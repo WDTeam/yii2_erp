@@ -69,12 +69,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
     {
         if (Yii::$app->has('response')) {
             $response = Yii::$app->getResponse();
-            // reset parameters of response to avoid interference with partially created response data
-            // in case the error occurred while sending the response.
             $response->isSent = false;
-            $response->stream = null;
-            $response->data = null;
-            $response->content = null;
         } else {
             $response = new Response();
         }
@@ -134,25 +129,40 @@ class ErrorHandler extends \yii\base\ErrorHandler
             'message' => $exception->getMessage(),
             'code' => $exception->getCode(),
         ];
+        $result_array = [
+            'success' => false,
+            'data' => '',
+            'errorCode' => $array['code'],
+            'errorMsg' => $array['message'],
+        ];
+
         if ($exception instanceof HttpException) {
-            $array['status'] = $exception->statusCode;
+//            $array['status'] = $exception->statusCode;
+            $result_array['status'] = $exception->statusCode;
+            $result_array['name'] = $array['name'];
         }
         if (YII_DEBUG) {
-            $array['type'] = get_class($exception);
+//            $array['type'] = get_class($exception);
+            $result_array['type'] = get_class($exception);
             if (!$exception instanceof UserException) {
-                $array['file'] = $exception->getFile();
-                $array['line'] = $exception->getLine();
-                $array['stack-trace'] = explode("\n", $exception->getTraceAsString());
+//                $array['file'] = $exception->getFile();
+//                $array['line'] = $exception->getLine();
+//                $array['stack-trace'] = explode("\n", $exception->getTraceAsString());
+                $result_array['file'] = $exception->getFile();
+                $result_array['line'] = $exception->getLine();
+                $result_array['trace'] = explode("\n", $exception->getTraceAsString());
                 if ($exception instanceof \yii\db\Exception) {
-                    $array['error-info'] = $exception->errorInfo;
+//                    $array['error-info'] = $exception->errorInfo;
+                    $result_array['error-info'] = $exception->errorInfo;
                 }
             }
         }
         if (($prev = $exception->getPrevious()) !== null) {
-            $array['previous'] = $this->convertExceptionToArray($prev);
+//            $array['previous'] = $this->convertExceptionToArray($prev);
+            $result_array['previous'] = $this->convertExceptionToArray($prev);
         }
 
-        return $array;
+        return $result_array;
     }
 
     /**
@@ -266,11 +276,11 @@ class ErrorHandler extends \yii\base\ErrorHandler
         if ($file !== null && $line !== null) {
             $line--; // adjust line number from one-based to zero-based
             $lines = @file($file);
-            if ($line < 0 || $lines === false || ($lineCount = count($lines)) < $line) {
+            if ($line < 0 || $lines === false || ($lineCount = count($lines)) < $line + 1) {
                 return '';
             }
 
-            $half = (int) (($index === 1 ? $this->maxSourceLines : $this->maxTraceSourceLines) / 2);
+            $half = (int)(($index == 1 ? $this->maxSourceLines : $this->maxTraceSourceLines) / 2);
             $begin = $line - $half > 0 ? $line - $half : 0;
             $end = $line + $half < $lineCount ? $line + $half : $lineCount - 1;
         }
@@ -322,7 +332,7 @@ class ErrorHandler extends \yii\base\ErrorHandler
      */
     public function createHttpStatusLink($statusCode, $statusDescription)
     {
-        return '<a href="http://en.wikipedia.org/wiki/List_of_HTTP_status_codes#' . (int) $statusCode . '" target="_blank">HTTP ' . (int) $statusCode . ' &ndash; ' . $statusDescription . '</a>';
+        return '<a href="http://en.wikipedia.org/wiki/List_of_HTTP_status_codes#' . (int)$statusCode . '" target="_blank">HTTP ' . (int)$statusCode . ' &ndash; ' . $statusDescription . '</a>';
     }
 
     /**
@@ -376,8 +386,8 @@ class ErrorHandler extends \yii\base\ErrorHandler
 
         foreach ($args as $key => $value) {
             $count++;
-            if ($count>=5) {
-                if ($count>5) {
+            if ($count >= 5) {
+                if ($count > 5) {
                     unset($args[$key]);
                 } else {
                     $args[$key] = '...';
