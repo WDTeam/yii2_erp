@@ -1,0 +1,21 @@
+
+.courseware-form {
+	padding-bottom:150px;
+	overflow:hidden;
+}
+#videoList {
+	overflow:hidden;
+}
+.video-list-item {
+	float:left;
+	width:200px;
+	padding:10px;
+	text-align: center;
+	list-style:none;
+	height:180px;
+	overflow:hidden;
+}
+.video-list-item.selected {
+	color:#fff;
+	background: #3a87ad;
+}

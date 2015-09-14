@@ -1,0 +1,10 @@
+{
+  "apiVersion": "1.0",
+  "swaggerVersion": "1.2",
+  "apis": [
+    {
+      "path": "http://dev.api.1jiajie.com:8080/docs/listings/user.json",
+      "description": "客户接口"
+    }
+  ]
+}

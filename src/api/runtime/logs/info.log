@@ -1,0 +1,1299 @@
+2015-09-12 20:24:38 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-12 20:24:38 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+2015-09-12 20:24:38 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-12 20:24:38 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: debug
+2015-09-12 20:24:38 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\debug\Module::bootstrap()
+2015-09-12 20:24:38 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: gii
+2015-09-12 20:24:38 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\gii\Module::bootstrap()
+2015-09-12 20:24:38 [127.0.0.1][-][-][trace][yii\web\UrlManager::parseRequest] Pretty URL not enabled. Using default URL parsing logic.
+2015-09-12 20:24:38 [127.0.0.1][-][-][trace][yii\web\Application::handleRequest] Route requested: ''
+2015-09-12 20:24:38 [127.0.0.1][-][-][trace][yii\base\Controller::runAction] Route to run: site/index
+2015-09-12 20:24:38 [127.0.0.1][-][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: user not logged in.
+    in E:\wwwroot\1jiajiecn\api\components\Controller.php:22
+2015-09-12 20:24:38 [127.0.0.1][-][-][trace][yii\base\InlineAction::runWithParams] Running action: api\controllers\SiteController::actionIndex()
+2015-09-12 20:24:38 [127.0.0.1][-][-][info][application] $_COOKIE = [
+    'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a' => '1441598724,1441862785'
+    'PHPSESSID' => '57fsh39q94kjsh3mfaie3ti3e2'
+    '_csrf' => 'b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa:2:{i:0;s:5:\"_csrf\";i:1;s:32:\"NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW\";}'
+]
+
+$_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'APPDATA' => 'C:\\Users\\pg\\AppData\\Roaming'
+    'CommonProgramFiles' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'PG-PC'
+    'ComSpec' => 'C:\\Windows\\system32\\cmd.exe'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\pg'
+    'LOCALAPPDATA' => 'C:\\Users\\pg\\AppData\\Local'
+    'LOGONSERVER' => '\\\\PG-PC'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Ruby22-x64\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;D:\\Program Files\\TortoiseGit\\bin;C:\\Ruby22\\bin;D:\\server\\php;'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.RB;.RBW'
+    'PROCESSOR_ARCHITECTURE' => 'x86'
+    'PROCESSOR_ARCHITEW6432' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 69 Stepping 1, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '4501'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files (x86)'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PSModulePath' => 'C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'SESSIONNAME' => 'Console'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\Windows'
+    'TEMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'USERDOMAIN' => 'pg-PC'
+    'USERNAME' => 'pg'
+    'USERPROFILE' => 'C:\\Users\\pg'
+    'windir' => 'C:\\Windows'
+    'windows_tracing_flags' => '3'
+    'windows_tracing_logfile' => 'C:\\BVTBin\\Tests\\installpackage\\csilogfile.log'
+    'HTTP_COOKIE' => 'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a=1441598724,1441862785; PHPSESSID=57fsh39q94kjsh3mfaie3ti3e2; _csrf=b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW%22%3B%7D'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, sdch'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.124 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_HOST' => 'api.1jiajie.com'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'api.1jiajie.com'
+    'SERVER_PORT' => '80'
+    'SERVER_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '62354'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'SERVER_SOFTWARE' => 'nginx/1.6.2'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => 'E:/wwwroot/1jiajiecn/api/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'PATH_TRANSLATED' => 'E:/wwwroot/1jiajiecn/api/web'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => 'E:/wwwroot/1jiajiecn/api/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1442060678.0208
+    'REQUEST_TIME' => 1442060678
+]
+2015-09-12 20:24:47 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-12 20:24:47 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+2015-09-12 20:24:47 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-12 20:24:47 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: debug
+2015-09-12 20:24:47 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\debug\Module::bootstrap()
+2015-09-12 20:24:47 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: gii
+2015-09-12 20:24:47 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\gii\Module::bootstrap()
+2015-09-12 20:24:47 [127.0.0.1][-][-][trace][yii\web\UrlManager::parseRequest] Pretty URL not enabled. Using default URL parsing logic.
+2015-09-12 20:24:47 [127.0.0.1][-][-][trace][yii\web\Application::handleRequest] Route requested: ''
+2015-09-12 20:24:47 [127.0.0.1][-][-][trace][yii\base\Controller::runAction] Route to run: site/index
+2015-09-12 20:24:47 [127.0.0.1][-][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: user not logged in.
+    in E:\wwwroot\1jiajiecn\api\components\Controller.php:22
+2015-09-12 20:24:47 [127.0.0.1][-][-][trace][yii\base\InlineAction::runWithParams] Running action: api\controllers\SiteController::actionIndex()
+2015-09-12 20:24:47 [127.0.0.1][-][-][info][application] $_GET = [
+    's' => '/gii'
+]
+
+$_COOKIE = [
+    'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a' => '1441598724,1441862785'
+    'PHPSESSID' => '57fsh39q94kjsh3mfaie3ti3e2'
+    '_csrf' => 'b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa:2:{i:0;s:5:\"_csrf\";i:1;s:32:\"NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW\";}'
+]
+
+$_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'APPDATA' => 'C:\\Users\\pg\\AppData\\Roaming'
+    'CommonProgramFiles' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'PG-PC'
+    'ComSpec' => 'C:\\Windows\\system32\\cmd.exe'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\pg'
+    'LOCALAPPDATA' => 'C:\\Users\\pg\\AppData\\Local'
+    'LOGONSERVER' => '\\\\PG-PC'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Ruby22-x64\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;D:\\Program Files\\TortoiseGit\\bin;C:\\Ruby22\\bin;D:\\server\\php;'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.RB;.RBW'
+    'PROCESSOR_ARCHITECTURE' => 'x86'
+    'PROCESSOR_ARCHITEW6432' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 69 Stepping 1, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '4501'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files (x86)'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PSModulePath' => 'C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'SESSIONNAME' => 'Console'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\Windows'
+    'TEMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'USERDOMAIN' => 'pg-PC'
+    'USERNAME' => 'pg'
+    'USERPROFILE' => 'C:\\Users\\pg'
+    'windir' => 'C:\\Windows'
+    'windows_tracing_flags' => '3'
+    'windows_tracing_logfile' => 'C:\\BVTBin\\Tests\\installpackage\\csilogfile.log'
+    'HTTP_COOKIE' => 'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a=1441598724,1441862785; PHPSESSID=57fsh39q94kjsh3mfaie3ti3e2; _csrf=b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW%22%3B%7D'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, sdch'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.124 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_HOST' => 'api.1jiajie.com'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'api.1jiajie.com'
+    'SERVER_PORT' => '80'
+    'SERVER_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '62354'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'SERVER_SOFTWARE' => 'nginx/1.6.2'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => 'E:/wwwroot/1jiajiecn/api/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/gii'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 's=/gii'
+    'PATH_TRANSLATED' => 'E:/wwwroot/1jiajiecn/api/web'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => 'E:/wwwroot/1jiajiecn/api/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1442060687.5304
+    'REQUEST_TIME' => 1442060687
+]
+2015-09-12 20:24:56 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-12 20:24:56 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+2015-09-12 20:24:56 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-12 20:24:56 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: debug
+2015-09-12 20:24:56 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\debug\Module::bootstrap()
+2015-09-12 20:24:56 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: gii
+2015-09-12 20:24:56 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\gii\Module::bootstrap()
+2015-09-12 20:24:56 [127.0.0.1][-][-][trace][yii\web\UrlManager::parseRequest] Pretty URL not enabled. Using default URL parsing logic.
+2015-09-12 20:24:56 [127.0.0.1][-][-][trace][yii\web\Application::handleRequest] Route requested: 'gii'
+2015-09-12 20:24:56 [127.0.0.1][-][-][trace][yii\base\Controller::runAction] Route to run: gii/default/index
+2015-09-12 20:24:56 [127.0.0.1][-][-][trace][yii\base\InlineAction::runWithParams] Running action: yii\gii\controllers\DefaultController::actionIndex()
+2015-09-12 20:24:56 [127.0.0.1][-][-][trace][yii\base\View::renderFile] Rendering view file: E:\wwwroot\1jiajiecn\vendor\yiisoft\yii2-gii\views\default\index.php
+2015-09-12 20:24:56 [127.0.0.1][-][-][trace][yii\base\View::renderFile] Rendering view file: E:\wwwroot\1jiajiecn\vendor\yiisoft\yii2-gii\views\layouts\main.php
+2015-09-12 20:24:56 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'gii'
+]
+
+$_COOKIE = [
+    'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a' => '1441598724,1441862785'
+    'PHPSESSID' => '57fsh39q94kjsh3mfaie3ti3e2'
+    '_csrf' => 'b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa:2:{i:0;s:5:\"_csrf\";i:1;s:32:\"NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW\";}'
+]
+
+$_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'APPDATA' => 'C:\\Users\\pg\\AppData\\Roaming'
+    'CommonProgramFiles' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'PG-PC'
+    'ComSpec' => 'C:\\Windows\\system32\\cmd.exe'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\pg'
+    'LOCALAPPDATA' => 'C:\\Users\\pg\\AppData\\Local'
+    'LOGONSERVER' => '\\\\PG-PC'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Ruby22-x64\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;D:\\Program Files\\TortoiseGit\\bin;C:\\Ruby22\\bin;D:\\server\\php;'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.RB;.RBW'
+    'PROCESSOR_ARCHITECTURE' => 'x86'
+    'PROCESSOR_ARCHITEW6432' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 69 Stepping 1, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '4501'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files (x86)'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PSModulePath' => 'C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'SESSIONNAME' => 'Console'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\Windows'
+    'TEMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'USERDOMAIN' => 'pg-PC'
+    'USERNAME' => 'pg'
+    'USERPROFILE' => 'C:\\Users\\pg'
+    'windir' => 'C:\\Windows'
+    'windows_tracing_flags' => '3'
+    'windows_tracing_logfile' => 'C:\\BVTBin\\Tests\\installpackage\\csilogfile.log'
+    'HTTP_COOKIE' => 'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a=1441598724,1441862785; PHPSESSID=57fsh39q94kjsh3mfaie3ti3e2; _csrf=b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW%22%3B%7D'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, sdch'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.124 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_HOST' => 'api.1jiajie.com'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'api.1jiajie.com'
+    'SERVER_PORT' => '80'
+    'SERVER_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '62354'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'SERVER_SOFTWARE' => 'nginx/1.6.2'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => 'E:/wwwroot/1jiajiecn/api/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/index.php?r=gii'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=gii'
+    'PATH_TRANSLATED' => 'E:/wwwroot/1jiajiecn/api/web'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => 'E:/wwwroot/1jiajiecn/api/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1442060696.1829
+    'REQUEST_TIME' => 1442060696
+]
+2015-09-12 20:50:52 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-12 20:50:52 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+2015-09-12 20:50:52 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-12 20:50:52 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: debug
+2015-09-12 20:50:52 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\debug\Module::bootstrap()
+2015-09-12 20:50:52 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: gii
+2015-09-12 20:50:52 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\gii\Module::bootstrap()
+2015-09-12 20:50:52 [127.0.0.1][-][-][trace][yii\web\UrlManager::parseRequest] Pretty URL not enabled. Using default URL parsing logic.
+2015-09-12 20:50:52 [127.0.0.1][-][-][trace][yii\web\Application::handleRequest] Route requested: ''
+2015-09-12 20:50:52 [127.0.0.1][-][-][trace][yii\base\Controller::runAction] Route to run: site/index
+2015-09-12 20:50:52 [127.0.0.1][-][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: user not logged in.
+    in E:\wwwroot\1jiajiecn\api\components\Controller.php:22
+2015-09-12 20:50:52 [127.0.0.1][-][-][trace][yii\base\InlineAction::runWithParams] Running action: api\controllers\SiteController::actionIndex()
+2015-09-12 20:50:52 [127.0.0.1][-][-][info][application] $_COOKIE = [
+    'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a' => '1441598724,1441862785'
+    'PHPSESSID' => '57fsh39q94kjsh3mfaie3ti3e2'
+    '_csrf' => 'b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa:2:{i:0;s:5:\"_csrf\";i:1;s:32:\"NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW\";}'
+]
+
+$_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'APPDATA' => 'C:\\Users\\pg\\AppData\\Roaming'
+    'CommonProgramFiles' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'PG-PC'
+    'ComSpec' => 'C:\\Windows\\system32\\cmd.exe'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\pg'
+    'LOCALAPPDATA' => 'C:\\Users\\pg\\AppData\\Local'
+    'LOGONSERVER' => '\\\\PG-PC'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Ruby22-x64\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;D:\\Program Files\\TortoiseGit\\bin;C:\\Ruby22\\bin;D:\\server\\php;'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.RB;.RBW'
+    'PROCESSOR_ARCHITECTURE' => 'x86'
+    'PROCESSOR_ARCHITEW6432' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 69 Stepping 1, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '4501'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files (x86)'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PSModulePath' => 'C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'SESSIONNAME' => 'Console'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\Windows'
+    'TEMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'USERDOMAIN' => 'pg-PC'
+    'USERNAME' => 'pg'
+    'USERPROFILE' => 'C:\\Users\\pg'
+    'windir' => 'C:\\Windows'
+    'windows_tracing_flags' => '3'
+    'windows_tracing_logfile' => 'C:\\BVTBin\\Tests\\installpackage\\csilogfile.log'
+    'HTTP_COOKIE' => 'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a=1441598724,1441862785; PHPSESSID=57fsh39q94kjsh3mfaie3ti3e2; _csrf=b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW%22%3B%7D'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, sdch'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.124 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_HOST' => 'api.1jiajie.com'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'api.1jiajie.com'
+    'SERVER_PORT' => '80'
+    'SERVER_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '64739'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'SERVER_SOFTWARE' => 'nginx/1.6.2'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => 'E:/wwwroot/1jiajiecn/api/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'PATH_TRANSLATED' => 'E:/wwwroot/1jiajiecn/api/web'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => 'E:/wwwroot/1jiajiecn/api/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1442062252.2209
+    'REQUEST_TIME' => 1442062252
+]
+2015-09-12 20:51:35 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-12 20:51:35 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+2015-09-12 20:51:35 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-12 20:51:35 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: debug
+2015-09-12 20:51:35 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\debug\Module::bootstrap()
+2015-09-12 20:51:35 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: gii
+2015-09-12 20:51:35 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\gii\Module::bootstrap()
+2015-09-12 20:51:35 [127.0.0.1][-][-][trace][yii\web\UrlManager::parseRequest] Pretty URL not enabled. Using default URL parsing logic.
+2015-09-12 20:51:35 [127.0.0.1][-][-][trace][yii\web\Application::handleRequest] Route requested: 'gii'
+2015-09-12 20:51:35 [127.0.0.1][-][-][trace][yii\base\Controller::runAction] Route to run: gii/default/index
+2015-09-12 20:51:35 [127.0.0.1][-][-][trace][yii\base\InlineAction::runWithParams] Running action: yii\gii\controllers\DefaultController::actionIndex()
+2015-09-12 20:51:35 [127.0.0.1][-][-][trace][yii\base\View::renderFile] Rendering view file: E:\wwwroot\1jiajiecn\vendor\yiisoft\yii2-gii\views\default\index.php
+2015-09-12 20:51:35 [127.0.0.1][-][-][trace][yii\base\View::renderFile] Rendering view file: E:\wwwroot\1jiajiecn\vendor\yiisoft\yii2-gii\views\layouts\main.php
+2015-09-12 20:51:35 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'gii'
+]
+
+$_COOKIE = [
+    'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a' => '1441598724,1441862785'
+    'PHPSESSID' => '57fsh39q94kjsh3mfaie3ti3e2'
+    '_csrf' => 'b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa:2:{i:0;s:5:\"_csrf\";i:1;s:32:\"NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW\";}'
+]
+
+$_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'APPDATA' => 'C:\\Users\\pg\\AppData\\Roaming'
+    'CommonProgramFiles' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'PG-PC'
+    'ComSpec' => 'C:\\Windows\\system32\\cmd.exe'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\pg'
+    'LOCALAPPDATA' => 'C:\\Users\\pg\\AppData\\Local'
+    'LOGONSERVER' => '\\\\PG-PC'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Ruby22-x64\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;D:\\Program Files\\TortoiseGit\\bin;C:\\Ruby22\\bin;D:\\server\\php;'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.RB;.RBW'
+    'PROCESSOR_ARCHITECTURE' => 'x86'
+    'PROCESSOR_ARCHITEW6432' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 69 Stepping 1, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '4501'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files (x86)'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PSModulePath' => 'C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'SESSIONNAME' => 'Console'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\Windows'
+    'TEMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'USERDOMAIN' => 'pg-PC'
+    'USERNAME' => 'pg'
+    'USERPROFILE' => 'C:\\Users\\pg'
+    'windir' => 'C:\\Windows'
+    'windows_tracing_flags' => '3'
+    'windows_tracing_logfile' => 'C:\\BVTBin\\Tests\\installpackage\\csilogfile.log'
+    'HTTP_COOKIE' => 'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a=1441598724,1441862785; PHPSESSID=57fsh39q94kjsh3mfaie3ti3e2; _csrf=b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW%22%3B%7D'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, sdch'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.124 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_HOST' => 'api.1jiajie.com'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'api.1jiajie.com'
+    'SERVER_PORT' => '80'
+    'SERVER_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '64739'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'SERVER_SOFTWARE' => 'nginx/1.6.2'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => 'E:/wwwroot/1jiajiecn/api/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/index.php?r=gii'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=gii'
+    'PATH_TRANSLATED' => 'E:/wwwroot/1jiajiecn/api/web'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => 'E:/wwwroot/1jiajiecn/api/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1442062295.4963
+    'REQUEST_TIME' => 1442062295
+]
+2015-09-13 10:04:33 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-13 10:04:33 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+2015-09-13 10:04:33 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-13 10:04:33 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: debug
+2015-09-13 10:04:33 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\debug\Module::bootstrap()
+2015-09-13 10:04:33 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: gii
+2015-09-13 10:04:33 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\gii\Module::bootstrap()
+2015-09-13 10:04:33 [127.0.0.1][-][-][trace][yii\web\UrlManager::parseRequest] Pretty URL not enabled. Using default URL parsing logic.
+2015-09-13 10:04:33 [127.0.0.1][-][-][trace][yii\web\Application::handleRequest] Route requested: ''
+2015-09-13 10:04:33 [127.0.0.1][-][-][trace][yii\base\Controller::runAction] Route to run: site/index
+2015-09-13 10:04:33 [127.0.0.1][-][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: user not logged in.
+    in E:\wwwroot\1jiajiecn\api\components\Controller.php:22
+2015-09-13 10:04:33 [127.0.0.1][-][-][trace][yii\base\InlineAction::runWithParams] Running action: api\controllers\SiteController::actionIndex()
+2015-09-13 10:04:33 [127.0.0.1][-][-][info][application] $_COOKIE = [
+    'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a' => '1441598724,1441862785'
+    'PHPSESSID' => '57fsh39q94kjsh3mfaie3ti3e2'
+    '_csrf' => 'b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa:2:{i:0;s:5:\"_csrf\";i:1;s:32:\"NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW\";}'
+]
+
+$_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'APPDATA' => 'C:\\Users\\pg\\AppData\\Roaming'
+    'CommonProgramFiles' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'PG-PC'
+    'ComSpec' => 'C:\\Windows\\system32\\cmd.exe'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\pg'
+    'LOCALAPPDATA' => 'C:\\Users\\pg\\AppData\\Local'
+    'LOGONSERVER' => '\\\\PG-PC'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Ruby22-x64\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;D:\\Program Files\\TortoiseGit\\bin;C:\\Ruby22\\bin;D:\\server\\php;'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.RB;.RBW'
+    'PROCESSOR_ARCHITECTURE' => 'x86'
+    'PROCESSOR_ARCHITEW6432' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 69 Stepping 1, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '4501'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files (x86)'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PSModulePath' => 'C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'SESSIONNAME' => 'Console'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\Windows'
+    'TEMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'USERDOMAIN' => 'pg-PC'
+    'USERNAME' => 'pg'
+    'USERPROFILE' => 'C:\\Users\\pg'
+    'windir' => 'C:\\Windows'
+    'windows_tracing_flags' => '3'
+    'windows_tracing_logfile' => 'C:\\BVTBin\\Tests\\installpackage\\csilogfile.log'
+    'HTTP_COOKIE' => 'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a=1441598724,1441862785; PHPSESSID=57fsh39q94kjsh3mfaie3ti3e2; _csrf=b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW%22%3B%7D'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, sdch'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.124 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_HOST' => 'api.1jiajie.com'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'api.1jiajie.com'
+    'SERVER_PORT' => '80'
+    'SERVER_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '56867'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'SERVER_SOFTWARE' => 'nginx/1.6.2'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => 'E:/wwwroot/1jiajiecn/api/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'PATH_TRANSLATED' => 'E:/wwwroot/1jiajiecn/api/web'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => 'E:/wwwroot/1jiajiecn/api/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1442109873.1006
+    'REQUEST_TIME' => 1442109873
+]
+2015-09-13 10:06:09 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-13 10:06:09 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+2015-09-13 10:06:09 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-13 10:06:09 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: debug
+2015-09-13 10:06:09 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\debug\Module::bootstrap()
+2015-09-13 10:06:09 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: gii
+2015-09-13 10:06:09 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\gii\Module::bootstrap()
+2015-09-13 10:06:09 [127.0.0.1][-][-][trace][yii\web\UrlManager::parseRequest] Pretty URL not enabled. Using default URL parsing logic.
+2015-09-13 10:06:09 [127.0.0.1][-][-][trace][yii\web\Application::handleRequest] Route requested: 'gii'
+2015-09-13 10:06:09 [127.0.0.1][-][-][trace][yii\base\Controller::runAction] Route to run: gii/default/index
+2015-09-13 10:06:09 [127.0.0.1][-][-][trace][yii\base\InlineAction::runWithParams] Running action: yii\gii\controllers\DefaultController::actionIndex()
+2015-09-13 10:06:09 [127.0.0.1][-][-][trace][yii\base\View::renderFile] Rendering view file: E:\wwwroot\1jiajiecn\vendor\yiisoft\yii2-gii\views\default\index.php
+2015-09-13 10:06:09 [127.0.0.1][-][-][trace][yii\base\View::renderFile] Rendering view file: E:\wwwroot\1jiajiecn\vendor\yiisoft\yii2-gii\views\layouts\main.php
+2015-09-13 10:06:09 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'gii'
+]
+
+$_COOKIE = [
+    'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a' => '1441598724,1441862785'
+    'PHPSESSID' => '57fsh39q94kjsh3mfaie3ti3e2'
+    '_csrf' => 'b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa:2:{i:0;s:5:\"_csrf\";i:1;s:32:\"NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW\";}'
+]
+
+$_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'APPDATA' => 'C:\\Users\\pg\\AppData\\Roaming'
+    'CommonProgramFiles' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'PG-PC'
+    'ComSpec' => 'C:\\Windows\\system32\\cmd.exe'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\pg'
+    'LOCALAPPDATA' => 'C:\\Users\\pg\\AppData\\Local'
+    'LOGONSERVER' => '\\\\PG-PC'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Ruby22-x64\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;D:\\Program Files\\TortoiseGit\\bin;C:\\Ruby22\\bin;D:\\server\\php;'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.RB;.RBW'
+    'PROCESSOR_ARCHITECTURE' => 'x86'
+    'PROCESSOR_ARCHITEW6432' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 69 Stepping 1, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '4501'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files (x86)'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PSModulePath' => 'C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'SESSIONNAME' => 'Console'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\Windows'
+    'TEMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'USERDOMAIN' => 'pg-PC'
+    'USERNAME' => 'pg'
+    'USERPROFILE' => 'C:\\Users\\pg'
+    'windir' => 'C:\\Windows'
+    'windows_tracing_flags' => '3'
+    'windows_tracing_logfile' => 'C:\\BVTBin\\Tests\\installpackage\\csilogfile.log'
+    'HTTP_COOKIE' => 'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a=1441598724,1441862785; PHPSESSID=57fsh39q94kjsh3mfaie3ti3e2; _csrf=b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW%22%3B%7D'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, sdch'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.124 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_HOST' => 'api.1jiajie.com'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'api.1jiajie.com'
+    'SERVER_PORT' => '80'
+    'SERVER_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '57207'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'SERVER_SOFTWARE' => 'nginx/1.6.2'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => 'E:/wwwroot/1jiajiecn/api/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/index.php?r=gii'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=gii'
+    'PATH_TRANSLATED' => 'E:/wwwroot/1jiajiecn/api/web'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => 'E:/wwwroot/1jiajiecn/api/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1442109969.3771
+    'REQUEST_TIME' => 1442109969
+]
+2015-09-13 10:34:39 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-13 10:34:39 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+2015-09-13 10:34:39 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-13 10:34:39 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: debug
+2015-09-13 10:34:39 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\debug\Module::bootstrap()
+2015-09-13 10:34:39 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: gii
+2015-09-13 10:34:39 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\gii\Module::bootstrap()
+2015-09-13 10:34:39 [127.0.0.1][-][-][trace][yii\web\UrlManager::parseRequest] Pretty URL not enabled. Using default URL parsing logic.
+2015-09-13 10:34:39 [127.0.0.1][-][-][trace][yii\web\Application::handleRequest] Route requested: 'gii'
+2015-09-13 10:34:39 [127.0.0.1][-][-][trace][yii\base\Controller::runAction] Route to run: gii/default/index
+2015-09-13 10:34:39 [127.0.0.1][-][-][trace][yii\base\InlineAction::runWithParams] Running action: yii\gii\controllers\DefaultController::actionIndex()
+2015-09-13 10:34:39 [127.0.0.1][-][-][trace][yii\base\View::renderFile] Rendering view file: E:\wwwroot\1jiajiecn\vendor\yiisoft\yii2-gii\views\default\index.php
+2015-09-13 10:34:39 [127.0.0.1][-][-][trace][yii\base\View::renderFile] Rendering view file: E:\wwwroot\1jiajiecn\vendor\yiisoft\yii2-gii\views\layouts\main.php
+2015-09-13 10:34:39 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'gii'
+]
+
+$_COOKIE = [
+    'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a' => '1441598724,1441862785'
+    'PHPSESSID' => '57fsh39q94kjsh3mfaie3ti3e2'
+    '_csrf' => 'b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa:2:{i:0;s:5:\"_csrf\";i:1;s:32:\"NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW\";}'
+]
+
+$_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'APPDATA' => 'C:\\Users\\pg\\AppData\\Roaming'
+    'CommonProgramFiles' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'PG-PC'
+    'ComSpec' => 'C:\\Windows\\system32\\cmd.exe'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\pg'
+    'LOCALAPPDATA' => 'C:\\Users\\pg\\AppData\\Local'
+    'LOGONSERVER' => '\\\\PG-PC'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Ruby22-x64\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;D:\\Program Files\\TortoiseGit\\bin;C:\\Ruby22\\bin;D:\\server\\php;'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.RB;.RBW'
+    'PROCESSOR_ARCHITECTURE' => 'x86'
+    'PROCESSOR_ARCHITEW6432' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 69 Stepping 1, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '4501'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files (x86)'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PSModulePath' => 'C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'SESSIONNAME' => 'Console'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\Windows'
+    'TEMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'USERDOMAIN' => 'pg-PC'
+    'USERNAME' => 'pg'
+    'USERPROFILE' => 'C:\\Users\\pg'
+    'windir' => 'C:\\Windows'
+    'windows_tracing_flags' => '3'
+    'windows_tracing_logfile' => 'C:\\BVTBin\\Tests\\installpackage\\csilogfile.log'
+    'HTTP_COOKIE' => 'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a=1441598724,1441862785; PHPSESSID=57fsh39q94kjsh3mfaie3ti3e2; _csrf=b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW%22%3B%7D'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, sdch'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.124 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_HOST' => 'api.1jiajie.com'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'api.1jiajie.com'
+    'SERVER_PORT' => '80'
+    'SERVER_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '60513'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'SERVER_SOFTWARE' => 'nginx/1.6.2'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => 'E:/wwwroot/1jiajiecn/api/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/index.php?r=gii'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=gii'
+    'PATH_TRANSLATED' => 'E:/wwwroot/1jiajiecn/api/web'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => 'E:/wwwroot/1jiajiecn/api/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1442111679.3389
+    'REQUEST_TIME' => 1442111679
+]
+2015-09-13 10:36:34 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-13 10:36:34 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+2015-09-13 10:36:34 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-13 10:36:34 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: debug
+2015-09-13 10:36:34 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\debug\Module::bootstrap()
+2015-09-13 10:36:34 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: gii
+2015-09-13 10:36:34 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\gii\Module::bootstrap()
+2015-09-13 10:36:34 [127.0.0.1][-][-][trace][yii\web\UrlManager::parseRequest] Pretty URL not enabled. Using default URL parsing logic.
+2015-09-13 10:36:34 [127.0.0.1][-][-][trace][yii\web\Application::handleRequest] Route requested: ''
+2015-09-13 10:36:34 [127.0.0.1][-][-][trace][yii\base\Controller::runAction] Route to run: site/index
+2015-09-13 10:36:34 [127.0.0.1][-][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: user not logged in.
+    in E:\wwwroot\1jiajiecn\api\components\Controller.php:22
+2015-09-13 10:36:34 [127.0.0.1][-][-][trace][yii\base\InlineAction::runWithParams] Running action: api\controllers\SiteController::actionIndex()
+2015-09-13 10:36:34 [127.0.0.1][-][-][info][application] $_COOKIE = [
+    'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a' => '1441598724,1441862785'
+    'PHPSESSID' => '57fsh39q94kjsh3mfaie3ti3e2'
+    '_csrf' => 'b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa:2:{i:0;s:5:\"_csrf\";i:1;s:32:\"NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW\";}'
+]
+
+$_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'APPDATA' => 'C:\\Users\\pg\\AppData\\Roaming'
+    'CommonProgramFiles' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'PG-PC'
+    'ComSpec' => 'C:\\Windows\\system32\\cmd.exe'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\pg'
+    'LOCALAPPDATA' => 'C:\\Users\\pg\\AppData\\Local'
+    'LOGONSERVER' => '\\\\PG-PC'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Ruby22-x64\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;D:\\Program Files\\TortoiseGit\\bin;C:\\Ruby22\\bin;D:\\server\\php;'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.RB;.RBW'
+    'PROCESSOR_ARCHITECTURE' => 'x86'
+    'PROCESSOR_ARCHITEW6432' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 69 Stepping 1, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '4501'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files (x86)'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PSModulePath' => 'C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'SESSIONNAME' => 'Console'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\Windows'
+    'TEMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'USERDOMAIN' => 'pg-PC'
+    'USERNAME' => 'pg'
+    'USERPROFILE' => 'C:\\Users\\pg'
+    'windir' => 'C:\\Windows'
+    'windows_tracing_flags' => '3'
+    'windows_tracing_logfile' => 'C:\\BVTBin\\Tests\\installpackage\\csilogfile.log'
+    'HTTP_COOKIE' => 'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a=1441598724,1441862785; PHPSESSID=57fsh39q94kjsh3mfaie3ti3e2; _csrf=b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW%22%3B%7D'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, sdch'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.124 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_HOST' => 'api.1jiajie.com'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'api.1jiajie.com'
+    'SERVER_PORT' => '80'
+    'SERVER_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '60657'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'SERVER_SOFTWARE' => 'nginx/1.6.2'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => 'E:/wwwroot/1jiajiecn/api/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'PATH_TRANSLATED' => 'E:/wwwroot/1jiajiecn/api/web'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => 'E:/wwwroot/1jiajiecn/api/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1442111794.2464
+    'REQUEST_TIME' => 1442111794
+]
+2015-09-13 10:37:06 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-13 10:37:06 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+2015-09-13 10:37:06 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-13 10:37:06 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: debug
+2015-09-13 10:37:06 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\debug\Module::bootstrap()
+2015-09-13 10:37:06 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: gii
+2015-09-13 10:37:06 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\gii\Module::bootstrap()
+2015-09-13 10:37:06 [127.0.0.1][-][-][trace][yii\web\UrlManager::parseRequest] Pretty URL not enabled. Using default URL parsing logic.
+2015-09-13 10:37:06 [127.0.0.1][-][-][trace][yii\web\Application::handleRequest] Route requested: ''
+2015-09-13 10:37:06 [127.0.0.1][-][-][trace][yii\base\Controller::runAction] Route to run: site/index
+2015-09-13 10:37:06 [127.0.0.1][-][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: user not logged in.
+    in E:\wwwroot\1jiajiecn\api\components\Controller.php:22
+2015-09-13 10:37:06 [127.0.0.1][-][-][trace][yii\base\InlineAction::runWithParams] Running action: api\controllers\SiteController::actionIndex()
+2015-09-13 10:37:06 [127.0.0.1][-][-][info][application] $_COOKIE = [
+    'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a' => '1441598724,1441862785'
+    'PHPSESSID' => '57fsh39q94kjsh3mfaie3ti3e2'
+    '_csrf' => 'b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa:2:{i:0;s:5:\"_csrf\";i:1;s:32:\"NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW\";}'
+]
+
+$_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'APPDATA' => 'C:\\Users\\pg\\AppData\\Roaming'
+    'CommonProgramFiles' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'PG-PC'
+    'ComSpec' => 'C:\\Windows\\system32\\cmd.exe'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\pg'
+    'LOCALAPPDATA' => 'C:\\Users\\pg\\AppData\\Local'
+    'LOGONSERVER' => '\\\\PG-PC'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Ruby22-x64\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;D:\\Program Files\\TortoiseGit\\bin;C:\\Ruby22\\bin;D:\\server\\php;'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.RB;.RBW'
+    'PROCESSOR_ARCHITECTURE' => 'x86'
+    'PROCESSOR_ARCHITEW6432' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 69 Stepping 1, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '4501'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files (x86)'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PSModulePath' => 'C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'SESSIONNAME' => 'Console'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\Windows'
+    'TEMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'USERDOMAIN' => 'pg-PC'
+    'USERNAME' => 'pg'
+    'USERPROFILE' => 'C:\\Users\\pg'
+    'windir' => 'C:\\Windows'
+    'windows_tracing_flags' => '3'
+    'windows_tracing_logfile' => 'C:\\BVTBin\\Tests\\installpackage\\csilogfile.log'
+    'HTTP_COOKIE' => 'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a=1441598724,1441862785; PHPSESSID=57fsh39q94kjsh3mfaie3ti3e2; _csrf=b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW%22%3B%7D'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, sdch'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.124 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_HOST' => 'api.1jiajie.com'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'api.1jiajie.com'
+    'SERVER_PORT' => '80'
+    'SERVER_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '60657'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'SERVER_SOFTWARE' => 'nginx/1.6.2'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => 'E:/wwwroot/1jiajiecn/api/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'PATH_TRANSLATED' => 'E:/wwwroot/1jiajiecn/api/web'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => 'E:/wwwroot/1jiajiecn/api/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1442111826.4633
+    'REQUEST_TIME' => 1442111826
+]
+2015-09-13 11:14:00 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-13 11:14:00 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+2015-09-13 11:14:00 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-13 11:14:00 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: debug
+2015-09-13 11:14:00 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\debug\Module::bootstrap()
+2015-09-13 11:14:00 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: gii
+2015-09-13 11:14:00 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\gii\Module::bootstrap()
+2015-09-13 11:14:00 [127.0.0.1][-][-][trace][yii\web\UrlManager::parseRequest] Pretty URL not enabled. Using default URL parsing logic.
+2015-09-13 11:14:00 [127.0.0.1][-][-][trace][yii\web\Application::handleRequest] Route requested: ''
+2015-09-13 11:14:00 [127.0.0.1][-][-][trace][yii\base\Controller::runAction] Route to run: site/index
+2015-09-13 11:14:00 [127.0.0.1][-][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: user not logged in.
+    in E:\wwwroot\1jiajiecn\api\components\Controller.php:22
+2015-09-13 11:14:00 [127.0.0.1][-][-][trace][yii\base\InlineAction::runWithParams] Running action: api\controllers\SiteController::actionIndex()
+2015-09-13 11:14:00 [127.0.0.1][-][-][info][application] $_GET = [
+    's' => '/interview/index'
+]
+
+$_COOKIE = [
+    'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a' => '1441598724,1441862785'
+    'PHPSESSID' => '57fsh39q94kjsh3mfaie3ti3e2'
+    '_csrf' => 'b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa:2:{i:0;s:5:\"_csrf\";i:1;s:32:\"NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW\";}'
+]
+
+$_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'APPDATA' => 'C:\\Users\\pg\\AppData\\Roaming'
+    'CommonProgramFiles' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'PG-PC'
+    'ComSpec' => 'C:\\Windows\\system32\\cmd.exe'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\pg'
+    'LOCALAPPDATA' => 'C:\\Users\\pg\\AppData\\Local'
+    'LOGONSERVER' => '\\\\PG-PC'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Ruby22-x64\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;D:\\Program Files\\TortoiseGit\\bin;C:\\Ruby22\\bin;D:\\server\\php;'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.RB;.RBW'
+    'PROCESSOR_ARCHITECTURE' => 'x86'
+    'PROCESSOR_ARCHITEW6432' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 69 Stepping 1, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '4501'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files (x86)'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PSModulePath' => 'C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'SESSIONNAME' => 'Console'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\Windows'
+    'TEMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'USERDOMAIN' => 'pg-PC'
+    'USERNAME' => 'pg'
+    'USERPROFILE' => 'C:\\Users\\pg'
+    'windir' => 'C:\\Windows'
+    'windows_tracing_flags' => '3'
+    'windows_tracing_logfile' => 'C:\\BVTBin\\Tests\\installpackage\\csilogfile.log'
+    'HTTP_COOKIE' => 'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a=1441598724,1441862785; PHPSESSID=57fsh39q94kjsh3mfaie3ti3e2; _csrf=b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW%22%3B%7D'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, sdch'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.124 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_HOST' => 'api.1jiajie.com'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'api.1jiajie.com'
+    'SERVER_PORT' => '80'
+    'SERVER_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '63173'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'SERVER_SOFTWARE' => 'nginx/1.6.2'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => 'E:/wwwroot/1jiajiecn/api/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/interview/index'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 's=/interview/index'
+    'PATH_TRANSLATED' => 'E:/wwwroot/1jiajiecn/api/web'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => 'E:/wwwroot/1jiajiecn/api/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1442114040.1199
+    'REQUEST_TIME' => 1442114040
+]
+2015-09-13 11:14:03 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-13 11:14:03 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+2015-09-13 11:14:03 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-13 11:14:03 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: debug
+2015-09-13 11:14:03 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\debug\Module::bootstrap()
+2015-09-13 11:14:03 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: gii
+2015-09-13 11:14:03 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\gii\Module::bootstrap()
+2015-09-13 11:14:03 [127.0.0.1][-][-][trace][yii\web\UrlManager::parseRequest] Pretty URL not enabled. Using default URL parsing logic.
+2015-09-13 11:14:03 [127.0.0.1][-][-][trace][yii\web\Application::handleRequest] Route requested: ''
+2015-09-13 11:14:03 [127.0.0.1][-][-][trace][yii\base\Controller::runAction] Route to run: site/index
+2015-09-13 11:14:03 [127.0.0.1][-][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: user not logged in.
+    in E:\wwwroot\1jiajiecn\api\components\Controller.php:22
+2015-09-13 11:14:03 [127.0.0.1][-][-][trace][yii\base\InlineAction::runWithParams] Running action: api\controllers\SiteController::actionIndex()
+2015-09-13 11:14:03 [127.0.0.1][-][-][info][application] $_COOKIE = [
+    'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a' => '1441598724,1441862785'
+    'PHPSESSID' => '57fsh39q94kjsh3mfaie3ti3e2'
+    '_csrf' => 'b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa:2:{i:0;s:5:\"_csrf\";i:1;s:32:\"NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW\";}'
+]
+
+$_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'APPDATA' => 'C:\\Users\\pg\\AppData\\Roaming'
+    'CommonProgramFiles' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'PG-PC'
+    'ComSpec' => 'C:\\Windows\\system32\\cmd.exe'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\pg'
+    'LOCALAPPDATA' => 'C:\\Users\\pg\\AppData\\Local'
+    'LOGONSERVER' => '\\\\PG-PC'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Ruby22-x64\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;D:\\Program Files\\TortoiseGit\\bin;C:\\Ruby22\\bin;D:\\server\\php;'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.RB;.RBW'
+    'PROCESSOR_ARCHITECTURE' => 'x86'
+    'PROCESSOR_ARCHITEW6432' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 69 Stepping 1, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '4501'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files (x86)'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PSModulePath' => 'C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'SESSIONNAME' => 'Console'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\Windows'
+    'TEMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'USERDOMAIN' => 'pg-PC'
+    'USERNAME' => 'pg'
+    'USERPROFILE' => 'C:\\Users\\pg'
+    'windir' => 'C:\\Windows'
+    'windows_tracing_flags' => '3'
+    'windows_tracing_logfile' => 'C:\\BVTBin\\Tests\\installpackage\\csilogfile.log'
+    'HTTP_COOKIE' => 'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a=1441598724,1441862785; PHPSESSID=57fsh39q94kjsh3mfaie3ti3e2; _csrf=b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW%22%3B%7D'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, sdch'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.124 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_HOST' => 'api.1jiajie.com'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'api.1jiajie.com'
+    'SERVER_PORT' => '80'
+    'SERVER_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '63173'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'SERVER_SOFTWARE' => 'nginx/1.6.2'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => 'E:/wwwroot/1jiajiecn/api/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'PATH_TRANSLATED' => 'E:/wwwroot/1jiajiecn/api/web'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => 'E:/wwwroot/1jiajiecn/api/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1442114043.1611
+    'REQUEST_TIME' => 1442114043
+]
+2015-09-13 11:14:12 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-13 11:14:12 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+2015-09-13 11:14:12 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-13 11:14:12 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: debug
+2015-09-13 11:14:12 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\debug\Module::bootstrap()
+2015-09-13 11:14:12 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: gii
+2015-09-13 11:14:12 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\gii\Module::bootstrap()
+2015-09-13 11:14:12 [127.0.0.1][-][-][trace][yii\web\UrlManager::parseRequest] Pretty URL not enabled. Using default URL parsing logic.
+2015-09-13 11:14:12 [127.0.0.1][-][-][trace][yii\web\Application::handleRequest] Route requested: ''
+2015-09-13 11:14:12 [127.0.0.1][-][-][trace][yii\base\Controller::runAction] Route to run: site/index
+2015-09-13 11:14:12 [127.0.0.1][-][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: user not logged in.
+    in E:\wwwroot\1jiajiecn\api\components\Controller.php:22
+2015-09-13 11:14:12 [127.0.0.1][-][-][trace][yii\base\InlineAction::runWithParams] Running action: api\controllers\SiteController::actionIndex()
+2015-09-13 11:14:12 [127.0.0.1][-][-][info][application] $_GET = [
+    's' => '/gii'
+]
+
+$_COOKIE = [
+    'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a' => '1441598724,1441862785'
+    'PHPSESSID' => '57fsh39q94kjsh3mfaie3ti3e2'
+    '_csrf' => 'b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa:2:{i:0;s:5:\"_csrf\";i:1;s:32:\"NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW\";}'
+]
+
+$_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'APPDATA' => 'C:\\Users\\pg\\AppData\\Roaming'
+    'CommonProgramFiles' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'PG-PC'
+    'ComSpec' => 'C:\\Windows\\system32\\cmd.exe'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\pg'
+    'LOCALAPPDATA' => 'C:\\Users\\pg\\AppData\\Local'
+    'LOGONSERVER' => '\\\\PG-PC'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Ruby22-x64\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;D:\\Program Files\\TortoiseGit\\bin;C:\\Ruby22\\bin;D:\\server\\php;'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.RB;.RBW'
+    'PROCESSOR_ARCHITECTURE' => 'x86'
+    'PROCESSOR_ARCHITEW6432' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 69 Stepping 1, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '4501'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files (x86)'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PSModulePath' => 'C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'SESSIONNAME' => 'Console'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\Windows'
+    'TEMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'USERDOMAIN' => 'pg-PC'
+    'USERNAME' => 'pg'
+    'USERPROFILE' => 'C:\\Users\\pg'
+    'windir' => 'C:\\Windows'
+    'windows_tracing_flags' => '3'
+    'windows_tracing_logfile' => 'C:\\BVTBin\\Tests\\installpackage\\csilogfile.log'
+    'HTTP_COOKIE' => 'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a=1441598724,1441862785; PHPSESSID=57fsh39q94kjsh3mfaie3ti3e2; _csrf=b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW%22%3B%7D'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, sdch'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.124 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_HOST' => 'api.1jiajie.com'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'api.1jiajie.com'
+    'SERVER_PORT' => '80'
+    'SERVER_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '63173'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'SERVER_SOFTWARE' => 'nginx/1.6.2'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => 'E:/wwwroot/1jiajiecn/api/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/gii'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 's=/gii'
+    'PATH_TRANSLATED' => 'E:/wwwroot/1jiajiecn/api/web'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => 'E:/wwwroot/1jiajiecn/api/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1442114052.8936
+    'REQUEST_TIME' => 1442114052
+]
+2015-09-13 11:14:22 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-13 11:14:22 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+2015-09-13 11:14:22 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-13 11:14:22 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: debug
+2015-09-13 11:14:22 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\debug\Module::bootstrap()
+2015-09-13 11:14:22 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: gii
+2015-09-13 11:14:22 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\gii\Module::bootstrap()
+2015-09-13 11:14:22 [127.0.0.1][-][-][trace][yii\web\UrlManager::parseRequest] Pretty URL not enabled. Using default URL parsing logic.
+2015-09-13 11:14:22 [127.0.0.1][-][-][trace][yii\web\Application::handleRequest] Route requested: 'gii'
+2015-09-13 11:14:22 [127.0.0.1][-][-][trace][yii\base\Controller::runAction] Route to run: gii/default/index
+2015-09-13 11:14:22 [127.0.0.1][-][-][trace][yii\base\InlineAction::runWithParams] Running action: yii\gii\controllers\DefaultController::actionIndex()
+2015-09-13 11:14:22 [127.0.0.1][-][-][trace][yii\base\View::renderFile] Rendering view file: E:\wwwroot\1jiajiecn\vendor\yiisoft\yii2-gii\views\default\index.php
+2015-09-13 11:14:22 [127.0.0.1][-][-][trace][yii\base\View::renderFile] Rendering view file: E:\wwwroot\1jiajiecn\vendor\yiisoft\yii2-gii\views\layouts\main.php
+2015-09-13 11:14:22 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'gii'
+]
+
+$_COOKIE = [
+    'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a' => '1441598724,1441862785'
+    'PHPSESSID' => '57fsh39q94kjsh3mfaie3ti3e2'
+    '_csrf' => 'b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa:2:{i:0;s:5:\"_csrf\";i:1;s:32:\"NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW\";}'
+]
+
+$_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'APPDATA' => 'C:\\Users\\pg\\AppData\\Roaming'
+    'CommonProgramFiles' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'PG-PC'
+    'ComSpec' => 'C:\\Windows\\system32\\cmd.exe'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\pg'
+    'LOCALAPPDATA' => 'C:\\Users\\pg\\AppData\\Local'
+    'LOGONSERVER' => '\\\\PG-PC'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Ruby22-x64\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;D:\\Program Files\\TortoiseGit\\bin;C:\\Ruby22\\bin;D:\\server\\php;'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.RB;.RBW'
+    'PROCESSOR_ARCHITECTURE' => 'x86'
+    'PROCESSOR_ARCHITEW6432' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 69 Stepping 1, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '4501'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files (x86)'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PSModulePath' => 'C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'SESSIONNAME' => 'Console'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\Windows'
+    'TEMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\pg\\AppData\\Local\\Temp'
+    'USERDOMAIN' => 'pg-PC'
+    'USERNAME' => 'pg'
+    'USERPROFILE' => 'C:\\Users\\pg'
+    'windir' => 'C:\\Windows'
+    'windows_tracing_flags' => '3'
+    'windows_tracing_logfile' => 'C:\\BVTBin\\Tests\\installpackage\\csilogfile.log'
+    'HTTP_COOKIE' => 'Hm_lvt_8cb0dedf820ed19a12222e3b0858424a=1441598724,1441862785; PHPSESSID=57fsh39q94kjsh3mfaie3ti3e2; _csrf=b03dc8367ea34117b24d1489c4366f88e4926e2f4454692553ee261e2ea6e64fa%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22NtsiBHmt6HXJ3pQAubpuw59h-EWKoGIW%22%3B%7D'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, sdch'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.124 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_HOST' => 'api.1jiajie.com'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'api.1jiajie.com'
+    'SERVER_PORT' => '80'
+    'SERVER_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '63173'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'SERVER_SOFTWARE' => 'nginx/1.6.2'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => 'E:/wwwroot/1jiajiecn/api/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/index.php?r=gii'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=gii'
+    'PATH_TRANSLATED' => 'E:/wwwroot/1jiajiecn/api/web'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => 'E:/wwwroot/1jiajiecn/api/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1442114062.3052
+    'REQUEST_TIME' => 1442114062
+]

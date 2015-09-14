@@ -1,0 +1,490 @@
+{
+  "apiVersion": 1.0,
+  "swaggerVersion": "1.2",
+  "basePath": "http://dev.api.1jiajie.com:8080/user/v1",
+  "resourcePath": "/user",
+  "produces": [
+    "application/json"
+  ],
+  "apis": [
+    {
+      "path": "/user",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "访问版本号",
+          "responseClass": "void",
+          "nickname": "view"
+        }
+      ]
+    },
+    {
+      "path": "/user/check-user-phone",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "登录验证",
+          "responseClass": "void",
+          "nickname": "view",
+          "parameters": [
+            {
+              "name": "UserPhone",
+              "description": "手机号",
+              "required": true,
+              "dataType": "string",
+              "paramType": "query"
+            },
+            {
+              "name": "captcha",
+              "description": "验证码",
+              "required": true,
+              "dataType": "string",
+              "paramType": "query"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/user/get-captcha",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "获取手机验证码",
+          "responseClass": "void",
+          "nickname": "getCaptcha",
+          "parameters": [
+            {
+              "name": "phone",
+              "required": true,
+              "allowMultiple": false,
+              "description": "手机号",
+              "dataType": "string",
+              "paramType": "query"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/user/get-user-msg",
+      "operations": [
+        {
+          "method": "GET",
+          "summary": "获取用户信息",
+          "responseClass": "void",
+          "nickname": "getUserMsg",
+          "parameters": [
+            {
+              "name": "UserToken",
+              "description": "UserToken",
+              "required": true,
+              "dataType": "string",
+              "paramType": "query"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/user/set-user-msg",
+      "operations": [
+        {
+          "method": "POST",
+          "summary": "修改用户信息",
+          "notes": "修改用户信息",
+          "responseClass": "void",
+          "nickname": "update",
+          "parameters": [
+            {
+              "name": "UserToken",
+              "description": "UserToken",
+              "required": true,
+              "dataType": "string",
+              "paramType": "query"
+            },
+            {
+              "name": "name",
+              "description": "用户名",
+              "dataType": "string",
+              "paramType": "form"
+            },
+            {
+              "name": "gender",
+              "description": "男的为1，女的为0",
+              "type":"array",
+              "items": {
+                "type": "string",
+                "enum": [{"1":"男"},{"0":"女"}]
+              },
+              "paramType": "form"
+            },
+            {
+              "name": "free_pay_hours",
+              "dataType": "float",
+              "description": "免单小时数",
+              "paramType": "form"
+            },
+            {
+              "name": "is_block",
+              "dataType": "int",
+              "description": "是否黑名单",
+              "paramType": "form"
+            },
+            {
+              "name": "block_date",
+              "dataType": "datetime",
+              "description": "阻塞时间",
+              "paramType": "form"
+            },
+            {
+              "name": "create_time",
+              "dataType": "datetime",
+              "description": "创建时间",
+              "paramType": "form"
+            },
+            {
+              "name": "charge_money",
+              "dataType": "float",
+              "description": "充值钱",
+              "paramType": "form"
+            },
+            {
+              "name": "reward_money",
+              "dataType": "float",
+              "description": "返的钱",
+              "paramType": "form"
+            },
+            {
+              "name": "user_type",
+              "dataType": "int",
+              "description": "用户等级，0 是非会员",
+              "paramType": "form"
+            },
+            {
+              "name": "level",
+              "dataType": "int",
+              "description": "用户级别，0 是没级别，1是银卡，2是金卡，3是铂金卡",
+              "paramType": "form"
+            },
+            {
+              "name": "user_src",
+              "dataType": "int",
+              "description": "会员来源",
+              "paramType": "form"
+            },
+            {
+              "name": "city_name",
+              "dataType": "string",
+              "description": "城市",
+              "paramType": "form"
+            },
+            {
+              "name": "expect_service",
+              "dataType": "string",
+              "description": "希望享受的服务",
+              "paramType": "form"
+            },
+            {
+              "name": "discount",
+              "dataType": "int",
+              "description": "卡折扣",
+              "paramType": "form"
+            },
+            {
+              "name": "shop_id",
+              "dataType": "int",
+              "description": "所属门店",
+              "paramType": "form"
+            },
+            {
+              "name": "pop_community_id",
+              "dataType": "int",
+              "description": "推广小区",
+              "paramType": "form"
+            },
+            {
+              "name": "join_active_id",
+              "dataType": "int",
+              "description": "参与活动",
+              "paramType": "form"
+            },
+            {
+              "name": "wanted_type",
+              "dataType": "string",
+              "description": "服务类型",
+              "paramType": "form"
+            },
+            {
+              "name": "street",
+              "dataType": "string",
+              "description": "街道",
+              "paramType": "form"
+            },
+            {
+              "name": "already_consum",
+              "dataType": "int",
+              "description": "已消费钱数",
+              "paramType": "form"
+            },
+            {
+              "name": "extend_info",
+              "dataType": "string",
+              "description": "用户需求",
+              "paramType": "form"
+            },
+            {
+              "name": "channel",
+              "dataType": "string",
+              "description": "渠道",
+              "paramType": "form"
+            },
+            {
+              "name": "education",
+              "dataType": "string",
+              "description": "文化程度",
+              "paramType": "form"
+            },
+            {
+              "name": "birthday",
+              "dataType": "datetime",
+              "description": "出生日期",
+              "paramType": "form"
+            },
+            {
+              "name": "parent_user_id",
+              "dataType": "int",
+              "description": "可以用谁的卡",
+              "paramType": "form"
+            },
+            {
+              "name": "gift_record",
+              "dataType": "string",
+              "description": "实物赠送记录",
+              "paramType": "form"
+            },
+            {
+              "name": "telphone",
+              "dataType": "string",
+              "description": "用户电话",
+              "paramType": "form"
+            },
+            {
+              "name": "email",
+              "dataType": "string",
+              "description": "邮件",
+              "paramType": "form"
+            },
+            {
+              "name": "smscode",
+              "dataType": "string",
+              "description": "验证码",
+              "paramType": "form"
+            },
+            {
+              "name": "device_token",
+              "dataType": "string",
+              "description": "手机token",
+              "paramType": "form"
+            },
+            {
+              "name": "mac_add",
+              "dataType": "string",
+              "description": "",
+              "paramType": "form"
+            },
+            {
+              "name": "device_type",
+              "dataType": "int",
+              "description": "",
+              "paramType": "form"
+            },
+            {
+              "name": "update_time",
+              "dataType": "datetime",
+              "description": "更新时间",
+              "paramType": "form"
+            },
+            {
+              "name": "weixin_id",
+              "dataType": "string",
+              "description": "用户的微信号",
+              "paramType": "form"
+            },
+            {
+              "name": "is_order_response",
+              "dataType": "int",
+              "description": "是否需要订单响应 0=>是 1=>否",
+              "paramType": "form"
+            },
+            {
+              "name": "is_order_recall",
+              "dataType": "int",
+              "description": "是否需要订单回访 0=>是 1=>否",
+              "paramType": "form"
+            },
+            {
+              "name": "user_roll",
+              "dataType": "int",
+              "description": "用户名单",
+              "paramType": "form"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "models": {
+    "UserInfo": {
+      "id": "UserInfo",
+      "properties": {
+        "id": {"type": "int"},
+        "name": {"type": "string"},
+        "gender": {
+          "type": "int",
+          "description": "男的为1，女的为0"
+        },
+        "free_pay_hours": {
+          "type": "float",
+          "description": "免单小时数"
+        },
+        "is_block": {
+          "type": "int",
+          "description": "是否黑名单"
+        },
+        "block_date": {
+          "type": "datetime",
+          "description": "阻塞时间"
+        },
+        "create_time": {
+          "type": "datetime",
+          "description": "创建时间"
+        },
+        "charge_money": {
+          "type": "float",
+          "description": "充值钱"
+        },
+        "reward_money": {
+          "type": "float",
+          "description": "返的钱"
+        },
+        "user_type": {
+          "type": "int",
+          "description": "用户等级，0 是非会员"
+        },
+        "level": {
+          "type": "int",
+          "description": "用户级别，0 是没级别，1是银卡，2是金卡，3是铂金卡"
+        },
+        "user_src": {
+          "type": "int",
+          "description": "会员来源"
+        },
+        "city_name": {
+          "type": "string",
+          "description": "城市"
+        },
+        "expect_service": {
+          "type": "string",
+          "description": "希望享受的服务"
+        },
+        "discount": {
+          "type": "int",
+          "description": "卡折扣"
+        },
+        "shop_id": {
+          "type": "int",
+          "description": "所属门店"
+        },
+        "pop_community_id": {
+          "type": "int",
+          "description": "推广小区"
+        },
+        "join_active_id": {
+          "type": "int",
+          "description": "参与活动"
+        },
+        "wanted_type": {
+          "type": "string",
+          "description": "服务类型"
+        },
+        "street": {
+          "type": "string",
+          "description": "街道"
+        },
+        "already_consum": {
+          "type": "int",
+          "description": "已消费钱数"
+        },
+        "extend_info": {
+          "type": "string",
+          "description": "用户需求"
+        },
+        "channel": {
+          "type": "string",
+          "description": "渠道"
+        },
+        "education": {
+          "type": "string",
+          "description": "文化程度"
+        },
+        "birthday": {
+          "type": "datetime",
+          "description": "出生日期"
+        },
+        "parent_user_id": {
+          "type": "int",
+          "description": "可以用谁的卡"
+        },
+        "gift_record": {
+          "type": "string",
+          "description": "实物赠送记录"
+        },
+        "telphone": {
+          "type": "string",
+          "description": "用户电话"
+        },
+        "email": {
+          "type": "string",
+          "description": "邮件"
+        },
+        "smscode": {
+          "type": "string",
+          "description": "验证码"
+        },
+        "device_token": {
+          "type": "string",
+          "description": "手机token"
+        },
+        "mac_add": {
+          "type": "string",
+          "description": ""
+        },
+        "device_type": {
+          "type": "int",
+          "description": ""
+        },
+        "update_time": {
+          "type": "datetime",
+          "description": "更新时间"
+        },
+        "weixin_id": {
+          "type": "string",
+          "description": "用户的微信号"
+        },
+        "is_order_response": {
+          "type": "int",
+          "description": "是否需要订单响应 0=>是 1=>否"
+        },
+        "is_order_recall": {
+          "type": "int",
+          "description": "是否需要订单回访 0=>是 1=>否"
+        },
+        "user_roll": {
+          "type": "int",
+          "description": "用户名单"
+        }
+      }
+    }
+  }
+}
