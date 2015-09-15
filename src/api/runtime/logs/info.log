@@ -2394,3 +2394,277 @@ $_SERVER = [
     'REQUEST_TIME_FLOAT' => 1442227704.1865
     'REQUEST_TIME' => 1442227704
 ]
+2015-09-15 12:00:49 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-15 12:00:49 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+2015-09-15 12:00:49 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-15 12:00:49 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: debug
+2015-09-15 12:00:49 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\debug\Module::bootstrap()
+2015-09-15 12:00:49 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: gii
+2015-09-15 12:00:49 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\gii\Module::bootstrap()
+2015-09-15 12:00:49 [127.0.0.1][-][-][trace][yii\web\UrlManager::parseRequest] Pretty URL not enabled. Using default URL parsing logic.
+2015-09-15 12:00:49 [127.0.0.1][-][-][trace][yii\web\Application::handleRequest] Route requested: ''
+2015-09-15 12:00:49 [127.0.0.1][-][-][trace][yii\base\Controller::runAction] Route to run: site/index
+2015-09-15 12:00:49 [127.0.0.1][-][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: user not logged in.
+    in D:\workspace_git\ejj-enterprise-boss\src\api\components\Controller.php:22
+2015-09-15 12:00:49 [127.0.0.1][-][-][trace][yii\base\InlineAction::runWithParams] Running action: api\controllers\SiteController::actionIndex()
+2015-09-15 12:00:49 [127.0.0.1][-][-][info][application] $_COOKIE = [
+    '_csrf' => 'cce208d2103445b3a0c405184836ee2fd48cabe77032d5cd0ba2f7b17e41626ea:2:{i:0;s:5:\"_csrf\";i:1;s:32:\"CGqlF7tCg1yXxasqKT2wvGB9XC0YHGAp\";}'
+]
+
+$_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'ANDROID_HOME' => 'C:\\Users\\Administrator\\AppData\\Local\\Temp\\Rar$EXa0.965\\adt-bundle-windows-x86_64-20140702\\sdk'
+    'ANT_HOME' => 'D:\\apache-ant-1.9.4'
+    'APPDATA' => 'C:\\Users\\Administrator\\AppData\\Roaming'
+    'asl_log' => 'Destination=file'
+    'CATALINA_HOME' => 'C:\\Program Files\\Java\\apache-tomcat-7.0.59'
+    'CLASSPATH' => 'C:\\Program Files (x86)\\Java\\jdk1.6.0_34\\lib\\dt.jar;C:\\Program Files (x86)\\Java\\jdk1.6.0_34\\lib\\tools.jar;C:\\Program Files (x86)\\Java\\jdk1.6.0_34\\bin;D:\\apache-jmeter-2.12/lib/ext/ApacheJMeter_core.jar;D:\\apache-jmeter-2.12/lib/jorphan.jar;D:\\apache-jmeter-2.12/lib/logkit-2.0.jar;'
+    'CommonProgramFiles' => 'C:\\Program Files\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'LINHONGYOU'
+    'ComSpec' => 'C:\\Windows\\system32\\cmd.exe'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\Administrator'
+    'JAVA_HOME' => 'C:\\Program Files (x86)'
+    'JMeter_home' => 'D:\\apache-jmeter-2.12'
+    'LOCALAPPDATA' => 'C:\\Users\\Administrator\\AppData\\Local'
+    'LOGONSERVER' => '\\\\LINHONGYOU'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Windows;C:\\Windows\\system32;C:\\ProgramData\\Oracle\\Java\\javapath;C:\\Program Files (x86)\\Common Files\\NetSarang;C:\\Users\\Administrator\\AppData\\Local\\Temp\\Rar$EXa0.965\\adt-bundle-windows-x86_64-20140702\\sdk\\tools;C:\\Users\\Administrator\\AppData\\Local\\Temp\\Rar$EXa0.965\\adt-bundle-windows-x86_64-20140702\\sdk\\platform-tools;D:\\apache-ant-1.9.4\\bin;C:\\Program Files\\Java\\jdk1.8.0_40\\bin;C:\\Program Files\\Java\\jdk1.8.0_40\\jre\\bin;C:\\Python27\\;C:\\Program Files\\TortoiseSVN\\bin;D:\\server\\php5.5;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\nodejs\\;C:\\Program Files (x86)\\Git\\cmd;C:\\Program Files (x86)\\Git\\bin;C:\\Program Files\\TortoiseGit\\bin;C:\\Users\\Administrator\\AppData\\Roaming\\npm'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'PHP_FCGI_MAX_REQUESTS' => '1000'
+    'PROCESSOR_ARCHITECTURE' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 60 Stepping 3, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '3c03'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PROMPT' => '$P$G'
+    'PSModulePath' => 'C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'SESSIONNAME' => 'Console'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\Windows'
+    'TEMP' => 'C:\\Users\\ADMINI~1\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\ADMINI~1\\AppData\\Local\\Temp'
+    'USERDOMAIN' => 'LINHONGYOU'
+    'USERNAME' => 'Administrator'
+    'USERPROFILE' => 'C:\\Users\\Administrator'
+    'windir' => 'C:\\Windows'
+    'windows_tracing_flags' => '3'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_COOKIE' => '_csrf=cce208d2103445b3a0c405184836ee2fd48cabe77032d5cd0ba2f7b17e41626ea%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22CGqlF7tCg1yXxasqKT2wvGB9XC0YHGAp%22%3B%7D'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0'
+    'HTTP_HOST' => 'api.me'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'api.me'
+    'SERVER_PORT' => '80'
+    'SERVER_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '54955'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'SERVER_SOFTWARE' => 'nginx/1.5.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => 'D:/workspace_git/ejj-enterprise-boss/src/api/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => 'D:/workspace_git/ejj-enterprise-boss/src/api/web//index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1442289648.9415
+    'REQUEST_TIME' => 1442289648
+]
+2015-09-15 12:03:12 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-15 12:03:12 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+2015-09-15 12:03:12 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-15 12:03:12 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: debug
+2015-09-15 12:03:12 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\debug\Module::bootstrap()
+2015-09-15 12:03:12 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: gii
+2015-09-15 12:03:12 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\gii\Module::bootstrap()
+2015-09-15 12:03:12 [127.0.0.1][-][-][trace][yii\web\UrlManager::parseRequest] Pretty URL not enabled. Using default URL parsing logic.
+2015-09-15 12:03:12 [127.0.0.1][-][-][trace][yii\web\Application::handleRequest] Route requested: ''
+2015-09-15 12:03:12 [127.0.0.1][-][-][trace][yii\base\Controller::runAction] Route to run: site/index
+2015-09-15 12:03:12 [127.0.0.1][-][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: user not logged in.
+    in D:\workspace_git\ejj-enterprise-boss\src\api\components\Controller.php:22
+2015-09-15 12:03:12 [127.0.0.1][-][-][trace][yii\base\InlineAction::runWithParams] Running action: api\controllers\SiteController::actionIndex()
+2015-09-15 12:03:12 [127.0.0.1][-][-][info][application] $_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'ANDROID_HOME' => 'C:\\Users\\Administrator\\AppData\\Local\\Temp\\Rar$EXa0.965\\adt-bundle-windows-x86_64-20140702\\sdk'
+    'ANT_HOME' => 'D:\\apache-ant-1.9.4'
+    'APPDATA' => 'C:\\Users\\Administrator\\AppData\\Roaming'
+    'asl_log' => 'Destination=file'
+    'CATALINA_HOME' => 'C:\\Program Files\\Java\\apache-tomcat-7.0.59'
+    'CLASSPATH' => 'C:\\Program Files (x86)\\Java\\jdk1.6.0_34\\lib\\dt.jar;C:\\Program Files (x86)\\Java\\jdk1.6.0_34\\lib\\tools.jar;C:\\Program Files (x86)\\Java\\jdk1.6.0_34\\bin;D:\\apache-jmeter-2.12/lib/ext/ApacheJMeter_core.jar;D:\\apache-jmeter-2.12/lib/jorphan.jar;D:\\apache-jmeter-2.12/lib/logkit-2.0.jar;'
+    'CommonProgramFiles' => 'C:\\Program Files\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'LINHONGYOU'
+    'ComSpec' => 'C:\\Windows\\system32\\cmd.exe'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\Administrator'
+    'JAVA_HOME' => 'C:\\Program Files (x86)'
+    'JMeter_home' => 'D:\\apache-jmeter-2.12'
+    'LOCALAPPDATA' => 'C:\\Users\\Administrator\\AppData\\Local'
+    'LOGONSERVER' => '\\\\LINHONGYOU'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Windows;C:\\Windows\\system32;C:\\ProgramData\\Oracle\\Java\\javapath;C:\\Program Files (x86)\\Common Files\\NetSarang;C:\\Users\\Administrator\\AppData\\Local\\Temp\\Rar$EXa0.965\\adt-bundle-windows-x86_64-20140702\\sdk\\tools;C:\\Users\\Administrator\\AppData\\Local\\Temp\\Rar$EXa0.965\\adt-bundle-windows-x86_64-20140702\\sdk\\platform-tools;D:\\apache-ant-1.9.4\\bin;C:\\Program Files\\Java\\jdk1.8.0_40\\bin;C:\\Program Files\\Java\\jdk1.8.0_40\\jre\\bin;C:\\Python27\\;C:\\Program Files\\TortoiseSVN\\bin;D:\\server\\php5.5;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\nodejs\\;C:\\Program Files (x86)\\Git\\cmd;C:\\Program Files (x86)\\Git\\bin;C:\\Program Files\\TortoiseGit\\bin;C:\\Users\\Administrator\\AppData\\Roaming\\npm'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'PHP_FCGI_MAX_REQUESTS' => '1000'
+    'PROCESSOR_ARCHITECTURE' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 60 Stepping 3, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '3c03'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PROMPT' => '$P$G'
+    'PSModulePath' => 'C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'SESSIONNAME' => 'Console'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\Windows'
+    'TEMP' => 'C:\\Users\\ADMINI~1\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\ADMINI~1\\AppData\\Local\\Temp'
+    'USERDOMAIN' => 'LINHONGYOU'
+    'USERNAME' => 'Administrator'
+    'USERPROFILE' => 'C:\\Users\\Administrator'
+    'windir' => 'C:\\Windows'
+    'windows_tracing_flags' => '3'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_REFERER' => 'http://localhost/ejj-enterprise-boss/src/api/'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0'
+    'HTTP_HOST' => 'localhost'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'localhost'
+    'SERVER_PORT' => '80'
+    'SERVER_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '55029'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'SERVER_SOFTWARE' => 'nginx/1.5.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => 'D:/workspace_git'
+    'DOCUMENT_URI' => '/ejj-enterprise-boss/src/api/web/index.php'
+    'REQUEST_URI' => '/ejj-enterprise-boss/src/api/web/'
+    'SCRIPT_NAME' => '/ejj-enterprise-boss/src/api/web/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => 'D:/workspace_git//ejj-enterprise-boss/src/api/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/ejj-enterprise-boss/src/api/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1442289791.8591
+    'REQUEST_TIME' => 1442289791
+]
+2015-09-15 12:03:30 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-15 12:03:30 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+2015-09-15 12:03:30 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-15 12:03:30 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: debug
+2015-09-15 12:03:30 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\debug\Module::bootstrap()
+2015-09-15 12:03:30 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: gii
+2015-09-15 12:03:30 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\gii\Module::bootstrap()
+2015-09-15 12:03:30 [127.0.0.1][-][-][trace][yii\web\UrlManager::parseRequest] Pretty URL not enabled. Using default URL parsing logic.
+2015-09-15 12:03:30 [127.0.0.1][-][-][trace][yii\web\Application::handleRequest] Route requested: 'site'
+2015-09-15 12:03:30 [127.0.0.1][-][-][trace][yii\base\Controller::runAction] Route to run: site/index
+2015-09-15 12:03:30 [127.0.0.1][-][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: user not logged in.
+    in D:\workspace_git\ejj-enterprise-boss\src\api\components\Controller.php:22
+2015-09-15 12:03:30 [127.0.0.1][-][-][trace][yii\base\InlineAction::runWithParams] Running action: api\controllers\SiteController::actionIndex()
+2015-09-15 12:03:30 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'site'
+]
+
+$_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'ANDROID_HOME' => 'C:\\Users\\Administrator\\AppData\\Local\\Temp\\Rar$EXa0.965\\adt-bundle-windows-x86_64-20140702\\sdk'
+    'ANT_HOME' => 'D:\\apache-ant-1.9.4'
+    'APPDATA' => 'C:\\Users\\Administrator\\AppData\\Roaming'
+    'asl_log' => 'Destination=file'
+    'CATALINA_HOME' => 'C:\\Program Files\\Java\\apache-tomcat-7.0.59'
+    'CLASSPATH' => 'C:\\Program Files (x86)\\Java\\jdk1.6.0_34\\lib\\dt.jar;C:\\Program Files (x86)\\Java\\jdk1.6.0_34\\lib\\tools.jar;C:\\Program Files (x86)\\Java\\jdk1.6.0_34\\bin;D:\\apache-jmeter-2.12/lib/ext/ApacheJMeter_core.jar;D:\\apache-jmeter-2.12/lib/jorphan.jar;D:\\apache-jmeter-2.12/lib/logkit-2.0.jar;'
+    'CommonProgramFiles' => 'C:\\Program Files\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'LINHONGYOU'
+    'ComSpec' => 'C:\\Windows\\system32\\cmd.exe'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\Administrator'
+    'JAVA_HOME' => 'C:\\Program Files (x86)'
+    'JMeter_home' => 'D:\\apache-jmeter-2.12'
+    'LOCALAPPDATA' => 'C:\\Users\\Administrator\\AppData\\Local'
+    'LOGONSERVER' => '\\\\LINHONGYOU'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Windows;C:\\Windows\\system32;C:\\ProgramData\\Oracle\\Java\\javapath;C:\\Program Files (x86)\\Common Files\\NetSarang;C:\\Users\\Administrator\\AppData\\Local\\Temp\\Rar$EXa0.965\\adt-bundle-windows-x86_64-20140702\\sdk\\tools;C:\\Users\\Administrator\\AppData\\Local\\Temp\\Rar$EXa0.965\\adt-bundle-windows-x86_64-20140702\\sdk\\platform-tools;D:\\apache-ant-1.9.4\\bin;C:\\Program Files\\Java\\jdk1.8.0_40\\bin;C:\\Program Files\\Java\\jdk1.8.0_40\\jre\\bin;C:\\Python27\\;C:\\Program Files\\TortoiseSVN\\bin;D:\\server\\php5.5;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\nodejs\\;C:\\Program Files (x86)\\Git\\cmd;C:\\Program Files (x86)\\Git\\bin;C:\\Program Files\\TortoiseGit\\bin;C:\\Users\\Administrator\\AppData\\Roaming\\npm'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'PHP_FCGI_MAX_REQUESTS' => '1000'
+    'PROCESSOR_ARCHITECTURE' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 60 Stepping 3, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '3c03'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PROMPT' => '$P$G'
+    'PSModulePath' => 'C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'SESSIONNAME' => 'Console'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\Windows'
+    'TEMP' => 'C:\\Users\\ADMINI~1\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\ADMINI~1\\AppData\\Local\\Temp'
+    'USERDOMAIN' => 'LINHONGYOU'
+    'USERNAME' => 'Administrator'
+    'USERPROFILE' => 'C:\\Users\\Administrator'
+    'windir' => 'C:\\Windows'
+    'windows_tracing_flags' => '3'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0'
+    'HTTP_HOST' => 'localhost'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'localhost'
+    'SERVER_PORT' => '80'
+    'SERVER_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '55029'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'SERVER_SOFTWARE' => 'nginx/1.5.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => 'D:/workspace_git'
+    'DOCUMENT_URI' => '/ejj-enterprise-boss/src/api/web/index.php'
+    'REQUEST_URI' => '/ejj-enterprise-boss/src/api/web/index.php?r=site'
+    'SCRIPT_NAME' => '/ejj-enterprise-boss/src/api/web/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=site'
+    'SCRIPT_FILENAME' => 'D:/workspace_git//ejj-enterprise-boss/src/api/web/index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/ejj-enterprise-boss/src/api/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1442289809.8394
+    'REQUEST_TIME' => 1442289809
+]

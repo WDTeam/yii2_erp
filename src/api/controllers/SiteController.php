@@ -15,6 +15,7 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
+        echo 'hello world';die;
         $search = new UserInfoSearch();
         return $search->search(\Yii::$app->request->queryParams);
     }
