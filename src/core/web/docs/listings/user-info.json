@@ -1,7 +1,7 @@
 {
   "apiVersion": 0.1,
   "swaggerVersion": "1.2",
-  "basePath": "http://service.1jiajie.com/user",
+  "basePath": "http://core.me:8080/user",
   "resourcePath": "/user-info",
   "produces": [
     "application/json"

@@ -5402,3 +5402,207 @@ $_SERVER = [
     'REQUEST_TIME_FLOAT' => 1442112829.0416
     'REQUEST_TIME' => 1442112829
 ]
+2015-09-14 17:06:21 [127.0.0.1][-][-][error][yii\base\InvalidConfigException] exception 'yii\base\InvalidConfigException' with message 'yii\web\Request::cookieValidationKey must be configured with a secret key.' in D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\web\Request.php:1219
+Stack trace:
+#0 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\web\Request.php(1201): yii\web\Request->loadCookies()
+#1 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\web\User.php(282): yii\web\Request->getCookies()
+#2 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\web\User.php(631): yii\web\User->loginByCookie()
+#3 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\web\User.php(176): yii\web\User->renewAuthStatus()
+#4 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\web\User.php(346): yii\web\User->getIdentity()
+#5 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\filters\AccessRule.php(149): yii\web\User->getIsGuest()
+#6 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\filters\AccessRule.php(104): yii\filters\AccessRule->matchRole(Object(yii\web\User))
+#7 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\filters\AccessControl.php(118): yii\filters\AccessRule->allows(Object(yii\base\InlineAction), Object(yii\web\User), Object(yii\web\Request))
+#8 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\base\ActionFilter.php(71): yii\filters\AccessControl->beforeAction(Object(yii\base\InlineAction))
+#9 [internal function]: yii\base\ActionFilter->beforeFilter(Object(yii\base\ActionEvent))
+#10 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\base\Component.php(541): call_user_func(Array, Object(yii\base\ActionEvent))
+#11 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\base\Controller.php(263): yii\base\Component->trigger('beforeAction', Object(yii\base\ActionEvent))
+#12 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\web\Controller.php(108): yii\base\Controller->beforeAction(Object(yii\base\InlineAction))
+#13 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\base\Controller.php(149): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#14 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\base\Module.php(455): yii\base\Controller->runAction('', Array)
+#15 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\web\Application.php(84): yii\base\Module->runAction('', Array)
+#16 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\base\Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#17 D:\workspace_git\ejj-enterprise-boss\src\boss\web\index.php(17): yii\base\Application->run()
+#18 {main}
+2015-09-14 17:06:20 [127.0.0.1][-][-][info][application] $_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'ANDROID_HOME' => 'C:\\Users\\Administrator\\AppData\\Local\\Temp\\Rar$EXa0.965\\adt-bundle-windows-x86_64-20140702\\sdk'
+    'ANT_HOME' => 'D:\\apache-ant-1.9.4'
+    'APPDATA' => 'C:\\Users\\Administrator\\AppData\\Roaming'
+    'asl_log' => 'Destination=file'
+    'CATALINA_HOME' => 'C:\\Program Files\\Java\\apache-tomcat-7.0.59'
+    'CLASSPATH' => 'C:\\Program Files (x86)\\Java\\jdk1.6.0_34\\lib\\dt.jar;C:\\Program Files (x86)\\Java\\jdk1.6.0_34\\lib\\tools.jar;C:\\Program Files (x86)\\Java\\jdk1.6.0_34\\bin;D:\\apache-jmeter-2.12/lib/ext/ApacheJMeter_core.jar;D:\\apache-jmeter-2.12/lib/jorphan.jar;D:\\apache-jmeter-2.12/lib/logkit-2.0.jar;'
+    'CommonProgramFiles' => 'C:\\Program Files\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'LINHONGYOU'
+    'ComSpec' => 'C:\\Windows\\system32\\cmd.exe'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\Administrator'
+    'JAVA_HOME' => 'C:\\Program Files (x86)'
+    'JMeter_home' => 'D:\\apache-jmeter-2.12'
+    'LOCALAPPDATA' => 'C:\\Users\\Administrator\\AppData\\Local'
+    'LOGONSERVER' => '\\\\LINHONGYOU'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Windows;C:\\Windows\\system32;C:\\ProgramData\\Oracle\\Java\\javapath;C:\\Program Files (x86)\\Common Files\\NetSarang;C:\\Users\\Administrator\\AppData\\Local\\Temp\\Rar$EXa0.965\\adt-bundle-windows-x86_64-20140702\\sdk\\tools;C:\\Users\\Administrator\\AppData\\Local\\Temp\\Rar$EXa0.965\\adt-bundle-windows-x86_64-20140702\\sdk\\platform-tools;D:\\apache-ant-1.9.4\\bin;C:\\Program Files\\Java\\jdk1.8.0_40\\bin;C:\\Program Files\\Java\\jdk1.8.0_40\\jre\\bin;C:\\Python27\\;C:\\Program Files\\TortoiseSVN\\bin;D:\\server\\php5.5;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\nodejs\\;C:\\Program Files (x86)\\Git\\cmd;C:\\Program Files (x86)\\Git\\bin;C:\\Program Files\\TortoiseGit\\bin;C:\\Users\\Administrator\\AppData\\Roaming\\npm'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'PHP_FCGI_MAX_REQUESTS' => '1000'
+    'PROCESSOR_ARCHITECTURE' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 60 Stepping 3, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '3c03'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PROMPT' => '$P$G'
+    'PSModulePath' => 'C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'SESSIONNAME' => 'Console'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\Windows'
+    'TEMP' => 'C:\\Users\\ADMINI~1\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\ADMINI~1\\AppData\\Local\\Temp'
+    'USERDOMAIN' => 'LINHONGYOU'
+    'USERNAME' => 'Administrator'
+    'USERPROFILE' => 'C:\\Users\\Administrator'
+    'windir' => 'C:\\Windows'
+    'windows_tracing_flags' => '3'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0'
+    'HTTP_HOST' => 'boss.me'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'boss.me'
+    'SERVER_PORT' => '80'
+    'SERVER_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '53453'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'SERVER_SOFTWARE' => 'nginx/1.5.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => 'D:/workspace_git/ejj-enterprise-boss/src/boss/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => ''
+    'SCRIPT_FILENAME' => 'D:/workspace_git/ejj-enterprise-boss/src/boss/web//index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1442221580.6204
+    'REQUEST_TIME' => 1442221580
+]
+2015-09-14 17:08:14 [127.0.0.1][-][-][error][yii\base\InvalidParamException] exception 'yii\base\InvalidParamException' with message 'The file or directory to be published does not exist: D:\workspace_git\ejj-enterprise-boss\src/vendor\bower/jquery/dist' in D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\web\AssetManager.php:452
+Stack trace:
+#0 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\web\AssetBundle.php(163): yii\web\AssetManager->publish('D:\\workspace_gi...', Array)
+#1 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\web\AssetManager.php(266): yii\web\AssetBundle->publish(Object(yii\web\AssetManager))
+#2 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\web\AssetManager.php(237): yii\web\AssetManager->loadBundle('yii\\web\\JqueryA...', Array, true)
+#3 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\web\View.php(284): yii\web\AssetManager->getBundle('yii\\web\\JqueryA...')
+#4 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\web\View.php(289): yii\web\View->registerAssetBundle('yii\\web\\JqueryA...', NULL)
+#5 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\web\View.php(289): yii\web\View->registerAssetBundle('yii\\web\\YiiAsse...', NULL)
+#6 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\web\AssetBundle.php(119): yii\web\View->registerAssetBundle('yii\\gii\\GiiAsse...')
+#7 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2-gii\views\layouts\main.php(9): yii\web\AssetBundle::register(Object(yii\web\View))
+#8 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\base\View.php(325): require('D:\\workspace_gi...')
+#9 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\base\View.php(247): yii\base\View->renderPhpFile('D:\\workspace_gi...', Array)
+#10 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\base\Controller.php(386): yii\base\View->renderFile('D:\\workspace_gi...', Array, Object(yii\gii\controllers\DefaultController))
+#11 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\base\Controller.php(372): yii\base\Controller->renderContent('<div class="def...')
+#12 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2-gii\controllers\DefaultController.php(35): yii\base\Controller->render('index')
+#13 [internal function]: yii\gii\controllers\DefaultController->actionIndex()
+#14 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\base\InlineAction.php(55): call_user_func_array(Array, Array)
+#15 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\base\Controller.php(151): yii\base\InlineAction->runWithParams(Array)
+#16 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\base\Module.php(455): yii\base\Controller->runAction('index', Array)
+#17 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\web\Application.php(84): yii\base\Module->runAction('gii/default/ind...', Array)
+#18 D:\workspace_git\ejj-enterprise-boss\src\vendor\yiisoft\yii2\base\Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#19 D:\workspace_git\ejj-enterprise-boss\src\boss\web\index.php(17): yii\base\Application->run()
+#20 {main}
+2015-09-14 17:08:14 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => '/gii'
+]
+
+$_COOKIE = [
+    'PHPSESSID' => 'ldifas21u9h1785cd86vqg6lg1'
+]
+
+$_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'ANDROID_HOME' => 'C:\\Users\\Administrator\\AppData\\Local\\Temp\\Rar$EXa0.965\\adt-bundle-windows-x86_64-20140702\\sdk'
+    'ANT_HOME' => 'D:\\apache-ant-1.9.4'
+    'APPDATA' => 'C:\\Users\\Administrator\\AppData\\Roaming'
+    'asl_log' => 'Destination=file'
+    'CATALINA_HOME' => 'C:\\Program Files\\Java\\apache-tomcat-7.0.59'
+    'CLASSPATH' => 'C:\\Program Files (x86)\\Java\\jdk1.6.0_34\\lib\\dt.jar;C:\\Program Files (x86)\\Java\\jdk1.6.0_34\\lib\\tools.jar;C:\\Program Files (x86)\\Java\\jdk1.6.0_34\\bin;D:\\apache-jmeter-2.12/lib/ext/ApacheJMeter_core.jar;D:\\apache-jmeter-2.12/lib/jorphan.jar;D:\\apache-jmeter-2.12/lib/logkit-2.0.jar;'
+    'CommonProgramFiles' => 'C:\\Program Files\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'LINHONGYOU'
+    'ComSpec' => 'C:\\Windows\\system32\\cmd.exe'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\Administrator'
+    'JAVA_HOME' => 'C:\\Program Files (x86)'
+    'JMeter_home' => 'D:\\apache-jmeter-2.12'
+    'LOCALAPPDATA' => 'C:\\Users\\Administrator\\AppData\\Local'
+    'LOGONSERVER' => '\\\\LINHONGYOU'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Windows;C:\\Windows\\system32;C:\\ProgramData\\Oracle\\Java\\javapath;C:\\Program Files (x86)\\Common Files\\NetSarang;C:\\Users\\Administrator\\AppData\\Local\\Temp\\Rar$EXa0.965\\adt-bundle-windows-x86_64-20140702\\sdk\\tools;C:\\Users\\Administrator\\AppData\\Local\\Temp\\Rar$EXa0.965\\adt-bundle-windows-x86_64-20140702\\sdk\\platform-tools;D:\\apache-ant-1.9.4\\bin;C:\\Program Files\\Java\\jdk1.8.0_40\\bin;C:\\Program Files\\Java\\jdk1.8.0_40\\jre\\bin;C:\\Python27\\;C:\\Program Files\\TortoiseSVN\\bin;D:\\server\\php5.5;C:\\ProgramData\\ComposerSetup\\bin;C:\\Program Files\\nodejs\\;C:\\Program Files (x86)\\Git\\cmd;C:\\Program Files (x86)\\Git\\bin;C:\\Program Files\\TortoiseGit\\bin;C:\\Users\\Administrator\\AppData\\Roaming\\npm'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'PHP_FCGI_MAX_REQUESTS' => '1000'
+    'PROCESSOR_ARCHITECTURE' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 60 Stepping 3, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '3c03'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PROMPT' => '$P$G'
+    'PSModulePath' => 'C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'SESSIONNAME' => 'Console'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\Windows'
+    'TEMP' => 'C:\\Users\\ADMINI~1\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\ADMINI~1\\AppData\\Local\\Temp'
+    'USERDOMAIN' => 'LINHONGYOU'
+    'USERNAME' => 'Administrator'
+    'USERPROFILE' => 'C:\\Users\\Administrator'
+    'windir' => 'C:\\Windows'
+    'windows_tracing_flags' => '3'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_COOKIE' => 'PHPSESSID=ldifas21u9h1785cd86vqg6lg1'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0'
+    'HTTP_HOST' => 'boss.me'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'boss.me'
+    'SERVER_PORT' => '80'
+    'SERVER_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '53535'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'SERVER_SOFTWARE' => 'nginx/1.5.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => 'D:/workspace_git/ejj-enterprise-boss/src/boss/web'
+    'DOCUMENT_URI' => '/index.php'
+    'REQUEST_URI' => '/gii'
+    'SCRIPT_NAME' => '/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=/gii'
+    'SCRIPT_FILENAME' => 'D:/workspace_git/ejj-enterprise-boss/src/boss/web//index.php'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1442221693.9878
+    'REQUEST_TIME' => 1442221693
+]

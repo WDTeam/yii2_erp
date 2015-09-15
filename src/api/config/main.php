@@ -1,5 +1,10 @@
 <?php
-
+$params = array_merge(
+    require(__DIR__ . '/../../common/config/params.php'),
+    require(__DIR__ . '/../../common/config/params-local.php'),
+    require(__DIR__ . '/params.php'),
+    require(__DIR__ . '/params-local.php')
+);
 return [
     'id' => 'app-api',
     'basePath' => dirname(__DIR__),
@@ -9,8 +14,8 @@ return [
     ],
     'controllerNamespace' => 'api\controllers',
     'modules' => [
-        'user' => [
-            'class' => 'api\modules\user\Module',
+        'v1' => [
+            'class' => 'api\modules\v1\Module',
         ],
     ],
     'components' => [
@@ -60,5 +65,5 @@ return [
 
 
     ],
-    'params' => include 'params-local.php',
+    'params' => $params,
 ];
