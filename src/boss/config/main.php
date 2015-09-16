@@ -12,13 +12,7 @@ return [
     'controllerNamespace' => 'boss\controllers',
     'bootstrap' => ['log'],
     'modules' => [
-        'blog' => [
-            'class' => 'funson86\blog\Module',
-            'controllerNamespace' => 'funson86\blog\controllers\boss'
-        ],
-        'gridview' => [
-            'class' => 'kartik\grid\Module',
-        ],
+
     ],
     'components' => [
         'user' => [

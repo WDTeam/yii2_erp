@@ -15,10 +15,6 @@ return [
             'class' => 'yii\rbac\DbManager',
             'defaultRoles' => ['guest'],
         ],
-        'cache' => [
-//             'class' => 'yii\caching\FileCache',
-            'class'=>'yii\caching\DbCache',
-        ],
         'i18n' => [
             'translations' => [
                 '*' => [

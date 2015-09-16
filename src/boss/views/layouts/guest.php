@@ -1,5 +1,5 @@
 <?php
-use backend\assets\AppAsset;
+use boss\assets\AppAsset;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use common\widgets\Alert;

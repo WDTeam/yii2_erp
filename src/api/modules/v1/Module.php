@@ -14,6 +14,10 @@ class Module extends \yii\base\Module
             'user' => [
                 'class' => 'api\modules\v1\user\Model',
             ],
+            'order' => [
+                'class' => 'api\modules\v1\order\Module',
+            ],
+
         ];
         // custom initialization code goes here
     }
