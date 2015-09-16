@@ -1,0 +1,307 @@
+Message-ID: <8487154bebedb8c4b2f8ef14641e31a3@fr>
+Date: Fri, 28 Aug 2015 18:51:40 +0800
+Subject: New train.1jiajie.com error log message
+From: 
+To: zhanghang@1jiajie.com, zhangxugang@1jiajie.com, liuhaijian@1jiajie.com,
+ lidenggao@1jiajie.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+2015-08-28 18:51:40
+[127.0.0.1][-][obecidgre8v8ab6dt90ueqoje6][error][yii=
+\db\Exception]
+exception 'PDOException' with message 'SQLSTATE[42000]: Sy=
+ntax error
+or access violation: 1064 You have an error in your SQL syntax=
+; check
+the manual that corresponds to your MySQL server version for the =
+right
+syntax to use near 'AND s.status=3D3) as passnum,  =20
+            =
+    (SELECT count(1) FROM et_studylog' at line 2' in
+E:\xampp\htdocs\etra=
+in\src\vendor\yiisoft\yii2\db\Command.php:837
+Stack trace:
+#0 E:\xampp\=
+htdocs\etrain\src\vendor\yiisoft\yii2\db\Command.php(837):
+PDOStatement->=
+execute()
+#1 E:\xampp\htdocs\etrain\src\vendor\yiisoft\yii2\db\Command.ph=
+p(359):
+yii\db\Command->queryInternal('<span class=3D"st...', '<span
+cl=
+ass=3D"ke...')
+#2 E:\xampp\htdocs\etrain\src\vendor\yiisoft\yii2\db\Query=
+.php(206):
+yii\db\Command->queryAll()
+#3
+E:\xampp\htdocs\etrain\src\v=
+endor\yiisoft\yii2\db\ActiveQuery.php(132):
+yii\db\Query->all('<span clas=
+s=3D"ke...')
+#4
+E:\xampp\htdocs\etrain\src\frontend\controllers\Categor=
+yController.php(72):
+yii\db\ActiveQuery->all()
+#5 [internal function]:=
+
+frontend\controllers\CategoryController->actionIndex()
+#6
+E:\xampp\h=
+tdocs\etrain\src\vendor\yiisoft\yii2\base\InlineAction.php(55):
+call_user=
+_func_array('[<span class=3D"t...', '[]')
+#7
+E:\xampp\htdocs\etrain\src=
+\vendor\yiisoft\yii2\base\Controller.php(151):
+yii\base\InlineAction->run=
+WithParams('[<span class=3D"s...')
+#8
+E:\xampp\htdocs\etrain\src\vendor=
+\yiisoft\yii2\base\Module.php(455):
+yii\base\Controller->runAction('<span=
+ class=3D"st...', '[<span
+class=3D"s...')
+#9
+E:\xampp\htdocs\etrain\s=
+rc\vendor\yiisoft\yii2\web\Application.php(84):
+yii\base\Module->runActio=
+n('<span class=3D"st...', '[<span class=3D"s...')
+#10
+E:\xampp\htdocs\e=
+train\src\vendor\yiisoft\yii2\base\Application.php(375):
+yii\web\Applicat=
+ion->handleRequest(Object(yii\web\Request))
+#11 E:\xampp\htdocs\etrain\sr=
+c\frontend\web\index.php(18):
+yii\base\Application->run()
+#12 {main}
+=
+
+Next exception 'yii\db\Exception' with message 'SQLSTATE[42000]:
+Synta=
+x error or access violation: 1064 You have an error in your SQL
+syntax; c=
+heck the manual that corresponds to your MySQL server version
+for the rig=
+ht syntax to use near 'AND s.status=3D3) as passnum,  =20
+                (=
+SELECT count(1) FROM et_studylog' at line 2
+The SQL being executed was: S=
+ELECT cateid,catename,description,
+                (SELECT count(1) FROM =
+et_studylog s WHERE
+s.classify_id=3Dc.cateid AND s.student_id=3D AND s.st=
+atus=3D3) as passnum, =20
+
+                (SELECT count(1) FROM et_study=
+log s WHERE
+s.classify_id=3Dc.cateid AND s.student_id=3D AND s.status!=3D=
+3) as
+nopassnum,
+                (SELECT count(1) FROM et_courseware c =
+WHERE
+c.classify_id=3Dc.cateid) as cnum
+                FROM et_categor=
+y c WHERE cateid > 1' in
+E:\xampp\htdocs\etrain\src\vendor\yiisoft\yii2\d=
+b\Schema.php:628
+Stack trace:
+#0 E:\xampp\htdocs\etrain\src\vendor\yiis=
+oft\yii2\db\Command.php(852):
+yii\db\Schema->convertException(Object(PDOE=
+xception), 'SELECT
+cateid,c...')
+#1 E:\xampp\htdocs\etrain\src\vendor\y=
+iisoft\yii2\db\Command.php(359):
+yii\db\Command->queryInternal('<span cla=
+ss=3D"st...', '<span
+class=3D"ke...')
+#2 E:\xampp\htdocs\etrain\src\ven=
+dor\yiisoft\yii2\db\Query.php(206):
+yii\db\Command->queryAll()
+#3
+E:\=
+xampp\htdocs\etrain\src\vendor\yiisoft\yii2\db\ActiveQuery.php(132):
+yii\=
+db\Query->all('<span class=3D"ke...')
+#4
+E:\xampp\htdocs\etrain\src\fro=
+ntend\controllers\CategoryController.php(72):
+yii\db\ActiveQuery->all()=
+
+#5 [internal function]:
+frontend\controllers\CategoryController->actio=
+nIndex()
+#6
+E:\xampp\htdocs\etrain\src\vendor\yiisoft\yii2\base\InlineA=
+ction.php(55):
+call_user_func_array('[<span class=3D"t...', '[]')
+#7
+=
+E:\xampp\htdocs\etrain\src\vendor\yiisoft\yii2\base\Controller.php(151):
+=
+yii\base\InlineAction->runWithParams('[<span class=3D"s...')
+#8
+E:\xamp=
+p\htdocs\etrain\src\vendor\yiisoft\yii2\base\Module.php(455):
+yii\base\Co=
+ntroller->runAction('<span class=3D"st...', '[<span
+class=3D"s...')
+#9=
+
+E:\xampp\htdocs\etrain\src\vendor\yiisoft\yii2\web\Application.php(84):=
+
+yii\base\Module->runAction('<span class=3D"st...', '[<span class=3D"s...=
+')
+#10
+E:\xampp\htdocs\etrain\src\vendor\yiisoft\yii2\base\Application.=
+php(375):
+yii\web\Application->handleRequest(Object(yii\web\Request))
+#=
+11 E:\xampp\htdocs\etrain\src\frontend\web\index.php(18):
+yii\base\Applic=
+ation->run()
+#12 {main}
+Additional Information:
+Array
+(
+    [0] =3D> 42000
+    [1] =3D> 1064
+    [2] =3D> You have =
+an error in your SQL syntax; check the manual that
+corresponds to your My=
+SQL server version for the right syntax to use
+near 'AND s.status=3D3) as=
+ passnum,  =20
+                (SELECT count(1) FROM et_studylog' at line 2=
+
+)
+
+2015-08-28 18:51:35
+[127.0.0.1][-][obecidgre8v8ab6dt90ueqoje6][=
+info][application] $_GET =3D
+[
+    'type' =3D> '1'
+]
+
+$_COOKIE =
+=3D [
+    'PHPSESSID' =3D> 'obecidgre8v8ab6dt90ueqoje6'
+    '_csrf' =3D=
+>
+'5e8e14f99edcbd44d32387b0c0f1807190881ac091edf7488e21d77e4c4bf713a:2:{i=
+:0;s:5:\"_csrf\";i:1;s:32:\"xpRwo7RescWXDZ9lPd5oeI72l0q8A3CW\";}'
+]
+
+=
+$_SESSION =3D [
+    '__flash' =3D> []
+]
+
+$_SERVER =3D [
+    'REDI=
+RECT_MIBDIRS' =3D> 'E:/xampp/php/extras/mibs'
+    'REDIRECT_MYSQL_HOME' =
+=3D> '\\xampp\\mysql\\bin'
+    'REDIRECT_OPENSSL_CONF' =3D> 'E:/xampp/apa=
+che/bin/openssl.cnf'
+    'REDIRECT_PHP_PEAR_SYSCONF_DIR' =3D> '\\xampp\\p=
+hp'
+    'REDIRECT_PHPRC' =3D> '\\xampp\\php'
+    'REDIRECT_TMP' =3D> '\=
+\xampp\\tmp'
+    'REDIRECT_STATUS' =3D> '200'
+    'MIBDIRS' =3D> 'E:/xa=
+mpp/php/extras/mibs'
+    'MYSQL_HOME' =3D> '\\xampp\\mysql\\bin'
+    'O=
+PENSSL_CONF' =3D> 'E:/xampp/apache/bin/openssl.cnf'
+    'PHP_PEAR_SYSCONF=
+_DIR' =3D> '\\xampp\\php'
+    'PHPRC' =3D> '\\xampp\\php'
+    'TMP' =3D=
+> '\\xampp\\tmp'
+    'HTTP_HOST' =3D> 'fr'
+    'HTTP_CONNECTION' =3D> '=
+keep-alive'
+    'HTTP_ACCEPT' =3D>
+'text/html,application/xhtml+xml,app=
+lication/xml;q=3D0.9,image/webp,*/*;q=3D0.8'
+    'HTTP_UPGRADE_INSECURE_R=
+EQUESTS' =3D> '1'
+    'HTTP_USER_AGENT' =3D> 'Mozilla/5.0 (Windows NT 6.1=
+; WOW64)
+AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.130
+Sa=
+fari/537.36'
+    'HTTP_REFERER' =3D> 'http://fr/'
+    'HTTP_ACCEPT_ENCO=
+DING' =3D> 'gzip, deflate, sdch'
+    'HTTP_ACCEPT_LANGUAGE' =3D> 'zh-CN,z=
+h;q=3D0.8'
+    'HTTP_COOKIE' =3D> 'PHPSESSID=3Dobecidgre8v8ab6dt90ueqoje6=
+;
+_csrf=3D5e8e14f99edcbd44d32387b0c0f1807190881ac091edf7488e21d77e4c4bf71=
+3a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22xpRwo7RescWXD=
+Z9lPd5oeI72l0q8A3CW%22%3B%7D'
+    'PATH' =3D>
+'C:\\ProgramData\\Oracle\=
+\Java\\javapath;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wb=
+em;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;D:\\TortoiseSVN\\bin.;D=
+:\\Java\\jdk1.8.0_51\\lib\\dt.jar;D:\\Java\\jdk1.8.0_51\\lib\\tools.jar;E:\=
+\xampp\\php;C:\\ProgramData\\ComposerSetup\\bin;'
+    'SystemRoot' =3D> '=
+C:\\Windows'
+    'COMSPEC' =3D> 'C:\\Windows\\system32\\cmd.exe'
+    'P=
+ATHEXT' =3D>
+'.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+  =
+  'WINDIR' =3D> 'C:\\Windows'
+    'SERVER_SIGNATURE' =3D> '<address>Apach=
+e/2.4.12 (Win32)
+OpenSSL/1.0.1l PHP/5.6.8 Server at fr Port 80</address>=
+
+'
+    'SERVER_SOFTWARE' =3D> 'Apache/2.4.12 (Win32) OpenSSL/1.0.1l
+P=
+HP/5.6.8'
+    'SERVER_NAME' =3D> 'fr'
+    'SERVER_ADDR' =3D> '127.0.0.1=
+'
+    'SERVER_PORT' =3D> '80'
+    'REMOTE_ADDR' =3D> '127.0.0.1'
+    =
+'DOCUMENT_ROOT' =3D> 'E:/xampp/htdocs/etrain/src/frontend/web'
+    'REQUE=
+ST_SCHEME' =3D> 'http'
+    'CONTEXT_PREFIX' =3D> ''
+    'CONTEXT_DOCUME=
+NT_ROOT' =3D>
+'E:/xampp/htdocs/etrain/src/frontend/web'
+    'SERVER_ADM=
+IN' =3D> 'fr'
+    'SCRIPT_FILENAME' =3D>
+'E:/xampp/htdocs/etrain/src/fr=
+ontend/web/index.php'
+    'REMOTE_PORT' =3D> '56010'
+    'REDIRECT_QUER=
+Y_STRING' =3D> 'type=3D1'
+    'REDIRECT_URL' =3D> '/category/index'
+   =
+ 'GATEWAY_INTERFACE' =3D> 'CGI/1.1'
+    'SERVER_PROTOCOL' =3D> 'HTTP/1.1'=
+
+    'REQUEST_METHOD' =3D> 'GET'
+    'QUERY_STRING' =3D> 'type=3D1'
+ =
+   'REQUEST_URI' =3D> '/category/index?type=3D1'
+    'SCRIPT_NAME' =3D> '=
+/index.php'
+    'PHP_SELF' =3D> '/index.php'
+    'REQUEST_TIME_FLOAT' =
+=3D> 1440759095.499
+    'REQUEST_TIME' =3D> 1440759095
+]

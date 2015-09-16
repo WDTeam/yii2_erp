@@ -1,0 +1,179 @@
+Message-ID: <0bc2380a75717377de88254ed5db36a7@fr.train>
+Date: Sat, 12 Sep 2015 17:13:01 +0800
+Subject: New train.1jiajie.com error log message
+From: 
+To: zhanghang@1jiajie.com, zhangxugang@1jiajie.com, liuhaijian@1jiajie.com,
+ lidenggao@1jiajie.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+2015-09-12 17:13:01
+[127.0.0.1][-][ees9kuf7km2m0prklo3j647m13][error][yii=
+\web\HttpException:404]
+exception 'yii\base\InvalidRouteException' with m=
+essage 'Unable to
+resolve the request "gii".' in
+D:\WWW\boss\vendor\yii=
+soft\yii2\base\Module.php:461
+Stack trace:
+#0 D:\WWW\boss\vendor\yiisof=
+t\yii2\web\Application.php(84):
+yii\base\Module->runAction('gii', Array)=
+
+#1 D:\WWW\boss\vendor\yiisoft\yii2\base\Application.php(375):
+yii\web\=
+Application->handleRequest(Object(yii\web\Request))
+#2 D:\WWW\boss\fronte=
+nd\web\index.php(18): yii\base\Application->run()
+#3 {main}
+
+Next exc=
+eption 'yii\web\NotFoundHttpException' with message
+'=E9=A1=B5=E9=9D=
+=A2=E6=9C=AA=E6=89=BE=E5=88=B0=E3=80=82' in
+D:\WWW\boss\vendor\yiisoft\yi=
+i2\web\Application.php:96
+Stack trace:
+#0 D:\WWW\boss\vendor\yiisoft\yi=
+i2\base\Application.php(375):
+yii\web\Application->handleRequest(Object(y=
+ii\web\Request))
+#1 D:\WWW\boss\frontend\web\index.php(18): yii\base\Appl=
+ication->run()
+#2 {main}
+2015-09-12 17:12:54
+[127.0.0.1][-][ees9kuf7k=
+m2m0prklo3j647m13][info][application] $_COOKIE
+=3D [
+    'PHPSESSID' =
+=3D> 'ees9kuf7km2m0prklo3j647m13'
+    '_csrf' =3D>
+'1a28beb108d5e7f50b5=
+f3275bd3669b32bdc336f82a3523da1e6972458197ab7a:2:{i:0;s:5:\"_csrf\";i:1;s:3=
+2:\"1gwEqh-N5Bz7Ht0Kzm2DDobQN_Xsu_u0\";}'
+]
+
+$_SESSION =3D [
+    '_=
+_flash' =3D> []
+]
+
+$_SERVER =3D [
+    'PATH' =3D>
+'D:\\phpStudy\\=
+php56n;C:\\ProgramData\\Oracle\\Java\\javapath;C:\\Program
+Files (x86)\\I=
+ntel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS
+Client\\;C:\\WINDOWS\\=
+system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\Win=
+dowsPowerShell\\v1.0\\;C:\\Program
+Files (x86)\\NVIDIA Corporation\\PhysX=
+\\Common;C:\\Program
+Files\\Intel\\WiFi\\bin\\;C:\\Program Files\\Common=
+
+Files\\Intel\\WirelessCommon\\;C:\\SWTOOLS\\ReadyApps;C:\\Program
+File=
+s (x86)\\Intel\\Intel(R) Management Engine
+Components\\DAL;C:\\Program Fi=
+les\\Intel\\Intel(R) Management Engine
+Components\\DAL;C:\\Program Files =
+(x86)\\Intel\\Intel(R) Management
+Engine Components\\IPT;C:\\Program File=
+s\\Intel\\Intel(R) Management
+Engine Components\\IPT;C:\\Program Files\\C=
+ondusiv
+Technologies\\ExpressCache\\;C:\\Program Files (x86)\\Windows
+K=
+its\\8.1\\Windows Performance Toolkit\\;C:\\Program Files\\Microsoft
+SQL =
+Server\\110\\Tools\\Binn\\;C:\\Program Files (x86)\\Microsoft
+SDKs\\TypeS=
+cript\\1.0\\;C:\\Program Files\\Microsoft SQL
+Server\\120\\Tools\\Binn\\;=
+C:\\Users\\zhang\\.dnx\\bin;C:\\Program
+Files\\Microsoft DNX\\Dnvm\\;C:\\=
+Program Files
+(x86)\\nodejs\\;C:\\Program Files\\TortoiseGit\\bin;C:\\Pro=
+gram
+Files\\Git\\cmd;C:\\Program Files\\Git\\mingw64\\bin;C:\\Program
+F=
+iles\\Git\\usr\\bin;D:\\phpStudy\\php56n;C:\\Program
+Files\\Intel\\WiFi\\=
+bin\\;C:\\Program Files\\Common
+Files\\Intel\\WirelessCommon\\;C:\\Users\=
+\zhang\\AppData\\Roaming\\npm'
+    'SYSTEMROOT' =3D> 'C:\\WINDOWS'
+    =
+'COMSPEC' =3D> 'C:\\WINDOWS\\system32\\cmd.exe'
+    'PATHEXT' =3D>
+'.CO=
+M;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' =3D> 'C:=
+\\WINDOWS'
+    'PHP_FCGI_MAX_REQUESTS' =3D> '1000'
+    'PHPRC' =3D> 'D:=
+/phpStudy/php56n'
+    '_FCGI_SHUTDOWN_EVENT_' =3D> '2028'
+    'SCRIPT_N=
+AME' =3D> '/index.php'
+    'REQUEST_URI' =3D> '/gii'
+    'QUERY_STRING'=
+ =3D> ''
+    'REQUEST_METHOD' =3D> 'GET'
+    'SERVER_PROTOCOL' =3D> 'HT=
+TP/1.1'
+    'GATEWAY_INTERFACE' =3D> 'CGI/1.1'
+    'REDIRECT_URL' =3D> =
+'/gii'
+    'REMOTE_PORT' =3D> '9706'
+    'SCRIPT_FILENAME' =3D> 'D:/WWW=
+/boss/frontend/web/index.php'
+    'SERVER_ADMIN' =3D> 'admin@phpStudy.net=
+'
+    'CONTEXT_DOCUMENT_ROOT' =3D> 'D:/WWW/boss/frontend/web'
+    'CONT=
+EXT_PREFIX' =3D> ''
+    'REQUEST_SCHEME' =3D> 'http'
+    'DOCUMENT_ROOT=
+' =3D> 'D:/WWW/boss/frontend/web'
+    'REMOTE_ADDR' =3D> '127.0.0.1'
+  =
+  'SERVER_PORT' =3D> '80'
+    'SERVER_ADDR' =3D> '127.0.0.1'
+    'SERVE=
+R_NAME' =3D> 'fr.train'
+    'SERVER_SOFTWARE' =3D> 'Apache/2.4.10 (Win32)=
+ OpenSSL/1.0.1i
+mod_fcgid/2.3.9'
+    'SERVER_SIGNATURE' =3D> ''
+    '=
+SystemRoot' =3D> 'C:\\WINDOWS'
+    'HTTP_COOKIE' =3D> 'PHPSESSID=3Dees9ku=
+f7km2m0prklo3j647m13;
+_csrf=3D1a28beb108d5e7f50b5f3275bd3669b32bdc336f82a=
+3523da1e6972458197ab7a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A3=
+2%3A%221gwEqh-N5Bz7Ht0Kzm2DDobQN_Xsu_u0%22%3B%7D'
+    'HTTP_ACCEPT_LANGUA=
+GE' =3D> 'zh-CN,zh;q=3D0.8'
+    'HTTP_ACCEPT_ENCODING' =3D> 'gzip,deflate=
+,sdch'
+    'HTTP_USER_AGENT' =3D> 'Mozilla/5.0 (Windows NT 6.3; WOW64)
+=
+AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63
+Safari/537.36'=
+
+    'HTTP_ACCEPT' =3D>
+'text/html,application/xhtml+xml,application/xm=
+l;q=3D0.9,image/webp,*/*;q=3D0.8'
+    'HTTP_CONNECTION' =3D> 'close'
+  =
+  'HTTP_HOST' =3D> 'fr.train'
+    'REDIRECT_STATUS' =3D> '200'
+    'FCG=
+I_ROLE' =3D> 'RESPONDER'
+    'PHP_SELF' =3D> '/index.php'
+    'REQUEST_=
+TIME_FLOAT' =3D> 1442049174.2039
+    'REQUEST_TIME' =3D> 1442049174
+]
