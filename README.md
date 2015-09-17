@@ -15,6 +15,9 @@
 　　4. 运维手册 ： http://i99kyj.axshare.com<br/>
 
 部署说明：
+-------------------
+
+```
 	1、代码目录 /code/ejj-enterprise-boss
 	2、部署规则
 	   域名:端口 boss.1jiajie.com:80			root /code/ejj-enterprise-boss/boss/web
@@ -69,3 +72,6 @@
 				include			fastcgi_params;
 			}
 	    }
+	   
+
+```
