@@ -3,7 +3,7 @@
   "swaggerVersion": "1.2",
   "apis": [
     {
-      "path": "http://service.1jiajie.com/docs/listings/user-info.json",
+      "path": "http://dev.service.1jiajie.com/docs/listings/user-info.json",
       "description": "客户接口"
     }
   ]
