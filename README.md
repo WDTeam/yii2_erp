@@ -72,6 +72,40 @@
 				include			fastcgi_params;
 			}
 	    }
-	   
+	   6、Apache部署模型
+		<VirtualHost *:80>
+		    DocumentRoot "/code/ejj-enterprise-boss/boss/web"
+		    ServerName boss.1jiajie.com
+		    ServerAlias 
+		  <Directory "/code/ejj-enterprise-boss/boss/web">
+		      Options FollowSymLinks ExecCGI
+		      AllowOverride All
+		      Order allow,deny
+		      Allow from all
+		      Require all granted
+		  </Directory>
+		</VirtualHost>
+
+		<VirtualHost *:80>
+		    DocumentRoot "/code/ejj-enterprise-boss/api/web"
+		    ServerName api.1jiajie.com
+		    ServerAlias 
+		  <Directory "/code/ejj-enterprise-boss/api/web">
+		      Options FollowSymLinks ExecCGI
+		      AllowOverride All
+		      Order allow,deny
+		      Allow from all
+		      Require all granted
+		  </Directory>
+		</VirtualHost>
+
+		在对应的根目录下面增加Rewrite解析的.htaccess
+		代码
+		RewriteEngine on
+
+		RewriteCond %{REQUEST_FILENAME} !-f
+		RewriteCond %{REQUEST_FILENAME} !-d
+		RewriteRule . index.php
+
 
 ```
