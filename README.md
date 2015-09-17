@@ -13,3 +13,99 @@
 　　2. 系统设计 ： http://i99kyj.axshare.com<br/>
 　　3. 测试计划 ： http://i99kyj.axshare.com<br/>
 　　4. 运维手册 ： http://i99kyj.axshare.com<br/>
+
+部署说明：
+-------------------
+
+```
+	1、代码目录 /code/ejj-enterprise-boss
+	2、部署规则
+	   域名:端口 boss.1jiajie.com:80			root /code/ejj-enterprise-boss/boss/web
+	   域名:端口 api.1jiajie.com:80				root /code/ejj-enterprise-boss/api/web
+	3、添加rewrite
+	   if (!-e $request_filename){
+			rewrite "^(.*)$" /index.php?r=$1 last;
+		}
+	4、dev、test环境分别在域名前面添加dev.和test.
+	5、Nginx部署模型仅供参考
+		server {
+	        listen       80;
+	        server_name  boss.1jiajie.com;
+			send_timeout 0;
+	        location / {
+	            root   /code/ejj-enterprise-boss/boss/web;
+	            index  index.html index.htm index.php;
+				autoindex on;
+				if (!-e $request_filename){
+					rewrite "^(.*)$" /index.php?r=$1 last;
+				}
+	        }
+
+	        location ~ \.php$ {
+				root	/code/ejj-enterprise-boss/boss/web;
+				fastcgi_pass	127.0.0.1:9000;
+				fastcgi_index	index.php;
+				fastcgi_param	SCRIPT_FILENAME  $document_root/$fastcgi_script_name;
+				fastcgi_buffers 4 128k;
+				include			fastcgi_params;
+			}
+	    }
+	    server {
+	        listen       80;
+	        server_name  api.1jiajie.com;
+			send_timeout 0;
+	        location / {
+	            root   /code/ejj-enterprise-boss/api/web;
+	            index  index.html index.htm index.php;
+				autoindex on;
+				if (!-e $request_filename){
+					rewrite "^(.*)$" /index.php?r=$1 last;
+				}
+	        }
+
+	        location ~ \.php$ {
+				root	/code/ejj-enterprise-boss/api/web;
+				fastcgi_pass	127.0.0.1:9000;
+				fastcgi_index	index.php;
+				fastcgi_param	SCRIPT_FILENAME  $document_root/$fastcgi_script_name;
+				fastcgi_buffers 4 128k;
+				include			fastcgi_params;
+			}
+	    }
+	   6、Apache部署模型
+		<VirtualHost *:80>
+		    DocumentRoot "/code/ejj-enterprise-boss/boss/web"
+		    ServerName boss.1jiajie.com
+		    ServerAlias 
+		  <Directory "/code/ejj-enterprise-boss/boss/web">
+		      Options FollowSymLinks ExecCGI
+		      AllowOverride All
+		      Order allow,deny
+		      Allow from all
+		      Require all granted
+		  </Directory>
+		</VirtualHost>
+
+		<VirtualHost *:80>
+		    DocumentRoot "/code/ejj-enterprise-boss/api/web"
+		    ServerName api.1jiajie.com
+		    ServerAlias 
+		  <Directory "/code/ejj-enterprise-boss/api/web">
+		      Options FollowSymLinks ExecCGI
+		      AllowOverride All
+		      Order allow,deny
+		      Allow from all
+		      Require all granted
+		  </Directory>
+		</VirtualHost>
+
+		在对应的根目录下面增加Rewrite解析的.htaccess
+		代码
+		RewriteEngine on
+
+		RewriteCond %{REQUEST_FILENAME} !-f
+		RewriteCond %{REQUEST_FILENAME} !-d
+		RewriteRule . index.php
+
+
+```
