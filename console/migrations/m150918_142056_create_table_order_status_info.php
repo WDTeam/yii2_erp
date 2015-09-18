@@ -23,6 +23,10 @@ class m150918_142056_create_table_order_status_info extends Migration
             'updated_at' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0',
             'isdel' => Schema::TYPE_SMALLINT.'(1) unsigned NOT NULL DEFAULT 0',
         ], $tableOptions);
+
+//        $this->batchInsert('{{%order_status_info}}',
+//            ['id','order_status_info_name','order_status_flow','order_status_oper','order_status_oper_man','created_at','updated_at','isdel'],
+//            ['1','初始化']);
     }
 
     public function down()
