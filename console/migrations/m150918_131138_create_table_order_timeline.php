@@ -56,6 +56,7 @@ class m150918_131138_create_table_order_timeline extends Migration
               'order_pop_pay_money'=> Schema::TYPE_DECIMAL.'(8,2) unsigned NOT NULL DEFAULT 0 COMMENT \'合作方结算金额\'',
               'invoice_id'=> Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'发票id\'',
               'compare_id'=> Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'对账id\'',
+              'shop_id'=> Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'门店id\'',
               'admin_id'=> Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'操作人id\'',
               'isdel'=> Schema::TYPE_SMALLINT.'(1) unsigned NOT NULL DEFAULT 0 COMMENT \'是否已删除\'',
         ], $tableOptions);
