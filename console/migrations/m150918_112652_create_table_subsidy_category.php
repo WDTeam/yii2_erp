@@ -9,7 +9,7 @@ class m150918_112652_create_table_subsidy_category extends Migration
     {
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
-            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'启动页表\'';
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'阿姨补助或奖励分类表，包括路补、晚补、扑空补助、全勤奖、无投诉奖、星级阿姨奖励、办卡提成、推荐服务、日常违规、投诉和赔偿奖、人才推荐奖\'';
         }
         $this->createTable('{{%subsidy_category}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT  COMMENT \'主键\'' ,
