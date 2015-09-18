@@ -11,7 +11,7 @@ class m150918_133302_ejj_help extends Migration
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'用户APP问答表\'';
         }
-        $this->createTable('{{%ejj_help}}', [
+        $this->createTable('{{%help}}', [
             'id'=>  Schema::TYPE_PK.'(8) NOT NULL AUTO_INCREMENT COMMENT \'主键\'' ,
             'help_question'=> Schema::TYPE_STRING.'(64) NOT NULL COMMENT \'问题\'' ,
             'help_solution'=> Schema::TYPE_TEXT.' DEFAULT NULL COMMENT \'回答\'' ,
@@ -24,6 +24,6 @@ class m150918_133302_ejj_help extends Migration
 
     public function down()
     {
-        $this->dropTable('{{%ejj_help}}');
+        $this->dropTable('{{%help}}');
     }
 }
