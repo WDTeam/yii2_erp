@@ -11,7 +11,7 @@ class m150918_131959_ejj_adv extends Migration
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'手机端广告轮播图\'';
         }
-        $this->createTable('{{%ejj_adv}}', [
+        $this->createTable('{{%adv}}', [
             'id'=>Schema::TYPE_PK . ' AUTO_INCREMENT  COMMENT \'编号\'' ,
             'adv_pic'=>Schema::TYPE_STRING . '(32) DEFAULT NULL COMMENT \'广告图片\'',
             'adv_url'=>Schema::TYPE_STRING . '(32) DEFAULT NULL COMMENT \'连接地址\'',
@@ -23,7 +23,7 @@ class m150918_131959_ejj_adv extends Migration
 
     public function down()
     {
-        $this->dropTable('{{%ejj_adv}}');
+        $this->dropTable('{{%adv}}');
     }
 
     /*

@@ -11,7 +11,7 @@ class m150918_132651_ejj_coupon extends Migration
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'优惠券\'';
         }
-        $this->createTable('{{%ejj_coupon}}', [
+        $this->createTable('{{%coupon}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT  COMMENT \'主键\'' ,
             'coupon_code'=>  Schema::TYPE_STRING. '(16) DEFAULT NULL COMMENT \'优惠码\'' ,
             'coupon_exchange_state'=> Schema::TYPE_SMALLINT . '(4) NOT NULL COMMENT \'兑换状态，1为未兑换，2为已兑换\'' ,
@@ -19,9 +19,9 @@ class m150918_132651_ejj_coupon extends Migration
             'coupon_use_state'=>  Schema::TYPE_SMALLINT . '(4) NOT NULL COMMENT \'使用状态，1为未使用，2为已使用\'' ,
             'coupon_type'=>  Schema::TYPE_SMALLINT . '(4) NOT NULL COMMENT \'1,满减，2立减\'' ,
             'coupon_use_time_type'=>  Schema::TYPE_SMALLINT. '(4) NOT NULL COMMENT \'优惠券使用时间类型，1为按照时长，2为按照起止时间\'' ,
-            'coupon_min_price'=>  Schema::TYPE_MONEY.  'NOT NULL DEFAULT 0.00 COMMENT \'最小订单金额\'' ,
-            'coupon_price'=>  Schema::TYPE_MONEY. 'NOT NULL COMMENT \'优惠券价值\'' ,
-            'user_id'=>  Schema::TYPE_INTEGER.(8) 'NOT NULL' ,
+            'coupon_min_price'=>  Schema::TYPE_DECIMAL. '(8,2) NOT NULL DEFAULT 0.00 COMMENT \'最小订单金额\'' ,
+            'coupon_price'=>  Schema::TYPE_DECIMAL. '(8,2) NOT NULL COMMENT \'优惠券价值\'' ,
+            'user_id'=>  Schema::TYPE_INTEGER.'(8) NOT NULL' ,
             'coupon_city_limit'=>  Schema::TYPE_INTEGER . '(4) NOT NULL COMMENT \'城市限制，1为城市单一限制，2为不限\'' ,
             'city_id'=> Schema::TYPE_INTEGER.'(8) NOT NULL' ,
             'coupon_user_limit'=>  Schema::TYPE_INTEGER . '(4) NOT NULL COMMENT \'新老用户限制，1为只限新用户，2为只限老用户，3为不限\'' ,
@@ -41,7 +41,7 @@ class m150918_132651_ejj_coupon extends Migration
 
     public function down()
     {
-        $this->dropTable('{{%ejj_coupon}}');
+        $this->dropTable('{{%coupon}}');
     }
 
     /*
