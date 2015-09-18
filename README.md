@@ -1,5 +1,5 @@
-　　系统简介
------------------------------
+# 系统简介
+
 　　BOSS（Business & Operation Support System，BOSS）指的是业务运营支撑系统。
 
 　　BOSS分为四个部分：计费及结算系统、营业与账务系统、客户服务系统和决策支持系统。
@@ -8,14 +8,13 @@
 
 　　本系统整合了通用后台、小家政后台、企业保洁后台、运营CMS后台、订单后台、数据后台等系统，实现了业务的统一入口、统一操作体验、统一业务逻辑、统一业务管理...并对用户界面进行了优化，简化操作，提升工作效率；
 
-　　相关项目资料：
-　　1. 产品需求 ： http://i99kyj.axshare.com
-　　2. 系统设计 ： http://i99kyj.axshare.com
-　　3. 测试计划 ： http://i99kyj.axshare.com
-　　4. 运维手册 ： http://i99kyj.axshare.com
+　　相关项目资料：<br/>
+　　1. 产品需求 ： http://i99kyj.axshare.com<br/>
+　　2. 系统设计 ： http://i99kyj.axshare.com<br/>
+　　3. 测试计划 ： http://i99kyj.axshare.com<br/>
+　　4. 运维手册 ： http://i99kyj.axshare.com<br/>
 
-　　BOSS系统代码框架结构说明：
------------------------------
+## BOSS系统代码框架结构说明：
 
 　　-- common （通用模块，自动生成数据库CRUD类，封装常用工具类）<br/>
 　　-- core （核心模块，继承并扩展common）<br/>
@@ -40,8 +39,16 @@
 　　LICENSE.md （授权协议）
 　　README.md （本说明）
 
-部署说明：
------------------------------
+## 注意事项
+  
+   1. 在任何人参与项目之前，请记住，一定不能对environments 配置目录下得文件修改，
+      
+      *不要修改enviroments目录*
+
+   2. 然后，自己本机上搭建数据库local_boss_db,  username: local_boss_db_dbo; password:localboss，然后执行 ./yii migration就可以在本机上进行开发了。
+ 
+ 
+## 部署说明：
 
 ```
 	1、代码目录 /code/ejj-enterprise-boss
