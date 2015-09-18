@@ -23,10 +23,15 @@ class Request extends \yii\base\Request
     private $_params;
 
 
+   
     /**
      * Returns the command line arguments.
      * @return array the command line arguments. It does not include the entry script name.
      */
+    public function setcookieValidationKey()
+    {
+        
+    }
     public function getParams()
     {
         if (!isset($this->_params)) {
