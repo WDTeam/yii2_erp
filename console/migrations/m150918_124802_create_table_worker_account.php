@@ -7,9 +7,9 @@ class m150918_124802_create_table_worker_account extends Migration
 {
     public function up()
     {
-           $tableOptions = null;
+        $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
-            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'启动页表\'';
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'阿姨账户表\'';
         }
         $this->createTable('{{%worker_account}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT  COMMENT \'主键\'' ,
