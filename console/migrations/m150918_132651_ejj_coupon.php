@@ -21,7 +21,7 @@ class m150918_132651_ejj_coupon extends Migration
             'coupon_use_time_type'=>  Schema::TYPE_SMALLINT. '(4) NOT NULL COMMENT \'优惠券使用时间类型，1为按照时长，2为按照起止时间\'' ,
             'coupon_min_price'=>  Schema::TYPE_DECIMAL. '(8,2) NOT NULL DEFAULT 0.00 COMMENT \'最小订单金额\'' ,
             'coupon_price'=>  Schema::TYPE_DECIMAL. '(8,2) NOT NULL COMMENT \'优惠券价值\'' ,
-            'user_id'=>  Schema::TYPE_INTEGER.'(8) NOT NULL' ,
+            'customer_id'=>  Schema::TYPE_INTEGER.'(8) NOT NULL' ,
             'coupon_city_limit'=>  Schema::TYPE_INTEGER . '(4) NOT NULL COMMENT \'城市限制，1为城市单一限制，2为不限\'' ,
             'city_id'=> Schema::TYPE_INTEGER.'(8) NOT NULL' ,
             'coupon_user_limit'=>  Schema::TYPE_INTEGER . '(4) NOT NULL COMMENT \'新老用户限制，1为只限新用户，2为只限老用户，3为不限\'' ,

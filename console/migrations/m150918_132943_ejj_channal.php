@@ -11,7 +11,7 @@ class m150918_132943_ejj_channal extends Migration
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'渠道表\'';
         }
-        $this->createTable('{{%ejj_channal}}', [
+        $this->createTable('{{%channal}}', [
             'id'=>  Schema::TYPE_PK.'(8) NOT NULL AUTO_INCREMENT COMMENT \'主键\'' ,
             'channal_name'=>  Schema::TYPE_STRING.'(16) NOT NULL COMMENT \'聚道名称\'' ,
             'pid'=>  Schema::TYPE_INTEGER.'(8) NULL DEFAULT NULL' ,
@@ -23,6 +23,6 @@ class m150918_132943_ejj_channal extends Migration
 
     public function down()
     {
-        $this->dropTable('{{%ejj_channal}}');
+        $this->dropTable('{{%channal}}');
     }
 }

@@ -11,11 +11,11 @@ class m150918_131959_ejj_adv extends Migration
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'手机端广告轮播图\'';
         }
-        $this->createTable('{{%adv}}', [
+        $this->createTable('{{%loop_advertisement}}', [
             'id'=>Schema::TYPE_PK . ' AUTO_INCREMENT  COMMENT \'编号\'' ,
-            'adv_pic'=>Schema::TYPE_STRING . '(32) DEFAULT NULL COMMENT \'广告图片\'',
-            'adv_url'=>Schema::TYPE_STRING . '(32) DEFAULT NULL COMMENT \'连接地址\'',
-            'adv_sort'=>Schema::TYPE_SMALLINT . '(4) DEFAULT 0 COMMENT \'排序\'',
+            'loop_advertisement_pic'=>Schema::TYPE_STRING . '(32) DEFAULT NULL COMMENT \'广告图片\'',
+            'loop_advertisement_url'=>Schema::TYPE_STRING . '(32) DEFAULT NULL COMMENT \'连接地址\'',
+            'loop_advertisement_sort'=>Schema::TYPE_SMALLINT . '(4) DEFAULT 0 COMMENT \'排序\'',
             'created_at'=>Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'创建时间\'',
             'updated_at'=>Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'修改时间\'',
             ]);
@@ -23,7 +23,7 @@ class m150918_131959_ejj_adv extends Migration
 
     public function down()
     {
-        $this->dropTable('{{%adv}}');
+        $this->dropTable('{{%loop_advertisement}}');
     }
 
     /*

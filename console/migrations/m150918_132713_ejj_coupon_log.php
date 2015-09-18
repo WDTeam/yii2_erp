@@ -13,7 +13,7 @@ class m150918_132713_ejj_coupon_log extends Migration
         }
         $this->createTable('{{%coupon_log}}', [
             'id'=>  Schema::TYPE_PK.'(8) NOT NULL AUTO_INCREMENT COMMENT \'主键\'',
-            'user_id'=>  Schema::TYPE_INTEGER.'(8) NOT NULL COMMENT \'关联用户\'',
+            'customer_id'=>  Schema::TYPE_INTEGER.'(8) NOT NULL COMMENT \'关联用户\'',
             'coupon_id'=>  Schema::TYPE_INTEGER.'(8) NOT NULL',
             'order_id'=>  Schema::TYPE_INTEGER.'(8) NOT NULL',
             'coupon_log_type'=>  Schema::TYPE_SMALLINT.'(4) NOT NULL COMMENT \'1为获取优惠码，2为兑换，3为使用，4为退还\'' ,
