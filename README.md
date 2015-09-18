@@ -17,16 +17,16 @@
 　　BOSS系统代码框架结构说明：
 -----------------------------
 
-　　-- common （通用模块，自动生成数据库CRUD类，封装常用工具类）
-　　-- core （核心模块，继承并扩展common）
-　　-- api （接口，调用并扩展core，也可以直接扩展common）
-　　-- boss （BOSS后台系统）
-　　-- console （控制台框架模板）
-　　-- datasql （数据库脚本）
-　　-- environments （环境配置）
-　　-- frontend （前台框架模板）
-　　-- tests （测试框架）
-　　-- vendor （YII 2.0框架库）
+　　-- common （通用模块，自动生成数据库CRUD类，封装常用工具类）<br/>
+　　-- core （核心模块，继承并扩展common）<br/>
+　　-- api （接口，调用并扩展core，也可以直接扩展common）<br/>
+　　-- boss （BOSS后台系统）<br/>
+　　-- console （控制台框架模板）<br/>
+　　-- datasql （数据库脚本）<br/>
+　　-- environments （环境配置，初始化环境模板，不要修改）<br/>
+　　-- frontend （前台框架模板）<br/>
+　　-- tests （测试框架）<br/>
+　　-- vendor （YII 2.0框架库）<br/>
 
 
 　　init （初始化脚本）
