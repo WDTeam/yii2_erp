@@ -1,0 +1,41 @@
+<?php
+
+use yii\db\Schema;
+use yii\db\Migration;
+
+class m150918_143308_create_table_settle_apply_detail extends Migration
+{
+    public function up()
+    {
+        $tableOptions = null;
+        if ($this->db->driverName === 'mysql') {
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'结算申请明细表\'';
+        }
+        $this->createTable('{{%settle_apply_detail}}', [
+            'id' => Schema::TYPE_PK . ' AUTO_INCREMENT  COMMENT \'主键\'' ,
+            'settle_apply_id' => Schema::TYPE_INTEGER . '(10) NOT NULL COMMENT \'结算申请id\'',
+            'settle_apply_reviewer_id' => Schema::TYPE_INTEGER . '(10) NOT NULL COMMENT \'审核人员Id\'',
+            'settle_apply_is_passed' => Schema::TYPE_INTEGER . '(1) DEFAULT 0 COMMENT \'审核是否通过，0审核未通过，1审核通过\'',
+            'settle_apply_reviewer_comment' => Schema::TYPE_TEXT . ' COMMENT \'审核人员意见\'',
+            'isdel' => Schema::TYPE_SMALLINT. '(1) DEFAULT 0 COMMENT \'是否被删除，0为启用，1为删除\'',
+            'updated_at' => Schema::TYPE_INTEGER . '(11)  COMMENT \'更新时间\'',
+            'created_at' => Schema::TYPE_INTEGER. '(11) COMMENT \'创建时间\'',
+        ], $tableOptions);
+    }
+
+    public function down()
+    {
+        $this->dropTable('{{%settle_apply_detail}}');
+    }
+
+    /*
+    // Use safeUp/safeDown to run migration code within a transaction
+    public function safeUp()
+    {
+    }
+
+    public function safeDown()
+    {
+    }
+    */
+}
