@@ -32,8 +32,8 @@ class m150918_075922_create_table_op_category_type extends Migration
             'category_type_price_description' => Schema::TYPE_TEXT . ' DEFAULT NULL COMMENT \'价格备注\'',
             'category_type_market_price' => Schema::TYPE_MONEY . ' DEFAULT 0 COMMENT \'市场价格\'',
             'tags' => Schema::TYPE_TEXT . ' DEFAULT NULL COMMENT \'服务类型标签编号(序列化方式存储)\'',
-            'category_type_app_ico' => Schema::TYPE_TEXT . ' DEFAULT 0 COMMENT \'APP端图标(序列化方式存储|首页大图，首页小图，分类页小图，订单页小图)\'',
-            'category_type_pc_ico' => Schema::TYPE_TEXT . ' DEFAULT 0 COMMENT \'PC端图标(序列化方式存储|首页推荐大图，更多推荐大图，下单页小图)\'',
+            'category_type_app_ico' => Schema::TYPE_TEXT . '  COMMENT \'APP端图标(序列化方式存储|首页大图，首页小图，分类页小图，订单页小图)\'',
+            'category_type_pc_ico' => Schema::TYPE_TEXT . '  COMMENT \'PC端图标(序列化方式存储|首页推荐大图，更多推荐大图，下单页小图)\'',
             
         ], $tableOptions);
     }
