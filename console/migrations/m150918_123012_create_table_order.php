@@ -26,7 +26,7 @@ class m150918_123012_create_table_order extends Migration
             'channel_id' => Schema::TYPE_INTEGER.'(10) unsigned DEFAULT 0 COMMENT \'下单渠道\'',
             'channel_oid' => Schema::TYPE_STRING . '(255) DEFAULT NULL COMMENT \'渠道订单编号\'',
             'user_id' => Schema::TYPE_INTEGER.'(10) unsigned DEFAULT 0 COMMENT \'用户编号\'',
-            'order_user_phone' => Schema::TYPE_STRING . '(11) NOT NULL DEFAULT 0 COMMENT \'用户手机号\'',
+            'order_user_phone' => Schema::TYPE_STRING .'(30) NOT NULL DEFAULT \'\' COMMENT \'用户手机号\'',
             'order_booked_begin_time' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'预约开始时间\'',
             'order_booked_end_time' => Schema::TYPE_INTEGER.'(10) unsigned DEFAULT 0 COMMENT \'预约结束时间\'',
             'order_booked_count' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'预约服务数量\'',
