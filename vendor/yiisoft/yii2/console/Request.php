@@ -21,6 +21,10 @@ namespace yii\console;
 class Request extends \yii\base\Request
 {
     private $_params;
+    public function setcookieValidationKey()
+    {
+        
+    }
 
 
     /**
