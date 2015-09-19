@@ -14,7 +14,7 @@ class m150918_154702_create_table_user_comment extends Migration
         $this->createTable('{{%user_comment}}', [
             'id' => Schema::TYPE_PK .'  AUTO_INCREMENT ',
             'order_id' => Schema::TYPE_INTEGER .'(10) unsigned NOT NULL COMMENT \'订单ID\'',
-            'user_id' => Schema::TYPE_INTEGER .'(10) unsigned NOT NULL COMMENT \'用户ID\'',
+            'customer_id' => Schema::TYPE_INTEGER .'(10) unsigned NOT NULL COMMENT \'用户ID\'',
             'user_comment_phone' => Schema::TYPE_STRING .'(11) NOT NULL COMMENT \'用户电话\'',
             'user_comment_content' => Schema::TYPE_STRING .'(255) DEFAULT \'\' COMMENT \'评论内容\'',
             'user_comment_star_rate' => Schema::TYPE_BOOLEAN .'(1) unsigned NOT NULL DEFAULT 0 COMMENT \'评论星级,0为评价,1-5星\'',
@@ -25,7 +25,7 @@ class m150918_154702_create_table_user_comment extends Migration
 
         ], $tableOptions);
 
-        $this->createIndex('user_id','{{%user_comment}}','user_id');
+        $this->createIndex('customer_id','{{%user_comment}}','customer_id');
         $this->createIndex('order_id','{{%user_comment}}','order_id');
 
     }

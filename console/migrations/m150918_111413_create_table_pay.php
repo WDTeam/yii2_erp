@@ -13,7 +13,7 @@ class m150918_111413_create_table_pay extends Migration
         }
         $this->createTable('{{%pay}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT ' ,
-            'user_id' => Schema::TYPE_INTEGER . '(11) unsigned NOT NULL COMMENT \'用户ID\'' ,
+            'customer_id' => Schema::TYPE_INTEGER . '(11) unsigned NOT NULL COMMENT \'用户ID\'' ,
             'order_id' => Schema::TYPE_INTEGER . '(11) unsigned DEFAULT 0 NOT NULL COMMENT \'订单ID\'' ,
             'pay_money' => Schema::TYPE_DECIMAL . '(8,2) unsigned DEFAULT 0 NOT NULL COMMENT \'发起充值/交易金额\'' ,
             'pay_actual_money' => Schema::TYPE_DECIMAL . '(8,2) unsigned DEFAULT 0 NOT NULL COMMENT \'实际充值/交易金额\'' ,
@@ -34,7 +34,7 @@ class m150918_111413_create_table_pay extends Migration
 
         ], $tableOptions);
 
-        $this->createIndex('user_id','{{%pay}}','user_id');
+        $this->createIndex('customer_id','{{%pay}}','customer_id');
         $this->createIndex('order_id','{{%pay}}','order_id');
         $this->createIndex('pay_source','{{%pay}}','pay_source');
         $this->createIndex('pay_mode','{{%pay}}','pay_mode');
