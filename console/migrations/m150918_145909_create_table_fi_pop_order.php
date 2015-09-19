@@ -9,39 +9,39 @@ class m150918_145909_create_table_fi_pop_order extends Migration
 	public function up()
     {
 		if ($this->db->driverName === 'mysql') {
-	    $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'µÚÈý·½¶©µ¥¶ÔÕË¼ÇÂ¼±í\'';
+	    $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'ç¬¬ä¸‰æ–¹è®¢å•å¯¹è´¦è®°å½•è¡¨\'';
 
     	}
 			$this->createTable('{{%fi_pop_order}}', [
-		  'id' => Schema::TYPE_PK . ' AUTO_INCREMENT COMMENT \'Ö÷¼üid\'',
-		  'fi_pop_order_number' => Schema::TYPE_STRING . '(40) NOT NULL DEFAULT \'0\' COMMENT \'µÚÈý·½¶©µ¥ºÅ\'',
-		  'order_channel_id' => Schema::TYPE_SMALLINT. '(2) NOT NULL COMMENT \'ÏÂµ¥ÇþµÀ(¶ÔÓ¦order_channel)\'',
-		  'order_channel_title' => Schema::TYPE_SMALLINT. '(80) NOT NULL COMMENT \'ÏÂµ¥ÇþµÀÃû³Æ(¶ÔÓ¦order_channel)\'',
-		  'pay_channel_id' => Schema::TYPE_SMALLINT. '(2) NOT NULL COMMENT \'Ö§¸¶ÇþµÀ(¶ÔÓ¦pay_channel)\'',
-		  'pay_channel_title' => Schema::TYPE_SMALLINT. '(80) NOT NULL COMMENT \'Ö§¸¶ÇþµÀÃû³Æ(¶ÔÓ¦pay_channel)\'',
-		  'fi_pop_order_tel' => Schema::TYPE_STRING . '(20) DEFAULT NULL COMMENT \'ÓÃ»§µç»°\'',
-		  'fi_pop_order_worker_uid'  => Schema::TYPE_INTEGER . '(10) DEFAULT NULL COMMENT \'·þÎñ°¢ÒÌ\'',
-		  'fi_pop_order_booked_time'  => Schema::TYPE_INTEGER . '(10)  NOT NULL DEFAULT \'0\' COMMENT \'Ô¤Ô¼¿ªÊ¼Ê±¼ä\'',
-		  'fi_pop_order_booked_counttime' => Schema::TYPE_SMALLINT. '(6) NOT NULL DEFAULT \'0\' COMMENT \'Ô¤Ô¼·þÎñÊ±³¤(°´·ÖÖÓ¼ÇÂ¼)\'',
-		  'fi_pop_order_sum_money' => Schema::TYPE_DECIMAL. '(8,2) NOT NULL DEFAULT \'0.00\' COMMENT \'×Ü½ð¶î\'',
-		  'fi_pop_order_coupon_count' => Schema::TYPE_DECIMAL. '(6,2) NOT NULL DEFAULT \'0.00\' COMMENT \'ÓÅ»Ý¾í½ð¶î\'',
-		  'fi_pop_order_coupon_id'  => Schema::TYPE_INTEGER . '(8)  DEFAULT NULL COMMENT \'ÓÅ»Ý¾íid\'',
-		  'fi_pop_order_order2' => Schema::TYPE_STRING . '(40)  DEFAULT NULL COMMENT \'×Ó¶©µ¥ºÅ\'',
-		  'fi_pop_order_channel_order' => Schema::TYPE_STRING . '(40) DEFAULT NULL  COMMENT \'»ñÈ¡ÇþµÀÎ¨Ò»¶©µ¥ºÅ\'',
-		  'fi_pop_order_order_type' => Schema::TYPE_SMALLINT. '(2)  NOT NULL DEFAULT \'0\' COMMENT \'¶©µ¥ÀàÐÍ\'',
-		  'fi_pop_order_status' => Schema::TYPE_SMALLINT. '(2)   DEFAULT NULL COMMENT \'Ö§¸¶×´Ì¬\'',
-		  'fi_pop_order_finance_isok' => Schema::TYPE_SMALLINT. '(1) DEFAULT NULL  COMMENT \'²ÆÎñÈ·¶¨\'',
-		  'fi_pop_order_discount_pay' => Schema::TYPE_DECIMAL. '(8,2) NOT NULL  DEFAULT \'0.00\' COMMENT \'ÓÅ»Ý½ð¶î\'',
-		  'fi_pop_order_reality_pay' => Schema::TYPE_DECIMAL. '(8,2) NOT NULL  DEFAULT \'0.00\' COMMENT \'Êµ¼ÊÊÕ¿î\'',
-		  'fi_pop_order_order_time'  => Schema::TYPE_INTEGER . '(10) DEFAULT NULL  COMMENT \'ÏÂµ¥Ê±¼ä\'',
-		  'fi_pop_order_pay_time'  => Schema::TYPE_INTEGER . '(10) DEFAULT NULL  COMMENT \'Ö§¸¶Ê±¼ä\'',
+		  'id' => Schema::TYPE_PK . ' AUTO_INCREMENT COMMENT \'ä¸»é”®id\'',
+		  'fi_pop_order_number' => Schema::TYPE_STRING . '(40) NOT NULL DEFAULT \'0\' COMMENT \'ç¬¬ä¸‰æ–¹è®¢å•å·\'',
+		  'order_channel_id' => Schema::TYPE_SMALLINT. '(2) NOT NULL COMMENT \'ä¸‹å•æ¸ é“(å¯¹åº”order_channel)\'',
+		  'order_channel_title' => Schema::TYPE_SMALLINT. '(80) NOT NULL COMMENT \'ä¸‹å•æ¸ é“åç§°(å¯¹åº”order_channel)\'',
+		  'pay_channel_id' => Schema::TYPE_SMALLINT. '(2) NOT NULL COMMENT \'æ”¯ä»˜æ¸ é“(å¯¹åº”pay_channel)\'',
+		  'pay_channel_title' => Schema::TYPE_SMALLINT. '(80) NOT NULL COMMENT \'æ”¯ä»˜æ¸ é“åç§°(å¯¹åº”pay_channel)\'',
+		  'fi_pop_order_customer_tel' => Schema::TYPE_STRING . '(20) DEFAULT NULL COMMENT \'ç”¨æˆ·ç”µè¯\'',
+		  'fi_pop_order_worker_uid'  => Schema::TYPE_INTEGER . '(10) DEFAULT NULL COMMENT \'æœåŠ¡é˜¿å§¨\'',
+		  'fi_pop_order_booked_time'  => Schema::TYPE_INTEGER . '(10)  NOT NULL DEFAULT \'0\' COMMENT \'é¢„çº¦å¼€å§‹æ—¶é—´\'',
+		  'fi_pop_order_booked_counttime' => Schema::TYPE_SMALLINT. '(6) NOT NULL DEFAULT \'0\' COMMENT \'é¢„çº¦æœåŠ¡æ—¶é•¿(æŒ‰åˆ†é’Ÿè®°å½•)\'',
+		  'fi_pop_order_sum_money' => Schema::TYPE_DECIMAL. '(8,2) NOT NULL DEFAULT \'0.00\' COMMENT \'æ€»é‡‘é¢\'',
+		  'fi_pop_order_coupon_count' => Schema::TYPE_DECIMAL. '(6,2) NOT NULL DEFAULT \'0.00\' COMMENT \'ä¼˜æƒ å·é‡‘é¢\'',
+		  'fi_pop_order_coupon_id'  => Schema::TYPE_INTEGER . '(8)  DEFAULT NULL COMMENT \'ä¼˜æƒ å·id\'',
+		  'fi_pop_order_order2' => Schema::TYPE_STRING . '(40)  DEFAULT NULL COMMENT \'å­è®¢å•å·\'',
+		  'fi_pop_order_channel_order' => Schema::TYPE_STRING . '(40) DEFAULT NULL  COMMENT \'èŽ·å–æ¸ é“å”¯ä¸€è®¢å•å·\'',
+		  'fi_pop_order_order_type' => Schema::TYPE_SMALLINT. '(2)  NOT NULL DEFAULT \'0\' COMMENT \'è®¢å•ç±»åž‹\'',
+		  'fi_pop_order_status' => Schema::TYPE_SMALLINT. '(2)   DEFAULT NULL COMMENT \'æ”¯ä»˜çŠ¶æ€\'',
+		  'fi_pop_order_finance_isok' => Schema::TYPE_SMALLINT. '(1) DEFAULT NULL  COMMENT \'è´¢åŠ¡ç¡®å®š\'',
+		  'fi_pop_order_discount_pay' => Schema::TYPE_DECIMAL. '(8,2) NOT NULL  DEFAULT \'0.00\' COMMENT \'ä¼˜æƒ é‡‘é¢\'',
+		  'fi_pop_order_reality_pay' => Schema::TYPE_DECIMAL. '(8,2) NOT NULL  DEFAULT \'0.00\' COMMENT \'å®žé™…æ”¶æ¬¾\'',
+		  'fi_pop_order_order_time'  => Schema::TYPE_INTEGER . '(10) DEFAULT NULL  COMMENT \'ä¸‹å•æ—¶é—´\'',
+		  'fi_pop_order_pay_time'  => Schema::TYPE_INTEGER . '(10) DEFAULT NULL  COMMENT \'æ”¯ä»˜æ—¶é—´\'',
 		 
-		  'fi_pop_order_pay_status' => Schema::TYPE_SMALLINT. '(1)  NOT NULL  DEFAULT \'0\' COMMENT \'1 ¶ÔÕË³É¹¦ 2 ²ÆÎñÈ·¶¨ok  3 ²ÆÎñÈ·¶¨on 4 ²ÆÎñÎ´´¦Àí\'',
-		  'fi_pop_order_pay_title' => Schema::TYPE_STRING. '(30)  NOT NULL  DEFAULT \'0\' COMMENT \'×´Ì¬ ÃèÊö\'',
-		  'fi_pop_order_check_id' => Schema::TYPE_SMALLINT. '(3) DEFAULT NULL  COMMENT \'²Ù×÷ÈËid\'',
-		  'fi_pop_order_finance_time'  => Schema::TYPE_INTEGER . '(10) DEFAULT NULL COMMENT \'²ÆÎñ¶ÔÕËÌá½»Ê±¼ä\'',
-		  'create_time' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL  COMMENT \'Ôö¼ÓÊ±¼ä\'',
-		  'is_del' => Schema::TYPE_SMALLINT . '(1) NOT NULL DEFAULT \'0\' COMMENT \'0 Õý³£ 1 É¾³ý\'',
+		  'fi_pop_order_pay_status' => Schema::TYPE_SMALLINT. '(1)  NOT NULL  DEFAULT \'0\' COMMENT \'1 å¯¹è´¦æˆåŠŸ 2 è´¢åŠ¡ç¡®å®šok  3 è´¢åŠ¡ç¡®å®šon 4 è´¢åŠ¡æœªå¤„ç†\'',
+		  'fi_pop_order_pay_title' => Schema::TYPE_STRING. '(30)  NOT NULL  DEFAULT \'0\' COMMENT \'çŠ¶æ€ æè¿°\'',
+		  'fi_pop_order_check_id' => Schema::TYPE_SMALLINT. '(3) DEFAULT NULL  COMMENT \'æ“ä½œäººid\'',
+		  'fi_pop_order_finance_time'  => Schema::TYPE_INTEGER . '(10) DEFAULT NULL COMMENT \'è´¢åŠ¡å¯¹è´¦æäº¤æ—¶é—´\'',
+		  'create_time' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL  COMMENT \'å¢žåŠ æ—¶é—´\'',
+		  'is_del' => Schema::TYPE_SMALLINT . '(1) NOT NULL DEFAULT \'0\' COMMENT \'0 æ­£å¸¸ 1 åˆ é™¤\'',
     			], $tableOptions);
     }
 
