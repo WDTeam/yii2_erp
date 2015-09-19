@@ -13,7 +13,7 @@ class m150918_141440_create_table_fi_invoice extends Migration
     	$this->createTable('{{%fi_invoice}}', [
     			'id' => Schema::TYPE_PK . '(10) AUTO_INCREMENT  COMMENT \'主键id\'' ,
     			'fi_invoice_serial_number' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL  COMMENT \'流水号\'',
-    			'fi_invoice_consumer_tel' => Schema::TYPE_STRING . '(20)   COMMENT \'用户电话\'',
+    			'fi_invoice_customer_tel' => Schema::TYPE_STRING . '(20)   COMMENT \'用户电话\'',
     			'fi_invoice_worker_tel' => Schema::TYPE_STRING . '(20)   COMMENT \'阿姨电话\'',
     			'pay_channel_pay_id' => Schema::TYPE_SMALLINT. '(6) DEFAULT NULL COMMENT \'支付方式\'',
 			    'pay_channel_pay_title' => Schema::TYPE_STRING. '(200) DEFAULT NULL COMMENT \'支付名称\'',
@@ -23,7 +23,7 @@ class m150918_141440_create_table_fi_invoice extends Migration
     			'fi_invoice_money' => Schema::TYPE_DECIMAL. '(8,2) DEFAULT  \'0.00\' COMMENT \'发票金额\'',
     			'fi_invoice_title' => Schema::TYPE_STRING. '(100) DEFAULT NULL COMMENT \'发票抬头\'',
     			'fi_invoice_address' => Schema::TYPE_STRING. '(200) DEFAULT NULL COMMENT \'邮寄地址\'',
-    			'fi_invoice_status' => Schema::TYPE_SMALLINT. '(1) NOT NULL DEFAULT \'0\' COMMENT \'1已邮寄 2 未邮寄  3 上门取  4 审核中 5 审核通过 6已完成\'',
+    			'fi_invoice_status' => Schema::TYPE_SMALLINT. '(1) NOT NULL DEFAULT \'0\' COMMENT \'0 未开发票 1已邮寄 2 未邮寄  3 上门取  4 审核中 5 审核通过 6已完成 7 已退回\'',
     			'fi_invoice_check_id' => Schema::TYPE_SMALLINT. '(4) DEFAULT NULL COMMENT \'审核人id\'',
     			'fi_invoice_number' => Schema::TYPE_SMALLINT. '(4) NOT NULL DEFAULT \'0\' COMMENT \'发票数量\'',
     			'fi_invoice_service_money' => Schema::TYPE_DECIMAL. '(8,2) NOT NULL DEFAULT \'0.00\' COMMENT \'开发票服务费\'',

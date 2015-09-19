@@ -11,22 +11,22 @@ class m150919_062638_create_table_fi_pop_order_log extends Migration
     {
     	if ($this->db->driverName === 'mysql') {
     		
-			$tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'第三方订单号日志表\'';
+			$tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'绗笁鏂硅鍗曞彿鏃ュ織琛╘'';
    
 			}
     
 			$this->createTable('{{%fi_pop_order_log}}', [
-  'id' => Schema::TYPE_PK . '(10) AUTO_INCREMENT COMMENT \'主键\'' ,
-  'pay_order_num' => Schema::TYPE_STRING . '(40) DEFAULT NULL COMMENT \'官方系统订单号\'' ,
-  'fi_pop_order_number' => Schema::TYPE_STRING . '(40) DEFAULT NULL COMMENT \'第三方订单号\'' ,
-  'fi_pop_order_log_series_succeed_status' => Schema::TYPE_SMALLINT . '(1) DEFAULT \'0\' COMMENT \'系统对账成功\'' ,
-  'fi_pop_order_log_series_succeed_status_time' => Schema::TYPE_INTEGER. '(10) DEFAULT \'0\' COMMENT \'系统对账成功时间\'' ,
-  'fi_pop_order_log_finance_status' => Schema::TYPE_SMALLINT . '(1) DEFAULT \'0\' COMMENT \'财务确定 \'' ,
-  'fi_pop_order_log_finance_status_time' => Schema::TYPE_INTEGER. '(10) DEFAULT \'0\' COMMENT \'财务 1 失败\'' ,
-  'fi_pop_order_log_finance_audit' => Schema::TYPE_SMALLINT . '(1) DEFAULT \'0\' COMMENT \'财务未处理\'' ,
-  'fi_pop_order_log_finance_audit_time' => Schema::TYPE_INTEGER. '(10) DEFAULT \'0\' COMMENT \'财务未处理时间\'' ,
-  'create_time' => Schema::TYPE_INTEGER. '(10) DEFAULT NULL COMMENT \'创建时间\'' ,
-  'is_del' => Schema::TYPE_SMALLINT . '(1) DEFAULT \'0\' COMMENT \'0 正常 1 删除\'' ,
+  'id' => Schema::TYPE_PK . '(10) AUTO_INCREMENT COMMENT \'涓婚敭\'' ,
+  'pay_order_num' => Schema::TYPE_STRING . '(40) DEFAULT NULL COMMENT \'瀹樻柟绯荤粺璁㈠崟鍙穃'' ,
+  'fi_pop_order_number' => Schema::TYPE_STRING . '(40) DEFAULT NULL COMMENT \'绗笁鏂硅鍗曞彿\'' ,
+  'fi_pop_order_log_series_succeed_status' => Schema::TYPE_SMALLINT . '(1) DEFAULT \'0\' COMMENT \'绯荤粺瀵硅处鎴愬姛\'' ,
+  'fi_pop_order_log_series_succeed_status_time' => Schema::TYPE_INTEGER. '(10) DEFAULT \'0\' COMMENT \'绯荤粺瀵硅处鎴愬姛鏃堕棿\'' ,
+  'fi_pop_order_log_finance_status' => Schema::TYPE_SMALLINT . '(1) DEFAULT \'0\' COMMENT \'璐㈠姟纭畾 \'' ,
+  'fi_pop_order_log_finance_status_time' => Schema::TYPE_INTEGER. '(10) DEFAULT \'0\' COMMENT \'璐㈠姟 1 澶辫触\'' ,
+  'fi_pop_order_log_finance_audit' => Schema::TYPE_SMALLINT . '(1) DEFAULT \'0\' COMMENT \'璐㈠姟鏈鐞哱'' ,
+  'fi_pop_order_log_finance_audit_time' => Schema::TYPE_INTEGER. '(10) DEFAULT \'0\' COMMENT \'璐㈠姟鏈鐞嗘椂闂碶'' ,
+  'create_time' => Schema::TYPE_INTEGER. '(10) DEFAULT NULL COMMENT \'鍒涘缓鏃堕棿\'' ,
+  'is_del' => Schema::TYPE_SMALLINT . '(1) DEFAULT \'0\' COMMENT \'0 姝ｅ父 1 鍒犻櫎\'' ,
     			], $tableOptions);
     }
 

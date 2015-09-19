@@ -11,25 +11,26 @@ class m150919_064906_create_table_fi_record_log extends Migration
 
     if ($this->db->driverName === 'mysql') {
     		
-			$tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'对账日志记录表\'';
+			$tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'瀵硅处鏃ュ織璁板綍琛╘'';
    
 			}
     
 			$this->createTable('{{%fi_record_log}}', [
-  'id' => Schema::TYPE_PK . '(10) AUTO_INCREMENT COMMENT \'主键\'' ,
-'order_channel_id' => Schema::TYPE_SMALLINT . '(4) DEFAULT NULL COMMENT \'对账名称id\'' ,
-  'order_channel_name' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'对账名称\'' ,
-  'pay_channel_id' => Schema::TYPE_SMALLINT . '(4) DEFAULT NULL COMMENT \'收款渠道id\'' ,
-  'pay_channel_name' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'收款渠道名称\'' ,
-  'fi_record_log_succeed_count' => Schema::TYPE_SMALLINT . '(6) DEFAULT NULL COMMENT \'成功记录数\'' ,
-  'fi_record_log_succeed_sum_money' => Schema::TYPE_DECIMAL. '(8,2) DEFAULT \'0.00\' COMMENT \'成功记录数总金额\'' ,
-  'fi_record_log_manual_count' => Schema::TYPE_SMALLINT . '(6) DEFAULT NULL COMMENT \'人工确认笔数\'' ,
-  'fi_record_log_manual_sum_money' => Schema::TYPE_DECIMAL. '(8,2) DEFAULT \'0.00\' COMMENT \'人工确认金额\'' ,
-  'fi_record_log_failure_count' => Schema::TYPE_SMALLINT . '(6) DEFAULT \'0\' COMMENT \'失败笔数\'' ,
-  'fi_record_log_failure_money' => Schema::TYPE_DECIMAL. '(8,2) DEFAULT \'0.00\' COMMENT \'失败总金额\'' ,
-  'fi_record_log_confirm_name' => Schema::TYPE_STRING . '(30) DEFAULT NULL COMMENT \'对账人\'' ,
-  'create_time' => Schema::TYPE_INTEGER. '(10) DEFAULT NULL COMMENT \'创建时间\'' ,
-  'is_del' => Schema::TYPE_SMALLINT . '(1) DEFAULT \'0\' COMMENT \'0 正常 1 删除\'' ,
+  'id' => Schema::TYPE_PK . '(10) AUTO_INCREMENT COMMENT \'涓婚敭\'' ,
+'order_channel_id' => Schema::TYPE_SMALLINT . '(4) DEFAULT NULL COMMENT \'瀵硅处鍚嶇Оid\'' ,
+  'order_channel_name' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'瀵硅处鍚嶇О\'' ,
+  'pay_channel_id' => Schema::TYPE_SMALLINT . '(4) DEFAULT NULL COMMENT \'鏀舵娓犻亾id\'' ,
+  'pay_channel_name' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'鏀舵娓犻亾鍚嶇О\'' ,
+  'fi_record_log_succeed_count' => Schema::TYPE_SMALLINT . '(6) DEFAULT NULL COMMENT \'鎴愬姛璁板綍鏁癨'' ,
+  'fi_record_log_succeed_sum_money' => Schema::TYPE_DECIMAL. '(8,2) DEFAULT \'0.00\' COMMENT \'鎴愬姛璁板綍鏁版�婚噾棰漒'' ,
+  'fi_record_log_manual_count' => Schema::TYPE_SMALLINT . '(6) DEFAULT NULL COMMENT \'浜哄伐纭绗旀暟\'' ,
+  'fi_record_log_manual_sum_money' => Schema::TYPE_DECIMAL. '(8,2) DEFAULT \'0.00\' COMMENT \'浜哄伐纭閲戦\'' ,
+  'fi_record_log_failure_count' => Schema::TYPE_SMALLINT . '(6) DEFAULT \'0\' COMMENT \'澶辫触绗旀暟\'' ,
+  'fi_record_log_failure_money' => Schema::TYPE_DECIMAL. '(8,2) DEFAULT \'0.00\' COMMENT \'澶辫触鎬婚噾棰漒'' ,
+  'fi_record_log_confirm_name' => Schema::TYPE_STRING . '(30) DEFAULT NULL COMMENT \'瀵硅处浜篭'' ,
+  'fi_record_log_fee' => Schema::TYPE_DECIMAL . '(8,2) DEFAULT \'0.00\' COMMENT \'鏈嶅姟璐筡'' ,
+  'create_time' => Schema::TYPE_INTEGER. '(10) DEFAULT NULL COMMENT \'鍒涘缓鏃堕棿\'' ,
+  'is_del' => Schema::TYPE_SMALLINT . '(1) DEFAULT \'0\' COMMENT \'0 姝ｅ父 1 鍒犻櫎\'' ,
     			], $tableOptions);
     }
 
