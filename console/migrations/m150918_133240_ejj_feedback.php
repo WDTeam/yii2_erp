@@ -15,8 +15,8 @@ class m150918_133240_ejj_feedback extends Migration
             'id'=>  Schema::TYPE_PK.'(8) NOT NULL AUTO_INCREMENT COMMENT \'主键\'' ,
             'customer_id'=>  Schema::TYPE_INTEGER.'(8) NOT NULL COMMENT \'关联用户\'' ,
             'feedback_content'=>  Schema::TYPE_TEXT.' NOT NULL COMMENT \'反馈内容\'' ,
-            'create_time'=>  Schema::TYPE_INTEGER.'(11) NOT NULL COMMENT \'创建时间\'' ,
-            'update_time'=>  Schema::TYPE_INTEGER.'(11) NOT NULL COMMENT \'更新时间\'' ,
+            'created_at'=>  Schema::TYPE_INTEGER.'(11) NOT NULL COMMENT \'创建时间\'' ,
+            'updated_at'=>  Schema::TYPE_INTEGER.'(11) NOT NULL COMMENT \'更新时间\'' ,
             ]);
     }
 

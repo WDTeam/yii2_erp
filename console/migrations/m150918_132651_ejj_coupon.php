@@ -14,9 +14,9 @@ class m150918_132651_ejj_coupon extends Migration
         $this->createTable('{{%coupon}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT  COMMENT \'主键\'' ,
             'coupon_code'=>  Schema::TYPE_STRING. '(16) DEFAULT NULL COMMENT \'优惠码\'' ,
-            'coupon_exchange_state'=> Schema::TYPE_SMALLINT . '(4) NOT NULL COMMENT \'兑换状态，1为未兑换，2为已兑换\'' ,
-            'coupon_bundle_state'=> Schema::TYPE_SMALLINT . '(4) NOT NULL COMMENT \'优惠券绑定状态，1为未绑定用户，2为已绑定用户\'' ,
-            'coupon_use_state'=>  Schema::TYPE_SMALLINT . '(4) NOT NULL COMMENT \'使用状态，1为未使用，2为已使用\'' ,
+            'coupon_exchange_status'=> Schema::TYPE_SMALLINT . '(4) NOT NULL COMMENT \'兑换状态，1为未兑换，2为已兑换\'' ,
+            'coupon_bundle_status'=> Schema::TYPE_SMALLINT . '(4) NOT NULL COMMENT \'优惠券绑定状态，1为未绑定用户，2为已绑定用户\'' ,
+            'coupon_use_status'=>  Schema::TYPE_SMALLINT . '(4) NOT NULL COMMENT \'使用状态，1为未使用，2为已使用\'' ,
             'coupon_type'=>  Schema::TYPE_SMALLINT . '(4) NOT NULL COMMENT \'1,满减，2立减\'' ,
             'coupon_use_time_type'=>  Schema::TYPE_SMALLINT. '(4) NOT NULL COMMENT \'优惠券使用时间类型，1为按照时长，2为按照起止时间\'' ,
             'coupon_min_price'=>  Schema::TYPE_DECIMAL. '(8,2) NOT NULL DEFAULT 0.00 COMMENT \'最小订单金额\'' ,

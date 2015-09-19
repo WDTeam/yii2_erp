@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150918_131959_ejj_adv extends Migration
+class m150918_131959_ejj_loop_advertisement extends Migration
 {
     public function up()
     {
@@ -18,6 +18,7 @@ class m150918_131959_ejj_adv extends Migration
             'loop_advertisement_sort'=>Schema::TYPE_SMALLINT . '(4) DEFAULT 0 COMMENT \'排序\'',
             'created_at'=>Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'创建时间\'',
             'updated_at'=>Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'修改时间\'',
+            'is_del'=>Schema::TYPE_SMALLINT . '(4) DEFAULT 0 COMMENT \'是否已经逻辑删除,1为已删除\'',
             ]);
     }
 

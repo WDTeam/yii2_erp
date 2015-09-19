@@ -19,6 +19,7 @@ class m150918_132713_ejj_coupon_log extends Migration
             'coupon_log_type'=>  Schema::TYPE_SMALLINT.'(4) NOT NULL COMMENT \'1为获取优惠码，2为兑换，3为使用，4为退还\'' ,
             'coupon_log_price'=>  Schema::TYPE_DECIMAL.'(8,2) NOT NULL COMMENT \'实际优惠或者退还金额\'' ,
             'created_at'=> Schema::TYPE_INTEGER.'(11) NOT NULL' ,
+            'updated_at'=> Schema::TYPE_INTEGER.'(11) NOT NULL' ,
             ]);
     }
 
