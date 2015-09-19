@@ -43,7 +43,7 @@
       
       *不要修改enviroments目录*
 
-   2. 然后，自己本机上搭建数据库local_boss_db,  username: local_boss_db_dbo; password:localboss，然后执行 ./yii migration就可以在本机上进行开发了。
+   2. 然后，自己本机上搭建数据库local_boss_db,  username: local_boss_db_dbo; password: localboss ，然后执行 ./yii migrate就可以在本机上进行开发了。
  
  
 ## 部署说明：
