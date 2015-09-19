@@ -14,10 +14,10 @@ class m150919_085512_ejj_coupon_status extends Migration
         $this->createTable('{{%coupon_status}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT  COMMENT \'主键\'',
             'coupon_id' => Schema::TYPE_INTEGER . '(11) NOT NULL COMMENT \'关联优惠券表\'',
-            'coupon_status_bundle_time'=>  Schema::TYPE_INTEGER. '(11) DEFAULT NULL COMMENT \'优惠券兑换成优惠券并绑定顾客时间\'',
-            'coupon_status_use_time'=> Schema::TYPE_INTEGER . '(11) NOT NULL COMMENT \'优惠券使用时间\'',
-            'created_at'=>  Schema::TYPE_INTEGER . '(11) NOT NULL COMMENT \'创建时间\'',
-            'updated_at'=> Schema::TYPE_INTEGER . '(11) NOT NULL',
+            'coupon_status_bundle_time'=>  Schema::TYPE_INTEGER. '(11) DEFAULT 0 COMMENT \'优惠券兑换成优惠券并绑定顾客时间\'',
+            'coupon_status_use_time'=> Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'优惠券使用时间\'',
+            'created_at'=>  Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'创建时间\'',
+            'updated_at'=> Schema::TYPE_INTEGER . '(11) DEFAULT 0',
             ]);
     }
 
