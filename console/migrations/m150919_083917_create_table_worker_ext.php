@@ -11,7 +11,7 @@ class m150919_083917_create_table_worker_ext extends Migration
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'阿姨基本信息表\'';
         }
-        $this->createTable('ejj_worker_ext', [
+        $this->createTable('{{%worker_ext}}', [
             'worker_id' => Schema::TYPE_PK . '(11)  COMMENT \'阿姨id\'',
             'worker_age' => Schema::TYPE_BOOLEAN . '(3) DEFAULT NULL COMMENT \'阿姨年龄\'',
             'worker_sex' => Schema::TYPE_BOOLEAN . '(1) DEFAULT NULL COMMENT \'阿姨性别\'',
