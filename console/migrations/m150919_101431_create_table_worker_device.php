@@ -11,7 +11,7 @@ class m150919_101431_create_table_worker_device extends Migration
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'阿姨设备信息表\'';
         }
-        $this->createTable('ejj_worker_device', [
+        $this->createTable('{{%worker_device}}', [
            
             'worker_id' => Schema::TYPE_PK . '(11)  COMMENT \'阿姨Id\'',
             'worker_device_curr_lng' => Schema::TYPE_FLOAT . ' DEFAULT NULL COMMENT \'阿姨客户端当前经度\'',
