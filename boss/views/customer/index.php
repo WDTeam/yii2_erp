@@ -10,12 +10,12 @@ use yii\widgets\Pjax;
  * @var boss\models\CustomerSearch $searchModel
  */
 
-$this->title = Yii::t('boss', 'Customers');
+$this->title = Yii::t('boss', '顾客');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="customer-index">
     <div class="page-header">
-            <h1><?= Html::encode($this->title) ?></h1>
+            <!-- <h1><?= Html::encode($this->title) ?></h1> -->
     </div>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
