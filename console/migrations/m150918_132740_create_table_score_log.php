@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150918_132740_ejj_score_log extends Migration
+class m150918_132740_create_table_score_log extends Migration
 {
     public function up()
     {
