@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150918_102439_create_operation_table_tag extends Migration
+class m150918_102439_create_table_operation_tag extends Migration
 {
     public function up()
     {
