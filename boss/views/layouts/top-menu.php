@@ -20,10 +20,10 @@ $menuItems = [
         'linkOptions' => ['data-method' => 'post']
     ]
 ];
-echo Nav::widget([
-    'options' => ['class' => 'navbar-nav navbar-right'],
-    'items' => $menuItems,
-]);
+//echo Nav::widget([
+//    'options' => ['class' => 'navbar-nav navbar-right'],
+//    'items' => $menuItems,
+//]);
 
 $menuItemsMain = [
     [
@@ -51,30 +51,39 @@ $menuItemsMain = [
         'visible' => Yii::$app->user->can('readPost'),
     ],
     [
-        'label' => '<i class="fa fa-cog"></i> ' . Yii::t('app', 'CMS'),
+        'label' => '<i class="fa fa-cog"></i> ' . Yii::t('app', '配置'),
         'url' => ['#'],
         'active' => false,
+        //'visible' => Yii::$app->user->can('haha'),
         'items' => [
             [
-                'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', 'Catalog'),
-                'url' => ['#'],
+                'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', 'User'),
+                'url' => ['/user'],
             ],
             [
-                'label' => '<i class="fa fa-user-md"></i> ' . Yii::t('app', 'Class'),
-                'url' => ['#'],
-            ],
-            [
-                'label' => '<i class="fa fa-user-md"></i> ' . Yii::t('app', 'Comment'),
-                'url' => ['#'],
-            ],
-            [
-                'label' => '<i class="fa fa-user-md"></i> ' . Yii::t('app', 'Tag'),
-                'url' => ['#'],
+                'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', 'Role'),
+                'url' => ['/role'],
             ],
         ],
     ],
     [
-        'label' => '<i class="fa fa-cog"></i> ' . Yii::t('app', 'System'),
+        'label' => '<i class="fa fa-cog"></i> ' . Yii::t('app', '用户'),
+        'url' => ['#'],
+        'active' => false,
+        //'visible' => Yii::$app->user->can('haha'),
+        'items' => [
+            [
+                'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', 'User'),
+                'url' => ['/user'],
+            ],
+            [
+                'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', 'Role'),
+                'url' => ['/role'],
+            ],
+        ],
+    ],
+    [
+        'label' => '<i class="fa fa-cog"></i> ' . Yii::t('app', '吐槽'),
         'url' => ['#'],
         'active' => false,
         //'visible' => Yii::$app->user->can('haha'),
@@ -91,7 +100,7 @@ $menuItemsMain = [
     ],
 ];
 echo Nav::widget([
-    'options' => ['class' => 'navbar-nav navbar-left'],
+    'options' => ['class' => 'navbar-nav navbar-right'],
     'items' => $menuItemsMain,
     'encodeLabels' => false,
 ]);

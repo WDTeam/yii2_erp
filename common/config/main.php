@@ -1,7 +1,7 @@
 <?php
 error_reporting(0);
 return [
-    'name' => 'e家洁阿姨培训系统',
+    'name' => 'BOSS',
     'language' => 'zh-CN',
     'timeZone' => 'Asia/Shanghai',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
