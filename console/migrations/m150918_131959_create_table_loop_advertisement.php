@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150918_131959_ejj_loop_advertisement extends Migration
+class m150918_131959_create_table_loop_advertisement extends Migration
 {
     public function up()
     {
