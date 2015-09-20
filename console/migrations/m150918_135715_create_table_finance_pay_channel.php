@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150918_135715_create_table_fi_pay_channel extends Migration
+class m150918_135715_create_table_finance_pay_channel extends Migration
 {
     public function up()
     {
@@ -13,12 +13,12 @@ class m150918_135715_create_table_fi_pay_channel extends Migration
    
 			}
     
-			$this->createTable('{{%fi_pay_channel}}', [
+			$this->createTable('{{%finance_pay_channel}}', [
     		
 			'id' => Schema::TYPE_PK . '(5) AUTO_INCREMENT  COMMENT \'主键id\'' ,
-    			'pay_channel_name' => Schema::TYPE_STRING . '(50) DEFAULT NULL COMMENT \'渠道名称\'',
-    	'pay_channel_rank' => Schema::TYPE_SMALLINT . '(5) DEFAULT 1 COMMENT \'排序\'',
-    			'pay_channel_is_lock' => Schema::TYPE_SMALLINT . '(1) DEFAULT \'1\' COMMENT \'1 上架 2 下架\'',
+    			'finance_pay_channel_name' => Schema::TYPE_STRING . '(50) DEFAULT NULL COMMENT \'渠道名称\'',
+    	'finance_pay_channel_rank' => Schema::TYPE_SMALLINT . '(5) DEFAULT 1 COMMENT \'排序\'',
+    			'finance_pay_channel_is_lock' => Schema::TYPE_SMALLINT . '(1) DEFAULT \'1\' COMMENT \'1 上架 2 下架\'',
     
 			'create_time' => Schema::TYPE_INTEGER. '(10) DEFAULT NULL COMMENT \'增加时间\'',
     		'is_del' => Schema::TYPE_SMALLINT . '(1) DEFAULT \'0\' COMMENT \'0 正常 1 删除\'',
@@ -27,7 +27,7 @@ class m150918_135715_create_table_fi_pay_channel extends Migration
 
     public function down()
     {
-          $this->dropTable('{{%fi_pay_channel}}');
+          $this->dropTable('{{%finance_pay_channel}}');
 
         return false;
     }
