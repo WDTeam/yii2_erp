@@ -11,7 +11,7 @@ class m150919_084929_create_table_worker_vacation extends Migration
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'阿姨请假时间表\'';
         }
-        $this->createTable('ejj_worker_vacation', [
+        $this->createTable('{{%worker_vacation}}', [
             'id' => Schema::TYPE_PK . ' COMMENT \'阿姨请假时间表自增id\'' ,
             'worker_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'主表阿姨id\'',
             'worker_vacation_start' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL COMMENT \'请假开始时间\'',

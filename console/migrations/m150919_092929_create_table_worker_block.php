@@ -11,7 +11,7 @@ class m150919_092929_create_table_worker_block extends Migration
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'阿姨封号表\'';
         }
-        $this->createTable('ejj_worker_block', [
+        $this->createTable('{{%worker_block}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT COMMENT \'阿姨封号表自增id\'' ,
             'worker_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'主表阿姨id\'',
             'worker_block_type' => Schema::TYPE_BOOLEAN . '(3) DEFAULT 0 COMMENT \'阿姨封号类型 0短期1永久\'',
