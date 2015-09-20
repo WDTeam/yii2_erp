@@ -524,13 +524,13 @@ body > .header .navbar .nav > li > a:hover > .label {
 }
 body > .header .logo {
   float: left;
-  font-size: 20px;
+  font-size: 30px;
   line-height: 50px;
   text-align: center;
   padding: 0 10px;
   width: 220px;
-  font-family: 'Kaushan Script', cursive;
-  font-weight: 500;
+  font-family: '微软雅黑', cursive;
+  font-weight:bold;
   height: 50px;
   display: block;
 }
@@ -2548,10 +2548,11 @@ Component: timeline
 */
 /* skin-blue navbar */
 .skin-blue .navbar {
-  background-color: #3c8dbc;
+  background-color: #f7b434;
 }
 .skin-blue .navbar .nav a {
-  color: rgba(255, 255, 255, 0.8);
+  /*color: rgba(255, 255, 255, 0.8);*/
+    color:#000000;
 }
 .skin-blue .navbar .nav > li > a:hover,
 .skin-blue .navbar .nav > li > a:active,
@@ -2566,21 +2567,21 @@ Component: timeline
   margin-right: 10px;
 }
 .skin-blue .navbar .sidebar-toggle .icon-bar {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(0, 0, 0, 0.8);
 }
 .skin-blue .navbar .sidebar-toggle:hover .icon-bar {
   background: #f6f6f6 !important;
 }
 /* skin-blue logo */
 .skin-blue .logo {
-  background-color: #367fa9;
-  color: #f9f9f9;
+  background-color: #f6a202;
+  color: #000000;
 }
 .skin-blue .logo > a {
   color: #f9f9f9;
 }
 .skin-blue .logo:hover {
-  background: #357ca5;
+  background: #f6a202;
 }
 /* skin-blue content header */
 .skin-blue .right-side > .content-header {
