@@ -73,17 +73,17 @@ echo Menu::widget(
                 'items' => [
                     [
                         'label' => '查看所有阿姨',
-                        'url' => ['#'],
+                        'url' => ['/worker/'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
                         'label' => '录入新阿姨',
-                        'url' => ['#'],
+                        'url' => ['/worker/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '管理黑名单阿姨',
-                        'url' => ['#'],
+                        'label' => '阿姨黑名单',
+                        'url' => ['/worker-block'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],

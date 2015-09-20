@@ -12,7 +12,7 @@ class m150919_092739_create_table_worker extends Migration
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'阿姨信息表\'';
         }
-        $this->createTable('ejj_worker', [
+        $this->createTable('{{%worker}}', [
 
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT COMMENT \'阿姨封号表自增id\'' ,
             'shop_id'  => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'门店id\'',
