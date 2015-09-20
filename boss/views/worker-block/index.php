@@ -10,13 +10,13 @@ use yii\widgets\Pjax;
  * @var boss\models\WorkerBlockSearch $searchModel
  */
 
-$this->title = Yii::t('app', '阿姨黑名单管理');
+$this->title = Yii::t('worker', 'worker_block_manage');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="worker-block-index">
-    <div class="page-header">
+    <!--<div class="page-header">
             <h1><?= Html::encode($this->title) ?></h1>
-    </div>
+    </div>-->
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
@@ -31,12 +31,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+//            'id',
             'worker_id',
             'worker_block_type',
             'worker_block_reason',
             'worker_block_start',
-//            'worker_block_finish', 
+            'worker_block_finish',
 //            'created_ad', 
 //            'updated_ad', 
 //            'admin_id', 
