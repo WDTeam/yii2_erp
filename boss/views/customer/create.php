@@ -7,8 +7,8 @@ use yii\helpers\Html;
  * @var common\models\Customer $model
  */
 
-$this->title = Yii::t('boss', 'Create {modelClass}', [
-    'modelClass' => 'Customer',
+$this->title = Yii::t('boss', '顾客 {modelClass}', [
+    'modelClass' => '顾客',
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('boss', 'Customers'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
