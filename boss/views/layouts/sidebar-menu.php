@@ -73,7 +73,7 @@ echo Menu::widget(
                 'items' => [
                     [
                         'label' => '查看所有阿姨',
-                        'url' => ['/worker/'],
+                        'url' => ['/worker'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
@@ -103,7 +103,7 @@ echo Menu::widget(
                     ],
                     [
                         'label' => '管理黑名单顾客',
-                        'url' => ['/customer'],
+                        'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],
@@ -118,7 +118,7 @@ echo Menu::widget(
                 'items' => [
                     [
                         'label' => '查看所有订单',
-                        'url' => ['#'],
+                        'url' => ['/order/order'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
@@ -158,7 +158,7 @@ echo Menu::widget(
                     ],
                     [
                         'label' => '结算管理',
-                        'url' => ['#'],
+                        'url' => ['/finance-settle-apply'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
@@ -188,7 +188,7 @@ echo Menu::widget(
                 'items' => [
                     [
                         'label' => '用户运营',
-                        'url' => ['#'],
+                        'url' => ['/operation-category'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
@@ -228,7 +228,7 @@ echo Menu::widget(
                 'items' => [
                     [
                         'label' => '城市管理',
-                        'url' => ['#'],
+                        'url' => ['/operation-city'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
