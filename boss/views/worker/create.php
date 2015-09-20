@@ -7,9 +7,7 @@ use yii\helpers\Html;
  * @var common\models\Worker $model
  */
 
-$this->title = Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Worker',
-]);
+$this->title ='阿姨录入';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Workers'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
