@@ -11,7 +11,7 @@ class m150919_083744_create_table_worker_stat extends Migration
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'阿姨统计表\'';
         }
-        $this->createTable('ejj_worker_stat', [
+        $this->createTable('{{%worker_stat}}', [
             'worker_id' => Schema::TYPE_PK . '(11)  COMMENT \'主表阿姨id\'',
             'worker_stat_order_num' => Schema::TYPE_SMALLINT . '(6) DEFAULT NULL COMMENT \'阿姨订单总数\'',
             'worker_stat_order_money' => Schema::TYPE_DECIMAL  . '(16) DEFAULT NULL COMMENT \'阿姨订单总金额\'',

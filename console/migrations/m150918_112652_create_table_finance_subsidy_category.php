@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150918_112652_create_table_fi_subsidy_category extends Migration
+class m150918_112652_create_table_finance_subsidy_category extends Migration
 {
     public function up()
     {
@@ -11,7 +11,7 @@ class m150918_112652_create_table_fi_subsidy_category extends Migration
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'阿姨补助或奖励分类表，包括路补、晚补、扑空补助、全勤奖、无投诉奖、星级阿姨奖励、办卡提成、推荐服务、日常违规、投诉和赔偿奖、人才推荐奖\'';
         }
-        $this->createTable('{{%fi_subsidy_category}}', [
+        $this->createTable('{{%finance_subsidy_category}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT  COMMENT \'主键\'' ,
             'subsidy_category_code' => Schema::TYPE_STRING . '(20) NOT NULL COMMENT \'补助或奖励编码\'',
             'subsidy_category_name' => Schema::TYPE_STRING . '(100) NOT NULL COMMENT \'补助或奖励名称\'',
@@ -24,7 +24,7 @@ class m150918_112652_create_table_fi_subsidy_category extends Migration
 
     public function down()
     {
-        $this->dropTable('{{%fi_subsidy_category}}');
+        $this->dropTable('{{%finance_subsidy_category}}');
     }
 
     /*

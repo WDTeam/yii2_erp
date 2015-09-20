@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150918_140930_create_table_fi_settle_apply extends Migration
+class m150918_140930_create_table_finance_settle_apply extends Migration
 {
     public function up()
     {
@@ -11,7 +11,7 @@ class m150918_140930_create_table_fi_settle_apply extends Migration
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'结算申请表\'';
         }
-        $this->createTable('{{%fi_settle_apply}}', [
+        $this->createTable('{{%finance_settle_apply}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT  COMMENT \'主键\'' ,
             'worder_id' => Schema::TYPE_INTEGER . '(10) NOT NULL COMMENT \'阿姨id\'',
             'settle_apply_money' => Schema::TYPE_DECIMAL . '(10,2) NOT NULL COMMENT \'申请结算金额\'',
@@ -24,7 +24,7 @@ class m150918_140930_create_table_fi_settle_apply extends Migration
 
     public function down()
     {
-        $this->dropTable('{{%fi_settle_apply}}');
+        $this->dropTable('{{%finance_settle_apply}}');
     }
 
     /*

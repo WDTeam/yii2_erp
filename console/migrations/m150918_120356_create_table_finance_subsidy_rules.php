@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150918_120356_create_table_fi_subsidy_rules extends Migration
+class m150918_120356_create_table_finance_subsidy_rules extends Migration
 {
     public function up()
     {
@@ -11,7 +11,7 @@ class m150918_120356_create_table_fi_subsidy_rules extends Migration
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'阿姨补助或奖励规则表\'';
         }
-        $this->createTable('{{%fi_subsidy_rules}}', [
+        $this->createTable('{{%finance_subsidy_rules}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT  COMMENT \'主键\'' ,
             'subsidy_category_id' => Schema::TYPE_INTEGER . '(10) NOT NULL COMMENT \'补助和奖励分类id\'',
             'subsidy_rules_unit_price' => Schema::TYPE_DECIMAL . '(10,2) NOT NULL COMMENT \'单价，例如：10元/单，5元/小时，50元/月\'',
@@ -23,7 +23,7 @@ class m150918_120356_create_table_fi_subsidy_rules extends Migration
 
     public function down()
     {
-        $this->dropTable('{{%fi_subsidy_rules}}');
+        $this->dropTable('{{%finance_subsidy_rules}}');
     }
 
     /*
