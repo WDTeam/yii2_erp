@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150919_102729_ejj_coupon extends Migration
+class m150919_102729_create_table_coupon extends Migration
 {
     public function up()
     {
