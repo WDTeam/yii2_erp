@@ -75,6 +75,9 @@ AppAsset::register($this);
             <section class="sidebar">
                 <!-- Sidebar user panel -->
                 <div class="user-panel">
+                    <div class="pull-left image">
+                        <img src="/adminlte/img/avatar2.png" class="img-circle" >
+                    </div>
                     <div class="pull-left info">
                         <p>
                             <?= Yii::t('app', 'Hello, {name}', ['name' => Yii::$app->user->identity->username]) ?>
@@ -86,6 +89,7 @@ AppAsset::register($this);
                 </div>
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <?= $this->render('//layouts/sidebar-menu') ?>
+                <div style="height: 100px;"  ></div>
             </section>
             <!-- /.sidebar -->
         </aside>
