@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150918_063719_create_table_op_price_strategy extends Migration
+class m150918_063719_create_table_operation_price_strategy extends Migration
 {
     public function up()
     {
@@ -11,7 +11,7 @@ class m150918_063719_create_table_op_price_strategy extends Migration
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'价格策略表\'';
         }
-        $this->createTable('{{%op_price_strategy}}', [
+        $this->createTable('{{%operation_price_strategy}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT COMMENT \'编号\'' ,
             'price_strategy_name' => Schema::TYPE_STRING . '(30) DEFAULT NULL COMMENT \'价格策略名称\'',
             'price_strategy_unit' => Schema::TYPE_STRING . '(30) DEFAULT NULL COMMENT \'计量单位名称\'',
@@ -23,7 +23,7 @@ class m150918_063719_create_table_op_price_strategy extends Migration
 
     public function down()
     {
-        $this->dropTable('{{%op_price_strategy}}');
+        $this->dropTable('{{%operation_price_strategy}}');
     }
 
     /*

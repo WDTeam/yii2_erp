@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150918_042915_create_table_op_city_types extends Migration
+class m150918_042915_create_table_operation_city_types extends Migration
 {
     public function up()
     {
@@ -12,7 +12,7 @@ class m150918_042915_create_table_op_city_types extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'城市所具备的服务表\'';
         }
         
-        $this->createTable('{{%op_city_type}}', [
+        $this->createTable('{{%operation_city_type}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT COMMENT \'编号\'' ,
             'city_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'所属城市编号\'',
             'city_name' => Schema::TYPE_STRING . '(30) DEFAULT NULL COMMENT \'所属城市名称\'',
@@ -44,7 +44,7 @@ class m150918_042915_create_table_op_city_types extends Migration
 
     public function down()
     {
-        $this->dropTable('{{%op_city_type}}');
+        $this->dropTable('{{%operation_city_type}}');
     }
 
     /*
