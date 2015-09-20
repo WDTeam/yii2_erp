@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 
 /**
  * @var yii\web\View $this
- * @var boss\models\OperationCitySearch $model
+ * @var boss\models\OperationCity $model
  * @var yii\widgets\ActiveForm $form
  */
 ?>
@@ -19,9 +19,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'city_name') ?>
+    <?= $form->field($model, 'operation_city_name') ?>
 
-    <?= $form->field($model, 'city_is_online') ?>
+    <?= $form->field($model, 'operation_city_is_online') ?>
 
     <?= $form->field($model, 'created_at') ?>
 

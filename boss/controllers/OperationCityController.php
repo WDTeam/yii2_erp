@@ -4,7 +4,7 @@ namespace boss\controllers;
 
 use Yii;
 use common\models\OperationCity;
-use boss\models\OperationCitySearch;
+use boss\models\OperationCity as OperationCitySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
