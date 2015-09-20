@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150918_141212_create_table_pay_log extends Migration
+class m150918_141212_create_table_general_pay_log extends Migration
 {
 
     public function up()
