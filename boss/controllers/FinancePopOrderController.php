@@ -1,6 +1,6 @@
 <?php
 
-namespace boss\models;
+namespace boss\controllers;
 
 use Yii;
 use common\models\FinancePopOrder;
