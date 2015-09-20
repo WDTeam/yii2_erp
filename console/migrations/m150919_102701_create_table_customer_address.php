@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150919_102701_ejj_customer_address extends Migration
+class m150919_102701_create_table_customer_address extends Migration
 {
     public function up()
     {

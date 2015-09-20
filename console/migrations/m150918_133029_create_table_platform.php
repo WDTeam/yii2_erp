@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150918_133029_ejj_platform extends Migration
+class m150918_133029_create_table_platform extends Migration
 {
     public function up()
     {
