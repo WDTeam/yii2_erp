@@ -23,7 +23,7 @@ class m150918_195648_create_table_customer_address extends Migration
             'customer_address_phone'=>Schema::TYPE_STRING.'(11) NOT NULL COMMENT \'被服务者手机\'',
             'created_at'=>  Schema::TYPE_INTEGER.'(11) NOT NULL COMMENT \'创建时间\'',
             'updated_at'=>  Schema::TYPE_INTEGER.'(11) NOT NULL COMMENT \'更新时间\'',
-            'is_del'=>  Schema::TYPE_SMALLINT.'(4) DEFAULT 0',
+            'is_del'=>  Schema::TYPE_SMALLINT.'(4) DEFAULT 0 COMMENT \'是否逻辑删除\'',
             ], $tableOptions);
     }
 
