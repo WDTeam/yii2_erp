@@ -6,14 +6,14 @@ use kartik\datecontrol\DateControl;
 
 /**
  * @var yii\web\View $this
- * @var common\models\Worker $model
+ * @var common\models\Customer $model
  */
 
-$this->title = $model->worker_name;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Workers'), 'url' => ['index']];
+$this->title = $model->id;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Customers'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="worker-view">
+<div class="customer-view">
     <div class="page-header">
         <h1><?= Html::encode($this->title) ?></h1>
     </div>
@@ -30,27 +30,24 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'attributes' => [
             'id',
-            'shop_id',
-            'worker_name',
-            'worker_phone',
-            'worker_idcard',
-            'worker_password',
-            'worker_photo',
-            'worker_level',
-            'worker_auth_status',
-            'worker_ontrial_status',
-            'worker_onboard_status',
-            'worker_work_city',
-            'worker_work_area',
-            'worker_work_street',
-            'worker_work_lng',
-            'worker_work_lat',
-            'worker_rule',
-            'worker_identify_id',
-            'worker_is_block',
-            'created_ad',
-            'updated_ad',
-            'isdel',
+            'customer_name',
+            'customer_sex',
+            'customer_birth',
+            'customer_photo',
+            'customer_phone',
+            'customer_email:email',
+            'region_id',
+            'customer_live_address_detail',
+            'customer_score',
+            'customer_level',
+            'customer_src',
+            'channal_id',
+            'platform_id',
+            'customer_login_ip',
+            'customer_login_time:datetime',
+            'created_at',
+            'updated_at',
+            'is_del',
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],
