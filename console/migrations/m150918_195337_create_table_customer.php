@@ -30,7 +30,7 @@ class m150918_195337_create_table_customer extends Migration
             'customer_login_time'=>  Schema::TYPE_INTEGER.'(11) DEFAULT NULL COMMENT \'登陆时间\'',
             'created_at'=>  Schema::TYPE_INTEGER.'(11) NOT NULL COMMENT \'创建时间\'',
             'updated_at'=>  Schema::TYPE_INTEGER.'(11) NOT NULL COMMENT \'更新时间\'',
-            'is_del'=>  Schema::TYPE_SMALLINT.'(4) DEFAULT NULL COMMENT \'是否逻辑删除\'',
+            'is_del'=>  Schema::TYPE_SMALLINT.'(4) DEFAULT NULL COMMENT \'是否已加入黑名单\'',
             ], $tableOptions);
     }
 

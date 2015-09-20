@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150918_155019_create_table_region extends Migration
+class m150918_155019_create_table_general_region extends Migration
 {
     public function up()
     {
@@ -13,23 +13,24 @@ class m150918_155019_create_table_region extends Migration
         }
 
 
-        $this->createTable('{{%region}}', [
+        $this->createTable('{{%general_region}}', [
             'id'=> Schema::TYPE_PK.' NOT NULL AUTO_INCREMENT COMMENT \'ID\'',
             'parent_id' => Schema::TYPE_INTEGER.'(10) NOT NULL DEFAULT 0 COMMENT \'上级ID\'',
-            'region_area_name' => Schema::TYPE_STRING.'(20) NOT NULL COMMENT \'地区名称\'',
-            'region_province_name'=> Schema::TYPE_STRING.'(20) DEFAULT NULL COMMENT \'省份名称\'',
-            'region_city_name'=> Schema::TYPE_STRING.'(50) DEFAULT NULL COMMENT \'城市名称\'',
-            'region_area_ename'=> Schema::TYPE_STRING.'(50) DEFAULT NULL COMMENT \'地区拼音\'',
-            'region_province_ename'=> Schema::TYPE_STRING.'(50) DEFAULT NULL COMMENT \'省份拼音\'',
-            'region_city_ename'=> Schema::TYPE_STRING.'(50) DEFAULT NULL COMMENT \'城市拼音\'',
-            'region_level' => Schema::TYPE_SMALLINT.'(2) DEFAULT NULL COMMENT \'地区级别\'',
+            'general_region_area_name' => Schema::TYPE_STRING.'(20) NOT NULL COMMENT \'地区名称\'',
+            'general_region_province_name'=> Schema::TYPE_STRING.'(20) DEFAULT NULL COMMENT \'省份名称\'',
+            'general_region_city_name'=> Schema::TYPE_STRING.'(50) DEFAULT NULL COMMENT \'城市名称\'',
+            'general_region_area_ename'=> Schema::TYPE_STRING.'(50) DEFAULT NULL COMMENT \'地区拼音\'',
+            'general_region_province_ename'=> Schema::TYPE_STRING.'(50) DEFAULT NULL COMMENT \'省份拼音\'',
+            'general_region_city_ename'=> Schema::TYPE_STRING.'(50) DEFAULT NULL COMMENT \'城市拼音\'',
+            'general_region_level' => Schema::TYPE_SMALLINT.'(2) DEFAULT NULL COMMENT \'地区级别\'',
             'created_at' => Schema::TYPE_INTEGER.'(10) NOT NULL DEFAULT 0 COMMENT \'创建时间\'',
             'updated_at' => Schema::TYPE_INTEGER.'(10) NOT NULL DEFAULT 0 COMMENT \'更新时间\'',
             'isdel' => Schema::TYPE_SMALLINT.'(1) unsigned NOT NULL DEFAULT 0',
         ], $tableOptions);
 
-        $this->batchInsert('{{%region}}',
-            ['id','parent_id','region_area_name','region_province_name','region_city_name','region_area_ename','region_province_ename','region_city_ename','region_level','created_at','updated_at','isdel'],
+        $this->batchInsert('{{%general_region}}',
+            ['id','parent_id','general_region_area_name','general_region_province_name','general_region_city_name','general_region_area_ename','general_region_province_ename',
+                'general_region_city_ename','general_region_level','created_at','updated_at','isdel'],
             [
                 [1,0,'北京','','','beijing','','',1,time(),time(),0],
                 [2,0,'上海','','','shanghai','','',1,time(),time(),0],
@@ -1036,7 +1037,7 @@ class m150918_155019_create_table_region extends Migration
 
     public function down()
     {
-        $this->dropTable('{{%region}}');
+        $this->dropTable('{{%general_region}}');
     }
 
     /*
