@@ -1,26 +1,20 @@
 <?php
+
+/*
+*  绝对绝对绝对不要修改这个文件！！！！！！（郭红波）
+*  绝对绝对绝对不要修改这个文件！！！！！！（郭红波）
+*  绝对绝对绝对不要修改这个文件！！！！！！（郭红波）
+*/
+
 return [
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=rdsl1g8oe3xdc1ul6l3i.mysql.rds.aliyuncs.com;dbname=sq_ejiajie_v2',
-            'username' => 'sq_ejiajie',
-            'password' => 'test_sq_ejiajie',
+            'dsn' => 'mysql:host=;dbname=',
+            'username' => '',
+            'password' => '',
             'charset' => 'utf8',
         ],
-        'dbv1' => [
-            'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=rdsl1g8oe3xdc1ul6l3i.mysql.rds.aliyuncs.com;dbname=sq_ejiajie',
-            'username' => 'sq_ejiajie',
-            'password' => 'test_sq_ejiajie',
-            'charset' => 'utf8',
-        ],
-        'dbv2' => [
-            'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=rdsl1g8oe3xdc1ul6l3i.mysql.rds.aliyuncs.com;dbname=sq_ejiajie_v2',
-            'username' => 'sq_ejiajie',
-            'password' => 'test_sq_ejiajie',
-            'charset' => 'utf8',
-        ]
-    ]
+ 
+    ],
 ];

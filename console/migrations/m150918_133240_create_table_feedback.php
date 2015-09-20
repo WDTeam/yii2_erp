@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150918_133240_ejj_feedback extends Migration
+class m150918_133240_create_table_feedback extends Migration
 {
     public function up()
     {
@@ -17,7 +17,7 @@ class m150918_133240_ejj_feedback extends Migration
             'feedback_content'=>  Schema::TYPE_TEXT.' NOT NULL COMMENT \'反馈内容\'' ,
             'created_at'=>  Schema::TYPE_INTEGER.'(11) NOT NULL COMMENT \'创建时间\'' ,
             'updated_at'=>  Schema::TYPE_INTEGER.'(11) NOT NULL COMMENT \'更新时间\'' ,
-            ]);
+            ], $tableOptions);
     }
 
     public function down()

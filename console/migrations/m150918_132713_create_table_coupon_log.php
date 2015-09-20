@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150919_102821_ejj_coupon_log extends Migration
+class m150918_132713_create_table_coupon_log extends Migration
 {
     public function up()
     {
@@ -14,8 +14,8 @@ class m150919_102821_ejj_coupon_log extends Migration
         $this->createTable('{{%coupon_log}}', [
             'id'=>  Schema::TYPE_PK.'(8) NOT NULL AUTO_INCREMENT COMMENT \'主键\'',
             'customer_id'=>  Schema::TYPE_INTEGER.'(8) NOT NULL COMMENT \'关联顾客\'',
-            'coupon_id'=>  Schema::TYPE_INTEGER.'(8) NOT NULL COMMENT \'关联优惠券\'',
-            'order_id'=>  Schema::TYPE_INTEGER.'(8) NOT NULL COMMENT \'关联订单\'',
+            'coupon_id'=>  Schema::TYPE_INTEGER.'(8) NOT NULL',
+            'order_id'=>  Schema::TYPE_INTEGER.'(8) NOT NULL',
             'coupon_log_type'=>  Schema::TYPE_SMALLINT.'(4) NOT NULL COMMENT \'1为绑定顾客，2为使用，3为退还\'' ,
             'coupon_log_price'=>  Schema::TYPE_DECIMAL.'(8,2) NOT NULL COMMENT \'实际优惠或者退还金额\'' ,
             'created_at'=> Schema::TYPE_INTEGER.'(11) NOT NULL' ,

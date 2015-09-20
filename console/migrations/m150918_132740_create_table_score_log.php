@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150918_132740_ejj_score_log extends Migration
+class m150918_132740_create_table_score_log extends Migration
 {
     public function up()
     {
@@ -19,7 +19,7 @@ class m150918_132740_ejj_score_log extends Migration
             'order_id'=>  Schema::TYPE_INTEGER.'(8) NOT NULL',
             'created_at'=>  Schema::TYPE_INTEGER.'(11) NOT NULL',
             'updated_at'=>  Schema::TYPE_INTEGER.'(11) NOT NULL',
-            ]);
+            ], $tableOptions);
     }
 
     public function down()

@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150918_133302_ejj_help extends Migration
+class m150918_133302_create_table_help extends Migration
 {
     public function up()
     {
@@ -19,7 +19,7 @@ class m150918_133302_ejj_help extends Migration
             'help_sort'=>  Schema::TYPE_SMALLINT.'(4) NOT NULL COMMENT \'越小排在前面\'' ,
             'created_at'=>  Schema::TYPE_INTEGER.'(11) NOT NULL' ,
             'update_at'=>  Schema::TYPE_INTEGER.'(11) NOT NULL' ,
-            ]);
+            ], $tableOptions);
     }
 
     public function down()
