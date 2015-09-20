@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
  * @var boss\models\WorkerSearch $searchModel
  */
 
-$this->title = '阿姨管理';
+$this->title = Yii::t('app', '阿姨管理');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="worker-index">
