@@ -10,8 +10,7 @@ use yii\widgets\Pjax;
  * @var boss\models\CustomerSearch $searchModel
  */
 
-// $this->title = Yii::t('app', 'Customers');
-$this->title = Yii::t('app', '顾客');
+$this->title = Yii::t('boss', 'Customers');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="customer-index">
@@ -21,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
+        <?php /* echo Html::a(Yii::t('boss', 'Create {modelClass}', [
     'modelClass' => 'Customer',
 ]), ['create'], ['class' => 'btn btn-success'])*/  ?>
     </p>

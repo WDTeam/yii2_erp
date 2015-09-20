@@ -7,13 +7,10 @@ use yii\helpers\Html;
  * @var common\models\Customer $model
  */
 
-// $this->title = Yii::t('app', 'Create {modelClass}', [
-//     'modelClass' => 'Customer',
-// ]);
-$this->title = Yii::t('app', '创建 {modelClass}', [
-    'modelClass' => '顾客',
+$this->title = Yii::t('boss', 'Create {modelClass}', [
+    'modelClass' => 'Customer',
 ]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Customers'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('boss', 'Customers'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="customer-create">

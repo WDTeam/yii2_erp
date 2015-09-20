@@ -16,7 +16,7 @@ class m150918_123012_create_table_order extends Migration
         
         $this->createTable('{{%order}}', [
             'id'=> Schema::TYPE_BIGPK .' NOT NULL AUTO_INCREMENT COMMENT \'编号\'',
-            'order_parent_id' => Schema::TYPETYPE_BIGINT.'(20) unsigned NOT NULL DEFAULT 0 COMMENT \'父级id\'',
+            'order_parent_id' => Schema::TYPE_BIGINT.'(20) unsigned NOT NULL DEFAULT 0 COMMENT \'父级id\'',
             'order_is_parent' => Schema::TYPE_BOOLEAN . '(1) unsigned NOT NULL DEFAULT 0 COMMENT \'有无子订单 1有 0无\'',
             'created_at' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 0 COMMENT \'创建时间\'',
             'updated_at' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 0 COMMENT \'修改时间\'',
