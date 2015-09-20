@@ -20,7 +20,7 @@ class m150918_195648_create_table_customer_address extends Migration
             'customer_address_longitude'=>  Schema::TYPE_DOUBLE.'(8,3) NULL DEFAULT NULL COMMENT \'经度\'',
             'customer_address_latitude'=>  Schema::TYPE_DOUBLE.'(8,3) NULL DEFAULT NULL COMMENT \'纬度\'',
             'customer_address_nickname'=>Schema::TYPE_STRING.'(32) NOT NULL COMMENT \'被服务者昵称\'',
-            'customer_address_phone'=>Schema::TYPE_STRING.'(32) NOT NULL COMMENT \'被服务者手机\'',
+            'customer_address_phone'=>Schema::TYPE_STRING.'(11) NOT NULL COMMENT \'被服务者手机\'',
             'created_at'=>  Schema::TYPE_INTEGER.'(11) NOT NULL COMMENT \'创建时间\'',
             'updated_at'=>  Schema::TYPE_INTEGER.'(11) NOT NULL COMMENT \'更新时间\'',
             'is_del'=>  Schema::TYPE_SMALLINT.'(4) DEFAULT NULL',
