@@ -7,12 +7,12 @@ use kartik\datecontrol\DateControl;
 
 /**
  * @var yii\web\View $this
- * @var common\models\OperationCity $model
+ * @var common\models\OperationCategory $model
  * @var yii\widgets\ActiveForm $form
  */
 ?>
 
-<div class="operation-city-form">
+<div class="operation-category-form">
 
     <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); echo Form::widget([
 
@@ -21,13 +21,11 @@ use kartik\datecontrol\DateControl;
     'columns' => 1,
     'attributes' => [
 
-'operation_city_is_online'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 城市是否上线（1为上线，2为下线）...']], 
-
 'created_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 创建时间...']], 
 
 'updated_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 编辑时间...']], 
 
-'operation_city_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 城市名称...', 'maxlength'=>30]], 
+'operation_category_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 服务品类名称...', 'maxlength'=>60]], 
 
     ]
 

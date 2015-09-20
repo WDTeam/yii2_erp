@@ -7,7 +7,7 @@ use yii\widgets\Pjax;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
- * @var boss\models\OperationCitySearch $searchModel
+ * @var boss\models\OperationCity $searchModel
  */
 
 $this->title = Yii::t('app', 'Operation Cities');
@@ -32,8 +32,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'city_name',
-            'city_is_online',
+            'operation_city_name',
+            'operation_city_is_online',
             'created_at',
             'updated_at',
 

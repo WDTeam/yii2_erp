@@ -7,21 +7,21 @@ use yii\widgets\Pjax;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
- * @var boss\models\CustomerSearch $searchModel
+ * @var boss\models\OperationCategory $searchModel
  */
 
-$this->title = Yii::t('boss', '顾客');
+$this->title = Yii::t('app', 'Operation Categories');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="customer-index">
+<div class="operation-category-index">
     <div class="page-header">
-            <!-- <h1><?= Html::encode($this->title) ?></h1> -->
+            <h1><?= Html::encode($this->title) ?></h1>
     </div>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?php /* echo Html::a(Yii::t('boss', 'Create {modelClass}', [
-    'modelClass' => 'Customer',
+        <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
+    'modelClass' => 'Operation Category',
 ]), ['create'], ['class' => 'btn btn-success'])*/  ?>
     </p>
 
@@ -32,30 +32,15 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'customer_name',
-            'customer_sex',
-            'customer_birth',
-            'customer_photo',
-//            'customer_phone', 
-//            'customer_email:email', 
-//            'region_id', 
-//            'customer_live_address_detail', 
-//            'customer_score', 
-//            'customer_level', 
-//            'customer_src', 
-//            'channal_id', 
-//            'platform_id', 
-//            'customer_login_ip', 
-//            'customer_login_time:datetime', 
-//            'created_at', 
-//            'updated_at', 
-//            'is_del', 
+            'operation_category_name',
+            'created_at',
+            'updated_at',
 
             [
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
                 'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['customer/view','id' => $model->id,'edit'=>'t']), [
+                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['operation-category/view','id' => $model->id,'edit'=>'t']), [
                                                     'title' => Yii::t('yii', 'Edit'),
                                                   ]);}
 

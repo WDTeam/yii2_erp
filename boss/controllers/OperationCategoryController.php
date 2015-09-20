@@ -3,16 +3,16 @@
 namespace boss\controllers;
 
 use Yii;
-use common\models\OperationCity;
-use boss\models\OperationCity as OperationCitySearch;
+use common\models\OperationCategory;
+use boss\models\OperationCategory as OperationCategorySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * OperationCityController implements the CRUD actions for OperationCity model.
+ * OperationCategoryController implements the CRUD actions for OperationCategory model.
  */
-class OperationCityController extends Controller
+class OperationCategoryController extends Controller
 {
     public function behaviors()
     {
@@ -27,12 +27,12 @@ class OperationCityController extends Controller
     }
 
     /**
-     * Lists all OperationCity models.
+     * Lists all OperationCategory models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new OperationCitySearch;
+        $searchModel = new OperationCategorySearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
         return $this->render('index', [
@@ -42,7 +42,7 @@ class OperationCityController extends Controller
     }
 
     /**
-     * Displays a single OperationCity model.
+     * Displays a single OperationCategory model.
      * @param integer $id
      * @return mixed
      */
@@ -58,13 +58,13 @@ class OperationCityController extends Controller
     }
 
     /**
-     * Creates a new OperationCity model.
+     * Creates a new OperationCategory model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new OperationCity;
+        $model = new OperationCategory;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -76,7 +76,7 @@ class OperationCityController extends Controller
     }
 
     /**
-     * Updates an existing OperationCity model.
+     * Updates an existing OperationCategory model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -95,7 +95,7 @@ class OperationCityController extends Controller
     }
 
     /**
-     * Deletes an existing OperationCity model.
+     * Deletes an existing OperationCategory model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -108,15 +108,15 @@ class OperationCityController extends Controller
     }
 
     /**
-     * Finds the OperationCity model based on its primary key value.
+     * Finds the OperationCategory model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return OperationCity the loaded model
+     * @return OperationCategory the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = OperationCity::findOne($id)) !== null) {
+        if (($model = OperationCategory::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150918_125452_create_table_fi_order_channel extends Migration
+class m150918_125452_create_table_finance_order_channel extends Migration
 {
     public function up()
     {
@@ -14,12 +14,12 @@ $tableOptions = null;
       
 		   }
     
-		   $this->createTable('{{%fi_order_channel}}', [
+		   $this->createTable('{{%finance_order_channel}}', [
            
 		   'id' => Schema::TYPE_PK . '(5) AUTO_INCREMENT  COMMENT \'主键id\'' ,
-            'order_channel_name' => Schema::TYPE_STRING . '(50) DEFAULT NULL COMMENT \'渠道名称\'',
-         'order_channel_sort' => Schema::TYPE_SMALLINT . '(5) DEFAULT 1 COMMENT \'排序\'',
-            'order_channel_is_lock' => Schema::TYPE_SMALLINT . '(1) DEFAULT \'1\' COMMENT \'1 上架 2 下架\'',
+            'finance_order_channel_name' => Schema::TYPE_STRING . '(50) DEFAULT NULL COMMENT \'渠道名称\'',
+ 'finance_order_channel_sort' => Schema::TYPE_SMALLINT . '(5) DEFAULT 1 COMMENT \'排序\'',
+      'finance_order_channel_is_lock' => Schema::TYPE_SMALLINT . '(1) DEFAULT \'1\' COMMENT \'1 上架 2 下架\'',
          
 		   'create_time' => Schema::TYPE_INTEGER. '(10) DEFAULT NULL COMMENT \'增加时间\'',
             'is_del' => Schema::TYPE_SMALLINT . '(1) DEFAULT \'0\' COMMENT \'0 正常 1 删除\'',
@@ -31,7 +31,7 @@ $tableOptions = null;
 
     public function down()
     {
-        $this->dropTable('{{%fi_order_channel}}');
+        $this->dropTable('{{%finance_order_channel}}');
 
         return false;
     }

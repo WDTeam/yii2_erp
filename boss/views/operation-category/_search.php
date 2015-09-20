@@ -5,12 +5,12 @@ use yii\widgets\ActiveForm;
 
 /**
  * @var yii\web\View $this
- * @var boss\models\OperationCity $model
+ * @var boss\models\OperationCategory $model
  * @var yii\widgets\ActiveForm $form
  */
 ?>
 
-<div class="operation-city-search">
+<div class="operation-category-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
@@ -19,9 +19,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'operation_city_name') ?>
-
-    <?= $form->field($model, 'operation_city_is_online') ?>
+    <?= $form->field($model, 'operation_category_name') ?>
 
     <?= $form->field($model, 'created_at') ?>
 

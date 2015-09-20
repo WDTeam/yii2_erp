@@ -7,21 +7,21 @@ use yii\widgets\Pjax;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
- * @var boss\models\CustomerSearch $searchModel
+ * @var boss\models\FinancePopOrderSearch $searchModel
  */
 
-$this->title = Yii::t('boss', '顾客');
+$this->title = Yii::t('app', 'Finance Pop Orders');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="customer-index">
+<div class="finance-pop-order-index">
     <div class="page-header">
-            <!-- <h1><?= Html::encode($this->title) ?></h1> -->
+            <h1><?= Html::encode($this->title) ?></h1>
     </div>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?php /* echo Html::a(Yii::t('boss', 'Create {modelClass}', [
-    'modelClass' => 'Customer',
+        <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
+    'modelClass' => 'Finance Pop Order',
 ]), ['create'], ['class' => 'btn btn-success'])*/  ?>
     </p>
 
@@ -32,30 +32,39 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'customer_name',
-            'customer_sex',
-            'customer_birth',
-            'customer_photo',
-//            'customer_phone', 
-//            'customer_email:email', 
-//            'region_id', 
-//            'customer_live_address_detail', 
-//            'customer_score', 
-//            'customer_level', 
-//            'customer_src', 
-//            'channal_id', 
-//            'platform_id', 
-//            'customer_login_ip', 
-//            'customer_login_time:datetime', 
-//            'created_at', 
-//            'updated_at', 
+            'finance_pop_order_number',
+            'finance_order_channel_id',
+            'finance_order_channel_title',
+            'finance_pay_channel_id',
+//            'finance_pay_channel_title', 
+//            'finance_pop_order_customer_tel', 
+//            'finance_pop_order_worker_uid', 
+//            'finance_pop_order_booked_time:datetime', 
+//            'finance_pop_order_booked_counttime:datetime', 
+//            'finance_pop_order_sum_money', 
+//            'finance_pop_order_coupon_count', 
+//            'finance_pop_order_coupon_id', 
+//            'finance_pop_order_order2', 
+//            'finance_pop_order_channel_order', 
+//            'finance_pop_order_order_type', 
+//            'finance_pop_order_status', 
+//            'finance_pop_order_finance_isok', 
+//            'finance_pop_order_discount_pay', 
+//            'finance_pop_order_reality_pay', 
+//            'finance_pop_order_order_time:datetime', 
+//            'finance_pop_order_pay_time:datetime', 
+//            'finance_pop_order_pay_status', 
+//            'finance_pop_order_pay_title', 
+//            'finance_pop_order_check_id', 
+//            'finance_pop_order_finance_time:datetime', 
+//            'create_time:datetime', 
 //            'is_del', 
 
             [
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
                 'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['customer/view','id' => $model->id,'edit'=>'t']), [
+                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance-pop-order/view','id' => $model->id,'edit'=>'t']), [
                                                     'title' => Yii::t('yii', 'Edit'),
                                                   ]);}
 

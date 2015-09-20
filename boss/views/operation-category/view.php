@@ -6,14 +6,14 @@ use kartik\datecontrol\DateControl;
 
 /**
  * @var yii\web\View $this
- * @var common\models\OperationCity $model
+ * @var common\models\OperationCategory $model
  */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Cities'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Categories'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="operation-city-view">
+<div class="operation-category-view">
     <div class="page-header">
         <h1><?= Html::encode($this->title) ?></h1>
     </div>
@@ -30,8 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'attributes' => [
             'id',
-            'operation_city_name',
-            'operation_city_is_online',
+            'operation_category_name',
             'created_at',
             'updated_at',
         ],
