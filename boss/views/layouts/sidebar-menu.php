@@ -98,12 +98,12 @@ echo Menu::widget(
                 'items' => [
                     [
                         'label' => '查看所有顾客',
-                        'url' => ['#'],
+                        'url' => ['/customer'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
                         'label' => '管理黑名单顾客',
-                        'url' => ['#'],
+                        'url' => ['/customer'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],
