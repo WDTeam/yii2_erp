@@ -57,10 +57,9 @@ class AdminUser extends \common\models\AdminUser
 
     public function getRoleLabel()
     {
-
         if ($this->_roleLabel === null) {
             $roles = self::getArrayRole();
-            $this->_roleLabel = $roles[$this->role];
+            $this->_roleLabel = isset($roles[$this->role])?$roles[$this->role]:'';
         }
         return $this->_roleLabel;
     }

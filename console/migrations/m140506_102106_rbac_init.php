@@ -62,7 +62,7 @@ class m140506_102106_rbac_init extends \yii\db\Migration
         ], $tableOptions);
         $this->createIndex('idx-auth_item-type', '{{%auth_item}}', 'type');
 
-        $this->createTable('{{%auth_auth_item_child}}', [
+        $this->createTable('{{%auth_item_child}}', [
             'parent' => $this->string(64)->notNull(),
             'child' => $this->string(64)->notNull(),
             'PRIMARY KEY (parent, child)',
