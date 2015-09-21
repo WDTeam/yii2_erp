@@ -42,7 +42,7 @@ class OperationCity extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', '编号'),
             'operation_city_name' => Yii::t('app', '城市名称'),
-            'operation_city_is_online' => Yii::t('app', '城市是否上线（1为上线，2为下线）'),
+            'operation_city_is_online' => Yii::t('app', '上线状态'),//（1为上线，2为下线）
             'created_at' => Yii::t('app', '创建时间'),
             'updated_at' => Yii::t('app', '编辑时间'),
         ];

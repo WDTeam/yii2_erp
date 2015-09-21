@@ -4,7 +4,7 @@ namespace boss\controllers;
 
 use Yii;
 use common\models\OperationCity;
-use boss\models\OperationCity as OperationCitySearch;
+use boss\models\OperationCitySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -66,8 +66,11 @@ class OperationCityController extends Controller
     {
         $model = new OperationCity;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->created_at = time();
+            $model->updated_at = time();
+            $model->save();
+            return $this->redirect(['index']);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -85,8 +88,10 @@ class OperationCityController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->updated_at = time();
+            $model->save();
+            return $this->redirect(['index']);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -103,7 +108,17 @@ class OperationCityController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
+        return $this->redirect(['index']);
+    }
+    
+    public function actionGoline($id){
+        $model = $this->findModel($id);
+        if($model->operation_city_is_online == '1'){
+            $model->operation_city_is_online = '2';
+        }else{
+            $model->operation_city_is_online = '1';
+        }
+        $model->save();
         return $this->redirect(['index']);
     }
 

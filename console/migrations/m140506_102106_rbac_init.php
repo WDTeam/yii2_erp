@@ -62,7 +62,7 @@ class m140506_102106_rbac_init extends \yii\db\Migration
         ], $tableOptions);
         $this->createIndex('idx-auth_item-type', '{{%auth_item}}', 'type');
 
-        $this->createTable('{{%auth_auth_item_child}}', [
+        $this->createTable('{{%auth_item_child}}', [
             'parent' => $this->string(64)->notNull(),
             'child' => $this->string(64)->notNull(),
             'PRIMARY KEY (parent, child)',
@@ -72,9 +72,9 @@ class m140506_102106_rbac_init extends \yii\db\Migration
 
         $this->createTable('{{%auth_assignment}}', [
             'item_name' => $this->string(64)->notNull(),
-            'admin_id' => $this->string(64)->notNull(),
+            'user_id' => $this->string(64)->notNull(),
             'created_at' => $this->integer(),
-            'PRIMARY KEY (item_name, admin_id)',
+            'PRIMARY KEY (item_name, user_id)',
             'FOREIGN KEY (item_name) REFERENCES ' . '{{%auth_item}}' . ' (name) ON DELETE CASCADE ON UPDATE CASCADE',
         ], $tableOptions);
     }

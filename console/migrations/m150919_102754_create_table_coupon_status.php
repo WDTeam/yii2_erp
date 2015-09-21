@@ -17,7 +17,8 @@ class m150919_102754_create_table_coupon_status extends Migration
             'coupon_status_bundle_time'=>  Schema::TYPE_INTEGER. '(11) DEFAULT 0 COMMENT \'优惠券兑换成优惠券并绑定顾客时间\'',
             'coupon_status_use_time'=> Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'优惠券使用时间\'',
             'created_at'=>  Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'创建时间\'',
-            'updated_at'=> Schema::TYPE_INTEGER . '(11) DEFAULT 0',
+            'updated_at'=> Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'更新时间\'',
+            'is_del'=> Schema::TYPE_SMALLINT . '(4) NOT NULL DEFAULT 0 COMMENT \'是否逻辑删除\'',
             ], $tableOptions);
     }
 

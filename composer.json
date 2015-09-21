@@ -24,7 +24,8 @@
         "kartik-v/yii2-widget-select2": "*",
         "warrence/yii2-kartikgii": "dev-master",
         "kartik-v/yii2-mpdf": "^1.0",
-        "kartik-v/yii2-builder": "^1.6"
+        "kartik-v/yii2-builder": "^1.6",
+        "yiisoft/yii2-redis": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

@@ -9,14 +9,14 @@ use kartik\datecontrol\DateControl;
  * @var common\models\OperationCategory $model
  */
 
-$this->title = $model->id;
+$this->title = Yii::t('app', 'Look').Yii::t('app', 'Operation Categories');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Categories'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-category-view">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
+<!--    <div class="page-header">
+        <h1><?php //= Html::encode($this->title) ?></h1>
+    </div>-->
 
 
     <?= DetailView::widget([
@@ -35,11 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'updated_at',
         ],
         'deleteOptions'=>[
-        'url'=>['delete', 'id' => $model->id],
-        'data'=>[
-        'confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'),
-        'method'=>'post',
-        ],
+            'url'=>['delete', 'id' => $model->id],
         ],
         'enableEditMode'=>true,
     ]) ?>

@@ -24,13 +24,14 @@ class m150919_102729_create_table_coupon extends Migration
             'coupon_customer_limit'=>  Schema::TYPE_SMALLINT . '(4) NOT NULL COMMENT \'新老用户限制，1为只限新用户，2为只限老用户，3为不限\'',
             'coupon_service_limit'=>  Schema::TYPE_SMALLINT. '(4) NOT NULL COMMENT \'是否有服务限制，1为单一服务限制，2为不限\'',
             'service_id'=>  Schema::TYPE_INTEGER.'(8) NOT NULL COMMENT \'关联服务\'',
-            'city_id'=> Schema::TYPE_INTEGER.'(8) NOT NULL',
+            'city_id'=> Schema::TYPE_INTEGER.'(8) NOT NULL COMMENT \'关联城市\'',
             'coupon_bundle_begin_time'=>  Schema::TYPE_INTEGER . '(11) NOT NULL COMMENT \'优惠券开始时间\'',
             'coupon_bundle_end_time'=>  Schema::TYPE_INTEGER . '(11) NOT NULL COMMENT \'优惠券兑换结束时间\'',
             'coupon_useable_begin_time'=>  Schema::TYPE_INTEGER . '(11) NOT NULL COMMENT \'开始时间\'',
             'coupon_useable_end_time'=>  Schema::TYPE_INTEGER . '(11) NOT NULL COMMENT \'结束时间\'',
             'created_at'=>  Schema::TYPE_INTEGER . '(11) NOT NULL COMMENT \'创建时间\'',
-            'updated_at'=> Schema::TYPE_INTEGER . '(11) NOT NULL',
+            'updated_at'=> Schema::TYPE_INTEGER . '(11) NOT NULL COMMENT \'更新时间\'',
+            'is_del'=> Schema::TYPE_INTEGER . '(11) NOT NULL DEFAULT 0 COMMENT \'是否逻辑删除\'',
             ], $tableOptions);
     }
 

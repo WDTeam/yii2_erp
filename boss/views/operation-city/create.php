@@ -7,16 +7,14 @@ use yii\helpers\Html;
  * @var common\models\OperationCity $model
  */
 
-$this->title = Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Operation City',
-]);
+$this->title = Yii::t('app', 'Create').Yii::t('app', 'City');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Cities'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-city-create">
-    <div class="page-header">
+<!--    <div class="page-header">
         <h1><?= Html::encode($this->title) ?></h1>
-    </div>
+    </div>-->
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
