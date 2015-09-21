@@ -7,22 +7,20 @@ use yii\widgets\Pjax;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
- * @var boss\models\FinancePopOrderSearch $searchModel
+ * @var boss\models\FinanceInvoiceSearch $searchModel
  */
 
-$this->title = Yii::t('app', '对账管理');
+$this->title = '发票管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="finance-pop-order-index">
+<div class="finance-invoice-index">
     <div class="page-header">
             <h1><?= Html::encode($this->title) ?></h1>
     </div>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Finance Pop Order',
-]), ['create'], ['class' => 'btn btn-success'])*/  ?>
+        <?php /* echo Html::a('Create Finance Invoice', ['create'], ['class' => 'btn btn-success'])*/  ?>
     </p>
 
     <?php Pjax::begin(); echo GridView::widget([
@@ -32,39 +30,35 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'finance_pop_order_number',
-            'finance_order_channel_id',
-            'finance_order_channel_title',
-            'finance_pay_channel_id',
-//            'finance_pay_channel_title', 
-//            'finance_pop_order_customer_tel', 
-//            'finance_pop_order_worker_uid', 
-//            'finance_pop_order_booked_time:datetime', 
-//            'finance_pop_order_booked_counttime:datetime', 
-//            'finance_pop_order_sum_money', 
-//            'finance_pop_order_coupon_count', 
-//            'finance_pop_order_coupon_id', 
-//            'finance_pop_order_order2', 
-//            'finance_pop_order_channel_order', 
-//            'finance_pop_order_order_type', 
-//            'finance_pop_order_status', 
-//            'finance_pop_order_finance_isok', 
-//            'finance_pop_order_discount_pay', 
-//            'finance_pop_order_reality_pay', 
-//            'finance_pop_order_order_time:datetime', 
-//            'finance_pop_order_pay_time:datetime', 
-//            'finance_pop_order_pay_status', 
-//            'finance_pop_order_pay_title', 
-//            'finance_pop_order_check_id', 
-//            'finance_pop_order_finance_time:datetime', 
-//            'create_time:datetime', 
+            'finance_invoice_serial_number',
+            'finance_invoice_customer_tel',
+            'finance_invoice_worker_tel',
+            'pay_channel_pay_id',
+//            'pay_channel_pay_title', 
+//            'finance_invoice_pay_status', 
+//            'admin_confirm_uid', 
+//            'finance_invoice_enrolment_time:datetime', 
+//            'finance_invoice_money', 
+//            'finance_invoice_title', 
+//            'finance_invoice_address', 
+//            'finance_invoice_status', 
+//            'finance_invoice_check_id', 
+//            'finance_invoice_number', 
+//            'finance_invoice_service_money', 
+//            'finance_invoice_corp_email:email', 
+//            'finance_invoice_corp_address', 
+//            'finance_invoice_corp_name', 
+//            'finance_invoice_district_id', 
+//            'classify_id', 
+//            'classify_title', 
+//            'create_time', 
 //            'is_del', 
 
             [
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
                 'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance-pop-order/view','id' => $model->id,'edit'=>'t']), [
+                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance-invoice/view','id' => $model->id,'edit'=>'t']), [
                                                     'title' => Yii::t('yii', 'Edit'),
                                                   ]);}
 
