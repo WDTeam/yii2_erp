@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
  * @var boss\models\FinancePopOrderSearch $searchModel
  */
 
-$this->title = Yii::t('app', 'Finance Pop Orders');
+$this->title = Yii::t('app', '对账管理');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="finance-pop-order-index">
