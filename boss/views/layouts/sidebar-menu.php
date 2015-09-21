@@ -243,7 +243,7 @@ echo Menu::widget(
 //                    ],
                     [
                         'label' => '服务品类管理',
-                        'url' => ['#'],
+                        'url' => ['/operation-category'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [

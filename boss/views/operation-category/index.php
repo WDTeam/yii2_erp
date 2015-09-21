@@ -10,13 +10,13 @@ use yii\widgets\Pjax;
  * @var boss\models\OperationCategory $searchModel
  */
 
-$this->title = Yii::t('app', 'Operation Categories');
+$this->title = Yii::t('app', 'Operation Categories').'管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-category-index">
-    <div class="page-header">
-            <h1><?= Html::encode($this->title) ?></h1>
-    </div>
+<!--    <div class="page-header">
+            <h1><?php //= Html::encode($this->title) ?></h1>
+    </div>-->
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
@@ -27,23 +27,70 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+//        'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'operation_category_name',
-            'created_at',
-            'updated_at',
-
             [
-                'class' => 'yii\grid\ActionColumn',
-                'buttons' => [
-                'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['operation-category/view','id' => $model->id,'edit'=>'t']), [
-                                                    'title' => Yii::t('yii', 'Edit'),
-                                                  ]);}
+                'class' => 'yii\grid\SerialColumn',
+                'header' => Yii::t('app', 'Order Number'),
+            ],
 
+//            'id',
+            'operation_category_name',
+            [
+               'attribute'=> 'created_at',
+               'format'=>'html',
+               'value' => function ($model){
+                    if(empty($model->created_at)){
+                        return '';
+                    }else{
+                        return date('Y-m-d H:i:s', $model->created_at);
+                    }
+               }
+            ],
+            [
+               'attribute'=> 'updated_at',
+               'format'=>'html',
+               'value' => function ($model){
+                    if(empty($model->updated_at)){
+                        return '';
+                    }else{
+                        return date('Y-m-d H:i:s', $model->updated_at);
+                    }
+               }
+            ],
+            [
+                'header' => Yii::t('app', 'Operation'),
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {update} {delete} {listbtn}',
+                'buttons' => [
+                    'view' => function ($url, $model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-eye-open"></span>', 
+                            Yii::$app->urlManager->createUrl(['operation-category/view','id' => $model->id]),
+                            ['title' => Yii::t('yii', 'View'), 'class' => 'btn btn-success btn-sm']
+                        );
+                    },
+                    'update' => function ($url, $model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-pencil"></span>', 
+                            Yii::$app->urlManager->createUrl(['operation-category/update','id' => $model->id]), 
+                            ['title' => Yii::t('yii', 'Edit'), 'class' => 'btn btn-info btn-sm',]
+                        );
+                    },
+                    'delete' => function ($url, $model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-trash"></span>', 
+                            Yii::$app->urlManager->createUrl(['operation-category/delete','id' => $model->id]),
+                            ['title' => Yii::t('yii', 'Delete'), 'class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
+                        );
+                    },
+                    'listbtn' => function ($url, $model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-list"></span>', 
+                            Yii::$app->urlManager->createUrl(['operation-category-type','id' => $model->id]), 
+                            ['title' => Yii::t('yii', 'Edit'), 'class' => 'btn btn-warning btn-sm',]
+                        );
+                    },
                 ],
             ],
         ],
@@ -58,8 +105,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type'=>'info',
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> Add', ['create'], ['class' => 'btn btn-success']),                                                                                                                                                          'after'=>Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List', ['index'], ['class' => 'btn btn-info']),
-            'showFooter'=>false
+            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> '.Yii::t('app', 'Add'), ['create'], ['class' => 'btn btn-success']),
+            'after'=>false,//Html::a('<i class="glyphicon glyphicon-repeat"></i> '.Yii::t('app', 'Reset List'), ['index'], ['class' => 'btn btn-info']),
+            'showFooter'=>false,
+            'footer' => false
         ],
     ]); Pjax::end(); ?>
 

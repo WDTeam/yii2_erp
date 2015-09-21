@@ -101,4 +101,7 @@ return [
     'Look' => '查看',
     'City' => '城市',
     'upline' => '上线',
+    'Operation' => '操作',
+    
+    'Operation Categories' => '服务品类',
 ];
