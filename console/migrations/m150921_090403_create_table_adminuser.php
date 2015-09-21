@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150921_090403_create_adminuser_table extends Migration
+class m150921_090403_create_table_adminuser extends Migration
 {
     public function up()
     {
