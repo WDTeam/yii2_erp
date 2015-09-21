@@ -3,7 +3,7 @@ return [
     'adminEmail' => 'admin@example.com',
     'supportEmail' => 'support@example.com',
     'user.passwordResetTokenExpire' => 3600,
-    'alipay_web'=>[
+    'alipay_web_config'=>[
         'partner' => '2088801136967007',    //合作身份者id，以2088开头的16位纯数字
         'key' => 'ptd4lbjltmwpx64g80qhil5eckr98opf',    //安全检验码，以数字和字母组成的32位字符
         'seller_email' => '47632990@qq.com',    //签约支付宝账号或卖家支付宝帐户
