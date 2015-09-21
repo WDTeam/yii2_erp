@@ -104,4 +104,5 @@ return [
     'Operation' => '操作',
     
     'Operation Categories' => '服务品类',
+    'Category Types' => '服务类型',
 ];
