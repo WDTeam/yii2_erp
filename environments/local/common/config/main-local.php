@@ -11,8 +11,8 @@ return [
         'db' => [
             'class' => 'yii\db\Connection',
             'dsn' => 'mysql:host=localhost;dbname=local-boss-db',
-            'username' => 'local-boss-db-dbo',
-            'password' => 'localboss',
+            'username' => 'root',
+            'password' => '',
             'tablePrefix' => 'et_',
             'charset' => 'utf8',
             ],
