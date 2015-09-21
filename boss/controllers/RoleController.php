@@ -39,26 +39,44 @@ class RoleController extends Controller
 //             ],
 //         ];
 //     }
-    
-    public function actionRbac()
+    /**
+     * 获取所有操作项目
+     */
+    public function getAllPermissions()
     {
         $handle = \opendir("../controllers/");
+        $permissions = [];
         if ($handle) {
             while (false !== ($fileName = readdir($handle))) {
                 if ($fileName != "." && $fileName != "..") {
-                    echo $fileName."<br/>";
                     if(preg_match('/(.*?)Controller/i', $fileName, $matches)) {
-                        print_r($matches);
-                        echo '我要截取的内容：' . $matches[1] . "<br/>";
+                        $controller_id = $matches[1];
+                        $content = file_get_contents("../controllers/".$fileName);
+                        if(preg_match_all('/action(.*?)\(/i', $content, $matches)) {
+                            foreach ($matches[1] as $action_id){
+                                if(!empty($action_id)){
+                                    $permissions[] = $controller_id.$action_id;
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
-//         $auth = Yii::$app->authManager;
-//         $createPost = $auth->createPermission('createPost');
-//         $createPost->description = 'Create a post';
-//         $auth->add($createPost);
-        
+        return $permissions;
+    }
+    public function actionRbac()
+    {
+        $auth = Yii::$app->authManager;
+        $permissions = $this->getAllPermissions();
+        foreach ($permissions as $permission){
+            $is_has = $auth->getPermission($permission);
+            if(!$is_has){
+                $createPost = $auth->createPermission($permission);
+                $createPost->description = $permission;
+                $auth->add($createPost);
+            }
+        }
 //         $auth->assign($createPost, 1);
     }
 
