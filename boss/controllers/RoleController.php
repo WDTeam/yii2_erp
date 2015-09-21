@@ -19,25 +19,35 @@ use yii\filters\VerbFilter;
 
 class RoleController extends Controller
 {
-    public function behaviors()
+//     public function behaviors()
+//     {
+//         return [
+//             'verbs' => [
+//                 'class' => VerbFilter::className(),
+//                 'actions' => [
+//                     'delete' => ['post'],
+//                 ],
+//             ],
+//             'access' => [
+//                 'class' => AccessControl::className(),
+//                 'rules' => [
+//                     [
+//                         'allow' => true,
+//                         'roles' => ['@']
+//                     ]
+//                 ]
+//             ],
+//         ];
+//     }
+    
+    public function actionRbac()
     {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                ],
-            ],
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['@']
-                    ]
-                ]
-            ],
-        ];
+        $auth = Yii::$app->authManager;
+        $createPost = $auth->createPermission('createPost');
+        $createPost->description = 'Create a post';
+//         $auth->add($createPost);
+        
+        $auth->assign($createPost, 1);
     }
 
     public function actionIndex()
