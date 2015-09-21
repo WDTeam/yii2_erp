@@ -42,12 +42,24 @@ class RoleController extends Controller
     
     public function actionRbac()
     {
-        $auth = Yii::$app->authManager;
-        $createPost = $auth->createPermission('createPost');
-        $createPost->description = 'Create a post';
+        $handle = \opendir("../controllers/");
+        if ($handle) {
+            while (false !== ($fileName = readdir($handle))) {
+                if ($fileName != "." && $fileName != "..") {
+                    echo $fileName."<br/>";
+                    if(preg_match('/(.*?)Controller/i', $fileName, $matches)) {
+                        print_r($matches);
+                        echo '我要截取的内容：' . $matches[1] . "<br/>";
+                    }
+                }
+            }
+        }
+//         $auth = Yii::$app->authManager;
+//         $createPost = $auth->createPermission('createPost');
+//         $createPost->description = 'Create a post';
 //         $auth->add($createPost);
         
-        $auth->assign($createPost, 1);
+//         $auth->assign($createPost, 1);
     }
 
     public function actionIndex()
