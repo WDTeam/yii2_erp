@@ -44,7 +44,7 @@ class Auth extends \yii\db\ActiveRecord
     {
         return [
             ['name', 'required'],
-            ['name', 'match', 'pattern' => '/^[a-zA-Z0-9_-]+$/'],
+//             ['name', 'match', 'pattern' => '/^[a-zA-Z0-9_-]+$/'],
             ['name', 'string', 'min' => 3, 'max' => 64],
             ['name', 'validatePermission'],
 
