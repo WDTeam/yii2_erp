@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'header' => Yii::t('yii', 'Operation'),
+                'header' => Yii::t('app', 'Operation'),
                 'buttons' => [
                     'view' => function ($url, $model) {
                         return Html::a(
