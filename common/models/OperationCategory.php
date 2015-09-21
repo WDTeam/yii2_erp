@@ -29,7 +29,8 @@ class OperationCategory extends \yii\db\ActiveRecord
     {
         return [
             [['created_at', 'updated_at'], 'integer'],
-            [['operation_category_name'], 'string', 'max' => 60]
+            [['operation_category_name'], 'string', 'max' => 60],
+//            [['operation_category_name'], 'integer', 'min' => '1', 'max' => '5'],
         ];
     }
 
