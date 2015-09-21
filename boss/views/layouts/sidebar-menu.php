@@ -236,8 +236,28 @@ echo Menu::widget(
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                     ],
+//                    [
+//                        'label' => '服务管理',
+//                        'url' => ['#'],
+//                        'icon' => 'fa fa-angle-right',
+//                    ],
                     [
-                        'label' => '服务管理',
+                        'label' => '服务品类管理',
+                        'url' => ['#'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
+                    [
+                        'label' => '启动页管理',
+                        'url' => ['#'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
+                    [
+                        'label' => '引导页管理',
+                        'url' => ['#'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
+                    [
+                        'label' => '话术管理',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                     ],

@@ -93,4 +93,12 @@ return [
     'Questions' => '试题管理',
     
     'Create Question'=>'创建试题',
+    'Operation Cities'=>'城市管理',
+    'Add'=>'增加',
+    'Reset List' => '刷新列表',
+    'Order Number' => '序号',
+    'View Detail' => '查看详情',
+    'Look' => '查看',
+    'City' => '城市',
+    'upline' => '上线',
 ];
