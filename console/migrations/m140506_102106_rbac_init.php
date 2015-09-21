@@ -72,7 +72,7 @@ class m140506_102106_rbac_init extends \yii\db\Migration
 
         $this->createTable('{{%auth_assignment}}', [
             'item_name' => $this->string(64)->notNull(),
-            'admin_id' => $this->string(64)->notNull(),
+            'user_id' => $this->string(64)->notNull(),
             'created_at' => $this->integer(),
             'PRIMARY KEY (item_name, admin_id)',
             'FOREIGN KEY (item_name) REFERENCES ' . '{{%auth_item}}' . ' (name) ON DELETE CASCADE ON UPDATE CASCADE',
