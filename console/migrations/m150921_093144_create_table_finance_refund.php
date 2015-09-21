@@ -8,24 +8,24 @@ class m150921_093144_create_table_finance_refund extends Migration
     public function up()
     {
 		if ($this->db->driverName === 'mysql') {
-            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'ÍË¿î¹ÜÀí\'';
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'é€€æ¬¾ç®¡ç†\'';
         }
         $this->createTable('{{%finance_refund}}' , [
-  'id' => Schema::TYPE_PK .' AUTO_INCREMENT COMMENT \'Ö÷¼üid\'' ,	
-  'finance_refund_tel' => Schema::TYPE_STRING . '(20)  NOT NULL COMMENT \'ÓÃ»§µç»°\'' ,
-  'finance_refund_money' => Schema::TYPE_DECIMAL. '(8,2) DEFAULT NULL COMMENT \'ÍË¿î½ð¶î\'' ,
-  'finance_refund_stype' => Schema::TYPE_SMALLINT. '(2) NOT NULL COMMENT \'ÉêÇë·½Ê½\'' ,
-  'finance_refund_reason' => Schema::TYPE_STRING . '(255)  DEFAULT NULL COMMENT \'ÍË¿îÀíÓÉ\'' ,
-  'finance_refund_discount' => Schema::TYPE_DECIMAL. '(6,2) DEFAULT NULL COMMENT \'ÓÅ»Ý¼Û¸ñ\'' ,
-  'finance_refund_pay_create_time' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL COMMENT \'¶©µ¥Ö§¸¶Ê±¼ä\'' ,
-  'finance_pay_channel_id' => Schema::TYPE_SMALLINT. '(2) DEFAULT NULL COMMENT \'Ö§¸¶·½Ê½id\'' ,
-  'finance_pay_channel_name' => Schema::TYPE_STRING . '(80) CHARACTER SET latin1 DEFAULT NULL COMMENT \'Ö§¸¶·½Ê½Ãû³Æ\'' ,
-  'finance_refund_pay_flow_num' => Schema::TYPE_STRING . '(80) CHARACTER SET latin1 DEFAULT NULL COMMENT \'¶©µ¥ºÅ\'' ,
-  'finance_refund_pay_status' => Schema::TYPE_SMALLINT. '(2) DEFAULT NULL COMMENT \'Ö§¸¶×´Ì¬ 1Ö§¸¶ 0 Î´Ö§¸¶ 2 ÆäËû\'' ,
-  'finance_refund_worker_id' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL COMMENT \'·þÎñ°¢ÒÌ\'' ,
-  'finance_refund_worker_tel' => Schema::TYPE_STRING . '(20) CHARACTER SET latin1 DEFAULT NULL COMMENT \'°¢ÒÌµç»°\'' ,
-  'create_time' => Schema::TYPE_INTEGER . '(10) NOT NULL COMMENT \'ÍË¿îÉêÇëÊ±¼ä\'' ,
-  'is_del' => Schema::TYPE_SMALLINT. '(1) DEFAULT \'0\' COMMENT \'0 Õý³£ 1É¾³ý\'' ,
+  'id' => Schema::TYPE_PK .' AUTO_INCREMENT COMMENT \'ä¸»é”®id\'' ,	
+  'finance_refund_tel' => Schema::TYPE_STRING . '(20)  NOT NULL COMMENT \'ç”¨æˆ·ç”µè¯\'' ,
+  'finance_refund_money' => Schema::TYPE_DECIMAL. '(8,2) DEFAULT NULL COMMENT \'é€€æ¬¾é‡‘é¢\'' ,
+  'finance_refund_stype' => Schema::TYPE_SMALLINT. '(2) NOT NULL COMMENT \'ç”³è¯·æ–¹å¼\'' ,
+  'finance_refund_reason' => Schema::TYPE_STRING . '(255)  DEFAULT NULL COMMENT \'é€€æ¬¾ç†ç”±\'' ,
+  'finance_refund_discount' => Schema::TYPE_DECIMAL. '(6,2) DEFAULT NULL COMMENT \'ä¼˜æƒ ä»·æ ¼\'' ,
+  'finance_refund_pay_create_time' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL COMMENT \'è®¢å•æ”¯ä»˜æ—¶é—´\'' ,
+  'finance_pay_channel_id' => Schema::TYPE_SMALLINT. '(2) DEFAULT NULL COMMENT \'æ”¯ä»˜æ–¹å¼id\'' ,
+  'finance_pay_channel_name' => Schema::TYPE_STRING . '(80) CHARACTER SET latin1 DEFAULT NULL COMMENT \'æ”¯ä»˜æ–¹å¼åç§°\'' ,
+  'finance_refund_pay_flow_num' => Schema::TYPE_STRING . '(80) CHARACTER SET latin1 DEFAULT NULL COMMENT \'è®¢å•å·\'' ,
+  'finance_refund_pay_status' => Schema::TYPE_SMALLINT. '(2) DEFAULT NULL COMMENT \'æ”¯ä»˜çŠ¶æ€ 1æ”¯ä»˜ 0 æœªæ”¯ä»˜ 2 å…¶ä»–\'' ,
+  'finance_refund_worker_id' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL COMMENT \'æœåŠ¡é˜¿å§¨\'' ,
+  'finance_refund_worker_tel' => Schema::TYPE_STRING . '(20) CHARACTER SET latin1 DEFAULT NULL COMMENT \'é˜¿å§¨ç”µè¯\'' ,
+  'create_time' => Schema::TYPE_INTEGER . '(10) NOT NULL COMMENT \'é€€æ¬¾ç”³è¯·æ—¶é—´\'' ,
+  'is_del' => Schema::TYPE_SMALLINT. '(1) DEFAULT \'0\' COMMENT \'0 æ­£å¸¸ 1åˆ é™¤\'' ,
         ], $tableOptions);
     }
 

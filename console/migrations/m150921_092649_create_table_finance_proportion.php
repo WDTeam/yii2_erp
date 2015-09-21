@@ -8,18 +8,18 @@ class m150921_092649_create_table_finance_proportion extends Migration
     public function up()
     {
 		if ($this->db->driverName === 'mysql') {
-            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'µÚÈý·½±ÈÀý±í\'';
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'ç¬¬ä¸‰æ–¹æ¯”ä¾‹è¡¨\'';
         }
         $this->createTable('{{%finance_proportion}}', [
-  'id' => Schema::TYPE_PK .' AUTO_INCREMENT COMMENT \'Ö÷¼üid\'' ,		
-  'finance_proportion_period' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'ÖÜÆÚ\'' ,
-  'finance_pay_channel_id' => Schema::TYPE_SMALLINT. '(2) DEFAULT NULL COMMENT \'Ö§¸¶ÇþµÀ\'' ,
-  'finance_pay_channel_name' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'ÇþµÀÃû³Æ\'' ,
-  'finance_order_channel_id' => Schema::TYPE_SMALLINT. '(2) DEFAULT NULL COMMENT \'¶©µ¥ÇþµÀ\'' ,
-  'finance_order_channel_name' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'¶©µ¥ÇþµÀÃû³Æ\'' ,
-  'finance_proportion_ratio' => Schema::TYPE_DECIMAL. '(4,2) DEFAULT \'1.00\' COMMENT \'±ÈÀý(µÚÈý·½¶ÔÓ¦±ÈÀý)\'' ,
-  'create_time' => Schema::TYPE_INTEGER . '(10) NOT NULL COMMENT \'ÍË¿îÉêÇëÊ±¼ä\'' ,
-  'is_del' => Schema::TYPE_SMALLINT. '(1) DEFAULT \'0\' COMMENT \'0 Õý³£ 1É¾³ý\'' ,
+  'id' => Schema::TYPE_PK .' AUTO_INCREMENT COMMENT \'ä¸»é”®id\'' ,		
+  'finance_proportion_period' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'å‘¨æœŸ\'' ,
+  'finance_pay_channel_id' => Schema::TYPE_SMALLINT. '(2) DEFAULT NULL COMMENT \'æ”¯ä»˜æ¸ é“\'' ,
+  'finance_pay_channel_name' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'æ¸ é“åç§°\'' ,
+  'finance_order_channel_id' => Schema::TYPE_SMALLINT. '(2) DEFAULT NULL COMMENT \'è®¢å•æ¸ é“\'' ,
+  'finance_order_channel_name' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'è®¢å•æ¸ é“åç§°\'' ,
+  'finance_proportion_ratio' => Schema::TYPE_DECIMAL. '(4,2) DEFAULT \'1.00\' COMMENT \'æ¯”ä¾‹(ç¬¬ä¸‰æ–¹å¯¹åº”æ¯”ä¾‹)\'' ,
+  'create_time' => Schema::TYPE_INTEGER . '(10) NOT NULL COMMENT \'é€€æ¬¾ç”³è¯·æ—¶é—´\'' ,
+  'is_del' => Schema::TYPE_SMALLINT. '(1) DEFAULT \'0\' COMMENT \'0 æ­£å¸¸ 1åˆ é™¤\'' ,
         ], $tableOptions);
     }
 

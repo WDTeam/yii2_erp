@@ -8,7 +8,7 @@ class m150918_141440_create_table_finance_invoice extends Migration
  public function up()
     {
     if ($this->db->driverName === 'mysql') {
-    		$tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'支付渠道表\'';
+    		$tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'发票管理表\'';
     	}
     	$this->createTable('{{%finance_invoice}}', [
     			'id' => Schema::TYPE_PK . '(10) AUTO_INCREMENT  COMMENT \'主键id\'' ,
