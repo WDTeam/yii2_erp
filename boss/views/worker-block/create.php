@@ -7,7 +7,7 @@ use yii\helpers\Html;
  * @var common\models\WorkerBlock $model
  */
 
-    $this->title = Yii::t('worker', 'worker_block_create', [
+$this->title = Yii::t('app', 'Create {modelClass}', [
     'modelClass' => 'Worker Block',
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Worker Blocks'), 'url' => ['index']];

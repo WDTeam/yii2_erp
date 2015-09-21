@@ -7,13 +7,13 @@ use yii\widgets\Pjax;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
- * @var boss\models\WorkerBlockSearch $searchModel
+ * @var boss\models\FinanceRefundSearch $searchModel
  */
 
-$this->title = Yii::t('app', 'Worker Blocks');
+$this->title = Yii::t('app', 'Finance Refunds');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="worker-block-index">
+<div class="finance-refund-index">
     <div class="page-header">
             <h1><?= Html::encode($this->title) ?></h1>
     </div>
@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Worker Block',
+    'modelClass' => 'Finance Refund',
 ]), ['create'], ['class' => 'btn btn-success'])*/  ?>
     </p>
 
@@ -32,20 +32,26 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'worker_id',
-            'worker_block_type',
-            'worker_block_reason',
-            'worker_block_start',
-//            'worker_block_finish', 
-//            'created_ad', 
-//            'updated_ad', 
-//            'admin_id', 
+            'finance_refund_tel',
+            'finance_refund_money',
+            'finance_refund_stype',
+            'finance_refund_reason',
+//            'finance_refund_discount', 
+//            'finance_refund_pay_create_time:datetime', 
+//            'finance_pay_channel_id', 
+//            'finance_pay_channel_name', 
+//            'finance_refund_pay_flow_num', 
+//            'finance_refund_pay_status', 
+//            'finance_refund_worker_id', 
+//            'finance_refund_worker_tel', 
+//            'create_time:datetime', 
+//            'is_del', 
 
             [
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
                 'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['worker-block/view','id' => $model->id,'edit'=>'t']), [
+                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance-refund/view','id' => $model->id,'edit'=>'t']), [
                                                     'title' => Yii::t('yii', 'Edit'),
                                                   ]);}
 

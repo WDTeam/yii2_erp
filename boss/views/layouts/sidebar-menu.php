@@ -153,7 +153,7 @@ echo Menu::widget(
                     ],
                     [
                         'label' => '赔偿管理',
-                        'url' => ['#'],
+                        'url' => ['/finance-compensate/'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [

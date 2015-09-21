@@ -4,16 +4,16 @@ use yii\helpers\Html;
 
 /**
  * @var yii\web\View $this
- * @var common\models\Worker $model
+ * @var common\models\FinanceRefund $model
  */
 
 $this->title = Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Worker',
+    'modelClass' => 'Finance Refund',
 ]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Workers'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Finance Refunds'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="worker-create">
+<div class="finance-refund-create">
     <div class="page-header">
         <h1><?= Html::encode($this->title) ?></h1>
     </div>
