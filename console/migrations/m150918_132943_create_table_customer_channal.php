@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150918_132943_create_table_channal extends Migration
+class m150918_132943_create_table_customer_channal extends Migration
 {
     public function up()
     {
@@ -11,7 +11,7 @@ class m150918_132943_create_table_channal extends Migration
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'渠道表\'';
         }
-        $this->createTable('{{%channal}}', [
+        $this->createTable('{{%customer_channal}}', [
             'id'=>  Schema::TYPE_PK.'(8) NOT NULL AUTO_INCREMENT COMMENT \'主键\'' ,
             'channal_name'=>  Schema::TYPE_STRING.'(16) NOT NULL COMMENT \'聚道名称\'' ,
             'pid'=>  Schema::TYPE_INTEGER.'(8) DEFAULT 0 COMMENT \'父级id\'' ,
@@ -23,6 +23,6 @@ class m150918_132943_create_table_channal extends Migration
 
     public function down()
     {
-        $this->dropTable('{{%channal}}');
+        $this->dropTable('{{%customer_channal}}');
     }
 }
