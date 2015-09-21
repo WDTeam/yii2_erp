@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "aa5771e83d579bcfa2710fbe234a1c8b",
+    "hash": "b26e56953d22b71e79bde7a4933f6dc2",
     "packages": [
         {
             "name": "alexandernst/yii2-device-detect",
@@ -2106,6 +2106,39 @@
             "time": "2015-06-18 09:43:23"
         },
         {
+            "name": "pjkui/kindeditor",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pjkui/kindeditor.git",
+                "reference": "22cb9b3e602c4e525925baf2ad0123fb851656f2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://packagist.phpcomposer.com/files/pjkui/kindeditor/22cb9b3e602c4e525925baf2ad0123fb851656f2.zip",
+                "reference": "22cb9b3e602c4e525925baf2ad0123fb851656f2",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "pjkui\\kindeditor\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Quinn Pan",
+                    "email": "pjkui@qq.com"
+                }
+            ],
+            "description": "desc",
+            "time": "2015-09-14 16:08:59"
+        },
+        {
             "name": "swiftmailer/swiftmailer",
             "version": "v5.4.1",
             "source": {
@@ -2843,7 +2876,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "funson86/yii2-gii": 20,
-        "warrence/yii2-kartikgii": 20
+        "warrence/yii2-kartikgii": 20,
+        "pjkui/kindeditor": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
