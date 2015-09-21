@@ -44,6 +44,7 @@ return [
             'thousandSeparator' => ' ',
             'currencyCode' => 'CNY',
         ],
+        // Url映射规则
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
@@ -54,6 +55,10 @@ return [
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
             ],
         ],
+        /**
+         * 配置邮箱账号 
+         *  modified by zhanghang 2015-09-21
+         */
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@common/mail',
@@ -63,14 +68,18 @@ return [
             'useFileTransport' => false,
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp.qq.com',
-                'username' => 'lidenggao@1jiajie.com',
-                'password' => 'ldg1234',
-                'port' => '465',
-                'encryption' => 'ssl',
+                'host' => 'corp.1jiajie.com',
+                'username' => 'service@corp.1jiajie.com',
+                'password' => '123qweASDZXC',
+                'port' => '25',
+//                'encryption' => 'ssl',
         
             ],
         ],
+        /**
+         * Log 日志配置
+         *  add by zhanghang 2015-09-21
+         */
         'log' => [
             'targets' => [
                 'fileError' => [
@@ -95,6 +104,28 @@ return [
         ],
         'devicedetect' => [
             'class' => 'alexandernst\devicedetect\DeviceDetect'
+        ],
+        /**
+         * 配置 redis 
+         *  add by zhanghang 2015-09-21
+         * 
+         * 使用方式： Yii::$app->redis->set('keyname','keyvalue');
+         * 
+         * 有部分函数使用时要注意，比如mget:
+         * $tempkeyarray=explode(',',$tempkey);
+         * $resultarray = Yii::$app->redis->executeCommand('mget',$tempkeyarray);
+         * 
+         * 修改php.ini，设置： 
+         * default_socket_timeout = -1
+         * 可以在index.php入口处加：
+         *   <?php
+         *      ini_set('default_socket_timeout', -1);
+         */
+        'redis' => [
+            'class' => 'yii\redis\Connection',
+            'hostname' => 'localhost', // 配置为 redis 服务器地址
+            'port' => 6379,
+            'database' => 0,
         ],
     ],
     'modules' => [
