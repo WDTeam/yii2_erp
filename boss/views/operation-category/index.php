@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
  * @var boss\models\OperationCategory $searchModel
  */
 
-$this->title = Yii::t('app', 'Operation Categories');
+$this->title = Yii::t('app', 'Operation Categories').'管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-category-index">
@@ -61,19 +61,34 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'header' => Yii::t('app', 'Operation'),
                 'class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {update} {delete} {listbtn}',
                 'buttons' => [
+                    'view' => function ($url, $model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-eye-open"></span>', 
+                            Yii::$app->urlManager->createUrl(['operation-category/view','id' => $model->id]),
+                            ['title' => Yii::t('yii', 'View'), 'class' => 'btn btn-success btn-sm']
+                        );
+                    },
                     'update' => function ($url, $model) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-pencil"></span>', 
                             Yii::$app->urlManager->createUrl(['operation-category/update','id' => $model->id]), 
-                            ['title' => Yii::t('yii', 'Edit'),]
+                            ['title' => Yii::t('yii', 'Edit'), 'class' => 'btn btn-info btn-sm',]
                         );
                     },
-                    'list' => function ($url, $model) {
+                    'delete' => function ($url, $model) {
                         return Html::a(
-                            '<span class="fa fa-list"></span>', 
-                            Yii::$app->urlManager->createUrl(['operation-category-type/list','id' => $model->id]), 
-                            ['title' => Yii::t('yii', 'Edit'),]
+                            '<span class="glyphicon glyphicon-trash"></span>', 
+                            Yii::$app->urlManager->createUrl(['operation-category/delete','id' => $model->id]),
+                            ['title' => Yii::t('yii', 'Delete'), 'class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
+                        );
+                    },
+                    'listbtn' => function ($url, $model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-list"></span>', 
+                            Yii::$app->urlManager->createUrl(['operation-category-type','id' => $model->id]), 
+                            ['title' => Yii::t('yii', 'Edit'), 'class' => 'btn btn-warning btn-sm',]
                         );
                     },
                 ],
