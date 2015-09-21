@@ -158,8 +158,38 @@ echo Menu::widget(
                     ],
                     [
                         'label' => '结算管理',
-                        'url' => ['/finance-settle-apply'],
+                        'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
+                        'options' => [
+                            'class' => 'treeview active',
+                          ],
+                        'items' => [
+                            [
+                            'label' => '结算申请列表',
+                            'url' => ['/finance-settle-apply'],
+                            'icon' => 'fa fa-angle-right',
+                            ],
+                            [
+                            'label' => '门店审核',
+                            'url' => ['#'],
+                            'icon' => 'fa fa-angle-right',
+                            ],
+                            [
+                            'label' => '业务部门审核',
+                            'url' => ['#'],
+                            'icon' => 'fa fa-angle-right',
+                            ],
+                            [
+                            'label' => '财务部门审核',
+                            'url' => ['#'],
+                            'icon' => 'fa fa-angle-right',
+                            ],
+                            [
+                            'label' => '确认付款',
+                            'url' => ['#'],
+                            'icon' => 'fa fa-angle-right',
+                            ],
+                        ]
                     ],
                     [
                         'label' => '报表管理',
