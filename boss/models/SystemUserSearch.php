@@ -5,12 +5,12 @@ namespace boss\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use boss\models\AdminUser;
+use boss\models\SystemUser;
 
 /**
  * UserSearch represents the model behind the search form about `backend\models\User`.
  */
-class AdminUserSearch extends AdminUser
+class SystemUserSearch extends SystemUser
 {
     /**
      * @inheritdoc
@@ -41,7 +41,7 @@ class AdminUserSearch extends AdminUser
      */
     public function search($params)
     {
-        $query = AdminUser::find();
+        $query = SystemUser::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

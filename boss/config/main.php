@@ -27,7 +27,7 @@ return [
     ],
     'components' => [
         'user' => [
-            'identityClass' => 'common\models\AdminUser',
+            'identityClass' => 'common\models\SystemUser',
             'enableAutoLogin' => true,
         ],
         'authManager' => [

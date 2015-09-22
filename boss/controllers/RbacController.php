@@ -2,13 +2,12 @@
 namespace boss\controllers;
 
 use Yii;
-use boss\models\AdminUser;
+use boss\models\SystemUser;
 use yii\rbac\Item;
 use boss\models\AuthItem;
 use boss\models\search\AuthItemSearch;
-use yii\web\Controller;
-use boss\components\BaseController;
-class RbacController extends BaseController
+use boss\components\Controller;
+class RbacController extends Controller
 {
     public function actionCreate()
     {
@@ -83,7 +82,7 @@ class RbacController extends BaseController
                         $classname = Yii::$app->getModule($module)->controllerNamespace."\\".$controllername;
                     }
                     $cont = new $classname($controller_id,Yii::$app->getModule($module));
-                    if($cont instanceof BaseController){
+                    if($cont instanceof Controller){
                         $controllers[$module][] = $controllername;
                     }
                 }
@@ -291,7 +290,7 @@ class RbacController extends BaseController
         $auth = Yii::$app->authManager;
         $data['permissions'] = $auth->getPermissions();
         $data['roles'] = $auth->getRoles();
-        $data['users'] = AdminUser::find()->orderBy('username')->all();
+        $data['users'] = SystemUser::find()->orderBy('username')->all();
         return $this->render('assign', [
             'data' => $data,
         ]);

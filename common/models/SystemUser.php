@@ -21,7 +21,7 @@ use yii\web\IdentityInterface;
  * @property integer $updated_at
  * @property string $password write-only password
  */
-class AdminUser extends ActiveRecord implements IdentityInterface
+class SystemUser extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = -1;
     const STATUS_INACTIVE = 0;
@@ -33,7 +33,7 @@ class AdminUser extends ActiveRecord implements IdentityInterface
      */
     public static function tableName()
     {
-        return '{{%adminuser}}';
+        return '{{%system_user}}';
     }
 
     /**

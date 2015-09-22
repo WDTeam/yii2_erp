@@ -19,7 +19,7 @@ use yii\helpers\ArrayHelper;
  * @property integer $updated_at
  * @property string $password write-only password
  */
-class AdminUser extends \common\models\AdminUser
+class SystemUser extends \common\models\SystemUser
 {
     public $password;
     public $repassword;

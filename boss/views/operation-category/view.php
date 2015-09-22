@@ -24,15 +24,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'condensed'=>false,
             'hover'=>true,
             'mode'=>Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
-            'panel'=>[
-            'heading'=>$this->title,
-            'type'=>DetailView::TYPE_INFO,
-        ],
+//            'panel'=>['heading'=>$this->title, 'type'=>DetailView::TYPE_INFO],
         'attributes' => [
             'id',
             'operation_category_name',
-            'created_at',
-            'updated_at',
+            ['attribute' => 'created_at', 'value' => date('Y-m-d H:i:s', $model->created_at)],
+            ['attribute' => 'updated_at', 'value' => date('Y-m-d H:i:s', $model->updated_at)],
         ],
         'deleteOptions'=>[
             'url'=>['delete', 'id' => $model->id],

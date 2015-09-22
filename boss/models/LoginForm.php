@@ -75,12 +75,12 @@ class LoginForm extends Model
     /**
      * Finds user by [[username]]
      *
-     * @return AdminUser|null
+     * @return SystemUser|null
      */
     public function getUser()
     {
         if ($this->_user === false) {
-            $this->_user = AdminUser::find()->where(['username'=>$this->username])->one();
+            $this->_user = SystemUser::find()->where(['username'=>$this->username])->one();
         }
         return $this->_user;
     }

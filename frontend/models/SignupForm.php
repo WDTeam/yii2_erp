@@ -1,7 +1,7 @@
 <?php
 namespace frontend\models;
 
-use common\models\AdminUser;
+use common\models\SystemUser;
 use yii\base\Model;
 use Yii;
 use frontend\models\User;
@@ -56,7 +56,7 @@ class SignupForm extends Model
     /**
      * Signs user up.
      *
-     * @return AdminUser|null the saved model or null if saving fails
+     * @return SystemUser|null the saved model or null if saving fails
      */
     public function signup()
     {
