@@ -40,6 +40,7 @@ class m150918_123012_create_table_order extends Migration
             'order_booked_count' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'预约服务数量\'',
             'address_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'地址ID\'',
             'order_address'=>Schema::TYPE_STRING.'(255) NOT NULL DEFAULT \'\' COMMENT \'详细地址 包括 联系人 手机号\'',
+            'order_unit_mone'=>Schema::TYPE_DECIMAL . '(8,0) NOT NULL DEFAULT 0 COMMENT \'订单单位价格\'', //TODO 订单单位价格
             'order_money' => Schema::TYPE_DECIMAL . '(8,0) NOT NULL DEFAULT 0 COMMENT \'订单金额\'',
             'order_booked_worker_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'指定阿姨\'',
             'order_customer_need' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'用户需求\'',
@@ -71,8 +72,6 @@ class m150918_123012_create_table_order extends Migration
 //===========================指派工人===》阿姨服务完成后
             'comment_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'评价id\'',
             'order_customer_hidden' => Schema::TYPE_BOOLEAN . '(1) unsigned NOT NULL DEFAULT 0 COMMENT \'客户端是否已删除\'',
-            'order_worker_bonus_detail' => Schema::TYPE_TEXT . ' NOT NULL COMMENT \'补贴明细\'',
-            'order_worker_bonus_money' => Schema::TYPE_DECIMAL . '(8,2) unsigned NOT NULL DEFAULT 0 COMMENT \'补贴金额\'',
 
             'order_pop_pay_money' => Schema::TYPE_DECIMAL . '(8,2) NOT NULL DEFAULT 0 COMMENT \'合作方结算金额 负数表示合作方结算规则不规律无法计算该值。\'',
             'invoice_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'发票id\'',
