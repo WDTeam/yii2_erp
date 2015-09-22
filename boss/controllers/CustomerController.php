@@ -32,12 +32,80 @@ class CustomerController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new CustomerSearch;
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        // $searchModel = new CustomerSearch;
+        // $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        // return $this->render('index', [
+        //     'dataProvider' => $dataProvider,
+        //     'searchModel' => $searchModel,
+        // ]);
+
+        $query = Customer::find();
+        $countQuery = clone $query;
+        $pages = new \yii\data\Pagination(['totalCount' => $countQuery->count()]);
+        $models = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
 
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel,
+             'models' => $models,
+             'pages' => $pages,
+        ]);
+        
+    }
+
+    /**
+     * Lists all Customer models.
+     * @return mixed
+     */
+    public function actionBlock()
+    {
+        // $searchModel = new CustomerSearch;
+        // $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        // return $this->render('block', [
+        //     'dataProvider' => $dataProvider,
+        //     'searchModel' => $searchModel,
+        // ]);
+
+        $query = Customer::find();
+        $countQuery = clone $query;
+        $pages = new \yii\data\Pagination(['totalCount' => $countQuery->count()]);
+        $models = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+
+        return $this->render('block', [
+             'models' => $models,
+             'pages' => $pages,
+        ]);
+        
+    }
+
+
+    /**
+     * Lists all Customer models.
+     * @return mixed
+     */
+    public function actionDel()
+    {
+        // $searchModel = new CustomerSearch;
+        // $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+
+
+        // $query = Customer::find();
+        // $countQuery = clone $query;
+        // $pages = new \yii\data\Pagination(['totalCount' => $countQuery->count()]);
+        // $models = $query->offset($pages->offset)
+        //     ->limit($pages->limit)
+        //     ->all();
+
+        // return $this->render('index', [
+        //      'models' => $models,
+        //      'pages' => $pages,
+        // ]);
+        $request = Yii::$app->request;
+        $customer_id = $request->get("customer_id");
+        return $this->render('del', [
+            'customer_id' => $customer_id,
         ]);
     }
 
@@ -65,6 +133,9 @@ class CustomerController extends Controller
     public function actionCreate()
     {
         $model = new Customer;
+
+        var_dump($model);
+        // var_dump(Yii::$app->request->post());
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
