@@ -4,19 +4,19 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 
-
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
  * @var boss\models\WorkerSearch $searchModel
  */
-$title = Yii::t('worker', 'worker_views');
+
+$this->title = Yii::t('app', 'Workers');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="worker-index">
-    <!--<div class="page-header">
-            <h1><?= Html::encode($this->title) ?></h1>
-    </div>-->
+    <div class="page-header">
+        <h1><?= Html::encode($this->title) ?></h1>
+    </div>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
@@ -31,28 +31,28 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-//          'id'
             'worker_name',
             'shop_id',
             'worker_phone',
             'worker_idcard',
-//            'worker_password', 
-//            'worker_photo', 
+//            'worker_password',
+//            'worker_photo',
 //            'worker_level',
-//            'worker_auth_status', 
-//            'worker_ontrial_status', 
-//            'worker_onboard_status', //
-            'worker_work_city',
-//            'worker_work_area', 
-//            'worker_work_street', 
-//            'worker_work_lng', 
-//            'worker_work_lat', 
-//            'worker_rule', 
-//            'worker_identify_id', 
-//            'worker_is_block', 
-//            'created_ad', 
-//            'updated_ad', 
-//            'isdel', 
+//            'worker_auth_status',
+//            'worker_ontrial_status',
+//            'worker_onboard_status',
+//            'worker_work_city',
+//            'worker_work_area',
+//            'worker_work_street',
+//            'worker_work_lng',
+//            'worker_work_lat',
+//            'worker_type',
+            'worker_rule_id',
+//            'worker_is_block',
+//            'worker_is_blacklist',
+            'created_ad',
+//            'updated_ad',
+//            'isdel',
 
             [
                 'class' => 'yii\grid\ActionColumn',
@@ -70,15 +70,24 @@ $this->params['breadcrumbs'][] = $this->title;
         'hover' => true,
         'condensed' => true,
         'floatHeader' => true,
-
-
         'panel' => [
-            'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> ' . Html::encode(Yii::t('worker', 'worker_list')) . ' </h3>',
+            'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> ' . Html::encode($this->title) . ' </h3>',
             'type' => 'info',
-            'before' => Html::a('<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('worker', 'worker_create'), ['create'], ['class' => 'btn btn-success']), 'after' => Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List', ['index'], ['class' => 'btn btn-info']),
+            'before' =>
+                Html::a('<i class="glyphicon" ></i>待试验', ['index?status=1'], ['class' => 'btn btn-success ', 'style' => 'margin-right:10px']) .
+                Html::a('<i class="glyphicon" ></i>未培训', ['index?status=2'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
+                Html::a('<i class="glyphicon" ></i>试工', ['index?status=3'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
+                Html::a('<i class="glyphicon" ></i>时段', ['index?rule=1'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
+                Html::a('<i class="glyphicon" ></i>高峰', ['index?rule=2'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
+                Html::a('<i class="glyphicon" ></i>全职', ['index?rule=3'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
+                Html::a('<i class="glyphicon" ></i>请假', ['index?rule=4'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
+                Html::a('<i class="glyphicon" ></i>封号', ['index?type=1'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
+                Html::a('<i class="glyphicon" ></i>黑名单', ['index?is_blocklist=1'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']),
+            'after' => Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List',
+                ['index'],
+                ['class' => 'btn btn-info']),
             'showFooter' => false
         ],
-
     ]);
     Pjax::end(); ?>
 
