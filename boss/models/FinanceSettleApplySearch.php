@@ -15,8 +15,9 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     public function rules()
     {
         return [
-            [['id', 'worder_id', 'settle_apply_status', 'isdel', 'updated_at', 'created_at'], 'integer'],
-            [['settle_apply_money'], 'number'],
+            [['id', 'worder_id', 'worker_type_id', 'finance_settle_apply_man_hour', 'finance_settle_apply_status', 'finance_settle_apply_cycle', 'isdel', 'updated_at', 'created_at'], 'integer'],
+            [['worder_tel', 'worker_type_name', 'finance_settle_apply_reviewer'], 'safe'],
+            [['finance_settle_apply_money', 'finance_settle_apply_order_money', 'finance_settle_apply_order_cash_money', 'finance_settle_apply_non_order_money'], 'number'],
         ];
     }
 
@@ -41,12 +42,22 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         $query->andFilterWhere([
             'id' => $this->id,
             'worder_id' => $this->worder_id,
-            'settle_apply_money' => $this->settle_apply_money,
-            'settle_apply_status' => $this->settle_apply_status,
+            'worker_type_id' => $this->worker_type_id,
+            'finance_settle_apply_money' => $this->finance_settle_apply_money,
+            'finance_settle_apply_man_hour' => $this->finance_settle_apply_man_hour,
+            'finance_settle_apply_order_money' => $this->finance_settle_apply_order_money,
+            'finance_settle_apply_order_cash_money' => $this->finance_settle_apply_order_cash_money,
+            'finance_settle_apply_non_order_money' => $this->finance_settle_apply_non_order_money,
+            'finance_settle_apply_status' => $this->finance_settle_apply_status,
+            'finance_settle_apply_cycle' => $this->finance_settle_apply_cycle,
             'isdel' => $this->isdel,
             'updated_at' => $this->updated_at,
             'created_at' => $this->created_at,
         ]);
+
+        $query->andFilterWhere(['like', 'worder_tel', $this->worder_tel])
+            ->andFilterWhere(['like', 'worker_type_name', $this->worker_type_name])
+            ->andFilterWhere(['like', 'finance_settle_apply_reviewer', $this->finance_settle_apply_reviewer]);
 
         return $dataProvider;
     }
