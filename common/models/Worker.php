@@ -56,7 +56,7 @@ class Worker extends \yii\db\ActiveRecord
             [['shop_id','worker_name','worker_phone','worker_idcard','worker_type', 'worker_type'],'required'],
             [['shop_id', 'worker_level', 'worker_auth_status', 'worker_ontrial_status', 'worker_onboard_status', 'worker_work_city', 'worker_work_area', 'worker_type', 'worker_rule_id', 'worker_is_block', 'worker_is_blacklist', 'created_ad', 'updated_ad', 'isdel'], 'integer'],
             [['worker_work_lng', 'worker_work_lat'], 'number'],
-            [[ 'worker_idcard'], 'string', 'max' => 20],
+            [[ 'worker_idcard'], 'string', 'max' => 18],
             [['worker_phone'], 'string', 'max' => 11],
             [['worker_password', 'worker_work_street'], 'string', 'max' => 50],
             [['worker_photo'], 'string', 'max' => 40]

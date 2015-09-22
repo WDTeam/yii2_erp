@@ -78,8 +78,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 Html::a('<i class="glyphicon" ></i>高峰', ['index?WorkerSearch[worker_rule_id]=2'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
                 Html::a('<i class="glyphicon" ></i>全职', ['index?WorkerSearch[worker_rule_id]=3'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
                 Html::a('<i class="glyphicon" ></i>请假', ['index?WorkerSearch[worker_rule_id]=4'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
-                Html::a('<i class="glyphicon" ></i>封号', ['index?WorkerSearch[type]=1'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
-                Html::a('<i class="glyphicon" ></i>黑名单', ['index?WorkerSearch[worker_is_blocklist]=1'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']),
+                Html::a('<i class="glyphicon" ></i>封号', ['index?WorkerSearch[worker_is_block]=1'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
+                Html::a('<i class="glyphicon" ></i>黑名单', ['index?WorkerSearch[worker_is_blacklist]=1'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']),
             'after' => Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List',
                 ['index'],
                 ['class' => 'btn btn-info']),
