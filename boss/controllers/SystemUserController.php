@@ -3,16 +3,16 @@
 namespace boss\controllers;
 
 use Yii;
-use common\models\FinanceSettleApply;
-use boss\models\FinanceSettleApplySearch;
+use boss\models\SystemUser;
+use boss\models\search\SystemUserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * FinanceSettleApplyController implements the CRUD actions for FinanceSettleApply model.
+ * SystemUserController implements the CRUD actions for SystemUser model.
  */
-class FinanceSettleApplyController extends Controller
+class SystemUserController extends Controller
 {
     public function behaviors()
     {
@@ -27,58 +27,40 @@ class FinanceSettleApplyController extends Controller
     }
 
     /**
-     * Lists all FinanceSettleApply models.
+     * Lists all SystemUser models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new FinanceSettleApplySearch;
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        $searchModel = new SystemUserSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
-        ]);
-    }
-    
-    /**
-     * Lists all FinanceSettleApply models.
-     * @return mixed
-     */
-    public function actionReview()
-    {
-        $searchModel = new FinanceSettleApplySearch;
-        $requestModel = Yii::$app->request->getQueryParams();
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-        return $this->render('index', [
             'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel,
         ]);
     }
 
     /**
-     * Displays a single FinanceSettleApply model.
+     * Displays a single SystemUser model.
      * @param integer $id
      * @return mixed
      */
     public function actionView($id)
     {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-        return $this->render('view', ['model' => $model]);
-}
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
     }
 
     /**
-     * Creates a new FinanceSettleApply model.
+     * Creates a new SystemUser model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new FinanceSettleApply;
+        $model = new SystemUser();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -90,7 +72,7 @@ class FinanceSettleApplyController extends Controller
     }
 
     /**
-     * Updates an existing FinanceSettleApply model.
+     * Updates an existing SystemUser model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -109,7 +91,7 @@ class FinanceSettleApplyController extends Controller
     }
 
     /**
-     * Deletes an existing FinanceSettleApply model.
+     * Deletes an existing SystemUser model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -122,15 +104,15 @@ class FinanceSettleApplyController extends Controller
     }
 
     /**
-     * Finds the FinanceSettleApply model based on its primary key value.
+     * Finds the SystemUser model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return FinanceSettleApply the loaded model
+     * @return SystemUser the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = FinanceSettleApply::findOne($id)) !== null) {
+        if (($model = SystemUser::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
