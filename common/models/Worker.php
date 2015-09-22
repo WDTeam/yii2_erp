@@ -52,9 +52,12 @@ class Worker extends \yii\db\ActiveRecord
         return [
             [['worker_name','worker_phone'],'unique','message'=>'{attribute}\'{value}\'已经被占用'],
             ['worker_phone','match','pattern'=>'/^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/','message'=>'请填写正确格式的手机号码'],
+            ['worker_idcard','match','pattern'=>'/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/','message'=>'请填写正确格式的身份证号'],
+            [['shop_id','worker_name','worker_phone','worker_idcard','worker_type', 'worker_type'],'required'],
             [['shop_id', 'worker_level', 'worker_auth_status', 'worker_ontrial_status', 'worker_onboard_status', 'worker_work_city', 'worker_work_area', 'worker_type', 'worker_rule_id', 'worker_is_block', 'worker_is_blacklist', 'created_ad', 'updated_ad', 'isdel'], 'integer'],
             [['worker_work_lng', 'worker_work_lat'], 'number'],
-            [['worker_phone', 'worker_idcard'], 'string', 'max' => 20],
+            [[ 'worker_idcard'], 'string', 'max' => 20],
+            [['worker_phone'], 'string', 'max' => 11],
             [['worker_password', 'worker_work_street'], 'string', 'max' => 50],
             [['worker_photo'], 'string', 'max' => 40]
         ];
@@ -66,7 +69,7 @@ class Worker extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', '阿姨封号表自增id'),
+            'id' => Yii::t('app', '阿姨表id'),
             'shop_id' => Yii::t('app', '门店名称'),
             'worker_name' => Yii::t('app', '阿姨姓名'),
             'worker_phone' => Yii::t('app', '阿姨手机'),
@@ -74,9 +77,9 @@ class Worker extends \yii\db\ActiveRecord
             'worker_password' => Yii::t('app', '阿姨端登录密码'),
             'worker_photo' => Yii::t('app', '阿姨头像地址'),
             'worker_level' => Yii::t('app', '阿姨等级'),
-            'worker_auth_status' => Yii::t('app', '阿姨审核状态 0未通过1通过'),
-            'worker_ontrial_status' => Yii::t('app', '阿姨试工状态 0未试工，1已试工'),
-            'worker_onboard_status' => Yii::t('app', '阿姨上岗状态 0未上岗 1已上岗 '),
+            'worker_auth_status' => Yii::t('app', '阿姨审核状态'),
+            'worker_ontrial_status' => Yii::t('app', '阿姨试工状态'),
+            'worker_onboard_status' => Yii::t('app', '阿姨上岗状态'),
             'worker_work_city' => Yii::t('app', '阿姨工作城市'),
             'worker_work_area' => Yii::t('app', '阿姨工作区县'),
             'worker_work_street' => Yii::t('app', '阿姨常用工作地址'),
@@ -88,8 +91,7 @@ class Worker extends \yii\db\ActiveRecord
             'worker_is_blacklist' => Yii::t('app', '阿姨是否黑名单'),
             'created_ad' => Yii::t('app', '阿姨录入时间'),
             'updated_ad' => Yii::t('app', '最后更新时间'),
-            'isdel' => Yii::t('app', '是否删号 0正常1删号'),
-            'worker_sex' => Yii::t('app', '是 0正常1删号'),
+            'isdel' => Yii::t('app', '是否删号'),
         ];
     }
 

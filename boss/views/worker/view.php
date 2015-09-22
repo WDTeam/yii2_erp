@@ -9,13 +9,13 @@ use kartik\datecontrol\DateControl;
  * @var common\models\Worker $model
  */
 
-$this->title = $model->id;
+$this->title = $model->worker_name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Workers'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="worker-view">
     <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
+        <!--<h1><?= Html::encode($this->title) ?></h1>-->
     </div>
 
 
