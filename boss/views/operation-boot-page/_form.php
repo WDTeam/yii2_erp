@@ -34,7 +34,7 @@ use kartik\date\DatePicker;
     echo DatePicker::widget([
         'name' => 'OperationBootPage[operation_boot_page_online_time]',
         'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-        'value' => date('Y-m-d', $model->operation_boot_page_online_time),
+        'value' => !empty($model->operation_boot_page_online_time) ? date('Y-m-d', $model->operation_boot_page_online_time) : '',
         'pluginOptions' => [
             'autoclose'=>true,
             'format' => 'yyyy-mm-dd'
@@ -46,7 +46,7 @@ use kartik\date\DatePicker;
     echo DatePicker::widget([
         'name' => 'OperationBootPage[operation_boot_page_offline_time]',
         'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-        'value' => date('Y-m-d', $model->operation_boot_page_offline_time),
+        'value' => !empty($model->operation_boot_page_offline_time) ? date('Y-m-d', $model->operation_boot_page_offline_time) : '',
         'pluginOptions' => [
             'autoclose'=>true,
             'format' => 'yyyy-mm-dd'

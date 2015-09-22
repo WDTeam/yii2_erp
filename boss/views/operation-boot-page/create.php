@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\OperationBootPage */
 
-$this->title = Yii::t('app','Add').Yii::t('app','Boot Page');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app','Operation Boot Page'), 'url' => ['index']];
+$this->title = Yii::t('app','Add').Yii::t('operation','Boot Page');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('operation','Operation Boot Page'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-boot-page-create">

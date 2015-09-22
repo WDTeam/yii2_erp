@@ -3,8 +3,8 @@
 namespace boss\controllers;
 
 use Yii;
-use common\models\OperationCity;
-use boss\models\OperationCitySearch;
+use boss\models\Operation\OperationCity;
+use boss\models\Operation\OperationCitySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -32,7 +32,7 @@ class OperationCityController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new OperationCitySearch;
+        $searchModel = new OperationCitySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
         return $this->render('index', [

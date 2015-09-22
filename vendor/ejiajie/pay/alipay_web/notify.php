@@ -14,11 +14,7 @@
  */
 
 
-namespace pay\alipay_web;
-use pay\alipay_web_function;
-
-require_once("function.php");
-
+require_once dirname(__FILE__)."/../functions.php";
 
 class AlipayNotify {
     /**

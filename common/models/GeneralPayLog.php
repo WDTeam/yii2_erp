@@ -46,6 +46,34 @@ class GeneralPayLog extends \yii\db\ActiveRecord
     }
 
     /**
+     * 插入交易记录
+     * @param array $post
+     */
+    public function insertLog($post){
+        $this->general_pay_log_price = $post['general_pay_log_price'];   //支付金额
+        $this->general_pay_log_shop_name = $post['general_pay_log_shop_name'];   //商品名称
+        $this->general_pay_log_eo_order_id = $post['general_pay_log_eo_order_id'];   //订单ID
+        $this->general_pay_log_transaction_id = $post['general_pay_log_transaction_id'];   //交易流水号
+        $this->general_pay_log_status_bool = $this->statusBool($post['general_pay_log_status_bool']);   //支付状态
+        $this->general_pay_log_status = $post['general_pay_log_status'];   //支付状态
+        $this->general_pay_log_json_aggregation = json_encode($post);
+        $this->save(false);
+    }
+
+    /**
+     * 判断支付状态
+     * @param $statusString 状态类型
+     * @return int  1/支付成功 ， 2/支付失败
+     */
+    private function statusBool($statusString){
+        $statusArr = [
+            'TRADE_FINISHED',   //支付宝
+            'TRADE_SUCCESS',    //支付宝
+        ];
+        return in_array($statusString,$statusArr) ? 1 : 0 ;
+    }
+
+    /**
      * @inheritdoc
      */
     public function attributeLabels()
