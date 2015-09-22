@@ -26,6 +26,8 @@ class m150918_131138_create_table_order_timeline extends Migration
             'order_before_status_name' => Schema::TYPE_STRING . '(128) NOT NULL  DEFAULT \'\' COMMENT \'状态变更前订单状态\'',
             'order_status_dict_id' => Schema::TYPE_SMALLINT . '(4) unsigned NOT NULL DEFAULT 0 COMMENT \'订单状态字典ID\'',
             'order_status_name' => Schema::TYPE_STRING . '(128) NOT NULL  DEFAULT \'\' COMMENT \'订单状态\'',
+
+//===============================创建完订单后 不可修改的部分
             'order_service_type_id' => Schema::TYPE_SMALLINT . '(4) unsigned NOT NULL DEFAULT 0 COMMENT \'订单服务类别ID\'',
             'order_service_type_name' => Schema::TYPE_STRING . '(128) NOT NULL DEFAULT \'\' COMMENT \'订单服务类别\'',
             'order_src_id' => Schema::TYPE_SMALLINT . '(4) unsigned DEFAULT 0 COMMENT \'订单来源，订单入口id\'',
@@ -39,13 +41,15 @@ class m150918_131138_create_table_order_timeline extends Migration
             'order_booked_end_time' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 0 COMMENT \'预约结束时间\'',
             'order_booked_count' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'预约服务数量\'',
             'address_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'地址ID\'',
-            'order_address'=>Schema::TYPE_STRING.'(255) NOT NULL DEFAULT \'\' COMMENT \'地址\'',
+            'order_address'=>Schema::TYPE_STRING.'(255) NOT NULL DEFAULT \'\' COMMENT \'详细地址 包括 联系人 手机号\'',
             'order_money' => Schema::TYPE_DECIMAL . '(8,0) NOT NULL DEFAULT 0 COMMENT \'订单金额\'',
             'order_booked_worker_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'指定阿姨\'',
             'order_customer_need' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'用户需求\'',
+
+//============================创建完订单后 只能修改一次的部分
             'order_customer_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'用户备注\'',
             'order_cs_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'客服备注\'',
-            'order_pay_type' => Schema::TYPE_BOOLEAN.'(1) unsigned NOT NULL DEFAULT 0 COMMENT \'支付方式 0线上支付 1现金支付\'',
+            'order_pay_type' => Schema::TYPE_BOOLEAN.'(1) unsigned NOT NULL DEFAULT 0 COMMENT \'支付方式 0线上支付 1现金支付\'', //如果是线上支付 支付成功之后再改状态
             'pay_channel_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'支付渠道id\'',
             'order_pay_channel_name' => Schema::TYPE_STRING.'(128) NOT NULL DEFAULT \'\' COMMENT \'支付渠道名称\'',
             'order_pay_flow_num' => Schema::TYPE_STRING . '(255) DEFAULT NULL COMMENT \'支付流水号\'',
@@ -57,19 +61,25 @@ class m150918_131138_create_table_order_timeline extends Migration
             'order_use_coupon_money' => Schema::TYPE_DECIMAL . '(8,2) unsigned NOT NULL DEFAULT 0 COMMENT \'使用优惠卷金额\'',
             'promotion_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'促销id\'',
             'order_use_promotion_money' => Schema::TYPE_DECIMAL . '(8,2) unsigned NOT NULL DEFAULT 0 COMMENT \'使用促销金额\'',
+
+//===========================订单支付完成后 指派阿姨
+            'order_lock_status' => Schema::TYPE_BOOLEAN.'(1) unsigned NOT NULL DEFAULT 0 COMMENT \'是否锁定 1锁定 0未锁定\'',
             'worker_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'阿姨id\'',
             'worker_type_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'阿姨职位类型ID\'',
             'order_worker_type_name' => Schema::TYPE_STRING.'(64) NOT NULL DEFAULT \'\' COMMENT \'阿姨职位类型\'',
             'order_worker_distri_type' => Schema::TYPE_SMALLINT.'(4) unsigned NOT NULL DEFAULT 0 COMMENT \'阿姨接单方式 0未接单 1阿姨抢单 2客服指派 3门店指派\'',
-            'order_lock_status' => Schema::TYPE_BOOLEAN.'(1) unsigned NOT NULL DEFAULT 0 COMMENT \'是否锁定 1锁定 0未锁定\'',
+            'shop_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'门店id\'',
+
+//===========================指派工人===》阿姨服务完成后
             'comment_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'评价id\'',
+            'order_customer_hidden' => Schema::TYPE_BOOLEAN . '(1) unsigned NOT NULL DEFAULT 0 COMMENT \'客户端是否已删除\'',
             'order_worker_bonus_detail' => Schema::TYPE_TEXT . ' NOT NULL COMMENT \'补贴明细\'',
             'order_worker_bonus_money' => Schema::TYPE_DECIMAL . '(8,2) unsigned NOT NULL DEFAULT 0 COMMENT \'补贴金额\'',
+
             'order_pop_pay_money' => Schema::TYPE_DECIMAL . '(8,2) NOT NULL DEFAULT 0 COMMENT \'合作方结算金额 负数表示合作方结算规则不规律无法计算该值。\'',
             'invoice_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'发票id\'',
             'checking_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'对账id\'',
-            'shop_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'门店id\'',
-            'admin_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'操作人id\'',
+            'admin_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'操作人id 0客户操作 1系统操作\'',
             'order_isdel' => Schema::TYPE_BOOLEAN . '(1) unsigned NOT NULL DEFAULT 0 COMMENT \'是否已删除\'',
             'isdel' => Schema::TYPE_BOOLEAN . '(1) unsigned NOT NULL DEFAULT 0 COMMENT \'快照是否已删除\'',
         ], $tableOptions);

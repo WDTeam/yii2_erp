@@ -10,20 +10,10 @@ use yii\widgets\Pjax;
  * @var boss\models\search\OrderSearch $searchModel
  */
 
-$this->title = Yii::t('app', 'Orders');
+$this->title = Yii::t('app', '订单列表');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="order-index">
-    <div class="page-header">
-            <h1><?= Html::encode($this->title) ?></h1>
-    </div>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Order',
-]), ['create'], ['class' => 'btn btn-success'])*/  ?>
-    </p>
 
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
