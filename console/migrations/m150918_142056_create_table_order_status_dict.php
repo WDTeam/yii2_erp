@@ -22,12 +22,12 @@ class m150918_142056_create_table_order_status_dict extends Migration
             'isdel' => Schema::TYPE_SMALLINT . '(1) unsigned NOT NULL DEFAULT 0',
         ], $tableOptions);
 
-        $this->batchInsert('{{%order_status_dict}}',
-            ['id', 'order_status_name', 'order_status_flow', 'order_status_operation', 'order_status_role', 'created_at', 'updated_at', 'isdel'],
-            [
-                ['1', '初始化','','','',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
-            ]
-        );
+//         $this->batchInsert('{{%order_status_dict}}',
+//             ['id', 'order_status_name', 'order_status_flow', 'order_status_operation', 'order_status_role', 'created_at', 'updated_at', 'isdel'],
+//             [
+//                 ['1', '初始化','','','',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
+//             ]
+//         );
     }
 
     public function down()
