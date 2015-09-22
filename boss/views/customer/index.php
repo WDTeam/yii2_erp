@@ -17,7 +17,7 @@ echo \yii\widgets\LinkPager::widget([
 <div>
 <section class="content">
     <div class="box-search">
-        城市：<select name="city"/></select>
+        城市：<!-- <select name="city"/></select> --><input type="text" name="city"/>
         加入时间：<?= \yii\jui\DatePicker::widget(['name' => 'date',]) ?>至<?= \yii\jui\DatePicker::widget(['name' => 'date',]) ?>
        身份：<input type="text" name="customer_is_vip"/>
        <input type="text" name="merge"/>
