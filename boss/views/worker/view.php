@@ -33,6 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'worker_name',
             'worker_phone',
             'worker_idcard',
+            //'worker_password',
             'worker_photo',
             'worker_level',
             'worker_auth_status',
