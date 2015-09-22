@@ -5,7 +5,7 @@ namespace common\models;
 /**
  * This is the ActiveQuery class for [[User]].
  *
- * @see AdminUser
+ * @see SystemUser
  */
 class UserQuery extends \yii\db\ActiveQuery
 {
@@ -17,7 +17,7 @@ class UserQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return AdminUser[]|array
+     * @return SystemUser[]|array
      */
     public function all($db = null)
     {
@@ -26,7 +26,7 @@ class UserQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return AdminUser|array|null
+     * @return SystemUser|array|null
      */
     public function one($db = null)
     {

@@ -2,7 +2,7 @@
 namespace boss\controllers;
 
 use Yii;
-use boss\models\AdminUser;
+use boss\models\SystemUser;
 use yii\rbac\Item;
 use boss\models\AuthItem;
 use boss\models\search\AuthItemSearch;
@@ -291,7 +291,7 @@ class RbacController extends BaseController
         $auth = Yii::$app->authManager;
         $data['permissions'] = $auth->getPermissions();
         $data['roles'] = $auth->getRoles();
-        $data['users'] = AdminUser::find()->orderBy('username')->all();
+        $data['users'] = SystemUser::find()->orderBy('username')->all();
         return $this->render('assign', [
             'data' => $data,
         ]);

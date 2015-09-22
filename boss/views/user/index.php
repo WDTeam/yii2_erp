@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use boss\models\AdminUser;
+use boss\models\SystemUser;
 use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */

@@ -267,7 +267,7 @@ class InterviewController extends Controller
      * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return AdminUser the loaded model
+     * @return SystemUser the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
