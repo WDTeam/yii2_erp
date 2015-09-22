@@ -34,7 +34,6 @@ class FinancePopOrderController extends Controller
     {
         $searchModel = new FinancePopOrderSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
