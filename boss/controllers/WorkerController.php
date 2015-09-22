@@ -3,11 +3,13 @@
 namespace boss\controllers;
 
 use Yii;
-use common\models\Worker;
-use boss\models\WorkerSearch;
+use yii\db\Query;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\models\Worker;
+use common\models\WorkerExt;
+use boss\models\WorkerSearch;
 
 /**
  * WorkerController implements the CRUD actions for Worker model.
@@ -64,13 +66,14 @@ class WorkerController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Worker;
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $worker = new Worker;
+        $worker_ext = new WorkerExt;
+        if ($worker->load(Yii::$app->request->post()) && $worker->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
-                'model' => $model,
+                'worker' => $worker,
+                'worker_ext'=>$worker_ext
             ]);
         }
     }
@@ -121,5 +124,26 @@ class WorkerController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+
+    public function actionShowShop($q=null,$id=null){
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = ['results' => ['id' => '', 'text' => '']];
+        if (!is_null($q)) {
+            $query = new Query;
+            $query->select('id, name AS text')
+                ->from('ejj_shop')
+                ->where('name LIKE "%' . $q .'%"')
+                ->limit(20);
+            $command = $query->createCommand();
+            $data = $command->queryAll();
+            $out['results'] = array_values($data);
+            //$out['results'] = [['id'=>'1','text'=>'门店'],['id'=>'2','text'=>'门店2']];
+        }
+        elseif ($id > 0) {
+            $out['results'] = ['id' => $id, 'text' => Worker::findone(array('id'=>1))->worker_name];
+        }
+        return $out;
     }
 }
