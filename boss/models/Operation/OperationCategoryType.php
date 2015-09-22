@@ -1,9 +1,9 @@
 <?php
 
-namespace common\models;
+namespace boss\models\Operation;
 
 use Yii;
-
+use core\models\Operation\CoreOperationCategoryType;
 /**
  * This is the model class for table "{{%operation_category_type}}".
  *
@@ -31,15 +31,15 @@ use Yii;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationCategoryType extends \yii\db\ActiveRecord
+class OperationCategoryType extends CoreOperationCategoryType
 {
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
-        return '{{%operation_category_type}}';
-    }
+//    public static function tableName()
+//    {
+//        return '{{%operation_category_type}}';
+//    }
 
     /**
      * @inheritdoc

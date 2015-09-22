@@ -1,13 +1,13 @@
 <?php
 
-namespace app\models;
+namespace common\models\Operation;
 
 /**
- * This is the ActiveQuery class for [[OpCategory]].
+ * This is the ActiveQuery class for [[OperationCategory]].
  *
- * @see OpCategory
+ * @see OperationCategory
  */
-class OpCategoryQuery extends \yii\db\ActiveQuery
+class CommonOperationCategoryQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -17,7 +17,7 @@ class OpCategoryQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return OpCategory[]|array
+     * @return OperationCategory[]|array
      */
     public function all($db = null)
     {
@@ -26,7 +26,7 @@ class OpCategoryQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return OpCategory|array|null
+     * @return OperationCategory|array|null
      */
     public function one($db = null)
     {

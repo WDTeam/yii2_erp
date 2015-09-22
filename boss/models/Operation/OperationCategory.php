@@ -1,9 +1,9 @@
 <?php
 
-namespace common\models;
+namespace boss\models\Operation;
 
 use Yii;
-
+use core\models\Operation\CoreOperationCategory;
 /**
  * This is the model class for table "{{%operation_category}}".
  *
@@ -12,15 +12,15 @@ use Yii;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationCategory extends \yii\db\ActiveRecord
+class OperationCategory extends CoreOperationCategory
 {
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
-        return '{{%operation_category}}';
-    }
+//    public static function tableName()
+//    {
+//        return '{{%operation_category}}';
+//    }
 
     /**
      * @inheritdoc
@@ -45,14 +45,5 @@ class OperationCategory extends \yii\db\ActiveRecord
             'created_at' => Yii::t('app', '创建时间'),
             'updated_at' => Yii::t('app', '编辑时间'),
         ];
-    }
-
-    /**
-     * @inheritdoc
-     * @return OperationCategoryQuery the active query used by this AR class.
-     */
-    public static function find()
-    {
-        return new OperationCategoryQuery(get_called_class());
     }
 }

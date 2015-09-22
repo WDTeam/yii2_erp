@@ -1,6 +1,6 @@
 <?php
 
-namespace boss\models;
+namespace common\models\Operation;
 
 use Yii;
 
@@ -31,7 +31,7 @@ use Yii;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationCategoryType extends \common\models\OperationCategoryType
+class CommonOperationCategoryType extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
@@ -40,6 +40,4 @@ class OperationCategoryType extends \common\models\OperationCategoryType
     {
         return '{{%operation_category_type}}';
     }
-
-    
 }

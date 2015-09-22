@@ -1,9 +1,8 @@
 <?php
-
-namespace common\models;
+namespace boss\models\Operation;
 
 use Yii;
-
+use core\models\Operation\CoreOperationCity;
 /**
  * This is the model class for table "{{%operation_city}}".
  *
@@ -13,15 +12,15 @@ use Yii;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationCity extends \yii\db\ActiveRecord
+class OperationCity extends CoreOperationCity
 {
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
-        return '{{%operation_city}}';
-    }
+//    public static function tableName()
+//    {
+//        return '{{%operation_city}}';
+//    }
 
     /**
      * @inheritdoc
@@ -30,7 +29,8 @@ class OperationCity extends \yii\db\ActiveRecord
     {
         return [
             [['operation_city_is_online', 'created_at', 'updated_at'], 'integer'],
-            [['operation_city_name'], 'string', 'max' => 30]
+            [['operation_city_name'], 'string', 'max' => 30],
+            [['operation_city_name'], 'required']
         ];
     }
 

@@ -257,23 +257,23 @@ echo Menu::widget(
                                 'url' => ['/operation-price-strategy'],
                                 'icon' => 'fa fa-angle-right',
                             ],
+                            [
+                                'label' => '启动页管理',
+                                'url' => ['#'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
                         ],
                     ],
-                    [
-                        'label' => '启动页管理',
-                        'url' => ['#'],
-                        'icon' => 'fa fa-angle-right',
-                    ],
-                    [
-                        'label' => '引导页管理',
-                        'url' => ['#'],
-                        'icon' => 'fa fa-angle-right',
-                    ],
-                    [
-                        'label' => '话术管理',
-                        'url' => ['#'],
-                        'icon' => 'fa fa-angle-right',
-                    ],
+//                    [
+//                        'label' => '引导页管理',
+//                        'url' => ['#'],
+//                        'icon' => 'fa fa-angle-right',
+//                    ],
+//                    [
+//                        'label' => '话术管理',
+//                        'url' => ['#'],
+//                        'icon' => 'fa fa-angle-right',
+//                    ],
                 ],
             ],
             [
