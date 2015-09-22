@@ -3,16 +3,16 @@
 namespace boss\controllers;
 
 use Yii;
-use boss\models\SystemUser;
-use boss\models\search\SystemUserSearch;
-use yii\web\Controller;
+use boss\models\ShopManager;
+use boss\models\search\ShopManagerSearch;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * SystemUserController implements the CRUD actions for SystemUser model.
+ * ShopManagerController implements the CRUD actions for ShopManager model.
  */
-class SystemUserController extends Controller
+class ShopManagerController extends Controller
 {
     public function behaviors()
     {
@@ -27,47 +27,46 @@ class SystemUserController extends Controller
     }
 
     /**
-     * Lists all SystemUser models.
+     * Lists all ShopManager models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new SystemUserSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $arrayStatus = SystemUser::getArrayStatus();
-        $arrayRole = SystemUser::getArrayRole();
+        $searchModel = new ShopManagerSearch;
+        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'arrayStatus' => $arrayStatus,
-            'arrayRole' => $arrayRole,
+            'searchModel' => $searchModel,
         ]);
     }
 
     /**
-     * Displays a single User model.
-     * @param integer $id
+     * Displays a single ShopManager model.
+     * @param string $id
      * @return mixed
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+        return $this->render('view', ['model' => $model]);
+}
     }
 
     /**
-     * Creates a new User model.
+     * Creates a new ShopManager model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new SystemUser(['scenario' => 'admin-create']);
+        $model = new ShopManager;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->authManager->assign(Yii::$app->authManager->getRole($model->role), $model->id);
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -77,19 +76,16 @@ class SystemUserController extends Controller
     }
 
     /**
-     * Updates an existing User model.
+     * Updates an existing ShopManager model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $model->setScenario('admin-update');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->authManager->revokeAll($id);
-            Yii::$app->authManager->assign(Yii::$app->authManager->getRole($model->role), $id);
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
@@ -99,9 +95,9 @@ class SystemUserController extends Controller
     }
 
     /**
-     * Deletes an existing User model.
+     * Deletes an existing ShopManager model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      */
     public function actionDelete($id)
@@ -112,15 +108,15 @@ class SystemUserController extends Controller
     }
 
     /**
-     * Finds the User model based on its primary key value.
+     * Finds the ShopManager model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return User the loaded model
+     * @param string $id
+     * @return ShopManager the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = SystemUser::findOne($id)) !== null) {
+        if (($model = ShopManager::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

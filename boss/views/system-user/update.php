@@ -3,18 +3,14 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model boss\models\SystemUser */
+/* @var $model backend\models\User */
 
-$this->title = Yii::t('app', 'Update {modelClass}: ', [
-    'modelClass' => 'System User',
-]) . ' ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'System Users'), 'url' => ['index']];
+$this->title = Yii::t('app', 'Update ') . Yii::t('app', 'User') . ' ' . $model->username;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Users'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
-<div class="system-user-update">
-
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="user-update">
 
     <?= $this->render('_form', [
         'model' => $model,
