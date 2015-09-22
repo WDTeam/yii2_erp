@@ -13,9 +13,10 @@ return [
     'Company ID' => '公司名称',
     'Operation List' => '权限列表',
 
-
-    'goods' => '课件管理',
-    'cat_manage' => '类别管理',
-    'cat_drop' => '类别删除',
+     //权限文案
+    'RoleIndex' => '访问角色列表',
+    'RoleCreate' => '创建角色',
+    'RoleUpdate' => '修改角色',
+    'RoleDelete' => '删除角色',
 
 ];
