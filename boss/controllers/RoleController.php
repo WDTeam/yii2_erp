@@ -13,9 +13,11 @@ use yii\filters\AccessControl;
 use yii\web\HttpException;
 
 use boss\models\Auth;
-use boss\models\AuthSearch;
+use boss\models\search\AuthSearch;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
+use boss\components\BaseController;
+use yii\helpers\ArrayHelper;
 
 class RoleController extends Controller
 {
@@ -39,50 +41,11 @@ class RoleController extends Controller
 //             ],
 //         ];
 //     }
-    /**
-     * 获取所有操作项目
-     */
-    public function getAllPermissions()
-    {
-        $handle = \opendir("../controllers/");
-        $permissions = [];
-        if ($handle) {
-            while (false !== ($fileName = readdir($handle))) {
-                if ($fileName != "." && $fileName != "..") {
-                    if(preg_match('/(.*?)Controller/i', $fileName, $matches)) {
-                        $controller_id = $matches[1];
-                        $content = file_get_contents("../controllers/".$fileName);
-                        if(preg_match_all('/action(.*?)\(/i', $content, $matches)) {
-                            foreach ($matches[1] as $action_id){
-                                if(!empty($action_id)){
-                                    $permissions[] = $controller_id.$action_id;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return $permissions;
-    }
-    public function actionRbac()
-    {
-        $auth = Yii::$app->authManager;
-        $permissions = $this->getAllPermissions();
-        foreach ($permissions as $permission){
-            $is_has = $auth->getPermission($permission);
-            if(!$is_has){
-                $createPost = $auth->createPermission($permission);
-                $createPost->description = $permission;
-                $auth->add($createPost);
-            }
-        }
-//         $auth->assign($createPost, 1);
-    }
 
     public function actionIndex()
     {
         $searchModel = new AuthSearch();
+        $searchModel->type = Auth::TYPE_ROLE;
         $dataProvider = $searchModel->search(Yii::$app->request->get(), Auth::TYPE_ROLE);
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -198,7 +161,7 @@ class RoleController extends Controller
         $models = Auth::find()->where(['type' => Auth::TYPE_PERMISSION])->all();
         $permissions = [];
         foreach($models as $model) {
-            $permissions[$model->name] = Yii::t('auth',$model->name);
+            $permissions[$model->name] = Yii::t('auth',$model->description);
         }
         return $permissions;
     }
