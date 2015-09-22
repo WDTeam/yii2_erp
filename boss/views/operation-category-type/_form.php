@@ -57,15 +57,15 @@ use kartik\date\DatePicker;
     <?= $form->field($model, 'operation_category_type_service_interval_time')->textInput() ?>
 
     <?= $form->field($model, 'operation_price_strategy_id')->dropDownList($priceStrategies)->label('选择价格策略') ?>
+    <div id="hidePrice" class="hide">
+        <?= $form->field($model, 'operation_category_type_price')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'operation_category_type_price')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'operation_category_type_balance_price')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'operation_category_type_balance_price')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'operation_category_type_lowest_consume')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'operation_category_type_additional_cost')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'operation_category_type_lowest_consume')->textInput(['maxlength' => true]) ?>
-
+        <?= $form->field($model, 'operation_category_type_additional_cost')->textInput(['maxlength' => true]) ?>
+    </div>
     <?= $form->field($model, 'operation_category_type_price_description')->textarea(['rows' => 6]) ?>
 
     <?= $form->field($model, 'operation_category_type_market_price')->textInput(['maxlength' => true, 'placeholder' => '市场价格（单位：元）'])->label('市场价格（单位：元）') ?>

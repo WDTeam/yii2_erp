@@ -11,14 +11,13 @@ class Controller extends \yii\web\Controller
      */
     public function beforeAction($action)
     {
-        $action = Yii::$app->controller->action->id;
-        $controller = Yii::$app->controller->id;
-        $name = $controller.$action;
+        $name = ucfirst($this->id).str_replace('action', '', $action->actionMethod);
         $auth = Yii::$app->authManager;
-        if($auth->getPermission($name) && \Yii::$app->user->can($name)){
+        $pre = $auth->getPermission($name);
+        if(empty($pre) || \Yii::$app->user->can($name)){
             return true;
         }else{
-           throw new ForbiddenHttpException("没有访问权限！");
+            throw new ForbiddenHttpException("没有访问权限！");
         }
     }
 

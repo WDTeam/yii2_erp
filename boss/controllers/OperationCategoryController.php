@@ -3,8 +3,8 @@
 namespace boss\controllers;
 
 use Yii;
-use common\models\OperationCategory;
-use boss\models\OperationCategory as OperationCategorySearch;
+use boss\models\Operation\OperationCategory;
+use boss\models\Operation\OperationCategorySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

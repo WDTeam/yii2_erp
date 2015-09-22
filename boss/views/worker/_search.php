@@ -49,11 +49,13 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'worker_work_lat') ?>
 
-    <?php // echo $form->field($model, 'worker_rule') ?>
+    <?php // echo $form->field($model, 'worker_type') ?>
 
-    <?php // echo $form->field($model, 'worker_identify_id') ?>
+    <?php // echo $form->field($model, 'worker_rule_id') ?>
 
     <?php // echo $form->field($model, 'worker_is_block') ?>
+
+    <?php // echo $form->field($model, 'worker_is_blacklist') ?>
 
     <?php // echo $form->field($model, 'created_ad') ?>
 

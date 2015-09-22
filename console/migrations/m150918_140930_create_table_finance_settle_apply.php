@@ -14,9 +14,9 @@ class m150918_140930_create_table_finance_settle_apply extends Migration
         $this->createTable('{{%finance_settle_apply}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT  COMMENT \'主键\'' ,
             'worder_id' => Schema::TYPE_INTEGER . '(10) NOT NULL COMMENT \'阿姨id\'',
-            'worder_tel' => Schema::TYPE_STRING . '(10) NOT NULL COMMENT \'阿姨电话\'',
+            'worder_tel' => Schema::TYPE_STRING . '(11) NOT NULL COMMENT \'阿姨电话\'',
             'worker_type_id' => Schema::TYPE_INTEGER . '(1) NOT NULL COMMENT \'阿姨类型Id\'',
-            'worker_type_name' => Schema::TYPE_STRING . '(1) NOT NULL COMMENT \'阿姨职位类型\'',
+            'worker_type_name' => Schema::TYPE_STRING . '(30) NOT NULL COMMENT \'阿姨职位类型\'',
             'finance_settle_apply_money' => Schema::TYPE_DECIMAL . '(10,2) NOT NULL COMMENT \'申请结算金额\'',
             'finance_settle_apply_man_hour' => Schema::TYPE_INTEGER . '(10) NOT NULL COMMENT \'订单总工时\'',
             'finance_settle_apply_order_money' => Schema::TYPE_DECIMAL . '(10,2) NOT NULL COMMENT \'工时费\'',

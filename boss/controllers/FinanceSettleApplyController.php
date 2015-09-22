@@ -34,7 +34,21 @@ class FinanceSettleApplyController extends Controller
     {
         $searchModel = new FinanceSettleApplySearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
+    
+    /**
+     * Lists all FinanceSettleApply models.
+     * @return mixed
+     */
+    public function actionReview()
+    {
+        $searchModel = new FinanceSettleApplySearch;
+        $requestModel = Yii::$app->request->getQueryParams();
+        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,

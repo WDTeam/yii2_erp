@@ -51,14 +51,14 @@ class PayController extends Controller
         $scenario = empty($data['order_id']) ? 'pay' : 'online_pay';
 
         //支付来源
-        $data['pay_source_name'] = $model->source($data['pay_source']);
+        $data['general_pay_source_name'] = $model->source($data['general_pay_source']);
 
         //使用场景
         $model->scenario = $scenario;
         $model->attributes = $data;
 
         //验证数据
-        if( $model->validate() && $model->save(true,array('id')) ){
+        if( $model->validate() && $model->save() ){
 
             //返回组装数据
             $model->getPay();
