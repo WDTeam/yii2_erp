@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3fc7c49d23a6593e9f6de62183935469",
+    "hash": "aa65e066643fa76b8005beed8d7104bb",
     "packages": [
         {
             "name": "alexandernst/yii2-device-detect",
@@ -820,6 +820,55 @@
                 "yii2"
             ],
             "time": "2015-06-17 17:58:21"
+        },
+        {
+            "name": "kartik-v/yii2-date-range",
+            "version": "v1.6.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/yii2-date-range.git",
+                "reference": "fcfd163d5c1e2f299eb5f47e1aa487a86dfe56bd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://packagist.phpcomposer.com/files/kartik-v/yii2-date-range/fcfd163d5c1e2f299eb5f47e1aa487a86dfe56bd.zip",
+                "reference": "fcfd163d5c1e2f299eb5f47e1aa487a86dfe56bd",
+                "shasum": ""
+            },
+            "require": {
+                "kartik-v/yii2-krajee-base": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "kartik\\daterange\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://www.krajee.com/"
+                }
+            ],
+            "description": "An advanced Yii 2 date range picker input for based on bootstrap-daterangepicker plugin.",
+            "homepage": "https://github.com/kartik-v/yii2-date-range",
+            "keywords": [
+                "bootstrap",
+                "bootstrap 3",
+                "date",
+                "date-range",
+                "extension",
+                "range",
+                "time",
+                "widget",
+                "yii2"
+            ],
+            "time": "2015-05-22 15:26:20"
         },
         {
             "name": "kartik-v/yii2-datecontrol",
