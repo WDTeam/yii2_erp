@@ -3,7 +3,7 @@
     ────┤           支付宝代码示例结构说明             ├────
             ╰───────────────────────╯ 
 　                                                                  
-　       接口名称：支付宝即时到账批量退款有密接口（refund_fastpay_by_platform_pwd）
+　       接口名称：支付宝即时到账交易接口（create_direct_pay_by_user）
 　 　    代码版本：3.3
          开发语言：PHP
          版    权：支付宝（中国）网络技术有限公司
@@ -16,7 +16,7 @@
  代码文件结构
 ───────
 
-refund_fastpay_by_platform_pwd-php-UTF-8
+create_direct_pay_by_user-php-UTF-8
   │
   ├lib┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈类文件夹
   │  │
@@ -35,6 +35,8 @@ refund_fastpay_by_platform_pwd-php-UTF-8
   ├alipayapi.php┈┈┈┈┈┈┈┈┈┈┈┈┈┈支付宝接口入口文件
   │
   ├notify_url.php ┈┈┈┈┈┈┈┈┈┈┈┈┈服务器异步通知页面文件
+  │
+  ├return_url.php ┈┈┈┈┈┈┈┈┈┈┈┈┈页面跳转同步通知文件
   │
   ├cacert.pem ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈用于CURL中校验SSL的CA证书文件
   │

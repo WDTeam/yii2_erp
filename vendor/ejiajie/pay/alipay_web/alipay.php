@@ -38,7 +38,20 @@ class alipay{
 
 
 
-
+https://mapi.alipay.com/gateway.do?
+//_input_charset=utf-8
+//_input_charset=utf-8
+//anti_phishing_key=1442813594
+//body=WIDbody
+//exter_invoke_ip=127.0.0.1
+//out_trade_no=a_w_14
+//partner=2088801136967007
+//payment_type=1
+//seller_email=47632990%40qq.com
+//service=create_direct_pay_by_user
+//subject=WIDsubject
+//sign=92ba33336c3a025081058a70e5ad58c9
+//sign_type=MD5
 
 
 

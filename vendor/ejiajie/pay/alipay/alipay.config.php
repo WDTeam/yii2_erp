@@ -20,13 +20,14 @@
  
 //↓↓↓↓↓↓↓↓↓↓请在这里配置您的基本信息↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 //合作身份者id，以2088开头的16位纯数字
-$alipay_config['partner']		= '2088801136967007';
+$alipay_config['partner']		= '';
+
+//收款支付宝账号
+$alipay_config['seller_email']	= '';
 
 //安全检验码，以数字和字母组成的32位字符
-$alipay_config['key']			= 'ptd4lbjltmwpx64g80qhil5eckr98opf';
+$alipay_config['key']			= '';
 
-//签约支付宝账号或卖家支付宝帐户
-$aliapy_config['seller_email'] = '47632990@qq.com';
 
 //↑↑↑↑↑↑↑↑↑↑请在这里配置您的基本信息↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
