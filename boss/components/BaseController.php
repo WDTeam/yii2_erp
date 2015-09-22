@@ -11,11 +11,11 @@ class BaseController extends \yii\web\Controller
         $action = Yii::$app->controller->action->id;
         $controller = Yii::$app->controller->id;
         $module = !empty($this->module)?$this->module->id.'@@':"";
-//        if(Yii::$app->user->can($module.$controller.'@'.$action)){
+       if(Yii::$app->user->can($module.$controller.'@'.$action)){
             return true;
-//        }else{
-//            throw new ForbiddenHttpException("没有访问权限！");
-//        }
+       }else{
+           throw new ForbiddenHttpException("没有访问权限！");
+       }
     }
 
 }
