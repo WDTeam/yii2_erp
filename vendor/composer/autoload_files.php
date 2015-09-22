@@ -12,6 +12,6 @@ return array(
     $vendorDir . '/ejiajie/pay/alipay_web/notify.php',  //支付宝
     $vendorDir . '/ejiajie/pay/wx_app/WxPay.Api.php',  //微信支付
     $vendorDir . '/ejiajie/pay/wx_app/WxPay.JsApiPay.php',  //微信支付
-    $vendorDir . '/ejiajie/pay/wx_app/WxPay.notify.php',  //微信支付
+    $vendorDir . '/ejiajie/pay/wx_app/WxPay.Notify.php',  //微信支付
 
 );
