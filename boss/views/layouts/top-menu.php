@@ -64,6 +64,10 @@ $menuItemsMain = [
                 'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', 'Role'),
                 'url' => ['/role'],
             ],
+            [
+            'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', 'Auths'),
+            'url' => ['/auth'],
+            ],
         ],
     ],
     [
@@ -76,10 +80,22 @@ $menuItemsMain = [
                 'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', 'User'),
                 'url' => ['/user'],
             ],
-            [
-                'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', 'Role'),
-                'url' => ['/role'],
-            ],
+//             [
+//                 'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', '授权列表'),
+//                 'url' => ['/rbac'],
+//             ],
+//             [
+//                 'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', '创建角色'),
+//                 'url' => ['/rbac/create'],
+//             ],
+//             [
+//                 'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', '创建授权项'),
+//                 'url' => ['/rbac/auto'],
+//             ],
+//             [
+//                 'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', '分配授权项'),
+//                 'url' => ['/rbac/assign'],
+//             ],
         ],
     ],
     [

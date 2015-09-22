@@ -85,7 +85,7 @@ class m140506_102106_rbac_init extends \yii\db\Migration
         $this->db = $authManager->db;
 
         $this->dropTable('{{%auth_assignment}}');
-        $this->dropTable('{{%auth_auth_item_child}}');
+        $this->dropTable('{{%auth_item_child}}');
         $this->dropTable('{{%auth_item}}');
         $this->dropTable('{{%auth_rule}}');
     }
