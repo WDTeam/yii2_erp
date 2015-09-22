@@ -7,8 +7,8 @@ use yii\widgets\DetailView;
 /* @var $model common\models\OperationBootPage */
 
 //$this->title = $model->id;
-$this->title = Yii::t('app','Look').Yii::t('app','Boot Page');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app','Operation Boot Page'), 'url' => ['index']];
+$this->title = Yii::t('app','Look').Yii::t('operation','Boot Page');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('operation','Operation Boot Page'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-boot-page-view">
