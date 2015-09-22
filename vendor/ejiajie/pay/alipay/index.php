@@ -1,6 +1,6 @@
 <?php
 /* *
- * 功能：支付宝即时到账批量退款有密接口接口调试入口页面
+ * 功能：支付宝即时到账交易接口接口调试入口页面
  * 版本：3.3
  * 日期：2012-07-23
  * 说明：
@@ -11,7 +11,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 	<head>
-	<title>支付宝即时到账批量退款有密接口接口</title>
+	<title>支付宝即时到账交易接口接口</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <style>
 *{
@@ -151,7 +151,7 @@ ul,ol{
                 <a target="_blank" href="https://b.alipay.com/home.htm"><span>商家服务</span></a>|
                 <a target="_blank" href="http://help.alipay.com/support/index_sh.htm"><span>帮助中心</span></a>
             </dl>
-            <span class="title">支付宝即时到账批量退款有密接口快速通道</span>
+            <span class="title">支付宝即时到账交易接口快速通道</span>
 		</div>
         <div class="cashier-nav">
             <ol>
@@ -163,35 +163,35 @@ ul,ol{
         <form name=alipayment action=alipayapi.php method=post target="_blank">
             <div id="body" style="clear:left">
                 <dl class="content">
-                    <dt>卖家支付宝帐户：</dt>
+                    <dt>商户订单号：</dt>
                     <dd>
                         <span class="null-star">*</span>
-                        <input size="30" name="WIDseller_email" />
+                        <input size="30" name="WIDout_trade_no" />
+                        <span>商户网站订单系统中唯一订单号，必填</span>
+                    </dd>
+                    <dt>订单名称：</dt>
+                    <dd>
+                        <span class="null-star">*</span>
+                        <input size="30" name="WIDsubject" />
                         <span>必填</span>
                     </dd>
-                    <dt>退款当天日期：</dt>
+                    <dt>付款金额：</dt>
                     <dd>
                         <span class="null-star">*</span>
-                        <input size="30" name="WIDrefund_date" />
-                        <span>必填，格式：年[4位]-月[2位]-日[2位] 小时[2位 24小时制]:分[2位]:秒[2位]，如：2007-10-01 13:13:13</span>
+                        <input size="30" name="WIDtotal_fee" />
+                        <span>必填</span>
                     </dd>
-                    <dt>批次号：</dt>
+                    <dt>订单描述：</dt>
                     <dd>
                         <span class="null-star">*</span>
-                        <input size="30" name="WIDbatch_no" />
-                        <span>必填，格式：当天日期[8位]+序列号[3至24位]，如：201008010000001</span>
+                        <input size="30" name="WIDbody" />
+                        <span></span>
                     </dd>
-                    <dt>退款笔数：</dt>
+                    <dt>商品展示地址：</dt>
                     <dd>
                         <span class="null-star">*</span>
-                        <input size="30" name="WIDbatch_num" />
-                        <span>必填，参数detail_data的值中，“#”字符出现的数量加1，最大支持1000笔（即“#”字符出现的数量999个）</span>
-                    </dd>
-                    <dt>退款详细数据：</dt>
-                    <dd>
-                        <span class="null-star">*</span>
-                        <input size="30" name="WIDdetail_data" />
-                        <span>必填，具体格式请参见接口技术文档</span>
+                        <input size="30" name="WIDshow_url" />
+                        <span>需以http://开头的完整路径，例如：http://www.商户网址.com/myorder.html</span>
                     </dd>
 					<dt></dt>
                     <dd>

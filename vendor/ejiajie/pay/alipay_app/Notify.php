@@ -13,8 +13,8 @@
  * 调试通知返回时，可查看或改写log日志的写入TXT里的数据，来检查通知返回是否正常
  */
 
-
-require_once dirname(__FILE__)."/../functions.php";
+require_once("alipay_core.function.php");
+require_once("alipay_rsa.function.php");
 
 class AlipayNotify {
     /**
@@ -125,8 +125,8 @@ class AlipayNotify {
 		
 		$isSgin = false;
 		switch (strtoupper(trim($this->alipay_config['sign_type']))) {
-			case "MD5" :
-				$isSgin = md5Verify($prestr, $sign, $this->alipay_config['key']);
+			case "RSA" :
+				$isSgin = rsaVerify($prestr, trim($this->alipay_config['ali_public_key_path']), $sign);
 				break;
 			default :
 				$isSgin = false;

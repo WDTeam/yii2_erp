@@ -10,9 +10,9 @@
  * 该代码仅供学习和研究支付宝接口使用，只是提供一个参考。
  */
 
-namespace ejiajie\pay\alipay_web;
 
-class submit {
+require_once dirname(__FILE__)."/../functions.php";
+class Submit {
 
 	var $alipay_config;
 	/**
@@ -103,11 +103,22 @@ class submit {
 
 		//submit按钮控件请不要含有name属性
         $sHtml = $sHtml."<input type='submit' value='".$button_name."'></form>";
-		
+
 		$sHtml = $sHtml."<script>document.forms['alipaysubmit'].submit();</script>";
 		
 		return $sHtml;
 	}
+    /**
+     * 建立请求的数据
+     * @param $para_temp 请求参数数组
+     */
+    function buildRequestData($para_temp){
+        //待请求参数数组
+        $para = $this->buildRequestPara($para_temp);
+        $param = http_build_query($para);
+        $requestUrl = $this->alipay_gateway_new;
+        return $requestUrl.$param;
+    }
 	
 	/**
      * 建立请求，以模拟远程HTTP的POST请求方式构造并获取支付宝的处理结果
