@@ -31,10 +31,14 @@ class SiteController extends Controller
             $this->redirect(array('login'));
         }
         return $this->render('index');
+        
+        
     }
 
     public function actionLogin()
     {
+    	
+    	
         $this->layout = 'guest';
 
         if (!\Yii::$app->user->isGuest) {

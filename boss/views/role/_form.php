@@ -43,7 +43,7 @@ use kartik\icons\Icon;
             </div>
 
             <div class="panel-body">
-                <?= $form->field($model, '_permissions')->checkboxList($permissions)->label('', ['hidden' => 'hidden']); ?>
+                <?= $form->field($model, '_permissions')->checkboxList($permissions, ['class'=>'test'])->label('', ['hidden' => 'hidden']); ?>
             </div>
         </div>
     </div>

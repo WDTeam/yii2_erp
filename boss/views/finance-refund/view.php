@@ -6,14 +6,14 @@ use kartik\datecontrol\DateControl;
 
 /**
  * @var yii\web\View $this
- * @var common\models\Worker $model
+ * @var common\models\FinanceRefund $model
  */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Workers'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Finance Refunds'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="worker-view">
+<div class="finance-refund-view">
     <div class="page-header">
         <h1><?= Html::encode($this->title) ?></h1>
     </div>
@@ -30,27 +30,20 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'attributes' => [
             'id',
-            'shop_id',
-            'worker_name',
-            'worker_phone',
-            'worker_idcard',
-            'worker_password',
-            'worker_photo',
-            'worker_level',
-            'worker_auth_status',
-            'worker_ontrial_status',
-            'worker_onboard_status',
-            'worker_work_city',
-            'worker_work_area',
-            'worker_work_street',
-            'worker_work_lng',
-            'worker_work_lat',
-            'worker_rule',
-            'worker_identify_id',
-            'worker_is_block',
-            'created_ad',
-            'updated_ad',
-            'isdel',
+            'finance_refund_tel',
+            'finance_refund_money',
+            'finance_refund_stype',
+            'finance_refund_reason',
+            'finance_refund_discount',
+            'finance_refund_pay_create_time:datetime',
+            'finance_pay_channel_id',
+            'finance_pay_channel_name',
+            'finance_refund_pay_flow_num',
+            'finance_refund_pay_status',
+            'finance_refund_worker_id',
+            'finance_refund_worker_tel',
+            'create_time:datetime',
+            'is_del',
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],

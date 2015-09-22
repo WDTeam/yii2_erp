@@ -7,22 +7,20 @@ use yii\widgets\Pjax;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
- * @var boss\models\WorkerBlockSearch $searchModel
+ * @var boss\models\FinanceInvoiceSearch $searchModel
  */
 
-$this->title = Yii::t('app', 'Worker Blocks');
+$this->title = '发票管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="worker-block-index">
+<div class="finance-invoice-index">
     <div class="page-header">
             <h1><?= Html::encode($this->title) ?></h1>
     </div>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Worker Block',
-]), ['create'], ['class' => 'btn btn-success'])*/  ?>
+        <?php /* echo Html::a('Create Finance Invoice', ['create'], ['class' => 'btn btn-success'])*/  ?>
     </p>
 
     <?php Pjax::begin(); echo GridView::widget([
@@ -32,20 +30,35 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'worker_id',
-            'worker_block_type',
-            'worker_block_reason',
-            'worker_block_start',
-//            'worker_block_finish', 
-//            'created_ad', 
-//            'updated_ad', 
-//            'admin_id', 
+            'finance_invoice_serial_number',
+            'finance_invoice_customer_tel',
+            'finance_invoice_worker_tel',
+            'pay_channel_pay_id',
+//            'pay_channel_pay_title', 
+//            'finance_invoice_pay_status', 
+//            'admin_confirm_uid', 
+//            'finance_invoice_enrolment_time:datetime', 
+//            'finance_invoice_money', 
+//            'finance_invoice_title', 
+//            'finance_invoice_address', 
+//            'finance_invoice_status', 
+//            'finance_invoice_check_id', 
+//            'finance_invoice_number', 
+//            'finance_invoice_service_money', 
+//            'finance_invoice_corp_email:email', 
+//            'finance_invoice_corp_address', 
+//            'finance_invoice_corp_name', 
+//            'finance_invoice_district_id', 
+//            'classify_id', 
+//            'classify_title', 
+//            'create_time', 
+//            'is_del', 
 
             [
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
                 'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['worker-block/view','id' => $model->id,'edit'=>'t']), [
+                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance-invoice/view','id' => $model->id,'edit'=>'t']), [
                                                     'title' => Yii::t('yii', 'Edit'),
                                                   ]);}
 
