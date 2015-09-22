@@ -6,15 +6,15 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Category Types');
+$this->title = $category->operation_category_name.' - '.Yii::t('app', 'Category Types');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-category-type-index">
 
-    <!--<h1><?= Html::encode($this->title) ?></h1>-->
+    <!--<h1><?php //= Html::encode($this->title) ?></h1>-->
 
     <p>
-        <?= Html::a('<i class="glyphicon glyphicon-plus"></i> '.Yii::t('app', 'Create'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('<i class="glyphicon glyphicon-plus"></i> '.Yii::t('app', 'Create').Yii::t('app', 'Category Types'), ['create', 'category_id'=> $category->id], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -28,7 +28,29 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'id',
             'operation_category_type_name',
             'operation_category_type_english_name',
-            'created_at',
+            'operation_category_name',
+            [
+               'attribute'=> 'created_at',
+               'format'=>'html',
+               'value' => function ($model){
+                    if(empty($model->created_at)){
+                        return '';
+                    }else{
+                        return date('Y-m-d H:i:s', $model->created_at);
+                    }
+               }
+            ],
+            [
+               'attribute'=> 'updated_at',
+               'format'=>'html',
+               'value' => function ($model){
+                    if(empty($model->created_at)){
+                        return '';
+                    }else{
+                        return date('Y-m-d H:i:s', $model->created_at);
+                    }
+               }
+            ],
 //            'operation_category_id',
 //            'operation_category_name',
 //            'operation_category_type_introduction:ntext',
@@ -53,7 +75,30 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'header' => Yii::t('app', 'Operation'),
-                'class' => 'yii\grid\ActionColumn'
+                'class' => 'yii\grid\ActionColumn',
+                'buttons' => [
+                    'view' => function ($url, $model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-eye-open"></span>', 
+                            Yii::$app->urlManager->createUrl(['operation-category-type/view','id' => $model->id, 'category_id'=> $model->operation_category_id]),
+                            ['title' => Yii::t('yii', 'View'), 'class' => 'btn btn-success btn-sm']
+                        );
+                    },
+                    'update' => function ($url, $model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-pencil"></span>', 
+                            Yii::$app->urlManager->createUrl(['operation-category-type/update','id' => $model->id, 'category_id'=> $model->operation_category_id]), 
+                            ['title' => Yii::t('yii', 'Edit'), 'class' => 'btn btn-info btn-sm',]
+                        );
+                    },
+                    'delete' => function ($url, $model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-trash"></span>', 
+                            Yii::$app->urlManager->createUrl(['operation-category-type/delete','id' => $model->id, 'category_id'=> $model->operation_category_id]),
+                            ['title' => Yii::t('yii', 'Delete'), 'class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
+                        );
+                    },
+                ],
             ],
         ],
     ]); ?>

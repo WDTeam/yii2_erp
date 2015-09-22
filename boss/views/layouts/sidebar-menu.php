@@ -239,15 +239,25 @@ echo Menu::widget(
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                     ],
-//                    [
-//                        'label' => '服务管理',
-//                        'url' => ['#'],
-//                        'icon' => 'fa fa-angle-right',
-//                    ],
                     [
-                        'label' => '服务品类管理',
-                        'url' => ['/operation-category'],
+                        'label' => '服务管理',
+                        'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
+                        'options' => [
+                            'class' => 'treeview active',
+                        ],
+                        'items' => [
+                            [
+                                'label' => '服务品类管理',
+                                'url' => ['/operation-category'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                            [
+                                'label' => '价格策略管理',
+                                'url' => ['/operation-price-strategy'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                        ],
                     ],
                     [
                         'label' => '启动页管理',

@@ -87,7 +87,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'listbtn' => function ($url, $model) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-list"></span>', 
-                            Yii::$app->urlManager->createUrl(['operation-category-type','id' => $model->id]), 
+                            Yii::$app->urlManager->createUrl(['operation-category-type','category_id' => $model->id]), 
                             ['title' => Yii::t('yii', '服务类型列表'), 'class' => 'btn btn-warning btn-sm',]
                         );
                     },

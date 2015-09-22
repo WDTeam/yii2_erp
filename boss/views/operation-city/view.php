@@ -20,14 +20,14 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'View Detail');
 
 
     <?= DetailView::widget([
-            'model' => $model,
-            'condensed'=>false,
-            'hover'=>true,
-            'mode'=>Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
-            'panel'=>[
-            'heading'=> $model->operation_city_name ,
-            'type'=>DetailView::TYPE_INFO,
-        ],
+        'model' => $model,
+        'condensed'=>false,
+        'hover'=>true,
+        'mode'=>Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
+//        'panel'=>[
+//            'heading'=> $model->operation_city_name, 
+//            'type'=>DetailView::TYPE_INFO,
+//        ],
         'attributes' => [
             'id',
             'operation_city_name',
