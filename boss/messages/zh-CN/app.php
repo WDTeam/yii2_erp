@@ -106,7 +106,7 @@ return [
     'Operation Categories' => '服务品类',
     'Category Types' => '服务类型',
     
-    'Auths'=>'权限',
-    'Create Auth'=>'创建权限',
-    'Update Auth'=>'更新权限'
+    'Auths'=>'授权项',
+    'Create Auth'=>'创建授权项',
+    'Update Auth'=>'更新授权项'
 ];
