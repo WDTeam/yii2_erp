@@ -198,7 +198,7 @@ class RoleController extends Controller
         $models = Auth::find()->where(['type' => Auth::TYPE_PERMISSION])->all();
         $permissions = [];
         foreach($models as $model) {
-            $permissions[$model->name] = $model->name . ' (' . $model->description . ')';
+            $permissions[$model->name] = Yii::t('auth',$model->name);
         }
         return $permissions;
     }
