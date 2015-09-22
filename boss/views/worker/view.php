@@ -9,7 +9,7 @@ use kartik\datecontrol\DateControl;
  * @var common\models\Worker $model
  */
 
-$this->title = $model->worker_name;
+$this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Workers'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

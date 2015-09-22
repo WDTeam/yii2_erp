@@ -9,39 +9,6 @@ echo Menu::widget(
             'class' => 'sidebar-menu'
         ],
         'items' => [
-            /* 面试管理 */
-                        [
-                'label' => Yii::t('app', 'InterviewManagement'),
-                'url' => ['#'],
-                'icon' => 'fa-dashboard',
-                'options' => [
-                    'class' => 'treeview',
-                ],
-                'visible' => Yii::$app->user->can('readPost'),
-                'items' => [
-                    [
-                        'label' => Yii::t('app', 'Interview'),
-                        'url' => ['/interview/index'],
-                        'icon' => 'fa fa-user',
-                    ],
-//                    [
-//                        'label' => Yii::t('app', 'Agreement'),
-//                        'url' => ['/signed/index'],
-//                        'icon' => 'fa fa-lock',
-//                    ],
-                ],
-            ],
-             /* 服务管理 */
-                        [
-                'label' => Yii::t('app', 'CategoryManagement'),
-                'url' => ['category/index'],
-                'icon' => 'fa-dashboard',
-                'options' => [
-//                     'class' => 'treeview',
-                ],
-                'active'=>isset($ctrl->is_category_manage),
-                'visible' => Yii::$app->user->can('readPost'),
-            ],
             [
                 'label' => '门店管理',
                 'url' => ['#'],
@@ -49,6 +16,7 @@ echo Menu::widget(
                 'options' => [
                     'class' => 'treeview active',
                 ],
+//                 'visible' => Yii::$app->user->can(''),
                 'items' => [
                     [
                         'label' => '查看所有门店',
@@ -75,16 +43,19 @@ echo Menu::widget(
                         'label' => '查看所有阿姨',
                         'url' => ['/worker'],
                         'icon' => 'fa fa-angle-right',
+                        'visible' => Yii::$app->user->can('WorkerIndex'),
                     ],
                     [
                         'label' => '录入新阿姨',
                         'url' => ['/worker/create'],
                         'icon' => 'fa fa-angle-right',
+                        'visible' => Yii::$app->user->can('WorkerCreate'),
                     ],
                     [
                         'label' => '阿姨黑名单',
                         'url' => ['/worker-block'],
                         'icon' => 'fa fa-angle-right',
+                        'visible' => Yii::$app->user->can('WorkerBlockIndex'),
                     ],
                 ],
             ],
@@ -100,6 +71,7 @@ echo Menu::widget(
                         'label' => '查看所有顾客',
                         'url' => ['/customer'],
                         'icon' => 'fa fa-angle-right',
+                        'visible' => Yii::$app->user->can('CustomerIndex'),
                     ],
                     [
                         'label' => '管理黑名单顾客',
@@ -120,6 +92,7 @@ echo Menu::widget(
                         'label' => '查看所有订单',
                         'url' => ['/order/order'],
                         'icon' => 'fa fa-angle-right',
+                        'visible' => Yii::$app->user->can('OrderOrder'),
                     ],
                     [
                         'label' => '创建新订单',
@@ -153,7 +126,7 @@ echo Menu::widget(
                     ],
                     [
                         'label' => '赔偿管理',
-                        'url' => ['#'],
+                        'url' => ['/finance-compensate/'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [

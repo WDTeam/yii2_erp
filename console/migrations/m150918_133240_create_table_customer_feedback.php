@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150918_133240_create_table_feedback extends Migration
+class m150918_133240_create_table_customer_feedback extends Migration
 {
     public function up()
     {
@@ -11,7 +11,7 @@ class m150918_133240_create_table_feedback extends Migration
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'用户反馈表\'';
         }
-        $this->createTable('{{%feedback}}', [
+        $this->createTable('{{%customer_feedback}}', [
             'id'=>  Schema::TYPE_PK.'(8) NOT NULL AUTO_INCREMENT COMMENT \'主键\'' ,
             'customer_id'=>  Schema::TYPE_INTEGER.'(8) NOT NULL COMMENT \'关联用户\'' ,
             'feedback_content'=>  Schema::TYPE_TEXT.' NOT NULL COMMENT \'反馈内容\'' ,
@@ -22,6 +22,6 @@ class m150918_133240_create_table_feedback extends Migration
 
     public function down()
     {
-        $this->dropTable('{{%feedback}}');
+        $this->dropTable('{{%customer_feedback}}');
     }
 }

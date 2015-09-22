@@ -44,8 +44,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             Yii::$app->urlManager->createUrl(['operation-city/upline','id' => $model->id]),
                             ['title' => '点击下线',]);
                     return $model->operation_city_is_online == 1 ? 
-                            Html::a('已上线', Yii::$app->urlManager->createUrl(['operation-city/goline','id' => $model->id]), ['title' => '点击下线',]) : 
-                            Html::a('已下线', Yii::$app->urlManager->createUrl(['operation-city/goline','id' => $model->id]), ['title' => '点击上线',]);
+                            Html::a('已上线', Yii::$app->urlManager->createUrl(['operation-city/goline','id' => $model->id]), ['title' => '点击下线', 'class' => 'btn btn-success btn-sm']) : 
+                            Html::a('已下线', Yii::$app->urlManager->createUrl(['operation-city/goline','id' => $model->id]), ['title' => '点击上线', 'class' => 'btn btn-danger btn-sm']);
                }
             ],
             [

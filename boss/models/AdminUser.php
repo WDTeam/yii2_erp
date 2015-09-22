@@ -49,18 +49,19 @@ class AdminUser extends \common\models\AdminUser
             self::STATUS_DELETED => Yii::t('app', 'STATUS_DELETED'),
         ];
     }
-
+    /**
+     * 获取角色列表
+     */
     public static function getArrayRole()
     {
-        return ArrayHelper::map(Yii::$app->authManager->getRoles(), 'name', 'description');
+        return ArrayHelper::map(Yii::$app->authManager->getRoles(), 'name', 'name');
     }
 
     public function getRoleLabel()
     {
-
         if ($this->_roleLabel === null) {
             $roles = self::getArrayRole();
-            $this->_roleLabel = $roles[$this->role];
+            $this->_roleLabel = isset($roles[$this->role])?$roles[$this->role]:'';
         }
         return $this->_roleLabel;
     }
@@ -78,7 +79,7 @@ class AdminUser extends \common\models\AdminUser
             // Unique
             [['username', 'email'], 'unique'],
             // Username
-            ['username', 'match', 'pattern' => '/^[a-zA-Z0-9_-]+$/'],
+//             ['username', 'match', 'pattern' => '/^[a-zA-Z0-9_-]+$/'],
             ['username', 'string', 'min' => 3, 'max' => 30],
             // E-mail
             ['email', 'string', 'max' => 100],

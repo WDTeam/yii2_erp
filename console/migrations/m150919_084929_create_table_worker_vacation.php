@@ -14,8 +14,8 @@ class m150919_084929_create_table_worker_vacation extends Migration
         $this->createTable('{{%worker_vacation}}', [
             'id' => Schema::TYPE_PK . ' COMMENT \'阿姨请假时间表自增id\'' ,
             'worker_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'主表阿姨id\'',
-            'worker_vacation_start' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL COMMENT \'请假开始时间\'',
-            'worker_vacation_finish' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL COMMENT \'请假结束时间\'',
+            'worker_vacation_start_time' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL COMMENT \'请假开始时间\'',
+            'worker_vacation_finish_time' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL COMMENT \'请假结束时间\'',
             'worker_vacation_type' => Schema::TYPE_BOOLEAN. '(1) DEFAULT NULL COMMENT \'阿姨请假类型 1休假 2事假\'',
             'worker_vacation_extend' => Schema::TYPE_STRING . '(11) DEFAULT NULL COMMENT \'阿姨请假备注\'',
             'created_ad' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL COMMENT \'创建时间\'',

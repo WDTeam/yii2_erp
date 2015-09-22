@@ -4,13 +4,13 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 
+
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
  * @var boss\models\WorkerSearch $searchModel
  */
-
-$this->title = Yii::t('worker', 'worker_views');
+$title = Yii::t('worker', 'worker_views');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="worker-index">
@@ -78,6 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'before' => Html::a('<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('worker', 'worker_create'), ['create'], ['class' => 'btn btn-success']), 'after' => Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List', ['index'], ['class' => 'btn btn-info']),
             'showFooter' => false
         ],
+
     ]);
     Pjax::end(); ?>
 

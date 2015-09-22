@@ -21,9 +21,9 @@ use kartik\datecontrol\DateControl;
     'columns' => 1,
     'attributes' => [
 
-'worker_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 主表阿姨id...']], 
+'worker_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 阿姨id...']], 
 
-'worker_block_type'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 阿姨封号类型 0短期1永久...']], 
+'worker_block_type'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 阿姨封号类型...']], 
 
 'worker_block_start'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 封号开始时间...']], 
 

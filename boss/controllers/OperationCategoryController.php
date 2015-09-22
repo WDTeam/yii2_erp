@@ -67,10 +67,10 @@ class OperationCategoryController extends Controller
         $model = new OperationCategory;
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->created_ad = time();
-            $model->updated_ad = time();
+            $model->created_at = time();
+            $model->updated_at = time();
             $model->save();
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         } else {
             return $this->render('create', [
                 'model' => $model,
