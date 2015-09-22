@@ -29,5 +29,3 @@ phpunit.phar
 # local phpunit config
 /phpunit.xml
 /.idea/*
-boss/config/main-local.php
-boss/web/index-test.php
