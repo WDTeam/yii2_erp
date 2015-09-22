@@ -76,7 +76,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::begin();
     
     
-    var_dump($dataProvider->getData()); exit;
+    //var_dump($dataProvider->getData()); exit;
+    
+    
      echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
