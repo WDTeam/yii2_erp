@@ -78,6 +78,15 @@ $cityDesc = '门店';
     echo $form->field($worker_ext, 'worker_is_insurance')->radioList(['1' => '是', '0' => '否'], ['inline' => true]);
     echo $form->field($worker_ext, 'worker_source')->textInput(['placeholder' => 'Enter 阿姨来源...']);
     echo $form->field($worker, 'worker_type')->radioList(['1' => '自有', '2' => '非自有'], ['inline' => true]);
+    echo $form->field($worker, 'worker_rule_id')->widget(Select2::classname(), [
+        'name' => 'worker_rule_id',
+        'hideSearch' => true,
+        'data' => [1 => '全职', 2 => '兼职',3=>'时段',4=>'高峰'],
+        'options' => ['placeholder' => '选择阿姨身份'],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]);
 
     echo $form->field($worker_ext, 'worker_bank_name')->textInput(['placeholder' => 'Enter 开户银行...']);
     echo $form->field($worker_ext, 'worker_bank_from')->textInput(['placeholder' => 'Enter 银行卡开户网点...']);
