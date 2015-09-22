@@ -69,7 +69,7 @@ class WorkerController extends Controller
         $worker = new Worker;
         $worker_ext = new WorkerExt;
         if ($worker->load(Yii::$app->request->post()) && $worker->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $worker->id]);
         } else {
             return $this->render('create', [
                 'worker' => $worker,
@@ -131,15 +131,15 @@ class WorkerController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $out = ['results' => ['id' => '', 'text' => '']];
         if (!is_null($q)) {
-            $query = new Query;
+            /*$query = new Query;
             $query->select('id, name AS text')
                 ->from('ejj_shop')
                 ->where('name LIKE "%' . $q .'%"')
                 ->limit(20);
             $command = $query->createCommand();
             $data = $command->queryAll();
-            $out['results'] = array_values($data);
-            //$out['results'] = [['id'=>'1','text'=>'门店'],['id'=>'2','text'=>'门店2']];
+            $out['results'] = array_values($data);*/
+            $out['results'] = [['id'=>'1','text'=>'门店'],['id'=>'2','text'=>'门店2'],['id'=>'2','text'=>'门店3']];
         }
         elseif ($id > 0) {
             $out['results'] = ['id' => $id, 'text' => Worker::findone(array('id'=>1))->worker_name];
