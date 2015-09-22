@@ -24,6 +24,7 @@ class m150918_195337_create_table_customer extends Migration
             'customer_balance'=>Schema::TYPE_DECIMAL.'(8,2) COMMENT \'账户余额\'',
             'customer_score'=>  Schema::TYPE_INTEGER.'(8) NOT NULL COMMENT \'积分\'',
             'customer_level'=>  Schema::TYPE_SMALLINT.'(4) NULL DEFAULT NULL COMMENT \'评级\'',
+            'customer_complaint_times'=>  Schema::TYPE_INTEGER.'(8) DEFAULT 0 COMMENT \'投诉\'',
             'customer_src'=>  Schema::TYPE_SMALLINT.'(4) NULL DEFAULT NULL COMMENT \'来源，1为线下，2为线上\'',
             'channal_id'=>  Schema::TYPE_INTEGER.'(8) NULL DEFAULT NULL COMMENT \'渠道\'',
             'platform_id'=>  Schema::TYPE_INTEGER.'(8) NULL DEFAULT NULL COMMENT \'平台\'',
@@ -33,6 +34,7 @@ class m150918_195337_create_table_customer extends Migration
             'created_at'=>  Schema::TYPE_INTEGER.'(11) NOT NULL COMMENT \'创建时间\'',
             'updated_at'=>  Schema::TYPE_INTEGER.'(11) NOT NULL COMMENT \'更新时间\'',
             'is_del'=>  Schema::TYPE_SMALLINT.'(4) DEFAULT NULL COMMENT \'加入黑名单\'',
+            'customer_del_reason'=>  Schema::TYPE_TEXT.'(255) DEFAULT NULL COMMENT \'加入黑名单原因\'',
             ], $tableOptions);
 
             // $this->createIndex('pay_channel_id','{{%customer}}','pay_channel_id');
