@@ -16,9 +16,9 @@ use kartik\date\DatePicker;
 
     <?= $form->field($model, 'operation_boot_page_name')->textInput(['maxlength' => 60]) ?>
 
-    <?= $form->field($model, 'operation_boot_page_ios_img')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'operation_boot_page_ios_img')->fileInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'operation_boot_page_android_img')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'operation_boot_page_android_img')->fileInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'operation_boot_page_url')->textInput(['maxlength' => true]) ?>
 

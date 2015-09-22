@@ -3,16 +3,16 @@
 namespace boss\controllers;
 
 use Yii;
-use boss\models\Operation\OperationCategory;
-use boss\models\Operation\OperationCategorySearch;
+use boss\models\SystemUser;
+use boss\models\search\SystemUserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * OperationCategoryController implements the CRUD actions for OperationCategory model.
+ * SystemUserController implements the CRUD actions for SystemUser model.
  */
-class OperationCategoryController extends Controller
+class SystemUserController extends Controller
 {
     public function behaviors()
     {
@@ -27,50 +27,43 @@ class OperationCategoryController extends Controller
     }
 
     /**
-     * Lists all OperationCategory models.
+     * Lists all SystemUser models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new OperationCategorySearch;
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        $searchModel = new SystemUserSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
     /**
-     * Displays a single OperationCategory model.
+     * Displays a single SystemUser model.
      * @param integer $id
      * @return mixed
      */
     public function actionView($id)
     {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-        return $this->render('view', ['model' => $model]);
-}
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
     }
 
     /**
-     * Creates a new OperationCategory model.
+     * Creates a new SystemUser model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new OperationCategory;
+        $model = new SystemUser();
 
-        if ($model->load(Yii::$app->request->post())) {
-            $model->created_at = time();
-            $model->updated_at = time();
-            $model->save();
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -79,7 +72,7 @@ class OperationCategoryController extends Controller
     }
 
     /**
-     * Updates an existing OperationCategory model.
+     * Updates an existing SystemUser model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -88,10 +81,8 @@ class OperationCategoryController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post())) {
-            $model->updated_at = time();
-            $model->save();
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -100,7 +91,7 @@ class OperationCategoryController extends Controller
     }
 
     /**
-     * Deletes an existing OperationCategory model.
+     * Deletes an existing SystemUser model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -113,15 +104,15 @@ class OperationCategoryController extends Controller
     }
 
     /**
-     * Finds the OperationCategory model based on its primary key value.
+     * Finds the SystemUser model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return OperationCategory the loaded model
+     * @return SystemUser the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = OperationCategory::findOne($id)) !== null) {
+        if (($model = SystemUser::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

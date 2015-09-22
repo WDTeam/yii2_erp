@@ -7,15 +7,19 @@ use yii\helpers\Html;
  * @var common\models\Worker $model
  */
 
-$this->title = Yii::t('app', 'Create {modelClass}', [
+$this->title = Yii::t('app', '录入新阿姨', [
     'modelClass' => 'Worker',
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Workers'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$worker_ext->worker_is_health=1;
+$worker_ext->worker_is_insurance=1;
+$worker_ext->worker_sex=0;
+$worker->worker_type=1;
+
 ?>
 <div class="worker-create">
     <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
     </div>
     <?= $this->render('_form', [
         'worker' => $worker,

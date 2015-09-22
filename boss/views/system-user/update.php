@@ -2,19 +2,19 @@
 
 use yii\helpers\Html;
 
-/**
- * @var yii\web\View $this
- * @var common\models\Worker $model
- */
+/* @var $this yii\web\View */
+/* @var $model boss\models\SystemUser */
 
 $this->title = Yii::t('app', 'Update {modelClass}: ', [
-    'modelClass' => 'Worker',
+    'modelClass' => 'System User',
 ]) . ' ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Workers'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'System Users'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
-<div class="worker-update">
+<div class="system-user-update">
+
+    <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
         'model' => $model,
