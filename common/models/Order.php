@@ -62,7 +62,7 @@ use Yii;
  * @property string $admin_id
  * @property integer $isdel
  */
-class Order extends \yii\db\ActiveRecord
+class Order extends ActiveRecord
 {
     /**
      * @inheritdoc
