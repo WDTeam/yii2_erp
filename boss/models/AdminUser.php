@@ -49,10 +49,12 @@ class AdminUser extends \common\models\AdminUser
             self::STATUS_DELETED => Yii::t('app', 'STATUS_DELETED'),
         ];
     }
-
+    /**
+     * 获取角色列表
+     */
     public static function getArrayRole()
     {
-        return ArrayHelper::map(Yii::$app->authManager->getRoles(), 'name', 'description');
+        return ArrayHelper::map(Yii::$app->authManager->getRoles(), 'name', 'name');
     }
 
     public function getRoleLabel()
