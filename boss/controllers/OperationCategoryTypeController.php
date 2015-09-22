@@ -4,6 +4,8 @@ namespace boss\controllers;
 
 use Yii;
 use boss\models\OperationCategoryType;
+use boss\models\OperationCategory;
+use boss\models\OperationPriceStrategy;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -30,14 +32,15 @@ class OperationCategoryTypeController extends Controller
      * Lists all OperationCategoryType models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($category_id)
     {
+        $category = OperationCategory::find()->where(['id' => $category_id])->one();
         $dataProvider = new ActiveDataProvider([
-            'query' => OperationCategoryType::find(),
+            'query' => OperationCategoryType::find()->where(['operation_category_id' => $category_id]),
         ]);
-
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'category' => $category,
         ]);
     }
 
@@ -58,15 +61,19 @@ class OperationCategoryTypeController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($category_id)
     {
+        $category = OperationCategory::find()->where(['id' => $category_id])->one();
+        $priceStrategies = OperationPriceStrategy::find()->all();
         $model = new OperationCategoryType();
-
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'category' => $category,
+                'priceStrategies' => $priceStrategies,
             ]);
         }
     }
@@ -77,8 +84,10 @@ class OperationCategoryTypeController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
-    {
+    public function actionUpdate($id, $category_id)
+    {   
+        $category = OperationCategory::find()->where(['id' => $category_id])->one();
+        $priceStrategies = OperationPriceStrategy::find()->all();
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -86,6 +95,8 @@ class OperationCategoryTypeController extends Controller
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'category' => $category,
+                'priceStrategies' => $priceStrategies,
             ]);
         }
     }
