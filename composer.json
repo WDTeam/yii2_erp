@@ -26,7 +26,8 @@
         "kartik-v/yii2-mpdf": "^1.0",
         "kartik-v/yii2-builder": "^1.6",
         "yiisoft/yii2-redis": "^2.0",
-        "pjkui/kindeditor": "dev-master"
+        "pjkui/kindeditor": "dev-master",
+        "crazyfd/yii2-qiniu": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

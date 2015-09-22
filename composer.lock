@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b26e56953d22b71e79bde7a4933f6dc2",
+    "hash": "3fc7c49d23a6593e9f6de62183935469",
     "packages": [
         {
             "name": "alexandernst/yii2-device-detect",
@@ -380,6 +380,47 @@
             ],
             "description": "CSS for vector based country flags",
             "time": "2015-03-26 16:41:06"
+        },
+        {
+            "name": "crazyfd/yii2-qiniu",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/crazyfd/yii2-qiniu.git",
+                "reference": "2b6f7a069d395358ec8d78f187df672106b8708c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://packagist.phpcomposer.com/files/crazyfd/yii2-qiniu/2b6f7a069d395358ec8d78f187df672106b8708c.zip",
+                "reference": "2b6f7a069d395358ec8d78f187df672106b8708c",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "crazyfd\\qiniu\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "crazyfd",
+                    "email": "crazyfd@qq.com"
+                }
+            ],
+            "description": "yii2上传到七牛云存储",
+            "keywords": [
+                "qiniu",
+                "upload",
+                "yii"
+            ],
+            "time": "2015-01-27 01:11:25"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -2877,7 +2918,8 @@
     "stability-flags": {
         "funson86/yii2-gii": 20,
         "warrence/yii2-kartikgii": 20,
-        "pjkui/kindeditor": 20
+        "pjkui/kindeditor": 20,
+        "crazyfd/yii2-qiniu": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

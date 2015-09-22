@@ -2983,5 +2983,48 @@
             }
         ],
         "description": "desc"
+    },
+    {
+        "name": "crazyfd/yii2-qiniu",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/crazyfd/yii2-qiniu.git",
+            "reference": "2b6f7a069d395358ec8d78f187df672106b8708c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "http://packagist.phpcomposer.com/files/crazyfd/yii2-qiniu/2b6f7a069d395358ec8d78f187df672106b8708c.zip",
+            "reference": "2b6f7a069d395358ec8d78f187df672106b8708c",
+            "shasum": ""
+        },
+        "require": {
+            "yiisoft/yii2": "*"
+        },
+        "time": "2015-01-27 01:11:25",
+        "type": "yii2-extension",
+        "installation-source": "source",
+        "autoload": {
+            "psr-4": {
+                "crazyfd\\qiniu\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "crazyfd",
+                "email": "crazyfd@qq.com"
+            }
+        ],
+        "description": "yii2上传到七牛云存储",
+        "keywords": [
+            "qiniu",
+            "upload",
+            "yii"
+        ]
     }
 ]
