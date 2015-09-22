@@ -9,6 +9,39 @@ echo Menu::widget(
             'class' => 'sidebar-menu'
         ],
         'items' => [
+            /* 面试管理 */
+                        [
+                'label' => Yii::t('app', 'InterviewManagement'),
+                'url' => ['#'],
+                'icon' => 'fa-dashboard',
+                'options' => [
+                    'class' => 'treeview',
+                ],
+                'visible' => Yii::$app->user->can('readPost'),
+                'items' => [
+                    [
+                        'label' => Yii::t('app', 'Interview'),
+                        'url' => ['/interview/index'],
+                        'icon' => 'fa fa-user',
+                    ],
+//                    [
+//                        'label' => Yii::t('app', 'Agreement'),
+//                        'url' => ['/signed/index'],
+//                        'icon' => 'fa fa-lock',
+//                    ],
+                ],
+            ],
+             /* 服务管理 */
+                        [
+                'label' => Yii::t('app', 'CategoryManagement'),
+                'url' => ['category/index'],
+                'icon' => 'fa-dashboard',
+                'options' => [
+//                     'class' => 'treeview',
+                ],
+                'active'=>isset($ctrl->is_category_manage),
+                'visible' => Yii::$app->user->can('readPost'),
+            ],
             [
                 'label' => '门店管理',
                 'url' => ['#'],
@@ -16,7 +49,6 @@ echo Menu::widget(
                 'options' => [
                     'class' => 'treeview active',
                 ],
-//                 'visible' => Yii::$app->user->can(''),
                 'items' => [
                     [
                         'label' => '查看所有门店',
@@ -43,19 +75,16 @@ echo Menu::widget(
                         'label' => '查看所有阿姨',
                         'url' => ['/worker'],
                         'icon' => 'fa fa-angle-right',
-                        'visible' => Yii::$app->user->can('WorkerIndex'),
                     ],
                     [
                         'label' => '录入新阿姨',
                         'url' => ['/worker/create'],
                         'icon' => 'fa fa-angle-right',
-                        'visible' => Yii::$app->user->can('WorkerCreate'),
                     ],
                     [
                         'label' => '阿姨黑名单',
                         'url' => ['/worker-block'],
                         'icon' => 'fa fa-angle-right',
-                        'visible' => Yii::$app->user->can('WorkerBlockIndex'),
                     ],
                 ],
             ],
@@ -71,7 +100,6 @@ echo Menu::widget(
                         'label' => '查看所有顾客',
                         'url' => ['/customer'],
                         'icon' => 'fa fa-angle-right',
-                        'visible' => Yii::$app->user->can('CustomerIndex'),
                     ],
                     [
                         'label' => '管理黑名单顾客',
@@ -92,7 +120,6 @@ echo Menu::widget(
                         'label' => '查看所有订单',
                         'url' => ['/order/order'],
                         'icon' => 'fa fa-angle-right',
-                        'visible' => Yii::$app->user->can('OrderOrder'),
                     ],
                     [
                         'label' => '创建新订单',
@@ -118,11 +145,79 @@ echo Menu::widget(
                         'label' => '对账管理',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
+							'options' => [
+							'class' => 'treeview active',
+							],
+							'items' => [
+							[
+							'label' => '对账',
+							'url' => ['/finance-pop-order/'],
+							'icon' => 'fa fa-angle-right',
+							],
+							[
+							'label' => '对账逻辑',
+							'url' => ['/finance-pop-order/'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '对账统计',
+							'url' => ['/finance-pop-order/'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '对账详情',
+							'url' => ['/finance-pop-order/'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '对账单配置',
+							'url' => ['/finance-pop-order/'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '增加账单配置',
+							'url' => ['/finance-pop-order/'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '坏账列表',
+							'url' => ['/finance-pop-order/'],
+							'icon' => 'fa fa-angle-right',
+							]
+		
+					]
                     ],
                     [
                         'label' => '退款管理',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
+							'options' => [
+							'class' => 'treeview active',
+							],
+							'items' => [
+							[
+							'label' => '确认退款审核',
+							'url' => ['/finance-refund/'],
+							'icon' => 'fa fa-angle-right',
+							],
+							[
+							'label' => '退款确认退款审批',
+							'url' => ['/finance-refund/'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '会计执行银行退款',
+							'url' => ['/finance-refund/'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '确认银行退款',
+							'url' => ['/finance-refund/'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '退款详情',
+							'url' => ['/finance-refund/'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '退款统计',
+							'url' => ['/finance-refund/'],
+							'icon' => 'fa fa-angle-right',
+							]
+							]
+							
                     ],
                     [
                         'label' => '赔偿管理',
@@ -239,25 +334,15 @@ echo Menu::widget(
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                     ],
+//                    [
+//                        'label' => '服务管理',
+//                        'url' => ['#'],
+//                        'icon' => 'fa fa-angle-right',
+//                    ],
                     [
-                        'label' => '服务管理',
-                        'url' => ['#'],
+                        'label' => '服务品类管理',
+                        'url' => ['/operation-category'],
                         'icon' => 'fa fa-angle-right',
-                        'options' => [
-                            'class' => 'treeview active',
-                        ],
-                        'items' => [
-                            [
-                                'label' => '服务品类管理',
-                                'url' => ['/operation-category'],
-                                'icon' => 'fa fa-angle-right',
-                            ],
-                            [
-                                'label' => '价格策略管理',
-                                'url' => ['/operation-price-strategy'],
-                                'icon' => 'fa fa-angle-right',
-                            ],
-                        ],
                     ],
                     [
                         'label' => '启动页管理',

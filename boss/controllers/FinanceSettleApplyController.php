@@ -34,7 +34,32 @@ class FinanceSettleApplyController extends Controller
     {
         $searchModel = new FinanceSettleApplySearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
+    
+    /**
+     * Lists all FinanceSettleApply models.
+     * @return mixed
+     */
+    public function actionReview()
+    {
+        
+        $searchModel = new FinanceSettleApplySearch;
+        $requestModel = Yii::$app->request->getQueryParams();
+        $financeSettleApplySearch = $requestModel["FinanceSettleApplySearch"];
+        //结算id字符串，例如："234,345"
+        $ids = $financeSettleApplySearch["ids"];
+        $financeSettleApplyStatus = $financeSettleApplySearch["finance_settle_apply_status"];
+        $idArr = explode(',', $ids);
+        foreach($idArr as $id){
+            $model = $this->findModel($id);
+            $model->finance_settle_apply_status = $financeSettleApplyStatus;
+            $model->save();
+        }
+        $dataProvider = $searchModel->search();
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,

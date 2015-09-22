@@ -6,7 +6,7 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', Yii::t('app','Operation Boot Page'));
+$this->title = Yii::t('app', Yii::t('operation','Operation Boot Page'));
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-boot-page-index">

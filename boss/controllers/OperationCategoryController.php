@@ -3,8 +3,8 @@
 namespace boss\controllers;
 
 use Yii;
-use common\models\OperationCategory;
-use boss\models\OperationCategory as OperationCategorySearch;
+use boss\models\Operation\OperationCategory;
+use boss\models\Operation\OperationCategorySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -89,9 +89,9 @@ class OperationCategoryController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->updated_ad = time();
+            $model->updated_at = time();
             $model->save();
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         } else {
             return $this->render('update', [
                 'model' => $model,

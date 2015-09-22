@@ -3,9 +3,9 @@
 namespace boss\controllers;
 
 use Yii;
-use boss\models\OperationCategoryType;
-use boss\models\OperationCategory;
-use boss\models\OperationPriceStrategy;
+use boss\models\Operation\OperationCategoryType;
+use boss\models\Operation\OperationCategory;
+use boss\models\Operation\OperationPriceStrategy;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -64,7 +64,9 @@ class OperationCategoryTypeController extends Controller
     public function actionCreate($category_id)
     {
         $category = OperationCategory::find()->where(['id' => $category_id])->one();
-        $priceStrategies = OperationPriceStrategy::find()->all();
+        
+        $priceStrategies = OperationPriceStrategy::getAllStrategy();
+        
         $model = new OperationCategoryType();
         
         if ($model->load(Yii::$app->request->post()) && $model->save()) {

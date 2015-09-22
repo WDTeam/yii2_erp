@@ -44,7 +44,7 @@ class WorkerExt extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['worker_age', 'worker_sex', 'worker_birth', 'worker_is_health', 'worker_is_insurance', 'worker_live_province', 'worker_live_city', 'worker_live_area', 'created_ad', 'updated_ad'], 'integer'],
+            [['worker_age', 'worker_sex', 'worker_is_health', 'worker_is_insurance', 'worker_live_province', 'worker_live_city', 'worker_live_area', 'created_ad', 'updated_ad'], 'integer'],
             [['worker_live_lng', 'worker_live_lat'], 'number'],
             [['worker_edu', 'worker_bank_card'], 'string', 'max' => 30],
             [['worker_hometown', 'worker_source', 'worker_live_street'], 'string', 'max' => 50],
@@ -65,8 +65,8 @@ class WorkerExt extends \yii\db\ActiveRecord
             'worker_birth' => Yii::t('app', '阿姨生日'),
             'worker_edu' => Yii::t('app', '阿姨教育程度'),
             'worker_hometown' => Yii::t('app', '阿姨籍贯'),
-            'worker_is_health' => Yii::t('app', '阿姨是否有健康证 0没有，1有'),
-            'worker_is_insurance' => Yii::t('app', '阿姨是否上保险 0否，1是'),
+            'worker_is_health' => Yii::t('app', '阿姨是否有健康证'),
+            'worker_is_insurance' => Yii::t('app', '阿姨是否上保险'),
             'worker_source' => Yii::t('app', '阿姨来源'),
             'worker_bank_name' => Yii::t('app', '开户银行'),
             'worker_bank_from' => Yii::t('app', '银行卡开户网点'),

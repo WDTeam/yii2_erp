@@ -12,6 +12,14 @@ use common\models\FinanceSettleApply;
  */
 class FinanceSettleApplySearch extends FinanceSettleApply
 {
+    const FINANCE_SETTLE_APPLY_STATUS_SUBMIT = "0";//申请中，结算初始化状态
+    
+    const FINANCE_SETTLE_APPLY_STATUS_PASSED = "1";//审核通过
+    
+    const FINANCE_SETTLE_APPLY_STATUS_FAILED = "2";//审核不通过
+    
+    public  $ids;
+    
     public function rules()
     {
         return [
@@ -34,7 +42,6 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
         if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }
