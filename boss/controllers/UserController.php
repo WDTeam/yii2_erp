@@ -3,8 +3,8 @@
 namespace boss\controllers;
 
 use Yii;
-use boss\models\AdminUser;
-use boss\models\AdminUserSearch;
+use boss\models\SystemUser;
+use boss\models\SystemUserSearch;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -42,10 +42,10 @@ class UserController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new AdminUserSearch();
+        $searchModel = new SystemUserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $arrayStatus = AdminUser::getArrayStatus();
-        $arrayRole = AdminUser::getArrayRole();
+        $arrayStatus = SystemUser::getArrayStatus();
+        $arrayRole = SystemUser::getArrayRole();
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -74,7 +74,7 @@ class UserController extends Controller
      */
     public function actionCreate()
     {
-        $model = new AdminUser(['scenario' => 'admin-create']);
+        $model = new SystemUser(['scenario' => 'admin-create']);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->authManager->assign(Yii::$app->authManager->getRole($model->role), $model->id);
@@ -130,7 +130,7 @@ class UserController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = AdminUser::findOne($id)) !== null) {
+        if (($model = SystemUser::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

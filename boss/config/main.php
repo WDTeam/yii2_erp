@@ -12,10 +12,10 @@ return [
     'controllerNamespace' => 'boss\controllers',
     'bootstrap' => ['log'],
     'modules' => [
-        'blog' => [
-            'class' => 'funson86\blog\Module',
-            'controllerNamespace' => 'funson86\blog\controllers\boss'
-        ],
+//        'blog' => [
+//            'class' => 'funson86\blog\Module',
+//            'controllerNamespace' => 'funson86\blog\controllers\boss'
+//        ],
         'gridview' => [
             'class' => 'kartik\grid\Module',
         ],
@@ -27,7 +27,7 @@ return [
     ],
     'components' => [
         'user' => [
-            'identityClass' => 'common\models\AdminUser',
+            'identityClass' => 'common\models\SystemUser',
             'enableAutoLogin' => true,
         ],
         'authManager' => [

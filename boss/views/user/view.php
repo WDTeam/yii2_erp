@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use boss\models\AdminUser;
+use boss\models\SystemUser;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\User */

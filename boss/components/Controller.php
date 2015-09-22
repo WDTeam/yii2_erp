@@ -1,34 +1,24 @@
 <?php
 namespace boss\components;
 
-class Controller extends \yii\rest\Controller
+use yii;
+use yii\web\ForbiddenHttpException;
+class Controller extends \yii\web\Controller
 {
-    public $appVersion = 1.0;
-    public $appKey = 0;
-    public function behaviors()
-    {
-        $behaviors = parent::behaviors();
-        //just provide the json format
-        unset($behaviors['contentNegotiator']);
-        return $behaviors;
-    }
-
+    /**
+     * 判断有没有授权项目，并已授权，如果有则运行权限管理
+     * @see \yii\web\Controller::beforeAction()
+     */
     public function beforeAction($action)
     {
-//        return true;
-        $headers = \Yii::$app->request->headers;
-        $this->appVersion =  $headers->get('version');
-        $this->appKey =  $headers->get('appkey');
-        return parent::beforeAction($action);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function afterAction($action, $result)
-    {
-        $result = parent::afterAction($action, $result);
-        return $result;
+        $name = ucfirst($this->id).str_replace('action', '', $action->actionMethod);
+        $auth = Yii::$app->authManager;
+        $pre = $auth->getPermission($name);
+        if(empty($pre) || \Yii::$app->user->can($name)){
+            return true;
+        }else{
+            throw new ForbiddenHttpException("没有访问权限！");
+        }
     }
 
 }

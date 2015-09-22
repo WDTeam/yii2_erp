@@ -1,8 +1,22 @@
 <?php
 return [
-    'adminEmail' => 'admin@example.com',
-    'supportEmail' => 'support@example.com',
+    'adminEmail' => 'admin@1jiajie.com',
+    'supportEmail' => 'support@1jiajie.com',
     'user.passwordResetTokenExpire' => 3600,
+    /**
+     * 配置财务数字显示
+     *  add by zhanghang 2015-09-22
+     */
+    'maskMoneyOptions' => [
+        'prefix' => '¥ ', // ¥ 在HTML，“¥”的命名实体是“&yen;”，x字符代码是“&#165;”和“&#xA5;”;
+        'suffix' => '',
+        'affixesStay' => true,
+        'thousands' => ',',
+        'decimal' => '.',
+        'precision' => 2, 
+        'allowZero' => false,
+        'allowNegative' => false,
+    ],
     'alipay_web_config'=>[
         'partner' => '2088801136967007',    //合作身份者id，以2088开头的16位纯数字
         'key' => 'ptd4lbjltmwpx64g80qhil5eckr98opf',    //安全检验码，以数字和字母组成的32位字符
@@ -11,8 +25,8 @@ return [
         'input_charset' => strtolower('utf-8'), //字符编码格式 目前支持 gbk 或 utf-8
         'cacert' => getcwd().'\\cacert.pem',    //ca证书路径地址，用于curl中ssl校验 //请保证cacert.pem文件在当前文件夹目录中
         'transport' => 'http',  //访问模式,根据自己的服务器是否支持ssl访问，若支持请选择https；若不支持请选择http
-        'notify_url' => 'http://'.$_SERVER['HTTP_HOST'].'/general-pay/alipay_web_notify',
-        'return_url' => 'http://'.$_SERVER['HTTP_HOST'].'/general-pay/alipay_web_return',
+        'notify_url' => 'http://'.$_SERVER['HTTP_HOST'].'/general-pay/alipay-web-notify',
+        'return_url' => 'http://'.$_SERVER['HTTP_HOST'].'/general-pay/alipay-web-return',
     ],
     'alipay_app_config'=>[
         'partner' => '2088801136967007',   //合作身份者id，以2088开头的16位纯数字
@@ -24,8 +38,8 @@ return [
         'input_charset' => strtolower('utf-8'),   //字符编码格式 目前支持 gbk 或 utf-8
         'cacert' => 'alipay_app/cacert.pem',    //ca证书路径地址，用于curl中ssl校验 //请保证cacert.pem文件在当前文件夹目录中
         'transport' => 'http',    //访问模式,根据自己的服务器是否支持ssl访问，若支持请选择https；若不支持请选择http
-        'notify_url' => 'http://'.$_SERVER['HTTP_HOST'].'/general-pay/alipay_app_notify',
-        'return_url' => 'http://'.$_SERVER['HTTP_HOST'].'/general-pay/alipay_app_return',
+        'notify_url' => 'http://'.$_SERVER['HTTP_HOST'].'/general-pay/alipay-app-notify',
+        'return_url' => 'http://'.$_SERVER['HTTP_HOST'].'/general-pay/alipay-app-return',
     ],
     'up_app_config'=>[
         'SDK_CVN2_ENC' => 0,   // cvn2加密 1：加密 0:不加密
@@ -48,7 +62,7 @@ return [
         'SDK_LOG_FILE_PATH' => 'd:/logs/',  //日志 目录
         'SDK_LOG_LEVEL' => 'INFO',  //日志级别
         'notify_url' => 'http://'.$_SERVER['HTTP_HOST'].'/general-pay/alipay_app_notify',
-        'return_url' => 'http://'.$_SERVER['HTTP_HOST'].'/general-pay/alipay_app_return',
+        'return_url' => 'http://'.$_SERVER['HTTP_HOST'].'/general-pay/alipay-app-return',
     ],
     'wx_app_config'=>[
         'partner' => '2088801136967007',   //合作身份者id，以2088开头的16位纯数字
@@ -60,8 +74,7 @@ return [
         'input_charset' => strtolower('utf-8'),   //字符编码格式 目前支持 gbk 或 utf-8
         'cacert' => 'alipay_app/cacert.pem',    //ca证书路径地址，用于curl中ssl校验 //请保证cacert.pem文件在当前文件夹目录中
         'transport' => 'http',    //访问模式,根据自己的服务器是否支持ssl访问，若支持请选择https；若不支持请选择http
-        'notify_url' => 'http://'.$_SERVER['HTTP_HOST'].'/general-pay/alipay_app_notify',
-        'return_url' => 'http://'.$_SERVER['HTTP_HOST'].'/general-pay/alipay_app_return',
+        'notify_url' => 'http://'.$_SERVER['HTTP_HOST'].'/general-pay/wx-app-notify',
     ],'wx_h5_config'=>[
         'appid' => 'wx7558e67c2d61eb8f',
         'mchid' => '10037310',
@@ -72,7 +85,7 @@ return [
         'CURL_PROXY_HOST' => '0.0.0.0',
         'CURL_PROXY_PORT' => 0,
         'REPORT_LEVENL' => 1,
-        'notify_url' => 'http://'.$_SERVER['HTTP_HOST'].'/general-pay/wx_h5_notify',
+        'notify_url' => 'http://'.$_SERVER['HTTP_HOST'].'/general-pay/wx-h5-notify',
     ],
 
 

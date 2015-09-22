@@ -19,7 +19,7 @@
 　　-- common （通用模块，自动生成数据库CRUD类，封装常用工具类）<br/>
 　　-- core （核心模块，继承并扩展common）<br/>
 　　-- api （接口，调用并扩展core，也可以直接扩展common）<br/>
-　　-- boss （BOSS后台系统）<br/>
+　　-- boss （BOSS后台系统，偏重于展现层的逻辑放在BOSS中）<br/>
 　　-- console （控制台框架模板）<br/>
 　　-- datasql （数据库脚本）<br/>
 　　-- environments （环境配置）<br/>

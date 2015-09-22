@@ -92,7 +92,7 @@ class LoginForm extends Model
     /**
      * Finds user by [[mobile]]
      *
-     * @return AdminUser|null
+     * @return SystemUser|null
      */
     public function getUser()
     {
