@@ -21,11 +21,29 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'worder_id') ?>
 
-    <?= $form->field($model, 'settle_apply_money') ?>
+    <?= $form->field($model, 'worder_tel') ?>
 
-    <?= $form->field($model, 'settle_apply_status') ?>
+    <?= $form->field($model, 'worker_type_id') ?>
 
-    <?= $form->field($model, 'isdel') ?>
+    <?= $form->field($model, 'worker_type_name') ?>
+
+    <?php // echo $form->field($model, 'finance_settle_apply_money') ?>
+
+    <?php // echo $form->field($model, 'finance_settle_apply_man_hour') ?>
+
+    <?php // echo $form->field($model, 'finance_settle_apply_order_money') ?>
+
+    <?php // echo $form->field($model, 'finance_settle_apply_order_cash_money') ?>
+
+    <?php // echo $form->field($model, 'finance_settle_apply_non_order_money') ?>
+
+    <?php // echo $form->field($model, 'finance_settle_apply_status') ?>
+
+    <?php // echo $form->field($model, 'finance_settle_apply_cycle') ?>
+
+    <?php // echo $form->field($model, 'finance_settle_apply_reviewer') ?>
+
+    <?php // echo $form->field($model, 'isdel') ?>
 
     <?php // echo $form->field($model, 'updated_at') ?>
 
