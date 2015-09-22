@@ -33,8 +33,8 @@ class AuthController extends Controller
     public function actionIndex()
     {
         $searchModel = new AuthSearch();
+        $searchModel->type = Auth::TYPE_PERMISSION;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
