@@ -46,9 +46,6 @@ class FinanceSettleApplyController extends Controller
      */
     public function actionReview()
     {
-        var_dump($_GET);
-        var_dump(Yii::$app->request->get());
-        
         $searchModel = new FinanceSettleApplySearch;
         $requestModel = Yii::$app->request->getQueryParams();
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
