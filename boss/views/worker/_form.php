@@ -59,7 +59,7 @@ $cityDesc = '门店';
     echo $form->field($worker, 'worker_work_area')->textInput(['placeholder' => 'Enter 阿姨工作区县...']);
     echo $form->field($worker, 'worker_work_street')->textInput(['placeholder' => 'Enter 阿姨常用工作地址...', 'maxlength' => 50]);
     echo $form->field($worker_ext, 'worker_sex')->radioList(['0' => '女', '1' => '男'], ['inline' => true]);
-    echo $form->field($worker_ext, 'worker_age')->textInput(['placeholder' => 'Enter 阿姨工作区县...']);
+    echo $form->field($worker_ext, 'worker_age')->textInput(['placeholder' => 'Enter 阿姨年龄...']);
     //echo '<label class="control-label">'.$model->attributeLabels()['operation_boot_page_online_time'].'</label>';
 
     echo $form->field($worker_ext, 'worker_birth')->widget(DatePicker::classname(),[
@@ -77,7 +77,7 @@ $cityDesc = '门店';
     echo $form->field($worker_ext, 'worker_is_health')->radioList(['1' => '是', '0' => '否'], ['inline' => true]);
     echo $form->field($worker_ext, 'worker_is_insurance')->radioList(['1' => '是', '0' => '否'], ['inline' => true]);
     echo $form->field($worker_ext, 'worker_source')->textInput(['placeholder' => 'Enter 阿姨来源...']);
-    echo $form->field($worker, 'worker_type')->radioList(['0' => '自有', '1' => '非自有'], ['inline' => true]);
+    echo $form->field($worker, 'worker_type')->radioList(['1' => '自有', '2' => '非自有'], ['inline' => true]);
 
     echo $form->field($worker_ext, 'worker_bank_name')->textInput(['placeholder' => 'Enter 开户银行...']);
     echo $form->field($worker_ext, 'worker_bank_from')->textInput(['placeholder' => 'Enter 银行卡开户网点...']);

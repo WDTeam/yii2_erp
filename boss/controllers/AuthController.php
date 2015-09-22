@@ -147,18 +147,18 @@ class AuthController extends Controller
     /**
      * 自动生成权限
      */
-    public function actionAutoCreate()
-    {
-        $auth = Yii::$app->authManager;
-        $permissions = $this->getAllPermissions();
-        foreach ($permissions as $controller_id=>$permission){
-            $is_has = $auth->getPermission($permission);
-            if(!$is_has){
-                $createPost = $auth->createPermission($permission);
-                $createPost->description = $permission;
-                $auth->add($createPost);
-            }
-        }
-        //         $auth->assign($createPost, 1);
-    }
+//     public function actionAutoCreate()
+//     {
+//         $auth = Yii::$app->authManager;
+//         $permissions = $this->getAllPermissions();
+//         foreach ($permissions as $controller_id=>$permission){
+//             $is_has = $auth->getPermission($permission);
+//             if(!$is_has){
+//                 $createPost = $auth->createPermission($permission);
+//                 $createPost->description = $permission;
+//                 $auth->add($createPost);
+//             }
+//         }
+//         //         $auth->assign($createPost, 1);
+//     }
 }

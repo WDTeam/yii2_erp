@@ -10,13 +10,10 @@ use yii\widgets\Pjax;
  * @var boss\models\WorkerSearch $searchModel
  */
 
-$this->title = Yii::t('app', 'Workers');
+$this->title = Yii::t('app', '阿姨管理');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="worker-index">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
@@ -74,15 +71,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> ' . Html::encode($this->title) . ' </h3>',
             'type' => 'info',
             'before' =>
-                Html::a('<i class="glyphicon" ></i>待试验', ['index?status=1'], ['class' => 'btn btn-success ', 'style' => 'margin-right:10px']) .
-                Html::a('<i class="glyphicon" ></i>未培训', ['index?status=2'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
-                Html::a('<i class="glyphicon" ></i>试工', ['index?status=3'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
-                Html::a('<i class="glyphicon" ></i>时段', ['index?rule=1'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
-                Html::a('<i class="glyphicon" ></i>高峰', ['index?rule=2'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
-                Html::a('<i class="glyphicon" ></i>全职', ['index?rule=3'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
-                Html::a('<i class="glyphicon" ></i>请假', ['index?rule=4'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
-                Html::a('<i class="glyphicon" ></i>封号', ['index?type=1'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
-                Html::a('<i class="glyphicon" ></i>黑名单', ['index?is_blocklist=1'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']),
+                Html::a('<i class="glyphicon" ></i>待试验', ['index?WorkerSearch[worker_auth_status]=0'], ['class' => 'btn btn-success ', 'style' => 'margin-right:10px']) .
+                Html::a('<i class="glyphicon" ></i>未培训', ['index?WorkerSearch[worker_ontrial_status]=0'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
+                Html::a('<i class="glyphicon" ></i>试工', ['index?WorkerSearch[worker_onboard_status]=0'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
+                Html::a('<i class="glyphicon" ></i>时段', ['index?WorkerSearch[worker_rule_id]=1'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
+                Html::a('<i class="glyphicon" ></i>高峰', ['index?WorkerSearch[worker_rule_id]=2'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
+                Html::a('<i class="glyphicon" ></i>全职', ['index?WorkerSearch[worker_rule_id]=3'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
+                Html::a('<i class="glyphicon" ></i>请假', ['index?WorkerSearch[worker_rule_id]=4'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
+                Html::a('<i class="glyphicon" ></i>封号', ['index?WorkerSearch[worker_is_block]=1'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
+                Html::a('<i class="glyphicon" ></i>黑名单', ['index?WorkerSearch[worker_is_blacklist]=1'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']),
             'after' => Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List',
                 ['index'],
                 ['class' => 'btn btn-info']),

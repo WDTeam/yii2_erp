@@ -11,7 +11,7 @@ class Controller extends \yii\web\Controller
      */
     public function beforeAction($action)
     {
-        $name = ucfirst($this->id).str_replace('action', '', $action->actionMethod);
+        $name = $this->id.'/'.$action->id;
         $auth = Yii::$app->authManager;
         $pre = $auth->getPermission($name);
         if(empty($pre) || \Yii::$app->user->can($name)){

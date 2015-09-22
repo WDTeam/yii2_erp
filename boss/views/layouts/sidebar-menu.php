@@ -16,7 +16,7 @@ echo Menu::widget(
                 'options' => [
                     'class' => 'treeview active',
                 ],
-//                 'visible' => Yii::$app->user->can(''),
+                'visible' => Yii::$app->user->can('shop'),
                 'items' => [
                     [
                         'label' => '查看所有门店',
@@ -38,24 +38,25 @@ echo Menu::widget(
                 'options' => [
                     'class' => 'treeview active',
                 ],
+                'visible' => Yii::$app->user->can('worker'),
                 'items' => [
                     [
                         'label' => '查看所有阿姨',
                         'url' => ['/worker'],
                         'icon' => 'fa fa-angle-right',
-                        'visible' => Yii::$app->user->can('WorkerIndex'),
+//                         'visible' => Yii::$app->user->can('worker/index'),
                     ],
                     [
                         'label' => '录入新阿姨',
                         'url' => ['/worker/create'],
                         'icon' => 'fa fa-angle-right',
-                        'visible' => Yii::$app->user->can('WorkerCreate'),
+//                         'visible' => Yii::$app->user->can('worker/create'),
                     ],
                     [
                         'label' => '阿姨黑名单',
                         'url' => ['/worker-block'],
                         'icon' => 'fa fa-angle-right',
-                        'visible' => Yii::$app->user->can('WorkerBlockIndex'),
+//                         'visible' => Yii::$app->user->can('worker/block-index'),
                     ],
                 ],
             ],
@@ -66,12 +67,13 @@ echo Menu::widget(
                 'options' => [
                     'class' => 'treeview active',
                 ],
+                'visible' => Yii::$app->user->can('customer'),
                 'items' => [
                     [
                         'label' => '查看所有顾客',
                         'url' => ['/customer'],
                         'icon' => 'fa fa-angle-right',
-                        'visible' => Yii::$app->user->can('CustomerIndex'),
+//                         'visible' => Yii::$app->user->can('CustomerIndex'),
                     ],
                     [
                         'label' => '管理黑名单顾客',
@@ -87,12 +89,13 @@ echo Menu::widget(
                 'options' => [
                     'class' => 'treeview active',
                 ],
+                'visible' => Yii::$app->user->can('order'),
                 'items' => [
                     [
                         'label' => '查看所有订单',
                         'url' => ['/order/order'],
                         'icon' => 'fa fa-angle-right',
-                        'visible' => Yii::$app->user->can('OrderOrder'),
+//                         'visible' => Yii::$app->user->can('OrderOrder'),
                     ],
                     [
                         'label' => '创建新订单',
@@ -113,6 +116,7 @@ echo Menu::widget(
                	'options' => [
                     'class' => 'treeview active',
                 ],
+                'visible' => Yii::$app->user->can('finance'),
                 'items' => [
                     [
                         'label' => '对账管理',
@@ -228,6 +232,7 @@ echo Menu::widget(
                 'options' => [
                     'class' => 'treeview active',
                 ],
+                'visible' => Yii::$app->user->can('operation'),
                 'items' => [
                     [
                         'label' => '用户运营',
@@ -268,6 +273,7 @@ echo Menu::widget(
                 'options' => [
                     'class' => 'treeview active',
                 ],
+                'visible' => Yii::$app->user->can('area'),
                 'items' => [
                     [
                         'label' => '城市管理',
@@ -353,6 +359,7 @@ echo Menu::widget(
                 'options' => [
                     'class' => 'treeview active',
                 ],
+                'visible' => Yii::$app->user->can('pop'),
                 'items' => [
                     [
                         'label' => '查看所有渠道',
@@ -373,6 +380,7 @@ echo Menu::widget(
                 'options' => [
                     'class' => 'treeview active',
                 ],
+                'visible' => Yii::$app->user->can('housekeep'),
                 'items' => [
                     [
                         'label' => '查看所有家政公司',
