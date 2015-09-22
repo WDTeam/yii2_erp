@@ -1,8 +1,22 @@
 <?php
 return [
-    'adminEmail' => 'admin@example.com',
-    'supportEmail' => 'support@example.com',
+    'adminEmail' => 'admin@1jiajie.com',
+    'supportEmail' => 'support@1jiajie.com',
     'user.passwordResetTokenExpire' => 3600,
+    /**
+     * 配置财务数字显示
+     *  add by zhanghang 2015-09-22
+     */
+    'maskMoneyOptions' => [
+        'prefix' => '¥ ', // ¥ 在HTML，“¥”的命名实体是“&yen;”，x字符代码是“&#165;”和“&#xA5;”;
+        'suffix' => '',
+        'affixesStay' => true,
+        'thousands' => ',',
+        'decimal' => '.',
+        'precision' => 2, 
+        'allowZero' => false,
+        'allowNegative' => false,
+    ],
     'alipay_web_config'=>[
         'partner' => '2088801136967007',    //合作身份者id，以2088开头的16位纯数字
         'key' => 'ptd4lbjltmwpx64g80qhil5eckr98opf',    //安全检验码，以数字和字母组成的32位字符
