@@ -6,9 +6,8 @@ use boss\models\SystemUser;
 use yii\rbac\Item;
 use boss\models\AuthItem;
 use boss\models\search\AuthItemSearch;
-use yii\web\Controller;
-use boss\components\BaseController;
-class RbacController extends BaseController
+use boss\components\Controller;
+class RbacController extends Controller
 {
     public function actionCreate()
     {
@@ -83,7 +82,7 @@ class RbacController extends BaseController
                         $classname = Yii::$app->getModule($module)->controllerNamespace."\\".$controllername;
                     }
                     $cont = new $classname($controller_id,Yii::$app->getModule($module));
-                    if($cont instanceof BaseController){
+                    if($cont instanceof Controller){
                         $controllers[$module][] = $controllername;
                     }
                 }

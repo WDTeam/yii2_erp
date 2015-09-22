@@ -5,7 +5,7 @@ namespace boss\controllers;
 use Yii;
 use boss\models\Auth;
 use boss\models\search\AuthSearch;
-use yii\web\Controller;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 

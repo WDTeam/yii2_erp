@@ -14,9 +14,8 @@ use yii\web\HttpException;
 
 use boss\models\Auth;
 use boss\models\search\AuthSearch;
-use yii\web\Controller;
 use yii\filters\VerbFilter;
-use boss\components\BaseController;
+use boss\components\Controller;
 use yii\helpers\ArrayHelper;
 
 class RoleController extends Controller
