@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 
 /**
  * @var yii\web\View $this
- * @var boss\models\CustomerSearch $model
+ * @var boss\models\Customer $model
  * @var yii\widgets\ActiveForm $form
  */
 ?>
@@ -35,9 +35,13 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'customer_live_address_detail') ?>
 
+    <?php // echo $form->field($model, 'customer_balance') ?>
+
     <?php // echo $form->field($model, 'customer_score') ?>
 
     <?php // echo $form->field($model, 'customer_level') ?>
+
+    <?php // echo $form->field($model, 'customer_complaint_times') ?>
 
     <?php // echo $form->field($model, 'customer_src') ?>
 
@@ -49,11 +53,15 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'customer_login_time') ?>
 
+    <?php // echo $form->field($model, 'customer_is_vip') ?>
+
     <?php // echo $form->field($model, 'created_at') ?>
 
     <?php // echo $form->field($model, 'updated_at') ?>
 
     <?php // echo $form->field($model, 'is_del') ?>
+
+    <?php // echo $form->field($model, 'customer_del_reason') ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('boss', 'Search'), ['class' => 'btn btn-primary']) ?>

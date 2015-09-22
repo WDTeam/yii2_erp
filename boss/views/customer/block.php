@@ -4,6 +4,14 @@
 <link href="../web/adminlte/css/ionicons.min.css" rel="stylesheet" type="text/css" />
 <link href="../web/adminlte/css/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
 <link href="../web/adminlte/css/AdminLTE.css" rel="stylesheet" type="text/css" />
+<link href="../../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="../../css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+<link href="../../css/ionicons.min.css" rel="stylesheet" type="text/css" />
+<link href="../../css/AdminLTE.css" rel="stylesheet" type="text/css" />
+<script src="../../js/jquery.min.js"></script>
+<script src="../../js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../../js/AdminLTE/app.js" type="text/javascript"></script>
+<script src="../../js/AdminLTE/demo.js" type="text/javascript"></script>
 </head>
 
 <?php 
@@ -17,10 +25,8 @@ echo \yii\widgets\LinkPager::widget([
 <div>
 <section class="content">
     <div class="box-search">
-        城市：<select name="city"/></select>
+        城市：<input type="text" name="city"/>
         加入时间：<?= \yii\jui\DatePicker::widget(['name' => 'date',]) ?>至<?= \yii\jui\DatePicker::widget(['name' => 'date',]) ?>
-       身份：<input type="text" name="customer_is_vip"/>
-       <input type="text" name="merge"/>
         <input type="submit" value="查询"/>
         <!-- <button class="btn btn-info">查询</button> -->
     </div>
@@ -29,7 +35,7 @@ echo \yii\widgets\LinkPager::widget([
 <div class="col-xs-12">
 <div class="box">
     <div class="box-header">
-        <h3 class="box-title">顾客列表</h3>
+        <h3 class="box-title">黑名单列表</h3>
     </div>
     <div class="box-body table-responsive">
         <table id="example1" class="table table-bordered table-striped">
@@ -60,15 +66,15 @@ echo \yii\widgets\LinkPager::widget([
                         <td><?= $model["customer_name"]?></td>
                         <td><?= $model["customer_phone"]?></td>
                         <td><?= $model["customer_live_address_detail"]?></td>
-                        <td><?= $model["customer_is_vip"]?></td>
-                        <td><?= $model["platform_id"]?></td>
-                        <td><?= $model["channal_id"]?></td>
+                        <td><?= $model["customer_del_reason"]?></td>
+                        <td><?= $model["created_at"]?></td>
                         <td><?= $model["order_num"]?></td>
                         <td><?= $model["customer_balance"]?></td>
-                        <td><?= $model["customer_complaint_times"]?></td>
                         <td><?= $model["customer_level"]?></td>
-                        <td><?= $model["created_at"]?></td>
-                        <td><a href="/customer/del">加入黑名单</a></td>
+                        <td><?= $model["customer_complaint_times"]?></td>
+                        <td><?= $model["customer_is_vip"]?></td>
+                        <td><?= $model["is_del"]?></td>
+                        <td><a href="/customer/cancal_del">取消</></td>
                     </tr>
                 <?php 
                 }
