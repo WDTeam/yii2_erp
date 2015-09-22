@@ -110,19 +110,89 @@ echo Menu::widget(
                 'label' => '财务管理',
                 'url' => ['#'],
                 'icon' => 'fa fa-credit-card',
-                'options' => [
+               	'options' => [
                     'class' => 'treeview active',
                 ],
                 'items' => [
                     [
                         'label' => '对账管理',
                         'url' => ['#'],
+						'sidebarExpandOnHover'=> false,
                         'icon' => 'fa fa-angle-right',
+							'options' => [
+							'class' => 'treeview active',
+		                    
+							],
+							'items' => [
+							[
+							'label' => '对账',
+							'url' => ['/finance-pop-order/'],
+							'icon' => 'fa fa-angle-right',
+							],
+							[
+							'label' => '对账逻辑',
+							'url' => ['/finance-pop-order/'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '对账统计',
+							'url' => ['/finance-pop-order/'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '对账详情',
+							'url' => ['/finance-pop-order/'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '对账单配置',
+							'url' => ['/finance-pop-order/'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '增加账单配置',
+							'url' => ['/finance-pop-order/'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '坏账列表',
+							'url' => ['/finance-pop-order/'],
+							'icon' => 'fa fa-angle-right',
+							]
+		
+					]
                     ],
                     [
                         'label' => '退款管理',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
+							'options' => [
+							'class' => 'treeview active',
+							],
+							'items' => [
+							[
+							'label' => '确认退款审核',
+							'url' => ['/finance-refund/'],
+							'icon' => 'fa fa-angle-right',
+							],
+							[
+							'label' => '退款确认退款审批',
+							'url' => ['/finance-refund/'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '会计执行银行退款',
+							'url' => ['/finance-refund/'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '确认银行退款',
+							'url' => ['/finance-refund/'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '退款详情',
+							'url' => ['/finance-refund/'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '退款统计',
+							'url' => ['/finance-refund/'],
+							'icon' => 'fa fa-angle-right',
+							]
+							]
+							
                     ],
                     [
                         'label' => '赔偿管理',

@@ -23,11 +23,11 @@ use kartik\datecontrol\DateControl;
 
 'finance_order_channel_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 下单渠道(对应finance_order_channel)...']], 
 
-'finance_order_channel_title'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 下单渠道名称(对应order_channel)...']], 
+'finance_order_channel_title'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 下单渠道名称(对应order_channel)...', 'maxlength'=>80]], 
 
 'finance_pay_channel_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 支付渠道(对应pay_channel)...']], 
 
-'finance_pay_channel_title'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 支付渠道名称(对应pay_channel)...']], 
+'finance_pay_channel_title'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 支付渠道名称(对应pay_channel)...', 'maxlength'=>80]], 
 
 'finance_pop_order_worker_uid'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 服务阿姨...']], 
 
