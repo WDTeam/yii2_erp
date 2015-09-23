@@ -29,7 +29,7 @@ AppAsset::register($this);
             <?= Yii::$app->name ?>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
-        <nav class="navbar navbar-static-top" role="navigation">
+        <nav class="navbar navbar-static-top .fixed" role="navigation">
             <!-- Sidebar toggle button-->
             <a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button">
                 <span class="sr-only"><?= Yii::t('app', 'Toggle navigation') ?></span>
