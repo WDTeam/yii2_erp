@@ -20,6 +20,13 @@ class m150918_195609_create_table_customer_worker extends Migration
             'updated_at'=>  Schema::TYPE_INTEGER.'(11) NOT NULL COMMENT \'更新时间\'',
             'is_del'=> Schema::TYPE_SMALLINT.'(4) DEFAULT 0 COMMENT \'是否逻辑删除\'',
             ], $tableOptions);
+        $this->batchInsert('{{%customer_worker}}',
+            ['id','customer_id','woker_id','customer_worker_status','created_at','updated_at','is_del'],
+            [
+                [1,1,1,1,time(),time(),0],
+                [2,1,1,0,time(),time(),0],
+                [3,1,1,0,time(),time(),0],
+            ]);
     }
 
     public function down()

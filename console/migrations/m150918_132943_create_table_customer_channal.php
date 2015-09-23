@@ -19,6 +19,12 @@ class m150918_132943_create_table_customer_channal extends Migration
             'updated_at'=>  Schema::TYPE_INTEGER.'(11) NOT NULL COMMENT \'更新时间\'' ,
             'is_del'=>  Schema::TYPE_SMALLINT.'(4) NOT NULL DEFAULT 0 COMMENT \'是否逻辑删除\'' ,
             ], $tableOptions);
+        $this->batchInsert('{{%customer_channal}}',
+            ['id','channal_name','pid','created_at','updated_at','is_del'],
+            [
+                [1,'美团',0, time(),time(), 0],
+                [2,'支付宝服务窗',0, time(),time(), 0],
+            ]);
     }
 
     public function down()
