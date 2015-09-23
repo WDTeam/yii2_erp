@@ -1,11 +1,16 @@
 <?php
-namespace yii\ejiajie\area;
+namespace yii\area;
 
 use Yii;
-use common\Operation\OperationArea;
+//use common\Operation\OperationArea;
+use yii\helpers\BaseHtml;
 
-class AreaCascade{
+class AreaCascade extends BaseHtml{
+//    public function __construct() {
+//        parent::__construct();
+//    }
+    
     public static function areaInitialization($name, $options){
-        
+        return 'dddd';
     }
 }
