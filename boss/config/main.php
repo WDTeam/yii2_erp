@@ -30,6 +30,7 @@ return [
             'identityClass' => 'common\models\SystemUser',
             'enableAutoLogin' => true,
         ],
+        
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
             'defaultRoles' => ['guest'],
@@ -56,6 +57,9 @@ return [
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
+        ],
+        'areacascade' => [
+            'class' => 'boss\components\AreaCascade'
         ],
     ],
     'params' => $params,
