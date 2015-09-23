@@ -1,4 +1,15 @@
 <?php
+/**
+* 对账控制器
+* ==========================
+* 北京一家洁 版权所有 2015-2018 
+* --------------------------
+* 这不是一个自由软件，未经授权不许任何使用和传播。
+* ==========================
+* @date: 2015-9-23
+* @author: peak pan 
+* @version:1.0
+*/
 
 namespace boss\controllers;
 
@@ -26,10 +37,14 @@ class FinancePopOrderController extends Controller
         ];
     }
 
+    
+    
     /**
-     * Lists all FinancePopOrder models.
-     * @return mixed
-     */
+    * 对账方法
+    * @date: 2015-9-23
+    * @author: peak pan
+    * @return:
+    **/
     public function actionIndex()
     {
         $searchModel = new FinancePopOrderSearch;
@@ -41,10 +56,11 @@ class FinancePopOrderController extends Controller
     }
 
     /**
-     * Displays a single FinancePopOrder model.
-     * @param integer $id
-     * @return mixed
-     */
+    * 查看和修改公用方法
+    * @date: 2015-9-23
+    * @author: peak pan
+    * @return:
+    **/
     public function actionView($id)
     {
         $model = $this->findModel($id);
@@ -57,10 +73,11 @@ class FinancePopOrderController extends Controller
     }
 
     /**
-     * Creates a new FinancePopOrder model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
+    * 公用添加方法
+    * @date: 2015-9-23
+    * @author: peak pan
+    * @return:
+    **/
     public function actionCreate()
     {
         $model = new FinancePopOrder;
@@ -74,12 +91,13 @@ class FinancePopOrderController extends Controller
         }
     }
 
+    
     /**
-     * Updates an existing FinancePopOrder model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
+    * 修改方法
+    * @date: 2015-9-23
+    * @author: peak pan
+    * @return:
+    **/
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -93,12 +111,12 @@ class FinancePopOrderController extends Controller
         }
     }
 
-    /**
-     * Deletes an existing FinancePopOrder model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
+   /**
+   * 公用删除方法
+   * @date: 2015-9-23
+   * @author: peak pan
+   * @return:
+   **/
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
@@ -107,12 +125,11 @@ class FinancePopOrderController extends Controller
     }
 
     /**
-     * Finds the FinancePopOrder model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return FinancePopOrder the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+    * 私有单一查询的Model，使用本类
+    * @date: 2015-9-23
+    * @author: peak pan
+    * @return:
+    **/
     protected function findModel($id)
     {
         if (($model = FinancePopOrder::findOne($id)) !== null) {
@@ -121,4 +138,51 @@ class FinancePopOrderController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+    
+    /**
+    * 对账统计方法
+    * @date: 2015-9-23
+    * @author: peak pan
+    * @return:
+    **/
+    public function actionBillcount(){
+    	$searchModel = new FinancePopOrderSearch;
+    	$dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+    	return $this->render('index', [
+    			'dataProvider' => $dataProvider,
+    			'searchModel' => $searchModel,
+    			]);
+    	
+    }
+    
+    
+    /**
+    * 对账详情
+    * @date: 2015-9-23
+    * @author: peak pan
+    * @return:
+    **/
+    public function actionBillinfo(){
+    	 
+    	 
+    	 
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

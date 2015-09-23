@@ -8,6 +8,8 @@ use boss\models\Demo;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use boss\models\ShopManager;
+use boss\models\search\ShopManagerSearch;
 
 /**
  * DemoController implements the CRUD actions for User model.
@@ -121,5 +123,48 @@ class DemoController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    /**
+     * test-run:apiDoc -i boss/ -o boss/web/apidoc/
+     * @api {get} /user/:id Request User information
+     * @apiName GetUser
+     * @apiGroup User
+     *
+     * @apiParam {Number} id Users unique ID.
+     *
+     * @apiSuccess {String} firstname Firstname of the User.
+     * @apiSuccess {String} lastname  Lastname of the User.
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "firstname": "John",
+     *       "lastname": "Doe"
+     *     }
+     *
+     * @apiError UserNotFound The id of the User was not found.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "error": "UserNotFound"
+     *     }
+     */
+    public function actionApiDoc()
+    {
+        
+    }
+    /**
+     * 
+     */
+    public function actionDynagrid()
+    {
+        $searchModel = new ShopManagerSearch;
+        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        
+        return $this->render('dynagrid',[
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
     }
 }

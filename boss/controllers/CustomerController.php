@@ -33,12 +33,12 @@ class CustomerController extends Controller
     public function actionIndex()
     {
         $searchModel = new CustomerSearch;
+
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
-        
     }
 
     /**
@@ -49,18 +49,18 @@ class CustomerController extends Controller
         $model = $this->findModel($id);
         $model->is_del = 1;
         $model->save();
-        return $this->redirect(['index']);
+        return $this->redirect(['/customer/index?CustomerSearch[is_del]=0']);
     }
 
     /**
      * 从黑名单中取消
      */
-    public function removeFromBlock($id)
+    public function actionRemoveFromBlock($id)
     {
         $model = $this->findModel($id);
         $model->is_del = 0;
         $model->save();
-        return $this->redirect(['block']);
+        return $this->redirect(['/customer/block?CustomerSearch[is_del]=1']);
     }
 
     /**
@@ -70,6 +70,8 @@ class CustomerController extends Controller
     public function actionBlock()
     {
         $searchModel = new CustomerSearch;
+        var_dump(Yii::$app->request->getQueryParams());
+        
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('block', [
             'dataProvider' => $dataProvider,

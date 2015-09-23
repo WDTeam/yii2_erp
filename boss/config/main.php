@@ -16,6 +16,9 @@ return [
 //            'class' => 'funson86\blog\Module',
 //            'controllerNamespace' => 'funson86\blog\controllers\boss'
 //        ],
+        'dynagrid'=> [
+            'class'=>'\kartik\dynagrid\Module',
+        ],
         'gridview' => [
             'class' => 'kartik\grid\Module',
         ],
@@ -30,6 +33,7 @@ return [
             'identityClass' => 'common\models\SystemUser',
             'enableAutoLogin' => true,
         ],
+        
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
             'defaultRoles' => ['guest'],
@@ -56,6 +60,9 @@ return [
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
+        ],
+        'areacascade' => [
+            'class' => 'boss\components\AreaCascade'
         ],
     ],
     'params' => $params,

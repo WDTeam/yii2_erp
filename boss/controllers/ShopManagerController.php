@@ -8,6 +8,10 @@ use boss\models\search\ShopManagerSearch;
 use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use crazyfd\qiniu\Qiniu;
+use yii\helpers\ArrayHelper;
+use kartik\helpers\Html;
+use yii\helpers\Json;
 
 /**
  * ShopManagerController implements the CRUD actions for ShopManager model.
@@ -67,6 +71,10 @@ class ShopManagerController extends Controller
         $model = new ShopManager;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+//             $qiniu = new Qiniu($ak, $sk,$domain, $bucket);
+//             $key = time();
+//             $qiniu->uploadFile($_FILES['tmp_name'],$key);
+//             $url = $qiniu->getLink($key);
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -121,5 +129,17 @@ class ShopManagerController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    /**
+     * 通过名称获取列表
+     */
+    public function actionSearchByName($name='')
+    {
+        $models = ShopManager::find()
+        ->select(['id', 'name'])
+        ->andFilterWhere(['like', 'name', $name])
+        ->limit(50)
+        ->all();
+        echo Json::encode(['results'=>$models]);
     }
 }
