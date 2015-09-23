@@ -33,7 +33,7 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'tel') ?>
 
-    <?php // echo $form->field($model, 'order_contact') ?>
+    <?php // echo $form->field($model, 'other_contact') ?>
 
     <?php // echo $form->field($model, 'bankcard_number') ?>
 

@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'street',
             'principal',
             'tel',
-            'order_contact',
+            'other_contact',
             'bankcard_number',
             'account_person',
             'opening_bank',

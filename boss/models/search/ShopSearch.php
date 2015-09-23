@@ -16,7 +16,7 @@ class ShopSearch extends Shop
     {
         return [
             [['id', 'shop_menager_id', 'create_at', 'update_at', 'is_blacklist', 'blacklist_time', 'audit_status', 'worker_count', 'complain_coutn'], 'integer'],
-            [['name', 'province_name', 'city_name', 'county_name', 'street', 'principal', 'tel', 'order_contact', 'bankcard_number', 'account_person', 'opening_bank', 'sub_branch', 'opening_address', 'blacklist_cause', 'level'], 'safe'],
+            [['name', 'province_name', 'city_name', 'county_name', 'street', 'principal', 'tel', 'other_contact', 'bankcard_number', 'account_person', 'opening_bank', 'sub_branch', 'opening_address', 'blacklist_cause', 'level'], 'safe'],
         ];
     }
 
@@ -57,7 +57,7 @@ class ShopSearch extends Shop
             ->andFilterWhere(['like', 'street', $this->street])
             ->andFilterWhere(['like', 'principal', $this->principal])
             ->andFilterWhere(['like', 'tel', $this->tel])
-            ->andFilterWhere(['like', 'order_contact', $this->order_contact])
+            ->andFilterWhere(['like', 'other_contact', $this->other_contact])
             ->andFilterWhere(['like', 'bankcard_number', $this->bankcard_number])
             ->andFilterWhere(['like', 'account_person', $this->account_person])
             ->andFilterWhere(['like', 'opening_bank', $this->opening_bank])
