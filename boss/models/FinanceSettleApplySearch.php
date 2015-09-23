@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\FinanceSettleApply;
+use common\models\FinanceWorkerOrderIncome;
 
 /**
  * FinanceSettleApplySearch represents the model behind the search form about `common\models\FinanceSettleApply`.
@@ -28,7 +29,10 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             [['finance_settle_apply_money', 'finance_settle_apply_order_money', 'finance_settle_apply_order_cash_money', 'finance_settle_apply_non_order_money'], 'number'],
         ];
     }
-
+    public function doSome(){
+        
+    }
+    
     public function scenarios()
     {
         // bypass scenarios() implementation in the parent class
@@ -37,8 +41,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
 
     public function search($params)
     {
-        $query = FinanceSettleApply::find();
-
+        $query = Self::find();
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);

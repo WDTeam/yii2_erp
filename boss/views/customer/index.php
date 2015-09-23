@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
+use common\models\CustomerPlatform;
+use common\models\CustomerChannal;
 
 /**
  * @var yii\web\View $this
@@ -43,17 +45,67 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'id',
-            'customer_name:text',
-            'customer_phone:text',
-            'region_id',
-            'customer_is_vip',
-            'platform_id',
-            'channal_id',
-            'customer_score:integer',
-            'customer_balance:decimal',
-            'customer_complaint_times',
-            'created_at:datetime',
+            'customer_name',
+            'customer_phone',
+            'customer_live_address_detail',
+            [
+                'format' => 'raw',
+                'label' => '身份',
+                'value' => function ($dataProvider) {
+                    return $dataProvider->customer_is_vip ? '会员' : '非会员';
+                },
+                'width' => "100px",
+            ],
+            [
+                'format' => 'raw',
+                'label' => '平台',
+                'value' => function ($dataProvider) {
+                    $platform = CustomerPlatform::find()->where(['id'=>$dataProvider->platform_id])->one();
+                    return $platform->platform_name ? $platform->platform_name : '-';
+                },
+                'width' => "100px",
+            ],
+            [
+                'format' => 'raw',
+                'label' => '渠道',
+                'value' => function ($dataProvider) {
+                    $channal = CustomerChannal::find()->where(['id'=>$dataProvider->channal_id])->one();
+                    return $channal->channal_name ? $channal->channal_name : '-';
+                },
+                'width' => "100px",
+            ],
+            [
+                'format' => 'raw',
+                'label' => '积分',
+                'value' => function ($dataProvider) {
+                    return $dataProvider->customer_score;
+                },
+                'width' => "100px",
+            ],
+            [
+                'format' => 'raw',
+                'label' => '余额',
+                'value' => function ($dataProvider) {
+                    return $dataProvider->customer_balance;
+                },
+                'width' => "100px",
+            ],
+            [
+                'format' => 'raw',
+                'label' => '投诉',
+                'value' => function ($dataProvider) {
+                    return $dataProvider->customer_complaint_times;
+                },
+                'width' => "100px",
+            ],
+            [
+                'format' => 'datetime',
+                'label' => '创建时间',
+                'value' => function ($dataProvider) {
+                    return $dataProvider->created_at;
+                },
+                'width' => "100px",
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
