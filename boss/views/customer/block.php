@@ -23,6 +23,21 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
     <?php Pjax::begin();
+
+
+    // echo GridView::widget([
+    // 'columns' => [
+    //     [
+    //         'attribute' => 'name',
+    //         'format' => 'text'
+    //     ],
+    //     [
+    //         'attribute' => 'birthday',
+    //         'format' => ['date', 'php:Y-m-d']
+    //     ],
+    // ],
+
+
     echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -86,7 +101,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> ' . Html::encode($this->title) . ' </h3>',
             'type' => 'info',
-            'before' =>Html::a('<i class="glyphicon" ></i>全部顾客', ['/customer/index?CustomerSearch[is_del]=0'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']),
+            'before' =>Html::a('<i class="glyphicon" ></i>顾客列表', ['/customer/index?CustomerSearch[is_del]=0'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']),
             // 'after' => Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List',
             //     ['index'],
             //     ['class' => 'btn btn-info']),
@@ -96,6 +111,7 @@ $this->params['breadcrumbs'][] = $this->title;
     Pjax::end(); ?>
 
 </div>
+
 
 
 
