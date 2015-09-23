@@ -39,15 +39,24 @@ use kartik\datecontrol\DateControl;
 
         'other_contact'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 其他联系方式...', 'maxlength'=>200]],
         
-        'is_blacklist'=>['type'=> Form::INPUT_TEXT, 'label'=>'是否黑名单', 'options'=>['placeholder'=>'Enter 是否是黑名单：0正常，1黑名单...']], 
-        
-        'audit_status'=>['type'=> Form::INPUT_TEXT, 'label'=>'审核状态', 'options'=>['placeholder'=>'Enter 审核状态：0未审核，1通过，2不通过...']], 
-        
-        'level'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 评级...', 'maxlength'=>50]],
-        
+        'audit_status'=>['type'=> Form::INPUT_RADIO_LIST, 'items'=>['未处理', '通过', '不通过'], 'label'=>'审核状态', 'options'=>['placeholder'=>'Enter 审核状态：0未审核，1通过，2不通过...']], 
+
     ]
 
     ]);?>
+    <?php if(!$model->getIsNewRecord()){
+        echo Form::widget([
+            'model' => $model,
+            'form' => $form,
+            'columns' => 1,
+            'attributes' => [
+                'level'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 评级...', 'maxlength'=>50]],
+        
+                'is_blacklist'=>['type'=> Form::INPUT_RADIO_LIST, 'items'=>['否', '是'], 'label'=>'是否黑名单', 'options'=>['placeholder'=>'Enter 是否是黑名单：0正常，1黑名单...']],
+            ]
+        
+        ]);
+    }?>
     <h2>营业执照息</h2>
     <?php echo Form::widget([
 
@@ -68,11 +77,53 @@ use kartik\datecontrol\DateControl;
         
         'bl_number'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 注册号...', 'maxlength'=>200]],
         
-        'bl_create_time'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 注册时间...']],
+        'bl_create_time'=>[
+            'type'=> Form::INPUT_WIDGET, 
+            'widgetClass'=>DateControl::classname(),
+            'options' => [
+                'type'=>DateControl::FORMAT_DATE,
+                'ajaxConversion'=>false,
+                'displayFormat' => 'php:Y-m-d',
+                'saveFormat'=>'php:U',
+                'options' => [
+                    'pluginOptions' => [
+                        'autoclose' => true
+                    ]
+                ]
+            ]
+        ],
         
-        'bl_expiry_start'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 有效期起始时间...']],
+        'bl_expiry_start'=>[
+            'type'=> Form::INPUT_WIDGET, 
+            'widgetClass'=>DateControl::classname(),
+            'options' => [
+                'type'=>DateControl::FORMAT_DATE,
+                'ajaxConversion'=>false,
+                'displayFormat' => 'php:Y-m-d',
+                'saveFormat'=>'php:U',
+                'options' => [
+                    'pluginOptions' => [
+                        'autoclose' => true
+                    ]
+                ]
+            ]
+        ],
         
-        'bl_expiry_end'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 有效期结束时间...']],
+        'bl_expiry_end'=>[
+            'type'=> Form::INPUT_WIDGET, 
+            'widgetClass'=>DateControl::classname(),
+            'options' => [
+                'type'=>DateControl::FORMAT_DATE,
+                'ajaxConversion'=>false,
+                'displayFormat' => 'php:Y-m-d',
+                'saveFormat'=>'php:U',
+                'options' => [
+                    'pluginOptions' => [
+                        'autoclose' => true
+                    ]
+                ]
+            ]
+        ],
 
         'bl_audit'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 注册资本...']],
             

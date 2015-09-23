@@ -8,6 +8,7 @@ use boss\models\search\ShopManagerSearch;
 use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use crazyfd\qiniu\Qiniu;
 
 /**
  * ShopManagerController implements the CRUD actions for ShopManager model.
@@ -67,6 +68,10 @@ class ShopManagerController extends Controller
         $model = new ShopManager;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+//             $qiniu = new Qiniu($ak, $sk,$domain, $bucket);
+//             $key = time();
+//             $qiniu->uploadFile($_FILES['tmp_name'],$key);
+//             $url = $qiniu->getLink($key);
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
