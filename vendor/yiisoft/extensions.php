@@ -390,4 +390,13 @@ return array (
       '@kartik/popover' => $vendorDir . '/kartik-v/yii2-popover-x',
     ),
   ),
+  'kartik-v/yii2-context-menu' => 
+  array (
+    'name' => 'kartik-v/yii2-context-menu',
+    'version' => '1.2.0.0',
+    'alias' => 
+    array (
+      '@kartik/cmenu' => $vendorDir . '/kartik-v/yii2-context-menu',
+    ),
+  ),
 );
