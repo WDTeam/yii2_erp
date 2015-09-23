@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "478784f447f4964fc335cddabbb62341",
+    "hash": "cff2605f88b216839e89d2c073ac3045",
     "packages": [
         {
             "name": "alexandernst/yii2-device-detect",
@@ -1148,6 +1148,61 @@
             "time": "2014-12-08 04:31:32"
         },
         {
+            "name": "kartik-v/yii2-dynagrid",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/yii2-dynagrid.git",
+                "reference": "8ed61fa996c949b233e3c3f241f24e91da76d95e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://packagist.phpcomposer.com/files/kartik-v/yii2-dynagrid/8ed61fa996c949b233e3c3f241f24e91da76d95e.zip",
+                "reference": "8ed61fa996c949b233e3c3f241f24e91da76d95e",
+                "shasum": ""
+            },
+            "require": {
+                "kartik-v/yii2-grid": "~3.0",
+                "kartik-v/yii2-sortable": "~1.2",
+                "kartik-v/yii2-widget-activeform": "~1.4",
+                "kartik-v/yii2-widget-select2": "~2.0"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "kartik\\dynagrid\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://www.krajee.com/"
+                }
+            ],
+            "description": "Turbo charge the Yii 2 GridView with personalized columns, page size, and themes.",
+            "homepage": "https://github.com/kartik-v/yii2-dynagrid",
+            "keywords": [
+                "columns",
+                "dynamic",
+                "extension",
+                "grid",
+                "hide",
+                "order",
+                "reorder",
+                "show",
+                "sort",
+                "visibility",
+                "widget",
+                "yii2"
+            ],
+            "time": "2015-08-04 15:22:13"
+        },
+        {
             "name": "kartik-v/yii2-grid",
             "version": "v3.0.6",
             "source": {
@@ -1569,6 +1624,53 @@
                 "yii2"
             ],
             "time": "2015-05-05 11:59:53"
+        },
+        {
+            "name": "kartik-v/yii2-sortable",
+            "version": "v1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/yii2-sortable.git",
+                "reference": "650dfd6876115fbb996eb6eb8f1d5d13ddb69285"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://packagist.phpcomposer.com/files/kartik-v/yii2-sortable/650dfd6876115fbb996eb6eb8f1d5d13ddb69285.zip",
+                "reference": "650dfd6876115fbb996eb6eb8f1d5d13ddb69285",
+                "shasum": ""
+            },
+            "require": {
+                "kartik-v/yii2-krajee-base": "~1.7"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "kartik\\sortable\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://www.krajee.com/"
+                }
+            ],
+            "description": "Create sortable lists and grids using HTML5 drag and drop API for Yii 2.0.",
+            "homepage": "https://github.com/kartik-v/yii2-sortable",
+            "keywords": [
+                "bootstrap",
+                "extension",
+                "jquery",
+                "range",
+                "sortable",
+                "widget",
+                "yii2"
+            ],
+            "time": "2015-06-17 17:34:48"
         },
         {
             "name": "kartik-v/yii2-tabs-x",
@@ -3390,7 +3492,8 @@
         "funson86/yii2-gii": 20,
         "warrence/yii2-kartikgii": 20,
         "pjkui/kindeditor": 20,
-        "crazyfd/yii2-qiniu": 20
+        "crazyfd/yii2-qiniu": 20,
+        "kartik-v/yii2-dynagrid": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
