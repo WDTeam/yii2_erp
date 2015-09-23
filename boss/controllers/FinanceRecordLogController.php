@@ -1,29 +1,18 @@
 <?php
-/**
-* 对账控制器
-* ==========================
-* 北京一家洁 版权所有 2015-2018 
-* --------------------------
-* 这不是一个自由软件，未经授权不许任何使用和传播。
-* ==========================
-* @date: 2015-9-23
-* @author: peak pan 
-* @version:1.0
-*/
 
 namespace boss\controllers;
 
 use Yii;
-use common\models\FinancePopOrder;
-use boss\models\FinancePopOrderSearch;
+use common\models\FinanceRecordLog;
+use boss\models\FinanceRecordLogSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * FinancePopOrderController implements the CRUD actions for FinancePopOrder model.
+ * FinanceRecordLogController implements the CRUD actions for FinanceRecordLog model.
  */
-class FinancePopOrderController extends Controller
+class FinanceRecordLogController extends Controller
 {
     public function behaviors()
     {
@@ -37,18 +26,15 @@ class FinancePopOrderController extends Controller
         ];
     }
 
-    
-    
     /**
-    * 对账方法
-    * @date: 2015-9-23
-    * @author: peak pan
-    * @return:
-    **/
+     * Lists all FinanceRecordLog models.
+     * @return mixed
+     */
     public function actionIndex()
     {
-        $searchModel = new FinancePopOrderSearch;
+        $searchModel = new FinanceRecordLogSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
@@ -56,11 +42,10 @@ class FinancePopOrderController extends Controller
     }
 
     /**
-    * 查看和修改公用方法
-    * @date: 2015-9-23
-    * @author: peak pan
-    * @return:
-    **/
+     * Displays a single FinanceRecordLog model.
+     * @param integer $id
+     * @return mixed
+     */
     public function actionView($id)
     {
         $model = $this->findModel($id);
@@ -73,14 +58,13 @@ class FinancePopOrderController extends Controller
     }
 
     /**
-    * 公用添加方法
-    * @date: 2015-9-23
-    * @author: peak pan
-    * @return:
-    **/
+     * Creates a new FinanceRecordLog model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
     public function actionCreate()
     {
-        $model = new FinancePopOrder;
+        $model = new FinanceRecordLog;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -91,13 +75,12 @@ class FinancePopOrderController extends Controller
         }
     }
 
-    
     /**
-    * 修改方法
-    * @date: 2015-9-23
-    * @author: peak pan
-    * @return:
-    **/
+     * Updates an existing FinanceRecordLog model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -111,12 +94,12 @@ class FinancePopOrderController extends Controller
         }
     }
 
-   /**
-   * 公用删除方法
-   * @date: 2015-9-23
-   * @author: peak pan
-   * @return:
-   **/
+    /**
+     * Deletes an existing FinanceRecordLog model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
@@ -125,64 +108,18 @@ class FinancePopOrderController extends Controller
     }
 
     /**
-    * 私有单一查询的Model，使用本类
-    * @date: 2015-9-23
-    * @author: peak pan
-    * @return:
-    **/
+     * Finds the FinanceRecordLog model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return FinanceRecordLog the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
     protected function findModel($id)
     {
-        if (($model = FinancePopOrder::findOne($id)) !== null) {
+        if (($model = FinanceRecordLog::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-    
-    /**
-    * 对账统计方法
-    * @date: 2015-9-23
-    * @author: peak pan
-    * @return:
-    **/
-    public function actionBillcount(){
-    	$searchModel = new FinancePopOrderSearch;
-    	$dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-    	return $this->render('index', [
-    			'dataProvider' => $dataProvider,
-    			'searchModel' => $searchModel,
-    			]);
-    	
-    }
-    
-    
-    /**
-    * 对账详情
-    * @date: 2015-9-23
-    * @author: peak pan
-    * @return:
-    **/
-    public function actionBillinfo(){
-    	 
-    	 
-    	 
-    }
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }
