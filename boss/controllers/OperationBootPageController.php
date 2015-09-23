@@ -3,8 +3,8 @@
 namespace boss\controllers;
 
 use Yii;
-use common\models\OperationBootPage;
-use common\models\OperationCity;
+use boss\models\Operation\OperationBootPage;
+use boss\models\Operation\OperationCity;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;

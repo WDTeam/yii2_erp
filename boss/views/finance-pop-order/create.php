@@ -7,8 +7,8 @@ use yii\helpers\Html;
  * @var common\models\FinancePopOrder $model
  */
 
-$this->title = Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Finance Pop Order',
+$this->title = Yii::t('app', '{modelClass}', [
+    'modelClass' => '添加对账数据',
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Finance Pop Orders'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;

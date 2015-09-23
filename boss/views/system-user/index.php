@@ -2,22 +2,21 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use boss\models\SystemUser;
-use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\UserSearch */
+/* @var $searchModel boss\models\search\SystemUserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Users');
+$this->title = Yii::t('app', 'System Users');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="user-index">
+<div class="system-user-index">
 
+    <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create ') . Yii::t('app', 'User'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Create System User'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -28,22 +27,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'username',
-            // 'auth_key',
-            // 'password_hash',
-            // 'password_reset_token',
+//             'auth_key',
+//             'password_hash',
+//             'password_reset_token',
             'email:email',
-            [
-                'attribute' => 'role',
-                'value' => function ($model) {
-                            return $model->roleLabel;
-                        },
-                'filter' => Html::activeDropDownList(
-                        $searchModel,
-                        'role',
-                        $arrayRole,
-                        ['class' => 'form-control', 'prompt' => Yii::t('app', 'Please Filter')]
-                    )
-            ],
+            'role',
             [
                 'attribute' => 'status',
                 'format' => 'html',
@@ -65,12 +53,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         ['class' => 'form-control', 'prompt' => Yii::t('app', 'Please Filter')]
                     )
             ],
-            //'created_at',
             [
                 'attribute' => 'created_at',
                 'format' => ['date', 'Y-M-d H:i:s'],
             ],
-            //'updated_at',
+            // 'updated_at',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

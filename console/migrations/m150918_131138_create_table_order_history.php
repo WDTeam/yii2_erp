@@ -26,6 +26,9 @@ class m150918_131138_create_table_order_history extends Migration
             'order_before_status_name' => Schema::TYPE_STRING . '(128) NOT NULL  DEFAULT \'\' COMMENT \'状态变更前订单状态\'',
             'order_status_dict_id' => Schema::TYPE_SMALLINT . '(4) unsigned NOT NULL DEFAULT 0 COMMENT \'订单状态字典ID\'',
             'order_status_name' => Schema::TYPE_STRING . '(128) NOT NULL  DEFAULT \'\' COMMENT \'订单状态\'',
+            'order_flag_send' => Schema::TYPE_BOOLEAN . '(1) unsigned NOT NULL DEFAULT 0 COMMENT \'指派不了 0可指派 1客服指派不了 2小家政指派不了 3都指派不了\'',
+            'order_flag_urgent' => Schema::TYPE_BOOLEAN . '(1) unsigned NOT NULL DEFAULT 0 COMMENT \'加急\'',
+            'order_flag_exception' => Schema::TYPE_BOOLEAN . '(1) unsigned NOT NULL DEFAULT 0 COMMENT \'异常 1无经纬度\'',
 
 //===============================创建完订单后 不可修改的部分
             'order_service_type_id' => Schema::TYPE_SMALLINT . '(4) unsigned NOT NULL DEFAULT 0 COMMENT \'订单服务类别ID\'',
@@ -36,13 +39,14 @@ class m150918_131138_create_table_order_history extends Migration
             'order_channel_name' => Schema::TYPE_STRING.'(64) NOT NULL DEFAULT \'\' COMMENT \'下单渠道名称\'',
             'order_channel_order_num' => Schema::TYPE_STRING . '(255) NOT NULL DEFAULT \'\' COMMENT \'渠道订单编号\'',
             'customer_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'用户编号\'',
+            'order_ip' => Schema::TYPE_INTEGER.'(10) NOT NULL DEFAULT 0 COMMENT \'用户编号\'',
             'order_customer_phone' => Schema::TYPE_STRING .'(16) NOT NULL DEFAULT \'\' COMMENT \'用户手机号\'',
             'order_booked_begin_time' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 0 COMMENT \'预约开始时间\'', //TODO 预约单词待定
             'order_booked_end_time' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 0 COMMENT \'预约结束时间\'',
             'order_booked_count' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'预约服务数量\'',
             'address_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'地址ID\'',
             'order_address'=>Schema::TYPE_STRING.'(255) NOT NULL DEFAULT \'\' COMMENT \'详细地址 包括 联系人 手机号\'',
-            'order_unit_mone'=>Schema::TYPE_DECIMAL . '(8,0) NOT NULL DEFAULT 0 COMMENT \'订单单位价格\'', //TODO 订单单位价格
+            'order_unit_money'=>Schema::TYPE_DECIMAL . '(8,0) NOT NULL DEFAULT 0 COMMENT \'订单单位价格\'', //TODO 订单单位价格
             'order_money' => Schema::TYPE_DECIMAL . '(8,0) NOT NULL DEFAULT 0 COMMENT \'订单金额\'',
             'order_booked_worker_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'指定阿姨\'',
             'order_customer_need' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'用户需求\'',
@@ -68,7 +72,7 @@ class m150918_131138_create_table_order_history extends Migration
             'worker_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'阿姨id\'',
             'worker_type_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'阿姨职位类型ID\'',
             'order_worker_type_name' => Schema::TYPE_STRING.'(64) NOT NULL DEFAULT \'\' COMMENT \'阿姨职位类型\'',
-            'order_worker_distri_type' => Schema::TYPE_SMALLINT.'(4) unsigned NOT NULL DEFAULT 0 COMMENT \'阿姨接单方式 0未接单 1阿姨抢单 2客服指派 3门店指派\'',
+            'order_worker_send_type' => Schema::TYPE_SMALLINT.'(4) unsigned NOT NULL DEFAULT 0 COMMENT \'阿姨接单方式 0未接单 1阿姨抢单 2客服指派 3门店指派\'',
             'shop_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'门店id\'',
 
 //===========================指派工人===》阿姨服务完成后
