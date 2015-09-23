@@ -5,14 +5,17 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "{{%order}}".
+ * This is the model class for table "{{%order_history}}".
  *
  * @property string $id
+ * @property string $created_at
+ * @property string $updated_at
+ * @property string $order_id
  * @property string $order_code
  * @property string $order_parent_id
  * @property integer $order_is_parent
- * @property string $created_at
- * @property string $updated_at
+ * @property string $order_created_at
+ * @property string $order_updated_at
  * @property integer $order_before_status_dict_id
  * @property string $order_before_status_name
  * @property integer $order_status_dict_id
@@ -65,16 +68,17 @@ use Yii;
  * @property string $invoice_id
  * @property string $checking_id
  * @property string $admin_id
+ * @property integer $order_isdel
  * @property integer $isdel
  */
-class Order extends ActiveRecord
+class OrderHistory extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%order}}';
+        return '{{%order_history}}';
     }
 
     /**
@@ -83,7 +87,8 @@ class Order extends ActiveRecord
     public function rules()
     {
         return [
-            [['order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'order_before_status_dict_id', 'order_status_dict_id', 'order_flag_send', 'order_flag_urgent', 'order_flag_exception', 'order_service_type_id', 'order_src_id', 'channel_id', 'customer_id', 'order_ip', 'order_booked_begin_time', 'order_booked_end_time', 'order_booked_count', 'address_id', 'order_booked_worker_id', 'order_pay_type', 'pay_channel_id', 'card_id', 'coupon_id', 'promotion_id', 'order_lock_status', 'worker_id', 'worker_type_id', 'order_worker_send_type', 'shop_id', 'comment_id', 'order_customer_hidden', 'invoice_id', 'checking_id', 'admin_id', 'isdel'], 'integer'],
+            [['created_at', 'updated_at', 'order_id', 'order_parent_id', 'order_is_parent', 'order_created_at', 'order_updated_at', 'order_before_status_dict_id', 'order_status_dict_id', 'order_flag_send', 'order_flag_urgent', 'order_flag_exception', 'order_service_type_id', 'order_src_id', 'channel_id', 'customer_id', 'order_ip', 'order_booked_begin_time', 'order_booked_end_time', 'order_booked_count', 'address_id', 'order_booked_worker_id', 'order_pay_type', 'pay_channel_id', 'card_id', 'coupon_id', 'promotion_id', 'order_lock_status', 'worker_id', 'worker_type_id', 'order_worker_send_type', 'shop_id', 'comment_id', 'order_customer_hidden', 'invoice_id', 'checking_id', 'admin_id', 'order_isdel', 'isdel'], 'integer'],
+            [['order_id'], 'required'],
             [['order_unit_money', 'order_money', 'order_pay_money', 'order_use_acc_balance', 'order_use_card_money', 'order_use_coupon_money', 'order_use_promotion_money', 'order_pop_pay_money'], 'number'],
             [['order_code', 'order_channel_name', 'order_worker_type_name'], 'string', 'max' => 64],
             [['order_before_status_name', 'order_status_name', 'order_service_type_name', 'order_src_name', 'order_pay_channel_name'], 'string', 'max' => 128],
@@ -98,12 +103,15 @@ class Order extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => '编号',
+            'id' => 'ID',
+            'created_at' => '快照创建时间',
+            'updated_at' => '快照修改时间',
+            'order_id' => '编号',
             'order_code' => '订单号',
             'order_parent_id' => '父级id',
             'order_is_parent' => '有无子订单 1有 0无',
-            'created_at' => '创建时间',
-            'updated_at' => '修改时间',
+            'order_created_at' => '创建时间',
+            'order_updated_at' => '修改时间',
             'order_before_status_dict_id' => '状态变更前订单状态字典ID',
             'order_before_status_name' => '状态变更前订单状态',
             'order_status_dict_id' => '订单状态字典ID',
@@ -156,7 +164,8 @@ class Order extends ActiveRecord
             'invoice_id' => '发票id',
             'checking_id' => '对账id',
             'admin_id' => '操作人id  0客户操作 1系统操作',
-            'isdel' => '是否已删除',
+            'order_isdel' => '是否已删除',
+            'isdel' => '快照是否已删除',
         ];
     }
 }
