@@ -33,7 +33,8 @@
         "kartik-v/yii2-tabs-x": "*",
         "kartik-v/yii2-popover-x": "*",
         "kartik-v/yii2-context-menu": "*",
-        "kartik-v/yii2-slider": "*"
+        "kartik-v/yii2-slider": "*",
+        "kartik-v/yii2-nav-x": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
