@@ -21,7 +21,7 @@ AppAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body class="skin-blue">
+<body class="skin-blue fixed">
     <?php $this->beginBody() ?>
     <header class="header">
         <a href="<?= Yii::$app->homeUrl ?>" class="logo">
