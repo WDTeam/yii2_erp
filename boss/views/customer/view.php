@@ -9,8 +9,8 @@ use kartik\datecontrol\DateControl;
  * @var common\models\Worker $model
  */
 
-$this->title = $model->worker_name;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Workers'), 'url' => ['index']];
+$this->title = $model->customer_name;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Customers'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="worker-view">
@@ -29,24 +29,17 @@ $this->params['breadcrumbs'][] = $this->title;
             'type'=>DetailView::TYPE_INFO,
         ],
         'attributes' => [
-            'shop_id',
-            'worker_name',
-            'worker_phone',
-            'worker_idcard',
+            'id',
+            'customer_name',
+            'customer_phone',
+            'region_id',
             //'worker_password',
-            'worker_photo',
-            'worker_level',
-            'worker_auth_status',
-            'worker_ontrial_status',
-            'worker_onboard_status',
-            'worker_work_city',
-            'worker_work_area',
-            'worker_work_street',
-            'worker_type',
-            'worker_rule_id',
-            'worker_is_block',
-            'worker_is_blacklist',
-            'created_ad',
+            'customer_is_vip',
+            'platform_id',
+            'channal_id',
+            'customer_score',
+            'customer_balance',
+            'customer_complaint_times',
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],

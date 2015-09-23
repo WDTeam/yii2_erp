@@ -399,4 +399,49 @@ return array (
       '@kartik/cmenu' => $vendorDir . '/kartik-v/yii2-context-menu',
     ),
   ),
+  'kartik-v/yii2-slider' => 
+  array (
+    'name' => 'kartik-v/yii2-slider',
+    'version' => '1.3.1.0',
+    'alias' => 
+    array (
+      '@kartik/slider' => $vendorDir . '/kartik-v/yii2-slider',
+    ),
+  ),
+  'kartik-v/yii2-dropdown-x' => 
+  array (
+    'name' => 'kartik-v/yii2-dropdown-x',
+    'version' => '1.2.0.0',
+    'alias' => 
+    array (
+      '@kartik/dropdown' => $vendorDir . '/kartik-v/yii2-dropdown-x',
+    ),
+  ),
+  'kartik-v/yii2-nav-x' => 
+  array (
+    'name' => 'kartik-v/yii2-nav-x',
+    'version' => '1.2.0.0',
+    'alias' => 
+    array (
+      '@kartik/nav' => $vendorDir . '/kartik-v/yii2-nav-x',
+    ),
+  ),
+  'kartik-v/yii2-sortable' => 
+  array (
+    'name' => 'kartik-v/yii2-sortable',
+    'version' => '1.2.0.0',
+    'alias' => 
+    array (
+      '@kartik/sortable' => $vendorDir . '/kartik-v/yii2-sortable',
+    ),
+  ),
+  'kartik-v/yii2-dynagrid' => 
+  array (
+    'name' => 'kartik-v/yii2-dynagrid',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@kartik/dynagrid' => $vendorDir . '/kartik-v/yii2-dynagrid',
+    ),
+  ),
 );
