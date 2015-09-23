@@ -75,7 +75,7 @@ use kartik\datecontrol\DateControl;
         'bl_expiry_end'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 有效期结束时间...']],
 
         'bl_audit'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 注册资本...']],
-        
+            
         'bl_business'=>['type'=> Form::INPUT_TEXTAREA, 'options'=>['placeholder'=>'Enter 营业范围...','rows'=> 6]],
         
     ]
