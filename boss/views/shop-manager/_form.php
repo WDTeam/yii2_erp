@@ -84,50 +84,50 @@ use boss\models\ShopManager;
         'bl_create_time'=>[
             'type'=> Form::INPUT_WIDGET, 
             'widgetClass'=>DateControl::classname(),
-            'options' => [
-                'type'=>DateControl::FORMAT_DATE,
-                'ajaxConversion'=>false,
-                'displayFormat' => 'php:Y-m-d',
-                'saveFormat'=>'php:U',
-                'options' => [
-                    'pluginOptions' => [
-                        'autoclose' => true
-                    ]
-                ]
-            ]
+//             'options' => [
+//                 'type'=>DateControl::FORMAT_DATE,
+//                 'ajaxConversion'=>false,
+//                 'displayFormat' => 'php:Y-m-d',
+//                 'saveFormat'=>'php:U',
+//                 'options' => [
+//                     'pluginOptions' => [
+//                         'autoclose' => true
+//                     ]
+//                 ]
+//             ]
         ],
         
-        'bl_expiry_start'=>[
-            'type'=> Form::INPUT_WIDGET, 
-            'widgetClass'=>DateControl::classname(),
-            'options' => [
-                'type'=>DateControl::FORMAT_DATE,
-                'ajaxConversion'=>false,
-                'displayFormat' => 'php:Y-m-d',
-                'saveFormat'=>'php:U',
-                'options' => [
-                    'pluginOptions' => [
-                        'autoclose' => true
-                    ]
-                ]
-            ]
-        ],
+//         'bl_expiry_start'=>[
+//             'type'=> Form::INPUT_WIDGET, 
+//             'widgetClass'=>DateControl::classname(),
+//             'options' => [
+//                 'type'=>DateControl::FORMAT_DATE,
+//                 'ajaxConversion'=>false,
+//                 'displayFormat' => 'php:Y-m-d',
+//                 'saveFormat'=>'php:U',
+//                 'options' => [
+//                     'pluginOptions' => [
+//                         'autoclose' => true
+//                     ]
+//                 ]
+//             ]
+//         ],
         
-        'bl_expiry_end'=>[
-            'type'=> Form::INPUT_WIDGET, 
-            'widgetClass'=>DateControl::classname(),
-            'options' => [
-                'type'=>DateControl::FORMAT_DATE,
-                'ajaxConversion'=>false,
-                'displayFormat' => 'php:Y-m-d',
-                'saveFormat'=>'php:U',
-                'options' => [
-                    'pluginOptions' => [
-                        'autoclose' => true
-                    ]
-                ]
-            ]
-        ],
+//         'bl_expiry_end'=>[
+//             'type'=> Form::INPUT_WIDGET, 
+//             'widgetClass'=>DateControl::classname(),
+//             'options' => [
+//                 'type'=>DateControl::FORMAT_DATE,
+//                 'ajaxConversion'=>false,
+//                 'displayFormat' => 'php:Y-m-d',
+//                 'saveFormat'=>'php:U',
+//                 'options' => [
+//                     'pluginOptions' => [
+//                         'autoclose' => true
+//                     ]
+//                 ]
+//             ]
+//         ],
 
         'bl_audit'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 注册资本...']],
             
