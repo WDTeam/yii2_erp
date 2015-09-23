@@ -372,4 +372,31 @@ return array (
       '@kartik/money' => $vendorDir . '/kartik-v/yii2-money',
     ),
   ),
+  'kartik-v/yii2-tabs-x' => 
+  array (
+    'name' => 'kartik-v/yii2-tabs-x',
+    'version' => '1.2.1.0',
+    'alias' => 
+    array (
+      '@kartik/tabs' => $vendorDir . '/kartik-v/yii2-tabs-x',
+    ),
+  ),
+  'kartik-v/yii2-popover-x' => 
+  array (
+    'name' => 'kartik-v/yii2-popover-x',
+    'version' => '1.3.1.0',
+    'alias' => 
+    array (
+      '@kartik/popover' => $vendorDir . '/kartik-v/yii2-popover-x',
+    ),
+  ),
+  'kartik-v/yii2-context-menu' => 
+  array (
+    'name' => 'kartik-v/yii2-context-menu',
+    'version' => '1.2.0.0',
+    'alias' => 
+    array (
+      '@kartik/cmenu' => $vendorDir . '/kartik-v/yii2-context-menu',
+    ),
+  ),
 );
