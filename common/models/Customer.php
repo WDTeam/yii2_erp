@@ -89,34 +89,4 @@ class Customer extends \yii\db\ActiveRecord
             'customer_del_reason' => Yii::t('boss', '加入黑名单原因'),
         ];
     }
-
-    /**
-     * 顾客列表
-     */
-    public function _list()
-    {
-        $request = Yii::$app->request;
-        if ($request->get("is_del")) {
-            
-        }
-    }
-
-    /**
-     * 加入黑名单
-     */
-    public function del($id)
-    {
-        
-        $connection = Yii::$app->db;
-        $connection->createCommand()->update('{{%customer}}', ['is_del' => 1], 'id = '.$id)->execute();
-    }
-
-    /**
-     * 取消加入黑名单
-     */
-    public function cancel_del($id)
-    {
-        $connection = Yii::$app->db;
-        $connection->createCommand()->update('{{%customer}}', ['is_del' => 0], 'id = '.$id)->execute();
-    }
 }
