@@ -29,15 +29,45 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             'id',
-            'customer_name',
-            'customer_phone',
-            'region_id',
-            'customer_is_vip',
-            'platform_id',
-            'channal_id',
-            'customer_score',
-            'customer_balance',
+            'customer_name:text',
+            'customer_phone:text',
+            [
+                'format' => 'raw',
+                'label' => '住址',
+                'value' => function ($dataProvider) {
+                    //return $dataProvider->platform_id ? '' : '非自有';
+                    return '北京市朝阳区SOHO一期2单元';
+                },
+                'width' => "100px",
+            ],
+            [
+                'format' => 'raw',
+                'label' => '身份',
+                'value' => function ($dataProvider) {
+                    return $dataProvider->customer_is_vip ? '会员' : '非会员';
+                },
+                'width' => "100px",
+            ],
+            [
+                'format' => 'raw',
+                'label' => '平台',
+                'value' => function ($dataProvider) {
+                    return 'IOS';
+                },
+                'width' => "100px",
+            ],
+            [
+                'format' => 'raw',
+                'label' => '渠道',
+                'value' => function ($dataProvider) {
+                    return '美团';
+                },
+                'width' => "100px",
+            ],
+            'customer_score:integer',
+            'customer_balance:decimal',
             'customer_complaint_times',
+            'created_at:datetime',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
@@ -46,7 +76,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'title' => Yii::t('yii', 'Edit'),
                         ]);
                     }
-
                 ],
             ],
         ],
