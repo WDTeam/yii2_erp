@@ -52,13 +52,13 @@ echo Menu::widget(
                 'items' => [
                     [
                         'label' => '查看所有门店',
-                        'url' => ['#'],
+                        'url' => ['shop/index'],
                         'icon' => 'fa fa-angle-right',
                         //'visible' => (Yii::$app->user->identity->username == 'admin'),
                     ],
                     [
                         'label' => '添加新门店',
-                        'url' => ['#'],
+                        'url' => ['shop/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],
@@ -391,12 +391,12 @@ echo Menu::widget(
                 'items' => [
                     [
                         'label' => '查看所有家政公司',
-                        'url' => ['#'],
+                        'url' => ['shop-manager/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
                         'label' => '添加新家政公司',
-                        'url' => ['#'],
+                        'url' => ['shop-manager/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],

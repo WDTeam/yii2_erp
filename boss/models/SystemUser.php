@@ -115,8 +115,8 @@ class SystemUser extends \common\models\SystemUser
         return array_merge(
             $labels,
             [
-                'password' => Yii::t('app', 'Password'),
-                'repassword' => Yii::t('app', 'Repassword')
+                'password' => Yii::t('app', '密码'),
+                'repassword' => Yii::t('app', '确认密码')
             ]
         );
     }

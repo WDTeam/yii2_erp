@@ -23,21 +23,14 @@ $this->params['breadcrumbs'][] = $this->title;
             <button type="button" class="btn btn-default btn-lg active">结算统计</button>
             <button type="button" class="btn btn-default btn-lg active">申请结算</button>
     </div>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Finance Settle Apply',
-]), ['create'], ['class' => 'btn btn-success'])*/  ?>
-    </p>
+    <br/>
+    <p></p>
     <div class = "container">
-        <button type="button" onclick="" class="btn btn-default">查询</button>
-        <button type="button" onclick="" class="btn btn-default">导出</button>
         <button type="button" onclick="checkResult(1)" class="btn btn-default">审核通过</button>
         <button type="button" onclick="checkResult(0)" class="btn btn-default">审核不通过</button>
+    </div>
         <input type="hidden" id="finance_settle_apply_status" name="FinanceSettleApplySearch[finance_settle_apply_status]"/>
         <input type="hidden" id="ids" name="FinanceSettleApplySearch[ids]"/>
-    </div>
     <script>
         function checkResult(checkStatus){
             //勾选的结算记录id

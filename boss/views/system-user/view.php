@@ -2,17 +2,16 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use boss\models\SystemUser;
 
 /* @var $this yii\web\View */
-/* @var $model boss\models\SystemUser */
+/* @var $model backend\models\User */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'System Users'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Users'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="system-user-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="user-view">
 
     <p>
         <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -24,20 +23,25 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </p>
-
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'id',
             'username',
-            'auth_key',
-            'password_hash',
-            'password_reset_token',
+            //'auth_key',
+            //'password_hash',
+            //'password_reset_token',
             'email:email',
-            'role',
-            'status',
-            'created_at',
-            'updated_at',
+            [
+                'attribute' => 'role',
+                'value' => $model->roleLabel,
+            ],
+            [
+                'attribute' => 'status',
+                'value' => $model->statusLabel,
+            ],
+            'created_at:datetime',
+            'updated_at:datetime',
         ],
     ]) ?>
 

@@ -32,25 +32,35 @@ class CustomerController extends Controller
      */
     public function actionIndex()
     {
-        // $searchModel = new CustomerSearch;
-        // $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-        // return $this->render('index', [
-        //     'dataProvider' => $dataProvider,
-        //     'searchModel' => $searchModel,
-        // ]);
-
-        $query = Customer::find();
-        $countQuery = clone $query;
-        $pages = new \yii\data\Pagination(['totalCount' => $countQuery->count()]);
-        $models = $query->offset($pages->offset)
-            ->limit($pages->limit)
-            ->all();
-
+        $searchModel = new CustomerSearch;
+        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('index', [
-             'models' => $models,
-             'pages' => $pages,
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
         ]);
         
+    }
+
+    /**
+     * 加入黑名单
+     */
+    public function actionAddToBlock($id)
+    {
+        $model = $this->findModel($id);
+        $model->is_del = 1;
+        $model->save();
+        return $this->redirect(['index']);
+    }
+
+    /**
+     * 从黑名单中取消
+     */
+    public function removeFromBlock($id)
+    {
+        $model = $this->findModel($id);
+        $model->is_del = 0;
+        $model->save();
+        return $this->redirect(['block']);
     }
 
     /**
@@ -59,53 +69,11 @@ class CustomerController extends Controller
      */
     public function actionBlock()
     {
-        // $searchModel = new CustomerSearch;
-        // $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-        // return $this->render('block', [
-        //     'dataProvider' => $dataProvider,
-        //     'searchModel' => $searchModel,
-        // ]);
-
-        $query = Customer::find();
-        $countQuery = clone $query;
-        $pages = new \yii\data\Pagination(['totalCount' => $countQuery->count()]);
-        $models = $query->offset($pages->offset)
-            ->limit($pages->limit)
-            ->all();
-
+        $searchModel = new CustomerSearch;
+        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('block', [
-             'models' => $models,
-             'pages' => $pages,
-        ]);
-        
-    }
-
-
-    /**
-     * Lists all Customer models.
-     * @return mixed
-     */
-    public function actionDel()
-    {
-        // $searchModel = new CustomerSearch;
-        // $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-
-
-        // $query = Customer::find();
-        // $countQuery = clone $query;
-        // $pages = new \yii\data\Pagination(['totalCount' => $countQuery->count()]);
-        // $models = $query->offset($pages->offset)
-        //     ->limit($pages->limit)
-        //     ->all();
-
-        // return $this->render('index', [
-        //      'models' => $models,
-        //      'pages' => $pages,
-        // ]);
-        $request = Yii::$app->request;
-        $customer_id = $request->get("customer_id");
-        return $this->render('del', [
-            'customer_id' => $customer_id,
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
         ]);
     }
 
@@ -119,10 +87,10 @@ class CustomerController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
-        return $this->render('view', ['model' => $model]);
-}
+            return $this->render('view', ['model' => $model]);
+        }
     }
 
     /**
@@ -133,10 +101,6 @@ class CustomerController extends Controller
     public function actionCreate()
     {
         $model = new Customer;
-
-        var_dump($model);
-        // var_dump(Yii::$app->request->post());
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
