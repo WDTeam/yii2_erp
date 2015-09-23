@@ -20,33 +20,19 @@ use kartik\date\DatePicker;
     <?= $form->field($model, 'operation_category_type_introduction')->textarea(['rows' => 6]) ?>
 
     <?= $form->field($model, 'operation_category_type_english_name')->textInput(['maxlength' => true]) ?>
-
+    
     <?php
-        echo '<label class="control-label">'.$model->attributeLabels()['operation_category_type_start_time'].'</label>';
-        echo DatePicker::widget([
-        'name' => 'OperationCategoryType[operation_category_type_start_time]',
-        'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-        'value' => $model->operation_category_type_start_time,
-        'pluginOptions' => [
-            'autoclose'=>true,
-            'format' => 'yyyy-mm-dd'
-        ],
-    ]);
+        echo '<label class="control-label">服务时间</label>';
+        echo '<div id="operationcategorytype-operation_category_type_service_time_slot" class="form-inline">';
+        echo '    <div class="form-group">';
+        echo          Html::textInput('OperationCategoryType[operation_category_type_start_time]','',['class' => 'form-control']);
+        echo '    </div>';
+        echo '    <div class="form-group">　-　</div>';
+        echo '    <div class="form-group">';
+        echo          Html::textInput('OperationCategoryType[operation_category_type_end_time]','',['class' => 'form-control']);
+        echo '    </div>';
+        echo '</div>';
     ?>
-        
-    <?php
-        echo '<label class="control-label">'.$model->attributeLabels()['operation_category_type_end_time'].'</label>';
-        echo DatePicker::widget([
-        'name' => 'OperationCategoryType[operation_category_type_end_time]',
-        'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-        'value' => $model->operation_category_type_end_time,
-        'pluginOptions' => [
-            'autoclose'=>true,
-            'format' => 'yyyy-mm-dd'
-        ]
-    ]);
-    ?>
-
     
     <?php //= $form->field($model, 'operation_category_type_start_time')->textInput(['maxlength' => true]) ?>
 
