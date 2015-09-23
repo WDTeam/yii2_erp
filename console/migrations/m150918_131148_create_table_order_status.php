@@ -15,7 +15,7 @@ class m150918_131148_create_table_order_status extends Migration
 
         $this->createTable('{{%order_status}}', [
             'id'  => Schema::TYPE_PK.' NOT NULL AUTO_INCREMENT COMMENT \'ID\'',
-            'order_id'  => Schema::TYPE_BOOLEAN.'(1) unsigned NOT NULL DEFAULT 0 COMMENT \'订单编号\'',
+            'order_id'  => Schema::TYPE_BOOLEAN.'(1) unsigned NOT NULL DEFAULT 0 COMMENT \'订单id\'',
             'created_at'  => Schema::TYPE_BOOLEAN.'(1) unsigned NOT NULL DEFAULT 0 COMMENT \'创建时间初始时间\'',
             'updated_at'  => Schema::TYPE_BOOLEAN.'(1) unsigned NOT NULL DEFAULT 0 COMMENT \'更新时间\'',
             'order_status_code'  => Schema::TYPE_BOOLEAN.'(1) unsigned NOT NULL DEFAULT 0 COMMENT \'状态码=所有状态的布尔值组合成二进制再转成10进制\'',
