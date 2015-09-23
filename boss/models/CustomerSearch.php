@@ -15,7 +15,7 @@ class CustomerSearch extends Customer
     public function rules()
     {
         return [
-            [['id', 'customer_sex', 'customer_birth', 'region_id', 'customer_score', 'customer_level', 'customer_src', 'channal_id', 'platform_id', 'customer_login_time', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['id', 'customer_sex', 'customer_birth', 'region_id', 'customer_score', 'customer_level', 'customer_src', 'channal_id', 'platform_id', 'customer_login_time', 'customer_is_vip', 'created_at', 'updated_at', 'is_del'], 'integer'],
             [['customer_name', 'customer_photo', 'customer_phone', 'customer_email', 'customer_live_address_detail', 'customer_login_ip'], 'safe'],
         ];
     }
@@ -49,6 +49,7 @@ class CustomerSearch extends Customer
             'channal_id' => $this->channal_id,
             'platform_id' => $this->platform_id,
             'customer_login_time' => $this->customer_login_time,
+            'customer_is_vip' => $this->customer_is_vip,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'is_del' => $this->is_del,
