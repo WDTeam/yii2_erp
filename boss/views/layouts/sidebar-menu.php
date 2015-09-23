@@ -52,13 +52,13 @@ echo Menu::widget(
                 'items' => [
                     [
                         'label' => '查看所有门店',
-                        'url' => ['#'],
+                        'url' => ['shop/index'],
                         'icon' => 'fa fa-angle-right',
                         //'visible' => (Yii::$app->user->identity->username == 'admin'),
                     ],
                     [
                         'label' => '添加新门店',
-                        'url' => ['#'],
+                        'url' => ['shop/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],
@@ -226,38 +226,8 @@ echo Menu::widget(
                     ],
                     [
                         'label' => '结算管理',
-                        'url' => ['#'],
+                        'url' => ['/finance-settle-apply'],
                         'icon' => 'fa fa-angle-right',
-                        'options' => [
-                            'class' => 'treeview active',
-                          ],
-                        'items' => [
-                            [
-                            'label' => '结算申请列表',
-                            'url' => ['/finance-settle-apply'],
-                            'icon' => 'fa fa-angle-right',
-                            ],
-                            [
-                            'label' => '门店审核',
-                            'url' => ['#'],
-                            'icon' => 'fa fa-angle-right',
-                            ],
-                            [
-                            'label' => '业务部门审核',
-                            'url' => ['#'],
-                            'icon' => 'fa fa-angle-right',
-                            ],
-                            [
-                            'label' => '财务部门审核',
-                            'url' => ['#'],
-                            'icon' => 'fa fa-angle-right',
-                            ],
-                            [
-                            'label' => '确认付款',
-                            'url' => ['#'],
-                            'icon' => 'fa fa-angle-right',
-                            ],
-                        ]
                     ],
                     [
                         'label' => '报表管理',
@@ -421,12 +391,12 @@ echo Menu::widget(
                 'items' => [
                     [
                         'label' => '查看所有家政公司',
-                        'url' => ['#'],
+                        'url' => ['shop-manager/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
                         'label' => '添加新家政公司',
-                        'url' => ['#'],
+                        'url' => ['shop-manager/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],
