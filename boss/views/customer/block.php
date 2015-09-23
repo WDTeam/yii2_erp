@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
  * @var boss\models\WorkerSearch $searchModel
  */
 
-$this->title = Yii::t('app', '顾客管理');
+$this->title = Yii::t('app', '顾客黑名单');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="worker-index">
@@ -28,29 +28,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'worker_name',
-            'shop_id',
-            'worker_phone',
-            'worker_idcard',
-//            'worker_password',
-//            'worker_photo',
-//            'worker_level',
-//            'worker_auth_status',
-//            'worker_ontrial_status',
-//            'worker_onboard_status',
-//            'worker_work_city',
-//            'worker_work_area',
-//            'worker_work_street',
-//            'worker_work_lng',
-//            'worker_work_lat',
-//            'worker_type',
-            'worker_rule_id',
-//            'worker_is_block',
-//            'worker_is_blacklist',
-            'created_ad',
-//            'updated_ad',
-//            'isdel',
-
+            'id',
+            'customer_name',
+            'customer_phone',
+            'region_id',
+            'customer_is_vip',
+            'platform_id',
+            'channal_id',
+            'customer_score',
+            'customer_balance',
+            'customer_complaint_times',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
@@ -71,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> ' . Html::encode($this->title) . ' </h3>',
             'type' => 'info',
             'before' =>
-                Html::a('<i class="glyphicon" ></i>全部顾客', ['index?CustomerSearch'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']),
+                Html::a('<i class="glyphicon" ></i>全部顾客', ['/customer'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']),
             'after' => Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List',
                 ['index'],
                 ['class' => 'btn btn-info']),

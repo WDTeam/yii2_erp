@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> ' . Html::encode($this->title) . ' </h3>',
             'type' => 'info',
             'before' =>
-                Html::a('<i class="glyphicon" ></i>黑名单', ['index?CustomerSearch[is_del]=1'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']),
+                Html::a('<i class="glyphicon" ></i>黑名单', ['/customer/block'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']),
             'after' => Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List',
                 ['index'],
                 ['class' => 'btn btn-info']),
