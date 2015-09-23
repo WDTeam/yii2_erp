@@ -67,7 +67,15 @@ use kartik\datecontrol\DateControl;
         'bl_person'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 法人代表...', 'maxlength'=>50]],
         
         'bl_number'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 注册号...', 'maxlength'=>200]],
+        
+        'bl_create_time'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 注册时间...']],
+        
+        'bl_expiry_start'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 有效期起始时间...']],
+        
+        'bl_expiry_end'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 有效期结束时间...']],
 
+        'bl_audit'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 注册资本...']],
+        
         'bl_business'=>['type'=> Form::INPUT_TEXTAREA, 'options'=>['placeholder'=>'Enter 营业范围...','rows'=> 6]],
         
     ]
