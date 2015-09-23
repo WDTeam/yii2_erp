@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'region_id',
             'customer_is_vip',
             'platform_id',
-            'channal_id:',
+            'channal_id',
             'customer_score:integer',
             'customer_balance:decimal',
             'customer_complaint_times',
