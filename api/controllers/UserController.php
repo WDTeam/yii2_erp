@@ -14,13 +14,69 @@ class UserController extends Controller
     public $Url;
     public $NowTime;
     public $HTTPHEADER;
-    
+
+    /**
+    *
+   * @api {POST} /user/:id 请求用户信息
+   * @apiName GetUser
+   * @apiGroup Order
+   * @apiHeader {String} access-key Users unique access-key.
+   *
+   * @apiParam {Number} id 用户唯一ID
+   * @apiParam {Number} name 用户姓名
+   *
+   * @apiSuccess {String} firstname Firstname of the User.
+   * @apiSuccess {String} lastname  Lastname of the User.
+   *
+   * @apiSuccessExample Success-Response:
+   *     HTTP/1.1 200 OK
+   *     {
+   *       "firstname": "John",
+   *       "lastname": "Doe"
+   *     }
+   *
+   * @apiError UserNotFound The id of the User was not found.
+   *
+   * @apiErrorExample Error-Response:
+   *     HTTP/1.1 404 Not Found
+   *     {
+   *       "error": "UserNotFound"
+   *     }
+   *  @apiSampleRequest http://www.baidu.com
+   */
     public function init() {
         $this->Url = 'http://service.1jiajie.com:80/user-info/view-by-telphone?';
         $this->NowTime = time();
         $this->HTTPHEADER = json_encode(['Appkey:4567']);
     }
 
+    /**
+    *
+	 * @api {POST} /user/:id 请求用户信息
+	 * @apiName GetUser
+	 * @apiGroup User
+	 *
+	 * @apiParam {Number} id 用户唯一ID
+   * @apiParam {Number} name 用户姓名
+	 *
+	 * @apiSuccess {String} firstname Firstname of the User.
+	 * @apiSuccess {String} lastname  Lastname of the User.
+	 *
+	 * @apiSuccessExample Success-Response:
+	 *     HTTP/1.1 200 OK
+	 *     {
+	 *       "firstname": "John",
+	 *       "lastname": "Doe"
+	 *     }
+	 *
+	 * @apiError UserNotFound The id of the User was not found.
+	 *
+	 * @apiErrorExample Error-Response:
+	 *     HTTP/1.1 404 Not Found
+	 *     {
+	 *       "error": "UserNotFound"
+	 *     }
+	 */
     public function actionIndex()
     {
         echo 'Hello World!';
@@ -31,7 +87,7 @@ class UserController extends Controller
      * else,insert User Msg,return defined token.
      */
     public function actionCheckUserPhone()
-    {   
+    {
         $UserPhone = !empty($_GET['UserPhone']) ? trim($_GET['UserPhone']) : 15810511209;
         $isMobile = SysFunction::checkMobile($UserPhone);
         if($isMobile === -1){
@@ -54,7 +110,7 @@ class UserController extends Controller
      * Check User Token,if valid,return 1,else,-1.
      */
     public function actionCheckUserToken($flag = false)
-    {   
+    {
         $UserToken = !empty($_GET['UserToken']) ? trim($_GET['UserToken']) : '79f6rUNWEoNuOelgyPytOwjTDAWuttKCEI3NTabORBJTzUSj1ofkqU4JQXlJiK9gC8w';
         if(empty($UserToken)){
             $ret = ['code'=>100001,'msg'=>'User Token is empty','data'=>[]];

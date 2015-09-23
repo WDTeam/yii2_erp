@@ -53,7 +53,8 @@ class OperationCategoryType extends CoreOperationCategoryType
             [['operation_category_type_name', 'operation_category_type_english_name'], 'string', 'max' => 60],
             [['operation_category_name'], 'string', 'max' => 11],
             [['operation_category_type_start_time', 'operation_category_type_end_time'], 'string', 'max' => 20],
-            [['operation_price_strategy_name'], 'string', 'max' => 30]
+            [['operation_price_strategy_name'], 'string', 'max' => 30],
+            [['operation_category_type_name', 'operation_category_type_start_time','operation_category_type_end_time','operation_category_type_service_interval_time','operation_category_type_market_price'], 'required']
         ];
     }
 
