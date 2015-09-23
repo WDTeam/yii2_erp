@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
+use common\models\CustomerPlatform;
+use common\models\CustomerChannal;
 
 /**
  * @var yii\web\View $this
@@ -51,7 +53,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => '住址',
                 'value' => function ($dataProvider) {
                     //return $dataProvider->platform_id ? '' : '非自有';
-                    return '北京市朝阳区SOHO一期2单元';
+                    // return '北京市朝阳区SOHO一期2单元';
+                    return $dataProvider->customer_live_address_detail;
                 },
                 'width' => "100px",
             ],
@@ -67,7 +70,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'label' => '平台',
                 'value' => function ($dataProvider) {
-                    return 'IOS';
+                    $platform = CustomerPlatform::find()->where(['id'=>$dataProvider->platform_id])->one();
+                    return $platform->platform_name ? $platform->platform_name : '-';
                 },
                 'width' => "100px",
             ],
@@ -75,7 +79,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'label' => '渠道',
                 'value' => function ($dataProvider) {
-                    return '美团';
+                    $channal = CustomerChannal::find()->where(['id'=>$dataProvider->channal_id])->one();
+                    return $channal->channal_name ? $channal->channal_name : '-';
                 },
                 'width' => "100px",
             ],
