@@ -29,6 +29,14 @@ class m150918_140930_create_table_finance_settle_apply extends Migration
             'updated_at' => Schema::TYPE_INTEGER . '(11)  COMMENT \'审核时间\'',
             'created_at' => Schema::TYPE_INTEGER. '(11) COMMENT \'申请时间\'',
         ], $tableOptions);
+        $this->batchInsert('{{%finance_settle_apply}}',
+            ['id','worder_id','worder_tel','worker_type_id','worker_type_name','finance_settle_apply_money','finance_settle_apply_man_hour',
+                'finance_settle_apply_order_money','finance_settle_apply_order_cash_money','finance_settle_apply_non_order_money','finance_settle_apply_status','finance_settle_apply_cycle','finance_settle_apply_reviewer',
+                'isdel','updated_at','created_at'],
+            [
+                [1,111,'13888888888',1,'兼职',400,6,300,0,100,0,1,'魏北南',0,time(),time()],
+                [2,222,'13899999999',1,'全职',500,8,300,0,0,0,1,'潘高峰',0,time(),time()],
+            ]);
     }
 
     public function down()
