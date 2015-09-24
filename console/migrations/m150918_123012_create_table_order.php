@@ -38,7 +38,7 @@ class m150918_123012_create_table_order extends Migration
             'order_channel_name' => Schema::TYPE_STRING.'(64) NOT NULL DEFAULT \'\' COMMENT \'下单渠道名称\'',
             'order_channel_order_num' => Schema::TYPE_STRING . '(255) NOT NULL DEFAULT \'\' COMMENT \'渠道订单编号\'',
             'customer_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'用户编号\'',
-            'order_ip' => Schema::TYPE_INTEGER.'(10) NOT NULL DEFAULT 0 COMMENT \'用户编号\'',
+            'order_ip' => Schema::TYPE_INTEGER.'(10) NOT NULL DEFAULT 0 COMMENT \'下单IP\'',
             'order_customer_phone' => Schema::TYPE_STRING .'(16) NOT NULL DEFAULT \'\' COMMENT \'用户手机号\'',
             'order_booked_begin_time' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 0 COMMENT \'预约开始时间\'', //TODO 预约单词待定
             'order_booked_end_time' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 0 COMMENT \'预约结束时间\'',

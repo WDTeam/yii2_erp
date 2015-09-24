@@ -124,8 +124,10 @@ AppAsset::register($this);
             </section><!-- /.content -->
         </aside><!-- /.right-side -->
     </div>
-
     <?php $this->endBody() ?>
+<footer style="height: 100px;">
+    开发者：E家洁BOSS攻坚组
+</footer>
 </body>
 </html>
 <?php $this->endPage() ?>

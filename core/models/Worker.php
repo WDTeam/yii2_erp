@@ -33,12 +33,23 @@ use Yii;
  */
 class Worker extends \common\models\Worker
 {
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return '{{%worker}}';
+
+    public function getWorkerTypeShow(){
+        if($this->worker_type==1){
+            return '自有';
+        }else{
+            return '非自有';
+        }
+    }
+    public function getWorkerRuleShow(){
+        if($this->worker_type==1){
+            return '自有';
+        }else{
+            return '非自有';
+        }
     }
 
+    public function getExt(){
+        return $this->hasOne(WorkerExt::className(),['worker_id'=>'id']);
+    }
 }

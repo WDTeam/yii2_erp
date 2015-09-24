@@ -44,7 +44,7 @@ class WorkerExt extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['worker_age', 'worker_sex', 'worker_is_health', 'worker_is_insurance', 'worker_live_province', 'worker_live_city', 'worker_live_area', 'created_ad', 'updated_ad'], 'integer'],
+            [['worker_age', 'worker_sex', 'worker_is_health', 'worker_is_insurance', 'worker_live_province', 'worker_live_city', 'worker_live_area', 'created_ad', 'updated_ad','worker_bank_card'], 'integer'],
             [['worker_live_lng', 'worker_live_lat'], 'number'],
             [['worker_edu', 'worker_bank_card'], 'string', 'max' => 30],
             [['worker_hometown', 'worker_source', 'worker_live_street'], 'string', 'max' => 50],
