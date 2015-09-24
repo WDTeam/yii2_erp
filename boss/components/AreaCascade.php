@@ -4,75 +4,69 @@ namespace boss\components;
 use Yii;
 use boss\models\Operation\OperationArea;
 use yii\helpers\Html;
+use yii\base\Widget;
 
 /**
  * 
  */
-class AreaCascade extends Html{
+class AreaCascade extends Widget{
+
+    const _PROVINCE_ = '选择省(直辖市)';
+    const _CITY_ = '选择城市';
+    const _COUNTY_ = '选择县（区）';
+    const _TOWN_ = '选择乡镇（街道）';
+    
+    public $name;
+    public $options;
+    public $label;
+    public $grades = 'town';
+    private $html;
+    
+    public function init() {
+        parent::init();
+        $this->cascadeAll();
+    }
+    
     /**
      * 
-     * @param type $name
-     * @param type $downList
-     * @return type 
      */
-    public static function cascadeAll($name, $options = []){
-        return  static::areaProvince($name, $options)
-                .static::areaCity($name, $options)
-                .static::areaCounty($name, $options)
-                .static::areaTown($name, $options);
+    public function cascadeAll(){
+        if($this->grades == 'province'){
+            $this->options['showend'] = 'yes';
+            $this->html = $this->area($this->options, self::_PROVINCE_, 'province', 0);
+        }elseif($this->grades == 'city'){
+            $this->html = $this->area($this->options, self::_PROVINCE_, 'province', 0);
+            $this->options['showend'] = 'yes';
+            $this->html .= $this->area($this->options, self::_CITY_, 'city');
+        }elseif($this->grades == 'county'){
+            $this->html = $this->area($this->options, self::_PROVINCE_, 'province', 0);
+            $this->html .= $this->area($this->options, self::_CITY_, 'city');
+            $this->options['showend'] = 'yes';
+            $this->html .= $this->area($this->options, self::_COUNTY_, 'county');
+        }elseif($this->grades == 'town'){
+            $this->html = $this->area($this->options, self::_PROVINCE_, 'province', 0);
+            $this->html .= $this->area($this->options, self::_CITY_, 'city');
+            $this->html .= $this->area($this->options, self::_COUNTY_, 'county');
+            $this->options['showend'] = 'yes';
+            $this->html .= $this->area($this->options, self::_TOWN_);
+        }
     }
     
     
-    public static function areaTown($name, $options = [], $county_id = null, $selection = '选择乡镇（街道）'){
-        $name = $name.'[town]';
-        $options['id'] = 'town';
+    public function area($options, $selection, $type = 'town', $parent_id = ''){
+        $name = $this->name.'['.$type.']';
+        $options['id'] = $type;
         $items = [$selection];
-        if(!empty($county_id)){
-            $towns = OperationArea::getProvinces($county_id);
-            foreach($towns as $key => $town){
-                $items[$town->id] = $town->area_name;
+        if($parent_id !== ''){
+            $data = OperationArea::getProvinces($parent_id);
+            foreach($data as $key => $value){
+                $items[$value->id] = $value->area_name;
             }
         }
-        return static::dropDownList($name, '', $items, $options);
-    }
-    
-    public static function areaCounty($name, $options = [], $city_id = null, $selection = '选择县（区）'){
-        $name = $name.'[county]';
-        $options['id'] = 'county';
-        $items = [$selection];
-        if(!empty($city_id)){
-            $counties = OperationArea::getProvinces($city_id);
-            foreach($counties as $key => $county){
-                $items[$county->id] = $county->area_name;
-            }
-        }
-        return static::dropDownList($name, '', $items, $options);
-    }
-    
-    public static function areaCity($name, $options = [], $province_id = null, $selection = '选择城市'){
-        $name = $name.'[city]';
-        $options['id'] = 'city';
-        $items = [$selection];
-        if(!empty($province_id)){
-            $citys = OperationArea::getCity($province_id);
-            foreach($citys as $key => $city){
-                $items[$city->id] = $city->area_name;
-            }
-        }
-        return static::dropDownList($name, '', $items, $options);
+        return Html::dropDownList($name, '', $items, $options);
     }
 
-    private static function areaProvince($name, $options = [],$selection = '选择省份'){
-        $name = $name.'[province]';
-        $provinces = OperationArea::getProvinces();
-        $items = [$selection];
-        $options['id'] = 'province';
-        foreach($provinces as $key => $prov){
-            $items[$prov->id] = $prov->area_name;
-        }
-        return static::dropDownList($name, '', $items, $options);
+    public function run(){
+        return $this->render('AreaCascade', ['name' => $this->name, 'html' => $this->html, 'label' =>$this->label]);
     }
-
-
-//    public static function
 }

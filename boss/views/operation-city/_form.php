@@ -16,12 +16,9 @@ use boss\components\AreaCascade;
 <div class="operation-city-form">
 
     <?php
-    $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); 
-    echo '<fieldset id="w2"><div class="form-group field-operationcity-operation_city_name required">';
-    echo '<label class="control-label col-md-2" for="operationcity-operation_city_name">选择城市</label>';
-    echo '<div class="col-md-10">'.Yii::$app->areacascade->cascadeAll('OperationCity', ['class' => 'form-control']).'</div>';
-    echo '</div></fieldset>';
     
+    $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); 
+    echo AreaCascade::widget(['name' => 'OperationCity', 'options' => ['class' => 'form-control inline'], 'label' =>'选择城市', 'grades' => 'town']);
     echo Form::widget(['model' => $model,
     'form' => $form,
     'columns' => 1,
