@@ -18,7 +18,7 @@ use Yii;
  * @property string $admin_id
  * @property integer $isdel
  */
-class OrderStatusHistory extends \yii\db\ActiveRecord
+class OrderStatusHistory extends ActiveRecord
 {
     /**
      * @inheritdoc

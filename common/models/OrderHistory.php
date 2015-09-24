@@ -71,7 +71,7 @@ use Yii;
  * @property integer $order_isdel
  * @property integer $isdel
  */
-class OrderHistory extends \yii\db\ActiveRecord
+class OrderHistory extends ActiveRecord
 {
     /**
      * @inheritdoc
