@@ -43,7 +43,7 @@ echo Menu::widget(
                 'visible' => Yii::$app->user->can('readPost'),
             ],
             [
-                'label' => '门店管理',
+                'label' => '门店管理(50%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-flag',
                 'options' => [
@@ -51,13 +51,13 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有门店',
+                        'label' => '查看所有门店(90%)',
                         'url' => ['shop/index'],
                         'icon' => 'fa fa-angle-right',
                         //'visible' => (Yii::$app->user->identity->username == 'admin'),
                     ],
                     [
-                        'label' => '添加新门店',
+                        'label' => '添加新门店(70%)',
                         'url' => ['shop/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -381,7 +381,7 @@ echo Menu::widget(
                 ],
             ],
             [
-                'label' => '小家政管理',
+                'label' => '小家政管理(50%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-slideshare',
                 'options' => [
@@ -389,12 +389,12 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有家政公司',
+                        'label' => '查看所有家政公司(70%)',
                         'url' => ['shop-manager/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '添加新家政公司',
+                        'label' => '添加新家政公司(80%)',
                         'url' => ['shop-manager/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
