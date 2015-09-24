@@ -55,12 +55,6 @@ echo Form::widget([
             ]
         ], 
         
-        'province_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 省份...', 'maxlength'=>50]], 
-        
-        'city_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 城市...', 'maxlength'=>50]], 
-
-        'county_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 县...', 'maxlength'=>50]],
-        
         'street'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 办公街道...', 'maxlength'=>255]], 
         
         'principal'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 负责人...', 'maxlength'=>50]], 
@@ -100,6 +94,14 @@ echo Form::widget([
         
         ]);
     }?>
+    <?php 
+    echo AreaCascade::widget([
+        'model' => $model,
+        'options' => ['class' => 'form-control inline'],
+        'label' =>'选择城市',
+        'grades' => 'county',
+    ]);
+    ?>
     
     <h2>银行信息</h2>
 <?php echo Form::widget([

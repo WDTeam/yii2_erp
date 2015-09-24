@@ -15,8 +15,8 @@ class ShopSearch extends Shop
     public function rules()
     {
         return [
-            [['id', 'shop_menager_id', 'create_at', 'update_at', 'is_blacklist', 'blacklist_time', 'audit_status', 'worker_count', 'complain_coutn'], 'integer'],
-            [['name', 'province_name', 'city_name', 'county_name', 'street', 'principal', 'tel', 'other_contact', 'bankcard_number', 'account_person', 'opening_bank', 'sub_branch', 'opening_address', 'blacklist_cause', 'level'], 'safe'],
+            [['id', 'shop_menager_id', 'province_id', 'city_id', 'county_id', 'create_at', 'update_at', 'is_blacklist', 'blacklist_time', 'audit_status', 'worker_count', 'complain_coutn'], 'integer'],
+            [['name', 'street', 'principal', 'tel', 'other_contact', 'bankcard_number', 'account_person', 'opening_bank', 'sub_branch', 'opening_address', 'blacklist_cause', 'level'], 'safe'],
         ];
     }
 
@@ -41,6 +41,9 @@ class ShopSearch extends Shop
         $query->andFilterWhere([
             'id' => $this->id,
             'shop_menager_id' => $this->shop_menager_id,
+            'province_id' => $this->province_id,
+            'city_id' => $this->city_id,
+            'county_id' => $this->county_id,
             'create_at' => $this->create_at,
             'update_at' => $this->update_at,
             'is_blacklist' => $this->is_blacklist,
@@ -51,9 +54,6 @@ class ShopSearch extends Shop
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'province_name', $this->province_name])
-            ->andFilterWhere(['like', 'city_name', $this->city_name])
-            ->andFilterWhere(['like', 'county_name', $this->county_name])
             ->andFilterWhere(['like', 'street', $this->street])
             ->andFilterWhere(['like', 'principal', $this->principal])
             ->andFilterWhere(['like', 'tel', $this->tel])
