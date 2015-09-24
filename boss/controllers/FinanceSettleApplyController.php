@@ -33,10 +33,17 @@ class FinanceSettleApplyController extends Controller
     public function actionIndex()
     {
         $searchModel = new FinanceSettleApplySearch;
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        $defaultParams = array('FinanceSettleApplySearch'=>['finance_settle_apply_status' => '0']);
+        $requestParams = Yii::$app->request->getQueryParams();
+        $requestModel = $requestParams['FinanceSettleApplySearch'];
+        $nodeId =$requestModel['nodeId'];
+        var_dump($nodeId);
+        $requestParams = array_merge($defaultParams,$requestParams);
+        $dataProvider = $searchModel->search($requestParams);
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+            'nodeId' => $nodeId,
         ]);
     }
     
@@ -46,13 +53,22 @@ class FinanceSettleApplyController extends Controller
      */
     public function actionReview()
     {
+        
         $searchModel = new FinanceSettleApplySearch;
         $requestModel = Yii::$app->request->getQueryParams();
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel,
-        ]);
+        $financeSettleApplySearch = $requestModel["FinanceSettleApplySearch"];
+        //结算id字符串，例如："234,345"
+        $ids = $financeSettleApplySearch["ids"];
+        $financeSettleApplyStatus = $financeSettleApplySearch["finance_settle_apply_status"];
+        var_dump($ids);
+        var_dump($financeSettleApplyStatus);
+        $idArr = explode(',', $ids);
+        foreach($idArr as $id){
+            $model = $this->findModel($id);
+            $model->finance_settle_apply_status = $financeSettleApplyStatus;
+            $model->save();
+        }
+        return $this->actionIndex();
     }
 
     /**

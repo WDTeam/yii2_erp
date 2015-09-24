@@ -21,7 +21,7 @@ AppAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body class="skin-blue">
+<body class="skin-blue fixed">
     <?php $this->beginBody() ?>
     <header class="header">
         <a href="<?= Yii::$app->homeUrl ?>" class="logo">
@@ -29,7 +29,7 @@ AppAsset::register($this);
             <?= Yii::$app->name ?>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
-        <nav class="navbar navbar-static-top" role="navigation">
+        <nav class="navbar navbar-static-top .fixed" role="navigation">
             <!-- Sidebar toggle button-->
             <a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button">
                 <span class="sr-only"><?= Yii::t('app', 'Toggle navigation') ?></span>
@@ -124,8 +124,10 @@ AppAsset::register($this);
             </section><!-- /.content -->
         </aside><!-- /.right-side -->
     </div>
-
     <?php $this->endBody() ?>
+<footer style="height: 100px;">
+    开发者：E家洁BOSS攻坚组
+</footer>
 </body>
 </html>
 <?php $this->endPage() ?>

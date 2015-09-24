@@ -33,9 +33,47 @@ class CustomerController extends Controller
     public function actionIndex()
     {
         $searchModel = new CustomerSearch;
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
+        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('index', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
+
+    /**
+     * 加入黑名单
+     */
+    public function actionAddToBlock($id)
+    {
+        $model = $this->findModel($id);
+        $model->is_del = 1;
+        $model->save();
+        return $this->redirect(['/customer/index?CustomerSearch[is_del]=0']);
+    }
+
+    /**
+     * 从黑名单中取消
+     */
+    public function actionRemoveFromBlock($id)
+    {
+        $model = $this->findModel($id);
+        $model->is_del = 0;
+        $model->save();
+        return $this->redirect(['/customer/block?CustomerSearch[is_del]=1']);
+    }
+
+    /**
+     * Lists all Customer models.
+     * @return mixed
+     */
+    public function actionBlock()
+    {
+        $searchModel = new CustomerSearch;
+        var_dump(Yii::$app->request->getQueryParams());
+        
+        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        return $this->render('block', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
@@ -51,10 +89,10 @@ class CustomerController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
-        return $this->render('view', ['model' => $model]);
-}
+            return $this->render('view', ['model' => $model]);
+        }
     }
 
     /**
@@ -65,7 +103,6 @@ class CustomerController extends Controller
     public function actionCreate()
     {
         $model = new Customer;
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {

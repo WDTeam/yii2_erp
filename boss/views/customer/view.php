@@ -6,16 +6,16 @@ use kartik\datecontrol\DateControl;
 
 /**
  * @var yii\web\View $this
- * @var common\models\Customer $model
+ * @var common\models\Worker $model
  */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('boss', 'Customers'), 'url' => ['index']];
+$this->title = $model->customer_name;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Customers'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="customer-view">
+<div class="worker-view">
     <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
+        <!--<h1><?= Html::encode($this->title) ?></h1>-->
     </div>
 
 
@@ -31,23 +31,15 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'customer_name',
-            'customer_sex',
-            'customer_birth',
-            'customer_photo',
             'customer_phone',
-            'customer_email:email',
             'region_id',
-            'customer_live_address_detail',
-            'customer_score',
-            'customer_level',
-            'customer_src',
-            'channal_id',
+            //'worker_password',
+            'customer_is_vip',
             'platform_id',
-            'customer_login_ip',
-            'customer_login_time:datetime',
-            'created_at',
-            'updated_at',
-            'is_del',
+            'channal_id',
+            'customer_score',
+            'customer_balance',
+            'customer_complaint_times',
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],
@@ -60,3 +52,5 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
 </div>
+
+

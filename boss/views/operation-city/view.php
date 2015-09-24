@@ -9,7 +9,7 @@ use kartik\datecontrol\DateControl;
  * @var common\models\OperationCity $model
  */
 
-$this->title = Yii::t('app', 'Look').$model->operation_city_name;
+$this->title = Yii::t('app', 'Look').$model->city_name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Cities'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = Yii::t('app', 'View Detail');
 ?>
@@ -30,7 +30,8 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'View Detail');
 //        ],
         'attributes' => [
             'id',
-            'operation_city_name',
+            'province_name',
+            'city_name',
             ['attribute' => 'operation_city_is_online', 'value' => $model->operation_city_is_online == 1 ? '已上线': '已下线'],
             ['attribute' => 'created_at', 'value' => empty($model->created_at)? '' : date('Y-m-d H:i:s', $model->created_at)],
             ['attribute' => 'updated_at', 'value' => empty($model->updated_at)? '' : date('Y-m-d H:i:s', $model->updated_at)],

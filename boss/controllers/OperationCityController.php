@@ -8,6 +8,8 @@ use boss\models\Operation\OperationCitySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+//use boss\components\AreaCascade;
+use boss\models\Operation\OperationArea;
 
 /**
  * OperationCityController implements the CRUD actions for OperationCity model.
@@ -65,8 +67,14 @@ class OperationCityController extends Controller
     public function actionCreate()
     {
         $model = new OperationCity;
-
-        if ($model->load(Yii::$app->request->post())) {
+        $p = Yii::$app->request->post();
+        if(!empty($p)){
+            $province = OperationArea::getOneFromId($p['OperationCity']['province_id']);
+            $city = OperationArea::getOneFromId($p['OperationCity']['city_id']);
+            $p['OperationCity']['province_name'] = $province->area_name;
+            $p['OperationCity']['city_name'] = $city->area_name;
+        }
+        if ($model->load($p)) {
             $model->created_at = time();
             $model->updated_at = time();
             $model->save();
@@ -120,6 +128,23 @@ class OperationCityController extends Controller
         }
         $model->save();
         return $this->redirect(['index']);
+    }
+    
+    public function actionGetArea(){
+        $parent_id = Yii::$app->request->post('parent_id');
+        if(!empty($parent_id)){
+            $where = ['parent_id' => $parent_id];
+            $data = OperationArea::getAllData($where);
+            $areas = [];
+            foreach ($data as $key => $area){
+                $areas[$area->id] = $area->area_name;
+            }
+            $result = true;
+        }else{
+            $result = false;
+            $areas = null;
+        }
+        return json_encode(['result' => $result, 'data' => $areas]);
     }
 
     /**

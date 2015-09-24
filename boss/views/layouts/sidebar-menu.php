@@ -9,6 +9,39 @@ echo Menu::widget(
             'class' => 'sidebar-menu'
         ],
         'items' => [
+            /* 面试管理 */
+                        [
+                'label' => Yii::t('app', 'InterviewManagement'),
+                'url' => ['#'],
+                'icon' => 'fa-dashboard',
+                'options' => [
+                    'class' => 'treeview',
+                ],
+                'visible' => Yii::$app->user->can('readPost'),
+                'items' => [
+                    [
+                        'label' => Yii::t('app', 'Interview'),
+                        'url' => ['/interview/index'],
+                        'icon' => 'fa fa-user',
+                    ],
+//                    [
+//                        'label' => Yii::t('app', 'Agreement'),
+//                        'url' => ['/signed/index'],
+//                        'icon' => 'fa fa-lock',
+//                    ],
+                ],
+            ],
+             /* 服务管理 */
+                        [
+                'label' => Yii::t('app', 'CategoryManagement'),
+                'url' => ['category/index'],
+                'icon' => 'fa-dashboard',
+                'options' => [
+//                     'class' => 'treeview',
+                ],
+                'active'=>isset($ctrl->is_category_manage),
+                'visible' => Yii::$app->user->can('readPost'),
+            ],
             [
                 'label' => '门店管理',
                 'url' => ['#'],
@@ -16,17 +49,16 @@ echo Menu::widget(
                 'options' => [
                     'class' => 'treeview active',
                 ],
-                'visible' => Yii::$app->user->can('shop'),
                 'items' => [
                     [
                         'label' => '查看所有门店',
-                        'url' => ['#'],
+                        'url' => ['shop/index'],
                         'icon' => 'fa fa-angle-right',
                         //'visible' => (Yii::$app->user->identity->username == 'admin'),
                     ],
                     [
                         'label' => '添加新门店',
-                        'url' => ['#'],
+                        'url' => ['shop/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],
@@ -38,25 +70,21 @@ echo Menu::widget(
                 'options' => [
                     'class' => 'treeview active',
                 ],
-                'visible' => Yii::$app->user->can('worker'),
                 'items' => [
                     [
                         'label' => '查看所有阿姨',
                         'url' => ['/worker'],
                         'icon' => 'fa fa-angle-right',
-//                         'visible' => Yii::$app->user->can('worker/index'),
                     ],
                     [
                         'label' => '录入新阿姨',
                         'url' => ['/worker/create'],
                         'icon' => 'fa fa-angle-right',
-//                         'visible' => Yii::$app->user->can('worker/create'),
                     ],
                     [
                         'label' => '阿姨黑名单',
                         'url' => ['/worker-block'],
                         'icon' => 'fa fa-angle-right',
-//                         'visible' => Yii::$app->user->can('worker/block-index'),
                     ],
                 ],
             ],
@@ -67,17 +95,15 @@ echo Menu::widget(
                 'options' => [
                     'class' => 'treeview active',
                 ],
-                'visible' => Yii::$app->user->can('customer'),
                 'items' => [
                     [
                         'label' => '查看所有顾客',
-                        'url' => ['/customer'],
+                        'url' => ['/customer/index?CustomerSearch[is_del]=0'],
                         'icon' => 'fa fa-angle-right',
-//                         'visible' => Yii::$app->user->can('CustomerIndex'),
                     ],
                     [
                         'label' => '管理黑名单顾客',
-                        'url' => ['#'],
+                        'url' => ['/customer/block?CustomerSearch[is_del]=1'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],
@@ -89,13 +115,11 @@ echo Menu::widget(
                 'options' => [
                     'class' => 'treeview active',
                 ],
-                'visible' => Yii::$app->user->can('order'),
                 'items' => [
                     [
                         'label' => '查看所有订单',
                         'url' => ['/order/order'],
                         'icon' => 'fa fa-angle-right',
-//                         'visible' => Yii::$app->user->can('OrderOrder'),
                     ],
                     [
                         'label' => '创建新订单',
@@ -116,17 +140,83 @@ echo Menu::widget(
                 'options' => [
                     'class' => 'treeview active',
                 ],
-                'visible' => Yii::$app->user->can('finance'),
                 'items' => [
                     [
                         'label' => '对账管理',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
+							'options' => [
+							'class' => 'treeview active',
+							],
+							'items' => [
+							[
+							'label' => '对账',
+							'url' => ['/finance-pop-order/'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '对账统计',
+							'url' => ['/finance-record-log/'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '对账详情',
+							'url' => ['/finance-pop-order/billinfo'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '对账单配置',
+							'url' => ['/finance-pop-order/comparisonconfig'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '增加账单配置',
+							'url' => ['/finance-pop-order/billconfig'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '坏账列表',
+							'url' => ['/finance-pop-order/badlist'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '渠道管理',
+							'url' => ['/finance-order-channel/'],
+							'icon' => 'fa fa-angle-right',
+							]
+		
+					]
                     ],
                     [
                         'label' => '退款管理',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
+							'options' => [
+							'class' => 'treeview active',
+							],
+							'items' => [
+							[
+							'label' => '确认退款审核',
+							'url' => ['/finance-refund/'],
+							'icon' => 'fa fa-angle-right',
+							],
+							[
+							'label' => '退款确认退款审批',
+							'url' => ['/finance-refund/'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '会计执行银行退款',
+							'url' => ['/finance-refund/'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '确认银行退款',
+							'url' => ['/finance-refund/'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '退款详情',
+							'url' => ['/finance-refund/'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '退款统计',
+							'url' => ['/finance-refund/'],
+							'icon' => 'fa fa-angle-right',
+							]
+							]
+							
                     ],
                     [
                         'label' => '赔偿管理',
@@ -162,7 +252,6 @@ echo Menu::widget(
                 'options' => [
                     'class' => 'treeview active',
                 ],
-                'visible' => Yii::$app->user->can('operation'),
                 'items' => [
                     [
                         'label' => '用户运营',
@@ -203,7 +292,6 @@ echo Menu::widget(
                 'options' => [
                     'class' => 'treeview active',
                 ],
-                'visible' => Yii::$app->user->can('area'),
                 'items' => [
                     [
                         'label' => '城市管理',
@@ -215,41 +303,31 @@ echo Menu::widget(
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                     ],
+//                    [
+//                        'label' => '服务管理',
+//                        'url' => ['#'],
+//                        'icon' => 'fa fa-angle-right',
+//                    ],
                     [
-                        'label' => '服务管理',
+                        'label' => '服务品类管理',
+                        'url' => ['/operation-category'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
+                    [
+                        'label' => '启动页管理',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
-                        'options' => [
-                            'class' => 'treeview active',
-                        ],
-                        'items' => [
-                            [
-                                'label' => '服务品类管理',
-                                'url' => ['/operation-category'],
-                                'icon' => 'fa fa-angle-right',
-                            ],
-                            [
-                                'label' => '价格策略管理',
-                                'url' => ['/operation-price-strategy'],
-                                'icon' => 'fa fa-angle-right',
-                            ],
-                            [
-                                'label' => '启动页管理',
-                                'url' => ['#'],
-                                'icon' => 'fa fa-angle-right',
-                            ],
-                        ],
                     ],
-//                    [
-//                        'label' => '引导页管理',
-//                        'url' => ['#'],
-//                        'icon' => 'fa fa-angle-right',
-//                    ],
-//                    [
-//                        'label' => '话术管理',
-//                        'url' => ['#'],
-//                        'icon' => 'fa fa-angle-right',
-//                    ],
+                    [
+                        'label' => '引导页管理',
+                        'url' => ['#'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
+                    [
+                        'label' => '话术管理',
+                        'url' => ['#'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
                 ],
             ],
             [
@@ -289,7 +367,6 @@ echo Menu::widget(
                 'options' => [
                     'class' => 'treeview active',
                 ],
-                'visible' => Yii::$app->user->can('pop'),
                 'items' => [
                     [
                         'label' => '查看所有渠道',
@@ -310,16 +387,15 @@ echo Menu::widget(
                 'options' => [
                     'class' => 'treeview active',
                 ],
-                'visible' => Yii::$app->user->can('housekeep'),
                 'items' => [
                     [
                         'label' => '查看所有家政公司',
-                        'url' => ['#'],
+                        'url' => ['shop-manager/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
                         'label' => '添加新家政公司',
-                        'url' => ['#'],
+                        'url' => ['shop-manager/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],

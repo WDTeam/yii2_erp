@@ -4,64 +4,102 @@ use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
-
+use kartik\widgets\Select2; // or kartik\select2\Select2
+use yii\web\JsExpression;
+use kartik\grid\GridView;
+use common\models\Customer;
+use kartik\date\DatePicker;
 /**
  * @var yii\web\View $this
  * @var common\models\Customer $model
  * @var yii\widgets\ActiveForm $form
  */
+$url = \yii\helpers\Url::to(['customer']);
+//$cityDesc = empty($worker->shop_id) ? '' : Worker::findOne($worker->shop_id)->description;
+$cityDesc = '顾客';
+//$worker->hasOne(WorkerExt::className(),'id=worker_id');
+//var_dump($worker->workerExts);die;
 ?>
 
+
 <div class="customer-form">
-
-    <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); echo Form::widget([
-
-    'model' => $model,
-    'form' => $form,
-    'columns' => 1,
-    'attributes' => [
-
-'customer_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 客户名称...', 'maxlength'=>16]], 
-
-'customer_sex'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 客户性别...']], 
-
-'customer_phone'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 客户手机号...', 'maxlength'=>11]], 
-
-'customer_score'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 用户积分...']], 
-
-'created_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 创建时间...']], 
-
-'updated_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 更新时间...']], 
-
-'customer_birth'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 客户生日...']], 
-
-'region_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 居住区域关联...']], 
-
-'customer_level'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 客户会员级别...']], 
-
-'customer_src'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 客户来源，1为线下，2为线上...']], 
-
-'channal_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 关联渠道...']], 
-
-'platform_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 关联平台...']], 
-
-'customer_login_time'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 登陆 时间...']], 
-
-'is_del'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 是否逻辑删除...']], 
-
-'customer_login_ip'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 登陆ip...', 'maxlength'=>16]], 
-
-'customer_photo'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 客户头像...', 'maxlength'=>32]], 
-
-'customer_email'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 客户邮箱...', 'maxlength'=>32]], 
-
-'customer_live_address_detail'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter Customer Live Address Detail...', 'maxlength'=>64]], 
-
-    ]
-
-
+<?php $form = ActiveForm::begin(['type' => ActiveForm::TYPE_HORIZONTAL, 'id' => 'msg-form',
+        //'options' => ['class'=>'form-horizontal'],
+        //'enableAjaxValidation'=>false,
+        'fieldConfig' => [
+            //'template' => "{label}\n<div class=\"col-lg-8\">{input}</div>\n<div class=\"col-lg-5\">{error}</div>",
+            //'labelOptions' => ['class' => 'col-lg-1 control-label'],
+        ]
     ]);
-    echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']);
-    ActiveForm::end(); ?>
 
+    echo $form->field($customer, 'customer_name')->textInput(['placeholder' => 'Enter 顾客姓名...', 'maxlength' => 16]);
+    echo $form->field($customer, 'customer_sex')->radioList(['0' => '女', '1' => '男'], ['inline' => true]);
+    echo $form->field($customer, 'customer_phone')->textInput(['placeholder' => 'Enter 顾客手机...', 'maxlength' => 11]);
+    echo $form->field($customer, 'customer_score')->textInput(['placeholder' => 'Enter 顾客积分...', 'maxlength' => 8]);
+    echo $form->field($customer, 'created_at')->widget(DatePicker::classname(),[
+        'name' => 'created_at',
+        'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+        'value' => date('Y-m-d', $customer->created_at),
+        'pluginOptions' => [
+            'autoclose'=>true,
+            'format' => 'yyyy-mm-dd'
+        ]
+    ]);
+    echo $form->field($customer, 'updated_at')->widget(DatePicker::classname(),[
+        'name' => 'updated_at',
+        'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+        'value' => date('Y-m-d', $customer->updated_at),
+        'pluginOptions' => [
+            'autoclose'=>true,
+            'format' => 'yyyy-mm-dd'
+        ]
+    ]);
+    echo $form->field($customer, 'customer_birth')->widget(DatePicker::classname(),[
+        'name' => 'customer_birth',
+        'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+        'value' => date('Y-m-d', $customer->customer_birth),
+        'pluginOptions' => [
+            'autoclose'=>true,
+            'format' => 'yyyy-mm-dd'
+        ]
+    ]);
+
+    echo $form->field($customer, 'region_id')->textInput(['placeholder' => 'Enter 顾客住址ID...', 'maxlength' => 8]);
+    echo $form->field($customer, 'customer_level')->textInput(['placeholder' => 'Enter 顾客评级...', 'maxlength' => 8]);
+    echo $form->field($customer, 'customer_complaint_times')->textInput(['placeholder' => 'Enter 顾客投诉次数...', 'maxlength' => 8]);
+    //echo '<label class="control-label">'.$model->attributeLabels()['operation_boot_page_online_time'].'</label>';
+
+    echo $form->field($customer, 'customer_src')->radioList(['0' => '线下', '1' => '线上'], ['inline' => true]);
+    echo $form->field($customer, 'platform_id')->textInput(['placeholder' => 'Enter 顾客平台...', 'maxlength' => 8]);
+    echo $form->field($customer, 'channal_id')->textInput(['placeholder' => 'Enter 顾客聚道...', 'maxlength' => 8]);
+
+    //echo $form->field($worker_ext, 'worker_birth')->time(['placeholder' => 'Enter 阿姨生日...']);
+    echo $form->field($customer, 'customer_login_ip')->textInput(['placeholder' => 'Enter 顾客登陆IP...', 'maxlength' => 32]);
+    echo $form->field($customer, 'customer_login_time')->widget(DatePicker::classname(),[
+        'name' => 'customer_login_time',
+        'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+        'value' => date('Y-m-d', $customer->customer_login_time),
+        'pluginOptions' => [
+            'autoclose'=>true,
+            'format' => 'yyyy-mm-dd'
+        ]
+    ]);
+
+    echo $form->field($customer, 'customer_is_vip')->radioList(['0' => '非会员', '1' => '会员'], ['inline' => true]);
+    echo $form->field($customer, 'customer_is_del')->radioList(['0' => '未加入黑名单', '1' => '已加入黑名单'], ['inline' => true]);
+
+    echo $form->field($customer, 'customer_balance')->textInput(['placeholder' => 'Enter 顾客余额', 'maxlength' => 10]);
+    echo $form->field($customer, 'customer_del_reason')->textInput(['placeholder' => 'Enter 顾客加入黑名单原因', 'maxlength' => 255]);
+    
+
+
+    echo $form->field($customer, 'customer_photo')->textInput(['placeholder' => 'Enter 顾客头像...']);
+    echo $form->field($customer, 'customer_email')->textInput(['placeholder' => 'Enter 顾客邮箱...']);
+    echo $form->field($customer, 'customer_live_address_detail')->textInput(['placeholder' => 'Enter 顾客住址详情...']);
+    ?>
+</div>
+<?php 
+echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']);
+    ActiveForm::end(); 
+?>
 </div>
