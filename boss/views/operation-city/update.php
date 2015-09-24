@@ -19,5 +19,4 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update').'城市';
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
-
 </div>
