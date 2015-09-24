@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cff2605f88b216839e89d2c073ac3045",
+    "hash": "f86b7e5fd27c4a37785a2f4b8685afde",
     "packages": [
         {
             "name": "alexandernst/yii2-device-detect",
@@ -2668,6 +2668,53 @@
             "time": "2014-11-09 19:54:17"
         },
         {
+            "name": "marekpetras/yii2-calendarview-widget",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/marekpetras/yii2-calendarview-widget.git",
+                "reference": "9ed44c42707b213cbfc0d31ec13da0941388ca67"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://packagist.phpcomposer.com/files/marekpetras/yii2-calendarview-widget/9ed44c42707b213cbfc0d31ec13da0941388ca67.zip",
+                "reference": "9ed44c42707b213cbfc0d31ec13da0941388ca67",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*",
+                "yiisoft/yii2-bootstrap": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "marekpetras\\calendarview\\": "/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marek Petras",
+                    "email": "mark@markpetras.eu"
+                }
+            ],
+            "description": "CalendarView widget for Yii 2 Framework.",
+            "homepage": "https://github.com/marekpetras/yii2-calendarview-widget",
+            "keywords": [
+                "activerecord",
+                "calendar",
+                "dataprovider",
+                "extension",
+                "view",
+                "widget",
+                "yii2"
+            ],
+            "time": "2015-06-18 04:07:48"
+        },
+        {
             "name": "mobiledetect/mobiledetectlib",
             "version": "2.8.17",
             "source": {
@@ -2937,21 +2984,21 @@
         },
         {
             "name": "yiisoft/yii2-bootstrap",
-            "version": "2.0.4",
+            "version": "2.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-bootstrap.git",
-                "reference": "1b6b1e61cf91c3cdd517d6a7e71d30bb212e4af0"
+                "reference": "1464f93834b1d5edb1f5625f7ffd6c3723fa4923"
             },
             "dist": {
                 "type": "zip",
-                "url": "http://packagist.phpcomposer.com/files/yiisoft/yii2-bootstrap/1b6b1e61cf91c3cdd517d6a7e71d30bb212e4af0.zip",
-                "reference": "1b6b1e61cf91c3cdd517d6a7e71d30bb212e4af0",
+                "url": "http://packagist.phpcomposer.com/files/yiisoft/yii2-bootstrap/1464f93834b1d5edb1f5625f7ffd6c3723fa4923.zip",
+                "reference": "1464f93834b1d5edb1f5625f7ffd6c3723fa4923",
                 "shasum": ""
             },
             "require": {
                 "bower-asset/bootstrap": "3.3.* | 3.2.* | 3.1.*",
-                "yiisoft/yii2": ">=2.0.4"
+                "yiisoft/yii2": ">=2.0.6"
             },
             "type": "yii2-extension",
             "extra": {
@@ -2983,7 +3030,7 @@
                 "bootstrap",
                 "yii2"
             ],
-            "time": "2015-05-10 22:08:17"
+            "time": "2015-09-23 17:48:24"
         },
         {
             "name": "yiisoft/yii2-composer",
@@ -3495,7 +3542,8 @@
         "warrence/yii2-kartikgii": 20,
         "pjkui/kindeditor": 20,
         "crazyfd/yii2-qiniu": 20,
-        "kartik-v/yii2-dynagrid": 20
+        "kartik-v/yii2-dynagrid": 20,
+        "marekpetras/yii2-calendarview-widget": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

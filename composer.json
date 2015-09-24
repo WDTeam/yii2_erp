@@ -35,7 +35,8 @@
         "kartik-v/yii2-context-menu": "*",
         "kartik-v/yii2-slider": "*",
         "kartik-v/yii2-nav-x": "*",
-        "kartik-v/yii2-dynagrid": "@dev"
+        "kartik-v/yii2-dynagrid": "@dev",
+        "marekpetras/yii2-calendarview-widget": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

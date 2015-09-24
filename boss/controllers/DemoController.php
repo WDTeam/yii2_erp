@@ -161,8 +161,8 @@ class DemoController extends Controller
     {
         $searchModel = new ShopManagerSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-        
-        return $this->render('dynagrid',[
+
+        return $this->render('dynagrid', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
