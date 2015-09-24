@@ -4,10 +4,11 @@ namespace boss\modules\order\controllers;
 
 use Yii;
 use common\models\Order;
-use boss\models\search\OrderSearch;
+use core\models\order\OrderSearch;
 use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use core\models\order\OrderService;
 
 /**
  * OrderController implements the CRUD actions for Order model.
@@ -49,12 +50,16 @@ class OrderController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        return $this->redirect(['view', 'id' => $model->id]);
-        } else {
+        $post = Yii::$app->request->post();
+        if($model->load($post)) {
+            $post['Order']['admin_id'] = Yii::$app->user->id;
+            $post['Order']['order_ip'] = ip2long(Yii::$app->request->userIP);
+            if ($model->update($post)) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        }
         return $this->render('view', ['model' => $model]);
-}
+
     }
 
     /**
@@ -64,35 +69,20 @@ class OrderController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Order;
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        $model = new OrderService();
+        $post = Yii::$app->request->post();
+        if($model->load($post)){
+            $post['Order']['admin_id'] = Yii::$app->user->id;
+            $post['Order']['order_ip'] = ip2long(Yii::$app->request->userIP);
+            if ($model->create($post)) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
-    /**
-     * Updates an existing Order model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param string $id
-     * @return mixed
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
-    }
 
     /**
      * Deletes an existing Order model.
@@ -116,7 +106,7 @@ class OrderController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Order::findOne($id)) !== null) {
+        if (($model = OrderService::getById($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

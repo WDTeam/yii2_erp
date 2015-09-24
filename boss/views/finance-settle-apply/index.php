@@ -16,10 +16,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <form id ="financeSettleApplyForm">
 <div class="finance-settle-apply-index">
     <div class="page-header">
-            <button type="button" class="btn btn-default btn-lg active">门店财务管理</button>
-            <button type="button" class="btn btn-default btn-lg active">线下运营审核</button>
-            <button type="button" class="btn btn-default btn-lg active">财务审核</button>
-            <button type="button" class="btn btn-default btn-lg active">财务确认结算</button>
+            <button type="button" onclick = "changetTab(0,1)" class="btn btn-default btn-lg active">门店财务审核</button>
+            <button type="button" onclick = "changetTab(1,2)" class="btn btn-default btn-lg active">线下运营审核</button>
+            <button type="button" onclick = "changetTab(2,3)" class="btn btn-default btn-lg active">财务审核</button>
+            <button type="button" onclick = "changetTab(3,4)" class="btn btn-default btn-lg active">财务确认结算</button>
             <button type="button" class="btn btn-default btn-lg active">结算统计</button>
             <button type="button" class="btn btn-default btn-lg active">申请结算</button>
     </div>
@@ -28,21 +28,32 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class = "container">
         <button type="button" onclick="checkResult(1)" class="btn btn-default">审核通过</button>
         <button type="button" onclick="checkResult(0)" class="btn btn-default">审核不通过</button>
-    </div>
-        <input type="hidden" id="finance_settle_apply_status" name="FinanceSettleApplySearch[finance_settle_apply_status]"/>
+        <input type="hidden" id="finance_settle_apply_status" name="FinanceSettleApplySearch[finance_settle_apply_status]"  />
         <input type="hidden" id="ids" name="FinanceSettleApplySearch[ids]"/>
+        <input type="hidden" id="nodeId"   name="FinanceSettleApplySearch[nodeId]" value = "<?php echo $nodeId; ?>"/>
+    </div>
+        
     <script>
         function checkResult(checkStatus){
             //勾选的结算记录id
             var ids = $('#w1').yiiGridView('getSelectedRows');
-            if(ids == ''){
-                alert("请勾选结算记录");
+            if(ids === ''){
                 return;
             }
-            $("#finance_settle_apply_status").val(checkStatus);
+            if(checkStatus === 1){
+                $("#finance_settle_apply_status").val($("#nodeId").val());
+            }else{
+                $("#finance_settle_apply_status").val(-$("#nodeId").val());
+            }
             $("#ids").val(ids);
-//            var url = '/finance-settle-apply/review?finance_settle_apply_status='+checkStatus+'&ids='+ids;
-var url = '/finance-settle-apply/review';
+            var url = '/finance-settle-apply/review';
+            $('#financeSettleApplyForm').attr('action',url);
+            $('#financeSettleApplyForm').submit();
+        }
+        function changetTab(applyStatus,nodeId){
+            $("#nodeId").val(nodeId);
+            $("#finance_settle_apply_status").val(applyStatus);
+            var url = '/finance-settle-apply/index';
             $('#financeSettleApplyForm').attr('action',url);
             $('#financeSettleApplyForm').submit();
         }
@@ -57,7 +68,6 @@ var url = '/finance-settle-apply/review';
 //            'id',
             'worder_id',
             'worder_tel',
-//            'worker_type_id',
             'worker_type_name',
             'created_at', 
             'finance_settle_apply_cycle',
@@ -65,12 +75,22 @@ var url = '/finance-settle-apply/review';
             'finance_settle_apply_man_hour', 
             'finance_settle_apply_order_money', 
             'finance_settle_apply_order_cash_money', 
-            'finance_settle_apply_non_order_money', 
+            'finance_settle_apply_non_order_money',
+            'finance_settle_apply_far_subsidy',
+            'finance_settle_apply_night_subsidy',
+            'finance_settle_apply_empty_handed_subsidy',
+            'finance_settle_apply_attendance_bonus',
+            'finance_settle_apply_no_complaint_bonus',
+            'finance_settle_apply_daily_violation_bonus',
+            'finance_settle_apply_complaint_reduction',
+            'finance_settle_apply_compensate_reduction',
+            'finance_settle_apply_task_bonus',
+            'finance_settle_apply_small_maintain',
+            'finance_settle_apply_channel_bonus',
 //            'finance_settle_apply_status', 
             'finance_settle_apply_reviewer', 
 //            'isdel', 
             'updated_at', 
-            
             [
                 'class' => 'yii\grid\ActionColumn',
             ],

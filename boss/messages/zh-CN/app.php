@@ -108,5 +108,13 @@ return [
     
     'Auths'=>'授权项',
     'Create Auth'=>'创建授权项',
-    'Update Auth'=>'更新授权项'
+    'Update Auth'=>'更新授权项',
+    
+    'Shops'=>'门店',
+    'Create Shop'=>'添加门店',
+    'Update Shop'=>'修改门店',
+    
+    'Shop Managers'=>'小家政',
+    'Create Shop Manager'=>'添加小家政',
+    'Update Shop Manager'=>'修改小家政',
 ];

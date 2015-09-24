@@ -7,9 +7,7 @@ use yii\helpers\Html;
  * @var boss\models\Shop $model
  */
 
-$this->title = Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Shop',
-]);
+$this->title = Yii::t('app', 'Create Shop');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Shops'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

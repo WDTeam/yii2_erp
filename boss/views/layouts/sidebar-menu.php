@@ -98,12 +98,12 @@ echo Menu::widget(
                 'items' => [
                     [
                         'label' => '查看所有顾客',
-                        'url' => ['/customer'],
+                        'url' => ['/customer/index?CustomerSearch[is_del]=0'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
                         'label' => '管理黑名单顾客',
-                        'url' => ['#'],
+                        'url' => ['/customer/block?CustomerSearch[is_del]=1'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],
@@ -153,30 +153,29 @@ echo Menu::widget(
 							'label' => '对账',
 							'url' => ['/finance-pop-order/'],
 							'icon' => 'fa fa-angle-right',
-							],
-							[
-							'label' => '对账逻辑',
-							'url' => ['/finance-pop-order/'],
-							'icon' => 'fa fa-angle-right',
 							],[
 							'label' => '对账统计',
-							'url' => ['/finance-pop-order/'],
+							'url' => ['/finance-record-log/'],
 							'icon' => 'fa fa-angle-right',
 							],[
 							'label' => '对账详情',
-							'url' => ['/finance-pop-order/'],
+							'url' => ['/finance-pop-order/billinfo'],
 							'icon' => 'fa fa-angle-right',
 							],[
 							'label' => '对账单配置',
-							'url' => ['/finance-pop-order/'],
+							'url' => ['/finance-pop-order/comparisonconfig'],
 							'icon' => 'fa fa-angle-right',
 							],[
 							'label' => '增加账单配置',
-							'url' => ['/finance-pop-order/'],
+							'url' => ['/finance-pop-order/billconfig'],
 							'icon' => 'fa fa-angle-right',
 							],[
 							'label' => '坏账列表',
-							'url' => ['/finance-pop-order/'],
+							'url' => ['/finance-pop-order/badlist'],
+							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '渠道管理',
+							'url' => ['/finance-order-channel/'],
 							'icon' => 'fa fa-angle-right',
 							]
 		
