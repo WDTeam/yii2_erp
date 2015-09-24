@@ -3,7 +3,7 @@
 namespace boss\controllers;
 
 use Yii;
-use common\models\Worker;
+use common\models\WorkerBlock;
 use boss\models\WorkerBlockSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -32,7 +32,7 @@ class WorkerBlockController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new WorkerSearch;
+        $searchModel = new WorkerBlockSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
         return $this->render('index', [
@@ -51,10 +51,10 @@ class WorkerBlockController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            return $this->render('view', ['model' => $model]);
-        }
+        return $this->render('view', ['model' => $model]);
+}
     }
 
     /**
