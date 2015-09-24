@@ -59,7 +59,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'label' => '门店名称',
                 'value' => function ($dataProvider) {
-                    return Shop::findOne($dataProvider->shop_id)->name;
+                    if($dataProvider->shop_id){
+                        return Shop::findOne($dataProvider->shop_id)->name;
+                    }
                 }
             ],
             'worker_phone',
