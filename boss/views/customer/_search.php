@@ -1,33 +1,54 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use kartik\widgets\ActiveForm;
+use kartik\widgets\Select2;
+use yii\web\JsExpression;
+use kartik\builder\Form;
+use kartik\datecontrol\DateControl;
+use kartik\grid\GridView;
+use kartik\date\DatePicker;
 
 /**
  * @var yii\web\View $this
  * @var boss\models\Customer $model
  * @var yii\widgets\ActiveForm $form
  */
+// $url = \yii\helpers\Url::to(['index']);
 ?>
 
 <div class="customer-search">
 
     <?php $form = ActiveForm::begin([
+        'type' => ActiveForm::TYPE_VERTICAL,
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+    <?php
+    echo $form->field($model, 'region_id')->widget(Select2::classname(), [
+        'initValueText' => '城市',
+        // 'name' => 'region_id',
+        'hideSearch' => true,
+        'data' => [1 => '北京', 2 => '上海', 3 => '成都', 4 => '深圳'],
+        'options' => ['placeholder' => '选择城市', 'inline' => true],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]); 
+    ?>
 
-    <?= $form->field($model, 'customer_name') ?>
+    <?php //echo $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'customer_sex') ?>
+    <?php echo $form->field($model, 'customer_name') ?>
 
-    <?= $form->field($model, 'customer_birth') ?>
+    <?php //echo $form->field($model, 'customer_sex') ?>
 
-    <?= $form->field($model, 'customer_photo') ?>
+    <?php //echo $form->field($model, 'customer_birth') ?>
 
-    <?php // echo $form->field($model, 'customer_phone') ?>
+    <?php //echo $form->field($model, 'customer_photo') ?>
+
+    <?php echo $form->field($model, 'customer_phone') ?>
 
     <?php // echo $form->field($model, 'customer_email') ?>
 
