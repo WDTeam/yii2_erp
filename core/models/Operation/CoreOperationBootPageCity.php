@@ -38,5 +38,9 @@ class CoreOperationBootPageCity extends CommonOperationBootPageCity
         }
         Yii::$app->db->createCommand()->batchInsert(self::tableName(), $fields, $d)->execute();
     }
+    
+    public static function delBootPageCityList($BootPageId){
+        self::deleteAll(['operation_boot_page_id' => $BootPageId]);
+    }
 }
     

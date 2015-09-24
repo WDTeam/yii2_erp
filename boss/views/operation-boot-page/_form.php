@@ -1,5 +1,4 @@
 <?php
-
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\grid\GridView;
@@ -30,8 +29,11 @@ use kartik\date\DatePicker;
     <!-- <?= $form->field($model, 'operation_boot_page_offline_time')->textInput() ?>-->
 
     <?php echo '<label class="control-label">'.$model->attributeLabels()['citylist'].'</label>';?>
+    <?php 
+        echo '<br><input type="checkbox" id="allcitylist">全选';
+    ?>
     <?php echo Html::checkboxList('citylist', $BootPageCityList, $citylist)  ?>
-
+    
     <?php
     echo '<label class="control-label">'.$model->attributeLabels()['operation_boot_page_online_time'].'</label>';
     echo DatePicker::widget([
