@@ -3,12 +3,11 @@
 namespace boss\modules\order\controllers;
 
 use Yii;
-use common\models\Order;
 use core\models\order\OrderSearch;
 use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use core\models\order\OrderService;
+use core\models\order\Order;
 
 /**
  * OrderController implements the CRUD actions for Order model.
@@ -54,6 +53,7 @@ class OrderController extends Controller
         if($model->load($post)) {
             $post['Order']['admin_id'] = Yii::$app->user->id;
             $post['Order']['order_ip'] = ip2long(Yii::$app->request->userIP);
+
             if ($model->update($post)) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -69,12 +69,16 @@ class OrderController extends Controller
      */
     public function actionCreate()
     {
-        $model = new OrderService();
+        $model = new Order();
         $post = Yii::$app->request->post();
         if($model->load($post)){
             $post['Order']['admin_id'] = Yii::$app->user->id;
             $post['Order']['order_ip'] = ip2long(Yii::$app->request->userIP);
-            if ($model->create($post)) {
+            $post['Order']['order_src_id'] = 1; //订单来源BOSS
+            $post['Order']['channel_id'] = 1; //TODO 订单来源渠道BOSS
+            $post['Order']['order_channel_name'] = 'BOSS'; //TODO 订单来源渠道BOSS
+            $post['Order']['order_channel_order_num'] = ''; //TODO 渠道订单号
+            if ($model->createNew($post)) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
@@ -106,7 +110,7 @@ class OrderController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = OrderService::getById($id)) !== null) {
+        if (($model = Order::findById($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

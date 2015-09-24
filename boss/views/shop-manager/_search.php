@@ -21,11 +21,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'name') ?>
 
-    <?= $form->field($model, 'province_name') ?>
+    <?= $form->field($model, 'province_id') ?>
 
-    <?= $form->field($model, 'city_name') ?>
+    <?= $form->field($model, 'city_id') ?>
 
-    <?= $form->field($model, 'county_name') ?>
+    <?= $form->field($model, 'county_id') ?>
 
     <?php // echo $form->field($model, 'street') ?>
 

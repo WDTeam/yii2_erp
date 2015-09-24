@@ -29,7 +29,7 @@ use Yii;
  * @property integer $order_status_shop_pay
  * @property integer $order_status_payback
  */
-class OrderStatus extends \yii\db\ActiveRecord
+class OrderStatus extends ActiveRecord
 {
     /**
      * @inheritdoc

@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="order-form">
         <?php $form = ActiveForm::begin(['layout'=>'horizontal']); ?>
 
-        <div class="panel panel-default">
+        <div class="panel panel-info">
             <div class="panel-heading">
                 <h3 class="panel-title">用户信息</h3>
             </div>
@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="panel-footer">
                 <div class="form-group">
                     <div class="col-sm-offset-3 col-sm-6">
-                        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']); ?>
+                        <?= Html::submitButton('创建', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']); ?>
                     </div>
                 </div>
             </div>

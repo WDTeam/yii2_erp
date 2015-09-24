@@ -16,12 +16,10 @@ $this->title = Yii::t('app', '顾客黑名单');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="customer-index">
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Worker',
-]), ['create'], ['class' => 'btn btn-success'])*/ ?>
+        <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', ['modelClass' => 'Worker',]), ['create'], ['class' => 'btn btn-success'])*/ ?>
     </p>
 
     <?php Pjax::begin();
@@ -42,13 +40,33 @@ $this->params['breadcrumbs'][] = $this->title;
 
     echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        // 'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'id',
-            'customer_name',
-            'customer_phone',
-            'customer_live_address_detail',
+            [
+                'format' => 'raw',
+                'label' => '用户名',
+                'value' => function ($dataProvider) {
+                    return $dataProvider->customer_name;
+                },
+                'width' => "100px",
+            ],
+            [
+                'format' => 'raw',
+                'label' => '电话',
+                'value' => function ($dataProvider) {
+                    return $dataProvider->customer_phone;
+                },
+                'width' => "100px",
+            ],
+            [
+                'format' => 'raw',
+                'label' => '住址详情',
+                'value' => function ($dataProvider) {
+                    return $dataProvider->customer_live_address_detail;
+                },
+                'width' => "100px",
+            ],
             [
                 'format' => 'raw',
                 'label' => '身份',
