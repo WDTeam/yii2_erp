@@ -64,7 +64,7 @@ echo Menu::widget(
                 ],
             ],
             [
-                'label' => '阿姨管理',
+                'label' => '阿姨管理(40%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-female',
                 'options' => [
