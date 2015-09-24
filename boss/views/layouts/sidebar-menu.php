@@ -89,7 +89,7 @@ echo Menu::widget(
                 ],
             ],
             [
-                'label' => '顾客管理',
+                'label' => '顾客管理(35%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-user',
                 'options' => [
@@ -97,12 +97,12 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有顾客',
+                        'label' => '查看所有顾客(40%)',
                         'url' => ['/customer/index?CustomerSearch[is_del]=0'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '管理黑名单顾客',
+                        'label' => '管理黑名单顾客(35%)',
                         'url' => ['/customer/block?CustomerSearch[is_del]=1'],
                         'icon' => 'fa fa-angle-right',
                     ],
