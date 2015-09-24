@@ -68,6 +68,12 @@ class ShopManagerController extends Controller
      */
     public function actionCreate()
     {
+        $sql = 'UPDATE `ejj_operation_area` SET area_name=REPLACE (area_name,"\'","")
+,short_name=REPLACE (short_name,"\'","")
+,longitude=REPLACE (longitude,"\'","")
+,latitude=REPLACE (latitude,"\'","")
+,`position`=REPLACE (`position`,"\'","");';
+        \Yii::$app->db->createCommand($sql)->execute();
         $model = new ShopManager;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
