@@ -6,6 +6,7 @@ use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
 use boss\models\Shop;
 use kartik\widgets\Affix;
+use boss\components\AreaCascade;
 
 
 // The widget
