@@ -7,6 +7,13 @@ use yii\helpers\Html;
  * @var common\models\Worker $model
  */
 
+/*tabs-x 切换
+nav-x 导航
+editable 弹出
+helper-functions/html icon
+yii2-dynagrid
+*/
+
 $this->title = Yii::t('app', '录入新阿姨', [
     'modelClass' => 'Worker',
 ]);
