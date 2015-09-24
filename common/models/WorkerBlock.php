@@ -33,7 +33,7 @@ class WorkerBlock extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['worker_id', 'worker_block_type', 'worker_block_start', 'worker_block_finish', 'created_ad', 'updated_ad', 'admin_id'], 'integer'],
+            [['worker_id', 'worker_block_start_time', 'worker_block_finish_time', 'created_ad', 'updated_ad', 'admin_id'], 'integer'],
             [['worker_block_reason'], 'string', 'max' => 16]
         ];
     }
@@ -46,10 +46,9 @@ class WorkerBlock extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', '阿姨封号id'),
             'worker_id' => Yii::t('app', '阿姨id'),
-            'worker_block_type' => Yii::t('app', '阿姨封号类型'),
             'worker_block_reason' => Yii::t('app', '阿姨封号原因'),
-            'worker_block_start' => Yii::t('app', '封号开始时间'),
-            'worker_block_finish' => Yii::t('app', '封号结束时间'),
+            'worker_block_start_time' => Yii::t('app', '封号开始时间'),
+            'worker_block_finish_time' => Yii::t('app', '封号结束时间'),
             'created_ad' => Yii::t('app', '创建时间'),
             'updated_ad' => Yii::t('app', '最后更新时间'),
             'admin_id' => Yii::t('app', '管理员id'),

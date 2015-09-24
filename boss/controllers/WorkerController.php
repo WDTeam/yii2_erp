@@ -51,7 +51,6 @@ class WorkerController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -69,9 +68,18 @@ class WorkerController extends Controller
         $worker = new Worker;
         $worker_ext = new WorkerExt;
         $worker->created_ad = time();
+        //var_dump($worker_ext->Province_id);
+
+//        echo '<pre>';
+//        var_dump(Yii::$app->request->post());die;
         if ($worker->load(Yii::$app->request->post()) && $worker->save()) {
+
             return $this->redirect(['view', 'id' => $worker->id]);
         } else {
+            $worker_ext->province_id = $worker_ext->worker_live_province;
+            $worker_ext->city_id = $worker_ext->worker_live_city;
+            $worker_ext->county_id = $worker_ext->worker_live_area;
+            $worker_ext->town_id = $worker_ext->worker_live_street;
             return $this->render('create', [
                 'worker' => $worker,
                 'worker_ext' => $worker_ext

@@ -3,7 +3,8 @@
 namespace core\models;
 
 use Yii;
-
+use core\models\WorkerExt;
+use core\models\WorkerRuleConfig;
 /**
  * This is the model class for table "{{%worker}}".
  *
@@ -34,6 +35,12 @@ use Yii;
 class Worker extends \common\models\Worker
 {
 
+
+
+    /*
+     * 获取阿姨类型名称
+     * return String worker_type_name
+     */
     public function getWorkerTypeShow(){
         if($this->worker_type==1){
             return '自有';
@@ -41,15 +48,121 @@ class Worker extends \common\models\Worker
             return '非自有';
         }
     }
+    /*
+     * 获取阿姨身份名称
+     * @return String worker_rule_name
+     */
     public function getWorkerRuleShow(){
-        if($this->worker_type==1){
-            return '自有';
+
+        $workerRuleArr = WorkerRuleConfig::find()->where(['id'=>$this->worker_rule_id,'isdel'=>0])->asArray()->one();
+
+        return $workerRuleArr['worker_rule_name'];
+    }
+
+    /*
+     * 关联阿姨基本信息
+     */
+    public function getExt(){
+        return $this->hasOne(WorkerExt::className(),['worker_id'=>'id']);
+    }
+
+
+    /*
+     * 获取是否黑名单
+     * @return String 是 or 否
+     */
+    public function getWorkerIsBlockShow(){
+        if($this->worker_is_block==1){
+            return '是';
         }else{
-            return '非自有';
+            return '否';
         }
     }
 
-    public function getExt(){
-        return $this->hasOne(WorkerExt::className(),['worker_id'=>'id']);
+    /*
+     * 获取是否封号
+     * @return String 是 or 否
+     */
+    public function getWorkerIsBlacListkShow(){
+        if($this->worker_is_blacklist==1){
+            return '是';
+        }else{
+            return '否';
+        }
+    }
+
+    /*
+     * 获取审核状态
+     * @return String 通过 or 未通过
+     */
+    public function getWorkerAuthStatusShow(){
+        if($this->worker_auth_status==1){
+            return '通过';
+        }else{
+            return '未通过';
+        }
+    }
+
+    /*
+     * 获取试工状态
+     * @return String 通过 or 未通过
+     */
+    public function getWorkerOntrialStatusShow(){
+        if($this->worker_ontrial_status==1){
+            return '通过';
+        }else{
+            return '未通过';
+        }
+    }
+
+    /*
+     * 获取上岗状态
+     * @return String 通过 or 未通过
+     */
+    public function getWorkerOnboardStatusShow(){
+        if($this->worker_onboard_status==1){
+            return '通过';
+        }else{
+            return '未通过';
+        }
+    }
+
+    public function getWorkerAllRules(){
+
+        $workerRulesArr = WorkerRuleConfig::find()->where(['isdel'=>0])->select('id,worker_rule_name')->asArray()->all();
+
+        return $workerRulesArr;
+    }
+
+    public function getAuthStatusCount(){
+        return $this->find()->where(['worker_auth_status'=>0,'worker_ontrial_status'=>0,'worker_onboard_status'=>0])->count();
+    }
+    public function getOntrialStatusCount(){
+        return $this->find()->where(['worker_auth_status'=>1,'worker_ontrial_status'=>0,'worker_onboard_status'=>0])->count();
+    }
+    public function getOnboardStatusCount(){
+        return $this->find()->where(['worker_auth_status'=>1,'worker_ontrial_status'=>1,'worker_onboard_status'=>0])->count();
+    }
+    public function getBlockCount(){
+        return $this->find()->where(['worker_is_block'=>1])->count();
+    }
+    public function getBlackListCount(){
+        return $this->find()->where(['worker_is_blacklist'=>1])->count();
+    }
+    public function getVacationCount(){
+        return $this->find()->where(['worker_auth_status'=>1,'worker_ontrial_status'=>1,'worker_onboard_status'=>0])->count();
+    }
+
+    public function getQCount(){
+        return $this->find()->where(['worker_rule_id'=>1])->count();
+    }
+    public function getJCount(){
+        return $this->find()->where(['worker_rule_id'=>2])->count();
+    }
+    public function getSCount(){
+        return $this->find()->where(['worker_rule_id'=>3])->count();
+    }
+    public function getGCount(){
+        return $this->find()->where(['worker_rule_id'=>4])->count();
     }
 }

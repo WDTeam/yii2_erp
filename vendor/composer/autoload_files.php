@@ -15,7 +15,7 @@ return array(
     //百付宝
     $vendorDir . '/ejiajie/pay/bfb_app/bfbpay_class.php',
     //银联
-    $vendorDir . '/ejiajie/pay/upacp_app/uppay_class.php',
+    //$vendorDir . '/ejiajie/pay/upacp_app/uppay_class.php',
 
 
 );

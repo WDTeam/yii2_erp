@@ -15,8 +15,8 @@ class ShopManagerSearch extends ShopManager
     public function rules()
     {
         return [
-            [['id', 'bl_type', 'bl_create_time', 'bl_audit', 'bl_expiry_start', 'bl_expiry_end', 'create_at', 'update_at', 'is_blacklist', 'blacklist_time', 'audit_status', 'shop_count', 'worker_count', 'complain_coutn'], 'integer'],
-            [['name', 'province_name', 'city_name', 'county_name', 'street', 'principal', 'tel', 'other_contact', 'bankcard_number', 'account_person', 'opening_bank', 'sub_branch', 'opening_address', 'bl_name', 'bl_number', 'bl_person', 'bl_address', 'bl_photo_url', 'bl_business', 'blacklist_cause', 'level'], 'safe'],
+            [['id', 'province_id', 'city_id', 'county_id', 'bl_type', 'bl_create_time', 'bl_audit', 'bl_expiry_start', 'bl_expiry_end', 'create_at', 'update_at', 'is_blacklist', 'blacklist_time', 'audit_status', 'shop_count', 'worker_count', 'complain_coutn'], 'integer'],
+            [['name', 'street', 'principal', 'tel', 'other_contact', 'bankcard_number', 'account_person', 'opening_bank', 'sub_branch', 'opening_address', 'bl_name', 'bl_number', 'bl_person', 'bl_address', 'bl_photo_url', 'bl_business', 'blacklist_cause', 'level'], 'safe'],
         ];
     }
 
@@ -40,6 +40,9 @@ class ShopManagerSearch extends ShopManager
 
         $query->andFilterWhere([
             'id' => $this->id,
+            'province_id' => $this->province_id,
+            'city_id' => $this->city_id,
+            'county_id' => $this->county_id,
             'bl_type' => $this->bl_type,
             'bl_create_time' => $this->bl_create_time,
             'bl_audit' => $this->bl_audit,
@@ -56,9 +59,6 @@ class ShopManagerSearch extends ShopManager
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'province_name', $this->province_name])
-            ->andFilterWhere(['like', 'city_name', $this->city_name])
-            ->andFilterWhere(['like', 'county_name', $this->county_name])
             ->andFilterWhere(['like', 'street', $this->street])
             ->andFilterWhere(['like', 'principal', $this->principal])
             ->andFilterWhere(['like', 'tel', $this->tel])

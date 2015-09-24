@@ -15,7 +15,7 @@ class WorkerBlockSearch extends WorkerBlock
     public function rules()
     {
         return [
-            [['id', 'worker_id', 'worker_block_type', 'worker_block_start', 'worker_block_finish', 'created_ad', 'updated_ad', 'admin_id'], 'integer'],
+            [['id', 'worker_id', 'worker_block_start_time', 'worker_block_finish_time', 'created_ad', 'updated_ad', 'admin_id'], 'integer'],
             [['worker_block_reason'], 'safe'],
         ];
     }
@@ -41,9 +41,8 @@ class WorkerBlockSearch extends WorkerBlock
         $query->andFilterWhere([
             'id' => $this->id,
             'worker_id' => $this->worker_id,
-            'worker_block_type' => $this->worker_block_type,
-            'worker_block_start' => $this->worker_block_start,
-            'worker_block_finish' => $this->worker_block_finish,
+            'worker_block_start_time' => $this->worker_block_start,
+            'worker_block_finish_time' => $this->worker_block_finish,
             'created_ad' => $this->created_ad,
             'updated_ad' => $this->updated_ad,
             'admin_id' => $this->admin_id,

@@ -5,6 +5,7 @@ use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
 use boss\models\ShopManager;
+use boss\components\AreaCascade;
 
 /**
  * @var yii\web\View $this
@@ -16,33 +17,41 @@ use boss\models\ShopManager;
 <div class="shop-manager-form">
 
     <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); ?>
+    <?php //var_dump($model->getErrors());?>
     <h2>基础信息</h2>
-<?php echo Form::widget([
-
-    'model' => $model,
-    'form' => $form,
-    'columns' => 1,
-    'attributes' => [
-        
-        'name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 家政名称...', 'maxlength'=>255]], 
-        
-        'province_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 省份...', 'maxlength'=>50]], 
-        
-        'city_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 城市...', 'maxlength'=>50]], 
-        
-        'county_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 县...', 'maxlength'=>50]],
-        
-        'street'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 办公街道...', 'maxlength'=>255]], 
-        
-        'principal'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 负责人...', 'maxlength'=>50]], 
-        
-        'tel'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 电话...', 'maxlength'=>50]], 
-
-        'other_contact'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 其他联系方式...', 'maxlength'=>200]],
-        
-    ]
-
+    <?php echo Form::widget([
+        'model' => $model,
+        'form' => $form,
+        'columns' => 1,
+        'attributes' => [
+            
+            'name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 家政名称...', 'maxlength'=>255]], 
+            
+        ]
     ]);?>
+    <?php 
+    echo AreaCascade::widget([
+        'model' => $model,
+        'options' => ['class' => 'form-control inline'],
+        'label' =>'选择城市',
+        'grades' => 'county',
+    ]);
+    ?>
+    <?php echo Form::widget([
+        'model' => $model,
+        'form' => $form,
+        'columns' => 1,
+        'attributes' => [
+            'street'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 办公街道...', 'maxlength'=>255]], 
+            
+            'principal'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 负责人...', 'maxlength'=>50]], 
+            
+            'tel'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 电话...', 'maxlength'=>50]], 
+    
+            'other_contact'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 其他联系方式...', 'maxlength'=>200]],
+        ]
+    ]);?>
+    
     <?php if(!$model->getIsNewRecord()){
         echo Form::widget([
             'model' => $model,
