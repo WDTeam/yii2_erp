@@ -61,18 +61,22 @@ class AreaCascade extends Widget{
         $county_selection = empty($this->county_id) ? self::_COUNTY_ : $this->county_id;
         $town_selection = empty($this->town_id) ? self::_TOWN_ : $this->town_id;
         if($this->grades == 'province'){
+            //显示一级
             $this->options['showend'] = 'yes';
             $this->html = $this->area($this->options, $province_selection, 'province', 0);
         }elseif($this->grades == 'city'){
+            //显示两级
             $this->html = $this->area($this->options, $province_selection, 'province', 0);
             $this->options['showend'] = 'yes';
             $this->html .= $this->area($this->options, $city_selection, 'city', $this->province_id);
         }elseif($this->grades == 'county'){
+            //显示三级
             $this->html = $this->area($this->options, $province_selection, 'province', 0);
             $this->html .= $this->area($this->options, $city_selection, 'city', $this->province_id);
             $this->options['showend'] = 'yes';
             $this->html .= $this->area($this->options, $county_selection, 'county', $this->city_id);
         }elseif($this->grades == 'town'){
+            //显示四级
             $this->html = $this->area($this->options, $province_selection, 'province', 0);
             $this->html .= $this->area($this->options, $city_selection, 'city', $this->province_id);
             $this->html .= $this->area($this->options, $county_selection, 'county', $this->city_id);
