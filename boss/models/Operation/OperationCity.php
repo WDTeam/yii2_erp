@@ -28,9 +28,9 @@ class OperationCity extends CoreOperationCity
     public function rules()
     {
         return [
-            [['operation_city_is_online', 'created_at', 'updated_at'], 'integer'],
-            [['operation_city_name'], 'string', 'max' => 30],
-            [['operation_city_name'], 'required']
+            [['operation_city_is_online', 'created_at', 'updated_at', 'city_id', 'province_id'], 'integer'],
+            [['city_name','province_name'], 'string', 'max' => 30],
+            [['city_name','province_name'], 'required']
         ];
     }
 
@@ -41,7 +41,10 @@ class OperationCity extends CoreOperationCity
     {
         return [
             'id' => Yii::t('app', '编号'),
-            'operation_city_name' => Yii::t('app', '城市名称'),
+            'province_id' => Yii::t('app', '省份编号'),
+            'province_name' => Yii::t('app', '省份名称'),
+            'city_id' => Yii::t('app', '城市编号'),
+            'city_name' => Yii::t('app', '城市名称'),
             'operation_city_is_online' => Yii::t('app', '上线状态'),//（1为上线，2为下线）
             'created_at' => Yii::t('app', '创建时间'),
             'updated_at' => Yii::t('app', '编辑时间'),

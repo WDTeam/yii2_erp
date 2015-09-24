@@ -58,8 +58,8 @@ class OperationArea extends CoreOperationArea
         ];
     }
     
-    public static function getProvinces(){
-        $where = ['parent_id' => '0'];
+    public static function getProvinces($parent_id = 0){
+        $where = ['parent_id' => $parent_id];
         return self::getAllData($where);
     }
 }
