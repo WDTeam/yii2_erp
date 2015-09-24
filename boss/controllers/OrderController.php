@@ -1,6 +1,6 @@
 <?php
 
-namespace boss\modules\order\controllers;
+namespace boss\controllers;
 
 use Yii;
 use core\models\order\OrderSearch;
