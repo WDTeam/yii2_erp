@@ -5,6 +5,7 @@ namespace boss\controllers;
 use Yii;
 use boss\models\Operation\OperationBootPage;
 use boss\models\Operation\OperationCity;
+use boss\models\Operation\OperationBootPageCity;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -70,13 +71,26 @@ class OperationBootPageController extends Controller
             $post['OperationBootPage']['operation_boot_page_offline_time'] = strtotime($post['OperationBootPage']['operation_boot_page_offline_time']);
             $post['OperationBootPage']['created_at'] = time();
             $post['OperationBootPage']['updated_at'] = time();
+            $operation_boot_page_ios_img_file = UploadedFile::getInstance($model, 'operation_boot_page_ios_img');
+            $operation_boot_page_android_img_file = UploadedFile::getInstance($model, 'operation_boot_page_android_img');
+            $qiniu = new Qiniu();
+            $ios_key = time().mt_rand('1000', '9999');
+            $android_key = time().mt_rand('1000', '9999');
+            $qiniu->uploadFile($operation_boot_page_ios_img_file->tempName, $ios_key);
+            $qiniu->uploadFile($operation_boot_page_android_img_file->tempName, $android_key);
+            $post['OperationBootPage']['operation_boot_page_ios_img'] = $qiniu->getLink($ios_key);
+            $post['OperationBootPage']['operation_boot_page_android_img'] = $qiniu->getLink($android_key);
         }
         if ($model->load($post) && $model->save()) {
+            if(isset($post['citylist'])){
+                OperationBootPageCity::setBootPageCityList($post['citylist'], $model->id);
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
-                'citylist' => OperationCity::find()->all(),
+                'citylist' => OperationCity::getOnlineCityList(),
+                'BootPageCityList' => '',
             ]);
         }
     }
@@ -97,15 +111,24 @@ class OperationBootPageController extends Controller
             $post['OperationBootPage']['updated_at'] = time();
             $operation_boot_page_ios_img_file = UploadedFile::getInstance($model, 'operation_boot_page_ios_img');
             $operation_boot_page_android_img_file = UploadedFile::getInstance($model, 'operation_boot_page_android_img');
-
-
-//            var_dump($operation_boot_page_android_img_file); exit;
+            $qiniu = new Qiniu();
+            $ios_key = time().mt_rand('1000', '9999');
+            $android_key = time().mt_rand('1000', '9999');
+            $qiniu->uploadFile($operation_boot_page_ios_img_file->tempName, $ios_key);
+            $qiniu->uploadFile($operation_boot_page_android_img_file->tempName, $android_key);
+            $post['OperationBootPage']['operation_boot_page_ios_img'] = $qiniu->getLink($ios_key);
+            $post['OperationBootPage']['operation_boot_page_android_img'] = $qiniu->getLink($android_key);
         }
         if ($model->load($post) && $model->save()) {
+            if(isset($post['citylist'])){
+                OperationBootPageCity::setBootPageCityList($post['citylist'], $model->id);
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'citylist' => OperationCity::getOnlineCityList(),
+                'BootPageCityList' => OperationBootPageCity::getBootPageCityList($id),
             ]);
         }
     }

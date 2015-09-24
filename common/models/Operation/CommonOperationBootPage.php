@@ -1,5 +1,4 @@
 <?php
-
 namespace common\models\Operation;
 
 use Yii;
@@ -28,29 +27,5 @@ class CommonOperationBootPage extends \yii\db\ActiveRecord
         return '{{%operation_boot_page}}';
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-    }
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => Yii::t('app', '编号'),
-            'operation_boot_page_name' => Yii::t('app', '启动页名称'),
-            'operation_boot_page_ios_img' => Yii::t('app', 'ios图片'),
-            'operation_boot_page_android_img' => Yii::t('app', 'android图片'),
-            'operation_boot_page_url' => Yii::t('app', '启动页连接地址'),
-            'operation_boot_page_residence_time' => Yii::t('app', '停留时间：秒数 （不填写默认为5秒）'),
-            'operation_boot_page_online_time' => Yii::t('app', '上线时间'),
-            'operation_boot_page_offline_time' => Yii::t('app', '下线时间'),
-            'created_at' => Yii::t('app', '创建时间'),
-            'updated_at' => Yii::t('app', '编辑时间'),
-        ];
-    }
 }
