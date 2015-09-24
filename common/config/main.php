@@ -166,14 +166,14 @@ return [
              * 查看完整的演示效果：http://demos.krajee.com/dynagrid-demo
              * 使用参考：http://demos.krajee.com/dynagrid
              */
-            'dynagrid'=> [
-                         'class'=>'\kartik\dynagrid\Module',
-                         // other module settings
-            ],
-            'gridview'=> [
-                 'class'=>'\kartik\grid\Module',
-                 // other module settings
-             ],
+//             'dynagrid'=> [
+//                          'class'=>'\kartik\dynagrid\Module',
+//                          // other module settings
+//             ],
+//             'gridview'=> [
+//                  'class'=>'\kartik\grid\Module',
+//                  // other module settings
+//              ],
          ]
     ],
 ];

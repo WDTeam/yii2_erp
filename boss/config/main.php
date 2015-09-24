@@ -16,6 +16,9 @@ return [
 //            'class' => 'funson86\blog\Module',
 //            'controllerNamespace' => 'funson86\blog\controllers\boss'
 //        ],
+        'dynagrid'=> [
+            'class'=>'\kartik\dynagrid\Module',
+        ],
         'gridview' => [
             'class' => 'kartik\grid\Module',
         ],

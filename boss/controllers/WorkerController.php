@@ -7,8 +7,8 @@ use yii\db\Query;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use common\models\Worker;
-use common\models\WorkerExt;
+use core\models\Worker;
+use core\models\WorkerExt;
 use boss\models\WorkerSearch;
 
 /**
@@ -53,10 +53,10 @@ class WorkerController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
-        return $this->render('view', ['model' => $model]);
-}
+            return $this->render('view', ['model' => $model]);
+        }
     }
 
     /**
@@ -68,12 +68,13 @@ class WorkerController extends Controller
     {
         $worker = new Worker;
         $worker_ext = new WorkerExt;
+        $worker->created_ad = time();
         if ($worker->load(Yii::$app->request->post()) && $worker->save()) {
             return $this->redirect(['view', 'id' => $worker->id]);
         } else {
             return $this->render('create', [
                 'worker' => $worker,
-                'worker_ext'=>$worker_ext
+                'worker_ext' => $worker_ext
             ]);
         }
     }
@@ -127,23 +128,27 @@ class WorkerController extends Controller
     }
 
 
-    public function actionShowShop($q=null,$id=null){
+    public function actionShowShop($q = null, $id = null)
+    {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $out = ['results' => ['id' => '', 'text' => '']];
         if (!is_null($q)) {
-            /*$query = new Query;
+            $query = new Query;
             $query->select('id, name AS text')
                 ->from('ejj_shop')
                 ->where('name LIKE "%' . $q .'%"')
                 ->limit(20);
             $command = $query->createCommand();
             $data = $command->queryAll();
-            $out['results'] = array_values($data);*/
-            $out['results'] = [['id'=>'1','text'=>'门店'],['id'=>'2','text'=>'门店2'],['id'=>'2','text'=>'门店3']];
-        }
-        elseif ($id > 0) {
-            $out['results'] = ['id' => $id, 'text' => Worker::findone(array('id'=>1))->worker_name];
+            $out['results'] = array_values($data);
+            //$out['results'] = [['id' => '1', 'text' => '门店'], ['id' => '2', 'text' => '门店2'], ['id' => '2', 'text' => '门店3']];
+        } elseif ($id > 0) {
+            $out['results'] = ['id' => $id, 'text' => Worker::findone(array('id' => 1))->worker_name];
         }
         return $out;
+    }
+
+    public function actionGetShopName(){
+        return 'abc';
     }
 }

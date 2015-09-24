@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
+use kartik\dynagrid\DynaGrid;
 
 /**
  * @var yii\web\View $this
@@ -96,5 +97,4 @@ $this->params['breadcrumbs'][] = $this->title;
             'showFooter'=>false
         ],
     ]); Pjax::end(); ?>
-
 </div>
