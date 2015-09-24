@@ -1,7 +1,4 @@
 <?php
-use yii\helpers\Html;
-use kartik\grid\GridView;
-use yii\widgets\Pjax;
 use kartik\dynagrid\DynaGrid;
 
 
@@ -9,15 +6,29 @@ $columns = [
     ['class'=>'kartik\grid\SerialColumn', 'order'=>DynaGrid::ORDER_FIX_LEFT],
     'id',
     'name',
-    [
-        'attribute'=>'name',
-        'filterType'=>GridView::FILTER_DATE,
-        'format'=>'raw',
-        'width'=>'170px',
-        'filterWidgetOptions'=>[
-            'pluginOptions'=>['format'=>'yyyy-mm-dd']
-        ],
-    ],
+    'province_name',
+    'city_name',
+    'county_name',
+   'street', 
+   'principal', 
+   'tel', 
+   'other_contact', 
+   'bankcard_number', 
+   'account_person', 
+   'opening_bank', 
+   'sub_branch', 
+   'opening_address', 
+   'bl_name', 
+   'bl_type', 
+   'bl_number', 
+   'bl_person', 
+   'bl_address', 
+   'bl_create_time:datetime', 
+   'bl_photo_url:url', 
+   'bl_audit', 
+   'bl_expiry_start', 
+   'bl_expiry_end', 
+   'bl_business:ntext', 
     [
         'class'=>'kartik\grid\BooleanColumn',
         'attribute'=>'audit_status',
@@ -33,7 +44,9 @@ $columns = [
 echo DynaGrid::widget([
     'columns'=>$columns,
     'storage'=>DynaGrid::TYPE_COOKIE,
-    'theme'=>'panel-danger',
+    'theme'=>'simple-default',
+    'allowPageSetting'=>true,
+    'showPersonalize'=>true,
     'gridOptions'=>[
         'dataProvider'=>$dataProvider,
         'filterModel'=>$searchModel,
