@@ -31,6 +31,7 @@ class AreaCascade extends Widget{
      * 
      */
     public function cascadeAll(){
+        if(empty($this->grades)){$this->grades = 'town';}
         if($this->grades == 'province'){
             $this->options['showend'] = 'yes';
             $this->html = $this->area($this->options, self::_PROVINCE_, 'province', 0);
