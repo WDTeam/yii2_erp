@@ -1,33 +1,32 @@
 <?php
 
 use yii\helpers\Html;
-use kartik\detail\DetailView;
-use kartik\datecontrol\DateControl;
+use yii\widgets\DetailView;
 
-/**
- * @var yii\web\View $this
- * @var boss\models\ShopManager $model
- */
+/* @var $this yii\web\View */
+/* @var $model boss\models\ShopManager */
 
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Shop Managers'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="shop-manager-view">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
 
+    <h1><?= Html::encode($this->title) ?></h1>
+
+    <p>
+        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
+            'class' => 'btn btn-danger',
+            'data' => [
+                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
+                'method' => 'post',
+            ],
+        ]) ?>
+    </p>
 
     <?= DetailView::widget([
-            'model' => $model,
-            'condensed'=>false,
-            'hover'=>true,
-            'mode'=>Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
-            'panel'=>[
-            'heading'=>$this->title,
-            'type'=>DetailView::TYPE_INFO,
-        ],
+        'model' => $model,
         'attributes' => [
             'id',
             'name',
@@ -65,14 +64,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'complain_coutn',
             'level',
         ],
-        'deleteOptions'=>[
-        'url'=>['delete', 'id' => $model->id],
-        'data'=>[
-        'confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'),
-        'method'=>'post',
-        ],
-        ],
-        'enableEditMode'=>true,
     ]) ?>
 
 </div>
