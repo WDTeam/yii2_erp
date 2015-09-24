@@ -37,9 +37,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'name',
-            'province_name',
-            'city_name',
-            'county_name',
+            'province_id',
+            'city_id',
+            'county_id',
            'street', 
            'principal', 
            'tel', 

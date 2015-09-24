@@ -10,9 +10,9 @@ use Yii;
  * @property string $id
  * @property string $name
  * @property integer $shop_menager_id
- * @property string $province_name
- * @property string $city_name
- * @property string $county_name
+ * @property integer $province_id
+ * @property integer $city_id
+ * @property integer $county_id
  * @property string $street
  * @property string $principal
  * @property string $tel
@@ -48,11 +48,11 @@ class Shop extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'shop_menager_id', 'province_name', 'city_name', 'street', 'principal', 'tel'], 'required'],
-            [['shop_menager_id', 'create_at', 'update_at', 'is_blacklist', 'blacklist_time', 'audit_status', 'worker_count', 'complain_coutn'], 'integer'],
+            [['name', 'street', 'principal', 'tel'], 'required'],
+            [['shop_menager_id', 'province_id', 'city_id', 'county_id', 'create_at', 'update_at', 'is_blacklist', 'blacklist_time', 'audit_status', 'worker_count', 'complain_coutn'], 'integer'],
             [['name', 'account_person'], 'string', 'max' => 100],
-            [['province_name', 'city_name', 'county_name', 'principal', 'tel', 'bankcard_number', 'level'], 'string', 'max' => 50],
             [['street', 'opening_address', 'blacklist_cause'], 'string', 'max' => 255],
+            [['principal', 'tel', 'bankcard_number', 'level'], 'string', 'max' => 50],
             [['other_contact', 'opening_bank', 'sub_branch'], 'string', 'max' => 200]
         ];
     }
@@ -66,9 +66,9 @@ class Shop extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'name' => Yii::t('app', '店名'),
             'shop_menager_id' => Yii::t('app', '归属家政ID'),
-            'province_name' => Yii::t('app', '省份'),
-            'city_name' => Yii::t('app', '城市'),
-            'county_name' => Yii::t('app', '县'),
+            'province_id' => Yii::t('app', '省份ID'),
+            'city_id' => Yii::t('app', '城市ID'),
+            'county_id' => Yii::t('app', '区县ID'),
             'street' => Yii::t('app', '办公街道'),
             'principal' => Yii::t('app', '负责人'),
             'tel' => Yii::t('app', '电话'),
@@ -80,7 +80,7 @@ class Shop extends \yii\db\ActiveRecord
             'opening_address' => Yii::t('app', '开户地址'),
             'create_at' => Yii::t('app', '创建时间'),
             'update_at' => Yii::t('app', '修改时间'),
-            'is_blacklist' => Yii::t('app', '是否是黑名单'),
+            'is_blacklist' => Yii::t('app', '是否是黑名单：0正常，1黑名单'),
             'blacklist_time' => Yii::t('app', '加入黑名单时间'),
             'blacklist_cause' => Yii::t('app', '黑名单原因'),
             'audit_status' => Yii::t('app', '审核状态：0未审核，1通过，2不通过'),

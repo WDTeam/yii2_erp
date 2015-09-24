@@ -17,6 +17,7 @@ use boss\components\AreaCascade;
 <div class="shop-manager-form">
 
     <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); ?>
+    <?php var_dump($model->getErrors());?>
     <h2>基础信息</h2>
     <?php echo Form::widget([
         'model' => $model,
@@ -31,7 +32,6 @@ use boss\components\AreaCascade;
     <?php 
     echo AreaCascade::widget([
         'model' => $model,
-        'name' => 'ShopManager',
         'options' => ['class' => 'form-control inline'],
         'label' =>'选择城市',
         'grades' => 'county',

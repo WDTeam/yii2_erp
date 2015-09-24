@@ -8,7 +8,8 @@ class m150924_093647_add_field_to_shopmanager extends Migration
 public function up()
     {
         $this->execute("
-        ALTER TABLE {{%shop_manager}} ADD COLUMN `province_id` INT(8) NULL COMMENT '省份ID' AFTER `province_name`, ADD COLUMN `city_id` INT(8) NULL COMMENT '城市ID' AFTER `city_name`, CHANGE `county_name` `county_name` VARCHAR(50) CHARSET utf8 COLLATE utf8_general_ci NULL COMMENT '区县', ADD COLUMN `county_id` INT(8) NULL COMMENT '区县ID' AFTER `county_name`;     
+        ALTER TABLE {{%shop_manager}} ADD COLUMN `province_id` INT(11) NULL COMMENT '省份ID' AFTER `province_name`, ADD COLUMN `city_id` INT(11) NULL COMMENT '城市ID' AFTER `city_name`, ADD COLUMN `county_id` INT(11) NULL COMMENT '区县ID' AFTER `county_name`; 
+        ALTER TABLE {{%shop_manager}} DROP COLUMN `province_name`, DROP COLUMN `city_name`, DROP COLUMN `county_name`; 
         ");
     }
 

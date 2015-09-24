@@ -9,9 +9,9 @@ use Yii;
  *
  * @property string $id
  * @property string $name
- * @property string $province_name
- * @property string $city_name
- * @property string $county_name
+ * @property integer $province_id
+ * @property integer $city_id
+ * @property integer $county_id
  * @property string $street
  * @property string $principal
  * @property string $tel
@@ -59,11 +59,11 @@ class ShopManager extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'province_name', 'city_name', 'street', 'principal', 'tel'], 'required'],
-            [['bl_type', 'bl_create_time', 'bl_audit', 'bl_expiry_start', 'bl_expiry_end', 'create_at', 'update_at', 'is_blacklist', 'blacklist_time', 'audit_status', 'shop_count', 'worker_count', 'complain_coutn'], 'integer'],
+            [['name', 'street', 'principal', 'tel'], 'required'],
+            [['province_id', 'city_id', 'county_id', 'bl_type', 'bl_create_time', 'bl_audit', 'bl_expiry_start', 'bl_expiry_end', 'create_at', 'update_at', 'is_blacklist', 'blacklist_time', 'audit_status', 'shop_count', 'worker_count', 'complain_coutn'], 'integer'],
             [['bl_business'], 'string'],
             [['name', 'street', 'opening_address', 'bl_name', 'bl_address', 'bl_photo_url', 'blacklist_cause'], 'string', 'max' => 255],
-            [['province_name', 'city_name', 'county_name', 'principal', 'tel', 'bankcard_number', 'bl_person', 'level'], 'string', 'max' => 50],
+            [['principal', 'tel', 'bankcard_number', 'bl_person', 'level'], 'string', 'max' => 50],
             [['other_contact', 'opening_bank', 'sub_branch', 'bl_number'], 'string', 'max' => 200],
             [['account_person'], 'string', 'max' => 100]
         ];
@@ -77,9 +77,9 @@ class ShopManager extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'name' => Yii::t('app', '家政名称'),
-            'province_name' => Yii::t('app', '省份'),
-            'city_name' => Yii::t('app', '城市'),
-            'county_name' => Yii::t('app', '县'),
+            'province_id' => Yii::t('app', '省份ID'),
+            'city_id' => Yii::t('app', '城市ID'),
+            'county_id' => Yii::t('app', '区县ID'),
             'street' => Yii::t('app', '办公街道'),
             'principal' => Yii::t('app', '负责人'),
             'tel' => Yii::t('app', '电话'),
