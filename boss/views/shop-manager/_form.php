@@ -29,7 +29,13 @@ use boss\components\AreaCascade;
             'columns' => 1,
             'attributes' => [
                 
-                'name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 家政名称...', 'maxlength'=>255]], 
+                'name'=>[
+                    'type'=> Form::INPUT_TEXT, 
+                    'options'=>[
+                        'placeholder'=>'Enter 家政名称...', 'maxlength'=>255,
+                    ]
+                    
+                ], 
                 
             ]
         ]);?>
@@ -81,7 +87,6 @@ use boss\components\AreaCascade;
         </div>
         <div class="panel-body">
             <?php echo Form::widget([
-        
             'model' => $model,
             'form' => $form,
             'columns' => 1,
@@ -91,9 +96,10 @@ use boss\components\AreaCascade;
                 
                 'bl_address'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 营业地址...', 'maxlength'=>255]],
         
-                'bl_type'=>['type'=> Form::INPUT_DROPDOWN_LIST, 'items'=>ShopManager::$bl_types],
-                
-                'bl_photo_url'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 营业执照URL...', 'maxlength'=>255]],
+                'bl_type'=>[
+                    'label'=>'注册类型',
+                    'type'=> Form::INPUT_DROPDOWN_LIST, 
+                    'items'=>ShopManager::$bl_types],
                 
                 'bl_person'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 法人代表...', 'maxlength'=>50]],
                 
@@ -148,7 +154,9 @@ use boss\components\AreaCascade;
                 ],
         
                 'bl_audit'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 注册资本...']],
-                    
+
+                'bl_photo_url'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 营业执照URL...', 'maxlength'=>255]],
+                
                 'bl_business'=>['type'=> Form::INPUT_TEXTAREA, 'options'=>['placeholder'=>'Enter 营业范围...','rows'=> 6]],
                 
             ]
