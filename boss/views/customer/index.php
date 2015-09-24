@@ -16,7 +16,7 @@ $this->title = Yii::t('app', '顾客管理');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="customer-index">
-    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php //echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
         <?php //echo Html::a(Yii::t('app', 'Create {modelClass}', ['modelClass' => 'Worker',]), ['create'], ['class' => 'btn btn-success']) 
