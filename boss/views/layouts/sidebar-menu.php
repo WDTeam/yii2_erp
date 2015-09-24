@@ -89,7 +89,7 @@ echo Menu::widget(
                 ],
             ],
             [
-                'label' => '顾客管理',
+                'label' => '顾客管理(35%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-user',
                 'options' => [
@@ -97,12 +97,12 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有顾客',
+                        'label' => '查看所有顾客(40%)',
                         'url' => ['/customer/index?CustomerSearch[is_del]=0'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '管理黑名单顾客',
+                        'label' => '管理黑名单顾客(35%)',
                         'url' => ['/customer/block?CustomerSearch[is_del]=1'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -254,32 +254,32 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '用户运营',
+                        'label' => '用户运营(0%)',
                         'url' => ['/operation-category'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '阿姨运营',
+                        'label' => '阿姨运营(0%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '企业运营',
+                        'label' => '企业运营(0%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => 'CMS管理',
+                        'label' => 'CMS管理(30%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '通知管理',
+                        'label' => '通知管理(0%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '促销管理',
+                        'label' => '促销管理(0%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -294,12 +294,12 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '城市管理',
+                        'label' => '城市管理(90%)',
                         'url' => ['/operation-city'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '商圈管理',
+                        'label' => '商圈管理(10%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -309,22 +309,22 @@ echo Menu::widget(
 //                        'icon' => 'fa fa-angle-right',
 //                    ],
                     [
-                        'label' => '服务品类管理',
+                        'label' => '服务品类管理(90%)',
                         'url' => ['/operation-category'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '启动页管理',
+                        'label' => '启动页管理(90%)',
+                        'url' => ['/operation-boot-page'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
+                    [
+                        'label' => '引导页管理(0%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '引导页管理',
-                        'url' => ['#'],
-                        'icon' => 'fa fa-angle-right',
-                    ],
-                    [
-                        'label' => '话术管理',
+                        'label' => '话术管理(0%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                     ],
