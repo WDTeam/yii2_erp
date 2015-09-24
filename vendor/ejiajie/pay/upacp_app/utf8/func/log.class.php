@@ -88,7 +88,7 @@
 	     */
 		private  function _createDir($dir)
 		{
-            $dir = '/tmp';
+            $dir = '/tmp/log';
 			return is_dir($dir) or (self::_createDir(dirname($dir)) and mkdir($dir, 0777));
 		}
 
