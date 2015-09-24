@@ -1,35 +1,61 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use kartik\widgets\ActiveForm;
+use kartik\widgets\Select2;
+use yii\web\JsExpression;
+use kartik\builder\Form;
+use kartik\datecontrol\DateControl;
+use kartik\grid\GridView;
+use kartik\date\DatePicker;
 
 /**
  * @var yii\web\View $this
  * @var boss\models\WorkerSearch $model
  * @var yii\widgets\ActiveForm $form
  */
+$url = \yii\helpers\Url::to(['show-shop']);
 ?>
 
 <div class="worker-search">
 
     <?php $form = ActiveForm::begin([
+        'type' => ActiveForm::TYPE_VERTICAL,
+        //'id' => 'login-form-inline',
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+            <?= $form->field($model, 'worker_work_city')->widget(Select2::classname(), [
+                'name' => 'worker_rule_id',
+                'hideSearch' => true,
+                'data' => [1 => '北京', 2 => '上海', 3 => '成都', 4 => '深圳'],
+                'options' => ['placeholder' => '选择城市', 'inline' => true],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ]); ?>
+            <?= $form->field($model, 'shop_id')->widget(Select2::classname(), [
+                'initValueText' => '店铺', // set the initial display text
+                'options' => ['placeholder' => '搜索门店名称...'],
+                'pluginOptions' => [
+                    'allowClear' => true,
+                    'minimumInputLength' => 2,
+                    'ajax' => [
+                        'url' => $url,
+                        'dataType' => 'json',
+                        'data' => new JsExpression('function(params) { return {q:params.term}; }')
+                    ],
+                    'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                    'templateResult' => new JsExpression('function(city) { return city.text; }'),
+                    'templateSelection' => new JsExpression('function (city) { return city.text; }'),
+                ],
+            ]); ?>
 
-    <?= $form->field($model, 'shop_id') ?>
 
     <?= $form->field($model, 'worker_name') ?>
 
     <?= $form->field($model, 'worker_phone') ?>
-
-    <?= $form->field($model, 'worker_idcard') ?>
-
-    <?php // echo $form->field($model, 'worker_password') ?>
-
-    <?php // echo $form->field($model, 'worker_photo') ?>
 
     <?php // echo $form->field($model, 'worker_level') ?>
 

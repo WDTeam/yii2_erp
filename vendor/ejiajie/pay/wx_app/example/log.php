@@ -61,12 +61,12 @@ class Log
 	
 	public static function DEBUG($msg)
 	{
-		self::$instance->write(1, $msg);
+		//self::$instance->write(1, $msg);
 	}
 	
 	public static function WARN($msg)
 	{
-		self::$instance->write(4, $msg);
+		//self::$instance->write(4, $msg);
 	}
 	
 	public static function ERROR($msg)

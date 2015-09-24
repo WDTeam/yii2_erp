@@ -13,6 +13,7 @@ $this->title = Yii::t('app', 'Update {modelClass}: ', [
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Workers'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+
 ?>
 <div class="worker-update">
 

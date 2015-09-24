@@ -16,11 +16,13 @@ $worker_ext->worker_is_health=1;
 $worker_ext->worker_is_insurance=1;
 $worker_ext->worker_sex=0;
 $worker->worker_type=1;
+$worker->worker_auth_status=0;
+$worker->worker_ontrial_status=0;
+$worker->worker_onboard_status=0;
 
 ?>
 <div class="worker-create">
-    <div class="page-header">
-    </div>
+
     <?= $this->render('_form', [
         'worker' => $worker,
         'worker_ext'=>$worker_ext
