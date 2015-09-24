@@ -17,8 +17,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <div class="worker-index">
-    <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
-
+    <div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 阿姨搜索</h3>
+    </div>
+    <div class="panel-body">
+        <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
+    </div>
+    </div>
     <p>
         <?php //echo Html::a(Yii::t('app', 'Create {modelClass}', ['modelClass' => 'Worker',]), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
