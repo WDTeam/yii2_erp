@@ -7,6 +7,7 @@ class m150923_085253_insert_data_operation_area extends Migration
 {
     public function up()
     {
+        ini_set('memory_limit', '128M');
         $str = file_get_contents('./datasql/areas.sql');
         $str = str_replace('`', '', $str);
         $pat = '/\((.*?)\)/i';
