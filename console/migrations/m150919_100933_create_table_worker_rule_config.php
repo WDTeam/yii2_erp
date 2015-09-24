@@ -19,6 +19,12 @@ class m150919_100933_create_table_worker_rule_config extends Migration
             'admin_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'操作管理员id\'',
             'isdel' => Schema::TYPE_DOUBLE . '(1) DEFAULT NULL COMMENT \'是否删除 0正常1删除\'',
         ], $tableOptions);
+        $this->execute(
+            "INSERT INTO `ejj_worker_rule_config` VALUES ('1', '全职', null, null, null, '0');
+             INSERT INTO `ejj_worker_rule_config` VALUES ('2', '兼职', null, null, null, '0');
+             INSERT INTO `ejj_worker_rule_config` VALUES ('3', '高峰', null, null, null, '0');
+             INSERT INTO `ejj_worker_rule_config` VALUES ('4', '时段', null, null, null, '0');"
+        );
     }
 
     public function down()
