@@ -19,7 +19,17 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     
     const FINANCE_SETTLE_APPLY_STATUS_FAILED = "2";//审核不通过
     
+    /**
+     * 申请表的主键Id字符串，例如：1,2,3
+     * @var type 
+     */
     public  $ids;
+    
+    /**
+     * 申请流程各个节点的Id，例如：1门店财务审核,2线下审核
+     * @var type 
+     */
+    public  $nodeId;
     
     public function rules()
     {
@@ -41,7 +51,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
 
     public function search($params)
     {
-        $query = Self::find();
+        $query = FinanceSettleApply::find();
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
