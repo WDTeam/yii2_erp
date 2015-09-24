@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::begin();
     echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        // 'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             'customer_name',

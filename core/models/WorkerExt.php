@@ -30,6 +30,33 @@ use Yii;
 class WorkerExt extends \common\models\WorkerExt
 {
 
+    public function setProvince_id($id){
+        $this->worker_live_province = $id;
+    }
 
+    public function getProvince_id(){
+        return $this->worker_live_province;
+    }
+    public function setCity_id($id){
+        $this->worker_live_city = $id;
+    }
 
+    public function getCity_id(){
+        return $this->worker_live_city;
+    }
+    public function setcounty_id($id){
+        $this->worker_live_area = $id;
+    }
+
+    public function getcounty_id(){
+        return $this->worker_live_area;
+    }
+
+    public function settown_id($id){
+        $this->worker_live_street = $id;
+    }
+
+    public function gettown_id(){
+        return $this->worker_live_street;
+    }
 }

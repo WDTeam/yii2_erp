@@ -16,7 +16,7 @@ $this->title = Yii::t('app', '顾客黑名单');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="customer-index">
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
         <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
@@ -42,10 +42,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        // 'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'id',
             'customer_name',
             'customer_phone',
             'customer_live_address_detail',
