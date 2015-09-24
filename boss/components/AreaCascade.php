@@ -1,4 +1,21 @@
 <?php
+/**
+ * 参数说明：
+ * model:更改已存在数据时使用,model中应包含属性：province_id,[city_id],[county_id],[town_id],至少要包含第一，或者可以包含第一个和第二个以此类推;
+ * name:您希望控件已什么样子命名
+ * options:控件的属性设置
+ * label:上分或者前方显示的名称
+ * grades:你希望显示几级：一级：province;二级：city;三级：county; 四级：town 或 不含这个参数
+ * 
+ * 如何调用：
+ * echo AreaCascade::widget([
+        'model' => $model,
+        'name' => 'OperationCity',
+        'options' => ['class' => 'form-control inline'],
+        'label' =>'选择城市',
+        'grades' => 'city',
+    ]);
+ */
 namespace boss\components;
 
 use Yii;
