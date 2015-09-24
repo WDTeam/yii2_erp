@@ -3592,6 +3592,55 @@
         ]
     },
     {
+        "name": "marekpetras/yii2-calendarview-widget",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/marekpetras/yii2-calendarview-widget.git",
+            "reference": "9ed44c42707b213cbfc0d31ec13da0941388ca67"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "http://packagist.phpcomposer.com/files/marekpetras/yii2-calendarview-widget/9ed44c42707b213cbfc0d31ec13da0941388ca67.zip",
+            "reference": "9ed44c42707b213cbfc0d31ec13da0941388ca67",
+            "shasum": ""
+        },
+        "require": {
+            "yiisoft/yii2": "*",
+            "yiisoft/yii2-bootstrap": "*"
+        },
+        "time": "2015-06-18 04:07:48",
+        "type": "yii2-extension",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "marekpetras\\calendarview\\": "/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Marek Petras",
+                "email": "mark@markpetras.eu"
+            }
+        ],
+        "description": "CalendarView widget for Yii 2 Framework.",
+        "homepage": "https://github.com/marekpetras/yii2-calendarview-widget",
+        "keywords": [
+            "activerecord",
+            "calendar",
+            "dataprovider",
+            "extension",
+            "view",
+            "widget",
+            "yii2"
+        ]
+    },
+    {
         "name": "pjkui/kindeditor",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
@@ -3608,7 +3657,7 @@
         },
         "time": "2015-09-14 16:08:59",
         "type": "library",
-        "installation-source": "source",
+        "installation-source": "dist",
         "autoload": {
             "psr-4": {
                 "pjkui\\kindeditor\\": ""
@@ -3625,5 +3674,64 @@
             }
         ],
         "description": "desc"
+    },
+    {
+        "name": "phpoffice/phpexcel",
+        "version": "1.8.1",
+        "version_normalized": "1.8.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/PHPOffice/PHPExcel.git",
+            "reference": "372c7cbb695a6f6f1e62649381aeaa37e7e70b32"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "http://packagist.phpcomposer.com/files/PHPOffice/PHPExcel/372c7cbb695a6f6f1e62649381aeaa37e7e70b32.zip",
+            "reference": "372c7cbb695a6f6f1e62649381aeaa37e7e70b32",
+            "shasum": ""
+        },
+        "require": {
+            "ext-xml": "*",
+            "ext-xmlwriter": "*",
+            "php": ">=5.2.0"
+        },
+        "time": "2015-05-01 07:00:55",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "PHPExcel": "Classes/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "LGPL"
+        ],
+        "authors": [
+            {
+                "name": "Maarten Balliauw",
+                "homepage": "http://blog.maartenballiauw.be"
+            },
+            {
+                "name": "Mark Baker"
+            },
+            {
+                "name": "Franck Lefevre",
+                "homepage": "http://blog.rootslabs.net"
+            },
+            {
+                "name": "Erik Tilt"
+            }
+        ],
+        "description": "PHPExcel - OpenXML - Read, Create and Write Spreadsheet documents in PHP - Spreadsheet engine",
+        "homepage": "http://phpexcel.codeplex.com",
+        "keywords": [
+            "OpenXML",
+            "excel",
+            "php",
+            "spreadsheet",
+            "xls",
+            "xlsx"
+        ]
     }
 ]

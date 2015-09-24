@@ -18,7 +18,12 @@ use boss\components\AreaCascade;
     <?php
     
     $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); 
-    echo AreaCascade::widget(['name' => 'OperationCity', 'options' => ['class' => 'form-control inline'], 'label' =>'选择城市', 'grades' => 'city']);
+    echo AreaCascade::widget([
+        'model' => $model,
+        'options' => ['class' => 'form-control inline'],
+        'label' =>'选择城市',
+        'grades' => 'city',
+    ]);
 //    echo Form::widget(['model' => $model,
 //    'form' => $form,
 //    'columns' => 1,
