@@ -30,4 +30,8 @@ class CommonOperationArea extends \yii\db\ActiveRecord
     public static function getAllData($where, $orderby = 'sort ASC'){
         return self::find()->where($where)->orderby($orderby)->all();
     }
+    
+    public static function getOneFromId($id){
+        return static::find()->where(['id' => $id])->one();
+    }
 }

@@ -35,7 +35,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
 //            'id',
-            'operation_city_name',
+            'province_name',
+            'city_name',
             [
                'attribute'=> 'operation_city_is_online',
                'format'=>'html',

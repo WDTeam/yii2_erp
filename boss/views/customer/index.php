@@ -26,12 +26,33 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::begin();
     echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        // 'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'customer_name',
-            'customer_phone',
-            'customer_live_address_detail',
+            [
+                'format' => 'raw',
+                'label' => '用户名',
+                'value' => function ($dataProvider) {
+                    return $dataProvider->customer_name;
+                },
+                'width' => "100px",
+            ],
+            [
+                'format' => 'raw',
+                'label' => '电话',
+                'value' => function ($dataProvider) {
+                    return $dataProvider->customer_phone;
+                },
+                'width' => "100px",
+            ],
+            [
+                'format' => 'raw',
+                'label' => '住址详情',
+                'value' => function ($dataProvider) {
+                    return $dataProvider->customer_live_address_detail;
+                },
+                'width' => "100px",
+            ],
             [
                 'format' => 'raw',
                 'label' => '身份',

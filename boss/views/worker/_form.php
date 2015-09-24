@@ -8,7 +8,7 @@ use kartik\widgets\Select2; // or kartik\select2\Select2
 use yii\web\JsExpression;
 use kartik\grid\GridView;
 use kartik\date\DatePicker;
-
+use boss\components\AreaCascade;
 /**
  * @var yii\web\View $this
  * @var common\models\Worker $worker
@@ -38,8 +38,27 @@ $cityDesc = '门店';
     //            echo '<div class="col-md-10">'.Yii::$app->areacascade->cascadeAll('OperationCity', ['class' => 'form-control']).'</div>';
     //            echo '</div></fieldset>';
     ?>
-    <div class="panel"><h3 style="margin-left: 30px">门店信息</h3>
-        <?= $form->field($worker, 'worker_work_city')->widget(Select2::classname(), [
+
+    <div class="panel"><h3  style="margin-left: 30px">门店信息</h3>
+        <div class="operation-city-form">
+
+            <?php
+            /*echo AreaCascade::widget([
+                'model' => $worker,
+                'options' => ['class' => 'form-control inline'],
+                'label' =>'阿姨居住地',
+                'grades' => 'town',
+            ]);*/
+            /*echo AreaCascade::widget([
+                'model' => $worker,
+                'options' => ['class' => 'form-control inline'],
+                'label' =>'阿姨工作地',
+                'grades' => 'town',
+            ]);*/
+            ?>
+
+        </div>
+        <?=  $form->field($worker, 'worker_work_city')->widget(Select2::classname(), [
             'name' => 'worker_rule_id',
             'hideSearch' => true,
             'data' => [1 => '北京', 2 => '上海', 3 => '成都', 4 => '深圳'],
@@ -84,8 +103,6 @@ $cityDesc = '门店';
         <?= $form->field($worker_ext, 'worker_source')->textInput(['placeholder' => 'Enter 阿姨来源...']); ?>
         <?= $form->field($worker_ext, 'worker_edu')->textInput(['placeholder' => 'Enter 阿姨教育程度...']); ?>
         <?= $form->field($worker_ext, 'worker_hometown')->textInput(['placeholder' => 'Enter 阿姨籍贯...']); ?>
-        <?= $form->field($worker, 'worker_work_area')->textInput(['placeholder' => 'Enter 阿姨工作区县...']); ?>
-        <?= $form->field($worker, 'worker_work_street')->textInput(['placeholder' => 'Enter 阿姨常用工作地址...', 'maxlength' => 50]); ?>
         <?= $form->field($worker_ext, 'worker_is_health')->radioList(['1' => '是', '0' => '否'], ['inline' => true]); ?>
         <?= $form->field($worker_ext, 'worker_is_insurance')->radioList(['1' => '是', '0' => '否'], ['inline' => true]); ?>
         <?= $form->field($worker, 'worker_type')->radioList(['1' => '自有', '2' => '非自有'], ['inline' => true]); ?>
@@ -98,6 +115,19 @@ $cityDesc = '门店';
                 'allowClear' => true
             ],
         ]); ?>
+        <div class="operation-city-form">
+
+            <?php
+
+            echo AreaCascade::widget([
+                'model' => $worker_ext,
+                'options' => ['class' => 'form-control inline'],
+                'label' =>'阿姨居住地',
+                'grades' => 'town',
+            ]);
+            ?>
+
+        </div>
     </div>
 
 

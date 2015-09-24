@@ -28,12 +28,12 @@ class Qiniu
     protected $bucket;
     protected $domain;
 
-    function __construct($accessKey, $secretKey, $domain, $bucket = '')
+    function __construct()
     {
-        $this->accessKey = $accessKey;
-        $this->secretKey = $secretKey;
-        $this->domain = $domain;
-        $this->bucket = $bucket;
+        $this->accessKey = '2JcEasZbcnt02g3BAKO6s_gFoTEDqk5hlGOzYuD7';
+        $this->secretKey = '8eqb4y55q2dOW45FYMeuqypbcmnazFHGMJ6p7xuf';
+        $this->domain = '7xn0um.com1.z0.glb.clouddn.com';
+        $this->bucket = 'ejiajie';
     }
 
     /**
@@ -239,15 +239,20 @@ class Qiniu
     }
 
     public function uploadToken($flags)
+{
+    if (!isset($flags['deadline'])) {
+        $flags['deadline'] = 3600 + time();
+    }
+    $encodedFlags = self::urlBase64Encode(json_encode($flags));
+    $sign = hash_hmac('sha1', $encodedFlags, $this->secretKey, true);
+    $encodedSign = self::urlBase64Encode($sign);
+    $token = $this->accessKey . ':' . $encodedSign . ':' . $encodedFlags;
+    return $token;
+}
+    public function Sign($data) // => $token
     {
-        if (!isset($flags['deadline'])) {
-            $flags['deadline'] = 3600 + time();
-        }
-        $encodedFlags = self::urlBase64Encode(json_encode($flags));
-        $sign = hash_hmac('sha1', $encodedFlags, $this->secretKey, true);
-        $encodedSign = self::urlBase64Encode($sign);
-        $token = $this->accessKey . ':' . $encodedSign . ':' . $encodedFlags;
-        return $token;
+        $sign = hash_hmac('sha1', $data, $this->secretKey, true);
+        return $this->accessKey . ':' . base64_encode($sign);
     }
 
     public function accessToken($url, $body = false)

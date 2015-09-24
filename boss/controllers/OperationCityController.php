@@ -8,7 +8,7 @@ use boss\models\Operation\OperationCitySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use boss\components\AreaCascade;
+//use boss\components\AreaCascade;
 use boss\models\Operation\OperationArea;
 
 /**
@@ -67,7 +67,14 @@ class OperationCityController extends Controller
     public function actionCreate()
     {
         $model = new OperationCity;
-        if ($model->load(Yii::$app->request->post())) {
+        $p = Yii::$app->request->post();
+        if(!empty($p)){
+            $province = OperationArea::getOneFromId($p['OperationCity']['province_id']);
+            $city = OperationArea::getOneFromId($p['OperationCity']['city_id']);
+            $p['OperationCity']['province_name'] = $province->area_name;
+            $p['OperationCity']['city_name'] = $city->area_name;
+        }
+        if ($model->load($p)) {
             $model->created_at = time();
             $model->updated_at = time();
             $model->save();

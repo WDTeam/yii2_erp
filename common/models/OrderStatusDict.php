@@ -14,8 +14,10 @@ use Yii;
  * @property string $updated_at
  * @property integer $isdel
  */
-class OrderStatusDict extends \yii\db\ActiveRecord
+class OrderStatusDict extends ActiveRecord
 {
+    const ORDER_CREATE=0;
+    const ORDER_INIT=1;
     /**
      * @inheritdoc
      */

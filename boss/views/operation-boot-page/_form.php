@@ -12,7 +12,7 @@ use kartik\date\DatePicker;
 
 <div class="operation-boot-page-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
     <?= $form->field($model, 'operation_boot_page_name')->textInput(['maxlength' => 60]) ?>
 
@@ -28,6 +28,9 @@ use kartik\date\DatePicker;
    <!-- <?= $form->field($model, 'operation_boot_page_online_time')->textInput() ?>-->
 
     <!-- <?= $form->field($model, 'operation_boot_page_offline_time')->textInput() ?>-->
+
+    <?php echo '<label class="control-label">'.$model->attributeLabels()['citylist'].'</label>';?>
+    <?php echo Html::checkboxList('citylist', $BootPageCityList, $citylist)  ?>
 
     <?php
     echo '<label class="control-label">'.$model->attributeLabels()['operation_boot_page_online_time'].'</label>';

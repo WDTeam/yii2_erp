@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
+use kartik\builder\Form;
+use boss\models\Shop;
 
 /**
  * @var yii\web\View $this
@@ -14,9 +16,7 @@ $this->title = Yii::t('app', 'Shops');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="shop-index">
-    <div class="page-header">
-            <h1><?= Html::encode($this->title) ?></h1>
-    </div>
+
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
@@ -25,7 +25,9 @@ $this->params['breadcrumbs'][] = $this->title;
 ]), ['create'], ['class' => 'btn btn-success'])*/  ?>
     </p>
 
-    <?php Pjax::begin(); echo GridView::widget([
+    <?php Pjax::begin(); 
+    $searchModel->audit_status = 0;
+    echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -54,7 +56,8 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'blacklist_cause', 
            [
                'attribute'=>'audit_status',
-               'label'=>'审核状态'
+               'label'=>'审核状态',
+               'filter'=>Shop::$audit_statuses,
            ], 
            'worker_count', 
            'complain_coutn', 

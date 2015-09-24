@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\dynagrid\DynaGrid;
+use boss\models\ShopManager;
 
 /**
  * @var yii\web\View $this
@@ -15,9 +16,7 @@ $this->title = Yii::t('app', 'Shop Managers');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="shop-manager-index">
-    <div class="page-header">
-            <h1><?= Html::encode($this->title) ?></h1>
-    </div>
+
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
@@ -26,7 +25,9 @@ $this->params['breadcrumbs'][] = $this->title;
 ]), ['create'], ['class' => 'btn btn-success'])*/  ?>
     </p>
 
-    <?php Pjax::begin(); echo GridView::widget([
+    <?php Pjax::begin(); 
+    $searchModel->audit_status = 0;
+    echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -34,10 +35,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'name',
-            'province_name',
-            'city_name',
-            'county_name',
-           'street', 
+//             'province_id',
+            'city_id',
+//             'county_id',
+//            'street', 
            'principal', 
            'tel', 
 //            'other_contact', 
@@ -64,8 +65,9 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'blacklist_cause', 
            [
                'attribute'=>'audit_status',
-               'label'=>'审核状态'
-           ], 
+               'label'=>'审核状态',
+               'filter'=>ShopManager::$audit_statuses,
+           ],
            'shop_count', 
            'worker_count', 
 //            'complain_coutn', 
