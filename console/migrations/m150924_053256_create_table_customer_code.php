@@ -14,7 +14,7 @@ class m150924_053256_create_table_customer_code extends Migration
         $this->createTable('{{%customer_code}}', [
             'id'=>  Schema::TYPE_PK.'(8) NOT NULL AUTO_INCREMENT COMMENT \'ID\'',
             'customer_code'=>  Schema::TYPE_STRING.'(8) NOT NULL COMMENT \'验证码\'',
-            'customer_code_expiration' => Schema::TYPE_INTEGEER.'(11) NOT NULL COMMENT \'验证码过期时间\'',
+            'customer_code_expiration' => Schema::TYPE_INTEGER.'(11) NOT NULL COMMENT \'验证码过期时间\'',
             'customer_phone'=>  Schema::TYPE_STRING.'(11) DEFAULT NULL COMMENT \'顾客电话\'',
             'created_at'=>  Schema::TYPE_INTEGER.'(11) NOT NULL COMMENT \'创建时间\'',
             'updated_at'=>  Schema::TYPE_INTEGER.'(11) NOT NULL COMMENT \'更新时间\'',
