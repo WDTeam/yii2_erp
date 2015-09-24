@@ -22,11 +22,7 @@ return [
         'gridview' => [
             'class' => 'kartik\grid\Module',
         ],
-        'order' => [
-
-            'class' => 'boss\modules\order\Module',
-
-        ],
+       
     ],
     'components' => [
         'user' => [
