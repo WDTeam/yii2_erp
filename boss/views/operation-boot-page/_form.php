@@ -12,7 +12,7 @@ use kartik\date\DatePicker;
 
 <div class="operation-boot-page-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
     <?= $form->field($model, 'operation_boot_page_name')->textInput(['maxlength' => 60]) ?>
 
