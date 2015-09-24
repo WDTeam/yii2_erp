@@ -72,18 +72,18 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有阿姨',
+                        'label' => '查看所有阿姨(40%)',
                         'url' => ['/worker'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '录入新阿姨',
+                        'label' => '录入新阿姨(80%)',
                         'url' => ['/worker/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '阿姨黑名单',
-                        'url' => ['/worker-block'],
+                        'label' => '阿姨黑名单(待定)',
+                        'url' => ['/worker/index?WorkerSearch[worker_is_blacklist]=1'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],
