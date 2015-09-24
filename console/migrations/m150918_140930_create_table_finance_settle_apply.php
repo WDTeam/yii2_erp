@@ -33,7 +33,7 @@ class m150918_140930_create_table_finance_settle_apply extends Migration
             'finance_settle_apply_task_bonus' => Schema::TYPE_DECIMAL . '(10,2)  DEFAULT 0 COMMENT \'阿姨任务奖励\'',
             'finance_settle_apply_small_maintain' => Schema::TYPE_DECIMAL . '(10,2) DEFAULT 0  COMMENT \'小保养\'',
             'finance_settle_apply_channel_bonus' => Schema::TYPE_DECIMAL . '(10,2)  DEFAULT 0 COMMENT \'渠道奖励\'',
-            'finance_settle_apply_status' => Schema::TYPE_INTEGER . '(2) NOT NULL COMMENT \'申请结算状态，-3财务打款失败；-2财务审核不通过；-1线下审核不通过；0提出申请，正在线下审核；1线下审核通过，等待财务审核；2财务审核通过，等待财务打款；3财务打款成功，申请完结；\'',
+            'finance_settle_apply_status' => Schema::TYPE_INTEGER . '(2) NOT NULL COMMENT \'申请结算状态，-4财务确认结算未通过;-3财务审核不通过；-2线下审核不通过；-1门店财务审核不通过；0提出申请，正在门店财务审核；1门店财务审核通过，等待线下审核；2线下审核通过，等待财务审核；3财务审核通过，等待财务确认结算；4财务确认结算；\'',
             'finance_settle_apply_cycle' => Schema::TYPE_INTEGER . '(1) NOT NULL COMMENT \'结算周期，1周结，2月结\'',
             'finance_settle_apply_cycle_des' => Schema::TYPE_TEXT . '(20) NOT NULL COMMENT \'结算周期，周结，月结\'',
             'finance_settle_apply_reviewer' => Schema::TYPE_STRING . '(20)  COMMENT \'审核人姓名\'',
