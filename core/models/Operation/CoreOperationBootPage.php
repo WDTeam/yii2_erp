@@ -1,5 +1,4 @@
 <?php
-
 namespace core\models\Operation;
 
 use Yii;
