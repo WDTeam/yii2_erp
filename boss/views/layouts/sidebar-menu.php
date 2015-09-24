@@ -150,31 +150,31 @@ echo Menu::widget(
 							],
 							'items' => [
 							[
-							'label' => '对账',
+							'label' => '对账(30%)',
 							'url' => ['/finance-pop-order/'],
 							'icon' => 'fa fa-angle-right',
 							],[
-							'label' => '对账统计',
+							'label' => '对账统计(30%)',
 							'url' => ['/finance-record-log/'],
 							'icon' => 'fa fa-angle-right',
 							],[
-							'label' => '对账详情',
+							'label' => '对账详情(40%)',
 							'url' => ['/finance-pop-order/billinfo'],
 							'icon' => 'fa fa-angle-right',
 							],[
-							'label' => '对账单配置',
+							'label' => '对账单配置(0%)',
 							'url' => ['/finance-pop-order/comparisonconfig'],
 							'icon' => 'fa fa-angle-right',
 							],[
-							'label' => '增加账单配置',
-							'url' => ['/finance-pop-order/billconfig'],
+							'label' => '增加账单配置(60%)',
+							'url' => ['/finance-header/index'],
 							'icon' => 'fa fa-angle-right',
 							],[
-							'label' => '坏账列表',
+							'label' => '坏账列表(70%)',
 							'url' => ['/finance-pop-order/badlist'],
 							'icon' => 'fa fa-angle-right',
 							],[
-							'label' => '渠道管理',
+							'label' => '渠道管理(80%)',
 							'url' => ['/finance-order-channel/'],
 							'icon' => 'fa fa-angle-right',
 							]
@@ -190,28 +190,28 @@ echo Menu::widget(
 							],
 							'items' => [
 							[
-							'label' => '确认退款审核',
+							'label' => '确认退款审核(5%)',
 							'url' => ['/finance-refund/'],
 							'icon' => 'fa fa-angle-right',
 							],
 							[
-							'label' => '退款确认退款审批',
+							'label' => '退款确认退款审批(5%)',
 							'url' => ['/finance-refund/'],
 							'icon' => 'fa fa-angle-right',
 							],[
-							'label' => '会计执行银行退款',
+							'label' => '会计执行银行退款(5%)',
 							'url' => ['/finance-refund/'],
 							'icon' => 'fa fa-angle-right',
 							],[
-							'label' => '确认银行退款',
+							'label' => '确认银行退款(5%)',
 							'url' => ['/finance-refund/'],
 							'icon' => 'fa fa-angle-right',
 							],[
-							'label' => '退款详情',
+							'label' => '退款详情(5%)',
 							'url' => ['/finance-refund/'],
 							'icon' => 'fa fa-angle-right',
 							],[
-							'label' => '退款统计',
+							'label' => '退款统计(5%)',
 							'url' => ['/finance-refund/'],
 							'icon' => 'fa fa-angle-right',
 							]
@@ -219,30 +219,25 @@ echo Menu::widget(
 							
                     ],
                     [
-                        'label' => '赔偿管理',
+                        'label' => '赔偿管理(5%)',
                         'url' => ['/finance-compensate/'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '结算管理(50%)',
+                        'label' => '结算管理',
                         'url' => ['/finance-settle-apply'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '报表管理',
+                        'label' => '报表管理(0%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '发票管理',
+                        'label' => '发票管理(5%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
-                    ],
-                    [
-                        'label' => '支付渠道管理',
-                        'url' => ['#'],
-                        'icon' => 'fa fa-angle-right',
-                    ],
+                    ]
                 ],
             ],
             [
