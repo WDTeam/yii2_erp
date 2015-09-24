@@ -17,7 +17,7 @@ use boss\components\AreaCascade;
 <div class="shop-manager-form">
 
     <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); ?>
-    <?php var_dump($model->getErrors());?>
+    <?php //var_dump($model->getErrors());?>
     <h2>基础信息</h2>
     <?php echo Form::widget([
         'model' => $model,
