@@ -444,4 +444,13 @@ return array (
       '@yii/bootstrap' => $vendorDir . '/yiisoft/yii2-bootstrap',
     ),
   ),
+  'marekpetras/yii2-calendarview-widget' => 
+  array (
+    'name' => 'marekpetras/yii2-calendarview-widget',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@marekpetras/calendarview' => '/',
+    ),
+  ),
 );
