@@ -16,9 +16,7 @@ $this->title = Yii::t('app', 'Shop Managers');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="shop-manager-index">
-    <div class="page-header">
-            <h1><?= Html::encode($this->title) ?></h1>
-    </div>
+
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
@@ -37,10 +35,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'name',
-            'province_id',
+//             'province_id',
             'city_id',
-            'county_id',
-           'street', 
+//             'county_id',
+//            'street', 
            'principal', 
            'tel', 
 //            'other_contact', 
