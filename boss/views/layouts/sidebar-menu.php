@@ -109,7 +109,7 @@ echo Menu::widget(
                 ],
             ],
             [
-                'label' => '订单管理',
+                'label' => '订单管理(27%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-tag',
                 'options' => [
@@ -117,17 +117,17 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有订单',
-                        'url' => ['/order/order'],
+                        'label' => '查看所有订单(20%)',
+                        'url' => ['/order'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '创建新订单',
-                        'url' => ['#'],
+                        'label' => '创建新订单(70%)',
+                        'url' => ['/order/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '操作订单',
+                        'label' => '操作订单(0%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -224,7 +224,7 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '结算管理',
+                        'label' => '结算管理(50%)',
                         'url' => ['/finance-settle-apply'],
                         'icon' => 'fa fa-angle-right',
                     ],

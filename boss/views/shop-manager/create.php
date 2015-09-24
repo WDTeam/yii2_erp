@@ -12,9 +12,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Shop Managers'), 'ur
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="shop-manager-create">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
+
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
