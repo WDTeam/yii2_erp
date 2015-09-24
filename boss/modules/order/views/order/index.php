@@ -16,16 +16,12 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="order-index">
     <?php
-    Modal::begin(['header' => '<h2>Hello world</h2>','toggleButton' =>['label'=>'Search','class' => 'btn btn-success','id'=>'modalButton'],]);
+    Modal::begin(['header' => '<h2>Hello world</h2>','toggleButton' =>['label'=>'Search','class' => 'btn btn-success hide','id'=>'modalButton'],]);
     echo $this->render('_search', ['model' => $searchModel]);
     Modal::end();
     ?>
-
-    <p>
-        <?php /* echo Html::a('Create Order', ['create'], ['class' => 'btn btn-success'])*/  ?>
-    </p>
-
-    <?php Pjax::begin(); echo GridView::widget([
+    <?php Pjax::begin();
+    echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -39,8 +35,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'updated_at',
             'order_status_name',
             'order_service_type_name',
-            'order_src_name',
-            'order_channel_name',
             'order_ip',
             'admin_id',
             'isdel',
@@ -64,9 +58,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type'=>'info',
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> Add', ['create'], ['class' => 'btn btn-success']),                                                                                                                                                          'after'=>Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List', ['index'], ['class' => 'btn btn-info']),
-            'showFooter'=>false
+            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> 创建新订单', ['create'], ['class' => 'btn btn-success'])." ".
+                      Html::a('<i class="glyphicon glyphicon-search"></i> 高级搜索', 'javascript:void(0)', ['class' => 'btn btn-success','onclick'=>'$("#modalButton").click();$("body").css("padding-right","0")']),                                                                                                                                                          'after'=>Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List', ['index'], ['class' => 'btn btn-info']),
+            'showFooter'=>true
         ],
-    ]); Pjax::end(); ?>
+    ]);
+    Pjax::end(); ?>
 
 </div>
