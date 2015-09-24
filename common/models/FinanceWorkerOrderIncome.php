@@ -14,6 +14,7 @@ use Yii;
  * @property string $finance_worker_order_income
  * @property integer $order_booked_count
  * @property integer $isSettled
+ * @property integer $finance_settle_apply_id
  * @property integer $isdel
  * @property integer $updated_at
  * @property integer $created_at
@@ -35,7 +36,7 @@ class FinanceWorkerOrderIncome extends \yii\db\ActiveRecord
     {
         return [
             [['worder_id', 'finance_worker_order_income_type'], 'required'],
-            [['worder_id', 'order_id', 'finance_worker_order_income_type', 'order_booked_count', 'isSettled', 'isdel', 'updated_at', 'created_at'], 'integer'],
+            [['worder_id', 'order_id', 'finance_worker_order_income_type', 'order_booked_count', 'isSettled', 'finance_settle_apply_id', 'isdel', 'updated_at', 'created_at'], 'integer'],
             [['finance_worker_order_income'], 'number']
         ];
     }
@@ -53,6 +54,7 @@ class FinanceWorkerOrderIncome extends \yii\db\ActiveRecord
             'finance_worker_order_income' => Yii::t('app', '阿姨收入'),
             'order_booked_count' => Yii::t('app', '预约服务数量，即工时'),
             'isSettled' => Yii::t('app', '是否已结算，0为未结算，1为已结算'),
+            'finance_settle_apply_id' => Yii::t('app', '结算申请Id'),
             'isdel' => Yii::t('app', '是否被删除，0为启用，1为删除'),
             'updated_at' => Yii::t('app', '结算时间'),
             'created_at' => Yii::t('app', '创建时间'),
