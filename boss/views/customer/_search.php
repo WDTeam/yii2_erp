@@ -26,7 +26,7 @@ use kartik\date\DatePicker;
     ]); ?>
 
     <?php
-    echo $form->field($model, 'region_id')->widget(Select2::classname(), [
+    echo $form->field($model, 'general_region_id')->widget(Select2::classname(), [
         'initValueText' => '城市',
         // 'name' => 'region_id',
         'hideSearch' => true,
