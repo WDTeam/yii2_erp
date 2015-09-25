@@ -289,12 +289,12 @@ echo Menu::widget(
                         'url' => ['/operation-city'],
                         'icon' => 'fa fa-angle-right',
                     ],
-                    [
-
-                        'label' => '商圈管理(40%)',
-                        'url' => ['/operation-shop-district'],
-                        'icon' => 'fa fa-angle-right',
-                    ],
+//                    [
+//
+//                        'label' => '商圈管理(40%)',
+//                        'url' => ['/operation-shop-district'],
+//                        'icon' => 'fa fa-angle-right',
+//                    ],
 //                    [
 //                        'label' => '服务管理',
 //                        'url' => ['#'],

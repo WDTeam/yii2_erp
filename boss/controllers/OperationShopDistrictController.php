@@ -4,6 +4,7 @@ namespace boss\controllers;
 
 use Yii;
 use boss\models\Operation\OperationShopDistrict;
+use boss\models\Operation\OperationCity;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -74,8 +75,12 @@ class OperationShopDistrictController extends Controller
     public function actionCreate()
     {
         $model = new OperationShopDistrict;
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $post = Yii::$app->request->post();
+        if(!empty($post)){
+            $post['OperationShopDistrict']['operation_city_id'] = $this->city_id;
+            $post['OperationShopDistrict']['operation_city_name'] = OperationCity::getCityName($this->city_id);
+        }
+        if ($model->load($post) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
