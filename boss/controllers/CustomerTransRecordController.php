@@ -61,7 +61,7 @@ class CustomerTransRecordController extends Controller
      * Creates a new CustomerTransRecord model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
-     */
+
     public function actionCreate()
     {
         $model = new CustomerTransRecord;
@@ -73,6 +73,44 @@ class CustomerTransRecordController extends Controller
                 'model' => $model,
             ]);
         }
+    }
+     */
+
+    /**
+     * 交易记录接口
+     */
+    public function actionCreate(){
+
+        //接收数据
+        $request = yii::$app->request;
+        $data = $request->get();
+
+        //
+        if( empty($data['record_type']) || !in_array($data['record_type'],array(1,2,3,4)) )
+        {
+            die('类型错误');
+        }
+
+        //实例化模型
+        $model = new CustomerTransRecord;
+
+        //使用场景
+        $scenario = $data['record_type'];
+        $model->scenario = $scenario;
+        $model->attributes = $data;
+
+        //验证数据
+        if( $model->validate() && $model->save() )
+        {
+            //返回组装数据
+            echo "验证成功!";
+        }
+        else
+        {
+            var_dump($model->errors);
+        }
+
+
     }
 
     /**
