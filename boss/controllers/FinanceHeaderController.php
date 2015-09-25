@@ -11,7 +11,8 @@ use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use common\models\FinanceOrderChannel;
 use common\models\FinancePayChannel;
-
+use boss\models\FinancePayChannelSearch;
+use boss\models\FinanceOrderChannelSearch;
 
 
 /**
@@ -19,6 +20,9 @@ use common\models\FinancePayChannel;
  */
 class FinanceHeaderController extends Controller
 {
+	
+	
+	
     public function behaviors()
     {
         return [
@@ -39,21 +43,30 @@ class FinanceHeaderController extends Controller
     {
         $searchModel = new FinanceHeaderSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        
 		//支付渠道数据
         $ordedata= new FinanceOrderChannel;
-
-        
         $ordewhere['is_del']=0;
-        $ordedatainfo=$ordedata::find()->where($ordewhere)->all();
-        
-        //var_dump($ordedatainfo);exit;
+        $payatainfo=$ordedata::find()->where($ordewhere)->asArray()->all();
+        foreach ($payatainfo as $errt){
+        	$tyd[]=$errt['id'];
+        	$tydtui[]=$errt['finance_order_channel_name'];
+        }
+       $tyu= array_combine($tyd,$tydtui);
         //订单渠道数据
         $paydata= new FinancePayChannel;
-        $paydata=11;
-        
+        $payewhere['is_del']=0;
+        $ordedatainfo=$paydata::find()->where($payewhere)->asArray()->all();
+        foreach ($ordedatainfo as $ordein){
+        	$tydoed[]=$ordein['id'];
+        	$tydoedname[]=$ordein['finance_pay_channel_name'];
+        }
+        $ordesite= array_combine($tydoed,$tydoedname);
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+        	'payatainfo' => $tyu,
+        	'ordedatainfo' => $ordesite,	
         ]);
     }
 
@@ -68,9 +81,6 @@ class FinanceHeaderController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
         	
-        	
-        	
-        
         return $this->redirect(['view', 'id' => $model->id]);
         } else {
         return $this->render('view', ['model' => $model]);
@@ -84,23 +94,43 @@ class FinanceHeaderController extends Controller
      */
     public function actionCreate()
     {
-    	
        $model = new FinanceHeader;
        if(Yii::$app->request->isPost) {
-       	$filePath = './uploads/14430836465880.xls'; // 要读取的文件的路径
+       	$model->finance_uplod_url = UploadedFile::getInstance($model, 'finance_uplod_url');
+       	if ($model->finance_uplod_url && $model->validate()) {
+       		//if(!file_exists('data/upload/'.$uid))mkdir('data/upload/'.$uid);
+       		$path='upload/';
+       		if(!file_exists($path))mkdir($path);
+       		$filename=time().'.'.$model->finance_uplod_url->extension;
+       		if(!$model->finance_uplod_url->saveAs($path.$filename)){
+       			return ["result"=>"Fail"];
+       		}
+       	}
+       	
+       	$filePath = $path.$filename;
+       //	$filePath = './uploads/14430836465880.xls'; // 要读取的文件的路径
        	$objPHPExcel = \PHPExcel_IOFactory::load($filePath);
        	$sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
        	header("Content-Type: text/html; charset=utf-8");
        	$model = new FinanceHeader;
        	$post = Yii::$app->request->post();
+   
+        $modelPay = new FinancePayChannelSearch;
+        $modelesr= new FinanceOrderChannelSearch;
+       	$nameorder=$post['FinanceHeader']['finance_order_channel_name'];
+       	$ordername=$modelesr->searchfind(array('id'=>$nameorder),'finance_order_channel_name');
        	
-        $post['FinanceHeader']['finance_order_channel_id'] =$post['FinanceHeader']['finance_order_channel_id']?$post['FinanceHeader']['finance_order_channel_id']:'1';
-       	 $post['FinanceHeader']['finance_order_channel_name'] = $post['FinanceHeader']['finance_order_channel_name']?$post['FinanceHeader']['finance_order_channel_name']:'支付宝';
-       	$post['FinanceHeader']['finance_pay_channel_id'] = $post['FinanceHeader']['finance_pay_channel_id']?$post['FinanceHeader']['finance_pay_channel_id']:'1';
-       	$post['FinanceHeader']['finance_pay_channel_name'] = $post['FinanceHeader']['finance_pay_channel_name']?$post['FinanceHeader']['finance_pay_channel_name']:'美团';
+       	 	$payname=$post['FinanceHeader']['finance_pay_channel_name'];
+       		$paynameinfo=$modelPay->searchfind(array('id'=>$payname),'finance_pay_channel_name');
+       	
+       	$post['FinanceHeader']['finance_header_title'] = $post['FinanceHeader']['finance_header_title']?$post['FinanceHeader']['finance_header_title']:'美团的'; 	
+        $post['FinanceHeader']['finance_order_channel_id'] =$post['FinanceHeader']['finance_order_channel_id']?$post['FinanceHeader']['finance_order_channel_name']:'1';
+       	 $post['FinanceHeader']['finance_order_channel_name'] =$ordername;
+       	 
+       	$post['FinanceHeader']['finance_pay_channel_id'] = $post['FinanceHeader']['finance_pay_channel_id']?$post['FinanceHeader']['finance_pay_channel_name']:'1';
+       	$post['FinanceHeader']['finance_pay_channel_name'] = $paynameinfo;
        	$post['FinanceHeader']['create_time'] = time();
        	$post['FinanceHeader']['is_del'] =0;
-       	 
        	foreach ($sheetData[1] as $value){
        		$post['FinanceHeader']['finance_header_name'] = $value;
        		$_model = clone $model;
@@ -108,19 +138,31 @@ class FinanceHeaderController extends Controller
        		$_model->save();
        		unset($post['FinanceHeader']['finance_header_name']);
        	}
-       	
-       	
-       	//return $this->redirect(['view', 'id' => $model->id]);
+       	return $this->redirect(['index']);
        }else{
-       	
+       	//支付渠道数据
+       	$ordedata= new FinanceOrderChannel;
+       	$ordewhere['is_del']=0;
+       	$payatainfo=$ordedata::find()->where($ordewhere)->asArray()->all();
+       	foreach ($payatainfo as $errt){
+       		$tyd[]=$errt['id'];
+       		$tydtui[]=$errt['finance_order_channel_name'];
+       	}
+       	$tyu= array_combine($tyd,$tydtui);
+       	//订单渠道数据
+       	$paydata= new FinancePayChannel;
+       	$payewhere['is_del']=0;
+       	$ordedatainfo=$paydata::find()->where($payewhere)->asArray()->all();
+       	foreach ($ordedatainfo as $ordein){
+       		$tydoed[]=$ordein['id'];
+       		$tydoedname[]=$ordein['finance_pay_channel_name'];
+       	}
+       	$ordesite= array_combine($tydoed,$tydoedname);
        	return $this->render('create', [
-       			'model' => $model,
+       			'model' => $model,'ordeinfo' => $ordesite,'payinfo' => $tyu,
        			]);
        	
        }
-       
-       
-       
     }
 
     /**

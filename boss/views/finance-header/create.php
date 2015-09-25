@@ -12,10 +12,11 @@ $this->title = Yii::t('boss', ' {modelClass}', [
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('boss', 'Finance Headers'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="finance-header-create">
     <?= $this->render('_form', [
-        'model' => $model,
+        'model' => $model,'htmlordeinfo' => $ordeinfo,'htmlpayinfo' =>$payinfo,
     ]) ?>
 
 </div>

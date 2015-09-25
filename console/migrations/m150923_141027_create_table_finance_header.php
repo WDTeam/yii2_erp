@@ -23,6 +23,7 @@ class m150923_141027_create_table_finance_header extends Migration
 	'finance_pay_channel_name' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'支付渠道名称\'' ,
 	'create_time' => Schema::TYPE_INTEGER. '(10) DEFAULT NULL COMMENT \'创建时间\'' ,
 	'is_del' => Schema::TYPE_SMALLINT . '(1) DEFAULT \'0\' COMMENT \'0 正常 1 删除\'' ,
+				 ], $tableOptions);
     }
 
 

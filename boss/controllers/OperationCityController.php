@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 //use boss\components\AreaCascade;
 use boss\models\Operation\OperationArea;
+use boss\components\UploadFile;
 
 /**
  * OperationCityController implements the CRUD actions for OperationCity model.
@@ -69,6 +70,7 @@ class OperationCityController extends Controller
     public function actionCreate()
     {
         $model = new OperationCity;
+//        
         $p = Yii::$app->request->post();
         if(!empty($p)){
             $province = OperationArea::getOneFromId($p['OperationCity']['province_id']);
@@ -77,6 +79,9 @@ class OperationCityController extends Controller
             $p['OperationCity']['city_name'] = $city->area_name;
         }
         if ($model->load($p)) {
+            $path = UploadFile::widget(['fileInputName' => 'file']);
+            echo $path;exit;
+//            print_r($_FILES);exit;
             $model->created_at = time();
             $model->updated_at = time();
             $model->save();

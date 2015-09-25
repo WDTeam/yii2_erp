@@ -21,7 +21,7 @@ use kartik\tabs\TabsX;
      Pjax::begin();
    $paychannel= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -50,14 +50,14 @@ use kartik\tabs\TabsX;
         'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type'=>'info',
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> 增加', ['create'], ['class' => 'btn btn-success']),                                                                                                                                                          'after'=>Html::a('<i class="glyphicon glyphicon-repeat"></i> 重置', ['index'], ['class' => 'btn btn-info']),
+            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> 增加', ['create'], ['class' => 'btn btn-success']),                                                                                                                                                          
             'showFooter'=>false
         ],
     ]); 
    
 $items = [
 [
-'label'=>'<i class="glyphicon glyphicon-list-alt"></i> 对账渠道管理',
+'label'=>'<i class="glyphicon glyphicon-list-alt"></i> 订单渠道管理',
 'content'=>'',
 'active'=>false,
 'url' => ['finance-order-channel/index']
