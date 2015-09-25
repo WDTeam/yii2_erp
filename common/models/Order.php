@@ -69,6 +69,7 @@ use Yii;
  */
 class Order extends ActiveRecord
 {
+
     /**
      * @inheritdoc
      */
@@ -159,4 +160,5 @@ class Order extends ActiveRecord
             'isdel' => '是否已删除',
         ];
     }
+
 }
