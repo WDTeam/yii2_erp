@@ -295,7 +295,7 @@ echo Menu::widget(
                     ],
                     [
                         'label' => '商圈管理(10%)',
-                        'url' => ['#'],
+                        'url' => ['operation-shop-district'],
                         'icon' => 'fa fa-angle-right',
                     ],
 //                    [
@@ -311,6 +311,11 @@ echo Menu::widget(
                     [
                         'label' => '启动页管理(90%)',
                         'url' => ['/operation-boot-page'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
+                    [
+                        'label' => '价格策略管理(90%)',
+                        'url' => ['/operation-price-strategy'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
