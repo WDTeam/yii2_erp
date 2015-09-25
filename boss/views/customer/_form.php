@@ -64,7 +64,7 @@ $cityDesc = '顾客';
         ]
     ]);
 
-    echo $form->field($customer, 'region_id')->textInput(['placeholder' => 'Enter 顾客住址ID...', 'maxlength' => 8]);
+    echo $form->field($customer, 'general_region_id')->textInput(['placeholder' => 'Enter 顾客住址ID...', 'maxlength' => 8]);
     echo $form->field($customer, 'customer_level')->textInput(['placeholder' => 'Enter 顾客评级...', 'maxlength' => 8]);
     echo $form->field($customer, 'customer_complaint_times')->textInput(['placeholder' => 'Enter 顾客投诉次数...', 'maxlength' => 8]);
     //echo '<label class="control-label">'.$model->attributeLabels()['operation_boot_page_online_time'].'</label>';
