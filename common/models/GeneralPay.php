@@ -360,6 +360,28 @@ class GeneralPay extends \yii\db\ActiveRecord
     }
 
     /**
+     * 制造签名
+     */
+    public function makeSign()
+    {
+        //加密字符串
+        $str='';
+        //排除的字段
+        $notArray = ['updated_at'];
+        //获取字段
+        $key = $this->attributeLabels();
+        //加密签名
+        foreach( $key as $name=>$val )
+        {
+            if( !empty($this->$name) && $this->$name != 1 && !in_array($name,$notArray))
+            {
+                $str .= $this->$name;
+            }
+        }
+        return md5(md5($str).'1jiajie.com');
+    }
+
+    /**
      * @inheritdoc
      */
     public function attributeLabels()

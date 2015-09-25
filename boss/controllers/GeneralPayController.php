@@ -193,7 +193,7 @@ class GeneralPayController extends Controller
                 $model->general_pay_transaction_id = $post['trade_no'];
                 $model->general_pay_is_coupon = 1;
                 $model->general_pay_eo_order_id = $post['out_trade_no'];
-                $model->general_pay_verify = md5(1);
+                $model->general_pay_verify = $model->makeSign();
 
                 if($model->save(false)) $status = true;
             }
