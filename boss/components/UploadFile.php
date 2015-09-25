@@ -18,13 +18,13 @@ class UploadFile extends Widget{
     }
     
     public function upfile(){
-        $file = UploadedFile::widget(['operation_boot_page_ios_img']);
         $qiniu = new Qiniu();
         $qiniu->uploadFile($file->tempName, $this->key);
     }
     
     private function getFile($file_input_name){
-        $file = UploadedFile::widget([$file_input_name]);
+        $file = UploadedFile::widget(['name' => $file_input_name]);
+        $this->file = $file;
     }
 
     public function run(){
