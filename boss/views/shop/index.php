@@ -105,7 +105,10 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'complain_coutn',
             // 'level',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template'=>'{update} {delete}'
+            ],
         ],
     ]); ?>
 

@@ -34,7 +34,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute'=>'id',
                 'options'=>['width'=>10]
             ],
-            'name',
+            [
+                'attribute'=>'name',
+                'value'=>function ($model){
+                    return Yii::$app->user->createUrl('view',['id'=>$model->id]);
+                }
+            ],
 //             'province_id',
             [
                 'attribute'=>'city_id',
@@ -100,7 +105,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'options'=>['width'=>60]
             ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template'=>'{update} {delete}'
+            ],
         ],
     ]); ?>
 

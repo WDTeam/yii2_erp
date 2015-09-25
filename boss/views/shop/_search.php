@@ -26,7 +26,7 @@ echo AreaCascade::widget([
     'options' => ['class' => 'form-control inline'],
     'label' =>'选择城市',
     'grades' => 'city',
-    'is_minui'=>true,
+//     'is_minui'=>true,
 ]);
 ?>
 

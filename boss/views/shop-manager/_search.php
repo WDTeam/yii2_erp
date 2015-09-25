@@ -17,6 +17,7 @@ use boss\models\ShopManager;
     'method' => 'get',
 ]); ?>
 
+<div class="col-md-3">
 <?php 
 echo AreaCascade::widget([
     'model' => $model,
@@ -26,6 +27,7 @@ echo AreaCascade::widget([
     'is_minui'=>true,
 ]);
 ?>
+</div>
 <?php //echo Html::activeTextInput($model, 'is_blacklist')?>
 <?php //echo Html::activeTextInput($model, 'audit_status')?>
 
