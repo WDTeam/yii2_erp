@@ -590,7 +590,7 @@ class WxPayApi
 	/**
 	 * 获取毫秒级别的时间戳
 	 */
-	private static function getMillisecond()
+	public static function getMillisecond()
 	{
 		//获取毫秒的时间戳
 		$time = explode ( " ", microtime () );

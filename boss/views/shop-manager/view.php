@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use boss\models\ShopManager;
 
 /* @var $this yii\web\View */
 /* @var $model boss\models\ShopManager */
@@ -22,24 +23,54 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </p>
-
+    <div class="col-md-6" style="padding:0">
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'id',
             'name',
-            'province_id',
-            'city_id',
-            'county_id',
-            'street',
+            [
+                'label'=>'地址',
+                'format'=>'raw',
+                'value'=>$model->getAllAddress(),
+            ],
             'principal',
             'tel',
             'other_contact',
-            'bankcard_number',
-            'account_person',
-            'opening_bank',
-            'sub_branch',
-            'opening_address',
+//             'bankcard_number',
+//             'account_person',
+//             'opening_bank',
+//             'sub_branch',
+//             'opening_address',
+            [
+                'attribute'=>'create_at',
+                'value'=>date('Y-m-d', $model->create_at)
+            ],
+            [
+                'attribute'=>'update_at',
+                'value'=>date('Y-m-d', $model->create_at)
+            ],
+            [
+                'attribute'=>'is_blacklist',
+                'value'=>ShopManager::$is_blacklists[(int)$model->is_blacklist]
+            ],
+            'blacklist_time:datetime',
+            'blacklist_cause',
+            [
+                'attribute'=>'audit_status',
+                'value'=>ShopManager::$audit_statuses[(int)$model->is_blacklist]
+            ],
+            'shop_count',
+            'worker_count',
+            'complain_coutn',
+            'level',
+        ],
+    ]) ?>
+    </div>
+    <div class="col-md-6">
+    <?= DetailView::widget([
+        'model' => $model,
+        'attributes' => [
             'bl_name',
             'bl_type',
             'bl_number',
@@ -51,17 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'bl_expiry_start',
             'bl_expiry_end',
             'bl_business:ntext',
-            'create_at',
-            'update_at',
-            'is_blacklist',
-            'blacklist_time:datetime',
-            'blacklist_cause',
-            'audit_status',
-            'shop_count',
-            'worker_count',
-            'complain_coutn',
-            'level',
         ],
     ]) ?>
-
+    </div>
 </div>
