@@ -47,6 +47,7 @@ class FinanceHeaderController extends Controller
 		//支付渠道数据
         $ordedata= new FinanceOrderChannel;
         $ordewhere['is_del']=0;
+        $ordewhere['finance_order_channel_is_lock']=1;
         $payatainfo=$ordedata::find()->where($ordewhere)->asArray()->all();
         foreach ($payatainfo as $errt){
         	$tyd[]=$errt['id'];
@@ -55,6 +56,7 @@ class FinanceHeaderController extends Controller
        $tyu= array_combine($tyd,$tydtui);
         //订单渠道数据
         $paydata= new FinancePayChannel;
+        $payewhere['finance_pay_channel_is_lock']=1;
         $payewhere['is_del']=0;
         $ordedatainfo=$paydata::find()->where($payewhere)->asArray()->all();
         foreach ($ordedatainfo as $ordein){
