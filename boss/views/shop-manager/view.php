@@ -22,35 +22,25 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </p>
-
+    <div class="col-md-6" style="padding:0">
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'id',
             'name',
-            'province_id',
-            'city_id',
-            'county_id',
-            'street',
+            [
+                'label'=>'地址',
+                'format'=>'raw',
+                'value'=>$model->getAllAddress(),
+            ],
             'principal',
             'tel',
             'other_contact',
-            'bankcard_number',
-            'account_person',
-            'opening_bank',
-            'sub_branch',
-            'opening_address',
-            'bl_name',
-            'bl_type',
-            'bl_number',
-            'bl_person',
-            'bl_address',
-            'bl_create_time:datetime',
-            'bl_photo_url:url',
-            'bl_audit',
-            'bl_expiry_start',
-            'bl_expiry_end',
-            'bl_business:ntext',
+//             'bankcard_number',
+//             'account_person',
+//             'opening_bank',
+//             'sub_branch',
+//             'opening_address',
             'create_at',
             'update_at',
             'is_blacklist',
@@ -63,5 +53,23 @@ $this->params['breadcrumbs'][] = $this->title;
             'level',
         ],
     ]) ?>
-
+    </div>
+    <div class="col-md-6">
+    <?= DetailView::widget([
+        'model' => $model,
+        'attributes' => [
+            'bl_name',
+            'bl_type',
+            'bl_number',
+            'bl_person',
+            'bl_address',
+            'bl_create_time:datetime',
+            'bl_photo_url:url',
+            'bl_audit',
+            'bl_expiry_start',
+            'bl_expiry_end',
+            'bl_business:ntext',
+        ],
+    ]) ?>
+    </div>
 </div>
