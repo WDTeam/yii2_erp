@@ -79,9 +79,12 @@ class OperationShopDistrictController extends Controller
         if(!empty($post)){
             $post['OperationShopDistrict']['operation_city_id'] = $this->city_id;
             $post['OperationShopDistrict']['operation_city_name'] = OperationCity::getCityName($this->city_id);
+            $post['OperationShopDistrict']['created_at'] = time();
+            $post['OperationShopDistrict']['updated_at'] = time();
         }
         if ($model->load($post) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+//            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -98,9 +101,13 @@ class OperationShopDistrictController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $post = Yii::$app->request->post();
+        if(!empty($post)){
+            $post['OperationShopDistrict']['updated_at'] = time();
+        }
+        if ($model->load($post) && $model->save()) {
+//            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         } else {
             return $this->render('update', [
                 'model' => $model,
