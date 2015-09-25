@@ -22,6 +22,7 @@ use Yii;
 use boss\models\Operation\OperationArea;
 use yii\helpers\Html;
 use yii\base\Widget;
+use kartik\widgets\Select2;
 
 /**
  * 
@@ -100,7 +101,18 @@ class AreaCascade extends Widget{
                 $items[$value->id] = $value->area_name;
             }
         }
-        return Html::dropDownList($name, $selection, $items, $options);
+        return '<div class="col-md-3">'.Select2::widget([
+            'name' => $name,
+            'data' => $items,
+            'options' => [
+                'placeholder' => $selection,
+                'multiple' => false,
+                'class' => 'form-control',
+                'id' => $type
+            ],
+        ]).'</div>';
+        
+//        Html::dropDownList($name, $selection, $items, $options);
     }
     
     private function getClassName(){

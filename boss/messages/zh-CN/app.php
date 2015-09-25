@@ -120,4 +120,6 @@ return [
     'Shop Managers'=>'小家政',
     'Create Shop Manager'=>'添加小家政',
     'Update Shop Manager'=>'修改小家政',
+    'province_name'=>'省份名称',
+    'city_name'=>'城市名称',
 ];

@@ -19,14 +19,26 @@ function getSonList(obj, targetids, deftext){
                 for(var j in targetids){
                     if(j == 0){
                         $('#'+targetids[j]).html(str);
+                        var first = $($('#'+targetids[j]).children('option')[0]);
+                        var id = 'select2-'+$('#'+targetids[j]).attr('id')+'-container';
+                        $('#'+id).attr('title', first.html()).html(first.html());
                     }else{
                         var first = $($('#'+targetids[j]).children('option')[0]);
                         $('#'+targetids[j]).html(first);
+                        var id = 'select2-'+$('#'+targetids[j]).attr('id')+'-container';
+                        $('#'+id).attr('title', first.html()).html(first.html());
                     }
                 }
             }else{
                 alert('获取数据失败');
             }
         }, 'json');
+    }else{
+        for(var j in targetids){
+            var first = $($('#'+targetids[j]).children('option')[0]);
+            var id = 'select2-'+$('#'+targetids[j]).attr('id')+'-container';
+            $('#'+id).attr('title', first.html()).html(first.html());
+            $('#'+targetids[j]).html('');
+        }
     }
 }

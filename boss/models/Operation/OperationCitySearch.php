@@ -28,7 +28,11 @@ class OperationCitySearch extends OperationCity
 
     public function search($params)
     {
-        $query = OperationCity::find()->where(['like',$params['fields'], $params['keyword']]);
+        if(!empty($params)){
+            $query = OperationCity::find()->where(['like',$params['fields'], $params['keyword']]);
+        }else{
+            $query = OperationCity::find();
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
