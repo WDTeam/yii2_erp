@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
+use boss\components\SearchBox;
 
 /**
  * @var yii\web\View $this
@@ -17,6 +18,19 @@ $this->params['breadcrumbs'][] = $this->title;
 <!--    <div class="page-header">
             <h1><?php //= Html::encode($this->title) ?></h1>
     </div>-->
+    <?php
+    echo SearchBox::widget([
+        'action' => ['index'],
+        'method' => 'POST',
+        'options' => [],
+        'type' => 'Field',
+        'keyword_value' => $params['keyword'],
+        'keyword_options' => ['placeholder' => '搜索关键字', 'class' => 'form-control'],
+        'submit_options' => ['class' => 'btn btn-default form-control'],
+        'fields' => ['搜索字段', 'province_name' => '省份名称', 'city_name' => '城市名称'],
+        'default' => $params['fields'],
+    ]);
+    ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>

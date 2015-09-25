@@ -35,11 +35,13 @@ class OperationCityController extends Controller
     public function actionIndex()
     {
         $searchModel = new OperationCitySearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        $params = Yii::$app->request->post();//getQueryParams();
+        $dataProvider = $searchModel->search($params);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+            'params' => $params,
         ]);
     }
 
