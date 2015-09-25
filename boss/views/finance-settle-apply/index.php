@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
+use yii\bootstrap\Modal;
 
 /**
  * @var yii\web\View $this
@@ -13,7 +14,17 @@ use yii\widgets\Pjax;
 $this->title = Yii::t('finance', 'Finance Settle Applies');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.css" rel="stylesheet">
+<link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+<script src="//cdn.bootcss.com/angular.js/1.4.6/angular.js"></script>
+<script src="//cdn.bootcss.com/angular-strap/2.3.3/modules/popover.js"></script>
+<script src="//cdn.bootcss.com/angular-strap/2.3.3/modules/tooltip.js"></script>
 <form id ="financeSettleApplyForm">
+   
+
+
 <div class="finance-settle-apply-index">
     <div class="page-header">
             <button type="button" onclick = "changetTab(0,1)" class="btn btn-default btn-lg active">门店财务审核</button>
@@ -60,37 +71,26 @@ $this->params['breadcrumbs'][] = $this->title;
     </script>
     <p>
     </p>
+  
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+//        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\CheckboxColumn'],
-//            'id',
-            'worder_id',
+//           'worder_id',
             'worder_tel',
             'worker_type_name',
             'created_at', 
-            'finance_settle_apply_cycle',
+            'finance_settle_apply_cycle_des',
             'finance_settle_apply_money', 
             'finance_settle_apply_man_hour', 
             'finance_settle_apply_order_money', 
             'finance_settle_apply_order_cash_money', 
-            'finance_settle_apply_non_order_money',
-            'finance_settle_apply_far_subsidy',
-            'finance_settle_apply_night_subsidy',
-            'finance_settle_apply_empty_handed_subsidy',
-            'finance_settle_apply_attendance_bonus',
-            'finance_settle_apply_no_complaint_bonus',
-            'finance_settle_apply_daily_violation_bonus',
-            'finance_settle_apply_complaint_reduction',
-            'finance_settle_apply_compensate_reduction',
-            'finance_settle_apply_task_bonus',
-            'finance_settle_apply_small_maintain',
-            'finance_settle_apply_channel_bonus',
-//            'finance_settle_apply_status', 
+            'finance_settle_apply_order_money_except_cash',
+            ['attribute'=>'finance_settle_apply_subsidy',
+             'content'=>function($model,$key,$index){return '<a class="btn btn-default" id = "subsidyButton" data-container="body" data-toggle="popover" data-placement="bottom" data-content="路补:10     |晚补:10    |扑空补:0">'.$model->finance_settle_apply_subsidy.'</a>';}],
             'finance_settle_apply_reviewer', 
-//            'isdel', 
-            'updated_at', 
+            'updated_at' ,
             [
                 'class' => 'yii\grid\ActionColumn',
             ],
@@ -103,4 +103,9 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); Pjax::end(); ?>
 
 </div>
+<script>
+$(function () {
+    $('[data-toggle="popover"]').popover({ html : true });
+});
+</script>
 </form>

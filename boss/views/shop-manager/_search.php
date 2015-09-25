@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use boss\components\AreaCascade;
 
 /**
  * @var yii\web\View $this
@@ -10,22 +11,30 @@ use yii\widgets\ActiveForm;
  */
 ?>
 
-<div class="shop-manager-search">
+<div class="shop-manager-search row">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+    <div class="col-md-3">
+        <label class="control-label" for="workersearch-worker_work_city">所在城市</label>
+        <div>
+        <?php echo AreaCascade::widget([
+            'model' => $model,
+            'options' => ['class' => 'form-control inline'],
+            'label' =>'选择城市',
+            'grades' => 'city',
+            'is_minui'=>true,
+        ]);?>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+    <?= $form->field($model, 'name')->label('中介名称、负责人姓名、电话等') ?>
+    </div>
 
-    <?= $form->field($model, 'name') ?>
-
-    <?= $form->field($model, 'province_id') ?>
-
-    <?= $form->field($model, 'city_id') ?>
-
-    <?= $form->field($model, 'county_id') ?>
 
     <?php // echo $form->field($model, 'street') ?>
 
@@ -87,7 +96,7 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'level') ?>
 
-    <div class="form-group">
+    <div class="col-md-2" style="margin-top:22px;">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
     </div>

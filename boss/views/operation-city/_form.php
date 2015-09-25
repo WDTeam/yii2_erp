@@ -12,18 +12,18 @@ use boss\components\AreaCascade;
  * @var yii\widgets\ActiveForm $form
  */
 ?>
-
 <div class="operation-city-form">
 
     <?php
     
-    $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); 
+    $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL, 'options' => ['enctype' => 'multipart/form-data']]); 
     echo AreaCascade::widget([
         'model' => $model,
-        'options' => ['class' => 'form-control inline'],
+        'options' => ['class' => 'form-control'],
         'label' =>'选择城市',
-//        'grades' => 'city',
+        'grades' => 'city',
     ]);
+    echo Html::fileInput('file');
     echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']);
     ActiveForm::end(); ?>
 

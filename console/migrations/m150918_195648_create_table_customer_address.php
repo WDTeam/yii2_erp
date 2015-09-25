@@ -12,9 +12,9 @@ class m150918_195648_create_table_customer_address extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'用户地址表\'';
         }
         $this->createTable('{{%customer_address}}', [
-            'id'=>  Schema::TYPE_PK.'(8) NOT NULL AUTO_INCREMENT COMMENT \'主键\'',
+            'id'=> Schema::TYPE_PK.'(8) NOT NULL AUTO_INCREMENT COMMENT \'主键\'',
             'customer_id' => Schema::TYPE_INTEGER.'(8) NOT NULL COMMENT \'关联客户\'',
-            'region_id'=>  Schema::TYPE_INTEGER.'(8) NOT NULL COMMENT \'关联区域\'',
+            'general_region_id'=>  Schema::TYPE_INTEGER.'(8) NOT NULL COMMENT \'关联区域\'',
             'customer_address_detail'=>  Schema::TYPE_STRING.'(64) NOT NULL COMMENT \'详细地址\'',
             'customer_address_status'=>  Schema::TYPE_SMALLINT.'(4) NOT NULL COMMENT \'客户地址类型,1为默认地址，-1为非默认地址\'',
             'customer_address_longitude'=>  Schema::TYPE_DOUBLE.'(8,3) DEFAULT NULL COMMENT \'经度\'',
@@ -27,7 +27,7 @@ class m150918_195648_create_table_customer_address extends Migration
             ], $tableOptions);
 
         $this->batchInsert('{{%customer_address}}',
-            ['id','customer_id','region_id','customer_address_detail','customer_address_status','customer_address_longitude','customer_address_latitude', 'customer_address_nickname', 'customer_address_phone','created_at', 'updated_at', 'is_del'],
+            ['id','customer_id','general_region_id','customer_address_detail','customer_address_status','customer_address_longitude','customer_address_latitude', 'customer_address_nickname', 'customer_address_phone','created_at', 'updated_at', 'is_del'],
             [
                 [1,1,1,'北京市朝阳区SOHO1',1, 12.888, 888.334, '测试昵称', '13554699534', time(),time(), 0],
                 [2,1,1,'北京市朝阳区SOHO2',0, 12.888, 888.334, '测试昵称', '13554699534', time(),time(), 0],

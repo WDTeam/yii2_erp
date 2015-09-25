@@ -89,7 +89,7 @@ echo Menu::widget(
                 ],
             ],
             [
-                'label' => '顾客管理(35%)',
+                'label' => '顾客管理(75%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-user',
                 'options' => [
@@ -97,12 +97,12 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有顾客(40%)',
+                        'label' => '查看所有顾客(75%)',
                         'url' => ['/customer/index?CustomerSearch[is_del]=0'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '管理黑名单顾客(35%)',
+                        'label' => '管理黑名单顾客(75%)',
                         'url' => ['/customer/block?CustomerSearch[is_del]=1'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -166,7 +166,7 @@ echo Menu::widget(
 							'url' => ['/finance-pop-order/comparisonconfig'],
 							'icon' => 'fa fa-angle-right',
 							],[
-							'label' => '增加账单配置(60%)',
+							'label' => '增加账单配置(85%)',
 							'url' => ['/finance-header/index'],
 							'icon' => 'fa fa-angle-right',
 							],[
@@ -295,7 +295,7 @@ echo Menu::widget(
                     ],
                     [
                         'label' => '商圈管理(10%)',
-                        'url' => ['#'],
+                        'url' => ['operation-shop-district'],
                         'icon' => 'fa fa-angle-right',
                     ],
 //                    [
@@ -314,6 +314,11 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
+                        'label' => '价格策略管理(90%)',
+                        'url' => ['/operation-price-strategy'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
+                    [
                         'label' => '引导页管理(0%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
@@ -326,7 +331,7 @@ echo Menu::widget(
                 ],
             ],
             [
-                'label' => '供应商管理',
+                'label' => '供应商管理(0%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-ambulance',
                 'options' => [

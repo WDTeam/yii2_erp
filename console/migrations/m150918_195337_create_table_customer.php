@@ -19,7 +19,9 @@ class m150918_195337_create_table_customer extends Migration
             'customer_photo'=>  Schema::TYPE_STRING.'(32) DEFAULT NULL COMMENT \'头像\'',
             'customer_phone' => Schema::TYPE_STRING.'(11) NOT NULL COMMENT \'电话\'',
             'customer_email'=>  Schema::TYPE_STRING.'(32) DEFAULT NULL COMMENT \'邮箱\'',
-            'region_id'=>  Schema::TYPE_INTEGER.'(8) DEFAULT NULL COMMENT \'住址\'',
+            'operation_area_id'=>  Schema::TYPE_INTEGER.'(8) DEFAULT NULL COMMENT \'商圈\'',
+            'operation_city_id'=> Schema::TYPE_INTEGER.'(8) DEFAULT NULL COMMENT \'城市\'',
+            'general_region_id'=>  Schema::TYPE_INTEGER.'(8) DEFAULT NULL COMMENT \'住址\'',
             'customer_live_address_detail'=>  Schema::TYPE_STRING.'(64) COMMENT \'详细住址\'',
             'customer_balance'=>Schema::TYPE_DECIMAL.'(8,2) COMMENT \'账户余额\'',
             'customer_score'=>  Schema::TYPE_INTEGER.'(8) NOT NULL COMMENT \'积分\'',
@@ -38,16 +40,15 @@ class m150918_195337_create_table_customer extends Migration
             ], $tableOptions);
 
         $this->batchInsert('{{%customer}}',
-            ['id','customer_name','customer_sex','customer_birth','customer_photo','customer_phone','customer_email','region_id', 'customer_live_address_detail',
+            ['id','customer_name','customer_sex','customer_birth','customer_photo','customer_phone','customer_email',
+            'operation_area_id', 'operation_city_id', 'general_region_id', 'customer_live_address_detail',
              'customer_balance', 'customer_score', 'customer_level', 'customer_complaint_times', 'customer_src', 'channal_id', 'platform_id', 
              'customer_login_ip', 'customer_login_time', 'customer_is_vip', 'created_at', 'updated_at', 'is_del', 'customer_del_reason'],
             [
-                [1,'刘道强',1,time(), '', '18519654001', 'liuzhiqiang@corp.1jiajie.com', 1, 'SOHO一期2单元908',
+                [1,'刘道强',1,time(), '', '18519654001', 'liuzhiqiang@corp.1jiajie.com', 1, 1, 1, 'SOHO一期2单元908',
                 1000, 10000, 1, 11, 1, 1, 1,
                 '192.168.0.1', time(), 1, time(), time(), 0, ''],
-                [2,'潘高峰',1,time(), '', '18519654001', 'pangaofeng@corp.1jiajie.com', 1, 'SOHO一期2单元908',
-                2000, 20000, 1, 22, 1, 1, 1,
-                '192.168.0.1', time(), 1, time(), time(), 1, '其他原因'],
+    
             ]);
     }
 

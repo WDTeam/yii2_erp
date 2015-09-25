@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
+use boss\components\SearchBox;
+
 
 /**
  * @var yii\web\View $this
@@ -17,6 +19,19 @@ $this->params['breadcrumbs'][] = $this->title;
 <!--    <div class="page-header">
             <h1><?php //= Html::encode($this->title) ?></h1>
     </div>-->
+    <?php
+    echo SearchBox::widget([
+        'action' => ['index'],
+        'method' => 'POST',
+        'options' => [],
+        'type' => 'Field',
+        'keyword_value' => isset($params['keyword']) ? $params['keyword'] : '',
+        'keyword_options' => ['placeholder' => '搜索关键字', 'class' => 'form-control'],
+        'submit_options' => ['class' => 'btn btn-default form-control'],
+        'fields' => ['搜索字段', 'province_name' => '省份名称', 'city_name' => '城市名称'],
+        'default' => isset($params['fields']) ? $params['fields'] : '',
+    ]);
+    ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
@@ -74,6 +89,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t('app', 'Operation'),
+                'template' => '{view} {update} {delete} {listbtn}',
                 'buttons' => [
                     'view' => function ($url, $model) {
                         return Html::a(
@@ -94,6 +110,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             '<span class="glyphicon glyphicon-trash"></span>', 
                             Yii::$app->urlManager->createUrl(['operation-city/delete','id' => $model->id]),
                             ['title' => Yii::t('yii', 'Delete'), 'class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
+                        );
+                    },
+                    'listbtn' => function ($url, $model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-list"></span>', 
+                            Yii::$app->urlManager->createUrl(['operation-shop-district','city_id' => $model->id]), 
+                            ['title' => Yii::t('yii', '商圈列表'), 'class' => 'btn btn-warning btn-sm',]
                         );
                     },
                 ],

@@ -12,6 +12,7 @@ require_once "WxPay.Data.php";
  */
 class WxPayApi
 {
+
 	/**
 	 * 
 	 * 统一下单，WxPayUnifiedOrder中out_trade_no、body、total_fee、trade_type必填
@@ -62,7 +63,7 @@ class WxPayApi
 		$response = self::postXmlCurl($xml, $url, false, $timeOut);
 		$result = WxPayResults::Init($response);
 		self::reportCostTime($url, $startTimeStamp, $result);//上报请求花费时间
-		
+
 		return $result;
 	}
 	
@@ -590,7 +591,7 @@ class WxPayApi
 	/**
 	 * 获取毫秒级别的时间戳
 	 */
-	private static function getMillisecond()
+	public static function getMillisecond()
 	{
 		//获取毫秒的时间戳
 		$time = explode ( " ", microtime () );

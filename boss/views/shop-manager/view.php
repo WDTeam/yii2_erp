@@ -1,10 +1,13 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\DetailView;
+use kartik\detail\DetailView;
+use kartik\datecontrol\DateControl;
 
-/* @var $this yii\web\View */
-/* @var $model boss\models\ShopManager */
+/**
+ * @var yii\web\View $this
+ * @var boss\models\ShopManager $model
+ */
 
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Shop Managers'), 'url' => ['index']];
@@ -12,21 +15,15 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="shop-manager-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
     <?= DetailView::widget([
-        'model' => $model,
+            'model' => $model,
+            'condensed'=>false,
+            'hover'=>true,
+            'mode'=>Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
+            'panel'=>[
+            'heading'=>$this->title,
+            'type'=>DetailView::TYPE_INFO,
+        ],
         'attributes' => [
             'id',
             'name',
@@ -37,11 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'principal',
             'tel',
             'other_contact',
-            'bankcard_number',
-            'account_person',
-            'opening_bank',
-            'sub_branch',
-            'opening_address',
+
             'bl_name',
             'bl_type',
             'bl_number',
@@ -64,6 +57,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'complain_coutn',
             'level',
         ],
+        'deleteOptions'=>[
+        'url'=>['delete', 'id' => $model->id],
+        'data'=>[
+        'confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'),
+        'method'=>'post',
+        ],
+        ],
+        'enableEditMode'=>true,
     ]) ?>
 
 </div>
