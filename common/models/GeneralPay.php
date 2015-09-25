@@ -57,6 +57,9 @@ class GeneralPay extends \yii\db\ActiveRecord
             [['general_pay_verify'], 'string', 'max' => 32],
             /**********以下自定义属性**********/
             [['partner'], 'required'],
+            [['partner'], 'required'],
+
+            //2088801136967007
         ];
     }
 
@@ -162,49 +165,31 @@ class GeneralPay extends \yii\db\ActiveRecord
     /**
      * 微信APP
      */
-    public function wx_app(){
-        $config = Yii::$app->params['wx_app_config'];
-
-        //构造要请求的参数数组，无需改动
-        $parameter = array(
+    private function wx_app()
+    {
+        $param = array(
             "body"	=> $this->body(),
             "out_trade_no"	=> $this->create_out_trade_no(),
-            "total_fee"	=> $this->toMoney($this->general_pay_money,100,false),
+            "general_pay_money"	=> $this->toMoney($this->general_pay_money,100,false),
             'time_start' => date("YmdHis"),
             'time_expire' => date("YmdHis", time() + 600000),
-            "notify_url"	=> $config['notify_url'],
-            "attach"	=> $this->subject(),
             "trade_type" => "APP",
             "goods_tag" => $this->subject(),
-            "openid" => trim($config['seller_email']),
+            "notify_url" => $this->notify_url('wx-app'),
         );
-        var_dump($parameter);
-        exit;
+        $class = new \wxpay_class();
+        $msg = $class->get($param);
+        echo json_encode(['code'=>'ok','msg'=>$msg]);
+
     }
 
 
     /**
      * 微信H5
      */
-    public function wx_h5()
+    private function wx_h5()
     {
-        $config = Yii::$app->params['wx_h5_config'];
 
-        //构造要请求的参数数组，无需改动
-        $parameter = array(
-            "body"	=> $this->body(),
-            "out_trade_no"	=> $this->create_out_trade_no(),
-            "total_fee"	=> $this->toMoney($this->general_pay_money,100,false),
-            'time_start' => date("YmdHis"),
-            'time_expire' => date("YmdHis", time() + 600000),
-            "notify_url"	=> $config['notify_url'],
-            "attach"	=> $this->subject(),
-            "trade_type" => "JSAPI",
-            "goods_tag" => $this->subject(),
-            "openid" => trim($config['seller_email']),
-        );
-        var_dump($parameter);
-        exit;
 
     }
 
@@ -212,34 +197,51 @@ class GeneralPay extends \yii\db\ActiveRecord
     /**
      * 百度钱包APP
      */
-    public function bfb_app(){}
+    private function bfb_app()
+    {
+        $param = array(
+            'out_trade_no'=>$this->create_out_trade_no(),
+            'subject'=>$this->subject(),
+            'body'=>$this->body(),
+            'general_pay_money'=>$this->toMoney($this->general_pay_money,100,false),
+            'notify_url'=>$this->notify_url('bfb-app'),
+        );
+        $class = new \bfbpay_class();
+        $msg = $class->get($param);
+        echo json_encode(['code'=>'ok','msg'=>$msg]);
+    }
 
 
     /**
      * 银联APP
      */
-    public function up_app(){}
+    private function up_app()
+    {
+        $param = array(
+            'out_trade_no'=>$this->create_out_trade_no(),
+            'subject'=>$this->subject(),
+            'general_pay_money'=>$this->general_pay_money,
+            'notify_url'=>$this->notify_url('up-app'),
+        );
+        $class = new \uppay_class();
+        $msg = $class->get($param);
+        echo json_encode(['code'=>'ok','msg'=>$msg]);
+    }
 
     /**
      * 支付宝APP
      */
-    public function alipay_app(){
-        $config = Yii::$app->params['alipay_web_config'];
-        //构造要请求的参数数组，无需改动
-        $parameter = array(
-            "partner"			  => trim($config['partner']),
-            "out_trade_no"		  => $this->create_out_trade_no(),
-            "subject"		      => $this->subject(),
-            "seller_id"           => $config['seller_email'],
-            "body"                => $this->body(),
-            "total_fee"			  => $this->general_pay_money,
-            "notify_url"		  => $config['notify_url'],
-            "service"             => "mobile.securitypay.pay",
-            "payment_type"        => "1",
-            "_input_charset"      => $config['input_charset']
+    private function alipay_app(){
+        $param = array(
+            'out_trade_no'=>$this->create_out_trade_no(),
+            'subject'=>$this->subject(),
+            'body'=>$this->body(),
+            'general_pay_money'=>$this->general_pay_money,
+            'notify_url'=>$this->notify_url('alipay-app'),
         );
-        var_dump($parameter);
-        exit;
+        $class = new \alipay_class();
+        $msg = $class->get($param);
+        echo json_encode(['code'=>'ok','msg'=>$msg]);
     }
 
 
@@ -251,34 +253,18 @@ class GeneralPay extends \yii\db\ActiveRecord
      * 2 服务端将支付所需参数返回给客户端
      * 3 服务端创建支付记录（未支付状态）
      */
-    private function alipay_web()
-    {
-        $config = Yii::$app->params['alipay_web_config'];
-        //构造要请求的参数数组，无需改动
-        $parameter = array(
-            "service" => "create_direct_pay_by_user",
-            "partner" => trim($config['partner']),
-            "seller_email" => trim($config['seller_email']),
-            "payment_type"	=> 1,
-            "notify_url"	=> $config['notify_url'],
-            "return_url"	=> $config['return_url'],
-            "out_trade_no"	=> $this->create_out_trade_no(),
-            "subject"	=> $this->subject(),
-            "total_fee"	=> $this->general_pay_money,
-            "body"	=> $this->body(),
-            "show_url"	=> '',
-            "anti_phishing_key"	=> time(),
-            "exter_invoke_ip"	=> $_SERVER['REMOTE_ADDR'],
-            "_input_charset"	=> trim(strtolower($config['input_charset']))
-        );
-        var_dump($parameter);
-        exit;
+    private function alipay_web(){}
+    private function pay_ht(){}
+    private function zhidahao_h5(){}
+
+    /**
+     * 回调地址
+     * @param $type_name 类型
+     */
+    private function notify_url($type_name){
+        $http = "http://".$_SERVER['HTTP_HOST']."/general-pay/".$type_name."-notify";
+        return $http;
     }
-
-    public function pay_ht(){}
-    public function zhidahao_h5(){}
-
-
     /**
      * 判断在线充值还是支付
      * @return string
@@ -363,14 +349,14 @@ class GeneralPay extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'customer_id' => Yii::t('app', '用户ID'),
             'order_id' => Yii::t('app', '订单ID'),
-            'general_pay_money' => Yii::t('app', '发起充值/交易金额'),
-            'general_pay_actual_money' => Yii::t('app', '实际充值/交易金额'),
-            'general_pay_source' => Yii::t('app', '数据来源:1=APP微信,2=H5微信,3=APP百度钱包,4=APP银联,5=APP支付宝,6=WEB支付宝,7=HT淘宝,8=H5百度直达号,9=HT刷卡,10=HT现金,11=HT刷卡'),
+            'general_pay_money' => Yii::t('app', '交易金额'),//发起充值/交易金额
+            'general_pay_actual_money' => Yii::t('app', '实际金额'),//实际充值/交易金额
+            'general_pay_source' => Yii::t('app', '数据来源'),//数据来源:1=APP微信,2=H5微信,3=APP百度钱包,4=APP银联,5=APP支付宝,6=WEB支付宝,7=HT淘宝,8=H5百度直达号,9=HT刷卡,10=HT现金,11=HT刷卡'
             'general_pay_source_name' => Yii::t('app', '数据来源名称'),
-            'general_pay_mode' => Yii::t('app', '交易方式:1=充值,2=余额支付,3=在线支付,4=退款,5=赔偿'),
-            'general_pay_status' => Yii::t('app', '状态：0=失败,1=成功'),
-            'general_pay_transaction_id' => Yii::t('app', '第三方交易流水号'),
-            'general_pay_eo_order_id' => Yii::t('app', '商户ID(第三方交易)'),
+            'general_pay_mode' => Yii::t('app', '交易方式'),//交易方式:1=充值,2=余额支付,3=在线支付,4=退款,5=赔偿
+            'general_pay_status' => Yii::t('app', '状态'),//状态：0=失败,1=成功
+            'general_pay_transaction_id' => Yii::t('app', '交易流水号'),//第三方交易流水号
+            'general_pay_eo_order_id' => Yii::t('app', '商户ID'),//商户ID(第三方交易)
             'general_pay_memo' => Yii::t('app', '备注'),
             'general_pay_is_coupon' => Yii::t('app', '是否返券'),
             'admin_id' => Yii::t('app', '管理员ID'),

@@ -21,12 +21,12 @@
 //↓↓↓↓↓↓↓↓↓↓请在这里配置您的基本信息↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 //合作身份者id，以2088开头的16位纯数字
 $alipay_config['partner']		= '2088801136967007';
-
+$alipay_config['seller_email']		= '22222';
 //商户的私钥（后缀是.pen）文件相对路径
-$alipay_config['private_key_path']	= 'key/rsa_private_key.pem';
+$alipay_config['private_key_path']	= dirname(__FILE__).'/key/rsa_private_key.pem';
 
 //支付宝公钥（后缀是.pen）文件相对路径
-$alipay_config['ali_public_key_path']= 'key/alipay_public_key.pem';
+$alipay_config['ali_public_key_path']= dirname(__FILE__).'/key/alipay_public_key.pem';
 
 
 //↑↑↑↑↑↑↑↑↑↑请在这里配置您的基本信息↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑

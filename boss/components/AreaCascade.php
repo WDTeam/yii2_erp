@@ -22,6 +22,7 @@ use Yii;
 use boss\models\Operation\OperationArea;
 use yii\helpers\Html;
 use yii\base\Widget;
+use kartik\widgets\Select2;
 
 /**
  * 
@@ -43,6 +44,7 @@ class AreaCascade extends Widget{
     private $city_id;
     private $county_id;
     private $town_id;
+    public $is_minui; //最小UI，不包含label
 
 
     public function init() {
@@ -99,7 +101,18 @@ class AreaCascade extends Widget{
                 $items[$value->id] = $value->area_name;
             }
         }
-        return Html::dropDownList($name, $selection, $items, $options);
+        return '<div class="col-md-3">'.Select2::widget([
+            'name' => $name,
+            'data' => $items,
+            'options' => [
+                'placeholder' => $selection,
+                'multiple' => false,
+                'class' => 'form-control',
+                'id' => $type
+            ],
+        ]).'</div>';
+        
+//        Html::dropDownList($name, $selection, $items, $options);
     }
     
     private function getClassName(){
@@ -125,6 +138,9 @@ class AreaCascade extends Widget{
     }
 
     public function run(){
+        if($this->is_minui){
+            return $this->html;
+        }
         return $this->render('AreaCascade', ['name' => $this->name, 'html' => $this->html, 'label' =>$this->label]);
     }
 }
