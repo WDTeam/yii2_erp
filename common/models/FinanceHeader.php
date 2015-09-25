@@ -23,6 +23,31 @@ class FinanceHeader extends \yii\db\ActiveRecord
 	
 	public $finance_uplod_url;
 	
+	public $select_where;
+	
+	
+	public static function selectname($wherename)
+	{
+			switch ($wherename)
+				{	
+				case 'order_channel_order_num':
+				  return '<font color="red">订单号</font>';
+				  break;  
+				case 'order_channel_promote':
+				  return '<font color="blue">渠道营销费</font>';
+				  break;
+				  
+				case 'order_money':
+				  return '<font color="green">订单金额</font>';
+				  break;
+				case 0:
+				  return '未选择';
+				  break;
+	 
+				}
+	}
+	
+	
     /**
      * @inheritdoc
      */
@@ -37,8 +62,8 @@ class FinanceHeader extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['finance_order_channel_id', 'finance_pay_channel_id', 'create_time', 'is_del'], 'integer'],
-            [['finance_header_name', 'finance_order_channel_name', 'finance_pay_channel_name'], 'string', 'max' => 100]
+            [['finance_order_channel_id','finance_pay_channel_id', 'create_time', 'is_del'], 'integer'],
+            [['finance_header_name','finance_header_title','finance_header_where','finance_order_channel_name', 'finance_pay_channel_name'], 'string', 'max' => 100]
         ];
     }
 
@@ -51,6 +76,7 @@ class FinanceHeader extends \yii\db\ActiveRecord
             'id' => Yii::t('boss', '主键'),
 			'finance_header_title' => Yii::t('boss', '当前名称'),
 			'finance_header_name' => Yii::t('boss', '表头名称'),
+			'finance_header_where' => Yii::t('boss', '比对字段名称'),
 			'finance_order_channel_id' => Yii::t('boss', '订单渠道id'),
             'finance_order_channel_name' => Yii::t('boss', '订单渠道名称'),
             'finance_pay_channel_id' => Yii::t('boss', '支付渠道id'),

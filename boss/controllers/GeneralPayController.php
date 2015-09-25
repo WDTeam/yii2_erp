@@ -46,8 +46,8 @@ class GeneralPayController extends Controller
 
         //查询订单是否已经支付过
         if( !empty($data['order_id']) ){
-            $data = GeneralPay::find()->where(['order_id'=>$data['order_id'],'general_pay_status'=>1,'is_del'=>1])->one();
-            if(!empty($data)){
+            $order = GeneralPay::find()->where(['order_id'=>$data['order_id'],'general_pay_status'=>1,'is_del'=>1])->one();
+            if(!empty($order)){
                 exit("订单已经支付过");
             }
         }

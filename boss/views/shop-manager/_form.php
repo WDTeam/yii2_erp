@@ -80,8 +80,7 @@ use boss\components\AreaCascade;
             
             ]);
         }?></div>
-    </div>
-    <div class="panel panel-info">
+
         <div class="panel-heading">
             <h3 class="panel-title">营业执照息</h3>
         </div>
@@ -92,18 +91,18 @@ use boss\components\AreaCascade;
             'columns' => 1,
             'attributes' => [
         
-                'bl_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 营业执照名称...', 'maxlength'=>255]],
+                'bl_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['maxlength'=>255]],
                 
-                'bl_address'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 营业地址...', 'maxlength'=>255]],
+                'bl_address'=>['type'=> Form::INPUT_TEXT, 'options'=>['maxlength'=>255]],
         
                 'bl_type'=>[
                     'label'=>'注册类型',
                     'type'=> Form::INPUT_DROPDOWN_LIST, 
                     'items'=>ShopManager::$bl_types],
                 
-                'bl_person'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 法人代表...', 'maxlength'=>50]],
+                'bl_person'=>['type'=> Form::INPUT_TEXT, 'options'=>['maxlength'=>50]],
                 
-                'bl_number'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 注册号...', 'maxlength'=>200]],
+                'bl_number'=>['type'=> Form::INPUT_TEXT, 'options'=>['maxlength'=>200]],
                 
                 'bl_create_time'=>[
                     'type'=> Form::INPUT_WIDGET, 
@@ -153,22 +152,22 @@ use boss\components\AreaCascade;
                     ]
                 ],
         
-                'bl_audit'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 注册资本...']],
+                'bl_audit'=>['type'=> Form::INPUT_TEXT, 'options'=>[]],
 
-                'bl_photo_url'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 营业执照URL...', 'maxlength'=>255]],
+                'bl_photo_url'=>['type'=> Form::INPUT_TEXT, 'options'=>[ 'maxlength'=>255]],
                 
-                'bl_business'=>['type'=> Form::INPUT_TEXTAREA, 'options'=>['placeholder'=>'Enter 营业范围...','rows'=> 6]],
+                'bl_business'=>['type'=> Form::INPUT_TEXTAREA, 'options'=>['rows'=> 6]],
                 
             ]
             ]);?>
-            <div class="panel-footer">
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-7">
-                        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']);?>
-                    </div>
+
+        </div>
+        <div class="panel-footer">
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-7">
+                    <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success btn-lg' : 'btn btn-primary btn-lg']);?>
                 </div>
             </div>
-        
         </div>
     </div>
     <?php ActiveForm::end(); ?>

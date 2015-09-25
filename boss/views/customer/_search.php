@@ -8,6 +8,7 @@ use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
 use kartik\grid\GridView;
 use kartik\date\DatePicker;
+use boss\components\AreaCascade;
 
 /**
  * @var yii\web\View $this
@@ -24,7 +25,6 @@ use kartik\date\DatePicker;
         'method' => 'get',
     ]); ?>
 
-    
     <div class='col-md-2'>
         <?php echo $form->field($model, 'operation_city_id')->widget(Select2::classname(), [
             'name' => 'operation_city_id',
@@ -34,6 +34,18 @@ use kartik\date\DatePicker;
             'pluginOptions' => [
                 'allowClear' => true
             ],
+        ]); ?>
+    </div>
+
+    <div class='col-md-2'>
+        <?php echo $form->field($model, 'created_at')->widget(DatePicker::classname(), [
+            'name' => 'created_at', 
+            'value' => date('d-M-Y', strtotime('+1 days')),
+            'options' => ['placeholder' => '选择日期'],
+            'pluginOptions' => [
+                'format' => 'dd-M-yyyy',
+                'todayHighlight' => true
+            ]
         ]); ?>
     </div>
 
@@ -56,7 +68,16 @@ use kartik\date\DatePicker;
     <div class='col-md-2'>
         <?php echo $form->field($model, 'customer_phone'); ?>
     </div>
-    
+    <div class='col-md-2'>
+        <?php 
+        // echo $form->field($model, 'general_region_id')->widget(AreaCascade::classname(), [
+        //     'model' => $model,
+        //     'options' => ['class' => 'form-control inline'],
+        //     'label' => '住址',
+        //     'grades' => 'town',
+        // ]); 
+        ?>
+    </div>
 
     <?php //echo $form->field($model, 'id') ?>
 
@@ -105,13 +126,11 @@ use kartik\date\DatePicker;
     <?php // echo $form->field($model, 'customer_del_reason') ?>
 
     <div class="form-group">
-        <div class='col-md-2' style="    margin-top: 22px;">
-        <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
-    </div>
+        <div class='col-md-2' style="margin-top: 22px;">
+            <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
+            <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
+        </div>
     </div>
 
     <?php ActiveForm::end(); ?>
-
-
 </div>

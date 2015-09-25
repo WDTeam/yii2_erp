@@ -68,4 +68,24 @@ class Shop extends \common\models\Shop
     {
         return (int)self::find()->where(['is_blacklist'=>1])->scalar();
     }
+    /**
+     * 获取地址全称,直辖市不需要显示省字段
+     */
+    public function getAllAddress()
+    {
+    
+        $arg = [110000, 120000, 310000, 500000];
+        if(in_array($this->province_id, $arg)){
+            $province = '';
+        }else{
+            $province = OperationArea::find()->select('area_name')
+            ->where(['id'=>$this->province_id])->scalar();
+        }
+    
+        $city = OperationArea::find()->select('area_name')
+        ->where(['id'=>$this->city_id])->scalar();
+        $county = OperationArea::find()->select('area_name')
+        ->where(['id'=>$this->county_id])->scalar();
+        return $province.$city.$county.$this->street;
+    }
 }
