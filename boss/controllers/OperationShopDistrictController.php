@@ -3,19 +3,27 @@
 namespace boss\controllers;
 
 use Yii;
-use common\models\CustomerTransRecord;
-use boss\models\CustomerTransRecordSearch;
+use boss\models\Operation\OperationShopDistrict;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
 /**
- * CustomerTransRecordController implements the CRUD actions for CustomerTransRecord model.
+ * OperationShopDistrictController implements the CRUD actions for OperationShopDistrict model.
  */
-class CustomerTransRecordController extends Controller
+class OperationShopDistrictController extends Controller
 {
-    public function behaviors()
-    {
+    public $city_id; //城市id
+    public function behaviors(){
+        $this->city_id = Yii::$app->request->get('city_id');
+        if(!empty($this->city_id)){
+            setcookie('city_id', $this->city_id, time()+86400);
+        }else{
+            $this->city_id = $_COOKIE['city_id'];
+            if(empty($this->city_id)){
+                return $this->redirect(['operation-city/index']);
+            }
+        }
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -25,24 +33,25 @@ class CustomerTransRecordController extends Controller
             ],
         ];
     }
+    
 
     /**
-     * Lists all CustomerTransRecord models.
+     * Lists all OperationShopDistrict models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new CustomerTransRecordSearch;
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        $dataProvider = new ActiveDataProvider([
+            'query' => OperationShopDistrict::find(),
+        ]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel,
         ]);
     }
 
     /**
-     * Displays a single CustomerTransRecord model.
+     * Displays a single OperationShopDistrict model.
      * @param integer $id
      * @return mixed
      */
@@ -58,13 +67,13 @@ class CustomerTransRecordController extends Controller
     }
 
     /**
-     * Creates a new CustomerTransRecord model.
+     * Creates a new OperationShopDistrict model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
-
+     */
     public function actionCreate()
     {
-        $model = new CustomerTransRecord;
+        $model = new OperationShopDistrict;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -74,47 +83,9 @@ class CustomerTransRecordController extends Controller
             ]);
         }
     }
-     */
 
     /**
-     * 交易记录接口
-     */
-    public function actionCreate(){
-
-        //接收数据
-        $request = yii::$app->request;
-        $data = $request->get();
-
-        //
-        if( empty($data['record_type']) || !in_array($data['record_type'],array(1,2,3,4)) )
-        {
-            die('类型错误');
-        }
-
-        //实例化模型
-        $model = new CustomerTransRecord;
-
-        //使用场景
-        $scenario = $data['record_type'];
-        $model->scenario = $scenario;
-        $model->attributes = $data;
-
-        //验证数据
-        if( $model->validate() && $model->save() )
-        {
-            //返回组装数据
-            echo "验证成功!";
-        }
-        else
-        {
-            var_dump($model->errors);
-        }
-
-
-    }
-
-    /**
-     * Updates an existing CustomerTransRecord model.
+     * Updates an existing OperationShopDistrict model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -133,7 +104,7 @@ class CustomerTransRecordController extends Controller
     }
 
     /**
-     * Deletes an existing CustomerTransRecord model.
+     * Deletes an existing OperationShopDistrict model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -146,15 +117,15 @@ class CustomerTransRecordController extends Controller
     }
 
     /**
-     * Finds the CustomerTransRecord model based on its primary key value.
+     * Finds the OperationShopDistrict model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return CustomerTransRecord the loaded model
+     * @return OperationShopDistrict the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = CustomerTransRecord::findOne($id)) !== null) {
+        if (($model = OperationShopDistrict::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

@@ -92,11 +92,10 @@ $url = \yii\helpers\Url::to(['show-shop']);
 
     <?php // echo $form->field($model, 'isdel') ?>
 
-    <div class="form-group">
-        <div class='col-md-2' style="    margin-top: 22px;">
+
+    <div class='col-md-2' style="    margin-top: 22px;">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
-    </div>
     </div>
 
     <?php ActiveForm::end(); ?>

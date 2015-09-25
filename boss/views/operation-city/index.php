@@ -89,6 +89,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t('app', 'Operation'),
+                'template' => '{view} {update} {delete} {listbtn}',
                 'buttons' => [
                     'view' => function ($url, $model) {
                         return Html::a(
@@ -109,6 +110,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             '<span class="glyphicon glyphicon-trash"></span>', 
                             Yii::$app->urlManager->createUrl(['operation-city/delete','id' => $model->id]),
                             ['title' => Yii::t('yii', 'Delete'), 'class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
+                        );
+                    },
+                    'listbtn' => function ($url, $model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-list"></span>', 
+                            Yii::$app->urlManager->createUrl(['operation-shop-district','city_id' => $model->id]), 
+                            ['title' => Yii::t('yii', '商圈列表'), 'class' => 'btn btn-warning btn-sm',]
                         );
                     },
                 ],

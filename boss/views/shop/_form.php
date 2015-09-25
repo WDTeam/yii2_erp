@@ -12,6 +12,7 @@ use boss\components\AreaCascade;
 // The widget
 use kartik\widgets\Select2; // or kartik\select2\Select2
 use yii\web\JsExpression;
+use common\components\BankHelper;
 use yii\helpers\Url
 
 /**
@@ -20,7 +21,6 @@ use yii\helpers\Url
  * @var yii\widgets\ActiveForm $form
  */
 ?>
-
 <div class="shop-form">
 
 <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); ?>
@@ -120,7 +120,11 @@ use yii\helpers\Url
                 'columns' => 1,
                 'attributes' => [
                     
-                    'opening_bank'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 开户行...', 'maxlength'=>200]], 
+                    'opening_bank'=>[
+                        'type'=> Form::INPUT_DROPDOWN_LIST, 
+                        'options'=>['placeholder'=>'Enter 开户行...', 'maxlength'=>200],
+                        'items'=>BankHelper::getBankNames(),
+                    ], 
                     
                     'sub_branch'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 支行名称...', 'maxlength'=>200]], 
                 

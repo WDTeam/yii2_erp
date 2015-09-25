@@ -39,6 +39,7 @@ use Yii;
  */
 class CustomerTransRecord extends \yii\db\ActiveRecord
 {
+    public $record_type;
     /**
      * @inheritdoc
      */
@@ -55,11 +56,54 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         return [
             [['customer_id', 'customer_trans_record_order_channel', 'pay_channel_id', 'customer_trans_record_pay_channel', 'customer_trans_record_mode_name', 'customer_trans_record_refund_money', 'customer_trans_record_verify'], 'required'],
             [['customer_id', 'order_id', 'order_channel_id', 'customer_trans_record_order_channel', 'pay_channel_id', 'customer_trans_record_pay_channel', 'customer_trans_record_mode', 'customer_trans_record_mode_name', 'created_at', 'updated_at', 'is_del'], 'integer'],
-            [['customer_trans_record_promo_code_money', 'customer_trans_record_coupon_money', 'customer_trans_record_cash', 'customer_trans_record_pre_pay', 'customer_trans_record_online_pay', 'customer_trans_record_online_balance_pay', 'customer_trans_record_online_service_card_pay', 'customer_trans_record_refund_money', 'customer_trans_record_money', 'customer_trans_record_order_total_money', 'customer_trans_record_total_money', 'customer_trans_record_current_balance', 'customer_trans_record_befor_balance'], 'number'],
+            [['customer_trans_record_promo_code_money', 'customer_trans_record_coupon_money', 'customer_trans_record_cash', 'customer_trans_record_pre_pay', 'customer_trans_record_online_pay', 'customer_trans_record_online_balance_pay', 'customer_trans_record_online_service_card_pay', 'customer_trans_record_refund_money', 'customer_trans_record_money', 'customer_trans_record_order_total_money', 'customer_trans_record_total_money', 'customer_trans_record_current_balance', 'customer_trans_record_befor_balance','customer_trans_record_compensate_money'], 'number'],
             [['customer_trans_record_online_service_card_on'], 'string', 'max' => 30],
             [['customer_trans_record_transaction_id'], 'string', 'max' => 40],
             [['customer_trans_record_remark'], 'string', 'max' => 255],
-            [['customer_trans_record_verify'], 'string', 'max' => 32]
+            [['customer_trans_record_verify'], 'string', 'max' => 32],
+            [['record_type'],'required']   //自定义，交易类型:1=消费,2=充值,3=退款,4=赔偿,5=补偿
+        ];
+    }
+
+    /**
+     * 场景验证
+     * @param string $record_type_交易类型:
+     * @remark 1=消费,2=充值,3=退款,4=补偿
+     */
+    public function scenarios()
+    {
+        return[
+            //1=消费
+            '1'=>[
+                    'customer_id','order_id','order_channel_id','customer_trans_record_order_channel','pay_channel_id',
+                    'customer_trans_record_pay_channel','customer_trans_record_mode','customer_trans_record_mode_name',
+                    'customer_trans_record_promo_code_money','customer_trans_record_coupon_money','customer_trans_record_cash',
+                    'customer_trans_record_pre_pay','customer_trans_record_online_pay','customer_trans_record_online_balance_pay',
+                    'customer_trans_record_online_service_card_on','customer_trans_record_online_service_card_pay',
+                    'customer_trans_record_money','customer_trans_record_remark',
+                 ],
+            //2=充值
+            '2'=>[
+                    'customer_id','pay_channel_id','customer_trans_record_pay_channel',
+                    'customer_trans_record_mode','customer_trans_record_mode_name',
+                    'customer_trans_record_cash','customer_trans_record_online_pay',
+                    'customer_trans_record_online_service_card_on','customer_trans_record_online_service_card_pay',
+                    'customer_trans_record_remark',
+                 ],
+            //3=退款
+            '3'=>[
+                    'customer_id','order_id','order_channel_id','customer_trans_record_order_channel','pay_channel_id',
+                    'customer_trans_record_pay_channel','customer_trans_record_mode','customer_trans_record_mode_name',
+                    'customer_trans_record_promo_code_money','customer_trans_record_coupon_money',
+                    'customer_trans_record_online_service_card_on','customer_trans_record_online_service_card_pay',
+                    'customer_trans_record_refund_money','customer_trans_record_remark',
+                 ],
+            //4=补偿
+            '4'=>[
+                    'customer_id','order_id','order_channel_id','customer_trans_record_order_channel','pay_channel_id',
+                    'customer_trans_record_pay_channel','customer_trans_record_mode','customer_trans_record_mode_name',
+                    'customer_trans_record_compensate_money','customer_trans_record_remark',
+                 ],
         ];
     }
 
@@ -76,7 +120,7 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
             'customer_trans_record_order_channel' => Yii::t('app', '订单渠道名称'),
             'pay_channel_id' => Yii::t('app', '支付渠道'),
             'customer_trans_record_pay_channel' => Yii::t('app', '支付渠道名称'),
-            'customer_trans_record_mode' => Yii::t('app', '交易方式:1消费,2=充值,3=退款,4=赔偿,5=补偿'),
+            'customer_trans_record_mode' => Yii::t('app', '交易方式:1消费,2=充值,3=退款,4=补偿'),
             'customer_trans_record_mode_name' => Yii::t('app', '交易方式名称'),
             'customer_trans_record_promo_code_money' => Yii::t('app', '优惠码金额'),
             'customer_trans_record_coupon_money' => Yii::t('app', '优惠券金额'),
@@ -86,6 +130,7 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
             'customer_trans_record_online_balance_pay' => Yii::t('app', '在线余额支付'),
             'customer_trans_record_online_service_card_on' => Yii::t('app', '服务卡号'),
             'customer_trans_record_online_service_card_pay' => Yii::t('app', '服务卡支付'),
+            'customer_trans_record_compensate_money' => Yii::t('app', '补偿金额'),
             'customer_trans_record_refund_money' => Yii::t('app', '退款金额'),
             'customer_trans_record_money' => Yii::t('app', '余额支付'),
             'customer_trans_record_order_total_money' => Yii::t('app', '订单总额'),
@@ -98,6 +143,7 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
             'created_at' => Yii::t('app', '创建时间'),
             'updated_at' => Yii::t('app', '更新时间'),
             'is_del' => Yii::t('app', '删除'),
+            'record_type' => Yii::t('app', '规则'),
         ];
     }
 }
