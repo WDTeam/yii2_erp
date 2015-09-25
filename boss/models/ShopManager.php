@@ -69,4 +69,19 @@ class ShopManager extends \common\models\ShopManager
         $model = OperationArea::find()->where(['id'=>$this->city_id])->one();
         return $model->area_name;
     }
+    /**
+     * 获取审核各状态数据
+     * @param int $number
+     */
+    public static function getAuditStatusCountByNumber($number)
+    {
+        return (int)self::find()->where(['audit_status'=>$number])->scalar();
+    }
+    /**
+     * 获取黑名单数
+     */
+    public static function getIsBlacklistCount()
+    {
+        return (int)self::find()->where(['is_blacklist'=>1])->scalar();
+    }
 }

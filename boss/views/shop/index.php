@@ -20,8 +20,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="shop-index">
     
 
-    <div style="text-align: right">
-        <div style="display: inline-block;width:800px;"><?php echo $this->render('_search', ['model' => $searchModel]); ?></div>
+    <div style="text-align: right; padding-bottom:5px; clear:both">
+        <div class="pull-left"><?php echo $this->render('_search', ['model' => $searchModel]); ?></div>
         <?= Html::a(Yii::t('app', 'Create Shop'), ['create'], ['class' => 'btn btn-success']) ?>
     </div>
     <?= GridView::widget([
