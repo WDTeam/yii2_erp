@@ -44,6 +44,7 @@ class OperationShopDistrict extends \yii\db\ActiveRecord
             'operation_shop_district_latitude_longitude' => Yii::t('operation', '商圈经纬度'),
             'created_at' => Yii::t('operation', '创建时间'),
             'updated_at' => Yii::t('operation', '编辑时间'),
+            'operation_shop_district_status' => Yii::t('operation', '上线状态'),
         ];
     }
 }

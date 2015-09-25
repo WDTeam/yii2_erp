@@ -108,6 +108,17 @@ class OperationShopDistrictController extends Controller
         }
     }
 
+    public function actionGoline($id){
+        $model = $this->findModel($id);
+        if($model->operation_shop_district_status == '1'){
+            $model->operation_shop_district_status = '2';
+        }else{
+            $model->operation_shop_district_status = '1';
+        }
+        $model->save();
+        return $this->redirect(['index']);
+    }
+
     /**
      * Deletes an existing OperationShopDistrict model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
