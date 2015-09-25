@@ -78,7 +78,7 @@ class GeneralPay extends \yii\db\ActiveRecord
     {
         return[
             //在线充值
-            'pay'=>['general_pay_money','customer_id','partner','general_pay_source','general_pay_source_name'],
+            'pay'       =>['general_pay_money','customer_id','partner','general_pay_source','general_pay_source_name'],
             //在线支付
             'online_pay'=>['general_pay_money','customer_id','partner','general_pay_source','general_pay_source_name','order_id'],
         ];
@@ -243,7 +243,6 @@ class GeneralPay extends \yii\db\ActiveRecord
         $msg = $class->get($param);
         echo json_encode(['code'=>'ok','msg'=>$msg]);
     }
-
 
 
     /**

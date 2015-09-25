@@ -30,7 +30,7 @@ $alipay_config['ali_public_key_path']= dirname(__FILE__).'/key/alipay_public_key
 
 $alipay_config['show_url']= 'http://www.1jiajie.com';
 
-$alipay_config['it_b_pay'] = "30m";
+$alipay_config['it_b_pay'] = "300m";
 
 //↑↑↑↑↑↑↑↑↑↑请在这里配置您的基本信息↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
