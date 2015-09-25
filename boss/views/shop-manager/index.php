@@ -2,6 +2,11 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use boss\components\AreaCascade;
+use kartik\widgets\Select2;
+use yii\helpers\Url;
+use yii\web\JsExpression;
+use boss\models\ShopManager;
 
 /* @var $this yii\web\View */
 /* @var $searchModel boss\models\search\ShopManagerSearch */
@@ -15,6 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <div style="text-align:right">
+        <div style="display: inline-block;width:800px;"><?php echo $this->render('_search', ['model' => $searchModel]); ?></div>
         <?= Html::a(Yii::t('app', 'Create Shop Manager'), ['create'], ['class' => 'btn btn-success']) ?>
     </div>
 
@@ -24,14 +30,23 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            [
+                'attribute'=>'id',
+                'options'=>['width'=>10]
+            ],
             'name',
-            'province_id',
-            'city_id',
-            'county_id',
+//             'province_id',
+            [
+                'attribute'=>'city_id',
+                'value'=>function ($model){
+                    return $model->getCityName();
+                },
+                'filter'=>false,
+            ],
+//             'county_id',
             // 'street',
-            // 'principal',
-            // 'tel',
+            'principal',
+            'tel',
             // 'other_contact',
             // 'bankcard_number',
             // 'account_person',
@@ -49,16 +64,41 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'bl_expiry_start',
             // 'bl_expiry_end',
             // 'bl_business:ntext',
-            // 'create_at',
+            [
+                'attribute'=>'create_at',
+                'value'=>function($model){
+                        return date('Y-m-d', $model->create_at);
+                },
+                'filter'=>false,
+            ],
             // 'update_at',
             // 'is_blacklist',
             // 'blacklist_time:datetime',
             // 'blacklist_cause',
-            // 'audit_status',
-            // 'shop_count',
-            // 'worker_count',
-            // 'complain_coutn',
-            // 'level',
+            [
+                'attribute'=>'audit_status',
+                'options'=>['width'=>100,],
+                'value'=>function($model){
+                    return ShopManager::$audit_statuses[$model->audit_status];
+                },
+                'filter'=>ShopManager::$audit_statuses,
+            ],
+            [
+                'attribute'=>'shop_count',
+                'options'=>['width'=>50]
+            ],
+            [
+                'attribute'=>'worker_count',
+                'options'=>['width'=>50]
+            ],
+            [
+                'attribute'=>'complain_coutn',
+                'options'=>['width'=>50]
+            ],
+            [
+            'attribute'=>'level',
+            'options'=>['width'=>60]
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

@@ -59,20 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'=>function($model){
                         return date('Y-m-d', $model->create_at);
                 },
-                'filter'=>false
-//                 'filter'=>DateControl::widget([
-//                     'type'=>DateControl::FORMAT_DATE,
-//                     'model'=>$searchModel,
-//                     'attribute'=>'create_at',
-//                     'ajaxConversion'=>false,
-//                     'displayFormat' => 'php:Y-m-d',
-//                     'saveFormat'=>'php:U',
-//                     'options' => [
-//                         'pluginOptions' => [
-//                             'autoclose' => true
-//                         ]
-//                     ]
-//                 ])
+                'filter'=>false,
             ],
             // 'update_at',
             // 'is_blacklist',
