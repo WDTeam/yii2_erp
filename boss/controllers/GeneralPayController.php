@@ -6,7 +6,7 @@ use Yii;
 use common\models\GeneralPay;
 use common\models\GeneralPayLog;
 use yii\data\ActiveDataProvider;
-use yii\web\Controller;
+use yii\rest\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
