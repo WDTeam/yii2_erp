@@ -57,6 +57,9 @@ class GeneralPay extends \yii\db\ActiveRecord
             [['general_pay_verify'], 'string', 'max' => 32],
             /**********以下自定义属性**********/
             [['partner'], 'required'],
+            [['partner'], 'required'],
+
+            //2088801136967007
         ];
     }
 
@@ -175,8 +178,8 @@ class GeneralPay extends \yii\db\ActiveRecord
             "notify_url" => $this->notify_url('wx-app'),
         );
         $class = new \wxpay_class();
-        var_dump($class->get($param));exit;
-        return $class->get($param);
+        $msg = $class->get($param);
+        echo json_encode(['code'=>'ok','msg'=>$msg]);
 
     }
 
@@ -204,7 +207,8 @@ class GeneralPay extends \yii\db\ActiveRecord
             'notify_url'=>$this->notify_url('bfb-app'),
         );
         $class = new \bfbpay_class();
-        return $class->get($param);
+        $msg = $class->get($param);
+        echo json_encode(['code'=>'ok','msg'=>$msg]);
     }
 
 
@@ -220,8 +224,8 @@ class GeneralPay extends \yii\db\ActiveRecord
             'notify_url'=>$this->notify_url('up-app'),
         );
         $class = new \uppay_class();
-        var_dump($class->get($param));exit;
-        return $class->get($param);
+        $msg = $class->get($param);
+        echo json_encode(['code'=>'ok','msg'=>$msg]);
     }
 
     /**
@@ -236,8 +240,8 @@ class GeneralPay extends \yii\db\ActiveRecord
             'notify_url'=>$this->notify_url('alipay-app'),
         );
         $class = new \alipay_class();
-        var_dump($class->get($param));exit;
-        return $class->get($param);
+        $msg = $class->get($param);
+        echo json_encode(['code'=>'ok','msg'=>$msg]);
     }
 
 
