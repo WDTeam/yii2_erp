@@ -50,6 +50,9 @@ class GeneralPayLog extends \yii\db\ActiveRecord
      * @param array $post
      */
     public function insertLog($post){
+        //写入文本日志
+        $this->writeLog($post);
+        //记录数据库日志
         $this->general_pay_log_price = $post['general_pay_log_price'];   //支付金额
         $this->general_pay_log_shop_name = $post['general_pay_log_shop_name'];   //商品名称
         $this->general_pay_log_eo_order_id = $post['general_pay_log_eo_order_id'];   //订单ID
