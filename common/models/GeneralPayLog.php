@@ -72,7 +72,7 @@ class GeneralPayLog extends \yii\db\ActiveRecord
         //创建目录
         is_dir($path) || mkdir($path,0777,true);
         //文件名称
-        if(is_null($filename)) $filename = date('Y-m-d',time());
+        if(is_null($filename)) $filename = date('Y-m-d',time()).'_pay.log';
         //写入数据
         $fullFileName = $path.$filename;
         file_put_contents($fullFileName,json_encode($data),FILE_APPEND);

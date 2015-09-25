@@ -211,13 +211,13 @@ class GeneralPayController extends Controller
         $GeneralPayLogModel = new GeneralPayLog();
 
         //记录日志
-        $post['general_pay_log_price'] = $post['total_fee'];   //支付金额
-        $post['general_pay_log_shop_name'] = $post['attach'];   //商品名称
-        $post['general_pay_log_eo_order_id'] = $post['out_trade_no'];   //订单ID
-        $post['general_pay_log_transaction_id'] = $post['transaction_id'];   //交易流水号
-        $post['general_pay_log_status_bool'] = $post['result_code'];   //支付状态
-        $post['general_pay_log_status'] = $post['result_code'];   //支付状态
-        $GeneralPayLogModel->insertLog($post);
+        $_post['general_pay_log_price'] = $post['total_fee'];   //支付金额
+        $_post['general_pay_log_shop_name'] = $post['attach'];   //商品名称
+        $_post['general_pay_log_eo_order_id'] = $post['out_trade_no'];   //订单ID
+        $_post['general_pay_log_transaction_id'] = $post['transaction_id'];   //交易流水号
+        $_post['general_pay_log_status_bool'] = $post['result_code'];   //支付状态
+        $_post['general_pay_log_status'] = $post['result_code'];   //支付状态
+        $GeneralPayLogModel->insertLog($_post);
 
         //实例化模型
         $model = new GeneralPay();
@@ -250,28 +250,6 @@ class GeneralPayController extends Controller
      */
     public function actionBfbAppNotify()
     {
-        $_GET = array (
-            'bank_no' => '',
-            'bfb_order_create_time' => '20150714115504',
-            'bfb_order_no' => '2015071415006100041110555687771',
-            'buyer_sp_username' => '',
-            'currency' => '1',
-            'extra' => '',
-            'fee_amount' => '0',
-            'input_charset' => '1',
-            'order_no' => 'BAid63146id24245',
-            'pay_result' => '1',
-            'pay_time' => '20150714115503',
-            'pay_type' => '2',
-            'sign_method' => '1',
-            'sp_no' => '1500610004',
-            'total_amount' => '1',
-            'transport_amount' => '0',
-            'unit_amount' => '1',
-            'unit_count' => '1',
-            'version' => '2',
-            'sign' => 'eef8e524ef6b6dde1699b04421fc9bc5',
-        ) ;
 
         $request = yii::$app->request;
 
@@ -280,18 +258,40 @@ class GeneralPayController extends Controller
 
         //POST数据
         if(!empty($_GET['debug'])){
+            $_GET = array (
+                'bank_no' => '',
+                'bfb_order_create_time' => '20150714115504',
+                'bfb_order_no' => '2015071415006100041110555687771',
+                'buyer_sp_username' => '',
+                'currency' => '1',
+                'extra' => '',
+                'fee_amount' => '0',
+                'input_charset' => '1',
+                'order_no' => 'BAid63146id24245',
+                'pay_result' => '1',
+                'pay_time' => '20150714115503',
+                'pay_type' => '2',
+                'sign_method' => '1',
+                'sp_no' => '1500610004',
+                'total_amount' => '1',
+                'transport_amount' => '0',
+                'unit_amount' => '1',
+                'unit_count' => '1',
+                'version' => '2',
+                'sign' => 'eef8e524ef6b6dde1699b04421fc9bc5',
+            ) ;
             $post = $_GET;
         }else{
             $post = $request->get();
         }
         //记录日志
-        $post['general_pay_log_price'] = $post['total_amount'];   //支付金额
-        $post['general_pay_log_shop_name'] = '百付宝';   //商品名称
-        $post['general_pay_log_eo_order_id'] = $post['order_no'];   //订单ID
-        $post['general_pay_log_transaction_id'] = $post['bfb_order_no'];   //交易流水号
-        $post['general_pay_log_status_bool'] = $post['pay_result'];   //支付状态
-        $post['general_pay_log_status'] = $post['pay_result'];   //支付状态
-        $GeneralPayLogModel->insertLog($post);
+        $_post['general_pay_log_price'] = $post['total_amount'];   //支付金额
+        $_post['general_pay_log_shop_name'] = '百付宝';   //商品名称
+        $_post['general_pay_log_eo_order_id'] = $post['order_no'];   //订单ID
+        $_post['general_pay_log_transaction_id'] = $post['bfb_order_no'];   //交易流水号
+        $_post['general_pay_log_status_bool'] = $post['pay_result'];   //支付状态
+        $_post['general_pay_log_status'] = $post['pay_result'];   //支付状态
+        $GeneralPayLogModel->insertLog($_post);
 
         //实例化模型
         $model = new GeneralPay();
@@ -326,30 +326,8 @@ class GeneralPayController extends Controller
     /**
      * 银联APP回调
      */
-    public function actionUpAppNotify(){
-        $_POST = array (
-            'bank_no' => '',
-            'bfb_order_create_time' => '20150714115504',
-            'bfb_order_no' => '2015071415006100041110555687771',
-            'buyer_sp_username' => '',
-            'currency' => '1',
-            'extra' => '',
-            'fee_amount' => '0',
-            'input_charset' => '1',
-            'order_no' => 'BAid63146id24245',
-            'pay_result' => '1',
-            'pay_time' => '20150714115503',
-            'pay_type' => '2',
-            'sign_method' => '1',
-            'sp_no' => '1500610004',
-            'total_amount' => '1',
-            'transport_amount' => '0',
-            'unit_amount' => '1',
-            'unit_count' => '1',
-            'version' => '2',
-            'sign' => 'eef8e524ef6b6dde1699b04421fc9bc5',
-        ) ;
-
+    public function actionUpAppNotify()
+    {
         $request = yii::$app->request;
 
         //实例化模型
@@ -357,19 +335,41 @@ class GeneralPayController extends Controller
 
         //POST数据
         if(!empty($_GET['debug'])){
+            $_POST = array (
+                'bank_no' => '',
+                'bfb_order_create_time' => '20150714115504',
+                'bfb_order_no' => '2015071415006100041110555687771',
+                'buyer_sp_username' => '',
+                'currency' => '1',
+                'extra' => '',
+                'fee_amount' => '0',
+                'input_charset' => '1',
+                'order_no' => 'BAid63146id24245',
+                'pay_result' => '1',
+                'pay_time' => '20150714115503',
+                'pay_type' => '2',
+                'sign_method' => '1',
+                'sp_no' => '1500610004',
+                'total_amount' => '1',
+                'transport_amount' => '0',
+                'unit_amount' => '1',
+                'unit_count' => '1',
+                'version' => '2',
+                'sign' => 'eef8e524ef6b6dde1699b04421fc9bc5',
+            ) ;
             $post = $_POST;
         }else{
             $post = $request->post();
         }
 
         //记录日志
-        $post['general_pay_log_price'] = $post['total_amount'];   //支付金额
-        $post['general_pay_log_shop_name'] = '银联支付';   //商品名称
-        $post['general_pay_log_eo_order_id'] = $post['order_no'];   //订单ID
-        $post['general_pay_log_transaction_id'] = $post['bfb_order_no'];   //交易流水号
-        $post['general_pay_log_status_bool'] = $post['pay_result'];   //支付状态
-        $post['general_pay_log_status'] = $post['pay_result'];   //支付状态
-        $GeneralPayLogModel->insertLog($post);
+        $_post['general_pay_log_price'] = $post['total_amount'];   //支付金额
+        $_post['general_pay_log_shop_name'] = '银联支付';   //商品名称
+        $_post['general_pay_log_eo_order_id'] = $post['order_no'];   //订单ID
+        $_post['general_pay_log_transaction_id'] = $post['bfb_order_no'];   //交易流水号
+        $_post['general_pay_log_status_bool'] = $post['pay_result'];   //支付状态
+        $_post['general_pay_log_status'] = $post['pay_result'];   //支付状态
+        $GeneralPayLogModel->insertLog($_post);
 
         //实例化模型
         $model = new GeneralPay();
