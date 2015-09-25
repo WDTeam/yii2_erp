@@ -33,7 +33,9 @@ class alipay_class{
             "notify_url"		  => $param['notify_url'],
             "service"             => "mobile.securitypay.pay",
             "payment_type"        => "1",
-            "_input_charset"      => $alipay_config['input_charset']
+            "_input_charset"      => $alipay_config['input_charset'],
+            "show_url"      => $alipay_config['show_url'],
+            "it_b_pay"      => $alipay_config['it_b_pay']
         );
         return $parameter;
 
