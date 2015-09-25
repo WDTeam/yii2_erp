@@ -26,6 +26,15 @@ class FinancePayChannelSearch extends FinancePayChannel
         return Model::scenarios();
     }
 
+    
+    public function searchfind($where,$flsde){
+    
+    	$dsfsd=$this->find()->where($where)->asArray()->one();
+    
+    	return $dsfsd[$flsde];
+    }
+    
+    
     public function search($params)
     {
         $query = FinancePayChannel::find();

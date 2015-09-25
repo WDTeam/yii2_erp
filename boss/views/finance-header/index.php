@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
-
+use common\models\FinanceHeader;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -14,51 +14,17 @@ $this->title = Yii::t('boss', '添加账单配置');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="finance-header-index">
-<!-- 
-<div class="finance-header-search">
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <form id="w0" action="/finance-header/index" method="get">
-    <div class="form-group field-financeheadersearch-id">
-<label class="control-label" for="financeheadersearch-id">主键</label>
-<input type="text" id="financeheadersearch-id" class="form-control" name="FinanceHeaderSearch[id]">
-
-<div class="help-block"></div>
-</div>
-    <div class="form-group field-financeheadersearch-finance_header_name">
-<label class="control-label" for="financeheadersearch-finance_header_name">表头名称</label>
-<input type="text" id="financeheadersearch-finance_header_name" class="form-control" name="FinanceHeaderSearch[finance_header_name]">
-
-<div class="help-block"></div>
-</div>
-    <div class="form-group field-financeheadersearch-finance_order_channel_id">
-<label class="control-label" for="financeheadersearch-finance_order_channel_id">订单渠道id</label>
-<input type="text" id="financeheadersearch-finance_order_channel_id" class="form-control" name="FinanceHeaderSearch[finance_order_channel_id]">
-
-<div class="help-block"></div>
-</div>
-    <div class="form-group field-financeheadersearch-finance_order_channel_name">
-<label class="control-label" for="financeheadersearch-finance_order_channel_name">订单渠道名称</label>
-<input type="text" id="financeheadersearch-finance_order_channel_name" class="form-control" name="FinanceHeaderSearch[finance_order_channel_name]">
-
-<div class="help-block"></div>
-</div>
-    <div class="form-group field-financeheadersearch-finance_pay_channel_id">
-<label class="control-label" for="financeheadersearch-finance_pay_channel_id">支付渠道id</label>
-<input type="text" id="financeheadersearch-finance_pay_channel_id" class="form-control" name="FinanceHeaderSearch[finance_pay_channel_id]">
-
-<div class="help-block"></div>
-</div>
     
-    
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Search</button>        <button type="reset" class="btn btn-default">Reset</button>    </div>
-
-    </form>
-</div>
---> 
-
-    <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
-
+    <div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 账单配置查询</h3>
+    </div>
+    <div class="panel-body">
+        <?php  echo $this->render('_search', ['model' => $searchModel,'odrinfo'=>$payatainfo,'ordedat' => $ordedatainfo]); ?>
+    </div>
+    </div>
     <p>
         <?php /* echo Html::a(Yii::t('boss', 'Create {modelClass}', [
     'modelClass' => 'Finance Header',
@@ -67,16 +33,24 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
             'id',
+            'finance_header_title',
             'finance_header_name',
-            'finance_order_channel_id',
+            [
+                'format' => 'raw',
+                'label' => '比对字段',
+               'value' => function ($dataProvider) {
+                $platform = FinanceHeader::selectname($dataProvider->finance_header_where);
+                    return $platform;
+                },
+                'width' => "100px",
+            ],
             'finance_order_channel_name',
-            'finance_pay_channel_id',
-//            'finance_pay_channel_name', 
+   //         'finance_pay_channel_id',
+           'finance_pay_channel_name', 
 //            'create_time:datetime', 
 //            'is_del', 
 
@@ -102,7 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type'=>'info',
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> Add', ['create'], ['class' => 'btn btn-success']),                                                                                                                                                          'after'=>Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List', ['index'], ['class' => 'btn btn-info']),
+            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> 添加', ['create'], ['class' => 'btn btn-success']),                                                                                                                                                          
             'showFooter'=>false
         ],
     ]); Pjax::end(); ?>

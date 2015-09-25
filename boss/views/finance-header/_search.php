@@ -19,51 +19,40 @@ use kartik\widgets\Select2;
     ]); ?>
 
     <?//= $form->field($model, 'id') ?>
-
-    <?= $form->field($model, 'finance_header_name') ?>
-
-    <?//= $form->field($model, 'finance_order_channel_id') ?>
-
-    <?//= $form->field($model, 'finance_order_channel_name') ?>
-    
-    <?= $form->field($model, 'finance_order_channel_name')->widget(Select2::classname(), [
-        'name' => 'finance_order_channel_name',
+<div class='col-md-2'>
+    <?= $form->field($model, 'finance_header_title') ?>
+     </div>
+    <div class='col-md-2'>
+    <?= $form->field($model, 'finance_order_channel_id')->widget(Select2::classname(), [
+        'name' => 'finance_order_channel_id',
         'hideSearch' => true,
-        'data' => [1 => '美团', 2 => '大众点评',3=>'京东到家',4=>'淘宝热卖'],
-        'options' => ['placeholder' => '选择订单渠道'],
+        'data' => $odrinfo,
+        'options' => ['placeholder' => '选择订单渠道','class' => 'col-md-2'],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]);
+   
+    ?>
+     </div>
+    <div class=col-md-3>
+    <?= $form->field($model, 'finance_pay_channel_id')->widget(Select2::classname(), [
+        'name' => 'finance_pay_channel_id',
+        'hideSearch' => true,
+        'data' => $ordedat,
+        'options' => ['placeholder' => '选择支付渠道','class' => 'col-md-2'],
         'pluginOptions' => [
             'allowClear' => true
         ],
     ]);
     
     ?>
-    
-    
-
-    <?//= $form->field($model, 'finance_pay_channel_id') ?>
-
-    <?php  //echo $form->field($model, 'finance_pay_channel_name') ?>
-    
-    <?= $form->field($model, 'finance_pay_channel_name')->widget(Select2::classname(), [
-        'name' => 'finance_pay_channel_name',
-        'hideSearch' => true,
-        'data' => [1 => '微信', 2 => '支付宝',3=>'财付通',4=>'银联'],
-        'options' => ['placeholder' => '选择支付渠道'],
-        'pluginOptions' => [
-            'allowClear' => true
-        ],
-    ]);
-    
-    ?>
-    
-
-    <?php // echo $form->field($model, 'create_time') ?>
-
-    <?php // echo $form->field($model, 'is_del') ?>
-
+    </div>
     <div class="form-group">
+     <div class='col-md-2' style="    margin-top: 22px;">
         <?= Html::submitButton(Yii::t('boss', '确定'), ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton(Yii::t('boss', '重置'), ['class' => 'btn btn-default']) ?>
+        </div>  
     </div>
 
     <?php ActiveForm::end(); ?>
