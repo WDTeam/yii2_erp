@@ -61,6 +61,21 @@ class GeneralPayLog extends \yii\db\ActiveRecord
     }
 
     /**
+     * 写入日志
+     * @param $path 目录
+     * @param $filename 文件名称
+     */
+    public function writeLog($data,$path='/tmp/pay/',$filename=null){
+        //创建目录
+        is_dir($path) || mkdir($path,0777,true);
+        //文件名称
+        if(is_null($filename)) $filename = date('Y-m-d',time());
+        //写入数据
+        $fullFileName = $path.$filename;
+        file_put_contents($fullFileName,json_encode($data),FILE_APPEND);
+    }
+
+    /**
      * 判断支付状态
      * @param $statusString 状态类型
      * @return int  1/支付成功 ， 2/支付失败
@@ -69,6 +84,9 @@ class GeneralPayLog extends \yii\db\ActiveRecord
         $statusArr = [
             'TRADE_FINISHED',   //支付宝
             'TRADE_SUCCESS',    //支付宝
+            '1',    //百付宝
+            'SUCCESS',    //微信
+            '验签成功',    //银联
         ];
         return in_array($statusString,$statusArr) ? 1 : 0 ;
     }

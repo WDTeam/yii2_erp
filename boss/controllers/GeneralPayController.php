@@ -51,8 +51,10 @@ class GeneralPayController extends Controller
                 exit("订单已经支付过");
             }
         }
+
         //在线支付（online_pay），在线充值（pay）
         $scenario = empty($data['order_id']) ? 'pay' : 'online_pay';
+
         //支付来源
         $data['general_pay_source_name'] = $model->source($data['general_pay_source']);
 
@@ -65,11 +67,19 @@ class GeneralPayController extends Controller
 
             //返回组装数据
             $model->call_pay();
-            echo "验证成功!";
 
         }else{
-            var_dump($model->errors);
+            echo json_encode(['code'=>'-1' , 'msg'=>['alertMsg'=>$model->errors]]);
         }
+/*
+        $dataProvider = new ActiveDataProvider([
+            'query' => GeneralPay::find(),
+        ]);
+
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+        ]);
+    */
     }
 
     /**
@@ -164,30 +174,23 @@ class GeneralPayController extends Controller
         //验证支付结果
         if(!empty($model)){
 
-            //配置参数
-            $config = Yii::$app->params['alipay_web_config'];
-
             //验证签名
-            $alipayNotify = new \AlipayNotify($config);
+            $alipay = new \alipay_class;
+            $verify_result = $alipay->callback();
             if(!empty($_GET['debug'])){
                 $verify_result = true;
-            }else{
-                $verify_result = $alipayNotify->verifyNotify();
             }
-
             //签名验证成功
             if($verify_result) {
-                if($_POST['trade_status'] == 'TRADE_FINISHED' || $_POST['trade_status'] == 'TRADE_SUCCESS') {
-                    $model->id = $GeneralPayId; //ID
-                    $model->general_pay_status = 1; //支付状态
-                    $model->general_pay_actual_money = $post['total_fee'];
-                    $model->general_pay_transaction_id = $post['trade_no'];
-                    $model->general_pay_is_coupon = 1;
-                    $model->general_pay_eo_order_id = $post['out_trade_no'];
-                    $model->general_pay_verify = md5(1);
+                $model->id = $GeneralPayId; //ID
+                $model->general_pay_status = 1; //支付状态
+                $model->general_pay_actual_money = $post['total_fee'];
+                $model->general_pay_transaction_id = $post['trade_no'];
+                $model->general_pay_is_coupon = 1;
+                $model->general_pay_eo_order_id = $post['out_trade_no'];
+                $model->general_pay_verify = md5(1);
 
-                    if($model->save(false)) $status = true;
-                }
+                if($model->save(false)) $status = true;
             }
         }
         echo !empty($status) ? 'success' : 'fail';
@@ -196,81 +199,207 @@ class GeneralPayController extends Controller
     /**
      * 微信APP回调
      */
-    public function actionWxAppNotify($post=null, $msg=null){
-        //判断是回调数据还是处理数据
-        if(is_null($post) && is_null($msg)){
-            $notify = new \WxPayNotify();
-            $notify->Handle(false);
-        }else{
+    public function actionWxAppNotify(){
 
-            $result = array (
-                'appid' => 'wx7558e67c2d61eb8f',
-                'attach' => 'e家洁在线支付',
-                'bank_type' => 'CMB_CREDIT',
-                'cash_fee' => '3500',
-                'fee_type' => 'CNY',
-                'is_subscribe' => 'Y',
-                'mch_id' => '10037310',
-                'nonce_str' => 'k67hrd7daokfetzwz1fcyehuz8vgehsb',
-                'openid' => 'o7KvajgiK1XXWInL-eMJjjrlQAmc',
-                //'out_trade_no' => 'WXWAP_2015092211069962_32551',
-                'result_code' => 'SUCCESS',
-                'return_code' => 'SUCCESS',
-                'sign' => '45A1A35B9F557FC5D914DF9E0D39EE21',
-                'time_end' => '20150922110653',
-                'total_fee' => '3500',
-                'trade_type' => 'JSAPI',
-                'transaction_id' => '1006560062201509220954999431',
-            );
+        $notify = new \wxpay_class();
+        //调用微信验证
+        $notify->callback();
+        //获取微信数据
+        $post = $notify->getNotifyData();
+        //获取验证状态
+        $status = $notify->notify();
+        //实例化模型
+        $GeneralPayLogModel = new GeneralPayLog();
 
-            //实例化模型
-            $GeneralPayLogModel = new GeneralPayLog();
+        //记录日志
+        $post['general_pay_log_price'] = $post['total_fee'];   //支付金额
+        $post['general_pay_log_shop_name'] = $post['attach'];   //商品名称
+        $post['general_pay_log_eo_order_id'] = $post['out_trade_no'];   //订单ID
+        $post['general_pay_log_transaction_id'] = $post['transaction_id'];   //交易流水号
+        $post['general_pay_log_status_bool'] = $post['result_code'];   //支付状态
+        $post['general_pay_log_status'] = $post['result_code'];   //支付状态
+        $GeneralPayLogModel->insertLog($post);
 
-            //记录日志
-            $post['general_pay_log_price'] = $post['total_fee'];   //支付金额
-            $post['general_pay_log_shop_name'] = $post['attach'];   //商品名称
-            $post['general_pay_log_eo_order_id'] = $post['out_trade_no'];   //订单ID
-            $post['general_pay_log_transaction_id'] = $post['transaction_id'];   //交易流水号
-            $post['general_pay_log_status_bool'] = $post['result_code'];   //支付状态
-            $post['general_pay_log_status'] = $post['result_code'];   //支付状态
-            $GeneralPayLogModel->insertLog($post);
+        //实例化模型
+        $model = new GeneralPay();
 
-            //实例化模型
-            $model = new GeneralPay();
+        //获取交易ID
+        $GeneralPayId = $model->getGeneralPayId($post['out_trade_no']);
 
-            //获取交易ID
-            $GeneralPayId = $model->getGeneralPayId($post['out_trade_no']);
+        //查询支付记录
+        $model = GeneralPay::find()->where(['id'=>$GeneralPayId,'general_pay_status'=>0,'is_del'=>1])->one();
 
-            if(!array_key_exists("transaction_id", $post)){
-                $msg = "输入参数不正确";
-                return false;
-            }
+        //验证支付结果
+        if(!empty($model)){
 
-            //查询订单，判断订单真实性
-            //if(!$this->Queryorder($post["transaction_id"])){
-            //    $msg = "订单查询失败";
-            //    return false;
-            //}
+            $model->id = $GeneralPayId; //ID
+            $model->general_pay_status = 1; //支付状态
+            $model->general_pay_actual_money = $model->toMoney($post['total_fee'],100,true);
+            $model->general_pay_transaction_id = $post['trade_no'];
+            $model->general_pay_is_coupon = 1;
+            $model->general_pay_eo_order_id = $post['out_trade_no'];
+            $model->general_pay_verify = md5(1);
 
-            //查询支付记录
-            $model = GeneralPay::find()->where(['id'=>$GeneralPayId,'general_pay_status'=>0,'is_del'=>1])->one();
+            $model->save(false);
 
-            //验证支付结果
-            if(!empty($model)){
-
-                $model->id = $GeneralPayId; //ID
-                $model->general_pay_status = 1; //支付状态
-                $model->general_pay_actual_money = $model->toMoney($post['total_fee'],100,true);
-                $model->general_pay_transaction_id = $post['trade_no'];
-                $model->general_pay_is_coupon = 1;
-                $model->general_pay_eo_order_id = $post['out_trade_no'];
-                $model->general_pay_verify = md5(1);
-
-                if($model->save(false)) $status = true;
-
-            }
-            return empty($status) ? false : true;
         }
+        echo $status;
+    }
+
+    /**
+     *  百付宝APP回调
+     */
+    public function actionBfbAppNotify()
+    {
+        $_GET = array (
+            'bank_no' => '',
+            'bfb_order_create_time' => '20150714115504',
+            'bfb_order_no' => '2015071415006100041110555687771',
+            'buyer_sp_username' => '',
+            'currency' => '1',
+            'extra' => '',
+            'fee_amount' => '0',
+            'input_charset' => '1',
+            'order_no' => 'BAid63146id24245',
+            'pay_result' => '1',
+            'pay_time' => '20150714115503',
+            'pay_type' => '2',
+            'sign_method' => '1',
+            'sp_no' => '1500610004',
+            'total_amount' => '1',
+            'transport_amount' => '0',
+            'unit_amount' => '1',
+            'unit_count' => '1',
+            'version' => '2',
+            'sign' => 'eef8e524ef6b6dde1699b04421fc9bc5',
+        ) ;
+
+        $request = yii::$app->request;
+
+        //实例化模型
+        $GeneralPayLogModel = new GeneralPayLog();
+
+        //POST数据
+        if(!empty($_GET['debug'])){
+            $post = $_GET;
+        }else{
+            $post = $request->get();
+        }
+        //记录日志
+        $post['general_pay_log_price'] = $post['total_amount'];   //支付金额
+        $post['general_pay_log_shop_name'] = '百付宝';   //商品名称
+        $post['general_pay_log_eo_order_id'] = $post['order_no'];   //订单ID
+        $post['general_pay_log_transaction_id'] = $post['bfb_order_no'];   //交易流水号
+        $post['general_pay_log_status_bool'] = $post['pay_result'];   //支付状态
+        $post['general_pay_log_status'] = $post['pay_result'];   //支付状态
+        $GeneralPayLogModel->insertLog($post);
+
+        //实例化模型
+        $model = new GeneralPay();
+
+        //获取交易ID
+        $GeneralPayId = $model->getGeneralPayId($post['order_no']);
+
+        //查询支付记录
+        $model = GeneralPay::find()->where(['id'=>$GeneralPayId,'general_pay_status'=>0,'is_del'=>1])->one();
+
+        //验证签名
+        $bfb = new \bfbpay_class();
+        $sign = $bfb->callback();
+
+        //验证支付结果
+        if( !empty($model) && !empty($sign) ){
+
+            $model->id = $GeneralPayId; //ID
+            $model->general_pay_status = 1; //支付状态
+            $model->general_pay_actual_money = $model->toMoney($post['total_fee'],100,true);
+            $model->general_pay_transaction_id = $post['bfb_order_no'];
+            $model->general_pay_is_coupon = 1;
+            $model->general_pay_eo_order_id = $post['order_no'];
+            $model->general_pay_verify = md5(1);
+
+            $model->save(false);
+            $bfb->notify();
+        }
+
+    }
+
+    /**
+     * 银联APP回调
+     */
+    public function actionUpAppNotify(){
+        $_POST = array (
+            'bank_no' => '',
+            'bfb_order_create_time' => '20150714115504',
+            'bfb_order_no' => '2015071415006100041110555687771',
+            'buyer_sp_username' => '',
+            'currency' => '1',
+            'extra' => '',
+            'fee_amount' => '0',
+            'input_charset' => '1',
+            'order_no' => 'BAid63146id24245',
+            'pay_result' => '1',
+            'pay_time' => '20150714115503',
+            'pay_type' => '2',
+            'sign_method' => '1',
+            'sp_no' => '1500610004',
+            'total_amount' => '1',
+            'transport_amount' => '0',
+            'unit_amount' => '1',
+            'unit_count' => '1',
+            'version' => '2',
+            'sign' => 'eef8e524ef6b6dde1699b04421fc9bc5',
+        ) ;
+
+        $request = yii::$app->request;
+
+        //实例化模型
+        $GeneralPayLogModel = new GeneralPayLog();
+
+        //POST数据
+        if(!empty($_GET['debug'])){
+            $post = $_POST;
+        }else{
+            $post = $request->post();
+        }
+
+        //记录日志
+        $post['general_pay_log_price'] = $post['total_amount'];   //支付金额
+        $post['general_pay_log_shop_name'] = '银联支付';   //商品名称
+        $post['general_pay_log_eo_order_id'] = $post['order_no'];   //订单ID
+        $post['general_pay_log_transaction_id'] = $post['bfb_order_no'];   //交易流水号
+        $post['general_pay_log_status_bool'] = $post['pay_result'];   //支付状态
+        $post['general_pay_log_status'] = $post['pay_result'];   //支付状态
+        $GeneralPayLogModel->insertLog($post);
+
+        //实例化模型
+        $model = new GeneralPay();
+
+        //获取交易ID
+        $GeneralPayId = $model->getGeneralPayId($post['order_no']);
+
+        //查询支付记录
+        $model = GeneralPay::find()->where(['id'=>$GeneralPayId,'general_pay_status'=>0,'is_del'=>1])->one();
+
+        //验证签名
+        $class = new \uppay_class();
+        $sign = $class->callback();
+
+        //验证支付结果
+        if( !empty($model) && !empty($sign) ){
+
+            $model->id = $GeneralPayId; //ID
+            $model->general_pay_status = 1; //支付状态
+            $model->general_pay_actual_money = $model->toMoney($post['total_fee'],100,true);
+            $model->general_pay_transaction_id = $post['bfb_order_no'];
+            $model->general_pay_is_coupon = 1;
+            $model->general_pay_eo_order_id = $post['order_no'];
+            $model->general_pay_verify = md5(1);
+
+            $model->save(false);
+            $class->notify();
+        }
+
     }
 
     /**
@@ -369,4 +498,5 @@ class GeneralPayController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
 }

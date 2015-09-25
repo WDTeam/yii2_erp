@@ -14,7 +14,9 @@ use Yii;
  * @property string $customer_photo
  * @property string $customer_phone
  * @property string $customer_email
- * @property integer $region_id
+ * @property integer $operation_area_id
+ * @property integer $operation_city_id
+ * @property integer $general_region_id
  * @property string $customer_live_address_detail
  * @property string $customer_balance
  * @property integer $customer_score
@@ -48,7 +50,7 @@ class Customer extends \yii\db\ActiveRecord
     {
         return [
             [['customer_name', 'customer_sex', 'customer_phone', 'customer_score', 'created_at', 'updated_at'], 'required'],
-            [['customer_sex', 'customer_birth', 'region_id', 'customer_score', 'customer_level', 'customer_complaint_times', 'customer_src', 'channal_id', 'platform_id', 'customer_login_time', 'customer_is_vip', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['customer_sex', 'customer_birth', 'operation_area_id', 'operation_city_id', 'general_region_id', 'customer_score', 'customer_level', 'customer_complaint_times', 'customer_src', 'channal_id', 'platform_id', 'customer_login_time', 'customer_is_vip', 'created_at', 'updated_at', 'is_del'], 'integer'],
             [['customer_balance'], 'number'],
             [['customer_del_reason'], 'string'],
             [['customer_name', 'customer_login_ip'], 'string', 'max' => 16],
@@ -71,7 +73,9 @@ class Customer extends \yii\db\ActiveRecord
             'customer_photo' => Yii::t('boss', '头像'),
             'customer_phone' => Yii::t('boss', '电话'),
             'customer_email' => Yii::t('boss', '邮箱'),
-            'region_id' => Yii::t('boss', '住址'),
+            'operation_area_id' => Yii::t('boss', '商圈'),
+            'operation_city_id' => Yii::t('boss', '城市'),
+            'general_region_id' => Yii::t('boss', '住址'),
             'customer_live_address_detail' => Yii::t('boss', '详细住址'),
             'customer_balance' => Yii::t('boss', '账户余额'),
             'customer_score' => Yii::t('boss', '积分'),

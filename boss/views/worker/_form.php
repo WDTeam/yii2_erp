@@ -9,6 +9,7 @@ use yii\web\JsExpression;
 use kartik\grid\GridView;
 use kartik\date\DatePicker;
 use boss\components\AreaCascade;
+
 /**
  * @var yii\web\View $this
  * @var common\models\Worker $worker
@@ -38,10 +39,11 @@ $cityDesc = '门店';
     //            echo '<div class="col-md-10">'.Yii::$app->areacascade->cascadeAll('OperationCity', ['class' => 'form-control']).'</div>';
     //            echo '</div></fieldset>';
     ?>
-
-    <div class="panel"><h3  style="margin-left: 30px">门店信息</h3>
-        <div class="operation-city-form">
-
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">门店信息</h3>
+        </div>
+        <div class="panel-body">
             <?php
             /*echo AreaCascade::widget([
                 'model' => $worker,
@@ -57,94 +59,102 @@ $cityDesc = '门店';
             ]);*/
             ?>
 
-        </div>
-        <?=  $form->field($worker, 'worker_work_city')->widget(Select2::classname(), [
-            'name' => 'worker_rule_id',
-            'hideSearch' => true,
-            'data' => [1 => '北京', 2 => '上海', 3 => '成都', 4 => '深圳'],
-            'options' => ['placeholder' => '选择城市', 'inline' => true],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-        ]); ?>
-        <?= $form->field($worker, 'shop_id')->widget(Select2::classname(), [
-            'initValueText' => $cityDesc, // set the initial display text
-            'options' => ['placeholder' => '搜索门店名称...'],
-            'pluginOptions' => [
-                'allowClear' => true,
-                'minimumInputLength' => 2,
-                'ajax' => [
-                    'url' => $url,
-                    'dataType' => 'json',
-                    'data' => new JsExpression('function(params) { return {q:params.term}; }')
+
+            <?= $form->field($worker, 'worker_work_city')->widget(Select2::classname(), [
+                'name' => 'worker_rule_id',
+                'hideSearch' => true,
+                'data' => [1 => '北京', 2 => '上海', 3 => '成都', 4 => '深圳'],
+                'options' => ['placeholder' => '选择城市', 'inline' => true],
+                'pluginOptions' => [
+                    'allowClear' => true
                 ],
-                'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-                'templateResult' => new JsExpression('function(city) { return city.text; }'),
-                'templateSelection' => new JsExpression('function (city) { return city.text; }'),
-            ],
-        ]); ?>
-    </div>
-    <div class="panel"><h3 style="margin-left: 30px">阿姨基本信息</h3>
-        <?= $form->field($worker, 'worker_name')->textInput(['placeholder' => 'Enter 阿姨姓名...', 'maxlength' => 10]); ?>
-        <?= $form->field($worker, 'worker_phone')->textInput(['placeholder' => 'Enter 阿姨手机...', 'maxlength' => 20]); ?>
-        <?= $form->field($worker, 'worker_idcard')->textInput(['placeholder' => 'Enter 阿姨身份证号...', 'maxlength' => 20]); ?>
-        <?= $form->field($worker_ext, 'worker_sex')->radioList(['0' => '女', '1' => '男'], ['inline' => true]); ?>
-        <?= $form->field($worker_ext, 'worker_age')->textInput(['placeholder' => 'Enter 阿姨年龄...']); ?>
-
-        <?= $form->field($worker_ext, 'worker_birth')->widget(DatePicker::classname(), [
-            'name' => 'worker_birth',
-            'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-            'value' => date('Y-m-d', $worker_ext->worker_birth),
-            'pluginOptions' => [
-                'autoclose' => true,
-                'format' => 'yyyy-mm-dd'
-            ]
-        ]); ?>
-        <?= $form->field($worker_ext, 'worker_source')->textInput(['placeholder' => 'Enter 阿姨来源...']); ?>
-        <?= $form->field($worker_ext, 'worker_edu')->textInput(['placeholder' => 'Enter 阿姨教育程度...']); ?>
-        <?= $form->field($worker_ext, 'worker_hometown')->textInput(['placeholder' => 'Enter 阿姨籍贯...']); ?>
-        <?= $form->field($worker_ext, 'worker_is_health')->radioList(['1' => '是', '0' => '否'], ['inline' => true]); ?>
-        <?= $form->field($worker_ext, 'worker_is_insurance')->radioList(['1' => '是', '0' => '否'], ['inline' => true]); ?>
-        <?= $form->field($worker, 'worker_type')->radioList(['1' => '自有', '2' => '非自有'], ['inline' => true]); ?>
-        <?= $form->field($worker, 'worker_rule_id')->widget(Select2::classname(), [
-            'name' => 'worker_rule_id',
-            'hideSearch' => true,
-            'data' => [1 => '全职', 2 => '兼职', 3 => '时段', 4 => '高峰'],
-            'options' => ['placeholder' => '选择阿姨身份'],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-        ]); ?>
-        <div class="operation-city-form">
-
-            <?php
-
-            echo AreaCascade::widget([
-                'model' => $worker_ext,
-                'options' => ['class' => 'form-control inline'],
-                'label' =>'阿姨居住地',
-                'grades' => 'town',
-            ]);
-            ?>
-
+            ]); ?>
+            <?= $form->field($worker, 'shop_id')->widget(Select2::classname(), [
+                'initValueText' => $cityDesc, // set the initial display text
+                'options' => ['placeholder' => '搜索门店名称...'],
+                'pluginOptions' => [
+                    'allowClear' => true,
+                    'minimumInputLength' => 2,
+                    'ajax' => [
+                        'url' => $url,
+                        'dataType' => 'json',
+                        'data' => new JsExpression('function(params) { return {q:params.term}; }')
+                    ],
+                    'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                    'templateResult' => new JsExpression('function(city) { return city.text; }'),
+                    'templateSelection' => new JsExpression('function (city) { return city.text; }'),
+                ],
+            ]); ?>
         </div>
+        <div class="panel-heading">
+            <h3 class="panel-title">阿姨基本信息</h3>
+        </div>
+        <div class="panel-body">
+            <?= $form->field($worker, 'worker_name')->textInput(['placeholder' => 'Enter 阿姨姓名...', 'maxlength' => 10]); ?>
+            <?= $form->field($worker, 'worker_phone')->textInput(['placeholder' => 'Enter 阿姨手机...', 'maxlength' => 20]); ?>
+            <?= $form->field($worker, 'worker_idcard')->textInput(['placeholder' => 'Enter 阿姨身份证号...', 'maxlength' => 20]); ?>
+            <?= $form->field($worker_ext, 'worker_sex')->radioList(['0' => '女', '1' => '男'], ['inline' => true]); ?>
+            <?= $form->field($worker_ext, 'worker_age')->textInput(['placeholder' => 'Enter 阿姨年龄...']); ?>
+
+            <?= $form->field($worker_ext, 'worker_birth')->widget(DatePicker::classname(), [
+                'name' => 'worker_birth',
+                'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+                'value' => date('Y-m-d', $worker_ext->worker_birth),
+                'pluginOptions' => [
+                    'autoclose' => true,
+                    'format' => 'yyyy-mm-dd'
+                ]
+            ]); ?>
+            <?= $form->field($worker_ext, 'worker_source')->textInput(['placeholder' => 'Enter 阿姨来源...']); ?>
+            <?= $form->field($worker_ext, 'worker_edu')->textInput(['placeholder' => 'Enter 阿姨教育程度...']); ?>
+            <?= $form->field($worker_ext, 'worker_hometown')->textInput(['placeholder' => 'Enter 阿姨籍贯...']); ?>
+            <?= $form->field($worker_ext, 'worker_is_health')->radioList(['1' => '是', '0' => '否'], ['inline' => true]); ?>
+            <?= $form->field($worker_ext, 'worker_is_insurance')->radioList(['1' => '是', '0' => '否'], ['inline' => true]); ?>
+            <?= $form->field($worker, 'worker_type')->radioList(['1' => '自有', '2' => '非自有'], ['inline' => true]); ?>
+            <?= $form->field($worker, 'worker_rule_id')->widget(Select2::classname(), [
+                'name' => 'worker_rule_id',
+                'hideSearch' => true,
+                'data' => [1 => '全职', 2 => '兼职', 3 => '时段', 4 => '高峰'],
+                'options' => ['placeholder' => '选择阿姨身份'],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ]); ?>
+            <div class="operation-city-form">
+
+                <?php
+
+                echo AreaCascade::widget([
+                    'model' => $worker_ext,
+                    'options' => ['class' => 'form-control inline'],
+                    'label' => '阿姨居住地',
+                    'grades' => 'town',
+                ]);
+                ?>
+
+            </div>
+        </div>
+
+        <div class="panel-heading">
+            <h3 class="panel-title">结算相关信息</h3>
+        </div>
+        <div class="panel-body">
+            <?= $form->field($worker_ext, 'worker_bank_name')->textInput(['placeholder' => 'Enter 开户银行...']); ?>
+            <?= $form->field($worker_ext, 'worker_bank_from')->textInput(['placeholder' => 'Enter 银行卡开户网点...']); ?>
+            <?= $form->field($worker_ext, 'worker_bank_card')->textInput(['placeholder' => 'Enter 银行卡号...']); ?>
+        </div>
+        <div class="panel-heading">
+            <h3 class="panel-title">审核相关信息</h3>
+        </div>
+        <div class="panel-body">
+            <?= $form->field($worker, 'worker_auth_status')->radioList(['1' => '已通过', '0' => '未通过'], ['inline' => true]); ?>
+            <?= $form->field($worker, 'worker_ontrial_status')->radioList(['1' => '已试工', '0' => '未试工'], ['inline' => true]); ?>
+            <?= $form->field($worker, 'worker_onboard_status')->radioList(['1' => '已上岗', '0' => '未上岗'], ['inline' => true]); ?>
+        </div>
+
     </div>
+    <?php
+    echo Html::submitButton($worker->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $worker->isNewRecord ? 'btn btn-success' : 'btn btn-primary']);
 
-
-    <div class="panel"><h3 style="margin-left: 30px">结算相关信息</h3>
-        <?= $form->field($worker_ext, 'worker_bank_name')->textInput(['placeholder' => 'Enter 开户银行...']); ?>
-        <?= $form->field($worker_ext, 'worker_bank_from')->textInput(['placeholder' => 'Enter 银行卡开户网点...']); ?>
-        <?= $form->field($worker_ext, 'worker_bank_card')->textInput(['placeholder' => 'Enter 银行卡号...']); ?>
-    </div>
-    <div class="panel"><h3 style="margin-left: 30px">审核相关信息</h3>
-        <?= $form->field($worker, 'worker_auth_status')->radioList(['1' => '已通过', '0' => '未通过'], ['inline' => true]); ?>
-        <?= $form->field($worker, 'worker_ontrial_status')->radioList(['1' => '已试工', '0' => '未试工'], ['inline' => true]); ?>
-        <?= $form->field($worker, 'worker_onboard_status')->radioList(['1' => '已上岗', '0' => '未上岗'], ['inline' => true]); ?>
-    </div>
-
-</div>
-<?php
-echo Html::submitButton($worker->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $worker->isNewRecord ? 'btn btn-success' : 'btn btn-primary']);
-
-ActiveForm::end(); ?>
+    ActiveForm::end(); ?>
 </div>

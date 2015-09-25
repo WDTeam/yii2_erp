@@ -33,6 +33,7 @@ class ShopController extends Controller
     public function actionIndex()
     {
         $searchModel = new ShopSearch;
+        $searchModel->audit_status = 0;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
         return $this->render('index', [

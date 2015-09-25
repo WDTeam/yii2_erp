@@ -31,6 +31,7 @@ class AppAsset extends AssetBundle
         'js/interview.js',
         'js/openWin.js',
         'js/cascade.js',
+        'js/bootpage.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

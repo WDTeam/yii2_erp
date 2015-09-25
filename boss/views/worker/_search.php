@@ -25,38 +25,41 @@ $url = \yii\helpers\Url::to(['show-shop']);
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
-
-            <?= $form->field($model, 'worker_work_city')->widget(Select2::classname(), [
-                'name' => 'worker_rule_id',
-                'hideSearch' => true,
-                'data' => [1 => '北京', 2 => '上海', 3 => '成都', 4 => '深圳'],
-                'options' => ['placeholder' => '选择城市', 'inline' => true],
-                'pluginOptions' => [
-                    'allowClear' => true
+    <div class='col-md-2'>
+        <?= $form->field($model, 'worker_work_city')->widget(Select2::classname(), [
+            'name' => 'worker_rule_id',
+            'hideSearch' => true,
+            'data' => [1 => '北京', 2 => '上海', 3 => '成都', 4 => '深圳'],
+            'options' => ['placeholder' => '选择城市', 'inline' => true],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]); ?>
+    </div>
+    <div class='col-md-3'>
+        <?= $form->field($model, 'shop_id')->widget(Select2::classname(), [
+            'initValueText' => '店铺', // set the initial display text
+            'options' => ['placeholder' => '搜索门店名称...', 'class' => 'col-md-2'],
+            'pluginOptions' => [
+                'allowClear' => true,
+                'minimumInputLength' => 2,
+                'ajax' => [
+                    'url' => $url,
+                    'dataType' => 'json',
+                    'data' => new JsExpression('function(params) { return {q:params.term}; }')
                 ],
-            ]); ?>
-            <?= $form->field($model, 'shop_id')->widget(Select2::classname(), [
-                'initValueText' => '店铺', // set the initial display text
-                'options' => ['placeholder' => '搜索门店名称...'],
-                'pluginOptions' => [
-                    'allowClear' => true,
-                    'minimumInputLength' => 2,
-                    'ajax' => [
-                        'url' => $url,
-                        'dataType' => 'json',
-                        'data' => new JsExpression('function(params) { return {q:params.term}; }')
-                    ],
-                    'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-                    'templateResult' => new JsExpression('function(city) { return city.text; }'),
-                    'templateSelection' => new JsExpression('function (city) { return city.text; }'),
-                ],
-            ]); ?>
-
-
-    <?= $form->field($model, 'worker_name') ?>
-
-    <?= $form->field($model, 'worker_phone') ?>
-
+                'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                'templateResult' => new JsExpression('function(city) { return city.text; }'),
+                'templateSelection' => new JsExpression('function (city) { return city.text; }'),
+            ],
+        ]); ?>
+    </div>
+    <div class='col-md-2'>
+        <?= $form->field($model, 'worker_name') ?>
+    </div>
+    <div class='col-md-2'>
+        <?= $form->field($model, 'worker_phone') ?>
+    </div>
     <?php // echo $form->field($model, 'worker_level') ?>
 
     <?php // echo $form->field($model, 'worker_auth_status') ?>
@@ -90,8 +93,10 @@ $url = \yii\helpers\Url::to(['show-shop']);
     <?php // echo $form->field($model, 'isdel') ?>
 
     <div class="form-group">
+        <div class='col-md-2' style="    margin-top: 22px;">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
+    </div>
     </div>
 
     <?php ActiveForm::end(); ?>
