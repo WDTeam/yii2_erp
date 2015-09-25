@@ -11,13 +11,13 @@ use yii\bootstrap\NavBar;
  * @var boss\models\FinancePopOrderSearch $searchModel
  */
 
-$this->title = Yii::t('app', '对账管理');
+$this->title = Yii::t('app', '对账详情');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="finance-pop-order-index">
       <div class="panel panel-info">
     <div class="panel-heading">
-        <h3 class="panel-title"><i class="glyphicon glyphicon-upload"></i> 上传对账单</h3>
+        <h3 class="panel-title"><i class="glyphicon glyphicon-upload"></i> 详情查询</h3>
     </div>
     <div class="panel-body">
         <?php  echo $this->render('_search', ['model' => $searchModel,'odrinfo'=>$payatainfo,'ordedat' => $ordedatainfo]); ?>
@@ -35,28 +35,28 @@ $this->params['breadcrumbs'][] = $this->title;
      		
             'id',
             'finance_pop_order_number',
-            'finance_order_channel_id',
+           // 'finance_order_channel_id',
             'finance_order_channel_title',
-            'finance_pay_channel_id',
+          //  'finance_pay_channel_id',
             'finance_pay_channel_title', 
             'finance_pop_order_customer_tel', 
-            'finance_pop_order_worker_uid', 
+      //      'finance_pop_order_worker_uid', 
             'finance_pop_order_booked_time:datetime', 
             'finance_pop_order_booked_counttime:datetime', 
-//            'finance_pop_order_sum_money', 
-//            'finance_pop_order_coupon_count', 
+           'finance_pop_order_sum_money', 
+            'finance_pop_order_coupon_count', 
 //            'finance_pop_order_coupon_id', 
 //            'finance_pop_order_order2', 
-//            'finance_pop_order_channel_order', 
+           'finance_pop_order_channel_order', 
 //            'finance_pop_order_order_type', 
 //            'finance_pop_order_status', 
-//            'finance_pop_order_finance_isok', 
+           'finance_pop_order_finance_isok', 
 //            'finance_pop_order_discount_pay', 
 //            'finance_pop_order_reality_pay', 
 //            'finance_pop_order_order_time:datetime', 
 //            'finance_pop_order_pay_time:datetime', 
 //            'finance_pop_order_pay_status', 
-//            'finance_pop_order_pay_title', 
+            'finance_pop_order_pay_title', 
 //            'finance_pop_order_check_id', 
 //            'finance_pop_order_finance_time:datetime', 
 //            'create_time:datetime', 
@@ -82,12 +82,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).'</h3>',
             'type'=>'info',
-
-           'before'=>Html::a('<i class="glyphicon" ></i>对账成功单', ['index?WorkerSearch[worker_auth_status]=0'], ['class' => 'btn btn-info ', 'style' => 'margin-right:10px']) .
-Html::a('<i class="glyphicon" ></i>我有你没有 ', ['index?WorkerSearch[worker_ontrial_status]=0'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
-Html::a('<i class="glyphicon" ></i>你有我没有 ', ['index?WorkerSearch[worker_onboard_status]=0'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
-Html::a('<i class="glyphicon" ></i>金额不对单 ', ['index?WorkerSearch[worker_rule_id]=1'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
-Html::a('<i class="glyphicon" ></i>状态不对单', ['index?WorkerSearch[worker_rule_id]=2'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']),
             'showFooter'=>false,
         ],
     ]); Pjax::end();

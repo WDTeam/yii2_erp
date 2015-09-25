@@ -14,7 +14,17 @@ $this->title = Yii::t('boss', '对账统计');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="finance-record-log-index">
-    <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
+
+
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 账单查询</h3>
+    </div>
+    <div class="panel-body">
+        <?php  echo $this->render('_search', ['model' => $searchModel,'odrinfo'=>$payatainfo,'ordedat' => $ordedatainfo]); ?>
+    </div>
+    </div>
     <p>
         <?php /* echo Html::a(Yii::t('boss', 'Create {modelClass}', [
     'modelClass' => 'Finance Record Log',
@@ -65,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type'=>'info',
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> 增加', ['create'], ['class' => 'btn btn-success']),                                                                                                                                                          'after'=>Html::a('<i class="glyphicon glyphicon-repeat"></i> 刷新', ['index'], ['class' => 'btn btn-info']),
+            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> 增加', ['create'], ['class' => 'btn btn-success']), 
             'showFooter'=>false
         ],
     ]); Pjax::end(); ?>
