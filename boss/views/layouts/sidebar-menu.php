@@ -43,7 +43,7 @@ echo Menu::widget(
                 'visible' => Yii::$app->user->can('readPost'),
             ],
             [
-                'label' => '门店管理(50%)',
+                'label' => '门店管理(60%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-flag',
                 'options' => [
@@ -51,7 +51,7 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有门店(90%)',
+                        'label' => '查看所有门店(80%)',
                         'url' => ['shop/index'],
                         'icon' => 'fa fa-angle-right',
                         //'visible' => (Yii::$app->user->identity->username == 'admin'),
@@ -294,8 +294,8 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '商圈管理(10%)',
-                        'url' => ['operation-shop-district'],
+                        'label' => '商圈管理(40%)',
+                        'url' => ['/operation-shop-district'],
                         'icon' => 'fa fa-angle-right',
                     ],
 //                    [
