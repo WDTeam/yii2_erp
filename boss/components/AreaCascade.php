@@ -101,14 +101,14 @@ class AreaCascade extends Widget{
                 $items[$value->id] = $value->area_name;
             }
         }
-        return '<div class="col-md-3">'.Select2::widget([
+        return '<div class="col-md-3" style="padding:0 1px;">'.Select2::widget([
             'name' => $name,
             'data' => $items,
             'options' => [
                 'placeholder' => $selection,
                 'multiple' => false,
                 'class' => 'form-control',
-                'id' => $type
+                'id' => $type,
             ],
         ]).'</div>';
         
