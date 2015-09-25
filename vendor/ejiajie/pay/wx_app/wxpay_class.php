@@ -3,32 +3,40 @@ include_once "lib/WxPay.Config.php";
 include_once "lib/WxPay.Api.php";
 include_once 'lib/WxPay.Notify.php';
 include_once 'example/log.php';
+
 class wxpay_class extends WxPayNotify{
 
     public function __construct(){
 
-
     }
 
     public function get($param){
-        //构造要请求的参数数组，无需改动
-        $parameter = array(
+        $input = new WxPayUnifiedOrder();
+        $input->SetBody($param['body']);
+        $input->SetAttach("test");
+        $input->SetOut_trade_no($param['out_trade_no']);
+        $input->SetTotal_fee($param['general_pay_money']);
+        $input->SetTime_start($param['time_start']);
+        $input->SetTime_expire($param['time_expire']);
+        $input->SetGoods_tag($param['goods_tag']);
+        $input->SetNotify_url($param['notify_url']);
+        $input->SetTrade_type($param['trade_type']);
+        $order = WxPayApi::unifiedOrder($input);
 
-            "body"	=> $param['body'],
-            "out_trade_no"	=> $param['out_trade_no'],
-            "total_fee"	=> $param['general_pay_money'],
-            "attach"	=> $param['goods_tag'],
-            "trade_type" => $param['trade_type'],
-            "goods_tag" => $param['goods_tag'],
-            "openid" => WxPayConfig::APPID,
-            'notify_url' => $param['notify_url'],
-            'time_start' => $param['time_start'],
-            'time_expire' => $param['time_expire'],
-            'nonce_str' => WxPayApi::getNonceStr(),
-            'time_stamp' => WxPayApi::getMillisecond(),
-        );
-        return $parameter;
+
+        $order["body"]	= $param['body'];
+        $order["out_trade_no"]	= $param['out_trade_no'];
+        $order["total_fee"]	= $param['general_pay_money'];
+        $order["attach"]	= $param['goods_tag'];
+        $order["trade_type"]	= $param['trade_type'];
+        $order["goods_tag"]	= $param['goods_tag'];
+        $order["openid"]	= WxPayConfig::APPID;
+        $order['notify_url'] = $param['notify_url'];
+        $order['time_start'] = $param['time_start'];
+        $order['time_expire'] = $param['time_expire'];
+        return $order;
     }
+
 
     public function callback(){
         $this->Handle(false);
