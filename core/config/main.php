@@ -9,9 +9,6 @@ return [
     ],
     'controllerNamespace' => 'core\controllers',
     'modules' => [
-        'user' => [
-            'class' => 'core\modules\user\Module',
-        ],
     ],
     'components' => [
         'urlManager' => [

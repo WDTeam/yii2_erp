@@ -43,7 +43,7 @@ echo Menu::widget(
                 'visible' => Yii::$app->user->can('readPost'),
             ],
             [
-                'label' => '门店管理(50%)',
+                'label' => '门店管理(60%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-flag',
                 'options' => [
@@ -51,7 +51,7 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有门店(90%)',
+                        'label' => '查看所有门店(80%)',
                         'url' => ['shop/index'],
                         'icon' => 'fa fa-angle-right',
                         //'visible' => (Yii::$app->user->identity->username == 'admin'),
@@ -72,7 +72,7 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有阿姨(40%)',
+                        'label' => '查看所有阿姨(50%)',
                         'url' => ['/worker'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -89,7 +89,7 @@ echo Menu::widget(
                 ],
             ],
             [
-                'label' => '顾客管理(35%)',
+                'label' => '顾客管理(75%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-user',
                 'options' => [
@@ -97,19 +97,19 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有顾客(40%)',
+                        'label' => '查看所有顾客(75%)',
                         'url' => ['/customer/index?CustomerSearch[is_del]=0'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '管理黑名单顾客(35%)',
+                        'label' => '管理黑名单顾客(75%)',
                         'url' => ['/customer/block?CustomerSearch[is_del]=1'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],
             ],
             [
-                'label' => '订单管理(27%)',
+                'label' => '订单管理(28%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-tag',
                 'options' => [
@@ -122,7 +122,7 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '创建新订单(70%)',
+                        'label' => '创建新订单(75%)',
                         'url' => ['/order/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -166,7 +166,7 @@ echo Menu::widget(
 							'url' => ['/finance-pop-order/comparisonconfig'],
 							'icon' => 'fa fa-angle-right',
 							],[
-							'label' => '增加账单配置(60%)',
+							'label' => '增加账单配置(85%)',
 							'url' => ['/finance-header/index'],
 							'icon' => 'fa fa-angle-right',
 							],[
@@ -224,7 +224,7 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '结算管理',
+                        'label' => '结算管理(60%)',
                         'url' => ['/finance-settle-apply'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -294,8 +294,8 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '商圈管理(10%)',
-                        'url' => ['#'],
+                        'label' => '商圈管理(40%)',
+                        'url' => ['/operation-shop-district'],
                         'icon' => 'fa fa-angle-right',
                     ],
 //                    [
@@ -314,6 +314,11 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
+                        'label' => '价格策略管理(90%)',
+                        'url' => ['/operation-price-strategy'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
+                    [
                         'label' => '引导页管理(0%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
@@ -326,7 +331,7 @@ echo Menu::widget(
                 ],
             ],
             [
-                'label' => '供应商管理',
+                'label' => '供应商管理(0%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-ambulance',
                 'options' => [
@@ -376,7 +381,7 @@ echo Menu::widget(
                 ],
             ],
             [
-                'label' => '小家政管理(50%)',
+                'label' => '小家政管理(60%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-slideshare',
                 'options' => [
@@ -384,12 +389,12 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有家政公司(70%)',
+                        'label' => '查看所有家政公司(80%)',
                         'url' => ['shop-manager/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '添加新家政公司(80%)',
+                        'label' => '添加新家政公司(70%)',
                         'url' => ['shop-manager/create'],
                         'icon' => 'fa fa-angle-right',
                     ],

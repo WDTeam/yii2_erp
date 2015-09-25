@@ -50,6 +50,8 @@ class GeneralPayLog extends \yii\db\ActiveRecord
      * @param array $post
      */
     public function insertLog($post){
+
+        //记录数据库日志
         $this->general_pay_log_price = $post['general_pay_log_price'];   //支付金额
         $this->general_pay_log_shop_name = $post['general_pay_log_shop_name'];   //商品名称
         $this->general_pay_log_eo_order_id = $post['general_pay_log_eo_order_id'];   //订单ID
@@ -69,10 +71,10 @@ class GeneralPayLog extends \yii\db\ActiveRecord
         //创建目录
         is_dir($path) || mkdir($path,0777,true);
         //文件名称
-        if(is_null($filename)) $filename = date('Y-m-d',time());
+        if(is_null($filename)) $filename = date('Y-m-d',time()).'_pay.log';
         //写入数据
         $fullFileName = $path.$filename;
-        file_put_contents($fullFileName,json_encode($data),FILE_APPEND);
+        file_put_contents($fullFileName,json_encode($data).'||',FILE_APPEND);
     }
 
     /**

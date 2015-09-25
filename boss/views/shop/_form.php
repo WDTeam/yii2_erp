@@ -12,6 +12,7 @@ use boss\components\AreaCascade;
 // The widget
 use kartik\widgets\Select2; // or kartik\select2\Select2
 use yii\web\JsExpression;
+use common\components\BankHelper;
 use yii\helpers\Url
 
 /**
@@ -20,7 +21,6 @@ use yii\helpers\Url
  * @var yii\widgets\ActiveForm $form
  */
 ?>
-
 <div class="shop-form">
 
 <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); ?>
@@ -109,8 +109,7 @@ use yii\helpers\Url
         ]);
         ?>
         </div>
-    </div>
-    <div class="panel panel-info">
+
         <div class="panel-heading">
             <h3 class="panel-title">银行信息</h3>
         </div>
@@ -121,7 +120,11 @@ use yii\helpers\Url
                 'columns' => 1,
                 'attributes' => [
                     
-                    'opening_bank'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 开户行...', 'maxlength'=>200]], 
+                    'opening_bank'=>[
+                        'type'=> Form::INPUT_DROPDOWN_LIST, 
+                        'options'=>['placeholder'=>'Enter 开户行...', 'maxlength'=>200],
+                        'items'=>BankHelper::getBankNames(),
+                    ], 
                     
                     'sub_branch'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 支行名称...', 'maxlength'=>200]], 
                 
@@ -132,11 +135,11 @@ use yii\helpers\Url
                     'bankcard_number'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 银行卡号...', 'maxlength'=>50]], 
                 ]
             ]);?>
-            <div class="panel-footer">
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-7">
-                        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']);?>
-                    </div>
+        </div>
+        <div class="panel-footer">
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-7">
+                    <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success btn-lg' : 'btn btn-primary btn-lg']);?>
                 </div>
             </div>
         </div>

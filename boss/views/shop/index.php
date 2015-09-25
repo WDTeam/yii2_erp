@@ -1,39 +1,33 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
-use kartik\datecontrol\DateControl;
-use yii\base\Widget;
+use kartik\grid\GridView;
+use yii\widgets\Pjax;
 use boss\models\Shop;
 use boss\components\AreaCascade;
 use kartik\widgets\Select2;
 use yii\helpers\Url;
 use yii\web\JsExpression;
 
-/* @var $this yii\web\View */
-/* @var $searchModel boss\models\search\ShopSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+/**
+ * @var yii\web\View $this
+ * @var yii\data\ActiveDataProvider $dataProvider
+ * @var boss\models\search\ShopSearch $searchModel
+ */
 
 $this->title = Yii::t('app', 'Shops');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="shop-index">
-    
 
-    <div class="row">
-        <div class="col-md-10"><?php echo $this->render('_search', ['model' => $searchModel]); ?></div>
-        <div class="col-md-2 text-right"><?= Html::a(Yii::t('app', 'Create Shop'), ['create'], ['class' => 'btn btn-success']) ?></div>
-    </div>
-    <?= GridView::widget([
+    <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
+        
+    <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+//         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            [
-                'attribute'=>'id',
-                'options'=>['width'=>10]
-            ],
             [
                 'attribute'=>'name',
                 'format'=>'raw',
@@ -86,26 +80,26 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'options'=>['width'=>200,],
                 'filter'=>Select2::widget([
-                        'initValueText' => '', // set the initial display text
-                        'model'=>$searchModel,
-                        'attribute'=>'shop_menager_id',
-                        'options'=>[
-                            
+                    'initValueText' => '', // set the initial display text
+                    'model'=>$searchModel,
+                    'attribute'=>'shop_menager_id',
+                    'options'=>[
+                        
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        
+                        'minimumInputLength' => 0,
+                        'ajax' => [
+                            'url' => Url::to(['shop-manager/search-by-name']),
+                            'dataType' => 'json',
+                            'data' => new JsExpression('function(params) { return {name:params.term}; }')
                         ],
-                        'pluginOptions' => [
-                            'allowClear' => true,
-                            
-                            'minimumInputLength' => 0,
-                            'ajax' => [
-                                'url' => Url::to(['shop-manager/search-by-name']),
-                                'dataType' => 'json',
-                                'data' => new JsExpression('function(params) { return {name:params.term}; }')
-                            ],
-                            //                     'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-                            'templateResult' => new JsExpression('function(model) { return model.name; }'),
-                            'templateSelection' => new JsExpression('function (model) { return model.name; }'),
-                        ],
-                    ])
+                        //                     'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                        'templateResult' => new JsExpression('function(model) { return model.name; }'),
+                        'templateSelection' => new JsExpression('function (model) { return model.name; }'),
+                    ],
+                ])
             ],
             // 'worker_count',
             // 'complain_coutn',
@@ -113,9 +107,29 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template'=>'{update} {delete}'
+                'template'=>'{update} {delete}',
+                'buttons' => [
+                    'update' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['shop/view', 'id' => $model->id, 'edit' => 't']), [
+                            'title' => Yii::t('yii', 'Edit'),
+                        ]);
+                    }
+                ],
             ],
         ],
-    ]); ?>
+        'responsive'=>true,
+        'hover'=>true,
+        'condensed'=>true,
+        'floatHeader'=>true,
+
+
+        'panel' => [
+            'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
+            'type'=>'info',
+            'before' =>$this->render('_index_links', ['model' => $searchModel]),
+            'after'=>false,
+            'showFooter'=>false
+        ],
+    ]); Pjax::end(); ?>
 
 </div>
