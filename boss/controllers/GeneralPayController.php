@@ -152,6 +152,10 @@ class GeneralPayController extends Controller
         }else{
             $post = $request->post();
         }
+
+        //写入文本日志
+        $this->writeLog($post);
+
         //记录日志
         $_post['general_pay_log_price'] = $post['total_fee'];   //支付金额
         $_post['general_pay_log_shop_name'] = $post['subject'];   //商品名称
