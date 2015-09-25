@@ -122,4 +122,6 @@ return [
     'Update Shop Manager'=>'修改小家政',
     'province_name'=>'省份名称',
     'city_name'=>'城市名称',
+    'county_name'=>'县（区）名称',
+    'town_name'=>'乡镇（街道）名称',
 ];
