@@ -109,8 +109,7 @@ use yii\helpers\Url
         ]);
         ?>
         </div>
-    </div>
-    <div class="panel panel-info">
+
         <div class="panel-heading">
             <h3 class="panel-title">银行信息</h3>
         </div>
