@@ -101,7 +101,16 @@ class AreaCascade extends Widget{
                 $items[$value->id] = $value->area_name;
             }
         }
-        return '<div class="col-md-3" style="padding:0 1px;">'.Select2::widget([
+        if($this->grades == 'province'){
+            $class="col-md-12";
+        }elseif($this->grades == 'city'){
+            $class="col-md-6";
+        }elseif($this->grades == 'county'){
+            $class="col-md-4";
+        }else{
+            $class="col-md-3";
+        }
+        return '<div class="'.$class.'" style="padding:0 1px;">'.Select2::widget([
             'name' => $name,
             'data' => $items,
             'options' => [
