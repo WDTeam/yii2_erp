@@ -57,9 +57,9 @@ class GeneralPay extends \yii\db\ActiveRecord
             [['general_pay_verify'], 'string', 'max' => 32],
             /**********以下自定义属性**********/
             [['partner'], 'required'],
-            [['partner'], 'required'],
+            //支付宝,银联,百度钱包,微信
+            [['partner'], 'in','range'=>['2088801136967007','898111448161364','1500610004','1217983401']],
 
-            //2088801136967007
         ];
     }
 
