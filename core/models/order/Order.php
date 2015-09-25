@@ -24,6 +24,9 @@ class Order extends OrderModel
     public function rules()
     {
         return [
+            [['order_code'],'unique'],
+            [['order_code','order_service_type_id','customer_id', 'order_ip', 'address_id','order_unit_money', 'order_money','order_before_status_name', 'order_status_name', 'order_service_type_name',
+                'order_src_name', 'order_address', 'order_customer_phone','order_booked_begin_time', 'order_booked_end_time'],'required'],
             [['order_parent_id', 'order_is_parent', 'order_before_status_dict_id', 'order_status_dict_id', 'order_flag_send', 'order_flag_urgent', 'order_flag_exception', 'order_service_type_id', 'order_src_id',
                 'channel_id', 'customer_id', 'order_ip', 'order_booked_count', 'address_id', 'order_booked_worker_id', 'order_pay_type', 'pay_channel_id', 'card_id', 'coupon_id', 'promotion_id', 'order_lock_status',
                 'worker_id', 'worker_type_id', 'order_worker_send_type', 'shop_id', 'comment_id', 'order_customer_hidden', 'invoice_id', 'checking_id', 'admin_id', 'isdel'], 'integer'],
@@ -36,6 +39,8 @@ class Order extends OrderModel
 
         ];
     }
+
+
 
     /**
      * 追加新订单
@@ -75,8 +80,9 @@ class Order extends OrderModel
             $statusFrom = OrderStatusDict::findOne(OrderStatusDict::ORDER_CREATE); //创建订单状态
             $statusTo = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //初始化订单状态
             $orderSrc = OrderSrc::findOne($this->order_src_id);
+            $orderCode = date('ymdHis').str_pad($this->order_service_type_id,2,'0',STR_PAD_LEFT).str_pad($this->customer_id,10,'0',STR_PAD_LEFT); //TODO 订单号待优化
             $this->setAttributes([
-                'order_code'=>date('ymdHis').$this->order_service_type_id.$this->customer_id,
+                'order_code'=>$orderCode,
                 'order_before_status_dict_id' => $statusFrom->id,
                 'order_before_status_name' => $statusFrom->order_status_name,
                 'order_status_dict_id' => $statusTo->id,

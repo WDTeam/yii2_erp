@@ -2,30 +2,56 @@
 
 namespace boss\controllers;
 
+use common\models\Customer;
+use common\models\CustomerAddress;
+use common\models\CustomerWorker;
+use core\models\Worker;
 use Yii;
 use core\models\order\OrderSearch;
 use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use core\models\order\Order;
+use yii\web\Response;
 
 /**
  * OrderController implements the CRUD actions for Order model.
  */
 class OrderController extends Controller
 {
-    public function behaviors()
+
+    public function actionCustomer()
     {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                ],
-            ],
-        ];
+        $phone = Yii::$app->request->get('phone');
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return Customer::find()->where(['customer_phone'=>$phone])->one();
     }
 
+    public function actionCustomerAddress($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return CustomerAddress::findAll(['customer_id'=>$id]);
+    }
+
+    public function actionCustomerUsedWorkers($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $customerWorker = CustomerWorker::findAll(['customer_id'=>$id]);
+        $worker = [];
+        foreach($customerWorker as $k=>$v)
+        {
+            $worker[$k] = $v->attributes;
+            $worker[$k]['worker'] = Worker::findOne($v->woker_id);
+        }
+        return $worker;
+    }
+
+    public function actionWorker()
+    {
+        $phone = Yii::$app->request->get('phone');
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return Worker::find()->where(['worker_phone'=>$phone])->one();
+    }
     /**
      * Lists all Order models.
      * @return mixed
