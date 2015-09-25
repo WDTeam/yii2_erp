@@ -43,7 +43,7 @@ class ShopManager extends \common\models\ShopManager
             [['principal', 'tel', 'bankcard_number', 'bl_person', 'level'], 'string', 'max' => 50],
             [['other_contact', 'opening_bank', 'sub_branch', 'bl_number'], 'string', 'max' => 200],
             [['account_person'], 'string', 'max' => 100],
-            ['shop_count,worker_count,complain_coutn,audit_status','default','value'=>0],
+            [['shop_count', 'worker_count', 'complain_coutn', 'audit_status'],'default','value'=>0],
         ]);
     }
     /**
