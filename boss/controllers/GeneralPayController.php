@@ -154,7 +154,7 @@ class GeneralPayController extends Controller
         }
 
         //写入文本日志
-        $this->writeLog($post);
+        $GeneralPayLogModel->writeLog($post);
 
         //记录日志
         $_post['general_pay_log_price'] = $post['total_fee'];   //支付金额
