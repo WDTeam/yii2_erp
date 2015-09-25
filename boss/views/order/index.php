@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'order_code',
             'order_parent_id',
             'order_is_parent',
-            'created_at',
+            ['attribute'=>'created_at','content'=>function($model,$key,$index){return Html::a(date('Y:m:d H:i:s',$model->created_at),'#');}],
             'updated_at',
             'order_status_name',
             'order_service_type_name',
