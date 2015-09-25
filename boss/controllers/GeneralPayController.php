@@ -67,10 +67,9 @@ class GeneralPayController extends Controller
 
             //返回组装数据
             $model->call_pay();
-            echo "验证成功!";
 
         }else{
-            var_dump($model->errors);
+            echo json_encode(['code'=>'-1' , 'msg'=>['alertMsg'=>$model->errors]]);
         }
 /*
         $dataProvider = new ActiveDataProvider([
