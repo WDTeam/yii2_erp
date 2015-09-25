@@ -453,13 +453,13 @@ return array (
       '@marekpetras/calendarview' => '/',
     ),
   ),
-  'jamband/yii2-schemadump' => 
+  '2amigos/yii2-date-picker-widget' => 
   array (
-    'name' => 'jamband/yii2-schemadump',
-    'version' => '0.9.7.0',
+    'name' => '2amigos/yii2-date-picker-widget',
+    'version' => '1.0.5.0',
     'alias' => 
     array (
-      '@jamband/schemadump' => $vendorDir . '/jamband/yii2-schemadump',
+      '@dosamigos/datepicker' => $vendorDir . '/2amigos/yii2-date-picker-widget/src',
     ),
   ),
 );
