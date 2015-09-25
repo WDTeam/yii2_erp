@@ -381,7 +381,7 @@ echo Menu::widget(
                 ],
             ],
             [
-                'label' => '小家政管理(50%)',
+                'label' => '小家政管理(60%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-slideshare',
                 'options' => [
@@ -389,7 +389,7 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有家政公司(70%)',
+                        'label' => '查看所有家政公司(80%)',
                         'url' => ['shop-manager/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
