@@ -72,7 +72,7 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有阿姨(40%)',
+                        'label' => '查看所有阿姨(50%)',
                         'url' => ['/worker'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -224,7 +224,7 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '结算管理',
+                        'label' => '结算管理(60%)',
                         'url' => ['/finance-settle-apply'],
                         'icon' => 'fa fa-angle-right',
                     ],
