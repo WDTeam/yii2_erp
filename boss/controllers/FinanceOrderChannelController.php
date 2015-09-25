@@ -35,7 +35,7 @@ class FinanceOrderChannelController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel
+           // 'searchModel' => $searchModel
         ]);
         
         
