@@ -12,9 +12,6 @@ use boss\models\ShopManager;
  */
 class ShopManagerSearch extends ShopManager
 {
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
@@ -23,22 +20,12 @@ class ShopManagerSearch extends ShopManager
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function scenarios()
     {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
 
-    /**
-     * Creates data provider instance with search query applied
-     *
-     * @param array $params
-     *
-     * @return ActiveDataProvider
-     */
     public function search($params)
     {
         $query = ShopManager::find();
@@ -47,11 +34,7 @@ class ShopManagerSearch extends ShopManager
             'query' => $query,
         ]);
 
-        $this->load($params);
-
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
+        if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }
 
@@ -93,6 +76,10 @@ class ShopManagerSearch extends ShopManager
             ->andFilterWhere(['like', 'bl_business', $this->bl_business])
             ->andFilterWhere(['like', 'blacklist_cause', $this->blacklist_cause])
             ->andFilterWhere(['like', 'level', $this->level]);
+        
+        $query->orFilterWhere(['like', 'principal', $this->name])
+            ->orFilterWhere(['like', 'name', $this->name])
+            ->orFilterWhere(['like', 'tel', $this->name]);
 
         return $dataProvider;
     }
