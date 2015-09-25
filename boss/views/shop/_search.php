@@ -3,6 +3,12 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use boss\components\AreaCascade;
+use kartik\widgets\Select2;
+use yii\base\Widget;
+use yii\helpers\Url;
+use boss\models\Shop;
+use kartik\widgets\Affix;
+use yii\web\JsExpression;
 
 /**
  * @var yii\web\View $this
@@ -34,6 +40,27 @@ use boss\components\AreaCascade;
             </div>
         </div>
         
+        <div class="col-md-3">
+            <label class="control-label" for="workersearch-worker_work_city">小家政</label>
+            <?php echo Select2::widget([
+                'initValueText' => '', // set the initial display text
+                'attribute'=>'shop_menager_id',
+                'model'=>$model,
+                'options' => [],
+                'pluginOptions' => [
+                    'allowClear' => true,
+                    'minimumInputLength' => 0,
+                    'ajax' => [
+                        'url' => Url::to(['shop-manager/search-by-name']),
+                        'dataType' => 'json',
+                        'data' => new JsExpression('function(params) { return {name:params.term}; }')
+                    ],
+                    //                     'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                    'templateResult' => new JsExpression('function(model) { return model.name; }'),
+                    'templateSelection' => new JsExpression('function (model) { return model.name; }'),
+                ],
+            ]);?>
+        </div>
         <div class="col-md-3">
         <?= $form->field($model, 'name')->label('门店名称、负责人姓名、电话等') ?>
         </div>
