@@ -5,6 +5,8 @@ use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use common\models\CustomerPlatform;
 use common\models\CustomerChannal;
+use common\models\CustomerAddress;
+use common\models\Order;
 
 /**
  * @var yii\web\View $this
@@ -15,7 +17,7 @@ use common\models\CustomerChannal;
 $this->title = Yii::t('app', '顾客黑名单');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="customer-index">
+<div class="customer-block">
     <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
@@ -45,7 +47,15 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             [
                 'format' => 'raw',
-                'label' => '用户名',
+                'label' => 'ID',
+                'value' => function ($dataProvider) {
+                    return $dataProvider->id;
+                },
+                'width' => "100px",
+            ],
+            [
+                'format' => 'raw',
+                'label' => '姓名',
                 'value' => function ($dataProvider) {
                     return $dataProvider->customer_name;
                 },
@@ -61,9 +71,33 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'format' => 'raw',
-                'label' => '住址详情',
+                'label' => '订单地址',
                 'value' => function ($dataProvider) {
-                    return $dataProvider->customer_live_address_detail;
+                    $address_count = CustomerAddress::find()->where([
+                        'customer_id'=>$dataProvider->id,
+                        ])->count();
+                    $customer_address = CustomerAddress::find()->where([
+                        'customer_id'=>$dataProvider->id,
+                        'customer_address_status'=>1
+                        ])->one();
+                    $general_region_id = $customer_address->general_region_id;
+                    $general_region = GeneralRegion::find()->where([
+                        'id'=>$general_region_id,
+                        ])->one();
+                    if ($address_count <= 0) {
+                        return '-';
+                    }
+                    if ($address_count == 1) {
+                        return $general_region->general_region_province_name 
+                        . $general_region->general_region_city_name 
+                        . $general_region_area_name;
+                    }
+                    if ($address_count > 1) {
+                        return $general_region->general_region_province_name 
+                        . $general_region->general_region_city_name 
+                        . $general_region_area_name
+                        . '...';
+                    }
                 },
                 'width' => "100px",
             ],
@@ -95,9 +129,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'format' => 'raw',
-                'label' => '积分',
+                'label' => '订单',
                 'value' => function ($dataProvider) {
-                    return $dataProvider->customer_score;
+                    $order_count = order::find()->where(['customer_id'=>$dataProvider->id])->count();
+                    return $order_count;
                 },
                 'width' => "100px",
             ],

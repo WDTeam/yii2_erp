@@ -9,7 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property integer $customer_id
- * @property integer $region_id
+ * @property integer $general_region_id
  * @property string $customer_address_detail
  * @property integer $customer_address_status
  * @property double $customer_address_longitude
@@ -36,8 +36,8 @@ class CustomerAddress extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'region_id', 'customer_address_detail', 'customer_address_status', 'customer_address_nickname', 'customer_address_phone', 'created_at', 'updated_at'], 'required'],
-            [['customer_id', 'region_id', 'customer_address_status', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['customer_id', 'general_region_id', 'customer_address_detail', 'customer_address_status', 'customer_address_nickname', 'customer_address_phone', 'created_at', 'updated_at'], 'required'],
+            [['customer_id', 'general_region_id', 'customer_address_status', 'created_at', 'updated_at', 'is_del'], 'integer'],
             [['customer_address_longitude', 'customer_address_latitude'], 'number'],
             [['customer_address_detail'], 'string', 'max' => 64],
             [['customer_address_nickname'], 'string', 'max' => 32],
@@ -53,7 +53,7 @@ class CustomerAddress extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('boss', '主键'),
             'customer_id' => Yii::t('boss', '关联客户'),
-            'region_id' => Yii::t('boss', '关联区域'),
+            'general_region_id' => Yii::t('boss', '关联区域'),
             'customer_address_detail' => Yii::t('boss', '详细地址'),
             'customer_address_status' => Yii::t('boss', '客户地址类型,1为默认地址，-1为非默认地址'),
             'customer_address_longitude' => Yii::t('boss', '经度'),

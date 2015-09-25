@@ -15,8 +15,9 @@ class CustomerSearch extends Customer
     public function rules()
     {
         return [
-            [['id', 'customer_sex', 'customer_birth', 'region_id', 'customer_score', 'customer_level', 'customer_src', 'channal_id', 'platform_id', 'customer_login_time', 'customer_is_vip', 'created_at', 'updated_at', 'is_del'], 'integer'],
-            [['customer_name', 'customer_photo', 'customer_phone', 'customer_email', 'customer_live_address_detail', 'customer_login_ip'], 'safe'],
+            [['id', 'customer_sex', 'customer_birth', 'operation_area_id', 'operation_city_id', 'general_region_id', 'customer_score', 'customer_level', 'customer_complaint_times', 'customer_src', 'channal_id', 'platform_id', 'customer_login_time', 'customer_is_vip', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['customer_name', 'customer_photo', 'customer_phone', 'customer_email', 'customer_live_address_detail', 'customer_login_ip', 'customer_del_reason'], 'safe'],
+            [['customer_balance'], 'number'],
         ];
     }
 
@@ -42,9 +43,13 @@ class CustomerSearch extends Customer
             'id' => $this->id,
             'customer_sex' => $this->customer_sex,
             'customer_birth' => $this->customer_birth,
-            'region_id' => $this->region_id,
+            'operation_area_id' => $this->operation_area_id,
+            'operation_city_id' => $this->operation_city_id,
+            'general_region_id' => $this->general_region_id,
+            'customer_balance' => $this->customer_balance,
             'customer_score' => $this->customer_score,
             'customer_level' => $this->customer_level,
+            'customer_complaint_times' => $this->customer_complaint_times,
             'customer_src' => $this->customer_src,
             'channal_id' => $this->channal_id,
             'platform_id' => $this->platform_id,
@@ -60,7 +65,8 @@ class CustomerSearch extends Customer
             ->andFilterWhere(['like', 'customer_phone', $this->customer_phone])
             ->andFilterWhere(['like', 'customer_email', $this->customer_email])
             ->andFilterWhere(['like', 'customer_live_address_detail', $this->customer_live_address_detail])
-            ->andFilterWhere(['like', 'customer_login_ip', $this->customer_login_ip]);
+            ->andFilterWhere(['like', 'customer_login_ip', $this->customer_login_ip])
+            ->andFilterWhere(['like', 'customer_del_reason', $this->customer_del_reason]);
 
         return $dataProvider;
     }
