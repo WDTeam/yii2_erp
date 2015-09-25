@@ -55,6 +55,8 @@ class FinancePopOrderController extends Controller
         ]);
     }
 
+    
+    
     /**
     * 查看和修改公用方法
     * @date: 2015-9-23
@@ -164,7 +166,12 @@ class FinancePopOrderController extends Controller
     **/
     public function actionBillinfo(){
     	 
-    	 
+    	$searchModel = new FinancePopOrderSearch;
+    	$dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+    	return $this->render('billinfo', [
+    			'dataProvider' => $dataProvider,
+    			'searchModel' => $searchModel,
+    			]);
     	 
     }
 

@@ -38,6 +38,10 @@ use Yii;
  */
 class FinancePopOrder extends \yii\db\ActiveRecord
 {
+	
+	public $finance_uplod_url;
+	
+	
     /**
      * @inheritdoc
      */
@@ -58,7 +62,7 @@ class FinancePopOrder extends \yii\db\ActiveRecord
             [['finance_pop_order_number', 'finance_pop_order_order2', 'finance_pop_order_channel_order'], 'string', 'max' => 40],
             [['finance_order_channel_title', 'finance_pay_channel_title'], 'string', 'max' => 80],
             [['finance_pop_order_customer_tel'], 'string', 'max' => 20],
-            [['finance_pop_order_pay_title'], 'string', 'max' => 30]
+            [['finance_pop_order_pay_title','finance_uplod_url'], 'string', 'max' => 30]
         ];
     }
 
@@ -69,8 +73,9 @@ class FinancePopOrder extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', '主键id'),
+            'finance_uplod_url' => Yii::t('app', '请上传对账单'),
             'finance_pop_order_number' => Yii::t('app', '第三方订单号'),
-            'finance_order_channel_id' => Yii::t('app', '下单渠道(对应finance_order_channel)'),
+            'finance_order_channel_id' => Yii::t('app', '下单渠道'),
             'finance_order_channel_title' => Yii::t('app', '下单渠道名称(对应order_channel)'),
             'finance_pay_channel_id' => Yii::t('app', '支付渠道(对应pay_channel)'),
             'finance_pay_channel_title' => Yii::t('app', '支付渠道名称(对应pay_channel)'),

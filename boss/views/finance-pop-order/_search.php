@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\widgets\Select2;
+use kartik\widgets\FileInput
 
 /**
  * @var yii\web\View $this
@@ -15,17 +17,42 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
-    ]); ?>
+    ]);
 
-    <?= $form->field($model, 'id') ?>
+    $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); 
+    
+    ?>
 
-    <?= $form->field($model, 'finance_pop_order_number') ?>
 
-    <?= $form->field($model, 'finance_order_channel_id') ?>
+   
+ <div class='col-md-2'>
+    <?= $form->field($model, 'finance_order_channel_id')->widget(Select2::classname(), [
+        'name' => '订单渠道',
+        'hideSearch' => true,
+        'data' => $odrinfo,
+        'options' => ['placeholder' => '选择订单渠道','class' => 'col-md-2'],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]);
+   
+    ?>
+     </div>
+    <div class='col-md-2'>
+<div class='col-md-2' style="margin-top: 22px;">
+<?php echo FileInput::widget([
+		'name' => 'attachments',
+		'options' => ['multiple' => true],
+		'pluginOptions' => ['previewFileType' => 'any']
+		]);
 
-    <?= $form->field($model, 'finance_order_channel_title') ?>
+?>
+</div>
+    </div> 
+     
+    <?//= $form->field($model, 'finance_order_channel_title') ?>
 
-    <?= $form->field($model, 'finance_pay_channel_id') ?>
+    <?// $form->field($model, 'finance_pay_channel_id') ?>
 
     <?php // echo $form->field($model, 'finance_pay_channel_title') ?>
 
@@ -74,10 +101,11 @@ use yii\widgets\ActiveForm;
     <?php // echo $form->field($model, 'is_del') ?>
 
     <div class="form-group">
+    <div class='col-md-2' style="    margin-top: 22px;">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
     </div>
-
+</div>
     <?php ActiveForm::end(); ?>
 
 </div>

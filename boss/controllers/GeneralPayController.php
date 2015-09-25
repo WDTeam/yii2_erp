@@ -181,7 +181,7 @@ class GeneralPayController extends Controller
             //验证签名
             $alipay = new \alipay_class;
             $verify_result = $alipay->callback();
-            
+
             if(!empty($_GET['debug'])){
                 $verify_result = true;
             }
