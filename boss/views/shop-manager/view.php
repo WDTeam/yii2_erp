@@ -1,11 +1,13 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\DetailView;
-use boss\models\ShopManager;
+use kartik\detail\DetailView;
+use kartik\datecontrol\DateControl;
 
-/* @var $this yii\web\View */
-/* @var $model boss\models\ShopManager */
+/**
+ * @var yii\web\View $this
+ * @var boss\models\ShopManager $model
+ */
 
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Shop Managers'), 'url' => ['index']];
@@ -13,64 +15,26 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="shop-manager-view">
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-    <div class="col-md-6" style="padding:0">
     <?= DetailView::widget([
-        'model' => $model,
+            'model' => $model,
+            'condensed'=>false,
+            'hover'=>true,
+            'mode'=>Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
+            'panel'=>[
+            'heading'=>$this->title,
+            'type'=>DetailView::TYPE_INFO,
+        ],
         'attributes' => [
             'id',
             'name',
-            [
-                'label'=>'地址',
-                'format'=>'raw',
-                'value'=>$model->getAllAddress(),
-            ],
+            'province_id',
+            'city_id',
+            'county_id',
+            'street',
             'principal',
             'tel',
             'other_contact',
-//             'bankcard_number',
-//             'account_person',
-//             'opening_bank',
-//             'sub_branch',
-//             'opening_address',
-            [
-                'attribute'=>'create_at',
-                'value'=>date('Y-m-d', $model->create_at)
-            ],
-            [
-                'attribute'=>'update_at',
-                'value'=>date('Y-m-d', $model->create_at)
-            ],
-            [
-                'attribute'=>'is_blacklist',
-                'value'=>ShopManager::$is_blacklists[(int)$model->is_blacklist]
-            ],
-            'blacklist_time:datetime',
-            'blacklist_cause',
-            [
-                'attribute'=>'audit_status',
-                'value'=>ShopManager::$audit_statuses[(int)$model->is_blacklist]
-            ],
-            'shop_count',
-            'worker_count',
-            'complain_coutn',
-            'level',
-        ],
-    ]) ?>
-    </div>
-    <div class="col-md-6">
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
+
             'bl_name',
             'bl_type',
             'bl_number',
@@ -82,7 +46,25 @@ $this->params['breadcrumbs'][] = $this->title;
             'bl_expiry_start',
             'bl_expiry_end',
             'bl_business:ntext',
+            'create_at',
+            'update_at',
+            'is_blacklist',
+            'blacklist_time:datetime',
+            'blacklist_cause',
+            'audit_status',
+            'shop_count',
+            'worker_count',
+            'complain_coutn',
+            'level',
         ],
+        'deleteOptions'=>[
+        'url'=>['delete', 'id' => $model->id],
+        'data'=>[
+        'confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'),
+        'method'=>'post',
+        ],
+        ],
+        'enableEditMode'=>true,
     ]) ?>
-    </div>
+
 </div>
