@@ -142,7 +142,7 @@ class OperationBootPageController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
+        OperationBootPageCity::delBootPageCityList($id);
         return $this->redirect(['index']);
     }
 

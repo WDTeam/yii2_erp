@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
 //            ['class' => 'yii\grid\SerialColumn'],
-
+//            ['class' => 'yii\grid\CheckboxColumn'],
             'id',
             'operation_boot_page_name',
             'operation_boot_page_ios_img',

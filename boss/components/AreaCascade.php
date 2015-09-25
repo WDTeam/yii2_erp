@@ -1,5 +1,6 @@
 <?php
 /**
+ * 此组件依赖于:boss\models\Operation\OperationArea和表operation_area
  * 参数说明：
  * model:更改已存在数据时使用,model中应包含属性：province_id,[city_id],[county_id],[town_id],至少要包含第一，或者可以包含第一个和第二个以此类推;
  * options:控件的属性设置
