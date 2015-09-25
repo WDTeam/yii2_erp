@@ -13,6 +13,7 @@ use yii\widgets\Pjax;
 $this->title = Yii::t('finance', 'Finance Settle Applies');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
 <form id ="financeSettleApplyForm">
 <div class="finance-settle-apply-index">
     <div class="page-header">
@@ -62,11 +63,10 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+//        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\CheckboxColumn'],
-//            'id',
-            'worder_id',
+//           'worder_id',
             'worder_tel',
             'worker_type_name',
             'created_at', 
@@ -75,22 +75,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'finance_settle_apply_man_hour', 
             'finance_settle_apply_order_money', 
             'finance_settle_apply_order_cash_money', 
-            'finance_settle_apply_non_order_money',
-            'finance_settle_apply_far_subsidy',
-            'finance_settle_apply_night_subsidy',
-            'finance_settle_apply_empty_handed_subsidy',
-            'finance_settle_apply_attendance_bonus',
-            'finance_settle_apply_no_complaint_bonus',
-            'finance_settle_apply_daily_violation_bonus',
-            'finance_settle_apply_complaint_reduction',
-            'finance_settle_apply_compensate_reduction',
-            'finance_settle_apply_task_bonus',
-            'finance_settle_apply_small_maintain',
-            'finance_settle_apply_channel_bonus',
-//            'finance_settle_apply_status', 
+            'finance_settle_apply_order_money_except_cash',
+            'finance_settle_apply_subsidy',
             'finance_settle_apply_reviewer', 
-//            'isdel', 
-            'updated_at', 
+            'updated_at' ,
             [
                 'class' => 'yii\grid\ActionColumn',
             ],
