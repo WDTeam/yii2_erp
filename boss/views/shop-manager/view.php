@@ -11,9 +11,6 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Shop Managers'), 'ur
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="shop-manager-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
         <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
@@ -24,46 +21,63 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'name',
-            'province_id',
-            'city_id',
-            'county_id',
-            'street',
-            'principal',
-            'tel',
-            'other_contact',
-            'bankcard_number',
-            'account_person',
-            'opening_bank',
-            'sub_branch',
-            'opening_address',
-            'bl_name',
-            'bl_type',
-            'bl_number',
-            'bl_person',
-            'bl_address',
-            'bl_create_time:datetime',
-            'bl_photo_url:url',
-            'bl_audit',
-            'bl_expiry_start',
-            'bl_expiry_end',
-            'bl_business:ntext',
-            'create_at',
-            'update_at',
-            'is_blacklist',
-            'blacklist_time:datetime',
-            'blacklist_cause',
-            'audit_status',
-            'shop_count',
-            'worker_count',
-            'complain_coutn',
-            'level',
-        ],
-    ]) ?>
-
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">基础信息</h3>
+        </div>
+        <div class="panel-body">
+            <?= DetailView::widget([
+                'model' => $model,
+                'attributes' => [
+                    'id',
+                    'name',
+                    'province_id',
+                    'city_id',
+                    'county_id',
+                    'street',
+                    'principal',
+                    'tel',
+                    'other_contact',
+                    'bankcard_number',
+                    'account_person',
+                    'opening_bank',
+                    'sub_branch',
+                    'opening_address',
+                    'create_at',
+                    'update_at',
+                    'is_blacklist',
+                    'blacklist_time:datetime',
+                    'blacklist_cause',
+                    'audit_status',
+                    'shop_count',
+                    'worker_count',
+                    'complain_coutn',
+                    'level',
+                ],
+            ]) ?>
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">营业执照息</h3>
+        </div>
+        <div class="panel-body">
+            <?= DetailView::widget([
+                'model' => $model,
+                'attributes' => [
+                    'bl_name',
+                    'bl_type',
+                    'bl_number',
+                    'bl_person',
+                    'bl_address',
+                    'bl_create_time:datetime',
+                    'bl_photo_url:url',
+                    'bl_audit',
+                    'bl_expiry_start',
+                    'bl_expiry_end',
+                    'bl_business:ntext',
+                ],
+            ]) ?>
+        </div>
+    </div>
 </div>

@@ -108,6 +108,7 @@ use boss\components\AreaCascade;
                 'bl_create_time'=>[
                     'type'=> Form::INPUT_WIDGET, 
                     'widgetClass'=>DateControl::classname(),
+                    'columnOptions'=>['colspan'=>3],
                     'options' => [
                         'type'=>DateControl::FORMAT_DATE,
                         'ajaxConversion'=>false,

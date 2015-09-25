@@ -20,6 +20,9 @@ return [
     'Please Filter' => '请筛选',
     'Please Select' => '请选择',
     'No Option' => '无',
+    
+    'Search'=>'查询',
+    'Reset'=>'重置',
 
     'Create ' => '创建',
     'Create' => '创建',
