@@ -81,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'worder_tel',
             'worker_type_name',
             'created_at', 
-            'finance_settle_apply_cycle',
+            'finance_settle_apply_cycle_des',
             'finance_settle_apply_money', 
             'finance_settle_apply_man_hour', 
             'finance_settle_apply_order_money', 
@@ -105,7 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <script>
 $(function () {
-$('[data-toggle="popover"]').popover()
-})
+    $('[data-toggle="popover"]').popover({ html : true });
+});
 </script>
 </form>

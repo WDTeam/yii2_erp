@@ -29,10 +29,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             [
-                'attribute'=>'id',
-                'options'=>['width'=>10]
-            ],
-            [
                 'attribute'=>'name',
                 'format'=>'raw',
                 'value'=>function ($model){
