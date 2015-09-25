@@ -166,7 +166,7 @@ echo Menu::widget(
 							'url' => ['/finance-pop-order/comparisonconfig'],
 							'icon' => 'fa fa-angle-right',
 							],[
-							'label' => '增加账单配置(60%)',
+							'label' => '增加账单配置(85%)',
 							'url' => ['/finance-header/index'],
 							'icon' => 'fa fa-angle-right',
 							],[
