@@ -9,6 +9,16 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+use common\models\CustomerAddress;
+
+use common\models\CustomerPlatform;
+use common\models\CustomerChannal;
+
+use common\models\OperationCity;
+use common\models\GeneralRegion;
+
+use common\models\Order;
+
 /**
  * CustomerController implements the CRUD actions for Customer model.
  */
@@ -49,7 +59,7 @@ class CustomerController extends Controller
         $model = $this->findModel($id);
         $model->is_del = 1;
         $model->save();
-        return $this->redirect(['/customer/index?CustomerSearch[is_del]=0']);
+        return $this->redirect(['/customer/block?CustomerSearch[is_del]=1']);
     }
 
     /**
@@ -60,7 +70,7 @@ class CustomerController extends Controller
         $model = $this->findModel($id);
         $model->is_del = 0;
         $model->save();
-        return $this->redirect(['/customer/block?CustomerSearch[is_del]=1']);
+        return $this->redirect(['/customer/index?CustomerSearch[is_del]=0']);
     }
 
     /**
@@ -88,10 +98,66 @@ class CustomerController extends Controller
     {
         $model = $this->findModel($id);
 
+        //组装model
+        $operationCity = OperationCity::find()->where([
+            'id'=>$model->operation_city_id
+            ])->one();
+
+        $customerPlatform = CustomerPlatform::find()->where([
+            'id'=>$model->platform_id
+            ])->one();
+        $customerChannal = CustomerChannal::find()->where([
+            'id'=>$model->channal_id
+            ])->one();
+
+        $generalRegion = GeneralRegion::find()->where([
+            'id'=>$model->general_region_id
+            ])->one();
+
+        //订单地址
+        $address_count = CustomerAddress::find()->where([
+            'customer_id'=>$model->id,
+            ])->count();
+        $customerAddress = CustomerAddress::find()->where([
+            'customer_id'=>$model->id,
+            'customer_address_status'=>1])->one();
+        $general_region_id = $customerAddress->general_region_id;
+        $general_region = GeneralRegion::find()->where([
+            'id'=>$general_region_id,
+            ])->one();
+        if ($address_count <= 0) {
+            $order_addresses = '-';
+        }
+        if ($address_count == 1) {
+            $order_addresses =  $general_region->general_region_province_name 
+            . $general_region->general_region_city_name 
+            . $general_region->general_region_area_name
+            . $customerAddress->customer_address_detail;
+        }
+        if ($address_count > 1) {
+            $order_addresses = $general_region->general_region_province_name 
+            . $general_region->general_region_city_name 
+            . $general_region->general_region_area_name
+            . $customerAddress->customer_address_detail
+            . '...';
+        }
+
+        //订单数量
+        $order_count = Order::find()->where([
+            'customer_id'=>$model->id
+            ])->count();
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            return $this->render('view', ['model' => $model]);
+            return $this->render('view', ['model' => $model, 
+                'operationCity'=>$operationCity, 
+                'customerPlatform'=>$customerPlatform, 
+                'customerChannal'=>$customerChannal,
+                'generalRegion'=>$generalRegion,
+                'order_addresses'=>$order_addresses,
+                'order_count'=>$order_count,
+                ]);
         }
     }
 

@@ -76,6 +76,10 @@ class ShopManagerSearch extends ShopManager
             ->andFilterWhere(['like', 'bl_business', $this->bl_business])
             ->andFilterWhere(['like', 'blacklist_cause', $this->blacklist_cause])
             ->andFilterWhere(['like', 'level', $this->level]);
+        
+        $query->orFilterWhere(['like', 'principal', $this->name])
+            ->orFilterWhere(['like', 'name', $this->name])
+            ->orFilterWhere(['like', 'tel', $this->name]);
 
         return $dataProvider;
     }

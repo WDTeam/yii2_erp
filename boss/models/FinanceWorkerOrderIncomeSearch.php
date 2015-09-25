@@ -192,7 +192,7 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
         $subsidy = 0;
         $defaultSubsidy = 2.5;
         $serviceDuration = $order->order_booked_count;//服务时长
-        $ = $order->order_parent_id;
+        $order_parent_id = $order->order_parent_id;
         $orderBookedBeginTime = $order->order_booked_begin_time;
         $baseTime = strtotime(date('Y-m-d',$orderBookedBeginTime).'18:00:00');
         if($orderBookedBeginTime > $baseTime){

@@ -17,7 +17,7 @@ return [
         ],
         'cache' => [
              'class' => 'yii\caching\FileCache',
- //           'class'=>'yii\caching\DbCache',
+        //   'class'=>'yii\caching\DbCache',
         ],
         'i18n' => [
             'translations' => [

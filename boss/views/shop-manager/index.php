@@ -3,7 +3,10 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
-use kartik\dynagrid\DynaGrid;
+use boss\components\AreaCascade;
+use kartik\widgets\Select2;
+use yii\helpers\Url;
+use yii\web\JsExpression;
 use boss\models\ShopManager;
 
 /**
@@ -13,74 +16,87 @@ use boss\models\ShopManager;
  */
 
 $this->title = Yii::t('app', 'Shop Managers');
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = $this->title; 
 ?>
 <div class="shop-manager-index">
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Shop Manager',
-]), ['create'], ['class' => 'btn btn-success'])*/  ?>
-    </p>
-
-    <?php Pjax::begin(); 
-    $searchModel->audit_status = 0;
-    echo GridView::widget([
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 小家政搜索</h3>
+        </div>
+        <div class="panel-body">
+            <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
+        </div>
+    </div>
+    <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+//         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'name',
-//             'province_id',
-            'city_id',
-//             'county_id',
-//            'street', 
-           'principal', 
-           'tel', 
-//            'other_contact', 
-//            'bankcard_number', 
-//            'account_person', 
-//            'opening_bank', 
-//            'sub_branch', 
-//            'opening_address', 
-//            'bl_name', 
-//            'bl_type', 
-//            'bl_number', 
-//            'bl_person', 
-//            'bl_address', 
-//            'bl_create_time:datetime', 
-//            'bl_photo_url:url', 
-//            'bl_audit', 
-//            'bl_expiry_start', 
-//            'bl_expiry_end', 
-//            'bl_business:ntext', 
-           'create_at', 
-//            'update_at', 
-//            'is_blacklist', 
-//            'blacklist_time:datetime', 
-//            'blacklist_cause', 
-           [
-               'attribute'=>'audit_status',
-               'label'=>'审核状态',
-               'filter'=>ShopManager::$audit_statuses,
-           ],
-           'shop_count', 
-           'worker_count', 
-//            'complain_coutn', 
-           'level', 
+            
+//             [
+//                 'attribute'=>'id',
+//                 'options'=>['width'=>10]
+//             ],
+            [
+                'attribute'=>'name',
+                'format'=>'raw',
+                'value'=>function ($model){
+                    return Html::a($model->name,['view', 'id'=>$model->id]);
+                }
+            ],
+            //             'province_id',
+            [
+                'attribute'=>'city_id',
+                'value'=>function ($model){
+                    return $model->getCityName();
+                },
+                'filter'=>false,
+            ],
+            //             'county_id',
+            // 'street',
+            'principal',
+            'tel',
+            [
+                'attribute'=>'create_at',
+                'value'=>function($model){
+                    return date('Y-m-d', $model->create_at);
+                },
+                'filter'=>false,
+            ],
+            [
+                'attribute'=>'audit_status',
+                'options'=>['width'=>100,],
+                'value'=>function($model){
+                    return ShopManager::$audit_statuses[$model->audit_status];
+                },
+                'filter'=>ShopManager::$audit_statuses,
+            ],
+            [
+                'attribute'=>'shop_count',
+                'options'=>['width'=>70]
+            ],
+            [
+                'attribute'=>'worker_count',
+                'options'=>['width'=>70]
+            ],
+            [
+                'attribute'=>'complain_coutn',
+                'options'=>['width'=>70]
+            ],
+            [
+                'attribute'=>'level',
+                'options'=>['width'=>70]
+            ],
 
             [
                 'class' => 'yii\grid\ActionColumn',
+                'template'=>'{update} {delete}',
                 'buttons' => [
-                'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['shop-manager/view','id' => $model->id,'edit'=>'t']), [
-                                                    'title' => Yii::t('yii', 'Edit'),
-                                                  ]);}
-
+                    'update' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['shop-manager/view','id' => $model->id,'edit'=>'t']), [
+                            'title' => Yii::t('yii', 'Edit'),
+                        ]);}
+                
                 ],
             ],
         ],
@@ -89,14 +105,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'condensed'=>true,
         'floatHeader'=>true,
 
-
-
-
         'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type'=>'info',
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> Add', ['create'], ['class' => 'btn btn-success']),                                                                                                                                                          'after'=>Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List', ['index'], ['class' => 'btn btn-info']),
-            'showFooter'=>false
+            'before' =>$this->render('_index_links', ['model' => $searchModel]),
+//             'after' => Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List',
+//                 ['index'],
+//                 ['class' => 'btn btn-info']),
+                'after'=>false,
+            'showFooter' => false
         ],
     ]); Pjax::end(); ?>
+
 </div>

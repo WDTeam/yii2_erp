@@ -1,11 +1,10 @@
 <?php
 header ( 'Content-type:text/html;charset=utf-8' );
-
+date_default_timezone_set("PRC");
 include_once dirname(__FILE__).'/utf8/func/common.php';
 include_once dirname(__FILE__).'/utf8/func/SDKConfig.php';
 include_once dirname(__FILE__).'/utf8/func/secureUtil.php';
 include_once dirname(__FILE__).'/utf8/func/httpClient.php';
-include_once dirname(__FILE__).'/utf8/func/log.class.php';
 /**
  * 消费交易-控件后台订单推送
  */
