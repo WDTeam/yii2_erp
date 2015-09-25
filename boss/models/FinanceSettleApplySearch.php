@@ -6,43 +6,26 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\FinanceSettleApply;
-use common\models\FinanceWorkerOrderIncome;
 
 /**
  * FinanceSettleApplySearch represents the model behind the search form about `common\models\FinanceSettleApply`.
  */
 class FinanceSettleApplySearch extends FinanceSettleApply
 {
-    const FINANCE_SETTLE_APPLY_STATUS_SUBMIT = "0";//申请中，结算初始化状态
-    
-    const FINANCE_SETTLE_APPLY_STATUS_PASSED = "1";//审核通过
-    
-    const FINANCE_SETTLE_APPLY_STATUS_FAILED = "2";//审核不通过
-    
-    /**
-     * 申请表的主键Id字符串，例如：1,2,3
-     * @var type 
-     */
-    public  $ids;
-    
-    /**
-     * 申请流程各个节点的Id，例如：1门店财务审核,2线下审核
-     * @var type 
-     */
-    public  $nodeId;
-    
+   public $ids;
+   
+   public $nodeId;
+   
+   
     public function rules()
     {
         return [
-            [['id', 'worder_id', 'worker_type_id', 'finance_settle_apply_man_hour', 'finance_settle_apply_status', 'finance_settle_apply_cycle', 'isdel', 'updated_at', 'created_at'], 'integer'],
-            [['worder_tel', 'worker_type_name', 'finance_settle_apply_reviewer'], 'safe'],
-            [['finance_settle_apply_money', 'finance_settle_apply_order_money', 'finance_settle_apply_order_cash_money', 'finance_settle_apply_non_order_money'], 'number'],
+            [['id', 'worder_id', 'worker_type_id', 'finance_settle_apply_man_hour', 'finance_settle_apply_status', 'finance_settle_apply_cycle', 'finance_settle_apply_starttime', 'finance_settle_apply_endtime', 'isdel', 'updated_at', 'created_at'], 'integer'],
+            [['worder_tel', 'worker_type_name', 'finance_settle_apply_cycle_des', 'finance_settle_apply_reviewer'], 'safe'],
+            [['finance_settle_apply_order_money', 'finance_settle_apply_order_cash_money', 'finance_settle_apply_order_money_except_cash', 'finance_settle_apply_subsidy', 'finance_settle_apply_money'], 'number'],
         ];
     }
-    public function doSome(){
-        
-    }
-    
+
     public function scenarios()
     {
         // bypass scenarios() implementation in the parent class
@@ -52,9 +35,11 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     public function search($params)
     {
         $query = FinanceSettleApply::find();
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
         if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }
@@ -63,13 +48,16 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             'id' => $this->id,
             'worder_id' => $this->worder_id,
             'worker_type_id' => $this->worker_type_id,
-            'finance_settle_apply_money' => $this->finance_settle_apply_money,
             'finance_settle_apply_man_hour' => $this->finance_settle_apply_man_hour,
             'finance_settle_apply_order_money' => $this->finance_settle_apply_order_money,
             'finance_settle_apply_order_cash_money' => $this->finance_settle_apply_order_cash_money,
-            'finance_settle_apply_non_order_money' => $this->finance_settle_apply_non_order_money,
+            'finance_settle_apply_order_money_except_cash' => $this->finance_settle_apply_order_money_except_cash,
+            'finance_settle_apply_subsidy' => $this->finance_settle_apply_subsidy,
+            'finance_settle_apply_money' => $this->finance_settle_apply_money,
             'finance_settle_apply_status' => $this->finance_settle_apply_status,
             'finance_settle_apply_cycle' => $this->finance_settle_apply_cycle,
+            'finance_settle_apply_starttime' => $this->finance_settle_apply_starttime,
+            'finance_settle_apply_endtime' => $this->finance_settle_apply_endtime,
             'isdel' => $this->isdel,
             'updated_at' => $this->updated_at,
             'created_at' => $this->created_at,
@@ -77,8 +65,12 @@ class FinanceSettleApplySearch extends FinanceSettleApply
 
         $query->andFilterWhere(['like', 'worder_tel', $this->worder_tel])
             ->andFilterWhere(['like', 'worker_type_name', $this->worker_type_name])
+            ->andFilterWhere(['like', 'finance_settle_apply_cycle_des', $this->finance_settle_apply_cycle_des])
             ->andFilterWhere(['like', 'finance_settle_apply_reviewer', $this->finance_settle_apply_reviewer]);
 
         return $dataProvider;
     }
+    
+    
+            
 }

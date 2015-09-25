@@ -37,7 +37,6 @@ class FinanceSettleApplyController extends Controller
         $requestParams = Yii::$app->request->getQueryParams();
         $requestModel = $requestParams['FinanceSettleApplySearch'];
         $nodeId =$requestModel['nodeId'];
-        var_dump($nodeId);
         $requestParams = array_merge($defaultParams,$requestParams);
         $dataProvider = $searchModel->search($requestParams);
         return $this->render('index', [
