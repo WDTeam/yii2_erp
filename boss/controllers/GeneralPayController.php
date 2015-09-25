@@ -115,33 +115,6 @@ class GeneralPayController extends Controller
      */
     public function actionAlipayAppNotify(){
 
-         $_POST = array (
-          'discount' => '0.00',
-          'payment_type' => '1',
-          'subject' => 'e家洁会员充值',
-          'trade_no' => '2015070561619716',
-          'buyer_email' => 'lsqpy@163.com',
-          'gmt_create' => '2015-07-05 13:07:39',
-          'notify_type' => 'trade_status_sync',
-          'quantity' => '1',
-          'out_trade_no' => 'ALAPP_2015070513073239657_6',
-          'seller_id' => '2088801136967007',
-          'notify_time' => '2015-07-05 13:07:40',
-          'body' => 'e家洁会员充值0.01元',
-          'trade_status' => 'TRADE_FINISHED',
-          'is_total_fee_adjust' => 'N',
-          'total_fee' => '0.01',
-          'gmt_payment' => '2015-07-05 13:07:40',
-          'seller_email' => '47632990@qq.com',
-          'gmt_close' => '2015-07-05 13:07:40',
-          'price' => '0.01',
-          'buyer_id' => '2088002074138164',
-          'notify_id' => '82c817f0e5b8a8e60cd1b0f82706a0be2w',
-          'use_coupon' => 'N',
-          'sign_type' => 'RSA',
-          'sign' => 'UTtBWOmbrxA3XnU2Sz9kwC32s5S+ZLF+ZlaxTKfD2PYH+q/RwJDv1BnuG1PWdyQDwAf5J8QpeTTjaAXhRWUs8Naa9F/HWWZA9iB5WoHcZd10A7nRioB6wV61gaGYczBD30+9L+wiBnlotJVJR+xf0AOp11YDaHiH8bNHNSHg9ak=',
-        );
-
         $request = yii::$app->request;
 
         //实例化模型
@@ -149,18 +122,44 @@ class GeneralPayController extends Controller
 
         //POST数据
         if(!empty($_GET['debug'])){
+            $_POST = array (
+                'discount' => '0.00',
+                'payment_type' => '1',
+                'subject' => 'e家洁会员充值',
+                'trade_no' => '2015070561619716',
+                'buyer_email' => 'lsqpy@163.com',
+                'gmt_create' => '2015-07-05 13:07:39',
+                'notify_type' => 'trade_status_sync',
+                'quantity' => '1',
+                'out_trade_no' => 'ALAPP_2015070513073239657_6',
+                'seller_id' => '2088801136967007',
+                'notify_time' => '2015-07-05 13:07:40',
+                'body' => 'e家洁会员充值0.01元',
+                'trade_status' => 'TRADE_FINISHED',
+                'is_total_fee_adjust' => 'N',
+                'total_fee' => '0.01',
+                'gmt_payment' => '2015-07-05 13:07:40',
+                'seller_email' => '47632990@qq.com',
+                'gmt_close' => '2015-07-05 13:07:40',
+                'price' => '0.01',
+                'buyer_id' => '2088002074138164',
+                'notify_id' => '82c817f0e5b8a8e60cd1b0f82706a0be2w',
+                'use_coupon' => 'N',
+                'sign_type' => 'RSA',
+                'sign' => 'UTtBWOmbrxA3XnU2Sz9kwC32s5S+ZLF+ZlaxTKfD2PYH+q/RwJDv1BnuG1PWdyQDwAf5J8QpeTTjaAXhRWUs8Naa9F/HWWZA9iB5WoHcZd10A7nRioB6wV61gaGYczBD30+9L+wiBnlotJVJR+xf0AOp11YDaHiH8bNHNSHg9ak=',
+            );
             $post = $_POST;
         }else{
             $post = $request->post();
         }
         //记录日志
-        $post['general_pay_log_price'] = $post['total_fee'];   //支付金额
-        $post['general_pay_log_shop_name'] = $post['subject'];   //商品名称
-        $post['general_pay_log_eo_order_id'] = $post['out_trade_no'];   //订单ID
-        $post['general_pay_log_transaction_id'] = $post['buyer_id'];   //交易流水号
-        $post['general_pay_log_status_bool'] = $post['trade_status'];   //支付状态
-        $post['general_pay_log_status'] = $post['trade_status'];   //支付状态
-        $GeneralPayLogModel->insertLog($post);
+        $_post['general_pay_log_price'] = $post['total_fee'];   //支付金额
+        $_post['general_pay_log_shop_name'] = $post['subject'];   //商品名称
+        $_post['general_pay_log_eo_order_id'] = $post['out_trade_no'];   //订单ID
+        $_post['general_pay_log_transaction_id'] = $post['buyer_id'];   //交易流水号
+        $_post['general_pay_log_status_bool'] = $post['trade_status'];   //支付状态
+        $_post['general_pay_log_status'] = $post['trade_status'];   //支付状态
+        $GeneralPayLogModel->insertLog($_post);
 
         //实例化模型
         $model = new GeneralPay();
