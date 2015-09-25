@@ -25,6 +25,7 @@ class wxpay_class extends WxPayNotify{
             'time_start' => $param['time_start'],
             'time_expire' => $param['time_expire'],
             'nonce_str' => WxPayApi::getNonceStr(),
+            'time_stamp' => WxPayApi::getMillisecond(),
         );
         return $parameter;
     }
