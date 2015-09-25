@@ -28,25 +28,23 @@ class OperationCitySearch extends OperationCity
 
     public function search($params)
     {
-        $query = OperationCity::find();
+        $query = OperationCity::find()->where(['like',$params['fields'], $params['keyword']]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
-        if (!($this->load($params) && $this->validate())) {
-            return $dataProvider;
-        }
-
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'city_is_online' => $this->city_is_online,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-        ]);
-
-        $query->andFilterWhere(['like', 'city_name', $this->city_name]);
-
+        
         return $dataProvider;
+//        if (!($this->load($params) && $this->validate())) {
+//            return $dataProvider;
+//        }
+
+//        $query->andFilterWhere([
+//            $params['fields'] => $params['keyword'],
+//        ]);
+
+//        $query->andFilterWhere(['like', 'city_name', $this->city_name]);
+
+//        return $dataProvider;
     }
 }

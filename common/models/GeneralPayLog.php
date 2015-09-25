@@ -69,6 +69,7 @@ class GeneralPayLog extends \yii\db\ActiveRecord
         $statusArr = [
             'TRADE_FINISHED',   //支付宝
             'TRADE_SUCCESS',    //支付宝
+            '1',    //百付宝
         ];
         return in_array($statusString,$statusArr) ? 1 : 0 ;
     }
