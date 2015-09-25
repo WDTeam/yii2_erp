@@ -94,14 +94,16 @@ class GeneralPayLog extends \yii\db\ActiveRecord
     }
 
     /**
-     * 自动处理时间
-     * @return array
+     * 自动处理创建时间和修改时间
+     * @see \yii\base\Component::behaviors()
      */
     public function behaviors()
     {
         return [
             [
-                'class' => TimestampBehavior::className()
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
             ],
         ];
     }

@@ -93,7 +93,9 @@ class GeneralPay extends \yii\db\ActiveRecord
     {
         return [
             [
-                'class' => TimestampBehavior::className()
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
             ],
         ];
     }
@@ -101,7 +103,6 @@ class GeneralPay extends \yii\db\ActiveRecord
     /**
      * 分配支付渠道
      */
-
     public function call_pay()
     {
         call_user_func(__CLASS__ .'::'.$this->pay_type);
