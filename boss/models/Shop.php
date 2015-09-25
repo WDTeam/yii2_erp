@@ -23,4 +23,16 @@ class Shop extends \common\models\Shop
             ],
         ];
     }
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return array_merge(parent::attributeLabels(),[
+            'province_id' => Yii::t('app', '省份'),
+            'city_id' => Yii::t('app', '城市'),
+            'county_id' => Yii::t('app', '区县'),
+            'audit_status' => Yii::t('app', '审核状态'),
+        ]);
+    }
 }
