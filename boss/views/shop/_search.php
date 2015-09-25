@@ -20,17 +20,21 @@ use boss\models\Shop;
     'method' => 'get',
 ]); ?>
 
+<div class="col-md-4" style="padding:0">
 <?php 
 echo AreaCascade::widget([
     'model' => $model,
     'options' => ['class' => 'form-control inline'],
     'label' =>'选择城市',
     'grades' => 'city',
-//     'is_minui'=>true,
+    'is_minui'=>true,
 ]);
 ?>
+</div>
 
-<?php echo Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
+<div class="col-md-1">
+    <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
+</div>
 
 <?php echo Html::a('待审核('.Shop::getAuditStatusCountByNumber(0).')',[
     'index','ShopSearch'=>['audit_status'=>0]

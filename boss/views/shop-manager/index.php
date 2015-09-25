@@ -19,9 +19,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <div style="text-align: right; padding-bottom:5px; clear:both">
-        <div class="pull-left"><?php echo $this->render('_search', ['model' => $searchModel]); ?></div>
-        <?= Html::a(Yii::t('app', 'Create Shop'), ['create'], ['class' => 'btn btn-success']) ?>
+    <div class="row">
+        <div class="col-md-10"><?php echo $this->render('_search', ['model' => $searchModel]); ?></div>
+        <div class="col-md-2 text-right"><?= Html::a(Yii::t('app', 'Create Shop'), ['create'], ['class' => 'btn btn-success']) ?></div>
     </div>
 
     <?= GridView::widget([
@@ -36,8 +36,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute'=>'name',
+                'format'=>'raw',
                 'value'=>function ($model){
-                    return Yii::$app->user->createUrl('view',['id'=>$model->id]);
+                    return Html::a($model->name,['view', 'id'=>$model->id]);
                 }
             ],
 //             'province_id',

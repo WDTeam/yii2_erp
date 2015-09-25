@@ -17,7 +17,7 @@ use boss\models\ShopManager;
     'method' => 'get',
 ]); ?>
 
-<div class="col-md-3">
+<div class="col-md-4" style="padding:0">
 <?php 
 echo AreaCascade::widget([
     'model' => $model,
@@ -28,10 +28,11 @@ echo AreaCascade::widget([
 ]);
 ?>
 </div>
-<?php //echo Html::activeTextInput($model, 'is_blacklist')?>
-<?php //echo Html::activeTextInput($model, 'audit_status')?>
 
-<?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
+<div class="col-md-1">
+    <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
+</div>
+
 <?php echo Html::a('待审核('.ShopManager::getAuditStatusCountByNumber(0).')',[
     'index','ShopSearch'=>['audit_status'=>0]
 ], [
