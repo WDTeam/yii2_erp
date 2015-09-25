@@ -326,7 +326,7 @@ echo Menu::widget(
                 ],
             ],
             [
-                'label' => '供应商管理',
+                'label' => '供应商管理(0%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-ambulance',
                 'options' => [
