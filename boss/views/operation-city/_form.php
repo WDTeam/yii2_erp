@@ -22,7 +22,7 @@ use boss\components\AreaCascade;
         'model' => $model,
         'options' => ['class' => 'form-control inline'],
         'label' =>'选择城市',
-//        'grades' => 'city',
+        'grades' => 'city',
     ]);
     echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']);
     ActiveForm::end(); ?>
