@@ -39,7 +39,7 @@
 		{
 			if ( $priority == PhpLog::OFF ) return;
 
-			$this->filename = date('Y-m-d', time()) . '.log';	//默认为以时间＋.log的文件文件
+            $this->filename = date('Y-m-d', time()) . '.log';	//默认为以时间＋.log的文件文件
 			$this->log_file = $this->createPath($filepath, $this->filename);
 			$this->MessageQueue = array();
 			$this->priority = $priority;

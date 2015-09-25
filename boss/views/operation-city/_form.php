@@ -20,9 +20,9 @@ use boss\components\AreaCascade;
     $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); 
     echo AreaCascade::widget([
         'model' => $model,
-        'options' => ['class' => 'form-control inline'],
+        'options' => ['class' => 'form-control'],
         'label' =>'选择城市',
-//        'grades' => 'city',
+        'grades' => 'city',
     ]);
     echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']);
     ActiveForm::end(); ?>
