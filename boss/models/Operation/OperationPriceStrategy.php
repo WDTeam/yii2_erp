@@ -53,7 +53,7 @@ class OperationPriceStrategy extends CoreOperationPriceStrategy
     /**
      * 
      */
-    public function getAllStrategy()
+    public static function getAllStrategy()
     {
         $priceStrategies = self::getAll();
         $priceStrategies_array = [0 => '选择价格策略'];
