@@ -118,7 +118,7 @@ use yii\helpers\Url
             <?php echo Form::widget([
                 'model' => $model,
                 'form' => $form,
-                'columns' => 1,
+                'columns' => 2,
                 'attributes' => [
                     'account_person'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 开户人...', 'maxlength'=>100]], 
                     

@@ -2,6 +2,10 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use boss\components\AreaCascade;
+use kartik\widgets\Select2;
+use yii\helpers\Url;
+use yii\web\JsExpression;
 
 /**
  * @var yii\web\View $this
@@ -10,66 +14,23 @@ use yii\widgets\ActiveForm;
  */
 ?>
 
-<div class="shop-search">
+<?php $form = ActiveForm::begin([
+    'action' => ['index'],
+    'method' => 'get',
+]); ?>
 
-    <?php $form = ActiveForm::begin([
-        'action' => ['index'],
-        'method' => 'get',
-    ]); ?>
+<?php 
+echo AreaCascade::widget([
+    'model' => $model,
+    'options' => ['class' => 'form-control inline'],
+    'label' =>'选择城市',
+    'grades' => 'city',
+    'is_minui'=>true,
+]);
+?>
+<?php //echo Html::activeTextInput($model, 'is_blacklist')?>
+<?php //echo Html::activeTextInput($model, 'audit_status')?>
 
-    <?= $form->field($model, 'id') ?>
+<?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
 
-    <?= $form->field($model, 'name') ?>
-
-    <?= $form->field($model, 'shop_menager_id') ?>
-
-    <?= $form->field($model, 'province_id') ?>
-
-    <?= $form->field($model, 'city_id') ?>
-
-    <?php // echo $form->field($model, 'county_id') ?>
-
-    <?php // echo $form->field($model, 'street') ?>
-
-    <?php // echo $form->field($model, 'principal') ?>
-
-    <?php // echo $form->field($model, 'tel') ?>
-
-    <?php // echo $form->field($model, 'other_contact') ?>
-
-    <?php // echo $form->field($model, 'bankcard_number') ?>
-
-    <?php // echo $form->field($model, 'account_person') ?>
-
-    <?php // echo $form->field($model, 'opening_bank') ?>
-
-    <?php // echo $form->field($model, 'sub_branch') ?>
-
-    <?php // echo $form->field($model, 'opening_address') ?>
-
-    <?php // echo $form->field($model, 'create_at') ?>
-
-    <?php // echo $form->field($model, 'update_at') ?>
-
-    <?php // echo $form->field($model, 'is_blacklist') ?>
-
-    <?php // echo $form->field($model, 'blacklist_time') ?>
-
-    <?php // echo $form->field($model, 'blacklist_cause') ?>
-
-    <?php // echo $form->field($model, 'audit_status') ?>
-
-    <?php // echo $form->field($model, 'worker_count') ?>
-
-    <?php // echo $form->field($model, 'complain_coutn') ?>
-
-    <?php // echo $form->field($model, 'level') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
-    </div>
-
-    <?php ActiveForm::end(); ?>
-
-</div>
+<?php ActiveForm::end(); ?>
