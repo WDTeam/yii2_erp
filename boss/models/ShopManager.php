@@ -15,6 +15,7 @@ class ShopManager extends \common\models\ShopManager
         1=>'通过',
         2=>'不通过'
     ];
+    public static $is_blacklists = ['否', '是'];
     /**
      * 自动处理创建时间和修改时间
      * @see \yii\base\Component::behaviors()

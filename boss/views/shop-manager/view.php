@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use boss\models\ShopManager;
 
 /* @var $this yii\web\View */
 /* @var $model boss\models\ShopManager */
@@ -41,12 +42,24 @@ $this->params['breadcrumbs'][] = $this->title;
 //             'opening_bank',
 //             'sub_branch',
 //             'opening_address',
-            'create_at',
-            'update_at',
-            'is_blacklist',
+            [
+                'attribute'=>'create_at',
+                'value'=>date('Y-m-d', $model->create_at)
+            ],
+            [
+                'attribute'=>'update_at',
+                'value'=>date('Y-m-d', $model->create_at)
+            ],
+            [
+                'attribute'=>'is_blacklist',
+                'value'=>ShopManager::$is_blacklists[(int)$model->is_blacklist]
+            ],
             'blacklist_time:datetime',
             'blacklist_cause',
-            'audit_status',
+            [
+                'attribute'=>'audit_status',
+                'value'=>ShopManager::$audit_statuses[(int)$model->is_blacklist]
+            ],
             'shop_count',
             'worker_count',
             'complain_coutn',
