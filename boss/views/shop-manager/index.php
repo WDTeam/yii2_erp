@@ -1,16 +1,11 @@
 <?php
 
 use yii\helpers\Html;
-use kartik\grid\GridView;
-use yii\widgets\Pjax;
-use kartik\dynagrid\DynaGrid;
-use boss\models\ShopManager;
+use yii\grid\GridView;
 
-/**
- * @var yii\web\View $this
- * @var yii\data\ActiveDataProvider $dataProvider
- * @var boss\models\search\ShopManagerSearch $searchModel
- */
+/* @var $this yii\web\View */
+/* @var $searchModel boss\models\search\ShopManagerSearch */
+/* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', 'Shop Managers');
 $this->params['breadcrumbs'][] = $this->title;
@@ -19,15 +14,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Shop Manager',
-]), ['create'], ['class' => 'btn btn-success'])*/  ?>
-    </p>
+    <div style="text-align:right">
+        <?= Html::a(Yii::t('app', 'Create Shop Manager'), ['create'], ['class' => 'btn btn-success']) ?>
+    </div>
 
-    <?php Pjax::begin(); 
-    $searchModel->audit_status = 0;
-    echo GridView::widget([
+    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -35,68 +26,42 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'name',
-//             'province_id',
+            'province_id',
             'city_id',
-//             'county_id',
-//            'street', 
-           'principal', 
-           'tel', 
-//            'other_contact', 
-//            'bankcard_number', 
-//            'account_person', 
-//            'opening_bank', 
-//            'sub_branch', 
-//            'opening_address', 
-//            'bl_name', 
-//            'bl_type', 
-//            'bl_number', 
-//            'bl_person', 
-//            'bl_address', 
-//            'bl_create_time:datetime', 
-//            'bl_photo_url:url', 
-//            'bl_audit', 
-//            'bl_expiry_start', 
-//            'bl_expiry_end', 
-//            'bl_business:ntext', 
-           'create_at', 
-//            'update_at', 
-//            'is_blacklist', 
-//            'blacklist_time:datetime', 
-//            'blacklist_cause', 
-           [
-               'attribute'=>'audit_status',
-               'label'=>'审核状态',
-               'filter'=>ShopManager::$audit_statuses,
-           ],
-           'shop_count', 
-           'worker_count', 
-//            'complain_coutn', 
-           'level', 
+            'county_id',
+            // 'street',
+            // 'principal',
+            // 'tel',
+            // 'other_contact',
+            // 'bankcard_number',
+            // 'account_person',
+            // 'opening_bank',
+            // 'sub_branch',
+            // 'opening_address',
+            // 'bl_name',
+            // 'bl_type',
+            // 'bl_number',
+            // 'bl_person',
+            // 'bl_address',
+            // 'bl_create_time:datetime',
+            // 'bl_photo_url:url',
+            // 'bl_audit',
+            // 'bl_expiry_start',
+            // 'bl_expiry_end',
+            // 'bl_business:ntext',
+            // 'create_at',
+            // 'update_at',
+            // 'is_blacklist',
+            // 'blacklist_time:datetime',
+            // 'blacklist_cause',
+            // 'audit_status',
+            // 'shop_count',
+            // 'worker_count',
+            // 'complain_coutn',
+            // 'level',
 
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'buttons' => [
-                'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['shop-manager/view','id' => $model->id,'edit'=>'t']), [
-                                                    'title' => Yii::t('yii', 'Edit'),
-                                                  ]);}
-
-                ],
-            ],
+            ['class' => 'yii\grid\ActionColumn'],
         ],
-        'responsive'=>true,
-        'hover'=>true,
-        'condensed'=>true,
-        'floatHeader'=>true,
+    ]); ?>
 
-
-
-
-        'panel' => [
-            'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
-            'type'=>'info',
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> Add', ['create'], ['class' => 'btn btn-success']),                                                                                                                                                          'after'=>Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List', ['index'], ['class' => 'btn btn-info']),
-            'showFooter'=>false
-        ],
-    ]); Pjax::end(); ?>
 </div>

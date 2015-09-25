@@ -3,11 +3,9 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/**
- * @var yii\web\View $this
- * @var boss\models\search\ShopManagerSearch $model
- * @var yii\widgets\ActiveForm $form
- */
+/* @var $this yii\web\View */
+/* @var $model boss\models\search\ShopManagerSearch */
+/* @var $form yii\widgets\ActiveForm */
 ?>
 
 <div class="shop-manager-search">
