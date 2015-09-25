@@ -19,9 +19,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <div style="text-align:right">
-        <div style="display: inline-block;width:800px;"><?php echo $this->render('_search', ['model' => $searchModel]); ?></div>
-        <?= Html::a(Yii::t('app', 'Create Shop Manager'), ['create'], ['class' => 'btn btn-success']) ?>
+    <div class="row">
+        <div class="col-md-10"><?php echo $this->render('_search', ['model' => $searchModel]); ?></div>
+        <div class="col-md-2 text-right"><?= Html::a(Yii::t('app', 'Create Shop'), ['create'], ['class' => 'btn btn-success']) ?></div>
     </div>
 
     <?= GridView::widget([
@@ -34,7 +34,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute'=>'id',
                 'options'=>['width'=>10]
             ],
-            'name',
+            [
+                'attribute'=>'name',
+                'format'=>'raw',
+                'value'=>function ($model){
+                    return Html::a($model->name,['view', 'id'=>$model->id]);
+                }
+            ],
 //             'province_id',
             [
                 'attribute'=>'city_id',
@@ -100,7 +106,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'options'=>['width'=>60]
             ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template'=>'{update} {delete}'
+            ],
         ],
     ]); ?>
 

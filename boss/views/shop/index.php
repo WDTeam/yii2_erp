@@ -20,9 +20,9 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="shop-index">
     
 
-    <div style="text-align: right">
-        <div style="display: inline-block;width:800px;"><?php echo $this->render('_search', ['model' => $searchModel]); ?></div>
-        <?= Html::a(Yii::t('app', 'Create Shop'), ['create'], ['class' => 'btn btn-success']) ?>
+    <div class="row">
+        <div class="col-md-10"><?php echo $this->render('_search', ['model' => $searchModel]); ?></div>
+        <div class="col-md-2 text-right"><?= Html::a(Yii::t('app', 'Create Shop'), ['create'], ['class' => 'btn btn-success']) ?></div>
     </div>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -105,7 +105,10 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'complain_coutn',
             // 'level',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template'=>'{update} {delete}'
+            ],
         ],
     ]); ?>
 
