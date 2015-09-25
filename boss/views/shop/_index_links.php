@@ -20,11 +20,6 @@ use boss\models\Shop;
     'method' => 'get',
 ]); ?>
 
-
-<div class="col-md-1">
-    <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
-</div>
-
 <?php echo Html::a('待审核('.Shop::getAuditStatusCountByNumber(0).')',[
     'index','ShopSearch'=>['audit_status'=>0]
 ], [
