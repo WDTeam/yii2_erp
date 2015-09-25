@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 /**
  * This is the model class for table "{{%general_pay}}".
  *
@@ -85,14 +86,24 @@ class GeneralPay extends \yii\db\ActiveRecord
     }
 
     /**
-     * 验证以后添加数据
+     * 自动处理创建时间和修改时间
+     * @see \yii\base\Component::behaviors()
      */
-    public function afterValidate()
+    public function behaviors()
     {
-        parent::afterValidate();
+        return [
+            [
+                'class' => TimestampBehavior::className()
+            ],
+        ];
     }
 
-    public function call_pay(){
+    /**
+     * 分配支付渠道
+     */
+
+    public function call_pay()
+    {
         call_user_func(__CLASS__ .'::'.$this->pay_type);
     }
 
@@ -111,7 +122,8 @@ class GeneralPay extends \yii\db\ActiveRecord
      * 9=HT刷卡,
      * 10=HT现金,
      */
-    public function source($source_id){
+    public function source($source_id)
+    {
         $source = '';
         if(empty($source_id)) return $source;
 
@@ -231,7 +243,8 @@ class GeneralPay extends \yii\db\ActiveRecord
     /**
      * 支付宝APP
      */
-    private function alipay_app(){
+    private function alipay_app()
+    {
         $param = array(
             'out_trade_no'=>$this->create_out_trade_no(),
             'subject'=>$this->subject(),
@@ -260,7 +273,8 @@ class GeneralPay extends \yii\db\ActiveRecord
      * 回调地址
      * @param $type_name 类型
      */
-    private function notify_url($type_name){
+    private function notify_url($type_name)
+    {
         $http = "http://".$_SERVER['HTTP_HOST']."/general-pay/".$type_name."-notify";
         return $http;
     }
@@ -268,7 +282,8 @@ class GeneralPay extends \yii\db\ActiveRecord
      * 判断在线充值还是支付
      * @return string
      */
-    private function subject(){
+    private function subject()
+    {
         return $subject = empty($this->order_id) ? 'e家洁会员充值' : 'e家洁在线支付';
     }
 
@@ -276,7 +291,8 @@ class GeneralPay extends \yii\db\ActiveRecord
      * 判断在线充值还是支付
      * @return string
      */
-    private function body(){
+    private function body()
+    {
         return $body = empty($this->order_id) ? 'e家洁会员充值'.$this->general_pay_money.'元' : 'e家洁在线支付'.$this->general_pay_money.'元';
     }
 
@@ -284,7 +300,8 @@ class GeneralPay extends \yii\db\ActiveRecord
      * 生成第三方订单号
      * @return bool|string 订单号
      */
-    private function create_out_trade_no(){
+    private function create_out_trade_no()
+    {
         if(empty($this->id) && empty($this->general_pay_source)) return false;
         //判断支付方式
         switch($this->general_pay_source){
@@ -324,7 +341,8 @@ class GeneralPay extends \yii\db\ActiveRecord
      * @param integer $val
      * @param bool $falg
      */
-    public function toMoney($money, $val, $falg){
+    public function toMoney($money, $val, $falg)
+    {
         //判断是转换分还是转换元
         $toMoney = $falg ? bcmul($money, $val) : bcdiv($money, $val);
         return round($toMoney,2);
@@ -334,7 +352,8 @@ class GeneralPay extends \yii\db\ActiveRecord
      * 获取记录ID
      * @param $out_trade_no 交易ID
      */
-    public function getGeneralPayId($out_trade_no){
+    public function getGeneralPayId($out_trade_no)
+    {
         $on = explode('_',$out_trade_no);
         return array_pop($on);
     }

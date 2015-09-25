@@ -94,6 +94,20 @@ class GeneralPayLog extends \yii\db\ActiveRecord
     }
 
     /**
+     * 自动处理时间
+     * @return array
+     */
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className()
+            ],
+        ];
+    }
+
+
+    /**
      * @inheritdoc
      */
     public function attributeLabels()
