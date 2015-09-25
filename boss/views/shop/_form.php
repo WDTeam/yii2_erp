@@ -118,17 +118,18 @@ use yii\helpers\Url
             <?php echo Form::widget([
                 'model' => $model,
                 'form' => $form,
-                'columns' => 2,
+                'columns' => 1,
                 'attributes' => [
-                    'account_person'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 开户人...', 'maxlength'=>100]], 
-                    
-                    'bankcard_number'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 银行卡号...', 'maxlength'=>50]], 
-                    
-                    'opening_address'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 开户地址...', 'maxlength'=>255]], 
                     
                     'opening_bank'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 开户行...', 'maxlength'=>200]], 
                     
                     'sub_branch'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 支行名称...', 'maxlength'=>200]], 
+                
+                    'opening_address'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 开户地址...', 'maxlength'=>255]], 
+                    
+                    'account_person'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 开户人...', 'maxlength'=>100]], 
+                
+                    'bankcard_number'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 银行卡号...', 'maxlength'=>50]], 
                 ]
             ]);?>
             <div class="panel-footer">
