@@ -3,6 +3,10 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
+use common\models\Shop;
+use yii\helpers\ArrayHelper;
+use kartik\nav\NavX;
+use yii\bootstrap\NavBar;
 
 use common\models\CustomerPlatform;
 use common\models\CustomerChannal;
@@ -20,9 +24,15 @@ use common\models\Order;
 $this->title = Yii::t('app', '顾客管理');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="customer-index">
-    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
-
+<div class="worker-index">
+    <div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 顾客搜索</h3>
+    </div>
+    <div class="panel-body">
+        <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
+    </div>
+    </div>
     <p>
         <?php //echo Html::a(Yii::t('app', 'Create {modelClass}', ['modelClass' => 'Worker',]), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
@@ -37,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'label' => 'ID',
                 'value' => function ($dataProvider) {
-                    return '<a href="">'.$dataProvider->id.'</a>';
+                    return '<a href="/customer/' . $dataProvider->id . '">'.$dataProvider->id.'</a>';
                 },
                 'width' => "100px",
             ],
@@ -119,7 +129,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => '订单',
                 'value' => function ($dataProvider) {
                     $order_count = order::find()->where(['customer_id'=>$dataProvider->id])->count();
-                    return $order_count;
+                    return '<a href="/order/index?OrderSearch[customer_id]='. $dataProvider->id .'">' . $order_count . '</a>';
                 },
                 'width' => "100px",
             ],
@@ -135,7 +145,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'label' => '投诉',
                 'value' => function ($dataProvider) {
-                    return $dataProvider->customer_complaint_times;
+                    return '<a href="/order/index?OrderSearch[customer_id]='. $dataProvider->id .'">' . $dataProvider->customer_complaint_times . '</a>';
                 },
                 'width' => "100px",
             ],
@@ -144,19 +154,28 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => '创建时间',
                 'value' => function ($dataProvider) {
                     return $dataProvider->created_at;
+                    
                 },
                 'width' => "100px",
             ],
             [
-                'class' => 'yii\grid\ActionColumn',
-                'buttons' => [
-                    'update' => function ($url, $model) {
-                        return Html::a('加入黑名单', Yii::$app->urlManager->createUrl(['customer/add-to-block', 'id' => $model->id, 'edit' => 't']), [
-                            'title' => Yii::t('yii', 'Edit'),
-                        ]);
-                    }
-                ],
+                'format' => 'raw',
+                'label' => '操作',
+                'value' => function ($dataProvider) {
+                    return '<a href="/customer/add-to-block?&id=' . $dataProvider->id . '">加入黑名单</a>';
+                },
+                'width' => "100px",
             ],
+            // [
+            //     'class' => 'yii\grid\ActionColumn',
+            //     'buttons' => [
+            //         'update' => function ($url, $model) {
+            //             return Html::a('加入黑名单', Yii::$app->urlManager->createUrl(['customer/add-to-block', 'id' => $model->id, 'edit' => 't']), [
+            //                 'title' => Yii::t('yii', 'Edit'),
+            //             ]);
+            //         }
+            //     ],
+            // ],
         ],
         'responsive' => true,
         'hover' => true,
