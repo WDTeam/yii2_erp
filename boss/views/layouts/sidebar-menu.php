@@ -294,8 +294,8 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '商圈管理(10%)',
-                        'url' => ['operation-shop-district'],
+                        'label' => '商圈管理(40%)',
+                        'url' => ['/operation-shop-district'],
                         'icon' => 'fa fa-angle-right',
                     ],
 //                    [

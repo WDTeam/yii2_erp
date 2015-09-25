@@ -64,6 +64,7 @@ return array(
     'kartik\\affix\\' => array($vendorDir . '/kartik-v/yii2-widget-affix'),
     'jamband\\schemadump\\' => array($vendorDir . '/jamband/yii2-schemadump'),
     'funson86\\yii2-gii\\' => array($vendorDir . '/funson86/yii2-gii'),
+    'dosamigos\\datepicker\\' => array($vendorDir . '/2amigos/yii2-date-picker-widget/src'),
     'crazyfd\\qiniu\\' => array($vendorDir . '/crazyfd/yii2-qiniu'),
     'cebe\\markdown\\' => array($vendorDir . '/cebe/markdown'),
     'alexandernst\\devicedetect\\' => array($vendorDir . '/alexandernst/yii2-device-detect'),
