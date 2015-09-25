@@ -34,7 +34,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute'=>'id',
                 'options'=>['width'=>10]
             ],
-            'name',
+            [
+                'attribute'=>'name',
+                'format'=>'raw',
+                'value'=>function ($model){
+                    return Html::a($model->name,['view', 'id'=>$model->id]);
+                }
+            ],
             
 //             'province_id',
             [
