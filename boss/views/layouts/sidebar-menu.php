@@ -72,7 +72,7 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有阿姨(40%)',
+                        'label' => '查看所有阿姨(50%)',
                         'url' => ['/worker'],
                         'icon' => 'fa fa-angle-right',
                     ],
