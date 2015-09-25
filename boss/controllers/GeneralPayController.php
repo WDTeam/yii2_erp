@@ -123,30 +123,31 @@ class GeneralPayController extends Controller
         //POST数据
         if(!empty($_GET['debug'])){
             $_POST = array (
-                'discount' => '0.00',
-                'payment_type' => '1',
-                'subject' => 'e家洁会员充值',
-                'trade_no' => '2015070561619716',
-                'buyer_email' => 'lsqpy@163.com',
-                'gmt_create' => '2015-07-05 13:07:39',
-                'notify_type' => 'trade_status_sync',
-                'quantity' => '1',
-                'out_trade_no' => 'ALAPP_2015070513073239657_6',
-                'seller_id' => '2088801136967007',
-                'notify_time' => '2015-07-05 13:07:40',
-                'body' => 'e家洁会员充值0.01元',
-                'trade_status' => 'TRADE_FINISHED',
-                'is_total_fee_adjust' => 'N',
-                'total_fee' => '0.01',
-                'gmt_payment' => '2015-07-05 13:07:40',
-                'seller_email' => '47632990@qq.com',
-                'gmt_close' => '2015-07-05 13:07:40',
-                'price' => '0.01',
-                'buyer_id' => '2088002074138164',
-                'notify_id' => '82c817f0e5b8a8e60cd1b0f82706a0be2w',
-                'use_coupon' => 'N',
-                'sign_type' => 'RSA',
-                'sign' => 'UTtBWOmbrxA3XnU2Sz9kwC32s5S+ZLF+ZlaxTKfD2PYH+q/RwJDv1BnuG1PWdyQDwAf5J8QpeTTjaAXhRWUs8Naa9F/HWWZA9iB5WoHcZd10A7nRioB6wV61gaGYczBD30+9L+wiBnlotJVJR+xf0AOp11YDaHiH8bNHNSHg9ak=',
+                "discount"=> "0.00",
+                "payment_type"=> "1",
+                "subject"=> "e家洁会员充值",
+                "trade_no"=> "2015092510430816",
+                "buyer_email"=> "lsqpy@163.com",
+                "gmt_create"=> "2015-09-25 21:13:20",
+                "notify_type"=> "trade_status_sync",
+                "quantity"=> "1",
+                "out_trade_no"=> "ali_app_0925_8467_65",
+                "seller_id"=> "2088801136967007",
+                "notify_time"=> "2015-09-25 21:13:21",
+                "body"=> "e家洁会员充值0.01元",
+                "trade_status"=> "TRADE_FINISHED",
+                "is_total_fee_adjust"=> "N",
+                "total_fee"=> "0.01",
+                "gmt_payment"=> "2015-09-25 21:13:21",
+                "seller_email"=> "47632990@qq.com",
+                "gmt_close"=> "2015-09-25 21:13:21",
+                "price"=> "0.01",
+                "buyer_id"=> "2088002074138164",
+                "notify_id"=> "6260ae5cc41e6aa3a42824ec032071df2w",
+                "use_coupon"=> "N",
+                "sign_type"=> "RSA",
+                "sign"=> "T4Bkh9KljoFOTIossu5QtYPRUwj/7by/YLXNQ7efaxe0AwYDjFDFWTFts4h8yq2ceCH8weqYVBklj2btkF2/hKPuUifuJNB6lk8EtHckmJg0MzhGIBAvpteUAo+5Gs+wlI5eS5zmryBskuHOXSM7svb9wNCcL9pHAv8CM06Au+A="
+
             );
             $post = $_POST;
         }else{
@@ -180,6 +181,7 @@ class GeneralPayController extends Controller
             //验证签名
             $alipay = new \alipay_class;
             $verify_result = $alipay->callback();
+            var_dump($verify_result);exit;
             if(!empty($_GET['debug'])){
                 $verify_result = true;
             }
