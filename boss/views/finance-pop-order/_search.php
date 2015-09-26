@@ -14,6 +14,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\widgets\Select2;
+use kartik\date\DatePicker;
 ?>
 
 <div class="finance-pop-order-search">
@@ -38,40 +39,28 @@ use kartik\widgets\Select2;
     ?>
      </div>
      
-   
-   
     <div class='col-md-2'>
-    <?= $form->field($model, 'finance_order_channel_statuspayment')->widget(Select2::classname(), [
-        'name' => '订单渠道',
-        'hideSearch' => true,
-        'data' => $ordedat,
-        'options' => ['placeholder' => '选择订单渠道','class' => 'col-md-2'],
-        'pluginOptions' => [
-            'allowClear' => true
-        ],
-    ]);
-   
-    ?>
+    <?= $form->field($model, 'finance_order_channel_statuspayment')->widget(DatePicker::classname(), [
+    		'name' => 'finance_order_channel_statuspayment',
+    		'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+    		'pluginOptions' => [
+    		'autoclose' => true,
+    		'format' => 'yyyy-mm-dd'
+    		]
+            ]); ?>
+           
      </div>
-     
       <div class='col-md-2'>
-    <?= $form->field($model, 'finance_order_channel_endpayment')->widget(Select2::classname(), [
-        'name' => '订单渠道',
-        'hideSearch' => true,
-        'data' => $ordedat,
-        'options' => ['placeholder' => '选择订单渠道','class' => 'col-md-2'],
-        'pluginOptions' => [
-            'allowClear' => true
-        ],
-    ]);
-   
-    ?>
+      
+     <?= $form->field($model, 'finance_order_channel_endpayment')->widget(DatePicker::classname(), [
+    		'name' => 'finance_order_channel_endpayment',
+    		'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+    		'pluginOptions' => [
+    		'autoclose' => true,
+    		'format' => 'yyyy-mm-dd'
+    		]
+            ]); ?>
      </div>
-     
-     
-     
-       
-     
      
     <div class='col-md-3'>
       <?= $form->field($model, 'finance_uplod_url')->fileInput(['maxlength' => true]) ?>
