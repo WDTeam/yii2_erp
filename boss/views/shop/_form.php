@@ -44,7 +44,7 @@ use yii\helpers\Url
                     'type'=> Form::INPUT_WIDGET, 
                     'widgetClass'=>Select2::classname(),
                     'options'=>[
-                        'initValueText' => 'xxx', // set the initial display text
+                        'initValueText' => '', // set the initial display text
                         'options' => ['placeholder' => 'Search for a shop_menager ...'],
                         'pluginOptions' => [
                             'allowClear' => true,
