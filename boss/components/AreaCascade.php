@@ -27,7 +27,7 @@ use yii\base\Widget;
 /**
  * 
  */
-class AreaCascade extends \kartik\base\InputWidget
+class AreaCascade extends \yii\widgets\InputWidget
 {
 
     const _PROVINCE_ = '选择省(直辖市)';
