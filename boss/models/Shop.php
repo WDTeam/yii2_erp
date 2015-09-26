@@ -53,6 +53,7 @@ class Shop extends \common\models\Shop
             'county_id' => Yii::t('app', '区县'),
             'audit_status' => Yii::t('app', '审核状态'),
             'is_blacklist'=>Yii::t('app', '是否黑名单'),
+            'shop_manager_id'=>Yii::t('app', '归属家政'),
         ]);
     }
     /**

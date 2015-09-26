@@ -9,7 +9,16 @@ use yii\data\ActiveDataProvider;
 use yii\rest\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+/*
+//支付宝
+include_once '../../ejiajie/pay/alipay_app/alipay_class.php';
+//微信
+include_once '../../ejiajie/pay/wx_app/wxpay_class.php';
+//百付宝
+include_once '../../ejiajie/pay/bfb_app/bfbpay_class.php';
+//银联
+include_once '../../ejiajie/pay/upacp_app/uppay_class.php';
+*/
 /**
  * GeneralPayController implements the CRUD actions for GeneralPay model.
  */

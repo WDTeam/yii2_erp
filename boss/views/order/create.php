@@ -15,6 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="order-create">
     <div class="order-form">
+        <?=Html::errorSummary($model); ?>
         <?php $form = ActiveForm::begin(['layout'=>'horizontal']); ?>
 
         <div class="panel panel-info">
@@ -57,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                     'options'=>[
                         'value'=>date('Y-m-d H:00:00',strtotime('+1 hours')),
-                        'disabled' => true,
+//                        'disabled' => true,
                     ]
                 ]);?>
                 <?= $form->field($model, 'order_booked_end_time')->widget(
@@ -73,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'options'=>[
                          'value'=>date('Y-m-d H:00:00',strtotime('+3 hours')),
                     ],
-                    'disabled' => true,
+//                    'disabled' => true,
                 ]);?>
             </div>
             <div class="panel-heading">
