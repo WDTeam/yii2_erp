@@ -1,0 +1,38 @@
+.right-side > .content {
+	margin-top: 51px;
+}
+
+.right-side > .content-header {
+    position: fixed;
+    z-index: 1000;
+    top: 50px;
+    right: 0;
+    left: 220px;
+    background-color: inherit;
+}
+
+.right-side.strech > .content-header {
+    left: 0;
+}
+
+.row-offcanvas.active > .right-side > .content-header {
+	left: 220px;
+}
+
+@media screen and (max-width: 560px){
+	.right-side > .content-header {
+	    top: 100px;
+	}
+}
+
+@media screen and (max-width: 767px){
+	.right-side > .content {
+		margin-top: 87px;
+	}
+}
+
+@media screen and (max-width: 992px){
+	.right-side > .content-header {
+	    left: 0;
+	}
+}

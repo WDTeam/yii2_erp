@@ -88,7 +88,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'finance_settle_apply_order_cash_money', 
             'finance_settle_apply_order_money_except_cash',
             ['attribute'=>'finance_settle_apply_subsidy',
-             'content'=>function($model,$key,$index){return '<a class="btn btn-default" id = "subsidyButton" data-container="body" data-toggle="popover" data-placement="bottom" data-content="路补:10     |晚补:10    |扑空补:0">'.$model->finance_settle_apply_subsidy.'</a>';}],
+             'content'=>function($model,$key,$index){return '<a class="btn btn-default"  id = "subsidyButton" data-container="body" data-toggle="popover" data-placement="bottom" data-popover-content="'.$model->id.'">'.$model->finance_settle_apply_subsidy.'</a>';}],
             'finance_settle_apply_reviewer', 
             'updated_at' ,
             [
@@ -103,9 +103,14 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); Pjax::end(); ?>
 
 </div>
+    <div id="popover_content_wrapper" style="display: none;">路补:10     |晚补:10    |扑空补:0|路补:10     |晚补:10    |扑空补:0</div>
 <script>
 $(function () {
-    $('[data-toggle="popover"]').popover({ html : true });
+    $('[data-toggle="popover"]').popover({  html : true, 
+        content: function() {
+          var settleApplyId = $(this).attr("data-popover-content");
+          return $('#popover_content_wrapper').html();
+        } });
 });
 </script>
 </form>

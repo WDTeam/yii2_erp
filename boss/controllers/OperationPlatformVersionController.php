@@ -4,6 +4,7 @@ namespace boss\controllers;
 
 use Yii;
 use boss\models\Operation\OperationPlatformVersion;
+use boss\models\Operation\OperationPlatform;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -30,14 +31,15 @@ class OperationPlatformVersionController extends Controller
      * Lists all OperationPlatformVersion models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($platform_id)
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => OperationPlatformVersion::find(),
+            'query' => OperationPlatformVersion::find()->where(['operation_platform_id' => $platform_id]),
         ]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'platform_id' => $platform_id,
         ]);
     }
 
@@ -46,10 +48,11 @@ class OperationPlatformVersionController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
+    public function actionView($id, $platform_id)
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'platform_id' => $platform_id
         ]);
     }
 
@@ -58,15 +61,21 @@ class OperationPlatformVersionController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($platform_id)
     {
         $model = new OperationPlatformVersion();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        
+        if ($model->load(Yii::$app->request->post())) {
+            $platform = OperationPlatform::find()->where(['id' => $platform_id])->one();
+            $model->operation_platform_name = $platform->operation_platform_name;
+            $model->created_at = time();
+            $model->updated_at = time();
+            $model->save();
+            return $this->redirect(['index', 'platform_id' => $platform_id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'platform_id' => $platform_id
             ]);
         }
     }
@@ -77,15 +86,20 @@ class OperationPlatformVersionController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
+    public function actionUpdate($id, $platform_id)
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $platform = OperationPlatform::find()->where(['id' => $platform_id])->one();
+            $model->operation_platform_name = $platform->operation_platform_name;
+            $model->updated_at = time();
+            $model->save();
+            return $this->redirect(['index', 'platform_id' => $platform_id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'platform_id' => $platform_id
             ]);
         }
     }
@@ -96,11 +110,11 @@ class OperationPlatformVersionController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
+    public function actionDelete($id, $platform_id)
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['index', 'platform_id' => $platform_id]);
     }
 
     /**
