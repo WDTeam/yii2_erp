@@ -3,6 +3,8 @@ namespace boss\models;
 use yii;
 use yii\behaviors\TimestampBehavior;
 use boss\models\Operation\OperationArea;
+use yii\base\Object;
+use boss\models\ShopStatus;
 class ShopManager extends \common\models\ShopManager
 {
     /**
@@ -25,6 +27,10 @@ class ShopManager extends \common\models\ShopManager
      * 黑名单原因
      */
     public $blacklist_cause='';
+    /**
+     * 黑名单时间
+     */
+    public $blacklist_time;
     /**
      * 自动处理创建时间和修改时间
      * @see \yii\base\Component::behaviors()
@@ -116,10 +122,67 @@ class ShopManager extends \common\models\ShopManager
     }
     /**
      * 加入黑名单
+     * @param string $cause 原因
      */
-    public function joinBlacklist()
+    public function joinBlacklist($cause='')
     {
         $this->is_blacklist = 1;
-        return $this->save();
+        if($this->save()){
+            $status = new ShopStatus();
+            $status->status_number = 1;
+            $status->model_name = self::className();
+            $status->status_type = 2;
+            $status->created_at = time();
+            $status->save();
+            $this->affShopJoinBlacklist($cause);
+            return true;
+        }
+        return false;
+    }
+    /**
+     * 家政下所有门店加了黑名单
+     */
+    public function affShopJoinBlacklist($cause)
+    {
+        $models = Shop::find()->where(['shop_manager_id'=>$this->id])->all();
+        foreach ($models as $model){
+            $model->joinBlacklist($cause);
+        }
+        return count($models);
+    }
+    /**
+     * 移出黑名单
+     * @param string $cause 原因
+     */
+    public function removeBlacklist($cause='')
+    {
+        $this->is_blacklist = 0;
+        if($this->save()){
+            $status = new ShopStatus();
+            $status->status_number = 0;
+            $status->model_name = self::className();
+            $status->status_type = 2;
+            $status->created_at = time();
+            return $status->save();
+        }
+        return false;
+    }
+    /**
+     * 改变审核状态
+     * @param int $number 状态码
+     * @param string $cause 原因
+     */
+    public function changeAuditStatus($number, $cause='')
+    {
+        $this->audit_status = $number;
+        if($this->save()){
+            $status = new ShopStatus();
+            $status->status_number = $this->audit_status;
+            $status->model_name = self::className();
+            $status->status_type = 1;
+            $status->created_at = time();
+            return $status->save();
+        }
+        return false;
     }
 }

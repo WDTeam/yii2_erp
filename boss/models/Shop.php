@@ -88,4 +88,56 @@ class Shop extends \common\models\Shop
         ->where(['id'=>$this->county_id])->scalar();
         return $province.$city.$county.$this->street;
     }
+    /**
+     * 加入黑名单
+     * @param string $cause 原因
+     */
+    public function joinBlacklist($cause='')
+    {
+        $this->is_blacklist = 1;
+        if($this->save()){
+            $status = new ShopStatus();
+            $status->status_number = 1;
+            $status->model_name = self::className();
+            $status->status_type = 2;
+            $status->created_at = time();
+            return $status->save();
+        }
+        return false;
+    }
+    /**
+     * 移出黑名单
+     * @param string $cause 原因
+     */
+    public function removeBlacklist($cause='')
+    {
+        $this->is_blacklist = 0;
+        if($this->save()){
+            $status = new ShopStatus();
+            $status->status_number = 0;
+            $status->model_name = self::className();
+            $status->status_type = 2;
+            $status->created_at = time();
+            return $status->save();
+        }
+        return false;
+    }
+    /**
+     * 改变审核状态
+     * @param int $number 状态码
+     * @param string $cause 原因
+     */
+    public function changeAuditStatus($number, $cause='')
+    {
+        $this->audit_status = $number;
+        if($this->save()){
+            $status = new ShopStatus();
+            $status->status_number = $this->audit_status;
+            $status->model_name = self::className();
+            $status->status_type = 1;
+            $status->created_at = time();
+            return $status->save();
+        }
+        return false;
+    }
 }

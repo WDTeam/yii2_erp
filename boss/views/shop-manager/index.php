@@ -90,13 +90,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template'=>'{update} {delete}',
+                'template'=>'{update} {delete} {joinblacklist}',
                 'buttons' => [
                     'update' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['shop-manager/view','id' => $model->id,'edit'=>'t']), [
                             'title' => Yii::t('yii', 'Edit'),
-                        ]);}
-                
+                        ]);
+                    },
+                    'joinblacklist' => function ($url, $model) {
+                        return Html::a('加入黑名单', Yii::$app->urlManager->createUrl(['shop-manager/join-blacklist','id' => $model->id]), [
+                            'title' => Yii::t('app', '加入黑名单'),
+                        ]);
+                    },
                 ],
             ],
         ],
