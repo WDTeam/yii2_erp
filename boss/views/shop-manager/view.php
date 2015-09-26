@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use kartik\detail\DetailView;
 use kartik\datecontrol\DateControl;
+use boss\models\ShopManager;
 
 /**
  * @var yii\web\View $this
@@ -51,7 +52,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'is_blacklist',
             'blacklist_time:datetime',
             'blacklist_cause',
-            'audit_status',
+            [
+                'attribute' => 'audit_status',
+                'type' => DetailView::INPUT_WIDGET,
+                'widgetOptions' => [
+                    'name'=>'worker_type',
+                    'class'=>\kartik\widgets\Select2::className(),
+                    'data' => ShopManager::$audit_statuses,
+                    'hideSearch' => true,
+                    'options'=>[
+                        'placeholder' => '选择状态',
+                    ]
+                ],
+                'value'=>ShopManager::$audit_statuses[$model->audit_status],
+            ],
             'shop_count',
             'worker_count',
             'complain_coutn',
