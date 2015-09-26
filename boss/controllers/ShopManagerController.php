@@ -147,10 +147,16 @@ class ShopManagerController extends Controller
      */
     public function actionJoinBlacklist($id)
     {
-        $cause = Yii::$app->request->get('cause','');
-        $this->findModel($id)->joinBlacklist($cause);
-    
-        return $this->redirect(['index']);
+        $model = $this->findModel($id);
+        if(\Yii::$app->request->isPost){
+            $cause = Yii::$app->request->get('cause','');
+            $model->joinBlacklist($cause);
+            return $this->redirect(['index']);
+        }
+        return $this->renderPartial('join_blacklist',[
+            'model'=>$model
+        ]);
+        
     }
     /**
      * 解除黑名单
