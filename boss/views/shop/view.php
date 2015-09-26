@@ -3,6 +3,11 @@
 use yii\helpers\Html;
 use kartik\detail\DetailView;
 use kartik\datecontrol\DateControl;
+use kartik\select2\Select2;
+use yii\web\JsExpression;
+use yii\helpers\Url;
+use boss\models\Shop;
+use boss\components\AreaCascade;
 
 /**
  * @var yii\web\View $this
@@ -27,11 +32,37 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'name',
-            'shop_manager_id',
-            'province_id',
-            'city_id',
-            'county_id',
-            'street',
+            [
+                'attribute'=>'shop_manager_id',
+                'type' => DetailView::INPUT_WIDGET,
+                'widgetOptions' => [
+                    'class' => Select2::classname(),
+                    'initValueText' => '', // set the initial display text
+                    'options' => ['placeholder' => 'Search for a shop_menager ...'],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'minimumInputLength' => 0,
+                        'ajax' => [
+                            'url' => Url::to(['shop-manager/search-by-name']),
+                            'dataType' => 'json',
+                            'data' => new JsExpression('function(params) { return {name:params.term}; }')
+                        ],
+                        //                     'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                        'templateResult' => new JsExpression('function(model) { return model.name; }'),
+                        'templateSelection' => new JsExpression('function (model) { return model.name; }'),
+                    ],
+                ],
+                'value'=>$model->getMenagerName(),
+            ],
+            [
+                'label'=>'地址',
+                'value'=>$model->getAllAddress(),
+                'type' => DetailView::INPUT_WIDGET,
+            ],
+//             'province_id',
+//             'city_id',
+//             'county_id',
+//             'street',
             'principal',
             'tel',
             'other_contact',
@@ -40,12 +71,64 @@ $this->params['breadcrumbs'][] = $this->title;
             'opening_bank',
             'sub_branch',
             'opening_address',
-            'create_at',
-            'update_at',
-            'is_blacklist',
-            'blacklist_time:datetime',
-            'blacklist_cause',
-            'audit_status',
+            [
+                'attribute'=>'create_at',
+                'type' => DetailView::INPUT_WIDGET,
+                'widgetOptions' => [
+                    'class' => DateControl::classname(),
+                    'type'=>DateControl::FORMAT_DATE,
+                    'ajaxConversion'=>false,
+                    'displayFormat' => 'php:Y-m-d',
+                    'saveFormat'=>'php:U',
+                    'options' => [
+                        'pluginOptions' => [
+                            'autoclose' => true
+                        ]
+                    ]
+                ],
+                'value'=>date('Y-m-d H:i:s', $model->create_at),
+            ],
+            [
+                'attribute'=>'update_at',
+                'type' => DetailView::INPUT_WIDGET,
+                'widgetOptions' => [
+                    'class' => DateControl::classname(),
+                    'type'=>DateControl::FORMAT_DATE,
+                    'ajaxConversion'=>false,
+                    'displayFormat' => 'php:Y-m-d',
+                    'saveFormat'=>'php:U',
+                    'options' => [
+                        'pluginOptions' => [
+                            'autoclose' => true
+                        ]
+                    ]
+                ],
+                'value'=>date('Y-m-d H:i:s', $model->update_at),
+            ],
+            [
+                'attribute' => 'is_blacklist',
+                'type' => DetailView::INPUT_WIDGET,
+                'widgetOptions' => [
+                    'class' => \kartik\widgets\SwitchInput::classname()
+                ],
+                'value'=>Shop::$is_blacklists[(int)$model->is_blacklist],
+            ],
+//             'blacklist_time:datetime',
+//             'blacklist_cause',
+            [
+                'attribute' => 'audit_status',
+                'type' => DetailView::INPUT_WIDGET,
+                'widgetOptions' => [
+                    'name'=>'worker_type',
+                    'class'=>\kartik\widgets\Select2::className(),
+                    'data' => Shop::$audit_statuses,
+                    'hideSearch' => true,
+                    'options'=>[
+                        'placeholder' => '选择状态',
+                    ]
+                ],
+                'value'=>Shop::$audit_statuses[(int)$model->audit_status],
+            ],
             'worker_count',
             'complain_coutn',
             'level',

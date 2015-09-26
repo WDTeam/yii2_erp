@@ -124,4 +124,8 @@ return [
     'city_name'=>'城市名称',
     'county_name'=>'县（区）名称',
     'town_name'=>'乡镇（街道）名称',
+    'Platform' => '平台',
+    'Manage' => '管理',
+    'Version' => '版本',
+    'Advert Position' => '广告位置',
 ];

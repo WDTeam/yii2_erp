@@ -33,6 +33,7 @@ echo DetailView::widget([
     'condensed'=>false,
     'hover'=>true,
     'mode'=>Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
+    // 'mode'=>DetailView::MODE_VIEW,
     'panel'=>[
         'heading'=>'基本信息',
         'type'=>DetailView::TYPE_INFO,
@@ -123,12 +124,9 @@ echo DetailView::widget([
             'type'=>DetailView::INPUT_SWITCH,
             'valueColOptions'=>['style'=>'width:90%']
         ],
-        
     ],
     // 'enableEditMode'=>true,
 ]); 
-
-
 
 echo DetailView::widget([
     'model' => $model,
