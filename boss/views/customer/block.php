@@ -165,42 +165,31 @@ $this->params['breadcrumbs'][] = $this->title;
                 'width' => "100px",
             ],
             // [
-            //     'format' => 'raw',
-            //     'label' => '操作',
-            //     'value' => function ($dataProvider) {
-            //         return '<a href="/customer/remove-from-block?&id=' . $dataProvider->id . '">取消黑名单</a>';
-            //     },
-            //     'width' => "100px",
-            // ],
-            // [
-            //     'format' => 'raw',
-            //     'label' => '操作',
-            //     'value' => function ($dataProvider) {
+            //     'format'=>'raw',
+            //     'label'=>'操作',
+            //     'value'=>function($dataProvider){
             //         if ($dataProvider->is_del) {
             //             $action_label = '取消黑名单';
             //         }
             //         if (!$dataProvider->is_del) {
             //             $action_label = '加入黑名单';
             //         }
-            //         return '<a href="/customer/switch-block?&id=' . $dataProvider->id . '">' . $action_label . '</a>';
+            //         return Html::a('<span class="glyphicon glyphicon-pencil">'.$action_label.'</span>', Yii::$app->urlManager->createUrl(['customer/switch-block', 'id' => $dataProvider->id, 'edit' => 't']), [
+            //                 'title' => Yii::t('yii', 'Edit'),
+            //             ]);
             //     },
             //     'width' => "100px",
             // ],
             [
-                'format'=>'raw',
-                'label'=>'操作',
-                'value'=>function($dataProvider){
-                    if ($dataProvider->is_del) {
-                        $action_label = '取消黑名单';
-                    }
-                    if (!$dataProvider->is_del) {
-                        $action_label = '加入黑名单';
-                    }
-                    return Html::a('<span class="glyphicon glyphicon-pencil">'.$action_label.'</span>', Yii::$app->urlManager->createUrl(['customer/switch-block', 'id' => $dataProvider->id, 'edit' => 't']), [
+                'class' => 'yii\grid\ActionColumn',
+                'buttons' => [
+                    'update' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['customer/view', 'id' => $model->id, 'edit' => 't']), [
                             'title' => Yii::t('yii', 'Edit'),
                         ]);
-                },
-                'width' => "100px",
+                    }
+
+                ],
             ],
         ],
         'responsive' => true,

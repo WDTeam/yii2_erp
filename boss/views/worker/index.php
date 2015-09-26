@@ -7,6 +7,7 @@ use common\models\Shop;
 use yii\helpers\ArrayHelper;
 use kartik\nav\NavX;
 use yii\bootstrap\NavBar;
+use yii\bootstrap\Modal;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -21,30 +22,23 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="panel-heading">
         <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 阿姨搜索</h3>
     </div>
+
     <div class="panel-body">
-        <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
+        <?php
+
+        //Modal::begin(['header' => '<h2>Hello world</h2>','toggleButton' =>['label'=>'Search','class' => 'btn btn-success','id'=>'myModal']]);
+        echo $this->render('_search', ['model' => $searchModel]);
+        //Modal::end();
+        ?>
+
     </div>
     </div>
     <p>
         <?php //echo Html::a(Yii::t('app', 'Create {modelClass}', ['modelClass' => 'Worker',]), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+
     <?php
-     $a=NavX::widget([
-        'options'=>['class'=>'navbar-nav'],
-        'items' => [
-            ['label' => '待试验', 'url' => '/worker/index?WorkerSearch[worker_auth_status]=0'],
-            ['label' => '未培训', 'url' => '/worker/index?WorkerSearch[worker_ontrial_status]=0'],
-            ['label' => '试工', 'url' => '/worker/index?WorkerSearch[worker_onboard_status]=0'],
-            ['label' => '兼职', 'url' => '/worker/index?WorkerSearch[worker_auth_status]=0'],
-            ['label' => '全职', 'url' => '/worker/index?WorkerSearch[worker_auth_status]=0'],
-            ['label' => '高峰', 'url' => '/worker/index?WorkerSearch[worker_auth_status]=0'],
-            ['label' => '时段', 'url' => '/worker/index?WorkerSearch[worker_auth_status]=0'],
-            ['label' => '请假', 'url' => '#'],
-            ['label' => '封号', 'url' => '#'],
-            ['label' => '黑名单', 'url' => '#'],
-            //'<li class="divider"></li>',
-        ]
-    ]);
+
     $b =  Html::a('<i class="glyphicon" ></i>待试验 '.$searchModel->AuthStatusCount, ['index?WorkerSearch[worker_auth_status]=0'], ['class' => 'btn btn-success ', 'style' => 'margin-right:10px']) .
         Html::a('<i class="glyphicon" ></i>待试工 '.$searchModel->OntrialStatusCount, ['index?WorkerSearch[worker_ontrial_status]=0'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
         Html::a('<i class="glyphicon" ></i>待上岗 '.$searchModel->OnboardStatusCount, ['index?WorkerSearch[worker_onboard_status]=0'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
@@ -57,10 +51,12 @@ $this->params['breadcrumbs'][] = $this->title;
         Html::a('<i class="glyphicon" ></i>黑名单 '.$searchModel->BlackListCount, ['index?WorkerSearch[worker_is_blacklist]=1'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']);
 
     ?>
-    <?php Pjax::begin();
+    <?php
+    Pjax::begin();
     echo GridView::widget([
         'dataProvider' => $dataProvider,
         'export'=>false,
+
         'toolbar' =>
             [
                 'content'=>
@@ -102,13 +98,43 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
+                'template' =>'{view} {update} {vacation} {block} {delete}',
                 'buttons' => [
                     'update' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['worker/view', 'id' => $model->id, 'edit' => 't']), [
-                            'title' => Yii::t('yii', 'Edit'),
+                            'title' => Yii::t('yii', '修改'),
+                        ]);
+                    },
+                    'vacation' => function ($url, $model) {
+                        return Html::a('<span class="fa fa-fw fa-history"></span>',
+                            [
+                                '/worker/vacation-create',
+                                'id' => $model->id
+                            ]
+                            ,
+                            [
+                                'title' => Yii::t('yii', '请假'),
+                                'data-toggle' => 'modal',
+                                'data-target' => '#vacationModal',
+                                'class'=>'vacation',
+                                'data-id'=>$model->id,
+                            ]);
+                    },
+                    'block' => function ($url, $model) {
+                        return Html::a('<span class="fa fa-fw fa-lock"></span>',
+                        [
+                            '/worker/block-create',
+                            'id' => $model->id
+                        ]
+                        ,
+                        [
+                            'title' => Yii::t('yii', '封号'),
+                            'data-toggle' => 'modal',
+                            'data-target' => '#blockModal',
+                            'class'=>'block',
+                            'data-id'=>$model->id,
                         ]);
                     }
-
                 ],
             ],
         ],
@@ -127,6 +153,30 @@ $this->params['breadcrumbs'][] = $this->title;
             'showFooter' => false
         ],
     ]);
-    Pjax::end(); ?>
+    Pjax::end();
+    //Modal::begin(['header' => '<h2>Hello world</h2>','toggleButton' =>['id'=>'vacationModal',]]);
+        //echo $this->render('_search', ['model' => $searchModel]);
+    //Modal::end();
+    echo Modal::widget([
+        'header' => '<h4 class="modal-title">请假</h4>',
+        'id'=>'vacationModal',
+   ]);
+    echo Modal::widget([
+        'header' => '<h4 class="modal-title">封号</h4>',
+        'id'=>'blockModal',
+    ]);
+$this->registerJs(<<<JSCONTENT
+        $('.vacation').click(function() {
+            $('#vacationModal .modal-body').html('加载中……');
+            $('#vacationModal .modal-body').eq(0).load(this.href);
+        });
+        $('.block').click(function() {
+            $('#blockModal .modal-body').html('加载中……');
+            $('#blockModal .modal-body').eq(0).load(this.href);
+        });
+JSCONTENT
+        );
 
-</div>
+
+
+    ?>

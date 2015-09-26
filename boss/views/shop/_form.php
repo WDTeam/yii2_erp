@@ -121,9 +121,15 @@ use yii\helpers\Url
                 'attributes' => [
                     
                     'opening_bank'=>[
-                        'type'=> Form::INPUT_DROPDOWN_LIST, 
-                        'options'=>['placeholder'=>'Enter 开户行...', 'maxlength'=>200],
-                        'items'=>BankHelper::getBankNames(),
+                        'type'=> Form::INPUT_WIDGET,
+                        'widgetClass'=>\kartik\widgets\Select2::className(),
+                        'options' => [
+                            'data' =>BankHelper::getBankNames(),
+                            'hideSearch' => false,
+                            'options'=>[
+                                'placeholder' => '选择银行',
+                            ]
+                        ],
                     ], 
                     
                     'sub_branch'=>['type'=> Form::INPUT_TEXT, 'options'=>[ 'maxlength'=>200]], 
