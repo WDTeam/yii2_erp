@@ -38,6 +38,8 @@ class FinanceSettleApply extends \yii\db\ActiveRecord
     
     const FINANCE_SETTLE_APPLY_CYCLE_MONTH_DES="月结";//月结描述
     
+    const FINANCE_SETTLE_APPLY_STATUS_INIT = 0;//提交结算申请
+    
     /**
      * @inheritdoc
      */

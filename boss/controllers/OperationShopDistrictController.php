@@ -4,6 +4,7 @@ namespace boss\controllers;
 
 use Yii;
 use boss\models\Operation\OperationShopDistrict;
+use boss\models\Operation\OperationCity;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -74,9 +75,16 @@ class OperationShopDistrictController extends Controller
     public function actionCreate()
     {
         $model = new OperationShopDistrict;
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $post = Yii::$app->request->post();
+        if(!empty($post)){
+            $post['OperationShopDistrict']['operation_city_id'] = $this->city_id;
+            $post['OperationShopDistrict']['operation_city_name'] = OperationCity::getCityName($this->city_id);
+            $post['OperationShopDistrict']['created_at'] = time();
+            $post['OperationShopDistrict']['updated_at'] = time();
+        }
+        if ($model->load($post) && $model->save()) {
+//            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -93,14 +101,29 @@ class OperationShopDistrictController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $post = Yii::$app->request->post();
+        if(!empty($post)){
+            $post['OperationShopDistrict']['updated_at'] = time();
+        }
+        if ($model->load($post) && $model->save()) {
+//            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         } else {
             return $this->render('update', [
                 'model' => $model,
             ]);
         }
+    }
+
+    public function actionGoline($id){
+        $model = $this->findModel($id);
+        if($model->operation_shop_district_status == '1'){
+            $model->operation_shop_district_status = '2';
+        }else{
+            $model->operation_shop_district_status = '1';
+        }
+        $model->save();
+        return $this->redirect(['index']);
     }
 
     /**

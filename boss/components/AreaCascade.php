@@ -10,10 +10,10 @@
  * 如何调用：
  * echo AreaCascade::widget([
         'model' => $model,
-        'name' => 'OperationCity',
         'options' => ['class' => 'form-control inline'],
         'label' =>'选择城市',
         'grades' => 'city',
+ *      'is_minui' => true,
     ]);
  */
 namespace boss\components;

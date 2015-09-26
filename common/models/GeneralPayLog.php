@@ -3,7 +3,7 @@
 namespace common\models;
 
 use Yii;
-
+use yii\behaviors\TimestampBehavior;
 /**
  * This is the model class for table "{{%general_pay_log}}".
  *
@@ -49,16 +49,7 @@ class GeneralPayLog extends \yii\db\ActiveRecord
      * 插入交易记录
      * @param array $post
      */
-    public function insertLog($post){
-
-        //记录数据库日志
-        $this->general_pay_log_price = $post['general_pay_log_price'];   //支付金额
-        $this->general_pay_log_shop_name = $post['general_pay_log_shop_name'];   //商品名称
-        $this->general_pay_log_eo_order_id = $post['general_pay_log_eo_order_id'];   //订单ID
-        $this->general_pay_log_transaction_id = $post['general_pay_log_transaction_id'];   //交易流水号
-        $this->general_pay_log_status_bool = $this->statusBool($post['general_pay_log_status_bool']);   //支付状态
-        $this->general_pay_log_status = $post['general_pay_log_status'];   //支付状态
-        $this->general_pay_log_json_aggregation = json_encode($post);
+    public function insertLog(){
         $this->save(false);
     }
 
@@ -82,7 +73,7 @@ class GeneralPayLog extends \yii\db\ActiveRecord
      * @param $statusString 状态类型
      * @return int  1/支付成功 ， 2/支付失败
      */
-    private function statusBool($statusString){
+    public function statusBool($statusString){
         $statusArr = [
             'TRADE_FINISHED',   //支付宝
             'TRADE_SUCCESS',    //支付宝
@@ -92,6 +83,22 @@ class GeneralPayLog extends \yii\db\ActiveRecord
         ];
         return in_array($statusString,$statusArr) ? 1 : 0 ;
     }
+
+    /**
+     * 自动处理创建时间和修改时间
+     * @see \yii\base\Component::behaviors()
+     */
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+            ],
+        ];
+    }
+
 
     /**
      * @inheritdoc

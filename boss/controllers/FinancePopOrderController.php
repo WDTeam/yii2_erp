@@ -19,6 +19,7 @@ use boss\models\FinancePopOrderSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\models\FinanceOrderChannel;
 
 /**
  * FinancePopOrderController implements the CRUD actions for FinancePopOrder model.
@@ -47,11 +48,22 @@ class FinancePopOrderController extends Controller
     **/
     public function actionIndex()
     {
+    	
+       $ordedata= new FinanceOrderChannel;
+        $ordewhere['is_del']=0;
+        $ordewhere['finance_order_channel_is_lock']=1;
+        $payatainfo=$ordedata::find()->where($ordewhere)->asArray()->all();
+        foreach ($payatainfo as $errt){
+        	$tyd[]=$errt['id'];
+        	$tydtui[]=$errt['finance_order_channel_name'];
+        }
+       $tyu= array_combine($tyd,$tydtui);
         $searchModel = new FinancePopOrderSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+        	'ordedatainfo' => $tyu,
         ]);
     }
 

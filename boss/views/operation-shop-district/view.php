@@ -35,8 +35,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'operation_city_id',
             'operation_city_name',
             'operation_shop_district_latitude_longitude:ntext',
-            'created_at',
-            'updated_at',
+            'created_at:datetime',
+            'updated_at:datetime',
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],

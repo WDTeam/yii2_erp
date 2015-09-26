@@ -176,8 +176,7 @@ class FinanceSettleApplyController extends Controller
                 ['worker_id'=>'666','order_id'=>'802','order_pay_type'=>'1','order_money'=>'50','order_booked_count'=>'2','order_complete_time'=>'123456565']
             );
 
-            $financeWorkerOrderIncomeArr = [];
-            $i = 0;
+            $financeWorkerOrderIncomeArr = array();
             foreach($orderIncomeDetail as $orderIncome){
                 $financeWorkerOrder = new FinanceWorkerOrderIncome;
                 $financeWorkerOrder->worder_id = $orderIncome['worker_id'];
@@ -188,12 +187,12 @@ class FinanceSettleApplyController extends Controller
                 $financeWorkerOrder->finance_worker_order_income_starttime = $settleStartTime;
                 $financeWorkerOrder->finance_worker_order_income_endtime = $settleEndTime;
                 $financeWorkerOrder->created_at = time();
-                $financeWorkerOrderIncomeArr[i]= $financeWorkerOrder;
-                $i++;
+                $financeWorkerOrderIncomeArr[]= $financeWorkerOrder;
             }
-            $orderIncomeSummary = array(['worker_id'=>'555','worker_idcard'=>'4210241983',
+            //获取订单总收入
+            $orderIncomeSummary = array('worker_id'=>'555','worker_idcard'=>'4210241983',
             'finance_settle_apply_man_hour'=>6,'finance_settle_apply_order_money'=>150,
-            'finance_settle_apply_order_cash_money'=>0]);
+            'finance_settle_apply_order_cash_money'=>0);
             $financeSettleApply = new FinanceSettleApply;
             $financeSettleApply->worder_id = $orderIncomeSummary['worker_id'];
             $financeSettleApply->worder_tel = '1380000';
@@ -207,10 +206,12 @@ class FinanceSettleApplyController extends Controller
             $financeSettleApply->finance_settle_apply_money =$orderIncomeSummary['finance_settle_apply_order_money']-$orderIncomeSummary['finance_settle_apply_order_cash_money']+ $financeSettleApply->finance_settle_apply_subsidy;//应结算金额
             $financeSettleApply->finance_settle_apply_cycle = FinanceSettleApply::FINANCE_SETTLE_APPLY_CYCLE_WEEK;//结算周期
             $financeSettleApply->finance_settle_apply_cycle_des = FinanceSettleApply::FINANCE_SETTLE_APPLY_CYCLE_WEEK_DES;//结算周期描述
-            $financeSettleApply->finance_settle_apply_status = 
+            $financeSettleApply->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT;//提交结算申请
             $financeSettleApply->finance_settle_apply_starttime = $settleStartTime;//结算开始日期
             $financeSettleApply->finance_settle_apply_endtime = $settleEndTime;//结算截止日期
             $financeSettleApply->created_at = time();//申请创建时间
+            //获取阿姨的奖励信息
+            
             $transaction =  Yii::$app->db->beginTransaction();
             try{
                 $existCount = FinanceSettleApply::find()->where(['worder_id'=>$financeSettleApply->worder_id,'finance_settle_apply_starttime'=>$settleStartTime,'finance_settle_apply_endtime'=>$settleEndTime])->count();
