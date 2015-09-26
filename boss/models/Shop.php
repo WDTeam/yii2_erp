@@ -42,7 +42,7 @@ class Shop extends \common\models\Shop
      */
     public function getMenagerName()
     {
-        $model = ShopManager::find()->where(['id'=>$this->shop_menager_id])->one();
+        $model = ShopManager::find()->where(['id'=>$this->shop_manager_id])->one();
         return $model->name;
     }
     /**
@@ -87,5 +87,60 @@ class Shop extends \common\models\Shop
         $county = OperationArea::find()->select('area_name')
         ->where(['id'=>$this->county_id])->scalar();
         return $province.$city.$county.$this->street;
+    }
+    /**
+     * 加入黑名单
+     * @param string $cause 原因
+     */
+    public function joinBlacklist($cause='')
+    {
+        $this->is_blacklist = 1;
+        if($this->save()){
+            $status = new ShopStatus();
+            $status->status_number = 1;
+            $status->model_name = ShopStatus::MODEL_SHOP;
+            $status->status_type = 2;
+            $status->created_at = time();
+            $status->cause = $cause;
+            return $status->save();
+        }
+        return false;
+    }
+    /**
+     * 移出黑名单
+     * @param string $cause 原因
+     */
+    public function removeBlacklist($cause='')
+    {
+        $this->is_blacklist = 0;
+        if($this->save()){
+            $status = new ShopStatus();
+            $status->status_number = 0;
+            $status->model_name = ShopStatus::MODEL_SHOP;
+            $status->status_type = 2;
+            $status->created_at = time();
+            $status->cause = $cause;
+            return $status->save();
+        }
+        return false;
+    }
+    /**
+     * 改变审核状态
+     * @param int $number 状态码
+     * @param string $cause 原因
+     */
+    public function changeAuditStatus($number, $cause='')
+    {
+        $this->audit_status = $number;
+        if($this->save()){
+            $status = new ShopStatus();
+            $status->status_number = $this->audit_status;
+            $status->model_name = ShopStatus::MODEL_SHOP;
+            $status->status_type = 1;
+            $status->created_at = time();
+            $status->cause = $cause;
+            return $status->save();
+        }
+        return false;
     }
 }

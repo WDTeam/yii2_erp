@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'name',
-            'shop_menager_id',
+            'shop_manager_id',
             'province_id',
             'city_id',
             'county_id',

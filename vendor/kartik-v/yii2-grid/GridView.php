@@ -417,11 +417,11 @@ HTML;
      * @var array the plugin options for the floatThead plugin that would render
      * the floating/sticky table header behavior. The default offset from the
      * top of the window where the floating header will 'stick' when scrolling down
-     * is set to `50` assuming a fixed bootstrap navbar on top. You can set this to 0
+     * is set to `100` assuming a fixed bootstrap navbar on top. You can set this to 0
      * or any javascript function/expression.
      * @see http://mkoryak.github.io/floatThead#options
      */
-    public $floatHeaderOptions = ['scrollingTop' => 50];
+    public $floatHeaderOptions = ['scrollingTop' => 100];
 
     /**
      * @var array the panel settings. If this is set, the grid widget
