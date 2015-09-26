@@ -86,7 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //           'worder_id',
             'worder_tel',
             'worker_type_name',
-            'created_at', 
+            ['attribute'=>'created_at','content'=>function($model,$key,$index){return Html::a(date('Y:m:d H:i:s',$model->created_at),'#');}],
             'finance_settle_apply_cycle_des',
             'finance_settle_apply_money', 
             'finance_settle_apply_man_hour', 
@@ -96,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['attribute'=>'finance_settle_apply_subsidy',
              'content'=>function($model,$key,$index){return '<a class="btn btn-default"  id = "subsidyButton" data-container="body" data-toggle="popover" data-placement="bottom" data-popover-content="'.$model->id.'">'.$model->finance_settle_apply_subsidy.'</a>';}],
             'finance_settle_apply_reviewer', 
-            'updated_at' ,
+            ['attribute'=>'updated_at','content'=>function($model,$key,$index){return Html::a(date('Y:m:d H:i:s',$model->updated_at),'#');}],
             [
                 'class' => 'yii\grid\ActionColumn',
             ],
