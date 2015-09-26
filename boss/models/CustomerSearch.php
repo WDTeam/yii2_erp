@@ -68,6 +68,8 @@ class CustomerSearch extends Customer
             ->andFilterWhere(['like', 'customer_login_ip', $this->customer_login_ip])
             ->andFilterWhere(['like', 'customer_del_reason', $this->customer_del_reason]);
 
+        $query->orFilterWhere(['like', 'customer_name', $this->customer_name])
+            ->orFilterWhere(['like', 'customer_phone', $this->customer_name]);
         return $dataProvider;
     }
 }

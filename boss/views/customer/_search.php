@@ -40,7 +40,7 @@ use boss\components\AreaCascade;
     <div class='col-md-2'>
         <?php echo $form->field($model, 'created_at')->widget(DatePicker::classname(), [
             'name' => 'created_at', 
-            'value' => date('d-M-Y', strtotime('+1 days')),
+            'value' => date('d-M-Y', strtotime('+0 days')),
             'options' => ['placeholder' => '选择日期'],
             'pluginOptions' => [
                 'format' => 'dd-M-yyyy',
@@ -62,21 +62,7 @@ use boss\components\AreaCascade;
     </div>
 
     <div class='col-md-2'>
-        <?php echo $form->field($model, 'customer_name'); ?>
-    </div>
-
-    <div class='col-md-2'>
-        <?php echo $form->field($model, 'customer_phone'); ?>
-    </div>
-    <div class='col-md-2'>
-        <?php 
-        // echo $form->field($model, 'general_region_id')->widget(AreaCascade::classname(), [
-        //     'model' => $model,
-        //     'options' => ['class' => 'form-control inline'],
-        //     'label' => '住址',
-        //     'grades' => 'town',
-        // ]); 
-        ?>
+        <?php echo $form->field($model, 'customer_name')->label('顾客姓名，电话等'); ?>
     </div>
 
     <?php //echo $form->field($model, 'id') ?>
