@@ -62,7 +62,15 @@ class GeneralPayController extends Controller
         }
 
         //在线支付（online_pay），在线充值（pay）
-        $scenario = empty($data['order_id']) ? 'pay' : 'online_pay';
+        if(empty($data['order_id'])){
+            $scenario = 'pay';
+            //交易方式
+            $data['general_pay_mode'] = 1;//充值
+        }else{
+            $scenario = 'online_pay';
+            //交易方式
+            $data['general_pay_mode'] = 3;//在线支付
+        }
 
         //支付来源
         $data['general_pay_source_name'] = $model->source($data['general_pay_source']);
@@ -80,15 +88,7 @@ class GeneralPayController extends Controller
         }else{
             echo json_encode(['code'=>'-1' , 'msg'=>['alertMsg'=>$model->errors]]);
         }
-/*
-        $dataProvider = new ActiveDataProvider([
-            'query' => GeneralPay::find(),
-        ]);
 
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-        ]);
-    */
     }
 
     /**
@@ -135,12 +135,12 @@ class GeneralPayController extends Controller
                 "discount"=> "0.00",
                 "payment_type"=> "1",
                 "subject"=> "e家洁会员充值",
-                "trade_no"=> "2015092510430816",
+                "trade_no"=> "2015092510165",
                 "buyer_email"=> "lsqpy@163.com",
                 "gmt_create"=> "2015-09-25 21:13:20",
                 "notify_type"=> "trade_status_sync",
                 "quantity"=> "1",
-                "out_trade_no"=> "ali_app_0925_8467_65",
+                "out_trade_no"=> "150925846765",
                 "seller_id"=> "2088801136967007",
                 "notify_time"=> "2015-09-25 21:13:21",
                 "body"=> "e家洁会员充值0.01元",
@@ -156,7 +156,6 @@ class GeneralPayController extends Controller
                 "use_coupon"=> "N",
                 "sign_type"=> "RSA",
                 "sign"=> "T4Bkh9KljoFOTIossu5QtYPRUwj/7by/YLXNQ7efaxe0AwYDjFDFWTFts4h8yq2ceCH8weqYVBklj2btkF2/hKPuUifuJNB6lk8EtHckmJg0MzhGIBAvpteUAo+5Gs+wlI5eS5zmryBskuHOXSM7svb9wNCcL9pHAv8CM06Au+A="
-
             );
             $post = $_POST;
         }else{
@@ -300,6 +299,7 @@ class GeneralPayController extends Controller
         }else{
             $post = $request->get();
         }
+
         //记录日志
         $_post['general_pay_log_price'] = $post['total_amount'];   //支付金额
         $_post['general_pay_log_shop_name'] = '百付宝';   //商品名称
