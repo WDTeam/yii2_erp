@@ -111,10 +111,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ])
             ],
-            // 'worker_count',
-            // 'complain_coutn',
-            // 'level',
-
+            'worker_count',
+            'complain_coutn',
+            'level',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template'=>'{update} {delete} {joinblacklist}',

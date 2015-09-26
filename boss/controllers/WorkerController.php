@@ -168,7 +168,7 @@ class WorkerController extends Controller
         $workerModel = $this->findModel($id);
         $workerVacationmodel = new WorkerVacation();
         if(\Yii::$app->request->post()){
-            echo 1;
+            return $this->redirect(['index']);
         }else{
             return $this->renderAjax('vacation_create',['workerModel'=>$workerModel,'workerVacationModel'=>$workerVacationmodel]);
         }
@@ -180,12 +180,11 @@ class WorkerController extends Controller
      *
      */
     public function actionBlockCreate($id){
-
         $workerModel = $this->findModel($id);
         $workerBlockmodel = new WorkerBlock();
 
         if(\Yii::$app->request->post()){
-            echo 1;
+            return $this->redirect(['index']);
         }else{
             return $this->renderAjax('block_create',['workerModel'=>$workerModel,'workerBlockmodel'=>$workerBlockmodel]);
         }
