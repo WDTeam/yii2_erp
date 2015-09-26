@@ -180,7 +180,6 @@ class WorkerController extends Controller
      *
      */
     public function actionBlockCreate($id){
-
         $workerModel = $this->findModel($id);
         $workerBlockmodel = new WorkerBlock();
 
