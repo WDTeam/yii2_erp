@@ -20,8 +20,8 @@ class bfbpay_class
             'sp_request_type' => 2,                                         //0代表免登陆收银台，1代表登陆版收银台，2代表统一收银台
             'order_create_time' => date("YmdHis"),                          //创建订单的时间
             'order_no' => $param['out_trade_no'],                           //订单ID,
-            'goods_name' => iconv("UTF-8", "GBK", urldecode($param['subject'])),     //商品的名称
-            'goods_desc' => iconv("UTF-8", "GBK", urldecode($param['body'])),        //商品的描述信息
+            'goods_name' => $param['subject'],//iconv("UTF-8", "GBK", urldecode($param['subject'])),     //商品的名称
+            'goods_desc' => $param['body'],//iconv("UTF-8", "GBK", urldecode($param['body'])),        //商品的描述信息
             'total_amount' => $param['general_pay_money'],   //总金额，以分为单位
             'currency' => sp_conf::BFB_INTERFACE_CURRENTCY,                         //币种，默认人民币
             'return_url' => $param['notify_url'],                                   //百度钱包主动通知商户支付结果的URL
