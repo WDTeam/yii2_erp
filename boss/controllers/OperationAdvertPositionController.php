@@ -8,6 +8,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use boss\models\Operation\OperationCity;
 
 /**
  * OperationAdvertPositionController implements the CRUD actions for OperationAdvertPosition model.
@@ -35,9 +36,10 @@ class OperationAdvertPositionController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => OperationAdvertPosition::find(),
         ]);
-
+        $citys = OperationCity::getOnlineCity();
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'citys' => $citys,
         ]);
     }
 
