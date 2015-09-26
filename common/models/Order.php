@@ -84,7 +84,12 @@ class Order extends ActiveRecord
     public function rules()
     {
         return [
-            [['order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'order_before_status_dict_id', 'order_status_dict_id', 'order_flag_send', 'order_flag_urgent', 'order_flag_exception', 'order_service_type_id', 'order_src_id', 'channel_id', 'customer_id', 'order_ip', 'order_booked_begin_time', 'order_booked_end_time', 'order_booked_count', 'address_id', 'order_booked_worker_id', 'order_pay_type', 'pay_channel_id', 'card_id', 'coupon_id', 'promotion_id', 'order_lock_status', 'worker_id', 'worker_type_id', 'order_worker_send_type', 'shop_id', 'comment_id', 'order_customer_hidden', 'invoice_id', 'checking_id', 'admin_id', 'isdel'], 'integer'],
+            [['order_code','order_service_type_id','customer_id', 'order_ip', 'address_id','order_unit_money', 'order_money','order_before_status_name', 'order_status_name', 'order_service_type_name',
+                'order_src_name', 'order_address', 'order_customer_phone','order_booked_begin_time', 'order_booked_end_time'],'required'],
+            [['order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'order_before_status_dict_id', 'order_status_dict_id', 'order_flag_send', 'order_flag_urgent',
+                'order_flag_exception', 'order_service_type_id', 'order_src_id', 'channel_id', 'customer_id', 'order_ip', 'order_booked_begin_time', 'order_booked_end_time', 'order_booked_count',
+                'address_id', 'order_booked_worker_id', 'order_pay_type', 'pay_channel_id', 'card_id', 'coupon_id', 'promotion_id', 'order_lock_status', 'worker_id', 'worker_type_id',
+                'order_worker_send_type', 'shop_id', 'comment_id', 'order_customer_hidden', 'invoice_id', 'checking_id', 'admin_id', 'isdel'], 'integer'],
             [['order_unit_money', 'order_money', 'order_pay_money', 'order_use_acc_balance', 'order_use_card_money', 'order_use_coupon_money', 'order_use_promotion_money', 'order_pop_pay_money'], 'number'],
             [['order_code', 'order_channel_name', 'order_worker_type_name'], 'string', 'max' => 64],
             [['order_before_status_name', 'order_status_name', 'order_service_type_name', 'order_src_name', 'order_pay_channel_name'], 'string', 'max' => 128],
