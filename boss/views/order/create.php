@@ -15,6 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="order-create">
     <div class="order-form">
+        <?=Html::errorSummary($model); ?>
         <?php $form = ActiveForm::begin(['layout'=>'horizontal']); ?>
 
         <div class="panel panel-info">
