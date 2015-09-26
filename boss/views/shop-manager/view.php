@@ -59,8 +59,40 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 'value'=>ShopManager::$bl_types[$model->bl_type],
             ],
-            'create_at:datetime',
-            'update_at:datetime',
+            [
+                'attribute'=>'create_at',
+                'type' => DetailView::INPUT_WIDGET,
+                'widgetOptions' => [
+                    'class' => DateControl::classname(),
+                    'type'=>DateControl::FORMAT_DATE,
+                    'ajaxConversion'=>false,
+                    'displayFormat' => 'php:Y-m-d',
+                    'saveFormat'=>'php:U',
+                    'options' => [
+                        'pluginOptions' => [
+                            'autoclose' => true
+                        ]
+                    ]
+                ],
+                'value'=>date('Y-m-d H:i:s', $model->create_at),
+            ],
+            [
+                'attribute'=>'update_at',
+                'type' => DetailView::INPUT_WIDGET,
+                'widgetOptions' => [
+                    'class' => DateControl::classname(),
+                    'type'=>DateControl::FORMAT_DATE,
+                    'ajaxConversion'=>false,
+                    'displayFormat' => 'php:Y-m-d',
+                    'saveFormat'=>'php:U',
+                    'options' => [
+                        'pluginOptions' => [
+                            'autoclose' => true
+                        ]
+                    ]
+                ],
+                'value'=>date('Y-m-d H:i:s', $model->update_at),
+            ],
             [
                 'attribute' => 'is_blacklist',
                 'type' => DetailView::INPUT_WIDGET,
@@ -69,8 +101,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 'value'=>ShopManager::$is_blacklists[(int)$model->is_blacklist],
             ],
-            'blacklist_time:datetime',
-            'blacklist_cause',
+//             'blacklist_time:datetime',
+//             'blacklist_cause',
             [
                 'attribute' => 'audit_status',
                 'type' => DetailView::INPUT_WIDGET,
@@ -97,8 +129,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'bl_create_time:datetime',
             'bl_photo_url:url',
             'bl_audit',
-            'bl_expiry_start',
-            'bl_expiry_end',
+            'bl_expiry_start:datetime',
+            'bl_expiry_end:datetime',
             'bl_business:ntext',
         ],
         'deleteOptions'=>[

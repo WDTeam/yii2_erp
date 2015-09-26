@@ -8,6 +8,8 @@ use boss\components\AreaCascade;
 use kartik\widgets\Select2;
 use yii\helpers\Url;
 use yii\web\JsExpression;
+use yii\bootstrap\Modal;
+use yii\base\Widget;
 
 /**
  * @var yii\web\View $this
@@ -74,7 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter'=>Shop::$audit_statuses,
             ],
             [
-                'attribute'=>'shop_menager_id',
+                'attribute'=>'shop_manager_id',
                 'value'=>function ($model){
                     return $model->getMenagerName();
                 },
@@ -82,7 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter'=>Select2::widget([
                     'initValueText' => '', // set the initial display text
                     'model'=>$searchModel,
-                    'attribute'=>'shop_menager_id',
+                    'attribute'=>'shop_manager_id',
                     'options'=>[
                         
                     ],
@@ -107,13 +109,31 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template'=>'{update} {delete}',
+                'template'=>'{update} {delete} {joinblacklist}',
                 'buttons' => [
                     'update' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['shop/view', 'id' => $model->id, 'edit' => 't']), [
                             'title' => Yii::t('yii', 'Edit'),
                         ]);
-                    }
+                    },
+                    'joinblacklist' => function ($url, $model) {
+                        return empty($model->is_blacklist)?Html::a('加入黑名单', [
+                            'shop/join-blacklist',
+                            'id' => $model->id
+                        ], [
+                            'title' => Yii::t('app', '加入黑名单'),
+                            'data-toggle'=>'modal',
+                            'data-target'=>'#modal',
+                            'data-id'=>$model->id,
+                            'class'=>'join-list-btn',
+                        ]):Html::a('解除黑名单', [
+                            'shop/remove-blacklist',
+                            'id' => $model->id
+                        
+                        ], [
+                            'title' => Yii::t('app', '解除黑名单'),
+                        ]);
+                    },
                 ],
             ],
         ],
@@ -133,3 +153,14 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); Pjax::end(); ?>
 
 </div>
+<?php echo Modal::widget([
+    'header' => '<h4 class="modal-title">黑名单原因</h4>',
+    'id' =>'modal',
+]);?>
+<?php $this->registerJs(<<<JSCONTENT
+    $('.join-list-btn').click(function(){
+        $('#modal .modal-body').html('加载中……');
+        $('#modal .modal-body').eq(0).load(this.href);
+    });
+JSCONTENT
+);?>

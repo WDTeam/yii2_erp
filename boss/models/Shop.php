@@ -4,6 +4,9 @@ use yii;
 use yii\behaviors\TimestampBehavior;
 use boss\models\Operation\OperationCity;
 use boss\models\Operation\OperationArea;
+use yii\web\HttpException;
+use yii\base\ErrorException;
+use yii\web\BadRequestHttpException;
 class Shop extends \common\models\Shop
 {
     public static $audit_statuses = [
@@ -11,6 +14,7 @@ class Shop extends \common\models\Shop
         1=>'通过',
         2=>'不通过'
     ];
+    public static $is_blacklists = ['否', '是'];
     /**
      * 自动处理创建时间和修改时间
      * @see \yii\base\Component::behaviors()
@@ -35,6 +39,7 @@ class Shop extends \common\models\Shop
             'city_id' => Yii::t('app', '城市'),
             'county_id' => Yii::t('app', '区县'),
             'audit_status' => Yii::t('app', '审核状态'),
+            'is_blacklist'=>Yii::t('app', '是否黑名单'),
         ]);
     }
     /**
@@ -42,7 +47,7 @@ class Shop extends \common\models\Shop
      */
     public function getMenagerName()
     {
-        $model = ShopManager::find()->where(['id'=>$this->shop_menager_id])->one();
+        $model = ShopManager::find()->where(['id'=>$this->shop_manager_id])->one();
         return $model->name;
     }
     /**
@@ -53,6 +58,7 @@ class Shop extends \common\models\Shop
         $model = OperationArea::find()->where(['id'=>$this->city_id])->one();
         return $model->area_name;
     }
+    
     /**
      * 获取审核各状态数据
      * @param int $number
@@ -62,18 +68,10 @@ class Shop extends \common\models\Shop
         return (int)self::find()->where(['audit_status'=>$number])->scalar();
     }
     /**
-     * 获取黑名单数
-     */
-    public static function getIsBlacklistCount()
-    {
-        return (int)self::find()->where(['is_blacklist'=>1])->scalar();
-    }
-    /**
      * 获取地址全称,直辖市不需要显示省字段
      */
     public function getAllAddress()
     {
-    
         $arg = [110000, 120000, 310000, 500000];
         if(in_array($this->province_id, $arg)){
             $province = '';
@@ -87,5 +85,71 @@ class Shop extends \common\models\Shop
         $county = OperationArea::find()->select('area_name')
         ->where(['id'=>$this->county_id])->scalar();
         return $province.$city.$county.$this->street;
+    }
+    /**
+     * 获取黑名单数
+     */
+    public static function getIsBlacklistCount()
+    {
+        return (int)self::find()->where(['is_blacklist'=>1])->scalar();
+    }
+    /**
+     * 加入黑名单
+     * @param string $cause 原因
+     */
+    public function joinBlacklist($cause='')
+    {
+        $this->is_blacklist = 1;
+        if($this->save()){
+            $status = new ShopStatus();
+            $status->status_number = 1;
+            $status->model_name = ShopStatus::MODEL_SHOP;
+            $status->status_type = 2;
+            $status->created_at = time();
+            $status->cause = $cause;
+            return $status->save();
+        }
+        return false;
+    }
+    /**
+     * 移出黑名单
+     * @param string $cause 原因
+     */
+    public function removeBlacklist($cause='')
+    {
+        $sm = ShopManager::find()->where(['id'=>$this->shop_manager_id])->one();
+        if($sm->is_blacklist==1){
+            throw new BadRequestHttpException('所在的小家政未移出黑名单');
+        }
+        $this->is_blacklist = 0;
+        if($this->save()){
+            $status = new ShopStatus();
+            $status->status_number = 0;
+            $status->model_name = ShopStatus::MODEL_SHOP;
+            $status->status_type = 2;
+            $status->created_at = time();
+            $status->cause = $cause;
+            return $status->save();
+        }
+        return false;
+    }
+    /**
+     * 改变审核状态
+     * @param int $number 状态码
+     * @param string $cause 原因
+     */
+    public function changeAuditStatus($number, $cause='')
+    {
+        $this->audit_status = $number;
+        if($this->save()){
+            $status = new ShopStatus();
+            $status->status_number = $this->audit_status;
+            $status->model_name = ShopStatus::MODEL_SHOP;
+            $status->status_type = 1;
+            $status->created_at = time();
+            $status->cause = $cause;
+            return $status->save();
+        }
+        return false;
     }
 }

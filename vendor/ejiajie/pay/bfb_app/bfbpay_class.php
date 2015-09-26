@@ -29,6 +29,7 @@ class bfbpay_class
             'input_charset' => sp_conf::BFB_INTERFACE_ENCODING,                     //请求参数的字符编码
             'version' => sp_conf::BFB_INTERFACE_VERSION,                            //接口的版本号，必须2
             'sign_method' => sp_conf::SIGN_METHOD_MD5,                              //签名方法
+            'key' => 'jukANpzsPnuLVudFwmGJfiyD3NcrEWvX'
         );
         return $parameter;
     }

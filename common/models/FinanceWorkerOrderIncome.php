@@ -36,7 +36,7 @@ class FinanceWorkerOrderIncome extends \yii\db\ActiveRecord
     {
         return [
             [['worder_id', 'finance_worker_order_income_type'], 'required'],
-            [['worder_id', 'order_id', 'finance_worker_order_income_type', 'order_booked_count', 'isSettled', 'finance_settle_apply_id', 'isdel', 'updated_at', 'created_at'], 'integer'],
+            [['worder_id', 'order_id', 'finance_worker_order_income_type','finance_worker_order_complete_time', 'order_booked_count', 'isSettled', 'finance_settle_apply_id', 'isdel', 'updated_at', 'created_at','finance_worker_order_income_starttime','finance_worker_order_income_endtime'], 'integer'],
             [['finance_worker_order_income'], 'number']
         ];
     }
@@ -52,7 +52,10 @@ class FinanceWorkerOrderIncome extends \yii\db\ActiveRecord
             'order_id' => Yii::t('app', '订单id'),
             'finance_worker_order_income_type' => Yii::t('app', '阿姨收入类型，1订单收入（线上支付），2订单收入（现金），3路补，4晚补，5扑空补助,6渠道奖励'),
             'finance_worker_order_income' => Yii::t('app', '阿姨收入'),
+            'finance_worker_order_complete_time' => Yii::t('app', '订单完成时间'),
             'order_booked_count' => Yii::t('app', '预约服务数量，即工时'),
+            'finance_worker_order_income_starttime' => Yii::t('app', '本次结算开始时间'),
+            'finance_worker_order_income_endtime' => Yii::t('app', '本次结算结束时间'),
             'isSettled' => Yii::t('app', '是否已结算，0为未结算，1为已结算'),
             'finance_settle_apply_id' => Yii::t('app', '结算申请Id'),
             'isdel' => Yii::t('app', '是否被删除，0为启用，1为删除'),
