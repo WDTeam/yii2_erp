@@ -39,7 +39,7 @@ class FinanceWorkerNonOrderIncome extends \yii\db\ActiveRecord
             [['worder_id', 'finance_worker_non_order_income_type'], 'required'],
             [['worder_id', 'finance_worker_non_order_income_type', 'finance_worker_non_order_income_starttime', 'finance_worker_non_order_income_endtime', 'finance_worker_non_order_income_isSettled', 'finance_settle_apply_id', 'isdel', 'updated_at', 'created_at'], 'integer'],
             [['finance_worker_non_order_income'], 'number'],
-            [['finance_worker_non_order_income_des'], 'string']
+            [['finance_worker_non_order_income_des','finance_worker_non_order_income_type_des'], 'string']
         ];
     }
 
@@ -52,6 +52,7 @@ class FinanceWorkerNonOrderIncome extends \yii\db\ActiveRecord
             'id' => Yii::t('app', '主键'),
             'worder_id' => Yii::t('app', '阿姨id'),
             'finance_worker_non_order_income_type' => Yii::t('app', '阿姨收入类型，1办卡提成，2推荐服务提成，3全勤奖，4无投诉奖，5日常违规扣款，6投诉处罚扣款，7赔偿扣款,8阿姨任务奖励,9小保养'),
+             'finance_worker_non_order_income_type_des' => Yii::t('app', '阿姨收入类型描述'),
             'finance_worker_non_order_income' => Yii::t('app', '阿姨收入'),
             'finance_worker_non_order_income_des' => Yii::t('app', '阿姨收入描述'),
             'finance_worker_non_order_income_starttime' => Yii::t('app', '本次结算开始时间(统计)，例如：2015.9.1 00:00:00对应的int值'),

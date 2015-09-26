@@ -14,7 +14,8 @@ class m150923_141027_create_table_finance_header extends Migration
 			}
     
 			$this->createTable('{{%finance_header}}', [
-	'id' => Schema::TYPE_PK . '(10) AUTO_INCREMENT COMMENT \'主键\'' ,
+	'id' => Schema::TYPE_PK . '(10) AUTO_INCREMENT COMMENT \'主键\'' ,		
+	'finance_header_key' => Schema::TYPE_SMALLINT . '(2) DEFAULT NULL COMMENT \'对应栏位\'' ,
 	'finance_header_title' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'当前名称\'' ,
     'finance_header_name' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'表头名称\'' ,
 	'finance_order_channel_id' => Schema::TYPE_SMALLINT . '(4) DEFAULT NULL COMMENT \'订单渠道id\'' ,

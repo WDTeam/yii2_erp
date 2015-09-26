@@ -143,11 +143,14 @@ class FinanceHeaderController extends Controller
        	$post['FinanceHeader']['finance_pay_channel_name'] = $paynameinfo;
        	$post['FinanceHeader']['create_time'] = time();
        	$post['FinanceHeader']['is_del'] =0;
+       	$i=0;
        	foreach ($sheetData[1] as $value){
+       		$post['FinanceHeader']['finance_header_key'] =$i;
        		$post['FinanceHeader']['finance_header_name'] = $value;
        		$_model = clone $model;
        		$_model->setAttributes($post['FinanceHeader']);
        		$_model->save();
+       		$i++;
        		unset($post['FinanceHeader']['finance_header_name']);
        	}
        	return $this->redirect(['index']);

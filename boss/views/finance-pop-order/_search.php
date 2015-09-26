@@ -14,19 +14,14 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\widgets\Select2;
-use kartik\widgets\FileInput
-
 ?>
 
 <div class="finance-pop-order-search">
-
     <?php $form = ActiveForm::begin([
+		'options' => ['enctype' => 'multipart/form-data'],
         'action' => ['index'],
-        'method' => 'get',
+        'method' => 'post',
     ]);
-
-    $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); 
-    
     ?>
   
  <div class='col-md-2'>
@@ -42,21 +37,13 @@ use kartik\widgets\FileInput
    
     ?>
      </div>
-    <div class='col-md-2'>
-<div class='col-md-2' style="margin-top: 22px;">
-<?php echo FileInput::widget([
-		'name' => 'finance_header_url',
-		'options' => ['multiple' => true],
-		'pluginOptions' => ['previewFileType' => 'any']
-		]);
-
-?>
-</div>
+    <div class='col-md-3'>
+      <?= $form->field($model, 'finance_uplod_url')->fileInput(['maxlength' => true]) ?>
     </div> 
     <div class="form-group">
     <div class='col-md-2' style="    margin-top: 22px;">
-        <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
+        <?= Html::submitButton(Yii::t('app', '提交'), ['class' => 'btn btn-primary']) ?>
+        <?= Html::resetButton(Yii::t('app', '重置'), ['class' => 'btn btn-default']) ?>
     </div>
 </div>
     <?php ActiveForm::end(); ?>
