@@ -147,6 +147,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ]);?>
 <?php $this->registerJs(<<<JSCONTENT
     $('.join-list-btn').click(function(){
+        $('#modal .modal-body').html('加载中……');
         $('#modal .modal-body').eq(0).load(this.href);
     });
 JSCONTENT
