@@ -162,9 +162,9 @@ class FinanceSettleApplyController extends Controller
     *   按收入类型分组的订单总金额，保存到结算表
     */
     public function actionPartTimeWorkerCycleSettlement(){
-        $settleStartTime = date('Y-m-d 00:00:00', strtotime('first day this week -7 day'));;//统计开始时间,上周第一天
+        $settleStartTime = date('Y-m-d 00:00:00', strtotime('-1 week last monday'));;//统计开始时间,上周第一天
         echo $settleStartTime.'------';
-        $settleEndTime = date('Y-m-d 23:59:59', strtotime('last day this week -7 day'));//统计结束时间,上周最后一天
+        $settleEndTime = date('Y-m-d 23:59:59', strtotime('last sunday'));//统计结束时间,上周最后一天
         echo $settleEndTime.'------';
         //获取阿姨的数组信息
         $partimeWorkerArr = array(['worker_id'=>'555','worker_name'=>'阿姨1','worker_idcard'=>'4210241983','worker_bank_card'=>'62217978'],['worker_id'=>'666','worker_name'=>'阿姨2','worker_idcard'=>'4210241984','worker_bank_card'=>'622174747']);
