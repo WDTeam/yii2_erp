@@ -41,6 +41,8 @@ return [
     'Hello, {name}' => '你好,{name}',
 
     'System' => '系统',
+    'System Users'=>'系统用户',
+    'Create System User'=>'创建系统用户',
     'Settings' => '设置',
     'User' => '用户',
     'Users' => '用户',

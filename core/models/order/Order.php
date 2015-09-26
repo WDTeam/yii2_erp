@@ -104,6 +104,12 @@ class Order extends OrderModel
                 'order_pop_pay_money' => 0,
                 'shop_id' => 0,
                 'order_worker_type_name' => 0,
+
+                'pay_channel_id'=>0,//支付渠道id
+                'order_pay_channel_name'=>'',//支付渠道
+                'order_pay_flow_num'=>'',//支付流水号
+                'order_pay_money'=>0,//支付金额
+
                 'invoice_id' => 0, //发票id 用户需求中有开发票就绑定发票id
                 'checking_id' => 0,
                 'isdel' => 0,
