@@ -184,7 +184,7 @@ class GeneralPay extends \yii\db\ActiveRecord
         $param = array(
             "body"	=> $this->body(),
             "out_trade_no"	=> $this->create_out_trade_no(),
-            "general_pay_money"	=> $this->toMoney($this->general_pay_money,100,false),
+            "general_pay_money"	=> $this->toMoney($this->general_pay_money,100,true),
             'time_start' => date("YmdHis"),
             'time_expire' => date("YmdHis", time() + 600000),
             "trade_type" => "APP",
@@ -193,7 +193,12 @@ class GeneralPay extends \yii\db\ActiveRecord
         );
         $class = new \wxpay_class();
         $msg = $class->get($param);
-        echo json_encode(['code'=>'ok','msg'=>$msg]);
+        if($msg['return_code'] == 'FAIL'){
+            echo json_encode(['code'=>'-1','msg'=>$msg]);
+        }else{
+            echo json_encode(['code'=>'ok','msg'=>$msg]);
+        }
+
 
     }
 
@@ -220,6 +225,7 @@ class GeneralPay extends \yii\db\ActiveRecord
             'general_pay_money'=>$this->toMoney($this->general_pay_money,100,false),
             'notify_url'=>$this->notify_url('bfb-app'),
         );
+
         $class = new \bfbpay_class();
         $msg = $class->get($param);
         echo json_encode(['code'=>'ok','msg'=>$msg]);
