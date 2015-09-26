@@ -108,6 +108,7 @@ class GeneralPay extends \yii\db\ActiveRecord
         call_user_func(__CLASS__ .'::'.$this->pay_type);
     }
 
+
     /**
      * @param $source_id    来源ID
      * @return string   来源名称
