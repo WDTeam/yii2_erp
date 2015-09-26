@@ -35,7 +35,8 @@ class Order extends OrderModel
             [['order_before_status_name', 'order_status_name', 'order_service_type_name', 'order_src_name', 'order_pay_channel_name'], 'string', 'max' => 128],
             [['order_channel_order_num', 'order_address', 'order_customer_need', 'order_customer_memo', 'order_cs_memo', 'order_pay_flow_num'], 'string', 'max' => 255],
             [['order_customer_phone'], 'string', 'max' => 16],
-            [['order_booked_begin_time', 'order_booked_end_time'], 'date', 'format'=>'yyyy-MM-dd HH:mm:ss'],
+//            [['order_booked_begin_time', 'order_booked_end_time'], 'date', 'format'=>'yyyy-MM-dd HH:mm:ss'],
+            [['order_booked_begin_time', 'order_booked_end_time'], 'safe'],
 
         ];
     }
@@ -130,41 +131,39 @@ class Order extends OrderModel
     public function doSave($statusChanged = false)
     {
         $transaction = static::getDb()->beginTransaction(); //开启一个事务
-        if ($this->validate($this->attributes)) {
-            $this->order_booked_begin_time = strtotime($this->order_booked_begin_time);
-            $this->order_booked_end_time = strtotime($this->order_booked_end_time);
-            if ($this->save(false)) {
-                $attributes = $this->attributes;
-                foreach ($attributes as $k => $v) {
-                    $attributes[$k] = ($v === null) ? '' : $v;
-                }
-                $attributes['order_id'] = $attributes['id'];
-                $attributes['order_created_at'] = $attributes['created_at'];
-                $attributes['order_updated_at'] = $attributes['updated_at'];
-                $attributes['order_isdel'] = $attributes['isdel'];
-                unset($attributes['id']);
-                unset($attributes['created_at']);
-                unset($attributes['updated_at']);
-                unset($attributes['isdel']);
+        $this->order_booked_begin_time = strtotime($this->order_booked_begin_time);
+        $this->order_booked_end_time = strtotime($this->order_booked_end_time);
+        if ($this->save()) {
+            $attributes = $this->attributes;
+            foreach ($attributes as $k => $v) {
+                $attributes[$k] = ($v === null) ? '' : $v;
+            }
+            $attributes['order_id'] = $attributes['id'];
+            $attributes['order_created_at'] = $attributes['created_at'];
+            $attributes['order_updated_at'] = $attributes['updated_at'];
+            $attributes['order_isdel'] = $attributes['isdel'];
+            unset($attributes['id']);
+            unset($attributes['created_at']);
+            unset($attributes['updated_at']);
+            unset($attributes['isdel']);
 
-                //插入订单操作历史
-                $orderHistory = new OrderHistory();
-                $orderHistory->setAttributes($attributes);
-                if ($statusChanged) { //订单状态有改动
-                    //插入订单状态变更历史
-                    $orderStatusHistory = new OrderStatusHistory();
-                    $orderStatusHistory->setAttributes($attributes);
-                    if (!$orderStatusHistory->save()) {
-                        $transaction->rollBack(); //插入不成功就回滚事务
-                        return false;
-                    }
+            //插入订单操作历史
+            $orderHistory = new OrderHistory();
+            $orderHistory->setAttributes($attributes);
+            if ($statusChanged) { //订单状态有改动
+                //插入订单状态变更历史
+                $orderStatusHistory = new OrderStatusHistory();
+                $orderStatusHistory->setAttributes($attributes);
+                if (!$orderStatusHistory->save()) {
+                    $transaction->rollBack(); //插入不成功就回滚事务
+                    return false;
                 }
-                if (!$orderHistory->save()) {
-                    $transaction->rollBack();//插入不成功就回滚事务
-                } else {
-                    $transaction->commit();
-                    return true;
-                }
+            }
+            if (!$orderHistory->save()) {
+                $transaction->rollBack();//插入不成功就回滚事务
+            } else {
+                $transaction->commit();
+                return true;
             }
         }
         return false;

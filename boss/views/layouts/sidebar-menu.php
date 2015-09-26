@@ -117,7 +117,7 @@ echo Menu::widget(
 							],
 							'items' => [
 							[
-							'label' => '对账(50%)',
+							'label' => '对账(70%)',
 							'url' => ['/finance-pop-order/'],
 							'icon' => 'fa fa-angle-right',
 							],[

@@ -131,7 +131,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'title' => Yii::t('yii', '封号'),
                             'data-toggle' => 'modal',
                             'data-target' => '#blockModal',
-                            'class'=>'blockModal',
+                            'class'=>'block',
                             'data-id'=>$model->id,
                         ]);
                     }
