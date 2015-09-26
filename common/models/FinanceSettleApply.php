@@ -30,6 +30,14 @@ use Yii;
  */
 class FinanceSettleApply extends \yii\db\ActiveRecord
 {
+    const FINANCE_SETTLE_APPLY_CYCLE_WEEK=1;//周结
+    
+    const FINANCE_SETTLE_APPLY_CYCLE_WEEK_DES="周结";//周结描述
+    
+    const FINANCE_SETTLE_APPLY_CYCLE_MONTH=2;//月结
+    
+    const FINANCE_SETTLE_APPLY_CYCLE_MONTH_DES="月结";//月结描述
+    
     /**
      * @inheritdoc
      */
