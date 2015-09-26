@@ -46,6 +46,8 @@ class AreaCascade extends \yii\widgets\InputWidget
     private $county_id;
     private $town_id;
     public $is_minui; //最小UI，不包含label
+    
+    public $attribute='city_id';
 
 
     public function init() {

@@ -153,7 +153,7 @@ class ShopManagerController extends Controller
             $model->joinBlacklist($cause);
             return $this->redirect(['index']);
         }
-        return $this->renderPartial('join_blacklist',[
+        return $this->renderAjax('join_blacklist',[
             'model'=>$model
         ]);
         
