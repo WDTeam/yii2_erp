@@ -22,7 +22,7 @@ use kartik\tabs\TabsX;
      Pjax::begin();
     $ertyy= GridView::widget([
      		'dataProvider' => $dataProvider,
-     		'filterModel' => $searchModel,
+     		//'filterModel' => $searchModel,
      		'columns' => [
      		['class' => 'yii\grid\SerialColumn'],
      
