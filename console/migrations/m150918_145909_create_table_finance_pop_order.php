@@ -41,8 +41,10 @@ class m150918_145909_create_table_finance_pop_order extends Migration
 		  'finance_pop_order_check_id' => Schema::TYPE_SMALLINT. '(3) DEFAULT NULL  COMMENT \'操作人id\'',
 		  'finance_pop_order_finance_time'  => Schema::TYPE_INTEGER . '(10) DEFAULT NULL COMMENT \'财务对账提交时间\'',
 		 'finance_pop_order_pay_status_type'  => Schema::TYPE_SMALLINT . '(2) DEFAULT NULL COMMENT \'1 金额比对成功 2 三有我没有 3 我有三没有 4 金额比对失败 5 状态不对的\'',
-		  'create_time' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL  COMMENT \'增加时间\'',
-		  'is_del' => Schema::TYPE_SMALLINT . '(1) NOT NULL DEFAULT \'0\' COMMENT \'0 正常 1 删除\'',
+		'finance_order_channel_statuspayment' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL  COMMENT \'开始账期\'',
+		'finance_order_channel_endpayment' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL  COMMENT \'结束账期\'',
+		'create_time' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL  COMMENT \'增加时间\'',
+	    'is_del' => Schema::TYPE_SMALLINT . '(1) NOT NULL DEFAULT \'0\' COMMENT \'0 正常 1 删除\'',
     			], $tableOptions);
     }
 

@@ -23,8 +23,9 @@ use kartik\widgets\Select2; // or kartik\select2\Select2
     $form = ActiveForm::begin([
         'type' => ActiveForm::TYPE_HORIZONTAL,
         'formConfig' => ['labelSpan' => 3, 'deviceSize' => ActiveForm::SIZE_SMALL],
+        //'action'=>['block-create', 'id'=>$workerBlockmodel->id]
     ]);
-    echo $form->field($workerModel, 'worker_name');
+    echo $form->field($workerModel, 'worker_name')->textInput(['disabled' => true]);
 
     echo $form->field($workerBlockmodel, 'worker_block_reason');
 
