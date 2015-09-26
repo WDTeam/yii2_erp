@@ -16,7 +16,7 @@ use core\models\Operation\CoreOperationShopDistrictCoordinate;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationShopDistrictCoordinate extends \yii\db\ActiveRecord
+class OperationShopDistrictCoordinate extends CoreOperationShopDistrictCoordinate
 {
     /**
      * @inheritdoc
@@ -25,7 +25,8 @@ class OperationShopDistrictCoordinate extends \yii\db\ActiveRecord
     {
         return [
             [['operation_city_id', 'created_at', 'updated_at'], 'integer'],
-            [['operation_shop_district_latitude_longitude'], 'string'],
+//            [['operation_shop_district_latitude_longitude'], 'string'],
+            [['operation_shop_district_name'], 'string', 'max' => 60],
             [['operation_shop_district_name'], 'string', 'max' => 60],
             [['operation_city_name'], 'string', 'max' => 50]
         ];

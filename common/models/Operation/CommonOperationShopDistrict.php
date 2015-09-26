@@ -21,7 +21,7 @@ class CommonOperationShopDistrict extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%operation-shop-district}}';
+        return '{{%operation_shop_district}}';
     }
     
 }
