@@ -8,6 +8,7 @@ use yii\web\JsExpression;
 use yii\helpers\Url;
 use boss\models\Shop;
 use boss\components\AreaCascade;
+use common\components\BankHelper;
 
 /**
  * @var yii\web\View $this
@@ -55,9 +56,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'=>$model->getMenagerName(),
             ],
             [
+                'attribute'=>'city_id',
                 'label'=>'地址',
                 'value'=>$model->getAllAddress(),
                 'type' => DetailView::INPUT_WIDGET,
+                'widgetOptions'=>[
+                    'class'=>AreaCascade::className(),
+                    'model' => $model,
+                    'options' => ['class' => 'form-control inline'],
+                    'label' =>'选择城市',
+                    'grades' => 'county',
+                    'is_minui'=>true,
+                ],
             ],
 //             'province_id',
 //             'city_id',
@@ -66,11 +76,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'principal',
             'tel',
             'other_contact',
-            'bankcard_number',
-            'account_person',
-            'opening_bank',
-            'sub_branch',
-            'opening_address',
+            
+            
             [
                 'attribute'=>'create_at',
                 'type' => DetailView::INPUT_WIDGET,
@@ -132,6 +139,23 @@ $this->params['breadcrumbs'][] = $this->title;
             'worker_count',
             'complain_coutn',
             'level',
+            //银行信息
+            [
+            'attribute'=>'opening_bank',
+            'type' => DetailView::INPUT_WIDGET,
+            'widgetOptions' => [
+                'class'=>\kartik\widgets\Select2::className(),
+                'data' =>BankHelper::getBankNames(),
+                'hideSearch' => false,
+                'options'=>[
+                    'placeholder' => '选择银行',
+                ]
+            ],
+            ],
+            'sub_branch',
+            'opening_address',
+            'bankcard_number',
+            'account_person',
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],

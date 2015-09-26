@@ -27,7 +27,8 @@ use yii\base\Widget;
 /**
  * 
  */
-class AreaCascade extends Widget{
+class AreaCascade extends \kartik\base\InputWidget
+{
 
     const _PROVINCE_ = '选择省(直辖市)';
     const _CITY_ = '选择城市';
@@ -38,7 +39,7 @@ class AreaCascade extends Widget{
     public $options;
     public $label;
     public $grades = 'town';
-    private $name;
+    public $name;
     private $html;
     private $province_id;
     private $city_id;
