@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "09a1f30fee764e5fed1a187a8eb66208",
+    "hash": "f341103198d54ebde97045c18bd0a8c4",
     "packages": [
         {
             "name": "2amigos/yii2-date-picker-widget",
@@ -3044,6 +3044,102 @@
             "time": "2015-01-13 15:55:32"
         },
         {
+            "name": "yii2tech/ar-softdelete",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yii2tech/ar-softdelete.git",
+                "reference": "d62def6057c4b1b3cd3ff464b2fba347666191d6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://packagist.phpcomposer.com/files/yii2tech/ar-softdelete/d62def6057c4b1b3cd3ff464b2fba347666191d6.zip",
+                "reference": "d62def6057c4b1b3cd3ff464b2fba347666191d6",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "yii2tech\\ar\\softdelete\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Paul Klimov",
+                    "email": "klimov.paul@gmail.com"
+                }
+            ],
+            "description": "Provides support for ActiveRecord soft delete in Yii2",
+            "keywords": [
+                "active",
+                "delete",
+                "record",
+                "smart",
+                "soft",
+                "yii2"
+            ],
+            "time": "2015-08-17 19:23:10"
+        },
+        {
+            "name": "yii2tech/crontab",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yii2tech/crontab.git",
+                "reference": "2e07d919ac9ccc21c869839347d7216c16325de4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://packagist.phpcomposer.com/files/yii2tech/crontab/2e07d919ac9ccc21c869839347d7216c16325de4.zip",
+                "reference": "2e07d919ac9ccc21c869839347d7216c16325de4",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "yii2tech\\crontab\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Paul Klimov",
+                    "email": "klimov.paul@gmail.com"
+                }
+            ],
+            "description": "Crontab support extension for the Yii2 framework",
+            "keywords": [
+                "cron",
+                "cronjob",
+                "crontab",
+                "yii2"
+            ],
+            "time": "2015-06-18 14:01:20"
+        },
+        {
             "name": "yiisoft/yii2",
             "version": "2.0.6",
             "source": {
@@ -3737,7 +3833,9 @@
         "pjkui/kindeditor": 20,
         "crazyfd/yii2-qiniu": 20,
         "kartik-v/yii2-dynagrid": 20,
-        "marekpetras/yii2-calendarview-widget": 20
+        "marekpetras/yii2-calendarview-widget": 20,
+        "yii2tech/ar-softdelete": 20,
+        "yii2tech/crontab": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
