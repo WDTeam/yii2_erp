@@ -4,7 +4,7 @@ namespace boss\controllers;
 use Yii;
 use common\models\FinanceOrderChannel;
 use boss\models\FinanceOrderChannelSearch;
-use boss\components\Controller;
+use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -35,7 +35,7 @@ class FinanceOrderChannelController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-           // 'searchModel' => $searchModel
+            'searchModel' => $searchModel
         ]);
         
         

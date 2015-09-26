@@ -16,7 +16,7 @@ namespace boss\controllers;
 use Yii;
 use common\models\FinancePopOrder;
 use boss\models\FinancePopOrderSearch;
-use boss\components\Controller;
+use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
@@ -299,12 +299,22 @@ class FinancePopOrderController extends Controller
     * @return:
     **/
     public function actionBillinfo(){
-    	 
+    	
+    	$ordedata= new FinanceOrderChannel;
+    	$ordewhere['is_del']=0;
+    	$ordewhere['finance_order_channel_is_lock']=1;
+    	$payatainfo=$ordedata::find()->where($ordewhere)->asArray()->all();
+    	foreach ($payatainfo as $errt){
+    		$tyd[]=$errt['id'];
+    		$tydtui[]=$errt['finance_order_channel_name'];
+    	}
+    	$tyu= array_combine($tyd,$tydtui);
     	$searchModel = new FinancePopOrderSearch;
     	$dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
     	return $this->render('billinfo', [
     			'dataProvider' => $dataProvider,
     			'searchModel' => $searchModel,
+    			'ordedatainfo' => $tyu,
     			]);
     	 
     }

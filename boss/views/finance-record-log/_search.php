@@ -66,7 +66,7 @@ use kartik\date\DatePicker;
     
     ?>
   </div>   
-    <?php//  echo $form->field($model, 'create_time') ?>
+    <?php //  echo $form->field($model, 'create_time') ?>
 
     <?php // echo $form->field($model, 'is_del') ?>
 
