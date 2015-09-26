@@ -29,6 +29,19 @@ class Shop extends \common\models\Shop
             ],
         ];
     }
+    public function rules()
+    {
+        return array_merge(parent::rules(),[
+            [['name', 'street', 'principal', 'tel'], 'required'],
+            [['shop_manager_id', 'province_id', 'city_id', 'county_id', 'is_blacklist', 
+                'blacklist_time', 'audit_status', 'worker_count', 
+                'complain_coutn', 'tel', 'bankcard_number'], 'integer'],
+            [['name', 'account_person'], 'string', 'max' => 100],
+            [['street', 'opening_address', 'blacklist_cause'], 'string', 'max' => 255],
+            [['principal', 'tel', 'bankcard_number', 'level'], 'string', 'max' => 50],
+            [['other_contact', 'opening_bank', 'sub_branch'], 'string', 'max' => 200],
+        ]);
+    }
     /**
      * @inheritdoc
      */
