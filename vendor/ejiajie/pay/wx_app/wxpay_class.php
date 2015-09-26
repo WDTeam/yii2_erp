@@ -13,7 +13,7 @@ class wxpay_class extends WxPayNotify{
     public function get($param){
         $input = new WxPayUnifiedOrder();
         $input->SetBody($param['body']);
-        $input->SetAttach("test");
+        $input->SetAttach($param['goods_tag']);
         $input->SetOut_trade_no($param['out_trade_no']);
         $input->SetTotal_fee($param['general_pay_money']);
         $input->SetTime_start($param['time_start']);
@@ -24,8 +24,11 @@ class wxpay_class extends WxPayNotify{
         $order = WxPayApi::unifiedOrder($input);
 
 
-        $order["body"]	= $param['body'];
+
         $order["out_trade_no"]	= $param['out_trade_no'];
+        //var_dump($order);
+        /*
+        $order["body"]	= $param['body'];
         $order["total_fee"]	= $param['general_pay_money'];
         $order["attach"]	= $param['goods_tag'];
         $order["trade_type"]	= $param['trade_type'];
@@ -34,6 +37,7 @@ class wxpay_class extends WxPayNotify{
         $order['notify_url'] = $param['notify_url'];
         $order['time_start'] = $param['time_start'];
         $order['time_expire'] = $param['time_expire'];
+        */
         return $order;
     }
 

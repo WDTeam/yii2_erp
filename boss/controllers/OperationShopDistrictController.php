@@ -4,6 +4,7 @@ namespace boss\controllers;
 
 use Yii;
 use boss\models\Operation\OperationShopDistrict;
+use boss\models\Operation\OperationShopDistrictCoordinate;
 use boss\models\Operation\OperationCity;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -102,6 +103,7 @@ class OperationShopDistrictController extends Controller
     {
         $model = $this->findModel($id);
         $post = Yii::$app->request->post();
+        $OperationShopDistrictCoordinate = new OperationShopDistrictCoordinate();
         if(!empty($post)){
             $post['OperationShopDistrict']['updated_at'] = time();
         }
@@ -111,6 +113,7 @@ class OperationShopDistrictController extends Controller
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'OperationShopDistrictCoordinate' => $OperationShopDistrictCoordinate,
             ]);
         }
     }

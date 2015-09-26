@@ -44,7 +44,7 @@ use yii\web\JsExpression;
             <label class="control-label" for="workersearch-worker_work_city">小家政</label>
             <?php echo Select2::widget([
                 'initValueText' => '', // set the initial display text
-                'attribute'=>'shop_menager_id',
+                'attribute'=>'shop_manager_id',
                 'model'=>$model,
                 'options' => [],
                 'pluginOptions' => [

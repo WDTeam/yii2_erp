@@ -263,6 +263,36 @@ echo Menu::widget(
                         'label' => 'CMS管理(30%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
+                        'options' => [
+                            'class' => 'treeview active',
+                        ],
+                        'items' => [
+                            [
+                                'label' => '平台管理',
+                                'url' => ['/operation-platform'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                            [
+                                'label' => '系统版本管理',
+                                'url' => ['/operation-platform-version'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                            [
+                                'label' => '广告位置管理',
+                                'url' => ['/operation-advert-position'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                            [
+                                'label' => '活动内容管理',
+                                'url' => ['/operation-advert-content'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                            [
+                                'label' => '广告发布',
+                                'url' => ['/operation-advert-release'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                        ]
                     ],
                     [
                         'label' => '通知管理(0%)',
