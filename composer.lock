@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "829075c2bc1780f8ffe243f27677b655",
+    "hash": "09a1f30fee764e5fed1a187a8eb66208",
     "packages": [
         {
             "name": "2amigos/yii2-date-picker-widget",
@@ -1251,7 +1251,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-dynagrid/zipball/8ed61fa996c949b233e3c3f241f24e91da76d95e",
+                "url": "https://api.github.com/repos/kartik-v/yii2-dynagrid/zipball/4f04a97458a49907984ab8919351544f98cd98b8",
                 "reference": "8ed61fa996c949b233e3c3f241f24e91da76d95e",
                 "shasum": ""
             },
@@ -3456,6 +3456,51 @@
                 "fixtures"
             ],
             "time": "2015-05-29 06:29:14"
+        },
+        {
+            "name": "jamband/yii2-schemadump",
+            "version": "v0.9.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jamband/yii2-schemadump.git",
+                "reference": "8d0409daf84a772beb15249178470145cbc2aaaa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jamband/yii2-schemadump/zipball/8d0409daf84a772beb15249178470145cbc2aaaa",
+                "reference": "8d0409daf84a772beb15249178470145cbc2aaaa",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "jamband\\schemadump\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tomoki Morita",
+                    "email": "tmsongbooks215@gmail.com",
+                    "homepage": "http://jamband.github.io/"
+                }
+            ],
+            "description": "Generate the schema from an existing database",
+            "homepage": "https://github.com/jamband/yii2-schemadump",
+            "keywords": [
+                "command",
+                "extesion",
+                "generator",
+                "migration",
+                "yii2"
+            ],
+            "time": "2015-05-02 13:07:54"
         },
         {
             "name": "phpspec/php-diff",

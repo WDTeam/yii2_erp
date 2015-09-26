@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
-use dosamigos\datepicker\DatePicker;
+use kartik\widgets\DateTimePicker;
 
 /**
  * @var yii\web\View $this
@@ -43,18 +43,28 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <?php $model->order_booked_worker_id=0; //默认值
                 echo $form->field($model, 'order_booked_worker_id')->radioList(['0'=>'不指定']) ?>
+
                 <?= $form->field($model, 'order_booked_count')->dropDownList(["120"=>"两小时","150"=>"两个半小时","180"=>"三小时","210"=>"三个半小时","240"=>"四小时","270"=>"四个半小时","300"=>"五小时","330"=>"五个半小时","360"=>"六小时"])->label('预约服务时长') ?>
                 <?= $form->field($model, 'order_booked_begin_time')->widget(
-                    DatePicker::className(), [
-                    'inline' => true,
-                    'template' => '<div class="well well-sm" style="background-color: #fff; width:250px">{input}</div>',
-                    'clientOptions' => [
-                        'autoclose' => true,
-                        'format' => 'yyyy-mm-dd'
+                    DateTimePicker::className(), [
+                    'pluginOptions' => [
+                        'autoclose'=>true,
+                        'format' => 'yyyy-mm-dd hh:ii',
+                        'startDate' => date('Y-m-d'),
+                        'hoursDisabled' => '0,1,2,3,4,5,6,7,21,22,23',
+                        'minuteStep' => 30,
                     ]
                 ]);?>
-                <?= $form->field($model, 'order_booked_begin_time')->textInput(['maxlength' => true]) ?>
-                <?= $form->field($model, 'order_booked_end_time')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'order_booked_end_time')->widget(
+                    DateTimePicker::className(), [
+                    'pluginOptions' => [
+                        'autoclose'=>true,
+                        'format' => 'yyyy-mm-dd hh:ii',
+                        'startDate' => date('Y-m-d'),
+                        'hoursDisabled' => '0,1,2,3,4,5,6,7,21,22,23',
+                        'minuteStep' => 30,
+                    ]
+                ]);?>
                 <?= $form->field($model, 'shop_id')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model, 'order_worker_type_name')->textInput(['maxlength' => true]) ?>
             </div>
