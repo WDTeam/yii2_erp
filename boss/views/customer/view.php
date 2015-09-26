@@ -120,7 +120,7 @@ echo DetailView::widget([
             'attribute'=>'customer_live_address_detail', 
             'label'=>'接单地址',
             'format'=>'raw',
-            'value'=> $order_addresses,
+            'value'=> $addressStr,
             'type'=>DetailView::INPUT_SWITCH,
             'valueColOptions'=>['style'=>'width:90%']
         ],

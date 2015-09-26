@@ -140,32 +140,70 @@ class CustomerController extends Controller
             ])->one();
 
         //订单地址
+        $addressStr = '';
         $address_count = CustomerAddress::find()->where([
             'customer_id'=>$model->id,
             ])->count();
-        $customerAddress = CustomerAddress::find()->where([
+        $customerDefaultAddress = CustomerAddress::find()->where([
             'customer_id'=>$model->id,
             'customer_address_status'=>1])->one();
-        $general_region_id = $customerAddress->general_region_id;
-        $general_region = GeneralRegion::find()->where([
-            'id'=>$general_region_id,
-            ])->one();
-        if ($address_count <= 0) {
-            $order_addresses = '-';
+        if ($customerDefaultAddress) {
+            $general_region_id = $customerDefaultAddress->general_region_id;
+            $general_region = GeneralRegion::find()->where([
+                'id'=>$general_region_id,
+                ])->one();
+
+            $default = [
+                'province'=>$general_region->general_region_province_name,
+                'city'=>$general_region->general_region_city_name,
+                'area'=>$general_region->general_region_area_name,
+                'detail'=>$customerDefaultAddress->customer_address_detail,
+                'phone'=>$customerDefaultAddress->customer_address_phone,
+                ];
         }
-        if ($address_count == 1) {
-            $order_addresses =  $general_region->general_region_province_name 
-            . $general_region->general_region_city_name 
-            . $general_region->general_region_area_name
-            . $customerAddress->customer_address_detail;
+        
+
+        $customerAddresses = CustomerAddress::find()->where([
+            'customer_id'=>$model->id,
+            'customer_address_status'=>0
+            ])->asArray()->all();
+
+        $others = [];
+        if ($customerAddresses) {
+            foreach ($customerAddresses as $k => $customerAddress) {
+                $general_region_id = $customerAddress->general_region_id;
+                $general_region = CustomerAddress::find()->where([
+                    'id'=>$general_region_id
+                    ])->one();
+                $others[$k]['province'] = $general_region->general_region_province_name;
+                $others[$k]['city'] = $general_region->general_region_city_name;
+                $others[$k]['area'] = $general_region->general_region_area_name;
+                $others[$k]['detail'] = $customerAddress->customer_address_detail;
+                $others[$k]['phone'] = $customerAddress->customer_address_phone;
+            }
+
+            $addressStr = $default['province'].$default['city'].$default['area'].$default['detail']."(".$detail['phone'].")<br/>";
+            foreach ($others as $k => $other) {
+                $addressStr .= $other['province'].$other['city'].$other['area'].$other['detail']."(".$other['phone'].")<br/>";
+            }
         }
-        if ($address_count > 1) {
-            $order_addresses = $general_region->general_region_province_name 
-            . $general_region->general_region_city_name 
-            . $general_region->general_region_area_name
-            . $customerAddress->customer_address_detail
-            . '...';
-        }
+        
+        // if ($address_count <= 0) {
+        //     $order_addresses = '-';
+        // }
+        // if ($address_count == 1) {
+        //     $order_addresses =  $general_region->general_region_province_name 
+        //     . $general_region->general_region_city_name 
+        //     . $general_region->general_region_area_name
+        //     . $customerAddress->customer_address_detail;
+        // }
+        // if ($address_count > 1) {
+        //     $order_addresses = $general_region->general_region_province_name 
+        //     . $general_region->general_region_city_name 
+        //     . $general_region->general_region_area_name
+        //     . $customerAddress->customer_address_detail
+        //     . '...';
+        // }
 
         //订单数量
         $order_count = Order::find()->where([
@@ -180,7 +218,10 @@ class CustomerController extends Controller
                 'customerPlatform'=>$customerPlatform, 
                 'customerChannal'=>$customerChannal,
                 'generalRegion'=>$generalRegion,
-                'order_addresses'=>$order_addresses,
+                // 'order_addresses'=>$order_addresses,
+                // 'default'=>$default,
+                // 'others'=>$others,
+                'addressStr'=>$addressStr,
                 'order_count'=>$order_count,
                 ]);
         }

@@ -60,8 +60,6 @@ class FinanceSettleApplyController extends Controller
         //结算id字符串，例如："234,345"
         $ids = $financeSettleApplySearch["ids"];
         $financeSettleApplyStatus = $financeSettleApplySearch["finance_settle_apply_status"];
-        var_dump($ids);
-        var_dump($financeSettleApplyStatus);
         $idArr = explode(',', $ids);
         foreach($idArr as $id){
             $model = $this->findModel($id);

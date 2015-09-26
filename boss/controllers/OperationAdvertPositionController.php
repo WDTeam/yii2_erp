@@ -42,6 +42,22 @@ class OperationAdvertPositionController extends Controller
             'citys' => $citys,
         ]);
     }
+    
+    public function actionCityAdvertPosition(){
+        $city_id = Yii::$app->request->post('city_id');
+        if($city_id == 'all'){
+            $dataProvider = new ActiveDataProvider([
+                'query' => OperationAdvertPosition::find(),
+            ]);
+        }else{
+            $dataProvider = new ActiveDataProvider([
+                'query' => OperationAdvertPosition::find()->where(['operation_city_id' => $city_id]),
+            ]);
+        }
+        return $this->renderPartial('city-advert-position', [
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 
     /**
      * Displays a single OperationAdvertPosition model.

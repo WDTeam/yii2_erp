@@ -77,18 +77,33 @@ class OperationShopDistrictController extends Controller
     {
         $model = new OperationShopDistrict;
         $post = Yii::$app->request->post();
+        $OperationShopDistrictCoordinate = new OperationShopDistrictCoordinate();
         if(!empty($post)){
+            $cityname = OperationCity::getCityName($this->city_id);
             $post['OperationShopDistrict']['operation_city_id'] = $this->city_id;
-            $post['OperationShopDistrict']['operation_city_name'] = OperationCity::getCityName($this->city_id);
+            $post['OperationShopDistrict']['operation_city_name'] = $cityname;
             $post['OperationShopDistrict']['created_at'] = time();
             $post['OperationShopDistrict']['updated_at'] = time();
         }
         if ($model->load($post) && $model->save()) {
+            $coordinate = array();
+            $coordinate['operation_shop_district_id'] = $model->id;
+            $coordinate['operation_shop_district_name'] = $post['OperationShopDistrict']['operation_shop_district_name'];
+            $coordinate['operation_city_id'] = $this->city_id;
+            $coordinate['operation_city_name'] = $cityname;
+            $coordinate['operation_shop_district_coordinate_start_longitude'] = $post['OperationShopDistrictCoordinate']['operation_shop_district_coordinate_start_longitude'];
+            $coordinate['operation_shop_district_coordinate_start_latitude'] = $post['OperationShopDistrictCoordinate']['operation_shop_district_coordinate_start_latitude'];
+            $coordinate['operation_shop_district_coordinate_end_longitude'] = $post['OperationShopDistrictCoordinate']['operation_shop_district_coordinate_end_longitude'];
+            $coordinate['operation_shop_district_coordinate_end_latitude'] = $post['OperationShopDistrictCoordinate']['operation_shop_district_coordinate_end_latitude'];
+            $coordinate['created_at'] = time();
+            $coordinate['updated_at'] = time();
+            OperationShopDistrictCoordinate::setShopDistrictCoordinate($coordinate);
 //            return $this->redirect(['view', 'id' => $model->id]);
             return $this->redirect(['index']);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'OperationShopDistrictCoordinate' => $OperationShopDistrictCoordinate,
             ]);
         }
     }
@@ -106,11 +121,26 @@ class OperationShopDistrictController extends Controller
         $OperationShopDistrictCoordinate = new OperationShopDistrictCoordinate();
         if(!empty($post)){
             $post['OperationShopDistrict']['updated_at'] = time();
+            $post['OperationShopDistrict']['operation_shop_district_status'] = 1;
         }
         if ($model->load($post) && $model->save()) {
+            $coordinate = array();
+            $coordinate['operation_city_id'] = $this->city_id;
+            $coordinate['operation_city_name'] = OperationCity::getCityName($this->city_id);
+            $coordinate['operation_shop_district_coordinate_start_longitude'] = $post['OperationShopDistrictCoordinate']['operation_shop_district_coordinate_start_longitude'];
+            $coordinate['operation_shop_district_coordinate_start_latitude'] = $post['OperationShopDistrictCoordinate']['operation_shop_district_coordinate_start_latitude'];
+            $coordinate['operation_shop_district_coordinate_end_longitude'] = $post['OperationShopDistrictCoordinate']['operation_shop_district_coordinate_end_longitude'];
+            $coordinate['operation_shop_district_coordinate_end_latitude'] = $post['OperationShopDistrictCoordinate']['operation_shop_district_coordinate_end_latitude'];
+            $coordinate['updated_at'] = time();
+            OperationShopDistrictCoordinate::upShopDistrictCoordinate($coordinate, $model->id);
 //            return $this->redirect(['view', 'id' => $model->id]);
             return $this->redirect(['index']);
         } else {
+            $OperationShopDistrictCoordinateList = OperationShopDistrictCoordinate::getShopDistrictCoordinate($id);
+            $OperationShopDistrictCoordinate->operation_shop_district_coordinate_start_longitude = $OperationShopDistrictCoordinateList['operation_shop_district_coordinate_start_longitude'];
+            $OperationShopDistrictCoordinate->operation_shop_district_coordinate_start_latitude = $OperationShopDistrictCoordinateList['operation_shop_district_coordinate_start_latitude'];
+            $OperationShopDistrictCoordinate->operation_shop_district_coordinate_end_longitude = $OperationShopDistrictCoordinateList['operation_shop_district_coordinate_end_longitude'];
+            $OperationShopDistrictCoordinate->operation_shop_district_coordinate_end_latitude = $OperationShopDistrictCoordinateList['operation_shop_district_coordinate_end_latitude'];
             return $this->render('update', [
                 'model' => $model,
                 'OperationShopDistrictCoordinate' => $OperationShopDistrictCoordinate,
