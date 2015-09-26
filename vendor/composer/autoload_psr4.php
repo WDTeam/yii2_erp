@@ -16,6 +16,7 @@ return array(
     'yii\\codeception\\' => array($vendorDir . '/yiisoft/yii2-codeception'),
     'yii\\bootstrap\\' => array($vendorDir . '/yiisoft/yii2-bootstrap'),
     'yii\\' => array($vendorDir . '/yiisoft/yii2'),
+    'yii2tech\\crontab\\' => array($vendorDir . '/yii2tech/crontab'),
     'yii2tech\\ar\\softdelete\\' => array($vendorDir . '/yii2tech/ar-softdelete'),
     'warrence\\kartikgii\\' => array($vendorDir . '/warrence/yii2-kartikgii'),
     'pjkui\\kindeditor\\' => array($vendorDir . '/pjkui/kindeditor'),

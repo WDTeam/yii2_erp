@@ -480,4 +480,13 @@ return array (
       '@yii2tech/ar/softdelete' => $vendorDir . '/yii2tech/ar-softdelete',
     ),
   ),
+  'yii2tech/crontab' => 
+  array (
+    'name' => 'yii2tech/crontab',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@yii2tech/crontab' => $vendorDir . '/yii2tech/crontab',
+    ),
+  ),
 );
