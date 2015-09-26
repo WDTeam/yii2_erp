@@ -8,6 +8,7 @@ use kartik\widgets\Select2;
 use yii\helpers\Url;
 use yii\web\JsExpression;
 use boss\models\ShopManager;
+use yii\bootstrap\Modal;
 
 /**
  * @var yii\web\View $this
@@ -98,9 +99,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]);
                     },
                     'joinblacklist' => function ($url, $model) {
-                        return empty($model->is_blacklist)?Html::a('加入黑名单', Yii::$app->urlManager->createUrl(['shop-manager/join-blacklist','id' => $model->id]), [
+                        return empty($model->is_blacklist)?Html::a('加入黑名单', ['shop-manager/view','id' => $model->id], [
                             'title' => Yii::t('app', '加入黑名单'),
-                        ]):Html::a('解除黑名单', Yii::$app->urlManager->createUrl(['shop-manager/remove-blacklist','id' => $model->id]), [
+                            'data-toggle'=>'modal',
+                            'data-target'=>'#modal',
+                            'data-remote'=>'shop-manager/view',
+                        ]):Html::a('解除黑名单', ['shop-manager/remove-blacklist','id' => $model->id], [
                             'title' => Yii::t('app', '解除黑名单'),
                         ]);
                     },
@@ -123,5 +127,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'showFooter' => false
         ],
     ]); Pjax::end(); ?>
-
+    
+    <?php
+    Modal::begin([
+        'header' => '<h4 class="modal-title">黑名单原因</h4>',
+        'id' =>'modal',
+    ]);
+    //echo $this->render('_search', ['model' => $searchModel]);
+    Modal::end();
+    ?>
 </div>
