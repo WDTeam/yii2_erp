@@ -7,7 +7,7 @@ use boss\models\Operation\OperationBootPage;
 use boss\models\Operation\OperationCity;
 use boss\models\Operation\OperationBootPageCity;
 use yii\data\ActiveDataProvider;
-use yii\web\Controller;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;

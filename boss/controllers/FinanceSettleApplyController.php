@@ -5,7 +5,7 @@ namespace boss\controllers;
 use Yii;
 use common\models\FinanceSettleApply;
 use boss\models\FinanceSettleApplySearch;
-use yii\web\Controller;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\FinanceWorkerOrderIncome;
@@ -37,8 +37,11 @@ class FinanceSettleApplyController extends Controller
         $searchModel = new FinanceSettleApplySearch;
         $defaultParams = array('FinanceSettleApplySearch'=>['finance_settle_apply_status' => '0']);
         $requestParams = Yii::$app->request->getQueryParams();
-        $requestModel = $requestParams['FinanceSettleApplySearch'];
-        $nodeId =$requestModel['nodeId'];
+        $nodeId = null;
+        if(isset($requestParams['FinanceSettleApplySearch'])){
+            $requestModel = $requestParams['FinanceSettleApplySearch'];
+            $nodeId =$requestModel['nodeId'];
+        }
         $requestParams = array_merge($defaultParams,$requestParams);
         $dataProvider = $searchModel->search($requestParams);
         return $this->render('index', [

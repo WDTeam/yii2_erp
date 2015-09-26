@@ -310,37 +310,11 @@ class GeneralPay extends \yii\db\ActiveRecord
      */
     private function create_out_trade_no()
     {
-        if(empty($this->id) && empty($this->general_pay_source)) return false;
-        //判断支付方式
-        switch($this->general_pay_source){
-            case 1:
-                $out_trade_no = 'wx_app';
-                break;
-            case 2:
-                $out_trade_no = 'wx_h5';
-                break;
-            case 3:
-                $out_trade_no = 'bfb_app';
-                break;
-            case 4:
-                $out_trade_no = 'up_app';
-                break;
-            case 5:
-                $out_trade_no = 'ali_app';
-                break;
-            case 6:
-                $out_trade_no = 'ali_web';
-                break;
-            case 8:
-                $out_trade_no = 'zdh_h5';
-                break;
-            default:
-                $out_trade_no = 'default';
-        }
+        if(empty($this->id)) return false;
         //组装支付订单号
         $rand = mt_rand(1000,9999);
-        $date = date("md",time());
-        return $out_trade_no.'_'.$date.'_'.$rand.'_'.$this->id;
+        $date = date("ymd",time());
+        return $date.$rand.$this->id;
     }
 
     /**
@@ -362,8 +336,7 @@ class GeneralPay extends \yii\db\ActiveRecord
      */
     public function getGeneralPayId($out_trade_no)
     {
-        $on = explode('_',$out_trade_no);
-        return array_pop($on);
+        return substr($out_trade_no,10);
     }
 
     /**
