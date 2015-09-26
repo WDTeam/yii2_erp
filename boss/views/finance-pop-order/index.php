@@ -3,7 +3,8 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
-
+use kartik\nav\NavX;
+use yii\bootstrap\NavBar;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -14,74 +15,21 @@ $this->title = Yii::t('app', '对账管理');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="finance-pop-order-index">
-    <div class="page-header">
-            <h1><?= Html::encode($this->title) ?></h1>
+      <div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="glyphicon glyphicon-upload"></i> 上传对账单</h3>
     </div>
-    
-   
+    <div class="panel-body">
+        <?php  echo $this->render('_search', ['model' => $searchModel,'odrinfo'=>$payatainfo,'ordedat' => $ordedatainfo]); ?>
+    </div>
+    </div>
     <?php  //echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <div class="finance-pop-order-search">
-    <form id="w0" action="/finance-pop-order/index" method="get">
-    <div class="form-group field-financepopordersearch-id">
-<label class="control-label">对账名称</label>
-<select>
-<option value="1">美团团购</option>
-<option value="2" >大众点评</option>
-<option value="3" >京东到家</option>
-</select>
-<div class="help-block"></div>
 </div>
-
-
-<div class="form-group field-financepopordersearch-id">
-<label class="control-label">支付渠道</label>
-
-<select>
-<option value="1">微信支付</option>
-<option value="2" >支付宝支付</option>
-<option value="3" >银联支付</option>
-</select>
-
-<div class="help-block"></div>
-</div>
-
-  <div class="form-group field-financepopordersearch-id">
-<label class="control-label">上传第三方账单</label>
-<input type="file" name="filename" />
-<div class="help-block"></div>
-</div>
-
-
-</div>
-    <p>
-    
-   <?php  echo Html::a(Yii::t('app', '{modelClass}', [
-    'modelClass' => '提交',
-]), ['create'], ['class' => 'btn btn-success'])  ?>
-         </p> 
-         </form>
-          <p> 
-           <?php  echo Html::a(Yii::t('app', '{modelClass}', [
-    'modelClass' => '显示第三方成功订单',
-]), ['create'], ['class' => 'btn btn-info'])  ?>
-           
-        <?php  echo Html::a(Yii::t('app', '{modelClass}', [
-    'modelClass' => '显示第三方失败订单',
-]), ['create'], ['class' => 'btn btn-success'])  ?>
-        
-        
-        
- 
     <?php Pjax::begin();
-    
-    
-    //var_dump($dataProvider->getData()); exit;
-    
     
      echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\CheckboxColumn'],
      		
@@ -133,12 +81,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
         'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).'</h3>',
-            'type'=>'primary',
+            'type'=>'info',
 
-           'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> 添加', ['create'], ['class' => 'btn btn-success']),    
-             // 'before'=>Html::a('<i class="glyphicon glyphicon-repeat"></i>批量处理', ['index'], ['class' => 'btn btn-info']),
-                                                                                                                                        			'after'=>Html::a('<i class="glyphicon glyphicon-repeat"></i> 重置', ['index'], ['class' => 'btn btn-info']),
-			
+           'before'=>Html::a('<i class="glyphicon" ></i>对账成功单', ['index?WorkerSearch[worker_auth_status]=0'], ['class' => 'btn btn-info ', 'style' => 'margin-right:10px']) .
+Html::a('<i class="glyphicon" ></i>我有你没有 ', ['index?WorkerSearch[worker_ontrial_status]=0'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
+Html::a('<i class="glyphicon" ></i>你有我没有 ', ['index?WorkerSearch[worker_onboard_status]=0'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
+Html::a('<i class="glyphicon" ></i>金额不对单 ', ['index?WorkerSearch[worker_rule_id]=1'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
+Html::a('<i class="glyphicon" ></i>状态不对单', ['index?WorkerSearch[worker_rule_id]=2'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']),
             'showFooter'=>false,
         ],
     ]); Pjax::end();

@@ -158,13 +158,14 @@ class GeneralPayController extends Controller
         $GeneralPayLogModel->writeLog($post);
 
         //记录日志
-        $_post['general_pay_log_price'] = $post['total_fee'];   //支付金额
-        $_post['general_pay_log_shop_name'] = $post['subject'];   //商品名称
-        $_post['general_pay_log_eo_order_id'] = $post['out_trade_no'];   //订单ID
-        $_post['general_pay_log_transaction_id'] = $post['buyer_id'];   //交易流水号
-        $_post['general_pay_log_status_bool'] = $post['trade_status'];   //支付状态
-        $_post['general_pay_log_status'] = $post['trade_status'];   //支付状态
-        $GeneralPayLogModel->insertLog($_post);
+        $GeneralPayLogModel->general_pay_log_price = $post['total_fee'];   //支付金额
+        $GeneralPayLogModel->general_pay_log_shop_name = $post['subject'];   //商品名称
+        $GeneralPayLogModel->general_pay_log_eo_order_id = $post['out_trade_no'];   //订单ID
+        $GeneralPayLogModel->general_pay_log_transaction_id = $post['buyer_id'];   //交易流水号
+        $GeneralPayLogModel->general_pay_log_status_bool = $GeneralPayLogModel->statusBool($post['trade_status']);   //支付状态
+        $GeneralPayLogModel->general_pay_log_status = $post['trade_status'];   //支付状态
+        $GeneralPayLogModel->general_pay_log_json_aggregation = json_encode($post);
+        $GeneralPayLogModel->insertLog();
 
         //实例化模型
         $model = new GeneralPay();
@@ -181,7 +182,7 @@ class GeneralPayController extends Controller
             //验证签名
             $alipay = new \alipay_class;
             $verify_result = $alipay->callback();
-            
+
             if(!empty($_GET['debug'])){
                 $verify_result = true;
             }
@@ -193,7 +194,7 @@ class GeneralPayController extends Controller
                 $model->general_pay_transaction_id = $post['trade_no'];
                 $model->general_pay_is_coupon = 1;
                 $model->general_pay_eo_order_id = $post['out_trade_no'];
-                $model->general_pay_verify = md5(1);
+                $model->general_pay_verify = $model->makeSign();
 
                 if($model->save(false)) $status = true;
             }

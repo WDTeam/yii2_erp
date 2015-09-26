@@ -24,4 +24,9 @@ class CoreOperationCity extends CommonOperationCity
         }
         return $d;
     }
+
+    public static function getCityName($city_id){
+        $data = self::find()->select(['city_name'])->asArray()->where(['operation_city_is_online' => '1'])->One();
+        return $data['city_name'];
+    }
 }

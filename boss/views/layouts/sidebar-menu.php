@@ -150,11 +150,11 @@ echo Menu::widget(
 							],
 							'items' => [
 							[
-							'label' => '对账(30%)',
+							'label' => '对账(50%)',
 							'url' => ['/finance-pop-order/'],
 							'icon' => 'fa fa-angle-right',
 							],[
-							'label' => '对账统计(30%)',
+							'label' => '对账统计(40%)',
 							'url' => ['/finance-record-log/'],
 							'icon' => 'fa fa-angle-right',
 							],[
@@ -162,19 +162,15 @@ echo Menu::widget(
 							'url' => ['/finance-pop-order/billinfo'],
 							'icon' => 'fa fa-angle-right',
 							],[
-							'label' => '对账单配置(0%)',
-							'url' => ['/finance-pop-order/comparisonconfig'],
-							'icon' => 'fa fa-angle-right',
-							],[
 							'label' => '增加账单配置(85%)',
 							'url' => ['/finance-header/index'],
 							'icon' => 'fa fa-angle-right',
 							],[
 							'label' => '坏账列表(70%)',
-							'url' => ['/finance-pop-order/badlist'],
+							'url' => ['/finance-pop-order/billinfo'],
 							'icon' => 'fa fa-angle-right',
 							],[
-							'label' => '渠道管理(80%)',
+							'label' => '渠道管理(85%)',
 							'url' => ['/finance-order-channel/'],
 							'icon' => 'fa fa-angle-right',
 							]
@@ -267,6 +263,36 @@ echo Menu::widget(
                         'label' => 'CMS管理(30%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
+                        'options' => [
+                            'class' => 'treeview active',
+                        ],
+                        'items' => [
+                            [
+                                'label' => '平台管理',
+                                'url' => ['/operation-platform'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                            [
+                                'label' => '系统版本管理',
+                                'url' => ['/operation-platform-version'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                            [
+                                'label' => '广告位置管理',
+                                'url' => ['/operation-advert-position'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                            [
+                                'label' => '活动内容管理',
+                                'url' => ['/operation-advert-content'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                            [
+                                'label' => '广告发布',
+                                'url' => ['/operation-advert-release'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                        ]
                     ],
                     [
                         'label' => '通知管理(0%)',
@@ -293,11 +319,12 @@ echo Menu::widget(
                         'url' => ['/operation-city'],
                         'icon' => 'fa fa-angle-right',
                     ],
-                    [
-                        'label' => '商圈管理(40%)',
-                        'url' => ['/operation-shop-district'],
-                        'icon' => 'fa fa-angle-right',
-                    ],
+//                    [
+//
+//                        'label' => '商圈管理(40%)',
+//                        'url' => ['/operation-shop-district'],
+//                        'icon' => 'fa fa-angle-right',
+//                    ],
 //                    [
 //                        'label' => '服务管理',
 //                        'url' => ['#'],
@@ -313,12 +340,7 @@ echo Menu::widget(
                         'url' => ['/operation-boot-page'],
                         'icon' => 'fa fa-angle-right',
                     ],
-                    [
-                        'label' => '价格策略管理(90%)',
-                        'url' => ['/operation-price-strategy'],
-                        'icon' => 'fa fa-angle-right',
-                    ],
-                    [
+                    /**[
                         'label' => '引导页管理(0%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
@@ -327,11 +349,11 @@ echo Menu::widget(
                         'label' => '话术管理(0%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
-                    ],
+                    ],*/
                 ],
             ],
             [
-                'label' => '供应商管理(0%)',
+                'label' => '供应商管理',
                 'url' => ['#'],
                 'icon' => 'fa fa-ambulance',
                 'options' => [
@@ -381,7 +403,7 @@ echo Menu::widget(
                 ],
             ],
             [
-                'label' => '小家政管理(50%)',
+                'label' => '小家政管理(60%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-slideshare',
                 'options' => [
@@ -389,12 +411,12 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有家政公司(70%)',
+                        'label' => '查看所有家政公司(80%)',
                         'url' => ['shop-manager/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '添加新家政公司(80%)',
+                        'label' => '添加新家政公司(70%)',
                         'url' => ['shop-manager/create'],
                         'icon' => 'fa fa-angle-right',
                     ],

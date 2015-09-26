@@ -33,14 +33,16 @@ class UploadFile extends Widget{
     public function upfile(){
         $qiniu = new Qiniu();
         $qiniu->uploadFile($this->file['tmp_name'], $this->key);
-        $this->dest_path = $qiniu->getLink($this->key);
+        $this->dest_path = $qiniu->getLink($this->key);//.'?e='. $this->getUnixTime();
+//        $token = $qiniu->Sign($downUrl);
+////        $token = $qiniu->accessToken($downUrl);
+////        $token = '2JcEasZbcnt02g3BAKO6s_gFoTEDqk5hlGOzYuD7:'.$token;
+//        $this->dest_path = $downUrl.'&token='.$token;
     }
     
-    public function getUrl($path, $SecretKey){
-        $Sign = hmac_sha1($path, 'MY_SECRET_KEY');
-        $bs = base64_encode(Sign);
+    public function getUnixTime(){
+        return time()+86400*365;
     }
-
 
     public function getFile(){
         $this->file = $_FILES[$this->fileInputName];
