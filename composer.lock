@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "829075c2bc1780f8ffe243f27677b655",
+    "hash": "08671fef7f478daf5052ed67b375249d",
     "packages": [
         {
             "name": "2amigos/yii2-date-picker-widget",
@@ -3456,6 +3456,51 @@
                 "fixtures"
             ],
             "time": "2015-05-29 06:29:14"
+        },
+        {
+            "name": "jamband/yii2-schemadump",
+            "version": "v0.9.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jamband/yii2-schemadump.git",
+                "reference": "8d0409daf84a772beb15249178470145cbc2aaaa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://packagist.phpcomposer.com/files/jamband/yii2-schemadump/8d0409daf84a772beb15249178470145cbc2aaaa.zip",
+                "reference": "8d0409daf84a772beb15249178470145cbc2aaaa",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "jamband\\schemadump\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tomoki Morita",
+                    "email": "tmsongbooks215@gmail.com",
+                    "homepage": "http://jamband.github.io/"
+                }
+            ],
+            "description": "Generate the schema from an existing database",
+            "homepage": "https://github.com/jamband/yii2-schemadump",
+            "keywords": [
+                "command",
+                "extesion",
+                "generator",
+                "migration",
+                "yii2"
+            ],
+            "time": "2015-05-02 13:07:54"
         },
         {
             "name": "phpspec/php-diff",

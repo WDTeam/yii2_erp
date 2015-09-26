@@ -16,9 +16,7 @@
  */
 require_once("lib/alipay_notify.class.php");
 class alipay_class{
-    public function __construct(){
-
-    }
+    public function __construct(){}
 
     public function get($param){
         require_once("alipay.config.php");

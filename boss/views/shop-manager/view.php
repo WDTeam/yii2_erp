@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use kartik\detail\DetailView;
 use kartik\datecontrol\DateControl;
+use boss\models\ShopManager;
+use boss\components\AreaCascade;
 
 /**
  * @var yii\web\View $this
@@ -27,16 +29,68 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'name',
-            'province_id',
-            'city_id',
-            'county_id',
+//             [
+//                 'type'=>DetailView::INPUT_WIDGET,
+//                 'widgetOptions' => [
+//                     'class'=>AreaCascade::className(),
+//                     'model' => $model,
+//                     'attribute'=>'city_id',
+//                     'options' => ['class' => 'form-control inline'],
+//                     'label' =>'选择城市',
+//                     'grades' => 'county',
+//                 ],
+//             ],
             'street',
             'principal',
             'tel',
             'other_contact',
-
             'bl_name',
-            'bl_type',
+            [
+                'attribute' => 'bl_type',
+                'type' => DetailView::INPUT_WIDGET,
+                'widgetOptions' => [
+                    'name'=>'worker_type',
+                    'class'=>\kartik\widgets\Select2::className(),
+                    'data' => ShopManager::$bl_types,
+                    'hideSearch' => true,
+                    'options'=>[
+                        'placeholder' => '选择类型',
+                    ]
+                ],
+                'value'=>ShopManager::$bl_types[$model->bl_type],
+            ],
+            'create_at:datetime',
+            'update_at:datetime',
+            [
+                'attribute' => 'is_blacklist',
+                'type' => DetailView::INPUT_WIDGET,
+                'widgetOptions' => [
+                    'class' => \kartik\widgets\SwitchInput::classname()
+                ],
+                'value'=>ShopManager::$is_blacklists[(int)$model->is_blacklist],
+            ],
+            'blacklist_time:datetime',
+            'blacklist_cause',
+            [
+                'attribute' => 'audit_status',
+                'type' => DetailView::INPUT_WIDGET,
+                'widgetOptions' => [
+                    'name'=>'worker_type',
+                    'class'=>\kartik\widgets\Select2::className(),
+                    'data' => ShopManager::$audit_statuses,
+                    'hideSearch' => true,
+                    'options'=>[
+                        'placeholder' => '选择状态',
+                    ]
+                ],
+                'value'=>ShopManager::$audit_statuses[$model->audit_status],
+            ],
+            'shop_count',
+            'worker_count',
+            'complain_coutn',
+            'level',
+            
+            
             'bl_number',
             'bl_person',
             'bl_address',
@@ -46,23 +100,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'bl_expiry_start',
             'bl_expiry_end',
             'bl_business:ntext',
-            'create_at',
-            'update_at',
-            'is_blacklist',
-            'blacklist_time:datetime',
-            'blacklist_cause',
-            'audit_status',
-            'shop_count',
-            'worker_count',
-            'complain_coutn',
-            'level',
         ],
         'deleteOptions'=>[
-        'url'=>['delete', 'id' => $model->id],
-        'data'=>[
-        'confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'),
-        'method'=>'post',
-        ],
+            'url'=>['delete', 'id' => $model->id],
+            'data'=>[
+                'confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'),
+                'method'=>'post',
+            ],
         ],
         'enableEditMode'=>true,
     ]) ?>

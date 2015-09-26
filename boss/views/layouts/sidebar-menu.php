@@ -263,6 +263,36 @@ echo Menu::widget(
                         'label' => 'CMS管理(30%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
+                        'options' => [
+                            'class' => 'treeview active',
+                        ],
+                        'items' => [
+                            [
+                                'label' => '平台管理',
+                                'url' => ['/operation-platform'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                            [
+                                'label' => '系统版本管理',
+                                'url' => ['/operation-platform-version'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                            [
+                                'label' => '广告位置管理',
+                                'url' => ['/operation-advert-position'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                            [
+                                'label' => '活动内容管理',
+                                'url' => ['/operation-advert-content'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                            [
+                                'label' => '广告发布',
+                                'url' => ['/operation-advert-release'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                        ]
                     ],
                     [
                         'label' => '通知管理(0%)',
@@ -289,16 +319,12 @@ echo Menu::widget(
                         'url' => ['/operation-city'],
                         'icon' => 'fa fa-angle-right',
                     ],
-                    [
-<<<<<<< HEAD
-                        'label' => '商圈管理(10%)',
-                        'url' => ['#'],
-=======
-                        'label' => '商圈管理(40%)',
-                        'url' => ['/operation-shop-district'],
->>>>>>> 806ca6dd8ee88f8ff1422d2ac1ce9ac74825d996
-                        'icon' => 'fa fa-angle-right',
-                    ],
+//                    [
+//
+//                        'label' => '商圈管理(40%)',
+//                        'url' => ['/operation-shop-district'],
+//                        'icon' => 'fa fa-angle-right',
+//                    ],
 //                    [
 //                        'label' => '服务管理',
 //                        'url' => ['#'],
@@ -314,7 +340,7 @@ echo Menu::widget(
                         'url' => ['/operation-boot-page'],
                         'icon' => 'fa fa-angle-right',
                     ],
-                    [
+                    /**[
                         'label' => '引导页管理(0%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
@@ -323,7 +349,7 @@ echo Menu::widget(
                         'label' => '话术管理(0%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
-                    ],
+                    ],*/
                 ],
             ],
             [

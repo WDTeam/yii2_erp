@@ -79,8 +79,8 @@ class OperationCityController extends Controller
             $p['OperationCity']['city_name'] = $city->area_name;
         }
         if ($model->load($p)) {
-            $path = UploadFile::widget(['fileInputName' => 'file']);
-            echo $path;exit;
+//            $path = UploadFile::widget(['fileInputName' => 'file']);
+//            echo $path;exit;
 //            print_r($_FILES);exit;
             $model->created_at = time();
             $model->updated_at = time();
