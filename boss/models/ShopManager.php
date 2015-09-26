@@ -5,17 +5,26 @@ use yii\behaviors\TimestampBehavior;
 use boss\models\Operation\OperationArea;
 class ShopManager extends \common\models\ShopManager
 {
+    /**
+     * 营业执照注册类型
+     */
     public static $bl_types = [
         1=>'个体户',
         2=>'商户'
     ];
-    
+    /**
+     * 审核状态
+     */
     public static $audit_statuses = [
         0=>'待审核',
         1=>'通过',
         2=>'不通过'
     ];
     public static $is_blacklists = ['否', '是'];
+    /**
+     * 黑名单原因
+     */
+    public $blacklist_cause='';
     /**
      * 自动处理创建时间和修改时间
      * @see \yii\base\Component::behaviors()
@@ -39,7 +48,7 @@ class ShopManager extends \common\models\ShopManager
             [['name', 'street', 'principal', 'tel'], 'required'],
             [['province_id', 'city_id', 'county_id', 'bl_type', 'bl_create_time', 'bl_audit', 'bl_expiry_start', 'bl_expiry_end', 'create_at', 'update_at', 'is_blacklist', 'blacklist_time', 'audit_status', 'shop_count', 'worker_count', 'complain_coutn'], 'integer'],
             [['bl_business'], 'string'],
-            [['name', 'street', 'opening_address', 'bl_name', 'bl_address', 'bl_photo_url', 'blacklist_cause'], 'string', 'max' => 255],
+            [['name', 'street', 'opening_address', 'bl_name', 'bl_address', 'bl_photo_url'], 'string', 'max' => 255],
             [['principal', 'tel', 'bankcard_number', 'bl_person', 'level'], 'string', 'max' => 50],
             [['other_contact', 'opening_bank', 'sub_branch', 'bl_number'], 'string', 'max' => 200],
             [['account_person'], 'string', 'max' => 100],

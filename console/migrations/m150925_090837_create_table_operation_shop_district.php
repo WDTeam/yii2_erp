@@ -16,7 +16,6 @@ class m150925_090837_create_table_operation_shop_district extends Migration
             'operation_city_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'城市编号\'',
             'operation_city_name' => Schema::TYPE_STRING . '(50) DEFAULT NULL COMMENT \'城市名称\'',
             'operation_shop_district_status' => Schema::TYPE_INTEGER . '(1) DEFAULT 1 COMMENT \'是否已上线(1: 未上线 2: 已上线)\'',
-            'operation_shop_district_latitude_longitude' => Schema::TYPE_TEXT . ' DEFAULT NULL COMMENT \'商圈经纬度（序列化存储）\'',
             'created_at' => Schema::TYPE_INTEGER. '(11) DEFAULT NULL COMMENT \'创建时间\'',
             'updated_at' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'编辑时间\'',
         ], $tableOptions);

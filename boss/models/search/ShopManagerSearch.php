@@ -16,7 +16,7 @@ class ShopManagerSearch extends ShopManager
     {
         return [
             [['id', 'province_id', 'city_id', 'county_id', 'bl_type', 'bl_create_time', 'bl_audit', 'bl_expiry_start', 'bl_expiry_end', 'create_at', 'update_at', 'is_blacklist', 'blacklist_time', 'audit_status', 'shop_count', 'worker_count', 'complain_coutn'], 'integer'],
-            [['name', 'street', 'principal', 'tel', 'other_contact', 'bankcard_number', 'account_person', 'opening_bank', 'sub_branch', 'opening_address', 'bl_name', 'bl_number', 'bl_person', 'bl_address', 'bl_photo_url', 'bl_business', 'blacklist_cause', 'level'], 'safe'],
+            [['name', 'street', 'principal', 'tel', 'other_contact', 'bankcard_number', 'account_person', 'opening_bank', 'sub_branch', 'opening_address', 'bl_name', 'bl_number', 'bl_person', 'bl_address', 'bl_photo_url', 'bl_business', 'level'], 'safe'],
         ];
     }
 
@@ -74,7 +74,6 @@ class ShopManagerSearch extends ShopManager
             ->andFilterWhere(['like', 'bl_address', $this->bl_address])
             ->andFilterWhere(['like', 'bl_photo_url', $this->bl_photo_url])
             ->andFilterWhere(['like', 'bl_business', $this->bl_business])
-            ->andFilterWhere(['like', 'blacklist_cause', $this->blacklist_cause])
             ->andFilterWhere(['like', 'level', $this->level]);
         
         $query->orFilterWhere(['like', 'principal', $this->name])
