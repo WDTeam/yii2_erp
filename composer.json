@@ -39,7 +39,7 @@
         "marekpetras/yii2-calendarview-widget": "dev-master",
         "phpoffice/phpexcel": "^1.8",
         "2amigos/yii2-date-picker-widget": "*",
-        "linslin/yii2-curl": "*"
+        "kartik-v/yii2-widget-datetimepicker": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

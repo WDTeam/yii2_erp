@@ -161,4 +161,12 @@ class Order extends ActiveRecord
         ];
     }
 
+    public function init()
+    {
+        $class = get_class($this);
+        if(!in_array($class,['core\models\order\Order','core\models\order\OrderSearch'])){
+            echo '非法调用！';
+            exit(0);
+        }
+    }
 }

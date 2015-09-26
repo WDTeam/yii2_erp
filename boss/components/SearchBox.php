@@ -36,7 +36,7 @@ namespace boss\components;
 use Yii;
 use yii\helpers\Html;
 use yii\base\Widget;
-use kartik\widgets\Select2;
+//use kartik\widgets\Select2;
 /**
  * 
  */
@@ -61,15 +61,16 @@ class SearchBox extends Widget{
     
     public function setFieldSearchForm(){
         $selection = empty($this->default) ? '选择字段' : $this->default;
-        $this->html = '<div class="form-group col-sm-3">'.Select2::widget([
-            'name' => 'fields',
-            'data' => $this->fields,
-            'options' => [
-                'placeholder' => Yii::t('app', $selection),
-                'multiple' => false,
-                'class' => 'form-control'
-            ],
-        ]).'</div>';
+//        $this->html = '<div class="form-group col-sm-3">'.Select2::widget([
+//            'name' => 'fields',
+//            'data' => $this->fields,
+//            'options' => [
+//                'placeholder' => Yii::t('app', $selection),
+//                'multiple' => false,
+//                'class' => 'form-control'
+//            ],
+//        ]).'</div>';
+        $this->html = '<div class="form-group col-sm-3">'.Html::dropDownList('fields', $selection, $this->fields, ['class' =>'form-control inline']).'</div>';
         
         $this->html .= '<div class="form-group col-sm-7">'.Html::textInput('keyword', $this->keyword_value, $this->keyword_options).'</div>';
         $this->html .= '<div class="form-group col-sm-2">'.Html::submitButton('搜索', $this->submit_options).'</div>';

@@ -1,6 +1,27 @@
 /**
  * Created by linhongyou on 2015/9/25.
  */
+function formatDate(now)   {
+    var   year=now.getFullYear();
+    var   month=now.getMonth()+1;
+    var   date=now.getDate();
+    var   hour=now.getHours();
+    var   minute=now.getMinutes();
+    var   second=now.getSeconds();
+    if(month<10) month ='0'+month;
+    if(date<10) date ='0'+date;
+    if(hour<10) hour ='0'+hour;
+    if(minute<10) minute ='0'+minute;
+    if(second<10) second ='0'+second;
+    return   year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;
+}
+function datetime_to_unix(datetime){
+    var tmp_datetime = datetime.replace(/:/g,'-');
+    tmp_datetime = tmp_datetime.replace(/ /g,'-');
+    var arr = tmp_datetime.split("-");
+    var now = new Date(Date.UTC(arr[0],arr[1]-1,arr[2],arr[3]-8,arr[4],arr[5]));
+    return parseInt(now.getTime()/1000);
+}
 $("#order-order_customer_phone").blur(function(){
     var phone = $(this).val();
     var reg = /^1[3-9][0-9]{9}$/;
@@ -82,13 +103,22 @@ $("#order-order_booked_worker_phone").blur(function(){
                         '<div class="radio-inline"><label><input type="radio" value="'+ worker.id
                         +'" checked="checked" name="Order[order_booked_worker_id]"> '+worker.worker_name+'</label></div>'
                     );
-                    $("#order-shop_id").val(worker.shop_id);
-                    $("#order-order_worker_type_name").val(worker.worker_rule_id);
                 }
             }
         });
     }
 });
 $("#order-order_booked_count").change(function(){
-    $("#order-order_money").val($(this).val()/60*$("#order-order_unit_money").val());
+    $money = $(this).val()/60*$("#order_unit_money").text();
+    $("#order-order_money").val($money.toFixed(2));
+    $("#order_money").text($money.toFixed(2));
 });
+
+$("#order-order_booked_begin_time,#order-order_booked_count").change(function(){
+    var stringTime = $("#order-order_booked_begin_time").val();
+    var timestamp = datetime_to_unix(stringTime);
+    timestamp = timestamp + $("#order-order_booked_count").val() * 60;
+    $("#order-order_booked_end_time").val(formatDate(new Date(timestamp * 1000)));
+
+});
+
