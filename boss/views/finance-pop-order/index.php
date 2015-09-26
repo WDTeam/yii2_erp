@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <h3 class="panel-title"><i class="glyphicon glyphicon-upload"></i> 上传对账单</h3>
     </div>
     <div class="panel-body">
-        <?php  echo $this->render('_search', ['model' => $searchModel,'odrinfo'=>$payatainfo,'ordedat' => $ordedatainfo]); ?>
+        <?php  echo $this->render('_search', ['model' => $searchModel,'ordedat' => $ordedatainfo]); ?>
     </div>
     </div>
     <?php  //echo $this->render('_search', ['model' => $searchModel]); ?>

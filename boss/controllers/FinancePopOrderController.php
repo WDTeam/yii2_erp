@@ -22,6 +22,12 @@ use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use common\models\FinanceOrderChannel;
 use common\models\FinanceHeader;
+use boss\controllers\FinanceRecordLogController;
+
+
+
+
+
 
 /**
  * FinancePopOrderController implements the CRUD actions for FinancePopOrder model.
@@ -126,6 +132,39 @@ class FinancePopOrderController extends Controller
     		}
     		$n++;
     		}
+    		
+    		
+    		//记录本次导入的数据
+    		/*
+    		 * finance_order_channel_id	smallint(4)	YES	NULL	对账名称id
+			finance_order_channel_name	varchar(100)	YES	NULL	对账名称
+			finance_pay_channel_id	smallint(4)	YES	NULL	收款渠道id
+			finance_pay_channel_name	varchar(100)	YES	NULL	收款渠道名称
+			finance_record_log_succeed_count	smallint(6)	YES	NULL	成功记录数
+			finance_record_log_succeed_sum_money	decimal(8,2)	YES	0.00	成功记录数总金额
+			finance_record_log_manual_count	smallint(6)	YES	NULL	人工确认笔数
+			finance_record_log_manual_sum_money	decimal(8,2)	YES	0.00	人工确认金额
+			finance_record_log_failure_count	smallint(6)	YES	0	失败笔数
+			finance_record_log_failure_money	decimal(8,2)	YES	0.00	失败总金额
+			finance_record_log_confirm_name	varchar(30)	YES	NULL	对账人
+			finance_record_log_fee	decimal(8,2)	YES	0.00	服务费
+			create_time	int(10)	YES	NULL	创建时间
+			is_del	smallint(1)	YES	0	0 正常 1 删除
+    		 *  
+    		 *  */
+    		
+    		$FinanceRecordLog = new FinanceRecordLogController;
+    		
+    		
+    		
+    		
+    		
+    		
+    		
+    		
+    		
+    		
+    		
     		return $this->redirect(['index']);
     	}
  
