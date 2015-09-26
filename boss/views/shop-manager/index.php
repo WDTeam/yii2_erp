@@ -8,6 +8,8 @@ use kartik\widgets\Select2;
 use yii\helpers\Url;
 use yii\web\JsExpression;
 use boss\models\ShopManager;
+use yii\bootstrap\Modal;
+use yii\base\Widget;
 
 /**
  * @var yii\web\View $this
@@ -93,14 +95,29 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template'=>'{update} {delete} {joinblacklist}',
                 'buttons' => [
                     'update' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['shop-manager/view','id' => $model->id,'edit'=>'t']), [
+                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', [
+                            'shop-manager/view',
+                            'id' => $model->id,
+                            'edit'=>'t'
+                        ], [
                             'title' => Yii::t('yii', 'Edit'),
                         ]);
                     },
                     'joinblacklist' => function ($url, $model) {
-                        return empty($model->is_blacklist)?Html::a('加入黑名单', Yii::$app->urlManager->createUrl(['shop-manager/join-blacklist','id' => $model->id]), [
+                        return empty($model->is_blacklist)?Html::a('加入黑名单', [
+                            'shop-manager/join-blacklist',
+                            'id' => $model->id
+                        ], [
                             'title' => Yii::t('app', '加入黑名单'),
-                        ]):Html::a('解除黑名单', Yii::$app->urlManager->createUrl(['shop-manager/remove-blacklist','id' => $model->id]), [
+                            'data-toggle'=>'modal',
+                            'data-target'=>'#modal',
+                            'data-id'=>$model->id,
+                            'class'=>'join-list-btn',
+                        ]):Html::a('解除黑名单', [
+                            'shop-manager/remove-blacklist',
+                            'id' => $model->id
+                            
+                        ], [
                             'title' => Yii::t('app', '解除黑名单'),
                         ]);
                     },
@@ -123,5 +140,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'showFooter' => false
         ],
     ]); Pjax::end(); ?>
-
 </div>
+<?php echo Modal::widget([
+    'header' => '<h4 class="modal-title">黑名单原因</h4>',
+    'id' =>'modal',
+]);?>
+<?php $this->registerJs(<<<JSCONTENT
+    $('.join-list-btn').click(function(){
+        $('#modal .modal-body').html('加载中……');
+        $('#modal .modal-body').eq(0).load(this.href);
+    });
+JSCONTENT
+);?>

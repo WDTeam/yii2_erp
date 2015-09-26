@@ -1,7 +1,6 @@
 <?php
 
 namespace boss\controllers;
-
 use Yii;
 use common\models\Customer;
 use boss\models\CustomerSearch;
@@ -44,8 +43,26 @@ class CustomerController extends Controller
     {
         $searchModel = new CustomerSearch;
 
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        $params = Yii::$app->request->getQueryParams();
+        // $params['is_del'] = 0;
+        $dataProvider = $searchModel->search($params);
         return $this->render('index', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
+
+    /**
+     * Lists all Customer models.
+     * @return mixed
+     */
+    public function actionBlock()
+    {
+        $searchModel = new CustomerSearch;
+        $params = Yii::$app->request->getQueryParams();
+        // $params['is_del'] = 1;
+        $dataProvider = $searchModel->search($params);
+        return $this->render('block', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
@@ -58,8 +75,9 @@ class CustomerController extends Controller
     {
         $model = $this->findModel($id);
         $model->is_del = 1;
+        $model->validate();
         $model->save();
-        return $this->redirect(['/customer/block?CustomerSearch[is_del]=1']);
+        return $this->redirect(['/customer/block']);
     }
 
     /**
@@ -69,25 +87,32 @@ class CustomerController extends Controller
     {
         $model = $this->findModel($id);
         $model->is_del = 0;
+        $model->validate();
         $model->save();
-        return $this->redirect(['/customer/index?CustomerSearch[is_del]=0']);
+        return $this->redirect(['/customer/index']);
     }
 
-    /**
-     * Lists all Customer models.
-     * @return mixed
-     */
-    public function actionBlock()
-    {
-        $searchModel = new CustomerSearch;
-        var_dump(Yii::$app->request->getQueryParams());
-        
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-        return $this->render('block', [
-            'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel,
-        ]);
+    public function actionSwitchBlock(){
+        // $id = Yii::$app->request->get('id');
+        // $connection = Yii::$app->db;
+        //echo "1";
+
+        $customer = Yii::$app->db->createCommand('SELECT * FROM {{%customer}} WHERE id='.(Yii::$app->request->get('id')))->queryOne();
+    
+        if ($customer['is_del'] == 1) {
+            $command = Yii::$app->db->createCommand('UPDATE {{%customer}} SET is_del=0 WHERE id='.(Yii::$app->request->get('id')));
+            $command->execute();
+            // return $this->actionIndex();
+            return $this->redirect(['/customer/index?CustomerSearch[is_del]=0']);
+        }else{
+            $command = Yii::$app->db->createCommand('UPDATE {{%customer}} SET is_del=1 WHERE id='.(Yii::$app->request->get('id')));
+            $command->execute();
+            // return $this->actionBlock();
+            return $this->redirect(['/customer/block?CustomerSearch[is_del]=1']);
+        }
     }
+
+    
 
     /**
      * Displays a single Customer model.
@@ -224,5 +249,103 @@ class CustomerController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionData(){
+
+        // $operationArea = new Operation\OperationArea();
+
+        $connectionNew =  \Yii::$app->db;
+        
+
+        $connection = new \yii\db\Connection([
+            'dsn' => 'mysql:host=rdsh52vh252q033a4ci5.mysql.rds.aliyuncs.com;dbname=sq_ejiajie_v2',
+            'username' => 'sq_ejiajie',
+            'password' => 'test_sq_ejiajie',
+        ]);
+        $connection->open();
+        $command = $connection->createCommand("SELECT * FROM user_info order by id asc limit 40");
+        $userInfo = $command->queryAll();
+        // $cityConfigArr=['北京'=>110100,'上海'=>310100,'广州'=>440100,'深圳'=>440300,'成都'=>510100,'南京'=>320100,'合肥'=>340100,'武汉'=>420100,'杭州'=>330100,'哈尔滨'=>230100,'青岛'=>370200,'太原'=>140100,'天津'=>120100,'长沙'=>430100,'沈阳'=>210100,'济南'=>370100,'石家庄'=>130100];
+
+        
+        $connectionNew->createCommand()->batchInsert('ejj_customer_channal', ['channal_name', 'pid', 'created_at', 'updated_at', 'is_del'], [
+            ['美团', 0, time(), 0, 0],
+            ['大众', 0, time(), 0, 0],
+            ['支付宝', 0, time(), 0, 0],
+        ])->execute();
+        echo "customer_channal数据导入成功";
+
+        $connectionNew->createCommand()->batchInsert('ejj_customer_platform', ['platform_name', 'pid', 'created_at', 'updated_at', 'is_del'], [
+            ['Android', 0, time(), 0, 0],
+            ['IOS', 0, time(), 0, 0],
+        ])->execute();
+        echo "customer_platform数据导入成功";
+        
+
+
+        if($userInfo){
+            foreach($userInfo as $val){
+                // $customer['id'] = intval($val['id']);
+                $customer['customer_name'] = $val['name'];
+                $customer['customer_sex'] = $val['gender'];
+                $customer['customer_birth'] = 0;
+                $customer['customer_photo'] = '';
+                $customer['customer_phone'] = $val['telphone'];
+                $customer['customer_email'] = $val['email'];
+
+                $customer['operation_area_id'] = 0;
+                $customer['operation_city_id'] = 0;
+                $customer['general_region_id'] = 0;
+                $customer['customer_live_address_detail'] = '';
+                
+                $customer['customer_balance'] = 300;
+                $customer['customer_score'] = 30000;
+                $customer['customer_level'] = $val['level'];
+                $customer['customer_complaint_times'] = 0;
+                
+                $customer['customer_src'] = $val['user_src'];
+                $customer['channal_id'] = 1;
+                $customer['platform_id'] = 0;
+                $customer['customer_login_ip'] = '';
+                $customer['customer_login_time'] = 0;
+                $customer['customer_is_vip'] = 1;
+                $customer['created_at'] = strtotime($val['create_time']);
+                $customer['updated_at'] = strtotime($val['update_time']);
+                $customer['is_del'] = $val['is_block'];
+                $customer['customer_del_reason'] = '辱骂阿姨';
+
+                $connectionNew->createCommand()->insert('ejj_customer', $customer)->execute();
+                
+                $customer_id = 1;
+
+                $customerAddress['customer_id'] = $customer_id;
+                $customerAddress['general_region_id'] = $customer['general_region_id'];
+                $customerAddress['customer_address_detail'] = $customer['customer_live_address_detail'];
+                $customerAddress['customer_address_status'] = 1;
+                $customerAddress['customer_address_longitude'] = '';
+                $customerAddress['customer_address_latitude'] = '';
+                $customerAddress['customer_address_nickname'] = $customer['customer_name'];
+                $customerAddress['customer_address_phone'] = $customer['customer_phone'];
+                $customerAddress['created_at'] = time();
+                $customerAddress['updated_at'] = 0;
+                $customerAddress['is_del'] = 0;
+
+                $connectionNew->createCommand()->insert('ejj_customer_address', $customerAddress)->execute();
+
+                $customerWorker['customer_id'] = $customer_id;
+                // $customerWorker['worker_id'] = 0;
+                $customerWorker['customer_worker_status'] = 1;
+                $customerWorker['created_at'] = time();
+                $customerWorker['updated_at'] = 0;
+                $customerWorker['is_del'] = 0;
+
+                $connectionNew->createCommand()->insert('ejj_customer_worker', $customerWorker)->execute();
+
+            }
+
+        }
+        echo "customer数据导入成功";
+
     }
 }

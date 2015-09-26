@@ -25,6 +25,12 @@ use kartik\datecontrol\DateControl;
 
 
     ]);
+    ?>
+    <?= $form->field($OperationShopDistrictCoordinate, 'operation_shop_district_coordinate_start_longitude')->textInput() ?>
+    <?= $form->field($OperationShopDistrictCoordinate, 'operation_shop_district_coordinate_start_latitude')->textInput() ?>
+    <?= $form->field($OperationShopDistrictCoordinate, 'operation_shop_district_coordinate_end_longitude')->textInput() ?>
+    <?= $form->field($OperationShopDistrictCoordinate, 'operation_shop_district_coordinate_end_latitude')->textInput() ?>
+<?php
     echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']);
     ActiveForm::end(); ?>
 

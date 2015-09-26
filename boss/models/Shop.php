@@ -4,6 +4,9 @@ use yii;
 use yii\behaviors\TimestampBehavior;
 use boss\models\Operation\OperationCity;
 use boss\models\Operation\OperationArea;
+use yii\web\HttpException;
+use yii\base\ErrorException;
+use yii\web\BadRequestHttpException;
 class Shop extends \common\models\Shop
 {
     public static $audit_statuses = [
@@ -98,9 +101,10 @@ class Shop extends \common\models\Shop
         if($this->save()){
             $status = new ShopStatus();
             $status->status_number = 1;
-            $status->model_name = self::className();
+            $status->model_name = ShopStatus::MODEL_SHOP;
             $status->status_type = 2;
             $status->created_at = time();
+            $status->cause = $cause;
             return $status->save();
         }
         return false;
@@ -111,13 +115,18 @@ class Shop extends \common\models\Shop
      */
     public function removeBlacklist($cause='')
     {
+        $sm = ShopManager::find()->where(['id'=>$this->shop_manager_id])->one();
+        if($sm->is_blacklist==1){
+            throw new BadRequestHttpException('所在的小家政未移出黑名单');
+        }
         $this->is_blacklist = 0;
         if($this->save()){
             $status = new ShopStatus();
             $status->status_number = 0;
-            $status->model_name = self::className();
+            $status->model_name = ShopStatus::MODEL_SHOP;
             $status->status_type = 2;
             $status->created_at = time();
+            $status->cause = $cause;
             return $status->save();
         }
         return false;
@@ -133,9 +142,10 @@ class Shop extends \common\models\Shop
         if($this->save()){
             $status = new ShopStatus();
             $status->status_number = $this->audit_status;
-            $status->model_name = self::className();
+            $status->model_name = ShopStatus::MODEL_SHOP;
             $status->status_type = 1;
             $status->created_at = time();
+            $status->cause = $cause;
             return $status->save();
         }
         return false;

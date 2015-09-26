@@ -20,8 +20,8 @@ use common\models\Order;
  * @var yii\data\ActiveDataProvider $dataProvider
  * @var boss\models\WorkerSearch $searchModel
  */
-
 $this->title = Yii::t('app', '顾客管理');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Customers'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="worker-index">
@@ -77,24 +77,30 @@ $this->params['breadcrumbs'][] = $this->title;
                     $customer_address = CustomerAddress::find()->where([
                         'customer_id'=>$dataProvider->id,
                         'customer_address_status'=>1])->one();
-                    $general_region_id = $customer_address->general_region_id;
-                    $general_region = GeneralRegion::find()->where([
+                    
+                    if ($customer_address) {
+                        $general_region_id = $customer_address->general_region_id;
+                        $general_region = GeneralRegion::find()->where([
                         'id'=>$general_region_id,
                         ])->one();
-                    if ($address_count <= 0) {
+                        if ($address_count <= 0) {
+                            return '-';
+                        }
+                        if ($address_count == 1) {
+                            return $general_region->general_region_province_name 
+                            . $general_region->general_region_city_name 
+                            . $general_region->general_region_area_name;
+                        }
+                        if ($address_count > 1) {
+                            return $general_region->general_region_province_name 
+                            . $general_region->general_region_city_name 
+                            . $general_region->general_region_area_name
+                            . '...';
+                        }
+                    }else{
                         return '-';
                     }
-                    if ($address_count == 1) {
-                        return $general_region->general_region_province_name 
-                        . $general_region->general_region_city_name 
-                        . $general_region->general_region_area_name;
-                    }
-                    if ($address_count > 1) {
-                        return $general_region->general_region_province_name 
-                        . $general_region->general_region_city_name 
-                        . $general_region->general_region_area_name
-                        . '...';
-                    }
+                    
                 },
                 'width' => "100px",
             ],
@@ -111,7 +117,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => '平台',
                 'value' => function ($dataProvider) {
                     $platform = CustomerPlatform::find()->where(['id'=>$dataProvider->platform_id])->one();
-                    return $platform->platform_name ? $platform->platform_name : '-';
+                    return $platform ? $platform->platform_name : '-';
                 },
                 'width' => "100px",
             ],
@@ -120,7 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => '渠道',
                 'value' => function ($dataProvider) {
                     $channal = CustomerChannal::find()->where(['id'=>$dataProvider->channal_id])->one();
-                    return $channal->channal_name ? $channal->channal_name : '-';
+                    return $channal ? $channal->channal_name : '-';
                 },
                 'width' => "100px",
             ],
@@ -158,24 +164,44 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'width' => "100px",
             ],
+            // [
+            //     'format' => 'raw',
+            //     'label' => '操作',
+            //     'value' => function ($dataProvider) {
+            //         return '<a href="/customer/add-to-block?&id=' . $dataProvider->id . '">加入黑名单</a>';
+            //     },
+            //     'width' => "100px",
+            // ],
+            // [
+            //     'format' => 'raw',
+            //     'label' => '操作',
+            //     'value' => function ($dataProvider) {
+            //         if ($dataProvider->is_del) {
+            //             $action_label = '取消黑名单';
+            //         }
+            //         if (!$dataProvider->is_del) {
+            //             $action_label = '加入黑名单';
+            //         }
+            //         return '<a href="['/customer/index?CustomerSearch[is_del]=0']">' . $action_label . '</a>';
+            //     },
+            //     'width' => "100px",
+            // ],
             [
-                'format' => 'raw',
-                'label' => '操作',
-                'value' => function ($dataProvider) {
-                    return '<a href="/customer/add-to-block?&id=' . $dataProvider->id . '">加入黑名单</a>';
+                'format'=>'raw',
+                'label'=>'操作',
+                'value'=>function($dataProvider){
+                    if ($dataProvider->is_del) {
+                        $action_label = '取消黑名单';
+                    }
+                    if (!$dataProvider->is_del) {
+                        $action_label = '加入黑名单';
+                    }
+                    return Html::a('<span class="glyphicon glyphicon-pencil">'.$action_label.'</span>', Yii::$app->urlManager->createUrl(['customer/switch-block', 'id' => $dataProvider->id, 'edit' => 't']), [
+                            'title' => Yii::t('yii', 'Edit'),
+                        ]);
                 },
                 'width' => "100px",
             ],
-            // [
-            //     'class' => 'yii\grid\ActionColumn',
-            //     'buttons' => [
-            //         'update' => function ($url, $model) {
-            //             return Html::a('加入黑名单', Yii::$app->urlManager->createUrl(['customer/add-to-block', 'id' => $model->id, 'edit' => 't']), [
-            //                 'title' => Yii::t('yii', 'Edit'),
-            //             ]);
-            //         }
-            //     ],
-            // ],
         ],
         'responsive' => true,
         'hover' => true,
@@ -184,7 +210,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> ' . Html::encode($this->title) . ' </h3>',
             'type' => 'info',
-            'before' =>Html::a('<i class="glyphicon" ></i>黑名单', ['/customer/block?CustomerSearch[is_del]=1'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']),
+            // 'before' =>Html::a('<i class="glyphicon" ></i>黑名单', ['/customer/block?CustomerSearch[is_del]=1'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']),
             // 'after' => Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List',
             //     ['index'],
             //     ['class' => 'btn btn-info']),
