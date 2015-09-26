@@ -36,7 +36,7 @@ class OperationPlatformVersion extends CoreOperationPlatformVersion
             'id' => '编号',
             'operation_platform_id' => '平台编号',
             'operation_platform_name' => '平台名称',
-            'operation_platform_version_name' => '平台名称',
+            'operation_platform_version_name' => '版本名称',
             'created_at' => '创建时间',
             'updated_at' => '编辑时间',
         ];

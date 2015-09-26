@@ -34,23 +34,23 @@ class m150918_140930_create_table_finance_settle_apply extends Migration
             'created_at' => Schema::TYPE_INTEGER. '(11) COMMENT \'申请时间\'',
         ], $tableOptions);
         $this->batchInsert('{{%finance_settle_apply}}',
-            ['id','worder_id','worder_tel','worker_type_id','worker_type_name','finance_settle_apply_money','finance_settle_apply_man_hour',
+            ['id','worder_id','worder_tel','worker_type_id','worker_type_name','finance_settle_apply_man_hour',
                 'finance_settle_apply_order_money','finance_settle_apply_order_cash_money','finance_settle_apply_order_money_except_cash',
-				'finance_settle_apply_subsidy',
+				'finance_settle_apply_subsidy','finance_settle_apply_money',
                 'finance_settle_apply_status','finance_settle_apply_cycle','finance_settle_apply_cycle_des','finance_settle_apply_reviewer',
 
                 'finance_settle_apply_starttime','finance_settle_apply_endtime',
                 'isdel','updated_at','created_at'],
             [
-                [1,111,'13888888888',2,'全职',220,6,150,0,150,70,0,2,'月结','魏北南',
+                [1,111,'13888888888',2,'全职',6,150,0,150,70,220,0,2,'月结','魏北南',
 
                     date("Y-m-d",strtotime("-1 month")),time(),0,time(),time()],
-                [2,222,'13899999999',1,'兼职',200,8,200,0,200,0,0,1,'周结','潘高峰',
+                [2,222,'13899999999',1,'兼职',8,200,0,200,0,200,0,1,'周结','潘高峰',
 
                     date("Y-m-d",strtotime("-1 week")),time(),0,time(),time()],
-                [3,333,'13899999999',1,'兼职',250,10,250,0,250,0,0,1,'周结','李胜强',
+                [3,333,'13899999999',1,'兼职',10,250,0,250,0,250,0,1,'周结','李胜强',
 
-                    time(),date("Y-m-d",strtotime("-1 week")),0,time(),time()],
+                    date("Y-m-d",strtotime("-1 week")),time(),0,time(),time()],
             ]);
     }
 

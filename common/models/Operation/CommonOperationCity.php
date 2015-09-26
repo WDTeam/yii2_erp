@@ -22,4 +22,9 @@ class CommonOperationCity extends \yii\db\ActiveRecord
     {
         return '{{%operation_city}}';
     }
+    
+    
+    public static function getOnlineCity(){
+        return static::find()->where(['operation_city_is_online' => 1])->all();
+    }
 }

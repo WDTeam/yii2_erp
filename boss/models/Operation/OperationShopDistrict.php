@@ -25,9 +25,10 @@ class OperationShopDistrict extends \yii\db\ActiveRecord
     {
         return [
             [['operation_city_id', 'created_at', 'updated_at'], 'integer'],
-            [['operation_shop_district_latitude_longitude'], 'string'],
+//            [['operation_shop_district_latitude_longitude'], 'string'],
             [['operation_shop_district_name'], 'string', 'max' => 60],
-            [['operation_city_name'], 'string', 'max' => 50]
+            [['operation_city_name'], 'string', 'max' => 50],
+            [['operation_shop_district_name'], 'required'],
         ];
     }
 

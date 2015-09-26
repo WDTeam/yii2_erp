@@ -21,6 +21,12 @@ $this->params['breadcrumbs'][] = $this->title;
 <script src="//cdn.bootcss.com/angular.js/1.4.6/angular.js"></script>
 <script src="//cdn.bootcss.com/angular-strap/2.3.3/modules/popover.js"></script>
 <script src="//cdn.bootcss.com/angular-strap/2.3.3/modules/tooltip.js"></script>
+<style type="text/css">
+    .popover {
+        height:50px;
+        max-width:2000px;
+    }
+</style>
 <form id ="financeSettleApplyForm">
    
 
@@ -103,7 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); Pjax::end(); ?>
 
 </div>
-    <div id="popover_content_wrapper" style="display: none;">路补:10     |晚补:10    |扑空补:0|路补:10     |晚补:10    |扑空补:0</div>
+    <div id="popover_content_wrapper" style="display: none;width:800px;">路补:10     |晚补:10    |扑空补:0|路补:10     |晚补:10    |扑空补:0|路补:10     |晚补:10    |扑空补:0路补:10 </div>
 <script>
 $(function () {
     $('[data-toggle="popover"]').popover({  html : true, 
