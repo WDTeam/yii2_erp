@@ -14,6 +14,7 @@ use common\models\OperationCity;
 
 use common\models\Order;
 
+
 /**
  * @var yii\web\View $this
  * @var common\models\Worker $model
@@ -33,51 +34,62 @@ echo DetailView::widget([
     'condensed'=>false,
     'hover'=>true,
     'mode'=>Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
-    // 'mode'=>DetailView::MODE_VIEW,
     'panel'=>[
         'heading'=>'基本信息',
         'type'=>DetailView::TYPE_INFO,
     ],
     'attributes' => [
+        // [
+        //     'attribute'=>'', 
+        //     'label'=>'城市',
+        //     'format'=>'raw',
+        //     'value'=> $operationCity ? $operationCity->city_name : '-',
+        //     'type'=>DetailView::INPUT_TEXT,
+        //     'valueColOptions'=>['style'=>'width:90%']
+        // ],
         [
-            'attribute'=>'', 
-            'label'=>'城市',
-            'format'=>'raw',
-            'value'=> $operationCity ? $operationCity->city_name : '-',
-            'type'=>DetailView::INPUT_TEXT,
-            'valueColOptions'=>['style'=>'width:90%']
+            'attribute' => 'operation_city_id',
+            'type' => DetailView::INPUT_WIDGET,
+            'widgetOptions' => [
+                'name'=>'operation_city_id',
+                'class'=>\kartik\widgets\Select2::className(),
+                'data' => [1 => '北京', 2=>'', 3=>'', 4=>''],
+                'hideSearch' => true,
+                'options'=>[
+                    'placeholder' => '选择城市',
+                ]
+            ],
+            'value'=>$operationCity['city_name'] ? $operationCity['city_name'] : '-',
+        ],
+        'customer_name',
+        'customer_phone',
+        [
+            'attribute' => 'platform_id',
+            'type' => DetailView::INPUT_WIDGET,
+            'widgetOptions' => [
+                'name'=>'platform_id',
+                'class'=>\kartik\widgets\Select2::className(),
+                'data' => $platforms,
+                'hideSearch' => true,
+                'options'=>[
+                    'placeholder' => '选择平台',
+                ]
+            ],
+            'value'=>$customerPlatform['platform_name'] ? $customerPlatform['platform_name'] : '-',
         ],
         [
-            'attribute'=>'customer_name', 
-            'label'=>'姓名',
-            'format'=>'raw',
-            'value'=>$model->customer_name,
-            'type'=>DetailView::INPUT_TEXT,
-            'valueColOptions'=>['style'=>'width:90%']
-        ],
-        [
-            'attribute'=>'customer_phone', 
-            'label'=>'手机号',
-            'format'=>'raw',
-            'value'=>$model->customer_phone,
-            'type'=>DetailView::INPUT_TEXT,
-            'valueColOptions'=>['style'=>'width:90%']
-        ],
-        [
-            'attribute'=>'platform_id', 
-            'label'=>'平台',
-            'format'=>'raw',
-            'value'=> $customerPlatform ? $customerPlatform->platform_name : '-',
-            'type'=>DetailView::INPUT_TEXT,
-            'valueColOptions'=>['style'=>'width:90%']
-        ],
-        [
-            'attribute'=>'channal_id', 
-            'label'=>'聚道',
-            'format'=>'raw',
-            'value'=>$customerChannal ? $customerChannal->channal_name : '-',
-            'type'=>DetailView::INPUT_SWITCH,
-            'valueColOptions'=>['style'=>'width:90%']
+            'attribute' => 'channal_id',
+            'type' => DetailView::INPUT_WIDGET,
+            'widgetOptions' => [
+                'name'=>'channal_id',
+                'class'=>\kartik\widgets\Select2::className(),
+                'data' => $channals,
+                'hideSearch' => true,
+                'options'=>[
+                    'placeholder' => '选择聚道',
+                ]
+            ],
+            'value'=>$customerChannal['channal_name'] ? $customerChannal['channal_name'] : '-',
         ],
         // [
         //     'attribute'=>'customer_phone', 
@@ -96,13 +108,13 @@ echo DetailView::widget([
         //     'valueColOptions'=>['style'=>'width:90%']
         // ],
         [
-            'attribute'=>'customer_is_vip', 
-            'label'=>'身份',
-            'format'=>'raw',
-            'value'=>$model->customer_is_vip ? '会员' : '非会员',
-            'type'=>DetailView::INPUT_SWITCH,
-            'valueColOptions'=>['style'=>'width:90%']
-        ],
+                'attribute' => 'customer_is_vip',
+                'type' => DetailView::INPUT_WIDGET,
+                'widgetOptions' => [
+                    'class' => \kartik\widgets\SwitchInput::classname()
+                ],
+                'value'=>$model->customer_is_vip ? '会员' : '非会员',
+            ],
         [
             'attribute'=>'customer_live_address_detail', 
             'label'=>'住址',
@@ -113,7 +125,7 @@ echo DetailView::widget([
                 .$generalRegion->general_region_area_name
                 .$model->customer_live_address_detail
                 : '-',
-            'type'=>DetailView::INPUT_SWITCH,
+            'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],
         [
@@ -121,7 +133,7 @@ echo DetailView::widget([
             'label'=>'接单地址',
             'format'=>'raw',
             'value'=> $addressStr,
-            'type'=>DetailView::INPUT_SWITCH,
+            'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],
     ],
@@ -143,7 +155,7 @@ echo DetailView::widget([
             'label'=>'订单',
             'format'=>'raw',
             'value'=> '<a href="/order/index?OrderSearch[customer_id]='. $model->id .'">'. $order_count .'</a>',
-            'type'=>DetailView::INPUT_SWITCH,
+            'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],
     ],
@@ -165,7 +177,7 @@ echo DetailView::widget([
             'label'=>'余额',
             'format'=>'raw',
             'value'=> $model->customer_balance,
-            'type'=>DetailView::INPUT_SWITCH,
+            'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],
     ],

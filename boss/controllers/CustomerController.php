@@ -131,9 +131,21 @@ class CustomerController extends Controller
         $customerPlatform = CustomerPlatform::find()->where([
             'id'=>$model->platform_id
             ])->one();
+        
+        $platforms = [];
+        $customerPlatforms = CustomerPlatform::find()->asArray()->all();
+        foreach ($customerPlatforms as $k => $customerPlatform) {
+            $platforms[$customerPlatform['id']] = $customerPlatform['platform_name'];
+        }
+
         $customerChannal = CustomerChannal::find()->where([
             'id'=>$model->channal_id
             ])->one();
+        $channals = [];
+        $customerChannals = CustomerChannal::find()->asArray()->all();
+        foreach ($customerChannals as $k => $customerChannal) {
+            $channals[$customerChannal['id']] = $customerChannal['channal_name'];
+        }
 
         $generalRegion = GeneralRegion::find()->where([
             'id'=>$model->general_region_id
@@ -213,10 +225,13 @@ class CustomerController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            return $this->render('view', ['model' => $model, 
+            return $this->render('view', [
+                'model' => $model, 
                 'operationCity'=>$operationCity, 
                 'customerPlatform'=>$customerPlatform, 
+                'platforms'=>$platforms,
                 'customerChannal'=>$customerChannal,
+                'channals'=>$channals,
                 'generalRegion'=>$generalRegion,
                 // 'order_addresses'=>$order_addresses,
                 // 'default'=>$default,
