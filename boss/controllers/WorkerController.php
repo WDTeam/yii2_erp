@@ -6,7 +6,7 @@ use common\models\WorkerBlock;
 use common\models\WorkerVacation;
 use Yii;
 use yii\db\Query;
-use yii\web\Controller;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use core\models\Worker;

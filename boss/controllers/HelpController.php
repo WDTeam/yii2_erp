@@ -5,7 +5,7 @@ namespace boss\controllers;
 use Yii;
 use common\models\Help;
 use boss\models\HelpSearch;
-use yii\web\Controller;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
