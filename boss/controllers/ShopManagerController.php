@@ -152,4 +152,14 @@ class ShopManagerController extends Controller
     
         return $this->redirect(['index']);
     }
+    /**
+     * 解除黑名单
+     */
+    public function actionRemoveBlacklist($id)
+    {
+        $cause = Yii::$app->request->get('cause','');
+        $this->findModel($id)->removeBlacklist($cause);
+    
+        return $this->redirect(['index']);
+    }
 }
