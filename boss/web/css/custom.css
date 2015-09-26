@@ -36,3 +36,9 @@
 	    left: 0;
 	}
 }
+
+/*以上是关于content-header的样式*/
+
+ul.sidebar-menu ul.treeview-menu li.active a.active{
+	color: red;
+}

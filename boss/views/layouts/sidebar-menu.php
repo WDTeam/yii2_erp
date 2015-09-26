@@ -39,7 +39,7 @@ echo Menu::widget(
                 'options' => [
 //                     'class' => 'treeview',
                 ],
-                'active'=>isset($ctrl->is_category_manage),
+                // 'active'=>isset($ctrl->is_category_manage),
                 'visible' => Yii::$app->user->can('readPost'),
             ],
             [
@@ -47,7 +47,7 @@ echo Menu::widget(
                 'url' => ['#'],
                 'icon' => 'fa fa-flag',
                 'options' => [
-                    'class' => 'treeview active',
+                    'class' => 'treeview rootTree',
                 ],
                 'items' => [
                     [
@@ -68,7 +68,7 @@ echo Menu::widget(
                 'url' => ['#'],
                 'icon' => 'fa fa-female',
                 'options' => [
-                    'class' => 'treeview active',
+                    'class' => 'treeview rootTree',
                 ],
                 'items' => [
                     [
@@ -93,7 +93,7 @@ echo Menu::widget(
                 'url' => ['#'],
                 'icon' => 'fa fa-user',
                 'options' => [
-                    'class' => 'treeview active',
+                    'class' => 'treeview rootTree',
                 ],
                 'items' => [
                     [
@@ -113,7 +113,7 @@ echo Menu::widget(
                 'url' => ['#'],
                 'icon' => 'fa fa-tag',
                 'options' => [
-                    'class' => 'treeview active',
+                    'class' => 'treeview rootTree',
                 ],
                 'items' => [
                     [
@@ -138,7 +138,7 @@ echo Menu::widget(
                 'url' => ['#'],
                 'icon' => 'fa fa-credit-card',
                 'options' => [
-                    'class' => 'treeview active',
+                    'class' => 'treeview rootTree',
                 ],
                 'items' => [
                     [
@@ -146,7 +146,7 @@ echo Menu::widget(
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
 							'options' => [
-							'class' => 'treeview active',
+							'class' => 'treeview ',
 							],
 							'items' => [
 							[
@@ -182,7 +182,7 @@ echo Menu::widget(
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
 							'options' => [
-							'class' => 'treeview active',
+							'class' => 'treeview',
 							],
 							'items' => [
 							[
@@ -241,7 +241,7 @@ echo Menu::widget(
                 'url' => ['#'],
                 'icon' => 'fa fa-recycle',
                 'options' => [
-                    'class' => 'treeview active',
+                    'class' => 'treeview rootTree',
                 ],
                 'items' => [
                     [
@@ -264,7 +264,7 @@ echo Menu::widget(
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                         'options' => [
-                            'class' => 'treeview active',
+                            'class' => 'treeview ',
                         ],
                         'items' => [
                             [
@@ -311,7 +311,7 @@ echo Menu::widget(
                 'url' => ['#'],
                 'icon' => 'fa fa-globe',
                 'options' => [
-                    'class' => 'treeview active',
+                    'class' => 'treeview rootTree',
                 ],
                 'items' => [
                     [
@@ -357,7 +357,7 @@ echo Menu::widget(
                 'url' => ['#'],
                 'icon' => 'fa fa-ambulance',
                 'options' => [
-                    'class' => 'treeview active',
+                    'class' => 'treeview rootTree',
                 ],
                 'items' => [
                     [
@@ -387,7 +387,7 @@ echo Menu::widget(
                 'url' => ['#'],
                 'icon' => 'fa fa-random',
                 'options' => [
-                    'class' => 'treeview active',
+                    'class' => 'treeview rootTree',
                 ],
                 'items' => [
                     [
@@ -407,7 +407,7 @@ echo Menu::widget(
                 'url' => ['#'],
                 'icon' => 'fa fa-slideshare',
                 'options' => [
-                    'class' => 'treeview active',
+                    'class' => 'treeview rootTree',
                 ],
                 'items' => [
                     [
