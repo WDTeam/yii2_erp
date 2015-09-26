@@ -105,4 +105,12 @@ class ShopManager extends \common\models\ShopManager
         ->where(['id'=>$this->county_id])->scalar();
         return $province.$city.$county.$this->street;
     }
+    /**
+     * 加入黑名单
+     */
+    public function joinBlacklist()
+    {
+        $this->is_blacklist = 1;
+        return $this->save();
+    }
 }
