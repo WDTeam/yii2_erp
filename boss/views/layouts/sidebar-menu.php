@@ -9,39 +9,6 @@ echo Menu::widget(
             'class' => 'sidebar-menu'
         ],
         'items' => [
-            /* 面试管理 */
-                        [
-                'label' => Yii::t('app', 'InterviewManagement'),
-                'url' => ['#'],
-                'icon' => 'fa-dashboard',
-                'options' => [
-                    'class' => 'treeview',
-                ],
-                'visible' => Yii::$app->user->can('readPost'),
-                'items' => [
-                    [
-                        'label' => Yii::t('app', 'Interview'),
-                        'url' => ['/interview/index'],
-                        'icon' => 'fa fa-user',
-                    ],
-//                    [
-//                        'label' => Yii::t('app', 'Agreement'),
-//                        'url' => ['/signed/index'],
-//                        'icon' => 'fa fa-lock',
-//                    ],
-                ],
-            ],
-             /* 服务管理 */
-                        [
-                'label' => Yii::t('app', 'CategoryManagement'),
-                'url' => ['category/index'],
-                'icon' => 'fa-dashboard',
-                'options' => [
-//                     'class' => 'treeview',
-                ],
-                // 'active'=>isset($ctrl->is_category_manage),
-                'visible' => Yii::$app->user->can('readPost'),
-            ],
             [
                 'label' => '门店管理(60%)',
                 'url' => ['#'],
