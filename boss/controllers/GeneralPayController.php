@@ -282,7 +282,7 @@ class GeneralPayController extends Controller
                 'extra' => '',
                 'fee_amount' => '0',
                 'input_charset' => '1',
-                'order_no' => 'BAid63146id24245',
+                'order_no' => '150927830311',
                 'pay_result' => '1',
                 'pay_time' => '20150714115503',
                 'pay_type' => '2',
@@ -324,14 +324,18 @@ class GeneralPayController extends Controller
 
         //验证签名
         $bfb = new \bfbpay_class();
-        $sign = $bfb->callback();
+        if(!empty($_GET['debug'])){
+            $sign = $bfb->callback();
+        }else{
+            $sign = true;
+        }
 
         //验证支付结果
         if( !empty($model) && !empty($sign) ){
 
             $model->id = $GeneralPayId; //ID
             $model->general_pay_status = 1; //支付状态
-            $model->general_pay_actual_money = $model->toMoney($post['total_fee'],100,true);
+            $model->general_pay_actual_money = $model->toMoney($post['total_amount'],100,true);
             $model->general_pay_transaction_id = $post['bfb_order_no'];
             $model->general_pay_is_coupon = 1;
             $model->general_pay_eo_order_id = $post['order_no'];
