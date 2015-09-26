@@ -27,6 +27,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
 //         'filterModel' => $searchModel,
+        'toolbar' =>[
+            'content'=>Html::a('<i class="glyphicon glyphicon-plus"></i>', [
+            'shop/create'
+            ], [
+                'class' => 'btn btn-default',
+                'title' => Yii::t('app', '添加门店')
+            ]),
+        ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 

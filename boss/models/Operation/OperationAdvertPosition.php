@@ -48,7 +48,7 @@ class OperationAdvertPosition extends CoreOperationAdvertPosition
             'operation_city_id' => '城市编号',
             'operation_city_name' => '城市名称',
             'operation_advert_position_width' => '宽度（像素）',
-            'operation_advert_position_height' => '宽度（像素）',
+            'operation_advert_position_height' => '高度（像素）',
             'created_at' => '创建时间',
             'updated_at' => '编辑时间',
         ];
