@@ -1,23 +1,14 @@
 digraph finite_state_machine {
 	rankdir=LR;
 	size="8,5"
-	node [shape = doublecircle]; LR_0 LR_3 LR_4 LR_8;
+
 	node [shape = circle];
-	已创建 -> 已派单 [ label = "doSend" ];
-	已派单 -> 已发送 [ label = "doDistr" ];
-	已发送 -> 已派单 [ label = "doAction" ];
-	已派单 -> 已派单 [ label = "doCancel" ];
-	已发送 -> 已服务 [ label = "doService" ];
-	已服务 -> 已退单 [ label = "doServiceBack" ];
-	LR_2 -> LR_6 [ label = "SS(b)" ];
-	LR_2 -> LR_5 [ label = "SS(a)" ];
-	LR_2 -> LR_4 [ label = "S(A)" ];
-	LR_5 -> LR_7 [ label = "S(b)" ];
-	LR_5 -> LR_5 [ label = "S(a)" ];
-	LR_6 -> LR_6 [ label = "S(b)" ];
-	LR_6 -> LR_5 [ label = "S(a)" ];
-	LR_7 -> LR_8 [ label = "S(b)" ];
-	LR_7 -> LR_5 [ label = "S(a)" ];
-	LR_8 -> LR_6 [ label = "S(b)" ];
-	LR_8 -> LR_5 [ label = "S(a)" ];
+  初始化 -> 待支付 [label = "do..."]
+	待支付 -> 支付中 [ label = "doPayClick" ];
+	支付中 -> 待支付 [ label = "doPayStatusTimeout" ];
+	支付中 -> 已支付 [ label = "checkPayResultFrom3rd" ];
+	已支付 -> 待指派 [ label = "doAuto..." ];
+	待指派 -> 自动指派中  [ label = "doAuto..." ];
+	待支付 -> 待指派 [ label = "doPayCash现金" ];
+
 }

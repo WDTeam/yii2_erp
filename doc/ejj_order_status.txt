@@ -1,0 +1,106 @@
+@startuml
+
+
+已创建 : 客户端_待支付
+已创建 : 阿姨端_不显示
+
+已支付 : 客户端_支付已成功，待指派
+已支付 : 阿姨端_不显示
+
+已开始订单指派: 客户端_订单指派中（000）...
+已开始订单指派: 阿姨端_接受新订单（？）
+
+S已开始智能指派: 客户端_订单指派中（001）...
+S已开始智能指派: 阿姨端_有新订单
+
+S已完成智能指派: 客户端_已完成派单
+S已完成智能指派: 阿姨端_已接受订单
+
+S未完成智能指派: 客户端_订单指派中（002）...
+S未完成智能指派: 阿姨端_...
+
+S已开始人工指派: 客户端_订单指派中（003）...
+S已开始人工指派: 阿姨端_有新指派订单
+
+S已完成人工指派: 客户端_订单指派中（004）...
+S已完成人工指派: 阿姨端_有新指派订单
+
+S未完成人工指派 : 客户端_订单指派中（005）...
+S未完成人工指派 : 阿姨端_...
+
+已完成订单指派 : 客户端_已完成派单
+已完成订单指派 : 阿姨端_已接受派单
+
+已开始服务 : 客户端_阿姨已开始服务...
+已开始服务 : 阿姨端_您已开始服务...
+
+已完成服务 : 客户端_阿姨已完成服务-请评价...
+已完成服务 : 阿姨端_您已完成服务-等待客户评价
+
+已开始评价 : 客户端_显示评价界面-请评价...
+已开始评价 : 阿姨端_客户已开始评价...
+
+已完成评价 : 客户端_评价已完成
+已完成评价 : 阿姨端_客户本单评价-五星
+
+已申请结算 : 客户端_评价已完成
+已申请结算 : 阿姨端_已申请结算-请等待核实
+
+
+已核实订单 : 客户端_评价已完成
+已核实订单 : 阿姨端_已核实结算请求-请等待打款
+
+已完成结算 : 客户端_评价已完成
+已完成结算 : 阿姨端_已完成结算-打款完毕-请查收
+
+
+
+
+
+
+[*] -right-> 已创建 : user:do_create_order
+
+
+
+
+已创建 -right-> 已支付 : user: do_order_pay
+已创建 -right-> 已支付 : system: did_order_pay
+已支付 -right-> 已开始订单指派 : system: start_order_distributing
+已开始订单指派 -right-> S已开始智能指派: system: start_smart_order_distributing
+S已开始智能指派 --> S已完成智能指派 : system: finish_smart_order_distributing
+S已开始智能指派 --> S未完成智能指派 : system: fail_smart_order_distributing
+
+
+S未完成智能指派 --> S已开始人工指派 : system: change_smart_to_human_mode
+S已开始人工指派 --> S已完成人工指派 : system: start_human_order_distributing
+
+S已开始人工指派 --> S未完成人工指派 : system: fail_human_order_distributing
+
+S已完成人工指派 --> 已完成订单指派 : system: start_human_order_distributing
+
+S已完成智能指派 --> 已完成订单指派 :  system: start_human_order_distributing
+
+
+已完成订单指派 -left-> 已开始服务 :  worker: start_serve_for_customer
+
+已开始服务 -left-> 已完成服务 :  worker: finish_serve_for_customer
+
+
+
+
+
+已完成服务 -left-> 已开始评价 :  customer: start_comment_for_worker
+
+已开始评价 -down->  已完成评价 :  customer: finish_comment_for_worker
+
+已完成评价 -right-> 已申请结算 :  worker: start_to_apply_settlement
+
+已申请结算 -right-> 已核实订单 :  finiance: checked_apply_settlement
+
+已核实订单 -right->  已完成结算 :  finiance: checked_apply_settlement
+
+已完成结算 -right->  [*]
+
+
+
+@enduml

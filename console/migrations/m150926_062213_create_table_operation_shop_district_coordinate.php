@@ -26,7 +26,8 @@ class m150926_062213_create_table_operation_shop_district_coordinate extends Mig
         ], $tableOptions);
     }
 
-    public function safeDown()
+    public function down()
     {
+        $this->dropTable('{{%operation_shop_district_coordinate}}');
     }
 }
