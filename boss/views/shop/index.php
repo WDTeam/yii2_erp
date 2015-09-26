@@ -74,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter'=>Shop::$audit_statuses,
             ],
             [
-                'attribute'=>'shop_menager_id',
+                'attribute'=>'shop_manager_id',
                 'value'=>function ($model){
                     return $model->getMenagerName();
                 },
@@ -82,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter'=>Select2::widget([
                     'initValueText' => '', // set the initial display text
                     'model'=>$searchModel,
-                    'attribute'=>'shop_menager_id',
+                    'attribute'=>'shop_manager_id',
                     'options'=>[
                         
                     ],

@@ -142,4 +142,14 @@ class ShopManagerController extends Controller
         ->all();
         echo Json::encode(['results'=>$models]);
     }
+    /**
+     * 加入黑名单
+     */
+    public function actionJoinBlacklist($id)
+    {
+        $cause = Yii::$app->request->get('cause','');
+        $this->findModel($id)->joinBlacklist($cause);
+    
+        return $this->redirect(['index']);
+    }
 }
