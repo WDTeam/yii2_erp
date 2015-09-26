@@ -23,7 +23,7 @@ use boss\components\AreaCascade;
         'label' =>'选择城市',
         'grades' => 'city',
     ]);
-    echo Html::fileInput('file');
+//    echo Html::fileInput('file');
     echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']);
     ActiveForm::end(); ?>
 
