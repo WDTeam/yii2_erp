@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 'value'=>ShopManager::$is_blacklists[(int)$model->is_blacklist],
             ],
-            'blacklist_time:datetime',
+//             'blacklist_time:datetime',
             'blacklist_cause',
             [
                 'attribute' => 'audit_status',
@@ -97,8 +97,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'bl_create_time:datetime',
             'bl_photo_url:url',
             'bl_audit',
-            'bl_expiry_start',
-            'bl_expiry_end',
+            'bl_expiry_start:datetime',
+            'bl_expiry_end:datetime',
             'bl_business:ntext',
         ],
         'deleteOptions'=>[
