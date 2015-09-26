@@ -150,11 +150,11 @@ echo Menu::widget(
 							],
 							'items' => [
 							[
-							'label' => '对账(30%)',
+							'label' => '对账(50%)',
 							'url' => ['/finance-pop-order/'],
 							'icon' => 'fa fa-angle-right',
 							],[
-							'label' => '对账统计(30%)',
+							'label' => '对账统计(40%)',
 							'url' => ['/finance-record-log/'],
 							'icon' => 'fa fa-angle-right',
 							],[
@@ -162,19 +162,15 @@ echo Menu::widget(
 							'url' => ['/finance-pop-order/billinfo'],
 							'icon' => 'fa fa-angle-right',
 							],[
-							'label' => '对账单配置(0%)',
-							'url' => ['/finance-pop-order/comparisonconfig'],
-							'icon' => 'fa fa-angle-right',
-							],[
 							'label' => '增加账单配置(85%)',
 							'url' => ['/finance-header/index'],
 							'icon' => 'fa fa-angle-right',
 							],[
 							'label' => '坏账列表(70%)',
-							'url' => ['/finance-pop-order/badlist'],
+							'url' => ['/finance-pop-order/billinfo'],
 							'icon' => 'fa fa-angle-right',
 							],[
-							'label' => '渠道管理(80%)',
+							'label' => '渠道管理(85%)',
 							'url' => ['/finance-order-channel/'],
 							'icon' => 'fa fa-angle-right',
 							]
@@ -293,11 +289,12 @@ echo Menu::widget(
                         'url' => ['/operation-city'],
                         'icon' => 'fa fa-angle-right',
                     ],
-                    [
-                        'label' => '商圈管理(40%)',
-                        'url' => ['/operation-shop-district'],
-                        'icon' => 'fa fa-angle-right',
-                    ],
+//                    [
+//
+//                        'label' => '商圈管理(40%)',
+//                        'url' => ['/operation-shop-district'],
+//                        'icon' => 'fa fa-angle-right',
+//                    ],
 //                    [
 //                        'label' => '服务管理',
 //                        'url' => ['#'],
@@ -314,11 +311,6 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '价格策略管理(90%)',
-                        'url' => ['/operation-price-strategy'],
-                        'icon' => 'fa fa-angle-right',
-                    ],
-                    [
                         'label' => '引导页管理(0%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
@@ -331,7 +323,7 @@ echo Menu::widget(
                 ],
             ],
             [
-                'label' => '供应商管理(0%)',
+                'label' => '供应商管理',
                 'url' => ['#'],
                 'icon' => 'fa fa-ambulance',
                 'options' => [

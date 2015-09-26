@@ -3,7 +3,7 @@
 namespace common\models;
 
 use Yii;
-
+use yii\behaviors\TimestampBehavior;
 /**
  * This is the model class for table "{{%general_pay_log}}".
  *
@@ -92,6 +92,22 @@ class GeneralPayLog extends \yii\db\ActiveRecord
         ];
         return in_array($statusString,$statusArr) ? 1 : 0 ;
     }
+
+    /**
+     * 自动处理创建时间和修改时间
+     * @see \yii\base\Component::behaviors()
+     */
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+            ],
+        ];
+    }
+
 
     /**
      * @inheritdoc
