@@ -4,8 +4,7 @@ use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
-use boss\models\ShopManager;
-use boss\components\AreaCascade;
+use boss\models\Shop;
 
 /**
  * @var yii\web\View $this
@@ -14,7 +13,7 @@ use boss\components\AreaCascade;
  */
 ?>
 
-<div class="shop-manager-joinblacklist">
+<div class="shop-joinblacklist">
 
 <?php $form = ActiveForm::begin([
     'type'=>ActiveForm::TYPE_HORIZONTAL,
