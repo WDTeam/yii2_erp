@@ -310,7 +310,7 @@ echo Menu::widget(
                         'url' => ['/operation-boot-page'],
                         'icon' => 'fa fa-angle-right',
                     ],
-                    [
+                    /**[
                         'label' => '引导页管理(0%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
@@ -319,7 +319,7 @@ echo Menu::widget(
                         'label' => '话术管理(0%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
-                    ],
+                    ],*/
                 ],
             ],
             [
