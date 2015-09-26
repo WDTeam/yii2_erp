@@ -272,11 +272,11 @@ echo Menu::widget(
                                 'url' => ['/operation-platform'],
                                 'icon' => 'fa fa-angle-right',
                             ],
-                            [
-                                'label' => '系统版本管理',
-                                'url' => ['/operation-platform-version'],
-                                'icon' => 'fa fa-angle-right',
-                            ],
+//                            [
+//                                'label' => '系统版本管理',
+//                                'url' => ['/operation-platform-version'],
+//                                'icon' => 'fa fa-angle-right',
+//                            ],
                             [
                                 'label' => '广告位置管理',
                                 'url' => ['/operation-advert-position'],
