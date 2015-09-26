@@ -300,14 +300,18 @@ class GeneralPayController extends Controller
             $post = $request->get();
         }
 
+        //写入文本日志
+        $GeneralPayLogModel->writeLog($post);
+
         //记录日志
-        $_post['general_pay_log_price'] = $post['total_amount'];   //支付金额
-        $_post['general_pay_log_shop_name'] = '百付宝';   //商品名称
-        $_post['general_pay_log_eo_order_id'] = $post['order_no'];   //订单ID
-        $_post['general_pay_log_transaction_id'] = $post['bfb_order_no'];   //交易流水号
-        $_post['general_pay_log_status_bool'] = $post['pay_result'];   //支付状态
-        $_post['general_pay_log_status'] = $post['pay_result'];   //支付状态
-        $GeneralPayLogModel->insertLog($_post);
+        $GeneralPayLogModel->general_pay_log_price = $post['total_amount'];   //支付金额
+        $GeneralPayLogModel->general_pay_log_shop_name = '百付宝';   //商品名称
+        $GeneralPayLogModel->general_pay_log_eo_order_id = $post['order_no'];   //订单ID
+        $GeneralPayLogModel->general_pay_log_transaction_id = $post['bfb_order_no'];   //交易流水号
+        $GeneralPayLogModel->general_pay_log_status_bool = $GeneralPayLogModel->statusBool($post['pay_result']);   //支付状态
+        $GeneralPayLogModel->general_pay_log_status = $post['pay_result'];   //支付状态
+        $GeneralPayLogModel->general_pay_log_json_aggregation = json_encode($post);
+        $GeneralPayLogModel->insertLog();
 
         //实例化模型
         $model = new GeneralPay();
