@@ -23,7 +23,7 @@ class m150925_090837_create_table_operation_shop_district extends Migration
     }
 
     public function down(){
-        $this->dropTable('{{%operation_boot_page_city}}');
+        $this->dropTable('{{%operation_shop_district}}');
     }
 
     /*
