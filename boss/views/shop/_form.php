@@ -37,7 +37,7 @@ use yii\helpers\Url
             'columns' => 1,
             'attributes' => [
                 
-                'name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 店名...', 'maxlength'=>100]], 
+                'name'=>['type'=> Form::INPUT_TEXT, 'options'=>[ 'maxlength'=>100]], 
                 
                 'shop_manager_id'=>[
                     'label'=>'归属家政',
@@ -61,13 +61,13 @@ use yii\helpers\Url
                     ]
                 ], 
                 
-                'street'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 办公街道...', 'maxlength'=>255]], 
+                'street'=>['type'=> Form::INPUT_TEXT, 'options'=>[ 'maxlength'=>255]], 
                 
-                'principal'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 负责人...', 'maxlength'=>50]], 
+                'principal'=>['type'=> Form::INPUT_TEXT, 'options'=>[ 'maxlength'=>50]], 
                 
-                'tel'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 电话...', 'maxlength'=>50]], 
+                'tel'=>['type'=> Form::INPUT_TEXT, 'options'=>['maxlength'=>50]], 
                 
-                'other_contact'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 其他联系方式...', 'maxlength'=>200]],
+                'other_contact'=>['type'=> Form::INPUT_TEXT, 'options'=>[ 'maxlength'=>200]],
                 
                 // 'create_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter Create At...']], 
                 
@@ -126,19 +126,19 @@ use yii\helpers\Url
                         'items'=>BankHelper::getBankNames(),
                     ], 
                     
-                    'sub_branch'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 支行名称...', 'maxlength'=>200]], 
+                    'sub_branch'=>['type'=> Form::INPUT_TEXT, 'options'=>[ 'maxlength'=>200]], 
                 
-                    'opening_address'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 开户地址...', 'maxlength'=>255]], 
+                    'opening_address'=>['type'=> Form::INPUT_TEXT, 'options'=>[ 'maxlength'=>255]], 
                     
-                    'account_person'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 开户人...', 'maxlength'=>100]], 
+                    'account_person'=>['type'=> Form::INPUT_TEXT, 'options'=>[ 'maxlength'=>100]], 
                 
-                    'bankcard_number'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 银行卡号...', 'maxlength'=>50]], 
+                    'bankcard_number'=>['type'=> Form::INPUT_TEXT, 'options'=>[ 'maxlength'=>50]], 
                 ]
             ]);?>
         </div>
         <div class="panel-footer">
             <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-7">
+                <div class="col-sm-offset-0 col-sm-12">
                     <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success btn-lg btn-block' : 'btn btn-primary btn-lg btn-block']);?>
                 </div>
             </div>

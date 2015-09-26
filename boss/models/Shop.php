@@ -4,6 +4,9 @@ use yii;
 use yii\behaviors\TimestampBehavior;
 use boss\models\Operation\OperationCity;
 use boss\models\Operation\OperationArea;
+use yii\web\HttpException;
+use yii\base\ErrorException;
+use yii\web\BadRequestHttpException;
 class Shop extends \common\models\Shop
 {
     public static $audit_statuses = [
@@ -112,6 +115,10 @@ class Shop extends \common\models\Shop
      */
     public function removeBlacklist($cause='')
     {
+        $sm = ShopManager::find()->where(['id'=>$this->shop_manager_id])->one();
+        if($sm->is_blacklist==1){
+            throw new BadRequestHttpException('所在的小家政未移出黑名单');
+        }
         $this->is_blacklist = 0;
         if($this->save()){
             $status = new ShopStatus();
