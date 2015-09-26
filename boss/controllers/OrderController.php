@@ -2,10 +2,6 @@
 
 namespace boss\controllers;
 
-use common\models\Customer;
-use common\models\CustomerAddress;
-use common\models\CustomerWorker;
-use core\models\Worker;
 use Yii;
 use core\models\order\OrderSearch;
 use boss\components\Controller;
@@ -22,35 +18,161 @@ class OrderController extends Controller
 
     public function actionCustomer()
     {
-        $phone = Yii::$app->request->get('phone');
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        return Customer::find()->where(['customer_phone'=>$phone])->one();
+//        $phone = Yii::$app->request->get('phone');
+//        Yii::$app->response->format = Response::FORMAT_JSON;
+//        return Customer::find()->where(['customer_phone'=>$phone])->one();
+        return '{
+                    "id": 1,
+                    "customer_name": "刘道强",
+                    "customer_sex": 1,
+                    "customer_birth": 1442994170,
+                    "customer_photo": "",
+                    "customer_phone": "18519654001",
+                    "customer_email": "liuzhiqiang@corp.1jiajie.com",
+                    "region_id": 1,
+                    "customer_live_address_detail": "SOHO一期2单元908",
+                    "customer_balance": "1000.00",
+                    "customer_score": 10000,
+                    "customer_level": 1,
+                    "customer_complaint_times": 11,
+                    "customer_src": 1,
+                    "channal_id": 1,
+                    "platform_id": 1,
+                    "customer_login_ip": "192.168.0.1",
+                    "customer_login_time": 1442994170,
+                    "customer_is_vip": 1,
+                    "created_at": 1442994170,
+                    "updated_at": 1442994170,
+                    "is_del": 0,
+                    "customer_del_reason": ""
+                }';
     }
 
     public function actionCustomerAddress($id)
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        return CustomerAddress::findAll(['customer_id'=>$id]);
+//        Yii::$app->response->format = Response::FORMAT_JSON;
+//        return CustomerAddress::findAll(['customer_id'=>$id]);
+        return '[
+            {
+                "id": 1,
+                "customer_id": 1,
+                "region_id": 1,
+                "customer_address_detail": "北京市朝阳区SOHO1",
+                "customer_address_status": 1,
+                "customer_address_longitude": 12.888,
+                "customer_address_latitude": 888.334,
+                "customer_address_nickname": "测试昵称",
+                "customer_address_phone": "13554699534",
+                "created_at": 1442994172,
+                "updated_at": 1442994172,
+                "is_del": 0
+            },
+            {
+                "id": 2,
+                "customer_id": 1,
+                "region_id": 1,
+                "customer_address_detail": "北京市朝阳区SOHO2",
+                "customer_address_status": 0,
+                "customer_address_longitude": 12.888,
+                "customer_address_latitude": 888.334,
+                "customer_address_nickname": "测试昵称",
+                "customer_address_phone": "13554699534",
+                "created_at": 1442994172,
+                "updated_at": 1442994172,
+                "is_del": 0
+            },
+            {
+                "id": 3,
+                "customer_id": 1,
+                "region_id": 1,
+                "customer_address_detail": "北京市朝阳区SOHO3",
+                "customer_address_status": 0,
+                "customer_address_longitude": 12.888,
+                "customer_address_latitude": 888.334,
+                "customer_address_nickname": "测试昵称",
+                "customer_address_phone": "13554699534",
+                "created_at": 1442994172,
+                "updated_at": 1442994172,
+                "is_del": 0
+            }
+        ]';
     }
 
     public function actionCustomerUsedWorkers($id)
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $customerWorker = CustomerWorker::findAll(['customer_id'=>$id]);
-        $worker = [];
-        foreach($customerWorker as $k=>$v)
-        {
-            $worker[$k] = $v->attributes;
-            $worker[$k]['worker'] = Worker::findOne($v->woker_id);
-        }
-        return $worker;
+//        Yii::$app->response->format = Response::FORMAT_JSON;
+//        $customerWorker = CustomerWorker::findAll(['customer_id'=>$id]);
+//        $worker = [];
+//        foreach($customerWorker as $k=>$v)
+//        {
+//            $worker[$k] = $v->attributes;
+//            $worker[$k]['worker'] = Worker::findOne($v->woker_id);
+//        }
+//        return $worker;
+        return '[
+                {
+                    "id": 1,
+                    "customer_id": 1,
+                    "woker_id": 1,
+                    "customer_worker_status": 1,
+                    "created_at": 1442994171,
+                    "updated_at": 1442994171,
+                    "is_del": 0,
+                    "worker": {
+                       "id": 1,
+                        "shop_id": 1,
+                        "worker_name": "王阿姨",
+                        "worker_phone": "18412341222",
+                        "worker_rule_id": "全职"
+                    }
+                },
+                {
+                    "id": 2,
+                    "customer_id": 1,
+                    "woker_id": 1,
+                    "customer_worker_status": 0,
+                    "created_at": 1442994171,
+                    "updated_at": 1442994171,
+                    "is_del": 0,
+                    "worker": {
+                       "id": 2,
+                        "shop_id": 2,
+                        "worker_name": "张阿姨",
+                        "worker_phone": "18412341233",
+                        "worker_rule_id": "兼职"
+                    }
+                },
+                {
+                    "id": 3,
+                    "customer_id": 1,
+                    "woker_id": 1,
+                    "customer_worker_status": 0,
+                    "created_at": 1442994171,
+                    "updated_at": 1442994171,
+                    "is_del": 0,
+                    "worker": {
+                       "id": 3,
+                        "shop_id": 3,
+                        "worker_name": "李阿姨",
+                        "worker_phone": "18412341234",
+                        "worker_rule_id": "小家政全职"
+                    }
+                }
+            ]';
     }
 
     public function actionWorker()
     {
-        $phone = Yii::$app->request->get('phone');
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        return Worker::find()->where(['worker_phone'=>$phone])->one();
+//        $phone = Yii::$app->request->get('phone');
+//        Yii::$app->response->format = Response::FORMAT_JSON;
+//        return Worker::find()->where(['worker_phone'=>$phone])->one();
+        return '{
+            "id": 1,
+            "shop_id": 1,
+            "worker_name": "王阿姨",
+            "worker_phone": "18412341234",
+            "worker_rule_id": "全职"
+        }';
     }
     /**
      * Lists all Order models.
@@ -110,6 +232,7 @@ class OrderController extends Controller
         }
         return $this->render('create', [
             'model' => $model,
+            'service_list'=>[1=>'家庭保洁',2=>'新居开荒'], //TODO 需要运营支持
         ]);
     }
 

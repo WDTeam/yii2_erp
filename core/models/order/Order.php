@@ -85,7 +85,7 @@ class Order extends OrderModel
                 'order_before_status_dict_id' => $statusFrom->id,
                 'order_before_status_name' => $statusFrom->order_status_name,
                 'order_status_dict_id' => $statusTo->id,
-                'order_status_dict_name' => $statusTo->order_status_name,
+                'order_status_name' => $statusTo->order_status_name,
                 'order_src_id' => $orderSrc->id,
                 'order_src_name' => $orderSrc->order_src_name,
 
@@ -102,6 +102,8 @@ class Order extends OrderModel
                 'comment_id' => 0,
                 'order_customer_hidden' => 0,
                 'order_pop_pay_money' => 0,
+                'shop_id' => 0,
+                'order_worker_type_name' => 0,
                 'invoice_id' => 0, //发票id 用户需求中有开发票就绑定发票id
                 'checking_id' => 0,
                 'isdel' => 0,

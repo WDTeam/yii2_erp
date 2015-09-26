@@ -103,15 +103,15 @@ $("#order-order_booked_worker_phone").blur(function(){
                         '<div class="radio-inline"><label><input type="radio" value="'+ worker.id
                         +'" checked="checked" name="Order[order_booked_worker_id]"> '+worker.worker_name+'</label></div>'
                     );
-                    $("#order-shop_id").val(worker.shop_id);
-                    $("#order-order_worker_type_name").val(worker.worker_rule_id);
                 }
             }
         });
     }
 });
 $("#order-order_booked_count").change(function(){
-    $("#order-order_money").val($(this).val()/60*$("#order-order_unit_money").val());
+    $money = $(this).val()/60*$("#order_unit_money").text();
+    $("#order-order_money").val($money.toFixed(2));
+    $("#order_money").text($money.toFixed(2));
 });
 
 $("#order-order_booked_begin_time,#order-order_booked_count").change(function(){

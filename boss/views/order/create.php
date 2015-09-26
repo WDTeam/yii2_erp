@@ -19,22 +19,22 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h3 class="panel-title">用户信息</h3>
+                <h3 class="panel-title">顾客信息</h3>
             </div>
             <div class="panel-body">
-                <?= $form->field($model, 'order_customer_phone')->textInput(['maxlength' => 11]) ?>
-                <div style="display: block;"><?= $form->field($model, 'customer_id')->textInput(['maxlength' => true]) ?></div>
-                <div id="address_div" style="display: none;"><?= $form->field($model, 'address_id')->radioList([1=>'ddddd',2=>'ggggg'])->label('地址') ?></div>
-                <div style="display: block;"><?= $form->field($model, 'order_address')->textInput(['maxlength' => true]) ?></div>
-                <?= $form->field($model, 'order_service_type_id')->dropDownList([1=>'家庭保洁',2=>'新居开荒']) ?>
-                <?= $form->field($model, 'order_service_type_name')->textInput(['maxlength' => true,'value'=>'家庭保洁']) ?>
+                <?= $form->field($model, 'order_customer_phone')->textInput(['maxlength' => 11])->label('顾客手机'); ?>
+                <div style="display: none;"><?= $form->field($model, 'customer_id')->textInput(['maxlength' => true]) ?></div>
+                <div id="address_div" style="display: none;"><?= $form->field($model, 'address_id')->radioList([1=>'ddddd',2=>'ggggg'])->label('地址信息') ?></div>
+                <div style="display: none;"><?= $form->field($model, 'order_address')->textInput(['maxlength' => true]) ?></div>
+                <?= $form->field($model, 'order_service_type_id')->dropDownList($service_list)->label('服务类别') ?>
+                <div style="display: none;"><?= $form->field($model, 'order_service_type_name')->textInput(['maxlength' => true,'value'=>$service_list[1]]) ?></div>
             </div>
             <div class="panel-heading">
                 <h3 class="panel-title">服务信息</h3>
             </div>
             <div class="panel-body">
                 <div class="form-group field-order-order_customer_phone required has-success">
-                    <label for="order-order_customer_phone" class="control-label col-sm-3">阿姨手机号</label>
+                    <label for="order-order_customer_phone" class="control-label col-sm-3">阿姨手机</label>
                     <div class="col-sm-6">
                         <input type="text" maxlength="11"  class="form-control" id="order-order_booked_worker_phone">
                         <div class="help-block help-block-error "></div>
@@ -75,18 +75,25 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                     'disabled' => true,
                 ]);?>
-                <?= $form->field($model, 'shop_id')->textInput(['maxlength' => true]) ?>
-                <?= $form->field($model, 'order_worker_type_name')->textInput(['maxlength' => true]) ?>
             </div>
             <div class="panel-heading">
                 <h3 class="panel-title">支付信息</h3>
             </div>
             <div class="panel-body">
-                <?= $form->field($model, 'order_unit_money')->textInput(['maxlength' => true,'value'=>25]) ?>
-                <?= $form->field($model, 'order_money')->textInput(['maxlength' => true,'value'=>50]) ?>
+                <div class="form-group">
+                    <label class=" col-sm-3"></label>
+                    <h4 class="col-sm-2">
+                        单价：<span id="order_unit_money" style="font-size: 25px;color: #00ff00;" >25.00</span>
+                    </h4>
+                    <h4 class="col-sm-2">
+                        总价：<span id="order_money" style="font-size: 25px;color: #ff0000;">50.00</span>
+                    </h4>
+                </div>
+                <?= $form->field($model, 'order_pay_type')->dropDownList([1=>'现金支付','2'=>'余额支付'])->label('支付方式') ?>
+                <div style="display: none;"><?= $form->field($model, 'order_unit_money')->textInput(['maxlength' => true,'value'=>25]) ?></div>
+                <div style="display: none;"><?= $form->field($model, 'order_money')->textInput(['maxlength' => true,'value'=>50]) ?></div>
                 <?= $form->field($model, 'coupon_id')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model, 'order_use_coupon_money')->textInput(['maxlength' => true]) ?>
-                <?= $form->field($model, 'order_pay_type')->textInput() ?>
                 <?= $form->field($model, 'pay_channel_id')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model, 'order_pay_money')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model, 'order_use_acc_balance')->textInput(['maxlength' => true]) ?>
