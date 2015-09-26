@@ -98,8 +98,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]);
                     },
                     'joinblacklist' => function ($url, $model) {
-                        return Html::a('加入黑名单', Yii::$app->urlManager->createUrl(['shop-manager/join-blacklist','id' => $model->id]), [
+                        return empty($model->is_blacklist)?Html::a('加入黑名单', Yii::$app->urlManager->createUrl(['shop-manager/join-blacklist','id' => $model->id]), [
                             'title' => Yii::t('app', '加入黑名单'),
+                        ]):Html::a('解除黑名单', Yii::$app->urlManager->createUrl(['shop-manager/remove-blacklist','id' => $model->id]), [
+                            'title' => Yii::t('app', '解除黑名单'),
                         ]);
                     },
                 ],
