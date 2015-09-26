@@ -30,10 +30,15 @@ class Qiniu
 
     function __construct()
     {
-        $this->accessKey = '2JcEasZbcnt02g3BAKO6s_gFoTEDqk5hlGOzYuD7';
-        $this->secretKey = '8eqb4y55q2dOW45FYMeuqypbcmnazFHGMJ6p7xuf';
-        $this->domain = '7xn0um.com1.z0.glb.clouddn.com';
-        $this->bucket = 'ejiajie';
+//        $this->accessKey = '2JcEasZbcnt02g3BAKO6s_gFoTEDqk5hlGOzYuD7';
+//        $this->secretKey = '8eqb4y55q2dOW45FYMeuqypbcmnazFHGMJ6p7xuf';
+//        $this->domain = '7xn0um.com1.z0.glb.clouddn.com';
+//        $this->bucket = 'ejiajie';
+        $this->accessKey = 'kaMuZPkS_f_fxcfsDKET0rTst-pW6Ci7GMlakffw';
+        $this->secretKey = 'HEMGszOQBpQEC_GMqFqT_mwQW0ypQoE0Y3uhCllq';
+        $this->domain = '7b1f97.com1.z0.glb.clouddn.com';
+        $this->bucket = 'bjzhichangmusic';
+//        这里暂时使用我个人的东西进行测试，回头请改成企业的
     }
 
     /**
