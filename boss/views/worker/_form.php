@@ -9,6 +9,7 @@ use yii\web\JsExpression;
 use kartik\grid\GridView;
 use kartik\date\DatePicker;
 use boss\components\AreaCascade;
+use yii\helpers\Url;
 /**
  * @var yii\web\View $this
  * @var common\models\Worker $worker
@@ -70,20 +71,19 @@ $cityDesc = '门店';
         ]); ?>
         <?= $form->field($worker, 'shop_id')->widget(Select2::classname(), [
             'initValueText' => $cityDesc, // set the initial display text
-            'options' => ['placeholder' => '搜索门店名称...'],
+            'options' => ['placeholder' => 'Search for a shop_menager ...'],
             'pluginOptions' => [
                 'allowClear' => true,
-                'minimumInputLength' => 2,
+                'minimumInputLength' => 0,
                 'ajax' => [
-                    'url' => $url,
+                    'url' => Url::to(['shop-manager/search-by-name']),
                     'dataType' => 'json',
-                    'data' => new JsExpression('function(params) { return {q:params.term}; }')
+                    'data' => new JsExpression('function(params) { return {name:params.term}; }')
                 ],
-                'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-                'templateResult' => new JsExpression('function(city) { return city.text; }'),
-                'templateSelection' => new JsExpression('function (city) { return city.text; }'),
+//                 'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                'templateResult' => new JsExpression('function(model) { return model.name; }'),
+                'templateSelection' => new JsExpression('function (model) { return model.name; }'),
             ],
-            'tool'
         ]); ?>
     </div>
         <div class="panel-heading">
