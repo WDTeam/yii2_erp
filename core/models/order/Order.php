@@ -18,7 +18,6 @@ use common\models\OrderSrc;
 class Order extends OrderModel
 {
 
-    public $order_booked_date;
     /**
      * @inheritdoc
      */
@@ -41,13 +40,6 @@ class Order extends OrderModel
         ];
     }
 
-
-    public function attributeLabels()
-    {
-        return [
-            'order_booked_date'=>'预约服务日期'
-        ]+parent::attributeLabels();
-    }
 
     /**
      * 追加新订单

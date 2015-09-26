@@ -47,23 +47,33 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $form->field($model, 'order_booked_count')->dropDownList(["120"=>"两小时","150"=>"两个半小时","180"=>"三小时","210"=>"三个半小时","240"=>"四小时","270"=>"四个半小时","300"=>"五小时","330"=>"五个半小时","360"=>"六小时"])->label('预约服务时长') ?>
                 <?= $form->field($model, 'order_booked_begin_time')->widget(
                     DateTimePicker::className(), [
+                    'type'=>DateTimePicker::TYPE_COMPONENT_INPUT_CENTER,
                     'pluginOptions' => [
                         'autoclose'=>true,
-                        'format' => 'yyyy-mm-dd hh:ii',
+                        'format' => 'yyyy-mm-dd hh:ii:00',
                         'startDate' => date('Y-m-d'),
                         'hoursDisabled' => '0,1,2,3,4,5,6,7,21,22,23',
                         'minuteStep' => 30,
+                    ],
+                    'options'=>[
+                        'value'=>date('Y-m-d H:00:00',strtotime('+1 hours')),
+                        'disabled' => true,
                     ]
                 ]);?>
                 <?= $form->field($model, 'order_booked_end_time')->widget(
                     DateTimePicker::className(), [
+                    'type'=>DateTimePicker::TYPE_COMPONENT_INPUT_CENTER,
                     'pluginOptions' => [
                         'autoclose'=>true,
-                        'format' => 'yyyy-mm-dd hh:ii',
+                        'format' => 'yyyy-mm-dd hh:ii:00',
                         'startDate' => date('Y-m-d'),
                         'hoursDisabled' => '0,1,2,3,4,5,6,7,21,22,23',
                         'minuteStep' => 30,
-                    ]
+                    ],
+                    'options'=>[
+                         'value'=>date('Y-m-d H:00:00',strtotime('+3 hours')),
+                    ],
+                    'disabled' => true,
                 ]);?>
                 <?= $form->field($model, 'shop_id')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model, 'order_worker_type_name')->textInput(['maxlength' => true]) ?>
