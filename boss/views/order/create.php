@@ -88,21 +88,22 @@ $this->params['breadcrumbs'][] = $this->title;
                     <h4 class="col-sm-2">
                         总价：<span id="order_money" style="font-size: 25px;color: #ff0000;">50.00</span>
                     </h4>
+                    <h4 class="col-sm-2">
+                        账户余额：<span id="customer_balance" style="font-size: 25px;">0.00</span>
+                    </h4>
                 </div>
                 <?= $form->field($model, 'order_pay_type')->dropDownList([1=>'现金支付','2'=>'余额支付'])->label('支付方式') ?>
                 <div style="display: none;"><?= $form->field($model, 'order_unit_money')->textInput(['maxlength' => true,'value'=>25]) ?></div>
                 <div style="display: none;"><?= $form->field($model, 'order_money')->textInput(['maxlength' => true,'value'=>50]) ?></div>
+                <div id="is_acc_balance_pay" style="display:none;">
                 <?= $form->field($model, 'coupon_id')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model, 'order_use_coupon_money')->textInput(['maxlength' => true]) ?>
-                <?= $form->field($model, 'pay_channel_id')->textInput(['maxlength' => true]) ?>
-                <?= $form->field($model, 'order_pay_money')->textInput(['maxlength' => true]) ?>
-                <?= $form->field($model, 'order_use_acc_balance')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model, 'card_id')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model, 'order_use_card_money')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model, 'promotion_id')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model, 'order_use_promotion_money')->textInput(['maxlength' => true]) ?>
-                <?= $form->field($model, 'order_pay_channel_name')->textInput(['maxlength' => true]) ?>
-                <?= $form->field($model, 'order_pay_flow_num')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'order_use_acc_balance')->textInput(['maxlength' => true]) ?>
+                </div>
             </div>
             <div class="panel-heading">
                 <h3 class="panel-title">用户需求</h3>
