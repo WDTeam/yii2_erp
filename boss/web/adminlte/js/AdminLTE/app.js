@@ -593,6 +593,15 @@ $(window).load(function() {
             //Slide open or close the menu on link click
             btn.click(function(e) {
                 e.preventDefault();
+
+                if ($(this).parent().hasClass('rootTree')){
+                //收起所有
+                    $(".sidebar-menu .rootTree").children(".treeview-menu").slideUp();
+                    $(".sidebar-menu .rootTree").children("a").children(".fa-angle-down").first().removeClass("fa-angle-down").addClass("fa-angle-left");
+                    $(".sidebar-menu .rootTree").children("a").parent("li").removeClass("active");
+
+                    isActive = $(this).hasClass('active');
+                }
                 if (isActive) {
                     //Slide up to close menu
                     menu.slideUp();
