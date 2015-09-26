@@ -120,7 +120,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'data-id'=>$model->id,
                             ]);
                     },
-                    
+                    'block' => function ($url, $model) {
+                        return Html::a('<span class="fa fa-fw fa-lock"></span>',
+                        [
+                            '/worker/block-create',
+                            'id' => $model->id
+                        ]
+                        ,
+                        [
+                            'title' => Yii::t('yii', '封号'),
+                            'data-toggle' => 'modal',
+                            'data-target' => '#blockModal',
+                            'class'=>'blockModal',
+                            'data-id'=>$model->id,
+                        ]);
+                    }
                 ],
             ],
         ],
@@ -147,13 +161,19 @@ $this->params['breadcrumbs'][] = $this->title;
         'header' => '<h4 class="modal-title">请假</h4>',
         'id'=>'vacationModal',
    ]);
-
+    echo Modal::widget([
+        'header' => '<h4 class="modal-title">封号</h4>',
+        'id'=>'blockModal',
+    ]);
 $this->registerJs(<<<JSCONTENT
         $('.vacation').click(function() {
             $('#vacationModal .modal-body').html('加载中……');
             $('#vacationModal .modal-body').eq(0).load(this.href);
         });
-
+        $('.block').click(function() {
+            $('#blockModal .modal-body').html('加载中……');
+            $('#blockModal .modal-body').eq(0).load(this.href);
+        });
 JSCONTENT
         );
 
