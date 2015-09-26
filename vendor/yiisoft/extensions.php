@@ -471,4 +471,13 @@ return array (
       '@jamband/schemadump' => $vendorDir . '/jamband/yii2-schemadump',
     ),
   ),
+  'yii2tech/ar-softdelete' => 
+  array (
+    'name' => 'yii2tech/ar-softdelete',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@yii2tech/ar/softdelete' => $vendorDir . '/yii2tech/ar-softdelete',
+    ),
+  ),
 );
