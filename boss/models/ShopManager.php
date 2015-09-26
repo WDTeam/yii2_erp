@@ -52,7 +52,10 @@ class ShopManager extends \common\models\ShopManager
     {
         return array_merge(parent::rules(),[
             [['name', 'street', 'principal', 'tel'], 'required'],
-            [['province_id', 'city_id', 'county_id', 'bl_type', 'bl_create_time', 'bl_audit', 'bl_expiry_start', 'bl_expiry_end', 'create_at', 'update_at', 'is_blacklist', 'blacklist_time', 'audit_status', 'shop_count', 'worker_count', 'complain_coutn'], 'integer'],
+            [['province_id', 'city_id', 'county_id', 'bl_type', 'bl_create_time',
+                'bl_audit', 'bl_expiry_start', 'bl_expiry_end', 'create_at',
+                'update_at', 'is_blacklist', 'blacklist_time', 'audit_status',
+                'shop_count', 'worker_count', 'complain_coutn', 'tel'], 'integer'],
             [['bl_business'], 'string'],
             [['name', 'street', 'opening_address', 'bl_name', 'bl_address', 'bl_photo_url'], 'string', 'max' => 255],
             [['principal', 'tel', 'bankcard_number', 'bl_person', 'level'], 'string', 'max' => 50],
