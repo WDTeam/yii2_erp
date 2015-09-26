@@ -149,7 +149,7 @@ class ShopManagerController extends Controller
     {
         $model = $this->findModel($id);
         if(\Yii::$app->request->isPost){
-            $cause = Yii::$app->request->get('cause','');
+            $cause = Yii::$app->request->post('cause','');
             $model->joinBlacklist($cause);
             return $this->redirect(['index']);
         }

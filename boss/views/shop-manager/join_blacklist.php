@@ -21,7 +21,7 @@ use boss\components\AreaCascade;
     'action'=>['join-blacklist', 'id'=>$model->id]
 ]); ?>
 
-    <?php echo Html::textarea('cause','', [
+    <?php echo Html::textarea('cause', '', [
         'style'=>'width:100%'
     ])?>
 

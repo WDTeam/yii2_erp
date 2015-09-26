@@ -98,9 +98,10 @@ class Shop extends \common\models\Shop
         if($this->save()){
             $status = new ShopStatus();
             $status->status_number = 1;
-            $status->model_name = self::className();
+            $status->model_name = ShopStatus::MODEL_SHOP;
             $status->status_type = 2;
             $status->created_at = time();
+            $status->cause = $cause;
             return $status->save();
         }
         return false;
@@ -115,9 +116,10 @@ class Shop extends \common\models\Shop
         if($this->save()){
             $status = new ShopStatus();
             $status->status_number = 0;
-            $status->model_name = self::className();
+            $status->model_name = ShopStatus::MODEL_SHOP;
             $status->status_type = 2;
             $status->created_at = time();
+            $status->cause = $cause;
             return $status->save();
         }
         return false;
@@ -133,9 +135,10 @@ class Shop extends \common\models\Shop
         if($this->save()){
             $status = new ShopStatus();
             $status->status_number = $this->audit_status;
-            $status->model_name = self::className();
+            $status->model_name = ShopStatus::MODEL_SHOP;
             $status->status_type = 1;
             $status->created_at = time();
+            $status->cause = $cause;
             return $status->save();
         }
         return false;
