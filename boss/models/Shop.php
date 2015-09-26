@@ -7,6 +7,7 @@ use boss\models\Operation\OperationArea;
 use yii\web\HttpException;
 use yii\base\ErrorException;
 use yii\web\BadRequestHttpException;
+use yii2tech\ar\softdelete\SoftDeleteBehavior;
 class Shop extends \common\models\Shop
 {
     public static $audit_statuses = [
@@ -165,5 +166,13 @@ class Shop extends \common\models\Shop
             return $status->save();
         }
         return false;
+    }
+    /**
+     * 软删除
+     */
+    public function softDelete()
+    {
+        $this->is_deleted = 1;
+        return $this->save();
     }
 }
