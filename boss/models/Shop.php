@@ -42,7 +42,7 @@ class Shop extends \common\models\Shop
      */
     public function getMenagerName()
     {
-        $model = ShopManager::find()->where(['id'=>$this->shop_menager_id])->one();
+        $model = ShopManager::find()->where(['id'=>$this->shop_manager_id])->one();
         return $model->name;
     }
     /**

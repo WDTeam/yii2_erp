@@ -39,7 +39,7 @@ use yii\helpers\Url
                 
                 'name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 店名...', 'maxlength'=>100]], 
                 
-                'shop_menager_id'=>[
+                'shop_manager_id'=>[
                     'label'=>'归属家政',
                     'type'=> Form::INPUT_WIDGET, 
                     'widgetClass'=>Select2::classname(),

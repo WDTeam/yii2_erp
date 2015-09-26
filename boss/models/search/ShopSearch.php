@@ -15,7 +15,7 @@ class ShopSearch extends Shop
     public function rules()
     {
         return [
-            [['id', 'shop_menager_id', 'province_id', 'city_id', 'county_id', 'create_at', 'update_at', 'is_blacklist', 'blacklist_time', 'audit_status', 'worker_count', 'complain_coutn'], 'integer'],
+            [['id', 'shop_manager_id', 'province_id', 'city_id', 'county_id', 'create_at', 'update_at', 'is_blacklist', 'blacklist_time', 'audit_status', 'worker_count', 'complain_coutn'], 'integer'],
             [['name', 'street', 'principal', 'tel', 'other_contact', 'bankcard_number', 'account_person', 'opening_bank', 'sub_branch', 'opening_address', 'level'], 'safe'],
         ];
     }
@@ -40,7 +40,7 @@ class ShopSearch extends Shop
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'shop_menager_id' => $this->shop_menager_id,
+            'shop_manager_id' => $this->shop_manager_id,
             'province_id' => $this->province_id,
             'city_id' => $this->city_id,
             'county_id' => $this->county_id,
