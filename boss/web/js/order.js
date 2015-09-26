@@ -33,6 +33,7 @@ $("#order-order_customer_phone").blur(function(){
             success: function (custormer) {
                 if (custormer.id) {
                     $("#order-customer_id").val(custormer.id);
+                    $("#customer_balance").text(custormer.customer_balance);
                     $.ajax({
                         type: "GET",
                         url: "/order/customer-address/?id=" + custormer.id,
@@ -120,5 +121,13 @@ $("#order-order_booked_begin_time,#order-order_booked_count").change(function(){
     timestamp = timestamp + $("#order-order_booked_count").val() * 60;
     $("#order-order_booked_end_time").val(formatDate(new Date(timestamp * 1000)));
 
+});
+
+$('#order-order_pay_type').change(function(){
+    if($(this).val()==1){
+        $('#is_acc_balance_pay').hide();
+    }else{
+        $('#is_acc_balance_pay').show();
+    }
 });
 

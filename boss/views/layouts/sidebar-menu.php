@@ -109,7 +109,7 @@ echo Menu::widget(
                 ],
             ],
             [
-                'label' => '订单管理(28%)',
+                'label' => '订单管理(20%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-tag',
                 'options' => [
@@ -122,7 +122,7 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '创建新订单(75%)',
+                        'label' => '创建新订单(80%)',
                         'url' => ['/order/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
