@@ -41,7 +41,8 @@
         "2amigos/yii2-date-picker-widget": "*",
         "kartik-v/yii2-widget-datetimepicker": "*",
         "yii2tech/ar-softdelete": "dev-master",
-        "yii2tech/crontab": "dev-master"
+        "yii2tech/crontab": "dev-master",
+        "yiidoc/yii2-redactor": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
