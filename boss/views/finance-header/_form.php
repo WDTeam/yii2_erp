@@ -24,8 +24,9 @@ use kartik\widgets\Select2;
     'attributes' => [
   		
 'finance_header_title'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'当前名称...', 'maxlength'=>100],'class' => 'col-md-2'],
- 'finance_order_channel_name'=>['type'=> Form::INPUT_DROPDOWN_LIST, 'items'=>$htmlordeinfo,'class' => 'col-md-2'], 		
- 'finance_pay_channel_name'=>['type'=> Form::INPUT_DROPDOWN_LIST, 'items'=>$htmlpayinfo,'class' => 'col-md-2'],		
+  'finance_order_channel_name'=>['type'=> Form::INPUT_DROPDOWN_LIST, 'items'=>$htmlpayinfo,'class' => 'col-md-2'],
+ 'finance_pay_channel_name'=>['type'=> Form::INPUT_DROPDOWN_LIST, 'items'=>$htmlordeinfo,'class' => 'col-md-2'],
+ 			
  'finance_uplod_url'=>['type'=> Form::INPUT_FILE, 'options'=>['placeholder'=>'上传exl名称...', 'maxlength'=>100],'class' => 'col-md-2'],
     ]
     ]);

@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\CheckboxColumn'],
+            ['class' => 'yii\grid\SerialColumn'],
      		
             'id',
             'finance_pop_order_number',
