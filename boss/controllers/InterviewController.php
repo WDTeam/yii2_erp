@@ -5,7 +5,7 @@ namespace boss\controllers;
 use Yii;
 use boss\models\Interview;
 use yii\data\ActiveDataProvider;
-use yii\web\Controller;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;

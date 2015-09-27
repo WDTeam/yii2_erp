@@ -26,7 +26,7 @@ class Order extends OrderModel
         return [
             [['order_code'],'unique'],
             [['order_code','order_service_type_id','customer_id', 'order_ip', 'address_id','order_unit_money', 'order_money','order_before_status_name', 'order_status_name', 'order_service_type_name',
-                'order_src_name', 'order_address', 'order_customer_phone','order_booked_begin_time', 'order_booked_end_time'],'required'],
+                'order_src_name', 'order_address', 'order_customer_phone','order_booked_begin_time', 'order_booked_end_time','order_use_acc_balance'],'required'],
             [['order_parent_id', 'order_is_parent', 'order_before_status_dict_id', 'order_status_dict_id', 'order_flag_send', 'order_flag_urgent', 'order_flag_exception', 'order_service_type_id', 'order_src_id',
                 'channel_id', 'customer_id', 'order_ip', 'order_booked_count', 'address_id', 'order_booked_worker_id', 'order_pay_type', 'pay_channel_id', 'card_id', 'coupon_id', 'promotion_id', 'order_lock_status',
                 'worker_id', 'worker_type_id', 'order_worker_send_type', 'shop_id', 'comment_id', 'order_customer_hidden', 'invoice_id', 'checking_id', 'admin_id', 'isdel'], 'integer'],
@@ -104,8 +104,14 @@ class Order extends OrderModel
                 'order_customer_hidden' => 0,
                 'order_pop_pay_money' => 0,
                 'shop_id' => 0,
-                'order_worker_type_name' => 0,
-
+                'order_worker_type_name' => '',
+                'order_use_acc_balance'=> $this->order_use_acc_balance?:0,
+                'card_id'=> $this->card_id?:0,
+                'order_use_card_money'=> $this->order_use_card_money?:0,
+                'coupon_id'=> $this->coupon_id?:0,
+                'order_use_coupon_money'=> $this->order_use_coupon_money?:0,
+                'promotion_id'=> $this->promotion_id?:0,
+                'order_use_promotion_money'=> $this->order_use_promotion_money?:0,
                 'pay_channel_id'=>0,//支付渠道id
                 'order_pay_channel_name'=>'',//支付渠道
                 'order_pay_flow_num'=>'',//支付流水号

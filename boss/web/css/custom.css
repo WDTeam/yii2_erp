@@ -42,3 +42,19 @@
 ul.sidebar-menu ul.treeview-menu li.active a.active{
 	color: red;
 }
+
+
+
+#manualSettle .settleDetail {
+	float: left;
+	width: 10%;
+}
+
+#manualSettle .settle-detail-body {
+	padding: 0;
+}
+
+#manualSettle .settle-detail-body div {
+	padding: 10px;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+}

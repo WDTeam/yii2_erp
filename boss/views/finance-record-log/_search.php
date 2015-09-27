@@ -25,11 +25,11 @@ use kartik\date\DatePicker;
     
     <?//= $form->field($model, 'finance_pay_channel_id') ?>
 <div class='col-md-2'>
-    <?= $form->field($model, 'finance_pay_channel_name')->widget(Select2::classname(), [
+    <?= $form->field($model, 'finance_pay_channel_id')->widget(Select2::classname(), [
         'name' => 'finance_pay_channel_id',
         'hideSearch' => true,
-        'data' => [1 => '美团', 2 => '大众点评',3=>'京东到家',4=>'淘宝热卖'],
-        'options' => ['placeholder' => '选择订单渠道'],
+        'data' =>$odrinfo,
+        'options' => ['placeholder' => '选择订单渠道','class' => 'col-md-2'],
         'pluginOptions' => [
             'allowClear' => true
         ],
@@ -66,7 +66,7 @@ use kartik\date\DatePicker;
     
     ?>
   </div>   
-    <?php//  echo $form->field($model, 'create_time') ?>
+    <?php //  echo $form->field($model, 'create_time') ?>
 
     <?php // echo $form->field($model, 'is_del') ?>
 

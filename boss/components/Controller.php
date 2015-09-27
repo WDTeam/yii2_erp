@@ -11,6 +11,9 @@ class Controller extends \yii\web\Controller
      */
     public function beforeAction($action)
     {
+        if(\Yii::$app->user->isGuest && $action->id!='login'){
+            $this->redirect(['site/login']);
+        }
         $name = $this->id.'/'.$action->id;
         $auth = Yii::$app->authManager;
         $pre = $auth->getPermission($name);

@@ -471,4 +471,40 @@ return array (
       '@jamband/schemadump' => $vendorDir . '/jamband/yii2-schemadump',
     ),
   ),
+  'yii2tech/ar-softdelete' => 
+  array (
+    'name' => 'yii2tech/ar-softdelete',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@yii2tech/ar/softdelete' => $vendorDir . '/yii2tech/ar-softdelete',
+    ),
+  ),
+  'yii2tech/crontab' => 
+  array (
+    'name' => 'yii2tech/crontab',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@yii2tech/crontab' => $vendorDir . '/yii2tech/crontab',
+    ),
+  ),
+  'yiidoc/yii2-redactor' => 
+  array (
+    'name' => 'yiidoc/yii2-redactor',
+    'version' => '2.0.1.0',
+    'alias' => 
+    array (
+      '@yii/redactor' => '/',
+    ),
+  ),
+  'liyunfang/yii2-contextmenu' => 
+  array (
+    'name' => 'liyunfang/yii2-contextmenu',
+    'version' => '1.0.5.0',
+    'alias' => 
+    array (
+      '@liyunfang/contextmenu' => $vendorDir . '/liyunfang/yii2-contextmenu',
+    ),
+  ),
 );

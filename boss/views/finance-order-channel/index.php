@@ -22,14 +22,21 @@ use kartik\tabs\TabsX;
      Pjax::begin();
     $ertyy= GridView::widget([
      		'dataProvider' => $dataProvider,
-     		'filterModel' => $searchModel,
+     		//'filterModel' => $searchModel,
      		'columns' => [
      		['class' => 'yii\grid\SerialColumn'],
      
      		'id',
      		'finance_order_channel_name',
      		'finance_order_channel_sort',
-     		'finance_order_channel_is_lock',
+    		[
+    		'format' => 'raw',
+    		'label' => '上下架',
+    		'value' => function ($dataProvider) {
+    			return $dataProvider->finance_order_channel_is_lock ? '<font cloro:red>上架</font>' : '下架';
+    		},
+    		'width' => "100px",
+    		],
      		'create_time:datetime',
      		[
      		'class' => 'yii\grid\ActionColumn',

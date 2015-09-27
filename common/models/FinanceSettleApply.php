@@ -40,6 +40,8 @@ class FinanceSettleApply extends \yii\db\ActiveRecord
     
     const FINANCE_SETTLE_APPLY_STATUS_INIT = 0;//提交结算申请
     
+
+    
     /**
      * @inheritdoc
      */

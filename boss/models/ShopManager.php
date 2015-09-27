@@ -5,6 +5,7 @@ use yii\behaviors\TimestampBehavior;
 use boss\models\Operation\OperationArea;
 use yii\base\Object;
 use boss\models\ShopStatus;
+use crazyfd\qiniu\Qiniu;
 class ShopManager extends \common\models\ShopManager
 {
     /**
@@ -85,6 +86,9 @@ class ShopManager extends \common\models\ShopManager
      */
     public function getCityName()
     {
+        if(empty($this->city_id)){
+            return '';
+        }
         $model = OperationArea::find()->where(['id'=>$this->city_id])->one();
         return $model->area_name;
     }
@@ -190,5 +194,21 @@ class ShopManager extends \common\models\ShopManager
             return $status->save();
         }
         return false;
+    }
+    /**
+     * 软删除
+     */
+    public function softDelete()
+    {
+        $this->is_deleted = 1;
+        return $this->save();
+    }
+    /**
+     * 获取执照URL
+     */
+    public function getBlPhotoUrlByQiniu()
+    {
+        $qn = new Qiniu();
+        return $qn->getLink().$this->bl_photo_url;
     }
 }

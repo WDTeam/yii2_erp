@@ -86,7 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute'=>'shop_manager_id',
                 'value'=>function ($model){
-                    return $model->getMenagerName();
+                    return $model->getManagerName();
                 },
                 'options'=>['width'=>200,],
                 'filter'=>Select2::widget([

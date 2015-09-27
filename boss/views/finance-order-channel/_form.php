@@ -23,8 +23,7 @@ use kartik\datecontrol\DateControl;
 
 'finance_order_channel_sort'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 排序...']], 
 
-'finance_order_channel_is_lock'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 1 上架 2 下架...']], 
-
+'finance_order_channel_is_lock'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 1 上架 2 下架...']], 				        
 'create_time'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 增加时间...']], 
 
 'is_del'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 0 正常 1 删除...']], 

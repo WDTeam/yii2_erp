@@ -413,23 +413,23 @@ class WxPayApi
 	{
         if(!empty($_GET['debug'])){
             $result = array (
-                'appid' => 'wx7558e67c2d61eb8f',
-                'attach' => 'e家洁在线支付',
-                'bank_type' => 'CMB_CREDIT',
-                'cash_fee' => '3500',
-                'fee_type' => 'CNY',
-                'is_subscribe' => 'Y',
-                'mch_id' => '10037310',
-                'nonce_str' => 'k67hrd7daokfetzwz1fcyehuz8vgehsb',
-                'openid' => 'o7KvajgiK1XXWInL-eMJjjrlQAmc',
-                'out_trade_no' => 'WXWAP_2015092211069962_32551',
-                'result_code' => 'SUCCESS',
-                'return_code' => 'SUCCESS',
-                'sign' => '45A1A35B9F557FC5D914DF9E0D39EE21',
-                'time_end' => '20150922110653',
-                'total_fee' => '3500',
-                'trade_type' => 'JSAPI',
-                'transaction_id' => '1006560062201509220954999431',
+                "appid"=> "wx865a1a3ff91297df",
+                "attach"=> "e家洁会员充值",
+                "bank_type"=> "CFT",
+                "cash_fee"=> "1",
+                "fee_type"=> "CNY",
+                "is_subscribe"=> "N",
+                "mch_id"=> "1217983401",
+                "nonce_str"=> "ntkdxmi7jzmlznwrb78x0141gaykxfjq",
+                "openid"=> "oyHbPjjgwiS-tmVjytAHI8lzPBFI",
+                "out_trade_no"=> "150927591240",
+                "result_code"=> "SUCCESS",
+                "return_code"=> "SUCCESS",
+                "sign"=> "79B01394EDD26869FA3F32DA2D210F5B",
+                "time_end"=> "20150927170548",
+                "total_fee"=> "1",
+                "trade_type"=> "APP",
+                "transaction_id"=> "1004390253201509271012600940"
             );
         }else{
             //获取通知的数据
