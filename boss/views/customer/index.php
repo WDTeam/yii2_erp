@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($dataProvider) {
                     return '<a href="/customer/' . $dataProvider->id . '">'.$dataProvider->id.'</a>';
                 },
-                'width' => "100px",
+                'width' => "80px",
             ],
             [
                 'format' => 'raw',
@@ -58,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($dataProvider) {
                     return $dataProvider->customer_name;
                 },
-                'width' => "100px",
+                'width' => "80px",
             ],
             [
                 'format' => 'raw',
@@ -66,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($dataProvider) {
                     return $dataProvider->customer_phone;
                 },
-                'width' => "100px",
+                'width' => "80px",
             ],
             [
                 'format' => 'raw',
@@ -103,7 +103,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     
                 },
-                'width' => "100px",
+                'width' => "150px",
             ],
             [
                 'format' => 'raw',
@@ -111,7 +111,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($dataProvider) {
                     return $dataProvider->customer_is_vip ? '会员' : '非会员';
                 },
-                'width' => "100px",
+                'width' => "80px",
             ],
             [
                 'format' => 'raw',
@@ -120,7 +120,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     $platform = CustomerPlatform::find()->where(['id'=>$dataProvider->platform_id])->one();
                     return $platform ? $platform->platform_name : '-';
                 },
-                'width' => "100px",
+                'width' => "80px",
             ],
             [
                 'format' => 'raw',
@@ -129,7 +129,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     $channal = CustomerChannal::find()->where(['id'=>$dataProvider->channal_id])->one();
                     return $channal ? $channal->channal_name : '-';
                 },
-                'width' => "100px",
+                'width' => "80px",
             ],
             [
                 'format' => 'raw',
@@ -138,7 +138,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     $order_count = order::find()->where(['customer_id'=>$dataProvider->id])->count();
                     return '<a href="/order/index?OrderSearch[customer_id]='. $dataProvider->id .'">' . $order_count . '</a>';
                 },
-                'width' => "100px",
+                'width' => "80px",
             ],
             [
                 'format' => 'raw',
@@ -146,7 +146,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($dataProvider) {
                     return $dataProvider->customer_balance;
                 },
-                'width' => "100px",
+                'width' => "80px",
             ],
             [
                 'format' => 'raw',
@@ -154,7 +154,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($dataProvider) {
                     return '<a href="/order/index?OrderSearch[customer_id]='. $dataProvider->id .'">' . $dataProvider->customer_complaint_times . '</a>';
                 },
-                'width' => "100px",
+                'width' => "80px",
             ],
             [
                 'format' => 'datetime',
@@ -163,7 +163,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $dataProvider->created_at;
                     
                 },
-                'width' => "100px",
+                'width' => "80px",
             ],
             // [
             //     'format'=>'raw',
