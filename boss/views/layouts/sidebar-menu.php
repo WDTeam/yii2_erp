@@ -188,7 +188,7 @@ echo Menu::widget(
                     ],
                     [
                         'label' => '结算管理(60%)',
-                        'url' => ['/finance-settle-apply'],
+                        'url' => ['/finance-settle-apply/index?FinanceSettleApplySearch[finance_settle_apply_status]=0&FinanceSettleApplySearch[ids]=&FinanceSettleApplySearch[nodeId]=1'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
