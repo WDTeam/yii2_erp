@@ -22,9 +22,10 @@ class wxpay_class extends WxPayNotify{
         $input->SetNotify_url($param['notify_url']);
         $input->SetTrade_type($param['trade_type']);
         $order = WxPayApi::unifiedOrder($input);
-        if(empty($order['appid'])){
+        if(empty($order['appid']) || empty($order['mch_id'])){
             $order = $this->get($param);
         }
+
         $data['appid'] = $order['appid'];
         $data['partnerid'] = $order['mch_id'];
         $data['prepayid'] = $order['prepay_id'];
