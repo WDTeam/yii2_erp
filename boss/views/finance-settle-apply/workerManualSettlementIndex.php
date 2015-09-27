@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="panel-heading">
                 <h3 class="panel-title">阿姨信息</h3>
         </div>
-        <div class="panel-body">
+        <div class="panel-body settle-detail-body">
             <div class='col-md-2'>
                 阿姨姓名
             </div>
@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 上次结算时间
             </div>
         </div>
-        <div class="panel-body ">
+        <div class="panel-body settle-detail-body">
             <div class='col-md-2'>
                 <?=  $model->workerName; ?>
             </div>
@@ -97,7 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
          ?>
         </div>
-        <div class="panel-body">
+        <div class="panel-body settle-detail-body">
             <div class='settleDetail'>
                 完成总单量
             </div>
@@ -129,7 +129,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 应结
             </div>
         </div>
-        <div class="panel-body ">
+        <div class="panel-body settle-detail-body">
             <div class='settleDetail'>
                 250
             </div>
