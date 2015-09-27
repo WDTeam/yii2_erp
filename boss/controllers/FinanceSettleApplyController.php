@@ -12,7 +12,7 @@ use yii\filters\VerbFilter;
 use common\models\FinanceWorkerOrderIncome;
 use common\models\FinanceWorkerNonOrderIncome;
 use boss\models\WorkerSearch;
-use boss\models\financesettle\SettleWorkerInfo;
+use boss\models\FinanceWorkerOrderIncomeSearch;
 
 /**
  * FinanceSettleApplyController implements the CRUD actions for FinanceSettleApply model.
@@ -178,7 +178,9 @@ class FinanceSettleApplyController extends Controller
         $financeSettleApplySearch->workerPhone= "13456789000";
         $financeSettleApplySearch->workerOnboardTime= "1443324337";
         $financeSettleApplySearch->workerType= "全职全日";
-        return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,]);
+        $searchModel = new FinanceWorkerOrderIncomeSearch;
+        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'dataProvider'=>$dataProvider]);
     }
     
     public function actionWorkerManualSettlementDone(){
