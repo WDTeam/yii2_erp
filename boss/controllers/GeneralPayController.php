@@ -339,7 +339,7 @@ class GeneralPayController extends Controller
             $model->general_pay_transaction_id = $post['bfb_order_no'];
             $model->general_pay_is_coupon = 1;
             $model->general_pay_eo_order_id = $post['order_no'];
-            $model->general_pay_verify = md5(1);
+            $model->general_pay_verify = $model->makeSign();
 
             $model->save(false);
             $bfb->notify();
@@ -417,7 +417,7 @@ class GeneralPayController extends Controller
             $model->general_pay_transaction_id = $post['bfb_order_no'];
             $model->general_pay_is_coupon = 1;
             $model->general_pay_eo_order_id = $post['order_no'];
-            $model->general_pay_verify = md5(1);
+            $model->general_pay_verify = $model->makeSign();
 
             $model->save(false);
             $class->notify();
