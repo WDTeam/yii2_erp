@@ -83,11 +83,23 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute'=>'shop_count',
-                'options'=>['width'=>70]
+                'options'=>['width'=>70],
+                'value'=>function ($model){
+                    return Html::a($model->shop_count, ['shop/index', 'ShopSearch'=>[
+                        'shop_manager_id'=>$model->id
+                    ]]);
+                },
+                'format'=>'raw',
             ],
             [
                 'attribute'=>'worker_count',
-                'options'=>['width'=>70]
+                'options'=>['width'=>70],
+//                 'value'=>function ($model){
+//                     return Html::a($model->worker_count, ['worker/index', 'ShopSearch'=>[
+//                         'shop_manager_id'=>$model->id
+//                     ]]);
+//                 },
+//                 'format'=>'raw',
             ],
             [
                 'attribute'=>'complain_coutn',
