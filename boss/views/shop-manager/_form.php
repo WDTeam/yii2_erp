@@ -16,7 +16,10 @@ use boss\components\AreaCascade;
 
 <div class="shop-manager-form">
 
-    <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); ?>
+    <?php $form = ActiveForm::begin([
+        'type'=>ActiveForm::TYPE_HORIZONTAL,
+        'options' =>  ['enctype' => 'multipart/form-data']
+    ]); ?>
     <?php //var_dump($model->getErrors());?>
     <div class="panel panel-info">
         <div class="panel-heading">
@@ -168,7 +171,10 @@ use boss\components\AreaCascade;
         
                 'bl_audit'=>['type'=> Form::INPUT_TEXT, 'options'=>[]],
 
-                'bl_photo_url'=>['type'=> Form::INPUT_TEXT, 'options'=>[ 'maxlength'=>255]],
+                'bl_photo_url'=>[
+                    'type'=> Form::INPUT_FILE,
+                    'options'=>[ 'maxlength'=>255]
+                ],
                 
                 'bl_business'=>['type'=> Form::INPUT_TEXTAREA, 'options'=>['rows'=> 6]],
                 

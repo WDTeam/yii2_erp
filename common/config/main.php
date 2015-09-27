@@ -174,6 +174,34 @@ return [
 //                  'class'=>'\kartik\grid\Module',
 //                  // other module settings
 //              ],
+            /**
+             * 配置 redactor
+             * 
+             * 使用参考：https://github.com/yiidoc/yii2-redactor
+             * 方法1：
+             * <?= \yii\redactor\widgets\Redactor::widget([
+             *    'model' => $model,
+             *    'attribute' => 'body'
+             * ]) ?>
+             * 
+             * 方法2：
+             * <?= $form->field($model, 'body')->widget(\yii\redactor\widgets\Redactor::className(), [
+             *     'clientOptions' => [
+             *         'imageManagerJson' => ['/redactor/upload/image-json'],
+             *         'imageUpload' => ['/redactor/upload/image'],
+             *         'fileUpload' => ['/redactor/upload/file'],
+             *         'lang' => 'zh_cn',
+             *         'plugins' => ['clips', 'fontcolor','imagemanager']
+             *     ]
+             * ])?>
+             * 
+             */
+            'redactor' => [
+                'class' => 'yii\redactor\RedactorModule',
+                'uploadDir' => '@webroot/path/to/uploadfolder',
+                'uploadUrl' => '@web/path/to/uploadfolder',
+                'imageAllowExtensions'=>['jpg','png','gif']
+            ],
          ]
     ],
 ];

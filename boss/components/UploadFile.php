@@ -15,6 +15,7 @@ use Yii;
 use crazyfd\qiniu\Qiniu;
 use yii\web\UploadedFile;
 use yii\base\Widget;
+use yii\base\Object;
 /**
  * 
  */

@@ -187,7 +187,7 @@ class Worker extends \common\models\Worker
     {
         $sm = Shop::find()->where(['id'=>$this->shop_id])->one();
         if($sm->worker_is_blacklist==1){
-            throw new BadRequestHttpException('所在的门店未移出黑名单');
+            throw new BadRequestHttpException('所在的门店还在黑名单中');
         }
         $this->is_blacklist = 0;
         if($this->save()){
