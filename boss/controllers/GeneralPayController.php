@@ -248,10 +248,10 @@ class GeneralPayController extends Controller
         $model = GeneralPay::find()->where(['id'=>$GeneralPayId,'general_pay_status'=>0,'is_del'=>1])->one();
 
         //验证支付结果
-        if(!empty($model)){
+        if(!empty($model) && $status == 'SUCCESS'){
             $model->id = $GeneralPayId; //ID
             $model->general_pay_status = 1; //支付状态
-            $model->general_pay_actual_money = $model->toMoney($post['total_fee'],100,true);
+            $model->general_pay_actual_money = $model->toMoney($post['total_fee'],100,false);
             $model->general_pay_transaction_id = $post['transaction_id'];
             $model->general_pay_is_coupon = 1;
             $model->general_pay_eo_order_id = $post['out_trade_no'];
