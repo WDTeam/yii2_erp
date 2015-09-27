@@ -70,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
         <div class="panel-body ">
-            <div class='col-md-2 box-solid'>
+            <div class='col-md-2'>
                 <?=  $model->workerName; ?>
             </div>
             <div class='col-md-2'>
@@ -98,66 +98,66 @@ $this->params['breadcrumbs'][] = $this->title;
          ?>
         </div>
         <div class="panel-body">
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 完成总单量
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 现金订单
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 收取现金
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 非现金订单
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 工时费应结
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 完成任务
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 任务奖励
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 小保养订单
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 小保养
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 应结
             </div>
         </div>
         <div class="panel-body ">
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 250
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 30
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 2000.00
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 100
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 4000.00
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 20
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 2000.00
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 20
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 2000.00
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 8000.00
             </div>
         </div>
