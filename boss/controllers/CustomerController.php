@@ -77,7 +77,7 @@ class CustomerController extends Controller
         $model->is_del = 1;
         $model->validate();
         $model->save();
-        return $this->redirect(['/customer/block']);
+        return $this->redirect(['/customer/block', 'CustomerSearch'=>['is_del'=>1]]);
     }
 
     /**
@@ -89,27 +89,58 @@ class CustomerController extends Controller
         $model->is_del = 0;
         $model->validate();
         $model->save();
-        return $this->redirect(['/customer/index']);
+        return $this->redirect(['/customer/index', 'CustomerSearch'=>['is_del'=>0]]);
     }
 
     public function actionSwitchBlock(){
-        // $id = Yii::$app->request->get('id');
-        // $connection = Yii::$app->db;
-        //echo "1";
+        $id = Yii::$app->request->get('id');
 
-        $customer = Yii::$app->db->createCommand('SELECT * FROM {{%customer}} WHERE id='.(Yii::$app->request->get('id')))->queryOne();
-    
-        if ($customer['is_del'] == 1) {
-            $command = Yii::$app->db->createCommand('UPDATE {{%customer}} SET is_del=0 WHERE id='.(Yii::$app->request->get('id')));
-            $command->execute();
-            // return $this->actionIndex();
-            return $this->redirect(['/customer/index?CustomerSearch[is_del]=0']);
-        }else{
-            $command = Yii::$app->db->createCommand('UPDATE {{%customer}} SET is_del=1 WHERE id='.(Yii::$app->request->get('id')));
-            $command->execute();
-            // return $this->actionBlock();
-            return $this->redirect(['/customer/block?CustomerSearch[is_del]=1']);
+        $customer = Customer::find()->where(['id'=>$id])->one();
+        // echo $id.'|'.$customer->is_del;exit;
+        // var_dump($customer);
+
+        $is_del = $customer->is_del;
+        // var_dump($is_del);
+        $is_del = $is_del ? 0 : 1;
+        // var_dump($is_del);
+        // exit();
+        $customer->is_del = $is_del;
+        $customer->validate();
+        if ($customer->hasErrors()) {
+            var_dump($customer->getErrors());
+            exit();
         }
+        $customer->save();
+        // var_dump($is_del);
+        // exit();
+        if ($customer->is_del == 1) {
+            return $this->redirect(['/customer/block', 
+                'CustomerSearch'=>['is_del'=>1]]);
+        }
+        if ($customer->is_del == 0){
+            return $this->redirect(['/customer/index', 
+                'CustomerSearch'=>['is_del'=>0]]);
+        }
+        // $connection = Yii::$app->db;
+        // echo "1";
+        // exit();
+        // $model->getErrors();
+
+        // $customer = $connection->createCommand('SELECT * FROM {{%customer}} WHERE id='.$id)->queryOne();
+        // var_dump($id);
+        // var_dump($connection);
+        // var_dump($customer);
+        // exit();
+        // if ($customer['is_del'] == 1) {
+        //     $command = $connection->createCommand('UPDATE {{%customer}} SET is_del=0 WHERE id='.$id);
+        //     $command->execute();
+        //     return $this->redirect(['/customer/index', 
+        //         'CustomerSearch'=>['is_del'=>0]]);
+        // }else{
+        //     $command = $connection->createCommand('UPDATE {{%customer}} SET is_del=1 WHERE id='.$id);
+        //     $command->execute();
+        //     return $this->redirect(['/customer/index?CustomerSearch[is_del]=1']);
+        // }
     }
 
     
@@ -121,6 +152,7 @@ class CustomerController extends Controller
      */
     public function actionView($id)
     {
+        $searchModel = new CustomerSearch;
         $model = $this->findModel($id);
 
         //组装model
@@ -227,6 +259,7 @@ class CustomerController extends Controller
         } else {
             return $this->render('view', [
                 'model' => $model, 
+                'searchModel'=>$searchModel,
                 'operationCity'=>$operationCity, 
                 'customerPlatform'=>$customerPlatform, 
                 'platforms'=>$platforms,

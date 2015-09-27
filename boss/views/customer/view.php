@@ -3,6 +3,13 @@
 use yii\helpers\Html;
 use kartik\detail\DetailView;
 use kartik\datecontrol\DateControl;
+use kartik\widgets\ActiveForm;
+use kartik\widgets\Select2;
+use yii\web\JsExpression;
+use kartik\builder\Form;
+use kartik\grid\GridView;
+use kartik\date\DatePicker;
+use boss\components\AreaCascade;
 
 use common\models\CustomerPlatform;
 use common\models\CustomerChannal;
@@ -20,13 +27,16 @@ use common\models\Order;
  * @var common\models\Worker $model
  */
 
-$this->title = '顾客详情';
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Customers'), 'url' => ['index']];
+$this->title = '客户详情';
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Customers'), 'url' => ['View']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="customer-view">
     <div class="page-header">
         <!--<h1><?= Html::encode($this->title) ?></h1>-->
+    </div>
+    <div class="panel-body">
+        <?php  //echo $this->render('_search', ['model' => $searchModel]); ?>
     </div>
 <?php 
 echo DetailView::widget([
