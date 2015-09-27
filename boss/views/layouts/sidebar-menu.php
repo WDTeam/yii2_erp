@@ -10,7 +10,7 @@ echo Menu::widget(
         ],
         'items' => [
             [
-                'label' => '门店管理',
+                'label' => '门店管理(95%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-flag',
                 'options' => [
@@ -370,7 +370,7 @@ echo Menu::widget(
                 ],
             ],
             [
-                'label' => '小家政管理',
+                'label' => '小家政管理(85%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-slideshare',
                 'options' => [
