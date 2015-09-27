@@ -16,7 +16,7 @@ use kartik\date\DatePicker;
  */
 $url = \yii\helpers\Url::to(['customer']);
 //$cityDesc = empty($worker->shop_id) ? '' : Worker::findOne($worker->shop_id)->description;
-$cityDesc = '顾客';
+$cityDesc = '客户';
 //$worker->hasOne(WorkerExt::className(),'id=worker_id');
 //var_dump($worker->workerExts);die;
 ?>
@@ -32,10 +32,10 @@ $cityDesc = '顾客';
         ]
     ]);
 
-    echo $form->field($customer, 'customer_name')->textInput(['placeholder' => 'Enter 顾客姓名...', 'maxlength' => 16]);
+    echo $form->field($customer, 'customer_name')->textInput(['placeholder' => 'Enter 客户姓名...', 'maxlength' => 16]);
     echo $form->field($customer, 'customer_sex')->radioList(['0' => '女', '1' => '男'], ['inline' => true]);
-    echo $form->field($customer, 'customer_phone')->textInput(['placeholder' => 'Enter 顾客手机...', 'maxlength' => 11]);
-    echo $form->field($customer, 'customer_score')->textInput(['placeholder' => 'Enter 顾客积分...', 'maxlength' => 8]);
+    echo $form->field($customer, 'customer_phone')->textInput(['placeholder' => 'Enter 客户手机...', 'maxlength' => 11]);
+    echo $form->field($customer, 'customer_score')->textInput(['placeholder' => 'Enter 客户积分...', 'maxlength' => 8]);
     echo $form->field($customer, 'created_at')->widget(DatePicker::classname(),[
         'name' => 'created_at',
         'type' => DatePicker::TYPE_COMPONENT_PREPEND,
@@ -64,17 +64,17 @@ $cityDesc = '顾客';
         ]
     ]);
 
-    echo $form->field($customer, 'general_region_id')->textInput(['placeholder' => 'Enter 顾客住址ID...', 'maxlength' => 8]);
-    echo $form->field($customer, 'customer_level')->textInput(['placeholder' => 'Enter 顾客评级...', 'maxlength' => 8]);
-    echo $form->field($customer, 'customer_complaint_times')->textInput(['placeholder' => 'Enter 顾客投诉次数...', 'maxlength' => 8]);
+    echo $form->field($customer, 'general_region_id')->textInput(['placeholder' => 'Enter 客户住址ID...', 'maxlength' => 8]);
+    echo $form->field($customer, 'customer_level')->textInput(['placeholder' => 'Enter 客户评级...', 'maxlength' => 8]);
+    echo $form->field($customer, 'customer_complaint_times')->textInput(['placeholder' => 'Enter 客户投诉次数...', 'maxlength' => 8]);
     //echo '<label class="control-label">'.$model->attributeLabels()['operation_boot_page_online_time'].'</label>';
 
     echo $form->field($customer, 'customer_src')->radioList(['0' => '线下', '1' => '线上'], ['inline' => true]);
-    echo $form->field($customer, 'platform_id')->textInput(['placeholder' => 'Enter 顾客平台...', 'maxlength' => 8]);
-    echo $form->field($customer, 'channal_id')->textInput(['placeholder' => 'Enter 顾客聚道...', 'maxlength' => 8]);
+    echo $form->field($customer, 'platform_id')->textInput(['placeholder' => 'Enter 客户平台...', 'maxlength' => 8]);
+    echo $form->field($customer, 'channal_id')->textInput(['placeholder' => 'Enter 客户聚道...', 'maxlength' => 8]);
 
     //echo $form->field($worker_ext, 'worker_birth')->time(['placeholder' => 'Enter 阿姨生日...']);
-    echo $form->field($customer, 'customer_login_ip')->textInput(['placeholder' => 'Enter 顾客登陆IP...', 'maxlength' => 32]);
+    echo $form->field($customer, 'customer_login_ip')->textInput(['placeholder' => 'Enter 客户登陆IP...', 'maxlength' => 32]);
     echo $form->field($customer, 'customer_login_time')->widget(DatePicker::classname(),[
         'name' => 'customer_login_time',
         'type' => DatePicker::TYPE_COMPONENT_PREPEND,
@@ -88,14 +88,14 @@ $cityDesc = '顾客';
     echo $form->field($customer, 'customer_is_vip')->radioList(['0' => '非会员', '1' => '会员'], ['inline' => true]);
     echo $form->field($customer, 'customer_is_del')->radioList(['0' => '未加入黑名单', '1' => '已加入黑名单'], ['inline' => true]);
 
-    echo $form->field($customer, 'customer_balance')->textInput(['placeholder' => 'Enter 顾客余额', 'maxlength' => 10]);
-    echo $form->field($customer, 'customer_del_reason')->textInput(['placeholder' => 'Enter 顾客加入黑名单原因', 'maxlength' => 255]);
+    echo $form->field($customer, 'customer_balance')->textInput(['placeholder' => 'Enter 客户余额', 'maxlength' => 10]);
+    echo $form->field($customer, 'customer_del_reason')->textInput(['placeholder' => 'Enter 客户加入黑名单原因', 'maxlength' => 255]);
     
 
 
-    echo $form->field($customer, 'customer_photo')->textInput(['placeholder' => 'Enter 顾客头像...']);
-    echo $form->field($customer, 'customer_email')->textInput(['placeholder' => 'Enter 顾客邮箱...']);
-    echo $form->field($customer, 'customer_live_address_detail')->textInput(['placeholder' => 'Enter 顾客住址详情...']);
+    echo $form->field($customer, 'customer_photo')->textInput(['placeholder' => 'Enter 客户头像...']);
+    echo $form->field($customer, 'customer_email')->textInput(['placeholder' => 'Enter 客户邮箱...']);
+    echo $form->field($customer, 'customer_live_address_detail')->textInput(['placeholder' => 'Enter 客户住址详情...']);
     ?>
 </div>
 <?php 

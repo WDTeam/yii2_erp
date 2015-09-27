@@ -34,7 +34,7 @@ class Shop extends \common\models\Shop
     public function rules()
     {
         return array_merge(parent::rules(),[
-            [['name', 'street', 'principal', 'tel'], 'required'],
+            [['name', 'street', 'principal', 'tel', 'shop_manager_id'], 'required'],
             [['shop_manager_id', 'province_id', 'city_id', 'county_id', 'is_blacklist', 
                 'blacklist_time', 'audit_status', 'worker_count', 
                 'complain_coutn', 'tel', 'bankcard_number'], 'integer'],
@@ -61,10 +61,10 @@ class Shop extends \common\models\Shop
     /**
      * 获取家政名称
      */
-    public function getMenagerName()
+    public function getManagerName()
     {
         $model = ShopManager::find()->where(['id'=>$this->shop_manager_id])->one();
-        return $model->name;
+        return isset($model)?$model->name:'';
     }
     /**
      * 获取城市名称

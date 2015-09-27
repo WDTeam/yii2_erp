@@ -86,6 +86,9 @@ class ShopManager extends \common\models\ShopManager
      */
     public function getCityName()
     {
+        if(empty($this->city_id)){
+            return '';
+        }
         $model = OperationArea::find()->where(['id'=>$this->city_id])->one();
         return $model->area_name;
     }

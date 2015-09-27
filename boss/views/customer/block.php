@@ -20,14 +20,14 @@ use common\models\Order;
  * @var yii\data\ActiveDataProvider $dataProvider
  * @var boss\models\WorkerSearch $searchModel
  */
-$this->title = Yii::t('app', '顾客黑名单');
+$this->title = Yii::t('app', '客户黑名单');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Customers'), 'url' => ['block']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="worker-index">
     <div class="panel panel-info">
     <div class="panel-heading">
-        <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 顾客搜索</h3>
+        <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 客户搜索</h3>
     </div>
     <div class="panel-body">
         <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -182,13 +182,22 @@ $this->params['breadcrumbs'][] = $this->title;
             // ],
             [
                 'class' => 'yii\grid\ActionColumn',
+                'template' =>'{view} {update} {delete} {block}',
                 'buttons' => [
-                    'update' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['customer/view', 'id' => $model->id, 'edit' => 't']), [
-                            'title' => Yii::t('yii', 'Edit'),
+                    'block' => function ($url, $dataProvider) {
+                        return Html::a('<span class="fa fa-fw fa-lock"></span>',
+                        [
+                            '/customer/remove-from-block',
+                            'id' => $dataProvider['id']
                         ]);
+                        // [
+                        //     'title' => Yii::t('yii', '黑名单'),
+                        //     'data-toggle' => 'modal',
+                        //     'data-target' => '#blockModal',
+                        //     'class'=>'blockModal',
+                        //     'data-id'=>$dataProvider['id'],
+                        // ]);
                     }
-
                 ],
             ],
         ],

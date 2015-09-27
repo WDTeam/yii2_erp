@@ -38,12 +38,24 @@ use boss\components\AreaCascade;
     </div>
 
     <div class='col-md-2'>
-        <?php echo $form->field($model, 'created_at')->widget(DatePicker::classname(), [
-            'name' => 'created_at', 
-            'value' => date('d-M-Y', strtotime('+0 days')),
+        <?php echo $form->field($model, 'time_begin')->widget(DatePicker::classname(), [
+            'name' => 'time_begin', 
+            'value' => date('d-M-Y', strtotime('+1 days')),
             'options' => ['placeholder' => '选择日期'],
             'pluginOptions' => [
-                'format' => 'dd-M-yyyy',
+                'format' => 'd-M-Y',
+                'todayHighlight' => true
+            ]
+        ]); ?>
+    </div>
+
+    <div class='col-md-2'>
+        <?php echo $form->field($model, 'time_end')->widget(DatePicker::classname(), [
+            'name' => 'time_end', 
+            'value' => date('d-M-Y', strtotime('+1 days')),
+            'options' => ['placeholder' => '选择日期'],
+            'pluginOptions' => [
+                'format' => 'd-M-Y',
                 'todayHighlight' => true
             ]
         ]); ?>
@@ -54,7 +66,7 @@ use boss\components\AreaCascade;
             'name' => 'customer_is_vip',
             'hideSearch' => true,
             'data' => [1 => '会员', 2 => '非会员'],
-            'options' => ['placeholder' => '选择顾客身份', 'inline' => true],
+            'options' => ['placeholder' => '选择客户身份', 'inline' => true],
             'pluginOptions' => [
                 'allowClear' => true
             ],
@@ -62,7 +74,7 @@ use boss\components\AreaCascade;
     </div>
 
     <div class='col-md-2'>
-        <?php echo $form->field($model, 'customer_name')->label('顾客姓名，电话等'); ?>
+        <?php echo $form->field($model, 'customer_name')->label('客户姓名，电话等'); ?>
     </div>
 
     <?php //echo $form->field($model, 'id') ?>

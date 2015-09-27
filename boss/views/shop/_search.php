@@ -39,11 +39,10 @@ use yii\web\JsExpression;
             ]);?>
             </div>
         </div>
-        
         <div class="col-md-3">
             <label class="control-label" for="workersearch-worker_work_city">小家政</label>
             <?php echo Select2::widget([
-                'initValueText' => '', // set the initial display text
+                'initValueText' => $model->getManagerName(), // set the initial display text
                 'attribute'=>'shop_manager_id',
                 'model'=>$model,
                 'options' => [],
