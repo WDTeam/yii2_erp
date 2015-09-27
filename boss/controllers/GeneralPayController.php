@@ -252,10 +252,10 @@ class GeneralPayController extends Controller
             $model->id = $GeneralPayId; //ID
             $model->general_pay_status = 1; //支付状态
             $model->general_pay_actual_money = $model->toMoney($post['total_fee'],100,true);
-            $model->general_pay_transaction_id = $post['trade_no'];
+            $model->general_pay_transaction_id = $post['transaction_id'];
             $model->general_pay_is_coupon = 1;
             $model->general_pay_eo_order_id = $post['out_trade_no'];
-            $model->general_pay_verify = md5(1);
+            $model->general_pay_verify = $model->makeSign();
 
             $model->save(false);
 
