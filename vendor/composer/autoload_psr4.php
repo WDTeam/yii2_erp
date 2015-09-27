@@ -22,6 +22,7 @@ return array(
     'warrence\\kartikgii\\' => array($vendorDir . '/warrence/yii2-kartikgii'),
     'pjkui\\kindeditor\\' => array($vendorDir . '/pjkui/kindeditor'),
     'marekpetras\\calendarview\\' => array($vendorDir . '/marekpetras/yii2-calendarview-widget'),
+    'liyunfang\\contextmenu\\' => array($vendorDir . '/liyunfang/yii2-contextmenu'),
     'kartik\\widgets\\' => array($vendorDir . '/kartik-v/yii2-widgets'),
     'kartik\\typeahead\\' => array($vendorDir . '/kartik-v/yii2-widget-typeahead'),
     'kartik\\touchspin\\' => array($vendorDir . '/kartik-v/yii2-widget-touchspin'),

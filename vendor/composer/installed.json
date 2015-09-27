@@ -4022,5 +4022,51 @@
             "wysiwyg",
             "yii2"
         ]
+    },
+    {
+        "name": "liyunfang/yii2-contextmenu",
+        "version": "1.0.5",
+        "version_normalized": "1.0.5.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/liyunfang/yii2-contextmenu.git",
+            "reference": "cbc869ccd0964e9526adc5bea8361591938dd64a"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "http://packagist.phpcomposer.com/files/liyunfang/yii2-contextmenu/cbc869ccd0964e9526adc5bea8361591938dd64a.zip",
+            "reference": "cbc869ccd0964e9526adc5bea8361591938dd64a",
+            "shasum": ""
+        },
+        "require": {
+            "yiisoft/yii2": "*",
+            "yiisoft/yii2-bootstrap": "*"
+        },
+        "time": "2015-09-25 02:35:26",
+        "type": "yii2-extension",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "liyunfang\\contextmenu\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "liyunfang",
+                "email": "381296986@qq.com"
+            }
+        ],
+        "description": "yii2 Extended for bootstrap-contextmenu plugin https://github.com/sydcanem/bootstrap-contextmenu",
+        "homepage": "https://github.com/liyunfang/yii2-contextmenu",
+        "keywords": [
+            "contextmenu",
+            "extension",
+            "yii2",
+            "yii2-contextmenu"
+        ]
     }
 ]

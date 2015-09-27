@@ -498,4 +498,13 @@ return array (
       '@yii/redactor' => '/',
     ),
   ),
+  'liyunfang/yii2-contextmenu' => 
+  array (
+    'name' => 'liyunfang/yii2-contextmenu',
+    'version' => '1.0.5.0',
+    'alias' => 
+    array (
+      '@liyunfang/contextmenu' => $vendorDir . '/liyunfang/yii2-contextmenu',
+    ),
+  ),
 );

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f78b8ee80841f9c2b2a2899fccd80be2",
+    "hash": "b571f9213bce9d88f6b68d574e208a27",
     "packages": [
         {
             "name": "2amigos/yii2-date-picker-widget",
@@ -2758,6 +2758,50 @@
                 "yii2"
             ],
             "time": "2014-11-09 19:54:17"
+        },
+        {
+            "name": "liyunfang/yii2-contextmenu",
+            "version": "1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/liyunfang/yii2-contextmenu.git",
+                "reference": "cbc869ccd0964e9526adc5bea8361591938dd64a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://packagist.phpcomposer.com/files/liyunfang/yii2-contextmenu/cbc869ccd0964e9526adc5bea8361591938dd64a.zip",
+                "reference": "cbc869ccd0964e9526adc5bea8361591938dd64a",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*",
+                "yiisoft/yii2-bootstrap": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "liyunfang\\contextmenu\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "liyunfang",
+                    "email": "381296986@qq.com"
+                }
+            ],
+            "description": "yii2 Extended for bootstrap-contextmenu plugin https://github.com/sydcanem/bootstrap-contextmenu",
+            "homepage": "https://github.com/liyunfang/yii2-contextmenu",
+            "keywords": [
+                "contextmenu",
+                "extension",
+                "yii2",
+                "yii2-contextmenu"
+            ],
+            "time": "2015-09-25 02:35:26"
         },
         {
             "name": "marekpetras/yii2-calendarview-widget",
