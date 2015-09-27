@@ -255,7 +255,7 @@ class FinancePopOrderController extends Controller
     	$tyu= array_combine($tyd,$tydtui);
     	$searchModel = new FinancePopOrderSearch;
     	$dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-    	return $this->render('billinfo', [
+    	return $this->render('bad', [
     			'dataProvider' => $dataProvider,
     			'searchModel' => $searchModel,
     			'ordedatainfo' => $tyu,
