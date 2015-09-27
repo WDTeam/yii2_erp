@@ -386,7 +386,7 @@ echo Menu::widget(
                 ],
             ],
             [
-                'label' => '小家政管理(85%)',
+                'label' => '小家政管理(90%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-slideshare',
                 'options' => [
