@@ -193,11 +193,7 @@ class GeneralPay extends \yii\db\ActiveRecord
         );
         $class = new \wxpay_class();
         $msg = $class->get($param);
-        if($msg['return_code'] == 'FAIL'){
-            echo json_encode(['code'=>'-1','msg'=>$msg]);
-        }else{
-            echo json_encode(['code'=>'ok','msg'=>$msg]);
-        }
+        echo json_encode(['code'=>'ok','msg'=>$msg]);
 
 
     }
