@@ -45,13 +45,17 @@ class m150918_195337_create_table_customer extends Migration
         $this->batchInsert('{{%customer}}',
             ['id','customer_name','customer_sex','customer_birth','customer_photo','customer_phone','customer_email',
             'operation_area_id', 'operation_city_id', 'general_region_id', 'customer_live_address_detail',
-             'customer_balance', 'customer_score', 'customer_level', 'customer_complaint_times', 'customer_src', 'channal_id', 'platform_id', 
-             'customer_login_ip', 'customer_login_time', 'customer_is_vip', 'created_at', 'updated_at', 'is_del', 'customer_del_reason'],
+             'customer_balance', 'customer_score', 'customer_level', 'customer_complaint_times', 
+             'customer_src', 'channal_id', 'platform_id', 'customer_platform_version', 'customer_app_version', 'customer_mac',
+             'customer_login_ip', 'customer_login_time', 'customer_is_vip', 
+             'created_at', 'updated_at', 'is_del', 'customer_del_reason'],
             [
-                [1,'刘道强',1,time(), '', '18519654001', 'liuzhiqiang@corp.1jiajie.com', 1, 1, 1, 'SOHO一期2单元908',
-                1000, 10000, 1, 11, 1, 1, 1,
-                '192.168.0.1', time(), 1, time(), time(), 0, ''],
-    
+                [1,'刘道强',1,time(), '', '18519654001', 'liuzhiqiang@corp.1jiajie.com', 
+                1, 1, 1, 'SOHO一期2单元908',
+                1000, 10000, 1, 0, 
+                1, 1, 1, '5.0', '1.0', 'xxxxxxxxxxxxxxx',
+                '192.168.0.1', time(), 1, 
+                time(), time(), 0, ''],
             ]);
     }
 
