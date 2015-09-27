@@ -11,6 +11,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\FinanceWorkerOrderIncome;
 use common\models\FinanceWorkerNonOrderIncome;
+use boss\models\WorkerSearch;
 
 /**
  * FinanceSettleApplyController implements the CRUD actions for FinanceSettleApply model.
@@ -165,6 +166,14 @@ class FinanceSettleApplyController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    
+    /**
+    * 阿姨人工结算
+    */
+    public function actionWorkerManualSettlementIndex(){
+        $workerSearchModel= new WorkerSearch;
+        return $this->render('workerManualSettlementIndex', ['workerSearchModel' => $workerSearchModel,]);
     }
     
     /**

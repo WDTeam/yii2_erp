@@ -201,7 +201,7 @@ echo Menu::widget(
 							'items' => [
 							[
 							'label' => '阿姨结算',
-							'url' => ['#'],
+							'url' => ['/finance-settle-apply/worker-manual-settlement-index'],
 							'icon' => 'fa fa-angle-right',
 							],
 							]
