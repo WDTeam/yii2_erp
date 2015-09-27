@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <div class="worker-index">
-    <div class="panel panel-info">
+    <div id = "manualSettle" class="panel panel-info">
         <div class="panel-heading">
             <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 阿姨搜索</h3>
         </div>
@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ?>
             <div class='col-md-6'>
-                <?= $form->field($workerSearchModel, 'worker_phone') ?>
+                <?= $form->field($model, 'workerPhone') ?>
             </div>
             <div class='col-md-2' >
                 <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
@@ -71,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="panel-body ">
             <div class='col-md-2 box-solid'>
-                张三
+                <?=  $model->workerName; ?>
             </div>
             <div class='col-md-2'>
                 13456789000
@@ -90,7 +90,12 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
         <div class="panel-heading">
-                <h3 class="panel-title">结算明细</h3>
+            <label class="panel-title">结算明细</label>
+        <?=
+
+            Html::a('结算', ['worker-manual-settlement-done?FinanceSettleApplySearch[workerId]='.$model->workerId], ['class' => 'btn btn-success ']);
+
+         ?>
         </div>
         <div class="panel-body">
             <div class='col-md-1'>
