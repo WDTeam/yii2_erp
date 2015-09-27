@@ -20,6 +20,12 @@ AppAsset::register($this);
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <script>
+	<?php if(Yii::$app->getSession()->hasFlash('default')){
+		$msg = Yii::$app->getSession()->getFlash('default');
+		echo 'alert("'.$msg.'");';
+	}?>
+    </script>
 </head>
 <body class="skin-blue fixed">
     <?php $this->beginBody() ?>
