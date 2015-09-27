@@ -16,6 +16,10 @@ class FinanceSettleApplySearch extends FinanceSettleApply
    
    public $nodeId;
    
+   public $subsidyStr;
+   
+   public $financeSettleApplyStatusArr = [-4=>'财务确认结算未通过',-3=>'财务审核不通过',-2=>'线下审核不通过',-1=>'门店财务审核不通过'
+      ,0=>'提出申请，正在门店财务审核',1=>'门店财务审核通过，等待线下审核',2=>'线下审核通过，等待财务审核',3=>'财务审核通过等待财务确认结算',4=>'财务确认结算'];
    
     public function rules()
     {

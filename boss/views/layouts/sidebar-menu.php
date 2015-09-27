@@ -192,6 +192,22 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
+                        'label' => '线下运营',
+                        'url' => ['#'],
+                        'icon' => 'fa fa-angle-right',
+							'options' => [
+							'class' => 'treeview',
+							],
+							'items' => [
+							[
+							'label' => '阿姨结算',
+							'url' => ['#'],
+							'icon' => 'fa fa-angle-right',
+							],
+							]
+							
+                    ],
+                    [
                         'label' => '报表管理(0%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',

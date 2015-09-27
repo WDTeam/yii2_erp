@@ -5,6 +5,7 @@ namespace boss\controllers;
 use Yii;
 use common\models\FinanceSettleApply;
 use boss\models\FinanceSettleApplySearch;
+use boss\models\FinanceSettleApplyLogSearch;
 use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -65,10 +66,21 @@ class FinanceSettleApplyController extends Controller
         $ids = $financeSettleApplySearch["ids"];
         $financeSettleApplyStatus = $financeSettleApplySearch["finance_settle_apply_status"];
         $idArr = explode(',', $ids);
+        
         foreach($idArr as $id){
             $model = $this->findModel($id);
             $model->finance_settle_apply_status = $financeSettleApplyStatus;
             $model->save();
+            $financeSettleApplyLogSearch = new FinanceSettleApplyLogSearch;
+            $financeSettleApplyLogSearch->finance_settle_apply_id = $id;
+            $financeSettleApplyLogSearch->finance_settle_apply_reviewer_id = Yii::$app->user->id;
+            $financeSettleApplyLogSearch->finance_settle_apply_reviewer = Yii::$app->user->identity->username;
+            $financeSettleApplyLogSearch->finance_settle_apply_node_id = abs($financeSettleApplyStatus);
+            $financeSettleApplyLogSearch->finance_settle_apply_node_des = $searchModel->financeSettleApplyStatusArr[$financeSettleApplyStatus];
+            $financeSettleApplyLogSearch->finance_settle_apply_is_passed = $financeSettleApplyStatus >0 ? 1:0;
+            $financeSettleApplyLogSearch->finance_settle_apply_reviewer_comment ="";
+            $financeSettleApplyLogSearch->created_at = time();
+            $financeSettleApplyLogSearch->save();
         }
         return $this->actionIndex();
     }
