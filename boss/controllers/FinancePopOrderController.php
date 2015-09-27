@@ -238,7 +238,7 @@ class FinancePopOrderController extends Controller
     * @return:
     **/
     
-    public function actionBad($id)
+    public function actionBad()
     {
     	$ordedata= new FinanceOrderChannel;
     	$ordewhere['is_del']=0;
