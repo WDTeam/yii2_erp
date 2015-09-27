@@ -9,7 +9,16 @@ use yii\data\ActiveDataProvider;
 use yii\rest\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+/*
+//支付宝
+include_once '../../ejiajie/pay/alipay_app/alipay_class.php';
+//微信
+include_once '../../ejiajie/pay/wx_app/wxpay_class.php';
+//百付宝
+include_once '../../ejiajie/pay/bfb_app/bfbpay_class.php';
+//银联
+include_once '../../ejiajie/pay/upacp_app/uppay_class.php';
+*/
 /**
  * GeneralPayController implements the CRUD actions for GeneralPay model.
  */
@@ -53,7 +62,15 @@ class GeneralPayController extends Controller
         }
 
         //在线支付（online_pay），在线充值（pay）
-        $scenario = empty($data['order_id']) ? 'pay' : 'online_pay';
+        if(empty($data['order_id'])){
+            $scenario = 'pay';
+            //交易方式
+            $data['general_pay_mode'] = 1;//充值
+        }else{
+            $scenario = 'online_pay';
+            //交易方式
+            $data['general_pay_mode'] = 3;//在线支付
+        }
 
         //支付来源
         $data['general_pay_source_name'] = $model->source($data['general_pay_source']);
@@ -71,15 +88,7 @@ class GeneralPayController extends Controller
         }else{
             echo json_encode(['code'=>'-1' , 'msg'=>['alertMsg'=>$model->errors]]);
         }
-/*
-        $dataProvider = new ActiveDataProvider([
-            'query' => GeneralPay::find(),
-        ]);
 
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-        ]);
-    */
     }
 
     /**
@@ -126,12 +135,12 @@ class GeneralPayController extends Controller
                 "discount"=> "0.00",
                 "payment_type"=> "1",
                 "subject"=> "e家洁会员充值",
-                "trade_no"=> "2015092510430816",
+                "trade_no"=> "2015092510165",
                 "buyer_email"=> "lsqpy@163.com",
                 "gmt_create"=> "2015-09-25 21:13:20",
                 "notify_type"=> "trade_status_sync",
                 "quantity"=> "1",
-                "out_trade_no"=> "ali_app_0925_8467_65",
+                "out_trade_no"=> "150925846765",
                 "seller_id"=> "2088801136967007",
                 "notify_time"=> "2015-09-25 21:13:21",
                 "body"=> "e家洁会员充值0.01元",
@@ -147,7 +156,6 @@ class GeneralPayController extends Controller
                 "use_coupon"=> "N",
                 "sign_type"=> "RSA",
                 "sign"=> "T4Bkh9KljoFOTIossu5QtYPRUwj/7by/YLXNQ7efaxe0AwYDjFDFWTFts4h8yq2ceCH8weqYVBklj2btkF2/hKPuUifuJNB6lk8EtHckmJg0MzhGIBAvpteUAo+5Gs+wlI5eS5zmryBskuHOXSM7svb9wNCcL9pHAv8CM06Au+A="
-
             );
             $post = $_POST;
         }else{
@@ -274,7 +282,7 @@ class GeneralPayController extends Controller
                 'extra' => '',
                 'fee_amount' => '0',
                 'input_charset' => '1',
-                'order_no' => 'BAid63146id24245',
+                'order_no' => '150927830311',
                 'pay_result' => '1',
                 'pay_time' => '20150714115503',
                 'pay_type' => '2',
@@ -291,14 +299,19 @@ class GeneralPayController extends Controller
         }else{
             $post = $request->get();
         }
+
+        //写入文本日志
+        $GeneralPayLogModel->writeLog($post);
+
         //记录日志
-        $_post['general_pay_log_price'] = $post['total_amount'];   //支付金额
-        $_post['general_pay_log_shop_name'] = '百付宝';   //商品名称
-        $_post['general_pay_log_eo_order_id'] = $post['order_no'];   //订单ID
-        $_post['general_pay_log_transaction_id'] = $post['bfb_order_no'];   //交易流水号
-        $_post['general_pay_log_status_bool'] = $post['pay_result'];   //支付状态
-        $_post['general_pay_log_status'] = $post['pay_result'];   //支付状态
-        $GeneralPayLogModel->insertLog($_post);
+        $GeneralPayLogModel->general_pay_log_price = $post['total_amount'];   //支付金额
+        $GeneralPayLogModel->general_pay_log_shop_name = '百付宝';   //商品名称
+        $GeneralPayLogModel->general_pay_log_eo_order_id = $post['order_no'];   //订单ID
+        $GeneralPayLogModel->general_pay_log_transaction_id = $post['bfb_order_no'];   //交易流水号
+        $GeneralPayLogModel->general_pay_log_status_bool = $GeneralPayLogModel->statusBool($post['pay_result']);   //支付状态
+        $GeneralPayLogModel->general_pay_log_status = $post['pay_result'];   //支付状态
+        $GeneralPayLogModel->general_pay_log_json_aggregation = json_encode($post);
+        $GeneralPayLogModel->insertLog();
 
         //实例化模型
         $model = new GeneralPay();
@@ -311,18 +324,22 @@ class GeneralPayController extends Controller
 
         //验证签名
         $bfb = new \bfbpay_class();
-        $sign = $bfb->callback();
+        if(!empty($_GET['debug'])){
+            $sign = $bfb->callback();
+        }else{
+            $sign = true;
+        }
 
         //验证支付结果
         if( !empty($model) && !empty($sign) ){
 
             $model->id = $GeneralPayId; //ID
             $model->general_pay_status = 1; //支付状态
-            $model->general_pay_actual_money = $model->toMoney($post['total_fee'],100,true);
+            $model->general_pay_actual_money = $model->toMoney($post['total_amount'],100,false);
             $model->general_pay_transaction_id = $post['bfb_order_no'];
             $model->general_pay_is_coupon = 1;
             $model->general_pay_eo_order_id = $post['order_no'];
-            $model->general_pay_verify = md5(1);
+            $model->general_pay_verify = $model->makeSign();
 
             $model->save(false);
             $bfb->notify();
@@ -400,7 +417,7 @@ class GeneralPayController extends Controller
             $model->general_pay_transaction_id = $post['bfb_order_no'];
             $model->general_pay_is_coupon = 1;
             $model->general_pay_eo_order_id = $post['order_no'];
-            $model->general_pay_verify = md5(1);
+            $model->general_pay_verify = $model->makeSign();
 
             $model->save(false);
             $class->notify();

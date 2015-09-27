@@ -3876,5 +3876,197 @@
             "migration",
             "yii2"
         ]
+    },
+    {
+        "name": "yii2tech/ar-softdelete",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/yii2tech/ar-softdelete.git",
+            "reference": "d62def6057c4b1b3cd3ff464b2fba347666191d6"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "http://packagist.phpcomposer.com/files/yii2tech/ar-softdelete/d62def6057c4b1b3cd3ff464b2fba347666191d6.zip",
+            "reference": "d62def6057c4b1b3cd3ff464b2fba347666191d6",
+            "shasum": ""
+        },
+        "require": {
+            "yiisoft/yii2": "*"
+        },
+        "time": "2015-08-17 19:23:10",
+        "type": "yii2-extension",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-4": {
+                "yii2tech\\ar\\softdelete\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Paul Klimov",
+                "email": "klimov.paul@gmail.com"
+            }
+        ],
+        "description": "Provides support for ActiveRecord soft delete in Yii2",
+        "keywords": [
+            "active",
+            "delete",
+            "record",
+            "smart",
+            "soft",
+            "yii2"
+        ]
+    },
+    {
+        "name": "yii2tech/crontab",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/yii2tech/crontab.git",
+            "reference": "2e07d919ac9ccc21c869839347d7216c16325de4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "http://packagist.phpcomposer.com/files/yii2tech/crontab/2e07d919ac9ccc21c869839347d7216c16325de4.zip",
+            "reference": "2e07d919ac9ccc21c869839347d7216c16325de4",
+            "shasum": ""
+        },
+        "require": {
+            "yiisoft/yii2": "*"
+        },
+        "time": "2015-06-18 14:01:20",
+        "type": "yii2-extension",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-4": {
+                "yii2tech\\crontab\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Paul Klimov",
+                "email": "klimov.paul@gmail.com"
+            }
+        ],
+        "description": "Crontab support extension for the Yii2 framework",
+        "keywords": [
+            "cron",
+            "cronjob",
+            "crontab",
+            "yii2"
+        ]
+    },
+    {
+        "name": "yiidoc/yii2-redactor",
+        "version": "2.0.1",
+        "version_normalized": "2.0.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/yiidoc/yii2-redactor.git",
+            "reference": "c4c80c19c68728e88d135f4eec5c51352fbbaa37"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "http://packagist.phpcomposer.com/files/yiidoc/yii2-redactor/c4c80c19c68728e88d135f4eec5c51352fbbaa37.zip",
+            "reference": "c4c80c19c68728e88d135f4eec5c51352fbbaa37",
+            "shasum": ""
+        },
+        "require": {
+            "yiisoft/yii2": "*"
+        },
+        "time": "2015-06-02 21:47:24",
+        "type": "yii2-extension",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "yii\\redactor\\": "/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Nghia Nguyen",
+                "email": "zinzinday@gmail.com"
+            }
+        ],
+        "description": "Extension redactor for Yii2 Framework.",
+        "keywords": [
+            "Redactor",
+            "extension",
+            "html editor",
+            "imperavi",
+            "wysiwyg",
+            "yii2"
+        ]
+    },
+    {
+        "name": "liyunfang/yii2-contextmenu",
+        "version": "1.0.5",
+        "version_normalized": "1.0.5.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/liyunfang/yii2-contextmenu.git",
+            "reference": "cbc869ccd0964e9526adc5bea8361591938dd64a"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "http://packagist.phpcomposer.com/files/liyunfang/yii2-contextmenu/cbc869ccd0964e9526adc5bea8361591938dd64a.zip",
+            "reference": "cbc869ccd0964e9526adc5bea8361591938dd64a",
+            "shasum": ""
+        },
+        "require": {
+            "yiisoft/yii2": "*",
+            "yiisoft/yii2-bootstrap": "*"
+        },
+        "time": "2015-09-25 02:35:26",
+        "type": "yii2-extension",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "liyunfang\\contextmenu\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "liyunfang",
+                "email": "381296986@qq.com"
+            }
+        ],
+        "description": "yii2 Extended for bootstrap-contextmenu plugin https://github.com/sydcanem/bootstrap-contextmenu",
+        "homepage": "https://github.com/liyunfang/yii2-contextmenu",
+        "keywords": [
+            "contextmenu",
+            "extension",
+            "yii2",
+            "yii2-contextmenu"
+        ]
     }
 ]

@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 账单查询</h3>
     </div>
     <div class="panel-body">
-        <?php  echo $this->render('_search', ['model' => $searchModel,'odrinfo'=>$payatainfo,'ordedat' => $ordedatainfo]); ?>
+        <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
     </div>
     </div>
     <p>

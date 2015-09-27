@@ -78,6 +78,7 @@ class FinancePopOrderSearch extends FinancePopOrder
 		//三有我没有
 	    $alinfo['order_channel_order_num']=$getorder;
 		$alinfo['order_money']=$getorder_money;	
+		//$alinfo['order_channel_promote']=$promote;
 		$alinfo['finance_pop_order_pay_status_type']=2;
 		}
     	return $alinfo;

@@ -5,6 +5,8 @@ namespace core\models;
 use Yii;
 use core\models\WorkerExt;
 use core\models\WorkerRuleConfig;
+use yii\web\BadRequestHttpException;
+use boss\models\Shop;
 /**
  * This is the model class for table "{{%worker}}".
  *
@@ -164,5 +166,33 @@ class Worker extends \common\models\Worker
     }
     public function getGCount(){
         return $this->find()->where(['worker_rule_id'=>4])->count();
+    }
+    /**
+     * 加入黑名单
+     * @param string $cause 原因
+     */
+    public function joinBlacklist($cause='')
+    {
+        $this->worker_is_blacklist = 1;
+        if($this->save()){
+            return true;
+        }
+        return false;
+    }
+    /**
+     * 移出黑名单
+     * @param string $cause 原因
+     */
+    public function removeBlacklist($cause='')
+    {
+        $sm = Shop::find()->where(['id'=>$this->shop_id])->one();
+        if($sm->worker_is_blacklist==1){
+            throw new BadRequestHttpException('所在的门店还在黑名单中');
+        }
+        $this->is_blacklist = 0;
+        if($this->save()){
+            return true;
+        }
+        return false;
     }
 }

@@ -10,7 +10,7 @@ echo Menu::widget(
         ],
         'items' => [
             [
-                'label' => '门店管理',
+                'label' => '门店管理(95%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-flag',
                 'options' => [
@@ -188,8 +188,24 @@ echo Menu::widget(
                     ],
                     [
                         'label' => '结算管理(60%)',
-                        'url' => ['/finance-settle-apply'],
+                        'url' => ['/finance-settle-apply/index?FinanceSettleApplySearch[finance_settle_apply_status]=0&FinanceSettleApplySearch[ids]=&FinanceSettleApplySearch[nodeId]=1'],
                         'icon' => 'fa fa-angle-right',
+                    ],
+                    [
+                        'label' => '线下运营',
+                        'url' => ['#'],
+                        'icon' => 'fa fa-angle-right',
+							'options' => [
+							'class' => 'treeview',
+							],
+							'items' => [
+							[
+							'label' => '阿姨结算',
+							'url' => ['/finance-settle-apply/worker-manual-settlement-index'],
+							'icon' => 'fa fa-angle-right',
+							],
+							]
+							
                     ],
                     [
                         'label' => '报表管理(0%)',
@@ -370,7 +386,7 @@ echo Menu::widget(
                 ],
             ],
             [
-                'label' => '小家政管理',
+                'label' => '小家政管理(85%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-slideshare',
                 'options' => [
@@ -383,7 +399,7 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '添加新家政公司(90%)',
+                        'label' => '添加新家政公司(100%)',
                         'url' => ['shop-manager/create'],
                         'icon' => 'fa fa-angle-right',
                     ],

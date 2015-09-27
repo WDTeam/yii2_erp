@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <h3 class="panel-title"><i class="glyphicon glyphicon-upload"></i> 上传对账单</h3>
     </div>
     <div class="panel-body">
-        <?php  echo $this->render('_search', ['model' => $searchModel,'odrinfo'=>$payatainfo,'ordedat' => $ordedatainfo]); ?>
+        <?php  echo $this->render('_search', ['model' => $searchModel,'ordedat' => $ordedatainfo]); ?>
     </div>
     </div>
     <?php  //echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\CheckboxColumn'],
      		
-            'id',
+         //   'id',
             'finance_pop_order_number',
            // 'finance_order_channel_id',
             'finance_order_channel_title',
@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'finance_pop_order_worker_uid', 
             'finance_pop_order_booked_time:datetime', 
             'finance_pop_order_booked_counttime:datetime', 
-//            'finance_pop_order_sum_money', 
+            'finance_pop_order_sum_money', 
 //            'finance_pop_order_coupon_count', 
 //            'finance_pop_order_coupon_id', 
 //            'finance_pop_order_order2', 

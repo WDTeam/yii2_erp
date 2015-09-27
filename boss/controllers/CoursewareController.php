@@ -7,7 +7,7 @@ use boss\models\Courseware;
 use boss\models\CoursewareSearch;
 use yii\data\ActiveDataProvider;
 use boss\models\Category;
-use yii\web\Controller;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 

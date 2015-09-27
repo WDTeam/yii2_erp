@@ -5,7 +5,7 @@ namespace boss\controllers;
 use Yii;
 use common\models\User;
 use boss\models\Demo;
-use yii\web\Controller;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use boss\models\ShopManager;
