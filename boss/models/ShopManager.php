@@ -196,6 +196,14 @@ class ShopManager extends \common\models\ShopManager
         return false;
     }
     /**
+     * 软删除
+     */
+    public function softDelete()
+    {
+        $this->is_deleted = 1;
+        return $this->save();
+    }
+    /**
      * 获取执照URL
      */
     public function getBlPhotoUrlByQiniu()
