@@ -136,10 +136,12 @@ class FinanceHeaderController extends Controller
        		$paynameinfo=$modelPay->searchfind(array('id'=>$payname),'finance_pay_channel_name');
        	
        	$post['FinanceHeader']['finance_header_title'] = $post['FinanceHeader']['finance_header_title']?$post['FinanceHeader']['finance_header_title']:'美团的'; 	
-        $post['FinanceHeader']['finance_order_channel_id'] =$post['FinanceHeader']['finance_order_channel_id']?$post['FinanceHeader']['finance_order_channel_name']:'1';
+       	
+        $post['FinanceHeader']['finance_order_channel_id'] =$post['FinanceHeader']['finance_order_channel_name']?$post['FinanceHeader']['finance_order_channel_name']:'0';
+        
        	 $post['FinanceHeader']['finance_order_channel_name'] =$ordername;
        	 
-       	$post['FinanceHeader']['finance_pay_channel_id'] = $post['FinanceHeader']['finance_pay_channel_id']?$post['FinanceHeader']['finance_pay_channel_name']:'1';
+       	$post['FinanceHeader']['finance_pay_channel_id'] = $post['FinanceHeader']['finance_pay_channel_name']?$post['FinanceHeader']['finance_pay_channel_name']:'1';
        	$post['FinanceHeader']['finance_pay_channel_name'] = $paynameinfo;
        	$post['FinanceHeader']['create_time'] = time();
        	$post['FinanceHeader']['is_del'] =0;

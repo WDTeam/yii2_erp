@@ -38,7 +38,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 <button type="button" onclick = "changetTab(1,2)" class="btn btn-default btn-lg active">线下运营审核</button>
                 <button type="button" onclick = "changetTab(2,3)" class="btn btn-default btn-lg active">财务审核</button>
                 <button type="button" onclick = "changetTab(3,4)" class="btn btn-default btn-lg active">财务确认结算</button>
-                <button type="button" class="btn btn-default btn-lg active">申请结算</button>
         </div>
         <br/>
         <p></p>

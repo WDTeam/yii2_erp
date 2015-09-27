@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <div class="worker-index">
-    <div class="panel panel-info">
+    <div id = "manualSettle" class="panel panel-info">
         <div class="panel-heading">
             <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 阿姨搜索</h3>
         </div>
@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ?>
             <div class='col-md-6'>
-                <?= $form->field($workerSearchModel, 'worker_phone') ?>
+                <?= $form->field($model, 'workerPhone') ?>
             </div>
             <div class='col-md-2' >
                 <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="panel-heading">
                 <h3 class="panel-title">阿姨信息</h3>
         </div>
-        <div class="panel-body">
+        <div class="panel-body settle-detail-body">
             <div class='col-md-2'>
                 阿姨姓名
             </div>
@@ -69,9 +69,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 上次结算时间
             </div>
         </div>
-        <div class="panel-body ">
-            <div class='col-md-2 box-solid'>
-                张三
+        <div class="panel-body settle-detail-body">
+            <div class='col-md-2'>
+                <?=  $model->workerName; ?>
             </div>
             <div class='col-md-2'>
                 13456789000
@@ -90,74 +90,116 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
         <div class="panel-heading">
-                <h3 class="panel-title">结算明细</h3>
+            <label class="panel-title">结算明细</label>
+        <?=
+
+            Html::a('结算', ['worker-manual-settlement-done?FinanceSettleApplySearch[workerId]='.$model->workerId], ['class' => 'btn btn-success ']);
+
+         ?>
         </div>
-        <div class="panel-body">
-            <div class='col-md-1'>
+        <div class="panel-body settle-detail-body">
+            <div class='settleDetail'>
                 完成总单量
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 现金订单
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 收取现金
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 非现金订单
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 工时费应结
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 完成任务
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 任务奖励
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 小保养订单
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 小保养
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 应结
             </div>
         </div>
-        <div class="panel-body ">
-            <div class='col-md-1'>
+        <div class="panel-body settle-detail-body">
+            <div class='settleDetail'>
                 250
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 30
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 2000.00
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 100
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 4000.00
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 20
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 2000.00
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 20
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 2000.00
             </div>
-            <div class='col-md-1'>
+            <div class='settleDetail'>
                 8000.00
             </div>
         </div>
+        <div class="panel-heading">
+            <label class="panel-title">订单明细</label>
+        </div>
+        <div>
+            
+             <?php Pjax::begin(); echo GridView::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
 
-        
+            'id',
+            'worder_id',
+            'order_id',
+            'finance_worker_order_income_type',
+            'finance_worker_order_income',
+            'finance_worker_order_complete_time:datetime', 
+            'order_booked_count', 
+            'finance_worker_order_income_starttime:datetime', 
+            'finance_worker_order_income_endtime:datetime', 
+            'finance_settle_apply_id', 
+            'created_at', 
+
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'buttons' => [
+                'update' => function ($url, $model) {
+                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance-worker-order-income/view','id' => $model->id,'edit'=>'t']), [
+                                                    'title' => Yii::t('yii', 'Edit'),
+                                                  ]);}
+
+                ],
+            ],
+        ],
+        'responsive'=>true,
+        'hover'=>true,
+        'condensed'=>true,
+        'floatHeader'=>true,
+    ]); Pjax::end(); ?>
+        </div>
     </div>
 </div>
 

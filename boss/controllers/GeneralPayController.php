@@ -225,14 +225,18 @@ class GeneralPayController extends Controller
         //实例化模型
         $GeneralPayLogModel = new GeneralPayLog();
 
+        //写入文本日志
+        $GeneralPayLogModel->writeLog($post);
+
         //记录日志
-        $_post['general_pay_log_price'] = $post['total_fee'];   //支付金额
-        $_post['general_pay_log_shop_name'] = $post['attach'];   //商品名称
-        $_post['general_pay_log_eo_order_id'] = $post['out_trade_no'];   //订单ID
-        $_post['general_pay_log_transaction_id'] = $post['transaction_id'];   //交易流水号
-        $_post['general_pay_log_status_bool'] = $post['result_code'];   //支付状态
-        $_post['general_pay_log_status'] = $post['result_code'];   //支付状态
-        $GeneralPayLogModel->insertLog($_post);
+        $GeneralPayLogModel->general_pay_log_price = $post['total_fee'];   //支付金额
+        $GeneralPayLogModel->general_pay_log_shop_name = $post['attach'];   //商品名称
+        $GeneralPayLogModel->general_pay_log_eo_order_id = $post['out_trade_no'];   //订单ID
+        $GeneralPayLogModel->general_pay_log_transaction_id = $post['transaction_id'];   //交易流水号
+        $GeneralPayLogModel->general_pay_log_status_bool = $GeneralPayLogModel->statusBool($post['result_code']);   //支付状态
+        $GeneralPayLogModel->general_pay_log_status = $post['result_code'];   //支付状态
+        $GeneralPayLogModel->general_pay_log_json_aggregation = json_encode($post);
+        $GeneralPayLogModel->insertLog();
 
         //实例化模型
         $model = new GeneralPay();
@@ -244,15 +248,14 @@ class GeneralPayController extends Controller
         $model = GeneralPay::find()->where(['id'=>$GeneralPayId,'general_pay_status'=>0,'is_del'=>1])->one();
 
         //验证支付结果
-        if(!empty($model)){
-
+        if(!empty($model) && $status == 'SUCCESS'){
             $model->id = $GeneralPayId; //ID
             $model->general_pay_status = 1; //支付状态
-            $model->general_pay_actual_money = $model->toMoney($post['total_fee'],100,true);
-            $model->general_pay_transaction_id = $post['trade_no'];
+            $model->general_pay_actual_money = $model->toMoney($post['total_fee'],100,false);
+            $model->general_pay_transaction_id = $post['transaction_id'];
             $model->general_pay_is_coupon = 1;
             $model->general_pay_eo_order_id = $post['out_trade_no'];
-            $model->general_pay_verify = md5(1);
+            $model->general_pay_verify = $model->makeSign();
 
             $model->save(false);
 

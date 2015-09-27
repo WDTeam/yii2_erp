@@ -3,18 +3,16 @@
 namespace boss\controllers;
 
 use Yii;
-use common\models\FinanceRecordLog;
-use boss\models\FinanceRecordLogSearch;
-use boss\components\Controller;
+use common\models\FinanceWorkerOrderIncome;
+use boss\models\FinanceWorkerOrderIncomeSearch;
+use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use common\models\FinanceOrderChannel;
-
 
 /**
- * FinanceRecordLogController implements the CRUD actions for FinanceRecordLog model.
+ * FinanceWorkerOrderIncomeController implements the CRUD actions for FinanceWorkerOrderIncome model.
  */
-class FinanceRecordLogController extends Controller
+class FinanceWorkerOrderIncomeController extends Controller
 {
     public function behaviors()
     {
@@ -29,35 +27,22 @@ class FinanceRecordLogController extends Controller
     }
 
     /**
-     * Lists all FinanceRecordLog models.
+     * Lists all FinanceWorkerOrderIncome models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new FinanceRecordLogSearch;
+        $searchModel = new FinanceWorkerOrderIncomeSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
-        //支付渠道数据
-        $ordedata= new FinanceOrderChannel;
-        $ordewhere['is_del']=0;
-        $ordewhere['finance_order_channel_is_lock']=1;
-        $payatainfo=$ordedata::find()->where($ordewhere)->asArray()->all();
-        foreach ($payatainfo as $errt){
-        	$tyd[]=$errt['id'];
-        	$tydtui[]=$errt['finance_order_channel_name'];
-        }
-        $tyu= array_combine($tyd,$tydtui);
-        
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-            'searchModel' =>  $searchModel,
-        	'odrinfo' => $tyu
-        		
+            'searchModel' => $searchModel,
         ]);
     }
 
     /**
-     * Displays a single FinanceRecordLog model.
+     * Displays a single FinanceWorkerOrderIncome model.
      * @param integer $id
      * @return mixed
      */
@@ -73,13 +58,13 @@ class FinanceRecordLogController extends Controller
     }
 
     /**
-     * Creates a new FinanceRecordLog model.
+     * Creates a new FinanceWorkerOrderIncome model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new FinanceRecordLog;
+        $model = new FinanceWorkerOrderIncome;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -91,7 +76,7 @@ class FinanceRecordLogController extends Controller
     }
 
     /**
-     * Updates an existing FinanceRecordLog model.
+     * Updates an existing FinanceWorkerOrderIncome model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -110,7 +95,7 @@ class FinanceRecordLogController extends Controller
     }
 
     /**
-     * Deletes an existing FinanceRecordLog model.
+     * Deletes an existing FinanceWorkerOrderIncome model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -123,15 +108,15 @@ class FinanceRecordLogController extends Controller
     }
 
     /**
-     * Finds the FinanceRecordLog model based on its primary key value.
+     * Finds the FinanceWorkerOrderIncome model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return FinanceRecordLog the loaded model
+     * @return FinanceWorkerOrderIncome the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = FinanceRecordLog::findOne($id)) !== null) {
+        if (($model = FinanceWorkerOrderIncome::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
