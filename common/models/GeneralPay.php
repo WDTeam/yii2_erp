@@ -198,16 +198,10 @@ class GeneralPay extends \yii\db\ActiveRecord
 
     }
 
-
     /**
      * 微信H5
      */
-    private function wx_h5()
-    {
-
-
-    }
-
+    private function wx_h5(){}
 
     /**
      * 百度钱包APP
@@ -282,6 +276,7 @@ class GeneralPay extends \yii\db\ActiveRecord
         $http = "http://".$_SERVER['HTTP_HOST']."/general-pay/".$type_name."-notify";
         return $http;
     }
+
     /**
      * 判断在线充值还是支付
      * @return string

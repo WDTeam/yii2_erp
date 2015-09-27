@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="panel-heading">
                 <h3 class="panel-title">阿姨信息</h3>
         </div>
-        <div class="panel-body">
+        <div class="panel-body settle-detail-body">
             <div class='col-md-2'>
                 阿姨姓名
             </div>
@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 上次结算时间
             </div>
         </div>
-        <div class="panel-body ">
+        <div class="panel-body settle-detail-body">
             <div class='col-md-2'>
                 <?=  $model->workerName; ?>
             </div>
@@ -97,7 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
          ?>
         </div>
-        <div class="panel-body">
+        <div class="panel-body settle-detail-body">
             <div class='settleDetail'>
                 完成总单量
             </div>
@@ -129,7 +129,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 应结
             </div>
         </div>
-        <div class="panel-body ">
+        <div class="panel-body settle-detail-body">
             <div class='settleDetail'>
                 250
             </div>
@@ -161,8 +161,45 @@ $this->params['breadcrumbs'][] = $this->title;
                 8000.00
             </div>
         </div>
+        <div class="panel-heading">
+            <label class="panel-title">订单明细</label>
+        </div>
+        <div>
+            
+             <?php Pjax::begin(); echo GridView::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
 
-        
+            'id',
+            'worder_id',
+            'order_id',
+            'finance_worker_order_income_type',
+            'finance_worker_order_income',
+            'finance_worker_order_complete_time:datetime', 
+            'order_booked_count', 
+            'finance_worker_order_income_starttime:datetime', 
+            'finance_worker_order_income_endtime:datetime', 
+            'finance_settle_apply_id', 
+            'created_at', 
+
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'buttons' => [
+                'update' => function ($url, $model) {
+                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance-worker-order-income/view','id' => $model->id,'edit'=>'t']), [
+                                                    'title' => Yii::t('yii', 'Edit'),
+                                                  ]);}
+
+                ],
+            ],
+        ],
+        'responsive'=>true,
+        'hover'=>true,
+        'condensed'=>true,
+        'floatHeader'=>true,
+    ]); Pjax::end(); ?>
+        </div>
     </div>
 </div>
 
