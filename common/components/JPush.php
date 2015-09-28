@@ -14,23 +14,22 @@ class JPush extends Object
     
     public function init()
     {
+        $this->client = new JPushClient($this->app_key, $this->master_secret);
         return parent::init();
     }
-    
-    public function push()
+
+    /**
+     * 推送消息
+     * @param string $msg 消息内容
+     * @return \JPush\Model\PushResponse
+     */
+    public function push($msg)
     {
-        $br = '<br/>';
-        $client = new JPushClient($this->app_key, $this->master_secret);
-        
-        $result = $client->push()
+        $result = $this->client->push()
         ->setPlatform(M\all)
         ->setAudience(M\all)
-        ->setNotification(M\notification('Hi, JPush'))
+        ->setNotification(M\notification($msg))
         ->send();
-        echo 'Push Success.' . $br;
-        echo 'sendno : ' . $result->sendno . $br;
-        echo 'msg_id : ' .$result->msg_id . $br;
-        echo 'Response JSON : ' . $result->json . $br;
         return $result;
     }
     
