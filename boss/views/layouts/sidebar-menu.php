@@ -285,8 +285,8 @@ echo Menu::widget(
                         ],
                         'items'=>[
                             [
-                                'label' => '结算详情',
-                                'url' => ['#'],
+                                'label' => '结算查询',
+                                'url' => ['/finance-settle-apply/query'],
                                 'icon' => 'fa fa-angle-right',
                             ],[
                                 'label' => '阿姨结算',

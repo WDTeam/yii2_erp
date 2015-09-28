@@ -58,6 +58,18 @@ class FinanceSettleApplyController extends Controller
      * Lists all FinanceSettleApply models.
      * @return mixed
      */
+    public function actionQuery()
+    {
+        $searchModel = new WorkerSearch;
+        return $this->render('query', [
+            'searchModel' => $searchModel,
+        ]);
+    }
+    
+    /**
+     * Lists all FinanceSettleApply models.
+     * @return mixed
+     */
     public function actionReview()
     {
         

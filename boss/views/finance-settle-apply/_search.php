@@ -1,55 +1,68 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use kartik\widgets\ActiveForm;
+use kartik\widgets\Select2;
+use yii\web\JsExpression;
+use kartik\builder\Form;
+use kartik\datecontrol\DateControl;
+use kartik\grid\GridView;
+use kartik\date\DatePicker;
 
 /**
  * @var yii\web\View $this
- * @var boss\models\FinanceSettleApplySearch $model
+ * @var boss\models\WorkerSearch $model
  * @var yii\widgets\ActiveForm $form
  */
+$url = \yii\helpers\Url::to(['show-shop']);
 ?>
 
-<div class="finance-settle-apply-search">
+<div class="worker-search">
 
     <?php $form = ActiveForm::begin([
+        'type' => ActiveForm::TYPE_VERTICAL,
+        //'id' => 'login-form-inline',
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
+    <div class='col-md-2'>
+        <?= $form->field($model, 'worker_work_city')->widget(Select2::classname(), [
+            'name' => 'worker_rule_id',
+            'hideSearch' => true,
+            'data' => [1 => '北京', 2 => '上海', 3 => '成都', 4 => '深圳'],
+            'options' => ['placeholder' => '选择城市', 'inline' => true],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]); ?>
+    </div>
+    <div class='col-md-3'>
+        <?= $form->field($model, 'shop_id')->widget(Select2::classname(), [
+            'initValueText' => '店铺', // set the initial display text
+            'options' => ['placeholder' => '搜索门店名称...', 'class' => 'col-md-2'],
+            'pluginOptions' => [
+                'allowClear' => true,
+                'minimumInputLength' => 0,
+                'ajax' => [
+                    'url' => $url,
+                    'dataType' => 'json',
+                    'data' => new JsExpression('function(params) { return {q:params.term}; }')
+                ],
+                'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                'templateResult' => new JsExpression('function(city) { return city.text; }'),
+                'templateSelection' => new JsExpression('function (city) { return city.text; }'),
+            ],
+        ]); ?>
+    </div>
+    <div class='col-md-2'>
+        <?= $form->field($model, 'worker_name') ?>
+    </div>
+    <div class='col-md-2'>
+        <?= $form->field($model, 'worker_phone') ?>
+    </div>
 
-    <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'worder_id') ?>
-
-    <?= $form->field($model, 'worder_tel') ?>
-
-    <?= $form->field($model, 'worker_type_id') ?>
-
-    <?= $form->field($model, 'worker_type_name') ?>
-
-    <?php // echo $form->field($model, 'finance_settle_apply_money') ?>
-
-    <?php // echo $form->field($model, 'finance_settle_apply_man_hour') ?>
-
-    <?php // echo $form->field($model, 'finance_settle_apply_order_money') ?>
-
-    <?php // echo $form->field($model, 'finance_settle_apply_order_cash_money') ?>
-
-    <?php // echo $form->field($model, 'finance_settle_apply_non_order_money') ?>
-
-    <?php // echo $form->field($model, 'finance_settle_apply_status') ?>
-
-    <?php // echo $form->field($model, 'finance_settle_apply_cycle') ?>
-
-    <?php // echo $form->field($model, 'finance_settle_apply_reviewer') ?>
-
-    <?php // echo $form->field($model, 'isdel') ?>
-
-    <?php // echo $form->field($model, 'updated_at') ?>
-
-    <?php // echo $form->field($model, 'created_at') ?>
-
-    <div class="form-group">
+    <div class='col-md-2' style="margin-top: 22px;">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
     </div>
