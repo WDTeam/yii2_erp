@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
+use dosamigos\datetimepicker\DateTimePicker;
 
 /**
  * @var yii\web\View $this
@@ -28,6 +29,8 @@ use kartik\datecontrol\DateControl;
     ?>
     <?= $form->field($citymodel, 'city_name')->textInput() ?>
     
+    <?= $form->field($model, 'operation_area_id')->dropDownList($areaList,['prompt' => '请选择区域'])->label('所属区域') ?>
+
     <?= $form->field($OperationShopDistrictCoordinate, 'operation_shop_district_coordinate_start_longitude')->textInput() ?>
     <?= $form->field($OperationShopDistrictCoordinate, 'operation_shop_district_coordinate_start_latitude')->textInput() ?>
     <?= $form->field($OperationShopDistrictCoordinate, 'operation_shop_district_coordinate_end_longitude')->textInput() ?>

@@ -22,6 +22,7 @@ $this->params['breadcrumbs'][] = Yii::t('operation', 'Update Operation Shop Dist
     <?= $this->render('_form', [
         'model' => $model,
         'citymodel' => $citymodel,
+        'areaList' => $areaList,
         'OperationShopDistrictCoordinate' => $OperationShopDistrictCoordinate,
     ]) ?>
 
