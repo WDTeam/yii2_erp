@@ -87,7 +87,7 @@ class SearchBox extends Widget{
             $this->html .= '<div class="form-group col-sm-2">'.Html::submitButton('搜索', $this->submit_options).'</div>';
         }
         $this->html .= '<div id="seachBox_addons" callback="'.$this->callback.'">';
-        foreach($this->addons as $k => $v){
+        foreach((array)$this->addons as $k => $v){
             $this->html .= Html::hiddenInput($k, $v);
         }
         $this->html .= '</div>';

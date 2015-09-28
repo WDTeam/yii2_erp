@@ -34,11 +34,11 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Look');
 //            'operation_platform_version_id',
             'operation_platform_version_name',
 //            'operation_city_id',
-            'operation_city_name',
+//            'operation_city_name',
             'operation_advert_position_width',
             'operation_advert_position_height',
-            ['attribute' => 'created_at', 'value' => empty($model->created_at)? '' : date('Y-m-d H:i:s', $model->created_at)],
-            ['attribute' => 'updated_at', 'value' => empty($model->updated_at)? '' : date('Y-m-d H:i:s', $model->updated_at)],
+            'created_at:datetime',
+            'updated_at:datetime',
         ],
     ]) ?>
 

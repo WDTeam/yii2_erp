@@ -1,5 +1,4 @@
 <?php
-
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
@@ -13,7 +12,7 @@ use boss\models\FinancePopOrderSearch;
 $this->title = Yii::t('boss', '对账统计');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="finance-record-log-index">
+<div class="finance-record-log-index hideTemp">
 
 
 
@@ -43,11 +42,26 @@ $this->params['breadcrumbs'][] = $this->title;
           //  'finance_pay_channel_id',
             'finance_pay_channel_name',
            'finance_record_log_succeed_count', 
-            'finance_record_log_succeed_sum_money', 
+    		[
+        		'format' => 'raw',
+        		'label' => '成功总金额',
+        		'value' => function ($dataProvider) {
+        			return FinancePopOrderSearch::sum_money($dataProvider->finance_record_log_succeed_sum_money);
+        		},
+        		'width' => "100px",
+    		],
             'finance_record_log_manual_count', 
             'finance_record_log_manual_sum_money', 
            'finance_record_log_failure_count', 
-            'finance_record_log_failure_money', 
+           
+           [
+           'format' => 'raw',
+           'label' => '成功总金额',
+           'value' => function ($dataProvider) {
+           	return FinancePopOrderSearch::sum_money($dataProvider->finance_record_log_failure_money);
+           },
+           'width' => "100px",
+           ],
            'finance_record_log_confirm_name', 
 //            'finance_record_log_fee',
  

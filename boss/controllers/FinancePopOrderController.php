@@ -129,6 +129,7 @@ class FinancePopOrderController extends Controller
     			$post['FinancePopOrder']['finance_pop_order_pay_status_type'] =$statusinfo['finance_pop_order_pay_status_type'];//财务确定处理按钮状态
     			$post['FinancePopOrder']['finance_pop_order_pay_title'] = $filenamesitename;
     			$post['FinancePopOrder']['finance_pop_order_check_id'] = Yii::$app->user->id;
+    			
     			$post['FinancePopOrder']['finance_pop_order_finance_time'] = 0;//财务对账提交时间
     			
     			$post['FinancePopOrder']['finance_order_channel_statuspayment'] =strtotime( $post['FinancePopOrderSearch']['finance_order_channel_statuspayment']);
@@ -195,11 +196,6 @@ class FinancePopOrderController extends Controller
  
   		##########################
 		//输出部分
-		
-    	
-    	
-    	
-    	
        $ordedata= new FinanceOrderChannel;
         $ordewhere['is_del']=0;
         $ordewhere['finance_order_channel_is_lock']=1;
@@ -210,16 +206,19 @@ class FinancePopOrderController extends Controller
         }
        $tyu= array_combine($tyd,$tydtui);
        
-        $searchModel = new FinancePopOrderSearch;
+       
+         $searchModel = new FinancePopOrderSearch;
+         //默认条件
+         $searchModel->is_del=0;
+         $searchModel->finance_pop_order_pay_status=0;
+        //状态处理
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-
         $decss=Yii::$app->request->getQueryParams();
         if(isset($decss['FinancePopOrderSearch'])){
         $sta= $decss['FinancePopOrderSearch']['finance_pop_order_pay_status_type'];
         }else{
         $sta='';
-        }
-       
+        } 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
@@ -250,17 +249,40 @@ class FinancePopOrderController extends Controller
     		$tydtui[]=$errt['finance_order_channel_name'];
     	}
     	
-    	
-    	
     	$tyu= array_combine($tyd,$tydtui);
     	$searchModel = new FinancePopOrderSearch;
-    	$dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-    	return $this->render('billinfo', [
+
+    	$defaultParams = array('FinancePopOrderSearch'=>['finance_pop_order_pay_status_type' => '4']);
+    	$requestParams = Yii::$app->request->getQueryParams();
+    	if(isset($requestParams['FinancePopOrderSearch'])){
+    		$requestModel = $requestParams['FinancePopOrderSearch'];
+    	}
+    	$requestParams = array_merge($defaultParams,$requestParams);
+    	$dataProvider = $searchModel->search($requestParams);
+    	//$dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+    	return $this->render('bad', [
     			'dataProvider' => $dataProvider,
     			'searchModel' => $searchModel,
     			'ordedatainfo' => $tyu,
     			]);
     }
+    
+    
+    
+    
+    public function actionIndexall()
+    {
+    	$searchModel = new FinancePopOrderSearch;
+    	$requestModel = Yii::$app->request->post();
+		//$idArr = implode(',',);
+		foreach ($requestModel['ids'] as $iddate){
+			$model=$searchModel::findOne($iddate);
+			$model->finance_pop_order_pay_status='1';
+			$model->save();
+		}
+		 return $this->redirect(['index']);
+    }
+    
     
     
     /**

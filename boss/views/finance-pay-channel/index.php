@@ -11,7 +11,7 @@ use kartik\tabs\TabsX;
  * @var boss\models\FinancePayChannelSearch $searchModel
  */
 ?>
-<div class="finance-pay-channel-index">
+<div class="finance-pay-channel-index hideTemp">
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>

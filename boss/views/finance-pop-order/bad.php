@@ -14,7 +14,7 @@ use yii\bootstrap\NavBar;
 $this->title = Yii::t('app', '坏账列表');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="finance-pop-order-index">
+<div class="finance-pop-order-index hideTemp">
       <div class="panel panel-info">
     <div class="panel-heading">
         <h3 class="panel-title"><i class="glyphicon glyphicon-upload"></i> 详情查询</h3>
