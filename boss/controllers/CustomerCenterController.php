@@ -16,7 +16,7 @@ use common\models\CustomerAccessToken;
  * 顾客端API
  * @author:liudaoqiang@corp.1jiajie.com
  */
-class Customer1Controller extends Controller
+class CustomerCenterController extends Controller
 {
 	public function actionIndex()
 	{
@@ -259,16 +259,73 @@ class Customer1Controller extends Controller
 	}
 
 	public function actionGetOrderList(){
-		
+		\YII::$app->response->format = Response::FORMAT_JSON;
+		return Order::findAll(['customer_id'=>$customer_id]);
 	}
 
 
+	/**
+	 * 客户账户余额获取接口
+	 */
+	public function actionGetBalance()
+	{
+		$customer_id = \Yii::$app->request->get('customer_id');
+		\Yii::$app->response->format = Response::FORMAT_JSON;
+
+		$customer = Customer::find()->where([
+			'id'=>$customer_id
+			])->one();
+		return ['errcode'=>0, 'errmsg'=>'ok', 'balance'=>$customer['customer_balance']];
+	}
+
+	/**
+	 * 客户账户余额转入接口
+	 */
+	public function actionIncBalance()
+	{
+		$customer_id = \Yii::$app->request->get('customer_id');
+		$cash = \Yii::$app->request->get('cash');
+		\Yii::$app->response->format = Response::FORMAT_JSON;
+
+		$customer = Customer::find()->where(['id'=>$customer_id])->one();
+		$balance = $customer->balance;
+		$customer->customer_balance += $cash;
+		$customer->validate();
+		$customer->save();
+		return ['errcode'=>0, 'errmsg'=>'ok'];
+	}
+
+	/**
+	 * 客户账户余额转出接口
+	 */
+	public function actionDecBalance()
+	{
+		$customer_id = \Yii::$app->request->get('customer_id');
+		$cash = \Yii::$app->request->get('cash');
+		\Yii::$app->response->format = Response::FORMAT_JSON;
+
+		$customer = Customer::find()->where(['id'=>$customer_id])->one();
+		$customer->customer_balance -= $cash;
+		$customer->validate();
+		$customer->save();
+		return ['errcode'=>0, 'errmsg'=>'ok'];
+	}
+	
 	/**
 	 * 顾客端使用帮组查询接口
 	 */
 	public function actioGetHelpList()
 	{
+		\YII::$app->response->format = Response::FORMAT_JSON;
+		return CustomerHelp::findAll();
+	}
 
+	/**
+	 * 顾客端广告轮播图获取接口
+	 */
+	public function actionCarousel()
+	{
+		
 	}
 }
 ?>

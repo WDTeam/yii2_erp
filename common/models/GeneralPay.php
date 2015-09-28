@@ -184,7 +184,7 @@ class GeneralPay extends \yii\db\ActiveRecord
         $param = array(
             "body"	=> $this->body(),
             "out_trade_no"	=> $this->create_out_trade_no(),
-            "general_pay_money"	=> $this->toMoney($this->general_pay_money,100,true),
+            "general_pay_money"	=> $this->toMoney($this->general_pay_money,100,'*'),
             'time_start' => date("YmdHis"),
             'time_expire' => date("YmdHis", time() + 600000),
             "trade_type" => "APP",
@@ -193,25 +193,15 @@ class GeneralPay extends \yii\db\ActiveRecord
         );
         $class = new \wxpay_class();
         $msg = $class->get($param);
-        if($msg['return_code'] == 'FAIL'){
-            echo json_encode(['code'=>'-1','msg'=>$msg]);
-        }else{
-            echo json_encode(['code'=>'ok','msg'=>$msg]);
-        }
+        echo json_encode(['code'=>'ok','msg'=>$msg]);
 
 
     }
-
 
     /**
      * 微信H5
      */
-    private function wx_h5()
-    {
-
-
-    }
-
+    private function wx_h5(){}
 
     /**
      * 百度钱包APP
@@ -222,7 +212,7 @@ class GeneralPay extends \yii\db\ActiveRecord
             'out_trade_no'=>$this->create_out_trade_no(),
             'subject'=>$this->subject(),
             'body'=>$this->body(),
-            'general_pay_money'=>$this->toMoney($this->general_pay_money,100,true),
+            'general_pay_money'=>$this->toMoney($this->general_pay_money,100,'*'),
             'notify_url'=>$this->notify_url('bfb-app'),
         );
 
@@ -286,6 +276,7 @@ class GeneralPay extends \yii\db\ActiveRecord
         $http = "http://".$_SERVER['HTTP_HOST']."/general-pay/".$type_name."-notify";
         return $http;
     }
+
     /**
      * 判断在线充值还是支付
      * @return string
@@ -319,15 +310,31 @@ class GeneralPay extends \yii\db\ActiveRecord
 
     /**
      * 转换金额
-     * @param integer $money
-     * @param integer $val
-     * @param bool $falg
+     * @param $money1   实际金额
+     * @param $money2   基数
+     * @param $method   +,-,*,%
+     * @return float    实际金额
      */
-    public function toMoney($money, $val, $falg)
+    public function toMoney($money1, $money2, $method = '*')
     {
-        //判断是转换分还是转换元
-        $toMoney = $falg ? bcmul($money, $val) : bcdiv($money, $val);
-        return round($toMoney,2);
+        $toMoney = '';
+        bcscale(2); //保留两位小数
+        switch($method)
+        {
+            case '+' :
+                $toMoney = bcadd($money1,$money2);
+                break;
+            case '-' :
+                $toMoney = bcsub($money1,$money2);
+                break;
+            case '*' :
+                $toMoney = bcmul($money1,$money2);
+                break;
+            case '/' :
+                $toMoney = bcdiv($money1,$money2);
+                break;
+        }
+        return $toMoney;
     }
 
     /**

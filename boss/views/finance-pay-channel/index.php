@@ -28,7 +28,14 @@ use kartik\tabs\TabsX;
             'id',
             'finance_pay_channel_name',
             'finance_pay_channel_rank',
-            'finance_pay_channel_is_lock',
+	   		[
+	   		'format' => 'raw',
+	   		'label' => '上下架',
+	   		'value' => function ($dataProvider) {
+	   			return $dataProvider->finance_pay_channel_is_lock ? '<font cloro:red>上架</font>' : '下架';
+	   		},
+	   		'width' => "100px",
+	   		],
             'create_time:datetime',
 //            'is_del', 
 

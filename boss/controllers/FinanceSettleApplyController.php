@@ -5,11 +5,14 @@ namespace boss\controllers;
 use Yii;
 use common\models\FinanceSettleApply;
 use boss\models\FinanceSettleApplySearch;
+use boss\models\FinanceSettleApplyLogSearch;
 use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\FinanceWorkerOrderIncome;
 use common\models\FinanceWorkerNonOrderIncome;
+use boss\models\WorkerSearch;
+use boss\models\FinanceWorkerOrderIncomeSearch;
 
 /**
  * FinanceSettleApplyController implements the CRUD actions for FinanceSettleApply model.
@@ -65,10 +68,21 @@ class FinanceSettleApplyController extends Controller
         $ids = $financeSettleApplySearch["ids"];
         $financeSettleApplyStatus = $financeSettleApplySearch["finance_settle_apply_status"];
         $idArr = explode(',', $ids);
+        
         foreach($idArr as $id){
             $model = $this->findModel($id);
             $model->finance_settle_apply_status = $financeSettleApplyStatus;
             $model->save();
+            $financeSettleApplyLogSearch = new FinanceSettleApplyLogSearch;
+            $financeSettleApplyLogSearch->finance_settle_apply_id = $id;
+            $financeSettleApplyLogSearch->finance_settle_apply_reviewer_id = Yii::$app->user->id;
+            $financeSettleApplyLogSearch->finance_settle_apply_reviewer = Yii::$app->user->identity->username;
+            $financeSettleApplyLogSearch->finance_settle_apply_node_id = abs($financeSettleApplyStatus);
+            $financeSettleApplyLogSearch->finance_settle_apply_node_des = $searchModel->financeSettleApplyStatusArr[$financeSettleApplyStatus];
+            $financeSettleApplyLogSearch->finance_settle_apply_is_passed = $financeSettleApplyStatus >0 ? 1:0;
+            $financeSettleApplyLogSearch->finance_settle_apply_reviewer_comment ="";
+            $financeSettleApplyLogSearch->created_at = time();
+            $financeSettleApplyLogSearch->save();
         }
         return $this->actionIndex();
     }
@@ -153,6 +167,27 @@ class FinanceSettleApplyController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    
+    /**
+    * 阿姨人工结算
+    */
+    public function actionWorkerManualSettlementIndex(){
+        $financeSettleApplySearch= new FinanceSettleApplySearch;
+        $financeSettleApplySearch->workerName = "张三";
+        $financeSettleApplySearch->workerPhone= "13456789000";
+        $financeSettleApplySearch->workerOnboardTime= "1443324337";
+        $financeSettleApplySearch->workerType= "全职全日";
+        $searchModel = new FinanceWorkerOrderIncomeSearch;
+        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'dataProvider'=>$dataProvider]);
+    }
+    
+    public function actionWorkerManualSettlementDone(){
+        $requestModel = Yii::$app->request->getQueryParams();
+        $financeSettleApplySearch = $requestModel["FinanceSettleApplySearch"];
+//        saveAndGenerateSettleData($partimeWorkerArr,$settleStartTime,$settleEndTime);
+        return $this->redirect(['index']);
     }
     
     /**

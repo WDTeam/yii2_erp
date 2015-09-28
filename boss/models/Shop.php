@@ -8,6 +8,7 @@ use yii\web\HttpException;
 use yii\base\ErrorException;
 use yii\web\BadRequestHttpException;
 use yii2tech\ar\softdelete\SoftDeleteBehavior;
+use core\models\Worker;
 class Shop extends \common\models\Shop
 {
     public static $audit_statuses = [
@@ -33,7 +34,7 @@ class Shop extends \common\models\Shop
     public function rules()
     {
         return array_merge(parent::rules(),[
-            [['name', 'street', 'principal', 'tel'], 'required'],
+            [['name', 'street', 'principal', 'tel', 'shop_manager_id'], 'required'],
             [['shop_manager_id', 'province_id', 'city_id', 'county_id', 'is_blacklist', 
                 'blacklist_time', 'audit_status', 'worker_count', 
                 'complain_coutn', 'tel', 'bankcard_number'], 'integer'],
@@ -60,10 +61,10 @@ class Shop extends \common\models\Shop
     /**
      * 获取家政名称
      */
-    public function getMenagerName()
+    public function getManagerName()
     {
         $model = ShopManager::find()->where(['id'=>$this->shop_manager_id])->one();
-        return $model->name;
+        return isset($model)?$model->name:'';
     }
     /**
      * 获取城市名称
@@ -122,7 +123,12 @@ class Shop extends \common\models\Shop
             $status->status_type = 2;
             $status->created_at = time();
             $status->cause = $cause;
-            return $status->save();
+            $status->save();
+            //门店阿姨全拉黑
+            $workers = $this->getWorkers();
+            foreach ($workers as $worker){
+                $worker->joinBlacklist($cause);
+            }
         }
         return false;
     }
@@ -174,5 +180,12 @@ class Shop extends \common\models\Shop
     {
         $this->is_deleted = 1;
         return $this->save();
+    }
+    /**
+     * 门店下阿姨
+     */
+    public function getWorkers() {
+        $models = Worker::find()->where(['shop_id'=>$this->id])->all();
+        return (array)$models;
     }
 }

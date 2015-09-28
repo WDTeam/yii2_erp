@@ -5,6 +5,7 @@ use kartik\detail\DetailView;
 use kartik\datecontrol\DateControl;
 use boss\models\ShopManager;
 use boss\components\AreaCascade;
+use kartik\builder\Form;
 
 /**
  * @var yii\web\View $this
@@ -18,11 +19,11 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="shop-manager-view">
 
     <?= DetailView::widget([
-            'model' => $model,
-            'condensed'=>false,
-            'hover'=>true,
-            'mode'=>Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
-            'panel'=>[
+        'model' => $model,
+        'condensed'=>false,
+        'hover'=>true,
+        'mode'=>Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
+        'panel'=>[
             'heading'=>$this->title,
             'type'=>DetailView::TYPE_INFO,
         ],
@@ -141,7 +142,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'bl_person',
             'bl_address',
             'bl_create_time:datetime',
-            'bl_photo_url:url',
+            [
+                'attribute'=>'bl_photo_url',
+                'type'=>DetailView::INPUT_FILE,
+                'value'=>Html::img($model->getBlPhotoUrlByQiniu(),['height'=>100]),
+                'format'=>'raw',
+            ],
             'bl_audit',
             'bl_expiry_start:datetime',
             'bl_expiry_end:datetime',

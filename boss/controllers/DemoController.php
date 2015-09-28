@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use boss\models\ShopManager;
 use boss\models\search\ShopManagerSearch;
 
+
 /**
  * DemoController implements the CRUD actions for User model.
  */
@@ -155,7 +156,7 @@ class DemoController extends Controller
         
     }
     /**
-     * 
+     * Dynagrid 模板DEMO
      */
     public function actionDynagrid()
     {
@@ -166,5 +167,14 @@ class DemoController extends Controller
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
+    }
+    /**
+     * JPush DEMO
+     */
+    
+    public function actionJpush()
+    {
+        $res = \Yii::$app->jpush;
+        var_dump($res->push());
     }
 }

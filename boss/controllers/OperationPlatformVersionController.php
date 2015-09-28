@@ -79,6 +79,25 @@ class OperationPlatformVersionController extends Controller
             ]);
         }
     }
+    
+    public function actionVersionList(){
+        $platform_id = Yii::$app->request->post('platform_id');
+        if(empty($platform_id)){
+            $result = FALSE;
+        }else{
+            $data = OperationPlatformVersion::find()->where(['operation_platform_id' => $platform_id])->all();
+            $d = [];
+            foreach($data as $v){
+                $d[$v['id']] = $v['operation_platform_version_name'];
+            }
+            if(empty($data)){
+                $result = FALSE;
+            }else{
+                $result = TRUE;
+            }
+        }
+        return json_encode(['result' => $result, 'data' => $d]);
+    }
 
     /**
      * Updates an existing OperationPlatformVersion model.

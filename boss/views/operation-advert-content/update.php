@@ -5,14 +5,11 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model boss\models\Operation\OperationAdvertContent */
 
-$this->title = 'Update Operation Advert Content: ' . ' ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Operation Advert Contents', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->title = Yii::t('app', 'Update').Yii::t('app', 'Advert Content');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Advert Content'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-advert-content-update">
-
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
         'model' => $model,
