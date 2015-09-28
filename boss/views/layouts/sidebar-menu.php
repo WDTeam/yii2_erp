@@ -120,8 +120,13 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '操作订单(0%)',
-                        'url' => ['#'],
+                        'label' => '人工派单(0%)',
+                        'url' => ['/manual-order'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
+                    [
+                        'label' => '系统派单(0%)',
+                        'url' => ['/auto-order'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],

@@ -64,6 +64,37 @@ class FinancePopOrderSearch extends FinancePopOrder
     	}
     }
     
+    public static  function is_orderstatus($id)
+    {
+   			 switch ($id)
+				{	
+				case 1:
+				  return '<font color="red">对账成功</font>';
+				  break;  
+				case 2:
+				  return '<font color="blue">你有我没</font>';
+				  break; 
+				case 3:
+				  return '<font color="green">我有你没</font>';
+				  break;
+				case 4:
+				  return '<font color="green">金额不对</font>';
+				  break;
+				  case 5:
+				  	return '<font color="green">状态不对</font>';
+				  	break;
+				  	case 6:
+				  		return '<font color="green">我不知道</font>';
+				  		break;
+	 
+				}
+
+    }
+    
+    
+    
+    
+    
     public static  function sum_money($date)
     {
     	if($date==0 || $date==""){
