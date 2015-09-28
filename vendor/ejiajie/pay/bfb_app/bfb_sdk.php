@@ -391,7 +391,7 @@ class bfb_sdk{
 	 * @return string	返回商户的百付宝密钥
 	 */
 	private function get_sp_key() {
-		$file = ROOT_PATH . sp_conf::SP_KEY_FILE;
+		$file = dirname(__FILE__) .'/'. sp_conf::SP_KEY_FILE;
 		if (!file_exists($file)) {
 			$this->log(sprintf('can not find the sp key file, file [%s]', $file));
 			return false;
