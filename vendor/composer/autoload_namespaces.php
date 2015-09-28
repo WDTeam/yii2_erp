@@ -6,7 +6,10 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'jpush' => array($vendorDir . '/jpush/jpush/src'),
+    'Psr\\Log\\' => array($vendorDir . '/psr/log'),
     'PHPExcel' => array($vendorDir . '/phpoffice/phpexcel/Classes'),
+    'Httpful' => array($vendorDir . '/nategood/httpful/src'),
     'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
     'Diff' => array($vendorDir . '/phpspec/php-diff/lib'),
     'Detection' => array($vendorDir . '/mobiledetect/mobiledetectlib/namespaced'),

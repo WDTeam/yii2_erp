@@ -52,6 +52,8 @@ return array(
     'kartik\\grid\\' => array($vendorDir . '/kartik-v/yii2-grid'),
     'kartik\\form\\' => array($vendorDir . '/kartik-v/yii2-widget-activeform'),
     'kartik\\file\\' => array($vendorDir . '/kartik-v/yii2-widget-fileinput'),
+    'kartik\\field\\' => array($vendorDir . '/kartik-v/yii2-field-range'),
+    'kartik\\editable\\' => array($vendorDir . '/kartik-v/yii2-editable'),
     'kartik\\dynagrid\\' => array($vendorDir . '/kartik-v/yii2-dynagrid'),
     'kartik\\dropdown\\' => array($vendorDir . '/kartik-v/yii2-dropdown-x'),
     'kartik\\detail\\' => array($vendorDir . '/kartik-v/yii2-detail-view'),
@@ -72,5 +74,6 @@ return array(
     'crazyfd\\qiniu\\' => array($vendorDir . '/crazyfd/yii2-qiniu'),
     'cebe\\markdown\\' => array($vendorDir . '/cebe/markdown'),
     'alexandernst\\devicedetect\\' => array($vendorDir . '/alexandernst/yii2-device-detect'),
+    'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'Faker\\' => array($vendorDir . '/fzaninotto/faker/src/Faker'),
 );

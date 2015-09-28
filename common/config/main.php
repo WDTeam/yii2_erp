@@ -127,6 +127,31 @@ return [
             'port' => 6379,
             'database' => 0,
         ],
+        /**
+         * 极光推送,默认为开发环境配置
+         * //正式
+         $app_key='507d4a12d19ebbab7205f6bb';
+         $master_secret = '30d1653625e797b7f80b56bb';
+         // 测试
+         $app_key='6b79c45db3ed3aa1706778f9';
+         $master_secret = '7bcba44668a3ff6469fb57a5';
+         //dev
+         $app_key='3037ca7c859cca4c996f7144';
+         $master_secret = 'a064811d7e4596c32d0e6884';
+         */
+        'jpush'=>[
+            'class'=>'common\components\JPush',
+            'app_key'=>'3037ca7c859cca4c996f7144',
+            'master_secret'=>'a064811d7e4596c32d0e6884'
+        ],
+        /**
+         * 发短信配置
+         */
+        'sms'=>[
+            'class'=>'common\components\Sms',
+            'userId'=>'J02356',
+            'password'=>'556201',
+        ],
     ],
     'modules' => [
         'datecontrol' =>  [

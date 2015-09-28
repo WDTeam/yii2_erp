@@ -113,50 +113,24 @@ class OrderController extends Controller
                 {
                     "id": 1,
                     "customer_id": 1,
-                    "woker_id": 1,
-                    "customer_worker_status": 1,
-                    "created_at": 1442994171,
-                    "updated_at": 1442994171,
-                    "is_del": 0,
-                    "worker": {
-                       "id": 1,
-                        "shop_id": 1,
-                        "worker_name": "王阿姨",
-                        "worker_phone": "18412341222",
-                        "worker_rule_id": "全职"
-                    }
+                    "worker_id": 1,
+                    "worker_name": "王阿姨",
+                    "customer_worker_status": 1
                 },
                 {
                     "id": 2,
                     "customer_id": 1,
-                    "woker_id": 1,
-                    "customer_worker_status": 0,
-                    "created_at": 1442994171,
-                    "updated_at": 1442994171,
-                    "is_del": 0,
-                    "worker": {
-                       "id": 2,
-                        "shop_id": 2,
-                        "worker_name": "张阿姨",
-                        "worker_phone": "18412341233",
-                        "worker_rule_id": "兼职"
-                    }
+                    "worker_id": 2,
+                    "worker_name": "张阿姨",
+                    "customer_worker_status": 0
+
                 },
                 {
                     "id": 3,
                     "customer_id": 1,
-                    "woker_id": 1,
-                    "customer_worker_status": 0,
-                    "created_at": 1442994171,
-                    "updated_at": 1442994171,
-                    "is_del": 0,
-                    "worker": {
-                       "id": 3,
-                        "shop_id": 3,
-                        "worker_name": "李阿姨",
-                        "worker_phone": "18412341234",
-                        "worker_rule_id": "小家政全职"
-                    }
+                    "worker_id": 3,
+                    "worker_name": "李阿姨",
+                    "customer_worker_status": 0
                 }
             ]';
     }
@@ -168,10 +142,7 @@ class OrderController extends Controller
 //        return Worker::find()->where(['worker_phone'=>$phone])->one();
         return '{
             "id": 1,
-            "shop_id": 1,
-            "worker_name": "王阿姨",
-            "worker_phone": "18412341234",
-            "worker_rule_id": "全职"
+            "worker_name": "王阿姨"
         }';
     }
     /**
@@ -223,16 +194,23 @@ class OrderController extends Controller
             $post['Order']['admin_id'] = Yii::$app->user->id;
             $post['Order']['order_ip'] = ip2long(Yii::$app->request->userIP);
             $post['Order']['order_src_id'] = 1; //订单来源BOSS
-            $post['Order']['channel_id'] = 1; //TODO 订单来源渠道BOSS
-            $post['Order']['order_channel_name'] = 'BOSS'; //TODO 订单来源渠道BOSS
-            $post['Order']['order_channel_order_num'] = ''; //TODO 渠道订单号
+            //预约时间处理
+            $time = explode('-',$post['Order']['order_booked_time_range']);
+            $post['Order']['order_booked_begin_time'] = $post['Order']['order_booked_date'].' '.$time[0].':00';
+            $post['Order']['order_booked_end_time'] = ($time[1]=='24:00')?date('Y-m-d H:i:s',strtotime($post['Order']['order_booked_date'].'00:00:00 +1 days')):$post['Order']['order_booked_date'].' '.$time[1].':00';
             if ($model->createNew($post)) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
+        }else{//init
+            $model->order_service_type_id = 1; //服务类型默认值
+            $model->order_booked_count = 120; //服务市场初始值120分钟
+            $model->order_booked_worker_id=0; //不指定阿姨
+            $model->order_booked_time_range = '08:00-10:00';//预约时间段初始值
+            $model->order_pay_type = 1;//支付方式 初始值
+            $model->channel_id = 1;//默认渠道
         }
         return $this->render('create', [
             'model' => $model,
-            'service_list'=>[1=>'家庭保洁',2=>'新居开荒'], //TODO 需要运营支持
         ]);
     }
 

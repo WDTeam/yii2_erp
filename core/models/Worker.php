@@ -5,8 +5,9 @@ namespace core\models;
 use Yii;
 use core\models\WorkerExt;
 use core\models\WorkerRuleConfig;
-use yii\web\BadRequestHttpException;
+use yii\web\ForbiddenHttpException;
 use boss\models\Shop;
+use yii\web\BadRequestHttpException;
 /**
  * This is the model class for table "{{%worker}}".
  *
@@ -36,6 +37,40 @@ use boss\models\Shop;
  */
 class Worker extends \common\models\Worker
 {
+    /*
+     * 获取阿姨列表
+     * @param type int 阿姨类型 1自营2非自营
+     * @param field string 返回字段名
+     * @return 阿姨列表数据
+     */
+    public function getWorkerList($type=0,$field='id'){
+        $condition = [];
+        if(!empty($type)){
+            $condition = ['worker_type'=>$type];
+        }
+        return $this->find()->select($field)->where($condition)->asArray()->all();
+    }
+
+    /*
+     * 获取单个阿姨详细信息
+     * @param worker_id int 阿姨id
+     * @return  单个阿姨详细信息
+     *
+     */
+        public function getWorkerInfo($worker_id){
+
+        $workerInfo = $this->find()->where((['id'=>$worker_id]))->select('id,shop_id,worker_name,worker_phone,worker_idcard,worker_type,worker_rule_id')->asArray()->one();
+        if($workerInfo){
+            //店铺名称
+            $shopInfo = Shop::findone($workerInfo['shop_id']);
+            $workerInfo['shop_name'] = isset($shopInfo['name'])?$shopInfo['name']:'';
+            //获取阿姨身份描述信息
+            $workerType = $workerInfo['worker_type']==1?'自营':'非自营';
+            $workerRule = $this->getWorkerRuleShow($workerInfo['worker_rule_id']);
+            $workerInfo['worker_type_description'] = $workerType.$workerRule;
+        }
+        return $workerInfo;
+    }
 
 
 
@@ -50,13 +85,14 @@ class Worker extends \common\models\Worker
             return '非自有';
         }
     }
+
     /*
      * 获取阿姨身份名称
      * @return String worker_rule_name
      */
-    public function getWorkerRuleShow(){
+    public function getWorkerRuleShow($worker_rule_id){
 
-        $workerRuleArr = WorkerRuleConfig::find()->where(['id'=>$this->worker_rule_id,'isdel'=>0])->asArray()->one();
+        $workerRuleArr = WorkerRuleConfig::find()->where(['id'=>$worker_rule_id,'isdel'=>0])->asArray()->one();
 
         return $workerRuleArr['worker_rule_name'];
     }

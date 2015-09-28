@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model boss\models\Operation\OperationAdvertContent */
@@ -10,32 +11,73 @@ use yii\widgets\ActiveForm;
 
 <div class="operation-advert-content-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options' =>['enctype' => "multipart/form-data"]]); ?>
 
     <?= $form->field($model, 'operation_advert_position_name')->textInput(['maxlength' => true]) ?>
+    
+    <?php
+        echo '<label class="control-label">'.$model->attributeLabels()['operation_advert_start_time'].'</label>';
+        echo DatePicker::widget([
+        'name' => 'OperationAdvertContent[operation_advert_start_time]',
+        'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+        'value' => date('Y-m-d', $model->operation_advert_start_time),
+        'pluginOptions' => [
+            'autoclose'=>true,
+            'format' => 'yyyy-mm-dd'
+        ]
+    ]);
+    ?>
+    <?php
+        echo '<label class="control-label">'.$model->attributeLabels()['operation_advert_end_time'].'</label>';
+        echo DatePicker::widget([
+        'name' => 'OperationAdvertContent[operation_advert_end_time]',
+        'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+        'value' => date('Y-m-d', $model->operation_advert_end_time),
+        'pluginOptions' => [
+            'autoclose'=>true,
+            'format' => 'yyyy-mm-dd'
+        ]
+    ]);
+    ?>
+    <?php
+        echo '<label class="control-label">'.$model->attributeLabels()['operation_advert_online_time'].'</label>';
+        echo DatePicker::widget([
+        'name' => 'OperationAdvertContent[operation_advert_online_time]',
+        'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+        'value' => date('Y-m-d', $model->operation_advert_online_time),
+        'pluginOptions' => [
+            'autoclose'=>true,
+            'format' => 'yyyy-mm-dd'
+        ]
+    ]);
+    ?>
+    <?php
+        echo '<label class="control-label">'.$model->attributeLabels()['operation_advert_offline_time'].'</label>';
+        echo DatePicker::widget([
+        'name' => 'OperationAdvertContent[operation_advert_offline_time]',
+        'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+        'value' => date('Y-m-d', $model->operation_advert_offline_time),
+        'pluginOptions' => [
+            'autoclose'=>true,
+            'format' => 'yyyy-mm-dd'
+        ]
+    ]);
+    ?>
 
-    <?= $form->field($model, 'operation_city_id')->textInput() ?>
+    <?php //= $form->field($model, 'operation_advert_start_time')->textInput() ?>
 
-    <?= $form->field($model, 'operation_city_name')->textInput(['maxlength' => true]) ?>
+    <?php //= $form->field($model, 'operation_advert_end_time')->textInput() ?>
 
-    <?= $form->field($model, 'operation_advert_start_time')->textInput() ?>
+    <?php //= $form->field($model, 'operation_advert_online_time')->textInput() ?>
 
-    <?= $form->field($model, 'operation_advert_end_time')->textInput() ?>
+    <?php //= $form->field($model, 'operation_advert_offline_time')->textInput() ?>
 
-    <?= $form->field($model, 'operation_advert_online_time')->textInput() ?>
-
-    <?= $form->field($model, 'operation_advert_offline_time')->textInput() ?>
-
-    <?= $form->field($model, 'operation_advert_picture')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'operation_advert_url')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'updated_at')->textInput() ?>
+    <?= $form->field($model, 'operation_advert_picture')->fileInput(['maxlength' => true, 'name' => 'operation_advert_picture']) ?>
+    <?= !empty($model->operation_advert_picture) ? '<img src="'.$model->operation_advert_picture.'" style="max-width:300px;max-height:300px;">' : '' ;?>
+    <?= $form->field($model, 'operation_advert_url')->textInput(['maxlength' => true, 'value' => empty($model->operation_advert_url) ? 'http://' : $model->operation_advert_url]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -185,6 +185,7 @@ class CustomerController extends Controller
 
         //订单地址
         $addressStr = '';
+        $default = [];
         $address_count = CustomerAddress::find()->where([
             'customer_id'=>$model->id,
             ])->count();
@@ -197,13 +198,19 @@ class CustomerController extends Controller
                 'id'=>$general_region_id,
                 ])->one();
 
-            $default = [
-                'province'=>$general_region->general_region_province_name,
-                'city'=>$general_region->general_region_city_name,
-                'area'=>$general_region->general_region_area_name,
-                'detail'=>$customerDefaultAddress->customer_address_detail,
-                'phone'=>$customerDefaultAddress->customer_address_phone,
-                ];
+            // $default = [
+            //     'province'=>$general_region->general_region_province_name,
+            //     'city'=>$general_region->general_region_city_name,
+            //     'area'=>$general_region->general_region_area_name,
+            //     'detail'=>$customerDefaultAddress->customer_address_detail,
+            //     'phone'=>$customerDefaultAddress->customer_address_phone,
+            //     ];
+
+            $default['province'] = $general_region->general_region_province_name;
+            $default['city'] = $general_region->general_region_city_name;
+            $default['area'] = $general_region->general_region_area_name;
+            $default['detail'] = $customerDefaultAddress->customer_address_detail;
+            $default['phone'] = $customerDefaultAddress->customer_address_phone;
         }
         
 
@@ -213,23 +220,31 @@ class CustomerController extends Controller
             ])->asArray()->all();
 
         $others = [];
-        if ($customerAddresses) {
+        if ($customerAddresses !== null) {
             foreach ($customerAddresses as $k => $customerAddress) {
-                $general_region_id = $customerAddress->general_region_id;
-                $general_region = CustomerAddress::find()->where([
-                    'id'=>$general_region_id
-                    ])->one();
-                $others[$k]['province'] = $general_region->general_region_province_name;
-                $others[$k]['city'] = $general_region->general_region_city_name;
-                $others[$k]['area'] = $general_region->general_region_area_name;
-                $others[$k]['detail'] = $customerAddress->customer_address_detail;
-                $others[$k]['phone'] = $customerAddress->customer_address_phone;
+                if ($customerAddress && $customerAddress['general_region_id']) {
+                    $general_region_id = $customerAddress['general_region_id'];
+                    $general_region = GeneralRegion::find()->where([
+                        'id'=>$general_region_id
+                        ])->one();
+                    // var_dump($customerAddress);
+                    // exit();
+                    if ($general_region !== null) {
+                        $others[$k]['province'] = $general_region->general_region_province_name;
+                        $others[$k]['city'] = $general_region->general_region_city_name;
+                        $others[$k]['area'] = $general_region->general_region_area_name;
+                        $others[$k]['detail'] = $customerAddress['customer_address_detail'];
+                        $others[$k]['phone'] = $customerAddress['customer_address_phone'];
+                    }
+                }
             }
+        }
 
-            $addressStr = $default['province'].$default['city'].$default['area'].$default['detail']."(".$detail['phone'].")<br/>";
-            foreach ($others as $k => $other) {
-                $addressStr .= $other['province'].$other['city'].$other['area'].$other['detail']."(".$other['phone'].")<br/>";
-            }
+        if (is_array($default) && $default != null) {
+            $addressStr = $default['province'].$default['city'].$default['area'].$default['detail']."(".$default['phone'].")<br/>";
+        }
+        foreach ($others as $k => $other) {
+            $addressStr .= $other['province'].$other['city'].$other['area'].$other['detail']."(".$other['phone'].")<br/>";
         }
         
         // if ($address_count <= 0) {

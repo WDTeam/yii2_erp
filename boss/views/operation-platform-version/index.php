@@ -30,29 +30,8 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'operation_platform_id',
             'operation_platform_name',
             'operation_platform_version_name',
-            [
-               'attribute'=> 'created_at',
-               'format'=>'html',
-               'value' => function ($model){
-                    if(empty($model->created_at)){
-                        return '';
-                    }else{
-                        return date('Y-m-d H:i:s', $model->created_at);
-                    }
-               }
-            ],
-            [
-               'attribute'=> 'updated_at',
-               'format'=>'html',
-               'value' => function ($model){
-                    if(empty($model->updated_at)){
-                        return '';
-                    }else{
-                        return date('Y-m-d H:i:s', $model->updated_at);
-                    }
-               }
-            ],
-
+            'created_at:datatime',
+            'updated_at:datetime',
             [
                 'header' => Yii::t('app', 'Operation'),
                 'class' => 'yii\grid\ActionColumn',

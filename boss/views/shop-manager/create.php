@@ -7,7 +7,7 @@ use yii\helpers\Html;
  * @var boss\models\ShopManager $model
  */
 
-$this->title = Yii::t('app', 'Create Shop Manager');
+$this->title = Yii::t('app', '添加小家政公司');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Shop Managers'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
