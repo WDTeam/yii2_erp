@@ -135,4 +135,6 @@ return [
     'begin_New_Work'=>'新工作方式的开始...',
     'help'=>'帮助',
     'forget_pwd'=>'忘记密码？',
+    'Advert Release' => '广告发布',
+    'Release Advert' => '发布广告',
 ];

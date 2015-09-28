@@ -17,7 +17,7 @@ use yii\base\Widget;
  * @var boss\models\search\ShopSearch $searchModel
  */
 
-$this->title = Yii::t('app', 'Shops');
+$this->title = Yii::t('app', '所有门店');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="shop-index">
@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'shop/create'
             ], [
                 'class' => 'btn btn-default',
-                'title' => Yii::t('app', '添加门店')
+                'title' => Yii::t('app', '添加新门店')
             ]),
         ],
         'columns' => [

@@ -37,10 +37,17 @@ class OperationAdvertRelease extends CoreOperationAdvertRelease
     {
         return [
             'id' => '编号',
-            'operation_advert_position_id' => '广告位置编号',
-            'operation_advert_position_name' => '广告位置名称',
-            'operation_advert_content_id' => '广告内容编号',
-            'operation_advert_content_name' => '广告内容名称',
+            'operation_city_id' => '发布目标城市编号',
+            'operation_city_name' => '发布目标城市',
+            'operation_platform_id' => '发布目标平台编号',
+            'operation_platform_name' => '发布目标平台',
+            'operation_platform_version_id' => '发布目标版本编号',
+            'operation_platform_version_name' => '发布目标版本',
+            
+            'operation_advert_position_id' => '发布目标位置编号',
+            'operation_advert_position_name' => '发布目标位置',
+            'operation_advert_content_id' => '发布广告内容编号',
+            'operation_advert_content_name' => '发布广告内容',
             'created_at' => '创建时间',
             'updated_at' => '编辑时间',
         ];

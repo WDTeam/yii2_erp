@@ -19,8 +19,7 @@ use kartik\date\DatePicker;
 
 <div class="finance-pop-order-search">
     <?php $form = ActiveForm::begin([
-		'options' => ['enctype' => 'multipart/form-data'],
-        'action' => ['index'],
+        'action' => ['bad'],
         'method' => 'post',
     ]);
     ?>
@@ -61,10 +60,7 @@ use kartik\date\DatePicker;
     		]
             ]); ?>
      </div>
-     
-    <div class='col-md-3'>
-      <?= $form->field($model, 'finance_uplod_url')->fileInput(['maxlength' => true]) ?>
-    </div> 
+
     <div class="form-group">
     <div class='col-md-2' style="    margin-top: 22px;">
         <?= Html::submitButton(Yii::t('app', '提交'), ['class' => 'btn btn-primary']) ?>

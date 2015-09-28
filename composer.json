@@ -42,9 +42,12 @@
         "kartik-v/yii2-widget-datetimepicker": "*",
         "yii2tech/ar-softdelete": "dev-master",
         "yii2tech/crontab": "dev-master",
+        "kartik-v/yii2-field-range": "*",
+        "kartik-v/yii2-editable": "^1.7",
         "yiidoc/yii2-redactor": "*",
         "liyunfang/yii2-contextmenu": "^1.0",
-        "jpush/jpush": "^3.2"
+        "jpush/jpush": "^3.2",
+        "2amigos/yii2-date-time-picker-widget": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

@@ -113,7 +113,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]
                             ,
                             [
-                                'title' => Yii::t('yii', '请假'),
+                                'title' => Yii::t('yii', '请假信息录入'),
                                 'data-toggle' => 'modal',
                                 'data-target' => '#vacationModal',
                                 'class'=>'vacation',
@@ -128,7 +128,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]
                         ,
                         [
-                            'title' => Yii::t('yii', '封号'),
+                            'title' => Yii::t('yii', '封号信息录入'),
                             'data-toggle' => 'modal',
                             'data-target' => '#blockModal',
                             'class'=>'block',
@@ -158,11 +158,11 @@ $this->params['breadcrumbs'][] = $this->title;
         //echo $this->render('_search', ['model' => $searchModel]);
     //Modal::end();
     echo Modal::widget([
-        'header' => '<h4 class="modal-title">请假</h4>',
+        'header' => '<h4 class="modal-title">请假信息录入</h4>',
         'id'=>'vacationModal',
    ]);
     echo Modal::widget([
-        'header' => '<h4 class="modal-title">封号</h4>',
+        'header' => '<h4 class="modal-title">封号信息录入</h4>',
         'id'=>'blockModal',
     ]);
 $this->registerJs(<<<JSCONTENT

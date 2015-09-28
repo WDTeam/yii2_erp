@@ -17,7 +17,7 @@ use yii\base\Widget;
  * @var boss\models\search\ShopManagerSearch $searchModel
  */
 
-$this->title = Yii::t('app', 'Shop Managers');
+$this->title = Yii::t('app', '所有家政公司');
 $this->params['breadcrumbs'][] = $this->title; 
 ?>
 <div class="shop-manager-index">

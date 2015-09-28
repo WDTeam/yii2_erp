@@ -1,13 +1,18 @@
 <?php
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
-
+use boss\assets\AppAsset;
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model \common\models\LoginForm */
 
 $this->title = Yii::t('app', 'Login');
 $this->params['breadcrumbs'][] = $this->title;
+AppAsset::register($this);
+//只在该视图中使用非全局的jui
+AppAsset::addScript($this,'adminlte/js/plugins/login/plugin.js');
+AppAsset::addCss($this,'adminlte/css/login/lrtk.css');
+
 ?>
 <style>
     html,body{

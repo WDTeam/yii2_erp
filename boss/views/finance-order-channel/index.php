@@ -12,7 +12,7 @@ use kartik\tabs\TabsX;
 
 
 ?>
-<div class="finance-order-channel-index">
+<div class="finance-order-channel-index hideTemp">
     <div class="page-header">
     </div>
     <p>

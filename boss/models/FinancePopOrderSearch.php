@@ -55,6 +55,58 @@ class FinancePopOrderSearch extends FinancePopOrder
     	return $name;
     }
     
+    public static  function is_finance($date)
+    {
+    	if($date==0 || $date==""){
+    		return '<font color="red">未处理</font>';
+    	}else{
+    		return '<font color="blue">已处理</font>';
+    	}
+    }
+    
+    public static  function is_orderstatus($id)
+    {
+   			 switch ($id)
+				{	
+				case 1:
+				  return '<font color="red">对账成功</font>';
+				  break;  
+				case 2:
+				  return '<font color="blue">你有我没</font>';
+				  break; 
+				case 3:
+				  return '<font color="green">我有你没</font>';
+				  break;
+				case 4:
+				  return '<font color="green">金额不对</font>';
+				  break;
+				  case 5:
+				  	return '<font color="green">状态不对</font>';
+				  	break;
+				  	case 6:
+				  		return '<font color="green">我不知道</font>';
+				  		break;
+	 
+				}
+
+    }
+    
+    
+    
+    
+    
+    public static  function sum_money($date)
+    {
+    	if($date==0 || $date==""){
+    		return '0';
+    	}else{
+    		return $date;
+    	}
+    }
+    
+    
+    
+    
     
     public   function defaultcss($a,$b)
     {
@@ -130,12 +182,12 @@ class FinancePopOrderSearch extends FinancePopOrder
     	$getorder_money=$dateinfo[$hder_info['order_money']];
     	
     	//对应数据表折扣金额
-    	$promote=$dateinfo[$hder_info['order_channel_promote']];
+    	//$promote=$dateinfo[$hder_info['order_channel_promote']];
     	
 		//打开订单库开始比对
 		//$orderinfo= new Order;
 		$alinfo=Order::find()
-		->select('order_status_name,channel_id,order_channel_name,customer_id,order_customer_phone,order_booked_begin_time,order_booked_end_time,order_money,order_booked_worker_id,order_pay_type,pay_channel_id,order_pay_channel_name,order_use_coupon_money,order_channel_order_num,order_customer_phone,worker_id,order_use_promotion_money,order_code,order_service_type_id,order_pay_money,created_at')
+		->select('order_status_name,channel_id,order_channel_name,customer_id,order_customer_phone,order_booked_begin_time,order_booked_end_time,order_money,order_booked_worker_id,order_pay_type,pay_channel_id,order_pay_channel_name,order_use_coupon_money,order_channel_order_num,order_customer_phone,worker_id,order_use_promotion_money,order_code,order_service_type_id,order_pay_money,created_at,coupon_id,order_before_status_dict_id')
 		->andWhere(['=','order_channel_order_num',$getorder])
 		->asArray()->one();
 		
@@ -181,7 +233,7 @@ class FinancePopOrderSearch extends FinancePopOrder
     {
     	//return $this->find()->where(['finance_pop_order_sum_money'=>$params])->count();
     $sumt=FinancePopOrder::find()->select(['sum(finance_pop_order_sum_money) as sumoney'])
-    	->andWhere(['finance_pop_order_pay_status_type' => $params])->asArray()->all();
+    	->where(['finance_pop_order_pay_status'=>'0'])->andWhere(['finance_pop_order_pay_status_type' => $params])->asArray()->all();
     	$post['FinanceRecordLog']['finance_record_log_succeed_sum_money'] =$sumt[0]['sumoney'];
     return $sumt[0]['sumoney']?$sumt[0]['sumoney']:0;
     	

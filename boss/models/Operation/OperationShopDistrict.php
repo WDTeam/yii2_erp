@@ -29,6 +29,7 @@ class OperationShopDistrict extends \yii\db\ActiveRecord
             [['operation_shop_district_name'], 'string', 'max' => 60],
             [['operation_city_name'], 'string', 'max' => 50],
             [['operation_shop_district_name'], 'required'],
+            [['operation_area_id', 'operation_area_name'], 'string'],
         ];
     }
 
