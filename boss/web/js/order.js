@@ -70,7 +70,7 @@ $("#order-order_customer_phone").blur(function(){
                                     var v = worker[k];
                                     $("#order-order_booked_worker_id").append(
                                         '<div class="radio-inline"><label><input type="radio" value="'+ v.worker_id
-                                        +'" name="Order[order_booked_worker_id]"> '+ v.worker.worker_name+'</label></div>'
+                                        +'" name="Order[order_booked_worker_id]"> '+ v.worker_name+'</label></div>'
                                     );
                                 }
                             }
@@ -87,9 +87,7 @@ $("#order-order_customer_phone").blur(function(){
 $(document).on("change","#order-address_id input",function(){
     $("#order-order_address").val($("#order-address_id input:checked").parent().text());
 });
-$("#order-order_service_type_id").change(function(){
-    $("#order-order_service_type_name").val($(this).find('option:selected').text());
-});
+
 $("#order-order_booked_worker_phone").blur(function(){
     var phone = $(this).val();
     var reg = /^1[3-9][0-9]{9}$/;
@@ -109,25 +107,31 @@ $("#order-order_booked_worker_phone").blur(function(){
         });
     }
 });
-$("#order-order_booked_count").change(function(){
-    $money = $(this).val()/60*$("#order_unit_money").text();
+$("#order-order_booked_count input").change(function(){
+    $money = $("#order-order_booked_count input:checked").val()/60*$("#order_unit_money").text();
     $("#order-order_money").val($money.toFixed(2));
-    $("#order_money").text($money.toFixed(2));
+    $(".order_money").text($money.toFixed(2));
+    $("#order-order_booked_time_range").html('');
+    for(var i=8;i<=18;i++){
+        var hour = i<10?'0'+i:i;
+        var hourtime = i+$("#order-order_booked_count input:checked").val()/60;
+        var hour2 = parseInt(hourtime)<10?'0'+parseInt(hourtime):parseInt(hourtime);
+        var minute = (hourtime%1==0)?'00':'30';
+        $("#order-order_booked_time_range").append('<label class="radio-inline"><input type="radio" checked="" value="'+hour+':00-'+hour2+':'+minute+'" name="Order[order_booked_time_range]"> '+hour+':00-'+hour2+':'+minute+'</label>');
+    }
+
 });
 
-$("#order-order_booked_begin_time,#order-order_booked_count").change(function(){
+$("#order-order_booked_begin_time,#order-order_booked_count input").change(function(){
     var stringTime = $("#order-order_booked_begin_time").val();
     var timestamp = datetime_to_unix(stringTime);
-    timestamp = timestamp + $("#order-order_booked_count").val() * 60;
+    timestamp = timestamp + $("#order-order_booked_count input:checked").val() * 60;
     $("#order-order_booked_end_time").val(formatDate(new Date(timestamp * 1000)));
 
 });
 
-$('#order-order_pay_type').change(function(){
-    if($(this).val()==1){
-        $('#is_acc_balance_pay').hide();
-    }else{
-        $('#is_acc_balance_pay').show();
-    }
+$('#order-order_pay_type input').change(function(){
+        $('[id^=order_pay_type]').hide();
+        $('#order_pay_type_'+$('#order-order_pay_type input:checked').val()).show();
 });
 
