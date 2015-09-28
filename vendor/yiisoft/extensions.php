@@ -489,6 +489,24 @@ return array (
       '@yii2tech/crontab' => $vendorDir . '/yii2tech/crontab',
     ),
   ),
+<<<<<<< HEAD
+  'kartik-v/yii2-field-range' => 
+  array (
+    'name' => 'kartik-v/yii2-field-range',
+    'version' => '1.3.0.0',
+    'alias' => 
+    array (
+      '@kartik/field' => $vendorDir . '/kartik-v/yii2-field-range',
+    ),
+  ),
+  'kartik-v/yii2-editable' => 
+  array (
+    'name' => 'kartik-v/yii2-editable',
+    'version' => '1.7.3.0',
+    'alias' => 
+    array (
+      '@kartik/editable' => $vendorDir . '/kartik-v/yii2-editable',
+=======
   'yiidoc/yii2-redactor' => 
   array (
     'name' => 'yiidoc/yii2-redactor',
@@ -505,6 +523,7 @@ return array (
     'alias' => 
     array (
       '@liyunfang/contextmenu' => $vendorDir . '/liyunfang/yii2-contextmenu',
+>>>>>>> 6160ec96312f6bc0d07526b8ef6af6b29ce5e62d
     ),
   ),
 );
