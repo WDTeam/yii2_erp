@@ -128,4 +128,6 @@ return [
     'Manage' => '管理',
     'Version' => '版本',
     'Advert Position' => '广告位置',
+    'List' => '列表',
+    'Advert Content' => '广告内容',
 ];

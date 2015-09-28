@@ -32,6 +32,7 @@ class AppAsset extends AssetBundle
         'js/interview.js',
         'js/openWin.js',
         'js/cascade.js',
+        'js/searchbox.js',
         'js/bootpage.js',
         'js/advert.js',
     ];
