@@ -96,4 +96,49 @@ class Customer extends \yii\db\ActiveRecord
             'customer_del_reason' => Yii::t('boss', '加入黑名单原因'),
         ];
     }
+
+    /**
+     * 客户账户余额获取
+     */
+    public function actionGetBalance()
+    {
+        $customer_id = \Yii::$app->request->get('customer_id');
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $customer = Customer::find()->where([
+            'id'=>$customer_id
+            ])->one();
+        return $customer->customer_balance;
+    }
+
+    /**
+     * 客户账户余额转入
+     */
+    public function actionIncBalance()
+    {
+        $customer_id = \Yii::$app->request->get('customer_id');
+        $cash = \Yii::$app->request->get('cash');
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $customer = Customer::find()->where(['id'=>$customer_id])->one();
+        $balance = $customer->balance;
+        $customer->customer_balance += $cash;
+        $customer->validate();
+        $customer->save();
+    }
+
+    /**
+     * 客户账户余额转出
+     */
+    public function actionDecBalance()
+    {
+        $customer_id = \Yii::$app->request->get('customer_id');
+        $cash = \Yii::$app->request->get('cash');
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $customer = Customer::find()->where(['id'=>$customer_id])->one();
+        $customer->customer_balance -= $cash;
+        $customer->validate();
+        $customer->save();
+    }
 }
