@@ -5,14 +5,14 @@ namespace boss\controllers;
 use Yii;
 use boss\models\Operation\OperationAdvertRelease;
 use yii\data\ActiveDataProvider;
-use boss\components\BaseAuthController;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * OperationAdvertReleaseController implements the CRUD actions for OperationAdvertRelease model.
  */
-class OperationAdvertReleaseController extends BaseAuthController
+class OperationAdvertReleaseController extends Controller
 {
     public function behaviors()
     {

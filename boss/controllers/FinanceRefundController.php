@@ -5,14 +5,14 @@ namespace boss\controllers;
 use Yii;
 use common\models\FinanceRefund;
 use boss\models\FinanceRefundSearch;
-use boss\components\BaseAuthController;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * FinanceRefundController implements the CRUD actions for FinanceRefund model.
  */
-class FinanceRefundController extends BaseAuthController
+class FinanceRefundController extends Controller
 {
     public function behaviors()
     {

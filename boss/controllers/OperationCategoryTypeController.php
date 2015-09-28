@@ -7,14 +7,14 @@ use boss\models\Operation\OperationCategoryType;
 use boss\models\Operation\OperationCategory;
 use boss\models\Operation\OperationPriceStrategy;
 use yii\data\ActiveDataProvider;
-use boss\components\BaseAuthController;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * OperationCategoryTypeController implements the CRUD actions for OperationCategoryType model.
  */
-class OperationCategoryTypeController extends BaseAuthController
+class OperationCategoryTypeController extends Controller
 {
     public function behaviors()
     {

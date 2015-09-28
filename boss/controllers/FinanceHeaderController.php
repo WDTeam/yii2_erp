@@ -15,7 +15,7 @@ namespace boss\controllers;
 use Yii;
 use common\models\FinanceHeader;
 use boss\models\FinanceHeaderSearch;
-use boss\components\BaseAuthController;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
@@ -28,7 +28,7 @@ use boss\models\FinanceOrderChannelSearch;
 /**
  * FinanceHeaderController implements the CRUD actions for FinanceHeader model.
  */
-class FinanceHeaderController extends BaseAuthController
+class FinanceHeaderController extends Controller
 {
 	
 	

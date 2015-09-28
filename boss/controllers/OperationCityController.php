@@ -5,7 +5,7 @@ namespace boss\controllers;
 use Yii;
 use boss\models\Operation\OperationCity;
 use boss\models\Operation\OperationCitySearch;
-use boss\components\BaseAuthController;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 //use boss\components\AreaCascade;
@@ -15,7 +15,7 @@ use boss\components\UploadFile;
 /**
  * OperationCityController implements the CRUD actions for OperationCity model.
  */
-class OperationCityController extends BaseAuthController
+class OperationCityController extends Controller
 {
     public function behaviors()
     {

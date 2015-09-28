@@ -77,7 +77,7 @@ class VerbFilter extends Behavior
      */
     public function events()
     {
-        return [BaseAuthController::EVENT_BEFORE_ACTION => 'beforeAction'];
+        return [Controller::EVENT_BEFORE_ACTION => 'beforeAction'];
     }
 
     /**

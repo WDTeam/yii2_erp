@@ -5,14 +5,14 @@ namespace boss\controllers;
 use Yii;
 use boss\models\Auth;
 use boss\models\search\AuthSearch;
-use boss\components\BaseAuthController;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * AuthController implements the CRUD actions for Auth model.
  */
-class AuthController extends BaseAuthController
+class AuthController extends Controller
 {
     public function behaviors()
     {

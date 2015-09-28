@@ -5,14 +5,14 @@ namespace boss\controllers;
 use Yii;
 use common\models\GeneralPayLog;
 use boss\models\GeneralPayLogSearch;
-use boss\components\BaseAuthController;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * GeneralPayLogController implements the CRUD actions for GeneralPayLog model.
  */
-class GeneralPayLogController extends BaseAuthController
+class GeneralPayLogController extends Controller
 {
     public function behaviors()
     {

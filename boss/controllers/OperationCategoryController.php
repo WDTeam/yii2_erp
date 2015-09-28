@@ -5,14 +5,14 @@ namespace boss\controllers;
 use Yii;
 use boss\models\Operation\OperationCategory;
 use boss\models\Operation\OperationCategorySearch;
-use boss\components\BaseAuthController;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * OperationCategoryController implements the CRUD actions for OperationCategory model.
  */
-class OperationCategoryController extends BaseAuthController
+class OperationCategoryController extends Controller
 {
     public function behaviors()
     {

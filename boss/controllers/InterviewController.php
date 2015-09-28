@@ -5,7 +5,7 @@ namespace boss\controllers;
 use Yii;
 use boss\models\Interview;
 use yii\data\ActiveDataProvider;
-use boss\components\BaseAuthController;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -16,7 +16,7 @@ use common\models\Sms;
 /**
  * InterviewController implements the CRUD actions for Interview model.
  */
-class InterviewController extends BaseAuthController
+class InterviewController extends Controller
 {
         /**
      * @inheritdoc

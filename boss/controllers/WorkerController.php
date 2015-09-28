@@ -6,7 +6,7 @@ use common\models\WorkerBlock;
 use common\models\WorkerVacation;
 use Yii;
 use yii\db\Query;
-use boss\components\BaseAuthController;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use core\models\Worker;
@@ -20,7 +20,7 @@ use common\models\WorkerBlockLog;
 /**
  * WorkerController implements the CRUD actions for Worker model.
  */
-class WorkerController extends BaseAuthController
+class WorkerController extends Controller
 {
     public function behaviors()
     {

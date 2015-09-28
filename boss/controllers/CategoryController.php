@@ -5,14 +5,14 @@ namespace boss\controllers;
 use Yii;
 use boss\models\Category;
 use yii\data\ActiveDataProvider;
-use boss\components\BaseAuthController;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * CategoryController implements the CRUD actions for Category model.
  */
-class CategoryController extends BaseAuthController
+class CategoryController extends Controller
 {
     public $is_category_manage = true;
     /**

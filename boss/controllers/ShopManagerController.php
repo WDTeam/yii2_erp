@@ -5,7 +5,7 @@ namespace boss\controllers;
 use Yii;
 use boss\models\ShopManager;
 use boss\models\search\ShopManagerSearch;
-use boss\components\BaseAuthController;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use crazyfd\qiniu\Qiniu;
@@ -18,7 +18,7 @@ use yii\web\UploadedFile;
 /**
  * ShopManagerController implements the CRUD actions for ShopManager model.
  */
-class ShopManagerController extends BaseAuthController
+class ShopManagerController extends Controller
 {
     public function behaviors()
     {

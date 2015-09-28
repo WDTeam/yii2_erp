@@ -5,14 +5,14 @@ namespace boss\controllers;
 use Yii;
 use common\models\FinancePopOrderLog;
 use boss\models\FinancePopOrderLogSearch;
-use boss\components\BaseAuthController;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * FinancePopOrderLogController implements the CRUD actions for FinancePopOrderLog model.
  */
-class FinancePopOrderLogController extends BaseAuthController
+class FinancePopOrderLogController extends Controller
 {
     public function behaviors()
     {

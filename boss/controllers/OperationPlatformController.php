@@ -5,14 +5,14 @@ namespace boss\controllers;
 use Yii;
 use boss\models\Operation\OperationPlatform;
 use yii\data\ActiveDataProvider;
-use boss\components\BaseAuthController;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * OperationPlatformController implements the CRUD actions for OperationPlatform model.
  */
-class OperationPlatformController extends BaseAuthController
+class OperationPlatformController extends Controller
 {
     public function behaviors()
     {

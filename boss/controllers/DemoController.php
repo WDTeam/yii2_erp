@@ -5,7 +5,7 @@ namespace boss\controllers;
 use Yii;
 use common\models\User;
 use boss\models\Demo;
-use boss\components\BaseAuthController;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use boss\models\ShopManager;
@@ -15,7 +15,7 @@ use boss\models\search\ShopManagerSearch;
 /**
  * DemoController implements the CRUD actions for User model.
  */
-class DemoController extends BaseAuthController
+class DemoController extends Controller
 {
     public function behaviors()
     {

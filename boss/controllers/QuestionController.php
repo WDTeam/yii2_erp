@@ -5,7 +5,7 @@ namespace boss\controllers;
 use Yii;
 use boss\models\Question;
 use yii\data\ActiveDataProvider;
-use boss\components\BaseAuthController;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use boss\models\Courseware;
@@ -14,7 +14,7 @@ use boss\models\Category;
 /**
  * QuestionController implements the CRUD actions for Question model.
  */
-class QuestionController extends BaseAuthController
+class QuestionController extends Controller
 {
     public $is_category_manage = true;
     public function behaviors()

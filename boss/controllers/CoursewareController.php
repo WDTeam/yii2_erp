@@ -7,14 +7,14 @@ use boss\models\Courseware;
 use boss\models\CoursewareSearch;
 use yii\data\ActiveDataProvider;
 use boss\models\Category;
-use boss\components\BaseAuthController;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * CoursewareController implements the CRUD actions for Courseware model.
  */
-class CoursewareController extends BaseAuthController
+class CoursewareController extends Controller
 {
     public $is_category_manage = true;
     public function behaviors()

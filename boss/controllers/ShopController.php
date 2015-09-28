@@ -5,14 +5,14 @@ namespace boss\controllers;
 use Yii;
 use boss\models\Shop;
 use boss\models\search\ShopSearch;
-use boss\components\BaseAuthController;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * ShopController implements the CRUD actions for Shop model.
  */
-class ShopController extends BaseAuthController
+class ShopController extends Controller
 {
     public function behaviors()
     {

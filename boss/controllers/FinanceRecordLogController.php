@@ -4,7 +4,7 @@ namespace boss\controllers;
 use Yii;
 use common\models\FinanceRecordLog;
 use boss\models\FinanceRecordLogSearch;
-use boss\components\BaseAuthController;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\FinanceOrderChannel;
@@ -13,7 +13,7 @@ use common\models\FinanceOrderChannel;
 /**
  * FinanceRecordLogController implements the CRUD actions for FinanceRecordLog model.
  */
-class FinanceRecordLogController extends BaseAuthController
+class FinanceRecordLogController extends Controller
 {
     public function behaviors()
     {
