@@ -64,6 +64,16 @@ class FinancePopOrderSearch extends FinancePopOrder
     	}
     }
     
+    public static  function sum_money($date)
+    {
+    	if($date==0 || $date==""){
+    		return '0';
+    	}else{
+    		return $date;
+    	}
+    }
+    
+    
     
     
     
