@@ -19,7 +19,7 @@ $this->title = Yii::t('app', '对账管理');
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
-<div class="finance-pop-order-index">
+<div class="finance-pop-order-index hideTemp">
       <div class="panel panel-info">
     <div class="panel-heading">
         <h3 class="panel-title"><i class="glyphicon glyphicon-upload"></i> 上传对账单</h3>

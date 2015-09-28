@@ -7,6 +7,13 @@ body{
 	background-color: #ecf0f5;
 }
 
+.right-side > .content .tabs-krajee{
+	background-color: #fff;
+	-moz-border-radius: 3px !important;
+	-webkit-border-radius: 3px !important;
+	border-radius: 3px !important;
+}
+
 .right-side > .content-header {
     position: fixed;
     z-index: 1000;
@@ -186,26 +193,34 @@ ul.navbar-right > li.dropdown > ul.dropdown-menu > li > a {
 
 .kv-panel-before .btn-success {
 	background-color: transparent !important;
-	color: #00a65a;
+	color: #f6a202;
+	border: 1px solid #f6a202 !important;
 	webkit-box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 0.09) !important;
     -moz-box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 0.09) !important;
     box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 0.09) !important;
 }
 
 .kv-panel-before .btn-success:hover {
-	color: rgba(0, 166, 90, .82);
-	border: 1px solid rgba(0, 166, 90, .82);
+	color: rgba(255, 255, 255, .82) !important;
+	background-color: #f6a202 !important;
 }
 
 .kv-panel-before .btn-success:focus {
-	color: rgba(0, 166, 90, .82);
-	border: 1px solid rgba(0, 166, 90, .82);
-	/*color: #01552e;
-	border: 1px solid #01552e;*/
+	color: rgba(255, 255, 255, .82) !important;
+	background-color: #f6a202 !important;
 }
 
 #province.inline,
 #city.inline,
 #county.inline {
 	width: 100%;
+}
+
+.hideTemp .grid-view .kv-panel-before .pull-right .kv-grid-toolbar {
+	display: none;
+}
+
+.hideTemp + form .grid-view .kv-panel-before .pull-right .kv-grid-toolbar,
+.hideTemp + div .grid-view .kv-panel-before .pull-right .kv-grid-toolbar {
+	display: none;
 }

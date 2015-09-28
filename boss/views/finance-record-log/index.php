@@ -12,7 +12,7 @@ use boss\models\FinancePopOrderSearch;
 $this->title = Yii::t('boss', '对账统计');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="finance-record-log-index">
+<div class="finance-record-log-index hideTemp">
 
 
 

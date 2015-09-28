@@ -13,7 +13,7 @@ use common\models\FinanceHeader;
 $this->title = Yii::t('boss', '添加账单配置');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="finance-header-index">
+<div class="finance-header-index hideTemp">
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     
