@@ -20,9 +20,9 @@ use kartik\date\DatePicker;
     <?= $form->field($model, 'finance_order_channel_name') ?>
 </div>
 
-    <? //= Html::selected(Yii::t('boss', 'Search'), ['class' => 'btn btn-primary']) ?>
+    <?php // Html::selected(Yii::t('boss', 'Search'), ['class' => 'btn btn-primary']) ?>
     
-    <?//= $form->field($model, 'finance_pay_channel_id') ?>
+    <?php // $form->field($model, 'finance_pay_channel_id') ?>
 <div class='col-md-2'>
     <?= $form->field($model, 'finance_pay_channel_id')->widget(Select2::classname(), [
         'name' => 'finance_pay_channel_id',
@@ -36,7 +36,7 @@ use kartik\date\DatePicker;
     
     ?>
 </div>
-    <?//= $form->field($model, 'finance_pay_channel_name') ?>
+    <?php // $form->field($model, 'finance_pay_channel_name') ?>
 
     <?php // echo $form->field($model, 'finance_record_log_succeed_count') ?>
 
