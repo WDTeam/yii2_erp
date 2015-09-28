@@ -174,7 +174,7 @@ class DemoController extends Controller
     public function actionJpush()
     {
         $res = \Yii::$app->jpush;
-        var_dump($res->push());
+        var_dump($res->push(), $res->getReport());
     }
     /**
      * 发短信 DEMO
