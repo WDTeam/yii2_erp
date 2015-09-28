@@ -51,6 +51,8 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'customer_trans_record_online_service_card_pay') ?>
 
+    <?php // echo $form->field($model, 'customer_trans_record_compensate_money') ?>
+
     <?php // echo $form->field($model, 'customer_trans_record_refund_money') ?>
 
     <?php // echo $form->field($model, 'customer_trans_record_money') ?>
