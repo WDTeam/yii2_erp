@@ -44,12 +44,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'finance_pay_channel_name',
            'finance_record_log_succeed_count', 
     		[
-    		'format' => 'raw',
-    		'label' => '成功总金额',
-    		'value' => function ($dataProvider) {
-    			return FinancePopOrderSearch::sum_money($dataProvider->finance_record_log_succeed_sum_money);
-    		},
-    		'width' => "100px",
+        		'format' => 'raw',
+        		'label' => '成功总金额',
+        		'value' => function ($dataProvider) {
+        			return FinancePopOrderSearch::sum_money($dataProvider->finance_record_log_succeed_sum_money);
+        		},
+        		'width' => "100px",
     		],
             'finance_record_log_manual_count', 
             'finance_record_log_manual_sum_money', 
