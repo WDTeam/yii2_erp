@@ -9,21 +9,5 @@ $(document).ready(function(){
 			$(".sidebar-menu .treeview-menu li a").eq(i).removeClass("active").addClass("active");
 		}
 	}
-
-	//$("#list li p i").click(
-	//	function(){
-	//		var classname=$(this).attr("class");
-	//		if(classname=="ckb")
-	//		{
-	//			$(this).addClass("cur");
-	//			$(this).removeClass("ckb");
-	//		}
-	//		else
-	//		{
-	//			$(this).addClass("ckb");
-	//			$(this).removeClass("cur");
-	//		}
-	//	}
-	//);
 });
 

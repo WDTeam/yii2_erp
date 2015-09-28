@@ -5,6 +5,7 @@ use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
 use kartik\date\DatePicker;
 use kartik\widgets\Select2; // or kartik\select2\Select2
+use kartik\field\FieldRange;
 ?>
 
 <div class="">
@@ -34,7 +35,8 @@ use kartik\widgets\Select2; // or kartik\select2\Select2
     'type' => DatePicker::TYPE_COMPONENT_PREPEND,
     'pluginOptions' => [
         'autoclose' => true,
-        'format' => 'yyyy-mm-dd'
+        'format' => 'yyyy-mm-dd',
+        'saveFormat' => 'php:U'
     ]
     ]);
     echo $form->field($workerBlockmodel, 'worker_block_finish_time')->widget(DatePicker::classname(), [
@@ -43,9 +45,11 @@ use kartik\widgets\Select2; // or kartik\select2\Select2
 
         'pluginOptions' => [
             'autoclose' => true,
-            'format' => 'yyyy-mm-dd'
+            'format' => 'yyyy-mm-dd',
         ]
     ]);
+
+
     echo Html::submitButton('确认',['class'=>'btn btn-primary btn-lg btn-block']);
     ActiveForm::end();
 ?>

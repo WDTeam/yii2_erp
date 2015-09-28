@@ -489,7 +489,7 @@ return array (
       '@yii2tech/crontab' => $vendorDir . '/yii2tech/crontab',
     ),
   ),
-  'yiidoc/yii2-redactor' => 
+  'yiidoc/yii2-redactor' =>
   array (
     'name' => 'yiidoc/yii2-redactor',
     'version' => '2.0.1.0',
@@ -507,4 +507,5 @@ return array (
       '@liyunfang/contextmenu' => $vendorDir . '/liyunfang/yii2-contextmenu',
     ),
   ),
+
 );

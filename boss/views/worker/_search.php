@@ -42,7 +42,7 @@ $url = \yii\helpers\Url::to(['show-shop']);
             'options' => ['placeholder' => '搜索门店名称...', 'class' => 'col-md-2'],
             'pluginOptions' => [
                 'allowClear' => true,
-                'minimumInputLength' => 2,
+                'minimumInputLength' => 0,
                 'ajax' => [
                     'url' => $url,
                     'dataType' => 'json',
