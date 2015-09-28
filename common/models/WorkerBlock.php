@@ -33,7 +33,7 @@ class WorkerBlock extends \yii\db\ActiveRecord
     {
         return [
             [['worker_id',  'worker_block_status', 'created_ad', 'updated_ad'], 'integer'],
-            [['worker_block_start_time', 'worker_block_finish_time'],'date'],
+            [['worker_id',  'worker_block_status', 'worker_block_start_time', 'worker_block_finish_time'], 'required'],
             [['worker_block_reason'], 'string', 'max' => 255]
         ];
     }
@@ -53,5 +53,12 @@ class WorkerBlock extends \yii\db\ActiveRecord
             'created_ad' => Yii::t('app', 'Created Ad'),
             'updated_ad' => Yii::t('app', 'Updated Ad'),
         ];
+    }
+
+    public function getStartTime(){
+        return date('Y-m-d',$this->worker_block_start_time);
+    }
+    public function getFinishTime(){
+        return date('Y-m-d',$this->worker_block_finish_time);
     }
 }

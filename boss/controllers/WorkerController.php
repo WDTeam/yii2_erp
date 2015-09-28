@@ -14,6 +14,9 @@ use core\models\WorkerExt;
 use boss\models\WorkerSearch;
 use boss\models\Operation;
 use yii\helpers\ArrayHelper;
+use yii\data\ActiveDataProvider;
+use common\models\WorkerBlockLog;
+
 /**
  * WorkerController implements the CRUD actions for Worker model.
  */
@@ -57,11 +60,20 @@ class WorkerController extends Controller
      */
     public function actionView($id)
     {
-        $model = $this->findModel($id);
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+
+        $workerModel = $this->findModel($id);
+        $workerBlockModel = new WorkerBlock();
+        $workerBlockData = new ActiveDataProvider([
+            'query' => $workerBlockModel->find()->where(['worker_id'=>$id]),
+        ]);
+        $workerVacationModel = new WorkerVacation();
+        $workerVacationData = new ActiveDataProvider([
+            'query' => $workerVacationModel->find()->where(['worker_id'=>$id]),
+        ]);
+        if ($workerModel->load(Yii::$app->request->post()) && $workerModel->save()) {
+            return $this->redirect(['view', 'id' => $workerModel->id]);
         } else {
-            return $this->render('view', ['model' => $model]);
+            return $this->render('view', ['workerModel' => $workerModel,'workerBlockData'=>$workerBlockData,'workerVacationData'=>$workerVacationData]);
         }
     }
 
@@ -107,6 +119,59 @@ class WorkerController extends Controller
                 'model' => $model,
             ]);
         }
+    }
+
+    public function actionUpdateWorkerBlock(){
+        if (Yii::$app->request->post('hasEditable')) {
+            // instantiate your book model for saving
+            $post = Yii::$app->request->post();
+            $id = $post['editableKey'];
+            $param['WorkerBlock'] = $post['WorkerBlock'][$post['editableIndex']];
+            $model = WorkerBlock::findOne($id);
+            $oldFinishTime = $model->worker_block_finish_time;
+            if(isset($param['WorkerBlock']['worker_block_finish_time'])){
+                if($oldFinishTime>$param['WorkerBlock']['worker_block_finish_time']){
+                    $this->CreateBlockLog($id,2);
+                }else{
+                    $this->CreateBlockLog($id,3);
+                }
+                $model->worker_block_finish_time = strtotime($param['WorkerBlock']['worker_block_finish_time']);
+            }
+            if(isset($param['WorkerBlock']['worker_block_status']) && isset($param['WorkerBlock']['worker_block_status'])==1){
+                $model->worker_block_status = $param['WorkerBlock']['worker_block_status'];
+            }
+            $model->save();
+            //$model->getErrors();
+            $out = json_encode(['output'=>array_values($param['WorkerBlock'] = $post['WorkerBlock'][$post['editableIndex']]), 'message'=>'']);
+            // return ajax json encoded response and exit
+            echo $out;
+            return;
+        }
+    }
+
+
+    protected function CreateBlockLog($blocdId,$type){
+            $log['worker_block_operate_type'] = $type;
+            $log['worker_block_id'] = $blocdId;
+            $log['worker_block_operate_time'] = time();
+            $log['worker_block_operate_id'] = Yii::$app->user->identity->id;
+
+            if($type==1){
+                $log['worker_block_operate_bak'] = '创建封号操作';
+            }elseif($type==2){
+                $log['worker_block_operate_bak'] = '缩短封号时间操作';
+            }elseif($type==3){
+                $log['worker_block_operate_bak'] = '延长封号时间操作';
+            }elseif($type==4){
+                $log['worker_block_operate_bak'] = '关闭操作';
+            }else{
+                $log['worker_block_operate_type'] = 5;
+                $log['worker_block_operate_bak'] = '其他操作';
+            }
+
+            $workerBlockModel = new WorkerBlockLog();
+            $workerBlockModel->load(['WorkerBlockLog'=>$log]);
+            $workerBlockModel->save();
     }
 
     /**
@@ -168,6 +233,7 @@ class WorkerController extends Controller
         $workerModel = $this->findModel($id);
         $workerVacationmodel = new WorkerVacation();
         if(\Yii::$app->request->post()){
+
             return $this->redirect(['index']);
         }else{
             return $this->renderAjax('vacation_create',['workerModel'=>$workerModel,'workerVacationModel'=>$workerVacationmodel]);
@@ -182,8 +248,14 @@ class WorkerController extends Controller
     public function actionBlockCreate($id){
         $workerModel = $this->findModel($id);
         $workerBlockmodel = new WorkerBlock();
-
-        if(\Yii::$app->request->post()){
+        $post = \Yii::$app->request->post();
+        if($post){
+            $workerBlockmodel->worker_id = $id;
+            $workerBlockmodel->worker_block_start_time = strtotime($post['WorkerBlock']['worker_block_start_time']);
+            $workerBlockmodel->worker_block_finish_time = strtotime($post['WorkerBlock']['worker_block_finish_time']);
+            $workerBlockmodel->worker_block_reason = $post['WorkerBlock']['worker_block_reason'];
+            $workerBlockmodel->worker_block_status = 0;
+            $workerBlockmodel->save();
             return $this->redirect(['index']);
         }else{
             return $this->renderAjax('block_create',['workerModel'=>$workerModel,'workerBlockmodel'=>$workerBlockmodel]);
@@ -305,5 +377,12 @@ class WorkerController extends Controller
 
         }
 
+    }
+
+    public function actionTest(){
+        $worker = new Worker();
+        $worker = $worker->getWorkerInfo(43);
+        echo '<pre>';
+        var_dump($worker);die;
     }
 }
