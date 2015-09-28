@@ -10,18 +10,6 @@ $(document).ready(function(){
 		}
 	}
 
-	(function ($) {
-		$('div, img').slideShow({
-			timeOut: 6000,
-			showNavigation: true,
-			pauseOnHover: true,
-			swipeNavigation: true
-		});
-		//var navbar=$('.navbar')
-		//navbar.animate({top: '-100px'}, function () {
-		//	navbar.hide();
-		//});
-	}(jQuery));
 	$("#list li p i").click(
 		function(){
 			var classname=$(this).attr("class");
@@ -35,8 +23,6 @@ $(document).ready(function(){
 				$(this).addClass("ckb");
 				$(this).removeClass("cur");
 			}
-
-
 		}
 	);
 });

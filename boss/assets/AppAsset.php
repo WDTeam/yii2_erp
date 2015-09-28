@@ -28,8 +28,6 @@ class AppAsset extends AssetBundle
         'adminlte/css/login/lrtk.css',
     ];
     public $js = [
-        'adminlte/js/jquery.min.js',
-        'adminlte/js/jquery.hammer-full.min.js',
         'adminlte/js/plugins/login/plugin.js',
         'adminlte/js/AdminLTE/app.js',
 //        'adminlte/js/jquery.min.js',
