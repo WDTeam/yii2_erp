@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f28758434b5b0a0c01b0396a5b39ec3f",
-    "content-hash": "8431d844cc7681d30b5efd37e62f2410",
+    "hash": "d03ea3c4305996d34fbee7ed328665c9",
     "packages": [
         {
             "name": "2amigos/yii2-date-picker-widget",
@@ -67,6 +66,49 @@
                 "yii2"
             ],
             "time": "2015-04-02 11:48:05"
+        },
+        {
+            "name": "2amigos/yii2-date-time-picker-widget",
+            "version": "0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/2amigos/yii2-date-time-picker-widget.git",
+                "reference": "572e2448ba1cd207b339dd5d117e3d1d23f0bbc3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://packagist.phpcomposer.com/files/2amigos/yii2-date-time-picker-widget/572e2448ba1cd207b339dd5d117e3d1d23f0bbc3.zip",
+                "reference": "572e2448ba1cd207b339dd5d117e3d1d23f0bbc3",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "dosamigos\\datetimepicker\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Antonio Ramirez",
+                    "email": "ramirez.cobos@gmail.com",
+                    "homepage": "http://2amigos.us"
+                }
+            ],
+            "description": "Bootstrap DateTimePicker widget for Yii2.",
+            "keywords": [
+                "datepicker",
+                "extension",
+                "widget",
+                "yii"
+            ],
+            "time": "2014-06-24 14:28:07"
         },
         {
             "name": "alexandernst/yii2-device-detect",
@@ -1371,7 +1413,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-editable/zipball/bbbe10218d1539c31f1628e86ee889a27629e3f5",
+                "url": "http://packagist.phpcomposer.com/files/kartik-v/yii2-editable/bbbe10218d1539c31f1628e86ee889a27629e3f5.zip",
                 "reference": "bbbe10218d1539c31f1628e86ee889a27629e3f5",
                 "shasum": ""
             },
@@ -1419,7 +1461,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-field-range/zipball/095d260eecb86ff2e78a70775011cec00a75df98",
+                "url": "http://packagist.phpcomposer.com/files/kartik-v/yii2-field-range/095d260eecb86ff2e78a70775011cec00a75df98.zip",
                 "reference": "095d260eecb86ff2e78a70775011cec00a75df98",
                 "shasum": ""
             },
@@ -3425,7 +3467,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yii2tech/ar-softdelete/zipball/d62def6057c4b1b3cd3ff464b2fba347666191d6",
+                "url": "http://packagist.phpcomposer.com/files/yii2tech/ar-softdelete/d62def6057c4b1b3cd3ff464b2fba347666191d6.zip",
                 "reference": "d62def6057c4b1b3cd3ff464b2fba347666191d6",
                 "shasum": ""
             },
@@ -3474,7 +3516,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yii2tech/crontab/zipball/2e07d919ac9ccc21c869839347d7216c16325de4",
+                "url": "http://packagist.phpcomposer.com/files/yii2tech/crontab/2e07d919ac9ccc21c869839347d7216c16325de4.zip",
                 "reference": "2e07d919ac9ccc21c869839347d7216c16325de4",
                 "shasum": ""
             },
