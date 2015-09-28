@@ -7,7 +7,6 @@ use yii\widgets\Pjax;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
- * @var boss\models\CustomerTransRecordSearch $searchModel
  */
 
 $this->title = Yii::t('app', 'Customer Trans Records');
@@ -17,7 +16,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="page-header">
             <h1><?= Html::encode($this->title) ?></h1>
     </div>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
         <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
@@ -27,7 +25,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -48,6 +45,9 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'customer_trans_record_online_balance_pay', 
 //            'customer_trans_record_online_service_card_on', 
 //            'customer_trans_record_online_service_card_pay', 
+//            'customer_trans_record_online_service_card_current_balance', 
+//            'customer_trans_record_online_service_card_befor_balance', 
+//            'customer_trans_record_compensate_money', 
 //            'customer_trans_record_refund_money', 
 //            'customer_trans_record_money', 
 //            'customer_trans_record_order_total_money', 

@@ -30,6 +30,8 @@ class m150918_141238_create_table_customer_trans_record extends Migration
             'customer_trans_record_online_balance_pay'  => Schema::TYPE_DECIMAL . '(5,2) unsigned NOT NULL DEFAULT 0 COMMENT \'在线余额支付\'',
             'customer_trans_record_online_service_card_on'  => Schema::TYPE_STRING . '(30) NOT NULL DEFAULT 0 COMMENT \'服务卡号\'',
             'customer_trans_record_online_service_card_pay'  => Schema::TYPE_DECIMAL . '(5,2) unsigned NOT NULL DEFAULT 0 COMMENT \'服务卡支付\'',
+            'customer_trans_record_online_service_card_current_balance'  => Schema::TYPE_DECIMAL . '(8,2) unsigned NOT NULL DEFAULT 0 COMMENT \'服务卡当前余额\'',
+            'customer_trans_record_online_service_card_befor_balance'  => Schema::TYPE_DECIMAL . '(8,2) unsigned NOT NULL DEFAULT 0 COMMENT \'服务卡之前余额\'',
             'customer_trans_record_compensate_money'  => Schema::TYPE_DECIMAL . '(8,2) unsigned NOT NULL COMMENT \'补偿金额\'',
             'customer_trans_record_refund_money'  => Schema::TYPE_DECIMAL . '(8,2) unsigned NOT NULL COMMENT \'退款金额\'',
             'customer_trans_record_money'  => Schema::TYPE_DECIMAL . '(8,2) unsigned NOT NULL DEFAULT 0 COMMENT \'余额支付\'',

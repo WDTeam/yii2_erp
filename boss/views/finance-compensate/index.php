@@ -13,7 +13,7 @@ use yii\widgets\Pjax;
 $this->title = Yii::t('app', 'Finance Compensates');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="finance-compensate-index">
+<div class="finance-compensate-index hideTemp">
     <div class="page-header">
             <h1><?= Html::encode($this->title) ?></h1>
     </div>

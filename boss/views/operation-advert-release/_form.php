@@ -11,6 +11,9 @@ use yii\widgets\ActiveForm;
 <div class="operation-advert-release-form">
 
     <?php $form = ActiveForm::begin(); ?>
+    <?= $form->field($model, 'operation_city_id')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'operation_platform_id')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'operation_platform_version_id')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'operation_advert_position_id')->textInput(['maxlength' => true]) ?>
 

@@ -48,8 +48,8 @@ class FinanceWorkerOrderIncome extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', '主键'),
-            'worder_id' => Yii::t('app', '阿姨id'),
-            'order_id' => Yii::t('app', '订单id'),
+            'worder_id' => Yii::t('app', '阿姨编号'),
+            'order_id' => Yii::t('app', '订单号'),
             'finance_worker_order_income_type' => Yii::t('app', '阿姨收入类型'),
             'finance_worker_order_income' => Yii::t('app', '阿姨收入'),
             'finance_worker_order_complete_time' => Yii::t('app', '订单完成时间'),

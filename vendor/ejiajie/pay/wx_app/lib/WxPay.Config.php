@@ -23,19 +23,12 @@ class WxPayConfig
 	 * @var string
 	 */
 
-    #define APP_ID          @"wxb4ba3c02aa476ea1"               //APPID
-#define APP_SECRET      @"" //appsecret
 //商户号，填写商户对应参数
-#define MCH_ID          @"10000100"
-    //const APPID = 'wxb4ba3c02aa476ea1';
     const APPID = 'wx865a1a3ff91297df';
-	//const MCHID = '10000100';
     const MCHID = '1217983401';
 	const KEY = '7a7a3fea6f07f312b9041562bfacc778';
-    //const KEY = '';
 	const APPSECRET = 'f5068761398e4d9aeaf7cc92c771f311';
-    //const APPSECRET = '';
-	
+
 	//=======【证书路径设置】=====================================
 	/**
 	 * TODO：设置商户证书路径

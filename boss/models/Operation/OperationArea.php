@@ -57,9 +57,4 @@ class OperationArea extends CoreOperationArea
             'sort' => '排序',
         ];
     }
-    
-    public static function getProvinces($parent_id = 0){
-        $where = ['parent_id' => $parent_id];
-        return self::getAllData($where);
-    }
 }

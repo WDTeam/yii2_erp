@@ -58,6 +58,18 @@ class FinanceSettleApplyController extends Controller
      * Lists all FinanceSettleApply models.
      * @return mixed
      */
+    public function actionQuery()
+    {
+        $searchModel = new WorkerSearch;
+        return $this->render('query', [
+            'searchModel' => $searchModel,
+        ]);
+    }
+    
+    /**
+     * Lists all FinanceSettleApply models.
+     * @return mixed
+     */
     public function actionReview()
     {
         
@@ -97,10 +109,10 @@ class FinanceSettleApplyController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
-        return $this->render('view', ['model' => $model]);
-}
+            return $this->render('view', ['model' => $model]);
+        }
     }
 
     /**
@@ -174,10 +186,11 @@ class FinanceSettleApplyController extends Controller
     */
     public function actionWorkerManualSettlementIndex(){
         $financeSettleApplySearch= new FinanceSettleApplySearch;
-        $financeSettleApplySearch->workerName = "张三";
-        $financeSettleApplySearch->workerPhone= "13456789000";
-        $financeSettleApplySearch->workerOnboardTime= "1443324337";
-        $financeSettleApplySearch->workerType= "全职全日";
+        $requestModel = Yii::$app->request->getQueryParams();
+        if(isset($requestModel["FinanceSettleApplySearch"])){
+            $financeSettleApplySearch = $requestModel["FinanceSettleApplySearch"];
+        }
+        $financeSettleApplySearch = $financeSettleApplySearch->getWorkerInfo($workerId);//获取阿姨的信息
         $searchModel = new FinanceWorkerOrderIncomeSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'dataProvider'=>$dataProvider]);
@@ -233,6 +246,7 @@ class FinanceSettleApplyController extends Controller
             $workerIdCard = $partimeWorker['worker_idcard'];
             $workerId = $partimeWorker['worker_id'];
             //订单收入明细
+            //已对账的订单，且没有投诉和赔偿的订单
             $orderIncomeDetail = array(['worker_id'=>'555','order_id'=>'801','order_pay_type'=>'0','order_money'=>'50','order_booked_count'=>'2','order_complete_time'=>'1234455'],
                 ['worker_id'=>'666','order_id'=>'802','order_pay_type'=>'1','order_money'=>'50','order_booked_count'=>'2','order_complete_time'=>'123456565']
             );

@@ -42,7 +42,7 @@ class OperationAdvertContent extends CoreOperationAdvertContent
     {
         return [
             'id' => '编号',
-            'operation_advert_position_name' => '广告名称',
+            'operation_advert_position_name' => '广告标题',
             'operation_city_id' => '城市编号',
             'operation_city_name' => '城市名称',
             'operation_advert_start_time' => '活动开始时间',

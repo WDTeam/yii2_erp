@@ -6,17 +6,15 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model boss\models\Operation\OperationAdvertRelease */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Operation Advert Releases', 'url' => ['index']];
+$this->title = Yii::t('app', 'Look').Yii::t('app', 'Advert Release');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Advert Release'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-advert-release-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
@@ -29,12 +27,15 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'operation_advert_position_id',
+            'operation_city_name',
+            'operation_platform_name',
+            'operation_platform_version_name',
+//            'operation_advert_position_id',
             'operation_advert_position_name:ntext',
-            'operation_advert_content_id',
+//            'operation_advert_content_id',
             'operation_advert_content_name',
-            'created_at',
-            'updated_at',
+            'created_at:datetime',
+            'updated_at:datetime',
         ],
     ]) ?>
 

@@ -171,10 +171,16 @@ class DemoController extends Controller
     /**
      * JPush DEMO
      */
-    
     public function actionJpush()
     {
         $res = \Yii::$app->jpush;
-        var_dump($res->push());
+        var_dump($res->push(), $res->getReport());
+    }
+    /**
+     * 发短信 DEMO
+     */
+    public function actionSms()
+    {
+        return \Yii::$app->sms->send('15110249233', 'test msg', 1);
     }
 }

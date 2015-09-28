@@ -2,6 +2,7 @@
 include_once "lib/WxPay.Config.php";
 include_once "lib/WxPay.Api.php";
 include_once 'lib/WxPay.Notify.php';
+include_once 'lib/WxPay.App.php';
 include_once 'example/log.php';
 
 class wxpay_class extends WxPayNotify{
@@ -11,6 +12,11 @@ class wxpay_class extends WxPayNotify{
     }
 
     public function get($param){
+
+        $input = new WxPayApp();
+        $input->unifiedorder($param);
+
+        exit;
         $input = new WxPayUnifiedOrder();
         $input->SetBody($param['body']);
         $input->SetAttach($param['goods_tag']);

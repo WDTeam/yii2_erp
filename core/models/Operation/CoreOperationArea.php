@@ -20,5 +20,17 @@ use common\models\Operation\CommonOperationArea;
  */
 class CoreOperationArea extends CommonOperationArea
 {
-
+    public static function getAreaList($parent_id){
+        $data = self::find()->select(['id', 'area_name'])->asArray()->where(['parent_id' => $parent_id])->All();
+        $d = array();
+        foreach((array)$data as $key => $value){
+            $d[$value['id'].'_'.$value['area_name']] = $value['area_name'];
+        }
+        return $d;
+    }
+    
+    public static function getProvinces($parent_id = 0){
+        $where = ['parent_id' => $parent_id];
+        return self::getAllData($where);
+    }
 }

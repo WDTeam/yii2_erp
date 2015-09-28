@@ -74,26 +74,26 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?=  $model->workerName; ?>
             </div>
             <div class='col-md-2'>
-                13456789000
+                <?=  $model->workerPhone; ?>
             </div>
             <div class='col-md-2'>
-                2015-09-10 17:30:00
+                <?=  date('Y:m:d H:i:s',$model->workerOnboardTime); ?>
             </div>
             <div class='col-md-2'>
-                全职全日
+                <?=  $model->workerType; ?>
             </div>
             <div class='col-md-2'>
-                月结
+                <?=  $model->finance_settle_apply_cycle_des; ?>
             </div>
             <div class='col-md-2'>
-                2015-09-10 17:30:00
+                <?=  date('Y:m:d H:i:s',$model->latestSettleTime); ?>
             </div>
         </div>
         <div class="panel-heading">
             <label class="panel-title">结算明细</label>
         <?=
 
-            Html::a('结算', ['worker-manual-settlement-done?FinanceSettleApplySearch[workerId]='.$model->workerId], ['class' => 'btn btn-success ']);
+            Html::a('结算', ['worker-manual-settlement-done?FinanceSettleApplySearch[worder_id]='.$model->worder_id], ['class' => 'btn btn-success ']);
 
          ?>
         </div>
@@ -170,19 +170,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'worder_id',
-            'order_id',
+            ['attribute'=>'order_id',
+                 'content'=>function($model,$key,$index)
+                        {return  Html::a('<u>'.$model->order_id.'</u>',[Yii::$app->urlManager->createUrl(['order/view/','id' => $model->order_id])],['target'=>'_blank']);}],
             'finance_worker_order_income_type',
             'finance_worker_order_income',
             'finance_worker_order_complete_time:datetime', 
             'order_booked_count', 
-            'finance_worker_order_income_starttime:datetime', 
-            'finance_worker_order_income_endtime:datetime', 
-            'finance_settle_apply_id', 
-            'created_at', 
-
             [
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [

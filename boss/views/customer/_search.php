@@ -37,28 +37,30 @@ use boss\components\AreaCascade;
         ]); ?>
     </div>
 
-    <div class='col-md-2'>
-        <?php echo $form->field($model, 'time_begin')->widget(DatePicker::classname(), [
-            'name' => 'time_begin', 
-            'value' => date('d-M-Y', strtotime('+1 days')),
-            'options' => ['placeholder' => '选择日期'],
-            'pluginOptions' => [
-                'format' => 'd-M-Y',
-                'todayHighlight' => true
-            ]
-        ]); ?>
+   <div class='col-md-2'>
+        <?php //echo $form->field($model, 'time_begin')->widget(DatePicker::classname(), [
+            // 'name' => 'time_begin', 
+            // 'value' => time(),
+            // 'options' => ['placeholder' => '选择日期'],
+            // 'pluginOptions' => [
+            //     'format' => 'Y-m-d',
+            //     'todayHighlight' => true
+            // ]
+        // ]); 
+        ?>
     </div>
 
     <div class='col-md-2'>
-        <?php echo $form->field($model, 'time_end')->widget(DatePicker::classname(), [
-            'name' => 'time_end', 
-            'value' => date('d-M-Y', strtotime('+1 days')),
-            'options' => ['placeholder' => '选择日期'],
-            'pluginOptions' => [
-                'format' => 'd-M-Y',
-                'todayHighlight' => true
-            ]
-        ]); ?>
+        <?php //echo $form->field($model, 'time_end')->widget(DatePicker::classname(), [
+        //     'name' => 'time_end', 
+        //     'value' => time(),
+        //     'options' => ['placeholder' => '选择日期'],
+        //     'pluginOptions' => [
+        //         'format' => 'Y-m-d',
+        //         'todayHighlight' => true
+        //     ]
+        // ]); 
+        ?>
     </div>
 
     <div class='col-md-2'>
