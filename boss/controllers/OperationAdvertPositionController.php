@@ -8,7 +8,6 @@ use yii\data\ActiveDataProvider;
 use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use boss\models\Operation\OperationCity;
 use boss\models\Operation\OperationPlatform;
 use boss\models\Operation\OperationPlatformVersion;
 
@@ -35,39 +34,38 @@ class OperationAdvertPositionController extends Controller
      */
     public function actionIndex()
     {
+        $post = Yii::$app->request->post();
         $dataProvider = new ActiveDataProvider([
-            'query' => OperationAdvertPosition::find(),
+            'query' =>!empty($post) ? OperationAdvertPosition::find()->where([$post['fields'] => $post['keyword']]): OperationAdvertPosition::find(),
         ]);
-        $citys = OperationCity::getOnlineCity();
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-            'citys' => $citys,
-            'city_id' => 'all'
+            'post' => $post,
         ]);
     }
     
-    public function actionCityAdvertPosition(){
-        $p = Yii::$app->request->post();
-        $query = OperationAdvertPosition::find();
-        if(isset($p['operation_city_id'])){
-            if($p['operation_city_id'] != 'all'){
-                $query->andFilterWhere(['operation_city_id' => $p['operation_city_id']]);
-                if(isset($p['fields']) && isset($p['keyword'])){
-                    $query->andFilterWhere(['like', $p['fields'], $p['keyword']]);
-                }
-            }
-        }
-        if(isset($p['fields']) && isset($p['keyword'])){
-             $query->andFilterWhere(['like', $p['fields'], $p['keyword']]);
-        }
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
-        return $this->renderPartial('city-advert-position', [
-            'dataProvider' => $dataProvider,
-            'p' => $p
-        ]);
-    }
+//    public function actionCityAdvertPosition(){
+//        $p = Yii::$app->request->post();
+//        $query = OperationAdvertPosition::find();
+//        if(isset($p['operation_city_id'])){
+//            if($p['operation_city_id'] != 'all'){
+//                $query->andFilterWhere(['operation_city_id' => $p['operation_city_id']]);
+//                if(isset($p['fields']) && isset($p['keyword'])){
+//                    $query->andFilterWhere(['like', $p['fields'], $p['keyword']]);
+//                }
+//            }
+//        }
+//        if(isset($p['fields']) && isset($p['keyword'])){
+//             $query->andFilterWhere(['like', $p['fields'], $p['keyword']]);
+//        }
+//        $dataProvider = new ActiveDataProvider([
+//            'query' => $query,
+//        ]);
+//        return $this->renderPartial('city-advert-position', [
+//            'dataProvider' => $dataProvider,
+//            'p' => $p
+//        ]);
+//    }
 
     /**
      * Displays a single OperationAdvertPosition model.
@@ -91,43 +89,23 @@ class OperationAdvertPositionController extends Controller
         $model = new OperationAdvertPosition();
         $post = Yii::$app->request->post();
         if ($model->load($post)) {
-            if(isset($post['OperationAdvertPosition']['useall'])){
-                //新增所有城市
-                $citys = OperationCity::getOnlineCity();
-                unset($post['OperationAdvertPosition']['useall']);
-            }else{
-                //新增指定城市
-                $cityids = explode(',', $post['OperationAdvertPosition']['citys'][0]);
-                $citys = OperationCity::find()->where(['IN', 'city_id', $cityids])->all();
-                unset($post['OperationAdvertPosition']['citys']);
-            }
-            //获取平台数据
             $platform = OperationPlatform::find()->where(['id'=>$post['OperationAdvertPosition']['operation_platform_id']])->one();
-            $post['OperationAdvertPosition']['operation_platform_name'] = $platform['operation_platform_name'];
-            //获取版本数据
             $version = OperationPlatformVersion::find()->where(['id'=>$post['OperationAdvertPosition']['operation_platform_version_id']])->one();
-            $post['OperationAdvertPosition']['operation_platform_version_name'] = $version['operation_platform_version_name'];
-            
-            //保存各个城市的广告位置数据
-            foreach($citys as $city){
-                $_model = clone $model;
-                $post['OperationAdvertPosition']['operation_city_id'] = $city->city_id;
-                $post['OperationAdvertPosition']['operation_city_name'] = $city->city_name;
-                $post['OperationAdvertPosition']['created_at'] = time();
-                $post['OperationAdvertPosition']['updated_at'] = time();
-                $_model->load($post);
-                $_model->save();
-            }
-            die('success');
+            $model->operation_platform_name = $platform['operation_platform_name'];
+            $model->operation_platform_version_name = $version['operation_platform_version_name'];
+            $model->created_at = time();
+            $model->updated_at = time();
+            $model->load($post);
+            $model->save();
+            return $this->redirect(['index']);
         } else {
             $platform = OperationPlatform::find()->all();
             $platforms = ['选择平台'];
             foreach($platform as $v){
                 $platforms[$v->id] = $v->operation_platform_name;
             }
-            return $this->renderPartial('create', [
+            return $this->render('create', [
                 'model' => $model,
-                'citys' => OperationCity::getOnlineCity(),
                 'platforms' => $platforms,
             ]);
         }
