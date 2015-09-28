@@ -18,7 +18,7 @@ use kartik\widgets\Select2;
         'method' => 'get',
     ]); ?>
 
-    <?//= $form->field($model, 'id') ?>
+    <?php //= $form->field($model, 'id') ?>
 <div class='col-md-2'>
     <?= $form->field($model, 'finance_header_title') ?>
      </div>
