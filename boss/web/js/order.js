@@ -1,7 +1,9 @@
 /**
  * Created by linhongyou on 2015/9/25.
  */
-function formatDate(now)   {
+window.coupons = new Array();
+window.cards = new Array();
+function formatDate(now) {
     var   year=now.getFullYear();
     var   month=now.getMonth()+1;
     var   date=now.getDate();
@@ -22,6 +24,48 @@ function datetime_to_unix(datetime){
     var now = new Date(Date.UTC(arr[0],arr[1]-1,arr[2],arr[3]-8,arr[4],arr[5]));
     return parseInt(now.getTime()/1000);
 }
+function getCoupons(){
+    if(window.customer != undefined) {
+        $.ajax({
+            type: "GET",
+            url: "/order/coupons/?id=" + window.customer.id+"&service_id="+$('#order-order_service_type_id input:checked').val(),
+            dataType: "json",
+            success: function (coupons) {
+                if (coupons.length > 0) {
+                    $("#order-coupon_id").html('');
+                    for (var k in coupons) {
+                        var v = coupons[k];
+                        window.coupons[v.id] = v.coupon_money;
+                        $("#order-coupon_id").append(
+                            '<option value="' + v.id + '" > ' + v.coupon_name + '</option>'
+                        );
+                    }
+                }
+            }
+        });
+    }
+}
+function getCards(){
+    if(window.customer != undefined) {
+        $.ajax({
+            type: "GET",
+            url: "/order/cards/?id=" + window.customer.id,
+            dataType: "json",
+            success: function (cards) {
+                if (cards.length > 0) {
+                    $("#order-card_id").html('');
+                    for (var k in cards) {
+                        var v = cards[k];
+                        window.cards[v.id] = v.card_money;
+                        $("#order-card_id").append(
+                            '<option value="' + v.id + '" > ' + v.card_code + '</option>'
+                        );
+                    }
+                }
+            }
+        });
+    }
+}
 $("#order-order_customer_phone").blur(function(){
     var phone = $(this).val();
     var reg = /^1[3-9][0-9]{9}$/;
@@ -30,13 +74,14 @@ $("#order-order_customer_phone").blur(function(){
             type: "GET",
             url: "/order/customer/?phone=" + phone,
             dataType: "json",
-            success: function (custormer) {
-                if (custormer.id) {
-                    $("#order-customer_id").val(custormer.id);
-                    $("#customer_balance").text(custormer.customer_balance);
+            success: function (customer) {
+                window.customer=customer;
+                if (customer.id) {
+                    $("#order-customer_id").val(customer.id);
+                    $("#customer_balance").text(customer.customer_balance);
                     $.ajax({
                         type: "GET",
-                        url: "/order/customer-address/?id=" + custormer.id,
+                        url: "/order/customer-address/?id=" + customer.id,
                         dataType: "json",
                         success: function (address) {
                             if (address.length>0) {
@@ -61,7 +106,7 @@ $("#order-order_customer_phone").blur(function(){
 
                     $.ajax({
                         type: "GET",
-                        url: "/order/customer-used-workers/?id=" + custormer.id,
+                        url: "/order/customer-used-workers/?id=" + customer.id,
                         dataType: "json",
                         success: function (worker) {
                             if (worker.length>0) {
@@ -77,6 +122,9 @@ $("#order-order_customer_phone").blur(function(){
                         }
                     });
 
+                    getCoupons();
+                    getCards();
+
                 }
             }
         });
@@ -84,6 +132,10 @@ $("#order-order_customer_phone").blur(function(){
         $("#address_div").hide();
     }
 });
+
+
+$(document).on("change","#order-order_service_type_id input",function(){getCoupons();});
+
 $(document).on("change","#order-address_id input",function(){
     $("#order-order_address").val($("#order-address_id input:checked").parent().text());
 });

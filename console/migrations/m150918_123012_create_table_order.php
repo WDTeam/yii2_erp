@@ -28,15 +28,19 @@ class m150918_123012_create_table_order extends Migration
             'order_flag_send' => Schema::TYPE_BOOLEAN . '(1) unsigned  DEFAULT 0 COMMENT \'指派不了 0可指派 1客服指派不了 2小家政指派不了 3都指派不了\'',
             'order_flag_urgent' => Schema::TYPE_BOOLEAN . '(1) unsigned  DEFAULT 0 COMMENT \'加急\'',
             'order_flag_exception' => Schema::TYPE_BOOLEAN . '(1) unsigned  DEFAULT 0 COMMENT \'异常 1无经纬度\'',
+            'order_flag_sys_assign' => Schema::TYPE_BOOLEAN . '(1) unsigned  DEFAULT 0 COMMENT \'是否需要系统指派 1是 0否\'', //新加
 
 //===============================创建完订单后 不可修改的部分
             'order_service_type_id' => Schema::TYPE_SMALLINT . '(4) unsigned NOT NULL DEFAULT 0 COMMENT \'订单服务类别ID\'',
             'order_service_type_name' => Schema::TYPE_STRING . '(128) NOT NULL DEFAULT \'\' COMMENT \'订单服务类别\'',
             'order_src_id' => Schema::TYPE_SMALLINT . '(4) unsigned DEFAULT 0 COMMENT \'订单来源，订单入口id\'',
             'order_src_name' => Schema::TYPE_STRING . '(128)  DEFAULT \'\' COMMENT \'订单来源，订单入口名称\'',
-            'channel_id' => Schema::TYPE_INTEGER.'(10) unsigned DEFAULT 0 COMMENT \'下单渠道ID\'',
-            'order_channel_name' => Schema::TYPE_STRING.'(64)  DEFAULT \'\' COMMENT \'下单渠道名称\'',
-            'order_channel_order_num' => Schema::TYPE_STRING . '(255)  DEFAULT \'\' COMMENT \'渠道订单编号\'',
+            'channel_id' => Schema::TYPE_INTEGER.'(10) unsigned DEFAULT 0 COMMENT \'订单渠道ID\'',
+            'order_channel_name' => Schema::TYPE_STRING.'(64)  DEFAULT \'\' COMMENT \'订单渠道名称\'',
+            'order_pop_order_code' => Schema::TYPE_STRING . '(255)  DEFAULT \'\' COMMENT \'第三方订单编号\'',
+            'order_pop_group_buy_code' =>  Schema::TYPE_STRING . '(255)  DEFAULT \'\' COMMENT \'第三方团购码\'',
+            'order_pop_operation_money' =>  Schema::TYPE_DECIMAL . '(8,2) unsigned  DEFAULT 0 COMMENT \'第三方运营费\'',
+            'order_pop_order_money' =>  Schema::TYPE_DECIMAL . '(8,2) unsigned  DEFAULT 0 COMMENT \'第三方订单金额\'',
             'customer_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'用户编号\'',
             'order_ip' => Schema::TYPE_INTEGER.'(10) NOT NULL DEFAULT 0 COMMENT \'下单IP\'',
             'order_customer_phone' => Schema::TYPE_STRING .'(16) NOT NULL DEFAULT \'\' COMMENT \'用户手机号\'',
@@ -53,7 +57,7 @@ class m150918_123012_create_table_order extends Migration
 //============================创建完订单后 只能修改一次的部分
             'order_customer_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'用户备注\'',
             'order_cs_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'客服备注\'',
-            'order_pay_type' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'支付方式 0线上支付 1现金支付 2余额支付 3服务卡支付 4余额+线上 5服务卡+线上 6服务卡+余额\'', //如果是线上支付 支付成功之后再改状态
+            'order_pay_type' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'支付方式 0未支付 1现金支付 2线上支付 3第三方预付 \'', //如果是线上支付 支付成功之后再改状态
             'pay_channel_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'支付渠道id\'',
             'order_pay_channel_name' => Schema::TYPE_STRING.'(128)  DEFAULT \'\' COMMENT \'支付渠道名称\'',
             'order_pay_flow_num' => Schema::TYPE_STRING . '(255) DEFAULT NULL COMMENT \'支付流水号\'',
@@ -71,7 +75,7 @@ class m150918_123012_create_table_order extends Migration
             'worker_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'阿姨id\'',
             'worker_type_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'阿姨职位类型ID\'',
             'order_worker_type_name' => Schema::TYPE_STRING.'(64)  DEFAULT \'\' COMMENT \'阿姨职位类型\'',
-            'order_worker_send_type' => Schema::TYPE_SMALLINT.'(4) unsigned  DEFAULT 0 COMMENT \'阿姨接单方式 0未接单 1阿姨抢单 2客服指派 3门店指派\'',
+            'order_worker_assign_type' => Schema::TYPE_SMALLINT.'(4) unsigned  DEFAULT 0 COMMENT \'阿姨接单方式 0未接单 1阿姨抢单 2客服指派 3门店指派\'',
             'shop_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'门店id\'',
 
 //===========================指派工人===》阿姨服务完成后

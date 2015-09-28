@@ -145,6 +145,50 @@ class OrderController extends Controller
             "worker_name": "王阿姨"
         }';
     }
+
+    public function actionCoupons()
+    {
+        $id = Yii::$app->request->get('id');
+        $service_id = Yii::$app->request->get('service_id');
+        return '[
+                {
+                    "id": 1,
+                    "coupon_name": "优惠券30",
+                    "coupon_money": 30
+                },
+                {
+                    "id": 2,
+                    "coupon_name": "40优惠券",
+                    "coupon_money": 30
+                },
+                {
+                    "id": 3,
+                    "coupon_name": "50优惠券",
+                    "coupon_money": 50
+                }
+            ]';
+    }
+
+    public function actionCards($id)
+    {
+        return '[
+                {
+                    "id": 1,
+                    "card_code": "1234567890",
+                    "card_money": 1000
+                },
+                {
+                    "id": 2,
+                    "card_code": "9876543245",
+                    "card_money": 3000
+                },
+                {
+                    "id": 3,
+                    "card_code": "3840959205",
+                    "card_money": 5000
+                }
+            ]';
+    }
     /**
      * Lists all Order models.
      * @return mixed

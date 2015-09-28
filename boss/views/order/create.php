@@ -84,21 +84,20 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                 </div>
                 <div id="order_pay_type_2" style="display:none;">
-                <?= $form->field($model, 'coupon_id')->textInput(['maxlength' => true]) ?>
-                <?= $form->field($model, 'order_use_coupon_money')->textInput(['maxlength' => true]) ?>
-                <?= $form->field($model, 'card_id')->textInput(['maxlength' => true]) ?>
-                <?= $form->field($model, 'order_use_card_money')->textInput(['maxlength' => true]) ?>
-                <?= $form->field($model, 'promotion_id')->textInput(['maxlength' => true]) ?>
-                <?= $form->field($model, 'order_use_promotion_money')->textInput(['maxlength' => true]) ?>
-                <?= $form->field($model, 'order_use_acc_balance')->textInput(['maxlength' => true,'value'=>'0.00']) ?>
+                <?= $form->field($model, 'coupon_id')->dropDownList([],['maxlength' => true]) ?>
+                <?= $form->field($model, 'card_id')->dropDownList([],['maxlength' => true]) ?>
+                <?= $form->field($model, 'order_use_acc_balance')->textInput(['maxlength' => true]) ?>
                 </div>
                 <div id="order_pay_type_3" style="display:none;">
                 <?= $form->field($model, 'channel_id')->inline()->radioList($model->orderChannelList); ?>
-                <?= $form->field($model, 'order_channel_order_num')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'order_pop_group_buy_code')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'order_pop_order_code')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'order_pop_order_money')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'order_pop_operation_money')->textInput(['maxlength' => true]) ?>
                 </div>
             </div>
             <div class="panel-heading">
-                <h3 class="panel-title">用户需求</h3>
+                <h3 class="panel-title">客户需求</h3>
             </div>
             <div class="panel-body">
                 <?= $form->field($model, 'order_customer_need')->textInput(['maxlength' => true]) ?>
