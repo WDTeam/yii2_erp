@@ -9,6 +9,8 @@ use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use boss\components\UploadFile;
+use boss\models\Operation\OperationPlatform;
+use boss\models\Operation\OperationPlatformVersion;
 
 /**
  * OperationAdvertContentController implements the CRUD actions for OperationAdvertContent model.
@@ -33,12 +35,17 @@ class OperationAdvertContentController extends Controller
      */
     public function actionIndex()
     {
+        $platforms = OperationPlatform::find()->asArray()->all();
+        foreach((array)$platforms as $key => $platform){
+            $platforms[$key]['version_list'] = OperationPlatformVersion::find()->asArray()->where(['operation_platform_id' => $platform['id']])->all();
+        }
         $dataProvider = new ActiveDataProvider([
             'query' => OperationAdvertContent::find(),
         ]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'platforms' => $platforms
         ]);
     }
 
