@@ -13,7 +13,7 @@ use kartik\datecontrol\DateControl;
 ?>
 
 <div class="operation-shop-district-form">
-
+    
     <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); echo Form::widget([
 
     'model' => $model,
@@ -26,6 +26,8 @@ use kartik\datecontrol\DateControl;
 
     ]);
     ?>
+    <?= $form->field($citymodel, 'city_name')->textInput() ?>
+    
     <?= $form->field($OperationShopDistrictCoordinate, 'operation_shop_district_coordinate_start_longitude')->textInput() ?>
     <?= $form->field($OperationShopDistrictCoordinate, 'operation_shop_district_coordinate_start_latitude')->textInput() ?>
     <?= $form->field($OperationShopDistrictCoordinate, 'operation_shop_district_coordinate_end_longitude')->textInput() ?>

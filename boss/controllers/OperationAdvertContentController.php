@@ -8,6 +8,7 @@ use yii\data\ActiveDataProvider;
 use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use boss\components\UploadFile;
 
 /**
  * OperationAdvertContentController implements the CRUD actions for OperationAdvertContent model.
@@ -61,9 +62,18 @@ class OperationAdvertContentController extends Controller
     public function actionCreate()
     {
         $model = new OperationAdvertContent();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $post = Yii::$app->request->post();
+        if ($model->load($post)) {
+            $model->operation_advert_start_time = strtotime($post['OperationAdvertContent']['operation_advert_start_time']);
+            $model->operation_advert_end_time = strtotime($post['OperationAdvertContent']['operation_advert_end_time']);
+            $model->operation_advert_online_time = strtotime($post['OperationAdvertContent']['operation_advert_online_time']);
+            $model->operation_advert_offline_time = strtotime($post['OperationAdvertContent']['operation_advert_offline_time']);
+            $path = UploadFile::widget(['fileInputName' => 'operation_advert_picture']);
+            $model->operation_advert_picture = $path;
+            $model->created_at = time();
+            $model->updated_at = time();
+            $model->save();
+            return $this->redirect(['index']);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -80,9 +90,17 @@ class OperationAdvertContentController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $post = Yii::$app->request->post();
+        if ($model->load($post)) {
+            $model->operation_advert_start_time = strtotime($post['OperationAdvertContent']['operation_advert_start_time']);
+            $model->operation_advert_end_time = strtotime($post['OperationAdvertContent']['operation_advert_end_time']);
+            $model->operation_advert_online_time = strtotime($post['OperationAdvertContent']['operation_advert_online_time']);
+            $model->operation_advert_offline_time = strtotime($post['OperationAdvertContent']['operation_advert_offline_time']);
+            $path = UploadFile::widget(['fileInputName' => 'operation_advert_picture']);
+            $model->operation_advert_picture = $path;
+            $model->updated_at = time();
+            $model->save();
+            return $this->redirect(['index']);
         } else {
             return $this->render('update', [
                 'model' => $model,

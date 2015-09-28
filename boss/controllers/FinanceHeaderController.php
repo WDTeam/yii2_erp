@@ -137,7 +137,6 @@ class FinanceHeaderController extends Controller
        	
        	$post['FinanceHeader']['finance_header_title'] = $post['FinanceHeader']['finance_header_title']?$post['FinanceHeader']['finance_header_title']:'美团的'; 	
        	
-       	
         $post['FinanceHeader']['finance_order_channel_id'] =$post['FinanceHeader']['finance_order_channel_name']?$post['FinanceHeader']['finance_order_channel_name']:'0';
         
        	 $post['FinanceHeader']['finance_order_channel_name'] =$ordername;

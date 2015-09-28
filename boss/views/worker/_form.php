@@ -90,11 +90,11 @@ $cityDesc = '门店';
             <h3 class="panel-title">阿姨基本信息</h3>
         </div>
         <div class="panel-body">
-        <?= $form->field($worker, 'worker_name')->textInput(['placeholder' => 'Enter 阿姨姓名...', 'maxlength' => 10]); ?>
-        <?= $form->field($worker, 'worker_phone')->textInput(['placeholder' => 'Enter 阿姨手机...', 'maxlength' => 20]); ?>
-        <?= $form->field($worker, 'worker_idcard')->textInput(['placeholder' => 'Enter 阿姨身份证号...', 'maxlength' => 20]); ?>
+        <?= $form->field($worker, 'worker_name')->textInput(['placeholder' => '输入阿姨姓名...', 'maxlength' => 10]); ?>
+        <?= $form->field($worker, 'worker_phone')->textInput(['placeholder' => '输入阿姨手机...', 'maxlength' => 20]); ?>
+        <?= $form->field($worker, 'worker_idcard')->textInput(['placeholder' => '输入阿姨身份证号...', 'maxlength' => 20]); ?>
         <?= $form->field($worker_ext, 'worker_sex')->radioList(['0' => '女', '1' => '男'], ['inline' => true]); ?>
-        <?= $form->field($worker_ext, 'worker_age')->textInput(['placeholder' => 'Enter 阿姨年龄...']); ?>
+        <?= $form->field($worker_ext, 'worker_age')->textInput(['placeholder' => '输入阿姨年龄...']); ?>
 
         <?= $form->field($worker_ext, 'worker_birth')->widget(DatePicker::classname(), [
             'name' => 'worker_birth',
@@ -105,9 +105,9 @@ $cityDesc = '门店';
                 'format' => 'yyyy-mm-dd'
             ]
         ]); ?>
-        <?= $form->field($worker_ext, 'worker_source')->textInput(['placeholder' => 'Enter 阿姨来源...']); ?>
-        <?= $form->field($worker_ext, 'worker_edu')->textInput(['placeholder' => 'Enter 阿姨教育程度...']); ?>
-        <?= $form->field($worker_ext, 'worker_hometown')->textInput(['placeholder' => 'Enter 阿姨籍贯...']); ?>
+        <?= $form->field($worker_ext, 'worker_source')->textInput(['placeholder' => '输入阿姨来源...']); ?>
+        <?= $form->field($worker_ext, 'worker_edu')->textInput(['placeholder' => '输入阿姨教育程度...']); ?>
+        <?= $form->field($worker_ext, 'worker_hometown')->textInput(['placeholder' => '输入阿姨籍贯...']); ?>
         <?= $form->field($worker_ext, 'worker_is_health')->radioList(['1' => '是', '0' => '否'], ['inline' => true]); ?>
         <?= $form->field($worker_ext, 'worker_is_insurance')->radioList(['1' => '是', '0' => '否'], ['inline' => true]); ?>
         <?= $form->field($worker, 'worker_type')->radioList(['1' => '自有', '2' => '非自有'], ['inline' => true]); ?>
@@ -139,9 +139,9 @@ $cityDesc = '门店';
             <h3 class="panel-title">结算相关信息</h3>
         </div>
         <div class="panel-body">
-        <?= $form->field($worker_ext, 'worker_bank_name')->textInput(['placeholder' => 'Enter 开户银行...']); ?>
-        <?= $form->field($worker_ext, 'worker_bank_from')->textInput(['placeholder' => 'Enter 银行卡开户网点...']); ?>
-        <?= $form->field($worker_ext, 'worker_bank_card')->textInput(['placeholder' => 'Enter 银行卡号...']); ?>
+        <?= $form->field($worker_ext, 'worker_bank_name')->textInput(['placeholder' => '输入开户银行...']); ?>
+        <?= $form->field($worker_ext, 'worker_bank_from')->textInput(['placeholder' => '输入银行卡开户网点...']); ?>
+        <?= $form->field($worker_ext, 'worker_bank_card')->textInput(['placeholder' => '输入银行卡号...']); ?>
     </div>
         <div class="panel-heading">
             <h3 class="panel-title">审核相关信息</h3>

@@ -24,7 +24,7 @@ class AppAsset extends AssetBundle
         'css/openWin.css',
         'adminlte/css/font-awesome.min.css',
         'css/courseware.css',
-        'css/custom.css'
+        'css/custom.css',
     ];
     public $js = [
         'adminlte/js/AdminLTE/app.js',
@@ -32,11 +32,22 @@ class AppAsset extends AssetBundle
         'js/interview.js',
         'js/openWin.js',
         'js/cascade.js',
+        'js/searchbox.js',
         'js/bootpage.js',
-        'js/custom.js'
+        'js/custom.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
     ];
+
+    //定义按需加载JS方法，注意加载顺序在最后
+    public static function addScript($view, $jsfile) {
+        $view->registerJsFile($jsfile, [AppAsset::className(), 'depends' => 'boss\assets\AppAsset']);
+    }
+
+    //定义按需加载css方法，注意加载顺序在最后
+    public static function addCss($view, $cssfile) {
+        $view->registerCssFile($cssfile, [AppAsset::className(), 'depends' => 'boss\assets\AppAsset']);
+    }
 }

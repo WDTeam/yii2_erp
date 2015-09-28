@@ -85,9 +85,16 @@ class FinancePopOrderController extends Controller
     		->andWhere(['=','finance_order_channel_id',$channelid])
     		->asArray()->All();
     		$n=1;
+    		//验证上传的表头和选择的是否一致
+    		$statusinfo=$model->id_header($sheetData[1],$channelid);
+    		
+    		if($statusinfo){
+    			\Yii::$app->getSession()->setFlash('default','对不起你上传的表不对！'); 
+    		  return $this->redirect(['index']);
+    		}
     		foreach ($sheetData as $key=>$value){
     			//去除表头
-    			if($n>2){	
+    			if($n>2){
     			$statusinfo=$model->PopOrderstatus($alinfo,$value);
     			$post['FinancePopOrder']['finance_pop_order_number'] =$statusinfo['order_channel_order_num'];
     			$post['FinancePopOrder']['finance_order_channel_id'] =$statusinfo['channel_id'];
@@ -135,6 +142,7 @@ class FinancePopOrderController extends Controller
     			$_model->save();
     			unset($post['FinancePopOrder']);
     		}
+    		
     		$n++;
     		}
     		
@@ -221,6 +229,38 @@ class FinancePopOrderController extends Controller
         ]);
     }
 
+    
+    
+    /**
+    * 坏账列表
+    * @date: 2015-9-27
+    * @author: peak pan
+    * @return:
+    **/
+    
+    public function actionBad()
+    {
+    	$ordedata= new FinanceOrderChannel;
+    	$ordewhere['is_del']=0;
+    	$ordewhere['finance_order_channel_is_lock']=1;
+    	$payatainfo=$ordedata::find()->where($ordewhere)->asArray()->all();
+    	
+    	foreach ($payatainfo as $errt){
+    		$tyd[]=$errt['id'];
+    		$tydtui[]=$errt['finance_order_channel_name'];
+    	}
+    	
+    	
+    	
+    	$tyu= array_combine($tyd,$tydtui);
+    	$searchModel = new FinancePopOrderSearch;
+    	$dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+    	return $this->render('billinfo', [
+    			'dataProvider' => $dataProvider,
+    			'searchModel' => $searchModel,
+    			'ordedatainfo' => $tyu,
+    			]);
+    }
     
     
     /**

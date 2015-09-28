@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\FinancePopOrder;
+use common\models\FinanceHeader;
 use common\models\Order;
 /**
  * FinancePopOrderSearch represents the model behind the search form about `common\models\FinancePopOrder`.
@@ -65,7 +66,37 @@ class FinancePopOrderSearch extends FinancePopOrder
     	
     }
     
+   /**
+   * 验证上传的是否是正确的exl
+   * @date: 2015-9-27
+   * @author: peak pan
+   * @return:$headerData 表头数据   $channelid 对应上传的id
+   **/
+    public function id_header($headerData,$channelid)
+    {
     
+    	$alinfo=FinanceHeader::find()
+    	->select('finance_header_name')
+    	->andWhere(['=','finance_order_channel_id',$channelid])
+    	->asArray()->all();
+    	foreach ($alinfo as $aliindata){
+    		$tyyu[]=$aliindata['finance_header_name'];
+    	
+    	}
+    	
+    	if(count($tyyu)==count($headerData)){
+		foreach ($headerData as $rtyes){
+			if(!in_array($rtyes,$tyyu)){
+				//比对的字符串不对
+				return true;
+			}
+		}
+    		
+    	}else {
+    		//长度不对
+    		return true; 
+    	}	
+    }
     
     
     /**
