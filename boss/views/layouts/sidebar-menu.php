@@ -45,7 +45,7 @@ echo Menu::widget(
                     ],
                     [
                         'label' => '查看所有自营门店(100%)',
-                        'url' => ['shop/index', 'ShopSearch'=>['id'=>1]],
+                        'url' => ['shop/index', 'ShopSearch'=>['shop_manager_id'=>1]],
                         'icon' => 'fa fa-angle-right',
                         //'visible' => (Yii::$app->user->identity->username == 'admin'),
                     ],
