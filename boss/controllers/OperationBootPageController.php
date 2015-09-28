@@ -7,7 +7,7 @@ use boss\models\Operation\OperationBootPage;
 use boss\models\Operation\OperationCity;
 use boss\models\Operation\OperationBootPageCity;
 use yii\data\ActiveDataProvider;
-use boss\components\Controller;
+use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
@@ -16,7 +16,7 @@ use crazyfd\qiniu\Qiniu;
 /**
  * OperationBootPageController implements the CRUD actions for OperationBootPage model.
  */
-class OperationBootPageController extends Controller
+class OperationBootPageController extends BaseAuthController
 {
     public function behaviors()
     {

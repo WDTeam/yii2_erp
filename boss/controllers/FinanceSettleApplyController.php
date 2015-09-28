@@ -6,7 +6,7 @@ use Yii;
 use common\models\FinanceSettleApply;
 use boss\models\FinanceSettleApplySearch;
 use boss\models\FinanceSettleApplyLogSearch;
-use boss\components\Controller;
+use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\FinanceWorkerOrderIncome;
@@ -17,7 +17,7 @@ use boss\models\FinanceWorkerOrderIncomeSearch;
 /**
  * FinanceSettleApplyController implements the CRUD actions for FinanceSettleApply model.
  */
-class FinanceSettleApplyController extends Controller
+class FinanceSettleApplyController extends BaseAuthController
 {
     public function behaviors()
     {
