@@ -248,23 +248,23 @@ echo Menu::widget(
     							'url' => ['/finance-order-channel/'],
     							'icon' => 'fa fa-angle-right',
 							],[
-							'label' => '对账(80%)',
-    							'url' => ['/finance-pop-order/'],
-    							'icon' => 'fa fa-angle-right',
-							],[
-    							'label' => '对账统计(80%)',
-    							'url' => ['/finance-record-log/'],
-    							'icon' => 'fa fa-angle-right',
-							],[
-    							'label' => '对账详情(70%)',
-    							'url' => ['/finance-pop-order/billinfo'],
-    							'icon' => 'fa fa-angle-right',
-							],[
-    							'label' => '增加账单配置(95%)',
+    							'label' => '配置对账表头(95%)',
     							'url' => ['/finance-header/index'],
     							'icon' => 'fa fa-angle-right',
 							],[
-    							'label' => '坏账列表(70%)',
+							'label' => '开始对账(80%)',
+    							'url' => ['/finance-pop-order/'],
+    							'icon' => 'fa fa-angle-right',
+							],[
+    							'label' => '查看历史对账记录(80%)',
+    							'url' => ['/finance-record-log/'],
+    							'icon' => 'fa fa-angle-right',
+							],[
+    							'label' => '对账记录详情(70%)',
+    							'url' => ['/finance-pop-order/billinfo'],
+    							'icon' => 'fa fa-angle-right',
+							],[
+    							'label' => '坏账管理(70%)',
     							'url' => ['/finance-pop-order/bad'],
     							'icon' => 'fa fa-angle-right',
 							]
@@ -273,8 +273,25 @@ echo Menu::widget(
                     ],
                     [
                         'label' => '结算管理(85%)',
-                        'url' => ['/finance-settle-apply/index?FinanceSettleApplySearch[finance_settle_apply_status]=0&FinanceSettleApplySearch[ids]=&FinanceSettleApplySearch[nodeId]=1'],
+                        'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
+                        'items'=>[
+                            [
+                                [
+                                'label' => '结算详情',
+                                'url' => ['#'],
+                                'icon' => 'fa fa-angle-right',
+                                ],[
+                                    'label' => '阿姨结算',
+                                    'url' => ['/finance-settle-apply/worker-manual-settlement-index'],
+                                    'icon' => 'fa fa-angle-right',
+                                ],[
+                                    'label' => '结算审核(85%)',
+                                    'url' => ['/finance-settle-apply/index?FinanceSettleApplySearch[finance_settle_apply_status]=0&FinanceSettleApplySearch[ids]=&FinanceSettleApplySearch[nodeId]=1'],
+                                    'icon' => 'fa fa-angle-right',
+                                ]
+                            ]
+                        ],
                     ],
                     [
                         'label' => '退款管理',
@@ -328,22 +345,18 @@ echo Menu::widget(
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                     ],
-                    [
-                        'label' => '线下运营（80%）',
-                        'url' => ['#'],
-                        'icon' => 'fa fa-angle-right',
-							'options' => [
-							'class' => 'treeview',
-							],
-							'items' => [
-							[
-							'label' => '阿姨结算',
-							'url' => ['/finance-settle-apply/worker-manual-settlement-index'],
-							'icon' => 'fa fa-angle-right',
-							],
-							]
+//                     [
+//                         'label' => '线下运营（80%）',
+//                         'url' => ['#'],
+//                         'icon' => 'fa fa-angle-right',
+// 							'options' => [
+// 							'class' => 'treeview',
+// 							],
+// 							'items' => [
 							
-                    ]
+// 							]
+							
+//                     ]
                 ],
             ],
 
