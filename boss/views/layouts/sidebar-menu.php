@@ -121,12 +121,12 @@ echo Menu::widget(
                     ],
                     [
                         'label' => '人工派单(0%)',
-                        'url' => ['/manual-order'],
+                        'url' => ['/manual-order/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
                         'label' => '系统派单(0%)',
-                        'url' => ['/auto-order'],
+                        'url' => ['/auto-order/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],
