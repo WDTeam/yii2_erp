@@ -241,7 +241,7 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '对账管理(80)',
+                        'label' => '对账管理(90%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
 						'options' => [
@@ -257,19 +257,19 @@ echo Menu::widget(
     							'url' => ['/finance-header/index'],
     							'icon' => 'fa fa-angle-right',
 							],[
-							'label' => '开始对账(80%)',
+							'label' => '开始对账(85%)',
     							'url' => ['/finance-pop-order/'],
     							'icon' => 'fa fa-angle-right',
 							],[
-    							'label' => '查看历史对账记录(80%)',
+    							'label' => '查看历史对账记录(95%)',
     							'url' => ['/finance-record-log/'],
     							'icon' => 'fa fa-angle-right',
 							],[
-    							'label' => '对账记录详情(70%)',
+    							'label' => '对账记录详情(90%)',
     							'url' => ['/finance-pop-order/billinfo'],
     							'icon' => 'fa fa-angle-right',
 							],[
-    							'label' => '坏账管理(70%)',
+    							'label' => '坏账管理(90%)',
     							'url' => ['/finance-pop-order/bad'],
     							'icon' => 'fa fa-angle-right',
 							]
