@@ -186,19 +186,26 @@ ul.navbar-right > li.dropdown > ul.dropdown-menu > li > a {
 
 .kv-panel-before .btn-success {
 	background-color: transparent !important;
-	border: 0 !important;
 	color: #00a65a;
 	webkit-box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 0.09) !important;
     -moz-box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 0.09) !important;
     box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 0.09) !important;
-    font-weight: 700 !important;
 }
 
 .kv-panel-before .btn-success:hover {
-	color: #008d4c;
+	color: rgba(0, 166, 90, .82);
+	border: 1px solid rgba(0, 166, 90, .82);
 }
 
 .kv-panel-before .btn-success:focus {
-	color: #008d4c;
+	color: rgba(0, 166, 90, .82);
+	border: 1px solid rgba(0, 166, 90, .82);
+	/*color: #01552e;
+	border: 1px solid #01552e;*/
 }
 
+#province.inline,
+#city.inline,
+#county.inline {
+	width: 100%;
+}
