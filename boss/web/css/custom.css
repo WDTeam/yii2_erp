@@ -1,5 +1,10 @@
+body{
+	background-color: #ecf0f5;
+	font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
+}
 .right-side > .content {
 	margin-top: 51px;
+	background-color: #ecf0f5;
 }
 
 .right-side > .content-header {
@@ -8,15 +13,24 @@
     top: 50px;
     right: 0;
     left: 220px;
-    background-color: inherit;
+    background-color: #ecf0f5 !important;
+    box-shadow: none !important;
 }
 
 .right-side.strech > .content-header {
     left: 0;
 }
+.main-footer.strech {
+    margin-left: 0;
+}
 
 .row-offcanvas.active > .right-side > .content-header {
 	left: 220px;
+}
+
+.main-footer {
+    margin-left: 220px;
+    z-index: 820;
 }
 
 @media screen and (max-width: 560px){
@@ -29,21 +43,25 @@
 	.right-side > .content {
 		margin-top: 87px;
 	}
+	.main-footer {
+	    margin-left: 220px;
+	}
 }
 
 @media screen and (max-width: 992px){
 	.right-side > .content-header {
 	    left: 0;
 	}
+	.main-footer {
+	    margin-left: 0;
+	}
 }
 
 /*以上是关于content-header的样式*/
 
 ul.sidebar-menu ul.treeview-menu li.active a.active{
-	color: red;
+	color: #f6a202;
 }
-
-
 
 #manualSettle .settleDetail {
 	float: left;
@@ -58,3 +76,129 @@ ul.sidebar-menu ul.treeview-menu li.active a.active{
 	padding: 10px;
 	border: 1px solid rgba(0, 0, 0, 0.1);
 }
+
+.rootTree.active a,
+.rootTree a:hover,
+.rootTree ul{
+	background: #f4f4f5 !important;
+}
+
+
+.skin-blue .left-side {
+	background-color: #f9fafc;
+	border-right: 1px solid #d2d6de;
+	font-size: 13px;
+	color: #777;
+}
+
+.sidebar .sidebar-menu .treeview-menu > li > a {
+	font-size: 12px;
+	color: #777;
+}
+
+.sidebar .sidebar-menu .treeview-menu > li > a:hover {
+	color: #111;
+}
+
+.right-side {
+	background-color: #ecf0f5;
+}
+
+.panel {
+	background-color: #fff;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.panel-info > .panel-heading {
+	background-color: #fff;
+	border: none;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.panel-footer {
+	background: #fff;
+}
+
+.logo {
+	/*background-image: url(/adminlte/img/boss_logo_white.png);
+	background-size: 80% 80%;*/
+	background:#f6a202 url(/adminlte/img/boss_logo_white.png) no-repeat center center;
+	background-size: 47% 63%;
+}
+
+.skin-blue .logo:hover {
+    /*background-image: url(/adminlte/img/boss_logo_white.png);
+	background-size: 80% 80%;*/
+	background:#f6a202 url(/adminlte/img/boss_logo_white.png) no-repeat center center;
+	background-size: 47% 63%;
+}
+
+.skin-blue .navbar {
+    background-color: #f6a202;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd),
+.table-striped > tbody > tr:nth-child(odd) > td,
+.table-striped > tbody > tr:nth-child(odd) > th {
+    background-color: transparent;
+}
+
+.table-hover > tbody > tr > td,
+.table-striped > tbody > tr > td {
+	padding-top: 8px;
+	padding-bottom: 8px;
+}
+
+.table-hover > tbody > tr:hover,
+.table-striped > tbody > tr:hover,
+.table-striped > tbody > tr:nth-child(odd) > td:hover {
+	background-color: #f3f4f5 !important;
+}
+
+.table-striped td a {
+	margin-left: 5px;
+}
+
+.main-footer {
+    background: #fff;
+    padding: 15px;
+    color: #444;
+    border-top: 1px solid #d2d6de;
+    font-size: 13px;
+}
+
+.navbar .nav a {
+    color: rgba(255, 255, 255, 1) !important;
+}
+
+ul.navbar-right > li.dropdown > ul.dropdown-menu > li > a {
+	color: rgba(0, 0, 0, 1) !important;
+}
+
+.navbar .sidebar-toggle .icon-bar {
+	background: rgba(255, 255, 255, 0.8) !important;
+}
+
+.navbar-right {
+	margin-right: 0;
+}
+
+.kv-panel-before .btn-success {
+	background-color: transparent !important;
+	border: 0 !important;
+	color: #00a65a;
+	webkit-box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 0.09) !important;
+    -moz-box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 0.09) !important;
+    box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 0.09) !important;
+    font-weight: 700 !important;
+}
+
+.kv-panel-before .btn-success:hover {
+	color: #008d4c;
+}
+
+.kv-panel-before .btn-success:focus {
+	color: #008d4c;
+}
+

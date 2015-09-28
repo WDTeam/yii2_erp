@@ -72,5 +72,6 @@ return array(
     'crazyfd\\qiniu\\' => array($vendorDir . '/crazyfd/yii2-qiniu'),
     'cebe\\markdown\\' => array($vendorDir . '/cebe/markdown'),
     'alexandernst\\devicedetect\\' => array($vendorDir . '/alexandernst/yii2-device-detect'),
+    'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'Faker\\' => array($vendorDir . '/fzaninotto/faker/src/Faker'),
 );

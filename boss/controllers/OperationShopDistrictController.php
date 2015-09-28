@@ -78,8 +78,9 @@ class OperationShopDistrictController extends Controller
         $model = new OperationShopDistrict;
         $post = Yii::$app->request->post();
         $OperationShopDistrictCoordinate = new OperationShopDistrictCoordinate();
+        $cityname = OperationCity::getCityName($this->city_id);
+        $citymodel = OperationCity::getCityInfo($this->city_id);
         if(!empty($post)){
-            $cityname = OperationCity::getCityName($this->city_id);
             $post['OperationShopDistrict']['operation_city_id'] = $this->city_id;
             $post['OperationShopDistrict']['operation_city_name'] = $cityname;
             $post['OperationShopDistrict']['created_at'] = time();
@@ -103,6 +104,7 @@ class OperationShopDistrictController extends Controller
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'citymodel' => $citymodel,
                 'OperationShopDistrictCoordinate' => $OperationShopDistrictCoordinate,
             ]);
         }
@@ -119,6 +121,8 @@ class OperationShopDistrictController extends Controller
         $model = $this->findModel($id);
         $post = Yii::$app->request->post();
         $OperationShopDistrictCoordinate = new OperationShopDistrictCoordinate();
+        $cityname = OperationCity::getCityName($this->city_id);
+        $citymodel = OperationCity::getCityInfo($this->city_id);
         if(!empty($post)){
             $post['OperationShopDistrict']['updated_at'] = time();
             $post['OperationShopDistrict']['operation_shop_district_status'] = 1;
@@ -126,7 +130,7 @@ class OperationShopDistrictController extends Controller
         if ($model->load($post) && $model->save()) {
             $coordinate = array();
             $coordinate['operation_city_id'] = $this->city_id;
-            $coordinate['operation_city_name'] = OperationCity::getCityName($this->city_id);
+            $coordinate['operation_city_name'] = $cityname;
             $coordinate['operation_shop_district_coordinate_start_longitude'] = $post['OperationShopDistrictCoordinate']['operation_shop_district_coordinate_start_longitude'];
             $coordinate['operation_shop_district_coordinate_start_latitude'] = $post['OperationShopDistrictCoordinate']['operation_shop_district_coordinate_start_latitude'];
             $coordinate['operation_shop_district_coordinate_end_longitude'] = $post['OperationShopDistrictCoordinate']['operation_shop_district_coordinate_end_longitude'];
@@ -143,6 +147,7 @@ class OperationShopDistrictController extends Controller
             $OperationShopDistrictCoordinate->operation_shop_district_coordinate_end_latitude = $OperationShopDistrictCoordinateList['operation_shop_district_coordinate_end_latitude'];
             return $this->render('update', [
                 'model' => $model,
+                'citymodel' => $citymodel,
                 'OperationShopDistrictCoordinate' => $OperationShopDistrictCoordinate,
             ]);
         }

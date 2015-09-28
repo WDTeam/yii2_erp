@@ -212,6 +212,7 @@ class GeneralPayController extends Controller
 
     /**
      * 微信APP回调
+     * 金额单位为【分】
      */
     public function actionWxAppNotify(){
 
@@ -224,12 +225,13 @@ class GeneralPayController extends Controller
         $status = $notify->notify();
         //实例化模型
         $GeneralPayLogModel = new GeneralPayLog();
+        $model = new GeneralPay();
 
         //写入文本日志
         $GeneralPayLogModel->writeLog($post);
 
         //记录日志
-        $GeneralPayLogModel->general_pay_log_price = $post['total_fee'];   //支付金额
+        $GeneralPayLogModel->general_pay_log_price = $model->toMoney($post['total_fee'],100,'/');   //支付金额
         $GeneralPayLogModel->general_pay_log_shop_name = $post['attach'];   //商品名称
         $GeneralPayLogModel->general_pay_log_eo_order_id = $post['out_trade_no'];   //订单ID
         $GeneralPayLogModel->general_pay_log_transaction_id = $post['transaction_id'];   //交易流水号
@@ -237,9 +239,6 @@ class GeneralPayController extends Controller
         $GeneralPayLogModel->general_pay_log_status = $post['result_code'];   //支付状态
         $GeneralPayLogModel->general_pay_log_json_aggregation = json_encode($post);
         $GeneralPayLogModel->insertLog();
-
-        //实例化模型
-        $model = new GeneralPay();
 
         //获取交易ID
         $GeneralPayId = $model->getGeneralPayId($post['out_trade_no']);
@@ -251,20 +250,20 @@ class GeneralPayController extends Controller
         if(!empty($model) && $status == 'SUCCESS'){
             $model->id = $GeneralPayId; //ID
             $model->general_pay_status = 1; //支付状态
-            $model->general_pay_actual_money = $model->toMoney($post['total_fee'],100,false);
+            $model->general_pay_actual_money = $model->toMoney($post['total_fee'],100,'/');
             $model->general_pay_transaction_id = $post['transaction_id'];
             $model->general_pay_is_coupon = 1;
             $model->general_pay_eo_order_id = $post['out_trade_no'];
             $model->general_pay_verify = $model->makeSign();
 
             $model->save(false);
-
         }
         echo $status;
     }
 
     /**
      *  百付宝APP回调
+     *  金额单位为【分】
      */
     public function actionBfbAppNotify()
     {
@@ -273,6 +272,7 @@ class GeneralPayController extends Controller
 
         //实例化模型
         $GeneralPayLogModel = new GeneralPayLog();
+        $model = new GeneralPay();
 
         //POST数据
         if(!empty($_GET['debug'])){
@@ -307,7 +307,7 @@ class GeneralPayController extends Controller
         $GeneralPayLogModel->writeLog($post);
 
         //记录日志
-        $GeneralPayLogModel->general_pay_log_price = $post['total_amount'];   //支付金额
+        $GeneralPayLogModel->general_pay_log_price = $model->toMoney($post['total_amount'],100,'/');   //支付金额
         $GeneralPayLogModel->general_pay_log_shop_name = '百付宝';   //商品名称
         $GeneralPayLogModel->general_pay_log_eo_order_id = $post['order_no'];   //订单ID
         $GeneralPayLogModel->general_pay_log_transaction_id = $post['bfb_order_no'];   //交易流水号
@@ -316,8 +316,6 @@ class GeneralPayController extends Controller
         $GeneralPayLogModel->general_pay_log_json_aggregation = json_encode($post);
         $GeneralPayLogModel->insertLog();
 
-        //实例化模型
-        $model = new GeneralPay();
 
         //获取交易ID
         $GeneralPayId = $model->getGeneralPayId($post['order_no']);
@@ -338,7 +336,7 @@ class GeneralPayController extends Controller
 
             $model->id = $GeneralPayId; //ID
             $model->general_pay_status = 1; //支付状态
-            $model->general_pay_actual_money = $model->toMoney($post['total_amount'],100,false);
+            $model->general_pay_actual_money = $model->toMoney($post['total_amount'],100,'/');
             $model->general_pay_transaction_id = $post['bfb_order_no'];
             $model->general_pay_is_coupon = 1;
             $model->general_pay_eo_order_id = $post['order_no'];
@@ -347,7 +345,6 @@ class GeneralPayController extends Controller
             $model->save(false);
             $bfb->notify();
         }
-
     }
 
     /**

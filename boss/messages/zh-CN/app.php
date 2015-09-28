@@ -130,4 +130,8 @@ return [
     'Manage' => '管理',
     'Version' => '版本',
     'Advert Position' => '广告位置',
+
+    'begin_New_Work'=>'新工作方式的开始...',
+    'help'=>'帮助',
+    'forget_pwd'=>'忘记密码？',
 ];

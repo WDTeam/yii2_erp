@@ -232,6 +232,38 @@ class FinancePopOrderController extends Controller
     
     
     /**
+    * 坏账列表
+    * @date: 2015-9-27
+    * @author: peak pan
+    * @return:
+    **/
+    
+    public function actionBad()
+    {
+    	$ordedata= new FinanceOrderChannel;
+    	$ordewhere['is_del']=0;
+    	$ordewhere['finance_order_channel_is_lock']=1;
+    	$payatainfo=$ordedata::find()->where($ordewhere)->asArray()->all();
+    	
+    	foreach ($payatainfo as $errt){
+    		$tyd[]=$errt['id'];
+    		$tydtui[]=$errt['finance_order_channel_name'];
+    	}
+    	
+    	
+    	
+    	$tyu= array_combine($tyd,$tydtui);
+    	$searchModel = new FinancePopOrderSearch;
+    	$dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+    	return $this->render('billinfo', [
+    			'dataProvider' => $dataProvider,
+    			'searchModel' => $searchModel,
+    			'ordedatainfo' => $tyu,
+    			]);
+    }
+    
+    
+    /**
     * 查看和修改公用方法
     * @date: 2015-9-23
     * @author: peak pan
