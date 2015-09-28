@@ -5,14 +5,14 @@ namespace boss\controllers;
 use Yii;
 use common\models\FinanceCompensate;
 use boss\models\FinanceCompensateSearch;
-use boss\components\Controller;
+use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * FinanceCompensateController implements the CRUD actions for FinanceCompensate model.
  */
-class FinanceCompensateController extends Controller
+class FinanceCompensateController extends BaseAuthController
 {
     public function behaviors()
     {

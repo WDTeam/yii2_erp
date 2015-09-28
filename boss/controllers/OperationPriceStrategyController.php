@@ -5,14 +5,14 @@ namespace boss\controllers;
 use Yii;
 use boss\models\Operation\OperationPriceStrategy;
 use yii\data\ActiveDataProvider;
-use boss\components\Controller;
+use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * OperationPriceStrategyController implements the CRUD actions for OperationPriceStrategy model.
  */
-class OperationPriceStrategyController extends Controller
+class OperationPriceStrategyController extends BaseAuthController
 {
     public function behaviors()
     {

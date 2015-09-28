@@ -3,14 +3,14 @@ namespace boss\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
-use boss\components\Controller;
+use boss\components\BaseAuthController;
 use boss\models\LoginForm;
 use yii\filters\VerbFilter;
 
 /**
  * Site controller
  */
-class SiteController extends Controller
+class SiteController extends BaseAuthController
 {
 
     /**

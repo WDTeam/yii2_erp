@@ -5,7 +5,7 @@ namespace boss\controllers;
 use Yii;
 use boss\models\Operation\OperationAdvertContent;
 use yii\data\ActiveDataProvider;
-use boss\components\Controller;
+use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use boss\components\UploadFile;
@@ -15,7 +15,7 @@ use boss\models\Operation\OperationPlatformVersion;
 /**
  * OperationAdvertContentController implements the CRUD actions for OperationAdvertContent model.
  */
-class OperationAdvertContentController extends Controller
+class OperationAdvertContentController extends BaseAuthController
 {
     public function behaviors()
     {

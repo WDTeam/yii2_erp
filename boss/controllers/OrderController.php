@@ -4,7 +4,7 @@ namespace boss\controllers;
 
 use Yii;
 use core\models\order\OrderSearch;
-use boss\components\Controller;
+use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use core\models\order\Order;
@@ -13,7 +13,7 @@ use yii\web\Response;
 /**
  * OrderController implements the CRUD actions for Order model.
  */
-class OrderController extends Controller
+class OrderController extends BaseAuthController
 {
 
     public function actionCustomer()

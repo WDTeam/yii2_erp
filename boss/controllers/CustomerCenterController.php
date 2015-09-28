@@ -1,7 +1,7 @@
 <?php
 namespace boss\controllers;
 
-use boss\components\Controller;
+use boss\components\BaseAuthController;
 use yii\db\Query;
 use common\models\CustomerCode;
 use common\models\CustomerAccessToken;
@@ -16,7 +16,7 @@ use common\models\CustomerAccessToken;
  * 顾客端API
  * @author:liudaoqiang@corp.1jiajie.com
  */
-class CustomerCenterController extends Controller
+class CustomerCenterController extends BaseAuthController
 {
 	public function actionIndex()
 	{

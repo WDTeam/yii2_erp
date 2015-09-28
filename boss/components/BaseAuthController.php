@@ -3,7 +3,7 @@ namespace boss\components;
 
 use yii;
 use yii\web\ForbiddenHttpException;
-class Controller extends \yii\web\Controller
+class BaseAuthController extends \yii\web\Controller
 {
     /**
      * 判断有没有授权项目，并已授权，如果有则运行权限管理
