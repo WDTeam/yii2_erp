@@ -125,7 +125,7 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '系统派单(0%)',
+                        'label' => '智能派单(0%)',
                         'url' => ['/auto-order/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
