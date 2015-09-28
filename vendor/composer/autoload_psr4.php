@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'yii\\swiftmailer\\' => array($vendorDir . '/yiisoft/yii2-swiftmailer'),
     'yii\\redis\\' => array($vendorDir . '/yiisoft/yii2-redis'),
+    'yii\\redactor\\' => array($vendorDir . '/yiidoc/yii2-redactor'),
     'yii\\jui\\' => array($vendorDir . '/yiisoft/yii2-jui'),
     'yii\\gii\\' => array($vendorDir . '/yiisoft/yii2-gii'),
     'yii\\faker\\' => array($vendorDir . '/yiisoft/yii2-faker'),
@@ -16,10 +17,12 @@ return array(
     'yii\\codeception\\' => array($vendorDir . '/yiisoft/yii2-codeception'),
     'yii\\bootstrap\\' => array($vendorDir . '/yiisoft/yii2-bootstrap'),
     'yii\\' => array($vendorDir . '/yiisoft/yii2'),
+    'yii2tech\\crontab\\' => array($vendorDir . '/yii2tech/crontab'),
+    'yii2tech\\ar\\softdelete\\' => array($vendorDir . '/yii2tech/ar-softdelete'),
     'warrence\\kartikgii\\' => array($vendorDir . '/warrence/yii2-kartikgii'),
     'pjkui\\kindeditor\\' => array($vendorDir . '/pjkui/kindeditor'),
     'marekpetras\\calendarview\\' => array($vendorDir . '/marekpetras/yii2-calendarview-widget'),
-    'linslin\\yii2\\curl\\' => array($vendorDir . '/linslin/yii2-curl'),
+    'liyunfang\\contextmenu\\' => array($vendorDir . '/liyunfang/yii2-contextmenu'),
     'kartik\\widgets\\' => array($vendorDir . '/kartik-v/yii2-widgets'),
     'kartik\\typeahead\\' => array($vendorDir . '/kartik-v/yii2-widget-typeahead'),
     'kartik\\touchspin\\' => array($vendorDir . '/kartik-v/yii2-widget-touchspin'),
@@ -69,5 +72,6 @@ return array(
     'crazyfd\\qiniu\\' => array($vendorDir . '/crazyfd/yii2-qiniu'),
     'cebe\\markdown\\' => array($vendorDir . '/cebe/markdown'),
     'alexandernst\\devicedetect\\' => array($vendorDir . '/alexandernst/yii2-device-detect'),
+    'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'Faker\\' => array($vendorDir . '/fzaninotto/faker/src/Faker'),
 );

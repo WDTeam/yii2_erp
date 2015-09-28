@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'type' => DetailView::INPUT_WIDGET,
                 'widgetOptions' => [
                     'class' => Select2::classname(),
-                    'initValueText' => '', // set the initial display text
+                    'initValueText' => $model->getManagerName(), // set the initial display text
                     'options' => ['placeholder' => 'Search for a shop_menager ...'],
                     'pluginOptions' => [
                         'allowClear' => true,
@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'templateSelection' => new JsExpression('function (model) { return model.name; }'),
                     ],
                 ],
-                'value'=>$model->getMenagerName(),
+                'value'=>$model->getManagerName(),
             ],
             [
                 'attribute'=>'city_id',
@@ -72,7 +72,10 @@ $this->params['breadcrumbs'][] = $this->title;
 //             'province_id',
 //             'city_id',
 //             'county_id',
-//             'street',
+            [
+                'attribute'=>'street',
+                ''
+            ],
             'principal',
             'tel',
             'other_contact',

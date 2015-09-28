@@ -79,9 +79,9 @@ class GeneralPay extends \yii\db\ActiveRecord
     {
         return[
             //在线充值
-            'pay'       =>['general_pay_money','customer_id','partner','general_pay_source','general_pay_source_name'],
+            'pay'       =>['general_pay_money','customer_id','partner','general_pay_source','general_pay_source_name','general_pay_mode'],
             //在线支付
-            'online_pay'=>['general_pay_money','customer_id','partner','general_pay_source','general_pay_source_name','order_id'],
+            'online_pay'=>['general_pay_money','customer_id','partner','general_pay_source','general_pay_source_name','general_pay_mode','order_id'],
         ];
     }
 
@@ -184,7 +184,7 @@ class GeneralPay extends \yii\db\ActiveRecord
         $param = array(
             "body"	=> $this->body(),
             "out_trade_no"	=> $this->create_out_trade_no(),
-            "general_pay_money"	=> $this->toMoney($this->general_pay_money,100,true),
+            "general_pay_money"	=> $this->toMoney($this->general_pay_money,100,'*'),
             'time_start' => date("YmdHis"),
             'time_expire' => date("YmdHis", time() + 600000),
             "trade_type" => "APP",
@@ -193,25 +193,15 @@ class GeneralPay extends \yii\db\ActiveRecord
         );
         $class = new \wxpay_class();
         $msg = $class->get($param);
-        if($msg['return_code'] == 'FAIL'){
-            echo json_encode(['code'=>'-1','msg'=>$msg]);
-        }else{
-            echo json_encode(['code'=>'ok','msg'=>$msg]);
-        }
+        echo json_encode(['code'=>'ok','msg'=>$msg]);
 
 
     }
-
 
     /**
      * 微信H5
      */
-    private function wx_h5()
-    {
-
-
-    }
-
+    private function wx_h5(){}
 
     /**
      * 百度钱包APP
@@ -222,7 +212,7 @@ class GeneralPay extends \yii\db\ActiveRecord
             'out_trade_no'=>$this->create_out_trade_no(),
             'subject'=>$this->subject(),
             'body'=>$this->body(),
-            'general_pay_money'=>$this->toMoney($this->general_pay_money,100,false),
+            'general_pay_money'=>$this->toMoney($this->general_pay_money,100,'*'),
             'notify_url'=>$this->notify_url('bfb-app'),
         );
 
@@ -286,6 +276,7 @@ class GeneralPay extends \yii\db\ActiveRecord
         $http = "http://".$_SERVER['HTTP_HOST']."/general-pay/".$type_name."-notify";
         return $http;
     }
+
     /**
      * 判断在线充值还是支付
      * @return string
@@ -310,50 +301,40 @@ class GeneralPay extends \yii\db\ActiveRecord
      */
     private function create_out_trade_no()
     {
-        if(empty($this->id) && empty($this->general_pay_source)) return false;
-        //判断支付方式
-        switch($this->general_pay_source){
-            case 1:
-                $out_trade_no = 'wx_app';
-                break;
-            case 2:
-                $out_trade_no = 'wx_h5';
-                break;
-            case 3:
-                $out_trade_no = 'bfb_app';
-                break;
-            case 4:
-                $out_trade_no = 'up_app';
-                break;
-            case 5:
-                $out_trade_no = 'ali_app';
-                break;
-            case 6:
-                $out_trade_no = 'ali_web';
-                break;
-            case 8:
-                $out_trade_no = 'zdh_h5';
-                break;
-            default:
-                $out_trade_no = 'default';
-        }
+        if(empty($this->id)) return false;
         //组装支付订单号
         $rand = mt_rand(1000,9999);
-        $date = date("md",time());
-        return $out_trade_no.'_'.$date.'_'.$rand.'_'.$this->id;
+        $date = date("ymd",time());
+        return $date.$rand.$this->id;
     }
 
     /**
      * 转换金额
-     * @param integer $money
-     * @param integer $val
-     * @param bool $falg
+     * @param $money1   实际金额
+     * @param $money2   基数
+     * @param $method   +,-,*,%
+     * @return float    实际金额
      */
-    public function toMoney($money, $val, $falg)
+    public function toMoney($money1, $money2, $method = '*')
     {
-        //判断是转换分还是转换元
-        $toMoney = $falg ? bcmul($money, $val) : bcdiv($money, $val);
-        return round($toMoney,2);
+        $toMoney = '';
+        bcscale(2); //保留两位小数
+        switch($method)
+        {
+            case '+' :
+                $toMoney = bcadd($money1,$money2);
+                break;
+            case '-' :
+                $toMoney = bcsub($money1,$money2);
+                break;
+            case '*' :
+                $toMoney = bcmul($money1,$money2);
+                break;
+            case '/' :
+                $toMoney = bcdiv($money1,$money2);
+                break;
+        }
+        return $toMoney;
     }
 
     /**
@@ -362,8 +343,7 @@ class GeneralPay extends \yii\db\ActiveRecord
      */
     public function getGeneralPayId($out_trade_no)
     {
-        $on = explode('_',$out_trade_no);
-        return array_pop($on);
+        return substr($out_trade_no,10);
     }
 
     /**
@@ -397,14 +377,14 @@ class GeneralPay extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'customer_id' => Yii::t('app', '用户ID'),
             'order_id' => Yii::t('app', '订单ID'),
-            'general_pay_money' => Yii::t('app', '交易金额'),//发起充值/交易金额
-            'general_pay_actual_money' => Yii::t('app', '实际金额'),//实际充值/交易金额
-            'general_pay_source' => Yii::t('app', '数据来源'),//数据来源:1=APP微信,2=H5微信,3=APP百度钱包,4=APP银联,5=APP支付宝,6=WEB支付宝,7=HT淘宝,8=H5百度直达号,9=HT刷卡,10=HT现金,11=HT刷卡'
+            'general_pay_money' => Yii::t('app', '发起充值/交易金额'),
+            'general_pay_actual_money' => Yii::t('app', '实际充值/交易金额'),
+            'general_pay_source' => Yii::t('app', '数据来源:1=APP微信,2=H5微信,3=APP百度钱包,4=APP银联,5=APP支付宝,6=WEB支付宝,7=HT淘宝,8=H5百度直达号,9=HT刷卡,10=HT现金,11=HT刷卡'),
             'general_pay_source_name' => Yii::t('app', '数据来源名称'),
-            'general_pay_mode' => Yii::t('app', '交易方式'),//交易方式:1=充值,2=余额支付,3=在线支付,4=退款,5=赔偿
-            'general_pay_status' => Yii::t('app', '状态'),//状态：0=失败,1=成功
-            'general_pay_transaction_id' => Yii::t('app', '交易流水号'),//第三方交易流水号
-            'general_pay_eo_order_id' => Yii::t('app', '商户ID'),//商户ID(第三方交易)
+            'general_pay_mode' => Yii::t('app', '交易方式:1=充值,2=余额支付,3=在线支付,4=退款,5=赔偿'),
+            'general_pay_status' => Yii::t('app', '状态：0=失败,1=成功'),
+            'general_pay_transaction_id' => Yii::t('app', '第三方交易流水号'),
+            'general_pay_eo_order_id' => Yii::t('app', '商户ID(第三方交易)'),
             'general_pay_memo' => Yii::t('app', '备注'),
             'general_pay_is_coupon' => Yii::t('app', '是否返券'),
             'admin_id' => Yii::t('app', '管理员ID'),

@@ -53,7 +53,7 @@ class m150918_123012_create_table_order extends Migration
 //============================创建完订单后 只能修改一次的部分
             'order_customer_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'用户备注\'',
             'order_cs_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'客服备注\'',
-            'order_pay_type' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'支付方式 0线上支付 1现金支付\'', //如果是线上支付 支付成功之后再改状态
+            'order_pay_type' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'支付方式 0线上支付 1现金支付 2余额支付 3服务卡支付 4余额+线上 5服务卡+线上 6服务卡+余额\'', //如果是线上支付 支付成功之后再改状态
             'pay_channel_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'支付渠道id\'',
             'order_pay_channel_name' => Schema::TYPE_STRING.'(128)  DEFAULT \'\' COMMENT \'支付渠道名称\'',
             'order_pay_flow_num' => Schema::TYPE_STRING . '(255) DEFAULT NULL COMMENT \'支付流水号\'',

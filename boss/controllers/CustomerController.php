@@ -4,7 +4,7 @@ namespace boss\controllers;
 use Yii;
 use common\models\Customer;
 use boss\models\CustomerSearch;
-use yii\web\Controller;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -77,7 +77,7 @@ class CustomerController extends Controller
         $model->is_del = 1;
         $model->validate();
         $model->save();
-        return $this->redirect(['/customer/block']);
+        return $this->redirect(['/customer/block', 'CustomerSearch'=>['is_del'=>1]]);
     }
 
     /**
@@ -89,27 +89,58 @@ class CustomerController extends Controller
         $model->is_del = 0;
         $model->validate();
         $model->save();
-        return $this->redirect(['/customer/index']);
+        return $this->redirect(['/customer/index', 'CustomerSearch'=>['is_del'=>0]]);
     }
 
     public function actionSwitchBlock(){
-        // $id = Yii::$app->request->get('id');
-        // $connection = Yii::$app->db;
-        //echo "1";
+        $id = Yii::$app->request->get('id');
 
-        $customer = Yii::$app->db->createCommand('SELECT * FROM {{%customer}} WHERE id='.(Yii::$app->request->get('id')))->queryOne();
-    
-        if ($customer['is_del'] == 1) {
-            $command = Yii::$app->db->createCommand('UPDATE {{%customer}} SET is_del=0 WHERE id='.(Yii::$app->request->get('id')));
-            $command->execute();
-            // return $this->actionIndex();
-            return $this->redirect(['/customer/index?CustomerSearch[is_del]=0']);
-        }else{
-            $command = Yii::$app->db->createCommand('UPDATE {{%customer}} SET is_del=1 WHERE id='.(Yii::$app->request->get('id')));
-            $command->execute();
-            // return $this->actionBlock();
-            return $this->redirect(['/customer/block?CustomerSearch[is_del]=1']);
+        $customer = Customer::find()->where(['id'=>$id])->one();
+        // echo $id.'|'.$customer->is_del;exit;
+        // var_dump($customer);
+
+        $is_del = $customer->is_del;
+        // var_dump($is_del);
+        $is_del = $is_del ? 0 : 1;
+        // var_dump($is_del);
+        // exit();
+        $customer->is_del = $is_del;
+        $customer->validate();
+        if ($customer->hasErrors()) {
+            var_dump($customer->getErrors());
+            exit();
         }
+        $customer->save();
+        // var_dump($is_del);
+        // exit();
+        if ($customer->is_del == 1) {
+            return $this->redirect(['/customer/block', 
+                'CustomerSearch'=>['is_del'=>1]]);
+        }
+        if ($customer->is_del == 0){
+            return $this->redirect(['/customer/index', 
+                'CustomerSearch'=>['is_del'=>0]]);
+        }
+        // $connection = Yii::$app->db;
+        // echo "1";
+        // exit();
+        // $model->getErrors();
+
+        // $customer = $connection->createCommand('SELECT * FROM {{%customer}} WHERE id='.$id)->queryOne();
+        // var_dump($id);
+        // var_dump($connection);
+        // var_dump($customer);
+        // exit();
+        // if ($customer['is_del'] == 1) {
+        //     $command = $connection->createCommand('UPDATE {{%customer}} SET is_del=0 WHERE id='.$id);
+        //     $command->execute();
+        //     return $this->redirect(['/customer/index', 
+        //         'CustomerSearch'=>['is_del'=>0]]);
+        // }else{
+        //     $command = $connection->createCommand('UPDATE {{%customer}} SET is_del=1 WHERE id='.$id);
+        //     $command->execute();
+        //     return $this->redirect(['/customer/index?CustomerSearch[is_del]=1']);
+        // }
     }
 
     
@@ -121,6 +152,7 @@ class CustomerController extends Controller
      */
     public function actionView($id)
     {
+        $searchModel = new CustomerSearch;
         $model = $this->findModel($id);
 
         //组装model
@@ -131,9 +163,21 @@ class CustomerController extends Controller
         $customerPlatform = CustomerPlatform::find()->where([
             'id'=>$model->platform_id
             ])->one();
+        
+        $platforms = [];
+        $customerPlatforms = CustomerPlatform::find()->asArray()->all();
+        foreach ($customerPlatforms as $k => $customerPlatform) {
+            $platforms[$customerPlatform['id']] = $customerPlatform['platform_name'];
+        }
+
         $customerChannal = CustomerChannal::find()->where([
             'id'=>$model->channal_id
             ])->one();
+        $channals = [];
+        $customerChannals = CustomerChannal::find()->asArray()->all();
+        foreach ($customerChannals as $k => $customerChannal) {
+            $channals[$customerChannal['id']] = $customerChannal['channal_name'];
+        }
 
         $generalRegion = GeneralRegion::find()->where([
             'id'=>$model->general_region_id
@@ -141,6 +185,7 @@ class CustomerController extends Controller
 
         //订单地址
         $addressStr = '';
+        $default = [];
         $address_count = CustomerAddress::find()->where([
             'customer_id'=>$model->id,
             ])->count();
@@ -153,13 +198,19 @@ class CustomerController extends Controller
                 'id'=>$general_region_id,
                 ])->one();
 
-            $default = [
-                'province'=>$general_region->general_region_province_name,
-                'city'=>$general_region->general_region_city_name,
-                'area'=>$general_region->general_region_area_name,
-                'detail'=>$customerDefaultAddress->customer_address_detail,
-                'phone'=>$customerDefaultAddress->customer_address_phone,
-                ];
+            // $default = [
+            //     'province'=>$general_region->general_region_province_name,
+            //     'city'=>$general_region->general_region_city_name,
+            //     'area'=>$general_region->general_region_area_name,
+            //     'detail'=>$customerDefaultAddress->customer_address_detail,
+            //     'phone'=>$customerDefaultAddress->customer_address_phone,
+            //     ];
+
+            $default['province'] = $general_region->general_region_province_name;
+            $default['city'] = $general_region->general_region_city_name;
+            $default['area'] = $general_region->general_region_area_name;
+            $default['detail'] = $customerDefaultAddress->customer_address_detail;
+            $default['phone'] = $customerDefaultAddress->customer_address_phone;
         }
         
 
@@ -169,23 +220,31 @@ class CustomerController extends Controller
             ])->asArray()->all();
 
         $others = [];
-        if ($customerAddresses) {
+        if ($customerAddresses !== null) {
             foreach ($customerAddresses as $k => $customerAddress) {
-                $general_region_id = $customerAddress->general_region_id;
-                $general_region = CustomerAddress::find()->where([
-                    'id'=>$general_region_id
-                    ])->one();
-                $others[$k]['province'] = $general_region->general_region_province_name;
-                $others[$k]['city'] = $general_region->general_region_city_name;
-                $others[$k]['area'] = $general_region->general_region_area_name;
-                $others[$k]['detail'] = $customerAddress->customer_address_detail;
-                $others[$k]['phone'] = $customerAddress->customer_address_phone;
+                if ($customerAddress && $customerAddress['general_region_id']) {
+                    $general_region_id = $customerAddress['general_region_id'];
+                    $general_region = GeneralRegion::find()->where([
+                        'id'=>$general_region_id
+                        ])->one();
+                    // var_dump($customerAddress);
+                    // exit();
+                    if ($general_region !== null) {
+                        $others[$k]['province'] = $general_region->general_region_province_name;
+                        $others[$k]['city'] = $general_region->general_region_city_name;
+                        $others[$k]['area'] = $general_region->general_region_area_name;
+                        $others[$k]['detail'] = $customerAddress['customer_address_detail'];
+                        $others[$k]['phone'] = $customerAddress['customer_address_phone'];
+                    }
+                }
             }
+        }
 
-            $addressStr = $default['province'].$default['city'].$default['area'].$default['detail']."(".$detail['phone'].")<br/>";
-            foreach ($others as $k => $other) {
-                $addressStr .= $other['province'].$other['city'].$other['area'].$other['detail']."(".$other['phone'].")<br/>";
-            }
+        if (is_array($default) && $default != null) {
+            $addressStr = $default['province'].$default['city'].$default['area'].$default['detail']."(".$default['phone'].")<br/>";
+        }
+        foreach ($others as $k => $other) {
+            $addressStr .= $other['province'].$other['city'].$other['area'].$other['detail']."(".$other['phone'].")<br/>";
         }
         
         // if ($address_count <= 0) {
@@ -213,10 +272,14 @@ class CustomerController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            return $this->render('view', ['model' => $model, 
+            return $this->render('view', [
+                'model' => $model, 
+                'searchModel'=>$searchModel,
                 'operationCity'=>$operationCity, 
                 'customerPlatform'=>$customerPlatform, 
+                'platforms'=>$platforms,
                 'customerChannal'=>$customerChannal,
+                'channals'=>$channals,
                 'generalRegion'=>$generalRegion,
                 // 'order_addresses'=>$order_addresses,
                 // 'default'=>$default,

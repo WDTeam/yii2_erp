@@ -7,6 +7,7 @@ use common\models\Shop;
 use yii\helpers\ArrayHelper;
 use kartik\nav\NavX;
 use yii\bootstrap\NavBar;
+use yii\bootstrap\Modal;
 
 use common\models\CustomerPlatform;
 use common\models\CustomerChannal;
@@ -20,14 +21,14 @@ use common\models\Order;
  * @var yii\data\ActiveDataProvider $dataProvider
  * @var boss\models\WorkerSearch $searchModel
  */
-$this->title = Yii::t('app', '顾客管理');
+$this->title = Yii::t('app', '客户管理');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Customers'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="worker-index">
     <div class="panel panel-info">
     <div class="panel-heading">
-        <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 顾客搜索</h3>
+        <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 客户搜索</h3>
     </div>
     <div class="panel-body">
         <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -49,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($dataProvider) {
                     return '<a href="/customer/' . $dataProvider->id . '">'.$dataProvider->id.'</a>';
                 },
-                'width' => "100px",
+                'width' => "80px",
             ],
             [
                 'format' => 'raw',
@@ -57,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($dataProvider) {
                     return $dataProvider->customer_name;
                 },
-                'width' => "100px",
+                'width' => "80px",
             ],
             [
                 'format' => 'raw',
@@ -65,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($dataProvider) {
                     return $dataProvider->customer_phone;
                 },
-                'width' => "100px",
+                'width' => "80px",
             ],
             [
                 'format' => 'raw',
@@ -102,7 +103,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     
                 },
-                'width' => "100px",
+                'width' => "150px",
             ],
             [
                 'format' => 'raw',
@@ -110,7 +111,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($dataProvider) {
                     return $dataProvider->customer_is_vip ? '会员' : '非会员';
                 },
-                'width' => "100px",
+                'width' => "80px",
             ],
             [
                 'format' => 'raw',
@@ -119,7 +120,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     $platform = CustomerPlatform::find()->where(['id'=>$dataProvider->platform_id])->one();
                     return $platform ? $platform->platform_name : '-';
                 },
-                'width' => "100px",
+                'width' => "80px",
             ],
             [
                 'format' => 'raw',
@@ -128,7 +129,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     $channal = CustomerChannal::find()->where(['id'=>$dataProvider->channal_id])->one();
                     return $channal ? $channal->channal_name : '-';
                 },
-                'width' => "100px",
+                'width' => "80px",
             ],
             [
                 'format' => 'raw',
@@ -137,7 +138,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     $order_count = order::find()->where(['customer_id'=>$dataProvider->id])->count();
                     return '<a href="/order/index?OrderSearch[customer_id]='. $dataProvider->id .'">' . $order_count . '</a>';
                 },
-                'width' => "100px",
+                'width' => "80px",
             ],
             [
                 'format' => 'raw',
@@ -145,7 +146,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($dataProvider) {
                     return $dataProvider->customer_balance;
                 },
-                'width' => "100px",
+                'width' => "80px",
             ],
             [
                 'format' => 'raw',
@@ -153,7 +154,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($dataProvider) {
                     return '<a href="/order/index?OrderSearch[customer_id]='. $dataProvider->id .'">' . $dataProvider->customer_complaint_times . '</a>';
                 },
-                'width' => "100px",
+                'width' => "80px",
             ],
             [
                 'format' => 'datetime',
@@ -162,7 +163,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $dataProvider->created_at;
                     
                 },
-                'width' => "100px",
+                'width' => "80px",
             ],
             // [
             //     'format'=>'raw',
@@ -180,15 +181,36 @@ $this->params['breadcrumbs'][] = $this->title;
             //     },
             //     'width' => "100px",
             // ],
+            // [
+            //     'class' => 'yii\grid\ActionColumn',
+            //     'buttons' => [
+            //         'update' => function ($url, $model) {
+            //             return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['customer/view', 'id' => $model->id, 'edit' => 't']), [
+            //                 'title' => Yii::t('yii', 'Edit'),
+            //             ]);
+            //         }
+
+            //     ],
+            // ],
             [
                 'class' => 'yii\grid\ActionColumn',
+                'template' =>'{view} {update} {delete} {block}',
                 'buttons' => [
-                    'update' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['customer/view', 'id' => $model->id, 'edit' => 't']), [
-                            'title' => Yii::t('yii', 'Edit'),
-                        ]);
+                    'block' => function ($url, $dataProvider) {
+                        return Html::a('<span class="fa fa-fw fa-lock"></span>',
+                        [
+                            '/customer/add-to-block',
+                            'id' => $dataProvider['id']
+                        ]
+                        // ,[
+                        //     'title' => Yii::t('yii', '黑名单'),
+                        //     'data-toggle' => 'modal',
+                        //     'data-target' => '#blockModal',
+                        //     'class'=>'blockModal',
+                        //     'data-id'=>$dataProvider['id'],
+                        // ]
+                        );
                     }
-
                 ],
             ],
         ],
@@ -206,7 +228,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'showFooter' => false
         ],
     ]);
-    Pjax::end(); ?>
+    Pjax::end(); 
+    // echo Modal::widget([
+    //     'header' => '<h4 class="modal-title">封号</h4>',
+    //     'id'=>'blockModal',
+    // ]);
+    ?>
 
 </div>
 

@@ -27,12 +27,11 @@ class m150923_034334_create_table_shop extends Migration
               `create_at` int(11) DEFAULT '0' COMMENT '创建时间',
               `update_at` int(11) DEFAULT '0' COMMENT '修改时间',
               `is_blacklist` int(3) DEFAULT '0' COMMENT '是否是黑名单：0正常，1黑名单',
-              `blacklist_time` int(11) DEFAULT '0' COMMENT '加入黑名单时间',
-              `blacklist_cause` varchar(255) DEFAULT NULL COMMENT '黑名单原因',
               `audit_status` tinyint(1) DEFAULT '0' COMMENT '审核状态：0未审核，1通过，2不通过',
               `worker_count` int(11) DEFAULT '0' COMMENT '阿姨数量',
               `complain_coutn` int(11) DEFAULT '0' COMMENT '投诉数量',
               `level` varchar(50) DEFAULT NULL COMMENT '评级',
+              `is_deleted` tinyint(1) DEFAULT NULL COMMENT '是否删除',
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             

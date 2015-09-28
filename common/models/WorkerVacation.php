@@ -33,7 +33,7 @@ class WorkerVacation extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['worker_id', 'worker_vacation_start', 'worker_vacation_finish', 'worker_vacation_type', 'created_ad', 'updated_ad', 'admin_id'], 'integer'],
+            [['worker_id', 'worker_vacation_start_time', 'worker_vacation_finish_time', 'worker_vacation_type', 'created_ad', 'updated_ad', 'admin_id'], 'integer'],
             [['worker_vacation_extend'], 'string', 'max' => 11]
         ];
     }
@@ -46,9 +46,9 @@ class WorkerVacation extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', '阿姨请假时间表自增id'),
             'worker_id' => Yii::t('app', '主表阿姨id'),
-            'worker_vacation_start' => Yii::t('app', '请假开始时间'),
-            'worker_vacation_finish' => Yii::t('app', '请假结束时间'),
-            'worker_vacation_type' => Yii::t('app', '阿姨请假类型 1休假 2事假'),
+            'worker_vacation_start_time' => Yii::t('app', '请假开始时间'),
+            'worker_vacation_finish_time' => Yii::t('app', '请假结束时间'),
+            'worker_vacation_type' => Yii::t('app', '阿姨请假类型'),
             'worker_vacation_extend' => Yii::t('app', '阿姨请假备注'),
             'created_ad' => Yii::t('app', '创建时间'),
             'updated_ad' => Yii::t('app', '最后更新时间'),

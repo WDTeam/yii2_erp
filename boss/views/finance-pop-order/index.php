@@ -5,6 +5,9 @@ use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\nav\NavX;
 use yii\bootstrap\NavBar;
+use boss\models\FinancePopOrderSearch;
+
+
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -13,6 +16,7 @@ use yii\bootstrap\NavBar;
 
 $this->title = Yii::t('app', '对账管理');
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="finance-pop-order-index">
       <div class="panel panel-info">
@@ -20,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <h3 class="panel-title"><i class="glyphicon glyphicon-upload"></i> 上传对账单</h3>
     </div>
     <div class="panel-body">
-        <?php  echo $this->render('_search', ['model' => $searchModel,'odrinfo'=>$payatainfo,'ordedat' => $ordedatainfo]); ?>
+        <?php  echo $this->render('_search', ['model' => $searchModel,'ordedat' => $ordedatainfo]); ?>
     </div>
     </div>
     <?php  //echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -33,30 +37,58 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\CheckboxColumn'],
      		
-            'id',
+         //   'id',
             'finance_pop_order_number',
-            'finance_order_channel_id',
-            'finance_order_channel_title',
-            'finance_pay_channel_id',
-            'finance_pay_channel_title', 
-            'finance_pop_order_customer_tel', 
-            'finance_pop_order_worker_uid', 
-            'finance_pop_order_booked_time:datetime', 
-            'finance_pop_order_booked_counttime:datetime', 
-//            'finance_pop_order_sum_money', 
-//            'finance_pop_order_coupon_count', 
+           // 'finance_order_channel_id',
+     		[
+     		'format' => 'raw',
+     		'label' => '渠道名称',
+     		'value' => function ($dataProvider) {
+     			return $dataProvider->finance_order_channel_title ? $dataProvider->finance_order_channel_title  : '未知';
+     		},
+     		'width' => "100px",
+     		],
+            //'finance_pay_channel_id',
+          //  'finance_pay_channel_title', 
+            //'finance_pop_order_customer_tel', 
+            [
+            'format' => 'raw',
+            'label' => '渠道名称',
+            'value' => function ($dataProvider) {
+            	return $dataProvider->finance_pop_order_worker_uid ? $dataProvider->finance_pop_order_worker_uid  : '未知';
+            },
+            'width' => "100px",
+            ],
+            [
+            'format' => 'raw',
+            'label' => '预约开始时间',
+            'value' => function ($dataProvider) {
+            	return FinancePopOrderSearch::alltime($dataProvider->finance_pop_order_booked_time);
+            },
+            'width' => "100px",
+            ],
+            [
+            'format' => 'raw',
+            'label' => '预约服务时长',
+            'value' => function ($dataProvider) {
+            	return FinancePopOrderSearch::alltimecount($dataProvider->finance_pop_order_booked_counttime);
+            },
+            'width' => "100px",
+            ],
+            'finance_pop_order_sum_money', 
+           'finance_pop_order_coupon_count', 
 //            'finance_pop_order_coupon_id', 
 //            'finance_pop_order_order2', 
 //            'finance_pop_order_channel_order', 
 //            'finance_pop_order_order_type', 
 //            'finance_pop_order_status', 
 //            'finance_pop_order_finance_isok', 
-//            'finance_pop_order_discount_pay', 
-//            'finance_pop_order_reality_pay', 
+           'finance_pop_order_discount_pay', 
+           'finance_pop_order_reality_pay', 
 //            'finance_pop_order_order_time:datetime', 
 //            'finance_pop_order_pay_time:datetime', 
 //            'finance_pop_order_pay_status', 
-//            'finance_pop_order_pay_title', 
+            'finance_pop_order_pay_title', 
 //            'finance_pop_order_check_id', 
 //            'finance_pop_order_finance_time:datetime', 
 //            'create_time:datetime', 
@@ -80,14 +112,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
         'panel' => [
-            'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).'</h3>',
+            'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '. Html::encode($this->title) . ' </h3>',
             'type'=>'info',
-
-           'before'=>Html::a('<i class="glyphicon" ></i>对账成功单', ['index?WorkerSearch[worker_auth_status]=0'], ['class' => 'btn btn-info ', 'style' => 'margin-right:10px']) .
-Html::a('<i class="glyphicon" ></i>我有你没有 ', ['index?WorkerSearch[worker_ontrial_status]=0'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
-Html::a('<i class="glyphicon" ></i>你有我没有 ', ['index?WorkerSearch[worker_onboard_status]=0'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
-Html::a('<i class="glyphicon" ></i>金额不对单 ', ['index?WorkerSearch[worker_rule_id]=1'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
-Html::a('<i class="glyphicon" ></i>状态不对单', ['index?WorkerSearch[worker_rule_id]=2'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']),
+           'before'=>
+           Html::a('<i class="glyphicon" ></i>对账成功(总额:'.$searchModel->OrderPayStatus(1).')', ['index?FinancePopOrderSearch[finance_pop_order_pay_status_type]=1'], ['class' => 'btn btn-'.$searchModel->defaultcss(1,$statusdeflde).'', 'style' => 'margin-right:10px']) .
+Html::a('<i class="glyphicon" ></i>我有你没 (总额:'.$searchModel->OrderPayStatus(3).')', ['index?FinancePopOrderSearch[finance_pop_order_pay_status_type]=3'], ['class' => 'btn btn-'.$searchModel->defaultcss(3,$statusdeflde).'', 'style' => 'margin-right:10px']) .
+Html::a('<i class="glyphicon" ></i>你有我没 (总额:'.$searchModel->OrderPayStatus(2).')', ['index?FinancePopOrderSearch[finance_pop_order_pay_status_type]=2'], ['class' => 'btn btn-'.$searchModel->defaultcss(2,$statusdeflde).'', 'style' => 'margin-right:10px']) .
+Html::a('<i class="glyphicon" ></i>金额不对 (总额:'.$searchModel->OrderPayStatus(4).')', ['index?FinancePopOrderSearch[finance_pop_order_pay_status_type]=4'], ['class' => 'btn btn-'.$searchModel->defaultcss(4,$statusdeflde).'', 'style' => 'margin-right:10px']) .
+Html::a('<i class="glyphicon" ></i>状态不对(总额:'.$searchModel->OrderPayStatus(5).')', ['index?FinancePopOrderSearch[finance_pop_order_pay_status_type]=5'], ['class' => 'btn btn-'.$searchModel->defaultcss(5,$statusdeflde).'', 'style' => 'margin-right:10px']),
+			/* 'after' => Html::a('批量审核',
+			['index'],
+			['class' => 'btn btn-default']), */
             'showFooter'=>false,
         ],
     ]); Pjax::end();

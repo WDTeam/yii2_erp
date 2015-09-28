@@ -39,7 +39,12 @@
         "marekpetras/yii2-calendarview-widget": "dev-master",
         "phpoffice/phpexcel": "^1.8",
         "2amigos/yii2-date-picker-widget": "*",
-        "linslin/yii2-curl": "*"
+        "kartik-v/yii2-widget-datetimepicker": "*",
+        "yii2tech/ar-softdelete": "dev-master",
+        "yii2tech/crontab": "dev-master",
+        "yiidoc/yii2-redactor": "*",
+        "liyunfang/yii2-contextmenu": "^1.0",
+        "jpush/jpush": "^3.2"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
@@ -56,5 +61,13 @@
             "npm-asset-library": "vendor/npm",
             "bower-asset-library": "vendor/bower"
         }
+    },
+    "autoload":{
+      "files":[
+        "vendor/ejiajie/pay/alipay_app/alipay_class.php",
+        "vendor/ejiajie/pay/wx_app/wxpay_class.php",
+        "vendor/ejiajie/pay/bfb_app/bfbpay_class.php",
+        "vendor/ejiajie/pay/upacp_app/uppay_class.php"
+      ]
     }
 }

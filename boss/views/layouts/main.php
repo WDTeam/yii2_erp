@@ -20,13 +20,20 @@ AppAsset::register($this);
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <script>
+	<?php if(Yii::$app->getSession()->hasFlash('default')){
+		$msg = Yii::$app->getSession()->getFlash('default');
+		echo 'alert("'.$msg.'");';
+	}?>
+    </script>
 </head>
 <body class="skin-blue fixed">
     <?php $this->beginBody() ?>
     <header class="header">
         <a href="<?= Yii::$app->homeUrl ?>" class="logo">
             <!-- Add the class icon to your logo image or logo icon to add the margining -->
-            <?= Yii::$app->name ?>
+            <!-- <?= Yii::$app->name ?> -->
+            
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top .fixed" role="navigation">
@@ -125,8 +132,19 @@ AppAsset::register($this);
         </aside><!-- /.right-side -->
     </div>
     <?php $this->endBody() ?>
-<footer style="height: 100px;">
+<!-- <footer style="height: 100px;">
     开发者：E家洁BOSS攻坚组
+</footer> -->
+<footer class="main-footer">
+    <div class="pull-right hidden-xs">
+        <b>Version</b> 1.0
+    </div>
+    <strong>
+        Copyright © 2015
+        <a href="#">E家洁BOSS攻坚组</a>
+        .
+    </strong>
+    All rights reserved.
 </footer>
 </body>
 </html>

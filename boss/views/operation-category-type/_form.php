@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
+use dosamigos\datetimepicker\DateTimePicker;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\OperationCategoryType */
@@ -16,13 +17,12 @@ use kartik\date\DatePicker;
     <i class="hide"><?= $form->field($model, 'operation_category_id')->hiddenInput(['value' =>$model->operation_category_id ]) ?></i>
 
     <?= $form->field($model, 'operation_category_type_name')->textInput(['maxlength' => true]) ?>
-
+   
     <?= $form->field($model, 'operation_category_type_introduction')->textarea(['rows' => 6]) ?>
 
     <?= $form->field($model, 'operation_category_type_english_name')->textInput(['maxlength' => true]) ?>
     
     <?= $form->field($model, 'operation_price_strategy_id')->dropDownList($priceStrategies)->label('选择价格策略') ?>
-    
     <?php
         echo '<label class="control-label">服务时间</label>';
         echo '<div id="operationcategorytype-operation_category_type_service_time_slot" class="form-inline">';

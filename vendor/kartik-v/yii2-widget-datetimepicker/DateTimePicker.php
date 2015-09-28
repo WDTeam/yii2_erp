@@ -29,6 +29,7 @@ class DateTimePicker extends \kartik\base\InputWidget
     const TYPE_INPUT = 1;
     const TYPE_COMPONENT_PREPEND = 2;
     const TYPE_COMPONENT_APPEND = 3;
+    const TYPE_COMPONENT_INPUT_CENTER = 6;
     const TYPE_INLINE = 4;
     const TYPE_BUTTON = 5;
 
@@ -97,8 +98,8 @@ class DateTimePicker extends \kartik\base\InputWidget
     {
         $this->_msgCat = 'kvdatetime';
         parent::init();
-        if ($this->type < 1 || $this->type > 5 || !is_int($this->type)) {
-            throw new InvalidConfigException("Invalid value for the property 'type'. Must be an integer between 1 and 5.");
+        if ($this->type < 1 || $this->type > 6 || !is_int($this->type)) {
+            throw new InvalidConfigException("Invalid value for the property 'type'. Must be an integer between 1 and 6.");
         }
         $this->initI18N();
         $s = DIRECTORY_SEPARATOR;
@@ -187,6 +188,11 @@ class DateTimePicker extends \kartik\base\InputWidget
             Html::addCssClass($this->_container, 'date');
             $addon = $this->renderAddon($this->removeButton, 'remove') . $this->renderAddon($this->pickerButton);
             return Html::tag('div', $input . $addon, $this->_container);
+        }
+        if ($this->type == self::TYPE_COMPONENT_INPUT_CENTER) {
+            Html::addCssClass($this->_container, 'date');
+            $addon =  $this->renderAddon($this->pickerButton) . $input . $this->renderAddon($this->removeButton, 'remove');
+            return Html::tag('div', $addon, $this->_container);
         }
         if ($this->type == self::TYPE_BUTTON) {
             Html::addCssClass($this->_container, 'date');

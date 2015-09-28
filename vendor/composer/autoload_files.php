@@ -8,12 +8,27 @@ $baseDir = dirname($vendorDir);
 return array(
     $vendorDir . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
     $vendorDir . '/swiftmailer/swiftmailer/lib/swift_required.php',
-    //支付宝
+    $vendorDir . '/jpush/jpush/src/JPush/Model/Audience.php',
+    $vendorDir . '/jpush/jpush/src/JPush/Model/Message.php',
+    $vendorDir . '/jpush/jpush/src/JPush/Model/Notification.php',
+    $vendorDir . '/jpush/jpush/src/JPush/Model/Options.php',
+    $vendorDir . '/jpush/jpush/src/JPush/Model/Platform.php',
+    $vendorDir . '/jpush/jpush/src/JPush/Model/PushPayload.php',
+    $vendorDir . '/jpush/jpush/src/JPush/Model/PushResponse.php',
+    $vendorDir . '/jpush/jpush/src/JPush/Model/ReportResponse.php',
+    $vendorDir . '/jpush/jpush/src/JPush/Model/MessageResponse.php',
+    $vendorDir . '/jpush/jpush/src/JPush/Model/MessageAndroid.php',
+    $vendorDir . '/jpush/jpush/src/JPush/Model/MessageIOS.php',
+    $vendorDir . '/jpush/jpush/src/JPush/Model/MessageItem.php',
+    $vendorDir . '/jpush/jpush/src/JPush/Model/UserResponse.php',
+    $vendorDir . '/jpush/jpush/src/JPush/Model/DeviceResponse.php',
+    $vendorDir . '/jpush/jpush/src/JPush/Model/Report.php',
+    $vendorDir . '/jpush/jpush/src/JPush/JPushClient.php',
+    $vendorDir . '/jpush/jpush/src/JPush/JPushLog.php',
+    $vendorDir . '/jpush/jpush/src/JPush/Exception/APIConnectionException.php',
+    $vendorDir . '/jpush/jpush/src/JPush/Exception/APIRequestException.php',
     $vendorDir . '/ejiajie/pay/alipay_app/alipay_class.php',
-    //微信
     $vendorDir . '/ejiajie/pay/wx_app/wxpay_class.php',
-    //百付宝
     $vendorDir . '/ejiajie/pay/bfb_app/bfbpay_class.php',
-    //银联
     $vendorDir . '/ejiajie/pay/upacp_app/uppay_class.php',
 );

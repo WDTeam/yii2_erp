@@ -30,7 +30,6 @@ use yii\helpers\Url
         </div>
         <div class="panel-body">
         <?php 
-        $url = Url::to(['shop-manager/search-by-name']);
         echo Form::widget([
             'model' => $model,
             'form' => $form,
@@ -50,7 +49,7 @@ use yii\helpers\Url
                             'allowClear' => true,
                             'minimumInputLength' => 0,
                             'ajax' => [
-                                'url' => $url,
+                                'url' => Url::to(['shop-manager/search-by-name']),
                                 'dataType' => 'json',
                                 'data' => new JsExpression('function(params) { return {name:params.term}; }')
                             ],

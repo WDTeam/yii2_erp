@@ -2,9 +2,11 @@
 
 namespace boss\controllers;
 
+use common\models\WorkerBlock;
+use common\models\WorkerVacation;
 use Yii;
 use yii\db\Query;
-use yii\web\Controller;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use core\models\Worker;
@@ -157,8 +159,35 @@ class WorkerController extends Controller
         return $out;
     }
 
-    public function actionGetShopName(){
-        return 'abc';
+
+    /*
+     * 创建阿姨请假信息
+     *
+     */
+    public function actionVacationCreate($id){
+        $workerModel = $this->findModel($id);
+        $workerVacationmodel = new WorkerVacation();
+        if(\Yii::$app->request->post()){
+            return $this->redirect(['index']);
+        }else{
+            return $this->renderAjax('vacation_create',['workerModel'=>$workerModel,'workerVacationModel'=>$workerVacationmodel]);
+        }
+
+    }
+
+    /*
+     * 创建阿姨封号信息
+     *
+     */
+    public function actionBlockCreate($id){
+        $workerModel = $this->findModel($id);
+        $workerBlockmodel = new WorkerBlock();
+
+        if(\Yii::$app->request->post()){
+            return $this->redirect(['index']);
+        }else{
+            return $this->renderAjax('block_create',['workerModel'=>$workerModel,'workerBlockmodel'=>$workerBlockmodel]);
+        }
     }
 
     public function actionGetDataFromOldDataBase(){

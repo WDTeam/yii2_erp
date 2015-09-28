@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <h3 class="panel-title"><i class="glyphicon glyphicon-upload"></i> 详情查询</h3>
     </div>
     <div class="panel-body">
-        <?php  echo $this->render('_search', ['model' => $searchModel,'odrinfo'=>$payatainfo,'ordedat' => $ordedatainfo]); ?>
+        <?php  echo $this->render('_search', ['model' => $searchModel,'ordedat' => $ordedatainfo]); ?>
     </div>
     </div>
     <?php  //echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\CheckboxColumn'],
+            ['class' => 'yii\grid\SerialColumn'],
      		
             'id',
             'finance_pop_order_number',

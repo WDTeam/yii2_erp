@@ -16,7 +16,10 @@ use boss\components\AreaCascade;
 
 <div class="shop-manager-form">
 
-    <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); ?>
+    <?php $form = ActiveForm::begin([
+        'type'=>ActiveForm::TYPE_HORIZONTAL,
+        'options' =>  ['enctype' => 'multipart/form-data']
+    ]); ?>
     <?php //var_dump($model->getErrors());?>
     <div class="panel panel-info">
         <div class="panel-heading">
@@ -32,7 +35,7 @@ use boss\components\AreaCascade;
                 'name'=>[
                     'type'=> Form::INPUT_TEXT, 
                     'options'=>[
-                        'placeholder'=>'Enter 家政名称...', 'maxlength'=>255,
+                        'maxlength'=>255,
                     ]
                     
                 ], 
@@ -52,13 +55,21 @@ use boss\components\AreaCascade;
             'form' => $form,
             'columns' => 1,
             'attributes' => [
-                'street'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 办公街道...', 'maxlength'=>255]], 
+                'street'=>['type'=> Form::INPUT_TEXT, 'options'=>[
+                    'maxlength'=>255
+                    
+                ]], 
                 
-                'principal'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 负责人...', 'maxlength'=>50]], 
+                'principal'=>['type'=> Form::INPUT_TEXT, 'options'=>[
+                    'maxlength'=>50
+                    
+                ]], 
                 
-                'tel'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 电话...', 'maxlength'=>50]], 
+                'tel'=>['type'=> Form::INPUT_TEXT, 'options'=>[
+                    'maxlength'=>50]], 
         
-                'other_contact'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 其他联系方式...', 'maxlength'=>200]],
+                'other_contact'=>['type'=> Form::INPUT_TEXT, 'options'=>[
+                    'maxlength'=>200]],
             ]
         ]);?>
     
@@ -71,11 +82,17 @@ use boss\components\AreaCascade;
     
                     'audit_status'=>['type'=> Form::INPUT_DROPDOWN_LIST, 'items'=>ShopManager::$audit_statuses, 'label'=>'审核状态', 'options'=>['placeholder'=>'Enter 审核状态：0未审核，1通过，2不通过...']],
                     
-                    'level'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 评级...', 'maxlength'=>50]],
+                    'level'=>['type'=> Form::INPUT_TEXT, 'options'=>[
+                        'maxlength'=>50]],
     
-                    'blacklist_cause'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 黑名单原因...', 'maxlength'=>255]],
+                    'blacklist_cause'=>['type'=> Form::INPUT_TEXT, 'options'=>[
+                        'maxlength'=>255]],
                     
-                    'is_blacklist'=>['type'=> Form::INPUT_RADIO_LIST, 'items'=>['否', '是'], 'label'=>'是否黑名单', 'options'=>['placeholder'=>'Enter 是否是黑名单：0正常，1黑名单...']],
+                    'is_blacklist'=>[
+                        'type'=> Form::INPUT_RADIO_LIST, 
+                        'items'=>['否', '是'], 
+                        'label'=>'是否黑名单', 
+                    ],
                 ]
             
             ]);
@@ -154,7 +171,10 @@ use boss\components\AreaCascade;
         
                 'bl_audit'=>['type'=> Form::INPUT_TEXT, 'options'=>[]],
 
-                'bl_photo_url'=>['type'=> Form::INPUT_TEXT, 'options'=>[ 'maxlength'=>255]],
+                'bl_photo_url'=>[
+                    'type'=> Form::INPUT_FILE,
+                    'options'=>[ 'maxlength'=>255]
+                ],
                 
                 'bl_business'=>['type'=> Form::INPUT_TEXTAREA, 'options'=>['rows'=> 6]],
                 

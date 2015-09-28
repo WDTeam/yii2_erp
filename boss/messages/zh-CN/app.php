@@ -41,6 +41,8 @@ return [
     'Hello, {name}' => '你好,{name}',
 
     'System' => '系统',
+    'System Users'=>'系统用户',
+    'Create System User'=>'创建系统用户',
     'Settings' => '设置',
     'User' => '用户',
     'Users' => '用户',
@@ -130,4 +132,7 @@ return [
     'Advert Position' => '广告位置',
     'List' => '列表',
     'Advert Content' => '广告内容',
+    'begin_New_Work'=>'新工作方式的开始...',
+    'help'=>'帮助',
+    'forget_pwd'=>'忘记密码？',
 ];

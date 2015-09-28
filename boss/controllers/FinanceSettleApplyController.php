@@ -5,10 +5,14 @@ namespace boss\controllers;
 use Yii;
 use common\models\FinanceSettleApply;
 use boss\models\FinanceSettleApplySearch;
-use yii\web\Controller;
+use boss\models\FinanceSettleApplyLogSearch;
+use boss\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\FinanceWorkerOrderIncome;
+use common\models\FinanceWorkerNonOrderIncome;
+use boss\models\WorkerSearch;
+use boss\models\FinanceWorkerOrderIncomeSearch;
 
 /**
  * FinanceSettleApplyController implements the CRUD actions for FinanceSettleApply model.
@@ -36,8 +40,11 @@ class FinanceSettleApplyController extends Controller
         $searchModel = new FinanceSettleApplySearch;
         $defaultParams = array('FinanceSettleApplySearch'=>['finance_settle_apply_status' => '0']);
         $requestParams = Yii::$app->request->getQueryParams();
-        $requestModel = $requestParams['FinanceSettleApplySearch'];
-        $nodeId =$requestModel['nodeId'];
+        $nodeId = null;
+        if(isset($requestParams['FinanceSettleApplySearch'])){
+            $requestModel = $requestParams['FinanceSettleApplySearch'];
+            $nodeId =$requestModel['nodeId'];
+        }
         $requestParams = array_merge($defaultParams,$requestParams);
         $dataProvider = $searchModel->search($requestParams);
         return $this->render('index', [
@@ -61,10 +68,21 @@ class FinanceSettleApplyController extends Controller
         $ids = $financeSettleApplySearch["ids"];
         $financeSettleApplyStatus = $financeSettleApplySearch["finance_settle_apply_status"];
         $idArr = explode(',', $ids);
+        
         foreach($idArr as $id){
             $model = $this->findModel($id);
             $model->finance_settle_apply_status = $financeSettleApplyStatus;
             $model->save();
+            $financeSettleApplyLogSearch = new FinanceSettleApplyLogSearch;
+            $financeSettleApplyLogSearch->finance_settle_apply_id = $id;
+            $financeSettleApplyLogSearch->finance_settle_apply_reviewer_id = Yii::$app->user->id;
+            $financeSettleApplyLogSearch->finance_settle_apply_reviewer = Yii::$app->user->identity->username;
+            $financeSettleApplyLogSearch->finance_settle_apply_node_id = abs($financeSettleApplyStatus);
+            $financeSettleApplyLogSearch->finance_settle_apply_node_des = $searchModel->financeSettleApplyStatusArr[$financeSettleApplyStatus];
+            $financeSettleApplyLogSearch->finance_settle_apply_is_passed = $financeSettleApplyStatus >0 ? 1:0;
+            $financeSettleApplyLogSearch->finance_settle_apply_reviewer_comment ="";
+            $financeSettleApplyLogSearch->created_at = time();
+            $financeSettleApplyLogSearch->save();
         }
         return $this->actionIndex();
     }
@@ -152,6 +170,27 @@ class FinanceSettleApplyController extends Controller
     }
     
     /**
+    * 阿姨人工结算
+    */
+    public function actionWorkerManualSettlementIndex(){
+        $financeSettleApplySearch= new FinanceSettleApplySearch;
+        $financeSettleApplySearch->workerName = "张三";
+        $financeSettleApplySearch->workerPhone= "13456789000";
+        $financeSettleApplySearch->workerOnboardTime= "1443324337";
+        $financeSettleApplySearch->workerType= "全职全日";
+        $searchModel = new FinanceWorkerOrderIncomeSearch;
+        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'dataProvider'=>$dataProvider]);
+    }
+    
+    public function actionWorkerManualSettlementDone(){
+        $requestModel = Yii::$app->request->getQueryParams();
+        $financeSettleApplySearch = $requestModel["FinanceSettleApplySearch"];
+//        saveAndGenerateSettleData($partimeWorkerArr,$settleStartTime,$settleEndTime);
+        return $this->redirect(['index']);
+    }
+    
+    /**
     * 本文件是用于兼职阿姨每周（例如：2015.9.21-2015.9.27）的结算
     * 1.获取当前在职的且是兼职的阿姨Id列表
     * 2.获取每个阿姨的身份证号，在2015.9.21-2015.9.27已完成的订单信息，
@@ -161,14 +200,38 @@ class FinanceSettleApplyController extends Controller
     *   按收入类型分组的订单总金额，保存到结算表
     */
     public function actionPartTimeWorkerCycleSettlement(){
-        $settleStartTime = mktime(0,0,0,date("m"),date("d")-7,date("Y"));//统计开始时间
-        echo date('Y-m-d H:i:s',$settleStartTime).'------';
-        $settleEndTime = mktime(23,59,59,date("m"),date("d")-1,date("Y"));//统计结束时间
-        echo date('Y-m-d H:i:s',$settleEndTime).'------';
+        $settleStartTime = date('Y-m-d 00:00:00', strtotime('-1 week last monday'));;//统计开始时间,上周第一天
+        echo $settleStartTime.'------';
+        $settleEndTime = date('Y-m-d 23:59:59', strtotime('last sunday'));//统计结束时间,上周最后一天
+        echo $settleEndTime.'------';
         //获取阿姨的数组信息
         $partimeWorkerArr = array(['worker_id'=>'555','worker_name'=>'阿姨1','worker_idcard'=>'4210241983','worker_bank_card'=>'62217978'],['worker_id'=>'666','worker_name'=>'阿姨2','worker_idcard'=>'4210241984','worker_bank_card'=>'622174747']);
+        $this->saveAndGenerateSettleData($partimeWorkerArr,$settleStartTime,$settleEndTime);
+    }
+    
+    /**
+    * 本文件是用于全职阿姨每月（例如：2015.9.1-2015.9.30）的结算
+    * 1.获取当前在职的且是全职的阿姨Id列表
+    * 2.获取每个阿姨，在2015.9.1-2015.9.30已完成的订单信息，
+    *   包括订单Id、支付类型、订单金额、服务时长、服务完成的时间，
+    *   保存到阿姨订单收入表
+    * 3.获取每个阿姨Id，在2015.9.1-2015.9.30已完成订单的总收入信息，
+    *   按收入类型分组的订单总金额，保存到结算表
+    */
+    public function actionFullTimeWorkerCycleSettlement(){
+        $settleStartTime = strtotime(date('Y-m-01 00:00:00', strtotime('-1 month')));//统计开始时间,上个月的第一天
+        echo date('Y-m-01 00:00:00', strtotime('-1 month')).'------';
+        $settleEndTime = strtotime(date('Y-m-t 23:59:59', strtotime('-1 month')));//统计结束时间,上个月的最后一天
+        echo date('Y-m-t 23:59:59', strtotime('-1 month')).'------';
+        //获取阿姨的数组信息
+        $partimeWorkerArr = array(['worker_id'=>'555','worker_name'=>'阿姨1','worker_idcard'=>'4210241983','worker_bank_card'=>'62217978'],['worker_id'=>'666','worker_name'=>'阿姨2','worker_idcard'=>'4210241984','worker_bank_card'=>'622174747']);
+        $this->saveAndGenerateSettleData($partimeWorkerArr,$settleStartTime,$settleEndTime);
+    }
+    
+    private function saveAndGenerateSettleData($partimeWorkerArr,$settleStartTime,$settleEndTime){
         foreach($partimeWorkerArr as $partimeWorker){
             $workerIdCard = $partimeWorker['worker_idcard'];
+            $workerId = $partimeWorker['worker_id'];
             //订单收入明细
             $orderIncomeDetail = array(['worker_id'=>'555','order_id'=>'801','order_pay_type'=>'0','order_money'=>'50','order_booked_count'=>'2','order_complete_time'=>'1234455'],
                 ['worker_id'=>'666','order_id'=>'802','order_pay_type'=>'1','order_money'=>'50','order_booked_count'=>'2','order_complete_time'=>'123456565']
@@ -209,7 +272,20 @@ class FinanceSettleApplyController extends Controller
             $financeSettleApply->finance_settle_apply_endtime = $settleEndTime;//结算截止日期
             $financeSettleApply->created_at = time();//申请创建时间
             //获取阿姨的奖励信息
-            
+            $workerSubsidyArr = Array(['finance_worker_non_order_income_type'=>1,'finance_worker_non_order_income_type_des'=>'补贴','finance_worker_non_order_income'=>10,'finance_worker_non_order_income_des'=>'路补超过7公里，补助10元'],);
+            $financeWorkerNonOrderIncomeArr = [];
+            foreach($workerSubsidyArr as $workerSubsidy){
+                $financeWorkerNonOrderIncome = new FinanceWorkerNonOrderIncome;
+                $financeWorkerNonOrderIncome->worder_id = $workerId;
+                $financeWorkerNonOrderIncome->finance_worker_non_order_income_type = $workerSubsidy['finance_worker_non_order_income_type'];
+                $financeWorkerNonOrderIncome->finance_worker_non_order_income_type_des = $workerSubsidy['finance_worker_non_order_income_type_des'];
+                $financeWorkerNonOrderIncome->finance_worker_non_order_income = $workerSubsidy['finance_worker_non_order_income'];
+                $financeWorkerNonOrderIncome->finance_worker_non_order_income_des = $workerSubsidy['finance_worker_non_order_income_des'];
+                $financeWorkerNonOrderIncome->finance_worker_non_order_income_starttime = $settleStartTime;
+                $financeWorkerNonOrderIncome->finance_worker_non_order_income_endtime = $settleStartTime;
+                $financeWorkerNonOrderIncome->created_at = time();
+                $financeWorkerNonOrderIncomeArr[] = $financeWorkerNonOrderIncome;
+            }
             $transaction =  Yii::$app->db->beginTransaction();
             try{
                 $existCount = FinanceSettleApply::find()->where(['worder_id'=>$financeSettleApply->worder_id,'finance_settle_apply_starttime'=>$settleStartTime,'finance_settle_apply_endtime'=>$settleEndTime])->count();
@@ -218,6 +294,9 @@ class FinanceSettleApplyController extends Controller
                     if($financeSettleApply->save()){
                         foreach($financeWorkerOrderIncomeArr as $financeWorkerOrderIncome){
                             $financeWorkerOrderIncome->save();
+                        }
+                        foreach($financeWorkerNonOrderIncomeArr as $financeWorkerNonOrder){
+                            $financeWorkerNonOrder->save();
                         }
                     }
                 }else{

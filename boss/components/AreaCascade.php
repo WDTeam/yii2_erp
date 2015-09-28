@@ -27,7 +27,7 @@ use yii\base\Widget;
 /**
  * 
  */
-class AreaCascade extends \kartik\base\InputWidget
+class AreaCascade extends \yii\widgets\InputWidget
 {
 
     const _PROVINCE_ = '选择省(直辖市)';
@@ -46,6 +46,8 @@ class AreaCascade extends \kartik\base\InputWidget
     private $county_id;
     private $town_id;
     public $is_minui; //最小UI，不包含label
+    
+    public $attribute='city_id';
 
 
     public function init() {

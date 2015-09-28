@@ -9,55 +9,22 @@ echo Menu::widget(
             'class' => 'sidebar-menu'
         ],
         'items' => [
-            /* 面试管理 */
-                        [
-                'label' => Yii::t('app', 'InterviewManagement'),
-                'url' => ['#'],
-                'icon' => 'fa-dashboard',
-                'options' => [
-                    'class' => 'treeview',
-                ],
-                'visible' => Yii::$app->user->can('readPost'),
-                'items' => [
-                    [
-                        'label' => Yii::t('app', 'Interview'),
-                        'url' => ['/interview/index'],
-                        'icon' => 'fa fa-user',
-                    ],
-//                    [
-//                        'label' => Yii::t('app', 'Agreement'),
-//                        'url' => ['/signed/index'],
-//                        'icon' => 'fa fa-lock',
-//                    ],
-                ],
-            ],
-             /* 服务管理 */
-                        [
-                'label' => Yii::t('app', 'CategoryManagement'),
-                'url' => ['category/index'],
-                'icon' => 'fa-dashboard',
-                'options' => [
-//                     'class' => 'treeview',
-                ],
-                'active'=>isset($ctrl->is_category_manage),
-                'visible' => Yii::$app->user->can('readPost'),
-            ],
             [
-                'label' => '门店管理(60%)',
+                'label' => '门店管理(95%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-flag',
                 'options' => [
-                    'class' => 'treeview active',
+                    'class' => 'treeview rootTree',
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有门店(80%)',
+                        'label' => '查看所有门店(90%)',
                         'url' => ['shop/index'],
                         'icon' => 'fa fa-angle-right',
                         //'visible' => (Yii::$app->user->identity->username == 'admin'),
                     ],
                     [
-                        'label' => '添加新门店(70%)',
+                        'label' => '添加新门店(100%)',
                         'url' => ['shop/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -68,7 +35,7 @@ echo Menu::widget(
                 'url' => ['#'],
                 'icon' => 'fa fa-female',
                 'options' => [
-                    'class' => 'treeview active',
+                    'class' => 'treeview rootTree',
                 ],
                 'items' => [
                     [
@@ -93,27 +60,27 @@ echo Menu::widget(
                 'url' => ['#'],
                 'icon' => 'fa fa-user',
                 'options' => [
-                    'class' => 'treeview active',
+                    'class' => 'treeview rootTree',
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有顾客(75%)',
+                        'label' => '查看所有顾客(80%)',
                         'url' => ['/customer/index?CustomerSearch[is_del]=0'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '管理黑名单顾客(75%)',
+                        'label' => '管理黑名单顾客(80%)',
                         'url' => ['/customer/block?CustomerSearch[is_del]=1'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],
             ],
             [
-                'label' => '订单管理(28%)',
+                'label' => '订单管理(20%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-tag',
                 'options' => [
-                    'class' => 'treeview active',
+                    'class' => 'treeview rootTree',
                 ],
                 'items' => [
                     [
@@ -122,7 +89,7 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '创建新订单(75%)',
+                        'label' => '创建新订单(80%)',
                         'url' => ['/order/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -138,39 +105,39 @@ echo Menu::widget(
                 'url' => ['#'],
                 'icon' => 'fa fa-credit-card',
                 'options' => [
-                    'class' => 'treeview active',
+                    'class' => 'treeview rootTree',
                 ],
                 'items' => [
                     [
-                        'label' => '对账管理',
+                        'label' => '对账管理(80)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
 							'options' => [
-							'class' => 'treeview active',
+							'class' => 'treeview ',
 							],
 							'items' => [
 							[
-							'label' => '对账(50%)',
+							'label' => '对账(80%)',
 							'url' => ['/finance-pop-order/'],
 							'icon' => 'fa fa-angle-right',
 							],[
-							'label' => '对账统计(40%)',
+							'label' => '对账统计(80%)',
 							'url' => ['/finance-record-log/'],
 							'icon' => 'fa fa-angle-right',
 							],[
-							'label' => '对账详情(40%)',
+							'label' => '对账详情(70%)',
 							'url' => ['/finance-pop-order/billinfo'],
 							'icon' => 'fa fa-angle-right',
 							],[
-							'label' => '增加账单配置(85%)',
+							'label' => '增加账单配置(95%)',
 							'url' => ['/finance-header/index'],
 							'icon' => 'fa fa-angle-right',
 							],[
 							'label' => '坏账列表(70%)',
-							'url' => ['/finance-pop-order/billinfo'],
+							'url' => ['/finance-pop-order/bad'],
 							'icon' => 'fa fa-angle-right',
 							],[
-							'label' => '渠道管理(85%)',
+							'label' => '渠道管理(95%)',
 							'url' => ['/finance-order-channel/'],
 							'icon' => 'fa fa-angle-right',
 							]
@@ -182,7 +149,7 @@ echo Menu::widget(
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
 							'options' => [
-							'class' => 'treeview active',
+							'class' => 'treeview',
 							],
 							'items' => [
 							[
@@ -220,9 +187,25 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '结算管理(60%)',
-                        'url' => ['/finance-settle-apply'],
+                        'label' => '结算管理(85%)',
+                        'url' => ['/finance-settle-apply/index?FinanceSettleApplySearch[finance_settle_apply_status]=0&FinanceSettleApplySearch[ids]=&FinanceSettleApplySearch[nodeId]=1'],
                         'icon' => 'fa fa-angle-right',
+                    ],
+                    [
+                        'label' => '线下运营（80%）',
+                        'url' => ['#'],
+                        'icon' => 'fa fa-angle-right',
+							'options' => [
+							'class' => 'treeview',
+							],
+							'items' => [
+							[
+							'label' => '阿姨结算',
+							'url' => ['/finance-settle-apply/worker-manual-settlement-index'],
+							'icon' => 'fa fa-angle-right',
+							],
+							]
+							
                     ],
                     [
                         'label' => '报表管理(0%)',
@@ -241,7 +224,7 @@ echo Menu::widget(
                 'url' => ['#'],
                 'icon' => 'fa fa-recycle',
                 'options' => [
-                    'class' => 'treeview active',
+                    'class' => 'treeview rootTree',
                 ],
                 'items' => [
                     [
@@ -264,7 +247,7 @@ echo Menu::widget(
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                         'options' => [
-                            'class' => 'treeview active',
+                            'class' => 'treeview ',
                         ],
                         'items' => [
                             [
@@ -311,7 +294,7 @@ echo Menu::widget(
                 'url' => ['#'],
                 'icon' => 'fa fa-globe',
                 'options' => [
-                    'class' => 'treeview active',
+                    'class' => 'treeview rootTree',
                 ],
                 'items' => [
                     [
@@ -357,7 +340,7 @@ echo Menu::widget(
                 'url' => ['#'],
                 'icon' => 'fa fa-ambulance',
                 'options' => [
-                    'class' => 'treeview active',
+                    'class' => 'treeview rootTree',
                 ],
                 'items' => [
                     [
@@ -387,7 +370,7 @@ echo Menu::widget(
                 'url' => ['#'],
                 'icon' => 'fa fa-random',
                 'options' => [
-                    'class' => 'treeview active',
+                    'class' => 'treeview rootTree',
                 ],
                 'items' => [
                     [
@@ -403,11 +386,11 @@ echo Menu::widget(
                 ],
             ],
             [
-                'label' => '小家政管理(60%)',
+                'label' => '小家政管理(90%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-slideshare',
                 'options' => [
-                    'class' => 'treeview active',
+                    'class' => 'treeview rootTree',
                 ],
                 'items' => [
                     [
@@ -416,7 +399,7 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '添加新家政公司(70%)',
+                        'label' => '添加新家政公司(100%)',
                         'url' => ['shop-manager/create'],
                         'icon' => 'fa fa-angle-right',
                     ],

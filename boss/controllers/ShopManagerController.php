@@ -12,6 +12,8 @@ use crazyfd\qiniu\Qiniu;
 use yii\helpers\ArrayHelper;
 use kartik\helpers\Html;
 use yii\helpers\Json;
+use yii\base\Widget;
+use yii\web\UploadedFile;
 
 /**
  * ShopManagerController implements the CRUD actions for ShopManager model.
@@ -70,12 +72,16 @@ class ShopManagerController extends Controller
     public function actionCreate()
     {
         $model = new ShopManager;
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-//             $qiniu = new Qiniu($ak, $sk,$domain, $bucket);
-//             $key = time();
-//             $qiniu->uploadFile($_FILES['tmp_name'],$key);
-//             $url = $qiniu->getLink($key);
-            return $this->redirect(['view', 'id' => $model->id]);
+        if (\Yii::$app->request->post()) {
+            $data = \Yii::$app->request->post();
+            $model->load($data);
+            $file = UploadedFile::getInstance($model, 'bl_photo_url');
+            $qiniu = new Qiniu();
+            $path = $qiniu->uploadFile($file->tempName);
+            $model->bl_photo_url = $path['key'];
+            if($model->save()){
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -93,8 +99,16 @@ class ShopManagerController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if (\Yii::$app->request->post()) {
+            $data = \Yii::$app->request->post();
+            $model->load($data);
+            $file = UploadedFile::getInstance($model, 'bl_photo_url');
+            $qiniu = new Qiniu();
+            $path = $qiniu->uploadFile($file->tempName);
+            $model->bl_photo_url = $path['key'];
+            if($model->save()){
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -110,7 +124,7 @@ class ShopManagerController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $this->findModel($id)->softDelete();
 
         return $this->redirect(['index']);
     }
@@ -153,7 +167,7 @@ class ShopManagerController extends Controller
             $model->joinBlacklist($cause);
             return $this->redirect(['index']);
         }
-        return $this->renderPartial('join_blacklist',[
+        return $this->renderAjax('join_blacklist',[
             'model'=>$model
         ]);
         

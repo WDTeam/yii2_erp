@@ -5,6 +5,7 @@ use yii\behaviors\TimestampBehavior;
 use boss\models\Operation\OperationArea;
 use yii\base\Object;
 use boss\models\ShopStatus;
+use crazyfd\qiniu\Qiniu;
 class ShopManager extends \common\models\ShopManager
 {
     /**
@@ -52,7 +53,10 @@ class ShopManager extends \common\models\ShopManager
     {
         return array_merge(parent::rules(),[
             [['name', 'street', 'principal', 'tel'], 'required'],
-            [['province_id', 'city_id', 'county_id', 'bl_type', 'bl_create_time', 'bl_audit', 'bl_expiry_start', 'bl_expiry_end', 'create_at', 'update_at', 'is_blacklist', 'blacklist_time', 'audit_status', 'shop_count', 'worker_count', 'complain_coutn'], 'integer'],
+            [['province_id', 'city_id', 'county_id', 'bl_type', 'bl_create_time',
+                'bl_audit', 'bl_expiry_start', 'bl_expiry_end', 'create_at',
+                'update_at', 'is_blacklist', 'blacklist_time', 'audit_status',
+                'shop_count', 'worker_count', 'complain_coutn', 'tel'], 'integer'],
             [['bl_business'], 'string'],
             [['name', 'street', 'opening_address', 'bl_name', 'bl_address', 'bl_photo_url'], 'string', 'max' => 255],
             [['principal', 'tel', 'bankcard_number', 'bl_person', 'level'], 'string', 'max' => 50],
@@ -82,6 +86,9 @@ class ShopManager extends \common\models\ShopManager
      */
     public function getCityName()
     {
+        if(empty($this->city_id)){
+            return '';
+        }
         $model = OperationArea::find()->where(['id'=>$this->city_id])->one();
         return $model->area_name;
     }
@@ -187,5 +194,21 @@ class ShopManager extends \common\models\ShopManager
             return $status->save();
         }
         return false;
+    }
+    /**
+     * 软删除
+     */
+    public function softDelete()
+    {
+        $this->is_deleted = 1;
+        return $this->save();
+    }
+    /**
+     * 获取执照URL
+     */
+    public function getBlPhotoUrlByQiniu()
+    {
+        $qn = new Qiniu();
+        return $qn->getLink().$this->bl_photo_url;
     }
 }
