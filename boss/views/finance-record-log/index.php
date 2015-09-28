@@ -1,4 +1,5 @@
 <?php
+
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
@@ -63,16 +64,16 @@ $this->params['breadcrumbs'][] = $this->title;
            'width' => "100px",
            ],
            'finance_record_log_confirm_name', 
-//            'finance_record_log_fee',
+           'finance_record_log_fee',
  
-    		[
+    		/* [
     		'format' => 'raw',
     		'label' => '预约开始时间',
     		'value' => function ($dataProvider) {
     			return FinancePopOrderSearch::alltime($dataProvider->create_time);
     		},
     		'width' => "100px",
-    		],
+    		], */
 //            'is_del', 
 
             [
