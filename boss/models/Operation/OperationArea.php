@@ -4,7 +4,6 @@ namespace boss\models\Operation;
 
 use Yii;
 use core\models\Operation\CoreOperationArea;
-
 /**
  * This is the model class for table "{{%operation_area}}".
  *
@@ -47,15 +46,15 @@ class OperationArea extends CoreOperationArea
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('operation', '编号'),
-            'area_name' => Yii::t('operation', '区域名称'),
-            'parent_id' => Yii::t('operation', '父名称'),
-            'short_name' => Yii::t('operation', '简称'),
-            'longitude' => Yii::t('operation', '经度'),
-            'latitude' => Yii::t('operation', '纬度'),
-            'level' => Yii::t('operation', '行政级别：1省（直辖市），2地级市（地区），3县,区，县级市 ，4：乡镇街道'),
-            'position' => Yii::t('operation', '逻辑关系位置'),
-            'sort' => Yii::t('operation', '排序'),
+            'id' => '编号',
+            'area_name' => '区域名称',
+            'parent_id' => '父名称',
+            'short_name' => '简称',
+            'longitude' => '经度',
+            'latitude' => '纬度',
+            'level' => '行政级别：1省（直辖市），2地级市（地区），3县,区，县级市 ，4：乡镇街道',
+            'position' => '逻辑关系位置',
+            'sort' => '排序',
         ];
     }
 }

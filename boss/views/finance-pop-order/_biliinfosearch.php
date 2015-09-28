@@ -19,7 +19,7 @@ use kartik\date\DatePicker;
 
 <div class="finance-pop-order-search">
     <?php $form = ActiveForm::begin([
-        'action' => ['bad'],
+        'action' => ['billinfo'],
         'method' => 'post',
     ]);
     ?>

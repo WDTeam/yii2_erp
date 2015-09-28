@@ -126,7 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '. Html::encode($this->title) . ' </h3>',
             'type'=>'info',
            'before'=>
-           Html::submitButton(Yii::t('app', '批量 '), ['class' => 'btn btn-default']).
+           Html::submitButton(Yii::t('app', '批量 '), ['class' => 'btn btn-default','style' => 'margin-right:10px']).
            Html::a('<i class="glyphicon" ></i>对账成功(总额:'.$searchModel->OrderPayStatus(1).')', ['index?FinancePopOrderSearch[finance_pop_order_pay_status_type]=1'], ['class' => 'btn btn-'.$searchModel->defaultcss(1,$statusdeflde).'', 'style' => 'margin-right:10px']) .
 Html::a('<i class="glyphicon" ></i>我有你没 (总额:'.$searchModel->OrderPayStatus(3).')', ['index?FinancePopOrderSearch[finance_pop_order_pay_status_type]=3'], ['class' => 'btn btn-'.$searchModel->defaultcss(3,$statusdeflde).'', 'style' => 'margin-right:10px']) .
 Html::a('<i class="glyphicon" ></i>你有我没 (总额:'.$searchModel->OrderPayStatus(2).')', ['index?FinancePopOrderSearch[finance_pop_order_pay_status_type]=2'], ['class' => 'btn btn-'.$searchModel->defaultcss(2,$statusdeflde).'', 'style' => 'margin-right:10px']) .
