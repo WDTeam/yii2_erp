@@ -5,14 +5,9 @@ namespace core\models;
 use Yii;
 use core\models\WorkerExt;
 use core\models\WorkerRuleConfig;
-<<<<<<< HEAD
 use yii\web\ForbiddenHttpException;
 use boss\models\Shop;
-
-=======
 use yii\web\BadRequestHttpException;
-use boss\models\Shop;
->>>>>>> 6160ec96312f6bc0d07526b8ef6af6b29ce5e62d
 /**
  * This is the model class for table "{{%worker}}".
  *
