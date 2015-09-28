@@ -144,6 +144,14 @@ return [
             'app_key'=>'3037ca7c859cca4c996f7144',
             'master_secret'=>'a064811d7e4596c32d0e6884'
         ],
+        /**
+         * 发短信配置
+         */
+        'sms'=>[
+            'class'=>'common\components\Sms',
+            'userId'=>'J02356',
+            'password'=>'556201',
+        ],
     ],
     'modules' => [
         'datecontrol' =>  [
