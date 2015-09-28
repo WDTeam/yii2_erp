@@ -67,7 +67,17 @@ $this->params['breadcrumbs'][] = $this->title;
      		},
      		'width' => "100px",
      		],
-            'finance_pop_order_pay_title', 
+            //'finance_pop_order_pay_title', 
+            
+     		[
+     		'format' => 'raw',
+     		'label' => '对账状态',
+     		'value' => function ($dataProvider) {
+     			$platform = FinancePopOrderSearch::is_orderstatus($dataProvider->finance_pop_order_pay_status_type);
+     			return $platform;
+     		},
+     		'width' => "100px",
+     		],
 //            'finance_pop_order_check_id', 
 //            'finance_pop_order_finance_time:datetime', 
 //            'create_time:datetime', 
