@@ -14,35 +14,22 @@ use yii\filters\VerbFilter;
  */
 class CustomerTransRecordController extends Controller
 {
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                ],
-            ],
-        ];
-    }
-
-
+    private $success = ['status'=>1,'data'=>'','msg'=>'操作成功'];
+    private $errors = ['status'=>0,'data'=>'','msg'=>'操作失败'];
     /**
      * Creates a new CustomerTransRecord model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function create($data)
     {
         $model = new CustomerTransRecord;
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        $model->attributes = $data;
+        if($model->save() !== null){
+            return $this->success = ['status'=>1,'data'=>'操作成功','msg'=>''];
         }
+        return $this->errors;
+
     }
 
 
