@@ -37,6 +37,7 @@ class AppAsset extends AssetBundle
         'js/searchbox.js',
         'js/bootpage.js',
         'js/custom.js',
+        'js/advert.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',

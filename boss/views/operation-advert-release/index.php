@@ -6,31 +6,37 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Operation Advert Releases';
+$this->title = Yii::t('app', 'Advert Release');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-advert-release-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
-        <?= Html::a('Create Operation Advert Release', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a( Yii::t('app', 'Release Advert'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            [
+                'header' => Yii::t('app', 'Order Number'),
+                'class' => 'yii\grid\SerialColumn'
+            ],
 
-            'id',
-            'operation_advert_position_id',
+//            'id',
+            'operation_city_name',
+            'operation_platform_name',
+            'operation_platform_version_name',
+            
+//            'operation_advert_position_id',
             'operation_advert_position_name:ntext',
-            'operation_advert_content_id',
+//            'operation_advert_content_id',
             'operation_advert_content_name',
-            // 'created_at',
-            // 'updated_at',
+//             'created_at:datetime',
+//             'updated_at:datetime',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'header' => Yii::t('app', 'Operation'),'class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 
