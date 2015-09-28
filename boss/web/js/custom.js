@@ -9,4 +9,35 @@ $(document).ready(function(){
 			$(".sidebar-menu .treeview-menu li a").eq(i).removeClass("active").addClass("active");
 		}
 	}
+
+	(function ($) {
+		$('div, img').slideShow({
+			timeOut: 6000,
+			showNavigation: true,
+			pauseOnHover: true,
+			swipeNavigation: true
+		});
+		//var navbar=$('.navbar')
+		//navbar.animate({top: '-100px'}, function () {
+		//	navbar.hide();
+		//});
+	}(jQuery));
+	$("#list li p i").click(
+		function(){
+			var classname=$(this).attr("class");
+			if(classname=="ckb")
+			{
+				$(this).addClass("cur");
+				$(this).removeClass("ckb");
+			}
+			else
+			{
+				$(this).addClass("ckb");
+				$(this).removeClass("cur");
+			}
+
+
+		}
+	);
 });
+
