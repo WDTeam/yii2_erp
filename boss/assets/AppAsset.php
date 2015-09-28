@@ -24,19 +24,23 @@ class AppAsset extends AssetBundle
         'css/openWin.css',
         'adminlte/css/font-awesome.min.css',
         'css/courseware.css',
-        'css/custom.css'
+        'css/custom.css',
+        //'adminlte/css/login/lrtk.css',
     ];
     public $js = [
+        //'adminlte/js/plugins/login/plugin.js',
         'adminlte/js/AdminLTE/app.js',
 //        'adminlte/js/jquery.min.js',
         'js/interview.js',
         'js/openWin.js',
         'js/cascade.js',
+        'js/searchbox.js',
         'js/bootpage.js',
-        'js/custom.js'
+        'js/custom.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
     ];
+
 }

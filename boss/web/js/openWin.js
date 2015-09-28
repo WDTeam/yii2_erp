@@ -166,6 +166,9 @@ $.win = {
 //        this.status[winId] = 1;
     },
     close:function(obj){
+        if(obj.attr('wId') == '' || obj.attr('wId') == null){
+            obj = $('.closeWin');
+        }
         var wId = obj.attr('wId');
         var o = $('#closeWin_'+wId).parent().parent();
         o.remove();
@@ -285,3 +288,5 @@ $.win = {
         return data;
     }
 }
+
+$(document).on('click', '#CancelWin', function(){$.win.close($(this));});
