@@ -40,7 +40,7 @@ class FinanceSettleApply extends \yii\db\ActiveRecord
     
     const FINANCE_SETTLE_APPLY_STATUS_INIT = 0;//提交结算申请
     
-
+    const FINANCE_SETTLE_APPLY_STATUS_COMPLETED = 4;//财务确认结算；
     
     /**
      * @inheritdoc
