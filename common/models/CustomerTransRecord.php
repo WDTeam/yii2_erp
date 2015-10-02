@@ -297,11 +297,32 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         //当前余额
         $this->customer_trans_record_current_balance = bcsub($lastResult['customer_trans_record_current_balance'],$this->customer_trans_record_online_balance_pay);
         //服务卡之前余额
-        $this->customer_trans_record_online_service_card_befor_balance = $lastResultServiceCard['customer_trans_record_online_service_card_currnet_balance'];
+        $this->customer_trans_record_online_service_card_befor_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'];
         //服务卡当前余额
-        $this->customer_trans_record_online_service_card_current_balance = bcsub($lastResultServiceCard['customer_trans_record_online_service_card_currnet_balance'],$this->customer_trans_record_online_service_card_pay);
-
+        $this->customer_trans_record_online_service_card_current_balance = bcsub($lastResultServiceCard['customer_trans_record_online_service_card_current_balance'],$this->customer_trans_record_online_service_card_pay);
+        $this->validate();
         return $this->save();
+    }
+
+    /**
+     *  充值（服务卡）
+     */
+    private function rechargeServiceCardPay()
+    {
+        //获取最后一次结果
+        $lastResult = $this->lastResult();
+        //获取最后一次服务卡结果
+        $lastResultServiceCard = $this->lastResultServerCard();
+        //之前余额
+        $this->customer_trans_record_befor_balance = $lastResult['customer_trans_record_befor_balance'];
+        //当前余额
+        $this->customer_trans_record_current_balance = $lastResult['customer_trans_record_current_balance'];
+        //服务卡之前余额
+        $this->customer_trans_record_online_service_card_befor_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'];
+        //服务卡当前余额
+        $this->customer_trans_record_online_service_card_current_balance = bcadd($lastResultServiceCard['customer_trans_record_online_service_card_current_balance'],$this->customer_trans_record_online_service_card_pay);
+        $this->validate();
+        return $this->save(false);
     }
     /**
      * 消费
@@ -386,6 +407,7 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
                 'customer_trans_record_online_service_card_on',
                 'customer_trans_record_online_service_card_pay',
                 'customer_trans_record_online_service_card_befor_balance',
+                'customer_trans_record_online_service_card_current_balance',
             ]
         )->where(
             [

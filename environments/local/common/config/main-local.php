@@ -13,7 +13,7 @@ return [
             'dsn' => 'mysql:host=localhost;dbname=local-boss-db',
             'username' => 'root',
             'password' => '',
-            'tablePrefix' => 'et_',
+            'tablePrefix' => 'ejj_',
             'charset' => 'utf8',
             ],
        ],
