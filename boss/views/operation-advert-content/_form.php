@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
+use boss\components\AreaCascade;
 
 /* @var $this yii\web\View */
 /* @var $model boss\models\Operation\OperationAdvertContent */
@@ -10,17 +11,17 @@ use kartik\date\DatePicker;
 ?>
 
 <div class="operation-advert-content-form">
-
     <?php $form = ActiveForm::begin(['options' =>['enctype' => "multipart/form-data"]]); ?>
-
-    <?= $form->field($model, 'operation_advert_position_name')->textInput(['maxlength' => true]) ?>
-    
+    <?= $form->field($model, 'operation_city_id')->dropDownList($cityList, ['maxlength' => true])->label('所属城市') ?>
+    <?= $form->field($model, 'operation_platform_id')->dropDownList($platformList, ['maxlength' => true])->label('所属平台') ?>
+    <?= $form->field($model, 'operation_platform_version_id')->dropDownList($versionList, ['maxlength' => true])->label('所属版本') ?>
+    <?= $form->field($model, 'operation_advert_position_name')->textInput(['maxlength' => true])?>
     <?php
-        echo '<label class="control-label">'.$model->attributeLabels()['operation_advert_start_time'].'</label>';
+//        echo '<label class="control-label">'.$model->attributeLabels()['operation_advert_start_time'].'</label>';
         echo DatePicker::widget([
         'name' => 'OperationAdvertContent[operation_advert_start_time]',
         'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-        'value' => date('Y-m-d', $model->operation_advert_start_time),
+        'value' => !empty($model->operation_advert_start_time) ? date('Y-m-d', $model->operation_advert_start_time) : '',
         'pluginOptions' => [
             'autoclose'=>true,
             'format' => 'yyyy-mm-dd'
@@ -32,7 +33,7 @@ use kartik\date\DatePicker;
         echo DatePicker::widget([
         'name' => 'OperationAdvertContent[operation_advert_end_time]',
         'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-        'value' => date('Y-m-d', $model->operation_advert_end_time),
+        'value' => !empty($model->operation_advert_start_time) ? date('Y-m-d', $model->operation_advert_end_time) : '',
         'pluginOptions' => [
             'autoclose'=>true,
             'format' => 'yyyy-mm-dd'
@@ -44,7 +45,7 @@ use kartik\date\DatePicker;
         echo DatePicker::widget([
         'name' => 'OperationAdvertContent[operation_advert_online_time]',
         'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-        'value' => date('Y-m-d', $model->operation_advert_online_time),
+        'value' => !empty($model->operation_advert_start_time) ? date('Y-m-d', $model->operation_advert_online_time) : '',
         'pluginOptions' => [
             'autoclose'=>true,
             'format' => 'yyyy-mm-dd'
@@ -56,7 +57,7 @@ use kartik\date\DatePicker;
         echo DatePicker::widget([
         'name' => 'OperationAdvertContent[operation_advert_offline_time]',
         'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-        'value' => date('Y-m-d', $model->operation_advert_offline_time),
+        'value' => !empty($model->operation_advert_start_time) ? date('Y-m-d', $model->operation_advert_offline_time) : '',
         'pluginOptions' => [
             'autoclose'=>true,
             'format' => 'yyyy-mm-dd'
@@ -73,6 +74,7 @@ use kartik\date\DatePicker;
     <?php //= $form->field($model, 'operation_advert_offline_time')->textInput() ?>
 
     <?= $form->field($model, 'operation_advert_picture')->fileInput(['maxlength' => true, 'name' => 'operation_advert_picture']) ?>
+    <?php echo Html::hiddenInput('old_operation_advert_picture', $model->operation_advert_picture);?>
     <?= !empty($model->operation_advert_picture) ? '<img src="'.$model->operation_advert_picture.'" style="max-width:300px;max-height:300px;">' : '' ;?>
     <?= $form->field($model, 'operation_advert_url')->textInput(['maxlength' => true, 'value' => empty($model->operation_advert_url) ? 'http://' : $model->operation_advert_url]) ?>
 
