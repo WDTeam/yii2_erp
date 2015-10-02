@@ -10,15 +10,13 @@ use boss\components\SearchBox;
 $this->title = Yii::t('app', 'Advert Content');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<p>
-    <?= Html::a(Yii::t('app', 'Create').Yii::t('app', 'Advert Content'), ['create'], ['class' => 'btn btn-success']) ?>
-</p>
+
 
 <div class="container-fluid">
     <nav class="navbar-default">
         <ul class="nav navbar-nav">
             <?php foreach ((array) $platforms as $k => $v) { ?>
-            <li class="<?php if(!empty($v['version_list'])){?>active<?php }else{ ?> dropdown<?php } ?>">
+            <li class="<?php if($k == 0){?>active<?php }else{ ?> dropdown<?php } ?>">
                 <a href="javascript:void(0);" url="operation-advert-content/index?platform_id=<?php echo $v['id']?>" <?php if(!empty($v['version_list'])){?>class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"<?php } ?>>
                     <?php echo $v['operation_platform_name']?>
                     <?php if(!empty($v['version_list'])){?><span class="caret"></span><?php } ?>
@@ -37,11 +35,11 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <div class="panel panel-default">
     <div class="container-fluid operation-panel">
-        
+        <?= Html::a(Yii::t('app', 'Create').Yii::t('app', 'Advert Content'), ['create'], ['class' => 'btn btn-success']) ?>
         <?=SearchBox::widget([
                     'action' => ['city-advert-position'],
                     'method' => 'POST',
-                    'options' => [],
+                    'options' => ['class' => 'pull-right'],
                     'type' => 'Field',
                     'keyword_value' => isset($params['keyword']) ? $params['keyword'] : '',
                     'keyword_options' => ['placeholder' => '搜索关键字', 'class' => 'form-control'],
@@ -60,7 +58,9 @@ $this->params['breadcrumbs'][] = $this->title;
     //            'id',
                 'operation_advert_position_name',
     //            'operation_city_id',
-    //            'operation_city_name',
+                'operation_city_name',
+//                'operation_platform_name',
+//                'operation_platform_version_name',
     //            'operation_advert_start_time:datetime',
     //             'operation_advert_end_time:datetime',
                  'operation_advert_online_time:date',
