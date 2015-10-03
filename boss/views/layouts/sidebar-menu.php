@@ -244,7 +244,7 @@ echo Menu::widget(
                     ],
                     [
                         'label' => '商品管理(20%)',
-                        'url' => ['/operation-category-type'],
+                        'url' => ['/operation-goods'],
                         'icon' => 'fa fa-angle-right',
                         'visible' => (Yii::$app->user->identity->username == 'admin'),
                     ],
