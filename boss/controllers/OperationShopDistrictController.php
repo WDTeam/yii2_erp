@@ -48,7 +48,7 @@ class OperationShopDistrictController extends BaseAuthController
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => OperationShopDistrict::find(),
+            'query' => OperationShopDistrict::find()->where(['operation_city_id' => $this->city_id]),
         ]);
 
         return $this->render('index', [
