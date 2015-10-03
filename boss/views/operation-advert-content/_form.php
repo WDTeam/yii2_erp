@@ -13,8 +13,12 @@ use boss\components\AreaCascade;
 <div class="operation-advert-content-form">
     <?php $form = ActiveForm::begin(['options' =>['enctype' => "multipart/form-data"]]); ?>
     <?= $form->field($model, 'operation_city_id')->dropDownList($cityList, ['maxlength' => true])->label('所属城市') ?>
-    <?= $form->field($model, 'operation_platform_id')->dropDownList($platformList, ['maxlength' => true])->label('所属平台') ?>
-    <?= $form->field($model, 'operation_platform_version_id')->dropDownList($versionList, ['maxlength' => true])->label('所属版本') ?>
+    <?= $form->field($model, 'operation_platform_id')->checkboxList($platformList, ['maxlength' => true])->label('所属平台') ?>
+    <div class="form-group field-operationadvertcontent-operation_platform_version_id hide">
+        <label class="control-label" for="operationadvertcontent-operation_platform_version_id">平台版本</label>
+        <div id="platformVersion"></div>
+    </div>
+    <?php // $form->field($model, 'operation_platform_version_id')->dropDownList($versionList, ['maxlength' => true])->label('所属版本') ?>
     <?= $form->field($model, 'operation_advert_position_name')->textInput(['maxlength' => true])?>
     <?php
 //        echo '<label class="control-label">'.$model->attributeLabels()['operation_advert_start_time'].'</label>';

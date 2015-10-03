@@ -29,8 +29,8 @@ class OperationAdvertContent extends CoreOperationAdvertContent
     public function rules()
     {
         return [
-            [['operation_city_id', 'operation_advert_start_time', 'operation_advert_end_time', 'operation_advert_online_time', 'operation_advert_offline_time', 'created_at', 'updated_at'], 'integer'],
-            [['operation_advert_position_name', 'operation_city_name'], 'string', 'max' => 60],
+            [['operation_city_id', 'operation_platform_id', 'operation_platform_version_id', 'operation_advert_start_time', 'operation_advert_end_time', 'operation_advert_online_time', 'operation_advert_offline_time', 'created_at', 'updated_at'], 'integer'],
+            [['operation_advert_position_name', 'operation_city_name', 'operation_platform_name', 'operation_platform_version_name'], 'string', 'max' => 60],
             [['operation_advert_picture', 'operation_advert_url'], 'string', 'max' => 255]
         ];
     }
