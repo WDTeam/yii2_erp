@@ -14,5 +14,5 @@
  */
 return [
     'Finance Settle Applies'=>'确认结算',
-
+    'Export'=>'导出',
 ];

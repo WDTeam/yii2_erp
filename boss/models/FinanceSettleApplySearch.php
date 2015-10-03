@@ -85,6 +85,11 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         return $dataProvider;
     }
     
+    public function getWorkerIncomeAndDetail(){
+        FinanceSettleApply::find()->join('left join','finance_worker_non_order_income','');
+    }
+    
+    
     public function getWorkerInfo($workerId){
         $financeSettleApplySearch = new FinanceSettleApplySearch;
         $financeSettleApplySearch->worder_id =1234;
