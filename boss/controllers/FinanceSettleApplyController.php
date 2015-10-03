@@ -1,7 +1,7 @@
 <?php
 
 namespace boss\controllers;
-
+error_reporting(E_ALL);
 use Yii;
 use common\models\FinanceSettleApply;
 use boss\models\FinanceSettleApplySearch;
@@ -60,10 +60,91 @@ class FinanceSettleApplyController extends BaseAuthController
      */
     public function actionQuery()
     {
-        $searchModel = new WorkerSearch;
+        $workerSearchModel = new WorkerSearch;
+        $financeSearchModel = new FinanceSettleApplySearch;
+        $dataProvider = $financeSearchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('query', [
-            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'searchModel' => $workerSearchModel,
         ]);
+    }
+    
+    /**
+     * 导出提交oa系统需要的excel表
+     * 1.动态组装excel标题，例如"通州门店8月全时段家政人员订单费用表"
+     * 2.动态组装表头信息，例如：‘店面’、‘姓名’、‘扣款’，‘阿姨所得’等
+     * 3.写入每个阿姨实时的收入数据
+     * @return type
+     */
+    public function actionExport(){
+        $shopName = "通州门店";
+        $settleMonth = "8月";
+        $workerType = "全时段";
+        $statDes = $shopName.$settleMonth.$workerType.'家政人员订单费用表';
+        
+        $financeSearchModel = new FinanceSettleApplySearch;
+        $financeSearchModel::find();
+        $baseData = array('shop_name'=>'待定','worker_name'=>'待定','worker_idcard'=>'待定','bank_no'=>'待定');
+        //获取当前阿姨所有的补贴id和描述，按id排序
+        $allWorkerSubsidyIdAndDes = [['rule_id'=>'1','rule_des'=>'路补'],['rule_id'=>'2','rule_des'=>'晚补'],['rule_id'=>'3','rule_des'=>'全勤奖']];
+        $sheetColumnLeter = ['E','F','G','H','I','J'];
+        $dynamicSheetHeaders = [];
+        $i = 0;
+        foreach ($allWorkerSubsidyIdAndDes as $workerSubsidyIdAndDes){
+            $dynamicSheetHeaders[$sheetColumnLeter[$i]]=$workerSubsidyIdAndDes['rule_des'];
+            $baseData[$workerSubsidyIdAndDes['rule_id']]=0.00;
+            $i++;
+        }
+        //查询结算申请表与worker表关联查询，之后单独查询非订单收入表，放入一个数组中，与baseData数组做merge操作
+        var_dump($baseData);die;
+        $data=array(
+            0=>array(
+             'id'=>1001,
+             'username'=>'张飞',
+             'password'=>'123456',
+             'address'=>'三国时高老庄250巷101室'
+            ),
+            1=>array(
+             'id'=>1002,
+             'username'=>'关羽',
+             'password'=>'123456',
+             'address'=>'三国时花果山'
+            ),
+           );
+           $objPHPExcel=new \PHPExcel();
+           $objPHPExcel->getProperties()->setCreator('http://www.jb51.net')
+                   ->setLastModifiedBy('http://www.jb51.net')
+                   ->setTitle('Office 2007 XLSX Document')
+                   ->setSubject('Office 2007 XLSX Document')
+                   ->setDescription('Document for Office 2007 XLSX, generated using PHP classes.')
+                   ->setKeywords('office 2007 openxml php')
+                   ->setCategory('Result file');
+           $objPHPExcel->setActiveSheetIndex(0)
+                       ->setCellValue('A1','店面')
+                       ->setCellValue('B1','姓名')
+                       ->setCellValue('C1','身份证号')
+                       ->setCellValue('D1','银行卡号');
+            foreach ($dynamicSheetHeaders as $dynamicSheetHeaderKey => $dynamicSheetHeaderValue){
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue($dynamicSheetHeaderKey.'1',$dynamicSheetHeaderValue);
+            }
+           $i=2;   
+//           foreach($data as $k=>$v){
+//            $objPHPExcel->setActiveSheetIndex(0)
+//                       ->setCellValue('A'.$i,$v['id'])
+//                       ->setCellValue('B'.$i,$v['username'])
+//                       ->setCellValue('C'.$i,$v['password'])
+//                       ->setCellValue('D'.$i,$v['address']);
+//            $i++;
+//           }
+           $objPHPExcel->getActiveSheet()->setTitle('三年级2班');
+           $objPHPExcel->setActiveSheetIndex(0);
+           $filename=urlencode('学生信息统计表').'_'.date('Y-m-dHis');
+           header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
+            header('Cache-Control: max-age=0');
+            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            $objWriter->save('php://output');
+        return null;
     }
     
     /**

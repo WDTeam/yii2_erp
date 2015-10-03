@@ -19,17 +19,59 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="worker-index">
     <div class="panel panel-info">
-    <div class="panel-heading">
-        <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i>结算查询</h3>
-    </div>
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i>结算查询</h3>
+        </div>
 
-    <div class="panel-body">
-        <?php
+        <div class="panel-body">
+            <?php
 
-        echo $this->render('_search', ['model' => $searchModel]);
-        ?>
+            echo $this->render('_search', ['model' => $searchModel]);
+            ?>
 
-    </div>
+        </div>
+        <div class="panel-heading">
+            <h3 class="panel-title">结算列表</h3>
+        </div>
+        <div>
+            
+            <?php Pjax::begin(); echo GridView::widget([
+            'dataProvider' => $dataProvider,
+    //        'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\CheckboxColumn'],
+    //           'worder_id',
+                'worder_tel',
+                'worker_type_name',
+                ['attribute'=>'created_at','content'=>function($model,$key,$index){return Html::a(date('Y:m:d H:i:s',$model->created_at),'#');}],
+                'finance_settle_apply_cycle_des',
+                'finance_settle_apply_money', 
+                'finance_settle_apply_man_hour', 
+                'finance_settle_apply_order_money', 
+                'finance_settle_apply_order_cash_money', 
+                'finance_settle_apply_order_money_except_cash',
+                ['attribute'=>'finance_settle_apply_subsidy',
+                 'content'=>function($model,$key,$index){return '<a class="btn btn-default"  id = "subsidyButton" data-container="body" data-toggle="popover" data-placement="bottom" data-popover-content="'.$model->id.'">'.$model->finance_settle_apply_subsidy.'</a>';}],
+                'finance_settle_apply_reviewer', 
+                ['attribute'=>'updated_at','content'=>function($model,$key,$index){return Html::a(date('Y:m:d H:i:s',$model->updated_at),'#');}],
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                ],
+            ],
+            'responsive'=>true,
+            'hover'=>true,
+            'condensed'=>true,
+            'floatHeader'=>false,
+                        
+             'panel' => [
+            'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
+            'type'=>'info',
+            'before' =>$this->render('_query_links', ['model' => $searchModel]),
+            'after'=>false,
+            'showFooter'=>false
+        ],
+        ]); Pjax::end(); ?>
+        </div>
     </div>
     <p>
     </p>
