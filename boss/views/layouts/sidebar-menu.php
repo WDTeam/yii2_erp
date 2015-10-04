@@ -172,7 +172,7 @@ echo Menu::widget(
                         'visible' => (Yii::$app->user->identity->username == 'admin'),
                     ],
                     [
-                        'label' => 'CMS管理(60%)',
+                        'label' => 'CMS管理(80%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                         'visible' => (Yii::$app->user->identity->username == 'admin'),
