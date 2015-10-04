@@ -237,16 +237,33 @@ echo Menu::widget(
 //                        'visible' => (Yii::$app->user->identity->username == 'admin'),
 //                    ],
                     [
-                        'label' => '服务管理(90%)',
-                        'url' => ['/operation-category'],
-                        'icon' => 'fa fa-angle-right',
-                        'visible' => (Yii::$app->user->identity->username == 'admin'),
-                    ],
-                    [
                         'label' => '商品管理(20%)',
-                        'url' => ['/operation-goods'],
+                        'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                         'visible' => (Yii::$app->user->identity->username == 'admin'),
+                        'options' => [
+                            'class' => 'treeview ',
+                        ],
+                        'items' => [
+                            [
+                                'label' => '商品管理(20%)',
+                                'url' => ['/operation-goods'],
+                                'icon' => 'fa fa-angle-right',
+                                'visible' => (Yii::$app->user->identity->username == 'admin'),
+                            ],
+                            [
+                                'label' => '商品规格管理(20%)',
+                                'url' => ['/operation-price-strategy'],
+                                'icon' => 'fa fa-angle-right',
+                                'visible' => (Yii::$app->user->identity->username == 'admin'),
+                            ],
+                            [
+                                'label' => '服务管理(90%)',
+                                'url' => ['/operation-category'],
+                                'icon' => 'fa fa-angle-right',
+                                'visible' => (Yii::$app->user->identity->username == 'admin'),
+                            ],
+                        ]
                     ],
                     [
                         'label' => '启动页管理(90%)',

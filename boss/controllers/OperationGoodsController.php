@@ -4,6 +4,7 @@ namespace boss\controllers;
 
 use Yii;
 use boss\models\Operation\OperationGoods;
+use boss\models\Operation\OperationPriceStrategy;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -64,6 +65,8 @@ class OperationGoodsController extends Controller
      */
     public function actionCreate()
     {
+        $priceStrategies = OperationPriceStrategy::getAllStrategy();
+
         $model = new OperationGoods;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -71,6 +74,7 @@ class OperationGoodsController extends Controller
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'priceStrategies' => $priceStrategies,
             ]);
         }
     }
@@ -83,6 +87,7 @@ class OperationGoodsController extends Controller
      */
     public function actionUpdate($id)
     {
+        $priceStrategies = OperationPriceStrategy::getAllStrategy();
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -90,6 +95,7 @@ class OperationGoodsController extends Controller
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'priceStrategies' => $priceStrategies,
             ]);
         }
     }

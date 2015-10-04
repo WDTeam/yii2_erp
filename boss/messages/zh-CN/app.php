@@ -137,4 +137,5 @@ return [
     'forget_pwd'=>'忘记密码？',
     'Advert Release' => '广告发布',
     'Release Advert' => '发布广告',
+    'Operation Goods' => '商品管理',
 ];
