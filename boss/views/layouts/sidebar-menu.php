@@ -243,6 +243,12 @@ echo Menu::widget(
                         'visible' => (Yii::$app->user->identity->username == 'admin'),
                     ],
                     [
+                        'label' => '商品管理(20%)',
+                        'url' => ['/operation-goods'],
+                        'icon' => 'fa fa-angle-right',
+                        'visible' => (Yii::$app->user->identity->username == 'admin'),
+                    ],
+                    [
                         'label' => '启动页管理(90%)',
                         'url' => ['/operation-boot-page'],
                         'icon' => 'fa fa-angle-right',

@@ -79,6 +79,10 @@ class OperationCityController extends BaseAuthController
             $p['OperationCity']['city_name'] = $city->area_name;
         }
         if ($model->load($p)) {
+            if(OperationCity::getCityInfo($model->city_id)){
+                $teturn = ['code'=>'80009', 'errmsg'=>'该城市已开通过'];
+                die;
+            }
 //            $path = UploadFile::widget(['fileInputName' => 'file']);
 //            echo $path;exit;
 //            print_r($_FILES);exit;

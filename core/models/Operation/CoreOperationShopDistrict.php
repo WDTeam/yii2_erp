@@ -17,5 +17,7 @@ use common\models\Operation\CommonOperationShopDistrict;
  */
 class CoreOperationShopDistrict extends CommonOperationShopDistrict
 {
+    public static function getCityShopDistrictList($city_id){
 
+    }
 }
