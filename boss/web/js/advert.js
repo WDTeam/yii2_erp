@@ -6,6 +6,30 @@ $('#operationadvertcontent-operation_platform_id > label > input[type=checkbox]'
 $('.platform').click(function(){seachAdvertContent($(this), 'platform');});
 $('.version').click(function(){seachAdvertContent($(this), 'version');});
 $('.platforma').click(function(){selectPlatform($(this));});
+$('.advert-goup').click(function(){adverGoUp($(this));});
+$('.advert-godown').click(function(){adverGoDown($(this));});
+
+function adverGoUp(obj){
+    var o = obj.parent().parent();
+    var p = o.parent();
+    var prev = o.prev();
+    if(prev[0] == null){
+        alert('已经在是第一个了');
+    }else{
+        prev.before(o);
+    }
+}
+
+function adverGoDown(obj){
+    var o = obj.parent().parent();
+    var p = o.parent();
+    var next = o.next();
+    if(next[0] == null){
+        alert('已经在是最后一个了');
+    }else{
+        next.after(o);
+    }
+}
 
 function selectPlatform(obj){
     var o = obj.parent();
