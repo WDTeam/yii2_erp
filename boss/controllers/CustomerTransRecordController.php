@@ -27,14 +27,17 @@ class CustomerTransRecordController extends Controller
         ];
     }
 
+
+
     /**
      * 创建交易记录
      * @param $data 数据
      */
-    public function createRecord($data){
+    public function createRecord($data)
+    {
         //交易记录日志
-        $TransRecordModel = new CustomerTransRecordLog();
-        $TransRecordModel->save(false);
+        //$TransRecordModel = new CustomerTransRecordLog();
+        //$TransRecordModel->insert();exit;
         $model = new CustomerTransRecord();
         //使用场景
         $model->scenario = $data['scenario'];

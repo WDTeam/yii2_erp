@@ -64,13 +64,50 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
     }
 
     /**
+     * 验证数据之前组装数据
+     */
+    public function beforeValidate(){
+        //支付渠道
+        $payChannel = FinancePayChannel::findOne($this->pay_channel_id);
+        //支付渠道名称
+        $this->customer_trans_record_pay_channel = $payChannel->finance_pay_channel_name;
+        //交易方式:1消费,2=充值,3=退款,4=补偿
+        switch($this->customer_trans_record_mode){
+            case 1 :
+                $this->customer_trans_record_mode_name = '消费';
+                break;
+            case 2 :
+                $this->customer_trans_record_mode_name = '充值';
+                break;
+            case 3 :
+                $this->customer_trans_record_mode_name = '退款';
+                break;
+            case 4 :
+                $this->customer_trans_record_mode_name = '补偿';
+                break;
+        }
+        //订单渠道
+        $orderChannel = FinanceOrderChannel::findOne($this->order_channel_id);
+        //订单渠道名称
+        $this->customer_trans_record_order_channel = $orderChannel->finance_order_channel_name;
+
+        return true;
+    }
+
+    /*
+    public function beforeSave($insert){
+        parent::beforeSave(true);
+        file_put_contents('/tmp/1.php','2222');
+    }
+*/
+    /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
             [['customer_id', 'customer_trans_record_order_channel', 'pay_channel_id', 'customer_trans_record_pay_channel', 'customer_trans_record_mode_name', 'customer_trans_record_refund_money', 'customer_trans_record_verify'], 'required'],
-            [['customer_id', 'order_id', 'order_channel_id', 'customer_trans_record_order_channel', 'pay_channel_id', 'customer_trans_record_pay_channel', 'customer_trans_record_mode', 'customer_trans_record_mode_name', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['customer_id', 'order_id', 'order_channel_id',  'pay_channel_id', 'customer_trans_record_mode',  'created_at', 'updated_at', 'is_del'], 'integer'],
             [['customer_trans_record_promo_code_money', 'customer_trans_record_coupon_money', 'customer_trans_record_cash', 'customer_trans_record_pre_pay', 'customer_trans_record_online_pay', 'customer_trans_record_online_balance_pay', 'customer_trans_record_online_service_card_pay','customer_trans_record_online_service_card_current_balance','customer_trans_record_online_service_card_befor_balance', 'customer_trans_record_refund_money', 'customer_trans_record_money', 'customer_trans_record_order_total_money', 'customer_trans_record_total_money', 'customer_trans_record_current_balance', 'customer_trans_record_befor_balance','customer_trans_record_compensate_money'], 'number'],
             [['customer_trans_record_online_service_card_on'], 'string', 'max' => 30],
             [['customer_trans_record_transaction_id'], 'string', 'max' => 40],
@@ -288,18 +325,6 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
      */
     private function onlinePay()
     {
-        //获取最后一次结果
-        $lastResult = $this->lastResult();
-        //获取最后一次服务卡结果
-        $lastResultServiceCard = $this->lastResultServerCard();
-        //之前余额
-        $this->customer_trans_record_befor_balance = $lastResult['customer_trans_record_current_balance'];
-        //当前余额
-        $this->customer_trans_record_current_balance = bcsub($lastResult['customer_trans_record_current_balance'],$this->customer_trans_record_online_balance_pay);
-        //服务卡之前余额
-        $this->customer_trans_record_online_service_card_befor_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'];
-        //服务卡当前余额
-        $this->customer_trans_record_online_service_card_current_balance = bcsub($lastResultServiceCard['customer_trans_record_online_service_card_current_balance'],$this->customer_trans_record_online_service_card_pay);
         $this->validate();
         return $this->save();
     }
@@ -314,15 +339,19 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         //获取最后一次服务卡结果
         $lastResultServiceCard = $this->lastResultServerCard();
         //之前余额
-        $this->customer_trans_record_befor_balance = $lastResult['customer_trans_record_befor_balance'];
+        $this->customer_trans_record_befor_balance = $lastResult['customer_trans_record_befor_balance'] ? $lastResult['customer_trans_record_befor_balance'] : 0;
         //当前余额
-        $this->customer_trans_record_current_balance = $lastResult['customer_trans_record_current_balance'];
+        $this->customer_trans_record_current_balance = $lastResult['customer_trans_record_current_balance'] ? $lastResult['customer_trans_record_current_balance'] : 0;
         //服务卡之前余额
-        $this->customer_trans_record_online_service_card_befor_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'];
+        $this->customer_trans_record_online_service_card_befor_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] ? $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] : 0;
         //服务卡当前余额
         $this->customer_trans_record_online_service_card_current_balance = bcadd($lastResultServiceCard['customer_trans_record_online_service_card_current_balance'],$this->customer_trans_record_online_service_card_pay);
-        $this->validate();
-        return $this->save(false);
+
+        if($this->insert()){
+            return true;
+        }else{
+            return false;
+        }
     }
     /**
      * 消费
