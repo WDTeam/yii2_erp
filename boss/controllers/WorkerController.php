@@ -42,7 +42,7 @@ class WorkerController extends BaseAuthController
     {
         if(Yii::$app->request->get('getData')==1){
             $this->actionGetDataFromOldDataBase();
-            header('worker/index?getData');
+            $this->redirect(['worker/index']);
         }
         $searchModel = new WorkerSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
@@ -267,12 +267,12 @@ class WorkerController extends BaseAuthController
         $operationArea = new Operation\OperationArea();
 
         $connectionNew =  \Yii::$app->db;
-        $command = $connectionNew->createCommand('select id from ejj_worker ORDER by id desc limit 1');
+        $command = $connectionNew->createCommand('select id from ejj_worker ORDER by id asc limit 1');
         $lastWorkerArr = $command->queryAll();
         if($lastWorkerArr){
             $lastWorkerId = $lastWorkerArr[0]['id'];
         }else{
-            $lastWorkerId = 0;
+            $lastWorkerId = 99999;
         }
 
         $connection = new \yii\db\Connection([
@@ -281,7 +281,7 @@ class WorkerController extends BaseAuthController
             'password' => 'test_sq_ejiajie',
         ]);
         $connection->open();
-        $command = $connection->createCommand("SELECT * FROM worker_info where id>$lastWorkerId order by id asc limit 40");
+        $command = $connection->createCommand("SELECT * FROM worker_info where id<$lastWorkerId order by id desc limit 40");
         $workerInfo = $command->queryAll();
         $cityConfigArr=['北京'=>110100,'上海'=>310100,'广州'=>440100,'深圳'=>440300,'成都'=>510100,'南京'=>320100,'合肥'=>340100,'武汉'=>420100,'杭州'=>330100,'哈尔滨'=>230100,'青岛'=>370200,'太原'=>140100,'天津'=>120100,'长沙'=>430100,'沈阳'=>210100,'济南'=>370100,'石家庄'=>130100];
 
