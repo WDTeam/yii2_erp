@@ -23,7 +23,7 @@ class m151003_121000_create_table_operation_goods extends Migration
             'operation_goods_start_time' => Schema::TYPE_STRING . '(20) DEFAULT NULL COMMENT \'开始服务时间即开始时间\'',
             'operation_goods_end_time' => Schema::TYPE_STRING . '(20) DEFAULT NULL COMMENT \'结束服务时间即结束时间\'',
             'operation_goods_service_time_slot' => Schema::TYPE_TEXT . ' DEFAULT NULL COMMENT \'可服务时间段（序列化方式存储）\'',
-            'operation_goods_service_interval_time' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'服务间隔时间(单位：秒)\'',
+            'operation_goods_service_interval_time' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'服务间隔时间(单位：分钟)\'',
 
             'operation_price_strategy_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'价格策略编号\'',
             'operation_price_strategy_name' => Schema::TYPE_STRING . '(60) DEFAULT NULL COMMENT \'价格策略名称\'',
