@@ -10,11 +10,11 @@ class m150919_062638_create_table_finance_pop_order_log extends Migration
  public function up()
     {
     	if ($this->db->driverName === 'mysql') {
-    		
+
 			$tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'第三方订单号日志表\'';
-   
+
 			}
-    
+
 			$this->createTable('{{%finance_pop_order_log}}', [
   'id' => Schema::TYPE_PK . '(10) AUTO_INCREMENT COMMENT \'主键\'' ,
   'finance_pay_order_num' => Schema::TYPE_STRING . '(40) DEFAULT NULL COMMENT \'官方系统订单号\'' ,
@@ -34,7 +34,7 @@ class m150919_062638_create_table_finance_pop_order_log extends Migration
     {
           $this->dropTable('{{%finance_pop_order_log}}');
 
-        return false;
+        return true;
     }
 
 

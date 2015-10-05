@@ -42,9 +42,9 @@ class m150918_141440_create_table_finance_invoice extends Migration
     {
           $this->dropTable('{{%finance_invoice}}');
 
-        return false;
+        return true;
     }
-    	
+
     /*
     // Use safeUp/safeDown to run migration code within a transaction
     public function safeUp()

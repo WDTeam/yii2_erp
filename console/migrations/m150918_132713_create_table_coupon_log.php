@@ -27,6 +27,8 @@ class m150918_132713_create_table_coupon_log extends Migration
     public function down()
     {
         $this->dropTable('{{%coupon_log}}');
+
+        return true;
     }
 
     /*

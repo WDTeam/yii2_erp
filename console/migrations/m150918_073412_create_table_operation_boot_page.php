@@ -26,6 +26,7 @@ class m150918_073412_create_table_operation_boot_page extends Migration
 
     public function down(){
         $this->dropTable('{{%operation_boot_page}}');
+        return true;
     }
 
     /*

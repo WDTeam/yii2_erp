@@ -23,7 +23,9 @@ class m150921_101649_create_table_worker_block_log extends Migration
 
     public function down()
     {
-        $this->dropTable('worker_block_operate_log');
+        $this->dropTable('{{%worker_block_log}}');
+
+        return true;
     }
 
     /*

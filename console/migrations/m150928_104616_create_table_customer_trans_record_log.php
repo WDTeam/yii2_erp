@@ -51,5 +51,7 @@ class m150928_104616_create_table_customer_trans_record_log extends Migration
     public function down()
     {
         $this->dropTable('{{%customer_trans_record_log}}');
+
+        return true;
     }
 }

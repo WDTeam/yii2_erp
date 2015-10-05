@@ -41,7 +41,7 @@ class m150918_135715_create_table_finance_pay_channel extends Migration
     {
           $this->dropTable('{{%finance_pay_channel}}');
 
-        return false;
+        return true;
     }
 
     /*

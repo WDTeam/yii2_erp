@@ -25,6 +25,8 @@ class m150918_132740_create_table_score_log extends Migration
     public function down()
     {
         $this->dropTable('{{%score_log}}');
+
+        return true;
     }
 
     /*

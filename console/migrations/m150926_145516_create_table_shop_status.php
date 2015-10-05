@@ -23,5 +23,7 @@ class m150926_145516_create_table_shop_status extends Migration
     public function safeDown()
     {
         $this->dropTable('{{%shop_status}}');
+
+        return true;
     }
 }

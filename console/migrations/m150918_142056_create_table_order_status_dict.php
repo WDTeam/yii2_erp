@@ -49,6 +49,8 @@ class m150918_142056_create_table_order_status_dict extends Migration
     public function down()
     {
         $this->dropTable('{{%order_status_dict}}');
+
+        return true;
     }
 
     /*

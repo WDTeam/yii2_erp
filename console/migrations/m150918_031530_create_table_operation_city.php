@@ -26,6 +26,8 @@ class m150918_031530_create_table_operation_city extends Migration
     public function down()
     {
         $this->dropTable('{{%operation_city}}');
+
+        return true;
     }
 
     /*

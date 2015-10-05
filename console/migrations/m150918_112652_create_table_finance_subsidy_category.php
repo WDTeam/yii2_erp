@@ -25,6 +25,8 @@ class m150918_112652_create_table_finance_subsidy_category extends Migration
     public function down()
     {
         $this->dropTable('{{%finance_subsidy_category}}');
+
+        return true;
     }
 
     /*
