@@ -46,7 +46,7 @@ class OperationGoods extends CoreOperationGoods
             [['operation_goods_price', 'operation_goods_balance_price', 'operation_goods_additional_cost', 'operation_goods_lowest_consume', 'operation_goods_market_price'], 'number'],
             [['operation_goods_name', 'operation_category_name', 'operation_goods_english_name', 'operation_price_strategy_name'], 'string', 'max' => 60],
             [['operation_category_ids'], 'string', 'max' => 100],
-            [['operation_goods_start_time', 'operation_goods_end_time'], 'string', 'max' => 20]
+            [['operation_goods_start_time', 'operation_goods_end_time'], 'string', 'max' => 20],
         ];
     }
 
@@ -58,8 +58,9 @@ class OperationGoods extends CoreOperationGoods
         return [
             'id' => Yii::t('app', '编号'),
             'operation_goods_name' => Yii::t('app', '商品名称'),
+
             'operation_category_id' => Yii::t('app', '对应服务品类编号（所属分类编号冗余）'),
-            'operation_category_ids' => Yii::t('app', '对应服务品类的所有编号以“,”关联'),
+            'operation_category_ids' => Yii::t('app', '服务品类'),
             'operation_category_name' => Yii::t('app', '对应服务品类名称（所属分类名称冗余）'),
             'operation_goods_introduction' => Yii::t('app', '服务类型简介'),
             'operation_goods_english_name' => Yii::t('app', '服务类型英文名称'),

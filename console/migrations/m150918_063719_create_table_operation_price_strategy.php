@@ -13,6 +13,9 @@ class m150918_063719_create_table_operation_price_strategy extends Migration
         }
         $this->createTable('{{%operation_price_strategy}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT COMMENT \'编号\'' ,
+            'operation_category_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'对应服务品类编号（所属分类编号冗余）\'',
+            'operation_category_ids' => Schema::TYPE_STRING . '(255) DEFAULT NULL COMMENT \'对应服务品类的所有编号以“,”关联\'',
+            'operation_category_name' => Schema::TYPE_STRING . '(60) DEFAULT NULL COMMENT \'对应服务品类名称（所属分类名称冗余）\'',
             'operation_price_strategy_name' => Schema::TYPE_STRING . '(30) DEFAULT NULL COMMENT \'价格策略名称\'',
             'operation_price_strategy_unit' => Schema::TYPE_STRING . '(30) DEFAULT NULL COMMENT \'计量单位名称\'',
             'operation_price_strategy_lowest_consume_unit' => Schema::TYPE_STRING . '(30) DEFAULT NULL COMMENT \'最低消费计量单位\'',

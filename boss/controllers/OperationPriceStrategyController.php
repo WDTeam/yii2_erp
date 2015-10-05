@@ -4,6 +4,7 @@ namespace boss\controllers;
 
 use Yii;
 use boss\models\Operation\OperationPriceStrategy;
+use boss\models\Operation\OperationCategory;
 use yii\data\ActiveDataProvider;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
@@ -61,8 +62,11 @@ class OperationPriceStrategyController extends BaseAuthController
     public function actionCreate()
     {
         $model = new OperationPriceStrategy();
-
-        if ($model->load(Yii::$app->request->post())) {
+        $post = Yii::$app->request->post();
+        if ($model->load($post)) {
+            $model->operation_category_id = end($post['OperationPriceStrategy']['operation_category_ids']);
+            $model->operation_category_name = OperationCategory::getCategoryName($model->operation_category_id);
+            $model->operation_category_ids = implode(',', $post['OperationPriceStrategy']['operation_category_ids']);
             $model->created_at = time();
             $model->updated_at = time();
             $model->save();
@@ -83,8 +87,11 @@ class OperationPriceStrategyController extends BaseAuthController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post())) {
+        $post = Yii::$app->request->post();
+        if ($model->load($post)) {
+            $model->operation_category_id = end($post['OperationPriceStrategy']['operation_category_ids']);
+            $model->operation_category_name = OperationCategory::getCategoryName($model->operation_category_id);
+            $model->operation_category_ids = implode(',', $post['OperationPriceStrategy']['operation_category_ids']);
             $model->updated_at = time();
             $model->save();
             return $this->redirect(['index']);
