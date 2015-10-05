@@ -24,14 +24,20 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
 //            'id',
-            'operation_city_name',
+//            'operation_city_name',
             'operation_platform_name',
             'operation_platform_version_name',
             
 //            'operation_advert_position_id',
-            'operation_advert_position_name:ntext',
+            'operation_advert_position_name',
 //            'operation_advert_content_id',
-            'operation_advert_content_name',
+//            [
+//                'attribute' => 'operation_advert_contents',
+//                'format'=>'html',
+//                'value' => function ($model){
+//                    return $model->operation_advert_contents;
+//                }
+//            ],
 //             'created_at:datetime',
 //             'updated_at:datetime',
 

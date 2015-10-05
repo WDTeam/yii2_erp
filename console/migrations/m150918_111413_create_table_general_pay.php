@@ -49,7 +49,7 @@ class m150918_111413_create_table_general_pay extends Migration
     public function down()
     {
         $this->dropTable("{{%general_pay}}");
-        return false;
+        return true;
     }
 
     /*

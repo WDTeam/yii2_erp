@@ -25,6 +25,8 @@ class m150924_053256_create_table_customer_code extends Migration
     public function down()
     {
         $this->dropTable('{{%customer_code}}');
+
+        return true;
     }
 
     /*

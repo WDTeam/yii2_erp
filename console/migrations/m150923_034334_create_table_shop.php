@@ -34,14 +34,14 @@ class m150923_034334_create_table_shop extends Migration
               `is_deleted` tinyint(1) DEFAULT NULL COMMENT '是否删除',
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            
+
         ")->execute();
     }
 
     public function down()
     {
         $this->dropTable('{{%shop}}');
-        return false;
+        return true;
     }
 
     /*

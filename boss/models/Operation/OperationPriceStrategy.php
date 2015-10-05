@@ -32,6 +32,7 @@ class OperationPriceStrategy extends CoreOperationPriceStrategy
         return [
 //            [['created_at', 'updated_at'], 'integer'],
             [['operation_price_strategy_name', 'operation_price_strategy_unit', 'operation_price_strategy_lowest_consume_unit'], 'required']
+            
         ];
     }
 

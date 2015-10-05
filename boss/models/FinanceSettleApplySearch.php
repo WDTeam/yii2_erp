@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\FinanceSettleApply;
+use common\models\Worker;
 
 /**
  * FinanceSettleApplySearch represents the model behind the search form about `common\models\FinanceSettleApply`.
@@ -84,6 +85,18 @@ class FinanceSettleApplySearch extends FinanceSettleApply
 
         return $dataProvider;
     }
+    
+    public function getWorkerIncomeAndDetail(){
+        $query = new \yii\db\Query();
+        $workerIncomeAndDetail = $query->select(['shop.name as shop_name', 'worker.worker_name', 'worker.worker_idcard', 'workerext.worker_bank_card','settleapply.worder_id','settleapply.id as settleApplyId', 'worker.id'])
+              ->from('{{%finance_settle_apply}} as settleapply')
+              ->innerJoin('{{%worker}} as worker','settleapply.worder_id = worker.id')
+              ->innerJoin('{{%shop}} as shop','shop.id = worker.shop_id')
+              ->innerJoin('{{%worker_ext}} as workerext','workerext.worker_id=settleapply.worder_id')
+              ->all();
+        return $workerIncomeAndDetail;
+    }
+    
     
     public function getWorkerInfo($workerId){
         $financeSettleApplySearch = new FinanceSettleApplySearch;

@@ -29,6 +29,9 @@ class m150918_132943_create_table_customer_channal extends Migration
 
     public function down()
     {
+        // 在删除表前，需要删除配置的数据
         $this->dropTable('{{%customer_channal}}');
+
+        return true;
     }
 }

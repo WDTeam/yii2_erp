@@ -24,6 +24,8 @@ class m150918_102439_create_table_operation_tag extends Migration
     public function down()
     {
         $this->dropTable('{{%operation_tag}}');
+
+        return true;
     }
 
     /*

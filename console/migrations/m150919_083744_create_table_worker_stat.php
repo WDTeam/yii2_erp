@@ -24,7 +24,9 @@ class m150919_083744_create_table_worker_stat extends Migration
 
     public function down()
     {
-        $this->dropTable('ejj_worker_stat');
+        $this->dropTable('{{%worker_stat}}');
+
+        return true;
     }
 
     /*

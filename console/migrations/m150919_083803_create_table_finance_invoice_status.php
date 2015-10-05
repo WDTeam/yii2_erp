@@ -9,11 +9,11 @@ class m150919_083803_create_table_finance_invoice_status extends Migration
     {
 
     if ($this->db->driverName === 'mysql') {
-    		
+
 			$tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'发票状态表\'';
-   
+
 			}
-    
+
 			$this->createTable('{{%finance_invoice_status}}', [
 		  'id' => Schema::TYPE_PK . '(10) AUTO_INCREMENT COMMENT \'主键\'' ,
 		  'invoice_status_is_apply' => Schema::TYPE_SMALLINT . '(1) DEFAULT \'0\' COMMENT \'是否开发票 0 不可以 1 已开\'' ,
@@ -39,7 +39,7 @@ class m150919_083803_create_table_finance_invoice_status extends Migration
     {
           $this->dropTable('{{%finance_invoice_status}}');
 
-        return false;
+        return true;
     }
 
 

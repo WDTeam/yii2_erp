@@ -16,7 +16,7 @@ use core\models\Operation\CoreOperationShopDistrict;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationShopDistrict extends \yii\db\ActiveRecord
+class OperationShopDistrict extends CoreOperationShopDistrict
 {
     /**
      * @inheritdoc

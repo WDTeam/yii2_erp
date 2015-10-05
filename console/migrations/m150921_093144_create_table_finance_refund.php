@@ -11,7 +11,7 @@ class m150921_093144_create_table_finance_refund extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'退款管理\'';
         }
         $this->createTable('{{%finance_refund}}' , [
-  'id' => Schema::TYPE_PK .' AUTO_INCREMENT COMMENT \'主键id\'' ,	
+  'id' => Schema::TYPE_PK .' AUTO_INCREMENT COMMENT \'主键id\'' ,
   'finance_refund_tel' => Schema::TYPE_STRING . '(20)  NOT NULL COMMENT \'用户电话\'' ,
   'finance_refund_money' => Schema::TYPE_DECIMAL. '(8,2) DEFAULT NULL COMMENT \'退款金额\'' ,
   'finance_refund_stype' => Schema::TYPE_SMALLINT. '(2) NOT NULL COMMENT \'申请方式\'' ,
@@ -33,6 +33,8 @@ class m150921_093144_create_table_finance_refund extends Migration
     public function down()
     {
         $this->dropTable('{{%finance_refund}}');
+
+        return true;
     }
 
     /*

@@ -7,7 +7,7 @@ class m150921_083138_create_table_finance_compensate extends Migration
 {
      public function up()
     {
-    
+
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'赔偿管理\'';
         }
@@ -39,6 +39,8 @@ class m150921_083138_create_table_finance_compensate extends Migration
     public function down()
     {
         $this->dropTable('{{%finance_compensate}}');
+
+        return true;
     }
 
     /*

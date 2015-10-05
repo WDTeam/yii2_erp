@@ -29,12 +29,12 @@ class m150918_154702_create_table_customer_comment extends Migration
         $this->createIndex('order_id','{{%customer_comment}}','order_id');
 
     }
-    
+
 
     public function down()
     {
         $this->dropTable("{{%customer_comment}}");
-        return false;
+        return true;
     }
 
     /*

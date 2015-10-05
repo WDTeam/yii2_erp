@@ -39,6 +39,8 @@ class m150921_115002_create_table_finance_worker_non_order_income extends Migrat
     public function down()
     {
         $this->dropTable('{{%finance_worker_non_order_income}}');
+
+        return true;
     }
 
     /*

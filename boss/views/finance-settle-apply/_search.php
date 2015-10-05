@@ -55,8 +55,45 @@ $url = \yii\helpers\Url::to(['show-shop']);
         ]); ?>
     </div>
     <div class='col-md-2'>
-        <?= $form->field($model, 'worker_name') ?>
+        <?= $form->field($model, 'worker_type')->radioList(['1' => '自有', '2' => '非自有'], ['inline' => true]); ?>
     </div>
+    <div class='col-md-2'>
+        <?= $form->field($model, 'worker_rule_id')->widget(Select2::classname(), [
+                'name' => 'worker_rule_id',
+                'hideSearch' => true,
+                'data' => [1 => '全职', 2 => '兼职', 3 => '时段', 4 => '高峰'],
+                'options' => ['placeholder' => '选择阿姨身份'],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ]); ?>
+    </div>
+    <div class='col-md-2'>
+    <?php echo  $form->field($model, 'created_ad')->widget(DatePicker::classname(),[
+        'name' => 'create_time',
+        'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+        'value' => date('Y-m-d', $model->created_ad),
+        'pluginOptions' => [
+            'autoclose'=>true,
+            'format' => 'yyyy-mm-dd'
+        ]
+    ]);
+    
+    ?>
+  </div>  
+    <div class='col-md-2'>
+    <?php echo  $form->field($model, 'updated_ad')->widget(DatePicker::classname(),[
+        'name' => 'create_time',
+        'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+        'value' => date('Y-m-d', $model->updated_ad),
+        'pluginOptions' => [
+            'autoclose'=>true,
+            'format' => 'yyyy-mm-dd'
+        ]
+    ]);
+    
+    ?>
+  </div> 
     <div class='col-md-2'>
         <?= $form->field($model, 'worker_phone') ?>
     </div>
@@ -65,6 +102,7 @@ $url = \yii\helpers\Url::to(['show-shop']);
     <div class='col-md-2' style="margin-top: 22px;">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
+        <?= Html::submitButton(Yii::t('finance', 'Export'), ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

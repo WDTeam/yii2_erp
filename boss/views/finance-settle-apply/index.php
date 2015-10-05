@@ -3,8 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
-use yii\bootstrap\Modal;
-
+use boss\models\FinanceWorkerNonOrderIncomeSearch;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -93,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'finance_settle_apply_order_cash_money', 
                 'finance_settle_apply_order_money_except_cash',
                 ['attribute'=>'finance_settle_apply_subsidy',
-                 'content'=>function($model,$key,$index){return '<a class="btn btn-default"  id = "subsidyButton" data-container="body" data-toggle="popover" data-placement="bottom" data-popover-content="'.$model->id.'">'.$model->finance_settle_apply_subsidy.'</a>';}],
+                 'content'=>function($model,$key,$index){return '<a class="btn btn-default"  id = "subsidyButton" data-container="body" data-toggle="popover" data-placement="bottom" data-content="'.FinanceWorkerNonOrderIncomeSearch::getSubsidyDetail($model->id).'">'.$model->finance_settle_apply_subsidy.'</a>';}],
                 'finance_settle_apply_reviewer', 
                 ['attribute'=>'updated_at','content'=>function($model,$key,$index){return Html::a(date('Y:m:d H:i:s',$model->updated_at),'#');}],
                 [
@@ -111,11 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div id="popover_content_wrapper" style="display: none;width:800px;">路补:10     |晚补:10    |扑空补:0|路补:10     |晚补:10    |扑空补:0|路补:10     |晚补:10    |扑空补:0路补:10 </div>
 <script>
 $(function () {
-    $('[data-toggle="popover"]').popover({  html : true, 
-        content: function() {
-          var settleApplyId = $(this).attr("data-popover-content");
-          return $('#popover_content_wrapper').html();
-        } });
+    $('[data-toggle="popover"]').popover();
 });
 </script>
 </form>
