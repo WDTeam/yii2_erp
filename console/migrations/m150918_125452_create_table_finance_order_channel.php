@@ -55,7 +55,7 @@ class m150918_125452_create_table_finance_order_channel extends Migration
     {
         $this->dropTable('{{%finance_order_channel}}');
 
-        return false;
+        return true;
     }
 
     /*

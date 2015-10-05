@@ -40,7 +40,7 @@ class m140506_102106_rbac_init extends \yii\db\Migration
             // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
- 
+
         $this->createTable('{{%auth_rule}}', [
             'name' => $this->string(64)->notNull(),
             'data' => $this->text(),
@@ -88,5 +88,7 @@ class m140506_102106_rbac_init extends \yii\db\Migration
         $this->dropTable('{{%auth_item_child}}');
         $this->dropTable('{{%auth_item}}');
         $this->dropTable('{{%auth_rule}}');
+
+        return true;
     }
 }

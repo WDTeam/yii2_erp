@@ -11,7 +11,7 @@ class m150921_092649_create_table_finance_proportion extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'第三方比例表\'';
         }
         $this->createTable('{{%finance_proportion}}', [
-  'id' => Schema::TYPE_PK .' AUTO_INCREMENT COMMENT \'主键id\'' ,		
+  'id' => Schema::TYPE_PK .' AUTO_INCREMENT COMMENT \'主键id\'' ,
   'finance_proportion_period' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'周期\'' ,
   'finance_pay_channel_id' => Schema::TYPE_SMALLINT. '(2) DEFAULT NULL COMMENT \'支付渠道\'' ,
   'finance_pay_channel_name' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'渠道名称\'' ,
@@ -27,6 +27,8 @@ class m150921_092649_create_table_finance_proportion extends Migration
     public function down()
     {
         $this->dropTable('{{%finance_proportion}}');
+
+        return true;
     }
     /*
     // Use safeUp/safeDown to run migration code within a transaction

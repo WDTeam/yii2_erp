@@ -83,4 +83,10 @@ class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
         }
         return $detail;
     }
+    
+    public function getNonOrderIncomeBySettleApplyId($settleApplyId){
+        $nonOrderIncomeArr =  FinanceWorkerNonOrderIncome::find()->select(['finance_worker_non_order_income_type','finance_worker_non_order_income'])
+                 ->where(['finance_settle_apply_id'=>$settleApplyId])->all();
+        return $nonOrderIncomeArr;
+    }
 }

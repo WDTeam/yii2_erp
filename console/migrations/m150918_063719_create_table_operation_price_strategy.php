@@ -27,6 +27,8 @@ class m150918_063719_create_table_operation_price_strategy extends Migration
     public function down()
     {
         $this->dropTable('{{%operation_price_strategy}}');
+
+        return true;
     }
 
     /*

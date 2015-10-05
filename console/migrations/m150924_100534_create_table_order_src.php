@@ -35,6 +35,8 @@ class m150924_100534_create_table_order_src extends Migration
     public function down()
     {
         $this->dropTable('{{%order_src}}');
+
+        return true;
     }
 
     /*

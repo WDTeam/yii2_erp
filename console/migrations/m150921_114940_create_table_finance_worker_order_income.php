@@ -27,12 +27,13 @@ class m150921_114940_create_table_finance_worker_order_income extends Migration
             'updated_at' => Schema::TYPE_INTEGER . '(11)  COMMENT \'结算时间\'',
             'created_at' => Schema::TYPE_INTEGER. '(11) COMMENT \'创建时间\'',
         ], $tableOptions);
-        
+
     }
 
     public function down()
     {
         $this->dropTable('{{%finance_worker_order_income}}');
+        return true;
     }
 
     /*

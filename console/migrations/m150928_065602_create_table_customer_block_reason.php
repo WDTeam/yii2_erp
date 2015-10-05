@@ -23,5 +23,7 @@ class m150928_065602_create_table_customer_block_reason extends Migration
     public function down()
     {
         $this->dropTable('{{%customer_block_reason}}');
+
+        return true;
     }
 }

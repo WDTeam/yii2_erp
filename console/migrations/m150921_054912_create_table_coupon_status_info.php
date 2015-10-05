@@ -26,6 +26,8 @@ class m150921_054912_create_table_coupon_status_info extends Migration
     public function down()
     {
         $this->dropTable('{{%coupon_status_info}}');
+
+        return true;
     }
 
     /*

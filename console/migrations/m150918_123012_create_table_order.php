@@ -13,7 +13,7 @@ class m150918_123012_create_table_order extends Migration
             $tableOptions ='CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'订单表\'';
         }
 
-        
+
         $this->createTable('{{%order}}', [
             'id'=> Schema::TYPE_BIGPK .' NOT NULL AUTO_INCREMENT COMMENT \'编号\'',
             'order_code' => Schema::TYPE_STRING.'(64) NOT NULL DEFAULT \'\' COMMENT \'订单号\'',
@@ -93,6 +93,8 @@ class m150918_123012_create_table_order extends Migration
     public function down()
     {
         $this->dropTable('{{%order}}');
+
+        return true;
     }
 
     /*
