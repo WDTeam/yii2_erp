@@ -50,7 +50,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'operation_goods_market_price',
             'operation_tags:ntext',
             'operation_goods_app_ico:ntext',
-            'operation_goods_type_pc_ico:ntext',
             'created_at',
             'updated_at',
         ],

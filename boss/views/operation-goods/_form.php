@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
+use dosamigos\datetimepicker\DateTimePicker;
+use boss\components\GoodsTypeCascade;
 
 /**
  * @var yii\web\View $this
@@ -14,7 +16,15 @@ use kartik\datecontrol\DateControl;
 
 <div class="operation-goods-form">
 
-    <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); echo Form::widget([
+    <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL, 'options' => ['enctype' => 'multipart/form-data']]); ?>
+    <?php
+        echo GoodsTypeCascade::widget([
+            'model' => $model,
+            'options' => ['class' => 'form-control'],
+            'name' => 'OperationGoods[operation_category_ids][]',
+        ]);
+    ?>
+    <?php echo Form::widget([
 
     'model' => $model,
     'form' => $form,
@@ -22,7 +32,7 @@ use kartik\datecontrol\DateControl;
     'attributes' => [
         'operation_goods_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'商品名称...', 'maxlength'=>60]],
 
-        'operation_category_ids'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 对应服务品类名称']],
+//        'operation_category_ids'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 对应服务品类名称']],
 
 
         'operation_goods_introduction'=>['type'=> Form::INPUT_TEXTAREA, 'options'=>['placeholder'=>'Enter 服务类型简介...','rows'=> 6]],
@@ -32,13 +42,118 @@ use kartik\datecontrol\DateControl;
 
         'operation_goods_english_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 服务类型英文名称...', 'maxlength'=>60]],
 
-        'operation_goods_start_time'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 开始服务时间即开始时间...', 'maxlength'=>20]],
-
-        'operation_goods_end_time'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 结束服务时间即结束时间...', 'maxlength'=>20]],
 
         ]]); ?>
-
+        <?= $form->field($model, 'operation_goods_start_time')->widget(DateTimePicker::className(), [
+            'language' => 'es',
+            'size' => 'ms',
+            'template' => '{input}',
+            'pickButtonIcon' => 'glyphicon glyphicon-time',
+            'inline' => true,
+            'clientOptions' => [
+                'startView' => 1,
+                'minView' => 0,
+                'maxView' => 1,
+                'autoclose' => true,
+                'linkFormat' => 'HH:ii', // if inline = true
+                // 'format' => 'HH:ii P', // if inline = false
+                'todayBtn' => true
+            ]
+        ]);?>
+        <?= $form->field($model, 'operation_goods_end_time')->widget(DateTimePicker::className(), [
+            'language' => 'es',
+            'size' => 'ms',
+            'template' => '{input}',
+            'pickButtonIcon' => 'glyphicon glyphicon-time',
+            'inline' => true,
+            'clientOptions' => [
+                'startView' => 1,
+                'minView' => 0,
+                'maxView' => 1,
+                'autoclose' => true,
+                'linkFormat' => 'HH:ii P', // if inline = true
+                'todayBtn' => true
+            ]
+        ]);?>
+    
         <?= $form->field($model, 'operation_price_strategy_id')->dropDownList($priceStrategies)->label('选择商品规格') ?>
+    
+        <?= $form->field($model, 'operation_goods_service_interval_time')->textInput(['maxlength' => true]) ?>
+   
+        <?= $form->field($model, 'operation_goods_service_estimate_time')->textInput(['maxlength' => true]) ?>
+    
+        <?= $form->field($model, 'operation_goods_additional_cost')->textInput(['maxlength' => true]) ?>
+    
+        <?= $form->field($model, 'operation_goods_price_description')->textInput(['maxlength' => true]) ?>
+    
+        <?= $form->field($model, 'operation_goods_market_price')->textInput(['maxlength' => true]) ?>
+    
+        <?= $form->field($model, 'operation_tags')->textInput(['maxlength' => true]) ?>
+    
+        <?php
+         echo '<div class="form-group ">
+            <label class="control-label col-md-2">'.$model->attributeLabels()['operation_goods_app_homepage_max_ico'].'</label>
+            <div class="col-md-10"><input type="hidden" value="" name="OperationGoods[operation_goods_app_homepage_max_ico]">
+            <input type="file" maxlength="" name="OperationGoods[operation_goods_app_homepage_max_ico]" ></div>
+            <div class="col-md-offset-2 col-md-10"></div>
+            <div class="col-md-offset-2 col-md-10"><div class="help-block"></div></div>
+            </div>';
+        ?>
+        <?php
+         echo '<div class="form-group ">
+            <label class="control-label col-md-2">'.$model->attributeLabels()['operation_goods_app_homepage_min_ico'].'</label>
+            <div class="col-md-10"><input type="hidden" value="" name="OperationGoods[operation_goods_app_homepage_min_ico]">
+            <input type="file" maxlength="" name="OperationGoods[operation_goods_app_homepage_min_ico]" ></div>
+            <div class="col-md-offset-2 col-md-10"></div>
+            <div class="col-md-offset-2 col-md-10"><div class="help-block"></div></div>
+            </div>';
+        ?>
+        <?php
+         echo '<div class="form-group ">
+            <label class="control-label col-md-2">'.$model->attributeLabels()['operation_goods_app_type_min_ico'].'</label>
+            <div class="col-md-10"><input type="hidden" value="" name="OperationGoods[operation_goods_app_type_min_ico]">
+            <input type="file" maxlength="" name="OperationGoods[operation_goods_app_type_min_ico]" ></div>
+            <div class="col-md-offset-2 col-md-10"></div>
+            <div class="col-md-offset-2 col-md-10"><div class="help-block"></div></div>
+            </div>';
+        ?>
+        <?php
+         echo '<div class="form-group ">
+            <label class="control-label col-md-2">'.$model->attributeLabels()['operation_goods_app_order_min_ico'].'</label>
+            <div class="col-md-10"><input type="hidden" value="" name="OperationGoods[operation_goods_app_order_min_ico]">
+            <input type="file" maxlength="" name="OperationGoods[operation_goods_app_order_min_ico]" ></div>
+            <div class="col-md-offset-2 col-md-10"></div>
+            <div class="col-md-offset-2 col-md-10"><div class="help-block"></div></div>
+            </div>';
+        ?>
+        <?php
+         echo '<div class="form-group ">
+            <label class="control-label col-md-2">'.$model->attributeLabels()['operation_goods_pc_homepage_max_ico'].'</label>
+            <div class="col-md-10"><input type="hidden" value="" name="OperationGoods[operation_goods_pc_homepage_max_ico]">
+            <input type="file" maxlength="" name="OperationGoods[operation_goods_pc_homepage_max_ico]" ></div>
+            <div class="col-md-offset-2 col-md-10"></div>
+            <div class="col-md-offset-2 col-md-10"><div class="help-block"></div></div>
+            </div>';
+        ?>
+        <?php
+         echo '<div class="form-group ">
+            <label class="control-label col-md-2">'.$model->attributeLabels()['operation_goods_pc_more_max_ico'].'</label>
+            <div class="col-md-10"><input type="hidden" value="" name="OperationGoods[operation_goods_pc_more_max_ico]">
+            <input type="file" maxlength="" name="OperationGoods[operation_goods_pc_more_max_ico]" ></div>
+            <div class="col-md-offset-2 col-md-10"></div>
+            <div class="col-md-offset-2 col-md-10"><div class="help-block"></div></div>
+            </div>';
+        ?>
+        <?php
+         echo '<div class="form-group ">
+            <label class="control-label col-md-2">'.$model->attributeLabels()['operation_goods_pc_submit_order_min_ico'].'</label>
+            <div class="col-md-10"><input type="hidden" value="" name="OperationGoods[operation_goods_pc_submit_order_min_ico]">
+            <input type="file" maxlength="" name="OperationGoods[operation_goods_pc_submit_order_min_ico]" ></div>
+            <div class="col-md-offset-2 col-md-10"></div>
+            <div class="col-md-offset-2 col-md-10"><div class="help-block"></div></div>
+            </div>';
+        ?>
+    
 <?php
 //        'operation_goods_service_interval_time'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 服务间隔时间(单位：秒）...']],
 //
@@ -58,7 +173,7 @@ use kartik\datecontrol\DateControl;
 //
 //        'operation_goods_app_ico'=>['type'=> Form::INPUT_TEXTAREA, 'options'=>['placeholder'=>'Enter APP端图标(序列化方式存储|首页大图，首页小图，分类页小图，订单页小图)...','rows'=> 6]],
 //
-//        'operation_goods_type_pc_ico'=>['type'=> Form::INPUT_TEXTAREA, 'options'=>['placeholder'=>'Enter PC端图标(序列化方式存储|首页推荐大图，更多推荐大图，下单页小图)...','rows'=> 6]],
+//        'operation_goods_pc_ico'=>['type'=> Form::INPUT_TEXTAREA, 'options'=>['placeholder'=>'Enter PC端图标(序列化方式存储|首页推荐大图，更多推荐大图，下单页小图)...','rows'=> 6]],
 //
 //        'operation_goods_price'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 售价...', 'maxlength'=>19]],
 //
