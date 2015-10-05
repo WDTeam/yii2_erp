@@ -25,5 +25,7 @@ class m150918_133302_create_table_customer_help extends Migration
     public function down()
     {
         $this->dropTable('{{%customer_help}}');
+
+        return true;
     }
 }

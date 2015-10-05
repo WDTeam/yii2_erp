@@ -12,7 +12,7 @@ class m150919_101431_create_table_worker_device extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'阿姨设备信息表\'';
         }
         $this->createTable('{{%worker_device}}', [
-           
+
             'worker_id' => Schema::TYPE_PK . '(11)  COMMENT \'阿姨Id\'',
             'worker_device_curr_lng' => Schema::TYPE_FLOAT . ' DEFAULT NULL COMMENT \'阿姨客户端当前经度\'',
             'worker_device_curr_lat' => Schema::TYPE_FLOAT . ' DEFAULT NULL COMMENT \'阿姨客户端当前纬度\'',
@@ -29,7 +29,8 @@ class m150919_101431_create_table_worker_device extends Migration
 
     public function down()
     {
-       
+      $this->dropTable('{{%worker_device}}');
+      return true;
     }
 
     /*

@@ -23,5 +23,7 @@ class m150918_133240_create_table_customer_feedback extends Migration
     public function down()
     {
         $this->dropTable('{{%customer_feedback}}');
+
+        return true;
     }
 }

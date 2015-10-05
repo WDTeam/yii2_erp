@@ -59,7 +59,7 @@ class m150918_141238_create_table_customer_trans_record extends Migration
     public function down()
     {
         $this->dropTable("{{%customer_trans_record}}");
-        return false;
+        return true;
     }
     /*
     // Use safeUp/safeDown to run migration code within a transaction

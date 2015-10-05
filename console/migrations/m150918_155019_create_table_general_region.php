@@ -1038,6 +1038,8 @@ class m150918_155019_create_table_general_region extends Migration
     public function down()
     {
         $this->dropTable('{{%general_region}}');
+
+        return true;
     }
 
     /*

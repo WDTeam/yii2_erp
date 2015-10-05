@@ -38,6 +38,8 @@ class m150918_195648_create_table_customer_address extends Migration
     public function down()
     {
         $this->dropTable('{{%customer_address}}');
+
+        return true;
     }
 
     /*

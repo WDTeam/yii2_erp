@@ -37,7 +37,9 @@ class m150919_083917_create_table_worker_ext extends Migration
 
     public function down()
     {
-        $this->dropTable('ejj_worker_ext');
+        $this->dropTable('{{%worker_ext}}');
+
+        return true;
     }
 
     /*

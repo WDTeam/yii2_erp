@@ -34,6 +34,8 @@ class m150926_035618_create_table_operation_advert_content extends Migration
     public function down()
     {
         $this->dropTable('{{%operation_advert_content}}');
+
+        return true;
     }
 
     /*

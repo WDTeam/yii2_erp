@@ -18,11 +18,13 @@ class m150918_074216_create_table_operation_boot_page_city extends Migration
             'created_at' => Schema::TYPE_INTEGER. '(11) DEFAULT NULL COMMENT \'创建时间\'',
             'updated_at' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'编辑时间\'',
         ], $tableOptions);
-    } 
+    }
 
-    public function down(){ 
+    public function down(){
         $this->dropTable('{{%operation_boot_page_city}}');
-    } 
+
+        return true;
+    }
 
     /*
     // Use safeUp/safeDown to run migration code within a transaction

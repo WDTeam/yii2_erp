@@ -15,7 +15,7 @@ class m150918_075847_create_table_operation_category extends Migration
             'operation_category_name' => Schema::TYPE_STRING . '(60) DEFAULT NULL COMMENT \'服务品类名称\'',
             'parent_id' => Schema::TYPE_INTEGER.'(11) DEFAULT 0 COMMENT \'上级id(为0是顶级分类)\'',
             'sort' => Schema::TYPE_INTEGER.'(11) DEFAULT 0 COMMENT \'排序\'',
-            
+
             'created_at' => Schema::TYPE_INTEGER. '(11) DEFAULT NULL COMMENT \'创建时间\'',
             'updated_at' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'编辑时间\'',
         ], $tableOptions);
@@ -23,6 +23,8 @@ class m150918_075847_create_table_operation_category extends Migration
 
     public function down(){
         $this->dropTable('{{%operation_category}}');
+
+        return true;
     }
 
     /*

@@ -45,14 +45,14 @@ class m150923_034111_create_table_shopmanager extends Migration
               `is_deleted` tinyint(1) DEFAULT NULL COMMENT '是否删除',
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            
+
         ")->execute();
     }
 
     public function down()
     {
         $this->dropTable('{{%shop_manager}}');
-        return false;
+        return true;
     }
 
     /*

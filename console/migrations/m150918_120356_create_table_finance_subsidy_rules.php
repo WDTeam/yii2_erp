@@ -24,6 +24,8 @@ class m150918_120356_create_table_finance_subsidy_rules extends Migration
     public function down()
     {
         $this->dropTable('{{%finance_subsidy_rules}}');
+
+        return true;
     }
 
     /*
