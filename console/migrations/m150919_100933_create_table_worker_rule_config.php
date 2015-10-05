@@ -23,14 +23,14 @@ class m150919_100933_create_table_worker_rule_config extends Migration
             "INSERT INTO `ejj_worker_rule_config` VALUES ('1', '全职', null, null, null, '0');
              INSERT INTO `ejj_worker_rule_config` VALUES ('2', '兼职', null, null, null, '0');
              INSERT INTO `ejj_worker_rule_config` VALUES ('3', '高峰', null, null, null, '0');
-             INSERT INTO `ejj_worker_rule_config` VALUES ('4', '时段', null, null, null, '0');"
+             INSERT INTO `ejj_worker_rule_config` VALUES ('4', '时1', null, null, null, '0');"
         );
     }
 
     public function down()
     {
-        $this->dropTable('{{%worker_rule_config}}');
-        return true;
+        //$this->dropTable('{{%worker_rule_config}}');
+        //return true;
     }
 
     /*
