@@ -49,7 +49,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
 
     public function search($params)
     {
-        $query = FinanceSettleApply::find();
+        $query = FinanceSettleApplySearch::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -109,6 +109,10 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         $financeSettleApplySearch->latestSettleTime = time();
 //        $financeSettleApplySearch->latestSettleTime = $this->getWorkerLatestSettledTime($workerId);
         return $financeSettleApplySearch;
+    }
+    
+    public function getSettleApplyStatusDes($settleApplyStatus){
+        return $this->financeSettleApplyStatusArr[$settleApplyStatus];
     }
     
     /**
