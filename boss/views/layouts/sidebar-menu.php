@@ -251,12 +251,12 @@ echo Menu::widget(
                                 'icon' => 'fa fa-angle-right',
                                 'visible' => (Yii::$app->user->identity->username == 'admin'),
                             ],
-                            [
-                                'label' => '商品规格管理(20%)',
-                                'url' => ['/operation-price-strategy'],
-                                'icon' => 'fa fa-angle-right',
-                                'visible' => (Yii::$app->user->identity->username == 'admin'),
-                            ],
+//                            [
+//                                'label' => '价格策略管理(20%)',
+//                                'url' => ['/operation-price-strategy'],
+//                                'icon' => 'fa fa-angle-right',
+//                                'visible' => (Yii::$app->user->identity->username == 'admin'),
+//                            ],
                             [
                                 'label' => '服务管理(90%)',
                                 'url' => ['/operation-category'],

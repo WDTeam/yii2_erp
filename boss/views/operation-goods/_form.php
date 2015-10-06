@@ -76,7 +76,7 @@ use boss\components\GoodsTypeCascade;
             ]
         ]);?>
     
-        <?= $form->field($model, 'operation_price_strategy_id')->dropDownList($priceStrategies)->label('选择商品规格') ?>
+        <?= $form->field($model, 'operation_price_strategy_id')->dropDownList($priceStrategies) ?>
     
         <?= $form->field($model, 'operation_goods_service_interval_time')->textInput(['maxlength' => true]) ?>
    

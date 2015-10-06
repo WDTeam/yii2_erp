@@ -37,6 +37,8 @@ class CoreOperationTag extends CommonOperationTag
             }
         }
 //        return $data;
-        Yii::$app->db->createCommand()->batchInsert(self::tableName(), $fields, $d)->execute();
+        if(!empty($d)){
+            Yii::$app->db->createCommand()->batchInsert(self::tableName(), $fields, $d)->execute();
+        }
     }
 }
