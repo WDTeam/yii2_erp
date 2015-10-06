@@ -12,9 +12,6 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Specs'), '
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-spec-create">
-<!--    <div class="page-header">-->
-<!--        <h1>--><?//= Html::encode($this->title) ?><!--</h1>-->
-<!--    </div>-->
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>

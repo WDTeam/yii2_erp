@@ -15,7 +15,7 @@ use kartik\datecontrol\DateControl;
 <div class="operation-spec-form">
 
     <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); ?>
-<!--    --><?//= $form->field($model, 'operation_spec_name')->textInput(['maxlength' => true]) ?>
+<!-- <?//= $form->field($model, 'operation_spec_name')->textInput(['maxlength' => true]) ?> -->
     <?php
     echo Form::widget([
         'model' => $model,
