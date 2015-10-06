@@ -15,9 +15,7 @@ $this->title = Yii::t('app', 'Operation Goods');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-goods-index">
-    <div class="page-header">
-            <h1><?= Html::encode($this->title) ?></h1>
-    </div>
+
 
     <p>
         <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
@@ -28,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+//            ['class' => 'yii\grid\SerialColumn'],
 
             'id',
             'operation_goods_name',

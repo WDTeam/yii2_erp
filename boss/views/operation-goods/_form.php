@@ -76,7 +76,7 @@ use boss\components\GoodsTypeCascade;
             ]
         ]);?>
     
-        <?= $form->field($model, 'operation_price_strategy_id')->dropDownList($priceStrategies) ?>
+        <?= $form->field($model, 'operation_spec_info')->dropDownList($OperationSpec) ?>
     
         <?= $form->field($model, 'operation_goods_service_interval_time')->textInput(['maxlength' => true]) ?>
    
@@ -85,9 +85,7 @@ use boss\components\GoodsTypeCascade;
         <?= $form->field($model, 'operation_goods_additional_cost')->textInput(['maxlength' => true]) ?>
     
         <?= $form->field($model, 'operation_goods_price_description')->textInput(['maxlength' => true]) ?>
-    
-        <?= $form->field($model, 'operation_goods_market_price')->textInput(['maxlength' => true]) ?>
-    
+
         <?= $form->field($model, 'operation_tags')->textInput(['maxlength' => true]) ?>
     
         <?php

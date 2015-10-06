@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
+use boss\models\Operation\OperationSpec;
 
 /**
  * @var yii\web\View $this
@@ -13,9 +14,7 @@ $this->title = Yii::t('app', 'Operation Specs');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-spec-index">
-    <div class="page-header">
-            <h1><?= Html::encode($this->title) ?></h1>
-    </div>
+
 
     <p>
         <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
@@ -26,12 +25,22 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
+//            ['class' => 'yii\grid\SerialColumn'],
+            [
+                'class' => 'yii\grid\CheckboxColumn',
+                'name' => 'id',
+            ],
             'id',
             'operation_spec_name',
             'operation_spec_description:ntext',
-            'operation_spec_values:ntext',
+//            'operation_spec_values:ntext',
+            [
+                'format' => 'raw',
+                'label' => '规格值',
+                'value' => function ($dataProvider) {
+                    return OperationSpec::hanldeSpecValues($dataProvider->operation_spec_values);
+                },
+            ],
             'created_at',
 //            'updated_at', 
 
@@ -39,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
                 'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['operation-spec/view','id' => $model->id,'edit'=>'t']), [
+                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['operation-spec/update','id' => $model->id]), [
                                                     'title' => Yii::t('yii', 'Edit'),
                                                   ]);}
 
