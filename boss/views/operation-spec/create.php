@@ -4,20 +4,19 @@ use yii\helpers\Html;
 
 /**
  * @var yii\web\View $this
- * @var boss\models\Operation\OperationGoods $model
+ * @var boss\models\Operation\OperationSpec $model
  */
 
-$this->title = Yii::t('app', 'Create').Yii::t('app', 'Goods');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Goods'), 'url' => ['index']];
+$this->title = Yii::t('app', 'Create').Yii::t('app', 'Spec');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Specs'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="operation-goods-create">
+<div class="operation-spec-create">
 <!--    <div class="page-header">-->
 <!--        <h1>--><?//= Html::encode($this->title) ?><!--</h1>-->
 <!--    </div>-->
     <?= $this->render('_form', [
         'model' => $model,
-        'priceStrategies' => $priceStrategies,
     ]) ?>
 
 </div>
