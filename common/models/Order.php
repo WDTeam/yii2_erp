@@ -71,10 +71,8 @@ use Yii;
  * @property string $admin_id
  * @property integer $isdel
  */
-class Order extends \common\models\ActiveRecord
+class Order extends ActiveRecord
 {
-    public $order_booked_date;
-    public $order_booked_time_range;
     /**
      * @inheritdoc
      */
@@ -132,9 +130,9 @@ class Order extends \common\models\ActiveRecord
             'order_pop_group_buy_code' => '第三方团购码',
             'order_pop_operation_money' => '第三方运营费',
             'order_pop_order_money' => '第三方订单金额',
-            'customer_id' => '用户编号',
+            'customer_id' => '客户编号',
             'order_ip' => '下单IP',
-            'order_customer_phone' => '用户手机号',
+            'order_customer_phone' => '客户手机号',
             'order_booked_begin_time' => '预约开始时间',
             'order_booked_end_time' => '预约结束时间',
             'order_booked_count' => '预约服务数量',
@@ -143,8 +141,8 @@ class Order extends \common\models\ActiveRecord
             'order_unit_money' => '订单单位价格',
             'order_money' => '订单金额',
             'order_booked_worker_id' => '指定阿姨',
-            'order_customer_need' => '用户需求',
-            'order_customer_memo' => '用户备注',
+            'order_customer_need' => '客户需求',
+            'order_customer_memo' => '客户备注',
             'order_cs_memo' => '客服备注',
             'order_pay_type' => '支付方式 0未支付 1现金支付 2线上支付 3第三方预付 ',
             'pay_channel_id' => '支付渠道id',
@@ -171,15 +169,20 @@ class Order extends \common\models\ActiveRecord
             'checking_id' => '对账id',
             'admin_id' => '操作人id  0客户操作 1系统操作',
             'isdel' => '是否已删除',
-            'order_booked_date' => '预约服务日期',
-            'order_booked_time_range' => '预约服务时间',
         ];
     }
 
     public function init()
     {
         $class = get_class($this);
-        if(!in_array($class,['core\models\order\Order','core\models\order\OrderSearch','boss\models\AutoOrderSerach','boss\models\ManualOrderSerach'])){
+        if(!in_array($class,[
+            'core\models\order\Order',
+            'core\models\order\OrderSearch',
+            'boss\models\order\Order',
+            'boss\models\order\OrderSearch',
+            'boss\models\AutoOrderSerach',
+            'boss\models\ManualOrderSerach'
+        ])){
             echo '非法调用！';
             exit(0);
         }

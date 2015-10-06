@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                 </div>
                 <?= $form->field($model, 'order_booked_worker_id')->inline()->radioList(['0'=>'不指定']); ?>
-                <?= $form->field($model, 'order_booked_date')->label('服务日期')->widget(
+                <?= $form->field($model, 'orderBookedDate')->label('服务日期')->widget(
                     DatePicker::className(), [
                     'inline' => true,
                     'template' => '<div class="well well-sm" style="background-color: #fff; width:250px">{input}</div>',
@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'language'=>'zh-CN'
                 ]);?>
                 <?= $form->field($model, 'order_booked_count')->inline()->radioList($model->orderBookedCountList)->label('服务时长'); ?>
-                <?= $form->field($model, 'order_booked_time_range')->inline()->radioList($model->orderBookedTimeRangeList)->label('服务时间');?>
+                <?= $form->field($model, 'orderBookedTimeRange')->inline()->radioList($model->orderBookedTimeRangeList)->label('服务时间');?>
             </div>
             <div class="panel-heading">
                 <h3 class="panel-title">支付信息</h3>

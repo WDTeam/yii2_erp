@@ -3,16 +3,16 @@
 namespace boss\controllers;
 
 use Yii;
-use common\models\CustomerTransRecord;
-use boss\models\CustomerTransRecordSearch;
-use yii\rest\Controller;
+use boss\models\Operation\OperationSpec;
+use yii\data\ActiveDataProvider;
+use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * CustomerTransRecordController implements the CRUD actions for CustomerTransRecord model.
+ * OperationSpecController implements the CRUD actions for OperationSpec model.
  */
-class CustomerTransRecordController extends Controller
+class OperationSpecController extends Controller
 {
     public function behaviors()
     {
@@ -26,56 +26,23 @@ class CustomerTransRecordController extends Controller
         ];
     }
 
-
-
     /**
-     * 创建交易记录
-     * @param $data 数据
-     */
-    public function createRecord($data)
-    {
-        //交易记录日志
-        //$TransRecordModel = new CustomerTransRecordLog();
-        //$TransRecordModel->insert();exit;
-        $model = new CustomerTransRecord();
-        //使用场景
-        $model->scenario = $data['CustomerTransRecord']['scenario'];
-        $model->attributes = $data['CustomerTransRecord'];
-        return $model->add();
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * Lists all CustomerTransRecord models.
+     * Lists all OperationSpec models.
      * @return mixed
      */
     public function actionIndex()
     {
-
-        $searchModel = new CustomerTransRecordSearch;
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        $dataProvider = new ActiveDataProvider([
+            'query' => OperationSpec::find(),
+        ]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel,
         ]);
     }
 
     /**
-     * Displays a single CustomerTransRecord model.
+     * Displays a single OperationSpec model.
      * @param integer $id
      * @return mixed
      */
@@ -91,19 +58,16 @@ class CustomerTransRecordController extends Controller
     }
 
     /**
-     * Creates a new CustomerTransRecord model.
+     * Creates a new OperationSpec model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new CustomerTransRecord;
-        $data = Yii::$app->request->post();
-        $data['CustomerTransRecord']['scenario'] = 7;
-        //var_dump(Yii::$app->request->post());exit;
-        if ($model->load(Yii::$app->request->post())) {
-            $model = $this->createRecord($data);
-            //return $this->redirect(['view', 'id' => $model->id]);
+        $model = new OperationSpec;
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -112,7 +76,7 @@ class CustomerTransRecordController extends Controller
     }
 
     /**
-     * Updates an existing CustomerTransRecord model.
+     * Updates an existing OperationSpec model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -131,7 +95,7 @@ class CustomerTransRecordController extends Controller
     }
 
     /**
-     * Deletes an existing CustomerTransRecord model.
+     * Deletes an existing OperationSpec model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -144,15 +108,15 @@ class CustomerTransRecordController extends Controller
     }
 
     /**
-     * Finds the CustomerTransRecord model based on its primary key value.
+     * Finds the OperationSpec model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return CustomerTransRecord the loaded model
+     * @return OperationSpec the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = CustomerTransRecord::findOne($id)) !== null) {
+        if (($model = OperationSpec::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

@@ -163,13 +163,13 @@ $("#order-order_booked_count input").change(function(){
     $money = $("#order-order_booked_count input:checked").val()/60*$("#order_unit_money").text();
     $("#order-order_money").val($money.toFixed(2));
     $(".order_money").text($money.toFixed(2));
-    $("#order-order_booked_time_range").html('');
+    $("#order-orderbookedtimerange").html('');
     for(var i=8;i<=18;i++){
         var hour = i<10?'0'+i:i;
         var hourtime = i+$("#order-order_booked_count input:checked").val()/60;
         var hour2 = parseInt(hourtime)<10?'0'+parseInt(hourtime):parseInt(hourtime);
         var minute = (hourtime%1==0)?'00':'30';
-        $("#order-order_booked_time_range").append('<label class="radio-inline"><input type="radio" checked="" value="'+hour+':00-'+hour2+':'+minute+'" name="Order[order_booked_time_range]"> '+hour+':00-'+hour2+':'+minute+'</label>');
+        $("#order-orderbookedtimerange").append('<label class="radio-inline"><input type="radio" checked="" value="'+hour+':00-'+hour2+':'+minute+'" name="Order[order_booked_time_range]"> '+hour+':00-'+hour2+':'+minute+'</label>');
     }
 
 });

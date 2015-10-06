@@ -35,19 +35,20 @@ class AppAsset extends AssetBundle
         'js/searchbox.js',
         'js/bootpage.js',
         'js/custom.js',
-        'js/advert.js'
+        'js/advert.js',
+        'js/spec.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
     ];
 
-    //¶¨Òå°´Ðè¼ÓÔØJS·½·¨£¬×¢Òâ¼ÓÔØË³ÐòÔÚ×îºó
+    //ï¿½ï¿½ï¿½å°´ï¿½ï¿½ï¿½ï¿½ï¿½JSï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×¢ï¿½ï¿½ï¿½ï¿½ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public static function addScript($view, $jsfile) {
         $view->registerJsFile($jsfile, [AppAsset::className(), 'depends' => 'boss\assets\AppAsset']);
     }
 
-    //¶¨Òå°´Ðè¼ÓÔØcss·½·¨£¬×¢Òâ¼ÓÔØË³ÐòÔÚ×îºó
+    //ï¿½ï¿½ï¿½å°´ï¿½ï¿½ï¿½ï¿½ï¿½cssï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×¢ï¿½ï¿½ï¿½ï¿½ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public static function addCss($view, $cssfile) {
         $view->registerCssFile($cssfile, [AppAsset::className(), 'depends' => 'boss\assets\AppAsset']);
     }
