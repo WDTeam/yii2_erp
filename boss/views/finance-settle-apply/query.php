@@ -52,7 +52,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'finance_settle_apply_order_money_except_cash',
                 ['attribute'=>'finance_settle_apply_subsidy',
                  'content'=>function($model,$key,$index){return '<a class="btn btn-default"  id = "subsidyButton" data-container="body" data-toggle="popover" data-placement="bottom" data-popover-content="'.$model->id.'">'.$model->finance_settle_apply_subsidy.'</a>';}],
-                'finance_settle_apply_reviewer', 
+                 ['attribute'=>'finance_settle_apply_status',
+                    'content'=> function($model,$key,$index){return $model->getSettleApplyStatusDes($model->finance_settle_apply_status);} ],     
+//                'finance_settle_apply_reviewer', 
                 ['attribute'=>'updated_at','content'=>function($model,$key,$index){return Html::a(date('Y:m:d H:i:s',$model->updated_at),'#');}],
                 [
                     'class' => 'yii\grid\ActionColumn',
