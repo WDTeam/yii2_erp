@@ -71,10 +71,8 @@ use Yii;
  * @property string $admin_id
  * @property integer $isdel
  */
-class Order extends \common\models\ActiveRecord
+class Order extends ActiveRecord
 {
-    public $order_booked_date;
-    public $order_booked_time_range;
     /**
      * @inheritdoc
      */
@@ -171,15 +169,20 @@ class Order extends \common\models\ActiveRecord
             'checking_id' => '对账id',
             'admin_id' => '操作人id  0客户操作 1系统操作',
             'isdel' => '是否已删除',
-            'order_booked_date' => '预约服务日期',
-            'order_booked_time_range' => '预约服务时间',
         ];
     }
 
     public function init()
     {
         $class = get_class($this);
-        if(!in_array($class,['core\models\order\Order','core\models\order\OrderSearch','boss\models\AutoOrderSerach','boss\models\ManualOrderSerach'])){
+        if(!in_array($class,[
+            'core\models\order\Order',
+            'core\models\order\OrderSearch',
+            'boss\models\order\Order',
+            'boss\models\order\OrderSearch',
+            'boss\models\AutoOrderSerach',
+            'boss\models\ManualOrderSerach'
+        ])){
             echo '非法调用！';
             exit(0);
         }
