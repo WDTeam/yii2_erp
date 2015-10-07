@@ -76,7 +76,16 @@ use boss\components\GoodsTypeCascade;
             ]
         ]);?>
     
-        <?= $form->field($model, 'operation_spec_info')->dropDownList($OperationSpec) ?>
+        <?= $form->field($model, 'operation_spec_info')->dropDownList($OperationSpec, ['prompt' => '请选择规格', 'id' => 'operationSpec'])->label('选择规格') ?>
+
+        <div id="SpecInfo">
+            <?php if($status == 'update') {
+                echo $this->render('specinfo', [
+                    'specvalues' => $specvalues,
+                ]);
+            }
+            ?>
+        </div>
     
         <?= $form->field($model, 'operation_goods_service_interval_time')->textInput(['maxlength' => true]) ?>
    

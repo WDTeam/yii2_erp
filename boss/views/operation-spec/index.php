@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return OperationSpec::hanldeSpecValues($dataProvider->operation_spec_values);
                 },
             ],
-            'created_at',
+            'created_at:date',
 //            'updated_at', 
 
             [

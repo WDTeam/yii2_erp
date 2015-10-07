@@ -22,6 +22,15 @@ class CoreOperationSpec extends CommonOperationSpec
     }
 
     public static function getSpecList(){
-        return self::find()->All();
+        $data = self::find()->select(['id', 'operation_spec_name'])->asArray()->All();
+        $d = array();
+        foreach((array)$data as $key => $value){
+            $d[$value['id']] = $value['operation_spec_name'];
+        }
+        return $d;
+    }
+    
+    public static function getSpecInfo($spec_id){
+        return self::find()->asArray()->where(['id' => $spec_id])->One();
     }
 }
