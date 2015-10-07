@@ -18,7 +18,11 @@ use common\models\Operation\CommonOperationSpec;
 class CoreOperationSpec extends CommonOperationSpec
 {
     public static function hanldeSpecValues($operation_spec_values){
-        return implode('          ', unserialize($operation_spec_values));
+        if(!empty($operation_spec_values)){
+            return implode('          ', unserialize($operation_spec_values));
+        }else{
+            return '';
+        }
     }
 
     public static function getSpecList(){

@@ -68,6 +68,7 @@ class OperationSpecController extends Controller
         $post = Yii::$app->request->post();
         if ($model->load($post)) {
             $operation_spec_values = serialize(array_filter(explode(';', str_replace(' ', '', str_replace('；', ';', $post['OperationSpec']['operation_spec_values'])))));
+            $model->operation_spec_values = $operation_spec_values;
             $model->created_at = time();
             $model->updated_at = time();
             if($model->save()){
