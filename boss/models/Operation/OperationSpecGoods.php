@@ -35,7 +35,7 @@ class OperationSpecGoods extends CoreOperationSpecGoods
         return [
             [['operation_goods_id', 'operation_spec_id', 'operation_spec_name', 'operation_spec_value', 'operation_spec_goods_lowest_consume_number', 'operation_spec_goods_commission_mode', 'created_at', 'updated_at'], 'integer'],
             [['operation_spec_goods_sell_price', 'operation_spec_goods_market_price', 'operation_spec_goods_cost_price', 'operation_spec_goods_settlement_price', 'operation_spec_goods_commission'], 'number'],
-            [['operation_goods_name'], 'string', 'max' => 60],
+            [['operation_goods_name', 'operation_spec_strategy_unit', 'operation_spec_strategy_unit'], 'string', 'max' => 60],
             [['operation_spec_goods_no'], 'string', 'max' => 20]
         ];
     }
@@ -54,6 +54,7 @@ class OperationSpecGoods extends CoreOperationSpecGoods
             'operation_spec_name' => Yii::t('app', '规格名称'),
             'operation_spec_value' => Yii::t('app', '规格属性'),
             'operation_spec_goods_lowest_consume_number' => Yii::t('app', '最低消费数量'),
+            'operation_spec_strategy_unit' => Yii::t('app', '计量单位'),
             'operation_spec_goods_sell_price' => Yii::t('app', '商品销售价格'),
             'operation_spec_goods_market_price' => Yii::t('app', '商品市场价格'),
             'operation_spec_goods_cost_price' => Yii::t('app', '商品成本价格'),

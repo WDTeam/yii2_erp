@@ -50,6 +50,7 @@ class coreOperationSpecGoods extends CommonOperationSpecGoods
                 $d[$key]['operation_spec_goods_no'] = $value; //商品货号
                 $d[$key]['operation_spec_value'] = $data['operation_spec_value'][$key]; //规格属性
                 $d[$key]['operation_spec_goods_lowest_consume_number'] = $data['operation_spec_goods_lowest_consume_number'][$key]; //最低消费数量
+                $d[$key]['operation_spec_strategy_unit'] = $data['operation_spec_strategy_unit'][$key]; //计量单位
                 if ($data['operation_spec_goods_sell_price'][$key] < $price) {
                     $pricekey = $key;
                     $price = $data['operation_spec_goods_sell_price'][$key];
@@ -76,6 +77,7 @@ class coreOperationSpecGoods extends CommonOperationSpecGoods
                 'operation_spec_goods_no',
                 'operation_spec_value',
                 'operation_spec_goods_lowest_consume_number',
+                'operation_spec_strategy_unit',
                 'operation_spec_goods_sell_price',
                 'operation_spec_goods_market_price',
                 'operation_spec_goods_cost_price',

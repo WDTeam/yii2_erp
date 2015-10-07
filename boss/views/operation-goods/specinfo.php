@@ -13,7 +13,8 @@
             销售价格：<input type="text" maxlength="" style="width:50px;" placeholder="销售价格" value="<?= $value['operation_spec_goods_sell_price']?>" name="OperationGoods[specinfo][operation_spec_goods_sell_price][]" >元
             成本价格：<input type="text" maxlength="" style="width:50px;" placeholder="成本价格" value="<?= $value['operation_spec_goods_cost_price']?>" name="OperationGoods[specinfo][operation_spec_goods_cost_price][]" >元
             结算价格：<input type="text" maxlength="" style="width:50px;" placeholder="结算价格" value="<?= $value['operation_spec_goods_settlement_price']?>" name="OperationGoods[specinfo][operation_spec_goods_settlement_price][]" >元
-            最低消费数量：<input type="text" maxlength="" style="width:70px;" placeholder="最低消费数量" value="<?= $value['operation_spec_goods_lowest_consume_number']?>" name="OperationGoods[specinfo][operation_spec_goods_lowest_consume_number][]" >
+            最低消费数量：<input type="text" maxlength="" style="width:70px;" placeholder="最低消费数量" value="<?= $value['operation_spec_goods_lowest_consume_number']?>" name="OperationGoods[specinfo][operation_spec_goods_lowest_consume_number][]" > <?= $value['operation_spec_strategy_unit']?>
+            <input type="hidden" name="OperationGoods[specinfo][operation_spec_strategy_unit][]" value="<?= $value['operation_spec_strategy_unit']?>">
             <div class="col-lg-6">
                 佣金收取方式：
                 <div class="input-group">

@@ -76,7 +76,8 @@ class OperationGoodsController extends Controller
         $specinfo = OperationSpec::getSpecInfo(Yii::$app->request->post('spec_id'));
         $specinfo['operation_spec_values'] = unserialize($specinfo['operation_spec_values']);
         $specvalues = array();
-        $specvalues['operation_spec_name'] = $specinfo['operation_spec_name'];
+        $specvalues['operation_spec_name'] = $specinfo['operation_spec_name']; //规格名称
+
         //增加货号 （为解决  暂时以 时间戳＋一个索引）
         $time = time();
         foreach((array)$specinfo['operation_spec_values'] as $key => $value){
@@ -88,7 +89,8 @@ class OperationGoodsController extends Controller
             $specvalues['info'][$key]['operation_spec_goods_cost_price'] = '';   //成本价格
             $specvalues['info'][$key]['operation_spec_goods_settlement_price'] = '';   //结算价格
             $specvalues['info'][$key]['operation_spec_goods_lowest_consume_number'] = 1;   //最低消费数量
-            
+            $specvalues['info'][$key]['operation_spec_strategy_unit'] = $specinfo['operation_spec_strategy_unit']; //计量单位
+
             $specvalues['info'][$key]['operation_spec_goods_commission_mode'] = '2';   //收取佣金方式（1: 百分比 2: 金额） 默认：金额
             $specvalues['info'][$key]['operation_spec_goods_commission'] = 0;   //佣金值
         }
@@ -114,6 +116,7 @@ class OperationGoodsController extends Controller
                 $specvalues['info'][$key]['operation_spec_goods_cost_price'] = $value['operation_spec_goods_cost_price'];   //成本价格
                 $specvalues['info'][$key]['operation_spec_goods_settlement_price'] = $value['operation_spec_goods_settlement_price'];   //结算价格
                 $specvalues['info'][$key]['operation_spec_goods_lowest_consume_number'] = $value['operation_spec_goods_lowest_consume_number'];   //最低消费数量
+                $specvalues['info'][$key]['operation_spec_strategy_unit'] = $value['operation_spec_strategy_unit']; //计量单位
 
                 $specvalues['info'][$key]['operation_spec_goods_commission_mode'] = $value['operation_spec_goods_commission_mode'];   //收取佣金方式（1: 百分比 2: 金额） 默认：金额
                 $specvalues['info'][$key]['operation_spec_goods_commission'] = $value['operation_spec_goods_commission'];   //佣金值

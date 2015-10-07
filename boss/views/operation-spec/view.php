@@ -28,6 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'operation_spec_name',
             'operation_spec_description:ntext',
             'operation_spec_values:ntext',
+            'operation_spec_strategy_unit:ntext',
             'created_at:date',
             'updated_at:date',
         ],
