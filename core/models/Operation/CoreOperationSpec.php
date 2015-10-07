@@ -17,4 +17,11 @@ use common\models\Operation\CommonOperationSpec;
  */
 class CoreOperationSpec extends CommonOperationSpec
 {
+    public static function hanldeSpecValues($operation_spec_values){
+        return implode('          ', unserialize($operation_spec_values));
+    }
+
+    public static function getSpecList(){
+        return self::find()->All();
+    }
 }

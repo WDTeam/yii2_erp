@@ -24,8 +24,12 @@ class m151005_090605_create_table_operation_spec_goods extends Migration
             'operation_spec_value' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'规格属性\'',
 
             'operation_spec_goods_lowest_consume_number' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'最低消费数量\'',
-            'operation_spec_goods_price' => Schema::TYPE_MONEY . ' DEFAULT 0 COMMENT \'商品价格\'',
+
+            'operation_spec_goods_sell_price' => Schema::TYPE_MONEY . ' DEFAULT 0 COMMENT \'商品销售价格\'',
+            'operation_spec_goods_market_price' => Schema::TYPE_MONEY . ' DEFAULT 0 COMMENT \'商品市场价格\'',
+            'operation_spec_goods_cost_price' => Schema::TYPE_MONEY . ' DEFAULT 0 COMMENT \'商品成本价格\'',
             'operation_spec_goods_settlement_price' => Schema::TYPE_MONEY . ' DEFAULT 0 COMMENT \'商品结算价格\'',
+
             'operation_spec_goods_commission_mode' => Schema::TYPE_INTEGER . '(1) DEFAULT 1 COMMENT \'收取佣金方式（1: 百分比 2: 金额）\'',
             'operation_spec_goods_commission' => Schema::TYPE_MONEY . ' DEFAULT NULL COMMENT \'佣金值\'',
 

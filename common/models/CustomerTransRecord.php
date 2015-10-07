@@ -66,8 +66,8 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
     /**
      * 验证数据之前组装数据
      */
-    public function beforeValidate(){
-
+    public function beforeValidate()
+    {
         //支付渠道
         $payChannel = FinancePayChannel::findOne($this->pay_channel_id);
         //支付渠道名称
@@ -91,11 +91,12 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         $orderChannel = FinanceOrderChannel::findOne($this->order_channel_id);
         //订单渠道名称
         $this->customer_trans_record_order_channel = $orderChannel->finance_order_channel_name;
-        //验证数据插入记录表
-        //$model = new CustomerTransRecordLog();
-        //$model->load(Yii::$app->request->post());
-        //var_dump($model->load(Yii::$app->request->post()));exit;
-        //$model->insert(false);
+        //验证之前将数据插入记录表
+        $model = new CustomerTransRecordLog();
+        $post = Yii::$app->request->post();
+        $model->attributes = $post['CustomerTransRecord'];
+        $model->validate();
+        $model->insert(false);
         return true;
     }
 
@@ -248,6 +249,7 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
                 'customer_trans_record_pay_channel',    //支付渠道名称
                 'customer_trans_record_mode',   //交易方式:1消费,2=充值,3=退款,4=补偿
                 'customer_trans_record_mode_name',  //交易方式:1消费,2=充值,3=退款,4=补偿
+                'customer_trans_record_online_balance_pay',//在线余额支付
                 'customer_trans_record_order_total_money',  //订单总额
             ],
             //9=退款（订单）：把订单金额原路退回 refundSource

@@ -45,19 +45,6 @@ class CustomerTransRecordController extends Controller
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * Lists all CustomerTransRecord models.
      * @return mixed
@@ -99,7 +86,7 @@ class CustomerTransRecordController extends Controller
     {
         $model = new CustomerTransRecord;
         $data = Yii::$app->request->post();
-        $data['CustomerTransRecord']['scenario'] = 7;
+        $data['CustomerTransRecord']['scenario'] = 3;
         //var_dump(Yii::$app->request->post());exit;
         if ($model->load(Yii::$app->request->post())) {
             $model = $this->createRecord($data);

@@ -83,7 +83,7 @@ class FinanceSettleApply extends \yii\db\ActiveRecord
             'finance_settle_apply_order_money_except_cash' => Yii::t('app', '工时费应结'),
             'finance_settle_apply_subsidy' => Yii::t('app', '总补助费'),
             'finance_settle_apply_money' => Yii::t('app', '应结算金额'),
-            'finance_settle_apply_status' => Yii::t('app', '申请结算状态，-4财务确认结算未通过;-3财务审核不通过；-2线下审核不通过；-1门店财务审核不通过；0提出申请，正在门店财务审核；1门店财务审核通过，等待线下审核；2线下审核通过，等待财务审核；3财务审核通过，等待财务确认结算；4财务确认结算；'),
+            'finance_settle_apply_status' => Yii::t('app', '结算状态'),
             'finance_settle_apply_cycle' => Yii::t('app', '结算周期'),
             'finance_settle_apply_cycle_des' => Yii::t('app', '结算周期'),
             'finance_settle_apply_reviewer' => Yii::t('app', '审核人姓名'),

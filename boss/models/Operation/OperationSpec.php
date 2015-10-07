@@ -39,7 +39,7 @@ class OperationSpec extends CoreOperationSpec
             'id' => Yii::t('app', '编号'),
             'operation_spec_name' => Yii::t('app', '规格名称'),
             'operation_spec_description' => Yii::t('app', '规格备注'),
-            'operation_spec_values' => Yii::t('app', '规格值(序列化属性)'),
+            'operation_spec_values' => Yii::t('app', '规格值'),
             'created_at' => Yii::t('app', '创建时间'),
             'updated_at' => Yii::t('app', '编辑时间'),
         ];

@@ -14,11 +14,6 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Specs'), '
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-spec-view">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
-
-
     <?= DetailView::widget([
             'model' => $model,
             'condensed'=>false,
@@ -33,8 +28,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'operation_spec_name',
             'operation_spec_description:ntext',
             'operation_spec_values:ntext',
-            'created_at',
-            'updated_at',
+            'created_at:date',
+            'updated_at:date',
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],

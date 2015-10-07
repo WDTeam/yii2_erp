@@ -4,9 +4,10 @@ namespace boss\controllers;
 
 use Yii;
 use boss\models\Operation\OperationGoods;
-use boss\models\Operation\OperationPriceStrategy;
+//use boss\models\Operation\OperationPriceStrategy;
 use boss\models\Operation\OperationTag;
 use boss\models\Operation\OperationCategory;
+use boss\models\Operation\OperationSpec;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -69,7 +70,8 @@ class OperationGoodsController extends Controller
      */
     public function actionCreate()
     {
-        $priceStrategies = OperationPriceStrategy::getAllStrategy();
+//        $priceStrategies = OperationPriceStrategy::getAllStrategy();
+        $OperationSpec = OperationSpec::getSpecList();
 
         $model = new OperationGoods;
         $post = Yii::$app->request->post();
@@ -93,9 +95,8 @@ class OperationGoodsController extends Controller
                 'operation_goods_pc_submit_order_min_ico',
             );
             $model->operation_goods_pc_ico = serialize($this->handleGoodsImgs($model, $pcFiles));
-            
-            $tags = str_replace('；', ';', $post['OperationGoods']['operation_tags']);
-            $tags = explode(';', $tags);
+
+            $tags = array_filter(explode(';', str_replace(' ', '', str_replace('；', ';', $post['OperationGoods']['operation_tags']))));
             OperationTag::setTagInfo($tags);
             
             $model->operation_tags = serialize($tags);
@@ -109,7 +110,8 @@ class OperationGoodsController extends Controller
         } else {
             return $this->render('create', [
                 'model' => $model,
-                'priceStrategies' => $priceStrategies,
+//                'priceStrategies' => $priceStrategies,
+                'OperationSpec' => $OperationSpec,
             ]);
         }
     }
@@ -162,9 +164,8 @@ class OperationGoodsController extends Controller
                 'operation_goods_pc_submit_order_min_ico',
             );
             $model->operation_goods_pc_ico = serialize($this->handleGoodsImgs($model, $pcFiles));
-            
-            $tags = str_replace('；', ';', $post['OperationGoods']['operation_tags']);
-            $tags = explode(';', $tags);
+
+            $tags = array_filter(explode(';', str_replace(' ', '', str_replace('；', ';', $post['OperationGoods']['operation_tags']))));
             OperationTag::setTagInfo($tags);
             $model->operation_tags = serialize($tags);
             
