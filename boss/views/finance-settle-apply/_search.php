@@ -1,55 +1,59 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use kartik\widgets\ActiveForm;
+use kartik\widgets\Select2;
+use yii\web\JsExpression;
+use kartik\builder\Form;
+use kartik\datecontrol\DateControl;
+use kartik\grid\GridView;
 
-/**
- * @var yii\web\View $this
- * @var boss\models\FinanceSettleApplySearch $model
- * @var yii\widgets\ActiveForm $form
- */
 ?>
 
-<div class="finance-settle-apply-search">
+<div class="worker-search">
 
     <?php $form = ActiveForm::begin([
-        'action' => ['index'],
+        'type' => ActiveForm::TYPE_VERTICAL,
+        //'id' => 'login-form-inline',
+        'action' => ['query'],
         'method' => 'get',
     ]); ?>
+    <div class='col-md-2'>
+    <?php echo  $form->field($model, 'finance_settle_apply_starttime')->widget(DateControl::classname(),[
+        'type' => DateControl::FORMAT_DATE,
+        'ajaxConversion'=>false,
+        'displayFormat' => 'php:Y-m-d',
+        'saveFormat'=>'php:U',
+        'options' => [
+            'pluginOptions' => [
+                 'autoclose' => true
+            ]
+        ]
+    ]);
+    
+    ?>
+  </div>  
+    <div class='col-md-2'>
+    <?php echo  $form->field($model, 'finance_settle_apply_endtime')->widget(DateControl::classname(),[
+        'type' => DateControl::FORMAT_DATE,
+        'ajaxConversion'=>false,
+        'displayFormat' => 'php:Y-m-d',
+        'saveFormat'=>'php:U',
+        'options' => [
+            'pluginOptions' => [
+                 'autoclose' => true
+            ]
+        ]
+    ]);
+    
+    ?>
+  </div> 
+    <div class='col-md-2'>
+        <?= $form->field($model, 'worder_tel') ?>
+    </div>
 
-    <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'worder_id') ?>
-
-    <?= $form->field($model, 'worder_tel') ?>
-
-    <?= $form->field($model, 'worker_type_id') ?>
-
-    <?= $form->field($model, 'worker_type_name') ?>
-
-    <?php // echo $form->field($model, 'finance_settle_apply_money') ?>
-
-    <?php // echo $form->field($model, 'finance_settle_apply_man_hour') ?>
-
-    <?php // echo $form->field($model, 'finance_settle_apply_order_money') ?>
-
-    <?php // echo $form->field($model, 'finance_settle_apply_order_cash_money') ?>
-
-    <?php // echo $form->field($model, 'finance_settle_apply_non_order_money') ?>
-
-    <?php // echo $form->field($model, 'finance_settle_apply_status') ?>
-
-    <?php // echo $form->field($model, 'finance_settle_apply_cycle') ?>
-
-    <?php // echo $form->field($model, 'finance_settle_apply_reviewer') ?>
-
-    <?php // echo $form->field($model, 'isdel') ?>
-
-    <?php // echo $form->field($model, 'updated_at') ?>
-
-    <?php // echo $form->field($model, 'created_at') ?>
-
-    <div class="form-group">
+    <div class='col-md-2' style="margin-top: 22px;">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
     </div>

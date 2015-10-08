@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150924_100534_create_table_order_src extends Migration
+class m151007_153207_create_table_order_src extends Migration
 {
     public function up()
     {
@@ -35,16 +35,9 @@ class m150924_100534_create_table_order_src extends Migration
     public function down()
     {
         $this->dropTable('{{%order_src}}');
+
+        return true;
     }
 
-    /*
-    // Use safeUp/safeDown to run migration code within a transaction
-    public function safeUp()
-    {
-    }
 
-    public function safeDown()
-    {
-    }
-    */
 }

@@ -6,14 +6,14 @@ use Yii;
 use boss\models\Operation\OperationPlatformVersion;
 use boss\models\Operation\OperationPlatform;
 use yii\data\ActiveDataProvider;
-use boss\components\Controller;
+use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * OperationPlatformVersionController implements the CRUD actions for OperationPlatformVersion model.
  */
-class OperationPlatformVersionController extends Controller
+class OperationPlatformVersionController extends BaseAuthController
 {
     public function behaviors()
     {

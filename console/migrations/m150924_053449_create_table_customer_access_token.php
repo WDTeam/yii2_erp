@@ -26,6 +26,8 @@ class m150924_053449_create_table_customer_access_token extends Migration
     public function down()
     {
         $this->dropTable('{{%customer_access_token}}');
+
+        return true;
     }
 
     /*

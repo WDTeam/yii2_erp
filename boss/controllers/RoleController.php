@@ -15,10 +15,10 @@ use yii\web\HttpException;
 use boss\models\Auth;
 use boss\models\search\AuthSearch;
 use yii\filters\VerbFilter;
-use boss\components\Controller;
+use boss\components\BaseAuthController;
 use yii\helpers\ArrayHelper;
 
-class RoleController extends Controller
+class RoleController extends BaseAuthController
 {
 //     public function behaviors()
 //     {

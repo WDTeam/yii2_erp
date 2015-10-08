@@ -7,7 +7,7 @@ use yii\helpers\Html;
 /* @var $model common\models\OperationCategoryType */
 
 $this->title = Yii::t('app', 'Create').Yii::t('app', 'Category Types');//'Create Operation Category Type';
-$this->params['breadcrumbs'][] = Html::a($category->operation_category_name.' - '.Yii::t('app', 'Category Types'), ['index', 'category_id'=>$category->id]);//['label' => 'Operation Category Types', 'url' => ['index']];
+$this->params['breadcrumbs'][] = Html::a(Yii::t('app', 'Category Types'), ['index']);//['label' => 'Operation Category Types', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-category-type-create">
@@ -16,7 +16,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
         'model' => $model,
-        'category' => $category,
         'priceStrategies' => $priceStrategies,
     ]) ?>
 

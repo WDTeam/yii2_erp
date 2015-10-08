@@ -5,14 +5,14 @@ namespace boss\controllers;
 use Yii;
 use common\models\Help;
 use boss\models\HelpSearch;
-use boss\components\Controller;
+use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * HelpController implements the CRUD actions for Help model.
  */
-class HelpController extends Controller
+class HelpController extends BaseAuthController
 {
     public function behaviors()
     {

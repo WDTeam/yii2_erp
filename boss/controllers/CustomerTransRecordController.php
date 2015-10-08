@@ -5,7 +5,7 @@ namespace boss\controllers;
 use Yii;
 use common\models\CustomerTransRecord;
 use boss\models\CustomerTransRecordSearch;
-use boss\components\Controller;
+use yii\rest\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -26,12 +26,32 @@ class CustomerTransRecordController extends Controller
         ];
     }
 
+
+
+    /**
+     * 创建交易记录
+     * @param $data 数据
+     */
+    public function createRecord($data)
+    {
+        //交易记录日志
+        //$TransRecordModel = new CustomerTransRecordLog();
+        //$TransRecordModel->insert();exit;
+        $model = new CustomerTransRecord();
+        //使用场景
+        $model->scenario = $data['CustomerTransRecord']['scenario'];
+        $model->attributes = $data['CustomerTransRecord'];
+        return $model->add();
+    }
+
+
     /**
      * Lists all CustomerTransRecord models.
      * @return mixed
      */
     public function actionIndex()
     {
+
         $searchModel = new CustomerTransRecordSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
@@ -61,56 +81,21 @@ class CustomerTransRecordController extends Controller
      * Creates a new CustomerTransRecord model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
-
+     */
     public function actionCreate()
     {
         $model = new CustomerTransRecord;
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $data = Yii::$app->request->post();
+        $data['CustomerTransRecord']['scenario'] = 3;
+        //var_dump(Yii::$app->request->post());exit;
+        if ($model->load(Yii::$app->request->post())) {
+            $model = $this->createRecord($data);
+            //return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
             ]);
         }
-    }
-     */
-
-    /**
-     * 交易记录接口
-     */
-    public function actionCreate(){
-
-        //接收数据
-        $request = yii::$app->request;
-        $data = $request->get();
-
-        //
-        if( empty($data['record_type']) || !in_array($data['record_type'],array(1,2,3,4)) )
-        {
-            die('类型错误');
-        }
-
-        //实例化模型
-        $model = new CustomerTransRecord;
-
-        //使用场景
-        $scenario = $data['record_type'];
-        $model->scenario = $scenario;
-        $model->attributes = $data;
-
-        //验证数据
-        if( $model->validate() && $model->save() )
-        {
-            //返回组装数据
-            echo "验证成功!";
-        }
-        else
-        {
-            var_dump($model->errors);
-        }
-
-
     }
 
     /**

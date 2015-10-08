@@ -3,17 +3,15 @@
 namespace boss\controllers;
 
 use Yii;
-use core\models\order\OrderSearch;
-use boss\components\Controller;
+use boss\components\BaseAuthController;
+use boss\models\order\OrderSearch;
+use boss\models\order\Order;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use core\models\order\Order;
-use yii\web\Response;
 
 /**
  * OrderController implements the CRUD actions for Order model.
  */
-class OrderController extends Controller
+class OrderController extends BaseAuthController
 {
 
     public function actionCustomer()
@@ -145,6 +143,50 @@ class OrderController extends Controller
             "worker_name": "王阿姨"
         }';
     }
+
+    public function actionCoupons()
+    {
+        $id = Yii::$app->request->get('id');
+        $service_id = Yii::$app->request->get('service_id');
+        return '[
+                {
+                    "id": 1,
+                    "coupon_name": "优惠券30",
+                    "coupon_money": 30
+                },
+                {
+                    "id": 2,
+                    "coupon_name": "40优惠券",
+                    "coupon_money": 30
+                },
+                {
+                    "id": 3,
+                    "coupon_name": "50优惠券",
+                    "coupon_money": 50
+                }
+            ]';
+    }
+
+    public function actionCards($id)
+    {
+        return '[
+                {
+                    "id": 1,
+                    "card_code": "1234567890",
+                    "card_money": 1000
+                },
+                {
+                    "id": 2,
+                    "card_code": "9876543245",
+                    "card_money": 3000
+                },
+                {
+                    "id": 3,
+                    "card_code": "3840959205",
+                    "card_money": 5000
+                }
+            ]';
+    }
     /**
      * Lists all Order models.
      * @return mixed
@@ -195,8 +237,8 @@ class OrderController extends Controller
             $post['Order']['order_ip'] = ip2long(Yii::$app->request->userIP);
             $post['Order']['order_src_id'] = 1; //订单来源BOSS
             //预约时间处理
-            $time = explode('-',$post['Order']['order_booked_time_range']);
-            $post['Order']['order_booked_begin_time'] = $post['Order']['order_booked_date'].' '.$time[0].':00';
+            $time = explode('-',$post['Order']['orderBookedTimeRange']);
+            $post['Order']['order_booked_begin_time'] = $post['Order']['orderBookedDate'].' '.$time[0].':00';
             $post['Order']['order_booked_end_time'] = ($time[1]=='24:00')?date('Y-m-d H:i:s',strtotime($post['Order']['order_booked_date'].'00:00:00 +1 days')):$post['Order']['order_booked_date'].' '.$time[1].':00';
             if ($model->createNew($post)) {
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -205,7 +247,7 @@ class OrderController extends Controller
             $model->order_service_type_id = 1; //服务类型默认值
             $model->order_booked_count = 120; //服务市场初始值120分钟
             $model->order_booked_worker_id=0; //不指定阿姨
-            $model->order_booked_time_range = '08:00-10:00';//预约时间段初始值
+            $model->orderBookedTimeRange = '08:00-10:00';//预约时间段初始值
             $model->order_pay_type = 1;//支付方式 初始值
             $model->channel_id = 1;//默认渠道
         }
@@ -237,7 +279,7 @@ class OrderController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Order::findById($id)) !== null) {
+        if (($model = Order::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

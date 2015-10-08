@@ -164,13 +164,49 @@ class Worker extends \common\models\Worker
             return '未通过';
         }
     }
-
+    /*
+     * 获取阿姨所有身份信息
+     * @return
+     */
     public function getWorkerAllRules(){
 
         $workerRulesArr = WorkerRuleConfig::find()->where(['isdel'=>0])->select('id,worker_rule_name')->asArray()->all();
 
         return $workerRulesArr;
     }
+
+
+    public function getSearchBtnCss($btnCate){
+        $searchParams = Yii::$app->request->getQueryParams();
+        $workerSearchParams = array_key_exists('WorkerSearch',$searchParams)?$searchParams['WorkerSearch']:[];
+        if($btnCate==0 && !array_key_exists('WorkerSearch',$searchParams)){
+            return 'btn-success-selected';
+        }elseif($btnCate==1 && array_key_exists('worker_auth_status',$workerSearchParams)){
+            return 'btn-success-selected';
+        }elseif($btnCate==2 && array_key_exists('worker_ontrial_status',$workerSearchParams)){
+            return 'btn-success-selected';
+        }elseif($btnCate==3 && array_key_exists('worker_onboard_status',$workerSearchParams)){
+            return 'btn-success-selected';
+        }elseif($btnCate==4 && array_key_exists('worker_rule_id',$workerSearchParams) && $workerSearchParams['worker_rule_id']==1){
+            return 'btn-success-selected';
+        }elseif($btnCate==5 && array_key_exists('worker_rule_id',$workerSearchParams) && $workerSearchParams['worker_rule_id']==2){
+            return 'btn-success-selected';
+        }elseif($btnCate==6 && array_key_exists('worker_rule_id',$workerSearchParams) && $workerSearchParams['worker_rule_id']==3){
+            return 'btn-success-selected';
+        }elseif($btnCate==7 && array_key_exists('worker_rule_id',$workerSearchParams) && $workerSearchParams['worker_rule_id']==4){
+            return 'btn-success-selected';
+        }elseif($btnCate==8 && array_key_exists('worker_is_vacation',$workerSearchParams)){
+            return 'btn-success-selected';
+        }elseif($btnCate==9 && array_key_exists('worker_is_block',$workerSearchParams)){
+            return 'btn-success-selected';
+        }elseif($btnCate==10 && array_key_exists('worker_is_blacklist',$workerSearchParams)){
+            return 'btn-success-selected';
+        }else{
+            return 'btn-success';
+        }
+    }
+
+
 
     public function getAuthStatusCount(){
         return $this->find()->where(['worker_auth_status'=>0,'worker_ontrial_status'=>0,'worker_onboard_status'=>0])->count();
@@ -203,6 +239,9 @@ class Worker extends \common\models\Worker
     public function getGCount(){
         return $this->find()->where(['worker_rule_id'=>4])->count();
     }
+
+
+
     /**
      * 加入黑名单
      * @param string $cause 原因

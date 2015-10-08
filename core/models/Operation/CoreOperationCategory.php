@@ -14,5 +14,12 @@ use common\models\Operation\CommonOperationCategory;
  */
 class CoreOperationCategory extends CommonOperationCategory
 {
+    public static function getCategoryList($operation_category_parent_id = 0){
+        return self::getAllData(['operation_category_parent_id' => $operation_category_parent_id]);
+    }
 
+    public static function getCategoryName($operation_category_id){
+        $data = self::find()->select(['operation_category_name'])->where(['id' => $operation_category_id])->one();
+        return $data->operation_category_name;
+    }
 }

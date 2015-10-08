@@ -27,6 +27,8 @@ class m150923_052037_create_table_operation_area extends Migration
     public function down()
     {
         $this->dropTable('{{%operation_area}}');
+
+        return true;
     }
 
     /*

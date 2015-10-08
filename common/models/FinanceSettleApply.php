@@ -40,7 +40,7 @@ class FinanceSettleApply extends \yii\db\ActiveRecord
     
     const FINANCE_SETTLE_APPLY_STATUS_INIT = 0;//提交结算申请
     
-
+    const FINANCE_SETTLE_APPLY_STATUS_COMPLETED = 4;//财务确认结算；
     
     /**
      * @inheritdoc
@@ -56,7 +56,7 @@ class FinanceSettleApply extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['worder_id', 'worder_tel', 'worker_type_id', 'worker_type_name', 'finance_settle_apply_man_hour', 'finance_settle_apply_order_money', 'finance_settle_apply_order_money_except_cash', 'finance_settle_apply_money', 'finance_settle_apply_status', 'finance_settle_apply_cycle', 'finance_settle_apply_cycle_des'], 'required'],
+//            [['worder_id', 'worder_tel', 'worker_type_id', 'worker_type_name', 'finance_settle_apply_man_hour', 'finance_settle_apply_order_money', 'finance_settle_apply_order_money_except_cash', 'finance_settle_apply_money', 'finance_settle_apply_status', 'finance_settle_apply_cycle', 'finance_settle_apply_cycle_des'], 'required'],
             [['worder_id', 'worker_type_id', 'finance_settle_apply_man_hour', 'finance_settle_apply_status', 'finance_settle_apply_cycle', 'finance_settle_apply_starttime', 'finance_settle_apply_endtime', 'isdel', 'updated_at', 'created_at'], 'integer'],
             [['finance_settle_apply_order_money', 'finance_settle_apply_order_cash_money', 'finance_settle_apply_order_money_except_cash', 'finance_settle_apply_subsidy', 'finance_settle_apply_money'], 'number'],
             [['finance_settle_apply_cycle_des'], 'string'],
@@ -83,12 +83,12 @@ class FinanceSettleApply extends \yii\db\ActiveRecord
             'finance_settle_apply_order_money_except_cash' => Yii::t('app', '工时费应结'),
             'finance_settle_apply_subsidy' => Yii::t('app', '总补助费'),
             'finance_settle_apply_money' => Yii::t('app', '应结算金额'),
-            'finance_settle_apply_status' => Yii::t('app', '申请结算状态，-4财务确认结算未通过;-3财务审核不通过；-2线下审核不通过；-1门店财务审核不通过；0提出申请，正在门店财务审核；1门店财务审核通过，等待线下审核；2线下审核通过，等待财务审核；3财务审核通过，等待财务确认结算；4财务确认结算；'),
+            'finance_settle_apply_status' => Yii::t('app', '结算状态'),
             'finance_settle_apply_cycle' => Yii::t('app', '结算周期'),
             'finance_settle_apply_cycle_des' => Yii::t('app', '结算周期'),
             'finance_settle_apply_reviewer' => Yii::t('app', '审核人姓名'),
-            'finance_settle_apply_starttime' => Yii::t('app', '本次结算开始时间(统计)，例如：2015.9.1 00:00:00对应的int值'),
-            'finance_settle_apply_endtime' => Yii::t('app', '本次结算结束时间(统计)，例如：2015.9.30 23:59:59对应的int值'),
+            'finance_settle_apply_starttime' => Yii::t('app', '结算开始时间'),
+            'finance_settle_apply_endtime' => Yii::t('app', '结算结束时间'),
             'isdel' => Yii::t('app', '是否被删除，0为启用，1为删除'),
             'updated_at' => Yii::t('app', '审核时间'),
             'created_at' => Yii::t('app', '申请时间'),

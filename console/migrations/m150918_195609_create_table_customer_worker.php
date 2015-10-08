@@ -32,6 +32,8 @@ class m150918_195609_create_table_customer_worker extends Migration
     public function down()
     {
         $this->dropTable('{{%customer_worker}}');
+
+        return true;
     }
 
     /*

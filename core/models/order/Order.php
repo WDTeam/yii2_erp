@@ -13,36 +13,22 @@ use common\models\Order as OrderModel;
 use common\models\OrderHistory;
 use common\models\OrderStatusHistory;
 use common\models\OrderStatusDict;
-use common\models\OrderSrc;
 
 class Order extends OrderModel
 {
-    public $order_booked_date;
-    public $order_booked_time_range;
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['order_code'],'unique'],
-            [['order_code','order_service_type_id','customer_id', 'order_ip', 'address_id','order_unit_money', 'order_money','order_before_status_name', 'order_status_name', 'order_service_type_name',
-                'order_src_name', 'order_address', 'order_customer_phone','order_booked_begin_time', 'order_booked_end_time','order_use_acc_balance','order_booked_date','order_booked_time_range'],'required'],
-            [['order_parent_id', 'order_is_parent', 'order_before_status_dict_id', 'order_status_dict_id', 'order_flag_send', 'order_flag_urgent', 'order_flag_exception', 'order_service_type_id', 'order_src_id',
-                'channel_id', 'customer_id', 'order_ip', 'order_booked_count', 'address_id', 'order_booked_worker_id', 'order_pay_type', 'pay_channel_id', 'card_id', 'coupon_id', 'promotion_id', 'order_lock_status',
-                'worker_id', 'worker_type_id', 'order_worker_send_type', 'shop_id', 'comment_id', 'order_customer_hidden', 'invoice_id', 'checking_id', 'admin_id', 'isdel'], 'integer'],
-            [['order_unit_money', 'order_money', 'order_pay_money', 'order_use_acc_balance', 'order_use_card_money', 'order_use_coupon_money', 'order_use_promotion_money', 'order_pop_pay_money'], 'number'],
-            [['order_code', 'order_channel_name', 'order_worker_type_name'], 'string', 'max' => 64],
-            [['order_before_status_name', 'order_status_name', 'order_service_type_name', 'order_src_name', 'order_pay_channel_name'], 'string', 'max' => 128],
-            [['order_channel_order_num', 'order_address', 'order_customer_need', 'order_customer_memo', 'order_cs_memo', 'order_pay_flow_num'], 'string', 'max' => 255],
-            [['order_customer_phone'], 'string', 'max' => 16],
-//            [['order_booked_begin_time', 'order_booked_end_time'], 'date', 'format'=>'yyyy-MM-dd HH:mm:ss'],
-            [['order_booked_begin_time', 'order_booked_end_time'], 'safe'],
 
-        ];
-    }
-
-
+    public $order_pay_type;
+    public $order_customer_phone;
+    public $customer_id;
+    public $coupon_id;
+    public $card_id;
+    public $order_use_acc_balance;
+    public $order_pop_group_buy_code;
+    public $order_pop_order_code;
+    public $order_pop_order_money;
+    public $order_pop_operation_money;
+    public $order_customer_need;
+    public $order_customer_memo;
     /**
      * 追加新订单
      * @param $post
@@ -50,9 +36,9 @@ class Order extends OrderModel
      */
     public function additional($post)
     {
-        if($post['order']['order_parent_id'] <= 0) {
-            $this->addError('order_parent_id','追加订单必须指定主订单编号！');
-        }else{
+        if ($post['order']['order_parent_id'] <= 0) {
+            $this->addError('order_parent_id', '追加订单必须指定主订单编号！');
+        } else {
             $post['order']['order_is_parent'] = 1;
             return $this->create($post);
         }
@@ -80,19 +66,16 @@ class Order extends OrderModel
         if ($this->load($post)) {
             $statusFrom = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //创建订单状态
             $statusTo = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //初始化订单状态
-            $orderCode = date('ymdHis').str_pad($this->order_service_type_id,2,'0',STR_PAD_LEFT).str_pad($this->customer_id,10,'0',STR_PAD_LEFT); //TODO 订单号待优化
+            $orderCode = date('ymdHis') . str_pad($this->order_service_type_id, 2, '0', STR_PAD_LEFT) . str_pad($this->customer_id, 10, '0', STR_PAD_LEFT); //TODO 订单号待优化
             $this->setAttributes([
-                'order_code'=>$orderCode,
+                'order_code' => $orderCode,
                 'order_before_status_dict_id' => $statusFrom->id,
                 'order_before_status_name' => $statusFrom->order_status_name,
                 'order_status_dict_id' => $statusTo->id,
                 'order_status_name' => $statusTo->order_status_name,
-//                'order_src_id' => $this->order_src_id,
                 'order_src_name' => $this->getOrderSrcName($this->order_src_id),
                 'order_channel_name' => $this->getOrderChannelList($this->channel_id),
                 'order_service_type_name' => $this->getServiceList($this->order_service_type_id),
-
-
                 'order_flag_send' => 0, //'指派不了 0可指派 1客服指派不了 2小家政指派不了 3都指派不了',
                 'order_flag_urgent' => 0,//加急 数字越大约紧急
                 'order_flag_exception' => 0,//异常标识
@@ -105,22 +88,24 @@ class Order extends OrderModel
                 'order_pop_pay_money' => 0,
                 'shop_id' => 0,
                 'order_worker_type_name' => '',
-                'order_use_acc_balance'=> $this->order_use_acc_balance?:0,
-                'card_id'=> $this->card_id?:0,
-                'order_use_card_money'=> $this->order_use_card_money?:0,
-                'coupon_id'=> $this->coupon_id?:0,
-                'order_use_coupon_money'=> $this->order_use_coupon_money?:0,
-                'promotion_id'=> $this->promotion_id?:0,
-                'order_use_promotion_money'=> $this->order_use_promotion_money?:0,
-                'pay_channel_id'=>0,//支付渠道id
-                'order_pay_channel_name'=>'',//支付渠道
-                'order_pay_flow_num'=>'',//支付流水号
-                'order_pay_money'=>0,//支付金额
-
+                'pay_channel_id' => 0,//支付渠道id
+                'order_pay_channel_name' => '',//支付渠道
+                'order_pay_flow_num' => '',//支付流水号
+                'order_pay_money' => 0,//支付金额
                 'invoice_id' => 0, //发票id 用户需求中有开发票就绑定发票id
                 'checking_id' => 0,
                 'isdel' => 0,
             ]);
+
+            if($this->coupon_id>0){ //如果使用了优惠卷
+                $coupon = $this->getCouponById($this->coupon_id);
+                $this->order_use_coupon_money = $coupon->coupon_money;
+            }
+            if($this->card_id>0){ //如果使用了服务卡
+                $card = $this->getCardById($this->card_id);
+                $this->order_use_card_money = $card->card_money;
+            }
+
             if ($this->doSave(true)) {
                 return true;
             }
@@ -184,54 +169,11 @@ class Order extends OrderModel
     {
         $this->setAttributes([
             'order_before_status_dict_id' => $from->id,
-            'order_before_status_name' => $from->$order_status_name,
+            'order_before_status_name' => $from->order_status_name,
             'order_status_dict_id' => $to->id,
             'order_status_dict_name' => $to->order_status_name
         ]);
         $this->doSave(true);
     }
 
-    /**
-     * 根据订单id获取订单
-     * @param $id
-     * @return null|static
-     */
-    public static function findById($id)
-    {
-        return self::findOne($id);
-    }
-
-    public function getOrderChannelList($channel_id=0)
-    {
-        $channel = [1=>'BOSS',2=>'美团',3=>'大众点评'];
-        return $channel_id==0?$channel:(isset($channel[$channel_id])?$channel[$channel_id]:false);
-    }
-    public function getServiceList($service_id=0)
-    {
-        $service = [1=>'家庭保洁',2=>'新居开荒',3=>'擦玻璃'];
-        return $service_id==0?$service:(isset($service[$service_id])?$service[$service_id]:false);
-    }
-    public function getOrderBookedCountList()
-    {
-        return ["120"=>"两小时","150"=>"两个半小时","180"=>"三小时","210"=>"三个半小时","240"=>"四小时","270"=>"四个半小时","300"=>"五小时","330"=>"五个半小时","360"=>"六小时"];
-    }
-    public function getOrderBookedTimeRangeList($range = 2)
-    {
-        $order_booked_time_range = [];
-        for($i=8;$i<=18;$i++){
-            $hour = str_pad($i,2,'0',STR_PAD_LEFT);
-            $hour2 = str_pad($i+intval($range),2,'0',STR_PAD_LEFT);
-            $minute = ($range-intval($range)==0)?'00':'30';
-            $order_booked_time_range["{$hour}:00-{$hour2}:{$minute}"] = "{$hour}:00-{$hour2}:{$minute}";
-        }
-        return $order_booked_time_range;
-    }
-    public function getOrderSrcName($id)
-    {
-        return OrderSrc::findOne($id)->order_src_name;
-    }
-    public function getCouponList()
-    {
-
-    }
 }

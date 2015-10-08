@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use boss\components\GoodsTypeCascade;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\OperationPriceStrategy */
@@ -11,7 +12,13 @@ use yii\widgets\ActiveForm;
 <div class="operation-price-strategy-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
+    <?php
+        echo GoodsTypeCascade::widget([
+            'model' => $model,
+            'options' => ['class' => 'form-control'],
+            'name' => 'OperationPriceStrategy[operation_category_ids][]',
+        ]);
+    ?>
     <?= $form->field($model, 'operation_price_strategy_name')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'operation_price_strategy_unit')->textInput(['maxlength' => true]) ?>

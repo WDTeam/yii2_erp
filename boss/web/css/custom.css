@@ -200,6 +200,15 @@ ul.navbar-right > li.dropdown > ul.dropdown-menu > li > a {
     box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 0.09) !important;
 }
 
+.kv-panel-before .btn-success-selected {
+	color: rgba(255, 255, 255, .82) !important;
+	background-color: #f6a202 !important;
+	border: 1px solid #f6a202 !important;
+	webkit-box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 0.09) !important;
+	-moz-box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 0.09) !important;
+	box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 0.09) !important;
+}
+
 .kv-panel-before .btn-success:hover {
 	color: rgba(255, 255, 255, .82) !important;
 	background-color: #f6a202 !important;

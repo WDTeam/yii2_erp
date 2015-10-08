@@ -15,7 +15,7 @@ class m150921_114940_create_table_finance_worker_order_income extends Migration
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT  COMMENT \'主键\'' ,
             'worder_id' => Schema::TYPE_INTEGER . '(10) NOT NULL COMMENT \'阿姨id\'',
             'order_id' => Schema::TYPE_INTEGER . '(10) NOT NULL COMMENT \'订单id\'',
-            'finance_worker_order_income_type' => Schema::TYPE_SMALLINT . '(1) NOT NULL COMMENT \'阿姨收入类型，0订单收入（线上支付），1订单收入（现金），2路补，3晚补，4扑空补助,5渠道奖励，6小保养\'',
+            'finance_worker_order_income_type' => Schema::TYPE_SMALLINT . '(1) NOT NULL COMMENT \'阿姨收入类型，0订单收入（线上支付），1订单收入（现金）\'',
             'finance_worker_order_income' => Schema::TYPE_DECIMAL . '(10,2)  COMMENT \'阿姨收入\'',
             'finance_worker_order_complete_time' => Schema::TYPE_INTEGER . '(11)  COMMENT \'订单完成时间\'',
             'order_booked_count' => Schema::TYPE_INTEGER. '(10)  COMMENT \'预约服务数量，即工时\'',
@@ -27,12 +27,13 @@ class m150921_114940_create_table_finance_worker_order_income extends Migration
             'updated_at' => Schema::TYPE_INTEGER . '(11)  COMMENT \'结算时间\'',
             'created_at' => Schema::TYPE_INTEGER. '(11) COMMENT \'创建时间\'',
         ], $tableOptions);
-        
+
     }
 
     public function down()
     {
         $this->dropTable('{{%finance_worker_order_income}}');
+        return true;
     }
 
     /*

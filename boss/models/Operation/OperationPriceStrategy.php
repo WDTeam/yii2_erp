@@ -32,6 +32,7 @@ class OperationPriceStrategy extends CoreOperationPriceStrategy
         return [
 //            [['created_at', 'updated_at'], 'integer'],
             [['operation_price_strategy_name', 'operation_price_strategy_unit', 'operation_price_strategy_lowest_consume_unit'], 'required']
+            
         ];
     }
 
@@ -42,7 +43,7 @@ class OperationPriceStrategy extends CoreOperationPriceStrategy
     {
         return [
             'id' => '编号',
-            'operation_price_strategy_name' => '策略名称',
+            'operation_price_strategy_name' => '规格名称',
             'operation_price_strategy_unit' => '价格计量单位',
             'operation_price_strategy_lowest_consume_unit' => '最低消费计量单位',
             'created_at' => '创建时间',
@@ -56,7 +57,7 @@ class OperationPriceStrategy extends CoreOperationPriceStrategy
     public static function getAllStrategy()
     {
         $priceStrategies = self::getAll();
-        $priceStrategies_array = [0 => '选择价格策略'];
+        $priceStrategies_array = [0 => '选择商品规格'];
         foreach($priceStrategies as $k => $v){
             $priceStrategies_array[$v->id] = $v->operation_price_strategy_name;
         }

@@ -7,14 +7,14 @@ use boss\models\Operation\OperationCategoryType;
 use boss\models\Operation\OperationCategory;
 use boss\models\Operation\OperationPriceStrategy;
 use yii\data\ActiveDataProvider;
-use boss\components\Controller;
+use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * OperationCategoryTypeController implements the CRUD actions for OperationCategoryType model.
  */
-class OperationCategoryTypeController extends Controller
+class OperationCategoryTypeController extends BaseAuthController
 {
     public function behaviors()
     {
@@ -32,15 +32,13 @@ class OperationCategoryTypeController extends Controller
      * Lists all OperationCategoryType models.
      * @return mixed
      */
-    public function actionIndex($category_id)
+    public function actionIndex()
     {
-        $category = OperationCategory::find()->where(['id' => $category_id])->one();
         $dataProvider = new ActiveDataProvider([
-            'query' => OperationCategoryType::find()->where(['operation_category_id' => $category_id]),
+            'query' => OperationCategoryType::find(),
         ]);
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-            'category' => $category,
         ]);
     }
 
@@ -61,10 +59,8 @@ class OperationCategoryTypeController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate($category_id)
+    public function actionCreate()
     {
-        $category = OperationCategory::find()->where(['id' => $category_id])->one();
-        
         $priceStrategies = OperationPriceStrategy::getAllStrategy();
         
         $model = new OperationCategoryType();
@@ -74,7 +70,6 @@ class OperationCategoryTypeController extends Controller
         } else {
             return $this->render('create', [
                 'model' => $model,
-                'category' => $category,
                 'priceStrategies' => $priceStrategies,
             ]);
         }

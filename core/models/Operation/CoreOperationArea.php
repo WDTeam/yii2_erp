@@ -28,4 +28,9 @@ class CoreOperationArea extends CommonOperationArea
         }
         return $d;
     }
+    
+    public static function getProvinces($parent_id = 0){
+        $where = ['parent_id' => $parent_id];
+        return self::getAllData($where);
+    }
 }

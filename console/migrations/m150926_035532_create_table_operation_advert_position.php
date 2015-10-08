@@ -30,6 +30,8 @@ class m150926_035532_create_table_operation_advert_position extends Migration
     public function down()
     {
         $this->dropTable('{{%operation_advert_position}}');
+
+        return true;
     }
 
     /*

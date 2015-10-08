@@ -57,6 +57,8 @@ class m150918_140930_create_table_finance_settle_apply extends Migration
     public function down()
     {
         $this->dropTable('{{%finance_settle_apply}}');
+
+        return true;
     }
 
     /*

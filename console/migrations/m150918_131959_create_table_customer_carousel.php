@@ -25,6 +25,8 @@ class m150918_131959_create_table_customer_carousel extends Migration
     public function down()
     {
         $this->dropTable('{{%customer_carousel}}');
+
+        return true;
     }
 
     /*

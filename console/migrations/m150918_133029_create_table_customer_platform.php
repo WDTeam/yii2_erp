@@ -32,5 +32,7 @@ class m150918_133029_create_table_customer_platform extends Migration
     public function down()
     {
         $this->dropTable('{{%customer_platform}}');
+
+        return true;
     }
 }
