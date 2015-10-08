@@ -13,11 +13,22 @@ use common\models\Order as OrderModel;
 use common\models\OrderHistory;
 use common\models\OrderStatusHistory;
 use common\models\OrderStatusDict;
-use common\models\OrderSrc;
 
 class Order extends OrderModel
 {
 
+    public $order_pay_type;
+    public $order_customer_phone;
+    public $customer_id;
+    public $coupon_id;
+    public $card_id;
+    public $order_use_acc_balance;
+    public $order_pop_group_buy_code;
+    public $order_pop_order_code;
+    public $order_pop_order_money;
+    public $order_pop_operation_money;
+    public $order_customer_need;
+    public $order_customer_memo;
     /**
      * 追加新订单
      * @param $post

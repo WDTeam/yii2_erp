@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150918_131148_create_table_order_status extends Migration
+class m151007_153204_create_table_order_ext_status extends Migration
 {
     public function up()
     {
@@ -13,7 +13,7 @@ class m150918_131148_create_table_order_status extends Migration
         }
 
 
-        $this->createTable('{{%order_status}}', [
+        $this->createTable('{{%order_ext_status}}', [
             'order_id'=> Schema::TYPE_BIGPK .' NOT NULL COMMENT \'订单id\'',
 
             'order_before_status_dict_id' => Schema::TYPE_SMALLINT . '(4) unsigned NOT NULL DEFAULT 0 COMMENT \'状态变更前订单状态字典ID\'',
@@ -29,19 +29,10 @@ class m150918_131148_create_table_order_status extends Migration
 
     public function down()
     {
-        $this->dropTable('{{%order_status}}');
+        $this->dropTable('{{%order_ext_status}}');
 
         return true;
     }
 
-    /*
-    // Use safeUp/safeDown to run migration code within a transaction
-    public function safeUp()
-    {
-    }
 
-    public function safeDown()
-    {
-    }
-    */
 }

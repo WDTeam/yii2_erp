@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use jamband\schemadump\Migration;
 
-class m151007_142219_create_table_order_flag extends Migration
+class m151007_142219_create_table_order_ext_flag extends Migration
 {
     public function up()
     {
@@ -13,7 +13,7 @@ class m151007_142219_create_table_order_flag extends Migration
         }
 
 
-        $this->createTable('{{%order_flag}}', [
+        $this->createTable('{{%order_ext_flag}}', [
             'order_id'=> Schema::TYPE_BIGPK .' NOT NULL COMMENT \'订单id\'',
 
             'order_flag_send' => Schema::TYPE_BOOLEAN . '(1) unsigned  DEFAULT 0 COMMENT \'指派不了 0可指派 1客服指派不了 2小家政指派不了 3都指派不了\'',
@@ -30,7 +30,7 @@ class m151007_142219_create_table_order_flag extends Migration
 
     public function down()
     {
-        $this->dropTable('{{%order_flag}}');
+        $this->dropTable('{{%order_ext_flag}}');
 
         return true;
     }

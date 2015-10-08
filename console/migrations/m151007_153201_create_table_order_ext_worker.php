@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use jamband\schemadump\Migration;
 
-class m151007_153201_create_table_order_worker extends Migration
+class m151007_153201_create_table_order_ext_worker extends Migration
 {
     public function up()
     {
@@ -13,7 +13,7 @@ class m151007_153201_create_table_order_worker extends Migration
         }
 
 
-        $this->createTable('{{%order_worker}}', [
+        $this->createTable('{{%order_ext_worker}}', [
             'order_id'=> Schema::TYPE_BIGPK .' NOT NULL COMMENT \'订单id\'',
 
             //===========================工人信息
@@ -31,7 +31,7 @@ class m151007_153201_create_table_order_worker extends Migration
 
     public function down()
     {
-        $this->dropTable('{{%order_worker}}');
+        $this->dropTable('{{%order_ext_worker}}');
 
         return true;
     }

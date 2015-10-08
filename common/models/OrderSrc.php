@@ -13,7 +13,7 @@ use Yii;
  * @property string $order_src_name
  * @property integer $isdel
  */
-class OrderSrc extends \yii\db\ActiveRecord
+class OrderSrc extends \common\models\ActiveRecord
 {
     /**
      * @inheritdoc
