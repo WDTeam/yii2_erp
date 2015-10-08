@@ -346,17 +346,47 @@ echo Menu::widget(
                         ],
                         'items'=>[
                            [
-                                'label' => '阿姨结算',
-                                'url' => ['/finance-settle-apply/worker-manual-settlement-index'],
+                                'label' => '自营结算',
+                                'url' => ['#'],
                                 'icon' => 'fa fa-angle-right',
+                                'options' => [
+                                    'class' => 'treeview ',
+                                ],
+                               'items'=>[
+                                    [
+                                        'label' => '全职结算',
+                                        'url' => ['/finance-settle-apply/homemaking-manual-settlement-index'],
+                                        'icon' => 'fa fa-angle-right',
+                                    ],
+                                   [
+                                        'label' => '兼职结算',
+                                        'url' => ['/finance-settle-apply/homemaking-manual-settlement-index'],
+                                        'icon' => 'fa fa-angle-right',
+                                    ],
+                               ]
                             ],
                             [
                                 'label' => '小家政结算',
-                                'url' => ['/finance-settle-apply/homemaking-manual-settlement-index'],
+                                'url' => ['#'],
                                 'icon' => 'fa fa-angle-right',
+                                'options' => [
+                                    'class' => 'treeview ',
+                                ],
+                                'items'=>[
+                                    [
+                                        'label' => '门店结算',
+                                        'url' => ['/finance-settle-apply/homemaking-manual-settlement-index'],
+                                        'icon' => 'fa fa-angle-right',
+                                    ],
+                                   [
+                                        'label' => '阿姨结算',
+                                        'url' => ['/finance-settle-apply/homemaking-manual-settlement-index'],
+                                        'icon' => 'fa fa-angle-right',
+                                    ],
+                                ]
                             ],
                             [
-                                'label' => '结算审核(85%)',
+                                'label' => '财务审核(85%)',
                                 'url' => ['/finance-settle-apply/index?FinanceSettleApplySearch[finance_settle_apply_status]=0&FinanceSettleApplySearch[ids]=&FinanceSettleApplySearch[nodeId]=1'],
                                 'icon' => 'fa fa-angle-right',
                             ], [
