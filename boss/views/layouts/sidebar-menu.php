@@ -355,7 +355,7 @@ echo Menu::widget(
                                'items'=>[
                                     [
                                         'label' => '全职结算',
-                                        'url' => ['/finance-settle-apply/homemaking-manual-settlement-index'],
+                                        'url' => ['/finance-settle-apply/index?FinanceSettleApplySearch[finance_settle_apply_status]=0&FinanceSettleApplySearch[ids]=&FinanceSettleApplySearch[nodeId]=1'],
                                         'icon' => 'fa fa-angle-right',
                                     ],
                                    [
