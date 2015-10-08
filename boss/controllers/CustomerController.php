@@ -4,7 +4,7 @@ namespace boss\controllers;
 use Yii;
 use common\models\Customer;
 use boss\models\CustomerSearch;
-use boss\components\Controller;
+use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -21,7 +21,7 @@ use common\models\Order;
 /**
  * CustomerController implements the CRUD actions for Customer model.
  */
-class CustomerController extends Controller
+class CustomerController extends BaseAuthController
 {
     public function behaviors()
     {

@@ -8,13 +8,13 @@ use boss\models\Operation\OperationShopDistrictCoordinate;
 use boss\models\Operation\OperationCity;
 use boss\models\Operation\OperationArea;
 use yii\data\ActiveDataProvider;
-use boss\components\Controller;
+use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 /**
  * OperationShopDistrictController implements the CRUD actions for OperationShopDistrict model.
  */
-class OperationShopDistrictController extends Controller
+class OperationShopDistrictController extends BaseAuthController
 {
     public $city_id; //城市id
     public function behaviors(){
@@ -48,7 +48,7 @@ class OperationShopDistrictController extends Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => OperationShopDistrict::find(),
+            'query' => OperationShopDistrict::find()->where(['operation_city_id' => $this->city_id]),
         ]);
 
         return $this->render('index', [

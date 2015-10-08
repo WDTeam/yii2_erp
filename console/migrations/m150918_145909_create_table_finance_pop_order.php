@@ -5,7 +5,7 @@ use yii\db\Migration;
 
 class m150918_145909_create_table_finance_pop_order extends Migration
 {
-	
+
 	public function up()
     {
 		if ($this->db->driverName === 'mysql') {
@@ -35,7 +35,7 @@ class m150918_145909_create_table_finance_pop_order extends Migration
 		  'finance_pop_order_reality_pay' => Schema::TYPE_DECIMAL. '(8,2) NOT NULL  DEFAULT \'0.00\' COMMENT \'实际收款\'',
 		  'finance_pop_order_order_time'  => Schema::TYPE_INTEGER . '(10) DEFAULT NULL  COMMENT \'下单时间\'',
 		  'finance_pop_order_pay_time'  => Schema::TYPE_INTEGER . '(10) DEFAULT NULL  COMMENT \'支付时间\'',
-		 
+
 		  'finance_pop_order_pay_status' => Schema::TYPE_SMALLINT. '(1)  NOT NULL  DEFAULT \'0\' COMMENT \'1 对账成功 2 财务确定ok  3 财务确定on 4 财务未处理\'',
 		  'finance_pop_order_pay_title' => Schema::TYPE_STRING. '(30)  NOT NULL  DEFAULT \'0\' COMMENT \'状态 描述\'',
 		  'finance_pop_order_check_id' => Schema::TYPE_SMALLINT. '(3) DEFAULT NULL  COMMENT \'操作人id\'',
@@ -52,7 +52,7 @@ class m150918_145909_create_table_finance_pop_order extends Migration
     {
           $this->dropTable('{{%finance_pop_order}}');
 
-        return false;
+        return true;
     }
     /*
     // Use safeUp/safeDown to run migration code within a transaction

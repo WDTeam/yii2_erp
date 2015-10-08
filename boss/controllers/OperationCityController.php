@@ -5,7 +5,7 @@ namespace boss\controllers;
 use Yii;
 use boss\models\Operation\OperationCity;
 use boss\models\Operation\OperationCitySearch;
-use boss\components\Controller;
+use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 //use boss\components\AreaCascade;
@@ -15,7 +15,7 @@ use boss\components\UploadFile;
 /**
  * OperationCityController implements the CRUD actions for OperationCity model.
  */
-class OperationCityController extends Controller
+class OperationCityController extends BaseAuthController
 {
     public function behaviors()
     {
@@ -79,6 +79,10 @@ class OperationCityController extends Controller
             $p['OperationCity']['city_name'] = $city->area_name;
         }
         if ($model->load($p)) {
+            if(OperationCity::getCityInfo($model->city_id)){
+                $teturn = ['code'=>'80009', 'errmsg'=>'该城市已开通过'];
+                die;
+            }
 //            $path = UploadFile::widget(['fileInputName' => 'file']);
 //            echo $path;exit;
 //            print_r($_FILES);exit;

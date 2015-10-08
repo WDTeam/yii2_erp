@@ -43,6 +43,8 @@ class m150918_131148_create_table_order_status extends Migration
     public function down()
     {
         $this->dropTable('{{%order_status}}');
+
+        return true;
     }
 
     /*

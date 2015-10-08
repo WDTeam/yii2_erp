@@ -10,11 +10,11 @@ class m150919_064906_create_table_finance_record_log extends Migration
     {
 
     if ($this->db->driverName === 'mysql') {
-    		
+
 			$tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'对账日志记录表\'';
-   
+
 			}
-    
+
 			$this->createTable('{{%finance_record_log}}', [
   'id' => Schema::TYPE_PK . '(10) AUTO_INCREMENT COMMENT \'主键\'' ,
 'finance_order_channel_id' => Schema::TYPE_SMALLINT . '(4) DEFAULT NULL COMMENT \'对账名称id\'' ,
@@ -38,7 +38,7 @@ class m150919_064906_create_table_finance_record_log extends Migration
     {
           $this->dropTable('{{%finance_record_log}}');
 
-        return false;
+        return true;
     }
 
     /*

@@ -26,7 +26,7 @@ class m150919_084929_create_table_worker_vacation extends Migration
 
     public function down()
     {
-        $this->dropTable('ejj_worker_vacation');
+        $this->dropTable('{{%worker_vacation}}');
     }
 
     /*

@@ -22,6 +22,8 @@ class m150926_035355_create_table_operation_platform extends Migration
     public function down()
     {
         $this->dropTable('{{%operation_platform}}');
+
+        return true;
     }
 
     /*

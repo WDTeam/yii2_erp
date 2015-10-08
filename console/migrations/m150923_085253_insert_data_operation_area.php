@@ -23,8 +23,10 @@ class m150923_085253_insert_data_operation_area extends Migration
 
     public function down()
     {
-        $sql = 'transcate {{%operation_area}}';
+        $sql = 'TRUNCATE {{%operation_area}}';
         $this->execute($sql);
+
+        return true;
     }
 
     /*

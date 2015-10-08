@@ -39,16 +39,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php
 
-    $b =  Html::a('<i class="glyphicon" ></i>待试验 '.$searchModel->AuthStatusCount, ['index?WorkerSearch[worker_auth_status]=0'], ['class' => 'btn btn-success ', 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>待试工 '.$searchModel->OntrialStatusCount, ['index?WorkerSearch[worker_ontrial_status]=0'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>待上岗 '.$searchModel->OnboardStatusCount, ['index?WorkerSearch[worker_onboard_status]=0'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>全职 '.$searchModel->QCount, ['index?WorkerSearch[worker_rule_id]=1'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>兼职 '.$searchModel->JCount, ['index?WorkerSearch[worker_rule_id]=2'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>时段 '.$searchModel->SCount, ['index?WorkerSearch[worker_rule_id]=3'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>高峰 '.$searchModel->GCount, ['index?WorkerSearch[worker_rule_id]=4'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>请假 '.$searchModel->VacationCount, ['index?WorkerSearch[worker_rule_id]=1'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>封号 '.$searchModel->BlockCount, ['index?WorkerSearch[worker_is_block]=1'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>黑名单 '.$searchModel->BlackListCount, ['index?WorkerSearch[worker_is_blacklist]=1'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']);
+    $b =
+        Html::a('<i class="glyphicon" ></i>全部 ', ['/worker'], ['class' => 'btn '.$searchModel->getSearchBtnCss(0), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>待检验 '.$searchModel->AuthStatusCount, ['index?WorkerSearch[worker_auth_status]=0'], ['class' => 'btn '.$searchModel->getSearchBtnCss(1), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>待试工 '.$searchModel->OntrialStatusCount, ['index?WorkerSearch[worker_ontrial_status]=0'], ['class' => 'btn '.$searchModel->getSearchBtnCss(2), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>待上岗 '.$searchModel->OnboardStatusCount, ['index?WorkerSearch[worker_onboard_status]=0'], ['class' => 'btn '.$searchModel->getSearchBtnCss(3), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>全职 '.$searchModel->QCount, ['index?WorkerSearch[worker_rule_id]=1'], ['class' => 'btn '.$searchModel->getSearchBtnCss(4), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>兼职 '.$searchModel->JCount, ['index?WorkerSearch[worker_rule_id]=2'], ['class' => 'btn '.$searchModel->getSearchBtnCss(5), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>时段 '.$searchModel->SCount, ['index?WorkerSearch[worker_rule_id]=3'], ['class' => 'btn '.$searchModel->getSearchBtnCss(6), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>高峰 '.$searchModel->GCount, ['index?WorkerSearch[worker_rule_id]=4'], ['class' => 'btn '.$searchModel->getSearchBtnCss(7), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>请假 '.$searchModel->VacationCount, ['index?WorkerSearch[worker_is_vacation]=1'], ['class' => 'btn '.$searchModel->getSearchBtnCss(8), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>封号 '.$searchModel->BlockCount, ['index?WorkerSearch[worker_is_block]=1'], ['class' => 'btn '.$searchModel->getSearchBtnCss(9), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>黑名单 '.$searchModel->BlackListCount, ['index?WorkerSearch[worker_is_blacklist]=1'], ['class' => 'btn '.$searchModel->getSearchBtnCss(10), 'style' => 'margin-right:10px']);
 
     ?>
     <?php
@@ -56,7 +58,6 @@ $this->params['breadcrumbs'][] = $this->title;
     echo GridView::widget([
         'dataProvider' => $dataProvider,
         'export'=>false,
-
         'toolbar' =>
             [
                 'content'=>

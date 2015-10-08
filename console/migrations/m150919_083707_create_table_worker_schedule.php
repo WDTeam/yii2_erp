@@ -26,7 +26,9 @@ class m150919_083707_create_table_worker_schedule extends Migration
 
     public function down()
     {
-        $this->dropTable('ejj_worker_schedule');
+        $this->dropTable('{{%worker_schedule}}');
+
+        return true;
     }
 
     /*

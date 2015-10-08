@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'operation_platform_id',
             'operation_platform_name',
             'operation_platform_version_name',
-            'created_at:datatime',
+            'created_at:datetime',
             'updated_at:datetime',
             [
                 'header' => Yii::t('app', 'Operation'),

@@ -25,7 +25,8 @@ class m150919_092929_create_table_worker_block extends Migration
 
     public function down()
     {
-        $this->dropTable('ejj_worker_block');
+        $this->dropTable('{{%worker_block}}');
+        return true;
     }
 
     /*

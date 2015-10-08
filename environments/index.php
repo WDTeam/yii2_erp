@@ -34,6 +34,10 @@ return [
         'setWritable' => [
             'core/runtime',
             'core/web/assets',
+            'boss/runtime',
+            'boss/web/assets',
+            'api/runtime',
+            'api/web/assets',
         ],
         'setExecutable' => [
             'yii',
@@ -48,6 +52,10 @@ return [
         'setWritable' => [
             'core/runtime',
             'core/web/assets',
+            'boss/runtime',
+            'boss/web/assets',
+            'api/runtime',
+            'api/web/assets',
         ],
         'setExecutable' => [
             'yii',
@@ -61,6 +69,10 @@ return [
         'setWritable' => [
             'core/runtime',
             'core/web/assets',
+            'boss/runtime',
+            'boss/web/assets',
+            'api/runtime',
+            'api/web/assets',
         ],
         'setExecutable' => [
             'yii',
@@ -74,6 +86,10 @@ return [
         'setWritable' => [
             'core/runtime',
             'core/web/assets',
+            'boss/runtime',
+            'boss/web/assets',
+            'api/runtime',
+            'api/web/assets',
         ],
         'setExecutable' => [
             'yii',

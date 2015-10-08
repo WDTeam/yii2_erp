@@ -7,7 +7,6 @@ use yii\widgets\Pjax;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
- * @var boss\models\CustomerTransRecordSearch $searchModel
  */
 
 $this->title = Yii::t('app', 'Customer Trans Records');
@@ -17,7 +16,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="page-header">
             <h1><?= Html::encode($this->title) ?></h1>
     </div>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
         <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
@@ -27,7 +25,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -36,30 +33,33 @@ $this->params['breadcrumbs'][] = $this->title;
             'order_id',
             'order_channel_id',
             'customer_trans_record_order_channel',
-//            'pay_channel_id', 
-//            'customer_trans_record_pay_channel', 
-//            'customer_trans_record_mode', 
-//            'customer_trans_record_mode_name', 
-//            'customer_trans_record_promo_code_money', 
-//            'customer_trans_record_coupon_money', 
-//            'customer_trans_record_cash', 
-//            'customer_trans_record_pre_pay', 
-//            'customer_trans_record_online_pay', 
-//            'customer_trans_record_online_balance_pay', 
-//            'customer_trans_record_online_service_card_on', 
-//            'customer_trans_record_online_service_card_pay', 
-//            'customer_trans_record_refund_money', 
-//            'customer_trans_record_money', 
-//            'customer_trans_record_order_total_money', 
-//            'customer_trans_record_total_money', 
-//            'customer_trans_record_current_balance', 
-//            'customer_trans_record_befor_balance', 
-//            'customer_trans_record_transaction_id', 
-//            'customer_trans_record_remark', 
-//            'customer_trans_record_verify', 
-//            'created_at', 
-//            'updated_at', 
-//            'is_del', 
+            'pay_channel_id',
+            'customer_trans_record_pay_channel',
+            'customer_trans_record_mode',
+            'customer_trans_record_mode_name',
+            'customer_trans_record_promo_code_money',
+            'customer_trans_record_coupon_money',
+            'customer_trans_record_cash',
+            'customer_trans_record_pre_pay',
+            'customer_trans_record_online_pay',
+            'customer_trans_record_online_balance_pay',
+            'customer_trans_record_online_service_card_on',
+            'customer_trans_record_online_service_card_pay',
+            'customer_trans_record_online_service_card_current_balance',
+            'customer_trans_record_online_service_card_befor_balance',
+            'customer_trans_record_compensate_money',
+            'customer_trans_record_refund_money',
+            'customer_trans_record_money',
+            'customer_trans_record_order_total_money',
+            'customer_trans_record_total_money',
+            'customer_trans_record_current_balance',
+            'customer_trans_record_befor_balance',
+            'customer_trans_record_transaction_id',
+            'customer_trans_record_remark',
+            'customer_trans_record_verify',
+            'created_at',
+            'updated_at',
+            'is_del',
 
             [
                 'class' => 'yii\grid\ActionColumn',

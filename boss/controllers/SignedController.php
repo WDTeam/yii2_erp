@@ -7,14 +7,14 @@ use boss\models\Signed;
 use boss\models\Interview;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
-use boss\components\Controller;
+use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * SignedController implements the CRUD actions for Signed model.
  */
-class SignedController extends Controller
+class SignedController extends BaseAuthController
 {
     public function behaviors()
     {

@@ -5,14 +5,14 @@ namespace boss\controllers;
 use Yii;
 use common\models\FinancePayChannel;
 use boss\models\FinancePayChannelSearch;
-use boss\components\Controller;
+use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * FinancePayChannelController implements the CRUD actions for FinancePayChannel model.
  */
-class FinancePayChannelController extends Controller
+class FinancePayChannelController extends BaseAuthController
 {
     public function behaviors()
     {

@@ -14,8 +14,12 @@ class m150926_035618_create_table_operation_advert_content extends Migration
         $this->createTable('{{%operation_advert_content}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT COMMENT \'编号\'' ,
             'operation_advert_position_name' => Schema::TYPE_STRING . '(60) DEFAULT NULL COMMENT \'广告名称\'',
-            'operation_city_id' => Schema::TYPE_TEXT . ' DEFAULT NULL COMMENT \'城市编号\'',
-            'operation_city_name' => Schema::TYPE_TEXT . ' DEFAULT NULL COMMENT \'城市名称\'',
+            'operation_city_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'城市编号\'',
+            'operation_city_name' => Schema::TYPE_STRING . '(50) DEFAULT NULL COMMENT \'城市名称\'',
+            'operation_platform_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'平台编号\'',
+            'operation_platform_name' => Schema::TYPE_STRING . '(50) DEFAULT NULL COMMENT \'平台名称\'',
+            'operation_platform_version_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'版本编号\'',
+            'operation_platform_version_name' => Schema::TYPE_STRING . '(50) DEFAULT NULL COMMENT \'版本名称\'',
             'operation_advert_start_time' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'活动开始时间\'',
             'operation_advert_end_time' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'活动结束时间\'',
             'operation_advert_online_time' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'广告上线时间\'',
@@ -30,6 +34,8 @@ class m150926_035618_create_table_operation_advert_content extends Migration
     public function down()
     {
         $this->dropTable('{{%operation_advert_content}}');
+
+        return true;
     }
 
     /*

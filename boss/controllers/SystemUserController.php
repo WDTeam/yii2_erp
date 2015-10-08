@@ -5,14 +5,14 @@ namespace boss\controllers;
 use Yii;
 use boss\models\SystemUser;
 use boss\models\search\SystemUserSearch;
-use boss\components\Controller;
+use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * SystemUserController implements the CRUD actions for SystemUser model.
  */
-class SystemUserController extends Controller
+class SystemUserController extends BaseAuthController
 {
     public function behaviors()
     {

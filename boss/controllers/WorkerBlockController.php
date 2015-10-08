@@ -5,14 +5,14 @@ namespace boss\controllers;
 use Yii;
 use common\models\WorkerBlock;
 use boss\models\WorkerBlockSearch;
-use boss\components\Controller;
+use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * WorkerBlockController implements the CRUD actions for WorkerBlock model.
  */
-class WorkerBlockController extends Controller
+class WorkerBlockController extends BaseAuthController
 {
     public function behaviors()
     {

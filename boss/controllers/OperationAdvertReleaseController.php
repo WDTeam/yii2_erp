@@ -5,14 +5,18 @@ namespace boss\controllers;
 use Yii;
 use boss\models\Operation\OperationAdvertRelease;
 use yii\data\ActiveDataProvider;
-use boss\components\Controller;
+use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+//use boss\models\Operation\OperationPlatform;
+//use boss\models\Operation\OperationPlatformVersion;
+use boss\models\Operation\OperationAdvertPosition;
+use boss\models\Operation\OperationAdvertContent;
 
 /**
  * OperationAdvertReleaseController implements the CRUD actions for OperationAdvertRelease model.
  */
-class OperationAdvertReleaseController extends Controller
+class OperationAdvertReleaseController extends BaseAuthController
 {
     public function behaviors()
     {
@@ -61,12 +65,30 @@ class OperationAdvertReleaseController extends Controller
     public function actionCreate()
     {
         $model = new OperationAdvertRelease();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $post = Yii::$app->request->post();
+        if ($model->load($post)){
+            $_model = clone $model;
+            $position_id = $post['OperationAdvertRelease']['operation_advert_position_id'];
+            $position = OperationAdvertPosition::find()->where(['id' => $position_id])->one();
+            $post['OperationAdvertRelease']['operation_advert_position_name'] = $position->operation_advert_position_name;
+            $post['OperationAdvertRelease']['operation_advert_contents'] = serialize($post['OperationAdvertRelease']['operation_advert_contents']);
+            $_model->operation_platform_id = $position->operation_platform_id;
+            $_model->operation_platform_name = $position->operation_platform_name;
+            $_model->operation_platform_version_id = $position->operation_platform_version_id;
+            $_model->operation_platform_version_name = $position->operation_platform_version_name;
+            $_model->load($post);
+            $_model->save();
+            return $this->redirect(['index']);
         } else {
+            $position = OperationAdvertPosition::find()->all();
+            $positions = ['选择广告位置'];
+            foreach($position as $v){$positions[$v->id] = $v->operation_advert_position_name;}
+            $content = OperationAdvertContent::find()->all();
+            foreach($content as $k => $v){$contents[$v->id] = $v->operation_advert_position_name;}
             return $this->render('create', [
                 'model' => $model,
+                'positions' => $positions,
+                'contents' => $contents,
             ]);
         }
     }
@@ -80,12 +102,30 @@ class OperationAdvertReleaseController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $post = Yii::$app->request->post();
+        if ($model->load($post)) {
+            $_model = clone $model;
+            $position_id = $post['OperationAdvertRelease']['operation_advert_position_id'];
+            $position = OperationAdvertPosition::find()->where(['id' => $position_id])->one();
+            $post['OperationAdvertRelease']['operation_advert_position_name'] = $position->operation_advert_position_name;
+            $post['OperationAdvertRelease']['operation_advert_contents'] = serialize($post['OperationAdvertRelease']['operation_advert_contents']);
+            $_model->operation_platform_id = $position->operation_platform_id;
+            $_model->operation_platform_name = $position->operation_platform_name;
+            $_model->operation_platform_version_id = $position->operation_platform_version_id;
+            $_model->operation_platform_version_name = $position->operation_platform_version_name;
+            $_model->load($post);
+            $_model->save();
+            return $this->redirect(['index']);
         } else {
+            $position = OperationAdvertPosition::find()->all();
+            $positions = ['选择广告位置'];
+            foreach($position as $v){$positions[$v->id] = $v->operation_advert_position_name;}
+            $content = OperationAdvertContent::find()->all();
+            foreach($content as $k => $v){$contents[$v->id] = $v->operation_advert_position_name;}
             return $this->render('update', [
                 'model' => $model,
+                'positions' => $positions,
+                'contents' => $contents,
             ]);
         }
     }
