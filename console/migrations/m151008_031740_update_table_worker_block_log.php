@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use jamband\schemadump\Migration;
 
-class m151008_031740_add_field_to_worker_block_log extends Migration
+class m151008_031740_update_table_worker_block_log extends Migration
 {
     public function Up()
     {

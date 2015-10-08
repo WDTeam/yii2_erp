@@ -110,7 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::a('<span class="fa fa-fw fa-history"></span>',
                             [
                                 '/worker/vacation-create',
-                                'id' => $model->id
+                                'workerId' => $model->id
                             ]
                             ,
                             [
@@ -125,7 +125,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::a('<span class="fa fa-fw fa-lock"></span>',
                         [
                             '/worker/block-create',
-                            'id' => $model->id
+                            'workerId' => $model->id
                         ]
                         ,
                         [

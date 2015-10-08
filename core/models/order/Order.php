@@ -8,107 +8,166 @@
 
 namespace core\models\order;
 
+use common\models\OrderExtCustomer;
+use common\models\OrderExtFlag;
+use common\models\OrderExtPay;
+use common\models\OrderExtStatus;
+use common\models\OrderExtPop;
+use common\models\OrderExtWorker;
 use Yii;
 use common\models\Order as OrderModel;
 use common\models\OrderHistory;
 use common\models\OrderStatusHistory;
 use common\models\OrderStatusDict;
+use common\models\OrderSrc;
 
+/**
+ * This is the model class for table "{{%order}}".
+ *
+ * @property string $id
+ * @property string $created_at
+ * @property string $updated_at
+ * @property string $order_code
+ * @property string $order_parent_id
+ * @property integer $order_is_parent
+ * @property integer $order_before_status_dict_id
+ * @property string $order_before_status_name
+ * @property integer $order_status_dict_id
+ * @property string $order_status_name
+ * @property integer $order_flag_send
+ * @property integer $order_flag_urgent
+ * @property integer $order_flag_exception
+ * @property integer $order_flag_sys_assign
+ * @property integer $order_flag_lock
+ * @property integer $order_ip
+ * @property integer $order_service_type_id
+ * @property string $order_service_type_name
+ * @property integer $order_src_id
+ * @property string $order_src_name
+ * @property string $channel_id
+ * @property string $order_channel_name
+ * @property string $order_unit_money
+ * @property string $order_money
+ * @property string $order_booked_count
+ * @property string $order_booked_begin_time
+ * @property string $order_booked_end_time
+ * @property string $address_id
+ * @property string $order_address
+ * @property string $order_booked_worker_id
+ * @property string $order_pop_order_code
+ * @property string $order_pop_group_buy_code
+ * @property string $order_pop_operation_money
+ * @property string $order_pop_order_money
+ * @property string $order_pop_pay_money
+ * @property string $customer_id
+ * @property string $order_customer_phone
+ * @property string $order_customer_need
+ * @property string $order_customer_memo
+ * @property string $comment_id
+ * @property string $invoice_id
+ * @property integer $order_customer_hidden
+ * @property integer $order_pay_type
+ * @property string $pay_channel_id
+ * @property string $order_pay_channel_name
+ * @property string $order_pay_flow_num
+ * @property string $order_pay_money
+ * @property string $order_use_acc_balance
+ * @property string $card_id
+ * @property string $order_use_card_money
+ * @property string $coupon_id
+ * @property string $order_use_coupon_money
+ * @property string $promotion_id
+ * @property string $order_use_promotion_money
+ * @property string $worker_id
+ * @property string $worker_type_id
+ * @property string $order_worker_type_name
+ * @property integer $order_worker_assign_type
+ * @property string $shop_id
+ * @property string $checking_id
+ * @property string $order_cs_memo
+ * @property string $admin_id
+ */
 class Order extends OrderModel
 {
 
-    public $order_pay_type;
-    public $order_customer_phone;
-    public $customer_id;
-    public $coupon_id;
-    public $card_id;
-    public $order_use_acc_balance;
-    public $order_pop_group_buy_code;
-    public $order_pop_order_code;
-    public $order_pop_order_money;
-    public $order_pop_operation_money;
-    public $order_customer_need;
-    public $order_customer_memo;
     /**
      * 追加新订单
-     * @param $post
+     * @param $attributes
      * @return bool
      */
-    public function additional($post)
+    public function additional($attributes)
     {
-        if ($post['order']['order_parent_id'] <= 0) {
-            $this->addError('order_parent_id', '追加订单必须指定主订单编号！');
+        if ($attributes['order_parent_id'] <= 0) {
+            $this->addError('order_parent_id', '追加订单必须指定主订单ID！');
         } else {
-            $post['order']['order_is_parent'] = 1;
-            return $this->create($post);
+            $attributes['order_is_parent'] = 1;
+            return $this->create($attributes);
         }
     }
 
     /**
      * 创建新订单
-     * @param $post
+     * @param $attributes
      * @return bool
      */
-    public function createNew($post)
+    public function createNew($attributes)
     {
-        $post['Order']['order_parent_id'] = 0;
-        $post['Order']['order_is_parent'] = 0;
-        return $this->create($post);
+        $attributes['order_parent_id'] = 0;
+        $attributes['order_is_parent'] = 0;
+        return $this->create($attributes);
     }
 
     /**
      * 创建订单
-     * @param $post
+     * @param $attributes
      * @return bool
      */
-    public function create($post)
+    public function create($attributes)
     {
-        if ($this->load($post)) {
-            $statusFrom = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //创建订单状态
-            $statusTo = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //初始化订单状态
-            $orderCode = date('ymdHis') . str_pad($this->order_service_type_id, 2, '0', STR_PAD_LEFT) . str_pad($this->customer_id, 10, '0', STR_PAD_LEFT); //TODO 订单号待优化
-            $this->setAttributes([
-                'order_code' => $orderCode,
-                'order_before_status_dict_id' => $statusFrom->id,
-                'order_before_status_name' => $statusFrom->order_status_name,
-                'order_status_dict_id' => $statusTo->id,
-                'order_status_name' => $statusTo->order_status_name,
-                'order_src_name' => $this->getOrderSrcName($this->order_src_id),
-                'order_channel_name' => $this->getOrderChannelList($this->channel_id),
-                'order_service_type_name' => $this->getServiceList($this->order_service_type_id),
-                'order_flag_send' => 0, //'指派不了 0可指派 1客服指派不了 2小家政指派不了 3都指派不了',
-                'order_flag_urgent' => 0,//加急 数字越大约紧急
-                'order_flag_exception' => 0,//异常标识
-                'order_lock_status' => 0,
-                'worker_id' => 0,
-                'worker_type_id' => 0,
-                'order_worker_send_type' => 0,
-                'comment_id' => 0,
-                'order_customer_hidden' => 0,
-                'order_pop_pay_money' => 0,
-                'shop_id' => 0,
-                'order_worker_type_name' => '',
-                'pay_channel_id' => 0,//支付渠道id
-                'order_pay_channel_name' => '',//支付渠道
-                'order_pay_flow_num' => '',//支付流水号
-                'order_pay_money' => 0,//支付金额
-                'invoice_id' => 0, //发票id 用户需求中有开发票就绑定发票id
-                'checking_id' => 0,
-                'isdel' => 0,
-            ]);
+        $this->setAttributes($attributes);
+        $statusFrom = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //创建订单状态
+        $statusTo = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //初始化订单状态
+        $orderCode = date('ymdHis') . str_pad($this->order_service_type_id, 2, '0', STR_PAD_LEFT) . str_pad($this->customer_id, 10, '0', STR_PAD_LEFT); //TODO 订单号待优化
+        $this->setAttributes([
+            'order_code' => $orderCode,
+            'order_before_status_dict_id' => $statusFrom->id,
+            'order_before_status_name' => $statusFrom->order_status_name,
+            'order_status_dict_id' => $statusTo->id,
+            'order_status_name' => $statusTo->order_status_name,
+            'order_src_name' => $this->getOrderSrcName($this->order_src_id),
+            'order_channel_name' => $this->getOrderChannelList($this->channel_id),
+            'order_service_type_name' => $this->getServiceList($this->order_service_type_id),
+            'order_flag_send' => 0, //'指派不了 0可指派 1客服指派不了 2小家政指派不了 3都指派不了',
+            'order_flag_urgent' => 0,//加急 数字越大约紧急
+            'order_flag_exception' => 0,//异常标识
+            'order_flag_lock' => 0,
+            'worker_id' => 0,
+            'worker_type_id' => 0,
+            'order_worker_send_type' => 0,
+            'comment_id' => 0,
+            'order_customer_hidden' => 0,
+            'order_pop_pay_money' => 0,
+            'shop_id' => 0,
+            'order_worker_type_name' => '',
+            'pay_channel_id' => 0,//支付渠道id
+            'order_pay_channel_name' => '',//支付渠道
+            'order_pay_flow_num' => '',//支付流水号
+            'order_pay_money' => 0,//支付金额
+            'invoice_id' => 0, //发票id 用户需求中有开发票就绑定发票id
+            'checking_id' => 0,
+            'isdel' => 0,
+        ]);
+        if ($this->coupon_id > 0) { //如果使用了优惠卷
+            $coupon = $this->getCouponById($this->coupon_id);
+            $this->order_use_coupon_money = $coupon['coupon_money'];
+        }
+        if ($this->card_id > 0) { //如果使用了服务卡
+            $card = $this->getCardById($this->card_id);
+            $this->order_use_card_money = $card['card_money'];
+        }
 
-            if($this->coupon_id>0){ //如果使用了优惠卷
-                $coupon = $this->getCouponById($this->coupon_id);
-                $this->order_use_coupon_money = $coupon->coupon_money;
-            }
-            if($this->card_id>0){ //如果使用了服务卡
-                $card = $this->getCardById($this->card_id);
-                $this->order_use_card_money = $card->card_money;
-            }
-
-            if ($this->doSave(true)) {
-                return true;
-            }
+        if ($this->doSave(true)) {
+            return true;
         }
         return false;
     }
@@ -125,6 +184,7 @@ class Order extends OrderModel
         $this->order_booked_begin_time = strtotime($this->order_booked_begin_time);
         $this->order_booked_end_time = strtotime($this->order_booked_end_time);
         if ($this->save()) {
+            //格式化数据开始
             $attributes = $this->attributes;
             foreach ($attributes as $k => $v) {
                 $attributes[$k] = ($v === null) ? '' : $v;
@@ -137,25 +197,26 @@ class Order extends OrderModel
             unset($attributes['created_at']);
             unset($attributes['updated_at']);
             unset($attributes['isdel']);
+            //格式化数据结束
 
-            //插入订单操作历史
-            $orderHistory = new OrderHistory();
-            $orderHistory->setAttributes($attributes);
+            //扩展信息
+            $extModel = ['OrderExtCustomer','OrderExtFlag','OrderExtPay','OrderExtPop','OrderExtStatus','OrderExtWorker','OrderHistory'];
             if ($statusChanged) { //订单状态有改动
-                //插入订单状态变更历史
-                $orderStatusHistory = new OrderStatusHistory();
-                $orderStatusHistory->setAttributes($attributes);
-                if (!$orderStatusHistory->save()) {
-                    $transaction->rollBack(); //插入不成功就回滚事务
+                $extModel[] = 'OrderStatusHistory';
+            }
+            foreach($extModel as $modelClassName){
+                $className = '\common\models\\'.$modelClassName;
+                $$modelClassName = new $className();
+                $$modelClassName->setAttributes($attributes);
+                $$modelClassName->order_id = $attributes['order_id'];
+                if (!$$modelClassName->save()) {
+                    $transaction->rollBack();//插入不成功就回滚事务
                     return false;
                 }
             }
-            if (!$orderHistory->save()) {
-                $transaction->rollBack();//插入不成功就回滚事务
-            } else {
-                $transaction->commit();
-                return true;
-            }
+
+            $transaction->commit();
+            return true;
         }
         return false;
     }
@@ -174,6 +235,92 @@ class Order extends OrderModel
             'order_status_dict_name' => $to->order_status_name
         ]);
         $this->doSave(true);
+    }
+
+    /**
+     * 获取订单来源名称
+     * @param $id
+     * @return string
+     */
+    public function getOrderSrcName($id)
+    {
+        return OrderSrc::findOne($id)->order_src_name;
+    }
+
+    /**
+     * 获取订单渠道
+     * @param int $channel_id
+     * @return array|bool
+     */
+    public function getOrderChannelList($channel_id = 0)
+    {
+        $channel = [1 => 'BOSS', 2 => '美团', 3 => '大众点评'];
+        return $channel_id == 0 ? $channel : (isset($channel[$channel_id]) ? $channel[$channel_id] : false);
+    }
+
+    /**
+     * 获取服务
+     * @param int $service_id
+     * @return array|bool
+     */
+    public function getServiceList($service_id = 0)
+    {
+        $service = [1 => '家庭保洁', 2 => '新居开荒', 3 => '擦玻璃'];
+        return $service_id == 0 ? $service : (isset($service[$service_id]) ? $service[$service_id] : false);
+    }
+
+    /**
+     * 获取优惠券
+     * @param $id
+     * @return mixed
+     */
+    public function getCouponById($id)
+    {
+        $coupon = [
+            1 => [
+                "id" => 1,
+                "coupon_name" => "优惠券30",
+                "coupon_money" => 30
+            ],
+            2 => [
+                "id" => 2,
+                "coupon_name" => "优惠券30",
+                "coupon_money" => 30
+            ],
+            3 => [
+                "id" => 3,
+                "coupon_name" => "优惠券30",
+                "coupon_money" => 30
+            ]
+        ];
+        return $coupon[$id];
+    }
+
+    /**
+     * 获取服务卡
+     * @param $id
+     * @return mixed
+     */
+    public function getCardById($id)
+    {
+        $card = [
+            1 => [
+                "id" => 1,
+                "card_code" => "1234567890",
+                "card_money" => 1000
+            ],
+            2 => [
+                "id" => 2,
+                "card_code" => "9876543245",
+                "card_money" => 3000
+            ],
+            3 => [
+                "id" => 3,
+                "card_code" => "3840959205",
+                "card_money" => 5000
+            ]
+        ];
+        return $card[$id];
     }
 
 }

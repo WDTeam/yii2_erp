@@ -22,8 +22,9 @@ $this->title = $workerModel->worker_name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Workers'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 $content1 = $this->render('info',['model'=>$workerModel]);
-$content2 = $this->render('block_info',['workerModel'=>$workerModel,'workerBlockData'=>$workerBlockData]);
-$content3 = $this->render('log_info',['workerBlockLogData'=>$workerBlockLogData]);
+$content2 = $this->render('vacation_info',['workerVacationData'=>$workerVacationData]);
+$content3 = $this->render('block_info',['workerModel'=>$workerModel,'workerBlockData'=>$workerBlockData]);
+$content4 = $this->render('log_info',['workerBlockLogData'=>$workerBlockLogData]);
 $items = [
     [
         'label'=>'<i class="glyphicon glyphicon-user"></i> 阿姨信息',
@@ -32,19 +33,19 @@ $items = [
     ],
     [
         'label'=>'<i class="fa  fa-fw fa-history"></i> 请假信息',
-        //'content'=>$content2,
-        //'linkOptions'=>['data-url'=>\yii\helpers\Url::to(['/site/tabs-data'])],
-        'active'=>false
-    ],
-    [
-        'label'=>'<i class="fa fa-fw fa-lock"></i> 封号信息',
         'content'=>$content2,
         //'linkOptions'=>['data-url'=>\yii\helpers\Url::to(['/site/tabs-data'])],
         'active'=>false
     ],
     [
-        'label'=>'<i class="fa fa-fw fa-book"></i> 操作记录',
+        'label'=>'<i class="fa fa-fw fa-lock"></i> 封号信息',
         'content'=>$content3,
+        //'linkOptions'=>['data-url'=>\yii\helpers\Url::to(['/site/tabs-data'])],
+        'active'=>false
+    ],
+    [
+        'label'=>'<i class="fa fa-fw fa-book"></i> 操作记录',
+        'content'=>$content4,
         //'linkOptions'=>['data-url'=>\yii\helpers\Url::to(['/site/tabs-data'])],
         'active'=>false
     ],
