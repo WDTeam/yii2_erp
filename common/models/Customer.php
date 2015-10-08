@@ -100,10 +100,10 @@ class Customer extends \yii\db\ActiveRecord
     /**
      * 客户账户余额获取
      */
-    public function actionGetBalance()
+    static public function getBalance($customer_id)
     {
-        $customer_id = \Yii::$app->request->get('customer_id');
-        \Yii::$app->response->format = Response::FORMAT_JSON;
+        // $customer_id = \Yii::$app->request->get('customer_id');
+        // \Yii::$app->response->format = Response::FORMAT_JSON;
 
         $customer = Customer::find()->where([
             'id'=>$customer_id
@@ -114,31 +114,39 @@ class Customer extends \yii\db\ActiveRecord
     /**
      * 客户账户余额转入
      */
-    public function actionIncBalance()
+    static public function incBalance($customer_id, $cash)
     {
-        $customer_id = \Yii::$app->request->get('customer_id');
-        $cash = \Yii::$app->request->get('cash');
-        \Yii::$app->response->format = Response::FORMAT_JSON;
+        // $customer_id = \Yii::$app->request->get('customer_id');
+        // $cash = \Yii::$app->request->get('cash');
+        // \Yii::$app->response->format = Response::FORMAT_JSON;
 
         $customer = Customer::find()->where(['id'=>$customer_id])->one();
         $balance = $customer->balance;
-        $customer->customer_balance += $cash;
+        $customer->customer_balance = bcadd($balance, $cash);
         $customer->validate();
+        if ($customer->hasErrors()) {
+            return false;
+        }
         $customer->save();
+        return true;
     }
 
     /**
      * 客户账户余额转出
      */
-    public function actionDecBalance()
+    static public function decBalance($customer_id, $cash)
     {
-        $customer_id = \Yii::$app->request->get('customer_id');
-        $cash = \Yii::$app->request->get('cash');
-        \Yii::$app->response->format = Response::FORMAT_JSON;
+        // $customer_id = \Yii::$app->request->get('customer_id');
+        // $cash = \Yii::$app->request->get('cash');
+        // \Yii::$app->response->format = Response::FORMAT_JSON;
 
         $customer = Customer::find()->where(['id'=>$customer_id])->one();
-        $customer->customer_balance -= $cash;
+        $customer->customer_balance = bcsub($balance, $cash);
         $customer->validate();
+        if ($customer->hasErrors()) {
+            return false;
+        }
         $customer->save();
+        return true;
     }
 }
