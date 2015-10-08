@@ -12,7 +12,7 @@ class Customer extends \common\models\Customer
     /**
      * 根据手机号获取顾客基本信息
      */
-    public function getCustomer($phone)
+    public function getCustomerInfo($phone)
     {
         $customer = Customer::find()->where(array(
             'customer_phone'=>$phone,
