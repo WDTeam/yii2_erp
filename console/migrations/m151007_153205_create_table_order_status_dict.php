@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150918_142056_create_table_order_status_dict extends Migration
+class m151007_153205_create_table_order_status_dict extends Migration
 {
     public function up()
     {
@@ -54,14 +54,5 @@ class m150918_142056_create_table_order_status_dict extends Migration
         return true;
     }
 
-    /*
-    // Use safeUp/safeDown to run migration code within a transaction
-    public function safeUp()
-    {
-    }
 
-    public function safeDown()
-    {
-    }
-    */
 }

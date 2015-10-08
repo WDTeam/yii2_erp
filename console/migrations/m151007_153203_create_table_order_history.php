@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m150918_131138_create_table_order_history extends Migration
+class m151007_153203_create_table_order_history extends Migration
 {
     public function up()
     {
@@ -108,14 +108,5 @@ class m150918_131138_create_table_order_history extends Migration
         return true;
     }
 
-    /*
-    // Use safeUp/safeDown to run migration code within a transaction
-    public function safeUp()
-    {
-    }
 
-    public function safeDown()
-    {
-    }
-    */
 }
