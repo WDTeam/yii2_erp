@@ -23,7 +23,7 @@ time, mark, audio, video {
     font-size: 100%;
     font: inherit;
     vertical-align: baseline;
-    font-family: "\5FAE\8F6F\96C5\9ED1";
+    font-family: "\5FAE\8F6F\96C5\9ED1","STheiti";
     font-weight:normal;
 
 }
@@ -304,7 +304,7 @@ div.warp div.loginlogo img{ width: 124px; height:36px;text-align:left;}
 .warp .login ul li p .ckb{ float: left;
     line-height: 21px;
     margin-right: 5px;
-    width: 120px;
+    width: 110px;
     height: 24px;
     vertical-align: middle;
     margin-top: 0;
@@ -314,7 +314,7 @@ div.warp div.loginlogo img{ width: 124px; height:36px;text-align:left;}
 .warp .login ul li p .cur{float: left;
     line-height: 21px;
     margin-right: 5px;
-    width: 120px;
+    width: 110px;
     height: 24px;
     vertical-align: middle;
     margin-top: 0;
