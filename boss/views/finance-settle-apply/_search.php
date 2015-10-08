@@ -7,14 +7,7 @@ use yii\web\JsExpression;
 use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
 use kartik\grid\GridView;
-use kartik\date\DatePicker;
 
-/**
- * @var yii\web\View $this
- * @var boss\models\WorkerSearch $model
- * @var yii\widgets\ActiveForm $form
- */
-$url = \yii\helpers\Url::to(['show-shop']);
 ?>
 
 <div class="worker-search">
@@ -22,37 +15,41 @@ $url = \yii\helpers\Url::to(['show-shop']);
     <?php $form = ActiveForm::begin([
         'type' => ActiveForm::TYPE_VERTICAL,
         //'id' => 'login-form-inline',
-        'action' => ['index'],
+        'action' => ['query'],
         'method' => 'get',
     ]); ?>
     <div class='col-md-2'>
-    <?php echo  $form->field($model, 'created_ad')->widget(DatePicker::classname(),[
-        'name' => 'create_time',
-        'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-        'value' => date('Y-m-d', $model->created_ad),
-        'pluginOptions' => [
-            'autoclose'=>true,
-            'format' => 'yyyy-mm-dd'
+    <?php echo  $form->field($model, 'finance_settle_apply_starttime')->widget(DateControl::classname(),[
+        'type' => DateControl::FORMAT_DATE,
+        'ajaxConversion'=>false,
+        'displayFormat' => 'php:Y-m-d',
+        'saveFormat'=>'php:U',
+        'options' => [
+            'pluginOptions' => [
+                 'autoclose' => true
+            ]
         ]
     ]);
     
     ?>
   </div>  
     <div class='col-md-2'>
-    <?php echo  $form->field($model, 'updated_ad')->widget(DatePicker::classname(),[
-        'name' => 'create_time',
-        'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-        'value' => date('Y-m-d', $model->updated_ad),
-        'pluginOptions' => [
-            'autoclose'=>true,
-            'format' => 'yyyy-mm-dd'
+    <?php echo  $form->field($model, 'finance_settle_apply_endtime')->widget(DateControl::classname(),[
+        'type' => DateControl::FORMAT_DATE,
+        'ajaxConversion'=>false,
+        'displayFormat' => 'php:Y-m-d',
+        'saveFormat'=>'php:U',
+        'options' => [
+            'pluginOptions' => [
+                 'autoclose' => true
+            ]
         ]
     ]);
     
     ?>
   </div> 
     <div class='col-md-2'>
-        <?= $form->field($model, 'worker_phone') ?>
+        <?= $form->field($model, 'worder_tel') ?>
     </div>
 
 

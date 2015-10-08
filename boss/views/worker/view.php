@@ -23,6 +23,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Workers'), 'url' => 
 $this->params['breadcrumbs'][] = $this->title;
 $content1 = $this->render('info',['model'=>$workerModel]);
 $content2 = $this->render('block_info',['workerModel'=>$workerModel,'workerBlockData'=>$workerBlockData]);
+$content3 = $this->render('log_info',['workerBlockLogData'=>$workerBlockLogData]);
 $items = [
     [
         'label'=>'<i class="glyphicon glyphicon-user"></i> 阿姨信息',
@@ -43,7 +44,7 @@ $items = [
     ],
     [
         'label'=>'<i class="fa fa-fw fa-book"></i> 操作记录',
-        //'content'=>$content2,
+        'content'=>$content3,
         //'linkOptions'=>['data-url'=>\yii\helpers\Url::to(['/site/tabs-data'])],
         'active'=>false
     ],
