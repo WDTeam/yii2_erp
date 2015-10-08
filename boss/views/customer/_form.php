@@ -32,70 +32,70 @@ $cityDesc = '客户';
         ]
     ]);
 
-    echo $form->field($customer, 'customer_name')->textInput(['placeholder' => 'Enter 客户姓名...', 'maxlength' => 16]);
-    echo $form->field($customer, 'customer_sex')->radioList(['0' => '女', '1' => '男'], ['inline' => true]);
-    echo $form->field($customer, 'customer_phone')->textInput(['placeholder' => 'Enter 客户手机...', 'maxlength' => 11]);
-    echo $form->field($customer, 'customer_score')->textInput(['placeholder' => 'Enter 客户积分...', 'maxlength' => 8]);
-    echo $form->field($customer, 'created_at')->widget(DatePicker::classname(),[
+    echo $form->field($model, 'customer_name')->textInput(['placeholder' => 'Enter 客户姓名...', 'maxlength' => 16]);
+    echo $form->field($model, 'customer_sex')->radioList(['0' => '女', '1' => '男'], ['inline' => true]);
+    echo $form->field($model, 'customer_phone')->textInput(['placeholder' => 'Enter 客户手机...', 'maxlength' => 11]);
+    echo $form->field($model, 'customer_score')->textInput(['placeholder' => 'Enter 客户积分...', 'maxlength' => 8]);
+    echo $form->field($model, 'created_at')->widget(DatePicker::classname(),[
         'name' => 'created_at',
         'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-        'value' => date('Y-m-d', $customer->created_at),
+        'value' => date('Y-m-d', $model->created_at),
         'pluginOptions' => [
             'autoclose'=>true,
             'format' => 'yyyy-mm-dd'
         ]
     ]);
-    echo $form->field($customer, 'updated_at')->widget(DatePicker::classname(),[
+    echo $form->field($model, 'updated_at')->widget(DatePicker::classname(),[
         'name' => 'updated_at',
         'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-        'value' => date('Y-m-d', $customer->updated_at),
+        'value' => date('Y-m-d', $model->updated_at),
         'pluginOptions' => [
             'autoclose'=>true,
             'format' => 'yyyy-mm-dd'
         ]
     ]);
-    echo $form->field($customer, 'customer_birth')->widget(DatePicker::classname(),[
+    echo $form->field($model, 'customer_birth')->widget(DatePicker::classname(),[
         'name' => 'customer_birth',
         'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-        'value' => date('Y-m-d', $customer->customer_birth),
+        'value' => date('Y-m-d', $model->customer_birth),
         'pluginOptions' => [
             'autoclose'=>true,
             'format' => 'yyyy-mm-dd'
         ]
     ]);
 
-    echo $form->field($customer, 'general_region_id')->textInput(['placeholder' => 'Enter 客户住址ID...', 'maxlength' => 8]);
-    echo $form->field($customer, 'customer_level')->textInput(['placeholder' => 'Enter 客户评级...', 'maxlength' => 8]);
-    echo $form->field($customer, 'customer_complaint_times')->textInput(['placeholder' => 'Enter 客户投诉次数...', 'maxlength' => 8]);
+    echo $form->field($model, 'general_region_id')->textInput(['placeholder' => 'Enter 客户住址ID...', 'maxlength' => 8]);
+    echo $form->field($model, 'customer_level')->textInput(['placeholder' => 'Enter 客户评级...', 'maxlength' => 8]);
+    echo $form->field($model, 'customer_complaint_times')->textInput(['placeholder' => 'Enter 客户投诉次数...', 'maxlength' => 8]);
     //echo '<label class="control-label">'.$model->attributeLabels()['operation_boot_page_online_time'].'</label>';
 
-    echo $form->field($customer, 'customer_src')->radioList(['0' => '线下', '1' => '线上'], ['inline' => true]);
-    echo $form->field($customer, 'platform_id')->textInput(['placeholder' => 'Enter 客户平台...', 'maxlength' => 8]);
-    echo $form->field($customer, 'channal_id')->textInput(['placeholder' => 'Enter 客户聚道...', 'maxlength' => 8]);
+    echo $form->field($model, 'customer_src')->radioList(['0' => '线下', '1' => '线上'], ['inline' => true]);
+    echo $form->field($model, 'platform_id')->textInput(['placeholder' => 'Enter 客户平台...', 'maxlength' => 8]);
+    echo $form->field($model, 'channal_id')->textInput(['placeholder' => 'Enter 客户聚道...', 'maxlength' => 8]);
 
     //echo $form->field($worker_ext, 'worker_birth')->time(['placeholder' => 'Enter 阿姨生日...']);
-    echo $form->field($customer, 'customer_login_ip')->textInput(['placeholder' => 'Enter 客户登陆IP...', 'maxlength' => 32]);
-    echo $form->field($customer, 'customer_login_time')->widget(DatePicker::classname(),[
+    echo $form->field($model, 'customer_login_ip')->textInput(['placeholder' => 'Enter 客户登陆IP...', 'maxlength' => 32]);
+    echo $form->field($model, 'customer_login_time')->widget(DatePicker::classname(),[
         'name' => 'customer_login_time',
         'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-        'value' => date('Y-m-d', $customer->customer_login_time),
+        'value' => date('Y-m-d', $model->customer_login_time),
         'pluginOptions' => [
             'autoclose'=>true,
             'format' => 'yyyy-mm-dd'
         ]
     ]);
 
-    echo $form->field($customer, 'customer_is_vip')->radioList(['0' => '非会员', '1' => '会员'], ['inline' => true]);
-    echo $form->field($customer, 'customer_is_del')->radioList(['0' => '未加入黑名单', '1' => '已加入黑名单'], ['inline' => true]);
+    echo $form->field($model, 'customer_is_vip')->radioList(['0' => '非会员', '1' => '会员'], ['inline' => true]);
+    echo $form->field($model, 'customer_is_del')->radioList(['0' => '未加入黑名单', '1' => '已加入黑名单'], ['inline' => true]);
 
-    echo $form->field($customer, 'customer_balance')->textInput(['placeholder' => 'Enter 客户余额', 'maxlength' => 10]);
-    echo $form->field($customer, 'customer_del_reason')->textInput(['placeholder' => 'Enter 客户加入黑名单原因', 'maxlength' => 255]);
+    echo $form->field($model, 'customer_balance')->textInput(['placeholder' => 'Enter 客户余额', 'maxlength' => 10]);
+    echo $form->field($model, 'customer_del_reason')->textInput(['placeholder' => 'Enter 客户加入黑名单原因', 'maxlength' => 255]);
     
 
 
-    echo $form->field($customer, 'customer_photo')->textInput(['placeholder' => 'Enter 客户头像...']);
-    echo $form->field($customer, 'customer_email')->textInput(['placeholder' => 'Enter 客户邮箱...']);
-    echo $form->field($customer, 'customer_live_address_detail')->textInput(['placeholder' => 'Enter 客户住址详情...']);
+    echo $form->field($model, 'customer_photo')->textInput(['placeholder' => 'Enter 客户头像...']);
+    echo $form->field($model, 'customer_email')->textInput(['placeholder' => 'Enter 客户邮箱...']);
+    echo $form->field($model, 'customer_live_address_detail')->textInput(['placeholder' => 'Enter 客户住址详情...']);
     ?>
 </div>
 <?php 
