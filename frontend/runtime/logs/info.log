@@ -48139,3 +48139,784 @@ $_SERVER = [
     'REQUEST_TIME_FLOAT' => 1442056614.0244
     'REQUEST_TIME' => 1442056614
 ]
+2015-10-08 16:17:29 [][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\acceptance\_bootstrap.php:2
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Bootstrap.php:30
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:17:29 [][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\acceptance\_bootstrap.php:2
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Bootstrap.php:30
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:17:29 [][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\acceptance\_bootstrap.php:2
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Bootstrap.php:30
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:17:29 [][-][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `ejj_user`
+    in D:\htdocs\ejiajie-boss\tests\codeception\common\_support\FixtureHelper.php:38
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Module.php:32
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:17:29 [][-][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=yii2_advanced_tests
+    in D:\htdocs\ejiajie-boss\tests\codeception\common\_support\FixtureHelper.php:38
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Module.php:32
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:17:27 [][-][-][info][application] $_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'APPDATA' => 'C:\\Users\\co\\AppData\\Roaming'
+    'BIN_TARGET' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'CommonProgramFiles' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'COLEE-PC'
+    'ComSpec' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'configsetroot' => 'C:\\WINDOWS\\ConfigSetRoot'
+    'FPS_BROWSER_APP_PROFILE_STRING' => 'Internet Explorer'
+    'FPS_BROWSER_USER_PROFILE_STRING' => 'Default'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\co'
+    'LOCALAPPDATA' => 'C:\\Users\\co\\AppData\\Local'
+    'LOGONSERVER' => '\\\\MicrosoftAccount'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;C:\\ProgramData\\Lenovo\\ReadyApps;C:\\Program Files\\TortoiseSVN\\bin;D:\\mysql-5.6.25-winx64\\bin;D:\\php-5.4.34-Win32-VC9-x86;D:\\nginx-1.6.2;C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin;C:\\Program Files (x86)\\Git\\cmd;C:\\Program Files (x86)\\Git\\bin;C:\\Ruby22-x64\\bin;C:\\Program Files\\nodejs\\;C:\\Users\\co\\AppData\\Roaming\\npm'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'PROCESSOR_ARCHITECTURE' => 'x86'
+    'PROCESSOR_ARCHITEW6432' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 69 Stepping 1, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '4501'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files (x86)'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PROMPT' => '$P$G'
+    'PSModulePath' => 'C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'READYAPPS' => 'C:\\ProgramData\\Lenovo\\ReadyApps'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'TEMP' => 'C:\\Users\\co\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\co\\AppData\\Local\\Temp'
+    'TVT' => 'C:\\Program Files (x86)\\Lenovo'
+    'USERDOMAIN' => 'COLEE-PC'
+    'USERDOMAIN_ROAMINGPROFILE' => 'COLEE-PC'
+    'USERNAME' => 'co'
+    'USERPROFILE' => 'C:\\Users\\co'
+    'windir' => 'C:\\WINDOWS'
+    'PHP_SELF' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'SCRIPT_NAME' => '/frontend/web/index-test.php'
+    'SCRIPT_FILENAME' => 'D:\\htdocs\\ejiajie-boss/frontend/web/index-test.php'
+    'PATH_TRANSLATED' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'DOCUMENT_ROOT' => ''
+    'REQUEST_TIME_FLOAT' => 1444292247.2038
+    'REQUEST_TIME' => 1444292247
+    'argv' => [
+        0 => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+        1 => 'run'
+    ]
+    'argc' => 2
+    'SERVER_NAME' => 'localhost'
+    'SERVER_PORT' => 8080
+]
+2015-10-08 16:18:38 [trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\unit\models\ContactFormTest.php:16
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+2015-10-08 16:18:38 [trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\unit\models\ContactFormTest.php:16
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+2015-10-08 16:18:38 [trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\unit\models\ContactFormTest.php:16
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+2015-10-08 16:18:39 [info][yii\mail\BaseMailer::send] Sending email "very important letter subject" to "admin@example.com"
+    in D:\htdocs\ejiajie-boss\frontend\models\ContactForm.php:57
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\unit\models\ContactFormTest.php:39
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:905
+2015-10-08 16:18:40 [trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\unit\models\PasswordResetRequestFormTest.php:18
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+2015-10-08 16:18:40 [trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\unit\models\PasswordResetRequestFormTest.php:18
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+2015-10-08 16:18:40 [trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\unit\models\PasswordResetRequestFormTest.php:18
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+2015-10-08 16:18:40 [info][yii\db\Command::execute] SET FOREIGN_KEY_CHECKS = 0
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\unit\models\PasswordResetRequestFormTest.php:18
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+2015-10-08 16:18:40 [info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=yii2_advanced_tests
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\unit\models\PasswordResetRequestFormTest.php:18
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+2015-10-08 16:18:40 [info][yii\db\Command::execute] SET FOREIGN_KEY_CHECKS = 1
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\unit\models\PasswordResetRequestFormTest.php:18
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+2015-10-08 16:18:40 [info][yii\db\Command::execute] SET FOREIGN_KEY_CHECKS = 0
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\unit\models\PasswordResetRequestFormTest.php:18
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+2015-10-08 16:18:40 [info][yii\db\Command::query] SHOW FULL COLUMNS FROM `ejj_user`
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\unit\models\PasswordResetRequestFormTest.php:18
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+2015-10-08 16:18:40 [trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\unit\models\PasswordResetRequestFormTest.php:18
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+2015-10-08 16:18:40 [trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\unit\models\PasswordResetRequestFormTest.php:18
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+2015-10-08 16:18:40 [trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\unit\models\PasswordResetRequestFormTest.php:18
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+2015-10-08 16:18:40 [info][yii\db\Command::execute] SET FOREIGN_KEY_CHECKS = 0
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\unit\models\PasswordResetRequestFormTest.php:18
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+2015-10-08 16:18:40 [info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=yii2_advanced_tests
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\unit\models\PasswordResetRequestFormTest.php:18
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+2015-10-08 16:18:40 [info][yii\db\Command::execute] SET FOREIGN_KEY_CHECKS = 1
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\unit\models\PasswordResetRequestFormTest.php:18
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+2015-10-08 16:18:40 [info][yii\db\Command::execute] SET FOREIGN_KEY_CHECKS = 0
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\unit\models\PasswordResetRequestFormTest.php:18
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+2015-10-08 16:18:40 [info][yii\db\Command::query] SHOW FULL COLUMNS FROM `ejj_user`
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\unit\models\PasswordResetRequestFormTest.php:18
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+2015-10-08 16:18:40 [trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [info][yii\db\Command::execute] SET FOREIGN_KEY_CHECKS = 0
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=yii2_advanced_tests
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [info][yii\db\Command::execute] SET FOREIGN_KEY_CHECKS = 1
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [info][yii\db\Command::execute] SET FOREIGN_KEY_CHECKS = 0
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [info][yii\db\Command::query] SHOW FULL COLUMNS FROM `ejj_user`
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [info][yii\db\Command::execute] SET FOREIGN_KEY_CHECKS = 0
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=yii2_advanced_tests
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [info][yii\db\Command::execute] SET FOREIGN_KEY_CHECKS = 1
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [info][yii\db\Command::execute] SET FOREIGN_KEY_CHECKS = 0
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [info][yii\db\Command::query] SHOW FULL COLUMNS FROM `ejj_user`
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [info][yii\db\Command::execute] SET FOREIGN_KEY_CHECKS = 0
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=yii2_advanced_tests
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [info][yii\db\Command::execute] SET FOREIGN_KEY_CHECKS = 1
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [info][yii\db\Command::execute] SET FOREIGN_KEY_CHECKS = 0
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [info][yii\db\Command::query] SHOW FULL COLUMNS FROM `ejj_user`
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [info][yii\db\Command::execute] SET FOREIGN_KEY_CHECKS = 0
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=yii2_advanced_tests
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [info][yii\db\Command::execute] SET FOREIGN_KEY_CHECKS = 1
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [info][yii\db\Command::execute] SET FOREIGN_KEY_CHECKS = 0
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [info][yii\db\Command::query] SHOW FULL COLUMNS FROM `ejj_user`
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [info][yii\db\Command::execute] SET FOREIGN_KEY_CHECKS = 0
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=yii2_advanced_tests
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [info][yii\db\Command::execute] SET FOREIGN_KEY_CHECKS = 1
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [info][yii\db\Command::execute] SET FOREIGN_KEY_CHECKS = 0
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:40 [info][yii\db\Command::query] SHOW FULL COLUMNS FROM `ejj_user`
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:771
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php:643
+    in C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php:711
+2015-10-08 16:18:38 [info][application] $_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'APPDATA' => 'C:\\Users\\co\\AppData\\Roaming'
+    'BIN_TARGET' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'CommonProgramFiles' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'COLEE-PC'
+    'ComSpec' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'configsetroot' => 'C:\\WINDOWS\\ConfigSetRoot'
+    'FPS_BROWSER_APP_PROFILE_STRING' => 'Internet Explorer'
+    'FPS_BROWSER_USER_PROFILE_STRING' => 'Default'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\co'
+    'LOCALAPPDATA' => 'C:\\Users\\co\\AppData\\Local'
+    'LOGONSERVER' => '\\\\MicrosoftAccount'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;C:\\ProgramData\\Lenovo\\ReadyApps;C:\\Program Files\\TortoiseSVN\\bin;D:\\mysql-5.6.25-winx64\\bin;D:\\php-5.4.34-Win32-VC9-x86;D:\\nginx-1.6.2;C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin;C:\\Program Files (x86)\\Git\\cmd;C:\\Program Files (x86)\\Git\\bin;C:\\Ruby22-x64\\bin;C:\\Program Files\\nodejs\\;C:\\Users\\co\\AppData\\Roaming\\npm'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'PROCESSOR_ARCHITECTURE' => 'x86'
+    'PROCESSOR_ARCHITEW6432' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 69 Stepping 1, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '4501'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files (x86)'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PROMPT' => '$P$G'
+    'PSModulePath' => 'C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'READYAPPS' => 'C:\\ProgramData\\Lenovo\\ReadyApps'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'TEMP' => 'C:\\Users\\co\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\co\\AppData\\Local\\Temp'
+    'TVT' => 'C:\\Program Files (x86)\\Lenovo'
+    'USERDOMAIN' => 'COLEE-PC'
+    'USERDOMAIN_ROAMINGPROFILE' => 'COLEE-PC'
+    'USERNAME' => 'co'
+    'USERPROFILE' => 'C:\\Users\\co'
+    'windir' => 'C:\\WINDOWS'
+    'PHP_SELF' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'SCRIPT_NAME' => '/frontend/web/index-test.php'
+    'SCRIPT_FILENAME' => 'D:\\htdocs\\ejiajie-boss/frontend/web/index-test.php'
+    'PATH_TRANSLATED' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'DOCUMENT_ROOT' => ''
+    'REQUEST_TIME_FLOAT' => 1444292317.7796
+    'REQUEST_TIME' => 1444292317
+    'argv' => [
+        0 => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+        1 => 'run'
+        2 => 'unit'
+    ]
+    'argc' => 3
+    'SERVER_NAME' => 'localhost'
+    'SERVER_PORT' => 8080
+]
+2015-10-08 16:19:19 [][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\functional\_bootstrap.php:3
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Bootstrap.php:30
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:19:19 [][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\functional\_bootstrap.php:3
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Bootstrap.php:30
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:19:19 [][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\functional\_bootstrap.php:3
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Bootstrap.php:30
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:19:19 [][-][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `ejj_user`
+    in D:\htdocs\ejiajie-boss\tests\codeception\common\_support\FixtureHelper.php:38
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Module.php:32
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:19:19 [][-][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=yii2_advanced_tests
+    in D:\htdocs\ejiajie-boss\tests\codeception\common\_support\FixtureHelper.php:38
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Module.php:32
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:19:18 [][-][-][info][application] $_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'APPDATA' => 'C:\\Users\\co\\AppData\\Roaming'
+    'BIN_TARGET' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'CommonProgramFiles' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'COLEE-PC'
+    'ComSpec' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'configsetroot' => 'C:\\WINDOWS\\ConfigSetRoot'
+    'FPS_BROWSER_APP_PROFILE_STRING' => 'Internet Explorer'
+    'FPS_BROWSER_USER_PROFILE_STRING' => 'Default'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\co'
+    'LOCALAPPDATA' => 'C:\\Users\\co\\AppData\\Local'
+    'LOGONSERVER' => '\\\\MicrosoftAccount'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;C:\\ProgramData\\Lenovo\\ReadyApps;C:\\Program Files\\TortoiseSVN\\bin;D:\\mysql-5.6.25-winx64\\bin;D:\\php-5.4.34-Win32-VC9-x86;D:\\nginx-1.6.2;C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin;C:\\Program Files (x86)\\Git\\cmd;C:\\Program Files (x86)\\Git\\bin;C:\\Ruby22-x64\\bin;C:\\Program Files\\nodejs\\;C:\\Users\\co\\AppData\\Roaming\\npm'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'PROCESSOR_ARCHITECTURE' => 'x86'
+    'PROCESSOR_ARCHITEW6432' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 69 Stepping 1, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '4501'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files (x86)'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PROMPT' => '$P$G'
+    'PSModulePath' => 'C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'READYAPPS' => 'C:\\ProgramData\\Lenovo\\ReadyApps'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'TEMP' => 'C:\\Users\\co\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\co\\AppData\\Local\\Temp'
+    'TVT' => 'C:\\Program Files (x86)\\Lenovo'
+    'USERDOMAIN' => 'COLEE-PC'
+    'USERDOMAIN_ROAMINGPROFILE' => 'COLEE-PC'
+    'USERNAME' => 'co'
+    'USERPROFILE' => 'C:\\Users\\co'
+    'windir' => 'C:\\WINDOWS'
+    'PHP_SELF' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'SCRIPT_NAME' => '/frontend/web/index-test.php'
+    'SCRIPT_FILENAME' => 'D:\\htdocs\\ejiajie-boss/frontend/web/index-test.php'
+    'PATH_TRANSLATED' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'DOCUMENT_ROOT' => ''
+    'REQUEST_TIME_FLOAT' => 1444292358.3912
+    'REQUEST_TIME' => 1444292358
+    'argv' => [
+        0 => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+        1 => 'run'
+        2 => 'functional'
+    ]
+    'argc' => 3
+    'SERVER_NAME' => 'localhost'
+    'SERVER_PORT' => 8080
+]
+2015-10-08 16:20:52 [][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\functional\_bootstrap.php:3
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Bootstrap.php:30
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:20:52 [][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\functional\_bootstrap.php:3
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Bootstrap.php:30
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:20:52 [][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\functional\_bootstrap.php:3
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Bootstrap.php:30
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:20:52 [][-][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `ejj_user`
+    in D:\htdocs\ejiajie-boss\tests\codeception\common\_support\FixtureHelper.php:38
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Module.php:32
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:20:52 [][-][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=yii2_advanced_tests
+    in D:\htdocs\ejiajie-boss\tests\codeception\common\_support\FixtureHelper.php:38
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Module.php:32
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:20:52 [][-][-][info][application] $_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'APPDATA' => 'C:\\Users\\co\\AppData\\Roaming'
+    'BIN_TARGET' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'CommonProgramFiles' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'COLEE-PC'
+    'ComSpec' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'configsetroot' => 'C:\\WINDOWS\\ConfigSetRoot'
+    'FPS_BROWSER_APP_PROFILE_STRING' => 'Internet Explorer'
+    'FPS_BROWSER_USER_PROFILE_STRING' => 'Default'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\co'
+    'LOCALAPPDATA' => 'C:\\Users\\co\\AppData\\Local'
+    'LOGONSERVER' => '\\\\MicrosoftAccount'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;C:\\ProgramData\\Lenovo\\ReadyApps;C:\\Program Files\\TortoiseSVN\\bin;D:\\mysql-5.6.25-winx64\\bin;D:\\php-5.4.34-Win32-VC9-x86;D:\\nginx-1.6.2;C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin;C:\\Program Files (x86)\\Git\\cmd;C:\\Program Files (x86)\\Git\\bin;C:\\Ruby22-x64\\bin;C:\\Program Files\\nodejs\\;C:\\Users\\co\\AppData\\Roaming\\npm'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'PROCESSOR_ARCHITECTURE' => 'x86'
+    'PROCESSOR_ARCHITEW6432' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 69 Stepping 1, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '4501'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files (x86)'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PROMPT' => '$P$G'
+    'PSModulePath' => 'C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'READYAPPS' => 'C:\\ProgramData\\Lenovo\\ReadyApps'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'TEMP' => 'C:\\Users\\co\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\co\\AppData\\Local\\Temp'
+    'TVT' => 'C:\\Program Files (x86)\\Lenovo'
+    'USERDOMAIN' => 'COLEE-PC'
+    'USERDOMAIN_ROAMINGPROFILE' => 'COLEE-PC'
+    'USERNAME' => 'co'
+    'USERPROFILE' => 'C:\\Users\\co'
+    'windir' => 'C:\\WINDOWS'
+    'PHP_SELF' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'SCRIPT_NAME' => '/frontend/web/index-test.php'
+    'SCRIPT_FILENAME' => 'D:\\htdocs\\ejiajie-boss/frontend/web/index-test.php'
+    'PATH_TRANSLATED' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'DOCUMENT_ROOT' => ''
+    'REQUEST_TIME_FLOAT' => 1444292451.9396
+    'REQUEST_TIME' => 1444292451
+    'argv' => [
+        0 => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+        1 => 'run'
+        2 => './functional/ContactCept.php'
+    ]
+    'argc' => 3
+    'SERVER_NAME' => 'localhost'
+    'SERVER_PORT' => 8080
+]
+2015-10-08 16:21:07 [][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\functional\_bootstrap.php:3
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Bootstrap.php:30
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:21:07 [][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\functional\_bootstrap.php:3
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Bootstrap.php:30
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:21:07 [][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\functional\_bootstrap.php:3
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Bootstrap.php:30
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:21:07 [][-][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `ejj_user`
+    in D:\htdocs\ejiajie-boss\tests\codeception\common\_support\FixtureHelper.php:38
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Module.php:32
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:21:07 [][-][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=yii2_advanced_tests
+    in D:\htdocs\ejiajie-boss\tests\codeception\common\_support\FixtureHelper.php:38
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Module.php:32
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:21:06 [][-][-][info][application] $_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'APPDATA' => 'C:\\Users\\co\\AppData\\Roaming'
+    'BIN_TARGET' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'CommonProgramFiles' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'COLEE-PC'
+    'ComSpec' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'configsetroot' => 'C:\\WINDOWS\\ConfigSetRoot'
+    'FPS_BROWSER_APP_PROFILE_STRING' => 'Internet Explorer'
+    'FPS_BROWSER_USER_PROFILE_STRING' => 'Default'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\co'
+    'LOCALAPPDATA' => 'C:\\Users\\co\\AppData\\Local'
+    'LOGONSERVER' => '\\\\MicrosoftAccount'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;C:\\ProgramData\\Lenovo\\ReadyApps;C:\\Program Files\\TortoiseSVN\\bin;D:\\mysql-5.6.25-winx64\\bin;D:\\php-5.4.34-Win32-VC9-x86;D:\\nginx-1.6.2;C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin;C:\\Program Files (x86)\\Git\\cmd;C:\\Program Files (x86)\\Git\\bin;C:\\Ruby22-x64\\bin;C:\\Program Files\\nodejs\\;C:\\Users\\co\\AppData\\Roaming\\npm'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'PROCESSOR_ARCHITECTURE' => 'x86'
+    'PROCESSOR_ARCHITEW6432' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 69 Stepping 1, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '4501'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files (x86)'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PROMPT' => '$P$G'
+    'PSModulePath' => 'C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'READYAPPS' => 'C:\\ProgramData\\Lenovo\\ReadyApps'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'TEMP' => 'C:\\Users\\co\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\co\\AppData\\Local\\Temp'
+    'TVT' => 'C:\\Program Files (x86)\\Lenovo'
+    'USERDOMAIN' => 'COLEE-PC'
+    'USERDOMAIN_ROAMINGPROFILE' => 'COLEE-PC'
+    'USERNAME' => 'co'
+    'USERPROFILE' => 'C:\\Users\\co'
+    'windir' => 'C:\\WINDOWS'
+    'PHP_SELF' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'SCRIPT_NAME' => '/frontend/web/index-test.php'
+    'SCRIPT_FILENAME' => 'D:\\htdocs\\ejiajie-boss/frontend/web/index-test.php'
+    'PATH_TRANSLATED' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'DOCUMENT_ROOT' => ''
+    'REQUEST_TIME_FLOAT' => 1444292466.7095
+    'REQUEST_TIME' => 1444292466
+    'argv' => [
+        0 => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+        1 => 'run'
+        2 => './functional/AboutCept.php'
+    ]
+    'argc' => 3
+    'SERVER_NAME' => 'localhost'
+    'SERVER_PORT' => 8080
+]
+2015-10-08 16:21:50 [][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\functional\_bootstrap.php:3
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Bootstrap.php:30
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:21:50 [][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\functional\_bootstrap.php:3
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Bootstrap.php:30
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:21:50 [][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\functional\_bootstrap.php:3
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Bootstrap.php:30
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:21:50 [][-][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `ejj_user`
+    in D:\htdocs\ejiajie-boss\tests\codeception\common\_support\FixtureHelper.php:38
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Module.php:32
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:21:50 [][-][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=yii2_advanced_tests
+    in D:\htdocs\ejiajie-boss\tests\codeception\common\_support\FixtureHelper.php:38
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Module.php:32
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:21:49 [][-][-][info][application] $_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'APPDATA' => 'C:\\Users\\co\\AppData\\Roaming'
+    'BIN_TARGET' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'CommonProgramFiles' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'COLEE-PC'
+    'ComSpec' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'configsetroot' => 'C:\\WINDOWS\\ConfigSetRoot'
+    'FPS_BROWSER_APP_PROFILE_STRING' => 'Internet Explorer'
+    'FPS_BROWSER_USER_PROFILE_STRING' => 'Default'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\co'
+    'LOCALAPPDATA' => 'C:\\Users\\co\\AppData\\Local'
+    'LOGONSERVER' => '\\\\MicrosoftAccount'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;C:\\ProgramData\\Lenovo\\ReadyApps;C:\\Program Files\\TortoiseSVN\\bin;D:\\mysql-5.6.25-winx64\\bin;D:\\php-5.4.34-Win32-VC9-x86;D:\\nginx-1.6.2;C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin;C:\\Program Files (x86)\\Git\\cmd;C:\\Program Files (x86)\\Git\\bin;C:\\Ruby22-x64\\bin;C:\\Program Files\\nodejs\\;C:\\Users\\co\\AppData\\Roaming\\npm'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'PROCESSOR_ARCHITECTURE' => 'x86'
+    'PROCESSOR_ARCHITEW6432' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 69 Stepping 1, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '4501'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files (x86)'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PROMPT' => '$P$G'
+    'PSModulePath' => 'C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'READYAPPS' => 'C:\\ProgramData\\Lenovo\\ReadyApps'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'TEMP' => 'C:\\Users\\co\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\co\\AppData\\Local\\Temp'
+    'TVT' => 'C:\\Program Files (x86)\\Lenovo'
+    'USERDOMAIN' => 'COLEE-PC'
+    'USERDOMAIN_ROAMINGPROFILE' => 'COLEE-PC'
+    'USERNAME' => 'co'
+    'USERPROFILE' => 'C:\\Users\\co'
+    'windir' => 'C:\\WINDOWS'
+    'PHP_SELF' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'SCRIPT_NAME' => '/frontend/web/index-test.php'
+    'SCRIPT_FILENAME' => 'D:\\htdocs\\ejiajie-boss/frontend/web/index-test.php'
+    'PATH_TRANSLATED' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'DOCUMENT_ROOT' => ''
+    'REQUEST_TIME_FLOAT' => 1444292509.4699
+    'REQUEST_TIME' => 1444292509
+    'argv' => [
+        0 => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+        1 => 'run'
+        2 => './functional/AboutCept.php'
+        3 => '--colors'
+    ]
+    'argc' => 4
+    'SERVER_NAME' => 'localhost'
+    'SERVER_PORT' => 8080
+]
+2015-10-08 16:37:46 [][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\functional\_bootstrap.php:3
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Bootstrap.php:30
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:37:46 [][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\functional\_bootstrap.php:3
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Bootstrap.php:30
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:37:46 [][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\functional\_bootstrap.php:3
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Bootstrap.php:30
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:37:46 [][-][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `ejj_user`
+    in D:\htdocs\ejiajie-boss\tests\codeception\common\_support\FixtureHelper.php:38
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Module.php:32
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:37:46 [][-][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=yii2_advanced_tests
+    in D:\htdocs\ejiajie-boss\tests\codeception\common\_support\FixtureHelper.php:38
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Module.php:32
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 16:37:45 [][-][-][info][application] $_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'APPDATA' => 'C:\\Users\\co\\AppData\\Roaming'
+    'BIN_TARGET' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'CommonProgramFiles' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'COLEE-PC'
+    'ComSpec' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'configsetroot' => 'C:\\WINDOWS\\ConfigSetRoot'
+    'FPS_BROWSER_APP_PROFILE_STRING' => 'Internet Explorer'
+    'FPS_BROWSER_USER_PROFILE_STRING' => 'Default'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\co'
+    'LOCALAPPDATA' => 'C:\\Users\\co\\AppData\\Local'
+    'LOGONSERVER' => '\\\\MicrosoftAccount'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;C:\\ProgramData\\Lenovo\\ReadyApps;C:\\Program Files\\TortoiseSVN\\bin;D:\\mysql-5.6.25-winx64\\bin;D:\\php-5.4.34-Win32-VC9-x86;D:\\nginx-1.6.2;C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin;C:\\Program Files (x86)\\Git\\cmd;C:\\Program Files (x86)\\Git\\bin;C:\\Ruby22-x64\\bin;C:\\Program Files\\nodejs\\;C:\\Users\\co\\AppData\\Roaming\\npm'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'PROCESSOR_ARCHITECTURE' => 'x86'
+    'PROCESSOR_ARCHITEW6432' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 69 Stepping 1, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '4501'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files (x86)'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PROMPT' => '$P$G'
+    'PSModulePath' => 'C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'READYAPPS' => 'C:\\ProgramData\\Lenovo\\ReadyApps'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'TEMP' => 'C:\\Users\\co\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\co\\AppData\\Local\\Temp'
+    'TVT' => 'C:\\Program Files (x86)\\Lenovo'
+    'USERDOMAIN' => 'COLEE-PC'
+    'USERDOMAIN_ROAMINGPROFILE' => 'COLEE-PC'
+    'USERNAME' => 'co'
+    'USERPROFILE' => 'C:\\Users\\co'
+    'windir' => 'C:\\WINDOWS'
+    'PHP_SELF' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'SCRIPT_NAME' => '/frontend/web/index-test.php'
+    'SCRIPT_FILENAME' => 'D:\\htdocs\\ejiajie-boss/frontend/web/index-test.php'
+    'PATH_TRANSLATED' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'DOCUMENT_ROOT' => ''
+    'REQUEST_TIME_FLOAT' => 1444293465.7533
+    'REQUEST_TIME' => 1444293465
+    'argv' => [
+        0 => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+        1 => 'run'
+        2 => './functional/AboutCept.php'
+        3 => '--colors'
+    ]
+    'argc' => 4
+    'SERVER_NAME' => 'localhost'
+    'SERVER_PORT' => 8080
+]
