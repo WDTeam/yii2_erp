@@ -12,7 +12,8 @@ class m151008_031740_add_field_to_worker_block_log extends Migration
 
     }
 
-    public function safeDown()
+    public function Down()
     {
+        $this->dropColumn('{{%worker_block_log}}','worker_id');
     }
 }
