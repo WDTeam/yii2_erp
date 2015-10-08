@@ -40,13 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'buttons' => [
-                'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['auth/view','id' => $model->name,'edit'=>'t']), [
-                                                    'title' => Yii::t('yii', 'Edit'),
-                                                  ]);}
-
-                ],
+                'template'=>'{update} {delete}',
             ],
         ],
         'responsive'=>true,
