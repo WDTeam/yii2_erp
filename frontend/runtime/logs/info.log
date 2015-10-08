@@ -48920,3 +48920,83 @@ $_SERVER = [
     'SERVER_NAME' => 'localhost'
     'SERVER_PORT' => 8080
 ]
+2015-10-08 17:47:02 [][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\functional\_bootstrap.php:3
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Bootstrap.php:30
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 17:47:02 [][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\functional\_bootstrap.php:3
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Bootstrap.php:30
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 17:47:02 [][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+    in D:\htdocs\ejiajie-boss\tests\codeception\frontend\functional\_bootstrap.php:3
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Bootstrap.php:30
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 17:47:02 [][-][-][info][yii\db\Command::query] SHOW FULL COLUMNS FROM `ejj_system_user`
+    in D:\htdocs\ejiajie-boss\tests\codeception\common\_support\FixtureHelper.php:38
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Module.php:32
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 17:47:02 [][-][-][info][yii\db\Connection::open] Opening DB connection: mysql:host=localhost;dbname=yii2_advanced_tests
+    in D:\htdocs\ejiajie-boss\tests\codeception\common\_support\FixtureHelper.php:38
+    in C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Subscriber\Module.php:32
+    in C:\Users\co\AppData\Roaming\Composer\vendor\symfony\event-dispatcher\EventDispatcher.php:164
+2015-10-08 17:47:02 [][-][-][info][application] $_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'APPDATA' => 'C:\\Users\\co\\AppData\\Roaming'
+    'BIN_TARGET' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'CommonProgramFiles' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'COLEE-PC'
+    'ComSpec' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'configsetroot' => 'C:\\WINDOWS\\ConfigSetRoot'
+    'FPS_BROWSER_APP_PROFILE_STRING' => 'Internet Explorer'
+    'FPS_BROWSER_USER_PROFILE_STRING' => 'Default'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\co'
+    'LOCALAPPDATA' => 'C:\\Users\\co\\AppData\\Local'
+    'LOGONSERVER' => '\\\\MicrosoftAccount'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;C:\\ProgramData\\Lenovo\\ReadyApps;C:\\Program Files\\TortoiseSVN\\bin;D:\\mysql-5.6.25-winx64\\bin;D:\\php-5.4.34-Win32-VC9-x86;D:\\nginx-1.6.2;C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin;C:\\Program Files (x86)\\Git\\cmd;C:\\Program Files (x86)\\Git\\bin;C:\\Ruby22-x64\\bin;C:\\Program Files\\nodejs\\;C:\\Users\\co\\AppData\\Roaming\\npm'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'PROCESSOR_ARCHITECTURE' => 'x86'
+    'PROCESSOR_ARCHITEW6432' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 69 Stepping 1, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '4501'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files (x86)'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PROMPT' => '$P$G'
+    'PSModulePath' => 'C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'READYAPPS' => 'C:\\ProgramData\\Lenovo\\ReadyApps'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'TEMP' => 'C:\\Users\\co\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\co\\AppData\\Local\\Temp'
+    'TVT' => 'C:\\Program Files (x86)\\Lenovo'
+    'USERDOMAIN' => 'COLEE-PC'
+    'USERDOMAIN_ROAMINGPROFILE' => 'COLEE-PC'
+    'USERNAME' => 'co'
+    'USERPROFILE' => 'C:\\Users\\co'
+    'windir' => 'C:\\WINDOWS'
+    'PHP_SELF' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'SCRIPT_NAME' => '/frontend/web/index-test.php'
+    'SCRIPT_FILENAME' => 'D:\\htdocs\\ejiajie-boss/frontend/web/index-test.php'
+    'PATH_TRANSLATED' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'DOCUMENT_ROOT' => ''
+    'REQUEST_TIME_FLOAT' => 1444297621.9965
+    'REQUEST_TIME' => 1444297621
+    'argv' => [
+        0 => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+        1 => 'run'
+        2 => './functional/LoginCept.php'
+    ]
+    'argc' => 3
+    'SERVER_NAME' => 'localhost'
+    'SERVER_PORT' => 8080
+]
