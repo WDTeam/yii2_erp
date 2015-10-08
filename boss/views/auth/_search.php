@@ -8,32 +8,30 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="auth-search">
+<div class="auth-search panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 授权项搜索</h3>
+    </div>
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
-
-    <?= $form->field($model, 'name') ?>
-
-    <?= $form->field($model, 'type') ?>
-
-    <?= $form->field($model, 'description') ?>
-
-    <?= $form->field($model, 'rule_name') ?>
-
-    <?= $form->field($model, 'data') ?>
-
-    <?php // echo $form->field($model, 'created_at') ?>
-
-    <?php // echo $form->field($model, 'updated_at') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
+    
+    <div class="panel-body row">
+        <div class="col-md-4">
+            <?= $form->field($model, 'name') ?>
+        </div>
+        <div class="col-md-4">
+            <?= $form->field($model, 'description') ?>
+        </div>
+    
+        <div class="col-md-2" style="margin-top:22px;">
+            <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
+            <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
+        </div>
     </div>
-
     <?php ActiveForm::end(); ?>
 
+    </div>
 </div>
