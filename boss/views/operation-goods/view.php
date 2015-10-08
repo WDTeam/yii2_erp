@@ -14,11 +14,6 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Goods'), '
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-goods-view">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
-
-
     <?= DetailView::widget([
             'model' => $model,
             'condensed'=>false,
@@ -38,10 +33,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'operation_goods_english_name',
             'operation_goods_start_time',
             'operation_goods_end_time',
-            'operation_goods_service_time_slot:ntext',
-            'operation_goods_service_interval_time:datetime',
-            'operation_price_strategy_id',
-            'operation_price_strategy_name',
+//            'operation_goods_service_time_slot:ntext',
+            'operation_goods_service_interval_time',
+//            'operation_price_strategy_id',
+//            'operation_price_strategy_name',
             'operation_goods_price',
             'operation_goods_balance_price',
             'operation_goods_additional_cost',
@@ -49,9 +44,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'operation_goods_price_description:ntext',
             'operation_goods_market_price',
             'operation_tags:ntext',
-            'operation_goods_app_ico:ntext',
-            'created_at',
-            'updated_at',
+//            'operation_goods_app_ico:ntext',
+            'created_at:datetime',
+            'updated_at:datetime',
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],

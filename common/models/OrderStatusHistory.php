@@ -16,9 +16,8 @@ use Yii;
  * @property integer $order_status_dict_id
  * @property string $order_status_name
  * @property string $admin_id
- * @property integer $isdel
  */
-class OrderStatusHistory extends ActiveRecord
+class OrderStatusHistory extends \common\models\ActiveRecord
 {
     /**
      * @inheritdoc
@@ -34,7 +33,7 @@ class OrderStatusHistory extends ActiveRecord
     public function rules()
     {
         return [
-            [['created_at', 'updated_at', 'order_id', 'order_before_status_dict_id', 'order_status_dict_id', 'admin_id', 'isdel'], 'integer'],
+            [['created_at', 'updated_at', 'order_id', 'order_before_status_dict_id', 'order_status_dict_id', 'admin_id'], 'integer'],
             [['order_id'], 'required'],
             [['order_before_status_name', 'order_status_name'], 'string', 'max' => 128]
         ];
@@ -49,13 +48,12 @@ class OrderStatusHistory extends ActiveRecord
             'id' => 'ID',
             'created_at' => '快照创建时间',
             'updated_at' => '快照修改时间',
-            'order_id' => '编号',
+            'order_id' => '订单ID',
             'order_before_status_dict_id' => '状态变更前订单状态字典ID',
             'order_before_status_name' => '状态变更前订单状态',
             'order_status_dict_id' => '订单状态字典ID',
             'order_status_name' => '订单状态',
             'admin_id' => '操作人id  0客户操作 1系统操作',
-            'isdel' => '快照是否已删除',
         ];
     }
 }

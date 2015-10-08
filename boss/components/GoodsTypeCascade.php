@@ -13,7 +13,7 @@ use yii\base\Widget;
 class GoodsTypeCascade extends \yii\widgets\InputWidget
 {
     public $label = '选择商品分类';
-    public $html;
+    public $html = '';
   
     public function init(){
         parent::init();
@@ -22,9 +22,11 @@ class GoodsTypeCascade extends \yii\widgets\InputWidget
     
     public function cascadeAll($operation_category_parent_id = 0){
         $data = OperationCategory::getCategoryList($operation_category_parent_id);
+        $items = array();
         foreach((array)$data as $key => $value){
             $items[$value->id] = $value->operation_category_name;
         }
+
         $this->html = $this->type($items);
     }
     

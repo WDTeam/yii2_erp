@@ -15,7 +15,7 @@ class ShopManagerSearch extends ShopManager
     public function rules()
     {
         return [
-            [['id', 'province_id', 'city_id', 'county_id', 'bl_type', 'bl_create_time', 'bl_audit', 'bl_expiry_start', 'bl_expiry_end', 'create_at', 'update_at', 'is_blacklist', 'blacklist_time', 'audit_status', 'shop_count', 'worker_count', 'complain_coutn'], 'integer'],
+            [['id', 'province_id', 'city_id', 'county_id', 'bl_type', 'bl_create_time', 'bl_audit', 'bl_expiry_start', 'bl_expiry_end', 'created_at', 'updated_at', 'is_blacklist', 'blacklist_time', 'audit_status', 'shop_count', 'worker_count', 'complain_coutn'], 'integer'],
             [['name', 'street', 'principal', 'tel', 'other_contact', 'bankcard_number', 'account_person', 'opening_bank', 'sub_branch', 'opening_address', 'bl_name', 'bl_number', 'bl_person', 'bl_address', 'bl_photo_url', 'bl_business', 'level'], 'safe'],
         ];
     }
@@ -48,8 +48,8 @@ class ShopManagerSearch extends ShopManager
             'bl_audit' => $this->bl_audit,
             'bl_expiry_start' => $this->bl_expiry_start,
             'bl_expiry_end' => $this->bl_expiry_end,
-            'create_at' => $this->create_at,
-            'update_at' => $this->update_at,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
             'is_blacklist' => $this->is_blacklist,
             'blacklist_time' => $this->blacklist_time,
             'audit_status' => $this->audit_status,

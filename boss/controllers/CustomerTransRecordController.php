@@ -2,7 +2,6 @@
 
 namespace boss\controllers;
 
-use common\models\CustomerTransRecordLog;
 use Yii;
 use common\models\CustomerTransRecord;
 use boss\models\CustomerTransRecordSearch;
@@ -40,23 +39,10 @@ class CustomerTransRecordController extends Controller
         //$TransRecordModel->insert();exit;
         $model = new CustomerTransRecord();
         //使用场景
-        $model->scenario = $data['scenario'];
-        $model->attributes = $data;
+        $model->scenario = $data['CustomerTransRecord']['scenario'];
+        $model->attributes = $data['CustomerTransRecord'];
         return $model->add();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     /**
@@ -100,9 +86,10 @@ class CustomerTransRecordController extends Controller
     {
         $model = new CustomerTransRecord;
         $data = Yii::$app->request->post();
-        $data['CustomerTransRecord']['scenario'] = 4;
+        $data['CustomerTransRecord']['scenario'] = 3;
+        //var_dump(Yii::$app->request->post());exit;
         if ($model->load(Yii::$app->request->post())) {
-            $model = $this->createRecord($data['CustomerTransRecord']);
+            $model = $this->createRecord($data);
             //return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [

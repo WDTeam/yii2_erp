@@ -22,21 +22,25 @@ class CoreOperationTag extends CommonOperationTag
 //        $data = array();
 //        $tagcontent = array();
         foreach((array)$tags as $key => $value){
-            $taginfo = self::find()->where(['operation_tag_name' => $value])->One();
-            if(empty($taginfo)){
-                $d[$key][] = $value;
-                $d[$key][] = 1;
-                $d[$key][] = '商品';
-                $d[$key][] = time();
-                $d[$key][] = time();
-                
+            if(!empty($value)) {
+                $taginfo = self::find()->where(['operation_tag_name' => $value])->One();
+                if (empty($taginfo)) {
+                    $d[$key][] = $value;
+                    $d[$key][] = 1;
+                    $d[$key][] = '商品';
+                    $d[$key][] = time();
+                    $d[$key][] = time();
+
 //                $tagcontent[] = $d[$key];
 //                Yii::$app->db->createCommand()->batchInsert(self::tableName(), $fields, $tagcontent)->execute();
 //                $data[Yii::$app()->db->getLastInsertID()] = $value;
 //                unset($tagcontent);
+                }
             }
         }
 //        return $data;
-        Yii::$app->db->createCommand()->batchInsert(self::tableName(), $fields, $d)->execute();
+        if(!empty($d)){
+            Yii::$app->db->createCommand()->batchInsert(self::tableName(), $fields, $d)->execute();
+        }
     }
 }

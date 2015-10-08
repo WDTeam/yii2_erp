@@ -61,12 +61,11 @@ class FinanceSettleApplyController extends BaseAuthController
      */
     public function actionQuery()
     {
-        $workerSearchModel = new WorkerSearch;
         $financeSearchModel = new FinanceSettleApplySearch;
         $dataProvider = $financeSearchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('query', [
             'dataProvider' => $dataProvider,
-            'searchModel' => $workerSearchModel,
+            'searchModel' => $financeSearchModel,
         ]);
     }
     
@@ -278,7 +277,7 @@ class FinanceSettleApplyController extends BaseAuthController
         if(isset($requestModel["FinanceSettleApplySearch"])){
             $financeSettleApplySearch = $requestModel["FinanceSettleApplySearch"];
         }
-        $financeSettleApplySearch = $financeSettleApplySearch->getWorkerInfo($workerId);//获取阿姨的信息
+//        $financeSettleApplySearch = $financeSettleApplySearch->getWorkerInfo($workerId);//获取阿姨的信息
         $searchModel = new FinanceWorkerOrderIncomeSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'dataProvider'=>$dataProvider]);

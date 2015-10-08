@@ -139,4 +139,6 @@ return [
     'Release Advert' => '发布广告',
     'Operation Goods' => '商品管理',
     'Goods' => '商品',
+    'Operation Specs' => '规格管理',
+    'Spec' => '规格',
 ];

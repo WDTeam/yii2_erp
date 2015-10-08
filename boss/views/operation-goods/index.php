@@ -15,9 +15,7 @@ $this->title = Yii::t('app', 'Operation Goods');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-goods-index">
-    <div class="page-header">
-            <h1><?= Html::encode($this->title) ?></h1>
-    </div>
+
 
     <p>
         <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
@@ -28,13 +26,20 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+//            ['class' => 'yii\grid\SerialColumn'],
 
             'id',
             'operation_goods_name',
-            'operation_category_id',
-            'operation_category_ids',
+//            'operation_category_id',
+//            'operation_category_ids',
+            'operation_goods_english_name',
+            'operation_goods_start_time',
+            'operation_goods_end_time',
             'operation_category_name',
+            'operation_goods_price',
+            'operation_goods_balance_price',
+//            'operation_goods_market_price',
+            'operation_goods_lowest_consume',
 //            'operation_goods_introduction:ntext', 
 //            'operation_goods_english_name', 
 //            'operation_goods_start_time', 
