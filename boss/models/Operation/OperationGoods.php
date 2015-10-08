@@ -41,7 +41,7 @@ class OperationGoods extends CoreOperationGoods
     public function rules()
     {
         return [
-            [['operation_category_id', 'operation_goods_service_interval_time', 'operation_goods_service_estimate_time', 'operation_price_strategy_id', 'created_at', 'updated_at'], 'integer'],
+            [['operation_category_id', 'operation_goods_service_interval_time', 'operation_goods_service_estimate_time', 'created_at', 'updated_at'], 'integer'],
             [['operation_goods_introduction', 'operation_goods_service_time_slot', 'operation_goods_price_description', 'operation_tags', 'operation_goods_app_ico', 'operation_goods_pc_ico'], 'string'],
             [['operation_goods_additional_cost', 'operation_goods_market_price'], 'number'],
             [['operation_goods_name', 'operation_category_name', 'operation_goods_english_name'], 'string', 'max' => 60],
@@ -61,24 +61,24 @@ class OperationGoods extends CoreOperationGoods
 
             'operation_category_id' => Yii::t('app', '对应服务品类编号（所属分类编号冗余）'),
             'operation_category_ids' => Yii::t('app', '服务品类'),
-            'operation_category_name' => Yii::t('app', '对应服务品类名称（所属分类名称冗余）'),
+            'operation_category_name' => Yii::t('app', '服务品类名称'),
             'operation_goods_introduction' => Yii::t('app', '商品简介'),
             'operation_goods_english_name' => Yii::t('app', '商品英文名称'),
-            'operation_goods_start_time' => Yii::t('app', '开始服务时间即开始时间'),
-            'operation_goods_end_time' => Yii::t('app', '结束服务时间即结束时间'),
+            'operation_goods_start_time' => Yii::t('app', '开始服务时间'),
+            'operation_goods_end_time' => Yii::t('app', '结束服务时间'),
             'operation_goods_service_time_slot' => Yii::t('app', '可服务时间段（序列化方式存储）'),
             'operation_goods_service_interval_time' => Yii::t('app', '服务间隔时间(单位：分钟）'),
             'operation_goods_service_estimate_time' => Yii::t('app', '预计服务时长(单位：分钟)'),
 
-            'operation_price_strategy_id' => Yii::t('app', '价格策略编号'),
-            'operation_price_strategy_name' => Yii::t('app', '价格策略名称'),
-            'operation_goods_price' => Yii::t('app', '售价'),
-//            'operation_goods_balance_price' => Yii::t('app', '阿姨结算价格'),
+//            'operation_price_strategy_id' => Yii::t('app', '价格策略编号'),
+//            'operation_price_strategy_name' => Yii::t('app', '价格策略名称'),
+            'operation_goods_price' => Yii::t('app', '售价(元)'),
+            'operation_goods_balance_price' => Yii::t('app', '结算价格(元)'),
 
             'operation_goods_additional_cost' => Yii::t('app', '附加费用'),
-            'operation_goods_lowest_consume' => Yii::t('app', '最低消费'),
+            'operation_goods_lowest_consume' => Yii::t('app', '最低消费(元)'),
             'operation_goods_price_description' => Yii::t('app', '价格备注'),
-            'operation_goods_market_price' => Yii::t('app', '市场价格'),
+            'operation_goods_market_price' => Yii::t('app', '市场价格(元)'),
             'operation_tags' => Yii::t('app', '个性标签'),
 
             'operation_goods_app_ico' => Yii::t('app', 'APP端图标(序列化方式存储|首页大图，首页小图，分类页小图，订单页小图)'),

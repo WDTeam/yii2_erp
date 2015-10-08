@@ -18,10 +18,23 @@ use common\models\Operation\CommonOperationSpec;
 class CoreOperationSpec extends CommonOperationSpec
 {
     public static function hanldeSpecValues($operation_spec_values){
-        return implode('          ', unserialize($operation_spec_values));
+        if(!empty($operation_spec_values)){
+            return implode('          ', unserialize($operation_spec_values));
+        }else{
+            return '';
+        }
     }
 
     public static function getSpecList(){
-        return self::find()->All();
+        $data = self::find()->select(['id', 'operation_spec_name'])->asArray()->All();
+        $d = array();
+        foreach((array)$data as $key => $value){
+            $d[$value['id']] = $value['operation_spec_name'];
+        }
+        return $d;
+    }
+    
+    public static function getSpecInfo($spec_id){
+        return self::find()->asArray()->where(['id' => $spec_id])->One();
     }
 }

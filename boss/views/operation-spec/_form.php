@@ -27,6 +27,7 @@ use kartik\datecontrol\DateControl;
             'operation_spec_description'=>['type'=> Form::INPUT_TEXTAREA, 'options'=>['placeholder'=>'规格备注...','rows'=> 6]],
 
             'operation_spec_values'=>['type'=> Form::INPUT_TEXTAREA, 'options'=>['placeholder'=>"规格属性【每项数据之间用逗号';'做分割】...",'rows'=> 6]],
+            'operation_spec_strategy_unit'=>['type'=> Form::INPUT_TEXTAREA, 'options'=>['placeholder'=>'计量单位...','maxlength'=> true]],
 
 //            'created_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 创建时间...']],
     //
