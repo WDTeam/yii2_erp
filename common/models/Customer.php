@@ -110,7 +110,7 @@ class Customer extends \yii\db\ActiveRecord
 
         $customer = Customer::find()->where(['id'=>$customer_id])->one();
         $balance = $customer->customer_balance;
-        $customer->customer_balance = bcadd($balance, $cash);
+        $customer->customer_balance = bcadd($balance, $cash, 2);
         $customer->validate();
         if ($customer->hasErrors()) {
             return false;
@@ -130,7 +130,8 @@ class Customer extends \yii\db\ActiveRecord
 
         $customer = Customer::find()->where(['id'=>$customer_id])->one();
         $balance = $customer->customer_balance;
-        $customer->customer_balance = bcsub($balance, $cash);
+        $customer->customer_balance = bcsub($balance, $cash, 2);
+        // $customer->customer_balance = $balance - $cash;
         $customer->validate();
         if ($customer->hasErrors()) {
             return false;
