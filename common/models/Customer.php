@@ -141,6 +141,7 @@ class Customer extends \yii\db\ActiveRecord
         // \Yii::$app->response->format = Response::FORMAT_JSON;
 
         $customer = Customer::find()->where(['id'=>$customer_id])->one();
+        $balance = $customer->balance;
         $customer->customer_balance = bcsub($balance, $cash);
         $customer->validate();
         if ($customer->hasErrors()) {
