@@ -345,17 +345,23 @@ echo Menu::widget(
                             'class' => 'treeview ',
                         ],
                         'items'=>[
-                            [
-                                'label' => '结算查询',
-                                'url' => ['/finance-settle-apply/query'],
-                                'icon' => 'fa fa-angle-right',
-                            ],[
+                           [
                                 'label' => '阿姨结算',
                                 'url' => ['/finance-settle-apply/worker-manual-settlement-index'],
                                 'icon' => 'fa fa-angle-right',
-                            ],[
+                            ],
+                            [
+                                'label' => '小家政结算',
+                                'url' => ['/finance-settle-apply/homemaking-manual-settlement-index'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                            [
                                 'label' => '结算审核(85%)',
                                 'url' => ['/finance-settle-apply/index?FinanceSettleApplySearch[finance_settle_apply_status]=0&FinanceSettleApplySearch[ids]=&FinanceSettleApplySearch[nodeId]=1'],
+                                'icon' => 'fa fa-angle-right',
+                            ], [
+                                'label' => '结算查询',
+                                'url' => ['/finance-settle-apply/query'],
                                 'icon' => 'fa fa-angle-right',
                             ]
                         ],
