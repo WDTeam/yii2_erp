@@ -26,7 +26,7 @@ class OperationSpec extends CoreOperationSpec
         return [
             [['operation_spec_description', 'operation_spec_values'], 'string'],
             [['created_at', 'updated_at'], 'integer'],
-            [['operation_spec_name'], 'string', 'max' => 60]
+            [['operation_spec_name', 'operation_spec_strategy_unit'], 'string', 'max' => 60]
         ];
     }
 
@@ -39,6 +39,7 @@ class OperationSpec extends CoreOperationSpec
             'id' => Yii::t('app', '编号'),
             'operation_spec_name' => Yii::t('app', '规格名称'),
             'operation_spec_description' => Yii::t('app', '规格备注'),
+            'operation_spec_strategy_unit' => Yii::t('app', '计量单位'),
             'operation_spec_values' => Yii::t('app', '规格值(序列化属性)'),
             'created_at' => Yii::t('app', '创建时间'),
             'updated_at' => Yii::t('app', '编辑时间'),

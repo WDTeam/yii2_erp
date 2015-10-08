@@ -64,16 +64,20 @@ class WorkerController extends BaseAuthController
         $workerModel = $this->findModel($id);
         $workerBlockModel = new WorkerBlock();
         $workerBlockData = new ActiveDataProvider([
-            'query' => $workerBlockModel->find()->where(['worker_id'=>$id]),
+            'query' => $workerBlockModel->find()->where(['worker_id'=>$id])->orderBy('id desc'),
         ]);
         $workerVacationModel = new WorkerVacation();
         $workerVacationData = new ActiveDataProvider([
-            'query' => $workerVacationModel->find()->where(['worker_id'=>$id]),
+            'query' => $workerVacationModel->find()->where(['worker_id'=>$id])->orderBy('id desc'),
+        ]);
+        $workerBlockLogModel = new WorkerBlockLog();
+        $workerBlockLogData = new ActiveDataProvider([
+            'query' => $workerBlockLogModel->find()->where(['worker_id'=>$id])->orderBy('id desc'),
         ]);
         if ($workerModel->load(Yii::$app->request->post()) && $workerModel->save()) {
             return $this->redirect(['view', 'id' => $workerModel->id]);
         } else {
-            return $this->render('view', ['workerModel' => $workerModel,'workerBlockData'=>$workerBlockData,'workerVacationData'=>$workerVacationData]);
+            return $this->render('view', ['workerModel' => $workerModel,'workerBlockData'=>$workerBlockData,'workerVacationData'=>$workerVacationData,'workerBlockLogData'=>$workerBlockLogData]);
         }
     }
 
@@ -121,59 +125,6 @@ class WorkerController extends BaseAuthController
         }
     }
 
-    public function actionUpdateWorkerBlock(){
-        if (Yii::$app->request->post('hasEditable')) {
-            // instantiate your book model for saving
-            $post = Yii::$app->request->post();
-            $id = $post['editableKey'];
-            $param['WorkerBlock'] = $post['WorkerBlock'][$post['editableIndex']];
-            $model = WorkerBlock::findOne($id);
-            $oldFinishTime = $model->worker_block_finish_time;
-            if(isset($param['WorkerBlock']['worker_block_finish_time'])){
-                if($oldFinishTime>$param['WorkerBlock']['worker_block_finish_time']){
-                    $this->CreateBlockLog($id,2);
-                }else{
-                    $this->CreateBlockLog($id,3);
-                }
-                $model->worker_block_finish_time = strtotime($param['WorkerBlock']['worker_block_finish_time']);
-            }
-            if(isset($param['WorkerBlock']['worker_block_status']) && isset($param['WorkerBlock']['worker_block_status'])==1){
-                $model->worker_block_status = $param['WorkerBlock']['worker_block_status'];
-            }
-            $model->save();
-            //$model->getErrors();
-            $out = json_encode(['output'=>array_values($param['WorkerBlock'] = $post['WorkerBlock'][$post['editableIndex']]), 'message'=>'']);
-            // return ajax json encoded response and exit
-            echo $out;
-            return;
-        }
-    }
-
-
-    protected function CreateBlockLog($blocdId,$type){
-            $log['worker_block_operate_type'] = $type;
-            $log['worker_block_id'] = $blocdId;
-            $log['worker_block_operate_time'] = time();
-            $log['worker_block_operate_id'] = Yii::$app->user->identity->id;
-
-            if($type==1){
-                $log['worker_block_operate_bak'] = '创建封号操作';
-            }elseif($type==2){
-                $log['worker_block_operate_bak'] = '缩短封号时间操作';
-            }elseif($type==3){
-                $log['worker_block_operate_bak'] = '延长封号时间操作';
-            }elseif($type==4){
-                $log['worker_block_operate_bak'] = '关闭操作';
-            }else{
-                $log['worker_block_operate_type'] = 5;
-                $log['worker_block_operate_bak'] = '其他操作';
-            }
-
-            $workerBlockModel = new WorkerBlockLog();
-            $workerBlockModel->load(['WorkerBlockLog'=>$log]);
-            $workerBlockModel->save();
-    }
-
     /**
      * Deletes an existing Worker model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -203,8 +154,12 @@ class WorkerController extends BaseAuthController
         }
     }
 
-
-    public function actionShowShop($q = null, $id = null)
+    /*
+     * ajax通过搜索关键字获取门店信息
+     * @param q string 关键字
+     * @return result array 门店信息
+     */
+    public function actionShowShop($q = null)
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $out = ['results' => ['id' => '', 'text' => '']];
@@ -218,8 +173,6 @@ class WorkerController extends BaseAuthController
             $data = $command->queryAll();
             $out['results'] = array_values($data);
             //$out['results'] = [['id' => '1', 'text' => '门店'], ['id' => '2', 'text' => '门店2'], ['id' => '2', 'text' => '门店3']];
-        } elseif ($id > 0) {
-            $out['results'] = ['id' => $id, 'text' => Worker::findone(array('id' => 1))->worker_name];
         }
         return $out;
     }
@@ -227,7 +180,8 @@ class WorkerController extends BaseAuthController
 
     /*
      * 创建阿姨请假信息
-     *
+     * @param workerId 阿姨Id
+     * @return empty
      */
     public function actionVacationCreate($id){
         $workerModel = $this->findModel($id);
@@ -243,14 +197,15 @@ class WorkerController extends BaseAuthController
 
     /*
      * 创建阿姨封号信息
-     *
+     * @param workerId 阿姨Id
+     * @return empty
      */
-    public function actionBlockCreate($id){
-        $workerModel = $this->findModel($id);
+    public function actionBlockCreate($workerId){
+        $workerModel = $this->findModel($workerId);
         $workerBlockmodel = new WorkerBlock();
         $post = \Yii::$app->request->post();
         if($post){
-            $workerBlockmodel->worker_id = $id;
+            $workerBlockmodel->worker_id = $workerId;
             $workerBlockmodel->worker_block_start_time = strtotime($post['WorkerBlock']['worker_block_start_time']);
             $workerBlockmodel->worker_block_finish_time = strtotime($post['WorkerBlock']['worker_block_finish_time']);
             $workerBlockmodel->worker_block_reason = $post['WorkerBlock']['worker_block_reason'];
@@ -261,7 +216,72 @@ class WorkerController extends BaseAuthController
             return $this->renderAjax('block_create',['workerModel'=>$workerModel,'workerBlockmodel'=>$workerBlockmodel]);
         }
     }
+    /*
+     * 更改阿姨封号信息，并同时记录到封号操作日志
+     *
+     */
+    public function actionUpdateWorkerBlock(){
+        if (Yii::$app->request->post('hasEditable')) {
+            // instantiate your book model for saving
+            $post = Yii::$app->request->post();
+            $blockId = $post['editableKey'];
+            $param['WorkerBlock'] = $post['WorkerBlock'][$post['editableIndex']];
+            $model = WorkerBlock::findOne($blockId);
+            $oldFinishTime = $model->worker_block_finish_time;
+            if(isset($param['WorkerBlock']['worker_block_finish_time'])){
+                if($oldFinishTime>$param['WorkerBlock']['worker_block_finish_time']){
+                    $this->CreateBlockLog($blockId,2);
+                }else{
+                    $this->CreateBlockLog($blockId,3);
+                }
+                $model->worker_block_finish_time = strtotime($param['WorkerBlock']['worker_block_finish_time']);
+            }
+            if(isset($param['WorkerBlock']['worker_block_status']) && isset($param['WorkerBlock']['worker_block_status'])==1){
+                $model->worker_block_status = $param['WorkerBlock']['worker_block_status'];
+            }
+            $model->save();
+            //$model->getErrors();
+            $out = json_encode(['output'=>array_values($param['WorkerBlock'] = $post['WorkerBlock'][$post['editableIndex']]), 'message'=>'']);
+            // return ajax json encoded response and exit
+            echo $out;
+            return;
+        }
+    }
 
+    /*
+     * 创建封号日志记录
+     * @param blockId 封号表主键id
+     * @param type 封号类型
+     * @return empty
+     */
+    protected function CreateBlockLog($blocdId,$type){
+        $log['worker_block_operate_type'] = $type;
+        $log['worker_block_id'] = $blocdId;
+        $log['worker_block_operate_time'] = time();
+        $log['worker_block_operate_id'] = Yii::$app->user->identity->id;
+
+        if($type==1){
+            $log['worker_block_operate_bak'] = '创建封号操作';
+        }elseif($type==2){
+            $log['worker_block_operate_bak'] = '缩短封号时间操作';
+        }elseif($type==3){
+            $log['worker_block_operate_bak'] = '延长封号时间操作';
+        }elseif($type==4){
+            $log['worker_block_operate_bak'] = '关闭操作';
+        }else{
+            $log['worker_block_operate_type'] = 5;
+            $log['worker_block_operate_bak'] = '其他操作';
+        }
+
+        $workerBlockModel = new WorkerBlockLog();
+        $workerBlockModel->load(['WorkerBlockLog'=>$log]);
+        $workerBlockModel->save();
+    }
+
+    /*
+     * 从老数据库中 导入阿姨数据 到新系统数据库中
+     * ***默认每次导入40条数据***
+     */
     public function actionGetDataFromOldDataBase(){
 
         $operationArea = new Operation\OperationArea();

@@ -61,12 +61,11 @@ class FinanceSettleApplyController extends BaseAuthController
      */
     public function actionQuery()
     {
-        $workerSearchModel = new WorkerSearch;
         $financeSearchModel = new FinanceSettleApplySearch;
         $dataProvider = $financeSearchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('query', [
             'dataProvider' => $dataProvider,
-            'searchModel' => $workerSearchModel,
+            'searchModel' => $financeSearchModel,
         ]);
     }
     
