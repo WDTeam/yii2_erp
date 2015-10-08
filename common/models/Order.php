@@ -81,7 +81,8 @@ class Order extends ActiveRecord
     public $order_worker_assign_type;
     public $shop_id;
     public $admin_id;
-    public $attributesExt = [ 'order_before_status_dict_id',
+    public $attributesExt = [
+        'order_before_status_dict_id',
         'order_before_status_name',
         'order_status_dict_id',
         'order_status_name',
@@ -119,7 +120,8 @@ class Order extends ActiveRecord
         'order_worker_type_name',
         'order_worker_assign_type',
         'shop_id',
-        'admin_id'];
+        'admin_id'
+    ];
 
     public function attributes(){
         return array_merge(parent::attributes(),$this->attributesExt);
