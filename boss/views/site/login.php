@@ -16,7 +16,7 @@ AppAsset::addCss($this,'adminlte/css/login/lrtk.css');
 ?>
 <style>
     html,body{
-        font-family: "Microsoft YaHei";
+        font-family: "Microsoft YaHei","STheiti";
         overflow: hidden;
     }
 </style>
