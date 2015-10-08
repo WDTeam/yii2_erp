@@ -386,7 +386,7 @@ echo Menu::widget(
                                 ]
                             ],
                             [
-                                'label' => '结算审核(85%)',
+                                'label' => '财务审核(85%)',
                                 'url' => ['/finance-settle-apply/index?FinanceSettleApplySearch[finance_settle_apply_status]=0&FinanceSettleApplySearch[ids]=&FinanceSettleApplySearch[nodeId]=1'],
                                 'icon' => 'fa fa-angle-right',
                             ], [
