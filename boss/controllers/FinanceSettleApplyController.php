@@ -239,18 +239,6 @@ class FinanceSettleApplyController extends BaseAuthController
         }
     }
 
-    /**
-     * Deletes an existing FinanceSettleApply model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
 
     /**
      * Finds the FinanceSettleApply model based on its primary key value.
@@ -281,6 +269,21 @@ class FinanceSettleApplyController extends BaseAuthController
         $searchModel = new FinanceWorkerOrderIncomeSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'dataProvider'=>$dataProvider]);
+    }
+    
+    /**
+    * 小家政人工结算
+    */
+    public function actionHomemakingManualSettlementIndex(){
+        $financeSettleApplySearch= new FinanceSettleApplySearch;
+        $requestModel = Yii::$app->request->getQueryParams();
+        if(isset($requestModel["FinanceSettleApplySearch"])){
+            $financeSettleApplySearch = $requestModel["FinanceSettleApplySearch"];
+        }
+//        $financeSettleApplySearch = $financeSettleApplySearch->getWorkerInfo($workerId);//获取阿姨的信息
+        $searchModel = new FinanceWorkerOrderIncomeSearch;
+        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        return $this->render('homemakingManualSettlementIndex', ['model'=>$financeSettleApplySearch,'dataProvider'=>$dataProvider]);
     }
     
     public function actionWorkerManualSettlementDone(){
