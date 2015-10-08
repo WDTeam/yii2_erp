@@ -84,9 +84,9 @@ use yii\web\JsExpression;
     
         <?php // echo $form->field($model, 'opening_address') ?>
     
-        <?php // echo $form->field($model, 'create_at') ?>
+        <?php // echo $form->field($model, 'created_at') ?>
     
-        <?php // echo $form->field($model, 'update_at') ?>
+        <?php // echo $form->field($model, 'updated_at') ?>
     
         <?php // echo $form->field($model, 'is_blacklist') ?>
     
