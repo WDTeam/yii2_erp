@@ -26,8 +26,8 @@ class Shop extends \common\models\Shop
         return [
             [
                 'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => 'create_at',
-                'updatedAtAttribute' => 'update_at',
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
             ],
         ];
     }
@@ -178,7 +178,7 @@ class Shop extends \common\models\Shop
      */
     public function softDelete()
     {
-        $this->is_deleted = 1;
+        $this->isdel = 1;
         return $this->save();
     }
     /**

@@ -23,7 +23,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="shop-index">
 
     <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
-        
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
 //         'filterModel' => $searchModel,
@@ -65,13 +64,13 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'sub_branch',
             // 'opening_address',
             [
-                'attribute'=>'create_at',
+                'attribute'=>'created_at',
                 'value'=>function($model){
-                        return date('Y-m-d', $model->create_at);
+                        return date('Y-m-d', $model->created_at);
                 },
                 'filter'=>false,
             ],
-            // 'update_at',
+            // 'updated_at',
             // 'is_blacklist',
             // 'blacklist_time:datetime',
             // 'blacklist_cause',
@@ -158,7 +157,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'showFooter'=>false
         ],
     ]); Pjax::end(); ?>
-
+    
 </div>
 <?php echo Modal::widget([
     'header' => '<h4 class="modal-title">黑名单原因</h4>',

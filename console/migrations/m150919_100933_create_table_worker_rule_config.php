@@ -29,8 +29,8 @@ class m150919_100933_create_table_worker_rule_config extends Migration
 
     public function down()
     {
-        //$this->dropTable('{{%worker_rule_config}}');
-        //return true;
+        $this->dropTable('{{%worker_rule_config}}');
+        return true;
     }
 
     /*
