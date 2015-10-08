@@ -1,10 +1,10 @@
 <?php
 
-namespace core\models;
+namespace core\models\worker;
 
 use Yii;
-use core\models\WorkerExt;
-use core\models\WorkerRuleConfig;
+use core\models\worker\WorkerExt;
+use core\models\worker\WorkerRuleConfig;
 use yii\web\ForbiddenHttpException;
 use boss\models\Shop;
 use yii\web\BadRequestHttpException;
@@ -31,6 +31,7 @@ use yii\web\BadRequestHttpException;
  * @property integer $worker_rule_id
  * @property integer $worker_is_block
  * @property integer $worker_is_blacklist
+ * @property integer $worker_is_vacation
  * @property integer $created_ad
  * @property integer $updated_ad
  * @property integer $isdel
@@ -72,7 +73,9 @@ class Worker extends \common\models\Worker
         return $workerInfo;
     }
 
+    public function getWorker_district(){
 
+    }
 
     /*
      * 获取阿姨类型名称
@@ -166,7 +169,7 @@ class Worker extends \common\models\Worker
     }
     /*
      * 获取阿姨所有身份信息
-     * @return
+     * @return Array 所有阿姨身份信息
      */
     public function getWorkerAllRules(){
 
@@ -175,7 +178,11 @@ class Worker extends \common\models\Worker
         return $workerRulesArr;
     }
 
-
+    /*
+     * 获取阿姨首页按钮css样式class
+     * @param int $btnCate 按钮所属类型 0-10
+     * @return string 按钮css样式class   btn-success-selected(按钮被选中) or btn-success(按钮未选中)
+     */
     public function getSearchBtnCss($btnCate){
         $searchParams = Yii::$app->request->getQueryParams();
         $workerSearchParams = array_key_exists('WorkerSearch',$searchParams)?$searchParams['WorkerSearch']:[];
@@ -224,7 +231,7 @@ class Worker extends \common\models\Worker
         return $this->find()->where(['worker_is_blacklist'=>1])->count();
     }
     public function getVacationCount(){
-        return $this->find()->where(['worker_auth_status'=>1,'worker_ontrial_status'=>1,'worker_onboard_status'=>0])->count();
+        return $this->find()->where(['worker_is_vacation'=>1])->count();
     }
 
     public function getQCount(){
@@ -242,7 +249,7 @@ class Worker extends \common\models\Worker
 
 
 
-    /**
+    /*
      * 加入黑名单
      * @param string $cause 原因
      */
@@ -254,7 +261,8 @@ class Worker extends \common\models\Worker
         }
         return false;
     }
-    /**
+
+    /*
      * 移出黑名单
      * @param string $cause 原因
      */

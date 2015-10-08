@@ -9,8 +9,8 @@ use Yii;
  *
  * @property integer $id
  * @property integer $worker_id
- * @property integer $worker_vacation_start
- * @property integer $worker_vacation_finish
+ * @property integer $worker_vacation_start_time
+ * @property integer $worker_vacation_finish_time
  * @property integer $worker_vacation_type
  * @property string $worker_vacation_extend
  * @property integer $created_ad
@@ -33,7 +33,8 @@ class WorkerVacation extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['worker_id', 'worker_vacation_start_time', 'worker_vacation_finish_time', 'worker_vacation_type', 'created_ad', 'updated_ad', 'admin_id'], 'integer'],
+            [['worker_id','worker_vacation_type','admin_id'], 'integer'],
+            [['worker_vacation_start_time','worker_vacation_finish_time','worker_vacation_type'],'required'],
             [['worker_vacation_extend'], 'string', 'max' => 11]
         ];
     }
@@ -44,7 +45,7 @@ class WorkerVacation extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', '阿姨请假时间表自增id'),
+            'id' => Yii::t('app', 'Id'),
             'worker_id' => Yii::t('app', '主表阿姨id'),
             'worker_vacation_start_time' => Yii::t('app', '请假开始时间'),
             'worker_vacation_finish_time' => Yii::t('app', '请假结束时间'),
