@@ -199,72 +199,22 @@ class Order extends OrderModel
             unset($attributes['isdel']);
             //格式化数据结束
 
-            //订单客户
-            $orderExtCustomer = new OrderExtCustomer();
-            $orderExtCustomer->setAttributes($attributes);
-            $orderExtCustomer->order_id = $attributes['order_id'];
-            if (!$orderExtCustomer->save()) {
-                $transaction->rollBack();//插入不成功就回滚事务
-                return false;
-            }
-            //订单标记
-            $orderExtFlag = new OrderExtFlag();
-            $orderExtFlag->setAttributes($attributes);
-            $orderExtFlag->order_id = $attributes['order_id'];
-            if (!$orderExtFlag->save()) {
-                $transaction->rollBack();//插入不成功就回滚事务
-                return false;
-            }
-            //订单支付
-            $orderExtPay = new OrderExtPay();
-            $orderExtPay->setAttributes($attributes);
-            $orderExtPay->order_id = $attributes['order_id'];
-            if (!$orderExtPay->save()) {
-                $transaction->rollBack();//插入不成功就回滚事务
-                return false;
-            }
-            //订单第三方
-            $orderExtPop = new OrderExtPop();
-            $orderExtPop->setAttributes($attributes);
-            $orderExtPop->order_id = $attributes['order_id'];
-            if (!$orderExtPop->save()) {
-                $transaction->rollBack();//插入不成功就回滚事务
-                return false;
-            }
-            //订单状态
-            $orderExtStatus = new OrderExtStatus();
-            $orderExtStatus->setAttributes($attributes);
-            $orderExtStatus->order_id = $attributes['order_id'];
-            if (!$orderExtStatus->save()) {
-                $transaction->rollBack();//插入不成功就回滚事务
-                return false;
-            }
-            //订单工人
-            $orderExtWorker = new OrderExtWorker();
-            $orderExtWorker->setAttributes($attributes);
-            $orderExtWorker->order_id = $attributes['order_id'];
-            if (!$orderExtWorker->save()) {
-                $transaction->rollBack();//插入不成功就回滚事务
-                return false;
-            }
-            //插入订单操作历史
-            $orderHistory = new OrderHistory();
-            $orderHistory->setAttributes($attributes);
-            $orderHistory->order_id = $attributes['order_id'];
-            if (!$orderHistory->save()) {
-                $transaction->rollBack();//插入不成功就回滚事务
-                return false;
-            }
-
+            //扩展信息
+            $extModel = ['OrderExtCustomer','OrderExtFlag','OrderExtPay','OrderExtPop','OrderExtStatus','OrderExtWorker','OrderHistory'];
             if ($statusChanged) { //订单状态有改动
-                //插入订单状态变更历史
-                $orderStatusHistory = new OrderStatusHistory();
-                $orderStatusHistory->setAttributes($attributes);
-                if (!$orderStatusHistory->save()) {
-                    $transaction->rollBack(); //插入不成功就回滚事务
+                $extModel[] = 'OrderStatusHistory';
+            }
+            foreach($extModel as $modelClassName){
+                $className = '\common\models\\'.$modelClassName;
+                $$modelClassName = new $className();
+                $$modelClassName->setAttributes($attributes);
+                $$modelClassName->order_id = $attributes['order_id'];
+                if (!$$modelClassName->save()) {
+                    $transaction->rollBack();//插入不成功就回滚事务
                     return false;
                 }
             }
+
             $transaction->commit();
             return true;
         }
