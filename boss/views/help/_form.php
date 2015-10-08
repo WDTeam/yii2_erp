@@ -29,7 +29,7 @@ use kartik\datecontrol\DateControl;
 
 'created_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter Created At...']], 
 
-'update_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter Update At...']], 
+'updated_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter Update At...']], 
 
 'help_solution'=>['type'=> Form::INPUT_TEXTAREA, 'options'=>['placeholder'=>'Enter 回答...','rows'=> 6]], 
 

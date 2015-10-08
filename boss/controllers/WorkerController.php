@@ -225,21 +225,28 @@ class WorkerController extends BaseAuthController
             // instantiate your book model for saving
             $post = Yii::$app->request->post();
             $blockId = $post['editableKey'];
-            $param['WorkerBlock'] = $post['WorkerBlock'][$post['editableIndex']];
-            $model = WorkerBlock::findOne($blockId);
-            $oldFinishTime = $model->worker_block_finish_time;
-            if(isset($param['WorkerBlock']['worker_block_finish_time'])){
-                if($oldFinishTime>$param['WorkerBlock']['worker_block_finish_time']){
-                    $this->CreateBlockLog($blockId,2);
+            $workerBlockArr = $post['WorkerBlock'][$post['editableIndex']];
+            $workerBlockModel = WorkerBlock::findOne($blockId);
+            $oldFinishTime = $workerBlockModel->worker_block_finish_time;
+            $workerId = $workerBlockModel->worker_id;
+
+            //更改封号结束时间
+            if(isset($workerBlockArr['worker_block_finish_time'])){
+                $finishTime = strtotime($workerBlockArr['worker_block_finish_time']);
+                if($oldFinishTime>$finishTime){
+                    //缩短封号时间
+                    $this->CreateBlockLog($workerId,$blockId,2);
                 }else{
-                    $this->CreateBlockLog($blockId,3);
+                    //延长封号时间
+                    $this->CreateBlockLog($workerId,$blockId,3);
                 }
-                $model->worker_block_finish_time = strtotime($param['WorkerBlock']['worker_block_finish_time']);
+                $workerBlockModel->worker_block_finish_time = $finishTime;
+            //更改封号状态
+            }elseif(isset($workerBlockArr['worker_block_status']) && $workerBlockArr['worker_block_status']==1){
+                $workerBlockModel->worker_block_status = $workerBlockArr['worker_block_status'];
             }
-            if(isset($param['WorkerBlock']['worker_block_status']) && isset($param['WorkerBlock']['worker_block_status'])==1){
-                $model->worker_block_status = $param['WorkerBlock']['worker_block_status'];
-            }
-            $model->save();
+
+            $workerBlockModel->save();
             //$model->getErrors();
             $out = json_encode(['output'=>array_values($param['WorkerBlock'] = $post['WorkerBlock'][$post['editableIndex']]), 'message'=>'']);
             // return ajax json encoded response and exit
@@ -250,31 +257,32 @@ class WorkerController extends BaseAuthController
 
     /*
      * 创建封号日志记录
+     * @param workerId 阿姨Id
      * @param blockId 封号表主键id
-     * @param type 封号类型
+     * @param type 封号类型 [1]创建操作
      * @return empty
      */
-    protected function CreateBlockLog($blocdId,$type){
-        $log['worker_block_operate_type'] = $type;
-        $log['worker_block_id'] = $blocdId;
-        $log['worker_block_operate_time'] = time();
-        $log['worker_block_operate_id'] = Yii::$app->user->identity->id;
-
+    protected function CreateBlockLog($workerId,$blocdId,$type){
+        $logArr['worker_id'] = $workerId;
+        $logArr['worker_block_id'] = $blocdId;
+        $logArr['worker_block_operate_time'] = time();
+        $logArr['worker_block_operate_type'] = $type;
+        $logArr['worker_block_operate_id'] = Yii::$app->user->identity->id;
         if($type==1){
-            $log['worker_block_operate_bak'] = '创建封号操作';
+            $logArr['worker_block_operate_bak'] = '创建封号操作';
         }elseif($type==2){
-            $log['worker_block_operate_bak'] = '缩短封号时间操作';
+            $logArr['worker_block_operate_bak'] = '缩短封号时间操作';
         }elseif($type==3){
-            $log['worker_block_operate_bak'] = '延长封号时间操作';
+            $logArr['worker_block_operate_bak'] = '延长封号时间操作';
         }elseif($type==4){
-            $log['worker_block_operate_bak'] = '关闭操作';
+            $logArr['worker_block_operate_bak'] = '关闭操作';
         }else{
-            $log['worker_block_operate_type'] = 5;
-            $log['worker_block_operate_bak'] = '其他操作';
+            $logArr['worker_block_operate_type'] = 5;
+            $logArr['worker_block_operate_bak'] = '其他操作';
         }
 
         $workerBlockModel = new WorkerBlockLog();
-        $workerBlockModel->load(['WorkerBlockLog'=>$log]);
+        $workerBlockModel->load(['WorkerBlockLog'=>$logArr]);
         $workerBlockModel->save();
     }
 

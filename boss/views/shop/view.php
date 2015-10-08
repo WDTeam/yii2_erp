@@ -82,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
             
             
             [
-                'attribute'=>'create_at',
+                'attribute'=>'created_at',
                 'type' => DetailView::INPUT_WIDGET,
                 'widgetOptions' => [
                     'class' => DateControl::classname(),
@@ -96,10 +96,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]
                     ]
                 ],
-                'value'=>date('Y-m-d H:i:s', $model->create_at),
+                'value'=>date('Y-m-d H:i:s', $model->created_at),
             ],
             [
-                'attribute'=>'update_at',
+                'attribute'=>'updated_at',
                 'type' => DetailView::INPUT_WIDGET,
                 'widgetOptions' => [
                     'class' => DateControl::classname(),
@@ -113,7 +113,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]
                     ]
                 ],
-                'value'=>date('Y-m-d H:i:s', $model->update_at),
+                'value'=>date('Y-m-d H:i:s', $model->updated_at),
             ],
             [
                 'attribute' => 'is_blacklist',

@@ -301,46 +301,41 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '对账管理(80)',
+                        'label' => '对账管理(90%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
-                        'visible' => (Yii::$app->user->identity->username == 'admin'),
-                        'options' => [
-                                'class' => 'treeview ',
-                        ],
-                        'items' => [
-                            [
-                            'label' => '渠道管理(95%)',
-                            'url' => ['/finance-order-channel/'],
-                            'icon' => 'fa fa-angle-right',
-                            ],
-                            [
-                            'label' => '配置对账表头(95%)',
-                            'url' => ['/finance-header/index'],
-                            'icon' => 'fa fa-angle-right',
-                            ],
-                            [
-                            'label' => '开始对账(80%)',
-                            'url' => ['/finance-pop-order/'],
-                            'icon' => 'fa fa-angle-right',
-                            ],
-                            [
-                            'label' => '查看历史对账记录(80%)',
-                            'url' => ['/finance-record-log/'],
-                            'icon' => 'fa fa-angle-right',
-                            ],
-                            [
-                            'label' => '对账记录详情(70%)',
-                            'url' => ['/finance-pop-order/billinfo'],
-                            'icon' => 'fa fa-angle-right',
-                            ],
-                            [
-                            'label' => '坏账管理(70%)',
-                            'url' => ['/finance-pop-order/bad'],
-                            'icon' => 'fa fa-angle-right',
-                            ]
+						'options' => [
+							'class' => 'treeview ',
+						],
+						'items' => [
+							[
+    							'label' => '渠道管理(95%)',
+    							'url' => ['/finance-order-channel/'],
+    							'icon' => 'fa fa-angle-right',
+							],[
+    							'label' => '配置对账表头(95%)',
+    							'url' => ['/finance-header/index'],
+    							'icon' => 'fa fa-angle-right',
+							],[
+							'label' => '开始对账(85%)',
+    							'url' => ['/finance-pop-order/'],
+    							'icon' => 'fa fa-angle-right',
+							],[
+    							'label' => '查看历史对账记录(95%)',
+    							'url' => ['/finance-record-log/'],
+    							'icon' => 'fa fa-angle-right',
+							],[
+    							'label' => '对账记录详情(90%)',
+    							'url' => ['/finance-pop-order/billinfo'],
+    							'icon' => 'fa fa-angle-right',
+							],[
+    							'label' => '坏账管理(90%)',
+    							'url' => ['/finance-pop-order/bad'],
+    							'icon' => 'fa fa-angle-right',
+							]
+		
+					   ]
 
-                   ]
                     ],
                     [
                         'label' => '结算管理(85%)',
@@ -350,17 +345,53 @@ echo Menu::widget(
                             'class' => 'treeview ',
                         ],
                         'items'=>[
+                           [
+                                'label' => '自营结算',
+                                'url' => ['#'],
+                                'icon' => 'fa fa-angle-right',
+                                'options' => [
+                                    'class' => 'treeview ',
+                                ],
+                               'items'=>[
+                                    [
+                                        'label' => '全职结算',
+                                        'url' => ['/finance-settle-apply/homemaking-manual-settlement-index'],
+                                        'icon' => 'fa fa-angle-right',
+                                    ],
+                                   [
+                                        'label' => '兼职结算',
+                                        'url' => ['/finance-settle-apply/homemaking-manual-settlement-index'],
+                                        'icon' => 'fa fa-angle-right',
+                                    ],
+                               ]
+                            ],
                             [
+                                'label' => '小家政结算',
+                                'url' => ['#'],
+                                'icon' => 'fa fa-angle-right',
+                                'options' => [
+                                    'class' => 'treeview ',
+                                ],
+                                'items'=>[
+                                    [
+                                        'label' => '门店结算',
+                                        'url' => ['/finance-settle-apply/homemaking-manual-settlement-index'],
+                                        'icon' => 'fa fa-angle-right',
+                                    ],
+                                   [
+                                        'label' => '阿姨结算',
+                                        'url' => ['/finance-settle-apply/homemaking-manual-settlement-index'],
+                                        'icon' => 'fa fa-angle-right',
+                                    ],
+                                ]
+                            ],
+                            [
+                                'label' => '财务审核(85%)',
+                                'url' => ['/finance-settle-apply/index?FinanceSettleApplySearch[finance_settle_apply_status]=0&FinanceSettleApplySearch[ids]=&FinanceSettleApplySearch[nodeId]=1'],
+                                'icon' => 'fa fa-angle-right',
+                            ], [
                                 'label' => '结算查询',
                                 'url' => ['/finance-settle-apply/query'],
-                                'icon' => 'fa fa-angle-right',
-                            ],[
-                                'label' => '阿姨结算',
-                                'url' => ['/finance-settle-apply/worker-manual-settlement-index'],
-                                'icon' => 'fa fa-angle-right',
-                            ],[
-                                'label' => '结算审核(85%)',
-                                'url' => ['/finance-settle-apply/index?FinanceSettleApplySearch[finance_settle_apply_status]=0&FinanceSettleApplySearch[ids]=&FinanceSettleApplySearch[nodeId]=1'],
                                 'icon' => 'fa fa-angle-right',
                             ]
                         ],
