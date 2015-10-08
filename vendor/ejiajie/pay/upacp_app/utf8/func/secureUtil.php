@@ -41,11 +41,11 @@ function sign(&$params) {
 
 /**
  * 验签
- *
+ * 注意这个方法会和codecept的方法同名冲突，请等待胜强处理。log by 李登高 2015-10-8
  * @param String $params_str
  * @param String $signature_str
  */
-function verify($params) {
+function _verify($params) {
 	global $log;
 	// 公钥
 	$public_key = getPulbicKeyByCertId ( $params ['certId'] );
