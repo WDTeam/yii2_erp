@@ -85,7 +85,7 @@ echo DetailView::widget([
                     'placeholder' => '选择平台',
                 ]
             ],
-            'value'=>$customerPlatform['platform_name'] ? $customerPlatform['platform_name'] : '-',
+            'value'=>$platform_name,
         ],
         [
             'attribute' => 'channal_id',
@@ -99,7 +99,7 @@ echo DetailView::widget([
                     'placeholder' => '选择聚道',
                 ]
             ],
-            'value'=>$customerChannal['channal_name'] ? $customerChannal['channal_name'] : '-',
+            'value'=>$channal_name,
         ],
         // [
         //     'attribute'=>'customer_phone', 
