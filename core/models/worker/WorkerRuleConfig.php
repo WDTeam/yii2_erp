@@ -1,6 +1,6 @@
 <?php
 
-namespace core\models;
+namespace core\models\worker;
 
 use Yii;
 

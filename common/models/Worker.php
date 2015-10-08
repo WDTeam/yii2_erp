@@ -30,6 +30,7 @@ use Yii;
  * @property integer $worker_rule_id
  * @property integer $worker_is_block
  * @property integer $worker_is_blacklist
+ * @property integer $worker_is_vacation
  * @property integer $created_ad
  * @property integer $updated_ad
  * @property integer $isdel
@@ -50,7 +51,7 @@ class Worker extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['worker_name','worker_phone'],'unique','message'=>'{attribute}\'{value}\'已经被占用'],
+            [['worker_name','worker_phone','worker_idcard'],'unique','message'=>'{attribute}\'{value}\'已经被占用'],
             ['worker_phone','match','pattern'=>'/^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/','message'=>'请填写正确格式的手机号码'],
             ['worker_idcard','match','pattern'=>'/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/','message'=>'请填写正确格式的身份证号'],
             [['shop_id','worker_name','worker_phone','worker_idcard','worker_type', 'worker_type','worker_rule_id'],'required'],
@@ -89,9 +90,11 @@ class Worker extends \yii\db\ActiveRecord
             'worker_rule_id' => Yii::t('app', '阿姨身份 '),
             'worker_is_block' => Yii::t('app', '阿姨是否封号'),
             'worker_is_blacklist' => Yii::t('app', '阿姨是否黑名单'),
+            'worker_is_vacation' => Yii::t('app', '阿姨是否请假'),
             'created_ad' => Yii::t('app', '阿姨录入时间'),
             'updated_ad' => Yii::t('app', '最后更新时间'),
             'isdel' => Yii::t('app', '是否删号'),
+            'worker_district' => Yii::t('app', '阿姨所属商圈'),
         ];
     }
 
