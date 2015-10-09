@@ -8,6 +8,12 @@ use yii\data\ActiveDataProvider;
 use common\models\FinancePopOrder;
 use common\models\FinanceHeader;
 use common\models\Order;
+use common\models\GeneralPay;
+use core\models\Customer;
+
+
+
+
 /**
  * FinancePopOrderSearch represents the model behind the search form about `common\models\FinancePopOrder`.
  */
@@ -157,9 +163,9 @@ class FinancePopOrderSearch extends FinancePopOrder
     * @author: peak pan
     * @return:finance_pop_order_pay_status 1 金额比对成功   2 三有我没有  3 我有三没有   4 金额比对失败  5状态不对的
     * 第一位是表头对应的信息 
-    * 第二位是一个表格的对应的信息
+    * 第二位是一个表格的对应的信息数据
     **/
-    public function PopOrderstatus($alinfo,$value)
+    public function PopOrderstatus($alinfo,$value,$channelid)
     {
 //     	'order_channel_order_num' => string '1' (length=1)
 //     	'order_money' => string '3' (length=1)
@@ -180,54 +186,117 @@ class FinancePopOrderSearch extends FinancePopOrder
     	
     	//对应系统金额
     	$getorder_money=$dateinfo[$hder_info['order_money']];
-    	
     	//对应数据表折扣金额
     	//$promote=$dateinfo[$hder_info['order_channel_promote']];
     	
 		//打开订单库开始比对
-		//$orderinfo= new Order;
-		$alinfo=Order::find()
-		->select('order_status_name,channel_id,order_channel_name,customer_id,order_customer_phone,order_booked_begin_time,order_booked_end_time,order_money,order_booked_worker_id,order_pay_type,pay_channel_id,order_pay_channel_name,order_use_coupon_money,order_channel_order_num,order_customer_phone,worker_id,order_use_promotion_money,order_code,order_service_type_id,order_pay_money,created_at,coupon_id,order_before_status_dict_id')
-		->andWhere(['=','order_channel_order_num',$getorder])
-		->asArray()->one();
-		
+    	//订单对账	
+    	$alinfo=Order::find()
+    		->select('order_status_name,channel_id,order_channel_name,customer_id,order_customer_phone,order_booked_begin_time,order_booked_end_time,order_money,order_booked_worker_id,order_pay_type,pay_channel_id,order_pay_channel_name,order_use_coupon_money,order_channel_order_num,order_customer_phone,worker_id,order_use_promotion_money,order_code,order_service_type_id,order_pay_money,created_at,coupon_id,order_before_status_dict_id')
+    		->andWhere(['=','order_channel_order_num',$getorder])
+    		->asArray()->one();
+    	
 		if ($alinfo) {
 			//比对金额
 			//1 金额比对成功   2 三有我没有  3 我有三没有   4 金额比对失败  5状态不对的
-			if($alinfo['order_money']==$getorder_money){ $alinfo['finance_pop_order_pay_status_type']=1;  }else{
-				$alinfo['finance_pop_order_pay_status_type']=4;
-			}
-				
+			if($alinfo['order_money']==$getorder_money){ 
+				$alinfo['finance_pop_order_pay_status_type']=1;
+			  }
 		}else {
-		//三有我没有
-	    $alinfo['order_channel_order_num']=$getorder;
-		$alinfo['order_money']=$getorder_money;	
-		//$alinfo['order_channel_promote']=$promote;
-		$alinfo['order_status_name']=0;
-		$alinfo['channel_id']=0;
-		$alinfo['order_channel_name']=0;
-		$alinfo['order_customer_phone']=0;
-		$alinfo['order_booked_begin_time']=0;
-		$alinfo['order_booked_end_time']=0;
-		$alinfo['order_booked_worker_id']=0;
-		$alinfo['order_pay_type']=0;
-		$alinfo['pay_channel_id']=0;
-		$alinfo['order_pay_channel_name']=0;
-		$alinfo['order_use_coupon_money']=0;
-		$alinfo['order_customer_phone']=0;
-		$alinfo['worker_id']=0;
-		$alinfo['order_use_promotion_money']=0;
-		$alinfo['order_code']=0;
-		$alinfo['order_service_type_id']=0;
-		$alinfo['worker_id']=0;
-		$alinfo['order_pay_money']=0;
-		$alinfo['created_at']=0;
-		$alinfo['coupon_id']=0;
-		$alinfo['order_before_status_dict_id']=0;
-		$alinfo['finance_pop_order_pay_status_type']=2;
+			//在订单表查询无数据 1 确实没有 2视为充值订单
+			if($getorder_money >=1000){
+				//查询胜强的充值表
+				//查询存在
+				$alinfo_es=GeneralPay::find()
+				->select('general_pay_status,customer_id,created_at,general_pay_money,general_pay_source,general_pay_transaction_id,general_pay_mode')
+				->andWhere(['=','order_channel_order_num',$getorder])
+				->asArray()->one();
+				if($alinfo_es){
+					//存在
+					//开始比对金额
+					if($alinfo_es['order_money']==$getorder_money){
+					//金额比对成功
+						if($alinfo_es['general_pay_status']==1){
+							$status='成功';
+						}else{
+							$status='失败';
+						}
+						//通过客户uid获取客户资料
+						$userinfo=Customer::getCustomerById($alinfo_es['customer_id']);
+						$alinfo['order_status_name']=$status;
+						$alinfo['channel_id']=$channelid;
+						$alinfo['order_channel_name']='充值订单';
+						$alinfo['customer_id']=0;
+						$alinfo['order_customer_phone']=$userinfo->customer_phone; //用户手机号 通过用户id调取用户信息
+						$alinfo['order_booked_begin_time']=$alinfo_es['created_at'];
+						$alinfo['order_booked_end_time']=$alinfo_es['created_at'];
+						$alinfo['order_money']=$alinfo_es['general_pay_money'];
+						$alinfo['order_booked_worker_id']=0;
+						$alinfo['order_pay_type']=$alinfo_es['general_pay_source'];
+						$alinfo['pay_channel_id']=0;
+						$alinfo['order_pay_channel_name']=0;
+						$alinfo['order_use_coupon_money']=0;
+						$alinfo['order_channel_order_num']=$alinfo_es['general_pay_transaction_id']; //第三方订单号
+						$alinfo['worker_id']=0;
+						$alinfo['order_use_promotion_money']=0;
+						$alinfo['order_code']=0;
+						$alinfo['order_service_type_id']=2;//订单类型 1 消费订单 2 充值订单
+						$alinfo['order_pay_money']=$alinfo_es['general_pay_money'];//实际收款
+						$alinfo['created_at']=$alinfo_es['created_at'];
+						$alinfo['coupon_id']=0;
+						$alinfo['order_before_status_dict_id']=$alinfo_es['general_pay_mode']; //支付状态交易方式:1=充值,2=余额支付,3=在线支付,4=退款,5=赔偿
+						$alinfo['finance_pop_order_pay_status_type']=1;
+					}else{
+						//金额比对不上
+						$alinfo['finance_pop_order_pay_status_type']=4;
+					}
+				}
+			}else{
+				//三有我没有
+				$alinfo['order_channel_order_num']=$getorder;
+				$alinfo['order_money']=$getorder_money;
+				//$alinfo['order_channel_promote']=$promote;
+				$alinfo['order_status_name']=0;
+				$alinfo['channel_id']=$channelid;
+				$alinfo['order_channel_name']=0;
+				$alinfo['order_customer_phone']=0;
+				$alinfo['order_booked_begin_time']=0;
+				$alinfo['order_booked_end_time']=0;
+				$alinfo['order_booked_worker_id']=0;
+				$alinfo['order_pay_type']=0;
+				$alinfo['pay_channel_id']=0;
+				$alinfo['order_pay_channel_name']=0;
+				$alinfo['order_use_coupon_money']=0;
+				$alinfo['order_customer_phone']=0;
+				$alinfo['worker_id']=0;
+				$alinfo['order_use_promotion_money']=0;
+				$alinfo['order_code']=0;
+				$alinfo['order_service_type_id']=0;
+				$alinfo['worker_id']=0;
+				$alinfo['order_pay_money']=0;
+				$alinfo['created_at']=0;
+				$alinfo['coupon_id']=0;
+				$alinfo['order_before_status_dict_id']=0;
+				$alinfo['finance_pop_order_pay_status_type']=2;
+			}
 		}
     	return $alinfo;
     }  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     public function OrderPayStatus($params)
     {

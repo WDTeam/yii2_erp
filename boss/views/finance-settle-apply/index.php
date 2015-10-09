@@ -10,7 +10,7 @@ use boss\models\FinanceWorkerNonOrderIncomeSearch;
  * @var boss\models\FinanceSettleApplySearch $searchModel
  */
 
-$this->title = Yii::t('finance', '全职结算');
+$this->title = Yii::t('finance', '财务审核');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.css" rel="stylesheet">
@@ -30,37 +30,6 @@ $this->params['breadcrumbs'][] = $this->title;
    
 <div class="finance-settle-apply-index">
      <div class="panel panel-info">
-        <div class = "container">
-            <input type="hidden" id="finance_settle_apply_status" name="FinanceSettleApplySearch[finance_settle_apply_status]"  />
-            <input type="hidden" id="ids" name="FinanceSettleApplySearch[ids]"/>
-            <input type="hidden" id="nodeId"   name="FinanceSettleApplySearch[nodeId]" value = "<?php echo $nodeId; ?>"/>
-        </div>
-
-        <script>
-            function checkResult(checkStatus){
-                //勾选的结算记录id
-                var ids = $('#w1').yiiGridView('getSelectedRows');
-                if(ids === ''){
-                    return;
-                }
-                if(checkStatus === 1){
-                    $("#finance_settle_apply_status").val($("#nodeId").val());
-                }else{
-                    $("#finance_settle_apply_status").val(-$("#nodeId").val());
-                }
-                $("#ids").val(ids);
-                var url = '/finance-settle-apply/review';
-                $('#financeSettleApplyForm').attr('action',url);
-                $('#financeSettleApplyForm').submit();
-            }
-            function changetTab(applyStatus,nodeId){
-                $("#nodeId").val(nodeId);
-                $("#finance_settle_apply_status").val(applyStatus);
-                var url = '/finance-settle-apply/index';
-                $('#financeSettleApplyForm').attr('action',url);
-                $('#financeSettleApplyForm').submit();
-            }
-        </script>
 
         <?php Pjax::begin(); echo GridView::widget([
             'dataProvider' => $dataProvider,
