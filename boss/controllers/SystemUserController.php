@@ -32,42 +32,41 @@ class SystemUserController extends BaseAuthController
      */
     public function actionIndex()
     {
-        $searchModel = new SystemUserSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $arrayStatus = SystemUser::getArrayStatus();
-        $arrayRole = SystemUser::getArrayRole();
+        $searchModel = new SystemUserSearch;
+        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'arrayStatus' => $arrayStatus,
-            'arrayRole' => $arrayRole,
+            'searchModel' => $searchModel,
         ]);
     }
 
     /**
-     * Displays a single User model.
+     * Displays a single SystemUser model.
      * @param integer $id
      * @return mixed
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            return $this->render('view', ['model' => $model]);
+        }
     }
 
     /**
-     * Creates a new User model.
+     * Creates a new SystemUser model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new SystemUser(['scenario' => 'admin-create']);
+        $model = new SystemUser;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->authManager->assign(Yii::$app->authManager->getRole($model->role), $model->id);
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -77,7 +76,7 @@ class SystemUserController extends BaseAuthController
     }
 
     /**
-     * Updates an existing User model.
+     * Updates an existing SystemUser model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -85,13 +84,9 @@ class SystemUserController extends BaseAuthController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $model->setScenario('admin-update');
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->authManager->revokeAll($id);
-            Yii::$app->authManager->assign(Yii::$app->authManager->getRole($model->role), $id);
             return $this->redirect(['view', 'id' => $model->id]);
-        } else {
+        }else {
             return $this->render('update', [
                 'model' => $model,
             ]);
@@ -99,7 +94,7 @@ class SystemUserController extends BaseAuthController
     }
 
     /**
-     * Deletes an existing User model.
+     * Deletes an existing SystemUser model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -112,10 +107,10 @@ class SystemUserController extends BaseAuthController
     }
 
     /**
-     * Finds the User model based on its primary key value.
+     * Finds the SystemUser model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return User the loaded model
+     * @return SystemUser the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)

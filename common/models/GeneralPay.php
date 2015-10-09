@@ -229,7 +229,7 @@ class GeneralPay extends \yii\db\ActiveRecord
         $param = array(
             'out_trade_no'=>$this->create_out_trade_no(),
             'subject'=>$this->subject(),
-            'general_pay_money'=>$this->general_pay_money,
+            'general_pay_money'=>$this->toMoney($this->general_pay_money,100,'*',0),
             'notify_url'=>$this->notify_url('up-app'),
         );
         $class = new \uppay_class();
@@ -312,12 +312,13 @@ class GeneralPay extends \yii\db\ActiveRecord
      * @param $money1   实际金额
      * @param $money2   基数
      * @param $method   +,-,*,%
+     * @param $num 保留几位小数
      * @return float    实际金额
      */
-    public function toMoney($money1, $money2, $method = '*')
+    public function toMoney($money1, $money2, $method = '*',$num=2)
     {
         $toMoney = '';
-        bcscale(2); //保留两位小数
+        bcscale($num); //保留两位小数
         switch($method)
         {
             case '+' :

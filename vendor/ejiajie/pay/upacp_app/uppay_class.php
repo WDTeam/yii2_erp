@@ -24,8 +24,8 @@ class uppay_class{
             'txnType' => '01',				//交易类型
             'txnSubType' => '01',				//交易子类
             'bizType' => '000201',				//业务类型
-            'frontUrl' =>  SDK_FRONT_NOTIFY_URL,  		//前台通知地址，控件接入的时候不会起作用
-            'backUrl' => SDK_BACK_NOTIFY_URL,		//后台通知地址
+            'frontUrl' =>  $param['notify_url'],  		//前台通知地址，控件接入的时候不会起作用
+            'backUrl' => $param['notify_url'],		//后台通知地址
             'signMethod' => '01',		//签名方法
             'channelType' => '08',		//渠道类型，07-PC，08-手机
             'accessType' => '0',		//接入类型
@@ -43,7 +43,7 @@ class uppay_class{
         getRequestParamString ( $params );
         // 发送信息到后台
         $result = sendHttpRequest ( $params, SDK_App_Request_Url );
-        parse_str($result,$url_param); 
+        parse_str($result,$url_param);
         return $url_param;
     }
 

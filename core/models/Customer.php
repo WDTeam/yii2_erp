@@ -9,6 +9,16 @@ use yii\web\BadRequestHttpException;
 
 class Customer extends \common\models\Customer
 {
+
+    /**
+     * 根据customer_id获取顾客信息
+     */
+    public function getCustomerById($customer_id)
+    {
+        $customer = Customer::findOne($customer_id);
+        return $customer;
+    }
+    
     /**
      * 根据手机号获取顾客基本信息
      */
@@ -24,7 +34,7 @@ class Customer extends \common\models\Customer
      * 获取顾客地址集
      */
     public function getCustomerAddresses($customer_id){
-        $customerAddresses = $this::hasMany('\boss\models\customerAddress', 'customer_id', 'id');
+        $customerAddresses = $this->hasMany('\boss\models\customerAddress', 'customer_id', 'id');
         return $customerAddresses;
     }
 
