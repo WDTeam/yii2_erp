@@ -20,7 +20,6 @@ class m150921_090403_create_table_system_user extends Migration
               `updated_at` int(11) DEFAULT NULL COMMENT '修改时间',
               PRIMARY KEY (`id`),
               UNIQUE KEY `username` (`username`),
-              KEY `role` (`role`),
               KEY `status` (`status`),
               KEY `created_at` (`created_at`)
             ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='后台用户表'
