@@ -9,6 +9,7 @@ return array(
     'yii\\swiftmailer\\' => array($vendorDir . '/yiisoft/yii2-swiftmailer'),
     'yii\\redis\\' => array($vendorDir . '/yiisoft/yii2-redis'),
     'yii\\redactor\\' => array($vendorDir . '/yiidoc/yii2-redactor'),
+    'yii\\mongodb\\' => array($vendorDir . '/yiisoft/yii2-mongodb'),
     'yii\\jui\\' => array($vendorDir . '/yiisoft/yii2-jui'),
     'yii\\gii\\' => array($vendorDir . '/yiisoft/yii2-gii'),
     'yii\\faker\\' => array($vendorDir . '/yiisoft/yii2-faker'),

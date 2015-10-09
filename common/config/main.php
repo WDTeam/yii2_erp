@@ -128,6 +128,14 @@ return [
             'database' => 0,
         ],
         /**
+         * 配置 mongodb
+         * 使用参考：http://www.yiiframework.com/doc-2.0/ext-mongodb-index.html
+         */
+        'mongodb' => [
+            'class' => '\yii\mongodb\Connection',
+            'dsn' => 'mongodb://developer:password@localhost:27017/mydatabase',
+        ],
+        /**
          * 极光推送,默认为开发环境配置
          * //正式
          $app_key='507d4a12d19ebbab7205f6bb';

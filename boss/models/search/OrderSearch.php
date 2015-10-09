@@ -95,6 +95,7 @@ class OrderSearch extends Order
             ->andFilterWhere(['like', 'order_pay_channel_name', $this->order_pay_channel_name])
             ->andFilterWhere(['like', 'order_pay_flow_num', $this->order_pay_flow_num])
             ->andFilterWhere(['like', 'order_worker_type_name', $this->order_worker_type_name])
+           // ->andFilterWhere(['<=', 'created_at', $this->created_at])
             ->andFilterWhere(['like', 'order_worker_bonus_detail', $this->order_worker_bonus_detail]);
 
         return $dataProvider;
