@@ -2,15 +2,16 @@
 
 use yii\helpers\Html;
 
+/**
+ * @var yii\web\View $this
+ * @var boss\models\SystemUser $model
+ */
 
-/* @var $this yii\web\View */
-/* @var $model backend\models\User */
-
-$this->title = Yii::t('app', 'Create ') . Yii::t('app', 'User');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Users'), 'url' => ['index']];
+$this->title = Yii::t('app', 'Create System User');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'System Users'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="user-create">
+<div class="system-user-create">
 
     <?= $this->render('_form', [
         'model' => $model,
