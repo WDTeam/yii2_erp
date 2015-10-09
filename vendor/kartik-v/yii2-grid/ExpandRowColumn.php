@@ -4,7 +4,7 @@
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2015
- * @version   3.0.6
+ * @version   3.0.7
  */
 
 namespace kartik\grid;
@@ -105,6 +105,12 @@ class ExpandRowColumn extends DataColumn
      * - GridView::ROW_EXPANDED : Will set all rows to expanded and display the `collapseIcon`
      */
     public $defaultHeaderState = GridView::ROW_COLLAPSED;
+
+    /**
+     * @var boolean whether to enable caching of expanded row content while expanding the row 
+     * using ajax triggered action (applicable when `detailUrl` is set). Defaults to `true`.
+     */
+    public $enableCache = true;
     
     /**
      * @var boolean whether to allow only one row to be expanded at a time and auto collapse other 
@@ -270,6 +276,7 @@ class ExpandRowColumn extends DataColumn
                 'animationDuration' => $this->detailAnimationDuration,
                 'expandOneOnly' => $this->expandOneOnly,
                 'enableRowClick' => $this->enableRowClick,
+                'enableCache' => $this->enableCache,
                 'rowClickExcludedTags' => array_map('strtoupper',$this->rowClickExcludedTags),
                 'collapseAll' => false,
                 'expandAll' => false,

@@ -53,7 +53,8 @@ class GeneralPay extends \yii\db\ActiveRecord
             [['general_pay_money', 'general_pay_actual_money'], 'number'],
             [['general_pay_source_name'], 'string', 'max' => 20],
             [['general_pay_transaction_id'], 'string', 'max' => 40],
-            [['general_pay_eo_order_id', 'general_pay_admin_name', 'general_pay_handle_admin_id'], 'string', 'max' => 30],
+            [['order_id', 'general_pay_admin_name', 'general_pay_handle_admin_id'], 'string', 'max' => 30],
+            [['customer_id','order_id'],'match','pattern'=>'%^[1-9]\d*$%'],   //必须为数字，不能是0
             [['general_pay_memo'], 'string', 'max' => 255],
             [['general_pay_verify'], 'string', 'max' => 32],
             /**********以下自定义属性**********/
@@ -195,7 +196,6 @@ class GeneralPay extends \yii\db\ActiveRecord
         $msg = $class->get($param);
         echo json_encode(['code'=>'ok','msg'=>$msg]);
 
-
     }
 
     /**
@@ -221,7 +221,6 @@ class GeneralPay extends \yii\db\ActiveRecord
         echo json_encode(['code'=>'ok','msg'=>$msg]);
     }
 
-
     /**
      * 银联APP
      */
@@ -230,7 +229,7 @@ class GeneralPay extends \yii\db\ActiveRecord
         $param = array(
             'out_trade_no'=>$this->create_out_trade_no(),
             'subject'=>$this->subject(),
-            'general_pay_money'=>$this->general_pay_money,
+            'general_pay_money'=>$this->toMoney($this->general_pay_money,100,'*',0),
             'notify_url'=>$this->notify_url('up-app'),
         );
         $class = new \uppay_class();
@@ -313,12 +312,13 @@ class GeneralPay extends \yii\db\ActiveRecord
      * @param $money1   实际金额
      * @param $money2   基数
      * @param $method   +,-,*,%
+     * @param $num 保留几位小数
      * @return float    实际金额
      */
-    public function toMoney($money1, $money2, $method = '*')
+    public function toMoney($money1, $money2, $method = '*',$num=2)
     {
         $toMoney = '';
-        bcscale(2); //保留两位小数
+        bcscale($num); //保留两位小数
         switch($method)
         {
             case '+' :

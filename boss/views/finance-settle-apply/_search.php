@@ -18,6 +18,7 @@ use kartik\grid\GridView;
         'action' => ['query'],
         'method' => 'get',
     ]); ?>
+    
     <div class='col-md-2'>
     <?php echo  $form->field($model, 'finance_settle_apply_starttime')->widget(DateControl::classname(),[
         'type' => DateControl::FORMAT_DATE,

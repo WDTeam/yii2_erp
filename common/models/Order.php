@@ -278,4 +278,67 @@ class Order extends ActiveRecord
     {
         return $this->hasOne(OrderExtWorker::className(), ['order_id' => 'id']);
     }
+
+
+    /**
+     * 保存订单
+     * 保存时记录订单历史
+     * @param array $save_models 需要保存操作的类名
+     * @return bool
+     */
+    public function doSave($save_models = ['OrderExtCustomer','OrderExtFlag','OrderExtPay','OrderExtPop','OrderExtStatus','OrderExtWorker','OrderStatusHistory'])
+    {
+        $transaction = static::getDb()->beginTransaction(); //开启一个事务
+        $this->order_booked_begin_time = strtotime($this->order_booked_begin_time);
+        $this->order_booked_end_time = strtotime($this->order_booked_end_time);
+        if ($this->save()) {
+            //格式化数据开始
+            $attributes = $this->attributes;
+            foreach ($attributes as $k => $v) {
+                $attributes[$k] = ($v === null) ? '' : $v;
+            }
+            $attributes['order_id'] = $attributes['id'];
+            $attributes['order_created_at'] = $attributes['created_at'];
+            $attributes['order_updated_at'] = $attributes['updated_at'];
+            $attributes['order_isdel'] = $attributes['isdel'];
+            unset($attributes['id']);
+            unset($attributes['created_at']);
+            unset($attributes['updated_at']);
+            unset($attributes['isdel']);
+            //格式化数据结束
+
+            //各类执行保存操作
+            $ext_models = ['OrderHistory']; //订单历史记录每次都需要插入
+            $ext_models = array_merge($save_models,$ext_models);
+            foreach($ext_models as $modelClassName){
+                $$modelClassName = new $modelClassName();
+                $$modelClassName->setAttributes($attributes);
+                $$modelClassName->order_id = $attributes['order_id'];
+                if (!$$modelClassName->save()) {
+                    $transaction->rollBack();//插入不成功就回滚事务
+                    return false;
+                }
+            }
+
+            $transaction->commit();
+            return true;
+        }
+        return false;
+    }
+
+    public function init()
+    {
+        $class = get_class($this);
+        if(!in_array($class,[
+            'core\models\order\Order',
+            'core\models\order\OrderSearch',
+            'boss\models\order\Order',
+            'boss\models\order\OrderSearch',
+            'boss\models\AutoOrderSerach',
+            'boss\models\ManualOrderSerach'
+        ])){
+            echo '非法调用！';
+            exit(0);
+        }
+    }
 }
