@@ -31,12 +31,12 @@ $this->params['breadcrumbs'][] = $this->title;
 //            ],
         'columns' => [
             //['class' => 'yii\grid\SerialColumn'],
-            'id',
+            '#',
             [
                 'attribute'=>'worker_id',
                 'class' => 'kartik\grid\EditableColumn',
                 'readonly'=>true,
-                'label'=>'阿姨名称',
+                'label'=>'阿姨姓名',
                 'value'=>function($dataProvider){
                     return Worker::findOne(['id'=>$dataProvider->worker_id])->worker_name;
                 },

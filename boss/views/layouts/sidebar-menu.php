@@ -57,7 +57,7 @@ echo Menu::widget(
                 ],
             ],
             [
-                'label' => '阿姨管理(40%)',
+                'label' => '阿姨管理(90%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-female',
                 'visible' => (Yii::$app->user->can('worker')),
@@ -66,12 +66,12 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有阿姨(50%)',
+                        'label' => '查看所有阿姨(90%)',
                         'url' => ['/worker'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '录入新阿姨(80%)',
+                        'label' => '录入新阿姨(90%)',
                         'url' => ['/worker/create'],
                         'icon' => 'fa fa-angle-right',
                     ],

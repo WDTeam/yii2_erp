@@ -214,7 +214,7 @@ class WorkerController extends BaseAuthController
             }
             return $this->redirect(['index']);
         }else{
-            return $this->renderAjax('vacation_create',['workerModel'=>$workerModel,'workerVacationModel'=>$workerVacationModel]);
+            return $this->renderAjax('create_vacation',['workerModel'=>$workerModel,'workerVacationModel'=>$workerVacationModel]);
         }
     }
 
@@ -240,7 +240,7 @@ class WorkerController extends BaseAuthController
             }
             return $this->redirect(['index']);
         }else{
-            return $this->renderAjax('block_create',['workerModel'=>$workerModel,'workerBlockmodel'=>$workerBlockmodel]);
+            return $this->renderAjax('create_block',['workerModel'=>$workerModel,'workerBlockmodel'=>$workerBlockmodel]);
         }
     }
 
@@ -487,6 +487,9 @@ class WorkerController extends BaseAuthController
 
 
     public function actionTest(){
+        var_dump(worker::getWorkerInfoByPhone(18645973380));
+
+        die;
         echo '<pre>';
 //        Yii::$app->redis->sadd('district_1','16684','16683','16685','16686','16687','16688','16689','16682');
 //        Yii::$app->redis->sadd('district_2','16694','16693','16695','16696','16697','16698','16699','16692');
