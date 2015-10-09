@@ -276,7 +276,7 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
                 'customer_trans_record_online_balance_pay',//在线余额支付
                 'customer_trans_record_order_total_money',  //订单总额
             ],
-            //9=退款（订单）：把订单金额原路退回 refundSource
+            //9=退款（订单）：把订单金额原路退回 refundSourc
             '9'=>[
                 'customer_id',  //用户ID
                 'order_id', //订单ID
