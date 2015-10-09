@@ -7,7 +7,8 @@ use boss\components\BaseAuthController;
 use boss\models\order\OrderSearch;
 use boss\models\order\Order;
 use yii\web\NotFoundHttpException;
-
+use yii\web\Response;
+use core\models\Customer;
 /**
  * OrderController implements the CRUD actions for Order model.
  */
@@ -16,132 +17,28 @@ class OrderController extends BaseAuthController
 
     public function actionCustomer()
     {
-//        $phone = Yii::$app->request->get('phone');
-//        Yii::$app->response->format = Response::FORMAT_JSON;
-//        return Customer::find()->where(['customer_phone'=>$phone])->one();
-        return '{
-                    "id": 1,
-                    "customer_name": "刘道强",
-                    "customer_sex": 1,
-                    "customer_birth": 1442994170,
-                    "customer_photo": "",
-                    "customer_phone": "18519654001",
-                    "customer_email": "liuzhiqiang@corp.1jiajie.com",
-                    "region_id": 1,
-                    "customer_live_address_detail": "SOHO一期2单元908",
-                    "customer_balance": "1000.00",
-                    "customer_score": 10000,
-                    "customer_level": 1,
-                    "customer_complaint_times": 11,
-                    "customer_src": 1,
-                    "channal_id": 1,
-                    "platform_id": 1,
-                    "customer_login_ip": "192.168.0.1",
-                    "customer_login_time": 1442994170,
-                    "customer_is_vip": 1,
-                    "created_at": 1442994170,
-                    "updated_at": 1442994170,
-                    "is_del": 0,
-                    "customer_del_reason": ""
-                }';
+        $phone = Yii::$app->request->get('phone');
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return Customer::getCustomerInfo($phone);
     }
 
     public function actionCustomerAddress($id)
     {
-//        Yii::$app->response->format = Response::FORMAT_JSON;
-//        return CustomerAddress::findAll(['customer_id'=>$id]);
-        return '[
-            {
-                "id": 1,
-                "customer_id": 1,
-                "region_id": 1,
-                "customer_address_detail": "北京市朝阳区SOHO1",
-                "customer_address_status": 1,
-                "customer_address_longitude": 12.888,
-                "customer_address_latitude": 888.334,
-                "customer_address_nickname": "测试昵称",
-                "customer_address_phone": "13554699534",
-                "created_at": 1442994172,
-                "updated_at": 1442994172,
-                "is_del": 0
-            },
-            {
-                "id": 2,
-                "customer_id": 1,
-                "region_id": 1,
-                "customer_address_detail": "北京市朝阳区SOHO2",
-                "customer_address_status": 0,
-                "customer_address_longitude": 12.888,
-                "customer_address_latitude": 888.334,
-                "customer_address_nickname": "测试昵称",
-                "customer_address_phone": "13554699534",
-                "created_at": 1442994172,
-                "updated_at": 1442994172,
-                "is_del": 0
-            },
-            {
-                "id": 3,
-                "customer_id": 1,
-                "region_id": 1,
-                "customer_address_detail": "北京市朝阳区SOHO3",
-                "customer_address_status": 0,
-                "customer_address_longitude": 12.888,
-                "customer_address_latitude": 888.334,
-                "customer_address_nickname": "测试昵称",
-                "customer_address_phone": "13554699534",
-                "created_at": 1442994172,
-                "updated_at": 1442994172,
-                "is_del": 0
-            }
-        ]';
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return Customer::getCustomerAddresses($id);
     }
 
     public function actionCustomerUsedWorkers($id)
     {
-//        Yii::$app->response->format = Response::FORMAT_JSON;
-//        $customerWorker = CustomerWorker::findAll(['customer_id'=>$id]);
-//        $worker = [];
-//        foreach($customerWorker as $k=>$v)
-//        {
-//            $worker[$k] = $v->attributes;
-//            $worker[$k]['worker'] = Worker::findOne($v->woker_id);
-//        }
-//        return $worker;
-        return '[
-                {
-                    "id": 1,
-                    "customer_id": 1,
-                    "worker_id": 1,
-                    "worker_name": "王阿姨",
-                    "customer_worker_status": 1
-                },
-                {
-                    "id": 2,
-                    "customer_id": 1,
-                    "worker_id": 2,
-                    "worker_name": "张阿姨",
-                    "customer_worker_status": 0
-
-                },
-                {
-                    "id": 3,
-                    "customer_id": 1,
-                    "worker_id": 3,
-                    "worker_name": "李阿姨",
-                    "customer_worker_status": 0
-                }
-            ]';
+        Yii::$app->response->format = Response::FORMAT_JSON;
+       return Customer::getCustomerUsedWorkers($id);
     }
 
     public function actionWorker()
     {
-//        $phone = Yii::$app->request->get('phone');
-//        Yii::$app->response->format = Response::FORMAT_JSON;
-//        return Worker::find()->where(['worker_phone'=>$phone])->one();
-        return '{
-            "id": 1,
-            "worker_name": "王阿姨"
-        }';
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $phone = Yii::$app->request->get('phone');
+        return Order::getWorkerInfoByPhone($phone);
     }
 
     public function actionCoupons()
@@ -233,14 +130,7 @@ class OrderController extends BaseAuthController
         $model = new Order();
         $post = Yii::$app->request->post();
         if($model->load($post)){
-            $post['Order']['admin_id'] = Yii::$app->user->id;
-            $post['Order']['order_ip'] = ip2long(Yii::$app->request->userIP);
-            $post['Order']['order_src_id'] = 1; //订单来源BOSS
-            //预约时间处理
-            $time = explode('-',$post['Order']['orderBookedTimeRange']);
-            $post['Order']['order_booked_begin_time'] = $post['Order']['orderBookedDate'].' '.$time[0].':00';
-            $post['Order']['order_booked_end_time'] = ($time[1]=='24:00')?date('Y-m-d H:i:s',strtotime($post['Order']['orderBookedDate'].'00:00:00 +1 days')):$post['Order']['orderBookedDate'].' '.$time[1].':00';
-            if ($model->createNew($post['Order'])) {
+            if ($model->createNew($post)) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }else{//init

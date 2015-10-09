@@ -42,6 +42,9 @@ use Yii;
 class Order extends ActiveRecord
 {
 
+    const ORDER_PAY_TYPE_OFF_LINE = 1;
+    const ORDER_PAY_TYPE_ON_LINE = 2;
+    const ORDER_PAY_TYPE_POP = 3;
     public $order_before_status_dict_id;
     public $order_before_status_name;
     public $order_status_dict_id;
@@ -280,6 +283,7 @@ class Order extends ActiveRecord
     }
 
 
+
     /**
      * 保存订单
      * 保存时记录订单历史
@@ -289,8 +293,7 @@ class Order extends ActiveRecord
     public function doSave($save_models = ['OrderExtCustomer','OrderExtFlag','OrderExtPay','OrderExtPop','OrderExtStatus','OrderExtWorker','OrderStatusHistory'])
     {
         $transaction = static::getDb()->beginTransaction(); //开启一个事务
-        $this->order_booked_begin_time = strtotime($this->order_booked_begin_time);
-        $this->order_booked_end_time = strtotime($this->order_booked_end_time);
+        $is_new_record = $this->isNewRecord;
         if ($this->save()) {
             //格式化数据开始
             $attributes = $this->attributes;
@@ -299,7 +302,6 @@ class Order extends ActiveRecord
             }
             $attributes['order_id'] = $attributes['id'];
             $attributes['order_created_at'] = $attributes['created_at'];
-            $attributes['order_updated_at'] = $attributes['updated_at'];
             $attributes['order_isdel'] = $attributes['isdel'];
             unset($attributes['id']);
             unset($attributes['created_at']);
@@ -308,17 +310,99 @@ class Order extends ActiveRecord
             //格式化数据结束
 
             //各类执行保存操作
-            $ext_models = ['OrderHistory']; //订单历史记录每次都需要插入
-            $ext_models = array_merge($save_models,$ext_models);
-            foreach($ext_models as $modelClassName){
-                $$modelClassName = new $modelClassName();
+            foreach($save_models as $modelClassName){
+                $class = '\common\models\\'.$modelClassName;
+                if($is_new_record || $modelClassName=='OrderStatusHistory'){//状态历史只新建不更新
+                    $$modelClassName = new $class();
+                    $$modelClassName->order_id = $attributes['order_id'];
+                }else{
+                    $$modelClassName = $class::findOne($attributes['order_id']);
+                }
+
                 $$modelClassName->setAttributes($attributes);
-                $$modelClassName->order_id = $attributes['order_id'];
+
                 if (!$$modelClassName->save()) {
                     $transaction->rollBack();//插入不成功就回滚事务
                     return false;
                 }
+
             }
+            $OrderHistory = new OrderHistory(); //订单历史记录每次都需要插入
+            $orderExtStatus = OrderExtStatus::findOne($this->id);
+            $orderExtFlag = OrderExtFlag::findOne($this->id);
+            $orderExtPop = OrderExtPop::findOne($this->id);
+            $orderExtCustomer = OrderExtCustomer::findOne($this->id);
+            $orderExtPay = OrderExtPay::findOne($this->id);
+            $orderExtWorker = OrderExtWorker::findOne($this->id);
+            $OrderHistory->setAttributes([
+                'order_id' => $this->id,
+                'order_code' => $this->order_code,
+                'order_parent_id' => $this->order_parent_id,
+                'order_is_parent' => $this->order_is_parent,
+                'order_created_at' => $this->created_at,
+                'order_isdel' => $this->isdel,
+                'order_before_status_dict_id' => $orderExtStatus->order_before_status_dict_id,
+                'order_before_status_name' => $orderExtStatus->order_before_status_name,
+                'order_status_dict_id' => $orderExtStatus->order_status_dict_id,
+                'order_status_name' => $orderExtStatus->order_status_name,
+                'order_flag_send' => $orderExtFlag->order_flag_send,
+                'order_flag_urgent' => $orderExtFlag->order_flag_urgent,
+                'order_flag_exception' => $orderExtFlag->order_flag_exception,
+                'order_flag_sys_assign' => $orderExtFlag->order_flag_sys_assign,
+                'order_flag_lock' => $orderExtFlag->order_flag_lock,
+                'order_ip' => $this->order_ip,
+                'order_service_type_id' => $this->order_service_type_id,
+                'order_service_type_name' => $this->order_service_type_name,
+                'order_src_id' => $this->order_src_id,
+                'order_src_name' => $this->order_src_name,
+                'channel_id' => $this->channel_id,
+                'order_channel_name' => $this->order_channel_name,
+                'order_unit_money' => $this->order_unit_money,
+                'order_money' => $this->order_money,
+                'order_booked_count' => $this->order_booked_count,
+                'order_booked_begin_time' => $this->order_booked_begin_time,
+                'order_booked_end_time' => $this->order_booked_end_time,
+                'address_id' => $this->address_id,
+                'order_address' => $this->order_address,
+                'order_booked_worker_id' => $this->order_booked_worker_id,
+                'order_pop_order_code' => $orderExtPop->order_pop_order_code,
+                'order_pop_group_buy_code' => $orderExtPop->order_pop_group_buy_code,
+                'order_pop_operation_money' => $orderExtPop->order_pop_operation_money,
+                'order_pop_order_money' => $orderExtPop->order_pop_order_money,
+                'order_pop_pay_money' => $orderExtPop->order_pop_pay_money,
+                'customer_id' => $orderExtCustomer->customer_id,
+                'order_customer_phone' => $orderExtCustomer->order_customer_phone,
+                'order_customer_need' => $orderExtCustomer->order_customer_need,
+                'order_customer_memo' => $orderExtCustomer->order_customer_memo,
+                'comment_id' => $orderExtCustomer->comment_id,
+                'invoice_id' => $orderExtCustomer->invoice_id,
+                'order_customer_hidden' => $orderExtCustomer->order_customer_hidden,
+                'order_pay_type' => $orderExtPay->order_pay_type,
+                'pay_channel_id' => $orderExtPay->pay_channel_id,
+                'order_pay_channel_name' => $orderExtPay->order_pay_channel_name,
+                'order_pay_flow_num' => $orderExtPay->order_pay_flow_num,
+                'order_pay_money' => $orderExtPay->order_pay_money,
+                'order_use_acc_balance' => $orderExtPay->order_use_acc_balance,
+                'card_id' => $orderExtPay->card_id,
+                'order_use_card_money' => $orderExtPay->order_use_card_money,
+                'coupon_id' => $orderExtPay->coupon_id,
+                'order_use_coupon_money' => $orderExtPay->order_use_coupon_money,
+                'promotion_id' => $orderExtPay->promotion_id,
+                'order_use_promotion_money' => $orderExtPay->order_use_promotion_money,
+                'worker_id' => $orderExtWorker->worker_id,
+                'worker_type_id' => $orderExtWorker->worker_type_id,
+                'order_worker_type_name' => $orderExtWorker->order_worker_type_name,
+                'order_worker_assign_type' => $orderExtWorker->order_worker_assign_type,
+                'shop_id' => $orderExtWorker->shop_id,
+                'checking_id' => $this->checking_id,
+                'order_cs_memo' => $this->order_cs_memo,
+                'admin_id' => $this->admin_id,
+            ]);
+            if (!$OrderHistory->save()) {
+                $transaction->rollBack();//插入不成功就回滚事务
+                return false;
+            }
+
 
             $transaction->commit();
             return true;

@@ -57,7 +57,7 @@ echo Menu::widget(
                 ],
             ],
             [
-                'label' => '阿姨管理(40%)',
+                'label' => '阿姨管理(90%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-female',
                 'visible' => (Yii::$app->user->can('worker')),
@@ -66,12 +66,12 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有阿姨(50%)',
+                        'label' => '查看所有阿姨(90%)',
                         'url' => ['/worker'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '录入新阿姨(80%)',
+                        'label' => '录入新阿姨(90%)',
                         'url' => ['/worker/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -213,6 +213,12 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                         
                     ],
+                    [
+                        'label' => '发布城市',
+                        'url' => ['/operation-city/release'],
+                        'icon' => 'fa fa-angle-right',
+                        'visible' => (Yii::$app->user->identity->username == 'admin'),
+                    ],
 //                     [
 
 //                        'label' => '商圈管理(40%)',
@@ -221,7 +227,7 @@ echo Menu::widget(
                        
 //                    ],
                     [
-                        'label' => '商品管理(20%)',
+                        'label' => '商品管理',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                         
@@ -230,7 +236,7 @@ echo Menu::widget(
                         ],
                         'items' => [
                             [
-                                'label' => '商品管理(20%)',
+                                'label' => '服务管理(60%)',
                                 'url' => ['/operation-goods'],
                                 'icon' => 'fa fa-angle-right',
                                 
@@ -242,14 +248,14 @@ echo Menu::widget(
                                
 //                            ],
                             [
-                                'label' => '规格管理(20%)',
+                                'label' => '规格管理(60%)',
                                 'url' => ['/operation-spec'],
                                 'icon' => 'fa fa-angle-right',
                                 
                             ],
                             [
-                                'label' => '服务管理(90%)',
-                                'url' => ['/operation-category'],
+                                'label' => '服务品类管理(80%)',
+                                'url' => ['/operation-category/'],
                                 'icon' => 'fa fa-angle-right',
                                 
                             ],

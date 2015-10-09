@@ -32,7 +32,7 @@ class CommonOperationCategory extends \yii\db\ActiveRecord
         return new CommonOperationCategoryQuery(get_called_class());
     }
     
-    public static function getAllData($where, $orderby = ''){
-        return self::find()->where($where)->orderby($orderby)->all();
+    public static function getAllData($where, $orderby = '', $select){
+        return self::find()->select($select)->asArray()->where($where)->orderby($orderby)->all();
     }
 }

@@ -20,6 +20,8 @@ $this->params['breadcrumbs'][] = Yii::t('boss', 'Update');
 
     <?= $this->render('_form', [
         'model' => $model,
+        'customerBalance'=>$customerBalance,
+        'customerScore'=>$customerScore,
     ]) ?>
 
 </div>

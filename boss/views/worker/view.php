@@ -21,10 +21,10 @@ use yii\helpers\ArrayHelper;
 $this->title = $workerModel->worker_name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Workers'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-$content1 = $this->render('info',['model'=>$workerModel]);
-$content2 = $this->render('vacation_info',['workerVacationData'=>$workerVacationData]);
-$content3 = $this->render('block_info',['workerModel'=>$workerModel,'workerBlockData'=>$workerBlockData]);
-$content4 = $this->render('log_info',['workerBlockLogData'=>$workerBlockLogData]);
+$content1 = $this->render('view_worker',['model'=>$workerModel]);
+$content2 = $this->render('view_vacation',['workerVacationData'=>$workerVacationData]);
+$content3 = $this->render('view_block',['workerModel'=>$workerModel,'workerBlockData'=>$workerBlockData]);
+$content4 = $this->render('view_log',['workerBlockLogData'=>$workerBlockLogData]);
 $items = [
     [
         'label'=>'<i class="glyphicon glyphicon-user"></i> 阿姨信息',
