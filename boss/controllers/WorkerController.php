@@ -328,7 +328,7 @@ class WorkerController extends BaseAuthController
         $operationArea = new Operation\OperationArea();
 
         $connectionNew =  \Yii::$app->db;
-        $command = $connectionNew->createCommand('select id from ejj_worker ORDER by id asc limit 1');
+        $command = $connectionNew->createCommand('select id from {{%worker}} ORDER by id asc limit 1');
         $lastWorkerArr = $command->queryAll();
         if($lastWorkerArr){
             $lastWorkerId = $lastWorkerArr[0]['id'];
@@ -431,8 +431,8 @@ class WorkerController extends BaseAuthController
                 $workerStatArr['worker_stat_sale_card'] = $val['sale_card'];
 
 
-                $connectionNew->createCommand()->insert('ejj_worker', $workerArr)->execute();
-                $connectionNew->createCommand()->insert('ejj_worker_ext', $workerExtArr)->execute();
+                $connectionNew->createCommand()->insert('{{%worker}}', $workerArr)->execute();
+                $connectionNew->createCommand()->insert('{{%worker_ext}}', $workerExtArr)->execute();
 
             }
 
