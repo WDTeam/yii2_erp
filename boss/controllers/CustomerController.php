@@ -2,7 +2,7 @@
 
 namespace boss\controllers;
 use Yii;
-use common\models\Customer;
+//use common\models\Customer;
 use boss\models\CustomerSearch;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
@@ -16,8 +16,8 @@ use common\models\CustomerChannal;
 use common\models\OperationCity;
 use common\models\GeneralRegion;
 
-use common\models\Order;
-// use core\models\Customer;
+use common\models\OrderExtCustomer;
+use core\models\Customer;
 
 /**
  * CustomerController implements the CRUD actions for Customer model.
@@ -268,7 +268,7 @@ class CustomerController extends BaseAuthController
         // }
 
         //订单数量
-        $order_count = Order::find()->where([
+        $order_count = OrderExtCustomer::find()->where([
             'customer_id'=>$model->id
             ])->count();
 
@@ -376,7 +376,8 @@ class CustomerController extends BaseAuthController
         $curPageNo = 1;
         $totalPage = $count <= 0 ? 0 : floor($count / $numPerPage) + 1;
         if ($totalPage > 0) {
-            while ($curPageNo <= 20) {
+            echo "<br/>正在导入数据。。。";
+            while ($curPageNo <= 30) {
                 $start = $numPerPage * ($curPageNo - 1);
                 $command = $connection->createCommand("SELECT * FROM user_info order by charge_money desc limit ".$start.", ".$numPerPage);
                 $userInfo = $command->queryAll();
@@ -384,7 +385,7 @@ class CustomerController extends BaseAuthController
                 foreach($userInfo as $val){
                     $customer = new Customer;
                     // $customer->id = $val['id'];
-                    $customer->customer_name = empty($val['name']) ? '未知' : $val['name'];
+                    $customer->customer_name = $val['name'];
                     $customer->customer_sex = $val['gender'];
                     $customer->customer_birth = intval(strtotime($val['birthday']));
                     $customer->customer_photo = '';
@@ -465,8 +466,8 @@ class CustomerController extends BaseAuthController
         // $res = $customer->decBalance(1, 0.01);
         // var_dump($res);
 
-        $test = new core\models\Customer;
-        $info = $test->getCustomerInfo('13910329061');
+        $test = new Customer;
+        $info = $test->getCustomerInfo('1391032906');
         var_dump($info);
 
     }
