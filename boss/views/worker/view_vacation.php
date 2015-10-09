@@ -19,21 +19,11 @@ $this->params['breadcrumbs'][] = $this->title;
     Pjax::begin();
     echo GridView::widget([
         'dataProvider' => $workerVacationData,
-//        'export'=>false,
-//        'toolbar' =>
-//            [
-//                'content'=>
-//
-//                    Html::a('<i class="glyphicon glyphicon-plus"></i>', ['index?getData=1'], [
-//                        'class' => 'btn btn-default',
-//                        'title' => Yii::t('kvgrid', 'Reset Grid')
-//                    ]),
-//            ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [
                 'attribute'=>'worker_id',
-                'label'=>'阿姨名称',
+                'label'=>'阿姨姓名',
                 'value'=>function($dataProvider){
                     return Worker::findOne(['id'=>$dataProvider->worker_id])->worker_name;
                 },
