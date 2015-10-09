@@ -139,10 +139,9 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
             [['customer_trans_record_remark'], 'string', 'max' => 255],
             [['customer_trans_record_verify'], 'string', 'max' => 32],
             [['record_type'],'required'],   //自定义，交易类型:1=消费,2=充值,3=退款,4=补偿
-            [['customer_id','order_id','order_channel_id','pay_channel_id'],'match','pattern'=>'%^[1-9]+$%'],   //必须为数字，不能是0
+            [['customer_id','order_id','order_channel_id','pay_channel_id'],'match','pattern'=>'%^[1-9]\d*$%'],   //必须为数字，不能是0
         ];
     }
-
 
     /**
      * 场景验证
