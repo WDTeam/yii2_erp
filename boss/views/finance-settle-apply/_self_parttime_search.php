@@ -11,22 +11,40 @@ use kartik\date\DatePicker;
     <?php $form = ActiveForm::begin([
         'type' => ActiveForm::TYPE_VERTICAL,
         //'id' => 'login-form-inline',
-        'action' => ['self-fulltime-worker-settle-index'],
+        'action' => ['self-parttime-worker-settle-index'],
         'method' => 'get',
     ]); ?>
     
     <div class='col-md-3'>
-        <?= $form->field($model, 'settleMonth')->widget(DatePicker::classname(), [
-                    'name' => 'settleMonth',
-                    'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-                    'pluginOptions' => [
-                        'autoclose' => true,
-                        'format' => 'yyyy-mm',
-                        'startView'=>1,
-                        'minViewMode'=>1,
-                    ]
-                ]); ?>
-    </div>
+    <?php echo  $form->field($model, 'finance_settle_apply_starttime')->widget(DateControl::classname(),[
+        'type' => DateControl::FORMAT_DATE,
+        'ajaxConversion'=>false,
+        'displayFormat' => 'php:Y-m-d',
+        'saveFormat'=>'php:U',
+        'options' => [
+            'pluginOptions' => [
+                 'autoclose' => true
+            ]
+        ]
+    ]);
+    
+    ?>
+  </div>  
+    <div class='col-md-3'>
+    <?php echo  $form->field($model, 'finance_settle_apply_endtime')->widget(DateControl::classname(),[
+        'type' => DateControl::FORMAT_DATE,
+        'ajaxConversion'=>false,
+        'displayFormat' => 'php:Y-m-d',
+        'saveFormat'=>'php:U',
+        'options' => [
+            'pluginOptions' => [
+                 'autoclose' => true
+            ]
+        ]
+    ]);
+    
+    ?>
+  </div> 
     <div class='col-md-2'>
         <?= $form->field($model, 'worder_tel') ?>
     </div>

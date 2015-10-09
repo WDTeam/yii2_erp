@@ -24,7 +24,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $general_pay_admin_name
  * @property string $worker_id
  * @property string $handle_admin_id
- * @property string $general_pay_handle_admin_id
+ * @property string $general_pay_handle_admin_idy
  * @property string $general_pay_verify
  * @property string $created_at
  * @property string $updated_at
@@ -41,6 +41,11 @@ class GeneralPay extends \yii\db\ActiveRecord
     {
         return '{{%general_pay}}';
     }
+//
+//    static public function test()
+//    {
+//        echo 1111;
+//    }
 
     /**
      * @inheritdoc

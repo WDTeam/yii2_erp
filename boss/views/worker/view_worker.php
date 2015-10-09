@@ -116,6 +116,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => ['datetime', 'php:Y年m月d日 H:i'],
                 'displayOnly' => true
             ],
+            [
+                'attribute' => 'worker_bank_name',
+                'type' => DetailView::INPUT_TEXT,
+                'format' => ['datetime', 'php:Y年m月d日 H:i'],
+                'displayOnly' => true
+            ]
         ],
         'deleteOptions' => [
             'url' => ['delete', 'id' => $model->id],

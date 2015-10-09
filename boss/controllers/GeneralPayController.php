@@ -590,4 +590,24 @@ class GeneralPayController extends Controller
         }
     }
 
+    /**
+     * 财务是否对账
+     * @param $id   对账ID
+     * @param $status   对账状态
+     * @return bool
+     * @throws NotFoundHttpException
+     */
+    public function modifyRecontiliation($id , $status)
+    {
+        $model = $this->findModel($id);
+        $model->id = $id;
+        $model->is_reconciliation = intval($status);
+        return $model->save(false);
+    }
+
+    public function actionTest()
+    {
+        var_dump($this->modifyRecontiliation(1,2));
+    }
+
 }

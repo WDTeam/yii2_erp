@@ -38,6 +38,9 @@ use yii\web\BadRequestHttpException;
  */
 class Worker extends \common\models\Worker
 {
+
+    public $worker_district;
+
     /*
      * 获取阿姨列表
      * @param type int 阿姨类型 1自营2非自营
@@ -79,16 +82,16 @@ class Worker extends \common\models\Worker
      * @param string $phone 阿姨电话
      * @return array $workerInfo 阿姨详细信息 包含阿姨id和阿姨姓名
      */
-    public function getWorkerInfoByPhone($phone){
-        $condition['worker_phone'] =$phone;
-        $condition['isdel']=0;
-        $condition['worker_is_block'] = 0;
-        $condition['worker_is_vacation'] = 0;
-        $condition['worker_is_blacklist'] = 0;
-        $workerInfo = $this->find()->where($condition)->select('id,worker_name')->asArray()->one();
+    static public function getWorkerInfoByPhone($phone){
+
+        $condition = ['worker_phone'=>$phone,'isdel'=>0,'worker_is_block'=>0,'worker_is_vacation'=>0,'worker_is_blacklist'=>0];
+        $workerInfo = worker::find()->where($condition)->select('id,worker_name')->asArray()->one();
         return $workerInfo;
     }
 
+//    public function getWorker_district(){
+//
+//    }
 
     /*
      * 获取阿姨类型名称
@@ -180,6 +183,7 @@ class Worker extends \common\models\Worker
             return '未通过';
         }
     }
+
     /*
      * 获取阿姨所有身份信息
      * @return Array 所有阿姨身份信息

@@ -57,7 +57,7 @@ echo Menu::widget(
                 ],
             ],
             [
-                'label' => '阿姨管理(40%)',
+                'label' => '阿姨管理(90%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-female',
                 'visible' => (Yii::$app->user->can('worker')),
@@ -66,12 +66,12 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有阿姨(50%)',
+                        'label' => '查看所有阿姨(90%)',
                         'url' => ['/worker'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '录入新阿姨(80%)',
+                        'label' => '录入新阿姨(90%)',
                         'url' => ['/worker/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -320,7 +320,7 @@ echo Menu::widget(
 
                     ],
                     [
-                        'label' => '结算管理(45%)',
+                        'label' => '结算管理(63%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                         'options' => [
@@ -336,13 +336,13 @@ echo Menu::widget(
                                 ],
                                'items'=>[
                                     [
-                                        'label' => '全职结算(50%)',
+                                        'label' => '全职结算(70%)',
                                         'url' => ['/finance-settle-apply/self-fulltime-worker-settle-index'],
                                         'icon' => 'fa fa-angle-right',
                                     ],
                                    [
-                                        'label' => '兼职结算(40%)',
-                                        'url' => ['/finance-settle-apply/homemaking-manual-settlement-index'],
+                                        'label' => '兼职结算(70%)',
+                                        'url' => ['/finance-settle-apply/self-parttime-worker-settle-index'],
                                         'icon' => 'fa fa-angle-right',
                                     ],
                                ]
@@ -356,19 +356,19 @@ echo Menu::widget(
                                 ],
                                 'items'=>[
                                     [
-                                        'label' => '门店结算(10%)',
-                                        'url' => ['/finance-settle-apply/homemaking-manual-settlement-index'],
+                                        'label' => '门店结算(50%)',
+                                        'url' => ['/finance-shop-settle-apply/index'],
                                         'icon' => 'fa fa-angle-right',
                                     ],
                                    [
-                                        'label' => '阿姨结算(30%)',
-                                        'url' => ['/finance-settle-apply/homemaking-manual-settlement-index'],
+                                        'label' => '阿姨结算(60%)',
+                                        'url' => ['/finance-settle-apply/self-parttime-worker-settle-index'],
                                         'icon' => 'fa fa-angle-right',
                                     ],
                                 ]
                             ],
                             [
-                                'label' => '财务审核(85%)',
+                                'label' => '财务审核(70%)',
                                 'url' => ['/finance-settle-apply/index?FinanceSettleApplySearch[finance_settle_apply_status]=0&FinanceSettleApplySearch[ids]=&FinanceSettleApplySearch[nodeId]=1'],
                                 'icon' => 'fa fa-angle-right',
                             ], [

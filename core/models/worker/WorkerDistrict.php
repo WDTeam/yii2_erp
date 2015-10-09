@@ -18,6 +18,8 @@ class WorkerDistrict extends \common\models\WorkerDistrict
 
 
     public function getworker(){
-        return $this->hasMany(Worker::className(),['id'=>'worker_id'])->onCondition(['worker_is_block'=>0,'worker_is_blacklist'=>0,'worker_is_vacation'=>0]);
+        $condition = ['worker_is_block'=>0,'worker_is_blacklist'=>0,'worker_is_vacation'=>0];
+        return $this->hasMany(Worker::className(),['id'=>'worker_id'])->onCondition($condition);
     }
+
 }
