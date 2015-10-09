@@ -35,7 +35,8 @@ class Customer extends \common\models\Customer
      * 获取顾客地址集
      */
     public static function getCustomerAddresses($customer_id){
-        $customerAddresses = $this->hasMany('\boss\models\customerAddress', 'customer_id', 'id');
+        $customer = self::findOne($customer_id);
+        $customerAddresses = $customer->hasMany('\common\models\customerAddress', ['customer_id'=>'id'])->all();
         return $customerAddresses != NULL ? $customerAddresses : false;
     }
 

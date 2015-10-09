@@ -49,9 +49,8 @@ class Customer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_sex', 'customer_phone', 'customer_score', 'created_at', 'updated_at'], 'required'],
-            [['customer_sex', 'operation_area_id', 'operation_city_id', 'general_region_id', 'customer_score', 'customer_level', 'customer_complaint_times', 'customer_src', 'channal_id', 'platform_id', 'customer_is_vip', 'is_del'], 'integer'],
-            [['customer_balance'], 'number'],
+            [['customer_sex', 'customer_phone', 'created_at', 'updated_at'], 'required'],
+            [['customer_sex', 'operation_area_id', 'operation_city_id', 'general_region_id', 'customer_level', 'customer_complaint_times', 'customer_src', 'channal_id', 'platform_id', 'customer_is_vip', 'is_del'], 'integer'],
             [['customer_del_reason', 'customer_platform_version', 'customer_app_version', 'customer_mac'], 'string'],
             [['customer_name', 'customer_login_ip'], 'string', 'max' => 16],
             [['customer_photo', 'customer_email'], 'string', 'max' => 32],
@@ -77,8 +76,6 @@ class Customer extends \yii\db\ActiveRecord
             'operation_city_id' => Yii::t('boss', '城市'),
             'general_region_id' => Yii::t('boss', '住址'),
             'customer_live_address_detail' => Yii::t('boss', '详细住址'),
-            'customer_balance' => Yii::t('boss', '账户余额'),
-            'customer_score' => Yii::t('boss', '积分'),
             'customer_level' => Yii::t('boss', '评级'),
             'customer_complaint_times' => Yii::t('boss', '投诉'),
             'customer_src' => Yii::t('boss', '来源，1为线下，2为线上'),

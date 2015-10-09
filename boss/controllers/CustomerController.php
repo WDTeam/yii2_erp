@@ -9,15 +9,16 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 use common\models\CustomerAddress;
-
 use common\models\CustomerPlatform;
 use common\models\CustomerChannal;
-
 use common\models\OperationCity;
 use common\models\GeneralRegion;
+use common\models\CustomerExtBalance;
+use common\models\CustomerExtScore;
 
 use common\models\OrderExtCustomer;
 use core\models\Customer;
+
 
 /**
  * CustomerController implements the CRUD actions for Customer model.
@@ -271,6 +272,14 @@ class CustomerController extends BaseAuthController
         $order_count = OrderExtCustomer::find()->where([
             'customer_id'=>$model->id
             ])->count();
+        //客户余额
+        $customerBalance = CustomerExtBalance::find()->where([
+            'customer_id'=>$model->id
+            ])->one();
+        if ($customerBalance == NULL) {
+            $customerBalance = new CustomerExtBalance;
+        }
+        
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -291,6 +300,7 @@ class CustomerController extends BaseAuthController
                 // 'others'=>$others,
                 'addressStr'=>$addressStr,
                 'order_count'=>$order_count,
+                'customerBalance'=>$customerBalance,
                 ]);
         }
     }
@@ -321,12 +331,27 @@ class CustomerController extends BaseAuthController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $customerBalance = CustomerExtBalance::find()->where([
+            'customer_id'=>$id,
+            ])->one();
+        if ($customerBalance == NULL) {
+            $customerBalance = new CustomerExtBalance;
+        }
+
+        $customerScore = CustomerExtScore::find()->where([
+            'customer_id'=>$id,
+            ])->one();
+        if ($customerScore == NULL) {
+            $customerScore = new CustomerExtScore;
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'customerBalance'=>$customerBalance,
+                'customerScore'=>$customerScore,
             ]);
         }
     }

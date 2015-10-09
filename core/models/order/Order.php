@@ -8,18 +8,13 @@
 
 namespace core\models\order;
 
-use common\models\OrderExtCustomer;
-use common\models\OrderExtFlag;
-use common\models\OrderExtPay;
-use common\models\OrderExtStatus;
-use common\models\OrderExtPop;
-use common\models\OrderExtWorker;
+
 use Yii;
 use common\models\Order as OrderModel;
-use common\models\OrderHistory;
-use common\models\OrderStatusHistory;
 use common\models\OrderStatusDict;
 use common\models\OrderSrc;
+use common\models\FinanceOrderChannel;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "{{%order}}".
@@ -106,6 +101,7 @@ class Order extends OrderModel
      * 追加新订单
      * @param $attributes
      * @return bool
+     * TODO 追加订单默认是否使用主订单阿姨？
      */
     public function addNew($attributes)
     {
@@ -119,22 +115,57 @@ class Order extends OrderModel
 
 
     /**
+     * 现金支付
+     * @param $order Order
+     * @return bool
+     */
+    public static function isPaymentOffLine($order)
+    {
+        $from = OrderStatusDict::findOne($order->orderExtStatus->order_status_dict_id); //当前订单状态
+        $to = OrderStatusDict::findOne(OrderStatusDict::ORDER_IS_PAY); //变更为已支付带指派状态
+        $order->setAttributes([
+            'order_pay_type' => self::ORDER_PAY_TYPE_OFF_LINE
+        ]);
+        return self::statusChange($order,$from,$to,['OrderExtPay']);
+    }
+
+    /**
+     * 第三方预付
+     * @param $order Order
+     * @return bool
+     */
+    public static function isPaymentPop($order)
+    {
+        $from = OrderStatusDict::findOne($order->orderExtStatus->order_status_dict_id); //当前订单状态
+        $to = OrderStatusDict::findOne(OrderStatusDict::ORDER_IS_PAY); //变更为已支付待指派状态
+        $order->setAttributes([
+            'order_pay_type' => self::ORDER_PAY_TYPE_POP
+        ]);
+        return self::statusChange($order,$from,$to,['OrderExtPay','OrderExtPop']);
+    }
+
+
+
+
+    /**
      * 修改订单状态
+     * @param $order Order
      * @param $from OrderStatusDict
      * @param $to OrderStatusDict
      * @param $must_models array
+     * @return bool
      */
-    public function statusChange($from, $to, $must_models = ['OrderExtCustomer','OrderExtFlag','OrderExtPay','OrderExtPop','OrderExtWorker'])
+    public static function statusChange($order, $from, $to, $must_models=[])
     {
-        $this->setAttributes([
+        $order->setAttributes([
             'order_before_status_dict_id' => $from->id,
             'order_before_status_name' => $from->order_status_name,
             'order_status_dict_id' => $to->id,
-            'order_status_dict_name' => $to->order_status_name
+            'order_status_name' => $to->order_status_name
         ]);
         $save_models = ['OrderExtStatus','OrderStatusHistory'];
         $save_models = array_merge($must_models,$save_models);
-        $this->doSave($save_models);
+        return $order->doSave($save_models);
     }
 
     /**
@@ -154,7 +185,8 @@ class Order extends OrderModel
      */
     public function getOrderChannelList($channel_id = 0)
     {
-        $channel = [1 => 'BOSS', 2 => '美团', 3 => '大众点评'];
+        $list = FinanceOrderChannel::get_order_channel_list();
+        $channel = ArrayHelper::map($list,'id','finance_order_channel_name');
         return $channel_id == 0 ? $channel : (isset($channel[$channel_id]) ? $channel[$channel_id] : false);
     }
 
@@ -241,6 +273,12 @@ class Order extends OrderModel
             'order_use_coupon_money' => 0,
             'card_id' => 0,
             'order_use_card_money' => 0,
+            //第三方支付
+            'channel_id'=>0,
+            'order_pop_group_buy_code'=>'',
+            'order_pop_order_code'=>'',
+            'order_pop_order_money'=>0,
+            'order_pop_operation_money'=>0,
             //为以下数据赋初始值
             'order_code' => $orderCode,
             'order_before_status_dict_id' => $statusFrom->id,
