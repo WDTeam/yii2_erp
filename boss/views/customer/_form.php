@@ -86,7 +86,7 @@ $cityDesc = '客户';
     ]);
 
     echo $form->field($model, 'customer_is_vip')->radioList(['0' => '非会员', '1' => '会员'], ['inline' => true]);
-    echo $form->field($model, 'customer_is_del')->radioList(['0' => '未加入黑名单', '1' => '已加入黑名单'], ['inline' => true]);
+    echo $form->field($model, 'is_del')->radioList(['0' => '未加入黑名单', '1' => '已加入黑名单'], ['inline' => true]);
 
     echo $form->field($model, 'customer_balance')->textInput(['placeholder' => 'Enter 客户余额', 'maxlength' => 10]);
     echo $form->field($model, 'customer_del_reason')->textInput(['placeholder' => 'Enter 客户加入黑名单原因', 'maxlength' => 255]);

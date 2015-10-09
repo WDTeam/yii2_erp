@@ -3,8 +3,8 @@
 namespace core\models;
 
 use Yii;
-use core\models\Customer;
-use core\models\customerAddress;
+use common\models\Customer;
+use common\models\customerAddress;
 use yii\web\BadRequestHttpException;
 
 class Customer extends \common\models\Customer
