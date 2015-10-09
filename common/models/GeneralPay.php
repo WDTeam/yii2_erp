@@ -53,7 +53,8 @@ class GeneralPay extends \yii\db\ActiveRecord
             [['general_pay_money', 'general_pay_actual_money'], 'number'],
             [['general_pay_source_name'], 'string', 'max' => 20],
             [['general_pay_transaction_id'], 'string', 'max' => 40],
-            [['general_pay_eo_order_id', 'general_pay_admin_name', 'general_pay_handle_admin_id'], 'string', 'max' => 30],
+            [['order_id', 'general_pay_admin_name', 'general_pay_handle_admin_id'], 'string', 'max' => 30],
+            [['customer_id','order_id'],'match','pattern'=>'%^[1-9]+$%'],   //必须为数字，不能是0
             [['general_pay_memo'], 'string', 'max' => 255],
             [['general_pay_verify'], 'string', 'max' => 32],
             /**********以下自定义属性**********/
@@ -195,7 +196,6 @@ class GeneralPay extends \yii\db\ActiveRecord
         $msg = $class->get($param);
         echo json_encode(['code'=>'ok','msg'=>$msg]);
 
-
     }
 
     /**
@@ -220,7 +220,6 @@ class GeneralPay extends \yii\db\ActiveRecord
         $msg = $class->get($param);
         echo json_encode(['code'=>'ok','msg'=>$msg]);
     }
-
 
     /**
      * 银联APP
