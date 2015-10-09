@@ -229,7 +229,7 @@ class GeneralPay extends \yii\db\ActiveRecord
         $param = array(
             'out_trade_no'=>$this->create_out_trade_no(),
             'subject'=>$this->subject(),
-            'general_pay_money'=>$this->general_pay_money,
+            'general_pay_money'=>$this->toMoney($this->general_pay_money,100,'*'),
             'notify_url'=>$this->notify_url('up-app'),
         );
         $class = new \uppay_class();
