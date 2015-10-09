@@ -69,14 +69,16 @@ class FinanceSettleApplyController extends BaseAuthController
         $newRequestParams = [];
         if(isset($requestParams['FinanceSettleApplySearch'])){
             $requestModel = $requestParams['FinanceSettleApplySearch'];
-            $newRequestParams = array(
-                                    'worder_tel' =>$requestModel['worder_tel'],
-                                );
+            if(isset($requestModel['worder_tel'])){
+                $newRequestParams = array(
+                                        'worder_tel' =>$requestModel['worder_tel'],
+                                    );
+            }
         }
         $requestParams = array_merge($defaultParams,$newRequestParams);
         $dataProvider = $searchModel->search(['FinanceSettleApplySearch'=>$requestParams]);
 //        $searchModel->settleMonth = date('Y-m', strtotime('-1 month'));
-        $searchModel->settleMonth = '2015-09-01';
+        $searchModel->settleMonth = '2015-09';
         return $this->render('selfFulltimeWorkerSettleIndex', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
@@ -104,6 +106,24 @@ class FinanceSettleApplyController extends BaseAuthController
         $financeSettleApplyLogSearch->created_at = time();
         $financeSettleApplyLogSearch->save();
         return $this->actionSelfFulltimeWorkerSettleIndex();
+    }
+    
+    /**
+     * 自营全职阿姨详细信息
+     * @return type
+     */
+    public function actionSelfFulltimeWorkerSettleView(){
+        $financeSettleApplySearch= new FinanceSettleApplySearch;
+        $requestModel = Yii::$app->request->getQueryParams();
+        if(isset($requestModel["FinanceSettleApplySearch"])){
+            $financeSettleApplySearch = $requestModel["FinanceSettleApplySearch"];
+        }
+//        $financeSettleApplySearch = $financeSettleApplySearch->getWorkerInfo($workerId);//获取阿姨的信息
+        $nonOrderIncomeSearchModel = new FinanceWorkerNonOrderIncomeSearch;
+        $nonOrderDataProvider = $nonOrderIncomeSearchModel->search(Yii::$app->request->getQueryParams());
+        $orderIncomeSearchModel = new FinanceWorkerOrderIncomeSearch;
+        $orderDataProvider = $orderIncomeSearchModel->search(Yii::$app->request->getQueryParams());
+        return $this->render('selfFulltimeWorkerSettleView', ['model'=>$financeSettleApplySearch,'nonOrderDataProvider'=>$nonOrderDataProvider,'orderDataProvider'=>$orderDataProvider]);
     }
     
     /**
@@ -299,7 +319,7 @@ class FinanceSettleApplyController extends BaseAuthController
     }
     
     /**
-    * 阿姨人工结算
+    * 阿姨人工结算详细信息
     */
     public function actionWorkerManualSettlementIndex(){
         $financeSettleApplySearch= new FinanceSettleApplySearch;
@@ -311,6 +331,17 @@ class FinanceSettleApplyController extends BaseAuthController
         $searchModel = new FinanceWorkerOrderIncomeSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'dataProvider'=>$dataProvider]);
+    }
+    
+    /**
+     * 提交阿姨人工结算
+     * @return type
+     */
+    public function actionWorkerManualSettlementDone(){
+        $requestModel = Yii::$app->request->getQueryParams();
+        $financeSettleApplySearch = $requestModel["FinanceSettleApplySearch"];
+//        saveAndGenerateSettleData($partimeWorkerArr,$settleStartTime,$settleEndTime);
+        return $this->actionSelfFulltimeWorkerSettleIndex();
     }
     
     /**
@@ -328,12 +359,7 @@ class FinanceSettleApplyController extends BaseAuthController
         return $this->render('homemakingManualSettlementIndex', ['model'=>$financeSettleApplySearch,'dataProvider'=>$dataProvider]);
     }
     
-    public function actionWorkerManualSettlementDone(){
-        $requestModel = Yii::$app->request->getQueryParams();
-        $financeSettleApplySearch = $requestModel["FinanceSettleApplySearch"];
-//        saveAndGenerateSettleData($partimeWorkerArr,$settleStartTime,$settleEndTime);
-        return $this->redirect(['index']);
-    }
+    
     
     /**
     * 本文件是用于兼职阿姨每周（例如：2015.9.21-2015.9.27）的结算
