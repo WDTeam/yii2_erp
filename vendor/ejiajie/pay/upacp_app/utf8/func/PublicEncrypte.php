@@ -5,7 +5,7 @@
 	function EncryptedPin($sPin, $sCardNo ,$sPubKeyURL)
 	{
 		global $log;
-		$sPubKeyURL = trim(SDK_ENCRYPT_CERT_PATH," ");
+		$sPubKeyURL = trim(__DIR__).trim(SDK_ENCRYPT_CERT_PATH);
 	//	$log->LogInfo("DisSpaces : " . PubKeyURL);
 		$fp = fopen($sPubKeyURL, "r");
 		if ($fp != NULL)
