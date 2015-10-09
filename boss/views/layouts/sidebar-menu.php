@@ -338,24 +338,60 @@ echo Menu::widget(
 
                     ],
                     [
-                        'label' => '结算管理(85%)',
+                        'label' => '结算管理(45%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                         'options' => [
                             'class' => 'treeview ',
                         ],
                         'items'=>[
+                           [
+                                'label' => '自营结算',
+                                'url' => ['#'],
+                                'icon' => 'fa fa-angle-right',
+                                'options' => [
+                                    'class' => 'treeview ',
+                                ],
+                               'items'=>[
+                                    [
+                                        'label' => '全职结算(50%)',
+                                        'url' => ['/finance-settle-apply/self-fulltime-worker-settle-index?FinanceSettleApplySearch[finance_settle_apply_status]=0&FinanceSettleApplySearch[ids]=&FinanceSettleApplySearch[nodeId]=1'],
+                                        'icon' => 'fa fa-angle-right',
+                                    ],
+                                   [
+                                        'label' => '兼职结算(40%)',
+                                        'url' => ['/finance-settle-apply/homemaking-manual-settlement-index'],
+                                        'icon' => 'fa fa-angle-right',
+                                    ],
+                               ]
+                            ],
                             [
-                                'label' => '结算查询',
-                                'url' => ['/finance-settle-apply/query'],
+                                'label' => '小家政结算',
+                                'url' => ['#'],
                                 'icon' => 'fa fa-angle-right',
-                            ],[
-                                'label' => '阿姨结算',
-                                'url' => ['/finance-settle-apply/worker-manual-settlement-index'],
-                                'icon' => 'fa fa-angle-right',
-                            ],[
-                                'label' => '结算审核(85%)',
+                                'options' => [
+                                    'class' => 'treeview ',
+                                ],
+                                'items'=>[
+                                    [
+                                        'label' => '门店结算(10%)',
+                                        'url' => ['/finance-settle-apply/homemaking-manual-settlement-index'],
+                                        'icon' => 'fa fa-angle-right',
+                                    ],
+                                   [
+                                        'label' => '阿姨结算(30%)',
+                                        'url' => ['/finance-settle-apply/homemaking-manual-settlement-index'],
+                                        'icon' => 'fa fa-angle-right',
+                                    ],
+                                ]
+                            ],
+                            [
+                                'label' => '财务审核(85%)',
                                 'url' => ['/finance-settle-apply/index?FinanceSettleApplySearch[finance_settle_apply_status]=0&FinanceSettleApplySearch[ids]=&FinanceSettleApplySearch[nodeId]=1'],
+                                'icon' => 'fa fa-angle-right',
+                            ], [
+                                'label' => '结算查询(50%)',
+                                'url' => ['/finance-settle-apply/query'],
                                 'icon' => 'fa fa-angle-right',
                             ]
                         ],

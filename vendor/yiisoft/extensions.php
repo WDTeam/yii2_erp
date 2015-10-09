@@ -24,7 +24,7 @@ return array (
   'kartik-v/yii2-grid' => 
   array (
     'name' => 'kartik-v/yii2-grid',
-    'version' => '3.0.6.0',
+    'version' => '3.0.7.0',
     'alias' => 
     array (
       '@kartik/grid' => $vendorDir . '/kartik-v/yii2-grid',

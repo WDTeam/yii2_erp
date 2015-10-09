@@ -204,7 +204,25 @@ class GeneralPayController extends Controller
                 $model->general_pay_eo_order_id = $post['out_trade_no'];
                 $model->general_pay_verify = $model->makeSign();
 
-                if($model->save(false)) $status = true;
+                //commit
+                $connection  = \Yii::$app->db;
+                $transaction = $connection->beginTransaction();
+                try {
+                    $model->save(false);
+                    //change customer balance
+                    $customer = new \common\models\Customer;
+                    if(!empty($model->order_id)){
+                        $customer::decBalance($model->customer_id,$model->general_pay_actual_money);
+                    }else{
+                        $customer::incBalance($model->customer_id,$model->general_pay_actual_money);
+                    }
+
+                    $transaction->commit();
+                    $status = true;
+                } catch(Exception $e) {
+                    $transaction->rollBack();
+                }
+
             }
         }
         echo !empty($status) ? 'success' : 'fail';
@@ -256,7 +274,23 @@ class GeneralPayController extends Controller
             $model->general_pay_eo_order_id = $post['out_trade_no'];
             $model->general_pay_verify = $model->makeSign();
 
-            $model->save(false);
+            //commit
+            $connection  = \Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+            try {
+                $model->save(false);
+                //change customer balance
+                $customer = new \common\models\Customer;
+                if(!empty($model->order_id)){
+                    $customer::incBalance($model->customer_id,$model->general_pay_actual_money);
+                }else{
+                    $customer::decBalance($model->customer_id,$model->general_pay_actual_money);
+                }
+                $transaction->commit();
+                $status = true;
+            } catch(Exception $e) {
+                $transaction->rollBack();
+            }
         }
         echo $status;
     }
@@ -333,7 +367,6 @@ class GeneralPayController extends Controller
 
         //验证支付结果
         if( !empty($model) && !empty($sign) ){
-
             $model->id = $GeneralPayId; //ID
             $model->general_pay_status = 1; //支付状态
             $model->general_pay_actual_money = $model->toMoney($post['total_amount'],100,'/');
@@ -342,8 +375,24 @@ class GeneralPayController extends Controller
             $model->general_pay_eo_order_id = $post['order_no'];
             $model->general_pay_verify = $model->makeSign();
 
-            $model->save(false);
-            $bfb->notify();
+            //commit
+            $connection  = \Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+            try {
+                $model->save(false);
+                //change customer balance
+                $customer = new \common\models\Customer;
+                if(!empty($model->order_id)){
+                    $customer::incBalance($model->customer_id,$model->general_pay_actual_money);
+                }else{
+                    $customer::decBalance($model->customer_id,$model->general_pay_actual_money);
+                }
+                $transaction->commit();
+                $bfb->notify();
+            } catch(Exception $e) {
+                $transaction->rollBack();
+            }
+
         }
     }
 
@@ -419,8 +468,24 @@ class GeneralPayController extends Controller
             $model->general_pay_eo_order_id = $post['order_no'];
             $model->general_pay_verify = $model->makeSign();
 
-            $model->save(false);
-            $class->notify();
+            //commit
+            $connection  = \Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+            try {
+                $model->save(false);
+                //change customer balance
+                $customer = new \common\models\Customer;
+                if(!empty($model->order_id)){
+                    $customer::incBalance($model->customer_id,$model->general_pay_actual_money);
+                }else{
+                    $customer::decBalance($model->customer_id,$model->general_pay_actual_money);
+                }
+                $transaction->commit();
+                $class->notify();
+            } catch(Exception $e) {
+                $transaction->rollBack();
+            }
+
         }
 
     }

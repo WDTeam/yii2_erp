@@ -17,6 +17,7 @@ use Yii;
  */
 class OrderStatusDict extends \common\models\ActiveRecord
 {
+    const ORDER_INIT = 1;
     /**
      * @inheritdoc
      */

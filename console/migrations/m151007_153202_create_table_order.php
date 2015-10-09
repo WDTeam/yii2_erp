@@ -22,7 +22,8 @@ class m151007_153202_create_table_order extends Migration
             'created_at' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 0 COMMENT \'创建时间\'',
             'updated_at' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 0 COMMENT \'修改时间\'',
             'isdel' => Schema::TYPE_BOOLEAN . '(1) unsigned NOT NULL DEFAULT 0 COMMENT \'是否已删除\'',
-            
+            'ver' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 1 COMMENT \'乐观锁\'',
+
 //===============================下单信息
             'order_ip' => Schema::TYPE_INTEGER.'(10) NOT NULL DEFAULT 0 COMMENT \'下单IP\'',
             'order_service_type_id' => Schema::TYPE_SMALLINT . '(4) unsigned NOT NULL DEFAULT 0 COMMENT \'订单服务类别ID\'',

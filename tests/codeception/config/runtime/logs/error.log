@@ -1,0 +1,296 @@
+2015-10-08 18:04:40 [][-][-][error][yii\base\ErrorException:1] exception 'yii\base\ErrorException' with message 'Class 'common\models\LoginForm' not found' in D:\htdocs\ejiajie-boss\tests\codeception\common\unit\models\LoginFormTest.php:41
+Stack trace:
+#0 C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php(905): ReflectionMethod->invokeArgs()
+#1 C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php(775): PHPUnit_Framework_TestCase->runTest()
+#2 C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php(643): PHPUnit_Framework_TestCase->runBare()
+#3 C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php(711): PHPUnit_Framework_TestResult->run()
+#4 C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestSuite.php(751): PHPUnit_Framework_TestCase->run()
+#5 C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\PHPUnit\Runner.php(100): PHPUnit_Framework_TestSuite->run()
+#6 C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\SuiteManager.php(153): Codeception\PHPUnit\Runner->doEnhancedRun()
+#7 C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Codecept.php(151): Codeception\SuiteManager->run()
+#8 C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Codecept.php(134): Codeception\Codecept->runSuite()
+#9 C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Command\Run.php(185): Codeception\Codecept->run()
+#10 C:\Users\co\AppData\Roaming\Composer\vendor\symfony\console\Command\Command.php(259): Codeception\Command\Run->execute()
+#11 C:\Users\co\AppData\Roaming\Composer\vendor\symfony\console\Application.php(878): Symfony\Component\Console\Command\Command->run()
+#12 C:\Users\co\AppData\Roaming\Composer\vendor\symfony\console\Application.php(195): Symfony\Component\Console\Application->doRunCommand()
+#13 C:\Users\co\AppData\Roaming\Composer\vendor\symfony\console\Application.php(126): Symfony\Component\Console\Application->doRun()
+#14 C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\codecept(27): Symfony\Component\Console\Application->run()
+#15 {main}
+2015-10-08 18:04:39 [][-][-][info][application] $_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'APPDATA' => 'C:\\Users\\co\\AppData\\Roaming'
+    'BIN_TARGET' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'CommonProgramFiles' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'COLEE-PC'
+    'ComSpec' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'configsetroot' => 'C:\\WINDOWS\\ConfigSetRoot'
+    'FPS_BROWSER_APP_PROFILE_STRING' => 'Internet Explorer'
+    'FPS_BROWSER_USER_PROFILE_STRING' => 'Default'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\co'
+    'LOCALAPPDATA' => 'C:\\Users\\co\\AppData\\Local'
+    'LOGONSERVER' => '\\\\MicrosoftAccount'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;C:\\ProgramData\\Lenovo\\ReadyApps;C:\\Program Files\\TortoiseSVN\\bin;D:\\mysql-5.6.25-winx64\\bin;D:\\php-5.4.34-Win32-VC9-x86;D:\\nginx-1.6.2;C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin;C:\\Program Files (x86)\\Git\\cmd;C:\\Program Files (x86)\\Git\\bin;C:\\Ruby22-x64\\bin;C:\\Program Files\\nodejs\\;C:\\Users\\co\\AppData\\Roaming\\npm'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'PROCESSOR_ARCHITECTURE' => 'x86'
+    'PROCESSOR_ARCHITEW6432' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 69 Stepping 1, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '4501'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files (x86)'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PROMPT' => '$P$G'
+    'PSModulePath' => 'C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'READYAPPS' => 'C:\\ProgramData\\Lenovo\\ReadyApps'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'TEMP' => 'C:\\Users\\co\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\co\\AppData\\Local\\Temp'
+    'TVT' => 'C:\\Program Files (x86)\\Lenovo'
+    'USERDOMAIN' => 'COLEE-PC'
+    'USERDOMAIN_ROAMINGPROFILE' => 'COLEE-PC'
+    'USERNAME' => 'co'
+    'USERPROFILE' => 'C:\\Users\\co'
+    'windir' => 'C:\\WINDOWS'
+    'PHP_SELF' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'SCRIPT_NAME' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'SCRIPT_FILENAME' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'PATH_TRANSLATED' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'DOCUMENT_ROOT' => ''
+    'REQUEST_TIME_FLOAT' => 1444298679.7871
+    'REQUEST_TIME' => 1444298679
+    'argv' => [
+        0 => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+        1 => 'run'
+        2 => './unit/models/LoginFormTest.php'
+    ]
+    'argc' => 3
+    'SERVER_NAME' => 'localhost'
+    'SERVER_PORT' => '80'
+]
+2015-10-08 18:10:11 [][-][-][error][yii\base\ErrorException:1] exception 'yii\base\ErrorException' with message 'Class 'common\models\LoginForm' not found' in D:\htdocs\ejiajie-boss\tests\codeception\common\unit\models\LoginFormTest.php:41
+Stack trace:
+#0 C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php(905): ReflectionMethod->invokeArgs()
+#1 C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php(775): PHPUnit_Framework_TestCase->runTest()
+#2 C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php(643): PHPUnit_Framework_TestCase->runBare()
+#3 C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php(711): PHPUnit_Framework_TestResult->run()
+#4 C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestSuite.php(751): PHPUnit_Framework_TestCase->run()
+#5 C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\PHPUnit\Runner.php(100): PHPUnit_Framework_TestSuite->run()
+#6 C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\SuiteManager.php(153): Codeception\PHPUnit\Runner->doEnhancedRun()
+#7 C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Codecept.php(151): Codeception\SuiteManager->run()
+#8 C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Codecept.php(134): Codeception\Codecept->runSuite()
+#9 C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Command\Run.php(185): Codeception\Codecept->run()
+#10 C:\Users\co\AppData\Roaming\Composer\vendor\symfony\console\Command\Command.php(259): Codeception\Command\Run->execute()
+#11 C:\Users\co\AppData\Roaming\Composer\vendor\symfony\console\Application.php(878): Symfony\Component\Console\Command\Command->run()
+#12 C:\Users\co\AppData\Roaming\Composer\vendor\symfony\console\Application.php(195): Symfony\Component\Console\Application->doRunCommand()
+#13 C:\Users\co\AppData\Roaming\Composer\vendor\symfony\console\Application.php(126): Symfony\Component\Console\Application->doRun()
+#14 C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\codecept(27): Symfony\Component\Console\Application->run()
+#15 {main}
+2015-10-08 18:10:11 [][-][-][info][application] $_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'APPDATA' => 'C:\\Users\\co\\AppData\\Roaming'
+    'BIN_TARGET' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'CommonProgramFiles' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'COLEE-PC'
+    'ComSpec' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'configsetroot' => 'C:\\WINDOWS\\ConfigSetRoot'
+    'FPS_BROWSER_APP_PROFILE_STRING' => 'Internet Explorer'
+    'FPS_BROWSER_USER_PROFILE_STRING' => 'Default'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\co'
+    'LOCALAPPDATA' => 'C:\\Users\\co\\AppData\\Local'
+    'LOGONSERVER' => '\\\\MicrosoftAccount'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;C:\\ProgramData\\Lenovo\\ReadyApps;C:\\Program Files\\TortoiseSVN\\bin;D:\\mysql-5.6.25-winx64\\bin;D:\\php-5.4.34-Win32-VC9-x86;D:\\nginx-1.6.2;C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin;C:\\Program Files (x86)\\Git\\cmd;C:\\Program Files (x86)\\Git\\bin;C:\\Ruby22-x64\\bin;C:\\Program Files\\nodejs\\;C:\\Users\\co\\AppData\\Roaming\\npm'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'PROCESSOR_ARCHITECTURE' => 'x86'
+    'PROCESSOR_ARCHITEW6432' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 69 Stepping 1, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '4501'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files (x86)'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PROMPT' => '$P$G'
+    'PSModulePath' => 'C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'READYAPPS' => 'C:\\ProgramData\\Lenovo\\ReadyApps'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'TEMP' => 'C:\\Users\\co\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\co\\AppData\\Local\\Temp'
+    'TVT' => 'C:\\Program Files (x86)\\Lenovo'
+    'USERDOMAIN' => 'COLEE-PC'
+    'USERDOMAIN_ROAMINGPROFILE' => 'COLEE-PC'
+    'USERNAME' => 'co'
+    'USERPROFILE' => 'C:\\Users\\co'
+    'windir' => 'C:\\WINDOWS'
+    'PHP_SELF' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'SCRIPT_NAME' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'SCRIPT_FILENAME' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'PATH_TRANSLATED' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'DOCUMENT_ROOT' => ''
+    'REQUEST_TIME_FLOAT' => 1444299011.0349
+    'REQUEST_TIME' => 1444299011
+    'argv' => [
+        0 => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+        1 => 'run'
+        2 => './unit/models/LoginFormTest.php'
+    ]
+    'argc' => 3
+    'SERVER_NAME' => 'localhost'
+    'SERVER_PORT' => '80'
+]
+2015-10-08 18:10:59 [][-][-][error][yii\base\ErrorException:1] exception 'yii\base\ErrorException' with message 'Class 'common\models\LoginForm' not found' in D:\htdocs\ejiajie-boss\tests\codeception\common\unit\models\LoginFormTest.php:41
+Stack trace:
+#0 C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php(905): ReflectionMethod->invokeArgs()
+#1 C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php(775): PHPUnit_Framework_TestCase->runTest()
+#2 C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestResult.php(643): PHPUnit_Framework_TestCase->runBare()
+#3 C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php(711): PHPUnit_Framework_TestResult->run()
+#4 C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestSuite.php(751): PHPUnit_Framework_TestCase->run()
+#5 C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\PHPUnit\Runner.php(100): PHPUnit_Framework_TestSuite->run()
+#6 C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\SuiteManager.php(153): Codeception\PHPUnit\Runner->doEnhancedRun()
+#7 C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Codecept.php(151): Codeception\SuiteManager->run()
+#8 C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Codecept.php(134): Codeception\Codecept->runSuite()
+#9 C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\src\Codeception\Command\Run.php(185): Codeception\Codecept->run()
+#10 C:\Users\co\AppData\Roaming\Composer\vendor\symfony\console\Command\Command.php(259): Codeception\Command\Run->execute()
+#11 C:\Users\co\AppData\Roaming\Composer\vendor\symfony\console\Application.php(878): Symfony\Component\Console\Command\Command->run()
+#12 C:\Users\co\AppData\Roaming\Composer\vendor\symfony\console\Application.php(195): Symfony\Component\Console\Application->doRunCommand()
+#13 C:\Users\co\AppData\Roaming\Composer\vendor\symfony\console\Application.php(126): Symfony\Component\Console\Application->doRun()
+#14 C:\Users\co\AppData\Roaming\Composer\vendor\codeception\codeception\codecept(27): Symfony\Component\Console\Application->run()
+#15 {main}
+2015-10-08 18:10:58 [][-][-][info][application] $_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'APPDATA' => 'C:\\Users\\co\\AppData\\Roaming'
+    'BIN_TARGET' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'CommonProgramFiles' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'COLEE-PC'
+    'ComSpec' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'configsetroot' => 'C:\\WINDOWS\\ConfigSetRoot'
+    'FPS_BROWSER_APP_PROFILE_STRING' => 'Internet Explorer'
+    'FPS_BROWSER_USER_PROFILE_STRING' => 'Default'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\co'
+    'LOCALAPPDATA' => 'C:\\Users\\co\\AppData\\Local'
+    'LOGONSERVER' => '\\\\MicrosoftAccount'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;C:\\ProgramData\\Lenovo\\ReadyApps;C:\\Program Files\\TortoiseSVN\\bin;D:\\mysql-5.6.25-winx64\\bin;D:\\php-5.4.34-Win32-VC9-x86;D:\\nginx-1.6.2;C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin;C:\\Program Files (x86)\\Git\\cmd;C:\\Program Files (x86)\\Git\\bin;C:\\Ruby22-x64\\bin;C:\\Program Files\\nodejs\\;C:\\Users\\co\\AppData\\Roaming\\npm'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'PROCESSOR_ARCHITECTURE' => 'x86'
+    'PROCESSOR_ARCHITEW6432' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 69 Stepping 1, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '4501'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files (x86)'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PROMPT' => '$P$G'
+    'PSModulePath' => 'C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'READYAPPS' => 'C:\\ProgramData\\Lenovo\\ReadyApps'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'TEMP' => 'C:\\Users\\co\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\co\\AppData\\Local\\Temp'
+    'TVT' => 'C:\\Program Files (x86)\\Lenovo'
+    'USERDOMAIN' => 'COLEE-PC'
+    'USERDOMAIN_ROAMINGPROFILE' => 'COLEE-PC'
+    'USERNAME' => 'co'
+    'USERPROFILE' => 'C:\\Users\\co'
+    'windir' => 'C:\\WINDOWS'
+    'PHP_SELF' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'SCRIPT_NAME' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'SCRIPT_FILENAME' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'PATH_TRANSLATED' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'DOCUMENT_ROOT' => ''
+    'REQUEST_TIME_FLOAT' => 1444299058.4748
+    'REQUEST_TIME' => 1444299058
+    'argv' => [
+        0 => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+        1 => 'run'
+        2 => './unit/models/LoginFormTest.php'
+    ]
+    'argc' => 3
+    'SERVER_NAME' => 'localhost'
+    'SERVER_PORT' => '80'
+]
+2015-10-08 18:23:59 [error][yii\i18n\PhpMessageSource::loadMessages] The message file for category 'app' does not exist: D:\htdocs\ejiajie-boss\tests\codeception\config/messages/zh-CN/app.php Fallback file does not exist as well: D:\htdocs\ejiajie-boss\tests\codeception\config/messages/zh/app.php
+2015-10-08 18:24:00 [error][yii\i18n\PhpMessageSource::loadMessages] The message file for category 'app' does not exist: D:\htdocs\ejiajie-boss\tests\codeception\config/messages/zh-CN/app.php Fallback file does not exist as well: D:\htdocs\ejiajie-boss\tests\codeception\config/messages/zh/app.php
+2015-10-08 18:23:58 [info][application] $_SERVER = [
+    'ALLUSERSPROFILE' => 'C:\\ProgramData'
+    'APPDATA' => 'C:\\Users\\co\\AppData\\Roaming'
+    'BIN_TARGET' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'CommonProgramFiles' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramFiles(x86)' => 'C:\\Program Files (x86)\\Common Files'
+    'CommonProgramW6432' => 'C:\\Program Files\\Common Files'
+    'COMPUTERNAME' => 'COLEE-PC'
+    'ComSpec' => 'C:\\WINDOWS\\system32\\cmd.exe'
+    'configsetroot' => 'C:\\WINDOWS\\ConfigSetRoot'
+    'FPS_BROWSER_APP_PROFILE_STRING' => 'Internet Explorer'
+    'FPS_BROWSER_USER_PROFILE_STRING' => 'Default'
+    'FP_NO_HOST_CHECK' => 'NO'
+    'HOMEDRIVE' => 'C:'
+    'HOMEPATH' => '\\Users\\co'
+    'LOCALAPPDATA' => 'C:\\Users\\co\\AppData\\Local'
+    'LOGONSERVER' => '\\\\MicrosoftAccount'
+    'NUMBER_OF_PROCESSORS' => '4'
+    'OS' => 'Windows_NT'
+    'Path' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;C:\\ProgramData\\Lenovo\\ReadyApps;C:\\Program Files\\TortoiseSVN\\bin;D:\\mysql-5.6.25-winx64\\bin;D:\\php-5.4.34-Win32-VC9-x86;D:\\nginx-1.6.2;C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin;C:\\Program Files (x86)\\Git\\cmd;C:\\Program Files (x86)\\Git\\bin;C:\\Ruby22-x64\\bin;C:\\Program Files\\nodejs\\;C:\\Users\\co\\AppData\\Roaming\\npm'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'PROCESSOR_ARCHITECTURE' => 'x86'
+    'PROCESSOR_ARCHITEW6432' => 'AMD64'
+    'PROCESSOR_IDENTIFIER' => 'Intel64 Family 6 Model 69 Stepping 1, GenuineIntel'
+    'PROCESSOR_LEVEL' => '6'
+    'PROCESSOR_REVISION' => '4501'
+    'ProgramData' => 'C:\\ProgramData'
+    'ProgramFiles' => 'C:\\Program Files (x86)'
+    'ProgramFiles(x86)' => 'C:\\Program Files (x86)'
+    'ProgramW6432' => 'C:\\Program Files'
+    'PROMPT' => '$P$G'
+    'PSModulePath' => 'C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\Modules\\'
+    'PUBLIC' => 'C:\\Users\\Public'
+    'READYAPPS' => 'C:\\ProgramData\\Lenovo\\ReadyApps'
+    'SystemDrive' => 'C:'
+    'SystemRoot' => 'C:\\WINDOWS'
+    'TEMP' => 'C:\\Users\\co\\AppData\\Local\\Temp'
+    'TMP' => 'C:\\Users\\co\\AppData\\Local\\Temp'
+    'TVT' => 'C:\\Program Files (x86)\\Lenovo'
+    'USERDOMAIN' => 'COLEE-PC'
+    'USERDOMAIN_ROAMINGPROFILE' => 'COLEE-PC'
+    'USERNAME' => 'co'
+    'USERPROFILE' => 'C:\\Users\\co'
+    'windir' => 'C:\\WINDOWS'
+    'PHP_SELF' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'SCRIPT_NAME' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'SCRIPT_FILENAME' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'PATH_TRANSLATED' => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+    'DOCUMENT_ROOT' => ''
+    'REQUEST_TIME_FLOAT' => 1444299838.704
+    'REQUEST_TIME' => 1444299838
+    'argv' => [
+        0 => 'C:\\Users\\co\\AppData\\Roaming\\Composer\\vendor\\bin\\/../codeception/codeception/codecept'
+        1 => 'run'
+        2 => './unit/models/LoginFormTest.php'
+    ]
+    'argc' => 3
+    'SERVER_NAME' => 'localhost'
+    'SERVER_PORT' => '80'
+]

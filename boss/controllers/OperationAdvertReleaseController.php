@@ -85,7 +85,9 @@ class OperationAdvertReleaseController extends BaseAuthController
             foreach($position as $v){$positions[$v->id] = $v->operation_advert_position_name;}
             $content = OperationAdvertContent::find()->all();
             $contents = [];
-            foreach($content as $k => $v){$contents[$v->id] = $v->operation_advert_position_name.'('.$v->operation_city_name.':'.$v->operation_platform_name.$v->operation_platform_version_name.')';}
+            foreach($content as $k => $v){
+                $contents[$v->id] = $v->operation_advert_position_name.'('.$v->operation_city_name.':'.$v->operation_platform_name.$v->operation_platform_version_name.')';
+            }
             return $this->render('create', [
                 'model' => $model,
                 'positions' => $positions,
@@ -122,7 +124,9 @@ class OperationAdvertReleaseController extends BaseAuthController
             $positions = ['选择广告位置'];
             foreach($position as $v){$positions[$v->id] = $v->operation_advert_position_name;}
             $content = OperationAdvertContent::find()->all();
-            foreach($content as $k => $v){$contents[$v->id] = $v->operation_advert_position_name;}
+            foreach($content as $k => $v){
+                $contents[$v->id] = $v->operation_advert_position_name.'('.$v->operation_city_name.':'.$v->operation_platform_name.$v->operation_platform_version_name.')';
+            }
             return $this->render('update', [
                 'model' => $model,
                 'positions' => $positions,

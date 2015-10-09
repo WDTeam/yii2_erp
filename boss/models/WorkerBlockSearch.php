@@ -5,7 +5,7 @@ namespace boss\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\WorkerBlock;
+use core\models\worker\WorkerBlock;
 
 /**
  * WorkerBlockSearch represents the model behind the search form about `common\models\WorkerBlock`.
