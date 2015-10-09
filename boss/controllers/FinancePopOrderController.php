@@ -24,7 +24,7 @@ use common\models\FinanceOrderChannel;
 use common\models\FinanceHeader;
 use boss\models\FinanceRecordLogSearch;
 use boss\models\FinanceOrderChannelSearch;
-use boss\models\search\OrderSearch;
+use core\models\order\OrderSearch;
 
 /**
  * FinancePopOrderController implements the CRUD actions for FinancePopOrder model.
@@ -128,7 +128,7 @@ class FinancePopOrderController extends Controller
     			//获取渠道唯一订单号有问题需要问问
     			$post['FinancePopOrder']['finance_pop_order_channel_order'] =$statusinfo['order_channel_order_num'];
     			
-    			$post['FinancePopOrder']['finance_pop_order_order_type'] =$statusinfo['order_service_type_id'];
+    			//$post['FinancePopOrder']['finance_pop_order_order_type'] =$statusinfo['order_service_type_id'];
     			$post['FinancePopOrder']['finance_pop_order_order_type'] =$statusinfo['order_service_type_id'];
     			$post['FinancePopOrder']['finance_pop_order_status'] =$statusinfo['order_before_status_dict_id'];
     			
@@ -220,8 +220,6 @@ class FinancePopOrderController extends Controller
         	$tydtui[]=$errt['finance_order_channel_name'];
         }
        $tyu= array_combine($tyd,$tydtui);
-       
-       
          $searchModel = new FinancePopOrderSearch;
          //默认条件
          $searchModel->is_del=0;
@@ -235,17 +233,7 @@ class FinancePopOrderController extends Controller
         
          if($sta==3){
         //我有三没有开始处理 从订单表里面开始查询
-        $search_infoModel= new OrderSearch;
-        //ejj_finance_record_log
-        $financerecordloginfo=FinanceRecordLogSearch::get_financerecordloginfo($sta);
-        if($financerecordloginfo){
-       //$search_infoModel->created_at=$financerecordloginfo['finance_record_log_statime'];
-        //$searchModel_info->created_at=$financerecordloginfo['finance_record_log_endtime'];
-        $search_infoModel->channel_id=$sta;
-        }
-       // $dataProvider='';
-        //$dataProvider_into = $search_infoModel->search(Yii::$app->request->getQueryParams());
-       // var_dump($dataProvider_into);exit;
+         return $this->redirect(['orderlist']);
         } 
         
         }else{
@@ -282,10 +270,8 @@ class FinancePopOrderController extends Controller
     	}
     	$tyu= array_combine($tyd,$tydtui);
     	
-    	
-    	$decss=Yii::$app->request->getQueryParams();
-    		$sta= $decss['FinancePopOrderSearch']['finance_pop_order_pay_status_type'];
-    		if($sta==3){
+    	$sta=3;
+    		
     			//我有三没有开始处理 从订单表里面开始查询
     			$searchModel= new OrderSearch;
     			$financerecordloginfo=FinanceRecordLogSearch::get_financerecordloginfo($sta);
@@ -294,26 +280,13 @@ class FinancePopOrderController extends Controller
     				//$searchModel_info->created_at=$financerecordloginfo['finance_record_log_endtime'];
     				$searchModel->channel_id=$sta;
     			}
-    			
     			$searchModel->channel_id=$sta;
-    			$dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-    			
-    			//var_dump($dataProvider); exit;
-    			
-    			
-    		}
-    		
-    		
+    			$dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());	
     	return $this->render('orderlist', [
     			'dataProvider' => $dataProvider,
     			'searchModel' => $searchModel,
     			]);
-    	
-    	
-    	
-    	
-    	
-    	
+
     }
     
     
