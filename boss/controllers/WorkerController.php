@@ -453,6 +453,7 @@ class WorkerController extends BaseAuthController
 
 
         //获取所属商圈中所有阿姨
+
         if($workerType==1){
             $districtWorkerResult = $workerDistrictModel::find()->select('`ejj_worker_district`.worker_id,`ejj_worker_district`.operation_shop_district_id')->where(['operation_shop_district_id'=>$workerDistrictId])->innerJoinWith('worker')->asArray()->all();
         }else{
