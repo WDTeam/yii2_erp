@@ -34,13 +34,10 @@ class CustomerTransRecordController extends Controller
      */
     public function createRecord($data)
     {
-        //交易记录日志
-        //$TransRecordModel = new CustomerTransRecordLog();
-        //$TransRecordModel->insert();exit;
         $model = new CustomerTransRecord();
         //使用场景
-        $model->scenario = $data['CustomerTransRecord']['scenario'];
-        $model->attributes = $data['CustomerTransRecord'];
+        $model->scenario = $data['scenario'];
+        $model->attributes = $data;
         return $model->add();
     }
 
@@ -89,7 +86,7 @@ class CustomerTransRecordController extends Controller
         $data['CustomerTransRecord']['scenario'] = 3;
         //var_dump(Yii::$app->request->post());exit;
         if ($model->load(Yii::$app->request->post())) {
-            $model = $this->createRecord($data);
+            $model = $this->createRecord($data['CustomerTransRecord']);
             //return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [

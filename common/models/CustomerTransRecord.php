@@ -292,6 +292,33 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
                 'customer_trans_record_online_service_card_pay',    //服务卡支付金额
                 'customer_trans_record_transaction_id', //交易流水号
             ],
+            //10=余额（在线支付）BalancePay
+            '10'=>[
+                'customer_id',  //用户ID
+                'order_id', //订单ID
+                'order_channel_id', //订单渠道
+                'customer_trans_record_order_channel',  //订单渠道名称
+                'pay_channel_id',   //支付渠道
+                'customer_trans_record_pay_channel',    //支付渠道名称
+                'customer_trans_record_mode',   //交易方式:1消费,2=充值,3=退款,4=补偿
+                'customer_trans_record_mode_name',  //交易方式:1消费,2=充值,3=退款,4=补偿
+                'customer_trans_record_money',//余额支付（非在线操作）
+                'customer_trans_record_order_total_money',  //订单总额
+            ],
+            //11=服务卡(在线支付) serviceCardPay
+            '11'=>[
+                'customer_id',  //用户ID
+                'order_id', //订单ID
+                'order_channel_id', //订单渠道
+                'customer_trans_record_order_channel',  //订单渠道名称
+                'pay_channel_id',   //支付渠道
+                'customer_trans_record_pay_channel',    //支付渠道名称
+                'customer_trans_record_mode',   //交易方式:1消费,2=充值,3=退款,4=补偿
+                'customer_trans_record_mode_name',  //交易方式:1消费,2=充值,3=退款,4=补偿
+                'customer_trans_record_order_total_money',  //订单总额
+                'customer_trans_record_online_service_card_on', //服务卡号
+                'customer_trans_record_online_service_card_pay',    //服务卡支付金额
+            ],
         ];
     }
 
