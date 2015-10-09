@@ -18,17 +18,7 @@ class Order extends OrderModel
     public $orderBookedDate;
     public $orderBookedTimeRange;
 
-    public function getOrderChannelList($channel_id = 0)
-    {
-        $channel = [1 => 'BOSS', 2 => '美团', 3 => '大众点评'];
-        return $channel_id == 0 ? $channel : (isset($channel[$channel_id]) ? $channel[$channel_id] : false);
-    }
 
-    public function getServiceList($service_id = 0)
-    {
-        $service = [1 => '家庭保洁', 2 => '新居开荒', 3 => '擦玻璃'];
-        return $service_id == 0 ? $service : (isset($service[$service_id]) ? $service[$service_id] : false);
-    }
 
     public function getOrderBookedCountList()
     {
@@ -47,53 +37,9 @@ class Order extends OrderModel
         return $order_booked_time_range;
     }
 
-    public function getOrderSrcName($id)
-    {
-        return OrderSrc::findOne($id)->order_src_name;
-    }
 
-    public function getCouponById($id)
-    {
-        $coupon = [
-            1 => [
-                "id" => 1,
-                "coupon_name" => "优惠券30",
-                "coupon_money" => 30
-            ],
-            2 => [
-                "id" => 2,
-                "coupon_name" => "优惠券30",
-                "coupon_money" => 30
-            ],
-            3 => [
-                "id" => 3,
-                "coupon_name" => "优惠券30",
-                "coupon_money" => 30
-            ]
-        ];
-        return $coupon[$id];
-    }
-    public function getCardById($id)
-    {
-        $card = [
-            1 => [
-                "id" => 1,
-                "card_code" => "1234567890",
-                "card_money" => 1000
-            ],
-            2 => [
-                "id" => 2,
-                "coupon_name" => "9876543245",
-                "coupon_money" => 3000
-            ],
-            3 => [
-                "id" => 3,
-                "coupon_name" => "3840959205",
-                "coupon_money" => 5000
-            ]
-        ];
-        return $card[$id];
-    }
+
+
 
     /**
      * @inheritdoc

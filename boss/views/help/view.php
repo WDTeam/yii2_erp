@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'help_status',
             'help_sort',
             'created_at',
-            'update_at',
+            'updated_at',
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],

@@ -27,6 +27,15 @@ use kartik\widgets\Select2; // or kartik\select2\Select2
     echo $form->field($workerModel, 'worker_name')->textInput(['disabled' => true]);
 
     echo $form->field($workerVacationModel, 'worker_vacation_extend');
+    echo $form->field($workerVacationModel, 'worker_vacation_type')->widget(Select2::classname(), [
+    'name' => 'worker_vacation_type',
+    'hideSearch' => true,
+    'data' => [1 => '休假', 2 => '事假'],
+    'options' => ['placeholder' => '选择阿姨请假类型'],
+    'pluginOptions' => [
+        'allowClear' => true
+    ],
+    ]);
 
     echo $form->field($workerVacationModel, 'worker_vacation_start_time')->widget(DatePicker::classname(), [
     'name' => 'worker_vacation_start_time',

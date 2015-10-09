@@ -41,15 +41,15 @@ function sign(&$params) {
 
 /**
  * 验签
- *
+ * 注意这个方法会和codecept的方法同名冲突，请等待胜强处理。log by 李登高 2015-10-8
  * @param String $params_str
  * @param String $signature_str
  */
-function verify($params) {
+function _verify($params) {
 	global $log;
 	// 公钥
 	$public_key = getPulbicKeyByCertId ( $params ['certId'] );
-//	echo $public_key.'<br/>';
+	//$public_key.'<br/>';exit;
 	// 签名串
 	$signature_str = $params ['signature'];
 	unset ( $params ['signature'] );
@@ -106,7 +106,6 @@ function getPulbicKeyByCertId($certId) {
  */
 function getCertId($cert_path) {
 	$pkcs12certdata = file_get_contents ( $cert_path );
-
 	openssl_pkcs12_read ( $pkcs12certdata, $certs, SDK_SIGN_CERT_PWD );
 	$x509data = $certs ['cert'];
 	openssl_x509_read ( $x509data );

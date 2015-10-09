@@ -68,9 +68,9 @@ use yii\helpers\Url
                 
                 'other_contact'=>['type'=> Form::INPUT_TEXT, 'options'=>[ 'maxlength'=>200]],
                 
-                // 'create_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter Create At...']], 
+                // 'created_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter Create At...']], 
                 
-                // 'update_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter Update At...']], 
+                // 'updated_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter Update At...']], 
         
         //         'blacklist_time'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 加入黑名单时间...']], 
         

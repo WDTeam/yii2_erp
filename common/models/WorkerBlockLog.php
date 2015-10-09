@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "{{%worker_block_log}}".
  *
  * @property integer $id
+ * @property integer $worker_id
  * @property integer $worker_block_id
  * @property integer $worker_block_operate_type
  * @property integer $worker_block_operate_id
@@ -30,7 +31,7 @@ class WorkerBlockLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['worker_block_id', 'worker_block_operate_type', 'worker_block_operate_id', 'worker_block_operate_time'], 'integer'],
+            [['worker_block_id', 'worker_id','worker_block_operate_type', 'worker_block_operate_id', 'worker_block_operate_time'], 'integer'],
             [['worker_block_operate_bak'], 'string', 'max' => 255]
         ];
     }
@@ -42,6 +43,7 @@ class WorkerBlockLog extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
+            'worker_id'=>Yii::t('app', 'Worker ID'),
             'worker_block_id' => Yii::t('app', 'Worker Block ID'),
             'worker_block_operate_type' => Yii::t('app', 'Worker Block Operate Type'),
             'worker_block_operate_id' => Yii::t('app', 'Worker Block Operate ID'),

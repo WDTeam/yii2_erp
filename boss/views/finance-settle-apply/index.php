@@ -10,7 +10,7 @@ use boss\models\FinanceWorkerNonOrderIncomeSearch;
  * @var boss\models\FinanceSettleApplySearch $searchModel
  */
 
-$this->title = Yii::t('finance', 'Finance Settle Applies');
+$this->title = Yii::t('finance', '全职结算');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.css" rel="stylesheet">
@@ -28,21 +28,9 @@ $this->params['breadcrumbs'][] = $this->title;
 </style>
 <form id ="financeSettleApplyForm">
    
-
-
 <div class="finance-settle-apply-index">
      <div class="panel panel-info">
-        <div class="page-header">
-                <button type="button" onclick = "changetTab(0,1)" class="btn btn-default btn-lg active">门店财务审核</button>
-                <button type="button" onclick = "changetTab(1,2)" class="btn btn-default btn-lg active">线下运营审核</button>
-                <button type="button" onclick = "changetTab(2,3)" class="btn btn-default btn-lg active">财务审核</button>
-                <button type="button" onclick = "changetTab(3,4)" class="btn btn-default btn-lg active">财务确认结算</button>
-        </div>
-        <br/>
-        <p></p>
         <div class = "container">
-            <button type="button" onclick="checkResult(1)" class="btn btn-default">审核通过</button>
-            <button type="button" onclick="checkResult(0)" class="btn btn-default">审核不通过</button>
             <input type="hidden" id="finance_settle_apply_status" name="FinanceSettleApplySearch[finance_settle_apply_status]"  />
             <input type="hidden" id="ids" name="FinanceSettleApplySearch[ids]"/>
             <input type="hidden" id="nodeId"   name="FinanceSettleApplySearch[nodeId]" value = "<?php echo $nodeId; ?>"/>
@@ -73,15 +61,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 $('#financeSettleApplyForm').submit();
             }
         </script>
-        <p>
-        </p>
 
         <?php Pjax::begin(); echo GridView::widget([
             'dataProvider' => $dataProvider,
     //        'filterModel' => $searchModel,
             'columns' => [
-                ['class' => 'yii\grid\CheckboxColumn'],
-    //           'worder_id',
+                ['class' => 'yii\grid\SerialColumn'],
                 'worder_tel',
                 'worker_type_name',
                 ['attribute'=>'created_at','content'=>function($model,$key,$index){return Html::a(date('Y:m:d H:i:s',$model->created_at),'#');}],
@@ -96,18 +81,47 @@ $this->params['breadcrumbs'][] = $this->title;
                 'finance_settle_apply_reviewer', 
                 ['attribute'=>'updated_at','content'=>function($model,$key,$index){return Html::a(date('Y:m:d H:i:s',$model->updated_at),'#');}],
                 [
-                    'class' => 'yii\grid\ActionColumn',
+                'class' => 'yii\grid\ActionColumn',
+                'template' =>'{view} {agree} {disagree}',
+                'buttons' => [
+                    'agree' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-ok"></span>', Yii::$app->urlManager->createUrl(['worker/view', 'id' => $model->id, 'edit' => 't']), [
+                            'title' => Yii::t('yii', '审核通过'),
+                        ]);
+                    },
+                    'disagree' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-remove"></span>',
+                            [
+                                '/worker/vacation-create',
+                                'id' => $model->id
+                            ]
+                            ,
+                            [
+                                'title' => Yii::t('yii', '请假信息录入'),
+                                'data-toggle' => 'modal',
+                                'data-target' => '#vacationModal',
+                                'class'=>'vacation',
+                                'data-id'=>$model->id,
+                            ]);
+                    },
                 ],
+            ],
             ],
             'responsive'=>true,
             'hover'=>true,
             'condensed'=>true,
             'floatHeader'=>false,
+           'panel' => [
+            'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
+            'type'=>'info',
+            'before' =>false,
+            'after'=>false,
+            'showFooter' => false
+        ],
 
         ]); Pjax::end(); ?>
      </div>
 </div>
-    <div id="popover_content_wrapper" style="display: none;width:800px;">路补:10     |晚补:10    |扑空补:0|路补:10     |晚补:10    |扑空补:0|路补:10     |晚补:10    |扑空补:0路补:10 </div>
 <script>
 $(function () {
     $('[data-toggle="popover"]').popover();
