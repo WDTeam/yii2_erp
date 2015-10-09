@@ -33,4 +33,9 @@ class CoreOperationCity extends CommonOperationCity
     public static function getCityInfo($city_id){
         return self::find()->where(['operation_city_is_online' => '1', 'city_id' => $city_id])->One();
     }
+    
+    /** 设置城市为开通状态**/
+    public static function setoperation_city_is_online($cityid){
+        return Yii::$app->db->createCommand()->update(self::tableName(), ['operation_city_is_online' => 1], ['city_id' => $cityid])->execute();
+    }
 }

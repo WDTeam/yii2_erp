@@ -10,7 +10,15 @@ $(document).ready(function(){
     $("input[name='categorylist[]']").click(function(){
         categoryGoods($(this));
     });
+    selectCategoryChecked();
 });
+
+function selectCategoryChecked(){
+    var status = false;
+    $("input[name='categorylist[]']").each(function(){
+        categoryGoods($(this));
+    });
+}
 
 function categoryGoods(obj){
     var status = obj.is(':checked');

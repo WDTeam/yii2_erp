@@ -214,7 +214,7 @@ echo Menu::widget(
                         
                     ],
                     [
-                        'label' => '发布城市',
+                        'label' => '发布城市(80%)',
                         'url' => ['/operation-city/release'],
                         'icon' => 'fa fa-angle-right',
                         'visible' => (Yii::$app->user->identity->username == 'admin'),
@@ -227,7 +227,7 @@ echo Menu::widget(
                        
 //                    ],
                     [
-                        'label' => '商品管理',
+                        'label' => '服务管理',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                         
@@ -236,7 +236,7 @@ echo Menu::widget(
                         ],
                         'items' => [
                             [
-                                'label' => '服务管理(60%)',
+                                'label' => '服务管理(80%)',
                                 'url' => ['/operation-goods'],
                                 'icon' => 'fa fa-angle-right',
                                 
@@ -248,7 +248,7 @@ echo Menu::widget(
                                
 //                            ],
                             [
-                                'label' => '规格管理(60%)',
+                                'label' => '规格管理(80%)',
                                 'url' => ['/operation-spec'],
                                 'icon' => 'fa fa-angle-right',
                                 

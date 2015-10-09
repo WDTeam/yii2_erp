@@ -10,5 +10,5 @@ use boss\components\AreaCascade;
 //    echo '<br><input type="checkbox" val="categorylist" id="alllist">全选';
 ?>
 <div id="goods_<?= $categoryid?>">
-    <?php echo Html::checkboxList('categorygoods', $categorygoods, $categorygoods)  ?>
+    <?php echo Html::checkboxList('categorygoods', $categorygoodsall, $categorygoods)  ?>
 </div>

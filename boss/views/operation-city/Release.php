@@ -11,7 +11,7 @@ use boss\components\AreaCascade;
  */
 
 $this->title = Yii::t('app', 'release').Yii::t('app', 'City');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'release').Yii::t('app', 'City'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'release').Yii::t('app', 'City'), 'url' => ['release']];
 ?>
 <div class="operation-city-release">
     <div class="operation-city-form">
