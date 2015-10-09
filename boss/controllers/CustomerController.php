@@ -17,7 +17,7 @@ use common\models\OperationCity;
 use common\models\GeneralRegion;
 
 use common\models\Order;
-use core\models\Customer;
+// use core\models\Customer;
 
 /**
  * CustomerController implements the CRUD actions for Customer model.
@@ -362,108 +362,102 @@ class CustomerController extends BaseAuthController
 
     public function actionData(){
 
-        // $operationArea = new Operation\OperationArea();
-
         $connectionNew =  \Yii::$app->db;
-
-        
-
         $connection = new \yii\db\Connection([
             'dsn' => 'mysql:host=rdsh52vh252q033a4ci5.mysql.rds.aliyuncs.com;dbname=sq_ejiajie_v2',
             'username' => 'sq_ejiajie',
             'password' => 'test_sq_ejiajie',
         ]);
         $connection->open();
-        $command = $connection->createCommand("SELECT * FROM user_info order by id asc limit 100, 200");
-        $userInfo = $command->queryAll();
-        // print_r($userInfo);
-        // exit();
-        // $cityConfigArr=['北京'=>110100,'上海'=>310100,'广州'=>440100,'深圳'=>440300,'成都'=>510100,'南京'=>320100,'合肥'=>340100,'武汉'=>420100,'杭州'=>330100,'哈尔滨'=>230100,'青岛'=>370200,'太原'=>140100,'天津'=>120100,'长沙'=>430100,'沈阳'=>210100,'济南'=>370100,'石家庄'=>130100];
+        $command = $connection->createCommand("SELECT count(*) FROM user_info");
+        $count = $command->queryScalar();
+        echo "<br/>顾客总记录数为" . $count;
+        $numPerPage = 20;
+        $curPageNo = 1;
+        $totalPage = $count <= 0 ? 0 : floor($count / $numPerPage) + 1;
+        if ($totalPage > 0) {
+            while ($curPageNo <= 20) {
+                $start = $numPerPage * ($curPageNo - 1);
+                $command = $connection->createCommand("SELECT * FROM user_info order by charge_money desc limit ".$start.", ".$numPerPage);
+                $userInfo = $command->queryAll();
 
-        
-        $connectionNew->createCommand()->batchInsert('ejj_customer_channal', ['channal_name', 'pid', 'created_at', 'updated_at', 'is_del'], [
-            ['美团', 0, time(), 0, 0],
-            ['大众', 0, time(), 0, 0],
-            ['支付宝', 0, time(), 0, 0],
-        ])->execute();
-        echo "customer_channal数据导入成功";
+                foreach($userInfo as $val){
+                    $customer = new Customer;
+                    // $customer->id = $val['id'];
+                    $customer->customer_name = empty($val['name']) ? '未知' : $val['name'];
+                    $customer->customer_sex = $val['gender'];
+                    $customer->customer_birth = intval(strtotime($val['birthday']));
+                    $customer->customer_photo = '';
+                    $customer->customer_phone = $val['telphone'];
+                    $customer->customer_email = $val['email'];
 
-        $connectionNew->createCommand()->batchInsert('ejj_customer_platform', ['platform_name', 'pid', 'created_at', 'updated_at', 'is_del'], [
-            ['Android', 0, time(), 0, 0],
-            ['IOS', 0, time(), 0, 0],
-        ])->execute();
-        echo "customer_platform数据导入成功";
-        
-
-        if($userInfo){
-            foreach($userInfo as $val){
-                $customer = new Customer;
-                // $customer->id = $val['id'];
-                $customer->customer_name = $val['name'];
-                $customer->customer_sex = $val['gender'];
-                $customer->customer_birth = intval(strtotime($val['birthday']));
-                $customer->customer_photo = '';
-                $customer->customer_phone = $val['telphone'];
-                $customer->customer_email = $val['email'];
-
-                $customer->operation_area_id = 0;
-                $customer->operation_city_id = 0;
-                $customer->general_region_id = 1;
-                $customer->customer_live_address_detail = $val['street'];
-                
-                $customer->customer_balance = $val['charge_money'] + $val['reward_money'];
-                $customer->customer_score = 0;
-                $customer->customer_level = $val['level'];
-                $customer->customer_complaint_times = 0;
-                
-                $customer->customer_src = $val['user_src'];
-                $customer->channal_id = 1;
-                $customer->platform_id = 0;
-                $customer->customer_login_ip = '';
-                $customer->customer_login_time = 0;
-                $customer->customer_is_vip = $val['user_type'];
-                $customer->created_at = intval(strtotime($val['create_time']));
-                $customer->updated_at = intval(strtotime($val['update_time']));
-                $customer->is_del = $val['is_block'];
-                $customer->customer_del_reason = '辱骂阿姨';
-                $customer->validate();
-                if ($customer->hasErrors()) {
-                    var_dump($customer->getErrors());
-                    die();
-                }
-                $customer->save();
-                // $connectionNew->createCommand()->insert('ejj_customer', $customer)->execute();
-                
-                $customer_id = $customer->id;
-                $command = $connection->createCommand("SELECT * FROM user_address where user_id=".$val['id']." order by id asc");
-                $userAddress = $command->queryAll();
-                // var_dump($customer_id);
-                // var_dump($userAddress);
-                // exit();
-
-                foreach ($userAddress as $value) {
-                    $customerAddress = new CustomerAddress;
-                    $customerAddress->customer_id = $customer_id;
-                    $customerAddress->general_region_id = $customer->general_region_id;
-                    $customerAddress->customer_address_detail = $value['place_detail'];
-                    $customerAddress->customer_address_status = $value['is_hidden'];
-                    $customerAddress->customer_address_longitude = $value['lng'];
-                    $customerAddress->customer_address_latitude = $value['lat'];
-                    $customerAddress->customer_address_nickname = $customer->customer_name;
-                    $customerAddress->customer_address_phone = $customer->customer_phone;
-                    $customerAddress->created_at = intval(strtotime($value['create_time']));
-                    $customerAddress->updated_at = 0;
-                    $customerAddress->is_del = 0;
-                    if ($customerAddress->hasErrors()) {
+                    $customer->operation_area_id = 0;
+                    $customer->operation_city_id = 0;
+                    $customer->general_region_id = 1;
+                    $customer->customer_live_address_detail = $val['street'];
+                    
+                    $customer->customer_balance = $val['charge_money'];
+                    $customer->customer_score = 0;
+                    $customer->customer_level = $val['level'];
+                    $customer->customer_complaint_times = 0;
+                    
+                    $customer->customer_src = intval($val['user_src']);
+                    $customer->channal_id = 0;
+                    $customer->platform_id = 0;
+                    $customer->customer_login_ip = '';
+                    $customer->customer_login_time = 0;
+                    $customer->customer_is_vip = $val['user_type'];
+                    $customer->created_at = intval(strtotime($val['create_time']));
+                    $customer->updated_at = intval(strtotime($val['update_time']));
+                    $customer->is_del = $val['is_block'];
+                    $customer->customer_del_reason = '辱骂阿姨';
+                    $customer->validate();
+                    if ($customer->hasErrors()) {
                         var_dump($customer->getErrors());
                         die();
                     }
-                    $customerAddress->save();
+                    $customer->save();
+
+                    // $customer_id = $customer->id;
+                    // $command = $connection->createCommand("SELECT * FROM user_address where user_id=".$val['id']." order by id asc");
+                    // $userAddress = $command->queryAll();
+
+                    // foreach ($userAddress as $value) {
+                    //     $customerAddress = new CustomerAddress;
+                    //     $customerAddress->customer_id = $customer_id;
+                    //     $customerAddress->general_region_id = $customer->general_region_id;
+                    //     $customerAddress->customer_address_detail = $value['place_detail'];
+                    //     $customerAddress->customer_address_status = $value['is_hidden'];
+                    //     $customerAddress->customer_address_longitude = $value['lng'];
+                    //     $customerAddress->customer_address_latitude = $value['lat'];
+                    //     $customerAddress->customer_address_nickname = $customer->customer_name;
+                    //     $customerAddress->customer_address_phone = $customer->customer_phone;
+                    //     $customerAddress->created_at = intval(strtotime($value['create_time']));
+                    //     $customerAddress->updated_at = 0;
+                    //     $customerAddress->is_del = 0;
+                    //     if ($customerAddress->hasErrors()) {
+                    //         var_dump($customer->getErrors());
+                    //         die();
+                    //     }
+                    //     $customerAddress->save();
+                    // }
                 }
+                $curPageNo ++;
             }
         }
-        echo "customer数据导入成功";
+        // $connectionNew->createCommand()->batchInsert('ejj_customer_channal', ['channal_name', 'pid', 'created_at', 'updated_at', 'is_del'], [
+        //     ['美团', 0, time(), 0, 0],
+        //     ['大众', 0, time(), 0, 0],
+        //     ['支付宝', 0, time(), 0, 0],
+        // ])->execute();
+        // echo "customer_channal数据导入成功";
 
+        // $connectionNew->createCommand()->batchInsert('ejj_customer_platform', ['platform_name', 'pid', 'created_at', 'updated_at', 'is_del'], [
+        //     ['Android', 0, time(), 0, 0],
+        //     ['IOS', 0, time(), 0, 0],
+        // ])->execute();
+        // echo "customer_platform数据导入成功";
+        echo "<br/>customer数据导入成功";
     }
 
     public function actionTest(){

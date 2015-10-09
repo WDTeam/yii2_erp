@@ -59,7 +59,7 @@ class RoleController extends BaseAuthController
             $permissions = $this->preparePermissions(Yii::$app->request->post());
             if($model->createRole($permissions)) {
                 Yii::$app->session->setFlash('success', " '$model->name' " . Yii::t('app', 'successfully saved'));
-                return $this->redirect(['view', 'name' => $model->name]);
+                return $this->redirect(['view', 'id' => $model->name]);
             }
             else
             {
@@ -81,18 +81,19 @@ class RoleController extends BaseAuthController
         }
     }
 
-    public function actionUpdate($name)
+    public function actionUpdate($id)
     {
+        $name = $id;
         if($name == 'admin') {
             Yii::$app->session->setFlash('success', Yii::t('app', 'The Administrator has all permissions'));
-            return $this->redirect(['view', 'name' => $name]);
+            return $this->redirect(['view', 'id' => $name]);
         }
         $model = $this->findModel($name);
         if ($model->load(Yii::$app->request->post())) {
             $permissions = $this->preparePermissions(Yii::$app->request->post());
             if($model->updateRole($name, $permissions)) {
                 Yii::$app->session->setFlash('success', " '$model->name' " . Yii::t('app', 'successfully updated'));
-                return $this->redirect(['view', 'name' => $name]);
+                return $this->redirect(['view', 'id' => $name]);
             }
         } else {
             $permissions = $this->getPermissions();
@@ -105,8 +106,9 @@ class RoleController extends BaseAuthController
         }
     }
 
-    public function actionDelete($name)
+    public function actionDelete($id)
     {
+        $name = $id;
         if(!Yii::$app->user->can('deleteRole')) throw new HttpException(500, 'No Auth');
 
         if ($name) {
@@ -129,8 +131,9 @@ class RoleController extends BaseAuthController
         return $this->redirect(['index']);
     }
 
-    public function actionView($name)
+    public function actionView($id)
     {
+        $name = $id;
         $model = $this->findModel($name);
         $model->loadRolePermissions($name);
         $permissions = $this->getPermissions();

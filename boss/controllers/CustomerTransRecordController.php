@@ -4,6 +4,7 @@ namespace boss\controllers;
 
 use Yii;
 use common\models\CustomerTransRecord;
+use common\models\CustomerTransRecordLog;
 use boss\models\CustomerTransRecordSearch;
 use yii\rest\Controller;
 use yii\web\NotFoundHttpException;
@@ -33,7 +34,13 @@ class CustomerTransRecordController extends Controller
      */
     public function createRecord($data)
     {
-        if(!empty($data['scenario'])){
+        //验证之前将数据插入记录表
+        $model = new CustomerTransRecordLog();
+        $model->attributes = $data;
+        $model->validate();
+        $model->insert(false);
+
+        if(empty($data['scenario'])){
             return false;
         }
         $model = new CustomerTransRecord();
@@ -155,6 +162,7 @@ class CustomerTransRecordController extends Controller
             'customer_trans_record_order_total_money' => 50,  //订单总额
             'scenario' => 8
         );
-        $this->createRecord($data);
+        $state = $this->createRecord($data);
+        var_dump($state);
     }
 }

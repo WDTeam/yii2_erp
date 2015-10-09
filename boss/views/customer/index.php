@@ -14,7 +14,7 @@ use common\models\CustomerChannal;
 use common\models\CustomerAddress;
 
 use common\models\GeneralRegion;
-use common\models\Order;
+use common\models\OrderExtCustomer;
 
 /**
  * @var yii\web\View $this
@@ -135,8 +135,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'label' => '订单',
                 'value' => function ($dataProvider) {
-                    $order_count = order::find()->where(['customer_id'=>$dataProvider->id])->count();
-                    return '<a href="/order/index?OrderSearch[customer_id]='. $dataProvider->id .'">' . $order_count . '</a>';
+                    $order_count = OrderExtCustomer::find()->where(['customer_id'=>$dataProvider->id])->count();
+                    return '<a href="/order/index?OrderSearch[customer_id]='. $dataProvider->id .'">'.$order_count.'</a>';
                 },
                 'width' => "80px",
             ],

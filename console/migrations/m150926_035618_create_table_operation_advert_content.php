@@ -7,6 +7,8 @@ class m150926_035618_create_table_operation_advert_content extends Migration
 {
     public function up()
     {
+        $sql = 'DROP TABLE IF EXISTS {{%operation_advert_content}}';
+        $this->execute($sql);
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'广告内容表\'';
