@@ -2,17 +2,18 @@
 header ( 'Content-type:text/html;charset=utf-8' );
 include_once dirname(__FILE__).'/log.class.php';
 include_once dirname(__FILE__).'/SDKConfig.php';
-// ?????
-$log = new PhpLog ( SDK_LOG_FILE_PATH, "PRC", SDK_LOG_LEVEL );
+
+// 初始化日志
+//$log = new PhpLog ( SDK_LOG_FILE_PATH, "PRC", SDK_LOG_LEVEL );
 /**
- * ?? ?????????
+ * 数组 排序后转化为字体串
  *
- * @param array $params        	
+ * @param array $params
  * @return string
  */
 function coverParamsToString($params) {
 	$sign_str = '';
-	// ??
+	// 排序
 	ksort ( $params );
 	foreach ( $params as $key => $val ) {
 		if ($key == 'signature') {
@@ -24,9 +25,9 @@ function coverParamsToString($params) {
 	return substr ( $sign_str, 0, strlen ( $sign_str ) - 1 );
 }
 /**
- * ?????? ??
+ * 字符串转换为 数组
  *
- * @param unknown_type $str        	
+ * @param unknown_type $str
  * @return multitype:unknown
  */
 function coverStringToArray($str) {
@@ -48,18 +49,18 @@ function coverStringToArray($str) {
 	return $result;
 }
 /**
- * ?????? ?????? , ?????utf-8 ???utf-8
+ * 处理返回报文 解码客户信息 , 如果编码为utf-8 则转为utf-8
  *
- * @param unknown_type $params        	
+ * @param unknown_type $params
  */
 function deal_params(&$params) {
 	/**
-	 * ?? customerInfo
+	 * 解码 customerInfo
 	 */
 	if (! empty ( $params ['customerInfo'] )) {
 		$params ['customerInfo'] = base64_decode ( $params ['customerInfo'] );
 	}
-	
+
 	if (! empty ( $params ['encoding'] ) && strtoupper ( $params ['encoding'] ) == 'utf-8') {
 		foreach ( $params as $key => $val ) {
 			$params [$key] = iconv ( 'utf-8', 'UTF-8', $val );
@@ -68,58 +69,58 @@ function deal_params(&$params) {
 }
 
 /**
- * ???? ??java deflate
+ * 压缩文件 对应java deflate
  *
- * @param unknown_type $params        	
+ * @param unknown_type $params
  */
 function deflate_file(&$params) {
-	global $log;
+	//global $log;
 	foreach ( $_FILES as $file ) {
-		$log->LogInfo ( "---------????---------" );
+		//$log->LogInfo ( "---------处理文件---------" );
 		if (file_exists ( $file ['tmp_name'] )) {
 			$params ['fileName'] = $file ['name'];
-			
+
 			$file_content = file_get_contents ( $file ['tmp_name'] );
 			$file_content_deflate = gzcompress ( $file_content );
-			
+
 			$params ['fileContent'] = base64_encode ( $file_content_deflate );
-			$log->LogInfo ( "????????>" . base64_encode ( $file_content_deflate ) );
+			//$log->LogInfo ( "压缩后文件内容为>" . base64_encode ( $file_content_deflate ) );
 		} else {
-			$log->LogInfo ( ">>>>??????<<<<<" );
+			//$log->LogInfo ( ">>>>文件上传失败<<<<<" );
 		}
 	}
 }
 
 /**
- * ????????
+ * 处理报文中的文件
  *
- * @param unknown_type $params        	
+ * @param unknown_type $params
  */
 function deal_file($params) {
-	global $log;
+	//global $log;
 	if (isset ( $params ['fileContent'] )) {
-		$log->LogInfo ( "---------???????????---------" );
+		//$log->LogInfo ( "---------处理后台报文返回的文件---------" );
 		$fileContent = $params ['fileContent'];
-		
+
 		if (empty ( $fileContent )) {
-			$log->LogInfo ( '??????' );
+			//$log->LogInfo ( '文件内容为空' );
 		} else {
-			// ???? ???
+			// 文件内容 解压缩
 			$content = gzuncompress ( base64_decode ( $fileContent ) );
 			$root = SDK_FILE_DOWN_PATH;
 			$filePath = null;
 			if (empty ( $params ['fileName'] )) {
-				$log->LogInfo ( "?????" );
+				//$log->LogInfo ( "文件名为空" );
 				$filePath = $root . $params ['merId'] . '_' . $params ['batchNo'] . '_' . $params ['txnTime'] . '.txt';
 			} else {
 				$filePath = $root . $params ['fileName'];
 			}
 			$handle = fopen ( $filePath, "w+" );
 			if (! is_writable ( $filePath )) {
-				$log->LogInfo ( "??:" . $filePath . "????????" );
+				//$log->LogInfo ( "文件:" . $filePath . "不可写，请检查！" );
 			} else {
 				file_put_contents ( $filePath, $content );
-				$log->LogInfo ( "???? >:" . $filePath );
+				//$log->LogInfo ( "文件位置 >:" . $filePath );
 			}
 			fclose ( $handle );
 		}
@@ -127,7 +128,7 @@ function deal_file($params) {
 }
 
 /**
- * ????????
+ * 构造自动提交表单
  *
  * @param unknown_type $params
  * @param unknown_type $action

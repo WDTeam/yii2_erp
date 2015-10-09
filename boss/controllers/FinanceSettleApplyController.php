@@ -56,6 +56,183 @@ class FinanceSettleApplyController extends BaseAuthController
     }
     
     /**
+     * 自营全职阿姨审核列表
+     */
+    public function actionSelfFulltimeWorkerSettleIndex(){
+        $searchModel = new FinanceSettleApplySearch;
+        $defaultParams = array('finance_settle_apply_status' => FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT,
+                                 'worker_type_id'=>'2',
+                                 'finance_settle_apply_starttime' => $this->getFirstDayOfLastMonth(),
+                                 'finance_settle_apply_endtime' => $this->getLastDayOfLastMonth(),   
+                                );
+        $requestParams = Yii::$app->request->getQueryParams();
+        $newRequestParams = [];
+        if(isset($requestParams['FinanceSettleApplySearch'])){
+            $requestModel = $requestParams['FinanceSettleApplySearch'];
+            if(isset($requestModel['worder_tel'])){
+                $newRequestParams = array(
+                                        'worder_tel' =>$requestModel['worder_tel'],
+                                    );
+            }
+        }
+        $requestParams = array_merge($defaultParams,$newRequestParams);
+        $dataProvider = $searchModel->search(['FinanceSettleApplySearch'=>$requestParams]);
+//        $searchModel->settleMonth = date('Y-m', strtotime('-1 month'));
+        $searchModel->settleMonth = '2015-09';
+        return $this->render('selfFulltimeWorkerSettleIndex', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
+    
+    /**
+     * 自营全职阿姨审核结果
+     */
+    public function actionSelfFulltimeWorkerSettleDone(){
+        $searchModel = new FinanceSettleApplySearch;
+        $id = Yii::$app->request->getQueryParams()['id'];
+        $model = $this->findModel($id);
+        $financeSettleApplyStatus = Yii::$app->request->getQueryParams()['finance_settle_apply_status'];
+        $model->finance_settle_apply_status = $financeSettleApplyStatus;
+        $model->save();
+        $financeSettleApplyLogSearch = new FinanceSettleApplyLogSearch;
+        $financeSettleApplyLogSearch->finance_settle_apply_id = $id;
+        $financeSettleApplyLogSearch->finance_settle_apply_reviewer_id = Yii::$app->user->id;
+        $financeSettleApplyLogSearch->finance_settle_apply_reviewer = Yii::$app->user->identity->username;
+        $financeSettleApplyLogSearch->finance_settle_apply_node_id = abs($financeSettleApplyStatus);
+        $financeSettleApplyLogSearch->finance_settle_apply_node_des = $searchModel->financeSettleApplyStatusArr[$financeSettleApplyStatus];
+        $financeSettleApplyLogSearch->finance_settle_apply_is_passed = $financeSettleApplyStatus >0 ? 1:0;
+        $financeSettleApplyLogSearch->finance_settle_apply_reviewer_comment ="";
+        $financeSettleApplyLogSearch->created_at = time();
+        $financeSettleApplyLogSearch->save();
+        return $this->actionSelfFulltimeWorkerSettleIndex();
+    }
+    
+    /**
+     * 自营全职阿姨详细信息
+     * @return type
+     */
+    public function actionSelfFulltimeWorkerSettleView(){
+        $financeSettleApplySearch= new FinanceSettleApplySearch;
+        $requestModel = Yii::$app->request->getQueryParams();
+        if(isset($requestModel["FinanceSettleApplySearch"])){
+            $financeSettleApplySearch = $requestModel["FinanceSettleApplySearch"];
+        }
+//        $financeSettleApplySearch = $financeSettleApplySearch->getWorkerInfo($workerId);//获取阿姨的信息
+        $nonOrderIncomeSearchModel = new FinanceWorkerNonOrderIncomeSearch;
+        $nonOrderDataProvider = $nonOrderIncomeSearchModel->search(Yii::$app->request->getQueryParams());
+        $orderIncomeSearchModel = new FinanceWorkerOrderIncomeSearch;
+        $orderDataProvider = $orderIncomeSearchModel->search(Yii::$app->request->getQueryParams());
+        return $this->render('selfFulltimeWorkerSettleView', ['model'=>$financeSettleApplySearch,'nonOrderDataProvider'=>$nonOrderDataProvider,'orderDataProvider'=>$orderDataProvider]);
+    }
+    
+    /**
+     * 自营兼职阿姨审核列表
+     */
+    public function actionSelfParttimeWorkerSettleIndex(){
+        $searchModel = new FinanceSettleApplySearch;
+        $defaultParams = array('finance_settle_apply_status' => FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT,
+                                 'worker_type_id'=>'1',
+                                 'finance_settle_apply_starttime' => $this->getFirstDayOfLastMonth(),
+                                 'finance_settle_apply_endtime' => $this->getLastDayOfLastMonth(),   
+                                );
+        $requestParams = Yii::$app->request->getQueryParams();
+        $newRequestParams = [];
+        if(isset($requestParams['FinanceSettleApplySearch'])){
+            $requestModel = $requestParams['FinanceSettleApplySearch'];
+            if(isset($requestModel['worder_tel'])){
+                $newRequestParams = array(
+                                        'worder_tel' =>$requestModel['worder_tel'],
+                                    );
+            }
+        }
+        $requestParams = array_merge($defaultParams,$newRequestParams);
+        $dataProvider = $searchModel->search(['FinanceSettleApplySearch'=>$requestParams]);
+//        $searchModel->settleMonth = date('Y-m', strtotime('-1 month'));
+        $searchModel->settleMonth = '2015-09';
+        return $this->render('selfParttimeWorkerSettleIndex', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
+    
+    /**
+     * 自营兼职阿姨审核结果
+     */
+    public function actionSelfParttimeWorkerSettleDone(){
+        $searchModel = new FinanceSettleApplySearch;
+        $id = Yii::$app->request->getQueryParams()['id'];
+        $model = $this->findModel($id);
+        $financeSettleApplyStatus = Yii::$app->request->getQueryParams()['finance_settle_apply_status'];
+        $model->finance_settle_apply_status = $financeSettleApplyStatus;
+        $model->save();
+        $financeSettleApplyLogSearch = new FinanceSettleApplyLogSearch;
+        $financeSettleApplyLogSearch->finance_settle_apply_id = $id;
+        $financeSettleApplyLogSearch->finance_settle_apply_reviewer_id = Yii::$app->user->id;
+        $financeSettleApplyLogSearch->finance_settle_apply_reviewer = Yii::$app->user->identity->username;
+        $financeSettleApplyLogSearch->finance_settle_apply_node_id = abs($financeSettleApplyStatus);
+        $financeSettleApplyLogSearch->finance_settle_apply_node_des = $searchModel->financeSettleApplyStatusArr[$financeSettleApplyStatus];
+        $financeSettleApplyLogSearch->finance_settle_apply_is_passed = $financeSettleApplyStatus >0 ? 1:0;
+        $financeSettleApplyLogSearch->finance_settle_apply_reviewer_comment ="";
+        $financeSettleApplyLogSearch->created_at = time();
+        $financeSettleApplyLogSearch->save();
+        return $this->actionSelfFulltimeWorkerSettleIndex();
+    }
+    
+    /**
+     * 小家政阿姨审核列表
+     */
+    public function actionHomemakingParttimeWorkerSettleIndex(){
+        $searchModel = new FinanceSettleApplySearch;
+        $defaultParams = array('finance_settle_apply_status' => FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT,
+                                 'worker_type_id'=>'2',
+                                 'finance_settle_apply_starttime' => $this->getFirstDayOfLastMonth(),
+                                 'finance_settle_apply_endtime' => $this->getLastDayOfLastMonth(),   
+                                );
+        $requestParams = Yii::$app->request->getQueryParams();
+        $newRequestParams = [];
+        if(isset($requestParams['FinanceSettleApplySearch'])){
+            $requestModel = $requestParams['FinanceSettleApplySearch'];
+            if(isset($requestModel['worder_tel'])){
+                $newRequestParams = array(
+                                        'worder_tel' =>$requestModel['worder_tel'],
+                                    );
+            }
+        }
+        $requestParams = array_merge($defaultParams,$newRequestParams);
+        $dataProvider = $searchModel->search(['FinanceSettleApplySearch'=>$requestParams]);
+//        $searchModel->settleMonth = date('Y-m', strtotime('-1 month'));
+        $searchModel->settleMonth = '2015-09';
+        return $this->render('selfParttimeWorkerSettleIndex', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
+    
+    /**
+     * 小家政阿姨审核结果
+     */
+    public function actionHomemakingParttimeWorkerSettleDone(){
+        $searchModel = new FinanceSettleApplySearch;
+        $id = Yii::$app->request->getQueryParams()['id'];
+        $model = $this->findModel($id);
+        $financeSettleApplyStatus = Yii::$app->request->getQueryParams()['finance_settle_apply_status'];
+        $model->finance_settle_apply_status = $financeSettleApplyStatus;
+        $model->save();
+        $financeSettleApplyLogSearch = new FinanceSettleApplyLogSearch;
+        $financeSettleApplyLogSearch->finance_settle_apply_id = $id;
+        $financeSettleApplyLogSearch->finance_settle_apply_reviewer_id = Yii::$app->user->id;
+        $financeSettleApplyLogSearch->finance_settle_apply_reviewer = Yii::$app->user->identity->username;
+        $financeSettleApplyLogSearch->finance_settle_apply_node_id = abs($financeSettleApplyStatus);
+        $financeSettleApplyLogSearch->finance_settle_apply_node_des = $searchModel->financeSettleApplyStatusArr[$financeSettleApplyStatus];
+        $financeSettleApplyLogSearch->finance_settle_apply_is_passed = $financeSettleApplyStatus >0 ? 1:0;
+        $financeSettleApplyLogSearch->finance_settle_apply_reviewer_comment ="";
+        $financeSettleApplyLogSearch->created_at = time();
+        $financeSettleApplyLogSearch->save();
+        return $this->actionSelfFulltimeWorkerSettleIndex();
+    }
+    
+    /**
      * Lists all FinanceSettleApply models.
      * @return mixed
      */
@@ -172,16 +349,7 @@ class FinanceSettleApplyController extends BaseAuthController
             $model = $this->findModel($id);
             $model->finance_settle_apply_status = $financeSettleApplyStatus;
             $model->save();
-            $financeSettleApplyLogSearch = new FinanceSettleApplyLogSearch;
-            $financeSettleApplyLogSearch->finance_settle_apply_id = $id;
-            $financeSettleApplyLogSearch->finance_settle_apply_reviewer_id = Yii::$app->user->id;
-            $financeSettleApplyLogSearch->finance_settle_apply_reviewer = Yii::$app->user->identity->username;
-            $financeSettleApplyLogSearch->finance_settle_apply_node_id = abs($financeSettleApplyStatus);
-            $financeSettleApplyLogSearch->finance_settle_apply_node_des = $searchModel->financeSettleApplyStatusArr[$financeSettleApplyStatus];
-            $financeSettleApplyLogSearch->finance_settle_apply_is_passed = $financeSettleApplyStatus >0 ? 1:0;
-            $financeSettleApplyLogSearch->finance_settle_apply_reviewer_comment ="";
-            $financeSettleApplyLogSearch->created_at = time();
-            $financeSettleApplyLogSearch->save();
+            
         }
         return $this->actionIndex();
     }
@@ -239,18 +407,6 @@ class FinanceSettleApplyController extends BaseAuthController
         }
     }
 
-    /**
-     * Deletes an existing FinanceSettleApply model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
 
     /**
      * Finds the FinanceSettleApply model based on its primary key value.
@@ -269,9 +425,35 @@ class FinanceSettleApplyController extends BaseAuthController
     }
     
     /**
-    * 阿姨人工结算
+    * 阿姨人工结算详细信息
     */
     public function actionWorkerManualSettlementIndex(){
+        $financeSettleApplySearch= new FinanceSettleApplySearch;
+        $requestModel = Yii::$app->request->getQueryParams();
+        if(isset($requestModel["FinanceSettleApplySearch"])){
+            $financeSettleApplySearch = $requestModel["FinanceSettleApplySearch"];
+        }
+        $financeSettleApplySearch = $financeSettleApplySearch->getWorkerInfo(1234);//获取阿姨的信息
+        $searchModel = new FinanceWorkerOrderIncomeSearch;
+        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'dataProvider'=>$dataProvider]);
+    }
+    
+    /**
+     * 提交阿姨人工结算
+     * @return type
+     */
+    public function actionWorkerManualSettlementDone(){
+        $requestModel = Yii::$app->request->getQueryParams();
+        $financeSettleApplySearch = $requestModel["FinanceSettleApplySearch"];
+//        saveAndGenerateSettleData($partimeWorkerArr,$settleStartTime,$settleEndTime);
+        return $this->actionSelfFulltimeWorkerSettleIndex();
+    }
+    
+    /**
+    * 小家政人工结算
+    */
+    public function actionHomemakingManualSettlementIndex(){
         $financeSettleApplySearch= new FinanceSettleApplySearch;
         $requestModel = Yii::$app->request->getQueryParams();
         if(isset($requestModel["FinanceSettleApplySearch"])){
@@ -280,15 +462,10 @@ class FinanceSettleApplyController extends BaseAuthController
 //        $financeSettleApplySearch = $financeSettleApplySearch->getWorkerInfo($workerId);//获取阿姨的信息
         $searchModel = new FinanceWorkerOrderIncomeSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-        return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'dataProvider'=>$dataProvider]);
+        return $this->render('homemakingManualSettlementIndex', ['model'=>$financeSettleApplySearch,'dataProvider'=>$dataProvider]);
     }
     
-    public function actionWorkerManualSettlementDone(){
-        $requestModel = Yii::$app->request->getQueryParams();
-        $financeSettleApplySearch = $requestModel["FinanceSettleApplySearch"];
-//        saveAndGenerateSettleData($partimeWorkerArr,$settleStartTime,$settleEndTime);
-        return $this->redirect(['index']);
-    }
+    
     
     /**
     * 本文件是用于兼职阿姨每周（例如：2015.9.21-2015.9.27）的结算
@@ -319,13 +496,28 @@ class FinanceSettleApplyController extends BaseAuthController
     *   按收入类型分组的订单总金额，保存到结算表
     */
     public function actionFullTimeWorkerCycleSettlement(){
-        $settleStartTime = strtotime(date('Y-m-01 00:00:00', strtotime('-1 month')));//统计开始时间,上个月的第一天
+        $settleStartTime = $this->getFirstDayOfLastMonth();//统计开始时间,上个月的第一天
         echo date('Y-m-01 00:00:00', strtotime('-1 month')).'------';
-        $settleEndTime = strtotime(date('Y-m-t 23:59:59', strtotime('-1 month')));//统计结束时间,上个月的最后一天
+        $settleEndTime = $this->getLastDayOfLastMonth();//统计结束时间,上个月的最后一天
         echo date('Y-m-t 23:59:59', strtotime('-1 month')).'------';
         //获取阿姨的数组信息
         $partimeWorkerArr = array(['worker_id'=>'555','worker_name'=>'阿姨1','worker_idcard'=>'4210241983','worker_bank_card'=>'62217978'],['worker_id'=>'666','worker_name'=>'阿姨2','worker_idcard'=>'4210241984','worker_bank_card'=>'622174747']);
         $this->saveAndGenerateSettleData($partimeWorkerArr,$settleStartTime,$settleEndTime);
+    }
+    
+    /**
+     * 获取上个月的第一天
+     * @return type
+     */
+    private function getFirstDayOfLastMonth(){
+        return strtotime(date('Y-m-01 00:00:00', strtotime('-1 month')));
+    }
+    
+    /**
+     * 获取上个月的最后一天
+     */
+    private function getLastDayOfLastMonth(){
+        return strtotime(date('Y-m-t 23:59:59', strtotime('-1 month')));
     }
     
     private function saveAndGenerateSettleData($partimeWorkerArr,$settleStartTime,$settleEndTime){

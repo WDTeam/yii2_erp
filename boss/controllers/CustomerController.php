@@ -2,21 +2,23 @@
 
 namespace boss\controllers;
 use Yii;
-use common\models\Customer;
+//use common\models\Customer;
 use boss\models\CustomerSearch;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 use common\models\CustomerAddress;
-
 use common\models\CustomerPlatform;
 use common\models\CustomerChannal;
-
 use common\models\OperationCity;
 use common\models\GeneralRegion;
+use common\models\CustomerExtBalance;
+use common\models\CustomerExtScore;
 
-use common\models\Order;
+use common\models\OrderExtCustomer;
+use core\models\Customer;
+
 
 /**
  * CustomerController implements the CRUD actions for Customer model.
@@ -163,6 +165,7 @@ class CustomerController extends BaseAuthController
         $customerPlatform = CustomerPlatform::find()->where([
             'id'=>$model->platform_id
             ])->one();
+        $platform_name = $customerPlatform ? $customerPlatform->platform_name : '_';
         
         $platforms = [];
         $customerPlatforms = CustomerPlatform::find()->asArray()->all();
@@ -173,6 +176,7 @@ class CustomerController extends BaseAuthController
         $customerChannal = CustomerChannal::find()->where([
             'id'=>$model->channal_id
             ])->one();
+        $channal_name = $customerChannal ? $customerChannal->channal_name : '_';
         $channals = [];
         $customerChannals = CustomerChannal::find()->asArray()->all();
         foreach ($customerChannals as $k => $customerChannal) {
@@ -265,9 +269,17 @@ class CustomerController extends BaseAuthController
         // }
 
         //订单数量
-        $order_count = Order::find()->where([
+        $order_count = OrderExtCustomer::find()->where([
             'customer_id'=>$model->id
             ])->count();
+        //客户余额
+        $customerBalance = CustomerExtBalance::find()->where([
+            'customer_id'=>$model->id
+            ])->one();
+        if ($customerBalance == NULL) {
+            $customerBalance = new CustomerExtBalance;
+        }
+        
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -277,8 +289,10 @@ class CustomerController extends BaseAuthController
                 'searchModel'=>$searchModel,
                 'operationCity'=>$operationCity, 
                 'customerPlatform'=>$customerPlatform, 
+                'platform_name'=>$platform_name,
                 'platforms'=>$platforms,
                 'customerChannal'=>$customerChannal,
+                'channal_name'=>$channal_name,
                 'channals'=>$channals,
                 'generalRegion'=>$generalRegion,
                 // 'order_addresses'=>$order_addresses,
@@ -286,6 +300,7 @@ class CustomerController extends BaseAuthController
                 // 'others'=>$others,
                 'addressStr'=>$addressStr,
                 'order_count'=>$order_count,
+                'customerBalance'=>$customerBalance,
                 ]);
         }
     }
@@ -316,12 +331,27 @@ class CustomerController extends BaseAuthController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $customerBalance = CustomerExtBalance::find()->where([
+            'customer_id'=>$id,
+            ])->one();
+        if ($customerBalance == NULL) {
+            $customerBalance = new CustomerExtBalance;
+        }
+
+        $customerScore = CustomerExtScore::find()->where([
+            'customer_id'=>$id,
+            ])->one();
+        if ($customerScore == NULL) {
+            $customerScore = new CustomerExtScore;
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'customerBalance'=>$customerBalance,
+                'customerScore'=>$customerScore,
             ]);
         }
     }
@@ -357,99 +387,113 @@ class CustomerController extends BaseAuthController
 
     public function actionData(){
 
-        // $operationArea = new Operation\OperationArea();
-
         $connectionNew =  \Yii::$app->db;
-        
-
         $connection = new \yii\db\Connection([
             'dsn' => 'mysql:host=rdsh52vh252q033a4ci5.mysql.rds.aliyuncs.com;dbname=sq_ejiajie_v2',
             'username' => 'sq_ejiajie',
             'password' => 'test_sq_ejiajie',
         ]);
         $connection->open();
-        $command = $connection->createCommand("SELECT * FROM user_info order by id asc limit 40");
-        $userInfo = $command->queryAll();
-        // $cityConfigArr=['北京'=>110100,'上海'=>310100,'广州'=>440100,'深圳'=>440300,'成都'=>510100,'南京'=>320100,'合肥'=>340100,'武汉'=>420100,'杭州'=>330100,'哈尔滨'=>230100,'青岛'=>370200,'太原'=>140100,'天津'=>120100,'长沙'=>430100,'沈阳'=>210100,'济南'=>370100,'石家庄'=>130100];
+        $command = $connection->createCommand("SELECT count(*) FROM user_info");
+        $count = $command->queryScalar();
+        echo "<br/>顾客总记录数为" . $count;
+        $numPerPage = 20;
+        $curPageNo = 1;
+        $totalPage = $count <= 0 ? 0 : floor($count / $numPerPage) + 1;
+        if ($totalPage > 0) {
+            echo "<br/>正在导入数据。。。";
+            while ($curPageNo <= 30) {
+                $start = $numPerPage * ($curPageNo - 1);
+                $command = $connection->createCommand("SELECT * FROM user_info order by charge_money desc limit ".$start.", ".$numPerPage);
+                $userInfo = $command->queryAll();
 
-        
-        $connectionNew->createCommand()->batchInsert('ejj_customer_channal', ['channal_name', 'pid', 'created_at', 'updated_at', 'is_del'], [
-            ['美团', 0, time(), 0, 0],
-            ['大众', 0, time(), 0, 0],
-            ['支付宝', 0, time(), 0, 0],
-        ])->execute();
-        echo "customer_channal数据导入成功";
+                foreach($userInfo as $val){
+                    $customer = new Customer;
+                    // $customer->id = $val['id'];
+                    $customer->customer_name = $val['name'];
+                    $customer->customer_sex = $val['gender'];
+                    $customer->customer_birth = intval(strtotime($val['birthday']));
+                    $customer->customer_photo = '';
+                    $customer->customer_phone = $val['telphone'];
+                    $customer->customer_email = $val['email'];
 
-        $connectionNew->createCommand()->batchInsert('ejj_customer_platform', ['platform_name', 'pid', 'created_at', 'updated_at', 'is_del'], [
-            ['Android', 0, time(), 0, 0],
-            ['IOS', 0, time(), 0, 0],
-        ])->execute();
-        echo "customer_platform数据导入成功";
-        
+                    $customer->operation_area_id = 0;
+                    $customer->operation_city_id = 0;
+                    $customer->general_region_id = 1;
+                    $customer->customer_live_address_detail = $val['street'];
+                    
+                    $customer->customer_balance = $val['charge_money'];
+                    $customer->customer_score = 0;
+                    $customer->customer_level = $val['level'];
+                    $customer->customer_complaint_times = 0;
+                    
+                    $customer->customer_src = intval($val['user_src']);
+                    $customer->channal_id = 0;
+                    $customer->platform_id = 0;
+                    $customer->customer_login_ip = '';
+                    $customer->customer_login_time = 0;
+                    $customer->customer_is_vip = $val['user_type'];
+                    $customer->created_at = intval(strtotime($val['create_time']));
+                    $customer->updated_at = intval(strtotime($val['update_time']));
+                    $customer->is_del = $val['is_block'];
+                    $customer->customer_del_reason = '辱骂阿姨';
+                    $customer->validate();
+                    if ($customer->hasErrors()) {
+                        var_dump($customer->getErrors());
+                        die();
+                    }
+                    $customer->save();
 
+                    // $customer_id = $customer->id;
+                    // $command = $connection->createCommand("SELECT * FROM user_address where user_id=".$val['id']." order by id asc");
+                    // $userAddress = $command->queryAll();
 
-        if($userInfo){
-            foreach($userInfo as $val){
-                // $customer['id'] = intval($val['id']);
-                $customer['customer_name'] = $val['name'];
-                $customer['customer_sex'] = $val['gender'];
-                $customer['customer_birth'] = 0;
-                $customer['customer_photo'] = '';
-                $customer['customer_phone'] = $val['telphone'];
-                $customer['customer_email'] = $val['email'];
-
-                $customer['operation_area_id'] = 0;
-                $customer['operation_city_id'] = 0;
-                $customer['general_region_id'] = 0;
-                $customer['customer_live_address_detail'] = '';
-                
-                $customer['customer_balance'] = 300;
-                $customer['customer_score'] = 30000;
-                $customer['customer_level'] = $val['level'];
-                $customer['customer_complaint_times'] = 0;
-                
-                $customer['customer_src'] = $val['user_src'];
-                $customer['channal_id'] = 1;
-                $customer['platform_id'] = 0;
-                $customer['customer_login_ip'] = '';
-                $customer['customer_login_time'] = 0;
-                $customer['customer_is_vip'] = 1;
-                $customer['created_at'] = strtotime($val['create_time']);
-                $customer['updated_at'] = strtotime($val['update_time']);
-                $customer['is_del'] = $val['is_block'];
-                $customer['customer_del_reason'] = '辱骂阿姨';
-
-                $connectionNew->createCommand()->insert('ejj_customer', $customer)->execute();
-                
-                $customer_id = 1;
-
-                $customerAddress['customer_id'] = $customer_id;
-                $customerAddress['general_region_id'] = $customer['general_region_id'];
-                $customerAddress['customer_address_detail'] = $customer['customer_live_address_detail'];
-                $customerAddress['customer_address_status'] = 1;
-                $customerAddress['customer_address_longitude'] = '';
-                $customerAddress['customer_address_latitude'] = '';
-                $customerAddress['customer_address_nickname'] = $customer['customer_name'];
-                $customerAddress['customer_address_phone'] = $customer['customer_phone'];
-                $customerAddress['created_at'] = time();
-                $customerAddress['updated_at'] = 0;
-                $customerAddress['is_del'] = 0;
-
-                $connectionNew->createCommand()->insert('ejj_customer_address', $customerAddress)->execute();
-
-                $customerWorker['customer_id'] = $customer_id;
-                // $customerWorker['worker_id'] = 0;
-                $customerWorker['customer_worker_status'] = 1;
-                $customerWorker['created_at'] = time();
-                $customerWorker['updated_at'] = 0;
-                $customerWorker['is_del'] = 0;
-
-                $connectionNew->createCommand()->insert('ejj_customer_worker', $customerWorker)->execute();
-
+                    // foreach ($userAddress as $value) {
+                    //     $customerAddress = new CustomerAddress;
+                    //     $customerAddress->customer_id = $customer_id;
+                    //     $customerAddress->general_region_id = $customer->general_region_id;
+                    //     $customerAddress->customer_address_detail = $value['place_detail'];
+                    //     $customerAddress->customer_address_status = $value['is_hidden'];
+                    //     $customerAddress->customer_address_longitude = $value['lng'];
+                    //     $customerAddress->customer_address_latitude = $value['lat'];
+                    //     $customerAddress->customer_address_nickname = $customer->customer_name;
+                    //     $customerAddress->customer_address_phone = $customer->customer_phone;
+                    //     $customerAddress->created_at = intval(strtotime($value['create_time']));
+                    //     $customerAddress->updated_at = 0;
+                    //     $customerAddress->is_del = 0;
+                    //     if ($customerAddress->hasErrors()) {
+                    //         var_dump($customer->getErrors());
+                    //         die();
+                    //     }
+                    //     $customerAddress->save();
+                    // }
+                }
+                $curPageNo ++;
             }
-
         }
-        echo "customer数据导入成功";
+        // $connectionNew->createCommand()->batchInsert('ejj_customer_channal', ['channal_name', 'pid', 'created_at', 'updated_at', 'is_del'], [
+        //     ['美团', 0, time(), 0, 0],
+        //     ['大众', 0, time(), 0, 0],
+        //     ['支付宝', 0, time(), 0, 0],
+        // ])->execute();
+        // echo "customer_channal数据导入成功";
+
+        // $connectionNew->createCommand()->batchInsert('ejj_customer_platform', ['platform_name', 'pid', 'created_at', 'updated_at', 'is_del'], [
+        //     ['Android', 0, time(), 0, 0],
+        //     ['IOS', 0, time(), 0, 0],
+        // ])->execute();
+        // echo "customer_platform数据导入成功";
+        echo "<br/>customer数据导入成功";
+    }
+
+    public function actionTest(){
+        // $customer = new Customer;
+        // $res = $customer->decBalance(1, 0.01);
+        // var_dump($res);
+
+        $test = new Customer;
+        $info = $test->getCustomerInfo('1391032906');
+        var_dump($info);
 
     }
 }

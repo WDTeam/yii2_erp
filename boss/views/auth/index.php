@@ -1,25 +1,32 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
+use yii\widgets\Pjax;
 
-/* @var $this yii\web\View */
-/* @var $searchModel boss\models\search\AuthSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+/**
+ * @var yii\web\View $this
+ * @var yii\data\ActiveDataProvider $dataProvider
+ * @var boss\models\search\AuthSearch $searchModel
+ */
 
 $this->title = Yii::t('app', 'Auths');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="auth-index">
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Create Auth'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?= GridView::widget([
+    <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+//         'filterModel' => $searchModel,
+        'toolbar' =>[
+            'content'=>Html::a('<i class="glyphicon glyphicon-plus"></i>', [
+                'auth/create'
+            ], [
+                'class' => 'btn btn-default',
+                'title' => Yii::t('app', '添加授权项')
+            ]),
+        ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -28,14 +35,29 @@ $this->params['breadcrumbs'][] = $this->title;
             'description:ntext',
 //             'rule_name',
 //             'data:ntext',
-            // 'created_at',
-            // 'updated_at',
+//            'created_at', 
+//            'updated_at', 
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template'=>'{update} {delete}'
+                'template'=>'{update} {delete}',
             ],
         ],
-    ]); ?>
+        'responsive'=>true,
+        'hover'=>true,
+        'condensed'=>true,
+        'floatHeader'=>true,
+
+
+
+
+        'panel' => [
+            'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
+            'type'=>'info',
+            'after'=>false,
+            'before'=>'',
+            'showFooter'=>false
+        ],
+    ]); Pjax::end(); ?>
 
 </div>

@@ -54,9 +54,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'principal',
             'tel',
             [
-                'attribute'=>'create_at',
+                'attribute'=>'created_at',
                 'value'=>function($model){
-                        return date('Y-m-d', $model->create_at);
+                        return date('Y-m-d', $model->created_at);
                 },
                 'filter'=>false,
             ],

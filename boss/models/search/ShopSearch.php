@@ -15,7 +15,7 @@ class ShopSearch extends Shop
     public function rules()
     {
         return [
-            [['id', 'shop_manager_id', 'province_id', 'city_id', 'county_id', 'create_at', 'update_at', 'is_blacklist', 'audit_status', 'worker_count', 'complain_coutn'], 'integer'],
+            [['id', 'shop_manager_id', 'province_id', 'city_id', 'county_id', 'created_at', 'updated_at', 'is_blacklist', 'audit_status', 'worker_count', 'complain_coutn'], 'integer'],
             [['name', 'street', 'principal', 'tel', 'other_contact', 'bankcard_number', 'account_person', 'opening_bank', 'sub_branch', 'opening_address', 'level'], 'safe'],
         ];
     }
@@ -44,8 +44,8 @@ class ShopSearch extends Shop
             'province_id' => $this->province_id,
             'city_id' => $this->city_id,
             'county_id' => $this->county_id,
-            'create_at' => $this->create_at,
-            'update_at' => $this->update_at,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
             'is_blacklist' => $this->is_blacklist,
 //             'blacklist_time' => $this->blacklist_time,
             'audit_status' => $this->audit_status,

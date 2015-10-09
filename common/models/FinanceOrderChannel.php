@@ -49,4 +49,27 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
             'is_del' => Yii::t('boss', '0 正常 1 删除'),
         ];
     }
+    
+    /**
+    * 获取订单渠道列表
+    * @date: 2015-10-9
+    * @author: peak pan
+    * @return:
+    **/
+    
+    public static function get_order_channel_list()
+    {
+    	if(\Yii::$app->cache->exists('orderchannellist')){
+        $orderchannellist= \Yii::$app->cache->get('orderchannellist');
+    	return json_decode($orderchannellist,true);
+	    }else{ 
+	    	$ordewhere['is_del']=0;
+	    	$ordewhere['finance_order_channel_is_lock']=1;
+	    	$payatainfo=FinanceOrderChannel::find()->select('id,finance_order_channel_name')->where($ordewhere)->asArray()->all();
+	    	\Yii::$app->cache->set('orderchannellist', json_encode($payatainfo));
+	    	return $payatainfo;
+	  }
+    }
+    
+    
 }

@@ -9,14 +9,16 @@ use Yii;
  *
  * @property integer $id
  * @property string $order_status_name
- * @property string $order_status_alias
+ * @property string $order_status_customer
+ * @property string $order_status_worker
  * @property string $created_at
  * @property string $updated_at
  * @property integer $isdel
  */
-class OrderStatusDict extends ActiveRecord
+class OrderStatusDict extends \common\models\ActiveRecord
 {
-    const ORDER_INIT=1;
+    const ORDER_INIT = 1;
+    const ORDER_IS_PAY = 2;
     /**
      * @inheritdoc
      */
@@ -33,7 +35,7 @@ class OrderStatusDict extends ActiveRecord
         return [
             [['order_status_name'], 'required'],
             [['created_at', 'updated_at', 'isdel'], 'integer'],
-            [['order_status_name', 'order_status_alias'], 'string', 'max' => 255]
+            [['order_status_name', 'order_status_customer', 'order_status_worker'], 'string', 'max' => 255]
         ];
     }
 
@@ -44,8 +46,9 @@ class OrderStatusDict extends ActiveRecord
     {
         return [
             'id' => 'ID',
-            'order_status_name' => '状态名称服务端',
-            'order_status_alias' => '状态名称客户端',
+            'order_status_name' => '状态名称',
+            'order_status_customer' => '客户端状态名称',
+            'order_status_worker' => '阿姨端状态名称',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'isdel' => 'Isdel',

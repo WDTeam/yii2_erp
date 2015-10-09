@@ -21,7 +21,6 @@ use yii\helpers\ArrayHelper;
  */
 class SystemUser extends \common\models\SystemUser
 {
-    public $password;
     public $repassword;
     private $_statusLabel;
     private $_roleLabel;
@@ -90,8 +89,19 @@ class SystemUser extends \common\models\SystemUser
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
 
             // Status
-            ['role', 'in', 'range' => array_keys(self::getArrayRole())],
+            ['roles', 'validateRole'],
         ];
+    }
+    /**
+     * role 验证规则
+     * @see \common\models\SystemUser::validateRole()
+     */
+    public function validateRole($attribute, $params)
+    {
+//         array_keys(self::getArrayRole());
+        if (!$this->hasErrors()) {
+            
+        }
     }
 
     /**
@@ -99,10 +109,10 @@ class SystemUser extends \common\models\SystemUser
      */
     public function scenarios()
     {
-        return [
-            'admin-create' => ['username', 'email', 'password', 'repassword', 'status', 'role'],
-            'admin-update' => ['username', 'email', 'password', 'repassword', 'status', 'role']
-        ];
+        return array_merge(parent::scenarios(),[
+//             'admin-create' => ['username', 'email', 'password', 'repassword', 'status', 'role'],
+//             'admin-update' => ['username', 'email', 'password', 'repassword', 'status', 'role']
+        ]);
     }
 
     /**
@@ -119,21 +129,5 @@ class SystemUser extends \common\models\SystemUser
                 'repassword' => Yii::t('app', '确认密码')
             ]
         );
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function beforeSave($insert)
-    {
-        if (parent::beforeSave($insert)) {
-            if ($this->isNewRecord || (!$this->isNewRecord && $this->password)) {
-                $this->setPassword($this->password);
-                $this->generateAuthKey();
-                $this->generatePasswordResetToken();
-            }
-            return true;
-        }
-        return false;
     }
 }

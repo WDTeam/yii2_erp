@@ -13,6 +13,7 @@ class m150921_101649_create_table_worker_block_log extends Migration
         }
         $this->createTable('{{%worker_block_log}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT COMMENT \'阿姨封号表日志id\'' ,
+            'worker_id',Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'阿姨id\'',
             'worker_block_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'封号表id\'',
             'worker_block_operate_type' => Schema::TYPE_INTEGER. '(2) DEFAULT NULL COMMENT \'操作类型 1创建阿姨封号2缩短封号时间3延长封号时间4关闭封号\'',
             'worker_block_operate_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'操作管理员id  0系统操作(到达解封时间，系统自动解封)\'',

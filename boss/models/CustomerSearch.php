@@ -17,9 +17,9 @@ class CustomerSearch extends Customer
     public function rules()
     {
         return [
-            [['id', 'customer_sex', 'customer_birth', 'operation_area_id', 'operation_city_id', 'general_region_id', 'customer_score', 'customer_level', 'customer_complaint_times', 'customer_src', 'channal_id', 'platform_id', 'customer_login_time', 'customer_is_vip', 'is_del'], 'integer'],
+            [['id', 'customer_sex', 'customer_birth', 'operation_area_id', 'operation_city_id', 'general_region_id', 'customer_level', 'customer_complaint_times', 'customer_src', 'channal_id', 'platform_id', 'customer_login_time', 'customer_is_vip', 'is_del', 'created_at'], 'integer'],
             [['customer_name', 'customer_photo', 'customer_phone', 'customer_email', 'customer_live_address_detail', 'customer_login_ip', 'customer_del_reason'], 'safe'],
-            [['customer_balance'], 'number'],
+            [['time_begin', 'time_end'], 'date'],
         ];
     }
 
@@ -48,8 +48,6 @@ class CustomerSearch extends Customer
             'operation_area_id' => $this->operation_area_id,
             'operation_city_id' => $this->operation_city_id,
             'general_region_id' => $this->general_region_id,
-            'customer_balance' => $this->customer_balance,
-            'customer_score' => $this->customer_score,
             'customer_level' => $this->customer_level,
             'customer_complaint_times' => $this->customer_complaint_times,
             'customer_src' => $this->customer_src,
@@ -72,22 +70,11 @@ class CustomerSearch extends Customer
             ->andFilterWhere(['like', 'customer_live_address_detail', $this->customer_live_address_detail])
             ->andFilterWhere(['like', 'customer_login_ip', $this->customer_login_ip])
             ->andFilterWhere(['like', 'customer_del_reason', $this->customer_del_reason]);
-            
-         // $query->andFilterWhere(['>', 'created_at', strtotime($this->time_begin)])
-         //    ->andFilterWhere(['<', 'created_at', strtotime($this->time_end)]);
-
-            // var_dump($params);
-            // var_dump($this->time_begin);
-            // var_dump($this->time_end);
-            // exit();
-        if (strtotime($this->time_end) > 0) {
-            // var_dump($params);
-            // var_dump($this->time_begin);
-            // var_dump($this->time_end);
-            // exit();
+        if ($this->time_begin && $this->time_end) {
             $query->andFilterWhere(['>', 'created_at', strtotime($this->time_begin)])
             ->andFilterWhere(['<', 'created_at', strtotime($this->time_end)]);
         }
+
 
         $query->orFilterWhere(['like', 'customer_name', $this->customer_name])
             ->orFilterWhere(['like', 'customer_phone', $this->customer_name]);

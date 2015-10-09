@@ -10,6 +10,7 @@ namespace boss\models\order;
 
 use Yii;
 use core\models\order\Order as OrderModel;
+use core\models\worker\Worker;
 
 
 class Order extends OrderModel
@@ -18,17 +19,12 @@ class Order extends OrderModel
     public $orderBookedDate;
     public $orderBookedTimeRange;
 
-    public function getOrderChannelList($channel_id = 0)
+
+    public static function getWorkerInfoByPhone($phone)
     {
-        $channel = [1 => 'BOSS', 2 => '美团', 3 => '大众点评'];
-        return $channel_id == 0 ? $channel : (isset($channel[$channel_id]) ? $channel[$channel_id] : false);
+        return Worker::getWorkerInfoByPhone($phone);
     }
 
-    public function getServiceList($service_id = 0)
-    {
-        $service = [1 => '家庭保洁', 2 => '新居开荒', 3 => '擦玻璃'];
-        return $service_id == 0 ? $service : (isset($service[$service_id]) ? $service[$service_id] : false);
-    }
 
     public function getOrderBookedCountList()
     {
@@ -47,54 +43,6 @@ class Order extends OrderModel
         return $order_booked_time_range;
     }
 
-    public function getOrderSrcName($id)
-    {
-        return OrderSrc::findOne($id)->order_src_name;
-    }
-
-    public function getCouponById($id)
-    {
-        $coupon = [
-            1 => [
-                "id" => 1,
-                "coupon_name" => "优惠券30",
-                "coupon_money" => 30
-            ],
-            2 => [
-                "id" => 2,
-                "coupon_name" => "优惠券30",
-                "coupon_money" => 30
-            ],
-            3 => [
-                "id" => 3,
-                "coupon_name" => "优惠券30",
-                "coupon_money" => 30
-            ]
-        ];
-        return $coupon[$id];
-    }
-    public function getCardById($id)
-    {
-        $card = [
-            1 => [
-                "id" => 1,
-                "card_code" => "1234567890",
-                "card_money" => 1000
-            ],
-            2 => [
-                "id" => 2,
-                "coupon_name" => "9876543245",
-                "coupon_money" => 3000
-            ],
-            3 => [
-                "id" => 3,
-                "coupon_name" => "3840959205",
-                "coupon_money" => 5000
-            ]
-        ];
-        return $card[$id];
-    }
-
     /**
      * @inheritdoc
      */
@@ -104,6 +52,46 @@ class Order extends OrderModel
             'orderBookedDate' => '预约服务日期',
             'orderBookedTimeRange' => '预约服务时间',
         ];
+    }
+
+
+    public function createNew($post)
+    {
+        $post['Order']['admin_id'] = Yii::$app->user->id;
+        $post['Order']['order_ip'] = ip2long(Yii::$app->request->userIP);
+        $post['Order']['order_src_id'] = 1; //订单来源BOSS
+        //预约时间处理
+        $time = explode('-',$post['Order']['orderBookedTimeRange']);
+        $post['Order']['order_booked_begin_time'] = strtotime($post['Order']['orderBookedDate'].' '.$time[0].':00');
+        $post['Order']['order_booked_end_time'] = strtotime(($time[1]=='24:00')?date('Y-m-d H:i:s',strtotime($post['Order']['orderBookedDate'].'00:00:00 +1 days')):$post['Order']['orderBookedDate'].' '.$time[1].':00');
+        if(parent::createNew($post['Order'])){ //创建成功后进行支付
+            switch($post['Order']['order_pay_type']){
+                case self::ORDER_PAY_TYPE_OFF_LINE://现金支付
+                        $order = Order::findOne($this->id);
+                        $order->admin_id = $post['Order']['admin_id'];
+                        $order->order_ip = $post['Order']['order_ip'];
+                        return self::isPaymentOffLine($order);
+                    break;
+                case self::ORDER_PAY_TYPE_ON_LINE://线上支付
+
+                    break;
+                case self::ORDER_PAY_TYPE_POP://第三方预付
+                    $order = Order::findOne($this->id);
+                    $order->admin_id = $post['Order']['admin_id'];
+                    $order->order_ip = $post['Order']['order_ip'];
+
+                    $order->channel_id = $post['Order']['channel_id'];
+                    $order->order_pop_group_buy_code = $post['Order']['order_pop_group_buy_code'];
+                    $order->order_pop_order_code = $post['Order']['order_pop_order_code'];
+                    $order->order_pop_order_money = $post['Order']['order_pop_order_money'];
+                    $order->order_pop_operation_money = $post['Order']['order_money'] - $post['Order']['order_pop_order_money'];
+                    return self::isPaymentPop($order);
+                    break;
+                default:break;
+
+            }
+        }
+        return false;
     }
 
 }

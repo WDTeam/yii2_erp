@@ -33,8 +33,9 @@ class AuthController extends BaseAuthController
     public function actionIndex()
     {
         $searchModel = new AuthSearch();
+        $searchModel->load(Yii::$app->request->queryParams);
         $searchModel->type = Auth::TYPE_PERMISSION;
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search();
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

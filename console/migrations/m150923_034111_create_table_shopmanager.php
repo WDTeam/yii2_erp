@@ -7,13 +7,13 @@ class m150923_034111_create_table_shopmanager extends Migration
 {
     public function up()
     {
-        \Yii::$app->db->createCommand("
+        $this->execute("
             CREATE TABLE IF NOT EXISTS {{%shop_manager}} (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `name` varchar(255) NOT NULL COMMENT '家政名称',
-              `province_name` varchar(50) NOT NULL COMMENT '省份',
-              `city_name` varchar(50) NOT NULL COMMENT '城市',
-              `county_name` varchar(50) DEFAULT NULL COMMENT '县',
+              `province_id` int(11) DEFAULT NULL COMMENT '省份ID',
+              `city_id` int(11) DEFAULT NULL COMMENT '城市ID',
+              `county_id` int(11) DEFAULT NULL COMMENT '区县ID',
               `street` varchar(255) NOT NULL COMMENT '办公街道',
               `principal` varchar(50) NOT NULL COMMENT '负责人',
               `tel` varchar(50) NOT NULL COMMENT '电话',
@@ -34,19 +34,19 @@ class m150923_034111_create_table_shopmanager extends Migration
               `bl_expiry_start` int(11) DEFAULT NULL COMMENT '有效期起始时间',
               `bl_expiry_end` int(11) DEFAULT NULL COMMENT '有效期结束时间',
               `bl_business` text COMMENT '营业范围',
-              `create_at` int(11) DEFAULT '0' COMMENT '创建时间',
-              `update_at` int(11) DEFAULT '0' COMMENT '修改时间',
+              `created_at` int(11) DEFAULT '0' COMMENT '创建时间',
+              `updated_at` int(11) DEFAULT '0' COMMENT '修改时间',
               `is_blacklist` int(3) DEFAULT NULL COMMENT '是否是黑名单：0正常，1黑名单',
               `audit_status` tinyint(1) DEFAULT NULL COMMENT '审核状态：0未审核，1通过，2不通过',
               `shop_count` int(11) DEFAULT NULL COMMENT '门店数量',
               `worker_count` int(11) DEFAULT NULL COMMENT '阿姨数量',
               `complain_coutn` int(11) DEFAULT NULL COMMENT '投诉数量',
               `level` varchar(50) DEFAULT NULL COMMENT '评级',
-              `is_deleted` tinyint(1) DEFAULT NULL COMMENT '是否删除',
+              `isdel` tinyint(1) DEFAULT NULL COMMENT '是否删除',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
-        ")->execute();
+        ");
     }
 
     public function down()

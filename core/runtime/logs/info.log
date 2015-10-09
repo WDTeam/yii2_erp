@@ -1,0 +1,329 @@
+2015-09-24 15:46:36 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-24 15:46:36 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+2015-09-24 15:46:36 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-24 15:46:36 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: debug
+2015-09-24 15:46:36 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\debug\Module::bootstrap()
+2015-09-24 15:46:36 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: gii
+2015-09-24 15:46:36 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\gii\Module::bootstrap()
+2015-09-24 15:46:36 [127.0.0.1][-][-][trace][yii\web\UrlManager::parseRequest] No matching URL rules. Using default URL parsing logic.
+2015-09-24 15:46:36 [127.0.0.1][-][-][trace][yii\web\Application::handleRequest] Route requested: ''
+2015-09-24 15:46:36 [127.0.0.1][-][-][trace][yii\base\Controller::runAction] Route to run: site/index
+2015-09-24 15:46:36 [127.0.0.1][-][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: user not logged in.
+2015-09-24 15:46:36 [127.0.0.1][-][-][trace][yii\base\InlineAction::runWithParams] Running action: core\controllers\SiteController::actionIndex()
+2015-09-24 15:46:36 [127.0.0.1][-][-][info][application] $_SERVER = [
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\windows\\system32;C:\\windows;C:\\windows\\System32\\Wbem;C:\\windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;C:\\Program Files (x86)\\Common Files\\lenovo\\easyplussdk\\bin;C:\\ProgramData\\Lenovo\\ReadyApps;C:\\Program Files\\TortoiseGit\\bin;C:\\wamp\\bin\\php\\php5.5.12;C:\\ProgramData\\ComposerSetup\\bin;C:\\phpstudy\\php56n\\;C:\\Program Files (x86)\\SSH Communications Security\\SSH Secure Shell;C:\\phpstudy\\php56n\\php.exe'
+    'SYSTEMROOT' => 'C:\\windows'
+    'COMSPEC' => 'C:\\windows\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\windows'
+    'PHP_FCGI_MAX_REQUESTS' => '1000'
+    'PHPRC' => 'C:/phpstudy/php56n'
+    '_FCGI_SHUTDOWN_EVENT_' => '1876'
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/'
+    'QUERY_STRING' => ''
+    'REQUEST_METHOD' => 'GET'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'REMOTE_PORT' => '61700'
+    'SCRIPT_FILENAME' => 'C:/phpstudy/WWW/ejj-enterprise-boss/core/web/index.php'
+    'SERVER_ADMIN' => 'admin@phpStudy.net'
+    'CONTEXT_DOCUMENT_ROOT' => 'C:/phpstudy/WWW/ejj-enterprise-boss/core/web'
+    'CONTEXT_PREFIX' => ''
+    'REQUEST_SCHEME' => 'http'
+    'DOCUMENT_ROOT' => 'C:/phpstudy/WWW/ejj-enterprise-boss/core/web'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_NAME' => 'core.me'
+    'SERVER_SOFTWARE' => 'Apache/2.4.10 (Win32) OpenSSL/1.0.1i mod_fcgid/2.3.9'
+    'SERVER_SIGNATURE' => ''
+    'SystemRoot' => 'C:\\windows'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_CONNECTION' => 'close'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0'
+    'HTTP_HOST' => 'core.me'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1443080796.5879
+    'REQUEST_TIME' => 1443080796
+]
+2015-09-24 15:51:41 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-24 15:51:41 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+2015-09-24 15:51:41 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-24 15:51:41 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: debug
+2015-09-24 15:51:41 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\debug\Module::bootstrap()
+2015-09-24 15:51:41 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: gii
+2015-09-24 15:51:41 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\gii\Module::bootstrap()
+2015-09-24 15:51:41 [127.0.0.1][-][-][trace][yii\web\UrlManager::parseRequest] No matching URL rules. Using default URL parsing logic.
+2015-09-24 15:51:41 [127.0.0.1][-][-][trace][yii\web\Application::handleRequest] Route requested: ''
+2015-09-24 15:51:41 [127.0.0.1][-][-][trace][yii\base\Controller::runAction] Route to run: site/index
+2015-09-24 15:51:41 [127.0.0.1][-][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: user not logged in.
+2015-09-24 15:51:41 [127.0.0.1][-][-][trace][yii\base\InlineAction::runWithParams] Running action: core\controllers\SiteController::actionIndex()
+2015-09-24 15:51:41 [127.0.0.1][-][-][info][application] $_SERVER = [
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\windows\\system32;C:\\windows;C:\\windows\\System32\\Wbem;C:\\windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;C:\\Program Files (x86)\\Common Files\\lenovo\\easyplussdk\\bin;C:\\ProgramData\\Lenovo\\ReadyApps;C:\\Program Files\\TortoiseGit\\bin;C:\\wamp\\bin\\php\\php5.5.12;C:\\ProgramData\\ComposerSetup\\bin;C:\\phpstudy\\php56n\\;C:\\Program Files (x86)\\SSH Communications Security\\SSH Secure Shell;C:\\phpstudy\\php56n\\php.exe'
+    'SYSTEMROOT' => 'C:\\windows'
+    'COMSPEC' => 'C:\\windows\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\windows'
+    'PHP_FCGI_MAX_REQUESTS' => '1000'
+    'PHPRC' => 'C:/phpstudy/php56n'
+    '_FCGI_SHUTDOWN_EVENT_' => '1876'
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/'
+    'QUERY_STRING' => ''
+    'REQUEST_METHOD' => 'GET'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'REMOTE_PORT' => '61786'
+    'SCRIPT_FILENAME' => 'C:/phpstudy/WWW/ejj-enterprise-boss/core/web/index.php'
+    'SERVER_ADMIN' => 'admin@phpStudy.net'
+    'CONTEXT_DOCUMENT_ROOT' => 'C:/phpstudy/WWW/ejj-enterprise-boss/core/web'
+    'CONTEXT_PREFIX' => ''
+    'REQUEST_SCHEME' => 'http'
+    'DOCUMENT_ROOT' => 'C:/phpstudy/WWW/ejj-enterprise-boss/core/web'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_NAME' => 'core.me'
+    'SERVER_SOFTWARE' => 'Apache/2.4.10 (Win32) OpenSSL/1.0.1i mod_fcgid/2.3.9'
+    'SERVER_SIGNATURE' => ''
+    'SystemRoot' => 'C:\\windows'
+    'HTTP_CONNECTION' => 'close'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0'
+    'HTTP_HOST' => 'core.me'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1443081101.594
+    'REQUEST_TIME' => 1443081101
+]
+2015-09-24 15:52:05 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-24 15:52:05 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+2015-09-24 15:52:05 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-24 15:52:05 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: debug
+2015-09-24 15:52:05 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\debug\Module::bootstrap()
+2015-09-24 15:52:05 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: gii
+2015-09-24 15:52:05 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\gii\Module::bootstrap()
+2015-09-24 15:52:05 [127.0.0.1][-][-][trace][yii\web\UrlManager::parseRequest] No matching URL rules. Using default URL parsing logic.
+2015-09-24 15:52:05 [127.0.0.1][-][-][trace][yii\web\Application::handleRequest] Route requested: ''
+2015-09-24 15:52:05 [127.0.0.1][-][-][trace][yii\base\Controller::runAction] Route to run: site/index
+2015-09-24 15:52:05 [127.0.0.1][-][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: user not logged in.
+2015-09-24 15:52:05 [127.0.0.1][-][-][trace][yii\base\InlineAction::runWithParams] Running action: core\controllers\SiteController::actionIndex()
+2015-09-24 15:52:05 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'site'
+]
+
+$_SERVER = [
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\windows\\system32;C:\\windows;C:\\windows\\System32\\Wbem;C:\\windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;C:\\Program Files (x86)\\Common Files\\lenovo\\easyplussdk\\bin;C:\\ProgramData\\Lenovo\\ReadyApps;C:\\Program Files\\TortoiseGit\\bin;C:\\wamp\\bin\\php\\php5.5.12;C:\\ProgramData\\ComposerSetup\\bin;C:\\phpstudy\\php56n\\;C:\\Program Files (x86)\\SSH Communications Security\\SSH Secure Shell;C:\\phpstudy\\php56n\\php.exe'
+    'SYSTEMROOT' => 'C:\\windows'
+    'COMSPEC' => 'C:\\windows\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\windows'
+    'PHP_FCGI_MAX_REQUESTS' => '1000'
+    'PHPRC' => 'C:/phpstudy/php56n'
+    '_FCGI_SHUTDOWN_EVENT_' => '1876'
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/?r=site'
+    'QUERY_STRING' => 'r=site'
+    'REQUEST_METHOD' => 'GET'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'REMOTE_PORT' => '61787'
+    'SCRIPT_FILENAME' => 'C:/phpstudy/WWW/ejj-enterprise-boss/core/web/index.php'
+    'SERVER_ADMIN' => 'admin@phpStudy.net'
+    'CONTEXT_DOCUMENT_ROOT' => 'C:/phpstudy/WWW/ejj-enterprise-boss/core/web'
+    'CONTEXT_PREFIX' => ''
+    'REQUEST_SCHEME' => 'http'
+    'DOCUMENT_ROOT' => 'C:/phpstudy/WWW/ejj-enterprise-boss/core/web'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_NAME' => 'core.me'
+    'SERVER_SOFTWARE' => 'Apache/2.4.10 (Win32) OpenSSL/1.0.1i mod_fcgid/2.3.9'
+    'SERVER_SIGNATURE' => ''
+    'SystemRoot' => 'C:\\windows'
+    'HTTP_CONNECTION' => 'close'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0'
+    'HTTP_HOST' => 'core.me'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1443081125.2226
+    'REQUEST_TIME' => 1443081125
+]
+2015-09-24 15:52:10 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-24 15:52:10 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+2015-09-24 15:52:10 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-24 15:52:10 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: debug
+2015-09-24 15:52:10 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\debug\Module::bootstrap()
+2015-09-24 15:52:10 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: gii
+2015-09-24 15:52:10 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\gii\Module::bootstrap()
+2015-09-24 15:52:10 [127.0.0.1][-][-][trace][yii\web\UrlManager::parseRequest] No matching URL rules. Using default URL parsing logic.
+2015-09-24 15:52:10 [127.0.0.1][-][-][trace][yii\web\Application::handleRequest] Route requested: ''
+2015-09-24 15:52:10 [127.0.0.1][-][-][trace][yii\base\Controller::runAction] Route to run: site/index
+2015-09-24 15:52:10 [127.0.0.1][-][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: user not logged in.
+2015-09-24 15:52:10 [127.0.0.1][-][-][trace][yii\base\InlineAction::runWithParams] Running action: core\controllers\SiteController::actionIndex()
+2015-09-24 15:52:10 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'site/index'
+]
+
+$_SERVER = [
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\windows\\system32;C:\\windows;C:\\windows\\System32\\Wbem;C:\\windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;C:\\Program Files (x86)\\Common Files\\lenovo\\easyplussdk\\bin;C:\\ProgramData\\Lenovo\\ReadyApps;C:\\Program Files\\TortoiseGit\\bin;C:\\wamp\\bin\\php\\php5.5.12;C:\\ProgramData\\ComposerSetup\\bin;C:\\phpstudy\\php56n\\;C:\\Program Files (x86)\\SSH Communications Security\\SSH Secure Shell;C:\\phpstudy\\php56n\\php.exe'
+    'SYSTEMROOT' => 'C:\\windows'
+    'COMSPEC' => 'C:\\windows\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\windows'
+    'PHP_FCGI_MAX_REQUESTS' => '1000'
+    'PHPRC' => 'C:/phpstudy/php56n'
+    '_FCGI_SHUTDOWN_EVENT_' => '1876'
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/?r=site/index'
+    'QUERY_STRING' => 'r=site/index'
+    'REQUEST_METHOD' => 'GET'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'REMOTE_PORT' => '61787'
+    'SCRIPT_FILENAME' => 'C:/phpstudy/WWW/ejj-enterprise-boss/core/web/index.php'
+    'SERVER_ADMIN' => 'admin@phpStudy.net'
+    'CONTEXT_DOCUMENT_ROOT' => 'C:/phpstudy/WWW/ejj-enterprise-boss/core/web'
+    'CONTEXT_PREFIX' => ''
+    'REQUEST_SCHEME' => 'http'
+    'DOCUMENT_ROOT' => 'C:/phpstudy/WWW/ejj-enterprise-boss/core/web'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_NAME' => 'core.me'
+    'SERVER_SOFTWARE' => 'Apache/2.4.10 (Win32) OpenSSL/1.0.1i mod_fcgid/2.3.9'
+    'SERVER_SIGNATURE' => ''
+    'SystemRoot' => 'C:\\windows'
+    'HTTP_CONNECTION' => 'close'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0'
+    'HTTP_HOST' => 'core.me'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1443081129.9945
+    'REQUEST_TIME' => 1443081129
+]
+2015-09-24 15:52:20 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-24 15:52:20 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+2015-09-24 15:52:20 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-24 15:52:20 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: debug
+2015-09-24 15:52:20 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\debug\Module::bootstrap()
+2015-09-24 15:52:20 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: gii
+2015-09-24 15:52:20 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\gii\Module::bootstrap()
+2015-09-24 15:52:20 [127.0.0.1][-][-][trace][yii\web\UrlManager::parseRequest] No matching URL rules. Using default URL parsing logic.
+2015-09-24 15:52:20 [127.0.0.1][-][-][trace][yii\web\Application::handleRequest] Route requested: ''
+2015-09-24 15:52:20 [127.0.0.1][-][-][trace][yii\base\Controller::runAction] Route to run: site/index
+2015-09-24 15:52:20 [127.0.0.1][-][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: user not logged in.
+2015-09-24 15:52:20 [127.0.0.1][-][-][trace][yii\base\InlineAction::runWithParams] Running action: core\controllers\SiteController::actionIndex()
+2015-09-24 15:52:20 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'customer/index'
+]
+
+$_SERVER = [
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\windows\\system32;C:\\windows;C:\\windows\\System32\\Wbem;C:\\windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;C:\\Program Files (x86)\\Common Files\\lenovo\\easyplussdk\\bin;C:\\ProgramData\\Lenovo\\ReadyApps;C:\\Program Files\\TortoiseGit\\bin;C:\\wamp\\bin\\php\\php5.5.12;C:\\ProgramData\\ComposerSetup\\bin;C:\\phpstudy\\php56n\\;C:\\Program Files (x86)\\SSH Communications Security\\SSH Secure Shell;C:\\phpstudy\\php56n\\php.exe'
+    'SYSTEMROOT' => 'C:\\windows'
+    'COMSPEC' => 'C:\\windows\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\windows'
+    'PHP_FCGI_MAX_REQUESTS' => '1000'
+    'PHPRC' => 'C:/phpstudy/php56n'
+    '_FCGI_SHUTDOWN_EVENT_' => '1876'
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/?r=customer/index'
+    'QUERY_STRING' => 'r=customer/index'
+    'REQUEST_METHOD' => 'GET'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'REMOTE_PORT' => '61788'
+    'SCRIPT_FILENAME' => 'C:/phpstudy/WWW/ejj-enterprise-boss/core/web/index.php'
+    'SERVER_ADMIN' => 'admin@phpStudy.net'
+    'CONTEXT_DOCUMENT_ROOT' => 'C:/phpstudy/WWW/ejj-enterprise-boss/core/web'
+    'CONTEXT_PREFIX' => ''
+    'REQUEST_SCHEME' => 'http'
+    'DOCUMENT_ROOT' => 'C:/phpstudy/WWW/ejj-enterprise-boss/core/web'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_NAME' => 'core.me'
+    'SERVER_SOFTWARE' => 'Apache/2.4.10 (Win32) OpenSSL/1.0.1i mod_fcgid/2.3.9'
+    'SERVER_SIGNATURE' => ''
+    'SystemRoot' => 'C:\\windows'
+    'HTTP_CONNECTION' => 'close'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0'
+    'HTTP_HOST' => 'core.me'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1443081140.1896
+    'REQUEST_TIME' => 1443081140
+]
+2015-09-24 15:52:26 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-24 15:52:26 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with alexandernst\devicedetect\DeviceDetect
+2015-09-24 15:52:26 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\log\Dispatcher
+2015-09-24 15:52:26 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: debug
+2015-09-24 15:52:26 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\debug\Module::bootstrap()
+2015-09-24 15:52:26 [127.0.0.1][-][-][trace][yii\base\Module::getModule] Loading module: gii
+2015-09-24 15:52:26 [127.0.0.1][-][-][trace][yii\base\Application::bootstrap] Bootstrap with yii\gii\Module::bootstrap()
+2015-09-24 15:52:26 [127.0.0.1][-][-][trace][yii\web\UrlManager::parseRequest] No matching URL rules. Using default URL parsing logic.
+2015-09-24 15:52:26 [127.0.0.1][-][-][trace][yii\web\Application::handleRequest] Route requested: ''
+2015-09-24 15:52:26 [127.0.0.1][-][-][trace][yii\base\Controller::runAction] Route to run: site/index
+2015-09-24 15:52:26 [127.0.0.1][-][-][info][yii\filters\RateLimiter::beforeAction] Rate limit skipped: user not logged in.
+2015-09-24 15:52:26 [127.0.0.1][-][-][trace][yii\base\InlineAction::runWithParams] Running action: core\controllers\SiteController::actionIndex()
+2015-09-24 15:52:26 [127.0.0.1][-][-][info][application] $_GET = [
+    'r' => 'customer/index'
+]
+
+$_SERVER = [
+    'PATH' => 'C:\\Program Files (x86)\\Intel\\iCLS Client\\;C:\\Program Files\\Intel\\iCLS Client\\;C:\\windows\\system32;C:\\windows;C:\\windows\\System32\\Wbem;C:\\windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\DAL;C:\\Program Files\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\Intel\\Intel(R) Management Engine Components\\IPT;C:\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static;C:\\Program Files (x86)\\Common Files\\lenovo\\easyplussdk\\bin;C:\\ProgramData\\Lenovo\\ReadyApps;C:\\Program Files\\TortoiseGit\\bin;C:\\wamp\\bin\\php\\php5.5.12;C:\\ProgramData\\ComposerSetup\\bin;C:\\phpstudy\\php56n\\;C:\\Program Files (x86)\\SSH Communications Security\\SSH Secure Shell;C:\\phpstudy\\php56n\\php.exe'
+    'SYSTEMROOT' => 'C:\\windows'
+    'COMSPEC' => 'C:\\windows\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\windows'
+    'PHP_FCGI_MAX_REQUESTS' => '1000'
+    'PHPRC' => 'C:/phpstudy/php56n'
+    '_FCGI_SHUTDOWN_EVENT_' => '1876'
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/?r=customer/index'
+    'QUERY_STRING' => 'r=customer/index'
+    'REQUEST_METHOD' => 'GET'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'REMOTE_PORT' => '61789'
+    'SCRIPT_FILENAME' => 'C:/phpstudy/WWW/ejj-enterprise-boss/core/web/index.php'
+    'SERVER_ADMIN' => 'admin@phpStudy.net'
+    'CONTEXT_DOCUMENT_ROOT' => 'C:/phpstudy/WWW/ejj-enterprise-boss/core/web'
+    'CONTEXT_PREFIX' => ''
+    'REQUEST_SCHEME' => 'http'
+    'DOCUMENT_ROOT' => 'C:/phpstudy/WWW/ejj-enterprise-boss/core/web'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_NAME' => 'core.me'
+    'SERVER_SOFTWARE' => 'Apache/2.4.10 (Win32) OpenSSL/1.0.1i mod_fcgid/2.3.9'
+    'SERVER_SIGNATURE' => ''
+    'SystemRoot' => 'C:\\windows'
+    'HTTP_CONNECTION' => 'close'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0'
+    'HTTP_HOST' => 'core.me'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1443081146.2411
+    'REQUEST_TIME' => 1443081146
+]

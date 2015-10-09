@@ -109,8 +109,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     'vacation' => function ($url, $model) {
                         return Html::a('<span class="fa fa-fw fa-history"></span>',
                             [
-                                '/worker/vacation-create',
-                                'id' => $model->id
+                                '/worker/create-vacation',
+                                'workerId' => $model->id
                             ]
                             ,
                             [
@@ -124,8 +124,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     'block' => function ($url, $model) {
                         return Html::a('<span class="fa fa-fw fa-lock"></span>',
                         [
-                            '/worker/block-create',
-                            'id' => $model->id
+                            '/worker/create-block',
+                            'workerId' => $model->id
                         ]
                         ,
                         [
@@ -148,9 +148,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'type' => 'info',
             'before' =>
                   $b,
-             'after' => Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List',
-                ['index'],
-                ['class' => 'btn btn-info']),
+            //'after' => Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List',['index'],['class' => 'btn btn-info']),
             'showFooter' => false
         ],
     ]);

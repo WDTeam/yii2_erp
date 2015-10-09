@@ -24,67 +24,63 @@ use boss\components\SearchBox;
     'addons' => $post,
     'callback' => 'searchTable'
 ]);?>
-<?php
-echo GridView::widget([
-    'dataProvider' => $dataProvider,
-    'columns' => [
-        [
-            'header' => Yii::t('app', 'Order Number'),
-            'class' => 'yii\grid\SerialColumn'
-        ],
+<?= GridView::widget([
+                'dataProvider' => $dataProvider,
+                'columns' => [
+                    [
+                        'header' => Yii::t('app', 'Order Number'),
+                        'class' => 'yii\grid\SerialColumn'
+                    ],
 
-//            'id',
-        'operation_advert_position_name',
-//            'operation_city_id',
-        'operation_city_name',
-//                'operation_platform_name',
-//                'operation_platform_version_name',
-//            'operation_advert_start_time:datetime',
-//             'operation_advert_end_time:datetime',
-         'operation_advert_online_time:date',
-         'operation_advert_offline_time:date',
-        [
-            'attribute'=> 'operation_advert_picture',
-            'format'=>'html',
-            'value' => function ($model){
-                if(empty($model->operation_advert_picture)){
-                    return '';
-                }else{
-                    return '<img src="'. $model->operation_advert_picture .'" height="30">';
-                }
-           }
-        ],
-         'operation_advert_url:url',
-         'created_at:datetime',
-         'updated_at:datetime',
+        //            'id',
+                    'operation_advert_content_name',
+                    'platform_name',
+                    'platform_version_name',
+        //            'operation_advert_start_time:datetime',
+        //             'operation_advert_end_time:datetime',
+//                     'operation_advert_online_time:date',
+//                     'operation_advert_offline_time:date',
+                    [
+                        'attribute'=> 'operation_advert_picture_text',
+                        'format'=>'html',
+                        'value' => function ($model){
+                            if(empty($model->operation_advert_picture_text)){
+                                return '';
+                            }else{
+                                return Html::a('<img border="0" src="'. $model->operation_advert_picture_text .'" height="30">',$model->operation_advert_url, ['target' => '_blank'] );
+                            }
+                       }
+                    ],
+//                     'operation_advert_url:url',
+                     'created_at:datetime',
+                     'updated_at:datetime',
 
-        [
-            'header' => Yii::t('app', 'Operation'),
-            'class' => 'yii\grid\ActionColumn',
-            'buttons' => [
-                'view' => function ($url, $model) {
-                    return Html::a(
-                        '<span class="glyphicon glyphicon-eye-open"></span>', 
-                        Yii::$app->urlManager->createUrl(['operation-advert-content/view','id' => $model->id]),
-                        ['title' => Yii::t('yii', 'View'), 'class' => 'btn btn-success btn-sm']
-                    );
-                },
-                'update' => function ($url, $model) {
-                    return Html::a(
-                        '<span class="glyphicon glyphicon-pencil"></span>', 
-                        Yii::$app->urlManager->createUrl(['operation-advert-content/update','id' => $model->id]),
-                        ['title' => Yii::t('yii', 'Update'), 'class' => 'btn btn-info btn-sm']
-                    );
-                },
-                'delete' => function ($url, $model) {
-                    return Html::a(
-                        '<span class="glyphicon glyphicon-trash"></span>', 
-                        Yii::$app->urlManager->createUrl(['operation-advert-content/delete','id' => $model->id]),
-                        ['title' => Yii::t('yii', 'Delete'), 'class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
-                    );
-                },
-            ],
-        ],
-    ],
-]);
-?>
+                    [
+                        'header' => Yii::t('app', 'Operation'),
+                        'class' => 'yii\grid\ActionColumn',
+                        'buttons' => [
+                            'view' => function ($url, $model) {
+                                return Html::a(
+                                    '<span class="glyphicon glyphicon-eye-open"></span>', 
+                                    Yii::$app->urlManager->createUrl(['operation-advert-content/view','id' => $model->id]),
+                                    ['title' => Yii::t('yii', 'View'), 'class' => 'btn btn-success btn-sm']
+                                );
+                            },
+                            'update' => function ($url, $model) {
+                                return Html::a(
+                                    '<span class="glyphicon glyphicon-pencil"></span>', 
+                                    Yii::$app->urlManager->createUrl(['operation-advert-content/update','id' => $model->id]),
+                                    ['title' => Yii::t('yii', 'Update'), 'class' => 'btn btn-info btn-sm']
+                                );
+                            },
+                            'delete' => function ($url, $model) {
+                                return Html::a(
+                                    '<span class="glyphicon glyphicon-trash"></span>', 
+                                    Yii::$app->urlManager->createUrl(['operation-advert-content/delete','id' => $model->id]),
+                                    ['title' => Yii::t('yii', 'Delete'), 'class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
+                                );
+                            },
+                        ],
+                    ],
+                ],
+            ]); ?>

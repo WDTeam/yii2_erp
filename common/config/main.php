@@ -123,9 +123,17 @@ return [
          */
         'redis' => [
             'class' => 'yii\redis\Connection',
-            'hostname' => 'localhost', // 配置为 redis 服务器地址
+            'hostname' => '101.200.179.70', // 配置为 dev环境 redis 服务器地址 test环境 101.200.200.74 ，prod环境 待定
             'port' => 6379,
             'database' => 0,
+        ],
+        /**
+         * 配置 mongodb
+         * 使用参考：http://www.yiiframework.com/doc-2.0/ext-mongodb-index.html
+         */
+        'mongodb' => [
+            'class' => '\yii\mongodb\Connection',
+            'dsn' => 'mongodb://developer:password@localhost:27017/mydatabase',
         ],
         /**
          * 极光推送,默认为开发环境配置

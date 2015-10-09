@@ -24,6 +24,9 @@ use common\models\FinanceOrderChannel;
 use common\models\FinanceHeader;
 use boss\models\FinanceRecordLogSearch;
 use boss\models\FinanceOrderChannelSearch;
+use core\models\order\OrderSearch;
+use core\models\GeneralPay\GeneralPaySearch;
+use boss\controllers\GeneralPayController;
 
 /**
  * FinancePopOrderController implements the CRUD actions for FinancePopOrder model.
@@ -54,8 +57,17 @@ class FinancePopOrderController extends Controller
     {
     	$model = new FinancePopOrderSearch;
     	$modelinfo= new FinancePopOrder;
-    	
     	if(Yii::$app->request->isPost) {
+    		
+    		//检查上月是否有未处理完毕的订单
+    		/* $searchModel= new FinancePopOrderSearch;
+    		$ordewhere_init['finance_pop_order_pay_status']=0;
+    		$searchinfo=$searchModel::find()->where($ordewhere_init)->asArray()->all();
+    		if(count($searchinfo)!=0){
+    			\Yii::$app->getSession()->setFlash('default','对不起你还有未处理的账单未完成,请先处理完成后在上传！');
+    			return $this->redirect(['index']);
+    		} */
+    		//检查完毕
     		
     		$model->finance_uplod_url = UploadedFile::getInstance($model, 'finance_uplod_url');
     		if ($model->finance_uplod_url && $model->validate()) {
@@ -95,7 +107,7 @@ class FinancePopOrderController extends Controller
     		foreach ($sheetData as $key=>$value){
     			//去除表头
     			if($n>2){
-    			$statusinfo=$model->PopOrderstatus($alinfo,$value);
+    			$statusinfo=$model->PopOrderstatus($alinfo,$value,$channelid);
     			$post['FinancePopOrder']['finance_pop_order_number'] =$statusinfo['order_channel_order_num'];
     			$post['FinancePopOrder']['finance_order_channel_id'] =$statusinfo['channel_id'];
     			$post['FinancePopOrder']['finance_order_channel_title'] =$statusinfo['order_channel_name'];
@@ -115,7 +127,7 @@ class FinancePopOrderController extends Controller
     			//获取渠道唯一订单号有问题需要问问
     			$post['FinancePopOrder']['finance_pop_order_channel_order'] =$statusinfo['order_channel_order_num'];
     			
-    			$post['FinancePopOrder']['finance_pop_order_order_type'] =$statusinfo['order_service_type_id'];
+    			//$post['FinancePopOrder']['finance_pop_order_order_type'] =$statusinfo['order_service_type_id'];
     			$post['FinancePopOrder']['finance_pop_order_order_type'] =$statusinfo['order_service_type_id'];
     			$post['FinancePopOrder']['finance_pop_order_status'] =$statusinfo['order_before_status_dict_id'];
     			
@@ -186,6 +198,8 @@ class FinancePopOrderController extends Controller
     		//服务费
     		$post['FinanceRecordLog']['finance_record_log_fee'] = 0;
     		
+    		
+    		
     		$post['FinanceRecordLog']['create_time'] = time();
     		$post['FinanceRecordLog']['is_del']=0;
     		$_model = clone $FinanceRecordLog;
@@ -193,7 +207,7 @@ class FinancePopOrderController extends Controller
     		$_model->save(); 
     		return $this->redirect(['index']);
     	}
- 
+
   		##########################
 		//输出部分
        $ordedata= new FinanceOrderChannel;
@@ -205,20 +219,32 @@ class FinancePopOrderController extends Controller
         	$tydtui[]=$errt['finance_order_channel_name'];
         }
        $tyu= array_combine($tyd,$tydtui);
-       
-       
          $searchModel = new FinancePopOrderSearch;
+         
+         
          //默认条件
+         
+         
          $searchModel->is_del=0;
          $searchModel->finance_pop_order_pay_status=0;
         //状态处理
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        
+        
+        
         $decss=Yii::$app->request->getQueryParams();
         if(isset($decss['FinancePopOrderSearch'])){
         $sta= $decss['FinancePopOrderSearch']['finance_pop_order_pay_status_type'];
+        
+         if($sta==3){
+        //我有三没有开始处理 从订单表里面开始查询
+         return $this->redirect(['orderlist']);
+        } 
+        
         }else{
         $sta='';
         } 
+         
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
@@ -228,7 +254,77 @@ class FinancePopOrderController extends Controller
         ]);
     }
 
+    /**
+    * 我有第三方没有的需要去订单表查查询
+    * @date: 2015-10-8
+    * @author: peak pan
+    * @return:
+    **/
     
+    public function actionOrderlist()
+    { 
+   
+    	//输出部分
+    	$ordedata= new FinanceOrderChannel;
+    	$ordewhere['is_del']=0;
+    	$ordewhere['finance_order_channel_is_lock']=1;
+    	$payatainfo=$ordedata::find()->where($ordewhere)->asArray()->all();
+    	foreach ($payatainfo as $errt){
+    		$tyd[]=$errt['id'];
+    		$tydtui[]=$errt['finance_order_channel_name'];
+    	}
+    	$tyu= array_combine($tyd,$tydtui);
+    	
+    	$sta=3;
+    		
+    			//我有三没有开始处理 从订单表里面开始查询
+    			$searchModel= new OrderSearch;
+    			$financerecordloginfo=FinanceRecordLogSearch::get_financerecordloginfo($sta);
+    			if($financerecordloginfo){
+    				//$search_infoModel->created_at=$financerecordloginfo['finance_record_log_statime'];
+    				//$searchModel_info->created_at=$financerecordloginfo['finance_record_log_endtime'];
+    				$searchModel->channel_id=$sta;
+    			}
+    			$searchModel->channel_id=$sta;
+    			$dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());	
+    	return $this->render('orderlist', [
+    			'dataProvider' => $dataProvider,
+    			'searchModel' => $searchModel,
+    			]);
+
+    }
+    
+    
+    /**
+    * 充值对账管理控制器
+    * @date: 2015-10-9
+    * @author: peak pan
+    * @return:
+    **/
+    
+    public function actionGeneralpaylist()
+    {
+    	 
+    	//输出部分
+    	$ordedata= new FinanceOrderChannel;
+    	$ordewhere['is_del']=0;
+    	$ordewhere['finance_order_channel_is_lock']=1;
+    	$payatainfo=$ordedata::find()->where($ordewhere)->asArray()->all();
+    	foreach ($payatainfo as $errt){
+    		$tyd[]=$errt['id'];
+    		$tydtui[]=$errt['finance_order_channel_name'];
+    	}
+    	$tyu= array_combine($tyd,$tydtui);
+    	//我有三没有开始处理 从订单表里面开始查询
+    	$searchModel= new GeneralPaySearch;
+    	$dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+    	return $this->render('generalpaylist', [
+    			'dataProvider' => $dataProvider,
+    			'searchModel' => $searchModel,
+    			]);
+    
+    }
+
     
     /**
     * 坏账列表
@@ -236,7 +332,6 @@ class FinancePopOrderController extends Controller
     * @author: peak pan
     * @return:
     **/
-    
     public function actionBad()
     {
     	$ordedata= new FinanceOrderChannel;
@@ -268,7 +363,12 @@ class FinancePopOrderController extends Controller
     }
     
     
-    
+    /**
+    * 批量操作第三方订单
+    * @date: 2015-10-9
+    * @author: peak pan
+    * @return:
+    **/
     
     public function actionIndexall()
     {
@@ -283,6 +383,45 @@ class FinancePopOrderController extends Controller
 		 return $this->redirect(['index']);
     }
     
+   /**
+   * 我们有第三方没有财务批量处理到订单表控制器
+   * @date: 2015-10-9
+   * @author: peak pan
+   * @return:
+   **/
+
+    public function actionIndexmepost()
+    {
+    	/*林红优提供接口，目前为提供  */
+    	
+    	/* $searchModel = new FinancePopOrderSearch;
+    	$requestModel = Yii::$app->request->post();
+    	//$idArr = implode(',',);
+    	foreach ($requestModel['ids'] as $iddate){
+    		$model=$searchModel::findOne($iddate);
+    		$model->finance_pop_order_pay_status='1';
+    		$model->save();
+    	} */
+    	return $this->redirect(['index']);
+    }
+    
+    /**
+    * 我们有第三方没有财务批量处理到充值表控制器
+    * @date: 2015-10-9
+    * @author: peak pan
+    * @return:
+    **/
+    public function actionGeneralmepost()
+    {
+    	/*胜强提供接口，目前未提供  */
+    	 $searchModel = new FinancePopOrderSearch;
+    	 $requestModel = Yii::$app->request->post();
+    	$GeneralPay= new GeneralPayController;
+    	foreach ($requestModel['ids'] as $iddate){
+    	$GeneralPay->modifyRecontiliation($iddate,1);
+    	} 
+    	return $this->redirect(['index']);
+    }
     
     
     /**

@@ -15,9 +15,9 @@ use common\models\CustomerPlatform;
 use common\models\CustomerChannal;
 use common\models\CustomerAddress;
 use common\models\CustomerWorker;
-
 use common\models\GeneralRegion;
 use common\models\OperationCity;
+use common\models\CustomerExtBalance;
 
 use common\models\Order;
 
@@ -85,7 +85,7 @@ echo DetailView::widget([
                     'placeholder' => '选择平台',
                 ]
             ],
-            'value'=>$customerPlatform['platform_name'] ? $customerPlatform['platform_name'] : '-',
+            'value'=>$platform_name,
         ],
         [
             'attribute' => 'channal_id',
@@ -99,7 +99,7 @@ echo DetailView::widget([
                     'placeholder' => '选择聚道',
                 ]
             ],
-            'value'=>$customerChannal['channal_name'] ? $customerChannal['channal_name'] : '-',
+            'value'=>$channal_name,
         ],
         // [
         //     'attribute'=>'customer_phone', 
@@ -121,7 +121,13 @@ echo DetailView::widget([
                 'attribute' => 'customer_is_vip',
                 'type' => DetailView::INPUT_WIDGET,
                 'widgetOptions' => [
-                    'class' => \kartik\widgets\SwitchInput::classname()
+                    'name'=>'customer_is_vip',
+                    'class'=>\kartik\widgets\Select2::className(),
+                    'data' => array('1'=>'会员', '0'=>'非会员'),
+                    'hideSearch' => true,
+                    'options'=>[
+                        'placeholder' => '选择客户身份',
+                    ]
                 ],
                 'value'=>$model->customer_is_vip ? '会员' : '非会员',
             ],
@@ -173,7 +179,7 @@ echo DetailView::widget([
 ]); 
 
 echo DetailView::widget([
-    'model' => $model,
+    'model' => $customerBalance,
     'condensed'=>false,
     'hover'=>true,
     'mode'=>Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
@@ -186,7 +192,7 @@ echo DetailView::widget([
             'attribute'=>'customer_balance', 
             'label'=>'余额',
             'format'=>'raw',
-            'value'=> $model->customer_balance,
+            'value'=> $customerBalance != NULL ? $customerBalance->customer_balance : 0,
             'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],

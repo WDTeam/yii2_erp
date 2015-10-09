@@ -38,28 +38,28 @@ use boss\components\AreaCascade;
     </div>
 
    <div class='col-md-2'>
-        <?php //echo $form->field($model, 'time_begin')->widget(DatePicker::classname(), [
-            // 'name' => 'time_begin', 
-            // 'value' => time(),
-            // 'options' => ['placeholder' => '选择日期'],
-            // 'pluginOptions' => [
-            //     'format' => 'Y-m-d',
-            //     'todayHighlight' => true
-            // ]
-        // ]); 
+        <?php echo $form->field($model, 'time_begin')->widget(DatePicker::classname(), [
+            'name' => 'time_begin', 
+            'value' => time(),
+            'options' => ['placeholder' => '选择日期'],
+            'pluginOptions' => [
+                'format' => 'yyyy-m-d',
+                'todayHighlight' => true
+            ]
+        ]); 
         ?>
     </div>
 
     <div class='col-md-2'>
-        <?php //echo $form->field($model, 'time_end')->widget(DatePicker::classname(), [
-        //     'name' => 'time_end', 
-        //     'value' => time(),
-        //     'options' => ['placeholder' => '选择日期'],
-        //     'pluginOptions' => [
-        //         'format' => 'Y-m-d',
-        //         'todayHighlight' => true
-        //     ]
-        // ]); 
+        <?php echo $form->field($model, 'time_end')->widget(DatePicker::classname(), [
+            'name' => 'time_end', 
+            'value' => time(),
+            'options' => ['placeholder' => '选择日期'],
+            'pluginOptions' => [
+                'format' => 'yyyy-m-d',
+                'todayHighlight' => true
+            ]
+        ]); 
         ?>
     </div>
 
@@ -67,7 +67,7 @@ use boss\components\AreaCascade;
         <?php echo $form->field($model, 'customer_is_vip')->widget(Select2::classname(), [
             'name' => 'customer_is_vip',
             'hideSearch' => true,
-            'data' => [1 => '会员', 2 => '非会员'],
+            'data' => [1 => '会员', 0 => '非会员'],
             'options' => ['placeholder' => '选择客户身份', 'inline' => true],
             'pluginOptions' => [
                 'allowClear' => true

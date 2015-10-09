@@ -14,7 +14,7 @@ class m150919_092739_create_table_worker extends Migration
         }
         $this->createTable('{{%worker}}', [
 
-            'id' => Schema::TYPE_PK . ' AUTO_INCREMENT COMMENT \'阿姨封号表自增id\'' ,
+            'id' => Schema::TYPE_PK . ' AUTO_INCREMENT COMMENT \'阿姨表自增id\'' ,
             'shop_id'  => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'门店id\'',
             'worker_name' => Schema::TYPE_STRING . '(10) DEFAULT NULL COMMENT \'阿姨姓名\'',
             'worker_phone' => Schema::TYPE_STRING . '(20) DEFAULT NULL COMMENT \'阿姨手机\'',
@@ -34,6 +34,7 @@ class m150919_092739_create_table_worker extends Migration
             'worker_rule_id' => Schema::TYPE_BOOLEAN  . '(3) NOT NULL  DEFAULT  1 COMMENT \'阿姨角色id \'',
             'worker_is_block' => Schema::TYPE_BOOLEAN  . '(3) NOT NULL  DEFAULT  0 COMMENT \'阿姨是否封号 0正常1封号\'',
             'worker_is_blacklist' => Schema::TYPE_BOOLEAN  . '(3) NOT NULL  DEFAULT  0 COMMENT \'阿姨是否黑名单 0正常1黑名单\'',
+            'worker_is_vacation' => Schema::TYPE_BOOLEAN  . '(3) NOT NULL  DEFAULT  0 COMMENT \'阿姨是否请假 0正常1请假中\'',
             'created_ad'  => Schema::TYPE_INTEGER . '(10)  DEFAULT NULL COMMENT \'阿姨录入时间\'',
             'updated_ad'  => Schema::TYPE_INTEGER . '(10)  DEFAULT NULL COMMENT \'最后更新时间\'',
             'isdel' => Schema::TYPE_BOOLEAN  . '(1) NOT NULL DEFAULT 0 COMMENT \'是否删号 0正常1删号\'',

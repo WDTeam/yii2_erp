@@ -7,9 +7,9 @@ use yii\helpers\Html;
  * @var common\models\Customer $model
  */
 
-$this->title = Yii::t('boss', 'Update {modelClass}: ', [
-    'modelClass' => 'Customer',
-]) . ' ' . $model->id;
+// $this->title = Yii::t('boss', '更新{modelClass}', [
+//     'modelClass' => '客户',
+// ]) . ' ';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('boss', 'Customers'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('boss', 'Update');
@@ -20,6 +20,8 @@ $this->params['breadcrumbs'][] = Yii::t('boss', 'Update');
 
     <?= $this->render('_form', [
         'model' => $model,
+        'customerBalance'=>$customerBalance,
+        'customerScore'=>$customerScore,
     ]) ?>
 
 </div>

@@ -1,8 +1,8 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
-use kartik\icons\Icon;
+use kartik\grid\GridView;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\AdminSearch */
@@ -13,48 +13,50 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="admin-index">
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Create ') . Yii::t('app', 'Role'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?= GridView::widget([
+    <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+//         'filterModel' => $searchModel,
+        'toolbar' =>[
+            'content'=>Html::a('<i class="glyphicon glyphicon-plus"></i>', [
+                'role/create'
+            ], [
+                'class' => 'btn btn-default',
+                'title' => Yii::t('app', '添加角色')
+            ]),
+        ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-                [
-                    'attribute' => 'name',
-                ],
-                'description',
-                [
-                    //'header' => Yii::t('auth', 'Actions'),
-                    'class' => 'yii\grid\ActionColumn',
-                    //'dropdown' => false,
-                    //'vAlign' => 'middle',
-                    'urlCreator' => function ($action, $model, $key, $index) {
-                            $link = '#';
-                            switch ($action) {
-                                case 'view':
-                                    $link = Yii::$app->getUrlManager()->createUrl(['role/view', 'name' => $model->name]);
-                                    break;
-                                case 'update':
-                                    $link = Yii::$app->getUrlManager()->createUrl(['role/update', 'name' => $model->name]);
-                                    break;
-                                case 'delete':
-                                    $link = Yii::$app->getUrlManager()->createUrl(['role/delete', 'name' => $model->name]);
-                                    break;
-                            }
-                            return $link;
-                        },
-                    //'viewOptions' => ['title' => Yii::t('auth', 'Details')],
-                    //'updateOptions' => ['title' => Yii::t('auth', 'Edit page')],
-                    //'deleteOptions' => ['title' => Yii::t('auth', 'Delete action')],
-                ],
-            //['class' => 'yii\grid\ActionColumn'],
+            'name',
+//             'type',
+            'description:ntext',
+//             'rule_name',
+//             'data:ntext',
+//            'created_at', 
+//            'updated_at', 
+
+            [
+                'class' => 'yii\grid\ActionColumn',
+            ],
         ],
-    ]); ?>
+        'responsive'=>true,
+        'hover'=>true,
+        'condensed'=>true,
+        'floatHeader'=>true,
+
+
+
+
+        'panel' => [
+            'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
+            'type'=>'info',
+            'after'=>false,
+            'before'=>'',
+            'showFooter'=>false
+        ],
+    ]); Pjax::end(); ?>
+    
 
 </div>

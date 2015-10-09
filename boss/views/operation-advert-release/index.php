@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="operation-advert-release-index">
 
     <p>
-        <?= Html::a( Yii::t('app', 'Release Advert'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a( Yii::t('app', 'Release Advert'), ['step-first'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -24,22 +24,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
 //            'id',
-//            'operation_city_name',
-            'operation_platform_name',
-            'operation_platform_version_name',
-            
-//            'operation_advert_position_id',
-            'operation_advert_position_name',
-//            'operation_advert_content_id',
-//            [
-//                'attribute' => 'operation_advert_contents',
-//                'format'=>'html',
-//                'value' => function ($model){
-//                    return $model->operation_advert_contents;
-//                }
-//            ],
-//             'created_at:datetime',
-//             'updated_at:datetime',
+            'city_name',
+             'created_at:datetime',
+             'updated_at:datetime',
 
             [
                 'header' => Yii::t('app', 'Operation'),'class' => 'yii\grid\ActionColumn'],

@@ -49,9 +49,8 @@ class Customer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_name', 'customer_sex', 'customer_phone', 'customer_score', 'created_at', 'updated_at'], 'required'],
-            [['customer_sex', 'customer_birth', 'operation_area_id', 'operation_city_id', 'general_region_id', 'customer_score', 'customer_level', 'customer_complaint_times', 'customer_src', 'channal_id', 'platform_id', 'customer_login_time', 'customer_is_vip', 'created_at', 'updated_at', 'is_del'], 'integer'],
-            [['customer_balance'], 'number'],
+            [['customer_sex', 'customer_phone', 'created_at', 'updated_at'], 'required'],
+            [['customer_sex', 'operation_area_id', 'operation_city_id', 'general_region_id', 'customer_level', 'customer_complaint_times', 'customer_src', 'channal_id', 'platform_id', 'customer_is_vip', 'is_del'], 'integer'],
             [['customer_del_reason', 'customer_platform_version', 'customer_app_version', 'customer_mac'], 'string'],
             [['customer_name', 'customer_login_ip'], 'string', 'max' => 16],
             [['customer_photo', 'customer_email'], 'string', 'max' => 32],
@@ -77,8 +76,6 @@ class Customer extends \yii\db\ActiveRecord
             'operation_city_id' => Yii::t('boss', '城市'),
             'general_region_id' => Yii::t('boss', '住址'),
             'customer_live_address_detail' => Yii::t('boss', '详细住址'),
-            'customer_balance' => Yii::t('boss', '账户余额'),
-            'customer_score' => Yii::t('boss', '积分'),
             'customer_level' => Yii::t('boss', '评级'),
             'customer_complaint_times' => Yii::t('boss', '投诉'),
             'customer_src' => Yii::t('boss', '来源，1为线下，2为线上'),
@@ -97,48 +94,46 @@ class Customer extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * 客户账户余额获取
-     */
-    public function actionGetBalance()
-    {
-        $customer_id = \Yii::$app->request->get('customer_id');
-        \Yii::$app->response->format = Response::FORMAT_JSON;
-
-        $customer = Customer::find()->where([
-            'id'=>$customer_id
-            ])->one();
-        return $customer->customer_balance;
-    }
+    
 
     /**
      * 客户账户余额转入
      */
-    public function actionIncBalance()
+    static public function incBalance($customer_id, $cash)
     {
-        $customer_id = \Yii::$app->request->get('customer_id');
-        $cash = \Yii::$app->request->get('cash');
-        \Yii::$app->response->format = Response::FORMAT_JSON;
+        // $customer_id = \Yii::$app->request->get('customer_id');
+        // $cash = \Yii::$app->request->get('cash');
+        // \Yii::$app->response->format = Response::FORMAT_JSON;
 
         $customer = Customer::find()->where(['id'=>$customer_id])->one();
-        $balance = $customer->balance;
-        $customer->customer_balance += $cash;
+        $balance = $customer->customer_balance;
+        $customer->customer_balance = bcadd($balance, $cash, 2);
         $customer->validate();
+        if ($customer->hasErrors()) {
+            return false;
+        }
         $customer->save();
+        return true;
     }
 
     /**
      * 客户账户余额转出
      */
-    public function actionDecBalance()
+    static public function decBalance($customer_id, $cash)
     {
-        $customer_id = \Yii::$app->request->get('customer_id');
-        $cash = \Yii::$app->request->get('cash');
-        \Yii::$app->response->format = Response::FORMAT_JSON;
+        // $customer_id = \Yii::$app->request->get('customer_id');
+        // $cash = \Yii::$app->request->get('cash');
+        // \Yii::$app->response->format = Response::FORMAT_JSON;
 
         $customer = Customer::find()->where(['id'=>$customer_id])->one();
-        $customer->customer_balance -= $cash;
+        $balance = $customer->customer_balance;
+        $customer->customer_balance = bcsub($balance, $cash, 2);
+        // $customer->customer_balance = $balance - $cash;
         $customer->validate();
+        if ($customer->hasErrors()) {
+            return false;
+        }
         $customer->save();
+        return true;
     }
 }

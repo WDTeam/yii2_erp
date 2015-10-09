@@ -7,19 +7,17 @@ class m150926_035719_create_table_operation_advert_release extends Migration
 {
     public function up()
     {
+        $sql = 'DROP TABLE IF EXISTS {{%operation_advert_release}}';
+        $this->execute($sql);
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'广告发布表\'';
         }
         $this->createTable('{{%operation_advert_release}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT COMMENT \'编号\'' ,
-            'operation_advert_position_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'广告位置编号\'',
-            'operation_advert_position_name' => Schema::TYPE_STRING . '(60) DEFAULT NULL COMMENT \'广告位置名称\'',
-            'operation_platform_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'广告平台编号\'',
-            'operation_platform_name' => Schema::TYPE_STRING . '(60) DEFAULT NULL COMMENT \'广告平台名称\'',
-            'operation_platform_version_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'广告版本编号\'',
-            'operation_platform_version_name' => Schema::TYPE_STRING . '(60) DEFAULT NULL COMMENT \'广告版本名称\'',
-            'operation_advert_contents' => Schema::TYPE_TEXT . ' DEFAULT NULL COMMENT \'广告内容编号\'',
+            'city_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'广告位置编号\'',
+            'city_name' => Schema::TYPE_STRING . '(60) DEFAULT NULL COMMENT \'广告位置名称\'',
+            'operation_release_contents' => Schema::TYPE_TEXT . ' DEFAULT NULL COMMENT \'发布详情\'',
             'created_at' => Schema::TYPE_INTEGER. '(11) DEFAULT NULL COMMENT \'创建时间\'',
             'updated_at' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'编辑时间\'',
         ], $tableOptions);
