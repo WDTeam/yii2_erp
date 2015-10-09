@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use boss\models\FinanceWorkerNonOrderIncomeSearch;
+use boss\models\FinanceSettleApplySearch;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -29,13 +30,15 @@ $this->params['breadcrumbs'][] = $this->title;
 <form id ="financeSettleApplyForm">
    
 <div class="finance-settle-apply-index">
-     <div class="panel panel-info">
-        <div class = "container">
-            <input type="hidden" id="finance_settle_apply_status" name="FinanceSettleApplySearch[finance_settle_apply_status]"  />
-            <input type="hidden" id="ids" name="FinanceSettleApplySearch[ids]"/>
-            <input type="hidden" id="nodeId"   name="FinanceSettleApplySearch[nodeId]" value = "<?php echo $nodeId; ?>"/>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 全职结算搜索</h3>
         </div>
-
+        <div class="panel-body">
+            <?php  echo $this->render('_self_fulltime_search', ['model' => $searchModel]); ?>
+        </div>
+    </div>
+     <div class="panel panel-info">
         <script>
             function checkResult(checkStatus){
                 //勾选的结算记录id
@@ -78,30 +81,25 @@ $this->params['breadcrumbs'][] = $this->title;
                 'finance_settle_apply_order_money_except_cash',
                 ['attribute'=>'finance_settle_apply_subsidy',
                  'content'=>function($model,$key,$index){return '<a class="btn btn-default"  id = "subsidyButton" data-container="body" data-toggle="popover" data-placement="bottom" data-content="'.FinanceWorkerNonOrderIncomeSearch::getSubsidyDetail($model->id).'">'.$model->finance_settle_apply_subsidy.'</a>';}],
-                'finance_settle_apply_reviewer', 
-                ['attribute'=>'updated_at','content'=>function($model,$key,$index){return Html::a(date('Y:m:d H:i:s',$model->updated_at),'#');}],
                 [
                 'class' => 'yii\grid\ActionColumn',
                 'template' =>'{view} {agree} {disagree}',
                 'buttons' => [
                     'agree' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-ok"></span>', Yii::$app->urlManager->createUrl(['worker/view', 'id' => $model->id, 'edit' => 't']), [
+                        return Html::a('<span class="glyphicon glyphicon-ok"></span>', Yii::$app->urlManager->createUrl(['/finance-settle-apply/self-fulltime-worker-settle-done', 'id' => $model->id, 'finance_settle_apply_status' => FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED]), [
                             'title' => Yii::t('yii', '审核通过'),
                         ]);
                     },
                     'disagree' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-remove"></span>',
                             [
-                                '/worker/vacation-create',
-                                'id' => $model->id
+                                '/finance-settle-apply/self-fulltime-worker-settle-done',
+                                'id' => $model->id, 
+                                'finance_settle_apply_status' => FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_FAILED
                             ]
                             ,
                             [
-                                'title' => Yii::t('yii', '请假信息录入'),
-                                'data-toggle' => 'modal',
-                                'data-target' => '#vacationModal',
-                                'class'=>'vacation',
-                                'data-id'=>$model->id,
+                                'title' => Yii::t('yii', '审核不通过'),
                             ]);
                     },
                 ],
