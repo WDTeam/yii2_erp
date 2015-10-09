@@ -64,27 +64,25 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
 
         //            'id',
-                    'operation_advert_position_name',
-        //            'operation_city_id',
-                    'operation_city_name',
-    //                'operation_platform_name',
-    //                'operation_platform_version_name',
+                    'operation_advert_content_name',
+                    'platform_name',
+                    'platform_version_name',
         //            'operation_advert_start_time:datetime',
         //             'operation_advert_end_time:datetime',
-                     'operation_advert_online_time:date',
-                     'operation_advert_offline_time:date',
+//                     'operation_advert_online_time:date',
+//                     'operation_advert_offline_time:date',
                     [
-                        'attribute'=> 'operation_advert_picture',
+                        'attribute'=> 'operation_advert_picture_text',
                         'format'=>'html',
                         'value' => function ($model){
-                            if(empty($model->operation_advert_picture)){
+                            if(empty($model->operation_advert_picture_text)){
                                 return '';
                             }else{
-                                return '<img src="'. $model->operation_advert_picture .'" height="30">';
+                                return Html::a('<img border="0" src="'. $model->operation_advert_picture_text .'" height="30">',$model->operation_advert_url, ['target' => '_blank'] );
                             }
                        }
                     ],
-                     'operation_advert_url:url',
+//                     'operation_advert_url:url',
                      'created_at:datetime',
                      'updated_at:datetime',
 
