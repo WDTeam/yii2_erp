@@ -56,6 +56,37 @@ class FinanceSettleApplyController extends BaseAuthController
     }
     
     /**
+     * 自营全职阿姨审核列表
+     */
+    public function actionSelfFulltimeWorkerSettleIndex(){
+        $searchModel = new FinanceSettleApplySearch;
+        $defaultParams = array('FinanceSettleApplySearch'=>['finance_settle_apply_status' => '0']);
+        $requestParams = Yii::$app->request->getQueryParams();
+        $nodeId = null;
+        if(isset($requestParams['FinanceSettleApplySearch'])){
+            $requestModel = $requestParams['FinanceSettleApplySearch'];
+            $nodeId =$requestModel['nodeId'];
+        }
+        $requestParams = array_merge($defaultParams,$requestParams);
+        $dataProvider = $searchModel->search($requestParams);
+        return $this->render('selfFulltimeWorkerSettleIndex', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'nodeId' => $nodeId,
+        ]);
+    }
+    
+    /**
+     * 自营全职阿姨审核结果
+     */
+    public function actionSelfFulltimeWorkerSettleDone(){
+         $requestModel = Yii::$app->request->getQueryParams();
+        $financeSettleApplySearch = $requestModel["FinanceSettleApplySearch"];
+//        saveAndGenerateSettleData($partimeWorkerArr,$settleStartTime,$settleEndTime);
+        return $this->actionSelfFulltimeWorkerSettleIndex();
+    }
+    
+    /**
      * Lists all FinanceSettleApply models.
      * @return mixed
      */
