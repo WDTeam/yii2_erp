@@ -122,7 +122,8 @@ class GeneralPayController extends Controller
     /**
      * 支付宝APP回调
      */
-    public function actionAlipayAppNotify(){
+    public function actionAlipayAppNotify()
+    {
 
         $request = yii::$app->request;
 
@@ -185,8 +186,8 @@ class GeneralPayController extends Controller
         $model = GeneralPay::find()->where(['id'=>$GeneralPayId,'general_pay_status'=>0,'is_del'=>1])->one();
 
         //验证支付结果
-        if(!empty($model)){
-
+        if(!empty($model))
+        {
             //验证签名
             $alipay = new \alipay_class;
             $verify_result = $alipay->callback();
@@ -194,6 +195,7 @@ class GeneralPayController extends Controller
             if(!empty($_GET['debug'])){
                 $verify_result = true;
             }
+
             //签名验证成功
             if($verify_result) {
                 $model->id = $GeneralPayId; //ID
@@ -209,7 +211,7 @@ class GeneralPayController extends Controller
                 $transaction = $connection->beginTransaction();
                 try {
                     $model->save(false);
-                    //change customer balance
+                    //修改用户余额
                     $customer = new \common\models\Customer;
                     if(!empty($model->order_id)){
                         $customer::decBalance($model->customer_id,$model->general_pay_actual_money);
@@ -220,6 +222,7 @@ class GeneralPayController extends Controller
                     $transaction->commit();
                     $status = true;
                 } catch(Exception $e) {
+                    $status = false;
                     $transaction->rollBack();
                 }
 
