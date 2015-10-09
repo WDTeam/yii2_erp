@@ -24,8 +24,8 @@ class uppay_class{
             'txnType' => '01',				//交易类型
             'txnSubType' => '01',				//交易子类
             'bizType' => '000201',				//业务类型
-            'frontUrl' =>  $param['notify_url'],  		//前台通知地址，控件接入的时候不会起作用
-            'backUrl' => $param['notify_url'],		//后台通知地址
+            'frontUrl' =>  SDK_FRONT_NOTIFY_URL,  		//前台通知地址，控件接入的时候不会起作用
+            'backUrl' => SDK_BACK_NOTIFY_URL,		//后台通知地址
             'signMethod' => '01',		//签名方法
             'channelType' => '08',		//渠道类型，07-PC，08-手机
             'accessType' => '0',		//接入类型
@@ -38,7 +38,7 @@ class uppay_class{
             'reqReserved' =>'透传信息', //请求方保留域，透传字段，查询、通知、对账文件中均会原样出现
         );
 
-        //签名
+        // 签名
         sign ( $params );
         getRequestParamString ( $params );
         // 发送信息到后台
