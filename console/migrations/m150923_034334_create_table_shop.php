@@ -7,14 +7,14 @@ class m150923_034334_create_table_shop extends Migration
 {
     public function up()
     {
-        \Yii::$app->db->createCommand("
+        $this->execute("
             CREATE TABLE IF NOT EXISTS {{%shop}} (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `name` varchar(100) NOT NULL COMMENT '店名',
               `shop_manager_id` int(11) NOT NULL DEFAULT '0' COMMENT '归属家政ID',
-              `province_name` varchar(50) NOT NULL COMMENT '省份',
-              `city_name` varchar(50) NOT NULL COMMENT '城市',
-              `county_name` varchar(50) DEFAULT NULL COMMENT '县',
+              `province_id` int(11) DEFAULT NULL COMMENT '省份ID',
+              `city_id` int(11) DEFAULT NULL COMMENT '城市ID',
+              `county_id` int(11) DEFAULT NULL COMMENT '区县ID',
               `street` varchar(255) NOT NULL COMMENT '办公街道',
               `principal` varchar(50) NOT NULL COMMENT '负责人',
               `tel` varchar(50) NOT NULL COMMENT '电话',
@@ -33,9 +33,9 @@ class m150923_034334_create_table_shop extends Migration
               `level` varchar(50) DEFAULT NULL COMMENT '评级',
               `isdel` tinyint(1) DEFAULT NULL COMMENT '是否删除',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
-        ")->execute();
+        ");
     }
 
     public function down()
