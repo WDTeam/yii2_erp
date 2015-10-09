@@ -121,7 +121,13 @@ echo DetailView::widget([
                 'attribute' => 'customer_is_vip',
                 'type' => DetailView::INPUT_WIDGET,
                 'widgetOptions' => [
-                    'class' => \kartik\widgets\SwitchInput::classname()
+                    'name'=>'customer_is_vip',
+                    'class'=>\kartik\widgets\Select2::className(),
+                    'data' => array('1'=>'会员', '0'=>'非会员'),
+                    'hideSearch' => true,
+                    'options'=>[
+                        'placeholder' => '选择客户身份',
+                    ]
                 ],
                 'value'=>$model->customer_is_vip ? '会员' : '非会员',
             ],

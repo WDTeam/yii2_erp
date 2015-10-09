@@ -39,7 +39,7 @@ $cityDesc = '客户';
     echo $form->field($model, 'created_at')->widget(DatePicker::classname(),[
         'name' => 'created_at',
         'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-        'value' => date('Y-m-d', $model->created_at),
+        'value' => date('yyyy-mm-dd', $model->created_at),
         'pluginOptions' => [
             'autoclose'=>true,
             'format' => 'yyyy-mm-dd'
@@ -48,7 +48,7 @@ $cityDesc = '客户';
     echo $form->field($model, 'updated_at')->widget(DatePicker::classname(),[
         'name' => 'updated_at',
         'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-        'value' => date('Y-m-d', $model->updated_at),
+        'value' => date('yyyy-mm-dd', $model->updated_at),
         'pluginOptions' => [
             'autoclose'=>true,
             'format' => 'yyyy-mm-dd'
@@ -57,7 +57,7 @@ $cityDesc = '客户';
     echo $form->field($model, 'customer_birth')->widget(DatePicker::classname(),[
         'name' => 'customer_birth',
         'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-        'value' => date('Y-m-d', $model->customer_birth),
+        'value' => date('yyyy-mm-dd', $model->customer_birth),
         'pluginOptions' => [
             'autoclose'=>true,
             'format' => 'yyyy-mm-dd'
@@ -78,7 +78,7 @@ $cityDesc = '客户';
     echo $form->field($model, 'customer_login_time')->widget(DatePicker::classname(),[
         'name' => 'customer_login_time',
         'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-        'value' => date('Y-m-d', $model->customer_login_time),
+        'value' => date('yyyy-mm-dd', $model->customer_login_time),
         'pluginOptions' => [
             'autoclose'=>true,
             'format' => 'yyyy-mm-dd'
