@@ -12,6 +12,18 @@ use common\models\FinanceWorkerOrderIncome;
  */
 class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
 {
+    public $worker_name;
+    
+    public $worker_phone;
+    
+    public $worker_type;
+    
+    public $order_count;
+    
+    public $manage_fee;
+    
+    public $worker_idcard;
+    
     //订单收入类型表，包括纯订单收入和订单补贴
     public $orderIncomeType = array('order_money'=>'0','cash_money'=>'1',
             'far_subsidy'=>'2','night_subsidy'=>'3',
@@ -76,6 +88,20 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
         ]);
 
         return $dataProvider;
+    }
+    
+     public function attributeLabels()
+    {
+        $parentAttributeLabels = parent::attributeLabels();
+        $addAttributeLabels = [
+            'worker_idcard' => Yii::t('app', '阿姨身份证号'),
+            'worker_name' => Yii::t('app', '阿姨姓名'),
+            'worker_phone' => Yii::t('app', '阿姨电话'),
+            'worker_type' => Yii::t('app', '阿姨类型'),
+            'order_count' => Yii::t('app', '完成单量'),
+            'manage_fee' => Yii::t('app', '服务费'),
+        ];
+        return array_merge($addAttributeLabels,$parentAttributeLabels);
     }
     
 }
