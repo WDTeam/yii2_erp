@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d03ea3c4305996d34fbee7ed328665c9",
-    "content-hash": "dffbf7f891a5448b7fbe03ad7b2a1c37",
+    "hash": "f0667075046faa6884f059910ea4989e",
+    "content-hash": "538119bba35144c0dec0a32c575d55f2",
     "packages": [
         {
             "name": "2amigos/yii2-date-picker-widget",
@@ -78,7 +78,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "http://packagist.phpcomposer.com/files/2amigos/yii2-date-time-picker-widget/572e2448ba1cd207b339dd5d117e3d1d23f0bbc3.zip",
+                "url": "https://api.github.com/repos/2amigos/yii2-date-time-picker-widget/zipball/572e2448ba1cd207b339dd5d117e3d1d23f0bbc3",
                 "reference": "572e2448ba1cd207b339dd5d117e3d1d23f0bbc3",
                 "shasum": ""
             },
@@ -703,7 +703,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "http://packagist.phpcomposer.com/files/jpush/jpush-api-php-client/d225ea5a940c2af27a02789db8c6435a45978e5b.zip",
+                "url": "https://api.github.com/repos/jpush/jpush-api-php-client/zipball/d225ea5a940c2af27a02789db8c6435a45978e5b",
                 "reference": "d225ea5a940c2af27a02789db8c6435a45978e5b",
                 "shasum": ""
             },
@@ -1359,7 +1359,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "http://packagist.phpcomposer.com/files/kartik-v/yii2-dynagrid/4f04a97458a49907984ab8919351544f98cd98b8.zip",
+                "url": "https://api.github.com/repos/kartik-v/yii2-dynagrid/zipball/4f04a97458a49907984ab8919351544f98cd98b8",
                 "reference": "4f04a97458a49907984ab8919351544f98cd98b8",
                 "shasum": ""
             },
@@ -1414,7 +1414,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "http://packagist.phpcomposer.com/files/kartik-v/yii2-editable/bbbe10218d1539c31f1628e86ee889a27629e3f5.zip",
+                "url": "https://api.github.com/repos/kartik-v/yii2-editable/zipball/bbbe10218d1539c31f1628e86ee889a27629e3f5",
                 "reference": "bbbe10218d1539c31f1628e86ee889a27629e3f5",
                 "shasum": ""
             },
@@ -1462,7 +1462,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "http://packagist.phpcomposer.com/files/kartik-v/yii2-field-range/095d260eecb86ff2e78a70775011cec00a75df98.zip",
+                "url": "https://api.github.com/repos/kartik-v/yii2-field-range/zipball/095d260eecb86ff2e78a70775011cec00a75df98",
                 "reference": "095d260eecb86ff2e78a70775011cec00a75df98",
                 "shasum": ""
             },
@@ -1513,7 +1513,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "http://packagist.phpcomposer.com/files/kartik-v/yii2-grid/913fde8fbe41bf998d53a88d0443e25e1e696194.zip",
+                "url": "https://api.github.com/repos/kartik-v/yii2-grid/zipball/913fde8fbe41bf998d53a88d0443e25e1e696194",
                 "reference": "913fde8fbe41bf998d53a88d0443e25e1e696194",
                 "shasum": ""
             },
@@ -2976,7 +2976,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "http://packagist.phpcomposer.com/files/liyunfang/yii2-contextmenu/cbc869ccd0964e9526adc5bea8361591938dd64a.zip",
+                "url": "https://api.github.com/repos/liyunfang/yii2-contextmenu/zipball/cbc869ccd0964e9526adc5bea8361591938dd64a",
                 "reference": "cbc869ccd0964e9526adc5bea8361591938dd64a",
                 "shasum": ""
             },
@@ -3121,7 +3121,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "http://packagist.phpcomposer.com/files/Seldaek/monolog/0524c87587ab85bc4c2d6f5b41253ccb930a5422.zip",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/0524c87587ab85bc4c2d6f5b41253ccb930a5422",
                 "reference": "0524c87587ab85bc4c2d6f5b41253ccb930a5422",
                 "shasum": ""
             },
@@ -3197,7 +3197,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "http://packagist.phpcomposer.com/files/nategood/httpful/bd73f89d34d8f879c54ac46eb94b0f7be1d00820.zip",
+                "url": "https://api.github.com/repos/nategood/httpful/zipball/bd73f89d34d8f879c54ac46eb94b0f7be1d00820",
                 "reference": "bd73f89d34d8f879c54ac46eb94b0f7be1d00820",
                 "shasum": ""
             },
@@ -3337,7 +3337,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "http://packagist.phpcomposer.com/files/php-fig/log/fe0936ee26643249e916849d48e3a51d5f5e278b.zip",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
                 "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
                 "shasum": ""
             },
@@ -3468,7 +3468,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "http://packagist.phpcomposer.com/files/yii2tech/ar-softdelete/d62def6057c4b1b3cd3ff464b2fba347666191d6.zip",
+                "url": "https://api.github.com/repos/yii2tech/ar-softdelete/zipball/d62def6057c4b1b3cd3ff464b2fba347666191d6",
                 "reference": "d62def6057c4b1b3cd3ff464b2fba347666191d6",
                 "shasum": ""
             },
@@ -3517,7 +3517,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "http://packagist.phpcomposer.com/files/yii2tech/crontab/2e07d919ac9ccc21c869839347d7216c16325de4.zip",
+                "url": "https://api.github.com/repos/yii2tech/crontab/zipball/2e07d919ac9ccc21c869839347d7216c16325de4",
                 "reference": "2e07d919ac9ccc21c869839347d7216c16325de4",
                 "shasum": ""
             },
@@ -3564,7 +3564,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "http://packagist.phpcomposer.com/files/yiidoc/yii2-redactor/c4c80c19c68728e88d135f4eec5c51352fbbaa37.zip",
+                "url": "https://api.github.com/repos/yiidoc/yii2-redactor/zipball/c4c80c19c68728e88d135f4eec5c51352fbbaa37",
                 "reference": "c4c80c19c68728e88d135f4eec5c51352fbbaa37",
                 "shasum": ""
             },
@@ -3832,6 +3832,54 @@
                 "yii2"
             ],
             "time": "2015-05-10 22:09:43"
+        },
+        {
+            "name": "yiisoft/yii2-mongodb",
+            "version": "2.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yiisoft/yii2-mongodb.git",
+                "reference": "8f959240e17bfdab6fb4e16be078b81b461988a2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yiisoft/yii2-mongodb/zipball/8f959240e17bfdab6fb4e16be078b81b461988a2",
+                "reference": "8f959240e17bfdab6fb4e16be078b81b461988a2",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mongo": ">=1.5.0",
+                "yiisoft/yii2": ">=2.0.4"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "yii\\mongodb\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Paul Klimov",
+                    "email": "klimov.paul@gmail.com"
+                }
+            ],
+            "description": "MongoDb extension for the Yii framework",
+            "keywords": [
+                "active-record",
+                "mongo",
+                "mongodb",
+                "yii2"
+            ],
+            "time": "2015-05-10 22:10:01"
         },
         {
             "name": "yiisoft/yii2-redis",
