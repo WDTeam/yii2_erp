@@ -3,7 +3,6 @@
 namespace boss\controllers;
 
 
-use common\models\WorkerDistrict;
 use Yii;
 use yii\db\Query;
 use boss\components\BaseAuthController;
@@ -11,6 +10,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use core\models\worker\Worker;
 use core\models\worker\WorkerExt;
+use core\models\worker\WorkerDistrict;
+use common\models\OrderExtWorker;
 use common\models\WorkerBlock;
 use common\models\WorkerVacation;
 use common\models\WorkerBlockLog;
@@ -436,9 +437,67 @@ class WorkerController extends BaseAuthController
     }
 
     public function actionTest(){
-        $worker = new Worker();
-        $worker = $worker->getWorkerInfo(43);
+
+        $workerModel = new Worker();
+        $r = $workerModel->getWorkerInfoByPhone(18645973380);
+        var_dump($r);die;
         echo '<pre>';
-        var_dump($worker);die;
+//        Yii::$app->redis->sadd('district_1','16684','16683','16685','16686','16687','16688','16689','16682');
+//        Yii::$app->redis->sadd('district_2','16694','16693','16695','16696','16697','16698','16699','16692');
+//        Yii::$app->redis->sadd('worker_16694','10','11','9','8','7');
+//        Yii::$app->redis->sadd('worker_16693','10','11');
+        $workerDistrictModel = new WorkerDistrict;
+        $orderExtWorkerModel = new OrderExtWorker;
+        $workerDistrictId = 4;
+        $workerType = 1;
+
+
+        //获取所属商圈中所有阿姨
+        if($workerType==1){
+            $districtWorkerResult = $workerDistrictModel::find()->select('`ejj_worker_district`.worker_id,`ejj_worker_district`.operation_shop_district_id')->where(['operation_shop_district_id'=>$workerDistrictId])->innerJoinWith('worker')->asArray()->all();
+        }else{
+            $districtWorkerResult = $workerDistrictModel::find()->select('`ejj_worker_district`.worker_id,`ejj_worker_district`.operation_shop_district_id')->where(['operation_shop_district_id'=>$workerDistrictId])->innerJoinWith('worker')->asArray()->all();
+        }
+        //var_dump(Yii::$app->log);
+        if($districtWorkerResult){
+            foreach ($districtWorkerResult as $val) {
+                $districtWorkerArr[] = $val['worker_id'];
+            }
+        }else{
+            $districtWorkerArr = [];
+        }
+
+        //获取已预约以及正在服务的所有阿姨
+        $orderWorkerResult = $orderExtWorkerModel::find()->asArray()->all();
+        if($orderWorkerResult){
+            foreach ($orderWorkerResult as $val) {
+                $busyWorkerArr[] = $val['worker_id'];
+            }
+        }else{
+            $busyWorkerArr = [];
+        }
+
+//        var_dump($districtWorkerArr);
+//        echo '<hr>';
+//        var_dump($busyWorkerArr);
+//        echo '<hr>';
+        $freeWorkerArr = array_diff($districtWorkerArr,$busyWorkerArr);
+        var_dump($freeWorkerArr);
+        die;
+
+
+
+
+        $workers = Yii::$app->redis->smembers('district_1');
+        $time = date('H');
+        foreach($workers as $val){
+            $workerKey = 'worker_'.$val;
+            $workerIsBusy = Yii::$app->redis->sismember($workerKey,$time);
+            if(empty($workerIsBusy)){
+                $workerFreeArr[] = $val;
+            }
+        }
+        var_dump($workerFreeArr);
+        var_dump(Yii::$app->redis->sinter('worker_16983','worker_16694'));
     }
 }
