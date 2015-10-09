@@ -4,7 +4,7 @@
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2015
- * @version   3.0.6
+ * @version   3.0.7
  */
 
 namespace kartik\grid;
@@ -47,9 +47,6 @@ trait ColumnTrait
     {
         if ($this->grid->filterModel !== null && $this->mergeHeader && $this->grid->filterPosition === GridView::FILTER_POS_BODY) {
             return null;
-        }
-        if (isset($this->filterType) && $this->filterType === GridView::FILTER_SELECT2 && empty($this->filterWidgetOptions['pluginOptions']['width'])) {
-            $this->filterWidgetOptions['pluginOptions']['width'] = 'resolve';
         }
         $this->headerOptions['data-col-seq'] = array_search($this, $this->grid->columns);
         return parent::renderFilterCell();
