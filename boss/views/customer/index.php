@@ -15,6 +15,7 @@ use common\models\CustomerAddress;
 
 use common\models\GeneralRegion;
 use common\models\OrderExtCustomer;
+use common\models\CustomerExtBalance;
 
 /**
  * @var yii\web\View $this
@@ -144,7 +145,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'label' => '余额',
                 'value' => function ($dataProvider) {
-                    return $dataProvider->customer_balance;
+                    $customerExtBalance = CustomerExtBalance::findOne($dataProvider->id);
+                    $customer_balance = $customerExtBalance != NULL ? $customerExtBalance->customer_balance : 0;
+                    return '￥'.$customer_balance;
                 },
                 'width' => "80px",
             ],
