@@ -44,7 +44,7 @@ class m150918_140930_create_table_finance_settle_apply extends Migration
             [
                 [1,111,'13888888888',2,'全职',6,150,0,150,70,220,0,2,'月结','魏北南',
 
-                    strtotime("-2 month"),strtotime("-1 month"),0,time(),time()],
+                    strtotime(date('Y-m-01 00:00:00', strtotime('2015-09'))),strtotime(date('Y-m-t 23:59:59', strtotime('2015-09'))),0,time(),time()],
                 [2,222,'13899999999',1,'兼职',8,200,0,200,0,200,0,1,'周结','潘高峰',
 
                     strtotime("-2 month"),strtotime("-1 month"),0,time(),time()],
