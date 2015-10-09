@@ -10,6 +10,7 @@ namespace boss\models\order;
 
 use Yii;
 use core\models\order\Order as OrderModel;
+use core\models\worker\Worker;
 
 
 class Order extends OrderModel
@@ -18,6 +19,11 @@ class Order extends OrderModel
     public $orderBookedDate;
     public $orderBookedTimeRange;
 
+
+    public static function getWorkerInfoByPhone($phone)
+    {
+        return Worker::getWorkerInfoByPhone($phone);
+    }
 
 
     public function getOrderBookedCountList()
@@ -70,7 +76,16 @@ class Order extends OrderModel
 
                     break;
                 case self::ORDER_PAY_TYPE_POP://第三方预付
+                    $order = Order::findOne($this->id);
+                    $order->admin_id = $post['Order']['admin_id'];
+                    $order->order_ip = $post['Order']['order_ip'];
 
+                    $order->channel_id = $post['Order']['channel_id'];
+                    $order->order_pop_group_buy_code = $post['Order']['order_pop_group_buy_code'];
+                    $order->order_pop_order_code = $post['Order']['order_pop_order_code'];
+                    $order->order_pop_order_money = $post['Order']['order_pop_order_money'];
+                    $order->order_pop_operation_money = $post['Order']['order_money'] - $post['Order']['order_pop_order_money'];
+                    return self::isPaymentPop($order);
                     break;
                 default:break;
 

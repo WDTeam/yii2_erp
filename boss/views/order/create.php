@@ -93,7 +93,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $form->field($model, 'order_pop_group_buy_code')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model, 'order_pop_order_code')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model, 'order_pop_order_money')->textInput(['maxlength' => true]) ?>
-                <?= $form->field($model, 'order_pop_operation_money')->textInput(['maxlength' => true]) ?>
                 </div>
             </div>
             <div class="panel-heading">
