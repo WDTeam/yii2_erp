@@ -219,4 +219,26 @@ class OperationAdvertContentController extends BaseAuthController
             'data' => $d
         ]);
     }
+    
+    public function actionAdverts(){
+        $platform_id = Yii::$app->request->post('platform_id');
+        $version_id = Yii::$app->request->post('version_id');
+        if($platform_id){
+            $where = ['platform_id' => $platform_id];
+            $platform = OperationPlatform::find()->where(['id' => $platform_id])->one();
+            if($version_id){
+                $where = ['AND' , $where, ['platform_version_id' => $version_id]];
+                $version = OperationPlatformVersion::find()->where(['id' => $version_id])->one();
+            }
+        }else{
+            $where = null;
+        }
+        
+        $infos = OperationAdvertContent::find()->asArray()->where($where)->all();
+        if(isset($version)){
+            return $this->renderAjax('adverts', ['infos' => $infos, 'platform' => $platform, 'version' => $version]);
+        }else{
+            return $this->renderAjax('adverts', ['infos' => $infos, 'platform' => $platform]);
+        }
+    }
 }

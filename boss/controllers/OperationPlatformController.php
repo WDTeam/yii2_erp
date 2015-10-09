@@ -123,4 +123,5 @@ class OperationPlatformController extends BaseAuthController
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+    
 }
