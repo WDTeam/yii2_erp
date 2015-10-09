@@ -120,6 +120,16 @@ $cityDesc = '门店';
                 'allowClear' => true
             ],
         ]); ?>
+        <?= $form->field($worker, 'worker_district')->widget(Select2::classname(), [
+            'name' => 'worker_district',
+            'hideSearch' => true,
+            'data' => [1 => '世界中心商圈', 2 => '五道口商圈', 3 => '西单商圈', 4 => '东单商圈'],
+            'options' => ['placeholder' => '选择阿姨商圈','multiple' => true],
+            'pluginOptions' => [
+                'tags' => true,
+                'maximumInputLength' => 10
+            ],
+        ]); ?>
         <div class="operation-city-form">
 
             <?php

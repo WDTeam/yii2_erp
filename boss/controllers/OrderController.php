@@ -239,8 +239,8 @@ class OrderController extends BaseAuthController
             //预约时间处理
             $time = explode('-',$post['Order']['orderBookedTimeRange']);
             $post['Order']['order_booked_begin_time'] = $post['Order']['orderBookedDate'].' '.$time[0].':00';
-            $post['Order']['order_booked_end_time'] = ($time[1]=='24:00')?date('Y-m-d H:i:s',strtotime($post['Order']['order_booked_date'].'00:00:00 +1 days')):$post['Order']['order_booked_date'].' '.$time[1].':00';
-            if ($model->createNew($post)) {
+            $post['Order']['order_booked_end_time'] = ($time[1]=='24:00')?date('Y-m-d H:i:s',strtotime($post['Order']['orderBookedDate'].'00:00:00 +1 days')):$post['Order']['orderBookedDate'].' '.$time[1].':00';
+            if ($model->createNew($post['Order'])) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }else{//init

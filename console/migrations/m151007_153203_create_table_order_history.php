@@ -24,6 +24,7 @@ class m151007_153203_create_table_order_history extends Migration
             'order_is_parent' => Schema::TYPE_BOOLEAN . '(1) unsigned  DEFAULT 0 COMMENT \'有无子订单 1有 0无\'',
             'order_created_at' => Schema::TYPE_INTEGER.'(11) unsigned  DEFAULT 0 COMMENT \'下单时间\'',
             'order_isdel' => Schema::TYPE_BOOLEAN . '(1) unsigned  DEFAULT 0 COMMENT \'订单是否已删除\'',
+            'order_ver' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 1 COMMENT \'乐观锁\'',
 //==============================订单状态
             'order_before_status_dict_id' => Schema::TYPE_SMALLINT . '(4) unsigned  DEFAULT 0 COMMENT \'状态变更前订单状态字典ID\'',
             'order_before_status_name' => Schema::TYPE_STRING . '(128)   DEFAULT \'\' COMMENT \'状态变更前订单状态\'',

@@ -169,7 +169,7 @@ $("#order-order_booked_count input").change(function(){
         var hourtime = i+$("#order-order_booked_count input:checked").val()/60;
         var hour2 = parseInt(hourtime)<10?'0'+parseInt(hourtime):parseInt(hourtime);
         var minute = (hourtime%1==0)?'00':'30';
-        $("#order-orderbookedtimerange").append('<label class="radio-inline"><input type="radio" checked="" value="'+hour+':00-'+hour2+':'+minute+'" name="Order[order_booked_time_range]"> '+hour+':00-'+hour2+':'+minute+'</label>');
+        $("#order-orderbookedtimerange").append('<label class="radio-inline"><input type="radio" checked="" value="'+hour+':00-'+hour2+':'+minute+'" name="Order[orderBookedTimeRange]"> '+hour+':00-'+hour2+':'+minute+'</label>');
     }
 
 });

@@ -2,7 +2,7 @@
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2015
- * @version   3.0.6
+ * @version   3.0.7
  *
  * jQuery methods library for yii2-grid expand row column
  * 
@@ -234,7 +234,13 @@ kvExpandRow = function (options) {
                 return true;
             }
             if (isExpanded($icon)) {
-                expandRow(false);
+                if (detailUrl) {
+                    loadDetail(function () {
+                        expandRow(false);
+                    });
+                } else {
+                    expandRow(false);
+                }
             }
             $cell.off('click').on('click', function () {
                 toggleRow($cell);
