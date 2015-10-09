@@ -35,4 +35,30 @@ use common\models\Operation\CommonOperationGoods;
  */
 class CoreOperationGoods extends CommonOperationGoods
 {
+    public static function getCategoryGoods($categoryid){
+        return self::find()->asArray()->where(['operation_category_id' => $categoryid])->All();
+    }
+    
+    public static function getCategoryGoodsInfo($categoryid){
+        $data = self::getCategoryGoods($categoryid);
+        $d = array();
+        foreach((array)$data as $key => $value){
+            $d[$value['id'].'-'.$value['operation_goods_name']] = $value['operation_goods_name'];
+        }
+        return $d;
+    }
+    
+    /**
+     * 获取多个商品详细
+     * @param type $goods_id
+     */
+    public static function getGoodsList($goods_ids = null){
+        $data = array();
+        if(!empty($goods_ids)){
+            foreach((array)$goods_ids as $key => $value){
+                $data[$key] = self::find()->asArray()->where(['id' => $value])->One();
+            }
+        }
+        return $data;
+    }
 }

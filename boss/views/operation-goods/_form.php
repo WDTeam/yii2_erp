@@ -18,13 +18,15 @@ use boss\components\GoodsTypeCascade;
 
     <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL, 'options' => ['enctype' => 'multipart/form-data']]); ?>
     <?php
-        echo GoodsTypeCascade::widget([
-            'model' => $model,
-            'options' => ['class' => 'form-control'],
-            'name' => 'OperationGoods[operation_category_ids][]',
-        ]);
+//        echo GoodsTypeCascade::widget([
+//            'model' => $model,
+//            'options' => ['class' => 'form-control'],
+//            'name' => 'OperationGoods[operation_category_ids][]',
+//        ]);
     ?>
-    <?php echo Form::widget([
+    <?= $form->field($model, 'operation_category_id')->dropDownList($OperationCategory, ['prompt' => '请选择分类'])->label('选择分类') ?>
+    <?php 
+    echo Form::widget([
 
     'model' => $model,
     'form' => $form,
@@ -44,46 +46,50 @@ use boss\components\GoodsTypeCascade;
 
 
         ]]); ?>
-        <?= $form->field($model, 'operation_goods_start_time')->widget(DateTimePicker::className(), [
-            'language' => 'es',
-            'size' => 'ms',
-            'template' => '{input}',
-            'pickButtonIcon' => 'glyphicon glyphicon-time',
-            'inline' => true,
-            'clientOptions' => [
-                'startView' => 1,
-                'minView' => 0,
-                'maxView' => 1,
-                'autoclose' => true,
-                'linkFormat' => 'HH:ii', // if inline = true
-                // 'format' => 'HH:ii P', // if inline = false
-                'todayBtn' => true
-            ]
-        ]);?>
-        <?= $form->field($model, 'operation_goods_end_time')->widget(DateTimePicker::className(), [
-            'language' => 'es',
-            'size' => 'ms',
-            'template' => '{input}',
-            'pickButtonIcon' => 'glyphicon glyphicon-time',
-            'inline' => true,
-            'clientOptions' => [
-                'startView' => 1,
-                'minView' => 0,
-                'maxView' => 1,
-                'autoclose' => true,
-                'linkFormat' => 'HH:ii P', // if inline = true
-                'todayBtn' => true
-            ]
-        ]);?>
+        <?php
+//            echo $form->field($model, 'operation_goods_start_time')->widget(DateTimePicker::className(), [
+//            'language' => 'es',
+//            'size' => 'ms',
+//            'template' => '{input}',
+//            'pickButtonIcon' => 'glyphicon glyphicon-time',
+//            'inline' => true,
+//            'clientOptions' => [
+//                'startView' => 1,
+//                'minView' => 0,
+//                'maxView' => 1,
+//                'autoclose' => true,
+//                'linkFormat' => 'HH:ii', // if inline = true
+//                // 'format' => 'HH:ii P', // if inline = false
+//                'todayBtn' => true
+//            ]
+//        ]);?>
+        <?php
+//            echo $form->field($model, 'operation_goods_end_time')->widget(DateTimePicker::className(), [
+//            'language' => 'es',
+//            'size' => 'ms',
+//            'template' => '{input}',
+//            'pickButtonIcon' => 'glyphicon glyphicon-time',
+//            'inline' => true,
+//            'clientOptions' => [
+//                'startView' => 1,
+//                'minView' => 0,
+//                'maxView' => 1,
+//                'autoclose' => true,
+//                'linkFormat' => 'HH:ii P', // if inline = true
+//                'todayBtn' => true
+//            ]
+//        ]);?>
     
-        <?= $form->field($model, 'operation_spec_info')->dropDownList($OperationSpec, ['prompt' => '请选择规格', 'id' => 'operationSpec'])->label('选择规格') ?>
+        <?php //echo $form->field($model, 'operation_spec_info')->dropDownList($OperationSpec, ['prompt' => '请选择规格', 'id' => 'operationSpec'])->label('选择规格') ?>
+        <?php echo $form->field($model, 'operation_spec_info')->dropDownList($OperationSpec, ['prompt' => '请选择规格'])->label('选择规格') ?>
 
         <div id="SpecInfo">
-            <?php if($status == 'update') {
-                echo $this->render('specinfo', [
-                    'specvalues' => $specvalues,
-                ]);
-            }
+            <?php 
+//            if($status == 'update') {
+//                echo $this->render('specinfo', [
+//                    'specvalues' => $specvalues,
+//                ]);
+//            }
             ?>
         </div>
     
@@ -91,75 +97,83 @@ use boss\components\GoodsTypeCascade;
    
         <?= $form->field($model, 'operation_goods_service_estimate_time')->textInput(['maxlength' => true]) ?>
     
-        <?= $form->field($model, 'operation_goods_additional_cost')->textInput(['maxlength' => true]) ?>
+        <?php // echo $form->field($model, 'operation_goods_additional_cost')->textInput(['maxlength' => true]) ?>
     
         <?= $form->field($model, 'operation_goods_price_description')->textInput(['maxlength' => true]) ?>
 
         <?= $form->field($model, 'operation_tags')->textInput(['maxlength' => true]) ?>
-    
+            <?php
+                echo '<div class="form-group ">
+                   <label class="control-label col-md-2">'.$model->attributeLabels()['operation_goods_img'].'</label>
+                   <div class="col-md-10"><input type="hidden" value="" name="OperationGoods[operation_goods_img]">
+                   <input type="file" maxlength="" name="OperationGoods[operation_goods_img]" ></div>
+                   <div class="col-md-offset-2 col-md-10"></div>
+                   <div class="col-md-offset-2 col-md-10"><div class="help-block"></div></div>
+                   </div>';
+//        ?>
         <?php
-         echo '<div class="form-group ">
-            <label class="control-label col-md-2">'.$model->attributeLabels()['operation_goods_app_homepage_max_ico'].'</label>
-            <div class="col-md-10"><input type="hidden" value="" name="OperationGoods[operation_goods_app_homepage_max_ico]">
-            <input type="file" maxlength="" name="OperationGoods[operation_goods_app_homepage_max_ico]" ></div>
-            <div class="col-md-offset-2 col-md-10"></div>
-            <div class="col-md-offset-2 col-md-10"><div class="help-block"></div></div>
-            </div>';
-        ?>
+//         echo '<div class="form-group ">
+//            <label class="control-label col-md-2">'.$model->attributeLabels()['operation_goods_app_homepage_max_ico'].'</label>
+//            <div class="col-md-10"><input type="hidden" value="" name="OperationGoods[operation_goods_app_homepage_max_ico]">
+//            <input type="file" maxlength="" name="OperationGoods[operation_goods_app_homepage_max_ico]" ></div>
+//            <div class="col-md-offset-2 col-md-10"></div>
+//            <div class="col-md-offset-2 col-md-10"><div class="help-block"></div></div>
+//            </div>';
+//        ?>
         <?php
-         echo '<div class="form-group ">
-            <label class="control-label col-md-2">'.$model->attributeLabels()['operation_goods_app_homepage_min_ico'].'</label>
-            <div class="col-md-10"><input type="hidden" value="" name="OperationGoods[operation_goods_app_homepage_min_ico]">
-            <input type="file" maxlength="" name="OperationGoods[operation_goods_app_homepage_min_ico]" ></div>
-            <div class="col-md-offset-2 col-md-10"></div>
-            <div class="col-md-offset-2 col-md-10"><div class="help-block"></div></div>
-            </div>';
-        ?>
+//         echo '<div class="form-group ">
+//            <label class="control-label col-md-2">'.$model->attributeLabels()['operation_goods_app_homepage_min_ico'].'</label>
+//            <div class="col-md-10"><input type="hidden" value="" name="OperationGoods[operation_goods_app_homepage_min_ico]">
+//            <input type="file" maxlength="" name="OperationGoods[operation_goods_app_homepage_min_ico]" ></div>
+//            <div class="col-md-offset-2 col-md-10"></div>
+//            <div class="col-md-offset-2 col-md-10"><div class="help-block"></div></div>
+//            </div>';
+//        ?>
         <?php
-         echo '<div class="form-group ">
-            <label class="control-label col-md-2">'.$model->attributeLabels()['operation_goods_app_type_min_ico'].'</label>
-            <div class="col-md-10"><input type="hidden" value="" name="OperationGoods[operation_goods_app_type_min_ico]">
-            <input type="file" maxlength="" name="OperationGoods[operation_goods_app_type_min_ico]" ></div>
-            <div class="col-md-offset-2 col-md-10"></div>
-            <div class="col-md-offset-2 col-md-10"><div class="help-block"></div></div>
-            </div>';
-        ?>
+//         echo '<div class="form-group ">
+//            <label class="control-label col-md-2">'.$model->attributeLabels()['operation_goods_app_type_min_ico'].'</label>
+//            <div class="col-md-10"><input type="hidden" value="" name="OperationGoods[operation_goods_app_type_min_ico]">
+//            <input type="file" maxlength="" name="OperationGoods[operation_goods_app_type_min_ico]" ></div>
+//            <div class="col-md-offset-2 col-md-10"></div>
+//            <div class="col-md-offset-2 col-md-10"><div class="help-block"></div></div>
+//            </div>';
+//        ?>
         <?php
-         echo '<div class="form-group ">
-            <label class="control-label col-md-2">'.$model->attributeLabels()['operation_goods_app_order_min_ico'].'</label>
-            <div class="col-md-10"><input type="hidden" value="" name="OperationGoods[operation_goods_app_order_min_ico]">
-            <input type="file" maxlength="" name="OperationGoods[operation_goods_app_order_min_ico]" ></div>
-            <div class="col-md-offset-2 col-md-10"></div>
-            <div class="col-md-offset-2 col-md-10"><div class="help-block"></div></div>
-            </div>';
-        ?>
+//         echo '<div class="form-group ">
+//            <label class="control-label col-md-2">'.$model->attributeLabels()['operation_goods_app_order_min_ico'].'</label>
+//            <div class="col-md-10"><input type="hidden" value="" name="OperationGoods[operation_goods_app_order_min_ico]">
+//            <input type="file" maxlength="" name="OperationGoods[operation_goods_app_order_min_ico]" ></div>
+//            <div class="col-md-offset-2 col-md-10"></div>
+//            <div class="col-md-offset-2 col-md-10"><div class="help-block"></div></div>
+//            </div>';
+//        ?>
         <?php
-         echo '<div class="form-group ">
-            <label class="control-label col-md-2">'.$model->attributeLabels()['operation_goods_pc_homepage_max_ico'].'</label>
-            <div class="col-md-10"><input type="hidden" value="" name="OperationGoods[operation_goods_pc_homepage_max_ico]">
-            <input type="file" maxlength="" name="OperationGoods[operation_goods_pc_homepage_max_ico]" ></div>
-            <div class="col-md-offset-2 col-md-10"></div>
-            <div class="col-md-offset-2 col-md-10"><div class="help-block"></div></div>
-            </div>';
-        ?>
+//         echo '<div class="form-group ">
+//            <label class="control-label col-md-2">'.$model->attributeLabels()['operation_goods_pc_homepage_max_ico'].'</label>
+//            <div class="col-md-10"><input type="hidden" value="" name="OperationGoods[operation_goods_pc_homepage_max_ico]">
+//            <input type="file" maxlength="" name="OperationGoods[operation_goods_pc_homepage_max_ico]" ></div>
+//            <div class="col-md-offset-2 col-md-10"></div>
+//            <div class="col-md-offset-2 col-md-10"><div class="help-block"></div></div>
+//            </div>';
+//        ?>
         <?php
-         echo '<div class="form-group ">
-            <label class="control-label col-md-2">'.$model->attributeLabels()['operation_goods_pc_more_max_ico'].'</label>
-            <div class="col-md-10"><input type="hidden" value="" name="OperationGoods[operation_goods_pc_more_max_ico]">
-            <input type="file" maxlength="" name="OperationGoods[operation_goods_pc_more_max_ico]" ></div>
-            <div class="col-md-offset-2 col-md-10"></div>
-            <div class="col-md-offset-2 col-md-10"><div class="help-block"></div></div>
-            </div>';
-        ?>
+//         echo '<div class="form-group ">
+//            <label class="control-label col-md-2">'.$model->attributeLabels()['operation_goods_pc_more_max_ico'].'</label>
+//            <div class="col-md-10"><input type="hidden" value="" name="OperationGoods[operation_goods_pc_more_max_ico]">
+//            <input type="file" maxlength="" name="OperationGoods[operation_goods_pc_more_max_ico]" ></div>
+//            <div class="col-md-offset-2 col-md-10"></div>
+//            <div class="col-md-offset-2 col-md-10"><div class="help-block"></div></div>
+//            </div>';
+//        ?>
         <?php
-         echo '<div class="form-group ">
-            <label class="control-label col-md-2">'.$model->attributeLabels()['operation_goods_pc_submit_order_min_ico'].'</label>
-            <div class="col-md-10"><input type="hidden" value="" name="OperationGoods[operation_goods_pc_submit_order_min_ico]">
-            <input type="file" maxlength="" name="OperationGoods[operation_goods_pc_submit_order_min_ico]" ></div>
-            <div class="col-md-offset-2 col-md-10"></div>
-            <div class="col-md-offset-2 col-md-10"><div class="help-block"></div></div>
-            </div>';
-        ?>
+//         echo '<div class="form-group ">
+//            <label class="control-label col-md-2">'.$model->attributeLabels()['operation_goods_pc_submit_order_min_ico'].'</label>
+//            <div class="col-md-10"><input type="hidden" value="" name="OperationGoods[operation_goods_pc_submit_order_min_ico]">
+//            <input type="file" maxlength="" name="OperationGoods[operation_goods_pc_submit_order_min_ico]" ></div>
+//            <div class="col-md-offset-2 col-md-10"></div>
+//            <div class="col-md-offset-2 col-md-10"><div class="help-block"></div></div>
+//            </div>';
+//        ?>
     
 <?php
 //        'operation_goods_service_interval_time'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 服务间隔时间(单位：秒）...']],

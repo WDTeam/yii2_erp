@@ -40,7 +40,8 @@ $this->params['breadcrumbs'][] = $this->title;
 ]), ['create'], ['class' => 'btn btn-success'])*/  ?>
     </p>
 
-    <?php Pjax::begin(); echo GridView::widget([
+    <?php Pjax::begin();
+    echo GridView::widget([
         'dataProvider' => $dataProvider,
 //        'filterModel' => $searchModel,
         'columns' => [
@@ -55,13 +56,18 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                'attribute'=> 'operation_city_is_online',
                'format'=>'html',
+//                'value' => function ($model){
+//                    Html::a('已上线', 
+//                            Yii::$app->urlManager->createUrl(['operation-city/upline','id' => $model->id]),
+//                            ['title' => '点击下线',]);
+//                    return $model->operation_city_is_online == 1 ? 
+//                            Html::a('已上线', Yii::$app->urlManager->createUrl(['operation-city/goline','id' => $model->id]), ['title' => '点击下线', 'class' => 'btn btn-success btn-sm']) : 
+//                            Html::a('已下线', Yii::$app->urlManager->createUrl(['operation-city/goline','id' => $model->id]), ['title' => '点击上线', 'class' => 'btn btn-danger btn-sm']);
+//               }
                'value' => function ($model){
-                    Html::a('已上线', 
-                            Yii::$app->urlManager->createUrl(['operation-city/upline','id' => $model->id]),
-                            ['title' => '点击下线',]);
                     return $model->operation_city_is_online == 1 ? 
-                            Html::a('已上线', Yii::$app->urlManager->createUrl(['operation-city/goline','id' => $model->id]), ['title' => '点击下线', 'class' => 'btn btn-success btn-sm']) : 
-                            Html::a('已下线', Yii::$app->urlManager->createUrl(['operation-city/goline','id' => $model->id]), ['title' => '点击上线', 'class' => 'btn btn-danger btn-sm']);
+                            Html::a('已开通', 'javascript:void(0)', ['title' => '', 'class' => 'btn btn-success btn-sm']) : 
+                            Html::a('未开通', 'javascript:void(0)', ['title' => '', 'class' => 'btn btn-danger btn-sm']);
                }
             ],
             [
@@ -113,7 +119,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         );
                     },
                     'listbtn' => function ($url, $model) {
-                        return $model->operation_city_is_online == 1 ? Html::a('<span class="glyphicon glyphicon-list"></span>',Yii::$app->urlManager->createUrl(['operation-shop-district','city_id' => $model->city_id]),['title' => Yii::t('yii', '商圈列表'), 'class' => 'btn btn-warning btn-sm']) : '';
+                        return Html::a('<span class="glyphicon glyphicon-list"></span>',Yii::$app->urlManager->createUrl(['operation-shop-district','city_id' => $model->city_id]),['title' => Yii::t('yii', '商圈列表'), 'class' => 'btn btn-warning btn-sm']);
                         
                     },
                 ],

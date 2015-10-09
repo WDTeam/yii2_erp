@@ -81,6 +81,7 @@ class OperationGoods extends CoreOperationGoods
             'operation_goods_market_price' => Yii::t('app', '市场价格(元)'),
             'operation_tags' => Yii::t('app', '个性标签'),
 
+            'operation_goods_img' => Yii::t('app', '商品图片'),
             'operation_goods_app_ico' => Yii::t('app', 'APP端图标(序列化方式存储|首页大图，首页小图，分类页小图，订单页小图)'),
             'operation_goods_app_homepage_max_ico' => Yii::t('app', 'APP端首页大图'),
             'operation_goods_app_homepage_min_ico' => Yii::t('app', 'APP端首页小图'),

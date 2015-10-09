@@ -15,7 +15,8 @@ use dosamigos\datetimepicker\DateTimePicker;
 
 <div class="operation-shop-district-form">
     
-    <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); echo Form::widget([
+    <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); 
+    echo Form::widget([
 
     'model' => $model,
     'form' => $form,
@@ -27,7 +28,9 @@ use dosamigos\datetimepicker\DateTimePicker;
 
     ]);
     ?>
-    <?= $form->field($citymodel, 'city_name')->textInput() ?>
+    <?php if($citymodel) { ?>
+        <?= $form->field($citymodel, 'city_name')->textInput() ?>
+    <?php }?>
     
     <?= $form->field($model, 'operation_area_id')->dropDownList($areaList,['prompt' => '请选择区域'])->label('所属区域') ?>
 

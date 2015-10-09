@@ -15,12 +15,9 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('operation', 'Operation Shop
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-shop-district-create">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
     <?= $this->render('_form', [
         'model' => $model,
-        'citymodel' => $citymodel,
+        'citymodel' => '',
         'areaList' => $areaList,
         'OperationShopDistrictCoordinate' => $OperationShopDistrictCoordinate,
     ]) ?>
