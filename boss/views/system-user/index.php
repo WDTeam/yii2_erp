@@ -1,65 +1,80 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
+use yii\widgets\Pjax;
 
-/* @var $this yii\web\View */
-/* @var $searchModel boss\models\search\SystemUserSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+/**
+ * @var yii\web\View $this
+ * @var yii\data\ActiveDataProvider $dataProvider
+ * @var boss\models\search\SystemUserSearch $searchModel
+ */
 
 $this->title = Yii::t('app', 'System Users');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="system-user-index">
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::a(Yii::t('app', 'Create System User'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?= GridView::widget([
+    <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+//         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+//             'id',
             'username',
 //             'auth_key',
 //             'password_hash',
 //             'password_reset_token',
-            'email:email',
-            'role',
-            [
-                'attribute' => 'status',
-                'format' => 'html',
-                'value' => function ($model) {
-                        if ($model->status === $model::STATUS_ACTIVE) {
-                            $class = 'label-success';
-                        } elseif ($model->status === $model::STATUS_INACTIVE) {
-                            $class = 'label-warning';
-                        } else {
-                            $class = 'label-danger';
-                        }
+           'email:email', 
+           [
+               'attribute'=>'roles',
+               'value'=>function ($model){
+                   return implode(',', $model->roles);
+               }
+           ], 
+           [
+               'attribute'=>'status',
+               'value'=>function ($model){
+                   return $model->getStatusLabel();
+               }
+           ], 
+//            'created_at', 
+//            'updated_at', 
 
-                        return '<span class="label ' . $class . '">' . $model->statusLabel . '</span>';
-                    },
-                'filter' => Html::activeDropDownList(
-                        $searchModel,
-                        'status',
-                        $arrayStatus,
-                        ['class' => 'form-control', 'prompt' => Yii::t('app', 'Please Filter')]
-                    )
-            ],
             [
-                'attribute' => 'created_at',
-                'format' => ['date', 'Y-M-d H:i:s'],
-            ],
-            // 'updated_at',
+                'class' => 'yii\grid\ActionColumn',
+                'buttons' => [
+                'update' => function ($url, $model) {
+                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['system-user/view','id' => $model->id,'edit'=>'t']), [
+                                                    'title' => Yii::t('yii', 'Edit'),
+                                                  ]);}
 
-            ['class' => 'yii\grid\ActionColumn'],
+                ],
+            ],
         ],
-    ]); ?>
+        'responsive'=>true,
+        'hover'=>true,
+        'condensed'=>true,
+        'floatHeader'=>true,
+
+        'toolbar' =>[
+            'content'=>Html::a('<i class="glyphicon glyphicon-plus"></i>', [
+                'system-user/create'
+            ], [
+                'class' => 'btn btn-default',
+                'title' => Yii::t('app', '添加系统用户')
+            ]),
+        ],
+
+
+        'panel' => [
+            'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
+            'type'=>'info',
+            'before'=>'',      
+            'after'=>false,
+            'showFooter'=>false
+        ],
+    ]); Pjax::end(); ?>
 
 </div>

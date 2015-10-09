@@ -49,7 +49,7 @@ class Customer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_name', 'customer_sex', 'customer_phone', 'customer_score', 'created_at', 'updated_at'], 'required'],
+            [['customer_sex', 'customer_phone', 'customer_score', 'created_at', 'updated_at'], 'required'],
             [['customer_sex', 'customer_birth', 'operation_area_id', 'operation_city_id', 'general_region_id', 'customer_score', 'customer_level', 'customer_complaint_times', 'customer_src', 'channal_id', 'platform_id', 'customer_login_time', 'customer_is_vip', 'created_at', 'updated_at', 'is_del'], 'integer'],
             [['customer_balance'], 'number'],
             [['customer_del_reason', 'customer_platform_version', 'customer_app_version', 'customer_mac'], 'string'],
