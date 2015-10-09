@@ -355,7 +355,7 @@ echo Menu::widget(
                                'items'=>[
                                     [
                                         'label' => '全职结算(50%)',
-                                        'url' => ['/finance-settle-apply/self-fulltime-worker-settle-index?FinanceSettleApplySearch[finance_settle_apply_status]=0&FinanceSettleApplySearch[ids]=&FinanceSettleApplySearch[nodeId]=1'],
+                                        'url' => ['/finance-settle-apply/self-fulltime-worker-settle-index'],
                                         'icon' => 'fa fa-angle-right',
                                     ],
                                    [
