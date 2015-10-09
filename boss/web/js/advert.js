@@ -8,11 +8,55 @@ $('.version').click(function(){seachAdvertContent($(this), 'version');});
 $('.platforma').click(function(){selectPlatform($(this));});
 $(document).on('click', '.advert-goup', function(){adverGoUp($(this));});
 $(document).on('click', '.advert-godown', function(){adverGoDown($(this));});
-$('#insertAdvertContent').click(function(){insertAdvertContent();});
-$('#emptyAdvertContent').click(function(){emptyAdvertContent();});
+//$('#insertAdvertContent').click(function(){insertAdvertContent();});
+//$('#emptyAdvertContent').click(function(){emptyAdvertContent();});
 $(document).on('click', '.selectContent', function(){selectContent($(this));});
 $(document).on('click', '.cancel', function(){$.win.close($('#closeWin'));});
-$(document).on('click', '.selectQuery', function(){selectQuery()});
+$(document).on('click', '.selectQuery', function(){selectQuery();});
+
+$('#operationadvertrelease-city_id').change(function(){getPlatforms();});
+$(document).on('click', '.step2 > label > input[type=checkbox]', function(){getPlatformVersions($(this))});
+$(document).on('click', '.platform_versions > label > input[type=checkbox]', function(){getAdverts($(this).parent().parent().attr('platform_id'), $(this).val());});
+
+
+function getAdverts(platform_id, version_id){
+    if(version_id != '' && version_id != null){
+        var data = {'version_id':version_id, 'platform_id':platform_id}
+    }else{
+        var data = {'platform_id':platform_id}
+    }
+    $.post('/operation-advert-content/adverts', {'version_id':version_id, 'platform_id':platform_id}, function(t){
+        if($('#step3').html() == ''){
+            t = '<label class="control-label" for="operationadvertrelease-city_id">第四步：选择要发布的广告</label>'+t;
+        }
+        $('#step4').append(t);
+    },'html');
+}
+
+function getPlatformVersions(obj){
+    var checked = obj.prop('checked');
+    var platform_id = obj.val();
+    if(checked){
+        $.post('/operation-platform-version/platform-versions', {platform_id : platform_id}, function(t){
+            if(t != ''){
+                if($('#step3').html() == ''){
+                    t = '<label class="control-label" for="operationadvertrelease-city_id">第三步：选择要的目标版本</label>'+t;
+                }
+                $('#step3').append(t);
+            }else{
+                getAdverts(platform_id);
+            }
+        }, 'html');
+    }else{
+        try{$('.step3_versions_'+platform_id).remove();}catch(e){}
+    }
+}
+
+function getPlatforms(){
+    $.get('/operation-platform/platforms', {}, function(t){
+        $("#step2").html(t);
+    }, 'html');
+}
 
 function selectQuery(){
     var objs = $('.selectBox').find('a[class="selectContent select"]');
@@ -42,26 +86,26 @@ function selectContent(obj){
         obj.removeClass('select');
     }
 }
+//
+//function insertAdvertContent(){
+//    var obj = $('#advertListContent');
+//    var objs = obj.children('div[class="list-group-item"]');
+//    var data = [];
+//    if(objs.length > 0){
+//        for(var i = 0; i < objs.length; i++){
+//            data[i] = $(objs[i]).attr('content_id');
+//        }
+//    }
+//    var url = '/operation-advert-content/get-list';
+//    if(data.length > 0){
+//        url += '?data='+data;
+//    }
+//    $.win.open('选择广告内容', url);
+//}
 
-function insertAdvertContent(){
-    var obj = $('#advertListContent');
-    var objs = obj.children('div[class="list-group-item"]');
-    var data = [];
-    if(objs.length > 0){
-        for(var i = 0; i < objs.length; i++){
-            data[i] = $(objs[i]).attr('content_id');
-        }
-    }
-    var url = '/operation-advert-content/get-list';
-    if(data.length > 0){
-        url += '?data='+data;
-    }
-    $.win.open('选择广告内容', url);
-}
-
-function emptyAdvertContent(){
-    $('#advertListContent').html('');
-}
+//function emptyAdvertContent(){
+//    $('#advertListContent').html('');
+//}
 
 function adverGoUp(obj){
     var o = obj.parent().parent();

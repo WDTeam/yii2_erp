@@ -3,8 +3,8 @@
 namespace core\models;
 
 use Yii;
-use core\models\Customer;
-use core\models\customerAddress;
+// use common\models\Customer;
+use common\models\customerAddress;
 use yii\web\BadRequestHttpException;
 
 class Customer extends \common\models\Customer
@@ -13,29 +13,30 @@ class Customer extends \common\models\Customer
     /**
      * 根据customer_id获取顾客信息
      */
-    static public function getCustomerById($customer_id)
+    public static function getCustomerById($customer_id)
     {
         $customer = Customer::findOne($customer_id);
-        return $customer;
+
+        return $customer != NULL ? $customer : false;
     }
     
     /**
      * 根据手机号获取顾客基本信息
      */
-    static public function getCustomerInfo($phone)
+    public static function getCustomerInfo($phone)
     {
         $customer = Customer::find()->where(array(
             'customer_phone'=>$phone,
             ))->one();
-        return $customer;
+        return $customer != NULL ? $customer : false;
     }
 
     /**
      * 获取顾客地址集
      */
-    static public function getCustomerAddresses($customer_id){
+    public static function getCustomerAddresses($customer_id){
         $customerAddresses = $this->hasMany('\boss\models\customerAddress', 'customer_id', 'id');
-        return $customerAddresses;
+        return $customerAddresses != NULL ? $customerAddresses : false;
     }
 
     /**

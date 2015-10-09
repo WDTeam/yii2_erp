@@ -25,6 +25,8 @@ use common\models\FinanceHeader;
 use boss\models\FinanceRecordLogSearch;
 use boss\models\FinanceOrderChannelSearch;
 use core\models\order\OrderSearch;
+use core\models\GeneralPay\GeneralPaySearch;
+use boss\controllers\GeneralPayController;
 
 /**
  * FinancePopOrderController implements the CRUD actions for FinancePopOrder model.
@@ -55,9 +57,6 @@ class FinancePopOrderController extends Controller
     {
     	$model = new FinancePopOrderSearch;
     	$modelinfo= new FinancePopOrder;
-    	
-    	
-    	
     	if(Yii::$app->request->isPost) {
     		
     		//检查上月是否有未处理完毕的订单
@@ -221,11 +220,17 @@ class FinancePopOrderController extends Controller
         }
        $tyu= array_combine($tyd,$tydtui);
          $searchModel = new FinancePopOrderSearch;
+         
+         
          //默认条件
+         
+         
          $searchModel->is_del=0;
          $searchModel->finance_pop_order_pay_status=0;
         //状态处理
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        
+        
         
         $decss=Yii::$app->request->getQueryParams();
         if(isset($decss['FinancePopOrderSearch'])){
@@ -290,7 +295,36 @@ class FinancePopOrderController extends Controller
     }
     
     
+    /**
+    * 充值对账管理控制器
+    * @date: 2015-10-9
+    * @author: peak pan
+    * @return:
+    **/
     
+    public function actionGeneralpaylist()
+    {
+    	 
+    	//输出部分
+    	$ordedata= new FinanceOrderChannel;
+    	$ordewhere['is_del']=0;
+    	$ordewhere['finance_order_channel_is_lock']=1;
+    	$payatainfo=$ordedata::find()->where($ordewhere)->asArray()->all();
+    	foreach ($payatainfo as $errt){
+    		$tyd[]=$errt['id'];
+    		$tydtui[]=$errt['finance_order_channel_name'];
+    	}
+    	$tyu= array_combine($tyd,$tydtui);
+    	//我有三没有开始处理 从订单表里面开始查询
+    	$searchModel= new GeneralPaySearch;
+    	$dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+    	return $this->render('generalpaylist', [
+    			'dataProvider' => $dataProvider,
+    			'searchModel' => $searchModel,
+    			]);
+    
+    }
+
     
     /**
     * 坏账列表
@@ -371,7 +405,23 @@ class FinancePopOrderController extends Controller
     	return $this->redirect(['index']);
     }
     
-    
+    /**
+    * 我们有第三方没有财务批量处理到充值表控制器
+    * @date: 2015-10-9
+    * @author: peak pan
+    * @return:
+    **/
+    public function actionGeneralmepost()
+    {
+    	/*胜强提供接口，目前未提供  */
+    	 $searchModel = new FinancePopOrderSearch;
+    	 $requestModel = Yii::$app->request->post();
+    	$GeneralPay= new GeneralPayController;
+    	foreach ($requestModel['ids'] as $iddate){
+    	$GeneralPay->modifyRecontiliation($iddate,1);
+    	} 
+    	return $this->redirect(['index']);
+    }
     
     
     /**

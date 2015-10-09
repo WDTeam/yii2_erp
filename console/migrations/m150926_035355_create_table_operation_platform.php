@@ -7,6 +7,8 @@ class m150926_035355_create_table_operation_platform extends Migration
 {
     public function up()
     {
+        $sql = 'DROP TABLE IF EXISTS {{%operation_platform}}';
+        $this->execute($sql);
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'广告平台表\'';

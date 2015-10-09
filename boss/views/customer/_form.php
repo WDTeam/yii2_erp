@@ -24,11 +24,11 @@ $cityDesc = '客户';
 
 <div class="customer-form">
 <?php $form = ActiveForm::begin(['type' => ActiveForm::TYPE_HORIZONTAL, 'id' => 'msg-form',
-        //'options' => ['class'=>'form-horizontal'],
-        //'enableAjaxValidation'=>false,
+        // 'options' => ['class'=>'form-horizontal'],
+        // 'enableAjaxValidation'=>false,
         'fieldConfig' => [
-            //'template' => "{label}\n<div class=\"col-lg-8\">{input}</div>\n<div class=\"col-lg-5\">{error}</div>",
-            //'labelOptions' => ['class' => 'col-lg-1 control-label'],
+            // 'template' => "{label}\n<div class=\"col-lg-8\">{input}</div>\n<div class=\"col-lg-5\">{error}</div>",
+            // 'labelOptions' => ['class' => 'col-lg-1 control-label'],
         ]
     ]);
 
@@ -39,7 +39,7 @@ $cityDesc = '客户';
     echo $form->field($model, 'created_at')->widget(DatePicker::classname(),[
         'name' => 'created_at',
         'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-        'value' => date('Y-m-d', $model->created_at),
+        'value' => date('yyyy-mm-dd', $model->created_at),
         'pluginOptions' => [
             'autoclose'=>true,
             'format' => 'yyyy-mm-dd'
@@ -48,7 +48,7 @@ $cityDesc = '客户';
     echo $form->field($model, 'updated_at')->widget(DatePicker::classname(),[
         'name' => 'updated_at',
         'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-        'value' => date('Y-m-d', $model->updated_at),
+        'value' => date('yyyy-mm-dd', $model->updated_at),
         'pluginOptions' => [
             'autoclose'=>true,
             'format' => 'yyyy-mm-dd'
@@ -57,14 +57,14 @@ $cityDesc = '客户';
     echo $form->field($model, 'customer_birth')->widget(DatePicker::classname(),[
         'name' => 'customer_birth',
         'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-        'value' => date('Y-m-d', $model->customer_birth),
+        'value' => date('yyyy-mm-dd', $model->customer_birth),
         'pluginOptions' => [
             'autoclose'=>true,
             'format' => 'yyyy-mm-dd'
         ]
     ]);
 
-    echo $form->field($model, 'general_region_id')->textInput(['placeholder' => 'Enter 客户住址ID...', 'maxlength' => 8]);
+    //echo $form->field($model, 'general_region_id')->textInput(['placeholder' => 'Enter 客户住址ID...', 'maxlength' => 8]);
     echo $form->field($model, 'customer_level')->textInput(['placeholder' => 'Enter 客户评级...', 'maxlength' => 8]);
     echo $form->field($model, 'customer_complaint_times')->textInput(['placeholder' => 'Enter 客户投诉次数...', 'maxlength' => 8]);
     //echo '<label class="control-label">'.$model->attributeLabels()['operation_boot_page_online_time'].'</label>';
@@ -78,7 +78,7 @@ $cityDesc = '客户';
     echo $form->field($model, 'customer_login_time')->widget(DatePicker::classname(),[
         'name' => 'customer_login_time',
         'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-        'value' => date('Y-m-d', $model->customer_login_time),
+        'value' => date('yyyy-mm-dd', $model->customer_login_time),
         'pluginOptions' => [
             'autoclose'=>true,
             'format' => 'yyyy-mm-dd'
@@ -86,7 +86,7 @@ $cityDesc = '客户';
     ]);
 
     echo $form->field($model, 'customer_is_vip')->radioList(['0' => '非会员', '1' => '会员'], ['inline' => true]);
-    echo $form->field($model, 'customer_is_del')->radioList(['0' => '未加入黑名单', '1' => '已加入黑名单'], ['inline' => true]);
+    echo $form->field($model, 'is_del')->radioList(['0' => '未加入黑名单', '1' => '已加入黑名单'], ['inline' => true]);
 
     echo $form->field($model, 'customer_balance')->textInput(['placeholder' => 'Enter 客户余额', 'maxlength' => 10]);
     echo $form->field($model, 'customer_del_reason')->textInput(['placeholder' => 'Enter 客户加入黑名单原因', 'maxlength' => 255]);

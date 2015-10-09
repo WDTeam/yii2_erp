@@ -3,14 +3,16 @@
 namespace boss\controllers;
 
 
-use common\models\WorkerDistrict;
 use Yii;
 use yii\db\Query;
 use boss\components\BaseAuthController;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use core\models\worker\Worker;
 use core\models\worker\WorkerExt;
+use core\models\worker\WorkerDistrict;
+use common\models\OrderExtWorker;
 use common\models\WorkerBlock;
 use common\models\WorkerVacation;
 use common\models\WorkerBlockLog;
@@ -193,7 +195,7 @@ class WorkerController extends BaseAuthController
      * @param workerId 阿姨Id
      * @return mixed
      */
-    public function actionVacationCreate($workerId){
+    public function actionCreateVacation($workerId){
         $workerModel = $this->findModel($workerId);
         $workerVacationModel = new WorkerVacation();
         $post = \Yii::$app->request->post();
@@ -221,7 +223,7 @@ class WorkerController extends BaseAuthController
      * @param workerId 阿姨Id
      * @return empty
      */
-    public function actionBlockCreate($workerId){
+    public function actionCreateBlock($workerId){
         $workerModel = $this->findModel($workerId);
         $workerBlockmodel = new WorkerBlock();
         $post = \Yii::$app->request->post();
@@ -257,7 +259,9 @@ class WorkerController extends BaseAuthController
             $workerBlockModel = WorkerBlock::findOne($blockId);
             $oldFinishTime = $workerBlockModel->worker_block_finish_time;
             $workerId = $workerBlockModel->worker_id;
-
+            if(empty($workerId)){
+                throw new ForbiddenHttpException('获取封号信息失败');
+            }
             //更改封号结束时间
             if(isset($workerBlockArr['worker_block_finish_time'])){
                 $finishTime = strtotime($workerBlockArr['worker_block_finish_time']);
@@ -272,6 +276,7 @@ class WorkerController extends BaseAuthController
             //更改封号状态
             }elseif(isset($workerBlockArr['worker_block_status']) && $workerBlockArr['worker_block_status']==1){
                 $workerBlockModel->worker_block_status = $workerBlockArr['worker_block_status'];
+                $this->CreateBlockLog($workerId,$blockId,4);
             }
 
             $workerBlockModel->save();
@@ -435,10 +440,70 @@ class WorkerController extends BaseAuthController
 
     }
 
+
+    /*
+     * 获取商圈中 所有可用阿姨id
+     * @param int districtId 商圈id
+     * @param int worker_type 阿姨类型 1自有2非自有
+     * @return array freeWorkerArr 所有可用阿姨id
+     */
+    public function getDistrictFreeWorker($districtId=4,$workerType=2){
+
+        $workerDistrictModel = new WorkerDistrict;
+        $orderExtWorkerModel = new OrderExtWorker;
+
+        //获取所属商圈中所有阿姨
+        $districtWorkerResult = $workerDistrictModel::find()
+            ->select('`ejj_worker_district`.worker_id,`ejj_worker_district`.operation_shop_district_id')
+            ->where(['operation_shop_district_id'=>$districtId])
+            ->innerJoinWith('worker') //关联workerDistrict getWorker方法
+            ->andOnCondition(['worker_type'=>$workerType])
+            ->asArray()
+            ->all();
+
+        if($districtWorkerResult){
+            foreach ($districtWorkerResult as $val) {
+                $districtWorkerArr[] = $val['worker_id'];
+            }
+        }else{
+            $districtWorkerArr = [];
+        }
+
+        //获取已预约以及正在服务的所有阿姨
+        $orderWorkerResult = $orderExtWorkerModel::find()->asArray()->all();
+
+        if($orderWorkerResult){
+            foreach ($orderWorkerResult as $val) {
+                $busyWorkerArr[] = $val['worker_id'];
+            }
+        }else{
+            $busyWorkerArr = [];
+        }
+        //排除以预约和正在服务的阿姨
+        $freeWorkerArr = array_diff($districtWorkerArr,$busyWorkerArr);
+        var_dump($freeWorkerArr);
+    }
+
+
+
     public function actionTest(){
-        $worker = new Worker();
-        $worker = $worker->getWorkerInfo(43);
         echo '<pre>';
-        var_dump($worker);die;
+//        Yii::$app->redis->sadd('district_1','16684','16683','16685','16686','16687','16688','16689','16682');
+//        Yii::$app->redis->sadd('district_2','16694','16693','16695','16696','16697','16698','16699','16692');
+//        Yii::$app->redis->sadd('worker_16694','10','11','9','8','7');
+//        Yii::$app->redis->sadd('worker_16693','10','11');
+
+
+        $workers = Yii::$app->redis->smembers('district_1');
+        $time = date('H');
+        foreach($workers as $val){
+            $workerKey = 'worker_'.$val;
+            $workerIsBusy = Yii::$app->redis->sismember($workerKey,$time);
+            if(empty($workerIsBusy)){
+                $workerFreeArr[] = $val;
+            }
+        }
+        var_dump($workerFreeArr);
+        var_dump(Yii::$app->redis->sinter('worker_16983','worker_16694'));
     }
 }

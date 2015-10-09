@@ -7,6 +7,8 @@ class m150918_031530_create_table_operation_city extends Migration
 {
     public function up()
     {
+        $sql = 'DROP TABLE IF EXISTS {{%operation_city}}';
+        $this->execute($sql);
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'开通城市表\'';

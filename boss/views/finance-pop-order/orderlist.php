@@ -2,11 +2,9 @@
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
-/* use yii\widgets\Pjax;
-use kartik\nav\NavX;
-use yii\bootstrap\NavBar; */
 use boss\models\FinancePopOrderSearch;
 use yii\widgets\ActiveForm;
+use kartik\tabs\TabsX;
 
 
 /**
@@ -15,19 +13,18 @@ use yii\widgets\ActiveForm;
  * @var boss\models\FinancePopOrderSearch $searchModel
  */
 
-$this->title = Yii::t('app', '我有三没有');
+$this->title = Yii::t('app', '我有三没有订单对账');
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
-<div class="finance-pop-order-index hideTemp">
-     
-</div>
-    <?php
-    ActiveForm::begin([
-    'action' => ['indexmepost'],
-    'method' => 'post'
-    		]);
-     echo GridView::widget([
+
+
+<?php 
+     ActiveForm::begin([
+     'action' => ['indexmepost'],
+     'method' => 'post'
+     		]);
+   $paychannel= GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
         'columns' => [
@@ -160,8 +157,28 @@ $this->params['breadcrumbs'][] = $this->title;
             'showFooter'=>false,
         ],
     ]);
-       ActiveForm::end();
 
-     ?>
+   
+$items = [
+[
+'label'=>'<i class="glyphicon glyphicon-list-alt"></i> 订单对账',
+'content'=>$paychannel,
+'active'=>true,
+],
+[
+'label'=>'<i class="glyphicon glyphicon-king"></i> 充值对账',
+'content'=>'',
+'active'=>false,
+'url' => ['finance-pop-order/generalpaylist']
+]
+];
+    echo TabsX::widget([
+    		'items'=>$items,
+    		'position'=>TabsX::POS_ABOVE,
+    		'bordered'=>true,
+    		'encodeLabels'=>false
+    		]);
+    ActiveForm::end();?> 
+
 
 </div>

@@ -61,6 +61,30 @@ class FinancePopOrderSearch extends FinancePopOrder
     	return $name;
     }
     
+    
+    public static  function selsect_isstatus($id)
+    {
+     switch ($id)
+				{	
+				case 1:
+				  return '<font color="red">充值</font>';
+				  break;  
+				case 2:
+				  return '<font color="blue">余额支付</font>';
+				  break; 
+				case 3:
+				  return '<font color="green">在线支付</font>';
+				  break;
+				case 4:
+				  return '<font color="green">退款</font>';
+				  break;
+				  case 5:
+				  	return '<font color="green">赔偿</font>';
+				  	break;
+				}
+    } 
+    
+    
     public static  function is_finance($date)
     {
     	if($date==0 || $date==""){

@@ -103,7 +103,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         $financeSettleApplySearch->workerPhone= "13456789000";
         $financeSettleApplySearch->workerOnboardTime= "1443324337";
         $financeSettleApplySearch->workerType= "全职全日";
-        $financeSettleApplySearch->finance_settle_apply_cycle_des = $this->getSettleCycleByWorkerType($workerType,$workerRuleId);
+        $financeSettleApplySearch->finance_settle_apply_cycle_des = $this->getSettleCycleByWorkerType('','');
         $financeSettleApplySearch->latestSettleTime = time();
 //        $financeSettleApplySearch->latestSettleTime = $this->getWorkerLatestSettledTime($workerId);
         return $financeSettleApplySearch;

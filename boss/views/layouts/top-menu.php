@@ -77,8 +77,8 @@ $menuItemsMain = [
         //'visible' => Yii::$app->user->can('haha'),
         'items' => [
             [
-                'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', 'User'),
-                'url' => ['/user'],
+                'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', '登出'),
+                'url' => ['/site/logout'],
             ],
 //             [
 //                 'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', '授权列表'),

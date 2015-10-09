@@ -11,7 +11,7 @@ use boss\models\FinanceSettleApplySearch;
  * @var boss\models\FinanceSettleApplySearch $searchModel
  */
 
-$this->title = Yii::t('finance', '全职结算');
+$this->title = Yii::t('finance', '自营全职结算');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.css" rel="stylesheet">
@@ -32,38 +32,13 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="finance-settle-apply-index">
     <div class="panel panel-info">
         <div class="panel-heading">
-            <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 全职结算搜索</h3>
+            <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 自营全职结算搜索</h3>
         </div>
         <div class="panel-body">
             <?php  echo $this->render('_self_fulltime_search', ['model' => $searchModel]); ?>
         </div>
     </div>
      <div class="panel panel-info">
-        <script>
-            function checkResult(checkStatus){
-                //勾选的结算记录id
-                var ids = $('#w1').yiiGridView('getSelectedRows');
-                if(ids === ''){
-                    return;
-                }
-                if(checkStatus === 1){
-                    $("#finance_settle_apply_status").val($("#nodeId").val());
-                }else{
-                    $("#finance_settle_apply_status").val(-$("#nodeId").val());
-                }
-                $("#ids").val(ids);
-                var url = '/finance-settle-apply/review';
-                $('#financeSettleApplyForm').attr('action',url);
-                $('#financeSettleApplyForm').submit();
-            }
-            function changetTab(applyStatus,nodeId){
-                $("#nodeId").val(nodeId);
-                $("#finance_settle_apply_status").val(applyStatus);
-                var url = '/finance-settle-apply/index';
-                $('#financeSettleApplyForm').attr('action',url);
-                $('#financeSettleApplyForm').submit();
-            }
-        </script>
 
         <?php Pjax::begin(); echo GridView::widget([
             'dataProvider' => $dataProvider,
@@ -85,6 +60,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'template' =>'{view} {agree} {disagree}',
                 'buttons' => [
+                    'view' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Yii::$app->urlManager->createUrl(['/finance-settle-apply/self-fulltime-worker-settle-view', 'id' => $model->id, 'finance_settle_apply_status' => FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED],['target'=>'_blank']), [
+                            'title' => Yii::t('yii', '查看'),
+                        ]);
+                    },
                     'agree' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-ok"></span>', Yii::$app->urlManager->createUrl(['/finance-settle-apply/self-fulltime-worker-settle-done', 'id' => $model->id, 'finance_settle_apply_status' => FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED]), [
                             'title' => Yii::t('yii', '审核通过'),

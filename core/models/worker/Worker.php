@@ -47,7 +47,7 @@ class Worker extends \common\models\Worker
     public function getWorkerList($type=0,$field='id'){
         $condition = [];
         if(!empty($type)){
-            $condition = ['worker_type'=>$type];
+            $condition['worker_type'] = $type;
         }
         return $this->find()->select($field)->where($condition)->asArray()->all();
     }
@@ -58,7 +58,7 @@ class Worker extends \common\models\Worker
      * @return  单个阿姨详细信息
      *
      */
-        public function getWorkerInfo($worker_id){
+    public function getWorkerInfo($worker_id){
 
         $workerInfo = $this->find()->where((['id'=>$worker_id]))->select('id,shop_id,worker_name,worker_phone,worker_idcard,worker_type,worker_rule_id')->asArray()->one();
         if($workerInfo){
@@ -70,6 +70,19 @@ class Worker extends \common\models\Worker
             $workerRule = $this->getWorkerRuleShow($workerInfo['worker_rule_id']);
             $workerInfo['worker_type_description'] = $workerType.$workerRule;
         }
+        return $workerInfo;
+    }
+
+
+    /*
+     * 通过电话获取可用阿姨信息
+     * @param string $phone 阿姨电话
+     * @return array $workerInfo 阿姨详细信息 包含阿姨id和阿姨姓名
+     */
+    public function getWorkerInfoByPhone($phone){
+
+        $condition = ['worker_phone'=>$phone,'isdel'=>0,'worker_is_block'=>0,'worker_is_vacation'=>0,'worker_is_blacklist'=>0];
+        $workerInfo = $this->find()->where($condition)->select('id,worker_name')->asArray()->one();
         return $workerInfo;
     }
 
@@ -167,6 +180,7 @@ class Worker extends \common\models\Worker
             return '未通过';
         }
     }
+
     /*
      * 获取阿姨所有身份信息
      * @return Array 所有阿姨身份信息

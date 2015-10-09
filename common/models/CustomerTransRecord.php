@@ -63,6 +63,11 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         ];
     }
 
+    public function ccc()
+    {
+        echo "test";
+    }
+
     /**
      * 验证数据之前组装数据
      */
@@ -93,12 +98,7 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         $this->customer_trans_record_order_channel = $orderChannel->finance_order_channel_name;
         //makeSign
         $this->customer_trans_record_verify = $this->makeSign();
-        //验证之前将数据插入记录表
-        $model = new CustomerTransRecordLog();
-        $post = Yii::$app->request->post();
-        $model->attributes = $post['CustomerTransRecord'];
-        $model->validate();
-        $model->insert(false);
+
         return true;
     }
 
@@ -469,6 +469,7 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         $lastResult = $this->lastResult();
         //获取最后一次服务卡结果
         $lastResultServiceCard = $this->lastResultServerCard();
+
         //保留两位小数
         bcscale(2);
         //之前余额
