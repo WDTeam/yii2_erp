@@ -17,6 +17,7 @@ use common\models\OperationCity;
 use common\models\GeneralRegion;
 
 use common\models\Order;
+use core\models\Customer;
 
 /**
  * CustomerController implements the CRUD actions for Customer model.
@@ -466,8 +467,13 @@ class CustomerController extends BaseAuthController
     }
 
     public function actionTest(){
-        $customer = new Customer;
-        $res = $customer->decBalance(1, 0.01);
-        var_dump($res);
+        // $customer = new Customer;
+        // $res = $customer->decBalance(1, 0.01);
+        // var_dump($res);
+
+        $test = new core\models\Customer;
+        $info = $test->getCustomerInfo('13910329061');
+        var_dump($info);
+
     }
 }
