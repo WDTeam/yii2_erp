@@ -38,7 +38,7 @@ class uppay_class{
             'reqReserved' =>'透传信息', //请求方保留域，透传字段，查询、通知、对账文件中均会原样出现
         );
 
-        // 签名
+        //签名
         sign ( $params );
         getRequestParamString ( $params );
         // 发送信息到后台
