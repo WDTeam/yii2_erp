@@ -20,13 +20,12 @@ class m150921_090403_create_table_system_user extends Migration
               `updated_at` int(11) DEFAULT NULL COMMENT '修改时间',
               PRIMARY KEY (`id`),
               UNIQUE KEY `username` (`username`),
-              KEY `role` (`role`),
               KEY `status` (`status`),
               KEY `created_at` (`created_at`)
             ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='后台用户表'
        ")->execute();
         \Yii::$app->db->createCommand("
-            INSERT INTO {{%system_user}} VALUES (1,'admin','1epI5YqrEp69yYopnIupWzaIbpbG45-M','\$2y\$13\$H2h2XPss7i.FPQ3lCHamQu/qjqx8jEEFXwTR3vXdxpxQY.SpKBFSS','','admin@demo.com','',1,1438409505,1438409505);
+            INSERT INTO {{%system_user}} VALUES (1,'admin','1epI5YqrEp69yYopnIupWzaIbpbG45-M','\$2y\$13\$H2h2XPss7i.FPQ3lCHamQu/qjqx8jEEFXwTR3vXdxpxQY.SpKBFSS','','admin@demo.com',1,1438409505,1438409505);
         ")->execute();
     }
 
