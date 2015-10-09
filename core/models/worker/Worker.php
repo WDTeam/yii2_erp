@@ -80,11 +80,15 @@ class Worker extends \common\models\Worker
      * @return array $workerInfo 阿姨详细信息 包含阿姨id和阿姨姓名
      */
     public function getWorkerInfoByPhone($phone){
+
         $condition = ['worker_phone'=>$phone,'isdel'=>0,'worker_is_block'=>0,'worker_is_vacation'=>0,'worker_is_blacklist'=>0];
         $workerInfo = $this->find()->where($condition)->select('id,worker_name')->asArray()->one();
         return $workerInfo;
     }
 
+    public function getWorker_district(){
+
+    }
 
     /*
      * 获取阿姨类型名称
@@ -176,6 +180,7 @@ class Worker extends \common\models\Worker
             return '未通过';
         }
     }
+
     /*
      * 获取阿姨所有身份信息
      * @return Array 所有阿姨身份信息
