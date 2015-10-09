@@ -15,9 +15,9 @@ use common\models\CustomerPlatform;
 use common\models\CustomerChannal;
 use common\models\CustomerAddress;
 use common\models\CustomerWorker;
-
 use common\models\GeneralRegion;
 use common\models\OperationCity;
+use common\models\CustomerExtBalance;
 
 use common\models\Order;
 
@@ -179,7 +179,7 @@ echo DetailView::widget([
 ]); 
 
 echo DetailView::widget([
-    'model' => $model,
+    'model' => $customerBalance,
     'condensed'=>false,
     'hover'=>true,
     'mode'=>Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
@@ -192,7 +192,7 @@ echo DetailView::widget([
             'attribute'=>'customer_balance', 
             'label'=>'余额',
             'format'=>'raw',
-            'value'=> $model->customer_balance,
+            'value'=> $customerBalance != NULL ? $customerBalance->customer_balance : 0,
             'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],
