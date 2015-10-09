@@ -2,11 +2,10 @@
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
-use boss\models\FinancePopOrderSearch;
 use yii\widgets\ActiveForm;
 use kartik\tabs\TabsX;
-
-
+use core\models\Customer;
+use boss\models\FinancePopOrderSearch;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -21,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php 
      ActiveForm::begin([
-     'action' => ['indexmepost'],
+     'action' => ['generalmepost'],
      'method' => 'post'
      		]);
    $paychannel= GridView::widget([
@@ -31,103 +30,78 @@ $this->params['breadcrumbs'][] = $this->title;
             [
      		'class' => 'yii\grid\CheckboxColumn',
      		'name'=>'ids'
-],
+			],
      		[
      		'format' => 'raw',
      		'label' => '订单号',
      		'value' => function ($dataProvider) {
-     			return $dataProvider->order_code;
-     		},
-     		'width' => "100px",
+     			return $dataProvider->order_id;
+     		}
      		],
      		
      		[
      		'format' => 'raw',
-     		'label' => '订单渠道',
+     		'label' => '交易金额',
      		'value' => function ($dataProvider) {
-     			return $dataProvider->order_channel_name;
-     		},
-     		'width' => "80px",
+     			return $dataProvider->general_pay_money;
+     		}
      		],
      		
      		[
      		'format' => 'raw',
      		'label' => '用户电话',
      		'value' => function ($dataProvider) {
-     			return $dataProvider->order_customer_phone;
-     		},
-     		'width' => "80px",
+     		$userinfo=Customer::getCustomerById($dataProvider->customer_id);
+     		if($userinfo){
+     		return  $userinfo->customer_phone;
+     		}else {
+     		return  '<font color="red">暂无</font>';
+     		}
+   		   
+     		}
      		],
      		[
      		'format' => 'raw',
-     		'label' => '预约开始时间',
+     		'label' => '交易方式',
      		'value' => function ($dataProvider) {
-     			return FinancePopOrderSearch::alltime($dataProvider->order_booked_begin_time);
-     		},
-     		'width' => "150px",
-     		],
-     		
-     		[
-     		'format' => 'raw',
-     		'label' => '订单金额',
-     		'value' => function ($dataProvider) {
-     			return $dataProvider->order_money;
-     		},
-     		'width' => "80px",
+     			$userinfo_order_stype=FinancePopOrderSearch::selsect_isstatus($dataProvider->general_pay_mode);
+     			return  $userinfo_order_stype;
+     		}
      		],
      		[
      		'format' => 'raw',
-     		'label' => '实际支付金额',
+     		'label' => '数据来源',
      		'value' => function ($dataProvider) {
-     			return $dataProvider->order_pay_money;
-     		},
-     		'width' => "85px",
+     			return $dataProvider->general_pay_source_name;
+     		}
      		],
      		
+     		[
+     		'format' => 'raw',
+     		'label' => '充值状态',
+     		'value' => function ($dataProvider) {
+     		if($dataProvider->general_pay_status==1){
+     		$status='成功';
+     		}else{
+     		$status='失败';
+     		}	
+     		return $status;
      		
-     		[
-     		'format' => 'raw',
-     		'label' => '使用余额',
-     		'value' => function ($dataProvider) {
-     			return $dataProvider->order_use_acc_balance;
-     		},
-     		'width' => "85px",
+     		}
      		],
      		[
      		'format' => 'raw',
-     		'label' => '使用服务卡金额',
+     		'label' => '管理员',
      		'value' => function ($dataProvider) {
-     			return $dataProvider->order_use_coupon_money;
-     		},
-     		'width' => "100px",
+     			return $dataProvider->general_pay_admin_name?$dataProvider->general_pay_admin_name:'未处理';
+     		}
      		],
      		[
      		'format' => 'raw',
-     		'label' => '使用促销金额',
+     		'label' => '时间',
      		'value' => function ($dataProvider) {
-     			return $dataProvider->order_use_promotion_money;
-     		},
-     		'width' => "100px",
-     		],
-     		[
-     		'format' => 'raw',
-     		'label' => '有无子订单',
-     		'value' => function ($dataProvider) {
-     		 if($dataProvider->order_is_parent==1){
-     		 	return '有';
-     		 }else{
-     		 	return '无';
-     		 }
-     		},
-     		'width' => "100px",
-     		],
-     		[
-     		'format' => 'raw',
-     		'label' => '订单状态',
-     		'value' => function ($dataProvider) {
-     			return $dataProvider->order_status_name;
-     		},
-     		'width' => "100px",
+     		return date('Y-m-d H:i', $dataProvider->created_at);
+     		}
      		],
             [
                 'class' => 'yii\grid\ActionColumn',
@@ -162,14 +136,14 @@ $this->params['breadcrumbs'][] = $this->title;
 $items = [
 [
 'label'=>'<i class="glyphicon glyphicon-list-alt"></i> 订单对账',
-'content'=>$paychannel,
-'active'=>true,
+'content'=>'',
+'active'=>false,
+'url' => ['finance-pop-order/orderlist']
 ],
 [
 'label'=>'<i class="glyphicon glyphicon-king"></i> 充值对账',
-'content'=>'',
-'active'=>false,
-'url' => ['finance-pop-order/generalpaylist']
+'content'=>$paychannel,
+'active'=>true,
 ]
 ];
     echo TabsX::widget([
