@@ -151,4 +151,15 @@ class OperationPlatformVersionController extends BaseAuthController
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+    
+    public function actionPlatformVersions(){
+        $platform_id = Yii::$app->request->post('platform_id');
+        $platform = OperationPlatform::find()->asArray()->where(['id' => $platform_id])->one();
+        $versions = OperationPlatformVersion::find()->asArray()->where(['operation_platform_id' => $platform_id])->all();
+        $data = [];
+        foreach($versions as $k => $v){
+            $data[$v['id']] = $v['operation_platform_version_name'];
+        }
+        return $this->renderAjax('versions', ['versions' => $data, 'platform' => $platform]);
+    }
 }

@@ -152,6 +152,7 @@ class CustomerTransRecordController extends Controller
 
     public function actionTest()
     {
+        /*
         $data = array(
             'customer_id' => 1,  //用户ID
             'order_id' => 1, //订单ID
@@ -164,5 +165,13 @@ class CustomerTransRecordController extends Controller
         );
         $state = $this->createRecord($data);
         var_dump($state);
+        */
+        $ev = new CustomerTransRecord();
+        $ev->on('ccc',[$ev,'ccc']);
+        $ev->trigger('ccc');
+
     }
+
+
+
 }

@@ -24,10 +24,9 @@ class OperationAdvertRelease extends CoreOperationAdvertRelease
     public function rules()
     {
         return [
-            [['operation_advert_position_name'], 'string'],
-            [['created_at', 'updated_at'], 'integer'],
-            [['operation_advert_position_id'], 'string', 'max' => 60],
-            [['operation_advert_contents'], 'string'],
+            [['city_name'], 'string'],
+            [['created_at', 'updated_at', 'city_id'], 'integer'],
+            [['operation_release_contents'], 'string'],
         ];
     }
 
@@ -38,15 +37,11 @@ class OperationAdvertRelease extends CoreOperationAdvertRelease
     {
         return [
             'id' => '编号',
-            'operation_platform_id' => '发布目标平台编号',
-            'operation_platform_name' => '发布目标平台',
-            'operation_platform_version_id' => '发布目标版本编号',
-            'operation_platform_version_name' => '发布目标版本',
-            'operation_advert_position_id' => '发布目标位置编号',
-            'operation_advert_position_name' => '发布目标位置',
-            'operation_advert_contents' => '发布广告内容',
-            'created_at' => '创建时间',
-            'updated_at' => '编辑时间',
+            'city_name' => '城市名称',
+            'city_id' => '城市编号',
+            'operation_release_contents' => '发布详情',
+            'created_at' => '首次发布时间',
+            'updated_at' => '最后发布时间',
         ];
     }
 }
