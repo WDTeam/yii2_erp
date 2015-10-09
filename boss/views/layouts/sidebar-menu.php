@@ -229,6 +229,12 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                         'visible' => (Yii::$app->user->identity->username == 'admin'),
                     ],
+                    [
+                        'label' => '发布城市',
+                        'url' => ['/operation-city/release'],
+                        'icon' => 'fa fa-angle-right',
+                        'visible' => (Yii::$app->user->identity->username == 'admin'),
+                    ],
 //                     [
 
 //                        'label' => '商圈管理(40%)',
@@ -237,7 +243,7 @@ echo Menu::widget(
 //                        'visible' => (Yii::$app->user->identity->username == 'admin'),
 //                    ],
                     [
-                        'label' => '商品管理(20%)',
+                        'label' => '商品管理',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                         'visible' => (Yii::$app->user->identity->username == 'admin'),
@@ -246,7 +252,7 @@ echo Menu::widget(
                         ],
                         'items' => [
                             [
-                                'label' => '商品管理(20%)',
+                                'label' => '服务管理(60%)',
                                 'url' => ['/operation-goods'],
                                 'icon' => 'fa fa-angle-right',
                                 'visible' => (Yii::$app->user->identity->username == 'admin'),
@@ -258,14 +264,14 @@ echo Menu::widget(
 //                                'visible' => (Yii::$app->user->identity->username == 'admin'),
 //                            ],
                             [
-                                'label' => '规格管理(20%)',
+                                'label' => '规格管理(60%)',
                                 'url' => ['/operation-spec'],
                                 'icon' => 'fa fa-angle-right',
                                 'visible' => (Yii::$app->user->identity->username == 'admin'),
                             ],
                             [
-                                'label' => '服务管理(90%)',
-                                'url' => ['/operation-category'],
+                                'label' => '服务品类管理(80%)',
+                                'url' => ['/operation-category/'],
                                 'icon' => 'fa fa-angle-right',
                                 'visible' => (Yii::$app->user->identity->username == 'admin'),
                             ],

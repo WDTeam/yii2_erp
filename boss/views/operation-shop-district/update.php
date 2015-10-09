@@ -16,9 +16,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('operation', 'Operation Shop
 $this->params['breadcrumbs'][] = Yii::t('operation', 'Update Operation Shop District');
 ?>
 <div class="operation-shop-district-update">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
+    
     <?= $this->render('_form', [
         'model' => $model,
         'citymodel' => $citymodel,

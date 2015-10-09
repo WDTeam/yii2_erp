@@ -27,7 +27,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
 //            ['class' => 'yii\grid\SerialColumn'],
-
+            [
+                'class' => 'yii\grid\CheckboxColumn',
+                'name' => 'id',
+            ],
             'id',
             'operation_goods_name',
 //            'operation_category_id',
@@ -36,10 +39,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'operation_goods_start_time',
             'operation_goods_end_time',
             'operation_category_name',
-            'operation_goods_price',
-            'operation_goods_balance_price',
+//            'operation_goods_price',
+//            'operation_goods_balance_price',
 //            'operation_goods_market_price',
-            'operation_goods_lowest_consume',
+//            'operation_goods_lowest_consume',
 //            'operation_goods_introduction:ntext', 
 //            'operation_goods_english_name', 
 //            'operation_goods_start_time', 
