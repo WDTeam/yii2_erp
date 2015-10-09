@@ -2,9 +2,9 @@
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
-use yii\widgets\Pjax;
+/* use yii\widgets\Pjax;
 use kartik\nav\NavX;
-use yii\bootstrap\NavBar;
+use yii\bootstrap\NavBar; */
 use boss\models\FinancePopOrderSearch;
 use yii\widgets\ActiveForm;
 
@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'finance_pop_order_customer_tel', 
             [
             'format' => 'raw',
-            'label' => '渠道名称',
+            'label' => '阿姨姓名',
             'value' => function ($dataProvider) {
             	return $dataProvider->finance_pop_order_worker_uid ? $dataProvider->finance_pop_order_worker_uid  : '未知';
             },

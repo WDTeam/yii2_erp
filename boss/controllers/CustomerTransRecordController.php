@@ -4,6 +4,7 @@ namespace boss\controllers;
 
 use Yii;
 use common\models\CustomerTransRecord;
+use common\models\CustomerTransRecordLog;
 use boss\models\CustomerTransRecordSearch;
 use yii\rest\Controller;
 use yii\web\NotFoundHttpException;
@@ -27,14 +28,19 @@ class CustomerTransRecordController extends Controller
     }
 
 
-
     /**
      * 创建交易记录
      * @param $data 数据
      */
     public function createRecord($data)
     {
-        if(!empty($data['scenario'])){
+        //验证之前将数据插入记录表
+        $model = new CustomerTransRecordLog();
+        $model->attributes = $data;
+        $model->validate();
+        $model->insert(false);
+
+        if(empty($data['scenario'])){
             return false;
         }
         $model = new CustomerTransRecord();
@@ -69,12 +75,11 @@ class CustomerTransRecordController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
-        return $this->render('view', ['model' => $model]);
-}
+            return $this->render('view', ['model' => $model]);
+        }
     }
 
     /**
@@ -126,7 +131,6 @@ class CustomerTransRecordController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
         return $this->redirect(['index']);
     }
 
@@ -144,5 +148,21 @@ class CustomerTransRecordController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionTest()
+    {
+        $data = array(
+            'customer_id' => 1,  //用户ID
+            'order_id' => 1, //订单ID
+            'order_channel_id' => 1, //订单渠道
+            'pay_channel_id' => 1,   //支付渠道
+            'customer_trans_record_mode' => 1,   //交易方式:1消费,2=充值,3=退款,4=补偿
+            'customer_trans_record_online_balance_pay' => 50,//在线余额支付
+            'customer_trans_record_order_total_money' => 50,  //订单总额
+            'scenario' => 8
+        );
+        $state = $this->createRecord($data);
+        var_dump($state);
     }
 }

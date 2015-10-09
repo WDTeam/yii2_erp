@@ -2,41 +2,41 @@
 include_once dirname(__FILE__).'/SDKConfig.php';
 include_once dirname(__FILE__).'/PublicEncrypte.php';
 include_once dirname(__FILE__).'/common.php';
-include_once dirname(__FILE__).'/log.class.php';
+//include_once dirname(__FILE__).'/log.class.php';
 
 // 初始化日志
-global $log;
-$log = new PhpLog ( SDK_LOG_FILE_PATH, "PRC", SDK_LOG_LEVEL );
+//global $log;
+//$log = new PhpLog ( SDK_LOG_FILE_PATH, "PRC", SDK_LOG_LEVEL );
 /**
  * 签名
  *
  * @param String $params_str
  */
 function sign(&$params) {
-	global $log;
-	$log->LogInfo ( '=====签名报文开始======' );
+	//global $log;
+	//$log->LogInfo ( '=====签名报文开始======' );
 	if(isset($params['transTempUrl'])){
 		unset($params['transTempUrl']);
 	}
 	// 转换成key=val&串
 	$params_str = coverParamsToString ( $params );
-	$log->LogInfo ( "签名key=val&...串 >" . $params_str );
+	//$log->LogInfo ( "签名key=val&...串 >" . $params_str );
 
 	$params_sha1x16 = sha1 ( $params_str, FALSE );
-	$log->LogInfo ( "摘要sha1x16 >" . $params_sha1x16 );
+	//$log->LogInfo ( "摘要sha1x16 >" . $params_sha1x16 );
 	// 签名证书路径
-	$cert_path = SDK_SIGN_CERT_PATH;
+	$cert_path = __DIR__.SDK_SIGN_CERT_PATH;
 	$private_key = getPrivateKey ( $cert_path );
 	// 签名
 	$sign_falg = openssl_sign ( $params_sha1x16, $signature, $private_key, OPENSSL_ALGO_SHA1 );
 	if ($sign_falg) {
 		$signature_base64 = base64_encode ( $signature );
-		$log->LogInfo ( "签名串为 >" . $signature_base64 );
+		//$log->LogInfo ( "签名串为 >" . $signature_base64 );
 		$params ['signature'] = $signature_base64;
 	} else {
-		$log->LogInfo ( ">>>>>签名失败<<<<<<<" );
+		//$log->LogInfo ( ">>>>>签名失败<<<<<<<" );
 	}
-	$log->LogInfo ( '=====签名报文结束======' );
+	//$log->LogInfo ( '=====签名报文结束======' );
 }
 
 /**
@@ -46,7 +46,7 @@ function sign(&$params) {
  * @param String $signature_str
  */
 function _verify($params) {
-	global $log;
+	//global $log;
 	// 公钥
 	$public_key = getPulbicKeyByCertId ( $params ['certId'] );
 	//$public_key.'<br/>';exit;
@@ -54,13 +54,13 @@ function _verify($params) {
 	$signature_str = $params ['signature'];
 	unset ( $params ['signature'] );
 	$params_str = coverParamsToString ( $params );
-	$log->LogInfo ( '报文去[signature] key=val&串>' . $params_str );
+	//$log->LogInfo ( '报文去[signature] key=val&串>' . $params_str );
 	$signature = base64_decode ( $signature_str );
 //	echo date('Y-m-d',time());
 	$params_sha1x16 = sha1 ( $params_str, FALSE );
-	$log->LogInfo ( '摘要shax16>' . $params_sha1x16 );
+	//$log->LogInfo ( '摘要shax16>' . $params_sha1x16 );
 	$isSuccess = openssl_verify ( $params_sha1x16, $signature,$public_key, OPENSSL_ALGO_SHA1 );
-	$log->LogInfo ( $isSuccess ? '验签成功' : '验签失败' );
+	//$log->LogInfo ( $isSuccess ? '验签成功' : '验签失败' );
 	return $isSuccess;
 }
 
@@ -71,11 +71,11 @@ function _verify($params) {
  * @return string NULL
  */
 function getPulbicKeyByCertId($certId) {
-	global $log;
-	$log->LogInfo ( '报文返回的证书ID>' . $certId );
+	//global $log;
+	//$log->LogInfo ( '报文返回的证书ID>' . $certId );
 	// 证书目录
-	$cert_dir = SDK_VERIFY_CERT_DIR;
-	$log->LogInfo ( '验证签名证书目录 :>' . $cert_dir );
+	$cert_dir = __DIR__.SDK_VERIFY_CERT_DIR;
+	//$log->LogInfo ( '验证签名证书目录 :>' . $cert_dir );
 	$handle = opendir ( $cert_dir );
 	if ($handle) {
 		while ( $file = readdir ( $handle ) ) {
@@ -85,15 +85,15 @@ function getPulbicKeyByCertId($certId) {
 				if (pathinfo ( $file, PATHINFO_EXTENSION ) == 'cer') {
 					if (getCertIdByCerPath ( $filePath ) == $certId) {
 						closedir ( $handle );
-						$log->LogInfo ( '加载验签证书成功' );
+						//$log->LogInfo ( '加载验签证书成功' );
 						return getPublicKey ( $filePath );
 					}
 				}
 			}
 		}
-		$log->LogInfo ( '没有找到证书ID为[' . $certId . ']的证书' );
+		//$log->LogInfo ( '没有找到证书ID为[' . $certId . ']的证书' );
 	} else {
-		$log->LogInfo ( '证书目录 ' . $cert_dir . '不正确' );
+		//$log->LogInfo ( '证书目录 ' . $cert_dir . '不正确' );
 	}
 	closedir ( $handle );
 	return null;
@@ -135,11 +135,11 @@ function getCertIdByCerPath($cert_path) {
 function getSignCertId() {
 	// 签名证书路径
 
-	return getCertId ( SDK_SIGN_CERT_PATH );
+	return getCertId ( __DIR__.SDK_SIGN_CERT_PATH );
 }
 function getEncryptCertId() {
 	// 签名证书路径
-	return getCertIdByCerPath ( SDK_ENCRYPT_CERT_PATH );
+	return getCertIdByCerPath ( __DIR__.SDK_ENCRYPT_CERT_PATH );
 }
 
 /**
@@ -183,7 +183,7 @@ function encryptPan($pan) {
  * @return Ambigous <number, string>
  */
 function encryptPin($pan, $pwd) {
-	$cert_path = SDK_ENCRYPT_CERT_PATH;
+	$cert_path = __DIR__.SDK_ENCRYPT_CERT_PATH;
 	$public_key = getPublicKey ( $cert_path );
 
 	return EncryptedPin ( $pwd, $pan, $public_key );
@@ -195,7 +195,7 @@ function encryptPin($pan, $pwd) {
  * @return unknown
  */
 function encryptCvn2($cvn2) {
-	$cert_path = SDK_ENCRYPT_CERT_PATH;
+	$cert_path = __DIR__.SDK_ENCRYPT_CERT_PATH;
 	$public_key = getPublicKey ( $cert_path );
 
 	openssl_public_encrypt ( $cvn2, $crypted, $public_key );
@@ -209,7 +209,7 @@ function encryptCvn2($cvn2) {
  * @return unknown
  */
 function encryptDate($certDate) {
-	$cert_path = SDK_ENCRYPT_CERT_PATH;
+	$cert_path = __DIR__.SDK_ENCRYPT_CERT_PATH;
 	$public_key = getPublicKey ( $cert_path );
 
 	openssl_public_encrypt ( $certDate, $crypted, $public_key );
@@ -224,7 +224,7 @@ function encryptDate($certDate) {
  * @return unknown
  */
 function encryptDateType($certDataType) {
-	$cert_path = SDK_ENCRYPT_CERT_PATH;
+	$cert_path = __DIR__.SDK_ENCRYPT_CERT_PATH;
 	$public_key = getPublicKey ( $cert_path );
 
 	openssl_public_encrypt ( $certDataType, $crypted, $public_key );

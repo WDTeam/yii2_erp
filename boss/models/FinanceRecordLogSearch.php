@@ -27,6 +27,34 @@ class FinanceRecordLogSearch extends FinanceRecordLog
         return Model::scenarios();
     }
 
+    
+    
+    /**
+    * 获取对账最后一次的信息
+    * @date: 2015-10-8
+    * @author: peak pan
+    * @return:
+    **/
+    
+    public static  function get_financerecordloginfo($id)
+    {
+    	
+    	$alinfo=FinanceRecordLogSearch::find()->select('finance_order_channel_name,finance_pay_channel_name,finance_record_log_statime,finance_record_log_endtime')->andWhere(['=','finance_order_channel_id',$id])->max('id');
+    	if(count($alinfo)){
+    		return $alinfo;
+    	}else {
+    		return 0;
+    	}
+    	
+    }
+    
+    
+    
+    
+    
+    
+    
+    
     public function search($params)
     {
         $query = FinanceRecordLog::find();
