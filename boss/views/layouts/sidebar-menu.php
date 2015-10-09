@@ -342,7 +342,7 @@ echo Menu::widget(
                                     ],
                                    [
                                         'label' => '兼职结算(40%)',
-                                        'url' => ['/finance-settle-apply/homemaking-manual-settlement-index'],
+                                        'url' => ['/finance-settle-apply/self-parttime-worker-settle-index'],
                                         'icon' => 'fa fa-angle-right',
                                     ],
                                ]
@@ -357,7 +357,7 @@ echo Menu::widget(
                                 'items'=>[
                                     [
                                         'label' => '门店结算(10%)',
-                                        'url' => ['/finance-settle-apply/homemaking-manual-settlement-index'],
+                                        'url' => ['/finance-shop-settle-apply/index'],
                                         'icon' => 'fa fa-angle-right',
                                     ],
                                    [
