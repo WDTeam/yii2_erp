@@ -113,12 +113,12 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有订单(20%)',
+                        'label' => '查看所有订单(0%)',
                         'url' => ['/order'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '创建新订单(80%)',
+                        'label' => '创建新订单(90%)',
                         'url' => ['/order/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
