@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'finance_shop_settle_apply_order_count',
                 'finance_shop_settle_apply_fee_per_order', 
                 'finance_shop_settle_apply_fee', 
-                'created_at', 
+                ['attribute'=>'created_at','content'=>function($model,$key,$index){return Html::a(date('Y:m:d H:i:s',$model->created_at),'#');}],
                 [
                 'class' => 'yii\grid\ActionColumn',
                 'template' =>'{view} {agree} {disagree}',

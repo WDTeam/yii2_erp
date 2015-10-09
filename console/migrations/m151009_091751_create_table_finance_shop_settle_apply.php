@@ -30,6 +30,18 @@ class m151009_091751_create_table_finance_shop_settle_apply extends Migration
             'updated_at' => Schema::TYPE_INTEGER . '(11)  COMMENT \'审核时间\'',
             'created_at' => Schema::TYPE_INTEGER. '(11) COMMENT \'申请时间\'',
         ], $tableOptions);
+        $this->batchInsert('{{%finance_shop_settle_apply}}',
+            ['id','shop_id','shop_name','shop_manager_id','shop_manager_name','finance_shop_settle_apply_order_count',
+                'finance_shop_settle_apply_fee_per_order','finance_shop_settle_apply_fee',
+                'finance_shop_settle_apply_status','finance_shop_settle_apply_cycle','finance_shop_settle_apply_cycle_des','finance_shop_settle_apply_reviewer',
+
+                'finance_shop_settle_apply_starttime','finance_shop_settle_apply_endtime',
+                'isdel','updated_at','created_at'],
+            [
+                [1,111,'爱佳家政北京双井店',2,'爱佳家政',6,10,60,0,2,'月结','魏北南',
+
+                    strtotime("-2 month"),strtotime("-1 month"),0,time(),time()],
+            ]);
     }
 
     public function down()

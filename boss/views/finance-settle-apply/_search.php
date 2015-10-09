@@ -19,7 +19,7 @@ use kartik\grid\GridView;
         'method' => 'get',
     ]); ?>
     
-    <div class='col-md-2'>
+    <div class='col-md-3'>
     <?php echo  $form->field($model, 'finance_settle_apply_starttime')->widget(DateControl::classname(),[
         'type' => DateControl::FORMAT_DATE,
         'ajaxConversion'=>false,
@@ -34,7 +34,7 @@ use kartik\grid\GridView;
     
     ?>
   </div>  
-    <div class='col-md-2'>
+    <div class='col-md-3'>
     <?php echo  $form->field($model, 'finance_settle_apply_endtime')->widget(DateControl::classname(),[
         'type' => DateControl::FORMAT_DATE,
         'ajaxConversion'=>false,
