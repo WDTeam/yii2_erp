@@ -436,9 +436,22 @@ class WorkerController extends BaseAuthController
     }
 
     public function actionTest(){
-        $worker = new Worker();
-        $worker = $worker->getWorkerInfo(43);
         echo '<pre>';
-        var_dump($worker);die;
+//        Yii::$app->redis->sadd('district_1','16684','16683','16685','16686','16687','16688','16689','16682');
+//        Yii::$app->redis->sadd('district_2','16694','16693','16695','16696','16697','16698','16699','16692');
+//        Yii::$app->redis->sadd('worker_16694','10','11','9','8','7');
+//        Yii::$app->redis->sadd('worker_16693','10','11');
+        $workers = Yii::$app->redis->smembers('district_1');
+        $time = date('H');
+        foreach($workers as $val){
+            $workerKey = 'worker_'.$val;
+            $workerIsBusy = Yii::$app->redis->sismember($workerKey,$time);
+            if(empty($workerIsBusy)){
+                $workerArr[] = $val;
+            }
+        }
+        phpinfo();
+        var_dump($workerArr);
+        var_dump(Yii::$app->redis->sinter('worker_16983','worker_16694'));
     }
 }
