@@ -30,39 +30,8 @@ class OrderController extends BaseAuthController
 
     public function actionCustomerUsedWorkers($id)
     {
-//        Yii::$app->response->format = Response::FORMAT_JSON;
-//        $customerWorker = CustomerWorker::findAll(['customer_id'=>$id]);
-//        $worker = [];
-//        foreach($customerWorker as $k=>$v)
-//        {
-//            $worker[$k] = $v->attributes;
-//            $worker[$k]['worker'] = Worker::findOne($v->woker_id);
-//        }
-//        return $worker;
-        return '[
-                {
-                    "id": 1,
-                    "customer_id": 1,
-                    "worker_id": 1,
-                    "worker_name": "王阿姨",
-                    "customer_worker_status": 1
-                },
-                {
-                    "id": 2,
-                    "customer_id": 1,
-                    "worker_id": 2,
-                    "worker_name": "张阿姨",
-                    "customer_worker_status": 0
-
-                },
-                {
-                    "id": 3,
-                    "customer_id": 1,
-                    "worker_id": 3,
-                    "worker_name": "李阿姨",
-                    "customer_worker_status": 0
-                }
-            ]';
+        Yii::$app->response->format = Response::FORMAT_JSON;
+       return Customer::getCustomerUsedWorkers($id);
     }
 
     public function actionWorker()

@@ -113,12 +113,12 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有订单(20%)',
+                        'label' => '查看所有订单(0%)',
                         'url' => ['/order'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '创建新订单(80%)',
+                        'label' => '创建新订单(90%)',
                         'url' => ['/order/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -342,7 +342,7 @@ echo Menu::widget(
                                 ],
                                'items'=>[
                                     [
-                                        'label' => '全职结算(70%)',
+                                        'label' => '全职结算(90%)',
                                         'url' => ['/finance-settle-apply/self-fulltime-worker-settle-index'],
                                         'icon' => 'fa fa-angle-right',
                                     ],
@@ -375,8 +375,23 @@ echo Menu::widget(
                             ],
                             [
                                 'label' => '财务审核(70%)',
-                                'url' => ['/finance-settle-apply/index?FinanceSettleApplySearch[finance_settle_apply_status]=0&FinanceSettleApplySearch[ids]=&FinanceSettleApplySearch[nodeId]=1'],
+                                'url' => ['#'],
                                 'icon' => 'fa fa-angle-right',
+                                'options' => [
+                                    'class' => 'treeview ',
+                                ],
+                                'items'=>[
+                                    [
+                                        'label' => '门店结算(10%)',
+                                        'url' => ['/finance-settle-apply/index?FinanceSettleApplySearch[finance_settle_apply_status]=0&FinanceSettleApplySearch[ids]=&FinanceSettleApplySearch[nodeId]=1'],
+                                        'icon' => 'fa fa-angle-right',
+                                    ],
+                                   [
+                                        'label' => '阿姨结算(60%)',
+                                        'url' => ['/finance-settle-apply/index?FinanceSettleApplySearch[finance_settle_apply_status]=0&FinanceSettleApplySearch[ids]=&FinanceSettleApplySearch[nodeId]=1'],
+                                        'icon' => 'fa fa-angle-right',
+                                    ],
+                                ]
                             ], [
                                 'label' => '结算查询(50%)',
                                 'url' => ['/finance-settle-apply/query'],

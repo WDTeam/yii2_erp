@@ -60,10 +60,11 @@ class FinanceSettleApplyController extends BaseAuthController
      */
     public function actionSelfFulltimeWorkerSettleIndex(){
         $searchModel = new FinanceSettleApplySearch;
+        $searchModel->settleMonth = date('Y-m', strtotime('-1 month'));//默认查询上个月的结算列表
         $defaultParams = array('finance_settle_apply_status' => FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT,
                                  'worker_type_id'=>'2',
-                                 'finance_settle_apply_starttime' => $this->getFirstDayOfLastMonth(),
-                                 'finance_settle_apply_endtime' => $this->getLastDayOfLastMonth(),   
+                                 'finance_settle_apply_starttime' => $this->getFirstDayOfSpecifiedMonth(),
+                                 'finance_settle_apply_endtime' => $this->getLastDayOfSpecifiedMonth(),   
                                 );
         $requestParams = Yii::$app->request->getQueryParams();
         $newRequestParams = [];
@@ -74,11 +75,16 @@ class FinanceSettleApplyController extends BaseAuthController
                                         'worder_tel' =>$requestModel['worder_tel'],
                                     );
             }
+            if(isset($requestModel['settleMonth'])){
+                $searchModel->settleMonth = $requestModel['settleMonth'];
+                $newRequestParams['finance_settle_apply_starttime'] = $this->getFirstDayOfSpecifiedMonth($searchModel->settleMonth);
+                $newRequestParams['finance_settle_apply_endtime'] = $this->getLastDayOfSpecifiedMonth($searchModel->settleMonth);
+                var_dump($newRequestParams);
+            }
         }
         $requestParams = array_merge($defaultParams,$newRequestParams);
         $dataProvider = $searchModel->search(['FinanceSettleApplySearch'=>$requestParams]);
-//        $searchModel->settleMonth = date('Y-m', strtotime('-1 month'));
-        $searchModel->settleMonth = '2015-09';
+        
         return $this->render('selfFulltimeWorkerSettleIndex', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
@@ -118,7 +124,7 @@ class FinanceSettleApplyController extends BaseAuthController
         if(isset($requestModel["FinanceSettleApplySearch"])){
             $financeSettleApplySearch = $requestModel["FinanceSettleApplySearch"];
         }
-//        $financeSettleApplySearch = $financeSettleApplySearch->getWorkerInfo($workerId);//获取阿姨的信息
+        $financeSettleApplySearch = $financeSettleApplySearch->getWorkerInfo('');//获取阿姨的信息
         $nonOrderIncomeSearchModel = new FinanceWorkerNonOrderIncomeSearch;
         $nonOrderDataProvider = $nonOrderIncomeSearchModel->search(Yii::$app->request->getQueryParams());
         $orderIncomeSearchModel = new FinanceWorkerOrderIncomeSearch;
@@ -133,8 +139,8 @@ class FinanceSettleApplyController extends BaseAuthController
         $searchModel = new FinanceSettleApplySearch;
         $defaultParams = array('finance_settle_apply_status' => FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT,
                                  'worker_type_id'=>'1',
-                                 'finance_settle_apply_starttime' => $this->getFirstDayOfLastMonth(),
-                                 'finance_settle_apply_endtime' => $this->getLastDayOfLastMonth(),   
+                                 'finance_settle_apply_starttime' => $this->getFirstDayOfSpecifiedMonth(),
+                                 'finance_settle_apply_endtime' => $this->getLastDayOfSpecifiedMonth(),   
                                 );
         $requestParams = Yii::$app->request->getQueryParams();
         $newRequestParams = [];
@@ -186,8 +192,8 @@ class FinanceSettleApplyController extends BaseAuthController
         $searchModel = new FinanceSettleApplySearch;
         $defaultParams = array('finance_settle_apply_status' => FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT,
                                  'worker_type_id'=>'2',
-                                 'finance_settle_apply_starttime' => $this->getFirstDayOfLastMonth(),
-                                 'finance_settle_apply_endtime' => $this->getLastDayOfLastMonth(),   
+                                 'finance_settle_apply_starttime' => $this->getFirstDayOfSpecifiedMonth(),
+                                 'finance_settle_apply_endtime' => $this->getLastDayOfSpecifiedMonth(),   
                                 );
         $requestParams = Yii::$app->request->getQueryParams();
         $newRequestParams = [];
@@ -496,28 +502,35 @@ class FinanceSettleApplyController extends BaseAuthController
     *   按收入类型分组的订单总金额，保存到结算表
     */
     public function actionFullTimeWorkerCycleSettlement(){
-        $settleStartTime = $this->getFirstDayOfLastMonth();//统计开始时间,上个月的第一天
+        $settleStartTime = $this->getFirstDayOfSpecifiedMonth();//统计开始时间,上个月的第一天
         echo date('Y-m-01 00:00:00', strtotime('-1 month')).'------';
-        $settleEndTime = $this->getLastDayOfLastMonth();//统计结束时间,上个月的最后一天
+        $settleEndTime = $this->getLastDayOfSpecifiedMonth();//统计结束时间,上个月的最后一天
         echo date('Y-m-t 23:59:59', strtotime('-1 month')).'------';
         //获取阿姨的数组信息
         $partimeWorkerArr = array(['worker_id'=>'555','worker_name'=>'阿姨1','worker_idcard'=>'4210241983','worker_bank_card'=>'62217978'],['worker_id'=>'666','worker_name'=>'阿姨2','worker_idcard'=>'4210241984','worker_bank_card'=>'622174747']);
         $this->saveAndGenerateSettleData($partimeWorkerArr,$settleStartTime,$settleEndTime);
     }
     
+    
     /**
-     * 获取上个月的第一天
+     * 获取指定月份的第一天
      * @return type
      */
-    private function getFirstDayOfLastMonth(){
-        return strtotime(date('Y-m-01 00:00:00', strtotime('-1 month')));
+    private function getFirstDayOfSpecifiedMonth($yearAndMonth = null){
+        if($yearAndMonth == null){
+            $yearAndMonth = date('Y-m', strtotime('-1 month'));
+        }
+        return strtotime(date('Y-m-01 00:00:00', strtotime($yearAndMonth)));
     }
     
     /**
-     * 获取上个月的最后一天
+     * 获取指定月份的最后一天
      */
-    private function getLastDayOfLastMonth(){
-        return strtotime(date('Y-m-t 23:59:59', strtotime('-1 month')));
+    private function getLastDayOfSpecifiedMonth($yearAndMonth = null){
+        if($yearAndMonth == null){
+            $yearAndMonth = date('Y-m', strtotime('-1 month'));
+        }
+        return strtotime(date('Y-m-t 23:59:59', strtotime($yearAndMonth)));
     }
     
     private function saveAndGenerateSettleData($partimeWorkerArr,$settleStartTime,$settleEndTime){

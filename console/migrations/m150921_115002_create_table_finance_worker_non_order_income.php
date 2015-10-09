@@ -27,12 +27,13 @@ class m150921_115002_create_table_finance_worker_non_order_income extends Migrat
             'created_at' => Schema::TYPE_INTEGER. '(11) COMMENT \'创建时间\'',
         ], $tableOptions);
         $this->batchInsert('{{%finance_worker_non_order_income}}',
-            ['id','worder_id','finance_worker_non_order_income_type','finance_worker_non_order_income',
+            ['id','worder_id','finance_worker_non_order_income_type','finance_worker_non_order_income_type_des','finance_worker_non_order_income',
                 'finance_worker_non_order_income_des',
                 'finance_worker_non_order_income_starttime','finance_worker_non_order_income_endtime',
-                'finance_worker_non_order_income_isSettled','isdel','updated_at','created_at'],
+                'finance_worker_non_order_income_isSettled','finance_settle_apply_id','isdel','updated_at','created_at'],
             [
-                [1,111,3,50,'全勤奖',date("Y-m-d",strtotime("-1 month")),time(),0,0,time(),time()],
+                [1,111,3,'全勤奖',50,'每个月请假不超过4天',strtotime(date('Y-m-01 00:00:00', strtotime('2015-09'))),strtotime(date('Y-m-t 23:59:59', strtotime('2015-09'))),0,1,0,time(),time()],
+                [2,111,3,'路补',10,'服务距离超过7KM',strtotime(date('Y-m-01 00:00:00', strtotime('2015-09'))),strtotime(date('Y-m-t 23:59:59', strtotime('2015-09'))),0,1,0,time(),time()],
             ]);
     }
 

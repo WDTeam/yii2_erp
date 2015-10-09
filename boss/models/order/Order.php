@@ -85,6 +85,7 @@ class Order extends OrderModel
                     $order->order_pop_order_code = $post['Order']['order_pop_order_code'];
                     $order->order_pop_order_money = $post['Order']['order_pop_order_money'];
                     $order->order_pop_operation_money = $post['Order']['order_money'] - $post['Order']['order_pop_order_money'];
+
                     return self::isPaymentPop($order);
                     break;
                 default:break;
