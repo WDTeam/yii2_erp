@@ -24,11 +24,11 @@ $cityDesc = '客户';
 
 <div class="customer-form">
 <?php $form = ActiveForm::begin(['type' => ActiveForm::TYPE_HORIZONTAL, 'id' => 'msg-form',
-        //'options' => ['class'=>'form-horizontal'],
-        //'enableAjaxValidation'=>false,
+        // 'options' => ['class'=>'form-horizontal'],
+        // 'enableAjaxValidation'=>false,
         'fieldConfig' => [
-            //'template' => "{label}\n<div class=\"col-lg-8\">{input}</div>\n<div class=\"col-lg-5\">{error}</div>",
-            //'labelOptions' => ['class' => 'col-lg-1 control-label'],
+            // 'template' => "{label}\n<div class=\"col-lg-8\">{input}</div>\n<div class=\"col-lg-5\">{error}</div>",
+            // 'labelOptions' => ['class' => 'col-lg-1 control-label'],
         ]
     ]);
 
@@ -64,7 +64,7 @@ $cityDesc = '客户';
         ]
     ]);
 
-    echo $form->field($model, 'general_region_id')->textInput(['placeholder' => 'Enter 客户住址ID...', 'maxlength' => 8]);
+    //echo $form->field($model, 'general_region_id')->textInput(['placeholder' => 'Enter 客户住址ID...', 'maxlength' => 8]);
     echo $form->field($model, 'customer_level')->textInput(['placeholder' => 'Enter 客户评级...', 'maxlength' => 8]);
     echo $form->field($model, 'customer_complaint_times')->textInput(['placeholder' => 'Enter 客户投诉次数...', 'maxlength' => 8]);
     //echo '<label class="control-label">'.$model->attributeLabels()['operation_boot_page_online_time'].'</label>';
