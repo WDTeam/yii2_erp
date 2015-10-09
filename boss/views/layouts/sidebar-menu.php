@@ -320,7 +320,7 @@ echo Menu::widget(
 
                     ],
                     [
-                        'label' => '结算管理(45%)',
+                        'label' => '结算管理(63%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                         'options' => [
@@ -336,12 +336,12 @@ echo Menu::widget(
                                 ],
                                'items'=>[
                                     [
-                                        'label' => '全职结算(50%)',
+                                        'label' => '全职结算(70%)',
                                         'url' => ['/finance-settle-apply/self-fulltime-worker-settle-index'],
                                         'icon' => 'fa fa-angle-right',
                                     ],
                                    [
-                                        'label' => '兼职结算(40%)',
+                                        'label' => '兼职结算(70%)',
                                         'url' => ['/finance-settle-apply/self-parttime-worker-settle-index'],
                                         'icon' => 'fa fa-angle-right',
                                     ],
@@ -356,19 +356,19 @@ echo Menu::widget(
                                 ],
                                 'items'=>[
                                     [
-                                        'label' => '门店结算(10%)',
+                                        'label' => '门店结算(50%)',
                                         'url' => ['/finance-shop-settle-apply/index'],
                                         'icon' => 'fa fa-angle-right',
                                     ],
                                    [
-                                        'label' => '阿姨结算(30%)',
-                                        'url' => ['/finance-settle-apply/homemaking-manual-settlement-index'],
+                                        'label' => '阿姨结算(60%)',
+                                        'url' => ['/finance-settle-apply/self-parttime-worker-settle-index'],
                                         'icon' => 'fa fa-angle-right',
                                     ],
                                 ]
                             ],
                             [
-                                'label' => '财务审核(85%)',
+                                'label' => '财务审核(70%)',
                                 'url' => ['/finance-settle-apply/index?FinanceSettleApplySearch[finance_settle_apply_status]=0&FinanceSettleApplySearch[ids]=&FinanceSettleApplySearch[nodeId]=1'],
                                 'icon' => 'fa fa-angle-right',
                             ], [

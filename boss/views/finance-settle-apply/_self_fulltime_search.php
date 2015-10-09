@@ -15,7 +15,7 @@ use kartik\date\DatePicker;
         'method' => 'get',
     ]); ?>
     
-    <div class='col-md-2'>
+    <div class='col-md-3'>
         <?= $form->field($model, 'settleMonth')->widget(DatePicker::classname(), [
                     'name' => 'settleMonth',
                     'type' => DatePicker::TYPE_COMPONENT_PREPEND,

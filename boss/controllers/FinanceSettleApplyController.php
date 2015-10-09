@@ -433,7 +433,7 @@ class FinanceSettleApplyController extends BaseAuthController
         if(isset($requestModel["FinanceSettleApplySearch"])){
             $financeSettleApplySearch = $requestModel["FinanceSettleApplySearch"];
         }
-//        $financeSettleApplySearch = $financeSettleApplySearch->getWorkerInfo($workerId);//获取阿姨的信息
+        $financeSettleApplySearch = $financeSettleApplySearch->getWorkerInfo(1234);//获取阿姨的信息
         $searchModel = new FinanceWorkerOrderIncomeSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'dataProvider'=>$dataProvider]);
