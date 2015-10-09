@@ -3,12 +3,14 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
-/* @var $model backend\models\UserSearch */
-/* @var $form yii\widgets\ActiveForm */
+/**
+ * @var yii\web\View $this
+ * @var boss\models\search\SystemUserSearch $model
+ * @var yii\widgets\ActiveForm $form
+ */
 ?>
 
-<div class="user-search">
+<div class="system-user-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],

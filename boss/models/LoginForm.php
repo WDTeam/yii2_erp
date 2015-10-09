@@ -80,7 +80,7 @@ class LoginForm extends Model
     public function getUser()
     {
         if ($this->_user === false) {
-            $this->_user = SystemUser::find()->where(['username'=>$this->username])->one();
+            $this->_user = SystemUser::findByUsername($this->username);
         }
         return $this->_user;
     }

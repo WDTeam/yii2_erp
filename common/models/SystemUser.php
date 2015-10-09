@@ -5,6 +5,7 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\web\IdentityInterface;
+use yii\helpers\ArrayHelper;
 
 /**
  * User model
@@ -27,6 +28,24 @@ class SystemUser extends ActiveRecord implements IdentityInterface
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
     const ROLE_USER = 10;
+    
+    public function setRoles($roles)
+    {
+        $auth = \Yii::$app->authManager;
+        $auth->revokeAll($this->id);
+        if(!empty($roles)){
+            foreach ($roles as $role){
+                $auth->assign($auth->getRole($role), $this->id);
+            }
+            return $auth->getRolesByUser($this->id);
+        }else{
+            return [];
+        }
+    }
+    public function getRoles()
+    {
+        return ArrayHelper::map(Yii::$app->authManager->getRolesByUser($this->id), 'name', 'name');
+    }
 
     /**
      * @inheritdoc
@@ -46,6 +65,7 @@ class SystemUser extends ActiveRecord implements IdentityInterface
         ];
     }
 
+
     /**
      * @inheritdoc
      */
@@ -55,8 +75,8 @@ class SystemUser extends ActiveRecord implements IdentityInterface
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
 
-            ['role', 'default', 'value' => self::ROLE_USER],
-            ['role', 'in', 'range' => [self::ROLE_USER]],
+            ['roles', 'default', 'value' => self::ROLE_USER],
+            ['roles', 'in', 'range' => [self::ROLE_USER]],
         ];
     }
 
@@ -70,8 +90,11 @@ class SystemUser extends ActiveRecord implements IdentityInterface
             'username' => Yii::t('app', 'Username'),
             'password' => Yii::t('app', 'Password'),
             'repassword' => Yii::t('app', 'Repassword'),
+            'auth_key'=> Yii::t('app', 'AuthKey'),
+            'password_hash'=> Yii::t('app', 'PasswordHash'),
+            'password_reset_token'=> Yii::t('app', 'PasswordResetToken'),
             'email' => Yii::t('app', 'Email'),
-            'role' => Yii::t('app', 'Role'),
+            'roles' => Yii::t('app', 'Role'),
             'status' => Yii::t('app', 'Status'),
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
@@ -182,9 +205,15 @@ class SystemUser extends ActiveRecord implements IdentityInterface
      *
      * @param string $password
      */
+    public function getPassword()
+    {
+        return null;
+    }
     public function setPassword($password)
     {
-        $this->password_hash = Yii::$app->security->generatePasswordHash($password);
+        if(!empty($password)){
+            $this->password_hash = Yii::$app->security->generatePasswordHash($password);
+        }
     }
 
     /**
