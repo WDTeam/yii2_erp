@@ -106,6 +106,7 @@ class Order extends OrderModel
      * 追加新订单
      * @param $attributes
      * @return bool
+     * TODO 追加订单默认是否使用主订单阿姨？
      */
     public function addNew($attributes)
     {
@@ -119,22 +120,42 @@ class Order extends OrderModel
 
 
     /**
+     * 现金支付
+     * @param $order Order
+     * @return bool
+     */
+    public static function isPaymentOffLine($order)
+    {
+        $from = OrderStatusDict::findOne($order->orderExtStatus->order_status_dict_id); //当前订单状态
+        $to = OrderStatusDict::findOne(OrderStatusDict::ORDER_IS_PAY); //变更为已支付带指派状态
+        $order->setAttributes([
+            'order_pay_type' => self::ORDER_PAY_TYPE_OFF_LINE
+        ]);
+        return self::statusChange($order,$from,$to,['OrderExtPay']);
+    }
+
+
+
+
+    /**
      * 修改订单状态
+     * @param $order Order
      * @param $from OrderStatusDict
      * @param $to OrderStatusDict
      * @param $must_models array
+     * @return bool
      */
-    public function statusChange($from, $to, $must_models = ['OrderExtCustomer','OrderExtFlag','OrderExtPay','OrderExtPop','OrderExtWorker'])
+    public static function statusChange($order, $from, $to, $must_models=[])
     {
-        $this->setAttributes([
+        $order->setAttributes([
             'order_before_status_dict_id' => $from->id,
             'order_before_status_name' => $from->order_status_name,
             'order_status_dict_id' => $to->id,
-            'order_status_dict_name' => $to->order_status_name
+            'order_status_name' => $to->order_status_name
         ]);
         $save_models = ['OrderExtStatus','OrderStatusHistory'];
         $save_models = array_merge($must_models,$save_models);
-        $this->doSave($save_models);
+        return $order->doSave($save_models);
     }
 
     /**

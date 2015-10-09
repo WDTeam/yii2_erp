@@ -233,14 +233,7 @@ class OrderController extends BaseAuthController
         $model = new Order();
         $post = Yii::$app->request->post();
         if($model->load($post)){
-            $post['Order']['admin_id'] = Yii::$app->user->id;
-            $post['Order']['order_ip'] = ip2long(Yii::$app->request->userIP);
-            $post['Order']['order_src_id'] = 1; //订单来源BOSS
-            //预约时间处理
-            $time = explode('-',$post['Order']['orderBookedTimeRange']);
-            $post['Order']['order_booked_begin_time'] = $post['Order']['orderBookedDate'].' '.$time[0].':00';
-            $post['Order']['order_booked_end_time'] = ($time[1]=='24:00')?date('Y-m-d H:i:s',strtotime($post['Order']['orderBookedDate'].'00:00:00 +1 days')):$post['Order']['orderBookedDate'].' '.$time[1].':00';
-            if ($model->createNew($post['Order'])) {
+            if ($model->createNew($post)) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }else{//init
