@@ -44,7 +44,7 @@ class uppay_class{
         // 发送信息到后台
         $result = sendHttpRequest ( $params, SDK_App_Request_Url );
         parse_str($result,$url_param);
-        return $url_param['tn'];
+        return $url_param;
     }
 
     public function callback(){

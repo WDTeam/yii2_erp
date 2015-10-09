@@ -34,6 +34,9 @@ class CustomerTransRecordController extends Controller
      */
     public function createRecord($data)
     {
+        if(!empty($data['scenario'])){
+            return false;
+        }
         $model = new CustomerTransRecord();
         //使用场景
         $model->scenario = $data['scenario'];
