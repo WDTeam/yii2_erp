@@ -24,6 +24,10 @@ body{
     box-shadow: none !important;
 }
 
+.right-side > .content-header.scroll {
+	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1) !important;
+}
+
 .right-side.strech > .content-header {
     left: 0;
 }
