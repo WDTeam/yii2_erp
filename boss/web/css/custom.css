@@ -193,12 +193,17 @@ ul.sidebar-menu ul.treeview-menu li.active a.active{
     font-size: 13px;
 }
 
-.navbar .nav a {
-    color: rgba(255, 255, 255, 1) !important;
+.skin-blue .navbar .nav a {
+    color: rgba(255, 255, 255, 1);
 }
 
 ul.navbar-right > li.dropdown > ul.dropdown-menu > li > a {
-	color: rgba(0, 0, 0, 1) !important;
+	color: rgba(0, 0, 0, 1);
+}
+
+.dropdown-menu > li > a:hover {
+	color: #fff !important;
+    background-color: #f6a202;
 }
 
 .navbar .sidebar-toggle .icon-bar {

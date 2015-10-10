@@ -64,6 +64,29 @@ class OperationGoodsController extends Controller
     }
     
     /**
+     * 获取商品列表
+     * @param type $city_id 城市id
+     * @param type $shop_district 商圈id
+     * @param type $goods_id 商品id
+     */
+    public static function getGoodsList($city_id = '', $shop_district = ''){
+        if(empty($city_id) || empty($shop_district)){
+            self::$jsondata['msg'] = '参数传递有误';
+            self::$jsondata['status'] = 0;
+        }else{
+            $goodsListInfo = OperationShopDistrictGoods::getShopDistrictGoodsList($city_id, $shop_district);
+            if(empty($goodsListInfo)){
+                self::$jsondata['msg'] = '该商圈下面没商品';
+                self::$jsondata['status'] = 0;
+            }else{
+                self::$jsondata['status'] = 1;
+                self::$jsondata['data'] = $goodsListInfo;
+            }
+        }
+        return self::$jsondata;
+    }
+    
+    /**
      * Lists all OperationGoods models.
      * @return mixed
      */
