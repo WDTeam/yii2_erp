@@ -60,9 +60,9 @@ class ShopManager extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'street', 'principal', 'tel'], 'required'],
-            [['province_id', 'city_id', 'county_id', 'bl_type', 'bl_create_time', 'bl_audit', 'bl_expiry_start', 'bl_expiry_end', 'created_at', 'updated_at', 'is_blacklist', 'blacklist_time', 'audit_status', 'shop_count', 'worker_count', 'complain_coutn'], 'integer'],
+            [['province_id', 'city_id', 'county_id', 'bl_type', 'bl_create_time', 'bl_audit', 'bl_expiry_start', 'bl_expiry_end', 'created_at', 'updated_at', 'is_blacklist', 'audit_status', 'shop_count', 'worker_count', 'complain_coutn'], 'integer'],
             [['bl_business'], 'string'],
-            [['name', 'street', 'opening_address', 'bl_name', 'bl_address', 'bl_photo_url', 'blacklist_cause'], 'string', 'max' => 255],
+            [['name', 'street', 'opening_address', 'bl_name', 'bl_address', 'bl_photo_url'], 'string', 'max' => 255],
             [['principal', 'tel', 'bankcard_number', 'bl_person', 'level'], 'string', 'max' => 50],
             [['other_contact', 'opening_bank', 'sub_branch', 'bl_number'], 'string', 'max' => 200],
             [['account_person'], 'string', 'max' => 100]
@@ -103,8 +103,8 @@ class ShopManager extends \yii\db\ActiveRecord
             'created_at' => Yii::t('app', '创建时间'),
             'updated_at' => Yii::t('app', '修改时间'),
             'is_blacklist' => Yii::t('app', '是否是黑名单：0正常，1黑名单'),
-            'blacklist_time' => Yii::t('app', '加入黑名单时间'),
-            'blacklist_cause' => Yii::t('app', '黑名单原因'),
+            // 'blacklist_time' => Yii::t('app', '加入黑名单时间'),
+            // 'blacklist_cause' => Yii::t('app', '黑名单原因'),
             'audit_status' => Yii::t('app', '审核状态：0未审核，1通过，2不通过'),
             'shop_count' => Yii::t('app', '门店数量'),
             'worker_count' => Yii::t('app', '阿姨数量'),
