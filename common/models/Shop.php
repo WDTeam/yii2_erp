@@ -49,9 +49,9 @@ class Shop extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'street', 'principal', 'tel'], 'required'],
-            [['shop_manager_id', 'province_id', 'city_id', 'county_id', 'created_at', 'updated_at', 'is_blacklist', 'blacklist_time', 'audit_status', 'worker_count', 'complain_coutn'], 'integer'],
+            [['shop_manager_id', 'province_id', 'city_id', 'county_id', 'created_at', 'updated_at', 'is_blacklist', 'audit_status', 'worker_count', 'complain_coutn'], 'integer'],
             [['name', 'account_person'], 'string', 'max' => 100],
-            [['street', 'opening_address', 'blacklist_cause'], 'string', 'max' => 255],
+            [['street', 'opening_address'], 'string', 'max' => 255],
             [['principal', 'tel', 'bankcard_number', 'level'], 'string', 'max' => 50],
             [['other_contact', 'opening_bank', 'sub_branch'], 'string', 'max' => 200]
         ];
@@ -81,8 +81,8 @@ class Shop extends \yii\db\ActiveRecord
             'created_at' => Yii::t('app', '创建时间'),
             'updated_at' => Yii::t('app', '修改时间'),
             'is_blacklist' => Yii::t('app', '是否是黑名单：0正常，1黑名单'),
-            'blacklist_time' => Yii::t('app', '加入黑名单时间'),
-            'blacklist_cause' => Yii::t('app', '黑名单原因'),
+            // 'blacklist_time' => Yii::t('app', '加入黑名单时间'),
+            // 'blacklist_cause' => Yii::t('app', '黑名单原因'),
             'audit_status' => Yii::t('app', '审核状态：0未审核，1通过，2不通过'),
             'worker_count' => Yii::t('app', '阿姨数量'),
             'complain_coutn' => Yii::t('app', '投诉数量'),
