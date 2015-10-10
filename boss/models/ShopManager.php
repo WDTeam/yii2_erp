@@ -167,6 +167,7 @@ class ShopManager extends \common\models\ShopManager
         $this->is_blacklist = 0;
         if($this->save()){
             $status = new ShopStatus();
+            $status->model_id = $this->id;
             $status->status_number = 0;
             $status->model_name = ShopStatus::MODEL_SHOPMANAGER;
             $status->status_type = 2;
@@ -186,6 +187,7 @@ class ShopManager extends \common\models\ShopManager
         $this->audit_status = $number;
         if($this->save()){
             $status = new ShopStatus();
+            $status->model_id = $this->id;
             $status->status_number = $this->audit_status;
             $status->model_name = ShopStatus::MODEL_SHOPMANAGER;
             $status->status_type = 1;

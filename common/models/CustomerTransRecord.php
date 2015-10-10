@@ -73,29 +73,12 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
      */
     public function beforeValidate()
     {
-        //支付渠道
-        $payChannel = FinancePayChannel::findOne($this->pay_channel_id);
         //支付渠道名称
-        $this->customer_trans_record_pay_channel = $payChannel->finance_pay_channel_name;
-        //交易方式:1消费,2=充值,3=退款,4=补偿
-        switch($this->customer_trans_record_mode){
-            case 1 :
-                $this->customer_trans_record_mode_name = '消费';
-                break;
-            case 2 :
-                $this->customer_trans_record_mode_name = '充值';
-                break;
-            case 3 :
-                $this->customer_trans_record_mode_name = '退款';
-                break;
-            case 4 :
-                $this->customer_trans_record_mode_name = '补偿';
-                break;
-        }
-        //订单渠道
-        $orderChannel = FinanceOrderChannel::findOne($this->order_channel_id);
+        $this->customer_trans_record_pay_channel = FinancePayChannel::getPayChannelByName($this->pay_channel_id);
         //订单渠道名称
-        $this->customer_trans_record_order_channel = $orderChannel->finance_order_channel_name;
+        $this->customer_trans_record_order_channel = FinanceOrderChannel::getOrderChannelByName($this->order_channel_id);
+        //交易方式:1消费,2=充值,3=退款,4=补偿
+        $this->customer_trans_record_mode_name = self::getCustomerTransRecordModeByName($this->customer_trans_record_mode);
         //makeSign
         $this->customer_trans_record_verify = $this->makeSign();
 
@@ -540,6 +523,30 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
                 'customer_trans_record_online_service_card_on'=>$this->customer_trans_record_online_service_card_on
             ]
         )->orderBy(['id' => SORT_DESC])->asArray()->one();
+    }
+
+    /**
+     * 模式名称
+     * @param $mode_id
+     * @return string
+     */
+    public static function getCustomerTransRecordModeByName($mode_id)
+    {
+        switch($mode_id){
+            case 1 :
+                $mode_name = '消费';
+                break;
+            case 2 :
+                $mode_name = '充值';
+                break;
+            case 3 :
+                $mode_name = '退款';
+                break;
+            case 4 :
+                $mode_name = '补偿';
+                break;
+        }
+        return $mode_name;
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace core\models\CustomerTransRecord;
 
 use common\models\CustomerTransRecordLog;
+use common\models\FinancePayChannel;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 
@@ -14,7 +15,6 @@ class CustomerTransRecord extends \common\models\CustomerTransRecord
      */
     public static function createRecord($data)
     {
-
         //记录日志
         $obj = new self;
         $obj->on('insertLog',[new CustomerTransRecordLog(),'insertLog'],$data);
