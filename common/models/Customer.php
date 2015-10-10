@@ -107,6 +107,19 @@ class Customer extends \yii\db\ActiveRecord
         // \Yii::$app->response->format = Response::FORMAT_JSON;
 
         $customerBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
+        if ($customerBalance == NULL) {
+            $customerBalance = new CustomerBalance;
+            $customerBalance->customer_id = $customer_id;
+            $customerBalance->customer_balance = 0;
+            $customerBalance->created_at = time();
+            $customerBalance->updated_at = 0;
+            $customerBalance->is_del = 0;
+            $customerBalance->validate();
+            if ($customerBalance->hasErrors()) {
+                return false;
+            }
+            $customerBalance->save();
+        }
         $balance = $customerBalance->customer_balance;
         $customerBalance->customer_balance = bcadd($balance, $cash, 2);
         $customerBalance->validate();
@@ -127,6 +140,19 @@ class Customer extends \yii\db\ActiveRecord
         // \Yii::$app->response->format = Response::FORMAT_JSON;
 
         $customerBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
+        if ($customerBalance == NULL) {
+            $customerBalance = new CustomerBalance;
+            $customerBalance->customer_id = $customer_id;
+            $customerBalance->customer_balance = 0;
+            $customerBalance->created_at = time();
+            $customerBalance->updated_at = 0;
+            $customerBalance->is_del = 0;
+            $customerBalance->validate();
+            if ($customerBalance->hasErrors()) {
+                return false;
+            }
+            $customerBalance->save();
+        }
         $balance = $customerBalance->customer_balance;
         $customerBalance->customer_balance = bcsub($balance, $cash, 2);
         $customerBalance->validate();
