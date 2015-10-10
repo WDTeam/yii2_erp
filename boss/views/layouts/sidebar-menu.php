@@ -402,16 +402,16 @@ echo Menu::widget(
                                     'class' => 'treeview ',
                                 ],
                                 'items'=>[
-                                    [
-                                        'label' => '阿姨结算',
-                                        'url' => ['/finance-settle-apply/query'],
-                                        'icon' => 'fa fa-angle-right',
-                                    ],
-                                    [
-                                        'label' => '门店结算',
-                                        'url' => ['/finance-shop-settle-apply/index?review_section='.FinanceShopSettleApplySearch::FINANCE_REVIEW],
-                                        'icon' => 'fa fa-angle-right',
-                                    ],
+                                    // [
+                                    //     'label' => '阿姨结算',
+                                    //     'url' => ['/finance-settle-apply/query'],
+                                    //     'icon' => 'fa fa-angle-right',
+                                    // ],
+                                    // [
+                                    //     'label' => '门店结算',
+                                    //     'url' => ['/finance-shop-settle-apply/index?review_section='.FinanceShopSettleApplySearch::FINANCE_REVIEW],
+                                    //     'icon' => 'fa fa-angle-right',
+                                    // ],
                                 ]
                             ]
                         ],
