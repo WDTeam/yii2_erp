@@ -159,7 +159,7 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => 'CMS管理(80%)',
+                        'label' => 'CMS管理(90%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                         'options' => [

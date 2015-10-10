@@ -56,8 +56,13 @@ class OperationAdvertReleaseController extends BaseAuthController
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $advert_ids = unserialize($model->operation_release_contents);
+        $adverts = OperationAdvertContent::find()->asArray()->where(['id' => $advert_ids])->all();
+//        $model->operation_release_contents = serialize($adverts);
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'adverts' => $adverts
         ]);
     }
     
@@ -111,13 +116,9 @@ class OperationAdvertReleaseController extends BaseAuthController
         $post = Yii::$app->request->post();
         if ($post){
             $version_ids = $post['version_id'];
-            var_dump($version_ids);exit;
-            
-//            $platform_ids = $post['platform_id'];
-//            $platforms = OperationPlatform::find()->asArray()->where(['id' => $platform_ids])->all();
-//            $cache = Yii::$app->cache;
-//            $cache->set('__PLATFORMS_INFO__', $platforms, 6000);
-//            return $this->redirect(['step-forth']);
+            $cache = Yii::$app->cache;
+            $cache->set('__VERSIONS_INFO__', $version_ids, 6000);
+            return $this->redirect(['step-forth']);
         } else {
             $platform_ids = Yii::$app->request->get('platform_ids');
             $platforms = OperationPlatform::find()->asArray()->where(['id' => $platform_ids])->all();
@@ -128,29 +129,81 @@ class OperationAdvertReleaseController extends BaseAuthController
             return $this->render('step-third', ['platforms' => $platforms]);
         }
     }
+    
+    /**
+     * 
+     */
+    public function actionStepForth()
+    {
+        $post = Yii::$app->request->post();
+        if ($post){
+            $cache = Yii::$app->cache;
+            $city = $cache->get('__CITY_INFO__');
+            $data = [
+                '_csrf' => $post['_csrf'],
+                'OperationAdvertRelease' => [
+                    'city_id' => $city['city_id'],
+                    'city_name' => $city['city_name'],
+                    'operation_release_contents' => serialize($post['advert']),
+                    'created_at' => time(),
+                    'updated_at' => time()
+                ]
+            ];
+            $model = new OperationAdvertRelease();
+            $model->load($data);
+            $model->save();
+            return $this->redirect(['index']);
+        } else {
+            $cache = Yii::$app->cache;
+            $platforms = $cache->get('__PLATFORMS_INFO__');
+            $versions = $cache->get('__VERSIONS_INFO__');
+            $data = [];
+            //读取所有符合条件的广告内容
+            foreach($platforms as $key =>$platform){
+                if(!empty($versions[$platform['id']])){
+                    //如果有平台和版本则：
+                    foreach($versions[$platform['id']] as $k => $v){
+                        $where = ['AND',['platform_id' => $platform['id']],['platform_version_id' => $v]];
+                        $adverts = OperationAdvertContent::find()->asArray()->where($where)->all();
+                        foreach($adverts as $advert){
+                            array_push($data, $advert);
+                        }
+                    }
+                }else{
+                    //如果有平台则：
+                    $adverts = OperationAdvertContent::find()->asArray()->where(['platform_id' => $platform['id']])->all();
+                    foreach($adverts as $advert){
+                        array_push($data, $advert);
+                    }
+                }
+            }
+//            var_dump($data);exit;
+            return $this->render('step-forth', ['data' => $data]);
+        }
+    }
 
     /**
      * Creates a new OperationAdvertRelease model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
-        $model = new OperationAdvertRelease();
-        $post = Yii::$app->request->post();
-        if ($model->load($post)){
-            $model->save();
-            return $this->redirect(['index']);
-        } else {
-            $citys = OperationCity::find()->all();
-            $c = ['选择要发布的城市'];
-            foreach($citys as $v){$c[$v->city_id] = $v->city_name;}
-            return $this->render('create', [
-                'model' => $model,
-                'citys' => $c
-            ]);
-        }
-    }
+//    public function actionCreate()
+//    {
+//        $model = new OperationAdvertRelease();
+//        $post = Yii::$app->request->post();
+//        if ($model->load($post)){
+//            $model->save();
+//            return $this->redirect(['index']);
+//        } else {
+//            $citys = OperationCity::find()->all();
+//            $c = ['选择要发布的城市'];
+//            foreach($citys as $v){$c[$v->city_id] = $v->city_name;}
+//            return $this->render('create', [
+//                'model' => $model,
+//                'citys' => $c
+//            ]);
+//        }
+//    }
 
     /**
      * Updates an existing OperationAdvertRelease model.
@@ -158,38 +211,38 @@ class OperationAdvertReleaseController extends BaseAuthController
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-        $post = Yii::$app->request->post();
-        if ($model->load($post)) {
-            $_model = clone $model;
-            $position_id = $post['OperationAdvertRelease']['operation_advert_position_id'];
-            $position = OperationAdvertPosition::find()->where(['id' => $position_id])->one();
-            $post['OperationAdvertRelease']['operation_advert_position_name'] = $position->operation_advert_position_name;
-            $post['OperationAdvertRelease']['operation_advert_contents'] = serialize($post['OperationAdvertRelease']['operation_advert_contents']);
-            $_model->operation_platform_id = $position->operation_platform_id;
-            $_model->operation_platform_name = $position->operation_platform_name;
-            $_model->operation_platform_version_id = $position->operation_platform_version_id;
-            $_model->operation_platform_version_name = $position->operation_platform_version_name;
-            $_model->load($post);
-            $_model->save();
-            return $this->redirect(['index']);
-        } else {
-            $position = OperationAdvertPosition::find()->all();
-            $positions = ['选择广告位置'];
-            foreach($position as $v){$positions[$v->id] = $v->operation_advert_position_name;}
-            $content = OperationAdvertContent::find()->all();
-            foreach($content as $k => $v){
-                $contents[$v->id] = $v->operation_advert_position_name.'('.$v->operation_city_name.':'.$v->operation_platform_name.$v->operation_platform_version_name.')';
-            }
-            return $this->render('update', [
-                'model' => $model,
-                'positions' => $positions,
-                'contents' => $contents,
-            ]);
-        }
-    }
+//    public function actionUpdate($id)
+//    {
+//        $model = $this->findModel($id);
+//        $post = Yii::$app->request->post();
+//        if ($model->load($post)) {
+//            $_model = clone $model;
+//            $position_id = $post['OperationAdvertRelease']['operation_advert_position_id'];
+//            $position = OperationAdvertPosition::find()->where(['id' => $position_id])->one();
+//            $post['OperationAdvertRelease']['operation_advert_position_name'] = $position->operation_advert_position_name;
+//            $post['OperationAdvertRelease']['operation_advert_contents'] = serialize($post['OperationAdvertRelease']['operation_advert_contents']);
+//            $_model->operation_platform_id = $position->operation_platform_id;
+//            $_model->operation_platform_name = $position->operation_platform_name;
+//            $_model->operation_platform_version_id = $position->operation_platform_version_id;
+//            $_model->operation_platform_version_name = $position->operation_platform_version_name;
+//            $_model->load($post);
+//            $_model->save();
+//            return $this->redirect(['index']);
+//        } else {
+//            $position = OperationAdvertPosition::find()->all();
+//            $positions = ['选择广告位置'];
+//            foreach($position as $v){$positions[$v->id] = $v->operation_advert_position_name;}
+//            $content = OperationAdvertContent::find()->all();
+//            foreach($content as $k => $v){
+//                $contents[$v->id] = $v->operation_advert_position_name.'('.$v->operation_city_name.':'.$v->operation_platform_name.$v->operation_platform_version_name.')';
+//            }
+//            return $this->render('update', [
+//                'model' => $model,
+//                'positions' => $positions,
+//                'contents' => $contents,
+//            ]);
+//        }
+//    }
 
     /**
      * Deletes an existing OperationAdvertRelease model.
