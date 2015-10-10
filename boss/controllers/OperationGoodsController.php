@@ -9,6 +9,7 @@ use boss\models\Operation\OperationTag;
 use boss\models\Operation\OperationCategory;
 use boss\models\Operation\OperationSpec;
 use boss\models\Operation\OperationSpecGoods;
+use boss\models\Operation\OperationShopDistrictGoods;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -21,6 +22,12 @@ use crazyfd\qiniu\Qiniu;
  */
 class OperationGoodsController extends Controller
 {
+    static $jsondata = [
+        'msg' => '',    // 提示消息 失败提示信息
+        'status' => 0, //状态 0: 失败 1：成功
+        'data' => '',  //数据 
+        ];
+    
     public function behaviors()
     {
         return [
@@ -32,7 +39,30 @@ class OperationGoodsController extends Controller
             ],
         ];
     }
-
+    
+    /**
+     * 获取商品详情
+     * @param type $city_id 城市id
+     * @param type $shop_district 商圈id
+     * @param type $goods_id 商品id
+     */
+    public static function getGoodsInfo($city_id = '', $shop_district = '', $goods_id = ''){
+        if(empty($city_id) || empty($shop_district) || empty($goods_id)){
+            self::$jsondata['msg'] = '参数传递有误';
+            self::$jsondata['status'] = 0;
+        }else{
+            $goodsInfo = OperationShopDistrictGoods::getShopDistrictGoodsInfo($city_id, $shop_district, $goods_id);
+            if(empty($goodsInfo)){
+                self::$jsondata['msg'] = '该商品不存在';
+                self::$jsondata['status'] = 0;
+            }else{
+                self::$jsondata['status'] = 1;
+                self::$jsondata['data'] = $goodsInfo;
+            }
+        }
+        return self::$jsondata;
+    }
+    
     /**
      * Lists all OperationGoods models.
      * @return mixed
