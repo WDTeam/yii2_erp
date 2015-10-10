@@ -2,7 +2,6 @@
 
 namespace core\models;
 
-use common\models\CustomerWorker;
 use common\models\Worker;
 use Yii;
 // use common\models\Customer;
