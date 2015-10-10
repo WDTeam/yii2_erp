@@ -15,7 +15,7 @@ class OrderSearch extends Order
     {
         return [
             [['id', 'order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'isdel', 'order_ip', 'order_service_type_id', 'order_src_id', 'channel_id', 'order_booked_count', 'order_booked_begin_time', 'order_booked_end_time', 'address_id', 'order_booked_worker_id', 'checking_id'], 'integer'],
-            [['order_code', 'order_service_type_name', 'order_src_name', 'order_channel_name', 'order_address', 'order_cs_memo'], 'safe'],
+            [['order_code', 'order_service_type_name', 'order_src_name', 'order_channel_name', 'order_address', 'order_cs_memo','order_pop_order_code'], 'safe'],
             [['order_unit_money', 'order_money'], 'number'],
         ];
     }
@@ -28,7 +28,7 @@ class OrderSearch extends Order
 
     public function search($params)
     {
-        $query = Order::find();
+        $query = Order::find()->leftJoin(['ejj_order_ext_pop'],['id'=>'order_id']);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -57,6 +57,7 @@ class OrderSearch extends Order
             'address_id' => $this->address_id,
             'order_booked_worker_id' => $this->order_booked_worker_id,
             'checking_id' => $this->checking_id,
+            'ejj_order_ext_pop.order_pop_order_code'=>$this->order_pop_order_code,
         ]);
 
         $query->andFilterWhere(['like', 'order_code', $this->order_code])
