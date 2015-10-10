@@ -21,4 +21,11 @@ class ActiveRecord extends \yii\db\ActiveRecord
             ]
         ];
     }
+    public function delete()
+    {
+        if($this->hasAttribute('isdel') && !$this->isNewRecord) {
+            $this->isdel = 1;
+            $this->save();
+        }
+    }
 }
