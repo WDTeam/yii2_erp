@@ -31,3 +31,5 @@ class CustomerTransRecord extends CustomerTransRecordModel
         return $model->add();
     }
 }
+
+

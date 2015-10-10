@@ -67,6 +67,7 @@ class FinanceSettleApplyController extends BaseAuthController
                                  'finance_settle_apply_endtime' => $this->getLastDayOfSpecifiedMonth(),   
                                 );
         $requestParams = Yii::$app->request->getQueryParams();
+        $searchModel->settle_type = $requestParams['settle_type'];
         $newRequestParams = [];
         if(isset($requestParams['FinanceSettleApplySearch'])){
             $requestModel = $requestParams['FinanceSettleApplySearch'];

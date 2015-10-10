@@ -1,6 +1,7 @@
 <?php
 use common\widgets\Menu;
 use boss\models\FinanceShopSettleApplySearch;
+use boss\models\FinanceSettleApplySearch;
 
 $ctrl = Yii::$app->controller;
 
@@ -344,12 +345,12 @@ echo Menu::widget(
                                'items'=>[
                                     [
                                         'label' => '全职结算(90%)',
-                                        'url' => ['/finance-settle-apply/self-fulltime-worker-settle-index'],
+                                        'url' => ['/finance-settle-apply/self-fulltime-worker-settle-index?settle_type='.FinanceSettleApplySearch::SELF_FULLTIME_WORKER_SETTELE.'&review_section='.FinanceShopSettleApplySearch::BUSINESS_REVIEW],
                                         'icon' => 'fa fa-angle-right',
                                     ],
                                    [
                                         'label' => '兼职结算(70%)',
-                                        'url' => ['/finance-settle-apply/self-parttime-worker-settle-index'],
+                                        'url' => ['/finance-settle-apply/self-fulltime-worker-settle-index?settle_type='.FinanceSettleApplySearch::SELF_PARTTIME_WORKER_SETTELE.'&review_section='.FinanceShopSettleApplySearch::BUSINESS_REVIEW],
                                         'icon' => 'fa fa-angle-right',
                                     ],
                                ]
@@ -369,7 +370,7 @@ echo Menu::widget(
                                     ],
                                    [
                                         'label' => '阿姨结算(60%)',
-                                        'url' => ['/finance-settle-apply/self-parttime-worker-settle-index'],
+                                        'url' => ['/finance-settle-apply/self-fulltime-worker-settle-index?settle_type='.FinanceSettleApplySearch::SHOP_WORKER_SETTELE.'&review_section='.FinanceShopSettleApplySearch::BUSINESS_REVIEW],
                                         'icon' => 'fa fa-angle-right',
                                     ],
                                 ]
@@ -384,7 +385,7 @@ echo Menu::widget(
                                 'items'=>[
                                     [
                                         'label' => '阿姨结算(90%)',
-                                        'url' => ['/finance-settle-apply/self-fulltime-worker-settle-index'],
+                                        'url' => ['/finance-settle-apply/self-fulltime-worker-settle-index?settle_type='.FinanceSettleApplySearch::ALL_WORKER_SETTELE.'&review_section='.FinanceShopSettleApplySearch::FINANCE_REVIEW],
                                         'icon' => 'fa fa-angle-right',
                                     ],
                                     [
