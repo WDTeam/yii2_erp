@@ -31,7 +31,7 @@ class ShopStatus extends \yii\db\ActiveRecord
     {
         return [
             [['status_number'], 'required'],
-            [['status_number', 'created_at', 'status_type'], 'integer'],
+            [['status_number', 'model_id', 'created_at', 'status_type'], 'integer'],
             [['cause'], 'string', 'max' => 255],
             [['model_name'], 'string', 'max' => 50]
         ];
@@ -48,6 +48,7 @@ class ShopStatus extends \yii\db\ActiveRecord
             'cause' => Yii::t('app', '原因'),
             'created_at' => Yii::t('app', '生成时间'),
             'model_name' => Yii::t('app', '对应模型：1 Shop,2 ShopManager'),
+            'model_id' => 'model_id',
             'status_type' => Yii::t('app', '状态类型：1审核，2黑名单'),
         ];
     }
