@@ -108,22 +108,24 @@ class OperationAdvertReleaseController extends BaseAuthController
      */
     public function actionStepThird()
     {
-        
         $post = Yii::$app->request->post();
         if ($post){
-            $platform_ids = $post['platform_id'];
-            $platforms = OperationPlatform::find()->asArray()->where(['id' => $platform_ids])->all();
-            $cache = Yii::$app->cache;
-            $cache->set('__PLATFORMS_INFO__', $platforms, 6000);
-            return $this->redirect(['step-forth']);
+            $version_ids = $post['version_id'];
+            var_dump($version_ids);exit;
+            
+//            $platform_ids = $post['platform_id'];
+//            $platforms = OperationPlatform::find()->asArray()->where(['id' => $platform_ids])->all();
+//            $cache = Yii::$app->cache;
+//            $cache->set('__PLATFORMS_INFO__', $platforms, 6000);
+//            return $this->redirect(['step-forth']);
         } else {
             $platform_ids = Yii::$app->request->get('platform_ids');
-            $versions = OperationPlatformVersion::find()->asArray()->where(['operation_platform_id' => $platform_ids])->all();
-            $data = [];
-            foreach($versions as $key => $value){
-                $data[$value['id']] = $value['operation_platform_version_name'];
+            $platforms = OperationPlatform::find()->asArray()->where(['id' => $platform_ids])->all();
+            foreach($platforms as $k => $v){
+                $versions = OperationPlatformVersion::find()->asArray()->where(['operation_platform_id' => $v['id']])->all();
+                $platforms[$k]['versions'] = $versions;
             }
-            return $this->render('step-third', ['platforms' => $data]);
+            return $this->render('step-third', ['platforms' => $platforms]);
         }
     }
 

@@ -127,8 +127,7 @@ class GeneralPayController extends Controller
 
         $request = yii::$app->request;
 
-        //实例化模型
-        $GeneralPayLogModel = new GeneralPayLog();
+
 
         //POST数据
         if(!empty($_GET['debug'])){
@@ -163,18 +162,25 @@ class GeneralPayController extends Controller
             $post = $request->post();
         }
 
+        //实例化模型
+        $GeneralPayLogModel = new GeneralPayLog();
+
         //写入文本日志
-        $GeneralPayLogModel->writeLog($post);
+        $this->on('writeLog',[$GeneralPayLogModel,'writeLog'],$post);
+        $this->trigger('writeLog');
 
         //记录日志
-        $GeneralPayLogModel->general_pay_log_price = $post['total_fee'];   //支付金额
-        $GeneralPayLogModel->general_pay_log_shop_name = $post['subject'];   //商品名称
-        $GeneralPayLogModel->general_pay_log_eo_order_id = $post['out_trade_no'];   //订单ID
-        $GeneralPayLogModel->general_pay_log_transaction_id = $post['buyer_id'];   //交易流水号
-        $GeneralPayLogModel->general_pay_log_status_bool = $GeneralPayLogModel->statusBool($post['trade_status']);   //支付状态
-        $GeneralPayLogModel->general_pay_log_status = $post['trade_status'];   //支付状态
-        $GeneralPayLogModel->general_pay_log_json_aggregation = json_encode($post);
-        $GeneralPayLogModel->insertLog();
+        $dataLog = array(
+            'general_pay_log_price' => $post['total_fee'],   //支付金额
+            'general_pay_log_shop_name' => $post['subject'],   //商品名称
+            'general_pay_log_eo_order_id' => $post['out_trade_no'],   //订单ID
+            'general_pay_log_transaction_id' => $post['buyer_id'],   //交易流水号
+            'general_pay_log_status_bool' => $GeneralPayLogModel->statusBool($post['trade_status']),   //支付状态
+            'general_pay_log_status' => $post['trade_status'],   //支付状态
+            'general_pay_log_json_aggregation' => json_encode($post),
+        );
+        $this->on('insertLog',[$GeneralPayLogModel,'insertLog'],$dataLog);
+        $this->trigger('insertLog');
 
         //实例化模型
         $model = new GeneralPay();
@@ -407,51 +413,63 @@ class GeneralPayController extends Controller
         $request = yii::$app->request;
 
         //实例化模型
-        $GeneralPayLogModel = new GeneralPayLog();
+        $model = new GeneralPay();
 
         //POST数据
         if(!empty($_GET['debug'])){
             $_POST = array (
-                'bank_no' => '',
-                'bfb_order_create_time' => '20150714115504',
-                'bfb_order_no' => '2015071415006100041110555687771',
-                'buyer_sp_username' => '',
-                'currency' => '1',
-                'extra' => '',
-                'fee_amount' => '0',
-                'input_charset' => '1',
-                'order_no' => 'BAid63146id24245',
-                'pay_result' => '1',
-                'pay_time' => '20150714115503',
-                'pay_type' => '2',
-                'sign_method' => '1',
-                'sp_no' => '1500610004',
-                'total_amount' => '1',
-                'transport_amount' => '0',
-                'unit_amount' => '1',
-                'unit_count' => '1',
-                'version' => '2',
-                'sign' => 'eef8e524ef6b6dde1699b04421fc9bc5',
+                "accessType" => "0",
+                "bizType" => "000201",
+                "certId" => "21267647932558653966460913033289351200",
+                "currencyCode" => "156",
+                "encoding" => "utf-8",
+                "merId" => "898111448161364",
+                "orderId" => "151010743932",
+                "queryId" => "201510101112461438298",
+                "reqReserved" => "透传信息",
+                "respCode" => "00",
+                "respMsg" => "Success!",
+                "settleAmt" => "1",
+                "settleCurrencyCode" => "156",
+                "settleDate" => "1010",
+                "signMethod" => "01",
+                "traceNo" => "143829",
+                "traceTime" => "1010111246",
+                "txnAmt" => "1",
+                "txnSubType" => "01",
+                "txnTime" => "20151010111246",
+                "txnType" => "01",
+                "version" => "5.0.0",
+                "signature" => "GnmVKKUPgdLc11K8zrwL5w5cTx1bieDdTniC2Psh7WEuk4y+53l8OzvE41KsJNyxBuBWAPBgypK+8jNJmGUU2x+tMU5Z0liIKVD5HWhboHxlwZvh0vMGfB8vlmIcbYipxUuWz3Jin11I6O8W6mvTAb76wJXrcbqZD1PKtVP7/5ldxpYsRh/MmEfeDFCcxqMk0uS/ON7XagGKkYSOxCcDMmQ4xRhNzLOthO8vkK6vPDWuowNjFdQXV8A2K9MxVqJNrR5QgR52Hm0dy9z5o09YhjDhMgwlyqRAgaBRbVDNt7qJXFyp3lcxwU9sJBkpOCYV6Cwi/03sWJA+W87U6+gN9Q=="
             ) ;
             $post = $_POST;
         }else{
             $post = $request->post();
         }
 
+        //实例化模型
+        $GeneralPayLogModel = new GeneralPayLog();
+
+        $writeLog = array(
+            'data' => $post
+        );
+
         //写入文本日志
-        $GeneralPayLogModel->writeLog($post);
+        $this->on('writeLog',[$GeneralPayLogModel,'writeLog'],$writeLog);
+        $this->trigger('writeLog');
 
         //记录日志
-        $_post['general_pay_log_price'] = $post['settleAmt'];   //支付金额
-        $_post['general_pay_log_shop_name'] = '银联支付';   //商品名称
-        $_post['general_pay_log_eo_order_id'] = $post['orderId'];   //订单ID
-        $_post['general_pay_log_transaction_id'] = $post['queryId'];   //交易流水号
-        $_post['general_pay_log_status_bool'] = $post['respCode'];   //支付状态
-        $_post['general_pay_log_status'] = $post['respCode'];   //支付状态
-        $GeneralPayLogModel->insertLog($_post);
-
-        //实例化模型
-        $model = new GeneralPay();
+        $dataLog = array(
+            'general_pay_log_price' => $model->toMoney($post['settleAmt'],100,'/'),   //支付金额
+            'general_pay_log_shop_name' => $post['reqReserved'],   //商品名称
+            'general_pay_log_eo_order_id' => $post['orderId'],   //订单ID
+            'general_pay_log_transaction_id' => $post['queryId'],   //交易流水号
+            'general_pay_log_status_bool' => $GeneralPayLogModel->statusBool($post['respCode']),   //支付状态
+            'general_pay_log_status' => $post['respCode'],   //支付状态
+            'general_pay_log_json_aggregation' => json_encode($post),
+        );
+        $this->on('insertLog',[$GeneralPayLogModel,'insertLog'],$dataLog);
+        $this->trigger('insertLog');
 
         //获取交易ID
         $GeneralPayId = $model->getGeneralPayId($post['orderId']);
