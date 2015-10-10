@@ -2,6 +2,20 @@ body{
 	background-color: #ecf0f5;
 	font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
 }
+
+.form-group label.col-md-2 {
+	float: none;
+	text-align: left;
+}
+
+.form-group div.col-md-10 {
+	width: 100%;
+}
+
+.form-group div.col-md-offset-2 {
+	margin-left: 0;
+}
+
 .right-side > .content {
 	margin-top: 51px;
 	background-color: #ecf0f5;
