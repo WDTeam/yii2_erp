@@ -84,4 +84,20 @@ class CoreOperationShopDistrictGoods extends CommonOperationShopDistrictGoods
         }
         Yii::$app->db->createCommand()->batchInsert(self::tableName(), $fields, $shop_district_goods_data)->execute();
     }
+    
+    public static function getShopDistrictGoodsInfo($city_id = '', $shop_district = '', $goods_id = ''){
+        if(empty($city_id) || empty($shop_district) || empty($goods_id)){
+            return '';
+        }else{
+            return self::find()->select(['operation_goods_id', 'operation_shop_district_goods_name', 'operation_shop_district_goods_introduction', 'operation_shop_district_goods_price', 'operation_shop_district_goods_lowest_consume_num', 'operation_shop_district_goods_lowest_consume', 'operation_shop_district_goods_market_price', 'created_at'])->asArray()->where(['operation_city_id' => $city_id, 'operation_shop_district_id' => $shop_district, 'operation_goods_id' => $goods_id])->One();
+        }
+    }
+    
+    public static function getShopDistrictGoodsList($city_id = '', $shop_district = ''){
+        if(empty($city_id) || empty($shop_district)){
+            return '';
+        }else{
+            return self::find()->select(['operation_goods_id', 'operation_shop_district_goods_name', 'operation_shop_district_goods_introduction', 'operation_shop_district_goods_price', 'operation_shop_district_goods_lowest_consume_num', 'operation_shop_district_goods_lowest_consume', 'operation_shop_district_goods_market_price', 'created_at'])->asArray()->where(['operation_city_id' => $city_id, 'operation_shop_district_id' => $shop_district])->All();
+        }
+    }
 }

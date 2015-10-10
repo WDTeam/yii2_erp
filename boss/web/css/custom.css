@@ -193,12 +193,17 @@ ul.sidebar-menu ul.treeview-menu li.active a.active{
     font-size: 13px;
 }
 
-.navbar .nav a {
-    color: rgba(255, 255, 255, 1) !important;
+.skin-blue .navbar .nav a {
+    color: rgba(255, 255, 255, 1);
 }
 
 ul.navbar-right > li.dropdown > ul.dropdown-menu > li > a {
-	color: rgba(0, 0, 0, 1) !important;
+	color: rgba(0, 0, 0, 1);
+}
+
+.dropdown-menu > li > a:hover {
+	color: #fff !important;
+    background-color: #f6a202;
 }
 
 .navbar .sidebar-toggle .icon-bar {
@@ -250,4 +255,43 @@ ul.navbar-right > li.dropdown > ul.dropdown-menu > li > a {
 .hideTemp + form .grid-view .kv-panel-before .pull-right .kv-grid-toolbar,
 .hideTemp + div .grid-view .kv-panel-before .pull-right .kv-grid-toolbar {
 	display: none;
+}
+
+/*a  upload */
+.a-upload {
+	padding: 5px 20px;
+    line-height: 20px;
+    position: relative;
+    cursor: pointer;
+    color: #666;
+    border-radius: 2px;
+    background: #f4f4f4;
+    border: 1px solid #ccc;
+    overflow: hidden;
+    display: inline-block;
+    text-decoration: none;
+    *display: inline;
+    *zoom: 1;
+}
+
+.a-upload  input {
+    position: absolute;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.a-upload:hover {
+    color: #666;
+    background: #e4e4e4;
+}
+
+label.uploadMsg {
+	font-size: 14px;
+	position: absolute;
+	top: 0;
+	left: 135px;
+	line-height: 36px;
+	font-weight: 100;
 }
