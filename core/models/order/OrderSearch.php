@@ -2,6 +2,7 @@
 
 namespace core\models\order;
 
+use common\models\OrderExtPop;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -28,8 +29,7 @@ class OrderSearch extends Order
 
     public function search($params)
     {
-        $query = Order::find()->leftJoin(['ejj_order_ext_pop'],['id'=>'order_id']);
-
+        $query = Order::find()->joinWith(['orderExtPop']);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -37,7 +37,6 @@ class OrderSearch extends Order
         if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }
-
         $query->andFilterWhere([
             'id' => $this->id,
             'order_parent_id' => $this->order_parent_id,
@@ -57,7 +56,7 @@ class OrderSearch extends Order
             'address_id' => $this->address_id,
             'order_booked_worker_id' => $this->order_booked_worker_id,
             'checking_id' => $this->checking_id,
-            'ejj_order_ext_pop.order_pop_order_code'=>$this->order_pop_order_code,
+            'order_pop_order_code'=>$this->order_pop_order_code,
         ]);
 
         $query->andFilterWhere(['like', 'order_code', $this->order_code])
