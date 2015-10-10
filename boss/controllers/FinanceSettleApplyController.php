@@ -67,6 +67,7 @@ class FinanceSettleApplyController extends BaseAuthController
                                  'finance_settle_apply_endtime' => $this->getLastDayOfSpecifiedMonth(),   
                                 );
         $requestParams = Yii::$app->request->getQueryParams();
+        $searchModel->settle_type = $requestParams['settle_type'];
         $newRequestParams = [];
         if(isset($requestParams['FinanceSettleApplySearch'])){
             $requestModel = $requestParams['FinanceSettleApplySearch'];
@@ -297,8 +298,8 @@ class FinanceSettleApplyController extends BaseAuthController
             0=>$workerIncomeAndDetailToExcel
            );
            $objPHPExcel=new \PHPExcel();
-           $objPHPExcel->getProperties()->setCreator('http://www.jb51.net')
-                   ->setLastModifiedBy('http://www.jb51.net')
+           $objPHPExcel->getProperties()->setCreator('ejiajie')
+                   ->setLastModifiedBy('ejiajie')
                    ->setTitle('Office 2007 XLSX Document')
                    ->setSubject('Office 2007 XLSX Document')
                    ->setDescription('Document for Office 2007 XLSX, generated using PHP classes.')
@@ -328,7 +329,7 @@ class FinanceSettleApplyController extends BaseAuthController
            $objPHPExcel->getActiveSheet()->setTitle('结算');
            $objPHPExcel->setActiveSheetIndex(0);
            $filename=urlencode('阿姨结算统计表').'_'.date('Y-m-dHis');
-           header('Content-Type: application/vnd.ms-excel');
+           header('Content-Type: text/csv');
             header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
             header('Cache-Control: max-age=0');
             $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');

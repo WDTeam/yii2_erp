@@ -18,7 +18,7 @@ use boss\components\SearchBox;
     'keyword_value' => isset($params['keyword']) ? $params['keyword'] : '',
     'keyword_options' => ['placeholder' => '搜索关键字', 'class' => 'form-control'],
     'submit_options' => ['class' => 'btn btn-default', 'id' => 'ajax_submit_search'],
-    'fields' => ['搜索字段', 'operation_advert_position_name' => '广告标题', 'operation_city_name' => '平台名称', 'operation_city_name' => '城市名称',],
+    'fields' => ['搜索字段', 'operation_advert_content_name' => '广告内容标题', 'position_name' => '位置名称', 'platform_name' => '平台名称', 'platform_version_name' => '城市名称',],
     'default' => isset($params['fields']) ? $params['fields'] : '',
     'is_ajax_search' => true,
     'addons' => $post,

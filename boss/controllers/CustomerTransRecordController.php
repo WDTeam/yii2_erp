@@ -166,9 +166,9 @@ class CustomerTransRecordController extends Controller
         $state = $this->createRecord($data);
         var_dump($state);
         */
-        $ev = new CustomerTransRecord();
-        $ev->on('ccc',[$ev,'ccc']);
-        $ev->trigger('ccc');
+        //$event = new \Yii\base\Event;
+        //$ev->on('ccc',[$ev,'ccc']);
+        $this->trigger('ccc');
 
     }
 

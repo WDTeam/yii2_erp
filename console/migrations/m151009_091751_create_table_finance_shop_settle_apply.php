@@ -38,9 +38,12 @@ class m151009_091751_create_table_finance_shop_settle_apply extends Migration
                 'finance_shop_settle_apply_starttime','finance_shop_settle_apply_endtime',
                 'isdel','updated_at','created_at'],
             [
-                [1,111,'爱佳家政北京双井店',2,'爱佳家政',6,10,60,0,2,'月结','魏北南',
+                [1,111,'爱佳家政北京双井店',2,'爱佳家政',6,10,60,0,1,'周结','魏北南',
 
-                    strtotime("-2 month"),strtotime("-1 month"),0,time(),time()],
+                    strtotime('-1 week last monday'),strtotime('last sunday'),0,time(),time()],
+                [2,222,'爱佳家政北京望京店',2,'爱佳家政',6,10,60,0,1,'周结','魏北南',
+
+                    strtotime('-1 week last monday'),strtotime('last sunday'),0,time(),time()],
             ]);
     }
 

@@ -10,8 +10,18 @@ use boss\models\FinanceSettleApplySearch;
  * @var yii\data\ActiveDataProvider $dataProvider
  * @var boss\models\FinanceSettleApplySearch $searchModel
  */
-
-$this->title = Yii::t('finance', '自营全职结算');
+if($searchModel->settle_type == FinanceSettleApplySearch::SELF_FULLTIME_WORKER_SETTELE){
+    $this->title = Yii::t('finance', '自营全职结算');
+}
+if($searchModel->settle_type == FinanceSettleApplySearch::SELF_PARTTIME_WORKER_SETTELE){
+    $this->title = Yii::t('finance', '自营兼职结算');
+}
+if($searchModel->settle_type == FinanceSettleApplySearch::SHOP_WORKER_SETTELE){
+    $this->title = Yii::t('finance', '门店阿姨结算');
+}
+if($searchModel->settle_type == FinanceSettleApplySearch::ALL_WORKER_SETTELE){
+    $this->title = Yii::t('finance', '阿姨结算');
+}
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.css" rel="stylesheet">
@@ -32,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="finance-settle-apply-index">
     <div class="panel panel-info">
         <div class="panel-heading">
-            <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 自营全职结算搜索</h3>
+            <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> <?php echo $this->title?>搜索</h3>
         </div>
         <div class="panel-body">
             <?php  echo $this->render('_self_fulltime_search', ['model' => $searchModel]); ?>
@@ -61,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' =>'{view} {agree} {disagree}',
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Yii::$app->urlManager->createUrl(['/finance-settle-apply/self-fulltime-worker-settle-view', 'id' => $model->id, 'finance_settle_apply_status' => FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED],['target'=>'_blank']), [
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Yii::$app->urlManager->createUrl(['/finance-settle-apply/self-fulltime-worker-settle-view', 'id' => $model->id],['target'=>'_blank']), [
                             'title' => Yii::t('yii', '查看'),
                         ]);
                     },

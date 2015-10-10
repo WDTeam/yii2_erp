@@ -12,6 +12,7 @@ $(document).ready(function(){
 	// 	}
 	// }
 
+	//滚动了一部分后，给content-header添加样式
 	$(window).scroll(function(){
 		var windowScroll = this.pageYOffset|| document.documentElement.scrollTop || document.body.scrollTop;
 
@@ -21,6 +22,12 @@ $(document).ready(function(){
 			$(".right-side .content-header").removeClass('scroll');
 		}
 		console.log(windowScroll);
+	});
+
+	$('input').iCheck({
+		checkboxClass: 'icheckbox_square-blue',
+		radioClass: 'iradio_square-blue',
+		increaseArea: '10%' // optional
 	});
 });
 
