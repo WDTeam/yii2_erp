@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use kartik\datecontrol\DateControl;
 use boss\models\FinanceShopSettleApplySearch;
+use boss\widgets\ShopSelect;
 ?>
 
 <div class="worker-search">
@@ -13,8 +14,15 @@ use boss\models\FinanceShopSettleApplySearch;
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
+    <div class='col-md-4' style="margin-top: 26px;">
+    <?php echo ShopSelect::widget([
+            'model'=>$model,
+            'shop_manager_id'=>'shop_manager_id',
+            'shop_id'=>'shop_id',
+            ]);?>
+    </div>
     
-    <div class='col-md-2'>
+    <div class='col-md-2' >
     <?php echo  $form->field($model, 'finance_shop_settle_apply_starttime')->widget(DateControl::classname(),[
         'type' => DateControl::FORMAT_DATE,
          'value'=>$model->finance_shop_settle_apply_starttime,
