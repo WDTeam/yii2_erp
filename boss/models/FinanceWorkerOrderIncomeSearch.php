@@ -59,7 +59,7 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
      */
     public function search($params)
     {
-        $query = FinanceWorkerOrderIncome::find();
+        $query = FinanceWorkerOrderIncomeSearch::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

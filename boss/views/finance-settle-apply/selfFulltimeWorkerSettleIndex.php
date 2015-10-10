@@ -61,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' =>'{view} {agree} {disagree}',
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Yii::$app->urlManager->createUrl(['/finance-settle-apply/self-fulltime-worker-settle-view', 'id' => $model->id, 'finance_settle_apply_status' => FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED],['target'=>'_blank']), [
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Yii::$app->urlManager->createUrl(['/finance-settle-apply/self-fulltime-worker-settle-view', 'id' => $model->id],['target'=>'_blank']), [
                             'title' => Yii::t('yii', '查看'),
                         ]);
                     },

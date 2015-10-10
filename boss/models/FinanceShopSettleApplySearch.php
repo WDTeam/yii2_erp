@@ -12,9 +12,16 @@ use common\models\FinanceShopSettleApply;
  */
 class FinanceShopSettleApplySearch extends FinanceShopSettleApply
 {
+    const BUSINESS_REVIEW = 1;//业务部门审核
+    
+    const FINANCE_REVIEW = 2;//财务部门审核
+    
+    public $review_section;//审核部门
+    
     public function rules()
     {
         return [
+            [[ 'finance_shop_settle_apply_starttime', 'finance_shop_settle_apply_endtime'], 'required'],
             [['id', 'shop_id', 'shop_manager_id', 'finance_shop_settle_apply_order_count', 'finance_shop_settle_apply_status', 'finance_shop_settle_apply_cycle', 'finance_shop_settle_apply_starttime', 'finance_shop_settle_apply_endtime', 'isdel', 'updated_at', 'created_at'], 'integer'],
             [['shop_name', 'shop_manager_name', 'finance_shop_settle_apply_cycle_des', 'finance_shop_settle_apply_reviewer'], 'safe'],
             [['finance_shop_settle_apply_fee_per_order', 'finance_shop_settle_apply_fee'], 'number'],
@@ -34,11 +41,6 @@ class FinanceShopSettleApplySearch extends FinanceShopSettleApply
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
-        if (!($this->load($params) && $this->validate())) {
-            return $dataProvider;
-        }
-
         $query->andFilterWhere([
             'id' => $this->id,
             'shop_id' => $this->shop_id,
