@@ -6,6 +6,7 @@ use Yii;
 use boss\models\Shop;
 use boss\models\search\ShopSearch;
 use boss\components\BaseAuthController;
+use yii\helpers\Json;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -123,6 +124,20 @@ class ShopController extends BaseAuthController
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    /**
+     * 通过名称获取列表
+     */
+    public function actionSearchByName($name='', $shop_manager_id=null)
+    {
+        $query = Shop::find()
+        ->select(['id', 'name'])
+        ->andFilterWhere(['like', 'name', $name]);
+        if(isset($shop_manager_id)){
+            $query->andFilterWhere(['=', 'shop_manager_id', $shop_manager_id]);
+        }
+        $models = $query->limit(50)->all();
+        echo Json::encode(['results'=>$models]);
     }
     /**
      * 加入黑名单

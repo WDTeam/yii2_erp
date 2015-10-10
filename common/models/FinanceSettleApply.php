@@ -12,6 +12,10 @@ use Yii;
  * @property string $worder_tel
  * @property integer $worker_type_id
  * @property string $worker_type_name
+ * @property integer $shop_id
+ * @property string $shop_name
+ * @property integer $shop_manager_id
+ * @property string $shop_manager_name
  * @property integer $finance_settle_apply_man_hour
  * @property string $finance_settle_apply_order_money
  * @property string $finance_settle_apply_order_cash_money
@@ -44,7 +48,9 @@ class FinanceSettleApply extends \yii\db\ActiveRecord
     
     const FINANCE_SETTLE_APPLY_STATUS_BUSINESS_FAILED = -1;//业务部门审核不通过
     
-    const FINANCE_SETTLE_APPLY_STATUS_COMPLETED = 4;//财务确认结算；
+    const FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED = 2;//财务确认结算；
+    
+    const FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED = -2;//财务审核不通过；
     
     /**
      * @inheritdoc
@@ -81,6 +87,10 @@ class FinanceSettleApply extends \yii\db\ActiveRecord
             'worder_tel' => Yii::t('app', '阿姨电话'),
             'worker_type_id' => Yii::t('app', '阿姨类型Id'),
             'worker_type_name' => Yii::t('app', '阿姨职位类型'),
+            'shop_id' => Yii::t('app', '门店id'),
+            'shop_name' => Yii::t('app', '门店名称'),
+            'shop_manager_id' => Yii::t('app', '归属家政id'),
+            'shop_manager_name' => Yii::t('app', '归属家政名称'),
             'finance_settle_apply_man_hour' => Yii::t('app', '订单总工时'),
             'finance_settle_apply_order_money' => Yii::t('app', '工时费'),
             'finance_settle_apply_order_cash_money' => Yii::t('app', '收取现金'),

@@ -3,22 +3,29 @@
 use yii\helpers\Html;
 use kartik\detail\DetailView;
 use kartik\datecontrol\DateControl;
-
+use common\models\FinanceOrderChannel;
+use common\models\FinancePayChannel;
+use core\models\Customer;
+use common\models\SystemUser;
 /**
  * @var yii\web\View $this
  * @var common\models\FinancePopOrder $model
  */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Finance Pop Orders'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = '订单号为:'.$model->finance_pop_order_number;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '账单详情'), 'url' => ['index']];
+$this->params['breadcrumbs'][] =$this->title;
+
+$userinfo=Customer::getCustomerById($model->finance_pop_order_worker_uid);
+if($userinfo){$uisername=$username->customer_name;}else{$username='未查到';}
+//
+$admininfo=SystemUser::findIdentity($model->finance_pop_order_worker_uid);
+
+if($admininfo){$adminname=$admininfo->username;}else{$adminname='未查到';}
+
+
 ?>
 <div class="finance-pop-order-view">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
-
-
     <?= DetailView::widget([
             'model' => $model,
             'condensed'=>false,
@@ -31,12 +38,25 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'finance_pop_order_number',
-            'finance_order_channel_id',
-            'finance_order_channel_title',
-            'finance_pay_channel_id',
-            'finance_pay_channel_title',
+    		[
+    		'attribute' => 'finance_order_channel_title',
+    		'type' => DetailView::INPUT_TEXT,
+    		'displayOnly' => true,
+    		'value'=> FinanceOrderChannel::get_order_channel_info($model->finance_order_channel_id) ,
+    		],
+    		[
+    		'attribute' => 'finance_pay_channel_title',
+    		'type' => DetailView::INPUT_TEXT,
+    		'displayOnly' => true,
+    		'value'=> FinancePayChannel::get_pay_channel_info($model->finance_pay_channel_id) ,
+    		],
             'finance_pop_order_customer_tel',
-            'finance_pop_order_worker_uid',
+    		[
+    		'attribute' => 'finance_pop_order_worker_uid',
+    		'type' => DetailView::INPUT_TEXT,
+    		'displayOnly' => true,
+    		'value'=>$username,
+    		],
             'finance_pop_order_booked_time:datetime',
             'finance_pop_order_booked_counttime:datetime',
             'finance_pop_order_sum_money',
@@ -46,17 +66,22 @@ $this->params['breadcrumbs'][] = $this->title;
             'finance_pop_order_channel_order',
             'finance_pop_order_order_type',
             'finance_pop_order_status',
-            'finance_pop_order_finance_isok',
+           // 'finance_pop_order_finance_isok',
             'finance_pop_order_discount_pay',
             'finance_pop_order_reality_pay',
             'finance_pop_order_order_time:datetime',
             'finance_pop_order_pay_time:datetime',
+    		
             'finance_pop_order_pay_status',
             'finance_pop_order_pay_title',
-            'finance_pop_order_check_id',
+    		[
+    		'attribute' => 'finance_pop_order_check_id',
+    		'type' => DetailView::INPUT_TEXT,
+    		'displayOnly' => true,
+    		'value'=>$adminname,
+    		],
             'finance_pop_order_finance_time:datetime',
             'create_time:datetime',
-            'is_del',
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],

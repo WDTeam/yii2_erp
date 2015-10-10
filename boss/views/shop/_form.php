@@ -13,7 +13,7 @@ use boss\components\AreaCascade;
 use kartik\widgets\Select2; // or kartik\select2\Select2
 use yii\web\JsExpression;
 use common\components\BankHelper;
-use yii\helpers\Url
+use yii\helpers\Url;
 
 /**
  * @var yii\web\View $this
@@ -140,6 +140,7 @@ use yii\helpers\Url
                     'bankcard_number'=>['type'=> Form::INPUT_TEXT, 'options'=>[ 'maxlength'=>50]], 
                 ]
             ]);?>
+
         </div>
         <div class="panel-footer">
             <div class="form-group">

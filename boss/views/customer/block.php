@@ -43,6 +43,16 @@ $this->params['breadcrumbs'][] = $this->title;
     echo GridView::widget([
         'dataProvider' => $dataProvider,
         // 'filterModel' => $searchModel,
+        'export'=>false,
+        'toolbar' =>
+            [
+                // 'content'=>
+
+                    // Html::a('<i class="glyphicon glyphicon-plus"></i>', ['index?getData=1'], [
+                    //     'class' => 'btn btn-default',
+                    //     'title' => Yii::t('kvgrid', 'Reset Grid')
+                    // ]),
+            ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [

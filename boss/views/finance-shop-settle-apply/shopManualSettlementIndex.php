@@ -129,16 +129,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'worker_type', 
             'order_count', 
             'manage_fee', 
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'buttons' => [
-                'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance-worker-order-income/view','edit'=>'t']), [
-                                                    'title' => Yii::t('yii', 'Edit'),
-                                                  ]);}
-
-                ],
-            ],
         ],
         'responsive'=>true,
         'hover'=>true,

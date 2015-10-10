@@ -56,9 +56,17 @@ class CoreOperationGoods extends CommonOperationGoods
         $data = array();
         if(!empty($goods_ids)){
             foreach((array)$goods_ids as $key => $value){
-                $data[$key] = self::find()->asArray()->where(['id' => $value])->One();
+               $data[$key] = self::getGoodsInfo($value);
             }
         }
         return $data;
+    }
+    
+    /**
+     * 获取单个商品详细
+     * @param type $goods_id
+     */
+    public static function getGoodsInfo($goods_id){
+        return self::find()->asArray()->where(['id' => $goods_id])->One();
     }
 }

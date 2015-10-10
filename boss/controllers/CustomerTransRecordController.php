@@ -152,23 +152,21 @@ class CustomerTransRecordController extends Controller
 
     public function actionTest()
     {
-        /*
+
         $data = array(
             'customer_id' => 1,  //用户ID
             'order_id' => 1, //订单ID
             'order_channel_id' => 1, //订单渠道
-            'pay_channel_id' => 1,   //支付渠道
+            'pay_channel_id' => 11,   //支付渠道
             'customer_trans_record_mode' => 1,   //交易方式:1消费,2=充值,3=退款,4=补偿
             'customer_trans_record_online_balance_pay' => 50,//在线余额支付
             'customer_trans_record_order_total_money' => 50,  //订单总额
             'scenario' => 8
         );
-        $state = $this->createRecord($data);
+
+        $state = \core\models\CustomerTransRecord\CustomerTransRecord::createRecord($data);
         var_dump($state);
-        */
-        $ev = new CustomerTransRecord();
-        $ev->on('ccc',[$ev,'ccc']);
-        $ev->trigger('ccc');
+
 
     }
 

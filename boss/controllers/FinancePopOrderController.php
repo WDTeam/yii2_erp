@@ -103,11 +103,22 @@ class FinancePopOrderController extends Controller
     		if($statusinfo){
     			\Yii::$app->getSession()->setFlash('default','对不起你上传的表不对！'); 
     		  return $this->redirect(['index']);
+    		}else {
+    		//向记录表里面插入一条空数据	
+    		$FinanceRecordLog = new FinanceRecordLogSearch;
+    		$FinanceRecordLog->insert();
+    		$lastidRecordLog=$FinanceRecordLog->id;
     		}
+    		if($lastidRecordLog==0){ \Yii::$app->getSession()->setFlash('default','账期出现问题，请重新上传！'); 
+    		  return $this->redirect(['index']);
+    		 }
+    		
     		foreach ($sheetData as $key=>$value){
     			//去除表头
     			if($n>2){
     			$statusinfo=$model->PopOrderstatus($alinfo,$value,$channelid);
+    			
+    			$post['FinancePopOrder']['finance_record_log_id'] =$lastidRecordLog;
     			$post['FinancePopOrder']['finance_pop_order_number'] =$statusinfo['order_channel_order_num'];
     			$post['FinancePopOrder']['finance_order_channel_id'] =$statusinfo['channel_id'];
     			$post['FinancePopOrder']['finance_order_channel_title'] =$statusinfo['order_channel_name'];
@@ -158,9 +169,9 @@ class FinancePopOrderController extends Controller
     		
     		$n++;
     		}
-    		
     	 	$FinanceRecordLog = new FinanceRecordLogSearch;
     		//获取渠道唯一订单号有问题需要问问
+    	 	$post['FinanceRecordLog']['finance_record_log_id'] =$lastidRecordLog;
     		$post['FinanceRecordLog']['finance_order_channel_id'] =1;
     		//对账名称
     		$post['FinanceRecordLog']['finance_order_channel_name'] =$filenamesitename;
@@ -197,14 +208,13 @@ class FinancePopOrderController extends Controller
     		$post['FinanceRecordLog']['finance_record_log_confirm_name'] =Yii::$app->user->identity->username;
     		//服务费
     		$post['FinanceRecordLog']['finance_record_log_fee'] = 0;
-    		
-    		
+    	
     		
     		$post['FinanceRecordLog']['create_time'] = time();
     		$post['FinanceRecordLog']['is_del']=0;
     		$_model = clone $FinanceRecordLog;
     		$_model->setAttributes($post['FinanceRecordLog']);
-    		$_model->save(); 
+    		$_model->update(); 
     		return $this->redirect(['index']);
     	}
 
@@ -220,17 +230,24 @@ class FinancePopOrderController extends Controller
         }
        $tyu= array_combine($tyd,$tydtui);
          $searchModel = new FinancePopOrderSearch;
-         
-         
          //默认条件
-         
-         
+         $searchModel->load(Yii::$app->request->getQueryParams());
          $searchModel->is_del=0;
          $searchModel->finance_pop_order_pay_status=0;
+         
+         
+         //
+         if(isset($lastidRecordLog)){
+         	\Yii::$app->cache->set('lastidinfoid',$lastidRecordLog,600);
+         }
+         
+         $lastid=FinancePopOrder::get_cache_tiem();
+         if(!isset($lastid)){
+         	$lastid='';
+         }
+         $searchModel->finance_record_log_id=$lastid;
         //状态处理
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-        
-        
+        $dataProvider = $searchModel->search();
         
         $decss=Yii::$app->request->getQueryParams();
         if(isset($decss['FinancePopOrderSearch'])){
@@ -244,12 +261,14 @@ class FinancePopOrderController extends Controller
         }else{
         $sta='';
         } 
-         
+        
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         	'ordedatainfo' => $tyu,
-        	'statusdeflde'=>$sta	
+        	'statusdeflde'=>$sta,
+        	'lastidRecordLogid'=>$lastid   //账期id
+        			
  		
         ]);
     }
@@ -263,7 +282,6 @@ class FinancePopOrderController extends Controller
     
     public function actionOrderlist()
     { 
-   
     	//输出部分
     	$ordedata= new FinanceOrderChannel;
     	$ordewhere['is_del']=0;
@@ -433,12 +451,19 @@ class FinancePopOrderController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
-
+		//添加
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        	
         return $this->redirect(['view', 'id' => $model->id]);
+        
         } else {
+        //查看
+        	
+        	
+        	
         return $this->render('view', ['model' => $model]);
-}
+        
+		}
     }
 
     /**
@@ -504,7 +529,7 @@ class FinancePopOrderController extends Controller
         if (($model = FinancePopOrder::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException('所请求的页面不存在.');
         }
     }
     

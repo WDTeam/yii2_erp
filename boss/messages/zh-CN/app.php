@@ -141,5 +141,5 @@ return [
     'Goods' => '商品',
     'Operation Specs' => '规格管理',
     'Spec' => '规格',
-    'release' => '发布',
+    'release' => '开通',
 ];

@@ -35,7 +35,7 @@ class m151003_121000_create_table_operation_goods extends Migration
             'operation_goods_price' => Schema::TYPE_MONEY . ' DEFAULT 0 COMMENT \'售价\'',
             'operation_goods_balance_price' => Schema::TYPE_MONEY . ' DEFAULT 0 COMMENT \'阿姨结算价格\'',
             'operation_goods_additional_cost' => Schema::TYPE_MONEY . ' DEFAULT 0 COMMENT \'附加费用\'',
-            'operation_goods_lowest_consume' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'最低消费\'',
+            'operation_goods_lowest_consume' => Schema::TYPE_MONEY . ' DEFAULT 0 COMMENT \'最低消费\'',
             'operation_goods_price_description' => Schema::TYPE_TEXT . ' DEFAULT NULL COMMENT \'价格备注\'',
             'operation_goods_market_price' => Schema::TYPE_MONEY . ' DEFAULT 0 COMMENT \'市场价格\'',
             'operation_tags' => Schema::TYPE_TEXT . ' DEFAULT NULL COMMENT \'服务类型标签编号(序列化方式存储)\'',

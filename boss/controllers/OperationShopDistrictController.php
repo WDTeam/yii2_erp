@@ -176,6 +176,10 @@ class OperationShopDistrictController extends BaseAuthController
             ]);
         }
     }
+    
+    public function actionGoodslist($id){
+        return $this->redirect(['operation-goods/index']);
+    }
 
     public function actionGoline($id){
         $model = $this->findModel($id);
