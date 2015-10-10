@@ -21,13 +21,23 @@ $(document).ready(function(){
 		} else{
 			$(".right-side .content-header").removeClass('scroll');
 		}
-		console.log(windowScroll);
 	});
 
+	//给所有单选框添加样式
 	$('input').iCheck({
 		checkboxClass: 'icheckbox_square-blue',
 		radioClass: 'iradio_square-blue',
 		increaseArea: '10%' // optional
+	});
+
+	//给所有的type=file外层添加一个<a>
+	$("input[type='file']").each(function() {
+		$(this).replaceWith('<a class="a-upload">' + $(this).prop('outerHTML') + '点击上传文件</a><label class="uploadMsg"></label>');
+	});
+
+	$("input[type='file']").on("change", function(){
+		// alert($(this).val());
+		$(this).parent().next().html($(this).val());
 	});
 });
 
