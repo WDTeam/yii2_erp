@@ -422,8 +422,8 @@ class CustomerController extends BaseAuthController
                     $customer->general_region_id = 1;
                     $customer->customer_live_address_detail = $val['street'];
                     
-                    $customer->customer_balance = $val['charge_money'];
-                    $customer->customer_score = 0;
+                    // $customer->customer_balance = $val['charge_money'];
+                    // $customer->customer_score = 0;
                     $customer->customer_level = $val['level'];
                     $customer->customer_complaint_times = 0;
                     
@@ -443,6 +443,32 @@ class CustomerController extends BaseAuthController
                         die();
                     }
                     $customer->save();
+
+                    $customerBalance = new CustomerExtBalance;
+                    $customerBalance->customer_id = $customer->id;
+                    $customerBalance->customer_balance = $val['charge_money'];
+                    $customerBalance->created_at = time();
+                    $customerBalance->updated_at = 0;
+                    $customerBalance->is_del = 0;
+                    $customerBalance->validate();
+                    if ($customerBalance->hasErrors()) {
+                        var_dump($customerBalance->getErrors());
+                        die();
+                    }
+                    $customerBalance->save();
+
+                    $customerScore = new CustomerExtScore;
+                    $customerScore->customer_id = $customer->id;
+                    $customerScore->customer_score = 0;
+                    $customerBalance->created_at = time();
+                    $customerBalance->updated_at = 0;
+                    $customerBalance->is_del = 0;
+                    $customerScore->validate();
+                    if ($customerScore->hasErrors()) {
+                        var_dump($customerScore->getErrors());
+                        die();
+                    }
+                    $customerScore->save();
 
                     // $customer_id = $customer->id;
                     // $command = $connection->createCommand("SELECT * FROM user_address where user_id=".$val['id']." order by id asc");
