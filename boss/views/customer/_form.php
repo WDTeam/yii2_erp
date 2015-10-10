@@ -8,8 +8,8 @@ use kartik\widgets\Select2; // or kartik\select2\Select2
 use yii\web\JsExpression;
 use kartik\grid\GridView;
 use common\models\Customer;
-use common\models\customerPlatform;
-use common\models\customerChannal;
+use common\models\CustomerPlatform;
+use common\models\CustomerChannal;
 use kartik\date\DatePicker;
 /**
  * @var yii\web\View $this
