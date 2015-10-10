@@ -88,25 +88,12 @@ class CustomerTransRecordLog extends \yii\db\ActiveRecord
 
         //订单渠道名称
         $param->data['customer_trans_record_order_channel'] = FinanceOrderChannel::getOrderChannelByName($param->data['order_channel_id']);
-        var_dump($param->data);exit;
+
         //makeSign
         $param->data['customer_trans_record_verify'] = $this->makeSign();
 
         //交易方式:1消费,2=充值,3=退款,4=补偿
-        switch($param->data['customer_trans_record_mode']){
-            case 1 :
-                $param->data['customer_trans_record_mode_name'] = '消费';
-                break;
-            case 2 :
-                $param->data['customer_trans_record_mode_name'] = '充值';
-                break;
-            case 3 :
-                $param->data['customer_trans_record_mode_name'] = '退款';
-                break;
-            case 4 :
-                $param->data['customer_trans_record_mode_name'] = '补偿';
-                break;
-        }
+        $param->data['customer_trans_record_mode_name'] = CustomerTransRecord::getCustomerTransRecordModeByName($param->data['customer_trans_record_mode']);
 
         //写入数据库日志
         $this->attributes = $param->data;
