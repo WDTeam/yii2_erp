@@ -1,5 +1,6 @@
 <?php
 /**
+ * 极光推送
  * @see http://docs.jpush.cn/display/dev/Push-API-v3#Push-API-v3-%E6%8E%A8%E9%80%81%E5%AF%B9%E8%B1%A1
  */
 namespace common\components;
