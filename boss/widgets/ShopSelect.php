@@ -15,6 +15,7 @@
 namespace boss\widgets;
 
 
+use boss\models\Shop;
 use boss\models\ShopManager;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
@@ -44,10 +45,18 @@ class ShopSelect extends InputWidget
         $models = ShopManager::find()->select(['id','name'])->where('isdel is NULL or isdel=0')->all();
         return ArrayHelper::map($models, 'id', 'name');
     }
+    public function getShopArray()
+    {
+        $manager_id = $this->model->getAttribute($this->shop_manager_id);
+        $models = Shop::find()->select(['id','name'])
+            ->where('(isdel is NULL OR isdel=0) AND shop_manager_id=?',[$manager_id])->all();
+        return ArrayHelper::map($models, 'id', 'name');
+    }
     public function run()
     {
         return $this->render('shop_select',[
             'shop_managers'=>$this->getShopManagerArray(),
+            'shops'=>$this->getShopArray(),
             'widget_id'=>$this->id,
             'model'=>$this->model,
             'shop_manager_id'=>$this->shop_manager_id,
