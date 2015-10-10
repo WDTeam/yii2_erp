@@ -55,6 +55,33 @@ class FinancePopOrderController extends Controller
     **/
     public function actionIndex()
     {
+    	
+    	
+    	$cookies = Yii::$app->response->cookies;
+    	Yii::app()->request->cookies[$name]=$cookie;
+    	/* $cookies->add(new \yii\web\Cookie([
+    			'name' => 'lastidinfoid',
+    			'value' => '1111',
+    			'expire'=>time()+10
+    			])); */
+
+    	//var_dump($cookies['lastidinfoid']);exit;
+    	if (isset($cookies['lastidinfoid'])){ 
+    		$language = $cookies->get('lastidinfoid', '1');
+    		echo  $language->value;
+    		var_dump($language);exit;
+    	}
+    	
+    	
+    	/* $cookies->add(new \yii\web\Cookie([
+    			'name' => 'lastidinfoid',
+    			'value' => '1111',
+    			'expire'=>time()+10
+    			]));
+    	 */
+    	
+    
+    	
     	$model = new FinancePopOrderSearch;
     	$modelinfo= new FinancePopOrder;
     	if(Yii::$app->request->isPost) {
@@ -115,12 +142,16 @@ class FinancePopOrderController extends Controller
     		$lastid=$FinanceRecordLog->insert();
     		$lastidRecordLog=$FinanceRecordLog->id;
     		
+    		if($lastidRecordLog){ \Yii::$app->getSession()->setFlash('default','长期出现问题，请重新上传！'); 
+    		  return $this->redirect(['index']);
+    		 }
     		
     		foreach ($sheetData as $key=>$value){
     			//去除表头
     			if($n>2){
     			$statusinfo=$model->PopOrderstatus($alinfo,$value,$channelid);
     			
+    			$post['FinancePopOrder']['finance_record_log_id'] =$lastidRecordLog;
     			$post['FinancePopOrder']['finance_pop_order_number'] =$statusinfo['order_channel_order_num'];
     			$post['FinancePopOrder']['finance_order_channel_id'] =$statusinfo['channel_id'];
     			$post['FinancePopOrder']['finance_order_channel_title'] =$statusinfo['order_channel_name'];
@@ -171,11 +202,9 @@ class FinancePopOrderController extends Controller
     		
     		$n++;
     		}
-    		
-    		
-    		
     	 	$FinanceRecordLog = new FinanceRecordLogSearch;
     		//获取渠道唯一订单号有问题需要问问
+    	 	$post['FinanceRecordLog']['finance_record_log_id'] =$lastidRecordLog;
     		$post['FinanceRecordLog']['finance_order_channel_id'] =1;
     		//对账名称
     		$post['FinanceRecordLog']['finance_order_channel_name'] =$filenamesitename;
@@ -218,7 +247,7 @@ class FinancePopOrderController extends Controller
     		$post['FinanceRecordLog']['is_del']=0;
     		$_model = clone $FinanceRecordLog;
     		$_model->setAttributes($post['FinanceRecordLog']);
-    		$_model->save(); 
+    		$_model->update(); 
     		return $this->redirect(['index']);
     	}
 
@@ -238,6 +267,27 @@ class FinancePopOrderController extends Controller
          $searchModel->load(Yii::$app->request->getQueryParams());
          $searchModel->is_del=0;
          $searchModel->finance_pop_order_pay_status=0;
+         
+         
+         //
+         if(isset($lastidRecordLog)){
+         	$session = Yii::$app->session;
+         	$session->set('lastidinfoid',$lastidRecordLog);
+         	$session['captcha']['lifetime'] = 600;
+         	
+         	$lastidinfoid= isset($_SESSION['lastidinfoid']) ? $_SESSION['lastidinfoid'] : 0;
+         	
+         	var_dump($lastidinfoid);exit;
+         	$lastid=$lastidinfoid;
+         	
+         	
+         }else{
+         	$lastid=12;
+         }
+         
+         
+         
+         $searchModel->finance_record_log_id=$lastid;
         //状态处理
         $dataProvider = $searchModel->search();
         
@@ -253,11 +303,14 @@ class FinancePopOrderController extends Controller
         }else{
         $sta='';
         } 
+        
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         	'ordedatainfo' => $tyu,
-        	'statusdeflde'=>$sta	
+        	'statusdeflde'=>$sta,
+        	'lastidRecordLogid'=>$lastid   //账期id
+        			
  		
         ]);
     }
