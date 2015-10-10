@@ -72,4 +72,20 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
     }
     
     
+    /**
+     * 根据渠道id获取渠道名称
+     * @date: 2015-10-9
+     * @author: peak pan
+     * @return:
+     **/
+    
+    public static function get_order_channel_info($channel_id)
+    {
+    	$channel_info = FinanceOrderChannel::findOne($channel_id);
+    	
+    	return $channel_info != NULL ? $channel_info : '未知';
+    }
+    
+    
+    
 }

@@ -62,6 +62,11 @@ class FinancePopOrderSearch extends FinancePopOrder
     }
     
     
+    
+    
+    
+    
+    
     public static  function selsect_isstatus($id)
     {
      switch ($id)
@@ -333,17 +338,17 @@ class FinancePopOrderSearch extends FinancePopOrder
     }
     
     
-    public function search($params)
+    public function search()
     {
         $query = FinancePopOrder::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
+/* 
         if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
-        }
+        } */
 
         $query->andFilterWhere([
             'id' => $this->id,
