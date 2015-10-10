@@ -10,7 +10,7 @@ class BankHelper
     public static function getBanks()
     {
         $str = file_get_contents('./../../common/components/banks.txt');
-        $data = explode("\r", $str);
+        $data = explode(PHP_EOL, $str);
         foreach ($data as $key=>$row){
             $data[$key] = explode("\t", $row);
         }
