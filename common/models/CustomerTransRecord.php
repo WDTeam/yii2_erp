@@ -73,10 +73,12 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
      */
     public function beforeValidate()
     {
+        //订单渠道
+        $orderChannelInfo = FinanceOrderChannel::get_order_channel_info($this->order_channel_id);
         //支付渠道名称
-        $this->customer_trans_record_pay_channel = FinancePayChannel::getPayChannelByName($this->pay_channel_id);
+        $this->customer_trans_record_pay_channel = FinancePayChannel::getPayChannelByName($orderChannelInfo->pay_channel_id);
         //订单渠道名称
-        $this->customer_trans_record_order_channel = FinanceOrderChannel::getOrderChannelByName($this->order_channel_id);
+        $this->customer_trans_record_order_channel = $orderChannelInfo->finance_order_channel_name;
         //交易方式:1消费,2=充值,3=退款,4=补偿
         $this->customer_trans_record_mode_name = self::getCustomerTransRecordModeByName($this->customer_trans_record_mode);
         //makeSign
@@ -526,7 +528,7 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
     }
 
     /**
-     * 模式名称
+     * 记录模式
      * @param $mode_id
      * @return string
      */
