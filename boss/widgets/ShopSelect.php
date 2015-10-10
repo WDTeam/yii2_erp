@@ -47,10 +47,10 @@ class ShopSelect extends InputWidget
     }
     public function getShopArray()
     {
-//        $manager_id = $this->model->getAttribute($this->shop_manager_id);
-//        $models = Shop::find()->select(['id','name'])
-//            ->where('(isdel is NULL OR isdel=0) AND shop_manager_id=?',[$manager_id])->all();
-//        return ArrayHelper::map($models, 'id', 'name');
+        $manager_id = (int)$this->model->getAttribute($this->shop_manager_id);
+        $models = Shop::find()->select(['id','name'])
+            ->where('(isdel is NULL OR isdel=0) AND shop_manager_id='.$manager_id)->all();
+        return ArrayHelper::map($models, 'id', 'name');
     }
     public function run()
     {
