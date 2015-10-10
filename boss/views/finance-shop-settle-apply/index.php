@@ -3,7 +3,6 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
-use boss\models\FinanceWorkerNonOrderIncomeSearch;
 use boss\models\FinanceSettleApplySearch;
 /**
  * @var yii\web\View $this
@@ -13,6 +12,7 @@ use boss\models\FinanceSettleApplySearch;
 
 $this->title = Yii::t('finance', '门店结算');
 $this->params['breadcrumbs'][] = $this->title;
+$this->params['review_section']=$searchModel->review_section;
 ?>
 <form id ="financeSettleApplyForm">
    
@@ -27,7 +27,9 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
      <div class="panel panel-info">
 
-        <?php Pjax::begin(); echo GridView::widget([
+        <?php 
+            $review_section = $searchModel->review_section;
+            Pjax::begin(); echo GridView::widget([
             'dataProvider' => $dataProvider,
     //        'filterModel' => $searchModel,
             'columns' => [
@@ -43,21 +45,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' =>'{view} {agree} {disagree}',
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Yii::$app->urlManager->createUrl(['/finance-settle-apply/self-parttime-worker-settle-view', 'id' => $model->id, 'finance_settle_apply_status' => FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED],['target'=>'_blank']), [
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Yii::$app->urlManager->createUrl(['/finance-shop-settle-apply/view', 'id' => $model->id], ['target'=>'_blank']), [
                             'title' => Yii::t('yii', '查看'),
                         ]);
                     },
                     'agree' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-ok"></span>', Yii::$app->urlManager->createUrl(['/finance-settle-apply/self-parttime-worker-settle-done', 'id' => $model->id, 'finance_settle_apply_status' => FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED]), [
+                        return Html::a('<span class="glyphicon glyphicon-ok"></span>', Yii::$app->urlManager->createUrl(['/finance-shop-settle-apply/review', 'id' => $model->id,'review_section'=>$this->params['review_section'],'is_ok'=>1]), [
                             'title' => Yii::t('yii', '审核通过'),
                         ]);
                     },
-                    'disagree' => function ($url, $model) {
+                    'disagree' => function ($url, $model,$review_section) {
                         return Html::a('<span class="glyphicon glyphicon-remove"></span>',
                             [
-                                '/finance-settle-apply/self-fulltime-worker-settle-done',
-                                'id' => $model->id, 
-                                'finance_settle_apply_status' => FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_FAILED
+                                '/finance-shop-settle-apply/review',
+                                'id' => $model->id, 'review_section'=>$this->params['review_section'],'is_ok'=>0
                             ]
                             ,
                             [

@@ -2,6 +2,13 @@
 use kartik\helpers\Html;
 use boss\models\ShopManager;
 ?>
+
+<?php echo Html::a('黑名单('.ShopManager::getIsBlacklistCount().')',[
+    'index','ShopManagerSearch[is_blacklist]'=>1
+],[
+    'class'=>'btn btn-success'
+]);?>
+
 <?php echo Html::a('待审核('.ShopManager::getAuditStatusCountByNumber(0).')',[
     'index','ShopManagerSearch'=>['audit_status'=>0]
 ], [
@@ -20,8 +27,3 @@ use boss\models\ShopManager;
     'class'=>'btn btn-success'
 ]);?>
 
-<?php echo Html::a('黑名单('.ShopManager::getIsBlacklistCount().')',[
-    'index','ShopManagerSearch[is_blacklist]'=>1
-],[
-    'class'=>'btn btn-success'
-]);?>

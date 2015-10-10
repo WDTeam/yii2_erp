@@ -29,7 +29,26 @@ $this->params['breadcrumbs'][] = $this->title;
              'updated_at:datetime',
 
             [
-                'header' => Yii::t('app', 'Operation'),'class' => 'yii\grid\ActionColumn'],
+                'header' => Yii::t('app', 'Operation'),
+                'class' => 'yii\grid\ActionColumn',
+                'buttons' => [
+                    'view' => function ($url, $model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-eye-open"></span>', 
+                            Yii::$app->urlManager->createUrl(['operation-advert-release/view','id' => $model->id]),
+                            ['title' => Yii::t('yii', 'View'), 'class' => 'btn btn-success btn-sm']
+                        );
+                    },
+                    'update' => function(){return false;},
+                    'delete' => function ($url, $model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-trash"></span>', 
+                            Yii::$app->urlManager->createUrl(['operation-advert-release/delete','id' => $model->id]),
+                            ['title' => Yii::t('yii', 'Delete'), 'class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
+                        );
+                    },
+                ],
+            ],
         ],
     ]); ?>
 

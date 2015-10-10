@@ -44,7 +44,9 @@ class FinanceSettleApply extends \yii\db\ActiveRecord
     
     const FINANCE_SETTLE_APPLY_STATUS_BUSINESS_FAILED = -1;//业务部门审核不通过
     
-    const FINANCE_SETTLE_APPLY_STATUS_COMPLETED = 4;//财务确认结算；
+    const FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED = 2;//财务确认结算；
+    
+    const FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED = -2;//财务审核不通过；
     
     /**
      * @inheritdoc

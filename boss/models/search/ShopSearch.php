@@ -47,7 +47,6 @@ class ShopSearch extends Shop
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'is_blacklist' => $this->is_blacklist,
-//             'blacklist_time' => $this->blacklist_time,
             'audit_status' => $this->audit_status,
             'worker_count' => $this->worker_count,
             'complain_coutn' => $this->complain_coutn,

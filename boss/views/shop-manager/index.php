@@ -73,14 +73,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'filter'=>false,
             ],
-            [
-                'attribute'=>'audit_status',
-                'options'=>['width'=>100,],
-                'value'=>function($model){
-                    return ShopManager::$audit_statuses[$model->audit_status];
-                },
-                'filter'=>ShopManager::$audit_statuses,
-            ],
+//            [
+//                'attribute'=>'audit_status',
+//                'options'=>['width'=>100,],
+//                'value'=>function($model){
+//                    return ShopManager::$audit_statuses[$model->audit_status];
+//                },
+//                'filter'=>ShopManager::$audit_statuses,
+//            ],
             [
                 'attribute'=>'shop_count',
                 'options'=>['width'=>70],
@@ -112,7 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template'=>'{update} {delete} {joinblacklist}',
+                'template'=>'{update} {joinblacklist}',
                 'buttons' => [
                     'update' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-pencil"></span>', [

@@ -28,7 +28,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'type'=>DetailView::TYPE_INFO,
         ],
         'attributes' => [
-            'id',
+            [
+                'attribute'=>'id',
+                'type'=>DetailView::INPUT_HIDDEN,
+            ],
             'name',
 //             [
 //                 'type'=>DetailView::INPUT_WIDGET,
@@ -76,36 +79,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute'=>'created_at',
-                'type' => DetailView::INPUT_WIDGET,
-                'widgetOptions' => [
-                    'class' => DateControl::classname(),
-                    'type'=>DateControl::FORMAT_DATE,
-                    'ajaxConversion'=>false,
-                    'displayFormat' => 'php:Y-m-d',
-                    'saveFormat'=>'php:U',
-                    'options' => [
-                        'pluginOptions' => [
-                            'autoclose' => true
-                        ]
-                    ]
-                ],
+                'type' => DetailView::INPUT_HIDDEN,
                 'value'=>date('Y-m-d H:i:s', $model->created_at),
             ],
             [
                 'attribute'=>'updated_at',
-                'type' => DetailView::INPUT_WIDGET,
-                'widgetOptions' => [
-                    'class' => DateControl::classname(),
-                    'type'=>DateControl::FORMAT_DATE,
-                    'ajaxConversion'=>false,
-                    'displayFormat' => 'php:Y-m-d',
-                    'saveFormat'=>'php:U',
-                    'options' => [
-                        'pluginOptions' => [
-                            'autoclose' => true
-                        ]
-                    ]
-                ],
+                'type' => DetailView::INPUT_HIDDEN,
                 'value'=>date('Y-m-d H:i:s', $model->updated_at),
             ],
             [
@@ -132,9 +111,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 'value'=>ShopManager::$audit_statuses[$model->audit_status],
             ],
-            'shop_count',
-            'worker_count',
-            'complain_coutn',
+            [
+                'attribute'=>'shop_count',
+                'type' => DetailView::INPUT_HIDDEN,
+            ],
+            [
+                'attribute'=>'worker_count',
+                'type' => DetailView::INPUT_HIDDEN,
+            ],
+            [
+                'attribute'=>'complain_coutn',
+                'type' => DetailView::INPUT_HIDDEN,
+            ],
             'level',
             
             

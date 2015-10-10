@@ -140,6 +140,7 @@ use yii\helpers\Url
                     'bankcard_number'=>['type'=> Form::INPUT_TEXT, 'options'=>[ 'maxlength'=>50]], 
                 ]
             ]);?>
+
         </div>
         <div class="panel-footer">
             <div class="form-group">
