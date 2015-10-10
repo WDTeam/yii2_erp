@@ -12,6 +12,7 @@ use boss\models\FinanceSettleApplySearch;
 
 $this->title = Yii::t('finance', '门店结算');
 $this->params['breadcrumbs'][] = $this->title;
+$this->params['review_section']=$searchModel->review_section;
 ?>
 <form id ="financeSettleApplyForm">
    
@@ -48,8 +49,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             'title' => Yii::t('yii', '查看'),
                         ]);
                     },
-                    'agree' => function ($url, $model,$review_section) {
-                        return Html::a('<span class="glyphicon glyphicon-ok"></span>', Yii::$app->urlManager->createUrl(['/finance-shop-settle-apply/review', 'id' => $model->id,'review_section'=>$review_section, 'FinanceShopSettleApply[finance_shop_settle_apply_status]' => FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED]), [
+                    'agree' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-ok"></span>', Yii::$app->urlManager->createUrl(['/finance-shop-settle-apply/review', 'id' => $model->id,'review_section'=>$this->params['review_section'],'is_ok'=>1]), [
                             'title' => Yii::t('yii', '审核通过'),
                         ]);
                     },
@@ -57,8 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::a('<span class="glyphicon glyphicon-remove"></span>',
                             [
                                 '/finance-shop-settle-apply/review',
-                                'id' => $model->id, 'review_section'=>$review_section,
-                                'FinanceShopSettleApply[finance_shop_settle_apply_status]' => FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_FAILED
+                                'id' => $model->id, 'review_section'=>$this->params['review_section'],'is_ok'=>0
                             ]
                             ,
                             [

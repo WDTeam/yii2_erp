@@ -57,14 +57,21 @@ class FinanceShopSettleApplyController extends Controller
      * @param type $id
      * @return type
      */
-    public function actionReview($id,$review_section){
-        var_dump($review_section);
-        var_dump($review_section);
-        var_dump($review_section);
-        var_dump($review_section);
-        var_dump($review_section);
+    public function actionReview($id,$review_section,$is_ok){
         $model = $this->findModel($id);
-        $model->load(Yii::$app->request->getQueryParams());
+        if($review_section== FinanceShopSettleApplySearch::BUSINESS_REVIEW){
+            if($is_ok == 1){
+                $model->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED;
+            }else{
+                $model->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_FAILED;
+            }
+        }elseif($review_section == FinanceShopSettleApplySearch::FINANCE_REVIEW){
+            if($is_ok == 1){
+                $model->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED;
+            }else{
+                $model->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED;
+            }
+        }
         $model->save();
         return $this->actionIndex();
     }
