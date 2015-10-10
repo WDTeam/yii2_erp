@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use common\models\CustomerExtBalance;
 
 /**
  * This is the model class for table "{{%customer}}".
@@ -105,14 +106,14 @@ class Customer extends \yii\db\ActiveRecord
         // $cash = \Yii::$app->request->get('cash');
         // \Yii::$app->response->format = Response::FORMAT_JSON;
 
-        $customer = Customer::find()->where(['id'=>$customer_id])->one();
-        $balance = $customer->customer_balance;
-        $customer->customer_balance = bcadd($balance, $cash, 2);
-        $customer->validate();
-        if ($customer->hasErrors()) {
+        $customerBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
+        $balance = $customerBalance->customer_balance;
+        $customerBalance->customer_balance = bcadd($balance, $cash, 2);
+        $customerBalance->validate();
+        if ($customerBalance->hasErrors()) {
             return false;
         }
-        $customer->save();
+        $customerBalance->save();
         return true;
     }
 
@@ -125,15 +126,14 @@ class Customer extends \yii\db\ActiveRecord
         // $cash = \Yii::$app->request->get('cash');
         // \Yii::$app->response->format = Response::FORMAT_JSON;
 
-        $customer = Customer::find()->where(['id'=>$customer_id])->one();
-        $balance = $customer->customer_balance;
-        $customer->customer_balance = bcsub($balance, $cash, 2);
-        // $customer->customer_balance = $balance - $cash;
-        $customer->validate();
-        if ($customer->hasErrors()) {
+        $customerBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
+        $balance = $customerBalance->customer_balance;
+        $customerBalance->customer_balance = bcsub($balance, $cash, 2);
+        $customerBalance->validate();
+        if ($customerBalance->hasErrors()) {
             return false;
         }
-        $customer->save();
+        $customerBalance->save();
         return true;
     }
 }
