@@ -49,4 +49,21 @@ class FinancePayChannel extends \yii\db\ActiveRecord
             'is_del' => Yii::t('boss', '0 正常 1 删除'),
         ];
     }
+    
+    /**
+     * 根据渠道id获取渠道名称
+     * @date: 2015-10-9
+     * @author: peak pan
+     * @return:
+     **/
+    
+    public static function get_pay_channel_info($pay_id)
+    {
+    	$pay_info = FinancePayChannel::findOne($pay_id);
+    	 
+    	return $pay_info != NULL ? $pay_info : '未知';
+    }
+    
+    
+    
 }
