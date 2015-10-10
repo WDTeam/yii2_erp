@@ -72,8 +72,42 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
     }
     
     
+    
     /**
-     * 根据渠道id获取渠道名称
+     * 获取订单渠道名称
+     * @param $id
+     * @return mixed
+     */
+    public static function getOrderChannelByName($id)
+    {
+        //定义缓存名称
+        $cacheName = 'OrderChannel_'.$id;
+
+        //判断是否存在缓存
+        if( $cache = Yii::$app->cache->get($cacheName) ){
+            return $cache['finance_order_channel_name'];
+        }
+
+        //生成缓存数据
+        $data = self::find($id)->asArray()->one();
+        self::createCache($cacheName,$data);
+
+        //返回渠道名称
+        return $data['finance_order_channel_name'];
+    }
+
+    /**
+     * 创建缓存
+     * @param $name 缓存名称
+     * @param $data 缓存数据
+     */
+    private static function createCache($name,$data)
+    {
+        \Yii::$app->cache->set($name, $data);
+    }
+    
+    /**
+     * 根据渠道id获取渠道名称判断
      * @date: 2015-10-9
      * @author: peak pan
      * @return:

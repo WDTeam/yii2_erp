@@ -40,8 +40,7 @@ class FinancePopOrder extends \yii\db\ActiveRecord
 {
 	
 	public $finance_uplod_url;
-	
-	
+
     /**
      * @inheritdoc
      */
@@ -50,6 +49,25 @@ class FinancePopOrder extends \yii\db\ActiveRecord
         return '{{%finance_pop_order}}';
     }
 
+    
+    
+    public static function get_order_channel_list($key)
+    {
+    	if(\Yii::$app->cache->exists('lastidinfoid')){
+    		$orderchannellist= \Yii::$app->cache->get('lastidinfoid');
+    		return json_decode($orderchannellist,true);
+    	}else{
+    		
+    		
+    		\Yii::$app->cache->set('lastidinfoid',$key);
+    		\Yii::$app->cache->expire('lastidinfoid',$key);
+    		return $payatainfo;
+    	}
+    }
+    
+    
+    
+    
     /**
      * @inheritdoc
      */
@@ -57,7 +75,7 @@ class FinancePopOrder extends \yii\db\ActiveRecord
     {
         return [
             [['finance_order_channel_id', 'finance_order_channel_title', 'finance_pay_channel_id', 'finance_pay_channel_title'], 'required'],
-            [['finance_order_channel_id', 'finance_pay_channel_id', 'finance_pop_order_worker_uid', 'finance_pop_order_booked_time', 'finance_pop_order_booked_counttime', 'finance_pop_order_coupon_id', 'finance_pop_order_order_type', 'finance_pop_order_status', 'finance_pop_order_finance_isok', 'finance_pop_order_order_time', 'finance_pop_order_pay_time', 'finance_pop_order_pay_status','finance_pop_order_pay_status_type', 'finance_pop_order_check_id', 'finance_pop_order_finance_time', 'create_time', 'is_del','finance_order_channel_statuspayment','finance_order_channel_endpayment'], 'integer'],
+            [['finance_record_log_id','finance_order_channel_id', 'finance_pay_channel_id', 'finance_pop_order_worker_uid', 'finance_pop_order_booked_time', 'finance_pop_order_booked_counttime', 'finance_pop_order_coupon_id', 'finance_pop_order_order_type', 'finance_pop_order_status', 'finance_pop_order_finance_isok', 'finance_pop_order_order_time', 'finance_pop_order_pay_time', 'finance_pop_order_pay_status','finance_pop_order_pay_status_type', 'finance_pop_order_check_id', 'finance_pop_order_finance_time', 'create_time', 'is_del','finance_order_channel_statuspayment','finance_order_channel_endpayment'], 'integer'],
             [['finance_pop_order_sum_money', 'finance_pop_order_coupon_count', 'finance_pop_order_discount_pay', 'finance_pop_order_reality_pay'], 'number'],
             [['finance_pop_order_number', 'finance_pop_order_order2', 'finance_pop_order_channel_order'], 'string', 'max' => 40],
             [['finance_order_channel_title', 'finance_pay_channel_title'], 'string', 'max' => 80],
@@ -74,6 +92,7 @@ class FinancePopOrder extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', '主键id'),
             'finance_uplod_url' => Yii::t('app', '请上传对账单'),
+            'finance_record_log_id' => Yii::t('app', '账期id'),
             'finance_pop_order_number' => Yii::t('app', '第三方订单号'),
             'finance_order_channel_id' => Yii::t('app', '下单渠道'),
             'finance_order_channel_title' => Yii::t('app', '下单渠道名称'),
