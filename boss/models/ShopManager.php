@@ -93,7 +93,7 @@ class ShopManager extends \common\models\ShopManager
         return $model->area_name;
     }
     /**
-     * 获取审核各状态数据
+     * 获取审核各状态的记录总数
      * @param int $number
      */
     public static function getAuditStatusCountByNumber($number)
@@ -148,7 +148,7 @@ class ShopManager extends \common\models\ShopManager
         return false;
     }
     /**
-     * 家政下所有门店加了黑名单
+     * 家政下所有门店加入黑名单
      */
     public function affShopJoinBlacklist($cause)
     {

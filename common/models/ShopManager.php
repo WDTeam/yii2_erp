@@ -32,8 +32,8 @@ use Yii;
  * @property integer $bl_expiry_start
  * @property integer $bl_expiry_end
  * @property string $bl_business
- * @property integer $create_at
- * @property integer $update_at
+ * @property integer $created_at
+ * @property integer $updated_at
  * @property integer $is_blacklist
  * @property integer $blacklist_time
  * @property string $blacklist_cause
@@ -60,7 +60,7 @@ class ShopManager extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'street', 'principal', 'tel'], 'required'],
-            [['province_id', 'city_id', 'county_id', 'bl_type', 'bl_create_time', 'bl_audit', 'bl_expiry_start', 'bl_expiry_end', 'create_at', 'update_at', 'is_blacklist', 'blacklist_time', 'audit_status', 'shop_count', 'worker_count', 'complain_coutn'], 'integer'],
+            [['province_id', 'city_id', 'county_id', 'bl_type', 'bl_create_time', 'bl_audit', 'bl_expiry_start', 'bl_expiry_end', 'created_at', 'updated_at', 'is_blacklist', 'blacklist_time', 'audit_status', 'shop_count', 'worker_count', 'complain_coutn'], 'integer'],
             [['bl_business'], 'string'],
             [['name', 'street', 'opening_address', 'bl_name', 'bl_address', 'bl_photo_url', 'blacklist_cause'], 'string', 'max' => 255],
             [['principal', 'tel', 'bankcard_number', 'bl_person', 'level'], 'string', 'max' => 50],
@@ -100,8 +100,8 @@ class ShopManager extends \yii\db\ActiveRecord
             'bl_expiry_start' => Yii::t('app', '有效期起始时间'),
             'bl_expiry_end' => Yii::t('app', '有效期结束时间'),
             'bl_business' => Yii::t('app', '营业范围'),
-            'create_at' => Yii::t('app', '创建时间'),
-            'update_at' => Yii::t('app', '修改时间'),
+            'created_at' => Yii::t('app', '创建时间'),
+            'updated_at' => Yii::t('app', '修改时间'),
             'is_blacklist' => Yii::t('app', '是否是黑名单：0正常，1黑名单'),
             'blacklist_time' => Yii::t('app', '加入黑名单时间'),
             'blacklist_cause' => Yii::t('app', '黑名单原因'),
