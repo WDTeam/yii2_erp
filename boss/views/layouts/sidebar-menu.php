@@ -327,7 +327,7 @@ echo Menu::widget(
 
                     ],
                     [
-                        'label' => '结算管理(63%)',
+                        'label' => '结算管理(75%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                         'options' => [
@@ -383,30 +383,35 @@ echo Menu::widget(
                                 ],
                                 'items'=>[
                                     [
-                                        'label' => '自营全职结算(90%)',
+                                        'label' => '阿姨结算(90%)',
                                         'url' => ['/finance-settle-apply/self-fulltime-worker-settle-index'],
                                         'icon' => 'fa fa-angle-right',
                                     ],
-                                   [
-                                        'label' => '自营兼职结算(70%)',
-                                        'url' => ['/finance-settle-apply/self-parttime-worker-settle-index'],
-                                        'icon' => 'fa fa-angle-right',
-                                    ],
                                     [
-                                        'label' => '门店管理费结算',
+                                        'label' => '门店结算',
                                         'url' => ['/finance-shop-settle-apply/index?review_section='.FinanceShopSettleApplySearch::FINANCE_REVIEW],
-                                        'icon' => 'fa fa-angle-right',
-                                    ],
-                                    [
-                                        'label' => '门店阿姨结算(60%)',
-                                        'url' => ['/finance-settle-apply/self-parttime-worker-settle-index'],
                                         'icon' => 'fa fa-angle-right',
                                     ],
                                 ]
                             ], [
                                 'label' => '结算查询(60%)',
-                                'url' => ['/finance-settle-apply/query'],
+                                 'url' => ['#'],
                                 'icon' => 'fa fa-angle-right',
+                                'options' => [
+                                    'class' => 'treeview ',
+                                ],
+                                'items'=>[
+                                    [
+                                        'label' => '阿姨结算(90%)',
+                                        'url' => ['/finance-settle-apply/query'],
+                                        'icon' => 'fa fa-angle-right',
+                                    ],
+                                    [
+                                        'label' => '门店结算',
+                                        'url' => ['/finance-shop-settle-apply/index?review_section='.FinanceShopSettleApplySearch::FINANCE_REVIEW],
+                                        'icon' => 'fa fa-angle-right',
+                                    ],
+                                ]
                             ]
                         ],
                     ],
