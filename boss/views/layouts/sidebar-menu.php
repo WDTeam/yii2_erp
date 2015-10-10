@@ -1,5 +1,6 @@
 <?php
 use common\widgets\Menu;
+use boss\models\FinanceShopSettleApplySearch;
 
 $ctrl = Yii::$app->controller;
 
@@ -159,7 +160,7 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => 'CMS管理(80%)',
+                        'label' => 'CMS管理(90%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                         'options' => [
@@ -363,7 +364,7 @@ echo Menu::widget(
                                 'items'=>[
                                     [
                                         'label' => '门店结算(50%)',
-                                        'url' => ['/finance-shop-settle-apply/index'],
+                                        'url' => ['/finance-shop-settle-apply/index?review_section='.FinanceShopSettleApplySearch::BUSINESS_REVIEW],
                                         'icon' => 'fa fa-angle-right',
                                     ],
                                    [
@@ -383,7 +384,7 @@ echo Menu::widget(
                                 'items'=>[
                                     [
                                         'label' => '门店结算(10%)',
-                                        'url' => ['/finance-settle-apply/index?FinanceSettleApplySearch[finance_settle_apply_status]=0&FinanceSettleApplySearch[ids]=&FinanceSettleApplySearch[nodeId]=1'],
+                                        'url' => ['/finance-shop-settle-apply/index?review_section='.FinanceShopSettleApplySearch::FINANCE_REVIEW],
                                         'icon' => 'fa fa-angle-right',
                                     ],
                                    [
