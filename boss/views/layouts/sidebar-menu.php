@@ -216,7 +216,7 @@ echo Menu::widget(
                         
                     ],
                     [
-                        'label' => '发布城市(80%)',
+                        'label' => '上线城市(80%)',
                         'url' => ['/operation-city/release'],
                         'icon' => 'fa fa-angle-right',
                         'visible' => (Yii::$app->user->identity->username == 'admin'),
