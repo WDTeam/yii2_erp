@@ -110,11 +110,14 @@ class OperationAdvertReleaseController extends BaseAuthController
     {
         $post = Yii::$app->request->post();
         if ($post){
-            $platform_ids = $post['platform_id'];
-            $platforms = OperationPlatform::find()->asArray()->where(['id' => $platform_ids])->all();
-            $cache = Yii::$app->cache;
-            $cache->set('__PLATFORMS_INFO__', $platforms, 6000);
-            return $this->redirect(['step-forth']);
+            $version_ids = $post['version_id'];
+            var_dump($version_ids);exit;
+            
+//            $platform_ids = $post['platform_id'];
+//            $platforms = OperationPlatform::find()->asArray()->where(['id' => $platform_ids])->all();
+//            $cache = Yii::$app->cache;
+//            $cache->set('__PLATFORMS_INFO__', $platforms, 6000);
+//            return $this->redirect(['step-forth']);
         } else {
             $platform_ids = Yii::$app->request->get('platform_ids');
             $platforms = OperationPlatform::find()->asArray()->where(['id' => $platform_ids])->all();

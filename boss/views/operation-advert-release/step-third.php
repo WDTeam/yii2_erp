@@ -15,14 +15,16 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php $form = ActiveForm::begin(); ?>
 <label class="control-label" for="operationadvertrelease-city_id"><?php echo $this->title?></label>
-<?php foreach($platforms as $k => $platform){?>
+<?php foreach($platforms as $k => $platform){
+if(!empty($platform['versions'])){?>
 <div class="form-group">
     <label class="control-label" for="operationadvertrelease-city_id"><?=$platform['operation_platform_name']?>：</label>
     <?php foreach($platform['versions'] as $key => $version){?>
-    <label><?=Html::checkbox('version_id['.$platform['id'].'][]', false, ['value' => $version['id']]);?>
+    <label><?=Html::checkbox('version_id['.$platform['id'].'][]', false, ['value' => $version['id']]);?><?php echo $version['operation_platform_version_name']?></label>
     <?php }?>
     <?php //=Html::checkboxList('OperationAdvertRelease[version_id][]', null, $versions, ['platform_id' => $platform['id'], 'class' => 'platform_versions']);?>
 </div>
+<?php }?>
 <?php }?>
 
 <div class="form-group">
