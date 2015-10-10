@@ -132,32 +132,27 @@ class OperationGoodsController extends Controller
      */
     public function actionCreate()
     {
-//        $priceStrategies = OperationPriceStrategy::getAllStrategy();
         $OperationSpec = OperationSpec::getSpecList();
 
         $model = new OperationGoods;
         $post = Yii::$app->request->post();
         if ($model->load($post)) {
-            $model->operation_category_id = end($post['OperationGoods']['operation_category_ids']);
+            $model->operation_category_ids = $model->operation_category_id;
             $model->operation_category_name = OperationCategory::getCategoryName($model->operation_category_id);
-            $model->operation_category_ids = implode(',', $post['OperationGoods']['operation_category_ids']);
-//            $model->operation_price_strategy_id = $post['OperationGoods']['operation_price_strategy_id'];
             
-            /** 添加app图片和pc图片 **/
+            /** 冗余计量单位 **/
+            $model->operation_spec_info = $post['OperationGoods']['operation_spec_info'];
+            $specinfo = OperationSpec::getSpecInfo($model->operation_spec_info);
+            $model->operation_spec_strategy_unit = $specinfo['operation_spec_strategy_unit'];
+            /** 冗余计量单位 **/
+            
+            /** 添加商品图片 **/
             $appFiles = array(
-                'operation_goods_app_homepage_max_ico',
-                'operation_goods_app_homepage_min_ico',
-                'operation_goods_app_type_min_ico',
-                'operation_goods_app_order_min_ico',
+                'operation_goods_img',
             );
-            $model->operation_goods_app_ico = serialize($this->handleGoodsImgs($model, $appFiles));
-            $pcFiles = array(
-                'operation_goods_pc_homepage_max_ico',
-                'operation_goods_pc_more_max_ico',
-                'operation_goods_pc_submit_order_min_ico',
-            );
-            $model->operation_goods_pc_ico = serialize($this->handleGoodsImgs($model, $pcFiles));
-            /** 添加app图片和pc图片 **/
+            $operation_goods_img = $this->handleGoodsImgs($model, $appFiles);
+            if(empty($operation_goods_img)){ $operation_goods_img = '';}else{$operation_goods_img = $operation_goods_img['operation_goods_img']; }
+            $model->operation_goods_img = $operation_goods_img;
             /** 添加个性标签 **/
             $tags = array_filter(explode(';', str_replace(' ', '', str_replace('；', ';', $post['OperationGoods']['operation_tags']))));
             OperationTag::setTagInfo($tags);
@@ -168,21 +163,14 @@ class OperationGoodsController extends Controller
             $model->updated_at = time();
             
             if($model->save()){
-                /** 插入规格 **/
-                $specdata = array();
-                $specdata = $post['OperationGoods']['specinfo'];
-                $specdata['operation_goods_id'] = $model->id;  //商品编号
-                $specdata['operation_goods_name'] = $post['OperationGoods']['operation_goods_name']; //商品名称
-                
-                $specdata['operation_spec_id'] = $post['OperationGoods']['operation_spec_info']; //规格编号
-                $specdata['operation_spec_name'] = $post['OperationGoods']['operation_spec_name']; //规格名称
-                OperationSpecGoods::setSpecGoods($specdata);
-                /** 插入规格 **/
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
+            $OperationCategorydata = OperationCategory::getCategoryList(0, '', ['id', 'operation_category_name']);
+            foreach((array)$OperationCategorydata as $key => $value){ $OperationCategory[$value['id']] = $value['operation_category_name']; }
             return $this->render('create', [
                 'model' => $model,
+                'OperationCategory' => $OperationCategory,
 //                'priceStrategies' => $priceStrategies,
                 'OperationSpec' => $OperationSpec,
             ]);
@@ -211,7 +199,6 @@ class OperationGoodsController extends Controller
      */
     public function actionUpdate($id)
     {
-//        $priceStrategies = OperationPriceStrategy::getAllStrategy();
         $OperationSpec = OperationSpec::getSpecList();
         $model = $this->findModel($id);
         $post = Yii::$app->request->post();
@@ -219,27 +206,22 @@ class OperationGoodsController extends Controller
             $model->operation_tags = implode(';', unserialize($model->operation_tags));
         }
         if ($model->load($post)) {
-            $model->operation_category_id = end($post['OperationGoods']['operation_category_ids']);
+            $model->operation_category_ids = $model->operation_category_id;
             $model->operation_category_name = OperationCategory::getCategoryName($model->operation_category_id);
-            $model->operation_category_ids = implode(',', $post['OperationGoods']['operation_category_ids']);
-//            $model->operation_price_strategy_id = $post['OperationGoods']['operation_price_strategy_id'];
             
-            /** 添加app图片和pc图片 **/
+            /** 冗余计量单位 **/
+            $model->operation_spec_info = $post['OperationGoods']['operation_spec_info'];
+            $specinfo = OperationSpec::getSpecInfo($model->operation_spec_info);
+            $model->operation_spec_strategy_unit = $specinfo['operation_spec_strategy_unit'];
+            /** 冗余计量单位 **/
+            
+             /** 添加商品图片 **/
             $appFiles = array(
-                'operation_goods_app_homepage_max_ico',
-                'operation_goods_app_homepage_min_ico',
-                'operation_goods_app_type_min_ico',
-                'operation_goods_app_order_min_ico',
+                'operation_goods_img',
             );
-            $model->operation_goods_app_ico = serialize($this->handleGoodsImgs($model, $appFiles));
-            $pcFiles = array(
-                'operation_goods_pc_homepage_max_ico',
-                'operation_goods_pc_more_max_ico',
-                'operation_goods_pc_submit_order_min_ico',
-            );
-            $model->operation_goods_pc_ico = serialize($this->handleGoodsImgs($model, $pcFiles));
-            /** 添加app图片和pc图片 **/
-            
+            $operation_goods_img = $this->handleGoodsImgs($model, $appFiles);
+            if(empty($operation_goods_img)){ $operation_goods_img = '';}else{$operation_goods_img = $operation_goods_img['operation_goods_img']; }
+            $model->operation_goods_img = $operation_goods_img;
             /** 添加个性标签 **/
             $tags = array_filter(explode(';', str_replace(' ', '', str_replace('；', ';', $post['OperationGoods']['operation_tags']))));
             OperationTag::setTagInfo($tags);
@@ -249,28 +231,15 @@ class OperationGoodsController extends Controller
             $model->updated_at = time();
             
             if($model->save()){
-                /** 插入规格 **/
-                    $specdata = array();
-                    $specdata = $post['OperationGoods']['specinfo'];
-                    $specdata['operation_goods_id'] = $model->id;  //商品编号
-                    $specdata['operation_goods_name'] = $post['OperationGoods']['operation_goods_name']; //商品名称
-
-                    $specdata['operation_spec_id'] = $post['OperationGoods']['operation_spec_info']; //规格编号
-                    $specdata['operation_spec_name'] = $post['OperationGoods']['operation_spec_name']; //规格名称
-                    OperationSpecGoods::setSpecGoods($specdata);
-                /** 插入规格 **/
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
-            if(!empty($model->operation_spec_info)){
-                $d = unserialize($model->operation_spec_info);
-                $model->operation_spec_info = $d['id'];
-            }
-
-            $specvalues = $this->actionHandlespec($id);
+            $OperationCategorydata = OperationCategory::getCategoryList(0, '', ['id', 'operation_category_name']);
+            foreach((array)$OperationCategorydata as $key => $value){ $OperationCategory[$value['id']] = $value['operation_category_name']; }
+            
             return $this->render('update', [
                 'model' => $model,
-                'specvalues' => $specvalues,
+                'OperationCategory' => $OperationCategory,
 //                'priceStrategies' => $priceStrategies,
                 'OperationSpec' => $OperationSpec,
             ]);

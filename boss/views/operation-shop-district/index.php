@@ -14,9 +14,6 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Cities'), 
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-shop-district-index">
-    <div class="page-header">
-            <h1><?= Html::encode($this->title) ?></h1>
-    </div>
 
     <p>
         <?php /* echo Html::a(Yii::t('operation', 'Create {modelClass}', [
@@ -31,18 +28,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'operation_shop_district_name',
-            [
-                'attribute'=> 'operation_shop_district_status',
-                'format'=>'html',
-                'value' => function ($model){
-                    Html::a('已上线',
-                        Yii::$app->urlManager->createUrl(['operation-shop-district/upline','id' => $model->id]),
-                        ['title' => '点击下线',]);
-                    return $model->operation_shop_district_status == 2 ?
-                        Html::a('已上线', Yii::$app->urlManager->createUrl(['operation-shop-district/goline','id' => $model->id]), ['title' => '点击下线', 'class' => 'btn btn-success btn-sm']) :
-                        Html::a('已下线', Yii::$app->urlManager->createUrl(['operation-shop-district/goline','id' => $model->id]), ['title' => '点击上线', 'class' => 'btn btn-danger btn-sm']);
-                }
-            ],
             'operation_city_id',
             'operation_city_name',
 //            'operation_shop_district_latitude_longitude:ntext',
@@ -73,6 +58,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             Yii::$app->urlManager->createUrl(['operation-shop-district/delete','id' => $model->id]),
                             ['title' => Yii::t('yii', 'Delete'), 'class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
                         );
+                    },      
+                    'listbtn' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-list"></span>',Yii::$app->urlManager->createUrl(['operation-shop-district/goodslist','id' => $model->id]),['title' => Yii::t('yii', '商圈商品列表'), 'class' => 'btn btn-warning btn-sm']);
+                        
                     },
                 ],
             ],

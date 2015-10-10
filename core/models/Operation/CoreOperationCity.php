@@ -16,8 +16,8 @@ use common\models\Operation\CommonOperationCity;
  */
 class CoreOperationCity extends CommonOperationCity
 {
-    public static function getOnlineCityList(){
-        $data = self::find()->where(['operation_city_is_online' => '1'])->all();
+    public static function getOnlineCityList($online = 1){
+        $data = self::find()->where(['operation_city_is_online' => $online])->all();
         $d = array();
         foreach((array)$data as $key => $value){
             $d[$value['city_id'].'-'.$value['city_name']] = $value['city_name'];
@@ -32,5 +32,10 @@ class CoreOperationCity extends CommonOperationCity
     
     public static function getCityInfo($city_id){
         return self::find()->where(['operation_city_is_online' => '1', 'city_id' => $city_id])->One();
+    }
+    
+    /** 设置城市为开通状态**/
+    public static function setoperation_city_is_online($cityid){
+        return Yii::$app->db->createCommand()->update(self::tableName(), ['operation_city_is_online' => 1], ['city_id' => $cityid])->execute();
     }
 }

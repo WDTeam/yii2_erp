@@ -2,6 +2,8 @@
 
 namespace core\models;
 
+use common\models\CustomerWorker;
+use common\models\Worker;
 use Yii;
 // use common\models\Customer;
 use common\models\customerAddress;
@@ -35,7 +37,8 @@ class Customer extends \common\models\Customer
      * 获取顾客地址集
      */
     public static function getCustomerAddresses($customer_id){
-        $customerAddresses = $this->hasMany('\boss\models\customerAddress', 'customer_id', 'id');
+        $customer = self::findOne($customer_id);
+        $customerAddresses = $customer->hasMany('\common\models\customerAddress', ['customer_id'=>'id'])->all();
         return $customerAddresses != NULL ? $customerAddresses : false;
     }
 
@@ -76,5 +79,17 @@ class Customer extends \common\models\Customer
             $transaction->rollBack();
             throw $e;
         }
+    }
+
+    public static function getCustomerUsedWorkers($id)
+    {
+        $customerWorker = CustomerWorker::findAll(['customer_id'=>$id]);
+        $worker = [];
+        foreach($customerWorker as $k=>$v)
+        {
+            $worker[$k] = $v->attributes;
+            $worker[$k]['worker_name'] = Worker::findOne($v->woker_id)->worker_name;
+        }
+        return $worker;
     }
 }
