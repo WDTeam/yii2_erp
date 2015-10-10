@@ -86,10 +86,6 @@ class OperationGoodsController extends Controller
         return self::$jsondata;
     }
     
-    public function actionGetgoods(){
-        var_dump(self::getGoodsList('110100', '5'));
-    }
-    
     /**
      * Lists all OperationGoods models.
      * @return mixed
