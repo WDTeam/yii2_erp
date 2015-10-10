@@ -24,11 +24,13 @@ class AppAsset extends AssetBundle
         'css/openWin.css',
         'adminlte/css/font-awesome.min.css',
         'css/courseware.css',
+        'css/blue.css',
         'css/custom.css',
     ];
     public $js = [
         'adminlte/js/AdminLTE/app.js',
 //        'adminlte/js/jquery.min.js',
+        'js/icheck.js',
         'js/interview.js',
         'js/openWin.js',
         'js/cascade.js',
