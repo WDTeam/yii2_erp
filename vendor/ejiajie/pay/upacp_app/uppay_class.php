@@ -49,7 +49,7 @@ class uppay_class{
 
     public function callback(){
         if (isset ( $_POST ['signature'] )) {
-            $status = verify ( $_POST ) ? true : false;
+            $status = _verify ( $_POST ) ? true : false;
             //$orderId = $_POST ['orderId']; //其他字段也可用类似方式获取
         } else {
             $status = false;

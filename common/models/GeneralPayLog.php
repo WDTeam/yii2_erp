@@ -17,7 +17,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $general_pay_log_json_aggregation
  * @property string $created_at
  * @property string $updated_at
- * @property integer $is_del
+ * @property integer $is_reconciliation
  */
 class GeneralPayLog extends \yii\db\ActiveRecord
 {
@@ -37,7 +37,7 @@ class GeneralPayLog extends \yii\db\ActiveRecord
         return [
             [['general_pay_log_price', 'general_pay_log_eo_order_id', 'general_pay_log_transaction_id', 'general_pay_log_status', 'general_pay_log_json_aggregation', 'created_at', 'updated_at'], 'required'],
             [['general_pay_log_price'], 'number'],
-            [['pay_channel_id', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['pay_channel_id', 'created_at', 'updated_at', 'is_reconciliation'], 'integer'],
             [['general_pay_log_json_aggregation'], 'string'],
             [['general_pay_log_shop_name'], 'string', 'max' => 50],
             [['general_pay_log_eo_order_id', 'general_pay_log_status'], 'string', 'max' => 30],
@@ -47,25 +47,30 @@ class GeneralPayLog extends \yii\db\ActiveRecord
 
     /**
      * 插入交易记录
-     * @param array $post
+     * @param array $param
      */
-    public function insertLog(){
-        $this->save(false);
+    public function insertLog($param){
+        $this->attributes = $param->data;
+        $this->insert(false);
     }
 
     /**
      * 写入日志
      * @param $path 目录
      * @param $filename 文件名称
+     * @param $data 写入数据
      */
-    public function writeLog($data,$path='/tmp/pay/',$filename=null){
+    public function writeLog($param){
+
         //创建目录
+        $path = !empty($param->data['path']) ? $param->data['path'] : '/tmp/pay/';
         is_dir($path) || mkdir($path,0777,true);
+
         //文件名称
-        if(is_null($filename)) $filename = date('Y-m-d',time()).'_pay.log';
+        $filename = !empty($param->data['filename']) ? $param->data['filename'] : date('Y-m-d',time()).'_pay.log';
         //写入数据
         $fullFileName = $path.$filename;
-        file_put_contents($fullFileName,json_encode($data).'||',FILE_APPEND);
+        file_put_contents($fullFileName,serialize($param->data['data']).'||',FILE_APPEND);
     }
 
     /**
@@ -79,7 +84,7 @@ class GeneralPayLog extends \yii\db\ActiveRecord
             'TRADE_SUCCESS',    //支付宝
             '1',    //百付宝
             'SUCCESS',    //微信
-            '验签成功',    //银联
+            '00',    //银联
         ];
         return in_array($statusString,$statusArr) ? 1 : 0 ;
     }
@@ -99,7 +104,6 @@ class GeneralPayLog extends \yii\db\ActiveRecord
         ];
     }
 
-
     /**
      * @inheritdoc
      */
@@ -116,7 +120,7 @@ class GeneralPayLog extends \yii\db\ActiveRecord
             'general_pay_log_json_aggregation' => Yii::t('app', '记录数据集合'),
             'created_at' => Yii::t('app', '创建时间'),
             'updated_at' => Yii::t('app', '更新时间'),
-            'is_del' => Yii::t('app', '删除'),
+            'is_reconciliation' => Yii::t('app', '是否对账'),
         ];
     }
 }
