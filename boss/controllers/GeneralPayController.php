@@ -55,7 +55,7 @@ class GeneralPayController extends Controller
 
         //查询订单是否已经支付过
         if( !empty($data['order_id']) ){
-            $order = GeneralPay::find()->where(['order_id'=>$data['order_id'],'general_pay_status'=>1,'is_del'=>1])->one();
+            $order = GeneralPay::find()->where(['order_id'=>$data['order_id'],'general_pay_status'=>1])->one();
             if(!empty($order)){
                 exit("订单已经支付过");
             }
@@ -183,7 +183,7 @@ class GeneralPayController extends Controller
         $GeneralPayId = $model->getGeneralPayId($post['out_trade_no']);
 
         //查询支付记录
-        $model = GeneralPay::find()->where(['id'=>$GeneralPayId,'general_pay_status'=>0,'is_del'=>1])->one();
+        $model = GeneralPay::find()->where(['id'=>$GeneralPayId,'general_pay_status'=>0])->one();
 
         //验证支付结果
         if(!empty($model))
@@ -265,7 +265,7 @@ class GeneralPayController extends Controller
         $GeneralPayId = $model->getGeneralPayId($post['out_trade_no']);
 
         //查询支付记录
-        $model = GeneralPay::find()->where(['id'=>$GeneralPayId,'general_pay_status'=>0,'is_del'=>1])->one();
+        $model = GeneralPay::find()->where(['id'=>$GeneralPayId,'general_pay_status'=>0])->one();
 
         //验证支付结果
         if(!empty($model) && $status == 'SUCCESS'){
@@ -358,7 +358,7 @@ class GeneralPayController extends Controller
         $GeneralPayId = $model->getGeneralPayId($post['order_no']);
 
         //查询支付记录
-        $model = GeneralPay::find()->where(['id'=>$GeneralPayId,'general_pay_status'=>0,'is_del'=>1])->one();
+        $model = GeneralPay::find()->where(['id'=>$GeneralPayId,'general_pay_status'=>0])->one();
 
         //验证签名
         $bfb = new \bfbpay_class();
@@ -438,23 +438,26 @@ class GeneralPayController extends Controller
             $post = $request->post();
         }
 
+        //写入文本日志
+        $GeneralPayLogModel->writeLog($post);
+
         //记录日志
-        $_post['general_pay_log_price'] = $post['total_amount'];   //支付金额
+        $_post['general_pay_log_price'] = $post['settleAmt'];   //支付金额
         $_post['general_pay_log_shop_name'] = '银联支付';   //商品名称
-        $_post['general_pay_log_eo_order_id'] = $post['order_no'];   //订单ID
-        $_post['general_pay_log_transaction_id'] = $post['bfb_order_no'];   //交易流水号
-        $_post['general_pay_log_status_bool'] = $post['pay_result'];   //支付状态
-        $_post['general_pay_log_status'] = $post['pay_result'];   //支付状态
+        $_post['general_pay_log_eo_order_id'] = $post['orderId'];   //订单ID
+        $_post['general_pay_log_transaction_id'] = $post['queryId'];   //交易流水号
+        $_post['general_pay_log_status_bool'] = $post['respCode'];   //支付状态
+        $_post['general_pay_log_status'] = $post['respCode'];   //支付状态
         $GeneralPayLogModel->insertLog($_post);
 
         //实例化模型
         $model = new GeneralPay();
 
         //获取交易ID
-        $GeneralPayId = $model->getGeneralPayId($post['order_no']);
+        $GeneralPayId = $model->getGeneralPayId($post['orderId']);
 
         //查询支付记录
-        $model = GeneralPay::find()->where(['id'=>$GeneralPayId,'general_pay_status'=>0,'is_del'=>1])->one();
+        $model = GeneralPay::find()->where(['id'=>$GeneralPayId,'general_pay_status'=>0])->one();
 
         //验证签名
         $class = new \uppay_class();
@@ -465,10 +468,10 @@ class GeneralPayController extends Controller
 
             $model->id = $GeneralPayId; //ID
             $model->general_pay_status = 1; //支付状态
-            $model->general_pay_actual_money = $model->toMoney($post['total_fee'],100,true);
-            $model->general_pay_transaction_id = $post['bfb_order_no'];
+            $model->general_pay_actual_money = $model->toMoney($post['settleAmt'],100,'/');
+            $model->general_pay_transaction_id = $post['queryId'];
             $model->general_pay_is_coupon = 1;
-            $model->general_pay_eo_order_id = $post['order_no'];
+            $model->general_pay_eo_order_id = $post['orderId'];
             $model->general_pay_verify = $model->makeSign();
 
             //commit
