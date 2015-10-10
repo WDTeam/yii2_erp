@@ -81,7 +81,7 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
     public static function getOrderChannelByName($id)
     {
         //定义缓存名称
-        $cacheName = 'OrderChannel_'.$id;
+        $cacheName = 'orderChannel_'.$id;
 
         //判断是否存在缓存
         if( $cache = Yii::$app->cache->get($cacheName) ){
@@ -89,7 +89,7 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
         }
 
         //生成缓存数据
-        $data = self::find($id)->asArray()->one();
+        $data = self::find()->where(['id'=>$id])->asArray()->one();
         self::createCache($cacheName,$data);
 
         //返回渠道名称
