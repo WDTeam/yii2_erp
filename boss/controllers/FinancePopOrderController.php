@@ -55,33 +55,6 @@ class FinancePopOrderController extends Controller
     **/
     public function actionIndex()
     {
-    	
-    	
-    	$cookies = Yii::$app->response->cookies;
-    	Yii::app()->request->cookies[$name]=$cookie;
-    	/* $cookies->add(new \yii\web\Cookie([
-    			'name' => 'lastidinfoid',
-    			'value' => '1111',
-    			'expire'=>time()+10
-    			])); */
-
-    	//var_dump($cookies['lastidinfoid']);exit;
-    	if (isset($cookies['lastidinfoid'])){ 
-    		$language = $cookies->get('lastidinfoid', '1');
-    		echo  $language->value;
-    		var_dump($language);exit;
-    	}
-    	
-    	
-    	/* $cookies->add(new \yii\web\Cookie([
-    			'name' => 'lastidinfoid',
-    			'value' => '1111',
-    			'expire'=>time()+10
-    			]));
-    	 */
-    	
-    
-    	
     	$model = new FinancePopOrderSearch;
     	$modelinfo= new FinancePopOrder;
     	if(Yii::$app->request->isPost) {
@@ -134,15 +107,9 @@ class FinancePopOrderController extends Controller
     		//向记录表里面插入一条空数据	
     		$FinanceRecordLog = new FinanceRecordLogSearch;
     		$FinanceRecordLog->insert();
-    		}
-    		
-    		
-    		
-    		$FinanceRecordLog = new FinanceRecordLogSearch;
-    		$lastid=$FinanceRecordLog->insert();
     		$lastidRecordLog=$FinanceRecordLog->id;
-    		
-    		if($lastidRecordLog){ \Yii::$app->getSession()->setFlash('default','长期出现问题，请重新上传！'); 
+    		}
+    		if($lastidRecordLog==0){ \Yii::$app->getSession()->setFlash('default','账期出现问题，请重新上传！'); 
     		  return $this->redirect(['index']);
     		 }
     		
@@ -271,22 +238,13 @@ class FinancePopOrderController extends Controller
          
          //
          if(isset($lastidRecordLog)){
-         	$session = Yii::$app->session;
-         	$session->set('lastidinfoid',$lastidRecordLog);
-         	$session['captcha']['lifetime'] = 600;
-         	
-         	$lastidinfoid= isset($_SESSION['lastidinfoid']) ? $_SESSION['lastidinfoid'] : 0;
-         	
-         	var_dump($lastidinfoid);exit;
-         	$lastid=$lastidinfoid;
-         	
-         	
-         }else{
-         	$lastid=12;
+         	\Yii::$app->cache->set('lastidinfoid',$lastidRecordLog,600);
          }
          
-         
-         
+         $lastid=FinancePopOrder::get_cache_tiem();
+         if(!isset($lastid)){
+         	$lastid='';
+         }
          $searchModel->finance_record_log_id=$lastid;
         //状态处理
         $dataProvider = $searchModel->search();
