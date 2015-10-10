@@ -108,7 +108,7 @@ class Customer extends \yii\db\ActiveRecord
 
         $customerBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
         if ($customerBalance == NULL) {
-            $customerBalance = new CustomerBalance;
+            $customerBalance = new CustomerExtBalance;
             $customerBalance->customer_id = $customer_id;
             $customerBalance->customer_balance = 0;
             $customerBalance->created_at = time();
@@ -141,7 +141,7 @@ class Customer extends \yii\db\ActiveRecord
 
         $customerBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
         if ($customerBalance == NULL) {
-            $customerBalance = new CustomerBalance;
+            $customerBalance = new CustomerExtBalance;
             $customerBalance->customer_id = $customer_id;
             $customerBalance->customer_balance = 0;
             $customerBalance->created_at = time();
