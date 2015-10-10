@@ -12,21 +12,27 @@ use common\models\FinanceSettleApply;
  */
 class FinanceSettleApplySearch extends FinanceSettleApply
 {
-   public $ids;
+   const SELF_FULLTIME_WORKER_SETTELE = 1;//自营全职阿姨结算
    
-   public $nodeId;
+   const SELF_PARTTIME_WORKER_SETTELE = 2;//自营兼职阿姨结算
    
-   public $subsidyStr;
+   const SHOP_WORKER_SETTELE = 3;//门店阿姨结算
    
-   public $workerName;
+   const ALL_WORKER_SETTELE = 4;//所有阿姨结算
+   
+   public $settle_type;//结算类型
+   
+   public $subsidyStr;//补贴
+   
+   public $workerName;//阿姨姓名
     
-    public $workerPhone;
+    public $workerPhone;//阿姨电话
     
-    public $workerOnboardTime;
+    public $workerOnboardTime;//阿姨报到时间
     
-    public $workerType;
+    public $workerType;//阿姨类型
     
-    public $latestSettleTime;
+    public $latestSettleTime;//上次结算日期
     
     public $settleMonth;//结算月份
    

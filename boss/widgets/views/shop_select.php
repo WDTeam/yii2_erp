@@ -33,6 +33,7 @@ use yii\web\JsExpression;
             'options'=>[
                 'placeholder' => '选择门店',
             ],
+            'data'=>$shops,
             'pluginOptions' => [
                 'allowClear' => true,
                 'minimumInputLength' => 0,
