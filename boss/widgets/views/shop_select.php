@@ -8,10 +8,11 @@
 use yii\web\JsExpression;
 ?>
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-6" style="padding:0">
         <?php echo \kartik\widgets\Select2::widget([
-            'name'=>'shop_manager_id',
-            'initValueText'=>'1',
+            'model'=>$model,
+            'attribute'=>$shop_manager_id,
+//            'initValueText'=>'1',
             'data' =>$shop_managers,
             'hideSearch' => false,
             'options'=>[
@@ -19,20 +20,32 @@ use yii\web\JsExpression;
             ],
             'pluginEvents' => [
                 'change' => 'function (model) {
-                    var shop_manamger_id = this.value;
-                    $("#'.$widget_id.'ShopId").select2({
-                        data: [{id:1, text:1111},{id:2, text:2222222}]
-                    });
+                    window.'.$widget_id.'shop_manager_id = this.value;
                 }'
             ],
         ]);?>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6" style="padding:0">
         <?php echo \kartik\widgets\Select2::widget([
-            'id'=>$widget_id.'ShopId',
-            'name'=>'shop_id',
+            'model'=>$model,
+            'attribute'=>$shop_id,
+//            'initValueText'=>'1',
             'options'=>[
                 'placeholder' => '选择门店',
+            ],
+            'pluginOptions' => [
+                'allowClear' => true,
+                'minimumInputLength' => 0,
+                'ajax' => [
+                    'url' => \yii\helpers\Url::to(['shop/search-by-name']),
+                    'dataType' => 'json',
+                    'data' => new JsExpression('function(params) {
+                        return {name:params.term, shop_manager_id: window.'.$widget_id.'shop_manager_id};
+                    }')
+                ],
+                //                     'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                'templateResult' => new JsExpression('function(model) { return model.name; }'),
+                'templateSelection' => new JsExpression('function (model) { return model.name; }'),
             ],
         ]);?>
     </div>
