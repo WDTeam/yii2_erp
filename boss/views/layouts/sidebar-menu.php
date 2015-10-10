@@ -85,7 +85,7 @@ echo Menu::widget(
                 ],
             ],
             [
-                'label' => '客户管理(75%)',
+                'label' => '客户管理(90%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-user',
                 'visible' => (Yii::$app->user->can('customer')),
@@ -94,12 +94,12 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有顾客(80%)',
+                        'label' => '查看所有顾客(90%)',
                         'url' => ['/customer/index?CustomerSearch[is_del]=0'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '管理顾客黑名单(80%)',
+                        'label' => '管理顾客黑名单(90%)',
                         'url' => ['/customer/block?CustomerSearch[is_del]=1'],
                         'icon' => 'fa fa-angle-right',
                     ],
