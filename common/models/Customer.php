@@ -105,10 +105,13 @@ class Customer extends \yii\db\ActiveRecord
         // $customer_id = \Yii::$app->request->get('customer_id');
         // $cash = \Yii::$app->request->get('cash');
         // \Yii::$app->response->format = Response::FORMAT_JSON;
-
+        $customer = Customer::findOne($customer_id);
+        if ($customer == NULL) {
+            return false;
+        }
         $customerBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
         if ($customerBalance == NULL) {
-            $customerBalance = new CustomerBalance;
+            $customerBalance = new CustomerExtBalance;
             $customerBalance->customer_id = $customer_id;
             $customerBalance->customer_balance = 0;
             $customerBalance->created_at = time();
@@ -138,10 +141,13 @@ class Customer extends \yii\db\ActiveRecord
         // $customer_id = \Yii::$app->request->get('customer_id');
         // $cash = \Yii::$app->request->get('cash');
         // \Yii::$app->response->format = Response::FORMAT_JSON;
-
+        $customer = Customer::findOne($customer_id);
+        if ($customer == NULL) {
+            return false;
+        }
         $customerBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
         if ($customerBalance == NULL) {
-            $customerBalance = new CustomerBalance;
+            $customerBalance = new CustomerExtBalance;
             $customerBalance->customer_id = $customer_id;
             $customerBalance->customer_balance = 0;
             $customerBalance->created_at = time();

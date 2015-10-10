@@ -92,6 +92,14 @@ class FinanceSettleApplySearch extends FinanceSettleApply
               ->innerJoin('{{%shop}} as shop','shop.id = worker.shop_id')
               ->innerJoin('{{%worker_ext}} as workerext','workerext.worker_id=settleapply.worder_id')
               ->all();
+        $workerIncomeAndDetail = array([
+            'shop_name'=>'望京店',
+            'worker_name'=>'陈阿姨',
+            'worker_idcard'=>'4210241984',
+            'worker_bank_card'=>'620219841139',
+            'settleApplyId'=>1,
+            'id'=>111,],
+        );
         return $workerIncomeAndDetail;
     }
     
