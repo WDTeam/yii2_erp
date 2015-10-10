@@ -137,14 +137,9 @@ AppAsset::register($this);
 </footer> -->
 <footer class="main-footer">
     <div class="pull-right hidden-xs">
-        <b>Version</b> 1.0
+    Copyright © 2015 e家洁.
+    All rights reserved. v1.0.0
     </div>
-    <strong>
-        Copyright © 2015
-        <a href="#">E家洁BOSS攻坚组</a>
-        .
-    </strong>
-    All rights reserved.
 </footer>
 </body>
 </html>
