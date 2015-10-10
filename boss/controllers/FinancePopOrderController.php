@@ -117,7 +117,6 @@ class FinancePopOrderController extends Controller
     			//去除表头
     			if($n>2){
     			$statusinfo=$model->PopOrderstatus($alinfo,$value,$channelid);
-    			
     			$post['FinancePopOrder']['finance_record_log_id'] =$lastidRecordLog;
     			$post['FinancePopOrder']['finance_pop_order_number'] =$statusinfo['order_channel_order_num'];
     			$post['FinancePopOrder']['finance_order_channel_id'] =$statusinfo['channel_id'];

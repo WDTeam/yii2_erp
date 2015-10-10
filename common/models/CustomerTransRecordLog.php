@@ -67,37 +67,58 @@ class CustomerTransRecordLog extends \yii\db\ActiveRecord
     }
 
     /**
-     * 验证数据之前组装数据
+     * 日志记录
+     * @param array $param
      */
-    public function beforeValidate()
+    public function insertLog($param)
     {
-        //支付渠道
-        $payChannel = FinancePayChannel::findOne($this->pay_channel_id);
+
+        //写入文本日志
+        $writeLog = array(
+            'path' => '/tmp/log/transaction_record/'.date('Y-m-d',time()),
+            'data' => $param->data,
+            'filename' => date('Y-m-d',time()).'.log'
+        );
+
+        $this->on('writeTextLog',[$this,'writeTextLog'],$writeLog);
+        $this->trigger('writeTextLog');
+
         //支付渠道名称
-        $this->customer_trans_record_pay_channel = $payChannel->finance_pay_channel_name;
-        //交易方式:1消费,2=充值,3=退款,4=补偿
-        switch($this->customer_trans_record_mode){
-            case 1 :
-                $this->customer_trans_record_mode_name = '消费';
-                break;
-            case 2 :
-                $this->customer_trans_record_mode_name = '充值';
-                break;
-            case 3 :
-                $this->customer_trans_record_mode_name = '退款';
-                break;
-            case 4 :
-                $this->customer_trans_record_mode_name = '补偿';
-                break;
-        }
-        //订单渠道
-        $orderChannel = FinanceOrderChannel::findOne($this->order_channel_id);
+        $param->data['customer_trans_record_pay_channel'] = FinancePayChannel::getPayChannelByName($param->data['pay_channel_id']);
+
         //订单渠道名称
-        $this->customer_trans_record_order_channel = $orderChannel->finance_order_channel_name;
+        $param->data['customer_trans_record_order_channel'] = FinanceOrderChannel::getOrderChannelByName($param->data['order_channel_id']);
+
         //makeSign
-        $this->customer_trans_record_verify = $this->makeSign();
-        return true;
+        $param->data['customer_trans_record_verify'] = $this->makeSign();
+
+        //交易方式:1消费,2=充值,3=退款,4=补偿
+        $param->data['customer_trans_record_mode_name'] = CustomerTransRecord::getCustomerTransRecordModeByName($param->data['customer_trans_record_mode']);
+
+        //写入数据库日志
+        $this->attributes = $param->data;
+        $this->insert(false);
     }
+
+    /**
+     * 写入日志
+     * @param $path 目录
+     * @param $filename 文件名称
+     * @param $data 写入数据
+     */
+    public function writeTextLog($param)
+    {
+        //创建目录
+        $path = !empty($param->data['path']) ? $param->data['path'] : '/tmp/log/pay/'.date('Y-m-d',time());
+        is_dir($path) || mkdir($path,0777,true);
+
+        //文件名称
+        $filename = !empty($param->data['filename']) ? $param->data['filename'] : date('Y-m-d',time()).'.log';
+        //写入数据
+        $fullFileName = rtrim($path,'/').'/'.$filename;
+        file_put_contents($fullFileName,serialize($param->data['data']).'||',FILE_APPEND);
+    }
+
 
     /**
      * 制造签名

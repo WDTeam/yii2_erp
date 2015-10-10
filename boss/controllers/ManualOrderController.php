@@ -2,6 +2,7 @@
 
 namespace boss\controllers;
 
+use boss\models\WorkerSearch;
 use Yii;
 use core\models\Order\Order;
 use boss\models\ManualOrderSerach;
@@ -33,7 +34,7 @@ class ManualOrderController extends BaseAuthController
      */
     public function actionIndex()
     {
-        $searchModel = new ManualOrderSerach;
+        $searchModel = new WorkerSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
         return $this->render('index', [

@@ -3,11 +3,11 @@
 namespace core\models\CustomerTransRecord;
 
 use common\models\CustomerTransRecordLog;
+use common\models\FinancePayChannel;
 use Yii;
 use yii\behaviors\TimestampBehavior;
-use common\models\CustomerTransRecord as CustomerTransRecordModel;
 
-class CustomerTransRecord extends CustomerTransRecordModel
+class CustomerTransRecord extends \common\models\CustomerTransRecord
 {
     /**
      * 创建交易记录
@@ -15,20 +15,20 @@ class CustomerTransRecord extends CustomerTransRecordModel
      */
     public static function createRecord($data)
     {
-        //验证之前将数据插入记录表
-        $model = new CustomerTransRecordLog();
-        $model->attributes = $data;
-        $model->validate();
-        $model->insert(false);
+        //记录日志
+        $obj = new self;
+        $obj->on('insertLog',[new CustomerTransRecordLog(),'insertLog'],$data);
+        $obj->trigger('insertLog');
 
+        //验证是否存在场景
         if(empty($data['scenario'])){
             return false;
         }
-        $model = new CustomerTransRecord();
+
         //使用场景
-        $model->scenario = $data['scenario'];
-        $model->attributes = $data;
-        return $model->add();
+        $obj->scenario = $data['scenario'];
+        $obj->attributes = $data;
+        return $obj->add();
     }
 }
 

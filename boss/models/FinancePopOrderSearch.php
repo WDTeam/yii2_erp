@@ -10,6 +10,8 @@ use common\models\FinanceHeader;
 use common\models\Order;
 use common\models\GeneralPay;
 use core\models\Customer;
+use core\models\order\OrderSearch;
+
 
 
 
@@ -212,7 +214,6 @@ class FinancePopOrderSearch extends FinancePopOrder
     	
     	//对应系统订单号
     	$getorder=$dateinfo[$hder_info['order_channel_order_num']];
-    	
     	//对应系统金额
     	$getorder_money=$dateinfo[$hder_info['order_money']];
     	//对应数据表折扣金额
@@ -220,11 +221,24 @@ class FinancePopOrderSearch extends FinancePopOrder
     	
 		//打开订单库开始比对
     	//订单对账	
-    	$alinfo=Order::find()
-    		->select('order_status_name,channel_id,order_channel_name,customer_id,order_customer_phone,order_booked_begin_time,order_booked_end_time,order_money,order_booked_worker_id,order_pay_type,pay_channel_id,order_pay_channel_name,order_use_coupon_money,order_channel_order_num,order_customer_phone,worker_id,order_use_promotion_money,order_code,order_service_type_id,order_pay_money,created_at,coupon_id,order_before_status_dict_id')
+    	//order_customer_phone order_status_name  customer_id  order_pay_type  
+    	// pay_channel_id   order_pay_channel_name  order_use_coupon_money   order_channel_order_num
+    	//worker_id   order_use_promotion_money  order_pay_money coupon_id
+    	
+    $OrderSearchinfo=new OrderSearch;
+    
+    $OrderSearchinfo->order_pop_order_code=$getorder;
+    
+   	$alinfo= $OrderSearchinfo->search(Yii::$app->request->getQueryParams());
+   	
+ //var_dump($alinfo);exit;
+
+    /* 	$alinfo=Order::find()
+		->select('channel_id,order_channel_name,order_booked_begin_time,order_booked_end_time,order_money,order_booked_worker_id,order_pay_type,pay_channel_id,order_pay_channel_name,order_use_coupon_money,order_channel_order_num,order_customer_phone,worker_id,order_use_promotion_money,order_code,order_service_type_id,order_pay_money,created_at,coupon_id,order_before_status_dict_id')
     		->andWhere(['=','order_channel_order_num',$getorder])
     		->asArray()->one();
-    	
+    	 */
+   	$alinfo='';
 		if ($alinfo) {
 			//比对金额
 			//1 金额比对成功   2 三有我没有  3 我有三没有   4 金额比对失败  5状态不对的
@@ -233,23 +247,24 @@ class FinancePopOrderSearch extends FinancePopOrder
 			  }
 		}else {
 			//在订单表查询无数据 1 确实没有 2视为充值订单
-			if($getorder_money >=1000){
+			/*if($getorder_money >=1000){
 				//查询胜强的充值表
 				//查询存在
 				$alinfo_es=GeneralPay::find()
 				->select('general_pay_status,customer_id,created_at,general_pay_money,general_pay_source,general_pay_transaction_id,general_pay_mode')
-				->andWhere(['=','order_channel_order_num',$getorder])
+				->andWhere(['=','general_pay_transaction_id',$getorder])
 				->asArray()->one();
-				if($alinfo_es){
+				
+				 if($alinfo_es){
 					//存在
 					//开始比对金额
 					if($alinfo_es['order_money']==$getorder_money){
 					//金额比对成功
-						if($alinfo_es['general_pay_status']==1){
+						 if($alinfo_es['general_pay_status']==1){
 							$status='成功';
 						}else{
 							$status='失败';
-						}
+						} 
 						//通过客户uid获取客户资料
 						$userinfo=Customer::getCustomerById($alinfo_es['customer_id']);
 						$alinfo['order_status_name']=$status;
@@ -279,8 +294,11 @@ class FinancePopOrderSearch extends FinancePopOrder
 						//金额比对不上
 						$alinfo['finance_pop_order_pay_status_type']=4;
 					}
-				}
-			}else{
+				} 
+				
+			}*/
+			
+			
 				//三有我没有
 				$alinfo['order_channel_order_num']=$getorder;
 				$alinfo['order_money']=$getorder_money;
@@ -307,7 +325,7 @@ class FinancePopOrderSearch extends FinancePopOrder
 				$alinfo['coupon_id']=0;
 				$alinfo['order_before_status_dict_id']=0;
 				$alinfo['finance_pop_order_pay_status_type']=2;
-			}
+			
 		}
     	return $alinfo;
     }  
