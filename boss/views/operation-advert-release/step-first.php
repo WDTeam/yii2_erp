@@ -7,7 +7,7 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model boss\models\Operation\OperationAdvertRelease */
 
-$this->title = Yii::t('app', 'Release Advert');
+$this->title = Yii::t('app', '第一步：选择城市');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Advert Release'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

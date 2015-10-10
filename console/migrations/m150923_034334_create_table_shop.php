@@ -34,7 +34,6 @@ class m150923_034334_create_table_shop extends Migration
               `isdel` tinyint(1) DEFAULT NULL COMMENT '是否删除',
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8
-
         ");
     }
 

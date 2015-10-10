@@ -22,8 +22,8 @@ use Yii;
  * @property string $opening_bank
  * @property string $sub_branch
  * @property string $opening_address
- * @property integer $create_at
- * @property integer $update_at
+ * @property integer $created_at
+ * @property integer $updated_at
  * @property integer $is_blacklist
  * @property integer $blacklist_time
  * @property string $blacklist_cause
@@ -49,7 +49,7 @@ class Shop extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'street', 'principal', 'tel'], 'required'],
-            [['shop_manager_id', 'province_id', 'city_id', 'county_id', 'create_at', 'update_at', 'is_blacklist', 'blacklist_time', 'audit_status', 'worker_count', 'complain_coutn'], 'integer'],
+            [['shop_manager_id', 'province_id', 'city_id', 'county_id', 'created_at', 'updated_at', 'is_blacklist', 'blacklist_time', 'audit_status', 'worker_count', 'complain_coutn'], 'integer'],
             [['name', 'account_person'], 'string', 'max' => 100],
             [['street', 'opening_address', 'blacklist_cause'], 'string', 'max' => 255],
             [['principal', 'tel', 'bankcard_number', 'level'], 'string', 'max' => 50],
@@ -78,8 +78,8 @@ class Shop extends \yii\db\ActiveRecord
             'opening_bank' => Yii::t('app', '开户行'),
             'sub_branch' => Yii::t('app', '支行名称'),
             'opening_address' => Yii::t('app', '开户地址'),
-            'create_at' => Yii::t('app', '创建时间'),
-            'update_at' => Yii::t('app', '修改时间'),
+            'created_at' => Yii::t('app', '创建时间'),
+            'updated_at' => Yii::t('app', '修改时间'),
             'is_blacklist' => Yii::t('app', '是否是黑名单：0正常，1黑名单'),
             'blacklist_time' => Yii::t('app', '加入黑名单时间'),
             'blacklist_cause' => Yii::t('app', '黑名单原因'),

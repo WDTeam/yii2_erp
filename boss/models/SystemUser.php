@@ -130,4 +130,5 @@ class SystemUser extends \common\models\SystemUser
             ]
         );
     }
+
 }

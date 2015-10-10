@@ -95,7 +95,7 @@ AppAsset::register($this);
                     </div>
                 </div>
                 <!-- sidebar menu: : style can be found in sidebar.less -->
-                <?= $this->render('//layouts/sidebar-menu') ?>
+                <?= $this->render('//layouts/sidebar-menu')?>
                 <div style="height: 100px;"  ></div>
             </section>
             <!-- /.sidebar -->

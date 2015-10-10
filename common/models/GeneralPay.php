@@ -28,7 +28,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $general_pay_verify
  * @property string $created_at
  * @property string $updated_at
- * @property integer $is_del
+ * @property integer $is_reconciliation
  */
 class GeneralPay extends \yii\db\ActiveRecord
 {
@@ -54,7 +54,7 @@ class GeneralPay extends \yii\db\ActiveRecord
     {
         return [
             [['customer_id', 'general_pay_source_name','general_pay_money','general_pay_source_name'], 'required'],
-            [['customer_id', 'order_id', 'general_pay_source', 'general_pay_mode', 'general_pay_status', 'general_pay_is_coupon', 'admin_id', 'worker_id', 'handle_admin_id', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['customer_id', 'order_id', 'general_pay_source', 'general_pay_mode', 'general_pay_status', 'general_pay_is_coupon', 'admin_id', 'worker_id', 'handle_admin_id', 'created_at', 'updated_at', 'is_reconciliation'], 'integer'],
             [['general_pay_money', 'general_pay_actual_money'], 'number'],
             [['general_pay_source_name'], 'string', 'max' => 20],
             [['general_pay_transaction_id'], 'string', 'max' => 40],
@@ -234,7 +234,7 @@ class GeneralPay extends \yii\db\ActiveRecord
         $param = array(
             'out_trade_no'=>$this->create_out_trade_no(),
             'subject'=>$this->subject(),
-            'general_pay_money'=>$this->toMoney($this->general_pay_money,100,'*'),
+            'general_pay_money'=>$this->toMoney($this->general_pay_money,100,'*',0),
             'notify_url'=>$this->notify_url('up-app'),
         );
         $class = new \uppay_class();
@@ -359,7 +359,7 @@ class GeneralPay extends \yii\db\ActiveRecord
         //加密字符串
         $str='';
         //排除的字段
-        $notArray = ['updated_at'];
+        $notArray = ['updated_at','is_reconciliation'];
         //获取字段
         $key = $this->attributeLabels();
         //加密签名
@@ -400,7 +400,7 @@ class GeneralPay extends \yii\db\ActiveRecord
             'general_pay_verify' => Yii::t('app', '支付验证'),
             'created_at' => Yii::t('app', '创建时间'),
             'updated_at' => Yii::t('app', '更新时间'),
-            'is_del' => Yii::t('app', '删除'),
+            'is_reconciliation' => Yii::t('app', '是否对账'),
         ];
     }
 }
