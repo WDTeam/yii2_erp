@@ -249,12 +249,12 @@ echo Menu::widget(
 //                                'icon' => 'fa fa-angle-right',
                                
 //                            ],
-                            [
-                                'label' => '规格管理(80%)',
-                                'url' => ['/operation-spec'],
-                                'icon' => 'fa fa-angle-right',
-                                
-                            ],
+//                            [
+//                                'label' => '规格管理(80%)',
+//                                'url' => ['/operation-spec'],
+//                                'icon' => 'fa fa-angle-right',
+//                                
+//                            ],
                             [
                                 'label' => '服务品类管理(80%)',
                                 'url' => ['/operation-category/'],
