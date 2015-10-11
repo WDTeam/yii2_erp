@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
     		'widgetOptions' => [
     		'name'=>'比对字段名称',
     		'class'=>\kartik\widgets\Select2::className(),
-    		'data' => [0=>'请选择','order_channel_order_num'=> '订单号', 'order_money'=>'支付金额','order_channel_promote'=>'渠道营销费'],
+    		'data' => [0=>'请选择','order_channel_order_num'=> '订单号', 'order_money'=>'支付金额','decrease'=>'递减','increase'=>'递加','order_channel_promote'=>'渠道营销费','function_way'=>'表达式(下期开发)'],
     		'hideSearch' => true,
     				],
     				],

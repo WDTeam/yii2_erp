@@ -228,23 +228,29 @@ class FinancePopOrderController extends Controller
         	$tyd[]=$errt['id'];
         	$tydtui[]=$errt['finance_order_channel_name'];
         }
-       $tyu= array_combine($tyd,$tydtui);
+         $tyu= array_combine($tyd,$tydtui);
+         
          $searchModel = new FinancePopOrderSearch;
          //默认条件
          $searchModel->load(Yii::$app->request->getQueryParams());
          $searchModel->is_del=0;
          $searchModel->finance_pop_order_pay_status=0;
-         
-         
-         //
+ 
          if(isset($lastidRecordLog)){
          	\Yii::$app->cache->set('lastidinfoid',$lastidRecordLog,600);
          }
          
          $lastid=FinancePopOrder::get_cache_tiem();
          if(!isset($lastid)){
-         	$lastid='';
+         	$lastid='0';
          }
+         
+         //接收从对账记录过来传入的参数
+         $getdata=Yii::$app->request->getQueryParams();
+         if(isset($getdata['id'])){
+         $lastid=$getdata['id'];
+         }
+        
          $searchModel->finance_record_log_id=$lastid;
         //状态处理
         $dataProvider = $searchModel->search();
@@ -292,7 +298,6 @@ class FinancePopOrderController extends Controller
     		$tydtui[]=$errt['finance_order_channel_name'];
     	}
     	$tyu= array_combine($tyd,$tydtui);
-    	
     	$sta=3;
     		
     			//我有三没有开始处理 从订单表里面开始查询
