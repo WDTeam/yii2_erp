@@ -125,8 +125,8 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '人工派单(0%)',
-                        'url' => ['/manual-order/index'],
+                        'label' => '人工派单(1%)',
+                        'url' => ['/order/assign'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
