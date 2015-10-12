@@ -54,7 +54,7 @@ class Customer extends \common\models\Customer
     /**
      * 获取客户的手机号
      */
-    public function getCustomerPhone($customer_id)
+    public static function getCustomerPhone($customer_id)
     {
         $customer = self::findOne($customer_id);
         if ($customer == NULL) {

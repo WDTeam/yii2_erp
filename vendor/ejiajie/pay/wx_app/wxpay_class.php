@@ -73,7 +73,6 @@ class wxpay_class extends WxPayNotify{
 
     public function callback(){
         $this->Handle(false);
-
     }
 
     public function notify(){
