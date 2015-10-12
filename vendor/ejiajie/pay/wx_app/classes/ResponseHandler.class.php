@@ -75,6 +75,9 @@ class ResponseHandler
      *false:否
      */
     function isTenpaySign() {
+        unset($this->parameters['r']);
+        unset($this->parameters['debug']);
+
         $signPars = "";
         ksort($this->parameters);
         foreach($this->parameters as $k => $v) {
@@ -88,9 +91,9 @@ class ResponseHandler
 
         $tenpaySign = strtolower($this->getParameter("sign"));
 
+
         //debug信息
-        $this->_setDebugInfo($signPars . " => sign:" . $sign .
-            " tenpaySign:" . $this->getParameter("sign"));
+        //$this->_setDebugInfo($signPars . " => sign:" . $sign ." tenpaySign:" . $this->getParameter("sign"));
 
         return $sign == $tenpaySign;
 

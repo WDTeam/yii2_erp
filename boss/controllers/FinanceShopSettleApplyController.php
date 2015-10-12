@@ -10,6 +10,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use boss\models\FinanceWorkerOrderIncomeSearch;
 use boss\models\FinanceSettleApplySearch;
+use PHPExcel;
+use PHPExcel_IOFactory;
 
 /**
  * FinanceShopSettleApplyController implements the CRUD actions for FinanceShopSettleApply model.
@@ -38,13 +40,13 @@ class FinanceShopSettleApplyController extends Controller
         $searchModel->finance_shop_settle_apply_starttime = strtotime('-1 week last monday');//统计结束时间,上周第一天
         $searchModel->finance_shop_settle_apply_endtime = strtotime('last sunday');//统计结束时间,上周最后一天
         $requestParams = Yii::$app->request->getQueryParams();
-        $searchModel->load($requestParams);
         $searchModel->review_section = $requestParams['review_section'];
         if($searchModel->review_section == FinanceShopSettleApplySearch::BUSINESS_REVIEW){
             $searchModel->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_INIT;
         }elseif($searchModel->review_section == FinanceShopSettleApplySearch::FINANCE_REVIEW){
             $searchModel->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED;
         }
+        $searchModel->load($requestParams);
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -85,6 +87,7 @@ class FinanceShopSettleApplyController extends Controller
         $orderIncomeSearchModel = new FinanceWorkerOrderIncomeSearch;
         $orderIncomeDataProvider = $orderIncomeSearchModel->search(Yii::$app->request->getQueryParams());
         $searchModel = new FinanceShopSettleApplySearch;
+        $searchModel->review_section = Yii::$app->request->getQueryParams()['review_section'];
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('shopManualSettlementIndex', [
             'dataProvider' => $dataProvider,
@@ -99,7 +102,7 @@ class FinanceShopSettleApplyController extends Controller
      */
     public function actionShopManualSettlementDone()
     {
-        return $this->actionIndex();
+        return $this->redirect('/finance-shop-settle-apply/index?review_section='.FinanceShopSettleApplySearch::BUSINESS_REVIEW);
     }
     
     
@@ -124,7 +127,8 @@ class FinanceShopSettleApplyController extends Controller
     public function actionExport(){
         $searchModel = new FinanceShopSettleApplySearch;
         $data = $searchModel->find()->all();
-        $objPHPExcel=new \PHPExcel();
+        $objPHPExcel=new PHPExcel();
+        ob_start();
         $objPHPExcel->getProperties()->setCreator('ejiajie')
                 ->setLastModifiedBy('ejiajie')
                 ->setTitle('Office 2007 XLSX Document')
@@ -150,14 +154,14 @@ class FinanceShopSettleApplyController extends Controller
            }
            $objPHPExcel->getActiveSheet()->setTitle('结算');
            $objPHPExcel->setActiveSheetIndex(0);
-           $filename=urlencode('门店结算统计表').'_'.date('Y-m-dHis');
+           $filename=urlencode('门店结算').'_'.date('Y-m-dHis');
+           $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
            ob_end_clean();
-           header('Content-Type: text/csv');
-            header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
+           header('Content-Type: application/vnd.ms-excel');
+           header('Content-Disposition: attachment;filename="' . $filename . '.xls"');
             header('Cache-Control: max-age=0');
-            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
             $objWriter->save('php://output');
-        return null;
+        return $this->actionQuery();
     }
 
     /**

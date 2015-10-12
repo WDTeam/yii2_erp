@@ -26,27 +26,41 @@ class OrderSearch extends Order
     /**
      * 获取待人工指派的订单
      * 订单状态为系统指派失败的订单
-     * @param $isCS bool 是否是客服获取
      * @param $admin_id 操作人id
+     * @param $isCS bool 是否是客服获取
      * @return $this|static
      */
-    public static function getWaitManualAssignOrder($isCS = false,$admin_id)
+    public static function getWaitManualAssignOrder($admin_id,$isCS = false)
     {
         $flag_send = $isCS?2:1;
-        $order = Order::find()->joinWith(['orderExtStatus', 'orderExtFlag'])->where(
+
+        $query = Order::find()->joinWith(['orderExtStatus', 'orderExtFlag'])->where(
             ['>','order_booked_begin_time',time()] //服务开始时间大于当前时间
         )->andWhere([
-            'orderExtStatus.order_status_dict_id'=>OrderStatusDict::ORDER_SYS_ASSIGN_UNDONE,
             'orderExtFlag.order_flag_send'=>[0,$flag_send], //0可指派 1客服指派不了 2小家政指派不了
-            'orderExtFlag.order_flag_lock'=>0, //0未锁定
-        ])->orderBy(['order_booked_begin_time'=>'ASC'])->one();
-        if(!empty($order)){
-            //获取到订单后加锁
-            $order->order_flag_lock = 1;
-            $order->admin_id = $admin_id;
-            if($order->doSave(['orderExtFlag'])){
-                return $order;
+        ])->orderBy(['order_booked_begin_time'=>SORT_ASC]);
+        //先查询该管理员正在指派的订单
+        $order_query = $query;
+        $order = $order_query->andWhere([
+            'orderExtStatus.order_status_dict_id'=>OrderStatusDict::ORDER_MANUAL_ASSIGN_START,
+            'orderExtFlag.order_flag_lock'=>$admin_id
+        ])->one();
+        if(empty($order)){//如果没有正在指派的订单再查询待指派的订单
+            $order_query = $query;
+            $order = $order_query->andWhere([
+                'orderExtStatus.order_status_dict_id'=>OrderStatusDict::ORDER_SYS_ASSIGN_UNDONE,
+                'orderExtFlag.order_flag_lock'=>0
+            ])->one();
+            if(!empty($order)){
+                //获取到订单后加锁并置为已开始人工派单的状态
+                $order->order_flag_lock = $admin_id;
+                $order->admin_id = $admin_id;
+                if(OrderStatus::manualAssignStart($order,['orderExtFlag'])){
+                    return $order;
+                }
             }
+        }else{
+            return $order;
         }
         return false;
     }

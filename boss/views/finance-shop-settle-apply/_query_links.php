@@ -6,5 +6,5 @@ use yii\helpers\Html;
  * and open the template in the editor.
  */
 ?>
-<?php echo Html::a('导出报表',['export'],['class'=>'btn btn-success']) ?>
+<?php echo Html::a('导出报表',['export'],['class'=>'btn btn-success','target' => '_blank',]) ?>
 

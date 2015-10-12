@@ -14,18 +14,18 @@ class m150918_141212_create_table_general_pay_log extends Migration
         }
         $this->createTable('{{%general_pay_log}}', [
             'id'  => Schema::TYPE_PK . ' AUTO_INCREMENT ',
-            'general_pay_log_price'  => Schema::TYPE_DECIMAL . '(9,2) unsigned NOT NULL COMMENT \'支付金额\'',
-            'general_pay_log_shop_name'  => Schema::TYPE_STRING . '(50) NOT NULL DEFAULT \'\' COMMENT \'商品名称\'',
-            'general_pay_log_eo_order_id'  => Schema::TYPE_STRING . '(30) NOT NULL COMMENT \'第三方订单ID\'',
-            'general_pay_log_transaction_id'  => Schema::TYPE_STRING . '(40) NOT NULL COMMENT \'第三方交易流水号\'',
-            'general_pay_log_status_bool'  => Schema::TYPE_BOOLEAN . '(1) NOT NULL COMMENT \'状态数\'',
-            'general_pay_log_status'  => Schema::TYPE_STRING . '(30) NOT NULL COMMENT \'状态\'',
-            'pay_channel_id'  => Schema::TYPE_BOOLEAN . '(4) unsigned NOT NULL DEFAULT 0 COMMENT \'支付渠道\'',
-            'pay_channel_name'  => Schema::TYPE_STRING . '(20) NOT NULL COMMENT \'支付渠道名称\'',
-            'general_pay_log_json_aggregation'  => Schema::TYPE_TEXT . ' NOT NULL COMMENT \'记录数据集合\'',
-            'created_at'  => Schema::TYPE_INTEGER . '(10) unsigned NOT NULL COMMENT \'创建时间\'',
-            'updated_at'  => Schema::TYPE_INTEGER . '(10) unsigned NOT NULL COMMENT \'更新时间\'',
-            'is_del'  => Schema::TYPE_BOOLEAN . '(1) unsigned NOT NULL DEFAULT 1 COMMENT \'删除\'',
+            'general_pay_log_price'  => Schema::TYPE_DECIMAL . '(9,2) COMMENT \'支付金额\'',
+            'general_pay_log_shop_name'  => Schema::TYPE_STRING . '(50) DEFAULT \'\' COMMENT \'商品名称\'',
+            'general_pay_log_eo_order_id'  => Schema::TYPE_STRING . '(30) COMMENT \'第三方订单ID\'',
+            'general_pay_log_transaction_id'  => Schema::TYPE_STRING . '(40) COMMENT \'第三方交易流水号\'',
+            'general_pay_log_status_bool'  => Schema::TYPE_BOOLEAN . '(1) COMMENT \'状态数\'',
+            'general_pay_log_status'  => Schema::TYPE_STRING . '(30) COMMENT \'状态\'',
+            'pay_channel_id'  => Schema::TYPE_BOOLEAN . '(4) DEFAULT 0 COMMENT \'支付渠道\'',
+            'pay_channel_name'  => Schema::TYPE_STRING . '(20) COMMENT \'支付渠道名称\'',
+            'general_pay_log_json_aggregation'  => Schema::TYPE_TEXT . ' COMMENT \'记录数据集合\'',
+            'created_at'  => Schema::TYPE_INTEGER . '(10) COMMENT \'创建时间\'',
+            'updated_at'  => Schema::TYPE_INTEGER . '(10) COMMENT \'更新时间\'',
+            'is_del'  => Schema::TYPE_BOOLEAN . '(1) DEFAULT 1 COMMENT \'删除\'',
 
         ], $tableOptions);
 

@@ -5,13 +5,14 @@ use kartik\widgets\ActiveForm;
 use kartik\datecontrol\DateControl;
 use boss\models\FinanceShopSettleApplySearch;
 use boss\widgets\ShopSelect;
+use boss\models\FinanceSettleApplySearch;
 ?>
 
 <div class="worker-search">
 
     <?php $form = ActiveForm::begin([
         'type' => ActiveForm::TYPE_VERTICAL,
-        'action' => ['index'],
+        'action' => ['index?review_section='.FinanceShopSettleApplySearch::BUSINESS_REVIEW],
         'method' => 'get',
     ]); ?>
     <div class='col-md-4' style='margin-top: 22px;'>
@@ -54,28 +55,24 @@ use boss\widgets\ShopSelect;
     
     ?>
   </div> 
-
+     <?php 
+    if($model->review_section == FinanceShopSettleApplySearch::BUSINESS_REVIEW){
+        echo "<div class='col-md-2'>";
+        echo  $form->field($model, 'finance_shop_settle_apply_status')->dropDownList([FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_INIT=>'待审核',FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED=>'财务审核未通过']);
+        echo "</div> ";
+    }
+    ?>
 
     <div class='col-md-2' style="margin-top: 22px;">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
-        
+        <?php 
+        if(($model->review_section == FinanceShopSettleApplySearch::BUSINESS_REVIEW)){
+            echo  Html::a(Yii::t('app', '人工结算'), ['shop-manual-settlement-index?review_section='.$model->review_section],['class' => 'btn btn-default']);
+        }
+        ?>
     </div>
 
     <?php ActiveForm::end(); ?>
     
-    <?php $form = ActiveForm::begin([
-        'type' => ActiveForm::TYPE_VERTICAL,
-        'action' => ['shop-manual-settlement-index'],
-        'method' => 'get',
-    ]); ?>
-    <div class='col-md-1' style="margin-top: 22px;">
-        <?php
-            if($model->review_section == FinanceShopSettleApplySearch::BUSINESS_REVIEW){
-                echo Html::submitButton(Yii::t('app', '人工结算'), ['class' => 'btn btn-default']);
-            }
-        ?>
-    </div>
-    <?php ActiveForm::end(); ?>
-
 </div>

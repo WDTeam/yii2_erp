@@ -207,15 +207,28 @@ $this->params['breadcrumbs'][] = $this->title;
             // ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' =>'{view} {update} {delete} {block}',
+                'template' =>'{view} {update} {update-customer-addresses} {delete} {block}',
                 'buttons' => [
+                    'block' => function ($url, $model) {
+                        return Html::a('<span class="fa fa-fw fa-lock"></span>',
+                        [
+                            '/customer/update-customer-addresses',
+                            'customer_id' => $model->id
+                        ],
+                        [
+                            'title' => Yii::t('yii', '客户加入黑名单'),
+                            'data-toggle' => 'modal',
+                            'data-target' => '#updateCustomerAddressModal',
+                            'class'=>'update-customer-addresses',
+                            'data-id'=>$model->id,
+                        ]);
+                    },
                     'block' => function ($url, $model) {
                         return Html::a('<span class="fa fa-fw fa-lock"></span>',
                         [
                             '/customer/create-block',
                             'customer_id' => $model->id
-                        ]
-                        ,
+                        ],
                         [
                             'title' => Yii::t('yii', '客户加入黑名单'),
                             'data-toggle' => 'modal',
