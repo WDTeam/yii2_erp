@@ -588,7 +588,7 @@ class GeneralPayController extends Controller
                     //充值交易记录
                     $customerTransRecord::analysisRecord($attribute);
                 }
-
+                exit;
                 $transaction->commit();
 
                 //发送短信事件
