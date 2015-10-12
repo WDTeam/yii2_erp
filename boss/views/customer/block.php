@@ -7,6 +7,7 @@ use common\models\Shop;
 use yii\helpers\ArrayHelper;
 use kartik\nav\NavX;
 use yii\bootstrap\NavBar;
+use yii\bootstrap\Modal;
 
 use common\models\CustomerPlatform;
 use common\models\CustomerChannal;
@@ -202,15 +203,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::a('<span class="fa fa-fw fa-lock"></span>',
                         [
                             '/customer/remove-from-block',
-                            'id' => $dataProvider['id']
+                            'customer_id' => $dataProvider->id
+                        ],
+                        [
+                            'title' => Yii::t('yii', '客户从黑名单删除'),
+                            'data-toggle' => 'modal',
+                            'data-target' => '#blockModal',
+                            'class'=>'block',
+                            'data-id'=>$dataProvider->id
                         ]);
-                        // [
-                        //     'title' => Yii::t('yii', '黑名单'),
-                        //     'data-toggle' => 'modal',
-                        //     'data-target' => '#blockModal',
-                        //     'class'=>'blockModal',
-                        //     'data-id'=>$dataProvider['id'],
-                        // ]);
                     }
                 ],
             ],
@@ -229,7 +230,19 @@ $this->params['breadcrumbs'][] = $this->title;
             'showFooter' => false
         ],
     ]);
-    Pjax::end(); ?>
+    Pjax::end();
+    echo Modal::widget([
+        'header' => '<h4 class="modal-title">客户从黑名单删除</h4>',
+        'id'=>'blockModal',
+    ]);
+    $this->registerJs(<<<JSCONTENT
+        $('.block').click(function() {
+            $('#blockModal .modal-body').html('加载中……');
+            $('#blockModal .modal-body').eq(0).load(this.href);
+        });
+JSCONTENT
+        );
+    ?>
 
 </div>
 

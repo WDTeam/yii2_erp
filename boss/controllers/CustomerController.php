@@ -18,8 +18,6 @@ use common\models\CustomerExtScore;
 
 use common\models\OrderExtCustomer;
 use core\models\Customer;
-
-
 /**
  * CustomerController implements the CRUD actions for Customer model.
  */
@@ -85,14 +83,14 @@ class CustomerController extends BaseAuthController
     /**
      * 从黑名单中取消
      */
-    public function actionRemoveFromBlock($id)
-    {
-        $model = $this->findModel($id);
-        $model->is_del = 0;
-        $model->validate();
-        $model->save();
-        return $this->redirect(['/customer/index', 'CustomerSearch'=>['is_del'=>0]]);
-    }
+    // public function actionRemoveFromBlock($id)
+    // {
+    //     $model = $this->findModel($id);
+    //     $model->is_del = 0;
+    //     $model->validate();
+    //     $model->save();
+    //     return $this->redirect(['/customer/index', 'CustomerSearch'=>['is_del'=>0]]);
+    // }
 
     public function actionSwitchBlock(){
         $id = Yii::$app->request->get('id');
@@ -385,6 +383,50 @@ class CustomerController extends BaseAuthController
         }
     }
 
+    /*
+     * 创建客户封号信息
+     * @param customerId 客户Id
+     * @return empty
+     */
+    public function actionCreateBlock($customer_id){
+        $customerModel = $this->findModel($customer_id);
+        if(\Yii::$app->request->post()){
+            $customerModel->is_del = 1;
+            $customerModel->customer_del_reason = $_POST['Customer']['customer_del_reason'];
+            $customerModel->updated_at = time();
+            $customerModel->validate();
+            if ($customerModel->hasErrors()) {
+                return $this->renderAjax('create_block',['customerModel'=>$customerModel,]);
+            }
+            $customerModel->save();
+            return $this->redirect(['index', 'CustomerSearch'=>['is_del'=>0]]);
+        }else{
+            return $this->renderAjax('create_block',['customerModel'=>$customerModel,]);
+        }
+    }
+
+    /*
+     * 客户从黑名单中删除
+     * @param customer_id 客户Id
+     * @return empty
+     */
+    public function actionRemoveFromBlock($customer_id){
+        $customerModel = $this->findModel($customer_id);
+        if(\Yii::$app->request->post()){
+            $customerModel->is_del = 0;
+            $customerModel->customer_del_reason = '';
+            $customerModel->updated_at = time();
+            $customerModel->validate();
+            if ($customerModel->hasErrors()) {
+                return $this->renderAjax('remove_from_block',['customerModel'=>$customerModel,]);
+            }
+            $customerModel->save();
+            return $this->redirect(['block', 'CustomerSearch'=>['is_del'=>1]]);
+        }else{
+            return $this->renderAjax('remove_from_block',['customerModel'=>$customerModel,]);
+        }
+    }
+
     public function actionData(){
 
         $connectionNew =  \Yii::$app->db;
@@ -518,7 +560,7 @@ class CustomerController extends BaseAuthController
         // var_dump($res);
 
         $test = new Customer;
-        $info = $test->getCustomerInfo('1391032906');
+        $info = $test->incBalance(202, 10);
         var_dump($info);
 
     }
