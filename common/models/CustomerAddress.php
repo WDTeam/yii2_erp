@@ -69,7 +69,7 @@ class CustomerAddress extends \yii\db\ActiveRecord
     /**
      * 新增服务地址
      */
-    public static function add($customer_id, $general_region_id, $customer_address_detail, $customer_address_nickname, $customer_address_phone){
+    public static function addAddress($customer_id, $general_region_id, $customer_address_detail, $customer_address_nickname, $customer_address_phone){
         $transaction = \Yii::$app->db->beginTransaction();
         try{
             $customerAddress = new CustomerAddress;
@@ -107,7 +107,7 @@ class CustomerAddress extends \yii\db\ActiveRecord
     /**
      * 软删除服务地址
      */
-    public static function delete($id){
+    public static function deleteAddress($id){
         $customerAddress = CustomerAddress::findOne($id);
         if ($customerAddress == NULL) {
             return false;
@@ -124,10 +124,10 @@ class CustomerAddress extends \yii\db\ActiveRecord
     /**
      * 修改服务地址
      */
-    public static function update($id, general_region_id, $customer_address_detail, $customer_address_nickname, $customer_address_phone){
+    public static function updateAddress($id, $general_region_id, $customer_address_detail, $customer_address_nickname, $customer_address_phone){
         $transaction = \Yii::$app->db->beginTransaction();
         try{
-            $customerAddress = ;
+            $customerAddress = self::findOne($id);
             $customerAddress->customer_id = $customer_id;
             $customerAddress->general_region_id = $general_region_id;
             $customerAddress->customer_address_status = 1;
@@ -161,7 +161,7 @@ class CustomerAddress extends \yii\db\ActiveRecord
     /**
      * 列出客户全部服务地址
      */
-    public static function list($customer_id){
+    public static function listAddress($customer_id){
         $customerAddresses = CustomerAddress::findAll(['customer_id'=>$customer_id]);
         return $customerAddresses;
     }
