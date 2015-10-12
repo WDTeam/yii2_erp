@@ -51,9 +51,10 @@ class OperationShopDistrictGoodsController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => OperationShopDistrictGoods::getCityShopDistrictGoodsList($this->city_id),
         ]);
-
+        
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'city_id' => $this->city_id,
             'city_name' => $this->city_name,
         ]);
     }
