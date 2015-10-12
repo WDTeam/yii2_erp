@@ -38,7 +38,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?php //echo Html::a(Yii::t('app', 'Create {modelClass}', ['modelClass' => 'Worker',]), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-
+    <?php
+    $b= Html::a('<i class="glyphicon" ></i>全部 ', ['index'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']). 
+    Html::a('<i class="glyphicon" ></i>黑名单 '.$searchModel->countBlockCustomer(), ['index?CustomerSearch[is_del]=1'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']);
+   
+    ?>
     <?php Pjax::begin();
     echo GridView::widget([
         'dataProvider' => $dataProvider,
@@ -47,11 +51,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'toolbar' =>
             [
                 // 'content'=>
-
-                    // Html::a('<i class="glyphicon glyphicon-plus"></i>', ['index?getData=1'], [
-                    //     'class' => 'btn btn-default',
-                    //     'title' => Yii::t('kvgrid', 'Reset Grid')
-                    // ]),
+                //     Html::a('<i class="glyphicon glyphicon-plus"></i>', ['index?getData=1'], [
+                //         'class' => 'btn btn-default',
+                //         'title' => Yii::t('kvgrid', 'Reset Grid')
+                //     ]),
             ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
@@ -207,35 +210,24 @@ $this->params['breadcrumbs'][] = $this->title;
             // ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' =>'{view} {update} {update-customer-addresses} {delete} {block}',
+                'template' =>'{view} {delete} {block}',
                 'buttons' => [
                     'block' => function ($url, $model) {
+                        $block_url = $model->is_del ? 'customer/remove-from-block' : 'customer/add-to-block';
+                        $block_item = $model->is_del ? '取消黑名单' : '加入黑名单';
                         return Html::a('<span class="fa fa-fw fa-lock"></span>',
                         [
-                            '/customer/update-customer-addresses',
-                            'customer_id' => $model->id
+                            $block_url,
+                            'customer_id' => $model->id,
                         ],
                         [
-                            'title' => Yii::t('yii', '客户加入黑名单'),
-                            'data-toggle' => 'modal',
-                            'data-target' => '#updateCustomerAddressModal',
-                            'class'=>'update-customer-addresses',
-                            'data-id'=>$model->id,
-                        ]);
-                    },
-                    'block' => function ($url, $model) {
-                        return Html::a('<span class="fa fa-fw fa-lock"></span>',
-                        [
-                            '/customer/create-block',
-                            'customer_id' => $model->id
-                        ],
-                        [
-                            'title' => Yii::t('yii', '客户加入黑名单'),
+                            'title' => Yii::t('yii', $block_item),
                             'data-toggle' => 'modal',
                             'data-target' => '#blockModal',
                             'class'=>'block',
                             'data-id'=>$model->id,
-                        ]);
+                        ]
+                        );
                     }
                 ],
             ],
@@ -247,16 +239,17 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> ' . Html::encode($this->title) . ' </h3>',
             'type' => 'info',
-            // 'before' =>Html::a('<i class="glyphicon" ></i>黑名单', ['/customer/block?CustomerSearch[is_del]=1'], ['class' => 'btn btn-success', 'style' => 'margin-right:10px']),
+            'before' =>$b,
             // 'after' => Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List',
             //     ['index'],
             //     ['class' => 'btn btn-info']),
             'showFooter' => false
         ],
+        
     ]);
     Pjax::end(); 
     echo Modal::widget([
-        'header' => '<h4 class="modal-title">客户加入黑名单</h4>',
+        'header' => '<h4 class="modal-title"></h4>',
         'id'=>'blockModal',
     ]);
     $this->registerJs(<<<JSCONTENT
@@ -268,7 +261,7 @@ JSCONTENT
         );
     ?>
 
-</div>
+
 
 
 

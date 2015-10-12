@@ -15,8 +15,8 @@ use common\models\OperationCity;
 use common\models\GeneralRegion;
 use common\models\CustomerExtBalance;
 use common\models\CustomerExtScore;
-
 use common\models\OrderExtCustomer;
+use common\models\CustomerComment;
 use core\models\Customer;
 /**
  * CustomerController implements the CRUD actions for Customer model.
@@ -71,14 +71,14 @@ class CustomerController extends BaseAuthController
     /**
      * 加入黑名单
      */
-    public function actionAddToBlock($id)
-    {
-        $model = $this->findModel($id);
-        $model->is_del = 1;
-        $model->validate();
-        $model->save();
-        return $this->redirect(['/customer/block', 'CustomerSearch'=>['is_del'=>1]]);
-    }
+    // public function actionAddToBlock($id)
+    // {
+    //     $model = $this->findModel($id);
+    //     $model->is_del = 1;
+    //     $model->validate();
+    //     $model->save();
+    //     return $this->redirect(['/customer/block', 'CustomerSearch'=>['is_del'=>1]]);
+    // }
 
     /**
      * 从黑名单中取消
@@ -388,7 +388,7 @@ class CustomerController extends BaseAuthController
      * @param customerId 客户Id
      * @return empty
      */
-    public function actionCreateBlock($customer_id){
+    public function actionAddToBlock($customer_id){
         $customerModel = $this->findModel($customer_id);
         if(\Yii::$app->request->post()){
             $customerModel->is_del = 1;
@@ -396,12 +396,12 @@ class CustomerController extends BaseAuthController
             $customerModel->updated_at = time();
             $customerModel->validate();
             if ($customerModel->hasErrors()) {
-                return $this->renderAjax('create_block',['customerModel'=>$customerModel,]);
+                return $this->renderAjax('add-to-block',['customerModel'=>$customerModel,]);
             }
             $customerModel->save();
-            return $this->redirect(['index', 'CustomerSearch'=>['is_del'=>0]]);
+            return $this->redirect(['index']);
         }else{
-            return $this->renderAjax('create_block',['customerModel'=>$customerModel,]);
+            return $this->renderAjax('add-to-block',['customerModel'=>$customerModel,]);
         }
     }
 
@@ -412,19 +412,15 @@ class CustomerController extends BaseAuthController
      */
     public function actionRemoveFromBlock($customer_id){
         $customerModel = $this->findModel($customer_id);
-        if(\Yii::$app->request->post()){
-            $customerModel->is_del = 0;
-            $customerModel->customer_del_reason = '';
-            $customerModel->updated_at = time();
-            $customerModel->validate();
-            if ($customerModel->hasErrors()) {
-                return $this->renderAjax('remove_from_block',['customerModel'=>$customerModel,]);
-            }
-            $customerModel->save();
-            return $this->redirect(['block', 'CustomerSearch'=>['is_del'=>1]]);
-        }else{
-            return $this->renderAjax('remove_from_block',['customerModel'=>$customerModel,]);
+        $customerModel->is_del = 0;
+        $customerModel->customer_del_reason = '';
+        $customerModel->updated_at = time();
+        $customerModel->validate();
+        if ($customerModel->hasErrors()) {
+            return false;
         }
+        $customerModel->save();
+        return $this->redirect(['index']);
     }
 
     /**
@@ -432,7 +428,9 @@ class CustomerController extends BaseAuthController
      */
     public function actionUpdateCustomerAddresses($customer_id){
         $customerAddressModel = CustomerAddress::findAll(['customer_id'=>$customer_id]);
-
+        // var_dump($customer_id);
+        // var_dump($customerAddressModel);
+        // exit();
         if(\Yii::$app->request->post()){
             // $customerModel->is_del = 0;
             // $customerModel->customer_del_reason = '';
@@ -458,7 +456,7 @@ class CustomerController extends BaseAuthController
             }
             return $this->redirect(['index', 'CustomerSearch'=>['is_del'=>0]]);
         }else{
-            return $this->renderAjax('update-customer-addresses',['customerAddressModel'=>$customerAddressModel,]);
+            return $this->render('update-customer-addresses',['customerAddressModel'=>$customerAddressModel]);
         }
     }
 
@@ -546,6 +544,44 @@ class CustomerController extends BaseAuthController
                         die();
                     }
                     $customerScore->save();
+
+                    $command = $connection->createCommand("SELECT * FROM user_comment where id=".$val['id']);
+                    $userComment = $command->queryAll();
+                    if ($userComment) {
+                        // print_r($userComment);
+                        // exit();
+                        $customerComment = new CustomerComment;
+                        $customerComment->customer_id = $customer->id;
+                        $customerComment->order_id = $userComment[0]['order_id'];
+                        $customerComment->customer_comment_phone = $userComment[0]['user_telephone'];
+                        $customerComment->customer_comment_content = $userComment[0]['comment'];
+                        $customerComment->customer_comment_star_rate = $userComment[0]['star_rate'];
+                        
+                        switch ($userComment[0]['is_anonymous']) {
+                            case 1:
+                                $customer_comment_anonymous = 0;
+                                break;
+                            case 0:
+                                $customer_comment_anonymous = 1;
+                                break;
+                            
+                            default:
+                                # code...
+                                break;
+                        }
+                        $customerComment->customer_comment_anonymous = $customer_comment_anonymous;
+                        $customerComment->customer_comment_anonymous = $userComment[0]['is_anonymous'];
+                        $customerComment->created_at = strtotime($userComment[0]['create_time']);
+                        $customerComment->is_del = $userComment[0]['is_hide'];
+                        $customerComment->validate();
+                        if ($customerComment->hasErrors()) {
+                            var_dump($customerComment->getErrors());
+                            die();
+                        }
+                        $customerComment->save();
+                    }
+                    
+
 
                     // $customer_id = $customer->id;
                     // $command = $connection->createCommand("SELECT * FROM user_address where user_id=".$val['id']." order by id asc");
