@@ -1,9 +1,10 @@
 <?php
 
 use yii\helpers\Html;
-use kartik\grid\GridView;
 use yii\widgets\Pjax;
-use common\models\Worker;
+
+use kartik\grid\GridView;
+
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider

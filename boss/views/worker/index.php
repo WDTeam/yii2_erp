@@ -1,13 +1,17 @@
 <?php
 
 use yii\helpers\Html;
-use kartik\grid\GridView;
 use yii\widgets\Pjax;
-use common\models\Shop;
 use yii\helpers\ArrayHelper;
-use kartik\nav\NavX;
 use yii\bootstrap\NavBar;
 use yii\bootstrap\Modal;
+
+use kartik\nav\NavX;
+use kartik\grid\GridView;
+
+use common\models\Shop;
+use core\models\worker\Worker;
+
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -41,16 +45,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
     $b =
         Html::a('<i class="glyphicon" ></i>全部 ', ['/worker'], ['class' => 'btn '.$searchModel->getSearchBtnCss(0), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>待检验 '.$searchModel->AuthStatusCount, ['index?WorkerSearch[worker_auth_status]=0'], ['class' => 'btn '.$searchModel->getSearchBtnCss(1), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>待试工 '.$searchModel->OntrialStatusCount, ['index?WorkerSearch[worker_ontrial_status]=0'], ['class' => 'btn '.$searchModel->getSearchBtnCss(2), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>待上岗 '.$searchModel->OnboardStatusCount, ['index?WorkerSearch[worker_onboard_status]=0'], ['class' => 'btn '.$searchModel->getSearchBtnCss(3), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>全职 '.$searchModel->QCount, ['index?WorkerSearch[worker_rule_id]=1'], ['class' => 'btn '.$searchModel->getSearchBtnCss(4), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>兼职 '.$searchModel->JCount, ['index?WorkerSearch[worker_rule_id]=2'], ['class' => 'btn '.$searchModel->getSearchBtnCss(5), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>时段 '.$searchModel->SCount, ['index?WorkerSearch[worker_rule_id]=3'], ['class' => 'btn '.$searchModel->getSearchBtnCss(6), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>高峰 '.$searchModel->GCount, ['index?WorkerSearch[worker_rule_id]=4'], ['class' => 'btn '.$searchModel->getSearchBtnCss(7), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>请假 '.$searchModel->VacationCount, ['index?WorkerSearch[worker_is_vacation]=1'], ['class' => 'btn '.$searchModel->getSearchBtnCss(8), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>封号 '.$searchModel->BlockCount, ['index?WorkerSearch[worker_is_block]=1'], ['class' => 'btn '.$searchModel->getSearchBtnCss(9), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>黑名单 '.$searchModel->BlackListCount, ['index?WorkerSearch[worker_is_blacklist]=1'], ['class' => 'btn '.$searchModel->getSearchBtnCss(10), 'style' => 'margin-right:10px']);
+        Html::a('<i class="glyphicon" ></i>待检验 '.$searchModel->AuthStatusCount, ['index?WorkerSearch[worker_auth_status]=0'], ['class' => 'btn '.Worker::getSearchBtnCss(1), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>待试工 '.$searchModel->OntrialStatusCount, ['index?WorkerSearch[worker_ontrial_status]=0'], ['class' => 'btn '.Worker::getSearchBtnCss(2), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>待上岗 '.$searchModel->OnboardStatusCount, ['index?WorkerSearch[worker_onboard_status]=0'], ['class' => 'btn '.Worker::getSearchBtnCss(3), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>全职 '.Worker::CountRuleWorker(1), ['index?WorkerSearch[worker_rule_id]=1'], ['class' => 'btn '.Worker::getSearchBtnCss(4), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>兼职 '.Worker::CountRuleWorker(2), ['index?WorkerSearch[worker_rule_id]=2'], ['class' => 'btn '.Worker::getSearchBtnCss(5), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>时段 '.Worker::CountRuleWorker(3), ['index?WorkerSearch[worker_rule_id]=3'], ['class' => 'btn '.Worker::getSearchBtnCss(6), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>高峰 '.Worker::CountRuleWorker(4), ['index?WorkerSearch[worker_rule_id]=4'], ['class' => 'btn '.Worker::getSearchBtnCss(7), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>请假 '.Worker::CountVacationWorker(), ['index?WorkerSearch[worker_is_vacation]=1'], ['class' => 'btn '.Worker::getSearchBtnCss(8), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>封号 '.Worker::CountBlockWorker(), ['index?WorkerSearch[worker_is_block]=1'], ['class' => 'btn '.Worker::getSearchBtnCss(9), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>黑名单 '.Worker::CountBlackListWorker(), ['index?WorkerSearch[worker_is_blacklist]=1'], ['class' => 'btn '.Worker::getSearchBtnCss(10), 'style' => 'margin-right:10px']);
 
     ?>
     <?php

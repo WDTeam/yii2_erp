@@ -26,8 +26,8 @@ class WxPayConfig
 //商户号，填写商户对应参数
     const APPID = 'wx865a1a3ff91297df';
     const MCHID = '1217983401';
-	const KEY = '7a7a3fea6f07f312b9041562bfacc778';
-	const APPSECRET = 'f5068761398e4d9aeaf7cc92c771f311';
+	const KEY = '8934e7d15453e97507ef794cf7b0519d';
+	const APPSECRET = 'db426a9829e4b49a0dcac7b4162da6b6';
 
 	//=======【证书路径设置】=====================================
 	/**

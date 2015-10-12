@@ -47,6 +47,10 @@ div#order-orderbookedtimerange label.radio-inline {
     width: 33%;
 }
 
+div#order-channel_id label.radio-inline {
+    width: 50%;
+}
+
 .radio-inline + .radio-inline {
     margin-left: 0;
 }

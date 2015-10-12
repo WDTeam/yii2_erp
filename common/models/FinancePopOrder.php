@@ -40,6 +40,9 @@ class FinancePopOrder extends \yii\db\ActiveRecord
 {
 	
 	public $finance_uplod_url;
+	
+	public $finance_pop_order_info_msg;
+	
 
     /**
      * @inheritdoc
@@ -118,6 +121,7 @@ class FinancePopOrder extends \yii\db\ActiveRecord
             'finance_pop_order_pay_status_type' => Yii::t('app', '对账状态'),
             'finance_order_channel_statuspayment' => Yii::t('app', '开始账期'),
             'finance_order_channel_endpayment' => Yii::t('app', '结束账期'),
+            'finance_pop_order_info_msg' => Yii::t('app', '订单状态机'),
             'create_time' => Yii::t('app', '增加时间'),
             'is_del' => Yii::t('app', '0 正常 1 删除'),
         ];

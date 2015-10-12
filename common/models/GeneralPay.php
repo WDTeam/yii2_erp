@@ -136,7 +136,7 @@ class GeneralPay extends \yii\db\ActiveRecord
         $source = '';
         if(empty($source_id)) return $source;
         //获取订单渠道名称
-        $source = FinancePayChannel::getPayChannelByName($source_id);
+        $source = FinanceOrderChannel::getOrderChannelByName($source_id);
         switch($source_id){
             case 1:
                 $this->pay_type = 'wx_app';
@@ -180,11 +180,11 @@ class GeneralPay extends \yii\db\ActiveRecord
         $param = array(
             "body"	=> $this->body(),
             "out_trade_no"	=> $this->create_out_trade_no(),
-            "general_pay_money"	=> $this->toMoney($this->general_pay_money,100,'*'),
+            "general_pay_money"	=> $this->toMoney($this->general_pay_money,100,'*',0),
             'time_start' => date("YmdHis"),
             'time_expire' => date("YmdHis", time() + 600000),
-            "trade_type" => "APP",
-            "goods_tag" => $this->subject(),
+            "trade_type" => "WX",
+            "subject" => $this->subject(),
             "notify_url" => $this->notify_url('wx-app'),
         );
         $class = new \wxpay_class();
