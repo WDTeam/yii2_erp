@@ -92,6 +92,18 @@ class OrderStatus extends Model
         return self::statusChange($order,$status,$must_models);
     }
 
+    /**
+     * 人工指派失败
+     * @param $order
+     * @param $must_models
+     * @return bool
+     */
+    public static function manualAssignUndone(&$order,$must_models)
+    {
+        $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_MANUAL_ASSIGN_UNDONE);
+        return self::statusChange($order,$status,$must_models);
+    }
+
 
 
 

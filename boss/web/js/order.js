@@ -17,7 +17,7 @@ function formatDate(now) {
     if(second<10) second ='0'+second;
     return   year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;
 }
-function datetime_to_unix(datetime){
+function strtotime(datetime){
     var tmp_datetime = datetime.replace(/:/g,'-');
     tmp_datetime = tmp_datetime.replace(/ /g,'-');
     var arr = tmp_datetime.split("-");
@@ -176,7 +176,7 @@ $("#order-order_booked_count input").change(function(){
 
 $("#order-order_booked_begin_time,#order-order_booked_count input").change(function(){
     var stringTime = $("#order-order_booked_begin_time").val();
-    var timestamp = datetime_to_unix(stringTime);
+    var timestamp = strtotime(stringTime);
     timestamp = timestamp + $("#order-order_booked_count input:checked").val() * 60;
     $("#order-order_booked_end_time").val(formatDate(new Date(timestamp * 1000)));
 

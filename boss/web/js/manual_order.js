@@ -4,12 +4,60 @@
 window.onbeforeunload = onbeforeunload_handler;
 window.work_status = 1; //1休息 2空闲 3忙碌
 window.order_data = new Object();
-$('#start_work').click(function(){
+window.continue_work_count_down = 10;
+$(document).on("click",'#start_work,#continue_work',function(){
     window.work_status = 2;
     $('#work_status').text('空闲');
     $("#work_console").html('<h4 id="get_order" class="col-sm-12">正在分配订单，请稍候……</h4>');
     getWaitManualAssignOrder();
 });
+
+
+$(document).on("click",'#pause_work',function(){
+    window.work_status = 1;
+    $('#work_status').text('休息');
+    $("#work_console").html(
+        '<button id="stop_work" class="btn btn-warning" type="button">收工啦</button>' +
+        '<button id="continue_work" class="btn btn-warning" type="button">继续</button>'
+    );
+});
+
+$(document).on("click",'#stop_work',function(){
+    window.work_status = 1;
+    $('#work_status').text('休息');
+    $("#work_console").html(
+        '<button id="start_work" class="btn btn-warning" type="button">开工啦</button>'
+    );
+});
+
+
+$(document).on("click",'#can_not_assign',function(){
+    if(confirm('您确认无法指派此订单？')){
+        canNotAssign();
+    }
+});
+
+function canNotAssign(){
+    $.ajax({
+        type: "GET",
+        url: "/order/can-not-assign?order_id="+window.order_data.order.id,
+        dataType:"json",
+        success: function (msg) {
+            if(!msg) {
+                alert('无法指派状态修改失败！请与系统管理员联系！');
+            }
+            window.continue_work_count_down = 10;
+            $("#work_console").html(
+                '<button id="stop_work" class="btn btn-warning" type="button">收工啦</button>' +
+                '<button id="pause_work" class="btn btn-warning" type="button">休息</button>' +
+                '<button id="continue_work" class="btn btn-warning" type="button">继续（'+window.continue_work_count_down+'s）</button>'
+            );
+            $("#order_assign").hide();
+            $("#work_console").show();
+
+        }
+    });
+}
 
 function getWaitManualAssignOrder(){
     $.ajax({
@@ -41,6 +89,13 @@ function timer(){
         $("#create_to_current_time").text(sec2time(time-window.order_data.order.created_at));
         $("#current_to_begin_service_time").text(sec2time(window.order_data.order.order_booked_begin_time-time));
         $("#count_down").text(sec2time(window.order_data.ext_flag.updated_at*1+window.order_data.oper_long_time*1-time));
+        if($("#work_console").css('display')=='block'){
+            window.continue_work_count_down--;
+            $("#continue_work").text('继续（'+window.continue_work_count_down+'s）');
+            if(window.continue_work_count_down<=0){
+                $("#continue_work").click();
+            }
+        }
         setTimeout(timer, 1000);
     }
 }
