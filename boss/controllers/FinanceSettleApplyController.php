@@ -17,6 +17,7 @@ use boss\models\FinanceWorkerNonOrderIncomeSearch;
 use boss\models\FinanceShopSettleApplySearch;
 use PHPExcel;
 use PHPExcel_IOFactory;
+use core\models\worker\Worker;
 
 /**
  * FinanceSettleApplyController implements the CRUD actions for FinanceSettleApply model.
@@ -374,7 +375,7 @@ class FinanceSettleApplyController extends BaseAuthController
            header("Content-Type: application/vnd.ms-excel");
             header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
             header('Cache-Control: max-age=0');
-            
+
             $objWriter->save('php://output');
         exit;
     }
@@ -485,6 +486,13 @@ class FinanceSettleApplyController extends BaseAuthController
         $financeSettleApplySearch->settle_type = $settle_type;
         $financeSettleApplySearch->review_section = $review_section;
         $searchModel = new FinanceWorkerOrderIncomeSearch;
+        $selfWorkers = Worker::getWorkerIds(1);
+        var_dump($selfWorkers);
+        $shopWorkers = Worker::getWorkerIds(2);
+        var_dump($shopWorkers);
+        $workerInfo = Worker::getWorkerInfo($shopWorkers[0]);
+        var_dump($workerInfo);
+        exit;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'dataProvider'=>$dataProvider]);
     }

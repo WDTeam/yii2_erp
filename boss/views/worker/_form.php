@@ -101,7 +101,7 @@ use core\models\worker\WorkerRuleConfig;
             <?= $form->field($worker_ext, 'worker_sex')->radioList(['0' => '女', '1' => '男'], ['inline' => true]); ?>
             <?= $form->field($worker_ext, 'worker_age')->textInput(['placeholder' => '输入阿姨年龄...']); ?>
 
-            <?= $form->field($worker_ext, 'worker_birth')->widget(DatePicker::classname(), [
+            <?php /*$form->field($worker_ext, 'worker_birth')->widget(DatePicker::classname(), [
                 'name' => 'worker_birth',
                 'type' => DatePicker::TYPE_COMPONENT_PREPEND,
                 'value' => date('Y-m-d', $worker_ext->worker_birth),
@@ -109,7 +109,7 @@ use core\models\worker\WorkerRuleConfig;
                     'autoclose' => true,
                     'format' => 'yyyy-mm-dd'
                 ]
-            ]); ?>
+            ]); */ ?>
             <?= $form->field($worker_ext, 'worker_edu')->widget(Select2::classname(), [
                 'name' => 'worker_edu',
                 'hideSearch' => true,
@@ -119,7 +119,7 @@ use core\models\worker\WorkerRuleConfig;
                     'allowClear' => true
                 ],
             ]); ?>
-            <?= $form->field($worker_ext, 'worker_hometown')->textInput(['placeholder' => '输入阿姨籍贯...']); ?>
+            <?php //$form->field($worker_ext, 'worker_hometown')->textInput(['placeholder' => '输入阿姨籍贯...']); ?>
             <?= $form->field($worker_ext, 'worker_is_health')->radioList(['1' => '是', '0' => '否'], ['inline' => true]); ?>
             <?= $form->field($worker_ext, 'worker_is_insurance')->radioList(['1' => '是', '0' => '否'], ['inline' => true]); ?>
             <?= $form->field($worker, 'worker_type')->radioList(['1' => '自有', '2' => '非自有'], ['inline' => true]); ?>
@@ -151,6 +151,7 @@ use core\models\worker\WorkerRuleConfig;
         <div class="panel-body">
             <?= $form->field($worker_ext, 'worker_bank_name')->textInput(['placeholder' => '输入开户银行...']); ?>
             <?= $form->field($worker_ext, 'worker_bank_from')->textInput(['placeholder' => '输入银行卡开户网点...']); ?>
+            <?= $form->field($worker_ext, 'worker_bank_from')->textInput(['placeholder' => '输入银行卡开户地...']); ?>
             <?= $form->field($worker_ext, 'worker_bank_card')->textInput(['placeholder' => '输入银行卡号...']); ?>
         </div>
 
