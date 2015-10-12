@@ -5,6 +5,7 @@ namespace core\models\Operation;
 use Yii;
 use common\models\Operation\CommonOperationShopDistrict;
 
+
 /**
  * This is the model class for table "{{%operation_price_strategy}}".
  *
@@ -19,5 +20,10 @@ class CoreOperationShopDistrict extends CommonOperationShopDistrict
 {
     public static function getCityShopDistrictList($city_id){
         return self::find()->asArray()->where(['operation_city_id' => $city_id])->all();
+    }
+
+    public static function getShopDistrictName($shopdistrict_id){
+        $data = self::find()->asArray()->where(['id' => $shopdistrict_id])->One();
+        return $data['operation_shop_district_name'];
     }
 }

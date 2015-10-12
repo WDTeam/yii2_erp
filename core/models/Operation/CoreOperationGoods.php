@@ -40,12 +40,13 @@ class CoreOperationGoods extends CommonOperationGoods
         return self::find()->asArray()->where(['operation_category_id' => $categoryid])->All();
     }
     
-    public static function getCategoryGoodsInfo($categoryid, $city_id){
+    public static function getCategoryGoodsInfo($categoryid, $city_id = ''){
         $data = self::getCategoryGoods($categoryid);
         $d = array();
         foreach((array)$data as $key => $value){
             //查找该商品是否在该城市存在，如不存在则返回
-            if(empty(OperationShopDistrictGoods::getCityShopDistrictGoodsInfo($city_id, $value['id']))){
+            $goodsstatus = OperationShopDistrictGoods::getCityShopDistrictGoodsInfo($city_id, $value['id']);
+            if(empty($goodsstatus)){
                 $d[$value['id'].'-'.$value['operation_goods_name']] = $value['operation_goods_name'];
             }
         }

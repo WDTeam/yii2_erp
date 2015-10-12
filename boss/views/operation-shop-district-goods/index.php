@@ -37,14 +37,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     'update' => function ($url, $model) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-pencil"></span>', 
-                            Yii::$app->urlManager->createUrl(['operation-city/categoryshopedit', 'city_id' => $model::$city_id, 'goods_id' => $model->operation_goods_id]),
+                            Yii::$app->urlManager->createUrl(['operation-city/settinggoodsinfo', 'city_id' => $model::$city_id, 'goods_id' => $model->operation_goods_id, 'cityAddGoods' => 'editGoods']),
                             ['title' => Yii::t('yii', 'Update'), 'class' => 'btn btn-info btn-sm']
                         );
                     },
                     'delete' => function ($url, $model) {
+                        return '';
                         return Html::a(
-                            '<span class="glyphicon glyphicon-trash"></span>', 
-                            Yii::$app->urlManager->createUrl(['operation-shop-district-goods/delete','id' => $model->id]),
+                            '<span class="glyphicon glyphicon-trash"></span>',
+                            Yii::$app->urlManager->createUrl(['operation-shop-district-goods/delete','id' => $model->operation_goods_id]),
                             ['title' => Yii::t('yii', 'Delete'), 'class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
                         );
                     },
@@ -62,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type'=>'info',
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> Add', ['operation-city/categoryshopadd', 'city_id' => $city_id], ['class' => 'btn btn-success']),                                                                                                                                                         
+            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> Add', ['operation-city/addgoods', 'city_id' => $city_id, 'cityAddGoods' => 'success'], ['class' => 'btn btn-success']),
 //            'after'=>Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List', ['index'], ['class' => 'btn btn-info']),
             'showFooter'=>false
         ],

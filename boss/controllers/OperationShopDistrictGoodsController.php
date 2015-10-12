@@ -51,7 +51,6 @@ class OperationShopDistrictGoodsController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => OperationShopDistrictGoods::getCityShopDistrictGoodsList($this->city_id),
         ]);
-        
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'city_id' => $this->city_id,
@@ -118,12 +117,12 @@ class OperationShopDistrictGoodsController extends Controller
      * @param integer $id
      * @return mixed
      */
-//    public function actionDelete($id)
-//    {
-////        $this->findModel($id)->delete();
-//        OperationShopDistrictGoods::delCityShopDistrictGoods($id, $this->city_id);
-//        return $this->redirect(['index']);
-//    }
+    public function actionDelete($id)
+    {
+//        $this->findModel($id)->delete();
+        OperationShopDistrictGoods::setCityShopDistrictGoodsStatus($id, $this->city_id);
+        return $this->redirect(['index']);
+    }
 
     /**
      * Finds the OperationShopDistrictGoods model based on its primary key value.

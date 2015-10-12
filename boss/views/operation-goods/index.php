@@ -78,6 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'title' => Yii::t('yii', 'Edit'), 'class' => 'btn btn-info btn-sm'
                             ]);},
                         'delete' => function ($url, $model) {
+                            return '';
                             return Html::a(
                                 '<span class="glyphicon glyphicon-trash"></span>',
                                 Yii::$app->urlManager->createUrl(['operation-goods/delete','id' => $model->id]),
