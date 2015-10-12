@@ -291,7 +291,7 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         switch($this->scenario){
             case 1:
                 //在线支付（在线+余额+服务卡）
-                $obj = $this->onlinePay();
+                $obj = $this->onlineCradBalancePay();
                 break;
             case 2:
                 //现金
@@ -325,6 +325,10 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
                 //退款（订单）：把订单金额原路退回
                 $obj = $this->refundSource();
                 break;
+            case 10:
+                //在线支付（在线）
+                $obj = $this->onlinePay();
+                break;
         }
 
         return $obj;
@@ -333,7 +337,7 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
     /**
      * 在线支付(1)
      */
-    private function onlinePay()
+    private function onlineCradBalancePay()
     {
         //获取最后一次结果
         $lastResult = $this->lastResult();
@@ -491,6 +495,28 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         //服务卡当前余额
         $this->customer_trans_record_online_service_card_current_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] ? $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] : 0;
 
+        return $this->insert();
+    }
+
+    /**
+     * 在线支付（在线）(10)
+     */
+    private function onlinePay()
+    {
+        //获取最后一次结果
+        $lastResult = $this->lastResult();
+        //获取最后一次服务卡结果
+        $lastResultServiceCard = $this->lastResultServerCard();
+        //保留两位小数
+        bcscale(2);
+        //之前余额
+        $this->customer_trans_record_befor_balance = $lastResult['customer_trans_record_befor_balance'] ? $lastResult['customer_trans_record_befor_balance'] : 0;
+        //当前余额
+        $this->customer_trans_record_current_balance = $lastResult['customer_trans_record_befor_balance'] ? $lastResult['customer_trans_record_befor_balance'] : 0;
+        //服务卡之前余额
+        $this->customer_trans_record_online_service_card_befor_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] ? $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] : 0;
+        //服务卡当前余额
+        $this->customer_trans_record_online_service_card_current_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] ? $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] : 0;
         return $this->insert();
     }
 

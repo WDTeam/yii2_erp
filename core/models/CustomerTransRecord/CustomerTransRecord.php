@@ -79,6 +79,11 @@ class CustomerTransRecord extends \common\models\CustomerTransRecord
             {
                 $data['scenario'] = 1;  //支付场景
             }
+            elseif( $data['customer_trans_record_online_pay'] > 0 )
+            {
+                //在线支付
+                $data['scenario'] = 10;  //支付场景
+            }
             elseif( !empty($data['customer_trans_record_online_service_card_on']) )
             {
             //服务卡支付 + 优惠券
