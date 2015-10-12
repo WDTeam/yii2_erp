@@ -15,6 +15,8 @@ use boss\models\WorkerSearch;
 use boss\models\FinanceWorkerOrderIncomeSearch;
 use boss\models\FinanceWorkerNonOrderIncomeSearch;
 use boss\models\FinanceShopSettleApplySearch;
+use PHPExcel;
+use PHPExcel_IOFactory;
 
 /**
  * FinanceSettleApplyController implements the CRUD actions for FinanceSettleApply model.
@@ -335,7 +337,7 @@ class FinanceSettleApplyController extends BaseAuthController
         $data=array(
             0=>$workerIncomeAndDetailToExcel
            );
-           $objPHPExcel=new \PHPExcel();
+           $objPHPExcel=new PHPExcel();
            $objPHPExcel->getProperties()->setCreator('ejiajie')
                    ->setLastModifiedBy('ejiajie')
                    ->setTitle('Office 2007 XLSX Document')
@@ -367,13 +369,12 @@ class FinanceSettleApplyController extends BaseAuthController
            $objPHPExcel->getActiveSheet()->setTitle('结算');
            $objPHPExcel->setActiveSheetIndex(0);
            $filename=urlencode('阿姨结算统计表').'_'.date('Y-m-dHis');
+           $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
            ob_end_clean();
-           header("Content-Type: application/force-download");
-           header("Content-Type: application/octet-stream");
-           header("Content-Type: application/download");
+           header("Content-Type: application/vnd.ms-excel");
             header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
             header('Cache-Control: max-age=0');
-            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            
             $objWriter->save('php://output');
         exit;
     }
