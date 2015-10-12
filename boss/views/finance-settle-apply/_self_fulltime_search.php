@@ -6,6 +6,7 @@ use kartik\datecontrol\DateControl;
 use kartik\date\DatePicker;
 use boss\models\FinanceSettleApplySearch;
 use boss\widgets\ShopSelect;
+use boss\models\FinanceShopSettleApplySearch;
 ?>
 
 <div class="worker-search">
@@ -13,7 +14,7 @@ use boss\widgets\ShopSelect;
     <?php $form = ActiveForm::begin([
         'type' => ActiveForm::TYPE_VERTICAL,
         //'id' => 'login-form-inline',
-        'action' => ['self-fulltime-worker-settle-index'],
+        'action' => ['self-fulltime-worker-settle-index?settle_type='.$model->settle_type.'&review_section='.$model->review_section],
         'method' => 'get',
     ]); ?>
     
@@ -70,8 +71,8 @@ use boss\widgets\ShopSelect;
     ?>
     
      <?php 
-    if($model->settle_type == FinanceSettleApplySearch::SHOP_WORKER_SETTELE){
-        echo "<div class='col-md-4' style='margin-top: 26px;'>";
+    if(($model->settle_type == FinanceSettleApplySearch::SHOP_WORKER_SETTELE) || ($model->settle_type ==FinanceSettleApplySearch::ALL_WORKER_SETTELE)){
+        echo "<div class='col-md-4' style='margin-top: 22px;'>";
         echo  ShopSelect::widget([
             'model'=>$model,
             'shop_manager_id'=>'shop_manager_id',
@@ -96,12 +97,17 @@ use boss\widgets\ShopSelect;
     <?php $form = ActiveForm::begin([
         'type' => ActiveForm::TYPE_VERTICAL,
         //'id' => 'login-form-inline',
-        'action' => ['worker-manual-settlement-index'],
+        'action' => ['worker-manual-settlement-index?settle_type='.$model->settle_type.'&review_section='.$model->review_section],
         'method' => 'get',
     ]); ?>
-    <div class='col-md-1' style="margin-top: 22px;">
-        <?= Html::submitButton(Yii::t('app', '人工结算'), ['class' => 'btn btn-default']) ?>
-    </div>
+    
+    <?php 
+    if(($model->review_section == FinanceShopSettleApplySearch::BUSINESS_REVIEW)){
+        echo "<div class='col-md-1' style='margin-top: 22px;'>";
+        echo  Html::submitButton(Yii::t('app', '人工结算'), ['class' => 'btn btn-default']);
+        echo "</div> ";
+    }
+    ?>
     <?php ActiveForm::end(); ?>
 
 </div>

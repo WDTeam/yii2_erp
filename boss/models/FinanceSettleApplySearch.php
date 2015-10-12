@@ -22,6 +22,8 @@ class FinanceSettleApplySearch extends FinanceSettleApply
    
    public $settle_type;//结算类型
    
+   public $review_section;
+   
    public $subsidyStr;//补贴
    
    public $workerName;//阿姨姓名
@@ -61,9 +63,6 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             'query' => $query,
         ]);
 
-        if (!($this->load($params) && $this->validate())) {
-            return $dataProvider;
-        }
         $query->andFilterWhere([
             'id' => $this->id,
             'worder_id' => $this->worder_id,

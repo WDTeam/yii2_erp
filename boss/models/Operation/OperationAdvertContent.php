@@ -31,7 +31,9 @@ class OperationAdvertContent extends CoreOperationAdvertContent
         return [
             [['platform_id', 'platform_version_id', 'operation_advert_start_time', 'operation_advert_end_time', 'operation_advert_online_time', 'operation_advert_offline_time', 'created_at', 'updated_at'], 'integer'],
             [['position_name', 'platform_name', 'platform_version_name', 'operation_advert_content_name'], 'string', 'max' => 60],
-            [['operation_advert_picture_text', 'operation_advert_url'], 'string', 'max' => 255]
+            [['operation_advert_picture_text', 'operation_advert_url'], 'string', 'max' => 255],
+            [['operation_advert_content_name', 'operation_advert_picture_text'], 'required'],
+            [['position_id'], 'integer', 'min' => 1]
         ];
     }
 

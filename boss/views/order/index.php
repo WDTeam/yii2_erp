@@ -27,16 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'created_at',
             'updated_at',
             'order_ip',
-            'order_service_type_name',
-            'order_src_name',
-            'order_channel_name',
-            'order_unit_money',
-            'order_money',
-            'order_booked_count',
-            'order_booked_begin_time',
-            'order_booked_end_time',
-            'order_address',
-            'order_cs_memo',
+            ['attribute'=>'order_pop_order_code','value'=>function($model){return $model->orderExtPop->order_pop_order_code;}],
 
             [
                 'class' => 'yii\grid\ActionColumn',
