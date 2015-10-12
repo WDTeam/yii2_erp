@@ -75,8 +75,8 @@ $this->params['review_section'] = $searchModel->review_section;
                 'template' =>'{view} {agree} {disagree}',
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Yii::$app->urlManager->createUrl(['/finance-settle-apply/self-fulltime-worker-settle-view', 'id' => $model->id],['target'=>'_blank']), [
-                            'title' => Yii::t('yii', '查看'),
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Yii::$app->urlManager->createUrl(['/finance-settle-apply/self-fulltime-worker-settle-view', 'id' => $model->id],[]), [
+                            'title' => Yii::t('yii', '查看'),'data-pjax'=>'0','target' => '_blank',
                         ]);
                     },
                     'agree' => function ($url, $model) {

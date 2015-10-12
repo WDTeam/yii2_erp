@@ -161,7 +161,7 @@ class FinanceShopSettleApplyController extends Controller
            header('Content-Disposition: attachment;filename="' . $filename . '.xls"');
             header('Cache-Control: max-age=0');
             $objWriter->save('php://output');
-        return $this->actionQuery();
+        exit;
     }
 
     /**

@@ -83,7 +83,7 @@ use boss\models\FinanceShopSettleApplySearch;
     ?>
   
     <div class='col-md-2'>
-        <?= $form->field($model, 'worder_tel') ?>
+        <?= $form->field($model, 'worder_tel'); ?>
     </div>
     
      <?php 

@@ -89,14 +89,11 @@ $order_channel_info=FinanceOrderChannel::get_order_channel_info($model->finance_
     		'displayOnly' => true,
     		'value'=>'订单提交成功--订单系统确认--订单正在分发中--订单分发到*阿姨--阿姨已确定--阿姨已上门--阿姨开始服务--订单完成--用户已评价',
     		],
-    		
-    		
-
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],
         'data'=>[
-        'confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'),
+        'confirm'=>Yii::t('app', '你确定你要删除吗?'),
         'method'=>'post',
         ],
         ],

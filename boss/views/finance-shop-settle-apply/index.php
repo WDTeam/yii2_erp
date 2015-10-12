@@ -46,7 +46,7 @@ $this->params['review_section']=$searchModel->review_section;
                 'buttons' => [
                     'view' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Yii::$app->urlManager->createUrl(['/finance-shop-settle-apply/view', 'id' => $model->id], ['target'=>'_blank']), [
-                            'title' => Yii::t('yii', '查看'),
+                            'title' => Yii::t('yii', '查看'),'data-pjax'=>'0','target' => '_blank',
                         ]);
                     },
                     'agree' => function ($url, $model) {
