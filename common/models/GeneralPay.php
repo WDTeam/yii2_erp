@@ -136,7 +136,7 @@ class GeneralPay extends \yii\db\ActiveRecord
         $source = '';
         if(empty($source_id)) return $source;
         //获取订单渠道名称
-        $source = FinancePayChannel::getPayChannelByName($source_id);
+        $source = FinanceOrderChannel::getOrderChannelByName($source_id);
         switch($source_id){
             case 1:
                 $this->pay_type = 'wx_app';
