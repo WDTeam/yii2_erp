@@ -97,9 +97,13 @@ class GeneralPay extends \yii\db\ActiveRecord
         return new GeneralPayQuery(get_called_class());
     }
 
-    public static function getGeneralPayByInfo($condition)
+    /**
+     * @param $condition
+     * @param $fileds
+     * @return array|GeneralPay|null
+     */
+    public static function getGeneralPayByInfo($condition,$fileds = '*')
     {
-        $data = GeneralPay::find()->where($condition)->one();
-        dump($data);
+        return GeneralPay::find()->select($fileds)->where($condition)->asArray()->one();
     }
 }

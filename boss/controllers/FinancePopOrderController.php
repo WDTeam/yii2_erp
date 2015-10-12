@@ -28,8 +28,6 @@ use core\models\order\OrderSearch;
 use core\models\GeneralPay\GeneralPaySearch;
 use boss\controllers\GeneralPayController;
 use common\models\FinanceRecordLog;
-
-
 /**
  * FinancePopOrderController implements the CRUD actions for FinancePopOrder model.
  */
@@ -119,55 +117,60 @@ class FinancePopOrderController extends Controller
     			//去除表头
     			if($n>2){
     			$statusinfo=$model->PopOrderstatus($alinfo,$value,$channelid);
-    			$post['FinancePopOrder']['finance_record_log_id'] =$lastidRecordLog;
-    			$post['FinancePopOrder']['finance_pop_order_number'] =$statusinfo['order_channel_order_num'];
-    			$post['FinancePopOrder']['finance_order_channel_id'] =$statusinfo['channel_id'];
-    			$post['FinancePopOrder']['finance_order_channel_title'] =$statusinfo['order_channel_name'];
-    			$post['FinancePopOrder']['finance_pay_channel_id'] =$statusinfo['pay_channel_id'];
-    			$post['FinancePopOrder']['finance_pay_channel_title'] =$statusinfo['order_pay_channel_name'];
-    			$post['FinancePopOrder']['finance_pop_order_customer_tel'] =$statusinfo['order_customer_phone'];
-    			$post['FinancePopOrder']['finance_pop_order_worker_uid'] =$statusinfo['worker_id'];
-    			$post['FinancePopOrder']['finance_pop_order_booked_time'] =$statusinfo['order_booked_begin_time'];
-    			$post['FinancePopOrder']['finance_pop_order_booked_counttime'] =$statusinfo['order_booked_end_time'];// 按照分钟计算 
-    			$post['FinancePopOrder']['finance_pop_order_sum_money'] =$statusinfo['order_money'];
+    			$postdate['finance_record_log_id'] =$lastidRecordLog;
+    			$postdate['finance_pop_order_number'] =$statusinfo['order_channel_order_num'];
+    			$postdate['finance_order_channel_id'] =$statusinfo['channel_id'];
+    			$postdate['finance_order_channel_title'] =$statusinfo['order_channel_name'];
+    			$postdate['finance_pay_channel_id'] =$statusinfo['pay_channel_id'];
+    			$postdate['finance_pay_channel_title'] =$statusinfo['order_pay_channel_name'];
+    			$postdate['finance_pop_order_customer_tel'] =$statusinfo['order_customer_phone'];
+    			$postdate['finance_pop_order_worker_uid'] =$statusinfo['worker_id'];
+    			$postdate['finance_pop_order_booked_time'] =$statusinfo['order_booked_begin_time'];
+    			$postdate['finance_pop_order_booked_counttime'] =$statusinfo['order_booked_end_time'];// 按照分钟计算 
+    			$postdate['finance_pop_order_sum_money'] =$statusinfo['order_money'];
     			//优惠卷金额
-    			$post['FinancePopOrder']['finance_pop_order_coupon_count'] =$statusinfo['order_use_coupon_money']; 
+    			$postdate['finance_pop_order_coupon_count'] =$statusinfo['order_use_coupon_money']; 
     			//优惠卷id
-    			$post['FinancePopOrder']['finance_pop_order_coupon_id'] =$statusinfo['coupon_id'];  
-    			$post['FinancePopOrder']['finance_pop_order_order2'] =$statusinfo['order_code'];
+    			$postdate['finance_pop_order_coupon_id'] =$statusinfo['coupon_id'];  
+    			$postdate['finance_pop_order_order2'] =$statusinfo['order_code'];
     			
     			//获取渠道唯一订单号有问题需要问问
-    			$post['FinancePopOrder']['finance_pop_order_channel_order'] =$statusinfo['order_channel_order_num'];
+    			$postdate['finance_pop_order_channel_order'] =$statusinfo['order_channel_order_num'];
     			
     			//$post['FinancePopOrder']['finance_pop_order_order_type'] =$statusinfo['order_service_type_id'];
-    			$post['FinancePopOrder']['finance_pop_order_order_type'] =$statusinfo['order_service_type_id'];
-    			$post['FinancePopOrder']['finance_pop_order_status'] =$statusinfo['order_before_status_dict_id'];
+    			$postdate['finance_pop_order_order_type'] =$statusinfo['order_service_type_id'];
+    			$postdate['finance_pop_order_status'] =$statusinfo['order_before_status_dict_id'];
     			
-    			$post['FinancePopOrder']['finance_pop_order_finance_isok'] =0;
-    			$post['FinancePopOrder']['finance_pop_order_discount_pay'] =$statusinfo['order_use_coupon_money'];
+    			$postdate['finance_pop_order_finance_isok'] =0;
+    			$postdate['finance_pop_order_discount_pay'] =$statusinfo['order_use_coupon_money'];
     			
-    			$post['FinancePopOrder']['finance_pop_order_reality_pay'] =$statusinfo['order_pay_money'];
-    			$post['FinancePopOrder']['finance_pop_order_order_time'] =$statusinfo['created_at'];
-    			$post['FinancePopOrder']['finance_pop_order_pay_time'] =$statusinfo['created_at'];
-    			$post['FinancePopOrder']['finance_pop_order_pay_status'] =0;//财务确定处理按钮状态
-    			$post['FinancePopOrder']['finance_pop_order_pay_status_type'] =$statusinfo['finance_pop_order_pay_status_type'];//财务确定处理按钮状态
-    			$post['FinancePopOrder']['finance_pop_order_pay_title'] = $filenamesitename;
-    			$post['FinancePopOrder']['finance_pop_order_check_id'] = Yii::$app->user->id;
     			
-    			$post['FinancePopOrder']['finance_pop_order_finance_time'] = 0;//财务对账提交时间
     			
-    			$post['FinancePopOrder']['finance_order_channel_statuspayment'] =strtotime( $post['FinancePopOrderSearch']['finance_order_channel_statuspayment']);
-    			$post['FinancePopOrder']['finance_order_channel_endpayment'] =strtotime($post['FinancePopOrderSearch']['finance_order_channel_endpayment']);
     			
-    			$post['FinancePopOrder']['create_time'] = time();
-    			$post['FinancePopOrder']['is_del'] =0;
+    			$postdate['finance_pop_order_reality_pay'] =$statusinfo['order_pay_money'];
+    			
+    			
+    			
+    			
+    			$postdate['finance_pop_order_order_time'] =$statusinfo['created_at'];
+    			$postdate['finance_pop_order_pay_time'] =$statusinfo['created_at'];
+    			$postdate['finance_pop_order_pay_status'] =0;//财务确定处理按钮状态
+    			$postdate['finance_pop_order_pay_status_type'] =$statusinfo['finance_pop_order_pay_status_type'];
+    			$postdate['finance_pop_order_pay_title'] = $filenamesitename;
+    			$postdate['finance_pop_order_check_id'] = Yii::$app->user->id;
+    			
+    			$postdate['finance_pop_order_finance_time'] = 0;//财务对账提交时间
+    			
+    			$postdate['finance_order_channel_statuspayment'] =strtotime( $post['FinancePopOrderSearch']['finance_order_channel_statuspayment']);
+    			$postdate['finance_order_channel_endpayment'] =strtotime($post['FinancePopOrderSearch']['finance_order_channel_endpayment']);
+    			$postdate['create_time'] = time();
+    			$postdate['is_del'] =0;
 
     			$_model = clone $model;
-    			$_model->setAttributes($post['FinancePopOrder']);
+    			$_model->setAttributes($postdate);
     			$_model->save();
-    			unset($post['FinancePopOrder']);
+    			unset($postdate);
     		}
-    		
     		$n++;
     		}
     	 	$FinanceRecordLog = new FinanceRecordLogSearch;
