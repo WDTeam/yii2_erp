@@ -43,7 +43,6 @@ $this->params['breadcrumbs'][] = $this->title;
     //           'worder_id',
                 'worder_tel',
                 'worker_type_name',
-                ['attribute'=>'created_at','content'=>function($model,$key,$index){return Html::a(date('Y:m:d H:i:s',$model->created_at),'#');}],
                 'finance_settle_apply_cycle_des',
                 'finance_settle_apply_money', 
                 'finance_settle_apply_man_hour', 
