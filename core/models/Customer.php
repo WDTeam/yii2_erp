@@ -52,6 +52,19 @@ class Customer extends \common\models\Customer
     }
 
     /**
+     * 获取客户的手机号
+     */
+    public function getCustomerPhone($customer_id)
+    {
+        $customer = self::findOne($customer_id);
+        if ($customer == NULL) {
+            return false;
+        }else{
+            return $customer->customer_phone;
+        }
+    }
+
+    /**
      * 根据客户id获取常用阿姨列表
      */
     public function getCustomerWorkers($customer_id)
