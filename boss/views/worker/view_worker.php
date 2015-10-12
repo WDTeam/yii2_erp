@@ -140,8 +140,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'worker_birth',
                 'editModel'=>$model->workerExt,
                 'viewModel'=>$model->workerExt,
-                'type' => DetailView::INPUT_DATE,
-                'label'=>'阿姨生日'
+                'type' => DetailView::INPUT_TEXT,
+                'label'=>'阿姨身高'
             ],
 
             [
@@ -158,13 +158,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]
                 ],
                 'label'=>'阿姨教育程度'
-            ],
-            [
-                'attribute' => 'worker_hometown',
-                'editModel'=>$model->workerExt,
-                'viewModel'=>$model->workerExt,
-                'type' => DetailView::INPUT_TEXT,
-                'label'=>'阿姨籍贯'
             ],
             [
                 'attribute' => 'worker_is_health',
@@ -198,6 +191,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'viewModel'=>$model->workerExt,
                 'type' => DetailView::INPUT_TEXT,
                 'label'=>'银行卡开户网点'
+            ],
+            [
+                'attribute' => 'worker_bank_from',
+                'editModel'=>$model->workerExt,
+                'viewModel'=>$model->workerExt,
+                'type' => DetailView::INPUT_TEXT,
+                'label'=>'银行卡开户地'
             ],
             [
                 'attribute' => 'worker_bank_card',

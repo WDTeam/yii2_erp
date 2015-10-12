@@ -99,7 +99,7 @@ class Worker extends \common\models\Worker
     /*
      * 获取商圈中 所有可用阿姨id
      * @param int districtId 商圈id
-     * @param int worker_type 阿姨类型 1自有2非自有
+     * @param int worker_type 阿姨类型 1自营2非自营
      * @return array freeWorkerArr 所有可用阿姨id
      */
     public static function getDistrictFreeWorker($districtId=1,$workerType=1){
@@ -113,13 +113,14 @@ class Worker extends \common\models\Worker
             ->andOnCondition(['worker_type'=>$workerType])
             ->asArray()
             ->all();
-
         if($districtWorkerResult){
             foreach ($districtWorkerResult as $val) {
-                $districtWorkerArr[] = $val['worker_id'];
+                $districtWorkerIdsArr[] = $val['worker_id'];
+                $districtWorkerArr[$val['worker'][0]['id']] = $val['worker'][0];
+                $districtWorkerArr[$val['worker'][0]['id']]['worker_id'] = $val['worker'][0]['id'];
             }
         }else{
-            $districtWorkerArr = [];
+            $districtWorkerIdsArr = [];
         }
 
         //获取已预约以及正在服务的所有阿姨
@@ -127,13 +128,18 @@ class Worker extends \common\models\Worker
 
         if($orderWorkerResult){
             foreach ($orderWorkerResult as $val) {
-                $busyWorkerArr[] = $val['worker_id'];
+                $busyWorkerIdsArr[] = $val['worker_id'];
             }
         }else{
-            $busyWorkerArr = [];
+            $busyWorkerIdsArr = [];
         }
-        //排除以预约和正在服务的阿姨
-        $freeWorkerArr = array_diff($districtWorkerArr,$busyWorkerArr);
+        //排除已预约和正在服务的阿姨
+        $freeWorkerIdsArr = array_diff($districtWorkerIdsArr,$busyWorkerIdsArr);
+
+        foreach ($freeWorkerIdsArr as $val) {
+            $freeWorkerArr[] = $districtWorkerArr[$val];
+        }
+
         return $freeWorkerArr;
     }
 
