@@ -67,6 +67,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             'id' => $this->id,
             'worder_id' => $this->worder_id,
             'worker_type_id' => $this->worker_type_id,
+            'worker_rule_id' => $this->worker_rule_id,
             'finance_settle_apply_man_hour' => $this->finance_settle_apply_man_hour,
             'finance_settle_apply_order_money' => $this->finance_settle_apply_order_money,
             'finance_settle_apply_order_cash_money' => $this->finance_settle_apply_order_cash_money,
@@ -83,6 +84,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         $query->andFilterWhere(['<=','finance_settle_apply_starttime',$this->finance_settle_apply_starttime])
               ->andFilterWhere(['<=','finance_settle_apply_endtime',$this->finance_settle_apply_endtime]);
         $query->andFilterWhere(['like', 'worker_type_name', $this->worker_type_name])
+                ->andFilterWhere(['like', 'worker_rule_name', $this->worker_rule_name])
             ->andFilterWhere(['like', 'finance_settle_apply_cycle_des', $this->finance_settle_apply_cycle_des])
             ->andFilterWhere(['like', 'finance_settle_apply_reviewer', $this->finance_settle_apply_reviewer]);
 
