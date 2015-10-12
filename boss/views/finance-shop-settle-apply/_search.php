@@ -68,7 +68,7 @@ use boss\models\FinanceSettleApplySearch;
         <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
         <?php 
         if(($model->review_section == FinanceShopSettleApplySearch::BUSINESS_REVIEW)){
-            echo  Html::a(Yii::t('app', '人工结算'), ['shop-manual-settlement-index'],['class' => 'btn btn-default']);
+            echo  Html::a(Yii::t('app', '人工结算'), ['shop-manual-settlement-index?review_section='.$model->review_section],['class' => 'btn btn-default']);
         }
         ?>
     </div>

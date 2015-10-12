@@ -38,7 +38,7 @@ use kartik\date\DatePicker;
     </div>
     <div class='col-md-3'>
         <?= $form->field($model, 'shop_id')->widget(Select2::classname(), [
-            'initValueText' => '店铺', // set the initial display text
+            'initValueText' => '门店', // set the initial display text
             'options' => ['placeholder' => '搜索门店名称...', 'class' => 'col-md-2'],
             'pluginOptions' => [
                 'allowClear' => true,

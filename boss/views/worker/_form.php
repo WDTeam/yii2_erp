@@ -13,6 +13,7 @@ use kartik\date\DatePicker;
 use boss\components\AreaCascade;
 
 use core\models\worker\Worker;
+use core\models\worker\WorkerExt;
 use core\models\worker\WorkerRuleConfig;
 /**
  * @var yii\web\View $this
@@ -20,11 +21,6 @@ use core\models\worker\WorkerRuleConfig;
  * @var yii\widgets\ActiveForm $form
  */
 
-$url = \yii\helpers\Url::to(['show-shop']);
-//$cityDesc = empty($worker->shop_id) ? '' : Worker::findOne($worker->shop_id)->description;
-$cityDesc = '门店';
-//$worker->hasOne(WorkerExt::className(),'id=worker_id');
-//var_dump($worker->workerExts);die;
 ?>
 
 <div class="worker-form">
@@ -58,29 +54,50 @@ $cityDesc = '门店';
                 ],
             ]); ?>
             <?= $form->field($worker, 'shop_id')->widget(Select2::classname(), [
-                'initValueText' => $cityDesc, // set the initial display text
-                'options' => ['placeholder' => 'Search for a shop_menager ...'],
+                'initValueText' => '门店', // set the initial display text
+                'options' => ['placeholder' => '选择门店', 'class' => 'col-md-2'],
                 'pluginOptions' => [
                     'allowClear' => true,
                     'minimumInputLength' => 0,
                     'ajax' => [
-                        'url' => Url::to(['shop-manager/search-by-name']),
+                        'url' => \yii\helpers\Url::to(['show-shop']),
                         'dataType' => 'json',
-                        'data' => new JsExpression('function(params) { return {name:params.term}; }')
+                        'data' => new JsExpression('function(params) { return {q:params.term}; }')
                     ],
-    //                 'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-                    'templateResult' => new JsExpression('function(model) { return model.name; }'),
-                    'templateSelection' => new JsExpression('function (model) { return model.name; }'),
+                    'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                    'templateResult' => new JsExpression('function(city) { return city.text; }'),
+                    'templateSelection' => new JsExpression('function (city) { return city.text; }'),
                 ],
             ]); ?>
+
             </div>
 
 
             <div class="panel-heading"><h3 class="panel-title">阿姨基本信息</h3> </div>
             <div class="panel-body">
+            <?= $form->field($worker_ext, 'worker_source')->widget(Select2::classname(), [
+                'name' => 'worker_source',
+                'class'=>\kartik\widgets\Select2::className(),
+                'data' => WorkerExt::getSourceConfigList(),
+                'hideSearch' => true,
+                'options'=>[
+                    'placeholder' => '选择招聘来源',
+                ]
+            ]); ?>
+
             <?= $form->field($worker, 'worker_name')->textInput(['placeholder' => '输入阿姨姓名...', 'maxlength' => 10]); ?>
             <?= $form->field($worker, 'worker_phone')->textInput(['placeholder' => '输入阿姨手机...', 'maxlength' => 20]); ?>
             <?= $form->field($worker, 'worker_idcard')->textInput(['placeholder' => '输入阿姨身份证号...', 'maxlength' => 20]); ?>
+            <?= $form->field($worker, 'worker_district')->widget(Select2::classname(), [
+                'name' => 'worker_district',
+                'hideSearch' => true,
+                'data' => Worker::getDistrictList(),
+                'options' => ['placeholder' => '选择阿姨商圈','multiple' => true],
+                'pluginOptions' => [
+                    'tags' => true,
+                    'maximumInputLength' => 10
+                ],
+            ]); ?>
             <?= $form->field($worker_ext, 'worker_sex')->radioList(['0' => '女', '1' => '男'], ['inline' => true]); ?>
             <?= $form->field($worker_ext, 'worker_age')->textInput(['placeholder' => '输入阿姨年龄...']); ?>
 
@@ -93,7 +110,6 @@ $cityDesc = '门店';
                     'format' => 'yyyy-mm-dd'
                 ]
             ]); ?>
-            <?= $form->field($worker_ext, 'worker_source')->textInput(['placeholder' => '输入阿姨来源...']); ?>
             <?= $form->field($worker_ext, 'worker_edu')->widget(Select2::classname(), [
                 'name' => 'worker_edu',
                 'hideSearch' => true,
@@ -116,16 +132,7 @@ $cityDesc = '门店';
                     'allowClear' => true
                 ],
             ]); ?>
-            <?= $form->field($worker, 'worker_district')->widget(Select2::classname(), [
-                'name' => 'worker_district',
-                'hideSearch' => true,
-                'data' => Worker::getDistrictList(),
-                'options' => ['placeholder' => '选择阿姨商圈','multiple' => true],
-                'pluginOptions' => [
-                    'tags' => true,
-                    'maximumInputLength' => 10
-                ],
-            ]); ?>
+
             <div class="operation-city-form">
 
             <?=AreaCascade::widget([

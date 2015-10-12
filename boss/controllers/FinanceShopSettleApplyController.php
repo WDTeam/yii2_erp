@@ -87,6 +87,7 @@ class FinanceShopSettleApplyController extends Controller
         $orderIncomeSearchModel = new FinanceWorkerOrderIncomeSearch;
         $orderIncomeDataProvider = $orderIncomeSearchModel->search(Yii::$app->request->getQueryParams());
         $searchModel = new FinanceShopSettleApplySearch;
+        $searchModel->review_section = Yii::$app->request->getQueryParams()['review_section'];
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('shopManualSettlementIndex', [
             'dataProvider' => $dataProvider,
@@ -101,7 +102,7 @@ class FinanceShopSettleApplyController extends Controller
      */
     public function actionShopManualSettlementDone()
     {
-        return $this->actionIndex();
+        return $this->redirect('/finance-shop-settle-apply/index?review_section='.FinanceShopSettleApplySearch::BUSINESS_REVIEW);
     }
     
     
@@ -152,11 +153,11 @@ class FinanceShopSettleApplyController extends Controller
            }
            $objPHPExcel->getActiveSheet()->setTitle('结算');
            $objPHPExcel->setActiveSheetIndex(0);
-           $filename=urlencode('shop_stat').'_'.date('Y-m-dHis');
-           $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+           $filename=urlencode('门店结算').'_'.date('Y-m-dHis');
+           $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
            ob_end_clean();
-           header("Content-Type: application/vnd.ms-excel");
-            header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
+           header('Content-Type: application/vnd.ms-excel');
+           header('Content-Disposition: attachment;filename="' . $file_name . '.xls"');
             header('Cache-Control: max-age=0');
             $objWriter->save('php://output');
         return $this->actionQuery();
