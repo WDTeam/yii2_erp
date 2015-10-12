@@ -18,7 +18,24 @@ use Yii;
 class OrderStatusDict extends \common\models\ActiveRecord
 {
     const ORDER_INIT = 1;
-    const ORDER_IS_PAY = 2;
+    const ORDER_WAIT_ASSIGN = 2;
+    const ORDER_SYS_ASSIGN_START = 3;
+    const ORDER_SYS_ASSIGN_DONE = 4;
+    const ORDER_SYS_ASSIGN_UNDONE = 5; //未完成智能指派 待人工指派
+    const ORDER_MANUAL_ASSIGN_START = 6; //开始人工指派
+    const ORDER_MANUAL_ASSIGN_DONE = 7; //完成人工指派
+    const ORDER_MANUAL_ASSIGN_UNDONE = 8; //未完成人工指派，如果客服和小家政都未完成人工指派则去响应，否则重回待指派状态。
+    const ORDER_SERVICE_START = 9; //开始服务
+    const ORDER_SERVICE_DONE = 10; //完成服务
+    const ORDER_CUSTOMER_ACCEPT_DONE = 11; //完成评价 可申请结算
+    const ORDER_APPLY_WAGES_DONE = 12; //已申请结算
+    const ORDER_CHECKED = 13; //已核实 已对账
+    const ORDER_PAYOFF_DONE = 14; //已完成结算
+    const ORDER_PAYOFF_SHOP_DONE = 15; //已完成门店结算
+    const ORDER_CANCEL = 16; //已取消
+    const ORDER_DIE = 17; //已归档
+
+
     /**
      * @inheritdoc
      */

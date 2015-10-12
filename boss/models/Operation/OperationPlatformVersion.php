@@ -23,7 +23,8 @@ class OperationPlatformVersion extends CoreOperationPlatformVersion
     {
         return [
             [['operation_platform_id', 'created_at', 'updated_at'], 'integer'],
-            [['operation_platform_name', 'operation_platform_version_name'], 'string', 'max' => 60]
+            [['operation_platform_name', 'operation_platform_version_name'], 'string', 'max' => 60],
+            [['operation_platform_version_name'], 'required']
         ];
     }
 

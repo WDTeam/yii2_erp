@@ -23,6 +23,8 @@ if($searchModel->settle_type == FinanceSettleApplySearch::ALL_WORKER_SETTELE){
     $this->title = Yii::t('finance', '阿姨结算');
 }
 $this->params['breadcrumbs'][] = $this->title;
+$this->params['settle_type'] = $searchModel->settle_type;
+$this->params['review_section'] = $searchModel->review_section;
 ?>
 <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.css" rel="stylesheet">
 <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
@@ -76,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]);
                     },
                     'agree' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-ok"></span>', Yii::$app->urlManager->createUrl(['/finance-settle-apply/self-fulltime-worker-settle-done', 'id' => $model->id, 'finance_settle_apply_status' => FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED]), [
+                        return Html::a('<span class="glyphicon glyphicon-ok"></span>', Yii::$app->urlManager->createUrl(['/finance-settle-apply/self-fulltime-worker-settle-done', 'id' => $model->id, 'settle_type'=>$this->params['settle_type'],'is_ok'=>1, 'review_section'=>$this->params['review_section']]), [
                             'title' => Yii::t('yii', '审核通过'),
                         ]);
                     },
@@ -85,7 +87,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 '/finance-settle-apply/self-fulltime-worker-settle-done',
                                 'id' => $model->id, 
-                                'finance_settle_apply_status' => FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_FAILED
+                                'settle_type'=>$this->params['settle_type'],'is_ok'=>0,'review_section'=>$this->params['review_section'],
                             ]
                             ,
                             [

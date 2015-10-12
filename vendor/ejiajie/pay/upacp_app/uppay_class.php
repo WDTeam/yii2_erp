@@ -35,7 +35,7 @@ class uppay_class{
             'txnAmt' => $param['general_pay_money'],		//交易金额，单位分
             'currencyCode' => '156',	//交易币种
             'orderDesc' => $param['subject'],  //订单描述，可不上送，上送时控件中会显示该信息
-            'reqReserved' =>'透传信息', //请求方保留域，透传字段，查询、通知、对账文件中均会原样出现
+            'reqReserved' =>$param['subject'], //请求方保留域，透传字段，查询、通知、对账文件中均会原样出现
         );
 
         // 签名

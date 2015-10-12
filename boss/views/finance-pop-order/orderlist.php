@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
-
+<div class="hideTemp">
 <?php 
      ActiveForm::begin([
      'action' => ['indexmepost'],
@@ -180,5 +180,5 @@ $items = [
     		]);
     ActiveForm::end();?> 
 
-
+</div>
 </div>

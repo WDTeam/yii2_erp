@@ -122,6 +122,10 @@ class Order extends OrderModel
     {
         $order = Order::findById($order_id);
        //TODO  放入订单池
+        //TODO 开始系统指派
+        OrderStatus::sysAssignStart($order,[]);
+        //TODO 系统指派失败
+        OrderStatus::sysAssignUndone($order,[]);
     }
 
     /**
