@@ -128,6 +128,7 @@ class FinanceShopSettleApplyController extends Controller
         $searchModel = new FinanceShopSettleApplySearch;
         $data = $searchModel->find()->all();
         $objPHPExcel=new PHPExcel();
+        ob_start();
         $objPHPExcel->getProperties()->setCreator('ejiajie')
                 ->setLastModifiedBy('ejiajie')
                 ->setTitle('Office 2007 XLSX Document')
@@ -154,10 +155,10 @@ class FinanceShopSettleApplyController extends Controller
            $objPHPExcel->getActiveSheet()->setTitle('结算');
            $objPHPExcel->setActiveSheetIndex(0);
            $filename=urlencode('门店结算').'_'.date('Y-m-dHis');
-           $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+           $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
            ob_end_clean();
            header('Content-Type: application/vnd.ms-excel');
-           header('Content-Disposition: attachment;filename="' . $file_name . '.xls"');
+           header('Content-Disposition: attachment;filename="' . $filename . '.xls"');
             header('Cache-Control: max-age=0');
             $objWriter->save('php://output');
         return $this->actionQuery();
