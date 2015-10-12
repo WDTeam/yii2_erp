@@ -27,6 +27,8 @@ use boss\models\FinanceOrderChannelSearch;
 use core\models\order\OrderSearch;
 use core\models\GeneralPay\GeneralPaySearch;
 use boss\controllers\GeneralPayController;
+use common\models\FinanceRecordLog;
+
 
 /**
  * FinancePopOrderController implements the CRUD actions for FinancePopOrder model.
@@ -107,20 +109,17 @@ class FinancePopOrderController extends Controller
     		//向记录表里面插入一条空数据	
     		$FinanceRecordLog = new FinanceRecordLogSearch;
     		$FinanceRecordLog->insert();
-    		}
-    		
-    		
-    		
-    		$FinanceRecordLog = new FinanceRecordLogSearch;
-    		$lastid=$FinanceRecordLog->insert();
     		$lastidRecordLog=$FinanceRecordLog->id;
-    		
+    		}
+    		if($lastidRecordLog==0){ \Yii::$app->getSession()->setFlash('default','账期出现问题，请重新上传！'); 
+    		  return $this->redirect(['index']);
+    		 }
     		
     		foreach ($sheetData as $key=>$value){
     			//去除表头
     			if($n>2){
     			$statusinfo=$model->PopOrderstatus($alinfo,$value,$channelid);
-    			
+    			$post['FinancePopOrder']['finance_record_log_id'] =$lastidRecordLog;
     			$post['FinancePopOrder']['finance_pop_order_number'] =$statusinfo['order_channel_order_num'];
     			$post['FinancePopOrder']['finance_order_channel_id'] =$statusinfo['channel_id'];
     			$post['FinancePopOrder']['finance_order_channel_title'] =$statusinfo['order_channel_name'];
@@ -171,16 +170,16 @@ class FinancePopOrderController extends Controller
     		
     		$n++;
     		}
-    		
-    		
-    		
     	 	$FinanceRecordLog = new FinanceRecordLogSearch;
     		//获取渠道唯一订单号有问题需要问问
-    		$post['FinanceRecordLog']['finance_order_channel_id'] =1;
+    	 	//$post['FinanceRecordLog']['id'] =$lastidRecordLog;
+    	 	$customer_info = FinanceRecordLog::findOne($lastidRecordLog);
+    	 	
+    		$customer_info->finance_order_channel_id =1;
     		//对账名称
-    		$post['FinanceRecordLog']['finance_order_channel_name'] =$filenamesitename;
+    		$customer_info->finance_order_channel_name =$filenamesitename;
     		//收款渠道id
-    		$post['FinanceRecordLog']['finance_pay_channel_id'] =$channelid;
+    		$customer_info->finance_pay_channel_id=$channelid;
     		
     		//$modelPay = new FinancePayChannelSearch;
     		$modelesr= new FinanceOrderChannelSearch;
@@ -188,37 +187,34 @@ class FinancePopOrderController extends Controller
     		
     		
     		//收款渠道名称
-    		$post['FinanceRecordLog']['finance_pay_channel_name'] =$ordername;
+    		$customer_info->finance_pay_channel_name=$ordername;
     		//成功记录数
-    		$post['FinanceRecordLog']['finance_record_log_succeed_count'] =$modelinfo::find()->andWhere(['finance_pop_order_pay_status_type' => '1'])->count('id'); 
+    		$customer_info->finance_record_log_succeed_count =$modelinfo::find()->andWhere(['finance_pop_order_pay_status_type' => '1'])->count('id'); 
     		
     		$sumt=$modelinfo::find()->select(['sum(finance_pop_order_sum_money) as sumoney'])
     		->andWhere(['finance_pop_order_pay_status_type' => '1'])->asArray()->all();
-    		$post['FinanceRecordLog']['finance_record_log_succeed_sum_money'] =$sumt[0]['sumoney'];
+    		$customer_info->finance_record_log_succeed_sum_money =$sumt[0]['sumoney'];
     		//人工确认笔数
-    		$post['FinanceRecordLog']['finance_record_log_manual_count'] =0;
+    		$customer_info->finance_record_log_manual_count =0;
     	
     		//人工确认金额
-    		$post['FinanceRecordLog']['finance_record_log_manual_sum_money'] =$statusinfo['created_at']?$statusinfo['created_at']:'0';
+    		$customer_info->finance_record_log_manual_sum_money =$statusinfo['created_at']?$statusinfo['created_at']:'0';
     		//失败笔数
-    		$post['FinanceRecordLog']['finance_record_log_failure_count'] =$modelinfo::find()->andWhere(['finance_pop_order_pay_status_type' => '4'])->count('id'); 
+    		$customer_info->finance_record_log_failure_count=$modelinfo::find()->andWhere(['finance_pop_order_pay_status_type' => '4'])->count('id'); 
     		
     		//失败总金额
     		$sumterr=$modelinfo::find()->select(['sum(finance_pop_order_sum_money) as sumoneyinfo'])
     		->andWhere(['finance_pop_order_pay_status_type' => '4'])->asArray()->all();
-    		$post['FinanceRecordLog']['finance_record_log_failure_money'] =$sumterr[0]['sumoneyinfo'];
+    		$customer_info->finance_record_log_failure_money =$sumterr[0]['sumoneyinfo'];
 
     		//对账人
-    		$post['FinanceRecordLog']['finance_record_log_confirm_name'] =Yii::$app->user->identity->username;
+    		$customer_info->finance_record_log_confirm_name =Yii::$app->user->identity->username;
     		//服务费
-    		$post['FinanceRecordLog']['finance_record_log_fee'] = 0;
-    	
+    		$customer_info->finance_record_log_fee = 0;
+    		$customer_info->create_time= time();
+    		$customer_info->is_del=0;
+    		$customer_info->save();
     		
-    		$post['FinanceRecordLog']['create_time'] = time();
-    		$post['FinanceRecordLog']['is_del']=0;
-    		$_model = clone $FinanceRecordLog;
-    		$_model->setAttributes($post['FinanceRecordLog']);
-    		$_model->save(); 
     		return $this->redirect(['index']);
     	}
 
@@ -238,6 +234,18 @@ class FinancePopOrderController extends Controller
          $searchModel->load(Yii::$app->request->getQueryParams());
          $searchModel->is_del=0;
          $searchModel->finance_pop_order_pay_status=0;
+         
+         
+         //
+         if(isset($lastidRecordLog)){
+         	\Yii::$app->cache->set('lastidinfoid',$lastidRecordLog,600);
+         }
+         
+         $lastid=FinancePopOrder::get_cache_tiem();
+         if(!isset($lastid)){
+         	$lastid='';
+         }
+         $searchModel->finance_record_log_id=$lastid;
         //状态处理
         $dataProvider = $searchModel->search();
         
@@ -253,11 +261,14 @@ class FinancePopOrderController extends Controller
         }else{
         $sta='';
         } 
+        
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         	'ordedatainfo' => $tyu,
-        	'statusdeflde'=>$sta	
+        	'statusdeflde'=>$sta,
+        	'lastidRecordLogid'=>$lastid   //账期id
+        			
  		
         ]);
     }

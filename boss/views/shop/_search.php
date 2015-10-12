@@ -27,7 +27,7 @@ use yii\web\JsExpression;
             'method' => 'get',
         ]); ?>
         
-        <div class="col-md-3">
+        <div class="col-md-4">
             <label class="control-label" for="workersearch-worker_work_city">所在城市</label>
             <div>
             <?php echo AreaCascade::widget([

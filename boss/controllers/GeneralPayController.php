@@ -124,10 +124,7 @@ class GeneralPayController extends Controller
      */
     public function actionAlipayAppNotify()
     {
-
         $request = yii::$app->request;
-
-
 
         //POST数据
         if(!empty($_GET['debug'])){
@@ -165,10 +162,6 @@ class GeneralPayController extends Controller
         //实例化模型
         $GeneralPayLogModel = new GeneralPayLog();
 
-        //写入文本日志
-        $this->on('writeLog',[$GeneralPayLogModel,'writeLog'],$post);
-        $this->trigger('writeLog');
-
         //记录日志
         $dataLog = array(
             'general_pay_log_price' => $post['total_fee'],   //支付金额
@@ -177,7 +170,9 @@ class GeneralPayController extends Controller
             'general_pay_log_transaction_id' => $post['buyer_id'],   //交易流水号
             'general_pay_log_status_bool' => $GeneralPayLogModel->statusBool($post['trade_status']),   //支付状态
             'general_pay_log_status' => $post['trade_status'],   //支付状态
+            'pay_channel_id' => 6,  //支付渠道ID
             'general_pay_log_json_aggregation' => json_encode($post),
+            'data' => $post //文件数据
         );
         $this->on('insertLog',[$GeneralPayLogModel,'insertLog'],$dataLog);
         $this->trigger('insertLog');
@@ -252,20 +247,25 @@ class GeneralPayController extends Controller
         $status = $notify->notify();
         //实例化模型
         $GeneralPayLogModel = new GeneralPayLog();
-        $model = new GeneralPay();
 
-        //写入文本日志
-        $GeneralPayLogModel->writeLog($post);
 
         //记录日志
-        $GeneralPayLogModel->general_pay_log_price = $model->toMoney($post['total_fee'],100,'/');   //支付金额
-        $GeneralPayLogModel->general_pay_log_shop_name = $post['attach'];   //商品名称
-        $GeneralPayLogModel->general_pay_log_eo_order_id = $post['out_trade_no'];   //订单ID
-        $GeneralPayLogModel->general_pay_log_transaction_id = $post['transaction_id'];   //交易流水号
-        $GeneralPayLogModel->general_pay_log_status_bool = $GeneralPayLogModel->statusBool($post['result_code']);   //支付状态
-        $GeneralPayLogModel->general_pay_log_status = $post['result_code'];   //支付状态
-        $GeneralPayLogModel->general_pay_log_json_aggregation = json_encode($post);
-        $GeneralPayLogModel->insertLog();
+        $dataLog = array(
+            'general_pay_log_price' => $model->toMoney($post['total_fee'],100,'/'),   //支付金额
+            'general_pay_log_shop_name' => $post['attach'],   //商品名称
+            'general_pay_log_eo_order_id' => $post['out_trade_no'],   //订单ID
+            'general_pay_log_transaction_id' => $post['transaction_id'],   //交易流水号
+            'general_pay_log_status_bool' => $GeneralPayLogModel->statusBool($post['result_code']),   //支付状态
+            'general_pay_log_status' => $post['result_code'],   //支付状态
+            'pay_channel_id' => 11,  //支付渠道ID
+            'general_pay_log_json_aggregation' => json_encode($post),
+            'data' => $post //文件数据
+        );
+        $this->on('insertLog',[$GeneralPayLogModel,'insertLog'],$dataLog);
+        $this->trigger('insertLog');
+
+        //实例化模型
+        $model = new GeneralPay();
 
         //获取交易ID
         $GeneralPayId = $model->getGeneralPayId($post['out_trade_no']);
@@ -295,9 +295,11 @@ class GeneralPayController extends Controller
                 }else{
                     $customer::decBalance($model->customer_id,$model->general_pay_actual_money);
                 }
-                $transaction->commit();
                 $status = true;
+                $transaction->commit();
+
             } catch(Exception $e) {
+                $status = false;
                 $transaction->rollBack();
             }
         }
@@ -310,7 +312,6 @@ class GeneralPayController extends Controller
      */
     public function actionBfbAppNotify()
     {
-
         $request = yii::$app->request;
 
         //实例化模型
@@ -346,19 +347,20 @@ class GeneralPayController extends Controller
             $post = $request->get();
         }
 
-        //写入文本日志
-        $GeneralPayLogModel->writeLog($post);
-
         //记录日志
-        $GeneralPayLogModel->general_pay_log_price = $model->toMoney($post['total_amount'],100,'/');   //支付金额
-        $GeneralPayLogModel->general_pay_log_shop_name = '百付宝';   //商品名称
-        $GeneralPayLogModel->general_pay_log_eo_order_id = $post['order_no'];   //订单ID
-        $GeneralPayLogModel->general_pay_log_transaction_id = $post['bfb_order_no'];   //交易流水号
-        $GeneralPayLogModel->general_pay_log_status_bool = $GeneralPayLogModel->statusBool($post['pay_result']);   //支付状态
-        $GeneralPayLogModel->general_pay_log_status = $post['pay_result'];   //支付状态
-        $GeneralPayLogModel->general_pay_log_json_aggregation = json_encode($post);
-        $GeneralPayLogModel->insertLog();
-
+        $dataLog = array(
+            'general_pay_log_price' => $model->toMoney($post['total_amount'],100,'/'),   //支付金额
+            'general_pay_log_shop_name' => '百付宝',   //商品名称
+            'general_pay_log_eo_order_id' => $post['order_no'],   //订单ID
+            'general_pay_log_transaction_id' => $post['bfb_order_no'],   //交易流水号
+            'general_pay_log_status_bool' => $GeneralPayLogModel->statusBool($post['pay_result']),   //支付状态
+            'general_pay_log_status' => $post['pay_result'],   //支付状态
+            'pay_channel_id' => 8,  //支付渠道ID
+            'general_pay_log_json_aggregation' => json_encode($post),
+            'data' => $post //文件数据
+        );
+        $this->on('insertLog',[$GeneralPayLogModel,'insertLog'],$dataLog);
+        $this->trigger('insertLog');
 
         //获取交易ID
         $GeneralPayId = $model->getGeneralPayId($post['order_no']);
@@ -450,24 +452,19 @@ class GeneralPayController extends Controller
         //实例化模型
         $GeneralPayLogModel = new GeneralPayLog();
 
-        $writeLog = array(
-            'data' => $post
-        );
-
-        //写入文本日志
-        $this->on('writeLog',[$GeneralPayLogModel,'writeLog'],$writeLog);
-        $this->trigger('writeLog');
-
         //记录日志
         $dataLog = array(
             'general_pay_log_price' => $model->toMoney($post['settleAmt'],100,'/'),   //支付金额
             'general_pay_log_shop_name' => $post['reqReserved'],   //商品名称
             'general_pay_log_eo_order_id' => $post['orderId'],   //订单ID
             'general_pay_log_transaction_id' => $post['queryId'],   //交易流水号
-            'general_pay_log_status_bool' => $GeneralPayLogModel->statusBool($post['respCode']),   //支付状态
-            'general_pay_log_status' => $post['respCode'],   //支付状态
+            'general_pay_log_status_bool' => $GeneralPayLogModel->statusBool($post['respMsg']),   //支付状态
+            'general_pay_log_status' => $post['respMsg'],   //支付状态
+            'pay_channel_id' => 12,  //支付渠道ID
             'general_pay_log_json_aggregation' => json_encode($post),
+            'data' => $post //文件数据
         );
+
         $this->on('insertLog',[$GeneralPayLogModel,'insertLog'],$dataLog);
         $this->trigger('insertLog');
 
@@ -499,19 +496,64 @@ class GeneralPayController extends Controller
                 $model->save(false);
                 //change customer balance
                 $customer = new \common\models\Customer;
+                $customerTransRecord = new \core\models\CustomerTransRecord\CustomerTransRecord();
+                $attribute = $model->getAttributes();
+                //支付订单
                 if(!empty($model->order_id)){
+
                     $customer::incBalance($model->customer_id,$model->general_pay_actual_money);
+                    //服务卡支付
+
+                    /**
+                    'customer_id',  //用户ID
+                    'order_id', //订单ID
+                    'order_channel_id', //订单渠道
+                    'customer_trans_record_order_channel',  //订单渠道名称
+                    'pay_channel_id',   //支付渠道
+                    'customer_trans_record_pay_channel',    //支付渠道名称
+                    'customer_trans_record_mode',   //交易方式:1消费,2=充值,3=退款,4=补偿
+                    'customer_trans_record_mode_name',  //交易方式:1消费,2=充值,3=退款,4=补偿
+                    'customer_trans_record_promo_code_money',   //优惠码金额
+                    'customer_trans_record_coupon_money',   //优惠券金额
+                    'customer_trans_record_online_pay', //在线支付
+                    'customer_trans_record_online_balance_pay', //在线余额支付
+                    'customer_trans_record_online_service_card_on', //服务卡号
+                    'customer_trans_record_online_service_card_pay',    //服务卡支付
+                    'customer_trans_record_order_total_money',  //订单总额
+                    'customer_trans_record_transaction_id', //交易流水号
+                     */
+                    //支付订单交易记录
+                    $customerTransRecord::analysisRecord($attribute);
                 }else{
+
+                    //支付充值
                     $customer::decBalance($model->customer_id,$model->general_pay_actual_money);
+
+                    /**
+                    'customer_id',  //用户ID
+                    'order_id', //订单ID
+                    'order_channel_id', //订单渠道
+                    'customer_trans_record_order_channel',  //订单渠道名称
+                    'pay_channel_id',   //支付渠道
+                    'customer_trans_record_pay_channel',    //支付渠道名称
+                    'customer_trans_record_mode',   //交易方式:1消费,2=充值,3=退款,4=补偿
+                    'customer_trans_record_mode_name',  //交易方式:1消费,2=充值,3=退款,4=补偿
+                    'customer_trans_record_order_total_money',  //订单总额
+                    'customer_trans_record_online_service_card_on', //服务卡号
+                    'customer_trans_record_online_service_card_pay',    //服务卡支付金额
+                    */
+
+                    //充值交易记录
+                    $customerTransRecord::analysisRecord($attribute);
                 }
+
                 $transaction->commit();
                 $class->notify();
             } catch(Exception $e) {
+                $class->notify();
                 $transaction->rollBack();
             }
-
         }
-
     }
 
     /**
