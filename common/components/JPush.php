@@ -38,6 +38,36 @@ class JPush extends Object
         ->send();
         return $result;
     }
+    /**
+     * 给指定android推送
+     * @param string $tags 客户端标签    如给指定阿姨端发送  eg: 'worker_1,worker_2'
+     * @param string $msg
+     * @param array $extras 附加发送的自定义数据
+     */
+    public function push2android($tags, $msg, $extras=[])
+    {
+        $result = $this->client->push()
+        ->setPlatform(M\platform("android"))
+        ->setAudience(M\Audience(M\Tag($tags)))
+        ->setNotification(M\notification(null, M\android($msg, '', 1, $extras)))
+        ->send();
+        return $result;
+    }
+    /**
+     * 给指定ios推送
+     * @param string $tags 客户端标签    如给指定阿姨端发送  eg: 'worker_1,worker_2'
+     * @param string $msg
+     * @param array $extras 附加发送的自定义数据
+     */
+    public function push2ios($tags, $msg, $extras=[])
+    {
+        $result = $this->client->push()
+        ->setPlatform(M\platform("ios"))
+        ->setAudience(M\Audience(M\Tag($tags)))
+        ->setNotification(M\notification(null, M\ios($msg, '', 1, $extras)))
+        ->send();
+        return $result;
+    }
     
     /**
      * 获取推送统计
