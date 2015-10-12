@@ -269,7 +269,7 @@ class GeneralPayController extends Controller
                 "transaction_id" => "1217983401381510128537567810",
                 "transport_fee" => "0"
             ];
-            $status = true;
+            $status = 'error';
         }else{
             //调用微信验证
             $post = $class->callback();
@@ -346,7 +346,7 @@ class GeneralPayController extends Controller
 
                 $status = $class->notify();
             } catch(Exception $e) {
-                $status = 'Error';
+                $status = 'error';
                 $transaction->rollBack();
             }
         }
