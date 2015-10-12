@@ -3,23 +3,28 @@
 namespace boss\controllers;
 
 
+use boss\models\Shop;
 use Yii;
 use yii\db\Query;
-use boss\components\BaseAuthController;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use core\models\worker\Worker;
-use core\models\worker\WorkerExt;
-use core\models\worker\WorkerDistrict;
-use common\models\OrderExtWorker;
+use yii\helpers\ArrayHelper;
+use yii\data\ActiveDataProvider;
+
+use boss\components\BaseAuthController;
+
 use common\models\WorkerBlock;
 use common\models\WorkerVacation;
 use common\models\WorkerBlockLog;
-use boss\models\WorkerSearch;
+use core\models\worker\Worker;
+use core\models\worker\WorkerExt;
+use core\models\worker\WorkerDistrict;
+use boss\models\worker\WorkerSearch;
+use boss\models\worker\WorkerDetail;
 use boss\models\Operation;
-use yii\helpers\ArrayHelper;
-use yii\data\ActiveDataProvider;
+
+
 
 /**
  * WorkerController implements the CRUD actions for Worker model.
@@ -37,6 +42,30 @@ class WorkerController extends BaseAuthController
             ],
         ];
     }
+
+    /**
+     * Finds the Worker model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return Worker the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id,$hasExt=false)
+    {
+        if($hasExt==true){
+            $model= Worker::find()->joinWith('workerExt')->where(['id'=>$id])->one();
+            $workerExtModel = new WorkerExt();
+            $model->link('workerExt',$workerExtModel);
+        }else{
+            $model= Worker::findOne($id);
+        }
+        if ($model!== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
 
     /**
      * Lists all Worker models.
@@ -63,19 +92,15 @@ class WorkerController extends BaseAuthController
      */
     public function actionView($id)
     {
-
-        $workerModel = $this->findModel($id);
-        $workerBlockModel = new WorkerBlock();
+        $workerModel = $this->findModel($id,true);
         $workerBlockData = new ActiveDataProvider([
-            'query' => $workerBlockModel->find()->where(['worker_id'=>$id])->orderBy('id desc'),
+            'query' => WorkerBlock::find()->where(['worker_id'=>$id])->orderBy('id desc'),
         ]);
-        $workerVacationModel = new WorkerVacation();
         $workerVacationData = new ActiveDataProvider([
-            'query' => $workerVacationModel->find()->where(['worker_id'=>$id])->orderBy('id desc'),
+            'query' => WorkerVacation::find()->where(['worker_id'=>$id])->orderBy('id desc'),
         ]);
-        $workerBlockLogModel = new WorkerBlockLog();
         $workerBlockLogData = new ActiveDataProvider([
-            'query' => $workerBlockLogModel->find()->where(['worker_id'=>$id])->orderBy('id desc'),
+            'query' => WorkerBlockLog::find()->where(['worker_id'=>$id])->orderBy('id desc'),
         ]);
         if ($workerModel->load(Yii::$app->request->post()) && $workerModel->save()) {
             return $this->redirect(['view', 'id' => $workerModel->id]);
@@ -95,6 +120,7 @@ class WorkerController extends BaseAuthController
         $worker_ext = new WorkerExt;
         $worker_district = new WorkerDistrict;
         $worker->created_ad = time();
+        //$worker->link('workerExt',$worker_ext);
         if ($worker->load(Yii::$app->request->post()) && $worker->save()) {
             $worker_ext->load(Yii::$app->request->post());
             $worker_ext->worker_id = $worker->id;
@@ -152,21 +178,8 @@ class WorkerController extends BaseAuthController
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the Worker model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Worker the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Worker::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
-    }
+
+
 
     /*
      * ajax通过搜索关键字获取门店信息
@@ -392,12 +405,16 @@ class WorkerController extends BaseAuthController
                     $workerExtArr['worker_live_street'] = $streetName;
 
                 }else{
-                    $workerArr['worker_work_street']=$val['live_place'];
+                    $workerExtArr['worker_live_province'] = 0;
+                    $workerExtArr['worker_live_city'] = 0;
+                    $workerExtArr['worker_live_area'] = 0;
+                    $workerExtArr['worker_live_street']=$val['live_place'];
                 }
                 //获取状态
                 //$workerArr[''] = $val['status'];
                 //头像地址 static.1jiajie.com/{worker_id}.jpg
                 //$workerArr['worker_photo'] = $val[''];
+                $workerArr['worker_work_city'] = '';
                 if(in_array($val['city_name'],$cityConfigArr)){
                     $workerArr['worker_work_city'] = $cityConfigArr[$val['city_name']];
                 }
@@ -409,94 +426,67 @@ class WorkerController extends BaseAuthController
                 $workerExtArr['worker_live_lat'] = $val['home_lat'];
                 $workerExtArr['worker_sex'] = $val['gender'];
                 $workerExtArr['worker_is_health'] = $val['is_health'];
-                $workerExtArr['worker_birth'] = strtotime($val['birthday']);
+                $workerExtArr['worker_birth'] = $val['birthday'];
                 $workerExtArr['worker_is_insurance'] = $val['is_insurance'];
-                $workerExtArr['worker_edu'] = $val['education'];
+                $workerEduConfig = [1=>'小学',2=>'初中',3=>'高中',4=>'大学'];
+                if($val['education']){
+                    $workerExtArr['worker_edu'] = $workerEduConfig[$val['education']];
+                }else{
+                    $workerExtArr['worker_edu'] = '';
+                }
+
                 $workerExtArr['worker_bank_card'] = $val['bank_card'];
                 $workerExtArr['worker_bank_name'] = $val['bank_name'];
                 $workerExtArr['worker_bank_from'] = $val['bank_from'];
 
-                $workerDevice['worker_id'] = $val['id'];
-                $workerDevice['worker_device_login_time'] = $val['last_login_time'];
-                $workerDevice['worker_device_login_ip'] = $val['last_login_ip'];
-                $workerDevice['worker_device_client_version'] = $val['client_version'];
-                $workerDevice['worker_device_version_name'] = $val['version_name'];
-                $workerDevice['worker_device_token'] = $val['device_token'];
-                $workerDevice['worker_device_mac_addr'] = $val['mac_add'];
-                $workerDevice['worker_device_curr_lng'] = $val['cur_lng'];
-                $workerDevice['worker_device_curr_lat'] = $val['cur_lat'];
+                $workerDeviceArr['worker_id'] = $val['id'];
+                $workerDeviceArr['worker_device_login_time'] = $val['last_login_time'];
+                $workerDeviceArr['worker_device_login_ip'] = $val['last_login_ip'];
+                $workerDeviceArr['worker_device_client_version'] = $val['client_version'];
+                $workerDeviceArr['worker_device_version_name'] = $val['version_name'];
+                $workerDeviceArr['worker_device_token'] = $val['device_token'];
+                $workerDeviceArr['worker_device_mac_addr'] = $val['mac_add'];
+                $workerDeviceArr['worker_device_curr_lng'] = $val['cur_lng'];
+                $workerDeviceArr['worker_device_curr_lat'] = $val['cur_lat'];
 
                 $workerStatArr['worker_id'] = $val['id'];
                 $workerStatArr['worker_stat_order_num'] = $val['order_num'];
-                $workerStatArr['worker_stat_sale_card'] = $val['sale_card'];
+                $workerStatArr['worker_stat_sale_cards'] = $val['sale_card'];
 
-
-                $connectionNew->createCommand()->insert('{{%worker}}', $workerArr)->execute();
-                $connectionNew->createCommand()->insert('{{%worker_ext}}', $workerExtArr)->execute();
-
+                $batchWorker[] = $workerArr;
+                $batchWorkerExt[] = $workerExtArr;
+                $batchWorkerDevice[] = $workerDeviceArr;
+                $batchWorkerStat[] = $workerStatArr;
             }
-
+            $workerColumns = array_keys($workerArr);
+            $connectionNew->createCommand()->batchInsert('{{%worker}}',$workerColumns, $batchWorker)->execute();
+            $workerExtColumns = array_keys($workerExtArr);
+            $connectionNew->createCommand()->batchInsert('{{%worker_ext}}',$workerExtColumns, $batchWorkerExt)->execute();
+            $workerDeviceColumns = array_keys($workerDeviceArr);
+            $connectionNew->createCommand()->batchInsert('{{%worker_device}}',$workerDeviceColumns, $batchWorkerDevice)->execute();
+            $workerStatColumns = array_keys($workerStatArr);
+            $connectionNew->createCommand()->batchInsert('{{%worker_stat}}',$workerStatColumns, $batchWorkerStat)->execute();
         }
 
+        //die;
     }
 
 
-    /*
-     * 获取商圈中 所有可用阿姨id
-     * @param int districtId 商圈id
-     * @param int worker_type 阿姨类型 1自有2非自有
-     * @return array freeWorkerArr 所有可用阿姨id
-     */
-    public function getDistrictFreeWorker($districtId=4,$workerType=2){
-
-        $workerDistrictModel = new WorkerDistrict;
-        $orderExtWorkerModel = new OrderExtWorker;
-
-        //获取所属商圈中所有阿姨
-        $districtWorkerResult = $workerDistrictModel::find()
-            ->select('`ejj_worker_district`.worker_id,`ejj_worker_district`.operation_shop_district_id')
-            ->where(['operation_shop_district_id'=>$districtId])
-            ->innerJoinWith('worker') //关联workerDistrict getWorker方法
-            ->andOnCondition(['worker_type'=>$workerType])
-            ->asArray()
-            ->all();
-
-        if($districtWorkerResult){
-            foreach ($districtWorkerResult as $val) {
-                $districtWorkerArr[] = $val['worker_id'];
-            }
-        }else{
-            $districtWorkerArr = [];
-        }
-
-        //获取已预约以及正在服务的所有阿姨
-        $orderWorkerResult = $orderExtWorkerModel::find()->asArray()->all();
-
-        if($orderWorkerResult){
-            foreach ($orderWorkerResult as $val) {
-                $busyWorkerArr[] = $val['worker_id'];
-            }
-        }else{
-            $busyWorkerArr = [];
-        }
-        //排除以预约和正在服务的阿姨
-        $freeWorkerArr = array_diff($districtWorkerArr,$busyWorkerArr);
-        var_dump($freeWorkerArr);
-    }
 
 
 
     public function actionTest(){
-        var_dump(worker::getWorkerInfoByPhone(18645973380));
-
-        die;
         echo '<pre>';
+        var_dump(Worker::getDistrictFreeWorker(1,1));
+        die;
+
+        $a = Worker::getWorkerInfo(16351);
+        var_dump($a);
+        die;
 //        Yii::$app->redis->sadd('district_1','16684','16683','16685','16686','16687','16688','16689','16682');
 //        Yii::$app->redis->sadd('district_2','16694','16693','16695','16696','16697','16698','16699','16692');
 //        Yii::$app->redis->sadd('worker_16694','10','11','9','8','7');
 //        Yii::$app->redis->sadd('worker_16693','10','11');
-
-
         $workers = Yii::$app->redis->smembers('district_1');
         $time = date('H');
         foreach($workers as $val){

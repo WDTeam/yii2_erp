@@ -543,4 +543,13 @@ return array (
       '@yii/mongodb' => $vendorDir . '/yiisoft/yii2-mongodb',
     ),
   ),
+  'toriphes/yii2-console-runner' => 
+  array (
+    'name' => 'toriphes/yii2-console-runner',
+    'version' => '1.0.0.0',
+    'alias' => 
+    array (
+      '@toriphes/console' => $vendorDir . '/toriphes/yii2-console-runner',
+    ),
+  ),
 );

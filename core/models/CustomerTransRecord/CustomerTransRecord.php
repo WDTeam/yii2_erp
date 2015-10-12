@@ -62,7 +62,7 @@ class CustomerTransRecord extends \common\models\CustomerTransRecord
 
             //查询订单信息
             $orderSearch = new \core\models\order\OrderSearch;
-            $orderInfo = $orderSearch->search(['OrderSearch'=>['id'=>1]])->query->one();
+            $orderInfo = $orderSearch->search(['OrderSearch'=>['id'=>$data['order_id']]])->query->one();
             $data['customer_trans_record_online_service_card_on'] = $orderInfo->orderExtPay->card_id;    //服务卡ID
             $data['customer_trans_record_online_service_card_pay'] = $orderInfo->orderExtPay->order_use_card_money;   //服务卡内容
             $data['customer_trans_record_coupon_money'] = $orderInfo->orderExtPay->order_use_coupon_money; //优惠券金额

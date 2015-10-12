@@ -20,7 +20,7 @@ use boss\models\FinanceShopSettleApplySearch;
     
         <?php
             if($model->settle_type == FinanceSettleApplySearch::SELF_FULLTIME_WORKER_SETTELE){
-                echo "<div class='col-md-3'>";
+                echo "<div class='col-md-2'>";
                 echo $form->field($model, 'settleMonth')->widget(DatePicker::classname(), [
                             'name' => 'settleMonth',
                             'type' => DatePicker::TYPE_COMPONENT_PREPEND,
@@ -36,7 +36,7 @@ use boss\models\FinanceShopSettleApplySearch;
         ?>
     <?php 
     if($model->settle_type == FinanceSettleApplySearch::SELF_PARTTIME_WORKER_SETTELE){
-        echo "<div class='col-md-3'>";
+        echo "<div class='col-md-2'>";
         echo  $form->field($model, 'finance_settle_apply_starttime')->widget(DateControl::classname(),[
             'type' => DateControl::FORMAT_DATE,
             'ajaxConversion'=>false,
@@ -54,7 +54,7 @@ use boss\models\FinanceShopSettleApplySearch;
     
     <?php 
     if($model->settle_type == FinanceSettleApplySearch::SELF_PARTTIME_WORKER_SETTELE){
-        echo "<div class='col-md-3'>";
+        echo "<div class='col-md-2'>";
         echo  $form->field($model, 'finance_settle_apply_endtime')->widget(DateControl::classname(),[
             'type' => DateControl::FORMAT_DATE,
             'ajaxConversion'=>false,
@@ -85,29 +85,27 @@ use boss\models\FinanceShopSettleApplySearch;
     <div class='col-md-2'>
         <?= $form->field($model, 'worder_tel') ?>
     </div>
-
-
-    <div class='col-md-2' style="margin-top: 22px;">
-        <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
-        
-    </div>
-
-    <?php ActiveForm::end(); ?>
-    <?php $form = ActiveForm::begin([
-        'type' => ActiveForm::TYPE_VERTICAL,
-        //'id' => 'login-form-inline',
-        'action' => ['worker-manual-settlement-index?settle_type='.$model->settle_type.'&review_section='.$model->review_section],
-        'method' => 'get',
-    ]); ?>
     
-    <?php 
-    if(($model->review_section == FinanceShopSettleApplySearch::BUSINESS_REVIEW)){
-        echo "<div class='col-md-1' style='margin-top: 22px;'>";
-        echo  Html::submitButton(Yii::t('app', '人工结算'), ['class' => 'btn btn-default']);
+     <?php 
+    if($model->settle_type !=FinanceSettleApplySearch::ALL_WORKER_SETTELE){
+        echo "<div class='col-md-2'>";
+        echo  $form->field($model, 'finance_settle_apply_status')->dropDownList([FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_INIT=>'待审核',FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED=>'财务审核未通过']);
         echo "</div> ";
     }
     ?>
-    <?php ActiveForm::end(); ?>
+
+
+    <div class='col-md-3' style="margin-top: 22px;">
+        <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
+        <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
+        <?php 
+        if(($model->review_section == FinanceShopSettleApplySearch::BUSINESS_REVIEW)){
+            echo  Html::a(Yii::t('app', '人工结算'), ['worker-manual-settlement-index?settle_type='.$model->settle_type.'&review_section='.$model->review_section],['class' => 'btn btn-default']);
+        }
+        ?>
+    </div>
+
+    
+    
 
 </div>

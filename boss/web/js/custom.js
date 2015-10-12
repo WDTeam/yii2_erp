@@ -24,17 +24,26 @@ $(document).ready(function(){
 	});
 
 	//给所有单选框添加样式
-	$('input').iCheck({
-		checkboxClass: 'icheckbox_square-blue',
-		radioClass: 'iradio_square-blue',
-		increaseArea: '10%' // optional
-	});
+	// $('input').iCheck({
+	// 	checkboxClass: 'icheckbox_square-blue',
+	// 	radioClass: 'iradio_square-blue',
+	// 	increaseArea: '10%' // optional
+	// });
+
+
+	// //触发单选框的change事件
+	// $('input').on('ifChecked', function(event){
+	// 	$(this).trigger("change");
+	// });
+	// $('input').on('ifUnchecked', function(event){
+	// 	$(this).trigger("change");
+	// });
 
 	//给所有的type=file外层添加一个<a>
 	$("input[type='file']").each(function() {
 		$(this).replaceWith('<a class="a-upload">' + $(this).prop('outerHTML') + '点击上传文件</a><label class="uploadMsg"></label>');
 	});
-
+	//选择完上传文件后，显示出来
 	$("input[type='file']").on("change", function(){
 		// alert($(this).val());
 		$(this).parent().next().html($(this).val());

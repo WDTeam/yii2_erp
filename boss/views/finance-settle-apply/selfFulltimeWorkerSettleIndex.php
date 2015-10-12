@@ -68,6 +68,8 @@ $this->params['review_section'] = $searchModel->review_section;
                 'finance_settle_apply_order_money_except_cash',
                 ['attribute'=>'finance_settle_apply_subsidy',
                  'content'=>function($model,$key,$index){return '<a class="btn btn-default"  id = "subsidyButton" data-container="body" data-toggle="popover" data-placement="bottom" data-content="'.FinanceWorkerNonOrderIncomeSearch::getSubsidyDetail($model->id).'">'.$model->finance_settle_apply_subsidy.'</a>';}],
+                ['attribute'=>'finance_settle_apply_status',
+                    'content'=> function($model,$key,$index){return $model->getSettleApplyStatusDes($model->finance_settle_apply_status);} ],   
                 [
                 'class' => 'yii\grid\ActionColumn',
                 'template' =>'{view} {agree} {disagree}',

@@ -34,7 +34,7 @@
 
 label.radio-inline {
     font-size: 14px;
-    padding-left: 0;
+    /*padding-left: 0;*/
     float: left;
     width: 15%;
 }
@@ -45,6 +45,10 @@ div.order-create label.radio-inline {
 
 div#order-orderbookedtimerange label.radio-inline {
     width: 33%;
+}
+
+div#order-channel_id label.radio-inline {
+    width: 50%;
 }
 
 .radio-inline + .radio-inline {

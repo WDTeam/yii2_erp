@@ -45,8 +45,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <ul class="list-group">
             <?php foreach($data as $k => $v){?>
             <li class="list-group-item list-group-item-info">
-                <?php echo Html::checkbox('advert[]', false, ['value' => $v['id']]);?>
-                <?php echo $v['position_name'].':'.$v['operation_advert_content_name']?>
+                <?php echo Html::checkbox('advert[id][]', false, ['value' => $v['id']]);?>
+                <?php echo $v['position_name'].':'.$v['operation_advert_content_name'];?>
+                <label>上线时间：<?php echo Html::textInput('advert[starttime][]');?></label>
+                <label>上线时间：<?php echo Html::textInput('advert[endtime][]');?> 格式：2015-10-01 08:20:25</label>
             </li>
             <?php }?>
         </ul>

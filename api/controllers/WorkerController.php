@@ -54,12 +54,44 @@ class WorkerController
     }
     
     /**
+     * @api {get} /mobileapidriver2/driver_get_now_order_list_hide 阿姨去不了
+     * @apiName actionDriverGetNowOrderListHide
+     * @apiGroup Worker
+     * @apiParam {String} session_id    会话id.
+     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_id  订单id.
+     * @apiParam {String} list_type  订单类型.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *      "code": "ok",
+     *      "msg":"操作成功",
+     *      "ret":
+     *      {
+     *      }
+     * }
+     *
+     * @apiError SessionIdNotFound 未找到会话ID.
+     *
+     * @apiErrorExample Error-Response:
+     *  HTTP/1.1 404 Not Found
+     *  {
+     *      "code":"Failed",
+     *      "msg": "SessionIdNotFound"
+     *  }
+     */
+    public function actionWorkerCancelService(){
+
+    }
+        
+    /**
      * @api {get} /mobileapidriver2/get_driver_info 个人中心首页
      * @apiName actionGetDriverInfo
      * @apiGroup Worker
      *
      * @apiParam {String} session_id    会话id.
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} platform_version 平台版本号
      * @apiParam {String} Sign  传了123.
      *
      * @apiSuccessExample {json} Success-Response:

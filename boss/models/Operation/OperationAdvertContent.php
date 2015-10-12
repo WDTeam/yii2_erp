@@ -59,6 +59,7 @@ class OperationAdvertContent extends CoreOperationAdvertContent
             'operation_advert_url' => '广告链接地址',
             'created_at' => '创建时间',
             'updated_at' => '编辑时间',
+            'operation_advert_content_orders' => '排序',
         ];
     }
 }

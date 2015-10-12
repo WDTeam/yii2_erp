@@ -3,11 +3,6 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
-use common\models\Shop;
-use yii\helpers\ArrayHelper;
-use kartik\nav\NavX;
-use yii\bootstrap\NavBar;
-use yii\bootstrap\Modal;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -37,10 +32,8 @@ $this->params['breadcrumbs'][] = $this->title;
             
             <?php Pjax::begin(); echo GridView::widget([
             'dataProvider' => $dataProvider,
-    //        'filterModel' => $searchModel,
             'columns' => [
-                ['class' => 'yii\grid\CheckboxColumn'],
-    //           'worder_id',
+                ['class' => 'yii\grid\SerialColumn'],
                 'worder_tel',
                 'worker_type_name',
                 'finance_settle_apply_cycle_des',
@@ -55,9 +48,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     'content'=> function($model,$key,$index){return $model->getSettleApplyStatusDes($model->finance_settle_apply_status);} ],     
 //                'finance_settle_apply_reviewer', 
                 ['attribute'=>'updated_at','content'=>function($model,$key,$index){return Html::a(date('Y:m:d H:i:s',$model->updated_at),'#');}],
-                [
-                    'class' => 'yii\grid\ActionColumn',
-                ],
             ],
             'responsive'=>true,
             'hover'=>true,

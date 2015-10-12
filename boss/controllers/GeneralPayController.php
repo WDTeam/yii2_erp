@@ -9,16 +9,7 @@ use yii\data\ActiveDataProvider;
 use yii\rest\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-/*
-//支付宝
-include_once '../../ejiajie/pay/alipay_app/alipay_class.php';
-//微信
-include_once '../../ejiajie/pay/wx_app/wxpay_class.php';
-//百付宝
-include_once '../../ejiajie/pay/bfb_app/bfbpay_class.php';
-//银联
-include_once '../../ejiajie/pay/upacp_app/uppay_class.php';
-*/
+
 /**
  * GeneralPayController implements the CRUD actions for GeneralPay model.
  */
@@ -253,36 +244,66 @@ class GeneralPayController extends Controller
      * 微信APP回调
      * 金额单位为【分】
      */
-    public function actionWxAppNotify(){
+    public function actionWxAppNotify()
+    {
+        //file_put_contents('/tmp/pay/test.txt',json_encode($_POST));
+        //file_put_contents('/tmp/pay/test1.txt',json_encode($_GET));
+        //http://dev.boss.1jiajie.com/general-pay/wx-app-notify?r=/general-pay/wx-app-notify&
+        //bank_type=0&discount=0&fee_type=1&input_charset=UTF-8&
+        //notify_id=envUQL970OImimNqSbr02zP5_Zq5nrw-luZ8ADWHtVsc_30p2GXJ51YmMHoAqccbbeZBlGI2Ken5nHuMzIRqYgLX_4kw4QXg&out_trade_no=15101258091&
+        //partner=1217983401&product_fee=1&sign=A9A2D759AC57CA47ACC80436C4C6A876&sign_type=MD5&time_end=20151012165432&total_fee=1&
+        //trade_mode=1&trade_state=0&transaction_id=1217983401381510128537567810&transport_fee=0
 
-        $notify = new \wxpay_class();
-        //调用微信验证
-        $notify->callback();
-        //获取微信数据
-        $post = $notify->getNotifyData();
-        //获取验证状态
-        $status = $notify->notify();
+        $request = yii::$app->request;
+
+        $class = new \wxpay_class();
+        if(!empty($_GET['debug'])){
+            $post = $_POST = [
+                "r" => "/general-pay/wx-app-notify",
+                "bank_type" => "0",
+                "discount" => "0",
+                "fee_type" => "1",
+                "input_charset" => "UTF-8",
+                "notify_id" => "envUQL970OImimNqSbr02zP5_Zq5nrw-luZ8ADWHtVsc_30p2GXJ51YmMHoAqccbbeZBlGI2Ken5nHuMzIRqYgLX_4kw4QXg",
+                "out_trade_no" => "15101258091",
+                "partner" => "1217983401",
+                "product_fee" => "1",
+                "sign" => "A9A2D759AC57CA47ACC80436C4C6A876",
+                "sign_type" => "MD5",
+                "time_end" => "20151012165432",
+                "total_fee" => "1",
+                "trade_mode" => "1",
+                "trade_state" => "0",
+                "transaction_id" => "1217983401381510128537567810",
+                "transport_fee" => "0"
+            ];
+            $status = 'error';
+        }else{
+            //调用微信验证
+            $post = $request->get();
+        }
+
         //实例化模型
         $GeneralPayLogModel = new GeneralPayLog();
 
+        //实例化模型
+        $model = new GeneralPay();
 
         //记录日志
         $dataLog = array(
             'general_pay_log_price' => $model->toMoney($post['total_fee'],100,'/'),   //支付金额
-            'general_pay_log_shop_name' => $post['attach'],   //商品名称
+            'general_pay_log_shop_name' => '微信支付',   //商品名称
             'general_pay_log_eo_order_id' => $post['out_trade_no'],   //订单ID
             'general_pay_log_transaction_id' => $post['transaction_id'],   //交易流水号
-            'general_pay_log_status_bool' => $GeneralPayLogModel->statusBool($post['result_code']),   //支付状态
-            'general_pay_log_status' => $post['result_code'],   //支付状态
+            'general_pay_log_status_bool' => $GeneralPayLogModel->statusBool($post['trade_state']),   //支付状态
+            'general_pay_log_status' => $post['trade_state'],   //支付状态
             'pay_channel_id' => 11,  //支付渠道ID
             'general_pay_log_json_aggregation' => json_encode($post),
             'data' => $post //文件数据
         );
+
         $this->on('insertLog',[$GeneralPayLogModel,'insertLog'],$dataLog);
         $this->trigger('insertLog');
-
-        //实例化模型
-        $model = new GeneralPay();
 
         //获取交易ID
         $GeneralPayId = $model->getGeneralPayId($post['out_trade_no']);
@@ -290,8 +311,14 @@ class GeneralPayController extends Controller
         //查询支付记录
         $model = GeneralPay::find()->where(['id'=>$GeneralPayId,'general_pay_status'=>0])->one();
 
+        if(!empty($_GET['debug'])){
+            $status = true;
+        }else{
+            $status = $class->callback();
+        }
+
         //验证支付结果
-        if(!empty($model) && $status == 'SUCCESS'){
+        if(!empty($model) && !empty($status)){
             $model->id = $GeneralPayId; //ID
             $model->general_pay_status = 1; //支付状态
             $model->general_pay_actual_money = $model->toMoney($post['total_fee'],100,'/');
@@ -328,17 +355,17 @@ class GeneralPayController extends Controller
 
                 $transaction->commit();
 
+                $class->notify();
+
                 //发送短信事件
                 $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
                 $this->trigger('paySms');
 
-                $status = true;
             } catch(Exception $e) {
-                $status = false;
                 $transaction->rollBack();
             }
         }
-        echo $status;
+
     }
 
     /**
@@ -569,7 +596,7 @@ class GeneralPayController extends Controller
                     //充值交易记录
                     $customerTransRecord::analysisRecord($attribute);
                 }
-
+                exit;
                 $transaction->commit();
 
                 //发送短信事件

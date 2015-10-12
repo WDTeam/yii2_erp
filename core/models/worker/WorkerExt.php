@@ -30,6 +30,21 @@ use Yii;
 class WorkerExt extends \common\models\WorkerExt
 {
 
+    /*
+     * 获取阿姨学历配置
+     */
+    public static function getEduConfigList(){
+        return ['小学'=>'小学','初中'=>'初中','高中'=>'高中','大学'=>'大学'];
+    }
+
+    /*
+     * 获取阿姨来源配置
+     */
+    public static function getSourceConfigList(){
+        return ['蓝领招聘'=>'蓝领招聘','小家政'=>'小家政','直营门店'=>'直营门店','阿姨推荐'=>'阿姨推荐'];
+    }
+
+
     public function setProvince_id($id){
         $this->worker_live_province = $id;
     }

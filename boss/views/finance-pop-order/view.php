@@ -18,11 +18,12 @@ $this->params['breadcrumbs'][] =$this->title;
 
 $userinfo=Customer::getCustomerById($model->finance_pop_order_worker_uid);
 if($userinfo){$uisername=$username->customer_name;}else{$username='未查到';}
+
+
 //
 $admininfo=SystemUser::findIdentity($model->finance_pop_order_worker_uid);
-
 if($admininfo){$adminname=$admininfo->username;}else{$adminname='未查到';}
-
+$order_channel_info=FinanceOrderChannel::get_order_channel_info($model->finance_order_channel_id);
 
 ?>
 <div class="finance-pop-order-view">
@@ -38,12 +39,12 @@ if($admininfo){$adminname=$admininfo->username;}else{$adminname='未查到';}
         'attributes' => [
             'id',
             'finance_pop_order_number',
-    		/* [
+    		[
     		'attribute' => 'finance_order_channel_title',
     		'type' => DetailView::INPUT_TEXT,
     		'displayOnly' => true,
-    		'value'=> FinanceOrderChannel::get_order_channel_info($model->finance_order_channel_id) ,
-    		], */
+    		'value'=> $order_channel_info->finance_order_channel_name,
+    		], 
     		[
     		'attribute' => 'finance_pay_channel_title',
     		'type' => DetailView::INPUT_TEXT,
@@ -82,6 +83,15 @@ if($admininfo){$adminname=$admininfo->username;}else{$adminname='未查到';}
     		],
             'finance_pop_order_finance_time:datetime',
             'create_time:datetime',
+    		[
+    		'attribute' => 'finance_pop_order_info_msg',
+    		'type' => DetailView::INPUT_TEXT,
+    		'displayOnly' => true,
+    		'value'=>'订单提交成功--订单系统确认--订单正在分发中--订单分发到*阿姨--阿姨已确定--阿姨已上门--阿姨开始服务--订单完成--用户已评价',
+    		],
+    		
+    		
+
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],

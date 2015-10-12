@@ -30,6 +30,7 @@ class m150926_035618_create_table_operation_advert_content extends Migration
             'operation_advert_url' => Schema::TYPE_STRING. '(255) DEFAULT NULL COMMENT \'广告链接地址\'',
             'created_at' => Schema::TYPE_INTEGER. '(11) DEFAULT NULL COMMENT \'创建时间\'',
             'updated_at' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'编辑时间\'',
+            'operation_advert_content_orders' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'排序\'',
         ], $tableOptions);
     }
 
