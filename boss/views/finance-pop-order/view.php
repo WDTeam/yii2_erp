@@ -38,12 +38,12 @@ if($admininfo){$adminname=$admininfo->username;}else{$adminname='未查到';}
         'attributes' => [
             'id',
             'finance_pop_order_number',
-    		[
+    		/* [
     		'attribute' => 'finance_order_channel_title',
     		'type' => DetailView::INPUT_TEXT,
     		'displayOnly' => true,
     		'value'=> FinanceOrderChannel::get_order_channel_info($model->finance_order_channel_id) ,
-    		],
+    		], */
     		[
     		'attribute' => 'finance_pay_channel_title',
     		'type' => DetailView::INPUT_TEXT,
@@ -74,7 +74,7 @@ if($admininfo){$adminname=$admininfo->username;}else{$adminname='未查到';}
     		
             'finance_pop_order_pay_status',
             'finance_pop_order_pay_title',
-    		[
+    		 [
     		'attribute' => 'finance_pop_order_check_id',
     		'type' => DetailView::INPUT_TEXT,
     		'displayOnly' => true,

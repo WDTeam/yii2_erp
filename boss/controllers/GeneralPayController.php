@@ -212,21 +212,38 @@ class GeneralPayController extends Controller
                 $transaction = $connection->beginTransaction();
                 try {
                     $model->save(false);
-                    //修改用户余额
+                    //change customer balance
                     $customer = new \common\models\Customer;
+                    $customerTransRecord = new \core\models\CustomerTransRecord\CustomerTransRecord();
+                    $attribute = $model->getAttributes();
+                    //支付订单
                     if(!empty($model->order_id)){
-                        $customer::decBalance($model->customer_id,$model->general_pay_actual_money);
-                    }else{
+
+                        //服务卡支付
                         $customer::incBalance($model->customer_id,$model->general_pay_actual_money);
+
+                        //支付订单交易记录
+                        $customerTransRecord::analysisRecord($attribute);
+                    }else{
+
+                        //支付充值
+                        $customer::decBalance($model->customer_id,$model->general_pay_actual_money);
+
+                        //充值交易记录
+                        $customerTransRecord::analysisRecord($attribute);
                     }
 
                     $transaction->commit();
+
+                    //发送短信事件
+                    $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
+                    $this->trigger('paySms');
+
                     $status = true;
                 } catch(Exception $e) {
                     $status = false;
                     $transaction->rollBack();
                 }
-
             }
         }
         echo !empty($status) ? 'success' : 'fail';
@@ -290,14 +307,32 @@ class GeneralPayController extends Controller
                 $model->save(false);
                 //change customer balance
                 $customer = new \common\models\Customer;
+                $customerTransRecord = new \core\models\CustomerTransRecord\CustomerTransRecord();
+                $attribute = $model->getAttributes();
+                //支付订单
                 if(!empty($model->order_id)){
+
+                    //服务卡支付
                     $customer::incBalance($model->customer_id,$model->general_pay_actual_money);
+
+                    //支付订单交易记录
+                    $customerTransRecord::analysisRecord($attribute);
                 }else{
+
+                    //支付充值
                     $customer::decBalance($model->customer_id,$model->general_pay_actual_money);
+
+                    //充值交易记录
+                    $customerTransRecord::analysisRecord($attribute);
                 }
-                $status = true;
+
                 $transaction->commit();
 
+                //发送短信事件
+                $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
+                $this->trigger('paySms');
+
+                $status = true;
             } catch(Exception $e) {
                 $status = false;
                 $transaction->rollBack();
@@ -369,9 +404,9 @@ class GeneralPayController extends Controller
         $model = GeneralPay::find()->where(['id'=>$GeneralPayId,'general_pay_status'=>0])->one();
 
         //验证签名
-        $bfb = new \bfbpay_class();
+        $class = new \bfbpay_class();
         if(!empty($_GET['debug'])){
-            $sign = $bfb->callback();
+            $sign = $class->callback();
         }else{
             $sign = true;
         }
@@ -393,14 +428,34 @@ class GeneralPayController extends Controller
                 $model->save(false);
                 //change customer balance
                 $customer = new \common\models\Customer;
+                $customerTransRecord = new \core\models\CustomerTransRecord\CustomerTransRecord();
+                $attribute = $model->getAttributes();
+                //支付订单
                 if(!empty($model->order_id)){
+
+                    //服务卡支付
                     $customer::incBalance($model->customer_id,$model->general_pay_actual_money);
+
+                    //支付订单交易记录
+                    $customerTransRecord::analysisRecord($attribute);
                 }else{
+
+                    //支付充值
                     $customer::decBalance($model->customer_id,$model->general_pay_actual_money);
+
+                    //充值交易记录
+                    $customerTransRecord::analysisRecord($attribute);
                 }
+
                 $transaction->commit();
-                $bfb->notify();
+
+                //发送短信事件
+                $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
+                $this->trigger('paySms');
+
+                $class->notify();
             } catch(Exception $e) {
+                $class->notify();
                 $transaction->rollBack();
             }
 
@@ -501,27 +556,9 @@ class GeneralPayController extends Controller
                 //支付订单
                 if(!empty($model->order_id)){
 
-                    $customer::incBalance($model->customer_id,$model->general_pay_actual_money);
                     //服务卡支付
+                    $customer::incBalance($model->customer_id,$model->general_pay_actual_money);
 
-                    /**
-                    'customer_id',  //用户ID
-                    'order_id', //订单ID
-                    'order_channel_id', //订单渠道
-                    'customer_trans_record_order_channel',  //订单渠道名称
-                    'pay_channel_id',   //支付渠道
-                    'customer_trans_record_pay_channel',    //支付渠道名称
-                    'customer_trans_record_mode',   //交易方式:1消费,2=充值,3=退款,4=补偿
-                    'customer_trans_record_mode_name',  //交易方式:1消费,2=充值,3=退款,4=补偿
-                    'customer_trans_record_promo_code_money',   //优惠码金额
-                    'customer_trans_record_coupon_money',   //优惠券金额
-                    'customer_trans_record_online_pay', //在线支付
-                    'customer_trans_record_online_balance_pay', //在线余额支付
-                    'customer_trans_record_online_service_card_on', //服务卡号
-                    'customer_trans_record_online_service_card_pay',    //服务卡支付
-                    'customer_trans_record_order_total_money',  //订单总额
-                    'customer_trans_record_transaction_id', //交易流水号
-                     */
                     //支付订单交易记录
                     $customerTransRecord::analysisRecord($attribute);
                 }else{
@@ -529,25 +566,16 @@ class GeneralPayController extends Controller
                     //支付充值
                     $customer::decBalance($model->customer_id,$model->general_pay_actual_money);
 
-                    /**
-                    'customer_id',  //用户ID
-                    'order_id', //订单ID
-                    'order_channel_id', //订单渠道
-                    'customer_trans_record_order_channel',  //订单渠道名称
-                    'pay_channel_id',   //支付渠道
-                    'customer_trans_record_pay_channel',    //支付渠道名称
-                    'customer_trans_record_mode',   //交易方式:1消费,2=充值,3=退款,4=补偿
-                    'customer_trans_record_mode_name',  //交易方式:1消费,2=充值,3=退款,4=补偿
-                    'customer_trans_record_order_total_money',  //订单总额
-                    'customer_trans_record_online_service_card_on', //服务卡号
-                    'customer_trans_record_online_service_card_pay',    //服务卡支付金额
-                    */
-
                     //充值交易记录
                     $customerTransRecord::analysisRecord($attribute);
                 }
 
                 $transaction->commit();
+
+                //发送短信事件
+                $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
+                $this->trigger('paySms');
+
                 $class->notify();
             } catch(Exception $e) {
                 $class->notify();

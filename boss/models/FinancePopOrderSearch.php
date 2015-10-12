@@ -331,25 +331,18 @@ class FinancePopOrderSearch extends FinancePopOrder
     }  
     
     
+
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    public function OrderPayStatus($params)
+    public function OrderPayStatus($params,$lastidRecordLogid)
     {
     	//return $this->find()->where(['finance_pop_order_sum_money'=>$params])->count();
     $sumt=FinancePopOrder::find()->select(['sum(finance_pop_order_sum_money) as sumoney'])
-    	->where(['finance_pop_order_pay_status'=>'0'])->andWhere(['finance_pop_order_pay_status_type' => $params])->asArray()->all();
+    	->where(['finance_pop_order_pay_status'=>'0'])
+    ->andWhere(['finance_pop_order_pay_status_type' => $params])
+    ->andWhere(['finance_record_log_id' => $lastidRecordLogid])
+    ->asArray()->all();
+    
+    //var_dump($lastidRecordLogid);exit;
     	$post['FinanceRecordLog']['finance_record_log_succeed_sum_money'] =$sumt[0]['sumoney'];
     return $sumt[0]['sumoney']?$sumt[0]['sumoney']:0;
     	

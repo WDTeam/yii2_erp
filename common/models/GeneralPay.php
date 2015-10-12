@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use core\models\Customer;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 /**
@@ -360,6 +361,17 @@ class GeneralPay extends \yii\db\ActiveRecord
             }
         }
         return md5(md5($str).'1jiajie.com');
+    }
+
+    /**
+     * 支付成功发送短信
+     * @param $customer_id 用户ID
+     */
+    public function smsSend($data)
+    {
+        $phone = Customer::getCustomerPhone($data->data['customer_id']);
+        $msg = '支付成功';
+        Yii::$app->sms->send($phone,$msg);
     }
 
     /**
