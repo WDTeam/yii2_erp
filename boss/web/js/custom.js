@@ -24,15 +24,20 @@ $(document).ready(function(){
 	});
 
 	//给所有单选框添加样式
-	$('input').iCheck({
-		checkboxClass: 'icheckbox_square-blue',
-		radioClass: 'iradio_square-blue',
-		increaseArea: '10%' // optional
-	});
-	//触发单选框的change事件
-	$('input').on('ifChecked', function(event){
-		$(this).trigger("change");
-	});
+	// $('input').iCheck({
+	// 	checkboxClass: 'icheckbox_square-blue',
+	// 	radioClass: 'iradio_square-blue',
+	// 	increaseArea: '10%' // optional
+	// });
+
+
+	// //触发单选框的change事件
+	// $('input').on('ifChecked', function(event){
+	// 	$(this).trigger("change");
+	// });
+	// $('input').on('ifUnchecked', function(event){
+	// 	$(this).trigger("change");
+	// });
 
 	//给所有的type=file外层添加一个<a>
 	$("input[type='file']").each(function() {
