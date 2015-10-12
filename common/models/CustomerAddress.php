@@ -165,4 +165,11 @@ class CustomerAddress extends \yii\db\ActiveRecord
         $customerAddresses = CustomerAddress::findAll(['customer_id'=>$customer_id]);
         return $customerAddresses;
     }
+
+    /**
+     * 根据地址id查询地址
+     */
+    public static function getAddress($id){
+        return self::findOne($id) ? self::findOne($id) : false;
+    }
 }
