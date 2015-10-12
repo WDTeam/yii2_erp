@@ -76,9 +76,11 @@ class ShopManagerController extends BaseAuthController
             $data = \Yii::$app->request->post();
             $model->load($data);
             $file = UploadedFile::getInstance($model, 'bl_photo_url');
-            $qiniu = new Qiniu();
-            $path = $qiniu->uploadFile($file->tempName);
-            $model->bl_photo_url = $path['key'];
+            if($file){
+                $qiniu = new Qiniu();
+                $path = $qiniu->uploadFile($file->tempName);
+                $model->bl_photo_url = $path['key'];
+            }
             if($model->save()){
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -103,9 +105,11 @@ class ShopManagerController extends BaseAuthController
             $data = \Yii::$app->request->post();
             $model->load($data);
             $file = UploadedFile::getInstance($model, 'bl_photo_url');
-            $qiniu = new Qiniu();
-            $path = $qiniu->uploadFile($file->tempName);
-            $model->bl_photo_url = $path['key'];
+            if($file){
+                $qiniu = new Qiniu();
+                $path = $qiniu->uploadFile($file->tempName);
+                $model->bl_photo_url = $path['key'];
+            }
             if($model->save()){
                 return $this->redirect(['view', 'id' => $model->id]);
             }

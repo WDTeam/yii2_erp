@@ -83,7 +83,7 @@ use boss\models\FinanceShopSettleApplySearch;
     ?>
   
     <div class='col-md-2'>
-        <?= $form->field($model, 'worder_tel') ?>
+        <?= $form->field($model, 'worder_tel')->label('I hereby accept the '. Html::a('terms and conditions', Yii::$app->urlManager->createUrl(['index']), ['target'=>'_blank'])) ?>
     </div>
     
      <?php 

@@ -5,5 +5,6 @@ return [
     'Operation Shop Districts' => '商圈管理',
     'Create Operation Shop District' => '创建商圈',
     'Update Operation Shop District' => '更新商圈',
+    'Shop District Goods' => '商圈商品',
     
 ];

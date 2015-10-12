@@ -10,6 +10,7 @@ use boss\components\AreaCascade;
     echo '<br><input type="checkbox" val="shopdistrict" id="alllist">全选';
 $this->title = Yii::t('app', 'release').Yii::t('app', 'City');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'release').Yii::t('app', 'City'), 'url' => ['release']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '选择服务'), 'url' => ['categoryshop']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '选择商圈'), 'url' => ['getcityshopdistrict']];
 ?>
 <?php    

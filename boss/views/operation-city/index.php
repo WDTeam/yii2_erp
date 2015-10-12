@@ -119,7 +119,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         );
                     },
                     'listbtn' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-list"></span>',Yii::$app->urlManager->createUrl(['operation-shop-district','city_id' => $model->city_id]),['title' => Yii::t('yii', '商圈列表'), 'class' => 'btn btn-warning btn-sm']);
+                        return Html::a('<span class="glyphicon glyphicon-list"></span>',Yii::$app->urlManager->createUrl(['operation-shop-district','city_id' => $model->city_id]),['title' => Yii::t('yii', '商圈列表'), 'class' => 'btn btn-warning btn-sm']).
+                            ($model->operation_city_is_online == 1 ? 
+                            Html::a('<span class="glyphicon glyphicon-list"></span>',Yii::$app->urlManager->createUrl(['operation-shop-district-goods/index','city_id' => $model->city_id]),['title' => Yii::t('yii', '编辑城市服务'), 'class' => 'btn btn-warning btn-sm']) : '');
                         
                     },
                 ],
