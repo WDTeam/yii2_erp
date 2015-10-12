@@ -25,7 +25,7 @@ class JPush extends Object
     }
 
     /**
-     * 推送消息,推送给指定阿姨需要和客户端统一registration_id规则后方可实现。
+     * 推送消息
      * @param string $msg 消息内容
      * @return \JPush\Model\PushResponse
      */
@@ -71,8 +71,9 @@ class JPush extends Object
     
     /**
      * 获取推送统计
+     * @param string $msg_ids 消息id,逗号分隔
      */
-    public function getReport()
+    public function getReport($msg_ids)
     {
         $msg_ids = '3800995500,3264017765';
         $result = $this->client->report($msg_ids);
