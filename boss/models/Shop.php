@@ -123,7 +123,6 @@ class Shop extends \common\models\Shop
     {
         $this->is_blacklist = 1;
         if($this->save()){
-            $this->trigger('change:blacklist');
             //门店阿姨全拉黑
             $workers = $this->getWorkers();
             foreach ($workers as $worker){
@@ -143,10 +142,7 @@ class Shop extends \common\models\Shop
             throw new BadRequestHttpException('所在的小家政未移出黑名单');
         }
         $this->is_blacklist = 0;
-        if($this->save()){
-            $this->trigger('change:blacklist');
-        }
-        return false;
+        return $this->save();
     }
     /**
      * 改变审核状态
@@ -158,7 +154,6 @@ class Shop extends \common\models\Shop
         $this->audit_status = $number;
         $this->cause = $cause;
         if($this->save()){
-            $this->trigger('change:status');
             return true;
         }
         return false;

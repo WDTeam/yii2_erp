@@ -5,6 +5,7 @@ use yii\base\Behavior;
 use yii\base\InvalidValueException;
 use yii\base\Object;
 use boss\models\ShopStatus;
+use common\models\ActiveRecord;
 class ShopStatusBehavior extends Behavior
 {
     const CHANGE_STATUS = 'change:status';
@@ -21,9 +22,16 @@ class ShopStatusBehavior extends Behavior
     public function events()
     {
         return [
+            ActiveRecord::EVENT_BEFORE_UPDATE=> 'beforeUpdate',
             self::CHANGE_STATUS=> 'changeStatus',
             self::CHANGE_BLACKLIST=> 'changeBlacklist'
         ];
+    }
+    
+    public function beforeUpdate($event)
+    {
+        $this->owner->trigger(self::CHANGE_STATUS);
+        $this->owner->trigger(self::CHANGE_BLACKLIST);
     }
     
     public function changeStatus($event)
@@ -59,7 +67,7 @@ class ShopStatusBehavior extends Behavior
     
     public function changeBlacklist($event)
     {
-        $last_status = ShopStatus::find()->select(['is_blacklist'])
+        $last_status = ShopStatus::find()->select(['status_number'])
         ->where([
             'model_id'=>$this->owner->id,
             'model_name'=>$this->model_name,
