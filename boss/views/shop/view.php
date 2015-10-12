@@ -17,7 +17,8 @@ use common\components\BankHelper;
 //\yii\base\Event::on(Shop::className(),'test', function($e){
 //    var_dump($e);
 //});
-//$model->trigger('test');
+// $model->cause = 'fffffffffffffff';
+// $model->trigger('change:blacklist');
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Shops'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;

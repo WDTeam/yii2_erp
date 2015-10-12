@@ -183,40 +183,7 @@ class OperationCityController extends BaseAuthController
             $city_name = $post['OperationCity']['city_name'];
             $cache->set("releasecity_info", $city_name);
             $city_info = explode('-', $city_name);
-            return $this->redirect(['getcityshopdistrict']);
-        }
-    }
-    
-    /**
-     * 商圈列表
-     * @param type $city_id
-     * @return type
-     */
-    public function actionGetcityshopdistrict(){
-        $cache = Yii::$app->cache;
-        $releasecity_info = $cache->get("releasecity_info");
-        $city_id = explode('-', $releasecity_info);
-        $city_id = $city_id[0];
-        if($releasecity_info){
-            $post = Yii::$app->request->post();
-            if(empty($post)){
-                $shopdistrict = OperationShopDistrict::getCityShopDistrictList($city_id);
-                $shopdistrictinfo = [];
-                foreach((array)$shopdistrict as $key => $value){
-                    $shopdistrictinfo[$value['id'].'-'.$value['operation_shop_district_name']] = $value['operation_shop_district_name'];
-                }
-                $shopdistrictall = $cache->get("shopdistrict");
-                return $this->render('shopdistrict', [
-                    'shopdistrict' => $shopdistrictinfo,
-                    'shopdistrictall' => $shopdistrictall,
-                ]);
-            }else{
-                $shopdistrict = $post['shopdistrict'];
-                $cache->set("shopdistrict", $shopdistrict);
-                return $this->redirect(['categoryshop']);
-            }
-        }else{
-            return $this->redirect(['release']);
+            return $this->redirect(['categoryshop']);
         }
     }
     
@@ -249,7 +216,7 @@ class OperationCityController extends BaseAuthController
             }
             $cache->set("categorylist", $categorylist);
             $cache->set("categorygoods", $categorygoods);
-            return $this->redirect(['settinggoods']);
+            return $this->redirect(['getcityshopdistrict']);
         }
     }
     
@@ -269,6 +236,41 @@ class OperationCityController extends BaseAuthController
         ]);
     }
     
+    
+    
+    /**
+     * 商圈列表
+     * @param type $city_id
+     * @return type
+     */
+    public function actionGetcityshopdistrict(){
+        $cache = Yii::$app->cache;
+        $releasecity_info = $cache->get("releasecity_info");
+        $city_id = explode('-', $releasecity_info);
+        $city_id = $city_id[0];
+        if($releasecity_info){
+            $post = Yii::$app->request->post();
+            if(empty($post)){
+                $shopdistrict = OperationShopDistrict::getCityShopDistrictList($city_id);
+                $shopdistrictinfo = [];
+                foreach((array)$shopdistrict as $key => $value){
+                    $shopdistrictinfo[$value['id'].'-'.$value['operation_shop_district_name']] = $value['operation_shop_district_name'];
+                }
+                $shopdistrictall = $cache->get("shopdistrict");
+                return $this->render('shopdistrict', [
+                    'shopdistrict' => $shopdistrictinfo,
+                    'shopdistrictall' => $shopdistrictall,
+                ]);
+            }else{
+                $shopdistrict = $post['shopdistrict'];
+                $cache->set("shopdistrict", $shopdistrict);
+                return $this->redirect(['settinggoods']);
+            }
+        }else{
+            return $this->redirect(['release']);
+        }
+    }
+    
     /**
      * 设置商品
      * @return type
@@ -281,12 +283,17 @@ class OperationCityController extends BaseAuthController
             $goodslist = $cache->get("categorygoods");
             $goodslist = OperationGoods::getGoodsList($goodslist);
             $settinggoodsinfo = $cache->get('settinggoodsinfo');
+            $settinghopdistrictgoods = $cache->get('settinghopdistrictgoods');
+            $shopdistrictall = $cache->get("shopdistrict");
             return $this->render('settinggoods', [
                 'goodslist' => $goodslist,
                 'settinggoodsinfo' => $settinggoodsinfo,
+                'settinghopdistrictgoods' => $settinghopdistrictgoods,
+                'shopdistrictall' => $shopdistrictall,
             ]);
         }else{
             $cache->set('settinggoodsinfo', $post['goodinfo']);
+            $cache->set('settinghopdistrictgoods', $post['shopdistrictgoods']);
             return $this->redirect(['releaseconfirm']);
         }
     }
@@ -307,11 +314,14 @@ class OperationCityController extends BaseAuthController
         $categorylist = $cache->get("categorylist");
         //商品
         $goodsinfo = $cache->get('settinggoodsinfo');
-        
+        //商圈商品价格设置
+        $settinghopdistrictgoods = $cache->get('settinghopdistrictgoods');
+
         if(empty($post)){
             return $this->render('releaseconfirm', [
                         'cityname' => $cityname,
                         'shopdistrictinfo' => $shopdistrictinfo,
+                        'settinghopdistrictgoods' => $settinghopdistrictgoods,
                         'categorylist' => $categorylist,
                         'goodsinfo' => $goodsinfo,
                     ]);
@@ -323,7 +333,7 @@ class OperationCityController extends BaseAuthController
             }
             /** 商品属性**/
             /**  插入商圈商品信息 **/
-            OperationShopDistrictGoods::handleReleaseCity($cityinfo, $shopdistrictinfo, $goodsinfo);
+            OperationShopDistrictGoods::handleReleaseCity($cityinfo, $shopdistrictinfo, $goodsinfo, $settinghopdistrictgoods);
             /**  插入商圈商品信息 **/
             
             /** 删除缓存中的城市相关信息 **/
@@ -331,6 +341,7 @@ class OperationCityController extends BaseAuthController
             $cache->delete('shopdistrict');
             $cache->delete('categorylist');
             $cache->delete('settinggoodsinfo');
+            $cache->delete('settinghopdistrictgoods');
             /** 删除缓存中的城市相关信息 **/
             
             /**城市设为开通城市**/

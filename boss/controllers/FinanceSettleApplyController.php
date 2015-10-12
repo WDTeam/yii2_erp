@@ -478,11 +478,12 @@ class FinanceSettleApplyController extends BaseAuthController
     */
     public function actionWorkerManualSettlementIndex(){
         $financeSettleApplySearch= new FinanceSettleApplySearch;
-        $requestModel = Yii::$app->request->getQueryParams();
-        if(isset($requestModel["FinanceSettleApplySearch"])){
-            $financeSettleApplySearch = $requestModel["FinanceSettleApplySearch"];
-        }
+        $requestParams = Yii::$app->request->getQueryParams();
+        $review_section = $requestParams['review_section'];
+        $settle_type = $requestParams['settle_type'];
         $financeSettleApplySearch = $financeSettleApplySearch->getWorkerInfo(1234);//获取阿姨的信息
+        $financeSettleApplySearch->settle_type = $settle_type;
+        $financeSettleApplySearch->review_section = $review_section;
         $searchModel = new FinanceWorkerOrderIncomeSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'dataProvider'=>$dataProvider]);
@@ -495,7 +496,7 @@ class FinanceSettleApplyController extends BaseAuthController
     public function actionWorkerManualSettlementDone(){
         $requestParams = Yii::$app->request->getQueryParams();
         $review_section = $requestParams['review_section'];
-        $settle_type = $requestParams['$settle_type'];
+        $settle_type = $requestParams['settle_type'];
 //        saveAndGenerateSettleData($partimeWorkerArr,$settleStartTime,$settleEndTime);
         
         return $this->redirect('/finance-settle-apply/self-fulltime-worker-settle-index?settle_type='.$settle_type.'&review_section='.$review_section);

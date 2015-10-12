@@ -95,7 +95,29 @@ class Customer extends \yii\db\ActiveRecord
         ];
     }
 
-    
+    /**
+     * 统计所有客户的数量
+     */
+    public static function countAllCustomer(){
+        $count = self::find()->count();
+        return $count;
+    }
+
+    /**
+     * 统计不包括黑名单的客户数量
+     */
+    public static function countCustomer(){
+        $count = self::find()->where(['is_del'=>0])->count();
+        return $count;
+    }
+
+    /**
+     * 统计黑名单客户数量
+     */
+    public static function countBlockCustomer(){
+        $count = self::find()->where(['is_del'=>1])->count();
+        return $count;
+    }
 
     /**
      * 客户账户余额转入

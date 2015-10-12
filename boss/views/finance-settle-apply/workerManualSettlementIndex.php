@@ -28,7 +28,6 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php $form = ActiveForm::begin([
                  'type' => ActiveForm::TYPE_HORIZONTAL,
                  //'id' => 'login-form-inline',
-                 'action' => ['index'],
                  'method' => 'get',
                  ]);
 
