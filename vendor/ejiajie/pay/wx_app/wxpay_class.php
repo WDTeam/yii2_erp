@@ -148,6 +148,6 @@ class wxpay_class
 
     public function notify(){
         //回复服务器处理成功
-        echo "Success";
+        return "Success";
     }
 }
