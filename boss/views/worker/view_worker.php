@@ -41,13 +41,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'type' => DetailView::TYPE_INFO,
         ],
         'attributes' => [
-            'worker_name',
-            'worker_phone',
-            [
-                'attribute'=>'worker_idcard',
-                'displayOnly' => true
-            ],
-            'worker_photo',
             [
                 'attribute' => 'worker_work_city',
                 'type' => DetailView::INPUT_WIDGET,
@@ -85,36 +78,55 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 'value'=>Worker::getShopName($model->shop_id),
             ],
+            [
+                'attribute' => 'worker_source',
+                'editModel'=>$model->workerExt,
+                'viewModel'=>$model->workerExt,
+                'type' => DetailView::INPUT_WIDGET,
+                'widgetOptions' => [
+                    'class'=>\kartik\widgets\Select2::className(),
+                    'data' => WorkerExt::getSourceConfigList(),
+                    'hideSearch' => true,
+                    'options'=>[
+                        'placeholder' => '选择招聘来源',
+                    ]
+                ],
+                'label'=>'招聘来源'
+            ],
+            'worker_name',
+            'worker_phone',
+            [
+                'attribute'=>'worker_idcard',
+                'displayOnly' => true
+            ],
+            [   'attribute' => 'worker_district',
+                'type' => DetailView::INPUT_WIDGET,
+                'widgetOptions' => [
+                    'class'=>\kartik\widgets\Select2::className(),
+                    'name' => 'worker_district',
+                    'hideSearch' => true,
+                    'data' => Worker::getDistrictList(),
+                    'options' => ['placeholder' => '选择商圈','multiple' => true],
+                    'pluginOptions' => [
+                        'tags' => true,
+                        'maximumInputLength' => 10
+                    ],
+                ],
+                'value'=>$model::getWorkerDistrictShow($model->id),
+            ],
+            'worker_photo',
             //'worker_work_area',
             //'worker_work_street',
-            [
-                'attribute' => 'worker_type',
-                'type' => DetailView::INPUT_WIDGET,
-                'widgetOptions' => [
-                    'name'=>'worker_type',
-                    'class'=>\kartik\widgets\Select2::className(),
-                    'data' => [1 => '自有', 2=>'非自有'],
-                    'hideSearch' => true,
-                    'options'=>[
-                        'placeholder' => '选择阿姨身份',
-                    ]
-                ],
-                'value'=>Worker::getWorkerTypeShow($model->worker_type),
-            ],
-            [
-                'attribute' => 'worker_rule_id',
-                'type' => DetailView::INPUT_WIDGET,
-                'widgetOptions' => [
-                    'class'=>\kartik\widgets\Select2::className(),
-                    'data' => WorkerRuleConfig::getWorkerRuleList(),
-                    'hideSearch' => true,
-                    'options'=>[
-                        'placeholder' => '选择阿姨身份',
-                    ]
-                ],
-                'value'=>WorkerRuleConfig::getWorkerRuleShow($model->worker_rule_id),
-            ],
 
+            [
+                'attribute' => 'worker_sex',
+                'editModel'=>$model->workerExt,
+                'viewModel'=>$model->workerExt,
+                'type' => DetailView::INPUT_RADIO_LIST,
+                'items' => [0=>'女',1=>'男'],
+                'label'=>'阿姨性别',
+                'value'=>$model::getWorkerSexShow($model->workerExt->worker_sex),
+            ],
             [
                 'attribute' => 'worker_age',
                 'viewModel'=>$extModel,
@@ -125,20 +137,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ],
             [
-                'attribute' => 'worker_sex',
-                'editModel'=>$model->workerExt,
-                'viewModel'=>$model->workerExt,
-                'type' => DetailView::INPUT_RADIO_LIST,
-                'items' => [0=>'女',1=>'男'],
-                'label'=>'阿姨性别'
-            ],
-            [
                 'attribute' => 'worker_birth',
                 'editModel'=>$model->workerExt,
                 'viewModel'=>$model->workerExt,
                 'type' => DetailView::INPUT_DATE,
                 'label'=>'阿姨生日'
             ],
+
             [
                 'attribute' => 'worker_edu',
                 'editModel'=>$model->workerExt,
@@ -166,32 +171,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 'editModel'=>$model->workerExt,
                 'viewModel'=>$model->workerExt,
                 'type' => DetailView::INPUT_RADIO_LIST,
-                'items' => [0=>'是',1=>'否'],
-                'label'=>'阿姨是否有健康证'
+                'items' => [1=>'有',0=>'无'],
+                'label'=>'阿姨是否有健康证',
+                'value'=>Worker::getWorkerIsHealthShow($model->workerExt->worker_is_health),
             ],
             [
                 'attribute' => 'worker_is_insurance',
                 'editModel'=>$model->workerExt,
                 'viewModel'=>$model->workerExt,
                 'type' => DetailView::INPUT_RADIO_LIST,
-                'items' => [0=>'是',1=>'否'],
-                'label'=>'阿姨是否上保险'
+                'items' => [1=>'是',0=>'否'],
+                'label'=>'阿姨是否上保险',
+                'value'=>Worker::getWorkerIsInsuranceShow($model->workerExt->worker_is_insurance),
             ],
-            [
-                'attribute' => 'worker_source',
-                'editModel'=>$model->workerExt,
-                'viewModel'=>$model->workerExt,
-                'type' => DetailView::INPUT_WIDGET,
-                'widgetOptions' => [
-                    'class'=>\kartik\widgets\Select2::className(),
-                    'data' => WorkerExt::getSourceConfigList(),
-                    'hideSearch' => true,
-                    'options'=>[
-                        'placeholder' => '选择阿姨来源',
-                    ]
-                ],
-                'label'=>'阿姨来源'
-            ],
+
             [
                 'attribute' => 'worker_bank_name',
                 'editModel'=>$model->workerExt,
@@ -245,11 +238,46 @@ $this->params['breadcrumbs'][] = $this->title;
                 'type' => DetailView::INPUT_TEXT,
             ],
             [
+                'attribute' => 'worker_type',
+                'type' => DetailView::INPUT_WIDGET,
+                'widgetOptions' => [
+                    'name'=>'worker_type',
+                    'class'=>\kartik\widgets\Select2::className(),
+                    'data' => [1 => '自有', 2=>'非自有'],
+                    'hideSearch' => true,
+                    'options'=>[
+                        'placeholder' => '选择阿姨类型',
+                    ]
+                ],
+                'value'=>Worker::getWorkerTypeShow($model->worker_type),
+            ],
+
+            [
+                'attribute' => 'worker_rule_id',
+                'type' => DetailView::INPUT_WIDGET,
+                'widgetOptions' => [
+                    'class'=>\kartik\widgets\Select2::className(),
+                    'data' => WorkerRuleConfig::getWorkerRuleList(),
+                    'hideSearch' => true,
+                    'options'=>[
+                        'placeholder' => '选择阿姨身份',
+                    ]
+                ],
+                'value'=>WorkerRuleConfig::getWorkerRuleShow($model->worker_rule_id),
+            ],
+            [
                 'attribute' => 'worker_auth_status',
                 'type' => DetailView::INPUT_RADIO_LIST,
                 'items'=>['0'=>'已审核','1'=>'已试工','2'=>'已上岗'],
                 //'value'=>Worker::getWorkerAuthStatusShow($model->worker_auth_status),
                 'label'=>'阿姨审核状态'
+            ],
+            [
+                'attribute' => 'worker_is_vacation',
+                'type' => DetailView::INPUT_TEXT,
+                'displayOnly' => true,
+                'value'=>Worker::getWorkerIsVacationShow($model->worker_is_blacklist),
+
             ],
             [
                 'attribute' => 'worker_is_blacklist',
