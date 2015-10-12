@@ -349,11 +349,7 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         $this->customer_trans_record_online_service_card_befor_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] ? $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] : 0;
         //服务卡当前余额
         $this->customer_trans_record_online_service_card_current_balance = bcsub($lastResultServiceCard['customer_trans_record_online_service_card_current_balance'],$this->customer_trans_record_online_service_card_pay);
-        dump($this->getAttributes());
-        $this->insert();
-        dump($this->errors);
-        return true;
-
+        return $this->insert();
     }
 
     /**
