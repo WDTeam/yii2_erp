@@ -113,7 +113,7 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
      * @return:
      **/
     
-    public static function get_order_channel_info($channel_id)
+    public static function get_order_channel_info($channel_id=0)
     {
     	$channel_info = FinanceOrderChannel::findOne($channel_id);
     	
