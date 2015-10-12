@@ -38,8 +38,12 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     
     public $settleMonth;//结算月份
    
-   public $financeSettleApplyStatusArr = [-2=>'财务审核不通过',-1=>'业务部门审核不通过'
-      ,0=>'提出申请，正在业务部门审核',1=>'业务部门审核通过，等待财务审核',2=>'财务审核通过'];
+   public $financeSettleApplyStatusArr = [
+       FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED=>'财务审核不通过',
+       FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_FAILED=>'业务部门审核不通过',
+       FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT=>'提出申请，正在业务部门审核',
+       FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED=>'业务部门审核通过，等待财务审核',
+       FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED=>'财务审核通过'];
    
     public function rules()
     {
@@ -67,6 +71,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             'id' => $this->id,
             'worder_id' => $this->worder_id,
             'worker_type_id' => $this->worker_type_id,
+            'worker_rule_id' => $this->worker_rule_id,
             'finance_settle_apply_man_hour' => $this->finance_settle_apply_man_hour,
             'finance_settle_apply_order_money' => $this->finance_settle_apply_order_money,
             'finance_settle_apply_order_cash_money' => $this->finance_settle_apply_order_cash_money,
@@ -83,6 +88,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         $query->andFilterWhere(['<=','finance_settle_apply_starttime',$this->finance_settle_apply_starttime])
               ->andFilterWhere(['<=','finance_settle_apply_endtime',$this->finance_settle_apply_endtime]);
         $query->andFilterWhere(['like', 'worker_type_name', $this->worker_type_name])
+                ->andFilterWhere(['like', 'worker_rule_name', $this->worker_rule_name])
             ->andFilterWhere(['like', 'finance_settle_apply_cycle_des', $this->finance_settle_apply_cycle_des])
             ->andFilterWhere(['like', 'finance_settle_apply_reviewer', $this->finance_settle_apply_reviewer]);
 

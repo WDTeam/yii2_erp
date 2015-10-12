@@ -18,9 +18,8 @@ use yii\helpers\Html;
 ?>
 <?php 
  $form = ActiveForm::begin([
-     'action'=>['index'],
      'method'=>'get',
  ]);
 ?>
-<?php echo Html::a('导出报表',['export'],['class'=>'btn btn-success']) ?>
+<?php echo Html::a('导出报表',['export'],['class'=>'btn btn-success','target' => '_blank',]) ?>
 <?php ActiveForm::end(); ?>

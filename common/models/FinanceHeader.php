@@ -38,12 +38,27 @@ class FinanceHeader extends \yii\db\ActiveRecord
 				  break;
 				  
 				case 'order_money':
-				  return '<font color="green">订单金额</font>';
+				  return '<font color="purple">订单金额</font>';
 				  break;
+				  
+			    case 'decrease':
+				  return '<font color="red">递减</font>';
+				  break;
+				  	
+			  	case 'increase':
+			  	  return '<font color="orange">递加</font>';
+			  	  break;
+			  		
+			  	case 'function_way':
+			  		return '<font color="black">表达式</font>';
+			  		break;
+				  		
 				case 0:
-				  return '未选择';
+				  return '<font color="gray">未选择</font>';
 				  break;
 	 
+		
+				  		
 				}
 	}
 	

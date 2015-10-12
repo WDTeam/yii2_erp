@@ -15,8 +15,10 @@ class m150918_140930_create_table_finance_settle_apply extends Migration
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT  COMMENT \'主键\'' ,
             'worder_id' => Schema::TYPE_INTEGER . '(10) NOT NULL COMMENT \'阿姨id\'',
             'worder_tel' => Schema::TYPE_STRING . '(11) NOT NULL COMMENT \'阿姨电话\'',
-            'worker_type_id' => Schema::TYPE_INTEGER . '(1) NOT NULL COMMENT \'阿姨类型Id\'',
+            'worker_type_id' => Schema::TYPE_INTEGER . '(2) NOT NULL COMMENT \'阿姨类型Id,1自营 2非自营\'',
             'worker_type_name' => Schema::TYPE_STRING . '(30) NOT NULL COMMENT \'阿姨职位类型\'',
+            'worker_rule_id' => Schema::TYPE_INTEGER . '(2) NOT NULL COMMENT \'阿姨类型Id,1全职 2兼职 3高峰 4时段 \'',
+            'worker_rule_name' => Schema::TYPE_STRING . '(30) NOT NULL COMMENT \'阿姨角色类型\'',
             'shop_id' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL COMMENT \'门店id\'',
             'shop_name' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'门店名称\'',
             'shop_manager_id' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL COMMENT \'归属家政id\'',
@@ -38,7 +40,7 @@ class m150918_140930_create_table_finance_settle_apply extends Migration
             'created_at' => Schema::TYPE_INTEGER. '(11) COMMENT \'申请时间\'',
         ], $tableOptions);
         $this->batchInsert('{{%finance_settle_apply}}',
-            ['id','worder_id','worder_tel','worker_type_id','worker_type_name','finance_settle_apply_man_hour',
+            ['id','worder_id','worder_tel','worker_type_id','worker_type_name','worker_rule_id','worker_rule_name','finance_settle_apply_man_hour',
                 'finance_settle_apply_order_money','finance_settle_apply_order_cash_money','finance_settle_apply_order_money_except_cash',
 				'finance_settle_apply_subsidy','finance_settle_apply_money',
                 'finance_settle_apply_status','finance_settle_apply_cycle','finance_settle_apply_cycle_des','finance_settle_apply_reviewer',
@@ -46,13 +48,13 @@ class m150918_140930_create_table_finance_settle_apply extends Migration
                 'finance_settle_apply_starttime','finance_settle_apply_endtime',
                 'isdel','updated_at','created_at'],
             [
-                [1,111,'13888888888',2,'全职',6,150,0,150,70,220,0,2,'月结','魏北南',
+                [1,111,'13888888888',1,'自营',1,'全职',6,150,0,150,70,220,0,2,'月结','魏北南',
 
                     strtotime(date('Y-m-01 00:00:00', strtotime('2015-09'))),strtotime(date('Y-m-t 23:59:59', strtotime('2015-09'))),0,time(),time()],
-                [2,222,'13899999999',1,'兼职',8,200,0,200,0,200,0,1,'周结','潘高峰',
+                [2,222,'13899999999',1,'自营',2,'兼职',8,200,0,200,0,200,0,1,'周结','潘高峰',
 
                     strtotime("-2 month"),strtotime("-1 month"),0,time(),time()],
-                [3,333,'13899999999',1,'兼职',10,250,0,250,0,250,0,1,'周结','李胜强',
+                [3,333,'13899999999',2,'非自营',2,'兼职',10,250,0,250,0,250,0,1,'周结','李胜强',
 
                     strtotime("-2 month"),strtotime("-1 month"),0,time(),time()],
             ]);

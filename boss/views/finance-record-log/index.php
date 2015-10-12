@@ -1,4 +1,10 @@
 <?php
+/**
+* 对账记录列表
+* @date: 2015-10-11
+* @author: peak pan
+* @return:
+**/
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
@@ -31,7 +37,8 @@ $this->params['breadcrumbs'][] = $this->title;
 ]), ['create'], ['class' => 'btn btn-success'])*/  ?>
     </p>
 
-    <?php Pjax::begin(); echo GridView::widget([
+    <?php Pjax::begin();
+     echo GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
         'columns' => [
@@ -78,23 +85,25 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
+                'template' =>'{view}  {vacation} {delete}',
                 'buttons' => [
                 'update' => function ($url, $model) {
                                     return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance-pop-order/billinfo','id' => $model->id,'edit'=>'t']), [
                                                     'title' => Yii::t('yii', 'Edit'),
-                                                  ]);}
-
+                                                  ]);},
+                    'vacation' => function ($url, $model) {
+                        return Html::a('<span class="fa fa-fw fa-history"></span>',
+                        		
+                        		Yii::$app->urlManager->createUrl(['finance-pop-order/index','id' => $model->id]), [
+                        		'title' => Yii::t('yii', '对账处理'),
+                        		]);}
                 ],
-            ],
+            ],  	
         ],
         'responsive'=>true,
         'hover'=>true,
         'condensed'=>true,
         'floatHeader'=>true,
-
-
-
-
         'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type'=>'info',

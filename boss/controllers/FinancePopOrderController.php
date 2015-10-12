@@ -172,7 +172,6 @@ class FinancePopOrderController extends Controller
     		}
     	 	$FinanceRecordLog = new FinanceRecordLogSearch;
     		//获取渠道唯一订单号有问题需要问问
-    	 	//$post['FinanceRecordLog']['id'] =$lastidRecordLog;
     	 	$customer_info = FinanceRecordLog::findOne($lastidRecordLog);
     	 	
     		$customer_info->finance_order_channel_id =1;
@@ -214,8 +213,7 @@ class FinancePopOrderController extends Controller
     		$customer_info->create_time= time();
     		$customer_info->is_del=0;
     		$customer_info->save();
-    		
-    		return $this->redirect(['index']);
+    		return $this->redirect(['index','id' =>$lastidRecordLog]);
     	}
 
   		##########################
@@ -228,23 +226,29 @@ class FinancePopOrderController extends Controller
         	$tyd[]=$errt['id'];
         	$tydtui[]=$errt['finance_order_channel_name'];
         }
-       $tyu= array_combine($tyd,$tydtui);
+         $tyu= array_combine($tyd,$tydtui);
+         
          $searchModel = new FinancePopOrderSearch;
          //默认条件
          $searchModel->load(Yii::$app->request->getQueryParams());
          $searchModel->is_del=0;
          $searchModel->finance_pop_order_pay_status=0;
-         
-         
-         //
-         if(isset($lastidRecordLog)){
+ 
+         /* if(isset($lastidRecordLog)){
          	\Yii::$app->cache->set('lastidinfoid',$lastidRecordLog,600);
          }
+         $lastid=FinancePopOrder::get_cache_tiem(); */
          
-         $lastid=FinancePopOrder::get_cache_tiem();
          if(!isset($lastid)){
-         	$lastid='';
+         	$lastid='0';
          }
+         
+         //接收从对账记录过来传入的参数
+         $getdata=Yii::$app->request->getQueryParams();
+         if(isset($getdata['id'])){
+         $lastid=$getdata['id'];
+         }
+        
          $searchModel->finance_record_log_id=$lastid;
         //状态处理
         $dataProvider = $searchModel->search();
@@ -252,12 +256,7 @@ class FinancePopOrderController extends Controller
         $decss=Yii::$app->request->getQueryParams();
         if(isset($decss['FinancePopOrderSearch'])){
         $sta= $decss['FinancePopOrderSearch']['finance_pop_order_pay_status_type'];
-        
-         if($sta==3){
-        //我有三没有开始处理 从订单表里面开始查询
-         return $this->redirect(['orderlist']);
-        } 
-        
+         
         }else{
         $sta='';
         } 
@@ -292,7 +291,6 @@ class FinancePopOrderController extends Controller
     		$tydtui[]=$errt['finance_order_channel_name'];
     	}
     	$tyu= array_combine($tyd,$tydtui);
-    	
     	$sta=3;
     		
     			//我有三没有开始处理 从订单表里面开始查询

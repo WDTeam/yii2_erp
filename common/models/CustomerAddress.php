@@ -65,4 +65,104 @@ class CustomerAddress extends \yii\db\ActiveRecord
             'is_del' => Yii::t('boss', '是否逻辑删除'),
         ];
     }
+
+    /**
+     * 新增服务地址
+     */
+    public static function addAddress($customer_id, $general_region_id, $customer_address_detail, $customer_address_nickname, $customer_address_phone){
+        $transaction = \Yii::$app->db->beginTransaction();
+        try{
+            $customerAddress = new CustomerAddress;
+            $customerAddress->customer_id = $customer_id;
+            $customerAddress->general_region_id = $general_region_id;
+            $customerAddress->customer_address_status = 1;
+            $customerAddress->customer_address_detail = $customer_address_detail;
+            $customerAddress->customer_address_longitude = '';
+            $customerAddress->customer_address_latitude = '';
+            $customerAddress->customer_address_nickname = $customer_address_nickname;
+            $customerAddress->customer_address_phone = $customer_address_phone;
+            $customerAddress->created_at = time();
+            $customerAddress->updated_at = 0;
+            $CustomerAddress->is_del = 0;
+            $customerAddress->validate();
+            if ($customerAddress->hasErrors()) {
+                return false;
+            }
+            $customerAddress->save();
+            $customerAddresses = CustomerAddress::findAll('customer_id=:customer_id and id!=:id', 
+                [':customer_id'=>$customer_id, ':id'=>$customerAddress->id]);
+            foreach ($customerAddresses as $customerAddress) {
+                $customerAddress->customer_address_status = 0;
+                $customerAddress->save();
+            }
+            $transaction->commit();
+            return true;
+        }catch(\Exception $e){
+            $transaction->rollback();
+            return false;
+        }
+        
+    }
+
+    /**
+     * 软删除服务地址
+     */
+    public static function deleteAddress($id){
+        $customerAddress = CustomerAddress::findOne($id);
+        if ($customerAddress == NULL) {
+            return false;
+        }
+        CustomerAddress::deleteAll(['id'=>$id]);
+        $customerAddress = CustomerAddress::findOne($id);
+        if ($customerAddress == NULL) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * 修改服务地址
+     */
+    public static function updateAddress($id, $general_region_id, $customer_address_detail, $customer_address_nickname, $customer_address_phone){
+        $transaction = \Yii::$app->db->beginTransaction();
+        try{
+            $customerAddress = self::findOne($id);
+            $customerAddress->customer_id = $customer_id;
+            $customerAddress->general_region_id = $general_region_id;
+            $customerAddress->customer_address_status = 1;
+            $customerAddress->customer_address_detail = $customer_address_detail;
+            $customerAddress->customer_address_longitude = '';
+            $customerAddress->customer_address_latitude = '';
+            $customerAddress->customer_address_nickname = $customer_address_nickname;
+            $customerAddress->customer_address_phone = $customer_address_phone;
+            // $customerAddress->created_at = time();
+            $customerAddress->updated_at = time();
+            $CustomerAddress->is_del = 0;
+            $customerAddress->validate();
+            if ($customerAddress->hasErrors()) {
+                return false;
+            }
+            $customerAddress->save();
+            $customerAddresses = CustomerAddress::findAll('customer_id=:customer_id and id!=:id', 
+                [':customer_id'=>$customer_id, ':id'=>$customerAddress->id]);
+            foreach ($customerAddresses as $customerAddress) {
+                $customerAddress->customer_address_status = 0;
+                $customerAddress->save();
+            }
+            $transaction->commit();
+            return true;
+        }catch(\Exception $e){
+            $transaction->rollback();
+            return false;
+        }
+    }
+
+    /**
+     * 列出客户全部服务地址
+     */
+    public static function listAddress($customer_id){
+        $customerAddresses = CustomerAddress::findAll(['customer_id'=>$customer_id]);
+        return $customerAddresses;
+    }
 }

@@ -37,10 +37,8 @@ $this->params['breadcrumbs'][] = $this->title;
             
             <?php Pjax::begin(); echo GridView::widget([
             'dataProvider' => $dataProvider,
-    //        'filterModel' => $searchModel,
             'columns' => [
-                ['class' => 'yii\grid\CheckboxColumn'],
-    //           'worder_id',
+                ['class' => 'yii\grid\SerialColumn'],
                 'worder_tel',
                 'worker_type_name',
                 'finance_settle_apply_cycle_des',

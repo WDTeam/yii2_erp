@@ -62,6 +62,7 @@ class FinanceSettleApplyController extends BaseAuthController
     public function actionSelfFulltimeWorkerSettleIndex(){
         $requestParams = Yii::$app->request->getQueryParams();
         $searchModel = $this->initQueryParams($requestParams);
+        $searchModel->load($requestParams);
         $dataProvider = $searchModel->search(['FinanceSettleApplySearch'=>$requestParams]);
         
         return $this->render('selfFulltimeWorkerSettleIndex', [
@@ -79,7 +80,8 @@ class FinanceSettleApplyController extends BaseAuthController
         if($settle_type == FinanceSettleApplySearch::SELF_FULLTIME_WORKER_SETTELE){
             $searchModel->settleMonth = date('Y-m', strtotime('-1 month'));
             $searchModel->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT;
-            $searchModel->worker_type_id = 2;
+            $searchModel->worker_type_id = 1;
+            $searchModel->worker_rule_id = 1;
             $searchModel->finance_settle_apply_starttime = $this->getFirstDayOfSpecifiedMonth();
             $searchModel->finance_settle_apply_endtime = $this->getLastDayOfSpecifiedMonth();
             if(isset($requestParams['FinanceSettleApplySearch'])){
@@ -97,12 +99,13 @@ class FinanceSettleApplyController extends BaseAuthController
         if($settle_type == FinanceSettleApplySearch::SELF_PARTTIME_WORKER_SETTELE){
             $searchModel->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT;
             $searchModel->worker_type_id = 1;
+            $searchModel->worker_rule_id = 2;
             $searchModel->finance_settle_apply_starttime = strtotime('-1 week last monday');
             $searchModel->finance_settle_apply_endtime = strtotime('last sunday');
         }
         if($settle_type == FinanceSettleApplySearch::SHOP_WORKER_SETTELE){
             $searchModel->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT;
-            $searchModel->worker_type_id = 1;
+            $searchModel->worker_type_id = 2;
             $searchModel->finance_settle_apply_starttime = strtotime('-1 week last monday');
             $searchModel->finance_settle_apply_endtime = strtotime('last sunday');
         }
@@ -364,12 +367,15 @@ class FinanceSettleApplyController extends BaseAuthController
            $objPHPExcel->getActiveSheet()->setTitle('结算');
            $objPHPExcel->setActiveSheetIndex(0);
            $filename=urlencode('阿姨结算统计表').'_'.date('Y-m-dHis');
-           header('Content-Type: text/csv');
+           ob_end_clean();
+           header("Content-Type: application/force-download");
+           header("Content-Type: application/octet-stream");
+           header("Content-Type: application/download");
             header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
             header('Cache-Control: max-age=0');
             $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
             $objWriter->save('php://output');
-        return null;
+        return $this->actionQuery();
     }
     
     /**
