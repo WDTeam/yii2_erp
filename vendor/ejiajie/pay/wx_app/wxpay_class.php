@@ -107,9 +107,6 @@ class wxpay_class
         $resHandler = new ResponseHandler();
         $resHandler->setKey($PARTNER_KEY);
 
-        //初始化页面提交过来的参数
-        $resHandler->Init();
-
         //判断签名
         if($resHandler->isTenpaySign() == true) {
             //商户在收到后台通知后根据通知ID向财付通发起验证确认，采用后台系统调用交互模式

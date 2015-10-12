@@ -244,8 +244,10 @@ class GeneralPayController extends Controller
      * 微信APP回调
      * 金额单位为【分】
      */
-    public function actionWxAppNotify(){
-
+    public function actionWxAppNotify()
+    {
+        file_put_contents('/tmp/pay/test.txt',json_encode($_POST));
+        file_put_contents('/tmp/pay/test1.txt',json_encode($_GET));
         $class = new \wxpay_class();
         //调用微信验证
         $post = $class->callback();
