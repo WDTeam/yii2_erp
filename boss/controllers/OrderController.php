@@ -2,6 +2,8 @@
 
 namespace boss\controllers;
 
+use common\models\CustomerAddress;
+use core\models\worker\Worker;
 use Yii;
 use boss\components\BaseAuthController;
 use boss\models\order\OrderSearch;
@@ -17,11 +19,11 @@ class OrderController extends BaseAuthController
 
     public function actionCustomer()
     {
-//        $phone = Yii::$app->request->get('phone');
-//        Yii::$app->response->format = Response::FORMAT_JSON;
-//        return Customer::getCustomerInfo($phone);
+        $phone = Yii::$app->request->get('phone');
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return Customer::getCustomerInfo($phone);
 
-        return '{"id":1,"customer_balance":"1000"}';
+//        return '{"id":1,"customer_balance":"1000"}';
     }
 
     public function actionCustomerAddress($id)
@@ -113,6 +115,20 @@ class OrderController extends BaseAuthController
         }
     }
 
+    public function actionGetCanAssignWorkerList()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $address_id =  Yii::$app->request->get('address_id');
+        $address = CustomerAddress::getAddress($address_id);
+        //TODO 根据地址经纬度获取商圈
+        $shangquan = 1;
+        //根据商圈获取阿姨列表 第二个参数 1自有 2非自有
+        return array_merge(Worker::getDistrictFreeWorker($shangquan,1),Worker::getDistrictFreeWorker($shangquan,2));
+
+    }
+
+
+
     /**
      * Lists all Order models.
      * @return mixed
@@ -176,9 +192,20 @@ class OrderController extends BaseAuthController
         ]);
     }
 
+    /**
+     * 订单指派页面
+     * @return string
+     */
     public function actionAssign()
     {
         return $this->render('assign');
+    }
+
+    public function actionCanNotAssign()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $order_id =  Yii::$app->request->get('order_id');
+        return Order::manualAssignUndone($order_id,Yii::$app->user->id,true);
     }
 
 
