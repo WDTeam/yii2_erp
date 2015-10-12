@@ -49,7 +49,7 @@ class OrderExtFlag extends \common\models\ActiveRecord
             'order_flag_urgent' => '加急',
             'order_flag_exception' => '异常 1无经纬度',
             'order_flag_sys_assign' => '是否需要系统指派 1是 0否',
-            'order_flag_lock' => '是否锁定 1锁定 0未锁定',
+            'order_flag_lock' => '是否锁定 0未锁定',
             'created_at' => '创建时间',
             'updated_at' => '修改时间',
         ];

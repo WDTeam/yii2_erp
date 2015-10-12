@@ -89,8 +89,7 @@ class ResponseHandler
         $tenpaySign = strtolower($this->getParameter("sign"));
 
         //debug信息
-        $this->_setDebugInfo($signPars . " => sign:" . $sign .
-            " tenpaySign:" . $this->getParameter("sign"));
+        //$this->_setDebugInfo($signPars . " => sign:" . $sign ." tenpaySign:" . $this->getParameter("sign"));
 
         return $sign == $tenpaySign;
 
