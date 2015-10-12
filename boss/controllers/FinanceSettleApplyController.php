@@ -375,7 +375,7 @@ class FinanceSettleApplyController extends BaseAuthController
            header("Content-Type: application/vnd.ms-excel");
             header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
             header('Cache-Control: max-age=0');
-            
+
             $objWriter->save('php://output');
         exit;
     }

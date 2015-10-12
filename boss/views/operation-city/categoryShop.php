@@ -10,14 +10,13 @@ use boss\components\AreaCascade;
 //    echo '<br><input type="checkbox" val="categorylist" id="alllist">全选';
 $this->title = Yii::t('app', 'release').Yii::t('app', 'City');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'release').Yii::t('app', 'City'), 'url' => ['release']];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '选择商圈'), 'url' => ['getcityshopdistrict']];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '选择服务品类'), 'url' => ['categoryshop']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '选择服务'), 'url' => ['categoryshop']];
 ?>
 <?php    
     $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL, 'options' => ['enctype' => 'multipart/form-data']]);
 ?>
 服务品类
-<?php echo Html::checkboxList('categorylist', $categorylistall, $categorylist, ['id' => 'category'])  ?>
+<?php echo Html::radioList('categorylist[]', $categorylistall, $categorylist)  ?>
 <div id="categoryGoodsContent">
 </div>
 
