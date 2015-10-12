@@ -12,6 +12,8 @@ use Yii;
  * @property string $worder_tel
  * @property integer $worker_type_id
  * @property string $worker_type_name
+ * @property integer $worker_rule_id
+ * @property string $worker_rule_name
  * @property integer $shop_id
  * @property string $shop_name
  * @property integer $shop_manager_id
@@ -87,6 +89,8 @@ class FinanceSettleApply extends \yii\db\ActiveRecord
             'worder_tel' => Yii::t('app', '阿姨电话'),
             'worker_type_id' => Yii::t('app', '阿姨类型Id'),
             'worker_type_name' => Yii::t('app', '阿姨职位类型'),
+            'worker_rule_id' => Yii::t('app', '阿姨类型Id'),
+            'worker_rule_name' => Yii::t('app', '阿姨职位类型'),
             'shop_id' => Yii::t('app', '门店id'),
             'shop_name' => Yii::t('app', '门店名称'),
             'shop_manager_id' => Yii::t('app', '归属家政id'),
