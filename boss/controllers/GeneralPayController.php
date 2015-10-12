@@ -253,9 +253,12 @@ class GeneralPayController extends Controller
         //notify_id=envUQL970OImimNqSbr02zP5_Zq5nrw-luZ8ADWHtVsc_30p2GXJ51YmMHoAqccbbeZBlGI2Ken5nHuMzIRqYgLX_4kw4QXg&out_trade_no=15101258091&
         //partner=1217983401&product_fee=1&sign=A9A2D759AC57CA47ACC80436C4C6A876&sign_type=MD5&time_end=20151012165432&total_fee=1&
         //trade_mode=1&trade_state=0&transaction_id=1217983401381510128537567810&transport_fee=0
+
+        $request = yii::$app->request;
+
         $class = new \wxpay_class();
         if(!empty($_GET['debug'])){
-            $post = [
+            $post = $_POST = [
                 "r" => "/general-pay/wx-app-notify",
                 "bank_type" => "0",
                 "discount" => "0",
@@ -277,8 +280,7 @@ class GeneralPayController extends Controller
             $status = 'error';
         }else{
             //调用微信验证
-            $post = $class->callback();
-            $status = $class->notify();
+            $post = $request->get();
         }
 
         //实例化模型
@@ -309,8 +311,14 @@ class GeneralPayController extends Controller
         //查询支付记录
         $model = GeneralPay::find()->where(['id'=>$GeneralPayId,'general_pay_status'=>0])->one();
 
+        if(!empty($_GET['debug'])){
+            $status = true;
+        }else{
+            $status = $class->callback();
+        }
+
         //验证支付结果
-        if(!empty($model) && $status == 'Success'){
+        if(!empty($model) && !empty($status)){
             $model->id = $GeneralPayId; //ID
             $model->general_pay_status = 1; //支付状态
             $model->general_pay_actual_money = $model->toMoney($post['total_fee'],100,'/');
@@ -347,17 +355,17 @@ class GeneralPayController extends Controller
 
                 $transaction->commit();
 
+                $class->notify();
+
                 //发送短信事件
                 $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
                 $this->trigger('paySms');
 
             } catch(Exception $e) {
-                $status = 'error';
                 $transaction->rollBack();
             }
         }
-        //获取验证状态
-        echo $status;
+
     }
 
     /**

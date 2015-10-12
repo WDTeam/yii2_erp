@@ -75,6 +75,9 @@ class ResponseHandler
      *false:否
      */
     function isTenpaySign() {
+        unset($this->parameters['r']);
+        unset($this->parameters['debug']);
+
         $signPars = "";
         ksort($this->parameters);
         foreach($this->parameters as $k => $v) {
