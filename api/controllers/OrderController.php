@@ -241,6 +241,48 @@ class OrderController
     public function actionCancelOrder(){
     
     }
+
+    /**
+     * @api {get} /mobileapidriver2/driver_request_order 抢单
+     * @apiName actionDriverRequestOrder
+     * @apiGroup Order
+     * @apiDescription 阿姨抢单
+     * @apiParam {String} session_id    会话id.
+     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_id  订单id.
+     * @apiParam {String} list_type  订单类型.
+     * @apiParam {String} latitude
+     * @apiParam {String} longitude
+     * @apiParam {String} allow_worker_num   1  处理阿姨同时接单.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *      "code": "ok",
+     *      "msg":"操作成功",
+     *      "ret":
+     *      {
+     *          "result": "0",
+     *          "msg": "抢单失败，当天该时间段已有其他订单",
+     *          "goPage": 1,
+     *          "isSuc": false,
+     *          "telephone": "4006767636"
+     *      }
+     * }
+     *
+     * @apiError SessionIdNotFound 未找到会话ID.
+     *
+     * @apiErrorExample Error-Response:
+     *  HTTP/1.1 404 Not Found
+     *  {
+     *      "code":"Failed",
+     *      "msg": "SessionIdNotFound"
+     *  }
+     *
+     */    
+     public function actionCancelOrder(){
+
+    }
     
     /**
      *
