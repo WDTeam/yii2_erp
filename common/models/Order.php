@@ -241,7 +241,7 @@ class Order extends ActiveRecord
      */
     public function getOrderExtCustomer()
     {
-        return $this->hasOne(OrderExtCustomer::className(), ['order_id' => 'id']);
+        return $this->hasOne(OrderExtCustomer::className(), ['order_id' => 'id'])->from(OrderExtCustomer::tableName().' AS orderExtCustomer');
     }
 
     /**
@@ -257,7 +257,7 @@ class Order extends ActiveRecord
      */
     public function getOrderExtPay()
     {
-        return $this->hasOne(OrderExtPay::className(), ['order_id' => 'id']);
+        return $this->hasOne(OrderExtPay::className(), ['order_id' => 'id'])->from(OrderExtPay::tableName().' AS orderExtPay');
     }
 
     /**
@@ -265,7 +265,7 @@ class Order extends ActiveRecord
      */
     public function getOrderExtPop()
     {
-        return $this->hasOne(OrderExtPop::className(), ['order_id' => 'id']);
+        return $this->hasOne(OrderExtPop::className(), ['order_id' => 'id'])->from(OrderExtPop::tableName().' AS orderExtPop');
     }
 
     /**
@@ -281,7 +281,7 @@ class Order extends ActiveRecord
      */
     public function getOrderExtWorker()
     {
-        return $this->hasOne(OrderExtWorker::className(), ['order_id' => 'id']);
+        return $this->hasOne(OrderExtWorker::className(), ['order_id' => 'id'])->from(OrderExtWorker::tableName().' AS orderExtWorker');
     }
 
 
