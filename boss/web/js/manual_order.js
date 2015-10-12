@@ -5,6 +5,7 @@ window.onbeforeunload = onbeforeunload_handler;
 window.work_status = 1; //1休息 2空闲 3忙碌
 window.order_data = new Object();
 window.continue_work_count_down = 10;
+window.count_down_flag = true; //倒计时结束后标记false代表已经处理订单
 $(document).on("click",'#start_work,#continue_work',function(){
     window.work_status = 2;
     $('#work_status').text('空闲');
@@ -38,6 +39,7 @@ $(document).on("click",'#can_not_assign',function(){
 });
 
 function canNotAssign(){
+    window.count_down_flag = false;
     $.ajax({
         type: "GET",
         url: "/order/can-not-assign?order_id="+window.order_data.order.id,
@@ -66,6 +68,7 @@ function getWaitManualAssignOrder(){
         dataType:"json",
         success: function (data) {
             if(data){
+                window.count_down_flag = true;
                 window.work_status = 3;
                 $('#work_status').text('忙碌');
                 window.order_data = data;
@@ -88,7 +91,11 @@ function timer(){
         var time = parseInt(now.getTime()/1000);
         $("#create_to_current_time").text(sec2time(time-window.order_data.order.created_at));
         $("#current_to_begin_service_time").text(sec2time(window.order_data.order.order_booked_begin_time-time));
-        $("#count_down").text(sec2time(window.order_data.ext_flag.updated_at*1+window.order_data.oper_long_time*1-time));
+        var count_down = window.order_data.ext_flag.updated_at*1+window.order_data.oper_long_time*1-time;
+        $("#count_down").text(sec2time(count_down));
+        if(count_down<=0 && window.count_down_flag){
+            canNotAssign();
+        }
         if($("#work_console").css('display')=='block'){
             window.continue_work_count_down--;
             $("#continue_work").text('继续（'+window.continue_work_count_down+'s）');
