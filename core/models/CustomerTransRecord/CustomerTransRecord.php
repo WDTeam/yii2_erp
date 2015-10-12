@@ -107,7 +107,6 @@ class CustomerTransRecord extends \common\models\CustomerTransRecord
                 exit('没有此条件');
             }
         }
-
         self::createRecord($data);
     }
 }
