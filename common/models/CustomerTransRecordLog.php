@@ -83,11 +83,16 @@ class CustomerTransRecordLog extends \yii\db\ActiveRecord
         $this->on('writeTextLog',[$this,'writeTextLog'],$writeLog);
         $this->trigger('writeTextLog');
 
+        $orderChannelInfo = FinanceOrderChannel::get_order_channel_info($param->data['order_channel_id']);
+
+        //支付渠道
+        $param->data['pay_channel_id'] = $orderChannelInfo->pay_channel_id;
+
         //支付渠道名称
-        $param->data['customer_trans_record_pay_channel'] = FinancePayChannel::getPayChannelByName($param->data['pay_channel_id']);
+        $param->data['customer_trans_record_pay_channel'] = FinancePayChannel::getPayChannelByName($orderChannelInfo->pay_channel_id);
 
         //订单渠道名称
-        $param->data['customer_trans_record_order_channel'] = FinanceOrderChannel::getOrderChannelByName($param->data['order_channel_id']);
+        $param->data['customer_trans_record_order_channel'] = $orderChannelInfo->finance_order_channel_name;
 
         //makeSign
         $param->data['customer_trans_record_verify'] = $this->makeSign();

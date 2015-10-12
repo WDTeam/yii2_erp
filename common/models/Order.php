@@ -151,7 +151,7 @@ class Order extends ActiveRecord
     public function rules()
     {
         return [
-            [['admin_id'],'required'],
+            [['admin_id','order_service_type_id','order_src_id','order_booked_begin_time','address_id'],'required'],
             [['order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'isdel', 'order_ip', 'order_service_type_id', 'order_src_id', 'channel_id', 'order_booked_count', 'order_booked_begin_time', 'order_booked_end_time', 'address_id', 'order_booked_worker_id', 'checking_id'], 'integer'],
             [['order_unit_money', 'order_money'], 'number'],
             [['order_code', 'order_channel_name'], 'string', 'max' => 64],
@@ -248,7 +248,7 @@ class Order extends ActiveRecord
      */
     public function getOrderExtFlag()
     {
-        return $this->hasOne(OrderExtFlag::className(), ['order_id' => 'id']);
+        return $this->hasOne(OrderExtFlag::className(), ['order_id' => 'id'])->from(OrderExtFlag::tableName().' AS orderExtFlag');
     }
 
     /**
@@ -272,7 +272,7 @@ class Order extends ActiveRecord
      */
     public function getOrderExtStatus()
     {
-        return $this->hasOne(OrderExtStatus::className(), ['order_id' => 'id']);
+        return $this->hasOne(OrderExtStatus::className(), ['order_id' => 'id'])->from(OrderExtStatus::tableName().' AS orderExtStatus');
     }
 
     /**
@@ -324,6 +324,7 @@ class Order extends ActiveRecord
 
                 if (!$$modelClassName->save()) {
                     $transaction->rollBack();//插入不成功就回滚事务
+                    $this->addErrors($$modelClassName->errors);
                     return false;
                 }
 

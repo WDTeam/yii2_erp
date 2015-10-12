@@ -191,6 +191,7 @@ ul.sidebar-menu ul.treeview-menu li.active a.active{
     color: #444;
     border-top: 1px solid #d2d6de;
     font-size: 13px;
+    min-height: 27px;
 }
 
 .skin-blue .navbar .nav a {

@@ -73,10 +73,13 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
      */
     public function beforeValidate()
     {
+        //订单渠道
+        $orderChannelInfo = FinanceOrderChannel::get_order_channel_info($this->order_channel_id);
+        $this->pay_channel_id = $orderChannelInfo->pay_channel_id;
         //支付渠道名称
-        $this->customer_trans_record_pay_channel = FinancePayChannel::getPayChannelByName($this->pay_channel_id);
+        $this->customer_trans_record_pay_channel = FinancePayChannel::getPayChannelByName($orderChannelInfo->pay_channel_id);
         //订单渠道名称
-        $this->customer_trans_record_order_channel = FinanceOrderChannel::getOrderChannelByName($this->order_channel_id);
+        $this->customer_trans_record_order_channel = $orderChannelInfo->finance_order_channel_name;
         //交易方式:1消费,2=充值,3=退款,4=补偿
         $this->customer_trans_record_mode_name = self::getCustomerTransRecordModeByName($this->customer_trans_record_mode);
         //makeSign
@@ -117,8 +120,8 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
             [['customer_id', 'customer_trans_record_order_channel', 'pay_channel_id', 'customer_trans_record_pay_channel', 'customer_trans_record_mode_name', 'customer_trans_record_refund_money', 'customer_trans_record_verify'], 'required'],
             [['customer_id', 'order_id', 'order_channel_id',  'pay_channel_id', 'customer_trans_record_mode',  'created_at', 'updated_at', 'is_del'], 'integer'],
             [['customer_trans_record_promo_code_money', 'customer_trans_record_coupon_money', 'customer_trans_record_cash', 'customer_trans_record_pre_pay', 'customer_trans_record_online_pay', 'customer_trans_record_online_balance_pay', 'customer_trans_record_online_service_card_pay','customer_trans_record_online_service_card_current_balance','customer_trans_record_online_service_card_befor_balance', 'customer_trans_record_refund_money', 'customer_trans_record_money', 'customer_trans_record_order_total_money', 'customer_trans_record_total_money', 'customer_trans_record_current_balance', 'customer_trans_record_befor_balance','customer_trans_record_compensate_money'], 'number'],
-            [['customer_trans_record_online_service_card_on'], 'string', 'max' => 30],
-            [['customer_trans_record_transaction_id'], 'string', 'max' => 40],
+            //[['customer_trans_record_online_service_card_on'], 'string', 'max' => 30],
+            //[['customer_trans_record_transaction_id'], 'string', 'max' => 40],
             [['customer_trans_record_remark'], 'string', 'max' => 255],
             [['customer_trans_record_verify'], 'string', 'max' => 32],
             [['record_type'],'required'],   //自定义，交易类型:1=消费,2=充值,3=退款,4=补偿
@@ -142,7 +145,7 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
     public function scenarios()
     {
         return[
-            //1=在线支付（在线+余额+服务卡）onlinePay
+            //1=在线支付（在线+余额+服务卡）onlineCradBalancePay
             '1'=>[
                 'customer_id',  //用户ID
                 'order_id', //订单ID
@@ -275,6 +278,22 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
                 'customer_trans_record_online_service_card_pay',    //服务卡支付金额
                 'customer_trans_record_transaction_id', //交易流水号
             ],
+            //1=在线支付（在线）onlinePay
+            '10'=>[
+                'customer_id',  //用户ID
+                'order_id', //订单ID
+                'order_channel_id', //订单渠道
+                'customer_trans_record_order_channel',  //订单渠道名称
+                'pay_channel_id',   //支付渠道
+                'customer_trans_record_pay_channel',    //支付渠道名称
+                'customer_trans_record_mode',   //交易方式:1消费,2=充值,3=退款,4=补偿
+                'customer_trans_record_mode_name',  //交易方式:1消费,2=充值,3=退款,4=补偿
+                'customer_trans_record_promo_code_money',   //优惠码金额
+                'customer_trans_record_coupon_money',   //优惠券金额
+                'customer_trans_record_online_pay', //在线支付
+                'customer_trans_record_order_total_money',  //订单总额
+                'customer_trans_record_transaction_id', //交易流水号
+            ],
         ];
     }
 
@@ -288,7 +307,7 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         switch($this->scenario){
             case 1:
                 //在线支付（在线+余额+服务卡）
-                $obj = $this->onlinePay();
+                $obj = $this->onlineCradBalancePay();
                 break;
             case 2:
                 //现金
@@ -322,15 +341,19 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
                 //退款（订单）：把订单金额原路退回
                 $obj = $this->refundSource();
                 break;
+            case 10:
+                //在线支付（在线）
+                $obj = $this->onlinePay();
+                break;
         }
 
         return $obj;
     }
 
     /**
-     * 在线支付
+     * 在线支付(1)
      */
-    private function onlinePay()
+    private function onlineCradBalancePay()
     {
         //获取最后一次结果
         $lastResult = $this->lastResult();
@@ -346,22 +369,16 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         $this->customer_trans_record_online_service_card_befor_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] ? $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] : 0;
         //服务卡当前余额
         $this->customer_trans_record_online_service_card_current_balance = bcsub($lastResultServiceCard['customer_trans_record_online_service_card_current_balance'],$this->customer_trans_record_online_service_card_pay);
+        //交易总额
+        $this->customer_trans_record_total_money = bcadd($lastResult['customer_trans_record_total_money'],$this->customer_trans_record_order_total_money);
 
         return $this->insert();
     }
 
     /**
-     * 现金支付
+     * 现金支付(2)
      */
     private function cardPay(){
-
-    }
-
-    /**
-     *  充值（服务卡）
-     */
-    private function rechargeServiceCardPay()
-    {
         //获取最后一次结果
         $lastResult = $this->lastResult();
         //获取最后一次服务卡结果
@@ -371,17 +388,19 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         //之前余额
         $this->customer_trans_record_befor_balance = $lastResult['customer_trans_record_befor_balance'] ? $lastResult['customer_trans_record_befor_balance'] : 0;
         //当前余额
-        $this->customer_trans_record_current_balance = $lastResult['customer_trans_record_current_balance'] ? $lastResult['customer_trans_record_current_balance'] : 0;
+        $this->customer_trans_record_current_balance = $lastResult['customer_trans_record_befor_balance'] ? $lastResult['customer_trans_record_befor_balance'] : 0;
         //服务卡之前余额
         $this->customer_trans_record_online_service_card_befor_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] ? $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] : 0;
         //服务卡当前余额
-        $this->customer_trans_record_online_service_card_current_balance = bcadd($lastResultServiceCard['customer_trans_record_online_service_card_current_balance'],$this->customer_trans_record_online_service_card_pay);
+        $this->customer_trans_record_online_service_card_current_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] ? $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] : 0;
+        //交易总额
+        $this->customer_trans_record_total_money = bcadd($lastResult['customer_trans_record_total_money'],$this->customer_trans_record_order_total_money);
 
         return $this->insert();
-
     }
+
     /**
-     * 预付费
+     * 预付费(3)
      */
     private function perPay()
     {
@@ -399,12 +418,41 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         $this->customer_trans_record_online_service_card_befor_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] ? $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] : 0;
         //服务卡当前余额
         $this->customer_trans_record_online_service_card_current_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] ? $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] : 0;
+        //交易总额
+        $this->customer_trans_record_total_money = bcadd($lastResult['customer_trans_record_total_money'],$this->customer_trans_record_order_total_money);
 
         return $this->insert();
     }
 
     /**
-     * 退款(服务卡)
+     *  充值（服务卡）(4)
+     */
+    private function rechargeServiceCardPay()
+    {
+        //获取最后一次结果
+        $lastResult = $this->lastResult();
+        //获取最后一次服务卡结果
+        $lastResultServiceCard = $this->lastResultServerCard();
+        //保留两位小数
+        bcscale(2);
+        //之前余额
+        $this->customer_trans_record_befor_balance = $lastResult['customer_trans_record_befor_balance'] ? $lastResult['customer_trans_record_befor_balance'] : 0;
+        //当前余额
+        $this->customer_trans_record_current_balance = $lastResult['customer_trans_record_current_balance'] ? $lastResult['customer_trans_record_current_balance'] : 0;
+        //服务卡之前余额
+        $this->customer_trans_record_online_service_card_befor_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] ? $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] : 0;
+        //服务卡当前余额
+        $this->customer_trans_record_online_service_card_current_balance = bcadd($lastResultServiceCard['customer_trans_record_online_service_card_current_balance'],$this->customer_trans_record_online_service_card_pay);
+        //交易总额
+        $this->customer_trans_record_total_money = bcadd($lastResult['customer_trans_record_total_money'],$this->customer_trans_record_order_total_money);
+
+        return $this->insert();
+
+    }
+
+
+    /**
+     * 退款(服务卡)(5)
      */
     private function refundServiceCardPay()
     {
@@ -412,7 +460,7 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
     }
 
     /**
-     * 补偿
+     * 补偿(6)
      */
     private function compensation()
     {
@@ -421,7 +469,7 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
 
 
     /**
-     * 服务卡(在线支付)
+     * 服务卡(在线支付)(7)
      */
     private function onlineServiceCardPay()
     {
@@ -439,12 +487,14 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         $this->customer_trans_record_online_service_card_befor_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] ? $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] : 0;
         //服务卡当前余额
         $this->customer_trans_record_online_service_card_current_balance = bcsub($lastResultServiceCard['customer_trans_record_online_service_card_current_balance'],$this->customer_trans_record_online_service_card_pay);
+        //交易总额
+        $this->customer_trans_record_total_money = bcadd($lastResult['customer_trans_record_total_money'],$this->customer_trans_record_order_total_money);
 
         return $this->insert();
     }
 
     /**
-     * 余额在线支付
+     * 余额在线支付(8)
      */
     public function onlineBalancePay()
     {
@@ -463,12 +513,14 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         $this->customer_trans_record_online_service_card_befor_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] ? $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] : 0;
         //服务卡当前余额
         $this->customer_trans_record_online_service_card_current_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] ? $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] : 0;
+        //交易总额
+        $this->customer_trans_record_total_money = bcadd($lastResult['customer_trans_record_total_money'],$this->customer_trans_record_order_total_money);
 
         return $this->insert();
     }
 
     /**
-     * 退款（订单）：把订单金额原路退回
+     * 退款（订单）：把订单金额原路退回(9)
      */
     private function refundSource()
     {
@@ -486,6 +538,31 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         $this->customer_trans_record_online_service_card_befor_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] ? $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] : 0;
         //服务卡当前余额
         $this->customer_trans_record_online_service_card_current_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] ? $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] : 0;
+
+        return $this->insert();
+    }
+
+    /**
+     * 在线支付（在线）(10)
+     */
+    private function onlinePay()
+    {
+        //获取最后一次结果
+        $lastResult = $this->lastResult();
+        //获取最后一次服务卡结果
+        $lastResultServiceCard = $this->lastResultServerCard();
+        //保留两位小数
+        bcscale(2);
+        //之前余额
+        $this->customer_trans_record_befor_balance = $lastResult['customer_trans_record_befor_balance'] ? $lastResult['customer_trans_record_befor_balance'] : 0;
+        //当前余额
+        $this->customer_trans_record_current_balance = $lastResult['customer_trans_record_befor_balance'] ? $lastResult['customer_trans_record_befor_balance'] : 0;
+        //服务卡之前余额
+        $this->customer_trans_record_online_service_card_befor_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] ? $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] : 0;
+        //服务卡当前余额
+        $this->customer_trans_record_online_service_card_current_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] ? $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] : 0;
+        //交易总额
+        $this->customer_trans_record_total_money = bcadd($lastResult['customer_trans_record_total_money'],$this->customer_trans_record_order_total_money);
 
         return $this->insert();
     }
@@ -526,7 +603,7 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
     }
 
     /**
-     * 模式名称
+     * 记录模式
      * @param $mode_id
      * @return string
      */

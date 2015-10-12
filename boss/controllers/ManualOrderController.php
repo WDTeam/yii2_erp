@@ -2,10 +2,8 @@
 
 namespace boss\controllers;
 
-use boss\models\WorkerSearch;
 use Yii;
 use core\models\Order\Order;
-use boss\models\ManualOrderSerach;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -34,14 +32,10 @@ class ManualOrderController extends BaseAuthController
      */
     public function actionIndex()
     {
-        $searchModel = new WorkerSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel,
-        ]);
+        return $this->render('index');
     }
+
+
 
     /**
      * Displays a single Order model.

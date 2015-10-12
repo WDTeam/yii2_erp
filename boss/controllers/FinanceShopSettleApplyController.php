@@ -101,6 +101,64 @@ class FinanceShopSettleApplyController extends Controller
     {
         return $this->actionIndex();
     }
+    
+    
+    /**
+     * 门店结算列表
+     * @return mixed
+     */
+    public function actionQuery()
+    {
+        $searchModel = new FinanceShopSettleApplySearch;
+        $searchModel->finance_shop_settle_apply_starttime = strtotime('-1 week last monday');//统计结束时间,上周第一天
+        $searchModel->finance_shop_settle_apply_endtime = strtotime('last sunday');//统计结束时间,上周最后一天
+        $requestParams = Yii::$app->request->getQueryParams();
+        $searchModel->load($requestParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        return $this->render('query', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
+    
+    public function actionExport(){
+        $searchModel = new FinanceShopSettleApplySearch;
+        $data = $searchModel->find()->all();
+        $objPHPExcel=new \PHPExcel();
+        $objPHPExcel->getProperties()->setCreator('ejiajie')
+                ->setLastModifiedBy('ejiajie')
+                ->setTitle('Office 2007 XLSX Document')
+                ->setSubject('Office 2007 XLSX Document')
+                ->setDescription('Document for Office 2007 XLSX, generated using PHP classes.')
+                ->setKeywords('office 2007 openxml php')
+                ->setCategory('Result file');
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1','门店名称')
+                    ->setCellValue('B1','归属家政名称')
+                    ->setCellValue('C1','完成总单量')
+                    ->setCellValue('D1','每单管理费')
+                    ->setCellValue('E1','管理费');
+           $i=2;   
+           foreach($data as $k=>$v){
+            $objPHPExcel->setActiveSheetIndex(0)
+                       ->setCellValue('A'.$i,$v['shop_name'])
+                       ->setCellValue('B'.$i,$v['shop_manager_name'])
+                       ->setCellValue('C'.$i,$v['finance_shop_settle_apply_order_count'])
+                       ->setCellValue('D'.$i,$v['finance_shop_settle_apply_fee_per_order'])
+                       ->setCellValue('E'.$i,$v['finance_shop_settle_apply_fee']);
+            $i++;
+           }
+           $objPHPExcel->getActiveSheet()->setTitle('结算');
+           $objPHPExcel->setActiveSheetIndex(0);
+           $filename=urlencode('门店结算统计表').'_'.date('Y-m-dHis');
+           ob_end_clean();
+           header('Content-Type: text/csv');
+            header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
+            header('Cache-Control: max-age=0');
+            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            $objWriter->save('php://output');
+        return null;
+    }
 
     /**
      * Displays a single FinanceShopSettleApply model.

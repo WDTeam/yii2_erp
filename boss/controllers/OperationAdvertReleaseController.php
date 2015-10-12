@@ -73,14 +73,15 @@ class OperationAdvertReleaseController extends BaseAuthController
     {
         $post = Yii::$app->request->post();
         if ($post){
-            $city = OperationCity::find()->asArray()->where(['city_id' => $post['city_id']])->one();
+            $citys = OperationCity::find()->asArray()->where(['city_id' => $post['city_ids']])->all();
             $cache = Yii::$app->cache;
-            $cache->set('__CITY_INFO__', $city, 6000);
+            $cache->set('__CITY_INFO__', $citys, 6000);
             return $this->redirect(['step-second']);
         } else {
             
             $citys = OperationCity::find()->all();
-            $c = ['选择要发布的城市'];
+//            $c = ['选择要发布的城市'];
+            $c = [];
             foreach($citys as $v){$c[$v->city_id] = $v->city_name;}
             return $this->render('step-first', ['citys' => $c]);
         }
@@ -93,11 +94,15 @@ class OperationAdvertReleaseController extends BaseAuthController
     {
         $post = Yii::$app->request->post();
         if ($post){
-            $platform_ids = $post['platform_id'];
-            $platforms = OperationPlatform::find()->asArray()->where(['id' => $platform_ids])->all();
-            $cache = Yii::$app->cache;
-            $cache->set('__PLATFORMS_INFO__', $platforms, 6000);
-            return $this->redirect(['step-third', 'platform_ids' => $platform_ids]);
+            if(!empty($post['platform_id'])){
+                $platform_ids = $post['platform_id'];
+                $platforms = OperationPlatform::find()->asArray()->where(['id' => $platform_ids])->all();
+                $cache = Yii::$app->cache;
+                $cache->set('__PLATFORMS_INFO__', $platforms, 6000);
+                return $this->redirect(['step-third', 'platform_ids' => $platform_ids]);
+            }else{
+                return $this->redirect(['step-second']);
+            }
         } else {
             $platforms = OperationPlatform::find()->asArray()->all();
             $data = [];
@@ -138,20 +143,23 @@ class OperationAdvertReleaseController extends BaseAuthController
         $post = Yii::$app->request->post();
         if ($post){
             $cache = Yii::$app->cache;
-            $city = $cache->get('__CITY_INFO__');
-            $data = [
-                '_csrf' => $post['_csrf'],
-                'OperationAdvertRelease' => [
-                    'city_id' => $city['city_id'],
-                    'city_name' => $city['city_name'],
-                    'operation_release_contents' => serialize($post['advert']),
-                    'created_at' => time(),
-                    'updated_at' => time()
-                ]
-            ];
+            $citys = $cache->get('__CITY_INFO__');
             $model = new OperationAdvertRelease();
-            $model->load($data);
-            $model->save();
+            foreach($citys as $k => $city){
+                $data = [
+                    '_csrf' => $post['_csrf'],
+                    'OperationAdvertRelease' => [
+                        'city_id' => $city['city_id'],
+                        'city_name' => $city['city_name'],
+                        'operation_release_contents' => serialize($post['advert']),
+                        'created_at' => time(),
+                        'updated_at' => time()
+                    ]
+                ];
+                $_model = clone $model;
+                $_model->load($data);
+                $_model->save();
+            }
             return $this->redirect(['index']);
         } else {
             $cache = Yii::$app->cache;

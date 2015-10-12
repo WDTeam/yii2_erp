@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use core\models\Customer;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 /**
@@ -134,50 +135,39 @@ class GeneralPay extends \yii\db\ActiveRecord
     {
         $source = '';
         if(empty($source_id)) return $source;
-
+        //获取订单渠道名称
+        $source = FinancePayChannel::getPayChannelByName($source_id);
         switch($source_id){
             case 1:
-                $source = 'APP微信';
                 $this->pay_type = 'wx_app';
                 break;
             case 2:
-                $source = 'H5微信';
                 $this->pay_type = 'wx_h5';
                 break;
             case 3:
-                $source = 'APP百度钱包';
                 $this->pay_type = 'bfb_app';
                 break;
             case 4:
-                $source = 'APP银联';
                 $this->pay_type = 'up_app';
                 break;
             case 5:
-                $source = 'APP支付宝';
                 $this->pay_type = 'alipay_app';
                 break;
             case 6:
-                $source = 'WEB支付宝';
                 $this->pay_type = 'alipay_web';
                 break;
             case 7:
-                $source = 'HT淘宝';
                 $this->pay_type = 'pay_ht';
                 break;
             case 8:
-                $source = 'H5百度直达号';
                 $this->pay_type = 'zhidahao_h5';
                 break;
             case 9:
-                $source = 'HT刷卡';
                 $this->pay_type = 'pay_ht';
                 break;
             case 10:
-                $source = 'HT现金';
                 $this->pay_type = 'pay_ht';
                 break;
-            default:
-                $source = '';
         }
         return $source;
     }
@@ -371,6 +361,17 @@ class GeneralPay extends \yii\db\ActiveRecord
             }
         }
         return md5(md5($str).'1jiajie.com');
+    }
+
+    /**
+     * 支付成功发送短信
+     * @param $customer_id 用户ID
+     */
+    public function smsSend($data)
+    {
+        $phone = Customer::getCustomerPhone($data->data['customer_id']);
+        $msg = '支付成功';
+        Yii::$app->sms->send($phone,$msg);
     }
 
     /**
