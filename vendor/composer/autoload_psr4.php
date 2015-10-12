@@ -21,6 +21,7 @@ return array(
     'yii2tech\\crontab\\' => array($vendorDir . '/yii2tech/crontab'),
     'yii2tech\\ar\\softdelete\\' => array($vendorDir . '/yii2tech/ar-softdelete'),
     'warrence\\kartikgii\\' => array($vendorDir . '/warrence/yii2-kartikgii'),
+    'toriphes\\console\\' => array($vendorDir . '/toriphes/yii2-console-runner'),
     'pjkui\\kindeditor\\' => array($vendorDir . '/pjkui/kindeditor'),
     'marekpetras\\calendarview\\' => array($vendorDir . '/marekpetras/yii2-calendarview-widget'),
     'liyunfang\\contextmenu\\' => array($vendorDir . '/liyunfang/yii2-contextmenu'),
