@@ -51,18 +51,15 @@ class FinancePopOrder extends \yii\db\ActiveRecord
 
     
     
-    public static function get_order_channel_list($key)
+    public static function get_cache_tiem()
     {
     	if(\Yii::$app->cache->exists('lastidinfoid')){
     		$orderchannellist= \Yii::$app->cache->get('lastidinfoid');
     		return json_decode($orderchannellist,true);
-    	}else{
-    		
-    		
-    		\Yii::$app->cache->set('lastidinfoid',$key);
-    		\Yii::$app->cache->expire('lastidinfoid',$key);
-    		return $payatainfo;
-    	}
+    	}/* else{
+    		\Yii::$app->cache->set('lastidinfoid',$key,5);
+    		return $key;
+    	} */
     }
     
     

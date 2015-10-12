@@ -496,11 +496,57 @@ class GeneralPayController extends Controller
                 $model->save(false);
                 //change customer balance
                 $customer = new \common\models\Customer;
+                $customerTransRecord = new \core\models\CustomerTransRecord\CustomerTransRecord();
+                $attribute = $model->getAttributes();
+                //支付订单
                 if(!empty($model->order_id)){
+
                     $customer::incBalance($model->customer_id,$model->general_pay_actual_money);
+                    //服务卡支付
+
+                    /**
+                    'customer_id',  //用户ID
+                    'order_id', //订单ID
+                    'order_channel_id', //订单渠道
+                    'customer_trans_record_order_channel',  //订单渠道名称
+                    'pay_channel_id',   //支付渠道
+                    'customer_trans_record_pay_channel',    //支付渠道名称
+                    'customer_trans_record_mode',   //交易方式:1消费,2=充值,3=退款,4=补偿
+                    'customer_trans_record_mode_name',  //交易方式:1消费,2=充值,3=退款,4=补偿
+                    'customer_trans_record_promo_code_money',   //优惠码金额
+                    'customer_trans_record_coupon_money',   //优惠券金额
+                    'customer_trans_record_online_pay', //在线支付
+                    'customer_trans_record_online_balance_pay', //在线余额支付
+                    'customer_trans_record_online_service_card_on', //服务卡号
+                    'customer_trans_record_online_service_card_pay',    //服务卡支付
+                    'customer_trans_record_order_total_money',  //订单总额
+                    'customer_trans_record_transaction_id', //交易流水号
+                     */
+                    //支付订单交易记录
+                    $customerTransRecord::analysisRecord($attribute);
                 }else{
+
+                    //支付充值
                     $customer::decBalance($model->customer_id,$model->general_pay_actual_money);
+
+                    /**
+                    'customer_id',  //用户ID
+                    'order_id', //订单ID
+                    'order_channel_id', //订单渠道
+                    'customer_trans_record_order_channel',  //订单渠道名称
+                    'pay_channel_id',   //支付渠道
+                    'customer_trans_record_pay_channel',    //支付渠道名称
+                    'customer_trans_record_mode',   //交易方式:1消费,2=充值,3=退款,4=补偿
+                    'customer_trans_record_mode_name',  //交易方式:1消费,2=充值,3=退款,4=补偿
+                    'customer_trans_record_order_total_money',  //订单总额
+                    'customer_trans_record_online_service_card_on', //服务卡号
+                    'customer_trans_record_online_service_card_pay',    //服务卡支付金额
+                    */
+
+                    //充值交易记录
+                    $customerTransRecord::analysisRecord($attribute);
                 }
+
                 $transaction->commit();
                 $class->notify();
             } catch(Exception $e) {

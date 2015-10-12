@@ -14,6 +14,7 @@ use common\models\FinanceWorkerNonOrderIncome;
 use boss\models\WorkerSearch;
 use boss\models\FinanceWorkerOrderIncomeSearch;
 use boss\models\FinanceWorkerNonOrderIncomeSearch;
+use boss\models\FinanceShopSettleApplySearch;
 
 /**
  * FinanceSettleApplyController implements the CRUD actions for FinanceSettleApply model.
@@ -59,37 +60,69 @@ class FinanceSettleApplyController extends BaseAuthController
      * 自营全职阿姨审核列表
      */
     public function actionSelfFulltimeWorkerSettleIndex(){
-        $searchModel = new FinanceSettleApplySearch;
-        $searchModel->settleMonth = date('Y-m', strtotime('-1 month'));//默认查询上个月的结算列表
-        $defaultParams = array('finance_settle_apply_status' => FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT,
-                                 'worker_type_id'=>'2',
-                                 'finance_settle_apply_starttime' => $this->getFirstDayOfSpecifiedMonth(),
-                                 'finance_settle_apply_endtime' => $this->getLastDayOfSpecifiedMonth(),   
-                                );
         $requestParams = Yii::$app->request->getQueryParams();
-        $searchModel->settle_type = $requestParams['settle_type'];
-        $newRequestParams = [];
-        if(isset($requestParams['FinanceSettleApplySearch'])){
-            $requestModel = $requestParams['FinanceSettleApplySearch'];
-            if(isset($requestModel['worder_tel'])){
-                $newRequestParams = array(
-                                        'worder_tel' =>$requestModel['worder_tel'],
-                                    );
-            }
-            if(isset($requestModel['settleMonth'])){
-                $searchModel->settleMonth = $requestModel['settleMonth'];
-                $newRequestParams['finance_settle_apply_starttime'] = $this->getFirstDayOfSpecifiedMonth($searchModel->settleMonth);
-                $newRequestParams['finance_settle_apply_endtime'] = $this->getLastDayOfSpecifiedMonth($searchModel->settleMonth);
-                var_dump($newRequestParams);
-            }
-        }
-        $requestParams = array_merge($defaultParams,$newRequestParams);
+        $searchModel = $this->initQueryParams($requestParams);
+//        $defaultParams = array('finance_settle_apply_status' => FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT,
+//                                 'worker_type_id'=>'2',
+//                                 'finance_settle_apply_starttime' => $this->getFirstDayOfSpecifiedMonth(),
+//                                 'finance_settle_apply_endtime' => $this->getLastDayOfSpecifiedMonth(),   
+//                                );
+        
+//        $newRequestParams = [];
+//        if(isset($requestParams['FinanceSettleApplySearch'])){
+//            $requestModel = $requestParams['FinanceSettleApplySearch'];
+//            if(isset($requestModel['worder_tel'])){
+//                $newRequestParams = array(
+//                                        'worder_tel' =>$requestModel['worder_tel'],
+//                                    );
+//            }
+//            if(isset($requestModel['settleMonth'])){
+//                $searchModel->settleMonth = $requestModel['settleMonth'];
+//                $newRequestParams['finance_settle_apply_starttime'] = $this->getFirstDayOfSpecifiedMonth($searchModel->settleMonth);
+//                $newRequestParams['finance_settle_apply_endtime'] = $this->getLastDayOfSpecifiedMonth($searchModel->settleMonth);
+//                var_dump($newRequestParams);
+//            }
+//        }
+//        $requestParams = array_merge($defaultParams,$newRequestParams);
         $dataProvider = $searchModel->search(['FinanceSettleApplySearch'=>$requestParams]);
         
         return $this->render('selfFulltimeWorkerSettleIndex', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
+    }
+    
+    private function initQueryParams($requestParams){
+        $searchModel = new FinanceSettleApplySearch;
+        $settle_type = $requestParams['settle_type'];
+        $searchModel->settle_type = $settle_type;
+        $searchModel->review_section = $requestParams['review_section'];
+        //自营全职阿姨
+        if($settle_type == FinanceSettleApplySearch::SELF_FULLTIME_WORKER_SETTELE){
+            $searchModel->settleMonth = date('Y-m', strtotime('-1 month'));
+            $searchModel->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT;
+            $searchModel->worker_type_id = 2;
+            $searchModel->finance_settle_apply_starttime = $this->getFirstDayOfSpecifiedMonth();
+            $searchModel->finance_settle_apply_endtime = $this->getLastDayOfSpecifiedMonth();
+            if(isset($requestParams['FinanceSettleApplySearch'])){
+                $requestModel = $requestParams['FinanceSettleApplySearch'];
+                if(isset($requestModel['worder_tel'])){
+                    $searchModel->worder_tel = $requestModel['worder_tel'];
+                }
+                if(isset($requestModel['settleMonth'])){
+                    $searchModel->settleMonth = $requestModel['settleMonth'];
+                    $searchModel->finance_settle_apply_starttime = $this->getFirstDayOfSpecifiedMonth($searchModel->settleMonth);
+                    $searchModel->finance_settle_apply_endtime = $this->getLastDayOfSpecifiedMonth($searchModel->settleMonth);
+                }
+            }
+        }
+        if($settle_type == FinanceSettleApplySearch::SELF_PARTTIME_WORKER_SETTELE){
+        }
+        if($settle_type == FinanceSettleApplySearch::SHOP_WORKER_SETTELE){
+        }
+        if($settle_type == FinanceSettleApplySearch::ALL_WORKER_SETTELE){
+        }
+        return $searchModel;
     }
     
     /**
@@ -454,7 +487,8 @@ class FinanceSettleApplyController extends BaseAuthController
         $requestModel = Yii::$app->request->getQueryParams();
         $financeSettleApplySearch = $requestModel["FinanceSettleApplySearch"];
 //        saveAndGenerateSettleData($partimeWorkerArr,$settleStartTime,$settleEndTime);
-        return $this->actionSelfFulltimeWorkerSettleIndex();
+        
+        return $this->redirect('/finance-settle-apply/self-fulltime-worker-settle-index?settle_type='.FinanceSettleApplySearch::SELF_FULLTIME_WORKER_SETTELE.'&review_section='.FinanceShopSettleApplySearch::BUSINESS_REVIEW);
     }
     
     /**
@@ -475,7 +509,7 @@ class FinanceSettleApplyController extends BaseAuthController
     
     
     /**
-    * 本文件是用于兼职阿姨每周（例如：2015.9.21-2015.9.27）的结算
+    * 本文件是用于自营兼职阿姨每周（例如：2015.9.21-2015.9.27）的结算
     * 1.获取当前在职的且是兼职的阿姨Id列表
     * 2.获取每个阿姨的身份证号，在2015.9.21-2015.9.27已完成的订单信息，
     *   包括订单Id、支付类型、订单金额、服务时长、服务完成的时间，
@@ -483,7 +517,7 @@ class FinanceSettleApplyController extends BaseAuthController
     * 3.获取每个阿姨Id，在2015.9.21-2015.9.27已完成订单的总收入信息，
     *   按收入类型分组的订单总金额，保存到结算表
     */
-    public function actionPartTimeWorkerCycleSettlement(){
+    public function actionSelfPartTimeWorkerCycleSettlement(){
         $settleStartTime = date('Y-m-d 00:00:00', strtotime('-1 week last monday'));;//统计开始时间,上周第一天
         echo $settleStartTime.'------';
         $settleEndTime = date('Y-m-d 23:59:59', strtotime('last sunday'));//统计结束时间,上周最后一天
@@ -494,7 +528,7 @@ class FinanceSettleApplyController extends BaseAuthController
     }
     
     /**
-    * 本文件是用于全职阿姨每月（例如：2015.9.1-2015.9.30）的结算
+    * 本文件是用于自营全职阿姨每月（例如：2015.9.1-2015.9.30）的结算
     * 1.获取当前在职的且是全职的阿姨Id列表
     * 2.获取每个阿姨，在2015.9.1-2015.9.30已完成的订单信息，
     *   包括订单Id、支付类型、订单金额、服务时长、服务完成的时间，
@@ -502,12 +536,12 @@ class FinanceSettleApplyController extends BaseAuthController
     * 3.获取每个阿姨Id，在2015.9.1-2015.9.30已完成订单的总收入信息，
     *   按收入类型分组的订单总金额，保存到结算表
     */
-    public function actionFullTimeWorkerCycleSettlement(){
+    public function actionSelfFullTimeWorkerCycleSettlement(){
         $settleStartTime = $this->getFirstDayOfSpecifiedMonth();//统计开始时间,上个月的第一天
         echo date('Y-m-01 00:00:00', strtotime('-1 month')).'------';
         $settleEndTime = $this->getLastDayOfSpecifiedMonth();//统计结束时间,上个月的最后一天
         echo date('Y-m-t 23:59:59', strtotime('-1 month')).'------';
-        //获取阿姨的数组信息
+        //获取所有"自营全职"得阿姨的Id列表,不考虑以下状态：拉黑、封号、离职、请假、休假
         $partimeWorkerArr = array(['worker_id'=>'555','worker_name'=>'阿姨1','worker_idcard'=>'4210241983','worker_bank_card'=>'62217978'],['worker_id'=>'666','worker_name'=>'阿姨2','worker_idcard'=>'4210241984','worker_bank_card'=>'622174747']);
         $this->saveAndGenerateSettleData($partimeWorkerArr,$settleStartTime,$settleEndTime);
     }
@@ -536,6 +570,7 @@ class FinanceSettleApplyController extends BaseAuthController
     
     private function saveAndGenerateSettleData($partimeWorkerArr,$settleStartTime,$settleEndTime){
         foreach($partimeWorkerArr as $partimeWorker){
+            //根据阿姨Id获取阿姨信息
             $workerIdCard = $partimeWorker['worker_idcard'];
             $workerId = $partimeWorker['worker_id'];
             //订单收入明细

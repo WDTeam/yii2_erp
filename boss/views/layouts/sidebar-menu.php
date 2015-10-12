@@ -125,8 +125,8 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '人工派单(0%)',
-                        'url' => ['/manual-order/index'],
+                        'label' => '人工派单(1%)',
+                        'url' => ['/order/assign'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
@@ -294,37 +294,37 @@ echo Menu::widget(
                         'label' => '对账管理(90%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
-						'options' => [
-							'class' => 'treeview ',
-						],
-						'items' => [
-							[
-    							'label' => '渠道管理(95%)',
-    							'url' => ['/finance-order-channel/'],
-    							'icon' => 'fa fa-angle-right',
-							],[
-    							'label' => '配置对账表头(95%)',
-    							'url' => ['/finance-header/index'],
-    							'icon' => 'fa fa-angle-right',
-							],[
-							'label' => '开始对账(85%)',
-    							'url' => ['/finance-pop-order/'],
-    							'icon' => 'fa fa-angle-right',
-							],[
-    							'label' => '查看历史对账记录(95%)',
-    							'url' => ['/finance-record-log/'],
-    							'icon' => 'fa fa-angle-right',
-							],[
-    							'label' => '对账记录详情(90%)',
-    							'url' => ['/finance-pop-order/billinfo'],
-    							'icon' => 'fa fa-angle-right',
-							],[
-    							'label' => '坏账管理(90%)',
-    							'url' => ['/finance-pop-order/bad'],
-    							'icon' => 'fa fa-angle-right',
-							]
-		
-					   ]
+                        'options' => [
+                            'class' => 'treeview ',
+                        ],
+                        'items' => [
+                            [
+                                'label' => '渠道管理(95%)',
+                                'url' => ['/finance-order-channel/'],
+                                'icon' => 'fa fa-angle-right',
+                            ],[
+                                'label' => '配置对账表头(95%)',
+                                'url' => ['/finance-header/index'],
+                                'icon' => 'fa fa-angle-right',
+                            ],[
+                            'label' => '开始对账(85%)',
+                                'url' => ['/finance-pop-order/'],
+                                'icon' => 'fa fa-angle-right',
+                            ],[
+                                'label' => '查看历史对账记录(95%)',
+                                'url' => ['/finance-record-log/'],
+                                'icon' => 'fa fa-angle-right',
+                            ],[
+                                'label' => '对账记录详情(90%)',
+                                'url' => ['/finance-pop-order/billinfo'],
+                                'icon' => 'fa fa-angle-right',
+                            ],[
+                                'label' => '坏账管理(90%)',
+                                'url' => ['/finance-pop-order/bad'],
+                                'icon' => 'fa fa-angle-right',
+                            ]
+        
+                       ]
 
                     ],
                     [
@@ -451,7 +451,7 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                         ]
                         ]
-							
+                            
                     ],
                     [
                         'label' => '赔偿管理(5%)',
@@ -472,13 +472,13 @@ echo Menu::widget(
 //                         'label' => '线下运营（80%）',
 //                         'url' => ['#'],
 //                         'icon' => 'fa fa-angle-right',
-// 							'options' => [
-// 							'class' => 'treeview',
-// 							],
-// 							'items' => [
-							
-// 							]
-							
+//                          'options' => [
+//                          'class' => 'treeview',
+//                          ],
+//                          'items' => [
+                            
+//                          ]
+                            
 //                     ]
                 ],
             ],

@@ -58,6 +58,7 @@ class Shop extends \common\models\Shop
             'shop_manager_id'=>Yii::t('app', '归属家政'),
         ]);
     }
+
     /**
      * 获取家政名称
      */
@@ -145,6 +146,7 @@ class Shop extends \common\models\Shop
         $this->is_blacklist = 0;
         if($this->save()){
             $status = new ShopStatus();
+            $status->model_id = $this->id;
             $status->status_number = 0;
             $status->model_name = ShopStatus::MODEL_SHOP;
             $status->status_type = 2;
@@ -164,6 +166,7 @@ class Shop extends \common\models\Shop
         $this->audit_status = $number;
         if($this->save()){
             $status = new ShopStatus();
+            $status->model_id = $this->id;
             $status->status_number = $this->audit_status;
             $status->model_name = ShopStatus::MODEL_SHOP;
             $status->status_type = 1;
@@ -187,5 +190,16 @@ class Shop extends \common\models\Shop
     public function getWorkers() {
         $models = Worker::find()->where(['shop_id'=>$this->id])->all();
         return (array)$models;
+    }
+    /**
+     * 最后审核时间
+     */
+    public function getLastAuditStatusChangeTime()
+    {
+        $time = ShopStatus::find()->select(['created_at'])->where([
+            'model_id'=>$this->id,
+            'model_name'=>ShopStatus::MODEL_SHOP,
+        ])->scalar();
+        return $time;
     }
 }

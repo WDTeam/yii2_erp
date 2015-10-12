@@ -14,7 +14,10 @@ use common\components\BankHelper;
  * @var yii\web\View $this
  * @var boss\models\Shop $model
  */
-
+//\yii\base\Event::on(Shop::className(),'test', function($e){
+//    var_dump($e);
+//});
+//$model->trigger('test');
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Shops'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
@@ -117,6 +120,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]
                 ],
                 'value'=>Shop::$audit_statuses[(int)$model->audit_status],
+            ],
+            [
+                'label'=>'最后审核时间',
+                'format'=>'datetime',
+                'value'=>date('Y-m-d H:i:s', $model->getLastAuditStatusChangeTime()),
             ],
             [
                 'attribute'=>'worker_count',

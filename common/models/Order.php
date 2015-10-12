@@ -151,6 +151,7 @@ class Order extends ActiveRecord
     public function rules()
     {
         return [
+            [['admin_id','order_service_type_id','order_src_id','order_booked_begin_time','address_id'],'required'],
             [['order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'isdel', 'order_ip', 'order_service_type_id', 'order_src_id', 'channel_id', 'order_booked_count', 'order_booked_begin_time', 'order_booked_end_time', 'address_id', 'order_booked_worker_id', 'checking_id'], 'integer'],
             [['order_unit_money', 'order_money'], 'number'],
             [['order_code', 'order_channel_name'], 'string', 'max' => 64],
@@ -247,7 +248,7 @@ class Order extends ActiveRecord
      */
     public function getOrderExtFlag()
     {
-        return $this->hasOne(OrderExtFlag::className(), ['order_id' => 'id']);
+        return $this->hasOne(OrderExtFlag::className(), ['order_id' => 'id'])->from(OrderExtFlag::tableName().' AS orderExtFlag');
     }
 
     /**
@@ -271,7 +272,7 @@ class Order extends ActiveRecord
      */
     public function getOrderExtStatus()
     {
-        return $this->hasOne(OrderExtStatus::className(), ['order_id' => 'id']);
+        return $this->hasOne(OrderExtStatus::className(), ['order_id' => 'id'])->from(OrderExtStatus::tableName().' AS orderExtStatus');
     }
 
     /**
@@ -323,6 +324,7 @@ class Order extends ActiveRecord
 
                 if (!$$modelClassName->save()) {
                     $transaction->rollBack();//插入不成功就回滚事务
+                    $this->addErrors($$modelClassName->errors);
                     return false;
                 }
 
@@ -341,6 +343,7 @@ class Order extends ActiveRecord
                 'order_is_parent' => $this->order_is_parent,
                 'order_created_at' => $this->created_at,
                 'order_isdel' => $this->isdel,
+                'order_ver' => $this->ver,
                 'order_before_status_dict_id' => $orderExtStatus->order_before_status_dict_id,
                 'order_before_status_name' => $orderExtStatus->order_before_status_name,
                 'order_status_dict_id' => $orderExtStatus->order_status_dict_id,
@@ -408,6 +411,63 @@ class Order extends ActiveRecord
             return true;
         }
         return false;
+    }
+
+    /**
+     * @param $id
+     * @return null|static
+     */
+    public static function findById($id)
+    {
+        $order = self::findOne($id);
+        $orderExtStatus = OrderExtStatus::findOne($id);
+        $orderExtFlag = OrderExtFlag::findOne($id);
+        $orderExtPop = OrderExtPop::findOne($id);
+        $orderExtCustomer = OrderExtCustomer::findOne($id);
+        $orderExtPay = OrderExtPay::findOne($id);
+        $orderExtWorker = OrderExtWorker::findOne($id);
+        $order->setAttributes([
+            'order_before_status_dict_id' => $orderExtStatus->order_before_status_dict_id,
+            'order_before_status_name' => $orderExtStatus->order_before_status_name,
+            'order_status_dict_id' => $orderExtStatus->order_status_dict_id,
+            'order_status_name' => $orderExtStatus->order_status_name,
+            'order_flag_send' => $orderExtFlag->order_flag_send,
+            'order_flag_urgent' => $orderExtFlag->order_flag_urgent,
+            'order_flag_exception' => $orderExtFlag->order_flag_exception,
+            'order_flag_sys_assign' => $orderExtFlag->order_flag_sys_assign,
+            'order_flag_lock' => $orderExtFlag->order_flag_lock,
+            'order_pop_order_code' => $orderExtPop->order_pop_order_code,
+            'order_pop_group_buy_code' => $orderExtPop->order_pop_group_buy_code,
+            'order_pop_operation_money' => $orderExtPop->order_pop_operation_money,
+            'order_pop_order_money' => $orderExtPop->order_pop_order_money,
+            'order_pop_pay_money' => $orderExtPop->order_pop_pay_money,
+            'customer_id' => $orderExtCustomer->customer_id,
+            'order_customer_phone' => $orderExtCustomer->order_customer_phone,
+            'order_customer_need' => $orderExtCustomer->order_customer_need,
+            'order_customer_memo' => $orderExtCustomer->order_customer_memo,
+            'comment_id' => $orderExtCustomer->comment_id,
+            'invoice_id' => $orderExtCustomer->invoice_id,
+            'order_customer_hidden' => $orderExtCustomer->order_customer_hidden,
+            'order_pay_type' => $orderExtPay->order_pay_type,
+            'pay_channel_id' => $orderExtPay->pay_channel_id,
+            'order_pay_channel_name' => $orderExtPay->order_pay_channel_name,
+            'order_pay_flow_num' => $orderExtPay->order_pay_flow_num,
+            'order_pay_money' => $orderExtPay->order_pay_money,
+            'order_use_acc_balance' => $orderExtPay->order_use_acc_balance,
+            'card_id' => $orderExtPay->card_id,
+            'order_use_card_money' => $orderExtPay->order_use_card_money,
+            'coupon_id' => $orderExtPay->coupon_id,
+            'order_use_coupon_money' => $orderExtPay->order_use_coupon_money,
+            'promotion_id' => $orderExtPay->promotion_id,
+            'order_use_promotion_money' => $orderExtPay->order_use_promotion_money,
+            'worker_id' => $orderExtWorker->worker_id,
+            'worker_type_id' => $orderExtWorker->worker_type_id,
+            'order_worker_type_name' => $orderExtWorker->order_worker_type_name,
+            'order_worker_assign_type' => $orderExtWorker->order_worker_assign_type,
+            'shop_id' => $orderExtWorker->shop_id,
+        ]);
+
+        return $order;
     }
 
     public function init()

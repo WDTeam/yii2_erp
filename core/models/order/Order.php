@@ -115,58 +115,83 @@ class Order extends OrderModel
 
 
     /**
-     * 现金支付
-     * @param $order Order
-     * @return bool
+     * 把订单放入订单池
+     * @param $order_id
      */
-    public static function isPaymentOffLine($order)
+    public static function addOrderToPool($order_id)
     {
-        $from = OrderStatusDict::findOne($order->orderExtStatus->order_status_dict_id); //当前订单状态
-        $to = OrderStatusDict::findOne(OrderStatusDict::ORDER_IS_PAY); //变更为已支付带指派状态
-        $order->setAttributes([
-            'order_pay_type' => self::ORDER_PAY_TYPE_OFF_LINE
-        ]);
-        return self::statusChange($order,$from,$to,['OrderExtPay']);
+        $order = Order::findById($order_id);
+       //TODO  放入订单池
+        //TODO 开始系统指派
+        OrderStatus::sysAssignStart($order,[]);
+        //TODO 系统指派失败
+        OrderStatus::sysAssignUndone($order,[]);
     }
 
     /**
-     * 第三方预付
-     * @param $order Order
+     * 创建订单
+     * @param $attributes
      * @return bool
      */
-    public static function isPaymentPop($order)
+    private function _create($attributes)
     {
-        $from = OrderStatusDict::findOne($order->orderExtStatus->order_status_dict_id); //当前订单状态
-        $to = OrderStatusDict::findOne(OrderStatusDict::ORDER_IS_PAY); //变更为已支付待指派状态
-        $order->setAttributes([
-            'order_pay_type' => self::ORDER_PAY_TYPE_POP
+        $this->setAttributes($attributes);
+        $statusFrom = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //创建订单状态
+        $statusTo = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //初始化订单状态
+        $orderCode = date('ymdHis') . str_pad($this->order_service_type_id, 2, '0', STR_PAD_LEFT) . str_pad($this->customer_id, 10, '0', STR_PAD_LEFT); //TODO 订单号待优化
+        $this->setAttributes([
+            //创建订单时优惠卷和服务卡都是初始状态
+            'coupon_id' => 0,
+            'order_use_coupon_money' => 0,
+            'card_id' => 0,
+            'order_use_card_money' => 0,
+            //第三方支付
+            'channel_id'=>0,
+            'order_pop_group_buy_code'=>'',
+            'order_pop_order_code'=>'',
+            'order_pop_order_money'=>0,
+            'order_pop_operation_money'=>0,
+            //为以下数据赋初始值
+            'order_code' => $orderCode,
+            'order_before_status_dict_id' => $statusFrom->id,
+            'order_before_status_name' => $statusFrom->order_status_name,
+            'order_status_dict_id' => $statusTo->id,
+            'order_status_name' => $statusTo->order_status_name,
+            'order_src_name' => $this->getOrderSrcName($this->order_src_id),
+            'order_channel_name' => $this->getOrderChannelList($this->channel_id),
+            'order_service_type_name' => $this->getServiceList($this->order_service_type_id),
+            'order_flag_send' => 0, //'指派不了 0可指派 1客服指派不了 2小家政指派不了 3都指派不了',
+            'order_flag_urgent' => 0,//加急 数字越大约紧急
+            'order_flag_exception' => 0,//异常标识
+            'order_flag_lock' => 0,
+            'worker_id' => 0,
+            'worker_type_id' => 0,
+            'order_worker_send_type' => 0,
+            'comment_id' => 0,
+            'order_customer_hidden' => 0,
+            'order_pop_pay_money' => 0,
+            'shop_id' => 0,
+            'order_worker_type_name' => '',
+            'pay_channel_id' => 0,//支付渠道id
+            'order_pay_channel_name' => '',//支付渠道
+            'order_pay_flow_num' => '',//支付流水号
+            'order_pay_money' => 0,//支付金额
+            'invoice_id' => 0, //发票id 用户需求中有开发票就绑定发票id
+            'checking_id' => 0,
+            'isdel' => 0,
         ]);
-        return self::statusChange($order,$from,$to,['OrderExtPay','OrderExtPop']);
+
+        if ($this->doSave()) {
+            //订单创建成功绑定添加到订单池的事件 支付成功后触发
+            Yii::$app->on('addOrderToPool', function ($event) {
+                Order::addOrderToPool($event->sender->id);
+            });
+            return true;
+        }
+        return false;
     }
 
 
-
-
-    /**
-     * 修改订单状态
-     * @param $order Order
-     * @param $from OrderStatusDict
-     * @param $to OrderStatusDict
-     * @param $must_models array
-     * @return bool
-     */
-    public static function statusChange($order, $from, $to, $must_models=[])
-    {
-        $order->setAttributes([
-            'order_before_status_dict_id' => $from->id,
-            'order_before_status_name' => $from->order_status_name,
-            'order_status_dict_id' => $to->id,
-            'order_status_name' => $to->order_status_name
-        ]);
-        $save_models = ['OrderExtStatus','OrderStatusHistory'];
-        $save_models = array_merge($must_models,$save_models);
-        return $order->doSave($save_models);
-    }
 
     /**
      * 获取订单来源名称
@@ -253,65 +278,5 @@ class Order extends OrderModel
             ]
         ];
         return $card[$id];
-    }
-
-
-    /**
-     * 创建订单
-     * @param $attributes
-     * @return bool
-     */
-    private function _create($attributes)
-    {
-        $this->setAttributes($attributes);
-        $statusFrom = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //创建订单状态
-        $statusTo = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //初始化订单状态
-        $orderCode = date('ymdHis') . str_pad($this->order_service_type_id, 2, '0', STR_PAD_LEFT) . str_pad($this->customer_id, 10, '0', STR_PAD_LEFT); //TODO 订单号待优化
-        $this->setAttributes([
-            //创建订单时优惠卷和服务卡都是初始状态
-            'coupon_id' => 0,
-            'order_use_coupon_money' => 0,
-            'card_id' => 0,
-            'order_use_card_money' => 0,
-            //第三方支付
-            'channel_id'=>0,
-            'order_pop_group_buy_code'=>'',
-            'order_pop_order_code'=>'',
-            'order_pop_order_money'=>0,
-            'order_pop_operation_money'=>0,
-            //为以下数据赋初始值
-            'order_code' => $orderCode,
-            'order_before_status_dict_id' => $statusFrom->id,
-            'order_before_status_name' => $statusFrom->order_status_name,
-            'order_status_dict_id' => $statusTo->id,
-            'order_status_name' => $statusTo->order_status_name,
-            'order_src_name' => $this->getOrderSrcName($this->order_src_id),
-            'order_channel_name' => $this->getOrderChannelList($this->channel_id),
-            'order_service_type_name' => $this->getServiceList($this->order_service_type_id),
-            'order_flag_send' => 0, //'指派不了 0可指派 1客服指派不了 2小家政指派不了 3都指派不了',
-            'order_flag_urgent' => 0,//加急 数字越大约紧急
-            'order_flag_exception' => 0,//异常标识
-            'order_flag_lock' => 0,
-            'worker_id' => 0,
-            'worker_type_id' => 0,
-            'order_worker_send_type' => 0,
-            'comment_id' => 0,
-            'order_customer_hidden' => 0,
-            'order_pop_pay_money' => 0,
-            'shop_id' => 0,
-            'order_worker_type_name' => '',
-            'pay_channel_id' => 0,//支付渠道id
-            'order_pay_channel_name' => '',//支付渠道
-            'order_pay_flow_num' => '',//支付流水号
-            'order_pay_money' => 0,//支付金额
-            'invoice_id' => 0, //发票id 用户需求中有开发票就绑定发票id
-            'checking_id' => 0,
-            'isdel' => 0,
-        ]);
-
-        if ($this->doSave()) {
-            return true;
-        }
-        return false;
     }
 }

@@ -93,7 +93,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <label class="panel-title">结算明细</label>
         <?=
 
-            Html::a('结算', ['worker-manual-settlement-done?FinanceSettleApplySearch[worder_id]='.$model->worder_id], ['class' => 'btn btn-success ']);
+            Html::a('结算', ['worker-manual-settlement-done?FinanceSettleApplySearch[worder_id]='.$model->worder_id.'&settle_type='.$model->settle_type.'&review_section='.$model->review_section], ['class' => 'btn btn-success ']);
 
          ?>
         </div>

@@ -17,9 +17,11 @@ class OrderController extends BaseAuthController
 
     public function actionCustomer()
     {
-        $phone = Yii::$app->request->get('phone');
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        return Customer::getCustomerInfo($phone);
+//        $phone = Yii::$app->request->get('phone');
+//        Yii::$app->response->format = Response::FORMAT_JSON;
+//        return Customer::getCustomerInfo($phone);
+
+        return '{"id":1,"customer_balance":"1000"}';
     }
 
     public function actionCustomerAddress($id)
@@ -120,6 +122,12 @@ class OrderController extends BaseAuthController
 
     }
 
+    public function actionGetWaitManualAssignOrder()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return OrderSearch::getWaitManualAssignOrder(true,Yii::$app->user->id);
+    }
+
     /**
      * Creates a new Order model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -144,6 +152,11 @@ class OrderController extends BaseAuthController
         return $this->render('create', [
             'model' => $model,
         ]);
+    }
+
+    public function actionAssign()
+    {
+        return $this->render('assign');
     }
 
 
