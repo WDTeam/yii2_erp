@@ -86,6 +86,33 @@ class OrderController extends BaseAuthController
                 }
             ]';
     }
+
+
+    /**
+     * 获取待手工指派的订单
+     * @return $this|static
+     */
+    public function actionGetWaitManualAssignOrder()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $order = OrderSearch::getWaitManualAssignOrder(Yii::$app->user->id,true);
+        if($order){
+            $oper_long_time = 900; //TODO 客服最大执行时间
+            return
+                [
+                    'order'=>$order,
+                    'ext_pay'=>$order->orderExtPay,
+                    'ext_pop'=>$order->orderExtPop,
+                    'ext_customer'=>$order->orderExtCustomer,
+                    'ext_flag'=>$order->orderExtFlag,
+                    'oper_long_time'=>$oper_long_time,
+                    'booked_time_range'=>date('Y-m-d    H:i-',$order->order_booked_begin_time).date('H:i',$order->order_booked_end_time),
+                ];
+        }else{
+            return false;
+        }
+    }
+
     /**
      * Lists all Order models.
      * @return mixed
@@ -122,11 +149,6 @@ class OrderController extends BaseAuthController
 
     }
 
-    public function actionGetWaitManualAssignOrder()
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        return OrderSearch::getWaitManualAssignOrder(true,Yii::$app->user->id);
-    }
 
     /**
      * Creates a new Order model.
