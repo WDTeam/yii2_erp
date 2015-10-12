@@ -366,6 +366,7 @@ class FinanceSettleApplyController extends BaseAuthController
            $objPHPExcel->getActiveSheet()->setTitle('结算');
            $objPHPExcel->setActiveSheetIndex(0);
            $filename=urlencode('阿姨结算统计表').'_'.date('Y-m-dHis');
+           ob_end_clean();
            header('Content-Type: text/csv');
             header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
             header('Cache-Control: max-age=0');
