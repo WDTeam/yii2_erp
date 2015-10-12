@@ -9,6 +9,7 @@ use yii\base\ErrorException;
 use yii\web\BadRequestHttpException;
 use yii2tech\ar\softdelete\SoftDeleteBehavior;
 use core\models\Worker;
+use boss\behaviors\ShopStatusBehavior;
 class Shop extends \common\models\Shop
 {
     public static $audit_statuses = [
@@ -29,6 +30,10 @@ class Shop extends \common\models\Shop
                 'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => 'updated_at',
             ],
+            [
+                'class'=>ShopStatusBehavior::className(),
+                'model_name'=>ShopStatus::MODEL_SHOP
+            ]
         ];
     }
     public function rules()
@@ -118,13 +123,7 @@ class Shop extends \common\models\Shop
     {
         $this->is_blacklist = 1;
         if($this->save()){
-            $status = new ShopStatus();
-            $status->status_number = 1;
-            $status->model_name = ShopStatus::MODEL_SHOP;
-            $status->status_type = 2;
-            $status->created_at = time();
-            $status->cause = $cause;
-            $status->save();
+            $this->trigger('change:blacklist');
             //门店阿姨全拉黑
             $workers = $this->getWorkers();
             foreach ($workers as $worker){
@@ -145,14 +144,7 @@ class Shop extends \common\models\Shop
         }
         $this->is_blacklist = 0;
         if($this->save()){
-            $status = new ShopStatus();
-            $status->model_id = $this->id;
-            $status->status_number = 0;
-            $status->model_name = ShopStatus::MODEL_SHOP;
-            $status->status_type = 2;
-            $status->created_at = time();
-            $status->cause = $cause;
-            return $status->save();
+            $this->trigger('change:blacklist');
         }
         return false;
     }
@@ -164,15 +156,10 @@ class Shop extends \common\models\Shop
     public function changeAuditStatus($number, $cause='')
     {
         $this->audit_status = $number;
+        $this->cause = $cause;
         if($this->save()){
-            $status = new ShopStatus();
-            $status->model_id = $this->id;
-            $status->status_number = $this->audit_status;
-            $status->model_name = ShopStatus::MODEL_SHOP;
-            $status->status_type = 1;
-            $status->created_at = time();
-            $status->cause = $cause;
-            return $status->save();
+            $this->trigger('change:status');
+            return true;
         }
         return false;
     }
