@@ -113,23 +113,22 @@ class wxpay_class
         //判断签名
         if($resHandler->isTenpaySign() == true) {
             //商户在收到后台通知后根据通知ID向财付通发起验证确认，采用后台系统调用交互模式
-            $data['notify_id'] = $resHandler->getParameter("notify_id");//通知id
+            //$data['notify_id'] = $resHandler->getParameter("notify_id");//通知id
 
             //商户交易单号
-            $data['out_trade_no'] = $resHandler->getParameter("out_trade_no");
-
+            //$data['out_trade_no'] = $resHandler->getParameter("out_trade_no");
 
             //财付通订单号
-            $data['transaction_id'] = $resHandler->getParameter("transaction_id");
+            //$data['transaction_id'] = $resHandler->getParameter("transaction_id");
 
             //商品金额,以分为单位
-            $data['total_fee'] = $resHandler->getParameter("total_fee");
+            //$data['total_fee'] = $resHandler->getParameter("total_fee");
 
             //如果有使用折扣券，discount有值，total_fee+discount=原请求的total_fee
-            $data['discount'] = $resHandler->getParameter("discount");
+            //$data['discount'] = $resHandler->getParameter("discount");
 
             //支付结果
-            $data['trade_state'] = $resHandler->getParameter("trade_state");
+            $trade_state = $resHandler->getParameter("trade_state");
             //可获取的其他参数还有
             //bank_type			银行类型,默认：BL
             //fee_type			现金支付币种,目前只支持人民币,默认值是1-人民币
@@ -141,8 +140,8 @@ class wxpay_class
             //transport_fee		物流费用，单位分，默认0。如果有值，必须保证transport_fee +  product_fee = total_fee
 
             //判断签名及结果
-            if ("0" == $data['trade_state']){
-                return $data;
+            if ("0" == $trade_state){
+                return $resHandler->getAllParameters();
             } else {
                 return false;
             }
