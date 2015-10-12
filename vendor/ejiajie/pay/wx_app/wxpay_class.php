@@ -138,7 +138,7 @@ class wxpay_class
 
             //判断签名及结果
             if ("0" == $trade_state){
-                return $resHandler->getAllParameters();
+                return true;
             } else {
                 return false;
             }
@@ -148,6 +148,6 @@ class wxpay_class
 
     public function notify(){
         //回复服务器处理成功
-        return "Success";
+        echo "Success";
     }
 }

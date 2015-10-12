@@ -22,7 +22,7 @@ class OrderStatus extends Model
      * @param $must_models
      * @return bool
      */
-    public static function payment($order,$must_models){
+    public static function payment(&$order,$must_models){
         $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_WAIT_ASSIGN); //变更为已支付待指派状态
         if(self::statusChange($order,$status,$must_models)){
             //支付成功 把订单放入订单池
@@ -38,7 +38,7 @@ class OrderStatus extends Model
      * @param $must_models
      * @return bool
      */
-    public static function sysAssignStart($order,$must_models)
+    public static function sysAssignStart(&$order,$must_models)
     {
         $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_SYS_ASSIGN_START);
         return self::statusChange($order,$status,$must_models);
@@ -50,7 +50,7 @@ class OrderStatus extends Model
      * @param $must_models
      * @return bool
      */
-    public static function sysAssignDone($order,$must_models)
+    public static function sysAssignDone(&$order,$must_models)
     {
         $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_SYS_ASSIGN_DONE);
         return self::statusChange($order,$status,$must_models);
@@ -62,7 +62,7 @@ class OrderStatus extends Model
      * @param $must_models
      * @return bool
      */
-    public static function sysAssignUndone($order,$must_models)
+    public static function sysAssignUndone(&$order,$must_models)
     {
         $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_SYS_ASSIGN_UNDONE);
         return self::statusChange($order,$status,$must_models);
@@ -74,7 +74,7 @@ class OrderStatus extends Model
      * @param $must_models
      * @return bool
      */
-    public static function manualAssignStart($order,$must_models)
+    public static function manualAssignStart(&$order,$must_models)
     {
         $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_MANUAL_ASSIGN_START);
         return self::statusChange($order,$status,$must_models);
@@ -86,7 +86,7 @@ class OrderStatus extends Model
      * @param $must_models
      * @return bool
      */
-    public static function manualAssignDone($order,$must_models)
+    public static function manualAssignDone(&$order,$must_models)
     {
         $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE);
         return self::statusChange($order,$status,$must_models);
@@ -104,7 +104,7 @@ class OrderStatus extends Model
      * @param $must_models array
      * @return bool
      */
-    public static function statusChange($order, $status, $must_models=[])
+    public static function statusChange(&$order, $status, $must_models=[])
     {
         $from = OrderStatusDict::findOne($order->orderExtStatus->order_status_dict_id); //当前订单状态
         $order->setAttributes([

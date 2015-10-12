@@ -45,6 +45,7 @@ class Order extends ActiveRecord
     const ORDER_PAY_TYPE_OFF_LINE = 1;
     const ORDER_PAY_TYPE_ON_LINE = 2;
     const ORDER_PAY_TYPE_POP = 3;
+
     public $order_before_status_dict_id;
     public $order_before_status_name;
     public $order_status_dict_id;
@@ -240,7 +241,7 @@ class Order extends ActiveRecord
      */
     public function getOrderExtCustomer()
     {
-        return $this->hasOne(OrderExtCustomer::className(), ['order_id' => 'id']);
+        return $this->hasOne(OrderExtCustomer::className(), ['order_id' => 'id'])->from(OrderExtCustomer::tableName().' AS orderExtCustomer');
     }
 
     /**
@@ -256,7 +257,7 @@ class Order extends ActiveRecord
      */
     public function getOrderExtPay()
     {
-        return $this->hasOne(OrderExtPay::className(), ['order_id' => 'id']);
+        return $this->hasOne(OrderExtPay::className(), ['order_id' => 'id'])->from(OrderExtPay::tableName().' AS orderExtPay');
     }
 
     /**
@@ -264,7 +265,7 @@ class Order extends ActiveRecord
      */
     public function getOrderExtPop()
     {
-        return $this->hasOne(OrderExtPop::className(), ['order_id' => 'id']);
+        return $this->hasOne(OrderExtPop::className(), ['order_id' => 'id'])->from(OrderExtPop::tableName().' AS orderExtPop');
     }
 
     /**
@@ -280,7 +281,7 @@ class Order extends ActiveRecord
      */
     public function getOrderExtWorker()
     {
-        return $this->hasOne(OrderExtWorker::className(), ['order_id' => 'id']);
+        return $this->hasOne(OrderExtWorker::className(), ['order_id' => 'id'])->from(OrderExtWorker::tableName().' AS orderExtWorker');
     }
 
 
@@ -299,7 +300,9 @@ class Order extends ActiveRecord
             //格式化数据开始
             $attributes = $this->attributes;
             foreach ($attributes as $k => $v) {
-                $attributes[$k] = ($v === null) ? '' : $v;
+                if($v === null){
+                    unset($attributes[$k]);
+                }
             }
             $attributes['order_id'] = $attributes['id'];
             $attributes['order_created_at'] = $attributes['created_at'];
@@ -319,7 +322,6 @@ class Order extends ActiveRecord
                 }else{
                     $$modelClassName = $class::findOne($attributes['order_id']);
                 }
-
                 $$modelClassName->setAttributes($attributes);
 
                 if (!$$modelClassName->save()) {

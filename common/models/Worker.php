@@ -71,7 +71,7 @@ class Worker extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', '阿姨表id'),
-            'shop_id' => Yii::t('app', '门店名称'),
+            'shop_id' => Yii::t('app', '阿姨所属门店'),
             'worker_name' => Yii::t('app', '阿姨姓名'),
             'worker_phone' => Yii::t('app', '阿姨手机'),
             'worker_idcard' => Yii::t('app', '阿姨身份证号'),

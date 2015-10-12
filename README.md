@@ -9,17 +9,17 @@
 　　本系统整合了通用后台、小家政后台、企业保洁后台、运营CMS后台、订单后台、数据后台等系统，实现了业务的统一入口、统一操作体验、统一业务逻辑、统一业务管理...并对用户界面进行了优化，简化操作，提升工作效率；
 
 　　相关项目资料：<br/>
-　　1. 产品需求 ： http://i99kyj.axshare.com<br/>
-　　2. 系统设计 ： http://i99kyj.axshare.com<br/>
-　　3. 测试计划 ： http://i99kyj.axshare.com<br/>
-　　4. 运维手册 ： http://i99kyj.axshare.com<br/>
+　　1. 产品需求 ： http://uha8ak.axshare.com/<br/>
+　　2. 系统设计 ： http://uha8ak.axshare.com/<br/>
+　　3. 测试计划 ： http://uha8ak.axshare.com/<br/>
+　　4. 运维手册 ： http://uha8ak.axshare.com/<<br/><br/>
 
 # BOSS系统代码框架结构说明：<br/><br/>
 
 　　-- common （通用模块，自动生成数据库CRUD类，封装常用工具类）<br/>
-　　-- core （核心模块，继承并扩展common）<br/>
+　　-- core （核心模块，继承并扩展common，不太容易变化的，并与公共相关的订单、阿姨、用户、财务相关的数据完整性逻辑）<br/>
 　　-- api （接口，调用并扩展core，也可以直接扩展common）<br/>
-　　-- boss （BOSS后台系统，偏重于展现层的逻辑放在BOSS中）<br/>
+　　-- boss （BOSS后台系统，继承并扩展自core，偏重于更多变化的业务层的业务逻辑放在BOSS中; core内部实现封装REST请求，不影响use调用）<br/>
 　　-- console （控制台框架模板）<br/>
 　　-- datasql （数据库脚本）<br/>
 　　-- environments （环境配置）<br/>

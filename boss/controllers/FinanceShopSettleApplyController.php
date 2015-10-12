@@ -10,6 +10,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use boss\models\FinanceWorkerOrderIncomeSearch;
 use boss\models\FinanceSettleApplySearch;
+use PHPExcel;
+use PHPExcel_IOFactory;
 
 /**
  * FinanceShopSettleApplyController implements the CRUD actions for FinanceShopSettleApply model.
@@ -85,6 +87,7 @@ class FinanceShopSettleApplyController extends Controller
         $orderIncomeSearchModel = new FinanceWorkerOrderIncomeSearch;
         $orderIncomeDataProvider = $orderIncomeSearchModel->search(Yii::$app->request->getQueryParams());
         $searchModel = new FinanceShopSettleApplySearch;
+        $searchModel->review_section = Yii::$app->request->getQueryParams()['review_section'];
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('shopManualSettlementIndex', [
             'dataProvider' => $dataProvider,
@@ -99,7 +102,7 @@ class FinanceShopSettleApplyController extends Controller
      */
     public function actionShopManualSettlementDone()
     {
-        return $this->actionIndex();
+        return $this->redirect('/finance-shop-settle-apply/index?review_section='.FinanceShopSettleApplySearch::BUSINESS_REVIEW);
     }
     
     
@@ -124,9 +127,41 @@ class FinanceShopSettleApplyController extends Controller
     public function actionExport(){
         $searchModel = new FinanceShopSettleApplySearch;
         $data = $searchModel->find()->all();
-        $objPHPExcel=new \PHPExcel();
-        
-            exit;
+        $objPHPExcel=new PHPExcel();
+        ob_start();
+        $objPHPExcel->getProperties()->setCreator('ejiajie')
+                ->setLastModifiedBy('ejiajie')
+                ->setTitle('Office 2007 XLSX Document')
+                ->setSubject('Office 2007 XLSX Document')
+                ->setDescription('Document for Office 2007 XLSX, generated using PHP classes.')
+                ->setKeywords('office 2007 openxml php')
+                ->setCategory('Result file');
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1','门店名称')
+                    ->setCellValue('B1','归属家政名称')
+                    ->setCellValue('C1','完成总单量')
+                    ->setCellValue('D1','每单管理费')
+                    ->setCellValue('E1','管理费');
+           $i=2;   
+           foreach($data as $k=>$v){
+            $objPHPExcel->setActiveSheetIndex(0)
+                       ->setCellValue('A'.$i,$v['shop_name'])
+                       ->setCellValue('B'.$i,$v['shop_manager_name'])
+                       ->setCellValue('C'.$i,$v['finance_shop_settle_apply_order_count'])
+                       ->setCellValue('D'.$i,$v['finance_shop_settle_apply_fee_per_order'])
+                       ->setCellValue('E'.$i,$v['finance_shop_settle_apply_fee']);
+            $i++;
+           }
+           $objPHPExcel->getActiveSheet()->setTitle('结算');
+           $objPHPExcel->setActiveSheetIndex(0);
+           $filename=urlencode('门店结算').'_'.date('Y-m-dHis');
+           $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+           ob_end_clean();
+           header('Content-Type: application/vnd.ms-excel');
+           header('Content-Disposition: attachment;filename="' . $filename . '.xls"');
+            header('Cache-Control: max-age=0');
+            $objWriter->save('php://output');
+        return $this->actionQuery();
     }
 
     /**

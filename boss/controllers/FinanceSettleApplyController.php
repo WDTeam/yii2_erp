@@ -15,6 +15,8 @@ use boss\models\WorkerSearch;
 use boss\models\FinanceWorkerOrderIncomeSearch;
 use boss\models\FinanceWorkerNonOrderIncomeSearch;
 use boss\models\FinanceShopSettleApplySearch;
+use PHPExcel;
+use PHPExcel_IOFactory;
 
 /**
  * FinanceSettleApplyController implements the CRUD actions for FinanceSettleApply model.
@@ -335,7 +337,7 @@ class FinanceSettleApplyController extends BaseAuthController
         $data=array(
             0=>$workerIncomeAndDetailToExcel
            );
-           $objPHPExcel=new \PHPExcel();
+           $objPHPExcel=new PHPExcel();
            $objPHPExcel->getProperties()->setCreator('ejiajie')
                    ->setLastModifiedBy('ejiajie')
                    ->setTitle('Office 2007 XLSX Document')
@@ -367,13 +369,12 @@ class FinanceSettleApplyController extends BaseAuthController
            $objPHPExcel->getActiveSheet()->setTitle('结算');
            $objPHPExcel->setActiveSheetIndex(0);
            $filename=urlencode('阿姨结算统计表').'_'.date('Y-m-dHis');
+           $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
            ob_end_clean();
-           header("Content-Type: application/force-download");
-           header("Content-Type: application/octet-stream");
-           header("Content-Type: application/download");
+           header("Content-Type: application/vnd.ms-excel");
             header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
             header('Cache-Control: max-age=0');
-            $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            
             $objWriter->save('php://output');
         exit;
     }
@@ -477,11 +478,12 @@ class FinanceSettleApplyController extends BaseAuthController
     */
     public function actionWorkerManualSettlementIndex(){
         $financeSettleApplySearch= new FinanceSettleApplySearch;
-        $requestModel = Yii::$app->request->getQueryParams();
-        if(isset($requestModel["FinanceSettleApplySearch"])){
-            $financeSettleApplySearch = $requestModel["FinanceSettleApplySearch"];
-        }
+        $requestParams = Yii::$app->request->getQueryParams();
+        $review_section = $requestParams['review_section'];
+        $settle_type = $requestParams['settle_type'];
         $financeSettleApplySearch = $financeSettleApplySearch->getWorkerInfo(1234);//获取阿姨的信息
+        $financeSettleApplySearch->settle_type = $settle_type;
+        $financeSettleApplySearch->review_section = $review_section;
         $searchModel = new FinanceWorkerOrderIncomeSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'dataProvider'=>$dataProvider]);
@@ -494,7 +496,7 @@ class FinanceSettleApplyController extends BaseAuthController
     public function actionWorkerManualSettlementDone(){
         $requestParams = Yii::$app->request->getQueryParams();
         $review_section = $requestParams['review_section'];
-        $settle_type = $requestParams['$settle_type'];
+        $settle_type = $requestParams['settle_type'];
 //        saveAndGenerateSettleData($partimeWorkerArr,$settleStartTime,$settleEndTime);
         
         return $this->redirect('/finance-settle-apply/self-fulltime-worker-settle-index?settle_type='.$settle_type.'&review_section='.$review_section);

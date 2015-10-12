@@ -14,7 +14,6 @@ use yii\data\ActiveDataProvider;
 
 use boss\components\BaseAuthController;
 
-use common\models\OrderExtWorker;
 use common\models\WorkerBlock;
 use common\models\WorkerVacation;
 use common\models\WorkerBlockLog;
@@ -55,6 +54,8 @@ class WorkerController extends BaseAuthController
     {
         if($hasExt==true){
             $model= Worker::find()->joinWith('workerExt')->where(['id'=>$id])->one();
+            $workerExtModel = new WorkerExt();
+            $model->link('workerExt',$workerExtModel);
         }else{
             $model= Worker::findOne($id);
         }
@@ -101,11 +102,6 @@ class WorkerController extends BaseAuthController
         $workerBlockLogData = new ActiveDataProvider([
             'query' => WorkerBlockLog::find()->where(['worker_id'=>$id])->orderBy('id desc'),
         ]);
-//        echo '<pre>';
-//        var_dump($workerModel->load(Yii::$app->request->post()));
-//        var_dump($workerModel);
-//        var_dump($workerModel->save());
-//        var_dump($workerModel->errors);die;
         if ($workerModel->load(Yii::$app->request->post()) && $workerModel->save()) {
             return $this->redirect(['view', 'id' => $workerModel->id]);
         } else {
@@ -476,52 +472,14 @@ class WorkerController extends BaseAuthController
     }
 
 
-    /*
-     * 获取商圈中 所有可用阿姨id
-     * @param int districtId 商圈id
-     * @param int worker_type 阿姨类型 1自有2非自有
-     * @return array freeWorkerArr 所有可用阿姨id
-     */
-    public function getDistrictFreeWorker($districtId=4,$workerType=2){
-
-        $workerDistrictModel = new WorkerDistrict;
-        $orderExtWorkerModel = new OrderExtWorker;
-
-        //获取所属商圈中所有阿姨
-        $districtWorkerResult = $workerDistrictModel::find()
-            ->select('`ejj_worker_district`.worker_id,`ejj_worker_district`.operation_shop_district_id')
-            ->where(['operation_shop_district_id'=>$districtId])
-            ->innerJoinWith('worker') //关联workerDistrict getWorker方法
-            ->andOnCondition(['worker_type'=>$workerType])
-            ->asArray()
-            ->all();
-
-        if($districtWorkerResult){
-            foreach ($districtWorkerResult as $val) {
-                $districtWorkerArr[] = $val['worker_id'];
-            }
-        }else{
-            $districtWorkerArr = [];
-        }
-
-        //获取已预约以及正在服务的所有阿姨
-        $orderWorkerResult = $orderExtWorkerModel::find()->asArray()->all();
-
-        if($orderWorkerResult){
-            foreach ($orderWorkerResult as $val) {
-                $busyWorkerArr[] = $val['worker_id'];
-            }
-        }else{
-            $busyWorkerArr = [];
-        }
-        //排除以预约和正在服务的阿姨
-        $freeWorkerArr = array_diff($districtWorkerArr,$busyWorkerArr);
-        var_dump($freeWorkerArr);
-    }
 
 
 
     public function actionTest(){
+        echo '<pre>';
+        var_dump(Worker::getDistrictFreeWorker(1,1));
+        die;
+
         $a = Worker::getWorkerInfo(16351);
         var_dump($a);
         die;

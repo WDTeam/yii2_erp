@@ -4,11 +4,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use kartik\widgets\ActiveForm;
 use yii\widgets\Pjax;
-use common\models\Shop;
-use yii\helpers\ArrayHelper;
-use kartik\nav\NavX;
-use yii\bootstrap\NavBar;
-use yii\bootstrap\Modal;
+use boss\models\FinanceShopSettleApplySearch;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -27,7 +23,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="panel-body">
             <?php $form = ActiveForm::begin([
                  'type' => ActiveForm::TYPE_HORIZONTAL,
-                 'action' => ['index'],
                  'method' => 'get',
                  ]);
 
