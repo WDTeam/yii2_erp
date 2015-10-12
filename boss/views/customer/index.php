@@ -209,20 +209,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'template' =>'{view} {update} {delete} {block}',
                 'buttons' => [
-                    'block' => function ($url, $dataProvider) {
+                    'block' => function ($url, $model) {
                         return Html::a('<span class="fa fa-fw fa-lock"></span>',
                         [
-                            '/customer/add-to-block',
-                            'id' => $dataProvider['id']
+                            '/customer/create-block',
+                            'customer_id' => $model->id
                         ]
-                        // ,[
-                        //     'title' => Yii::t('yii', '黑名单'),
-                        //     'data-toggle' => 'modal',
-                        //     'data-target' => '#blockModal',
-                        //     'class'=>'blockModal',
-                        //     'data-id'=>$dataProvider['id'],
-                        // ]
-                        );
+                        ,
+                        [
+                            'title' => Yii::t('yii', '客户加入黑名单'),
+                            'data-toggle' => 'modal',
+                            'data-target' => '#blockModal',
+                            'class'=>'block',
+                            'data-id'=>$model->id,
+                        ]);
                     }
                 ],
             ],
@@ -242,10 +242,17 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]);
     Pjax::end(); 
-    // echo Modal::widget([
-    //     'header' => '<h4 class="modal-title">封号</h4>',
-    //     'id'=>'blockModal',
-    // ]);
+    echo Modal::widget([
+        'header' => '<h4 class="modal-title">客户加入黑名单</h4>',
+        'id'=>'blockModal',
+    ]);
+    $this->registerJs(<<<JSCONTENT
+        $('.block').click(function() {
+            $('#blockModal .modal-body').html('加载中……');
+            $('#blockModal .modal-body').eq(0).load(this.href);
+        });
+JSCONTENT
+        );
     ?>
 
 </div>

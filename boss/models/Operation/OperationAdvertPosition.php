@@ -29,7 +29,11 @@ class OperationAdvertPosition extends CoreOperationAdvertPosition
     {
         return [
             [['operation_platform_id', 'operation_platform_version_id', 'operation_advert_position_width', 'operation_advert_position_height', 'created_at', 'updated_at'], 'integer'],
-            [['operation_advert_position_name', 'operation_platform_name', 'operation_platform_version_name'], 'string', 'max' => 60]
+            [['operation_advert_position_name', 'operation_platform_name', 'operation_platform_version_name'], 'string', 'max' => 60],
+            [['operation_advert_position_name', 'operation_advert_position_width', 'operation_advert_position_height'], 'required'],
+            [['operation_advert_position_width', 'operation_advert_position_height'], 'integer', 'min' => 1],
+            [['operation_platform_id'], 'integer', 'min' => 1, 'message' => '请您选择平台'],
+            [['operation_platform_version_id'], 'integer', 'min' => 1, 'message' => '请您选择版本']
         ];
     }
 

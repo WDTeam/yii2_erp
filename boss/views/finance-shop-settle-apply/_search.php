@@ -14,7 +14,7 @@ use boss\widgets\ShopSelect;
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
-    <div class='col-md-4' style="margin-top: 26px;">
+    <div class='col-md-4' style='margin-top: 22px;'>
     <?php echo ShopSelect::widget([
             'model'=>$model,
             'shop_manager_id'=>'shop_manager_id',
