@@ -38,13 +38,13 @@ class FinanceShopSettleApplyController extends Controller
         $searchModel->finance_shop_settle_apply_starttime = strtotime('-1 week last monday');//统计结束时间,上周第一天
         $searchModel->finance_shop_settle_apply_endtime = strtotime('last sunday');//统计结束时间,上周最后一天
         $requestParams = Yii::$app->request->getQueryParams();
-        $searchModel->load($requestParams);
         $searchModel->review_section = $requestParams['review_section'];
         if($searchModel->review_section == FinanceShopSettleApplySearch::BUSINESS_REVIEW){
             $searchModel->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_INIT;
         }elseif($searchModel->review_section == FinanceShopSettleApplySearch::FINANCE_REVIEW){
             $searchModel->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED;
         }
+        $searchModel->load($requestParams);
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('index', [
             'dataProvider' => $dataProvider,

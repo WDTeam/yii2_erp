@@ -62,6 +62,7 @@ class FinanceSettleApplyController extends BaseAuthController
     public function actionSelfFulltimeWorkerSettleIndex(){
         $requestParams = Yii::$app->request->getQueryParams();
         $searchModel = $this->initQueryParams($requestParams);
+        $searchModel->load($requestParams);
         $dataProvider = $searchModel->search(['FinanceSettleApplySearch'=>$requestParams]);
         
         return $this->render('selfFulltimeWorkerSettleIndex', [
