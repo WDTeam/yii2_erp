@@ -22,7 +22,8 @@ class OperationPlatform extends CoreOperationPlatform
     {
         return [
             [['created_at', 'updated_at'], 'integer'],
-            [['operation_platform_name'], 'string', 'max' => 60]
+            [['operation_platform_name'], 'string', 'max' => 60],
+            [['operation_platform_name'], 'required']
         ];
     }
 
