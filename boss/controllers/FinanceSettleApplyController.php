@@ -62,28 +62,6 @@ class FinanceSettleApplyController extends BaseAuthController
     public function actionSelfFulltimeWorkerSettleIndex(){
         $requestParams = Yii::$app->request->getQueryParams();
         $searchModel = $this->initQueryParams($requestParams);
-//        $defaultParams = array('finance_settle_apply_status' => FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT,
-//                                 'worker_type_id'=>'2',
-//                                 'finance_settle_apply_starttime' => $this->getFirstDayOfSpecifiedMonth(),
-//                                 'finance_settle_apply_endtime' => $this->getLastDayOfSpecifiedMonth(),   
-//                                );
-        
-//        $newRequestParams = [];
-//        if(isset($requestParams['FinanceSettleApplySearch'])){
-//            $requestModel = $requestParams['FinanceSettleApplySearch'];
-//            if(isset($requestModel['worder_tel'])){
-//                $newRequestParams = array(
-//                                        'worder_tel' =>$requestModel['worder_tel'],
-//                                    );
-//            }
-//            if(isset($requestModel['settleMonth'])){
-//                $searchModel->settleMonth = $requestModel['settleMonth'];
-//                $newRequestParams['finance_settle_apply_starttime'] = $this->getFirstDayOfSpecifiedMonth($searchModel->settleMonth);
-//                $newRequestParams['finance_settle_apply_endtime'] = $this->getLastDayOfSpecifiedMonth($searchModel->settleMonth);
-//                var_dump($newRequestParams);
-//            }
-//        }
-//        $requestParams = array_merge($defaultParams,$newRequestParams);
         $dataProvider = $searchModel->search(['FinanceSettleApplySearch'=>$requestParams]);
         
         return $this->render('selfFulltimeWorkerSettleIndex', [
@@ -117,10 +95,19 @@ class FinanceSettleApplyController extends BaseAuthController
             }
         }
         if($settle_type == FinanceSettleApplySearch::SELF_PARTTIME_WORKER_SETTELE){
+            $searchModel->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT;
+            $searchModel->worker_type_id = 1;
+            $searchModel->finance_settle_apply_starttime = strtotime('-1 week last monday');
+            $searchModel->finance_settle_apply_endtime = strtotime('last sunday');
         }
         if($settle_type == FinanceSettleApplySearch::SHOP_WORKER_SETTELE){
+            $searchModel->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT;
+            $searchModel->worker_type_id = 1;
+            $searchModel->finance_settle_apply_starttime = strtotime('-1 week last monday');
+            $searchModel->finance_settle_apply_endtime = strtotime('last sunday');
         }
         if($settle_type == FinanceSettleApplySearch::ALL_WORKER_SETTELE){
+            $searchModel->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED;
         }
         return $searchModel;
     }
@@ -130,22 +117,37 @@ class FinanceSettleApplyController extends BaseAuthController
      */
     public function actionSelfFulltimeWorkerSettleDone(){
         $searchModel = new FinanceSettleApplySearch;
-        $id = Yii::$app->request->getQueryParams()['id'];
+        $requestParams = Yii::$app->request->getQueryParams();
+        $id = $requestParams['id'];
         $model = $this->findModel($id);
-        $financeSettleApplyStatus = Yii::$app->request->getQueryParams()['finance_settle_apply_status'];
-        $model->finance_settle_apply_status = $financeSettleApplyStatus;
+        $review_section = $requestParams['review_section'];
+        $settle_type = $requestParams['settle_type'];
+        $is_ok = $requestParams['is_ok'];
+        if($review_section== FinanceShopSettleApplySearch::BUSINESS_REVIEW){
+            if($is_ok == 1){
+                $model->finance_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED;
+            }else{
+                $model->finance_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_FAILED;
+            }
+        }elseif($review_section == FinanceShopSettleApplySearch::FINANCE_REVIEW){
+            if($is_ok == 1){
+                $model->finance_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED;
+            }else{
+                $model->finance_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED;
+            }
+        }
         $model->save();
         $financeSettleApplyLogSearch = new FinanceSettleApplyLogSearch;
         $financeSettleApplyLogSearch->finance_settle_apply_id = $id;
         $financeSettleApplyLogSearch->finance_settle_apply_reviewer_id = Yii::$app->user->id;
         $financeSettleApplyLogSearch->finance_settle_apply_reviewer = Yii::$app->user->identity->username;
-        $financeSettleApplyLogSearch->finance_settle_apply_node_id = abs($financeSettleApplyStatus);
-        $financeSettleApplyLogSearch->finance_settle_apply_node_des = $searchModel->financeSettleApplyStatusArr[$financeSettleApplyStatus];
-        $financeSettleApplyLogSearch->finance_settle_apply_is_passed = $financeSettleApplyStatus >0 ? 1:0;
+        $financeSettleApplyLogSearch->finance_settle_apply_node_id = $review_section;
+        $financeSettleApplyLogSearch->finance_settle_apply_node_des = $searchModel->financeSettleApplyStatusArr[$model->finance_settle_apply_status];
+        $financeSettleApplyLogSearch->finance_settle_apply_is_passed =$is_ok;
         $financeSettleApplyLogSearch->finance_settle_apply_reviewer_comment ="";
         $financeSettleApplyLogSearch->created_at = time();
         $financeSettleApplyLogSearch->save();
-        return $this->actionSelfFulltimeWorkerSettleIndex();
+        return $this->redirect('/finance-settle-apply/self-fulltime-worker-settle-index?settle_type='.$settle_type.'&review_section='.$review_section);
     }
     
     /**
@@ -484,11 +486,12 @@ class FinanceSettleApplyController extends BaseAuthController
      * @return type
      */
     public function actionWorkerManualSettlementDone(){
-        $requestModel = Yii::$app->request->getQueryParams();
-        $financeSettleApplySearch = $requestModel["FinanceSettleApplySearch"];
+        $requestParams = Yii::$app->request->getQueryParams();
+        $review_section = $requestParams['review_section'];
+        $settle_type = $requestParams['$settle_type'];
 //        saveAndGenerateSettleData($partimeWorkerArr,$settleStartTime,$settleEndTime);
         
-        return $this->redirect('/finance-settle-apply/self-fulltime-worker-settle-index?settle_type='.FinanceSettleApplySearch::SELF_FULLTIME_WORKER_SETTELE.'&review_section='.FinanceShopSettleApplySearch::BUSINESS_REVIEW);
+        return $this->redirect('/finance-settle-apply/self-fulltime-worker-settle-index?settle_type='.$settle_type.'&review_section='.$review_section);
     }
     
     /**
