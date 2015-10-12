@@ -57,12 +57,18 @@ class OperationAdvertReleaseController extends BaseAuthController
     public function actionView($id)
     {
         $model = $this->findModel($id);
-        $advert_ids = unserialize($model->operation_release_contents);
-        $adverts = OperationAdvertContent::find()->asArray()->where(['id' => $advert_ids])->all();
+        $adverts = unserialize($model->operation_release_contents);
+        $advertinfos = OperationAdvertContent::find()->asArray()->where(['id' => $adverts['id']])->all();
+        $i = 0;
+        foreach($advertinfos as $key => $value){
+            $advertinfos[$key]['starttime'] = $adverts['starttime'][$i];
+            $advertinfos[$key]['endtime'] = $adverts['endtime'][$i];
+            $i++;
+        }
 //        $model->operation_release_contents = serialize($adverts);
         return $this->render('view', [
             'model' => $model,
-            'adverts' => $adverts
+            'adverts' => $advertinfos,
         ]);
     }
     

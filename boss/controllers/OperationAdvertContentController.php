@@ -75,6 +75,19 @@ class OperationAdvertContentController extends BaseAuthController
             'post' => $post,
         ]);
     }
+    
+    public function actionSaveOrders(){
+        $data = Yii::$app->request->post();
+        $keys = array_keys($data);
+        $model = new OperationAdvertContent();
+        foreach($data as $id => $orders){
+            $model = $this->findModel($id);
+            $model->id = $id;
+            $model->operation_advert_content_orders = $orders;
+            $model->save();
+        }
+        return '保存排序成功！';
+    }
 
     /**
      * Displays a single OperationAdvertContent model.
