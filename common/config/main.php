@@ -161,6 +161,17 @@ return [
             'userId'=>'J02356',
             'password'=>'556201',
         ],
+        /**
+         * 配置控制台
+         * 
+         * 使用方法：
+         * $output = '';
+         * Yii::$app->consoleRunner->run('controller/action param1 param2 ...', $output);
+         * echo $output; //prints the command output
+         */
+        'consoleRunner' => [
+            'class' => 'toriphes\console\Runner'
+        ]
     ],
     'modules' => [
         'datecontrol' =>  [
