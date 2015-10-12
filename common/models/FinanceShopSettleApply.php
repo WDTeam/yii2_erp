@@ -64,7 +64,7 @@ class FinanceShopSettleApply extends \yii\db\ActiveRecord
             'finance_shop_settle_apply_order_count' => Yii::t('app', '完成总单量'),
             'finance_shop_settle_apply_fee_per_order' => Yii::t('app', '每单管理费'),
             'finance_shop_settle_apply_fee' => Yii::t('app', '管理费'),
-            'finance_shop_settle_apply_status' => Yii::t('app', '申请结算状态，-4财务确认结算未通过;-3财务审核不通过；-2线下审核不通过；-1门店财务审核不通过；0提出申请，正在门店财务审核；1门店财务审核通过，等待线下审核；2线下审核通过，等待财务审核；3财务审核通过，等待财务确认结算；4财务确认结算；'),
+            'finance_shop_settle_apply_status' => Yii::t('app', '结算状态'),
             'finance_shop_settle_apply_cycle' => Yii::t('app', '结算周期，1周结，2月结'),
             'finance_shop_settle_apply_cycle_des' => Yii::t('app', '结算周期，周结，月结'),
             'finance_shop_settle_apply_reviewer' => Yii::t('app', '审核人姓名'),

@@ -640,7 +640,7 @@ class DetailView extends \yii\widgets\DetailView
             if (empty($attribute['editModel']) || !$attribute['editModel'] instanceof Model) {
                 continue;
             }
-            if ($attribute['editModel']->getErrors() > 0) {
+            if (count($attribute['editModel']->getErrors()) > 0) {
                 return true;
             }
         }

@@ -14,7 +14,7 @@ use kartik\date\DatePicker;
  * @var boss\models\WorkerSearch $model
  * @var yii\widgets\ActiveForm $form
  */
-$url = \yii\helpers\Url::to(['show-shop']);
+
 ?>
 
 <div class="worker-search">
@@ -29,7 +29,7 @@ $url = \yii\helpers\Url::to(['show-shop']);
         <?= $form->field($model, 'worker_work_city')->widget(Select2::classname(), [
             'name' => 'worker_rule_id',
             'hideSearch' => true,
-            'data' => [1 => '北京', 2 => '上海', 3 => '成都', 4 => '深圳'],
+            'data' => $model::getOnlineCityList(),
             'options' => ['placeholder' => '选择城市', 'inline' => true],
             'pluginOptions' => [
                 'allowClear' => true
@@ -44,7 +44,7 @@ $url = \yii\helpers\Url::to(['show-shop']);
                 'allowClear' => true,
                 'minimumInputLength' => 0,
                 'ajax' => [
-                    'url' => $url,
+                    'url' => \yii\helpers\Url::to(['show-shop']),
                     'dataType' => 'json',
                     'data' => new JsExpression('function(params) { return {q:params.term}; }')
                 ],

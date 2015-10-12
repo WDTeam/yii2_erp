@@ -1,121 +1,153 @@
 <?php
-include_once "lib/WxPay.Config.php";
-include_once "lib/WxPay.Api.php";
-include_once 'lib/WxPay.Notify.php';
-include_once 'lib/WxPay.App.php';
-include_once 'example/log.php';
+//header('Content-type: text/json');
+//header('Content-type: text/html; charset=gb2312');
+//---------------------------------------------------------
+//微信支付服务器签名支付请求示例，商户按照此文档进行开发即可
+//---------------------------------------------------------
 
-class wxpay_class extends WxPayNotify{
+require_once ("classes/RequestHandler.class.php");
 
+require_once ("classes/ResponseHandler.class.php");
+
+require_once ("classes/client/TenpayHttpClient.class.php");
+
+
+class wxpay_class
+{
     public function __construct(){
 
     }
 
     public function get($param){
+        require_once ("tenpay_config.php");
+        //获取token值
+        $reqHandler = new RequestHandler();
+        $reqHandler->init($APP_ID, $APP_SECRET, $PARTNER_KEY, $APP_KEY);
+        $Token= $reqHandler->GetToken();
 
-        $input = new WxPayApp();
-        $input->unifiedorder($param);
+        if ( $Token !='' ){
+            //=========================
+            //生成预支付单
+            //=========================
+            //设置packet支付参数
+            $packageParams =array();
 
-        exit;
-        $input = new WxPayUnifiedOrder();
-        $input->SetBody($param['body']);
-        $input->SetAttach($param['goods_tag']);
-        $input->SetOut_trade_no($param['out_trade_no']);
-        $input->SetTotal_fee($param['general_pay_money']);
-        $input->SetTime_start($param['time_start']);
-        $input->SetTime_expire($param['time_expire']);
-        $input->SetGoods_tag($param['goods_tag']);
-        $input->SetNotify_url($param['notify_url']);
-        $input->SetTrade_type($param['trade_type']);
-        $order = WxPayApi::unifiedOrder($input);
-        if(empty($order['appid'])){
-            $order = $this->get($param);
-        }
+            $packageParams['bank_type']		= $param['trade_type'];	            //支付类型
+            $packageParams['body']			= $param['body'];					//商品描述
+            $packageParams['fee_type']		= '1';				//银行币种
+            $packageParams['input_charset']	= 'UTF-8';		    //字符集
+            $packageParams['notify_url']	= $param['notify_url'];	    //通知地址
+            $packageParams['out_trade_no']	= $param['out_trade_no'];		        //商户订单号
+            $packageParams['partner']		= $PARTNER;		        //设置商户号
+            $packageParams['total_fee']		= $param['general_pay_money'];			//商品总金额,以分为单位
+            $packageParams['spbill_create_ip']= $_SERVER['REMOTE_ADDR'];  //支付机器IP
+            //获取package包
+            $package= $reqHandler->genPackage($packageParams);
 
-        $data['appid'] = $order['appid'];
-        $data['partnerid'] = $order['mch_id'];
-        $data['prepayid'] = $order['prepay_id'];
-        $data['package'] = 'Sign=WXPay';
-        $data['noncestr'] = $order['nonce_str'];
-        $data['timestamp'] = time();
-        $sign = $this->mkSign($data);
-        $data['sign'] = $sign;
+            $time_stamp = time();
+            $nonce_str = md5(rand());
+            //设置支付参数
+            $signParams =array();
+            $signParams['appid']	=$APP_ID;
+            $signParams['appkey']	=$APP_KEY;
+            $signParams['noncestr']	=$nonce_str;
+            $signParams['package']	=$package;
+            $signParams['timestamp']=$time_stamp;
+            $signParams['traceid']	= 'mytraceid_001';
+            //生成支付签名
+            $sign = $reqHandler->createSHA1Sign($signParams);
 
-        return $data;
-    }
+            //增加非参与签名的额外参数
+            $signParams['sign_method']		='sha1';
+            $signParams['app_signature']	=$sign;
+            //剔除appkey
+            unset($signParams['appkey']);
+            //获取prepayid
+            $prepayid=$reqHandler->sendPrepay($signParams);
 
-    /**
-     * 二次签名
-     * 公众账号ID	       appid	    String(32)	是	wx8888888888888888	微信分配的公众账号ID
-     * 商户号	           partnerid	String(32)	是	1900000109	微信支付分配的商户号
-     * 预支付交易会话ID	   prepayid	    String(32)	是	WX1217752501201407033233368018	微信返回的支付交易会话ID
-     * 扩展字段	           package	    String(128)	是	Sign=WXPay	暂填写固定值Sign=WXPay
-     * 随机字符串	           noncestr	    String(32)	是	5K8264ILTKCH16CQ2502SI8ZNMTM67VS	随机字符串，不长于32位。推荐随机数生成算法
-     * 时间戳	           timestamp	String(10)	是	1412000000	时间戳，请见接口规则-参数规定
-     * 签名	               sign	        String(32)	是	C380BEC2BFD727A4B6845133519F3AD6	签名，详见签名生成算法
-     */
-    private function mkSign($data){
-        //签名步骤一：按字典序排序参数
-        ksort($data);
-        $buff = "";
-        foreach ($data as $k => $v)
-        {
-            if($k != "sign" && $v != "" && !is_array($v)){
-                $buff .= $k . "=" . $v . "&";
+            if ($prepayid != null) {
+                $pack	= 'Sign=WXPay';
+                //输出参数列表
+                $prePayParams =array();
+                $prePayParams['appid']		=$APP_ID;
+                $prePayParams['appkey']		=$APP_KEY;
+                $prePayParams['noncestr']	=$nonce_str;
+                $prePayParams['package']	=$pack;
+                $prePayParams['partnerid']	=$PARTNER;
+                $prePayParams['prepayid']	=$prepayid;
+                $prePayParams['timestamp']	=$time_stamp;
+                //生成签名
+                $sign=$reqHandler->createSHA1Sign($prePayParams);
+
+                $outparams['retcode']=0;
+                $outparams['retmsg']='ok';
+                $outparams['appid']=$APP_ID;
+                $outparams['noncestr']=$nonce_str;
+                $outparams['package']=$pack;
+                $outparams['prepayid']=$prepayid;
+                $outparams['timestamp']=$time_stamp;
+                $outparams['sign']=$sign;
+
+            }else{
+                $outparams['retcode']=-2;
+                $outparams['retmsg']='错误：获取prepayId失败';
             }
+        }else{
+            $outparams['retcode']=-1;
+            $outparams['retmsg']='错误：获取不到Token';
         }
-        $buff = trim($buff, "&");
-        $string = $buff. "&key=".WxPayConfig::KEY;
-        $key = md5($string);
-        return strtoupper($key);
-    }
 
+        $outparams['partnerid'] = $PARTNER;
+        return $outparams;
+    }
 
     public function callback(){
-        $this->Handle(false);
-    }
+        require_once ("tenpay_config.php");
+        /* 创建支付应答对象 */
+        $resHandler = new ResponseHandler();
+        $resHandler->setKey($PARTNER_KEY);
 
-    public function notify(){
-        return $this->GetReturn_code();
-    }
+        //判断签名
+        if($resHandler->isTenpaySign() == true) {
+            //商户在收到后台通知后根据通知ID向财付通发起验证确认，采用后台系统调用交互模式
+            //$data['notify_id'] = $resHandler->getParameter("notify_id");//通知id
 
-    //查询订单
-    public function Queryorder($transaction_id)
-    {
-        $input = new WxPayOrderQuery();
-        $input->SetTransaction_id($transaction_id);
-        $result = WxPayApi::orderQuery($input);
-        Log::DEBUG("query:" . json_encode($result));
-        if(array_key_exists("return_code", $result)
-            && array_key_exists("result_code", $result)
-            && $result["return_code"] == "SUCCESS"
-            && $result["result_code"] == "SUCCESS")
-        {
-            return true;
+            //商户交易单号
+            //$data['out_trade_no'] = $resHandler->getParameter("out_trade_no");
+
+            //财付通订单号
+            //$data['transaction_id'] = $resHandler->getParameter("transaction_id");
+
+            //商品金额,以分为单位
+            //$data['total_fee'] = $resHandler->getParameter("total_fee");
+
+            //如果有使用折扣券，discount有值，total_fee+discount=原请求的total_fee
+            //$data['discount'] = $resHandler->getParameter("discount");
+
+            //支付结果
+            $trade_state = $resHandler->getParameter("trade_state");
+            //可获取的其他参数还有
+            //bank_type			银行类型,默认：BL
+            //fee_type			现金支付币种,目前只支持人民币,默认值是1-人民币
+            //input_charset		字符编码,取值：GBK、UTF-8，默认：GBK。
+            //partner			商户号,由财付通统一分配的10位正整数(120XXXXXXX)号
+            //product_fee		物品费用，单位分。如果有值，必须保证transport_fee + product_fee=total_fee
+            //sign_type			签名类型，取值：MD5、RSA，默认：MD5
+            //time_end			支付完成时间
+            //transport_fee		物流费用，单位分，默认0。如果有值，必须保证transport_fee +  product_fee = total_fee
+
+            //判断签名及结果
+            if ("0" == $trade_state){
+                return $resHandler->getAllParameters();
+            } else {
+                return false;
+            }
         }
         return false;
     }
 
-    //重写回调处理函数
-    public function NotifyProcess($data, &$msg)
-    {
-        Log::DEBUG("call back:" . json_encode($data));
-        $this->notfiyOutput = $data;
-
-        if(!array_key_exists("transaction_id", $data)){
-            $msg = "输入参数不正确";
-            return false;
-        }
-
-        //查询订单，判断订单真实性
-        if(!$this->Queryorder($data["transaction_id"])){
-            $msg = "订单查询失败";
-            return false;
-        }
-        return true;
-    }
-
-    public function getNotifyData(){
-        return $this->notfiyOutput;
+    public function notify(){
+        //回复服务器处理成功
+        echo "Success";
     }
 }

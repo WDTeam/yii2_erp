@@ -38,8 +38,12 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     
     public $settleMonth;//结算月份
    
-   public $financeSettleApplyStatusArr = [-2=>'财务审核不通过',-1=>'业务部门审核不通过'
-      ,0=>'提出申请，正在业务部门审核',1=>'业务部门审核通过，等待财务审核',2=>'财务审核通过'];
+   public $financeSettleApplyStatusArr = [
+       FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED=>'财务审核不通过',
+       FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_FAILED=>'业务部门审核不通过',
+       FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT=>'提出申请，正在业务部门审核',
+       FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED=>'业务部门审核通过，等待财务审核',
+       FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED=>'财务审核通过'];
    
     public function rules()
     {
