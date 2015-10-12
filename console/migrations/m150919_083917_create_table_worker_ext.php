@@ -15,7 +15,7 @@ class m150919_083917_create_table_worker_ext extends Migration
             'worker_id' => Schema::TYPE_PK . '(11)  COMMENT \'阿姨id\'',
             'worker_age' => Schema::TYPE_BOOLEAN . '(3) DEFAULT NULL COMMENT \'阿姨年龄\'',
             'worker_sex' => Schema::TYPE_BOOLEAN . '(1) DEFAULT NULL COMMENT \'阿姨性别\'',
-            'worker_birth' => Schema::TYPE_INTEGER. '(11) DEFAULT NULL COMMENT \'阿姨生日\'',
+            'worker_birth' => Schema::TYPE_DATE. '(1) DEFAULT NULL COMMENT \'阿姨生日\'',
             'worker_edu' => Schema::TYPE_STRING . '(30) DEFAULT NULL COMMENT \'阿姨教育程度\'',
             'worker_hometown' => Schema::TYPE_STRING . '(50) DEFAULT NULL COMMENT \'阿姨籍贯\'',
             'worker_is_health' => Schema::TYPE_BOOLEAN . '(1) DEFAULT 0 COMMENT \'阿姨是否有健康证 0没有，1有\'',

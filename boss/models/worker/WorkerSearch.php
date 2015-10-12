@@ -1,6 +1,6 @@
 <?php
 
-namespace boss\models;
+namespace boss\models\worker;
 
 use Yii;
 use yii\base\Model;

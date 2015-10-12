@@ -3,11 +3,15 @@
 namespace core\models\worker;
 
 use Yii;
+use yii\helpers\ArrayHelper;
+use yii\web\ForbiddenHttpException;
+use yii\web\BadRequestHttpException;
+
 use core\models\worker\WorkerExt;
 use core\models\worker\WorkerRuleConfig;
-use yii\web\ForbiddenHttpException;
+use core\models\Operation\CoreOperationShopDistrict;
+use core\models\Operation\CoreOperationCity;
 use boss\models\Shop;
-use yii\web\BadRequestHttpException;
 /**
  * This is the model class for table "{{%worker}}".
  *
@@ -43,16 +47,16 @@ class Worker extends \common\models\Worker
 
     /*
      * 获取阿姨列表
-     * @param type int 阿姨类型 1自营2非自营
-     * @param field string 返回字段名
-     * @return 阿姨列表数据
+     * @param type int 阿姨类型 0所有 1自营 2非自营
+     * @return array 阿姨ID列表
      */
-    public function getWorkerList($type=0,$field='id'){
+    public static function getWorkerIds($type=0){
         $condition = [];
         if(!empty($type)){
             $condition['worker_type'] = $type;
         }
-        return $this->find()->select($field)->where($condition)->asArray()->all();
+        $workerList = self::find()->select('id')->where($condition)->asArray()->all();
+        return ArrayHelper::getColumn($workerList,'id');
     }
 
     /*
@@ -61,17 +65,19 @@ class Worker extends \common\models\Worker
      * @return  单个阿姨详细信息
      *
      */
-    public function getWorkerInfo($worker_id){
+    public static function getWorkerInfo($worker_id){
 
-        $workerInfo = $this->find()->where((['id'=>$worker_id]))->select('id,shop_id,worker_name,worker_phone,worker_idcard,worker_type,worker_rule_id')->asArray()->one();
+        $workerInfo = self::find()->where((['id'=>$worker_id]))->select('id,shop_id,worker_name,worker_phone,worker_idcard,worker_type,worker_rule_id')->asArray()->one();
         if($workerInfo){
             //店铺名称
             $shopInfo = Shop::findone($workerInfo['shop_id']);
             $workerInfo['shop_name'] = isset($shopInfo['name'])?$shopInfo['name']:'';
             //获取阿姨身份描述信息
-            $workerType = $workerInfo['worker_type']==1?'自营':'非自营';
-            $workerRule = $this->getWorkerRuleShow($workerInfo['worker_rule_id']);
+            $workerType = self::getWorkerTypeShow($workerInfo['worker_type']);
+            $workerRule = WorkerRuleConfig::getWorkerRuleShow($workerInfo['worker_rule_id']);
             $workerInfo['worker_type_description'] = $workerType.$workerRule;
+        }else{
+            $workerInfo = [];
         }
         return $workerInfo;
     }
@@ -80,25 +86,61 @@ class Worker extends \common\models\Worker
     /*
      * 通过电话获取可用阿姨信息
      * @param string $phone 阿姨电话
-     * @return array $workerInfo 阿姨详细信息 包含阿姨id和阿姨姓名
+     * @return array $workerInfo 阿姨详细信息(阿姨id，阿姨姓名)
      */
-    static public function getWorkerInfoByPhone($phone){
+     public static function getWorkerInfoByPhone($phone){
 
         $condition = ['worker_phone'=>$phone,'isdel'=>0,'worker_is_block'=>0,'worker_is_vacation'=>0,'worker_is_blacklist'=>0];
         $workerInfo = worker::find()->where($condition)->select('id,worker_name')->asArray()->one();
         return $workerInfo;
     }
 
-//    public function getWorker_district(){
-//
-//    }
+    /*
+     * 获取已开通城市列表
+     * @return array [city_id=>city_name,...]
+     */
+    public static function getOnlineCityList(){
+        $onlineCityList= CoreOperationCity::find()->select('city_id,city_name')->where(['operation_city_is_online'=>1])->asArray()->all();
+        return \yii\helpers\ArrayHelper::map($onlineCityList,'city_id','city_name');
+    }
+
+    /*
+     * 获取已开通城市名称
+     * @param int $city_d 城市id
+     * @return sting $cityName 城市名称
+     */
+    public static function getOnlineCityName($city_d=0){
+        if(empty($city_d)) return '';
+        $onlineCity= CoreOperationCity::find()->select('city_name')->where(['city_id'=>$city_d])->asArray()->one();
+        return $onlineCity['city_name'];
+    }
+
+    /*
+     * 获取门店名称
+     * @param int $shop_id 店铺id
+     * @return string $shopName 店铺名称
+     */
+    public static function getShopName($shop_id=0){
+        if(empty($shop_id)) return '';
+        $shop = Shop::findOne($shop_id);
+        return $shop['name'];
+    }
+
+    /*
+     * 获取已上线商圈列表
+     * @return array [id=>operation_shop_district_name,...]
+     */
+    public static function getDistrictList(){
+        $districtList =CoreOperationShopDistrict::find()->select('id,operation_shop_district_name')->where(['operation_shop_district_status'=>2])->asArray()->all();
+        return \yii\helpers\ArrayHelper::map($districtList,'id','operation_shop_district_name');
+    }
 
     /*
      * 获取阿姨类型名称
      * return String worker_type_name
      */
-    public function getWorkerTypeShow(){
-        if($this->worker_type==1){
+    public static function getWorkerTypeShow($worker_type){
+        if($worker_type==1){
             return '自有';
         }else{
             return '非自有';
@@ -106,30 +148,11 @@ class Worker extends \common\models\Worker
     }
 
     /*
-     * 获取阿姨身份名称
-     * @return String worker_rule_name
-     */
-    public function getWorkerRuleShow($worker_rule_id){
-
-        $workerRuleArr = WorkerRuleConfig::find()->where(['id'=>$worker_rule_id,'isdel'=>0])->asArray()->one();
-
-        return $workerRuleArr['worker_rule_name'];
-    }
-
-    /*
-     * 关联阿姨基本信息
-     */
-    public function getExt(){
-        return $this->hasOne(WorkerExt::className(),['worker_id'=>'id']);
-    }
-
-
-    /*
      * 获取是否黑名单
      * @return String 是 or 否
      */
-    public function getWorkerIsBlockShow(){
-        if($this->worker_is_block==1){
+    public static function getWorkerIsBlockShow($worker_is_block){
+        if($worker_is_block==1){
             return '是';
         }else{
             return '否';
@@ -140,8 +163,8 @@ class Worker extends \common\models\Worker
      * 获取是否封号
      * @return String 是 or 否
      */
-    public function getWorkerIsBlacListkShow(){
-        if($this->worker_is_blacklist==1){
+    public static function getWorkerIsBlacListkShow($worker_is_blacklist){
+        if($worker_is_blacklist==1){
             return '是';
         }else{
             return '否';
@@ -152,8 +175,8 @@ class Worker extends \common\models\Worker
      * 获取审核状态
      * @return String 通过 or 未通过
      */
-    public function getWorkerAuthStatusShow(){
-        if($this->worker_auth_status==1){
+    public static function getWorkerAuthStatusShow($worker_auth_status){
+        if($worker_auth_status==1){
             return '通过';
         }else{
             return '未通过';
@@ -164,8 +187,8 @@ class Worker extends \common\models\Worker
      * 获取试工状态
      * @return String 通过 or 未通过
      */
-    public function getWorkerOntrialStatusShow(){
-        if($this->worker_ontrial_status==1){
+    public static function getWorkerOntrialStatusShow($worker_ontrial_status){
+        if($worker_ontrial_status==1){
             return '通过';
         }else{
             return '未通过';
@@ -176,95 +199,55 @@ class Worker extends \common\models\Worker
      * 获取上岗状态
      * @return String 通过 or 未通过
      */
-    public function getWorkerOnboardStatusShow(){
-        if($this->worker_onboard_status==1){
+    public static function getWorkerOnboardStatusShow($worker_onboard_statuss){
+        if($worker_onboard_statuss==1){
             return '通过';
         }else{
             return '未通过';
         }
     }
 
+
+
     /*
-     * 获取阿姨所有身份信息
-     * @return Array 所有阿姨身份信息
+     * 统计被列入黑名单的阿姨的数量
      */
-    public function getWorkerAllRules(){
-
-        $workerRulesArr = WorkerRuleConfig::find()->where(['isdel'=>0])->select('id,worker_rule_name')->asArray()->all();
-
-        return $workerRulesArr;
+    public static function CountBlockWorker(){
+        return self::find()->where(['worker_is_block'=>1,'isdel'=>0])->count();
     }
 
     /*
-     * 获取阿姨首页按钮css样式class
-     * @param int $btnCate 按钮所属类型 0-10
-     * @return string 按钮css样式class   btn-success-selected(按钮被选中) or btn-success(按钮未选中)
+     * 统计被封号的阿姨的数量
      */
-    public function getSearchBtnCss($btnCate){
-        $searchParams = Yii::$app->request->getQueryParams();
-        $workerSearchParams = array_key_exists('WorkerSearch',$searchParams)?$searchParams['WorkerSearch']:[];
-        if($btnCate==0 && !array_key_exists('WorkerSearch',$searchParams)){
-            return 'btn-success-selected';
-        }elseif($btnCate==1 && array_key_exists('worker_auth_status',$workerSearchParams)){
-            return 'btn-success-selected';
-        }elseif($btnCate==2 && array_key_exists('worker_ontrial_status',$workerSearchParams)){
-            return 'btn-success-selected';
-        }elseif($btnCate==3 && array_key_exists('worker_onboard_status',$workerSearchParams)){
-            return 'btn-success-selected';
-        }elseif($btnCate==4 && array_key_exists('worker_rule_id',$workerSearchParams) && $workerSearchParams['worker_rule_id']==1){
-            return 'btn-success-selected';
-        }elseif($btnCate==5 && array_key_exists('worker_rule_id',$workerSearchParams) && $workerSearchParams['worker_rule_id']==2){
-            return 'btn-success-selected';
-        }elseif($btnCate==6 && array_key_exists('worker_rule_id',$workerSearchParams) && $workerSearchParams['worker_rule_id']==3){
-            return 'btn-success-selected';
-        }elseif($btnCate==7 && array_key_exists('worker_rule_id',$workerSearchParams) && $workerSearchParams['worker_rule_id']==4){
-            return 'btn-success-selected';
-        }elseif($btnCate==8 && array_key_exists('worker_is_vacation',$workerSearchParams)){
-            return 'btn-success-selected';
-        }elseif($btnCate==9 && array_key_exists('worker_is_block',$workerSearchParams)){
-            return 'btn-success-selected';
-        }elseif($btnCate==10 && array_key_exists('worker_is_blacklist',$workerSearchParams)){
-            return 'btn-success-selected';
-        }else{
-            return 'btn-success';
-        }
+    public static function CountBlackListWorker(){
+        return self::find()->where(['worker_is_blacklist'=>1,'isdel'=>0])->count();
     }
 
+    /*
+     * 统计请假的阿姨数量的数量
+     */
+    public static function CountVacationWorker(){
+        return self::find()->where(['worker_is_vacation'=>1,'isdel'=>0])->count();
+    }
 
+    /*
+     * 统计各个身份的阿姨数量
+     */
+    public static function CountRuleWorker($workerRuleId){
+        return self::find()->where(['worker_rule_id'=>$workerRuleId,'isdel'=>0])->count();
+    }
 
     public function getAuthStatusCount(){
         return $this->find()->where(['worker_auth_status'=>0,'worker_ontrial_status'=>0,'worker_onboard_status'=>0])->count();
     }
+
     public function getOntrialStatusCount(){
         return $this->find()->where(['worker_auth_status'=>1,'worker_ontrial_status'=>0,'worker_onboard_status'=>0])->count();
     }
+
     public function getOnboardStatusCount(){
         return $this->find()->where(['worker_auth_status'=>1,'worker_ontrial_status'=>1,'worker_onboard_status'=>0])->count();
     }
-    public function getBlockCount(){
-        return $this->find()->where(['worker_is_block'=>1])->count();
-    }
-    public function getBlackListCount(){
-        return $this->find()->where(['worker_is_blacklist'=>1])->count();
-    }
-    public function getVacationCount(){
-        return $this->find()->where(['worker_is_vacation'=>1])->count();
-    }
-
-    public function getQCount(){
-        return $this->find()->where(['worker_rule_id'=>1])->count();
-    }
-    public function getJCount(){
-        return $this->find()->where(['worker_rule_id'=>2])->count();
-    }
-    public function getSCount(){
-        return $this->find()->where(['worker_rule_id'=>3])->count();
-    }
-    public function getGCount(){
-        return $this->find()->where(['worker_rule_id'=>4])->count();
-    }
-
-
 
     /*
      * 加入黑名单
@@ -295,4 +278,50 @@ class Worker extends \common\models\Worker
         }
         return false;
     }
+
+    /*
+   * 获取阿姨首页按钮css样式class
+   * @param int $btnCate 按钮所属类型 0-10
+   * @return string 按钮css样式class   btn-success-selected(按钮被选中) or btn-success(按钮未选中)
+   */
+    public static function getSearchBtnCss($btnCate){
+        $searchParams = Yii::$app->request->getQueryParams();
+        $workerSearchParams = array_key_exists('WorkerSearch',$searchParams)?$searchParams['WorkerSearch']:[];
+        if($btnCate==0 && !array_key_exists('WorkerSearch',$searchParams)){
+            return 'btn-success-selected';
+        }elseif($btnCate==1 && array_key_exists('worker_auth_status',$workerSearchParams)){
+            return 'btn-success-selected';
+        }elseif($btnCate==2 && array_key_exists('worker_ontrial_status',$workerSearchParams)){
+            return 'btn-success-selected';
+        }elseif($btnCate==3 && array_key_exists('worker_onboard_status',$workerSearchParams)){
+            return 'btn-success-selected';
+        }elseif($btnCate==4 && array_key_exists('worker_rule_id',$workerSearchParams) && $workerSearchParams['worker_rule_id']==1){
+            return 'btn-success-selected';
+        }elseif($btnCate==5 && array_key_exists('worker_rule_id',$workerSearchParams) && $workerSearchParams['worker_rule_id']==2){
+            return 'btn-success-selected';
+        }elseif($btnCate==6 && array_key_exists('worker_rule_id',$workerSearchParams) && $workerSearchParams['worker_rule_id']==3){
+            return 'btn-success-selected';
+        }elseif($btnCate==7 && array_key_exists('worker_rule_id',$workerSearchParams) && $workerSearchParams['worker_rule_id']==4){
+            return 'btn-success-selected';
+        }elseif($btnCate==8 && array_key_exists('worker_is_vacation',$workerSearchParams)){
+            return 'btn-success-selected';
+        }elseif($btnCate==9 && array_key_exists('worker_is_block',$workerSearchParams)){
+            return 'btn-success-selected';
+        }elseif($btnCate==10 && array_key_exists('worker_is_blacklist',$workerSearchParams)){
+            return 'btn-success-selected';
+        }else{
+            return 'btn-success';
+        }
+    }
+
+    /*
+     * 关联阿姨基本信息
+     */
+    public function getWorkerExt(){
+        return $this->hasOne(WorkerExt::className(),['worker_id'=>'id']);
+    }
+
+
+
+
 }
