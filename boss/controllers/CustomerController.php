@@ -427,6 +427,41 @@ class CustomerController extends BaseAuthController
         }
     }
 
+    /**
+     * 修改客户订单服务地址
+     */
+    public function actionUpdateCustomerAddresses($customer_id){
+        $customerAddressModel = CustomerAddress::findAll(['customer_id'=>$customer_id]);
+
+        if(\Yii::$app->request->post()){
+            // $customerModel->is_del = 0;
+            // $customerModel->customer_del_reason = '';
+            // $customerModel->updated_at = time();
+            // $customerModel->validate();
+            // if ($customerModel->hasErrors()) {
+            //     return $this->renderAjax('remove_from_block',['customerModel'=>$customerModel,]);
+            // }
+            // $customerModel->save();
+
+            foreach ($customerAddressModel as $customerAddress) {
+                // $customerAddress->customer_id 
+                // $customerAddress->general_region_id
+                // $customerAddress->customer_address_detail
+                // $customerAddress->customer_address_status
+                // $customerAddress->customer_address_longitude
+                // $customerAddress->customer_address_latitude
+                // $customerAddress->customer_address_phone
+                // $customerAddress->customer_address_nickname
+                // $customerAddress->is_del
+                // $customerAddress->created_at
+                // $customerAddress->updated_at
+            }
+            return $this->redirect(['index', 'CustomerSearch'=>['is_del'=>0]]);
+        }else{
+            return $this->renderAjax('update-customer-addresses',['customerAddressModel'=>$customerAddressModel,]);
+        }
+    }
+
     public function actionData(){
 
         $connectionNew =  \Yii::$app->db;
