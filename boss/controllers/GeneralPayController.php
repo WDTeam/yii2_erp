@@ -725,6 +725,11 @@ class GeneralPayController extends Controller
 
     public function actionTest()
     {
+        echo @vendor;
+        exit;
+        $wx = new \wxrefund_class();
+
+        exit;
         $wx = new \wxpay_class();
         $wx->orderQuery();
 
