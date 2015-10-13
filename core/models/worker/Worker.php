@@ -2,6 +2,7 @@
 
 namespace core\models\worker;
 
+use common\models\WorkerStat;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\ForbiddenHttpException;
@@ -106,21 +107,33 @@ class Worker extends \common\models\Worker
 
 
         //获取所属商圈中所有阿姨
-        $districtWorkerResult = WorkerDistrict::find()
-            ->select('`ejj_worker_district`.worker_id,`ejj_worker_district`.operation_shop_district_id')
-            ->where(['operation_shop_district_id'=>$districtId])
-            ->innerJoinWith('worker') //关联workerDistrict getWorker方法
-            ->andOnCondition(['worker_type'=>$workerType])
+        $districtWorkerResult = Worker::find()
+            ->select('{{%worker}}.id,shop_id,worker_name,worker_phone,worker_idcard,worker_rule_id,worker_type')
+            ->innerJoinWith('workerDistrictRelation') //关联worker workerDistrictRelation方法
+            ->andOnCondition(['operation_shop_district_id'=>$districtId])
+            ->innerJoinWith('workerStatRelation') //关联worker WorkerStatRelation方法
+            ->innerJoinWith('shopRelation') //关联worker shopRelation方法
+            ->where(['worker_is_block'=>0,'worker_is_blacklist'=>0,'worker_is_vacation'=>0])
             ->asArray()
             ->all();
-        if($districtWorkerResult){
-            foreach ($districtWorkerResult as $val) {
-                $districtWorkerIdsArr[] = $val['worker_id'];
-                $districtWorkerArr[$val['worker'][0]['id']] = $val['worker'][0];
-                $districtWorkerArr[$val['worker'][0]['id']]['worker_id'] = $val['worker'][0]['id'];
-            }
+        $workerRuleConfigArr = WorkerRuleConfig::getWorkerRuleList();
+        if(empty($districtWorkerResult)){
+            return [];
         }else{
-            $districtWorkerIdsArr = [];
+            foreach ($districtWorkerResult as $val) {
+                $districtWorkerIdsArr[] = $val['id'];
+
+                $val['worker_id'] = $val['id'];
+                $val['shop_name'] = $val['shopRelation']['name'];
+                $val['worker_type_description'] = self::getWorkerTypeShow($val['worker_type']);
+                $val['worker_rule_description'] = $workerRuleConfigArr[$val['worker_rule_id']];
+                $val['worker_stat_order_num'] = $val['workerStatRelation']['worker_stat_order_refuse'];
+                $val['worker_stat_order_refuse'] = $val['workerStatRelation']['worker_stat_order_refuse'];
+                unset($val['workerStatRelation']);
+                unset($val['workerDistrictRelation']);
+                unset($val['shopRelation']);
+                $districtWorkerArr[$val['id']] = $val;
+            }
         }
 
         //获取已预约以及正在服务的所有阿姨
@@ -133,14 +146,19 @@ class Worker extends \common\models\Worker
         }else{
             $busyWorkerIdsArr = [];
         }
+
         //排除已预约和正在服务的阿姨
         $freeWorkerIdsArr = array_diff($districtWorkerIdsArr,$busyWorkerIdsArr);
 
-        foreach ($freeWorkerIdsArr as $val) {
-            $freeWorkerArr[] = $districtWorkerArr[$val];
+        if(empty($freeWorkerIdsArr)){
+            return [];
+        }else{
+            foreach ($freeWorkerIdsArr as $id) {
+                $freeWorkerArr[] = $districtWorkerArr[$id];
+            }
+            return $freeWorkerArr;
         }
 
-        return $freeWorkerArr;
     }
 
 
@@ -188,10 +206,10 @@ class Worker extends \common\models\Worker
      * 获取阿姨所属商圈
      */
     public static function getWorkerDistrict($worker_id){
-        $workerDistrictData = WorkerDistrict::find()->where(['worker_id'=>$worker_id])->select('operation_shop_district_id')->innerJoinWith('district')->asArray()->all();
-        if($workerDistrictData){
+        $workerDistrictResult = WorkerDistrict::find()->where(['worker_id'=>$worker_id])->select('operation_shop_district_id')->innerJoinWith('district')->asArray()->all();
+        if($workerDistrictResult){
 
-            foreach($workerDistrictData as $key=>$val){
+            foreach($workerDistrictResult as $key=>$val){
                 $workerDistrictTmp['operation_shop_district_id'] = $val['operation_shop_district_id'];
                 $workerDistrictTmp['operation_shop_district_name'] = $val['district'][0]['operation_shop_district_name'];
                 $workerDistrictArr[] = $workerDistrictTmp;
@@ -429,17 +447,37 @@ class Worker extends \common\models\Worker
     }
 
     /*
-     * 关联阿姨基本信息
+     * 阿姨附属表连表方法
      */
-    public function getWorkerExt(){
+    public function getWorkerExtRelation(){
         return $this->hasOne(WorkerExt::className(),['worker_id'=>'id']);
+    }
+
+    /*
+     * 阿姨商圈表连表方法
+     */
+    public function getWorkerDistrictRelation(){
+        return $this->hasOne(WorkerDistrict::className(),['worker_id'=>'id'])->select('worker_id,operation_shop_district_id');
+    }
+
+    /*
+     * 阿姨统计表连表方法
+     */
+    public function getWorkerStatRelation(){
+        return $this->hasOne(WorkerStat::className(),['worker_id'=>'id']);
+    }
+
+    /*
+     * 商铺表连表方法
+     */
+    public function getShopRelation(){
+        return $this->hasOne(Shop::className(),['id'=>'shop_id'])->select('name');
     }
 
     /*
      * 赋值worker_district属性
      */
-    public function getWorker_district(){
-        return [1,2];
+    public function getworker_district(){
         $workerDistrictArr = self::getWorkerDistrict($this->id);
         return $workerDistrictArr?ArrayHelper::getColumn($workerDistrictArr,'operation_shop_district_id'):[];
     }
