@@ -322,8 +322,7 @@ class FinancePopOrderController extends Controller
     **/
     
     public function actionGeneralpaylist()
-    {
-    	 
+    { 
     	//输出部分
     	$ordedata= new FinanceOrderChannel;
     	$ordewhere['is_del']=0;
@@ -364,15 +363,24 @@ class FinancePopOrderController extends Controller
     	}
     	
     	$tyu= array_combine($tyd,$tydtui);
+    	
     	$searchModel = new FinancePopOrderSearch;
 
-    	$defaultParams = array('FinancePopOrderSearch'=>['finance_pop_order_pay_status_type' => '4']);
-    	$requestParams = Yii::$app->request->getQueryParams();
+    	
+ /*    	$requestParams = Yii::$app->request->getQueryParams();
     	if(isset($requestParams['FinancePopOrderSearch'])){
     		$requestModel = $requestParams['FinancePopOrderSearch'];
     	}
     	$requestParams = array_merge($defaultParams,$requestParams);
-    	$dataProvider = $searchModel->search($requestParams);
+    	
+    	var_dump($requestParams);exit; */
+
+    	$searchModel->load(Yii::$app->request->getQueryParams());
+    	$searchModel->is_del=0;
+    	$searchModel->finance_pop_order_pay_status=3;
+    	$dataProvider = $searchModel->search();
+    	
+    	
     	//$dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
     	return $this->render('bad', [
     			'dataProvider' => $dataProvider,
@@ -402,6 +410,29 @@ class FinancePopOrderController extends Controller
 		 return $this->redirect(['index']);
     }
     
+    
+    /**
+    * 标记为坏账
+    * @date: 2015-10-13
+    * @author: peak pan
+    * @return:
+    **/
+    public function actionTagssign()
+    {
+    	$searchModel = new FinancePopOrderSearch;
+    	$requestModel = Yii::$app->request->get();
+    		$model=$searchModel::findOne($requestModel['id']);
+    		if($requestModel['edit']=='bak'){
+    	    //坏账还原
+    		$model->finance_pop_order_pay_status='0';
+    		}else {	
+    		$model->finance_pop_order_pay_status='3';
+    		}
+    		$model->save();
+    		return $this->redirect(['index', 'id' =>$requestModel['oid']]);
+    }
+      
+
    /**
    * 我们有第三方没有财务批量处理到订单表控制器
    * @date: 2015-10-9

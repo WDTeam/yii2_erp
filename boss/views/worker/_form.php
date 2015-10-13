@@ -69,7 +69,6 @@ use core\models\worker\WorkerRuleConfig;
                     'templateSelection' => new JsExpression('function (city) { return city.text; }'),
                 ],
             ]); ?>
-
             </div>
 
 
