@@ -3,6 +3,7 @@
 namespace boss\controllers;
 
 use common\models\CustomerAddress;
+use core\models\order\OrderWorkerRelation;
 use core\models\worker\Worker;
 use Yii;
 use boss\components\BaseAuthController;
@@ -137,10 +138,17 @@ class OrderController extends BaseAuthController
             $workers[$v['id']]['tag'] = in_array($v['id'],$used_worker_ids)?'服务过':"";
             $workers[$v['id']]['tag'] = ($v['id']==$order->order_booked_worker_id)?'指定阿姨': $workers[$v['id']]['tag'];
             $workers[$v['id']]['order_booked_time_range']=[];
+            $workers[$v['id']]['memo']=[];
+            $workers[$v['id']]['status']=[];
         }
         $worker_orders = OrderSearch::getListByWorkerIds( $worker_ids,$order->order_booked_begin_time);
         foreach($worker_orders as $v){
             $workers[$v->orderExtWorker->worker_id]['order_booked_time_range'][] = date('H:i',$v->order_booked_begin_time).'-'.date('H:i',$v->order_booked_end_time);
+        }
+        $order_worker_relations = OrderWorkerRelation::getListByOrderIdAndWorkerIds($order_id,$worker_ids);
+        foreach($order_worker_relations as $v){
+            $workers[$v->worker_id]['memo'][] = $v->order_worker_relation_memo;
+            $workers[$v->worker_id]['status'][] = $v->order_worker_relation_status;
         }
         return $workers;
 
@@ -220,6 +228,10 @@ class OrderController extends BaseAuthController
         return $this->render('assign');
     }
 
+    /**
+     * 不能指派
+     * @return array|bool
+     */
     public function actionCanNotAssign()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -227,10 +239,30 @@ class OrderController extends BaseAuthController
         return Order::manualAssignUndone($order_id,Yii::$app->user->id,true);
     }
 
+    /**
+     * 指派
+     * @return array|bool
+     */
+    public function actionDoAssign()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $order_id =  Yii::$app->request->post('order_id');
+        $worker_id =  Yii::$app->request->post('worker_id');
+        return Order::manualAssignDone($order_id,$worker_id,Yii::$app->user->id,true);
+    }
 
+
+    /**
+     * 添加订单和阿姨的关系信息
+     *
+     */
     public function actionCreateOrderWorkerRelation()
     {
-
+        $order_id = Yii::$app->request->post('order_id');
+        $worker_id = Yii::$app->request->post('worker_id');
+        $memo = Yii::$app->request->post('memo');
+        $status = Yii::$app->request->post('status');
+        return OrderWorkerRelation::addOrderWorkerRelation($order_id,$worker_id,$memo,$status,Yii::$app->user->id);
     }
 
 

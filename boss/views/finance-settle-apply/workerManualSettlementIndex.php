@@ -165,33 +165,35 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div>
             
-             <?php Pjax::begin(); echo GridView::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            ['attribute'=>'order_id',
-                 'content'=>function($model,$key,$index)
-                        {return  Html::a('<u>'.$model->order_id.'</u>',[Yii::$app->urlManager->createUrl(['order/view/','id' => $model->order_id])],['target'=>'_blank']);}],
-            'finance_worker_order_income_type',
-            'finance_worker_order_income',
-            'finance_worker_order_complete_time:datetime', 
-            'order_booked_count', 
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'buttons' => [
-                'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance-worker-order-income/view','id' => $model->id,'edit'=>'t']), [
-                                                    'title' => Yii::t('yii', 'Edit'),
-                                                  ]);}
+             <?php 
+                    Pjax::begin(); echo GridView::widget([
+               'dataProvider' => $dataProvider,
+               'columns' => [
+                   ['class' => 'yii\grid\SerialColumn'],
+                   ['attribute'=>'order_id',
+                        'content'=>function($model,$key,$index)
+                               {return  Html::a('<u>'.$model->order_id.'</u>',[Yii::$app->urlManager->createUrl(['order/view/','id' => $model->order_id])],['data-pjax'=>'0','target' => '_blank',]);}],
+                   'finance_worker_order_income_type',
+                   'finance_worker_order_income',
+                   'finance_worker_order_complete_time:datetime', 
+                   'order_booked_count', 
+                   [
+                       'class' => 'yii\grid\ActionColumn',
+                       'buttons' => [
+                       'update' => function ($url, $model) {
+                                           return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance-worker-order-income/view','id' => $model->id,'edit'=>'t']), [
+                                                           'title' => Yii::t('yii', 'Edit'),
+                                                         ]);}
 
-                ],
-            ],
-        ],
-        'responsive'=>true,
-        'hover'=>true,
-        'condensed'=>true,
-        'floatHeader'=>true,
-    ]); Pjax::end(); ?>
+                       ],
+                   ],
+               ],
+               'responsive'=>true,
+               'hover'=>true,
+               'condensed'=>true,
+               'floatHeader'=>true,
+           ]); Pjax::end(); 
+            ?>
         </div>
     </div>
 </div>

@@ -21,6 +21,7 @@ class m151007_153208_create_table_order_worker_relation extends Migration
             'worker_id' => Schema::TYPE_INTEGER . '(11) NOT NULL DEFAULT 0 COMMENT \'阿姨id\'',
             'order_worker_relation_memo' => Schema::TYPE_STRING . '(255) NOT NULL DEFAULT \'\' COMMENT \'订单阿姨备注\'',
             'order_worker_relation_status' => Schema::TYPE_STRING . '(255) NOT NULL DEFAULT \'\' COMMENT \'订单阿姨状态\'',
+            'admin_id' => Schema::TYPE_INTEGER . '(11) NOT NULL DEFAULT 0 COMMENT \'派单员id\'',
             'isdel' => Schema::TYPE_BOOLEAN . '(1) unsigned NOT NULL DEFAULT 0 COMMENT \'是否已删除\'',
         ], $tableOptions);
 

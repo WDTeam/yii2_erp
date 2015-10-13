@@ -8,6 +8,7 @@
 
 namespace boss\models\order;
 
+use core\models\CustomerTransRecord\CustomerTransRecord;
 use core\models\order\OrderPay;
 use Yii;
 use core\models\order\Order as OrderModel;
@@ -66,21 +67,31 @@ class Order extends OrderModel
         $post['Order']['order_booked_begin_time'] = strtotime($post['Order']['orderBookedDate'].' '.$time[0].':00');
         $post['Order']['order_booked_end_time'] = strtotime(($time[1]=='24:00')?date('Y-m-d H:i:s',strtotime($post['Order']['orderBookedDate'].'00:00:00 +1 days')):$post['Order']['orderBookedDate'].' '.$time[1].':00');
         if(parent::createNew($post['Order'])){ //创建成功后进行支付
+
+            $post['Order']['order_id'] = $this->id;
+
+            //dump($post);exit;
             switch($post['Order']['order_pay_type']){
                 case self::ORDER_PAY_TYPE_OFF_LINE://现金支付
+                        //交易记录
+                        $post['Order']['customer_trans_record_cash'] = $post['Order']['order_money'];
+                        $post['Order']['general_pay_source'] = 20;
+                        CustomerTransRecord::analysisRecord($post['Order']);
+
                         return OrderPay::isPaymentOffLine($this->id,$post['Order']['admin_id']);
                     break;
                 case self::ORDER_PAY_TYPE_ON_LINE://线上支付
                         //TODO 调胜强的接口
+                        //交易记录
+                        $post['Order']['customer_trans_record_online_balance_pay'] = $post['Order']['order_use_acc_balance'];
+                        $post['Order']['general_pay_source'] = 20;
+                        return CustomerTransRecord::analysisRecord($post['Order']);
                     break;
                 case self::ORDER_PAY_TYPE_POP://第三方预付
-                    $admin_id = $post['Order']['admin_id'];
-                    $channel_id = $post['Order']['channel_id'];
-                    $order_pop_group_buy_code = $post['Order']['order_pop_group_buy_code'];
-                    $order_pop_order_code = $post['Order']['order_pop_order_code'];
-                    $order_pop_order_money = $post['Order']['order_pop_order_money'];
-                    $order_pop_operation_money = $post['Order']['order_money'] - $post['Order']['order_pop_order_money'];
-                    return OrderPay::isPaymentPop($this->id,$admin_id,$channel_id,$order_pop_group_buy_code,$order_pop_order_code,$order_pop_order_money,$order_pop_operation_money);
+                        //交易记录
+                        $post['Order']['customer_trans_record_pre_pay'] = $post['Order']['order_pop_order_money'];
+                        $post['Order']['general_pay_source'] = $post['Order']['channel_id'];
+                        return CustomerTransRecord::analysisRecord($post['Order']);
                     break;
                 default:break;
 
