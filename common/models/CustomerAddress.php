@@ -83,7 +83,7 @@ class CustomerAddress extends \yii\db\ActiveRecord
             $customerAddress->customer_address_phone = $customer_address_phone;
             $customerAddress->created_at = time();
             $customerAddress->updated_at = 0;
-            $CustomerAddress->is_del = 0;
+            $customerAddress->is_del = 0;
             $customerAddress->validate();
             if ($customerAddress->hasErrors()) {
                 return false;
@@ -128,7 +128,7 @@ class CustomerAddress extends \yii\db\ActiveRecord
         $transaction = \Yii::$app->db->beginTransaction();
         try{
             $customerAddress = self::findOne($id);
-            $customerAddress->customer_id = $customer_id;
+            // $customerAddress->customer_id = $customer_id;
             $customerAddress->general_region_id = $general_region_id;
             $customerAddress->customer_address_status = 1;
             $customerAddress->customer_address_detail = $customer_address_detail;
@@ -138,7 +138,7 @@ class CustomerAddress extends \yii\db\ActiveRecord
             $customerAddress->customer_address_phone = $customer_address_phone;
             // $customerAddress->created_at = time();
             $customerAddress->updated_at = time();
-            $CustomerAddress->is_del = 0;
+            $customerAddress->is_del = 0;
             $customerAddress->validate();
             if ($customerAddress->hasErrors()) {
                 return false;

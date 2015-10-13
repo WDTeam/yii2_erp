@@ -53,9 +53,8 @@ class WorkerController extends BaseAuthController
     protected function findModel($id,$hasExt=false)
     {
         if($hasExt==true){
-            $model= Worker::find()->joinWith('workerExt')->where(['id'=>$id])->one();
+            $model= Worker::find()->joinWith('workerExtRelation')->where(['id'=>$id])->one();
             $workerExtModel = new WorkerExt();
-            $model->link('workerExt',$workerExtModel);
         }else{
             $model= Worker::findOne($id);
         }
@@ -102,7 +101,19 @@ class WorkerController extends BaseAuthController
         $workerBlockLogData = new ActiveDataProvider([
             'query' => WorkerBlockLog::find()->where(['worker_id'=>$id])->orderBy('id desc'),
         ]);
+
         if ($workerModel->load(Yii::$app->request->post()) && $workerModel->save()) {
+            $workerDistrictModel = new WorkerDistrict;
+            $workerParam = Yii::$app->request->post('Worker');
+            $workerDistrictModel->deleteAll(['worker_id'=>$id]);
+            if($workerParam['worker_district']){
+                foreach($workerParam['worker_district'] as $val){
+                    $workerDistrictModel->created_ad = time();
+                    $workerDistrictModel->worker_id = $id;
+                    $workerDistrictModel->operation_shop_district_id = $val;
+                }
+                $workerDistrictModel->save();
+            }
             return $this->redirect(['view', 'id' => $workerModel->id]);
         } else {
             return $this->render('view', ['workerModel' => $workerModel,'workerBlockData'=>$workerBlockData,'workerVacationData'=>$workerVacationData,'workerBlockLogData'=>$workerBlockLogData]);
@@ -125,9 +136,9 @@ class WorkerController extends BaseAuthController
             $worker_ext->load(Yii::$app->request->post());
             $worker_ext->worker_id = $worker->id;
             $worker_ext->save();
-            $workerDistrictArr = Yii::$app->request->post('Worker');
-            if($workerDistrictArr['worker_district']){
-                foreach($workerDistrictArr['worker_district'] as $val){
+            $workerParam = Yii::$app->request->post('Worker');
+            if($workerParam['worker_district']){
+                foreach($workerParam['worker_district'] as $val){
                     $worker_district->created_ad = time();
                     $worker_district->worker_id = $worker->id;
                     $worker_district->operation_shop_district_id = $val;
@@ -135,10 +146,10 @@ class WorkerController extends BaseAuthController
             }
             return $this->redirect(['view', 'id' => $worker->id]);
         } else {
-            $worker_ext->province_id = $worker_ext->worker_live_province;
-            $worker_ext->city_id = $worker_ext->worker_live_city;
-            $worker_ext->county_id = $worker_ext->worker_live_area;
-            $worker_ext->town_id = $worker_ext->worker_live_street;
+//            $worker_ext->province_id = $worker_ext->worker_live_province;
+//            $worker_ext->city_id = $worker_ext->worker_live_city;
+//            $worker_ext->county_id = $worker_ext->worker_live_area;
+//            $worker_ext->town_id = $worker_ext->worker_live_street;
             return $this->render('create', [
                 'worker' => $worker,
                 'worker_ext' => $worker_ext,
@@ -421,12 +432,10 @@ class WorkerController extends BaseAuthController
 
                 $workerExtArr['worker_id'] = $val['id'];
                 $workerExtArr['worker_age'] = $val['age'];
-                $workerExtArr['worker_hometown'] = $val['home_town'];
                 $workerExtArr['worker_live_lng'] = $val['home_lng'];
                 $workerExtArr['worker_live_lat'] = $val['home_lat'];
                 $workerExtArr['worker_sex'] = $val['gender'];
                 $workerExtArr['worker_is_health'] = $val['is_health'];
-                $workerExtArr['worker_birth'] = $val['birthday'];
                 $workerExtArr['worker_is_insurance'] = $val['is_insurance'];
                 $workerEduConfig = [1=>'小学',2=>'初中',3=>'高中',4=>'大学'];
                 if($val['education']){
