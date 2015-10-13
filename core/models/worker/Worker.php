@@ -112,7 +112,7 @@ class Worker extends \common\models\Worker
 
         //获取所属商圈中所有阿姨
         $districtWorkerResult = Worker::find()
-            ->select('{{%worker}}.id,shop_id,worker_name,worker_phone,worker_idcard,worker_rule_id,worker_type')
+            ->select('{{%worker}}.id,shop_id,worker_name,worker_phone,worker_idcard,worker_rule_id,worker_type,name as shop_name,worker_stat_order_num,worker_stat_order_refuse')
             ->innerJoinWith('workerDistrictRelation') //关联worker workerDistrictRelation方法
             ->andOnCondition(['operation_shop_district_id'=>$districtId])
             ->joinWith('workerStatRelation') //关联worker WorkerStatRelation方法
@@ -134,20 +134,8 @@ class Worker extends \common\models\Worker
                 $val['worker_type_description'] = self::getWorkerTypeShow($val['worker_type']);
                 $val['worker_rule_description'] = $workerRuleConfigArr[$val['worker_rule_id']];
 
-                $val['shop_name'] = isset($val['shopRelation']['name'])?$val['shopRelation']['name']:'';
-
-                if(isset($val['workerStatRelation']['worker_stat_order_num'])){
-                    $val['worker_stat_order_num'] = $val['workerStatRelation']['worker_stat_order_num'];
-                }else{
-                    $val['worker_stat_order_num'] = 0;
-                }
-
-                if(isset($val['workerStatRelation']['worker_stat_order_refuse'])){
-                    $val['worker_stat_order_refuse'] = intval($val['workerStatRelation']['worker_stat_order_refuse']);
-                }else{
-                    $val['worker_stat_order_refuse'] = 0;
-                }
-
+                $val['worker_stat_order_num'] = intval($val['worker_stat_order_num']);
+                $val['worker_stat_order_refuse'] = intval($val['worker_stat_order_refuse']);
                 if($val['worker_stat_order_num']!==0){
                     $val['worker_stat_order_refuse_percent'] = Yii::$app->formatter->asPercent($val['worker_stat_order_refuse']/$val['worker_stat_order_num']);
                 }else{
@@ -498,7 +486,7 @@ class Worker extends \common\models\Worker
      * 商铺表连表方法
      */
     public function getShopRelation(){
-        return $this->hasOne(Shop::className(),['id'=>'shop_id'])->select('name');
+        return $this->hasOne(Shop::className(),['id'=>'shop_id']);
     }
 
     /*

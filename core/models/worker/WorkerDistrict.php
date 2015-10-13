@@ -25,6 +25,8 @@ class WorkerDistrict extends \common\models\WorkerDistrict
 
     }
 
+    //public static function updateWorkerDistrict();
+
     /*
      * 关联District表
      */
