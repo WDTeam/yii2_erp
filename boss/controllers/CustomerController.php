@@ -17,6 +17,7 @@ use common\models\CustomerExtBalance;
 use common\models\CustomerExtScore;
 use common\models\OrderExtCustomer;
 use common\models\CustomerComment;
+use common\models\CustomerBlockLog;
 use core\models\Customer;
 /**
  * CustomerController implements the CRUD actions for Customer model.
@@ -300,6 +301,7 @@ class CustomerController extends BaseAuthController
                 'order_count'=>$order_count,
                 'customerBalance'=>$customerBalance,
                 ]);
+
         }
     }
 
@@ -388,21 +390,19 @@ class CustomerController extends BaseAuthController
      * @param customerId 客户Id
      * @return empty
      */
-    public function actionAddToBlock($customer_id){
-        $customerModel = $this->findModel($customer_id);
+    public function actionAddToBlock($id){
+
+        $model = $this->findModel($id);
         if(\Yii::$app->request->post()){
-            $customerModel->is_del = 1;
-            $customerModel->customer_del_reason = $_POST['Customer']['customer_del_reason'];
-            $customerModel->updated_at = time();
-            $customerModel->validate();
-            if ($customerModel->hasErrors()) {
-                return $this->renderAjax('add-to-block',['customerModel'=>$customerModel,]);
+            $block_reason =\Yii::$app->request->post('customer_del_reason','');
+            $is_added = CustomerBlockLog::addToBlock($id, $block_reason);
+            if ($is_added) {
+                return $this->redirect(['index']);
+            }else{
+                return $this->renderAjax('add-to-block',['model'=>$model]);
             }
-            $customerModel->save();
-            return $this->redirect(['index']);
-        }else{
-            return $this->renderAjax('add-to-block',['customerModel'=>$customerModel,]);
         }
+        return $this->renderAjax('add-to-block',['model'=>$model]);
     }
 
     /*
@@ -410,16 +410,8 @@ class CustomerController extends BaseAuthController
      * @param customer_id 客户Id
      * @return empty
      */
-    public function actionRemoveFromBlock($customer_id){
-        $customerModel = $this->findModel($customer_id);
-        $customerModel->is_del = 0;
-        $customerModel->customer_del_reason = '';
-        $customerModel->updated_at = time();
-        $customerModel->validate();
-        if ($customerModel->hasErrors()) {
-            return false;
-        }
-        $customerModel->save();
+    public function actionRemoveFromBlock($id){
+        $is_removed = CustomerBlockLog::removeFromBlock($id);
         return $this->redirect(['index']);
     }
 
@@ -460,8 +452,10 @@ class CustomerController extends BaseAuthController
         }
     }
 
+    public $global_cur_page_no = 1;
     public function actionData(){
-
+        // set_time_limit(30 * 1000); 
+        ini_set("max_execution_time", 30000);
         $connectionNew =  \Yii::$app->db;
         $connection = new \yii\db\Connection([
             'dsn' => 'mysql:host=rdsh52vh252q033a4ci5.mysql.rds.aliyuncs.com;dbname=sq_ejiajie_v2',
@@ -473,143 +467,160 @@ class CustomerController extends BaseAuthController
         $count = $command->queryScalar();
         echo "<br/>顾客总记录数为" . $count;
         $numPerPage = 20;
-        $curPageNo = 1;
         $totalPage = $count <= 0 ? 0 : floor($count / $numPerPage) + 1;
-        if ($totalPage > 0) {
-            echo "<br/>正在导入数据。。。";
-            while ($curPageNo <= 30) {
-                $start = $numPerPage * ($curPageNo - 1);
-                $command = $connection->createCommand("SELECT * FROM user_info order by charge_money desc limit ".$start.", ".$numPerPage);
-                $userInfo = $command->queryAll();
+        $curPageNo = $this->global_cur_page_no;
+        $start_page_no = $this->global_cur_page_no;
+        $end_page_no = $this->global_cur_page_no + 50;
+        $success_count = 0;
+        while ($curPageNo <= $totalPage && $curPageNo < $end_page_no) {
+            $start = $numPerPage * ($curPageNo - 1);
+            $command = $connection->createCommand("SELECT * FROM user_info order by id asc limit ".$start.", ".$numPerPage);
+            $userInfo = $command->queryAll();
 
-                foreach($userInfo as $val){
-                    $customer = new Customer;
-                    // $customer->id = $val['id'];
-                    $customer->customer_name = $val['name'];
-                    $customer->customer_sex = $val['gender'];
-                    $customer->customer_birth = intval(strtotime($val['birthday']));
-                    $customer->customer_photo = '';
-                    $customer->customer_phone = $val['telphone'];
-                    $customer->customer_email = $val['email'];
+            foreach($userInfo as $val){
+                $customer = new Customer;
+                // $customer->id = $val['id'];
+                $customer->customer_name = $val['name'];
+                $customer->customer_sex = $val['gender'];
+                $customer->customer_birth = intval(strtotime($val['birthday']));
+                $customer->customer_photo = '';
+                $customer->customer_phone = $val['telphone'];
+                $customer->customer_email = $val['email'];
 
-                    $customer->operation_area_id = 0;
-                    $customer->operation_city_id = 0;
-                    $customer->general_region_id = 1;
-                    $customer->customer_live_address_detail = $val['street'];
-                    
-                    // $customer->customer_balance = $val['charge_money'];
-                    // $customer->customer_score = 0;
-                    $customer->customer_level = $val['level'];
-                    $customer->customer_complaint_times = 0;
-                    
-                    $customer->customer_src = intval($val['user_src']);
-                    $customer->channal_id = 0;
-                    $customer->platform_id = 0;
-                    $customer->customer_login_ip = '';
-                    $customer->customer_login_time = 0;
-                    $customer->customer_is_vip = $val['user_type'];
-                    $customer->created_at = intval(strtotime($val['create_time']));
-                    $customer->updated_at = intval(strtotime($val['update_time']));
-                    $customer->is_del = $val['is_block'];
-                    $customer->customer_del_reason = '辱骂阿姨';
-                    $customer->validate();
-                    if ($customer->hasErrors()) {
-                        var_dump($customer->getErrors());
-                        die();
-                    }
-                    $customer->save();
-
-                    $customerBalance = new CustomerExtBalance;
-                    $customerBalance->customer_id = $customer->id;
-                    $customerBalance->customer_balance = $val['charge_money'];
-                    $customerBalance->created_at = time();
-                    $customerBalance->updated_at = 0;
-                    $customerBalance->is_del = 0;
-                    $customerBalance->validate();
-                    if ($customerBalance->hasErrors()) {
-                        var_dump($customerBalance->getErrors());
-                        die();
-                    }
-                    $customerBalance->save();
-
-                    $customerScore = new CustomerExtScore;
-                    $customerScore->customer_id = $customer->id;
-                    $customerScore->customer_score = 0;
-                    $customerBalance->created_at = time();
-                    $customerBalance->updated_at = 0;
-                    $customerBalance->is_del = 0;
-                    $customerScore->validate();
-                    if ($customerScore->hasErrors()) {
-                        var_dump($customerScore->getErrors());
-                        die();
-                    }
-                    $customerScore->save();
-
-                    $command = $connection->createCommand("SELECT * FROM user_comment where id=".$val['id']);
-                    $userComment = $command->queryAll();
-                    if ($userComment) {
-                        // print_r($userComment);
-                        // exit();
-                        $customerComment = new CustomerComment;
-                        $customerComment->customer_id = $customer->id;
-                        $customerComment->order_id = $userComment[0]['order_id'];
-                        $customerComment->customer_comment_phone = $userComment[0]['user_telephone'];
-                        $customerComment->customer_comment_content = $userComment[0]['comment'];
-                        $customerComment->customer_comment_star_rate = $userComment[0]['star_rate'];
-                        
-                        switch ($userComment[0]['is_anonymous']) {
-                            case 1:
-                                $customer_comment_anonymous = 0;
-                                break;
-                            case 0:
-                                $customer_comment_anonymous = 1;
-                                break;
-                            
-                            default:
-                                # code...
-                                break;
-                        }
-                        $customerComment->customer_comment_anonymous = $customer_comment_anonymous;
-                        $customerComment->customer_comment_anonymous = $userComment[0]['is_anonymous'];
-                        $customerComment->created_at = strtotime($userComment[0]['create_time']);
-                        $customerComment->is_del = $userComment[0]['is_hide'];
-                        $customerComment->validate();
-                        if ($customerComment->hasErrors()) {
-                            var_dump($customerComment->getErrors());
-                            die();
-                        }
-                        $customerComment->save();
-                    }
-                    
-
-
-                    // $customer_id = $customer->id;
-                    // $command = $connection->createCommand("SELECT * FROM user_address where user_id=".$val['id']." order by id asc");
-                    // $userAddress = $command->queryAll();
-
-                    // foreach ($userAddress as $value) {
-                    //     $customerAddress = new CustomerAddress;
-                    //     $customerAddress->customer_id = $customer_id;
-                    //     $customerAddress->general_region_id = $customer->general_region_id;
-                    //     $customerAddress->customer_address_detail = $value['place_detail'];
-                    //     $customerAddress->customer_address_status = $value['is_hidden'];
-                    //     $customerAddress->customer_address_longitude = $value['lng'];
-                    //     $customerAddress->customer_address_latitude = $value['lat'];
-                    //     $customerAddress->customer_address_nickname = $customer->customer_name;
-                    //     $customerAddress->customer_address_phone = $customer->customer_phone;
-                    //     $customerAddress->created_at = intval(strtotime($value['create_time']));
-                    //     $customerAddress->updated_at = 0;
-                    //     $customerAddress->is_del = 0;
-                    //     if ($customerAddress->hasErrors()) {
-                    //         var_dump($customer->getErrors());
-                    //         die();
-                    //     }
-                    //     $customerAddress->save();
-                    // }
+                $customer->operation_area_id = 0;
+                $customer->operation_city_id = 0;
+                $customer->general_region_id = 1;
+                $customer->customer_live_address_detail = $val['street'];
+                
+                // $customer->customer_balance = $val['charge_money'];
+                // $customer->customer_score = 0;
+                $customer->customer_level = $val['level'];
+                $customer->customer_complaint_times = 0;
+                
+                $customer->customer_src = intval($val['user_src']);
+                $customer->channal_id = 0;
+                $customer->platform_id = 0;
+                $customer->customer_login_ip = '';
+                $customer->customer_login_time = 0;
+                $customer->customer_is_vip = $val['user_type'];
+                $customer->created_at = intval(strtotime($val['create_time']));
+                $customer->updated_at = intval(strtotime($val['update_time']));
+                $customer->is_del = $val['is_block'];
+                $customer->customer_del_reason = '辱骂阿姨';
+                $customer->validate();
+                if ($customer->hasErrors()) {
+                    // var_dump($customer->getErrors());
+                    // die();
+                    echo "<br/>数据有误略过";
+                    continue;
                 }
-                $curPageNo ++;
+                $customer->save();
+
+                $customerBalance = new CustomerExtBalance;
+                $customerBalance->customer_id = $customer->id;
+                $customerBalance->customer_balance = $val['charge_money'];
+                $customerBalance->created_at = time();
+                $customerBalance->updated_at = 0;
+                $customerBalance->is_del = 0;
+                $customerBalance->validate();
+                if ($customerBalance->hasErrors()) {
+                    // var_dump($customerBalance->getErrors());
+                    // die();
+                    echo "<br/>数据有误略过";
+                    continue;
+                }
+                $customerBalance->save();
+
+                $customerScore = new CustomerExtScore;
+                $customerScore->customer_id = $customer->id;
+                $customerScore->customer_score = 0;
+                $customerBalance->created_at = time();
+                $customerBalance->updated_at = 0;
+                $customerBalance->is_del = 0;
+                $customerScore->validate();
+                if ($customerScore->hasErrors()) {
+                    // var_dump($customerScore->getErrors());
+                    // die();
+                    echo "<br/>数据有误略过";
+                    continue;
+                }
+                $customerScore->save();
+
+                $command = $connection->createCommand("SELECT * FROM user_comment where id=".$val['id']);
+                $userComment = $command->queryAll();
+                if ($userComment) {
+                    // print_r($userComment);
+                    // exit();
+                    $customerComment = new CustomerComment;
+                    $customerComment->customer_id = $customer->id;
+                    $customerComment->order_id = $userComment[0]['order_id'];
+                    $customerComment->customer_comment_phone = $userComment[0]['user_telephone'];
+                    $customerComment->customer_comment_content = $userComment[0]['comment'];
+                    $customerComment->customer_comment_star_rate = $userComment[0]['star_rate'];
+                    
+                    switch ($userComment[0]['is_anonymous']) {
+                        case 1:
+                            $customer_comment_anonymous = 0;
+                            break;
+                        case 0:
+                            $customer_comment_anonymous = 1;
+                            break;
+                        
+                        default:
+                            # code...
+                            break;
+                    }
+                    $customerComment->customer_comment_anonymous = $customer_comment_anonymous;
+                    $customerComment->customer_comment_anonymous = $userComment[0]['is_anonymous'];
+                    $customerComment->created_at = strtotime($userComment[0]['create_time']);
+                    $customerComment->is_del = $userComment[0]['is_hide'];
+                    $customerComment->validate();
+                    if ($customerComment->hasErrors()) {
+                        // var_dump($customerComment->getErrors());
+                        // die();
+                        echo "<br/>数据有误略过";
+                        continue;
+                    }
+                    $customerComment->save();
+                }
+                
+
+
+                // $customer_id = $customer->id;
+                // $command = $connection->createCommand("SELECT * FROM user_address where user_id=".$val['id']." order by id asc");
+                // $userAddress = $command->queryAll();
+
+                // foreach ($userAddress as $value) {
+                //     $customerAddress = new CustomerAddress;
+                //     $customerAddress->customer_id = $customer_id;
+                //     $customerAddress->general_region_id = $customer->general_region_id;
+                //     $customerAddress->customer_address_detail = $value['place_detail'];
+                //     $customerAddress->customer_address_status = $value['is_hidden'];
+                //     $customerAddress->customer_address_longitude = $value['lng'];
+                //     $customerAddress->customer_address_latitude = $value['lat'];
+                //     $customerAddress->customer_address_nickname = $customer->customer_name;
+                //     $customerAddress->customer_address_phone = $customer->customer_phone;
+                //     $customerAddress->created_at = intval(strtotime($value['create_time']));
+                //     $customerAddress->updated_at = 0;
+                //     $customerAddress->is_del = 0;
+                //     if ($customerAddress->hasErrors()) {
+                //         var_dump($customer->getErrors());
+                //         die();
+                //     }
+                //     $customerAddress->save();
+                // }
+                // unset($customerComment);
+                // unset($customerScore);
+                // unset($customerBalance);
+                // unset($customer);
+                $success_count ++;
+                echo "<br/>成功导入".$success_count."条数据，原id=".$val['id']."现在id=".$customer->id;
             }
+            echo "<br/>成功导入" . $numPerPage * $curPageNo;
+            $curPageNo ++;
+            $this->global_cur_page_no = $curPageNo;
         }
+        
         // $connectionNew->createCommand()->batchInsert('ejj_customer_channal', ['channal_name', 'pid', 'created_at', 'updated_at', 'is_del'], [
         //     ['美团', 0, time(), 0, 0],
         //     ['大众', 0, time(), 0, 0],
@@ -630,9 +641,11 @@ class CustomerController extends BaseAuthController
         // $res = $customer->decBalance(1, 0.01);
         // var_dump($res);
 
-        $test = new Customer;
-        $info = $test->incBalance(202, 10);
-        var_dump($info);
+        // $test = new Customer;
+        // $info = $test->incBalance(202, 10);
+        // var_dump($info);
 
+        $res = \common\models\CustomerBlockLog::addToBlock(17782, '测试');
+        var_dump($res);
     }
 }

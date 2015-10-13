@@ -12,7 +12,6 @@ use core\models\Customer;
 use core\models\order\OrderSearch;
 use core\models\order\Order;
 use core\models\worker\Worker;
-
 /**
  * FinancePopOrderSearch represents the model behind the search form about `common\models\FinancePopOrder`.
  */
@@ -40,12 +39,15 @@ class FinancePopOrderSearch extends FinancePopOrder
     * @author: peak pan
     * @return:
     **/
-    public static  function alltime($time)
+    public static  function alltime($time,$styp=1)
     {
     	if($time==0 || $time==""){
     	$name='未知';	
     	}else{
-    	$name=date('Y-m-d H:i:s',$time);
+    		if($styp==1){
+    			$name=date('Y-m-d H:i:s',$time);
+    		}else{
+    			$name=date('Y-m-d',$time);}
     	}
     	return $name;
     }
@@ -80,6 +82,42 @@ class FinancePopOrderSearch extends FinancePopOrder
     		$name='未知';
     	}else{
     		$name=$time;
+    	}
+    	return $name;
+    }
+    
+    /**
+    * 对账记录里面 未处理笔数
+    * @date: 2015-10-13
+    * @author: peak pan
+    * @return:
+    **/
+    public static  function countnub($id)
+    {
+    	$sumt=FinancePopOrder::find()
+    	->andWhere(['finance_pop_order_pay_status' => '0'])->asArray()->all();
+    	if(count($sumt)>0){
+    		$name=count($sumt);
+    	}else{
+    		$name=0;
+    	}
+    	return $name;
+    }
+    
+    /**
+     * 对账记录里面 未处理金额
+     * @date: 2015-10-13
+     * @author: peak pan
+     * @return:
+     **/
+    public static  function summoney($id)
+    {
+    	$sumt=FinancePopOrder::find()->select(['sum(finance_pop_order_sum_money) as sumoney'])
+    	->andWhere(['finance_pop_order_pay_status' => '0'])->asArray()->all(); 
+    	if(count($sumt)>0){
+    		$name=$sumt[0]['sumoney'];
+    	}else{
+    		$name=0;
     	}
     	return $name;
     }

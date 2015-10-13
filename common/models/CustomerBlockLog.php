@@ -142,4 +142,30 @@ class CustomerBlockLog extends \yii\db\ActiveRecord
         }
         return $customer_block_logs;
     }
+
+    /**
+     * 获取当前状态
+     */
+    public static function getCurrentBlockStatus($customer_id){
+        $customer = Customer::findOne($customer_id);
+        if ($customer == NULL) {
+            return false;
+        }
+        $block_status_name = '';
+        switch ($customer->is_del) {
+            case 0:
+                $block_status_name = '正常';
+                break;
+            case 1:
+                $block_status_name = '黑名单';
+                break;
+            default:
+                # code...
+                break;
+        }
+        return array(
+            'is_del'=>$customer->is_del,
+            'block_status_name'=>$block_status_name,
+            );
+    }
 }

@@ -166,17 +166,16 @@ class wxpay_class
     /**
      * 查询支付结果
      */
-    public function orderQuery()
+    public function orderQuery($out_trade_no)
     {
         require_once ("tenpay_config.php");
         $reqHandler = new RequestHandler();
         $reqHandler->init($APP_ID, $APP_SECRET, $PARTNER_KEY, $APP_KEY);
         $Token= $reqHandler->GetToken();
 
-        $out_trade_no = '15101258091';
-        //$package = $reqHandler -> makeOrderQueryPackage($out_trade_no,$PARTNER);
+        //$out_trade_no = '15101258091';
         $data = $reqHandler->orderQuery($Token,$out_trade_no,$PARTNER);
-        dump($data);
+        return $data;
 
     }
 }

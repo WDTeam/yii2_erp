@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use boss\components\SearchBox;
+use boss\models\Operation\OperationCity;
+use boss\models\Operation\OperationShopDistrictGoods;
 
 
 /**
@@ -70,6 +72,15 @@ $this->params['breadcrumbs'][] = $this->title;
                             Html::a('未开通', 'javascript:void(0)', ['title' => '', 'class' => 'btn btn-danger btn-sm']);
                }
             ],
+//            [
+//               'attribute'=> 'category',
+//               'format'=>'html',
+//               'value' => function ($model){
+////                    return OperationShopDistrictGoods::getCityCategory($model->city_id);
+//                    return date('Y-m-d H:i:s', $model->created_at);
+//               }
+//            ],
+            
             [
                'attribute'=> 'created_at',
                'format'=>'html',

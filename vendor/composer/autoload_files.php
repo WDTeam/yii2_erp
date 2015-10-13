@@ -31,4 +31,5 @@ return array(
     $vendorDir . '/ejiajie/pay/wx_app/wxpay_class.php',
     $vendorDir . '/ejiajie/pay/bfb_app/bfbpay_class.php',
     $vendorDir . '/ejiajie/pay/upacp_app/uppay_class.php',
+    $vendorDir . '/ejiajie/pay/wx_app_refund/wxrefund_class.php',
 );

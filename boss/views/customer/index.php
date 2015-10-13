@@ -9,6 +9,12 @@ use kartik\nav\NavX;
 use yii\bootstrap\NavBar;
 use yii\bootstrap\Modal;
 
+use boss\components\AreaCascade;
+use kartik\widgets\Select2;
+use yii\helpers\Url;
+use yii\web\JsExpression;
+use yii\base\Widget;
+
 use common\models\CustomerPlatform;
 use common\models\CustomerChannal;
 use common\models\CustomerAddress;
@@ -26,7 +32,7 @@ $this->title = Yii::t('app', '客户管理');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Customers'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="worker-index">
+<div class="customer-index">
     <div class="panel panel-info">
     <div class="panel-heading">
         <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 客户搜索</h3>
@@ -57,20 +63,21 @@ $this->params['breadcrumbs'][] = $this->title;
                 //     ]),
             ],
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            [
-                'format' => 'raw',
-                'label' => 'ID',
-                'value' => function ($dataProvider) {
-                    return '<a href="/customer/' . $dataProvider->id . '">'.$dataProvider->id.'</a>';
-                },
-                'width' => "80px",
-            ],
+            // ['class' => 'yii\grid\SerialColumn'],
+            // [
+            //     'format' => 'raw',
+            //     'label' => 'ID',
+            //     'value' => function ($dataProvider) {
+            //         return '<a href="/customer/' . $dataProvider->id . '">'.$dataProvider->id.'</a>';
+            //     },
+            //     'width' => "80px",
+            // ],
             [
                 'format' => 'raw',
                 'label' => '姓名',
                 'value' => function ($dataProvider) {
-                    return $dataProvider->customer_name;
+                    $name_show = empty($dataProvider->customer_name) ? "未知" : $dataProvider->customer_name;
+                    return '<a href="/customer/' . $dataProvider->id . '">'.$name_show.'</a>';
                 },
                 'width' => "80px",
             ],
@@ -179,56 +186,34 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $dataProvider->created_at;
                     
                 },
-                'width' => "80px",
+                'width' => "160px",
             ],
-            // [
-            //     'format'=>'raw',
-            //     'label'=>'操作',
-            //     'value'=>function($dataProvider){
-            //         if ($dataProvider->is_del) {
-            //             $action_label = '取消黑名单';
-            //         }
-            //         if (!$dataProvider->is_del) {
-            //             $action_label = '加入黑名单';
-            //         }
-            //         return Html::a('<span class="glyphicon glyphicon-pencil">'.$action_label.'</span>', Yii::$app->urlManager->createUrl(['customer/switch-block', 'id' => $dataProvider->id, 'edit' => 't']), [
-            //                 'title' => Yii::t('yii', 'Edit'),
-            //             ]);
-            //     },
-            //     'width' => "100px",
-            // ],
-            // [
-            //     'class' => 'yii\grid\ActionColumn',
-            //     'buttons' => [
-            //         'update' => function ($url, $model) {
-            //             return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['customer/view', 'id' => $model->id, 'edit' => 't']), [
-            //                 'title' => Yii::t('yii', 'Edit'),
-            //             ]);
-            //         }
-
-            //     ],
-            // ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' =>'{view} {delete} {block}',
+                'template'=>'{block}',
                 'buttons' => [
                     'block' => function ($url, $model) {
-                        $block_url = $model->is_del ? 'customer/remove-from-block' : 'customer/add-to-block';
-                        $block_item = $model->is_del ? '取消黑名单' : '加入黑名单';
-                        return Html::a('<span class="fa fa-fw fa-lock"></span>',
-                        [
-                            $block_url,
-                            'customer_id' => $model->id,
-                        ],
-                        [
-                            'title' => Yii::t('yii', $block_item),
-                            'data-toggle' => 'modal',
-                            'data-target' => '#blockModal',
-                            'class'=>'block',
+                        return empty($model->is_del) ? Html::a('加入黑名单', [
+                            'customer/add-to-block',
+                            'id' => $model->id
+                        ], [
+                            'title' => Yii::t('app', '加入黑名单'),
+                            'data-toggle'=>'modal',
+                            'data-target'=>'#modal',
                             'data-id'=>$model->id,
-                        ]
-                        );
-                    }
+                            'class'=>'block-btn',
+                        ]) : Html::a('解除黑名单', [
+                            'customer/remove-from-block',
+                            'id' => $model->id
+                            
+                        ], [
+                            'title' => Yii::t('app', '解除黑名单'),
+                            'data-toggle'=>'modal',
+                            'data-target'=>'#remove-modal',
+                            'data-id'=>$model->id,
+                            'class'=>'remove-btn',
+                        ]);
+                    },
                 ],
             ],
         ],
@@ -247,19 +232,27 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         
     ]);
-    Pjax::end(); 
-    echo Modal::widget([
-        'header' => '<h4 class="modal-title"></h4>',
-        'id'=>'blockModal',
-    ]);
-    $this->registerJs(<<<JSCONTENT
-        $('.block').click(function() {
-            $('#blockModal .modal-body').html('加载中……');
-            $('#blockModal .modal-body').eq(0).load(this.href);
-        });
+    Pjax::end(); ?>
+</div>
+<?php echo Modal::widget([
+'header' => '<h4 class="modal-title">黑名单原因</h4>',
+'id' =>'modal',
+]);?>
+<?php echo Modal::widget([
+'header' => '<h4 class="modal-title">黑名单原因</h4>',
+'id' =>'remove-modal',
+]);?>
+<?php $this->registerJs(<<<JSCONTENT
+$('.block-btn').click(function(){
+    $('#modal .modal-body').html('加载中……');
+    $('#modal .modal-body').eq(0).load(this.href);
+});
+$('.remove-btn').click(function(){
+    $('#modal .modal-body').html('加载中……');
+    $('#modal .modal-body').eq(0).load(this.href);
+});
 JSCONTENT
-        );
-    ?>
+);?>
 
 
 
