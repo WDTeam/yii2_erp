@@ -314,4 +314,10 @@ class CoreOperationShopDistrictGoods extends CommonOperationShopDistrictGoods
         $data = self::find()->asArray()->where(['operation_city_id' => $city_id, 'operation_goods_id' => $goods_id, 'operation_shop_district_goods_status' => 1])->all();
         return count($data);
     }
+
+    public static function getCityShopDistrictNum($city_id){
+        $data = self::find()->asArray()->where(['operation_city_id' => $city_id])->all();
+        return count($data);
+    }
+
 }

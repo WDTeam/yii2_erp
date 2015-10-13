@@ -205,7 +205,7 @@ echo Menu::widget(
 //                        
 //                    ],
                     [
-                        'label' => '城市管理(90%)',
+                        'label' => '城市和商圈管理(90%)',
                         'url' => ['/operation-city'],
                         'icon' => 'fa fa-angle-right',
                         
