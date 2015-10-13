@@ -1,4 +1,10 @@
 <?php
+/**
+* 账期管理
+* @date: 2015-10-13
+* @author: peak pan
+* @return:
+**/
 namespace boss\controllers;
 
 use Yii;
@@ -8,11 +14,8 @@ use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\FinanceOrderChannel;
+use common\models\FinancePopOrder;
 
-
-/**
- * FinanceRecordLogController implements the CRUD actions for FinanceRecordLog model.
- */
 class FinanceRecordLogController extends BaseAuthController
 {
     public function behaviors()
@@ -117,8 +120,10 @@ class FinanceRecordLogController extends BaseAuthController
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        //删除对账记录表
+       $poporder= new FinancePopOrder;
+       FinancePopOrder::deleteAll(['finance_record_log_id'=>$id]);
+       return $this->redirect(['index']);
     }
 
     /**
