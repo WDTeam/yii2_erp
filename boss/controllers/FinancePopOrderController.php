@@ -205,6 +205,9 @@ class FinancePopOrderController extends Controller
     		$customer_info->finance_record_log_confirm_name =Yii::$app->user->identity->username;
     		//服务费
     		$customer_info->finance_record_log_fee = 0;
+    		
+    		$customer_info->finance_record_log_statime =strtotime($post['FinancePopOrderSearch']['finance_order_channel_statuspayment']);
+    		$customer_info->finance_record_log_endtime =strtotime($post['FinancePopOrderSearch']['finance_order_channel_endpayment']);
     		$customer_info->create_time= time();
     		$customer_info->is_del=0;
     		$customer_info->save();
