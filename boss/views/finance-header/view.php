@@ -6,9 +6,7 @@ use kartik\datecontrol\DateControl;
 use kartik\date\DatePicker;
 use kartik\grid\GridView;
 use kartik\widgets\ActiveForm;
-use kartik\widgets\Select2;
-
-
+use kartik\widgets\Select2; 
 
 /**
  * @var yii\web\View $this
@@ -32,23 +30,24 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'finance_header_name',
-            'finance_order_channel_id',
+            //'finance_order_channel_id',
             'finance_order_channel_name',
-            'finance_pay_channel_id',
+            //'finance_pay_channel_id',
             'finance_pay_channel_name',
             //'create_time:datetime',
             'is_del',
+    		'finance_header_where_es',
     		[
     		'attribute' => 'finance_header_where',
     		'type' => DetailView::INPUT_WIDGET,
     		'widgetOptions' => [
     		'name'=>'比对字段名称',
     		'class'=>\kartik\widgets\Select2::className(),
-    		'data' => [0=>'请选择','order_channel_order_num'=> '订单号', 'order_money'=>'支付金额','decrease'=>'递减','increase'=>'递加','order_channel_promote'=>'渠道营销费','function_way'=>'表达式(下期开发)'],
+    		'data' => [0=>'请选择','order_channel_order_num'=> '订单号', 'order_money'=>'支付金额','order_channel_promote'=>'渠道营销费','decrease'=>'手续费','function_way'=>'表达式(下期开发)'],
     		'hideSearch' => true,
     				],
     				],
-        ],
+        ],		
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],
         'data'=>[
