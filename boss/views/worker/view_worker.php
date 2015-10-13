@@ -18,9 +18,8 @@ use kartik\date\DatePicker;
 use common\models\Shop;
 use core\models\worker\Worker;
 use core\models\worker\WorkerRuleConfig;
-use core\models\worker\WorkerExt;
+use core\models\worker\workerExt;
 
-$extModel = \core\models\worker\WorkerExt::findOne('16391');
 /**
  * @var yii\web\View $this
  * @var common\models\Worker $model
@@ -80,12 +79,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'worker_source',
-                'editModel'=>$model->workerExt,
-                'viewModel'=>$model->workerExt,
+                'editModel'=>$model->workerExtRelation,
+                'viewModel'=>$model->workerExtRelation,
                 'type' => DetailView::INPUT_WIDGET,
                 'widgetOptions' => [
                     'class'=>\kartik\widgets\Select2::className(),
-                    'data' => WorkerExt::getSourceConfigList(),
+                    'data' => workerExt::getSourceConfigList(),
                     'hideSearch' => true,
                     'options'=>[
                         'placeholder' => '选择招聘来源',
@@ -120,38 +119,38 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'attribute' => 'worker_sex',
-                'editModel'=>$model->workerExt,
-                'viewModel'=>$model->workerExt,
+                'editModel'=>$model->workerExtRelation,
+                'viewModel'=>$model->workerExtRelation,
                 'type' => DetailView::INPUT_RADIO_LIST,
                 'items' => [0=>'女',1=>'男'],
                 'label'=>'阿姨性别',
-                'value'=>$model::getWorkerSexShow($model->workerExt->worker_sex),
+                'value'=>$model::getWorkerSexShow($model->workerExtRelation->worker_sex),
             ],
             [
                 'attribute' => 'worker_age',
-                'viewModel'=>$extModel,
-                'editModel'=>$extModel,
+                'viewModel'=>$model->workerExtRelation,
+                'editModel'=>$model->workerExtRelation,
                 'type' => DetailView::INPUT_TEXT,
                 'label'=>'阿姨年龄',
-                'value'=>$model->workerExt->worker_age
+                'value'=>$model->workerExtRelation->worker_age
 
             ],
             [
-                'attribute' => 'worker_birth',
-                'editModel'=>$model->workerExt,
-                'viewModel'=>$model->workerExt,
+                'attribute' => 'worker_height',
+                'editModel'=>$model->workerExtRelation,
+                'viewModel'=>$model->workerExtRelation,
                 'type' => DetailView::INPUT_TEXT,
                 'label'=>'阿姨身高'
             ],
 
             [
                 'attribute' => 'worker_edu',
-                'editModel'=>$model->workerExt,
-                'viewModel'=>$model->workerExt,
+                'editModel'=>$model->workerExtRelation,
+                'viewModel'=>$model->workerExtRelation,
                 'type' => DetailView::INPUT_WIDGET,
                 'widgetOptions' => [
                     'class'=>\kartik\widgets\Select2::className(),
-                    'data' => WorkerExt::getEduConfigList(),
+                    'data' => workerExt::getEduConfigList(),
                     'hideSearch' => true,
                     'options'=>[
                         'placeholder' => '选择阿姨教育程度',
@@ -161,48 +160,48 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'worker_is_health',
-                'editModel'=>$model->workerExt,
-                'viewModel'=>$model->workerExt,
+                'editModel'=>$model->workerExtRelation,
+                'viewModel'=>$model->workerExtRelation,
                 'type' => DetailView::INPUT_RADIO_LIST,
                 'items' => [1=>'有',0=>'无'],
                 'label'=>'阿姨是否有健康证',
-                'value'=>Worker::getWorkerIsHealthShow($model->workerExt->worker_is_health),
+                'value'=>Worker::getWorkerIsHealthShow($model->workerExtRelation->worker_is_health),
             ],
             [
                 'attribute' => 'worker_is_insurance',
-                'editModel'=>$model->workerExt,
-                'viewModel'=>$model->workerExt,
+                'editModel'=>$model->workerExtRelation,
+                'viewModel'=>$model->workerExtRelation,
                 'type' => DetailView::INPUT_RADIO_LIST,
                 'items' => [1=>'是',0=>'否'],
                 'label'=>'阿姨是否上保险',
-                'value'=>Worker::getWorkerIsInsuranceShow($model->workerExt->worker_is_insurance),
+                'value'=>Worker::getWorkerIsInsuranceShow($model->workerExtRelation->worker_is_insurance),
             ],
 
             [
                 'attribute' => 'worker_bank_name',
-                'editModel'=>$model->workerExt,
-                'viewModel'=>$model->workerExt,
+                'editModel'=>$model->workerExtRelation,
+                'viewModel'=>$model->workerExtRelation,
                 'type' => DetailView::INPUT_TEXT,
                 'label'=>'开户银行'
             ],
             [
                 'attribute' => 'worker_bank_from',
-                'editModel'=>$model->workerExt,
-                'viewModel'=>$model->workerExt,
+                'editModel'=>$model->workerExtRelation,
+                'viewModel'=>$model->workerExtRelation,
                 'type' => DetailView::INPUT_TEXT,
                 'label'=>'银行卡开户网点'
             ],
             [
-                'attribute' => 'worker_bank_from',
-                'editModel'=>$model->workerExt,
-                'viewModel'=>$model->workerExt,
+                'attribute' => 'worker_bank_area',
+                'editModel'=>$model->workerExtRelation,
+                'viewModel'=>$model->workerExtRelation,
                 'type' => DetailView::INPUT_TEXT,
                 'label'=>'银行卡开户地'
             ],
             [
                 'attribute' => 'worker_bank_card',
-                'editModel'=>$model->workerExt,
-                'viewModel'=>$model->workerExt,
+                'editModel'=>$model->workerExtRelation,
+                'viewModel'=>$model->workerExtRelation,
                 'type' => DetailView::INPUT_TEXT,
                 'label'=>'银行卡号',
             ],
@@ -210,22 +209,22 @@ $this->params['breadcrumbs'][] = $this->title;
                 'columns'=>[
                     [
                         'attribute' => 'worker_live_province',
-                        'editModel'=>$model->workerExt,
-                        'viewModel'=>$model->workerExt,
+                        'editModel'=>$model->workerExtRelation,
+                        'viewModel'=>$model->workerExtRelation,
                         'type' => DetailView::INPUT_TEXT,
                         'label'=>'阿姨居住地',
                     ],
                     [
                         'attribute' => 'worker_live_city',
-                        'editModel'=>$model->workerExt,
-                        'viewModel'=>$model->workerExt,
+                        'editModel'=>$model->workerExtRelation,
+                        'viewModel'=>$model->workerExtRelation,
                         'type' => DetailView::INPUT_TEXT,
                         'labelColOptions'=>['style'=>'display:none']
                     ],
                     [
                         'attribute' => 'worker_live_area',
-                        'editModel'=>$model->workerExt,
-                        'viewModel'=>$model->workerExt,
+                        'editModel'=>$model->workerExtRelation,
+                        'viewModel'=>$model->workerExtRelation,
                         'type' => DetailView::INPUT_TEXT,
                         'labelColOptions'=>['style'=>'display:none']
                     ],
@@ -233,8 +232,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'worker_live_street',
-                'editModel'=>$model->workerExt,
-                'viewModel'=>$model->workerExt,
+                'editModel'=>$model->workerExtRelation,
+                'viewModel'=>$model->workerExtRelation,
                 'type' => DetailView::INPUT_TEXT,
             ],
             [
@@ -268,9 +267,10 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'worker_auth_status',
                 'type' => DetailView::INPUT_RADIO_LIST,
-                'items'=>['0'=>'已审核','1'=>'已试工','2'=>'已上岗'],
+                'items'=>['0'=>'新录入','1'=>'已审核','2'=>'已试工','3'=>'已上岗'],
                 //'value'=>Worker::getWorkerAuthStatusShow($model->worker_auth_status),
-                'label'=>'阿姨审核状态'
+                'label'=>'阿姨状态',
+                'value'=>$model::getWorkerAuthStatusShow($model->worker_auth_status),
             ],
             [
                 'attribute' => 'worker_is_vacation',

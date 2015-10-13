@@ -44,12 +44,12 @@ class WorkerExt extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['worker_age', 'worker_sex', 'worker_is_health', 'worker_is_insurance', 'worker_live_province', 'worker_live_city', 'worker_live_area', 'created_ad', 'updated_ad','worker_bank_card'], 'integer'],
+            [['worker_age', 'worker_sex', 'worker_is_health', 'worker_is_insurance', 'worker_live_province', 'worker_live_city', 'worker_live_area', 'created_ad', 'updated_ad','worker_bank_card','worker_height'], 'integer'],
             [['worker_live_lng', 'worker_live_lat'], 'number'],
             [['worker_edu', 'worker_bank_card'], 'string', 'max' => 30],
-            [['worker_hometown', 'worker_source', 'worker_live_street'], 'string', 'max' => 50],
+            [['worker_source', 'worker_live_street'], 'string', 'max' => 50],
             [['worker_bank_name'], 'string', 'max' => 10],
-            [['worker_bank_from'], 'string', 'max' => 40]
+            [['worker_bank_from','worker_bank_area'], 'string', 'max' => 40]
         ];
     }
 
@@ -62,14 +62,14 @@ class WorkerExt extends \yii\db\ActiveRecord
             'worker_id' => Yii::t('app', '阿姨id'),
             'worker_age' => Yii::t('app', '阿姨年龄'),
             'worker_sex' => Yii::t('app', '阿姨性别'),
-            'worker_birth' => Yii::t('app', '阿姨生日'),
+            'worker_height' => Yii::t('app', '阿姨身高(cm)'),
             'worker_edu' => Yii::t('app', '阿姨教育程度'),
-            'worker_hometown' => Yii::t('app', '阿姨籍贯'),
             'worker_is_health' => Yii::t('app', '阿姨是否有健康证'),
             'worker_is_insurance' => Yii::t('app', '阿姨是否上保险'),
             'worker_source' => Yii::t('app', '阿姨来源'),
             'worker_bank_name' => Yii::t('app', '开户银行'),
             'worker_bank_from' => Yii::t('app', '银行卡开户网点'),
+            'worker_bank_area' => Yii::t('app', '银行卡开户地'),
             'worker_bank_card' => Yii::t('app', '银行卡号'),
             'worker_live_province' => Yii::t('app', '阿姨居住地(省份)'),
             'worker_live_city' => Yii::t('app', '阿姨居住地(市)'),

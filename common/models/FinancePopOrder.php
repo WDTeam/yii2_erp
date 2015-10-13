@@ -42,7 +42,7 @@ class FinancePopOrder extends \yii\db\ActiveRecord
 	public $finance_uplod_url;
 	
 	public $finance_pop_order_info_msg;
-	
+	public $finance_pop_order_no;
 
     /**
      * @inheritdoc
@@ -91,6 +91,7 @@ class FinancePopOrder extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', '主键id'),
+            'finance_pop_order_no' => Yii::t('app', '标记坏账'),
             'finance_uplod_url' => Yii::t('app', '请上传对账单'),
             'finance_record_log_id' => Yii::t('app', '账期id'),
             'finance_pop_order_number' => Yii::t('app', '第三方订单号'),
@@ -114,7 +115,7 @@ class FinancePopOrder extends \yii\db\ActiveRecord
             'finance_pop_order_reality_pay' => Yii::t('app', '实际收款'),
             'finance_pop_order_order_time' => Yii::t('app', '下单时间'),
             'finance_pop_order_pay_time' => Yii::t('app', '支付时间'),
-            'finance_pop_order_pay_status' => Yii::t('app', '财务对账'),
+            'finance_pop_order_pay_status' => Yii::t('app', '支付状态'),
             'finance_pop_order_pay_title' => Yii::t('app', '状态 描述'),
             'finance_pop_order_check_id' => Yii::t('app', '操作人id'),
             'finance_pop_order_finance_time' => Yii::t('app', '财务对账提交时间'),

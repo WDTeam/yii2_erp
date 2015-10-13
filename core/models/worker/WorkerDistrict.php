@@ -2,10 +2,10 @@
 
 namespace core\models\worker;
 
+use common\models\Shop;
 use Yii;
 use core\models\worker\Worker;
 use core\models\Operation\CoreOperationShopDistrict;
-
 /**
  * This is the model class for table "{{%worker_district}}".
  *
@@ -17,14 +17,15 @@ use core\models\Operation\CoreOperationShopDistrict;
 class WorkerDistrict extends \common\models\WorkerDistrict
 {
 
-    /*
-     * 关联Worker表
-     */
-    public function getWorker(){
-        $condition = ['worker_is_block'=>0,'worker_is_blacklist'=>0,'worker_is_vacation'=>0];
-        return $this->hasMany(Worker::className(),['id'=>'worker_id'])->onCondition($condition)->select('id,shop_id,worker_name,worker_phone,worker_idcard,worker_rule_id,worker_type');
+    public static function saveWorkerDistrict($worker_id,$workerDistrictArr){
+        $model = self::find()->where;
+        if($workerDistrictArr){
+
+        }
+
     }
 
+    //public static function updateWorkerDistrict();
 
     /*
      * 关联District表
@@ -32,5 +33,6 @@ class WorkerDistrict extends \common\models\WorkerDistrict
     public function getDistrict(){
         return $this->hasMany(CoreOperationShopDistrict::className(),['id'=>'operation_shop_district_id']);
     }
+
 
 }

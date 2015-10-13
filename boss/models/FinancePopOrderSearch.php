@@ -10,11 +10,8 @@ use common\models\FinanceHeader;
 use common\models\GeneralPay;
 use core\models\Customer;
 use core\models\order\OrderSearch;
-
 use core\models\order\Order;
-
-
-
+use core\models\worker\Worker;
 
 /**
  * FinancePopOrderSearch represents the model behind the search form about `common\models\FinancePopOrder`.
@@ -52,6 +49,30 @@ class FinancePopOrderSearch extends FinancePopOrder
     	}
     	return $name;
     }
+    
+    
+    
+    /**
+    * 获取阿姨资料
+    * @date: 2015-10-13
+    * @author: peak pan
+    * @return:
+    **/
+    
+    public static  function Workerinfo($Workerid,$name)
+    {
+    	
+    $WorkerInfo= Worker::getWorkerInfo($Workerid);
+    	if(count($WorkerInfo)>0){
+    		$nameinfo=$WorkerInfo[$name];
+    	}else{
+    		$nameinfo='未查到此阿姨';
+    	}
+    	return $nameinfo;
+    }
+    
+    
+    
     
     public static  function alltimecount($time)
     {
@@ -96,8 +117,10 @@ class FinancePopOrderSearch extends FinancePopOrder
     {
     	if($date==0 || $date==""){
     		return '<font color="red">未处理</font>';
-    	}else{
+    	}elseif($date==1){
     		return '<font color="blue">已处理</font>';
+    	}elseif ($date==3){
+    		return '<font color="orange">坏 账</font>';
     	}
     }
     
@@ -255,7 +278,7 @@ class FinancePopOrderSearch extends FinancePopOrder
 			  	$orderdateinfo['order_money']=$getorder_money;
 			  	$orderdateinfo['finance_pop_order_pay_status_type']=4;
 			  }
-			   
+ 
 		}else {
 			//在订单表查询无数据 1 确实没有 2视为充值订单
 			if($getorder_money >=1000){

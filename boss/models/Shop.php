@@ -8,7 +8,7 @@ use yii\web\HttpException;
 use yii\base\ErrorException;
 use yii\web\BadRequestHttpException;
 use yii2tech\ar\softdelete\SoftDeleteBehavior;
-use core\models\Worker;
+use core\models\worker\Worker;
 use boss\behaviors\ShopStatusBehavior;
 class Shop extends \common\models\Shop
 {
@@ -109,6 +109,13 @@ class Shop extends \common\models\Shop
         return $province.$city.$county.$this->street;
     }
     /**
+     * 获取记录总数
+     */
+    public static function getTotal()
+    {
+        return (int)self::find()->where('isdel is null or isdel=0')->scalar();
+    }
+    /**
      * 获取黑名单数
      */
     public static function getIsBlacklistCount()
@@ -172,16 +179,5 @@ class Shop extends \common\models\Shop
     public function getWorkers() {
         $models = Worker::find()->where(['shop_id'=>$this->id])->all();
         return (array)$models;
-    }
-    /**
-     * 最后审核时间
-     */
-    public function getLastAuditStatusChangeTime()
-    {
-        $time = ShopStatus::find()->select(['created_at'])->where([
-            'model_id'=>$this->id,
-            'model_name'=>ShopStatus::MODEL_SHOP,
-        ])->scalar();
-        return $time;
     }
 }
