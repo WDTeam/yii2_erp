@@ -120,7 +120,7 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '人工派单(40%)',
+                        'label' => '人工派单(80%)',
                         'url' => ['/order/assign'],
                         'icon' => 'fa fa-angle-right',
                     ],

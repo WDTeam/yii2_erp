@@ -99,7 +99,7 @@ class OrderController extends BaseAuthController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $order = OrderSearch::getWaitManualAssignOrder(Yii::$app->user->id,true);
         if($order){
-            $oper_long_time = 90000; //TODO 客服最大执行时间
+            $oper_long_time = 900; //TODO 客服最大执行时间
             return
                 [
                     'order'=>$order,
