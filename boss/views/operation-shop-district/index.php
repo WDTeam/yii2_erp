@@ -11,6 +11,7 @@ use yii\widgets\Pjax;
 
 $this->title = Yii::t('operation', 'Operation Shop Districts');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Cities'), 'url' => ['operation-city/index']];
+$this->params['breadcrumbs'][] = ['label' => $city_name];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-shop-district-index">
