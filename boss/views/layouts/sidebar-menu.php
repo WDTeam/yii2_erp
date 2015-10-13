@@ -156,6 +156,29 @@ echo Menu::widget(
 //                        'icon' => 'fa fa-angle-right',
 //                    ],
                     [
+                        'label' => '服务和品类管理(80%)',
+                        'url' => ['/operation-category/'],
+                        'icon' => 'fa fa-angle-right',
+
+                    ],
+                    [
+                        'label' => '城市和商圈管理(90%)',
+                        'url' => ['/operation-city'],
+                        'icon' => 'fa fa-angle-right',
+
+                    ],
+//                    [
+//                        'label' => '上线城市(80%)',
+//                        'url' => ['/operation-city/release'],
+//                        'icon' => 'fa fa-angle-right',
+//                        'visible' => (Yii::$app->user->identity->username == 'admin'),
+//                    ],
+                    [
+                        'label' => '已开通城市管理',
+                        'url' => ['/operation-city/opencity'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
+                    [
                         'label' => 'CMS管理(90%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
@@ -204,23 +227,7 @@ echo Menu::widget(
 //                        'icon' => 'fa fa-angle-right',
 //                        
 //                    ],
-                    [
-                        'label' => '城市和商圈管理(90%)',
-                        'url' => ['/operation-city'],
-                        'icon' => 'fa fa-angle-right',
-                        
-                    ],
-//                    [
-//                        'label' => '上线城市(80%)',
-//                        'url' => ['/operation-city/release'],
-//                        'icon' => 'fa fa-angle-right',
-//                        'visible' => (Yii::$app->user->identity->username == 'admin'),
-//                    ],
-                    [
-                        'label' => '已开通城市管理',
-                        'url' => ['/operation-city/opencity'],
-                        'icon' => 'fa fa-angle-right',
-                    ],
+
 //                     [
 
 //                        'label' => '商圈管理(40%)',
@@ -228,17 +235,12 @@ echo Menu::widget(
 //                        'icon' => 'fa fa-angle-right',
                        
 //                    ],
-                    [
-                        'label' => '服务品类管理(80%)',
-                        'url' => ['/operation-category/'],
-                        'icon' => 'fa fa-angle-right',
 
-                    ],
-                    [
-                        'label' => '服务管理(80%)',
-                        'url' => ['/operation-goods'],
-                        'icon' => 'fa fa-angle-right',
-                    ],
+//                    [
+//                        'label' => '服务管理(80%)',
+//                        'url' => ['/operation-goods'],
+//                        'icon' => 'fa fa-angle-right',
+//                    ],
                     
                     [
                         'label' => '启动页管理(90%)',

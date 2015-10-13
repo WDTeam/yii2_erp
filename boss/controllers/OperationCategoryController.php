@@ -35,6 +35,7 @@ class OperationCategoryController extends BaseAuthController
         $searchModel = new OperationCategorySearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
+
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
