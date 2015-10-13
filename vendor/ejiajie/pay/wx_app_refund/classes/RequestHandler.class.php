@@ -15,7 +15,7 @@
  * ============================================================================
  *
  */
-class RequestHandler {
+class RequestHandlerRefund {
 
     /** 网关url地址 */
     var $gateUrl;

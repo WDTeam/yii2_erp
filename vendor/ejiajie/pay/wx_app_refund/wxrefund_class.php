@@ -5,25 +5,37 @@
  * Date: 15-10-13
  * Time: 下午5:15
  */
-//require_once ("classes/RequestHandler.class.php");
-//require_once ("classes/client/ClientResponseHandler.class.php");
-//require_once ("classes/client/TenpayHttpClient.class.php");
+require_once ("classes/RequestHandler.class.php");
+require_once ("classes/client/ClientResponseHandler.class.php");
+require_once ("classes/client/TenpayHttpClient.class.php");
 
 class wxrefund_class{
     /**
      * 退款接口
      */
     public function refund($param){
+
+        //https://mch.tenpay.com/refundapi/gateway/refund.xml?
+        //op_user_id=1217983401&
+        //op_user_passwd=4297f44b13955235245b2497399d7a93&
+        //out_refund_no=15101396401&
+        //out_trade_no=15101258091&
+        //partner=1217983401&
+        //refund_fee=1&
+        //service_version=1.1&
+        //sign=72e00863ba4ef8ad2b4c1aa5c77afd8b&
+        //total_fee=1&
+        //transaction_id=
         require_once ("tenpay_config.php");
         /* 商户号 */
         $partner = $PARTNER;
         /* 密钥 */
         $key = $PARTNER_KEY;
         /* 创建支付请求对象 */
-        $reqHandler = new RequestHandler();
+        $reqHandler = new RequestHandlerRefund();
 
         //通信对象
-        $httpClient = new TenpayHttpClient();
+        $httpClient = new TenpayHttpClientRefund();
 
         //应答对象
         $resHandler = new ClientResponseHandler();
@@ -38,17 +50,18 @@ class wxrefund_class{
         $reqHandler->setParameter("partner", $partner);
 
         //out_trade_no和transaction_id至少一个必填，同时存在时transaction_id优先
-        //$reqHandler->setParameter("out_trade_no", "201101121111462844");
-        $reqHandler->setParameter("transaction_id", "1900000109201101120023707085");
+        $reqHandler->setParameter("out_trade_no", $param['out_trade_no']);
+        $reqHandler->setParameter("transaction_id", $param['transaction_id']);
         //必须保证全局唯一，同个退款单号财付通认为是同笔请求
-        $reqHandler->setParameter("out_refund_no", "2011032400002");
-        $reqHandler->setParameter("total_fee", "2");
-        $reqHandler->setParameter("refund_fee", "1");
-        $reqHandler->setParameter("op_user_id", "1900000109");
+        $reqHandler->setParameter("out_refund_no", $param['out_refund_no']);
+        $reqHandler->setParameter("total_fee", $param['total_fee']);
+        $reqHandler->setParameter("refund_fee", $param['refund_fee']);
+        $reqHandler->setParameter("op_user_id", $partner);
         //操作员密码,MD5处理
-        $reqHandler->setParameter("op_user_passwd", md5("111111"));
+        $reqHandler->setParameter("op_user_passwd", $param['op_user_passwd']);
         //接口版本号,取值1.1
         $reqHandler->setParameter("service_version", "1.1");
+        $reqHandler->setParameter("input_charset", "UTF-8");
 
 
         //-----------------------------
@@ -56,14 +69,17 @@ class wxrefund_class{
         //-----------------------------
         //设置PEM证书，pfx证书转pem方法：openssl pkcs12 -in 2000000501.pfx  -out 2000000501.pem
         //证书必须放在用户下载不到的目录，避免证书被盗取
-        $pemPath = __DIR__.'1217983401_20140924144357.pem';
-        $httpClient->setCertInfo($pemPath, "1217983401_20140924144357");
+        $pemPath = __DIR__.'/1217983401_20140924144357.pem';
+
+        $httpClient->setCertInfo($pemPath, "1217983401");
         //设置CA
-        $httpClient->setCaInfo("C:\\key\\cacert.pem");
+        $caPath = __DIR__.'/tenpay_ca_cert.crt';
+        $httpClient->setCaInfo($caPath);
         $httpClient->setTimeOut(5);
         //设置请求内容
         $httpClient->setReqContent($reqHandler->getRequestURL());
-
+//        dump($reqHandler->getRequestURL());
+        //exit;
         //后台调用
         if($httpClient->call()) {
             //设置结果参数

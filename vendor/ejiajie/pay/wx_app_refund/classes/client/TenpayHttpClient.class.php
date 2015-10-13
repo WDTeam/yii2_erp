@@ -18,7 +18,7 @@
  *
  */
 
-class TenpayHttpClient {
+class TenpayHttpClientRefund {
     //请求内容，无论post和get，都用get方式提供
     var $reqContent;
     //应答内容
@@ -119,7 +119,7 @@ class TenpayHttpClient {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
 
         // 从证书中检查SSL加密算法是否存在
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
 
 
         $arr = explode("?", $this->reqContent);
