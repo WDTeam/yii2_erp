@@ -105,9 +105,11 @@ class Worker extends \common\models\Worker
      * 获取商圈中 所有可用阿姨id
      * @param int districtId 商圈id
      * @param int worker_type 阿姨类型 1自营2非自营
+     * @param int orderBookBeginTime 待指派订单预约开始时间
+     * @param int orderBookeEndTime 待指派订单预约结束时间
      * @return array freeWorkerArr 所有可用阿姨id
      */
-    public static function getDistrictFreeWorker($districtId=1,$workerType=1){
+    public static function getDistrictFreeWorker($districtId=1,$workerType=1,$orderBookBeginTime,$orderBookeEndTime){
 
 
         //获取所属商圈中所有阿姨
@@ -120,7 +122,7 @@ class Worker extends \common\models\Worker
             ->where(['worker_is_block'=>0,'worker_is_blacklist'=>0,'worker_is_vacation'=>0,'worker_type'=>$workerType])
             ->asArray()
             ->all();
-
+//var_dump($districtWorkerResult);
         $workerRuleConfigArr = WorkerRuleConfig::getWorkerRuleList();
         if(empty($districtWorkerResult)){
             return [];
@@ -149,22 +151,16 @@ class Worker extends \common\models\Worker
             }
         }
 
-        //获取已预约以及正在服务的所有阿姨
-        $starttime = 2;
-        $endtime = 30;
-        /*
-         * order starttime endtime
-         * 1        10        20
-         * 2        30        60
-         */
-        $condition = "(order_booked_begin_time>$endtime or order_booked_end_time<$starttime)";
+        //获取在指派时间段内已预约的阿姨
+        //$condition = "(order_booked_begin_time>$orderBookeEndTime or order_booked_end_time<$orderBookBeginTime)";
+        $condition = "	(ejj_order.order_booked_begin_time<=$orderBookBeginTime AND ejj_order.order_booked_end_time>=$orderBookBeginTime )";
+        $condition.= " OR ( ejj_order.order_booked_begin_time<=$orderBookeEndTime AND ejj_order.order_booked_end_time>=$orderBookeEndTime )";
+        $condition.= " OR ( ejj_order.order_booked_begin_time>=$orderBookBeginTime AND ejj_order.order_booked_end_time<=$orderBookeEndTime )";
         $orderWorkerResult = OrderExtWorker::find()
             ->innerJoinWith('order')
             ->onCondition($condition)
             ->asArray()
             ->all();
-        echo '<pre>';
-        print_r($orderWorkerResult);die;
         if($orderWorkerResult){
             foreach ($orderWorkerResult as $val) {
                 $busyWorkerIdsArr[] = $val['worker_id'];
