@@ -96,8 +96,10 @@ class FinancePopOrderSearch extends FinancePopOrder
     {
     	if($date==0 || $date==""){
     		return '<font color="red">未处理</font>';
-    	}else{
+    	}elseif($date==1){
     		return '<font color="blue">已处理</font>';
+    	}elseif ($date==3){
+    		return '<font color="orange">坏 账</font>';
     	}
     }
     

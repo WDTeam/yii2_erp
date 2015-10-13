@@ -17,14 +17,20 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '账单详情'), 'url
 $this->params['breadcrumbs'][] =$this->title;
 
 $userinfo=Customer::getCustomerById($model->finance_pop_order_worker_uid);
-if($userinfo){$uisername=$username->customer_name;}else{$username='未查到';}
+
+if(isset($userinfo->customer_name)){$username=$userinfo->customer_name;}else{$username='未查到';}
 
 
-//
+
 $admininfo=SystemUser::findIdentity($model->finance_pop_order_worker_uid);
 if($admininfo){$adminname=$admininfo->username;}else{$adminname='未查到';}
 $order_channel_info=FinanceOrderChannel::get_order_channel_info($model->finance_order_channel_id);
 
+if(isset($order_channel_info->finance_order_channel_name)){
+	$channel_title=$order_channel_info->finance_order_channel_name;
+}else{
+	$channel_title='未知';
+}
 ?>
 <div class="finance-pop-order-view">
     <?= DetailView::widget([
@@ -37,13 +43,20 @@ $order_channel_info=FinanceOrderChannel::get_order_channel_info($model->finance_
             'type'=>DetailView::TYPE_INFO,
         ],
         'attributes' => [
+
             'id',
+    		[
+    		'attribute' => 'finance_pop_order_no',
+    		'type' => DetailView::INPUT_TEXT,
+    		'displayOnly' => true,
+    		'value'=>'坏账',
+    		],
             'finance_pop_order_number',
     		[
     		'attribute' => 'finance_order_channel_title',
     		'type' => DetailView::INPUT_TEXT,
     		'displayOnly' => true,
-    		'value'=> $order_channel_info->finance_order_channel_name,
+    		'value'=>$channel_title,
     		], 
     		[
     		'attribute' => 'finance_pay_channel_title',
