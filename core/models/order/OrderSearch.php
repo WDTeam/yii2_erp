@@ -2,6 +2,7 @@
 
 namespace core\models\order;
 
+use common\models\OrderExtCustomer;
 use common\models\OrderStatusDict;
 use Yii;
 use yii\base\Model;
@@ -62,6 +63,23 @@ class OrderSearch extends Order
             return $order;
         }
         return false;
+    }
+
+    public static function getListByWorkerId($worker_id,$booked_begin_time)
+    {
+        $day_begin = strtotime(date('Y:m:d 00:00:00',$booked_begin_time));
+        $day_end = strtotime(date('Y:m:d 23:59:59',$booked_begin_time));
+        return Order::find()->joinWith(['orderExtWorker'])->where(['worker_id'=>$worker_id])->andWhere(['between', 'order_booked_begin_time', $day_begin, $day_end])->all();
+    }
+
+    /**
+     * 获取客户订单数量
+     * @param $customer_id
+     * @return int|string
+     */
+    public static function getCustomerOrderCount($customer_id)
+    {
+        return OrderExtCustomer::find()->where(['customer_id'=>$customer_id])->count();
     }
 
     public function scenarios()
