@@ -20,6 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'citymodel' => '',
         'areaList' => $areaList,
+        'operation' => 'create',
         'OperationShopDistrictCoordinate' => $OperationShopDistrictCoordinate,
     ]) ?>
 

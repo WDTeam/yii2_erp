@@ -196,51 +196,53 @@ class CoreOperationShopDistrictGoods extends CommonOperationShopDistrictGoods
         ];
         $shop_district_goods_data = [];
         self::setCityShopDistrictGoodsStatus($goods_id, $city_id);
+        $i = 0;
         foreach((array)$shopdistrict as $key => $value){
-            $shop_district_goods_data[] = $goodsinfo['operation_goods_name'];  //商品名称
-            $shop_district_goods_data[] = $goodsinfo['operation_goods_no'];  //商品货号
-            $shop_district_goods_data[] = $goods_id;  //商品id
-            $shop_district_goods_data[] = $value;  //商圈id
-            $shop_district_goods_data[] = CoreOperationShopDistrict::getShopDistrictName($value);  //商圈名称
-            $shop_district_goods_data[] = $city_id;  //城市id
-            $shop_district_goods_data[] = CoreOperationCity::getCityName($city_id);  //城市名称
-            $shop_district_goods_data[] = $goodsinfo['operation_category_id'];  //对应服务品类编号（所属分类编号冗余）
-            $shop_district_goods_data[] = $goodsinfo['operation_category_ids'];  //对应服务品类的所有编号以“,”关联
-            $shop_district_goods_data[] = $goodsinfo['operation_category_name'];  //对应服务品类名称（所属分类名称冗余）
-            $shop_district_goods_data[] = $goodsinfo['operation_goods_introduction'];  //服务类型简介
-            $shop_district_goods_data[] = $goodsinfo['operation_goods_english_name'];  //商品英文名称
+            $shop_district_goods_data[$i][] = $goodsinfo['operation_goods_name'];  //商品名称
+            $shop_district_goods_data[$i][] = $goodsinfo['operation_goods_no'];  //商品货号
+            $shop_district_goods_data[$i][] = $goods_id;  //商品id
+            $shop_district_goods_data[$i][] = $value;  //商圈id
+            $shop_district_goods_data[$i][] = CoreOperationShopDistrict::getShopDistrictName($value);  //商圈名称
+            $shop_district_goods_data[$i][] = $city_id;  //城市id
+            $shop_district_goods_data[$i][] = CoreOperationCity::getCityName($city_id);  //城市名称
+            $shop_district_goods_data[$i][] = $goodsinfo['operation_category_id'];  //对应服务品类编号（所属分类编号冗余）
+            $shop_district_goods_data[$i][] = $goodsinfo['operation_category_ids'];  //对应服务品类的所有编号以“,”关联
+            $shop_district_goods_data[$i][] = $goodsinfo['operation_category_name'];  //对应服务品类名称（所属分类名称冗余）
+            $shop_district_goods_data[$i][] = $goodsinfo['operation_goods_introduction'];  //服务类型简介
+            $shop_district_goods_data[$i][] = $goodsinfo['operation_goods_english_name'];  //商品英文名称
 
-            $shop_district_goods_data[] = $shopdistrictGoods['operation_goods_start_time'][$value];  //服务开始时间
-            $shop_district_goods_data[] = $shopdistrictGoods['operation_goods_end_time'][$value];  //服务结束时间
+            $shop_district_goods_data[$i][] = $shopdistrictGoods['operation_goods_start_time'][$value];  //服务开始时间
+            $shop_district_goods_data[$i][] = $shopdistrictGoods['operation_goods_end_time'][$value];  //服务结束时间
 
-            $shop_district_goods_data[] = $goodsinfo['operation_goods_service_interval_time'];  //服务间隔时间(单位：分钟)
-            $shop_district_goods_data[] = $goodsinfo['operation_goods_service_estimate_time'];  //预计服务时长(单位：分钟)
-            $shop_district_goods_data[] = $goodsinfo['operation_spec_info'];  //规格id
-            $shop_district_goods_data[] = $goodsinfo['operation_spec_strategy_unit'];  //计量单位
-            $shop_district_goods_data[] = $shopdistrictGoods['operation_goods_price'][$value];  //售价
-            $shop_district_goods_data[] = $goodsinfo['operation_goods_balance_price'];   //阿姨结算价格
-            $shop_district_goods_data[] = $goodsinfo['operation_goods_additional_cost'];  //附加费用
-            $shop_district_goods_data[] = $shopdistrictGoods['operation_goods_price'][$value]*$shopdistrictGoods['operation_goods_lowest_consume'][$value];  //最低消费价格
-            $shop_district_goods_data[] = $shopdistrictGoods['operation_goods_lowest_consume'][$value];  //最低消费数量
-            $shop_district_goods_data[] = $goodsinfo['operation_goods_price_description'];  //价格备注
-            $shop_district_goods_data[] = $shopdistrictGoods['operation_goods_market_price'][$value];  //市场价格
-            $shop_district_goods_data[] = $goodsinfo['operation_tags'];  //个性标签
-            $shop_district_goods_data[] = empty($goodsinfo['operation_goods_img']) ? '' : $goodsinfo['operation_goods_img'];  //商品图片
-            $shop_district_goods_data[] = 1;  //商品状态（1:上架 2:下架）
-            $shop_district_goods_data[] = time(); //创建时间
-            $shop_district_goods_data[] = time(); //更新时间
+            $shop_district_goods_data[$i][] = $goodsinfo['operation_goods_service_interval_time'];  //服务间隔时间(单位：分钟)
+            $shop_district_goods_data[$i][] = $goodsinfo['operation_goods_service_estimate_time'];  //预计服务时长(单位：分钟)
+            $shop_district_goods_data[$i][] = $goodsinfo['operation_spec_info'];  //规格id
+            $shop_district_goods_data[$i][] = $goodsinfo['operation_spec_strategy_unit'];  //计量单位
+            $shop_district_goods_data[$i][] = $shopdistrictGoods['operation_goods_price'][$value];  //售价
+            $shop_district_goods_data[$i][] = $goodsinfo['operation_goods_balance_price'];   //阿姨结算价格
+            $shop_district_goods_data[$i][] = $goodsinfo['operation_goods_additional_cost'];  //附加费用
+            $shop_district_goods_data[$i][] = $shopdistrictGoods['operation_goods_price'][$value]*$shopdistrictGoods['operation_goods_lowest_consume'][$value];  //最低消费价格
+            $shop_district_goods_data[$i][] = $shopdistrictGoods['operation_goods_lowest_consume'][$value];  //最低消费数量
+            $shop_district_goods_data[$i][] = $goodsinfo['operation_goods_price_description'];  //价格备注
+            $shop_district_goods_data[$i][] = $shopdistrictGoods['operation_goods_market_price'][$value];  //市场价格
+            $shop_district_goods_data[$i][] = $goodsinfo['operation_tags'];  //个性标签
+            $shop_district_goods_data[$i][] = empty($goodsinfo['operation_goods_img']) ? '' : $goodsinfo['operation_goods_img'];  //商品图片
+            $shop_district_goods_data[$i][] = 1;  //商品状态（1:上架 2:下架）
+            $shop_district_goods_data[$i][] = time(); //创建时间
+            $shop_district_goods_data[$i][] = time(); //更新时间
             /**查看该商品是否存在**/
             $goodsstatus = self::getShopDistrictGoodsInfo($city_id, $value, $goods_id);
             if(empty($goodsstatus)){
-                Yii::$app->db->createCommand()->batchInsert(self::tableName(), $fields, $shop_district_goods_data)->execute();
+                Yii::$app->db->createCommand()->batchInsert(self::tableName(), $fields, [$shop_district_goods_data[$i]])->execute();
             }else{
                 $wheredata = [];
                 foreach((array)$fields as $key => $val){
-                    $wheredata[$val] = $shop_district_goods_data[$key];
+                    $wheredata[$val] = $shop_district_goods_data[$i][$key];
                 }
                 Yii::$app->db->createCommand()->update(self::tableName(), $wheredata, ['operation_city_id' => $city_id, 'operation_shop_district_id' => $value, 'operation_goods_id' => $goods_id])->execute();
             }
             $shop_district_goods_data = [];
+            $i++;
         }
 //        Yii::$app->db->createCommand()->batchInsert(self::tableName(), $fields, $shop_district_goods_data)->execute();
     }
@@ -275,6 +277,10 @@ class CoreOperationShopDistrictGoods extends CommonOperationShopDistrictGoods
             return self::find()->where(['operation_city_id' => $city_id])->groupBy('operation_goods_id');
         }
     }
+    
+    public static function getCityShopDistrictGoodsListArray($city_id = ''){
+        return self::find()->where(['operation_city_id' => $city_id])->groupBy('operation_goods_id')->asArray()->all();
+    }
 
     /*
      * 城市下边商品的状态置为下架
@@ -298,5 +304,14 @@ class CoreOperationShopDistrictGoods extends CommonOperationShopDistrictGoods
      */
     public static function getCityShopDistrictGoodsInfo($city_id, $goods_id){
         return self::find()->asArray()->where(['operation_city_id' => $city_id, 'operation_goods_id' => $goods_id])->All();
+    }
+    
+    public static function getCityCategory($city_id){
+        return self::find()->asArray()->where(['operation_city_id' => $city_id])->groupBy('operation_goods_id');
+    }
+    
+    public static function getCityGoodsOpenShopDistrictNum($city_id, $goods_id){
+        $data = self::find()->asArray()->where(['operation_city_id' => $city_id, 'operation_goods_id' => $goods_id, 'operation_shop_district_goods_status' => 1])->all();
+        return count($data);
     }
 }

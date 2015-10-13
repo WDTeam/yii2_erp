@@ -145,21 +145,21 @@ echo Menu::widget(
                     'class' => 'treeview rootTree',
                 ],
                 'items' => [
-                    [
-                        'label' => '用户运营(0%)',
-                        'url' => ['/operation-category'],
-                        'icon' => 'fa fa-angle-right',
-                    ],
-                    [
-                        'label' => '阿姨运营(0%)',
-                        'url' => ['#'],
-                        'icon' => 'fa fa-angle-right',
-                    ],
-                    [
-                        'label' => '企业运营(0%)',
-                        'url' => ['#'],
-                        'icon' => 'fa fa-angle-right',
-                    ],
+//                    [
+//                        'label' => '用户运营(0%)',
+//                        'url' => ['/operation-category'],
+//                        'icon' => 'fa fa-angle-right',
+//                    ],
+//                    [
+//                        'label' => '阿姨运营(0%)',
+//                        'url' => ['#'],
+//                        'icon' => 'fa fa-angle-right',
+//                    ],
+//                    [
+//                        'label' => '企业运营(0%)',
+//                        'url' => ['#'],
+//                        'icon' => 'fa fa-angle-right',
+//                    ],
                     [
                         'label' => 'CMS管理(90%)',
                         'url' => ['#'],
@@ -197,18 +197,18 @@ echo Menu::widget(
                             ],
                         ]
                     ],
-                    [
-                        'label' => '通知管理(0%)',
-                        'url' => ['#'],
-                        'icon' => 'fa fa-angle-right',
-                        
-                    ],
-                    [
-                        'label' => '促销管理(0%)',
-                        'url' => ['#'],
-                        'icon' => 'fa fa-angle-right',
-                        
-                    ],
+//                    [
+//                        'label' => '通知管理(0%)',
+//                        'url' => ['#'],
+//                        'icon' => 'fa fa-angle-right',
+//                        
+//                    ],
+//                    [
+//                        'label' => '促销管理(0%)',
+//                        'url' => ['#'],
+//                        'icon' => 'fa fa-angle-right',
+//                        
+//                    ],
                     [
                         'label' => '城市管理(90%)',
                         'url' => ['/operation-city'],
@@ -221,6 +221,11 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                         'visible' => (Yii::$app->user->identity->username == 'admin'),
                     ],
+                    [
+                        'label' => '开通城市管理',
+                        'url' => ['/operation-city/opencity'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
 //                     [
 
 //                        'label' => '商圈管理(40%)',
@@ -229,40 +234,17 @@ echo Menu::widget(
                        
 //                    ],
                     [
-                        'label' => '服务管理',
-                        'url' => ['#'],
+                        'label' => '服务品类管理(80%)',
+                        'url' => ['/operation-category/'],
                         'icon' => 'fa fa-angle-right',
-                        
-                        'options' => [
-                            'class' => 'treeview ',
-                        ],
-                        'items' => [
-                            [
-                                'label' => '服务管理(80%)',
-                                'url' => ['/operation-goods'],
-                                'icon' => 'fa fa-angle-right',
-                                
-                            ],
-//                            [
-//                                'label' => '价格策略管理(20%)',
-//                                'url' => ['/operation-price-strategy'],
-//                                'icon' => 'fa fa-angle-right',
-                               
-//                            ],
-//                            [
-//                                'label' => '规格管理(80%)',
-//                                'url' => ['/operation-spec'],
-//                                'icon' => 'fa fa-angle-right',
-//                                
-//                            ],
-                            [
-                                'label' => '服务品类管理(80%)',
-                                'url' => ['/operation-category/'],
-                                'icon' => 'fa fa-angle-right',
-                                
-                            ],
-                        ]
+
                     ],
+                    [
+                        'label' => '服务管理(80%)',
+                        'url' => ['/operation-goods'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
+                    
                     [
                         'label' => '启动页管理(90%)',
                         'url' => ['/operation-boot-page'],

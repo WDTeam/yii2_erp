@@ -22,7 +22,9 @@ $this->params['breadcrumbs'][] = Yii::t('operation', 'Update Operation Shop Dist
         'model' => $model,
         'citymodel' => $citymodel,
         'areaList' => $areaList,
+        'operation' => 'update',
         'OperationShopDistrictCoordinate' => $OperationShopDistrictCoordinate,
+        'OperationShopDistrictCoordinateList' => $OperationShopDistrictCoordinateList,
     ]) ?>
 
 </div>
