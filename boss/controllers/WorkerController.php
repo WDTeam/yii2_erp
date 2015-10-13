@@ -101,15 +101,18 @@ class WorkerController extends BaseAuthController
         $workerBlockLogData = new ActiveDataProvider([
             'query' => WorkerBlockLog::find()->where(['worker_id'=>$id])->orderBy('id desc'),
         ]);
+
         if ($workerModel->load(Yii::$app->request->post()) && $workerModel->save()) {
-            $worker_district = new WorkerDistrict;
+            $workerDistrictModel = new WorkerDistrict;
             $workerParam = Yii::$app->request->post('Worker');
+            $workerDistrictModel->deleteAll(['worker_id'=>$id]);
             if($workerParam['worker_district']){
                 foreach($workerParam['worker_district'] as $val){
-                    $worker_district->created_ad = time();
-                    $worker_district->worker_id = $workerModel->id;
-                    $worker_district->operation_shop_district_id = $val;
+                    $workerDistrictModel->created_ad = time();
+                    $workerDistrictModel->worker_id = $id;
+                    $workerDistrictModel->operation_shop_district_id = $val;
                 }
+                $workerDistrictModel->save();
             }
             return $this->redirect(['view', 'id' => $workerModel->id]);
         } else {
@@ -143,10 +146,10 @@ class WorkerController extends BaseAuthController
             }
             return $this->redirect(['view', 'id' => $worker->id]);
         } else {
-            $worker_ext->province_id = $worker_ext->worker_live_province;
-            $worker_ext->city_id = $worker_ext->worker_live_city;
-            $worker_ext->county_id = $worker_ext->worker_live_area;
-            $worker_ext->town_id = $worker_ext->worker_live_street;
+//            $worker_ext->province_id = $worker_ext->worker_live_province;
+//            $worker_ext->city_id = $worker_ext->worker_live_city;
+//            $worker_ext->county_id = $worker_ext->worker_live_area;
+//            $worker_ext->town_id = $worker_ext->worker_live_street;
             return $this->render('create', [
                 'worker' => $worker,
                 'worker_ext' => $worker_ext,
@@ -483,7 +486,7 @@ class WorkerController extends BaseAuthController
 
     public function actionTest(){
         echo '<pre>';
-        var_dump(Worker::getWorkerInfo(18532));
+        var_dump(Worker::getDistrictFreeWorker(1,1));
         die;
 
         $a = Worker::getWorkerInfo(16351);
