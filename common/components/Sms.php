@@ -2,6 +2,13 @@
 namespace common\components;
 
 /**
+ * 添加配置
+    'sms'=>[
+        'class'=>'common\components\Sms',
+        'userId'=>'J02356',
+        'password'=>'556201',
+    ],
+    
  * 使用: Yii::$app->sms->send('手机号，逗号分隔', '短信内容', '一次并发数,可选');
  */
 use yii\base\Object;
