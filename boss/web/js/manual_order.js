@@ -89,7 +89,7 @@ function getWaitManualAssignOrder(){
 function getCanAssignWorkerList(){
     $.ajax({
         type: "GET",
-        url: "/order/get-can-assign-worker-list?address_id="+window.order_data.order.address_id+'&booked_begin_time='+window.order_data.order.order_booked_begin_time,
+        url: "/order/get-can-assign-worker-list?order_id="+window.order_data.order.id,
         dataType:"json",
         success: function (data) {
             if(data){
@@ -101,9 +101,9 @@ function getCanAssignWorkerList(){
                     '<td>'+ v.worker_phone+'</td>'+
                     '<td>'+ v.shop_name+'</td>'+
                     '<td>'+ v.worker_rule_description+'</td>'+
-                    '<td>'+ v.orders+'</td>'+
+                    '<td>'+ v.order_booked_time_range.join('<br/>')+'</td>'+
                     '<td>'+ v.worker_stat_order_refuse_percent+'</td>'+
-                    '<td></td>'+
+                    '<td>'+ v.tag+'</td>'+
                     '<td></td>'+
                     '<td><a href="javascript:void(0);" class="worker_contacted" >已联系</a></td>'+
                     '</tr>');
