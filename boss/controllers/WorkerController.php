@@ -225,6 +225,8 @@ class WorkerController extends BaseAuthController
      * @return mixed
      */
     public function actionCreateVacation($workerId){
+        $workerIdArr = explode(',',$workerId);
+        $workerId = $workerIdArr[0] ;
         $workerModel = $this->findModel($workerId);
         $workerVacationModel = new WorkerVacation();
         $post = \Yii::$app->request->post();
