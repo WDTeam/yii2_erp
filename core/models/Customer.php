@@ -180,7 +180,7 @@ class Customer extends \common\models\Customer
         foreach($customerWorker as $k=>$v)
         {
             $worker[$k] = $v->attributes;
-            $worker[$k]['worker_name'] = Worker::findOne($v->woker_id)->worker_name;
+            $worker[$k]['worker_name'] = Worker::findOne($v->worker_id)->worker_name;
         }
         return $worker;
     }
