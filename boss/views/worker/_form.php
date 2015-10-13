@@ -156,12 +156,6 @@ use core\models\worker\WorkerRuleConfig;
         </div>
 
 
-        <div class="panel-heading"><h3 class="panel-title">审核相关信息</h3></div>
-        <div class="panel-body">
-            <?= $form->field($worker, 'worker_auth_status')->radioList(['1' => '已通过', '0' => '未通过'], ['inline' => true]); ?>
-            <?= $form->field($worker, 'worker_ontrial_status')->radioList(['1' => '已试工', '0' => '未试工'], ['inline' => true]); ?>
-            <?= $form->field($worker, 'worker_onboard_status')->radioList(['1' => '已上岗', '0' => '未上岗'], ['inline' => true]); ?>
-        </div>
 
 
     </div>

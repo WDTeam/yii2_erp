@@ -120,8 +120,7 @@ class Worker extends \common\models\Worker
             ->where(['worker_is_block'=>0,'worker_is_blacklist'=>0,'worker_is_vacation'=>0,'worker_type'=>$workerType])
             ->asArray()
             ->all();
-//        echo '<pre>';
-//        print_r(Yii::$app->log);die;
+
         $workerRuleConfigArr = WorkerRuleConfig::getWorkerRuleList();
         if(empty($districtWorkerResult)){
             return [];
@@ -134,6 +133,7 @@ class Worker extends \common\models\Worker
                 $val['worker_type_description'] = self::getWorkerTypeShow($val['worker_type']);
                 $val['worker_rule_description'] = $workerRuleConfigArr[$val['worker_rule_id']];
 
+                $val['shop_name'] = isset($val['shop_name'])?$val['shop_name']:'';
                 $val['worker_stat_order_num'] = intval($val['worker_stat_order_num']);
                 $val['worker_stat_order_refuse'] = intval($val['worker_stat_order_refuse']);
                 if($val['worker_stat_order_num']!==0){
@@ -325,11 +325,21 @@ class Worker extends \common\models\Worker
      * 获取审核状态
      */
     public static function getWorkerAuthStatusShow($worker_auth_status){
-        if($worker_auth_status==1){
+        switch($worker_auth_status){
+            case 0:
+                return '新录入';
+            case 1:
+                return '已审核';
+            case 2:
+                return '已试工';
+            case 3:
+                return '已上岗';
+        }
+       /* if($worker_auth_status==1){
             return '通过';
         }else{
             return '未通过';
-        }
+        }*/
     }
 
     /*
