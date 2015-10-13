@@ -40,10 +40,11 @@ class Customer extends \common\models\Customer
         $customerBalance = CustomerExtBalance::find()->where(array(
             'customer_id'=>$customer->id,
             ))->one();
-        if ($customerBalance == NULL) {
-            $customer_balance = 0;
-        }
-        $customer_balance = $customerBalance->customer_balance;
+        // if ($customerBalance == NULL) {
+        //     $customer_balance = 0;
+        // }
+        // $customer_balance = $customerBalance->customer_balance;
+        $customer_balance = $customerBalance == NULL ? 0 : $customerBalance->customer_balance;
         return array(
             'id'=>$customer->id,
             'customer_phone'=>$phone,
