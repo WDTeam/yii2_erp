@@ -129,7 +129,9 @@ class FinanceSettleApplyController extends BaseAuthController
         $review_section = $requestParams['review_section'];
         $settle_type = $requestParams['settle_type'];
         $is_ok = $requestParams['is_ok'];
-        $model->comment = $requestParams['comment'];
+        if(isset($requestParams['comment'])){
+            $model->comment = $requestParams['comment'];
+        }
         if($review_section== FinanceShopSettleApplySearch::BUSINESS_REVIEW){
             if($is_ok == 1){
                 $model->finance_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED;
