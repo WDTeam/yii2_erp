@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\FinanceShopSettleApply;
+use common\models\FinanceSettleApply;
 
 /**
  * FinanceShopSettleApplySearch represents the model behind the search form about `common\models\FinanceShopSettleApply`.
@@ -17,6 +18,13 @@ class FinanceShopSettleApplySearch extends FinanceShopSettleApply
     const FINANCE_REVIEW = 2;//财务部门审核
     
     public $review_section;//审核部门
+    
+    public $financeShopSettleApplyStatusArr = [
+       FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED=>'财务审核不通过',
+       FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_FAILED=>'业务部门审核不通过',
+       FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT=>'提出申请，正在业务部门审核',
+       FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED=>'业务部门审核通过，等待财务审核',
+       FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED=>'财务审核通过'];
     
     public function rules()
     {
@@ -36,7 +44,7 @@ class FinanceShopSettleApplySearch extends FinanceShopSettleApply
 
     public function search($params)
     {
-        $query = FinanceShopSettleApply::find();
+        $query = FinanceShopSettleApplySearch::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -63,5 +71,9 @@ class FinanceShopSettleApplySearch extends FinanceShopSettleApply
             ->andFilterWhere(['like', 'finance_shop_settle_apply_reviewer', $this->finance_shop_settle_apply_reviewer]);
 
         return $dataProvider;
+    }
+    
+    public function getShopSettleApplyStatusDes($shopSettleApplyStatus){
+        return $this->financeShopSettleApplyStatusArr[$shopSettleApplyStatus];
     }
 }

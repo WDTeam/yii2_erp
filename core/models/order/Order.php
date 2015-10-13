@@ -9,6 +9,7 @@
 namespace core\models\order;
 
 
+use common\models\OrderWorkerRelation;
 use Yii;
 use common\models\Order as OrderModel;
 use common\models\OrderStatusDict;
@@ -132,6 +133,7 @@ class Order extends OrderModel
 
 
     /**
+     * 人工指派失败
      * @param $order_id
      * @param $admin_id
      * @param bool $isCS
@@ -159,6 +161,18 @@ class Order extends OrderModel
         }
         return false;
     }
+
+
+    public static function addOrderWorkerRelation($order_id,$worker_id,$memo,$status)
+    {
+        $order_worker_relation = new OrderWorkerRelation();
+        $order_worker_relation->order_id = $order_id;
+        $order_worker_relation->worker_id = $worker_id;
+        $order_worker_relation->order_worker_relation_memo = $memo;
+        $order_worker_relation->order_worker_relation_status = $status;
+        return $order_worker_relation->save();
+    }
+
 
     /**
      * 创建订单

@@ -3,8 +3,10 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
-use boss\models\FinanceWorkerNonOrderIncomeSearch;
 use boss\models\FinanceSettleApplySearch;
+use boss\models\FinanceWorkerNonOrderIncomeSearch;
+use yii\bootstrap\Modal;
+
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -26,11 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
 $this->params['settle_type'] = $searchModel->settle_type;
 $this->params['review_section'] = $searchModel->review_section;
 ?>
-<link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.css" rel="stylesheet">
-<link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
 <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.js"></script>
-<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.js"></script>
-<script src="//cdn.bootcss.com/angular.js/1.4.6/angular.js"></script>
 <script src="//cdn.bootcss.com/angular-strap/2.3.3/modules/popover.js"></script>
 <script src="//cdn.bootcss.com/angular-strap/2.3.3/modules/tooltip.js"></script>
 <style type="text/css">
@@ -88,14 +86,17 @@ $this->params['review_section'] = $searchModel->review_section;
                     'disagree' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-remove"></span>',
                             [
-                                '/finance-settle-apply/self-fulltime-worker-settle-done',
+                                '/finance-settle-apply/review-failed-reason',
                                 'id' => $model->id, 
                                 'settle_type'=>$this->params['settle_type'],'is_ok'=>0,'review_section'=>$this->params['review_section'],
                             ]
                             ,
                             [
                                 'title' => Yii::t('yii', '审核不通过'),
+                                'data-toggle' => 'modal',
+                                'data-target' => '#reasonModal',
                                 'class'=>'disagree',
+                                'data-id'=>$model->id,
                             ]);
                     },
                 ],
@@ -117,6 +118,7 @@ $this->params['review_section'] = $searchModel->review_section;
         
         ?>
          <?php 
+         
             $js=<<<JS
                     $(".agree").click(
                         function(){
@@ -127,6 +129,10 @@ $this->params['review_section'] = $searchModel->review_section;
                             }
                         }
                     );
+                    $('.disagree').click(function() {
+                        $('#reasonModal .modal-body').html('加载中……');
+                        $('#reasonModal .modal-body').eq(0).load(this.href);
+                    });
 JS;
         $this->registerJs(
                 $js
@@ -140,3 +146,11 @@ $(function () {
 });
 </script>
 </form>
+<?php echo Modal::widget([
+            'header' => '<h4 class="modal-title">请输入审核不通过原因</h4>',
+            'id'=>'reasonModal',
+            'options'=>[
+                'size'=>'modal-sm',
+            ],
+        ]);
+?>
