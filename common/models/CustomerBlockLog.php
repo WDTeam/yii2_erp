@@ -94,7 +94,7 @@ class CustomerBlockLog extends \yii\db\ActiveRecord
     /**
      * 从黑名单删除
      */
-    public static function removeFromBlock($customer_id, $customer_block_log_reason){
+    public static function removeFromBlock($customer_id){
         $customer = Customer::findOne($customer_id);
         if ($customer == NULL) {
             return false;
@@ -105,7 +105,7 @@ class CustomerBlockLog extends \yii\db\ActiveRecord
         $transaction = \Yii::$app->db->beginTransaction();
         try{
             $customer->is_del = 0;
-            $customer->customer_del_reason = $customer_block_log_reason;
+            $customer->customer_del_reason = '';
             $customer->validate();
             if ($customer->hasErrors()) {
                 return false;
@@ -114,7 +114,7 @@ class CustomerBlockLog extends \yii\db\ActiveRecord
             $customerBlockLog = new CustomerBlockLog;
             $customerBlockLog->customer_id = $customer_id;
             $customerBlockLog->customer_block_log_status = 0;
-            $customerBlockLog->customer_block_log_reason = $customer_block_log_reason;
+            $customerBlockLog->customer_block_log_reason = '';
             $customerBlockLog->created_at = time();
             $customerBlockLog->updated_at = 0;
             $customerBlockLog->is_del = 0;
