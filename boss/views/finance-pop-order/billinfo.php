@@ -85,11 +85,22 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
+                'template' =>'{view} {tagssign}',
                 'buttons' => [
                 'update' => function ($url, $model) {
                                     return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance-pop-order/view','id' => $model->id,'edit'=>'t']), [
                                                     'title' => Yii::t('yii', 'Edit'),
-                                                  ]);}
+                                                  ]);},
+'tagssign' => function ($url, $model, $key) {
+	$options = [
+	'title' => Yii::t('yii', '取消处理'),
+	'aria-label' => Yii::t('yii', '取消处理'),
+	'data-confirm' => Yii::t('kvgrid', '你确定要回滚处理吗?'),
+	'data-method' => 'post',
+	'data-pjax' => '0'
+			];
+	return Html::a('<span class="glyphicon glyphicon-backward"></span>', Yii::$app->urlManager->createUrl(['finance-pop-order/tagssign','id' => $model->id,'edit'=>'bakinfo','oid'=>$model->finance_record_log_id]), $options);
+}
 
                 ],
             ],

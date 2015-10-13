@@ -50,14 +50,14 @@ class FinanceShopSettleApplySearch extends FinanceShopSettleApply
             'finance_shop_settle_apply_fee' => $this->finance_shop_settle_apply_fee,
             'finance_shop_settle_apply_status' => $this->finance_shop_settle_apply_status,
             'finance_shop_settle_apply_cycle' => $this->finance_shop_settle_apply_cycle,
-            'finance_shop_settle_apply_starttime' => $this->finance_shop_settle_apply_starttime,
-            'finance_shop_settle_apply_endtime' => $this->finance_shop_settle_apply_endtime,
             'isdel' => $this->isdel,
             'updated_at' => $this->updated_at,
             'created_at' => $this->created_at,
         ]);
 
-        $query->andFilterWhere(['like', 'shop_name', $this->shop_name])
+        $query->andFilterWhere(['<=', 'finance_shop_settle_apply_starttime', $this->finance_shop_settle_apply_starttime])
+            ->andFilterWhere(['>=', 'finance_shop_settle_apply_endtime', $this->finance_shop_settle_apply_endtime])
+            ->andFilterWhere(['like', 'shop_name', $this->shop_name])
             ->andFilterWhere(['like', 'shop_manager_name', $this->shop_manager_name])
             ->andFilterWhere(['like', 'finance_shop_settle_apply_cycle_des', $this->finance_shop_settle_apply_cycle_des])
             ->andFilterWhere(['like', 'finance_shop_settle_apply_reviewer', $this->finance_shop_settle_apply_reviewer]);

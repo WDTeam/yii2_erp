@@ -101,8 +101,12 @@ class WorkerController extends BaseAuthController
         $workerBlockLogData = new ActiveDataProvider([
             'query' => WorkerBlockLog::find()->where(['worker_id'=>$id])->orderBy('id desc'),
         ]);
-
         if ($workerModel->load(Yii::$app->request->post()) && $workerModel->save()) {
+            //更新阿姨附属信息
+            $worker_ext = WorkerExt::findOne($id);
+            $worker_ext->load(Yii::$app->request->post());
+            $worker_ext->save();
+            //更新阿姨商圈信息
             $workerDistrictModel = new WorkerDistrict;
             $workerParam = Yii::$app->request->post('Worker');
             $workerDistrictModel->deleteAll(['worker_id'=>$id]);

@@ -82,6 +82,7 @@ $this->params['review_section'] = $searchModel->review_section;
                     'agree' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-ok"></span>', Yii::$app->urlManager->createUrl(['/finance-settle-apply/self-fulltime-worker-settle-done', 'id' => $model->id, 'settle_type'=>$this->params['settle_type'],'is_ok'=>1, 'review_section'=>$this->params['review_section']]), [
                             'title' => Yii::t('yii', '审核通过'),
+                            'class'=>'agree',
                         ]);
                     },
                     'disagree' => function ($url, $model) {
@@ -94,6 +95,7 @@ $this->params['review_section'] = $searchModel->review_section;
                             ,
                             [
                                 'title' => Yii::t('yii', '审核不通过'),
+                                'class'=>'disagree',
                             ]);
                     },
                 ],
@@ -111,7 +113,25 @@ $this->params['review_section'] = $searchModel->review_section;
             'showFooter' => false
         ],
 
-        ]); Pjax::end(); ?>
+        ]); Pjax::end(); 
+        
+        ?>
+         <?php 
+            $js=<<<JS
+                    $(".agree").click(
+                        function(){
+                            if(confirm("审核通过该笔结算是吗?")){
+                                return true;
+                            }else{
+                                return false;
+                            }
+                        }
+                    );
+JS;
+        $this->registerJs(
+                $js
+        );
+         ?>
      </div>
 </div>
 <script>
