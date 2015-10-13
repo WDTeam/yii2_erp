@@ -180,7 +180,12 @@ class Customer extends \common\models\Customer
         foreach($customerWorker as $k=>$v)
         {
             $worker[$k] = $v->attributes;
-            $worker[$k]['worker_name'] = Worker::findOne($v->worker_id)->worker_name;
+            $worker = Worker::findOne($v->worker_id);
+            if(!empty($worker)) {
+                $worker[$k]['worker_name'] = $worker->worker_name;
+            }else{
+                unset($worker[$k]);
+            }
         }
         return $worker;
     }
