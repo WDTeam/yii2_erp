@@ -9,16 +9,11 @@ use kartik\datecontrol\DateControl;
  * @var common\models\FinanceRecordLog $model
  */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('boss', 'Finance Record Logs'), 'url' => ['index']];
+$this->title = $model->finance_order_channel_name;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('boss', '账期详情'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="finance-record-log-view">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
-
-
     <?= DetailView::widget([
             'model' => $model,
             'condensed'=>false,
@@ -29,8 +24,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'type'=>DetailView::TYPE_INFO,
         ],
         'attributes' => [
-            'id',
-            'finance_order_channel_id',
             'finance_order_channel_name',
             'finance_pay_channel_id',
             'finance_pay_channel_name',
@@ -41,18 +34,19 @@ $this->params['breadcrumbs'][] = $this->title;
             'finance_record_log_failure_count',
             'finance_record_log_failure_money',
             'finance_record_log_confirm_name',
+    		'finance_record_log_statime:datetime',
+    		'finance_record_log_endtime:datetime',
             'finance_record_log_fee',
-            'create_time:datetime',
-            'is_del',
+            'create_time:datetime'
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],
         'data'=>[
-        'confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'),
+        'confirm'=>Yii::t('app', '确定需要删除吗?'),
         'method'=>'post',
         ],
         ],
-        'enableEditMode'=>true,
+        'enableEditMode'=>false,
     ]) ?>
 
 </div>

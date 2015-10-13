@@ -370,7 +370,7 @@ class GeneralPay extends \yii\db\ActiveRecord
     public function smsSend($data)
     {
         $phone = Customer::getCustomerPhone($data->data['customer_id']);
-        $msg = '支付成功';
+        $msg = !empty($data->data['msg']) ? $data->data['msg'] : '支付成功!!!';
         Yii::$app->sms->send($phone,$msg);
     }
 
@@ -404,4 +404,5 @@ class GeneralPay extends \yii\db\ActiveRecord
             'is_reconciliation' => Yii::t('app', '是否对账'),
         ];
     }
+
 }

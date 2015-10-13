@@ -48,6 +48,7 @@ class OperationCity extends CoreOperationCity
             'operation_city_is_online' => Yii::t('app', '上线状态'),//（1为上线，2为下线）
             'created_at' => Yii::t('app', '创建时间'),
             'updated_at' => Yii::t('app', '编辑时间'),
+            'category' => Yii::t('app', '服务品类'),
         ];
     }
     

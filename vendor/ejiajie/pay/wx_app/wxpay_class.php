@@ -18,6 +18,11 @@ class wxpay_class
 
     }
 
+    /**
+     * 获取支付参数
+     * @param $param
+     * @return mixed
+     */
     public function get($param){
         require_once ("tenpay_config.php");
         //获取token值
@@ -101,6 +106,10 @@ class wxpay_class
         return $outparams;
     }
 
+    /**
+     * 回调验证支付签名
+     * @return bool
+     */
     public function callback(){
         require_once ("tenpay_config.php");
         /* 创建支付应答对象 */
@@ -146,8 +155,27 @@ class wxpay_class
         return false;
     }
 
+    /**
+     * 回调处理
+     */
     public function notify(){
         //回复服务器处理成功
         echo "Success";
+    }
+
+    /**
+     * 查询支付结果
+     */
+    public function orderQuery($out_trade_no)
+    {
+        require_once ("tenpay_config.php");
+        $reqHandler = new RequestHandler();
+        $reqHandler->init($APP_ID, $APP_SECRET, $PARTNER_KEY, $APP_KEY);
+        $Token= $reqHandler->GetToken();
+
+        //$out_trade_no = '15101258091';
+        $data = $reqHandler->orderQuery($Token,$out_trade_no,$PARTNER);
+        return $data;
+
     }
 }

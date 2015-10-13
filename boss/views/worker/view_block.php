@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\Pjax;
 
 use kartik\grid\GridView;
-
+use core\models\worker\Worker;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -12,7 +12,6 @@ use kartik\grid\GridView;
  */
 $this->title = Yii::t('app', '阿姨管理');
 $this->params['breadcrumbs'][] = $this->title;
-//var_dump($workerBlockData->workerBlock->worker_block_start_time);die;
 ?>
 
     <div style="height:1000px">
@@ -32,7 +31,6 @@ $this->params['breadcrumbs'][] = $this->title;
 //            ],
         'columns' => [
             //['class' => 'yii\grid\SerialColumn'],
-            '#',
             [
                 'attribute'=>'worker_id',
                 'class' => 'kartik\grid\EditableColumn',

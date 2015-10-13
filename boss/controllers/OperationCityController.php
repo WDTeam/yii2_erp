@@ -43,11 +43,25 @@ class OperationCityController extends BaseAuthController
         $searchModel = new OperationCitySearch();
         $params = Yii::$app->request->post();//getQueryParams();
         $dataProvider = $searchModel->search($params);
-
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'params' => $params,
+        ]);
+    }
+    
+    public function actionOpencity(){
+        $citylist = OperationCity::getCityOnlineInfoList();
+        foreach((array)$citylist as $key => $value){
+            $city_id = $value['city_id'];
+            $citygoodsList = OperationShopDistrictGoods::getCityShopDistrictGoodsListArray($city_id);
+            foreach((array)$citygoodsList as $k => $v){
+                $citygoodsList[$k]['openshodistrictnum'] = OperationShopDistrictGoods::getCityGoodsOpenShopDistrictNum($city_id, $v['operation_goods_id']);
+            }
+            $citylist[$key]['citygoodsList'] = $citygoodsList;
+        }
+        return $this->render('opencity', [
+            'citylist' => $citylist,
         ]);
     }
 

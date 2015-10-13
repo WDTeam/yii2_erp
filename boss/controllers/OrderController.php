@@ -99,7 +99,7 @@ class OrderController extends BaseAuthController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $order = OrderSearch::getWaitManualAssignOrder(Yii::$app->user->id,true);
         if($order){
-            $oper_long_time = 900; //TODO 客服最大执行时间
+            $oper_long_time = 90000; //TODO 客服最大执行时间
             return
                 [
                     'order'=>$order,
@@ -118,12 +118,19 @@ class OrderController extends BaseAuthController
     public function actionGetCanAssignWorkerList()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
+//       return OrderSearch::getListByWorkerId('53',1444791600);
         $address_id =  Yii::$app->request->get('address_id');
-        $address = CustomerAddress::getAddress($address_id);
+        $booked_begin_time =  Yii::$app->request->get('booked_begin_time');
+//        $address = CustomerAddress::getAddress($address_id);
         //TODO 根据地址经纬度获取商圈
         $shangquan = 1;
         //根据商圈获取阿姨列表 第二个参数 1自有 2非自有
-        return array_merge(Worker::getDistrictFreeWorker($shangquan,1),Worker::getDistrictFreeWorker($shangquan,2));
+        $workerList = array_merge(Worker::getDistrictFreeWorker($shangquan,1),Worker::getDistrictFreeWorker($shangquan,2));
+        foreach($workerList as $k=>$v) {
+            $workerList[$k]['orders'] = OrderSearch::getListByWorkerId($v['id'],$booked_begin_time);
+        }
+
+        return $workerList;
 
     }
 

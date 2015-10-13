@@ -725,7 +725,23 @@ class GeneralPayController extends Controller
 
     public function actionTest()
     {
-        var_dump($this->modifyRecontiliation(1,2));
+        $param = [
+            'out_refund_no' => date("ymd",time()).mt_rand(1000,9999).'1',
+            'out_trade_no' => '15101258091',   //订单号
+            'transaction_id' => '', //交易流水号
+            'total_fee' => '1',      //交易总额(分单位)
+            'refund_fee' => '1',     //退款总额(分单位)
+            'op_user_passwd' => md5('YT230271'), //操作员密码,MD5处理
+        ];
+
+        $wx = new \wxrefund_class();
+        $wx->refund($param);
+        exit;
+        $wx = new \wxpay_class();
+        $wx->orderQuery();
+
+        exit;
+
     }
 
 }

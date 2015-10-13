@@ -25,6 +25,12 @@ use Yii;
  */
 class FinanceRecordLog extends \yii\db\ActiveRecord
 {
+	
+	
+	public $not_dispose_nub;
+	public $not_dispose_sum;
+			
+			
     /**
      * @inheritdoc
      */
@@ -60,9 +66,13 @@ class FinanceRecordLog extends \yii\db\ActiveRecord
             'finance_record_log_succeed_count' => Yii::t('boss', '成功记录数'),
             'finance_record_log_succeed_sum_money' => Yii::t('boss', '成功记录数总金额'),
             'finance_record_log_manual_count' => Yii::t('boss', '人工确认笔数'),
+            'not_dispose_nub' => Yii::t('boss', '未处理笔数'),
+            'not_dispose_sum' => Yii::t('boss', '未处理总额'),		
             'finance_record_log_manual_sum_money' => Yii::t('boss', '人工确认金额'),
             'finance_record_log_failure_count' => Yii::t('boss', '失败笔数'),
             'finance_record_log_failure_money' => Yii::t('boss', '失败总金额'),
+            'finance_record_log_statime' => Yii::t('boss', '账期开始时间'),
+            'finance_record_log_endtime' => Yii::t('boss', '账期结束时间'),
             'finance_record_log_confirm_name' => Yii::t('boss', '对账人'),
             'finance_record_log_fee' => Yii::t('boss', '服务费'),
             'create_time' => Yii::t('boss', '创建时间'),

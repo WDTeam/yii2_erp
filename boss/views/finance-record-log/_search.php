@@ -3,15 +3,9 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\widgets\Select2;
 use kartik\date\DatePicker;
-/**
- * @var yii\web\View $this
- * @var boss\models\FinanceRecordLogSearch $model
- * @var yii\widgets\ActiveForm $form
- */
+
 ?>
-
 <div class="finance-record-log-search">
-
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
@@ -19,10 +13,6 @@ use kartik\date\DatePicker;
 <div class='col-md-2'>
     <?= $form->field($model, 'finance_order_channel_name') ?>
 </div>
-
-    <?php // Html::selected(Yii::t('boss', 'Search'), ['class' => 'btn btn-primary']) ?>
-    
-    <?php // $form->field($model, 'finance_pay_channel_id') ?>
 <div class='col-md-2'>
     <?= $form->field($model, 'finance_pay_channel_id')->widget(Select2::classname(), [
         'name' => 'finance_pay_channel_id',
