@@ -16,6 +16,11 @@ use yii\filters\VerbFilter;
  */
 class OperationShopDistrictController extends BaseAuthController
 {
+    static $jsondata = [
+        'msg' => '',    // 提示消息 失败提示信息
+        'status' => 0, //状态 0: 失败 1：成功
+        'data' => '',  //数据 
+        ];
     public $city_id; //城市id
     public $city_name; //城市名称
     public function behaviors(){
@@ -193,6 +198,28 @@ class OperationShopDistrictController extends BaseAuthController
         }
         $model->save();
         return $this->redirect(['index']);
+    }
+    
+    /**
+     * 根据经纬度查询所属商圈，返回商圈id
+     * @param type $longitude 经度
+     * @param type $latitude 纬度
+     */
+    public static function getCoordinateShopDistrict($longitude = '', $latitude = ''){
+        if(empty($longitude) || empty($latitude)){
+            self::$jsondata['msg'] = '参数传递有误';
+            self::$jsondata['status'] = 0;
+        }else{
+            $ShopDistrictInfo = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
+            if(empty($ShopDistrictInfo)){
+                self::$jsondata['msg'] = '商圈不存在';
+                self::$jsondata['status'] = 0;
+            }else{
+                self::$jsondata['status'] = 1;
+                self::$jsondata['data'] = $ShopDistrictInfo;
+            }
+        }
+        return self::$jsondata;
     }
 
     /**
