@@ -62,6 +62,10 @@ $this->params['breadcrumbs'][] = $this->title;
     echo GridView::widget([
         'dataProvider' => $dataProvider,
         'export'=>false,
+        'containerOptions'=>['style'=>'overflow: auto'], // only set when $responsive = false
+        'headerRowOptions'=>['class'=>'kartik-sheet-style'],
+        'filterRowOptions'=>['class'=>'kartik-sheet-style'],
+        //'persistResize'=>true,
         'toolbar' =>
             [
                 'content'=>
@@ -72,7 +76,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]),
             ],
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            ['class' => 'kartik\grid\SerialColumn'],
+
             'worker_name',
             [
                 'format' => 'raw',
@@ -102,7 +107,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'width' => "120px",
             ],
             [
-                'class' => 'yii\grid\ActionColumn',
+                'class' => 'kartik\grid\ActionColumn',
+                'width' => "120px",
                 'template' =>'{view} {update} {vacation} {block} {delete}',
                 'buttons' => [
                     'update' => function ($url, $model) {
@@ -141,6 +147,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]);
                     }
                 ],
+            ],
+            [
+                'class'=>'kartik\grid\CheckboxColumn',
+                'headerOptions'=>['class'=>'kartik-sheet-style'],
             ],
         ],
         'responsive' => true,

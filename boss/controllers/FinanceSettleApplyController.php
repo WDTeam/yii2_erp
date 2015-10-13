@@ -129,7 +129,9 @@ class FinanceSettleApplyController extends BaseAuthController
         $review_section = $requestParams['review_section'];
         $settle_type = $requestParams['settle_type'];
         $is_ok = $requestParams['is_ok'];
-        $model->comment = $requestParams['comment'];
+        if(isset($requestParams['comment'])){
+            $model->comment = $requestParams['comment'];
+        }
         if($review_section== FinanceShopSettleApplySearch::BUSINESS_REVIEW){
             if($is_ok == 1){
                 $model->finance_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED;
@@ -498,13 +500,6 @@ class FinanceSettleApplyController extends BaseAuthController
         $financeSettleApplySearch->settle_type = $settle_type;
         $financeSettleApplySearch->review_section = $review_section;
         $searchModel = new FinanceWorkerOrderIncomeSearch;
-        $selfWorkers = Worker::getWorkerIds(1);
-        var_dump($selfWorkers);
-        $shopWorkers = Worker::getWorkerIds(2);
-        var_dump($shopWorkers);
-        $workerInfo = Worker::getWorkerInfo($shopWorkers[0]);
-        var_dump($workerInfo);
-        exit;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'dataProvider'=>$dataProvider]);
     }

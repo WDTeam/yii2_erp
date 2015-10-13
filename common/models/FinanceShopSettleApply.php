@@ -24,6 +24,7 @@ use Yii;
  * @property integer $isdel
  * @property integer $updated_at
  * @property integer $created_at
+ * @property text $comment
  */
 class FinanceShopSettleApply extends \yii\db\ActiveRecord
 {
@@ -73,6 +74,7 @@ class FinanceShopSettleApply extends \yii\db\ActiveRecord
             'isdel' => Yii::t('app', '是否被删除，0为启用，1为删除'),
             'updated_at' => Yii::t('app', '审核时间'),
             'created_at' => Yii::t('app', '申请时间'),
+            'comment' => Yii::t('app', '备注'),
         ];
     }
 }

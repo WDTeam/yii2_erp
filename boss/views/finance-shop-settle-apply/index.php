@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use boss\models\FinanceSettleApplySearch;
+use yii\bootstrap\Modal;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -58,12 +59,16 @@ $this->params['review_section']=$searchModel->review_section;
                     'disagree' => function ($url, $model,$review_section) {
                         return Html::a('<span class="glyphicon glyphicon-remove"></span>',
                             [
-                                '/finance-shop-settle-apply/review',
-                                'id' => $model->id, 'review_section'=>$this->params['review_section'],'is_ok'=>0
+                                '/finance-shop-settle-apply/review-failed-reason',
+                                'id' => $model->id, 'review_section'=>$this->params['review_section'],'is_ok'=>0,
                             ]
                             ,
                             [
                                 'title' => Yii::t('yii', '审核不通过'),
+                                'data-toggle' => 'modal',
+                                'data-target' => '#reasonModal',
+                                'class'=>'disagree',
+                                'data-id'=>$model->id,
                             ]);
                     },
                 ],
@@ -93,6 +98,10 @@ $this->params['review_section']=$searchModel->review_section;
                             }
                         }
                     );
+                     $('.disagree').click(function() {
+                        $('#reasonModal .modal-body').html('加载中……');
+                        $('#reasonModal .modal-body').eq(0).load(this.href);
+                    });
 JS;
         $this->registerJs(
                 $js
@@ -101,3 +110,11 @@ JS;
      </div>
 </div>
 </form>
+<?php echo Modal::widget([
+            'header' => '<h4 class="modal-title">请输入审核不通过原因</h4>',
+            'id'=>'reasonModal',
+            'options'=>[
+                'size'=>'modal-sm',
+            ],
+        ]);
+?>

@@ -90,7 +90,7 @@ class Customer extends \common\models\Customer
      */
     public static function getCustomerAddresses($customer_id){
         $customer = self::findOne($customer_id);
-        $customerAddresses = $customer->hasMany('\common\models\customerAddress', ['customer_id'=>'id'])->all();
+        $customerAddresses = $customer->hasMany('\common\models\CustomerAddress', ['customer_id'=>'id'])->all();
         return $customerAddresses != NULL ? $customerAddresses : false;
     }
 
