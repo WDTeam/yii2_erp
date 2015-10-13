@@ -54,13 +54,24 @@ class FinanceShopSettleApplyController extends Controller
         ]);
     }
     
+    public function actionReviewFailedReason(){
+        $searchModel = new FinanceShopSettleApplySearch;
+        $requestParams = Yii::$app->request->getQueryParams();
+        $searchModel->review_section = $requestParams['review_section'];
+        $searchModel->id = $requestParams['id'];
+        return $this->renderAjax('reviewFailedReason', [
+            'model' => $searchModel,
+        ]);
+    }
+    
     /**
      * 记录审核结果
      * @param type $id
      * @return type
      */
-    public function actionReview($id,$review_section,$is_ok){
+    public function actionReview($id,$review_section,$is_ok,$comment){
         $model = $this->findModel($id);
+        $model->comment = $comment;
         if($review_section== FinanceShopSettleApplySearch::BUSINESS_REVIEW){
             if($is_ok == 1){
                 $model->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED;
