@@ -8,7 +8,7 @@ use yii\web\HttpException;
 use yii\base\ErrorException;
 use yii\web\BadRequestHttpException;
 use yii2tech\ar\softdelete\SoftDeleteBehavior;
-use core\models\Worker;
+use core\models\worker\Worker;
 use boss\behaviors\ShopStatusBehavior;
 class Shop extends \common\models\Shop
 {
