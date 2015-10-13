@@ -150,8 +150,21 @@ class Worker extends \common\models\Worker
         }
 
         //获取已预约以及正在服务的所有阿姨
-        $orderWorkerResult = OrderExtWorker::find()->asArray()->all();
-
+        $starttime = 2;
+        $endtime = 30;
+        /*
+         * order starttime endtime
+         * 1        10        20
+         * 2        30        60
+         */
+        $condition = "(order_booked_begin_time>$endtime or order_booked_end_time<$starttime)";
+        $orderWorkerResult = OrderExtWorker::find()
+            ->innerJoinWith('order')
+            ->onCondition($condition)
+            ->asArray()
+            ->all();
+        echo '<pre>';
+        print_r($orderWorkerResult);die;
         if($orderWorkerResult){
             foreach ($orderWorkerResult as $val) {
                 $busyWorkerIdsArr[] = $val['worker_id'];
@@ -220,6 +233,7 @@ class Worker extends \common\models\Worker
      */
     public static function getWorkerDistrict($worker_id){
         $workerDistrictResult = WorkerDistrict::find()->where(['worker_id'=>$worker_id])->select('operation_shop_district_id')->innerJoinWith('district')->asArray()->all();
+
         if($workerDistrictResult){
 
             foreach($workerDistrictResult as $key=>$val){
@@ -504,6 +518,7 @@ class Worker extends \common\models\Worker
      */
     public function getworker_district(){
         $workerDistrictArr = self::getWorkerDistrict($this->id);
+//        var_dump(ArrayHelper::getColumn($workerDistrictArr,'operation_shop_district_id'));die;
         return $workerDistrictArr?ArrayHelper::getColumn($workerDistrictArr,'operation_shop_district_id'):[];
     }
 

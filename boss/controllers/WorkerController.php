@@ -106,17 +106,18 @@ class WorkerController extends BaseAuthController
             $worker_ext = WorkerExt::findOne($id);
             $worker_ext->load(Yii::$app->request->post());
             $worker_ext->save();
-            //更新阿姨商圈信息
+            //更新阿姨商圈信息 ???
             $workerDistrictModel = new WorkerDistrict;
             $workerParam = Yii::$app->request->post('Worker');
             $workerDistrictModel->deleteAll(['worker_id'=>$id]);
             if($workerParam['worker_district']){
                 foreach($workerParam['worker_district'] as $val){
+                    $workerDistrictModel = new WorkerDistrict;
                     $workerDistrictModel->created_ad = time();
                     $workerDistrictModel->worker_id = $id;
                     $workerDistrictModel->operation_shop_district_id = $val;
+                    $workerDistrictModel->save();
                 }
-                $workerDistrictModel->save();
             }
             return $this->redirect(['view', 'id' => $workerModel->id]);
         } else {
@@ -235,8 +236,7 @@ class WorkerController extends BaseAuthController
             $workerVacationModel->worker_vacation_extend = trim($post['WorkerVacation']['worker_vacation_extend']);
             $workerVacationModel->created_ad = time();
             $workerVacationModel->admin_id = Yii::$app->user->identity->id;
-            $saveStatus = $workerVacationModel->save();
-            if($saveStatus){
+            if($workerVacationModel->save()){
                 $workerModel->worker_is_vacation = 1;
                 $workerModel->save();
             }
