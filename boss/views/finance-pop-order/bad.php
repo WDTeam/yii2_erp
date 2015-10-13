@@ -89,7 +89,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	'data-method' => 'post',
 	'data-pjax' => '0'
 			];
-	return Html::a('<span class="glyphicon glyphicon-glass"></span>', Yii::$app->urlManager->createUrl(['finance-pop-order/tagssign','id' => $model->id,'edit'=>'bak','oid'=>$model->finance_record_log_id]), $options);
+	return Html::a('<span class="glyphicon glyphicon-backward"></span>', Yii::$app->urlManager->createUrl(['finance-pop-order/tagssign','id' => $model->id,'edit'=>'bak','oid'=>$model->finance_record_log_id]), $options);
 }
                 ],
             ],
