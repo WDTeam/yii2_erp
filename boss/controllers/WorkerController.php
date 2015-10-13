@@ -102,6 +102,15 @@ class WorkerController extends BaseAuthController
             'query' => WorkerBlockLog::find()->where(['worker_id'=>$id])->orderBy('id desc'),
         ]);
         if ($workerModel->load(Yii::$app->request->post()) && $workerModel->save()) {
+            $worker_district = new WorkerDistrict;
+            $workerParam = Yii::$app->request->post('Worker');
+            if($workerParam['worker_district']){
+                foreach($workerParam['worker_district'] as $val){
+                    $worker_district->created_ad = time();
+                    $worker_district->worker_id = $workerModel->id;
+                    $worker_district->operation_shop_district_id = $val;
+                }
+            }
             return $this->redirect(['view', 'id' => $workerModel->id]);
         } else {
             return $this->render('view', ['workerModel' => $workerModel,'workerBlockData'=>$workerBlockData,'workerVacationData'=>$workerVacationData,'workerBlockLogData'=>$workerBlockLogData]);
@@ -124,9 +133,9 @@ class WorkerController extends BaseAuthController
             $worker_ext->load(Yii::$app->request->post());
             $worker_ext->worker_id = $worker->id;
             $worker_ext->save();
-            $workerDistrictArr = Yii::$app->request->post('Worker');
-            if($workerDistrictArr['worker_district']){
-                foreach($workerDistrictArr['worker_district'] as $val){
+            $workerParam = Yii::$app->request->post('Worker');
+            if($workerParam['worker_district']){
+                foreach($workerParam['worker_district'] as $val){
                     $worker_district->created_ad = time();
                     $worker_district->worker_id = $worker->id;
                     $worker_district->operation_shop_district_id = $val;
@@ -474,7 +483,7 @@ class WorkerController extends BaseAuthController
 
     public function actionTest(){
         echo '<pre>';
-        var_dump(Worker::getDistrictFreeWorker(11,1));
+        var_dump(Worker::getWorkerInfo(18532));
         die;
 
         $a = Worker::getWorkerInfo(16351);

@@ -2,6 +2,7 @@
 
 namespace core\models\worker;
 
+use common\models\ShopManager;
 use common\models\WorkerStat;
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -49,14 +50,13 @@ class Worker extends \common\models\Worker
 
     /*
      * 获取阿姨列表
-     * @param type int 阿姨类型 0所有 1自营 2非自营
+     * @param  int $type 阿姨类型 1自营 2非自营
+     * @param  int $rule_id 阿姨身份id
      * @return array 阿姨ID列表
      */
-    public static function getWorkerIds($type=0){
-        $condition = [];
-        if(!empty($type)){
-            $condition['worker_type'] = $type;
-        }
+    public static function getWorkerIds($type,$rule_id){
+        $condition['worker_type'] = $type;
+        $condition['worker_rule_id'] = $rule_id;
         $workerList = self::find()->select('id')->where($condition)->asArray()->all();
         return $workerList?ArrayHelper::getColumn($workerList,'id'):[];
     }
@@ -69,15 +69,19 @@ class Worker extends \common\models\Worker
      */
     public static function getWorkerInfo($worker_id){
 
-        $workerInfo = self::find()->where((['id'=>$worker_id]))->select('id,shop_id,worker_name,worker_phone,worker_idcard,worker_type,worker_rule_id')->asArray()->one();
+        $workerInfo = self::find()->where((['id'=>$worker_id]))->select('id,shop_id,worker_name,worker_phone,worker_idcard,worker_type,worker_rule_id,created_ad')->asArray()->one();
         if($workerInfo){
-            //店铺名称
+            //门店名称,家政公司名称
             $shopInfo = Shop::findone($workerInfo['shop_id']);
+            if($shopInfo){
+                $shopManagerInfo = ShopManager::findOne($shopInfo['shop_manager_id']);
+            }
             $workerInfo['shop_name'] = isset($shopInfo['name'])?$shopInfo['name']:'';
-            //获取阿姨身份描述信息
-            $workerType = self::getWorkerTypeShow($workerInfo['worker_type']);
-            $workerRule = WorkerRuleConfig::getWorkerRuleShow($workerInfo['worker_rule_id']);
-            $workerInfo['worker_type_description'] = $workerType.$workerRule;
+            $workerInfo['shop_manager_name'] = isset($shopManagerInfo['name'])?$shopManagerInfo['name']:'';
+            //阿姨类型描述信息
+            $workerInfo['worker_type_description'] = self::getWorkerTypeShow($workerInfo['worker_type']);
+            //阿姨身份描述信息
+            $workerInfo['worker_rule_description'] = WorkerRuleConfig::getWorkerRuleShow($workerInfo['worker_rule_id']);
         }else{
             $workerInfo = [];
         }
@@ -121,14 +125,20 @@ class Worker extends \common\models\Worker
             return [];
         }else{
             foreach ($districtWorkerResult as $val) {
+
                 $districtWorkerIdsArr[] = $val['id'];
 
                 $val['worker_id'] = $val['id'];
                 $val['shop_name'] = $val['shopRelation']['name'];
                 $val['worker_type_description'] = self::getWorkerTypeShow($val['worker_type']);
                 $val['worker_rule_description'] = $workerRuleConfigArr[$val['worker_rule_id']];
-                $val['worker_stat_order_num'] = $val['workerStatRelation']['worker_stat_order_refuse'];
-                $val['worker_stat_order_refuse'] = $val['workerStatRelation']['worker_stat_order_refuse'];
+                $val['worker_stat_order_num'] = intval($val['workerStatRelation']['worker_stat_order_refuse']);
+                $val['worker_stat_order_refuse'] = intval($val['workerStatRelation']['worker_stat_order_refuse']);
+                if($val['worker_stat_order_num']!==0){
+                    $val['worker_stat_order_refuse_percent'] = round($val['worker_stat_order_refuse']/$val['worker_stat_order_num'],2).'%';
+                }else{
+                    $val['worker_stat_order_refuse_percent'] = '0%';
+                }
                 unset($val['workerStatRelation']);
                 unset($val['workerDistrictRelation']);
                 unset($val['shopRelation']);
@@ -220,6 +230,7 @@ class Worker extends \common\models\Worker
             return [];
         }
     }
+
     /*
      * 获取阿姨所属商圈名称
      */
@@ -232,6 +243,7 @@ class Worker extends \common\models\Worker
             return '';
         }
     }
+
     /*
      * 获取阿姨性别名称
      */

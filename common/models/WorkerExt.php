@@ -49,7 +49,7 @@ class WorkerExt extends \yii\db\ActiveRecord
             [['worker_edu', 'worker_bank_card'], 'string', 'max' => 30],
             [['worker_source', 'worker_live_street'], 'string', 'max' => 50],
             [['worker_bank_name'], 'string', 'max' => 10],
-            [['worker_bank_from'], 'string', 'max' => 40]
+            [['worker_bank_from','worker_bank_area'], 'string', 'max' => 40]
         ];
     }
 
