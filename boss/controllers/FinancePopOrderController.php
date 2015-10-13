@@ -119,8 +119,8 @@ class FinancePopOrderController extends Controller
     			$statusinfo=$model->PopOrderstatus($alinfo,$value,$channelid);
     			$postdate['finance_record_log_id'] =$lastidRecordLog;
     			$postdate['finance_pop_order_number'] =$statusinfo['order_channel_order_num'];
-    			$postdate['finance_order_channel_id'] =$statusinfo['channel_id'];
-    			$postdate['finance_order_channel_title'] =$statusinfo['order_channel_name'];
+    			$postdate['finance_order_channel_id'] =$channelid;
+    			$postdate['finance_order_channel_title'] =FinanceOrderChannel::getOrderChannelByName($channelid);
     			$postdate['finance_pay_channel_id'] =$statusinfo['pay_channel_id'];
     			$postdate['finance_pay_channel_title'] =$statusinfo['order_pay_channel_name'];
     			$postdate['finance_pop_order_customer_tel'] =$statusinfo['order_customer_phone'];
@@ -143,15 +143,7 @@ class FinancePopOrderController extends Controller
     			
     			$postdate['finance_pop_order_finance_isok'] =0;
     			$postdate['finance_pop_order_discount_pay'] =$statusinfo['order_use_coupon_money'];
-    			
-    			
-    			
-    			
     			$postdate['finance_pop_order_reality_pay'] =$statusinfo['order_pay_money'];
-    			
-    			
-    			
-    			
     			$postdate['finance_pop_order_order_time'] =$statusinfo['created_at'];
     			$postdate['finance_pop_order_pay_time'] =$statusinfo['created_at'];
     			$postdate['finance_pop_order_pay_status'] =0;//财务确定处理按钮状态
@@ -425,7 +417,10 @@ class FinancePopOrderController extends Controller
     		if($requestModel['edit']=='bak'){
     	    //坏账还原
     		$model->finance_pop_order_pay_status='0';
-    		}else {	
+    		}elseif($requestModel['edit']=='bakinfo'){
+    		//回滚财务审核	
+    		$model->finance_pop_order_pay_status='0';
+    		}else{	
     		$model->finance_pop_order_pay_status='3';
     		}
     		$model->save();

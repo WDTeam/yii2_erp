@@ -31,14 +31,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'hover'=>true,
             'mode'=>Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
             'panel'=>[
-            'heading'=>$this->title,
+            'heading'=>'基础信息',
             'type'=>DetailView::TYPE_INFO,
         ],
         'attributes' => [
-            [
-                'attribute'=>'id',
-                'type' => DetailView::INPUT_HIDDEN,
-            ],
             'name',
             [
                 'attribute'=>'shop_manager_id',
@@ -81,12 +77,19 @@ $this->params['breadcrumbs'][] = $this->title;
 //             'county_id',
             [
                 'attribute'=>'street',
-                ''
             ],
             'principal',
             'tel',
             'other_contact',
-            
+            [
+                'attribute'=>'worker_count',
+                'type' => DetailView::INPUT_HIDDEN,
+            ],
+            [
+                'attribute'=>'complain_coutn',
+                'type' => DetailView::INPUT_HIDDEN,
+            ],
+            'level',
             
             [
                 'attribute'=>'created_at',
@@ -99,16 +102,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'=>date('Y-m-d H:i:s', $model->updated_at),
             ],
             [
-                'attribute' => 'is_blacklist',
-                'type' => DetailView::INPUT_WIDGET,
-                'widgetOptions' => [
-                    'class' => \kartik\widgets\SwitchInput::classname()
-                ],
-                'value'=>Shop::$is_blacklists[(int)$model->is_blacklist],
-            ],
-//             'blacklist_time:datetime',
-//             'blacklist_cause',
-            [
                 'attribute' => 'audit_status',
                 'type' => DetailView::INPUT_WIDGET,
                 'widgetOptions' => [
@@ -120,23 +113,40 @@ $this->params['breadcrumbs'][] = $this->title;
                         'placeholder' => '选择状态',
                     ]
                 ],
-                'value'=>Shop::$audit_statuses[(int)$model->audit_status],
+                'format'=>'raw',
+                'value'=>'<div class="col-md-2">'.Shop::$audit_statuses[(int)$model->audit_status].'</div>'.
+                '<div class="col-md-6">最后审核时间:'.date('Y-m-d H:i:s', $model->getLastAuditStatus()->created_at).'</div>',
             ],
             [
-                'label'=>'最后审核时间',
-                'format'=>'datetime',
-                'value'=>date('Y-m-d H:i:s', $model->getLastAuditStatusChangeTime()),
+                'attribute' => 'is_blacklist',
+                'type' => DetailView::INPUT_WIDGET,
+                'widgetOptions' => [
+                    'class' => \kartik\widgets\SwitchInput::classname()
+                ],
+                'format'=>'raw',
+                'value'=>$this->render('view_blacklist', ['model'=>$model]),
             ],
-            [
-                'attribute'=>'worker_count',
-                'type' => DetailView::INPUT_HIDDEN,
-            ],
-            [
-                'attribute'=>'complain_coutn',
-                'type' => DetailView::INPUT_HIDDEN,
-            ],
-            'level',
-            //银行信息
+        ],
+        'deleteOptions'=>[
+        'url'=>['delete', 'id' => $model->id],
+        'data'=>[
+        'confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'),
+        'method'=>'post',
+        ],
+        ],
+        'enableEditMode'=>true,
+    ]) ?>
+    <?= DetailView::widget([
+            'model' => $model,
+            'condensed'=>false,
+            'hover'=>true,
+            'mode'=>Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
+            'panel'=>[
+            'heading'=>'银行信息',
+            'type'=>DetailView::TYPE_INFO,
+        ],
+        'attributes' => [
+            'bankcard_number',
             [
             'attribute'=>'opening_bank',
             'type' => DetailView::INPUT_WIDGET,
@@ -151,7 +161,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'sub_branch',
             'opening_address',
-            'bankcard_number',
             'account_person',
         ],
         'deleteOptions'=>[

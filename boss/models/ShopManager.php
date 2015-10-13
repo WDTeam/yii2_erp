@@ -6,6 +6,7 @@ use boss\models\Operation\OperationArea;
 use yii\base\Object;
 use boss\models\ShopStatus;
 use crazyfd\qiniu\Qiniu;
+use boss\behaviors\ShopStatusBehavior;
 class ShopManager extends \common\models\ShopManager
 {
     /**
@@ -44,6 +45,10 @@ class ShopManager extends \common\models\ShopManager
                 'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => 'updated_at',
             ],
+            [
+                'class'=>ShopStatusBehavior::className(),
+                'model_name'=>ShopStatus::MODEL_SHOPMANAGER
+            ]
         ];
     }
     /**
@@ -106,6 +111,13 @@ class ShopManager extends \common\models\ShopManager
     public static function getIsBlacklistCount()
     {
         return (int)self::find()->where(['is_blacklist'=>1])->scalar();
+    }
+    /**
+     * 获取记录总数
+     */
+    public static function getTotal()
+    {
+        return (int)self::find()->where('isdel is null or isdel=0')->scalar();
     }
     /**
      * 获取地址全称,直辖市不需要显示省字段

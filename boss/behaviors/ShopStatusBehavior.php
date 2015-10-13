@@ -22,13 +22,13 @@ class ShopStatusBehavior extends Behavior
     public function events()
     {
         return [
-            ActiveRecord::EVENT_BEFORE_UPDATE=> 'beforeUpdate',
+            ActiveRecord::EVENT_AFTER_UPDATE=> 'afterUpdate',
             self::CHANGE_STATUS=> 'changeStatus',
             self::CHANGE_BLACKLIST=> 'changeBlacklist'
         ];
     }
     
-    public function beforeUpdate($event)
+    public function afterUpdate($event)
     {
         $this->owner->trigger(self::CHANGE_STATUS);
         $this->owner->trigger(self::CHANGE_BLACKLIST);
@@ -87,5 +87,28 @@ class ShopStatusBehavior extends Behavior
         return $status->save();
     }
     
-    
+    public function getLastJoinBlackList()
+    {
+        $model = ShopStatus::find()->select(['id','cause', 'created_at', 'status_number'])
+        ->where([
+            'model_id'=>$this->owner->id,
+            'model_name'=>$this->model_name,
+            'status_type'=>2
+        ])->orderBy('created_at DESC')->one();
+        return empty($model)?new ShopStatus():$model;
+    }
+    /**
+     * 最后审核记录
+     */
+    public function getLastAuditStatus()
+    {
+        $model = ShopStatus::find()
+        ->select(['id','cause', 'created_at', 'status_number'])
+        ->where([
+            'model_id'=>$this->owner->id,
+            'model_name'=>$this->model_name,
+            'status_type'=>1
+        ])->orderBy('created_at DESC')->one();
+        return empty($model)?new ShopStatus():$model;
+    }
 }
