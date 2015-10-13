@@ -100,6 +100,7 @@ use core\models\worker\WorkerRuleConfig;
             ]); ?>
             <?= $form->field($worker_ext, 'worker_sex')->radioList(['0' => '女', '1' => '男'], ['inline' => true]); ?>
             <?= $form->field($worker_ext, 'worker_age')->textInput(['placeholder' => '输入阿姨年龄...']); ?>
+            <?= $form->field($worker_ext, 'worker_height')->textInput(['placeholder' => '输入阿姨身高...']); ?>
 
             <?php /*$form->field($worker_ext, 'worker_birth')->widget(DatePicker::classname(), [
                 'name' => 'worker_birth',
@@ -151,7 +152,7 @@ use core\models\worker\WorkerRuleConfig;
         <div class="panel-body">
             <?= $form->field($worker_ext, 'worker_bank_name')->textInput(['placeholder' => '输入开户银行...']); ?>
             <?= $form->field($worker_ext, 'worker_bank_from')->textInput(['placeholder' => '输入银行卡开户网点...']); ?>
-            <?= $form->field($worker_ext, 'worker_bank_from')->textInput(['placeholder' => '输入银行卡开户地...']); ?>
+            <?= $form->field($worker_ext, 'worker_bank_area')->textInput(['placeholder' => '输入银行卡开户地...']); ?>
             <?= $form->field($worker_ext, 'worker_bank_card')->textInput(['placeholder' => '输入银行卡号...']); ?>
         </div>
 

@@ -51,7 +51,9 @@ class m151008_061002_create_table_operation_shop_district_goods extends Migratio
             'operation_goods_img' => Schema::TYPE_TEXT . ' DEFAULT NULL COMMENT \'商品图片\'',
             'operation_shop_district_goods_app_ico' => Schema::TYPE_TEXT . ' DEFAULT NULL  COMMENT \'APP端图标(序列化方式存储|首页大图，首页小图，分类页小图，订单页小图)\'',
             'operation_shop_district_goods_pc_ico' => Schema::TYPE_TEXT . ' DEFAULT NULL  COMMENT \'PC端图标(序列化方式存储|首页推荐大图，更多推荐大图，下单页小图)\'',
-
+            
+            'operation_shop_district_goods_status' => Schema::TYPE_INTEGER . '(1) DEFAULT 1 COMMENT \'商品状态（1:上架 2:下架）\'',
+            
             'created_at' => Schema::TYPE_INTEGER. '(11) DEFAULT NULL COMMENT \'创建时间\'',
             'updated_at' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'编辑时间\'',
         ], $tableOptions);

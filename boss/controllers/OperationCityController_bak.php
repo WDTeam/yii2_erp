@@ -81,7 +81,6 @@ class OperationCityController extends BaseAuthController
             $province = OperationArea::getOneFromId($p['OperationCity']['province_id']);
             $city = OperationArea::getOneFromId($p['OperationCity']['city_id']);
             if(empty($p['OperationCity']['city_id'])){
-                return $this->redirect(['create']);
                 throw new NotFoundHttpException('请选择城市');
             }
             $p['OperationCity']['province_name'] = $province->area_name;
@@ -89,7 +88,6 @@ class OperationCityController extends BaseAuthController
         }
         if ($model->load($p)) {
             if(OperationCity::getCityInfo($model->city_id)){
-                return $this->redirect(['create']);
                 throw new NotFoundHttpException('该城市已开通过');
             }
 //            $path = UploadFile::widget(['fileInputName' => 'file']);
@@ -166,116 +164,34 @@ class OperationCityController extends BaseAuthController
         }
         return json_encode(['result' => $result, 'data' => $areas]);
     }
-
+    
     /**
      * 城市列表
      * @return type
      */
     public function actionRelease(){
         $post = Yii::$app->request->post();
+        $cache = Yii::$app->cache;
+        $this->delSettingCityCaches();
         if(empty($post)){
             $model = new OperationCity;
             $citylist = OperationCity::getOnlineCityList(2); //未开通的城市列表
+            $model->city_name = $cache->get("releasecity_info");
             return $this->render('Release', [
                 'model' => $model,
                 'citylist' => $citylist,
             ]);
         }else{
-            if(empty($post['OperationCity']['city_name'])){
-                return $this->redirect(['release']);
-            }
-            $cityinfo = explode('-', $post['OperationCity']['city_name']);
+            $cityinfo = $post['OperationCity']['city_name'];
+            $cache->set("releasecity_info", $cityinfo);
+            $cityinfo = explode('-', $cityinfo);
             $city_id = $cityinfo[0];
             $city_name = $cityinfo[1];
-            return $this->redirect(['addgoods', 'city_id' => $city_id]);
+            $cache->set("city_id", $city_id);
+            $cache->set("city_name", $city_name);
+            return $this->redirect(['categoryshop']);
         }
     }
-
-    /**
-     * 添加服务
-     * @param $city_id
-     */
-    public function actionAddgoods($city_id, $cityAddGoods = ''){
-        $post = Yii::$app->request->post();
-        if(empty($post)) {
-            $categoryinfo = OperationCategory::getCategoryList();
-            $categorylist = array();
-            foreach ((array)$categoryinfo as $key => $value) {
-                $categorylist[$value['id'] . '-' . $value['operation_category_name']] = $value['operation_category_name'];
-            }
-            $city_name = OperationCity::getCityName($city_id);
-            return $this->render('addgoods', [
-                'cityAddGoods' => $cityAddGoods,
-                'city_id' => $city_id,
-                'city_name' => $city_name,
-                'categorylist' => $categorylist,
-            ]);
-        }else{
-            if(empty($post['categorygoods'])){
-                return $this->redirect(['addgoods', 'city_id' => $city_id, 'cityAddGoods' => $cityAddGoods]);
-            }
-            $categorylist = $post['categorylist'];  //服务品类
-            $categorygoods = explode('-', $post['categorygoods']); //服务
-            $goods_id = $categorygoods[0];
-            return $this->redirect(['settinggoodsinfo', 'city_id' => $city_id, 'goods_id' => $goods_id, 'cityAddGoods' => $cityAddGoods]);
-        }
-    }
-
-    /**
-     * 设置服务并开通该城市
-     * @param $city_id
-     * @param $goods_id
-     * @return string
-     */
-    public function actionSettinggoodsinfo($city_id, $goods_id, $cityAddGoods = ''){
-        $post = Yii::$app->request->post();
-        $goodsInfo = OperationGoods::getGoodsInfo($goods_id);
-        if(empty($post)) {
-            $shopdistrict = OperationShopDistrict::getCityShopDistrictList($city_id);
-            $shopdistrictinfo = [];
-            foreach ((array)$shopdistrict as $key => $value) {
-                $shopdistrictinfo[$value['id']] = $value['operation_shop_district_name'];
-            }
-            $city_name = OperationCity::getCityName($city_id);
-            $shopdistrictinfoall = [];
-            $goodsshopdistrictinfo = [];
-            if($cityAddGoods == 'editGoods'){
-                $cityshopdistrictgoodsinfo = OperationShopDistrictGoods::getCityShopDistrictGoodsInfo($city_id, $goods_id);
-
-                foreach((array)$cityshopdistrictgoodsinfo as $key => $value){
-                    /**查找该商品上线的数据**/
-                    if($value['operation_shop_district_goods_status'] == 1){
-                        $shopdistrictinfoall[] = $value['operation_shop_district_id'];
-                        $goodsshopdistrictinfo[$value['operation_shop_district_id']] = $value;
-                    }
-                }
-            }
-            return $this->render('settinggoodsinfo', [
-                'city_id' => $city_id,
-                'city_name' => $city_name,
-                'goodsInfo' => $goodsInfo,
-                'cityAddGoods' => $cityAddGoods,
-                'shopdistrictinfo' => $shopdistrictinfo,
-                'shopdistrictinfoall' => $shopdistrictinfoall,
-                'goodsshopdistrictinfo' => $goodsshopdistrictinfo,
-            ]);
-        }else{
-            if(empty($post['shopdistrict'])){
-                return $this->redirect(['settinggoodsinfo', 'city_id' => $city_id, 'goods_id' => $goods_id, 'cityAddGoods' => $cityAddGoods]);
-            }
-            $shopdistrict = $post['shopdistrict'];
-            $shopdistrictGoods = $post['goodsinfo'];
-            if($cityAddGoods == 'editGoods'){
-                OperationShopDistrictGoods::updateShopDistrictGoods($city_id, $goods_id, $shopdistrict, $goodsInfo, $shopdistrictGoods);
-            }else {
-                OperationShopDistrictGoods::insertShopDistrictGoods($city_id, $goods_id, $shopdistrict, $goodsInfo, $shopdistrictGoods);
-                /** 开通城市 **/
-                OperationCity::setoperation_city_is_online($city_id);
-            }
-            return $this->redirect(['index']);
-        }
-    }
-
     
     /**
      * 选择品类与品类下边商品
@@ -396,10 +312,11 @@ class OperationCityController extends BaseAuthController
      * @return type
      */
     public function actionGetcategorygoods(){
+        $cache = Yii::$app->cache;
         $categoryid = Yii::$app->request->post('categoryid');
-        $city_id = Yii::$app->request->post('city_id');
+        $city_id = $cache->get("city_id");
         $categorygoods = OperationGoods::getCategoryGoodsInfo($categoryid, $city_id);
-        $categorygoodsall = [];
+        $categorygoodsall = $cache->get("categorygoods");
         return $this->renderAjax('categorygoods', [
             'categoryid' => $categoryid,
             'categorygoods' => $categorygoods,

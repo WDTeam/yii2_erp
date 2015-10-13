@@ -53,9 +53,8 @@ class WorkerController extends BaseAuthController
     protected function findModel($id,$hasExt=false)
     {
         if($hasExt==true){
-            $model= Worker::find()->joinWith('workerExt')->where(['id'=>$id])->one();
+            $model= Worker::find()->joinWith('workerExtRelation')->where(['id'=>$id])->one();
             $workerExtModel = new WorkerExt();
-            $model->link('workerExt',$workerExtModel);
         }else{
             $model= Worker::findOne($id);
         }
@@ -421,12 +420,10 @@ class WorkerController extends BaseAuthController
 
                 $workerExtArr['worker_id'] = $val['id'];
                 $workerExtArr['worker_age'] = $val['age'];
-                $workerExtArr['worker_hometown'] = $val['home_town'];
                 $workerExtArr['worker_live_lng'] = $val['home_lng'];
                 $workerExtArr['worker_live_lat'] = $val['home_lat'];
                 $workerExtArr['worker_sex'] = $val['gender'];
                 $workerExtArr['worker_is_health'] = $val['is_health'];
-                $workerExtArr['worker_birth'] = $val['birthday'];
                 $workerExtArr['worker_is_insurance'] = $val['is_insurance'];
                 $workerEduConfig = [1=>'小学',2=>'初中',3=>'高中',4=>'大学'];
                 if($val['education']){
@@ -477,7 +474,7 @@ class WorkerController extends BaseAuthController
 
     public function actionTest(){
         echo '<pre>';
-        var_dump(Worker::getDistrictFreeWorker(1,1));
+        var_dump(Worker::getDistrictFreeWorker(11,1));
         die;
 
         $a = Worker::getWorkerInfo(16351);

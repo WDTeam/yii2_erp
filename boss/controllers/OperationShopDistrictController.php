@@ -17,6 +17,7 @@ use yii\filters\VerbFilter;
 class OperationShopDistrictController extends BaseAuthController
 {
     public $city_id; //城市id
+    public $city_name; //城市名称
     public function behaviors(){
         return [
             'verbs' => [
@@ -38,6 +39,7 @@ class OperationShopDistrictController extends BaseAuthController
                 return $this->redirect(['operation-city/index']);
             }
         }
+        $this->city_name = OperationCity::getCityName($this->city_id);
     }
     
 
@@ -52,6 +54,7 @@ class OperationShopDistrictController extends BaseAuthController
         ]);
 
         return $this->render('index', [
+            'city_name' => $this->city_name,
             'dataProvider' => $dataProvider,
         ]);
     }
@@ -68,7 +71,7 @@ class OperationShopDistrictController extends BaseAuthController
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
         return $this->redirect(['view', 'id' => $model->id]);
         } else {
-        return $this->render('view', ['model' => $model]);
+        return $this->render('view', ['model' => $model,'city_name' => $this->city_name]);
 }
     }
 
@@ -117,6 +120,7 @@ class OperationShopDistrictController extends BaseAuthController
             $model->operation_area_id = $model->operation_area_id.'_'.$model->operation_area_name;
             return $this->render('create', [
                 'model' => $model,
+                'city_name' => $this->city_name,
                 'citymodel' => $citymodel,
                 'areaList' => $areaList,
                 'OperationShopDistrictCoordinate' => $OperationShopDistrictCoordinate,
@@ -170,6 +174,7 @@ class OperationShopDistrictController extends BaseAuthController
             $model->operation_area_id = $model->operation_area_id.'_'.$model->operation_area_name;
             return $this->render('update', [
                 'model' => $model,
+                'city_name' => $this->city_name,
                 'citymodel' => $citymodel,
                 'areaList' => $areaList,
                 'OperationShopDistrictCoordinate' => $OperationShopDistrictCoordinate,

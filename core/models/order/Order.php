@@ -123,9 +123,41 @@ class Order extends OrderModel
         $order = Order::findById($order_id);
        //TODO  放入订单池
         //TODO 开始系统指派
+        $order->admin_id=0;
         OrderStatus::sysAssignStart($order,[]);
         //TODO 系统指派失败
+        $order->admin_id=0;
         OrderStatus::sysAssignUndone($order,[]);
+    }
+
+
+    /**
+     * @param $order_id
+     * @param $admin_id
+     * @param bool $isCS
+     * @return array|bool
+     */
+    public static function manualAssignUndone($order_id,$admin_id,$isCS = false)
+    {
+        $flag_send = $isCS?1:2;
+        $order = Order::findOne($order_id);
+        if($order->orderExtFlag->order_flag_send+$flag_send==3) //小家政和客服都无法指派出去
+        {
+            $order->order_flag_send = $order->orderExtFlag->order_flag_send+$flag_send; //标记是谁指派不了
+            $order->order_flag_lock = 0;
+            $order->admin_id = $admin_id;
+            if(OrderStatus::manualAssignUndone($order,['orderExtFlag'])){
+                return true;
+            }
+        }else{//客服或小家政还没指派过则进入待人工指派的状态
+            $order->order_flag_send = $order->orderExtFlag->order_flag_send+$flag_send;
+            $order->order_flag_lock = 0;
+            $order->admin_id = $admin_id;
+            if(OrderStatus::sysAssignUndone($order,['orderExtFlag'])){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

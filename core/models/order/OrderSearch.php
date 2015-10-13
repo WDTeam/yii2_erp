@@ -23,6 +23,7 @@ class OrderSearch extends Order
             [['order_address', 'order_cs_memo'], 'string', 'max' => 255],
         ];
     }
+
     /**
      * 获取待人工指派的订单
      * 订单状态为系统指派失败的订单
@@ -34,23 +35,21 @@ class OrderSearch extends Order
     {
         $flag_send = $isCS?2:1;
 
-        $query = Order::find()->joinWith(['orderExtStatus', 'orderExtFlag'])->where(
+        $order = Order::find()->joinWith(['orderExtStatus', 'orderExtFlag'])->where(
             ['>','order_booked_begin_time',time()] //服务开始时间大于当前时间
-        )->andWhere([
+        )->andWhere([ //先查询该管理员正在指派的订单
             'orderExtFlag.order_flag_send'=>[0,$flag_send], //0可指派 1客服指派不了 2小家政指派不了
-        ])->orderBy(['order_booked_begin_time'=>SORT_ASC]);
-        //先查询该管理员正在指派的订单
-        $order_query = $query;
-        $order = $order_query->andWhere([
             'orderExtStatus.order_status_dict_id'=>OrderStatusDict::ORDER_MANUAL_ASSIGN_START,
             'orderExtFlag.order_flag_lock'=>$admin_id
-        ])->one();
+        ])->orderBy(['order_booked_begin_time'=>SORT_ASC])->one();
         if(empty($order)){//如果没有正在指派的订单再查询待指派的订单
-            $order_query = $query;
-            $order = $order_query->andWhere([
+            $order = Order::find()->joinWith(['orderExtStatus', 'orderExtFlag'])->where(
+                ['>','order_booked_begin_time',time()] //服务开始时间大于当前时间
+            )->andWhere([
+                'orderExtFlag.order_flag_send'=>[0,$flag_send], //0可指派 1客服指派不了 2小家政指派不了
                 'orderExtStatus.order_status_dict_id'=>OrderStatusDict::ORDER_SYS_ASSIGN_UNDONE,
                 'orderExtFlag.order_flag_lock'=>0
-            ])->one();
+            ])->orderBy(['order_booked_begin_time'=>SORT_ASC])->one();
             if(!empty($order)){
                 //获取到订单后加锁并置为已开始人工派单的状态
                 $order->order_flag_lock = $admin_id;

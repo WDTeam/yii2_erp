@@ -6,29 +6,53 @@ $(document).ready(function(){
     $('#alllist').change(function(){
         alllist($(this));
     });
-
+    
     $("input[name='categorylist[]']").click(function(){
         categoryGoods($(this));
     });
-    
-    $('#goodssetting').click(function(){
-        goodssetting($(this));
-    });
-    
     selectCategoryChecked();
+
+
+
+
+
+
+    $("input[name='shopdistrict[]']").change(function(){
+        shopdistrict($(this));
+    });
+
+    $(".settingGoodsinfo").click(function(){
+        settingGoodsinfo();
+    });
 });
 
-/**
- * 统一设置
- * @returns {undefined}
- */
-function goodssetting(obj){
-    $(".operation_goods_market_price").attr('value', $(".operation_goods_market_price_demo").attr('value')); //市场价格
-    $(".operation_goods_price").attr('value', $(".operation_goods_price_demo").attr('value'));//销售价格
-    $(".operation_goods_lowest_consume").attr('value', $(".operation_goods_lowest_consume_demo").attr('value'));//最低消费数量
-    $(".operation_goods_start_time").attr('value', $(".operation_goods_start_time_demo").attr('value'));//开始时间
-    $(".operation_goods_end_time").attr('value', $(".operation_goods_end_time_demo").attr('value'));//结束时间
+function shopdistrict(obj){
+    var val = obj.attr('value');
+    var status = obj.is(':checked');
+    if(status){
+        $('.shopdistrictgoods'+val).show();
+    }else{
+        $('.shopdistrictgoods'+val).hide();
+    }
 }
+
+function settingGoodsinfo(){
+    var operation_goods_market_price_demo = $('.operation_goods_market_price_demo').val();
+    var operation_goods_price_demo = $('.operation_goods_price_demo').val();
+    var operation_goods_lowest_consume_demo = $('.operation_goods_lowest_consume_demo').val();
+    var operation_goods_start_time_demo = $('.operation_goods_start_time_demo').val();
+    var operation_goods_end_time_demo = $('.operation_goods_end_time_demo').val();
+    $('.operation_goods_market_price').val(operation_goods_market_price_demo);
+    $('.operation_goods_price').val(operation_goods_price_demo);
+    $('.operation_goods_lowest_consume').val(operation_goods_lowest_consume_demo);
+    $('.operation_goods_start_time').val(operation_goods_start_time_demo);
+    $('.operation_goods_end_time').val(operation_goods_end_time_demo);
+}
+
+
+
+
+
 
 function selectCategoryChecked(){
     var status = false;
@@ -37,29 +61,39 @@ function selectCategoryChecked(){
     });
 }
 
-var categoryid = 0;
 function categoryGoods(obj){
     var status = obj.is(':checked');
     var value = obj.attr('value');
-    if(value != categoryid){
-        categoryid = value;
-        if(status){
-            $('#categoryGoodsContent').html(" ");
-            var url = '/operation-city/getcategorygoods';
-            var data = {'categoryid': value};
-            $.post(url, data, function(t){
-                $('#categoryGoodsContent').append(t);
-            }, 'html');
-        }
+    $('.goods_list').remove();
+    if(status){
+        var url = '/operation-city/getcategorygoods';
+        var city_id = $('.city_id').val();
+        var data = {'categoryid': value, 'city_id' : city_id};
+        $.post(url, data, function(t){
+            $('#categoryGoodsContent').append(t);
+        }, 'html');
+    }else{
+        $('#goods_'+value).remove();
     }
 }
 
 function alllist(obj){
     var status = obj.is(':checked');
-    if(status){
-        $("input[name='"+obj.attr('val')+"[]']").prop('checked',true);
-    }else{
-        $("input[name='"+obj.attr('val')+"[]']").prop('checked',false);
+    if(obj.attr('val') == 'shopdistrict'){
+        if(status){
+            $("input[name='"+obj.attr('val')+"[]']").prop('checked',true);
+        }else{
+            $("input[name='"+obj.attr('val')+"[]']").prop('checked',false);
+        }
+        $("input[name='" + obj.attr('val') + "[]']").each(function(){
+            shopdistrict($(this));
+        });
+    }else {
+        if (status) {
+            $("input[name='" + obj.attr('val') + "[]']").prop('checked', true);
+        } else {
+            $("input[name='" + obj.attr('val') + "[]']").prop('checked', false);
+        }
     }
 }
 

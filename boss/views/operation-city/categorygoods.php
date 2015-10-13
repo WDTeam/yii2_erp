@@ -9,6 +9,6 @@ use boss\components\AreaCascade;
 <?php 
 //    echo '<br><input type="checkbox" val="categorylist" id="alllist">全选';
 ?>
-<div id="goods_<?= $categoryid?>">
+<div id="goods_<?= $categoryid?>" class="goods_list">
     <?php echo Html::radioList('categorygoods', $categorygoodsall, $categorygoods)  ?>
 </div>

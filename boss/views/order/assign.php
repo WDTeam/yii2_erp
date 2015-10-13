@@ -72,9 +72,13 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="panel-body">
                 <table id="worker_list" class="table table-bordered">
-                    <tr><th>阿姨姓名</th><th>阿姨电话</th><th>阿姨身份</th><th>当日订单</th><th>拒单率</th><th>阿姨标签</th><th>接单状态</th><th>操作</th></tr>
-                    <tr><th>近七日平均</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-                    <tr><th>今日</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <thead>
+                        <tr><th>阿姨姓名</th><th>阿姨电话</th><th>阿姨身份</th><th>当日订单</th><th>拒单率</th><th>阿姨标签</th><th>接单状态</th><th>操作</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><th>近七日平均</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr><th>今日</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    </tbody>
                 </table>
             </div>
         </div>

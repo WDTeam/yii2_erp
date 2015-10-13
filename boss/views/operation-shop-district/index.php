@@ -11,6 +11,7 @@ use yii\widgets\Pjax;
 
 $this->title = Yii::t('operation', 'Operation Shop Districts');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Cities'), 'url' => ['operation-city/index']];
+$this->params['breadcrumbs'][] = ['label' => $city_name];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-shop-district-index">
@@ -60,8 +61,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         );
                     },      
                     'listbtn' => function ($url, $model) {
+                        return '';
                         return Html::a('<span class="glyphicon glyphicon-list"></span>',Yii::$app->urlManager->createUrl(['operation-shop-district/goodslist','id' => $model->id]),['title' => Yii::t('yii', '商圈商品列表'), 'class' => 'btn btn-warning btn-sm']);
-                        
                     },
                 ],
             ],
