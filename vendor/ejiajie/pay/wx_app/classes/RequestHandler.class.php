@@ -38,6 +38,7 @@ class RequestHandler {
         $this->tokenUrl		= 'https://api.weixin.qq.com/cgi-bin/token';
         $this->gateUrl		= 'https://api.weixin.qq.com/pay/genprepay';
         $this->notifyUrl	= 'https://gw.tenpay.com/gateway/simpleverifynotifyid.xml';
+        $this->queryUrl	= 'https://api.weixin.qq.com/pay/orderquery';
     }
     /**
      *初始化函数。
@@ -174,11 +175,81 @@ class RequestHandler {
 
         return $prepayid;
     }
+
+    /**
+     * 查询支付结果
+     * @param $Token
+     * @param $out_trade_no 订单号
+     */
+    function orderQuery($Token,$out_trade_no,$partner)
+    {
+        $timestamp = time();
+        $package = $this->makeOrderQueryPackage($out_trade_no,$partner);
+        $data = array(
+            "appid" => $this->app_id,
+            "timestamp" => $timestamp,
+            "sign_method" => "sha1",
+            "package" => $package,
+            "app_signature" => $this->createSHA1Sign(['appid'=>$this->app_id,'appkey'=>$this->app_key,'package'=>$package,'timestamp'=>$timestamp]),
+        );
+
+        $url = $this->queryUrl.'?access_token='.$Token;
+        return $this->httpSend($url,'POST',json_encode($data));
+
+        /**
+         *  查询接口返回记录
+         * ret_code = 0
+         * trade_state = 0
+         * 两个参数返回 0 表示成功
+
+        {
+            "errcode": 0,
+            "errmsg": "ok",
+                "order_info":
+                {
+                    "ret_code": 0,
+                    "ret_msg": "",
+                    "input_charset": "GBK",
+                    "trade_state": "0",
+                    "trade_mode": "1",
+                    "partner": "1217983401",
+                    "bank_type": "",
+                    "bank_billno": "",
+                    "total_fee": "1",   //订单总额(分单位)
+                    "fee_type": "1",
+                    "transaction_id": "1217983401381510128537567810",   //第三方交易流水号
+                    "out_trade_no": "15101258091",  //订单号
+                    "is_split": "false",
+                    "is_refund": "false",
+                    "attach": "",
+                    "time_end": "20151012165432",
+                    "transport_fee": "0",
+                    "product_fee": "1",
+                    "discount": "0",
+                    "rmb_total_fee": ""
+                }
+        }
+         */
+    }
+
+    /**
+     * 查询订单签名
+     * @param $out_trade_no 订单号
+     */
+    function makeOrderQueryPackage($out_trade_no,$partner)
+    {
+        $sign= strtoupper(md5("out_trade_no=$out_trade_no&partner=$partner&key=$this->partner_key"));
+        $package = "out_trade_no=$out_trade_no&partner=$partner&sign=$sign";
+        return $package;
+    }
     /**
      *设置debug信息
      */
     function _setDebugInfo($debugInfo) {
         $this->debugInfo = PHP_EOL.$this->debugInfo.$debugInfo.PHP_EOL;
     }
+
+
+
 }
 ?>
