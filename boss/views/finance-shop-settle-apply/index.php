@@ -52,6 +52,7 @@ $this->params['review_section']=$searchModel->review_section;
                     'agree' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-ok"></span>', Yii::$app->urlManager->createUrl(['/finance-shop-settle-apply/review', 'id' => $model->id,'review_section'=>$this->params['review_section'],'is_ok'=>1]), [
                             'title' => Yii::t('yii', '审核通过'),
+                            'class'=>'agree',
                         ]);
                     },
                     'disagree' => function ($url, $model,$review_section) {
@@ -81,6 +82,22 @@ $this->params['review_section']=$searchModel->review_section;
         ],
 
         ]); Pjax::end(); ?>
+                  <?php 
+            $js=<<<JS
+                    $(".agree").click(
+                        function(){
+                            if(confirm("审核通过该笔结算是吗?")){
+                                return true;
+                            }else{
+                                return false;
+                            }
+                        }
+                    );
+JS;
+        $this->registerJs(
+                $js
+        );
+         ?>
      </div>
 </div>
 </form>
