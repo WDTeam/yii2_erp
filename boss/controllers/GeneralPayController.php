@@ -725,7 +725,66 @@ class GeneralPayController extends Controller
 
     public function actionTest()
     {
-        var_dump($this->modifyRecontiliation(1,2));
+        $wx = new \wxpay_class();
+        $wx->orderQuery();
+
+        exit;
+        /*
+        include_once("WxPayHelper.php");
+
+        //1. 获取access token
+        $appid = "wx0000000000000000";
+        $appsecret = "e76050733ce76050733ce76050733cdd";
+        $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=$appid&secret=$appsecret";
+        $result = https_request($url);
+        $jsoninfo = json_decode($result, true);
+        $access_token = $jsoninfo["access_token"];
+
+
+        //2.准备参数
+        $timestamp = time();
+        $sign= strtoupper(md5("out_trade_no=JfuKdiBig4zZnE4n&partner=1234567890&key=asdfasdfasdfasdfasdfasdfasdfasdf"));
+        $package = "out_trade_no=JfuKdiBig4zZnE4n&partner=1234567890&sign=".$sign;
+
+        //2.1构造最麻烦的app_signature
+        $obj['appid']          = "wx0000000000000000";
+        $obj['appkey']         = "8mruTNOGeX8OVUlIYxIyw6kxCRvdJENpWpw8mruTNOGeX8OVUlIYxIyw6kxCRvdJENpWpw8mruTNOGeX8OVUlIYxIyw6kxCRvdJENpWpw8mruTNOGeX8OVUlIYxIyw6k";
+        $obj['package']        = $package;
+        $obj['timestamp']      = $timestamp;
+        $WxPayHelper = new WxPayHelper();
+        //get_biz_sign函数受保护，需要先取消一下，否则会报错
+        $app_signature  = $WxPayHelper->get_biz_sign($obj);
+
+        //3. 将构造的json提交给微信服务器，查询
+        $jsonmenu = '
+        {
+         "appid" : "wx0000000000000000",
+         "package" : "'.$package.'",
+         "timestamp" : "'.$timestamp.'",
+         "app_signature" : "'.$app_signature.'",
+         "sign_method" : "sha1"
+        }
+        ';
+
+        $url = "https://api.weixin.qq.com/pay/orderquery?access_token=".$access_token;
+        $result = https_request($url, $jsonmenu);
+        var_dump($result);
+        */
+    }
+
+    function https_request($url, $data = null){
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        if (!empty($data)){
+            curl_setopt($curl, CURLOPT_POST, 1);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        }
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $output = curl_exec($curl);
+        curl_close($curl);
+        return $output;
     }
 
 }
