@@ -30,9 +30,29 @@ class SMSController extends Controller
      *
      * @apiSampleRequest http://test.web.1jiajie.com/mobileapinew8/packageSmsSendSms?platform_version=apitest&tel=15011152243&msg%5BtempId%5D=1
      */
-    public function acionSend()
+    public function actionSendV()
     {
-        echo 'mobileapinew8/packageSmsSendSms';
+        if ($content)
+        {
+            $id = $content['id'];
+            $token = Yii::$app->cache->get($id);
+            if ($token == false)
+            {
+                $token = base64_encode($id.time());
+                Yii::$app->cache->set($id, $token, Yii::$app->params['cacheExpiration']);
+                Yii::$app->cache->set($token, $id, Yii::$app->params['cacheExpiration']);
+            }
+            $ret = [
+                "user" => $content,
+                "access_token" => $token
+            ];
+
+            return $this->send($ret,"登陆成功");
+        }
+        else
+        {
+            return $this->send(null,"用户名或验证码错误","error");
+        }
     }
     
     /**
