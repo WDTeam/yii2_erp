@@ -31,7 +31,6 @@ class FinanceRecordLog extends \yii\db\ActiveRecord
 	public $not_dispose_sum;
 			
 			
-			
     /**
      * @inheritdoc
      */

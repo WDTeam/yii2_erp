@@ -3,7 +3,7 @@
 namespace common\models;
 
 use Yii;
-
+use yii\helpers\ArrayHelper;
 /**
  * This is the model class for table "{{%finance_header}}".
  *
@@ -18,13 +18,9 @@ use Yii;
  */
 class FinanceHeader extends \yii\db\ActiveRecord
 {
-	
-	
-	
 	public $finance_uplod_url;
-	
 	public $select_where;
-	
+	public $finance_header_where_es;
 	
 	public static function selectname($wherename)
 	{
@@ -82,6 +78,7 @@ class FinanceHeader extends \yii\db\ActiveRecord
         ];
     }
 
+
     /**
      * @inheritdoc
      */
@@ -97,7 +94,8 @@ class FinanceHeader extends \yii\db\ActiveRecord
             'finance_order_channel_name' => Yii::t('boss', '订单渠道名称'),
             'finance_pay_channel_id' => Yii::t('boss', '支付渠道id'),
             'finance_pay_channel_name' => Yii::t('boss', '支付渠道名称'),
-'create_time' => Yii::t('boss', '创建时间'),
+			'create_time' => Yii::t('boss', '创建时间'),
+			'finance_header_where_es' => Yii::t('boss', '表达式'),
 			'is_del' => Yii::t('boss', '0 正常 1 删除'),
 			
         ];

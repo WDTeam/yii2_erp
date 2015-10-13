@@ -5,7 +5,7 @@ use Yii;
 use yii\filters\AccessControl;
 use boss\models\LoginForm;
 use yii\filters\VerbFilter;
-use yii\base\Controller;
+use yii\web\Controller;
 
 /**
  * Site controller
