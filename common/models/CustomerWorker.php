@@ -31,8 +31,8 @@ class CustomerWorker extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'woker_id', 'customer_worker_status', 'created_at', 'updated_at'], 'required'],
-            [['customer_id', 'woker_id', 'customer_worker_status', 'created_at', 'updated_at', 'is_del'], 'integer']
+            [['customer_id', 'worker_id', 'customer_worker_status', 'created_at', 'updated_at'], 'required'],
+            [['customer_id', 'worker_id', 'customer_worker_status', 'created_at', 'updated_at', 'is_del'], 'integer']
         ];
     }
 
@@ -44,7 +44,7 @@ class CustomerWorker extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('boss', '主键'),
             'customer_id' => Yii::t('boss', '关联用户'),
-            'woker_id' => Yii::t('boss', '关联阿姨'),
+            'worker_id' => Yii::t('boss', '关联阿姨'),
             'customer_worker_status' => Yii::t('boss', '阿姨类型1为默认阿姨，-1为非默认阿姨'),
             'created_at' => Yii::t('boss', '创建时间'),
             'updated_at' => Yii::t('boss', '更新时间'),
