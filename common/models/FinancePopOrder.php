@@ -42,7 +42,7 @@ class FinancePopOrder extends \yii\db\ActiveRecord
 	public $finance_uplod_url;
 	
 	public $finance_pop_order_info_msg;
-	
+	public $finance_pop_order_no;
 
     /**
      * @inheritdoc
@@ -91,6 +91,7 @@ class FinancePopOrder extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', '主键id'),
+            'finance_pop_order_no' => Yii::t('app', '标记坏账'),
             'finance_uplod_url' => Yii::t('app', '请上传对账单'),
             'finance_record_log_id' => Yii::t('app', '账期id'),
             'finance_pop_order_number' => Yii::t('app', '第三方订单号'),
