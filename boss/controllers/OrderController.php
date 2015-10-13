@@ -23,7 +23,6 @@ class OrderController extends BaseAuthController
         Yii::$app->response->format = Response::FORMAT_JSON;
         return Customer::getCustomerInfo($phone);
 
-//        return '{"id":1,"customer_balance":"1000"}';
     }
 
     public function actionCustomerAddress($id)
@@ -118,19 +117,32 @@ class OrderController extends BaseAuthController
     public function actionGetCanAssignWorkerList()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-//       return OrderSearch::getListByWorkerId('53',1444791600);
-        $address_id =  Yii::$app->request->get('address_id');
-        $booked_begin_time =  Yii::$app->request->get('booked_begin_time');
-//        $address = CustomerAddress::getAddress($address_id);
+        $order_id =  Yii::$app->request->get('order_id');
+        $order = Order::findOne($order_id);
+//        $address = CustomerAddress::getAddress($order->address_id);
         //TODO 根据地址经纬度获取商圈
         $shangquan = 1;
         //根据商圈获取阿姨列表 第二个参数 1自有 2非自有
-        $workerList = array_merge(Worker::getDistrictFreeWorker($shangquan,1),Worker::getDistrictFreeWorker($shangquan,2));
-        foreach($workerList as $k=>$v) {
-            $workerList[$k]['orders'] = OrderSearch::getListByWorkerId($v['id'],$booked_begin_time);
+        $used_worker_list = Customer::getCustomerUsedWorkers($order->orderExtCustomer->customer_id);
+        $used_worker_ids = [];
+        foreach($used_worker_list as $v){
+            $used_worker_ids[] = $v['worker_id'];
         }
-
-        return $workerList;
+        $worker_list = array_merge(Worker::getDistrictFreeWorker($shangquan,1,$order->order_booked_begin_time,$order->order_booked_end_time),Worker::getDistrictFreeWorker($shangquan,2,$order->order_booked_begin_time,$order->order_booked_end_time));
+        $worker_ids = [];
+        $workers = [];
+        foreach($worker_list as $k=>$v) {
+            $worker_ids[] = $v['id'];
+            $workers[$v['id']] = $worker_list[$k];
+            $workers[$v['id']]['tag'] = in_array($v['id'],$used_worker_ids)?'服务过':"";
+            $workers[$v['id']]['tag'] = ($v['id']==$order->order_booked_worker_id)?'指定阿姨': $workers[$v['id']]['tag'];
+            $workers[$v['id']]['order_booked_time_range']=[];
+        }
+        $worker_orders = OrderSearch::getListByWorkerIds( $worker_ids,$order->order_booked_begin_time);
+        foreach($worker_orders as $v){
+            $workers[$v->orderExtWorker->worker_id]['order_booked_time_range'][] = date('H:i',$v->order_booked_begin_time).'-'.date('H:i',$v->order_booked_end_time);
+        }
+        return $workers;
 
     }
 
@@ -213,6 +225,12 @@ class OrderController extends BaseAuthController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $order_id =  Yii::$app->request->get('order_id');
         return Order::manualAssignUndone($order_id,Yii::$app->user->id,true);
+    }
+
+
+    public function actionCreateOrderWorkerRelation()
+    {
+
     }
 
 
