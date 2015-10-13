@@ -296,3 +296,11 @@ label.uploadMsg {
 	line-height: 36px;
 	font-weight: 100;
 }
+
+.div-inline{
+	display: inline-block;
+	width: 30px;
+}
+.not-bold label {
+	font-weight: 100;
+}

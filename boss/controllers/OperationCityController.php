@@ -286,7 +286,7 @@ class OperationCityController extends BaseAuthController
                 /** 开通城市 **/
                 OperationCity::setoperation_city_is_online($city_id);
             }
-            return $this->redirect(['index']);
+            return $this->redirect(['opencity']);
         }
     }
 

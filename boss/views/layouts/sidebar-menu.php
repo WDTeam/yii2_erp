@@ -210,14 +210,14 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                         
                     ],
+//                    [
+//                        'label' => '上线城市(80%)',
+//                        'url' => ['/operation-city/release'],
+//                        'icon' => 'fa fa-angle-right',
+//                        'visible' => (Yii::$app->user->identity->username == 'admin'),
+//                    ],
                     [
-                        'label' => '上线城市(80%)',
-                        'url' => ['/operation-city/release'],
-                        'icon' => 'fa fa-angle-right',
-                        'visible' => (Yii::$app->user->identity->username == 'admin'),
-                    ],
-                    [
-                        'label' => '开通城市管理',
+                        'label' => '已开通城市管理',
                         'url' => ['/operation-city/opencity'],
                         'icon' => 'fa fa-angle-right',
                     ],
