@@ -85,7 +85,8 @@ class wxrefund_class{
             //设置结果参数
             $resHandler->setContent($httpClient->getResContent());
             $resHandler->setKey($key);
-
+            dump($resHandler->getAllParameters());
+            exit;
             //判断签名及结果
             //只有签名正确并且retcode为0才是请求成功
             if($resHandler->isTenpaySign() && $resHandler->getParameter("retcode") == "0" ) {

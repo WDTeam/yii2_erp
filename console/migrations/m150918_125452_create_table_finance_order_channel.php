@@ -43,9 +43,11 @@ class m150918_125452_create_table_finance_order_channel extends Migration
              INSERT INTO {{%finance_order_channel}} VALUES ('13', '5', '支付宝服务窗', 13, 1, 0, '0');
              INSERT INTO {{%finance_order_channel}} VALUES ('14', '6', '淘宝店（dudujiaoche）', 14, 1, 0, '0');
              INSERT INTO {{%finance_order_channel}} VALUES ('15', '7', '淘宝店（e家洁家政公司）', 15, 1, 0, '0');
-             INSERT INTO {{%finance_order_channel}} VALUES ('16', '8', '百度闭环（3600行）', null, 16, 1, 0, '0');
+             INSERT INTO {{%finance_order_channel}} VALUES ('16', '8', '百度闭环（3600行）', 16, 1, 0, '0');
              INSERT INTO {{%finance_order_channel}} VALUES ('17', '8', '百度订单分发（手机百度）', 17, 1, 0, '0');
-             INSERT INTO {{%finance_order_channel}} VALUES ('18', '9', 'APP到位', 18, 1, 0, '0');"
+             INSERT INTO {{%finance_order_channel}} VALUES ('18', '9', 'APP到位', 18, 1, 0, '0');
+             INSERT INTO {{%finance_order_channel}} VALUES ('19', '1', '美团团购', 19, 1, 0, '0');
+             INSERT INTO {{%finance_order_channel}} VALUES ('20', '14', '后台下单', 20, 1, 0, '0');"
         );
     }
 
