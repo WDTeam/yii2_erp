@@ -6,6 +6,7 @@ use boss\models\Operation\OperationArea;
 use yii\base\Object;
 use boss\models\ShopStatus;
 use crazyfd\qiniu\Qiniu;
+use boss\behaviors\ShopStatusBehavior;
 class ShopManager extends \common\models\ShopManager
 {
     /**
@@ -44,6 +45,10 @@ class ShopManager extends \common\models\ShopManager
                 'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => 'updated_at',
             ],
+            [
+                'class'=>ShopStatusBehavior::className(),
+                'model_name'=>ShopStatus::MODEL_SHOPMANAGER
+            ]
         ];
     }
     /**
@@ -52,17 +57,9 @@ class ShopManager extends \common\models\ShopManager
     public function rules()
     {
         return array_merge(parent::rules(),[
-            [['name', 'street', 'principal', 'tel'], 'required'],
-            [['province_id', 'city_id', 'county_id', 'bl_type', 'bl_create_time',
-                'bl_audit', 'bl_expiry_start', 'bl_expiry_end', 'created_at',
-                'updated_at', 'is_blacklist', 'blacklist_time', 'audit_status',
-                'shop_count', 'worker_count', 'complain_coutn', 'tel'], 'integer'],
-            [['bl_business'], 'string'],
-            [['name', 'street', 'opening_address', 'bl_name', 'bl_address', 'bl_photo_url'], 'string', 'max' => 255],
-            [['principal', 'tel', 'bankcard_number', 'bl_person', 'level'], 'string', 'max' => 50],
-            [['other_contact', 'opening_bank', 'sub_branch', 'bl_number'], 'string', 'max' => 200],
-            [['account_person'], 'string', 'max' => 100],
-            [['shop_count', 'worker_count', 'complain_coutn', 'audit_status'],'default','value'=>0],
+            [['name', 'street', 'principal', 'tel', 
+            'bl_name', 'bl_type', 'bl_number', 'bl_person', 'bl_address', 'bl_audit'
+            ], 'required'],
         ]);
     }
     /**
@@ -106,6 +103,13 @@ class ShopManager extends \common\models\ShopManager
     public static function getIsBlacklistCount()
     {
         return (int)self::find()->where(['is_blacklist'=>1])->scalar();
+    }
+    /**
+     * 获取记录总数
+     */
+    public static function getTotal()
+    {
+        return (int)self::find()->where('isdel is null or isdel=0')->scalar();
     }
     /**
      * 获取地址全称,直辖市不需要显示省字段

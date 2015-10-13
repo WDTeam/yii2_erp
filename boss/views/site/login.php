@@ -2,6 +2,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use boss\assets\AppAsset;
+
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model \common\models\LoginForm */
@@ -9,51 +10,59 @@ use boss\assets\AppAsset;
 $this->title = Yii::t('app', 'Login');
 $this->params['breadcrumbs'][] = $this->title;
 AppAsset::register($this);
-//只在该视图中使用非全局的jui
-AppAsset::addScript($this,'adminlte/js/plugins/login/plugin.js');
-AppAsset::addCss($this,'adminlte/css/login/lrtk.css');
+//只锟节革拷锟斤拷图锟斤拷使锟矫凤拷全锟街碉拷jui
+AppAsset::addScript($this, 'adminlte/js/plugins/login/plugin.js');
+AppAsset::addCss($this, 'adminlte/css/login/lrtk.css');
 
 ?>
-<style>
-    html,body{
-        font-family: "Microsoft YaHei","STheiti";
-        overflow: hidden;
-    }
-</style>
 
-    <div class="container-fluid text-center">
-        <div class="warp">
-            <div class="loginlogo" style="text-align:left;"><img src="../../adminlte/img/login/logo.png"> <span><a href="###"><?php echo Html::encode(Yii::t('app', 'help')); ?></a></span></div>
-            <h1><span><?php echo Html::encode(Yii::t('app', 'begin_New_Work')); ?></span></h1>
-            <div class="toumin"></div>
-            <div class="login">
-                <ul id="list">
+<?php $form = ActiveForm::begin(); ?>
 
-                    <li><h3><?php echo Html::encode($this->title); ?></h3></li>
-                    <?php $form = ActiveForm::begin(); ?>
-                    <li><?= $form->field($model, 'username')->textInput(['placeholder' => $model->getAttributeLabel('username'),
-                            'class'=>'account'])->label(false) ?>
-                    </li>
+<div class="container-fluid text-center">
+    <div class="warp">
+        <div class="header">
+            <div class="loginlogo" style="text-align:left;"><img src="../../adminlte/img/login/logo.png"> <span><a
+                        href="###"><?php echo Html::encode(Yii::t('app', 'help')); ?></a></span></div>
+        </div>
+        <div class="login-content">
+            <div class="middle">
+                <div class="bgimg"><img src="../../adminlte/img/login/banner_730_380.png"></div>
 
-                    <li>
-                        <?= $form->field($model, 'password')->passwordInput(['placeholder' => $model->getAttributeLabel('password'),
-                            'class'=>'password'])->label(false) ?>
-                    </li>
+                <!--<div class="toumin"></div>-->
+                <div class="login">
+                    <ul id="list">
 
-                    <li>
-                        <?= Html::submitButton(Yii::t('app', 'Login'), ['class'=>'btnlogin']) ?>
-                    </li>
-                    <li>
-                        <p><i class="ckb" name="$model[rememberMe]"><?php echo Html::encode($model->getAttributeLabel('rememberMe')); ?></i> </p>
-                        <span><a href="###"><?php echo Html::encode(Yii::t('app', 'forget_pwd')); ?></a></span>
-                    </li>
-                </ul>
+                        <li><h3><?php echo Html::encode($this->title); ?></h3></li>
+
+                        <li><?= $form->field($model, 'username')->textInput(['placeholder' => $model->getAttributeLabel('username'),
+                                'class' => 'account'])->label(false) ?>
+                        </li>
+
+                        <li>
+                            <?= $form->field($model, 'password')->passwordInput(['placeholder' => $model->getAttributeLabel('password'),
+                                'class' => 'password'])->label(false) ?>
+                        </li>
+
+                        <li>
+                            <?= Html::submitButton(Yii::t('app', 'Login'), ['class' => 'btnlogin']) ?>
+                        </li>
+                        <li>
+                            <p class="ickb"><i class="ckb"
+                                               name="$model[rememberMe]"></i> <?php echo Html::encode($model->getAttributeLabel('rememberMe')); ?>
+                            </p>
+                            <span><a href="###"><?php echo Html::encode(Yii::t('app', 'forget_pwd')); ?></a></span>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-        <div class="header">
-            <img class="headerImg" src="../../adminlte/img/login/back_img4.jpg"
-                 data-slideshow='../../adminlte/img/login/back_img1.jpg|../../adminlte/img/login/back_img2.jpg|../../adminlte/img/login/back_img3.jpg|../../adminlte/img/login/back_img.jpg'>
+
+        <div class="footer">
+            Copyright 漏 2015 e瀹舵磥.
+            All rights reserved. v1.0.0
         </div>
     </div>
+
+</div>
 <?php ActiveForm::end(); ?>
 

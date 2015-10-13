@@ -106,4 +106,5 @@ class GeneralPay extends \yii\db\ActiveRecord
     {
         return GeneralPay::find()->select($fileds)->where($condition)->asArray()->one();
     }
+
 }

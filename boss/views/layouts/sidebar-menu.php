@@ -47,11 +47,6 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '查看所有自营门店(100%)',
-                        'url' => ['shop/index', 'ShopSearch'=>['shop_manager_id'=>1]],
-                        'icon' => 'fa fa-angle-right',
-                    ],
-                    [
                         'label' => '添加新门店(100%)',
                         'url' => ['shop/create'],
                         'icon' => 'fa fa-angle-right',

@@ -2,9 +2,6 @@
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
-/* use yii\widgets\Pjax;
-use kartik\nav\NavX;
-use yii\bootstrap\NavBar; */
 use boss\models\FinancePopOrderSearch;
 use yii\widgets\ActiveForm;
 
@@ -17,7 +14,6 @@ use yii\widgets\ActiveForm;
 
 $this->title = Yii::t('app', '对账管理');
 $this->params['breadcrumbs'][] = $this->title;
-
 ?>
 <div class="finance-pop-order-index hideTemp">
       <div class="panel panel-info">
@@ -66,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'format' => 'raw',
             'label' => '阿姨姓名',
             'value' => function ($dataProvider) {
-            	return $dataProvider->finance_pop_order_worker_uid ? $dataProvider->finance_pop_order_worker_uid  : '未知';
+            	return  FinancePopOrderSearch::Workerinfo($dataProvider->finance_pop_order_worker_uid,'worker_name');
             },
             'width' => "100px",
             ],
@@ -98,8 +94,17 @@ $this->params['breadcrumbs'][] = $this->title;
            'finance_pop_order_reality_pay', 
 //            'finance_pop_order_order_time:datetime', 
 //            'finance_pop_order_pay_time:datetime', 
-//            'finance_pop_order_pay_status', 
-            'finance_pop_order_pay_title', 
+            //'finance_pop_order_pay_status', 
+            [
+            'format' => 'raw',
+            'label' => '对账状态',
+            'value' => function ($dataProvider) {
+            	$platform = FinancePopOrderSearch::is_orderstatus($dataProvider->finance_pop_order_pay_status_type);
+            	return $platform;
+            },
+            'width' => "100px",
+            ],
+            //'finance_pop_order_pay_title', 
 //            'finance_pop_order_check_id', 
 //            'finance_pop_order_finance_time:datetime', 
 //            'create_time:datetime', 
@@ -107,13 +112,22 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' =>'{view}',
+                'template' =>'{view} {tagssign}',
                 'buttons' => [
                 'update' => function ($url, $model) {
                                     return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance-pop-order/view','id' => $model->id,'edit'=>'t']), [
                                                     'title' => Yii::t('yii', 'Edit'),
-                                                  ]);}
-
+                                                  ]);},
+                'tagssign' => function ($url, $model, $key) {
+                    $options = [
+                        'title' => Yii::t('yii', '标记坏账'),
+                        'aria-label' => Yii::t('yii', '标记坏账'),
+                        'data-confirm' => Yii::t('kvgrid', '你确定标记为坏账吗?'),
+                        'data-method' => 'post',
+                        'data-pjax' => '0'
+                    ];
+                    return Html::a('<span class="glyphicon glyphicon-tags"></span>', Yii::$app->urlManager->createUrl(['finance-pop-order/tagssign','id' => $model->id,'edit'=>'bak','oid'=>$model->finance_record_log_id]), $options);
+                }
                 ],
             ],
         ],

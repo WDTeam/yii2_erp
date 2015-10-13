@@ -119,8 +119,8 @@ class FinancePopOrderController extends Controller
     			$statusinfo=$model->PopOrderstatus($alinfo,$value,$channelid);
     			$postdate['finance_record_log_id'] =$lastidRecordLog;
     			$postdate['finance_pop_order_number'] =$statusinfo['order_channel_order_num'];
-    			$postdate['finance_order_channel_id'] =$statusinfo['channel_id'];
-    			$postdate['finance_order_channel_title'] =$statusinfo['order_channel_name'];
+    			$postdate['finance_order_channel_id'] =$channelid;
+    			$postdate['finance_order_channel_title'] =FinanceOrderChannel::getOrderChannelByName($channelid);
     			$postdate['finance_pay_channel_id'] =$statusinfo['pay_channel_id'];
     			$postdate['finance_pay_channel_title'] =$statusinfo['order_pay_channel_name'];
     			$postdate['finance_pop_order_customer_tel'] =$statusinfo['order_customer_phone'];
@@ -143,15 +143,7 @@ class FinancePopOrderController extends Controller
     			
     			$postdate['finance_pop_order_finance_isok'] =0;
     			$postdate['finance_pop_order_discount_pay'] =$statusinfo['order_use_coupon_money'];
-    			
-    			
-    			
-    			
     			$postdate['finance_pop_order_reality_pay'] =$statusinfo['order_pay_money'];
-    			
-    			
-    			
-    			
     			$postdate['finance_pop_order_order_time'] =$statusinfo['created_at'];
     			$postdate['finance_pop_order_pay_time'] =$statusinfo['created_at'];
     			$postdate['finance_pop_order_pay_status'] =0;//财务确定处理按钮状态
@@ -213,6 +205,9 @@ class FinancePopOrderController extends Controller
     		$customer_info->finance_record_log_confirm_name =Yii::$app->user->identity->username;
     		//服务费
     		$customer_info->finance_record_log_fee = 0;
+    		
+    		$customer_info->finance_record_log_statime =strtotime($post['FinancePopOrderSearch']['finance_order_channel_statuspayment']);
+    		$customer_info->finance_record_log_endtime =strtotime($post['FinancePopOrderSearch']['finance_order_channel_endpayment']);
     		$customer_info->create_time= time();
     		$customer_info->is_del=0;
     		$customer_info->save();
@@ -322,8 +317,7 @@ class FinancePopOrderController extends Controller
     **/
     
     public function actionGeneralpaylist()
-    {
-    	 
+    { 
     	//输出部分
     	$ordedata= new FinanceOrderChannel;
     	$ordewhere['is_del']=0;
@@ -364,15 +358,24 @@ class FinancePopOrderController extends Controller
     	}
     	
     	$tyu= array_combine($tyd,$tydtui);
+    	
     	$searchModel = new FinancePopOrderSearch;
 
-    	$defaultParams = array('FinancePopOrderSearch'=>['finance_pop_order_pay_status_type' => '4']);
-    	$requestParams = Yii::$app->request->getQueryParams();
+    	
+ /*    	$requestParams = Yii::$app->request->getQueryParams();
     	if(isset($requestParams['FinancePopOrderSearch'])){
     		$requestModel = $requestParams['FinancePopOrderSearch'];
     	}
     	$requestParams = array_merge($defaultParams,$requestParams);
-    	$dataProvider = $searchModel->search($requestParams);
+    	
+    	var_dump($requestParams);exit; */
+
+    	$searchModel->load(Yii::$app->request->getQueryParams());
+    	$searchModel->is_del=0;
+    	$searchModel->finance_pop_order_pay_status=3;
+    	$dataProvider = $searchModel->search();
+    	
+    	
     	//$dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
     	return $this->render('bad', [
     			'dataProvider' => $dataProvider,
@@ -402,6 +405,32 @@ class FinancePopOrderController extends Controller
 		 return $this->redirect(['index']);
     }
     
+    
+    /**
+    * 标记为坏账
+    * @date: 2015-10-13
+    * @author: peak pan
+    * @return:
+    **/
+    public function actionTagssign()
+    {
+    	$searchModel = new FinancePopOrderSearch;
+    	$requestModel = Yii::$app->request->get();
+    		$model=$searchModel::findOne($requestModel['id']);
+    		if($requestModel['edit']=='bak'){
+    	    //坏账还原
+    		$model->finance_pop_order_pay_status='0';
+    		}elseif($requestModel['edit']=='bakinfo'){
+    		//回滚财务审核	
+    		$model->finance_pop_order_pay_status='0';
+    		}else{	
+    		$model->finance_pop_order_pay_status='3';
+    		}
+    		$model->save();
+    		return $this->redirect(['index', 'id' =>$requestModel['oid']]);
+    }
+      
+
    /**
    * 我们有第三方没有财务批量处理到订单表控制器
    * @date: 2015-10-9

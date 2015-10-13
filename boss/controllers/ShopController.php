@@ -148,6 +148,7 @@ class ShopController extends BaseAuthController
         if(\Yii::$app->request->isPost){
             $cause = Yii::$app->request->post('cause','');
             $model->joinBlacklist($cause);
+            \Yii::$app->session->setFlash('default', '添加成功');
             return $this->redirect(['index']);
         }
         return $this->renderPartial('join_blacklist',[
@@ -162,6 +163,7 @@ class ShopController extends BaseAuthController
     {
         $cause = Yii::$app->request->get('cause','');
         $this->findModel($id)->removeBlacklist($cause);
+        \Yii::$app->session->setFlash('default', '取消成功');
     
         return $this->redirect(['index']);
     }

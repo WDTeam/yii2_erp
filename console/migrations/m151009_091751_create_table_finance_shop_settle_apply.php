@@ -38,10 +38,37 @@ class m151009_091751_create_table_finance_shop_settle_apply extends Migration
                 'finance_shop_settle_apply_starttime','finance_shop_settle_apply_endtime',
                 'isdel','updated_at','created_at'],
             [
-                [1,111,'爱佳家政北京双井店',2,'爱佳家政',6,10,60,0,1,'周结','魏北南',
+                [1,111,'爱佳家政北京沙河店',2,'爱佳家政',6,10,60,0,1,'周结','',
 
                     strtotime('-1 week last monday'),strtotime('last sunday'),0,time(),time()],
-                [2,222,'爱佳家政北京望京店',2,'爱佳家政',6,10,60,0,1,'周结','魏北南',
+                [2,222,'爱佳家政北京望京店',2,'爱佳家政',6,10,60,0,1,'周结','',
+
+                    strtotime('-1 week last monday'),strtotime('last sunday'),0,time(),time()],
+                [3,222,'爱佳家政北京西二旗店',2,'爱佳家政',6,10,60,0,1,'周结','',
+
+                    strtotime('-1 week last monday'),strtotime('last sunday'),0,time(),time()],
+                [4,222,'爱佳家政北京东直门店',2,'爱佳家政',6,10,60,0,1,'周结','',
+
+                    strtotime('-1 week last monday'),strtotime('last sunday'),0,time(),time()],
+                [5,222,'爱佳家政北京顺义店',2,'爱佳家政',6,10,60,0,1,'周结','',
+
+                    strtotime('-1 week last monday'),strtotime('last sunday'),0,time(),time()],
+                [6,222,'爱佳家政北京门头沟店',2,'爱佳家政',6,10,60,0,1,'周结','',
+
+                    strtotime('-1 week last monday'),strtotime('last sunday'),0,time(),time()],
+                [7,222,'爱佳家政北京亦庄店',2,'爱佳家政',6,10,60,0,1,'周结','',
+
+                    strtotime('-1 week last monday'),strtotime('last sunday'),0,time(),time()],
+                [8,222,'爱佳家政北京通州店',2,'爱佳家政',6,10,60,0,1,'周结','',
+
+                    strtotime('-1 week last monday'),strtotime('last sunday'),0,time(),time()],
+                [9,222,'爱佳家政北京五道口店',2,'爱佳家政',6,10,60,0,1,'周结','',
+
+                    strtotime('-1 week last monday'),strtotime('last sunday'),0,time(),time()],
+                [10,222,'爱佳家政北京北苑店',2,'爱佳家政',6,10,60,0,1,'周结','',
+
+                    strtotime('-1 week last monday'),strtotime('last sunday'),0,time(),time()],
+                [11,222,'爱佳家政北京双井店',2,'爱佳家政',6,10,60,0,1,'周结','',
 
                     strtotime('-1 week last monday'),strtotime('last sunday'),0,time(),time()],
             ]);

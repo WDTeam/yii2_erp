@@ -72,13 +72,45 @@ function getWaitManualAssignOrder(){
                 window.work_status = 3;
                 $('#work_status').text('忙碌');
                 window.order_data = data;
+                getCanAssignWorkerList();
                 showOrder();
                 $("#work_console").hide();
                 $("#order_assign").show();
             }else{
-                setTimeout(getWaitManualAssignOrder,1000);
+                setTimeout(getWaitManualAssignOrder,3000);
+            }
+        },
+        error: function($msg){
+            setTimeout(getWaitManualAssignOrder,10000);
+        }
+    });
+}
+
+function getCanAssignWorkerList(){
+    $.ajax({
+        type: "GET",
+        url: "/order/get-can-assign-worker-list?address_id="+window.order_data.order.address_id+'&booked_begin_time='+window.order_data.order.order_booked_begin_time,
+        dataType:"json",
+        success: function (data) {
+            if(data){
+                $("#worker_list tbody").html('');
+                for(var k in data){
+                    var v = data[k];
+                    $("#worker_list tbody").append('<tr>'+
+                    '<td><a href="/worker/view/'+ v.id+'" target="_blank">'+ v.worker_name+'</a></td>'+
+                    '<td>'+ v.worker_phone+'</td>'+
+                    '<td>'+ v.shop_name+'</td>'+
+                    '<td>'+ v.worker_rule_description+'</td>'+
+                    '<td>'+ v.orders+'</td>'+
+                    '<td>'+ v.worker_stat_order_refuse_percent+'</td>'+
+                    '<td></td>'+
+                    '<td></td>'+
+                    '<td><a href="javascript:void(0);" class="worker_contacted" >已联系</a></td>'+
+                    '</tr>');
+                }
             }
         }
+
     });
 }
 
