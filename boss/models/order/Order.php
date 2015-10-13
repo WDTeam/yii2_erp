@@ -74,21 +74,22 @@ class Order extends OrderModel
             switch($post['Order']['order_pay_type']){
                 case self::ORDER_PAY_TYPE_OFF_LINE://现金支付
                         //交易记录
-                        $post['Order']['general_pay_money'] = $post['Order']['order_money'];
+                        $post['Order']['customer_trans_record_cash'] = $post['Order']['order_money'];
                         $post['Order']['general_pay_source'] = 20;
                         CustomerTransRecord::analysisRecord($post['Order']);
+
                         return OrderPay::isPaymentOffLine($this->id,$post['Order']['admin_id']);
                     break;
                 case self::ORDER_PAY_TYPE_ON_LINE://线上支付
                         //TODO 调胜强的接口
                         //交易记录
-                        $post['Order']['general_pay_money'] = $post['Order']['order_use_acc_balance'];
+                        $post['Order']['customer_trans_record_online_balance_pay'] = $post['Order']['order_use_acc_balance'];
                         $post['Order']['general_pay_source'] = 20;
                         return CustomerTransRecord::analysisRecord($post['Order']);
                     break;
                 case self::ORDER_PAY_TYPE_POP://第三方预付
                         //交易记录
-                        $post['Order']['general_pay_money'] = $post['Order']['order_pop_order_money'];
+                        $post['Order']['customer_trans_record_pre_pay'] = $post['Order']['order_pop_order_money'];
                         $post['Order']['general_pay_source'] = $post['Order']['channel_id'];
                         return CustomerTransRecord::analysisRecord($post['Order']);
                     break;

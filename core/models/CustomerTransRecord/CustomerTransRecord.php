@@ -69,12 +69,12 @@ class CustomerTransRecord extends \common\models\CustomerTransRecord
             $data['customer_trans_record_online_balance_pay'] = $orderInfo->orderExtPay->order_use_acc_balance;  //余额支付
             $data['customer_trans_record_order_total_money'] = $orderInfo->order_money;  //订单总额
             $data['order_pop_order_money'] = $orderInfo->orderExtPop->order_pop_order_money;  //预付费
-            $data['customer_trans_record_cash'] = $orderInfo->orderExtPay->order_pay_type == 1 ? $orderInfo->order_money : 0;  //现金支付
 
-            $data['customer_trans_record_online_pay'] = $data['general_pay_money'];  //在线支付
-
+            $data['customer_trans_record_online_pay'] = !empty($data['customer_trans_record_online_pay']) ? $data['customer_trans_record_online_pay'] : 0;  //在线支付
+            $data['customer_trans_record_pre_pay'] = !empty($data['customer_trans_record_pre_pay']) ? $data['customer_trans_record_pre_pay'] : 0;  //预付费
+            $data['customer_trans_record_cash'] = !empty($data['customer_trans_record_cash']) ? $data['customer_trans_record_cash'] : 0;
             $data['customer_trans_record_mode'] = 1; //交易方式:1消费,2=充值,3=退款,4=补偿
-
+            //dump($data);exit;
 
             //服务卡 or 余额 + 在线 + 优惠券
             if( (!empty($data['customer_trans_record_online_service_card_on']) || $data['customer_trans_record_online_balance_pay'] > 0) && $data['customer_trans_record_online_pay'] > 0 )
