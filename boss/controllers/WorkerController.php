@@ -225,10 +225,10 @@ class WorkerController extends BaseAuthController
         if($postParam){
             foreach($workerIdsArr as $workerId){
                 $workerVacationModel = new WorkerVacation();
-                $workerVacationModel->worker_vacation_start_time = strtotime($vacationParam['WorkerVacation']['worker_vacation_start_time']);
-                $workerVacationModel->worker_vacation_finish_time = strtotime($vacationParam['WorkerVacation']['worker_vacation_finish_time']);
-                $workerVacationModel->worker_vacation_type = intval($vacationParam['WorkerVacation']['worker_vacation_type']);
-                $workerVacationModel->worker_vacation_extend = trim($vacationParam['WorkerVacation']['worker_vacation_extend']);
+                $workerVacationModel->worker_vacation_start_time = strtotime($postParam['WorkerVacation']['worker_vacation_start_time']);
+                $workerVacationModel->worker_vacation_finish_time = strtotime($postParam['WorkerVacation']['worker_vacation_finish_time']);
+                $workerVacationModel->worker_vacation_type = intval($postParam['WorkerVacation']['worker_vacation_type']);
+                $workerVacationModel->worker_vacation_extend = trim($postParam['WorkerVacation']['worker_vacation_extend']);
                 $workerVacationModel->created_ad = time();
                 $workerVacationModel->admin_id = Yii::$app->user->identity->id;
                 $workerVacationModel->worker_id = $workerId;
@@ -245,7 +245,9 @@ class WorkerController extends BaseAuthController
             foreach ($workerResult as $val) {
                 $workerNameStr .= $val['worker_name'].',';
             }
+            $vacationType = \Yii::$app->request->get('vacationType');
             $workerNameStr = trim($workerNameStr,',');
+            $workerVacationModel->worker_vacation_type = $vacationType;
             return $this->renderAjax('create_vacation',['workerName'=>$workerNameStr,'workerVacationModel'=>$workerVacationModel]);
         }
     }
@@ -434,18 +436,18 @@ class WorkerController extends BaseAuthController
                 //$workerArr[''] = $val['status'];
                 //头像地址 static.1jiajie.com/{worker_id}.jpg
                 //$workerArr['worker_photo'] = $val[''];
-                $workerArr['worker_work_city'] = '';
+                $workerArr['worker_work_city'] = 0;
                 if(in_array($val['city_name'],$cityConfigArr)){
                     $workerArr['worker_work_city'] = $cityConfigArr[$val['city_name']];
                 }
 
                 $workerExtArr['worker_id'] = $val['id'];
-                $workerExtArr['worker_age'] = $val['age'];
+                $workerExtArr['worker_age'] = intval($val['age']);
                 $workerExtArr['worker_live_lng'] = $val['home_lng'];
                 $workerExtArr['worker_live_lat'] = $val['home_lat'];
-                $workerExtArr['worker_sex'] = $val['gender'];
-                $workerExtArr['worker_is_health'] = $val['is_health'];
-                $workerExtArr['worker_is_insurance'] = $val['is_insurance'];
+                $workerExtArr['worker_sex'] = intval($val['gender']);
+                $workerExtArr['worker_is_health'] = intval($val['is_health']);
+                $workerExtArr['worker_is_insurance'] = intval($val['is_insurance']);
                 $workerEduConfig = [1=>'小学',2=>'初中',3=>'高中',4=>'大学'];
                 if($val['education']){
                     $workerExtArr['worker_edu'] = $workerEduConfig[$val['education']];
@@ -453,12 +455,12 @@ class WorkerController extends BaseAuthController
                     $workerExtArr['worker_edu'] = '';
                 }
 
-                $workerExtArr['worker_bank_card'] = $val['bank_card'];
+                $workerExtArr['worker_bank_card'] = intval($val['bank_card']);
                 $workerExtArr['worker_bank_name'] = $val['bank_name'];
                 $workerExtArr['worker_bank_from'] = $val['bank_from'];
 
                 $workerDeviceArr['worker_id'] = $val['id'];
-                $workerDeviceArr['worker_device_login_time'] = $val['last_login_time'];
+                $workerDeviceArr['worker_device_login_time'] = strtotime($val['last_login_time']);
                 $workerDeviceArr['worker_device_login_ip'] = $val['last_login_ip'];
                 $workerDeviceArr['worker_device_client_version'] = $val['client_version'];
                 $workerDeviceArr['worker_device_version_name'] = $val['version_name'];
@@ -468,14 +470,15 @@ class WorkerController extends BaseAuthController
                 $workerDeviceArr['worker_device_curr_lat'] = $val['cur_lat'];
 
                 $workerStatArr['worker_id'] = $val['id'];
-                $workerStatArr['worker_stat_order_num'] = $val['order_num'];
-                $workerStatArr['worker_stat_sale_cards'] = $val['sale_card'];
+                $workerStatArr['worker_stat_order_num'] = intval($val['order_num']);
+                $workerStatArr['worker_stat_sale_cards'] = intval($val['sale_card']);
 
                 $batchWorker[] = $workerArr;
                 $batchWorkerExt[] = $workerExtArr;
                 $batchWorkerDevice[] = $workerDeviceArr;
                 $batchWorkerStat[] = $workerStatArr;
             }
+
             $workerColumns = array_keys($workerArr);
             $connectionNew->createCommand()->batchInsert('{{%worker}}',$workerColumns, $batchWorker)->execute();
             $workerExtColumns = array_keys($workerExtArr);

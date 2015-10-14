@@ -102,9 +102,26 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'width' => "100px",
             ],
+
             [
                 'format' => 'raw',
-                'label' => '阿姨录入时间',
+                'label' => '所属商圈',
+                'value' => function($dataProvider){
+                    return Worker::getWorkerDistrictShow($dataProvider->id);
+                },
+                'width' => "8%",
+            ],
+            [
+                'format' => 'raw',
+                'label' => '状态',
+                'value' => function($dataProvider){
+                    return Worker::getWorkerAuthStatusShow($dataProvider->worker_auth_status);
+                },
+                'width' => "100px",
+            ],
+            [
+                'format' => 'raw',
+                'label' => '阿姨入职时间',
                 'value' => function ($dataProvider) {
                     return date('Y-m-d H:i', $dataProvider->created_ad);
                 },
@@ -150,8 +167,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 '/worker/create-block',
                                 'workerId' => $model->id
-                            ]
-                            ,
+                            ],
                             [
                                 'title' => Yii::t('yii', '封号信息录入'),
                                 'data-toggle' => 'modal',
@@ -163,7 +179,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 ],
             ],
-
         ],
         'responsive' => true,
         'hover' => true,
@@ -173,10 +188,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '. Html::encode($this->title) . ' </h3>',
             'type' => 'info',
-            'before' =>
-                  $b,
-            //'after' => Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List',['index'],['class' => 'btn btn-info']),
-            'showFooter' => false
+            'before' =>$b,
+            'after' => Html::a('<i ></i>批量休假',['/worker/create-vacation?workerIds='],['class' => 'btn btn-success batchVacation','data-target' => '#vacationModal','data-toggle' => 'modal','type'=>1,'style'=>'margin-right:20px'])
+                .Html::a('<i></i>批量事假',['/worker/create-vacation?workerIds='],['class' => 'btn btn-success batchVacation','type'=>2,'data-target' => '#vacationModal','data-toggle' => 'modal']),
         ],
     ]);
     Pjax::end();
@@ -194,7 +208,16 @@ $this->params['breadcrumbs'][] = $this->title;
 $this->registerJs(<<<JSCONTENT
         $('.vacation').click(function() {
             $('#vacationModal .modal-body').html('加载中……');
+            $('#vacationModal .modal-body').eq(0).load(this.href);
+        });
+        $('.block').click(function() {
+            $('#blockModal .modal-body').html('加载中……');
+            $('#blockModal .modal-body').eq(0).load(this.href);
+        });
+        $('.batchVacation').click(function() {
+            $('#vacationModal .modal-body').html('加载中……');
             url = this.href;
+            vacationType = $(this).attr('type');
             selectWorkerIds = '';
             $('.danger').each(function(index,ele){
                  workerId = $(this).attr('data-key');
@@ -202,21 +225,15 @@ $this->registerJs(<<<JSCONTENT
             })
             if(selectWorkerIds){
                 selectWorkerIds = selectWorkerIds.substring(0,selectWorkerIds.length-1);
-                url = url.substring(0,url.indexOf("=")+1)+selectWorkerIds
+                url = url.substring(0,url.indexOf("=")+1)+selectWorkerIds+'&vacationType='+vacationType
+            }else{
+                alert('请选择阿姨');
+                return false;
             }
             $('#vacationModal .modal-body').eq(0).load(url);
-
-        });
-        $('.block').click(function() {
-            $('#blockModal .modal-body').html('加载中……');
-            $('#blockModal .modal-body').eq(0).load(this.href);
         });
 JSCONTENT
         );
 
 
-
     ?>
-<script>
-    $.trim()
-</script>

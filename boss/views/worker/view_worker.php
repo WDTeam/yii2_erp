@@ -113,7 +113,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 'value'=>$model::getWorkerDistrictShow($model->id),
             ],
-            'worker_photo',
+            [
+                'attribute' =>'worker_photo',
+                'type' => DetailView::INPUT_FILEINPUT,
+
+            ],
             //'worker_work_area',
             //'worker_work_street',
 
@@ -140,7 +144,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'editModel'=>$model->workerExtRelation,
                 'viewModel'=>$model->workerExtRelation,
                 'type' => DetailView::INPUT_TEXT,
-                'label'=>'阿姨身高'
+                'label'=>'阿姨身高(cm)'
             ],
 
             [
