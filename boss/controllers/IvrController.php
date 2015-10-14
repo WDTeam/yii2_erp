@@ -23,7 +23,7 @@ class IvrController extends Controller
     public function actionTest()
     {
         $I = new Ivr();
-        $res = $I->send('15110249233', time(),'E家洁，您身边的家政专家');
+        $res = $I->send('15110249233', 'A'.time(),'E家洁，您身边的家政专家');
         var_dump($res);
     }
 }
