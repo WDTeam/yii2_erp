@@ -97,9 +97,24 @@ class Worker extends \common\models\Worker
      public static function getWorkerInfoByPhone($phone){
 
         $condition = ['worker_phone'=>$phone,'isdel'=>0,'worker_is_block'=>0,'worker_is_vacation'=>0,'worker_is_blacklist'=>0];
-        $workerInfo = worker::find()->where($condition)->select('id,worker_name')->asArray()->one();
+        $workerInfo = worker::find()->where($condition)->select('id,worker_name,')->asArray()->one();
+        if($workerInfo){
+             //门店名称,家政公司名称
+             $shopInfo = Shop::findone($workerInfo['shop_id']);
+             if($shopInfo){
+                 $shopManagerInfo = ShopManager::findOne($shopInfo['shop_manager_id']);
+             }
+             $workerInfo['shop_name'] = isset($shopInfo['name'])?$shopInfo['name']:'';
+             $workerInfo['shop_manager_name'] = isset($shopManagerInfo['name'])?$shopManagerInfo['name']:'';
+             //阿姨类型描述信息
+             $workerInfo['worker_type_description'] = self::getWorkerTypeShow($workerInfo['worker_type']);
+             //阿姨身份描述信息
+             $workerInfo['worker_rule_description'] = WorkerRuleConfig::getWorkerRuleShow($workerInfo['worker_rule_id']);
+        }else{
+             $workerInfo = [];
+        }
         return $workerInfo;
-    }
+     }
 
     /*
      * 获取商圈中 所有可用阿姨id
@@ -185,6 +200,21 @@ class Worker extends \common\models\Worker
 
 
     /*
+     * 通过阿姨id批量获取阿姨信息
+     * @param array 阿姨id数组
+     * @param str 返回字段
+     */
+    public static function getWorkerListByIds($workerIdsArr,$field='worker_name'){
+        if(empty($workerIdsArr)){
+            return [];
+        }else{
+            $condition['id'] = $workerIdsArr;
+            $workerResult = Worker::find()->where($condition)->select($field)->asArray()->all();
+
+            return $workerResult;
+        }
+    }
+    /*
      * 获取已开通城市列表
      * @return array [city_id=>city_name,...]
      */
@@ -220,7 +250,7 @@ class Worker extends \common\models\Worker
      * @return array [id=>operation_shop_district_name,...]
      */
     public static function getDistrictList(){
-        $districtList =CoreOperationShopDistrict::find()->select('id,operation_shop_district_name')->where(['operation_shop_district_status'=>2])->asArray()->all();
+        $districtList =CoreOperationShopDistrict::find()->select('id,operation_shop_district_name')->asArray()->all();
         return $districtList?ArrayHelper::map($districtList,'id','operation_shop_district_name'):[];
     }
 
@@ -339,7 +369,7 @@ class Worker extends \common\models\Worker
             case 0:
                 return '新录入';
             case 1:
-                return '已审核';
+                return '已验证';
             case 2:
                 return '已试工';
             case 3:
@@ -402,21 +432,16 @@ class Worker extends \common\models\Worker
     /*
      * 统计各个身份的阿姨数量
      */
-    public static function CountRuleWorker($workerRuleId){
+    public static function CountWorkerRule($workerRuleId){
         return self::find()->where(['worker_rule_id'=>$workerRuleId,'isdel'=>0])->count();
     }
-
-    public function getAuthStatusCount(){
-        return $this->find()->where(['worker_auth_status'=>0,'worker_ontrial_status'=>0,'worker_onboard_status'=>0])->count();
+    /*
+     * 统计各个审核状态的阿姨数量
+     */
+    public static function CountWorkerStatus($workerStatus){
+        return self::find()->where(['worker_auth_status'=>$workerStatus])->count();
     }
 
-    public function getOntrialStatusCount(){
-        return $this->find()->where(['worker_auth_status'=>1,'worker_ontrial_status'=>0,'worker_onboard_status'=>0])->count();
-    }
-
-    public function getOnboardStatusCount(){
-        return $this->find()->where(['worker_auth_status'=>1,'worker_ontrial_status'=>1,'worker_onboard_status'=>0])->count();
-    }
 
     /*
      * 加入黑名单
@@ -458,11 +483,11 @@ class Worker extends \common\models\Worker
         $workerSearchParams = array_key_exists('WorkerSearch',$searchParams)?$searchParams['WorkerSearch']:[];
         if($btnCate==0 && !array_key_exists('WorkerSearch',$searchParams)){
             return 'btn-success-selected';
-        }elseif($btnCate==1 && array_key_exists('worker_auth_status',$workerSearchParams)){
+        }elseif($btnCate==1 && isset($workerSearchParams['worker_auth_status']) && $workerSearchParams['worker_auth_status']==0){
             return 'btn-success-selected';
-        }elseif($btnCate==2 && array_key_exists('worker_ontrial_status',$workerSearchParams)){
+        }elseif($btnCate==2 && isset($workerSearchParams['worker_auth_status']) && $workerSearchParams['worker_auth_status']==1){
             return 'btn-success-selected';
-        }elseif($btnCate==3 && array_key_exists('worker_onboard_status',$workerSearchParams)){
+        }elseif($btnCate==3 && isset($workerSearchParams['worker_auth_status']) && $workerSearchParams['worker_auth_status']==2){
             return 'btn-success-selected';
         }elseif($btnCate==4 && array_key_exists('worker_rule_id',$workerSearchParams) && $workerSearchParams['worker_rule_id']==1){
             return 'btn-success-selected';

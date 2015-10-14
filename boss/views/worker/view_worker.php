@@ -140,7 +140,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'editModel'=>$model->workerExtRelation,
                 'viewModel'=>$model->workerExtRelation,
                 'type' => DetailView::INPUT_TEXT,
-                'label'=>'阿姨身高'
+                'label'=>'阿姨身高(cm)'
             ],
 
             [
