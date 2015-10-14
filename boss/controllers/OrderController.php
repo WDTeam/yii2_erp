@@ -126,20 +126,24 @@ class OrderController extends BaseAuthController
         //根据商圈获取阿姨列表 第二个参数 1自有 2非自有
         $used_worker_list = Customer::getCustomerUsedWorkers($order->orderExtCustomer->customer_id);
         $used_worker_ids = [];
-        foreach($used_worker_list as $v){
-            $used_worker_ids[] = $v['worker_id'];
+        if(is_array($used_worker_list)) {
+            foreach ($used_worker_list as $v) {
+                $used_worker_ids[] = $v['worker_id'];
+            }
         }
         $worker_list = array_merge(Worker::getDistrictFreeWorker($shangquan,1,$order->order_booked_begin_time,$order->order_booked_end_time),Worker::getDistrictFreeWorker($shangquan,2,$order->order_booked_begin_time,$order->order_booked_end_time));
         $worker_ids = [];
         $workers = [];
-        foreach($worker_list as $k=>$v) {
-            $worker_ids[] = $v['id'];
-            $workers[$v['id']] = $worker_list[$k];
-            $workers[$v['id']]['tag'] = in_array($v['id'],$used_worker_ids)?'服务过':"";
-            $workers[$v['id']]['tag'] = ($v['id']==$order->order_booked_worker_id)?'指定阿姨': $workers[$v['id']]['tag'];
-            $workers[$v['id']]['order_booked_time_range']=[];
-            $workers[$v['id']]['memo']=[];
-            $workers[$v['id']]['status']=[];
+        if(is_array($worker_list)) {
+            foreach ($worker_list as $k => $v) {
+                $worker_ids[] = $v['id'];
+                $workers[$v['id']] = $worker_list[$k];
+                $workers[$v['id']]['tag'] = in_array($v['id'], $used_worker_ids) ? '服务过' : "";
+                $workers[$v['id']]['tag'] = ($v['id'] == $order->order_booked_worker_id) ? '指定阿姨' : $workers[$v['id']]['tag'];
+                $workers[$v['id']]['order_booked_time_range'] = [];
+                $workers[$v['id']]['memo'] = [];
+                $workers[$v['id']]['status'] = [];
+            }
         }
         $worker_orders = OrderSearch::getListByWorkerIds( $worker_ids,$order->order_booked_begin_time);
         foreach($worker_orders as $v){

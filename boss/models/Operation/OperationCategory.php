@@ -44,7 +44,6 @@ class OperationCategory extends CoreOperationCategory
             'operation_category_name' => Yii::t('app', '服务品类名称'),
             'created_at' => Yii::t('app', '创建时间'),
             'updated_at' => Yii::t('app', '编辑时间'),
-            
             'operation_category_app_ico' => Yii::t('app', 'APP端图标(序列化方式存储|首页大图，首页小图，分类页小图，订单页小图)'),
             'operation_category_app_homepage_max_ico' => Yii::t('app', 'APP端首页大图'),
             'operation_category_app_homepage_min_ico' => Yii::t('app', 'APP端首页小图'),
