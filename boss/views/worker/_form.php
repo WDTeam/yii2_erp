@@ -71,7 +71,6 @@ use core\models\worker\WorkerRuleConfig;
             ]); ?>
             </div>
 
-
             <div class="panel-heading"><h3 class="panel-title">阿姨基本信息</h3> </div>
             <div class="panel-body">
             <?= $form->field($worker_ext, 'worker_source')->widget(Select2::classname(), [
