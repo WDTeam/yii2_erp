@@ -77,6 +77,10 @@ class Ivr extends Component
     public $cb_data=[];
     public $request_data;
     
+    public function init(){
+        var_dump($this);
+    }
+    
     public function behaviors()
     {
         return [
