@@ -440,12 +440,12 @@ class WorkerController extends BaseAuthController
                 }
 
                 $workerExtArr['worker_id'] = $val['id'];
-                $workerExtArr['worker_age'] = $val['age'];
+                $workerExtArr['worker_age'] = intval($val['age']);
                 $workerExtArr['worker_live_lng'] = $val['home_lng'];
                 $workerExtArr['worker_live_lat'] = $val['home_lat'];
-                $workerExtArr['worker_sex'] = $val['gender'];
-                $workerExtArr['worker_is_health'] = $val['is_health'];
-                $workerExtArr['worker_is_insurance'] = $val['is_insurance'];
+                $workerExtArr['worker_sex'] = intval($val['gender']);
+                $workerExtArr['worker_is_health'] = intval($val['is_health']);
+                $workerExtArr['worker_is_insurance'] = intval($val['is_insurance']);
                 $workerEduConfig = [1=>'小学',2=>'初中',3=>'高中',4=>'大学'];
                 if($val['education']){
                     $workerExtArr['worker_edu'] = $workerEduConfig[$val['education']];
@@ -453,7 +453,7 @@ class WorkerController extends BaseAuthController
                     $workerExtArr['worker_edu'] = '';
                 }
 
-                $workerExtArr['worker_bank_card'] = $val['bank_card'];
+                $workerExtArr['worker_bank_card'] = intval($val['bank_card']);
                 $workerExtArr['worker_bank_name'] = $val['bank_name'];
                 $workerExtArr['worker_bank_from'] = $val['bank_from'];
 
