@@ -95,32 +95,32 @@ class FinanceSettleApplyController extends BaseAuthController
             $searchModel->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT;
             $searchModel->worker_type_id = 1;
             $searchModel->worker_rule_id = 1;
-            $searchModel->finance_settle_apply_starttime = $this->getFirstDayOfSpecifiedMonth();
-            $searchModel->finance_settle_apply_endtime = $this->getLastDayOfSpecifiedMonth();
+//            $searchModel->finance_settle_apply_starttime = $this->getFirstDayOfSpecifiedMonth();
+//            $searchModel->finance_settle_apply_endtime = $this->getLastDayOfSpecifiedMonth();
             if(isset($requestParams['FinanceSettleApplySearch'])){
                 $requestModel = $requestParams['FinanceSettleApplySearch'];
                 if(isset($requestModel['worder_tel'])){
                     $searchModel->worder_tel = $requestModel['worder_tel'];
                 }
-                if(isset($requestModel['settleMonth'])){
-                    $searchModel->settleMonth = $requestModel['settleMonth'];
-                    $searchModel->finance_settle_apply_starttime = $this->getFirstDayOfSpecifiedMonth($searchModel->settleMonth);
-                    $searchModel->finance_settle_apply_endtime = $this->getLastDayOfSpecifiedMonth($searchModel->settleMonth);
-                }
+//                if(isset($requestModel['settleMonth'])){
+//                    $searchModel->settleMonth = $requestModel['settleMonth'];
+//                    $searchModel->finance_settle_apply_starttime = $this->getFirstDayOfSpecifiedMonth($searchModel->settleMonth);
+//                    $searchModel->finance_settle_apply_endtime = $this->getLastDayOfSpecifiedMonth($searchModel->settleMonth);
+//                }
             }
         }
         if($settle_type == FinanceSettleApplySearch::SELF_PARTTIME_WORKER_SETTELE){
             $searchModel->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT;
             $searchModel->worker_type_id = 1;
             $searchModel->worker_rule_id = 2;
-            $searchModel->finance_settle_apply_starttime = strtotime('-1 week last monday');
-            $searchModel->finance_settle_apply_endtime = strtotime('last sunday');
+//            $searchModel->finance_settle_apply_starttime = strtotime('-1 week last monday');
+//            $searchModel->finance_settle_apply_endtime = strtotime('last sunday');
         }
         if($settle_type == FinanceSettleApplySearch::SHOP_WORKER_SETTELE){
             $searchModel->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT;
             $searchModel->worker_type_id = 2;
-            $searchModel->finance_settle_apply_starttime = strtotime('-1 week last monday');
-            $searchModel->finance_settle_apply_endtime = strtotime('last sunday');
+//            $searchModel->finance_settle_apply_starttime = strtotime('-1 week last monday');
+//            $searchModel->finance_settle_apply_endtime = strtotime('last sunday');
         }
         if($settle_type == FinanceSettleApplySearch::ALL_WORKER_SETTELE){
             $searchModel->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED;
