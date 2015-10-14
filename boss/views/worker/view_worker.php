@@ -113,7 +113,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 'value'=>$model::getWorkerDistrictShow($model->id),
             ],
-            'worker_photo',
+            [
+                'attribute' =>'worker_photo',
+                'type' => DetailView::INPUT_FILEINPUT,
+
+            ],
             //'worker_work_area',
             //'worker_work_street',
 
