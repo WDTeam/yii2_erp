@@ -24,7 +24,7 @@ class CustomerCode extends \common\models\CustomerCode
     public static function generateAndSend($phone){
         $transaction = \Yii::$app->db->beginTransaction();
         try{
-            $customerCodes = CustomerCode::findAll('customer_phone'=>$phone);
+            $customerCodes = self::find()->where(['customer_phone'=>$phone])->all();
             foreach ($customerCodes as $customerCode) {
                 $customerCode->is_del = 1;
                 $customerCode->validate();
@@ -35,13 +35,17 @@ class CustomerCode extends \common\models\CustomerCode
             for ($i=0; $i < 4; $i++) { 
                 $customer_code .= rand(0, 9);
             }
+            
             $customerCode->customer_code = $customer_code;
-            $custoemrCode->customer_code_expiration = 90;
+            $customerCode->customer_code_expiration = 90;
             $customerCode->customer_phone = $phone;
             $customerCode->created_at = time();
             $customerCode->updated_at = 0;
             $customerCode->is_del = 0;
             $customerCode->validate();
+            if ($customerCode->hasErrors()) {
+                var_dump($customerCode->getErrors());
+            }
             $customerCode->save();
             $msg = '您本次的验证码为'.$customer_code.', 欢迎使用e家洁APP';
             $string = Yii::$app->sms->send($phone, $msg, 1);
@@ -61,7 +65,7 @@ class CustomerCode extends \common\models\CustomerCode
         if ($customerCode == NULL) {
             return false;
         }
-        if ($customerCode->created_at < time() || $customerCode->created_at + $customerCode->customer_code_expiration > time()) {
+        if ($customerCode->created_at < time() && $customerCode->created_at + $customerCode->customer_code_expiration > time()) {
             return true;
         }
         return false;
