@@ -14,11 +14,8 @@ use common\components\BankHelper;
  * @var yii\web\View $this
  * @var boss\models\Shop $model
  */
-//\yii\base\Event::on(Shop::className(),'test', function($e){
-//    var_dump($e);
-//});
-// $model->cause = 'fffffffffffffff';
-// $model->trigger('change:blacklist');
+
+
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Shops'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
