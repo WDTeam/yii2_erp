@@ -9,25 +9,21 @@ use kartik\widgets\Select2; // or kartik\select2\Select2
 
 <div class="">
 
-<?php /*$form = ActiveForm::begin([
-    'type'=>ActiveForm::TYPE_HORIZONTAL,
-    'action'=>['vacation-create', 'worker_id'=>$workerModel->id]
-]); */ ?>
-    <!--<div class="form-group">
-        <div class="col-sm-offset-0 col-sm-12">
-            <?php // Html::submitButton('确认',['class'=>'btn btn-primary btn-lg btn-block']);?>
-        </div>
-    </div>-->
-    <?php /* ActiveForm::end(); */?>
-<?php
-    $form = ActiveForm::begin([
-        'type' => ActiveForm::TYPE_HORIZONTAL,
-        'formConfig' => ['labelSpan' => 3, 'deviceSize' => ActiveForm::SIZE_SMALL],
-    ]);
-    echo $form->field($workerModel, 'worker_name')->textInput(['disabled' => true]);
+    <?php
+        $form = ActiveForm::begin([
+            'type' => ActiveForm::TYPE_HORIZONTAL,
+            'formConfig' => ['labelSpan' => 3, 'deviceSize' => ActiveForm::SIZE_SMALL],
+        ]);
+    ?>
+    <div class="form-group field-worker-worker_name required">
+        <label class="control-label col-sm-3" for="worker-worker_name">阿姨姓名</label>
+        <div class="col-sm-9"><textarea id="worker-worker_name" class="form-control" name="Worker[worker_name]" disabled="" ><?php echo $workerName?></textarea></div>
+        <div class="col-sm-offset-3 col-sm-9"></div>
+        <div class="col-sm-offset-3 col-sm-9"><div class="help-block"></div></div>
+    </div>
 
-    echo $form->field($workerVacationModel, 'worker_vacation_extend');
-    echo $form->field($workerVacationModel, 'worker_vacation_type')->widget(Select2::classname(), [
+    <?= $form->field($workerVacationModel, 'worker_vacation_extend');?>
+    <?= $form->field($workerVacationModel, 'worker_vacation_type')->widget(Select2::classname(), [
     'name' => 'worker_vacation_type',
     'hideSearch' => true,
     'data' => [1 => '休假', 2 => '事假'],
@@ -35,17 +31,17 @@ use kartik\widgets\Select2; // or kartik\select2\Select2
     'pluginOptions' => [
         'allowClear' => true
     ],
-    ]);
+    ]);?>
 
-    echo $form->field($workerVacationModel, 'worker_vacation_start_time')->widget(DatePicker::classname(), [
+    <?=  $form->field($workerVacationModel, 'worker_vacation_start_time')->widget(DatePicker::classname(), [
     'name' => 'worker_vacation_start_time',
     'type' => DatePicker::TYPE_COMPONENT_PREPEND,
     'pluginOptions' => [
         'autoclose' => true,
         'format' => 'yyyy-mm-dd'
     ]
-    ]);
-    echo $form->field($workerVacationModel, 'worker_vacation_finish_time')->widget(DatePicker::classname(), [
+    ]);?>
+    <?=  $form->field($workerVacationModel, 'worker_vacation_finish_time')->widget(DatePicker::classname(), [
         'name' => 'worker_vacation_finish_time',
         'type' => DatePicker::TYPE_COMPONENT_PREPEND,
 
@@ -53,9 +49,8 @@ use kartik\widgets\Select2; // or kartik\select2\Select2
             'autoclose' => true,
             'format' => 'yyyy-mm-dd'
         ]
-    ]);
-    echo Html::submitButton('确认',['class'=>'btn btn-primary btn-lg btn-block']);
-    ActiveForm::end();
-?>
+    ]);?>
+    <?=  Html::submitButton('确认',['class'=>'btn btn-primary btn-lg btn-block']);?>
+    <?php ActiveForm::end();?>
 
 </div>

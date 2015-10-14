@@ -15,9 +15,20 @@ return [
     ],
     'components' => [
         'urlManager' => [
-            'enablePrettyUrl' => false,
+            'enablePrettyUrl' => true,
 //            'enableStrictParsing' => true,
             'showScriptName' => false,
+            'rules' => [
+                'v<version:\d>/<controller:\w+>/<id:\d+>' => '<controller>/view',
+                'v<version:\d>/<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
+                'v<version:\d>/<controller:\S+>/<action:\S+>' => '<controller>/<action>',
+                //'v<version:\d>/<controller:\S+>' => '<controller>',
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'user-info',
+                    'except' => ['delete'],
+                ],
+            ],
         ],
         'user' => [
             'identityClass' => 'common\models\UserInfo',

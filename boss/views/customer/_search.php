@@ -9,6 +9,9 @@ use kartik\datecontrol\DateControl;
 use kartik\grid\GridView;
 use kartik\date\DatePicker;
 use boss\components\AreaCascade;
+use yii\helpers\ArrayHelper;
+
+use \common\models\OperationCity;
 
 /**
  * @var yii\web\View $this
@@ -27,9 +30,9 @@ use boss\components\AreaCascade;
 
     <div class='col-md-2'>
         <?php echo $form->field($model, 'operation_city_id')->widget(Select2::classname(), [
-            'name' => 'operation_city_id',
+            'name' => 'id',
             'hideSearch' => true,
-            'data' => [1 => '北京', 2 => '上海', 3 => '成都', 4 => '深圳'],
+            'data' => ArrayHelper::map(OperationCity::find()->asArray()->all(), 'id', 'city_name'),
             'options' => ['placeholder' => '选择城市', 'inline' => true],
             'pluginOptions' => [
                 'allowClear' => true

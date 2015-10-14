@@ -1,41 +1,47 @@
 <?php
 namespace api\components;
 
+use Yii;
+use yii\web\HttpException;
+use yii\base\ExitException;
+use yii\base\ErrorException;
+use yii\web\BadRequestHttpException;
+use yii\web\MethodNotAllowedHttpException;
 class Controller extends \yii\rest\Controller
 {
-    public $appVersion = 1.0;
-    public $appKey = 0;
-    public function behaviors()
-    {
-        $behaviors = parent::behaviors();
-        //just provide the json format
-        unset($behaviors['contentNegotiator']);
-        return $behaviors;
-    }
-
+    public $version;
+    public $enableCsrfValidation = false;
     public function beforeAction($action)
     {
-//        return true;
-        $headers = \Yii::$app->request->headers;
-        $this->appVersion =  $headers->get('version');
-        $this->appKey =  $headers->get('appkey');
+        $this->version = Yii::$app->request->get('version');
         return parent::beforeAction($action);
     }
 
     /**
-     * @inheritdoc
+     * 输出结果处理
+     * @param Array|String|Number $data 输出内容
+     * @param integer $error_code 错误码
+     * @param string $msg 信息
      */
-    public function afterAction($action, $result)
+    public function send($ret, $msg="操作成功", $code="ok")
     {
-        $result = parent::afterAction($action, $result);
         $result = [
-            'success' => isset($result['success']) ? $result['success'] : true,
-            'data' => $result,
-            'errorCode' => isset($result['errorCode']) ? $result['errorCode'] : '100000',
-            'errorMsg' => isset($result['errorMsg']) ? $result['errorMsg'] : "",
-            'trace' => null
+            'code'=>$code,
+            'msg'=>$msg,
+            'ret'=>$ret
         ];
-        return $result;
+
+        $response = Yii::$app->response;
+        $response->format = Yii\web\Response::FORMAT_JSON;
+        $response->data = $result;
+
+        return $response;
+    }
+
+    public function getUserIdByToken($token)
+    {
+        $id = Yii::$app->cache->get($token);
+        return $id;
     }
 
 }
