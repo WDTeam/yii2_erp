@@ -83,4 +83,37 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="worker_refuse_modal" tabindex="-1" role="dialog" aria-labelledby="worker_refuse_modal_label">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="worker_refuse_modal_label">请选择拒单原因</h4>
+            </div>
+            <div class="modal-body">
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="worker_refuse_memo" id="worker_refuse_memo1" value="距离太远"> 距离太远
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="worker_refuse_memo" id="worker_refuse_memo3" value="有其它活儿"> 有其它活儿
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="worker_refuse_memo" id="worker_refuse_memo3" value="0"> <input type="text" class="form-control" id="worker_refuse_memo_other" placeholder="其它" />
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" id="worker_refuse_memo_submit" class="btn btn-warning">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
 <?php $this->registerJsFile('/js/manual_order.js',['depends'=>[ 'yii\web\YiiAsset','yii\bootstrap\BootstrapAsset']]); ?>

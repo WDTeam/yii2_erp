@@ -55,7 +55,7 @@ class OrderSearch extends Order
                 //获取到订单后加锁并置为已开始人工派单的状态
                 $order->order_flag_lock = $admin_id;
                 $order->admin_id = $admin_id;
-                if(OrderStatus::manualAssignStart($order,['orderExtFlag'])){
+                if(OrderStatus::manualAssignStart($order,['OrderExtFlag'])){
                     return $order;
                 }
             }

@@ -8,6 +8,7 @@ use yii\bootstrap\Modal;
 
 use kartik\nav\NavX;
 use kartik\grid\GridView;
+use kartik\grid\ActionColumn;
 
 use common\models\Shop;
 use core\models\worker\Worker;
@@ -76,7 +77,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]),
             ],
         'columns' => [
-            ['class' => 'kartik\grid\SerialColumn'],
+            [
+                'class'=>'kartik\grid\CheckboxColumn',
+                'headerOptions'=>['class'=>'kartik-sheet-style'],
+            ],
 
             'worker_name',
             [
@@ -106,10 +110,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'width' => "120px",
             ],
+
             [
                 'class' => 'kartik\grid\ActionColumn',
-                'width' => "120px",
+                'header' => '操作',
+                'width' => "10%",
                 'template' =>'{view} {update} {vacation} {block} {delete}',
+                'contentOptions'=>[
+                    'style'=>'font-size: 12px;',
+                ],
                 'buttons' => [
                     'update' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['worker/view', 'id' => $model->id, 'edit' => 't']), [
@@ -133,30 +142,27 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'block' => function ($url, $model) {
                         return Html::a('<span class="fa fa-fw fa-lock"></span>',
-                        [
-                            '/worker/create-block',
-                            'workerId' => $model->id
-                        ]
-                        ,
-                        [
-                            'title' => Yii::t('yii', '封号信息录入'),
-                            'data-toggle' => 'modal',
-                            'data-target' => '#blockModal',
-                            'class'=>'block',
-                            'data-id'=>$model->id,
-                        ]);
+                            [
+                                '/worker/create-block',
+                                'workerId' => $model->id
+                            ]
+                            ,
+                            [
+                                'title' => Yii::t('yii', '封号信息录入'),
+                                'data-toggle' => 'modal',
+                                'data-target' => '#blockModal',
+                                'class'=>'block',
+                                'data-id'=>$model->id,
+                            ]);
                     }
                 ],
-            ],
-            [
-                'class'=>'kartik\grid\CheckboxColumn',
-                'headerOptions'=>['class'=>'kartik-sheet-style'],
             ],
         ],
         'responsive' => true,
         'hover' => true,
         'condensed' => true,
         'floatHeader' => true,
+        'striped'=>false,
         'panel' => [
             'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '. Html::encode($this->title) . ' </h3>',
             'type' => 'info',
@@ -181,7 +187,18 @@ $this->params['breadcrumbs'][] = $this->title;
 $this->registerJs(<<<JSCONTENT
         $('.vacation').click(function() {
             $('#vacationModal .modal-body').html('加载中……');
-            $('#vacationModal .modal-body').eq(0).load(this.href);
+            url = this.href;
+            selectWorkerIds = '';
+            $('.danger').each(function(index,ele){
+                 workerId = $(this).attr('data-key');
+                 selectWorkerIds += workerId+','
+            })
+            if(selectWorkerIds){
+                selectWorkerIds = selectWorkerIds.substring(0,selectWorkerIds.length-1);
+                url = url.substring(0,url.indexOf("=")+1)+selectWorkerIds
+            }
+            $('#vacationModal .modal-body').eq(0).load(url);
+
         });
         $('.block').click(function() {
             $('#blockModal .modal-body').html('加载中……');
@@ -193,3 +210,6 @@ JSCONTENT
 
 
     ?>
+<script>
+    $.trim()
+</script>

@@ -10,6 +10,7 @@ namespace core\models\order;
 
 
 use common\models\OrderWorkerRelation;
+use core\models\worker\Worker;
 use Yii;
 use common\models\Order as OrderModel;
 use common\models\OrderStatusDict;
@@ -148,31 +149,42 @@ class Order extends OrderModel
             $order->order_flag_send = $order->orderExtFlag->order_flag_send+$flag_send; //标记是谁指派不了
             $order->order_flag_lock = 0;
             $order->admin_id = $admin_id;
-            if(OrderStatus::manualAssignUndone($order,['orderExtFlag'])){
+            if(OrderStatus::manualAssignUndone($order,['OrderExtFlag'])){
                 return true;
             }
         }else{//客服或小家政还没指派过则进入待人工指派的状态
             $order->order_flag_send = $order->orderExtFlag->order_flag_send+$flag_send;
             $order->order_flag_lock = 0;
             $order->admin_id = $admin_id;
-            if(OrderStatus::sysAssignUndone($order,['orderExtFlag'])){
+            if(OrderStatus::sysAssignUndone($order,['OrderExtFlag'])){
                 return true;
             }
         }
         return false;
     }
 
-
-    public static function addOrderWorkerRelation($order_id,$worker_id,$memo,$status)
+    /**
+     * 人工指派成功
+     * @param $order_id
+     * @param $worker_id
+     * @param $admin_id
+     *  @param bool $isCS
+     * @return bool
+     * TODO 避免同一时间 给阿姨指派多个订单问题 需要处理
+     */
+    public static function manualAssignDone($order_id,$worker_id,$admin_id,$isCS = false)
     {
-        $order_worker_relation = new OrderWorkerRelation();
-        $order_worker_relation->order_id = $order_id;
-        $order_worker_relation->worker_id = $worker_id;
-        $order_worker_relation->order_worker_relation_memo = $memo;
-        $order_worker_relation->order_worker_relation_status = $status;
-        return $order_worker_relation->save();
+        $order = Order::findOne($order_id);
+        $order->order_flag_lock = 0;
+        $order->worker_id = $worker_id;
+        $worker = Worker::getWorkerInfo($worker_id);
+        $order->worker_type_id = $worker['worker_type'];
+        $order->order_worker_type_name =  $worker['worker_type_description'];
+        $order->shop_id = $worker["shop_id"];
+        $order->order_worker_assign_type = $isCS?2:3; //2客服指派 3门店指派
+        $order->admin_id = $admin_id;
+        return OrderStatus::manualAssignDone($order,['OrderExtFlag','OrderExtWorker']);
     }
-
 
     /**
      * 创建订单

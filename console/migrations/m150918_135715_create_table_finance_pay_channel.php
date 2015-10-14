@@ -32,7 +32,8 @@ class m150918_135715_create_table_finance_pay_channel extends Migration
              INSERT INTO {{%finance_pay_channel}} VALUES ('10', '微信后台', 10, 1, 0, '0');
              INSERT INTO {{%finance_pay_channel}} VALUES ('11', '财付通', 11, 1, 0, '0');
              INSERT INTO {{%finance_pay_channel}} VALUES ('12', '银联后台', 12, 1, 0, '0');
-             INSERT INTO {{%finance_pay_channel}} VALUES ('13', '现金', 13, 1, 0, '0');"
+             INSERT INTO {{%finance_pay_channel}} VALUES ('13', '现金', 13, 1, 0, '0');
+             INSERT INTO {{%finance_pay_channel}} VALUES ('14', '管理后台', 14, 1, 0, '0');"
         );
 
     }
