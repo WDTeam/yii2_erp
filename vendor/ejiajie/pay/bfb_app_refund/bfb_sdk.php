@@ -14,12 +14,12 @@
  *         @brief
  *
  */
-if (!defined("BFB_SDK_ROOT"))
+if (!defined("BFB_REFUND_SDK_ROOT"))
 {
-    define("BFB_SDK_ROOT", dirname(__FILE__) . DIRECTORY_SEPARATOR);
+    define("BFB_REFUND_SDK_ROOT", dirname(__FILE__) . DIRECTORY_SEPARATOR);
 }
 
-require_once(BFB_SDK_ROOT . 'bfb_refund.cfg.php');
+require_once(BFB_REFUND_SDK_ROOT . 'bfb_refund.cfg.php');
 
 if (!function_exists('curl_init')) {
     exit('您的PHP没有安装 配置cURL扩展，请先安装配置cURL，具体方法可以上网查。');
@@ -30,7 +30,7 @@ if (!function_exists('json_decode')) {
 }
 
 
-class bfb_sdk{
+class bfb_sdk_refund{
     public $err_msg;
     public $order_no;
 
@@ -66,8 +66,8 @@ class bfb_sdk{
         print_r("结束3"+$url);
         if (!in_array($url,
             array (
-                sp_conf::BFB_REFUND_URL,
-                sp_conf::BFB_REFUND_QUERY_URL,
+                sp_refund_conf::BFB_REFUND_URL,
+                sp_refund_conf::BFB_REFUND_QUERY_URL,
             ))) {
             $this->log(
                 sprintf('invalid url[%s], bfb just provide three kind of pay url',
@@ -113,7 +113,7 @@ class bfb_sdk{
         $arr_params = $_GET;
         $this->order_no = $arr_params ['order_no'];
         // 检查商户ID是否是自己，如果传过来的sp_no不是商户自己的，那么说明这个百度钱包的支付结果通知无效
-        if (sp_conf::SP_NO != $arr_params ['sp_no']) {
+        if (sp_refund_conf::SP_NO != $arr_params ['sp_no']) {
             $this->err_msg = '百度钱包退款通知中商户ID无效，该通知无效';
             $this->log(
                 'the id in baifubao notify is wrong, this notify is invaild');
@@ -145,7 +145,7 @@ class bfb_sdk{
      * 		百度钱包才不会再向商户发送支付结果通知
      */
     function notify_bfb() {
-        $rep_str = "<html><head>" . sp_conf::BFB_NOTIFY_META .
+        $rep_str = "<html><head>" . sp_refund_conf::BFB_NOTIFY_META .
             "</head><body><h1>这是一个return_url页面</h1></body></html>";
         echo "$rep_str";
     }
@@ -171,13 +171,13 @@ class bfb_sdk{
      */
     function query_baifubao_refund_result_by_order_no($order_no) {
         $params = array (
-            'service_code' => sp_conf::BFB_QUERY_INTERFACE_SERVICE_ID, // 查询接口的服务ID号
-            'sp_no' => sp_conf::SP_NO,
+            'service_code' => sp_refund_conf::BFB_QUERY_INTERFACE_SERVICE_ID, // 查询接口的服务ID号
+            'sp_no' => sp_refund_conf::SP_NO,
             'order_no' => $order_no,
-            'output_type' => sp_conf::BFB_INTERFACE_OUTPUT_FORMAT, // 百度钱包返回XML格式的结果
-            'output_charset' => sp_conf::BFB_INTERFACE_ENCODING, // 百度钱包返回GBK编码的结果
-            'version' => sp_conf::BFB_INTERFACE_VERSION,
-            'sign_method' => sp_conf::SIGN_METHOD_MD5
+            'output_type' => sp_refund_conf::BFB_INTERFACE_OUTPUT_FORMAT, // 百度钱包返回XML格式的结果
+            'output_charset' => sp_refund_conf::BFB_INTERFACE_ENCODING, // 百度钱包返回GBK编码的结果
+            'version' => sp_refund_conf::BFB_INTERFACE_VERSION,
+            'sign_method' => sp_refund_conf::SIGN_METHOD_MD5
         );
 
         // 百度钱包订单号退款查询接口参数，具体的参数取值参见接口文档
@@ -190,13 +190,13 @@ class bfb_sdk{
         $params ['sign'] = $sign;
         $params_str = http_build_query($params);
 
-        $query_url = sp_conf::BFB_REFUND_QUERY_URL . '?' . $params_str;
+        $query_url = sp_refund_conf::BFB_REFUND_QUERY_URL . '?' . $params_str;
         $this->log(
             sprintf('the url of query baifubao refund result is [%s]',
                 $query_url));
         $content = $this->request($query_url);
         $retry = 0;
-        while (empty($content) && $retry < sp_conf::BFB_QUERY_RETRY_TIME) {
+        while (empty($content) && $retry < sp_refund_conf::BFB_QUERY_RETRY_TIME) {
             $content = $this->request($query_url);
             $retry++;
         }
@@ -228,14 +228,14 @@ class bfb_sdk{
      */
     function query_baifubao_refund_result_by_sprefund_no($order_no,$sp_refund_no) {
         $params = array (
-            'service_code' => sp_conf::BFB_QUERY_INTERFACE_SERVICE_ID, // 查询接口的服务ID号
-            'sp_no' => sp_conf::SP_NO,
+            'service_code' => sp_refund_conf::BFB_QUERY_INTERFACE_SERVICE_ID, // 查询接口的服务ID号
+            'sp_no' => sp_refund_conf::SP_NO,
             'order_no' => $order_no,
             'sp_refund_no' => $sp_refund_no,
-            'output_type' => sp_conf::BFB_INTERFACE_OUTPUT_FORMAT, // 百度钱包返回XML格式的结果
-            'output_charset' => sp_conf::BFB_INTERFACE_ENCODING, // 百度钱包返回GBK编码的结果
-            'version' => sp_conf::BFB_INTERFACE_VERSION,
-            'sign_method' => sp_conf::SIGN_METHOD_MD5
+            'output_type' => sp_refund_conf::BFB_INTERFACE_OUTPUT_FORMAT, // 百度钱包返回XML格式的结果
+            'output_charset' => sp_refund_conf::BFB_INTERFACE_ENCODING, // 百度钱包返回GBK编码的结果
+            'version' => sp_refund_conf::BFB_INTERFACE_VERSION,
+            'sign_method' => sp_refund_conf::SIGN_METHOD_MD5
         );
 
         // 百度钱包订单号退款查询接口参数，具体的参数取值参见接口文档
@@ -248,13 +248,13 @@ class bfb_sdk{
         $params ['sign'] = $sign;
         $params_str = http_build_query($params);
 
-        $query_url = sp_conf::BFB_REFUND_QUERY_URL . '?' . $params_str;
+        $query_url = sp_refund_conf::BFB_REFUND_QUERY_URL . '?' . $params_str;
         $this->log(
             sprintf('the url of query baifubao refund result is [%s]',
                 $query_url));
         $content = $this->request($query_url);
         $retry = 0;
-        while (empty($content) && $retry < sp_conf::BFB_QUERY_RETRY_TIME) {
+        while (empty($content) && $retry < sp_refund_conf::BFB_QUERY_RETRY_TIME) {
             $content = $this->request($query_url);
             $retry++;
         }
@@ -310,9 +310,9 @@ class bfb_sdk{
                 }
                 $sign_str = implode('&', $arr_temp);
                 // 选择相应的加密算法
-                if ($params ['sign_method'] == sp_conf::SIGN_METHOD_MD5) {
+                if ($params ['sign_method'] == sp_refund_conf::SIGN_METHOD_MD5) {
                     return md5($sign_str);
-                } else if ($params ['sign_method'] == sp_conf::SIGN_METHOD_SHA1) {
+                } else if ($params ['sign_method'] == sp_refund_conf::SIGN_METHOD_SHA1) {
                     return sha1($sign_str);
                 } else{
                     $this->log('unsupported sign method');
@@ -367,7 +367,7 @@ class bfb_sdk{
      * @return string	返回商户的百度钱包密钥
      */
     private function get_sp_key() {
-        $file = sp_conf::SP_KEY_FILE;
+        $file = sp_refund_conf::SP_KEY_FILE;
         if (!file_exists($file)) {
             $this->log(sprintf('can not find the sp key file, file [%s]', $file));
             return false;
@@ -419,7 +419,7 @@ class bfb_sdk{
      * @param string $msg	日志信息
      */
     function log($msg) {
-        if(define(sp_conf::LOG_FILE)) {
+        if(define(sp_refund_conf::LOG_FILE)) {
             error_log(
                 sprintf("[%s] [order_no: %s] : %s\n", date("Y-m-d H:i:s"),
                     $this->order_no, $msg));
@@ -427,7 +427,7 @@ class bfb_sdk{
         else {
             error_log(
                 sprintf("[%s] [order_no: %s] : %s\n", date("Y-m-d H:i:s"),
-                    $this->order_no, $msg), 3, sp_conf::LOG_FILE);
+                    $this->order_no, $msg), 3, sp_refund_conf::LOG_FILE);
         }
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-final class sp_conf{
+final class sp_refund_conf{
     // 商户在百度钱包的商户ID
-    const SP_NO = '1500610004';
+    const SP_NO = '';
     // 密钥文件路径，该文件中保存了商户的百度钱包合作密钥，该文件需要放在一个安全的地方，切勿让外人知晓或者外网访问
     const SP_KEY_FILE = 'sp.key';
     // 日志文件
