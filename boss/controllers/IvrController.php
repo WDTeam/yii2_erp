@@ -10,20 +10,18 @@ class IvrController extends Controller
      */
     public function actionCallback()
     {
-        $data = \Yii::$app->request->post();
-        $text = \Yii::$app->ivr->callback($data);
-        if($data['postType']==1){
+        $data = \Yii::$app->ivr->callback(\Yii::$app->request->post());
+        var_dump(\Yii::$app->ivr->model);
+        if(isset($data['postType']) && $data['postType']==1){
+            // code=1表示接单成功
             return json_encode([
                 'code'=>1
             ]);
-        }else{
-            return '请求的数据：'.$text;
         }
     }
+    
     public function actionTest()
     {
-        $res = \Yii::$app->ivr->send('15110249233', 'A'.time(),'E家洁，您身边的家政专家');
-        var_dump($res);
-        return $res;
+        \Yii::$app->ivr->send('15110249233', 'A1444808733', '洗衣');
     }
 }
