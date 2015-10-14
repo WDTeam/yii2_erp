@@ -71,15 +71,15 @@ use boss\models\FinanceShopSettleApplySearch;
     ?>
     
      <?php 
-    if(($model->settle_type == FinanceSettleApplySearch::SHOP_WORKER_SETTELE) || ($model->settle_type ==FinanceSettleApplySearch::ALL_WORKER_SETTELE)){
-        echo "<div class='col-md-4' style='margin-top: 22px;'>";
-        echo  ShopSelect::widget([
-            'model'=>$model,
-            'shop_manager_id'=>'shop_manager_id',
-            'shop_id'=>'shop_id',
-            ]);
-        echo "</div> ";
-    }
+//    if(($model->settle_type == FinanceSettleApplySearch::SHOP_WORKER_SETTELE) || ($model->settle_type ==FinanceSettleApplySearch::ALL_WORKER_SETTELE)){
+//        echo "<div class='col-md-4' style='margin-top: 22px;'>";
+//        echo  ShopSelect::widget([
+//            'model'=>$model,
+//            'shop_manager_id'=>'shop_manager_id',
+//            'shop_id'=>'shop_id',
+//            ]);
+//        echo "</div> ";
+//    }
     ?>
   
     <div class='col-md-2'>
