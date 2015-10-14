@@ -109,10 +109,10 @@ class OperationShopDistrictController extends BaseAuthController
             $coordinate['operation_city_id'] = $this->city_id;
             $coordinate['operation_city_name'] = $cityname;
             $coordinate['operation_shop_district_name'] = $post['OperationShopDistrict']['operation_shop_district_name'];
-            $coordinate['operation_shop_district_coordinate_start_longitude'] = $post['OperationShopDistrictCoordinate']['operation_shop_district_coordinate_start_longitude'];
-            $coordinate['operation_shop_district_coordinate_start_latitude'] = $post['OperationShopDistrictCoordinate']['operation_shop_district_coordinate_start_latitude'];
-            $coordinate['operation_shop_district_coordinate_end_longitude'] = $post['OperationShopDistrictCoordinate']['operation_shop_district_coordinate_end_longitude'];
-            $coordinate['operation_shop_district_coordinate_end_latitude'] = $post['OperationShopDistrictCoordinate']['operation_shop_district_coordinate_end_latitude'];
+            $coordinate['operation_shop_district_coordinate_start_longitude'] = $post['operation_shop_district_coordinate_start_longitude'];
+            $coordinate['operation_shop_district_coordinate_start_latitude'] = $post['operation_shop_district_coordinate_start_latitude'];
+            $coordinate['operation_shop_district_coordinate_end_longitude'] = $post['operation_shop_district_coordinate_end_longitude'];
+            $coordinate['operation_shop_district_coordinate_end_latitude'] = $post['operation_shop_district_coordinate_end_latitude'];
             $coordinate['operation_area_id'] = $area_id;
             $coordinate['operation_area_name'] = $area_name;
             OperationShopDistrictCoordinate::settingShopDistrictCoordinate($coordinate);
@@ -219,6 +219,13 @@ class OperationShopDistrictController extends BaseAuthController
                 self::$jsondata['data'] = $ShopDistrictInfo;
             }
         }
+        return self::$jsondata;
+    }
+    
+    public static function getCityShopDistrictList($city_id = ''){
+        $ShopDistrictlist = OperationShopDistrict::getCityShopDistrictList($city_id);
+        self::$jsondata['status'] = 1;
+        self::$jsondata['data'] = $ShopDistrictlist;
         return self::$jsondata;
     }
 
