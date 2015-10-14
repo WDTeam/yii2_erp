@@ -81,6 +81,36 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class'=>'kartik\grid\CheckboxColumn',
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
             ],
+
+            'worker_name',
+            [
+                'format' => 'raw',
+                'label' => '门店名称',
+                'value' => function ($dataProvider) {
+                    if($dataProvider->shop_id && Shop::findOne($dataProvider->shop_id)){
+                        return Shop::findOne($dataProvider->shop_id)->name;
+                    }
+                }
+            ],
+            'worker_phone',
+            'worker_idcard',
+            [
+                'format' => 'raw',
+                'label' => '阿姨类型',
+                'value' => function ($dataProvider) {
+                    return $dataProvider->worker_type ? '自有' : '非自有';
+                },
+                'width' => "100px",
+            ],
+            [
+                'format' => 'raw',
+                'label' => '阿姨录入时间',
+                'value' => function ($dataProvider) {
+                    return date('Y-m-d H:i', $dataProvider->created_ad);
+                },
+                'width' => "120px",
+            ],
+
             [
                 'class' => 'kartik\grid\ActionColumn',
                 'header' => '操作',
@@ -127,36 +157,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 ],
             ],
-            'worker_name',
-            [
-                'format' => 'raw',
-                'label' => '门店名称',
-                'value' => function ($dataProvider) {
-                    if($dataProvider->shop_id && Shop::findOne($dataProvider->shop_id)){
-                        return Shop::findOne($dataProvider->shop_id)->name;
-                    }
-                }
-            ],
-            'worker_phone',
-            'worker_idcard',
-            [
-                'format' => 'raw',
-                'label' => '阿姨类型',
-                'value' => function ($dataProvider) {
-                    return $dataProvider->worker_type ? '自有' : '非自有';
-                },
-                'width' => "100px",
-            ],
-            [
-                'format' => 'raw',
-                'label' => '阿姨录入时间',
-                'value' => function ($dataProvider) {
-                    return date('Y-m-d H:i', $dataProvider->created_ad);
-                },
-                'width' => "120px",
-            ],
-
-
         ],
         'responsive' => true,
         'hover' => true,

@@ -93,11 +93,6 @@ echo Menu::widget(
                         'url' => ['/customer/index?CustomerSearch[is_del]=0'],
                         'icon' => 'fa fa-angle-right',
                     ],
-                    [
-                        'label' => '管理顾客黑名单(90%)',
-                        'url' => ['/customer/block?CustomerSearch[is_del]=1'],
-                        'icon' => 'fa fa-angle-right',
-                    ],
                 ],
             ],
             [

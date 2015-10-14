@@ -176,17 +176,16 @@ class Customer extends \common\models\Customer
     public static function getCustomerUsedWorkers($id)
     {
         $customerWorker = CustomerWorker::findAll(['customer_id'=>$id]);
-        $worker = [];
+        $workers = [];
         foreach($customerWorker as $k=>$v)
         {
-            $worker[$k] = $v->attributes;
-            $worker = Worker::findOne($v->worker_id);
-            if(!empty($worker)) {
-                $worker[$k]['worker_name'] = $worker->worker_name;
-            }else{
-                unset($worker[$k]);
+            $worker = $v->attributes;
+            $worker_model = Worker::findOne($v->worker_id);
+            if(!empty($worker_model)) {
+                $worker['worker_name'] = $worker_model->worker_name;
+                $workers[]=$worker;
             }
         }
-        return $worker;
+        return $workers;
     }
 }
