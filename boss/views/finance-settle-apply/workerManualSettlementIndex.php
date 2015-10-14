@@ -4,11 +4,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use kartik\widgets\ActiveForm;
 use yii\widgets\Pjax;
-use common\models\Shop;
-use yii\helpers\ArrayHelper;
-use kartik\nav\NavX;
-use yii\bootstrap\NavBar;
-use yii\bootstrap\Modal;
+use boss\models\FinanceWorkerOrderIncomeSearch;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -130,28 +126,39 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="panel-body settle-detail-body">
             <div class='settleDetail'>
-                250
+                
+                <?php
+                    echo Html::a('<u>250</u>',[Yii::$app->urlManager->createUrl(['/finance-settle-apply/worker-manual-settlement-index','id' => $model->id,'settle_type'=>$model->settle_type,'review_section'=>$model->review_section])]);
+                ?>
             </div>
             <div class='settleDetail'>
-                30
+                 <?php
+                    echo Html::a('<u>30</u>',[Yii::$app->urlManager->createUrl(['/finance-settle-apply/worker-manual-settlement-index','id' => $model->id,'finance_worker_order_income_type'=>FinanceWorkerOrderIncomeSearch::CASH_INCOME,'settle_type'=>$model->settle_type,'review_section'=>$model->review_section])]);
+                ?>
             </div>
             <div class='settleDetail'>
                 2000.00
             </div>
             <div class='settleDetail'>
-                100
+                <?php
+                    echo Html::a('<u>100</u>',[Yii::$app->urlManager->createUrl(['/finance-settle-apply/worker-manual-settlement-index','id' => $model->id,'finance_worker_order_income_type'=>FinanceWorkerOrderIncomeSearch::ONLINE_INCOME,'settle_type'=>$model->settle_type,'review_section'=>$model->review_section])]);
+                ?>
             </div>
             <div class='settleDetail'>
                 4000.00
             </div>
             <div class='settleDetail'>
-                20
+                <?php
+                    echo Html::a('<u>20</u>',[Yii::$app->urlManager->createUrl(['/finance-settle-apply/worker-manual-settlement-index','id' => $model->id,'settle_type'=>$model->settle_type,'review_section'=>$model->review_section])]);
+                ?>
             </div>
             <div class='settleDetail'>
                 2000.00
             </div>
             <div class='settleDetail'>
-                20
+                <?php
+                    echo Html::a('<u>20</u>',[Yii::$app->urlManager->createUrl(['/finance-settle-apply/worker-manual-settlement-index','id' => $model->id,'settle_type'=>$model->settle_type,'review_section'=>$model->review_section])]);
+                ?>
             </div>
             <div class='settleDetail'>
                 2000.00
@@ -167,26 +174,17 @@ $this->params['breadcrumbs'][] = $this->title;
             
              <?php 
                     Pjax::begin(); echo GridView::widget([
-               'dataProvider' => $dataProvider,
+               'dataProvider' => $orderIncomeDataProvider,
                'columns' => [
                    ['class' => 'yii\grid\SerialColumn'],
                    ['attribute'=>'order_id',
                         'content'=>function($model,$key,$index)
                                {return  Html::a('<u>'.$model->order_id.'</u>',[Yii::$app->urlManager->createUrl(['order/view/','id' => $model->order_id])],['data-pjax'=>'0','target' => '_blank',]);}],
-                   'finance_worker_order_income_type',
+                    ['attribute'=>'finance_worker_order_income_type',
+                    'content'=> function($model,$key,$index){return $model->getOrderIncomeTypeDes($model->finance_worker_order_income_type);} ],     
                    'finance_worker_order_income',
                    'finance_worker_order_complete_time:datetime', 
                    'order_booked_count', 
-                   [
-                       'class' => 'yii\grid\ActionColumn',
-                       'buttons' => [
-                       'update' => function ($url, $model) {
-                                           return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance-worker-order-income/view','id' => $model->id,'edit'=>'t']), [
-                                                           'title' => Yii::t('yii', 'Edit'),
-                                                         ]);}
-
-                       ],
-                   ],
                ],
                'responsive'=>true,
                'hover'=>true,

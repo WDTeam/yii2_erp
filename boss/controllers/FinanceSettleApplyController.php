@@ -24,6 +24,16 @@ use core\models\worker\Worker;
  */
 class FinanceSettleApplyController extends BaseAuthController
 {
+    const ORDER_COUNT = 1;//完成总单量
+    
+    const CASH_ORDER_COUNT = 2;//现金订单
+    
+    const ONLINE_ORDER_COUNT = 3;//非现金订单
+    
+    const COMPLETE_TASKS = 4;//完成任务
+    
+    const SMALL_MAINTAIN = 5;//小保养订单
+    
     public function behaviors()
     {
         return [
@@ -499,9 +509,13 @@ class FinanceSettleApplyController extends BaseAuthController
         $financeSettleApplySearch = $financeSettleApplySearch->getWorkerInfo(1234);//获取阿姨的信息
         $financeSettleApplySearch->settle_type = $settle_type;
         $financeSettleApplySearch->review_section = $review_section;
-        $searchModel = new FinanceWorkerOrderIncomeSearch;
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-        return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'dataProvider'=>$dataProvider]);
+        $financeWorkerOrderIncomeSearch = new FinanceWorkerOrderIncomeSearch;
+        $financeWorkerOrderIncomeSearch->load($requestParams);
+        if(isset($requestParams['finance_worker_order_income_type'])){
+            $financeWorkerOrderIncomeSearch->finance_worker_order_income_type = $requestParams['finance_worker_order_income_type'];
+        }
+        $orderIncomeDataProvider = $financeWorkerOrderIncomeSearch->search(Yii::$app->request->getQueryParams());
+        return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'orderIncomeDataProvider'=>$orderIncomeDataProvider]);
     }
     
     /**
