@@ -222,6 +222,11 @@ class OperationShopDistrictController extends BaseAuthController
         return self::$jsondata;
     }
     
+    /**
+     * 获取城市商圈列表
+     * @param type $city_id
+     * @return type
+     */
     public static function getCityShopDistrictList($city_id = ''){
         $ShopDistrictlist = OperationShopDistrict::getCityShopDistrictList($city_id);
         self::$jsondata['status'] = 1;
