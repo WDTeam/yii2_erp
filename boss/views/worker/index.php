@@ -45,14 +45,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
 
     $b =
-        Html::a('<i class="glyphicon" ></i>全部 ', ['/worker'], ['class' => 'btn '.$searchModel->getSearchBtnCss(0), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>待检验 '.$searchModel->AuthStatusCount, ['index?WorkerSearch[worker_auth_status]=0'], ['class' => 'btn '.Worker::getSearchBtnCss(1), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>待试工 '.$searchModel->OntrialStatusCount, ['index?WorkerSearch[worker_ontrial_status]=0'], ['class' => 'btn '.Worker::getSearchBtnCss(2), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>待上岗 '.$searchModel->OnboardStatusCount, ['index?WorkerSearch[worker_onboard_status]=0'], ['class' => 'btn '.Worker::getSearchBtnCss(3), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>全职 '.Worker::CountRuleWorker(1), ['index?WorkerSearch[worker_rule_id]=1'], ['class' => 'btn '.Worker::getSearchBtnCss(4), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>兼职 '.Worker::CountRuleWorker(2), ['index?WorkerSearch[worker_rule_id]=2'], ['class' => 'btn '.Worker::getSearchBtnCss(5), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>时段 '.Worker::CountRuleWorker(3), ['index?WorkerSearch[worker_rule_id]=3'], ['class' => 'btn '.Worker::getSearchBtnCss(6), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>高峰 '.Worker::CountRuleWorker(4), ['index?WorkerSearch[worker_rule_id]=4'], ['class' => 'btn '.Worker::getSearchBtnCss(7), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>全部 ', ['/worker'], ['class' => 'btn '.Worker::getSearchBtnCss(0), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>待验证 '.Worker::CountWorkerStatus(0), ['index?WorkerSearch[worker_auth_status]=0'], ['class' => 'btn '.Worker::getSearchBtnCss(1), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>待试工 '.Worker::CountWorkerStatus(1), ['index?WorkerSearch[worker_auth_status]=1'], ['class' => 'btn '.Worker::getSearchBtnCss(2), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>待上岗 '.Worker::CountWorkerStatus(2), ['index?WorkerSearch[worker_auth_status]=2'], ['class' => 'btn '.Worker::getSearchBtnCss(3), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>全职 '.Worker::CountWorkerRule(1), ['index?WorkerSearch[worker_rule_id]=1'], ['class' => 'btn '.Worker::getSearchBtnCss(4), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>兼职 '.Worker::CountWorkerRule(2), ['index?WorkerSearch[worker_rule_id]=2'], ['class' => 'btn '.Worker::getSearchBtnCss(5), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>时段 '.Worker::CountWorkerRule(3), ['index?WorkerSearch[worker_rule_id]=3'], ['class' => 'btn '.Worker::getSearchBtnCss(6), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>高峰 '.Worker::CountWorkerRule(4), ['index?WorkerSearch[worker_rule_id]=4'], ['class' => 'btn '.Worker::getSearchBtnCss(7), 'style' => 'margin-right:10px']) .
         Html::a('<i class="glyphicon" ></i>请假 '.Worker::CountVacationWorker(), ['index?WorkerSearch[worker_is_vacation]=1'], ['class' => 'btn '.Worker::getSearchBtnCss(8), 'style' => 'margin-right:10px']) .
         Html::a('<i class="glyphicon" ></i>封号 '.Worker::CountBlockWorker(), ['index?WorkerSearch[worker_is_block]=1'], ['class' => 'btn '.Worker::getSearchBtnCss(9), 'style' => 'margin-right:10px']) .
         Html::a('<i class="glyphicon" ></i>黑名单 '.Worker::CountBlackListWorker(), ['index?WorkerSearch[worker_is_blacklist]=1'], ['class' => 'btn '.Worker::getSearchBtnCss(10), 'style' => 'margin-right:10px']);
@@ -102,34 +102,55 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'width' => "100px",
             ],
+
             [
                 'format' => 'raw',
-                'label' => '阿姨录入时间',
+                'label' => '所属商圈',
+                'value' => function($dataProvider){
+                    return Worker::getWorkerDistrictShow($dataProvider->id);
+                },
+                'width' => "8%",
+            ],
+            [
+                'format' => 'raw',
+                'label' => '状态',
+                'value' => function($dataProvider){
+                    return Worker::getWorkerAuthStatusShow($dataProvider->worker_auth_status);
+                },
+                'width' => "100px",
+            ],
+            [
+                'format' => 'raw',
+                'label' => '阿姨入职时间',
                 'value' => function ($dataProvider) {
                     return date('Y-m-d H:i', $dataProvider->created_ad);
                 },
                 'width' => "120px",
             ],
-
             [
                 'class' => 'kartik\grid\ActionColumn',
                 'header' => '操作',
-                'width' => "10%",
+                'width' => "9%",
                 'template' =>'{view} {update} {vacation} {block} {delete}',
                 'contentOptions'=>[
-                    'style'=>'font-size: 12px;',
+                    'style'=>'font-size: 12px;padding-right:2px',
+                ],
+                'viewOptions'=>[
+                    'style'=>'margin-right:3px'
                 ],
                 'buttons' => [
                     'update' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['worker/view', 'id' => $model->id, 'edit' => 't']), [
                             'title' => Yii::t('yii', '修改'),
+                            'style' => 'margin-right:3px'
                         ]);
                     },
+
                     'vacation' => function ($url, $model) {
                         return Html::a('<span class="fa fa-fw fa-history"></span>',
                             [
                                 '/worker/create-vacation',
-                                'workerId' => $model->id
+                                'workerIds' => $model->id
                             ]
                             ,
                             [
@@ -138,6 +159,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'data-target' => '#vacationModal',
                                 'class'=>'vacation',
                                 'data-id'=>$model->id,
+                                'style' => 'margin-right:3px'
                             ]);
                     },
                     'block' => function ($url, $model) {
@@ -145,14 +167,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 '/worker/create-block',
                                 'workerId' => $model->id
-                            ]
-                            ,
+                            ],
                             [
                                 'title' => Yii::t('yii', '封号信息录入'),
                                 'data-toggle' => 'modal',
                                 'data-target' => '#blockModal',
                                 'class'=>'block',
                                 'data-id'=>$model->id,
+                                'style' => 'margin-right:3px'
                             ]);
                     }
                 ],
@@ -166,10 +188,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '. Html::encode($this->title) . ' </h3>',
             'type' => 'info',
-            'before' =>
-                  $b,
-            //'after' => Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List',['index'],['class' => 'btn btn-info']),
-            'showFooter' => false
+            'before' =>$b,
+            'after' => Html::a('<i ></i>批量休假',['/worker/create-vacation?workerIds='],['class' => 'btn btn-success batchVacation','data-target' => '#vacationModal','data-toggle' => 'modal','type'=>1,'style'=>'margin-right:20px'])
+                .Html::a('<i></i>批量事假',['/worker/create-vacation?workerIds='],['class' => 'btn btn-success batchVacation','type'=>2,'data-target' => '#vacationModal','data-toggle' => 'modal']),
         ],
     ]);
     Pjax::end();
@@ -187,7 +208,16 @@ $this->params['breadcrumbs'][] = $this->title;
 $this->registerJs(<<<JSCONTENT
         $('.vacation').click(function() {
             $('#vacationModal .modal-body').html('加载中……');
+            $('#vacationModal .modal-body').eq(0).load(this.href);
+        });
+        $('.block').click(function() {
+            $('#blockModal .modal-body').html('加载中……');
+            $('#blockModal .modal-body').eq(0).load(this.href);
+        });
+        $('.batchVacation').click(function() {
+            $('#vacationModal .modal-body').html('加载中……');
             url = this.href;
+            vacationType = $(this).attr('type');
             selectWorkerIds = '';
             $('.danger').each(function(index,ele){
                  workerId = $(this).attr('data-key');
@@ -195,21 +225,15 @@ $this->registerJs(<<<JSCONTENT
             })
             if(selectWorkerIds){
                 selectWorkerIds = selectWorkerIds.substring(0,selectWorkerIds.length-1);
-                url = url.substring(0,url.indexOf("=")+1)+selectWorkerIds
+                url = url.substring(0,url.indexOf("=")+1)+selectWorkerIds+'&vacationType='+vacationType
+            }else{
+                alert('请选择阿姨');
+                return false;
             }
             $('#vacationModal .modal-body').eq(0).load(url);
-
-        });
-        $('.block').click(function() {
-            $('#blockModal .modal-body').html('加载中……');
-            $('#blockModal .modal-body').eq(0).load(this.href);
         });
 JSCONTENT
         );
 
 
-
     ?>
-<script>
-    $.trim()
-</script>

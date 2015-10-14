@@ -23,9 +23,7 @@ $worker_ext->worker_is_health=1;
 $worker_ext->worker_is_insurance=1;
 $worker_ext->worker_sex=0;
 $worker->worker_type=1;
-$worker->worker_auth_status=0;
-$worker->worker_ontrial_status=0;
-$worker->worker_onboard_status=0;
+$worker->worker_rule_id=1;
 
 ?>
 <div class="worker-create">

@@ -189,7 +189,8 @@ class OperationCityController extends BaseAuthController
         $post = Yii::$app->request->post();
         if(empty($post)){
             $model = new OperationCity;
-            $citylist = OperationCity::getOnlineCityList(2); //未开通的城市列表
+//            $citylist = OperationCity::getOnlineCityList(2); //未开通的城市列表
+            $citylist = OperationCity::getCityList(); //城市列表
             return $this->render('Release', [
                 'model' => $model,
                 'citylist' => $citylist,
@@ -253,7 +254,7 @@ class OperationCityController extends BaseAuthController
             $city_name = OperationCity::getCityName($city_id);
             $shopdistrictinfoall = [];
             $goodsshopdistrictinfo = [];
-            if($cityAddGoods == 'editGoods'){
+            if($cityAddGoods == 'editGoods' || !empty(OperationShopDistrictGoods::getCityShopDistrictGoodsInfo($city_id, $goods_id))){
                 $cityshopdistrictgoodsinfo = OperationShopDistrictGoods::getCityShopDistrictGoodsInfo($city_id, $goods_id);
 
                 foreach((array)$cityshopdistrictgoodsinfo as $key => $value){
@@ -279,7 +280,7 @@ class OperationCityController extends BaseAuthController
             }
             $shopdistrict = $post['shopdistrict'];
             $shopdistrictGoods = $post['goodsinfo'];
-            if($cityAddGoods == 'editGoods'){
+            if($cityAddGoods == 'editGoods' || (!empty(OperationShopDistrictGoods::getCityShopDistrictGoodsInfo($city_id, $goods_id)))){
                 OperationShopDistrictGoods::updateShopDistrictGoods($city_id, $goods_id, $shopdistrict, $goodsInfo, $shopdistrictGoods);
             }else {
                 OperationShopDistrictGoods::insertShopDistrictGoods($city_id, $goods_id, $shopdistrict, $goodsInfo, $shopdistrictGoods);
