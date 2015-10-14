@@ -11,6 +11,7 @@ use kartik\grid\GridView;
 use kartik\date\DatePicker;
 use boss\components\AreaCascade;
 use yii\data\ActiveDataProvider;
+use yii\helpers\ArrayHelper;
 
 use common\models\CustomerPlatform;
 use common\models\CustomerChannal;
@@ -67,9 +68,9 @@ echo DetailView::widget([
             'attribute' => 'operation_city_id',
             'type' => DetailView::INPUT_WIDGET,
             'widgetOptions' => [
-                'name'=>'operation_city_id',
+                'name'=>'id',
                 'class'=>\kartik\widgets\Select2::className(),
-                'data' => [1 => '北京', 2=>'', 3=>'', 4=>''],
+                'data' => ArrayHelper::map(OperationCity::find()->asArray()->all(), 'id', 'city_name'),
                 'hideSearch' => true,
                 'options'=>[
                     'placeholder' => '选择城市',
@@ -77,7 +78,7 @@ echo DetailView::widget([
             ],
             'value'=>$operationCity['city_name'] ? $operationCity['city_name'] : '-',
         ],
-        'customer_name',
+        // 'customer_name',
         'customer_phone',
         [
             'attribute' => 'platform_id',
