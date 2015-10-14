@@ -50,11 +50,21 @@ function settingGoodsinfo(){
     var operation_goods_lowest_consume_demo = $('.operation_goods_lowest_consume_demo').val();
     var operation_goods_start_time_demo = $('.operation_goods_start_time_demo').val();
     var operation_goods_end_time_demo = $('.operation_goods_end_time_demo').val();
-    $('.operation_goods_market_price').val(operation_goods_market_price_demo);
-    $('.operation_goods_price').val(operation_goods_price_demo);
-    $('.operation_goods_lowest_consume').val(operation_goods_lowest_consume_demo);
-    $('.operation_goods_start_time').val(operation_goods_start_time_demo);
-    $('.operation_goods_end_time').val(operation_goods_end_time_demo);
+    if(operation_goods_market_price_demo != ''){
+        $('.operation_goods_market_price').val(operation_goods_market_price_demo);
+    }
+    if(operation_goods_price_demo != ''){
+        $('.operation_goods_price').val(operation_goods_price_demo);
+    }
+    if(operation_goods_lowest_consume_demo != ''){
+        $('.operation_goods_lowest_consume').val(operation_goods_lowest_consume_demo);
+    }
+    if(operation_goods_start_time_demo != ''){
+        $('.operation_goods_start_time').val(operation_goods_start_time_demo);
+    }
+    if(operation_goods_end_time_demo != ''){
+        $('.operation_goods_end_time').val(operation_goods_end_time_demo);
+    }
 }
 
 //增加经纬度

@@ -105,7 +105,9 @@ class CustomerTransRecord extends \common\models\CustomerTransRecord
             {
             //现金
                 $data['scenario'] = 2;  //支付场景
-            }else{
+            }
+            else
+            {
                 exit('没有此条件');
             }
         }

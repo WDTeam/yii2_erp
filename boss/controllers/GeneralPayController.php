@@ -102,15 +102,6 @@ class GeneralPayController extends Controller
 
 
     /**
-     * 退款
-     * @return mixed
-     */
-    public function actionRefund()
-    {
-
-    }
-
-    /**
      * 支付宝APP回调
      */
     public function actionAlipayAppNotify()
@@ -596,7 +587,6 @@ class GeneralPayController extends Controller
                     //充值交易记录
                     $customerTransRecord::analysisRecord($attribute);
                 }
-                exit;
                 $transaction->commit();
 
                 //发送短信事件
@@ -726,15 +716,19 @@ class GeneralPayController extends Controller
     public function actionTest()
     {
         $param = [
-            'out_refund_no' => date("ymd",time()).mt_rand(1000,9999).'1',
-            'out_trade_no' => '15101258091',   //订单号
-            'transaction_id' => '', //交易流水号
-            'total_fee' => '1',      //交易总额(分单位)
-            'refund_fee' => '1',     //退款总额(分单位)
-            'op_user_passwd' => md5('YT230271'), //操作员密码,MD5处理
+            'sp_refund_no' => date("ymd",time()).mt_rand(1000,9999).'1',
+            'order_no' => '15101258091',   //订单号
+            'cashback_amount' => '1',     //退款总额(分单位)
+            'return_url' => "http://".$_SERVER['HTTP_HOST']."/general-pay/bfb-refund-notify",   //服务器异步通知地址
         ];
 
+        $bfb = new \bfbrefund_class();
+        $bfb->refund($param);
+
+        exit;
         $wx = new \wxrefund_class();
+        dump($wx->refundQuery($param));
+        exit;
         $wx->refund($param);
         exit;
         $wx = new \wxpay_class();
