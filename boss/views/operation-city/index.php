@@ -14,26 +14,33 @@ use boss\models\Operation\OperationShopDistrictGoods;
  * @var boss\models\OperationCity $searchModel
  */
 
-$this->title = Yii::t('app', Yii::t('app','Operation Cities'));
+$this->title = Yii::t('app', 'Operation And Cities').'管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-city-index">
 <!--    <div class="page-header">
             <h1><?php //= Html::encode($this->title) ?></h1>
     </div>-->
-    <?php
-    echo SearchBox::widget([
-        'action' => ['index'],
-        'method' => 'POST',
-        'options' => [],
-        'type' => 'Field',
-        'keyword_value' => isset($params['keyword']) ? $params['keyword'] : '',
-        'keyword_options' => ['placeholder' => '搜索关键字', 'class' => 'form-control'],
-        'submit_options' => ['class' => 'btn btn-default form-control'],
-        'fields' => ['搜索字段', 'province_name' => '省份名称', 'city_name' => '城市名称'],
-        'default' => isset($params['fields']) ? $params['fields'] : '',
-    ]);
-    ?>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 城市搜索</h3>
+        </div>
+        <div class="panel-body">
+            <?php
+            echo SearchBox::widget([
+                'action' => ['index'],
+                'method' => 'POST',
+                'options' => [],
+                'type' => 'Field',
+                'keyword_value' => isset($params['keyword']) ? $params['keyword'] : '',
+                'keyword_options' => ['placeholder' => '搜索关键字', 'class' => 'form-control'],
+                'submit_options' => ['class' => 'btn btn-default form-control'],
+                'fields' => ['搜索字段', 'province_name' => '省份名称', 'city_name' => '城市名称'],
+                'default' => isset($params['fields']) ? $params['fields'] : '',
+            ]);
+            ?>
+        </div>
+    </div>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
@@ -157,7 +164,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
         'panel' => [
-            'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
+            'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '. Yii::t('app', Yii::t('app','Operation Cities')).' </h3>',
             'type'=>'info',
             'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> '.Yii::t('app', 'Add'), ['create'], ['class' => 'btn btn-success']), 
             'after'=>false,//Html::a('<i class="glyphicon glyphicon-repeat"></i> '.Yii::t('app','Reset List'), ['index'], ['class' => 'btn btn-info']),

@@ -66,11 +66,11 @@ class SearchBox extends Widget{
     public function setFieldSearchForm(){
         $selection = empty($this->default) ? '选择字段' : $this->default;
         $this->html = '<div class="form-group col-sm-3">'.Html::dropDownList('fields', $selection, $this->fields, ['class' =>'form-control inline']).'</div>';
-        $this->html .= '<div class="form-group col-sm-7">'.Html::textInput('keyword', $this->keyword_value, $this->keyword_options).'</div>';
+        $this->html .= '<div class="form-group col-sm-6">'.Html::textInput('keyword', $this->keyword_value, $this->keyword_options).'</div>';
         if($this->is_ajax_search){
-            $this->html .= '<div class="form-group col-sm-2">'.Html::a('', $this->action).Html::button('搜索', $this->submit_options).'</div>';
+            $this->html .= '<div class="form-group col-sm-3">'.Html::a('', $this->action).Html::button('搜索', $this->submit_options).'</div>';
         }else{
-            $this->html .= '<div class="form-group col-sm-2">'.Html::submitButton('搜索', $this->submit_options).'</div>';
+            $this->html .= '<div class="form-group col-sm-3">'.Html::submitButton('搜索', $this->submit_options).'</div>';
         }
         $this->html .= '<div id="seachBox_addons" callback="'.$this->callback.'">';
         foreach((array)$this->addons as $k => $v){
