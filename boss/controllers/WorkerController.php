@@ -458,7 +458,7 @@ class WorkerController extends BaseAuthController
                 $workerExtArr['worker_bank_from'] = $val['bank_from'];
 
                 $workerDeviceArr['worker_id'] = $val['id'];
-                $workerDeviceArr['worker_device_login_time'] = $val['last_login_time'];
+                $workerDeviceArr['worker_device_login_time'] = strtotime($val['last_login_time']);
                 $workerDeviceArr['worker_device_login_ip'] = $val['last_login_ip'];
                 $workerDeviceArr['worker_device_client_version'] = $val['client_version'];
                 $workerDeviceArr['worker_device_version_name'] = $val['version_name'];
@@ -468,14 +468,15 @@ class WorkerController extends BaseAuthController
                 $workerDeviceArr['worker_device_curr_lat'] = $val['cur_lat'];
 
                 $workerStatArr['worker_id'] = $val['id'];
-                $workerStatArr['worker_stat_order_num'] = $val['order_num'];
-                $workerStatArr['worker_stat_sale_cards'] = $val['sale_card'];
-
+                $workerStatArr['worker_stat_order_num'] = intval($val['order_num']);
+                $workerStatArr['worker_stat_sale_cards'] = intval($val['sale_card']);
+                
                 $batchWorker[] = $workerArr;
                 $batchWorkerExt[] = $workerExtArr;
                 $batchWorkerDevice[] = $workerDeviceArr;
                 $batchWorkerStat[] = $workerStatArr;
             }
+
             $workerColumns = array_keys($workerArr);
             $connectionNew->createCommand()->batchInsert('{{%worker}}',$workerColumns, $batchWorker)->execute();
             $workerExtColumns = array_keys($workerExtArr);
