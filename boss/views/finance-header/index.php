@@ -36,20 +36,20 @@ $this->params['breadcrumbs'][] = $this->title;
         //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'id',
+            'finance_header_key',
             'finance_header_title',
             'finance_header_name',
             [
                 'format' => 'raw',
                 'label' => '比对字段',
-               'value' => function ($dataProvider) {
-                $platform = FinanceHeader::selectname($dataProvider->finance_header_where);
+                'value' => function ($dataProvider) {
+                 $platform = FinanceHeader::selectname($dataProvider->finance_header_where);
                     return $platform;
                 },
                 'width' => "100px",
             ],
             'finance_order_channel_name',
-   //         'finance_pay_channel_id',
+   //       'finance_pay_channel_id',
            'finance_pay_channel_name', 
 //            'create_time:datetime', 
 //            'is_del', 

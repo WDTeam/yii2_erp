@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'finance_pop_order_booked_time:datetime', 
             'finance_pop_order_booked_counttime:datetime', 
            'finance_pop_order_sum_money', 
-            'finance_pop_order_coupon_count', 
+           // 'finance_pop_order_coupon_count', 
 //            'finance_pop_order_coupon_id', 
 //            'finance_pop_order_order2', 
          //  'finance_pop_order_channel_order', 
@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'finance_pop_order_status', 
           // 'finance_pop_order_finance_isok', 
 //            'finance_pop_order_discount_pay', 
-//            'finance_pop_order_reality_pay', 
+            'finance_pop_order_reality_pay', 
 //            'finance_pop_order_order_time:datetime', 
 //            'finance_pop_order_pay_time:datetime', 
 

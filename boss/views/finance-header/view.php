@@ -36,14 +36,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'finance_pay_channel_name',
             //'create_time:datetime',
             'is_del',
-    		'finance_header_where_es',
+    		//'finance_header_where_es',
     		[
     		'attribute' => 'finance_header_where',
     		'type' => DetailView::INPUT_WIDGET,
     		'widgetOptions' => [
     		'name'=>'比对字段名称',
     		'class'=>\kartik\widgets\Select2::className(),
-    		'data' => [0=>'请选择','order_channel_order_num'=> '订单号', 'order_money'=>'支付金额','order_channel_promote'=>'渠道营销费','decrease'=>'手续费','function_way'=>'表达式(下期开发)'],
+    		'data' => [0=>'请选择','order_channel_order_num'=> '订单号', 'order_money'=>'支付金额','order_channel_promote'=>'渠道营销费','refund'=>'退款金额','decrease'=>'手续费','function_way'=>'状态分类'],
     		'hideSearch' => true,
     				],
     				],

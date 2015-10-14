@@ -83,18 +83,26 @@ $this->params['breadcrumbs'][] = $this->title;
             'width' => "100px",
             ],
             'finance_pop_order_sum_money', 
-           'finance_pop_order_coupon_count', 
+        //   'finance_pop_order_coupon_count', 
 //            'finance_pop_order_coupon_id', 
 //            'finance_pop_order_order2', 
 //            'finance_pop_order_channel_order', 
 //            'finance_pop_order_order_type', 
-//            'finance_pop_order_status', 
 //            'finance_pop_order_finance_isok', 
            'finance_pop_order_discount_pay', 
            'finance_pop_order_reality_pay', 
 //            'finance_pop_order_order_time:datetime', 
 //            'finance_pop_order_pay_time:datetime', 
             //'finance_pop_order_pay_status', 
+            [
+            'format' => 'raw',
+            'label' => '状态',
+            'value' => function ($dataProvider) {
+            if($dataProvider->finance_pop_order_status==1){ $status='结算';}else{ $status='<font color="red">退款</font>';}
+            	return $status;
+            },
+            'width' => "100px",
+            ],
             [
             'format' => 'raw',
             'label' => '对账状态',
