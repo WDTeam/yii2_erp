@@ -208,10 +208,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             
                         ], [
                             'title' => Yii::t('app', '解除黑名单'),
-                            'data-toggle'=>'modal',
-                            'data-target'=>'#remove-modal',
-                            'data-id'=>$model->id,
-                            'class'=>'remove-btn',
                         ]);
                     },
                 ],
