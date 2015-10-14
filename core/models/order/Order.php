@@ -9,7 +9,6 @@
 namespace core\models\order;
 
 
-use common\models\OrderWorkerRelation;
 use core\models\worker\Worker;
 use Yii;
 use common\models\Order as OrderModel;
@@ -126,10 +125,12 @@ class Order extends OrderModel
        //TODO  放入订单池
         //TODO 开始系统指派
         $order->admin_id=0;
-        OrderStatus::sysAssignStart($order,[]);
-        //TODO 系统指派失败
-        $order->admin_id=0;
-        OrderStatus::sysAssignUndone($order,[]);
+        if(OrderStatus::sysAssignStart($order,[]))
+        {
+            //TODO 系统指派失败
+            $order->admin_id=0;
+            OrderStatus::sysAssignUndone($order,[]);
+        }
     }
 
 
