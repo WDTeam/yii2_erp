@@ -1,5 +1,6 @@
 <?php
 namespace boss\controllers;
+
 use yii\web\Controller;
 use common\components\Ivr;
 class IvrController extends Controller
@@ -9,7 +10,8 @@ class IvrController extends Controller
      */
     public function actionCallback()
     {
-        $text = json_encode($_GET);
+        $params = \Yii::$app->request->getQueryParams();
+        $text = json_encode($params);
         return \Yii::$app->mailer->compose()
         ->setFrom('service@corp.1jiajie.com')
         ->setTo('lidenggao@1jiajie.com')
