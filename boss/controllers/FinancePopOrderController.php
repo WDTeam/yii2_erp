@@ -55,6 +55,16 @@ class FinancePopOrderController extends Controller
     **/
     public function actionIndex()
     {
+    	
+    	/* $sumttoo=FinancePopOrder::find()->select(['sum(finance_pop_order_reality_pay) as reality_pay'])
+    	->where(['finance_pop_order_pay_status'=>'0'])
+    	->andWhere(['finance_pop_order_pay_status_type' => 2])
+    	->andWhere(['finance_record_log_id' => 198])
+    	//->andWhere(['finance_pop_order_status' => 2])
+    	->asArray()->all();
+    	var_dump($sumttoo);exit; */
+    	
+
     	$model = new FinancePopOrderSearch;
     	$modelinfo= new FinancePopOrder;
     	if(Yii::$app->request->isPost) {
@@ -115,8 +125,9 @@ class FinancePopOrderController extends Controller
     		
     		foreach ($sheetData as $key=>$value){
     			//去除表头
-    			if($n>2){
+    			if($n>1){
     			$statusinfo=$model->PopOrderstatus($alinfo,$value,$channelid);
+    			//var_dump($statusinfo);exit;
     			$postdate['finance_record_log_id'] =$lastidRecordLog;
     			$postdate['finance_pop_order_number'] =$statusinfo['order_channel_order_num'];
     			$postdate['finance_order_channel_id'] =$channelid;
@@ -127,9 +138,9 @@ class FinancePopOrderController extends Controller
     			$postdate['finance_pop_order_worker_uid'] =$statusinfo['worker_id'];
     			$postdate['finance_pop_order_booked_time'] =$statusinfo['order_booked_begin_time'];
     			$postdate['finance_pop_order_booked_counttime'] =$statusinfo['order_booked_end_time'];// 按照分钟计算 
-    			$postdate['finance_pop_order_sum_money'] =$statusinfo['order_money'];
+    			$postdate['finance_pop_order_sum_money'] =$statusinfo['order_money']; //总金额
     			//优惠卷金额
-    			$postdate['finance_pop_order_coupon_count'] =$statusinfo['order_use_coupon_money']; 
+    			$postdate['finance_pop_order_coupon_count'] =0; 
     			//优惠卷id
     			$postdate['finance_pop_order_coupon_id'] =$statusinfo['coupon_id'];  
     			$postdate['finance_pop_order_order2'] =$statusinfo['order_code'];
@@ -140,10 +151,10 @@ class FinancePopOrderController extends Controller
     			//$post['FinancePopOrder']['finance_pop_order_order_type'] =$statusinfo['order_service_type_id'];
     			$postdate['finance_pop_order_order_type'] =$statusinfo['order_service_type_id'];
     			$postdate['finance_pop_order_status'] =$statusinfo['order_before_status_dict_id'];
-    			
     			$postdate['finance_pop_order_finance_isok'] =0;
+    			//折扣总金额
     			$postdate['finance_pop_order_discount_pay'] =$statusinfo['order_use_coupon_money'];
-    			$postdate['finance_pop_order_reality_pay'] =$statusinfo['order_pay_money'];
+    			$postdate['finance_pop_order_reality_pay'] =$statusinfo['finance_pop_order_reality_pay'];
     			$postdate['finance_pop_order_order_time'] =$statusinfo['created_at'];
     			$postdate['finance_pop_order_pay_time'] =$statusinfo['created_at'];
     			$postdate['finance_pop_order_pay_status'] =0;//财务确定处理按钮状态
@@ -157,7 +168,6 @@ class FinancePopOrderController extends Controller
     			$postdate['finance_order_channel_endpayment'] =strtotime($post['FinancePopOrderSearch']['finance_order_channel_endpayment']);
     			$postdate['create_time'] = time();
     			$postdate['is_del'] =0;
-
     			$_model = clone $model;
     			$_model->setAttributes($postdate);
     			$_model->save();
@@ -250,7 +260,6 @@ class FinancePopOrderController extends Controller
          $searchModel->finance_record_log_id=$lastid;
         //状态处理
         $dataProvider = $searchModel->search();
-        
         $decss=Yii::$app->request->getQueryParams();
         if(isset($decss['FinancePopOrderSearch'])){
         $sta= $decss['FinancePopOrderSearch']['finance_pop_order_pay_status_type'];
