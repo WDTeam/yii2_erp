@@ -225,10 +225,10 @@ class WorkerController extends BaseAuthController
         if($postParam){
             foreach($workerIdsArr as $workerId){
                 $workerVacationModel = new WorkerVacation();
-                $workerVacationModel->worker_vacation_start_time = strtotime($vacationParam['WorkerVacation']['worker_vacation_start_time']);
-                $workerVacationModel->worker_vacation_finish_time = strtotime($vacationParam['WorkerVacation']['worker_vacation_finish_time']);
-                $workerVacationModel->worker_vacation_type = intval($vacationParam['WorkerVacation']['worker_vacation_type']);
-                $workerVacationModel->worker_vacation_extend = trim($vacationParam['WorkerVacation']['worker_vacation_extend']);
+                $workerVacationModel->worker_vacation_start_time = strtotime($postParam['WorkerVacation']['worker_vacation_start_time']);
+                $workerVacationModel->worker_vacation_finish_time = strtotime($postParam['WorkerVacation']['worker_vacation_finish_time']);
+                $workerVacationModel->worker_vacation_type = intval($postParam['WorkerVacation']['worker_vacation_type']);
+                $workerVacationModel->worker_vacation_extend = trim($postParam['WorkerVacation']['worker_vacation_extend']);
                 $workerVacationModel->created_ad = time();
                 $workerVacationModel->admin_id = Yii::$app->user->identity->id;
                 $workerVacationModel->worker_id = $workerId;
@@ -434,7 +434,7 @@ class WorkerController extends BaseAuthController
                 //$workerArr[''] = $val['status'];
                 //头像地址 static.1jiajie.com/{worker_id}.jpg
                 //$workerArr['worker_photo'] = $val[''];
-                $workerArr['worker_work_city'] = '';
+                $workerArr['worker_work_city'] = 0;
                 if(in_array($val['city_name'],$cityConfigArr)){
                     $workerArr['worker_work_city'] = $cityConfigArr[$val['city_name']];
                 }
