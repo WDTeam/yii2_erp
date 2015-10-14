@@ -55,7 +55,7 @@ class OrderSearch extends Order
                 //获取到订单后加锁并置为已开始人工派单的状态
                 $order->order_flag_lock = $admin_id;
                 $order->admin_id = $admin_id;
-                if(OrderStatus::manualAssignStart($order,['orderExtFlag'])){
+                if(OrderStatus::manualAssignStart($order,['OrderExtFlag'])){
                     return $order;
                 }
             }
@@ -65,11 +65,11 @@ class OrderSearch extends Order
         return false;
     }
 
-    public static function getListByWorkerId($worker_id,$booked_begin_time)
+    public static function getListByWorkerIds($worker_ids,$booked_begin_time)
     {
         $day_begin = strtotime(date('Y:m:d 00:00:00',$booked_begin_time));
         $day_end = strtotime(date('Y:m:d 23:59:59',$booked_begin_time));
-        return Order::find()->joinWith(['orderExtWorker'])->where(['worker_id'=>$worker_id])->andWhere(['between', 'order_booked_begin_time', $day_begin, $day_end])->all();
+        return Order::find()->joinWith(['orderExtWorker'])->where(['worker_id'=>$worker_ids])->andWhere(['between', 'order_booked_begin_time', $day_begin, $day_end])->all();
     }
 
     /**

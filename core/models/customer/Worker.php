@@ -151,7 +151,7 @@ class Worker extends \common\models\Worker
             }
         }
 
-        //获取在指派时间段内已被预约的阿姨
+        //获取在指派时间段内已预约的阿姨
         //$condition = "(order_booked_begin_time>$orderBookeEndTime or order_booked_end_time<$orderBookBeginTime)";
         $condition = "	(ejj_order.order_booked_begin_time<=$orderBookBeginTime AND ejj_order.order_booked_end_time>=$orderBookBeginTime )";
         $condition.= " OR ( ejj_order.order_booked_begin_time<=$orderBookeEndTime AND ejj_order.order_booked_end_time>=$orderBookeEndTime )";
@@ -169,7 +169,7 @@ class Worker extends \common\models\Worker
             $busyWorkerIdsArr = [];
         }
 
-        //排除被预约的阿姨
+        //排除已预约和正在服务的阿姨
         $freeWorkerIdsArr = array_diff($districtWorkerIdsArr,$busyWorkerIdsArr);
 
         if(empty($freeWorkerIdsArr)){
@@ -344,8 +344,6 @@ class Worker extends \common\models\Worker
                 return '已试工';
             case 3:
                 return '已上岗';
-            case 4:
-                return '已离职';
         }
        /* if($worker_auth_status==1){
             return '通过';

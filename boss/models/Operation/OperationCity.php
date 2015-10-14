@@ -49,6 +49,7 @@ class OperationCity extends CoreOperationCity
             'created_at' => Yii::t('app', '创建时间'),
             'updated_at' => Yii::t('app', '编辑时间'),
             'category' => Yii::t('app', '服务品类'),
+            'shopdistrict' => Yii::t('app', '商圈'),
         ];
     }
     

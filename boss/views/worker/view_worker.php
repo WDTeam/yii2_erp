@@ -267,7 +267,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'worker_auth_status',
                 'type' => DetailView::INPUT_RADIO_LIST,
-                'items'=>['0'=>'新录入','1'=>'已审核','2'=>'已试工','3'=>'已上岗'],
+                'items'=>['0'=>'新录入','1'=>'已审核','2'=>'已试工','3'=>'已上岗','4'=>'已离职'],
                 //'value'=>Worker::getWorkerAuthStatusShow($model->worker_auth_status),
                 'label'=>'阿姨状态',
                 'value'=>$model::getWorkerAuthStatusShow($model->worker_auth_status),

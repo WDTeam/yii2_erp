@@ -28,6 +28,7 @@ class OperationCategorySearch extends CoreOperationCategory
         return [
             'id' => Yii::t('app', '编号'),
             'operation_category_name' => Yii::t('app', '品类名称'),
+            'operation_goods_name'=>Yii::t('app','商品名称'),
             'created_at' => Yii::t('app', '创建时间'),
             'updated_at' => Yii::t('app', '编辑时间'),
         ];
@@ -41,8 +42,16 @@ class OperationCategorySearch extends CoreOperationCategory
 
     public function search($params)
     {
-        $query = OperationCategory::find();
 
+        $query = new \yii\db\Query();;
+        $query = $query->select(['goods.id as goods_id',
+            'category.id',
+            'category.operation_category_name',
+            'goods.operation_goods_name',
+            'goods.operation_goods_english_name'
+        ])
+            ->from('{{%operation_goods}} as goods')
+            ->rightJoin('{{%operation_category}} as category','goods.operation_category_id = category.id');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);

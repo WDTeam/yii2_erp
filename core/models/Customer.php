@@ -90,7 +90,7 @@ class Customer extends \common\models\Customer
      */
     public static function getCustomerAddresses($customer_id){
         $customer = self::findOne($customer_id);
-        $customerAddresses = $customer->hasMany('\common\models\customerAddress', ['customer_id'=>'id'])->all();
+        $customerAddresses = $customer->hasMany('\common\models\CustomerAddress', ['customer_id'=>'id'])->all();
         return $customerAddresses != NULL ? $customerAddresses : false;
     }
 
@@ -180,7 +180,12 @@ class Customer extends \common\models\Customer
         foreach($customerWorker as $k=>$v)
         {
             $worker[$k] = $v->attributes;
-            $worker[$k]['worker_name'] = Worker::findOne($v->woker_id)->worker_name;
+            $worker = Worker::findOne($v->worker_id);
+            if(!empty($worker)) {
+                $worker[$k]['worker_name'] = $worker->worker_name;
+            }else{
+                unset($worker[$k]);
+            }
         }
         return $worker;
     }

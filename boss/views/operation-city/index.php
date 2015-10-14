@@ -39,7 +39,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
     'modelClass' => 'Operation City',
-]), ['create'], ['class' => 'btn btn-success'])*/  ?>
+]), ['create'], ['class' => 'btn btn-success'])*/
+        ?>
     </p>
 
     <?php Pjax::begin();
@@ -56,8 +57,17 @@ $this->params['breadcrumbs'][] = $this->title;
             'province_name',
             'city_name',
             [
+                'attribute'=> 'shopdistrict',
+                'format'=>'html',
+                'value' => function ($model){
+                    return OperationShopDistrictGoods::getCityShopDistrictNum($model->city_id);
+                    //                   return date('Y-m-d H:i:s', $model->created_at);
+                }
+            ],
+            [
                'attribute'=> 'operation_city_is_online',
                'format'=>'html',
+
 //                'value' => function ($model){
 //                    Html::a('已上线', 
 //                            Yii::$app->urlManager->createUrl(['operation-city/upline','id' => $model->id]),
@@ -76,33 +86,33 @@ $this->params['breadcrumbs'][] = $this->title;
 //               'attribute'=> 'category',
 //               'format'=>'html',
 //               'value' => function ($model){
-////                    return OperationShopDistrictGoods::getCityCategory($model->city_id);
-//                    return date('Y-m-d H:i:s', $model->created_at);
+//                    return OperationShopDistrictGoods::getCityShopDistrictNum($model->city_id);
+// //                   return date('Y-m-d H:i:s', $model->created_at);
 //               }
 //            ],
-            
-            [
-               'attribute'=> 'created_at',
-               'format'=>'html',
-               'value' => function ($model){
-                    if(empty($model->created_at)){
-                        return '';
-                    }else{
-                        return date('Y-m-d H:i:s', $model->created_at);
-                    }
-               }
-            ],
-            [
-               'attribute'=> 'updated_at',
-               'format'=>'html',
-               'value' => function ($model){
-                    if(empty($model->updated_at)){
-                        return '';
-                    }else{
-                        return date('Y-m-d H:i:s', $model->updated_at);
-                    }
-               }
-            ],
+//
+//            [
+//               'attribute'=> 'created_at',
+//               'format'=>'html',
+//               'value' => function ($model){
+//                    if(empty($model->created_at)){
+//                        return '';
+//                    }else{
+//                        return date('Y-m-d H:i:s', $model->created_at);
+//                    }
+//               }
+//            ],
+//            [
+//               'attribute'=> 'updated_at',
+//               'format'=>'html',
+//               'value' => function ($model){
+//                    if(empty($model->updated_at)){
+//                        return '';
+//                    }else{
+//                        return date('Y-m-d H:i:s', $model->updated_at);
+//                    }
+//               }
+//            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t('app', 'Operation'),
@@ -132,8 +142,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         );
                     },
                     'listbtn' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-list"></span>',Yii::$app->urlManager->createUrl(['operation-shop-district','city_id' => $model->city_id]),['title' => Yii::t('yii', '商圈列表'), 'class' => 'btn btn-warning btn-sm']).
-                        Html::a('<span class="glyphicon glyphicon-list"></span>',Yii::$app->urlManager->createUrl(['operation-shop-district-goods','city_id' => $model->city_id]),['title' => Yii::t('yii', '城市商品列表'), 'class' => 'btn btn-warning btn-sm']);
+                        return Html::a('<span class="glyphicon glyphicon-list"></span>',Yii::$app->urlManager->createUrl(['operation-shop-district','city_id' => $model->city_id]),['title' => Yii::t('yii', '商圈列表'), 'class' => 'btn btn-warning btn-sm']);
+                        //.Html::a('<span class="glyphicon glyphicon-list"></span>',Yii::$app->urlManager->createUrl(['operation-shop-district-goods','city_id' => $model->city_id]),['title' => Yii::t('yii', '城市商品列表'), 'class' => 'btn btn-warning btn-sm']);
                     },
                 ],
             ],

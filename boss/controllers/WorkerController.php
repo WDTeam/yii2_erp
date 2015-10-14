@@ -225,6 +225,8 @@ class WorkerController extends BaseAuthController
      * @return mixed
      */
     public function actionCreateVacation($workerId){
+        $workerIdArr = explode(',',$workerId);
+        $workerId = $workerIdArr[0] ;
         $workerModel = $this->findModel($workerId);
         $workerVacationModel = new WorkerVacation();
         $post = \Yii::$app->request->post();
@@ -368,6 +370,7 @@ class WorkerController extends BaseAuthController
             'dsn' => 'mysql:host=rdsh52vh252q033a4ci5.mysql.rds.aliyuncs.com;dbname=sq_ejiajie_v2',
             'username' => 'sq_ejiajie',
             'password' => 'test_sq_ejiajie',
+            'charset' => 'utf8',
         ]);
         $connection->open();
         $command = $connection->createCommand("SELECT * FROM worker_info where id<$lastWorkerId order by id desc limit 40");

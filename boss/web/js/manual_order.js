@@ -6,6 +6,7 @@ window.work_status = 1; //1休息 2空闲 3忙碌
 window.order_data = new Object();
 window.continue_work_count_down = 10;
 window.count_down_flag = true; //倒计时结束后标记false代表已经处理订单
+var refuse_worker_id = 0;
 $(document).on("click",'#start_work,#continue_work',function(){
     window.work_status = 2;
     $('#work_status').text('空闲');
@@ -37,6 +38,77 @@ $(document).on("click",'#can_not_assign',function(){
         canNotAssign();
     }
 });
+
+$(document).on("click",'.worker_assign',function(){
+    if(confirm('您确认此阿姨接单？')){
+
+        refuse_worker_id = $(this).parents('tr').find('input').val();
+        $.ajax({
+            type: "POST",
+            url:  "/order/do-assign",
+            data: "order_id="+window.order_data.order.id+"&worker_id="+refuse_worker_id,
+            dataType:"json",
+            success: function (msg) {
+                if(msg){
+                    window.continue_work_count_down = 10;
+                    $("#work_console").html(
+                        '<button id="stop_work" class="btn btn-warning" type="button">收工啦</button>' +
+                        '<button id="pause_work" class="btn btn-warning" type="button">休息</button>' +
+                        '<button id="continue_work" class="btn btn-warning" type="button">继续（'+window.continue_work_count_down+'s）</button>'
+                    );
+                    $("#order_assign").hide();
+                    $("#work_console").show();
+                }else{
+                    alert('指派失败！');
+                }
+            }
+        });
+    }
+});
+
+$(document).on("click",'.worker_refuse',function(){
+    refuse_worker_id = $(this).parents('tr').find('input').val();
+});
+
+$(document).on("click",'.worker_contact_failure',function(){
+    refuse_worker_id = $(this).parents('tr').find('input').val();
+    $.ajax({
+        type: "POST",
+        url:  "/order/create-order-worker-relation",
+        data: "order_id="+window.order_data.order.id+"&worker_id="+refuse_worker_id+"&memo="+encodeURIComponent("人工指派未响应")+"&status="+encodeURIComponent("人工指派未响应"),
+        dataType:"json",
+        success: function (msg) {
+            if(msg){
+                $("#worker_memo_"+refuse_worker_id).text('人工指派未响应');
+                $("#worker_status_"+refuse_worker_id).text('人工指派未响应');
+            }
+        }
+    });
+});
+
+$(document).on("click",'#worker_refuse_memo_submit',function(){
+    var memo = $("#worker_refuse_modal input[name=worker_refuse_memo]:checked").val();
+    if(memo==0) memo = $("#worker_refuse_memo_other").val();
+    if(memo.length<=0){
+        alert('拒绝原因不能为空！');
+    }else{
+        $.ajax({
+            type: "POST",
+            url:  "/order/create-order-worker-relation",
+            data: "order_id="+window.order_data.order.id+"&worker_id="+refuse_worker_id+"&memo="+encodeURIComponent(memo)+"&status="+encodeURIComponent("人工指派拒单"),
+            dataType:"json",
+            success: function (msg) {
+                if(msg){
+                    $("#worker_memo_"+refuse_worker_id).text('已拒单：'+memo);
+                    $("#worker_status_"+refuse_worker_id).text('人工指派拒单');
+                    $("#worker_refuse_modal .close").click();
+                }
+            }
+        });
+    }
+});
+
+
 
 function canNotAssign(){
     window.count_down_flag = false;
@@ -89,7 +161,7 @@ function getWaitManualAssignOrder(){
 function getCanAssignWorkerList(){
     $.ajax({
         type: "GET",
-        url: "/order/get-can-assign-worker-list?address_id="+window.order_data.order.address_id+'&booked_begin_time='+window.order_data.order.order_booked_begin_time,
+        url: "/order/get-can-assign-worker-list?order_id="+window.order_data.order.id,
         dataType:"json",
         success: function (data) {
             if(data){
@@ -97,15 +169,15 @@ function getCanAssignWorkerList(){
                 for(var k in data){
                     var v = data[k];
                     $("#worker_list tbody").append('<tr>'+
-                    '<td><a href="/worker/view/'+ v.id+'" target="_blank">'+ v.worker_name+'</a></td>'+
+                    '<td><input type="hidden" value="'+ v.id+'" /><a href="/worker/view/'+ v.id+'" target="_blank">'+ v.worker_name+'</a></td>'+
                     '<td>'+ v.worker_phone+'</td>'+
                     '<td>'+ v.shop_name+'</td>'+
                     '<td>'+ v.worker_rule_description+'</td>'+
-                    '<td>'+ v.orders+'</td>'+
+                    '<td>'+ v.order_booked_time_range.join('<br/>')+'</td>'+
                     '<td>'+ v.worker_stat_order_refuse_percent+'</td>'+
-                    '<td></td>'+
-                    '<td></td>'+
-                    '<td><a href="javascript:void(0);" class="worker_contacted" >已联系</a></td>'+
+                    '<td>'+ v.tag+'</td>'+
+                    '<td id="worker_status_'+ v.id+'">'+ v.status.join(',')+'</td>'+
+                    '<td id="worker_memo_'+ v.id+'">'+ (v.memo.length>0?v.memo.join(','):'<a href="javascript:void(0);" class="worker_assign">派单</a> <a href="javascript:void(0);" data-toggle="modal" data-target="#worker_refuse_modal" class="worker_refuse">拒单</a> <a href="javascript:void(0);" class="worker_contact_failure">未接通</a>')+'</td>'+
                     '</tr>');
                 }
             }
