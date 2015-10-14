@@ -164,10 +164,10 @@ function getCanAssignWorkerList(){
         url: "/order/get-can-assign-worker-list?order_id="+window.order_data.order.id,
         dataType:"json",
         success: function (data) {
-            if(data){
+            if(data.code==200){
                 $("#worker_list tbody").html('');
-                for(var k in data){
-                    var v = data[k];
+                for(var k in data.data){
+                    var v = data.data[k];
                     $("#worker_list tbody").append('<tr>'+
                     '<td><input type="hidden" value="'+ v.id+'" /><a href="/worker/view/'+ v.id+'" target="_blank">'+ v.worker_name+'</a></td>'+
                     '<td>'+ v.worker_phone+'</td>'+
@@ -180,6 +180,8 @@ function getCanAssignWorkerList(){
                     '<td id="worker_memo_'+ v.id+'">'+ (v.memo.length>0?v.memo.join(','):'<a href="javascript:void(0);" class="worker_assign">派单</a> <a href="javascript:void(0);" data-toggle="modal" data-target="#worker_refuse_modal" class="worker_refuse">拒单</a> <a href="javascript:void(0);" class="worker_contact_failure">未接通</a>')+'</td>'+
                     '</tr>');
                 }
+            }else{
+                alert(data.msg);
             }
         }
 
