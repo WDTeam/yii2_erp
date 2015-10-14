@@ -129,7 +129,7 @@ class Ivr extends Component
         var_dump($telephone, $orderId, $press, $result, $postType);
     }
     
-    private function request($data)
+    public function request($data)
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); // 对认证证书来源的检查
