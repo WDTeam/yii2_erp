@@ -110,12 +110,12 @@ $("#order-order_customer_phone").blur(function(){
                         dataType: "json",
                         success: function (worker) {
                             if (worker.length>0) {
-                                $("#order-order_booked_worker_id").html('<div class="radio-inline"><label><input type="radio" checked="" value="0" name="Order[order_booked_worker_id]"> 不指定</label></div>');
+                                $("#order-order_booked_worker_id").html('<label class="radio-inline"><input type="radio" checked="" value="0" name="Order[order_booked_worker_id]"> 不指定</label>');
                                 for(var k in worker){
                                     var v = worker[k];
                                     $("#order-order_booked_worker_id").append(
-                                        '<div class="radio-inline"><label><input type="radio" value="'+ v.worker_id
-                                        +'" name="Order[order_booked_worker_id]"> '+ v.worker_name+'</label></div>'
+                                        '<label class="radio-inline"><input type="radio" value="'+ v.worker_id
+                                        +'" name="Order[order_booked_worker_id]"> '+ v.worker_name+'</label>'
                                     );
                                 }
                             }
@@ -151,8 +151,8 @@ $("#order-order_booked_worker_phone").blur(function(){
             success: function (worker) {
                 if (worker.id) {
                     $("#order-order_booked_worker_id").html(
-                        '<div class="radio-inline"><label><input type="radio" value="'+ worker.id
-                        +'" checked="checked" name="Order[order_booked_worker_id]"> '+worker.worker_name+'</label></div>'
+                        '<label class="radio-inline"><input type="radio" value="'+ worker.id
+                        +'" checked="checked" name="Order[order_booked_worker_id]"> '+worker.worker_name+'</label>'
                     );
                 }
             }
@@ -174,13 +174,6 @@ $("#order-order_booked_count input").change(function(){
 
 });
 
-$("#order-order_booked_begin_time,#order-order_booked_count input").change(function(){
-    var stringTime = $("#order-order_booked_begin_time").val();
-    var timestamp = strtotime(stringTime);
-    timestamp = timestamp + $("#order-order_booked_count input:checked").val() * 60;
-    $("#order-order_booked_end_time").val(formatDate(new Date(timestamp * 1000)));
-
-});
 
 $('#order-order_pay_type input').change(function(){
         $('[id^=order_pay_type]').hide();
