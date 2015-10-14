@@ -9,9 +9,9 @@ return [
     ],
     'controllerNamespace' => 'api\controllers',
     'modules' => [
-        'user' => [
-            'class' => 'api\modules\user\Module',
-        ],
+//         'user' => [
+//             'class' => 'api\modules\user\Module',
+//         ],
     ],
     'components' => [
         'urlManager' => [

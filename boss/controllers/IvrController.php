@@ -10,13 +10,15 @@ class IvrController extends Controller
      */
     public function actionCallback()
     {
-        $data = \Yii::$app->ivr->callback(\Yii::$app->request->post());
-        if(isset($data['postType']) && $data['postType']==1){
-            // code=1表示接单成功
-            return json_encode([
-                'code'=>1
-            ]);
-        }
+        \Yii::$app->ivr->callback(\Yii::$app->request->post());
+//         \Yii::$app->ivr->on(Ivr::EVENT_CALLBACK, function ($event){
+//             if(isset($data['postType']) && $data['postType']==1){
+//                 // code=1表示接单成功
+//                 return json_encode([
+//                     'code'=>1
+//                 ]);
+//             }
+//         });
     }
     
     public function actionTest()
