@@ -4,6 +4,9 @@ use yii\web\Controller;
 use common\components\Ivr;
 class IvrController extends Controller
 {
+    /**
+     * IVR回调
+     */
     public function actionCallback()
     {
         $text = json_encode($_GET);
