@@ -24,12 +24,12 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
     
     public $worker_idcard;
     
+    const ONLINE_INCOME = 0;//线上支付订单
+    
+    const CASH_INCOME = 1;//现金订单
+    
     //订单收入类型表，包括纯订单收入和订单补贴
-    public $orderIncomeType = array('order_money'=>'0','cash_money'=>'1',
-            'far_subsidy'=>'2','night_subsidy'=>'3',
-            'empty_handed_subsidy'=>'4','channel_bonus'=>'5',
-            'small_maintain'=>'6',
-        );
+    public $orderIncomeType = array(self::ONLINE_INCOME=>'非现金订单',self::CASH_INCOME=>'现金订单',);
     /**
      * @inheritdoc
      */
@@ -65,14 +65,6 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
             'query' => $query,
         ]);
 
-        $this->load($params);
-
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
-        }
-
         $query->andFilterWhere([
             'id' => $this->id,
             'worder_id' => $this->worder_id,
@@ -104,4 +96,8 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
         return array_merge($addAttributeLabels,$parentAttributeLabels);
     }
     
+    
+    public function getOrderIncomeTypeDes($status){
+        return $this->orderIncomeType[$status];
+    }
 }

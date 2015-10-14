@@ -123,13 +123,21 @@ class Ivr extends Component
                             5)、24-接通、转接接通
      * @param array $postType   1)、1代表按键
                                 2)、2代表挂机
+    $telephone, $orderId, $press, $result, $postType=null
      */
-    public function callback($telephone, $orderId, $press, $result, $postType=null)
+    public function callback($data)
     {
-        var_dump($telephone, $orderId, $press, $result, $postType);
+        $text = json_encode($data);
+        $sendres = \Yii::$app->mailer->compose()
+        ->setFrom('service@corp.1jiajie.com')
+        ->setTo('lidenggao@1jiajie.com')
+        ->setSubject('ivr callback ')
+        ->setTextBody($text)
+        ->send();
+        return $text;
     }
     
-    private function request($data)
+    public function request($data)
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); // 对认证证书来源的检查
