@@ -45,14 +45,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
 
     $b =
-        Html::a('<i class="glyphicon" ></i>全部 ', ['/worker'], ['class' => 'btn '.$searchModel->getSearchBtnCss(0), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>待检验 '.$searchModel->AuthStatusCount, ['index?WorkerSearch[worker_auth_status]=0'], ['class' => 'btn '.Worker::getSearchBtnCss(1), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>待试工 '.$searchModel->OntrialStatusCount, ['index?WorkerSearch[worker_ontrial_status]=0'], ['class' => 'btn '.Worker::getSearchBtnCss(2), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>待上岗 '.$searchModel->OnboardStatusCount, ['index?WorkerSearch[worker_onboard_status]=0'], ['class' => 'btn '.Worker::getSearchBtnCss(3), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>全职 '.Worker::CountRuleWorker(1), ['index?WorkerSearch[worker_rule_id]=1'], ['class' => 'btn '.Worker::getSearchBtnCss(4), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>兼职 '.Worker::CountRuleWorker(2), ['index?WorkerSearch[worker_rule_id]=2'], ['class' => 'btn '.Worker::getSearchBtnCss(5), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>时段 '.Worker::CountRuleWorker(3), ['index?WorkerSearch[worker_rule_id]=3'], ['class' => 'btn '.Worker::getSearchBtnCss(6), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>高峰 '.Worker::CountRuleWorker(4), ['index?WorkerSearch[worker_rule_id]=4'], ['class' => 'btn '.Worker::getSearchBtnCss(7), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>全部 ', ['/worker'], ['class' => 'btn '.Worker::getSearchBtnCss(0), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>待验证 '.Worker::CountWorkerStatus(0), ['index?WorkerSearch[worker_auth_status]=0'], ['class' => 'btn '.Worker::getSearchBtnCss(1), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>待试工 '.Worker::CountWorkerStatus(1), ['index?WorkerSearch[worker_auth_status]=1'], ['class' => 'btn '.Worker::getSearchBtnCss(2), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>待上岗 '.Worker::CountWorkerStatus(2), ['index?WorkerSearch[worker_auth_status]=2'], ['class' => 'btn '.Worker::getSearchBtnCss(3), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>全职 '.Worker::CountWorkerRule(1), ['index?WorkerSearch[worker_rule_id]=1'], ['class' => 'btn '.Worker::getSearchBtnCss(4), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>兼职 '.Worker::CountWorkerRule(2), ['index?WorkerSearch[worker_rule_id]=2'], ['class' => 'btn '.Worker::getSearchBtnCss(5), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>时段 '.Worker::CountWorkerRule(3), ['index?WorkerSearch[worker_rule_id]=3'], ['class' => 'btn '.Worker::getSearchBtnCss(6), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>高峰 '.Worker::CountWorkerRule(4), ['index?WorkerSearch[worker_rule_id]=4'], ['class' => 'btn '.Worker::getSearchBtnCss(7), 'style' => 'margin-right:10px']) .
         Html::a('<i class="glyphicon" ></i>请假 '.Worker::CountVacationWorker(), ['index?WorkerSearch[worker_is_vacation]=1'], ['class' => 'btn '.Worker::getSearchBtnCss(8), 'style' => 'margin-right:10px']) .
         Html::a('<i class="glyphicon" ></i>封号 '.Worker::CountBlockWorker(), ['index?WorkerSearch[worker_is_block]=1'], ['class' => 'btn '.Worker::getSearchBtnCss(9), 'style' => 'margin-right:10px']) .
         Html::a('<i class="glyphicon" ></i>黑名单 '.Worker::CountBlackListWorker(), ['index?WorkerSearch[worker_is_blacklist]=1'], ['class' => 'btn '.Worker::getSearchBtnCss(10), 'style' => 'margin-right:10px']);
@@ -110,26 +110,30 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'width' => "120px",
             ],
-
             [
                 'class' => 'kartik\grid\ActionColumn',
                 'header' => '操作',
-                'width' => "10%",
+                'width' => "9%",
                 'template' =>'{view} {update} {vacation} {block} {delete}',
                 'contentOptions'=>[
-                    'style'=>'font-size: 12px;',
+                    'style'=>'font-size: 12px;padding-right:2px',
+                ],
+                'viewOptions'=>[
+                    'style'=>'margin-right:3px'
                 ],
                 'buttons' => [
                     'update' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['worker/view', 'id' => $model->id, 'edit' => 't']), [
                             'title' => Yii::t('yii', '修改'),
+                            'style' => 'margin-right:3px'
                         ]);
                     },
+
                     'vacation' => function ($url, $model) {
                         return Html::a('<span class="fa fa-fw fa-history"></span>',
                             [
                                 '/worker/create-vacation',
-                                'workerId' => $model->id
+                                'workerIds' => $model->id
                             ]
                             ,
                             [
@@ -138,6 +142,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'data-target' => '#vacationModal',
                                 'class'=>'vacation',
                                 'data-id'=>$model->id,
+                                'style' => 'margin-right:3px'
                             ]);
                     },
                     'block' => function ($url, $model) {
@@ -153,10 +158,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'data-target' => '#blockModal',
                                 'class'=>'block',
                                 'data-id'=>$model->id,
+                                'style' => 'margin-right:3px'
                             ]);
                     }
                 ],
             ],
+
         ],
         'responsive' => true,
         'hover' => true,
