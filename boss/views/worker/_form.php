@@ -45,7 +45,7 @@ use core\models\worker\WorkerRuleConfig;
         <div class="panel-heading"><h3 class="panel-title">门店信息</h3></div>
         <div class="panel-body">
             <?=  $form->field($worker, 'worker_work_city')->widget(Select2::classname(), [
-                'name' => 'worker_rule_id',
+                'name' => 'worker_work_city',
                 'hideSearch' => true,
                 'data' => $worker::getOnlineCityList(),
                 'options' => ['placeholder' => '选择城市', 'inline' => true],

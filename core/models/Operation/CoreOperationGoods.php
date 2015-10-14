@@ -45,10 +45,10 @@ class CoreOperationGoods extends CommonOperationGoods
         $d = array();
         foreach((array)$data as $key => $value){
             //查找该商品是否在该城市存在，如不存在则返回
-            $goodsstatus = OperationShopDistrictGoods::getCityShopDistrictGoodsInfo($city_id, $value['id']);
-            if(empty($goodsstatus)){
+//            $goodsstatus = OperationShopDistrictGoods::getCityShopDistrictGoodsInfo($city_id, $value['id']);
+//            if(empty($goodsstatus)){
                 $d[$value['id'].'-'.$value['operation_goods_name']] = $value['operation_goods_name'];
-            }
+//            }
         }
         return $d;
     }

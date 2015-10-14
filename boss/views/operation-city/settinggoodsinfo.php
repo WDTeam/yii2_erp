@@ -28,7 +28,7 @@ if($cityAddGoods == 'editGoods') {
 <?php // echo Html::checkboxList('shopdistrict', $shopdistrictinfoall, $shopdistrictinfo)  ?>
 
     <div class="form-group ">
-        <label class="control-label col-md-2"><?= $goodsInfo['operation_goods_name']?>&nbsp;&nbsp;&nbsp;统一设置</label>
+        <label class="control-label col-md-2"><?= $goodsInfo['operation_goods_name']?>&nbsp;&nbsp;&nbsp;</label><label class="settingGoodsinfo">统一设置</label>
 <!--        <label class="control-label col-md-2 settingGoodsinfo"></label>-->
         <div class="col-md-10 not-bold">
             <label>市场价格：</label><input type="text" maxlength="" style="width:50px;" class="operation_goods_market_price_demo" value="" name="operation_goods_market_price[]" >元<div class="div-inline"></div>
@@ -58,7 +58,10 @@ if($cityAddGoods == 'editGoods') {
 
 <?php if($cityAddGoods == 'success'){
             $buttonname = '确认添加';
-      }else{
+      }elseif($cityAddGoods == 'editGoods'){
+          $buttonname = '确认编辑';
+      }
+      else{
             $buttonname = '确认开通';
       }
 
