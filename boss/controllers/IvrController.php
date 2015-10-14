@@ -10,15 +10,15 @@ class IvrController extends Controller
      */
     public function actionCallback()
     {
-        $params = \Yii::$app->request->post();
-        $text = json_encode($params);
-        $sendres = \Yii::$app->mailer->compose()
-        ->setFrom('service@corp.1jiajie.com')
-        ->setTo('lidenggao@1jiajie.com')
-        ->setSubject('ivr callback ')
-        ->setTextBody($text)
-        ->send();
-        return '请求的数据：'.$text;
+        $data = \Yii::$app->request->post();
+        $text = \Yii::$app->ivr->callback($data);
+        if($data['postType']==1){
+            return json_encode([
+                'code'=>1
+            ]);
+        }else{
+            return '请求的数据：'.$text;
+        }
     }
     public function actionTest()
     {
