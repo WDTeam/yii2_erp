@@ -60,33 +60,28 @@ namespace common\components;
 use yii\base\Component;
 use yii\base\Event;
 use yii\web\Application;
+use common\behaviors\IvrlogBehavior;
 class Ivr extends Component
 {
     const IVR_URL = 'https://api.vlink.cn/interface/open/v1/webcall';
+    const EVENT_SEND_AFTER = 'ivrSendAfter';
+    const EVENT_CALLBACK = 'ivrCallback';
     /**
      * 必选	应用编号	由天润生成并提供
      */
     public $app_id;
     public $token;
     
+    public $cb_data=[];
+    public $request_data;
+    
     public function behaviors()
     {
         return [
-//             [
-//                 'class'=>ShopStatusBehavior::className(),
-//                 'model_name'=>ShopStatus::MODEL_SHOP
-//             ]
+            [
+                'class'=>IvrlogBehavior::className(),
+            ]
         ];
-    }
-    public function events()
-    {
-        return [
-            Application::EVENT_BEFORE_REQUEST=>'beforRequest'
-        ];
-    }
-    public function beforRequest($event)
-    {
-        var_dump($event);exit;
     }
     /**
      * 发送语音播报
@@ -105,8 +100,10 @@ class Ivr extends Component
             'orderMessage' => $orderMessage,
             'orderId' => $orderId
         ];
-        var_dump($ivrarr);
-        return $this->request($ivrarr);
+        $res = $this->request($ivrarr);
+        $this->request_data = array_merge($ivrarr, (array)json_decode($res,true));
+        $this->trigger(self::EVENT_SEND_AFTER);
+        return $res;
     }
     /**
      * 回调处理
@@ -127,14 +124,16 @@ class Ivr extends Component
      */
     public function callback($data)
     {
-        $text = json_encode($data);
-        $sendres = \Yii::$app->mailer->compose()
-        ->setFrom('service@corp.1jiajie.com')
-        ->setTo('lidenggao@1jiajie.com')
-        ->setSubject('ivr callback ')
-        ->setTextBody($text)
-        ->send();
-        return $text;
+        $this->cb_data = $data;
+        $this->trigger(self::EVENT_CALLBACK);
+        return $data;
+//         $text = json_encode($data);
+//         $sendres = \Yii::$app->mailer->compose()
+//         ->setFrom('service@corp.1jiajie.com')
+//         ->setTo('lidenggao@1jiajie.com')
+//         ->setSubject('ivr callback ')
+//         ->setTextBody($text)
+//         ->send();
     }
     
     public function request($data)
