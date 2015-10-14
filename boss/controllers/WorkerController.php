@@ -245,7 +245,9 @@ class WorkerController extends BaseAuthController
             foreach ($workerResult as $val) {
                 $workerNameStr .= $val['worker_name'].',';
             }
+            $vacationType = \Yii::$app->request->get('vacationType');
             $workerNameStr = trim($workerNameStr,',');
+            $workerVacationModel->worker_vacation_type = $vacationType;
             return $this->renderAjax('create_vacation',['workerName'=>$workerNameStr,'workerVacationModel'=>$workerVacationModel]);
         }
     }
@@ -470,7 +472,7 @@ class WorkerController extends BaseAuthController
                 $workerStatArr['worker_id'] = $val['id'];
                 $workerStatArr['worker_stat_order_num'] = intval($val['order_num']);
                 $workerStatArr['worker_stat_sale_cards'] = intval($val['sale_card']);
-                
+
                 $batchWorker[] = $workerArr;
                 $batchWorkerExt[] = $workerExtArr;
                 $batchWorkerDevice[] = $workerDeviceArr;

@@ -30,9 +30,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ?>
             <div class='col-md-6'>
-                <?= $form->field($model, 'workerPhone') ?>
+                <?= $form->field($model, 'worder_tel') ?>
             </div>
-            <div class='col-md-2' >
+            <div class='col-md-2' style='margin-top: 22px;'>
                 <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
                 <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
             </div>
@@ -69,13 +69,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?=  $model->workerName; ?>
             </div>
             <div class='col-md-2'>
-                <?=  $model->workerPhone; ?>
+                <?=  $model->worder_tel; ?>
             </div>
             <div class='col-md-2'>
                 <?=  date('Y:m:d H:i:s',$model->workerOnboardTime); ?>
             </div>
             <div class='col-md-2'>
-                <?=  $model->workerType; ?>
+                <?=  $model->workerTypeDes; ?>
             </div>
             <div class='col-md-2'>
                 <?=  $model->finance_settle_apply_cycle_des; ?>

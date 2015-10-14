@@ -10,16 +10,6 @@ use kartik\field\FieldRange;
 
 <div class="">
 
-<?php /*$form = ActiveForm::begin([
-    'type'=>ActiveForm::TYPE_HORIZONTAL,
-    'action'=>['vacation-create', 'worker_id'=>$workerModel->id]
-]); */ ?>
-    <!--<div class="form-group">
-        <div class="col-sm-offset-0 col-sm-12">
-            <?php // Html::submitButton('确认',['class'=>'btn btn-primary btn-lg btn-block']);?>
-        </div>
-    </div>-->
-    <?php /* ActiveForm::end(); */?>
 <?php
     $form = ActiveForm::begin([
         'type' => ActiveForm::TYPE_HORIZONTAL,

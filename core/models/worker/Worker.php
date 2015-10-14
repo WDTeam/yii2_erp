@@ -97,9 +97,24 @@ class Worker extends \common\models\Worker
      public static function getWorkerInfoByPhone($phone){
 
         $condition = ['worker_phone'=>$phone,'isdel'=>0,'worker_is_block'=>0,'worker_is_vacation'=>0,'worker_is_blacklist'=>0];
-        $workerInfo = worker::find()->where($condition)->select('id,worker_name,')->asArray()->one();
+        $workerInfo = worker::find()->where($condition)->select('id,shop_id,worker_name,worker_phone,worker_idcard,worker_type,worker_rule_id,created_ad')->asArray()->one();
+        if($workerInfo){
+             //门店名称,家政公司名称
+             $shopInfo = Shop::findone($workerInfo['shop_id']);
+             if($shopInfo){
+                 $shopManagerInfo = ShopManager::findOne($shopInfo['shop_manager_id']);
+             }
+             $workerInfo['shop_name'] = isset($shopInfo['name'])?$shopInfo['name']:'';
+             $workerInfo['shop_manager_name'] = isset($shopManagerInfo['name'])?$shopManagerInfo['name']:'';
+             //阿姨类型描述信息
+             $workerInfo['worker_type_description'] = self::getWorkerTypeShow($workerInfo['worker_type']);
+             //阿姨身份描述信息
+             $workerInfo['worker_rule_description'] = WorkerRuleConfig::getWorkerRuleShow($workerInfo['worker_rule_id']);
+        }else{
+             $workerInfo = [];
+        }
         return $workerInfo;
-    }
+     }
 
     /*
      * 获取商圈中 所有可用阿姨id

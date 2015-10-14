@@ -30,34 +30,47 @@ class IvrlogBehavior extends Behavior
         $model->ivrlog_req_order_message = $data['orderMessage'];
         $model->ivrlog_req_order_id = $data['orderId'];
         $model->ivrlog_res_result = $data['result'];
-        $model->ivrlog_res_unique_id = $data['unique_id'];
-        $model->ivrlog_res_clid = $data['clid'];
+        if(isset($data['uniqueId']) && isset($data['clid'])){
+            $model->ivrlog_res_unique_id = $data['uniqueId'];
+            $model->ivrlog_res_clid = $data['clid'];
+        }
         $model->ivrlog_res_description = $data['description'];
         $model->save(true);
+        $this->_model = $model;
     }
     
     protected $_model;
     public function callback($event)
     {
+//         $text = json_encode($data);
+//         $sendres = \Yii::$app->mailer->compose()
+//         ->setFrom('service@corp.1jiajie.com')
+//         ->setTo('lidenggao@1jiajie.com')
+//         ->setSubject('ivr callback ')
+//         ->setTextBody($text)
+//         ->send();
+        
         $cbdata = (object)$this->owner->cb_data;
-        $model = $this->getModel();
+        $model = Ivrlog::find()->where([
+            'ivrlog_req_tel'=>$cbdata->telephone,
+            'ivrlog_req_order_id'=>$cbdata->orderId,
+        ])->one();
         if(isset($model)){
             $model->ivrlog_cb_telephone = $cbdata->telephone;
             $model->ivrlog_cb_order_id = $cbdata->orderId;
             $model->ivrlog_cb_press = $cbdata->press;
             $model->ivrlog_cb_result = $cbdata->result;
             $model->ivrlog_cb_post_type = $cbdata->postType;
-            $model->ivrlog_cb_webcall_request_unique_id = $cbdata->webcall_request_unique_id;
+            if(isset($cbdata->webcall_request_unique_id)){
+                $model->ivrlog_cb_webcall_request_unique_id = $cbdata->webcall_request_unique_id;
+            }
             $model->ivrlog_cb_time = time();
             $model->save(true);
         }
+        $this->_model = $model;
     }
     public function getModel()
     {
-        $this->_model = Ivrlog::find()->where([
-            'ivrlog_req_tel'=>$cbdata->telephone,
-            'ivrlog_req_order_id'=>$cbdata->orderId,
-        ])->one();
         return $this->_model;
     }
     
