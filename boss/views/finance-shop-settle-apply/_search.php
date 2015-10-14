@@ -15,46 +15,50 @@ use boss\models\FinanceSettleApplySearch;
         'action' => ['index?review_section='.FinanceShopSettleApplySearch::BUSINESS_REVIEW],
         'method' => 'get',
     ]); ?>
-    <div class='col-md-4' style='margin-top: 22px;'>
-    <?php echo ShopSelect::widget([
-            'model'=>$model,
-            'shop_manager_id'=>'shop_manager_id',
-            'shop_id'=>'shop_id',
-            ]);?>
-    </div>
-    
-    <div class='col-md-2' >
-    <?php echo  $form->field($model, 'finance_shop_settle_apply_starttime')->widget(DateControl::classname(),[
-        'type' => DateControl::FORMAT_DATE,
-         'value'=>$model->finance_shop_settle_apply_starttime,
-        'ajaxConversion'=>false,
-        'displayFormat' => 'php:Y-m-d',
-        'saveFormat'=>'php:U',
-        'options' => [
-            'pluginOptions' => [
-                 'autoclose' => true
-            ]
-        ]
-    ]);
-    
+<!--    <div class='col-md-4' style='margin-top: 22px;'>
+    <?php 
+//    echo ShopSelect::widget([
+//            'model'=>$model,
+//            'shop_manager_id'=>'shop_manager_id',
+//            'shop_id'=>'shop_id',
+//            ]);
     ?>
+    </div>-->
+    
+    <!--<div class='col-md-2' >-->
+    <?php 
+//    echo  $form->field($model, 'finance_shop_settle_apply_starttime')->widget(DateControl::classname(),[
+//        'type' => DateControl::FORMAT_DATE,
+//         'value'=>$model->finance_shop_settle_apply_starttime,
+//        'ajaxConversion'=>false,
+//        'displayFormat' => 'php:Y-m-d',
+//        'saveFormat'=>'php:U',
+//        'options' => [
+//            'pluginOptions' => [
+//                 'autoclose' => true
+//            ]
+//        ]
+//    ]);
+    
+//    ?>
   </div>  
-    <div class='col-md-2'>
-    <?php echo  $form->field($model, 'finance_shop_settle_apply_endtime')->widget(DateControl::classname(),[
-        'type' => DateControl::FORMAT_DATE,
-        'value'=>$model->finance_shop_settle_apply_endtime,
-        'ajaxConversion'=>false,
-        'displayFormat' => 'php:Y-m-d',
-        'saveFormat'=>'php:U',
-        'options' => [
-            'pluginOptions' => [
-                 'autoclose' => true
-            ]
-        ]
-    ]);
+    <!--<div class='col-md-2'>-->
+    <?php 
+//    echo  $form->field($model, 'finance_shop_settle_apply_endtime')->widget(DateControl::classname(),[
+//        'type' => DateControl::FORMAT_DATE,
+//        'value'=>$model->finance_shop_settle_apply_endtime,
+//        'ajaxConversion'=>false,
+//        'displayFormat' => 'php:Y-m-d',
+//        'saveFormat'=>'php:U',
+//        'options' => [
+//            'pluginOptions' => [
+//                 'autoclose' => true
+//            ]
+//        ]
+//    ]);
     
     ?>
-  </div> 
+  <!--</div>--> 
      <?php 
     if($model->review_section == FinanceShopSettleApplySearch::BUSINESS_REVIEW){
         echo "<div class='col-md-2'>";

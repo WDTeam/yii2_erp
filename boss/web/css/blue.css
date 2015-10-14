@@ -43,6 +43,14 @@ div.order-create label.radio-inline {
     width: 25%;
 }
 
+div.order-create .radio {
+    font-size: 14px;
+}
+
+div.order-create .control-label {
+    font-size: 14px;
+}
+
 div#order-orderbookedtimerange label.radio-inline {
     width: 33%;
 }

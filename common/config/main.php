@@ -162,6 +162,14 @@ return [
             'password'=>'556201',
         ],
         /**
+         * IVR
+         */
+        'ivr'=>[
+            'class'=>'common\components\Ivr',
+            'app_id'=>'5000040',
+            'token'=>'8578b07ba71ff7dfd6ddeca95d69828c',
+        ],
+        /**
          * 配置控制台命令
          * 
          * 使用方法：

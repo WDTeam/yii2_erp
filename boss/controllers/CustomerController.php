@@ -267,18 +267,6 @@ class CustomerController extends BaseAuthController
         //     . '...';
         // }
 
-        //订单数量
-        $order_count = OrderExtCustomer::find()->where([
-            'customer_id'=>$model->id
-            ])->count();
-        //客户余额
-        $customerBalance = CustomerExtBalance::find()->where([
-            'customer_id'=>$model->id
-            ])->one();
-        if ($customerBalance == NULL) {
-            $customerBalance = new CustomerExtBalance;
-        }
-        
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -298,8 +286,6 @@ class CustomerController extends BaseAuthController
                 // 'default'=>$default,
                 // 'others'=>$others,
                 'addressStr'=>$addressStr,
-                'order_count'=>$order_count,
-                'customerBalance'=>$customerBalance,
                 ]);
 
         }
@@ -636,6 +622,100 @@ class CustomerController extends BaseAuthController
         echo "<br/>customer数据导入成功";
     }
 
+    public function actionData2(){
+        // set_time_limit(30 * 1000); 
+        ini_set("max_execution_time", 30000);
+        $connectionNew =  \Yii::$app->db;
+        $connection = new \yii\db\Connection([
+            'dsn' => 'mysql:host=rdsh52vh252q033a4ci5.mysql.rds.aliyuncs.com;dbname=sq_ejiajie_v2',
+            'username' => 'sq_ejiajie',
+            'password' => 'test_sq_ejiajie',
+        ]);
+        $connection->open();
+        $command = $connection->createCommand("SELECT count(*) FROM user_info");
+        $count = $command->queryScalar();
+        echo "<br/>顾客总记录数为" . $count;
+        
+        $command = $connection->createCommand("SELECT * FROM user_info order by id asc");
+        $userInfo = $command->queryAll();
+
+        $customerArr = array();
+        $customerBalanceArr = array();
+        $customerScoreArr = array();
+        $customerCommentArr = array();
+        foreach($userInfo as $val){
+            $customerArr[]['id'] = intval($val['id']);
+            $customerArr[]['customer_name'] = $val['name'];
+            $customerArr[]['customer_sex'] = $val['gender'];
+            $customerArr[]['customer_birth'] = intval(strtotime($val['birthday']));
+            $customerArr[]['customer_photo'] = '';
+            $customerArr[]['customer_phone'] = $val['telphone'];
+            $customerArr[]['customer_email'] = $val['email'];
+            $customerArr[]['operation_area_id'] = 0;
+            $customerArr[]['operation_city_id'] = 0;
+            $customerArr[]['general_region_id'] = 1;
+            $customerArr[]['customer_live_address_detail'] = $val['street'];
+            $customerArr[]['customer_level'] = $val['level'];
+            $customerArr[]['customer_complaint_times'] = 0;
+            $customerArr[]['customer_src'] = intval($val['user_src']);
+            $customerArr[]['channal_id'] = 0;
+            $customerArr[]['platform_id'] = 0;
+            $customerArr[]['customer_login_ip'] = '';
+            $customerArr[]['customer_login_time'] = 0;
+            $customerArr[]['customer_is_vip'] = $val['user_type'];
+            $customerArr[]['created_at'] = intval(strtotime($val['create_time']));
+            $customerArr[]['updated_at'] = intval(strtotime($val['update_time']));
+            $customerArr[]['is_del'] = $val['is_block'];
+            $customerArr[]['customer_del_reason'] = '辱骂阿姨';
+
+            // $customerBalanceArr[]['id'] = intval($val['id']);
+            $customerBalanceArr[]['customer_id'] = $val['id'];
+            $customerBalanceArr[]['customer_balance'] = $val['charge_money'];
+            $customerBalanceArr[]['created_at'] = time();
+            $customerBalanceArr[]['updated_at'] = 0;
+            $customerBalanceArr[]['is_del'] = 0;
+           
+            // $customerScoreArr[]['id'] = intval($val['id']);
+            $customerScoreArr[]['customer_id'] = $val['id'];
+            $customerScoreArr[]['customer_score'] = 0;
+            $customerScoreArr[]['created_at'] = time();
+            $customerScoreArr[]['updated_at'] = 0;
+            $customerScoreArr[]['is_del'] = 0;
+
+            $command = $connection->createCommand("SELECT * FROM user_comment where id=".$val['id']);
+            $userComment = $command->queryAll();
+            if ($userComment) {
+                // $customerCommentArr[]['id'] = intval($val['id']);
+                $customerCommentArr[]['customer_id'] = intval($val['id']);;
+                $customerCommentArr[]['order_id'] = $userComment[0]['order_id'];
+                $customerCommentArr[]['customer_comment_phone'] = $userComment[0]['user_telephone'];
+                $customerCommentArr[]['customer_comment_content'] = $userComment[0]['comment'];
+                $customerCommentArr[]['customer_comment_star_rate'] = $userComment[0]['star_rate'];
+                switch ($userComment[0]['is_anonymous']) {
+                    case 1:
+                        $customer_comment_anonymous = 0;
+                        break;
+                    case 0:
+                        $customer_comment_anonymous = 1;
+                        break;
+                    
+                    default:
+                        # code...
+                        break;
+                }
+                $customerCommentArr[]['customer_comment_anonymous'] = $customer_comment_anonymous;
+                $customerCommentArr[]['created_at'] = strtotime($userComment[0]['create_time']);
+                $customerCommentArr[]['updated_at'] = 0;
+                $customerCommentArr[]['is_del'] = 0;
+            }
+        }
+        $connectionNew->createCommand()->batchInsert('{{%customer}}',$customerArr[0], $customerArr)->execute();
+        $connectionNew->createCommand()->batchInsert('{{%customer_ext_balance}}',$customerBalanceArr[0], $customerBalanceArr)->execute();
+        $connectionNew->createCommand()->batchInsert('{{%customer_ext_score}}',$customerScoreArr[0], $customerScoreArr)->execute();
+        $connectionNew->createCommand()->batchInsert('{{%customer_comment}}',$customeCommentArr[0], $customerCommentArr)->execute();
+        echo "<br/>customer数据导入成功";
+    }
+
     public function actionTest(){
         // $customer = new Customer;
         // $res = $customer->decBalance(1, 0.01);
@@ -645,7 +725,18 @@ class CustomerController extends BaseAuthController
         // $info = $test->incBalance(202, 10);
         // var_dump($info);
 
-        $res = \common\models\CustomerBlockLog::addToBlock(17782, '测试');
+        // $res = \common\models\CustomerBlockLog::addToBlock(17782, '测试');
+        // var_dump($res);
+        // $res = \core\models\customer\CustomerCode::generateAndSend('18519654001');
+        // var_dump($res);
+
+        // $res = \core\models\customer\CustomerCode::checkCode('18519654001', '9906');
+        // var_dump($res);
+
+        // $res = \core\models\customer\CustomerAccessToken::generateAccessToken('18519654001', '9906');
+        // var_dump($res);
+
+        $res = \core\models\customer\CustomerAccessToken::getCustomer('19647829599d11c786cd95ea93896b1f');
         var_dump($res);
     }
 }
