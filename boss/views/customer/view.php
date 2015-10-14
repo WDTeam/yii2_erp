@@ -11,6 +11,7 @@ use kartik\grid\GridView;
 use kartik\date\DatePicker;
 use boss\components\AreaCascade;
 use yii\data\ActiveDataProvider;
+use yii\helpers\ArrayHelper;
 
 use common\models\CustomerPlatform;
 use common\models\CustomerChannal;
@@ -20,6 +21,7 @@ use common\models\GeneralRegion;
 use common\models\OperationCity;
 use common\models\CustomerExtBalance;
 use common\models\CustomerExtScore;
+use common\models\CustomerExtSrc;
 use common\models\CustoemrBlockLog;
 use common\models\CustomerComment;
 use common\models\Order;
@@ -34,6 +36,16 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="customer-view">
 <?php 
+$customerExtSrc = CustomerExtSrc::find()->where(['customer_id'=>$model->id])->orderBy('created_at asc')->one();
+$platform_name_str = '';
+$channal_name_str = '';
+if ($customerExtSrc == NULL) {
+    $platform_name_str = '';
+    $channal_name_str = '';
+}else{
+    $platform_name_str = $customerExtSrc->platform_name;
+    $channal_name_str = $customerExtSrc->channal_name;
+}
 echo DetailView::widget([
     'model' => $model,
     'condensed'=>false,
@@ -56,9 +68,9 @@ echo DetailView::widget([
             'attribute' => 'operation_city_id',
             'type' => DetailView::INPUT_WIDGET,
             'widgetOptions' => [
-                'name'=>'operation_city_id',
+                'name'=>'id',
                 'class'=>\kartik\widgets\Select2::className(),
-                'data' => [1 => '北京', 2=>'', 3=>'', 4=>''],
+                'data' => ArrayHelper::map(OperationCity::find()->asArray()->all(), 'id', 'city_name'),
                 'hideSearch' => true,
                 'options'=>[
                     'placeholder' => '选择城市',
@@ -66,7 +78,7 @@ echo DetailView::widget([
             ],
             'value'=>$operationCity['city_name'] ? $operationCity['city_name'] : '-',
         ],
-        'customer_name',
+        // 'customer_name',
         'customer_phone',
         [
             'attribute' => 'platform_id',
@@ -80,7 +92,7 @@ echo DetailView::widget([
                     'placeholder' => '选择平台',
                 ]
             ],
-            'value'=>$platform_name,
+            'value'=>$platform_name_str,
         ],
         [
             'attribute' => 'channal_id',
@@ -94,7 +106,7 @@ echo DetailView::widget([
                     'placeholder' => '选择聚道',
                 ]
             ],
-            'value'=>$channal_name,
+            'value'=>$channal_name_str,
         ],
         // [
         //     'attribute'=>'customer_phone', 

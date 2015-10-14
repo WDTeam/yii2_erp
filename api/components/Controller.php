@@ -23,7 +23,7 @@ class Controller extends \yii\rest\Controller
      * @param integer $error_code 错误码
      * @param string $msg 信息
      */
-    public function send($ret, $msg="操作成功", $code="ok")
+    public function send($ret, $msg="操作成功", $code="ok",$value=200,$text=null)
     {
         $result = [
             'code'=>$code,
@@ -34,7 +34,7 @@ class Controller extends \yii\rest\Controller
         $response = Yii::$app->response;
         $response->format = Yii\web\Response::FORMAT_JSON;
         $response->data = $result;
-
+        $response->setStatusCode($value,$text);
         return $response;
     }
 

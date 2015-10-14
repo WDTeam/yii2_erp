@@ -47,6 +47,8 @@ class CustomerController extends BaseAuthController
         $params = Yii::$app->request->getQueryParams();
         // $params['is_del'] = 0;
         $dataProvider = $searchModel->search($params);
+        $dataProvider->query->orderBy(['created_at' => SORT_DESC ]);
+        
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
@@ -399,6 +401,20 @@ class CustomerController extends BaseAuthController
     public function actionRemoveFromBlock($id){
         $is_removed = CustomerBlockLog::removeFromBlock($id);
         return $this->redirect(['index']);
+    }
+
+    /**
+     * 批量加入黑名单
+     */
+    public function actionMultiAddToBlock(){
+
+    }
+
+    /**
+     * 批量从黑名单中删除
+     */
+    public function actionMultiRemoveFromBlock(){
+
     }
 
     /**

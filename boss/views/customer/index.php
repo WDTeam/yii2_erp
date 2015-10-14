@@ -18,10 +18,10 @@ use yii\base\Widget;
 use common\models\CustomerPlatform;
 use common\models\CustomerChannal;
 use common\models\CustomerAddress;
-
 use common\models\GeneralRegion;
 use common\models\OrderExtCustomer;
 use common\models\CustomerExtBalance;
+use common\models\CustomerExtSrc;
 
 /**
  * @var yii\web\View $this
@@ -47,6 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     $b= Html::a('<i class="glyphicon" ></i>全部 ', ['index'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']). 
     Html::a('<i class="glyphicon" ></i>黑名单 '.$searchModel->countBlockCustomer(), ['index?CustomerSearch[is_del]=1'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']);
+    
    
     ?>
     <?php Pjax::begin();
@@ -56,11 +57,15 @@ $this->params['breadcrumbs'][] = $this->title;
         'export'=>false,
         'toolbar' =>
             [
-                // 'content'=>
-                //     Html::a('<i class="glyphicon glyphicon-plus"></i>', ['index?getData=1'], [
-                //         'class' => 'btn btn-default',
-                //         'title' => Yii::t('kvgrid', 'Reset Grid')
-                //     ]),
+                'content'=>
+                    Html::a('<i class="glyphicon">批量加入黑名单</i>', ['customer/multi-add-to-block'], [
+                        'class' => 'btn btn-default',
+                        // 'title' => Yii::t('kvgrid', 'Reset Grid')
+                    ]),
+                    Html::a('<i class="glyphicon">批量加从黑名单删除</i>', ['customer/multi-remove-from-block'], [
+                        'class' => 'btn btn-default',
+                        // 'title' => Yii::t('kvgrid', 'Reset Grid')
+                    ]),
             ],
         'columns' => [
             // ['class' => 'yii\grid\SerialColumn'],
@@ -73,19 +78,23 @@ $this->params['breadcrumbs'][] = $this->title;
             //     'width' => "80px",
             // ],
             [
-                'format' => 'raw',
-                'label' => '姓名',
-                'value' => function ($dataProvider) {
-                    $name_show = empty($dataProvider->customer_name) ? "未知" : $dataProvider->customer_name;
-                    return '<a href="/customer/' . $dataProvider->id . '">'.$name_show.'</a>';
-                },
-                'width' => "80px",
+                'class'=>'kartik\grid\CheckboxColumn',
+                'headerOptions'=>['class'=>'kartik-sheet-style'],
             ],
+            // [
+            //     'format' => 'raw',
+            //     'label' => '姓名',
+            //     'value' => function ($dataProvider) {
+            //         $name_show = empty($dataProvider->customer_name) ? "未知" : $dataProvider->customer_name;
+            //         return '<a href="/customer/' . $dataProvider->id . '">'.$name_show.'</a>';
+            //     },
+            //     'width' => "80px",
+            // ],
             [
                 'format' => 'raw',
                 'label' => '电话',
                 'value' => function ($dataProvider) {
-                    return $dataProvider->customer_phone;
+                    return '<a href="/customer/' . $dataProvider->id . '">'.$dataProvider->customer_phone.'</a>';
                 },
                 'width' => "80px",
             ],
@@ -138,8 +147,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'label' => '平台',
                 'value' => function ($dataProvider) {
-                    $platform = CustomerPlatform::find()->where(['id'=>$dataProvider->platform_id])->one();
-                    return $platform ? $platform->platform_name : '-';
+                    // $platform = CustomerPlatform::find()->where(['id'=>$dataProvider->platform_id])->one();
+                    // return $platform ? $platform->platform_name : '-';
+                    $customerExtSrc = CustomerExtSrc::find()->where(['customer_id'=>$dataProvider->id])->orderBy('created_at asc')->one();
+                    return $customerExtSrc == NULL ? '-' : $customerExtSrc->platform_name;
                 },
                 'width' => "80px",
             ],
@@ -147,8 +158,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'label' => '渠道',
                 'value' => function ($dataProvider) {
-                    $channal = CustomerChannal::find()->where(['id'=>$dataProvider->channal_id])->one();
-                    return $channal ? $channal->channal_name : '-';
+                    // $channal = CustomerChannal::find()->where(['id'=>$dataProvider->channal_id])->one();
+                    // return $channal ? $channal->channal_name : '-';
+                    $customerExtSrc = CustomerExtSrc::find()->where(['customer_id'=>$dataProvider->id])->orderBy('created_at asc')->one();
+                    return $customerExtSrc == NULL ? '-' : $customerExtSrc->platform_name;
                 },
                 'width' => "80px",
             ],
