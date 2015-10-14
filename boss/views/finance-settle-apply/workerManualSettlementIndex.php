@@ -88,7 +88,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <label class="panel-title">结算明细</label>
         <?=
 
-            Html::a('结算', ['worker-manual-settlement-done?FinanceSettleApplySearch[worder_id]='.$model->worder_id.'&settle_type='.$model->settle_type.'&review_section='.$model->review_section], ['class' => 'btn btn-success ']);
+            Html::a('结算', ['worker-manual-settlement-done?worder_id='.$model->worder_id.'&settle_type='.$model->settle_type.'&review_section='.$model->review_section], ['class' => 'btn btn-success ']);
 
          ?>
         </div>
@@ -192,7 +192,7 @@ $this->params['breadcrumbs'][] = $this->title;
                'floatHeader'=>true,
            ]); Pjax::end(); 
             ?>
-            //<?php 
+<?php 
 //                    Pjax::begin(); echo GridView::widget([
 //               'dataProvider' => $orderDataProvider,
 //               'columns' => [
@@ -217,7 +217,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //               'condensed'=>true,
 //               'floatHeader'=>true,
 //           ]); Pjax::end(); 
-//            ?>
+            ?>
         </div>
     </div>
 </div>

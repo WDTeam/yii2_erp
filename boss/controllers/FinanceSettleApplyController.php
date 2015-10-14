@@ -520,8 +520,9 @@ class FinanceSettleApplyController extends BaseAuthController
         $requestParams = Yii::$app->request->getQueryParams();
         $review_section = $requestParams['review_section'];
         $settle_type = $requestParams['settle_type'];
-//        saveAndGenerateSettleData($partimeWorkerArr,$settleStartTime,$settleEndTime);
-        
+        $worker_id = $requestParams['settle_type'];
+        $partimeWorkerArr = [['worker_id'=>$worker_id],];
+//        $this->saveAndGenerateSettleData($partimeWorkerArr,$settleStartTime,$settleEndTime);
         return $this->redirect('/finance-settle-apply/self-fulltime-worker-settle-index?settle_type='.$settle_type.'&review_section='.$review_section);
     }
     
@@ -602,11 +603,10 @@ class FinanceSettleApplyController extends BaseAuthController
         return strtotime(date('Y-m-t 23:59:59', strtotime($yearAndMonth)));
     }
     
-    private function saveAndGenerateSettleData($partimeWorkerArr,$settleStartTime,$settleEndTime){
-        foreach($partimeWorkerArr as $partimeWorker){
+    private function saveAndGenerateSettleData($workerArr,$settleStartTime,$settleEndTime){
+        foreach($workerArr as $worker){
             //根据阿姨Id获取阿姨信息
-            $workerIdCard = $partimeWorker['worker_idcard'];
-            $workerId = $partimeWorker['worker_id'];
+            $workerId = $worker['worker_id'];
             //订单收入明细
             //已对账的订单，且没有投诉和赔偿的订单
             $orderIncomeDetail = array(['worker_id'=>'555','order_id'=>'801','order_pay_type'=>'0','order_money'=>'50','order_booked_count'=>'2','order_complete_time'=>'1234455'],
