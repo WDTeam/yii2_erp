@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\FinanceWorkerOrderIncome;
+use core\models\order\Order;
 
 /**
  * FinanceWorkerOrderIncomeSearch represents the model behind the search form about `common\models\FinanceWorkerOrderIncome`.
@@ -79,6 +80,12 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
             'created_at' => $this->created_at,
         ]);
 
+        return $dataProvider;
+    }
+    
+    public function getOrderDataProvider(){
+        $query = Order::find();
+        $dataProvider = new ActiveDataProvider([ 'query' => $query,]);
         return $dataProvider;
     }
     

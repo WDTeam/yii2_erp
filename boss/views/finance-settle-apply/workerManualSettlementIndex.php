@@ -192,6 +192,32 @@ $this->params['breadcrumbs'][] = $this->title;
                'floatHeader'=>true,
            ]); Pjax::end(); 
             ?>
+            //<?php 
+//                    Pjax::begin(); echo GridView::widget([
+//               'dataProvider' => $orderDataProvider,
+//               'columns' => [
+//                   ['class' => 'yii\grid\SerialColumn'],
+//                   ['attribute'=>'id',
+//                       'header' => Yii::t('app', '订单号'),
+//                        'content'=>function($model,$key,$index)
+//                               {return  Html::a('<u>'.$model->id.'</u>',[Yii::$app->urlManager->createUrl(['order/view/','id' => $model->id])],['data-pjax'=>'0','target' => '_blank',]);}],
+//                   [
+//                       'header' => Yii::t('app', '支付方式'),
+//                        'attribute' => 'order_pay_type',
+//                       'content'=>function($model,$key,$index){
+//                                   return $model->order_pay_type==null?'':$model->order_pay_type;
+//                       },
+//                    ],
+//                   'order_money',
+//                   'order_booked_begin_time:datetime', 
+//                   'order_booked_count', 
+//               ],
+//               'responsive'=>true,
+//               'hover'=>true,
+//               'condensed'=>true,
+//               'floatHeader'=>true,
+//           ]); Pjax::end(); 
+//            ?>
         </div>
     </div>
 </div>

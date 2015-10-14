@@ -11,13 +11,12 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\FinanceWorkerOrderIncome;
 use common\models\FinanceWorkerNonOrderIncome;
-use boss\models\WorkerSearch;
 use boss\models\FinanceWorkerOrderIncomeSearch;
 use boss\models\FinanceWorkerNonOrderIncomeSearch;
 use boss\models\FinanceShopSettleApplySearch;
 use PHPExcel;
 use PHPExcel_IOFactory;
-use core\models\worker\Worker;
+
 
 /**
  * FinanceSettleApplyController implements the CRUD actions for FinanceSettleApply model.
@@ -506,8 +505,11 @@ class FinanceSettleApplyController extends BaseAuthController
         if(isset($requestParams['finance_worker_order_income_type'])){
             $financeWorkerOrderIncomeSearch->finance_worker_order_income_type = $requestParams['finance_worker_order_income_type'];
         }
+//        $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProvider();
+//        return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider]);
         $orderIncomeDataProvider = $financeWorkerOrderIncomeSearch->search(Yii::$app->request->getQueryParams());
         return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'orderIncomeDataProvider'=>$orderIncomeDataProvider]);
+        
     }
     
     /**
