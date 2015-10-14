@@ -12,17 +12,18 @@ class IvrController extends Controller
     {
         $params = \Yii::$app->request->getQueryParams();
         $text = json_encode($params);
-        return \Yii::$app->mailer->compose()
+        $sendres = \Yii::$app->mailer->compose()
         ->setFrom('service@corp.1jiajie.com')
         ->setTo('lidenggao@1jiajie.com')
         ->setSubject('ivr callback ')
         ->setTextBody($text)
         ->send();
+        return '请求的数据：'.$text;
     }
     public function actionTest()
     {
         $I = new Ivr();
-        $res = $I->send('15110249233', 'sdf12f123123o','E家洁，您身边的家政装甲');
+        $res = $I->send('15110249233', time(),'E家洁，您身边的家政专家');
         var_dump($res);
     }
 }
