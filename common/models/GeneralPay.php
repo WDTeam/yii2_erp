@@ -363,6 +363,61 @@ class GeneralPay extends \yii\db\ActiveRecord
         return md5(md5($str).'1jiajie.com');
     }
 
+
+    /**
+     * 订单退款
+     * @param $out_trade_no    商户订单号
+     * @param $transaction_id   交易流水号
+     * @param $out_refund_no    退款订单号
+     * @param $total_fee    订单总金额(单位/分)
+     * @param $refund_fee   退款金额(单位/分)
+     * @param $op_user_passwd   退款密码(MD5)
+     */
+    public function wx_app_refund( $out_refund_no,$total_fee,$refund_fee,$op_user_passwd,$out_trade_no=0,$transaction_id=0 )
+    {
+        if( empty($out_trade_no) && empty($transaction_id) ){
+            return $msg = "out_trade_no和transaction_id至少一个必填，同时存在时transaction_id优先";
+        }
+
+        $params = [
+            'out_refund_no' => $out_refund_no,
+            'out_trade_no' => $out_trade_no,   //订单号
+            'transaction_id' => $transaction_id, //交易流水号
+            'total_fee' => $total_fee,      //交易总额(分单位)
+            'refund_fee' => $refund_fee,     //退款总额(分单位)
+            'op_user_passwd' => $op_user_passwd, //操作员密码,MD5处理
+        ];
+
+        $class = new \wxrefund_class();
+        $data = $class->refund($params);
+        return $data;
+    }
+
+
+    /**
+     * @param int $out_trade_no     支付订单号
+     * @param int $transaction_id   支付交易流水号
+     * @param int $out_refund_no    退款交易流水号
+     * @param int $refund_id        退款订单号
+     */
+    public function wx_app_refund_query( $out_trade_no=0,$transaction_id=0,$out_refund_no=0,$refund_id=0 )
+    {
+        if( empty($out_trade_no) && empty($transaction_id) ){
+            return $msg = "out_trade_no和transaction_id、out_refund_no、refund_id至少一个必填";
+        }
+
+        $params = [
+            'out_trade_no' => $out_trade_no,    //支付订单号
+            'transaction_id' => $transaction_id,   //支付交易流水号
+            'out_refund_no' => $out_refund_no, //退款交易流水号
+            'refund_id' => $refund_id,      //退款订单号
+        ];
+
+        $class = new \wxrefund_class();
+        $data = $class->refundQuery($params);
+        return $data;
+    }
+
     /**
      * 支付成功发送短信
      * @param $customer_id 用户ID

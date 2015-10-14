@@ -20,6 +20,7 @@ use common\models\GeneralRegion;
 use common\models\OperationCity;
 use common\models\CustomerExtBalance;
 use common\models\CustomerExtScore;
+use common\models\CustomerExtSrc;
 use common\models\CustoemrBlockLog;
 use common\models\CustomerComment;
 use common\models\Order;
@@ -34,6 +35,16 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="customer-view">
 <?php 
+$customerExtSrc = CustomerExtSrc::find()->where(['customer_id'=>$model->id])->orderBy('created_at asc')->one();
+$platform_name_str = '';
+$channal_name_str = '';
+if ($customerExtSrc == NULL) {
+    $platform_name_str = '';
+    $channal_name_str = '';
+}else{
+    $platform_name_str = $customerExtSrc->platform_name;
+    $channal_name_str = $customerExtSrc->channal_name;
+}
 echo DetailView::widget([
     'model' => $model,
     'condensed'=>false,
@@ -80,7 +91,7 @@ echo DetailView::widget([
                     'placeholder' => '选择平台',
                 ]
             ],
-            'value'=>$platform_name,
+            'value'=>$platform_name_str,
         ],
         [
             'attribute' => 'channal_id',
@@ -94,7 +105,7 @@ echo DetailView::widget([
                     'placeholder' => '选择聚道',
                 ]
             ],
-            'value'=>$channal_name,
+            'value'=>$channal_name_str,
         ],
         // [
         //     'attribute'=>'customer_phone', 
