@@ -24,15 +24,6 @@ use core\models\worker\Worker;
  */
 class FinanceSettleApplyController extends BaseAuthController
 {
-    const ORDER_COUNT = 1;//完成总单量
-    
-    const CASH_ORDER_COUNT = 2;//现金订单
-    
-    const ONLINE_ORDER_COUNT = 3;//非现金订单
-    
-    const COMPLETE_TASKS = 4;//完成任务
-    
-    const SMALL_MAINTAIN = 5;//小保养订单
     
     public function behaviors()
     {
@@ -506,7 +497,8 @@ class FinanceSettleApplyController extends BaseAuthController
         $requestParams = Yii::$app->request->getQueryParams();
         $review_section = $requestParams['review_section'];
         $settle_type = $requestParams['settle_type'];
-        $financeSettleApplySearch = $financeSettleApplySearch->getWorkerInfo(1234);//获取阿姨的信息
+        $financeSettleApplySearch->load($requestParams);
+        $financeSettleApplySearch = $financeSettleApplySearch->getWorkerInfo($financeSettleApplySearch->worder_tel);//获取阿姨的信息
         $financeSettleApplySearch->settle_type = $settle_type;
         $financeSettleApplySearch->review_section = $review_section;
         $financeWorkerOrderIncomeSearch = new FinanceWorkerOrderIncomeSearch;
