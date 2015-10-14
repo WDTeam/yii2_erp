@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\FinanceSettleApply;
+use core\models\worker\Worker;
 
 /**
  * FinanceSettleApplySearch represents the model behind the search form about `common\models\FinanceSettleApply`.
@@ -28,12 +29,22 @@ class FinanceSettleApplySearch extends FinanceSettleApply
    
    public $workerName;//阿姨姓名
     
-    public $workerPhone;//阿姨电话
-    
     public $workerOnboardTime;//阿姨报到时间
     
-    public $workerType;//阿姨类型
+    public $workerTypeDes;//阿姨类型,例如：'自营全职'等
     
+    const SELF_OPERATION = 1;//自营
+    
+    const NON_SELF_OPERATION = 2;//非自营
+    
+    public $operationDes = [self::SELF_OPERATION=>'自营',self::NON_SELF_OPERATION=>'非自营'];
+    
+    const FULLTIME = 1;//全职
+    
+    const PARTTIME = 2;//兼职
+    
+    public $roleDes = [self::FULLTIME=>'全职',self::PARTTIME=>'兼职'];
+            
     public $latestSettleTime;//上次结算日期
     
     public $settleMonth;//结算月份
@@ -50,7 +61,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         return [
             [[ 'finance_settle_apply_starttime', 'finance_settle_apply_endtime'], 'required'],
              [['worder_id', 'worker_type_id', 'finance_settle_apply_man_hour', 'finance_settle_apply_status', ], 'integer'],
-            [['worder_tel'], 'string', 'max' => 11],
+            [['worder_tel',], 'string', 'max' => 11],
         ];
     }
 
@@ -115,15 +126,29 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     }
     
     
-    public function getWorkerInfo($workerId){
+    public function getWorkerInfo($workerPhone){
         $financeSettleApplySearch = new FinanceSettleApplySearch;
-        $financeSettleApplySearch->worder_id =1234;
-        $financeSettleApplySearch->workerName = "张三";
-        $financeSettleApplySearch->workerPhone= "13456789000";
-        $financeSettleApplySearch->workerOnboardTime= "1443324337";
-        $financeSettleApplySearch->workerType= "全职全日";
-        $financeSettleApplySearch->finance_settle_apply_cycle_des = $this->getSettleCycleByWorkerType('','');
-        $financeSettleApplySearch->latestSettleTime = time();
+        $workerSimple = Worker::getWorkerInfoByPhone($workerPhone);
+        $workerInfo = Worker::getWorkerInfo($workerSimple['id']);
+        if(count($workerInfo)> 0){
+             $financeSettleApplySearch->worder_id =$workerInfo['id'];
+            $financeSettleApplySearch->workerName = $workerInfo['worker_name'];
+            $financeSettleApplySearch->worder_tel= $workerInfo['worker_phone'];
+            $financeSettleApplySearch->workerOnboardTime= $workerInfo['created_ad'];
+            $financeSettleApplySearch->workerTypeDes= $this->operationDes[$workerInfo['worker_type']].$this->roleDes[$workerInfo['worker_rule_id']];
+            $financeSettleApplySearch->worker_type_id = $workerInfo['worker_type'];
+            $financeSettleApplySearch->worker_rule_id = $workerInfo['worker_rule_id'];
+            $financeSettleApplySearch->finance_settle_apply_cycle_des = $this->getSettleCycleByWorkerType($financeSettleApplySearch->worker_type_id,$financeSettleApplySearch->worker_rule_id);
+            $financeSettleApplySearch->latestSettleTime = time();
+        }else{
+            $financeSettleApplySearch->worder_id =1234;
+            $financeSettleApplySearch->workerName = "张三";
+            $financeSettleApplySearch->worder_tel= "13456789000";
+            $financeSettleApplySearch->workerOnboardTime= "1443324337";
+            $financeSettleApplySearch->workerTypeDes= "全职全日";
+            $financeSettleApplySearch->finance_settle_apply_cycle_des = $this->getSettleCycleByWorkerType('','');
+            $financeSettleApplySearch->latestSettleTime = time();
+        }
 //        $financeSettleApplySearch->latestSettleTime = $this->getWorkerLatestSettledTime($workerId);
         return $financeSettleApplySearch;
     }
@@ -138,7 +163,12 @@ class FinanceSettleApplySearch extends FinanceSettleApply
      * @param type $workerRuleId
      */
     public function getSettleCycleByWorkerType($workerType,$workerRuleId){
-        return "月结";
+        if(($workerType == self::SELF_OPERATION) && ($workerRuleId == self::FULLTIME)){
+            return self::FINANCE_SETTLE_APPLY_CYCLE_MONTH_DES;
+        }else{
+            return self::FINANCE_SETTLE_APPLY_CYCLE_WEEK_DES;
+        }
+        
     }
     
     /**
@@ -162,7 +192,6 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     {
         $parentAttributeLabels = parent::attributeLabels();
         $addAttributeLabels = [
-            'workerPhone' => Yii::t('app', '阿姨电话'),
             'settleMonth' => Yii::t('app', '结算月份'),
         ];
         return array_merge($addAttributeLabels,$parentAttributeLabels);
