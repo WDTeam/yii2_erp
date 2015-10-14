@@ -238,19 +238,13 @@ $this->params['breadcrumbs'][] = $this->title;
 'header' => '<h4 class="modal-title">黑名单原因</h4>',
 'id' =>'modal',
 ]);?>
-<?php echo Modal::widget([
-'header' => '<h4 class="modal-title">黑名单原因</h4>',
-'id' =>'remove-modal',
-]);?>
+
 <?php $this->registerJs(<<<JSCONTENT
 $('.block-btn').click(function(){
     $('#modal .modal-body').html('加载中……');
     $('#modal .modal-body').eq(0).load(this.href);
 });
-$('.remove-btn').click(function(){
-    $('#modal .modal-body').html('加载中……');
-    $('#modal .modal-body').eq(0).load(this.href);
-});
+
 JSCONTENT
 );?>
 
