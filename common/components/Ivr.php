@@ -61,6 +61,8 @@ use yii\base\Component;
 use yii\base\Event;
 use yii\web\Application;
 use common\behaviors\IvrlogBehavior;
+use yii\web\HttpException;
+use yii\base\ExitException;
 class Ivr extends Component
 {
     const IVR_URL = 'https://api.vlink.cn/interface/open/v1/webcall';
@@ -101,7 +103,10 @@ class Ivr extends Component
             'orderId' => $orderId
         ];
         $res = $this->request($ivrarr);
-        $this->request_data = array_merge($ivrarr, (array)json_decode($res,true));
+        $res = $this->request_data = array_merge($ivrarr, (array)json_decode($res,true));
+        if(empty($res['result'])){
+            throw new \ErrorException('请求错误');
+        }
         $this->trigger(self::EVENT_SEND_AFTER);
         return $res;
     }
@@ -127,13 +132,6 @@ class Ivr extends Component
         $this->cb_data = $data;
         $this->trigger(self::EVENT_CALLBACK);
         return $data;
-//         $text = json_encode($data);
-//         $sendres = \Yii::$app->mailer->compose()
-//         ->setFrom('service@corp.1jiajie.com')
-//         ->setTo('lidenggao@1jiajie.com')
-//         ->setSubject('ivr callback ')
-//         ->setTextBody($text)
-//         ->send();
     }
     
     public function request($data)
