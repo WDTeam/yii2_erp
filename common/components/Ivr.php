@@ -58,14 +58,16 @@ description	说明
 namespace common\components;
 
 use yii\base\Component;
+use yii\base\Event;
+use yii\web\Application;
 class Ivr extends Component
 {
     const IVR_URL = 'https://api.vlink.cn/interface/open/v1/webcall';
     /**
      * 必选	应用编号	由天润生成并提供
      */
-    public $app_id = '5000005';
-    public $token = '9e4225742aba3b33b2d0576223933a76';
+    public $app_id;
+    public $token;
     
     public function behaviors()
     {
@@ -75,6 +77,16 @@ class Ivr extends Component
 //                 'model_name'=>ShopStatus::MODEL_SHOP
 //             ]
         ];
+    }
+    public function events()
+    {
+        return [
+            Application::EVENT_BEFORE_REQUEST=>'beforRequest'
+        ];
+    }
+    public function beforRequest($event)
+    {
+        var_dump($event);exit;
     }
     /**
      * 发送语音播报
