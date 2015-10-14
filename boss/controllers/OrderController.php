@@ -201,7 +201,7 @@ class OrderController extends BaseAuthController
                         $used_worker_ids[] = $v['worker_id'];
                     }
                 }
-                $worker_list = array_merge(Worker::getDistrictFreeWorker($district_id, 1, $order->order_booked_begin_time, $order->order_booked_end_time), Worker::getDistrictFreeWorker($shangquan, 2, $order->order_booked_begin_time, $order->order_booked_end_time));
+                $worker_list = array_merge(Worker::getDistrictFreeWorker($district_id, 1, $order->order_booked_begin_time, $order->order_booked_end_time), Worker::getDistrictFreeWorker($district_id, 2, $order->order_booked_begin_time, $order->order_booked_end_time));
                 $worker_ids = [];
                 $workers = [];
                 if (is_array($worker_list)) {
