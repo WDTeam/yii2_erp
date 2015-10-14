@@ -149,14 +149,14 @@ class Order extends OrderModel
             $order->order_flag_send = $order->orderExtFlag->order_flag_send+$flag_send; //标记是谁指派不了
             $order->order_flag_lock = 0;
             $order->admin_id = $admin_id;
-            if(OrderStatus::manualAssignUndone($order,['orderExtFlag'])){
+            if(OrderStatus::manualAssignUndone($order,['OrderExtFlag'])){
                 return true;
             }
         }else{//客服或小家政还没指派过则进入待人工指派的状态
             $order->order_flag_send = $order->orderExtFlag->order_flag_send+$flag_send;
             $order->order_flag_lock = 0;
             $order->admin_id = $admin_id;
-            if(OrderStatus::sysAssignUndone($order,['orderExtFlag'])){
+            if(OrderStatus::sysAssignUndone($order,['OrderExtFlag'])){
                 return true;
             }
         }
@@ -183,7 +183,7 @@ class Order extends OrderModel
         $order->shop_id = $worker["shop_id"];
         $order->order_worker_assign_type = $isCS?2:3; //2客服指派 3门店指派
         $order->admin_id = $admin_id;
-        return OrderStatus::manualAssignDone($order,['orderExtFlag','orderExtWorker']);
+        return OrderStatus::manualAssignDone($order,['OrderExtFlag','OrderExtWorker']);
     }
 
     /**
