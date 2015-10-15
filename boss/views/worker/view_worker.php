@@ -118,6 +118,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 'value'=>$model::getWorkerDistrictShow($model->id),
             ],
+
+            //'worker_work_area',
+            //'worker_work_street',
+
+            [
+                'attribute' => 'worker_sex',
+                'editModel'=>$model->workerExtRelation,
+                'viewModel'=>$model->workerExtRelation,
+                'type' => DetailView::INPUT_RADIO_LIST,
+                'items' => [0=>'女',1=>'男'],
+                'label'=>'阿姨性别',
+                'value'=>$model::getWorkerSexShow($model->workerExtRelation->worker_sex),
+            ],
             [
                 'attribute' =>'worker_photo',
                 'type' => DetailView::INPUT_FILEINPUT,
@@ -136,18 +149,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                     ]
                 ],
-            ],
-            //'worker_work_area',
-            //'worker_work_street',
-
-            [
-                'attribute' => 'worker_sex',
-                'editModel'=>$model->workerExtRelation,
-                'viewModel'=>$model->workerExtRelation,
-                'type' => DetailView::INPUT_RADIO_LIST,
-                'items' => [0=>'女',1=>'男'],
-                'label'=>'阿姨性别',
-                'value'=>$model::getWorkerSexShow($model->workerExtRelation->worker_sex),
             ],
             [
                 'attribute' => 'worker_age',

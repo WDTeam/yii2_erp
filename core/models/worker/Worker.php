@@ -7,6 +7,7 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\ForbiddenHttpException;
 use yii\web\BadRequestHttpException;
+use yii\web\UploadedFile;
 
 use common\models\OrderExtWorker;
 use common\models\ShopManager;
@@ -16,6 +17,8 @@ use core\models\worker\WorkerRuleConfig;
 use core\models\Operation\CoreOperationShopDistrict;
 use core\models\Operation\CoreOperationCity;
 use boss\models\Shop;
+
+use crazyfd\qiniu\Qiniu;
 
 /**
  * This is the model class for table "{{%worker}}".
@@ -211,6 +214,23 @@ class Worker extends \common\models\Worker
             return $workerResult;
         }
     }
+
+    /**
+     * 上传图片到七牛服务器
+     * @param string $field 上传文件字段名
+     * @return string $imgUrl 文件URL
+     */
+    public function uploadImgToQiniu($field){
+        $qiniu = new Qiniu();
+        $fileinfo = UploadedFile::getInstance($this, $field);
+        if(!empty($fileinfo)){
+            $key = time().mt_rand('1000', '9999').uniqid();
+            $qiniu->uploadFile($fileinfo->tempName, $key);
+            $imgUrl = $qiniu->getLink($key);
+            $this->$field = $imgUrl;
+        }
+    }
+
     /*
      * 获取已开通城市列表
      * @return array [city_id=>city_name,...]

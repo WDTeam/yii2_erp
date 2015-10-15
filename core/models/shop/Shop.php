@@ -1,5 +1,5 @@
 <?php
-namespace boss\models;
+namespace core\models\shop;
 use yii;
 use yii\behaviors\TimestampBehavior;
 use boss\models\Operation\OperationCity;
@@ -9,7 +9,7 @@ use yii\base\ErrorException;
 use yii\web\BadRequestHttpException;
 use yii2tech\ar\softdelete\SoftDeleteBehavior;
 use core\models\worker\Worker;
-use boss\behaviors\ShopStatusBehavior;
+use core\behaviors\ShopStatusBehavior;
 class Shop extends \common\models\Shop
 {
     public static $audit_statuses = [

@@ -60,7 +60,7 @@ namespace common\components;
 use yii\base\Component;
 use yii\base\Event;
 use yii\web\Application;
-use common\behaviors\IvrlogBehavior;
+use core\behaviors\IvrlogBehavior;
 use yii\web\HttpException;
 use yii\base\ExitException;
 class Ivr extends Component
@@ -78,7 +78,7 @@ class Ivr extends Component
     public $request_data;
     
     public function init(){
-        var_dump($this);
+        
     }
     
     public function behaviors()
@@ -107,8 +107,9 @@ class Ivr extends Component
             'orderId' => $orderId
         ];
         $res = $this->request($ivrarr);
-        $res = $this->request_data = array_merge($ivrarr, (array)json_decode($res,true));
-        if(empty($res['result'])){
+        $this->request_data = $res = array_merge($ivrarr, (array)json_decode($res,true));
+
+        if(!isset($res['result'])){
             throw new \ErrorException('请求错误');
         }
         $this->trigger(self::EVENT_SEND_AFTER);

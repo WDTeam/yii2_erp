@@ -10,6 +10,7 @@ use kartik\datecontrol\DateControl;
 use kartik\widgets\Select2; // or kartik\select2\Select2
 use kartik\grid\GridView;
 use kartik\date\DatePicker;
+use kartik\widgets\FileInput;
 use boss\components\AreaCascade;
 
 use core\models\worker\Worker;
@@ -89,6 +90,7 @@ use core\models\worker\WorkerRuleConfig;
             <?= $form->field($worker, 'worker_name')->textInput(['placeholder' => '输入阿姨姓名...', 'maxlength' => 10]); ?>
             <?= $form->field($worker, 'worker_phone')->textInput(['placeholder' => '输入阿姨手机...', 'maxlength' => 20]); ?>
             <?= $form->field($worker, 'worker_idcard')->textInput(['placeholder' => '输入阿姨身份证号...', 'maxlength' => 20]); ?>
+
             <?= $form->field($worker, 'worker_district')->widget(Select2::classname(), [
                 'name' => 'worker_district',
                 'hideSearch' => true,
@@ -99,6 +101,16 @@ use core\models\worker\WorkerRuleConfig;
                     'maximumInputLength' => 10
                 ],
             ]); ?>
+            <?= $form->field($worker, 'worker_photo')->widget(FileInput::classname(), [
+                'options' => ['multiple' => true],
+                'pluginOptions' => [
+                    'previewFileType' => 'any',
+                    'showPreview' => true,
+                    'showCaption' => false,
+                    'showRemove' => true,
+                    'showUpload' => false,
+                ]
+            ])?>
             <?= $form->field($worker_ext, 'worker_sex')->radioList(['0' => '女', '1' => '男'], ['inline' => true]); ?>
             <?= $form->field($worker_ext, 'worker_age')->textInput(['placeholder' => '输入阿姨年龄...']); ?>
             <?= $form->field($worker_ext, 'worker_height')->textInput(['placeholder' => '输入阿姨身高...']); ?>
@@ -141,11 +153,12 @@ use core\models\worker\WorkerRuleConfig;
                 'model' => $worker_ext,
                 'options' => ['class' => 'form-control inline'],
                 'label' =>'阿姨居住地',
-                'grades' => 'town',
+                'grades' => 'county',
             ]);
             ?>
 
             </div>
+            <?= $form->field($worker_ext, 'worker_live_street')->textInput(['placeholder' => '输入阿姨居住详细地址...', 'maxlength' => 10]); ?>
         </div>
 
 

@@ -1,27 +1,26 @@
 <?php
 
-namespace boss\models;
+namespace core\models\auth;
 
 use Yii;
 
 /**
- * This is the model class for table "auth_rule".
+ * This is the model class for table "auth_assignment".
  *
- * @property string $name
- * @property string $data
+ * @property string $item_name
+ * @property string $user_id
  * @property integer $created_at
- * @property integer $updated_at
  *
- * @property AuthItem[] $authItems
+ * @property AuthItem $itemName
  */
-class AuthRule extends \yii\db\ActiveRecord
+class AuthAssignment extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%auth_rule}}';
+        return '{{%auth_assignment}}';
     }
 
     /**
@@ -38,10 +37,9 @@ class AuthRule extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
-            [['data'], 'string'],
-            [['created_at', 'updated_at'], 'integer'],
-            [['name'], 'string', 'max' => 64]
+            [['item_name', 'user_id'], 'required'],
+            [['created_at'], 'integer'],
+            [['item_name', 'user_id'], 'string', 'max' => 64]
         ];
     }
 
@@ -51,18 +49,17 @@ class AuthRule extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'name' => 'Name',
-            'data' => 'Data',
+            'item_name' => 'Item Name',
+            'user_id' => 'User ID',
             'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAuthItems()
+    public function getItemName()
     {
-        return $this->hasMany(AuthItem::className(), ['rule_name' => 'name']);
+        return $this->hasOne(AuthItem::className(), ['name' => 'item_name']);
     }
 }

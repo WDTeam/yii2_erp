@@ -8,8 +8,8 @@ use boss\models\Demo;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use boss\models\ShopManager;
-use boss\models\search\ShopManagerSearch;
+use core\models\shop\ShopManager;
+use core\models\shop\ShopManagerSearch;
 
 
 /**

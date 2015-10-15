@@ -6,11 +6,11 @@ use boss\components\AreaCascade;
 use kartik\widgets\Select2;
 use yii\helpers\Url;
 use yii\web\JsExpression;
-use boss\models\Shop;
+use core\models\shop\Shop;
 
 /**
  * @var yii\web\View $this
- * @var boss\models\search\ShopSearch $model
+ * @var core\models\shop\ShopSearch $model
  * @var yii\widgets\ActiveForm $form
  */
 ?>
