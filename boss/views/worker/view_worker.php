@@ -34,6 +34,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'condensed' => false,
         'hover' => true,
+        'formOptions'=>[
+            'options'=>[
+                'enctype'=>'multipart/form-data'
+            ],
+        ],
         'mode' => Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
         'panel' => [
             'heading' => $this->title,
@@ -116,7 +121,21 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' =>'worker_photo',
                 'type' => DetailView::INPUT_FILEINPUT,
-
+                'widgetOptions'=>[
+                    'options'=>[
+                        'accept' => 'image/*',
+                        'name'=>'Worker[worker_photo]',
+                    ],
+                    'pluginOptions' => [
+                        'showPreview' => true,
+                        'showCaption' => false,
+                        'showRemove' => true,
+                        'showUpload' => false,
+                        'initialPreview'=>[
+                            Worker::getWorkerPhotoShow($model->worker_photo)
+                        ],
+                    ]
+                ],
             ],
             //'worker_work_area',
             //'worker_work_street',

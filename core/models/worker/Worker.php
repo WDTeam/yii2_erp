@@ -78,9 +78,7 @@ class Worker extends \common\models\Worker
             }
             $workerInfo['shop_name'] = isset($shopInfo['name'])?$shopInfo['name']:'';
             $workerInfo['shop_manager_name'] = isset($shopManagerInfo['name'])?$shopManagerInfo['name']:'';
-            //阿姨类型描述信息
             $workerInfo['worker_type_description'] = self::getWorkerTypeShow($workerInfo['worker_type']);
-            //阿姨身份描述信息
             $workerInfo['worker_rule_description'] = WorkerRuleConfig::getWorkerRuleShow($workerInfo['worker_rule_id']);
         }else{
             $workerInfo = [];
@@ -137,7 +135,6 @@ class Worker extends \common\models\Worker
             ->where(['worker_is_block'=>0,'worker_is_blacklist'=>0,'worker_is_vacation'=>0,'worker_type'=>$workerType])
             ->asArray()
             ->all();
-//var_dump($districtWorkerResult);
         $workerRuleConfigArr = WorkerRuleConfig::getWorkerRuleList();
         if(empty($districtWorkerResult)){
             return [];
@@ -219,7 +216,7 @@ class Worker extends \common\models\Worker
      * @return array [city_id=>city_name,...]
      */
     public static function getOnlineCityList(){
-        $onlineCityList= CoreOperationCity::find()->select('city_id,city_name')->where(['operation_city_is_online'=>1])->asArray()->all();
+        $onlineCityList= CoreOperationCity::find()->select('city_id,city_name')->asArray()->all();
         return $onlineCityList?ArrayHelper::map($onlineCityList,'city_id','city_name'):[];
     }
 
@@ -406,7 +403,11 @@ class Worker extends \common\models\Worker
         }
     }
 
-
+    public static function getWorkerPhotoShow($worker_photo){
+        if($worker_photo){
+            return \yii\helpers\Html::img($worker_photo, ['class'=>'file-preview-image']);
+        }
+    }
 
     /*
      * 统计被列入黑名单的阿姨的数量
@@ -479,29 +480,29 @@ class Worker extends \common\models\Worker
    * @return string 按钮css样式class   btn-success-selected(按钮被选中) or btn-success(按钮未选中)
    */
     public static function getSearchBtnCss($btnCate){
-        $searchParams = Yii::$app->request->getQueryParams();
-        $workerSearchParams = array_key_exists('WorkerSearch',$searchParams)?$searchParams['WorkerSearch']:[];
-        if($btnCate==0 && !array_key_exists('WorkerSearch',$searchParams)){
+        $params = Yii::$app->request->getQueryParams();
+        $workerParams = isset($params['WorkerSearch'])?$params['WorkerSearch']:[];
+        if($btnCate==0 && !isset($params['WorkerSearch'])){
             return 'btn-success-selected';
-        }elseif($btnCate==1 && isset($workerSearchParams['worker_auth_status']) && $workerSearchParams['worker_auth_status']==0){
+        }elseif($btnCate==1 && isset($workerParams['worker_auth_status']) && $workerParams['worker_auth_status']==0){
             return 'btn-success-selected';
-        }elseif($btnCate==2 && isset($workerSearchParams['worker_auth_status']) && $workerSearchParams['worker_auth_status']==1){
+        }elseif($btnCate==2 && isset($workerParams['worker_auth_status']) && $workerParams['worker_auth_status']==1){
             return 'btn-success-selected';
-        }elseif($btnCate==3 && isset($workerSearchParams['worker_auth_status']) && $workerSearchParams['worker_auth_status']==2){
+        }elseif($btnCate==3 && isset($workerParams['worker_auth_status']) && $workerParams['worker_auth_status']==2){
             return 'btn-success-selected';
-        }elseif($btnCate==4 && array_key_exists('worker_rule_id',$workerSearchParams) && $workerSearchParams['worker_rule_id']==1){
+        }elseif($btnCate==4 && array_key_exists('worker_rule_id',$workerParams) && $workerParams['worker_rule_id']==1){
             return 'btn-success-selected';
-        }elseif($btnCate==5 && array_key_exists('worker_rule_id',$workerSearchParams) && $workerSearchParams['worker_rule_id']==2){
+        }elseif($btnCate==5 && array_key_exists('worker_rule_id',$workerParams) && $workerParams['worker_rule_id']==2){
             return 'btn-success-selected';
-        }elseif($btnCate==6 && array_key_exists('worker_rule_id',$workerSearchParams) && $workerSearchParams['worker_rule_id']==3){
+        }elseif($btnCate==6 && array_key_exists('worker_rule_id',$workerParams) && $workerParams['worker_rule_id']==3){
             return 'btn-success-selected';
-        }elseif($btnCate==7 && array_key_exists('worker_rule_id',$workerSearchParams) && $workerSearchParams['worker_rule_id']==4){
+        }elseif($btnCate==7 && array_key_exists('worker_rule_id',$workerParams) && $workerParams['worker_rule_id']==4){
             return 'btn-success-selected';
-        }elseif($btnCate==8 && array_key_exists('worker_is_vacation',$workerSearchParams)){
+        }elseif($btnCate==8 && array_key_exists('worker_is_vacation',$workerParams)){
             return 'btn-success-selected';
-        }elseif($btnCate==9 && array_key_exists('worker_is_block',$workerSearchParams)){
+        }elseif($btnCate==9 && array_key_exists('worker_is_block',$workerParams)){
             return 'btn-success-selected';
-        }elseif($btnCate==10 && array_key_exists('worker_is_blacklist',$workerSearchParams)){
+        }elseif($btnCate==10 && array_key_exists('worker_is_blacklist',$workerParams)){
             return 'btn-success-selected';
         }else{
             return 'btn-success';
