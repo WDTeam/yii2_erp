@@ -40,6 +40,7 @@ use kartik\tabs\TabsX;
      		'create_time:datetime',
      		[
      		'class' => 'yii\grid\ActionColumn',
+     		'template' =>'{view} {update}',
      		'buttons' => [
      		'update' => function ($url, $model) {
      	return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance-order-channel/view','id' => $model->id,'edit'=>'t']), [
