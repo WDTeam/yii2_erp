@@ -2,6 +2,8 @@
 
 namespace core\models\GeneralPay;
 
+use core\models\Customer;
+use core\models\CustomerTransRecord\CustomerTransRecord;
 use Yii;
 
 /**
@@ -105,6 +107,55 @@ class GeneralPay extends \yii\db\ActiveRecord
     public static function getGeneralPayByInfo($condition,$fileds = '*')
     {
         return GeneralPay::find()->select($fileds)->where($condition)->asArray()->one();
+    }
+
+    /**
+     * 服务卡支付
+     * @param $data
+     */
+    public static function serviceCradPay($data)
+    {
+        try{
+            //用户服务卡扣款
+            //ServiceCard();
+            //用户交易记录
+            CustomerTransRecord::analysisRecord($data);
+            return true;
+        } catch(Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * 余额支付
+     * @param $data
+     */
+    public static function balancePay($data)
+    {
+        try{
+            //用户服务卡扣款
+            Customer::decBalance($data['customer_id'],$data['general_pay_actual_money']);
+            //用户交易记录
+            CustomerTransRecord::analysisRecord($data);
+            return true;
+        } catch(Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * 现金支付
+     * @param $data
+     */
+    public static function cashPay($data)
+    {
+        try{
+            //用户交易记录
+            CustomerTransRecord::analysisRecord($data);
+            return true;
+        } catch(Exception $e) {
+            return false;
+        }
     }
 
 }

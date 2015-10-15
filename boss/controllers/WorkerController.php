@@ -499,7 +499,7 @@ class WorkerController extends BaseAuthController
 
     public function actionTest(){
         echo '<pre>';
-        var_dump(Worker::getWorkerInfoByPhone(15040629565));
+        var_dump(Worker::searchWorker(null,'56'));
         die;
 
         $a = Worker::getWorkerInfo(16351);
