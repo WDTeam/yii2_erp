@@ -16,7 +16,7 @@ use core\models\worker\WorkerExt;
 use core\models\worker\WorkerRuleConfig;
 use core\models\Operation\CoreOperationShopDistrict;
 use core\models\Operation\CoreOperationCity;
-use boss\models\Shop;
+use core\models\shop\Shop;
 
 use crazyfd\qiniu\Qiniu;
 
