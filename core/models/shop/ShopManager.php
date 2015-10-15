@@ -58,7 +58,7 @@ class ShopManager extends \common\models\ShopManager
     {
         return array_merge(parent::rules(),[
             [['name', 'street', 'principal', 'tel', 
-            'bl_name', 'bl_type', 'bl_number', 'bl_person', 'bl_address', 'bl_audit'
+            
             ], 'required'],
         ]);
     }
