@@ -4,7 +4,7 @@ use yii;
 use yii\behaviors\TimestampBehavior;
 use boss\models\Operation\OperationArea;
 use yii\base\Object;
-use core\models\ShopStatus;
+use core\models\shop\ShopStatus;
 use crazyfd\qiniu\Qiniu;
 use core\behaviors\ShopStatusBehavior;
 class ShopManager extends \common\models\ShopManager
