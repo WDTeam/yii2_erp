@@ -129,7 +129,10 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     public function getWorkerInfo($workerPhone){
         $financeSettleApplySearch = new FinanceSettleApplySearch;
         $workerSimple = Worker::getWorkerInfoByPhone($workerPhone);
-        $workerInfo = Worker::getWorkerInfo($workerSimple['id']);
+        $workerInfo = [];
+        if(isset($workerSimple['id'])){
+            $workerInfo = Worker::getWorkerInfo($workerSimple['id']);
+        }
         if(count($workerInfo)> 0){
              $financeSettleApplySearch->worder_id =$workerInfo['id'];
             $financeSettleApplySearch->workerName = $workerInfo['worker_name'];

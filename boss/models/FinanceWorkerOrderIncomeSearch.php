@@ -82,6 +82,12 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
         return $dataProvider;
     }
     
+    public function getOrderDataProvider(){
+        $query = null;
+        $dataProvider = new ActiveDataProvider([ 'query' => $query,]);
+        return $dataProvider;
+    }
+    
      public function attributeLabels()
     {
         $parentAttributeLabels = parent::attributeLabels();

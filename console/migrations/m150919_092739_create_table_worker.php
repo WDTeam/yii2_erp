@@ -20,7 +20,7 @@ class m150919_092739_create_table_worker extends Migration
             'worker_phone' => Schema::TYPE_STRING . '(20) DEFAULT NULL COMMENT \'阿姨手机\'',
             'worker_idcard' => Schema::TYPE_STRING . '(20) DEFAULT NULL COMMENT \'阿姨身份证号\'',
             'worker_password' => Schema::TYPE_STRING . '(50) DEFAULT NULL COMMENT \'阿姨端登录密码\'',
-            'worker_photo' => Schema::TYPE_STRING . '(40)  DEFAULT \'\' COMMENT \'阿姨头像地址\'',
+            'worker_photo' => Schema::TYPE_STRING . '(150)  DEFAULT \'\' COMMENT \'阿姨头像地址\'',
             'worker_level' => Schema::TYPE_BOOLEAN  . '(4)   DEFAULT 1 COMMENT \'阿姨等级\'',
             'worker_auth_status' => Schema::TYPE_BOOLEAN  . '(1) NOT NULL DEFAULT  0 COMMENT \'阿姨审核状态 0未通过1通过\'',
             'worker_ontrial_status' => Schema::TYPE_BOOLEAN  . '(1) NOT NULL DEFAULT 0 COMMENT \'阿姨试工状态 0未试工，1已试工\'',

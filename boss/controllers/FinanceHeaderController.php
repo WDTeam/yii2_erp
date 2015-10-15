@@ -31,8 +31,6 @@ use boss\models\FinanceOrderChannelSearch;
 class FinanceHeaderController extends BaseAuthController
 {
 	
-	
-	
     public function behaviors()
     {
         return [
@@ -53,6 +51,7 @@ class FinanceHeaderController extends BaseAuthController
     {
         $searchModel = new FinanceHeaderSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        $dataProvider->query->orderBy(['id'=>SORT_DESC]);
         
 		//支付渠道数据
         $ordedata= new FinanceOrderChannel;
@@ -89,14 +88,25 @@ class FinanceHeaderController extends BaseAuthController
      */
     public function actionView($id)
     {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        	
-        return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-        return $this->render('view', ['model' => $model]);
-}
+       /*  $model = $this->findModel($id);
+        if ($model->load(Yii::$app->request->post())) {
+			if($model->finance_header_where_es && $model->finance_header_where=='function_way' ){
+				$model->finance_header_where=$model->finance_header_where_es;
+			}
+			if($model->save()){
+				return $this->redirect(['view', 'id' => $model->id]);
+			} else {
+        		return $this->render('view', ['model' => $model]);
+			}
+        }  */
+    	
+    	
+    	$model = $this->findModel($id);
+    	if ($model->load(Yii::$app->request->post()) && $model->save()) {
+    			return $this->redirect(['index', 'id' => $model->id]);
+    		} else {
+    			return $this->render('view', ['model' => $model]);
+    		}
     }
 
     /**

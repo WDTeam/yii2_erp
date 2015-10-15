@@ -1,3 +1,7 @@
+<?php
+$this->title = Yii::t('app', 'Opened City').'管理';
+?>
+
 <div class="order-index">
     <div class="panel panel-info">
         <div class="panel-heading">

@@ -1,6 +1,9 @@
 ﻿<?php
 namespace api\controllers;
 
+use Yii;
+use Yii\web\Controller;
+use \core\models\customer\CustomerCode;
 /**
  * SMS controller
  */
@@ -32,13 +35,11 @@ class SMSController extends Controller
      */
     public function actionSendV()
     {
-        if ($content)
-        {
+        if ($content) {
             $id = $content['id'];
             $token = Yii::$app->cache->get($id);
-            if ($token == false)
-            {
-                $token = base64_encode($id.time());
+            if ($token == false) {
+                $token = base64_encode($id . time());
                 Yii::$app->cache->set($id, $token, Yii::$app->params['cacheExpiration']);
                 Yii::$app->cache->set($token, $id, Yii::$app->params['cacheExpiration']);
             }
@@ -47,14 +48,12 @@ class SMSController extends Controller
                 "access_token" => $token
             ];
 
-            return $this->send($ret,"登陆成功");
-        }
-        else
-        {
-            return $this->send(null,"用户名或验证码错误","error");
+            return $this->send($ret, "登陆成功");
+        } else {
+            return $this->send(null, "用户名或验证码错误", "error");
         }
     }
-    
+
     /**
      *
      * @api {GET} /auth/sendmessagecode 短信验证码
@@ -82,7 +81,28 @@ class SMSController extends Controller
      */
     public function actionSendMessageCode()
     {
-    
+        $phone = Yii::app()->request->getParam('phone');
+        $app_version = Yii::app()->request->getParam('app_version');
+        if (preg_match("/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/", $phone)) {
+            //验证通过
+            if (!CustomerCode::generateAndSend($phone)) {
+                $code = 'error';
+                $msg = '短信发送失败';
+            }
+        } else {
+            $code = 'error';
+            $msg = '电话号码不符合规则';
+        }
+        $result = [
+            'code' => $code,
+            'msg' => $msg,
+            'ret' => ''
+        ];
+        $response = Yii::$app->response;
+        $response->format = Yii\web\Response::FORMAT_JSON;
+        $response->data = $result;
+
+        return $response;
     }
 
 }

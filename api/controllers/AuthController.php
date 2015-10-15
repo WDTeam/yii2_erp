@@ -1,8 +1,8 @@
 <?php
-
+namespace api\controllers;
 use Yii;
 use \core\models\customer\CustomerCode;
-
+use \core\models\customer\CustomerAccessToken;
 class AuthController extends \api\components\Controller
 {
 
@@ -26,7 +26,7 @@ class AuthController extends \api\components\Controller
      *       "code": "ok",
      *       "msg": "登录成功"，
      *       "ret":{
-     *          user:{}
+     *          "user":{}
      *          "access_token":""
      *       }
      *     }
@@ -37,34 +37,31 @@ class AuthController extends \api\components\Controller
      *     HTTP/1.1 403 Not Found
      *     { 
      *       "code":"error",
-     *       "msg": "验证码错误"
+     *       "msg": "用户名或验证码错误"
      *     }
      */
-    public function actionLogin($username, $verificationCode)
+    public function actionLogin()
     {
-//        $content = Yii::$app->db->createCommand('SELECT * FROM jc_admin_user WHERE username=:username AND password=:pass AND enable=1 AND is_stop=0')
-//            ->bindValue(':username', $username)
-//            ->bindValue(':pass', md5($pass . '@#$' . $username))
-//            ->queryOne();
-        //verify verification code & user phone code
-
-        if ($content) {
-
-            $id = $content['id'];
-            $token = Yii::$app->cache->get($id);
-            if ($token == false) {
-                $token = base64_encode($id . time());
-                Yii::$app->cache->set($id, $token, Yii::$app->params['cacheExpiration']);
-                Yii::$app->cache->set($token, $id, Yii::$app->params['cacheExpiration']);
+        $phone = Yii::$app->request->post('phone');
+        $verifyCode = Yii::$app->request->post('verify_code');
+        if(empty($phone)||empty($verifyCode)){
+            return $this->send(null, "用户名或验证码不能为空", "error",403,"数据不完整");
+        }
+        $checkRet = CustomerCode::checkCode($phone,$verifyCode);
+        if ($checkRet) {
+            $token = CustomerAccessToken::generateAccessToken($phone, $verifyCode);
+            if (empty($token)) {
+                return $this->send(null, "生成token错误","error");
+            }else{
+                $user = CustomerAccessToken::getCustomer($token);
+                $ret = [
+                    "user" => $user,
+                    "access_token" => $token
+                ];
+                return $this->send($ret, "登陆成功");
             }
-            $ret = [
-                "user" => $content,
-                "access_token" => $token
-            ];
-
-            return $this->send($ret, "登陆成功");
         } else {
-            return $this->send(null, "用户名或验证码错误", "error");
+            return $this->send(null, "用户名或验证码错误", "error",403);
         }
     }
 

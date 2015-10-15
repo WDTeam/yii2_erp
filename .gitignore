@@ -31,3 +31,6 @@ phpunit.phar
 /.idea/*
 boss/config/main-local.php
 /datasql/areas - 副本.sql
+
+#api runtime debug file
+/api/runtime/*

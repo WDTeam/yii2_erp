@@ -29,9 +29,11 @@ class FinanceHeaderSearch extends FinanceHeader
     public function search($params)
     {
         $query = FinanceHeader::find();
-
+       
+      //  FinanceHeader::orderBy(['id'=>SORT_DESC]);
+        
         $dataProvider = new ActiveDataProvider([
-            'query' => $query,
+            'query' => $query,	
         ]);
 
         if (!($this->load($params) && $this->validate())) {
