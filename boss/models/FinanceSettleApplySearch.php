@@ -7,6 +7,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\FinanceSettleApply;
 use core\models\worker\Worker;
+use core\models\order\Order;
 
 /**
  * FinanceSettleApplySearch represents the model behind the search form about `common\models\FinanceSettleApply`.
@@ -102,7 +103,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
                 ->andFilterWhere(['like', 'worker_rule_name', $this->worker_rule_name])
             ->andFilterWhere(['like', 'finance_settle_apply_cycle_des', $this->finance_settle_apply_cycle_des])
             ->andFilterWhere(['like', 'finance_settle_apply_reviewer', $this->finance_settle_apply_reviewer]);
-
+        $dataProvider->query->orderBy(['created_at'=>SORT_DESC]);
         return $dataProvider;
     }
     
@@ -161,6 +162,74 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     }
     
     /**
+     * 根据阿姨Id获取结算的整体信息
+     * @param type $workerId
+     */
+    public function getWorkerSettlementSummaryInfo($workerId){
+        $orders = $this->getWorkerOrderInfo($workerId);
+        $order_count = 0;//总单量
+        $order_cash_count = 0;//现金订单
+        $order_cash_money = 0;//收取现金
+        $order_noncash_count = 0;//非现金订单
+        $order_money_except_cash = 0;//工时费应结
+        $apply_man_hour = 0;//总工时
+        $apply_order_money = 0;//订单总金额
+        if(count($orders) > 0){
+           $order_count = count($orders);
+           foreach($orders as $order){
+               $apply_man_hour += $order->order_booked_count;
+               $apply_order_money += $order->order_money;
+              if($order->orderExtPay->order_pay_type == 1){
+                  $order_cash_count++;
+                  $order_cash_money += $order->order_money;
+              }
+              if($order->orderExtPay->order_pay_type == 2){
+                  $order_noncash_count++;
+                  $order_money_except_cash += $order->order_money;
+              }
+           }
+        }
+        $this->finance_settle_apply_order_count = $order_count;//总单量
+        $this->finance_settle_apply_order_cash_count = $order_cash_count;//现金订单
+        $this->finance_settle_apply_order_cash_money = $order_cash_money;//收取现金
+        $this->finance_settle_apply_order_noncash_count = $order_noncash_count;//非现金订单
+        $this->finance_settle_apply_order_money_except_cash = $order_money_except_cash;//工时费应结
+        $this->finance_settle_apply_man_hour = $apply_man_hour;//总工时
+        $this->finance_settle_apply_order_money = $apply_order_money;//订单总金额
+        $this->finance_settle_apply_subsidy = 0;
+        $this->finance_settle_apply_money =$order_money_except_cash+ $this->finance_settle_apply_subsidy;//应结算金额
+        $this->worder_id = $workerId;
+        $workerInfo = Worker::getWorkerInfo($workerId);
+        if(count($workerInfo)>0){
+            $this->worder_tel = $workerInfo['worker_phone'];
+            $this->worker_type_id = $workerInfo['worker_type'];
+            $this->worker_rule_id = $workerInfo['worker_rule_id'];
+            $this->worker_type_name = $this->getWorkerTypeDes($workerInfo['worker_type']);
+            $this->worker_rule_name = $this->getWorkerRuleDes($workerInfo['worker_rule_id']);
+        }
+        $this->finance_settle_apply_cycle = $this->getSettleCycleIdByWorkerType($this->worker_type_id, $this->worker_rule_id);//结算周期Id
+        $this->finance_settle_apply_cycle_des = $this->getSettleCycleByWorkerType($this->worker_type_id, $this->worker_rule_id);//结算周期描述
+        $this->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT;//提交结算申请
+        $this->finance_settle_apply_starttime = time();//结算开始日期
+        $this->finance_settle_apply_endtime = time();//结算截止日期
+        $this->created_at = time();//申请创建时间
+        return $this;
+
+    }
+    
+    public function getWorkerOrderInfo($workerId){
+        return  Order::find()->where(['order_booked_worker_id'=>$workerId])->all();
+    }
+    
+    public function getWorkerTypeDes($workerType){
+        return $this->operationDes[$workerType];
+    }
+    
+    public function getWorkerRuleDes($workerRuleId){
+        return $this->roleDes[$workerRuleId];
+    }
+    
+    /**
      * 根据用户角色和阿姨类型获取结算周期
      * @param type $workerType
      * @param type $workerRuleId
@@ -170,6 +239,21 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             return self::FINANCE_SETTLE_APPLY_CYCLE_MONTH_DES;
         }else{
             return self::FINANCE_SETTLE_APPLY_CYCLE_WEEK_DES;
+        }
+        
+    }
+    
+     /**
+     * 根据用户角色和阿姨类型获取结算周期Id
+      * 
+     * @param type $workerType
+     * @param type $workerRuleId
+     */
+    public function getSettleCycleIdByWorkerType($workerType,$workerRuleId){
+        if(($workerType == self::SELF_OPERATION) && ($workerRuleId == self::FULLTIME)){
+            return self::FINANCE_SETTLE_APPLY_CYCLE_MONTH;
+        }else{
+            return self::FINANCE_SETTLE_APPLY_CYCLE_WEEK;
         }
         
     }
