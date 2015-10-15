@@ -76,10 +76,7 @@ class bfbrefund_class
             $bfb_sdk->log(sprintf('create the url for baifubao pay interface success, [URL: %s]', $refund_url));
             echo "<script>window.open('$refund_url');</script>";
         }
-
     }
-
-
 
     public function refundQuery()
     {
