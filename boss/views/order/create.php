@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div style="display: none;"><?= $form->field($model, 'customer_id')->textInput(['maxlength' => true]) ?></div>
                 <div id="address_div"><?= $form->field($model, 'address_id')->radioList([''=>'请先输入手机号获取地址信息'])->label('地址信息') ?></div>
                 <div style="display: none;"><?= $form->field($model, 'order_address')->textInput(['maxlength' => true]) ?></div>
-                <?= $form->field($model, 'order_service_type_id')->inline()->radioList([''=>'选择地址获取服务类别'])->label('服务类别') ?>
+                <?= $form->field($model, 'order_service_type_id')->inline()->radioList([''=>'选择地址获取商品'])->label('选择商品') ?>
             </div>
             <div class="panel-heading">
                 <h3 class="panel-title">服务信息</h3>

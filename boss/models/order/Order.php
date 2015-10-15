@@ -21,6 +21,12 @@ class Order extends OrderModel
     public $orderBookedDate;
     public $orderBookedTimeRange;
 
+    public function rules()
+    {
+        return [
+            [['order_customer_phone','orderBookedDate','orderBookedTimeRange'],'required']
+        ]+parent::rules();
+    }
 
     public static function getWorkerInfoByPhone($phone)
     {
