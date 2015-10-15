@@ -1239,7 +1239,7 @@ class QueryBuilder extends \yii\base\Object
                 $phName = $value->expression;
             } else {
                 $phName = self::PARAM_PREFIX . count($params);
-                $params[$phName] = empty($escape) ? $value : ('%' . strtr($value, $escape) . '%');
+                    $params[$phName] = empty($escape) ? $value : ('%' . strtr($value, $escape) . '%');
             }
             $parts[] = "$column $operator $phName";
         }

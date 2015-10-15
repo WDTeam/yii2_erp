@@ -52,7 +52,7 @@ class Worker extends \common\models\Worker
 {
 
 
-    /*
+    /**
      * 获取阿姨列表
      * @param  int $type 阿姨类型 1自营 2非自营
      * @param  int $rule_id 阿姨身份id
@@ -65,10 +65,61 @@ class Worker extends \common\models\Worker
         return $workerList?ArrayHelper::getColumn($workerList,'id'):[];
     }
 
-    /*
+    /**
+     * 根据条件搜索阿姨
+     * @param $worker_name 阿姨姓名
+     * @param $worker_phone 阿姨电话
+     * @return array 阿姨列表
+     */
+    public static function searchWorker($worker_name=null,$worker_phone=null){
+        $defaultCondition['worker_is_block'] = 0;
+        $defaultCondition['worker_is_vacation'] = 0;
+        $defaultCondition['worker_is_blacklist'] = 0;
+        //$condition = array_merge($defaultCondition,$filterCondition);
+        //获取所属商圈中所有阿姨
+        $districtWorkerResult = Worker::find()
+            ->select('{{%worker}}.id,shop_id,worker_name,worker_phone,worker_idcard,worker_rule_id,worker_type,name as shop_name,worker_stat_order_num,worker_stat_order_refuse')
+            ->joinWith('workerStatRelation') //关联worker WorkerStatRelation方法
+            ->joinWith('shopRelation') //关联worker shopRelation方法
+            ->where($defaultCondition)
+            ->andFilterWhere(['like', 'worker_name', $worker_name])
+            ->andFilterWhere(['like', 'worker_phone', $worker_phone])
+            ->asArray()
+            ->all();
+
+        $workerRuleConfigArr = WorkerRuleConfig::getWorkerRuleList();
+
+        if(empty($districtWorkerResult)){
+            return [];
+        }else{
+            foreach ($districtWorkerResult as $val) {
+
+                $val['worker_id'] = $val['id'];
+                $val['worker_type_description'] = self::getWorkerTypeShow($val['worker_type']);
+                $val['worker_rule_description'] = $workerRuleConfigArr[$val['worker_rule_id']];
+
+                $val['shop_name'] = isset($val['shop_name'])?$val['shop_name']:'';
+                $val['worker_stat_order_num'] = intval($val['worker_stat_order_num']);
+                $val['worker_stat_order_refuse'] = intval($val['worker_stat_order_refuse']);
+                if($val['worker_stat_order_num']!==0){
+                    $val['worker_stat_order_refuse_percent'] = Yii::$app->formatter->asPercent($val['worker_stat_order_refuse']/$val['worker_stat_order_num']);
+                }else{
+                    $val['worker_stat_order_refuse_percent'] = '0%';
+                }
+
+                unset($val['workerStatRelation']);
+                unset($val['shopRelation']);
+                $districtWorkerArr[] = $val;
+            }
+            return $districtWorkerArr;
+        }
+    }
+
+
+    /**
      * 获取单个阿姨详细信息
-     * @param worker_id int 阿姨id
-     * @return  单个阿姨详细信息
+     * @param integer worker_id  阿姨id
+     * @return array 阿姨详细信息
      */
     public static function getWorkerInfo($worker_id){
 
@@ -117,28 +168,52 @@ class Worker extends \common\models\Worker
         return $workerInfo;
      }
 
+
+    /**
+     * 获取商圈中所有阿姨
+     * @param $districtId
+     * @param array $filterCondition 阿姨筛选条件
+     * @return array 阿姨列表
+     */
+     public static function getDistrictAllWorker($districtId,$filterCondition=[]){
+         if(empty($districtId) || !is_array($filterCondition)){
+            return [];
+         }
+         $defaultCondition['worker_is_block'] = 0;
+         $defaultCondition['worker_is_vacation'] = 0;
+         $defaultCondition['worker_is_blacklist'] = 0;
+         $condition = array_merge($defaultCondition,$filterCondition);
+         //获取所属商圈中所有阿姨
+         $districtWorkerResult = Worker::find()
+             ->select('{{%worker}}.id,shop_id,worker_name,worker_phone,worker_idcard,worker_rule_id,worker_type,name as shop_name,worker_stat_order_num,worker_stat_order_refuse')
+             ->innerJoinWith('workerDistrictRelation') //关联worker workerDistrictRelation方法
+             ->andOnCondition(['operation_shop_district_id'=>$districtId])
+             ->joinWith('workerStatRelation') //关联worker WorkerStatRelation方法
+             ->joinWith('shopRelation') //关联worker shopRelation方法
+             ->where($condition)
+             ->asArray()
+             ->all();
+
+         return $districtWorkerResult;
+     }
+
+
     /*
      * 获取商圈中 所有可用阿姨id
      * @param int districtId 商圈id
      * @param int worker_type 阿姨类型 1自营2非自营
      * @param int orderBookBeginTime 待指派订单预约开始时间
      * @param int orderBookeEndTime 待指派订单预约结束时间
-     * @return array freeWorkerArr 所有可用阿姨id
+     * @return array freeWorkerArr 所有可用阿姨列表
      */
     public static function getDistrictFreeWorker($districtId=1,$workerType=1,$orderBookBeginTime,$orderBookeEndTime){
 
-
-        //获取所属商圈中所有阿姨
-        $districtWorkerResult = Worker::find()
-            ->select('{{%worker}}.id,shop_id,worker_name,worker_phone,worker_idcard,worker_rule_id,worker_type,name as shop_name,worker_stat_order_num,worker_stat_order_refuse')
-            ->innerJoinWith('workerDistrictRelation') //关联worker workerDistrictRelation方法
-            ->andOnCondition(['operation_shop_district_id'=>$districtId])
-            ->joinWith('workerStatRelation') //关联worker WorkerStatRelation方法
-            ->joinWith('shopRelation') //关联worker shopRelation方法
-            ->where(['worker_is_block'=>0,'worker_is_blacklist'=>0,'worker_is_vacation'=>0,'worker_type'=>$workerType])
-            ->asArray()
-            ->all();
         $workerRuleConfigArr = WorkerRuleConfig::getWorkerRuleList();
+
+        //获取商圈中所有阿姨
+        $condition['worker_type'] = $workerType;
+        $districtWorkerResult = self::getDistrictAllWorker($districtId,$condition);
+
         if(empty($districtWorkerResult)){
             return [];
         }else{
