@@ -10,7 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\data\ActiveDataProvider;
-use yii\web\UploadedFile;
+
 use boss\components\BaseAuthController;
 
 use common\models\WorkerBlock;
@@ -23,7 +23,6 @@ use boss\models\worker\WorkerSearch;
 use boss\models\Operation;
 use core\models\shop\Shop;
 
-use crazyfd\qiniu\Qiniu;
 
 
 /**
@@ -93,13 +92,10 @@ class WorkerController extends BaseAuthController
         $workerModel = $this->findModel($id,true);
         $workerExtModel = WorkerExt::findOne($id);
         if ($workerModel->load(Yii::$app->request->post()) && $workerExtModel->load(Yii::$app->request->post())) {
-            $workerPhotoUrl = $this->handleUploadImg($workerModel,'worker_photo');
-            if($workerPhotoUrl){
-                $workerModel->worker_photo = $workerPhotoUrl;
-            }
+            $workerModel->uploadImgToQiniu('worker_photo');
+            $workerModel->save();
             //更新阿姨附属信息
             $workerModel->link('workerExtRelation',$workerExtModel);
-            $workerModel->save();
             //更新阿姨商圈信息 ???
             $workerDistrictModel = new WorkerDistrict;
             $workerParam = Yii::$app->request->post('Worker');
@@ -128,17 +124,6 @@ class WorkerController extends BaseAuthController
         }
     }
 
-    public function handleUploadImg($model,$field){
-        $qiniu = new Qiniu();
-        $fileinfo = UploadedFile::getInstance($model, $field);
-        if(!empty($fileinfo)){
-            $key = time().mt_rand('1000', '9999').uniqid();
-            $qiniu->uploadFile($fileinfo->tempName, $key);
-            $imgUrl = $qiniu->getLink($key);
-            $model->$field = $imgUrl;
-        }
-    }
-
     /**
      * 录入新阿姨
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -148,18 +133,19 @@ class WorkerController extends BaseAuthController
     {
         $workerModel = new Worker;
         $workerExtModel = new WorkerExt;
-        $workerDistrictModel = new WorkerDistrict;
-
-        $workerModel->created_ad = time();
         if ($workerModel->load(Yii::$app->request->post()) && $workerExtModel->load(Yii::$app->request->post())) {
-            $workerModel->link('workerExtRelation',$workerExtModel);
+            $workerModel->created_ad = time();
+            $workerModel->uploadImgToQiniu('worker_photo');
             $workerModel->save();
+            $workerModel->link('workerExtRelation',$workerExtModel);
             $workerParam = Yii::$app->request->post('Worker');
             if($workerParam['worker_district']){
                 foreach($workerParam['worker_district'] as $val){
+                    $workerDistrictModel = new WorkerDistrict;
                     $workerDistrictModel->created_ad = time();
                     $workerDistrictModel->worker_id = $workerModel->id;
                     $workerDistrictModel->operation_shop_district_id = $val;
+                    $workerDistrictModel->save();
                 }
             }
             return $this->redirect(['view', 'id' => $workerModel->id]);
