@@ -76,6 +76,16 @@ use core\models\worker\WorkerRuleConfig;
             </div>
 
             <div class="panel-heading"><h3 class="panel-title">阿姨基本信息</h3> </div>
+            <?= $form->field($worker, 'worker_photo')->widget(FileInput::classname(), [
+                'options' => ['multiple' => true],
+                'pluginOptions' => [
+                    'previewFileType' => 'any',
+                    'showPreview' => true,
+                    'showCaption' => false,
+                    'showRemove' => true,
+                    'showUpload' => false,
+                ]
+            ])?>
             <div class="panel-body">
             <?= $form->field($worker_ext, 'worker_source')->widget(Select2::classname(), [
                 'name' => 'worker_source',
@@ -101,16 +111,7 @@ use core\models\worker\WorkerRuleConfig;
                     'maximumInputLength' => 10
                 ],
             ]); ?>
-            <?= $form->field($worker, 'worker_photo')->widget(FileInput::classname(), [
-                'options' => ['multiple' => true],
-                'pluginOptions' => [
-                    'previewFileType' => 'any',
-                    'showPreview' => true,
-                    'showCaption' => false,
-                    'showRemove' => true,
-                    'showUpload' => false,
-                ]
-            ])?>
+
             <?= $form->field($worker_ext, 'worker_sex')->radioList(['0' => '女', '1' => '男'], ['inline' => true]); ?>
             <?= $form->field($worker_ext, 'worker_age')->textInput(['placeholder' => '输入阿姨年龄...']); ?>
             <?= $form->field($worker_ext, 'worker_height')->textInput(['placeholder' => '输入阿姨身高...']); ?>
