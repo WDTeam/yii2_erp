@@ -1,7 +1,6 @@
 <?php
 
 namespace core\models\customer;
-
 use Yii;
 use common\models\GeneralRegion;
 
@@ -124,11 +123,22 @@ class CustomerAddress extends \common\models\CustomerAddress
         return $customerAddresses;
     }
 
+
+
+
+
+
+
+
+
+
+
+
     /**
      * 客户服务地址列表已数组形式，元素为字符串
      */
-    public static function listAddressArr($customer_id){
-        $customerAddresses = CustomerAddress::find()->where(['customer_id'=>$customer_id])->all();
+    public static function getAddressArr($customer_id){
+        $customerAddresses = self::find()->where(['customer_id'=>$customer_id])->all();
         $customerAddressArr = array();
         if (!empty($customerAddresses)) {
             foreach ($customerAddresses as $value) {
@@ -142,11 +152,12 @@ class CustomerAddress extends \common\models\CustomerAddress
                         $customerAddressArr[]['customer_address_detail'] =  $value->customer_address_detail;
                         $customerAddressArr[]['customer_address_nickname'] =  $value->customer_address_nickname;
                         $customerAddressArr[]['customer_address_phone'] =  $value->customer_address_phone;
-                        $customerAddressArr[]['province-city-area-detail'] = 
-                            $customerAddressArr[]['general_region_province_name']
-                            .$customerAddressArr[]['general_region_city_name']
-                            .$customerAddressArr[]['general_region_area_name']
-                            .$customerAddressArr[]['customer_address_detail'];
+
+
+                        $customerAddressArr[]['province_city_area_detail'] = $generalRegion->general_region_province_name
+                            .$generalRegion->general_region_city_name
+                            .$generalRegion->general_region_area_name
+                            .$value->customer_address_detail;
                     }
                 }
             }
@@ -154,10 +165,26 @@ class CustomerAddress extends \common\models\CustomerAddress
         return $customerAddressArr;
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * 根据地址id查询地址
      */
     public static function getAddress($id){
+
+        return 1233; exit;
         return self::findOne($id) ? self::findOne($id) : false;
     }
 }
