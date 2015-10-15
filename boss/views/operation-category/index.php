@@ -74,8 +74,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         if(empty($model['goods_id'])){
 
                         }else {
+                            return Html::a(Yii::t('yii', 'View'), ['operation-goods/view','id' => $model['goods_id']], ['class' => 'btn btn-success']);
                             return Html::a(
-                                '<span class="glyphicon glyphicon-eye-open"></span>',
+                                '<span class="glyphicon glyphicon-eye-open">创建</span>',
                                 Yii::$app->urlManager->createUrl(['operation-goods/view','id' => $model['goods_id']]),
                                 ['title' => Yii::t('yii', 'View'), 'class' => 'btn btn-success btn-sm']
                             );
