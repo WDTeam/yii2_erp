@@ -177,6 +177,8 @@ class OperationAdvertContentController extends BaseAuthController
             $model->platform_name = $position['operation_platform_name'];
             $model->platform_version_id = $position['operation_platform_version_id'];
             $model->platform_version_name = $position['operation_platform_version_name'];
+            $model->operation_advert_start_time = strtotime($model->operation_advert_start_time);
+            $model->operation_advert_end_time =  strtotime($model->operation_advert_end_time);
             $model->updated_at = time();
             $model->save();
             return $this->redirect(['index']);
