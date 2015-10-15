@@ -17,12 +17,16 @@ use common\models\Operation\CommonOperationCity;
 class CoreOperationCity extends CommonOperationCity
 {
     public static function getOnlineCityList($online = 1){
-        $data = self::find()->where(['operation_city_is_online' => $online])->all();
+        self::getOnlineCitys($online);
         $d = array();
         foreach((array)$data as $key => $value){
             $d[$value['city_id'].'-'.$value['city_name']] = $value['city_name'];
         }
         return $d;
+    }
+    
+    public static function getOnlineCitys($online = 1){
+        return self::find()->where(['operation_city_is_online' => $online])->all();
     }
     
     
