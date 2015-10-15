@@ -23,7 +23,7 @@ $this->title = Yii::t('app', 'Opened City').'管理';
                     <tr>
                         <th><?= $value['province_name']?></th>
                         <td><?= $value['city_name']?></td>
-                        <td></td>
+                        <td><?= $v['operation_category_name']?></td>
                         <td style="padding-top: 0; padding-bottom: 0">
 
                                 <div style="padding-top: 5px">

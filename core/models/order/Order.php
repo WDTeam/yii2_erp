@@ -11,6 +11,7 @@ namespace core\models\order;
 
 use core\models\worker\Worker;
 use Yii;
+use Redis;
 use common\models\Order as OrderModel;
 use common\models\OrderStatusDict;
 use common\models\OrderSrc;
@@ -122,12 +123,16 @@ class Order extends OrderModel
     public static function addOrderToPool($order_id)
     {
         $order = Order::findById($order_id);
-       //TODO  放入订单池
+       //放入订单池 zset 根据预约开始时间+订单id排序
+        $redis = new Redis();
+        $redis->zAdd('WaitAssignOrdersPool',$order->order_booked_begin_time.$order_id,$order);
+
         //TODO 开始系统指派
         $order->admin_id=0;
         if(OrderStatus::sysAssignStart($order,[]))
         {
             //TODO 系统指派失败
+            $order = Order::findById($order_id);
             $order->admin_id=0;
             OrderStatus::sysAssignUndone($order,[]);
         }
@@ -195,9 +200,10 @@ class Order extends OrderModel
     private function _create($attributes)
     {
         $this->setAttributes($attributes);
-        $statusFrom = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //创建订单状态
-        $statusTo = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //初始化订单状态
-        $orderCode = date('ymdHis') . str_pad($this->order_service_type_id, 2, '0', STR_PAD_LEFT) . str_pad($this->customer_id, 10, '0', STR_PAD_LEFT); //TODO 订单号待优化
+        $status_from = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //创建订单状态
+        $status_to = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //初始化订单状态
+        $order_count = OrderSearch::getCustomerOrderCount($this->customer_id); //该用户的订单数量
+        $orderCode = strlen($this->customer_id).$this->customer_id.strlen($order_count).$order_count ; //TODO 订单号待优化
         $this->setAttributes([
             //创建订单时优惠卷和服务卡都是初始状态
             'coupon_id' => 0,
@@ -212,10 +218,10 @@ class Order extends OrderModel
             'order_pop_operation_money'=>0,
             //为以下数据赋初始值
             'order_code' => $orderCode,
-            'order_before_status_dict_id' => $statusFrom->id,
-            'order_before_status_name' => $statusFrom->order_status_name,
-            'order_status_dict_id' => $statusTo->id,
-            'order_status_name' => $statusTo->order_status_name,
+            'order_before_status_dict_id' => $status_from->id,
+            'order_before_status_name' => $status_from->order_status_name,
+            'order_status_dict_id' => $status_to->id,
+            'order_status_name' => $status_to->order_status_name,
             'order_src_name' => $this->getOrderSrcName($this->order_src_id),
             'order_channel_name' => $this->getOrderChannelList($this->channel_id),
             'order_service_type_name' => $this->getServiceList($this->order_service_type_id),

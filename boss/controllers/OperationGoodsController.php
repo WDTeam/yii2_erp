@@ -216,7 +216,8 @@ class OperationGoodsController extends Controller
             $model->updated_at = time();
             
             if($model->save()){
-                return $this->redirect(['view', 'id' => $model->id]);
+//                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['/operation-category']);
             }
         } else {
             $OperationCategorydata = OperationCategory::getCategoryList(0, '', ['id', 'operation_category_name']);
@@ -284,7 +285,8 @@ class OperationGoodsController extends Controller
             $model->updated_at = time();
             
             if($model->save()){
-                return $this->redirect(['view', 'id' => $model->id]);
+//                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['/operation-category']);
             }
         } else {
             $OperationCategorydata = OperationCategory::getCategoryList(0, '', ['id', 'operation_category_name']);

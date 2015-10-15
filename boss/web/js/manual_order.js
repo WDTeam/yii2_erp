@@ -108,6 +108,45 @@ $(document).on("click",'#worker_refuse_memo_submit',function(){
     }
 });
 
+$(document).on("click",'#worker_search_submit',function(){
+    $param = $("#worker_search_input").val();
+    if($param != '') {
+        var reg = /^1[3-9][0-9]{9}$/;
+        var url = '';
+        if (reg.test($param)) {
+            url = "/order/search-assign-worker?order_id="+window.order_data.order.id+"&phone=" + $param;
+        } else {
+            url = "/order/search-assign-worker?order_id="+window.order_data.order.id+"&worker_name=" + $param;
+        }
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType:"json",
+            success: function (data) {
+                if(data.code==200){
+                    for(var k in data.data){
+                        var v = data.data[k];
+                        $("#worker_list tbody").prepend('<tr>'+
+                        '<td><input type="hidden" value="'+ v.id+'" /><a href="/worker/view/'+ v.id+'" target="_blank">'+ v.worker_name+'</a></td>'+
+                        '<td>'+ v.worker_phone+'</td>'+
+                        '<td>'+ v.shop_name+'</td>'+
+                        '<td>'+ v.worker_rule_description+'</td>'+
+                        '<td>'+ v.order_booked_time_range.join('<br/>')+'</td>'+
+                        '<td>'+ v.worker_stat_order_refuse_percent+'</td>'+
+                        '<td>'+ v.tag+'</td>'+
+                        '<td id="worker_status_'+ v.id+'">'+ v.status.join(',')+'</td>'+
+                        '<td id="worker_memo_'+ v.id+'">'+ (v.memo.length>0?v.memo.join(','):'<a href="javascript:void(0);" class="worker_assign">派单</a> <a href="javascript:void(0);" data-toggle="modal" data-target="#worker_refuse_modal" class="worker_refuse">拒单</a> <a href="javascript:void(0);" class="worker_contact_failure">未接通</a>')+'</td>'+
+                        '</tr>');
+                    }
+                }else{
+                    alert(data.msg);
+                }
+            }
+
+        });
+    }
+});
+
 
 
 function canNotAssign(){
@@ -197,7 +236,7 @@ function timer(){
         var time = parseInt(now.getTime()/1000);
         $("#create_to_current_time").text(sec2time(time-window.order_data.order.created_at));
         $("#current_to_begin_service_time").text(sec2time(window.order_data.order.order_booked_begin_time-time));
-        var count_down = window.order_data.ext_flag.updated_at*1+window.order_data.oper_long_time*1-time;
+        var count_down = window.order_data.ext_flag.updated_at*1+window.order_data.operation_long_time*1-time;
         $("#count_down").text(sec2time(count_down));
         if(count_down<=0 && window.count_down_flag){
             canNotAssign();
