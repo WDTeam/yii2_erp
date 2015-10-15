@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
  * @var boss\models\OperationCategory $searchModel
  */
 
-$this->title = Yii::t('app', 'Operation Categories').'管理';
+$this->title = Yii::t('app', 'Operation And Categories').'管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-category-index">
@@ -19,11 +19,11 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>-->
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
+<!--    <p>-->
         <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
     'modelClass' => 'Operation Category',
 ]), ['create'], ['class' => 'btn btn-success'])*/  ?>
-    </p>
+<!--    </p>-->
 
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,

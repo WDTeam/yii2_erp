@@ -1,6 +1,8 @@
 <?php
+namespace api\controllers;
 
-class UserController
+use api\components\Controller;
+class UserController extends Controller
 {
     /**
      *
@@ -145,7 +147,7 @@ class UserController
      */
     public function actionDeleteAddress()
     {
-    
+        return '1111111111';
     }
     
     /**

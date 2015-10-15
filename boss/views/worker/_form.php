@@ -26,14 +26,17 @@ use core\models\worker\WorkerRuleConfig;
 <div class="worker-form">
 
     <?php $form = ActiveForm::begin(
-        ['type' => ActiveForm::TYPE_HORIZONTAL, 'id' => 'msg-form',
-            //'options' => ['class'=>'form-horizontal'],
+        [
+            'type' => ActiveForm::TYPE_HORIZONTAL, 'id' => 'msg-form',
+            'options' => ['enctype' => 'multipart/form-data'],
             //'enableAjaxValidation'=>false,
             'fieldConfig' => [
                 //'template' => "{label}\n<div class=\"col-lg-8\">{input}</div>\n<div class=\"col-lg-5\">{error}</div>",
                 //'labelOptions' => ['class' => 'col-lg-1 control-label'],
             ]
-        ]);
+        ]
+
+    );
     //    echo '<fieldset id="w2"><div class="form-group field-operationcity-operation_city_name required">';
     //            echo '<label class="control-label col-md-2" for="operationcity-operation_city_name">选择城市</label>';
     //            echo '<div class="col-md-10">'.Yii::$app->areacascade->cascadeAll('OperationCity', ['class' => 'form-control']).'</div>';

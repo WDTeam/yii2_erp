@@ -3,6 +3,9 @@
  */
 window.coupons = new Array();
 window.cards = new Array();
+var address_list = new Array();
+var goods_list = new Array();
+
 function formatDate(now) {
     var   year=now.getFullYear();
     var   month=now.getMonth()+1;
@@ -85,6 +88,7 @@ $("#order-order_customer_phone").blur(function(){
                         dataType: "json",
                         success: function (address) {
                             if (address.length>0) {
+                                address_list = address;
                                 $("#order-address_id").html('');
                                 for(var k in address){
                                     var v = address[k];
@@ -100,6 +104,7 @@ $("#order-order_customer_phone").blur(function(){
                                     }
                                 }
                                 $("#address_div").show();
+                                getGoods(); //获取完地址后去获取商品
                             }
                         }
                     });
@@ -122,7 +127,6 @@ $("#order-order_customer_phone").blur(function(){
                         }
                     });
 
-                    getCoupons();
                     getCards();
 
                 }
@@ -134,10 +138,25 @@ $("#order-order_customer_phone").blur(function(){
 });
 
 
-$(document).on("change","#order-order_service_type_id input",function(){getCoupons();});
+$(document).on("change","#order-order_service_type_id input",function(){
+    var goods_id = $("#order-order_service_type_id input:checked").val();
+    var goods = new Array();
+    for(var k in goods_list){
+        if(goods_list[k].operation_goods_id == goods_id){
+            goods = goods_list[k];
+            break;
+        }
+    }
+    var unit_price = parseFloat(goods.operation_shop_district_goods_price);
+    $("#order_unit_money").text(unit_price.toFixed(2));
+    $("#order-order_unit_money").val(unit_price.toFixed(2));
+    setOrderMoney();
+    getCoupons();
+});
 
 $(document).on("change","#order-address_id input",function(){
     $("#order-order_address").val($("#order-address_id input:checked").parent().text());
+    getGoods();//地址信息变更后去获取商品信息
 });
 
 $("#order-order_booked_worker_phone").blur(function(){
@@ -160,9 +179,7 @@ $("#order-order_booked_worker_phone").blur(function(){
     }
 });
 $("#order-order_booked_count input").change(function(){
-    $money = $("#order-order_booked_count input:checked").val()/60*$("#order_unit_money").text();
-    $("#order-order_money").val($money.toFixed(2));
-    $(".order_money").text($money.toFixed(2));
+    setOrderMoney();
     $("#order-orderbookedtimerange").html('');
     for(var i=8;i<=18;i++){
         var hour = i<10?'0'+i:i;
@@ -179,4 +196,47 @@ $('#order-order_pay_type input').change(function(){
         $('[id^=order_pay_type]').hide();
         $('#order_pay_type_'+$('#order-order_pay_type input:checked').val()).show();
 });
+//计算订单金额填写到表单
+function setOrderMoney(){
+    $money = $("#order-order_booked_count input:checked").val()/60*$("#order_unit_money").text();
+    $("#order-order_money").val($money.toFixed(2));
+    $(".order_money").text($money.toFixed(2));
+}
+
+function getGoods(){
+    var address_id = $("#order-address_id input:checked").val();
+    var lng = 0;
+    var lat = 0;
+    for(var k in address_list){
+        if(address_list[k].id == address_id){
+            lng = address_list[k].customer_address_longitude;
+            lat = address_list[k].customer_address_latitude;
+            break;
+        }
+    }
+
+    $.ajax({
+        type: "GET",
+        url: "/order/get-goods/?lng=" + lng + "&lat=" + lat,
+        dataType: "json",
+        success: function (data) {
+            if(data.code==200){
+                $("#order-order_service_type_id").html('');
+                goods_list = data.data;
+                for(var k in goods_list){
+                    var v = goods_list[k];
+                    $("#order-order_service_type_id").append(
+                        '<label class="radio-inline"><input type="radio" value="'+ v.operation_goods_id
+                        +'" name="Order[order_service_type_id]"> '+ v.operation_shop_district_goods_name+'</label>'
+                    );
+                }
+            }else{
+                alert(data.msg);
+            }
+        }
+    });
+
+
+}
+
 

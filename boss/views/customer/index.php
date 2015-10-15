@@ -58,7 +58,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'toolbar' =>
             [
                 'content'=>
-                    Html::a('<i class="glyphicon glyphicon-plus"></i>', ['customer/multi-add-to-block'], [
+                    Html::a('<i class="glyphicon">批量加入黑名单</i>', ['customer/multi-add-to-block'], [
+                        'class' => 'btn btn-default',
+                        // 'title' => Yii::t('kvgrid', 'Reset Grid')
+                    ]),
+                    Html::a('<i class="glyphicon">批量加从黑名单删除</i>', ['customer/multi-remove-from-block'], [
                         'class' => 'btn btn-default',
                         // 'title' => Yii::t('kvgrid', 'Reset Grid')
                     ]),
@@ -77,20 +81,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class'=>'kartik\grid\CheckboxColumn',
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
             ],
-            [
-                'format' => 'raw',
-                'label' => '姓名',
-                'value' => function ($dataProvider) {
-                    $name_show = empty($dataProvider->customer_name) ? "未知" : $dataProvider->customer_name;
-                    return '<a href="/customer/' . $dataProvider->id . '">'.$name_show.'</a>';
-                },
-                'width' => "80px",
-            ],
+            // [
+            //     'format' => 'raw',
+            //     'label' => '姓名',
+            //     'value' => function ($dataProvider) {
+            //         $name_show = empty($dataProvider->customer_name) ? "未知" : $dataProvider->customer_name;
+            //         return '<a href="/customer/' . $dataProvider->id . '">'.$name_show.'</a>';
+            //     },
+            //     'width' => "80px",
+            // ],
             [
                 'format' => 'raw',
                 'label' => '电话',
                 'value' => function ($dataProvider) {
-                    return $dataProvider->customer_phone;
+                    return '<a href="/customer/' . $dataProvider->id . '">'.$dataProvider->customer_phone.'</a>';
                 },
                 'width' => "80px",
             ],

@@ -99,6 +99,7 @@ return [
     
     'Create Question'=>'创建试题',
     'Operation Cities'=>'城市管理',
+    'Operation And Cities'=>'城市和商圈',
     'Add'=>'增加',
     'Reset List' => '刷新列表',
     'Order Number' => '序号',
@@ -107,8 +108,12 @@ return [
     'City' => '城市',
     'upline' => '上线',
     'Operation' => '操作',
+
+    'Opened City' => '已开通城市',
+    'Add Service' => '添加服务',
     
     'Operation Categories' => '服务品类',
+    'Operation And Categories' => '服务和品类',
     'Category Types' => '服务类型',
     
     'Auths'=>'授权项',
