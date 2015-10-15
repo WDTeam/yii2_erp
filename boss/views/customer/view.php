@@ -36,28 +36,21 @@ $this->params['breadcrumbs'][] = $this->title;
 
 //来源
 $customerExtSrc = CustomerExtSrc::getFirstSrc($model->id);
-// var_dump($customerExtSrc);
-// echo "4";
-// exit();
 $platform_name = $customerExtSrc == false ? '-' : $customerExtSrc->platform_name; 
 $channal_name = $customerExtSrc == false ? '-' : $customerExtSrc->channal_name; 
 $device_name = $customerExtSrc == false ? '-' : $customerExtSrc->device_name;
 $device_no = $customerExtSrc == false ? '-' : $customerExtSrc->device_no;
 
-
-
 //全部服务地址
-// $customerAddressArr = CustomerAddress::listAddressArr($model->id);
-// var_dump($customerAddressArr);
-// $customerAddressStr = '';
-// if (!empty($customerAddressArr)) {
-//     foreach ($customerAddressArr as $value) {
-//         $customerAddressStr .= $value['province-city-area-detail']
-//         .' '.$value['customer_address_nickname']
-//         .' '.$value['customer_address_phone'].'<br/>';
-//     }
-// }
-
+$customerAddressArr = CustomerAddress::getAddressArr($model->id);
+$customerAddressStr = '';
+if (!empty($customerAddressArr)) {
+    foreach ($customerAddressArr as $value) {
+        $customerAddressStr .= $value['province-city-area-detail']
+        .'|'.$value['customer_address_nickname']
+        .'|'.$value['customer_address_phone'].'<br/>';
+    }
+}
 
 //订单
 $order_count = OrderSearch::getCustomerOrderCount($model->id);
@@ -138,14 +131,14 @@ echo DetailView::widget([
             ],
             'value'=>$model->customer_is_vip ? '会员' : '非会员',
         ],
-        // [
-        //     'attribute'=>'customer_live_address_detail', 
-        //     'label'=>'接单地址',
-        //     'format'=>'raw',
-        //     'value'=> $customerAddressStr,
-        //     'type'=>DetailView::INPUT_TEXT,
-        //     'valueColOptions'=>['style'=>'width:90%']
-        // ],
+        [
+            'attribute'=>'', 
+            'label'=>'接单地址',
+            'format'=>'raw',
+            'value'=> $customerAddressStr,
+            'type'=>DetailView::INPUT_TEXT,
+            'valueColOptions'=>['style'=>'width:90%']
+        ],
     ],
     'enableEditMode'=>false,
 ]); 
