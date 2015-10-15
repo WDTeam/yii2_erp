@@ -138,26 +138,31 @@ class CustomerAddress extends \common\models\CustomerAddress
      * 客户服务地址列表已数组形式，元素为字符串
      */
     public static function getAddressArr($customer_id){
-        $customerAddresses = self::find()->where(['customer_id'=>$customer_id])->all();
+        $customerAddresses = self::find()->where(['customer_id'=>$customer_id])->asArray()->all();
         $customerAddressArr = array();
         if (!empty($customerAddresses)) {
             foreach ($customerAddresses as $value) {
-                if ($value != NULL) {
-                    $general_region_id = $value->general_region_id;
-                    $generalRegion = GeneralRegion::findOne($general_region_id);
-                    if ($generalRegion != NULL) {
-                        $customerAddressArr[]['general_region_province_name'] = $generalRegion->general_region_province_name;
-                        $customerAddressArr[]['general_region_city_name'] = $generalRegion->general_region_city_name;
-                        $customerAddressArr[]['general_region_area_name'] = $generalRegion->general_region_area_name;
-                        $customerAddressArr[]['customer_address_detail'] =  $value->customer_address_detail;
-                        $customerAddressArr[]['customer_address_nickname'] =  $value->customer_address_nickname;
-                        $customerAddressArr[]['customer_address_phone'] =  $value->customer_address_phone;
-
-
-                        $customerAddressArr[]['province_city_area_detail'] = $generalRegion->general_region_province_name
-                            .$generalRegion->general_region_city_name
-                            .$generalRegion->general_region_area_name
-                            .$value->customer_address_detail;
+                if (!empty($value)) {
+                    $general_region_id = $value['general_region_id'];
+                    $generalRegion = GeneralRegion::find()->where(['id'=>$general_region_id])->asArray()->one();
+                    if (!empty($generalRegion)) {
+                        $customerAddressArr[] = array(
+                            'general_region_province_name'=>$generalRegion['general_region_province_name'],
+                            'general_region_city_name'=>$generalRegion['general_region_city_name'],
+                            'general_region_area_name'=>$generalRegion['general_region_area_name'],
+                            'customer_address_detail'=>$value['customer_address_detail'],
+                            'customer_address_nickname'=>$value['customer_address_nickname'],
+                            'customer_address_phone'=>$value['customer_address_phone'],
+                            'province_city_area_detail'=>$generalRegion['general_region_province_name']
+                                .$generalRegion['general_region_city_name']
+                                .$generalRegion['general_region_area_name']
+                                .$value['customer_address_detail'],
+                        );
+                        // $customerAddressArr[]['address_info'] = 
+                        //     $generalRegion['general_region_province_name']
+                        //     .$generalRegion['general_region_city_name']
+                        //     .$generalRegion['general_region_area_name']
+                        //     .$value['customer_address_detail'];
                     }
                 }
             }
