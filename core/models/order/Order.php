@@ -124,8 +124,8 @@ class Order extends OrderModel
     {
         $order = Order::findById($order_id);
        //放入订单池 zset 根据预约开始时间+订单id排序
-        $redis = new Redis();
-        $redis->zAdd('WaitAssignOrdersPool',$order->order_booked_begin_time.$order_id,$order);
+//        $redis = new Redis();
+//        $redis->zAdd('WaitAssignOrdersPool',$order->order_booked_begin_time.$order_id,$order);
 
         //TODO 开始系统指派
         $order->admin_id=0;
