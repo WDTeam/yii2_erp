@@ -23,9 +23,9 @@ class Order extends OrderModel
 
     public function rules()
     {
-        return [
+        return array_merge([
             [['order_customer_phone','orderBookedDate','orderBookedTimeRange'],'required']
-        ]+parent::rules();
+        ],parent::rules());
     }
 
     public static function getWorkerInfoByPhone($phone)
