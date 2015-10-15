@@ -2,37 +2,11 @@
 
 namespace core\models\GeneralPay;
 
+use common\models\CustomerTransRecord;
 use core\models\Customer;
-use core\models\CustomerTransRecord\CustomerTransRecord;
 use Yii;
 
-/**
- * This is the model class for table "{{%general_pay}}".
- *
- * @property integer $id
- * @property integer $customer_id
- * @property integer $order_id
- * @property string $general_pay_money
- * @property string $general_pay_actual_money
- * @property integer $general_pay_source
- * @property string $general_pay_source_name
- * @property integer $general_pay_mode
- * @property integer $general_pay_status
- * @property string $general_pay_transaction_id
- * @property string $general_pay_eo_order_id
- * @property string $general_pay_memo
- * @property integer $general_pay_is_coupon
- * @property integer $admin_id
- * @property string $general_pay_admin_name
- * @property integer $worker_id
- * @property integer $handle_admin_id
- * @property string $general_pay_handle_admin_id
- * @property string $general_pay_verify
- * @property integer $created_at
- * @property integer $updated_at
- * @property integer $is_del
- */
-class GeneralPay extends \yii\db\ActiveRecord
+class GeneralPay extends \common\models\GeneralPay
 {
     /**
      * @inheritdoc
@@ -111,7 +85,7 @@ class GeneralPay extends \yii\db\ActiveRecord
 
     /**
      * 服务卡支付
-     * @param $data
+     * @param $data  订单数据
      */
     public static function serviceCradPay($data)
     {
@@ -128,7 +102,7 @@ class GeneralPay extends \yii\db\ActiveRecord
 
     /**
      * 余额支付
-     * @param $data
+     * @param $data  订单数据
      */
     public static function balancePay($data)
     {
@@ -145,7 +119,7 @@ class GeneralPay extends \yii\db\ActiveRecord
 
     /**
      * 现金支付
-     * @param $data
+     * @param $data 订单数据
      */
     public static function cashPay($data)
     {
@@ -156,6 +130,85 @@ class GeneralPay extends \yii\db\ActiveRecord
         } catch(Exception $e) {
             return false;
         }
+    }
+
+    /**
+     * 预付费
+     * @param $data 订单数据
+     */
+    public function perPay($data)
+    {
+        try{
+            //用户交易记录
+            CustomerTransRecord::analysisRecord($data);
+            return true;
+        } catch(Exception $e) {
+            return false;
+        }
+    }
+
+
+    /**
+     * 调用(调起)在线支付,发送给支付接口的数据
+     * @param integer $pay_money 支付金额
+     * @param integer $customer_id 消费者ID
+     * @param integer $channel_id 渠道ID
+     * @param integer $order_id 订单ID
+     * @param integer $partner 第三方合作号
+     */
+    public static function getPayParams( $pay_money,$customer_id,$channel_id,$partner,$order_id=0 )
+    {
+        //接收数据
+        //$request = yii::$app->request;
+        //$data = $request->get();
+
+        $data = [
+            "pay_money" => $pay_money,
+            "customer_id" => $customer_id,
+            "general_pay_source" => $channel_id,
+            "partner" => $partner,
+            "order_id" => $order_id
+        ];
+
+            //实例化模型
+        $model = new GeneralPay();
+
+        //查询订单是否已经支付过
+        if( !empty($data['order_id']) ){
+            $order = GeneralPay::find()->where(['order_id'=>$data['order_id'],'general_pay_status'=>1])->one();
+            if(!empty($order)){
+                return ['status'=>0 , 'info'=>'订单已经支付过', 'data'=>''];
+            }
+        }
+
+        //在线支付（online_pay），在线充值（pay）
+        if(empty($data['order_id'])){
+            $scenario = 'pay';
+            //交易方式
+            $data['general_pay_mode'] = 1;//充值
+        }else{
+            $scenario = 'online_pay';
+            //交易方式
+            $data['general_pay_mode'] = 3;//在线支付
+        }
+
+        //支付来源,定义分发支付渠道
+        $data['general_pay_source_name'] = $model->source($data['general_pay_source']);
+
+        //使用场景
+        $model->scenario = $scenario;
+        $model->attributes = $data;
+
+        //验证数据
+        if( $model->validate() && $model->save() ){
+
+            //返回组装数据
+            return $model->call_pay();
+
+        }else{
+            return ['status'=>0 , 'info'=>'数据返回失败', 'data'=>$model->errors];
+        }
+
     }
 
 }
