@@ -6,10 +6,10 @@ use boss\components\AreaCascade;
 use kartik\widgets\Select2;
 use yii\helpers\Url;
 use yii\web\JsExpression;
-use boss\models\ShopManager;
+use core\models\shop\ShopManager;
 
 /* @var $this yii\web\View */
-/* @var $searchModel boss\models\search\ShopManagerSearch */
+/* @var $searchModel core\models\shop\ShopManagerSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', 'Shop Managers');

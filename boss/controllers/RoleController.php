@@ -12,8 +12,8 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\HttpException;
 
-use boss\models\Auth;
-use boss\models\search\AuthSearch;
+use core\models\auth\Auth;
+use core\models\auth\AuthSearch;
 use yii\filters\VerbFilter;
 use boss\components\BaseAuthController;
 use yii\helpers\ArrayHelper;

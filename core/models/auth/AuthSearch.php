@@ -1,11 +1,11 @@
 <?php
 
-namespace boss\models\search;
+namespace boss\models\auth;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use boss\models\Auth;
+use core\models\Auth;
 
 /**
  * AuthSearch represents the model behind the search form about `boss\models\Auth`.

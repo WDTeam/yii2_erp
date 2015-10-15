@@ -6,7 +6,7 @@ use boss\components\AreaCascade;
 
 /**
  * @var yii\web\View $this
- * @var boss\models\search\ShopManagerSearch $model
+ * @var core\models\shop\ShopManagerSearch $model
  * @var yii\widgets\ActiveForm $form
  */
 ?>

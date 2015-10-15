@@ -1,6 +1,6 @@
 <?php 
 use kartik\helpers\Html;
-use boss\models\ShopManager;
+use core\models\shop\ShopManager;
 ?>
 
 <?php 

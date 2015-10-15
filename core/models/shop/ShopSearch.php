@@ -1,22 +1,22 @@
 <?php
 
-namespace boss\models\search;
+namespace core\models\shop;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use boss\models\ShopManager;
+use core\models\shop\Shop;
 
 /**
- * ShopManagerSearch represents the model behind the search form about `boss\models\ShopManager`.
+ * ShopSearch represents the model behind the search form about `boss\models\Shop`.
  */
-class ShopManagerSearch extends ShopManager
+class ShopSearch extends Shop
 {
     public function rules()
     {
         return [
-            [['id', 'province_id', 'city_id', 'county_id', 'bl_type', 'bl_create_time', 'bl_audit', 'bl_expiry_start', 'bl_expiry_end', 'created_at', 'updated_at', 'is_blacklist', 'audit_status', 'shop_count', 'worker_count', 'complain_coutn'], 'integer'],
-            [['name', 'street', 'principal', 'tel', 'other_contact', 'bankcard_number', 'account_person', 'opening_bank', 'sub_branch', 'opening_address', 'bl_name', 'bl_number', 'bl_person', 'bl_address', 'bl_photo_url', 'bl_business', 'level'], 'safe'],
+            [['id', 'shop_manager_id', 'province_id', 'city_id', 'county_id', 'created_at', 'updated_at', 'is_blacklist', 'audit_status', 'worker_count', 'complain_coutn'], 'integer'],
+            [['name', 'street', 'principal', 'tel', 'other_contact', 'bankcard_number', 'account_person', 'opening_bank', 'sub_branch', 'opening_address', 'level'], 'safe'],
         ];
     }
 
@@ -28,7 +28,7 @@ class ShopManagerSearch extends ShopManager
 
     public function search($params)
     {
-        $query = ShopManager::find();
+        $query = Shop::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -40,19 +40,14 @@ class ShopManagerSearch extends ShopManager
 
         $query->andFilterWhere([
             'id' => $this->id,
+            'shop_manager_id' => $this->shop_manager_id,
             'province_id' => $this->province_id,
             'city_id' => $this->city_id,
             'county_id' => $this->county_id,
-            'bl_type' => $this->bl_type,
-            'bl_create_time' => $this->bl_create_time,
-            'bl_audit' => $this->bl_audit,
-            'bl_expiry_start' => $this->bl_expiry_start,
-            'bl_expiry_end' => $this->bl_expiry_end,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'is_blacklist' => $this->is_blacklist,
             'audit_status' => $this->audit_status,
-            'shop_count' => $this->shop_count,
             'worker_count' => $this->worker_count,
             'complain_coutn' => $this->complain_coutn,
         ]);
@@ -67,17 +62,11 @@ class ShopManagerSearch extends ShopManager
             ->andFilterWhere(['like', 'opening_bank', $this->opening_bank])
             ->andFilterWhere(['like', 'sub_branch', $this->sub_branch])
             ->andFilterWhere(['like', 'opening_address', $this->opening_address])
-            ->andFilterWhere(['like', 'bl_name', $this->bl_name])
-            ->andFilterWhere(['like', 'bl_number', $this->bl_number])
-            ->andFilterWhere(['like', 'bl_person', $this->bl_person])
-            ->andFilterWhere(['like', 'bl_address', $this->bl_address])
-            ->andFilterWhere(['like', 'bl_photo_url', $this->bl_photo_url])
-            ->andFilterWhere(['like', 'bl_business', $this->bl_business])
             ->andFilterWhere(['like', 'level', $this->level]);
         
         $query->orFilterWhere(['like', 'principal', $this->name])
-            ->orFilterWhere(['like', 'name', $this->name])
-            ->orFilterWhere(['like', 'tel', $this->name]);
+        ->orFilterWhere(['like', 'name', $this->name])
+        ->orFilterWhere(['like', 'tel', $this->name]);
 
         return $dataProvider;
     }

@@ -1,10 +1,10 @@
 <?php
-namespace common\behaviors;
+namespace core\behaviors;
 
 use yii\base\Behavior;
 use yii\base\InvalidValueException;
 use yii\base\Object;
-use boss\models\ShopStatus;
+use core\models\shop\ShopStatus;
 use common\models\ActiveRecord;
 use common\components\Ivr;
 use common\models\Ivrlog;
