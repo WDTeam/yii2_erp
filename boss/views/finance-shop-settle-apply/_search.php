@@ -15,15 +15,15 @@ use boss\models\FinanceSettleApplySearch;
         'action' => ['index?review_section='.FinanceShopSettleApplySearch::BUSINESS_REVIEW],
         'method' => 'get',
     ]); ?>
-<!--    <div class='col-md-4' style='margin-top: 22px;'>
+    <div class='col-md-4' style='margin-top: 22px;'>
     <?php 
-//    echo ShopSelect::widget([
-//            'model'=>$model,
-//            'shop_manager_id'=>'shop_manager_id',
-//            'shop_id'=>'shop_id',
-//            ]);
+    echo ShopSelect::widget([
+            'model'=>$model,
+            'shop_manager_id'=>'shop_manager_id',
+            'shop_id'=>'shop_id',
+            ]);
     ?>
-    </div>-->
+    </div>
     
     <!--<div class='col-md-2' >-->
     <?php 

@@ -89,7 +89,28 @@ class Order extends OrderModel
 
     /**
      * 创建新订单
-     * @param $attributes
+     * @param $attributes [
+     *  integer $order_ip 下单IP地址 必填
+     *  integer $order_service_type_id 服务类型 商品id 必填
+     *  string $order_service_type_name 商品名称 必填
+     *  integer $order_src_id 订单来源id 必填
+     *  string $channel_id 下单渠道 必填
+     *  float $order_unit_money 单价 必填
+     *  float $order_money 订单价格 必填
+     *  int $order_booked_count 商品数量 分钟数 必填
+     *  int $order_booked_begin_time 预约开始时间 必填
+     *  int $order_booked_end_time 预约结束时间 必填
+     *  int $address_id 客户地址id 必填
+     *  string $order_address 客户地址 必填
+     *  string $order_booked_worker_id 指定阿姨id
+     *  string $order_pop_order_code 第三方订单号
+     *  string $order_pop_group_buy_code 第三方团购号
+     *  int $customer_id 客户id 必填
+     *  string $order_customer_phone 客户手机号 必填
+     *  string $order_customer_need 客户需求
+     *  string $order_customer_memo 客户备注
+     *  int $admin_id 操作人id 0客户 1系统
+     * ]
      * @return bool
      */
     public function createNew($attributes)
@@ -132,7 +153,7 @@ class Order extends OrderModel
         if(OrderStatus::sysAssignStart($order,[]))
         {
             //TODO 系统指派失败
-            $order = Order::findById($order_id);
+            $order = Order::findOne($order_id);
             $order->admin_id=0;
             OrderStatus::sysAssignUndone($order,[]);
         }
@@ -203,7 +224,7 @@ class Order extends OrderModel
         $status_from = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //创建订单状态
         $status_to = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //初始化订单状态
         $order_count = OrderSearch::getCustomerOrderCount($this->customer_id); //该用户的订单数量
-        $orderCode = strlen($this->customer_id).$this->customer_id.strlen($order_count).$order_count ; //TODO 订单号待优化
+        $order_code = strlen($this->customer_id).$this->customer_id.strlen($order_count).$order_count ; //TODO 订单号待优化
         $this->setAttributes([
             //创建订单时优惠卷和服务卡都是初始状态
             'coupon_id' => 0,
@@ -217,7 +238,7 @@ class Order extends OrderModel
             'order_pop_order_money'=>0,
             'order_pop_operation_money'=>0,
             //为以下数据赋初始值
-            'order_code' => $orderCode,
+            'order_code' => $order_code,
             'order_before_status_dict_id' => $status_from->id,
             'order_before_status_name' => $status_from->order_status_name,
             'order_status_dict_id' => $status_to->id,
