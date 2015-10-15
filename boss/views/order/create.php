@@ -35,13 +35,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h3 class="panel-title">服务信息</h3>
             </div>
             <div class="panel-body">
-                <div class="form-group field-order-order_booked_worker_phone">
-                    <label for="order-order_booked_worker_phone" class="control-label col-sm-3">阿姨手机</label>
-                    <div class="col-sm-6">
-                        <input type="text" maxlength="11"  class="form-control" id="order-order_booked_worker_phone">
-                        <div class="help-block help-block-error "></div>
-                    </div>
-                </div>
                 <?= $form->field($model, 'order_booked_worker_id')->inline()->radioList(['0'=>'不指定']); ?>
                 <?= $form->field($model, 'orderBookedDate')->label('服务日期')->widget(
                     DatePicker::className(), [
@@ -50,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'clientOptions' => [
                         'autoclose' => true,
                         'format' => 'yyyy-mm-dd',
-                        'minDate'=> 'new Date()'
+                        'startDate' => date('Y-m-d'),
                     ],
                     'language'=>'zh-CN'
                 ]);?>

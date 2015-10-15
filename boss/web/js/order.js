@@ -159,25 +159,7 @@ $(document).on("change","#order-address_id input",function(){
     getGoods();//地址信息变更后去获取商品信息
 });
 
-$("#order-order_booked_worker_phone").blur(function(){
-    var phone = $(this).val();
-    var reg = /^1[3-9][0-9]{9}$/;
-    if(reg.test(phone)) {
-        $.ajax({
-            type: "GET",
-            url: "/order/worker/?phone=" + phone,
-            dataType: "json",
-            success: function (worker) {
-                if (worker.id) {
-                    $("#order-order_booked_worker_id").html(
-                        '<label class="radio-inline"><input type="radio" value="'+ worker.id
-                        +'" checked="checked" name="Order[order_booked_worker_id]"> '+worker.worker_name+'</label>'
-                    );
-                }
-            }
-        });
-    }
-});
+
 $("#order-order_booked_count input").change(function(){
     setOrderMoney();
     $("#order-orderbookedtimerange").html('');
