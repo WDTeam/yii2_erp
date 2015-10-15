@@ -17,7 +17,8 @@ use core\models\worker\WorkerRuleConfig;
 use core\models\Operation\CoreOperationShopDistrict;
 use core\models\Operation\CoreOperationCity;
 use core\models\shop\Shop;
-
+use boss\models\Operation\OperationCity;
+use boss\models\Operation\OperationShopDistrict;
 use crazyfd\qiniu\Qiniu;
 
 /**
@@ -311,7 +312,8 @@ class Worker extends \common\models\Worker
      * @return array [city_id=>city_name,...]
      */
     public static function getOnlineCityList(){
-        $onlineCityList= CoreOperationCity::find()->select('city_id,city_name')->asArray()->all();
+        $onlineCityList = OperationCity::getCityOnlineInfoList();
+        //$onlineCityList= CoreOperationCity::find()->select('city_id,city_name')->asArray()->all();
         return $onlineCityList?ArrayHelper::map($onlineCityList,'city_id','city_name'):[];
     }
 
@@ -320,9 +322,9 @@ class Worker extends \common\models\Worker
      * @param int $city_d 城市id
      * @return sting $cityName 城市名称
      */
-    public static function getOnlineCityName($city_d=0){
-        if(empty($city_d)) return '';
-        $onlineCity= CoreOperationCity::find()->select('city_name')->where(['city_id'=>$city_d])->asArray()->one();
+    public static function getOnlineCityName($city_id=0){
+        if(empty($city_id)) return '';
+        $onlineCity= CoreOperationCity::find()->select('city_name')->where(['city_id'=>$city_id])->asArray()->one();
         return $onlineCity['city_name'];
     }
 
@@ -342,7 +344,8 @@ class Worker extends \common\models\Worker
      * @return array [id=>operation_shop_district_name,...]
      */
     public static function getDistrictList(){
-        $districtList =CoreOperationShopDistrict::find()->select('id,operation_shop_district_name')->asArray()->all();
+        $districtList = OperationShopDistrict::getCityShopDistrictList();
+        //$districtList = CoreOperationShopDistrict::find()->select('id,operation_shop_district_name')->asArray()->all();
         return $districtList?ArrayHelper::map($districtList,'id','operation_shop_district_name'):[];
     }
 

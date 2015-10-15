@@ -76,6 +76,8 @@ use core\models\worker\WorkerRuleConfig;
             </div>
 
             <div class="panel-heading"><h3 class="panel-title">阿姨基本信息</h3> </div>
+
+            <div class="panel-body">
             <?= $form->field($worker, 'worker_photo')->widget(FileInput::classname(), [
                 'options' => ['multiple' => true],
                 'pluginOptions' => [
@@ -86,7 +88,6 @@ use core\models\worker\WorkerRuleConfig;
                     'showUpload' => false,
                 ]
             ])?>
-            <div class="panel-body">
             <?= $form->field($worker_ext, 'worker_source')->widget(Select2::classname(), [
                 'name' => 'worker_source',
                 'class'=>\kartik\widgets\Select2::className(),
