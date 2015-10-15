@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\FinanceWorkerOrderIncome;
+use core\models\order\Order;
 
 /**
  * FinanceWorkerOrderIncomeSearch represents the model behind the search form about `common\models\FinanceWorkerOrderIncome`.
@@ -82,8 +83,8 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
         return $dataProvider;
     }
     
-    public function getOrderDataProvider(){
-        $query = null;
+    public function getOrderDataProvider($worker_id){
+        $query = Order::find()->where(['order_booked_worker_id'=>$worker_id]);
         $dataProvider = new ActiveDataProvider([ 'query' => $query,]);
         return $dataProvider;
     }

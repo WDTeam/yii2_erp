@@ -1,6 +1,10 @@
 <?php
+namespace api\controllers;
+use Yii;
+use \api\models\PayParam;
+use \core\models\GeneralPay\GeneralPay;
 
-class PayController
+class PayController extends \api\components\Controller
 {
     /**
      * @api {get} /v2/auto_paid_confirm.php  结算-顾客现金支付
@@ -162,17 +166,15 @@ class PayController
      */
     
     /**
-     * @api {get} v2/wx_app_pay.php 会员充值付接口
-     * @apiName actionWxAppPay
+     * @api {post} pay/pay 会员充值付接口
+     * @apiName actionPay
      * @apiGroup Pay
      * 
-     * @apiParam {String} session_id    会话id.
-     * @apiParam {String} platform_version 平台版本号.
-     * @apiParam {String} partner_id  商户号.
-     * @apiParam {String} app_id  appID.
-     * @apiParam {String} order_id  订单ID.
-     * @apiParam {String} order_price  订单价格.
-     * @apiParam {String} channel  渠道标签.
+     * @apiParam integer pay_money 支付金额
+     * @apiParam integer customer_id 消费者ID
+     * @apiParam integer channel_id 渠道ID
+     * @apiParam integer [order_id] 订单ID,没有订单号表示充值
+     * @apiParam integer partner 第三方合作号
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -211,6 +213,19 @@ class PayController
      *  }
      *
      */
+
+    public function actionPay(){
+        $model=new PayParam();
+        if($model->load(Yii::$app->request->post())&&$model->validators())
+        {
+           $retInfo= GeneralPay::getPayParams($model->pay_money,$model->customer_id,
+                $model->channel_id,$model->order_id,$model->partner);
+
+           return $this->send($retInfo['data'], $retInfo['info'], $retInfo['status']);
+        }
+        return $this->send(null, $model->errors, "error");
+
+    }
     
     /**
      * @api {get} v2/bfb_app.php 百度钱包支付接口

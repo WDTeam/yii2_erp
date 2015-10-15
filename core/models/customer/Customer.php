@@ -2,95 +2,190 @@
 
 namespace core\models\customer;
 
+
 use Yii;
+// use common\models\Customer;
+use common\models\CustomerAddress;
+use common\models\CustomerWorker;
+use common\models\Worker;
+use common\models\CustomerExtBalance;
+use common\models\GeneralRegion;
+use yii\web\BadRequestHttpException;
 
-/**
- * This is the model class for table "{{%customer}}".
- *
- * @property integer $id
- * @property string $customer_name
- * @property integer $customer_sex
- * @property integer $customer_birth
- * @property string $customer_photo
- * @property string $customer_phone
- * @property string $customer_email
- * @property integer $operation_area_id
- * @property integer $operation_city_id
- * @property integer $general_region_id
- * @property string $customer_live_address_detail
- * @property integer $customer_level
- * @property integer $customer_complaint_times
- * @property integer $customer_src
- * @property integer $channal_id
- * @property integer $platform_id
- * @property string $customer_platform_version
- * @property string $customer_app_version
- * @property string $customer_mac
- * @property string $customer_login_ip
- * @property integer $customer_login_time
- * @property integer $customer_is_vip
- * @property integer $created_at
- * @property integer $updated_at
- * @property integer $is_del
- * @property string $customer_del_reason
- */
-class Customer extends \yii\db\ActiveRecord
+class Customer extends \common\models\Customer
 {
+
     /**
-     * @inheritdoc
+     * 根据customer_id获取顾客信息
      */
-    public static function tableName()
+    public static function getCustomerById($customer_id)
     {
-        return '{{%customer}}';
+        $customer = Customer::findOne($customer_id);
+
+        return $customer != NULL ? $customer : false;
+    }
+    
+    /**
+     * 根据手机号获取顾客基本信息
+     */
+    public static function getCustomerInfo($phone)
+    {
+        $customer = Customer::find()->where(array(
+            'customer_phone'=>$phone,
+            ))->one();
+        if ($customer == NULL) {
+            return false;
+        }
+        
+        $customerBalance = CustomerExtBalance::find()->where(array(
+            'customer_id'=>$customer->id,
+            ))->one();
+        // if ($customerBalance == NULL) {
+        //     $customer_balance = 0;
+        // }
+        // $customer_balance = $customerBalance->customer_balance;
+        $customer_balance = $customerBalance == NULL ? 0 : $customerBalance->customer_balance;
+        return array(
+            'id'=>$customer->id,
+            'customer_phone'=>$phone,
+            'customer_balance'=>$customer_balance,
+            );
     }
 
     /**
-     * @inheritdoc
+     * 获取客户的手机号
      */
-    public function rules()
+    public static function getCustomerPhone($customer_id)
     {
-        return [
-            [['customer_sex', 'customer_birth', 'operation_area_id', 'operation_city_id', 'general_region_id', 'customer_level', 'customer_complaint_times', 'customer_src', 'channal_id', 'platform_id', 'customer_login_time', 'customer_is_vip', 'created_at', 'updated_at', 'is_del'], 'integer'],
-            [['customer_del_reason'], 'string'],
-            [['customer_name', 'customer_platform_version', 'customer_app_version', 'customer_mac', 'customer_login_ip'], 'string', 'max' => 16],
-            [['customer_photo', 'customer_email'], 'string', 'max' => 32],
-            [['customer_phone'], 'string', 'max' => 11],
-            [['customer_live_address_detail'], 'string', 'max' => 64]
-        ];
+        $customer = self::findOne($customer_id);
+        if ($customer == NULL) {
+            return false;
+        }else{
+            return $customer->customer_phone;
+        }
     }
 
     /**
-     * @inheritdoc
+     * 根据客户id获取常用阿姨列表
      */
-    public function attributeLabels()
+    public function getCustomerWorkers($customer_id)
     {
-        return [
-            'id' => Yii::t('boss', 'ID'),
-            'customer_name' => Yii::t('boss', '用户名'),
-            'customer_sex' => Yii::t('boss', '性别'),
-            'customer_birth' => Yii::t('boss', '生日'),
-            'customer_photo' => Yii::t('boss', '头像'),
-            'customer_phone' => Yii::t('boss', '电话'),
-            'customer_email' => Yii::t('boss', '邮箱'),
-            'operation_area_id' => Yii::t('boss', '商圈'),
-            'operation_city_id' => Yii::t('boss', '城市'),
-            'general_region_id' => Yii::t('boss', '住址'),
-            'customer_live_address_detail' => Yii::t('boss', '详细住址'),
-            'customer_level' => Yii::t('boss', '评级'),
-            'customer_complaint_times' => Yii::t('boss', '投诉'),
-            'customer_src' => Yii::t('boss', '来源，1为线下，2为线上'),
-            'channal_id' => Yii::t('boss', '渠道'),
-            'platform_id' => Yii::t('boss', '平台'),
-            'customer_platform_version' => Yii::t('boss', '操作系统版本号'),
-            'customer_app_version' => Yii::t('boss', 'app版本号'),
-            'customer_mac' => Yii::t('boss', 'mac地址'),
-            'customer_login_ip' => Yii::t('boss', '登陆ip'),
-            'customer_login_time' => Yii::t('boss', '登陆时间'),
-            'customer_is_vip' => Yii::t('boss', '身份'),
-            'created_at' => Yii::t('boss', '创建时间'),
-            'updated_at' => Yii::t('boss', '更新时间'),
-            'is_del' => Yii::t('boss', '加入黑名单'),
-            'customer_del_reason' => Yii::t('boss', '加入黑名单原因'),
-        ];
+        $customer = self::findOne($customer_id);
+        $customerWorkers = $customer->hasMany('\common\models\customerWorker', ['customer_id'=>'id'])->all();
+        return $customerWorkers != NULL ? $customerWorkers : false;
+    }
+
+    // public static function getCustomerAddresses($customer_id)
+    // {
+    //     $customerAddress = CustomerAddress::find()->where(array(
+    //         'customer_id'=>$customer_id,
+    //         ))->all();
+    //     foreach ($customerAddress as $value) {
+    //         $generalRegion = GeneralRegion::findOne($value['general_region_id']);
+    //     }
+    // }
+
+    /**
+     * 获取顾客地址集
+     */
+    public static function getCustomerAddresses($customer_id){
+        $customer = self::findOne($customer_id);
+        $customerAddresses = $customer->hasMany('\common\models\CustomerAddress', ['customer_id'=>'id'])->all();
+        return $customerAddresses != NULL ? $customerAddresses : false;
+    }
+
+    /**
+     * 新增顾客服务地址
+     */
+    public function addCustomerAddress($customer_id, $general_region_id, $detail, $nickname, $phone){
+        
+        $transaction = \Yii::$app->db->beginTransaction();
+
+        try {
+            // 所有的查询都在主服务器上执行
+            $customerAddresses = CustomerAddress::find()->where(array(
+                'customer_id'=>$customer_id,
+                ))->all();
+            foreach ($customerAddresses as $customerAddress) {
+                $customerAddress->customer_address_status = 0;
+                $customerAddress->validate();
+                $customerAddress->save();
+            }
+            $customerAddress = new customerAddress;
+            $customerAddress->customer_id = $customer_id;
+            $customerAddress->general_region_id = $general_region_id;
+            $customerAddress->customer_address_detail = $detail;
+            $customerAddress->customer_address_status = 1;
+            //根据地址获取经纬度信息
+            $customerAddress->customer_address_longitude = '';
+            $customerAddress->customer_address_latitude = '';
+            $customerAddress->customer_address_nickname = $nickname;
+            $customerAddress->customer_address_phone = $phone;
+            $customerAddress->created_at = time();
+            $customerAddress->updated_at = 0;
+            $customerAddress->is_del = 0;
+            $customerAddress->validate();
+            $customerAddress->save();
+            $transaction->commit();
+        } catch(\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+    }
+
+    /**
+     * 修改顾客服务地址
+     */
+    public function updateCustomerAddress($customer_id, $general_region_id, $detail, $nickname, $phone){
+        
+        $transaction = \Yii::$app->db->beginTransaction();
+
+        try {
+            // 所有的查询都在主服务器上执行
+            $customerAddresses = CustomerAddress::find()->where(array(
+                'customer_id'=>$customer_id,
+                ))->all();
+            foreach ($customerAddresses as $customerAddress) {
+                $customerAddress->customer_address_status = 0;
+                $customerAddress->validate();
+                $customerAddress->save();
+            }
+            $customerAddress = CustomerAddress::find()->where(array(
+                'customer_id'=>$customer_id,
+                ))->one();
+            $customerAddress->general_region_id = $general_region_id;
+            $customerAddress->customer_address_detail = $detail;
+            $customerAddress->customer_address_status = 1;
+            //根据地址获取经纬度信息
+            $customerAddress->customer_address_longitude = '';
+            $customerAddress->customer_address_latitude = '';
+            $customerAddress->customer_address_nickname = $nickname;
+            $customerAddress->customer_address_phone = $phone;
+            $customerAddress->created_at = time();
+            $customerAddress->updated_at = 0;
+            $customerAddress->is_del = 0;
+            $customerAddress->validate();
+            $customerAddress->save();
+            $transaction->commit();
+        } catch(\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+    }
+
+    public static function getCustomerUsedWorkers($id)
+    {
+        $customerWorker = CustomerWorker::findAll(['customer_id'=>$id]);
+        $workers = [];
+        foreach($customerWorker as $k=>$v)
+        {
+            $worker = $v->attributes;
+            $worker_model = Worker::findOne($v->worker_id);
+            if(!empty($worker_model)) {
+                $worker['worker_name'] = $worker_model->worker_name;
+                $workers[]=$worker;
+            }
+        }
+        return $workers;
     }
 }

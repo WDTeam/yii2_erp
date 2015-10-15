@@ -4,6 +4,8 @@ namespace common\models;
 
 use core\models\Customer;
 use Yii;
+use yii\base\ErrorException;
+use yii\base\Exception;
 use yii\behaviors\TimestampBehavior;
 /**
  * This is the model class for table "{{%general_pay}}".
@@ -42,11 +44,6 @@ class GeneralPay extends \yii\db\ActiveRecord
     {
         return '{{%general_pay}}';
     }
-//
-//    static public function test()
-//    {
-//        echo 1111;
-//    }
 
     /**
      * @inheritdoc
@@ -112,7 +109,8 @@ class GeneralPay extends \yii\db\ActiveRecord
      */
     public function call_pay()
     {
-        call_user_func(__CLASS__ .'::'.$this->pay_type);
+        $fun = $this->pay_type;
+        return $this->$fun();
     }
 
 
@@ -177,7 +175,7 @@ class GeneralPay extends \yii\db\ActiveRecord
      */
     private function wx_app()
     {
-        $param = array(
+        $param = [
             "body"	=> $this->body(),
             "out_trade_no"	=> $this->create_out_trade_no(),
             "general_pay_money"	=> $this->toMoney($this->general_pay_money,100,'*',0),
@@ -186,34 +184,48 @@ class GeneralPay extends \yii\db\ActiveRecord
             "trade_type" => "WX",
             "subject" => $this->subject(),
             "notify_url" => $this->notify_url('wx-app'),
-        );
+        ];
         $class = new \wxpay_class();
         $msg = $class->get($param);
-        echo json_encode(['code'=>'ok','msg'=>$msg]);
-
+        return $msg;
     }
 
     /**
      * 微信H5
      */
-    private function wx_h5(){}
+    private function wx_h5()
+    {
+        $param = [
+            "body"	=> $this->body(),
+            "out_trade_no"	=> $this->create_out_trade_no(),
+            "general_pay_money"	=> $this->toMoney($this->general_pay_money,100,'*',0),
+            'time_start' => date("YmdHis"),
+            'time_expire' => date("YmdHis", time() + 600000),
+            "trade_type" => "JSAPI",
+            "subject" => $this->subject(),
+            "notify_url" => $this->notify_url('wx-h5'),
+        ];
+        $class = new \wxjspay_class();
+        $msg = $class->get($param);
+        return $msg;
+    }
 
     /**
      * 百度钱包APP
      */
     private function bfb_app()
     {
-        $param = array(
+        $param = [
             'out_trade_no'=>$this->create_out_trade_no(),
             'subject'=>$this->subject(),
             'body'=>$this->body(),
             'general_pay_money'=>$this->toMoney($this->general_pay_money,100,'*'),
             'notify_url'=>$this->notify_url('bfb-app'),
-        );
+        ];
 
         $class = new \bfbpay_class();
         $msg = $class->get($param);
-        echo json_encode(['code'=>'ok','msg'=>$msg]);
+        return $msg;
     }
 
     /**
@@ -221,15 +233,15 @@ class GeneralPay extends \yii\db\ActiveRecord
      */
     private function up_app()
     {
-        $param = array(
+        $param = [
             'out_trade_no'=>$this->create_out_trade_no(),
             'subject'=>$this->subject(),
             'general_pay_money'=>$this->toMoney($this->general_pay_money,100,'*',0),
             'notify_url'=>$this->notify_url('up-app'),
-        );
+        ];
         $class = new \uppay_class();
         $msg = $class->get($param);
-        echo json_encode(['code'=>'ok','msg'=>$msg]);
+        return $msg;
     }
 
     /**
@@ -237,16 +249,16 @@ class GeneralPay extends \yii\db\ActiveRecord
      */
     private function alipay_app()
     {
-        $param = array(
+        $param = [
             'out_trade_no'=>$this->create_out_trade_no(),
             'subject'=>$this->subject(),
             'body'=>$this->body(),
             'general_pay_money'=>$this->general_pay_money,
             'notify_url'=>$this->notify_url('alipay-app'),
-        );
+        ];
         $class = new \alipay_class();
         $msg = $class->get($param);
-        echo json_encode(['code'=>'ok','msg'=>$msg]);
+        return $msg;
     }
 
 
@@ -330,6 +342,47 @@ class GeneralPay extends \yii\db\ActiveRecord
                 break;
         }
         return $toMoney;
+    }
+
+    /**
+     * 订单支付
+     * @param $attribute 支付或订单详细数据
+     */
+    public static function orderPay($attribute)
+    {
+        //查询用户信息
+        $orderSearch = new \core\models\order\OrderSearch;
+        $orderInfo = $orderSearch->search(['OrderSearch'=>['id'=>$attribute['order_id']]])->query->one();
+        $attribute['customer_trans_record_online_service_card_on'] = !empty($orderInfo->orderExtPay->card_id) ? $orderInfo->orderExtPay->card_id : 0;    //服务卡ID
+        $attribute['customer_trans_record_online_service_card_pay'] = !empty($orderInfo->orderExtPay->order_use_card_money) ? $orderInfo->orderExtPay->order_use_card_money : 0;//服务卡金额
+        $attribute['customer_trans_record_coupon_money'] = !empty($orderInfo->orderExtPay->order_use_coupon_money) ? $orderInfo->orderExtPay->order_use_coupon_money : 0; //优惠券金额
+        $attribute['customer_trans_record_online_balance_pay'] = !empty($orderInfo->orderExtPay->order_use_acc_balance) ? $orderInfo->orderExtPay->order_use_acc_balance : 0;  //余额支付
+        $attribute['customer_trans_record_order_total_money'] = $orderInfo->order_money;  //订单总额
+        $attribute['order_pop_order_money'] = !empty($orderInfo->orderExtPop->order_pop_order_money) ? $orderInfo->orderExtPop->order_pop_order_money : 0;  //预付费
+
+        //服务卡扣费
+        if( !empty($attribute['customer_trans_record_online_service_card_on']) && !empty($attribute['customer_trans_record_online_service_card_pay']) ){
+            //Customer::decBalance($model->customer_id,$orderInfo->orderExtPay->order_use_acc_balance);
+        }elseif( !empty($attribute['customer_trans_record_online_balance_pay']) ){
+            //余额扣费
+            Customer::decBalance($attribute['customer_id'],$orderInfo->orderExtPay->order_use_acc_balance);
+        }
+        //支付订单交易记录
+        CustomerTransRecord::analysisRecord($attribute);
+    }
+
+    /**
+     * 充值支付
+     * @param $attribute 支付或订单详细数据
+     */
+    public static function pay($attribute)
+    {
+        //支付充值
+        Customer::incBalance($attribute['customer_id'],$attribute['general_pay_actual_money']);
+
+        //充值交易记录
+        CustomerTransRecord::analysisRecord($attribute);
+        return true;
     }
 
     /**
