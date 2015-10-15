@@ -49,18 +49,5 @@ class CustomerExtScore extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * 获取客户积分
-     */
-    public static function getScore($customer_id){
-        $customer = Customer::findOne($customer_id);
-        if ($customer == NULL) {
-            return false;
-        }
-        $customerExtScore = self::find()->where(['customer_id'=>$customer_id])->one();
-        if ($customerExtScore == NULL) {
-            return 0;
-        }
-        return $customerExtScore->customer_score;
-    }
+    
 }

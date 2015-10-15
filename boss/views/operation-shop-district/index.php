@@ -48,6 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                        );
 //                    },
                     'update' => function ($url, $model) {
+                        return Html::a(Yii::t('yii', '编辑'), ['operation-shop-district/update', 'id' => $model->id], ['class' => 'btn btn-info btn-sm']);
                         return Html::a(
                             '<span class="glyphicon glyphicon-pencil"></span>', 
                             Yii::$app->urlManager->createUrl(['operation-shop-district/update','id' => $model->id]),
@@ -55,6 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         );
                     },
                     'delete' => function ($url, $model) {
+                        return Html::a(Yii::t('yii', '删除'), ['operation-shop-district/delete', 'id' => $model->id], ['class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]);
                         return Html::a(
                             '<span class="glyphicon glyphicon-trash"></span>', 
                             Yii::$app->urlManager->createUrl(['operation-shop-district/delete','id' => $model->id]),

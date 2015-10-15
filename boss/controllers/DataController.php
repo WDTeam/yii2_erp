@@ -1,30 +1,26 @@
 <?php
 
 namespace boss\controllers;
+
 use Yii;
 //use common\models\Customer;
 use boss\models\CustomerSearch;
-use yii\web\Controller;
+use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-// use common\models\CustomerAddress;
-// use common\models\CustomerPlatform;
-// use common\models\CustomerChannal;
-// use common\models\OperationCity;
-// use common\models\GeneralRegion;
-// use common\models\CustomerExtBalance;
-// use common\models\CustomerExtScore;
-// use common\models\OrderExtCustomer;
-// use common\models\CustomerComment;
-
-use core\models\customer\CustomerBlockLog;
 use core\models\customer\Customer;
 use core\models\customer\CustomerAddress;
+use core\models\customer\CustomerExtBalance;
+use core\models\customer\CustomerExtScore;
+use core\models\customer\CustomerExtSrc;
+use core\models\customer\CustomerComment;
+
+
 /**
  * CustomerController implements the CRUD actions for Customer model.
  */
-class CustomerController extends Controller
+class DataController extends BaseAuthController
 {
     public function behaviors()
     {
@@ -44,259 +40,11 @@ class CustomerController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new CustomerSearch;
 
-        $params = Yii::$app->request->getQueryParams();
-        $dataProvider = $searchModel->search($params);
-        $dataProvider->query->orderBy(['created_at' => SORT_DESC ]);
-
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel,
-        ]);
-    }
-
-    /**
-     * Lists all Customer models.
-     * @return mixed
-     */
-    public function actionBlock()
-    {
-        $searchModel = new CustomerSearch;
-        $params = Yii::$app->request->getQueryParams();
-        $dataProvider = $searchModel->search($params);
-        return $this->render('block', [
-            'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel,
-        ]);
-    }
-
-    public function actionSwitchBlock(){
-        $id = Yii::$app->request->get('id');
-
-        $customer = Customer::find()->where(['id'=>$id])->one();
-        $is_del = $customer->is_del;
-        $is_del = $is_del ? 0 : 1;
-        $customer->is_del = $is_del;
-        $customer->validate();
-        if ($customer->hasErrors()) {
-            var_dump($customer->getErrors());
-            exit();
-        }
-        $customer->save();
-        if ($customer->is_del == 1) {
-            return $this->redirect(['/customer/block', 
-                'CustomerSearch'=>['is_del'=>1]]);
-        }
-        if ($customer->is_del == 0){
-            return $this->redirect(['/customer/index', 
-                'CustomerSearch'=>['is_del'=>0]]);
-        }
     }
 
     
-
-    /**
-     * Displays a single Customer model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionView($id)
-    {
-        $searchModel = new CustomerSearch;
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('view', [
-                'model' => $model, 
-                'searchModel'=>$searchModel,
-                ]);
-        }
-    }
-
-    /**
-     * Creates a new Customer model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new Customer;
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Updates an existing Customer model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-        $customerBalance = CustomerExtBalance::find()->where([
-            'customer_id'=>$id,
-            ])->one();
-        if ($customerBalance == NULL) {
-            $customerBalance = new CustomerExtBalance;
-        }
-
-        $customerScore = CustomerExtScore::find()->where([
-            'customer_id'=>$id,
-            ])->one();
-        if ($customerScore == NULL) {
-            $customerScore = new CustomerExtScore;
-        }
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-                'customerBalance'=>$customerBalance,
-                'customerScore'=>$customerScore,
-            ]);
-        }
-    }
-
-    /**
-     * Deletes an existing Customer model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the Customer model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Customer the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Customer::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
-    }
-
-    /*
-     * 创建客户封号信息
-     * @param customerId 客户Id
-     * @return empty
-     */
-    public function actionAddToBlock($id){
-
-        $model = $this->findModel($id);
-        if(\Yii::$app->request->post()){
-            $block_reason =\Yii::$app->request->post('customer_del_reason','');
-            $is_added = CustomerBlockLog::addToBlock($id, $block_reason);
-            if ($is_added) {
-                return $this->redirect(['index']);
-            }else{
-                return $this->renderAjax('add-to-block',['model'=>$model]);
-            }
-        }
-        return $this->renderAjax('add-to-block',['model'=>$model]);
-    }
-
-    /*
-     * 客户从黑名单中删除
-     * @param customer_id 客户Id
-     * @return empty
-     */
-    public function actionRemoveFromBlock($id){
-        $is_removed = CustomerBlockLog::removeFromBlock($id);
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * 批量加入黑名单
-     */
-    public function actionMultiAddToBlock(){
-        // $ids_str = \Yii::$app->request->get('ids_str', '');
-        // $ids_arr = explode(',', trim($ids_str, ','));
-        $ids_arr = \Yii::$app->request->post('ids', '');
-        // var_dump($ids);
-        // exit();
-        if(\Yii::$app->request->post()){
-            $block_reason =\Yii::$app->request->post('customer_del_reason','');
-            if (!empty($ids_arr)) {
-                foreach ($ids_arr as $id) {
-                    $is_added = CustomerBlockLog::addToBlock($id, $block_reason);
-                }
-            }
-            return $this->redirect(['index']);
-        }
-        return $this->renderAjax('multi-add-to-block',['ids_str'=>$ids_str]);
-    }
-
-    /**
-     * 批量从黑名单中删除
-     */
-    public function actionMultiRemoveFromBlock(){
-        $ids_str = \Yii::$app->request->get('ids_str', '');
-        $ids_arr = explode(',', trim($ids_str, ','));
-        if (!empty($ids_arr)) {
-            foreach ($ids_arr as $id) {
-                $is_removed = CustomerBlockLog::RemoveFromBlock($id, $block_reason);
-            }
-        }
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * 修改客户订单服务地址
-     */
-    public function actionUpdateCustomerAddresses($customer_id){
-        $customerAddressModel = CustomerAddress::findAll(['customer_id'=>$customer_id]);
-        // var_dump($customer_id);
-        // var_dump($customerAddressModel);
-        // exit();
-        if(\Yii::$app->request->post()){
-            // $customerModel->is_del = 0;
-            // $customerModel->customer_del_reason = '';
-            // $customerModel->updated_at = time();
-            // $customerModel->validate();
-            // if ($customerModel->hasErrors()) {
-            //     return $this->renderAjax('remove_from_block',['customerModel'=>$customerModel,]);
-            // }
-            // $customerModel->save();
-
-            foreach ($customerAddressModel as $customerAddress) {
-                // $customerAddress->customer_id 
-                // $customerAddress->general_region_id
-                // $customerAddress->customer_address_detail
-                // $customerAddress->customer_address_status
-                // $customerAddress->customer_address_longitude
-                // $customerAddress->customer_address_latitude
-                // $customerAddress->customer_address_phone
-                // $customerAddress->customer_address_nickname
-                // $customerAddress->is_del
-                // $customerAddress->created_at
-                // $customerAddress->updated_at
-            }
-            return $this->redirect(['index', 'CustomerSearch'=>['is_del'=>0]]);
-        }else{
-            return $this->render('update-customer-addresses',['customerAddressModel'=>$customerAddressModel]);
-        }
-    }
+    
 
     public $global_cur_page_no = 1;
     public function actionData(){
@@ -309,8 +57,8 @@ class CustomerController extends Controller
             'password' => 'test_sq_ejiajie',
         ]);
         $connection->open();
-        $command = $connection->createCommand("SELECT count(*) FROM user_info");
-        $count = $command->queryScalar();
+        $command = $connection->createCommand("SELECT count(*) FROM user_info limit 0, 200");
+        $count = $command->queryScalar(); 
         echo "<br/>顾客总记录数为" . $count;
         $numPerPage = 20;
         $totalPage = $count <= 0 ? 0 : floor($count / $numPerPage) + 1;
@@ -497,7 +245,6 @@ class CustomerController extends Controller
         // echo "customer_platform数据导入成功";
         echo "<br/>customer数据导入成功";
     }
-
     public function actionData2(){
         // set_time_limit(30 * 1000); 
         ini_set("max_execution_time", 30000);
@@ -590,14 +337,6 @@ class CustomerController extends Controller
         $connectionNew->createCommand()->batchInsert('{{%customer_ext_score}}',$customerScoreArr[0], $customerScoreArr)->execute();
         $connectionNew->createCommand()->batchInsert('{{%customer_comment}}',$customeCommentArr[0], $customerCommentArr)->execute();
         echo "<br/>customer数据导入成功";
-    }
-
-    public function actionData3(){
-        $customer = Customer::find()->orderBy('id asc')->one();
-        $customer_id = $customer->id;
-        $res = CustomerAddress::addAddress($customer_id, 191, 'SOHO一期2单元908', '测试昵称', '18519999999');
-        $res = CustomerAddress::addAddress($customer_id, 191, 'SOHO一期2单元719', '测试昵称', '18519999999');
-        
     }
 
     public function actionTest(){
