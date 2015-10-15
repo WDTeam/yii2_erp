@@ -21,7 +21,7 @@ use core\models\worker\WorkerExt;
 use core\models\worker\WorkerDistrict;
 use boss\models\worker\WorkerSearch;
 use boss\models\Operation;
-use boss\models\Shop;
+use core\models\shop\Shop;
 
 
 

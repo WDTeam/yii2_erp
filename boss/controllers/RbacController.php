@@ -4,8 +4,8 @@ namespace boss\controllers;
 use Yii;
 use boss\models\SystemUser;
 use yii\rbac\Item;
-use boss\models\AuthItem;
-use boss\models\search\AuthItemSearch;
+use core\models\auth\AuthItem;
+use core\models\auth\AuthItemSearch;
 use boss\components\BaseAuthController;
 class RbacController extends BaseAuthController
 {

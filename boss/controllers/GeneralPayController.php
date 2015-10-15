@@ -201,15 +201,14 @@ class GeneralPayController extends Controller
                     //支付订单
                     if(!empty($model->order_id)){
 
-                        //服务卡支付
-                        $customer::incBalance($model->customer_id,$model->general_pay_actual_money);
-
+                        //用户余额支付
+                        //$customer::decBalance($model->customer_id,$model->general_pay_actual_money);
                         //支付订单交易记录
                         $customerTransRecord::analysisRecord($attribute);
                     }else{
 
                         //支付充值
-                        $customer::decBalance($model->customer_id,$model->general_pay_actual_money);
+                        $customer::incBalance($model->customer_id,$model->general_pay_actual_money);
 
                         //充值交易记录
                         $customerTransRecord::analysisRecord($attribute);
@@ -330,15 +329,15 @@ class GeneralPayController extends Controller
                 //支付订单
                 if(!empty($model->order_id)){
 
-                    //服务卡支付
-                    $customer::incBalance($model->customer_id,$model->general_pay_actual_money);
+                    //用户余额支付
+                    //$customer::decBalance($model->customer_id,$model->general_pay_actual_money);
 
                     //支付订单交易记录
                     $customerTransRecord::analysisRecord($attribute);
                 }else{
 
                     //支付充值
-                    $customer::decBalance($model->customer_id,$model->general_pay_actual_money);
+                    $customer::incBalance($model->customer_id,$model->general_pay_actual_money);
 
                     //充值交易记录
                     $customerTransRecord::analysisRecord($attribute);
@@ -451,15 +450,15 @@ class GeneralPayController extends Controller
                 //支付订单
                 if(!empty($model->order_id)){
 
-                    //服务卡支付
-                    $customer::incBalance($model->customer_id,$model->general_pay_actual_money);
+                    //用户余额支付
+                    //$customer::decBalance($model->customer_id,$model->general_pay_actual_money);
 
                     //支付订单交易记录
                     $customerTransRecord::analysisRecord($attribute);
                 }else{
 
                     //支付充值
-                    $customer::decBalance($model->customer_id,$model->general_pay_actual_money);
+                    $customer::incBalance($model->customer_id,$model->general_pay_actual_money);
 
                     //充值交易记录
                     $customerTransRecord::analysisRecord($attribute);
@@ -574,15 +573,15 @@ class GeneralPayController extends Controller
                 //支付订单
                 if(!empty($model->order_id)){
 
-                    //服务卡支付
-                    $customer::incBalance($model->customer_id,$model->general_pay_actual_money);
+                    //用户余额支付
+                    //$customer::decBalance($model->customer_id,$model->general_pay_actual_money);
 
                     //支付订单交易记录
                     $customerTransRecord::analysisRecord($attribute);
                 }else{
 
                     //支付充值
-                    $customer::decBalance($model->customer_id,$model->general_pay_actual_money);
+                    $customer::incBalance($model->customer_id,$model->general_pay_actual_money);
 
                     //充值交易记录
                     $customerTransRecord::analysisRecord($attribute);
@@ -600,6 +599,23 @@ class GeneralPayController extends Controller
             }
         }
     }
+
+    /**
+     * 用户服务卡支付
+     */
+    public function serviceCradPay()
+    {
+
+    }
+
+    /**
+     * 用户余额支付
+     */
+    public function balancePay()
+    {
+
+    }
+
 
     /**
      * Lists all GeneralPay models.
@@ -715,9 +731,10 @@ class GeneralPayController extends Controller
 
     public function actionTest()
     {
+
         $param = [
             'sp_refund_no' => date("ymd",time()).mt_rand(1000,9999).'1',
-            'order_no' => '15101258091',   //订单号
+            'order_no' => '150927830311',   //订单号
             'cashback_amount' => '1',     //退款总额(分单位)
             'return_url' => "http://".$_SERVER['HTTP_HOST']."/general-pay/bfb-refund-notify",   //服务器异步通知地址
         ];

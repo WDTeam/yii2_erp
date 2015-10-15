@@ -64,6 +64,6 @@ class CoreOperationShopDistrictCoordinate extends CommonOperationShopDistrictCoo
      */
     public static function getCoordinateShopDistrictInfo($longitude, $latitude){
         $where = '`operation_shop_district_coordinate_start_longitude` >= '.$longitude.' AND '.$longitude.' <= `operation_shop_district_coordinate_end_longitude`'.' AND `operation_shop_district_coordinate_start_latitude` >= '.$latitude.' AND `operation_shop_district_coordinate_end_latitude` <= '.$latitude;
-        return self::find()->select(['id', 'operation_shop_district_name', 'operation_city_id', 'operation_city_name', 'operation_area_id', 'operation_area_name'])->asArray()->where($where)->one();
+        return self::find()->select(['id', 'operation_shop_district_id', 'operation_shop_district_name', 'operation_city_id', 'operation_city_name', 'operation_area_id', 'operation_area_name'])->asArray()->where($where)->one();
     }
 }

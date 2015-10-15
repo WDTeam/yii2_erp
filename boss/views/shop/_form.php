@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
-use boss\models\Shop;
+use core\models\shop\Shop;
 use kartik\widgets\Affix;
 use boss\components\AreaCascade;
 
@@ -17,7 +17,7 @@ use yii\helpers\Url;
 
 /**
  * @var yii\web\View $this
- * @var boss\models\Shop $model
+ * @var core\models\shop\Shop $model
  * @var yii\widgets\ActiveForm $form
  */
 ?>

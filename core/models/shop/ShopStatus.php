@@ -1,5 +1,5 @@
 <?php
-namespace boss\models;
+namespace core\models\shop;
 
 class ShopStatus extends \common\models\ShopStatus
 {

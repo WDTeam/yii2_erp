@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
-use boss\models\Shop;
+use core\models\shop\Shop;
 
 /**
  * @var yii\web\View $this
- * @var boss\models\ShopManager $model
+ * @var core\models\shop\ShopManager $model
  * @var yii\widgets\ActiveForm $form
  */
 ?>
