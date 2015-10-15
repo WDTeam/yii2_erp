@@ -9,6 +9,7 @@ use Yii;
 use boss\components\BaseAuthController;
 use boss\models\order\OrderSearch;
 use boss\models\order\Order;
+use yii\base\Exception;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use core\models\Customer;
@@ -51,46 +52,8 @@ class OrderController extends BaseAuthController
         $longitude = Yii::$app->request->get('lng');
         $latitude = Yii::$app->request->get('lat');
         $shop_district_info= OperationShopDistrictController::getCoordinateShopDistrict($longitude, $latitude);
-        //TODO 临时数据 薛成江接口没有数据
-        $shop_district_info = ['msg' => '', 'status' => 1, 'data' =>
-            [
-              'id' => 1,
-              'operation_shop_district_name' => '西城区',
-              'operation_city_id' => '110100',
-              'operation_city_name' => '北京',
-              'operation_area_id' => '110102',
-              'operation_area_name' => '西城区'
-            ]
-        ];
         if(isset($shop_district_info['status']) && $shop_district_info['status']==1){
-            $goods = OperationGoodsController::getGoodsList($shop_district_info['data']['operation_city_id'], $shop_district_info['data']['id']);
-            //TODO 临时数据 薛成江接口没有数据
-            $goods = [
-                'msg' => '',
-                'status' => 1,
-                'data' => [
-                    0 =>[
-                          'operation_goods_id' =>'1',
-                          'operation_shop_district_goods_name' => '家庭保洁',
-                          'operation_shop_district_goods_introduction' => '家庭保洁',
-                          'operation_shop_district_goods_price' => '25',
-                          'operation_shop_district_goods_lowest_consume_num' =>'2',
-                          'operation_shop_district_goods_lowest_consume' => '50',
-                          'operation_shop_district_goods_market_price' => '30',
-                          'created_at' => '1444413773'
-                        ],
-                  1 => [
-                          'operation_goods_id' =>'2',
-                          'operation_shop_district_goods_name' => '新居开荒',
-                          'operation_shop_district_goods_introduction' => '新居开荒',
-                          'operation_shop_district_goods_price' => '200',
-                          'operation_shop_district_goods_lowest_consume_num' =>'2',
-                          'operation_shop_district_goods_lowest_consume' => '50',
-                          'operation_shop_district_goods_market_price' => '30',
-                          'created_at' => '1444413773'
-                        ]
-                ]
-            ];
+            $goods = OperationGoodsController::getGoodsList($shop_district_info['data']['operation_city_id'], $shop_district_info['data']['operation_shop_district_id']);
             if(isset($goods['status'])&&$goods['status']==1){
                 return ['code'=>200,'data'=>$goods['data']];
             }else{
@@ -155,7 +118,7 @@ class OrderController extends BaseAuthController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $order = OrderSearch::getWaitManualAssignOrder(Yii::$app->user->id,true);
         if($order){
-            $oper_long_time = 900; //TODO 客服最大执行时间
+            $operation_long_time = 900; //TODO 客服最大执行时间
             return
                 [
                     'order'=>$order,
@@ -163,7 +126,7 @@ class OrderController extends BaseAuthController
                     'ext_pop'=>$order->orderExtPop,
                     'ext_customer'=>$order->orderExtCustomer,
                     'ext_flag'=>$order->orderExtFlag,
-                    'oper_long_time'=>$oper_long_time,
+                    'operation_long_time'=>$operation_long_time,
                     'booked_time_range'=>date('Y-m-d    H:i-',$order->order_booked_begin_time).date('H:i',$order->order_booked_end_time),
                 ];
         }else{
@@ -171,37 +134,46 @@ class OrderController extends BaseAuthController
         }
     }
 
+    /**
+     * 获取可指派阿姨的列表
+     * @return array
+     */
     public function actionGetCanAssignWorkerList()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $order_id =  Yii::$app->request->get('order_id');
         $order = Order::findOne($order_id);
-        $address = CustomerAddress::getAddress($order->address_id);
+        try{
+            $address = CustomerAddress::getAddress($order->address_id);
+        }catch (Exception $e){
+            return ['code'=>500,'msg'=>'获取客户地址接口异常！'];
+        }
         if(isset($address->customer_address_longitude) && isset($address->customer_address_latitude)) {
-            //TODO 根据地址经纬度获取商圈
-            $shop_district_info = OperationShopDistrictController::getCoordinateShopDistrict($address->customer_address_longitude, $address->customer_address_latitude);
-            //TODO 接口无数据 以下为临时数据
-            $shop_district_info = ['msg' => '', 'status' => 1, 'data' =>
-                [
-                    'id' => 1,
-                    'operation_shop_district_name' => '西城区',
-                    'operation_city_id' => '110100',
-                    'operation_city_name' => '北京',
-                    'operation_area_id' => '110102',
-                    'operation_area_name' => '西城区'
-                ]
-            ];
+            //根据地址经纬度获取商圈
+            try{
+                $shop_district_info = OperationShopDistrictController::getCoordinateShopDistrict($address->customer_address_longitude, $address->customer_address_latitude);
+            }catch (Exception $e){
+                return ['code'=>500,'msg'=>'获取商圈信息异常！'];
+            }
             if(isset($shop_district_info['status']) && $shop_district_info['status']==1) {
-                $district_id = $shop_district_info['data']['id'];
-                //根据商圈获取阿姨列表 第二个参数 1自有 2非自有
-                $used_worker_list = Customer::getCustomerUsedWorkers($order->orderExtCustomer->customer_id);
-                $used_worker_ids = [];
-                if (is_array($used_worker_list)) {
-                    foreach ($used_worker_list as $v) {
-                        $used_worker_ids[] = $v['worker_id'];
+                $district_id = $shop_district_info['data']['operation_shop_district_id'];
+                try{
+                    $used_worker_list = Customer::getCustomerUsedWorkers($order->orderExtCustomer->customer_id);
+                    $used_worker_ids = [];
+                    if (is_array($used_worker_list)) {
+                        foreach ($used_worker_list as $v) {
+                            $used_worker_ids[] = $v['worker_id'];
+                        }
                     }
+                }catch (Exception $e){
+
                 }
-                $worker_list = array_merge(Worker::getDistrictFreeWorker($district_id, 1, $order->order_booked_begin_time, $order->order_booked_end_time), Worker::getDistrictFreeWorker($district_id, 2, $order->order_booked_begin_time, $order->order_booked_end_time));
+                //根据商圈获取阿姨列表 第二个参数 1自有 2非自有
+                try {
+                    $worker_list = array_merge(Worker::getDistrictFreeWorker($district_id, 1, $order->order_booked_begin_time, $order->order_booked_end_time), Worker::getDistrictFreeWorker($district_id, 2, $order->order_booked_begin_time, $order->order_booked_end_time));
+                }catch (Exception $e){
+                    return ['code'=>500,'msg'=>'获取阿姨列表接口异常！'];
+                }
                 $worker_ids = [];
                 $workers = [];
                 if (is_array($worker_list)) {
@@ -231,6 +203,54 @@ class OrderController extends BaseAuthController
         }else{
             return ['code'=>500,'msg'=>'获取阿姨列表失败：没有匹配到经纬度'];
         }
+
+    }
+
+    public function actionSearchAssignWorker()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $order_id =  Yii::$app->request->get('order_id');
+        $phone =  Yii::$app->request->get('phone');
+        $worker_name =  Yii::$app->request->get('worker_name');
+
+        $order = Order::findOne($order_id);
+        $used_worker_list = Customer::getCustomerUsedWorkers($order->orderExtCustomer->customer_id);
+        $used_worker_ids = [];
+        if (is_array($used_worker_list)) {
+            foreach ($used_worker_list as $v) {
+                $used_worker_ids[] = $v['worker_id'];
+            }
+        }
+        //根据商圈获取阿姨列表 第二个参数 1自有 2非自有
+        try {
+            $worker_list = Worker::searchWorker($worker_name, $phone);
+        }catch (Exception $e){
+            return ['code'=>500,'msg'=>'获取阿姨列表接口异常！'];
+        }
+        $worker_ids = [];
+        $workers = [];
+        if (is_array($worker_list)) {
+            foreach ($worker_list as $k => $v) {
+                $worker_ids[] = $v['id'];
+                $workers[$v['id']] = $worker_list[$k];
+                $workers[$v['id']]['tag'] = in_array($v['id'], $used_worker_ids) ? '服务过' : "";
+                $workers[$v['id']]['tag'] = ($v['id'] == $order->order_booked_worker_id) ? '指定阿姨' : $workers[$v['id']]['tag'];
+                $workers[$v['id']]['order_booked_time_range'] = [];
+                $workers[$v['id']]['memo'] = [];
+                $workers[$v['id']]['status'] = [];
+            }
+            $worker_orders = OrderSearch::getListByWorkerIds($worker_ids, $order->order_booked_begin_time);
+            foreach ($worker_orders as $v) {
+                $workers[$v->orderExtWorker->worker_id]['order_booked_time_range'][] = date('H:i', $v->order_booked_begin_time) . '-' . date('H:i', $v->order_booked_end_time);
+            }
+            $order_worker_relations = OrderWorkerRelation::getListByOrderIdAndWorkerIds($order_id, $worker_ids);
+            foreach ($order_worker_relations as $v) {
+                $workers[$v->worker_id]['memo'][] = $v->order_worker_relation_memo;
+                $workers[$v->worker_id]['status'][] = $v->order_worker_relation_status;
+            }
+        }
+        return ['code'=>200,'data'=>$workers];
+
 
     }
 

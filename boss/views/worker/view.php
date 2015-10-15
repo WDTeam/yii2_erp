@@ -23,29 +23,36 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Workers'), 'url' => 
 $this->params['breadcrumbs'][] = $this->title;
 $content1 = $this->render('view_worker',['model'=>$workerModel]);
 $content2 = $this->render('view_vacation',['workerVacationData'=>$workerVacationData]);
-$content3 = $this->render('view_block',['workerModel'=>$workerModel,'workerBlockData'=>$workerBlockData]);
-$content4 = $this->render('view_log',['workerBlockLogData'=>$workerBlockLogData]);
+$content3 = $this->render('view_schedule',['workerBlockData'=>$workerBlockData]);
+$content4 = $this->render('view_block',['workerModel'=>$workerModel,'workerBlockData'=>$workerBlockData]);
+$content5 = $this->render('view_log',['workerBlockLogData'=>$workerBlockLogData]);
 $items = [
     [
         'label'=>'<i class="glyphicon glyphicon-user"></i> 阿姨信息',
         'content'=>$content1,
         'active'=>true
     ],
+//    [
+//        'label'=>'<i class="fa  fa-fw fa-history"></i> 排班表',
+//        'content'=>$content2,
+//        //'linkOptions'=>['data-url'=>\yii\helpers\Url::to(['/site/tabs-data'])],
+//        'active'=>false
+//    ],
     [
         'label'=>'<i class="fa  fa-fw fa-history"></i> 请假信息',
-        'content'=>$content2,
-        //'linkOptions'=>['data-url'=>\yii\helpers\Url::to(['/site/tabs-data'])],
-        'active'=>false
-    ],
-    [
-        'label'=>'<i class="fa fa-fw fa-lock"></i> 封号信息',
         'content'=>$content3,
         //'linkOptions'=>['data-url'=>\yii\helpers\Url::to(['/site/tabs-data'])],
         'active'=>false
     ],
     [
-        'label'=>'<i class="fa fa-fw fa-book"></i> 操作记录',
+        'label'=>'<i class="fa fa-fw fa-lock"></i> 封号信息',
         'content'=>$content4,
+        //'linkOptions'=>['data-url'=>\yii\helpers\Url::to(['/site/tabs-data'])],
+        'active'=>false
+    ],
+    [
+        'label'=>'<i class="fa fa-fw fa-book"></i> 操作记录',
+        'content'=>$content5,
         //'linkOptions'=>['data-url'=>\yii\helpers\Url::to(['/site/tabs-data'])],
         'active'=>false
     ],
