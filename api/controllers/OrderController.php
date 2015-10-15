@@ -238,9 +238,7 @@ class OrderController
      *     }
      *
      */
-    public function actionCancelOrder(){
-    
-    }
+
 
     /**
      * @api {get} /mobileapidriver2/driver_request_order 抢单
