@@ -1,8 +1,8 @@
 <?php
 
 namespace core\models\customer;
-
 use Yii;
+use common\models\GeneralRegion;
 
 /**
  * This is the model class for table "{{%customer_address}}".
@@ -20,49 +20,176 @@ use Yii;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class CustomerAddress extends \yii\db\ActiveRecord
+class CustomerAddress extends \common\models\CustomerAddress
 {
+    
     /**
-     * @inheritdoc
+     * 新增服务地址
      */
-    public static function tableName()
-    {
-        return '{{%customer_address}}';
+    public static function addAddress($customer_id, $general_region_id, $customer_address_detail, $customer_address_nickname, $customer_address_phone){
+        $transaction = \Yii::$app->db->beginTransaction();
+        try{
+            $customerAddress = new CustomerAddress;
+            $customerAddress->customer_id = $customer_id;
+            $customerAddress->general_region_id = $general_region_id;
+            $customerAddress->customer_address_status = 1;
+            $customerAddress->customer_address_detail = $customer_address_detail;
+            $customerAddress->customer_address_longitude = '';
+            $customerAddress->customer_address_latitude = '';
+            $customerAddress->customer_address_nickname = $customer_address_nickname;
+            $customerAddress->customer_address_phone = $customer_address_phone;
+            $customerAddress->created_at = time();
+            $customerAddress->updated_at = 0;
+            $customerAddress->is_del = 0;
+            $customerAddress->validate();
+            if ($customerAddress->hasErrors()) {
+                return false;
+            }
+            $customerAddress->save();
+            $customerAddresses = CustomerAddress::findAll('customer_id=:customer_id and id!=:id', 
+                [':customer_id'=>$customer_id, ':id'=>$customerAddress->id]);
+            foreach ($customerAddresses as $customerAddress) {
+                $customerAddress->customer_address_status = 0;
+                $customerAddress->save();
+            }
+            $transaction->commit();
+            return true;
+        }catch(\Exception $e){
+            $transaction->rollback();
+            return false;
+        }
+        
     }
 
     /**
-     * @inheritdoc
+     * 软删除服务地址
      */
-    public function rules()
-    {
-        return [
-            [['customer_id', 'general_region_id', 'customer_address_detail', 'customer_address_status', 'customer_address_nickname', 'customer_address_phone', 'created_at', 'updated_at'], 'required'],
-            [['customer_id', 'general_region_id', 'customer_address_status', 'created_at', 'updated_at', 'is_del'], 'integer'],
-            [['customer_address_longitude', 'customer_address_latitude'], 'number'],
-            [['customer_address_detail'], 'string', 'max' => 64],
-            [['customer_address_nickname'], 'string', 'max' => 32],
-            [['customer_address_phone'], 'string', 'max' => 11]
-        ];
+    public static function deleteAddress($id){
+        $customerAddress = CustomerAddress::findOne($id);
+        if ($customerAddress == NULL) {
+            return false;
+        }
+        CustomerAddress::deleteAll(['id'=>$id]);
+        $customerAddress = CustomerAddress::findOne($id);
+        if ($customerAddress == NULL) {
+            return true;
+        }else{
+            return false;
+        }
     }
 
     /**
-     * @inheritdoc
+     * 修改服务地址
      */
-    public function attributeLabels()
-    {
-        return [
-            'id' => Yii::t('boss', '主键'),
-            'customer_id' => Yii::t('boss', '关联客户'),
-            'general_region_id' => Yii::t('boss', '关联区域'),
-            'customer_address_detail' => Yii::t('boss', '详细地址'),
-            'customer_address_status' => Yii::t('boss', '客户地址类型,1为默认地址，-1为非默认地址'),
-            'customer_address_longitude' => Yii::t('boss', '经度'),
-            'customer_address_latitude' => Yii::t('boss', '纬度'),
-            'customer_address_nickname' => Yii::t('boss', '被服务者昵称'),
-            'customer_address_phone' => Yii::t('boss', '被服务者手机'),
-            'created_at' => Yii::t('boss', '创建时间'),
-            'updated_at' => Yii::t('boss', '更新时间'),
-            'is_del' => Yii::t('boss', '是否逻辑删除'),
-        ];
+    public static function updateAddress($id, $general_region_id, $customer_address_detail, $customer_address_nickname, $customer_address_phone){
+        $transaction = \Yii::$app->db->beginTransaction();
+        try{
+            $customerAddress = self::findOne($id);
+            // $customerAddress->customer_id = $customer_id;
+            $customerAddress->general_region_id = $general_region_id;
+            $customerAddress->customer_address_status = 1;
+            $customerAddress->customer_address_detail = $customer_address_detail;
+            $customerAddress->customer_address_longitude = '';
+            $customerAddress->customer_address_latitude = '';
+            $customerAddress->customer_address_nickname = $customer_address_nickname;
+            $customerAddress->customer_address_phone = $customer_address_phone;
+            // $customerAddress->created_at = time();
+            $customerAddress->updated_at = time();
+            $customerAddress->is_del = 0;
+            $customerAddress->validate();
+            if ($customerAddress->hasErrors()) {
+                return false;
+            }
+            $customerAddress->save();
+            $customerAddresses = CustomerAddress::findAll('customer_id=:customer_id and id!=:id', 
+                [':customer_id'=>$customer_id, ':id'=>$customerAddress->id]);
+            foreach ($customerAddresses as $customerAddress) {
+                $customerAddress->customer_address_status = 0;
+                $customerAddress->save();
+            }
+            $transaction->commit();
+            return true;
+        }catch(\Exception $e){
+            $transaction->rollback();
+            return false;
+        }
+    }
+
+    /**
+     * 列出客户全部服务地址
+     */
+    public static function listAddress($customer_id){
+        $customerAddresses = self::find()->where(['customer_id'=>$customer_id])->all();
+        return $customerAddresses;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * 客户服务地址列表已数组形式，元素为字符串
+     */
+    public static function getAddressArr($customer_id){
+        $customerAddresses = self::find()->where(['customer_id'=>$customer_id])->asArray()->all();
+        $customerAddressArr = array();
+        if (!empty($customerAddresses)) {
+            foreach ($customerAddresses as $value) {
+                if (!empty($value)) {
+                    $general_region_id = $value['general_region_id'];
+                    $generalRegion = GeneralRegion::find()->where(['id'=>$general_region_id])->asArray()->one();
+                    if (!empty($generalRegion)) {
+                        $customerAddressArr[] = array(
+                            'general_region_province_name'=>$generalRegion['general_region_province_name'],
+                            'general_region_city_name'=>$generalRegion['general_region_city_name'],
+                            'general_region_area_name'=>$generalRegion['general_region_area_name'],
+                            'customer_address_detail'=>$value['customer_address_detail'],
+                            'customer_address_nickname'=>$value['customer_address_nickname'],
+                            'customer_address_phone'=>$value['customer_address_phone'],
+                            'province_city_area_detail'=>$generalRegion['general_region_province_name']
+                                .$generalRegion['general_region_city_name']
+                                .$generalRegion['general_region_area_name']
+                                .$value['customer_address_detail'],
+                        );
+                        // $customerAddressArr[]['address_info'] = 
+                        //     $generalRegion['general_region_province_name']
+                        //     .$generalRegion['general_region_city_name']
+                        //     .$generalRegion['general_region_area_name']
+                        //     .$value['customer_address_detail'];
+                    }
+                }
+            }
+        }
+        return $customerAddressArr;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * 根据地址id查询地址
+     */
+    public static function getAddress($id){
+
+        return 1233; exit;
+        return self::findOne($id) ? self::findOne($id) : false;
     }
 }

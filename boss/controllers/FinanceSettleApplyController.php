@@ -500,15 +500,16 @@ class FinanceSettleApplyController extends BaseAuthController
         $financeSettleApplySearch = $financeSettleApplySearch->getWorkerInfo($financeSettleApplySearch->worder_tel);//获取阿姨的信息
         $financeSettleApplySearch->settle_type = $settle_type;
         $financeSettleApplySearch->review_section = $review_section;
+        $financeSettleApplySearch = $financeSettleApplySearch->getWorkerSettlementSummaryInfo($financeSettleApplySearch->worder_id);
         $financeWorkerOrderIncomeSearch = new FinanceWorkerOrderIncomeSearch;
         $financeWorkerOrderIncomeSearch->load($requestParams);
         if(isset($requestParams['finance_worker_order_income_type'])){
             $financeWorkerOrderIncomeSearch->finance_worker_order_income_type = $requestParams['finance_worker_order_income_type'];
         }
-//        $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProvider();
-//        return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider]);
-        $orderIncomeDataProvider = $financeWorkerOrderIncomeSearch->search(Yii::$app->request->getQueryParams());
-        return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'orderIncomeDataProvider'=>$orderIncomeDataProvider]);
+        $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProvider($financeSettleApplySearch->worder_id);
+        return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider]);
+//        $orderIncomeDataProvider = $financeWorkerOrderIncomeSearch->search(Yii::$app->request->getQueryParams());
+//        return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'orderIncomeDataProvider'=>$orderIncomeDataProvider]);
         
     }
     
@@ -520,9 +521,9 @@ class FinanceSettleApplyController extends BaseAuthController
         $requestParams = Yii::$app->request->getQueryParams();
         $review_section = $requestParams['review_section'];
         $settle_type = $requestParams['settle_type'];
-        $worker_id = $requestParams['settle_type'];
+        $worker_id = $requestParams['worker_id'];
         $partimeWorkerArr = [['worker_id'=>$worker_id],];
-//        $this->saveAndGenerateSettleData($partimeWorkerArr,$settleStartTime,$settleEndTime);
+        $this->saveAndGenerateSettleData($partimeWorkerArr,time(),time());
         return $this->redirect('/finance-settle-apply/self-fulltime-worker-settle-index?settle_type='.$settle_type.'&review_section='.$review_section);
     }
     
@@ -604,21 +605,20 @@ class FinanceSettleApplyController extends BaseAuthController
     }
     
     private function saveAndGenerateSettleData($workerArr,$settleStartTime,$settleEndTime){
+        $financeSettleApplySearch = new FinanceSettleApplySearch();
         foreach($workerArr as $worker){
             //根据阿姨Id获取阿姨信息
             $workerId = $worker['worker_id'];
             //订单收入明细
             //已对账的订单，且没有投诉和赔偿的订单
-            $orderIncomeDetail = array(['worker_id'=>'555','order_id'=>'801','order_pay_type'=>'0','order_money'=>'50','order_booked_count'=>'2','order_complete_time'=>'1234455'],
-                ['worker_id'=>'666','order_id'=>'802','order_pay_type'=>'1','order_money'=>'50','order_booked_count'=>'2','order_complete_time'=>'123456565']
-            );
+            $orderIncomeDetail = $financeSettleApplySearch->getWorkerOrderInfo($workerId);
 
             $financeWorkerOrderIncomeArr = array();
             foreach($orderIncomeDetail as $orderIncome){
                 $financeWorkerOrder = new FinanceWorkerOrderIncome;
-                $financeWorkerOrder->worder_id = $orderIncome['worker_id'];
-                $financeWorkerOrder->order_id = $orderIncome['order_id'];
-                $financeWorkerOrder->finance_worker_order_income_type = $orderIncome['order_pay_type'];
+                $financeWorkerOrder->worder_id = $workerId;
+                $financeWorkerOrder->order_id = $orderIncome['id'];
+                $financeWorkerOrder->finance_worker_order_income_type = $orderIncome->orderExtPay->order_pay_type;
                 $financeWorkerOrder->finance_worker_order_income =  $orderIncome['order_money'];
                 $financeWorkerOrder->order_booked_count = $orderIncome['order_booked_count'];
                 $financeWorkerOrder->finance_worker_order_income_starttime = $settleStartTime;
@@ -627,26 +627,8 @@ class FinanceSettleApplyController extends BaseAuthController
                 $financeWorkerOrderIncomeArr[]= $financeWorkerOrder;
             }
             //获取订单总收入
-            $orderIncomeSummary = array('worker_id'=>'555','worker_idcard'=>'4210241983',
-            'finance_settle_apply_man_hour'=>6,'finance_settle_apply_order_money'=>150,
-            'finance_settle_apply_order_cash_money'=>0);
-            $financeSettleApply = new FinanceSettleApply;
-            $financeSettleApply->worder_id = $orderIncomeSummary['worker_id'];
-            $financeSettleApply->worder_tel = '1380000';
-            $financeSettleApply->worker_type_id = 1;
-            $financeSettleApply->worker_type_name = '兼职';
-            $financeSettleApply->finance_settle_apply_man_hour = $orderIncomeSummary['finance_settle_apply_man_hour'];//总工时
-            $financeSettleApply->finance_settle_apply_order_money = $orderIncomeSummary['finance_settle_apply_order_money'];//订单总金额
-            $financeSettleApply->finance_settle_apply_order_cash_money = $orderIncomeSummary['finance_settle_apply_order_cash_money'];//收取的现金
-            $financeSettleApply->finance_settle_apply_order_money_except_cash = $orderIncomeSummary['finance_settle_apply_order_money']-$orderIncomeSummary['finance_settle_apply_order_cash_money'];//最后结算的金额
-            $financeSettleApply->finance_settle_apply_subsidy = 0;
-            $financeSettleApply->finance_settle_apply_money =$orderIncomeSummary['finance_settle_apply_order_money']-$orderIncomeSummary['finance_settle_apply_order_cash_money']+ $financeSettleApply->finance_settle_apply_subsidy;//应结算金额
-            $financeSettleApply->finance_settle_apply_cycle = FinanceSettleApply::FINANCE_SETTLE_APPLY_CYCLE_WEEK;//结算周期
-            $financeSettleApply->finance_settle_apply_cycle_des = FinanceSettleApply::FINANCE_SETTLE_APPLY_CYCLE_WEEK_DES;//结算周期描述
-            $financeSettleApply->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT;//提交结算申请
-            $financeSettleApply->finance_settle_apply_starttime = $settleStartTime;//结算开始日期
-            $financeSettleApply->finance_settle_apply_endtime = $settleEndTime;//结算截止日期
-            $financeSettleApply->created_at = time();//申请创建时间
+            $financeSettleApplySearch = $financeSettleApplySearch->getWorkerSettlementSummaryInfo($workerId);
+
             //获取阿姨的奖励信息
             $workerSubsidyArr = Array(['finance_worker_non_order_income_type'=>1,'finance_worker_non_order_income_type_des'=>'补贴','finance_worker_non_order_income'=>10,'finance_worker_non_order_income_des'=>'路补超过7公里，补助10元'],);
             $financeWorkerNonOrderIncomeArr = [];
@@ -664,10 +646,10 @@ class FinanceSettleApplyController extends BaseAuthController
             }
             $transaction =  Yii::$app->db->beginTransaction();
             try{
-                $existCount = FinanceSettleApply::find()->where(['worder_id'=>$financeSettleApply->worder_id,'finance_settle_apply_starttime'=>$settleStartTime,'finance_settle_apply_endtime'=>$settleEndTime])->count();
+                $existCount = FinanceSettleApply::find()->where(['worder_id'=>$financeSettleApplySearch->worder_id,'finance_settle_apply_starttime'=>$settleStartTime,'finance_settle_apply_endtime'=>$settleEndTime])->count();
                 echo '---'.$existCount;
                 if($existCount == 0){
-                    if($financeSettleApply->save()){
+                    if($financeSettleApplySearch->save()){
                         foreach($financeWorkerOrderIncomeArr as $financeWorkerOrderIncome){
                             $financeWorkerOrderIncome->save();
                         }

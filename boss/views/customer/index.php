@@ -14,6 +14,7 @@ use kartik\widgets\Select2;
 use yii\helpers\Url;
 use yii\web\JsExpression;
 use yii\base\Widget;
+use yii\widgets\ActiveForm;
 
 use common\models\CustomerPlatform;
 use common\models\CustomerChannal;
@@ -45,12 +46,16 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php //echo Html::a(Yii::t('app', 'Create {modelClass}', ['modelClass' => 'Worker',]), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?php
-    $b= Html::a('<i class="glyphicon" ></i>全部 ', ['index'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']). 
+    $b= Html::a('<i class="glyphicon" ></i>全部 '.$searchModel->countALLCustomer(), ['index'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']). 
     Html::a('<i class="glyphicon" ></i>黑名单 '.$searchModel->countBlockCustomer(), ['index?CustomerSearch[is_del]=1'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']);
     
    
     ?>
-    <?php Pjax::begin();
+    <?php 
+    // ActiveForm::begin([
+    // 'action' => ['multi-add-to-block'],
+    // 'method' => 'post'
+    //         ]);
     echo GridView::widget([
         'dataProvider' => $dataProvider,
         // 'filterModel' => $searchModel,
@@ -58,13 +63,18 @@ $this->params['breadcrumbs'][] = $this->title;
         'toolbar' =>
             [
                 'content'=>
-                    Html::a('<i class="glyphicon">批量加入黑名单</i>', ['customer/multi-add-to-block'], [
+                    // Html::submitButton(Yii::t('app', '批量 '), ['class' => 'btn btn-default','style' => 'margin-right:10px','data-toggle'=>'modal',
+                    //     'data-target'=>'#multi-add-to-block-modal',]),
+                    // Html::a('<i class="glyphicon">批量加入黑名单</i>', ['customer/multi-add-to-block'], [
+                    //     'class' => 'btn btn-default multi-add-to-block',
+                    //     'data-toggle'=>'modal',
+                    //     'data-target'=>'#multi-add-to-block-modal',
+                    // ]),
+                    // Html::a('<i class="glyphicon">批量移除黑名单</i>', ['customer/multi-remove-from-block'], [
+                    //     'class' => 'btn btn-default multi-remove-from-block',
+                    // ]),
+                    Html::a('<i class="glyphicon">导入测试数据</i>', ['customer/data'], [
                         'class' => 'btn btn-default',
-                        // 'title' => Yii::t('kvgrid', 'Reset Grid')
-                    ]),
-                    Html::a('<i class="glyphicon">批量加从黑名单删除</i>', ['customer/multi-remove-from-block'], [
-                        'class' => 'btn btn-default',
-                        // 'title' => Yii::t('kvgrid', 'Reset Grid')
                     ]),
             ],
         'columns' => [
@@ -73,14 +83,15 @@ $this->params['breadcrumbs'][] = $this->title;
             //     'format' => 'raw',
             //     'label' => 'ID',
             //     'value' => function ($dataProvider) {
-            //         return '<a href="/customer/' . $dataProvider->id . '">'.$dataProvider->id.'</a>';
+            //         return $dataProvider->id;
             //     },
-            //     'width' => "80px",
+            //     'width' => "0px",
             // ],
             [
-                'class'=>'kartik\grid\CheckboxColumn',
-                'headerOptions'=>['class'=>'kartik-sheet-style'],
+                'class' => 'yii\grid\CheckboxColumn',
+                
             ],
+
             // [
             //     'format' => 'raw',
             //     'label' => '姓名',
@@ -92,9 +103,19 @@ $this->params['breadcrumbs'][] = $this->title;
             // ],
             [
                 'format' => 'raw',
+                'label' => '状态',
+                'value' => function ($dataProvider) {
+                    $currentBlockStatus = \core\models\customer\CustomerBlockLog::getCurrentBlockStatus($dataProvider->id);
+                    return $currentBlockStatus['block_status_name'];
+                },
+                'width' => "80px",
+            ],
+            [
+                'format' => 'raw',
                 'label' => '电话',
                 'value' => function ($dataProvider) {
-                    return '<a href="/customer/' . $dataProvider->id . '">'.$dataProvider->customer_phone.'</a>';
+                    // return '<a href="/customer/' . $dataProvider->id . '">'.$dataProvider->customer_phone.'</a>';
+                    return Html::a('<i class="glyphicon">'.$dataProvider->customer_phone.'</i>', ['customer/view', 'id'=>$dataProvider->id]);
                 },
                 'width' => "80px",
             ],
@@ -241,7 +262,8 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         
     ]);
-    Pjax::end(); ?>
+    // ActiveForm::end(); 
+    ?>
 </div>
 <?php echo Modal::widget([
 'header' => '<h4 class="modal-title">黑名单原因</h4>',
@@ -253,9 +275,9 @@ $('.block-btn').click(function(){
     $('#modal .modal-body').html('加载中……');
     $('#modal .modal-body').eq(0).load(this.href);
 });
-
 JSCONTENT
 );?>
+</div>
 
 
 

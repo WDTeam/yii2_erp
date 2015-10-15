@@ -29,19 +29,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div style="display: none;"><?= $form->field($model, 'customer_id')->textInput(['maxlength' => true]) ?></div>
                 <div id="address_div"><?= $form->field($model, 'address_id')->radioList([''=>'请先输入手机号获取地址信息'])->label('地址信息') ?></div>
                 <div style="display: none;"><?= $form->field($model, 'order_address')->textInput(['maxlength' => true]) ?></div>
-                <?= $form->field($model, 'order_service_type_id')->inline()->radioList([''=>'选择地址获取服务类别'])->label('服务类别') ?>
+                <?= $form->field($model, 'order_service_type_id')->inline()->radioList([''=>'选择地址获取商品'])->label('选择商品') ?>
             </div>
             <div class="panel-heading">
                 <h3 class="panel-title">服务信息</h3>
             </div>
             <div class="panel-body">
-                <div class="form-group field-order-order_booked_worker_phone">
-                    <label for="order-order_booked_worker_phone" class="control-label col-sm-3">阿姨手机</label>
-                    <div class="col-sm-6">
-                        <input type="text" maxlength="11"  class="form-control" id="order-order_booked_worker_phone">
-                        <div class="help-block help-block-error "></div>
-                    </div>
-                </div>
                 <?= $form->field($model, 'order_booked_worker_id')->inline()->radioList(['0'=>'不指定']); ?>
                 <?= $form->field($model, 'orderBookedDate')->label('服务日期')->widget(
                     DatePicker::className(), [
@@ -49,7 +42,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     'template' => '<div class="well well-sm" style="background-color: #fff; width:250px">{input}</div>',
                     'clientOptions' => [
                         'autoclose' => true,
-                        'format' => 'yyyy-mm-dd'
+                        'format' => 'yyyy-mm-dd',
+                        'startDate' => date('Y-m-d'),
                     ],
                     'language'=>'zh-CN'
                 ]);?>

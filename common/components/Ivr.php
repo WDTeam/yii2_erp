@@ -63,7 +63,8 @@ use yii\web\Application;
 use core\behaviors\IvrlogBehavior;
 use yii\web\HttpException;
 use yii\base\ExitException;
-class Ivr extends Component
+use yii\base\BootstrapInterface;
+class Ivr extends Component implements BootstrapInterface
 {
     const IVR_URL = 'https://api.vlink.cn/interface/open/v1/webcall';
     const EVENT_SEND_AFTER = 'ivrSendAfter';
@@ -73,12 +74,24 @@ class Ivr extends Component
      */
     public $app_id;
     public $token;
+    public $redirect_uri='ivr/callback/';
     
     public $cb_data=[];
     public $request_data;
     
-    public function init(){
-        
+    public function bootstrap($app)
+    {
+        \Yii::$app->on(Application::EVENT_BEFORE_ACTION, function($event){
+            $path = substr($event->sender->requestedRoute, 0, -1);
+            if($path==$this->redirect_uri){
+                $this->callback(\Yii::$app->request->post());
+            }
+        });
+        if ($app instanceof \yii\web\Application) {
+            $app->getUrlManager()->addRules([
+                'ivr/callback' => $this->redirect_uri,
+            ], false);
+        }
     }
     
     public function behaviors()

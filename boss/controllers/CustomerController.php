@@ -4,25 +4,31 @@ namespace boss\controllers;
 use Yii;
 //use common\models\Customer;
 use boss\models\CustomerSearch;
-use boss\components\BaseAuthController;
+use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-use common\models\CustomerAddress;
-use common\models\CustomerPlatform;
-use common\models\CustomerChannal;
-use common\models\OperationCity;
-use common\models\GeneralRegion;
-use common\models\CustomerExtBalance;
-use common\models\CustomerExtScore;
-use common\models\OrderExtCustomer;
-use common\models\CustomerComment;
-use common\models\CustomerBlockLog;
-use core\models\Customer;
+// use common\models\CustomerAddress;
+// use common\models\CustomerPlatform;
+// use common\models\CustomerChannal;
+// use common\models\OperationCity;
+// use common\models\GeneralRegion;
+// use common\models\CustomerExtBalance;
+// use common\models\CustomerExtScore;
+// use common\models\OrderExtCustomer;
+// use common\models\CustomerComment;
+
+use core\models\customer\Customer;
+use core\models\customer\CustomerBlockLog;
+use core\models\customer\CustomerAddress;
+use core\models\customer\CustomerExtSrc;
+use core\models\customer\CustomerExtBalance;
+use core\models\customer\CustomerExtScore;
+use core\models\customer\CustomerComment;
 /**
  * CustomerController implements the CRUD actions for Customer model.
  */
-class CustomerController extends BaseAuthController
+class CustomerController extends Controller
 {
     public function behaviors()
     {
@@ -45,10 +51,9 @@ class CustomerController extends BaseAuthController
         $searchModel = new CustomerSearch;
 
         $params = Yii::$app->request->getQueryParams();
-        // $params['is_del'] = 0;
         $dataProvider = $searchModel->search($params);
         $dataProvider->query->orderBy(['created_at' => SORT_DESC ]);
-        
+
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
@@ -63,7 +68,6 @@ class CustomerController extends BaseAuthController
     {
         $searchModel = new CustomerSearch;
         $params = Yii::$app->request->getQueryParams();
-        // $params['is_del'] = 1;
         $dataProvider = $searchModel->search($params);
         return $this->render('block', [
             'dataProvider' => $dataProvider,
@@ -71,42 +75,12 @@ class CustomerController extends BaseAuthController
         ]);
     }
 
-    /**
-     * 加入黑名单
-     */
-    // public function actionAddToBlock($id)
-    // {
-    //     $model = $this->findModel($id);
-    //     $model->is_del = 1;
-    //     $model->validate();
-    //     $model->save();
-    //     return $this->redirect(['/customer/block', 'CustomerSearch'=>['is_del'=>1]]);
-    // }
-
-    /**
-     * 从黑名单中取消
-     */
-    // public function actionRemoveFromBlock($id)
-    // {
-    //     $model = $this->findModel($id);
-    //     $model->is_del = 0;
-    //     $model->validate();
-    //     $model->save();
-    //     return $this->redirect(['/customer/index', 'CustomerSearch'=>['is_del'=>0]]);
-    // }
-
     public function actionSwitchBlock(){
         $id = Yii::$app->request->get('id');
 
         $customer = Customer::find()->where(['id'=>$id])->one();
-        // echo $id.'|'.$customer->is_del;exit;
-        // var_dump($customer);
-
         $is_del = $customer->is_del;
-        // var_dump($is_del);
         $is_del = $is_del ? 0 : 1;
-        // var_dump($is_del);
-        // exit();
         $customer->is_del = $is_del;
         $customer->validate();
         if ($customer->hasErrors()) {
@@ -114,8 +88,6 @@ class CustomerController extends BaseAuthController
             exit();
         }
         $customer->save();
-        // var_dump($is_del);
-        // exit();
         if ($customer->is_del == 1) {
             return $this->redirect(['/customer/block', 
                 'CustomerSearch'=>['is_del'=>1]]);
@@ -124,26 +96,6 @@ class CustomerController extends BaseAuthController
             return $this->redirect(['/customer/index', 
                 'CustomerSearch'=>['is_del'=>0]]);
         }
-        // $connection = Yii::$app->db;
-        // echo "1";
-        // exit();
-        // $model->getErrors();
-
-        // $customer = $connection->createCommand('SELECT * FROM {{%customer}} WHERE id='.$id)->queryOne();
-        // var_dump($id);
-        // var_dump($connection);
-        // var_dump($customer);
-        // exit();
-        // if ($customer['is_del'] == 1) {
-        //     $command = $connection->createCommand('UPDATE {{%customer}} SET is_del=0 WHERE id='.$id);
-        //     $command->execute();
-        //     return $this->redirect(['/customer/index', 
-        //         'CustomerSearch'=>['is_del'=>0]]);
-        // }else{
-        //     $command = $connection->createCommand('UPDATE {{%customer}} SET is_del=1 WHERE id='.$id);
-        //     $command->execute();
-        //     return $this->redirect(['/customer/index?CustomerSearch[is_del]=1']);
-        // }
     }
 
     
@@ -158,138 +110,13 @@ class CustomerController extends BaseAuthController
         $searchModel = new CustomerSearch;
         $model = $this->findModel($id);
 
-        //组装model
-        $operationCity = OperationCity::find()->where([
-            'id'=>$model->operation_city_id
-            ])->one();
-
-        $customerPlatform = CustomerPlatform::find()->where([
-            'id'=>$model->platform_id
-            ])->one();
-        $platform_name = $customerPlatform ? $customerPlatform->platform_name : '_';
-        
-        $platforms = [];
-        $customerPlatforms = CustomerPlatform::find()->asArray()->all();
-        foreach ($customerPlatforms as $k => $customerPlatform) {
-            $platforms[$customerPlatform['id']] = $customerPlatform['platform_name'];
-        }
-
-        $customerChannal = CustomerChannal::find()->where([
-            'id'=>$model->channal_id
-            ])->one();
-        $channal_name = $customerChannal ? $customerChannal->channal_name : '_';
-        $channals = [];
-        $customerChannals = CustomerChannal::find()->asArray()->all();
-        foreach ($customerChannals as $k => $customerChannal) {
-            $channals[$customerChannal['id']] = $customerChannal['channal_name'];
-        }
-
-        $generalRegion = GeneralRegion::find()->where([
-            'id'=>$model->general_region_id
-            ])->one();
-
-        //订单地址
-        $addressStr = '';
-        $default = [];
-        $address_count = CustomerAddress::find()->where([
-            'customer_id'=>$model->id,
-            ])->count();
-        $customerDefaultAddress = CustomerAddress::find()->where([
-            'customer_id'=>$model->id,
-            'customer_address_status'=>1])->one();
-        if ($customerDefaultAddress) {
-            $general_region_id = $customerDefaultAddress->general_region_id;
-            $general_region = GeneralRegion::find()->where([
-                'id'=>$general_region_id,
-                ])->one();
-
-            // $default = [
-            //     'province'=>$general_region->general_region_province_name,
-            //     'city'=>$general_region->general_region_city_name,
-            //     'area'=>$general_region->general_region_area_name,
-            //     'detail'=>$customerDefaultAddress->customer_address_detail,
-            //     'phone'=>$customerDefaultAddress->customer_address_phone,
-            //     ];
-
-            $default['province'] = $general_region->general_region_province_name;
-            $default['city'] = $general_region->general_region_city_name;
-            $default['area'] = $general_region->general_region_area_name;
-            $default['detail'] = $customerDefaultAddress->customer_address_detail;
-            $default['phone'] = $customerDefaultAddress->customer_address_phone;
-        }
-        
-
-        $customerAddresses = CustomerAddress::find()->where([
-            'customer_id'=>$model->id,
-            'customer_address_status'=>0
-            ])->asArray()->all();
-
-        $others = [];
-        if ($customerAddresses !== null) {
-            foreach ($customerAddresses as $k => $customerAddress) {
-                if ($customerAddress && $customerAddress['general_region_id']) {
-                    $general_region_id = $customerAddress['general_region_id'];
-                    $general_region = GeneralRegion::find()->where([
-                        'id'=>$general_region_id
-                        ])->one();
-                    // var_dump($customerAddress);
-                    // exit();
-                    if ($general_region !== null) {
-                        $others[$k]['province'] = $general_region->general_region_province_name;
-                        $others[$k]['city'] = $general_region->general_region_city_name;
-                        $others[$k]['area'] = $general_region->general_region_area_name;
-                        $others[$k]['detail'] = $customerAddress['customer_address_detail'];
-                        $others[$k]['phone'] = $customerAddress['customer_address_phone'];
-                    }
-                }
-            }
-        }
-
-        if (is_array($default) && $default != null) {
-            $addressStr = $default['province'].$default['city'].$default['area'].$default['detail']."(".$default['phone'].")<br/>";
-        }
-        foreach ($others as $k => $other) {
-            $addressStr .= $other['province'].$other['city'].$other['area'].$other['detail']."(".$other['phone'].")<br/>";
-        }
-        
-        // if ($address_count <= 0) {
-        //     $order_addresses = '-';
-        // }
-        // if ($address_count == 1) {
-        //     $order_addresses =  $general_region->general_region_province_name 
-        //     . $general_region->general_region_city_name 
-        //     . $general_region->general_region_area_name
-        //     . $customerAddress->customer_address_detail;
-        // }
-        // if ($address_count > 1) {
-        //     $order_addresses = $general_region->general_region_province_name 
-        //     . $general_region->general_region_city_name 
-        //     . $general_region->general_region_area_name
-        //     . $customerAddress->customer_address_detail
-        //     . '...';
-        // }
-
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('view', [
                 'model' => $model, 
                 'searchModel'=>$searchModel,
-                'operationCity'=>$operationCity, 
-                'customerPlatform'=>$customerPlatform, 
-                'platform_name'=>$platform_name,
-                'platforms'=>$platforms,
-                'customerChannal'=>$customerChannal,
-                'channal_name'=>$channal_name,
-                'channals'=>$channals,
-                'generalRegion'=>$generalRegion,
-                // 'order_addresses'=>$order_addresses,
-                // 'default'=>$default,
-                // 'others'=>$others,
-                'addressStr'=>$addressStr,
                 ]);
-
         }
     }
 
@@ -407,14 +234,35 @@ class CustomerController extends BaseAuthController
      * 批量加入黑名单
      */
     public function actionMultiAddToBlock(){
-
+        // $ids_str = \Yii::$app->request->get('ids_str', '');
+        // $ids_arr = explode(',', trim($ids_str, ','));
+        $ids_arr = \Yii::$app->request->post('ids', '');
+        // var_dump($ids);
+        // exit();
+        if(\Yii::$app->request->post()){
+            $block_reason =\Yii::$app->request->post('customer_del_reason','');
+            if (!empty($ids_arr)) {
+                foreach ($ids_arr as $id) {
+                    $is_added = CustomerBlockLog::addToBlock($id, $block_reason);
+                }
+            }
+            return $this->redirect(['index']);
+        }
+        return $this->renderAjax('multi-add-to-block',['ids_str'=>$ids_str]);
     }
 
     /**
      * 批量从黑名单中删除
      */
     public function actionMultiRemoveFromBlock(){
-
+        $ids_str = \Yii::$app->request->get('ids_str', '');
+        $ids_arr = explode(',', trim($ids_str, ','));
+        if (!empty($ids_arr)) {
+            foreach ($ids_arr as $id) {
+                $is_removed = CustomerBlockLog::RemoveFromBlock($id, $block_reason);
+            }
+        }
+        return $this->redirect(['index']);
     }
 
     /**
@@ -586,7 +434,23 @@ class CustomerController extends BaseAuthController
                     $customerComment->save();
                 }
                 
-
+                $customerAddress = new CustomerAddress;
+                $customerAddress->customer_id = $customer->id;
+                $customerAddress->general_region_id = 191;
+                $customerAddress->customer_address_detail = 'SOHO一期2单元908';
+                $customerAddress->customer_address_status = 1;
+                $customerAddress->customer_address_longitude = '';
+                $customerAddress->customer_address_latitude = '';
+                $customerAddress->customer_address_nickname = '测试昵称';
+                $customerAddress->customer_address_phone = '18519651111';
+                $customerAddress->created_at = time();
+                $customerAddress->updated_at = 0;
+                $customerAddress->is_del = 0;
+                if ($customerAddress->hasErrors()) {
+                    var_dump($customer->getErrors());
+                    die();
+                }
+                $customerAddress->save();
 
                 // $customer_id = $customer->id;
                 // $command = $connection->createCommand("SELECT * FROM user_address where user_id=".$val['id']." order by id asc");
@@ -732,6 +596,14 @@ class CustomerController extends BaseAuthController
         echo "<br/>customer数据导入成功";
     }
 
+    public function actionData3(){
+        $customer = Customer::find()->orderBy('id asc')->one();
+        $customer_id = $customer->id;
+        $res = CustomerAddress::addAddress($customer_id, 191, 'SOHO一期2单元908', '测试昵称', '18519999999');
+        $res = CustomerAddress::addAddress($customer_id, 191, 'SOHO一期2单元719', '测试昵称', '18519999999');
+        
+    }
+
     public function actionTest(){
         // $customer = new Customer;
         // $res = $customer->decBalance(1, 0.01);
@@ -743,8 +615,8 @@ class CustomerController extends BaseAuthController
 
         // $res = \common\models\CustomerBlockLog::addToBlock(17782, '测试');
         // var_dump($res);
-        // $res = \core\models\customer\CustomerCode::generateAndSend('18519654001');
-        // var_dump($res);
+        $res = \core\models\customer\CustomerCode::generateAndSend('18519654001');
+        var_dump($res);
 
         // $res = \core\models\customer\CustomerCode::checkCode('18519654001', '9906');
         // var_dump($res);
@@ -752,7 +624,7 @@ class CustomerController extends BaseAuthController
         // $res = \core\models\customer\CustomerAccessToken::generateAccessToken('18519654001', '9906');
         // var_dump($res);
 
-        $res = \core\models\customer\CustomerAccessToken::getCustomer('19647829599d11c786cd95ea93896b1f');
-        var_dump($res);
+        // $res = \core\models\customer\CustomerAccessToken::getCustomer('19647829599d11c786cd95ea93896b1f');
+        // var_dump($res);
     }
 }
