@@ -254,7 +254,8 @@ class OperationCityController extends BaseAuthController
             $city_name = OperationCity::getCityName($city_id);
             $shopdistrictinfoall = [];
             $goodsshopdistrictinfo = [];
-            if($cityAddGoods == 'editGoods' || !empty(OperationShopDistrictGoods::getCityShopDistrictGoodsInfo($city_id, $goods_id))){
+            $citys = OperationShopDistrictGoods::getCityShopDistrictGoodsInfo($city_id, $goods_id);
+            if($cityAddGoods == 'editGoods' || !empty($citys)){
                 $cityshopdistrictgoodsinfo = OperationShopDistrictGoods::getCityShopDistrictGoodsInfo($city_id, $goods_id);
 
                 foreach((array)$cityshopdistrictgoodsinfo as $key => $value){
@@ -280,7 +281,8 @@ class OperationCityController extends BaseAuthController
             }
             $shopdistrict = $post['shopdistrict'];
             $shopdistrictGoods = $post['goodsinfo'];
-            if($cityAddGoods == 'editGoods' || (!empty(OperationShopDistrictGoods::getCityShopDistrictGoodsInfo($city_id, $goods_id)))){
+            $citys = OperationShopDistrictGoods::getCityShopDistrictGoodsInfo($city_id, $goods_id);
+            if($cityAddGoods == 'editGoods' || (!empty($citys))){
                 OperationShopDistrictGoods::updateShopDistrictGoods($city_id, $goods_id, $shopdistrict, $goodsInfo, $shopdistrictGoods);
             }else {
                 OperationShopDistrictGoods::insertShopDistrictGoods($city_id, $goods_id, $shopdistrict, $goodsInfo, $shopdistrictGoods);

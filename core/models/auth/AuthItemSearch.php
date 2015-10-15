@@ -1,6 +1,6 @@
 <?php
 
-namespace boss\models\search;
+namespace core\models\auth;
 
 use Yii;
 use yii\base\Model;

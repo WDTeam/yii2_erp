@@ -4,14 +4,14 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use kartik\datecontrol\DateControl;
 use yii\base\Widget;
-use boss\models\Shop;
+use core\models\shop\Shop;
 use boss\components\AreaCascade;
 use kartik\widgets\Select2;
 use yii\helpers\Url;
 use yii\web\JsExpression;
 
 /* @var $this yii\web\View */
-/* @var $searchModel boss\models\search\ShopSearch */
+/* @var $searchModel core\models\shop\ShopSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', 'Shops');

@@ -45,7 +45,8 @@ class bfb_sdk_refund{
      * @return string 返回生成的百度钱包退款接口URL
      */
     function create_baifubao_Refund_url($params, $url) {
-        if (empty($params ['service_code']) || empty($params ['input_charset']) ||
+        if (empty($params ['service_code']) ||
+            empty($params ['input_charset']) ||
             empty($params ['sign_method']) ||
             empty($params ['output_type']) ||
             empty($params ['output_charset']) ||
@@ -63,7 +64,7 @@ class bfb_sdk_refund{
             print_r("结束2yu2create_baifubao_Refund_url");
             return false;
         }
-        print_r("结束3"+$url);
+
         if (!in_array($url,
             array (
                 sp_refund_conf::BFB_REFUND_URL,
@@ -80,6 +81,7 @@ class bfb_sdk_refund{
         if (false === ($sign = $this->make_sign($params))) {
             return false;
         }
+
         $this->order_no = $params ['order_no'];
         $params ['sign'] = $sign;
         $params_str = http_build_query($params);
@@ -367,7 +369,7 @@ class bfb_sdk_refund{
      * @return string	返回商户的百度钱包密钥
      */
     private function get_sp_key() {
-        $file = sp_refund_conf::SP_KEY_FILE;
+        $file = dirname(__FILE__) .'/'.sp_refund_conf::SP_KEY_FILE;
         if (!file_exists($file)) {
             $this->log(sprintf('can not find the sp key file, file [%s]', $file));
             return false;
@@ -419,7 +421,8 @@ class bfb_sdk_refund{
      * @param string $msg	日志信息
      */
     function log($msg) {
-        if(define(sp_refund_conf::LOG_FILE)) {
+        /*
+        if(defined(sp_refund_conf::LOG_FILE)) {
             error_log(
                 sprintf("[%s] [order_no: %s] : %s\n", date("Y-m-d H:i:s"),
                     $this->order_no, $msg));
@@ -429,6 +432,7 @@ class bfb_sdk_refund{
                 sprintf("[%s] [order_no: %s] : %s\n", date("Y-m-d H:i:s"),
                     $this->order_no, $msg), 3, sp_refund_conf::LOG_FILE);
         }
+        */
     }
 }
 

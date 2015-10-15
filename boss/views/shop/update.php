@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 /**
  * @var yii\web\View $this
- * @var boss\models\Shop $model
+ * @var core\models\shop\Shop $model
  */
 
 $this->title = $model->name;

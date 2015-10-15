@@ -9,7 +9,7 @@ use boss\components\AreaCascade;
 
 /**
  * @var yii\web\View $this
- * @var boss\models\ShopManager $model
+ * @var core\models\shop\ShopManager $model
  * @var yii\widgets\ActiveForm $form
  */
 ?>

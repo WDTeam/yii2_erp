@@ -7,7 +7,7 @@ use yii\widgets\Pjax;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
- * @var boss\models\search\AuthSearch $searchModel
+ * @var core\models\auth\AuthSearch $searchModel
  */
 
 $this->title = Yii::t('app', 'Auths');

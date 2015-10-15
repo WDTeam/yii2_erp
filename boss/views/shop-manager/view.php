@@ -3,13 +3,13 @@
 use yii\helpers\Html;
 use kartik\detail\DetailView;
 use kartik\datecontrol\DateControl;
-use boss\models\ShopManager;
+use core\models\shop\ShopManager;
 use boss\components\AreaCascade;
 use kartik\builder\Form;
 
 /**
  * @var yii\web\View $this
- * @var boss\models\ShopManager $model
+ * @var core\models\shop\ShopManager $model
  */
 
 $this->title = $model->name;

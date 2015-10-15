@@ -1,11 +1,11 @@
 <?php
 
-namespace boss\models\search;
+namespace core\models\shop;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use boss\models\ShopManager;
+use core\models\shop\ShopManager;
 
 /**
  * ShopManagerSearch represents the model behind the search form about `boss\models\ShopManager`.

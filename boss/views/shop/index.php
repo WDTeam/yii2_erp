@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
-use boss\models\Shop;
+use core\models\shop\Shop;
 use boss\components\AreaCascade;
 use kartik\widgets\Select2;
 use yii\helpers\Url;
@@ -14,7 +14,7 @@ use yii\base\Widget;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
- * @var boss\models\search\ShopSearch $searchModel
+ * @var core\models\shop\ShopSearch $searchModel
  */
 
 $this->title = Yii::t('app', '所有门店');

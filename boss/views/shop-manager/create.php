@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 /**
  * @var yii\web\View $this
- * @var boss\models\ShopManager $model
+ * @var core\models\shop\ShopManager $model
  */
 
 $this->title = Yii::t('app', '添加小家政公司');

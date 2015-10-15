@@ -21,7 +21,7 @@ use core\models\worker\WorkerExt;
 use core\models\worker\WorkerDistrict;
 use boss\models\worker\WorkerSearch;
 use boss\models\Operation;
-use boss\models\Shop;
+use core\models\shop\Shop;
 
 
 
@@ -499,7 +499,7 @@ class WorkerController extends BaseAuthController
 
     public function actionTest(){
         echo '<pre>';
-        var_dump(Worker::getWorkerInfoByPhone(15040629565));
+        var_dump(Worker::getDistrictFreeWorker(1,1,1,1000));
         die;
 
         $a = Worker::getWorkerInfo(16351);
