@@ -35,4 +35,14 @@ class CoreOperationShopDistrict extends CommonOperationShopDistrict
         $data = self::find()->asArray()->where(['id' => $shopdistrict_id])->One();
         return $data['operation_shop_district_name'];
     }
+    
+    /**
+     * 城市所属商圈数据
+     * @param type $city_id
+     * @return type
+     */
+    public static function getCityShopDistrictNum($city_id){
+        $data = self::find()->asArray()->where(['operation_city_id' => $city_id])->all();
+        return count($data);
+    }
 }

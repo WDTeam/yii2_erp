@@ -77,9 +77,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
         'panel' => [
-            'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
+            'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' - '.Html::encode($city_name).' </h3>',
             'type'=>'info',
-            'before'=>'<span class="panel-title">'.Html::encode($city_name).' </span>'
+            'before'=>''   //<span class="panel-title">'.Html::encode($city_name).' </span>
                 .Html::a('<i class="glyphicon glyphicon-plus"></i> '.Yii::t('app', 'Add'), ['create'], ['class' => 'btn btn-success']),
 //            'after'=>Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List', ['index'], ['class' => 'btn btn-info']),
             'showFooter'=>false

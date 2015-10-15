@@ -8,7 +8,8 @@ use yii\helpers\Html;
  */
 
 $this->title = Yii::t('app', 'Create').Yii::t('app', 'Goods');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Goods'), 'url' => ['index']];
+//$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Goods'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Goods'), 'url' => ['/operation-category']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-goods-create">
