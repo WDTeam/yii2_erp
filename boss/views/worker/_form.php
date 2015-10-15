@@ -10,6 +10,7 @@ use kartik\datecontrol\DateControl;
 use kartik\widgets\Select2; // or kartik\select2\Select2
 use kartik\grid\GridView;
 use kartik\date\DatePicker;
+use kartik\widgets\FileInput;
 use boss\components\AreaCascade;
 
 use core\models\worker\Worker;
@@ -26,14 +27,17 @@ use core\models\worker\WorkerRuleConfig;
 <div class="worker-form">
 
     <?php $form = ActiveForm::begin(
-        ['type' => ActiveForm::TYPE_HORIZONTAL, 'id' => 'msg-form',
-            //'options' => ['class'=>'form-horizontal'],
+        [
+            'type' => ActiveForm::TYPE_HORIZONTAL, 'id' => 'msg-form',
+            'options' => ['enctype' => 'multipart/form-data'],
             //'enableAjaxValidation'=>false,
             'fieldConfig' => [
                 //'template' => "{label}\n<div class=\"col-lg-8\">{input}</div>\n<div class=\"col-lg-5\">{error}</div>",
                 //'labelOptions' => ['class' => 'col-lg-1 control-label'],
             ]
-        ]);
+        ]
+
+    );
     //    echo '<fieldset id="w2"><div class="form-group field-operationcity-operation_city_name required">';
     //            echo '<label class="control-label col-md-2" for="operationcity-operation_city_name">选择城市</label>';
     //            echo '<div class="col-md-10">'.Yii::$app->areacascade->cascadeAll('OperationCity', ['class' => 'form-control']).'</div>';
@@ -72,7 +76,18 @@ use core\models\worker\WorkerRuleConfig;
             </div>
 
             <div class="panel-heading"><h3 class="panel-title">阿姨基本信息</h3> </div>
+
             <div class="panel-body">
+            <?= $form->field($worker, 'worker_photo')->widget(FileInput::classname(), [
+                'options' => ['multiple' => true],
+                'pluginOptions' => [
+                    'previewFileType' => 'any',
+                    'showPreview' => true,
+                    'showCaption' => false,
+                    'showRemove' => true,
+                    'showUpload' => false,
+                ]
+            ])?>
             <?= $form->field($worker_ext, 'worker_source')->widget(Select2::classname(), [
                 'name' => 'worker_source',
                 'class'=>\kartik\widgets\Select2::className(),
@@ -86,6 +101,7 @@ use core\models\worker\WorkerRuleConfig;
             <?= $form->field($worker, 'worker_name')->textInput(['placeholder' => '输入阿姨姓名...', 'maxlength' => 10]); ?>
             <?= $form->field($worker, 'worker_phone')->textInput(['placeholder' => '输入阿姨手机...', 'maxlength' => 20]); ?>
             <?= $form->field($worker, 'worker_idcard')->textInput(['placeholder' => '输入阿姨身份证号...', 'maxlength' => 20]); ?>
+
             <?= $form->field($worker, 'worker_district')->widget(Select2::classname(), [
                 'name' => 'worker_district',
                 'hideSearch' => true,
@@ -96,6 +112,7 @@ use core\models\worker\WorkerRuleConfig;
                     'maximumInputLength' => 10
                 ],
             ]); ?>
+
             <?= $form->field($worker_ext, 'worker_sex')->radioList(['0' => '女', '1' => '男'], ['inline' => true]); ?>
             <?= $form->field($worker_ext, 'worker_age')->textInput(['placeholder' => '输入阿姨年龄...']); ?>
             <?= $form->field($worker_ext, 'worker_height')->textInput(['placeholder' => '输入阿姨身高...']); ?>
@@ -138,11 +155,12 @@ use core\models\worker\WorkerRuleConfig;
                 'model' => $worker_ext,
                 'options' => ['class' => 'form-control inline'],
                 'label' =>'阿姨居住地',
-                'grades' => 'town',
+                'grades' => 'county',
             ]);
             ?>
 
             </div>
+            <?= $form->field($worker_ext, 'worker_live_street')->textInput(['placeholder' => '输入阿姨居住详细地址...', 'maxlength' => 10]); ?>
         </div>
 
 

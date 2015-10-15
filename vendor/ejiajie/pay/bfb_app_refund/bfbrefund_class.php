@@ -74,7 +74,7 @@ class bfbrefund_class
         }
         else {
             $bfb_sdk->log(sprintf('create the url for baifubao pay interface success, [URL: %s]', $refund_url));
-            echo "<script>window.location=\"" . $refund_url . "\";</script>";
+            echo "<script>window.open('$refund_url');</script>";
         }
 
     }

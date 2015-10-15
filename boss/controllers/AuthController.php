@@ -3,8 +3,8 @@
 namespace boss\controllers;
 
 use Yii;
-use boss\models\Auth;
-use boss\models\search\AuthSearch;
+use core\models\auth\Auth;
+use core\models\auth\AuthSearch;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

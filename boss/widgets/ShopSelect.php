@@ -15,8 +15,8 @@
 namespace boss\widgets;
 
 
-use boss\models\Shop;
-use boss\models\ShopManager;
+use core\models\shop\Shop;
+use core\models\shop\ShopManager;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;

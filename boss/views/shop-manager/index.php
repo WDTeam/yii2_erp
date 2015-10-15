@@ -7,14 +7,14 @@ use boss\components\AreaCascade;
 use kartik\widgets\Select2;
 use yii\helpers\Url;
 use yii\web\JsExpression;
-use boss\models\ShopManager;
+use core\models\shop\ShopManager;
 use yii\bootstrap\Modal;
 use yii\base\Widget;
 
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
- * @var boss\models\search\ShopManagerSearch $searchModel
+ * @var core\models\shop\ShopManagerSearch $searchModel
  */
 
 $this->title = Yii::t('app', '所有家政公司');

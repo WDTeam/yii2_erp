@@ -56,4 +56,12 @@ class CustomerExtSrc extends \common\models\CustomerExtSrc
             'is_del' => Yii::t('boss', '是否逻辑删除'),
         ];
     }
+
+    /**
+     * 获取最初来源
+     */
+    public static function getFirstSrc($customer_id){
+        $customerExtSrc = self::find()->where(['customer_id'=>$customer_id])->orderBy('created_at asc')->one();
+        return $customerExtSrc == NULL ? false : $customerExtSrc;
+    }
 }

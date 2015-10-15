@@ -34,6 +34,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'condensed' => false,
         'hover' => true,
+        'formOptions'=>[
+            'options'=>[
+                'enctype'=>'multipart/form-data'
+            ],
+        ],
         'mode' => Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
         'panel' => [
             'heading' => $this->title,
@@ -78,6 +83,25 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'=>Worker::getShopName($model->shop_id),
             ],
             [
+                'attribute' =>'worker_photo',
+                'type' => DetailView::INPUT_FILEINPUT,
+                'widgetOptions'=>[
+                    'options'=>[
+                        'accept' => 'image/*',
+                        'name'=>'Worker[worker_photo]',
+                    ],
+                    'pluginOptions' => [
+                        'showPreview' => true,
+                        'showCaption' => false,
+                        'showRemove' => true,
+                        'showUpload' => false,
+                        'initialPreview'=>[
+                            Worker::getWorkerPhotoShow($model->worker_photo)
+                        ],
+                    ]
+                ],
+            ],
+            [
                 'attribute' => 'worker_source',
                 'editModel'=>$model->workerExtRelation,
                 'viewModel'=>$model->workerExtRelation,
@@ -113,11 +137,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 'value'=>$model::getWorkerDistrictShow($model->id),
             ],
-            [
-                'attribute' =>'worker_photo',
-                'type' => DetailView::INPUT_FILEINPUT,
 
-            ],
             //'worker_work_area',
             //'worker_work_street',
 
@@ -130,6 +150,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label'=>'阿姨性别',
                 'value'=>$model::getWorkerSexShow($model->workerExtRelation->worker_sex),
             ],
+
             [
                 'attribute' => 'worker_age',
                 'viewModel'=>$model->workerExtRelation,

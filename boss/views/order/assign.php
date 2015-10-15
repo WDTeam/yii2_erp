@@ -60,10 +60,10 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="panel-body">
                 <div class="worker-search">
                     <div class="col-sm-4">
-                        <input type="text" name="worker_search" class="form-control" id="workersearch-worker_name" placeholder="阿姨姓名或电话...">
+                        <input type="text" name="worker_search" class="form-control" id="worker_search_input" placeholder="阿姨姓名或电话...">
                     </div>
                     <div class="col-sm-1">
-                        <?= Html::submitButton('<span class="glyphicon glyphicon-search"></span>'.Yii::t('app', 'Search'), ['class' => 'btn btn-warning']) ?>
+                        <?= Html::submitButton('<span class="glyphicon glyphicon-search"></span>'.Yii::t('app', 'Search'), ['class' => 'btn btn-warning','id'=>'worker_search_submit']) ?>
                     </div>
                     <div class="col-sm-7">
                         <?= Html::button('<span class="glyphicon glyphicon-ban-circle"></span>无法指派', ['class' => 'btn btn-warning','id'=>'can_not_assign']) ?>

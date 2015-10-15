@@ -6,13 +6,13 @@ use kartik\datecontrol\DateControl;
 use kartik\select2\Select2;
 use yii\web\JsExpression;
 use yii\helpers\Url;
-use boss\models\Shop;
+use core\models\shop\Shop;
 use boss\components\AreaCascade;
 use common\components\BankHelper;
 
 /**
  * @var yii\web\View $this
- * @var boss\models\Shop $model
+ * @var core\models\shop\Shop $model
  */
 
 

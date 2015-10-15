@@ -25,7 +25,6 @@ class CoreOperationCity extends CommonOperationCity
         return $d;
     }
     
-    
     public static function getCityList(){
         $data = self::find()->all();
         $d = array();

@@ -7,6 +7,7 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\ForbiddenHttpException;
 use yii\web\BadRequestHttpException;
+use yii\web\UploadedFile;
 
 use common\models\OrderExtWorker;
 use common\models\ShopManager;
@@ -15,7 +16,10 @@ use core\models\worker\WorkerExt;
 use core\models\worker\WorkerRuleConfig;
 use core\models\Operation\CoreOperationShopDistrict;
 use core\models\Operation\CoreOperationCity;
-use boss\models\Shop;
+use core\models\shop\Shop;
+use boss\models\Operation\OperationCity;
+use boss\models\Operation\OperationShopDistrict;
+use crazyfd\qiniu\Qiniu;
 
 /**
  * This is the model class for table "{{%worker}}".
@@ -49,7 +53,7 @@ class Worker extends \common\models\Worker
 {
 
 
-    /*
+    /**
      * 获取阿姨列表
      * @param  int $type 阿姨类型 1自营 2非自营
      * @param  int $rule_id 阿姨身份id
@@ -62,10 +66,61 @@ class Worker extends \common\models\Worker
         return $workerList?ArrayHelper::getColumn($workerList,'id'):[];
     }
 
-    /*
+    /**
+     * 根据条件搜索阿姨
+     * @param $worker_name 阿姨姓名 不搜索此项传null
+     * @param $worker_phone 阿姨电话 不搜索此项传null
+     * @return array 阿姨列表
+     */
+    public static function searchWorker($worker_name=null,$worker_phone=null){
+        $defaultCondition['worker_is_block'] = 0;
+        $defaultCondition['worker_is_vacation'] = 0;
+        $defaultCondition['worker_is_blacklist'] = 0;
+        //$condition = array_merge($defaultCondition,$filterCondition);
+        //获取所属商圈中所有阿姨
+        $districtWorkerResult = Worker::find()
+            ->select('{{%worker}}.id,shop_id,worker_name,worker_phone,worker_idcard,worker_rule_id,worker_type,name as shop_name,worker_stat_order_num,worker_stat_order_refuse')
+            ->joinWith('workerStatRelation') //关联worker WorkerStatRelation方法
+            ->joinWith('shopRelation') //关联worker shopRelation方法
+            ->where($defaultCondition)
+            ->andFilterWhere(['like', 'worker_name', $worker_name])
+            ->andFilterWhere(['like', 'worker_phone', $worker_phone])
+            ->asArray()
+            ->all();
+
+        $workerRuleConfigArr = WorkerRuleConfig::getWorkerRuleList();
+
+        if(empty($districtWorkerResult)){
+            return [];
+        }else{
+            foreach ($districtWorkerResult as $val) {
+
+                $val['worker_id'] = $val['id'];
+                $val['worker_type_description'] = self::getWorkerTypeShow($val['worker_type']);
+                $val['worker_rule_description'] = $workerRuleConfigArr[$val['worker_rule_id']];
+
+                $val['shop_name'] = isset($val['shop_name'])?$val['shop_name']:'';
+                $val['worker_stat_order_num'] = intval($val['worker_stat_order_num']);
+                $val['worker_stat_order_refuse'] = intval($val['worker_stat_order_refuse']);
+                if($val['worker_stat_order_num']!==0){
+                    $val['worker_stat_order_refuse_percent'] = Yii::$app->formatter->asPercent($val['worker_stat_order_refuse']/$val['worker_stat_order_num']);
+                }else{
+                    $val['worker_stat_order_refuse_percent'] = '0%';
+                }
+
+                unset($val['workerStatRelation']);
+                unset($val['shopRelation']);
+                $districtWorkerArr[] = $val;
+            }
+            return $districtWorkerArr;
+        }
+    }
+
+
+    /**
      * 获取单个阿姨详细信息
-     * @param worker_id int 阿姨id
-     * @return  单个阿姨详细信息
+     * @param integer worker_id  阿姨id
+     * @return array 阿姨详细信息
      */
     public static function getWorkerInfo($worker_id){
 
@@ -78,9 +133,7 @@ class Worker extends \common\models\Worker
             }
             $workerInfo['shop_name'] = isset($shopInfo['name'])?$shopInfo['name']:'';
             $workerInfo['shop_manager_name'] = isset($shopManagerInfo['name'])?$shopManagerInfo['name']:'';
-            //阿姨类型描述信息
             $workerInfo['worker_type_description'] = self::getWorkerTypeShow($workerInfo['worker_type']);
-            //阿姨身份描述信息
             $workerInfo['worker_rule_description'] = WorkerRuleConfig::getWorkerRuleShow($workerInfo['worker_rule_id']);
         }else{
             $workerInfo = [];
@@ -116,29 +169,52 @@ class Worker extends \common\models\Worker
         return $workerInfo;
      }
 
+
+    /**
+     * 获取商圈中所有阿姨
+     * @param $districtId
+     * @param array $filterCondition 阿姨筛选条件
+     * @return array 阿姨列表
+     */
+     public static function getDistrictAllWorker($districtId,$filterCondition=[]){
+         if(empty($districtId) || !is_array($filterCondition)){
+            return [];
+         }
+         $defaultCondition['worker_is_block'] = 0;
+         $defaultCondition['worker_is_vacation'] = 0;
+         $defaultCondition['worker_is_blacklist'] = 0;
+         $condition = array_merge($defaultCondition,$filterCondition);
+         //获取所属商圈中所有阿姨
+         $districtWorkerResult = Worker::find()
+             ->select('{{%worker}}.id,shop_id,worker_name,worker_phone,worker_idcard,worker_rule_id,worker_type,name as shop_name,worker_stat_order_num,worker_stat_order_refuse')
+             ->innerJoinWith('workerDistrictRelation') //关联worker workerDistrictRelation方法
+             ->andOnCondition(['operation_shop_district_id'=>$districtId])
+             ->joinWith('workerStatRelation') //关联worker WorkerStatRelation方法
+             ->joinWith('shopRelation') //关联worker shopRelation方法
+             ->where($condition)
+             ->asArray()
+             ->all();
+
+         return $districtWorkerResult;
+     }
+
+
     /*
      * 获取商圈中 所有可用阿姨id
      * @param int districtId 商圈id
      * @param int worker_type 阿姨类型 1自营2非自营
      * @param int orderBookBeginTime 待指派订单预约开始时间
      * @param int orderBookeEndTime 待指派订单预约结束时间
-     * @return array freeWorkerArr 所有可用阿姨id
+     * @return array freeWorkerArr 所有可用阿姨列表
      */
     public static function getDistrictFreeWorker($districtId=1,$workerType=1,$orderBookBeginTime,$orderBookeEndTime){
 
-
-        //获取所属商圈中所有阿姨
-        $districtWorkerResult = Worker::find()
-            ->select('{{%worker}}.id,shop_id,worker_name,worker_phone,worker_idcard,worker_rule_id,worker_type,name as shop_name,worker_stat_order_num,worker_stat_order_refuse')
-            ->innerJoinWith('workerDistrictRelation') //关联worker workerDistrictRelation方法
-            ->andOnCondition(['operation_shop_district_id'=>$districtId])
-            ->joinWith('workerStatRelation') //关联worker WorkerStatRelation方法
-            ->joinWith('shopRelation') //关联worker shopRelation方法
-            ->where(['worker_is_block'=>0,'worker_is_blacklist'=>0,'worker_is_vacation'=>0,'worker_type'=>$workerType])
-            ->asArray()
-            ->all();
-//var_dump($districtWorkerResult);
         $workerRuleConfigArr = WorkerRuleConfig::getWorkerRuleList();
+
+        //获取商圈中所有阿姨
+        $condition['worker_type'] = $workerType;
+        $districtWorkerResult = self::getDistrictAllWorker($districtId,$condition);
+
         if(empty($districtWorkerResult)){
             return [];
         }else{
@@ -214,12 +290,30 @@ class Worker extends \common\models\Worker
             return $workerResult;
         }
     }
+
+    /**
+     * 上传图片到七牛服务器
+     * @param string $field 上传文件字段名
+     * @return string $imgUrl 文件URL
+     */
+    public function uploadImgToQiniu($field){
+        $qiniu = new Qiniu();
+        $fileinfo = UploadedFile::getInstance($this, $field);
+        if(!empty($fileinfo)){
+            $key = time().mt_rand('1000', '9999').uniqid();
+            $qiniu->uploadFile($fileinfo->tempName, $key);
+            $imgUrl = $qiniu->getLink($key);
+            $this->$field = $imgUrl;
+        }
+    }
+
     /*
      * 获取已开通城市列表
      * @return array [city_id=>city_name,...]
      */
     public static function getOnlineCityList(){
-        $onlineCityList= CoreOperationCity::find()->select('city_id,city_name')->where(['operation_city_is_online'=>1])->asArray()->all();
+        $onlineCityList = OperationCity::getCityOnlineInfoList();
+        //$onlineCityList= CoreOperationCity::find()->select('city_id,city_name')->asArray()->all();
         return $onlineCityList?ArrayHelper::map($onlineCityList,'city_id','city_name'):[];
     }
 
@@ -228,9 +322,9 @@ class Worker extends \common\models\Worker
      * @param int $city_d 城市id
      * @return sting $cityName 城市名称
      */
-    public static function getOnlineCityName($city_d=0){
-        if(empty($city_d)) return '';
-        $onlineCity= CoreOperationCity::find()->select('city_name')->where(['city_id'=>$city_d])->asArray()->one();
+    public static function getOnlineCityName($city_id=0){
+        if(empty($city_id)) return '';
+        $onlineCity= CoreOperationCity::find()->select('city_name')->where(['city_id'=>$city_id])->asArray()->one();
         return $onlineCity['city_name'];
     }
 
@@ -250,7 +344,8 @@ class Worker extends \common\models\Worker
      * @return array [id=>operation_shop_district_name,...]
      */
     public static function getDistrictList(){
-        $districtList =CoreOperationShopDistrict::find()->select('id,operation_shop_district_name')->asArray()->all();
+        $districtList = OperationShopDistrict::getCityShopDistrictList();
+        //$districtList = CoreOperationShopDistrict::find()->select('id,operation_shop_district_name')->asArray()->all();
         return $districtList?ArrayHelper::map($districtList,'id','operation_shop_district_name'):[];
     }
 
@@ -406,7 +501,11 @@ class Worker extends \common\models\Worker
         }
     }
 
-
+    public static function getWorkerPhotoShow($worker_photo){
+        if($worker_photo){
+            return \yii\helpers\Html::img($worker_photo, ['class'=>'file-preview-image']);
+        }
+    }
 
     /*
      * 统计被列入黑名单的阿姨的数量
@@ -479,29 +578,29 @@ class Worker extends \common\models\Worker
    * @return string 按钮css样式class   btn-success-selected(按钮被选中) or btn-success(按钮未选中)
    */
     public static function getSearchBtnCss($btnCate){
-        $searchParams = Yii::$app->request->getQueryParams();
-        $workerSearchParams = array_key_exists('WorkerSearch',$searchParams)?$searchParams['WorkerSearch']:[];
-        if($btnCate==0 && !array_key_exists('WorkerSearch',$searchParams)){
+        $params = Yii::$app->request->getQueryParams();
+        $workerParams = isset($params['WorkerSearch'])?$params['WorkerSearch']:[];
+        if($btnCate==0 && !isset($params['WorkerSearch'])){
             return 'btn-success-selected';
-        }elseif($btnCate==1 && isset($workerSearchParams['worker_auth_status']) && $workerSearchParams['worker_auth_status']==0){
+        }elseif($btnCate==1 && isset($workerParams['worker_auth_status']) && $workerParams['worker_auth_status']==0){
             return 'btn-success-selected';
-        }elseif($btnCate==2 && isset($workerSearchParams['worker_auth_status']) && $workerSearchParams['worker_auth_status']==1){
+        }elseif($btnCate==2 && isset($workerParams['worker_auth_status']) && $workerParams['worker_auth_status']==1){
             return 'btn-success-selected';
-        }elseif($btnCate==3 && isset($workerSearchParams['worker_auth_status']) && $workerSearchParams['worker_auth_status']==2){
+        }elseif($btnCate==3 && isset($workerParams['worker_auth_status']) && $workerParams['worker_auth_status']==2){
             return 'btn-success-selected';
-        }elseif($btnCate==4 && array_key_exists('worker_rule_id',$workerSearchParams) && $workerSearchParams['worker_rule_id']==1){
+        }elseif($btnCate==4 && array_key_exists('worker_rule_id',$workerParams) && $workerParams['worker_rule_id']==1){
             return 'btn-success-selected';
-        }elseif($btnCate==5 && array_key_exists('worker_rule_id',$workerSearchParams) && $workerSearchParams['worker_rule_id']==2){
+        }elseif($btnCate==5 && array_key_exists('worker_rule_id',$workerParams) && $workerParams['worker_rule_id']==2){
             return 'btn-success-selected';
-        }elseif($btnCate==6 && array_key_exists('worker_rule_id',$workerSearchParams) && $workerSearchParams['worker_rule_id']==3){
+        }elseif($btnCate==6 && array_key_exists('worker_rule_id',$workerParams) && $workerParams['worker_rule_id']==3){
             return 'btn-success-selected';
-        }elseif($btnCate==7 && array_key_exists('worker_rule_id',$workerSearchParams) && $workerSearchParams['worker_rule_id']==4){
+        }elseif($btnCate==7 && array_key_exists('worker_rule_id',$workerParams) && $workerParams['worker_rule_id']==4){
             return 'btn-success-selected';
-        }elseif($btnCate==8 && array_key_exists('worker_is_vacation',$workerSearchParams)){
+        }elseif($btnCate==8 && array_key_exists('worker_is_vacation',$workerParams)){
             return 'btn-success-selected';
-        }elseif($btnCate==9 && array_key_exists('worker_is_block',$workerSearchParams)){
+        }elseif($btnCate==9 && array_key_exists('worker_is_block',$workerParams)){
             return 'btn-success-selected';
-        }elseif($btnCate==10 && array_key_exists('worker_is_blacklist',$workerSearchParams)){
+        }elseif($btnCate==10 && array_key_exists('worker_is_blacklist',$workerParams)){
             return 'btn-success-selected';
         }else{
             return 'btn-success';

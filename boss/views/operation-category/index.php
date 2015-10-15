@@ -74,8 +74,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         if(empty($model['goods_id'])){
 
                         }else {
+                            return Html::a(Yii::t('yii', 'View'), ['operation-goods/view','id' => $model['goods_id']], ['class' => 'btn btn-success btn-sm']);
                             return Html::a(
-                                '<span class="glyphicon glyphicon-eye-open"></span>',
+                                '<span class="glyphicon glyphicon-eye-open">创建</span>',
                                 Yii::$app->urlManager->createUrl(['operation-goods/view','id' => $model['goods_id']]),
                                 ['title' => Yii::t('yii', 'View'), 'class' => 'btn btn-success btn-sm']
                             );
@@ -85,6 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         if(empty($model['goods_id'])){
 
                         }else {
+                             return Html::a(Yii::t('yii', '编辑'), ['operation-goods/update', 'id' => $model['goods_id']], ['class' => 'btn btn-info btn-sm']);
                             return Html::a(
                             '<span class="glyphicon glyphicon-pencil"></span>',
                             Yii::$app->urlManager->createUrl(['operation-goods/update', 'id' => $model['goods_id']]),
@@ -96,8 +98,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         if(empty($model['goods_id'])){
 
                         }else{
+                            return Html::a(Yii::t('yii', '删除'), ['operation-goods/delete', 'id' => $model['goods_id']], ['class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]);
                             return Html::a(
-                                '<span class="glyphicon glyphicon-trash"></span>',
+                                '<span class="glyphicon glyphicon-trash">删除</span>',
                                 Yii::$app->urlManager->createUrl(['operation-goods/delete','id' => $model['goods_id']]),
                                 ['title' => Yii::t('yii', 'Delete'), 'class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
                             );

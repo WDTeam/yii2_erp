@@ -21,7 +21,7 @@ use core\models\worker\WorkerExt;
 use core\models\worker\WorkerDistrict;
 use boss\models\worker\WorkerSearch;
 use boss\models\Operation;
-use boss\models\Shop;
+use core\models\shop\Shop;
 
 
 
@@ -43,11 +43,11 @@ class WorkerController extends BaseAuthController
     }
 
     /**
-     * Finds the Worker model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
+     * 通过id 获取worker model
      * @param integer $id
-     * @return Worker the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
+     * @param integer $hasExt 是否关联阿姨附属表Model
+     * @return model
+     * @throws NotFoundHttpException if not found
      */
     protected function findModel($id,$hasExt=false)
     {
@@ -65,7 +65,7 @@ class WorkerController extends BaseAuthController
 
 
     /**
-     * Lists all Worker models.
+     * 首页阿姨列表
      * @return mixed
      */
     public function actionIndex()
@@ -83,7 +83,7 @@ class WorkerController extends BaseAuthController
     }
 
     /**
-     * Displays a single Worker model.
+     * 阿姨详情
      * @param integer $id
      * @return mixed
      */
@@ -91,11 +91,11 @@ class WorkerController extends BaseAuthController
     {
         $workerModel = $this->findModel($id,true);
         $workerExtModel = WorkerExt::findOne($id);
-
         if ($workerModel->load(Yii::$app->request->post()) && $workerExtModel->load(Yii::$app->request->post())) {
+            $workerModel->uploadImgToQiniu('worker_photo');
+            $workerModel->save();
             //更新阿姨附属信息
             $workerModel->link('workerExtRelation',$workerExtModel);
-            $workerModel->save();
             //更新阿姨商圈信息 ???
             $workerDistrictModel = new WorkerDistrict;
             $workerParam = Yii::$app->request->post('Worker');
@@ -125,7 +125,7 @@ class WorkerController extends BaseAuthController
     }
 
     /**
-     * Creates a new Worker model.
+     * 录入新阿姨
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
@@ -133,18 +133,19 @@ class WorkerController extends BaseAuthController
     {
         $workerModel = new Worker;
         $workerExtModel = new WorkerExt;
-        $workerDistrictModel = new WorkerDistrict;
-
-        $workerModel->created_ad = time();
         if ($workerModel->load(Yii::$app->request->post()) && $workerExtModel->load(Yii::$app->request->post())) {
-            $workerModel->link('workerExtRelation',$workerExtModel);
+            $workerModel->created_ad = time();
+            $workerModel->uploadImgToQiniu('worker_photo');
             $workerModel->save();
+            $workerModel->link('workerExtRelation',$workerExtModel);
             $workerParam = Yii::$app->request->post('Worker');
             if($workerParam['worker_district']){
                 foreach($workerParam['worker_district'] as $val){
+                    $workerDistrictModel = new WorkerDistrict;
                     $workerDistrictModel->created_ad = time();
                     $workerDistrictModel->worker_id = $workerModel->id;
                     $workerDistrictModel->operation_shop_district_id = $val;
+                    $workerDistrictModel->save();
                 }
             }
             return $this->redirect(['view', 'id' => $workerModel->id]);
@@ -157,7 +158,7 @@ class WorkerController extends BaseAuthController
     }
 
     /**
-     * Updates an existing Worker model.
+     * 更新阿姨
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -176,8 +177,8 @@ class WorkerController extends BaseAuthController
     }
 
     /**
-     * Deletes an existing Worker model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * 删除阿姨
+     * 数据库中不删除阿姨信息，采用软删除
      * @param integer $id
      * @return mixed
      */
@@ -191,8 +192,9 @@ class WorkerController extends BaseAuthController
 
 
 
-    /*
-     * ajax通过搜索关键字获取门店信息
+    /**
+     * 通过搜索关键字获取门店信息
+     * 联想搜索通过ajax返回
      * @param q string 关键字
      * @return result array 门店信息
      */
@@ -211,7 +213,7 @@ class WorkerController extends BaseAuthController
     }
 
 
-    /*
+    /**
      * 创建阿姨请假信息
      * 可以为单个阿姨或者多个阿姨创建请假信息
      * @param workerId 阿姨Id
@@ -221,66 +223,65 @@ class WorkerController extends BaseAuthController
         $workerIdsArr = explode(',',$workerIds);
 
         $workerVacationModel = new WorkerVacation();
-        $postParam = \Yii::$app->request->post();
-        if($postParam){
-            foreach($workerIdsArr as $workerId){
+        $post = \Yii::$app->request->post();
+        if($post){
+            foreach($workerIdsArr as $id){
                 $workerVacationModel = new WorkerVacation();
-                $workerVacationModel->worker_vacation_start_time = strtotime($postParam['WorkerVacation']['worker_vacation_start_time']);
-                $workerVacationModel->worker_vacation_finish_time = strtotime($postParam['WorkerVacation']['worker_vacation_finish_time']);
-                $workerVacationModel->worker_vacation_type = intval($postParam['WorkerVacation']['worker_vacation_type']);
-                $workerVacationModel->worker_vacation_extend = trim($postParam['WorkerVacation']['worker_vacation_extend']);
+                $workerVacationModel->worker_vacation_start_time = strtotime($post['WorkerVacation']['worker_vacation_start_time']);
+                $workerVacationModel->worker_vacation_finish_time = strtotime($post['WorkerVacation']['worker_vacation_finish_time']);
+                $workerVacationModel->worker_vacation_type = intval($post['WorkerVacation']['worker_vacation_type']);
+                $workerVacationModel->worker_vacation_extend = trim($post['WorkerVacation']['worker_vacation_extend']);
                 $workerVacationModel->created_ad = time();
                 $workerVacationModel->admin_id = Yii::$app->user->identity->id;
-                $workerVacationModel->worker_id = $workerId;
+                $workerVacationModel->worker_id = $id;
                 if($workerVacationModel->save()){
-                    $workerModel = Worker::findOne($workerId);
+                    $workerModel = Worker::findOne($id);
                     $workerModel->worker_is_vacation = 1;
                     $workerModel->save();
                 }
             }
             return $this->redirect(['index']);
         }else{
-            $workerResult = Worker::getWorkerListByIds($workerIdsArr,'worker_name');
+            $result = Worker::getWorkerListByIds($workerIdsArr,'worker_name');
             $workerNameStr = '';
-            foreach ($workerResult as $val) {
+            foreach ($result as $val) {
                 $workerNameStr .= $val['worker_name'].',';
             }
-            $vacationType = \Yii::$app->request->get('vacationType');
             $workerNameStr = trim($workerNameStr,',');
-            $workerVacationModel->worker_vacation_type = $vacationType;
+
+            $workerVacationModel->worker_vacation_type = \Yii::$app->request->get('vacationType');
             return $this->renderAjax('create_vacation',['workerName'=>$workerNameStr,'workerVacationModel'=>$workerVacationModel]);
         }
     }
 
-    /*
+    /**
      * 创建阿姨封号信息
-     * @param workerId 阿姨Id
+     * @param integer workerId 阿姨Id
      * @return empty
      */
     public function actionCreateBlock($workerId){
         $workerModel = $this->findModel($workerId);
-        $workerBlockmodel = new WorkerBlock();
-        $postParam = \Yii::$app->request->post();
-        if($postParam){
-            $workerBlockmodel->worker_id = $workerId;
-            $workerBlockmodel->worker_block_start_time = strtotime($postParam['WorkerBlock']['worker_block_start_time']);
-            $workerBlockmodel->worker_block_finish_time = strtotime($postParam['WorkerBlock']['worker_block_finish_time']);
-            $workerBlockmodel->worker_block_reason = $postParam['WorkerBlock']['worker_block_reason'];
-            $workerBlockmodel->created_ad = time();
-            $workerBlockmodel->worker_block_status = 0;
-            $saveStatus = $workerBlockmodel->save();
-            if($saveStatus){
+        $workerBlockModel = new WorkerBlock();
+        $post = \Yii::$app->request->post();
+        if($post){
+            $workerBlockModel->worker_id = $workerId;
+            $workerBlockModel->worker_block_start_time = strtotime($post['WorkerBlock']['worker_block_start_time']);
+            $workerBlockModel->worker_block_finish_time = strtotime($post['WorkerBlock']['worker_block_finish_time']);
+            $workerBlockModel->worker_block_reason = $post['WorkerBlock']['worker_block_reason'];
+            $workerBlockModel->created_ad = time();
+            $workerBlockModel->worker_block_status = 0;
+            if($workerBlockModel->save()){
                 $workerModel->worker_is_block = 1;
                 $workerModel->save();
             }
             return $this->redirect(['index']);
         }else{
-            return $this->renderAjax('create_block',['workerModel'=>$workerModel,'workerBlockmodel'=>$workerBlockmodel]);
+            return $this->renderAjax('create_block',['workerModel'=>$workerModel,'workerBlockmodel'=>$workerBlockModel]);
         }
     }
 
 
-    /*
+    /**
      * 更改阿姨封号信息，并同时记录到封号操作日志
      *
      */
@@ -288,30 +289,30 @@ class WorkerController extends BaseAuthController
         if (Yii::$app->request->post('hasEditable')) {
             // instantiate your book model for saving
             $post = Yii::$app->request->post();
-            $blockId = $post['editableKey'];
+            $block_id = $post['editableKey'];
             $workerBlockArr = $post['WorkerBlock'][$post['editableIndex']];
 
-            $workerBlockModel = WorkerBlock::findOne($blockId);
-            $oldFinishTime = $workerBlockModel->worker_block_finish_time;
-            $workerId = $workerBlockModel->worker_id;
-            if(empty($workerId)){
+            $workerBlockModel = WorkerBlock::findOne($block_id);
+            $old_finish_time = $workerBlockModel->worker_block_finish_time;
+            $worker_id = $workerBlockModel->worker_id;
+            if(empty($worker_id)){
                 throw new ForbiddenHttpException('获取封号信息失败');
             }
             //更改封号结束时间
             if(isset($workerBlockArr['worker_block_finish_time'])){
-                $finishTime = strtotime($workerBlockArr['worker_block_finish_time']);
-                if($oldFinishTime>$finishTime){
+                $finish_ime = strtotime($workerBlockArr['worker_block_finish_time']);
+                if($old_finish_time>$finish_ime){
                     //缩短封号时间
-                    $this->CreateBlockLog($workerId,$blockId,2);
+                    $this->CreateBlockLog($worker_id,$block_id,2);
                 }else{
                     //延长封号时间
-                    $this->CreateBlockLog($workerId,$blockId,3);
+                    $this->CreateBlockLog($worker_id,$block_id,3);
                 }
-                $workerBlockModel->worker_block_finish_time = $finishTime;
+                $workerBlockModel->worker_block_finish_time = $finish_ime;
             //更改封号状态
             }elseif(isset($workerBlockArr['worker_block_status']) && $workerBlockArr['worker_block_status']==1){
                 $workerBlockModel->worker_block_status = $workerBlockArr['worker_block_status'];
-                $this->CreateBlockLog($workerId,$blockId,4);
+                $this->CreateBlockLog($worker_id,$block_id,4);
             }
             $workerBlockModel->save();
             //$model->getErrors();
@@ -322,11 +323,11 @@ class WorkerController extends BaseAuthController
         }
     }
 
-    /*
-     * 创建封号日志记录
-     * @param workerId 阿姨Id
-     * @param blockId 封号表主键id
-     * @param type 封号类型 [1]创建操作
+    /**
+     * 记录封号操作日志
+     * @param integer workerId 阿姨Id
+     * @param integer blockId 封号表主键id
+     * @param integer type 封号类型 [1]创建操作[2]缩短封号时间[3]延长封号时间[4]关闭[5]其他
      * @return empty
      */
     protected function CreateBlockLog($workerId,$blocdId,$type){
@@ -353,7 +354,7 @@ class WorkerController extends BaseAuthController
         $workerBlockModel->save();
     }
 
-    /*
+    /**
      * 从老数据库中 导入阿姨数据 到新系统数据库中
      * 默认每次导入40条数据
      */
@@ -498,7 +499,7 @@ class WorkerController extends BaseAuthController
 
     public function actionTest(){
         echo '<pre>';
-        var_dump(Worker::getDistrictFreeWorker(1,1,0,100));
+        var_dump(Worker::getDistrictFreeWorker(1,1,1,1000));
         die;
 
         $a = Worker::getWorkerInfo(16351);

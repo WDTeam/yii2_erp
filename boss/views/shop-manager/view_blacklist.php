@@ -1,5 +1,5 @@
 <?php 
-use boss\models\ShopManager;
+use core\models\shop\ShopManager;
 
 $creatd_time = $model->getLastJoinBlackList()->created_at;
 ?>

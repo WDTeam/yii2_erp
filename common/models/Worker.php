@@ -60,7 +60,6 @@ class Worker extends \yii\db\ActiveRecord
             [[ 'worker_idcard'], 'string', 'max' => 18],
             [['worker_phone'], 'string', 'max' => 11],
             [['worker_password', 'worker_work_street'], 'string', 'max' => 50],
-            [['worker_photo'], 'string', 'max' => 40]
         ];
     }
 

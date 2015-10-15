@@ -1,12 +1,12 @@
 <?php
-namespace boss\models;
+namespace core\models\shop;
 use yii;
 use yii\behaviors\TimestampBehavior;
 use boss\models\Operation\OperationArea;
 use yii\base\Object;
-use boss\models\ShopStatus;
+use core\models\shop\ShopStatus;
 use crazyfd\qiniu\Qiniu;
-use boss\behaviors\ShopStatusBehavior;
+use core\behaviors\ShopStatusBehavior;
 class ShopManager extends \common\models\ShopManager
 {
     /**
@@ -58,7 +58,7 @@ class ShopManager extends \common\models\ShopManager
     {
         return array_merge(parent::rules(),[
             [['name', 'street', 'principal', 'tel', 
-            'bl_name', 'bl_type', 'bl_number', 'bl_person', 'bl_address', 'bl_audit'
+            
             ], 'required'],
         ]);
     }

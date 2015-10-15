@@ -3,8 +3,8 @@
 namespace boss\controllers;
 
 use Yii;
-use boss\models\Shop;
-use boss\models\search\ShopSearch;
+use core\models\shop\Shop;
+use core\models\shop\ShopSearch;
 use boss\components\BaseAuthController;
 use yii\helpers\Json;
 use yii\web\NotFoundHttpException;
