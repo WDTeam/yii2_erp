@@ -67,8 +67,8 @@ class Worker extends \common\models\Worker
 
     /**
      * 根据条件搜索阿姨
-     * @param $worker_name 阿姨姓名
-     * @param $worker_phone 阿姨电话
+     * @param $worker_name 阿姨姓名 不搜索此项传null
+     * @param $worker_phone 阿姨电话 不搜索此项传null
      * @return array 阿姨列表
      */
     public static function searchWorker($worker_name=null,$worker_phone=null){
