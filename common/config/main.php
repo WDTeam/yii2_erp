@@ -5,7 +5,7 @@ return [
     'language' => 'zh-CN',
     'timeZone' => 'Asia/Shanghai',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
-    'bootstrap' => ['log', 'devicedetect'],
+    'bootstrap' => ['log', 'devicedetect', 'ivr'],
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
@@ -168,6 +168,7 @@ return [
             'class'=>'common\components\Ivr',
             'app_id'=>'5000040',
             'token'=>'8578b07ba71ff7dfd6ddeca95d69828c',
+            'redirect_uri'=>'ivr/callback'
         ],
         /**
          * 配置控制台命令
@@ -179,7 +180,7 @@ return [
          */
         'consoleRunner' => [
             'class' => 'toriphes\console\Runner'
-        ]
+        ],
     ],
     'modules' => [
         'datecontrol' =>  [
