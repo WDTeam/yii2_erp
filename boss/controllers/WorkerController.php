@@ -373,9 +373,9 @@ class WorkerController extends BaseAuthController
         }elseif($type==3){
             $logArr['worker_block_operate_bak'] = '延长封号结束时间';
         }elseif($type==4){
-            $logArr['worker_block_operate_bak'] = '阿姨关闭封号';
+            $logArr['worker_block_operate_bak'] = '关闭阿姨封号';
         }elseif($type==5){
-            $logArr['worker_block_operate_bak'] = '阿姨开启封号';
+            $logArr['worker_block_operate_bak'] = '开启阿姨封号';
         }else{
             $logArr['worker_block_operate_type'] = 6;
             $logArr['worker_block_operate_bak'] = '其他操作';

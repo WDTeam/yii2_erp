@@ -22,7 +22,7 @@ $this->title = $workerModel->worker_name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Workers'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 $content1 = $this->render('view_worker',['model'=>$workerModel]);
-//$content2 = $this->render('view_block',['worker_id'=>$worker_id]);
+$content2 = $this->render('view_auth',['worker_id'=>$worker_id]);
 $content3 = $this->render('view_vacation',['workerVacationData'=>$workerVacationData]);
 $content4 = $this->render('view_block',['worker_id'=>$worker_id]);
 $content5 = $this->render('view_log',['workerBlockLogData'=>$workerBlockLogData]);
@@ -34,6 +34,7 @@ $items = [
     ],
     [
         'label'=>'<i class="fa  fa-fw fa-th-list"></i> 审核管理',
+        'content'=>$content2,
         //'linkOptions'=>['data-url'=>\yii\helpers\Url::to(['/site/tabs-data'])],
         'active'=>false
     ],
