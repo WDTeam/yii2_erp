@@ -115,12 +115,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template'=>'{update} {joinblacklist}',
                 'buttons' => [
                     'update' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', [
+                        return Html::a(Yii::t('yii', '编辑'), [
                             'shop-manager/view',
                             'id' => $model->id,
                             'edit'=>'t'
                         ], [
-                            'title' => Yii::t('yii', 'Edit'),
+                            'title' => Yii::t('yii', '编辑'),
+                            'class' => 'btn btn-success btn-sm'
                         ]);
                     },
                     'joinblacklist' => function ($url, $model) {
@@ -132,7 +133,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-toggle'=>'modal',
                             'data-target'=>'#modal',
                             'data-id'=>$model->id,
-                            'class'=>'join-list-btn',
+                            'class'=>'join-list-btn btn btn-success btn-sm',
                         ]):Html::a('解除黑名单', [
                             'shop-manager/remove-blacklist',
                             'id' => $model->id
