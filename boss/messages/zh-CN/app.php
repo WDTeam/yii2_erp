@@ -111,6 +111,7 @@ return [
 
     'Opened City' => '已开通城市',
     'Add Service' => '添加服务',
+    'Set Service' => '设置服务',
     
     'Operation Categories' => '服务品类',
     'Operation And Categories' => '服务和品类',

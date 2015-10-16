@@ -16,18 +16,30 @@ if($cityAddGoods == 'success'){
 }
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '添加服务')];
 ?>
+<?php
+$form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL, 'options' => ['enctype' => 'multipart/form-data']]);
+?>
     <div class="panel panel-info">
         <div class="panel-heading">
             <h3 class="panel-title"> 服务品类</h3>
         </div>
-    <div class="panel-body">
-        <?php
-            $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL, 'options' => ['enctype' => 'multipart/form-data']]);
-        ?>
+    <div class="panel-body ">
         <input type="hidden" class="city_id" name="city_id" value="<?= $city_id?>" />
-
-        <?php echo Html::radioList('categorylist[]', [], $categorylist)  ?>
-        <div id="categoryGoodsContent">
+        <div class="row">
+            <div class="col-md-2">选择品类</div>
+            <div class="col-md-2">选择商品</div>
         </div>
-        <?php echo Html::submitButton('下一步', ['class' => 'btn btn-success']);
-            ActiveForm::end(); ?>
+        <div class="row">
+            <?php echo Html::radioList('categorylist[]', [], $categorylist, ['class'=>'MyRadioStyle col-md-2'])  ?>
+            <div id="categoryGoodsContent" class="MyRadioStyle col-md-6">
+            </div>
+        </div>
+    </div>
+        <div class="panel-footer">
+            <div class="form-group">
+                <div class="col-sm-12">
+                <?php echo Html::submitButton('下一步', ['class' => 'btn btn-success btn-lg btn-block']);?>
+                </div>
+            </div>
+        </div>
+        <?php ActiveForm::end(); ?>

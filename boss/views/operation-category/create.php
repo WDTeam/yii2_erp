@@ -15,12 +15,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <!--    <div class="page-header">
         <h1><?php //= Html::encode($this->title) ?></h1>
     </div>-->
-    <div class="panel panel-info">
-        <div class="panel-body">
             <?= $this->render('_form', [
                 'model' => $model,
             ]) ?>
-        </div>
-    </div>
 
 </div>

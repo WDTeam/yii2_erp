@@ -7,7 +7,7 @@ $(document).ready(function(){
         alllist($(this));
     });
     
-    $("input[name='categorylist[]']").click(function(){
+    $("input[name='categorylist[]']").change(function(){
         categoryGoods($(this));
     });
     selectCategoryChecked();
@@ -98,6 +98,11 @@ function categoryGoods(obj){
         var data = {'categoryid': value, 'city_id' : city_id};
         $.post(url, data, function(t){
             $('#categoryGoodsContent').append(t);
+
+            //radio应用icheck样式
+            $('#categoryGoodsContent input').each(function(){
+                ApplyToRadio($(this));
+            });
         }, 'html');
     }else{
         $('#goods_'+value).remove();
