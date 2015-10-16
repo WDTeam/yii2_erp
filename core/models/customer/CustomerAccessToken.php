@@ -5,6 +5,7 @@ namespace core\models\customer;
 use Yii;
 use core\models\customer\CustomerCode;
 use common\models\Customer;
+use core\models\customer\CustomerChannal;
 
 /**
  * This is the model class for table "{{%customer_access_token}}".
@@ -45,6 +46,7 @@ class CustomerAccessToken extends \common\models\CustomerAccessToken
             $customerAccessToken->customer_access_token_expiration = 2 * 3600;
             $customerAccessToken->customer_code_id = $customer_code_id;
             $customerAccessToken->customer_code = $code;
+            $customerAccessToken->customer_phone = $phone;
             $customerAccessToken->created_at = time();
             $customerAccessToken->updated_at = 0;
             $customerAccessToken->is_del = 0;
@@ -52,7 +54,7 @@ class CustomerAccessToken extends \common\models\CustomerAccessToken
             $customerAccessToken->save();
             $transaction->commit();
             return $customerAccessToken->customer_access_token;
-            
+
         }catch(\Exception $e){
             $transaction->rollback();
             return false;
@@ -92,5 +94,66 @@ class CustomerAccessToken extends \common\models\CustomerAccessToken
         // var_dump($customerCode);exit();
         $customer = Customer::find()->where(['customer_phone'=>$customerCode->customer_phone])->one();
         return $customer == NULL ? false : $customer;
+    }
+
+    /**
+     * 验证POP调用BOSS系统的签名
+     */
+    public static function checkSign($phone, $sign, $channal_ename){
+        $key = 'pop_to_boss';
+        $customerChannal = CustomerChannal::find()->where(['channal_ename'=>$channal_ename])->one();
+        if ($customerChannal == NULL) {
+            return false;
+        }
+        if (md5($phone.$key) != $sign) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 为POP客户下发access_token
+     */
+    public static function generateAccessTokenForPop($phone, $sign, $channal_ename){
+        $check_sign = self::checkSign($phone, $sign, $channal_ename);
+        if (!$check_sign) {
+            return false;
+        }
+
+        $transaction = \Yii::$app->db->beginTransaction();
+        try{
+            $customerAccessTokens = self::find()->where(['customer_phone'=>$phone])->all();
+            if (!empty($customerAccessTokens)) {
+                foreach ($customerAccessTokens as $customerAccessToken) {
+                    $customerAccessToken->is_del = 1;
+                    $customerAccessToken->validate();
+                    $customerAccessToken->save();
+                }
+            }
+        
+            $customerAccessToken = new CustomerAccessToken;
+            $randstr = '';
+            for ($i=0; $i < 4; $i++) { 
+                $randstr .= rand(0, 9);
+            }
+
+            $customerAccessToken->customer_access_token = md5($phone.$randstr);
+            $customerAccessToken->customer_access_token_expiration = 2 * 3600;
+            $customerAccessToken->customer_code_id = 0;
+            $customerAccessToken->customer_code = '';
+            $customerAccessToken->customer_phone = $phone;
+            $customerAccessToken->created_at = time();
+            $customerAccessToken->updated_at = 0;
+            $customerAccessToken->is_del = 0;
+            $customerAccessToken->validate();
+            $customerAccessToken->save();
+            $transaction->commit();
+            return $customerAccessToken->customer_access_token;
+
+        }catch(\Exception $e){
+            $transaction->rollback();
+            return false;
+        }
+        
     }
 }
