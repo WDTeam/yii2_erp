@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use common\models\Worker;
+use yii\bootstrap\Modal;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -11,16 +12,24 @@ use common\models\Worker;
  */
 $this->title = Yii::t('app', '阿姨管理');
 $this->params['breadcrumbs'][] = $this->title;
-//var_dump($workerBlockData->workerBlock->worker_block_start_time);die;
+$workerVacationModel = new \common\models\WorkerVacation();
+$workerModel = new \common\models\Worker();
 ?>
 
-    <div style="height:1000px">
+<div style="height:1000px">
+    <?php
+//    Modal::begin([
+//        'header' => '<h4 class="modal-title">操作请假信息</h4>',
+//        'toggleButton' => ['label' => '<i class="fa fa-fw fa-lock"></i>操作请假信息', 'class' => 'btn btn-primary']
+//    ]);
+//    echo $this->render('create_vacation',['workerModel'=>$workerModel,'workerVacationModel'=>$workerVacationModel]);
+//    Modal::end();
+    ?>
     <?php
     Pjax::begin();
     echo GridView::widget([
         'dataProvider' => $workerVacationData,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
             [
                 'attribute'=>'worker_id',
                 'label'=>'阿姨姓名',
@@ -63,6 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'after' => '',
 //            'showFooter' => true
 //        ],
+        'summary'=>false
     ]);
     Pjax::end();
     ?>

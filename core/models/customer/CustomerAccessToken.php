@@ -4,7 +4,7 @@ namespace core\models\customer;
 
 use Yii;
 use core\models\customer\CustomerCode;
-use common\models\Customer;
+use core\models\customer\Customer;
 use core\models\customer\CustomerChannal;
 
 /**
@@ -22,12 +22,26 @@ use core\models\customer\CustomerChannal;
 class CustomerAccessToken extends \common\models\CustomerAccessToken
 {
     public static function generateAccessToken($phone, $code){
-        if (!CustomerCode::checkCode($phone, $code)) {
-            return false;
+        $check_code = CustomerCode::checkCode($phone, $code);
+        // var_dump($check_code);
+        // exit();
+        if ($check_code == false) {
+            return $check_code;
         }
 
         $transaction = \Yii::$app->db->beginTransaction();
         try{
+            //没有客户则创建
+            $customer = Customer::find()->where(['customer_phone'=>$phone])->one();
+            if ($customer == NULL) {
+                $customer = new Customer;
+                $customer->customer_phone = $phone;
+                $customer->created_at = time();
+                $customer->updated_at = 0;
+                $customer->is_del = 0;
+                $customer->save();
+            }
+
             $customerAccessTokens = self::find()->where(['customer_code'=>$code])->all();
             foreach ($customerAccessTokens as $customerAccessToken) {
                 $customerAccessToken->is_del = 1;
@@ -51,6 +65,9 @@ class CustomerAccessToken extends \common\models\CustomerAccessToken
             $customerAccessToken->updated_at = 0;
             $customerAccessToken->is_del = 0;
             $customerAccessToken->validate();
+            if ($customerAccessToken->hasErrors()) {
+                var_dump($customerAccessToken->getErrors());
+            }
             $customerAccessToken->save();
             $transaction->commit();
             return $customerAccessToken->customer_access_token;
@@ -122,6 +139,17 @@ class CustomerAccessToken extends \common\models\CustomerAccessToken
 
         $transaction = \Yii::$app->db->beginTransaction();
         try{
+            //没有客户则创建
+            $customer = Customer::find()->where(['customer_phone'=>$phone])->one();
+            if ($customer == NULL) {
+                $customer = new Customer;
+                $customer->customer_phone = $phone;
+                $customer->created_at = time();
+                $customer->updated_at = 0;
+                $customer->is_del = 0;
+                $customer->save();
+            }
+
             $customerAccessTokens = self::find()->where(['customer_phone'=>$phone])->all();
             if (!empty($customerAccessTokens)) {
                 foreach ($customerAccessTokens as $customerAccessToken) {

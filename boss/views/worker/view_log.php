@@ -10,7 +10,6 @@ use common\models\SystemUser;
  * @var yii\data\ActiveDataProvider $dataProvider
  * @var boss\models\WorkerSearch $searchModel
  */
-$this->title = Yii::t('app', '阿姨日志管理');
 $this->params['breadcrumbs'][] = $this->title;
 //var_dump($workerBlockData->workerBlock->worker_block_start_time);die;
 ?>
@@ -44,7 +43,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute'=>'worker_block_operate_bak',
                 'format' => 'raw',
                 'label' => '操作备注',
-
             ],
             [
                 'attribute'=>'worker_block_operate_id',
