@@ -14,6 +14,7 @@ class m150918_140930_create_table_finance_settle_apply extends Migration
         $this->createTable('{{%finance_settle_apply}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT  COMMENT \'主键\'' ,
             'worder_id' => Schema::TYPE_INTEGER . '(10) NOT NULL COMMENT \'阿姨id\'',
+            'worder_name' => Schema::TYPE_STRING . '(30) NOT NULL COMMENT \'阿姨姓名\'',
             'worder_tel' => Schema::TYPE_STRING . '(11) NOT NULL COMMENT \'阿姨电话\'',
             'worker_type_id' => Schema::TYPE_INTEGER . '(2) NOT NULL COMMENT \'阿姨类型Id,1自营 2非自营\'',
             'worker_type_name' => Schema::TYPE_STRING . '(30) NOT NULL COMMENT \'阿姨职位类型\'',
@@ -38,6 +39,7 @@ class m150918_140930_create_table_finance_settle_apply extends Migration
             'finance_settle_apply_reviewer' => Schema::TYPE_STRING . '(20)  COMMENT \'审核人姓名\'',
             'finance_settle_apply_starttime' => Schema::TYPE_INTEGER . '(10)  COMMENT \'本次结算开始时间(统计)，例如：2015.9.1 00:00:00对应的int值\'',
             'finance_settle_apply_endtime' => Schema::TYPE_INTEGER . '(10)  COMMENT \'本次结算结束时间(统计)，例如：2015.9.30 23:59:59对应的int值\'',
+            'isManagementFeeDone' => Schema::TYPE_SMALLINT. '(1) DEFAULT 0 COMMENT \'门店服务管理费是否已结算，0为未结算，1为已结算\'',
             'isdel' => Schema::TYPE_SMALLINT. '(1) DEFAULT 0 COMMENT \'是否被删除，0为启用，1为删除\'',
             'updated_at' => Schema::TYPE_INTEGER . '(11)  COMMENT \'审核时间\'',
             'created_at' => Schema::TYPE_INTEGER. '(11) COMMENT \'申请时间\'',

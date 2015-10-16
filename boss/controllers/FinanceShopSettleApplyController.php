@@ -131,16 +131,7 @@ class FinanceShopSettleApplyController extends Controller
         $searchModel = new FinanceShopSettleApplySearch;
         $searchModel->load($requestParams);
         if(!empty($searchModel->shop_id)){
-            $shopModel = Shop::findById($searchModel->shop_id);
-            $shopManagerModel = ShopManager::findById($searchModel->shop_manager_id);
-            $searchModel->shop_name = $shopModel->name;
-            $searchModel->shop_manager_name = $shopManagerModel->name;
-            $searchModel->finance_shop_settle_apply_fee_per_order = FinanceShopSettleApplySearch::MANAGE_FEE_PER_ORDER;
-            $searchModel->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_INIT;
-            $searchModel->finance_shop_settle_apply_cycle = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_CYCLE_WEEK;
-            $searchModel->finance_shop_settle_apply_cycle_des = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_CYCLE_WEEK_DES;
-            $searchModel->created_at = time();
-            $searchModel->save();
+            $this->saveAndGenerateSettleData([['shop_id'=>$searchModel->shop_id,'shop_manager_id'=>$searchModel->shop_manager_id],], '', '');
         }
         return $this->redirect('/finance-shop-settle-apply/index?review_section='.FinanceShopSettleApplySearch::BUSINESS_REVIEW);
     }
@@ -285,6 +276,37 @@ class FinanceShopSettleApplyController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+    
+    /**
+    * 本文件是用于门店每周（例如：2015.9.21-2015.9.27）的结算
+    * 1.获取所有小家政门店的信息
+    * 2.用每个小家政门店的Id从阿姨结算表中获取小家政服务费
+    * 3.保存小家政的结算信息到数据库表
+    */
+    public function actionShopCycleSettlement(){
+        $settleStartTime = date('Y-m-d 00:00:00', strtotime('-1 week last monday'));;//统计开始时间,上周第一天
+        echo $settleStartTime.'------';
+        $settleEndTime = date('Y-m-d 23:59:59', strtotime('last sunday'));//统计结束时间,上周最后一天
+        echo $settleEndTime.'------';
+        //获取阿姨的数组信息
+        $shopArr = array(['worker_id'=>'555','worker_name'=>'阿姨1','worker_idcard'=>'4210241983','worker_bank_card'=>'62217978'],['worker_id'=>'666','worker_name'=>'阿姨2','worker_idcard'=>'4210241984','worker_bank_card'=>'622174747']);
+        $this->saveAndGenerateSettleData($shopArr,$settleStartTime,$settleEndTime);
+    }
+    
+    private function saveAndGenerateSettleData($shopArr,$settleStartTime,$settleEndTime){
+        foreach($shopArr as $shop){
+            $shopModel = Shop::findById($shop->id);
+            $shopManagerModel = ShopManager::findById($shop->shop_manager_id);
+            $searchModel->shop_name = $shopModel->name;
+            $searchModel->shop_manager_name = $shopManagerModel->name;
+            $searchModel->finance_shop_settle_apply_fee_per_order = FinanceShopSettleApplySearch::MANAGE_FEE_PER_ORDER;
+            $searchModel->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_INIT;
+            $searchModel->finance_shop_settle_apply_cycle = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_CYCLE_WEEK;
+            $searchModel->finance_shop_settle_apply_cycle_des = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_CYCLE_WEEK_DES;
+            $searchModel->created_at = time();
+            $searchModel->save();
         }
     }
 }
