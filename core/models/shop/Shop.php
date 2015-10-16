@@ -183,4 +183,12 @@ class Shop extends \common\models\Shop
     public static function findById($id) {
         return self::findOne(['id'=>$id]);
     }
+    /**
+     * 获取所有有效shop_id并带manager_id
+     */
+    public static function getShopIds()
+    {
+        return self::find()->select(['id as shop_id','manager_id'])
+        ->where('isdel is null or isdel=0')->asArray()->all();
+    }
 }
