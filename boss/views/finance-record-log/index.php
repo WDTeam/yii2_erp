@@ -59,12 +59,8 @@ $this->params['breadcrumbs'][] = $this->title;
         		},
         		'width' => "100px",
     		],
-    		
-    		
-    		
             'finance_record_log_manual_count', //人工确认笔数
             'finance_record_log_manual_sum_money',
-            'id',
             [
             'format' => 'raw',
             'label' => '未处理笔数',
