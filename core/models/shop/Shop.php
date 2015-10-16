@@ -180,4 +180,7 @@ class Shop extends \common\models\Shop
         $models = Worker::find()->where(['shop_id'=>$this->id])->all();
         return (array)$models;
     }
+    public static function findById($id) {
+        return self::findOne(['id'=>$id]);
+    }
 }
