@@ -9,15 +9,11 @@ use kartik\datecontrol\DateControl;
  * @var common\models\FinancePayChannel $model
  */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('boss', 'Finance Pay Channels'), 'url' => ['index']];
+$this->title = $model->finance_pay_channel_name;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('boss', '支付渠道管理'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="finance-pay-channel-view">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
-
 
     <?= DetailView::widget([
             'model' => $model,
@@ -29,17 +25,23 @@ $this->params['breadcrumbs'][] = $this->title;
             'type'=>DetailView::TYPE_INFO,
         ],
         'attributes' => [
-            'id',
+           // 'id',
             'finance_pay_channel_name',
             'finance_pay_channel_rank',
-            'finance_pay_channel_is_lock',
-            'create_time:datetime',
-            'is_del',
+    		[
+    		'format' => 'raw',
+    		'label' => '状态',
+    		'attribute'=>'finance_pay_channel_is_lock',
+    		'type'=> DetailView::INPUT_RADIO_LIST,
+    		'items'=>['1' => '开启', '2' => '关闭'],
+    		],
+           // 'create_time:datetime',
+          //  'is_del',
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],
         'data'=>[
-        'confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'),
+        'confirm'=>Yii::t('app', '你确定删除吗?'),
         'method'=>'post',
         ],
         ],

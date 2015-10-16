@@ -36,6 +36,7 @@ if(isset($order_channel_info->finance_order_channel_name)){
     <?= DetailView::widget([
             'model' => $model,
             'condensed'=>false,
+    		'buttons1'=>'<a href="javascript:history.go(-1)">返回</a>',
             'hover'=>true,
             'mode'=>Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
             'panel'=>[
@@ -100,17 +101,17 @@ if(isset($order_channel_info->finance_order_channel_name)){
     		'attribute' => 'finance_pop_order_info_msg',
     		'type' => DetailView::INPUT_TEXT,
     		'displayOnly' => true,
-    		'value'=>'订单提交成功--订单系统确认--订单正在分发中--订单分发到*阿姨--阿姨已确定--阿姨已上门--阿姨开始服务--订单完成--用户已评价',
+    		'value'=>'(需要洪优提供接口)--订单提交成功--订单系统确认--订单正在分发中--订单分发到*阿姨--阿姨已确定--阿姨已上门--阿姨开始服务--订单完成--用户已评价',
     		],
         ],
-        'deleteOptions'=>[
+         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],
         'data'=>[
         'confirm'=>Yii::t('app', '你确定你要删除吗?'),
         'method'=>'post',
         ],
         ],
-        'enableEditMode'=>true,
+        'enableEditMode'=>true, 	     
     ]) ?>
 
 </div>

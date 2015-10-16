@@ -17,14 +17,6 @@ use core\models\Operation\CoreOperationShopDistrict;
 class WorkerDistrict extends \common\models\WorkerDistrict
 {
 
-    public static function saveWorkerDistrict($worker_id,$workerDistrictArr){
-        $model = self::find()->where;
-        if($workerDistrictArr){
-
-        }
-
-    }
-
     //public static function updateWorkerDistrict();
 
     /*
@@ -33,6 +25,5 @@ class WorkerDistrict extends \common\models\WorkerDistrict
     public function getDistrict(){
         return $this->hasMany(CoreOperationShopDistrict::className(),['id'=>'operation_shop_district_id']);
     }
-
 
 }

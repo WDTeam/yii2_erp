@@ -9,16 +9,12 @@ use kartik\datecontrol\DateControl;
  * @var common\models\FinanceOrderChannel $model
  */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('boss', 'Finance Order Channels'), 'url' => ['index']];
+$this->title = $model->finance_order_channel_name;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('boss', '渠道管理'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="finance-order-channel-view">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
-
-
+    
     <?= DetailView::widget([
             'model' => $model,
             'condensed'=>false,
@@ -29,12 +25,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'type'=>DetailView::TYPE_INFO,
         ],
         'attributes' => [
-            'id',
+           // 'id',
             'finance_order_channel_name',
             'finance_order_channel_sort',
-            'finance_order_channel_is_lock',
-            'create_time:datetime',
-            'is_del',
+          //'finance_order_channel_is_lock',
+    		[
+    		'format' => 'raw',
+    		'label' => '状态',
+    		'attribute'=>'finance_order_channel_is_lock',
+    		'type'=> DetailView::INPUT_RADIO_LIST,
+    		'items'=>['1' => '开启', '2' => '关闭'],
+    		],
+    	
+         //   'create_time:datetime',
+          //  'is_del',
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],

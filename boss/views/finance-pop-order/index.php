@@ -14,6 +14,10 @@ use yii\widgets\ActiveForm;
 
 $this->title = Yii::t('app', '对账管理');
 $this->params['breadcrumbs'][] = $this->title;
+
+
+
+
 ?>
 <div class="finance-pop-order-index hideTemp">
       <div class="panel panel-info">
@@ -32,8 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
     'action' => ['indexall'],
     'method' => 'post'
     		]);
-  
-
+ 
      echo GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
@@ -43,8 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
      		'name'=>'ids'
 
 ],
-     		
-         //   'id',
+           //'id',
             'finance_pop_order_number',
            // 'finance_order_channel_id',
      		[
@@ -82,23 +84,31 @@ $this->params['breadcrumbs'][] = $this->title;
             },
             'width' => "100px",
             ],
-            'finance_pop_order_sum_money', 
-        //   'finance_pop_order_coupon_count', 
-//            'finance_pop_order_coupon_id', 
-//            'finance_pop_order_order2', 
-//            'finance_pop_order_channel_order', 
-//            'finance_pop_order_order_type', 
-//            'finance_pop_order_finance_isok', 
-           'finance_pop_order_discount_pay', 
-           'finance_pop_order_reality_pay', 
-//            'finance_pop_order_order_time:datetime', 
-//            'finance_pop_order_pay_time:datetime', 
+            'finance_pop_order_sum_money', // 总金额
+           /* 'finance_pop_order_coupon_count', 
+           'finance_pop_order_coupon_id', 
+           'finance_pop_order_order2', 
+           'finance_pop_order_channel_order', 
+           'finance_pop_order_order_type', 
+           'finance_pop_order_finance_isok',  */
+            [
+            'format' => 'raw',
+            'label' =>FinancePopOrderSearch::get_stypname($channleid),
+            'value' => function ($dataProvider) {
+            	return $dataProvider->finance_pop_order_discount_pay;
+            },
+            'width' => "100px",
+            ],
+          	//'finance_pop_order_discount_pay', //优惠金额
+           'finance_pop_order_reality_pay', //实际收款
+			//'finance_pop_order_order_time:datetime', 
+			//'finance_pop_order_pay_time:datetime', 
             //'finance_pop_order_pay_status', 
             [
             'format' => 'raw',
             'label' => '状态',
             'value' => function ($dataProvider) {
-            if($dataProvider->finance_pop_order_status==1){ $status='结算';}else{ $status='<font color="red">退款</font>';}
+            if($dataProvider->finance_pop_order_status==1){ $status='结算';}elseif($dataProvider->finance_pop_order_status==2){ $status='<font color="red">退款</font>';}elseif($dataProvider->finance_pop_order_status==3){ $status='<font color="red">服务费</font>';}elseif($dataProvider->finance_pop_order_status==4){ $status='<font color="red">转账</font>';}
             	return $status;
             },
             'width' => "100px",
@@ -134,7 +144,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'data-method' => 'post',
                         'data-pjax' => '0'
                     ];
-                    return Html::a('<span class="glyphicon glyphicon-tags"></span>', Yii::$app->urlManager->createUrl(['finance-pop-order/tagssign','id' => $model->id,'edit'=>'bak','oid'=>$model->finance_record_log_id]), $options);
+                    return Html::a('<span class="glyphicon glyphicon-tags"></span>', Yii::$app->urlManager->createUrl(['finance-pop-order/tagssign','id' => $model->id,'edit'=>'baksite','oid'=>$model->finance_record_log_id]), $options);
                 }
                 ],
             ],
@@ -143,8 +153,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'hover'=>true,
         'condensed'=>true,
         'floatHeader'=>true,
-
-
         'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '. Html::encode($this->title) . ' </h3>',
             'type'=>'info',
@@ -152,7 +160,7 @@ $this->params['breadcrumbs'][] = $this->title;
            Html::submitButton(Yii::t('app', '批量 '), ['class' => 'btn btn-default','style' => 'margin-right:10px']).
            Html::a('<i class="glyphicon" ></i>对账成功(总额:'.$searchModel->OrderPayStatus(1,$lastidRecordLogid).')', ['index?FinancePopOrderSearch[finance_pop_order_pay_status_type]=1&id='.$lastidRecordLogid], ['class' => 'btn btn-'.$searchModel->defaultcss(1,$statusdeflde).'', 'style' => 'margin-right:10px']) .
 Html::a('<i class="glyphicon" ></i>我有你没 (总额:'.$searchModel->OrderPayStatus(3,$lastidRecordLogid).')', ['orderlist?FinancePopOrderSearch[finance_pop_order_pay_status_type]=3&id='.$lastidRecordLogid], ['class' => 'btn btn-'.$searchModel->defaultcss(3,$statusdeflde).'', 'style' => 'margin-right:10px']) .
-Html::a('<i class="glyphicon" ></i>你有我没 (总额:'.$searchModel->OrderPayStatus(2,$lastidRecordLogid).')', ['index?FinancePopOrderSearch[finance_pop_order_pay_status_type]=2&id='.$lastidRecordLogid], ['class' => 'btn btn-'.$searchModel->defaultcss(2,$statusdeflde).'', 'style' => 'margin-right:10px']) .
+Html::a('<i class="glyphicon" ></i>你有我没 (总额:'.$searchModel->OrderPayStatus('2',$lastidRecordLogid).')', ['index?FinancePopOrderSearch[finance_pop_order_pay_status_type]=2&id='.$lastidRecordLogid], ['class' => 'btn btn-'.$searchModel->defaultcss(2,$statusdeflde).'', 'style' => 'margin-right:10px']) .
 Html::a('<i class="glyphicon" ></i>金额不对 (总额:'.$searchModel->OrderPayStatus(4,$lastidRecordLogid).')', ['index?FinancePopOrderSearch[finance_pop_order_pay_status_type]=4&id='.$lastidRecordLogid], ['class' => 'btn btn-'.$searchModel->defaultcss(4,$statusdeflde).'', 'style' => 'margin-right:10px']) .
 Html::a('<i class="glyphicon" ></i>状态不对(总额:'.$searchModel->OrderPayStatus(5,$lastidRecordLogid).')', ['index?FinancePopOrderSearch[finance_pop_order_pay_status_type]=5&id='.$lastidRecordLogid], ['class' => 'btn btn-'.$searchModel->defaultcss(5,$statusdeflde).'', 'style' => 'margin-right:10px']),
 			/* 'after' => Html::a('批量审核',

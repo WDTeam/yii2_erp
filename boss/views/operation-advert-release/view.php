@@ -44,12 +44,26 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
         <h1 class="panel-title">广告列表：<br /></h1>
         <ul class="list-group">
-            <?php foreach($adverts as $k => $v){?>
-            <li class="list-group-item list-group-item-info">
-                <?php //echo Html::checkbox('advert[]', false, ['value' => $v['id']]);?>
-                <?php echo $v['position_name'].':'.$v['operation_advert_content_name'].'(上线时间：'.$v['starttime'].' 下线时间：'.$v['endtime'].')';?>
-            </li>
-            <?php }?>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>位置名称</th>
+                        <th>内容名称</th>
+                        <th>上线时间</th>
+                        <th>下线时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach($adverts as $k => $v){?>
+                    <tr>
+                        <td><?php echo $v['position_name'];?></td>
+                        <td><?php echo $v['operation_advert_content_name'];?></td>
+                        <td><?php echo $v['starttime'];?></td>
+                        <td><?php echo $v['endtime'];?></td>
+                    </tr>
+                <?php }?>
+                </tbody>
+            </table>
         </ul>
     </div>
 </div>

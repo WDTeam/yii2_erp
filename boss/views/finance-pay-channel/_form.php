@@ -5,6 +5,8 @@ use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
 
+$model->finance_pay_channel_is_lock=1;
+$model->is_del=0;
 /**
  * @var yii\web\View $this
  * @var common\models\FinancePayChannel $model
@@ -21,15 +23,14 @@ use kartik\datecontrol\DateControl;
     'columns' => 1,
     'attributes' => [
 
-'finance_pay_channel_rank'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 排序...']], 
+'finance_pay_channel_rank'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'排序...']],   		
+'finance_pay_channel_is_lock'=>['type'=> Form::INPUT_RADIO_LIST, 'items'=>['1' => '开启', '2' => '关闭'],
+    		'options'=>[]],    				
+//'create_time'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 增加时间...']], 
 
-'finance_pay_channel_is_lock'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 1 上架 2 下架...']], 
+//'is_del'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 0 正常 1 删除...']], 
 
-'create_time'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 增加时间...']], 
-
-'is_del'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 0 正常 1 删除...']], 
-
-'finance_pay_channel_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 渠道名称...', 'maxlength'=>50]], 
+'finance_pay_channel_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'渠道名称...', 'maxlength'=>50]], 
 
     ]
 

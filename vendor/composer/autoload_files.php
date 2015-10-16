@@ -28,6 +28,7 @@ return array(
     $vendorDir . '/jpush/jpush/src/JPush/Exception/APIConnectionException.php',
     $vendorDir . '/jpush/jpush/src/JPush/Exception/APIRequestException.php',
     $vendorDir . '/ejiajie/pay/alipay_app/alipay_class.php',
+    $vendorDir . '/ejiajie/pay/wx_js/wxjspay_class.php',
     $vendorDir . '/ejiajie/pay/wx_app/wxpay_class.php',
     $vendorDir . '/ejiajie/pay/bfb_app/bfbpay_class.php',
     $vendorDir . '/ejiajie/pay/upacp_app/uppay_class.php',

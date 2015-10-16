@@ -43,14 +43,28 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1 class="panel-title">可发布的广告：</h1>
     <div class="panel-body">
         <ul class="list-group">
-            <?php foreach($data as $k => $v){?>
-            <li class="list-group-item list-group-item-info">
-                <?php echo Html::checkbox('advert[id][]', false, ['value' => $v['id']]);?>
-                <?php echo $v['position_name'].':'.$v['operation_advert_content_name'];?>
-                <label>上线时间：<?php echo Html::textInput('advert[starttime][]');?></label>
-                <label>上线时间：<?php echo Html::textInput('advert[endtime][]');?> 格式：2015-10-01 08:20:25</label>
-            </li>
-            <?php }?>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>选择</th>
+                        <th>位置名称</th>
+                        <th>广告名称</th>
+                        <th>上线时间</th>
+                        <th>下线时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach($data as $k => $v){?>
+                    <tr>
+                        <td><?php echo Html::checkbox('advert[id][]', false, ['value' => $v['id']]);?></td>
+                        <td><?php echo $v['position_name'];?></td>
+                        <td><?php echo $v['operation_advert_content_name'];?></td>
+                        <td><?php echo Html::textInput('advert[starttime][]');?> 格式：2015-10-01 08:20:25</td>
+                        <td><?php echo Html::textInput('advert[endtime][]');?> 格式：2015-10-01 08:20:25</td>
+                    </tr>
+                <?php }?>
+                </tbody>
+            </table>
         </ul>
     </div>
 </div>

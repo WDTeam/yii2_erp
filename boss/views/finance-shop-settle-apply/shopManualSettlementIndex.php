@@ -5,6 +5,7 @@ use kartik\grid\GridView;
 use kartik\widgets\ActiveForm;
 use yii\widgets\Pjax;
 use boss\models\FinanceShopSettleApplySearch;
+use boss\widgets\ShopSelect;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -28,8 +29,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
             ?>
-            <div class='col-md-6'>
-                <?= $form->field($model, 'shop_name') ?>
+           <div class='col-md-4'>
+                <?php 
+                echo ShopSelect::widget([
+                        'model'=>$model,
+                        'shop_manager_id'=>'shop_manager_id',
+                        'shop_id'=>'shop_id',
+                        ]);
+                ?>
             </div>
             <div class='col-md-2' >
                 <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
@@ -65,30 +72,30 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="panel-body settle-detail-body">
             <div class='col-md-2'>
-                爱佳家政
+                <?php echo $model->shop_manager_name?>
             </div>
             <div class='col-md-2'>
-                爱佳家政北京双井店
+                <?php echo $shopModel->name?>
             </div>
             <div class='col-md-2'>
-                20
+                <?php echo $shopModel->worker_count?>
             </div>
             <div class='col-md-2'>
-                张三
+                <?php echo $shopModel->principal?>
             </div>
             <div class='col-md-2'>
-                13456789000
+                <?php echo $shopModel->tel?>
             </div>
             <div class='col-md-2'>
-                2015-09-10 17:30:00
+                <?php echo  date('Y:m:d H:i:s',$shopModel->created_at)?>
             </div>
         </div>
         <div class="panel-heading">
             <label class="panel-title">门店结算明细</label>
-        <?=
-
-            Html::a('结算', ['shop-manual-settlement-done?FinanceShopSettleApplySearch[shop_id]='.$model->shop_id], ['class' => 'btn btn-success ']);
-
+        <?php
+            if($model->finance_shop_settle_apply_order_count > 0){
+                echo Html::a('结算', ['shop-manual-settlement-done?FinanceShopSettleApplySearch[shop_id]='.$model->shop_id.'&FinanceShopSettleApplySearch[shop_manager_id]='.$model->shop_manager_id.'&FinanceShopSettleApplySearch[finance_shop_settle_apply_order_count]='.$model->finance_shop_settle_apply_order_count.'&FinanceShopSettleApplySearch[finance_shop_settle_apply_fee]='.$model->finance_shop_settle_apply_fee], ['class' => 'btn btn-success ']);
+            }
          ?>
         </div>
         <div class="panel-body settle-detail-body">
@@ -101,10 +108,10 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="panel-body settle-detail-body">
             <div class='col-md-6'>
-                250
+                <?php echo $model->finance_shop_settle_apply_order_count ?>
             </div>
             <div class='col-md-6'>
-                2500
+                <?php echo $model->finance_shop_settle_apply_fee ?>
             </div>
         </div>
         <div class="panel-heading">
@@ -113,17 +120,23 @@ $this->params['breadcrumbs'][] = $this->title;
         <div>
             
              <?php Pjax::begin(); echo GridView::widget([
-        'dataProvider' => $orderIncomeDataProvider,
+        'dataProvider' => $financeSettleApplyDataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            ['attribute'=>'worker_idcard',
+            ['attribute'=>'worder_id',
                  'content'=>function($model,$key,$index)
-                        {return  Html::a('<u>'.$model->order_id.'</u>',[Yii::$app->urlManager->createUrl(['order/view/','id' => $model->order_id])],['target'=>'_blank']);}],
-            'worker_name',
-            'worker_phone',
-            'worker_type', 
-            'order_count', 
-            'manage_fee', 
+                        {return  Html::a('<u>'.$model->worder_id.'</u>',[Yii::$app->urlManager->createUrl(['order/view/','id' => $model->worder_id])],['target'=>'_blank']);}],
+            'worder_tel',
+            'worker_type_name',
+            'worker_rule_name', 
+            'finance_settle_apply_order_count', 
+             [
+                'header' => Yii::t('app', '服务费'),
+                'attribute' => 'finance_settle_apply_order_count',
+                'content'=>function($model,$key,$index){
+                            return $model->finance_settle_apply_order_count * FinanceShopSettleApplySearch::MANAGE_FEE_PER_ORDER;
+                },
+            ],                   
         ],
         'responsive'=>true,
         'hover'=>true,

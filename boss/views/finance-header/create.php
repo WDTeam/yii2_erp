@@ -10,7 +10,7 @@ use yii\helpers\Html;
 $this->title = Yii::t('boss', ' {modelClass}', [
     'modelClass' => '添加表头',
 ]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('boss', 'Finance Headers'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('boss', '配置对账表头'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>

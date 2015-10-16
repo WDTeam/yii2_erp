@@ -12,6 +12,8 @@ use boss\models\FinanceWorkerOrderIncomeSearch;
 use boss\models\FinanceSettleApplySearch;
 use PHPExcel;
 use PHPExcel_IOFactory;
+use core\models\shop\Shop;
+use core\models\shop\ShopManager;
 
 /**
  * FinanceShopSettleApplyController implements the CRUD actions for FinanceShopSettleApply model.
@@ -98,15 +100,22 @@ class FinanceShopSettleApplyController extends Controller
      */
     public function actionShopManualSettlementIndex()
     {
-        $orderIncomeSearchModel = new FinanceWorkerOrderIncomeSearch;
-        $orderIncomeDataProvider = $orderIncomeSearchModel->search(Yii::$app->request->getQueryParams());
+        $requestParams = Yii::$app->request->getQueryParams();
         $searchModel = new FinanceShopSettleApplySearch;
         $searchModel->review_section = Yii::$app->request->getQueryParams()['review_section'];
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        $searchModel->load($requestParams);
+        $shopModel = Shop::findById($searchModel->shop_id);
+        $shopManagerModel = ShopManager::findById($searchModel->shop_manager_id);
+        $searchModel->shop_manager_name = $shopManagerModel->name;
+        $searchModel->getShopSettleInfo($searchModel->shop_id);
+        $financeSettleApplySearchModel = new FinanceSettleApplySearch;
+        
+        $financeSettleApplySearchModel->shop_id = $searchModel->shop_id;
+        $financeSettleApplyDataProvider = $financeSettleApplySearchModel->search($requestParams);
         return $this->render('shopManualSettlementIndex', [
-            'dataProvider' => $dataProvider,
-            'orderIncomeDataProvider' => $orderIncomeDataProvider,
+            'financeSettleApplyDataProvider' => $financeSettleApplyDataProvider,
             'model' => $searchModel,
+            'shopModel' => $shopModel,
         ]);
     }
     
@@ -116,6 +125,19 @@ class FinanceShopSettleApplyController extends Controller
      */
     public function actionShopManualSettlementDone()
     {
+        $requestParams = Yii::$app->request->getQueryParams();
+        $searchModel = new FinanceShopSettleApplySearch;
+        $searchModel->load($requestParams);
+        $shopModel = Shop::findById($searchModel->shop_id);
+        $shopManagerModel = ShopManager::findById($searchModel->shop_manager_id);
+        $searchModel->shop_name = $shopModel->name;
+        $searchModel->shop_manager_name = $shopManagerModel->name;
+        $searchModel->finance_shop_settle_apply_fee_per_order = FinanceShopSettleApplySearch::MANAGE_FEE_PER_ORDER;
+        $searchModel->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_INIT;
+        $searchModel->finance_shop_settle_apply_cycle = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_CYCLE_WEEK;
+        $searchModel->finance_shop_settle_apply_cycle_des = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_CYCLE_WEEK_DES;
+        $searchModel->created_at = time();
+        $searchModel->save();
         return $this->redirect('/finance-shop-settle-apply/index?review_section='.FinanceShopSettleApplySearch::BUSINESS_REVIEW);
     }
     
