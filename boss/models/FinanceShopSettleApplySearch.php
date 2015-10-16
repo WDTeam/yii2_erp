@@ -7,7 +7,6 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\FinanceShopSettleApply;
 use common\models\FinanceSettleApply;
-
 /**
  * FinanceShopSettleApplySearch represents the model behind the search form about `common\models\FinanceShopSettleApply`.
  */
@@ -18,6 +17,8 @@ class FinanceShopSettleApplySearch extends FinanceShopSettleApply
     const FINANCE_REVIEW = 2;//财务部门审核
     
     public $review_section;//审核部门
+    
+    const MANAGE_FEE_PER_ORDER = 10;//门店管理费，每单10元
     
     public $financeShopSettleApplyStatusArr = [
        FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED=>'财务审核不通过',
@@ -75,5 +76,12 @@ class FinanceShopSettleApplySearch extends FinanceShopSettleApply
     
     public function getShopSettleApplyStatusDes($shopSettleApplyStatus){
         return $this->financeShopSettleApplyStatusArr[$shopSettleApplyStatus];
+    }
+    
+    public function getShopSettleInfo($shopId){
+        $orderCount = FinanceSettleApply::find()->select(['sum(finance_settle_apply_order_count) as orderCount'])->andWhere(['shop_id'=>$shopId])->asArray()->all();
+        $this->finance_shop_settle_apply_order_count = $orderCount[0]['orderCount'];
+        $this->finance_shop_settle_apply_fee_per_order = self::MANAGE_FEE_PER_ORDER;
+        $this->finance_shop_settle_apply_fee = self::MANAGE_FEE_PER_ORDER * $this->finance_shop_settle_apply_order_count;
     }
 }
