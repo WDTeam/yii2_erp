@@ -46,7 +46,7 @@ use core\models\worker\WorkerRuleConfig;
     <div class="panel panel-info">
 
 
-        <div class="panel-heading"><h3 class="panel-title">门店信息</h3></div>
+        <div class="panel-heading"><h3 class="panel-title">基础信息</h3></div>
         <div class="panel-body">
             <?=  $form->field($worker, 'worker_work_city')->widget(Select2::classname(), [
                 'name' => 'worker_work_city',

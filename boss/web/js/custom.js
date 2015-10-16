@@ -24,20 +24,24 @@ $(document).ready(function(){
 	});
 
 	//给所有单选框添加样式
-	// $('input').iCheck({
+	// $('.MyRadioStyle input').iCheck({
 	// 	checkboxClass: 'icheckbox_square-blue',
 	// 	radioClass: 'iradio_square-blue',
 	// 	increaseArea: '10%' // optional
 	// });
 
+	$('.MyRadioStyle input').each(function(){
+		ApplyToRadio($(this));
+	});
 
-	// //触发单选框的change事件
-	// $('input').on('ifChecked', function(event){
-	// 	$(this).trigger("change");
-	// });
-	// $('input').on('ifUnchecked', function(event){
-	// 	$(this).trigger("change");
-	// });
+
+	 //触发单选框的change事件
+	 $('.MyRadioStyle input').on('ifChecked', function(event){
+	 	$(this).trigger("change");
+	 });
+	 $('.MyRadioStyle input').on('ifUnchecked', function(event){
+	 	$(this).trigger("change");
+	 });
 
 	//给所有的type=file外层添加一个<a>
 	$("input[type='file']").each(function() {
@@ -49,4 +53,23 @@ $(document).ready(function(){
 		$(this).parent().next().html($(this).val());
 	});
 });
+
+function ApplyToRadio(self){
+	var label = self;
+	var label_text = label.parent().text();
+
+	////截取文字长度
+	//if(label_text.length > 6) {
+	//	label.parent().attr('title', label_text);
+	//	label_text = label_text.substr(0,6) + '...';
+	//}
+
+	label.parent().html('').append(self);
+
+	self.iCheck({
+		checkboxClass: 'icheckbox_line-blue',
+		radioClass: 'iradio_line-blue',
+		insert: '<div class="icheck_line-icon"></div>' + label_text
+	});
+}
 

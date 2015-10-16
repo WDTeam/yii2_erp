@@ -85,6 +85,9 @@ class Order extends ActiveRecord
     public $order_worker_assign_type;
     public $shop_id;
     public $admin_id;
+
+    public $order_is_use_balance;
+
     public $attributesExt = [
         'order_before_status_dict_id',
         'order_before_status_name',
@@ -124,7 +127,8 @@ class Order extends ActiveRecord
         'order_worker_type_name',
         'order_worker_assign_type',
         'shop_id',
-        'admin_id'
+        'admin_id',
+        'order_is_use_balance'
     ];
 
     public function attributes(){
@@ -233,6 +237,7 @@ class Order extends ActiveRecord
             'order_worker_assign_type' => '工人接单方式 0未接单 1工人抢单 2客服指派 3门店指派',
             'shop_id' => '工人所属门店id',
             'admin_id' => '操作人id  0客户操作 1系统操作',
+            'order_is_use_balance'=>'是否使用余额 1是 0否'
         ];
     }
 

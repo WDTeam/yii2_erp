@@ -5,7 +5,7 @@ $this->title = Yii::t('app', 'Opened City').'管理';
 <div class="order-index">
     <div class="panel panel-info">
         <div class="panel-heading">
-            <h3 class="panel-title" style="display: inline-block">开通城市列表：<span class="badge"></span></h3>
+            <h3 class="panel-title" style="display: inline-block">开通城市列表<span class="badge"></span></h3>
             <a style="float:right" class="btn btn-primary btn-xs" href="/operation-city/release">上线城市</a>
         </div>
         <div class="panel-body">
@@ -33,7 +33,16 @@ $this->title = Yii::t('app', 'Opened City').'管理';
                         </td>
                         <td><?= $v['openshodistrictnum']?></td>
                         <td>
-                            <a href="<?= Yii::$app->urlManager->createUrl(['operation-city/settinggoodsinfo','city_id' => $value['city_id'], 'goods_id'=> $v['operation_goods_id'], 'cityAddGoods' => 'editGoods'])?>">编辑</a>
+                            <a href="<?= Yii::$app->urlManager->createUrl(
+                                [
+                                    'operation-city/settinggoodsinfo',
+                                    'city_id' => $value['city_id'],
+                                    'goods_id'=> $v['operation_goods_id'],
+                                    'cityAddGoods' => 'editGoods'
+                                ]
+                                )?>"
+                                class="btn btn-success btn-sm">编辑
+                            </a>
 
                             <br>
                         </td>

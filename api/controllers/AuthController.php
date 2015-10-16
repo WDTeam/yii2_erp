@@ -1,5 +1,6 @@
 <?php
 namespace api\controllers;
+
 use Yii;
 use \core\models\customer\CustomerCode;
 use \core\models\customer\CustomerAccessToken;
@@ -43,7 +44,7 @@ class AuthController extends \api\components\Controller
     public function actionLogin()
     {
         $phone = Yii::$app->request->post('phone');
-        $verifyCode = Yii::$app->request->post('verify_code');
+        verifyCode = Yii::$app->request->post('verify_code');
         if(empty($phone)||empty($verifyCode)){
             return $this->send(null, "用户名或验证码不能为空", "error",403,"数据不完整");
         }
@@ -66,7 +67,7 @@ class AuthController extends \api\components\Controller
     }
 
     /**
-     * @api {get} /mobileapidriver2/driver_login 阿姨登录
+     * @api {post} /mobileapidriver2/driver_login 阿姨登录
      * @apiName actionDriverLogin
      * @apiGroup Auth
      *
