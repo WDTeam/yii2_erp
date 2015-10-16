@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="panel-heading">
             <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i>门店搜索</h3>
         </div>
-
+        
         <div class="panel-body">
             <?php $form = ActiveForm::begin([
                  'type' => ActiveForm::TYPE_HORIZONTAL,
@@ -29,6 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
             ?>
+            <input type='hidden' value="<?= $model->shop_id ?>" id ='shopId' />
            <div class='col-md-4'>
                 <?php 
                 echo ShopSelect::widget([
@@ -46,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <?php ActiveForm::end(); ?>
         </div>
-
+     <div id = "manualSettleInfo">
         <div class="panel-heading">
                 <h3 class="panel-title">门店信息</h3>
         </div>
@@ -144,6 +145,25 @@ $this->params['breadcrumbs'][] = $this->title;
         'floatHeader'=>true,
     ]); Pjax::end(); ?>
         </div>
+         </div>
     </div>
 </div>
+
+ <?php 
+         
+            $js=<<<JS
+                    $(document).ready(
+                        function(){
+                            var shopId = $('#shopId').val();
+                            alert(shopId);
+                            if(shopId == ''){
+                                $('#manualSettleInfo').html('<h4  class="col-sm-12">请输入查询条件进行人工结算</h4>');
+                            }
+                        }
+                    );
+JS;
+        $this->registerJs(
+                $js
+        );
+         ?>
 

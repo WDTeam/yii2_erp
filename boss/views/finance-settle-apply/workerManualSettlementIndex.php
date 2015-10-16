@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ?>
             <div class='col-md-6'>
-                <?= $form->field($model, 'worder_tel') ?>
+                <?= $form->field($model, 'worder_tel')->textInput(['id'=>'worder_tel']) ?>
             </div>
             <div class='col-md-2' style='margin-top: 22px;'>
                 <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <?php ActiveForm::end(); ?>
         </div>
-
+    <div id = "manualSettleInfo">
         <div class="panel-heading">
                 <h3 class="panel-title">阿姨信息</h3>
         </div>
@@ -227,6 +227,23 @@ $this->params['breadcrumbs'][] = $this->title;
            ]); Pjax::end(); 
             ?>
         </div>
+        </div>
     </div>
 </div>
+         <?php 
+         
+            $js=<<<JS
+                    $(document).ready(
+                        function(){
+                            var worder_tel = $('#worder_tel').val();
+                            if(worder_tel == ''){
+                                $('#manualSettleInfo').html('<h4  class="col-sm-12">请输入查询条件进行人工结算</h4>');
+                            }
+                        }
+                    );
+JS;
+        $this->registerJs(
+                $js
+        );
+         ?>
 
