@@ -51,17 +51,7 @@ class OrderController extends BaseAuthController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $longitude = Yii::$app->request->get('lng');
         $latitude = Yii::$app->request->get('lat');
-        $shop_district_info= OperationShopDistrictController::getCoordinateShopDistrict($longitude, $latitude);
-        if(isset($shop_district_info['status']) && $shop_district_info['status']==1){
-            $goods = OperationGoodsController::getGoodsList($shop_district_info['data']['operation_city_id'], $shop_district_info['data']['operation_shop_district_id']);
-            if(isset($goods['status'])&&$goods['status']==1){
-                return ['code'=>200,'data'=>$goods['data']];
-            }else{
-                return ['code'=>500,'msg'=>'获取服务类别失败：没有匹配的服务'];
-            }
-        }else{
-            return ['code'=>500,'msg'=>'获取服务类别失败：没有匹配的商圈'];
-        }
+       return Order::getGoods($longitude,$latitude);
     }
 
     public function actionCoupons()

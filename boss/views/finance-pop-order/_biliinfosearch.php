@@ -15,12 +15,14 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\widgets\Select2;
 use kartik\date\DatePicker;
+
+
 ?>
 
 <div class="finance-pop-order-search">
     <?php $form = ActiveForm::begin([
         'action' => ['billinfo'],
-        'method' => 'post',
+        'method' => 'get',
     ]);
     ?>
   

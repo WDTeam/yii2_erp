@@ -37,7 +37,9 @@ class FinanceRecordLogController extends BaseAuthController
     public function actionIndex()
     {
         $searchModel = new FinanceRecordLogSearch;
+        
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        
 
         //支付渠道数据
         $ordedata= new FinanceOrderChannel;

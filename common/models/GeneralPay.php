@@ -207,11 +207,12 @@ class GeneralPay extends \yii\db\ActiveRecord
             "trade_type" => "JSAPI",
             "subject" => $this->subject(),
             "notify_url" => $this->notify_url('wx-h5'),
-            'openid' => $data['openid'],
+            'openid' => 'o7KvajnBQIengRoR8AWys280Jg5I',//$data['openid'],
         ];
-        dump($param);exit;
+
         $class = new \wxjspay_class();
         $msg = $class->get($param);
+        echo json_encode($msg);
         return $msg;
     }
 
@@ -388,6 +389,112 @@ class GeneralPay extends \yii\db\ActiveRecord
         //充值交易记录
         CustomerTransRecord::analysisRecord($attribute);
         return true;
+    }
+
+    /**
+     * 银联APP回调
+     * @param $data
+     * @throws \yii\db\Exception
+     */
+    public function upAppNotify($data)
+    {
+        //POST数据
+        if(!empty($data['debug'])){
+            $post = array (
+                "accessType" => "0",
+                "bizType" => "000201",
+                "certId" => "21267647932558653966460913033289351200",
+                "currencyCode" => "156",
+                "encoding" => "utf-8",
+                "merId" => "898111448161364",
+                "orderId" => "151010743932",
+                "queryId" => "201510101112461438298",
+                "reqReserved" => "透传信息",
+                "respCode" => "00",
+                "respMsg" => "Success!",
+                "settleAmt" => "1",
+                "settleCurrencyCode" => "156",
+                "settleDate" => "1010",
+                "signMethod" => "01",
+                "traceNo" => "143829",
+                "traceTime" => "1010111246",
+                "txnAmt" => "1",
+                "txnSubType" => "01",
+                "txnTime" => "20151010111246",
+                "txnType" => "01",
+                "version" => "5.0.0",
+                "signature" => "GnmVKKUPgdLc11K8zrwL5w5cTx1bieDdTniC2Psh7WEuk4y+53l8OzvE41KsJNyxBuBWAPBgypK+8jNJmGUU2x+tMU5Z0liIKVD5HWhboHxlwZvh0vMGfB8vlmIcbYipxUuWz3Jin11I6O8W6mvTAb76wJXrcbqZD1PKtVP7/5ldxpYsRh/MmEfeDFCcxqMk0uS/ON7XagGKkYSOxCcDMmQ4xRhNzLOthO8vkK6vPDWuowNjFdQXV8A2K9MxVqJNrR5QgR52Hm0dy9z5o09YhjDhMgwlyqRAgaBRbVDNt7qJXFyp3lcxwU9sJBkpOCYV6Cwi/03sWJA+W87U6+gN9Q=="
+            ) ;
+        }else{
+            $post = $data;
+        }
+        //实例化模型
+        //$model = new GeneralPay();
+
+        //实例化模型
+        $GeneralPayLogModel = new GeneralPayLog();
+
+        //记录日志
+        $dataLog = array(
+            'general_pay_log_price' => $this->toMoney($post['settleAmt'],100,'/'),   //支付金额
+            'general_pay_log_shop_name' => $post['reqReserved'],   //商品名称
+            'general_pay_log_eo_order_id' => $post['orderId'],   //订单ID
+            'general_pay_log_transaction_id' => $post['queryId'],   //交易流水号
+            'general_pay_log_status_bool' => $GeneralPayLogModel->statusBool($post['respMsg']),   //支付状态
+            'general_pay_log_status' => $post['respMsg'],   //支付状态
+            'pay_channel_id' => 12,  //支付渠道ID
+            'general_pay_log_json_aggregation' => json_encode($post),
+            'data' => $post //文件数据
+        );
+
+        $this->on('insertLog',[$GeneralPayLogModel,'insertLog'],$dataLog);
+        $this->trigger('insertLog');
+
+        //获取交易ID
+        $GeneralPayId = $this->getGeneralPayId($post['orderId']);
+
+        //查询支付记录
+        $model = GeneralPay::find()->where(['id'=>$GeneralPayId,'general_pay_status'=>0])->one();
+
+        //验证签名
+        $class = new \uppay_class();
+        $sign = $class->callback();
+
+        //验证支付结果
+        if( !empty($model) && !empty($sign) ){
+
+            $model->id = $GeneralPayId; //ID
+            $model->general_pay_status = 1; //支付状态
+            $model->general_pay_actual_money = $model->toMoney($post['settleAmt'],100,'/');
+            $model->general_pay_transaction_id = $post['queryId'];
+            $model->general_pay_is_coupon = 1;
+            $model->general_pay_eo_order_id = $post['orderId'];
+            $model->general_pay_verify = $model->makeSign();
+
+            //commit
+            $connection  = \Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+            try {
+                $model->save(false);
+                $attribute = $model->getAttributes();
+                if(!empty($model->order_id)){
+                    //支付订单
+                    GeneralPay::orderPay($attribute);
+                }else{
+                    //充值支付
+                    GeneralPay::pay($attribute);
+                }
+                $transaction->commit();
+
+                //发送短信事件
+                $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
+                $this->trigger('paySms');
+
+                $class->notify();
+            } catch(Exception $e) {
+                $transaction->rollBack();
+            }
+        }
     }
 
     /**

@@ -21,7 +21,7 @@ class FinancePopOrderSearch extends FinancePopOrder
     {
         return [
             [['id','finance_record_log_id', 'finance_order_channel_id', 'finance_pay_channel_id', 'finance_pop_order_worker_uid','finance_pop_order_status','finance_pop_order_booked_time', 'finance_pop_order_booked_counttime', 'finance_pop_order_coupon_id', 'finance_pop_order_order_type', 'finance_pop_order_finance_isok', 'finance_pop_order_order_time', 'finance_pop_order_pay_time', 'finance_pop_order_pay_status', 'finance_pop_order_check_id', 'finance_pop_order_finance_time', 'create_time', 'is_del'], 'integer'],
-            [['finance_record_log_id','finance_pop_order_number', 'finance_order_channel_title', 'finance_pay_channel_title', 'finance_pop_order_customer_tel', 'finance_pop_order_order2', 'finance_pop_order_channel_order', 'finance_pop_order_pay_title'], 'safe'],
+            [['finance_record_log_id','finance_order_channel_statuspayment','finance_order_channel_endpayment','finance_pop_order_number', 'finance_order_channel_title', 'finance_pay_channel_title', 'finance_pop_order_customer_tel', 'finance_pop_order_order2', 'finance_pop_order_channel_order', 'finance_pop_order_pay_title'], 'safe'],
             [['finance_pop_order_sum_money', 'finance_pop_order_coupon_count', 'finance_pop_order_discount_pay', 'finance_pop_order_reality_pay','finance_pop_order_pay_status_type'], 'number'],
         ];
     }
@@ -95,9 +95,10 @@ class FinancePopOrderSearch extends FinancePopOrder
     public static  function countnub($id)
     {
     	$sumt=FinancePopOrder::find()
+    	->andWhere(['finance_record_log_id' => $id])
     	->andWhere(['finance_pop_order_pay_status' => '0'])->asArray()->all();
     	if(count($sumt)>0){
-    		$name=count($sumt);
+    		$name='<font color="red">'.count($sumt).'条</font>';
     	}else{
     		$name=0;
     	}
@@ -113,9 +114,10 @@ class FinancePopOrderSearch extends FinancePopOrder
     public static  function summoney($id)
     {
     	$sumt=FinancePopOrder::find()->select(['sum(finance_pop_order_sum_money) as sumoney'])
+    	->andWhere(['finance_record_log_id' => $id])
     	->andWhere(['finance_pop_order_pay_status' => '0'])->asArray()->all(); 
     	if(count($sumt)>0){
-    		$name=$sumt[0]['sumoney'];
+    		$name='<font color="red">'.$sumt[0]['sumoney'].'</font>';
     	}else{
     		$name=0;
     	}
@@ -223,7 +225,7 @@ class FinancePopOrderSearch extends FinancePopOrder
     	if($date==0 || $date==""){
     		return '0';
     	}else{
-    		return $date;
+    		return '<font color="blue">'.$date.'</font>';
     	}
     }
     
@@ -449,12 +451,14 @@ class FinancePopOrderSearch extends FinancePopOrder
     if (isset($orderInfo->order_code)) {
     	$orderdateinfo=$orderInfo->getAttributes();
     	//$erty=$orderInfo->orderExtPay->pay_channel_id;
+    	if(isset($orderInfo->orderExtPay)){
     	$orderdateinfo['pay_channel_id']=$orderInfo->orderExtPay->pay_channel_id;
     	$orderdateinfo['order_pay_channel_name']=$orderInfo->orderExtPay->order_pay_channel_name;//支付渠道名称
     	$orderdateinfo['order_use_coupon_money']=$orderInfo->orderExtPay->order_use_coupon_money;//使用优惠卷金额
     	$orderdateinfo['order_use_promotion_money']=$orderInfo->orderExtPay->order_use_promotion_money;//使用促销金额
     	$orderdateinfo['order_pay_money']=$orderInfo->orderExtPay->order_pay_money;//支付金额
     	$orderdateinfo['coupon_id']=$orderInfo->orderExtPay->coupon_id;
+    	}
     	//第三方运营费用
     	$orderdateinfo['order_pop_operation_money']=$promote;
     	$orderdateinfo['finance_pop_order_reality_pay']=$accmay;
@@ -774,18 +778,7 @@ class FinancePopOrderSearch extends FinancePopOrder
     	}
     	return $orderdateinfo;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     public function OrderPayStatus($paramsinfo,$lastidRecordLogid)
     {
     $stype= 2;
@@ -807,11 +800,6 @@ class FinancePopOrderSearch extends FinancePopOrder
     }
     
     
-    
-    
-    
-    
-    
     public function search()
     {
         $query = FinancePopOrder::find();
@@ -826,6 +814,7 @@ class FinancePopOrderSearch extends FinancePopOrder
             return $dataProvider;
         } */
 
+        $query->orderBy(['id'=>SORT_DESC]);
         $query->andFilterWhere([
             'id' => $this->id,
         	'finance_record_log_id' => $this->finance_record_log_id,
@@ -851,14 +840,19 @@ class FinancePopOrderSearch extends FinancePopOrder
             'create_time' => $this->create_time,
             'is_del' => $this->is_del,
         ]);
-
+ 
         $query->andFilterWhere(['like', 'finance_pop_order_number', $this->finance_pop_order_number])
             ->andFilterWhere(['like', 'finance_order_channel_title', $this->finance_order_channel_title])
             ->andFilterWhere(['like', 'finance_pay_channel_title', $this->finance_pay_channel_title])
             ->andFilterWhere(['like', 'finance_pop_order_customer_tel', $this->finance_pop_order_customer_tel])
             ->andFilterWhere(['like', 'finance_pop_order_order2', $this->finance_pop_order_order2])
             ->andFilterWhere(['like', 'finance_pop_order_channel_order', $this->finance_pop_order_channel_order])
-            ->andFilterWhere(['like', 'finance_pop_order_pay_title', $this->finance_pop_order_pay_title]);
+            ->andFilterWhere(['>=', 'finance_order_channel_statuspayment', $this->finance_order_channel_statuspayment])
+            
+            ->andFilterWhere(['<=', 'finance_order_channel_endpayment', $this->finance_order_channel_endpayment])
+            
+            
+       		->andFilterWhere(['like', 'finance_pop_order_pay_title', $this->finance_pop_order_pay_title]);
 
         return $dataProvider;
     }

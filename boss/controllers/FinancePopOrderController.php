@@ -158,6 +158,8 @@ class FinancePopOrderController extends Controller
     			$postdate['finance_order_channel_endpayment'] =strtotime($post['FinancePopOrderSearch']['finance_order_channel_endpayment']);
     			$postdate['create_time'] = time();
     			$postdate['is_del'] =0;
+    			
+    			
     			$_model = clone $model;
     			$_model->setAttributes($postdate);
     			$_model->save();
@@ -168,6 +170,8 @@ class FinancePopOrderController extends Controller
     	 	$FinanceRecordLog = new FinanceRecordLogSearch;
     		//获取渠道唯一订单号有问题需要问问
     	 	$customer_info = FinanceRecordLog::findOne($lastidRecordLog);
+    	 	
+    	 	
     	 	
     		$customer_info->finance_order_channel_id =1;
     		//对账名称
@@ -183,9 +187,9 @@ class FinancePopOrderController extends Controller
     		//收款渠道名称
     		$customer_info->finance_pay_channel_name=$ordername;
     		//成功记录数
-    		$customer_info->finance_record_log_succeed_count =$modelinfo::find()->andWhere(['finance_pop_order_pay_status_type' => '1'])->count('id'); 
-    		
+    		$customer_info->finance_record_log_succeed_count =$modelinfo::find()->andWhere(['finance_record_log_id' => $lastidRecordLog])->andWhere(['finance_pop_order_pay_status_type' => '1'])->count('id'); 
     		$sumt=$modelinfo::find()->select(['sum(finance_pop_order_sum_money) as sumoney'])
+    		->andWhere(['finance_record_log_id' => $lastidRecordLog])
     		->andWhere(['finance_pop_order_pay_status_type' => '1'])->asArray()->all();
     		$customer_info->finance_record_log_succeed_sum_money =$sumt[0]['sumoney'];
     		//人工确认笔数
@@ -194,17 +198,30 @@ class FinancePopOrderController extends Controller
     		//人工确认金额
     		$customer_info->finance_record_log_manual_sum_money =$statusinfo['created_at']?$statusinfo['created_at']:'0';
     		//失败笔数
-    		$customer_info->finance_record_log_failure_count=$modelinfo::find()->andWhere(['finance_pop_order_pay_status_type' => '4'])->count('id'); 
+    		$customer_info->finance_record_log_failure_count=$modelinfo::find()
+    		->andWhere(['finance_record_log_id' => $lastidRecordLog])
+    		->andWhere(['finance_pop_order_pay_status_type' => '4'])->count('id'); 
     		
     		//失败总金额
     		$sumterr=$modelinfo::find()->select(['sum(finance_pop_order_sum_money) as sumoneyinfo'])
-    		->andWhere(['finance_pop_order_pay_status_type' => '4'])->asArray()->all();
-    		$customer_info->finance_record_log_failure_money =$sumterr[0]['sumoneyinfo'];
-
+    		->andWhere(['finance_record_log_id' => $lastidRecordLog])
+    		->andWhere(['finance_pop_order_pay_status_type' => '4'])->asArray()->one();
+    		
+    		$customer_info->finance_record_log_failure_money =$sumterr['sumoneyinfo']?$sumterr['sumoneyinfo']:0;
     		//对账人
     		$customer_info->finance_record_log_confirm_name =Yii::$app->user->identity->username;
+    	
     		//服务费
-    		$customer_info->finance_record_log_fee = 0;
+    		if($channelid==7){
+    		//目前淘宝有手续费
+    		$discount_pay=$modelinfo::find()->select(['sum(finance_pop_order_discount_pay) as discount_pay'])
+    		->andWhere(['finance_record_log_id' => $lastidRecordLog])
+    		->andWhere(['finance_order_channel_id' => '7'])->asArray()->one();
+    	     $log_fee=$discount_pay['discount_pay']?abs($discount_pay['discount_pay']):0;
+    		}else{
+    			$log_fee=0;
+    		}
+    		$customer_info->finance_record_log_fee =$log_fee;
     		
     		$customer_info->finance_record_log_statime =strtotime($post['FinancePopOrderSearch']['finance_order_channel_statuspayment']);
     		$customer_info->finance_record_log_endtime =strtotime($post['FinancePopOrderSearch']['finance_order_channel_endpayment']);
@@ -363,23 +380,10 @@ class FinancePopOrderController extends Controller
     	$tyu= array_combine($tyd,$tydtui);
     	
     	$searchModel = new FinancePopOrderSearch;
-
-    	
- /*    	$requestParams = Yii::$app->request->getQueryParams();
-    	if(isset($requestParams['FinancePopOrderSearch'])){
-    		$requestModel = $requestParams['FinancePopOrderSearch'];
-    	}
-    	$requestParams = array_merge($defaultParams,$requestParams);
-    	
-    	var_dump($requestParams);exit; */
-
     	$searchModel->load(Yii::$app->request->getQueryParams());
     	$searchModel->is_del=0;
     	$searchModel->finance_pop_order_pay_status=3;
     	$dataProvider = $searchModel->search();
-    	
-    	
-    	//$dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
     	return $this->render('bad', [
     			'dataProvider' => $dataProvider,
     			'searchModel' => $searchModel,
@@ -601,8 +605,19 @@ class FinancePopOrderController extends Controller
     		$tydtui[]=$errt['finance_order_channel_name'];
     	}
     	$tyu= array_combine($tyd,$tydtui);
+    	
     	$searchModel = new FinancePopOrderSearch;
-    	$dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+    	$searchModel->load(Yii::$app->request->getQueryParams());
+    	$searchModel->is_del=0;
+    	$timeinfo=Yii::$app->request->getQueryParams();
+    	if(isset($timeinfo['FinancePopOrderSearch']['finance_order_channel_statuspayment'])){
+    		$searchModel->finance_order_channel_statuspayment=strtotime($timeinfo['FinancePopOrderSearch']['finance_order_channel_statuspayment']);
+    	}
+    	if(isset($timeinfo['FinancePopOrderSearch']['finance_order_channel_endpayment'])){
+    		$searchModel->finance_order_channel_statuspayment=strtotime($timeinfo['FinancePopOrderSearch']['finance_order_channel_endpayment']);
+    	}
+    	
+    	$dataProvider = $searchModel->search();
     	return $this->render('billinfo', [
     			'dataProvider' => $dataProvider,
     			'searchModel' => $searchModel,
@@ -611,20 +626,6 @@ class FinancePopOrderController extends Controller
     	 
     }
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
