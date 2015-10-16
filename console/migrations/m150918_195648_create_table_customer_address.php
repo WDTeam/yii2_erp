@@ -14,14 +14,14 @@ class m150918_195648_create_table_customer_address extends Migration
         $this->createTable('{{%customer_address}}', [
             'id'=> Schema::TYPE_PK.'(8) NOT NULL AUTO_INCREMENT COMMENT \'主键\'',
             'customer_id' => Schema::TYPE_INTEGER.'(8) NOT NULL COMMENT \'关联客户\'',
-            'operation_privince_id'=>  Schema::TYPE_INTEGER.'(8) DEFAULT 0 COMMENT \'省\'',
+            'operation_province_id'=>  Schema::TYPE_INTEGER.'(8) DEFAULT 0 COMMENT \'省\'',
             'operation_city_id'=>  Schema::TYPE_INTEGER.'(8) DEFAULT 0 COMMENT \'市\'',
             'operation_area_id'=>  Schema::TYPE_INTEGER.'(8) DEFAULT 0 COMMENT \'区\'',
 
-            'operation_privince_name'=>  Schema::TYPE_STRING.'(255) DEFAULT NULL COMMENT \'省名\'',
+            'operation_province_name'=>  Schema::TYPE_STRING.'(255) DEFAULT NULL COMMENT \'省名\'',
             'operation_city_name'=>  Schema::TYPE_STRING.'(255) DEFAULT NULL COMMENT \'市名\'',
             'operation_area_name'=>  Schema::TYPE_STRING.'(255) DEFAULT NULL COMMENT \'区名\'',
-            'operation_privince_short_name'=>  Schema::TYPE_STRING.'(255) DEFAULT NULL COMMENT \'省短名\'',
+            'operation_province_short_name'=>  Schema::TYPE_STRING.'(255) DEFAULT NULL COMMENT \'省短名\'',
             'operation_city_short_name'=>  Schema::TYPE_STRING.'(255) DEFAULT NULL COMMENT \'市短名\'',
             'operation_area_short_name'=>  Schema::TYPE_STRING.'(255) DEFAULT NULL COMMENT \'区短名\'',
             

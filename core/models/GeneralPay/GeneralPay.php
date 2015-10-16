@@ -217,11 +217,35 @@ class GeneralPay extends \common\models\GeneralPay
 
 
     /**
-     * 银联支付
+     * 银联支付回调
      * @param $data
      */
     public function upAppNotify($data){
         parent::upAppNotify($data);
+    }
+
+    /**
+     * 支付宝APP回调
+     * @param $data
+     */
+    public function alipayAppNotify($data){
+        parent::alipayAppNotify($data);
+    }
+
+    /**
+     * 微信APP回调
+     * @param $data
+     */
+    public function wxAppNotify($data){
+        parent::wxAppNotify($data);
+    }
+
+    /**
+     * 百付宝APP回调
+     * @param $data
+     */
+    public function bfbAppNotify($data){
+        parent::bfbAppNotify($data);
     }
 
 }

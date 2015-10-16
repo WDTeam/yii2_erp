@@ -64,6 +64,13 @@ use core\behaviors\IvrlogBehavior;
 use yii\web\HttpException;
 use yii\base\ExitException;
 use yii\base\BootstrapInterface;
+
+/**
+ * 
+ * @author colee
+ * 使用方法：\Yii::$app->ivr->send('手机号','订单ID', '订单消息文本');
+ * 回调处理默认在路由: ivr/callback 中,可以使用 \Yii::$app->ivr->cb_data获取回调的数据。
+ */
 class Ivr extends Component implements BootstrapInterface
 {
     const IVR_URL = 'https://api.vlink.cn/interface/open/v1/webcall';
@@ -152,7 +159,7 @@ class Ivr extends Component implements BootstrapInterface
         return $data;
     }
     
-    public function request($data)
+    protected function request($data)
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); // 对认证证书来源的检查

@@ -38,12 +38,14 @@ class CustomerAddress extends \common\models\CustomerAddress
                 'area_name'=>$operation_area_name,
                 'level'=>3,
                 ])->asArray()->one();
+            
             $operation_area_id = $operationArea['id'];
             $operation_area_name = $operationArea['area_name'];
             $operation_area_short_name = $operationArea['short_name'];
             $operation_city_id = $operationArea['parent_id'];
-            $operation_longitude = $operationArea['operation_longitude'];
-            $operation_latitude = $operationArea['operation_latitude'];
+
+            $operation_longitude = $operationArea['longitude'];
+            $operation_latitude = $operationArea['latitude'];
 
             $operationCity = CommonOperationArea::find()->where([
                 'id'=>$operation_city_id,
@@ -52,13 +54,13 @@ class CustomerAddress extends \common\models\CustomerAddress
             $operation_city_id = $operationCity['id'];
             $operation_city_name = $operationCity['area_name'];
             $operation_city_short_name = $operationCity['short_name'];
-            $operation_province_id = $operationArea['parent_id'];
+            $operation_province_id = $operationCity['parent_id'];
 
             $operationProvince = CommonOperationArea::find()->where([
                 'id'=>$operation_province_id,
                 'level'=>1,
                 ])->asArray()->one();
-            $operation_province_id = $operationProvince['id'];
+    
             $operation_province_name = $operationProvince['area_name'];
             $operation_province_short_name = $operationProvince['short_name'];
 
@@ -131,12 +133,14 @@ class CustomerAddress extends \common\models\CustomerAddress
                 'area_name'=>$operation_area_name,
                 'level'=>3,
                 ])->asArray()->one();
+            
             $operation_area_id = $operationArea['id'];
             $operation_area_name = $operationArea['area_name'];
             $operation_area_short_name = $operationArea['short_name'];
             $operation_city_id = $operationArea['parent_id'];
-            $operation_longitude = $operationArea['operation_longitude'];
-            $operation_latitude = $operationArea['operation_latitude'];
+
+            $operation_longitude = $operationArea['longitude'];
+            $operation_latitude = $operationArea['latitude'];
 
             $operationCity = CommonOperationArea::find()->where([
                 'id'=>$operation_city_id,
@@ -145,13 +149,13 @@ class CustomerAddress extends \common\models\CustomerAddress
             $operation_city_id = $operationCity['id'];
             $operation_city_name = $operationCity['area_name'];
             $operation_city_short_name = $operationCity['short_name'];
-            $operation_province_id = $operationArea['parent_id'];
+            $operation_province_id = $operationCity['parent_id'];
 
             $operationProvince = CommonOperationArea::find()->where([
                 'id'=>$operation_province_id,
                 'level'=>1,
                 ])->asArray()->one();
-            $operation_province_id = $operationProvince['id'];
+    
             $operation_province_name = $operationProvince['area_name'];
             $operation_province_short_name = $operationProvince['short_name'];
 
