@@ -22,8 +22,11 @@ use core\models\customer\CustomerChannal;
 class CustomerAccessToken extends \common\models\CustomerAccessToken
 {
     public static function generateAccessToken($phone, $code){
-        if (!CustomerCode::checkCode($phone, $code)) {
-            return false;
+        $check_code = CustomerCode::checkCode($phone, $code);
+        // var_dump($check_code);
+        // exit();
+        if ($check_code == false) {
+            return $check_code;
         }
 
         $transaction = \Yii::$app->db->beginTransaction();
@@ -62,6 +65,9 @@ class CustomerAccessToken extends \common\models\CustomerAccessToken
             $customerAccessToken->updated_at = 0;
             $customerAccessToken->is_del = 0;
             $customerAccessToken->validate();
+            if ($customerAccessToken->hasErrors()) {
+                var_dump($customerAccessToken->getErrors());
+            }
             $customerAccessToken->save();
             $transaction->commit();
             return $customerAccessToken->customer_access_token;
@@ -143,7 +149,7 @@ class CustomerAccessToken extends \common\models\CustomerAccessToken
                 $customer->is_del = 0;
                 $customer->save();
             }
-            
+
             $customerAccessTokens = self::find()->where(['customer_phone'=>$phone])->all();
             if (!empty($customerAccessTokens)) {
                 foreach ($customerAccessTokens as $customerAccessToken) {
