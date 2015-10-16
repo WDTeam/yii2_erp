@@ -216,11 +216,22 @@ class PayController extends \api\components\Controller
 
     public function actionPay(){
         $model=new PayParam();
-        if($model->load(Yii::$app->request->post())&&$model->validators())
-        {
-           $retInfo= GeneralPay::getPayParams($model->pay_money,$model->customer_id,
-                $model->channel_id,$model->order_id,$model->partner);
+        $data[$model->formName()] = Yii::$app->request->get();
 
+        if(empty($data[$model->formName()]['order_id']))
+        {
+            $model->scenario = 'pay';
+        }
+        else
+        {
+            $model->scenario = 'online_pay';
+        }
+
+        if($model->load($data)&&$model->validate())
+        {
+            $retInfo= GeneralPay::getPayParams($model->pay_money,$model->customer_id,
+                $model->channel_id,$model->order_id,$model->partner);
+            return $retInfo;
            return $this->send($retInfo['data'], $retInfo['info'], $retInfo['status']);
         }
         return $this->send(null, $model->errors, "error");

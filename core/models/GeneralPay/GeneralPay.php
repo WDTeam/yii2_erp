@@ -215,4 +215,13 @@ class GeneralPay extends \common\models\GeneralPay
 
     }
 
+
+    /**
+     * 银联支付
+     * @param $data
+     */
+    public function upAppNotify($data){
+        parent::upAppNotify($data);
+    }
+
 }

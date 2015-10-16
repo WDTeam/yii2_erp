@@ -3,6 +3,7 @@
 namespace common\models;
 
 use core\models\Customer;
+use core\models\CustomerTransRecord\CustomerTransRecord;
 use Yii;
 use yii\base\ErrorException;
 use yii\base\Exception;
@@ -398,9 +399,10 @@ class GeneralPay extends \yii\db\ActiveRecord
      */
     public function upAppNotify($data)
     {
+
         //POST数据
         if(!empty($data['debug'])){
-            $post = array (
+            $_POST = array (
                 "accessType" => "0",
                 "bizType" => "000201",
                 "certId" => "21267647932558653966460913033289351200",
@@ -424,7 +426,8 @@ class GeneralPay extends \yii\db\ActiveRecord
                 "txnType" => "01",
                 "version" => "5.0.0",
                 "signature" => "GnmVKKUPgdLc11K8zrwL5w5cTx1bieDdTniC2Psh7WEuk4y+53l8OzvE41KsJNyxBuBWAPBgypK+8jNJmGUU2x+tMU5Z0liIKVD5HWhboHxlwZvh0vMGfB8vlmIcbYipxUuWz3Jin11I6O8W6mvTAb76wJXrcbqZD1PKtVP7/5ldxpYsRh/MmEfeDFCcxqMk0uS/ON7XagGKkYSOxCcDMmQ4xRhNzLOthO8vkK6vPDWuowNjFdQXV8A2K9MxVqJNrR5QgR52Hm0dy9z5o09YhjDhMgwlyqRAgaBRbVDNt7qJXFyp3lcxwU9sJBkpOCYV6Cwi/03sWJA+W87U6+gN9Q=="
-            ) ;
+            );
+            $post = $_POST;
         }else{
             $post = $data;
         }
