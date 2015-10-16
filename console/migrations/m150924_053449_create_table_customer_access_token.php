@@ -17,6 +17,7 @@ class m150924_053449_create_table_customer_access_token extends Migration
             'customer_access_token_expiration' => Schema::TYPE_INTEGER.'(11) NOT NULL COMMENT \'access_token过期时间\'',
             'customer_code_id'=> Schema::TYPE_INTEGER.'(8) DEFAULT NULL COMMENT \'关联验证码\'',
             'customer_code'=> Schema::TYPE_STRING.'(8) DEFAULT NULL COMMENT \'验证码\'',
+            'customer_phone'=>  Schema::TYPE_STRING.'(11) DEFAULT NULL COMMENT \'客户手机\'',
             'created_at'=>  Schema::TYPE_INTEGER.'(11) NOT NULL COMMENT \'创建时间\'',
             'updated_at'=>  Schema::TYPE_INTEGER.'(11) NOT NULL COMMENT \'更新时间\'',
             'is_del'=>  Schema::TYPE_SMALLINT.'(4) DEFAULT 0 COMMENT \'逻辑删除\'',

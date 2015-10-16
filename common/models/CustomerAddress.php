@@ -9,13 +9,13 @@ use Yii;
  *
  * @property integer $id
  * @property integer $customer_id
- * @property integer $operation_privince_id
+ * @property integer $operation_province_id
  * @property integer $operation_city_id
  * @property integer $operation_area_id
- * @property string $operation_privince_name
+ * @property string $operation_province_name
  * @property string $operation_city_name
  * @property string $operation_area_name
- * @property string $operation_privince_short_name
+ * @property string $operation_province_short_name
  * @property string $operation_city_short_name
  * @property string $operation_area_short_name
  * @property string $customer_address_detail
@@ -45,9 +45,9 @@ class CustomerAddress extends \yii\db\ActiveRecord
     {
         return [
             [['customer_id', 'customer_address_status', 'customer_address_nickname', 'customer_address_phone', 'created_at', 'updated_at'], 'required'],
-            [['customer_id', 'operation_privince_id', 'operation_city_id', 'operation_area_id', 'customer_address_status', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['customer_id', 'operation_province_id', 'operation_city_id', 'operation_area_id', 'customer_address_status', 'created_at', 'updated_at', 'is_del'], 'integer'],
             [['customer_address_longitude', 'customer_address_latitude'], 'number'],
-            [['operation_privince_name', 'operation_city_name', 'operation_area_name', 'operation_privince_short_name', 'operation_city_short_name', 'operation_area_short_name'], 'string', 'max' => 255],
+            [['operation_province_name', 'operation_city_name', 'operation_area_name', 'operation_province_short_name', 'operation_city_short_name', 'operation_area_short_name'], 'string', 'max' => 255],
             [['customer_address_detail'], 'string', 'max' => 64],
             [['customer_address_nickname'], 'string', 'max' => 32],
             [['customer_address_phone'], 'string', 'max' => 11]
@@ -62,13 +62,13 @@ class CustomerAddress extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('boss', '主键'),
             'customer_id' => Yii::t('boss', '关联客户'),
-            'operation_privince_id' => Yii::t('boss', '省'),
+            'operation_province_id' => Yii::t('boss', '省'),
             'operation_city_id' => Yii::t('boss', '市'),
             'operation_area_id' => Yii::t('boss', '区'),
-            'operation_privince_name' => Yii::t('boss', '省名'),
+            'operation_province_name' => Yii::t('boss', '省名'),
             'operation_city_name' => Yii::t('boss', '市名'),
             'operation_area_name' => Yii::t('boss', '区名'),
-            'operation_privince_short_name' => Yii::t('boss', '省短名'),
+            'operation_province_short_name' => Yii::t('boss', '省短名'),
             'operation_city_short_name' => Yii::t('boss', '市短名'),
             'operation_area_short_name' => Yii::t('boss', '区短名'),
             'customer_address_detail' => Yii::t('boss', '详细地址'),

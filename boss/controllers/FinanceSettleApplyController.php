@@ -497,6 +497,7 @@ class FinanceSettleApplyController extends BaseAuthController
         $review_section = $requestParams['review_section'];
         $settle_type = $requestParams['settle_type'];
         $financeSettleApplySearch->load($requestParams);
+        $orderDataProvider = null;
         $financeSettleApplySearch = $financeSettleApplySearch->getWorkerInfo($financeSettleApplySearch->worder_tel);//获取阿姨的信息
         $financeSettleApplySearch->settle_type = $settle_type;
         $financeSettleApplySearch->review_section = $review_section;
@@ -508,9 +509,6 @@ class FinanceSettleApplyController extends BaseAuthController
         }
         $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProvider($financeSettleApplySearch->worder_id);
         return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider]);
-//        $orderIncomeDataProvider = $financeWorkerOrderIncomeSearch->search(Yii::$app->request->getQueryParams());
-//        return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'orderIncomeDataProvider'=>$orderIncomeDataProvider]);
-        
     }
     
     /**
