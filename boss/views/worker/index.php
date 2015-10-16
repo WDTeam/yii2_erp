@@ -162,21 +162,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'style' => 'margin-right:3px'
                             ]);
                     },
-                    'block' => function ($url, $model) {
-                        return Html::a('<span class="fa fa-fw fa-lock"></span>',
-                            [
-                                '/worker/create-block',
-                                'workerId' => $model->id
-                            ],
-                            [
-                                'title' => Yii::t('yii', '封号信息录入'),
-                                'data-toggle' => 'modal',
-                                'data-target' => '#blockModal',
-                                'class'=>'block',
-                                'data-id'=>$model->id,
-                                'style' => 'margin-right:3px'
-                            ]);
-                    }
                 ],
             ],
         ],

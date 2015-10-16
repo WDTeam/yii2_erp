@@ -120,7 +120,7 @@ class WorkerController extends BaseAuthController
             $workerBlockLogData = new ActiveDataProvider([
                 'query' => WorkerBlockLog::find()->where(['worker_id'=>$id])->orderBy('id desc'),
             ]);
-            return $this->render('view', ['workerModel' => $workerModel,'workerBlockData'=>$workerBlockData,'workerVacationData'=>$workerVacationData,'workerBlockLogData'=>$workerBlockLogData]);
+            return $this->render('view', ['workerModel' => $workerModel,'worker_id'=>$id,'workerVacationData'=>$workerVacationData,'workerBlockLogData'=>$workerBlockLogData]);
         }
     }
 
@@ -259,26 +259,54 @@ class WorkerController extends BaseAuthController
      * @param integer workerId 阿姨Id
      * @return empty
      */
-    public function actionCreateBlock($workerId){
+    public function actionOperateBlock($workerId){
         $workerModel = $this->findModel($workerId);
-        $workerBlockModel = new WorkerBlock();
-        $post = \Yii::$app->request->post();
+        $post = \Yii::$app->request->post('WorkerBlock');
         if($post){
-            $workerBlockModel->worker_id = $workerId;
-            $workerBlockModel->worker_block_start_time = strtotime($post['WorkerBlock']['worker_block_start_time']);
-            $workerBlockModel->worker_block_finish_time = strtotime($post['WorkerBlock']['worker_block_finish_time']);
-            $workerBlockModel->worker_block_reason = $post['WorkerBlock']['worker_block_reason'];
-            $workerBlockModel->created_ad = time();
-            $workerBlockModel->worker_block_status = 0;
-            if($workerBlockModel->save()){
-                $workerModel->worker_is_block = 1;
-                $workerModel->save();
-                //记录日志记录
-                $this->CreateBlockLog($workerId,$workerBlockModel->id,1);
+            $workerBlockModel = WorkerBlock::findone($post['id'])?WorkerBlock::findone($post['id']):new WorkerBlock();
+            if(empty($post['id'])){
+                $workerBlockModel = new WorkerBlock();
+            }else{
+                $workerBlockModel = WorkerBlock::findone($post['id']);
             }
-            return $this->redirect(['index']);
-        }else{
-            return $this->renderAjax('create_block',['workerModel'=>$workerModel,'workerBlockmodel'=>$workerBlockModel]);
+            $workerBlockModel->worker_id = intval($workerId);
+            $workerBlockModel->worker_block_start_time = strtotime($post['worker_block_start_time']);
+            $workerBlockModel->worker_block_finish_time = strtotime($post['worker_block_finish_time']);
+            $workerBlockModel->worker_block_reason = $post['worker_block_reason'];
+            $workerBlockModel->worker_block_status = intval($post['worker_block_status']);
+            //为更改前的阿姨封号属性
+            $oldAttributes = $workerBlockModel->oldAttributes;
+            //更改的阿姨封号属性
+            $modifiedAttributes = $workerBlockModel->getDirtyAttributes();
+            //记录阿姨日志
+            if($workerBlockModel->save()){
+                if(empty($post['id'])){
+                    $this->CreateBlockLog($workerId,$workerBlockModel->id,1);
+                }else{
+                    if(isset($modifiedAttributes['worker_block_finish_time'])){
+                        if($modifiedAttributes['worker_block_finish_time']<$oldAttributes['worker_block_finish_time']){
+                            $this->CreateBlockLog($workerId,$workerBlockModel->id,2);
+                        }elseif($modifiedAttributes['worker_block_finish_time']>$oldAttributes['worker_block_finish_time']){
+                            $this->CreateBlockLog($workerId,$workerBlockModel->id,3);
+                        }
+                    }
+                    if(isset($modifiedAttributes['worker_block_status'])){
+                        if($modifiedAttributes['worker_block_status']==1){
+                            $workerModel->worker_is_block = 1;
+                            $workerModel->save();
+                            //记录日志记录
+                            $this->CreateBlockLog($workerId,$workerBlockModel->id,5);
+                        }elseif($modifiedAttributes['worker_block_status']==0){
+                            $workerModel->worker_is_block = 0;
+                            $workerModel->save();
+                            //记录日志记录
+                            $this->CreateBlockLog($workerId,$workerBlockModel->id,4);
+                        }
+                    }
+
+                }
+            }
+            return $this->redirect(['/worker/'.$workerId]);
         }
     }
 
@@ -339,15 +367,17 @@ class WorkerController extends BaseAuthController
         $logArr['worker_block_operate_type'] = $type;
         $logArr['worker_block_operate_id'] = Yii::$app->user->identity->id;
         if($type==1){
-            $logArr['worker_block_operate_bak'] = '创建封号操作';
+            $logArr['worker_block_operate_bak'] = '创建封号信息';
         }elseif($type==2){
-            $logArr['worker_block_operate_bak'] = '缩短封号时间操作';
+            $logArr['worker_block_operate_bak'] = '缩短封号结束时间';
         }elseif($type==3){
-            $logArr['worker_block_operate_bak'] = '延长封号时间操作';
+            $logArr['worker_block_operate_bak'] = '延长封号结束时间';
         }elseif($type==4){
-            $logArr['worker_block_operate_bak'] = '关闭操作';
+            $logArr['worker_block_operate_bak'] = '阿姨关闭封号';
+        }elseif($type==5){
+            $logArr['worker_block_operate_bak'] = '阿姨开启封号';
         }else{
-            $logArr['worker_block_operate_type'] = 5;
+            $logArr['worker_block_operate_type'] = 6;
             $logArr['worker_block_operate_bak'] = '其他操作';
         }
 
