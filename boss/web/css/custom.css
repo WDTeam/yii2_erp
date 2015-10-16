@@ -214,14 +214,29 @@ ul.navbar-right > li.dropdown > ul.dropdown-menu > li > a {
 .navbar-right {
 	margin-right: 0;
 }
+/***********************button***************************/
 
-.kv-panel-before .btn-success {
+.kv-panel-before .btn-success,
+.btn.btn-primary,
+.btn.btn-default,
+table .btn.btn-success,
+table .btn.btn-info,
+table .btn.btn-danger,
+table .btn.btn-warning {
 	background-color: transparent !important;
 	color: #f6a202;
 	border: 1px solid #f6a202 !important;
 	webkit-box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 0.09) !important;
     -moz-box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 0.09) !important;
     box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 0.09) !important;
+}
+
+table .btn.btn-success,
+table .btn.btn-info,
+table .btn.btn-danger,
+table .btn.btn-warning {
+	display: block;
+	margin: 5px;
 }
 
 .kv-panel-before .btn-success-selected {
@@ -233,15 +248,28 @@ ul.navbar-right > li.dropdown > ul.dropdown-menu > li > a {
 	box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 0.09) !important;
 }
 
-.kv-panel-before .btn-success:hover {
+.kv-panel-before .btn-success:hover,
+.kv-panel-before .btn-success:focus,
+.btn.btn-primary:hover,
+.btn.btn-default:hover,
+table .btn.btn-success:hover,
+table .btn.btn-info:hover,
+table .btn.btn-danger:hover,
+table .btn.btn-warning:hover,
+.btn.btn-primary:focus,
+.btn.btn-default:focus,
+table .btn.btn-success:focus,
+table .btn.btn-info:focus,
+table .btn.btn-danger:focus,
+table .btn.btn-warning:focus {
 	color: rgba(255, 255, 255, .82) !important;
 	background-color: #f6a202 !important;
 }
 
-.kv-panel-before .btn-success:focus {
-	color: rgba(255, 255, 255, .82) !important;
-	background-color: #f6a202 !important;
-}
+
+
+
+/***********************button***************************/
 
 #province.inline,
 #city.inline,

@@ -17,7 +17,7 @@ class m150919_092929_create_table_worker_block extends Migration
             'worker_block_start_time' => Schema::TYPE_INTEGER. '(11) DEFAULT NULL COMMENT \'封号开始时间\'',
             'worker_block_finish_time' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'封号结束时间\'',
             'worker_block_reason'=>Schema::TYPE_STRING .'(255) DEFAULT NULL COMMENT \'封号原因\'',
-            'worker_block_status' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'封号状态，0开启1关闭\'',
+            'worker_block_status' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'封号状态，0关闭1开启\'',
             'created_ad' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'创建时间\'',
             'updated_ad' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'最后更新时间\'',
         ], $tableOptions);
