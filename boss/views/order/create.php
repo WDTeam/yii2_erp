@@ -68,7 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div style="display: none;"><?= $form->field($model, 'order_unit_money')->textInput(['maxlength' => true,'value'=>25]) ?></div>
                 <div style="display: none;"><?= $form->field($model, 'order_money')->textInput(['maxlength' => true,'value'=>50]) ?></div>
-                <?= $form->field($model, 'order_pay_type')->inline()->radioList(['1'=>'现金支付','2'=>'线上支付','3'=>'第三方预付'])->label('支付方式'); ?>
+                <?= $form->field($model, 'order_pay_type')->inline()->radioList(['1'=>'现金支付','2'=>'余额支付','3'=>'第三方预付'])->label('支付方式'); ?>
                 <div id="order_pay_type_1" >
                     <div class="form-group">
                         <label class="control-label col-sm-3">需支付</label>
@@ -79,8 +79,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div id="order_pay_type_2" style="display:none;">
                 <?= $form->field($model, 'coupon_id')->dropDownList([],['maxlength' => true]) ?>
-                <?= $form->field($model, 'card_id')->dropDownList([],['maxlength' => true]) ?>
-                <?= $form->field($model, 'order_use_acc_balance')->textInput(['maxlength' => true]) ?>
+                <div class="form-group">
+                    <label class="control-label col-sm-3">需支付</label>
+                    <div class="col-sm-2">
+                        <span class="order_pay_money" style="font-size: 20px;color: #ff0000;">50.00</span>
+                    </div>
+                </div>
                 </div>
                 <div id="order_pay_type_3" style="display:none;">
                 <?= $form->field($model, 'channel_id')->inline()->radioList($model->orderChannelList); ?>
