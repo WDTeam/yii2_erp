@@ -3,6 +3,7 @@
 namespace core\models\customer;
 use Yii;
 use common\models\GeneralRegion;
+use common\models\Operation\CommonOperationArea;
 
 /**
  * This is the model class for table "{{%customer_address}}".
@@ -26,16 +27,57 @@ class CustomerAddress extends \common\models\CustomerAddress
     /**
      * 新增服务地址
      */
-    public static function addAddress($customer_id, $general_region_id, $customer_address_detail, $customer_address_nickname, $customer_address_phone){
+    public static function addAddress($customer_id, $operation_area_name, $customer_address_detail, $customer_address_nickname, $customer_address_phone){
         $transaction = \Yii::$app->db->beginTransaction();
         try{
             $customerAddress = new CustomerAddress;
             $customerAddress->customer_id = $customer_id;
-            $customerAddress->general_region_id = $general_region_id;
+
+            //根据区名查询省市区
+            $operationArea = CommonOperationArea::find()->where([
+                'area_name'=>$operation_area_name,
+                'level'=>3,
+                ])->asArray()->one();
+            $operation_area_id = $operationArea['id'];
+            $operation_area_name = $operationArea['area_name'];
+            $operation_area_short_name = $operationArea['short_name'];
+            $operation_city_id = $operationArea['parent_id'];
+            $operation_longitude = $operationArea['operation_longitude'];
+            $operation_latitude = $operationArea['operation_latitude'];
+
+            $operationCity = CommonOperationArea::find()->where([
+                'id'=>$operation_city_id,
+                'level'=>2,
+                ])->asArray()->one();
+            $operation_city_id = $operationCity['id'];
+            $operation_city_name = $operationCity['area_name'];
+            $operation_city_short_name = $operationCity['short_name'];
+            $operation_province_id = $operationArea['parent_id'];
+
+            $operationProvince = CommonOperationArea::find()->where([
+                'id'=>$operation_province_id,
+                'level'=>1,
+                ])->asArray()->one();
+            $operation_province_id = $operationProvince['id'];
+            $operation_province_name = $operationProvince['area_name'];
+            $operation_province_short_name = $operationProvince['short_name'];
+
+            $customerAddress->operation_province_id = $operation_province_id;
+            $customerAddress->operation_city_id = $operation_city_id;
+            $customerAddress->operation_area_id = $operation_area_id;
+
+            $customerAddress->operation_province_name = $operation_province_name;
+            $customerAddress->operation_city_name = $operation_city_name;
+            $customerAddress->operation_area_name = $operation_area_name;
+
+            $customerAddress->operation_province_short_name = $operation_province_short_name;
+            $customerAddress->operation_city_short_name = $operation_city_short_name;
+            $customerAddress->operation_area_short_name = $operation_area_short_name;
+
             $customerAddress->customer_address_status = 1;
             $customerAddress->customer_address_detail = $customer_address_detail;
-            $customerAddress->customer_address_longitude = '';
-            $customerAddress->customer_address_latitude = '';
+            $customerAddress->customer_address_longitude = $operation_longitude;
+            $customerAddress->customer_address_latitude = $operation_latitude;
             $customerAddress->customer_address_nickname = $customer_address_nickname;
             $customerAddress->customer_address_phone = $customer_address_phone;
             $customerAddress->created_at = time();
@@ -58,7 +100,6 @@ class CustomerAddress extends \common\models\CustomerAddress
             $transaction->rollback();
             return false;
         }
-        
     }
 
     /**
@@ -81,16 +122,57 @@ class CustomerAddress extends \common\models\CustomerAddress
     /**
      * 修改服务地址
      */
-    public static function updateAddress($id, $general_region_id, $customer_address_detail, $customer_address_nickname, $customer_address_phone){
+    public static function updateAddress($id, $operation_area_name, $customer_address_detail, $customer_address_nickname, $customer_address_phone){
         $transaction = \Yii::$app->db->beginTransaction();
         try{
             $customerAddress = self::findOne($id);
+            //根据区名查询省市区
+            $operationArea = CommonOperationArea::find()->where([
+                'area_name'=>$operation_area_name,
+                'level'=>3,
+                ])->asArray()->one();
+            $operation_area_id = $operationArea['id'];
+            $operation_area_name = $operationArea['area_name'];
+            $operation_area_short_name = $operationArea['short_name'];
+            $operation_city_id = $operationArea['parent_id'];
+            $operation_longitude = $operationArea['operation_longitude'];
+            $operation_latitude = $operationArea['operation_latitude'];
+
+            $operationCity = CommonOperationArea::find()->where([
+                'id'=>$operation_city_id,
+                'level'=>2,
+                ])->asArray()->one();
+            $operation_city_id = $operationCity['id'];
+            $operation_city_name = $operationCity['area_name'];
+            $operation_city_short_name = $operationCity['short_name'];
+            $operation_province_id = $operationArea['parent_id'];
+
+            $operationProvince = CommonOperationArea::find()->where([
+                'id'=>$operation_province_id,
+                'level'=>1,
+                ])->asArray()->one();
+            $operation_province_id = $operationProvince['id'];
+            $operation_province_name = $operationProvince['area_name'];
+            $operation_province_short_name = $operationProvince['short_name'];
+
+            $customerAddress->operation_province_id = $operation_province_id;
+            $customerAddress->operation_city_id = $operation_city_id;
+            $customerAddress->operation_area_id = $operation_area_id;
+
+            $customerAddress->operation_province_name = $operation_province_name;
+            $customerAddress->operation_city_name = $operation_city_name;
+            $customerAddress->operation_area_name = $operation_area_name;
+
+            $customerAddress->operation_province_short_name = $operation_province_short_name;
+            $customerAddress->operation_city_short_name = $operation_city_short_name;
+            $customerAddress->operation_area_short_name = $operation_area_short_name;
+
+            
             // $customerAddress->customer_id = $customer_id;
-            $customerAddress->general_region_id = $general_region_id;
             $customerAddress->customer_address_status = 1;
             $customerAddress->customer_address_detail = $customer_address_detail;
-            $customerAddress->customer_address_longitude = '';
-            $customerAddress->customer_address_latitude = '';
+            $customerAddress->customer_address_longitude = $operation_longitude;
+            $customerAddress->customer_address_latitude = $operation_latitude;
             $customerAddress->customer_address_nickname = $customer_address_nickname;
             $customerAddress->customer_address_phone = $customer_address_phone;
             // $customerAddress->created_at = time();
@@ -123,16 +205,7 @@ class CustomerAddress extends \common\models\CustomerAddress
         return $customerAddresses;
     }
 
-
-
-
-
-
-
-
-
-
-
+    
 
     /**
      * 客户服务地址列表已数组形式，元素为字符串
@@ -158,11 +231,6 @@ class CustomerAddress extends \common\models\CustomerAddress
                                 .$generalRegion['general_region_area_name']
                                 .$value['customer_address_detail'],
                         );
-                        // $customerAddressArr[]['address_info'] = 
-                        //     $generalRegion['general_region_province_name']
-                        //     .$generalRegion['general_region_city_name']
-                        //     .$generalRegion['general_region_area_name']
-                        //     .$value['customer_address_detail'];
                     }
                 }
             }
@@ -170,26 +238,10 @@ class CustomerAddress extends \common\models\CustomerAddress
         return $customerAddressArr;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * 根据地址id查询地址
      */
     public static function getAddress($id){
-
-        return 1233; exit;
         return self::findOne($id) ? self::findOne($id) : false;
     }
 }
