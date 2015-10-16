@@ -198,9 +198,6 @@ class GeneralPayController extends Controller
                 try
                 {
                     $model->save(false);
-                    //change customer balance
-                    $customer = new \common\models\Customer;
-                    $customerTransRecord = new \core\models\CustomerTransRecord\CustomerTransRecord();
                     $attribute = $model->getAttributes();
                     if(!empty($model->order_id)){
                         //支付订单

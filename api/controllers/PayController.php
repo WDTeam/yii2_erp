@@ -467,7 +467,16 @@ class PayController extends \api\components\Controller
      *  }
      *
      */
-    
+
+    /**
+     * 银联APP回调
+     */
+    public function actionUpAppNotify()
+    {
+        $obj = new GeneralPay();
+        $obj->UpAppNotify(yii::$app->request->get());
+        exit;
+    }
 }
 
 ?>
