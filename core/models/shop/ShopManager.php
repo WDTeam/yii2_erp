@@ -217,4 +217,7 @@ class ShopManager extends \common\models\ShopManager
         $qn = new Qiniu();
         return $qn->getLink().$this->bl_photo_url;
     }
+    public static function findById($id) {
+        return self::findOne(['id'=>$id]);
+    }
 }

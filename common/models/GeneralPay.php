@@ -195,6 +195,9 @@ class GeneralPay extends \yii\db\ActiveRecord
      */
     private function wx_h5()
     {
+        $get = yii::$app->request->get();
+        $data = json_decode($get['params'],true);
+
         $param = [
             "body"	=> $this->body(),
             "out_trade_no"	=> $this->create_out_trade_no(),
@@ -204,8 +207,9 @@ class GeneralPay extends \yii\db\ActiveRecord
             "trade_type" => "JSAPI",
             "subject" => $this->subject(),
             "notify_url" => $this->notify_url('wx-h5'),
-            'openid' => 'ioadsfsdf'
+            'openid' => $data['openid'],
         ];
+        dump($param);exit;
         $class = new \wxjspay_class();
         $msg = $class->get($param);
         return $msg;

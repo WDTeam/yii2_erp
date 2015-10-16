@@ -99,7 +99,7 @@ class FinancePayChannel extends \yii\db\ActiveRecord
             'id' => Yii::t('boss', '主键id'),
             'finance_pay_channel_name' => Yii::t('boss', '渠道名称'),
             'finance_pay_channel_rank' => Yii::t('boss', '排序'),
-            'finance_pay_channel_is_lock' => Yii::t('boss', '1 上架 2 下架'),
+            'finance_pay_channel_is_lock' => Yii::t('boss', '状态'),
             'create_time' => Yii::t('boss', '增加时间'),
             'is_del' => Yii::t('boss', '0 正常 1 删除'),
         ];
