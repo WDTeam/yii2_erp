@@ -20,6 +20,7 @@ class FinanceHeader extends \yii\db\ActiveRecord
 {
 	public $finance_uplod_url;
 	public $select_where;
+	public $finance_header_where;
 	
 	public static function selectname($wherename)
 	{
