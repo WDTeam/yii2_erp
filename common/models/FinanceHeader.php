@@ -24,17 +24,33 @@ class FinanceHeader extends \yii\db\ActiveRecord
 	
 	public static function selectname($wherename)
 	{
-		 if($wherename=='order_channel_order_num'){
-			return '<font color="red">订单号</font>';
-		}elseif ($wherename=='order_channel_promote'){
-			return '<font color="blue">渠道营销费</font>';
-		}elseif ($wherename=='order_money'){
-			return '<font color="purple">订单金额</font>';
-		}elseif ($wherename!=0 && count($wherename)>3){
-			return '<font color="black">表达式</font>';
-		}else{
-			return '<font color="gray">未选择</font>';
-		} 
+		 
+		switch ($wherename)
+		{
+			case 'order_channel_order_num':
+				return '<font color="red">订单号</font>';
+				break;
+			case 'order_channel_promote':
+				return '<font color="blue">渠道营销费</font>';
+				break;
+			case 'order_money':
+				return '<font color="purple">支付金额</font>';
+				break;
+			case 'refund':
+				return '<font color="black">退款金额</font>';
+				break;
+			case 'decrease':
+				return '<font color="blue">手续费</font>';
+				break;
+			case 'function_way':
+				return '<font color="blue">状态分类</font>';
+				break;
+			default:
+				return '<font color="purple">未选择</font>';
+				break;
+				
+		}
+	
 	}
 	
 	

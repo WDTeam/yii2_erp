@@ -10,7 +10,7 @@ use yii\helpers\Html;
 $this->title = Yii::t('boss', '{modelClass}', [
     'modelClass' => '订单渠道添加',
 ]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('boss', 'Finance Order Channels'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('boss', '渠道管理'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="finance-order-channel-create">

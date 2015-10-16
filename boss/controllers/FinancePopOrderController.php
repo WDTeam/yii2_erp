@@ -55,16 +55,6 @@ class FinancePopOrderController extends Controller
     **/
     public function actionIndex()
     {
-    	
-    	/* $sumttoo=FinancePopOrder::find()->select(['sum(finance_pop_order_reality_pay) as reality_pay'])
-    	->where(['finance_pop_order_pay_status'=>'0'])
-    	->andWhere(['finance_pop_order_pay_status_type' => 2])
-    	->andWhere(['finance_record_log_id' => 198])
-    	//->andWhere(['finance_pop_order_status' => 2])
-    	->asArray()->all();
-    	var_dump($sumttoo);exit; */
-    	
-
     	$model = new FinancePopOrderSearch;
     	$modelinfo= new FinancePopOrder;
     	if(Yii::$app->request->isPost) {
@@ -125,7 +115,7 @@ class FinancePopOrderController extends Controller
     		
     		foreach ($sheetData as $key=>$value){
     			//去除表头
-    			if($n>1){
+    			if($n>1 && !empty($value['A'])){
     			$statusinfo=$model->PopOrderstatus($alinfo,$value,$channelid);
     			//var_dump($statusinfo);exit;
     			$postdate['finance_record_log_id'] =$lastidRecordLog;
@@ -268,14 +258,18 @@ class FinancePopOrderController extends Controller
         $sta='';
         } 
         
+        //通过账期id查找渠道id
+        
+        
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         	'ordedatainfo' => $tyu,
         	'statusdeflde'=>$sta,
-        	'lastidRecordLogid'=>$lastid   //账期id
-        			
- 		
+        	'lastidRecordLogid'=>$lastid,   //账期id
+        	'channleid'=>$model->get_channleid($lastid),   //账期id
+        	
+        		
         ]);
     }
 
@@ -429,6 +423,7 @@ class FinancePopOrderController extends Controller
     		if($requestModel['edit']=='bak'){
     	    //坏账还原
     		$model->finance_pop_order_pay_status='0';
+    		
     		}elseif($requestModel['edit']=='bakinfo'){
     		//回滚财务审核	
     		$model->finance_pop_order_pay_status='0';

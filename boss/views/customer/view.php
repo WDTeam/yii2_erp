@@ -45,10 +45,11 @@ $device_no = $customerExtSrc == false ? '-' : $customerExtSrc->device_no;
 $customerAddressArr = CustomerAddress::getAddressArr($model->id);
 $customerAddressStr = '';
 if (!empty($customerAddressArr)) {
-    foreach ($customerAddressArr as $value) {
-        $customerAddressStr .= $value['province-city-area-detail']
-        .'|'.$value['customer_address_nickname']
-        .'|'.$value['customer_address_phone'].'<br/>';
+    foreach ($customerAddressArr as $customerAddress) {
+        $customerAddressStr .= 
+        $customerAddress['province_city_area_detail']
+        .'|'.$customerAddress['customer_address_nickname']
+        .'|'.$customerAddress['customer_address_phone'].'<br/>';
     }
 }
 
