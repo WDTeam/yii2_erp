@@ -33,10 +33,10 @@ class FinanceHeader extends \yii\db\ActiveRecord
 				return '<font color="blue">渠道营销费</font>';
 				break;
 			case 'order_money':
-				return '<font color="purple">支付金额</font>';
+				return '<font color="red">支付金额</font>';
 				break;
 			case 'refund':
-				return '<font color="black">退款金额</font>';
+				return '<font color="red">退款金额</font>';
 				break;
 			case 'decrease':
 				return '<font color="blue">手续费</font>';

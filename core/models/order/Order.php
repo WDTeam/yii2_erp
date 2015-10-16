@@ -10,6 +10,7 @@ namespace core\models\order;
 
 
 use core\models\Customer;
+use core\models\GeneralPay\GeneralPay;
 use core\models\worker\Worker;
 use Yii;
 use Redis;
@@ -102,11 +103,12 @@ class Order extends OrderModel
      *  string $order_customer_phone 客户手机号 必填
      *  int $admin_id 操作人id 0客户 1系统 必填
      *  int $order_pay_type 支付方式 1现金 2线上 3第三方 必填
-     *
+     *  int $coupon_id 优惠券id
+     *  int $order_is_use_balance 是否使用余额 0否 1是
      *  string $order_booked_worker_id 指定阿姨id
      *  string $order_pop_order_code 第三方订单号
      *  string $order_pop_group_buy_code 第三方团购号
-     *  int $order_pop_order_money 第三方订单金额
+     *  int $order_pop_order_money 第三方预付金额
      *  string $order_customer_need 客户需求
      *  string $order_customer_memo 客户备注
      * ]
@@ -246,6 +248,15 @@ class Order extends OrderModel
                 $this->order_use_coupon_money = self::getCouponById($this->coupon_id);
                 $this->order_pay_money -= $this->order_use_coupon_money;
             }
+            if($this->order_is_use_balance==1){
+                $customer = Customer::getCustomerInfo($this->order_customer_phone);
+                if($customer['customer_balance']<$this->order_pay_money){ //用户余额小于需支付金额
+                    $this->order_use_acc_balance = $customer['customer_balance']; //使用余额为用户余额
+                }else{
+                    $this->order_use_acc_balance = $this->order_pay_money; //使用余额为需支付金额
+                }
+                $this->order_pay_money -= $this->order_use_coupon_money;
+            }
         }
 
 
@@ -287,6 +298,40 @@ class Order extends OrderModel
             Yii::$app->on('addOrderToPool', function ($event) {
                 Order::addOrderToPool($event->sender->id);
             });
+            $order = $this->attributes;
+            switch($this->orderExtPay->order_pay_type){
+                case self::ORDER_PAY_TYPE_OFF_LINE://现金支付
+                    //交易记录
+                    $order['customer_trans_record_cash'] = $this->order_money;
+                    $order['general_pay_source'] = 20;
+                    if(GeneralPay::cashPay($order)){
+                        $this->admin_id = $attributes['admin_id'];
+                        OrderStatus::payment($this,['OrderExtPay']);
+                    }
+                    break;
+                case self::ORDER_PAY_TYPE_ON_LINE://线上支付
+                    if($this->orderExtPay->order_pay_money==0){ //如果需要支付的金额等于0 则全部走余额支付
+                        //交易记录
+                        $order['customer_trans_record_online_balance_pay'] = $this->orderExtPay->order_use_acc_balance;
+                        $order['general_pay_source'] = 20;
+                        if(GeneralPay::balancePay($order)){
+                            $this->admin_id = $attributes['admin_id'];
+                            OrderStatus::payment($this,['OrderExtPay']);
+                        }
+                    }
+                    break;
+                case self::ORDER_PAY_TYPE_POP://第三方预付
+                    //交易记录
+                    $order['customer_trans_record_pre_pay'] = $this->orderExtPop->order_pop_order_money;
+                    $order['general_pay_source'] = $this->channel_id;
+                    if(GeneralPay::perPay($order)){
+                        $this->admin_id = $attributes['admin_id'];
+                        OrderStatus::payment($this,['OrderExtPay']);
+                    }
+                    break;
+                default:break;
+
+            }
             return true;
         }
         return false;

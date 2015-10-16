@@ -2,7 +2,7 @@
 
 namespace core\models\GeneralPay;
 
-use common\models\CustomerTransRecord;
+use core\models\CustomerTransRecord\CustomerTransRecord;
 use core\models\Customer;
 use Yii;
 
@@ -213,6 +213,39 @@ class GeneralPay extends \common\models\GeneralPay
             return ['status'=>0 , 'info'=>'数据返回失败', 'data'=>$model->errors];
         }
 
+    }
+
+
+    /**
+     * 银联支付回调
+     * @param $data
+     */
+    public function upAppNotify($data){
+        parent::upAppNotify($data);
+    }
+
+    /**
+     * 支付宝APP回调
+     * @param $data
+     */
+    public function alipayAppNotify($data){
+        parent::alipayAppNotify($data);
+    }
+
+    /**
+     * 微信APP回调
+     * @param $data
+     */
+    public function wxAppNotify($data){
+        parent::wxAppNotify($data);
+    }
+
+    /**
+     * 百付宝APP回调
+     * @param $data
+     */
+    public function bfbAppNotify($data){
+        parent::bfbAppNotify($data);
     }
 
 }

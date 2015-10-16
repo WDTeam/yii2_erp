@@ -106,7 +106,9 @@ class FinanceShopSettleApplyController extends Controller
         $searchModel->load($requestParams);
         $shopModel = Shop::findById($searchModel->shop_id);
         $shopManagerModel = ShopManager::findById($searchModel->shop_manager_id);
-        $searchModel->shop_manager_name = $shopManagerModel->name;
+        if(count($shopManagerModel) > 0){
+            $searchModel->shop_manager_name = $shopManagerModel->name;
+        }
         $searchModel->getShopSettleInfo($searchModel->shop_id);
         $financeSettleApplySearchModel = new FinanceSettleApplySearch;
         
@@ -128,16 +130,18 @@ class FinanceShopSettleApplyController extends Controller
         $requestParams = Yii::$app->request->getQueryParams();
         $searchModel = new FinanceShopSettleApplySearch;
         $searchModel->load($requestParams);
-        $shopModel = Shop::findById($searchModel->shop_id);
-        $shopManagerModel = ShopManager::findById($searchModel->shop_manager_id);
-        $searchModel->shop_name = $shopModel->name;
-        $searchModel->shop_manager_name = $shopManagerModel->name;
-        $searchModel->finance_shop_settle_apply_fee_per_order = FinanceShopSettleApplySearch::MANAGE_FEE_PER_ORDER;
-        $searchModel->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_INIT;
-        $searchModel->finance_shop_settle_apply_cycle = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_CYCLE_WEEK;
-        $searchModel->finance_shop_settle_apply_cycle_des = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_CYCLE_WEEK_DES;
-        $searchModel->created_at = time();
-        $searchModel->save();
+        if(!empty($searchModel->shop_id)){
+            $shopModel = Shop::findById($searchModel->shop_id);
+            $shopManagerModel = ShopManager::findById($searchModel->shop_manager_id);
+            $searchModel->shop_name = $shopModel->name;
+            $searchModel->shop_manager_name = $shopManagerModel->name;
+            $searchModel->finance_shop_settle_apply_fee_per_order = FinanceShopSettleApplySearch::MANAGE_FEE_PER_ORDER;
+            $searchModel->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_INIT;
+            $searchModel->finance_shop_settle_apply_cycle = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_CYCLE_WEEK;
+            $searchModel->finance_shop_settle_apply_cycle_des = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_CYCLE_WEEK_DES;
+            $searchModel->created_at = time();
+            $searchModel->save();
+        }
         return $this->redirect('/finance-shop-settle-apply/index?review_section='.FinanceShopSettleApplySearch::BUSINESS_REVIEW);
     }
     

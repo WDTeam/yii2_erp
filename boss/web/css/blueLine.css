@@ -9,7 +9,8 @@
     font-size: 13px;
     line-height: 17px;
     color: #fff;
-    background: #2489c5;
+    /*background: #2489c5;*/
+    background: #D1D1D1;
     border: none;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
@@ -26,17 +27,18 @@
         margin: -5px 0 0 0;
         padding: 0;
         overflow: hidden;
-        background: url(line.png) no-repeat;
+        background: url(../adminlte/img/input/line.png) no-repeat;
         border: none;
     }
     .icheckbox_line-blue.hover,
     .icheckbox_line-blue.checked.hover,
     .iradio_line-blue.hover {
-        background: #3DA0DB;
+        /*background: #3DA0DB;*/
+        background: rgba(246, 162, 2, .6);
     }
     .icheckbox_line-blue.checked,
     .iradio_line-blue.checked {
-        background: #2489c5;
+        background: #f6a202;
     }
         .icheckbox_line-blue.checked .icheck_line-icon,
         .iradio_line-blue.checked .icheck_line-icon {
@@ -64,8 +66,12 @@
 @media (-o-min-device-pixel-ratio: 5/4), (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 120dpi), (min-resolution: 1.25dppx) {
     .icheckbox_line-blue .icheck_line-icon,
     .iradio_line-blue .icheck_line-icon {
-        background-image: url(line@2x.png);
+        background-image: url(../adminlte/img/input/line@2x.png);
         -webkit-background-size: 60px 13px;
         background-size: 60px 13px;
     }
+}
+
+.MyRadioStyle label {
+	display: block;
 }

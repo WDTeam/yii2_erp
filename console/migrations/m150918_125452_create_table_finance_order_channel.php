@@ -28,26 +28,26 @@ class m150918_125452_create_table_finance_order_channel extends Migration
         $this->createIndex('pay_channel_id','{{%finance_order_channel}}','pay_channel_id');
 
         $this->execute(
-            "INSERT INTO {{%finance_order_channel}} VALUES ('1', '11', 'APP微信（客户端）', 1, 1, 0, '0');
-             INSERT INTO {{%finance_order_channel}} VALUES ('2', '10', 'H5手机微信', 2, 1, 0, '0');
-             INSERT INTO {{%finance_order_channel}} VALUES ('3', '8', 'APP百度钱包（客户端）', 3, 1, 0, '0');
-             INSERT INTO {{%finance_order_channel}} VALUES ('4', '12', 'APP银联（客户端）', 4, 1, 0, '0');
-             INSERT INTO {{%finance_order_channel}} VALUES ('5', '6', 'APP支付宝（客户端）', 5, 1, 0, '0');
+            "INSERT INTO {{%finance_order_channel}} VALUES ('1', '1', '美团团购', 1, 1, 1443339882, '0');
+             INSERT INTO {{%finance_order_channel}} VALUES ('2', '10', 'H5手机微信', 2, 1, 1443339882, '0');
+             INSERT INTO {{%finance_order_channel}} VALUES ('3', '8', 'APP百度钱包（客户端）', 3, 1, 1443339882, '0');
+             INSERT INTO {{%finance_order_channel}} VALUES ('4', '12', 'APP银联（客户端）', 4, 1, 1443339882, '0');
+             INSERT INTO {{%finance_order_channel}} VALUES ('5', '6', 'APP支付宝（客户端）', 5, 1, 1443339882, '0');
              INSERT INTO {{%finance_order_channel}} VALUES ('6', '6', 'WEB官网', 6, 1, 0, '0');
-             INSERT INTO {{%finance_order_channel}} VALUES ('7', '8', 'H5百度直达号（@e家洁）', 7, 1, 0, '0');
-             INSERT INTO {{%finance_order_channel}} VALUES ('8', '1', '美团上门', 8, 1, 0, '0');
-             INSERT INTO {{%finance_order_channel}} VALUES ('9', '2', '点评到家', 9, 1, 0, '0');
-             INSERT INTO {{%finance_order_channel}} VALUES ('10', '3', '京东到家', 10, 1, 0, '0');
-             INSERT INTO {{%finance_order_channel}} VALUES ('11', '4', '糯米网团购', 11, 1, 0, '0');
-             INSERT INTO {{%finance_order_channel}} VALUES ('12', '2', '大众点评团购', 12, 1, 0, '0');
-             INSERT INTO {{%finance_order_channel}} VALUES ('13', '5', '支付宝服务窗', 13, 1, 0, '0');
-             INSERT INTO {{%finance_order_channel}} VALUES ('14', '6', '淘宝店（dudujiaoche）', 14, 1, 0, '0');
-             INSERT INTO {{%finance_order_channel}} VALUES ('15', '7', '淘宝店（e家洁家政公司）', 15, 1, 0, '0');
-             INSERT INTO {{%finance_order_channel}} VALUES ('16', '8', '百度闭环（3600行）', 16, 1, 0, '0');
-             INSERT INTO {{%finance_order_channel}} VALUES ('17', '8', '百度订单分发（手机百度）', 17, 1, 0, '0');
-             INSERT INTO {{%finance_order_channel}} VALUES ('18', '9', 'APP到位', 18, 1, 0, '0');
-             INSERT INTO {{%finance_order_channel}} VALUES ('19', '1', '美团团购', 19, 1, 0, '0');
-             INSERT INTO {{%finance_order_channel}} VALUES ('20', '14', '后台下单', 20, 1, 0, '0');"
+             INSERT INTO {{%finance_order_channel}} VALUES ('7', '5', '支付宝服务窗', 7, 1, 1443339882, '0');
+             INSERT INTO {{%finance_order_channel}} VALUES ('8', '1', '美团上门', 8, 1, 1443339882, '0');
+             INSERT INTO {{%finance_order_channel}} VALUES ('9', '2', '点评到家', 9, 1, 1443339882, '0');
+             INSERT INTO {{%finance_order_channel}} VALUES ('10', '3', '京东到家', 10, 1, 1443339882, '0');
+             INSERT INTO {{%finance_order_channel}} VALUES ('11', '4', '糯米网团购', 11, 1, 1443339882, '0');
+             INSERT INTO {{%finance_order_channel}} VALUES ('12', '2', '大众点评团购', 12, 1, 1443339882, '0');
+             INSERT INTO {{%finance_order_channel}} VALUES ('13', '8', 'H5百度直达号（@e家洁）', 13, 1,1443339882, '0');
+             INSERT INTO {{%finance_order_channel}} VALUES ('14', '6', '淘宝店（dudujiaoche）', 14, 1, 1443339882, '0');
+             INSERT INTO {{%finance_order_channel}} VALUES ('15', '7', '淘宝店（e家洁家政公司）', 15, 1, 1443339882, '0');
+             INSERT INTO {{%finance_order_channel}} VALUES ('16', '8', '百度闭环（3600行）', 16, 1,1443339882, '0');
+             INSERT INTO {{%finance_order_channel}} VALUES ('17', '8', '百度订单分发（手机百度）', 17, 1, 1443339882, '0');
+             INSERT INTO {{%finance_order_channel}} VALUES ('18', '9', 'APP到位', 18, 1, 1443339882, '0');
+             INSERT INTO {{%finance_order_channel}} VALUES ('19', '11', 'APP微信(客户端)', 19, 1, 1443339882, '0');
+             INSERT INTO {{%finance_order_channel}} VALUES ('20', '14', '后台下单', 20, 1, 1443339882, '0');"
         );
     }
 

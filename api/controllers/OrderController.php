@@ -1,6 +1,11 @@
 <?php
+namespace api\controllers;
 
-class OrderController
+use Yii;
+use core\models\order\Order;
+use core\models\customer\CustomerAccessToken;
+
+class OrderController extends \api\components\Controller
 {
     /**
      *
@@ -67,44 +72,43 @@ class OrderController
     
     /**
      *
-     * @api {GET} /order/requestorder 创建订单
+     * @api {POST} /order/create-order 创建订单
      *
      *
-     * @apiName RequestOrder
+     * @apiName ActionCreateOrder
      * @apiGroup Order
+     * @apiDescription 创建订单v1
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} app_version 访问源(android_4.2.2)
-     * @apiParam {String} lng 经度
-     * @apiParam {String} lat 纬度
-     * @apiParam {String} show_common 是否使用常用阿姨
-     * @apiParam {String} plan_time 计划服务时间
-     * @apiParam {String} is_used_worker 是否使用常用阿姨
-     * @apiParam {String} city 城市名称
-     * @apiParam {String} service_hour服务时长
-     * @apiParam {String} street 街道小区
-     * @apiParam {String} wanted_worker_id 使用阿姨id
-     * @apiParam {String} service_date 计划服务日期
-     * @apiParam {String} service_time 服务时长
-     * @apiParam {String} custom_require 个性化需求
-     * @apiParam {String} service_item 服务类型
-     * @apiParam {String} coupon 优惠劵id
-     * @apiParam {String} place_detail 详细地址精确到门牌号
-     * @apiParam {String} pop_channel 订单推广渠道
-     * @apiParam {Number} pay_amount 预付款
-     * @apiParam {Number} worker_num 服务人数
-     * @apiParam {String} extend_info 扩展信息
-     * @apiParam {String} order_src 订单来源
+     * @apiParam {String} order_service_type_id 服务类型商品id
+     * @apiParam {String} order_src_id 订单来源id 访问源(android_4.2.2)
+     * @apiParam {String} order_booked_begin_time 服务开始时间
+     * @apiParam {String} order_booked_end_time 服务结束时间
+     * @apiParam {String} order_customer_phone 用户手机号
+     * @apiParam {String} order_pay_type 支付方式 1现金 2线上 3第三方 必填
+     * @apiParam {String} address_id 订单地址id
+     * @apiParam {String} [address] 订单地址
+     * @apiParam {String} [city]城市
+     * @apiParam {String} [order_pop_order_code] 第三方订单号
+     * @apiParam {String} [order_pop_group_buy_code] 第三方团购号
+     * @apiParam {Integer} [order_pop_order_money] 第三方订单金额,预付金额
+     * @apiParam {String} [coupon_id] 优惠劵id
+     * @apiParam {String} [channel_id] 下单渠道
+     * @apiParam {String} [order_booked_worker_id] 指定阿姨id
+     * @apiParam {Number} [order_customer_need] 客户需求
+     * @apiParam {String} [order_customer_memo] 客户备注
+     * @apiParam {Integer} [order_is_use_balance] 是否使用余额 1 使用 0 不适用 默认1
      * 
      *
-     * @apiSuccess {Object} order 成功订单对象. 
+     * @apiSuccess {Object} order 成功订单对象.
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/order/action-append-order
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
      *       "code": "ok",
      *       "msg": "以下单成功，正在等待阿姨抢单",
      *       "ret":{
-     *           "order": {}
+     *           order对象
      *           
      *       }
      *
@@ -121,8 +125,223 @@ class OrderController
      *     }
      *
      */
-    public function actionRequestOrder(){
-    
+    public function actionCreateOrder(){
+        $args = Yii::$app->request->post();
+        $attributes = [];
+        $user = CustomerAccessToken::getCustomer($args['access_token']);
+        if(is_null($user)){
+            return $this->send(null, "用户无效,请先登录");
+        }
+        $attributes['customer_id'] = $user->id;
+        if(is_null($args['order_service_type_id'])){
+            return $this->send(null, "请输入商品类型");
+        }
+        $attributes['order_service_type_id'] = $args['order_service_type_id'];
+        if(is_null($args['order_src_id'])){
+            return $this->send(null, "数据不完整,缺少订单来源");
+        }
+        $attributes['order_src_id'] = $args['order_src_id'];
+
+        if(is_null($args['order_booked_begin_time'])){
+            return $this->send(null, "数据不完整,请输入初始时间");
+        }
+        $attributes['order_booked_begin_time'] = $args['order_booked_begin_time'];
+
+        if(is_null($args['order_booked_end_time'])){
+            return $this->send(null, "数据不完整,请输入完成时间");
+        }
+        $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
+
+        if(is_null($args['address_id']) and (is_null($args['address_id']) or is_null($args['city']))){
+            return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名");
+        }
+        if(is_null($args['address_id'])){
+            //add address into customer and return customer id
+        }else{
+            $attributes['address_id'] = $args['address_id'];
+        }
+
+        if(is_set($args['order_pop_order_code'])){
+            $attributes['order_pop_order_code'] = $args['order_pop_order_code'];
+        }
+
+        if(is_set($args['order_pop_group_buy_code'])){
+            $attributes['order_pop_group_buy_code'] = $args['order_pop_group_buy_code'];
+        }
+
+        if(is_set($args['coupon_id'])){
+            $attributes['coupon_id'] = $args['coupon_id'];
+        }
+
+        if(is_set($args['channel_id'])){
+            $attributes['channel_id'] = $args['channel_id'];
+        }
+
+        if(is_set($args['order_booked_worker_id'])){
+            $attributes['order_booked_worker_id'] = $args['order_booked_worker_id'];
+        }
+
+        if(is_set($args['order_customer_need'])){
+            $attributes['order_customer_need'] = $args['order_customer_need'];
+        }
+
+        if(is_set($args['order_customer_memo'])){
+            $attributes['order_customer_memo'] = $args['order_customer_memo'];
+        }
+        $attributes['order_is_use_balance'] = 1;
+        if(is_set($args['order_is_use_balance'])){
+            $attributes['order_is_use_balance'] = $args['order_is_use_balance'];
+        }
+
+        $attributes['order_ip'] = Yii::app()->request->userHostAddress;
+        $attributes['admin_id'] = 0;
+        $order =new \core\models\order\Order();
+        $is_success = $order->createNew($attributes);
+        if($is_success){
+            $msg = '创建订单成功';
+            $this->send($order,$msg);
+        }else{
+            $msg = '创建订单失败';
+            $this->send($order,$msg,"error");
+        }
+
+
+    }
+
+    /**
+     *
+     * @api {POST} v1/order/append-order 追加订单
+     *
+     * @apiName ActionAppendOrder
+     * @apiGroup Order
+     *
+     * @apiDescription 追加订单
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} order_service_type_id 服务类型商品id
+     * @apiParam {String} order_src_id 订单来源id 访问源(android_4.2.2)
+     * @apiParam {String} order_booked_begin_time 服务开始时间
+     * @apiParam {String} order_booked_end_time 服务结束时间
+     * @apiParam {String} order_customer_phone 用户手机号
+     * @apiParam {String} order_parent_id 追加父订单id
+     * @apiParam {String} order_pay_type 支付方式 1现金 2线上 3第三方 必填
+     * @apiParam {String} address_id 订单地址id
+     * @apiParam {String} [address] 订单地址
+     * @apiParam {String} [city]城市
+     * @apiParam {String} [order_pop_order_code] 第三方订单号
+     * @apiParam {String} [order_pop_group_buy_code] 第三方团购号
+     * @apiParam {Integer} [order_pop_order_money] 第三方订单金额,预付金额
+     * @apiParam {String} [coupon_id] 优惠劵id
+     * @apiParam {String} [channel_id] 下单渠道
+     * @apiParam {String} [order_booked_worker_id] 指定阿姨id
+     * @apiParam {Number} [order_customer_need] 客户需求
+     * @apiParam {String} [order_customer_memo] 客户备注
+     * @apiParam {Integer} [order_is_use_balance] 是否使用余额 1 使用 0 不适用 默认1
+     *
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/order/action-append-order
+     *
+     * @apiSuccess {Object} order 成功订单对象.
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "code": "ok",
+     *       "msg": "以下单成功，正在等待阿姨抢单",
+     *       "ret":{
+     *           "order": {}
+     *
+     *       }
+     *
+     *     }
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "error",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *
+     *     }
+     *
+     */
+    public function actionAppendOrder(){
+        $args = Yii::$app->request->post();
+        $attributes = [];
+        $user = CustomerAccessToken::getCustomer($args['access_token']);
+        if(is_null($user)){
+            return $this->send(null, "用户无效,请先登录");
+        }
+        $attributes['customer_id'] = $user->id;
+        if(is_null($args['order_service_type_id'])){
+            return $this->send(null, "请输入商品类型");
+        }
+        $attributes['order_service_type_id'] = $args['order_service_type_id'];
+        if(is_null($args['order_src_id'])){
+            return $this->send(null, "数据不完整,缺少订单来源");
+        }
+        $attributes['order_src_id'] = $args['order_src_id'];
+
+        if(is_null($args['order_booked_begin_time'])){
+            return $this->send(null, "数据不完整,请输入初始时间");
+        }
+        $attributes['order_booked_begin_time'] = $args['order_booked_begin_time'];
+
+        if(is_null($args['order_booked_end_time'])){
+            return $this->send(null, "数据不完整,请输入完成时间");
+        }
+        $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
+
+        if(is_null($args['address_id']) and (is_null($args['address_id']) or is_null($args['city']))){
+            return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名");
+        }
+        if(is_null($args['address_id'])){
+            //add address into customer and return customer id
+        }else{
+            $attributes['address_id'] = $args['address_id'];
+        }
+
+        if(is_set($args['order_pop_order_code'])){
+            $attributes['order_pop_order_code'] = $args['order_pop_order_code'];
+        }
+
+        if(is_set($args['order_pop_group_buy_code'])){
+            $attributes['order_pop_group_buy_code'] = $args['order_pop_group_buy_code'];
+        }
+
+        if(is_set($args['coupon_id'])){
+            $attributes['coupon_id'] = $args['coupon_id'];
+        }
+
+        if(is_set($args['channel_id'])){
+            $attributes['channel_id'] = $args['channel_id'];
+        }
+
+        if(is_set($args['order_booked_worker_id'])){
+            $attributes['order_booked_worker_id'] = $args['order_booked_worker_id'];
+        }
+
+        if(is_set($args['order_customer_need'])){
+            $attributes['order_customer_need'] = $args['order_customer_need'];
+        }
+
+        if(is_set($args['order_customer_memo'])){
+            $attributes['order_customer_memo'] = $args['order_customer_memo'];
+        }
+        $attributes['order_is_use_balance'] = 1;
+        if(is_set($args['order_is_use_balance'])){
+            $attributes['order_is_use_balance'] = $args['order_is_use_balance'];
+        }
+
+        $attributes['order_ip'] = Yii::app()->request->userHostAddress;
+        $attributes['admin_id'] = 0;
+        $order =new \core\models\order\Order();
+        $is_success = $order->createNew($attributes);
+        if($is_success){
+            $msg = '追加订单成功';
+            $this->send($order,$msg);
+        }else{
+            $msg = '追加订单失败';
+            $this->send($order,$msg,"error");
+        }
     }
     
     /**
@@ -241,7 +460,7 @@ class OrderController
 
 
     /**
-     * @api {get} /mobileapidriver2/driver_request_order 抢单
+     * @api {get} /mobileapidriver2/worker_request_order 抢单
      * @apiName actionDriverRequestOrder
      * @apiGroup Order
      * @apiDescription 阿姨抢单
@@ -278,7 +497,7 @@ class OrderController
      *  }
      *
      */    
-     public function actionCancelOrder(){
+     public function actionObtainOrder(){
 
     }
     

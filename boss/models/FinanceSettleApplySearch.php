@@ -145,14 +145,6 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             $financeSettleApplySearch->worker_rule_id = $workerInfo['worker_rule_id'];
             $financeSettleApplySearch->finance_settle_apply_cycle_des = $this->getSettleCycleByWorkerType($financeSettleApplySearch->worker_type_id,$financeSettleApplySearch->worker_rule_id);
             $financeSettleApplySearch->latestSettleTime = time();
-        }else{
-            $financeSettleApplySearch->worder_id =1234;
-            $financeSettleApplySearch->workerName = "张三";
-            $financeSettleApplySearch->worder_tel= "13456789000";
-            $financeSettleApplySearch->workerOnboardTime= "1443324337";
-            $financeSettleApplySearch->workerTypeDes= "全职全日";
-            $financeSettleApplySearch->finance_settle_apply_cycle_des = $this->getSettleCycleByWorkerType('','');
-            $financeSettleApplySearch->latestSettleTime = time();
         }
 //        $financeSettleApplySearch->latestSettleTime = $this->getWorkerLatestSettledTime($workerId);
         return $financeSettleApplySearch;

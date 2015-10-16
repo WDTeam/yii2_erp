@@ -22,6 +22,7 @@ class m150923_141027_create_table_finance_header extends Migration
 	'finance_order_channel_name' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'订单渠道名称\'' ,
 	'finance_pay_channel_id' => Schema::TYPE_SMALLINT . '(4) DEFAULT NULL COMMENT \'支付渠道id\'' ,
 	'finance_pay_channel_name' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'支付渠道名称\'' ,
+    'finance_header_where' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'比对字段名称\'' ,
 	'create_time' => Schema::TYPE_INTEGER. '(10) DEFAULT NULL COMMENT \'创建时间\'' ,
 	'is_del' => Schema::TYPE_SMALLINT . '(1) DEFAULT \'0\' COMMENT \'0 正常 1 删除\'' ,
 				 ], $tableOptions);
