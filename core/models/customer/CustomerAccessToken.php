@@ -52,6 +52,7 @@ class CustomerAccessToken extends \common\models\CustomerAccessToken
             $customerAccessToken->save();
             $transaction->commit();
             return $customerAccessToken->customer_access_token;
+            
         }catch(\Exception $e){
             $transaction->rollback();
             return false;
