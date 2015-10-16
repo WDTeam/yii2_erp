@@ -16,6 +16,14 @@ class Customer extends \common\models\Customer
 {
 
     /**
+     * 是否有该手机号的客户
+     */
+    public static function hasCustomer($phone){
+        $customer = self::find()->where(['customer_phone'=>$phone])->one();
+        return $customer == NULL ? false : true;
+    }
+
+    /**
      * 根据customer_id获取顾客信息
      */
     public static function getCustomerById($customer_id)

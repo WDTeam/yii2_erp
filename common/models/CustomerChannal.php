@@ -9,6 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property string $channal_name
+ * @property string $channal_ename
  * @property integer $pid
  * @property integer $created_at
  * @property integer $updated_at
@@ -30,9 +31,9 @@ class CustomerChannal extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['channal_name', 'created_at', 'updated_at'], 'required'],
             [['pid', 'created_at', 'updated_at', 'is_del'], 'integer'],
-            [['channal_name'], 'string', 'max' => 16]
+            [['created_at', 'updated_at'], 'required'],
+            [['channal_name', 'channal_ename'], 'string', 'max' => 16]
         ];
     }
 
@@ -44,6 +45,7 @@ class CustomerChannal extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('boss', '主键'),
             'channal_name' => Yii::t('boss', '聚道名称'),
+            'channal_ename' => Yii::t('boss', '聚道拼音'),
             'pid' => Yii::t('boss', '父级id'),
             'created_at' => Yii::t('boss', '创建时间'),
             'updated_at' => Yii::t('boss', '更新时间'),

@@ -14,8 +14,18 @@ class m150918_195648_create_table_customer_address extends Migration
         $this->createTable('{{%customer_address}}', [
             'id'=> Schema::TYPE_PK.'(8) NOT NULL AUTO_INCREMENT COMMENT \'主键\'',
             'customer_id' => Schema::TYPE_INTEGER.'(8) NOT NULL COMMENT \'关联客户\'',
-            'general_region_id'=>  Schema::TYPE_INTEGER.'(8) NOT NULL COMMENT \'关联区域\'',
-            'customer_address_detail'=>  Schema::TYPE_STRING.'(64) NOT NULL COMMENT \'详细地址\'',
+            'operation_privince_id'=>  Schema::TYPE_INTEGER.'(8) DEFAULT 0 COMMENT \'省\'',
+            'operation_city_id'=>  Schema::TYPE_INTEGER.'(8) DEFAULT 0 COMMENT \'市\'',
+            'operation_area_id'=>  Schema::TYPE_INTEGER.'(8) DEFAULT 0 COMMENT \'区\'',
+
+            'operation_privince_name'=>  Schema::TYPE_STRING.'(255) DEFAULT NULL COMMENT \'省名\'',
+            'operation_city_name'=>  Schema::TYPE_STRING.'(255) DEFAULT NULL COMMENT \'市名\'',
+            'operation_area_name'=>  Schema::TYPE_STRING.'(255) DEFAULT NULL COMMENT \'区名\'',
+            'operation_privince_short_name'=>  Schema::TYPE_STRING.'(255) DEFAULT NULL COMMENT \'省短名\'',
+            'operation_city_short_name'=>  Schema::TYPE_STRING.'(255) DEFAULT NULL COMMENT \'市短名\'',
+            'operation_area_short_name'=>  Schema::TYPE_STRING.'(255) DEFAULT NULL COMMENT \'区短名\'',
+            
+            'customer_address_detail'=>  Schema::TYPE_STRING.'(64) DEFAULT NULL COMMENT \'详细地址\'',
             'customer_address_status'=>  Schema::TYPE_SMALLINT.'(4) NOT NULL COMMENT \'客户地址类型,1为默认地址，-1为非默认地址\'',
             'customer_address_longitude'=>  Schema::TYPE_DOUBLE.'(8,3) DEFAULT NULL COMMENT \'经度\'',
             'customer_address_latitude'=>  Schema::TYPE_DOUBLE.'(8,3) DEFAULT NULL COMMENT \'纬度\'',
@@ -26,13 +36,13 @@ class m150918_195648_create_table_customer_address extends Migration
             'is_del'=>  Schema::TYPE_SMALLINT.'(4) DEFAULT 0 COMMENT \'是否逻辑删除\'',
             ], $tableOptions);
 
-        $this->batchInsert('{{%customer_address}}',
-            ['id','customer_id','general_region_id','customer_address_detail','customer_address_status','customer_address_longitude','customer_address_latitude', 'customer_address_nickname', 'customer_address_phone','created_at', 'updated_at', 'is_del'],
-            [
-                [1,1,1,'北京市朝阳区SOHO1',1, 12.888, 888.334, '测试昵称', '13554699534', time(),time(), 0],
-                [2,1,1,'北京市朝阳区SOHO2',0, 12.888, 888.334, '测试昵称', '13554699534', time(),time(), 0],
-                [3,1,1,'北京市朝阳区SOHO3',0, 12.888, 888.334, '测试昵称', '13554699534', time(),time(), 0],
-            ]);
+        // $this->batchInsert('{{%customer_address}}',
+        //     ['id','customer_id','general_region_id','customer_address_detail','customer_address_status','customer_address_longitude','customer_address_latitude', 'customer_address_nickname', 'customer_address_phone','created_at', 'updated_at', 'is_del'],
+        //     [
+        //         [1,1,1,'北京市朝阳区SOHO1',1, 12.888, 888.334, '测试昵称', '13554699534', time(),time(), 0],
+        //         [2,1,1,'北京市朝阳区SOHO2',0, 12.888, 888.334, '测试昵称', '13554699534', time(),time(), 0],
+        //         [3,1,1,'北京市朝阳区SOHO3',0, 12.888, 888.334, '测试昵称', '13554699534', time(),time(), 0],
+        //     ]);
     }
 
     public function down()

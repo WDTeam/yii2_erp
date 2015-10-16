@@ -61,7 +61,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     {
         return [
             [[ 'finance_settle_apply_starttime', 'finance_settle_apply_endtime'], 'required'],
-             [['worder_id', 'worker_type_id', 'finance_settle_apply_man_hour', 'finance_settle_apply_status', ], 'integer'],
+             [['worder_id', 'worker_type_id','shop_id', 'finance_settle_apply_man_hour', 'finance_settle_apply_status', ], 'integer'],
             [['worder_tel',], 'string', 'max' => 11],
         ];
     }
@@ -84,6 +84,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             'worder_id' => $this->worder_id,
             'worker_type_id' => $this->worker_type_id,
             'worker_rule_id' => $this->worker_rule_id,
+            'shop_id' => $this->shop_id,
             'finance_settle_apply_man_hour' => $this->finance_settle_apply_man_hour,
             'finance_settle_apply_order_money' => $this->finance_settle_apply_order_money,
             'finance_settle_apply_order_cash_money' => $this->finance_settle_apply_order_cash_money,

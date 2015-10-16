@@ -20,7 +20,6 @@ class FinanceHeader extends \yii\db\ActiveRecord
 {
 	public $finance_uplod_url;
 	public $select_where;
-	public $finance_header_where_es;
 	
 	public static function selectname($wherename)
 	{
@@ -69,7 +68,7 @@ class FinanceHeader extends \yii\db\ActiveRecord
     {
         return [
             [['finance_order_channel_id','finance_pay_channel_id', 'create_time', 'is_del','finance_header_key'], 'integer'],
-            [['finance_header_where_es','finance_header_name','finance_header_title','finance_header_where','finance_order_channel_name', 'finance_pay_channel_name'], 'string', 'max' => 100]
+            [['finance_header_name','finance_header_title','finance_header_where','finance_order_channel_name', 'finance_pay_channel_name'], 'string', 'max' => 100]
         ];
     }
 
@@ -90,7 +89,8 @@ class FinanceHeader extends \yii\db\ActiveRecord
             'finance_pay_channel_id' => Yii::t('boss', '支付渠道id'),
             'finance_pay_channel_name' => Yii::t('boss', '支付渠道名称'),
 			'create_time' => Yii::t('boss', '创建时间'),
-			'finance_header_where_es' => Yii::t('boss', '表达式'),
+			'finance_header_where' => Yii::t('boss', '比对字段'),
+			'finance_uplod_url' => Yii::t('boss', '上传xls'),
 			'is_del' => Yii::t('boss', '0 正常 1 删除'),
 			
         ];
