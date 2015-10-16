@@ -5,6 +5,7 @@ use kartik\grid\GridView;
 use kartik\widgets\ActiveForm;
 use yii\widgets\Pjax;
 use boss\models\FinanceShopSettleApplySearch;
+use boss\widgets\ShopSelect;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -28,8 +29,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
             ?>
-            <div class='col-md-6'>
-                <?= $form->field($model, 'shop_name') ?>
+           <div class='col-md-4'>
+                <?php 
+                echo ShopSelect::widget([
+                        'model'=>$model,
+                        'shop_manager_id'=>'shop_manager_id',
+                        'shop_id'=>'shop_id',
+                        ]);
+                ?>
             </div>
             <div class='col-md-2' >
                 <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>

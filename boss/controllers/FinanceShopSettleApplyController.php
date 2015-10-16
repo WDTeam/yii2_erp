@@ -99,9 +99,15 @@ class FinanceShopSettleApplyController extends Controller
     public function actionShopManualSettlementIndex()
     {
         $orderIncomeSearchModel = new FinanceWorkerOrderIncomeSearch;
-        $orderIncomeDataProvider = $orderIncomeSearchModel->search(Yii::$app->request->getQueryParams());
+        $requestParams = Yii::$app->request->getQueryParams();
+        $orderIncomeDataProvider = $orderIncomeSearchModel->search($requestParams);
         $searchModel = new FinanceShopSettleApplySearch;
         $searchModel->review_section = Yii::$app->request->getQueryParams()['review_section'];
+        $searchModel->load($requestParams);
+        var_dump($requestParams);
+        var_dump($requestParams);
+        var_dump($searchModel);
+        var_dump($searchModel);
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('shopManualSettlementIndex', [
             'dataProvider' => $dataProvider,
