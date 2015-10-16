@@ -9,7 +9,10 @@
 namespace core\models\order;
 
 
+use boss\controllers\OperationGoodsController;
+use boss\controllers\OperationShopDistrictController;
 use core\models\Customer;
+use core\models\customer\CustomerAddress;
 use core\models\GeneralPay\GeneralPay;
 use core\models\worker\Worker;
 use Yii;
@@ -18,6 +21,7 @@ use common\models\Order as OrderModel;
 use common\models\OrderStatusDict;
 use common\models\OrderSrc;
 use common\models\FinanceOrderChannel;
+use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -226,13 +230,26 @@ class Order extends OrderModel
         $status_to = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //初始化订单状态
         $order_count = OrderSearch::getCustomerOrderCount($this->customer_id); //该用户的订单数量
         $order_code = strlen($this->customer_id).$this->customer_id.strlen($order_count).$order_count ; //TODO 订单号待优化
-
-        $address = Customer::getCustomerAddresses($this->address_id);
-        $goods = self::getGoods($address['customer_address_longitude'],$address['customer_address_latitude'],$attributes['order_service_type_id']);
+        try {
+            $address = CustomerAddress::getAddress($this->address_id);
+        }catch (Exception $e){
+            $this->addError('order_address','创建时获取地址异常！');
+            return false;
+        }
+        try {
+            $goods = self::getGoods($address['customer_address_longitude'], $address['customer_address_latitude'], $attributes['order_service_type_id']);
+        }catch (Exception $e){
+            $this->addError('order_service_type_name','创建时获商品信息异常！');
+            return false;
+        }
+        if(empty($goods)){
+            $this->addError('order_service_type_name','创建时获商品信息失败！');
+            return false;
+        }
         $this->setAttributes([
             'order_unit_money'=> $goods['operation_shop_district_goods_price'], //单价
             'order_service_type_name'=> $goods['operation_shop_district_goods_name'], //商品名称
-            'order_booked_count' => ($this->order_booked_end_time-$this->order_booked_begin_time)/60, //时长
+            'order_booked_count' => intval(($this->order_booked_end_time-$this->order_booked_begin_time)/60), //时长
         ]);
         $this->setAttributes([
             'order_money'=> $this->order_unit_money*$this->order_booked_count/60, //订单总价
@@ -240,16 +257,21 @@ class Order extends OrderModel
         ]);
 
 
-        if($this->$order_pay_type==3){ //第三方预付
+        if($this->order_pay_type==3){ //第三方预付
             $this->order_pop_operation_money=$this->order_money-$this->order_pop_order_money; //渠道运营费
-        }elseif($this->$order_pay_type==2){//线上支付
+        }elseif($this->order_pay_type==2){//线上支付
             $this->order_pay_money = $this->order_money;//支付金额
             if(!empty($this->coupon_id)){//是否使用了优惠券
                 $this->order_use_coupon_money = self::getCouponById($this->coupon_id);
                 $this->order_pay_money -= $this->order_use_coupon_money;
             }
             if($this->order_is_use_balance==1){
-                $customer = Customer::getCustomerInfo($this->order_customer_phone);
+                try {
+                    $customer = Customer::getCustomerInfo($this->order_customer_phone);
+                }catch (Exception $e){
+                    $this->addError('order_use_acc_balance','创建时获客户余额信息失败！');
+                    return false;
+                }
                 if($customer['customer_balance']<$this->order_pay_money){ //用户余额小于需支付金额
                     $this->order_use_acc_balance = $customer['customer_balance']; //使用余额为用户余额
                 }else{
@@ -299,14 +321,15 @@ class Order extends OrderModel
                 Order::addOrderToPool($event->sender->id);
             });
             $order = $this->attributes;
+            $order_model = Order::findOne($this->id);
             switch($this->orderExtPay->order_pay_type){
                 case self::ORDER_PAY_TYPE_OFF_LINE://现金支付
                     //交易记录
                     $order['customer_trans_record_cash'] = $this->order_money;
                     $order['general_pay_source'] = 20;
                     if(GeneralPay::cashPay($order)){
-                        $this->admin_id = $attributes['admin_id'];
-                        OrderStatus::payment($this,['OrderExtPay']);
+                        $order_model->admin_id = $attributes['admin_id'];
+                        OrderStatus::payment($order_model,['OrderExtPay']);
                     }
                     break;
                 case self::ORDER_PAY_TYPE_ON_LINE://线上支付
@@ -315,8 +338,8 @@ class Order extends OrderModel
                         $order['customer_trans_record_online_balance_pay'] = $this->orderExtPay->order_use_acc_balance;
                         $order['general_pay_source'] = 20;
                         if(GeneralPay::balancePay($order)){
-                            $this->admin_id = $attributes['admin_id'];
-                            OrderStatus::payment($this,['OrderExtPay']);
+                            $order_model->admin_id = $attributes['admin_id'];
+                            OrderStatus::payment($order_model,['OrderExtPay']);
                         }
                     }
                     break;
@@ -325,8 +348,8 @@ class Order extends OrderModel
                     $order['customer_trans_record_pre_pay'] = $this->orderExtPop->order_pop_order_money;
                     $order['general_pay_source'] = $this->channel_id;
                     if(GeneralPay::perPay($order)){
-                        $this->admin_id = $attributes['admin_id'];
-                        OrderStatus::payment($this,['OrderExtPay']);
+                        $order_model->admin_id = $attributes['admin_id'];
+                        OrderStatus::payment($order_model,['OrderExtPay']);
                     }
                     break;
                 default:break;
@@ -373,7 +396,7 @@ class Order extends OrderModel
                 }else{
                     foreach($goods['data'] as $v){
                         if($v['operation_goods_id']==$goods_id){
-                            return ['code'=>200,'data'=>$v];
+                            return $v;
                         }
                     }
                     return ['code'=>500,'msg'=>'获取商品信息失败：没有匹配的商品'];

@@ -62,7 +62,7 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
     	if(\Yii::$app->cache->exists('orderchannellist')){
         $orderchannellist= \Yii::$app->cache->get('orderchannellist');
     	return json_decode($orderchannellist,true);
-	    }else{ 
+	    }else{
 	    	$ordewhere['is_del']=0;
 	    	$ordewhere['finance_order_channel_is_lock']=1;
 	    	$payatainfo=FinanceOrderChannel::find()->select('id,finance_order_channel_name')->where($ordewhere)->asArray()->all();

@@ -2,7 +2,7 @@
 
 namespace boss\controllers;
 
-use common\models\CustomerAddress;
+use core\models\customer\CustomerAddress;
 use core\models\order\OrderWorkerRelation;
 use core\models\worker\Worker;
 use Yii;
@@ -297,12 +297,10 @@ class OrderController extends BaseAuthController
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }else{//init
-            $model->order_service_type_id = 1; //服务类型默认值
-            $model->order_booked_count = 120; //服务市场初始值120分钟
+            $model->order_booked_count = 120; //服务时长初始值120分钟
             $model->order_booked_worker_id=0; //不指定阿姨
             $model->orderBookedTimeRange = '08:00-10:00';//预约时间段初始值
             $model->order_pay_type = 1;//支付方式 初始值
-            $model->channel_id = 1;//默认渠道
         }
         return $this->render('create', [
             'model' => $model,

@@ -118,10 +118,13 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
 $this->registerJsFile('/js/order.js',['depends'=>[ 'yii\web\YiiAsset','yii\bootstrap\BootstrapAsset']]);
 $this->registerCss('
- #order-order_booked_time_range .radio-inline ,#order-order_booked_time_range .checkbox-inline {
+ #order-orderbookedtimerange .radio-inline ,#order-channel_id .radio-inline {
         margin-left: 0px;
         margin-right: 10px;
         margin-top: 0;
+    }
+    label,input.form-control{
+        font-size:14px;
     }
 ');
 ?>
