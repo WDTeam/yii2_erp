@@ -36,7 +36,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'finance_pay_channel_name',
             //'create_time:datetime',
             'is_del',
-    		//'finance_header_where_es',
     		[
     		'attribute' => 'finance_header_where',
     		'type' => DetailView::INPUT_WIDGET,
