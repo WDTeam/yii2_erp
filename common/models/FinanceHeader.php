@@ -91,6 +91,7 @@ class FinanceHeader extends \yii\db\ActiveRecord
             'finance_pay_channel_name' => Yii::t('boss', '支付渠道名称'),
 			'create_time' => Yii::t('boss', '创建时间'),
 			'finance_header_where_es' => Yii::t('boss', '表达式'),
+			'finance_uplod_url' => Yii::t('boss', '上传xls'),
 			'is_del' => Yii::t('boss', '0 正常 1 删除'),
 			
         ];
