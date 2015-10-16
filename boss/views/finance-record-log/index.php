@@ -68,7 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'format' => 'raw',
             'label' => '未处理笔数',
             'value' => function ($dataProvider) {
-            	return FinancePopOrderSearch::countnub($dataProvider->id).'条';
+            	return FinancePopOrderSearch::countnub($dataProvider->id);
             },
             'width' => "100px",
             ],

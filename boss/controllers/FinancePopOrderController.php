@@ -199,8 +199,7 @@ class FinancePopOrderController extends Controller
     		//失败总金额
     		$sumterr=$modelinfo::find()->select(['sum(finance_pop_order_sum_money) as sumoneyinfo'])
     		->andWhere(['finance_pop_order_pay_status_type' => '4'])->asArray()->all();
-    		$customer_info->finance_record_log_failure_money =$sumterr[0]['sumoneyinfo'];
-
+    		$customer_info->finance_record_log_failure_money =$sumterr[0]['sumoneyinfo']?$sumterr[0]['sumoneyinfo']:0;
     		//对账人
     		$customer_info->finance_record_log_confirm_name =Yii::$app->user->identity->username;
     		//服务费
@@ -363,23 +362,10 @@ class FinancePopOrderController extends Controller
     	$tyu= array_combine($tyd,$tydtui);
     	
     	$searchModel = new FinancePopOrderSearch;
-
-    	
- /*    	$requestParams = Yii::$app->request->getQueryParams();
-    	if(isset($requestParams['FinancePopOrderSearch'])){
-    		$requestModel = $requestParams['FinancePopOrderSearch'];
-    	}
-    	$requestParams = array_merge($defaultParams,$requestParams);
-    	
-    	var_dump($requestParams);exit; */
-
     	$searchModel->load(Yii::$app->request->getQueryParams());
     	$searchModel->is_del=0;
     	$searchModel->finance_pop_order_pay_status=3;
     	$dataProvider = $searchModel->search();
-    	
-    	
-    	//$dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
     	return $this->render('bad', [
     			'dataProvider' => $dataProvider,
     			'searchModel' => $searchModel,
@@ -601,8 +587,19 @@ class FinancePopOrderController extends Controller
     		$tydtui[]=$errt['finance_order_channel_name'];
     	}
     	$tyu= array_combine($tyd,$tydtui);
+    	
     	$searchModel = new FinancePopOrderSearch;
-    	$dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+    	$searchModel->load(Yii::$app->request->getQueryParams());
+    	$searchModel->is_del=0;
+    	$timeinfo=Yii::$app->request->getQueryParams();
+    	if(isset($timeinfo['FinancePopOrderSearch']['finance_order_channel_statuspayment'])){
+    		$searchModel->finance_order_channel_statuspayment=strtotime($timeinfo['FinancePopOrderSearch']['finance_order_channel_statuspayment']);
+    	}
+    	if(isset($timeinfo['FinancePopOrderSearch']['finance_order_channel_endpayment'])){
+    		$searchModel->finance_order_channel_statuspayment=strtotime($timeinfo['FinancePopOrderSearch']['finance_order_channel_endpayment']);
+    	}
+    	
+    	$dataProvider = $searchModel->search(false);
     	return $this->render('billinfo', [
     			'dataProvider' => $dataProvider,
     			'searchModel' => $searchModel,
@@ -611,20 +608,6 @@ class FinancePopOrderController extends Controller
     	 
     }
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
