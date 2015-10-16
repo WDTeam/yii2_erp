@@ -278,7 +278,27 @@ class GeneralPay extends \yii\db\ActiveRecord
     /**
      * 直达号支付(7)
      */
-    private function zhidahao_h5(){}
+    private function zhidahao_h5()
+    {
+        $get = yii::$app->request->get();
+        $data = json_decode($get['params'],true);
+        $detail = $data['params']['detail'];
+        $param = [
+            'out_trade_no'=>$this->create_out_trade_no(),
+            'subject'=>$this->subject(),
+            'general_pay_money'=>$this->general_pay_money,
+            'detail' => $detail,
+            'order_source_url' => $data['params']['order_source_url'],
+            'return_url' => $data['params']['return_url'],
+            'page_url' => $data['params']['page_url'],
+            'customer_name' => $data['params']['customer_name'],
+            'customer_mobile' => $data['params']['customer_mobile'],
+            'customer_address' => $data['params']['customer_address'],
+        ];
+        $class = new \zhidahao_class();
+        $msg = $class->get($param);
+
+    }
 
     /**
      * 后台支付(20)
