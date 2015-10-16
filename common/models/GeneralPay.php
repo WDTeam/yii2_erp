@@ -156,16 +156,13 @@ class GeneralPay extends \yii\db\ActiveRecord
                 $this->pay_type = 'alipay_web';
                 break;
             case 7:
-                $this->pay_type = 'pay_ht';
-                break;
-            case 8:
                 $this->pay_type = 'zhidahao_h5';
                 break;
-            case 9:
+            case 20:
                 $this->pay_type = 'pay_ht';
                 break;
-            case 10:
-                $this->pay_type = 'pay_ht';
+            case 21:
+                $this->pay_type = 'weibo_h5';
                 break;
         }
         return $source;
@@ -213,7 +210,7 @@ class GeneralPay extends \yii\db\ActiveRecord
 
         $class = new \wxjspay_class();
         $msg = $class->get($param);
-        echo json_encode($msg);
+        echo $msg;exit;
         return $msg;
     }
 
@@ -252,7 +249,7 @@ class GeneralPay extends \yii\db\ActiveRecord
     }
 
     /**
-     * 支付宝APP
+     * 支付宝APP(5)
      */
     private function alipay_app()
     {
@@ -270,15 +267,28 @@ class GeneralPay extends \yii\db\ActiveRecord
 
 
     /**
-     * 支付宝WEB
+     * 支付宝WEB(6)
      * 第三方支付思路：
      * 1 客户端请求服务端，带有指定数据
      * 2 服务端将支付所需参数返回给客户端
      * 3 服务端创建支付记录（未支付状态）
      */
     private function alipay_web(){}
-    private function pay_ht(){}
+
+    /**
+     * 直达号支付(7)
+     */
     private function zhidahao_h5(){}
+
+    /**
+     * 后台支付(20)
+     */
+    private function pay_ht(){}
+
+    /**
+     * 直达号支付(21)
+     */
+    private function weibo_h5(){}
 
     /**
      * 回调地址
