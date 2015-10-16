@@ -27,10 +27,11 @@ $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL, 'options' => ['e
         <input type="hidden" class="city_id" name="city_id" value="<?= $city_id?>" />
         <div class="row">
             <div class="col-md-2">先选择品类</div>
-            <div class="col-md-2">后选择商品</div>
+            <div class="col-md-offset-2 col-md-2">后选择商品</div>
         </div>
-        <div class="row">
+        <div class="row" style="margin-top: 10px; margin-bottom: 10px;">
             <?php echo Html::radioList('categorylist[]', [], $categorylist, ['class'=>'MyRadioStyle col-md-2'])  ?>
+            <div class="col-md-2"></div>
             <div id="categoryGoodsContent" class="MyRadioStyle col-md-6">
             </div>
         </div>

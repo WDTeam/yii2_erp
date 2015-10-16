@@ -118,9 +118,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template'=>'{update} {delete} {joinblacklist}',
                 'buttons' => [
                     'update' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['shop/view', 'id' => $model->id, 'edit' => 't']), [
-                            'title' => Yii::t('yii', 'Edit'),
+                        return Html::a(Yii::t('yii', '编辑'), Yii::$app->urlManager->createUrl(['shop/view', 'id' => $model->id, 'edit' => 't']), [
+                            'title' => Yii::t('yii', '编辑'),
+                            'class' => 'btn btn-success btn-sm'
                         ]);
+                    },
+                    'delete' => function ($url, $model) {
+                        return Html::a(
+                            Yii::t('yii', 'Delete'),
+                            Yii::$app->urlManager->createUrl(['shop/delete','id' => $model->id, 'id'=> $model->id]),
+                            ['title' => Yii::t('yii', 'Delete'), 'class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
+                        );
                     },
                     'joinblacklist' => function ($url, $model) {
                         return empty($model->is_blacklist)?Html::a('加入黑名单', [
@@ -131,7 +139,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-toggle'=>'modal',
                             'data-target'=>'#modal',
                             'data-id'=>$model->id,
-                            'class'=>'join-list-btn',
+                            'class'=>'join-list-btn btn btn-success btn-sm',
                         ]):Html::a('解除黑名单', [
                             'shop/remove-blacklist',
                             'id' => $model->id
