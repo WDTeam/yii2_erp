@@ -97,7 +97,7 @@ class CustomerAddress extends \common\models\CustomerAddress
                 $customerAddress->save();
             }
             $transaction->commit();
-            return true;
+            return $customerAddress;
         }catch(\Exception $e){
             $transaction->rollback();
             return false;
