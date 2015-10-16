@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="finance-record-log-index hideTemp">
 <div class="panel panel-info">
     <div class="panel-heading">
-        <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 对账查询</h3>
+        <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i>历史对账查询</h3>
     </div>
     <div class="panel-body">
         <?php  echo $this->render('_search', ['model' => $searchModel,'odrinfo'=>$odrinfo]); ?>
@@ -64,6 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
     		
             'finance_record_log_manual_count', //人工确认笔数
             'finance_record_log_manual_sum_money',
+            'id',
             [
             'format' => 'raw',
             'label' => '未处理笔数',
