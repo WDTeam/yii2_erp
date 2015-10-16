@@ -171,7 +171,7 @@ class GeneralPay extends \yii\db\ActiveRecord
     }
 
     /**
-     * 微信APP
+     * 微信APP(1)
      */
     private function wx_app()
     {
@@ -191,10 +191,13 @@ class GeneralPay extends \yii\db\ActiveRecord
     }
 
     /**
-     * 微信H5
+     * 微信H5(2)
      */
     private function wx_h5()
     {
+        $get = yii::$app->request->get();
+        $data = json_decode($get['params'],true);
+
         $param = [
             "body"	=> $this->body(),
             "out_trade_no"	=> $this->create_out_trade_no(),
@@ -204,14 +207,16 @@ class GeneralPay extends \yii\db\ActiveRecord
             "trade_type" => "JSAPI",
             "subject" => $this->subject(),
             "notify_url" => $this->notify_url('wx-h5'),
+            'openid' => $data['openid'],
         ];
+        dump($param);exit;
         $class = new \wxjspay_class();
         $msg = $class->get($param);
         return $msg;
     }
 
     /**
-     * 百度钱包APP
+     * 百度钱包APP(3)
      */
     private function bfb_app()
     {
@@ -229,7 +234,7 @@ class GeneralPay extends \yii\db\ActiveRecord
     }
 
     /**
-     * 银联APP
+     * 银联APP(4)
      */
     private function up_app()
     {

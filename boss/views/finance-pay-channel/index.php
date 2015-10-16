@@ -30,9 +30,9 @@ use kartik\tabs\TabsX;
             'finance_pay_channel_rank',
 	   		[
 	   		'format' => 'raw',
-	   		'label' => '上下架',
+	   		'label' => '状态',
 	   		'value' => function ($dataProvider) {
-	   			return $dataProvider->finance_pay_channel_is_lock ? '<font cloro:red>上架</font>' : '下架';
+	   			return $dataProvider->finance_pay_channel_is_lock ? '<font cloro:red>开启</font>' : '关闭';
 	   		},
 	   		'width' => "100px",
 	   		],
@@ -41,6 +41,7 @@ use kartik\tabs\TabsX;
 
             [
                 'class' => 'yii\grid\ActionColumn',
+                'template' =>'{view} {update}',
                 'buttons' => [
                 'update' => function ($url, $model) {
                                     return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance-pay-channel/view','id' => $model->id,'edit'=>'t']), [

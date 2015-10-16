@@ -1,7 +1,7 @@
 <?php
 require_once dirname(__FILE__)."/lib/WxPay.Api.php";
 require_once dirname(__FILE__)."/example/WxPay.JsApiPay.php";
-
+require_once dirname(__FILE__)."/lib/WxPay.Notify.php";
 class wxjspay_class extends WxPayNotify{
 
     public function __construct(){
