@@ -2,7 +2,7 @@
 
 namespace core\models\GeneralPay;
 
-use common\models\CustomerTransRecord;
+use core\models\CustomerTransRecord\CustomerTransRecord;
 use core\models\Customer;
 use Yii;
 
