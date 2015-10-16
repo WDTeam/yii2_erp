@@ -156,12 +156,8 @@ class GeneralPay extends \common\models\GeneralPay
      * @param integer $order_id 订单ID
      * @param integer $partner 第三方合作号
      */
-    public static function getPayParams( $pay_money,$customer_id,$channel_id,$partner,$order_id=0 )
+    public static function getPayParams( $pay_money,$customer_id,$channel_id,$partner,$order_id=0,$ext_params=[] )
     {
-        //接收数据
-        //$request = yii::$app->request;
-        //$data = $request->get();
-
         $data = [
             "pay_money" => $pay_money,
             "customer_id" => $customer_id,
@@ -169,24 +165,29 @@ class GeneralPay extends \common\models\GeneralPay
             "partner" => $partner,
             "order_id" => $order_id
         ];
-
-            //实例化模型
+        $data = array_merge($data,$ext_params);
+        //实例化模型
         $model = new GeneralPay();
 
         //查询订单是否已经支付过
-        if( !empty($data['order_id']) ){
+        if( !empty($data['order_id']) )
+        {
             $order = GeneralPay::find()->where(['order_id'=>$data['order_id'],'general_pay_status'=>1])->one();
-            if(!empty($order)){
+            if(!empty($order))
+            {
                 return ['status'=>0 , 'info'=>'订单已经支付过', 'data'=>''];
             }
         }
 
         //在线支付（online_pay），在线充值（pay）
-        if(empty($data['order_id'])){
+        if(empty($data['order_id']))
+        {
             $scenario = 'pay';
             //交易方式
             $data['general_pay_mode'] = 1;//充值
-        }else{
+        }
+        else
+        {
             $scenario = 'online_pay';
             //交易方式
             $data['general_pay_mode'] = 3;//在线支付
@@ -200,12 +201,15 @@ class GeneralPay extends \common\models\GeneralPay
         $model->attributes = $data;
 
         //验证数据
-        if( $model->validate() && $model->save() ){
+        if( $model->validate() && $model->save() )
+        {
 
             //返回组装数据
             return $model->call_pay();
 
-        }else{
+        }
+        else
+        {
             return ['status'=>0 , 'info'=>'数据返回失败', 'data'=>$model->errors];
         }
 

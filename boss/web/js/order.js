@@ -6,27 +6,7 @@ window.cards = new Array();
 var address_list = new Array();
 var goods_list = new Array();
 
-function formatDate(now) {
-    var   year=now.getFullYear();
-    var   month=now.getMonth()+1;
-    var   date=now.getDate();
-    var   hour=now.getHours();
-    var   minute=now.getMinutes();
-    var   second=now.getSeconds();
-    if(month<10) month ='0'+month;
-    if(date<10) date ='0'+date;
-    if(hour<10) hour ='0'+hour;
-    if(minute<10) minute ='0'+minute;
-    if(second<10) second ='0'+second;
-    return   year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;
-}
-function strtotime(datetime){
-    var tmp_datetime = datetime.replace(/:/g,'-');
-    tmp_datetime = tmp_datetime.replace(/ /g,'-');
-    var arr = tmp_datetime.split("-");
-    var now = new Date(Date.UTC(arr[0],arr[1]-1,arr[2],arr[3]-8,arr[4],arr[5]));
-    return parseInt(now.getTime()/1000);
-}
+
 function getCoupons(){
     if(window.customer != undefined) {
         $.ajax({
@@ -93,8 +73,7 @@ $("#order-order_customer_phone").blur(function(){
                                 for(var k in address){
                                     var v = address[k];
                                     $("#order-address_id").append(
-                                        '<div class="radio"><label><input type="radio" value="'+ v.id
-                                        +'" '+(v.customer_address_status?'checked="checked"':'')
+                                        '<div class="radio"><label><input type="radio" value="'+ v.id +'" '
                                         +' name="Order[address_id]"> '+ v.customer_address_detail+' '
                                         + v.customer_address_nickname+' '
                                         + v.customer_address_phone+'</label></div>'
@@ -104,7 +83,6 @@ $("#order-order_customer_phone").blur(function(){
                                     }
                                 }
                                 $("#address_div").show();
-                                getGoods(); //获取完地址后去获取商品
                             }
                         }
                     });
@@ -159,25 +137,7 @@ $(document).on("change","#order-address_id input",function(){
     getGoods();//地址信息变更后去获取商品信息
 });
 
-$("#order-order_booked_worker_phone").blur(function(){
-    var phone = $(this).val();
-    var reg = /^1[3-9][0-9]{9}$/;
-    if(reg.test(phone)) {
-        $.ajax({
-            type: "GET",
-            url: "/order/worker/?phone=" + phone,
-            dataType: "json",
-            success: function (worker) {
-                if (worker.id) {
-                    $("#order-order_booked_worker_id").html(
-                        '<label class="radio-inline"><input type="radio" value="'+ worker.id
-                        +'" checked="checked" name="Order[order_booked_worker_id]"> '+worker.worker_name+'</label>'
-                    );
-                }
-            }
-        });
-    }
-});
+
 $("#order-order_booked_count input").change(function(){
     setOrderMoney();
     $("#order-orderbookedtimerange").html('');
@@ -186,7 +146,7 @@ $("#order-order_booked_count input").change(function(){
         var hourtime = i+$("#order-order_booked_count input:checked").val()/60;
         var hour2 = parseInt(hourtime)<10?'0'+parseInt(hourtime):parseInt(hourtime);
         var minute = (hourtime%1==0)?'00':'30';
-        $("#order-orderbookedtimerange").append('<label class="radio-inline"><input type="radio" checked="" value="'+hour+':00-'+hour2+':'+minute+'" name="Order[orderBookedTimeRange]"> '+hour+':00-'+hour2+':'+minute+'</label>');
+        $("#order-orderbookedtimerange").append('<label class="radio-inline"><input type="radio"  value="'+hour+':00-'+hour2+':'+minute+'" name="Order[orderBookedTimeRange]"> '+hour+':00-'+hour2+':'+minute+'</label>');
     }
 
 });

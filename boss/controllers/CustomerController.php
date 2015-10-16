@@ -18,9 +18,13 @@ use yii\filters\VerbFilter;
 // use common\models\OrderExtCustomer;
 // use common\models\CustomerComment;
 
-use core\models\customer\CustomerBlockLog;
 use core\models\customer\Customer;
+use core\models\customer\CustomerBlockLog;
 use core\models\customer\CustomerAddress;
+use core\models\customer\CustomerExtSrc;
+use core\models\customer\CustomerExtBalance;
+use core\models\customer\CustomerExtScore;
+use core\models\customer\CustomerComment;
 /**
  * CustomerController implements the CRUD actions for Customer model.
  */
@@ -436,7 +440,7 @@ class CustomerController extends Controller
                 $customerAddress->customer_address_detail = 'SOHO一期2单元908';
                 $customerAddress->customer_address_status = 1;
                 $customerAddress->customer_address_longitude = '';
-                $customerAddress->customer_address_latitude = $value['lat'];
+                $customerAddress->customer_address_latitude = '';
                 $customerAddress->customer_address_nickname = '测试昵称';
                 $customerAddress->customer_address_phone = '18519651111';
                 $customerAddress->created_at = time();

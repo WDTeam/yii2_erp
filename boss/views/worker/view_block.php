@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 use yii\widgets\Pjax;
-
 use kartik\grid\GridView;
 use core\models\worker\Worker;
 /**
@@ -10,11 +9,23 @@ use core\models\worker\Worker;
  * @var yii\data\ActiveDataProvider $dataProvider
  * @var boss\models\WorkerSearch $searchModel
  */
+use kartik\grid\EditableColumn;
 $this->title = Yii::t('app', '阿姨管理');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
+    <style>
+        .workerblock-0-finishtime-popover{padding-right:0px}
+    </style>
+    <script>
+        $('#workerblock-0-finishtime-targ').click(function(){
+            alert(1)
+        })
+    </script>
     <div style="height:1000px">
+    <?php
+        echo 1;
+
+    ?>
     <?php
     Pjax::begin();
     echo GridView::widget([
@@ -55,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'class' => 'kartik\grid\EditableColumn',
-                'attribute'=>'worker_block_finish_time',
+                'attribute'=>'finishtime',
                 'readonly'=>function($dataProvider){
                     if($dataProvider->worker_block_status==0){
                         return false;
@@ -63,22 +74,24 @@ $this->params['breadcrumbs'][] = $this->title;
                         return true;
                     }
                 },
-                'refreshGrid'=>true,
-                'format' => ['date', 'php:Y-m-d'],
                 'label' => '封号结束时间',
 //                'value' => function ($dataProvider) {
 //                    return date('Y-m-d',$dataProvider->worker_block_finish_time);
 //                },
                 'editableOptions' => [
                     'header' => '修改封号结束时间',
+                    'asPopover' => true,
                     'inputType' => \kartik\editable\Editable::INPUT_DATE,
                     'options' => [
                         'pluginOptions'=>[
                             'format'=>'yyyy-mm-dd'
-                        ]
+                        ],
                     ],
-                    'size'=>'md',
-                    'formOptions'=>['action'=>'update-worker-block',],
+                    'size'=>'sd',
+                    'containerOptions'=>[
+                        'style'=>'padding-right:0px',
+                    ],
+                    'formOptions'=>['action'=>'update-worker-block', ],
                 ],
             ],
             [

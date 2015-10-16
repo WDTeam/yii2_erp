@@ -112,7 +112,7 @@ class WorkerController extends BaseAuthController
             return $this->redirect(['view', 'id' => $workerModel->id]);
         } else {
             $workerBlockData = new ActiveDataProvider([
-                'query' => WorkerBlock::find()->where(['worker_id'=>$id])->orderBy('id desc'),
+                'query' => WorkerBlock::find()->select("*,from_unixtime(`worker_block_finish_time`,'%Y-%m-%d')  as `finish_time`")->where(['worker_id'=>$id])->orderBy('id desc'),
             ]);
             $workerVacationData = new ActiveDataProvider([
                 'query' => WorkerVacation::find()->where(['worker_id'=>$id])->orderBy('id desc'),
@@ -273,6 +273,8 @@ class WorkerController extends BaseAuthController
             if($workerBlockModel->save()){
                 $workerModel->worker_is_block = 1;
                 $workerModel->save();
+                //记录日志记录
+                $this->CreateBlockLog($workerId,$workerBlockModel->id,1);
             }
             return $this->redirect(['index']);
         }else{
@@ -299,8 +301,8 @@ class WorkerController extends BaseAuthController
                 throw new ForbiddenHttpException('获取封号信息失败');
             }
             //更改封号结束时间
-            if(isset($workerBlockArr['worker_block_finish_time'])){
-                $finish_ime = strtotime($workerBlockArr['worker_block_finish_time']);
+            if(isset($workerBlockArr['finishtime'])){
+                $finish_ime = strtotime($workerBlockArr['finishtime']);
                 if($old_finish_time>$finish_ime){
                     //缩短封号时间
                     $this->CreateBlockLog($worker_id,$block_id,2);
