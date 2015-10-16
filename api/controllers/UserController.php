@@ -1,25 +1,29 @@
 <?php
 namespace api\controllers;
 
+use core\models\customer\Customer;
+use Yii;
 use api\components\Controller;
+use \core\models\customer\CustomerAddress;
+use \core\models\customer\CustomerAccessToken;
+
 class UserController extends Controller
 {
     /**
      *
-     * @api {GET} /user/addaddress 添加常用地址
+     * @api {POST} /user/addaddress 添加常用地址
      *
      * @apiName AddAddress
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} app_version 访问源(android_4.2.2)
-     * @apiParam {String} lng 经度
-     * @apiParam {String} lat 纬度
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
      * @apiParam {String} city_name 城市名
-     * @apiParam {String} street 城街道信息小区信息
-     * @apiParam {String} place_detail 详细门牌信息
-     * 
-     * @apiSuccess {Object[]} addresses 用户常用地址数组.
+     * @apiParam {String} address_detail 详细地址信息
+     * @apiParam {String} address_nickname 联系人
+     * @apiParam {String} address_phone 联系电话
+     *
+     * @apiSuccess {Object[]} address 新增地址.
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -27,17 +31,19 @@ class UserController extends Controller
      *       "code": "ok",
      *       "msg": "地址添加成功"
      *       "ret":{
-     *       "address": [
+     *       "address":
      *          {
-     *           "city": "北京",
-     *           "latitude": "39.770908",
-     *           "longitude": "116.223751",
-     *           "street": "上海路",
-     *           "place_detail": "某某小区8栋3单元502",
-     *           "address": "长阳镇",
-     *           "address_id": "1612679"
+     *          'address_id'=>"1612679",
+     *          'province_name' => "北京",
+     *          'city_name' => "北京",
+     *          'area_name' => "朝阳区",
+     *          'address_detail' => "某某小区8栋3单元502",
+     *          'address_nickname' => '张先生',
+     *          'address_phone' => '13300112233',
+     *          'default_address' => '1',客户地址类型,1为默认地址，-1为非默认地址
+     *          'latitude' => "39.770908",
+     *          'longitude' => "116.223751",
      *          }
-     *         ]
      *        }
      *
      *     }
@@ -48,7 +54,7 @@ class UserController extends Controller
      *     HTTP/1.1 403 Not Found
      *     {
      *       "code": "error",
-     *       "msg": "用户认证已经过期,请重新登录，"
+     *       "msg": "用户认证已经过期,请重新登录。"
      *
      *     }
      * @apiError AddressNotFound 用户认证失败.
@@ -61,21 +67,54 @@ class UserController extends Controller
      *
      *     }
      */
+
     public function actionAddAddress()
     {
-    
+        $date = Yii::$app->request->post();
+        if (empty($date['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
+        $customer = CustomerAccessToken::getCustomer($date['access_token']);
+
+        if (!empty($customer) && !empty($customer->id)) {
+            $model = CustomerAddress::addAddress($customer->id, $date['region_id'], $date['address_detail'],
+                $date['address_nickname'], $date['address_phone']);
+
+            if (!empty($model)) {
+                $address = [
+                    'address_id' => $model->id,
+                    'province_name' => $model->general_region_province_name,
+                    'city_name' => $model->general_region_city_name,
+                    'area_name' => $model->general_region_area_name,
+                    'address_detail' => $model->customer_address_detail,
+                    'address_nickname' => $model->customer_address_nickname,
+                    'address_phone' => $model->customer_address_phone,
+                    'default_address' => $model->customer_address_status,
+                    'latitude' => $model->customer_address_latitude,
+                    'longitude' => $model->customer_address_longitude,
+                ];
+                $ret = ['address' => $address];
+
+                return $this->send($ret, "常用地址添加成功", "ok");
+            } else {
+                return $this->send(null, "常用地址添加失败", "error", 403);
+            }
+        } else {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
+
     }
-    
-    
+
+
     /**
      *
      * @api {GET} /user/addresses 常用地址列表
-     * 
+     *
      * @apiName Addresses
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} app_version 访问源(android_4.2.2)
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      * @apiSuccess {Object[]} addresses 用户常用地址数组.
      *
@@ -83,17 +122,20 @@ class UserController extends Controller
      *     HTTP/1.1 200 OK
      *     {
      *       "code": "ok",
-     *       "msg": "查询成功"
+     *       "msg": "获取地址列表成功"
      *       "ret":{
      *       "addresses": [
      *          {
-     *           "city": "北京",
-     *           "latitude": "39.770908",
-     *           "longitude": "116.223751",
-     *           "street": "上海路",
-     *           "place_detail": "某某小区8栋3单元502",
-     *           "address": "长阳镇",
-     *           "address_id": "1612679"
+     *          'address_id'=>"1612679",
+     *          'province_name' => "北京",
+     *          'city_name' => "北京",
+     *          'area_name' => "朝阳区",
+     *          'address_detail' => "某某小区8栋3单元502",
+     *          'address_nickname' => '张先生',
+     *          'address_phone' => '13300112233',
+     *          'default_address' => '1',客户地址类型,1为默认地址，-1为非默认地址
+     *          'latitude' => "39.770908",
+     *          'longitude' => "116.223751",
      *          }
      *         ]
      *        }
@@ -107,18 +149,49 @@ class UserController extends Controller
      *     {
      *       "code": "error",
      *       "msg": "用户认证已经过期,请重新登录，"
-     *       
+     *
      *     }
      */
     public function actionAddresses()
     {
-    
+        $accessToken = Yii::$app->request->get('access_token');
+        if (empty($accessToken)) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
+        $customer = CustomerAccessToken::getCustomer($accessToken);
+
+        if (!empty($customer) && !empty($customer->id)) {
+            $AddressArr = CustomerAddress::listAddress($customer->id);
+
+            $addresses = array();
+            foreach ($AddressArr as $key => $model) {
+                $item = [
+                    'address_id' => $model->id,
+                    'province_name' => $model->general_region_province_name,
+                    'city_name' => $model->general_region_city_name,
+                    'area_name' => $model->general_region_area_name,
+                    'address_detail' => $model->customer_address_detail,
+                    'address_nickname' => $model->customer_address_nickname,
+                    'address_phone' => $model->customer_address_phone,
+                    'default_address' => $model->customer_address_status,
+                    'latitude' => $model->customer_address_latitude,
+                    'longitude' => $model->customer_address_longitude,
+                ];
+                $addresses[] = $item;
+            }
+            $ret = ['addresses' => $addresses];
+            return $this->send($ret, "获取地址列表成功", "ok");
+
+        } else {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
     }
-    
+
+
     /**
      *
      * @api {DELETE} /user/addresses 删除用户常用地址
-     * 
+     *
      *
      * @apiName DeleteAddresses
      * @apiGroup User
@@ -149,7 +222,7 @@ class UserController extends Controller
     {
         return '1111111111';
     }
-    
+
     /**
      *
      * @api {GET} /user/setdefaultcity 设置默认地址
@@ -186,10 +259,11 @@ class UserController extends Controller
      *
      *     }
      */
-    public function actionSetDefaultCity(){
-        
+    public function actionSetDefaultCity()
+    {
+
     }
-    
+
     /**
      *
      * @api {GET} /user/setdefaultcity 获取用户个性化配置和优惠劵
@@ -203,7 +277,7 @@ class UserController extends Controller
      *
      * @apiSuccess {Object[]} myCoupons 用户拥有优惠劵.
      * @apiSuccess {Object[]} personality 用户可以选择的个性化需求.
-     * 
+     *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
@@ -244,10 +318,11 @@ class UserController extends Controller
      *
      *     }
      */
-    public function actionGetCouponsAndPersonality(){
-    
+    public function actionGetCouponsAndPersonality()
+    {
+
     }
-    
+
     /**
      *
      * @api {GET} /user/exchangecoupon 兑换优惠劵
@@ -266,7 +341,7 @@ class UserController extends Controller
      *     {
      *       "code": "ok",
      *       "msg": "兑换成功"
-     *       
+     *
      *
      *     }
      *
@@ -279,7 +354,7 @@ class UserController extends Controller
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
-     *     
+     *
      * @apiError CouponNotFound 优惠码不存在.
      *
      * @apiErrorExample Error-Response:
@@ -290,10 +365,11 @@ class UserController extends Controller
      *
      *     }
      */
-    public function actionExchangeCoupon(){
-    
+    public function actionExchangeCoupon()
+    {
+
     }
-    
+
     /**
      *
      * @api {GET} /user/getsharetext 获取分享优惠文本
@@ -310,12 +386,16 @@ class UserController extends Controller
      *     {
      *       "code": "ok",
      *       "msg": {
-     *               "wxCnt": "送你e家洁的10元免费体验邀请码：1011685，关注下e家洁的微信账号： ejiajie，十几分钟保洁阿姨就到了，关键是还便宜！只需50元就可以将家里彻底打扫一遍，快告诉你好友吧！",
-     *               "wbCnt": "最近用了【e家洁】App找保洁小时工，阿姨准时登门，干活麻利，门后墙角都干干净净的，2小时才50元，必须推荐给你们！http://t.cn/8siFiZZ 下载后输入体验邀请码：1011685，你们还可以获得10元优惠券哦！",
-     *                "wxGroupCnt": "最近用了【e家洁】App找保洁小时工，阿姨准时登门，干活麻利，门后墙角都干干净净的，2小时才50元，必须推荐给你们！http://t.cn/8siFiZZ 下载后输入体验邀请码：1011685，你们还可以获得10元优惠券哦！",
+     *               "wxCnt": "送你e家洁的10元免费体验邀请码：1011685，关注下e家洁的微信账号：
+     *     ejiajie，十几分钟保洁阿姨就到了，关键是还便宜！只需50元就可以将家里彻底打扫一遍，快告诉你好友吧！",
+     *               "wbCnt": "最近用了【e家洁】App找保洁小时工，阿姨准时登门，干活麻利，门后墙角都干干净净的，2小时才50元，必须推荐给你们！http://t.cn/8siFiZZ
+     *     下载后输入体验邀请码：1011685，你们还可以获得10元优惠券哦！",
+     *                "wxGroupCnt": "最近用了【e家洁】App找保洁小时工，阿姨准时登门，干活麻利，门后墙角都干干净净的，2小时才50元，必须推荐给你们！http://t.cn/8siFiZZ
+     *     下载后输入体验邀请码：1011685，你们还可以获得10元优惠券哦！",
      *                "wxFriendGroupShare": "品质生活  从e家洁开始",
      *                "wbShare": "最近使用的保洁打扫利器，新居开荒家电清洗洗衣洗护样样齐全，优质服务省事贴心！快来体验更多~ http://t.cn/8siFiZZ",
-     *                "sms": "最近用了【e家洁】App找保洁小时工，阿姨准时登门，干活麻利，门后墙角都干干净净的，2小时才50元，必须推荐给你们！http://t.cn/8siFiZZ 下载后输入体验邀请码：1011685，你们还可以获得10元优惠券哦！"
+     *                "sms": "最近用了【e家洁】App找保洁小时工，阿姨准时登门，干活麻利，门后墙角都干干净净的，2小时才50元，必须推荐给你们！http://t.cn/8siFiZZ
+     *     下载后输入体验邀请码：1011685，你们还可以获得10元优惠券哦！"
      *               }
      *
      *
@@ -332,10 +412,11 @@ class UserController extends Controller
      *     }
      *
      */
-    public function actionGetShareText(){
-    
+    public function actionGetShareText()
+    {
+
     }
-    
+
     /**
      *
      * @api {GET} /user/deleteUsedWorker 删除常用阿姨
@@ -365,7 +446,7 @@ class UserController extends Controller
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
-     *          
+     *
      * @apiError WorkerNotFound 该阿姨不存在.
      *
      * @apiErrorExample Error-Response:
@@ -377,11 +458,12 @@ class UserController extends Controller
      *     }
      *
      */
-    public function deleteUsedWorker(){
-    
+    public function deleteUsedWorker()
+    {
+
     }
-    
-    
+
+
     /**
      *
      * @api {GET} /user/blacklistworkers 黑名单阿姨列表
@@ -417,7 +499,7 @@ class UserController extends Controller
      *     }
      *
      *
-     *     
+     *
      *
      * @apiError UserNotFound 用户认证已经过期.
      *
@@ -431,10 +513,11 @@ class UserController extends Controller
      *
      *
      */
-    public function blackListWorkers(){
-    
+    public function blackListWorkers()
+    {
+
     }
-    
+
     /**
      *
      * @api {GET} /user/removeblacklistworker 移除黑名单中的阿姨
@@ -452,7 +535,7 @@ class UserController extends Controller
      *     {
      *       "code": "ok",
      *       "msg": "移除成功"
-     *       
+     *
      *     }
      *
      * @apiError UserNotFound 用户认证已经过期.
@@ -467,10 +550,11 @@ class UserController extends Controller
      *
      *
      */
-    public function removeBlackListWorker(){
-    
+    public function removeBlackListWorker()
+    {
+
     }
-    
+
     /**
      *
      * @api {GET} /user/chooseusedworker 选择常用阿姨
@@ -531,24 +615,25 @@ class UserController extends Controller
      *     }
      *
      */
-    public function actionChooseUsedWorker(){
-    
+    public function actionChooseUsedWorker()
+    {
+
     }
-    
+
     /**
      *
      * @api {GET} /user/usermoney 用户余额和消费记录
      *
      *
      * @apiName UserMoney
-     * 
+     *
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} app_version 访问源(android_4.2.2)
      *
      * @apiSuccess {Object} UserMoney 用户当前余额和消费记录对象
-     *      
+     *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
@@ -582,14 +667,15 @@ class UserController extends Controller
      *     }
      *
      */
-    public function actionUserMoney(){
-    
+    public function actionUserMoney()
+    {
+
     }
-    
+
     /**
      *
      * @api {GET} /user/userscore 用户积分明细
-     * 
+     *
      * @apiDescription 获取用户当前积分，积分兑换奖品信息，怎样获取积分信息
      * @apiName Userscore
      * @apiGroup User
@@ -646,10 +732,11 @@ class UserController extends Controller
      *     }
      *
      */
-    public function actionUserScore(){
-    
+    public function actionUserScore()
+    {
+
     }
-    
+
     /**
      *
      * @api {POST} /user/usersuggest 用户提交意见反馈
@@ -666,7 +753,7 @@ class UserController extends Controller
      *     {
      *       "code": "ok",
      *       "msg": "提交成功"
-     *       
+     *
      *     }
      *
      * @apiError UserNotFound 用户认证已经过期.
@@ -680,12 +767,12 @@ class UserController extends Controller
      *     }
      *
      */
-    public function actionUserSuggest(){
-    
+    public function actionUserSuggest()
+    {
+
     }
-    
-    
-    
+
+
 }
 
 ?>
