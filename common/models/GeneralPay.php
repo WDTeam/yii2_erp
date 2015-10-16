@@ -204,6 +204,7 @@ class GeneralPay extends \yii\db\ActiveRecord
             "trade_type" => "JSAPI",
             "subject" => $this->subject(),
             "notify_url" => $this->notify_url('wx-h5'),
+            'openid' => 'ioadsfsdf'
         ];
         $class = new \wxjspay_class();
         $msg = $class->get($param);
