@@ -434,23 +434,23 @@ class CustomerController extends Controller
                     $customerComment->save();
                 }
                 
-                $customerAddress = new CustomerAddress;
-                $customerAddress->customer_id = $customer->id;
-                $customerAddress->general_region_id = 191;
-                $customerAddress->customer_address_detail = 'SOHO一期2单元908';
-                $customerAddress->customer_address_status = 1;
-                $customerAddress->customer_address_longitude = '';
-                $customerAddress->customer_address_latitude = '';
-                $customerAddress->customer_address_nickname = '测试昵称';
-                $customerAddress->customer_address_phone = '18519651111';
-                $customerAddress->created_at = time();
-                $customerAddress->updated_at = 0;
-                $customerAddress->is_del = 0;
-                if ($customerAddress->hasErrors()) {
-                    var_dump($customer->getErrors());
-                    die();
-                }
-                $customerAddress->save();
+                // $customerAddress = new CustomerAddress;
+                // $customerAddress->customer_id = $customer->id;
+                // $customerAddress->general_region_id = 191;
+                // $customerAddress->customer_address_detail = 'SOHO一期2单元908';
+                // $customerAddress->customer_address_status = 1;
+                // $customerAddress->customer_address_longitude = '';
+                // $customerAddress->customer_address_latitude = '';
+                // $customerAddress->customer_address_nickname = '测试昵称';
+                // $customerAddress->customer_address_phone = '18519651111';
+                // $customerAddress->created_at = time();
+                // $customerAddress->updated_at = 0;
+                // $customerAddress->is_del = 0;
+                // if ($customerAddress->hasErrors()) {
+                //     var_dump($customer->getErrors());
+                //     die();
+                // }
+                // $customerAddress->save();
 
                 // $customer_id = $customer->id;
                 // $command = $connection->createCommand("SELECT * FROM user_address where user_id=".$val['id']." order by id asc");
@@ -615,8 +615,8 @@ class CustomerController extends Controller
 
         // $res = \common\models\CustomerBlockLog::addToBlock(17782, '测试');
         // var_dump($res);
-        $res = \core\models\customer\CustomerCode::generateAndSend('18519654001');
-        var_dump($res);
+        // $res = \core\models\customer\CustomerCode::generateAndSend('18519654001');
+        // var_dump($res);
 
         // $res = \core\models\customer\CustomerCode::checkCode('18519654001', '9906');
         // var_dump($res);
@@ -626,5 +626,10 @@ class CustomerController extends Controller
 
         // $res = \core\models\customer\CustomerAccessToken::getCustomer('19647829599d11c786cd95ea93896b1f');
         // var_dump($res);
+
+        $res =  \core\models\customer\CustomerAddress::addAddress(1, '大兴区', '详细地址', '刘道强', '18519654001');
+        var_dump($res);
+
+
     }
 }
