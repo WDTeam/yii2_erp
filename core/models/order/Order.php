@@ -9,6 +9,7 @@
 namespace core\models\order;
 
 
+use core\models\Customer;
 use core\models\worker\Worker;
 use Yii;
 use Redis;
@@ -92,24 +93,22 @@ class Order extends OrderModel
      * @param $attributes [
      *  integer $order_ip 下单IP地址 必填
      *  integer $order_service_type_id 服务类型 商品id 必填
-     *  string $order_service_type_name 商品名称 必填
      *  integer $order_src_id 订单来源id 必填
      *  string $channel_id 下单渠道 必填
-     *  float $order_unit_money 单价 必填
-     *  float $order_money 订单价格 必填
-     *  int $order_booked_count 商品数量 分钟数 必填
      *  int $order_booked_begin_time 预约开始时间 必填
      *  int $order_booked_end_time 预约结束时间 必填
      *  int $address_id 客户地址id 必填
-     *  string $order_address 客户地址 必填
+     *  int $customer_id 客户id 必填
+     *  string $order_customer_phone 客户手机号 必填
+     *  int $admin_id 操作人id 0客户 1系统 必填
+     *  int $order_pay_type 支付方式 1现金 2线上 3第三方 必填
+     *
      *  string $order_booked_worker_id 指定阿姨id
      *  string $order_pop_order_code 第三方订单号
      *  string $order_pop_group_buy_code 第三方团购号
-     *  int $customer_id 客户id 必填
-     *  string $order_customer_phone 客户手机号 必填
+     *  int $order_pop_order_money 第三方订单金额
      *  string $order_customer_need 客户需求
      *  string $order_customer_memo 客户备注
-     *  int $admin_id 操作人id 0客户 1系统
      * ]
      * @return bool
      */
@@ -225,18 +224,36 @@ class Order extends OrderModel
         $status_to = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //初始化订单状态
         $order_count = OrderSearch::getCustomerOrderCount($this->customer_id); //该用户的订单数量
         $order_code = strlen($this->customer_id).$this->customer_id.strlen($order_count).$order_count ; //TODO 订单号待优化
+
+        $address = Customer::getCustomerAddresses($this->address_id);
+        $goods = self::getGoods($address['customer_address_longitude'],$address['customer_address_latitude'],$attributes['order_service_type_id']);
         $this->setAttributes([
-            //创建订单时优惠卷和服务卡都是初始状态
-            'coupon_id' => 0,
-            'order_use_coupon_money' => 0,
+            'order_unit_money'=> $goods['operation_shop_district_goods_price'], //单价
+            'order_service_type_name'=> $goods['operation_shop_district_goods_name'], //商品名称
+            'order_booked_count' => ($this->order_booked_end_time-$this->order_booked_begin_time)/60, //时长
+        ]);
+        $this->setAttributes([
+            'order_money'=> $this->order_unit_money*$this->order_booked_count/60, //订单总价
+            'order_address'=>$address['customer_address_detail'].','.$address['customer_address_nickname'].','.$address['customer_address_phone'],//地址信息
+        ]);
+
+
+        if($this->$order_pay_type==3){ //第三方预付
+            $this->order_pop_operation_money=$this->order_money-$this->order_pop_order_money; //渠道运营费
+        }elseif($this->$order_pay_type==2){//线上支付
+            $this->order_pay_money = $this->order_money;//支付金额
+            if(!empty($this->coupon_id)){//是否使用了优惠券
+                $this->order_use_coupon_money = self::getCouponById($this->coupon_id);
+                $this->order_pay_money -= $this->order_use_coupon_money;
+            }
+        }
+
+
+        $this->setAttributes([
+            //创建订单时服务卡是初始状态
             'card_id' => 0,
             'order_use_card_money' => 0,
-            //第三方支付
-            'channel_id'=>0,
-            'order_pop_group_buy_code'=>'',
-            'order_pop_order_code'=>'',
-            'order_pop_order_money'=>0,
-            'order_pop_operation_money'=>0,
+
             //为以下数据赋初始值
             'order_code' => $order_code,
             'order_before_status_dict_id' => $status_from->id,
@@ -245,7 +262,6 @@ class Order extends OrderModel
             'order_status_name' => $status_to->order_status_name,
             'order_src_name' => $this->getOrderSrcName($this->order_src_id),
             'order_channel_name' => $this->getOrderChannelList($this->channel_id),
-            'order_service_type_name' => $this->getServiceList($this->order_service_type_id),
             'order_flag_send' => 0, //'指派不了 0可指派 1客服指派不了 2小家政指派不了 3都指派不了',
             'order_flag_urgent' => 0,//加急 数字越大约紧急
             'order_flag_exception' => 0,//异常标识
@@ -255,13 +271,12 @@ class Order extends OrderModel
             'order_worker_send_type' => 0,
             'comment_id' => 0,
             'order_customer_hidden' => 0,
-            'order_pop_pay_money' => 0,
+            'order_pop_pay_money' => 0, //第三方结算金额
             'shop_id' => 0,
             'order_worker_type_name' => '',
             'pay_channel_id' => 0,//支付渠道id
             'order_pay_channel_name' => '',//支付渠道
             'order_pay_flow_num' => '',//支付流水号
-            'order_pay_money' => 0,//支付金额
             'invoice_id' => 0, //发票id 用户需求中有开发票就绑定发票id
             'checking_id' => 0,
             'isdel' => 0,
@@ -301,15 +316,29 @@ class Order extends OrderModel
         return $channel_id == 0 ? $channel : (isset($channel[$channel_id]) ? $channel[$channel_id] : false);
     }
 
-    /**
-     * 获取服务
-     * @param int $service_id
-     * @return array|bool
-     */
-    public function getServiceList($service_id = 0)
+
+    public static function getGoods($longitude,$latitude,$goods_id=0)
     {
-        $service = [1 => '家庭保洁', 2 => '新居开荒', 3 => '擦玻璃'];
-        return $service_id == 0 ? $service : (isset($service[$service_id]) ? $service[$service_id] : false);
+        $shop_district_info= OperationShopDistrictController::getCoordinateShopDistrict($longitude, $latitude);
+        if(isset($shop_district_info['status']) && $shop_district_info['status']==1){
+            $goods = OperationGoodsController::getGoodsList($shop_district_info['data']['operation_city_id'], $shop_district_info['data']['operation_shop_district_id']);
+            if(isset($goods['status'])&&$goods['status']==1){
+                if($goods_id==0){
+                    return ['code'=>200,'data'=>$goods['data']];
+                }else{
+                    foreach($goods['data'] as $v){
+                        if($v['operation_goods_id']==$goods_id){
+                            return ['code'=>200,'data'=>$v];
+                        }
+                    }
+                    return ['code'=>500,'msg'=>'获取商品信息失败：没有匹配的商品'];
+                }
+            }else{
+                return ['code'=>501,'msg'=>'获取商品信息失败：没有匹配的商品'];
+            }
+        }else{
+            return ['code'=>502,'msg'=>'获取商品信息失败：没有匹配的商圈'];
+        }
     }
 
     /**
@@ -317,7 +346,7 @@ class Order extends OrderModel
      * @param $id
      * @return mixed
      */
-    public function getCouponById($id)
+    public static function getCouponById($id)
     {
         $coupon = [
             1 => [
