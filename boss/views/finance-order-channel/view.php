@@ -10,7 +10,7 @@ use kartik\datecontrol\DateControl;
  */
 
 $this->title = $model->finance_order_channel_name;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('boss', 'Finance Order Channels'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('boss', '渠道管理'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="finance-order-channel-view">
@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
           //'finance_order_channel_is_lock',
     		[
     		'format' => 'raw',
-    		'label' => '上下架',
+    		'label' => '状态',
     		'attribute'=>'finance_order_channel_is_lock',
     		'type'=> DetailView::INPUT_RADIO_LIST,
     		'items'=>['1' => '开启', '2' => '关闭'],
