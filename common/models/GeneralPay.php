@@ -171,7 +171,7 @@ class GeneralPay extends \yii\db\ActiveRecord
     }
 
     /**
-     * 微信APP
+     * 微信APP(1)
      */
     private function wx_app()
     {
@@ -191,7 +191,7 @@ class GeneralPay extends \yii\db\ActiveRecord
     }
 
     /**
-     * 微信H5
+     * 微信H5(2)
      */
     private function wx_h5()
     {
@@ -211,7 +211,7 @@ class GeneralPay extends \yii\db\ActiveRecord
     }
 
     /**
-     * 百度钱包APP
+     * 百度钱包APP(3)
      */
     private function bfb_app()
     {
@@ -229,7 +229,7 @@ class GeneralPay extends \yii\db\ActiveRecord
     }
 
     /**
-     * 银联APP
+     * 银联APP(4)
      */
     private function up_app()
     {
