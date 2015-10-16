@@ -3,15 +3,14 @@ namespace api\controllers;
 
 use core\models\customer\Customer;
 use Yii;
-use api\components\Controller;
 use \core\models\customer\CustomerAddress;
 use \core\models\customer\CustomerAccessToken;
 
-class UserController extends Controller
+class UserController extends \api\components\Controller
 {
     /**
      *
-     * @api {POST} /user/addaddress 添加常用地址
+     * @api {POST} /user/add-address 添加常用地址
      *
      * @apiName AddAddress
      * @apiGroup User
@@ -108,7 +107,7 @@ class UserController extends Controller
 
     /**
      *
-     * @api {GET} /user/addresses 常用地址列表
+     * @api {POST} /user/addresses 常用地址列表
      *
      * @apiName Addresses
      * @apiGroup User
@@ -154,7 +153,7 @@ class UserController extends Controller
      */
     public function actionAddresses()
     {
-        $accessToken = Yii::$app->request->get('access_token');
+        $accessToken = Yii::$app->request->post('access_token');
         if (empty($accessToken)) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
         }
@@ -190,15 +189,15 @@ class UserController extends Controller
 
     /**
      *
-     * @api {DELETE} /user/addresses 删除用户常用地址
+     * @api {DELETE} /user/delete-address 删除用户常用地址
      *
      *
-     * @apiName DeleteAddresses
+     * @apiName DeleteAddress
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} app_version 访问源(android_4.2.2)
-     * @apiParam {String} address_id 常用地址id
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} address_id 地址id
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -214,25 +213,104 @@ class UserController extends Controller
      *     HTTP/1.1 403 Not Found
      *     {
      *       "code": "error",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
+     *       "msg": "用户认证已经过期,请重新登录."
      *     }
      */
     public function actionDeleteAddress()
     {
-        return '1111111111';
+        $params=Yii::$app->request->post();
+        $accessToken = $params['access_token'];
+        $addressId = $params['address_id'];
+        if (empty($accessToken)||!CustomerAccessToken::checkAccessToken($accessToken)) {
+            return $this->send(null, "用户认证已经过期,请重新登录.", "error", 403);
+        }
+        if (empty($addressId)) {
+            return $this->send(null, "地址信息获取失败", "error", 403);
+        }
+
+        if(CustomerAddress::deleteAddress($addressId))
+        {
+            return $this->send(null, "删除成功", "ok");
+        }
+        else
+        {
+
+            return $this->send(null, "删除失败", "error",403);
+        }
     }
 
     /**
      *
-     * @api {GET} /user/setdefaultcity 设置默认地址
+     * @api {GET} /user/set-default-address 设置默认地址
      *
-     * @apiName SetDefaultCity
+     * @apiName SetDefaultAddress
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} city 城市
-     * @apiParam {String} app_version 访问源(android_4.2.2)
+     * @apiParam {String} address_id 地址id
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "code": "ok",
+     *       "msg": "设置成功"
+     *     }
+     *
+     * @apiError UserNotFound The id of the User was not found.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "error",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *     }
+     */
+    public function actionSetDefaultAddress()
+    {
+        $params=Yii::$app->request->post();
+        $accessToken = $params['access_token'];
+        $addressId = $params['address_id'];
+        if (empty($accessToken)||!CustomerAccessToken::checkAccessToken($accessToken)) {
+            return $this->send(null, "用户认证已经过期,请重新登录.", "error", 403);
+        }
+        if (empty($addressId)) {
+            return $this->send(null, "地址信息获取失败", "error", 403);
+        }
+
+        $model =CustomerAddress::getAddress($addressId);
+
+        if(empty($model))
+        {
+            return $this->send(null, "地址信息获取失败", "error", 403);
+        }
+        $model->id
+        CustomerAddress::updateAddress($model->id, $general_region_id, $customer_address_detail, $customer_address_nickname, $customer_address_phone)
+
+
+        if(CustomerAddress::deleteAddress($addressId))
+        {
+            return $this->send(null, "删除成功", "ok");
+        }
+        else
+        {
+
+            return $this->send(null, "删除失败", "error",403);
+        }
+        getAddress();
+    }
+
+    /**
+     *
+     * @api {GET} /user/set-default-address 设置默认城市
+     *
+     * @apiName SetDefaultAddress
+     * @apiGroup User
+     *
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} address_id 城市
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      * @apiSuccess {Object[]} services 该城市提供的服务.
      * @apiSuccess {Object[]} appInfoWithCity 该城市相关初始化配置.
@@ -259,10 +337,43 @@ class UserController extends Controller
      *
      *     }
      */
-    public function actionSetDefaultCity()
-    {
 
-    }
+    /**
+     *
+     * @api {GET} /user/set-default-address 修改载入城市
+     *
+     * @apiName SetDefaultAddress
+     * @apiGroup User
+     *
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} address_id 城市
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     *
+     * @apiSuccess {Object[]} services 该城市提供的服务.
+     * @apiSuccess {Object[]} appInfoWithCity 该城市相关初始化配置.
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "code": "ok",
+     *       "msg": "设置成功"
+     *       "ret":{
+     *          "services":{}
+     *          "appInfoWithCity":{}
+     *        }
+     *
+     *     }
+     *
+     * @apiError UserNotFound The id of the User was not found.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "error",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *
+     *     }
+     */
 
     /**
      *

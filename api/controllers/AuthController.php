@@ -44,7 +44,7 @@ class AuthController extends \api\components\Controller
     public function actionLogin()
     {
         $phone = Yii::$app->request->post('phone');
-        verifyCode = Yii::$app->request->post('verify_code');
+        $verifyCode = Yii::$app->request->post('verify_code');
         if(empty($phone)||empty($verifyCode)){
             return $this->send(null, "用户名或验证码不能为空", "error",403,"数据不完整");
         }
