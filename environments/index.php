@@ -36,6 +36,7 @@ return [
             'core/web/assets',
             'boss/runtime',
             'boss/web/assets',
+			'boss/web/upload',
             'api/runtime',
             'api/web/assets',
         ],
