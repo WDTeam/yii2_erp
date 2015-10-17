@@ -1,6 +1,7 @@
 <?php
 namespace api\controllers;
 
+use Faker\Provider\DateTime;
 use Yii;
 use core\models\order\Order;
 use core\models\customer\CustomerAccessToken;
@@ -70,8 +71,6 @@ class OrderController extends \api\components\Controller
     {
         $params = Yii::$app->request->post();
         $accessToken = $params['access_token'];
-        $user = CustomerAccessToken::getCustomer($accessToken);
-        return $this->send($user, "test.", "error", 403);
 
         if (empty($accessToken)&&!CustomerAccessToken::checkAccessToken($accessToken)) {
             return $this->send(empty($accessToken), "用户认证已经过期,请重新登录.", "error", 403);
@@ -79,9 +78,9 @@ class OrderController extends \api\components\Controller
         $appointment = array();
         for ($i = 0; $i <= 7; $i++) {
             $item = [
-                'date_format' => '10月10日',
-                'date_stamp' => '1444406400',
-                'week' => '明天',
+                'date_format' => date('m月d日',strtotime('+'.$i.' day')),
+                'date_stamp' => time(date('m月d日',strtotime('+'.$i.' day'))),
+                'week' => $i==1? '明天':'',
                 'have_worker' => '1',
                 'hour' =>
                     [

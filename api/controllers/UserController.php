@@ -73,12 +73,12 @@ class UserController extends \api\components\Controller
         if (empty($param['access_token'])||!CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
         }
+
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
 
         if (!empty($customer) && !empty($customer->id)) {
             $model = CustomerAddress::addAddress($customer->id, $param['operation_area_name'], $param['address_detail'],
                 $param['address_nickname'], $param['address_phone']);
-
             if (!empty($model)) {
                 $address = [
                     'address_id' => $customer->id,
