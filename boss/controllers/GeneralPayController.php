@@ -112,6 +112,7 @@ class GeneralPayController extends Controller
         file_put_contents('/tmp/pay/get.php',json_encode($_GET));
         file_put_contents('/tmp/pay/post.php',json_encode($_POST));
         file_put_contents('/tmp/pay/request.php',json_encode($_REQUEST));
+        file_put_contents('/tmp/pay/global.php',json_encode($GLOBALS['HTTP_RAW_POST_DATA']));
         //POST数据
         if(!empty($_GET['debug'])){
             $_POST = array (
