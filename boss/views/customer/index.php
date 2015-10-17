@@ -8,7 +8,6 @@ use yii\helpers\ArrayHelper;
 use kartik\nav\NavX;
 use yii\bootstrap\NavBar;
 use yii\bootstrap\Modal;
-
 use boss\components\AreaCascade;
 use kartik\widgets\Select2;
 use yii\helpers\Url;
@@ -16,13 +15,11 @@ use yii\web\JsExpression;
 use yii\base\Widget;
 use yii\widgets\ActiveForm;
 
-use common\models\CustomerPlatform;
-use common\models\CustomerChannal;
-use common\models\CustomerAddress;
-use common\models\GeneralRegion;
 use common\models\OrderExtCustomer;
-use common\models\CustomerExtBalance;
-use common\models\CustomerExtSrc;
+
+use core\models\customer\CustomerAddress;
+use core\models\customer\CustomerExtBalance;
+use core\models\customer\CustomerExtSrc;
 
 /**
  * @var yii\web\View $this
@@ -60,6 +57,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         // 'filterModel' => $searchModel,
         'export'=>false,
+        'containerOptions'=>['style'=>'overflow: auto'], // only set when $responsive = false
+        'headerRowOptions'=>['class'=>'kartik-sheet-style'],
+        'filterRowOptions'=>['class'=>'kartik-sheet-style'],
         'toolbar' =>
             [
                 'content'=>
@@ -123,38 +123,24 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'label' => '订单地址',
                 'value' => function ($dataProvider) {
-                    $address_count = CustomerAddress::find()->where([
-                        'customer_id'=>$dataProvider->id,
-                        ])->count();
-                    $customer_address = CustomerAddress::find()->where([
-                        'customer_id'=>$dataProvider->id,
-                        'customer_address_status'=>1])->one();
-                    
-                    if ($customer_address) {
-                        $general_region_id = $customer_address->general_region_id;
-                        $general_region = GeneralRegion::find()->where([
-                        'id'=>$general_region_id,
-                        ])->one();
-                        if ($address_count <= 0) {
-                            return '-';
-                        }
-                        if ($address_count == 1) {
-                            return $general_region->general_region_province_name 
-                            . $general_region->general_region_city_name 
-                            . $general_region->general_region_area_name;
-                        }
-                        if ($address_count > 1) {
-                            return $general_region->general_region_province_name 
-                            . $general_region->general_region_city_name 
-                            . $general_region->general_region_area_name
-                            . '...';
-                        }
-                    }else{
+                    $customerAddress = CustomerAddress::listAddress($dataProvider->id);
+                    if (empty($customerAddress)) {
                         return '-';
                     }
-                    
+                    $addressStr = '';
+                    foreach ($customerAddress as $address) {
+                        if ($address != NULL) {
+                            $addressStr .= $address->operation_province_name
+                                .$address->operation_city_name
+                                .$address->operation_area_name
+                                .$address->customer_address_detail
+                                .'|'.$address->customer_address_nickname
+                                .'|'.$address->customer_address_phone;
+                        }
+                    }
+                    return $addressStr;
                 },
-                'width' => "150px",
+                'width' => "300px",
             ],
             [
                 'format' => 'raw',
@@ -168,10 +154,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'label' => '平台',
                 'value' => function ($dataProvider) {
-                    // $platform = CustomerPlatform::find()->where(['id'=>$dataProvider->platform_id])->one();
-                    // return $platform ? $platform->platform_name : '-';
-                    $customerExtSrc = CustomerExtSrc::find()->where(['customer_id'=>$dataProvider->id])->orderBy('created_at asc')->one();
-                    return $customerExtSrc == NULL ? '-' : $customerExtSrc->platform_name;
+                    $customerExtSrc = CustomerExtSrc::getFirstSrc($dataProvider->id);
+                    return $customerExtSrc == false ? '-' : $customerExtSrc->platform_name == '' ? '-' : $customerExtSrc->platform_name;
                 },
                 'width' => "80px",
             ],
@@ -179,10 +163,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'label' => '渠道',
                 'value' => function ($dataProvider) {
-                    // $channal = CustomerChannal::find()->where(['id'=>$dataProvider->channal_id])->one();
-                    // return $channal ? $channal->channal_name : '-';
-                    $customerExtSrc = CustomerExtSrc::find()->where(['customer_id'=>$dataProvider->id])->orderBy('created_at asc')->one();
-                    return $customerExtSrc == NULL ? '-' : $customerExtSrc->platform_name;
+                    $customerExtSrc = CustomerExtSrc::getFirstSrc($dataProvider->id);
+                    return $customerExtSrc == false ? '-' : $customerExtSrc->channal_name == '' ? '-' : $customerExtSrc->channal_name;
                 },
                 'width' => "80px",
             ],
@@ -193,15 +175,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     $order_count = OrderExtCustomer::find()->where(['customer_id'=>$dataProvider->id])->count();
                     return '<a href="/order/index?OrderSearch[customer_id]='. $dataProvider->id .'">'.$order_count.'</a>';
                 },
-                'width' => "80px",
+                'width' => "50px",
             ],
             [
                 'format' => 'raw',
                 'label' => '余额',
                 'value' => function ($dataProvider) {
-                    $customerExtBalance = CustomerExtBalance::findOne($dataProvider->id);
-                    $customer_balance = $customerExtBalance != NULL ? $customerExtBalance->customer_balance : 0;
-                    return '￥'.$customer_balance;
+                    $customerBalance = CustomerExtBalance::getCustomerBalance($dataProvider->id);
+                    return $customerBalance == false ? 0 : $customerBalance;
                 },
                 'width' => "80px",
             ],
@@ -211,7 +192,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($dataProvider) {
                     return '<a href="/order/index?OrderSearch[customer_id]='. $dataProvider->id .'">' . $dataProvider->customer_complaint_times . '</a>';
                 },
-                'width' => "80px",
+                'width' => "50px",
             ],
             [
                 'format' => 'datetime',
@@ -220,7 +201,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $dataProvider->created_at;
                     
                 },
-                'width' => "160px",
+                'width' => "120px",
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
@@ -251,6 +232,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'hover' => true,
         'condensed' => true,
         'floatHeader' => true,
+        'striped'=>false,
         'panel' => [
             'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> ' . Html::encode($this->title) . ' </h3>',
             'type' => 'info',

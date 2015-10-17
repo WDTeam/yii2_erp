@@ -303,7 +303,7 @@ class FinanceShopSettleApplyController extends Controller
             $shopManagerModel = ShopManager::findById($shop['shop_manager_id']);
             $searchModel->shop_name = $shopModel->name;
             $searchModel->shop_manager_name = $shopManagerModel->name;
-            $searchModel->getShopSettleInfo($shop->id);
+            $searchModel->getShopSettleInfo($shop['shop_id']);
             $searchModel->finance_shop_settle_apply_fee_per_order = FinanceShopSettleApplySearch::MANAGE_FEE_PER_ORDER;
             $searchModel->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_INIT;
             $searchModel->finance_shop_settle_apply_cycle = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_CYCLE_WEEK;
@@ -311,8 +311,6 @@ class FinanceShopSettleApplyController extends Controller
             $searchModel->finance_shop_settle_apply_starttime = time();
             $searchModel->finance_shop_settle_apply_endtime = time();
             $searchModel->created_at = time();
-            var_dump($searchModel);
-            var_dump($searchModel);
             $searchModel->save();
         }
     }
