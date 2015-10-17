@@ -27,6 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
            // 'id',
             'finance_order_channel_name',
+    		'finance_order_channel_rate',
             'finance_order_channel_sort',
           //'finance_order_channel_is_lock',
     		[
