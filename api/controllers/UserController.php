@@ -32,26 +32,16 @@ class UserController extends \api\components\Controller
      *       "ret":{
      *       "address":
      *          {
-     *          "customer_id": 1665,
-     *          "operation_province_id": "110000",
-     *          "operation_city_id": "110100",
-     *          "operation_area_id": "110108",
-     *          "operation_province_name": "北京",
-     *          "operation_city_name": "北京市",
-     *          "operation_area_name": "海淀区",
-     *          "operation_province_short_name": "北京",
-     *          "operation_city_short_name": "北京",
-     *          "operation_area_short_name": "海淀",
-     *          "customer_address_status": 1,客户地址类型,1为默认地址，-1为非默认地址
-     *          "customer_address_detail": "某某小区8栋3单元502",
-     *          "customer_address_longitude": "116.31031",
-     *          "customer_address_latitude": "39.95607",
-     *          "customer_address_nickname": "小明",
-     *          "customer_address_phone": "18210922324",
-     *          "created_at": 1445055342,
-     *          "updated_at": 0,
-     *          "is_del": 0,
-     *          "id": 2
+     *          'address_id'=>"1612679",
+     *          'province_name' => "北京",
+     *          'city_name' => "北京",
+     *          'area_name' => "朝阳区",
+     *          'address_detail' => "某某小区8栋3单元502",
+     *          'address_nickname' => '张先生',
+     *          'address_phone' => '13300112233',
+     *          'default_address' => '1',客户地址类型,1为默认地址，-1为非默认地址
+     *          'latitude' => "39.770908",
+     *          'longitude' => "116.223751",
      *          }
      *        }
      *
@@ -80,7 +70,7 @@ class UserController extends \api\components\Controller
     public function actionAddAddress()
     {
         $param = Yii::$app->request->post();
-        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+        if (empty($param['access_token'])||!CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
         }
 
@@ -90,7 +80,20 @@ class UserController extends \api\components\Controller
             $model = CustomerAddress::addAddress($customer->id, $param['operation_area_name'], $param['address_detail'],
                 $param['address_nickname'], $param['address_phone']);
             if (!empty($model)) {
-                $ret = ['address' => $model];
+                $address = [
+                    'address_id' => $customer->id,
+                    'province_name' => $model->general_region_province_name,
+                    'city_name' => $model->general_region_city_name,
+                    'area_name' => $model->general_region_area_name,
+                    'address_detail' => $model->customer_address_detail,
+                    'address_nickname' => $model->customer_address_nickname,
+                    'address_phone' => $model->customer_address_phone,
+                    'default_address' => $model->customer_address_status,
+                    'latitude' => $model->customer_address_latitude,
+                    'longitude' => $model->customer_address_longitude,
+                ];
+                $ret = ['address' => $address];
+
                 return $this->send($ret, "常用地址添加成功", "ok");
             } else {
                 return $this->send(null, "常用地址添加失败", "error", 403);
@@ -122,27 +125,17 @@ class UserController extends \api\components\Controller
      *       "ret":{
      *       "addresses": [
      *          {
-     *          "customer_id": 1665,
-     *          "operation_province_id": "110000",
-     *          "operation_city_id": "110100",
-     *          "operation_area_id": "110108",
-     *          "operation_province_name": "北京",
-     *          "operation_city_name": "北京市",
-     *          "operation_area_name": "海淀区",
-     *          "operation_province_short_name": "北京",
-     *          "operation_city_short_name": "北京",
-     *          "operation_area_short_name": "海淀",
-     *          "customer_address_status": 1,客户地址类型,1为默认地址，-1为非默认地址
-     *          "customer_address_detail": "某某小区8栋3单元502",
-     *          "customer_address_longitude": "116.31031",
-     *          "customer_address_latitude": "39.95607",
-     *          "customer_address_nickname": "小明",
-     *          "customer_address_phone": "18210922324",
-     *          "created_at": 1445055342,
-     *          "updated_at": 0,
-     *          "is_del": 0,
-     *          "id": 2
-     *          },
+     *          'address_id'=>"1612679",
+     *          'province_name' => "北京",
+     *          'city_name' => "北京",
+     *          'area_name' => "朝阳区",
+     *          'address_detail' => "某某小区8栋3单元502",
+     *          'address_nickname' => '张先生',
+     *          'address_phone' => '13300112233',
+     *          'default_address' => '1',客户地址类型,1为默认地址，-1为非默认地址
+     *          'latitude' => "39.770908",
+     *          'longitude' => "116.223751",
+     *          }
      *         ]
      *        }
      *     }
@@ -160,7 +153,7 @@ class UserController extends \api\components\Controller
     public function actionAddresses()
     {
         $accessToken = Yii::$app->request->post('access_token');
-        if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
+        if (empty($accessToken)||!CustomerAccessToken::checkAccessToken($accessToken)) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
         }
         $customer = CustomerAccessToken::getCustomer($accessToken);
@@ -170,7 +163,19 @@ class UserController extends \api\components\Controller
 
             $addresses = array();
             foreach ($AddressArr as $key => $model) {
-                $addresses[] = $model;
+                $item = [
+                    'address_id' => $model->id,
+                    'province_name' => $model->general_region_province_name,
+                    'city_name' => $model->general_region_city_name,
+                    'area_name' => $model->general_region_area_name,
+                    'address_detail' => $model->customer_address_detail,
+                    'address_nickname' => $model->customer_address_nickname,
+                    'address_phone' => $model->customer_address_phone,
+                    'default_address' => $model->customer_address_status,
+                    'latitude' => $model->customer_address_latitude,
+                    'longitude' => $model->customer_address_longitude,
+                ];
+                $addresses[] = $item;
             }
             $ret = ['addresses' => $addresses];
             return $this->send($ret, "获取地址列表成功", "ok");
@@ -211,21 +216,24 @@ class UserController extends \api\components\Controller
      */
     public function actionDeleteAddress()
     {
-        $params = Yii::$app->request->post();
+        $params=Yii::$app->request->post();
         $accessToken = $params['access_token'];
         $addressId = $params['address_id'];
-        if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
+        if (empty($accessToken)||!CustomerAccessToken::checkAccessToken($accessToken)) {
             return $this->send(null, "用户认证已经过期,请重新登录.", "error", 403);
         }
         if (empty($addressId)) {
             return $this->send(null, "地址信息获取失败", "error", 403);
         }
 
-        if (CustomerAddress::deleteAddress($addressId)) {
+        if(CustomerAddress::deleteAddress($addressId))
+        {
             return $this->send(null, "删除成功", "ok");
-        } else {
+        }
+        else
+        {
 
-            return $this->send(null, "删除失败", "error", 403);
+            return $this->send(null, "删除失败", "error",403);
         }
     }
 
@@ -259,29 +267,32 @@ class UserController extends \api\components\Controller
      */
     public function actionSetDefaultAddress()
     {
-        $params = Yii::$app->request->post();
+        $params=Yii::$app->request->post();
         $accessToken = $params['access_token'];
         $addressId = $params['address_id'];
-        if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
+        if (empty($accessToken)||!CustomerAccessToken::checkAccessToken($accessToken)) {
             return $this->send(null, "用户认证已经过期,请重新登录.", "error", 403);
         }
         if (empty($addressId)) {
             return $this->send(null, "地址信息获取失败", "error", 403);
         }
 
-        $model = CustomerAddress::getAddress($addressId);
+        $model =CustomerAddress::getAddress($addressId);
 
-        if (empty($model)) {
+        if(empty($model))
+        {
             return $this->send(null, "地址信息获取失败", "error", 403);
         }
 
-        if (CustomerAddress::updateAddress($model->id, $model->operation_area_name,
-            $model->customer_address_detail, $model->customer_address_nickname, $model->customer_address_phone)
-        ) {
+        if(CustomerAddress::updateAddress($model->id, $model->operation_area_name,
+            $model->customer_address_detail, $model->customer_address_nickname, $model->customer_address_phone))
+        {
             return $this->send(null, "设置默认地址成功", "ok");
-        } else {
+        }
+        else
+        {
 
-            return $this->send(null, "设置默认地址失败", "error", 403);
+            return $this->send(null, "设置默认地址失败", "error",403);
         }
     }
 
@@ -330,28 +341,32 @@ class UserController extends \api\components\Controller
      */
     public function actionUpdateAddress()
     {
-        $params = Yii::$app->request->post();
+        $params=Yii::$app->request->post();
         $accessToken = $params['access_token'];
         $addressId = $params['address_id'];
-        if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
+        if (empty($accessToken)||!CustomerAccessToken::checkAccessToken($accessToken)) {
             return $this->send(null, "用户认证已经过期,请重新登录.", "error", 403);
         }
         if (empty($addressId)) {
             return $this->send(null, "地址信息获取失败", "error", 403);
         }
 
-        $model = CustomerAddress::getAddress($addressId);
+        $model =CustomerAddress::getAddress($addressId);
 
-        if (empty($model)) {
+        if(empty($model))
+        {
             return $this->send(null, "地址信息获取失败", "error", 403);
         }
-        $ret=CustomerAddress::updateAddress($model->id, $params['operation_area_name'],
-            $params['address_detail'], $params['address_nickname'], $params['address_phone']);
-        if ($ret) {
-            return $this->send(null, "修改常用地址成功", "ok");
-        } else {
 
-            return $this->send(null, "修改常用地址失败", "error", 403);
+        if(CustomerAddress::updateAddress($model->id, $params['operation_area_name'],
+            $params['address_detail'], $params['address_nickname'], $params['address_phone']))
+        {
+            return $this->send(null, "修改常用地址成功", "ok");
+        }
+        else
+        {
+
+            return $this->send(null, "修改常用地址失败", "error",403);
         }
     }
 

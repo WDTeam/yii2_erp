@@ -25,7 +25,6 @@ use core\models\customer\CustomerBlockLog;
  * @var yii\web\View $this
  * @var common\models\Worker $model
  */
-
 $this->title = '客户详情';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Customers'), 'url' => ['View']];
 $this->params['breadcrumbs'][] = $this->title;
@@ -42,14 +41,19 @@ $device_name = $customerExtSrc == false ? '-' : $customerExtSrc->device_name;
 $device_no = $customerExtSrc == false ? '-' : $customerExtSrc->device_no;
 
 //全部服务地址
-$customerAddressArr = CustomerAddress::getAddressArr($model->id);
-$customerAddressStr = '';
-if (!empty($customerAddressArr)) {
-    foreach ($customerAddressArr as $customerAddress) {
-        $customerAddressStr .= 
-        $customerAddress['province_city_area_detail']
-        .'|'.$customerAddress['customer_address_nickname']
-        .'|'.$customerAddress['customer_address_phone'].'<br/>';
+$customerAddress = CustomerAddress::listAddress($model->id);
+if (empty($customerAddress)) {
+    return '-';
+}
+$addressStr = '';
+foreach ($customerAddress as $address) {
+    if ($address != NULL) {
+        $addressStr .= $address->operation_province_name
+            .$address->operation_city_name
+            .$address->operation_area_name
+            .$address->customer_address_detail
+            .' | '.$address->customer_address_nickname
+            .' | '.$address->customer_address_phone;
     }
 }
 
@@ -136,12 +140,12 @@ echo DetailView::widget([
             'attribute'=>'', 
             'label'=>'接单地址',
             'format'=>'raw',
-            'value'=> $customerAddressStr,
+            'value'=> $addressStr,
             'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],
     ],
-    'enableEditMode'=>false,
+    'enableEditMode'=>true,
 ]); 
 
 echo DetailView::widget([
