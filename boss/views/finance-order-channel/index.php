@@ -26,9 +26,10 @@ use kartik\tabs\TabsX;
      		'columns' => [
      		['class' => 'yii\grid\SerialColumn'],
      
-     		'id',
+     		//'id',
      		'finance_order_channel_name',
-     		'finance_order_channel_sort',
+    		'finance_order_channel_rate',
+     		//'finance_order_channel_sort',
     		[
     		'format' => 'raw',
     		'label' => '状态',

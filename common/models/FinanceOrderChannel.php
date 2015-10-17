@@ -31,7 +31,7 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
     {
         return [
             [['finance_order_channel_sort', 'finance_order_channel_is_lock', 'create_time', 'is_del'], 'integer'],
-            [['finance_order_channel_name'], 'string', 'max' => 50]
+            [['finance_order_channel_rate','finance_order_channel_name','finance_order_channel_rate'], 'string', 'max' => 50]
         ];
     }
 
@@ -43,6 +43,7 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('boss', '主键id'),
             'finance_order_channel_name' => Yii::t('boss', '渠道名称'),
+            'finance_order_channel_rate' => Yii::t('boss', '比例'),
             'finance_order_channel_sort' => Yii::t('boss', '排序'),
             'finance_order_channel_is_lock' => Yii::t('boss', '状态'),
             'create_time' => Yii::t('boss', '增加时间'),
@@ -62,7 +63,7 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
     	if(\Yii::$app->cache->exists('orderchannellist')){
         $orderchannellist= \Yii::$app->cache->get('orderchannellist');
     	return json_decode($orderchannellist,true);
-	    }else{ 
+	    }else{
 	    	$ordewhere['is_del']=0;
 	    	$ordewhere['finance_order_channel_is_lock']=1;
 	    	$payatainfo=FinanceOrderChannel::find()->select('id,finance_order_channel_name')->where($ordewhere)->asArray()->all();

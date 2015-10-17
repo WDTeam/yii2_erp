@@ -203,10 +203,8 @@ class GeneralPay extends \common\models\GeneralPay
         //验证数据
         if( $model->validate() && $model->save() )
         {
-
             //返回组装数据
             return $model->call_pay();
-
         }
         else
         {
