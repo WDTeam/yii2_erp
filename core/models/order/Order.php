@@ -11,6 +11,7 @@ namespace core\models\order;
 
 use boss\controllers\OperationGoodsController;
 use boss\controllers\OperationShopDistrictController;
+use common\models\OrderExtFlag;
 use core\models\Customer;
 use core\models\customer\CustomerAddress;
 use core\models\GeneralPay\GeneralPay;
@@ -171,7 +172,7 @@ class Order extends OrderModel
      * @param $admin_id
      * @return array|bool
      */
-    public static function manualAssignUndone($order_id,$admin_id)
+    public static function manualAssignUndone($order_id,$admin_id=1)
     {
         $order = Order::findOne($order_id);
         $order->order_flag_lock = 0;
@@ -181,6 +182,17 @@ class Order extends OrderModel
             return OrderStatus::manualAssignUndone($order,['OrderExtFlag']);
         }else{//客服或小家政还没指派过则进入待人工指派的状态
             return OrderStatus::sysAssignUndone($order,['OrderExtFlag']);
+        }
+    }
+
+    /**
+     * 批量解锁
+     */
+    public static function manualAssignUnlock()
+    {
+        $lockedOrders = OrderExtFlag::find()->where(['>','order_flag_lock',0])->andWhere(['<','updated_at',time()-Order::MANUAL_ASSIGN_lONG_TIME])->all();
+        foreach($lockedOrders as $v){//解锁操作超时订单
+            self::manualAssignUndone($v['order_id']);
         }
     }
 
