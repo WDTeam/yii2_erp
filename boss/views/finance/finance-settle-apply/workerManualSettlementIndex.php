@@ -129,7 +129,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 
                 <?php
                     if($model->finance_settle_apply_order_count > 0){
-                        echo Html::a('<u>'.$model->finance_settle_apply_order_count.'</u>',[Yii::$app->urlManager->createUrl(['/finance-settle-apply/worker-manual-settlement-index','id' => $model->id,'settle_type'=>$model->settle_type,'review_section'=>$model->review_section])]);
+                        echo Html::a('<u>'.$model->finance_settle_apply_order_count.'</u>',[Yii::$app->urlManager->createUrl(['/finance/finance-settle-apply/worker-manual-settlement-index','id' => $model->id,'settle_type'=>$model->settle_type,'review_section'=>$model->review_section])]);
                     }else{
                         echo $model->finance_settle_apply_order_count;
                     }
@@ -138,7 +138,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class='settleDetail'>
                  <?php
                     if($model->finance_settle_apply_order_cash_count > 0){
-                        echo Html::a('<u>'.$model->finance_settle_apply_order_cash_count.'</u>',[Yii::$app->urlManager->createUrl(['/finance-settle-apply/worker-manual-settlement-index','id' => $model->id,'finance_worker_order_income_type'=>FinanceWorkerOrderIncomeSearch::CASH_INCOME,'settle_type'=>$model->settle_type,'review_section'=>$model->review_section])]);
+                        echo Html::a('<u>'.$model->finance_settle_apply_order_cash_count.'</u>',[Yii::$app->urlManager->createUrl(['/finance/finance-settle-apply/worker-manual-settlement-index','id' => $model->id,'finance_worker_order_income_type'=>FinanceWorkerOrderIncomeSearch::CASH_INCOME,'settle_type'=>$model->settle_type,'review_section'=>$model->review_section])]);
                     }else{
                         echo $model->finance_settle_apply_order_cash_count;
                     }
@@ -150,7 +150,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class='settleDetail'>
                 <?php
                     if($model->finance_settle_apply_order_noncash_count > 0){
-                        echo Html::a('<u>'.$model->finance_settle_apply_order_noncash_count.'</u>',[Yii::$app->urlManager->createUrl(['/finance-settle-apply/worker-manual-settlement-index','id' => $model->id,'finance_worker_order_income_type'=>FinanceWorkerOrderIncomeSearch::ONLINE_INCOME,'settle_type'=>$model->settle_type,'review_section'=>$model->review_section])]);
+                        echo Html::a('<u>'.$model->finance_settle_apply_order_noncash_count.'</u>',[Yii::$app->urlManager->createUrl(['/finance/finance-settle-apply/worker-manual-settlement-index','id' => $model->id,'finance_worker_order_income_type'=>FinanceWorkerOrderIncomeSearch::ONLINE_INCOME,'settle_type'=>$model->settle_type,'review_section'=>$model->review_section])]);
                     }else{
                         echo $model->finance_settle_apply_order_noncash_count;
                     }

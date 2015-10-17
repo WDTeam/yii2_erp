@@ -1,6 +1,6 @@
 <?php
 
-namespace boss\controllers;
+namespace boss\controllers\finance;
 error_reporting(E_ALL);
 use Yii;
 use common\models\FinanceSettleApply;
@@ -156,7 +156,7 @@ class FinanceSettleApplyController extends BaseAuthController
         $financeSettleApplyLogSearch->finance_settle_apply_reviewer_comment ="";
         $financeSettleApplyLogSearch->created_at = time();
         $financeSettleApplyLogSearch->save();
-        return $this->redirect('/finance-settle-apply/self-fulltime-worker-settle-index?settle_type='.$settle_type.'&review_section='.$review_section);
+        return $this->redirect('self-fulltime-worker-settle-index?settle_type='.$settle_type.'&review_section='.$review_section);
     }
     
     public function actionReviewFailedReason(){
@@ -521,7 +521,7 @@ class FinanceSettleApplyController extends BaseAuthController
         $worker_id = $requestParams['worker_id'];
         $partimeWorkerArr = [['worker_id'=>$worker_id],];
         $this->saveAndGenerateSettleData($partimeWorkerArr,time(),time());
-        return $this->redirect('/finance-settle-apply/self-fulltime-worker-settle-index?settle_type='.$settle_type.'&review_section='.$review_section);
+        return $this->redirect('self-fulltime-worker-settle-index?settle_type='.$settle_type.'&review_section='.$review_section);
     }
     
     /**

@@ -48,13 +48,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?=  $model->workerName; ?>
             </div>
             <div class='col-md-2'>
-                <?=  $model->workerPhone; ?>
+                <?=  $model->worder_tel; ?>
             </div>
             <div class='col-md-2'>
                 <?=  date('Y:m:d H:i:s',$model->workerOnboardTime); ?>
             </div>
             <div class='col-md-2'>
-                <?=  $model->workerType; ?>
+                <?=  $model->workerTypeDes; ?>
             </div>
             <div class='col-md-2'>
                 <?=  $model->finance_settle_apply_cycle_des; ?>
