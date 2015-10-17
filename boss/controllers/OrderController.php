@@ -2,7 +2,7 @@
 
 namespace boss\controllers;
 
-use common\models\CustomerAddress;
+use core\models\customer\CustomerAddress;
 use core\models\order\OrderWorkerRelation;
 use core\models\worker\Worker;
 use Yii;
@@ -108,7 +108,6 @@ class OrderController extends BaseAuthController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $order = OrderSearch::getWaitManualAssignOrder(Yii::$app->user->id,true);
         if($order){
-            $operation_long_time = 900; //TODO 客服最大执行时间
             return
                 [
                     'order'=>$order,
@@ -116,7 +115,7 @@ class OrderController extends BaseAuthController
                     'ext_pop'=>$order->orderExtPop,
                     'ext_customer'=>$order->orderExtCustomer,
                     'ext_flag'=>$order->orderExtFlag,
-                    'operation_long_time'=>$operation_long_time,
+                    'operation_long_time'=>Order::MANUAL_ASSIGN_lONG_TIME,
                     'booked_time_range'=>date('Y-m-d    H:i-',$order->order_booked_begin_time).date('H:i',$order->order_booked_end_time),
                 ];
         }else{
@@ -297,12 +296,10 @@ class OrderController extends BaseAuthController
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }else{//init
-            $model->order_service_type_id = 1; //服务类型默认值
-            $model->order_booked_count = 120; //服务市场初始值120分钟
+            $model->order_booked_count = 120; //服务时长初始值120分钟
             $model->order_booked_worker_id=0; //不指定阿姨
             $model->orderBookedTimeRange = '08:00-10:00';//预约时间段初始值
             $model->order_pay_type = 1;//支付方式 初始值
-            $model->channel_id = 1;//默认渠道
         }
         return $this->render('create', [
             'model' => $model,
