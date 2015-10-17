@@ -47,7 +47,7 @@ class FinanceRecordLog extends \yii\db\ActiveRecord
         return [
             [['finance_order_channel_id', 'finance_pay_channel_id', 'finance_record_log_succeed_count', 'finance_record_log_manual_count', 'finance_record_log_failure_count', 'create_time', 'is_del'], 'integer'],
             [['finance_record_log_succeed_sum_money', 'finance_record_log_manual_sum_money', 'finance_record_log_failure_money', 'finance_record_log_fee'], 'number'],
-            [['finance_order_channel_name', 'finance_pay_channel_name'], 'string', 'max' => 100],
+            [['finance_order_channel_name','finance_record_log_qiniuurl','finance_pay_channel_name'], 'string', 'max' => 100],
             [['finance_record_log_confirm_name'], 'string', 'max' => 30]
         ];
     }
@@ -75,6 +75,7 @@ class FinanceRecordLog extends \yii\db\ActiveRecord
             'finance_record_log_endtime' => Yii::t('boss', '账期结束时间'),
             'finance_record_log_confirm_name' => Yii::t('boss', '对账人'),
             'finance_record_log_fee' => Yii::t('boss', '服务费'),
+            'finance_record_log_qiniuurl' => Yii::t('boss', '七牛地址'),
             'create_time' => Yii::t('boss', '创建时间'),
             'is_del' => Yii::t('boss', '0 正常 1 删除'),
         ];

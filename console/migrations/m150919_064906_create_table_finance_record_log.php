@@ -31,6 +31,7 @@ class m150919_064906_create_table_finance_record_log extends Migration
   'finance_record_log_fee' => Schema::TYPE_DECIMAL . '(8,2) DEFAULT \'0.00\' COMMENT \'服务费\'' ,
   'finance_record_log_statime' => Schema::TYPE_INTEGER. '(10) DEFAULT NULL COMMENT \'对账周期开始时间\'' ,
   'finance_record_log_endtime' => Schema::TYPE_INTEGER. '(10) DEFAULT NULL COMMENT \'对账周期结束时间\'' ,
+  'finance_record_log_qiniuurl' => Schema::TYPE_STRING . '(220) DEFAULT NULL COMMENT \'七牛地址\'' ,	
   'create_time' => Schema::TYPE_INTEGER. '(10) DEFAULT NULL COMMENT \'创建时间\'' ,
   'is_del' => Schema::TYPE_SMALLINT . '(1) DEFAULT \'0\' COMMENT \'0 正常 1 删除\'' ,
     			], $tableOptions);
