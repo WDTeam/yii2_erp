@@ -19,6 +19,7 @@ class m150918_125452_create_table_finance_order_channel extends Migration
             'id' => Schema::TYPE_PK . '(5) AUTO_INCREMENT  COMMENT \'主键id\'',
             'pay_channel_id' => Schema::TYPE_SMALLINT . '(5) DEFAULT 0 COMMENT \'支付渠道ID\'',
             'finance_order_channel_name' => Schema::TYPE_STRING . '(50) DEFAULT NULL COMMENT \'渠道名称\'',
+			'finance_order_channel_rate' => Schema::TYPE_STRING . '(6) DEFAULT NULL COMMENT \'比率\'',
             'finance_order_channel_sort' => Schema::TYPE_SMALLINT . '(5) DEFAULT 1 COMMENT \'排序\'',
             'finance_order_channel_is_lock' => Schema::TYPE_SMALLINT . '(1) DEFAULT \'1\' COMMENT \'1 上架 2 下架\'',
             'create_time' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL COMMENT \'增加时间\'',
