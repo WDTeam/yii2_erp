@@ -57,6 +57,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         // 'filterModel' => $searchModel,
         'export'=>false,
+        'containerOptions'=>['style'=>'overflow: auto'], // only set when $responsive = false
+        'headerRowOptions'=>['class'=>'kartik-sheet-style'],
+        'filterRowOptions'=>['class'=>'kartik-sheet-style'],
         'toolbar' =>
             [
                 'content'=>
@@ -229,6 +232,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'hover' => true,
         'condensed' => true,
         'floatHeader' => true,
+        'striped'=>false,
         'panel' => [
             'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> ' . Html::encode($this->title) . ' </h3>',
             'type' => 'info',

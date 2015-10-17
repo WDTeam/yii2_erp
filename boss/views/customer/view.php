@@ -148,94 +148,27 @@ echo DetailView::widget([
     'enableEditMode'=>true,
 ]); 
 
-echo DetailView::widget([
-    'model' => $model,
-    'condensed'=>false,
-    'hover'=>true,
-    'mode'=>DetailView::MODE_VIEW,
-    'panel'=>[
-        'heading'=>'订单信息',
-        'type'=>DetailView::TYPE_INFO,
-    ],
-    'attributes' => [
-        [
-            'attribute'=>'', 
-            'label'=>'订单',
-            'format'=>'raw',
-            'value'=> '<a href="/order/index?OrderSearch[customer_id]='. $model->id .'">'. $order_count .'</a>',
-            'type'=>DetailView::INPUT_TEXT,
-            'valueColOptions'=>['style'=>'width:90%']
-        ],
-    ],
-    'enableEditMode'=>false,
-]); 
-
-echo DetailView::widget([
-    'model' => $model,
-    'condensed'=>false,
-    'hover'=>true,
-    'mode'=>DetailView::MODE_VIEW,
-    'panel'=>[
-        'heading'=>'评价信息',
-        'type'=>DetailView::TYPE_INFO,
-    ],
-    'attributes' => [
-        [
-            'attribute'=>'', 
-            'label'=>'评价',
-            'format'=>'raw',
-            'value'=> '<a href="/order/index?OrderSearch[customer_id]='. $model->id .'">'. $comment_count .'</a>',
-            'type'=>DetailView::INPUT_TEXT,
-            'valueColOptions'=>['style'=>'width:90%']
-        ],
-    ],
-    'enableEditMode'=>false,
-]); 
-
-
-echo DetailView::widget([
-    'model' => $model,
-    'condensed'=>false,
-    'hover'=>true,
-    'mode'=>DetailView::MODE_VIEW,
-    'panel'=>[
-        'heading'=>'积分信息',
-        'type'=>DetailView::TYPE_INFO,
-    ],
-    'attributes' => [
-        [
-            'attribute'=>'customer_score', 
-            'label'=>'积分',
-            'format'=>'raw',
-            'value'=> $score,
-            'type'=>DetailView::INPUT_TEXT,
-            'valueColOptions'=>['style'=>'width:90%']
-        ],
-    ],
-    'enableEditMode'=>false,
-]);
-
-echo DetailView::widget([
-    'model' => $model,
-    'condensed'=>false,
-    'hover'=>true,
-    'mode'=>DetailView::MODE_VIEW,
-    'panel'=>[
-        'heading'=>'账户余额',
-        'type'=>DetailView::TYPE_INFO,
-    ],
-    'attributes' => [
-        [
-            'attribute'=>'customer_balance', 
-            'label'=>'余额',
-            'format'=>'raw',
-            'value'=> $balance,
-            'type'=>DetailView::INPUT_TEXT,
-            'valueColOptions'=>['style'=>'width:90%']
-        ],
-    ],
-    'enableEditMode'=>false,
-]); 
+// echo DetailView::widget([
+//     'model' => $model,
+//     'condensed'=>false,
+//     'hover'=>true,
+//     'mode'=>DetailView::MODE_VIEW,
+//     'panel'=>[
+//         'heading'=>'评价信息',
+//         'type'=>DetailView::TYPE_INFO,
+//     ],
+//     'attributes' => [
+//         [
+//             'attribute'=>'', 
+//             'label'=>'评价',
+//             'format'=>'raw',
+//             'value'=> '<a href="/order/index?OrderSearch[customer_id]='. $model->id .'">'. $comment_count .'</a>',
+//             'type'=>DetailView::INPUT_TEXT,
+//             'valueColOptions'=>['style'=>'width:90%']
+//         ],
+//     ],
+//     'enableEditMode'=>false,
+// ]); 
 
 // echo DetailView::widget([
 //     'model' => $model,
@@ -261,6 +194,52 @@ echo DetailView::widget([
 
 
 // $customerBlockLog = \common\models\CustomerBlockLog::findAll('customer_id'=>$model->id);
+echo DetailView::widget([
+    'model' => $model,
+    'condensed'=>false,
+    'hover'=>true,
+    'mode'=>DetailView::MODE_VIEW,
+    'panel'=>[
+        'heading'=>'其他信息',
+        'type'=>DetailView::TYPE_INFO,
+    ],
+    'attributes' => [
+        [
+            'attribute'=>'', 
+            'label'=>'账户状态',
+            'format'=>'raw',
+            'value'=>$currentBlockStatus['block_status_name'],
+            'type'=>DetailView::INPUT_TEXT,
+            'valueColOptions'=>['style'=>'width:90%']
+        ],
+        [
+            'attribute'=>'', 
+            'label'=>'订单总数',
+            'format'=>'raw',
+            'value'=>'<a href="/order/index?OrderSearch[customer_id]='. $model->id .'">'. $order_count .'</a>',
+            'type'=>DetailView::INPUT_TEXT,
+            'valueColOptions'=>['style'=>'width:90%']
+        ],
+        [
+            'attribute'=>'', 
+            'label'=>'账户余额',
+            'format'=>'raw',
+            'value'=>$balance,
+            'type'=>DetailView::INPUT_TEXT,
+            'valueColOptions'=>['style'=>'width:90%']
+        ],
+        [
+            'attribute'=>'', 
+            'label'=>'总积分数',
+            'format'=>'raw',
+            'value'=>$score,
+            'type'=>DetailView::INPUT_TEXT,
+            'valueColOptions'=>['style'=>'width:90%']
+        ],
+    ],
+    'enableEditMode'=>false,
+]); 
+
 $customerBlockLogProvider = new ActiveDataProvider(['query' => \core\models\customer\CustomerBlockLog::find(),]);
 echo GridView::widget([
     'dataProvider' => $customerBlockLogProvider,
@@ -302,28 +281,6 @@ echo GridView::widget([
         ],
     ],
 ]);
-
-echo DetailView::widget([
-    'model' => $model,
-    'condensed'=>false,
-    'hover'=>true,
-    'mode'=>DetailView::MODE_VIEW,
-    'panel'=>[
-        'heading'=>'当前状态信息',
-        'type'=>DetailView::TYPE_INFO,
-    ],
-    'attributes' => [
-        [
-            'attribute'=>'is_del', 
-            'label'=>'当前状态',
-            'format'=>'raw',
-            'value'=>$currentBlockStatus['block_status_name'],
-            'type'=>DetailView::INPUT_TEXT,
-            'valueColOptions'=>['style'=>'width:90%']
-        ],
-    ],
-    'enableEditMode'=>false,
-]); 
 ?>
 </div>
 

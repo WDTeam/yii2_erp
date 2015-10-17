@@ -70,7 +70,7 @@ class OrderController extends \api\components\Controller
     public function actionChooseServiceTime()
     {
         $params = Yii::$app->request->post();
-        $accessToken = $params['access_token'];
+        @$accessToken = $params['access_token'];
 
         if (empty($accessToken)&&!CustomerAccessToken::checkAccessToken($accessToken)) {
             return $this->send(empty($accessToken), "用户认证已经过期,请重新登录.", "error", 403);

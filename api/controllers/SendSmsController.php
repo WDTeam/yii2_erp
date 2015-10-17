@@ -53,18 +53,19 @@ class SendSmsController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /auth/sendmessagecode 短信验证码
+     * @api {POST} /send-sms/send-message-code 短信验证码
      * @apiName SendMessageCode
      * @apiGroup SMS
      * @apiDescription 请求向用户手机发送验证码用于登录
      * @apiParam {String} phone 用户手机号
-     * @apiParam {String} app_version 访问源(android_4.2.2)
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code":"ok"
+     *        "code":"ok"
+     *        "msg": "短信发送成功"
      *     }
      *
      * @apiError PhoneNotFound The id of the User was not found.
@@ -78,8 +79,8 @@ class SendSmsController extends \api\components\Controller
      */
     public function actionSendMessageCode()
     {
-        $phone = Yii::$app->request->get('phone');
-        $app_version = Yii::$app->request->get('app_version');
+        @$phone = Yii::$app->request->post('phone');
+        @$app_version = Yii::$app->request->post('app_version');
         if (preg_match("/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/", $phone)) {
             //验证通过
             if (!CustomerCode::generateAndSend($phone)) {

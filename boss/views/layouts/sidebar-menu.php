@@ -253,6 +253,11 @@ echo Menu::widget(
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                     ],*/
+                    [
+                        'label' => '阿姨任务管理(20%)',
+                        'url' => ['/worker-task/index'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
                 ],
             ],
             [

@@ -149,20 +149,87 @@ class Order extends OrderModel
      */
     public static function addOrderToPool($order_id)
     {
-        $order = Order::findById($order_id);
        //放入订单池 zset 根据预约开始时间+订单id排序
 //        $redis = new Redis();
 //        $redis->zAdd('WaitAssignOrdersPool',$order->order_booked_begin_time.$order_id,$order);
 
         //TODO 开始系统指派
-        $order->admin_id=0;
-        if(OrderStatus::sysAssignStart($order,[]))
+        if(self::sysAssignStart($order_id))
         {
             //TODO 系统指派失败
-            $order = Order::findOne($order_id);
-            $order->admin_id=0;
-            OrderStatus::sysAssignUndone($order,[]);
+            self::sysAssignUndone($order_id);
         }
+    }
+
+    /**
+     * 开始系统指派
+     * @param $order_id
+     * @return bool
+     */
+    public static function sysAssignStart($order_id)
+    {
+        $order = OrderSearch::getOne($order_id);
+        $order->admin_id=1;
+        return OrderStatus::sysAssignStart($order,[]);
+    }
+
+    /**
+     * 标记订单已发送短信给阿姨
+     * @param $order_id
+     * @return bool
+     */
+    public static function workerSMSPushFlag($order_id)
+    {
+        $order = OrderSearch::getOne($order_id);
+        $order->order_flag_worker_sms = 1;
+        return $order->doSave(['OrderExtFlag']);
+    }
+
+    /**
+     * 标记订单已推送极光给阿姨
+     * @param $order_id
+     * @return bool
+     */
+    public static function workerJPushFlag($order_id)
+    {
+        $order = OrderSearch::getOne($order_id);
+        $order->order_flag_worker_jpush = 1;
+        return $order->doSave(['OrderExtFlag']);
+    }
+
+    /**
+     * 标记订单已发送IVR给阿姨
+     * @param $order_id
+     * @return bool
+     */
+    public static function workerIVRPushFlag($order_id)
+    {
+        $order = OrderSearch::getOne($order_id);
+        $order->order_flag_worker_ivr = 1;
+        return $order->doSave(['OrderExtFlag']);
+    }
+
+    /**
+     * 系统指派失败
+     * @param $order_id
+     * @return bool
+     */
+    public static function sysAssignUndone($order_id)
+    {
+        $order = OrderSearch::getOne($order_id);
+        $order->admin_id=1;
+        return OrderStatus::sysAssignUndone($order,[]);
+    }
+
+    /**
+     * 系统指派成功 阿姨接单
+     * @param $order_id
+     * @param $worker_id
+     * @return bool
+     */
+    public static function sysAssignDone($order_id,$worker_id)
+    {
+        return self::assignDone($order_id,$worker_id,1,1);
     }
 
 
@@ -174,7 +241,7 @@ class Order extends OrderModel
      */
     public static function manualAssignUndone($order_id,$admin_id=1)
     {
-        $order = Order::findOne($order_id);
+        $order = OrderSearch::getOne($order_id);
         $order->order_flag_lock = 0;
         $order->admin_id = $admin_id;
         if($order->orderExtFlag->order_flag_send==3) //小家政和客服都无法指派出去
@@ -207,16 +274,34 @@ class Order extends OrderModel
      */
     public static function manualAssignDone($order_id,$worker_id,$admin_id,$isCS = false)
     {
-        $order = Order::findOne($order_id);
+        $assign_type = $isCS?2:3; //2客服指派 3门店指派
+        return self::assignDone($order_id,$worker_id,$admin_id,$assign_type);
+    }
+
+    /**
+     * 指派成功
+     * @param $order_id
+     * @param $worker_id
+     * @param $admin_id
+     * @param $assign_type
+     * @return bool
+     */
+    public static function assignDone($order_id,$worker_id,$admin_id,$assign_type)
+    {
+        $order = OrderSearch::getOne($order_id);
         $order->order_flag_lock = 0;
         $order->worker_id = $worker_id;
         $worker = Worker::getWorkerInfo($worker_id);
         $order->worker_type_id = $worker['worker_type'];
         $order->order_worker_type_name =  $worker['worker_type_description'];
         $order->shop_id = $worker["shop_id"];
-        $order->order_worker_assign_type = $isCS?2:3; //2客服指派 3门店指派
+        $order->order_worker_assign_type = $assign_type; //接单方式
         $order->admin_id = $admin_id;
-        return OrderStatus::manualAssignDone($order,['OrderExtFlag','OrderExtWorker']);
+        if($admin_id>1) { //大于1属于人工操作
+            return OrderStatus::manualAssignDone($order, ['OrderExtFlag', 'OrderExtWorker']);
+        }else{
+            return OrderStatus::sysAssignDone($order, ['OrderExtFlag', 'OrderExtWorker']);
+        }
     }
 
     /**
@@ -322,7 +407,7 @@ class Order extends OrderModel
                 Order::addOrderToPool($event->sender->id);
             });
             $order = $this->attributes;
-            $order_model = Order::findOne($this->id);
+            $order_model = OrderSearch::getOne($this->id);
             switch($this->orderExtPay->order_pay_type){
                 case self::ORDER_PAY_TYPE_OFF_LINE://现金支付
                     //交易记录
