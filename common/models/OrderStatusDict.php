@@ -33,7 +33,7 @@ class OrderStatusDict extends \common\models\ActiveRecord
     const ORDER_PAYOFF_DONE = 14; //已完成结算
     const ORDER_PAYOFF_SHOP_DONE = 15; //已完成门店结算
     const ORDER_CANCEL = 16; //已取消
-    const ORDER_DIE = 17; //已归档
+    const ORDER_DIED = 17; //已归档
 
 
     /**
