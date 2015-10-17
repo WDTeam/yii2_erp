@@ -27,7 +27,20 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="panel-body">
                 <?= $form->field($model, 'order_customer_phone')->textInput(['maxlength' => 11])->label('客户手机'); ?>
                 <div style="display: none;"><?= $form->field($model, 'customer_id')->textInput(['maxlength' => true]) ?></div>
-                <div id="address_div"><?= $form->field($model, 'address_id')->radioList([''=>'请先输入手机号获取地址信息'])->label('地址信息') ?></div>
+                <?= $form->field($model, 'address_id')->radioList([''=>'请先输入手机号获取地址信息'])->label('地址信息') ?>
+                <div class="form-group field-order-address_id required">
+                    <label for="order-address_id" class="control-label col-sm-3">地址信息</label>
+                    <div class="col-sm-6">
+                        <input type="hidden" value="" name="Order[address_id]">
+                            <div id="order-address_id">
+                                <div class="radio"><label><input type="radio" name="Order[address_id]" value="1"> 北京市朝阳区SOHO1 测试昵称 13554699534</label> <label style="">没有经纬度</label></div>
+                                <div class="radio"><label><input type="radio" name="Order[address_id]" value="2"> 北京市朝阳区SOHO2 测试昵称 13554699534</label></div>
+                                <div class="radio"><label><input type="radio" name="Order[address_id]" value="3"> 北京市朝阳区SOHO3 测试昵称 13554699534</label></div>
+                            </div>
+                        <div class="help-block help-block-error "></div>
+                    </div>
+
+                </div>
                 <div style="display: none;"><?= $form->field($model, 'order_address')->textInput(['maxlength' => true]) ?></div>
                 <?= $form->field($model, 'order_service_type_id')->inline()->radioList([''=>'选择地址获取商品'])->label('选择商品') ?>
             </div>

@@ -108,7 +108,6 @@ class OrderController extends BaseAuthController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $order = OrderSearch::getWaitManualAssignOrder(Yii::$app->user->id,true);
         if($order){
-            $operation_long_time = 900; //TODO 客服最大执行时间
             return
                 [
                     'order'=>$order,
@@ -116,7 +115,7 @@ class OrderController extends BaseAuthController
                     'ext_pop'=>$order->orderExtPop,
                     'ext_customer'=>$order->orderExtCustomer,
                     'ext_flag'=>$order->orderExtFlag,
-                    'operation_long_time'=>$operation_long_time,
+                    'operation_long_time'=>Order::MANUAL_ASSIGN_lONG_TIME,
                     'booked_time_range'=>date('Y-m-d    H:i-',$order->order_booked_begin_time).date('H:i',$order->order_booked_end_time),
                 ];
         }else{

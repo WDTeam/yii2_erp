@@ -169,30 +169,19 @@ class Order extends OrderModel
      * 人工指派失败
      * @param $order_id
      * @param $admin_id
-     * @param bool $isCS
      * @return array|bool
      */
-    public static function manualAssignUndone($order_id,$admin_id,$isCS = false)
+    public static function manualAssignUndone($order_id,$admin_id)
     {
-        $flag_send = $isCS?1:2;
         $order = Order::findOne($order_id);
-        if($order->orderExtFlag->order_flag_send+$flag_send==3) //小家政和客服都无法指派出去
+        $order->order_flag_lock = 0;
+        $order->admin_id = $admin_id;
+        if($order->orderExtFlag->order_flag_send==3) //小家政和客服都无法指派出去
         {
-            $order->order_flag_send = $order->orderExtFlag->order_flag_send+$flag_send; //标记是谁指派不了
-            $order->order_flag_lock = 0;
-            $order->admin_id = $admin_id;
-            if(OrderStatus::manualAssignUndone($order,['OrderExtFlag'])){
-                return true;
-            }
+            return OrderStatus::manualAssignUndone($order,['OrderExtFlag']);
         }else{//客服或小家政还没指派过则进入待人工指派的状态
-            $order->order_flag_send = $order->orderExtFlag->order_flag_send+$flag_send;
-            $order->order_flag_lock = 0;
-            $order->admin_id = $admin_id;
-            if(OrderStatus::sysAssignUndone($order,['OrderExtFlag'])){
-                return true;
-            }
+            return OrderStatus::sysAssignUndone($order,['OrderExtFlag']);
         }
-        return false;
     }
 
     /**
