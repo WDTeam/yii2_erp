@@ -188,7 +188,7 @@ class CustomerAddress extends \common\models\CustomerAddress
             }
             $customerAddress->save();
             $customerAddresses = CustomerAddress::findAll('customer_id=:customer_id and id!=:id', 
-                [':customer_id'=>$customer_id, ':id'=>$customerAddress->id]);
+                [':customer_id'=>$id, ':id'=>$customerAddress->id]);
             foreach ($customerAddresses as $customerAddress) {
                 $customerAddress->customer_address_status = 0;
                 $customerAddress->save();

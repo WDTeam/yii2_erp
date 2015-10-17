@@ -42,7 +42,7 @@ class CustomerAccessToken extends \common\models\CustomerAccessToken
                 $customer->save();
             }
 
-            $customerAccessTokens = self::find()->where(['customer_code'=>$code])->all();
+            $customerAccessTokens = self::find()->where(['customer_phone'=>$phone])->all();
             foreach ($customerAccessTokens as $customerAccessToken) {
                 $customerAccessToken->is_del = 1;
                 $customerAccessToken->validate();
@@ -65,9 +65,9 @@ class CustomerAccessToken extends \common\models\CustomerAccessToken
             $customerAccessToken->updated_at = 0;
             $customerAccessToken->is_del = 0;
             $customerAccessToken->validate();
-            if ($customerAccessToken->hasErrors()) {
-                var_dump($customerAccessToken->getErrors());
-            }
+            // if ($customerAccessToken->hasErrors()) {
+            //     var_dump($customerAccessToken->getErrors());
+            // }
             $customerAccessToken->save();
             $transaction->commit();
             return $customerAccessToken->customer_access_token;
@@ -85,11 +85,11 @@ class CustomerAccessToken extends \common\models\CustomerAccessToken
         $customerAccessToken = self::find()->where(['customer_access_token'=>$access_token, 'is_del'=>0])->one();
         if ($customerAccessToken == NULL) {
             return false;
-        }
-        if ($customerAccessToken->created_at < time() && $customerAccessToken->created_at + $customerAccessToken->customer_access_token_expiration > time()) {
+        }else if (($customerAccessToken->created_at <= time()) && ($customerAccessToken->created_at + $customerAccessToken->customer_access_token_expiration >= time())) {
             return true;
+        }else{
+            return false;
         }
-        return false;
     }
 
     /**
@@ -108,7 +108,6 @@ class CustomerAccessToken extends \common\models\CustomerAccessToken
         if ($customerCode == NULL) {
             return false;
         }
-        // var_dump($customerCode);exit();
         $customer = Customer::find()->where(['customer_phone'=>$customerCode->customer_phone])->one();
         return $customer == NULL ? false : $customer;
     }
