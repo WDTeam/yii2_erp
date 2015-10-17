@@ -112,8 +112,15 @@ class GeneralPayController extends Controller
         file_put_contents('/tmp/pay/get.php',json_encode($_GET));
         file_put_contents('/tmp/pay/post.php',json_encode($_POST));
         file_put_contents('/tmp/pay/request.php',json_encode($_REQUEST));
+        if( !empty($GLOBALS['HTTP_RAW_POST_DATA']) ){
         file_put_contents('/tmp/pay/global.php',json_encode($GLOBALS['HTTP_RAW_POST_DATA']));
+        }
         //POST数据
+
+        //调用微信数据
+        $class = new \wxjspay_class();
+        $class->callback();
+
         if(!empty($_GET['debug'])){
             $_POST = array (
                 "discount"=> "0.00",
@@ -143,8 +150,10 @@ class GeneralPayController extends Controller
             );
             $post = $_POST;
         }else{
-            $post = $request->post();
+            $post = $class->getNotifyData();
         }
+        file_put_contents('/tmp/pay/p.php',json_encode($post));
+        $class->notify();
 
         //实例化模型
         $GeneralPayLogModel = new GeneralPayLog();

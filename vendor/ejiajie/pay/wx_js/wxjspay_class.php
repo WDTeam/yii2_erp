@@ -43,7 +43,7 @@ class wxjspay_class extends WxPayNotify{
 
 
     public function getNotifyData(){
-        return $this->notfiyOutput;
+        return $this->GetValues();
     }
 
 
