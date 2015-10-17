@@ -155,7 +155,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     $(document).ready(
                         function(){
                             var shopId = $('#shopId').val();
-                            alert(shopId);
                             if(shopId == ''){
                                 $('#manualSettleInfo').html('<h4  class="col-sm-12">请输入查询条件进行人工结算</h4>');
                             }

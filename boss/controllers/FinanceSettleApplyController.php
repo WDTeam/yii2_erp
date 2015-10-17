@@ -497,7 +497,6 @@ class FinanceSettleApplyController extends BaseAuthController
         $review_section = $requestParams['review_section'];
         $settle_type = $requestParams['settle_type'];
         $financeSettleApplySearch->load($requestParams);
-        $orderDataProvider = null;
         $financeSettleApplySearch = $financeSettleApplySearch->getWorkerInfo($financeSettleApplySearch->worder_tel);//获取阿姨的信息
         $financeSettleApplySearch->settle_type = $settle_type;
         $financeSettleApplySearch->review_section = $review_section;
