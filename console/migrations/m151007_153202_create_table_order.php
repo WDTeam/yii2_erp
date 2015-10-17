@@ -23,6 +23,7 @@ class m151007_153202_create_table_order extends Migration
             'updated_at' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 0 COMMENT \'修改时间\'',
             'isdel' => Schema::TYPE_BOOLEAN . '(1) unsigned NOT NULL DEFAULT 0 COMMENT \'是否已删除\'',
             'ver' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 1 COMMENT \'乐观锁\'',
+            'version' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 1 COMMENT \'标记\'',
 
 //===============================下单信息
             'order_ip' => Schema::TYPE_INTEGER.'(10) NOT NULL DEFAULT 0 COMMENT \'下单IP\'',

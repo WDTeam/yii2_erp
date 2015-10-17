@@ -58,17 +58,6 @@ class FinancePopOrderController extends Controller
     	$model = new FinancePopOrderSearch;
     	$modelinfo= new FinancePopOrder;
     	if(Yii::$app->request->isPost) {
-    		
-    		//检查上月是否有未处理完毕的订单
-    		/* $searchModel= new FinancePopOrderSearch;
-    		$ordewhere_init['finance_pop_order_pay_status']=0;
-    		$searchinfo=$searchModel::find()->where($ordewhere_init)->asArray()->all();
-    		if(count($searchinfo)!=0){
-    			\Yii::$app->getSession()->setFlash('default','对不起你还有未处理的账单未完成,请先处理完成后在上传！');
-    			return $this->redirect(['index']);
-    		} */
-    		//检查完毕
-    		
     		$model->finance_uplod_url = UploadedFile::getInstance($model, 'finance_uplod_url');
     		if ($model->finance_uplod_url && $model->validate()) {
     			$path='upload/';
@@ -212,11 +201,11 @@ class FinancePopOrderController extends Controller
     		$customer_info->finance_record_log_confirm_name =Yii::$app->user->identity->username;
     	
     		//服务费
-    		if($channelid==7){
+    		if($channelid==19){
     		//目前淘宝有手续费
     		$discount_pay=$modelinfo::find()->select(['sum(finance_pop_order_discount_pay) as discount_pay'])
     		->andWhere(['finance_record_log_id' => $lastidRecordLog])
-    		->andWhere(['finance_order_channel_id' => '7'])->asArray()->one();
+    		->andWhere(['finance_order_channel_id' => '19'])->asArray()->one();
     	     $log_fee=$discount_pay['discount_pay']?abs($discount_pay['discount_pay']):0;
     		}else{
     			$log_fee=0;

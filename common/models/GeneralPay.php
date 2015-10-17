@@ -194,8 +194,6 @@ class GeneralPay extends \yii\db\ActiveRecord
     private function wx_h5()
     {
         $get = yii::$app->request->get();
-        $data = json_decode($get['params'],true);
-
         $param = [
             "body"	=> $this->body(),
             "out_trade_no"	=> $this->create_out_trade_no(),
@@ -205,7 +203,7 @@ class GeneralPay extends \yii\db\ActiveRecord
             "trade_type" => "JSAPI",
             "subject" => $this->subject(),
             "notify_url" => $this->notify_url('wx-h5'),
-            'openid' => 'o7KvajnBQIengRoR8AWys280Jg5I',//$data['openid'],
+            'openid' => $get['params']['openid'],//'o7KvajnBQIengRoR8AWys280Jg5I',//$data['openid'],
         ];
 
         $class = new \wxjspay_class();
@@ -278,7 +276,60 @@ class GeneralPay extends \yii\db\ActiveRecord
     /**
      * 直达号支付(7)
      */
-    private function zhidahao_h5(){}
+    private function zhidahao_h5()
+    {
+        /* */
+        $detail['customer_name'] = '测试商品';
+        $detail['customer_mobile'] = '18001305711';
+        $detail['customer_address'] = '黑龙江省牡丹江市';
+        $detail['order_source_url'] = 'http://www.baidu.com';
+        $detail['return_url'] = 'http://www.qq.com';
+        $detail['page_url'] = 'http://www.sina.com';
+        $detail['detail'] = array(
+            array(
+                'item_id' => 'po8348865999721745',
+                'cat_id' => 0,
+                'name' => '日本寿司',
+                'desc' => '很好吃',
+                'price' => 1,
+                'amount' => 1,
+            ),
+            array(
+                'item_id' => 'po9293477665438182',
+                'cat_id' => 0,
+                'name' => '肯德基外卖全家桶',
+                'desc' => '实惠',
+                'price' => 1,
+                'amount' => 1,
+            ),
+        );
+        $params['params'] = $detail;
+
+        //dump($params);
+        //echo json_encode($params);
+        //echo http_build_query($params);exit;
+
+        $get = yii::$app->request->get();
+        //$data = json_decode($get['params'],true);
+        $detail = $get['params']['detail'];
+
+        $param = [
+            'out_trade_no'=>$this->create_out_trade_no(),
+            'subject'=>$this->subject(),
+            'general_pay_money'=>$this->general_pay_money,
+            'detail' => $detail,
+            'order_source_url' => $get['params']['order_source_url'],
+            'return_url' => $get['params']['return_url'],
+            'page_url' => $get['params']['page_url'],
+            'customer_name' => $get['params']['customer_name'],
+            'customer_mobile' => $get['params']['customer_mobile'],
+            'customer_address' => $get['params']['customer_address'],
+        ];
+        //dump($param);exit;
+        $class = new \zhidahao_class();
+        $msg = $class->get($param);
+
+    }
 
     /**
      * 后台支付(20)

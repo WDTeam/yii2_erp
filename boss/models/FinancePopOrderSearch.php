@@ -132,7 +132,7 @@ class FinancePopOrderSearch extends FinancePopOrder
     **/
     public static  function get_stypname($idname)
     {
-    	if($idname==7){
+    	if($idname==13){
     		$name='手续费';
     	}else{
     		$name='优惠金额';
@@ -289,7 +289,7 @@ class FinancePopOrderSearch extends FinancePopOrder
 		 *   13	App到位    14	手机微信       15	App微信     16	移动app    17	充值订单 
 		 **/
 
-		if($channleid==1){
+		if($channleid==19){
 		//1 美团赵轮订单  在状态项里面不存在状态项    1 正常订单和退款 2 补偿订单 3 退款
 			if($refund>0){
 			if(in_array($stypeid,$mestatus_tui && $namestype==1 && $namestype==3) ){
@@ -311,7 +311,7 @@ class FinancePopOrderSearch extends FinancePopOrder
 		}elseif ($channleid==6){
 		//6	支付宝服务窗
 			return 1;
-		}elseif ($channleid==7){
+		}elseif ($channleid==19){
 		//7	支付宝
 			return 1;
 		}elseif ($channleid==8){
@@ -358,11 +358,11 @@ class FinancePopOrderSearch extends FinancePopOrder
     		$dateinfo[]=$rtyy;
     	}
     	
-    	if($channelid==1){
+    	if($channelid==19){
     		//美团对账
     		$orderdateinfo=$this->get_beautifulgroupon($hder_info,$dateinfo,$channelid);
     		return $orderdateinfo; 
-    	}elseif ($channelid==7){
+    	}elseif ($channelid==13){
     		//淘宝对账
     		$orderdateinfo=$this->get_taobaodata($hder_info,$dateinfo,$channelid);
     		return $orderdateinfo;
