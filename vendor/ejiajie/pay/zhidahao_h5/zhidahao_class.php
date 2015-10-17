@@ -26,6 +26,7 @@ class zhidahao_class
             'customer_mobile' => $param['customer_mobile'],
             'customer_address' => $param['customer_address']
         );
+        return $params;
         $data = zhidahao::makePostParamsUrl($params);
         dump($data);exit;
         $ch = curl_init ();

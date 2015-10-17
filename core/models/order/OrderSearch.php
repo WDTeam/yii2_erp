@@ -3,6 +3,8 @@
 namespace core\models\order;
 
 use common\models\OrderExtCustomer;
+use common\models\OrderExtFlag;
+use common\models\OrderExtStatus;
 use common\models\OrderStatusDict;
 use Yii;
 use yii\base\Model;

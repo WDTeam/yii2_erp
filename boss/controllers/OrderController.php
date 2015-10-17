@@ -325,7 +325,7 @@ class OrderController extends BaseAuthController
         $order_id =  Yii::$app->request->get('order_id');
         return Order::manualAssignUndone($order_id,Yii::$app->user->id,true);
     }
-
+    
     /**
      * 指派
      * @return array|bool

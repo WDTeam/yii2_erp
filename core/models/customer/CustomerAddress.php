@@ -171,30 +171,25 @@ class CustomerAddress extends \common\models\CustomerAddress
             $customerAddress->operation_city_short_name = $operation_city_short_name;
             $customerAddress->operation_area_short_name = $operation_area_short_name;
 
-            
-            // $customerAddress->customer_id = $customer_id;
             $customerAddress->customer_address_status = 1;
             $customerAddress->customer_address_detail = $customer_address_detail;
             $customerAddress->customer_address_longitude = $operation_longitude;
             $customerAddress->customer_address_latitude = $operation_latitude;
             $customerAddress->customer_address_nickname = $customer_address_nickname;
             $customerAddress->customer_address_phone = $customer_address_phone;
-            // $customerAddress->created_at = time();
+
             $customerAddress->updated_at = time();
             $customerAddress->is_del = 0;
             $customerAddress->validate();
-            if ($customerAddress->hasErrors()) {
-                return false;
-            }
             $customerAddress->save();
             $customerAddresses = CustomerAddress::findAll('customer_id=:customer_id and id!=:id', 
-                [':customer_id'=>$customer_id, ':id'=>$customerAddress->id]);
+                [':customer_id'=>$customerAddress->customer_id, ':id'=>$customerAddress->id]);
             foreach ($customerAddresses as $customerAddress) {
                 $customerAddress->customer_address_status = 0;
                 $customerAddress->save();
             }
             $transaction->commit();
-            return true;
+            return $customerAddress;
         }catch(\Exception $e){
             $transaction->rollback();
             return false;
