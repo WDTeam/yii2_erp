@@ -90,6 +90,11 @@ class OrderSearch extends Order
         return Model::scenarios();
     }
 
+    public static function getOne($id)
+    {
+        return Order::findOne($id);
+    }
+
     public function searchList($attributes)
     {
         $params['OrderSearch'] = $attributes;

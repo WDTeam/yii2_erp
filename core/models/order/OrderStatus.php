@@ -28,7 +28,7 @@ class OrderStatus extends Model
      */
     public static function isPaymentOnline($order_id,$admin_id,$pay_channel_id,$order_pay_channel_name,$order_pay_flow_num)
     {
-        $order = Order::findOne($order_id);
+        $order = OrderSearch::getOne($order_id);
         $order->setAttributes([
             'order_pay_type' => Order::ORDER_PAY_TYPE_ON_LINE,
             'admin_id' => $admin_id,
