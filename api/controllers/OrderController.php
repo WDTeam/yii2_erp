@@ -4,7 +4,10 @@ namespace api\controllers;
 use Faker\Provider\DateTime;
 use Yii;
 use core\models\order\Order;
+use core\models\order\OrderSearch;
+use core\models\order\OrderStatus;
 use core\models\customer\CustomerAccessToken;
+
 
 class OrderController extends \api\components\Controller
 {
@@ -380,7 +383,7 @@ class OrderController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /order/queryorders 查询订单
+     * @api {GET} /order/query-orders 查询订单
      *
      *
      * @apiName QueryOrder
@@ -491,6 +494,7 @@ class OrderController extends \api\components\Controller
      *     }
      *
      */
+
 
 
     /**
