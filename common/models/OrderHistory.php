@@ -25,6 +25,9 @@ use Yii;
  * @property integer $order_flag_exception
  * @property integer $order_flag_sys_assign
  * @property integer $order_flag_lock
+ * @property integer $order_flag_worker_sms
+ * @property integer $order_flag_worker_jpush
+ * @property integer $order_flag_worker_ivr
  * @property integer $order_ip
  * @property integer $order_service_type_id
  * @property string $order_service_type_name
@@ -89,7 +92,7 @@ class OrderHistory extends \common\models\ActiveRecord
     public function rules()
     {
         return [
-            [['created_at', 'updated_at', 'order_id', 'order_parent_id', 'order_is_parent', 'order_created_at', 'order_isdel', 'order_before_status_dict_id', 'order_status_dict_id', 'order_flag_send', 'order_flag_urgent', 'order_flag_exception', 'order_flag_sys_assign', 'order_flag_lock', 'order_ip', 'order_service_type_id', 'order_src_id', 'channel_id', 'order_booked_count', 'order_booked_begin_time', 'order_booked_end_time', 'address_id', 'order_booked_worker_id', 'customer_id', 'comment_id', 'invoice_id', 'order_customer_hidden', 'order_pay_type', 'pay_channel_id', 'card_id', 'coupon_id', 'promotion_id', 'worker_id', 'worker_type_id', 'order_worker_assign_type', 'shop_id', 'checking_id', 'admin_id'], 'integer'],
+            [['created_at', 'updated_at', 'order_id', 'order_parent_id', 'order_is_parent', 'order_created_at', 'order_isdel', 'order_before_status_dict_id', 'order_status_dict_id', 'order_flag_send', 'order_flag_urgent', 'order_flag_exception', 'order_flag_sys_assign', 'order_flag_lock', 'order_flag_worker_sms', 'order_flag_worker_jpush', 'order_flag_worker_ivr', 'order_ip', 'order_service_type_id', 'order_src_id', 'channel_id', 'order_booked_count', 'order_booked_begin_time', 'order_booked_end_time', 'address_id', 'order_booked_worker_id', 'customer_id', 'comment_id', 'invoice_id', 'order_customer_hidden', 'order_pay_type', 'pay_channel_id', 'card_id', 'coupon_id', 'promotion_id', 'worker_id', 'worker_type_id', 'order_worker_assign_type', 'shop_id', 'checking_id', 'admin_id'], 'integer'],
             [['order_id'], 'required'],
             [['order_unit_money', 'order_money', 'order_pop_operation_money', 'order_pop_order_money', 'order_pop_pay_money', 'order_pay_money', 'order_use_acc_balance', 'order_use_card_money', 'order_use_coupon_money', 'order_use_promotion_money'], 'number'],
             [['order_code', 'order_channel_name', 'order_worker_type_name'], 'string', 'max' => 64],
@@ -123,6 +126,9 @@ class OrderHistory extends \common\models\ActiveRecord
             'order_flag_exception' => '异常 1无经纬度',
             'order_flag_sys_assign' => '是否需要系统指派 1是 0否',
             'order_flag_lock' => '是否锁定 1锁定 0未锁定',
+            'order_flag_worker_sms' => '是否给阿姨发过短信',
+            'order_flag_worker_jpush' => '是否给阿姨发过极光',
+            'order_flag_worker_ivr' => '是否给阿姨发过IVR',
             'order_ip' => '下单IP',
             'order_service_type_id' => '订单服务类别ID',
             'order_service_type_name' => '订单服务类别',
