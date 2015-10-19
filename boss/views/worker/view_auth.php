@@ -77,7 +77,7 @@ if(1){
     $attributes =[       // 2 column layout
         'content'=>[
             'type'=>Form::INPUT_RAW,
-            'value'=>'<span style="display: inline-block;font-size: 14px;font-weight: 300;margin-bottom: 15px"><span style="font-weight: 700">审核状态：</span>已通过</span>'
+            'value'=>'<span style="display: inline-block;font-size: 14px;font-weight: 300;margin-bottom: 15px"><span style="font-weight: 700">审核状态：</span><span style="color:green">已通过</span></span>'
         ]
     ];
 }else{

@@ -29,18 +29,16 @@ $this->params['review_section']=$searchModel->review_section;
      <div class="panel panel-info">
 
         <?php 
-            $review_section = $searchModel->review_section;
-            Pjax::begin(); echo GridView::widget([
-            'dataProvider' => $dataProvider,
-    //        'filterModel' => $searchModel,
-            'columns' => [
+            Pjax::begin();
+            $columns = [
                 ['class' => 'yii\grid\SerialColumn'],
                 'shop_name',
                 'shop_manager_name',
                 'finance_shop_settle_apply_order_count',
                 'finance_shop_settle_apply_fee_per_order', 
-                'finance_shop_settle_apply_fee', 
+                'finance_shop_settle_apply_fee',
                 ['attribute'=>'created_at','content'=>function($model,$key,$index){return Html::a(date('Y:m:d H:i:s',$model->created_at),'#');}],
+                'comment', 
                 [
                 'class' => 'yii\grid\ActionColumn',
                 'template' =>'{view} {agree} {disagree}',
@@ -73,7 +71,18 @@ $this->params['review_section']=$searchModel->review_section;
                     },
                 ],
             ],
-            ],
+            ];
+            if($searchModel->finance_shop_settle_apply_status != FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED){
+            foreach($columns as $key => $value){
+                if($value == 'comment'){
+                    unset($columns[$key]);
+                }
+            }
+            
+        }
+            echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'columns' =>$columns ,
             'responsive'=>true,
             'hover'=>true,
             'condensed'=>true,

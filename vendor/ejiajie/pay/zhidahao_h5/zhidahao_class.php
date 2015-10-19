@@ -47,8 +47,10 @@ class zhidahao_class
         if($_REQUEST['sign'] != zhidahao::getSignature($_REQUEST)){
             return false;
         }
+
         $errorCode = zhidahao::queryOrder($_REQUEST);
-        if( $errorCode['status'] == 1 ){
+
+        if( $errorCode['status'] != 1 ){
             return false;
         }
 
