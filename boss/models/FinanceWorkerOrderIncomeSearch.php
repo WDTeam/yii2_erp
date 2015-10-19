@@ -83,7 +83,13 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
         return $dataProvider;
     }
     
-    public function getOrderDataProvider($worker_id){
+    public function getOrderDataProviderFromOrder($worker_id){
+        $query = Order::find()->where(['order_booked_worker_id'=>$worker_id]);
+        $dataProvider = new ActiveDataProvider([ 'query' => $query,]);
+        return $dataProvider;
+    }
+    
+    public function getCashOrderDataProviderFromOrder($worker_id){
         $query = Order::find()->where(['order_booked_worker_id'=>$worker_id]);
         $dataProvider = new ActiveDataProvider([ 'query' => $query,]);
         return $dataProvider;

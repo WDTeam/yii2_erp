@@ -8,16 +8,6 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-// use common\models\CustomerAddress;
-// use common\models\CustomerPlatform;
-// use common\models\CustomerChannal;
-// use common\models\OperationCity;
-// use common\models\GeneralRegion;
-// use common\models\CustomerExtBalance;
-// use common\models\CustomerExtScore;
-// use common\models\OrderExtCustomer;
-// use common\models\CustomerComment;
-
 use core\models\customer\Customer;
 use core\models\customer\CustomerBlockLog;
 use core\models\customer\CustomerAddress;
@@ -52,11 +42,20 @@ class CustomerController extends Controller
 
         $params = Yii::$app->request->getQueryParams();
         $dataProvider = $searchModel->search($params);
-        $dataProvider->query->orderBy(['created_at' => SORT_DESC ]);
+        $is_del = isset($_GET['CustomerSearch']['is_del']) ? $_GET['CustomerSearch']['is_del'] : 0;
+        $sort = \Yii::$app->request->get('sort', 'created_at');
+        if ($sort == 'created_at') {
+            $dataProvider->query->orderBy(['created_at' => SORT_DESC ]);
+        }else if ($sort == 'order_count') {
+            
+        }else{
+            $dataProvider->query->orderBy(['created_at' => SORT_DESC ]);
+        }
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+            'is_del'=>$is_del,
         ]);
     }
 
@@ -180,7 +179,6 @@ class CustomerController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
         return $this->redirect(['index']);
     }
 
@@ -338,7 +336,9 @@ class CustomerController extends Controller
                 $customer->customer_email = $val['email'];
 
                 $customer->operation_area_id = 0;
-                $customer->operation_city_id = 0;
+
+                $city = (new \yii\db\Query())->select('id, city_id, city_name')->from('ejj_operation_city')->where(['like', 'city_name', '北京'])->one();
+                $customer->operation_city_id = empty($city) ? 0 : $city['id'];
                 $customer->general_region_id = 1;
                 $customer->customer_live_address_detail = $val['street'];
                 
@@ -384,9 +384,9 @@ class CustomerController extends Controller
                 $customerScore = new CustomerExtScore;
                 $customerScore->customer_id = $customer->id;
                 $customerScore->customer_score = 0;
-                $customerBalance->created_at = time();
-                $customerBalance->updated_at = 0;
-                $customerBalance->is_del = 0;
+                $customerScore->created_at = time();
+                $customerScore->updated_at = 0;
+                $customerScore->is_del = 0;
                 $customerScore->validate();
                 if ($customerScore->hasErrors()) {
                     // var_dump($customerScore->getErrors());
@@ -434,51 +434,55 @@ class CustomerController extends Controller
                     $customerComment->save();
                 }
                 
-                // $customerAddress = new CustomerAddress;
-                // $customerAddress->customer_id = $customer->id;
-                // $customerAddress->general_region_id = 191;
-                // $customerAddress->customer_address_detail = 'SOHO一期2单元908';
-                // $customerAddress->customer_address_status = 1;
-                // $customerAddress->customer_address_longitude = '';
-                // $customerAddress->customer_address_latitude = '';
-                // $customerAddress->customer_address_nickname = '测试昵称';
-                // $customerAddress->customer_address_phone = '18519651111';
-                // $customerAddress->created_at = time();
-                // $customerAddress->updated_at = 0;
-                // $customerAddress->is_del = 0;
-                // if ($customerAddress->hasErrors()) {
-                //     var_dump($customer->getErrors());
-                //     die();
-                // }
-                // $customerAddress->save();
+                $customerAddress = new CustomerAddress;
+                $customerAddress->customer_id = $customer->id;
+                $customerAddress->operation_province_id = 110000;
+                $customerAddress->operation_city_id = 110100;
+                $customerAddress->operation_area_id = 110105;
 
-                // $customer_id = $customer->id;
-                // $command = $connection->createCommand("SELECT * FROM user_address where user_id=".$val['id']." order by id asc");
-                // $userAddress = $command->queryAll();
+                $customerAddress->operation_province_name = '北京';
+                $customerAddress->operation_city_name = '北京市';
+                $customerAddress->operation_area_name = '朝阳区';
 
-                // foreach ($userAddress as $value) {
-                //     $customerAddress = new CustomerAddress;
-                //     $customerAddress->customer_id = $customer_id;
-                //     $customerAddress->general_region_id = $customer->general_region_id;
-                //     $customerAddress->customer_address_detail = $value['place_detail'];
-                //     $customerAddress->customer_address_status = $value['is_hidden'];
-                //     $customerAddress->customer_address_longitude = $value['lng'];
-                //     $customerAddress->customer_address_latitude = $value['lat'];
-                //     $customerAddress->customer_address_nickname = $customer->customer_name;
-                //     $customerAddress->customer_address_phone = $customer->customer_phone;
-                //     $customerAddress->created_at = intval(strtotime($value['create_time']));
-                //     $customerAddress->updated_at = 0;
-                //     $customerAddress->is_del = 0;
-                //     if ($customerAddress->hasErrors()) {
-                //         var_dump($customer->getErrors());
-                //         die();
-                //     }
-                //     $customerAddress->save();
-                // }
-                // unset($customerComment);
-                // unset($customerScore);
-                // unset($customerBalance);
-                // unset($customer);
+                $customerAddress->operation_province_short_name = '北京';
+                $customerAddress->operation_city_short_name = '北京';
+                $customerAddress->operation_area_short_name = '朝阳';
+
+                $customerAddress->customer_address_detail = 'SOHO一期2单元908';
+                $customerAddress->customer_address_status = 1;
+                $customerAddress->customer_address_longitude = '116.48641';
+                $customerAddress->customer_address_latitude = '39.92149';
+                $customerAddress->customer_address_nickname = '测试昵称';
+                $customerAddress->customer_address_phone = '18519654001';
+                $customerAddress->created_at = time();
+                $customerAddress->updated_at = 0;
+                $customerAddress->is_del = 0;
+                if ($customerAddress->hasErrors()) {
+                    var_dump($customer->getErrors());
+                    die();
+                }
+                $customerAddress->save();
+
+                $customerExtSrc = new CustomerExtSrc;
+                $customerExtSrc->customer_id = $customer->id;
+                $customerExtSrc->platform_id = 0;
+                $customerExtSrc->channal_id = 0;
+                $customerExtSrc->platform_name = 'Android';
+                $customerExtSrc->channal_name = '美团';
+                $customerExtSrc->platform_ename = 'android';
+                $customerExtSrc->channal_ename = 'meituan';
+                $customerExtSrc->device_name = '';
+                $customerExtSrc->device_no = '';
+                $customerExtSrc->created_at = time();
+                $customerExtSrc->updated_at = 0;
+                $customerExtSrc->is_del = 0;
+                $customerExtSrc->validate();
+                if ($customerExtSrc->hasErrors()) {
+                    var_dump($customerExtSrc->getErrors());
+                    die();
+                }
+                $customerExtSrc->save();
+
                 $success_count ++;
                 echo "<br/>成功导入".$success_count."条数据，原id=".$val['id']."现在id=".$customer->id;
             }
@@ -604,6 +608,189 @@ class CustomerController extends Controller
         
     }
 
+    public function actionData4(){
+        $connection = new \yii\db\Connection([
+            'dsn' => 'mysql:host=rdsh52vh252q033a4ci5.mysql.rds.aliyuncs.com;dbname=dev-boss-db',
+            'username' => 'dev_boss_db_dbo',
+            'password' => 'devboss',
+        ]);
+        $connectionNew = new \yii\db\Connection([
+            'dsn' => 'mysql:host=localhost;dbname=dev-boss-db',
+            'username' => 'root',
+            'password' => 'root',
+        ]);
+
+        $connection->open();
+        $command = $connection->createCommand("SELECT * FROM ejj_operation_area limit 2000");
+        $operation_areas = $command->queryAll();
+        // var_dump($operation_areas);
+        // exit();
+        // $connectionNew->createCommand()->batchInsert('ejj_operation_area',$operation_areas[0], $operation_areas)->execute();
+        foreach ($operation_areas as $operation_area) {
+            $operationArea = new \common\models\Operation\CommonOperationArea;
+            $operationArea->area_name = $operation_area['area_name'];
+            $operationArea->parent_id = $operation_area['parent_id'];
+            $operationArea->short_name = $operation_area['short_name'];
+            $operationArea->longitude = $operation_area['longitude'];
+            $operationArea->latitude = $operation_area['latitude'];
+            $operationArea->level = $operation_area['level'];
+            $operationArea->position = $operation_area['position'];
+            $operationArea->sort = $operation_area['sort'];
+            $operationArea->save();
+        }
+    }
+
+    public function actionData5(){
+        //创建客户
+        $customer = new \core\models\customer\Customer;
+
+        $customer->customer_name = '刘道强';
+        $customer->customer_sex = 1;
+        $customer->customer_phone = '18519654001';
+        $customer->customer_is_vip = 1;
+        $customer->created_at = time();
+        $customer->updated_at = 0;
+        $customer->is_del = 0;
+        $customer->customer_del_reason = '';
+        $customer->validate();
+        if ($customer->hasErrors()) {
+            var_dump($customer->getErrors());
+        }
+        $customer->save();
+        // exit();
+
+        //创建客户来源
+        $customerChannal = new \core\models\customer\CustomerChannal;
+        $customerExtSrc = new \core\models\customer\CustomerExtSrc;
+        $customerChannal->channal_name = '美团';
+        $customerChannal->channal_ename = 'meituan';
+        $customerChannal->pid = 0;
+        $customerChannal->created_at = time();
+        $customerChannal->updated_at = 0;
+        $customerChannal->is_del = 0;
+        $customerChannal->validate();
+        if ($customerChannal->hasErrors()) {
+            var_dump($customerChannal->getErrors());
+        }
+        $customerChannal->save();
+
+        $customerExtSrc->customer_id = $customer->id;
+        $customerExtSrc->platform_id = 0;
+        $customerExtSrc->channal_id = $customerChannal->id;
+        $customerExtSrc->platform_name = '';
+        $customerExtSrc->channal_name = $customerChannal->channal_name;
+        $customerExtSrc->platform_ename = '';
+        $customerExtSrc->channal_ename = $customerChannal->channal_ename;
+        $customerExtSrc->created_at = time();
+        $customerExtSrc->updated_at = time();
+        $customerExtSrc->is_del =0;
+        $customerExtSrc->validate();
+        if ($customerExtSrc->hasErrors()) {
+            var_dump($customerExtSrc->getErrors());
+        }
+        $customerExtSrc->save();
+
+
+        //创建客户余额
+        $customerExtBalance = new \core\models\customer\CustomerExtBalance;
+        $customerExtBalance->customer_id = $customer->id;
+        $customerExtBalance->customer_balance = 100;
+        $customerExtBalance->created_at = time();
+        $customerExtBalance->updated_at = 0;
+        $customerExtBalance->is_del = 0;
+        $customerExtBalance->validate();
+        if ($customerExtBalance->hasErrors()) {
+            var_dump($customerExtBalance->getErrors());
+        }
+        $customerExtBalance->save();
+
+        //创建客户积分
+        $customerExtScore = new \core\models\customer\CustomerExtScore;
+        $customerExtScore->customer_id = $customer->id;
+        $customerExtScore->customer_score = 10000;
+        $customerExtScore->created_at = time();
+        $customerExtScore->updated_at = 0;
+        $customerExtScore->is_del = 0;
+        $customerExtScore->validate();
+        if ($customerExtScore->hasErrors()) {
+            var_dump($customerExtScore->getErrors());
+        }
+        $customerExtScore->save();
+
+        //创建客户服务地址
+        $customerAddress = new \core\models\customer\CustomerAddress;
+        $customerAddress->customer_id = $customer->id;
+
+        //根据区名查询省市区
+        $operationArea = \common\models\Operation\CommonOperationArea::find()->where([
+            'level'=>3,
+            ])->asArray()->one();
+        
+        $operation_area_id = $operationArea['id'];
+        $operation_area_name = $operationArea['area_name'];
+        $operation_area_short_name = $operationArea['short_name'];
+        $operation_city_id = $operationArea['parent_id'];
+
+        $operation_longitude = $operationArea['longitude'];
+        $operation_latitude = $operationArea['latitude'];
+
+        $operationCity = \common\models\Operation\CommonOperationArea::find()->where([
+            'id'=>$operation_city_id,
+            'level'=>2,
+            ])->asArray()->one();
+        $operation_city_id = $operationCity['id'];
+        $operation_city_name = $operationCity['area_name'];
+        $operation_city_short_name = $operationCity['short_name'];
+        $operation_province_id = $operationCity['parent_id'];
+
+        $operationProvince = \common\models\Operation\CommonOperationArea::find()->where([
+            'id'=>$operation_province_id,
+            'level'=>1,
+            ])->asArray()->one();
+
+        $operation_province_name = $operationProvince['area_name'];
+        $operation_province_short_name = $operationProvince['short_name'];
+
+        $customerAddress->operation_province_id = $operation_province_id;
+        $customerAddress->operation_city_id = $operation_city_id;
+        $customerAddress->operation_area_id = $operation_area_id;
+
+        $customerAddress->operation_province_name = $operation_province_name;
+        $customerAddress->operation_city_name = $operation_city_name;
+        $customerAddress->operation_area_name = $operation_area_name;
+
+        $customerAddress->operation_province_short_name = $operation_province_short_name;
+        $customerAddress->operation_city_short_name = $operation_city_short_name;
+        $customerAddress->operation_area_short_name = $operation_area_short_name;
+
+        $customerAddress->customer_address_status = 1;
+        $customerAddress->customer_address_detail = '测试详情地址';
+        $customerAddress->customer_address_longitude = $operation_longitude;
+        $customerAddress->customer_address_latitude = $operation_latitude;
+        $customerAddress->customer_address_nickname = '刘道强';
+        $customerAddress->customer_address_phone = '18519654001';
+        $customerAddress->created_at = time();
+        $customerAddress->updated_at = 0;
+        $customerAddress->is_del = 0;
+        $customerAddress->validate();
+        if ($customerAddress->hasErrors()) {
+            var_dump($customerAddress->getErrors());
+        }
+        $customerAddress->save();
+
+    }
+
+    public function actionTest1(){
+        $res = \core\models\customer\CustomerAccessToken::generateAccessTokenForPop('18519654001', md5('18519654001pop_to_boss'), 'meituan');
+        var_dump($res);
+    }
+
+    public function actionTest2(){
+        $city = (new \yii\db\Query())->select('id, city_id, city_name')->from('ejj_operation_city')->where(['like', 'city_name', '北京'])->one();
+        var_dump($city);
+
+    }
+
     public function actionTest(){
         // $customer = new Customer;
         // $res = $customer->decBalance(1, 0.01);
@@ -621,15 +808,20 @@ class CustomerController extends Controller
         // $res = \core\models\customer\CustomerCode::checkCode('18519654001', '9906');
         // var_dump($res);
 
-        // $res = \core\models\customer\CustomerAccessToken::generateAccessToken('18519654001', '9906');
+        // $access_token = \core\models\customer\CustomerAccessToken::generateAccessToken('18519654001', '7441');
+        // var_dump($access_token);
+
+        // $res = \core\models\customer\CustomerAccessToken::checkAccessToken($access_token);
         // var_dump($res);
 
-        // $res = \core\models\customer\CustomerAccessToken::getCustomer('19647829599d11c786cd95ea93896b1f');
+        // $res = \core\models\customer\CustomerAccessToken::getCustomer($access_token);
         // var_dump($res);
 
-        $res =  \core\models\customer\CustomerAddress::addAddress(1, '大兴区', '详细地址', '刘道强', '18519654001');
-        var_dump($res);
+        // $res =  \core\models\customer\CustomerAddress::addAddress(1, '东城区', '详细地址', '刘道强', '18519654001');
+        // var_dump($res);
+    }
 
-
+    public function testAddress(){
+        
     }
 }
