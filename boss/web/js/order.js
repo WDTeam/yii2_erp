@@ -7,48 +7,7 @@ var address_list = new Object();
 var goods_list = new Array();
 
 
-function getCoupons(){
-    if(window.customer != undefined) {
-        $.ajax({
-            type: "GET",
-            url: "/order/coupons/?id=" + window.customer.id+"&service_id="+$('#order-order_service_type_id input:checked').val(),
-            dataType: "json",
-            success: function (coupons) {
-                if (coupons.length > 0) {
-                    $("#order-coupon_id").html('');
-                    for (var k in coupons) {
-                        var v = coupons[k];
-                        window.coupons[v.id] = v.coupon_money;
-                        $("#order-coupon_id").append(
-                            '<option value="' + v.id + '" > ' + v.coupon_name + '</option>'
-                        );
-                    }
-                }
-            }
-        });
-    }
-}
-function getCards(){
-    if(window.customer != undefined) {
-        $.ajax({
-            type: "GET",
-            url: "/order/cards/?id=" + window.customer.id,
-            dataType: "json",
-            success: function (cards) {
-                if (cards.length > 0) {
-                    $("#order-card_id").html('');
-                    for (var k in cards) {
-                        var v = cards[k];
-                        window.cards[v.id] = v.card_money;
-                        $("#order-card_id").append(
-                            '<option value="' + v.id + '" > ' + v.card_code + '</option>'
-                        );
-                    }
-                }
-            }
-        });
-    }
-}
+
 $("#order-order_customer_phone").blur(function(){
     var phone = $(this).val();
     var reg = /^1[3-9][0-9]{9}$/;
@@ -256,6 +215,13 @@ $(document).on("click",".save_address_btn",function(){
     });
 });
 
+$(document).on('change','#order-coupon_id',function(){
+    if($(this).val()!=''){
+        var order_pay_money = $("#order-order_money").val()-window.coupons[$(this).val()];
+        $(".order_pay_money").text(order_pay_money.toFixed(2));
+    }
+});
+
 function getCity(province_id,address_id,city_id,county_id)
 {
     $.ajax({
@@ -331,6 +297,49 @@ function getGoods(){
     });
 
 
+}
+
+function getCoupons(){
+    if(window.customer != undefined) {
+        $.ajax({
+            type: "GET",
+            url: "/order/coupons/?id=" + window.customer.id+"&service_id="+$('#order-order_service_type_id input:checked').val(),
+            dataType: "json",
+            success: function (coupons) {
+                if (coupons.length > 0) {
+                    $("#order-coupon_id").html('<option value="">请选择优惠券</option>');
+                    for (var k in coupons) {
+                        var v = coupons[k];
+                        window.coupons[v.id] = v.coupon_money;
+                        $("#order-coupon_id").append(
+                            '<option value="' + v.id + '" > ' + v.coupon_name + '</option>'
+                        );
+                    }
+                }
+            }
+        });
+    }
+}
+function getCards(){
+    if(window.customer != undefined) {
+        $.ajax({
+            type: "GET",
+            url: "/order/cards/?id=" + window.customer.id,
+            dataType: "json",
+            success: function (cards) {
+                if (cards.length > 0) {
+                    $("#order-card_id").html('');
+                    for (var k in cards) {
+                        var v = cards[k];
+                        window.cards[v.id] = v.card_money;
+                        $("#order-card_id").append(
+                            '<option value="' + v.id + '" > ' + v.card_code + '</option>'
+                        );
+                    }
+                }
+            }
+        });
+    }
 }
 
 
