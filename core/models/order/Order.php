@@ -304,6 +304,20 @@ class Order extends OrderModel
         }
     }
 
+
+    /**
+     * 取消订单
+     * @param $order_id
+     * @param $admin_id
+     * @return bool
+     */
+    public static function cancel($order_id,$admin_id)
+    {
+        $order = OrderSearch::getOne($order_id);
+        $order->admin_id=$admin_id;
+        return OrderStatus::cancel($order,[]);
+    }
+
     /**
      * 创建订单
      * @param $attributes
