@@ -21,12 +21,10 @@ class zhidahao {
 		return json_decode($output, true);
 	}
 	
-	public static function queryOrder($server_type, $order_id){
+	public static function queryOrder($param){
 		$params = array();
 		$params['sp_no'] = self::SP_NO;
-		//$params['sp_no'] = 1049;
-		$params['order_no'] = getZhidahaoOrderNo($server_type, $order_id);
-		//$params['order_id'] = '5166548';
+		$params['order_no'] = $param['order_no'];
 		$params['sign'] = self::getSignature($params);
 		$url = 'http://m.baidu.com/lightapp/pay/order/info/query'. '?' . http_build_query($params);
 		//echo $url;

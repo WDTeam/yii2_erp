@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="panel-body settle-detail-body">
             <div class='col-md-2'>
-                <?=  $model->workerName; ?>
+                <?=  $model->worder_name; ?>
             </div>
             <div class='col-md-2'>
                 <?=  $model->worder_tel; ?>

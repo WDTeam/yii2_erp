@@ -3,7 +3,7 @@
  */
 window.coupons = new Array();
 window.cards = new Array();
-var address_list = new Array();
+var address_list = new Object();
 var goods_list = new Array();
 
 
@@ -67,24 +67,27 @@ $("#order-order_customer_phone").blur(function(){
                         url: "/order/customer-address/?id=" + customer.id,
                         dataType: "json",
                         success: function (address) {
-                            if (address.length>0) {
                                 address_list = address;
                                 $("#order-address_id").html('');
                                 for(var k in address){
                                     var v = address[k];
                                     $("#order-address_id").append(
-                                        '<div class="radio"><label><input type="radio" value="'+ v.id +'" '
-                                        +' name="Order[address_id]"> '+ v.customer_address_detail+' '
+                                        '<div class="radio" id="address_'+ v.id +'"><label class="col-sm-6"><input type="radio" value="'+ v.id +'" '
+                                        +' name="Order[address_id]"> '
+                                        + v.operation_province_name+' '
+                                        + v.operation_city_name+' '
+                                        + v.operation_area_name+' '
+                                        + v.customer_address_detail+' '
                                         + v.customer_address_nickname+' '
-                                        + v.customer_address_phone+'</label></div>'
+                                        + v.customer_address_phone+'</label>' +
+                                        '<label class="col-sm-5" style="color: #FF0000;">' +
+                                        (v.customer_address_longitude* v.customer_address_latitude==0?'该地址没有匹配到经纬度':'该地址可以下单')+
+                                        '</label>' +
+                                        '<button class="btn btn-xs btn-warning col-sm-1 update_address_btn" type="button">编辑</button>' +
+                                        '</div>'
                                     );
-                                    if(v.customer_address_status){
-                                        $("#order-order_address").val(v.customer_address_detail+' '+ v.customer_address_nickname+' '+ v.customer_address_phone);
-                                    }
                                 }
-                                $("#address_div").show();
                             }
-                        }
                     });
 
                     $.ajax({
@@ -132,7 +135,7 @@ $(document).on("change","#order-order_service_type_id input",function(){
     getCoupons();
 });
 
-$(document).on("change","#order-address_id input",function(){
+$(document).on("change","#order-address_id input[type='radio']",function(){
     $("#order-order_address").val($("#order-address_id input:checked").parent().text());
     getGoods();//地址信息变更后去获取商品信息
 });
@@ -156,6 +159,137 @@ $('#order-order_pay_type input').change(function(){
         $('[id^=order_pay_type]').hide();
         $('#order_pay_type_'+$('#order-order_pay_type input:checked').val()).show();
 });
+
+$(document).on("click","#add_address_btn",function(){
+    if($('#address_0').length==0 && customer_id!='') {
+        $form = '<div class="radio" id="address_0">' + $('#address_form').html() + '</div>';
+        $("#order-address_id").append($form);
+    }
+});
+
+$(document).on("click",".update_address_btn",function(){
+    var address_id = $(this).parent().find('input[type=radio]').val();
+    $(this).parent().html($("#address_form").html());
+    var address = address_list[address_id];
+    $('#address_'+address_id+' .province_form').val(address.operation_province_id);
+    getCity(address.operation_province_id,address_id,address.operation_city_id,address.operation_area_id);
+    $('#address_'+address_id+' .detail_form').val(address.customer_address_detail);
+    $('#address_'+address_id+' .nickname_form').val(address.customer_address_nickname);
+    $('#address_'+address_id+' .phone_form').val(address.customer_address_phone);
+});
+
+$(document).on("change",".province_form",function(){
+    var province_id = $(this).val();
+    var address_id = $(this).parents('.radio').attr('id').split('_')[1];
+    getCity(province_id,address_id,0,0);
+});
+
+$(document).on("change",".city_form",function(){
+    var city_id = $(this).val();
+    var address_id = $(this).parents('.radio').attr('id').split('_')[1];
+    getCounty(city_id,address_id,0);
+});
+
+$(document).on("click",".cancel_address_btn",function(){
+    var address_id = $(this).parents('.radio').attr('id').split('_')[1];
+    if(address_id>0) {
+        var v = address_list[address_id];
+        $("#address_" + address_id).html(
+            '<label class="col-sm-6"><input type="radio" value="' + v.id + '" '
+            + ' name="Order[address_id]"> '
+            + v.operation_province_name + ' '
+            + v.operation_city_name + ' '
+            + v.operation_area_name + ' '
+            + v.customer_address_detail + ' '
+            + v.customer_address_nickname + ' '
+            + v.customer_address_phone + '</label>' +
+            '<label class="col-sm-5" style="color: #FF0000;">' +
+            (v.customer_address_longitude * v.customer_address_latitude == 0 ? '该地址没有匹配到经纬度' : '该地址可以下单') +
+            '</label>' +
+            '<button class="btn btn-xs btn-warning col-sm-1 update_address_btn" type="button">编辑</button>'
+        );
+    }else{
+        $("#address_0").remove();
+    }
+});
+
+$(document).on("click",".save_address_btn",function(){
+    var address_id = $(this).parents('.radio').attr('id').split('_')[1];
+    var province_id = $('#address_'+address_id+' .province_form').val();
+    var city_id = $('#address_'+address_id+' .city_form').val();
+    var county_id = $('#address_'+address_id+' .county_form').val();
+    var county_name = $('#address_'+address_id+' .county_form option:selected').text();
+    var detail = $('#address_'+address_id+' .detail_form').val();
+    var nickname = $('#address_'+address_id+' .nickname_form').val();
+    var phone = $('#address_'+address_id+' .phone_form').val();
+    var customer_id = $('#order-customer_id').val();
+    if(address_id==0 && customer_id==''){
+        alert('请先选择客户再添加地址！');
+        return false;
+    }
+    $.ajax({
+        type: "POST",
+        url: "/order/save-address/?address_id=" + address_id,
+        data: "province_id="+province_id+"&city_id="+city_id+"&county_id="+county_id+"&county_name="+county_name+"&detail="+detail+"&nickname="+nickname+"&phone="+phone+"&customer_id="+customer_id,
+        dataType: "json",
+        success: function (msg) {
+            if(msg.code==200) {
+                var v = msg.data;
+                address_list[v.id] = v;
+                $("#address_"+address_id).attr('id','address_'+ v.id);
+                $("#address_" + v.id).html(
+                    '<label class="col-sm-6"><input type="radio" value="' + v.id + '" '
+                    + ' name="Order[address_id]"> '
+                    + v.operation_province_name + ' '
+                    + v.operation_city_name + ' '
+                    + v.operation_area_name + ' '
+                    + v.customer_address_detail + ' '
+                    + v.customer_address_nickname + ' '
+                    + v.customer_address_phone + '</label>' +
+                    '<label class="col-sm-5" style="color: #FF0000;">' +
+                    (v.customer_address_longitude * v.customer_address_latitude == 0 ? '该地址没有匹配到经纬度' : '该地址可以下单') +
+                    '</label>' +
+                    '<button class="btn btn-xs btn-warning col-sm-1 update_address_btn" type="button">编辑</button>'
+                );
+            }
+        }
+    });
+});
+
+function getCity(province_id,address_id,city_id,county_id)
+{
+    $.ajax({
+        type: "GET",
+        url: "/order/get-city/?province_id=" + province_id,
+        dataType: "json",
+        success: function (city) {
+            $('#address_'+address_id+' .city_form').html('<option value="">请选择城市</option>');
+           for(var k in city){
+               $('#address_'+address_id+' .city_form').append('<option '+(k==city_id?'selected="selected"':'')+' value="'+k+'">'+city[k]+'</option>');
+           }
+            if(city_id>0) {
+                getCounty(city_id, address_id, county_id);
+            }
+        }
+    });
+}
+
+function getCounty(city_id,address_id,county_id)
+{
+    $.ajax({
+        type: "GET",
+        url: "/order/get-county/?city_id=" + city_id,
+        dataType: "json",
+        success: function (county) {
+            $('#address_'+address_id+' .county_form').html('<option value="">请选择区县</option>');
+            for(var k in county){
+                $('#address_'+address_id+' .county_form').append('<option '+(k==county_id?'selected="selected"':'')+' value="'+k+'">'+county[k]+'</option>');
+            }
+        }
+    });
+}
+
+
 //计算订单金额填写到表单
 function setOrderMoney(){
     $money = $("#order-order_booked_count input:checked").val()/60*$("#order_unit_money").text();
