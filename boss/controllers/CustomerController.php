@@ -42,8 +42,8 @@ class CustomerController extends Controller
 
         $params = Yii::$app->request->getQueryParams();
         $dataProvider = $searchModel->search($params);
+        $is_del = isset($_GET['CustomerSearch']['is_del']) ? $_GET['CustomerSearch']['is_del'] : 0;
         $sort = \Yii::$app->request->get('sort', 'created_at');
-        
         if ($sort == 'created_at') {
             $dataProvider->query->orderBy(['created_at' => SORT_DESC ]);
         }else if ($sort == 'order_count') {
@@ -55,6 +55,7 @@ class CustomerController extends Controller
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+            'is_del'=>$is_del,
         ]);
     }
 
@@ -462,32 +463,26 @@ class CustomerController extends Controller
                 }
                 $customerAddress->save();
 
-                // $customer_id = $customer->id;
-                // $command = $connection->createCommand("SELECT * FROM user_address where user_id=".$val['id']." order by id asc");
-                // $userAddress = $command->queryAll();
-                // foreach ($userAddress as $value) {
-                //     $customerAddress = new CustomerAddress;
-                //     $customerAddress->customer_id = $customer_id;
-                //     $customerAddress->general_region_id = $customer->general_region_id;
-                //     $customerAddress->customer_address_detail = $value['place_detail'];
-                //     $customerAddress->customer_address_status = $value['is_hidden'];
-                //     $customerAddress->customer_address_longitude = $value['lng'];
-                //     $customerAddress->customer_address_latitude = $value['lat'];
-                //     $customerAddress->customer_address_nickname = $customer->customer_name;
-                //     $customerAddress->customer_address_phone = $customer->customer_phone;
-                //     $customerAddress->created_at = intval(strtotime($value['create_time']));
-                //     $customerAddress->updated_at = 0;
-                //     $customerAddress->is_del = 0;
-                //     if ($customerAddress->hasErrors()) {
-                //         var_dump($customer->getErrors());
-                //         die();
-                //     }
-                //     $customerAddress->save();
-                // }
-                // unset($customerComment);
-                // unset($customerScore);
-                // unset($customerBalance);
-                // unset($customer);
+                $customerExtSrc = new CustomerExtSrc;
+                $customerExtSrc->customer_id = $customer->id;
+                $customerExtSrc->platform_id = 0;
+                $customerExtSrc->channal_id = 0;
+                $customerExtSrc->platform_name = 'Android';
+                $customerExtSrc->channal_name = '美团';
+                $customerExtSrc->platform_ename = 'android';
+                $customerExtSrc->channal_ename = 'meituan';
+                $customerExtSrc->device_name = '';
+                $customerExtSrc->device_no = '';
+                $customerExtSrc->created_at = time();
+                $customerExtSrc->updated_at = 0;
+                $customerExtSrc->is_del = 0;
+                $customerExtSrc->validate();
+                if ($customerExtSrc->hasErrors()) {
+                    var_dump($customerExtSrc->getErrors());
+                    die();
+                }
+                $customerExtSrc->save();
+
                 $success_count ++;
                 echo "<br/>成功导入".$success_count."条数据，原id=".$val['id']."现在id=".$customer->id;
             }

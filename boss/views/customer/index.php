@@ -114,6 +114,16 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'format' => 'raw',
+                'label' => '黑名单原因',
+                'value' => function ($dataProvider) {
+                    $currentBlockReason = \core\models\customer\CustomerBlockLog::getCurrentBlockReason($dataProvider->id);
+                    return $currentBlockReason == false ? '-' : $currentBlockReason;
+                },
+                'width' => "80px",
+                'visible' => $is_del == 1 ? true : false,
+            ],
+            [
+                'format' => 'raw',
                 'label' => '电话',
                 'value' => function ($dataProvider) {
                     // return '<a href="/customer/' . $dataProvider->id . '">'.$dataProvider->customer_phone.'</a>';
