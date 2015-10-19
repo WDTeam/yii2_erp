@@ -263,6 +263,7 @@ class GeneralPayController extends Controller
     public function actionZhidahaoH5Notify()
     {
         $request = yii::$app->request;
+        file_put_contents('/tmp/pay/getzdh.php',json_encode($_GET));
         if(!empty($_GET['debug'])){
             $post = array (
                 "order_id" => "",//直达号中心订单号
@@ -312,18 +313,18 @@ class GeneralPayController extends Controller
             //验证签名
             //调用微信数据
             $class = new \wxjspay_class();
-            $class->callback();
-            $status = $class->notify();
+            $status = $class->callback();
+
 
             //签名验证成功
-            if($status == 'SUCCESS')
+            if( !empty($status) )
             {
                 $model->id = $GeneralPayId; //ID
                 $model->general_pay_status = 1; //支付状态
-                $model->general_pay_actual_money = $post['total_fee'];
-                $model->general_pay_transaction_id = $post['transaction_id'];
+                $model->general_pay_actual_money = $post['paid_amount'];
+                $model->general_pay_transaction_id = $post['order_id'];
                 $model->general_pay_is_coupon = 1;
-                $model->general_pay_eo_order_id = $post['out_trade_no'];
+                $model->general_pay_eo_order_id = $post['order_no'];
                 $model->general_pay_verify = $model->makeSign();
 
                 //commit
@@ -342,7 +343,7 @@ class GeneralPayController extends Controller
                     }
 
                     $transaction->commit();
-
+                    echo $class->notify();
                     //发送短信事件
                     $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
                     $this->trigger('paySms');
