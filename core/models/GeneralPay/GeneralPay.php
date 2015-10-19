@@ -172,7 +172,7 @@ class GeneralPay extends \common\models\GeneralPay
         //查询订单是否已经支付过
         if( !empty($data['order_id']) )
         {
-            $order = GeneralPay::find()->where(['order_id'=>$data['order_id'],'general_pay_status'=>1])->one();
+            $order = parent::getPayStatus($data['order_id'],1);
             if(!empty($order))
             {
                 return ['status'=>0 , 'info'=>'订单已经支付过', 'data'=>''];
@@ -182,13 +182,25 @@ class GeneralPay extends \common\models\GeneralPay
         //在线支付（online_pay），在线充值（pay）
         if(empty($data['order_id']))
         {
-            $scenario = 'pay';
+            if($channel_id == '2'){
+                $scenario = 'wx_h5_pay';
+            }elseif($channel_id == '7'){
+                $scenario = 'zhidahao_h5_pay';
+            }else{
+                $scenario = 'pay';
+            }
             //交易方式
             $data['general_pay_mode'] = 1;//充值
         }
         else
         {
-            $scenario = 'online_pay';
+            if($channel_id == '2'){
+                $scenario = 'wx_h5_online_pay';
+            }elseif($channel_id == '7'){
+                $scenario = 'zhidahao_h5_online_pay';
+            }else{
+                $scenario = 'online_pay';
+            }
             //交易方式
             $data['general_pay_mode'] = 3;//在线支付
         }

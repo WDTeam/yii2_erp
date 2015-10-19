@@ -17,41 +17,6 @@ use Yii;
  */
 class CustomerBlockLog extends \common\models\CustomerBlockLog
 {
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return '{{%customer_block_log}}';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['customer_id', 'customer_block_log_status', 'created_at', 'updated_at', 'is_del'], 'integer'],
-            [['created_at', 'updated_at'], 'required'],
-            [['customer_block_log_reason'], 'string', 'max' => 255]
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => Yii::t('boss', '编号'),
-            'customer_id' => Yii::t('boss', '客户'),
-            'customer_block_log_status' => Yii::t('boss', '状态，1为黑名单0为正常'),
-            'customer_block_log_reason' => Yii::t('boss', '原因'),
-            'created_at' => Yii::t('boss', '创建时间'),
-            'updated_at' => Yii::t('boss', '更新时间'),
-            'is_del' => Yii::t('boss', '是否逻辑删除'),
-        ];
-    }
 
     /**
      * 客户加入黑名单
@@ -167,5 +132,23 @@ class CustomerBlockLog extends \common\models\CustomerBlockLog
             'is_del'=>$customer->is_del,
             'block_status_name'=>$block_status_name,
             );
+    }
+
+    /**
+     * 获取当前加入黑名单的原因
+     */
+    public static function getCurrentBlockReason($customer_id){
+        $customer = Customer::findOne($customer_id);
+        if ($customer == NULL) {
+            return false;
+        }
+        if (!$customer->is_del) {
+            return false;
+        }
+        $customerBlockLog = self::find()->where(['customer_id'=>$customer_id])->one();
+        if ($customerBlockLog == NULL) {
+            return false;
+        }
+        return $customerBlockLog->customer_block_log_reason;
     }
 }

@@ -4,11 +4,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use kartik\widgets\ActiveForm;
 use yii\widgets\Pjax;
-use common\models\Shop;
-use yii\helpers\ArrayHelper;
-use kartik\nav\NavX;
-use yii\bootstrap\NavBar;
-use yii\bootstrap\Modal;
+use boss\models\FinanceWorkerOrderIncomeSearch;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -20,6 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="worker-index">
     <div id = "manualSettle" class="panel panel-info">
+
+    <div id = "manualSettleInfo">
         <div class="panel-heading">
                 <h3 class="panel-title">阿姨信息</h3>
         </div>
@@ -63,10 +61,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?=  date('Y:m:d H:i:s',$model->latestSettleTime); ?>
             </div>
         </div>
-    </div>   
-   <div id = "manualSettle" class="panel panel-info">
         <div class="panel-heading">
             <label class="panel-title">结算明细</label>
+        </div>
         <div class="panel-body settle-detail-body">
             <div class='settleDetail'>
                 完成总单量
@@ -101,82 +98,104 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="panel-body settle-detail-body">
             <div class='settleDetail'>
-                250
+                
+                <?php
+                    if($model->finance_settle_apply_order_count > 0){
+                        echo Html::a('<u>'.$model->finance_settle_apply_order_count.'</u>',[Yii::$app->urlManager->createUrl(['/finance/finance-settle-apply/worker-manual-settlement-index','id' => $model->id,'settle_type'=>$model->settle_type,'review_section'=>$model->review_section])]);
+                    }else{
+                        echo $model->finance_settle_apply_order_count;
+                    }
+                ?>
             </div>
             <div class='settleDetail'>
-                30
+                 <?php
+                    if($model->finance_settle_apply_order_cash_count > 0){
+                        echo Html::a('<u>'.$model->finance_settle_apply_order_cash_count.'</u>',[Yii::$app->urlManager->createUrl(['/finance/finance-settle-apply/worker-manual-settlement-index','id' => $model->id,'finance_worker_order_income_type'=>FinanceWorkerOrderIncomeSearch::CASH_INCOME,'settle_type'=>$model->settle_type,'review_section'=>$model->review_section])]);
+                    }else{
+                        echo $model->finance_settle_apply_order_cash_count;
+                    }
+                ?>
             </div>
             <div class='settleDetail'>
-                2000.00
+                <?php echo $model->finance_settle_apply_order_cash_money ?>
             </div>
             <div class='settleDetail'>
-                100
+                <?php
+                    if($model->finance_settle_apply_order_noncash_count > 0){
+                        echo Html::a('<u>'.$model->finance_settle_apply_order_noncash_count.'</u>',[Yii::$app->urlManager->createUrl(['/finance/finance-settle-apply/worker-manual-settlement-index','id' => $model->id,'finance_worker_order_income_type'=>FinanceWorkerOrderIncomeSearch::ONLINE_INCOME,'settle_type'=>$model->settle_type,'review_section'=>$model->review_section])]);
+                    }else{
+                        echo $model->finance_settle_apply_order_noncash_count;
+                    }
+                ?>
             </div>
             <div class='settleDetail'>
-                4000.00
+                <?php echo $model->finance_settle_apply_order_money_except_cash ?>
             </div>
             <div class='settleDetail'>
-                20
+                0
             </div>
             <div class='settleDetail'>
-                2000.00
+                0
             </div>
             <div class='settleDetail'>
-                20
+                0
             </div>
             <div class='settleDetail'>
-                2000.00
+                0
             </div>
             <div class='settleDetail'>
-                8000.00
+                0
             </div>
         </div>
-    </div>  
-    <div id = "manualSettle" class="panel panel-info">
-        <div class="panel-heading">
-            <label class="panel-title">补贴明细</label>
-        </div>
-        <div>
-            
-        <?php Pjax::begin(); echo GridView::widget([
-        'dataProvider' => $nonOrderDataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            'finance_worker_non_order_income_type_des',
-            'finance_worker_non_order_income',
-            'finance_worker_non_order_income_des', 
-        ],
-        'responsive'=>true,
-        'hover'=>true,
-        'condensed'=>true,
-        'floatHeader'=>true,
-    ]); Pjax::end(); ?>
-        </div>
-    </div>
-    <div id = "manualSettle" class="panel panel-info">
         <div class="panel-heading">
             <label class="panel-title">订单明细</label>
         </div>
         <div>
             
-             <?php Pjax::begin(); echo GridView::widget([
-        'dataProvider' => $orderDataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            ['attribute'=>'order_id',
-                 'content'=>function($model,$key,$index)
-                        {return  Html::a('<u>'.$model->order_id.'</u>',[Yii::$app->urlManager->createUrl(['order/view/','id' => $model->order_id])],['target'=>'_blank']);}],
-            'finance_worker_order_income_type',
-            'finance_worker_order_income',
-            'finance_worker_order_complete_time:datetime', 
-            'order_booked_count', 
-        ],
-        'responsive'=>true,
-        'hover'=>true,
-        'condensed'=>true,
-        'floatHeader'=>true,
-    ]); Pjax::end(); ?>
+<?php 
+                    Pjax::begin(); echo GridView::widget([
+               'dataProvider' => $orderDataProvider,
+               'columns' => [
+                   ['class' => 'yii\grid\SerialColumn'],
+                   ['attribute'=>'id',
+                       'header' => Yii::t('app', '订单号'),
+                        'content'=>function($model,$key,$index)
+                               {return  Html::a('<u>'.$model->id.'</u>',[Yii::$app->urlManager->createUrl(['order/view/','id' => $model->id])],['data-pjax'=>'0','target' => '_blank',]);}],
+                   [
+                       'header' => Yii::t('app', '支付方式'),
+                        'attribute' => 'order_pay_type',
+                       'content'=>function($model,$key,$index){
+                                   return $model->order_pay_type==null?'':$model->order_pay_type;
+                       },
+                    ],
+                   'order_money',
+                   'order_booked_begin_time:datetime', 
+                   'order_booked_count', 
+               ],
+               'responsive'=>true,
+               'hover'=>true,
+               'condensed'=>true,
+               'floatHeader'=>true,
+           ]); Pjax::end(); 
+            ?>
+        </div>
         </div>
     </div>
 </div>
+         <?php 
+         
+            $js=<<<JS
+                    $(document).ready(
+                        function(){
+                            var worder_tel = $('#worder_tel').val();
+                            if(worder_tel == ''){
+                                $('#manualSettleInfo').html('<h4  class="col-sm-12">请输入查询条件进行人工结算</h4>');
+                            }
+                        }
+                    );
+JS;
+        $this->registerJs(
+                $js
+        );
+         ?>
 

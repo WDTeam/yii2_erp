@@ -415,6 +415,15 @@ class Worker extends \common\models\Worker
         }
     }
 
+
+    /**
+     * 获取阿姨类型列表
+     * @return array
+     */
+    public static function getWorkerTypeList(){
+        return [1=>'自有',2=>'非自有'];
+    }
+
     /*
      * 获取阿姨类型名称
      */
