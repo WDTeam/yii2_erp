@@ -62,7 +62,7 @@ class FinancePopOrderSearch extends FinancePopOrder
     public static  function get_fee_pay($channelid,$lastidRecordLog)
     {
     		//目前淘宝有手续费
-    		if($channelid!=19){
+    		if($channelid==13 ||$channelid==1 || $channelid==3){
     		$discount_pay=FinancePopOrder::find()->select(['sum(finance_pop_order_discount_pay) as discount_pay'])
     		->andWhere(['finance_record_log_id' => $lastidRecordLog])
     		->andWhere(['finance_order_channel_id' => $channelid])->asArray()->one();
@@ -155,6 +155,8 @@ class FinancePopOrderSearch extends FinancePopOrder
     	if($idname==13){
     		$name='手续费';
     	}elseif ($idname==1){
+    		$name='手续费';
+    	}elseif ($idname==3){
     		$name='手续费';
     	}else{
     		$name='优惠金额';
@@ -269,16 +271,13 @@ class FinancePopOrderSearch extends FinancePopOrder
    **/
     public function id_header($headerData,$channelid)
     {
-    
     	$alinfo=FinanceHeader::find()
     	->select('finance_header_name')
     	->andWhere(['=','finance_order_channel_id',$channelid])
     	->asArray()->all();
     	foreach ($alinfo as $aliindata){
     		$tyyu[]=$aliindata['finance_header_name'];
-    	
     	}
-    	
     	if(count($tyyu)==count($headerData)){
 		foreach ($headerData as $rtyes){
 			if(!in_array($rtyes,$tyyu)){
@@ -402,11 +401,10 @@ class FinancePopOrderSearch extends FinancePopOrder
     		$orderdateinfo=$this->get_taobaodata($hder_info,$dateinfo,$channelid,$channel_rate['finance_order_channel_rate']);
     		return $orderdateinfo;
     		
-    	}elseif ($channelid==1111){
-    		//微信对账
-    		$orderdateinfo=$this->get_infodata($hder_info,$dateinfo,$channelid);
+    	}elseif ($channelid==22){
+    		//大众点评退款
+    		$orderdateinfo=$this->get_dianping($hder_info,$dateinfo,$channelid,$channel_rate['finance_order_channel_rate']);
     		return $orderdateinfo;
-    		
     	}elseif ($channelid==1112){
     		//微信对账
     		$orderdateinfo=$this->get_infodata($hder_info,$dateinfo,$channelid);
@@ -414,8 +412,8 @@ class FinancePopOrderSearch extends FinancePopOrder
     		
     	}else{
     		//其他对账
-    		$orderdateinfo=$this->get_infodata();
-    		return $orderdateinfo;
+    		$orderdateinfo=$this->get_beautifulgroupon($hder_info,$dateinfo,$channelid,$channel_rate['finance_order_channel_rate']);
+    		return $orderdateinfo; 
     		
     	}
     	
@@ -445,7 +443,7 @@ class FinancePopOrderSearch extends FinancePopOrder
     $getorder=$dateinfo[$hder_info['order_channel_order_num']];
     
     //对应数据表折扣金额（渠道营销费）
-    if(is_array($hder_info['order_channel_promote'])){
+    if(isset($hder_info['order_channel_promote'])){
     	foreach ($hder_info['order_channel_promote'] as $zkje){
     		$site[]=$dateinfo[$zkje];
     	}
@@ -810,9 +808,196 @@ class FinancePopOrderSearch extends FinancePopOrder
     	return $orderdateinfo;
     }
 
+ 
+    //大众点评退款对账
+    public function get_dianping($hder_info,$dateinfo,$channelid,$channel_rate){
+    		$order_status=1;
+    		//支付状态 支付
+    		$refund=0;
+    	//总金额
+    	$getorder_money=$dateinfo[$hder_info['order_money']]*$channel_rate;
+    	//对应系统订单号
+    	$getorder=$dateinfo[$hder_info['order_channel_order_num']];
+    	
+    	//对应数据表折扣金额（渠道营销费）
+    	if(isset($hder_info['order_channel_promote'])){
+    		foreach ($hder_info['order_channel_promote'] as $zkje){
+    			$site[]=$dateinfo[$zkje];
+    		}
+    		$promoteinfo=array_sum($site)*$channel_rate;
+    		//实际支付金额
+    		if($dateinfo[$hder_info['function_way']]>0){
+    			$promote=($getorder_money-$promoteinfo)*0.5+$promoteinfo;
+    		}else{
+    			$promote=$getorder_money-$promoteinfo;
+    		}
+
+    	}else{
+    		$promote=$dateinfo[$hder_info['decrease']]*$channel_rate;
+    	}
+    	//实际收款
+    	$accmay=$getorder_money-$promoteinfo;
+    	//手续费
+    	if(isset($hder_info['decrease'])){
+    		$decrease=$dateinfo[$hder_info['decrease']];
+    	}else{
+    		$decrease=0;
+    	}
+    	 
+    	//状态分类
+    	if(isset($hder_info['function_way'])){
+    		$function_way=$dateinfo[$hder_info['function_way']];
+    	}else{
+    		$function_way='';
+    	}
+    	//打开订单库开始比对
+    	//订单对账
+    	$OrderExtPop = new Order;
+    	$orderInfo = $OrderExtPop::find()->joinWith(['orderExtPop'])->where(['orderExtPop.order_pop_order_code'=>trim($getorder)])->one();
+    	//第三方运营费
+    	 
+    	if (isset($orderInfo->order_code)) {
+    	
+    		$orderdateinfo=$orderInfo->getAttributes();
+    		//$erty=$orderInfo->orderExtPay->pay_channel_id;
+    		if($orderInfo->orderExtPay){
+    		$orderdateinfo['pay_channel_id']=$orderInfo->orderExtPay->pay_channel_id;
+    		$orderdateinfo['order_pay_channel_name']=$orderInfo->orderExtPay->order_pay_channel_name;//支付渠道名称
+    		$orderdateinfo['order_use_coupon_money']=$orderInfo->orderExtPay->order_use_coupon_money;//使用优惠卷金额
+    		$orderdateinfo['order_use_promotion_money']=$orderInfo->orderExtPay->order_use_promotion_money;//使用促销金额
+    		$orderdateinfo['order_pay_money']=$orderInfo->orderExtPay->order_pay_money;//支付金额
+    		$orderdateinfo['coupon_id']=$orderInfo->orderExtPay->coupon_id;
+    	}
+    		//第三方运营费用
+    		$orderdateinfo['order_pop_operation_money']=$promote;
+    		$orderdateinfo['finance_pop_order_reality_pay']=$accmay;
+    		$orderdateinfo['order_use_coupon_money']=$promote;
+    		if($orderInfo->orderExtCustomer){
+    			$orderdateinfo['order_customer_phone']=$orderInfo->orderExtCustomer->order_customer_phone;
+    		}else {
+    			$orderdateinfo['order_customer_phone']=0;
+    		}
+    	
+    		if($orderInfo->orderExtWorker){
+    			$orderdateinfo['worker_id']=$orderInfo->orderExtWorker->worker_id;
+    		}else {
+    			$orderdateinfo['worker_id']=0;
+    		}
+    	
+    		$orderdateinfo['order_channel_order_num']=$getorder;
+    		//1 支付 2 退款 3 手续费  4转账
+    		$orderdateinfo['order_before_status_dict_id']=$order_status;
+    	
+    		//比对金额
+    		//1 金额比对成功   2 三有我没有  3 我有三没有   4 金额比对失败  5状态不对的
+    		if($orderdateinfo['order_money']==$getorder_money){
+    	
+    			//第三方对账订单   ——  比对上了金额相同，在比对状态
+    			if($function_way){
+    				//有状态
+    				$ststusinfo=$this->stutasinfo_look($channelid,$function_way,$orderInfo->orderExtStatus->order_status_dict_id,$refund);
+    				$orderdateinfo['finance_pop_order_pay_status_type']=$ststusinfo;
+    			}else {
+    				//无状态
+    				$orderdateinfo['finance_pop_order_pay_status_type']=1;
+    			}
+    	
+    		}else {
+    			$orderdateinfo['order_money']=$getorder_money;
+    			$orderdateinfo['finance_pop_order_pay_status_type']=4;
+    		}
+    	}else {
+    		//在订单表查询无数据 1 确实没有 2视为充值订单
+    		if($getorder_money >=1000){
+    			//查询胜强的充值表
+    			//查询存在
+    			$alinfo_es=\core\models\GeneralPay\GeneralPay::getGeneralPayByInfo(['general_pay_transaction_id'=>$getorder],'general_pay_status,customer_id,created_at,general_pay_money,general_pay_source,general_pay_transaction_id,general_pay_mode');
+    	
+    	
+    			/* 	 if($alinfo_es){
+    			 //充值订单存在 开始比对金额
+    			if($alinfo_es['order_money']==$getorder_money){
+    			//金额比对成功
+    			if($alinfo_es['general_pay_status']==1){
+    			$status='成功';
+    			}else{
+    			$status='失败';
+    			}
+    			//通过客户uid获取客户资料
+    			$userinfo=Customer::getCustomerById($alinfo_es['customer_id']);
+    			$alinfo['order_status_name']=$status;
+    			$alinfo['channel_id']=$channelid;
+    			$alinfo['order_channel_name']='充值订单';
+    			$alinfo['customer_id']=0;
+    			$alinfo['order_customer_phone']=$userinfo->customer_phone; //用户手机号 通过用户id调取用户信息
+    			$alinfo['order_booked_begin_time']=$alinfo_es['created_at'];
+    			$alinfo['order_booked_end_time']=$alinfo_es['created_at'];
+    			$alinfo['order_money']=$alinfo_es['general_pay_money'];
+    			$alinfo['order_booked_worker_id']=0;
+    			$alinfo['order_pay_type']=$alinfo_es['general_pay_source'];
+    			$alinfo['pay_channel_id']=0;
+    			$alinfo['order_pay_channel_name']=0;
+    			$alinfo['order_use_coupon_money']=0;
+    			$alinfo['order_channel_order_num']=$alinfo_es['general_pay_transaction_id']; //第三方订单号
+    			$alinfo['worker_id']=0;
+    			$alinfo['order_use_promotion_money']=0;
+    			$alinfo['order_code']=0;
+    			$alinfo['order_service_type_id']=2;//订单类型 1 消费订单 2 充值订单
+    			$alinfo['order_pay_money']=$alinfo_es['general_pay_money'];//实际收款
+    			$alinfo['created_at']=$alinfo_es['created_at'];
+    			$alinfo['coupon_id']=0;
+    			$alinfo['order_before_status_dict_id']=$alinfo_es['general_pay_mode']; //支付状态交易方式:1=充值,2=余额支付,3=在线支付,4=退款,5=赔偿
+    			$alinfo['finance_pop_order_pay_status_type']=1;
+    			}else{
+    			//金额比对不上
+    			$alinfo['finance_pop_order_pay_status_type']=4;
+    			}
+    			}  */
+    	
+    		}
+    	
+    		//三有我没有
+    		$orderdateinfo['order_channel_order_num']=$getorder;
+    		$orderdateinfo['order_money']=$getorder_money;
+    		//$alinfo['order_channel_promote']=$promote;
+    		$orderdateinfo['order_status_name']=0;
+    		$orderdateinfo['channel_id']=$channelid;
+    		$orderdateinfo['order_channel_name']=0;
+    		$orderdateinfo['order_customer_phone']=0;
+    		$orderdateinfo['order_booked_begin_time']=0;
+    		$orderdateinfo['order_booked_end_time']=0;
+    		$orderdateinfo['order_booked_worker_id']=0;
+    		$orderdateinfo['order_pay_type']=0;
+    		$orderdateinfo['pay_channel_id']=0;
+    		$orderdateinfo['order_pay_channel_name']=0;
+    		$orderdateinfo['finance_pop_order_reality_pay']=$accmay; //实际收款金额
+    		$orderdateinfo['order_use_coupon_money']=$promote;//优惠金额
+    		$orderdateinfo['order_customer_phone']=0;
+    		$orderdateinfo['worker_id']=0;
+    		$orderdateinfo['order_use_promotion_money']=0;
+    		$orderdateinfo['order_code']=0;
+    		$orderdateinfo['order_service_type_id']=0;
+    		$orderdateinfo['worker_id']=0;
+    		$orderdateinfo['order_pay_money']=0;
+    		$orderdateinfo['created_at']=0;
+    		$orderdateinfo['coupon_id']=0;
+    		$orderdateinfo['order_before_status_dict_id']=$order_status;
+    		$orderdateinfo['finance_pop_order_pay_status_type']=2;
+    	
+    	}
+    	return $orderdateinfo;
+    }
+    
+    
+    
     public function OrderPayStatus($paramsinfo,$lastidRecordLogid)
     {
-    $stype= 2;
+    	
+    //if($paramsinfo==2 && $channid==12){
+    //	$stype= 1;
+   // }else {
+   // 	$stype= 2;
+   // }	
     $sumtone=FinancePopOrder::find()->select(['sum(finance_pop_order_sum_money) as sumoney'])
     	->where(['finance_pop_order_pay_status'=>'0'])
     ->andWhere(['finance_pop_order_pay_status_type' => $paramsinfo])
@@ -823,8 +1008,10 @@ class FinancePopOrderSearch extends FinancePopOrder
     ->where(['finance_pop_order_pay_status'=>'0'])
     ->andWhere(['finance_pop_order_pay_status_type' => $paramsinfo])
     ->andWhere(['finance_record_log_id' => $lastidRecordLogid])
-    ->andWhere(['finance_pop_order_status' =>$stype])
+    //->andWhere(['finance_pop_order_status' =>$stype])
     ->asArray()->all();
+    
+    //var_dump($sumtone);exit;
     $suminfodata=$sumtone[0]['sumoney']-abs($sumttoo[0]['reality_pay']);
     return $suminfodata?$suminfodata:0;
     	

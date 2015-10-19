@@ -72,7 +72,7 @@ class CustomerAddress extends \common\models\CustomerAddress
             $operation_province_short_name = $operationProvince['short_name'];
 
             $city_encode = urlencode($operation_city_name);
-            $detail_encode = urlencode($customer_address_detail);
+            $detail_encode = urlencode($operation_province_name.$operation_city_name.$operation_area_name.$customer_address_detail);
             $address_encode = file_get_contents("http://api.map.baidu.com/geocoder/v2/?city=".$city_encode."&address=".$detail_encode."&output=json&ak=AEab3d1da1e282618154e918602a4b98");
             $address_decode = json_decode($address_encode, true);
             $operation_longitude = $address_decode['result']['location']['lng'];
@@ -175,9 +175,9 @@ class CustomerAddress extends \common\models\CustomerAddress
             // $operation_longitude = $operationArea['longitude'];
             // $operation_latitude = $operationArea['latitude'];
             $city_encode = urlencode($operation_city_name);
-            $detail_encode = urlencode($customer_address_detail);
+            $detail_encode = urlencode($operation_province_name.$operation_city_name.$operation_area_name.$customer_address_detail);
             $address_encode = file_get_contents("http://api.map.baidu.com/geocoder/v2/?city=".$city_encode."&address=".$detail_encode."&output=json&ak=AEab3d1da1e282618154e918602a4b98");
-            $address_decode = json_decode($address_encode);
+            $address_decode = json_decode($address_encode,true);
             $operation_longitude = $address_decode['result']['location']['lng'];
             $operation_latitude = $address_decode['result']['location']['lat'];
 

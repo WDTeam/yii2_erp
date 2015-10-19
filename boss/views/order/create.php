@@ -130,6 +130,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $form->field($model, 'order_customer_need')->inline()->checkboxList($model->customerNeeds) ?>
                 <?= $form->field($model, 'order_customer_memo')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model, 'order_cs_memo')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'order_flag_sys_assign')->inline()->radioList([1=>'是',0=>'否'])->label('系统指派'); ?>
             </div>
             <div class="panel-footer">
                 <div class="form-group">
