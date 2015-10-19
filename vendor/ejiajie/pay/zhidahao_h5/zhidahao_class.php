@@ -20,7 +20,7 @@ class zhidahao_class
             'goods_name' => $param['goods_name'],
             'return_url' => $param['return_url'],
             'page_url' => $param['page_url'],
-            'detail' => json_encode($param['detail']),
+            'detail' => $param['detail'],
             'order_source_url' => $param['order_source_url'],
             'customer_name' => $param['customer_name'],
             'customer_mobile' => $param['customer_mobile'],
@@ -31,10 +31,31 @@ class zhidahao_class
 
     }
 
+    /**
+     *
+     * @return bool
+     */
     public function callback(){
+        if($_REQUEST['sp_no'] != zhidahao::SP_NO){
+            return false;
+        }
 
+        if($_REQUEST['pay_result'] != zhidahao::BFB_PAY_RESULT_SUCCESS){
+            return false;
+        }
+
+        if($_REQUEST['sign'] != zhidahao::getSignature($_REQUEST)){
+            return false;
+        }
+        $errorCode = zhidahao::queryOrder($_REQUEST);
+        if( $errorCode['status'] == 1 ){
+            return false;
+        }
+
+        return true;
     }
 
     public function notify(){
+        return json_encode(['result'=>0]);
     }
 }
