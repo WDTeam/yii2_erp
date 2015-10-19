@@ -38,6 +38,7 @@ class GeneralPay extends \yii\db\ActiveRecord
 {
     public $partner;
     public $pay_type;
+    public $openid;
     /**
      * @inheritdoc
      */
@@ -52,7 +53,7 @@ class GeneralPay extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'general_pay_source_name','general_pay_money','general_pay_source_name'], 'required'],
+            [['openid','customer_id', 'general_pay_source_name','general_pay_money','general_pay_source_name'], 'required'],
             [['customer_id', 'order_id', 'general_pay_source', 'general_pay_mode', 'general_pay_status', 'general_pay_is_coupon', 'admin_id', 'worker_id', 'handle_admin_id', 'created_at', 'updated_at', 'is_reconciliation'], 'integer'],
             [['general_pay_money', 'general_pay_actual_money'], 'number'],
             [['general_pay_source_name'], 'string', 'max' => 20],
@@ -87,6 +88,14 @@ class GeneralPay extends \yii\db\ActiveRecord
             'pay'       =>['general_pay_money','customer_id','partner','general_pay_source','general_pay_source_name','general_pay_mode'],
             //在线支付
             'online_pay'=>['general_pay_money','customer_id','partner','general_pay_source','general_pay_source_name','general_pay_mode','order_id'],
+            //微信在线充值
+            'wx_h5_pay' =>['general_pay_money','customer_id','partner','general_pay_source','general_pay_source_name','general_pay_mode','openid'],
+            //微信在线支付
+            'wx_h5_online_pay'=>['general_pay_money','customer_id','partner','general_pay_source','general_pay_source_name','general_pay_mode','order_id','openid'],
+            //微信在线充值
+            'zhidahao_h5_pay' =>['general_pay_money','customer_id','partner','general_pay_source','general_pay_source_name','general_pay_mode','openid'],
+            //微信在线支付
+            'zhidahao_h5_online_pay'=>['general_pay_money','customer_id','partner','general_pay_source','general_pay_source_name','general_pay_mode','order_id','openid'],
         ];
     }
 
@@ -194,6 +203,11 @@ class GeneralPay extends \yii\db\ActiveRecord
     private function wx_h5()
     {
         $get = yii::$app->request->get();
+        if(empty($get['params']['openid']))
+        {
+            return ['status'=>0 , 'info'=>'openid必须', 'data'=>'openid必须'];
+        }
+
         $param = [
             "body"	=> $this->body(),
             "out_trade_no"	=> $this->create_out_trade_no(),
@@ -965,6 +979,11 @@ class GeneralPay extends \yii\db\ActiveRecord
         $class = new \wxrefund_class();
         $data = $class->refundQuery($params);
         return $data;
+    }
+
+    public function getPayStatus($order_id,$general_pay_status){
+        $where = ['order_id'=>$order_id,'general_pay_status'=>$general_pay_status];
+        return GeneralPay::find()->where($where)->one();
     }
 
     /**

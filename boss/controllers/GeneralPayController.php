@@ -55,11 +55,23 @@ class GeneralPayController extends Controller
 
         //在线支付（online_pay），在线充值（pay）
         if(empty($data['order_id'])){
-            $scenario = 'pay';
+            if($data['general_pay_source'] == '2'){
+                $scenario = 'wx_h5_pay';
+            }elseif($data['general_pay_source'] == '7'){
+                $scenario = 'zhidahao_h5_pay';
+            }else{
+                $scenario = 'pay';
+            }
             //交易方式
             $data['general_pay_mode'] = 1;//充值
         }else{
-            $scenario = 'online_pay';
+            if($data['general_pay_source'] == '2'){
+                $scenario = 'wx_h5_online_pay';
+            }elseif($data['general_pay_source'] == '7'){
+                $scenario = 'zhidahao_h5_online_pay';
+            }else{
+                $scenario = 'online_pay';
+            }
             //交易方式
             $data['general_pay_mode'] = 3;//在线支付
         }
@@ -109,7 +121,26 @@ class GeneralPayController extends Controller
     public function actionWxH5Notify()
     {
         if(!empty($_GET['debug'])){
-            $_POST = array (
+            $GLOBALS['HTTP_RAW_POST_DATA'] = "<xml>
+                <appid><![CDATA[wx7558e67c2d61eb8f]]></appid>
+                <attach><![CDATA[e家洁在线支付]]></attach>
+                <bank_type><![CDATA[CFT]]></bank_type>
+                <cash_fee><![CDATA[1]]></cash_fee>
+                <fee_type><![CDATA[CNY]]></fee_type>
+                <is_subscribe><![CDATA[Y]]></is_subscribe>
+                <mch_id><![CDATA[10037310]]></mch_id>
+                <nonce_str><![CDATA[aoydf0e8u58c2scu2o441n1i5yxtxghr]]></nonce_str>
+                <openid><![CDATA[o7Kvajh91Fmh_KYzhwX0LWZtpMPM]]></openid>
+                <out_trade_no><![CDATA[15101922921]]></out_trade_no>
+                <result_code><![CDATA[SUCCESS]]></result_code>
+                <return_code><![CDATA[SUCCESS]]></return_code>
+                <sign><![CDATA[3E437AF36D969693DD705034A8FFD5F9]]></sign>
+                <time_end><![CDATA[20151019102921]]></time_end>
+                <total_fee>1</total_fee>
+                <trade_type><![CDATA[JSAPI]]></trade_type>
+                <transaction_id><![CDATA[1004390062201510191251335932]]></transaction_id>
+                </xml>";
+            $post = array (
                 "appid" => "wx7558e67c2d61eb8f",
                 "attach" => "e家洁在线支付",
                 "bank_type" => "CFT",
@@ -128,7 +159,6 @@ class GeneralPayController extends Controller
                 "trade_type" => "JSAPI",
                 "transaction_id" => "1004390062201510191251335932"
             );
-            $post = $_POST;
         }else{
             $post = json_decode(json_encode(simplexml_load_string($GLOBALS['HTTP_RAW_POST_DATA'], 'SimpleXMLElement', LIBXML_NOCDATA)), true);
         }
@@ -168,11 +198,6 @@ class GeneralPayController extends Controller
             $class = new \wxjspay_class();
             $class->callback();
             $status = $class->notify();
-
-            if(!empty($_GET['debug']))
-            {
-                $status = 'SUCCESS';
-            }
 
             //签名验证成功
             if($status == 'SUCCESS')
