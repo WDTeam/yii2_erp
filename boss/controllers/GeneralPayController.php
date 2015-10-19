@@ -57,6 +57,7 @@ class GeneralPayController extends Controller
         if(empty($data['order_id'])){
             if($data['general_pay_source'] == '2'){
                 $scenario = 'wx_h5_pay';
+                $data['openid'] = $data['params']['openid'];
             }elseif($data['general_pay_source'] == '7'){
                 $scenario = 'zhidahao_h5_pay';
             }else{

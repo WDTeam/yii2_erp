@@ -203,10 +203,6 @@ class GeneralPay extends \yii\db\ActiveRecord
     private function wx_h5()
     {
         $get = yii::$app->request->get();
-        if(empty($get['params']['openid']))
-        {
-            return ['status'=>0 , 'info'=>'openid必须', 'data'=>'openid必须'];
-        }
 
         $param = [
             "body"	=> $this->body(),
