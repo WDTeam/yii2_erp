@@ -202,7 +202,7 @@ class GeneralPay extends \yii\db\ActiveRecord
             'time_expire' => date("YmdHis", time() + 600000),
             "trade_type" => "JSAPI",
             "subject" => $this->subject(),
-            "notify_url" => $this->notify_url('wx-js'),
+            "notify_url" => $this->notify_url('wx-h5'),
             'openid' => $get['params']['openid'],//'o7Kvajh91Fmh_KYzhwX0LWZtpMPM',//$data['openid'],
         ];
 

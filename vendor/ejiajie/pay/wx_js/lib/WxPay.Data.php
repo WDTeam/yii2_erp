@@ -200,7 +200,7 @@ class WxPayResults extends WxPayDataBase
      * @throws WxPayException
      */
 	public static function Init($xml)
-	{	
+	{
 		$obj = new self();
 		$obj->FromXml($xml);
 		//fix bug 2015-06-29

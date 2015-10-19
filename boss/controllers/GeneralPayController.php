@@ -113,7 +113,9 @@ class GeneralPayController extends Controller
         file_put_contents('/tmp/pay/post.php',json_encode($_POST));
         file_put_contents('/tmp/pay/request.php',json_encode($_REQUEST));
         if( !empty($GLOBALS['HTTP_RAW_POST_DATA']) ){
-        file_put_contents('/tmp/pay/global.php',json_encode($GLOBALS['HTTP_RAW_POST_DATA']));
+            file_put_contents('/tmp/pay/global.php',json_encode($GLOBALS['HTTP_RAW_POST_DATA']));
+            $arr = json_decode(json_encode(simplexml_load_string($GLOBALS['HTTP_RAW_POST_DATA'], 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+            file_put_contents('/tmp/pay/arr.php',json_encode($arr));
         }
         //POST数据
 
