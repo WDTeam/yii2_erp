@@ -226,7 +226,15 @@ echo DetailView::widget([
             'attribute'=>'', 
             'label'=>'订单总数',
             'format'=>'raw',
-            'value'=>'<a href="/order/index?OrderSearch[customer_id]='. $model->id .'">'. $order_count .'</a>',
+            'value'=>Html::a($order_count, ['order/index', 'OrderSearch[customer_id]'=>$model->id]),
+            'type'=>DetailView::INPUT_TEXT,
+            'valueColOptions'=>['style'=>'width:90%']
+        ],
+        [
+            'attribute'=>'', 
+            'label'=>'评价总数',
+            'format'=>'raw',
+            'value'=>Html::a($comment_count, ['customer-comment/index', 'CustomerCommentSearch[customer_id]'=>$model->id]),
             'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],
