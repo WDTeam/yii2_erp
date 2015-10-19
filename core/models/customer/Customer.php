@@ -4,13 +4,15 @@ namespace core\models\customer;
 
 
 use Yii;
-// use common\models\Customer;
+use yii\web\BadRequestHttpException;
+
 use common\models\CustomerAddress;
 use common\models\CustomerWorker;
 use common\models\Worker;
 use common\models\CustomerExtBalance;
 use common\models\GeneralRegion;
-use yii\web\BadRequestHttpException;
+use common\models\OrderExtCustomer;
+use common\models\Operation\CommonOperationCity;
 
 class Customer extends \common\models\Customer
 {
@@ -195,5 +197,26 @@ class Customer extends \common\models\Customer
             }
         }
         return $workers;
+    }
+
+    /**
+     * 根据订单量从大到小获取客户id  
+     */
+    // public static function getCustomerIdByOrderCount(){
+    //     OrderExtCustomer::find()->orderBy('')->
+    // }
+
+    /**
+
+
+     * 客户城市
+     */
+    public static function getCityName($customer_id){
+        $customer = self::findOne($customer_id);
+        if ($customer == NULL) {
+            return '-';
+        }
+        $operationCity = CommonOperationCity::findOne($customer->operation_city_id);
+        return $operationCity == NULL ? '-' : $operationCity->city_name == '' ? '-' : $operationCity->city_name;
     }
 }
