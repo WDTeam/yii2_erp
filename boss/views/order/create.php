@@ -31,15 +31,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     <label for="order-address_id" class="control-label col-sm-3">地址信息</label>
                     <div class="col-sm-6">
                         <input type="hidden" value="" name="Order[address_id]">
-                            <div id="order-address_id">
-                                <div class="radio">
-                                    <label class="col-sm-6"><input type="radio" name="Order[address_id]" value="1"> 北京市朝阳区SOHO1 测试昵称 13554699534</label>
-                                    <label class="col-sm-5" style="color: #FF0000;">没有经纬度</label>
-                                    <button class="btn btn-xs btn-warning col-sm-1 update_address_btn" type="button">编辑</button>
-                                </div>
-                            </div>
+                        <div id="order-address_id"></div>
+                        <?= Html::button('新增地址', ['class' =>  'btn btn-sm btn-warning','id'=>'add_address_btn']); ?>
                         <div class="help-block help-block-error "></div>
-                        <?= Html::button('新增地址', ['class' =>  'btn btn-sm btn-warning','id'=>'add_address_btn','style'=>'margin-top:10px;']); ?>
                         <div id="address_form" style="display: none;">
                             <div class="col-sm-4" style="padding-left: 0;">
                                 <?= Html::dropDownList('province','',[''=>'请选择省份']+$model->onlineProvinceList,['class'=>'form-control province_form']); ?>
@@ -164,6 +158,7 @@ $this->registerCss('
     }
     .radio{
         overflow:hidden;
+        padding-bottom:7px;
     }
 ');
 ?>

@@ -393,7 +393,17 @@ class FinanceSettleApplyController extends BaseAuthController
         $review_section = $requestParams['review_section'];
         $settle_type = $requestParams['settle_type'];
         $financeSettleApplySearch->load($requestParams);
+        if($settle_type == FinanceSettleApplySearch::SHOP_WORKER_SETTELE){
+            $worker_type = FinanceSettleApplySearch::NON_SELF_OPERATION;
+        }else{
+            $worker_type = FinanceSettleApplySearch::SELF_OPERATION;
+        }
+        if(!empty($financeSettleApplySearch->worder_tel) && !$financeSettleApplySearch->isWorkerExist($financeSettleApplySearch->worder_tel, $worker_type)){
+            Yii::$app->getSession()->setFlash('default', "未找到该阿姨的信息，请确认阿姨类型");
+            $financeSettleApplySearch->worder_tel = "";
+        }
         $financeSettleApplySearch->getWorkerInfo($financeSettleApplySearch->worder_tel);//获取阿姨的信息
+        //如果是门店阿姨结算，阿姨角色肯定是
         $financeSettleApplySearch->settle_type = $settle_type;
         $financeSettleApplySearch->review_section = $review_section;
         $financeSettleApplySearch = $financeSettleApplySearch->getWorkerSettlementSummaryInfo($financeSettleApplySearch->worder_id);
