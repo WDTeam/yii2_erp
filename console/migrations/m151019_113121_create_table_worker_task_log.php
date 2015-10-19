@@ -18,6 +18,7 @@ class m151019_113121_create_table_worker_task_log extends Migration
             'worker_task_name' => Schema::TYPE_STRING . '(255) DEFAULT NULL COMMENT \'任务名称\'',
             'worker_task_start' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'任务开始时间\'',
             'worker_task_end' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'任务结束时间\'',
+            'worker_task_is_done' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'任务结束时间\'',
 
             'created_at'=>  Schema::TYPE_INTEGER.'(11) DEFAULT 0 COMMENT \'创建时间\'' ,
             'updated_at'=>  Schema::TYPE_INTEGER.'(11) DEFAULT 0 COMMENT \'更新时间\'' ,
