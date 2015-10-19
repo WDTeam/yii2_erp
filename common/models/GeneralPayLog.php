@@ -97,8 +97,9 @@ class GeneralPayLog extends \yii\db\ActiveRecord
             'TRADE_FINISHED',   //支付宝
             'TRADE_SUCCESS',    //支付宝
             '1',    //百付宝
-            '0',    //微信
+            '0',    //微信APP
             'Success!',   //银联
+            'SUCCESS',//微信
         ];
         $status = in_array($statusString,$statusArr) ? 1 : 0 ;
         return $status;

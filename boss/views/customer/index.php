@@ -44,8 +44,10 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
     <?php
     $b= Html::a('<i class="glyphicon" ></i>全部 '.$searchModel->countALLCustomer(), ['index'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']). 
-    Html::a('<i class="glyphicon" ></i>黑名单 '.$searchModel->countBlockCustomer(), ['index?CustomerSearch[is_del]=1'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']);
-    
+    Html::a('<i class="glyphicon" ></i>黑名单 '.$searchModel->countBlockCustomer(), ['index?CustomerSearch[is_del]=1'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']).
+    Html::a('<i class="glyphicon" ></i>按时间从大到小 ', ['index', 'sort'=>'created_at'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']);
+    // Html::a('<i class="glyphicon" ></i>按订单量从大到小 ', ['index', 'sort'=>'order_count'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']);
+   
    
     ?>
     <?php 
@@ -109,6 +111,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $currentBlockStatus['block_status_name'];
                 },
                 'width' => "80px",
+            ],
+            [
+                'format' => 'raw',
+                'label' => '黑名单原因',
+                'value' => function ($dataProvider) {
+                    $currentBlockReason = \core\models\customer\CustomerBlockLog::getCurrentBlockReason($dataProvider->id);
+                    return $currentBlockReason == false ? '-' : $currentBlockReason;
+                },
+                'width' => "80px",
+                'visible' => $is_del == 1 ? true : false,
             ],
             [
                 'format' => 'raw',

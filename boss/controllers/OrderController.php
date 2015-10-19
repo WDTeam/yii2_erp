@@ -30,7 +30,14 @@ class OrderController extends BaseAuthController
     public function actionCustomerAddress($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        return Customer::getCustomerAddresses($id);
+        $address_list = Customer::getCustomerAddresses($id);
+        $address = [];
+        if(is_array($address_list)) {
+            foreach ($address_list as $v) {
+                $address[$v['id']] = $v;
+            }
+        }
+        return $address;
     }
 
     public function actionCustomerUsedWorkers($id)
@@ -52,6 +59,20 @@ class OrderController extends BaseAuthController
         $longitude = Yii::$app->request->get('lng');
         $latitude = Yii::$app->request->get('lat');
        return Order::getGoods($longitude,$latitude);
+    }
+
+    public function actionGetCity()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $province_id = Yii::$app->request->get('province_id');
+        return Order::getOnlineCityList($province_id);
+    }
+
+    public function actionGetCounty()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $city_id = Yii::$app->request->get('city_id');
+        return Order::getCountyList($city_id);
     }
 
     public function actionCoupons()
@@ -352,6 +373,21 @@ class OrderController extends BaseAuthController
         return OrderWorkerRelation::addOrderWorkerRelation($order_id,$worker_id,$memo,$status,Yii::$app->user->id);
     }
 
+
+    public function actionSaveAddress($address_id)
+    {
+        $province_id = Yii::$app->request->post('province_id');
+        $city_id = Yii::$app->request->post('city_id');
+        $county_id = Yii::$app->request->post('county_id');
+        $detail = Yii::$app->request->post('detail');
+        $nickname = Yii::$app->request->post('nickname');
+        $phone = Yii::$app->request->post('phone');
+        if($address_id>0){
+            //修改
+        }else{
+            //添加
+        }
+    }
 
     /**
      * Deletes an existing Order model.

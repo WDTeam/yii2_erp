@@ -410,31 +410,8 @@ class WxPayApi
  	 */
 	public static function notify($callback, &$msg)
 	{
-		if(!empty($GLOBALS['HTTP_RAW_POST_DATA'])){
-			//获取通知的数据
-			$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
-		}else{
-			$xml = "<xml>
-						<appid><![CDATA[wx7559e67c2d61eb8f]]></appid>
-						<attach><![CDATA[e家洁在线支付]]></attach>
-						<bank_type><![CDATA[CFT]]></bank_type>
-						<cash_fee><![CDATA[1]]></cash_fee>
-						<fee_type><![CDATA[CNY]]></fee_type>
-						<is_subscribe><![CDATA[Y]]></is_subscribe>
-						<mch_id><![CDATA[10037310]]></mch_id>
-						<nonce_str><![CDATA[m00vc6qzfsgx4q7fsab6j6bv7528velu]]></nonce_str>
-						<openid><![CDATA[o7Kvajh91Fmh_KYzhwX0LWZtpMPM]]></openid>
-						<out_trade_no><![CDATA[151017805545]]></out_trade_no>
-						<result_code><![CDATA[SUCCESS]]></result_code>
-						<return_code><![CDATA[SUCCESS]]></return_code>
-						<sign><![CDATA[0DF161294ABC1A9D9988D487FF2CD91E]]></sign>
-						<time_end><![CDATA[20151017162702]]></time_end>
-						<total_fee>1</total_fee>
-						<trade_type><![CDATA[JSAPI]]></trade_type>
-						<transaction_id><![CDATA[1004390062201510171232279663]]></transaction_id>
-					</xml>";
-		}
-
+		//获取通知的数据
+		$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
 
 		//如果返回成功则验证签名
 		try {

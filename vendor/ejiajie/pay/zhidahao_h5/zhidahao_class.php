@@ -17,7 +17,7 @@ class zhidahao_class
             'sp_no' => zhidahao::SP_NO,
             'order_no' => $param['out_trade_no'],
             'total_amount' => $param['general_pay_money'],
-            'goods_name' => $param['subject'],
+            'goods_name' => $param['goods_name'],
             'return_url' => $param['return_url'],
             'page_url' => $param['page_url'],
             'detail' => json_encode($param['detail']),
@@ -26,22 +26,8 @@ class zhidahao_class
             'customer_mobile' => $param['customer_mobile'],
             'customer_address' => $param['customer_address']
         );
+
         return $params;
-        $data = zhidahao::makePostParamsUrl($params);
-        dump($data);exit;
-        $ch = curl_init ();
-        $url = zhidahao::ORDER_ADD_PAY_URL;
-
-        curl_setopt ( $ch, CURLOPT_URL, $url );
-        curl_setopt ( $ch, CURLOPT_POST, 1 );
-        curl_setopt ( $ch, CURLOPT_HEADER, 0 );
-        curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
-        curl_setopt ( $ch, CURLOPT_POSTFIELDS, $data );
-        $return = curl_exec ( $ch );
-        curl_close ( $ch );
-
-        echo $return;
-        return $data;
 
     }
 

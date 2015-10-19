@@ -13,6 +13,7 @@ use boss\components\AreaCascade;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 
+use core\models\customer\Customer;
 use core\models\customer\CustomerExtSrc;
 use core\models\customer\CustomerAddress;
 use core\models\order\OrderSearch;
@@ -32,7 +33,8 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="customer-view">
 <?php 
-
+//城市
+$city_name = Customer::getCityName($model->id);
 //来源
 $customerExtSrc = CustomerExtSrc::getFirstSrc($model->id);
 $platform_name = $customerExtSrc == false ? '-' : $customerExtSrc->platform_name; 
@@ -89,6 +91,14 @@ echo DetailView::widget([
         // ],
         
         // 'customer_name',
+        [
+            'attribute'=>'', 
+            'label'=>'城市',
+            'format'=>'raw',
+            'value'=>$city_name,
+            'type'=>DetailView::INPUT_TEXT,
+            'valueColOptions'=>['style'=>'width:90%']
+        ],
         'customer_phone',
         [
             'attribute'=>'', 
