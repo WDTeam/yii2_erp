@@ -179,10 +179,8 @@ class FinanceSettleApplyController extends BaseAuthController
         $financeSettleApplySearch= new FinanceSettleApplySearch;
         $requestParams = Yii::$app->request->getQueryParams();
         $financeSettleApplySearch->load($requestParams);
-        var_dump($requestParams);
-        var_dump($requestParams);
-        var_dump($financeSettleApplySearch);
-        $financeSettleApplySearch = $financeSettleApplySearch->search($requestParams);
+        $financeSettleApplySearch = $financeSettleApplySearch->findOne(['id'=>$financeSettleApplySearch->id]);
+        $financeSettleApplySearch->workerTypeDes = $financeSettleApplySearch->getWorkerTypeDes();
         $financeWorkerOrderIncomeSearch = new FinanceWorkerOrderIncomeSearch;
         $financeWorkerOrderIncomeSearch->load($requestParams);
         if(isset($requestParams['finance_worker_order_income_type'])){
@@ -395,7 +393,7 @@ class FinanceSettleApplyController extends BaseAuthController
         $review_section = $requestParams['review_section'];
         $settle_type = $requestParams['settle_type'];
         $financeSettleApplySearch->load($requestParams);
-        $financeSettleApplySearch = $financeSettleApplySearch->getWorkerInfo($financeSettleApplySearch->worder_tel);//获取阿姨的信息
+        $financeSettleApplySearch->getWorkerInfo($financeSettleApplySearch->worder_tel);//获取阿姨的信息
         $financeSettleApplySearch->settle_type = $settle_type;
         $financeSettleApplySearch->review_section = $review_section;
         $financeSettleApplySearch = $financeSettleApplySearch->getWorkerSettlementSummaryInfo($financeSettleApplySearch->worder_id);
@@ -404,8 +402,9 @@ class FinanceSettleApplyController extends BaseAuthController
         if(isset($requestParams['finance_worker_order_income_type'])){
             $financeWorkerOrderIncomeSearch->finance_worker_order_income_type = $requestParams['finance_worker_order_income_type'];
         }
-        $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProvider($financeSettleApplySearch->worder_id);
-        return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider]);
+        $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProviderFromOrder($financeSettleApplySearch->worder_id);
+        $cashOrderDataProvider = $financeWorkerOrderIncomeSearch->getCashOrderDataProviderFromOrder($financeSettleApplySearch->worder_id);
+        return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider,'cashOrderDataProvider'=>$cashOrderDataProvider]);
     }
     
     /**
