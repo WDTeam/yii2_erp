@@ -45,6 +45,7 @@ class Order extends ActiveRecord
     const ORDER_PAY_TYPE_OFF_LINE = 1;
     const ORDER_PAY_TYPE_ON_LINE = 2;
     const ORDER_PAY_TYPE_POP = 3;
+    const MANUAL_ASSIGN_lONG_TIME = 900;
 
     public $order_before_status_dict_id;
     public $order_before_status_name;
@@ -55,6 +56,9 @@ class Order extends ActiveRecord
     public $order_flag_exception;
     public $order_flag_sys_assign;
     public $order_flag_lock;
+    public $order_flag_worker_sms;
+    public $order_flag_worker_jpush;
+    public $order_flag_worker_ivr;
     public $order_pop_order_code;
     public $order_pop_group_buy_code;
     public $order_pop_operation_money;
@@ -98,6 +102,9 @@ class Order extends ActiveRecord
         'order_flag_exception',
         'order_flag_sys_assign',
         'order_flag_lock',
+        'order_flag_worker_sms',
+        'order_flag_worker_jpush',
+        'order_flag_worker_ivr',
         'order_pop_order_code',
         'order_pop_group_buy_code',
         'order_pop_operation_money',
@@ -157,7 +164,7 @@ class Order extends ActiveRecord
     {
         return [
             [['admin_id','order_service_type_id','order_src_id','order_booked_begin_time','address_id'],'required'],
-            [['order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'isdel', 'order_ip', 'order_service_type_id', 'order_src_id', 'channel_id', 'order_booked_count', 'order_booked_begin_time', 'order_booked_end_time', 'address_id', 'order_booked_worker_id', 'checking_id'], 'integer'],
+            [['order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'isdel', 'order_ip', 'order_service_type_id', 'order_src_id', 'channel_id', 'order_booked_count', 'order_booked_begin_time', 'order_booked_end_time', 'address_id', 'order_booked_worker_id', 'checking_id','version'], 'integer'],
             [['order_unit_money', 'order_money'], 'number'],
             [['order_code', 'order_channel_name'], 'string', 'max' => 64],
             [['order_service_type_name', 'order_src_name'], 'string', 'max' => 128],
@@ -207,6 +214,9 @@ class Order extends ActiveRecord
             'order_flag_exception' => '异常 1无经纬度',
             'order_flag_sys_assign' => '是否需要系统指派 1是 0否',
             'order_flag_lock' => '是否锁定 1锁定 0未锁定',
+            'order_flag_lock' => '是否锁定 0未锁定',
+            'order_flag_worker_sms' => '是否给阿姨发过短信',
+            'order_flag_worker_jpush' => '是否给阿姨发过极光',
             'order_pop_order_code' => '第三方订单编号',
             'order_pop_group_buy_code' => '第三方团购码',
             'order_pop_operation_money' => '第三方运营费',
@@ -301,6 +311,7 @@ class Order extends ActiveRecord
     {
         $transaction = static::getDb()->beginTransaction(); //开启一个事务
         $is_new_record = $this->isNewRecord;
+        if(!$this->isNewRecord)$this->version++;
         if ($this->save()) {
             //格式化数据开始
             $attributes = $this->attributes;
@@ -350,7 +361,7 @@ class Order extends ActiveRecord
                 'order_is_parent' => $this->order_is_parent,
                 'order_created_at' => $this->created_at,
                 'order_isdel' => $this->isdel,
-                'order_ver' => $this->ver,
+                'order_ver' => $this->version,
                 'order_before_status_dict_id' => $orderExtStatus->order_before_status_dict_id,
                 'order_before_status_name' => $orderExtStatus->order_before_status_name,
                 'order_status_dict_id' => $orderExtStatus->order_status_dict_id,
@@ -360,6 +371,9 @@ class Order extends ActiveRecord
                 'order_flag_exception' => $orderExtFlag->order_flag_exception,
                 'order_flag_sys_assign' => $orderExtFlag->order_flag_sys_assign,
                 'order_flag_lock' => $orderExtFlag->order_flag_lock,
+                'order_flag_worker_sms' => $orderExtFlag->order_flag_worker_sms,
+                'order_flag_worker_jpush' => $orderExtFlag->order_flag_worker_jpush,
+                'order_flag_worker_ivr' => $orderExtFlag->order_flag_worker_ivr,
                 'order_ip' => $this->order_ip,
                 'order_service_type_id' => $this->order_service_type_id,
                 'order_service_type_name' => $this->order_service_type_name,
@@ -443,6 +457,9 @@ class Order extends ActiveRecord
             'order_flag_exception' => $orderExtFlag->order_flag_exception,
             'order_flag_sys_assign' => $orderExtFlag->order_flag_sys_assign,
             'order_flag_lock' => $orderExtFlag->order_flag_lock,
+            'order_flag_worker_sms' => $orderExtFlag->order_flag_worker_sms,
+            'order_flag_worker_jpush' => $orderExtFlag->order_flag_worker_jpush,
+            'order_flag_worker_ivr' => $orderExtFlag->order_flag_worker_ivr,
             'order_pop_order_code' => $orderExtPop->order_pop_order_code,
             'order_pop_group_buy_code' => $orderExtPop->order_pop_group_buy_code,
             'order_pop_operation_money' => $orderExtPop->order_pop_operation_money,

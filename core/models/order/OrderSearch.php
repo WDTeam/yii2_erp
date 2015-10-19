@@ -3,6 +3,8 @@
 namespace core\models\order;
 
 use common\models\OrderExtCustomer;
+use common\models\OrderExtFlag;
+use common\models\OrderExtStatus;
 use common\models\OrderStatusDict;
 use Yii;
 use yii\base\Model;
@@ -39,7 +41,6 @@ class OrderSearch extends Order
         $order = Order::find()->joinWith(['orderExtStatus', 'orderExtFlag'])->where(
             ['>','order_booked_begin_time',time()] //服务开始时间大于当前时间
         )->andWhere([ //先查询该管理员正在指派的订单
-            'orderExtFlag.order_flag_send'=>[0,$flag_send], //0可指派 1客服指派不了 2小家政指派不了
             'orderExtStatus.order_status_dict_id'=>OrderStatusDict::ORDER_MANUAL_ASSIGN_START,
             'orderExtFlag.order_flag_lock'=>$admin_id
         ])->orderBy(['order_booked_begin_time'=>SORT_ASC])->one();
@@ -54,6 +55,7 @@ class OrderSearch extends Order
             if(!empty($order)){
                 //获取到订单后加锁并置为已开始人工派单的状态
                 $order->order_flag_lock = $admin_id;
+                $order->order_flag_send = $order->orderExtFlag->order_flag_send+($isCS?1:2); //指派时先标记是谁指派不了
                 $order->admin_id = $admin_id;
                 if(OrderStatus::manualAssignStart($order,['OrderExtFlag'])){
                     return $order;
@@ -86,6 +88,11 @@ class OrderSearch extends Order
     {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
+    }
+
+    public static function getOne($id)
+    {
+        return Order::findOne($id);
     }
 
     public function searchList($attributes)

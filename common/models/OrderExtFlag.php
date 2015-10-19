@@ -13,6 +13,9 @@ use Yii;
  * @property integer $order_flag_exception
  * @property integer $order_flag_sys_assign
  * @property integer $order_flag_lock
+ * @property integer $order_flag_worker_sms
+ * @property integer $order_flag_worker_jpush
+ * @property integer $order_flag_worker_ivr
  * @property string $created_at
  * @property string $updated_at
  *
@@ -34,7 +37,7 @@ class OrderExtFlag extends \common\models\ActiveRecord
     public function rules()
     {
         return [
-            [['order_flag_send', 'order_flag_urgent', 'order_flag_exception', 'order_flag_sys_assign', 'order_flag_lock', 'created_at', 'updated_at'], 'integer']
+            [['order_flag_send', 'order_flag_urgent', 'order_flag_exception', 'order_flag_sys_assign', 'order_flag_lock', 'order_flag_worker_sms', 'order_flag_worker_jpush', 'order_flag_worker_ivr', 'created_at', 'updated_at'], 'integer']
         ];
     }
 
@@ -50,6 +53,9 @@ class OrderExtFlag extends \common\models\ActiveRecord
             'order_flag_exception' => '异常 1无经纬度',
             'order_flag_sys_assign' => '是否需要系统指派 1是 0否',
             'order_flag_lock' => '是否锁定 0未锁定',
+            'order_flag_worker_sms' => '是否给阿姨发过短信',
+            'order_flag_worker_jpush' => '是否给阿姨发过极光',
+            'order_flag_worker_ivr' => '是否给阿姨发过IVR',
             'created_at' => '创建时间',
             'updated_at' => '修改时间',
         ];

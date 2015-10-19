@@ -38,6 +38,7 @@ class GeneralPay extends \yii\db\ActiveRecord
 {
     public $partner;
     public $pay_type;
+    public $openid;
     /**
      * @inheritdoc
      */
@@ -52,7 +53,7 @@ class GeneralPay extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'general_pay_source_name','general_pay_money','general_pay_source_name'], 'required'],
+            [['openid','customer_id', 'general_pay_source_name','general_pay_money','general_pay_source_name'], 'required'],
             [['customer_id', 'order_id', 'general_pay_source', 'general_pay_mode', 'general_pay_status', 'general_pay_is_coupon', 'admin_id', 'worker_id', 'handle_admin_id', 'created_at', 'updated_at', 'is_reconciliation'], 'integer'],
             [['general_pay_money', 'general_pay_actual_money'], 'number'],
             [['general_pay_source_name'], 'string', 'max' => 20],
@@ -87,6 +88,14 @@ class GeneralPay extends \yii\db\ActiveRecord
             'pay'       =>['general_pay_money','customer_id','partner','general_pay_source','general_pay_source_name','general_pay_mode'],
             //在线支付
             'online_pay'=>['general_pay_money','customer_id','partner','general_pay_source','general_pay_source_name','general_pay_mode','order_id'],
+            //微信在线充值
+            'wx_h5_pay' =>['general_pay_money','customer_id','partner','general_pay_source','general_pay_source_name','general_pay_mode','openid'],
+            //微信在线支付
+            'wx_h5_online_pay'=>['general_pay_money','customer_id','partner','general_pay_source','general_pay_source_name','general_pay_mode','order_id','openid'],
+            //微信在线充值
+            'zhidahao_h5_pay' =>['general_pay_money','customer_id','partner','general_pay_source','general_pay_source_name','general_pay_mode','openid'],
+            //微信在线支付
+            'zhidahao_h5_online_pay'=>['general_pay_money','customer_id','partner','general_pay_source','general_pay_source_name','general_pay_mode','order_id','openid'],
         ];
     }
 
@@ -194,7 +203,6 @@ class GeneralPay extends \yii\db\ActiveRecord
     private function wx_h5()
     {
         $get = yii::$app->request->get();
-        $data = json_decode($get['params'],true);
 
         $param = [
             "body"	=> $this->body(),
@@ -205,7 +213,7 @@ class GeneralPay extends \yii\db\ActiveRecord
             "trade_type" => "JSAPI",
             "subject" => $this->subject(),
             "notify_url" => $this->notify_url('wx-h5'),
-            'openid' => 'o7KvajnBQIengRoR8AWys280Jg5I',//$data['openid'],
+            'openid' => $get['params']['openid'],//'o7Kvajh91Fmh_KYzhwX0LWZtpMPM',//$data['openid'],
         ];
 
         $class = new \wxjspay_class();
@@ -278,7 +286,60 @@ class GeneralPay extends \yii\db\ActiveRecord
     /**
      * 直达号支付(7)
      */
-    private function zhidahao_h5(){}
+    private function zhidahao_h5()
+    {
+        /* */
+        $detail['customer_name'] = '测试商品';
+        $detail['customer_mobile'] = '18001305711';
+        $detail['customer_address'] = '黑龙江省牡丹江市';
+        $detail['order_source_url'] = 'http://www.baidu.com';
+        $detail['return_url'] = 'http://www.qq.com';
+        $detail['page_url'] = 'http://www.sina.com';
+        $detail['detail'] = array(
+            array(
+                'item_id' => 'po8348865999721745',
+                'cat_id' => 0,
+                'name' => '日本寿司',
+                'desc' => '很好吃',
+                'price' => 1,
+                'amount' => 1,
+            ),
+            array(
+                'item_id' => 'po9293477665438182',
+                'cat_id' => 0,
+                'name' => '肯德基外卖全家桶',
+                'desc' => '实惠',
+                'price' => 1,
+                'amount' => 1,
+            ),
+        );
+        $params['params'] = $detail;
+
+        //dump($params);
+        //echo json_encode($params);
+        //echo http_build_query($params);exit;
+
+        $get = yii::$app->request->get();
+        //$data = json_decode($get['params'],true);
+        $detail = $get['params']['detail'];
+
+        $param = [
+            'out_trade_no'=>$this->create_out_trade_no(),
+            'subject'=>$this->subject(),
+            'general_pay_money'=>$this->general_pay_money,
+            'detail' => $detail,
+            'order_source_url' => $get['params']['order_source_url'],
+            'return_url' => $get['params']['return_url'],
+            'page_url' => $get['params']['page_url'],
+            'customer_name' => $get['params']['customer_name'],
+            'customer_mobile' => $get['params']['customer_mobile'],
+            'customer_address' => $get['params']['customer_address'],
+        ];
+        //dump($param);exit;
+        $class = new \zhidahao_class();
+        $msg = $class->get($param);
+
+    }
 
     /**
      * 后台支付(20)
@@ -914,6 +975,11 @@ class GeneralPay extends \yii\db\ActiveRecord
         $class = new \wxrefund_class();
         $data = $class->refundQuery($params);
         return $data;
+    }
+
+    public function getPayStatus($order_id,$general_pay_status){
+        $where = ['order_id'=>$order_id,'general_pay_status'=>$general_pay_status];
+        return GeneralPay::find()->where($where)->one();
     }
 
     /**

@@ -28,6 +28,7 @@ use core\models\order\OrderSearch;
 use core\models\GeneralPay\GeneralPaySearch;
 use boss\controllers\GeneralPayController;
 use common\models\FinanceRecordLog;
+use crazyfd\qiniu\Qiniu;
 /**
  * FinancePopOrderController implements the CRUD actions for FinancePopOrder model.
  */
@@ -55,35 +56,46 @@ class FinancePopOrderController extends Controller
     **/
     public function actionIndex()
     {
+    	
     	$model = new FinancePopOrderSearch;
     	$modelinfo= new FinancePopOrder;
     	if(Yii::$app->request->isPost) {
-    		
-    		//检查上月是否有未处理完毕的订单
-    		/* $searchModel= new FinancePopOrderSearch;
-    		$ordewhere_init['finance_pop_order_pay_status']=0;
-    		$searchinfo=$searchModel::find()->where($ordewhere_init)->asArray()->all();
-    		if(count($searchinfo)!=0){
-    			\Yii::$app->getSession()->setFlash('default','对不起你还有未处理的账单未完成,请先处理完成后在上传！');
-    			return $this->redirect(['index']);
-    		} */
-    		//检查完毕
-    		
-    		$model->finance_uplod_url = UploadedFile::getInstance($model, 'finance_uplod_url');
-    		if ($model->finance_uplod_url && $model->validate()) {
-    			$path='upload/';
-    			if(!file_exists($path))mkdir($path);
-    			$filenamesitename=$model->finance_uplod_url->baseName;
-    			$filename=time().'.'.$model->finance_uplod_url->extension;
-    			if(!$model->finance_uplod_url->saveAs($path.$filename)){
-    				return ["result"=>"Fail"];
+    		if(false){
+    		//开启七牛上传，文件存储在七牛
+    			$data = \Yii::$app->request->post();
+    			$model->load($data);
+    			$file = UploadedFile::getInstance($model, 'finance_uplod_url');
+    			
+    			$filenamesitename=$file->baseName;
+    			if($file){
+    				$qiniu = new Qiniu();
+    				$path = $qiniu->uploadFile($file->tempName);
+    				$model->finance_uplod_url = $path['key'];
     			}
+    			$qiniuurl=$qiniu->getLink($path['key']);
+    			$filePath=$file->tempName;
+    		}else{
+    			//文件存储在本地
+    			$model->finance_uplod_url = UploadedFile::getInstance($model, 'finance_uplod_url');
+    			if ($model->finance_uplod_url && $model->validate()) {
+    				$path='upload/';
+    				if(!file_exists($path))mkdir($path);
+    				$filenamesitename=$model->finance_uplod_url->baseName;
+    				$filename=time().'.'.$model->finance_uplod_url->extension;
+    				$qiniuurl='0';
+    				if(!$model->finance_uplod_url->saveAs($path.$filename)){
+    					return ["result"=>"Fail"];
+    				}
+    			}
+    			$filePath = $path.$filename;
     		}
-    		 
-    		$filePath = $path.$filename;
-    		//	$filePath = './uploads/14430836465880.xls'; // 要读取的文件的路径
+    
+    		//$filePath = './uploads/14430836465880.xls'; // 要读取的文件的路径
     		$objPHPExcel = \PHPExcel_IOFactory::load($filePath);
     		$sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+    		
+    		//var_dump($sheetData);exit;
+    		
     		header("Content-Type: text/html; charset=utf-8");
     		$post = Yii::$app->request->post();
     		
@@ -170,9 +182,6 @@ class FinancePopOrderController extends Controller
     	 	$FinanceRecordLog = new FinanceRecordLogSearch;
     		//获取渠道唯一订单号有问题需要问问
     	 	$customer_info = FinanceRecordLog::findOne($lastidRecordLog);
-    	 	
-    	 	
-    	 	
     		$customer_info->finance_order_channel_id =1;
     		//对账名称
     		$customer_info->finance_order_channel_name =$filenamesitename;
@@ -210,21 +219,11 @@ class FinancePopOrderController extends Controller
     		$customer_info->finance_record_log_failure_money =$sumterr['sumoneyinfo']?$sumterr['sumoneyinfo']:0;
     		//对账人
     		$customer_info->finance_record_log_confirm_name =Yii::$app->user->identity->username;
-    	
-    		//服务费
-    		if($channelid==7){
-    		//目前淘宝有手续费
-    		$discount_pay=$modelinfo::find()->select(['sum(finance_pop_order_discount_pay) as discount_pay'])
-    		->andWhere(['finance_record_log_id' => $lastidRecordLog])
-    		->andWhere(['finance_order_channel_id' => '7'])->asArray()->one();
-    	     $log_fee=$discount_pay['discount_pay']?abs($discount_pay['discount_pay']):0;
-    		}else{
-    			$log_fee=0;
-    		}
-    		$customer_info->finance_record_log_fee =$log_fee;
-    		
+    		//获取服务费
+    		$customer_info->finance_record_log_fee =FinancePopOrderSearch::get_fee_pay($channelid,$lastidRecordLog);
     		$customer_info->finance_record_log_statime =strtotime($post['FinancePopOrderSearch']['finance_order_channel_statuspayment']);
     		$customer_info->finance_record_log_endtime =strtotime($post['FinancePopOrderSearch']['finance_order_channel_endpayment']);
+    		$customer_info->finance_record_log_qiniuurl =$qiniuurl;
     		$customer_info->create_time= time();
     		$customer_info->is_del=0;
     		$customer_info->save();

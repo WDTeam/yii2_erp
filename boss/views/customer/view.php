@@ -13,6 +13,7 @@ use boss\components\AreaCascade;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 
+use core\models\customer\Customer;
 use core\models\customer\CustomerExtSrc;
 use core\models\customer\CustomerAddress;
 use core\models\order\OrderSearch;
@@ -25,7 +26,6 @@ use core\models\customer\CustomerBlockLog;
  * @var yii\web\View $this
  * @var common\models\Worker $model
  */
-
 $this->title = '客户详情';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Customers'), 'url' => ['View']];
 $this->params['breadcrumbs'][] = $this->title;
@@ -33,7 +33,8 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="customer-view">
 <?php 
-
+//城市
+$city_name = Customer::getCityName($model->id);
 //来源
 $customerExtSrc = CustomerExtSrc::getFirstSrc($model->id);
 $platform_name = $customerExtSrc == false ? '-' : $customerExtSrc->platform_name; 
@@ -42,14 +43,19 @@ $device_name = $customerExtSrc == false ? '-' : $customerExtSrc->device_name;
 $device_no = $customerExtSrc == false ? '-' : $customerExtSrc->device_no;
 
 //全部服务地址
-$customerAddressArr = CustomerAddress::getAddressArr($model->id);
-$customerAddressStr = '';
-if (!empty($customerAddressArr)) {
-    foreach ($customerAddressArr as $customerAddress) {
-        $customerAddressStr .= 
-        $customerAddress['province_city_area_detail']
-        .'|'.$customerAddress['customer_address_nickname']
-        .'|'.$customerAddress['customer_address_phone'].'<br/>';
+$customerAddress = CustomerAddress::listAddress($model->id);
+if (empty($customerAddress)) {
+    return '-';
+}
+$addressStr = '';
+foreach ($customerAddress as $address) {
+    if ($address != NULL) {
+        $addressStr .= $address->operation_province_name
+            .$address->operation_city_name
+            .$address->operation_area_name
+            .$address->customer_address_detail
+            .' | '.$address->customer_address_nickname
+            .' | '.$address->customer_address_phone;
     }
 }
 
@@ -85,6 +91,14 @@ echo DetailView::widget([
         // ],
         
         // 'customer_name',
+        [
+            'attribute'=>'', 
+            'label'=>'城市',
+            'format'=>'raw',
+            'value'=>$city_name,
+            'type'=>DetailView::INPUT_TEXT,
+            'valueColOptions'=>['style'=>'width:90%']
+        ],
         'customer_phone',
         [
             'attribute'=>'', 
@@ -136,102 +150,35 @@ echo DetailView::widget([
             'attribute'=>'', 
             'label'=>'接单地址',
             'format'=>'raw',
-            'value'=> $customerAddressStr,
+            'value'=> $addressStr,
             'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],
     ],
-    'enableEditMode'=>false,
+    'enableEditMode'=>true,
 ]); 
 
-echo DetailView::widget([
-    'model' => $model,
-    'condensed'=>false,
-    'hover'=>true,
-    'mode'=>DetailView::MODE_VIEW,
-    'panel'=>[
-        'heading'=>'订单信息',
-        'type'=>DetailView::TYPE_INFO,
-    ],
-    'attributes' => [
-        [
-            'attribute'=>'', 
-            'label'=>'订单',
-            'format'=>'raw',
-            'value'=> '<a href="/order/index?OrderSearch[customer_id]='. $model->id .'">'. $order_count .'</a>',
-            'type'=>DetailView::INPUT_TEXT,
-            'valueColOptions'=>['style'=>'width:90%']
-        ],
-    ],
-    'enableEditMode'=>false,
-]); 
-
-echo DetailView::widget([
-    'model' => $model,
-    'condensed'=>false,
-    'hover'=>true,
-    'mode'=>DetailView::MODE_VIEW,
-    'panel'=>[
-        'heading'=>'评价信息',
-        'type'=>DetailView::TYPE_INFO,
-    ],
-    'attributes' => [
-        [
-            'attribute'=>'', 
-            'label'=>'评价',
-            'format'=>'raw',
-            'value'=> '<a href="/order/index?OrderSearch[customer_id]='. $model->id .'">'. $comment_count .'</a>',
-            'type'=>DetailView::INPUT_TEXT,
-            'valueColOptions'=>['style'=>'width:90%']
-        ],
-    ],
-    'enableEditMode'=>false,
-]); 
-
-
-echo DetailView::widget([
-    'model' => $model,
-    'condensed'=>false,
-    'hover'=>true,
-    'mode'=>DetailView::MODE_VIEW,
-    'panel'=>[
-        'heading'=>'积分信息',
-        'type'=>DetailView::TYPE_INFO,
-    ],
-    'attributes' => [
-        [
-            'attribute'=>'customer_score', 
-            'label'=>'积分',
-            'format'=>'raw',
-            'value'=> $score,
-            'type'=>DetailView::INPUT_TEXT,
-            'valueColOptions'=>['style'=>'width:90%']
-        ],
-    ],
-    'enableEditMode'=>false,
-]);
-
-echo DetailView::widget([
-    'model' => $model,
-    'condensed'=>false,
-    'hover'=>true,
-    'mode'=>DetailView::MODE_VIEW,
-    'panel'=>[
-        'heading'=>'账户余额',
-        'type'=>DetailView::TYPE_INFO,
-    ],
-    'attributes' => [
-        [
-            'attribute'=>'customer_balance', 
-            'label'=>'余额',
-            'format'=>'raw',
-            'value'=> $balance,
-            'type'=>DetailView::INPUT_TEXT,
-            'valueColOptions'=>['style'=>'width:90%']
-        ],
-    ],
-    'enableEditMode'=>false,
-]); 
+// echo DetailView::widget([
+//     'model' => $model,
+//     'condensed'=>false,
+//     'hover'=>true,
+//     'mode'=>DetailView::MODE_VIEW,
+//     'panel'=>[
+//         'heading'=>'评价信息',
+//         'type'=>DetailView::TYPE_INFO,
+//     ],
+//     'attributes' => [
+//         [
+//             'attribute'=>'', 
+//             'label'=>'评价',
+//             'format'=>'raw',
+//             'value'=> '<a href="/order/index?OrderSearch[customer_id]='. $model->id .'">'. $comment_count .'</a>',
+//             'type'=>DetailView::INPUT_TEXT,
+//             'valueColOptions'=>['style'=>'width:90%']
+//         ],
+//     ],
+//     'enableEditMode'=>false,
+// ]); 
 
 // echo DetailView::widget([
 //     'model' => $model,
@@ -257,6 +204,52 @@ echo DetailView::widget([
 
 
 // $customerBlockLog = \common\models\CustomerBlockLog::findAll('customer_id'=>$model->id);
+echo DetailView::widget([
+    'model' => $model,
+    'condensed'=>false,
+    'hover'=>true,
+    'mode'=>DetailView::MODE_VIEW,
+    'panel'=>[
+        'heading'=>'其他信息',
+        'type'=>DetailView::TYPE_INFO,
+    ],
+    'attributes' => [
+        [
+            'attribute'=>'', 
+            'label'=>'账户状态',
+            'format'=>'raw',
+            'value'=>$currentBlockStatus['block_status_name'],
+            'type'=>DetailView::INPUT_TEXT,
+            'valueColOptions'=>['style'=>'width:90%']
+        ],
+        [
+            'attribute'=>'', 
+            'label'=>'订单总数',
+            'format'=>'raw',
+            'value'=>'<a href="/order/index?OrderSearch[customer_id]='. $model->id .'">'. $order_count .'</a>',
+            'type'=>DetailView::INPUT_TEXT,
+            'valueColOptions'=>['style'=>'width:90%']
+        ],
+        [
+            'attribute'=>'', 
+            'label'=>'账户余额',
+            'format'=>'raw',
+            'value'=>$balance,
+            'type'=>DetailView::INPUT_TEXT,
+            'valueColOptions'=>['style'=>'width:90%']
+        ],
+        [
+            'attribute'=>'', 
+            'label'=>'总积分数',
+            'format'=>'raw',
+            'value'=>$score,
+            'type'=>DetailView::INPUT_TEXT,
+            'valueColOptions'=>['style'=>'width:90%']
+        ],
+    ],
+    'enableEditMode'=>false,
+]); 
+
 $customerBlockLogProvider = new ActiveDataProvider(['query' => \core\models\customer\CustomerBlockLog::find(),]);
 echo GridView::widget([
     'dataProvider' => $customerBlockLogProvider,
@@ -298,28 +291,6 @@ echo GridView::widget([
         ],
     ],
 ]);
-
-echo DetailView::widget([
-    'model' => $model,
-    'condensed'=>false,
-    'hover'=>true,
-    'mode'=>DetailView::MODE_VIEW,
-    'panel'=>[
-        'heading'=>'当前状态信息',
-        'type'=>DetailView::TYPE_INFO,
-    ],
-    'attributes' => [
-        [
-            'attribute'=>'is_del', 
-            'label'=>'当前状态',
-            'format'=>'raw',
-            'value'=>$currentBlockStatus['block_status_name'],
-            'type'=>DetailView::INPUT_TEXT,
-            'valueColOptions'=>['style'=>'width:90%']
-        ],
-    ],
-    'enableEditMode'=>false,
-]); 
 ?>
 </div>
 

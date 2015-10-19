@@ -188,7 +188,7 @@ class Shop extends \common\models\Shop
      */
     public static function getShopIds()
     {
-        return self::find()->select(['id as shop_id','manager_id'])
+        return self::find()->select(['id as shop_id','shop_manager_id'])
         ->where('isdel is null or isdel=0')->asArray()->all();
     }
 }

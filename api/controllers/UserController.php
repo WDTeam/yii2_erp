@@ -1,24 +1,23 @@
 <?php
 namespace api\controllers;
 
-use core\models\customer\Customer;
+use \core\models\customer\Customer;
 use Yii;
-use api\components\Controller;
 use \core\models\customer\CustomerAddress;
 use \core\models\customer\CustomerAccessToken;
 
-class UserController extends Controller
+class UserController extends \api\components\Controller
 {
     /**
      *
-     * @api {POST} /user/addaddress 添加常用地址
+     * @api {POST} /user/add-address 添加常用地址
      *
      * @apiName AddAddress
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {String} city_name 城市名
+     * @apiParam {String} operation_area_name 地区名（朝阳区）
      * @apiParam {String} address_detail 详细地址信息
      * @apiParam {String} address_nickname 联系人
      * @apiParam {String} address_phone 联系电话
@@ -33,16 +32,26 @@ class UserController extends Controller
      *       "ret":{
      *       "address":
      *          {
-     *          'address_id'=>"1612679",
-     *          'province_name' => "北京",
-     *          'city_name' => "北京",
-     *          'area_name' => "朝阳区",
-     *          'address_detail' => "某某小区8栋3单元502",
-     *          'address_nickname' => '张先生',
-     *          'address_phone' => '13300112233',
-     *          'default_address' => '1',客户地址类型,1为默认地址，-1为非默认地址
-     *          'latitude' => "39.770908",
-     *          'longitude' => "116.223751",
+     *          "id": 2,
+     *          "customer_id": 1,
+     *          "operation_province_id": 110000,
+     *          "operation_city_id": 110100,
+     *          "operation_area_id": 110105,
+     *          "operation_province_name": "北京",
+     *          "operation_city_name": "北京市",
+     *          "operation_area_name": "朝阳区",
+     *          "operation_province_short_name": "北京",
+     *          "operation_city_short_name": "北京",
+     *          "operation_area_short_name": "朝阳",
+     *          "customer_address_detail": "某某小区8栋3单元512",
+     *          "customer_address_status": 1,客户地址类型,1为默认地址，0为非默认地址
+     *          "customer_address_longitude": 116.48641,
+     *          "customer_address_latitude": 39.92149,
+     *          "customer_address_nickname": "王小明",
+     *          "customer_address_phone": "18210922324",
+     *          "created_at": 1445063798,
+     *          "updated_at": 0,
+     *          "is_del": 0
      *          }
      *        }
      *
@@ -57,50 +66,37 @@ class UserController extends Controller
      *       "msg": "用户认证已经过期,请重新登录。"
      *
      *     }
-     * @apiError AddressNotFound 用户认证失败.
+     * @apiError AddressNotFound 常用地址添加失败.
      *
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 address Not Found
      *     {
      *       "code": "error",
-     *       "msg": "地址不存在"
+     *       "msg": "常用地址添加失败"
      *
      *     }
      */
 
     public function actionAddAddress()
     {
-        $date = Yii::$app->request->post();
-        if (empty($date['access_token'])) {
+        $param = Yii::$app->request->post();
+        if (empty(@$param['access_token']) || !CustomerAccessToken::checkAccessToken(@$param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
         }
-        $customer = CustomerAccessToken::getCustomer($date['access_token']);
+
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
 
         if (!empty($customer) && !empty($customer->id)) {
-            $model = CustomerAddress::addAddress($customer->id, $date['region_id'], $date['address_detail'],
-                $date['address_nickname'], $date['address_phone']);
-
+            $model = CustomerAddress::addAddress($customer->id, @$param['operation_area_name'], @$param['address_detail'],
+                @$param['address_nickname'], @$param['address_phone']);
             if (!empty($model)) {
-                $address = [
-                    'address_id' => $model->id,
-                    'province_name' => $model->general_region_province_name,
-                    'city_name' => $model->general_region_city_name,
-                    'area_name' => $model->general_region_area_name,
-                    'address_detail' => $model->customer_address_detail,
-                    'address_nickname' => $model->customer_address_nickname,
-                    'address_phone' => $model->customer_address_phone,
-                    'default_address' => $model->customer_address_status,
-                    'latitude' => $model->customer_address_latitude,
-                    'longitude' => $model->customer_address_longitude,
-                ];
-                $ret = ['address' => $address];
-
+                $ret = ['address' => $model];
                 return $this->send($ret, "常用地址添加成功", "ok");
             } else {
                 return $this->send(null, "常用地址添加失败", "error", 403);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录.", "error", 403);
         }
 
     }
@@ -108,7 +104,7 @@ class UserController extends Controller
 
     /**
      *
-     * @api {GET} /user/addresses 常用地址列表
+     * @api {POST} /user/addresses 常用地址列表
      *
      * @apiName Addresses
      * @apiGroup User
@@ -126,20 +122,29 @@ class UserController extends Controller
      *       "ret":{
      *       "addresses": [
      *          {
-     *          'address_id'=>"1612679",
-     *          'province_name' => "北京",
-     *          'city_name' => "北京",
-     *          'area_name' => "朝阳区",
-     *          'address_detail' => "某某小区8栋3单元502",
-     *          'address_nickname' => '张先生',
-     *          'address_phone' => '13300112233',
-     *          'default_address' => '1',客户地址类型,1为默认地址，-1为非默认地址
-     *          'latitude' => "39.770908",
-     *          'longitude' => "116.223751",
-     *          }
+     *          "id": 2,
+     *          "customer_id": 1,
+     *          "operation_province_id": 110000,
+     *          "operation_city_id": 110100,
+     *          "operation_area_id": 110105,
+     *          "operation_province_name": "北京",
+     *          "operation_city_name": "北京市",
+     *          "operation_area_name": "朝阳区",
+     *          "operation_province_short_name": "北京",
+     *          "operation_city_short_name": "北京",
+     *          "operation_area_short_name": "朝阳",
+     *          "customer_address_detail": "某某小区8栋3单元512",
+     *          "customer_address_status": 1,客户地址类型,1为默认地址，0为非默认地址
+     *          "customer_address_longitude": 116.48641,
+     *          "customer_address_latitude": 39.92149,
+     *          "customer_address_nickname": "王小明",
+     *          "customer_address_phone": "18210922324",
+     *          "created_at": 1445063798,
+     *          "updated_at": 0,
+     *          "is_del": 0
+     *          },
      *         ]
      *        }
-     *
      *     }
      *
      * @apiError UserNotFound 用户认证失败.
@@ -154,8 +159,8 @@ class UserController extends Controller
      */
     public function actionAddresses()
     {
-        $accessToken = Yii::$app->request->get('access_token');
-        if (empty($accessToken)) {
+        @$accessToken = Yii::$app->request->post('access_token');
+        if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
         }
         $customer = CustomerAccessToken::getCustomer($accessToken);
@@ -165,19 +170,7 @@ class UserController extends Controller
 
             $addresses = array();
             foreach ($AddressArr as $key => $model) {
-                $item = [
-                    'address_id' => $model->id,
-                    'province_name' => $model->general_region_province_name,
-                    'city_name' => $model->general_region_city_name,
-                    'area_name' => $model->general_region_area_name,
-                    'address_detail' => $model->customer_address_detail,
-                    'address_nickname' => $model->customer_address_nickname,
-                    'address_phone' => $model->customer_address_phone,
-                    'default_address' => $model->customer_address_status,
-                    'latitude' => $model->customer_address_latitude,
-                    'longitude' => $model->customer_address_longitude,
-                ];
-                $addresses[] = $item;
+                $addresses[] = $model;
             }
             $ret = ['addresses' => $addresses];
             return $this->send($ret, "获取地址列表成功", "ok");
@@ -190,49 +183,189 @@ class UserController extends Controller
 
     /**
      *
-     * @api {DELETE} /user/addresses 删除用户常用地址
+     * @api {POST} /user/delete-address 删除用户常用地址
      *
      *
-     * @apiName DeleteAddresses
+     * @apiName DeleteAddress
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} app_version 访问源(android_4.2.2)
-     * @apiParam {String} address_id 常用地址id
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} address_id 地址id
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
      *       "code": "ok",
      *       "msg": "删除成功"
-     *
      *     }
      *
-     * @apiError UserNotFound The id of the User was not found.
+     * @apiError UserNotFound 用户认证已经过期.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "error",
+     *       "msg": "用户认证已经过期,请重新登录."
+     *     }
+     */
+    public function actionDeleteAddress()
+    {
+        $params = Yii::$app->request->post();
+        @$accessToken = $params['access_token'];
+        @$addressId = $params['address_id'];
+        if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
+            return $this->send(null, "用户认证已经过期,请重新登录.", "error", 403);
+        }
+        if (empty($addressId)) {
+            return $this->send(null, "地址信息获取失败", "error", 403);
+        }
+
+        if (CustomerAddress::deleteAddress($addressId)) {
+            return $this->send(null, "删除成功", "ok");
+        } else {
+
+            return $this->send(null, "删除失败", "error", 403);
+        }
+    }
+
+    /**
+     *
+     * @api {POST} /user/set-default-address 设置默认地址
+     *
+     * @apiName SetDefaultAddress
+     * @apiGroup User
+     *
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} address_id 地址id
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     *
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "code": "ok",
+     *       "msg": "设置成功"
+     *     }
+     *
+     * @apiError UserNotFound 用户认证已经过期.
      *
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
      *       "code": "error",
      *       "msg": "用户认证已经过期,请重新登录，"
-     *
      *     }
      */
-    public function actionDeleteAddress()
+    public function actionSetDefaultAddress()
     {
-        return '1111111111';
+        $params = Yii::$app->request->post();
+        @$accessToken = $params['access_token'];
+        @$addressId = $params['address_id'];
+        if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
+            return $this->send(null, "用户认证已经过期,请重新登录.", "error", 403);
+        }
+        if (empty($addressId)) {
+            return $this->send(null, "地址信息获取失败", "error", 403);
+        }
+
+        $model = CustomerAddress::getAddress($addressId);
+
+        if (empty($model)) {
+            return $this->send(null, "地址信息获取失败", "error", 403);
+        }
+
+        if (CustomerAddress::updateAddress($model->id, $model->operation_area_name,
+            $model->customer_address_detail, $model->customer_address_nickname, $model->customer_address_phone)
+        ) {
+            return $this->send(null, "设置默认地址成功", "ok");
+        } else {
+
+            return $this->send(null, "设置默认地址失败", "error", 403);
+        }
     }
 
     /**
      *
-     * @api {GET} /user/setdefaultcity 设置默认地址
+     * @api {POST} /user/update-address 修改常用地址
+     *
+     * @apiName UpdateAddress
+     * @apiGroup User
+     *
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} address_id 地址id
+     * @apiParam {String} operation_area_name 地区名（朝阳区）
+     * @apiParam {String} address_detail 详细地址信息
+     * @apiParam {String} address_nickname 联系人
+     * @apiParam {String} address_phone 联系电话
+     *
+     * @apiSuccess {Object[]} address 新增地址.
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "code": "ok",
+     *       "msg": "修改常用地址成功"
+     *     }
+     *
+     * @apiError UserNotFound 用户认证失败.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "error",
+     *       "msg": "用户认证已经过期,请重新登录。"
+     *
+     *     }
+     * @apiError AddressNotFound 地址信息获取失败.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 200 address Not Found
+     *     {
+     *       "code": "error",
+     *       "msg": "地址信息获取失败"
+     *
+     *     }
+     */
+    public function actionUpdateAddress()
+    {
+        $params = Yii::$app->request->post();
+        @$accessToken = $params['access_token'];
+        @$addressId = $params['address_id'];
+        if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
+            return $this->send(null, "用户认证已经过期,请重新登录.", "error", 403);
+        }
+        if (empty($addressId)) {
+            return $this->send(null, "地址信息获取失败", "error", 403);
+        }
+
+        $model = CustomerAddress::getAddress($addressId);
+
+        if (empty($model)) {
+            return $this->send(null, "地址信息获取失败", "error", 403);
+        }
+
+        if (CustomerAddress::updateAddress($model->id, @$params['operation_area_name'],
+            @$params['address_detail'], @$params['address_nickname'], @$params['address_phone'])
+        ) {
+            return $this->send(null, "修改常用地址成功", "ok");
+        } else {
+
+            return $this->send(null, "修改常用地址失败", "error", 403);
+        }
+    }
+
+    /**
+     *
+     * @api {GET} /user/set-default-city 设置默认城市
      *
      * @apiName SetDefaultCity
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} city 城市
-     * @apiParam {String} app_version 访问源(android_4.2.2)
+     * @apiParam {String} city_name 城市名称
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      * @apiSuccess {Object[]} services 该城市提供的服务.
      * @apiSuccess {Object[]} appInfoWithCity 该城市相关初始化配置.
@@ -259,10 +392,43 @@ class UserController extends Controller
      *
      *     }
      */
-    public function actionSetDefaultCity()
-    {
 
-    }
+    /**
+     *
+     * @api {GET} /user/update-city 修改载入城市
+     *
+     * @apiName UpdateCity
+     * @apiGroup User
+     *
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} city_name 城市
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     *
+     * @apiSuccess {Object[]} services 该城市提供的服务.
+     * @apiSuccess {Object[]} appInfoWithCity 该城市相关初始化配置.
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "code": "ok",
+     *       "msg": "设置成功"
+     *       "ret":{
+     *          "services":{}
+     *          "appInfoWithCity":{}
+     *        }
+     *
+     *     }
+     *
+     * @apiError UserNotFound The id of the User was not found.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "error",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *
+     *     }
+     */
 
     /**
      *

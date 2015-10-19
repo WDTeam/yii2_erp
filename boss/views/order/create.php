@@ -27,7 +27,27 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="panel-body">
                 <?= $form->field($model, 'order_customer_phone')->textInput(['maxlength' => 11])->label('客户手机'); ?>
                 <div style="display: none;"><?= $form->field($model, 'customer_id')->textInput(['maxlength' => true]) ?></div>
-                <div id="address_div"><?= $form->field($model, 'address_id')->radioList([''=>'请先输入手机号获取地址信息'])->label('地址信息') ?></div>
+                <?= $form->field($model, 'address_id')->radioList([''=>'请先输入手机号获取地址信息'])->label('地址信息') ?>
+                <div class="form-group field-order-address_id required">
+                    <label for="order-address_id" class="control-label col-sm-3">地址信息</label>
+                    <div class="col-sm-6">
+                        <input type="hidden" value="" name="Order[address_id]">
+                            <div id="order-address_id">
+                                <div class="radio">
+                                    <label class="col-sm-6"><input type="radio" name="Order[address_id]" value="1"> 北京市朝阳区SOHO1 测试昵称 13554699534</label>
+                                    <label class="col-sm-5" style="color: #FF0000;">没有经纬度</label>
+                                    <div class="col-sm-1"><button class="btn btn-sm btn-warning" type="button">编辑</button></div>
+                                </div>
+                                <div class="radio">
+                                    <label class="col-sm-6"><input type="radio" name="Order[address_id]" value="2"> 北京市朝阳区SOHO2 测试昵称 13554699534</label>
+                                    <label class="col-sm-5" style="color: #FF0000;">没有经纬度</label>
+                                    <div class="col-sm-1"><button class="btn btn-sm btn-warning" type="button">编辑</button></div>
+                            </div>
+                        <div class="help-block help-block-error "></div>
+                        <?= Html::button('添加地址', ['class' =>  'btn btn-sm btn-warning']); ?>
+                    </div>
+
+                </div>
                 <div style="display: none;"><?= $form->field($model, 'order_address')->textInput(['maxlength' => true]) ?></div>
                 <?= $form->field($model, 'order_service_type_id')->inline()->radioList([''=>'选择地址获取商品'])->label('选择商品') ?>
             </div>
@@ -104,7 +124,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="panel-footer">
                 <div class="form-group">
                     <div class="col-sm-offset-0 col-sm-12">
-                        <?= Html::submitButton('创建', ['class' => $model->isNewRecord ? 'btn btn-success btn-lg btn-block' : 'btn btn-primary btn-lg btn-block']); ?>
+                        <?= Html::submitButton('创建', ['class' => $model->isNewRecord ? 'btn btn-warning btn-lg btn-block' : 'btn btn-warning btn-lg btn-block']); ?>
                     </div>
                 </div>
             </div>
@@ -118,10 +138,13 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
 $this->registerJsFile('/js/order.js',['depends'=>[ 'yii\web\YiiAsset','yii\bootstrap\BootstrapAsset']]);
 $this->registerCss('
- #order-order_booked_time_range .radio-inline ,#order-order_booked_time_range .checkbox-inline {
+ #order-orderbookedtimerange .radio-inline ,#order-channel_id .radio-inline {
         margin-left: 0px;
         margin-right: 10px;
         margin-top: 0;
+    }
+    label,input.form-control{
+        font-size:14px;
     }
 ');
 ?>

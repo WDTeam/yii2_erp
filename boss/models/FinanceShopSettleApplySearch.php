@@ -70,7 +70,7 @@ class FinanceShopSettleApplySearch extends FinanceShopSettleApply
             ->andFilterWhere(['like', 'shop_manager_name', $this->shop_manager_name])
             ->andFilterWhere(['like', 'finance_shop_settle_apply_cycle_des', $this->finance_shop_settle_apply_cycle_des])
             ->andFilterWhere(['like', 'finance_shop_settle_apply_reviewer', $this->finance_shop_settle_apply_reviewer]);
-
+        $dataProvider->query->orderBy(['created_at'=>SORT_DESC]);
         return $dataProvider;
     }
     

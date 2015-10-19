@@ -30,6 +30,16 @@ class CustomerAddress extends \common\models\CustomerAddress
     public static function addAddress($customer_id, $operation_area_name, $customer_address_detail, $customer_address_nickname, $customer_address_phone){
         $transaction = \Yii::$app->db->beginTransaction();
         try{
+            //先将该客户所有的地址状态设为0
+            $customerAddress = self::find()->where(['customer_id'=>$customer_id])->all();
+            if (!empty($customerAddress)) {
+                foreach ($customerAddress as $address) {
+                    $address->customer_address_status = 0;
+                    $address->validate();
+                    $address->save();
+                }
+            }
+
             $customerAddress = new CustomerAddress;
             $customerAddress->customer_id = $customer_id;
 
@@ -90,12 +100,6 @@ class CustomerAddress extends \common\models\CustomerAddress
                 return false;
             }
             $customerAddress->save();
-            $customerAddresses = CustomerAddress::findAll('customer_id=:customer_id and id!=:id', 
-                [':customer_id'=>$customer_id, ':id'=>$customerAddress->id]);
-            foreach ($customerAddresses as $customerAddress) {
-                $customerAddress->customer_address_status = 0;
-                $customerAddress->save();
-            }
             $transaction->commit();
             return $customerAddress;
         }catch(\Exception $e){
@@ -127,6 +131,17 @@ class CustomerAddress extends \common\models\CustomerAddress
     public static function updateAddress($id, $operation_area_name, $customer_address_detail, $customer_address_nickname, $customer_address_phone){
         $transaction = \Yii::$app->db->beginTransaction();
         try{
+            //先将该客户所有的地址状态设为0
+            $customerAddress = self::findOne($id);
+            if ($customerAddress != NULL) {
+                $customer_id = $customerAddress->customer_id;
+                $customerAddresses = self::find()->where(['customer_id'=>$customer_id])->all();
+                foreach ($customerAddresses as $address) {
+                    $address->customer_address_status = 0;
+                    $address->validate();
+                    $address->save();
+                }
+            }
             $customerAddress = self::findOne($id);
             //根据区名查询省市区
             $operationArea = CommonOperationArea::find()->where([
@@ -171,30 +186,20 @@ class CustomerAddress extends \common\models\CustomerAddress
             $customerAddress->operation_city_short_name = $operation_city_short_name;
             $customerAddress->operation_area_short_name = $operation_area_short_name;
 
-            
-            // $customerAddress->customer_id = $customer_id;
             $customerAddress->customer_address_status = 1;
             $customerAddress->customer_address_detail = $customer_address_detail;
             $customerAddress->customer_address_longitude = $operation_longitude;
             $customerAddress->customer_address_latitude = $operation_latitude;
             $customerAddress->customer_address_nickname = $customer_address_nickname;
             $customerAddress->customer_address_phone = $customer_address_phone;
-            // $customerAddress->created_at = time();
+
             $customerAddress->updated_at = time();
             $customerAddress->is_del = 0;
             $customerAddress->validate();
-            if ($customerAddress->hasErrors()) {
-                return false;
-            }
             $customerAddress->save();
-            $customerAddresses = CustomerAddress::findAll('customer_id=:customer_id and id!=:id', 
-                [':customer_id'=>$customer_id, ':id'=>$customerAddress->id]);
-            foreach ($customerAddresses as $customerAddress) {
-                $customerAddress->customer_address_status = 0;
-                $customerAddress->save();
-            }
+            
             $transaction->commit();
-            return true;
+            return $customerAddress;
         }catch(\Exception $e){
             $transaction->rollback();
             return false;

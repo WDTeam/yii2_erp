@@ -62,9 +62,20 @@ use kartik\date\DatePicker;
             ]); ?>
      </div>
      
+     
+     
+     
+     
     <div class='col-md-3'>
       <?= $form->field($model, 'finance_uplod_url')->fileInput(['maxlength' => true]) ?>
     </div> 
+    
+    
+    
+    
+    
+    
+    
     <div class="form-group">
     <div class='col-md-2' style="    margin-top: 22px;">
         <?= Html::submitButton(Yii::t('app', '提交'), ['class' => 'btn btn-primary']) ?>

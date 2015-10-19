@@ -12,6 +12,7 @@ use core\models\Customer;
 use core\models\order\OrderSearch;
 use core\models\order\Order;
 use core\models\worker\Worker;
+use common\models\FinanceOrderChannel;
 /**
  * FinancePopOrderSearch represents the model behind the search form about `common\models\FinancePopOrder`.
  */
@@ -52,6 +53,25 @@ class FinancePopOrderSearch extends FinancePopOrder
     	return $name;
     }
     
+    /**
+    * 获取服务费
+    * @date: 2015-10-17
+    * @author: peak pan
+    * @return:
+    **/
+    public static  function get_fee_pay($channelid,$lastidRecordLog)
+    {
+    		//目前淘宝有手续费
+    		if($channelid!=19){
+    		$discount_pay=FinancePopOrder::find()->select(['sum(finance_pop_order_discount_pay) as discount_pay'])
+    		->andWhere(['finance_record_log_id' => $lastidRecordLog])
+    		->andWhere(['finance_order_channel_id' => $channelid])->asArray()->one();
+    	     $log_fee=$discount_pay['discount_pay']?abs($discount_pay['discount_pay']):0;
+    		}else {
+    			$log_fee=0;
+    		}
+    	return $log_fee;
+    }
     
     
     /**
@@ -132,7 +152,9 @@ class FinancePopOrderSearch extends FinancePopOrder
     **/
     public static  function get_stypname($idname)
     {
-    	if($idname==7){
+    	if($idname==13){
+    		$name='手续费';
+    	}elseif ($idname==1){
     		$name='手续费';
     	}else{
     		$name='优惠金额';
@@ -289,7 +311,7 @@ class FinancePopOrderSearch extends FinancePopOrder
 		 *   13	App到位    14	手机微信       15	App微信     16	移动app    17	充值订单 
 		 **/
 
-		if($channleid==1){
+		if($channleid==19){
 		//1 美团赵轮订单  在状态项里面不存在状态项    1 正常订单和退款 2 补偿订单 3 退款
 			if($refund>0){
 			if(in_array($stypeid,$mestatus_tui && $namestype==1 && $namestype==3) ){
@@ -311,7 +333,7 @@ class FinancePopOrderSearch extends FinancePopOrder
 		}elseif ($channleid==6){
 		//6	支付宝服务窗
 			return 1;
-		}elseif ($channleid==7){
+		}elseif ($channleid==19){
 		//7	支付宝
 			return 1;
 		}elseif ($channleid==8){
@@ -358,19 +380,28 @@ class FinancePopOrderSearch extends FinancePopOrder
     		$dateinfo[]=$rtyy;
     	}
     	
-    	if($channelid==1){
+    	
+    	//查找对账比例
+    	$channel_rate=FinanceOrderChannel::find()->select(['finance_order_channel_rate'])
+    	->andWhere(['id' => $channelid])
+    	->asArray()->one();
+    	//$channel_rate['finance_order_channel_rate']
+
+    	
+    	if($channelid==19){
     		//美团对账
-    		$orderdateinfo=$this->get_beautifulgroupon($hder_info,$dateinfo,$channelid);
+    		$orderdateinfo=$this->get_beautifulgroupon($hder_info,$dateinfo,$channelid,$channel_rate['finance_order_channel_rate']);
     		return $orderdateinfo; 
-    	}elseif ($channelid==7){
+    	}elseif ($channelid==13){
     		//淘宝对账
-    		$orderdateinfo=$this->get_taobaodata($hder_info,$dateinfo,$channelid);
+    		$orderdateinfo=$this->get_taobaodata($hder_info,$dateinfo,$channelid,$channel_rate['finance_order_channel_rate']);
     		return $orderdateinfo;
     		
-    	}elseif ($channelid==14){
+    	}elseif ($channelid==1){
     		//微信对账	
-    		$orderdateinfo=$this->get_infodata($hder_info,$dateinfo,$channelid);
+    		$orderdateinfo=$this->get_taobaodata($hder_info,$dateinfo,$channelid,$channel_rate['finance_order_channel_rate']);
     		return $orderdateinfo;
+    		
     	}elseif ($channelid==1111){
     		//微信对账
     		$orderdateinfo=$this->get_infodata($hder_info,$dateinfo,$channelid);
@@ -390,8 +421,9 @@ class FinancePopOrderSearch extends FinancePopOrder
     	
     }  
     
-  		//美团对账处理   
-		public function get_beautifulgroupon($hder_info,$dateinfo,$channelid){
+  		//美团对账处理  
+     //$channel_rate 比例
+		public function get_beautifulgroupon($hder_info,$dateinfo,$channelid,$channel_rate){
     	//对应退款金额
 	    if(isset($hder_info['refund'])){
 	    	$refund=$dateinfo[$hder_info['refund']];
@@ -407,8 +439,8 @@ class FinancePopOrderSearch extends FinancePopOrder
 	    	$order_status=1;
 	    	$refund=0;
 	    }
-    //总金额
-    $getorder_money=$dateinfo[$hder_info['order_money']];
+    //总金额1%
+    $getorder_money=($dateinfo[$hder_info['order_money']]) * $channel_rate;
     //对应系统订单号
     $getorder=$dateinfo[$hder_info['order_channel_order_num']];
     
@@ -417,7 +449,7 @@ class FinancePopOrderSearch extends FinancePopOrder
     	foreach ($hder_info['order_channel_promote'] as $zkje){
     		$site[]=$dateinfo[$zkje];
     	}
-    	$promote=array_sum($site);
+    	$promote=array_sum($site)*$channel_rate;
     	//实际支付金额
     	$accmay=$getorder_money-$promote;
     }else{
@@ -428,7 +460,7 @@ class FinancePopOrderSearch extends FinancePopOrder
      
     //手续费
     if(isset($hder_info['decrease'])){
-    	$decrease=$dateinfo[$hder_info['decrease']];
+    	$decrease=$dateinfo[$hder_info['decrease']]*$channel_rate;
     }else{
     	$decrease=0;
     }
@@ -582,11 +614,10 @@ class FinancePopOrderSearch extends FinancePopOrder
     }  
 
     //淘宝对账
-    public function get_taobaodata($hder_info,$dateinfo,$channelid){
-    	
+    public function get_taobaodata($hder_info,$dateinfo,$channelid,$channel_rate){
     	//对应退款金额
     	if(isset($hder_info['refund'])){
-    		$refund=$dateinfo[$hder_info['refund']];
+    		$refund=$dateinfo[$hder_info['refund']]*$channel_rate;
     		if($refund>0){
     			$order_status=2;
     		}else{
@@ -607,7 +638,7 @@ class FinancePopOrderSearch extends FinancePopOrder
     	
     	
     	//总金额
-    	$getorder_money=$dateinfo[$hder_info['order_money']];
+    	$getorder_money=$dateinfo[$hder_info['order_money']]*$channel_rate;
     	//对应系统订单号
     	$getorder=$dateinfo[$hder_info['order_channel_order_num']];
     	
@@ -616,11 +647,11 @@ class FinancePopOrderSearch extends FinancePopOrder
     		foreach ($hder_info['order_channel_promote'] as $zkje){
     			$site[]=$dateinfo[$zkje];
     		}
-    		$promote=array_sum($site);
+    		$promote=array_sum($site)*$channel_rate;
     		//实际支付金额
     		$accmay=$getorder_money-$promote;
     	}else{
-    		$promote=$dateinfo[$hder_info['decrease']];
+    		$promote=$dateinfo[$hder_info['decrease']]*$channel_rate;
     		$accmay=$getorder_money;
     	}
     	 
