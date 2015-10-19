@@ -72,7 +72,7 @@ $("#order-order_customer_phone").blur(function(){
                                 for(var k in address){
                                     var v = address[k];
                                     $("#order-address_id").append(
-                                        '<div class="radio" id="address_'+ v.id +'"><label class="col-sm-6"><input type="radio" value="'+ v.id +'" '
+                                        '<div class="radio" id="address_'+ v.id +'"><label class="col-sm-7"><input type="radio" value="'+ v.id +'" '
                                         +' name="Order[address_id]"> '
                                         + v.operation_province_name+' '
                                         + v.operation_city_name+' '
@@ -80,7 +80,7 @@ $("#order-order_customer_phone").blur(function(){
                                         + v.customer_address_detail+' '
                                         + v.customer_address_nickname+' '
                                         + v.customer_address_phone+'</label>' +
-                                        '<label class="col-sm-5" style="color: #FF0000;">' +
+                                        '<label class="col-sm-4" style="color: #FF0000;">' +
                                         (v.customer_address_longitude* v.customer_address_latitude==0?'该地址没有匹配到经纬度':'该地址可以下单')+
                                         '</label>' +
                                         '<button class="btn btn-xs btn-warning col-sm-1 update_address_btn" type="button">编辑</button>' +
@@ -161,7 +161,7 @@ $('#order-order_pay_type input').change(function(){
 });
 
 $(document).on("click","#add_address_btn",function(){
-    if($('#address_0').length==0 && customer_id!='') {
+    if($('#address_0').length==0 && $('#order-customer_id').val()!='') {
         $form = '<div class="radio" id="address_0">' + $('#address_form').html() + '</div>';
         $("#order-address_id").append($form);
     }
@@ -195,7 +195,7 @@ $(document).on("click",".cancel_address_btn",function(){
     if(address_id>0) {
         var v = address_list[address_id];
         $("#address_" + address_id).html(
-            '<label class="col-sm-6"><input type="radio" value="' + v.id + '" '
+            '<label class="col-sm-7"><input type="radio" value="' + v.id + '" '
             + ' name="Order[address_id]"> '
             + v.operation_province_name + ' '
             + v.operation_city_name + ' '
@@ -203,7 +203,7 @@ $(document).on("click",".cancel_address_btn",function(){
             + v.customer_address_detail + ' '
             + v.customer_address_nickname + ' '
             + v.customer_address_phone + '</label>' +
-            '<label class="col-sm-5" style="color: #FF0000;">' +
+            '<label class="col-sm-4" style="color: #FF0000;">' +
             (v.customer_address_longitude * v.customer_address_latitude == 0 ? '该地址没有匹配到经纬度' : '该地址可以下单') +
             '</label>' +
             '<button class="btn btn-xs btn-warning col-sm-1 update_address_btn" type="button">编辑</button>'
@@ -238,7 +238,7 @@ $(document).on("click",".save_address_btn",function(){
                 address_list[v.id] = v;
                 $("#address_"+address_id).attr('id','address_'+ v.id);
                 $("#address_" + v.id).html(
-                    '<label class="col-sm-6"><input type="radio" value="' + v.id + '" '
+                    '<label class="col-sm-7"><input type="radio" value="' + v.id + '" '
                     + ' name="Order[address_id]"> '
                     + v.operation_province_name + ' '
                     + v.operation_city_name + ' '
@@ -246,7 +246,7 @@ $(document).on("click",".save_address_btn",function(){
                     + v.customer_address_detail + ' '
                     + v.customer_address_nickname + ' '
                     + v.customer_address_phone + '</label>' +
-                    '<label class="col-sm-5" style="color: #FF0000;">' +
+                    '<label class="col-sm-4" style="color: #FF0000;">' +
                     (v.customer_address_longitude * v.customer_address_latitude == 0 ? '该地址没有匹配到经纬度' : '该地址可以下单') +
                     '</label>' +
                     '<button class="btn btn-xs btn-warning col-sm-1 update_address_btn" type="button">编辑</button>'
