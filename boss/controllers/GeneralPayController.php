@@ -156,7 +156,7 @@ class GeneralPayController extends Controller
         }
         file_put_contents('/tmp/pay/p.php',json_encode($post));
         $class->notify();
-        var_dump($post);exit;
+
         //实例化模型
         $GeneralPayLogModel = new GeneralPayLog();
 
