@@ -138,6 +138,11 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     }
     
     
+    
+    /**
+     * 根据阿姨手机号获取阿姨信息
+     * @param type $workerPhone
+     */
     public function getWorkerInfo($workerPhone){
         $workerSimple = Worker::getWorkerInfoByPhone($workerPhone);
         $workerInfo = [];
