@@ -22,14 +22,24 @@ class FinanceSettleApplySearch extends FinanceSettleApply
    
    const ALL_WORKER_SETTELE = 4;//所有阿姨结算
    
+   const SETTLE_CATEGORY_ALL_ORDER_COUNT = 1;//所有订单
+   
+   const SETTLE_CATEGORY_ALL_CASH_ORDER_COUNT = 2;//现金订单
+   
+   const SETTLE_CATEGORY_ALL_NONCASH_ORDER_COUNT = 3;//非现金订单
+   
+   const SETTLE_CATEGORY_TASKS = 4;//任务
+   
+   const SETTLE_CATEGORY_SMALL_MAINTAIN = 5;//小保养
+   
+   const SETTLE_CATEGORY_DEDUCTION = 6;//扣款
+   
    public $settle_type;//结算类型
    
-   public $review_section;
+   public $review_section;//审核部门
    
    public $subsidyStr;//补贴
    
-   public $workerName;//阿姨姓名
-    
     public $workerOnboardTime;//阿姨报到时间
     
     public $workerTypeDes;//阿姨类型,例如：'自营全职'等
@@ -61,7 +71,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     {
         return [
             [[ 'finance_settle_apply_starttime', 'finance_settle_apply_endtime'], 'required'],
-             [['worder_id', 'worker_type_id','shop_id', 'finance_settle_apply_man_hour', 'finance_settle_apply_status', ], 'integer'],
+             [['worder_id','id', 'worker_type_id','shop_id', 'finance_settle_apply_man_hour', 'finance_settle_apply_status','worker_type_id','worker_rule_id', ], 'integer'],
             [['worder_tel',], 'string', 'max' => 11],
         ];
     }
@@ -129,25 +139,27 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     
     
     public function getWorkerInfo($workerPhone){
-        $financeSettleApplySearch = new FinanceSettleApplySearch;
         $workerSimple = Worker::getWorkerInfoByPhone($workerPhone);
         $workerInfo = [];
         if(isset($workerSimple['id'])){
             $workerInfo = Worker::getWorkerInfo($workerSimple['id']);
         }
         if(count($workerInfo)> 0){
-             $financeSettleApplySearch->worder_id =$workerInfo['id'];
-            $financeSettleApplySearch->workerName = $workerInfo['worker_name'];
-            $financeSettleApplySearch->worder_tel= $workerInfo['worker_phone'];
-            $financeSettleApplySearch->workerOnboardTime= $workerInfo['created_ad'];
-            $financeSettleApplySearch->workerTypeDes= $this->operationDes[$workerInfo['worker_type']].$this->roleDes[$workerInfo['worker_rule_id']];
-            $financeSettleApplySearch->worker_type_id = $workerInfo['worker_type'];
-            $financeSettleApplySearch->worker_rule_id = $workerInfo['worker_rule_id'];
-            $financeSettleApplySearch->finance_settle_apply_cycle_des = $this->getSettleCycleByWorkerType($financeSettleApplySearch->worker_type_id,$financeSettleApplySearch->worker_rule_id);
-            $financeSettleApplySearch->latestSettleTime = time();
+             $this->worder_id =$workerInfo['id'];
+            $this->worder_name = $workerInfo['worker_name'];
+            $this->worder_tel= $workerInfo['worker_phone'];
+            $this->workerOnboardTime= $workerInfo['created_ad'];
+            $this->worker_type_id = $workerInfo['worker_type'];
+            $this->worker_rule_id = $workerInfo['worker_rule_id'];
+            $this->workerTypeDes= $this->getWorkerTypeDes();
+            $this->finance_settle_apply_cycle_des = $this->getSettleCycleByWorkerType($this->worker_type_id,$this->worker_rule_id);
+            $this->latestSettleTime = time();
         }
 //        $financeSettleApplySearch->latestSettleTime = $this->getWorkerLatestSettledTime($workerId);
-        return $financeSettleApplySearch;
+    }
+    
+    public function getWorkerTypeDes(){
+          return $this->getWorkerTypeName($this->worker_type_id).$this->getWorkerRuleDes($this->worker_rule_id);
     }
     
     public function getSettleApplyStatusDes($settleApplyStatus){
@@ -195,9 +207,10 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         $workerInfo = Worker::getWorkerInfo($workerId);
         if(count($workerInfo)>0){
             $this->worder_tel = $workerInfo['worker_phone'];
+            $this->worder_name = $workerInfo['worker_name'];
             $this->worker_type_id = $workerInfo['worker_type'];
             $this->worker_rule_id = $workerInfo['worker_rule_id'];
-            $this->worker_type_name = $this->getWorkerTypeDes($workerInfo['worker_type']);
+            $this->worker_type_name = $this->getWorkerTypeName($workerInfo['worker_type']);
             $this->worker_rule_name = $this->getWorkerRuleDes($workerInfo['worker_rule_id']);
         }
         $this->finance_settle_apply_cycle = $this->getSettleCycleIdByWorkerType($this->worker_type_id, $this->worker_rule_id);//结算周期Id
@@ -214,7 +227,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         return  Order::find()->where(['order_booked_worker_id'=>$workerId])->all();
     }
     
-    public function getWorkerTypeDes($workerType){
+    public function getWorkerTypeName($workerType){
         return $this->operationDes[$workerType];
     }
     

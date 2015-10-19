@@ -66,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="panel-body settle-detail-body">
             <div class='col-md-2'>
-                <?=  $model->workerName; ?>
+                <?=  $model->worder_name; ?>
             </div>
             <div class='col-md-2'>
                 <?=  $model->worder_tel; ?>
@@ -129,7 +129,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 
                 <?php
                     if($model->finance_settle_apply_order_count > 0){
-                        echo Html::a('<u>'.$model->finance_settle_apply_order_count.'</u>',[Yii::$app->urlManager->createUrl(['/finance/finance-settle-apply/worker-manual-settlement-index','id' => $model->id,'settle_type'=>$model->settle_type,'review_section'=>$model->review_section])]);
+                        echo '<span class = "ordercount" style = "cursor:pointer"><u>'.$model->finance_settle_apply_order_count.'</u></span>';
                     }else{
                         echo $model->finance_settle_apply_order_count;
                     }
@@ -138,7 +138,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class='settleDetail'>
                  <?php
                     if($model->finance_settle_apply_order_cash_count > 0){
-                        echo Html::a('<u>'.$model->finance_settle_apply_order_cash_count.'</u>',[Yii::$app->urlManager->createUrl(['/finance/finance-settle-apply/worker-manual-settlement-index','id' => $model->id,'finance_worker_order_income_type'=>FinanceWorkerOrderIncomeSearch::CASH_INCOME,'settle_type'=>$model->settle_type,'review_section'=>$model->review_section])]);
+                        echo '<span class = "cashordercount" style = "cursor:pointer"><u>'.$model->finance_settle_apply_order_cash_count.'</u></span>';
                     }else{
                         echo $model->finance_settle_apply_order_cash_count;
                     }
@@ -175,13 +175,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 0
             </div>
         </div>
-        <div class="panel-heading">
-            <label class="panel-title">订单明细</label>
-        </div>
-        <div>
-            
+        
 <?php 
-                    Pjax::begin(); echo GridView::widget([
+           echo '<div id = "allOrderInfo" >';
+                Pjax::begin(); echo GridView::widget([
                'dataProvider' => $orderDataProvider,
                'columns' => [
                    ['class' => 'yii\grid\SerialColumn'],
@@ -204,10 +201,50 @@ $this->params['breadcrumbs'][] = $this->title;
                'hover'=>true,
                'condensed'=>true,
                'floatHeader'=>true,
+           'panel' => [
+             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> 所有订单明细 </h3>',
+            ],
            ]); Pjax::end(); 
+           echo '</div></div>';
             ?>
-        </div>
-        </div>
+        
+        
+            
+<?php 
+            echo '<div id = "cashOrderInfo" style = "display:none">';
+            Pjax::begin(); echo GridView::widget([
+               'dataProvider' => $cashOrderDataProvider,
+               'columns' => [
+                   ['class' => 'yii\grid\SerialColumn'],
+                   ['attribute'=>'id',
+                       'header' => Yii::t('app', '订单号'),
+                        'content'=>function($model,$key,$index)
+                               {return  Html::a('<u>'.$model->id.'</u>',[Yii::$app->urlManager->createUrl(['order/view/','id' => $model->id])],['data-pjax'=>'0','target' => '_blank',]);}],
+                   [
+                       'header' => Yii::t('app', '支付方式'),
+                        'attribute' => 'order_pay_type',
+                       'content'=>function($model,$key,$index){
+                                   return $model->order_pay_type==null?'':$model->order_pay_type;
+                       },
+                    ],
+                   'order_money',
+                   'order_booked_begin_time:datetime', 
+                   'order_booked_count', 
+               ],
+               'responsive'=>true,
+               'hover'=>true,
+               'condensed'=>true,
+               'floatHeader'=>true,
+              'panel' => [
+                    'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> 现金订单明细 </h3>',
+                ],
+           ]); Pjax::end(); 
+           echo '</div></div>';
+           
+            ?>
+        
+        
+        
     </div>
 </div>
          <?php 
@@ -221,6 +258,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             }
                         }
                     );
+                    $(".ordercount").click(function(){
+                        $("#allOrderInfo").css('display','block');
+                        $("#cashOrderInfo").css('display','none');
+                    });
+                    $(".cashordercount").click(function(){
+                        $("#cashOrderInfo").css('display','block');
+                        $("#allOrderInfo").css('display','none');
+                    });
 JS;
         $this->registerJs(
                 $js
