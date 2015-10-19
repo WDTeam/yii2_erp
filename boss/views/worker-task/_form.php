@@ -7,6 +7,7 @@ use core\models\worker\WorkerTask;
 use kartik\helpers\Html;
 use core\models\worker\WorkerRuleConfig;
 use core\models\Operation\CoreOperationCity;
+use core\models\worker\Worker;
 
 /**
  * @var yii\web\View $this
@@ -91,23 +92,33 @@ var_dump($model->getErrors());
             ]
         ], 
         
-        'worker_type'=>[
-            'type'=> Form::INPUT_TEXT, 
-            'options'=>['placeholder'=>'Enter 阿姨角色...']
-            
+        'worker_types'=>[
+            'type'=> Form::INPUT_CHECKBOX_LIST, 
+            'options'=>['placeholder'=>'Enter 阿姨角色...'],
+            'items'=>Worker::getWorkerTypeList()
         ], 
         
-        'worker_rule_id'=>[
+        'worker_rules'=>[
             'type'=> Form::INPUT_CHECKBOX_LIST, 
             'options'=>['placeholder'=>'Enter 阿姨身份...'],
             'items'=>WorkerRuleConfig::getWorkerRuleList()
         ], 
         
-        'worker_task_city_id'=>[
+        'worker_cites'=>[
             'type'=> Form::INPUT_CHECKBOX_LIST, 
             'options'=>['placeholder'=>'Enter 适用城市...'],
             'items'=>CoreOperationCity::getCityOnlineInfoList()
         ], 
+        
+        'worker_task_reward_type'=>[
+            'type'=>Form::INPUT_RADIO_LIST,
+            'items'=>WorkerTask::REWARD_TYPES,
+        ],
+        
+        'worker_task_reward_value'=>[
+            'type'=>Form::INPUT_TEXT,
+            'options'=>['placeholder'=>'Enter 奖励值...'],
+        ],
 
         'worker_task_description_url'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 任务描述URL...', 'maxlength'=>255]],
         

@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use kartik\detail\DetailView;
 use kartik\datecontrol\DateControl;
+use core\models\worker\WorkerTask;
 
 /**
  * @var yii\web\View $this
@@ -12,6 +13,8 @@ use kartik\datecontrol\DateControl;
 $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Worker Tasks'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+WorkerTask::getTaskListByWorkerId(18473);
 ?>
 <div class="worker-task-view">
 

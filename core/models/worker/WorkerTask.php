@@ -1,6 +1,7 @@
 <?php
 namespace core\models\worker;
 
+use yii\base\InvalidParamException;
 class WorkerTask extends \common\models\WorkerTask
 {
     /**
@@ -36,11 +37,20 @@ class WorkerTask extends \common\models\WorkerTask
         '2'=>'周',
         '3'=>'天'
     ];
+    /**
+     * 任务奖励类型
+     */
+    const REWARD_TYPES = [
+        1=>'金额',
+        2=>'当月流量',
+        3=>'次月流量',
+    ];
     
     public function rules()
     {
         return array_merge(parent::rules(),[
-            [['worker_task_name', 'worker_task_start', 'worker_task_end', 'worker_task_cycle'], 'required'],
+            [['worker_task_name', 'worker_task_start', 'worker_task_end', 'worker_task_reward_type'], 'required'],
+            [['worker_types', 'worker_rules', 'worker_cites'], 'string'],
             [['conditions'], 'validateConditions'],
         ]);
     }
@@ -57,13 +67,46 @@ class WorkerTask extends \common\models\WorkerTask
         $names = self::CONDITION_NAME;
         $data = (array)json_decode($this->worker_task_conditions, true);
         foreach ($data as $item){
-            $data[$item->id]['name'] = $names[$item->id];
+            $data[$item['id']]['name'] = $names[$item['id']];
         }
         return $data;
     }
     public function setConditions($data)
     {
         $this->worker_task_conditions = json_encode($data);
+    }
+    /**
+     * 阿姨类型字段
+     */
+    public function getWorker_types()
+    {
+        return explode(',', $this->worker_type);
+    }
+    public function setWorker_types($value)
+    {
+        $this->worker_type = implode(',', $this->worker_type);
+    }
+    /**
+     * 阿姨角色字段
+     */
+    public function getWorker_rules()
+    {
+        return explode(',', $this->worker_rule_id);
+    }
+    public function setWorker_rules($value)
+    {
+        $this->worker_rule_id = implode(',', $this->worker_rule_id);
+    }
+    /**
+     * 城市字段
+     */
+    public function getWorker_cites()
+    {
+        return explode(',', $this->worker_task_city_id);
+    }
+    public function setWorker_cites($value)
+    {
+        $this->worker_task_city_id = implode(',', $this->worker_task_city_id);
     }
     /**
      * 完整条件，包含所有已设置和未设置的
@@ -88,5 +131,22 @@ class WorkerTask extends \common\models\WorkerTask
             }
         }
         return $res;
+    }
+    /**
+     * 计算阿姨任务列表
+     */
+    public static function getTaskListByWorkerId($worker_id)
+    {
+        $cur_time = time();
+        $worker = Worker::findOne(['id'=>$worker_id]);
+        if(empty($worker)){
+            throw new InvalidParamException('阿姨不存在');
+        }
+        $tasks = self::find()
+        ->where("FIND_IN_SET({$worker->worker_type}, worker_type) AND FIND_IN_SET({$worker->worker_rule_id}, worker_rule_id)")
+        ->andFilterWhere(['<','worker_task_start', $cur_time])
+        ->andFilterWhere(['>','worker_task_end', $cur_time])
+        ->all();
+        return $tasks;
     }
 }
