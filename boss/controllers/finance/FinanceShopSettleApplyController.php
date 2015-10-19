@@ -1,6 +1,6 @@
 <?php
 
-namespace boss\controllers;
+namespace boss\controllers\finance;
 
 use Yii;
 use common\models\FinanceShopSettleApply;
@@ -133,7 +133,7 @@ class FinanceShopSettleApplyController extends Controller
         if(!empty($searchModel->shop_id)){
             $this->saveAndGenerateSettleData([['shop_id'=>$searchModel->shop_id,'shop_manager_id'=>$searchModel->shop_manager_id],], '', '');
         }
-        return $this->redirect('/finance-shop-settle-apply/index?review_section='.FinanceShopSettleApplySearch::BUSINESS_REVIEW);
+        return $this->redirect('index?review_section='.FinanceShopSettleApplySearch::BUSINESS_REVIEW);
     }
     
     

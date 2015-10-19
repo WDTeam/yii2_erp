@@ -55,11 +55,24 @@ class GeneralPayController extends Controller
 
         //在线支付（online_pay），在线充值（pay）
         if(empty($data['order_id'])){
-            $scenario = 'pay';
+            if($data['general_pay_source'] == '2'){
+                $scenario = 'wx_h5_pay';
+                $data['openid'] = $data['params']['openid'];
+            }elseif($data['general_pay_source'] == '7'){
+                $scenario = 'zhidahao_h5_pay';
+            }else{
+                $scenario = 'pay';
+            }
             //交易方式
             $data['general_pay_mode'] = 1;//充值
         }else{
-            $scenario = 'online_pay';
+            if($data['general_pay_source'] == '2'){
+                $scenario = 'wx_h5_online_pay';
+            }elseif($data['general_pay_source'] == '7'){
+                $scenario = 'zhidahao_h5_online_pay';
+            }else{
+                $scenario = 'online_pay';
+            }
             //交易方式
             $data['general_pay_mode'] = 3;//在线支付
         }
@@ -108,42 +121,47 @@ class GeneralPayController extends Controller
      */
     public function actionWxH5Notify()
     {
-        $request = yii::$app->request;
-        file_put_contents('/tmp/pay/get.php',json_encode($_GET));
-        file_put_contents('/tmp/pay/post.php',json_encode($_POST));
-        file_put_contents('/tmp/pay/request.php',json_encode($_REQUEST));
-        file_put_contents('/tmp/pay/global.php',json_encode($GLOBALS['HTTP_RAW_POST_DATA']));
-        //POST数据
         if(!empty($_GET['debug'])){
-            $_POST = array (
-                "discount"=> "0.00",
-                "payment_type"=> "1",
-                "subject"=> "e家洁会员充值",
-                "trade_no"=> "2015092510165",
-                "buyer_email"=> "lsqpy@163.com",
-                "gmt_create"=> "2015-09-25 21:13:20",
-                "notify_type"=> "trade_status_sync",
-                "quantity"=> "1",
-                "out_trade_no"=> "150925846765",
-                "seller_id"=> "2088801136967007",
-                "notify_time"=> "2015-09-25 21:13:21",
-                "body"=> "e家洁会员充值0.01元",
-                "trade_status"=> "TRADE_FINISHED",
-                "is_total_fee_adjust"=> "N",
-                "total_fee"=> "0.01",
-                "gmt_payment"=> "2015-09-25 21:13:21",
-                "seller_email"=> "47632990@qq.com",
-                "gmt_close"=> "2015-09-25 21:13:21",
-                "price"=> "0.01",
-                "buyer_id"=> "2088002074138164",
-                "notify_id"=> "6260ae5cc41e6aa3a42824ec032071df2w",
-                "use_coupon"=> "N",
-                "sign_type"=> "RSA",
-                "sign"=> "T4Bkh9KljoFOTIossu5QtYPRUwj/7by/YLXNQ7efaxe0AwYDjFDFWTFts4h8yq2ceCH8weqYVBklj2btkF2/hKPuUifuJNB6lk8EtHckmJg0MzhGIBAvpteUAo+5Gs+wlI5eS5zmryBskuHOXSM7svb9wNCcL9pHAv8CM06Au+A="
+            $GLOBALS['HTTP_RAW_POST_DATA'] = "<xml>
+                <appid><![CDATA[wx7558e67c2d61eb8f]]></appid>
+                <attach><![CDATA[e家洁在线支付]]></attach>
+                <bank_type><![CDATA[CFT]]></bank_type>
+                <cash_fee><![CDATA[1]]></cash_fee>
+                <fee_type><![CDATA[CNY]]></fee_type>
+                <is_subscribe><![CDATA[Y]]></is_subscribe>
+                <mch_id><![CDATA[10037310]]></mch_id>
+                <nonce_str><![CDATA[aoydf0e8u58c2scu2o441n1i5yxtxghr]]></nonce_str>
+                <openid><![CDATA[o7Kvajh91Fmh_KYzhwX0LWZtpMPM]]></openid>
+                <out_trade_no><![CDATA[15101922921]]></out_trade_no>
+                <result_code><![CDATA[SUCCESS]]></result_code>
+                <return_code><![CDATA[SUCCESS]]></return_code>
+                <sign><![CDATA[3E437AF36D969693DD705034A8FFD5F9]]></sign>
+                <time_end><![CDATA[20151019102921]]></time_end>
+                <total_fee>1</total_fee>
+                <trade_type><![CDATA[JSAPI]]></trade_type>
+                <transaction_id><![CDATA[1004390062201510191251335932]]></transaction_id>
+                </xml>";
+            $post = array (
+                "appid" => "wx7558e67c2d61eb8f",
+                "attach" => "e家洁在线支付",
+                "bank_type" => "CFT",
+                "cash_fee" => "1",
+                "fee_type" => "CNY",
+                "is_subscribe" => "Y",
+                "mch_id" => "10037310",
+                "nonce_str" => "aoydf0e8u58c2scu2o441n1i5yxtxghr",
+                "openid" => "o7Kvajh91Fmh_KYzhwX0LWZtpMPM",
+                "out_trade_no" => "15101922921",
+                "result_code" => "SUCCESS",
+                "return_code" => "SUCCESS",
+                "sign" => "3E437AF36D969693DD705034A8FFD5F9",
+                "time_end" => "20151019102921",
+                "total_fee" => "1",
+                "trade_type" => "JSAPI",
+                "transaction_id" => "1004390062201510191251335932"
             );
-            $post = $_POST;
         }else{
-            $post = $request->post();
+            $post = json_decode(json_encode(simplexml_load_string($GLOBALS['HTTP_RAW_POST_DATA'], 'SimpleXMLElement', LIBXML_NOCDATA)), true);
         }
 
         //实例化模型
@@ -152,12 +170,12 @@ class GeneralPayController extends Controller
         //记录日志
         $dataLog = array(
             'general_pay_log_price' => $post['total_fee'],   //支付金额
-            'general_pay_log_shop_name' => $post['subject'],   //商品名称
+            'general_pay_log_shop_name' => $post['attach'],   //商品名称
             'general_pay_log_eo_order_id' => $post['out_trade_no'],   //订单ID
-            'general_pay_log_transaction_id' => $post['buyer_id'],   //交易流水号
-            'general_pay_log_status_bool' => $GeneralPayLogModel->statusBool($post['trade_status']),   //支付状态
-            'general_pay_log_status' => $post['trade_status'],   //支付状态
-            'pay_channel_id' => 6,  //支付渠道ID
+            'general_pay_log_transaction_id' => $post['transaction_id'],   //交易流水号
+            'general_pay_log_status_bool' => $GeneralPayLogModel->statusBool($post['return_code']),   //支付状态
+            'general_pay_log_status' => $post['return_code'],   //支付状态
+            'pay_channel_id' => 10,  //支付渠道ID
             'general_pay_log_json_aggregation' => json_encode($post),
             'data' => $post //文件数据
         );
@@ -177,21 +195,18 @@ class GeneralPayController extends Controller
         if(!empty($model))
         {
             //验证签名
-            $alipay = new \alipay_class;
-            $verify_result = $alipay->callback();
-
-            if(!empty($_GET['debug']))
-            {
-                $verify_result = true;
-            }
+            //调用微信数据
+            $class = new \wxjspay_class();
+            $class->callback();
+            $status = $class->notify();
 
             //签名验证成功
-            if($verify_result)
+            if($status == 'SUCCESS')
             {
                 $model->id = $GeneralPayId; //ID
                 $model->general_pay_status = 1; //支付状态
                 $model->general_pay_actual_money = $post['total_fee'];
-                $model->general_pay_transaction_id = $post['trade_no'];
+                $model->general_pay_transaction_id = $post['transaction_id'];
                 $model->general_pay_is_coupon = 1;
                 $model->general_pay_eo_order_id = $post['out_trade_no'];
                 $model->general_pay_verify = $model->makeSign();
@@ -216,7 +231,6 @@ class GeneralPayController extends Controller
                     //发送短信事件
                     $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
                     $this->trigger('paySms');
-                    echo $this->notify();
                 }
                 catch(Exception $e)
                 {

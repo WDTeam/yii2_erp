@@ -73,12 +73,12 @@ $this->params['review_section'] = $searchModel->review_section;
                 'template' =>'{view} {agree} {disagree}',
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Yii::$app->urlManager->createUrl(['/finance-settle-apply/self-fulltime-worker-settle-view', 'id' => $model->id],[]), [
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Yii::$app->urlManager->createUrl(['/finance/finance-settle-apply/self-fulltime-worker-settle-view', 'FinanceSettleApplySearch[id]' => $model->id],[]), [
                             'title' => Yii::t('yii', '查看'),'data-pjax'=>'0','target' => '_blank',
                         ]);
                     },
                     'agree' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-ok"></span>', Yii::$app->urlManager->createUrl(['/finance-settle-apply/self-fulltime-worker-settle-done', 'id' => $model->id, 'settle_type'=>$this->params['settle_type'],'is_ok'=>1, 'review_section'=>$this->params['review_section']]), [
+                        return Html::a('<span class="glyphicon glyphicon-ok"></span>', Yii::$app->urlManager->createUrl(['/finance/finance-settle-apply/self-fulltime-worker-settle-done', 'id' => $model->id, 'settle_type'=>$this->params['settle_type'],'is_ok'=>1, 'review_section'=>$this->params['review_section']]), [
                             'title' => Yii::t('yii', '审核通过'),
                             'class'=>'agree',
                         ]);
@@ -86,7 +86,7 @@ $this->params['review_section'] = $searchModel->review_section;
                     'disagree' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-remove"></span>',
                             [
-                                '/finance-settle-apply/review-failed-reason',
+                                '/finance/finance-settle-apply/review-failed-reason',
                                 'id' => $model->id, 
                                 'settle_type'=>$this->params['settle_type'],'is_ok'=>0,'review_section'=>$this->params['review_section'],
                             ]

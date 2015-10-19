@@ -44,7 +44,7 @@ class UserController extends \api\components\Controller
      *          "operation_city_short_name": "北京",
      *          "operation_area_short_name": "朝阳",
      *          "customer_address_detail": "某某小区8栋3单元512",
-     *          "customer_address_status": 1,客户地址类型,1为默认地址，-1为非默认地址
+     *          "customer_address_status": 1,客户地址类型,1为默认地址，0为非默认地址
      *          "customer_address_longitude": 116.48641,
      *          "customer_address_latitude": 39.92149,
      *          "customer_address_nickname": "王小明",
@@ -134,7 +134,7 @@ class UserController extends \api\components\Controller
      *          "operation_city_short_name": "北京",
      *          "operation_area_short_name": "朝阳",
      *          "customer_address_detail": "某某小区8栋3单元512",
-     *          "customer_address_status": 1,客户地址类型,1为默认地址，-1为非默认地址
+     *          "customer_address_status": 1,客户地址类型,1为默认地址，0为非默认地址
      *          "customer_address_longitude": 116.48641,
      *          "customer_address_latitude": 39.92149,
      *          "customer_address_nickname": "王小明",
