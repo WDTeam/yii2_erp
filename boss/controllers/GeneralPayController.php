@@ -56,10 +56,18 @@ class GeneralPayController extends Controller
         //在线支付（online_pay），在线充值（pay）
         if(empty($data['order_id'])){
             if($data['general_pay_source'] == '2'){
+                //微信H5
                 $scenario = 'wx_h5_pay';
-                $data['openid'] = $data['params']['openid'];
+                $data['openid'] = $data['params']['openid'];    //微信openid
             }elseif($data['general_pay_source'] == '7'){
+                //百度直达号
                 $scenario = 'zhidahao_h5_pay';
+                $data['customer_name'] = $data['params']['customer_name'];  //商品名称
+                $data['customer_mobile'] = $data['params']['customer_mobile'];  //用户电话
+                $data['customer_address'] = $data['params']['customer_address'];  //用户地址
+                $data['order_source_url'] = $data['params']['order_source_url'];  //订单详情地址
+                $data['page_url'] = $data['params']['page_url'];  //订单跳转地址
+                $data['detail'] = $data['params']['detail'];  //订单详情
             }else{
                 $scenario = 'pay';
             }
@@ -67,9 +75,17 @@ class GeneralPayController extends Controller
             $data['general_pay_mode'] = 1;//充值
         }else{
             if($data['general_pay_source'] == '2'){
+                //微信H5
                 $scenario = 'wx_h5_online_pay';
             }elseif($data['general_pay_source'] == '7'){
+                //百度直达号
                 $scenario = 'zhidahao_h5_online_pay';
+                $data['customer_name'] = $data['params']['customer_name'];  //商品名称
+                $data['customer_mobile'] = $data['params']['customer_mobile'];  //用户电话
+                $data['customer_address'] = $data['params']['customer_address'];  //用户地址
+                $data['order_source_url'] = $data['params']['order_source_url'];  //订单详情地址
+                $data['page_url'] = $data['params']['page_url'];  //订单跳转地址
+                $data['detail'] = $data['params']['detail'];  //订单详情
             }else{
                 $scenario = 'online_pay';
             }
