@@ -137,18 +137,21 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         return $workerIncomeAndDetail;
     }
     
-    
+    public function isWorkerExist($workerPhone,$worker_type){
+        $isWorkerExist = false;
+        $worker = Worker::getWorkerInfoByPhone($workerPhone);
+        if(isset($worker['id']) && ($worker['worker_type'] == $worker_type)){
+            return true;
+        }
+        return $isWorkerExist;
+    }
     
     /**
      * 根据阿姨手机号获取阿姨信息
      * @param type $workerPhone
      */
     public function getWorkerInfo($workerPhone){
-        $workerSimple = Worker::getWorkerInfoByPhone($workerPhone);
-        $workerInfo = [];
-        if(isset($workerSimple['id'])){
-            $workerInfo = Worker::getWorkerInfo($workerSimple['id']);
-        }
+        $workerInfo = Worker::getWorkerInfoByPhone($workerPhone);
         if(count($workerInfo)> 0){
              $this->worder_id =$workerInfo['id'];
             $this->worder_name = $workerInfo['worker_name'];

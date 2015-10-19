@@ -57,7 +57,7 @@ class CustomerAccessToken extends \common\models\CustomerAccessToken
                 $randstr .= rand(0, 9);
             }
             $customerAccessToken->customer_access_token = md5($phone.$code.$randstr);
-            $customerAccessToken->customer_access_token_expiration = 2 * 3600;
+            $customerAccessToken->customer_access_token_expiration = 365 * 24 * 3600;
             $customerAccessToken->customer_code_id = $customer_code_id;
             $customerAccessToken->customer_code = $code;
             $customerAccessToken->customer_phone = $phone;
@@ -165,7 +165,7 @@ class CustomerAccessToken extends \common\models\CustomerAccessToken
             }
 
             $customerAccessToken->customer_access_token = md5($phone.$randstr);
-            $customerAccessToken->customer_access_token_expiration = 2 * 3600;
+            $customerAccessToken->customer_access_token_expiration = 365 * 24 * 3600;
             $customerAccessToken->customer_code_id = 0;
             $customerAccessToken->customer_code = '';
             $customerAccessToken->customer_phone = $phone;
