@@ -321,6 +321,7 @@ class OrderController extends BaseAuthController
             $model->order_booked_worker_id=0; //不指定阿姨
             $model->orderBookedTimeRange = '08:00-10:00';//预约时间段初始值
             $model->order_pay_type = 1;//支付方式 初始值
+            $model->order_flag_sys_assign = 1;//是否系统指派
         }
         return $this->render('create', [
             'model' => $model,

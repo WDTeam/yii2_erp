@@ -49,8 +49,16 @@ class OrderSearch extends Order
                 ['>','order_booked_begin_time',time()] //服务开始时间大于当前时间
             )->andWhere([
                 'orderExtFlag.order_flag_send'=>[0,$flag_send], //0可指派 1客服指派不了 2小家政指派不了
-                'orderExtStatus.order_status_dict_id'=>OrderStatusDict::ORDER_SYS_ASSIGN_UNDONE,
-                'orderExtFlag.order_flag_lock'=>0
+                'orderExtFlag.order_flag_lock'=>0,
+            ])->andWhere([ //系统指派失败的 或者 已支付待指派并且标记不需要系统指派的订单
+                'or',
+                [
+                    'orderExtStatus.order_status_dict_id'=>OrderStatusDict::ORDER_SYS_ASSIGN_UNDONE
+                ],
+                [
+                    'orderExtStatus.order_status_dict_id'=>OrderStatusDict::ORDER_WAIT_ASSIGN,
+                    'orderExtFlag.order_flag_sys_assign'=>0
+                ]
             ])->orderBy(['order_booked_begin_time'=>SORT_ASC])->one();
             if(!empty($order)){
                 //获取到订单后加锁并置为已开始人工派单的状态
