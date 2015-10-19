@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <?php ActiveForm::end(); ?>
         </div>
-    <div id = "manualSettleInfo">
+    <div id = "manualSettleInfo" style="display:none">
         <div class="panel-heading">
                 <h3 class="panel-title">阿姨信息</h3>
         </div>
@@ -255,6 +255,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             var worder_tel = $('#worder_tel').val();
                             if(worder_tel == ''){
                                 $('#manualSettleInfo').html('<h4  class="col-sm-12">请输入查询条件进行人工结算</h4>');
+                                $('#manualSettleInfo').show();
+                            }else{
+                                $('#manualSettleInfo').show();
                             }
                         }
                     );
