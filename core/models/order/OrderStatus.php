@@ -127,6 +127,115 @@ class OrderStatus extends Model
         return self::statusChange($order,$status,$must_models);
     }
 
+    /**
+     * 开始服务
+     * @param $order
+     * @param $must_models
+     * @return bool
+     */
+    public static function serviceStart(&$order,$must_models=[])
+    {
+        $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_SERVICE_START);
+        return self::statusChange($order,$status,$must_models);
+    }
+
+    /**
+     * 完成服务
+     * @param $order
+     * @param $must_models
+     * @return bool
+     */
+    public static function serviceDone(&$order,$must_models=[])
+    {
+        $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_SERVICE_DONE);
+        return self::statusChange($order,$status,$must_models);
+    }
+
+    /**
+     * 完成评价 用户确认
+     * @param $order
+     * @param $must_models
+     * @return bool
+     */
+    public static function customerAcceptDone(&$order,$must_models=[])
+    {
+        $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_CUSTOMER_ACCEPT_DONE);
+        return self::statusChange($order,$status,$must_models);
+    }
+
+    /**
+     * 申请结算
+     * @param $order
+     * @param $must_models
+     * @return bool
+     */
+    public static function applyWagesDone(&$order,$must_models=[])
+    {
+        $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_APPLY_WAGES_DONE);
+        return self::statusChange($order,$status,$must_models);
+    }
+
+    /**
+     * 已核实 已对账
+     * @param $order
+     * @param $must_models
+     * @return bool
+     */
+    public static function checked(&$order,$must_models=[])
+    {
+        $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_CHECKED);
+        return self::statusChange($order,$status,$must_models);
+    }
+
+    /**
+     * 已完成结算
+     * @param $order
+     * @param $must_models
+     * @return bool
+     */
+    public static function payoffDone(&$order,$must_models=[])
+    {
+        $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_PAYOFF_DONE);
+        return self::statusChange($order,$status,$must_models);
+    }
+
+    /**
+     * 已完成门店结算
+     * @param $order
+     * @param $must_models
+     * @return bool
+     */
+    public static function payoffShopDone(&$order,$must_models=[])
+    {
+        $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_PAYOFF_SHOP_DONE);
+        return self::statusChange($order,$status,$must_models);
+    }
+
+
+    /**
+     * 取消订单
+     * @param $order
+     * @param $must_models
+     * @return bool
+     */
+    public static function cancel(&$order,$must_models=[])
+    {
+        $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_CANCEL);
+        return self::statusChange($order,$status,$must_models);
+    }
+
+    /**
+     * 已归档
+     * @param $order
+     * @param $must_models
+     * @return bool
+     */
+    public static function Died(&$order,$must_models=[])
+    {
+        $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_DIED);
+        return self::statusChange($order,$status,$must_models);
+    }
+
 
 
 

@@ -174,6 +174,42 @@ class Order extends OrderModel
     }
 
     /**
+     * 标记订单已发送短信给阿姨
+     * @param $order_id
+     * @return bool
+     */
+    public static function workerSMSPushFlag($order_id)
+    {
+        $order = OrderSearch::getOne($order_id);
+        $order->order_flag_worker_sms = 1;
+        return $order->doSave(['OrderExtFlag']);
+    }
+
+    /**
+     * 标记订单已推送极光给阿姨
+     * @param $order_id
+     * @return bool
+     */
+    public static function workerJPushFlag($order_id)
+    {
+        $order = OrderSearch::getOne($order_id);
+        $order->order_flag_worker_jpush = 1;
+        return $order->doSave(['OrderExtFlag']);
+    }
+
+    /**
+     * 标记订单已发送IVR给阿姨
+     * @param $order_id
+     * @return bool
+     */
+    public static function workerIVRPushFlag($order_id)
+    {
+        $order = OrderSearch::getOne($order_id);
+        $order->order_flag_worker_ivr = 1;
+        return $order->doSave(['OrderExtFlag']);
+    }
+
+    /**
      * 系统指派失败
      * @param $order_id
      * @return bool
@@ -266,6 +302,20 @@ class Order extends OrderModel
         }else{
             return OrderStatus::sysAssignDone($order, ['OrderExtFlag', 'OrderExtWorker']);
         }
+    }
+
+
+    /**
+     * 取消订单
+     * @param $order_id
+     * @param $admin_id
+     * @return bool
+     */
+    public static function cancel($order_id,$admin_id)
+    {
+        $order = OrderSearch::getOne($order_id);
+        $order->admin_id=$admin_id;
+        return OrderStatus::cancel($order,[]);
     }
 
     /**

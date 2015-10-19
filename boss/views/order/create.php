@@ -33,11 +33,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-sm-6">
                         <input type="hidden" value="" name="Order[address_id]">
                             <div id="order-address_id">
-                                <div class="radio"><label><input type="radio" name="Order[address_id]" value="1"> 北京市朝阳区SOHO1 测试昵称 13554699534</label> <label style="">没有经纬度</label></div>
-                                <div class="radio"><label><input type="radio" name="Order[address_id]" value="2"> 北京市朝阳区SOHO2 测试昵称 13554699534</label></div>
-                                <div class="radio"><label><input type="radio" name="Order[address_id]" value="3"> 北京市朝阳区SOHO3 测试昵称 13554699534</label></div>
+                                <div class="radio">
+                                    <label class="col-sm-6"><input type="radio" name="Order[address_id]" value="1"> 北京市朝阳区SOHO1 测试昵称 13554699534</label>
+                                    <label class="col-sm-5" style="color: #FF0000;">没有经纬度</label>
+                                    <div class="col-sm-1"><button class="btn btn-sm btn-warning" type="button">编辑</button></div>
+                                </div>
+                                <div class="radio">
+                                    <label class="col-sm-6"><input type="radio" name="Order[address_id]" value="2"> 北京市朝阳区SOHO2 测试昵称 13554699534</label>
+                                    <label class="col-sm-5" style="color: #FF0000;">没有经纬度</label>
+                                    <div class="col-sm-1"><button class="btn btn-sm btn-warning" type="button">编辑</button></div>
                             </div>
                         <div class="help-block help-block-error "></div>
+                        <?= Html::button('添加地址', ['class' =>  'btn btn-sm btn-warning']); ?>
                     </div>
 
                 </div>
@@ -117,7 +124,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="panel-footer">
                 <div class="form-group">
                     <div class="col-sm-offset-0 col-sm-12">
-                        <?= Html::submitButton('创建', ['class' => $model->isNewRecord ? 'btn btn-success btn-lg btn-block' : 'btn btn-primary btn-lg btn-block']); ?>
+                        <?= Html::submitButton('创建', ['class' => $model->isNewRecord ? 'btn btn-warning btn-lg btn-block' : 'btn btn-warning btn-lg btn-block']); ?>
                     </div>
                 </div>
             </div>

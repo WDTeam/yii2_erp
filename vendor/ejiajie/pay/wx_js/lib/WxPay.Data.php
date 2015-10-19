@@ -83,7 +83,7 @@ class WxPayDataBase
         //将XML转为array
         //禁止引用外部xml实体
         libxml_disable_entity_loader(true);
-        $this->values = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);		
+        $this->values = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
 		return $this->values;
 	}
 	
@@ -200,7 +200,7 @@ class WxPayResults extends WxPayDataBase
      * @throws WxPayException
      */
 	public static function Init($xml)
-	{	
+	{
 		$obj = new self();
 		$obj->FromXml($xml);
 		//fix bug 2015-06-29

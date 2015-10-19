@@ -16,7 +16,7 @@ class FinanceRecordLogSearch extends FinanceRecordLog
     {
         return [
             [['id', 'finance_order_channel_id', 'finance_pay_channel_id', 'finance_record_log_succeed_count', 'finance_record_log_manual_count', 'finance_record_log_failure_count'], 'integer'],
-            [['finance_order_channel_name', 'finance_pay_channel_name', 'finance_record_log_confirm_name'], 'safe'],
+            [['finance_order_channel_name','finance_record_log_qiniuurl', 'finance_pay_channel_name', 'finance_record_log_confirm_name'], 'safe'],
             [['finance_record_log_succeed_sum_money', 'finance_record_log_manual_sum_money', 'finance_record_log_failure_money', 'finance_record_log_fee'], 'number'],
         ];
     }

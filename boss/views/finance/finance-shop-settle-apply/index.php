@@ -46,12 +46,12 @@ $this->params['review_section']=$searchModel->review_section;
                 'template' =>'{view} {agree} {disagree}',
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Yii::$app->urlManager->createUrl(['/finance-shop-settle-apply/view', 'id' => $model->id], ['target'=>'_blank']), [
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Yii::$app->urlManager->createUrl(['/finance/finance-shop-settle-apply/view', 'id' => $model->id], ['target'=>'_blank']), [
                             'title' => Yii::t('yii', '查看'),'data-pjax'=>'0','target' => '_blank',
                         ]);
                     },
                     'agree' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-ok"></span>', Yii::$app->urlManager->createUrl(['/finance-shop-settle-apply/review', 'id' => $model->id,'review_section'=>$this->params['review_section'],'is_ok'=>1]), [
+                        return Html::a('<span class="glyphicon glyphicon-ok"></span>', Yii::$app->urlManager->createUrl(['/finance/finance-shop-settle-apply/review', 'id' => $model->id,'review_section'=>$this->params['review_section'],'is_ok'=>1]), [
                             'title' => Yii::t('yii', '审核通过'),
                             'class'=>'agree',
                         ]);
@@ -59,7 +59,7 @@ $this->params['review_section']=$searchModel->review_section;
                     'disagree' => function ($url, $model,$review_section) {
                         return Html::a('<span class="glyphicon glyphicon-remove"></span>',
                             [
-                                '/finance-shop-settle-apply/review-failed-reason',
+                                '/finance/finance-shop-settle-apply/review-failed-reason',
                                 'id' => $model->id, 'review_section'=>$this->params['review_section'],'is_ok'=>0,
                             ]
                             ,

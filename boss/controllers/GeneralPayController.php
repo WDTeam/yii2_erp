@@ -55,11 +55,24 @@ class GeneralPayController extends Controller
 
         //在线支付（online_pay），在线充值（pay）
         if(empty($data['order_id'])){
-            $scenario = 'pay';
+            if($data['general_pay_source'] == '2'){
+                $scenario = 'wx_h5_pay';
+                $data['openid'] = $data['params']['openid'];
+            }elseif($data['general_pay_source'] == '7'){
+                $scenario = 'zhidahao_h5_pay';
+            }else{
+                $scenario = 'pay';
+            }
             //交易方式
             $data['general_pay_mode'] = 1;//充值
         }else{
-            $scenario = 'online_pay';
+            if($data['general_pay_source'] == '2'){
+                $scenario = 'wx_h5_online_pay';
+            }elseif($data['general_pay_source'] == '7'){
+                $scenario = 'zhidahao_h5_online_pay';
+            }else{
+                $scenario = 'online_pay';
+            }
             //交易方式
             $data['general_pay_mode'] = 3;//在线支付
         }
@@ -99,6 +112,132 @@ class GeneralPayController extends Controller
     public function actionSearch()
     {
 
+    }
+
+
+    /**
+     * 支付宝APP回调
+     * wx-js-notify
+     */
+    public function actionWxH5Notify()
+    {
+        if(!empty($_GET['debug'])){
+            $GLOBALS['HTTP_RAW_POST_DATA'] = "<xml>
+                <appid><![CDATA[wx7558e67c2d61eb8f]]></appid>
+                <attach><![CDATA[e家洁在线支付]]></attach>
+                <bank_type><![CDATA[CFT]]></bank_type>
+                <cash_fee><![CDATA[1]]></cash_fee>
+                <fee_type><![CDATA[CNY]]></fee_type>
+                <is_subscribe><![CDATA[Y]]></is_subscribe>
+                <mch_id><![CDATA[10037310]]></mch_id>
+                <nonce_str><![CDATA[aoydf0e8u58c2scu2o441n1i5yxtxghr]]></nonce_str>
+                <openid><![CDATA[o7Kvajh91Fmh_KYzhwX0LWZtpMPM]]></openid>
+                <out_trade_no><![CDATA[15101922921]]></out_trade_no>
+                <result_code><![CDATA[SUCCESS]]></result_code>
+                <return_code><![CDATA[SUCCESS]]></return_code>
+                <sign><![CDATA[3E437AF36D969693DD705034A8FFD5F9]]></sign>
+                <time_end><![CDATA[20151019102921]]></time_end>
+                <total_fee>1</total_fee>
+                <trade_type><![CDATA[JSAPI]]></trade_type>
+                <transaction_id><![CDATA[1004390062201510191251335932]]></transaction_id>
+                </xml>";
+            $post = array (
+                "appid" => "wx7558e67c2d61eb8f",
+                "attach" => "e家洁在线支付",
+                "bank_type" => "CFT",
+                "cash_fee" => "1",
+                "fee_type" => "CNY",
+                "is_subscribe" => "Y",
+                "mch_id" => "10037310",
+                "nonce_str" => "aoydf0e8u58c2scu2o441n1i5yxtxghr",
+                "openid" => "o7Kvajh91Fmh_KYzhwX0LWZtpMPM",
+                "out_trade_no" => "15101922921",
+                "result_code" => "SUCCESS",
+                "return_code" => "SUCCESS",
+                "sign" => "3E437AF36D969693DD705034A8FFD5F9",
+                "time_end" => "20151019102921",
+                "total_fee" => "1",
+                "trade_type" => "JSAPI",
+                "transaction_id" => "1004390062201510191251335932"
+            );
+        }else{
+            $post = json_decode(json_encode(simplexml_load_string($GLOBALS['HTTP_RAW_POST_DATA'], 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+        }
+
+        //实例化模型
+        $GeneralPayLogModel = new GeneralPayLog();
+
+        //记录日志
+        $dataLog = array(
+            'general_pay_log_price' => $post['total_fee'],   //支付金额
+            'general_pay_log_shop_name' => $post['attach'],   //商品名称
+            'general_pay_log_eo_order_id' => $post['out_trade_no'],   //订单ID
+            'general_pay_log_transaction_id' => $post['transaction_id'],   //交易流水号
+            'general_pay_log_status_bool' => $GeneralPayLogModel->statusBool($post['return_code']),   //支付状态
+            'general_pay_log_status' => $post['return_code'],   //支付状态
+            'pay_channel_id' => 10,  //支付渠道ID
+            'general_pay_log_json_aggregation' => json_encode($post),
+            'data' => $post //文件数据
+        );
+        $this->on('insertLog',[$GeneralPayLogModel,'insertLog'],$dataLog);
+        $this->trigger('insertLog');
+
+        //实例化模型
+        $model = new GeneralPay();
+
+        //获取交易ID
+        $GeneralPayId = $model->getGeneralPayId($post['out_trade_no']);
+
+        //查询支付记录
+        $model = GeneralPay::find()->where(['id'=>$GeneralPayId,'general_pay_status'=>0])->one();
+
+        //验证支付结果
+        if(!empty($model))
+        {
+            //验证签名
+            //调用微信数据
+            $class = new \wxjspay_class();
+            $class->callback();
+            $status = $class->notify();
+
+            //签名验证成功
+            if($status == 'SUCCESS')
+            {
+                $model->id = $GeneralPayId; //ID
+                $model->general_pay_status = 1; //支付状态
+                $model->general_pay_actual_money = $post['total_fee'];
+                $model->general_pay_transaction_id = $post['transaction_id'];
+                $model->general_pay_is_coupon = 1;
+                $model->general_pay_eo_order_id = $post['out_trade_no'];
+                $model->general_pay_verify = $model->makeSign();
+
+                //commit
+                $connection  = \Yii::$app->db;
+                $transaction = $connection->beginTransaction();
+                try
+                {
+                    $model->save(false);
+                    $attribute = $model->getAttributes();
+                    if(!empty($model->order_id)){
+                        //支付订单
+                        GeneralPay::orderPay($attribute);
+                    }else{
+                        //充值支付
+                        GeneralPay::pay($attribute);
+                    }
+
+                    $transaction->commit();
+
+                    //发送短信事件
+                    $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
+                    $this->trigger('paySms');
+                }
+                catch(Exception $e)
+                {
+                    $transaction->rollBack();
+                }
+            }
+        }
     }
 
 
