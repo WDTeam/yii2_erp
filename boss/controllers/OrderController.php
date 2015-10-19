@@ -88,7 +88,7 @@ class OrderController extends BaseAuthController
                 {
                     "id": 2,
                     "coupon_name": "40优惠券",
-                    "coupon_money": 30
+                    "coupon_money": 40
                 },
                 {
                     "id": 3,

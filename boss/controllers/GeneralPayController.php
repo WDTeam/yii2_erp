@@ -264,18 +264,20 @@ class GeneralPayController extends Controller
     {
         $request = yii::$app->request;
         file_put_contents('/tmp/pay/getzdh.php',json_encode($_GET));
-        if(!empty($_GET['debug'])){
-            $post = array (
-                "order_id" => "",//直达号中心订单号
-                "order_no" => "",//第三方的订单号
-                "pay_time" => "",//支付时间
-                "pay_result" => "",//1 支付成功,2 等待支付, 3 退款成功
-                "sp_no" => "",//商户号
-                "paid_amount" => "",//成功支付现金金额(单位分)
-                "coupons" => "",//优惠券使用金额(单位分)
-                "promotion" => "",//立减金额(单位分)
-                "sign" => "",//签名
-            );
+        if(!empty($_REQUEST['debug'])){
+
+            $post = [
+                "order_no" => "15101980901",    //第三方的订单号
+                "order_id" => "17600075",       //直达号中心订单号
+                "sp_no" => "1049",              //商户号
+                "pay_time" => "1445252232",     //支付时间
+                "pay_result" => "1",            //1 支付成功,2 等待支付, 3 退款成功
+                "paid_amount" => "1",           //成功支付现金金额(单位分)
+                "coupons" => "0",               //优惠券使用金额(单位分)
+                "promotion" => "0",             //立减金额(单位分)
+                "sign" => "192efb9b70c26c4135d7550628f3e7cd"    //签名
+            ];
+            $_REQUEST = $post;
         }else{
             $post = $request->get();
         }
@@ -302,7 +304,7 @@ class GeneralPayController extends Controller
         $model = new GeneralPay();
 
         //获取交易ID
-        $GeneralPayId = $model->getGeneralPayId($post['out_trade_no']);
+        $GeneralPayId = $model->getGeneralPayId($post['order_no']);
 
         //查询支付记录
         $model = GeneralPay::find()->where(['id'=>$GeneralPayId,'general_pay_status'=>0])->one();
@@ -310,11 +312,9 @@ class GeneralPayController extends Controller
         //验证支付结果
         if(!empty($model))
         {
-            //验证签名
-            //调用微信数据
-            $class = new \wxjspay_class();
+            //调用直达号数据
+            $class = new \zhidahao_class();
             $status = $class->callback();
-
 
             //签名验证成功
             if( !empty($status) )

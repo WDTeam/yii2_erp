@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $form->field($model, 'orderBookedDate')->label('服务日期')->widget(
                     DatePicker::className(), [
                     'inline' => true,
-                    'template' => '<div class="well well-sm" style="background-color: #fff; width:250px">{input}</div>',
+                    'template' => '<div class="well well-sm" style="background-color: #fff; width:250px;font-size:14px;">{input}</div>',
                     'clientOptions' => [
                         'autoclose' => true,
                         'format' => 'yyyy-mm-dd',
@@ -108,7 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                 </div>
                 <div id="order_pay_type_2" style="display:none;">
-                <?= $form->field($model, 'coupon_id')->dropDownList([],['maxlength' => true]) ?>
+                <?= $form->field($model, 'coupon_id')->dropDownList([""=>"请选择优惠券"],['maxlength' => true]) ?>
                 <div class="form-group">
                     <label class="control-label col-sm-3">需支付</label>
                     <div class="col-sm-2">
@@ -127,7 +127,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h3 class="panel-title">客户需求</h3>
             </div>
             <div class="panel-body">
-                <?= $form->field($model, 'order_customer_need')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'order_customer_need')->inline()->checkboxList($model->customerNeeds) ?>
                 <?= $form->field($model, 'order_customer_memo')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model, 'order_cs_memo')->textInput(['maxlength' => true]) ?>
             </div>
@@ -153,7 +153,7 @@ $this->registerCss('
         margin-right: 10px;
         margin-top: 0;
     }
-    label,input.form-control{
+    label,input.form-control,select.form-control{
         font-size:14px;
     }
     .radio{
