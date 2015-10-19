@@ -23,6 +23,7 @@ public function up()
             'worker_task_description' => Schema::TYPE_STRING . '(255) DEFAULT NULL COMMENT \'任务描述\'',
             'worker_task_description_url'=>Schema::TYPE_STRING . '(255) DEFAULT NULL COMMENT \'任务描述URL\'',
             'worker_task_conditions'=>Schema::TYPE_TEXT . ' DEFAULT NULL COMMENT \'任务条件(JSON)\'',
+            'worker_task_reward'=>Schema::TYPE_TEXT . ' DEFAULT NULL COMMENT \'任务奖励(JSON)\'',
             'created_at'=>  Schema::TYPE_INTEGER.'(11) DEFAULT 0 COMMENT \'创建时间\'' ,
             'updated_at'=>  Schema::TYPE_INTEGER.'(11) DEFAULT 0 COMMENT \'更新时间\'' ,
             'is_del'=>  Schema::TYPE_BOOLEAN.' DEFAULT 0 COMMENT \'是否逻辑删除\'' ,

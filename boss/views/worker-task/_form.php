@@ -5,6 +5,8 @@ use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
 use core\models\worker\WorkerTask;
 use kartik\helpers\Html;
+use core\models\worker\WorkerRuleConfig;
+use core\models\Operation\CoreOperationCity;
 
 /**
  * @var yii\web\View $this
@@ -58,20 +60,54 @@ var_dump($model->getErrors());
         ],
         
         'worker_task_start'=>[
-            'type'=> Form::INPUT_TEXT, 
-            'options'=>['placeholder'=>'Enter 任务开始时间...'],
+            'type'=> Form::INPUT_WIDGET, 
+            'widgetClass'=>DateControl::classname(),
+            'options' => [
+                'type'=>DateControl::FORMAT_DATE,
+                'ajaxConversion'=>false,
+                'displayFormat' => 'php:Y-m-d',
+                'saveFormat'=>'php:U',
+                'options' => [
+                    'pluginOptions' => [
+                        'autoclose' => true
+                    ]
+                ]
+            ]
         ], 
         
         'worker_task_end'=>[
-            'type'=> Form::INPUT_TEXT, 
-            'options'=>['placeholder'=>'Enter 任务结束时间...'],
+            'type'=> Form::INPUT_WIDGET, 
+            'widgetClass'=>DateControl::classname(),
+            'options' => [
+                'type'=>DateControl::FORMAT_DATE,
+                'ajaxConversion'=>false,
+                'displayFormat' => 'php:Y-m-d',
+                'saveFormat'=>'php:U',
+                'options' => [
+                    'pluginOptions' => [
+                        'autoclose' => true
+                    ]
+                ]
+            ]
         ], 
         
-        'worker_type'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 阿姨角色...']], 
+        'worker_type'=>[
+            'type'=> Form::INPUT_TEXT, 
+            'options'=>['placeholder'=>'Enter 阿姨角色...']
+            
+        ], 
         
-        'worker_rule_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 阿姨身份...']], 
+        'worker_rule_id'=>[
+            'type'=> Form::INPUT_CHECKBOX_LIST, 
+            'options'=>['placeholder'=>'Enter 阿姨身份...'],
+            'items'=>WorkerRuleConfig::getWorkerRuleList()
+        ], 
         
-        'worker_task_city_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 适用城市...']], 
+        'worker_task_city_id'=>[
+            'type'=> Form::INPUT_CHECKBOX_LIST, 
+            'options'=>['placeholder'=>'Enter 适用城市...'],
+            'items'=>CoreOperationCity::getCityOnlineInfoList()
+        ], 
 
         'worker_task_description_url'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 任务描述URL...', 'maxlength'=>255]],
         

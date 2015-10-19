@@ -55,9 +55,9 @@ class WorkerTask extends \common\models\WorkerTask
     public function getConditions()
     {
         $names = self::CONDITION_NAME;
-        $data = json_decode($this->worker_task_conditions, true);
-        foreach ($data as $id=>$item){
-            $data[$id]['name'] = $names[$id];
+        $data = (array)json_decode($this->worker_task_conditions, true);
+        foreach ($data as $item){
+            $data[$item->id]['name'] = $names[$item->id];
         }
         return $data;
     }

@@ -18,6 +18,7 @@ use Yii;
  * @property string $worker_task_description
  * @property string $worker_task_description_url
  * @property string $worker_task_conditions
+ * @property string $worker_task_reward
  * @property integer $created_at
  * @property integer $updated_at
  * @property integer $is_del
@@ -39,7 +40,7 @@ class WorkerTask extends \yii\db\ActiveRecord
     {
         return [
             [['worker_task_start', 'worker_task_end', 'worker_task_cycle', 'worker_type', 'worker_rule_id', 'worker_task_city_id', 'created_at', 'updated_at', 'is_del'], 'integer'],
-            [['worker_task_conditions'], 'string'],
+            [['worker_task_conditions', 'worker_task_reward'], 'string'],
             [['worker_task_name', 'worker_task_description', 'worker_task_description_url'], 'string', 'max' => 255]
         ];
     }
@@ -61,6 +62,7 @@ class WorkerTask extends \yii\db\ActiveRecord
             'worker_task_description' => Yii::t('app', '任务描述'),
             'worker_task_description_url' => Yii::t('app', '任务描述URL'),
             'worker_task_conditions' => Yii::t('app', '任务条件(JSON)'),
+            'worker_task_reward' => Yii::t('app', '任务奖励(JSON)'),
             'created_at' => Yii::t('app', '创建时间'),
             'updated_at' => Yii::t('app', '更新时间'),
             'is_del' => Yii::t('app', '是否逻辑删除'),
