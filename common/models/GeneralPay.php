@@ -4,6 +4,7 @@ namespace common\models;
 
 use core\models\Customer;
 use core\models\CustomerTransRecord\CustomerTransRecord;
+use core\models\order\OrderStatus;
 use Yii;
 use yii\base\ErrorException;
 use yii\base\Exception;
@@ -423,6 +424,16 @@ class GeneralPay extends \yii\db\ActiveRecord
         }
         //支付订单交易记录
         CustomerTransRecord::analysisRecord($attribute);
+        //修改订单状态
+        /**
+         * @param $order_id 订单ID
+         * @param $admin_id 后台管理员ID 系统0 客户1
+         * @param $pay_channel_id  支付渠道ID
+         * @param $order_pay_channel_name   支付渠道名称
+         * @param $order_pay_flow_num   支付流水号
+         */
+        $orderChannel = FinanceOrderChannel::get_order_channel_info($attribute['general_pay_source']);
+        OrderStatus::isPaymentOnline($attribute['order_id'],0,$orderChannel['id'],$orderChannel['finance_pay_channel_name'],$attribute['general_pay_transaction_id']);
     }
 
     /**

@@ -321,7 +321,7 @@ class GeneralPayController extends Controller
             {
                 $model->id = $GeneralPayId; //ID
                 $model->general_pay_status = 1; //支付状态
-                $model->general_pay_actual_money = $post['paid_amount'];
+                $model->general_pay_actual_money = $model->toMoney($post['paid_amount'],100,'/');
                 $model->general_pay_transaction_id = $post['order_id'];
                 $model->general_pay_is_coupon = 1;
                 $model->general_pay_eo_order_id = $post['order_no'];
