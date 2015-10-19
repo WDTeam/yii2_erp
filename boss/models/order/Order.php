@@ -8,11 +8,13 @@
 
 namespace boss\models\order;
 
-use core\models\CustomerTransRecord\CustomerTransRecord;
+use boss\models\Operation\OperationCity;
+use core\models\Operation\CoreOperationArea;
 use core\models\order\OrderPay;
 use Yii;
 use core\models\order\Order as OrderModel;
 use core\models\worker\Worker;
+use yii\helpers\ArrayHelper;
 
 
 class Order extends OrderModel
@@ -37,6 +39,36 @@ class Order extends OrderModel
     public function getOrderBookedCountList()
     {
         return ["120" => "两小时", "150" => "两个半小时", "180" => "三小时", "210" => "三个半小时", "240" => "四小时", "270" => "四个半小时", "300" => "五小时", "330" => "五个半小时", "360" => "六小时"];
+    }
+
+    /**
+     * TODO 获取开通省份列表
+     * @return array
+     */
+    public function getOnlineProvinceList(){
+        $province_list = OperationCity::find()->select(['province_id','province_name'])->where(['operation_city_is_online'=>1])->groupBy(['province_id'])->all();
+        return ArrayHelper::map($province_list,'province_id','province_name');
+    }
+    /**
+     * TODO 获取开通城市列表
+     * @return array
+     */
+    public static function getOnlineCityList($province_id){
+        $city_list = OperationCity::find()->select(['city_id','city_name'])->where(['province_id'=>$province_id,'operation_city_is_online'=>1])->all();
+        return ArrayHelper::map($city_list,'city_id','city_name');
+    }
+
+    public static function getCountyList($city_id)
+    {
+        $county_list = CoreOperationArea::getAreaList($city_id);
+        $countys = [];
+        if(is_array($county_list)) {
+            foreach ($county_list as $k => $v) {
+                $county = explode('_', $k);
+                $countys[$county[0]] = $v;
+            }
+        }
+        return $countys;
     }
 
     public function getOrderBookedTimeRangeList($range = 2)

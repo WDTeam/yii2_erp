@@ -27,7 +27,6 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="panel-body">
                 <?= $form->field($model, 'order_customer_phone')->textInput(['maxlength' => 11])->label('客户手机'); ?>
                 <div style="display: none;"><?= $form->field($model, 'customer_id')->textInput(['maxlength' => true]) ?></div>
-                <?= $form->field($model, 'address_id')->radioList([''=>'请先输入手机号获取地址信息'])->label('地址信息') ?>
                 <div class="form-group field-order-address_id required">
                     <label for="order-address_id" class="control-label col-sm-3">地址信息</label>
                     <div class="col-sm-6">
@@ -36,19 +35,36 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <div class="radio">
                                     <label class="col-sm-6"><input type="radio" name="Order[address_id]" value="1"> 北京市朝阳区SOHO1 测试昵称 13554699534</label>
                                     <label class="col-sm-5" style="color: #FF0000;">没有经纬度</label>
-                                    <div class="col-sm-1"><button class="btn btn-sm btn-warning" type="button">编辑</button></div>
+                                    <button class="btn btn-xs btn-warning col-sm-1 update_address_btn" type="button">编辑</button>
                                 </div>
-                                <div class="radio">
-                                    <label class="col-sm-6"><input type="radio" name="Order[address_id]" value="2"> 北京市朝阳区SOHO2 测试昵称 13554699534</label>
-                                    <label class="col-sm-5" style="color: #FF0000;">没有经纬度</label>
-                                    <div class="col-sm-1"><button class="btn btn-sm btn-warning" type="button">编辑</button></div>
                             </div>
                         <div class="help-block help-block-error "></div>
-                        <?= Html::button('添加地址', ['class' =>  'btn btn-sm btn-warning']); ?>
+                        <?= Html::button('新增地址', ['class' =>  'btn btn-sm btn-warning','id'=>'add_address_btn','style'=>'margin-top:10px;']); ?>
+                        <div id="address_form" style="display: none;">
+                            <div class="col-sm-4" style="padding-left: 0;">
+                                <?= Html::dropDownList('province','',[''=>'请选择省份']+$model->onlineProvinceList,['class'=>'form-control province_form']); ?>
+                            </div>
+                            <div class="col-sm-3" >
+                                <?= Html::dropDownList('city','',[''=>'请选择城市'],['class'=>'form-control city_form']); ?>
+                            </div>
+                            <div class="col-sm-4">
+                                <?= Html::dropDownList('county','',[''=>'请选择区县'],['class'=>'form-control  county_form']); ?>
+                            </div>
+                            <button class="btn btn-sm btn-warning col-sm-1 cancel_address_btn" style="margin-top:10px;" type="button">取消</button>
+                            <div class="col-sm-5" style="padding-left: 0; margin-top:10px;">
+                                <?= Html::textInput('detail','',['placeholder'=>'详细地址','class'=>'form-control  detail_form']); ?>
+                            </div>
+                            <div class="col-sm-3" style="margin-top:10px;">
+                                <?= Html::textInput('nickname','',['placeholder'=>'联系人','class'=>'form-control  nickname_form']); ?>
+                            </div>
+                            <div class="col-sm-3" style="margin-top:10px;">
+                                <?= Html::textInput('phone','',['placeholder'=>'手机号','class'=>'form-control  phone_form']); ?>
+                            </div>
+                            <button class="btn btn-sm btn-warning col-sm-1 save_address_btn" style="margin-top:10px;" type="button">保存</button>
+                        </div>
                     </div>
 
                 </div>
-                <div style="display: none;"><?= $form->field($model, 'order_address')->textInput(['maxlength' => true]) ?></div>
                 <?= $form->field($model, 'order_service_type_id')->inline()->radioList([''=>'选择地址获取商品'])->label('选择商品') ?>
             </div>
             <div class="panel-heading">
@@ -145,6 +161,9 @@ $this->registerCss('
     }
     label,input.form-control{
         font-size:14px;
+    }
+    .radio{
+        overflow:hidden;
     }
 ');
 ?>
