@@ -110,8 +110,7 @@ class FinancePopOrderController extends Controller
     		->asArray()->All();
     		$n=1;
     		//验证上传的表头和选择的是否一致
-    		$statusinfo=$model->id_header($sheetData[1],$channelid);
-    		
+    		$statusinfo=$model->id_header(array_filter($sheetData[1]),$channelid);
     		if($statusinfo){
     			\Yii::$app->getSession()->setFlash('default','对不起你上传的表不对！'); 
     		  return $this->redirect(['index']);

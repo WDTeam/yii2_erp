@@ -136,7 +136,7 @@ class GeneralPay extends \common\models\GeneralPay
      * 预付费
      * @param $data 订单数据
      */
-    public function perPay($data)
+    public static function perPay($data)
     {
         try{
             //用户交易记录

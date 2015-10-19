@@ -48,8 +48,10 @@ class OrderStatus extends Model
     public static function payment(&$order,$must_models=[]){
         $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_WAIT_ASSIGN); //变更为已支付待指派状态
         if(self::statusChange($order,$status,$must_models)){
-            //支付成功 把订单放入订单池
-            Yii::$app->trigger('addOrderToPool', new Event(['sender' => $order]));
+            //支付成功后如果需要系统派单则把订单放入订单池
+            if($order->orderExtFlag->order_flag_sys_assign==1) {
+                Yii::$app->trigger('addOrderToPool', new Event(['sender' => $order]));
+            }
             return true;
         }
         return false;

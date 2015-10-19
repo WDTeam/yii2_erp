@@ -52,7 +52,7 @@ class AuthController extends \api\components\Controller
         if ($checkRet) {
             $token = CustomerAccessToken::generateAccessToken($phone, $verifyCode);
             if (empty($token)) {
-                return $this->send(null, "生成token错误","error");
+                return $this->send($token, "生成token错误","error");
             }else{
                 $user = CustomerAccessToken::getCustomer($token);
                 $ret = [
