@@ -135,7 +135,7 @@ $(document).on("change","#order-order_service_type_id input",function(){
     getCoupons();
 });
 
-$(document).on("change","#order-address_id input",function(){
+$(document).on("change","#order-address_id input[type='radio']",function(){
     $("#order-order_address").val($("#order-address_id input:checked").parent().text());
     getGoods();//地址信息变更后去获取商品信息
 });
@@ -161,7 +161,7 @@ $('#order-order_pay_type input').change(function(){
 });
 
 $(document).on("click","#add_address_btn",function(){
-    if($('#address_0').length==0) {
+    if($('#address_0').length==0 && customer_id!='') {
         $form = '<div class="radio" id="address_0">' + $('#address_form').html() + '</div>';
         $("#order-address_id").append($form);
     }
@@ -218,13 +218,19 @@ $(document).on("click",".save_address_btn",function(){
     var province_id = $('#address_'+address_id+' .province_form').val();
     var city_id = $('#address_'+address_id+' .city_form').val();
     var county_id = $('#address_'+address_id+' .county_form').val();
+    var county_name = $('#address_'+address_id+' .county_form option:selected').text();
     var detail = $('#address_'+address_id+' .detail_form').val();
     var nickname = $('#address_'+address_id+' .nickname_form').val();
     var phone = $('#address_'+address_id+' .phone_form').val();
+    var customer_id = $('#order-customer_id').val();
+    if(address_id==0 && customer_id==''){
+        alert('请先选择客户再添加地址！');
+        return false;
+    }
     $.ajax({
         type: "POST",
         url: "/order/save-address/?address_id=" + address_id,
-        data: "province_id="+province_id+"&city_id="+city_id+"&county_id="+county_id+"&detail="+detail+"&nickname="+nickname+"&phone="+phone,
+        data: "province_id="+province_id+"&city_id="+city_id+"&county_id="+county_id+"&county_name="+county_name+"&detail="+detail+"&nickname="+nickname+"&phone="+phone+"&customer_id="+customer_id,
         dataType: "json",
         success: function (msg) {
             if(msg.code==200) {
