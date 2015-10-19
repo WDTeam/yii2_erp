@@ -56,7 +56,7 @@ $this->params['review_section'] = $searchModel->review_section;
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
                 'worder_tel',
-                'worker_type_name',
+                'worder_name',
                 ['attribute'=>'created_at','content'=>function($model,$key,$index){return Html::a(date('Y:m:d H:i:s',$model->created_at),'#');}],
                 'finance_settle_apply_cycle_des',
                 'finance_settle_apply_money', 

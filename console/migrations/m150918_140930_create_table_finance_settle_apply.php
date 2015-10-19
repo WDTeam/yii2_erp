@@ -46,7 +46,7 @@ class m150918_140930_create_table_finance_settle_apply extends Migration
              'comment' => Schema::TYPE_TEXT. ' COMMENT \'备注，可能是审核不通过原因\'',
         ], $tableOptions);
         $this->batchInsert('{{%finance_settle_apply}}',
-            ['id','worder_id','worder_tel','worker_type_id','worker_type_name','worker_rule_id','worker_rule_name','finance_settle_apply_man_hour',
+            ['id','worder_id','worder_name','worder_tel','worker_type_id','worker_type_name','worker_rule_id','worker_rule_name','finance_settle_apply_man_hour',
                 'finance_settle_apply_order_money','finance_settle_apply_order_cash_money','finance_settle_apply_order_money_except_cash',
 				'finance_settle_apply_subsidy','finance_settle_apply_money',
                 'finance_settle_apply_status','finance_settle_apply_cycle','finance_settle_apply_cycle_des','finance_settle_apply_reviewer',
