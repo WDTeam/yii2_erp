@@ -88,7 +88,7 @@ class OrderController extends BaseAuthController
                 {
                     "id": 2,
                     "coupon_name": "40优惠券",
-                    "coupon_money": 30
+                    "coupon_money": 40
                 },
                 {
                     "id": 3,
@@ -376,16 +376,26 @@ class OrderController extends BaseAuthController
 
     public function actionSaveAddress($address_id)
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         $province_id = Yii::$app->request->post('province_id');
         $city_id = Yii::$app->request->post('city_id');
         $county_id = Yii::$app->request->post('county_id');
+        $county_name = Yii::$app->request->post('county_name');
         $detail = Yii::$app->request->post('detail');
         $nickname = Yii::$app->request->post('nickname');
         $phone = Yii::$app->request->post('phone');
+        $customer_id = Yii::$app->request->post('customer_id');
         if($address_id>0){
             //修改
+            $address = CustomerAddress::updateAddress($address_id,$county_name,$detail,$nickname,$phone);
         }else{
             //添加
+            $address = CustomerAddress::addAddress($customer_id,$county_name,$detail,$nickname,$phone);
+        }
+        if($address){
+            return ['code'=>200,'data'=>$address];
+        }else{
+            return ['code'=>500,'error'=>'保存失败'];
         }
     }
 

@@ -59,6 +59,10 @@ class CustomerController extends Controller
         ]);
     }
 
+    public function actionCommentList(){
+        
+    }
+
     /**
      * Lists all Customer models.
      * @return mixed
@@ -299,6 +303,8 @@ class CustomerController extends Controller
             return $this->render('update-customer-addresses',['customerAddressModel'=>$customerAddressModel]);
         }
     }
+
+
 
     public $global_cur_page_no = 1;
     public function actionData(){

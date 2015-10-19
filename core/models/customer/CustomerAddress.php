@@ -54,9 +54,6 @@ class CustomerAddress extends \common\models\CustomerAddress
             $operation_area_short_name = $operationArea['short_name'];
             $operation_city_id = $operationArea['parent_id'];
 
-            $operation_longitude = $operationArea['longitude'];
-            $operation_latitude = $operationArea['latitude'];
-
             $operationCity = CommonOperationArea::find()->where([
                 'id'=>$operation_city_id,
                 'level'=>2,
@@ -73,6 +70,13 @@ class CustomerAddress extends \common\models\CustomerAddress
     
             $operation_province_name = $operationProvince['area_name'];
             $operation_province_short_name = $operationProvince['short_name'];
+
+            $city_encode = urlencode($operation_city_name);
+            $detail_encode = urlencode($customer_address_detail);
+            $address_encode = file_get_contents("http://api.map.baidu.com/geocoder/v2/?city=".$city_encode."&address=".$detail_encode."&output=json&ak=AEab3d1da1e282618154e918602a4b98");
+            $address_decode = json_decode($address_encode, true);
+            $operation_longitude = $address_decode['result']['location']['lng'];
+            $operation_latitude = $address_decode['result']['location']['lat'];
 
             $customerAddress->operation_province_id = $operation_province_id;
             $customerAddress->operation_city_id = $operation_city_id;
@@ -96,9 +100,6 @@ class CustomerAddress extends \common\models\CustomerAddress
             $customerAddress->updated_at = 0;
             $customerAddress->is_del = 0;
             $customerAddress->validate();
-            if ($customerAddress->hasErrors()) {
-                return false;
-            }
             $customerAddress->save();
             $transaction->commit();
             return $customerAddress;
@@ -154,9 +155,6 @@ class CustomerAddress extends \common\models\CustomerAddress
             $operation_area_short_name = $operationArea['short_name'];
             $operation_city_id = $operationArea['parent_id'];
 
-            $operation_longitude = $operationArea['longitude'];
-            $operation_latitude = $operationArea['latitude'];
-
             $operationCity = CommonOperationArea::find()->where([
                 'id'=>$operation_city_id,
                 'level'=>2,
@@ -173,6 +171,15 @@ class CustomerAddress extends \common\models\CustomerAddress
     
             $operation_province_name = $operationProvince['area_name'];
             $operation_province_short_name = $operationProvince['short_name'];
+
+            // $operation_longitude = $operationArea['longitude'];
+            // $operation_latitude = $operationArea['latitude'];
+            $city_encode = urlencode($operation_city_name);
+            $detail_encode = urlencode($customer_address_detail);
+            $address_encode = file_get_contents("http://api.map.baidu.com/geocoder/v2/?city=".$city_encode."&address=".$detail_encode."&output=json&ak=AEab3d1da1e282618154e918602a4b98");
+            $address_decode = json_decode($address_encode);
+            $operation_longitude = $address_decode['result']['location']['lng'];
+            $operation_latitude = $address_decode['result']['location']['lat'];
 
             $customerAddress->operation_province_id = $operation_province_id;
             $customerAddress->operation_city_id = $operation_city_id;
@@ -212,39 +219,6 @@ class CustomerAddress extends \common\models\CustomerAddress
     public static function listAddress($customer_id){
         $customerAddresses = self::find()->where(['customer_id'=>$customer_id])->all();
         return $customerAddresses;
-    }
-
-    
-
-    /**
-     * 客户服务地址列表已数组形式，元素为字符串
-     */
-    public static function getAddressArr($customer_id){
-        $customerAddresses = self::find()->where(['customer_id'=>$customer_id])->asArray()->all();
-        $customerAddressArr = array();
-        if (!empty($customerAddresses)) {
-            foreach ($customerAddresses as $value) {
-                if (!empty($value)) {
-                    $general_region_id = $value['general_region_id'];
-                    $generalRegion = GeneralRegion::find()->where(['id'=>$general_region_id])->asArray()->one();
-                    if (!empty($generalRegion)) {
-                        $customerAddressArr[] = array(
-                            'general_region_province_name'=>$generalRegion['general_region_province_name'],
-                            'general_region_city_name'=>$generalRegion['general_region_city_name'],
-                            'general_region_area_name'=>$generalRegion['general_region_area_name'],
-                            'customer_address_detail'=>$value['customer_address_detail'],
-                            'customer_address_nickname'=>$value['customer_address_nickname'],
-                            'customer_address_phone'=>$value['customer_address_phone'],
-                            'province_city_area_detail'=>$generalRegion['general_region_province_name']
-                                .$generalRegion['general_region_city_name']
-                                .$generalRegion['general_region_area_name']
-                                .$value['customer_address_detail'],
-                        );
-                    }
-                }
-            }
-        }
-        return $customerAddressArr;
     }
 
     /**

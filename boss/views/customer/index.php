@@ -48,7 +48,6 @@ $this->params['breadcrumbs'][] = $this->title;
     Html::a('<i class="glyphicon" ></i>按时间从大到小 ', ['index', 'sort'=>'created_at'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']);
     // Html::a('<i class="glyphicon" ></i>按订单量从大到小 ', ['index', 'sort'=>'order_count'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']);
    
-   
     ?>
     <?php 
     // ActiveForm::begin([
@@ -91,7 +90,6 @@ $this->params['breadcrumbs'][] = $this->title;
             // ],
             [
                 'class' => 'yii\grid\CheckboxColumn',
-                
             ],
 
             // [

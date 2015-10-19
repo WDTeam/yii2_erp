@@ -21,15 +21,14 @@ class zhidahao {
 		return json_decode($output, true);
 	}
 	
-	public static function queryOrder($server_type, $order_id){
+	public static function queryOrder($param){
+
 		$params = array();
 		$params['sp_no'] = self::SP_NO;
-		//$params['sp_no'] = 1049;
-		$params['order_no'] = getZhidahaoOrderNo($server_type, $order_id);
-		//$params['order_id'] = '5166548';
+		$params['order_no'] = $param['order_no'];
 		$params['sign'] = self::getSignature($params);
 		$url = 'http://m.baidu.com/lightapp/pay/order/info/query'. '?' . http_build_query($params);
-		//echo $url;
+
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -46,13 +45,15 @@ class zhidahao {
 	 * @param String secret 签名密钥
 	 * @return 签名
 	 */
-	public static function getSignature($params, $session_secret)
+	public static function getSignature($params, $session_secret = self::SK)
 	{
 		if (is_array($params) && is_string($session_secret)) {
 			if (ksort($params)) {
 				$string_temp = '';
 				foreach ($params as $key => $val) {
-					$string_temp .= $key . '=' . $val;
+					if($key != 'sign'){
+						$string_temp .= $key . '=' . $val;
+					}
 				}
 				$string_temp .= $session_secret;
 				return md5($string_temp);
