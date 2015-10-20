@@ -47,6 +47,7 @@ class GeneralPay extends \yii\db\ActiveRecord
     public $order_source_url; //订单详情地址
     public $page_url; //订单跳转地址
     public $detail; //订单详情
+    public $extParams; //附加参数
 
     /**
      * @inheritdoc
@@ -62,7 +63,7 @@ class GeneralPay extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_name','customer_mobile','customer_address','order_source_url','page_url','detail',  'openid','customer_id', 'general_pay_source_name','general_pay_money','general_pay_source_name'], 'required'],
+            [['customer_name','customer_mobile','customer_address','order_source_url','page_url','detail','openid','customer_id', 'general_pay_source_name','general_pay_money','general_pay_source_name'], 'required'],
             [['customer_id', 'order_id', 'general_pay_source', 'general_pay_mode', 'general_pay_status', 'general_pay_is_coupon', 'admin_id', 'worker_id', 'handle_admin_id', 'created_at', 'updated_at', 'is_reconciliation'], 'integer'],
             [['general_pay_money', 'general_pay_actual_money'], 'number'],
             [['general_pay_source_name'], 'string', 'max' => 20],
@@ -126,10 +127,10 @@ class GeneralPay extends \yii\db\ActiveRecord
     /**
      * 分配支付渠道
      */
-    public function call_pay()
+    public function call_pay($data)
     {
         $fun = $this->pay_type;
-        return $this->$fun();
+        return $this->$fun($data);
     }
 
 
@@ -189,7 +190,7 @@ class GeneralPay extends \yii\db\ActiveRecord
     /**
      * 微信APP(1)
      */
-    private function wx_app()
+    private function wx_app($data)
     {
         $param = [
             "body"	=> $this->body(),
@@ -201,6 +202,7 @@ class GeneralPay extends \yii\db\ActiveRecord
             "subject" => $this->subject(),
             "notify_url" => $this->notify_url('wx-app'),
         ];
+
         $class = new \wxpay_class();
         $msg = $class->get($param);
         return $msg;
@@ -209,10 +211,8 @@ class GeneralPay extends \yii\db\ActiveRecord
     /**
      * 微信H5(2)
      */
-    private function wx_h5()
+    private function wx_h5($data)
     {
-        $get = yii::$app->request->get();
-
         $param = [
             "body"	=> $this->body(),
             "out_trade_no"	=> $this->create_out_trade_no(),
@@ -222,19 +222,18 @@ class GeneralPay extends \yii\db\ActiveRecord
             "trade_type" => "JSAPI",
             "subject" => $this->subject(),
             "notify_url" => $this->notify_url('wx-h5'),
-            'openid' => $get['params']['openid'],//'o7Kvajh91Fmh_KYzhwX0LWZtpMPM',//$data['openid'],
+            'openid' => $data['openid'],//'o7Kvajh91Fmh_KYzhwX0LWZtpMPM',//$data['openid'],
         ];
 
         $class = new \wxjspay_class();
         $msg = $class->get($param);
-        echo $msg;exit;
         return $msg;
     }
 
     /**
      * 百度钱包APP(3)
      */
-    private function bfb_app()
+    private function bfb_app($data)
     {
         $param = [
             'out_trade_no'=>$this->create_out_trade_no(),
@@ -252,7 +251,7 @@ class GeneralPay extends \yii\db\ActiveRecord
     /**
      * 银联APP(4)
      */
-    private function up_app()
+    private function up_app($data)
     {
         $param = [
             'out_trade_no'=>$this->create_out_trade_no(),
@@ -268,7 +267,7 @@ class GeneralPay extends \yii\db\ActiveRecord
     /**
      * 支付宝APP(5)
      */
-    private function alipay_app()
+    private function alipay_app($data)
     {
         $param = [
             'out_trade_no'=>$this->create_out_trade_no(),
@@ -295,7 +294,7 @@ class GeneralPay extends \yii\db\ActiveRecord
     /**
      * 直达号支付(7)
      */
-    private function zhidahao_h5()
+    private function zhidahao_h5($data)
     {
         $get = yii::$app->request->get();
         $detail = $get['params']['detail'];

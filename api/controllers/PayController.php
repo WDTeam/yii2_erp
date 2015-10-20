@@ -216,21 +216,51 @@ class PayController extends \api\components\Controller
 
     public function actionPay(){
         $model=new PayParam();
-        $data[$model->formName()] = Yii::$app->request->get();
-
-        if(empty($data[$model->formName()]['order_id']))
+        $name = $model->formName();
+        $data[$name] = Yii::$app->request->get();
+        $ext_params = [];
+        //在线支付（online_pay），在线充值（pay）
+        if(empty($data[$name]['order_id']))
         {
-            $model->scenario = 'pay';
+            if($data[$name]['channel_id'] == '2'){
+                $model->scenario = 'wx_h5_pay';
+                $ext_params['openid'] = $data[$name]['ext_params']['openid'];    //微信openid
+            }elseif($data[$name]['channel_id'] == '7'){
+                $model->scenario = 'zhidahao_h5_pay';
+                $ext_params['customer_name'] = $data[$name]['ext_params']['customer_name'];  //商品名称
+                $ext_params['customer_mobile'] = $data[$name]['ext_params']['customer_mobile'];  //用户电话
+                $ext_params['customer_address'] = $data[$name]['ext_params']['customer_address'];  //用户地址
+                $ext_params['order_source_url'] = $data[$name]['ext_params']['order_source_url'];  //订单详情地址
+                $ext_params['page_url'] = $data[$name]['ext_params']['page_url'];  //订单跳转地址
+                $ext_params['detail'] = $data[$name]['ext_params']['detail'];  //订单详情
+            }else{
+                $model->scenario = 'pay';
+            }
         }
         else
         {
-            $model->scenario = 'online_pay';
+            if($data[$name]['channel_id'] == '2'){
+                $model->scenario = 'wx_h5_online_pay';
+                $ext_params['openid'] = $data[$name]['ext_params']['openid'];    //微信openid
+            }elseif($data[$name]['channel_id'] == '7'){
+                $model->scenario = 'zhidahao_h5_online_pay';
+                $ext_params['customer_name'] = $data[$name]['ext_params']['customer_name'];  //商品名称
+                $ext_params['customer_mobile'] = $data[$name]['ext_params']['customer_mobile'];  //用户电话
+                $ext_params['customer_address'] = $data[$name]['ext_params']['customer_address'];  //用户地址
+                $ext_params['order_source_url'] = $data[$name]['ext_params']['order_source_url'];  //订单详情地址
+                $ext_params['page_url'] = $data[$name]['ext_params']['page_url'];  //订单跳转地址
+                $ext_params['detail'] = $data[$name]['ext_params']['detail'];  //订单详情
+            }else{
+                $model->scenario = 'online_pay';
+            }
         }
 
-        if($model->load($data)&&$model->validate())
+        $data[$name] = array_merge($data[$name],$ext_params);
+        $model->attributes = $data[$name];
+
+        if($model->load($data) && $model->validate())
         {
-            $retInfo= GeneralPay::getPayParams($model->pay_money,$model->customer_id,
-                $model->channel_id,$model->order_id,$model->partner);
+            $retInfo= GeneralPay::getPayParams($model->pay_money,$model->customer_id,$model->channel_id,$model->partner,$model->order_id,$ext_params);
             return $retInfo;
            return $this->send($retInfo['data'], $retInfo['info'], $retInfo['status']);
         }
@@ -487,6 +517,12 @@ class PayController extends \api\components\Controller
         $obj = new GeneralPay();
         $obj->UpAppNotify(yii::$app->request->get());
         exit;
+    }
+
+
+    public function actionTest(){
+        $data = \core\models\CustomerTransRecord\CustomerTransRecord::queryRecord(1);
+        dump($data);
     }
 }
 
