@@ -180,25 +180,17 @@ class PayController extends \api\components\Controller
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *      "code": "ok",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      {
-     *          "result":"ok",
-     *          "retmsg":
-     *          {
-     *              "appid":"wx865a1a3ff91297df",
-     *              "noncestr":"d94008bb02fc2aee5b550bb5befa94f8",
-     *              "pack_age":"Sign=WXPay",
-     *              "partnerid":"1217983401",
-     *              "prepayid":"32010330001510100bd104be573943aa",
-     *              "sign":"98498d9f500c1d986034e3c50ef45f5732152cf7",
-     *              "timestamp":1444448732
-     *          },
-     *          "msgStyle":"toast",
-     *          "alertMsg":""
+     *   code: "ok",
+     *   msg: "操作成功",
+     *   ret: {
+     *           appId: "wx7558e67c2d61eb8f",
+     *           nonceStr: "bw49b49oypsepjwu72rxr6vm2l1w2yrh",
+     *           package: "prepay_id=wx2015102019101737c5eba0520251793495",
+     *           signType: "MD5",
+     *           timeStamp: "1445339417",
+     *           paySign: "6C4C398E98ACB00DAD672098C71DB4F2"
      *      }
-     * }
+     *   }
      *
      * @apiError SessionIdNotFound 未找到会话ID.
      * @apiError OrderIdNotFound 未找到订单ID.
