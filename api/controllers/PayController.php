@@ -115,7 +115,7 @@ class PayController extends \api\components\Controller
      */
     
     /**
-     * @api {get} v2/wx_app_online_pay.php 微信支付接口
+     * @api {get} v2/wx_app_online_pay.php 微信支付接口 (使用支付接口)
      * @apiName actionWxAppOnline_pay
      * @apiGroup Pay
      * 
@@ -166,7 +166,7 @@ class PayController extends \api\components\Controller
      */
     
     /**
-     * @api {post} pay/pay 会员充值付接口
+     * @api {post} pay/pay 支付接口 （已完成）
      * @apiName actionPay
      * @apiGroup Pay
      * 
@@ -260,7 +260,7 @@ class PayController extends \api\components\Controller
     }
     
     /**
-     * @api {get} v2/bfb_app.php 百度钱包支付接口
+     * @api {get} v2/bfb_app.php 百度钱包支付接口 (使用支付接口)
      * @apiName actionBfbApp
      * @apiGroup Pay
      * 
@@ -296,7 +296,7 @@ class PayController extends \api\components\Controller
      */
     
     /**
-     * @api {get} v2/alipay_app.php 支付宝支付接口
+     * @api {get} v2/alipay_app.php 支付宝支付接口 (使用支付接口)
      * @apiName actionAlipayApp
      * @apiGroup Pay
      * 
@@ -334,7 +334,7 @@ class PayController extends \api\components\Controller
      */
     
     /**
-     * @api {get} v2/up_app_pay.php 会员充值银联支付
+     * @api {get} v2/up_app_pay.php 会员充值银联支付 (使用支付接口)
      * @apiName actionUpAppPay
      * @apiGroup Pay
      * 
