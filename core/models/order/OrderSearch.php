@@ -66,7 +66,7 @@ class OrderSearch extends Order
                 $order->order_flag_send = $order->orderExtFlag->order_flag_send+($isCS?1:2); //指派时先标记是谁指派不了
                 $order->admin_id = $admin_id;
                 if (OrderStatus::manualAssignStart($order, ['OrderExtFlag'])) {
-                    return $order;
+                    return Order::findOne($order->id);
                 }
             }
         } else {

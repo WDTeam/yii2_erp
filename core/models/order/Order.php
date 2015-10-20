@@ -220,10 +220,10 @@ class Order extends OrderModel
     public static function pushToWorkers($order,$workers){
         $worker_ids = [];
         foreach ($workers as $v) {
-            Yii::$app->ivr->send($v['worker_phone'], $order->id, "开始时间叉叉叉，时长插插插，地址插插插插！");
+            Yii::$app->ivr->send($v['worker_phone'], $order->id, "开始时间叉叉叉，时长插插插，地址插插插插！"); //TODO 发送内容
             $worker_ids[] = "worker_{$v['id']}";
         }
-        Yii::$app->jpush->push(implode(',', $worker_ids), '订单来啦！');
+        Yii::$app->jpush->push(implode(',', $worker_ids), '订单来啦！'); //TODO 发送内容
         self::workerJPushFlag($order->id);
         self::workerIVRPushFlag($order->id);
     }
