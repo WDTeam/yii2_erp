@@ -426,7 +426,7 @@ class UserController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /user/setdefaultcity 获取用户个性化配置和优惠劵
+     * @api {GET} /user/setdefaultcity 获取用户个性化配置和优惠劵 （没有此需求）
      *
      * @apiName GetCouponsAndPersonality
      * @apiGroup User
