@@ -93,7 +93,14 @@ use boss\models\FinanceShopSettleApplySearch;
         echo "</div> ";
     }
     ?>
-
+    
+    <?php 
+        if($model->settle_type ==FinanceSettleApplySearch::ALL_WORKER_SETTELE){
+            echo "<div class='col-md-2'>";
+            echo  $form->field($model, 'finance_settle_apply_status')->dropDownList([FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_INIT=>'待审核',FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED=>'财务审核已通过,需要确认打款']);
+            echo "</div> ";
+        }
+        ?>
 
     <div class='col-md-3' style="margin-top: 22px;">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>

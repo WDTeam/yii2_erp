@@ -144,10 +144,9 @@ class GeneralPay extends \yii\db\ActiveRecord
      * 4=APP银联,
      * 5=APP支付宝,
      * 6=WEB支付宝,
-     * 7=HT淘宝,
-     * 8=H5百度直达号,
-     * 9=HT刷卡,
-     * 10=HT现金,
+     * 7=H5百度直达号,
+     * 20=后台支付,
+     * 21=微博支付,
      */
     public function source($source_id)
     {
@@ -495,7 +494,7 @@ class GeneralPay extends \yii\db\ActiveRecord
             );
             $post = $_POST;
         }else{
-            $post = $data;
+            $post = yii::$app->request->post();
         }
 
         //实例化模型
@@ -526,8 +525,8 @@ class GeneralPay extends \yii\db\ActiveRecord
         if(!empty($model))
         {
             //验证签名
-            $alipay = new \alipay_class;
-            $verify_result = $alipay->callback();
+            $class = new \alipay_class;
+            $verify_result = $class->callback();
 
             if(!empty($_GET['debug']))
             {
@@ -562,10 +561,12 @@ class GeneralPay extends \yii\db\ActiveRecord
 
                     $transaction->commit();
 
-                    //发送短信事件
-                    $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
-                    $this->trigger('paySms');
-                    echo $this->notify();
+                    if(empty($data['debug'])){
+                        //发送短信事件
+                        $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
+                        $this->trigger('paySms');
+                    }
+                    echo $class->notify();
                 }
                 catch(Exception $e)
                 {
@@ -666,9 +667,11 @@ class GeneralPay extends \yii\db\ActiveRecord
                 $transaction->commit();
                 $class->notify();
 
-                //发送短信事件
-                $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
-                $this->trigger('paySms');
+                if(empty($data['debug'])){
+                    //发送短信事件
+                    $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
+                    $this->trigger('paySms');
+                }
 
             } catch(Exception $e) {
                 $transaction->rollBack();
@@ -771,9 +774,11 @@ class GeneralPay extends \yii\db\ActiveRecord
 
                 $transaction->commit();
 
-                //发送短信事件
-                $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
-                $this->trigger('paySms');
+                if(empty($data['debug'])){
+                    //发送短信事件
+                    $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
+                    $this->trigger('paySms');
+                }
 
                 $class->notify();
             } catch(Exception $e) {
@@ -819,7 +824,7 @@ class GeneralPay extends \yii\db\ActiveRecord
             );
             $post = $_POST;
         }else{
-            $post = $data;
+            $post = yii::$app->request->post();
         }
 
         //实例化模型
@@ -877,9 +882,11 @@ class GeneralPay extends \yii\db\ActiveRecord
                 }
                 $transaction->commit();
 
-                //发送短信事件
-                $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
-                $this->trigger('paySms');
+                if(empty($data['debug'])){
+                    //发送短信事件
+                    $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
+                    $this->trigger('paySms');
+                }
 
                 $class->notify();
             } catch(Exception $e) {
@@ -934,15 +941,18 @@ class GeneralPay extends \yii\db\ActiveRecord
                 "transaction_id" => "1004390062201510191251335932"
             );
         }else{
-            $post = $data;//json_decode(json_encode(simplexml_load_string($GLOBALS['HTTP_RAW_POST_DATA'], 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+            $post = json_decode(json_encode(simplexml_load_string($GLOBALS['HTTP_RAW_POST_DATA'], 'SimpleXMLElement', LIBXML_NOCDATA)), true);
         }
+
+        //实例化模型
+        $model = new GeneralPay();
 
         //实例化模型
         $GeneralPayLogModel = new GeneralPayLog();
 
         //记录日志
         $dataLog = array(
-            'general_pay_log_price' => $post['total_fee'],   //支付金额
+            'general_pay_log_price' => $model->toMoney($post['total_fee'],100,'/'),   //支付金额
             'general_pay_log_shop_name' => $post['attach'],   //商品名称
             'general_pay_log_eo_order_id' => $post['out_trade_no'],   //订单ID
             'general_pay_log_transaction_id' => $post['transaction_id'],   //交易流水号
@@ -955,8 +965,7 @@ class GeneralPay extends \yii\db\ActiveRecord
         $this->on('insertLog',[$GeneralPayLogModel,'insertLog'],$dataLog);
         $this->trigger('insertLog');
 
-        //实例化模型
-        $model = new GeneralPay();
+
 
         //获取交易ID
         $GeneralPayId = $model->getGeneralPayId($post['out_trade_no']);
@@ -978,7 +987,7 @@ class GeneralPay extends \yii\db\ActiveRecord
             {
                 $model->id = $GeneralPayId; //ID
                 $model->general_pay_status = 1; //支付状态
-                $model->general_pay_actual_money = $post['total_fee'];
+                $model->general_pay_actual_money = $model->toMoney($post['total_fee'],100,'/');
                 $model->general_pay_transaction_id = $post['transaction_id'];
                 $model->general_pay_is_coupon = 1;
                 $model->general_pay_eo_order_id = $post['out_trade_no'];
@@ -1001,9 +1010,11 @@ class GeneralPay extends \yii\db\ActiveRecord
 
                     $transaction->commit();
 
-                    //发送短信事件
-                    $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
-                    $this->trigger('paySms');
+                    if(empty($data['debug'])){
+                        //发送短信事件
+                        $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
+                        $this->trigger('paySms');
+                    }
                 }
                 catch(Exception $e)
                 {
@@ -1020,7 +1031,6 @@ class GeneralPay extends \yii\db\ActiveRecord
     public function zhidahaoH5Notify($data)
     {
         if(!empty($data['debug'])){
-
             $post = [
                 "order_no" => "15101980901",    //第三方的订单号
                 "order_id" => "17600075",       //直达号中心订单号
@@ -1071,6 +1081,7 @@ class GeneralPay extends \yii\db\ActiveRecord
             $class = new \zhidahao_class();
             $status = $class->callback();
 
+
             //签名验证成功
             if( !empty($status) )
             {
@@ -1089,6 +1100,7 @@ class GeneralPay extends \yii\db\ActiveRecord
                 {
                     $model->save(false);
                     $attribute = $model->getAttributes();
+
                     if(!empty($model->order_id)){
                         //支付订单
                         GeneralPay::orderPay($attribute);
@@ -1099,9 +1111,11 @@ class GeneralPay extends \yii\db\ActiveRecord
 
                     $transaction->commit();
                     echo $class->notify();
-                    //发送短信事件
-                    $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
-                    $this->trigger('paySms');
+                    if(empty($data['debug'])){
+                        //发送短信事件
+                        $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
+                        $this->trigger('paySms');
+                    }
                 }
                 catch(Exception $e)
                 {

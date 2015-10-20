@@ -93,6 +93,16 @@ use yii\helpers\ArrayHelper;
  */
 class Order extends OrderModel
 {
+    //用户创建订单
+    const EVENT_CREATE_BY_USER = 'event_create_by_user';
+//     阿姨订单完成
+    const EVENT_DONE_BY_WORKER = 'event_done_by_worker';
+//     阿姨接受订单
+    const EVENT_ACCEPT_BY_WORKER = 'event_accept_by_worker';
+//     阿姨取消订单
+    const EVENT_CANCEL_BY_WORKER = 'event_cancel_by_worker';
+//     阿姨拒绝订单
+    const EVENT_REJECT_BY_WORKER = 'event_reject_by_worker';
 
     /**
      * 创建新订单

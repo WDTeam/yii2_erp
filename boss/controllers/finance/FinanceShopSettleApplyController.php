@@ -98,7 +98,7 @@ class FinanceShopSettleApplyController extends Controller
             }
         }
         $model->save();
-        return $this->actionIndex();
+        return $this->redirect('index?review_section='.$review_section);
     }
     
     /**
