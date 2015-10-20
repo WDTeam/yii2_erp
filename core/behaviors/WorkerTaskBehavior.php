@@ -9,11 +9,7 @@ class WorkerTaskBehavior extends Behavior
 {
     public function events(){
         return [
-//             Order::EVENT_CREATE_BY_USER=>'',
             Order::EVENT_ACCEPT_BY_WORKER=>'acceptByWorker',
-            Order::EVENT_CANCEL_BY_WORKER=>'',
-            Order::EVENT_DONE_BY_WORKER=>'',
-            Order::EVENT_REJECT_BY_WORKER=>'',
         ];
     }
     /**
@@ -28,8 +24,7 @@ class WorkerTaskBehavior extends Behavior
     {
         $order = $event->sender;
         $ext_worker = $order->orderExtWorker;
-        
-        if(!empty($ext_worker) && $ext_worker->order_worker_assign_type==1){
+        if(!empty($ext_worker)){
             $log = new WorkerTaskLog();
             $log->worker_id = $ext_worker->worker_id;
         }
@@ -49,6 +44,13 @@ class WorkerTaskBehavior extends Behavior
      */
     public function getConditionsValues($start_time, $end_time, $worker_id)
     {
-        
+        return [
+            1=>3,
+            2=>5,
+            3=>8,
+            4=>1,
+            5=>22,
+            6=>3,
+        ];
     }
 }
