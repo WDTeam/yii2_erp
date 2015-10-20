@@ -153,7 +153,7 @@ class OrderController extends BaseAuthController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $order_id =  Yii::$app->request->get('order_id');
         $order = Order::findOne($order_id);
-        
+
         $district_id = $order->district_id;
         try{
             $used_worker_list = Customer::getCustomerUsedWorkers($order->orderExtCustomer->customer_id);
