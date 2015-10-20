@@ -135,7 +135,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="panel-footer">
                 <div class="form-group">
                     <div class="col-sm-offset-0 col-sm-12">
-                        <?= Html::submitButton('创建', ['class' => $model->isNewRecord ? 'btn btn-warning btn-lg btn-block' : 'btn btn-warning btn-lg btn-block']); ?>
+                        <?= Html::button('创建', ['class' =>'btn btn-warning btn-lg btn-block','id'=>'submit']); ?>
                     </div>
                 </div>
             </div>

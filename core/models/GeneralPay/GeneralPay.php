@@ -141,6 +141,7 @@ class GeneralPay extends \common\models\GeneralPay
                 $data['customer_address'] = $ext_params['customer_address'];  //用户地址
                 $data['order_source_url'] = $ext_params['order_source_url'];  //订单详情地址
                 $data['page_url'] = $ext_params['page_url'];  //订单跳转地址
+                $data['goods_name'] = $ext_params['goods_name'];  //订单名称
                 $data['detail'] = $ext_params['detail'];  //订单详情
             }else{
                 $scenario = 'pay';
@@ -160,6 +161,7 @@ class GeneralPay extends \common\models\GeneralPay
                 $data['customer_address'] = $ext_params['customer_address'];  //用户地址
                 $data['order_source_url'] = $ext_params['order_source_url'];  //订单详情地址
                 $data['page_url'] = $ext_params['page_url'];  //订单跳转地址
+                $data['goods_name'] = $ext_params['goods_name'];  //订单名称
                 $data['detail'] = $ext_params['detail'];  //订单详情
             }else{
                 $scenario = 'online_pay';
