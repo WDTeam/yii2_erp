@@ -152,19 +152,15 @@ class Order extends OrderModel
         $order = Order::findOne($order_id);
         $redis_order = [
             'order_id'=>$order_id,
-            'created_at'=>$order->created_at,
-            'updated_at'=>$order->updated_at
+            'created_at'=>$order->created_at
         ];
-//        $redis = new Redis();
-//        $redis->rPush();
-       //放入订单池 zset 根据预约开始时间+订单id排序
-        Yii::$app->redis->rPush('WaitAssignOrdersPool',$redis_order);
-        //TODO 开始系统指派
-        if(self::sysAssignStart($order_id))
-        {
-            //TODO 系统指派失败
-            self::sysAssignUndone($order_id);
-        }
+        Yii::$app->redis->executeCommand('zAdd',['WaitAssignOrdersPool',$order->order_booked_begin_time.$order_id,json_encode($redis_order)]);
+//        //TODO 开始系统指派
+//        if(self::sysAssignStart($order_id))
+//        {
+//            //TODO 系统指派失败
+//            self::sysAssignUndone($order_id);
+//        }
     }
 
     /**
@@ -427,6 +423,7 @@ class Order extends OrderModel
                 Order::addOrderToPool($event->sender->id);
             });
             $order = $this->attributes;
+            $order['order_id'] = $order['id'];
             $order_model = OrderSearch::getOne($this->id);
             switch($this->orderExtPay->order_pay_type){
                 case self::ORDER_PAY_TYPE_OFF_LINE://现金支付
