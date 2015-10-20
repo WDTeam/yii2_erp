@@ -53,7 +53,7 @@ class AuthController extends \api\components\Controller
         if ($checkRet) {
             $token = CustomerAccessToken::generateAccessToken($phone, $verifyCode);
             if (empty($token)) {
-                return $this->send(null, "生成token错误","error");
+                return $this->send($token, "生成token错误","error");
             }else{
                 $user = CustomerAccessToken::getCustomer($token);
                 $ret = [
@@ -68,7 +68,74 @@ class AuthController extends \api\components\Controller
     }
 
     /**
+<<<<<<< HEAD
      * @api {post} /mobileapidriver2/driver_login 阿姨登录(李勇0%)
+=======
+     *
+     * @api {POST} /auth/loginfrompop 客户登录(第三方渠道) (已实现)
+     * @apiName LoginFromPop
+     * @apiGroup Auth
+     *
+     * @apiParam {String} phone 用户电话号码
+     * @apiParam {String} sign 签名
+     * @apiParam {String} channel_name 渠道名称(拼音)
+     *
+     * @apiSuccess {Object} user 用户信息.
+     * @apiSuccess {String} access_token 访问令牌字符串.
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "code": "ok",
+     *       "msg": "登录成功"，
+     *       "ret":{
+     *          "user":{}
+     *          "access_token":""
+     *       }
+     *     }
+     *
+     * @apiError UserNotFound The id of the User was not found.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     { 
+     *       "code":"error",
+     *       "msg": "用户名,签名或渠道名称错误"
+     *     }
+     */
+    public function actionLoginFromPop()
+    {
+        $phone = Yii::$app->request->post('phone');
+        $sign = Yii::$app->request->post('sign');
+        $channel_name = Yii::$app->request->post('channel_name');
+
+        if (empty($phone) || empty($sign) || empty($channel_name)) {
+            // param error
+            return $this->send(null, "用户名,签名,渠道名称不能为空", "error", 403, "数据不完整");
+        }
+
+        $checkRet = CustomerAccessToken::checkSign($phone, $sign, $channel_name);
+
+        if ($checkRet) {
+            $token = CustomerAccessToken::generateAccessTokenForPop($phone, $sign, $channel_name);
+            if (empty($token)) {
+                return $this->send(null, "生成token错误", "error");
+            } else {
+                $user = CustomerAccessToken::getCustomer($token);
+                $ret = [
+                    "user" => $user,
+                    "access_token" => $token
+                ];
+                return $this->send($ret, "登陆成功");
+            }
+        } else {
+            return $this->send(null, "用户名,签名或渠道名称错误", "error", 403);
+        }
+    }
+
+    /**
+     * @api {post} /mobileapidriver2/driver_login 阿姨登录
+>>>>>>> 72390c443a8562e76ecca17c926416d5795d2d4c
      * @apiName actionDriverLogin
      * @apiGroup Auth
      *
