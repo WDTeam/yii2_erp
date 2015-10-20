@@ -149,10 +149,16 @@ class Order extends OrderModel
      */
     public static function addOrderToPool($order_id)
     {
-       //放入订单池 zset 根据预约开始时间+订单id排序
+        $order = Order::findOne($order_id);
+        $redis_order = [
+            'order_id'=>$order_id,
+            'created_at'=>$order->created_at,
+            'updated_at'=>$order->updated_at
+        ];
 //        $redis = new Redis();
-//        $redis->zAdd('WaitAssignOrdersPool',$order->order_booked_begin_time.$order_id,$order);
-
+//        $redis->rPush();
+       //放入订单池 zset 根据预约开始时间+订单id排序
+        Yii::$app->redis->rPush('WaitAssignOrdersPool',$redis_order);
         //TODO 开始系统指派
         if(self::sysAssignStart($order_id))
         {
@@ -181,7 +187,7 @@ class Order extends OrderModel
     public static function workerSMSPushFlag($order_id)
     {
         $order = OrderSearch::getOne($order_id);
-        $order->order_flag_worker_sms = 1;
+        $order->order_flag_worker_sms = $order->orderExtFlag->order_flag_worker_sms+1;
         return $order->doSave(['OrderExtFlag']);
     }
 
@@ -193,7 +199,7 @@ class Order extends OrderModel
     public static function workerJPushFlag($order_id)
     {
         $order = OrderSearch::getOne($order_id);
-        $order->order_flag_worker_jpush = 1;
+        $order->order_flag_worker_jpush = $order->orderExtFlag->order_flag_worker_jpush+1;
         return $order->doSave(['OrderExtFlag']);
     }
 
@@ -205,7 +211,7 @@ class Order extends OrderModel
     public static function workerIVRPushFlag($order_id)
     {
         $order = OrderSearch::getOne($order_id);
-        $order->order_flag_worker_ivr = 1;
+        $order->order_flag_worker_ivr = $order->orderExtFlag->order_flag_worker_ivr+1;
         return $order->doSave(['OrderExtFlag']);
     }
 
