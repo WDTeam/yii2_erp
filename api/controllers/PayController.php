@@ -175,6 +175,7 @@ class PayController extends \api\components\Controller
      * @apiParam integer channel_id 渠道ID
      * @apiParam integer [order_id] 订单ID,没有订单号表示充值
      * @apiParam integer partner 第三方合作号
+     * @apiParam integer [ext_params] 扩展参数,用于微信/百度直达号
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -183,9 +184,6 @@ class PayController extends \api\components\Controller
      *      "msg":"操作成功",
      *      "ret":
      *      {
-     *          "old_user_id":"12",
-     *          "new_user_id":"3",
-     *          "telephone":"18311133170",
      *          "result":"ok",
      *          "retmsg":
      *          {
