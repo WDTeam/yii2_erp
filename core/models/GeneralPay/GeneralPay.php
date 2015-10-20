@@ -258,4 +258,20 @@ class GeneralPay extends \common\models\GeneralPay
         parent::bfbAppNotify($data);
     }
 
+    /**
+     * 微信H5回调
+     * @param $data
+     */
+    public function wxH5Notify($data){
+        parent::wxH5Notify($data);
+    }
+
+    /**
+     * 百度直达号回调
+     * @param $data
+     */
+    public function zhidahaoH5Notify($data){
+        parent::zhidahaoH5Notify($data);
+    }
+
 }
