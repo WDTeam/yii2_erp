@@ -29,9 +29,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'worker_task_name',
-            'worker_task_cycle',
-            'worker_task_start',
-            'worker_task_end',
+//             'worker_task_cycle',
+            'worker_task_start:date',
+            'worker_task_end:date',
             'worker_type',
             'worker_rule_id',
             'worker_task_city_id',
@@ -39,7 +39,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'worker_task_description_url:url',
             [
                 'label'=>'条件',
-                'value'=>json_encode($model->conditions)
+                'format'=>'raw',
+                'value'=>$this->render('show_conditions',['models'=>$model->getConditions()])
             ],
 //             'created_at',
 //             'updated_at',

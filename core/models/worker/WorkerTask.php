@@ -2,6 +2,8 @@
 namespace core\models\worker;
 
 use yii\base\InvalidParamException;
+use core\models\Operation\CoreOperationCity;
+use yii\helpers\ArrayHelper;
 class WorkerTask extends \common\models\WorkerTask
 {
     /**
@@ -77,7 +79,7 @@ class WorkerTask extends \common\models\WorkerTask
     }
     public function setWorker_types($value)
     {
-        $this->worker_type = implode(',', $this->worker_types);
+        $this->worker_type = implode(',', $value);
     }
     /**
      * 阿姨角色字段
@@ -88,7 +90,7 @@ class WorkerTask extends \common\models\WorkerTask
     }
     public function setWorker_rules($value)
     {
-        $this->worker_rule_id = implode(',', $this->worker_rules);
+        $this->worker_rule_id = implode(',', $value);
     }
     /**
      * 城市字段
@@ -99,7 +101,7 @@ class WorkerTask extends \common\models\WorkerTask
     }
     public function setWorker_cites($value)
     {
-        $this->worker_task_city_id = implode(',', $this->worker_cites);
+        $this->worker_task_city_id = implode(',', $value);
     }
     /**
      * 完整条件，包含所有已设置和未设置的
@@ -161,5 +163,10 @@ class WorkerTask extends \common\models\WorkerTask
             }
         }
         return $isfalse<=0;
+    }
+    public static function getOnlineCites()
+    {
+        $cites = CoreOperationCity::getCityOnlineInfoList();
+        return ArrayHelper::map($cites, 'city_id', 'city_name');
     }
 }

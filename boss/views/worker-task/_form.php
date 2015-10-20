@@ -6,7 +6,6 @@ use kartik\datecontrol\DateControl;
 use core\models\worker\WorkerTask;
 use kartik\helpers\Html;
 use core\models\worker\WorkerRuleConfig;
-use core\models\Operation\CoreOperationCity;
 use core\models\worker\Worker;
 
 /**
@@ -102,7 +101,7 @@ var_dump($model->getErrors());
         'worker_cites'=>[
             'type'=> Form::INPUT_CHECKBOX_LIST, 
             'options'=>['placeholder'=>'Enter 适用城市...'],
-            'items'=>CoreOperationCity::getCityOnlineInfoList()
+            'items'=>WorkerTask::getOnlineCites()
         ], 
         
         'worker_task_reward_type'=>[
