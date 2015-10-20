@@ -8,9 +8,12 @@ use Yii;
  * This is the model class for table "{{%worker_task_logmeta}}".
  *
  * @property integer $id
+ * @property integer $worker_task_id
  * @property integer $worker_tasklog_id
+ * @property integer $worker_id
  * @property integer $worker_tasklog_condition
  * @property integer $worker_tasklog_value
+ * @property integer $worker_tasklog_is_done
  * @property integer $created_at
  * @property integer $updated_at
  */
@@ -30,7 +33,7 @@ class WorkerTaskLogmeta extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['worker_tasklog_id', 'worker_tasklog_condition', 'worker_tasklog_value', 'created_at', 'updated_at'], 'integer']
+            [['worker_task_id', 'worker_tasklog_id', 'worker_id', 'worker_tasklog_condition', 'worker_tasklog_value', 'worker_tasklog_is_done', 'created_at', 'updated_at'], 'integer']
         ];
     }
 
@@ -41,9 +44,12 @@ class WorkerTaskLogmeta extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', '编号'),
-            'worker_tasklog_id' => Yii::t('app', '任务ID'),
+            'worker_task_id' => Yii::t('app', '任务ID'),
+            'worker_tasklog_id' => Yii::t('app', '任务记录ID'),
+            'worker_id' => Yii::t('app', '阿姨ID'),
             'worker_tasklog_condition' => Yii::t('app', '条件索引'),
             'worker_tasklog_value' => Yii::t('app', '条件值'),
+            'worker_tasklog_is_done' => Yii::t('app', '是否完成条件'),
             'created_at' => Yii::t('app', '创建时间'),
             'updated_at' => Yii::t('app', '更新时间'),
         ];

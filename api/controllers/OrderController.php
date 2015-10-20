@@ -14,7 +14,7 @@ class OrderController extends \api\components\Controller
 {
     /**
      *
-     * @api {POST} /order/choose-service-time 可服务时间表
+     * @api {POST} /order/choose-service-time 可服务时间表 (赵顺利%20 block linhongyou provide the feature)
      *
      * @apiDescription 选择服务时间接口服务器依据用户的当前位置提供时间表
      * @apiName ChooseServiceTime
@@ -108,7 +108,7 @@ class OrderController extends \api\components\Controller
 
     /**
      *
-     * @api {POST} /order/create-order 创建订单
+     * @api {POST} /order/create-order 创建订单 (xieyi 80% 目前block再ipv6地址不能存储，渠道号未定义)
      *
      *
      * @apiName ActionCreateOrder
@@ -236,23 +236,26 @@ class OrderController extends \api\components\Controller
 
         $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
 
+
         $attributes['admin_id'] = 0;
         $order = new \core\models\order\Order();
         $is_success = $order->createNew($attributes);
+        $order->errors;
         if ($is_success) {
             $msg = '创建订单成功';
             $this->send($order, $msg);
         } else {
             $msg = '创建订单失败';
-            $this->send($order, $msg, "error");
+            $this->send($order->errors, $msg, "error");
         }
 
 
     }
 
+
     /**
      *
-     * @api {POST} v1/order/append-order 追加订单
+     * @api {POST} v1/order/append-order 追加订单(xieyi 80%和创建订单一样)
      *
      * @apiName ActionAppendOrder
      * @apiGroup Order
@@ -391,7 +394,7 @@ class OrderController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /order/query-orders 查询订单
+     * @api {GET} /order/query-orders 查询订单(xieyi %70已经将后台接口完成，创建也完成缺少测试)
      *
      *
      * @apiName QueryOrders
@@ -504,7 +507,7 @@ class OrderController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /order/cancelorder 取消订单
+     * @api {GET} /order/cancelorder 取消订单(xieyi %0  )
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} app_version 访问源(android_4.2.2)
@@ -538,7 +541,7 @@ class OrderController extends \api\components\Controller
 
 
     /**
-     * @api {get} /mobileapidriver2/worker_request_order 抢单
+     * @api {get} /mobileapidriver2/worker_request_order 抢单（xieyi %0）
      * @apiName actionDriverRequestOrder
      * @apiGroup Order
      * @apiDescription 阿姨抢单
@@ -582,7 +585,7 @@ class OrderController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /order/addcomment 评价订单
+     * @api {GET} /order/addcomment 评价订单（xieyi %0）
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} app_version 访问源(android_4.2.2)
@@ -623,7 +626,7 @@ class OrderController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /order/hiddenorder 删除订单
+     * @api {GET} /order/hiddenorder 删除订单（xieyi %0 ）
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} app_version 访问源(android_4.2.2)
@@ -657,7 +660,7 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {get} /order/search_push_order.php 获得推送订单信息
+     * @api {get} /order/search_push_order.php 获得推送订单信息 (xieyi 0%)
      * @apiName actionSearchPushOrder
      * @apiGroup Order
      * @apiDescription 推送过来的订单，通过id获取订单信息
@@ -709,7 +712,7 @@ class OrderController extends \api\components\Controller
      */
 
     /**
-     * @api {get} /mobileapidriver2/driver_get_now_order_list 待接活订单
+     * @api {get} /mobileapidriver2/driver_get_now_order_list 待接活订单(zhaoshunli 0%)
      * @apiName actionDriverGetNowOrderList
      * @apiGroup Order
      * @apiDescription 阿姨查看带接活订单
@@ -773,7 +776,7 @@ class OrderController extends \api\components\Controller
 
 
     /**
-     * @api {get} /mobileapidriver2/worker_history_order 阿姨历史订单
+     * @api {get} /mobileapidriver2/worker_history_order 阿姨历史订单(zhaoshunli 100%)
      * @apiName actionWorkerHistoryOrder
      * @apiGroup Order
      * @apiDescription 阿姨查看历史订单
@@ -844,7 +847,7 @@ class OrderController extends \api\components\Controller
      */
 
     /**
-     * @api {get} v2/worker/account_checking.php 日常订单列表
+     * @api {get} v2/worker/account_checking.php 日常订单列表(zhaoshunli %0)
      * @apiName actionAccountChecking
      * @apiGroup Order
      * @apiDescription 对账首页，日常订单
@@ -889,7 +892,7 @@ class OrderController extends \api\components\Controller
 
 
     /**
-     * @api {get} v2/worker/all_order_common.php 全部订单月份列表
+     * @api {get} v2/worker/all_order_common.php 全部订单月份列表(zhaoshunli 0%)
      * @apiName actionAllOrderCommon
      * @apiGroup Order
      * @apiDescription 对账日常订单查看全部，月份列表
@@ -931,7 +934,7 @@ class OrderController extends \api\components\Controller
      */
 
     /**
-     * @api {get} v2/worker/all_order_common_list.php 日常订单列表
+     * @api {get} v2/worker/all_order_common_list.php 日常订单列表(zhaoshunli 0%)
      * @apiName actionAllOrderCommonList
      * @apiGroup Order
      * @apiDescription 对账日常订单，全部订单
@@ -977,7 +980,7 @@ class OrderController extends \api\components\Controller
      */
 
     /**
-     * @api {get} /v2/FixedUserOrder.php 固定客户以及订单列表
+     * @api {get} /v2/FixedUserOrder.php 固定客户以及订单列表(zhaoshunli 0%)
      * @apiName actionFixedUserOrder
      * @apiGroup Order
      * @apiDescription 对账固定客户首页，全部固定客户订单
@@ -1033,7 +1036,7 @@ class OrderController extends \api\components\Controller
 
 
     /**
-     * @api {get} v1/order/no_settlement_order_list.php  未结算订单
+     * @api {get} v1/order/no_settlement_order_list.php  未结算订单(0%zhaoshunli)
      * @apiName actionNoSettlementOrderList
      * @apiGroup Order
      *

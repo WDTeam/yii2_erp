@@ -66,7 +66,7 @@ $this->params['review_section'] = $searchModel->review_section;
                  'content'=>function($model,$key,$index){return '<a class="btn btn-default"  id = "subsidyButton" data-container="body" data-toggle="popover" data-placement="bottom" data-content="'.FinanceWorkerNonOrderIncomeSearch::getSubsidyDetail($model->id).'">'.$model->finance_settle_apply_subsidy.'</a>';}],
                 ['attribute'=>'finance_settle_apply_status',
                     'content'=> function($model,$key,$index){return $model->getSettleApplyStatusDes($model->finance_settle_apply_status);} ],   
-                'comment',
+                ['attribute'=>'comment','hidden'=>$searchModel->finance_settle_apply_status != FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED],
                 [
                 'class' => 'yii\grid\ActionColumn',
                 'template' =>'{view} {agree} {disagree}',
@@ -97,18 +97,10 @@ $this->params['review_section'] = $searchModel->review_section;
                                 'class'=>'disagree',
                                 'data-id'=>$model->id,
                             ]);
-                    },
+                        },
+                    ],
                 ],
-            ],
             ];
-        if($searchModel->finance_settle_apply_status != FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED){
-            foreach($columns as $key => $value){
-                if($value == 'comment'){
-                    unset($columns[$key]);
-                }
-            }
-            
-        }
         
         echo GridView::widget([
             'dataProvider' => $dataProvider,

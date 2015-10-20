@@ -38,7 +38,5 @@ class m151014_104903_create_table_ivrlog extends Migration
     public function safeDown()
     {
         $this->dropTable('{{%ivrlog}}');
-
-        return true;
     }
 }

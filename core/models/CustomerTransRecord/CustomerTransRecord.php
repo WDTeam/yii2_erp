@@ -9,6 +9,16 @@ use yii\behaviors\TimestampBehavior;
 
 class CustomerTransRecord extends \common\models\CustomerTransRecord
 {
+
+    /**
+     * 根据用户ID返回消费记录
+     * @param $customer_id
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function queryRecord($customer_id)
+    {
+        return CustomerTransRecord::find()->asArray()->all();
+    }
     /**
      * 创建交易记录
      * @param $data 数据
@@ -39,6 +49,7 @@ class CustomerTransRecord extends \common\models\CustomerTransRecord
     public static function analysisRecord($data)
     {
         //公用部分
+        $data['order_id'] = $data['id'];
         $data['order_channel_id'] = $data['general_pay_source']; //订单渠道
         $data['customer_trans_record_transaction_id'] = !empty($data['general_pay_transaction_id']) ? $data['general_pay_transaction_id'] : 0; //交易流水号
 

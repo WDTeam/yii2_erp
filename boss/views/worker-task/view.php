@@ -14,7 +14,6 @@ $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Worker Tasks'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
-WorkerTask::getTaskListByWorkerId(18473);
 ?>
 <div class="worker-task-view">
 

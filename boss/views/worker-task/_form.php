@@ -54,12 +54,7 @@ var_dump($model->getErrors());
     'form' => $form,
     'columns' => 1,
     'attributes' => [
-        'worker_task_cycle'=>[
-            'type'=> Form::INPUT_DROPDOWN_LIST,
-            'items'=>WorkerTask::TASK_CYCLE,
-            'options'=>['placeholder'=>'Enter 任务开始时间...'],
-        ],
-        
+
         'worker_task_start'=>[
             'type'=> Form::INPUT_WIDGET, 
             'widgetClass'=>DateControl::classname(),

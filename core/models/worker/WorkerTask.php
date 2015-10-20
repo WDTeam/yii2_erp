@@ -29,14 +29,7 @@ class WorkerTask extends \common\models\WorkerTask
         '>'=>'大于',
         '<>'=>'不等于'
     ];
-    /**
-     * 条件处理周期
-     */
-    const TASK_CYCLE = [
-        '1'=>'月',
-        '2'=>'周',
-        '3'=>'天'
-    ];
+
     /**
      * 任务奖励类型
      */
@@ -50,7 +43,7 @@ class WorkerTask extends \common\models\WorkerTask
     {
         return array_merge(parent::rules(),[
             [['worker_task_name', 'worker_task_start', 'worker_task_end', 'worker_task_reward_type'], 'required'],
-            [['worker_types', 'worker_rules', 'worker_cites'], 'string'],
+            [['worker_types', 'worker_rules', 'worker_cites'], 'safe'],
             [['conditions'], 'validateConditions'],
         ]);
     }
@@ -84,7 +77,7 @@ class WorkerTask extends \common\models\WorkerTask
     }
     public function setWorker_types($value)
     {
-        $this->worker_type = implode(',', $this->worker_type);
+        $this->worker_type = implode(',', $this->worker_types);
     }
     /**
      * 阿姨角色字段
@@ -95,7 +88,7 @@ class WorkerTask extends \common\models\WorkerTask
     }
     public function setWorker_rules($value)
     {
-        $this->worker_rule_id = implode(',', $this->worker_rule_id);
+        $this->worker_rule_id = implode(',', $this->worker_rules);
     }
     /**
      * 城市字段
@@ -106,7 +99,7 @@ class WorkerTask extends \common\models\WorkerTask
     }
     public function setWorker_cites($value)
     {
-        $this->worker_task_city_id = implode(',', $this->worker_task_city_id);
+        $this->worker_task_city_id = implode(',', $this->worker_cites);
     }
     /**
      * 完整条件，包含所有已设置和未设置的
@@ -133,7 +126,7 @@ class WorkerTask extends \common\models\WorkerTask
         return $res;
     }
     /**
-     * 计算阿姨任务列表
+     * 计算符合阿姨条件的任务列表
      */
     public static function getTaskListByWorkerId($worker_id)
     {
@@ -148,5 +141,25 @@ class WorkerTask extends \common\models\WorkerTask
         ->andFilterWhere(['>','worker_task_end', $cur_time])
         ->all();
         return $tasks;
+    }
+    /**
+     * 给定数据判断是否完成
+     * @param array $tasklogmetas 数值记录
+     */
+    public function calculateValuesIsDone($tasklogmetas)
+    {
+        $isfalse = 0;
+        $cons = $this->getConditions();
+        foreach($cons as $con){
+            foreach ($tasklogmetas as $meta){
+                if($con['id']==$meta['worker_tasklog_condition']){
+                    $is_done = eval($meta['worker_tasklog_value'].$con['judge'].$con['value']);
+                    if($is_done==false){
+                        $isfalse++;
+                    }
+                }
+            }
+        }
+        return $isfalse<=0;
     }
 }
