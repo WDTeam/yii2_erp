@@ -22,4 +22,10 @@ class CoreOperationCategory extends CommonOperationCategory
         $data = self::find()->select(['operation_category_name'])->where(['id' => $operation_category_id])->one();
         return $data->operation_category_name;
     }
+
+    public static function getAllCategory()
+    {
+        return self::getAllData('', 'sort', 'id,operation_category_name');
+
+    }
 }

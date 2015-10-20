@@ -1,12 +1,19 @@
 <?php
+namespace api\controllers;
 
-class ConfigureController
+use Yii;
+use core\models\Operation\CoreOperationShopDistrictGoods;
+use core\models\Operation\CoreOperationCategory;
+use \core\models\customer\CustomerAccessToken;
+
+class ConfigureController extends \api\components\Controller
 {
     /**
-     * @api {GET} /configure/all-services 城市服务初始化 （赵顺利）
+     * @api {POST} /configure/all-services 城市服务初始化 （已完成）
      * @apiName actionAllServices
      * @apiGroup configure
-     * 
+     *
+     * @apiParam {string} access_token 用户认证
      * @apiParam {String} city_name 城市
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
@@ -18,32 +25,29 @@ class ConfigureController
      *      "ret":
      *      [
      *      {
-     *          "type_id":"",
-     *          "name":"专业保洁",
-     *          "icon":"",
-     *          "pic":"",
-     *          "goods":
+     *          "category_id":"", 服务品类id
+     *          "category_name":"专业保洁",  服务品类名
+     *          "goodses":
      *          [
      *          {
-     *              "server_id":"",
-     *              "name":"家庭保洁",
-     *              "icon":"",
-     *              "pic":"",
-     *              "url":"",
-     *          },
-     *          {
-     *              "type_id":"",
-     *              "name":"家庭保洁",
-     *              "icon":"",
-     *              "pic":"",
-     *              "url":"",
+     *              "goods_id": "2", 服务类型id
+     *              "goods_no": null,  服务类型编号
+     *              "goods_name": "空调清洗",  服务类型名
+     *              "goods_introduction": "", 服务类型简介
+     *              "goods_english_name": "", 服务类型英文名称
+     *              "goods_img": "", 服务类型图片
+     *              "goods_app_ico": null,  APP端图标(序列化方式存储|首页大图，首页小图，分类页小图，订单页小图)
+     *              "goods_pc_ico": null,  PC端图标(序列化方式存储|首页大图，首页小图，分类页小图，订单页小图)
+     *              "goods_price": "0.0000", 价格
+     *              "goods_price_unit": "件",  单位
+     *              "goods_price_description": "1232131"
      *          },
      *          ]
      *       }
      *       ],
      *  }
-     *  
-     * @apiError CityNotSupportFound 该城市未开通.
+     *
+     * @apiError CityNotSupportFound 该城市暂未开通.
      *
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 404 Not Found
@@ -55,6 +59,52 @@ class ConfigureController
      */
     public function actionAllServices()
     {
+        $param = Yii::$app->request->post();
+        if (empty(@$param['access_token']) || !CustomerAccessToken::checkAccessToken(@$param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
+
+        if (empty(@$param['city_name'])) {
+            return $this->send(null, "未取得城市信息", "error", "403");
+        }
+
+        $categoryes = CoreOperationCategory::getAllCategory();
+        $goodses = CoreOperationShopDistrictGoods::getGoodsByCity($param['city_name']);
+
+        if (empty($categoryes) || empty($goodses)) {
+            return $this->send(null, "该城市暂未开通", "error", "403");
+        }
+        $cDate = [];
+        foreach ($categoryes as $cItem) {
+            $gDate = [];
+            foreach ($goodses as $gItem) {
+                if ($cItem['id'] == $gItem['operation_category_id']) {
+                    $gobject = [
+                        'goods_id' => $gItem['goods_id'],
+                        'goods_no' => $gItem['operation_goods_no'],
+                        'goods_name' => $gItem['operation_goods_name'],
+                        'goods_introduction' => $gItem['operation_goods_introduction'],
+                        'goods_english_name' => $gItem['operation_goods_english_name'],
+                        'goods_img' => $gItem['operation_goods_img'],
+                        'goods_app_ico' => $gItem['operation_goods_app_ico'],
+                        'goods_pc_ico' => $gItem['operation_goods_pc_ico'],
+                        'goods_price' => $gItem['operation_goods_price'],
+                        'goods_price_unit' => $gItem['operation_spec_strategy_unit'],
+                        'goods_price_description' => $gItem['operation_goods_price_description'],
+                    ];
+                    $gDate[] = $gobject;
+                }
+
+            }
+            $cObject = [
+                'category_id' => $cItem['id'],
+                'category_name' => $cItem['operation_category_name'],
+                'goodses' => $gDate
+            ];
+            $cDate[] = $cObject;
+        }
+
+        return $this->send($cDate, "数据获取成功", "ok");
     }
 
     /**
@@ -101,7 +151,7 @@ class ConfigureController
      *              "url_title": ""
      *            }
      *          ]
-     *       
+     *
      *        },
      *        "isUpdate": 0,
      *        "updateContent": "",
@@ -130,7 +180,7 @@ class ConfigureController
      * @api {GET} /v2/worker/check_update.php 检查阿姨端版本更新
      * @apiName actionCheckUpdate
      * @apiGroup configure
-     * 
+     *
      * @apiParam {String} session_id    会话id.
      * @apiParam {String} platform_version 平台版本号.
      *
@@ -160,7 +210,7 @@ class ConfigureController
      *  }
      *
      */
-    
+
     /**
      * @api {get} /v2/worker/home_page.php 阿姨app初始化
      * @apiName actionIndex

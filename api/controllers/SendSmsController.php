@@ -53,13 +53,12 @@ class SendSmsController extends \api\components\Controller
 
     /**
      *
-     * @api {POST} /send-sms/send-message-code 短信验证码
-     * @apiName SendMessageCode
-     * @apiGroup SMS
+     * @api {POST} /send-sms/send-message-code 短信验证码 （已完成）
+     * @apiName actionSendMessageCode
+     * @apiGroup SendSms
      * @apiDescription 请求向用户手机发送验证码用于登录
      * @apiParam {String} phone 用户手机号
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     *
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
