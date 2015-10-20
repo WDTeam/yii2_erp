@@ -6,7 +6,6 @@ use kartik\datecontrol\DateControl;
 use core\models\worker\WorkerTask;
 use kartik\helpers\Html;
 use core\models\worker\WorkerRuleConfig;
-use core\models\Operation\CoreOperationCity;
 use core\models\worker\Worker;
 
 /**
@@ -40,7 +39,7 @@ var_dump($model->getErrors());
         <label class="control-label col-md-2">任务条件</label>
         <?php foreach ($conditions as $con){?>
         <div class="row col-md-10" style="padding-left:50px">
-            <span class="col-md-1">
+            <span class="col-md-2">
                 <?php echo Html::dropDownList("WorkerTask[conditions][{$con['id']}][id]", $conditions[$con['id']]['id'], WorkerTask::CONDITION_NAME);?>
             </span>
             <?php echo Html::dropDownList("WorkerTask[conditions][{$con['id']}][judge]", $conditions[$con['id']]['judge'], WorkerTask::CONDITION_JUDGE);?>
@@ -102,7 +101,7 @@ var_dump($model->getErrors());
         'worker_cites'=>[
             'type'=> Form::INPUT_CHECKBOX_LIST, 
             'options'=>['placeholder'=>'Enter 适用城市...'],
-            'items'=>CoreOperationCity::getCityOnlineInfoList()
+            'items'=>WorkerTask::getOnlineCites()
         ], 
         
         'worker_task_reward_type'=>[

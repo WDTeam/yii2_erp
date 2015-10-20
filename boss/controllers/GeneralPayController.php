@@ -36,6 +36,7 @@ class GeneralPayController extends Controller
      * @param integer $order_id 订单ID
      * @param integer $partner 第三方合作号
      */
+    /*
     public function actionGetPay()
     {
         //接收数据
@@ -111,7 +112,7 @@ class GeneralPayController extends Controller
         }
 
     }
-
+    */
     /**
      * 接收第三方支付数据
      * @return mixed
@@ -135,6 +136,7 @@ class GeneralPayController extends Controller
      * 支付宝APP回调
      * wx-js-notify
      */
+    /*
     public function actionWxH5Notify()
     {
         if(!empty($_GET['debug'])){
@@ -255,11 +257,12 @@ class GeneralPayController extends Controller
             }
         }
     }
-
+    */
     /**
      * 支付宝APP回调
      * wx-js-notify
      */
+    /*
     public function actionZhidahaoH5Notify()
     {
         $request = yii::$app->request;
@@ -354,11 +357,12 @@ class GeneralPayController extends Controller
             }
         }
     }
-
+    */
 
     /**
      * 支付宝APP回调
      */
+    /*
     public function actionAlipayAppNotify()
     {
         $request = yii::$app->request;
@@ -475,11 +479,12 @@ class GeneralPayController extends Controller
             }
         }
     }
-
+    */
     /**
      * 微信APP回调
      * 金额单位为【分】
      */
+    /*
     public function actionWxAppNotify()
     {
         //file_put_contents('/tmp/pay/test.txt',json_encode($_POST));
@@ -590,11 +595,12 @@ class GeneralPayController extends Controller
         }
 
     }
-
+    */
     /**
      *  百付宝APP回调
      *  金额单位为【分】
      */
+    /*
     public function actionBfbAppNotify()
     {
         $request = yii::$app->request;
@@ -699,10 +705,11 @@ class GeneralPayController extends Controller
 
         }
     }
-
+    */
     /**
      * 银联APP回调
      */
+    /*
     public function actionUpAppNotify()
     {
         $request = yii::$app->request;
@@ -807,7 +814,7 @@ class GeneralPayController extends Controller
             }
         }
     }
-
+    */
     /**
      * 用户服务卡支付
      */

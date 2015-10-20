@@ -2,21 +2,21 @@
 namespace core\models\worker;
 
 use yii\base\InvalidParamException;
+use core\models\Operation\CoreOperationCity;
+use yii\helpers\ArrayHelper;
+use yii\behaviors\TimestampBehavior;
 class WorkerTask extends \common\models\WorkerTask
 {
     /**
      * 条件名
      */
     const CONDITION_NAME = [
-        1=>'主动接单',
-        2=>'增值服务',
-        3=>'复购率',
-        4=>'用户投诉',
-        5=>'用户好评',
-        6=>'完成工时',
-        7=>'取消订单',
-        8=>'拒绝订单',
-        9=>'迟到订单',
+        1=>'无取消订单 ',
+        2=>'无拒绝订单',
+        3=>'服务老用户',
+        4=>'主动接单',
+        5=>'完成工时',
+        6=>'完成小保养 ',
     ];
     /**
      * 条件判断符
@@ -39,6 +39,16 @@ class WorkerTask extends \common\models\WorkerTask
         3=>'次月流量',
     ];
     
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+            ],
+        ];
+    }
     public function rules()
     {
         return array_merge(parent::rules(),[
@@ -60,7 +70,11 @@ class WorkerTask extends \common\models\WorkerTask
         $names = self::CONDITION_NAME;
         $data = (array)json_decode($this->worker_task_conditions, true);
         foreach ($data as $item){
-            $data[$item['id']]['name'] = $names[$item['id']];
+            if(isset($names[$item['id']])){
+                $data[$item['id']]['name'] = $names[$item['id']];
+            }else{
+                unset($data[$item['id']]);
+            }
         }
         return $data;
     }
@@ -77,7 +91,7 @@ class WorkerTask extends \common\models\WorkerTask
     }
     public function setWorker_types($value)
     {
-        $this->worker_type = implode(',', $this->worker_types);
+        $this->worker_type = implode(',', $value);
     }
     /**
      * 阿姨角色字段
@@ -88,7 +102,7 @@ class WorkerTask extends \common\models\WorkerTask
     }
     public function setWorker_rules($value)
     {
-        $this->worker_rule_id = implode(',', $this->worker_rules);
+        $this->worker_rule_id = implode(',', $value);
     }
     /**
      * 城市字段
@@ -99,7 +113,7 @@ class WorkerTask extends \common\models\WorkerTask
     }
     public function setWorker_cites($value)
     {
-        $this->worker_task_city_id = implode(',', $this->worker_cites);
+        $this->worker_task_city_id = implode(',', $value);
     }
     /**
      * 完整条件，包含所有已设置和未设置的
@@ -161,5 +175,10 @@ class WorkerTask extends \common\models\WorkerTask
             }
         }
         return $isfalse<=0;
+    }
+    public static function getOnlineCites()
+    {
+        $cites = CoreOperationCity::getCityOnlineInfoList();
+        return ArrayHelper::map($cites, 'city_id', 'city_name');
     }
 }

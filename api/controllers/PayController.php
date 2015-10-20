@@ -175,6 +175,7 @@ class PayController extends \api\components\Controller
      * @apiParam integer channel_id 渠道ID
      * @apiParam integer [order_id] 订单ID,没有订单号表示充值
      * @apiParam integer partner 第三方合作号
+     * @apiParam integer [ext_params] 扩展参数,用于微信/百度直达号
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -183,9 +184,6 @@ class PayController extends \api\components\Controller
      *      "msg":"操作成功",
      *      "ret":
      *      {
-     *          "old_user_id":"12",
-     *          "new_user_id":"3",
-     *          "telephone":"18311133170",
      *          "result":"ok",
      *          "retmsg":
      *          {
@@ -263,8 +261,7 @@ class PayController extends \api\components\Controller
         if($model->load($data) && $model->validate())
         {
             $retInfo= GeneralPay::getPayParams($model->pay_money,$model->customer_id,$model->channel_id,$model->partner,$model->order_id,$ext_params);
-            return $retInfo;
-           return $this->send($retInfo['data'], $retInfo['info'], $retInfo['status']);
+            return $this->send($retInfo['data']);
         }
         return $this->send(null, $model->errors, "error");
 
@@ -517,7 +514,7 @@ class PayController extends \api\components\Controller
     public function actionUpAppNotify()
     {
         $obj = new GeneralPay();
-        $obj->UpAppNotify(yii::$app->request->post());
+        $obj->UpAppNotify(yii::$app->request->get());
         exit;
     }
 
@@ -527,7 +524,7 @@ class PayController extends \api\components\Controller
     public function actionAlipayAppNotify()
     {
         $obj = new GeneralPay();
-        $obj->alipayAppNotify(yii::$app->request->post());
+        $obj->alipayAppNotify(yii::$app->request->get());
         exit;
     }
 
@@ -557,7 +554,7 @@ class PayController extends \api\components\Controller
     public function actionWxH5Notify()
     {
         $obj = new GeneralPay();
-        $obj->wxH5Notify($GLOBALS['HTTP_RAW_POST_DATA']);
+        $obj->wxH5Notify(yii::$app->request->get());
         exit;
     }
 
