@@ -26,7 +26,7 @@ class m151007_153202_create_table_order extends Migration
             'version' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 1 COMMENT \'标记\'',
 
 //===============================下单信息
-            'order_ip' => Schema::TYPE_INTEGER.'(10) NOT NULL DEFAULT 0 COMMENT \'下单IP\'',
+            'order_ip' => Schema::TYPE_STRING.'(128) NOT NULL DEFAULT \'\' COMMENT \'下单IP\'',
             'order_service_type_id' => Schema::TYPE_SMALLINT . '(4) unsigned NOT NULL DEFAULT 0 COMMENT \'订单服务类别ID\'',
             'order_service_type_name' => Schema::TYPE_STRING . '(128) NOT NULL DEFAULT \'\' COMMENT \'订单服务类别\'',
             'order_src_id' => Schema::TYPE_SMALLINT . '(4) unsigned DEFAULT 0 COMMENT \'订单来源，订单入口id\'',

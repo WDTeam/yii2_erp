@@ -104,11 +104,11 @@ class CustomerAccessToken extends \common\models\CustomerAccessToken
         if ($customerAccessToken == NULL) {
             return false;
         }
-        $customerCode = CustomerCode::findOne($customerAccessToken->customer_code_id);
-        if ($customerCode == NULL) {
-            return false;
-        }
-        $customer = Customer::find()->where(['customer_phone'=>$customerCode->customer_phone])->one();
+        // $customerCode = CustomerCode::findOne($customerAccessToken->customer_code_id);
+        // if ($customerCode == NULL) {
+        //     return false;
+        // }
+        $customer = Customer::find()->where(['customer_phone'=>$customerAccessToken->customer_phone])->one();
         return $customer == NULL ? false : $customer;
     }
 
@@ -116,6 +116,8 @@ class CustomerAccessToken extends \common\models\CustomerAccessToken
      * 验证POP调用BOSS系统的签名
      */
     public static function checkSign($phone, $sign, $channal_ename){
+
+        
         $key = 'pop_to_boss';
         $customerChannal = CustomerChannal::find()->where(['channal_ename'=>$channal_ename])->one();
         if ($customerChannal == NULL) {

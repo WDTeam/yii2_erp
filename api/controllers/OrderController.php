@@ -14,7 +14,7 @@ class OrderController extends \api\components\Controller
 {
     /**
      *
-     * @api {POST} /order/choose-service-time 可服务时间表
+     * @api {POST} /order/choose-service-time 可服务时间表 (赵顺利%20 block linhongyou provide the feature)
      *
      * @apiDescription 选择服务时间接口服务器依据用户的当前位置提供时间表
      * @apiName ChooseServiceTime
@@ -234,10 +234,8 @@ class OrderController extends \api\components\Controller
             $attributes['order_is_use_balance'] = $args['order_is_use_balance'];
         }
 
-        $attributes['order_ip'] = ip2long(Yii::$app->getRequest()->getUserIP());
-        var_dump(Yii::$app->getRequest()->getUserIP());
-        $this->send(var_dump(Yii::$app->getRequest()->getUserIP()));
-        die();
+        $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
+
 
         $attributes['admin_id'] = 0;
         $order = new \core\models\order\Order();

@@ -43,7 +43,7 @@ use yii\helpers\ArrayHelper;
  * @property integer $order_flag_exception
  * @property integer $order_flag_sys_assign
  * @property integer $order_flag_lock
- * @property integer $order_ip
+ * @property string $order_ip
  * @property integer $order_service_type_id
  * @property string $order_service_type_name
  * @property integer $order_src_id
@@ -97,7 +97,7 @@ class Order extends OrderModel
     /**
      * 创建新订单
      * @param $attributes [
-     *  integer $order_ip 下单IP地址 必填
+     *  string $order_ip 下单IP地址 必填
      *  integer $order_service_type_id 服务类型 商品id 必填
      *  integer $order_src_id 订单来源id 必填
      *  string $channel_id 下单渠道 必填
@@ -459,8 +459,6 @@ class Order extends OrderModel
         }
         return false;
     }
-
-
 
     /**
      * 获取订单来源名称
