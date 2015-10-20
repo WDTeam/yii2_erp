@@ -29,6 +29,8 @@ use core\models\GeneralPay\GeneralPaySearch;
 use boss\controllers\GeneralPayController;
 use common\models\FinanceRecordLog;
 use crazyfd\qiniu\Qiniu;
+
+
 /**
  * FinancePopOrderController implements the CRUD actions for FinancePopOrder model.
  */
@@ -56,7 +58,6 @@ class FinancePopOrderController extends Controller
     **/
     public function actionIndex()
     {
-    	
     	$model = new FinancePopOrderSearch;
     	$modelinfo= new FinancePopOrder;
     	if(Yii::$app->request->isPost) {
@@ -541,6 +542,40 @@ class FinancePopOrderController extends Controller
         }
     }
 
+    
+    
+    
+    
+   /**
+   * 返回坏账记录标示框
+   * @date: 2015-10-20
+   * @author: peak pan
+   * @return:
+   **/
+    public function actionForminfo()
+    {
+    	$post=\Yii::$app->request->post();
+    	if($post){
+    	$searchModel = new FinancePopOrderSearch;
+    	$requestModel = Yii::$app->request->get();
+    	$model=$searchModel::findOne($requestModel['id']);
+    	
+    	
+    	//var_dump($requestModel);exit;
+    	if($requestModel['edit']=='baksite'){
+    		//回滚财务审核
+    		$model->finance_pop_order_pay_status='3';
+    		$model->finance_pop_order_msg=$post['FinancePopOrder']['finance_pop_order_msg'];
+    	}
+    	$model->save();
+    	return $this->redirect(['index', 'id' =>$requestModel['oid']]);
+    	}else{
+    	$model = new FinancePopOrder;
+    	return $this->renderAjax('forminfo',['workerVacationModel'=>$model]);
+    	}
+    }
+    
+      
    /**
    * 公用删除方法
    * @date: 2015-9-23
