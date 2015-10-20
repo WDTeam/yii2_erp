@@ -1,4 +1,5 @@
 <?php
+
 namespace api\controllers;
 
 use \core\models\customer\Customer;
@@ -8,6 +9,7 @@ use \core\models\customer\CustomerAccessToken;
 
 class UserController extends \api\components\Controller
 {
+
     /**
      *
      * @api {POST} /user/add-address 添加常用地址
@@ -76,19 +78,18 @@ class UserController extends \api\components\Controller
      *
      *     }
      */
-
     public function actionAddAddress()
     {
         $param = Yii::$app->request->post();
-        if (empty(@$param['access_token']) || !CustomerAccessToken::checkAccessToken(@$param['access_token'])) {
+
+        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
         }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
 
         if (!empty($customer) && !empty($customer->id)) {
-            $model = CustomerAddress::addAddress($customer->id, @$param['operation_area_name'], @$param['address_detail'],
-                @$param['address_nickname'], @$param['address_phone']);
+            $model = CustomerAddress::addAddress($customer->id, @$param['operation_area_name'], @$param['address_detail'], @$param['address_nickname'], @$param['address_phone']);
             if (!empty($model)) {
                 $ret = ['address' => $model];
                 return $this->send($ret, "常用地址添加成功", "ok");
@@ -98,9 +99,7 @@ class UserController extends \api\components\Controller
         } else {
             return $this->send(null, "用户认证已经过期,请重新登录.", "error", 403);
         }
-
     }
-
 
     /**
      *
@@ -174,12 +173,10 @@ class UserController extends \api\components\Controller
             }
             $ret = ['addresses' => $addresses];
             return $this->send($ret, "获取地址列表成功", "ok");
-
         } else {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
         }
     }
-
 
     /**
      *
@@ -275,8 +272,7 @@ class UserController extends \api\components\Controller
             return $this->send(null, "地址信息获取失败", "error", 403);
         }
 
-        if (CustomerAddress::updateAddress($model->id, $model->operation_area_name,
-            $model->customer_address_detail, $model->customer_address_nickname, $model->customer_address_phone)
+        if (CustomerAddress::updateAddress($model->id, $model->operation_area_name, $model->customer_address_detail, $model->customer_address_nickname, $model->customer_address_phone)
         ) {
             return $this->send(null, "设置默认地址成功", "ok");
         } else {
@@ -346,8 +342,7 @@ class UserController extends \api\components\Controller
             return $this->send(null, "地址信息获取失败", "error", 403);
         }
 
-        if (CustomerAddress::updateAddress($model->id, @$params['operation_area_name'],
-            @$params['address_detail'], @$params['address_nickname'], @$params['address_phone'])
+        if (CustomerAddress::updateAddress($model->id, @$params['operation_area_name'], @$params['address_detail'], @$params['address_nickname'], @$params['address_phone'])
         ) {
             return $this->send(null, "修改常用地址成功", "ok");
         } else {
@@ -392,7 +387,6 @@ class UserController extends \api\components\Controller
      *
      *     }
      */
-
     /**
      *
      * @api {GET} /user/update-city 修改载入城市
@@ -486,7 +480,7 @@ class UserController extends \api\components\Controller
      */
     public function actionGetCouponsAndPersonality()
     {
-
+        
     }
 
     /**
@@ -533,7 +527,7 @@ class UserController extends \api\components\Controller
      */
     public function actionExchangeCoupon()
     {
-
+        
     }
 
     /**
@@ -580,7 +574,7 @@ class UserController extends \api\components\Controller
      */
     public function actionGetShareText()
     {
-
+        
     }
 
     /**
@@ -626,9 +620,8 @@ class UserController extends \api\components\Controller
      */
     public function deleteUsedWorker()
     {
-
+        
     }
-
 
     /**
      *
@@ -681,7 +674,7 @@ class UserController extends \api\components\Controller
      */
     public function blackListWorkers()
     {
-
+        
     }
 
     /**
@@ -718,7 +711,7 @@ class UserController extends \api\components\Controller
      */
     public function removeBlackListWorker()
     {
-
+        
     }
 
     /**
@@ -783,7 +776,7 @@ class UserController extends \api\components\Controller
      */
     public function actionChooseUsedWorker()
     {
-
+        
     }
 
     /**
@@ -835,8 +828,31 @@ class UserController extends \api\components\Controller
      */
     public function actionUserMoney()
     {
+        $param = Yii::$app->request->post();
+        
+        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
+
+        #获取用户用户余额
+        $userBalance = \core\models\customer\CustomerExtBalance::getCustomerBalance(1);
+
+        if ($userBalance) {
+            #获取用户消费记录
+            $userRecord = \core\models\CustomerTransRecord\CustomerTransRecord::queryRecord(1);
+
+            foreach ($userRecord as $key => $val) {
+                $userRecord[$key]['userBalance'] = $userBalance;
+            }
+
+            return $this->send($userRecord, "查询成功", "ok");
+        } else {
+            return $this->send(null, "用户认证已经过期,请重新登录111.", "error", 403);
+        }
 
     }
+
+    #f214e8a8d6cde5cc434a97d1a8883737
 
     /**
      *
@@ -900,7 +916,7 @@ class UserController extends \api\components\Controller
      */
     public function actionUserScore()
     {
-
+        
     }
 
     /**
@@ -935,9 +951,8 @@ class UserController extends \api\components\Controller
      */
     public function actionUserSuggest()
     {
-
+        
     }
-
 
 }
 
