@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models;
+namespace core\models\finance_refund;
 
 use Yii;
 
@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "{{%finance_refund}}".
  *
  * @property integer $id
+ * @property string $finance_refund_pop_nub
  * @property string $finance_refund_tel
  * @property string $finance_refund_money
  * @property integer $finance_refund_stype
@@ -15,15 +16,18 @@ use Yii;
  * @property string $finance_refund_discount
  * @property integer $finance_refund_pay_create_time
  * @property integer $finance_pay_channel_id
- * @property string $finance_pay_channel_name
- * @property string $finance_refund_pay_flow_num
+ * @property string $finance_pay_channel_title
  * @property integer $finance_refund_pay_status
+ * @property string $finance_refund_pay_flow_num
+ * @property integer $finance_order_channel_id
+ * @property string $finance_order_channel_title
  * @property integer $finance_refund_worker_id
  * @property string $finance_refund_worker_tel
+ * @property integer $isstatus
  * @property integer $create_time
  * @property integer $is_del
  */
-class FinanceRefund extends \yii\db\ActiveRecord
+class FinanceRefund extends \common\models\FinanceRefund
 {
     /**
      * @inheritdoc

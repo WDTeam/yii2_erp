@@ -15,7 +15,7 @@ use core\models\worker\Worker;
  */
  
 $conditions = $model->getFullConditions();
-var_dump($model->getErrors());
+// var_dump($model->getErrors());
 ?>
 
 <div class="worker-task-form">

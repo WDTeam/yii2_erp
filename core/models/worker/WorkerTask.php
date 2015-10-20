@@ -70,7 +70,7 @@ class WorkerTask extends \common\models\WorkerTask
         $names = self::CONDITION_NAME;
         $data = (array)json_decode($this->worker_task_conditions, true);
         foreach ($data as $item){
-            if(isset($names[$item['id']])){
+            if(isset($names[$item['id']]) && isset($item['value']) && $item['value']!=''){
                 $data[$item['id']]['name'] = $names[$item['id']];
             }else{
                 unset($data[$item['id']]);
@@ -176,9 +176,28 @@ class WorkerTask extends \common\models\WorkerTask
         }
         return $isfalse<=0;
     }
+    /**
+     * 开通的城市列表
+     */
     public static function getOnlineCites()
     {
         $cites = CoreOperationCity::getCityOnlineInfoList();
         return ArrayHelper::map($cites, 'city_id', 'city_name');
+    }
+    /**
+     * 指定时间内阿姨已完成的任务记录列表,用于结算
+     * 而且是金钱奖励
+     */
+    public static function getDoneTasksByWorkerId($start_time, $end_time, $worker_id)
+    {
+        $models = WorkerTaskLog::find()->where([
+            'worker_id'=>$worker_id,
+            'worker_task_is_done'=>1,
+            'worker_task_reward_type'=>1
+        ])
+        ->filterWhere(['>=','worker_task_done_time', $start_time])
+        ->filterWhere(['<','worker_task_done_time', $end_time])
+        ->all();
+        return $models;
     }
 }

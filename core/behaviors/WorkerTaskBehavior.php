@@ -4,15 +4,12 @@ namespace core\behaviors;
 use yii\base\Behavior;
 use core\models\order\Order;
 use core\models\worker\WorkerTaskLog;
+use common\models\OrderExtWorker;
 class WorkerTaskBehavior extends Behavior
 {
     public function events(){
         return [
-//             Order::EVENT_CREATE_BY_USER=>'',
             Order::EVENT_ACCEPT_BY_WORKER=>'acceptByWorker',
-            Order::EVENT_CANCEL_BY_WORKER=>'',
-            Order::EVENT_DONE_BY_WORKER=>'',
-            Order::EVENT_REJECT_BY_WORKER=>'',
         ];
     }
     /**
@@ -27,12 +24,33 @@ class WorkerTaskBehavior extends Behavior
     {
         $order = $event->sender;
         $ext_worker = $order->orderExtWorker;
-        
-        if(!empty($ext_worker) && $ext_worker->order_worker_assign_type==1){
+        if(!empty($ext_worker)){
             $log = new WorkerTaskLog();
             $log->worker_id = $ext_worker->worker_id;
         }
-        
-        
+    }
+    /**
+     * 指定时间段内阿姨各个条件完成值
+     *  条件类型：
+     *  1=>'取消订单 ',
+        2=>'拒绝订单',
+        3=>'服务老用户',
+        4=>'主动接单',
+        5=>'完成工时',
+        6=>'完成小保养 ',个数
+     * @param unknown $start_time
+     * @param unknown $end_time
+     * @param unknown $worker_id
+     */
+    public function getConditionsValues($start_time, $end_time, $worker_id)
+    {
+        return [
+            1=>3,
+            2=>5,
+            3=>8,
+            4=>1,
+            5=>22,
+            6=>3,
+        ];
     }
 }

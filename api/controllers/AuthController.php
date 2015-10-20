@@ -172,8 +172,8 @@ class AuthController extends \api\components\Controller
      *
      */
     public function actionWorkerLogin(){
-        $phone=Yii::$app->request->get('phone');
-        $password=Yii::$app->request->get('password');
+        $phone=Yii::$app->request->post('phone');
+        $password=Yii::$app->request->post('password');
         if(empty($phone) || empty($password)){
             return $this->send(null, "用户名或密码不能为空", "error",403,"数据不完整");
         }

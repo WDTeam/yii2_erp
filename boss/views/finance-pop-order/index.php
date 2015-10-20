@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use boss\models\FinancePopOrderSearch;
 use yii\widgets\ActiveForm;
+use yii\bootstrap\Modal;
 
 
 /**
@@ -136,7 +137,27 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance-pop-order/view','id' => $model->id,'edit'=>'t']), [
                                                     'title' => Yii::t('yii', 'Edit'),
                                                   ]);},
-                'tagssign' => function ($url, $model, $key) {
+                                                  
+                                                  
+                                                  'tagssign' => function ($url, $model) {
+                                                  	return Html::a('<span class="fa fa-fw fa-history"></span>',
+                                                  			[
+                                                  			'finance-pop-order/forminfo',
+                                                  			'id' => $model->id,
+                                                  			'edit'=>'baksite',
+                                                  			'oid'=>$model->finance_record_log_id
+                                                  			]
+                                                  			,
+                                                  			[
+                                                  			'title' => Yii::t('yii', '请输入坏账原因'),
+                                                  			'data-toggle' => 'modal',
+                                                  			'data-target' => '#vacationModal',
+                                                  			'class'=>'vacation',
+                                                  			'data-id'=>$model->id,
+                                                  			'style' => 'margin-right:3px'
+                                                  			]);
+                                                  },       
+               /*  'tagssign' => function ($url, $model, $key) {
                     $options = [
                         'title' => Yii::t('yii', '标记坏账'),
                         'aria-label' => Yii::t('yii', '标记坏账'),
@@ -145,7 +166,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'data-pjax' => '0'
                     ];
                     return Html::a('<span class="glyphicon glyphicon-tags"></span>', Yii::$app->urlManager->createUrl(['finance-pop-order/tagssign','id' => $model->id,'edit'=>'baksite','oid'=>$model->finance_record_log_id]), $options);
-                }
+                } */
                 ],
             ],
         ],
@@ -171,6 +192,42 @@ Html::a('<i class="glyphicon" ></i>状态不对(总额:'.$searchModel->OrderPayS
     ]);
        ActiveForm::end();
 
+       
+       echo Modal::widget([
+       		'header' => '<h4 class="modal-title">坏账原因</h4>',
+       		'id'=>'vacationModal',
+       		]);
+
+
+$this->registerJs(<<<JSCONTENT
+        $('.vacation').click(function() {
+            $('#vacationModal .modal-body').html('加载中……');
+            $('#vacationModal .modal-body').eq(0).load(this.href);
+        });
+        $('.block').click(function() {
+            $('#blockModal .modal-body').html('加载中……');
+            $('#blockModal .modal-body').eq(0).load(this.href);
+        });
+        $('.batchVacation').click(function() {
+            $('#vacationModal .modal-body').html('加载中……');
+            url = this.href;
+            vacationType = $(this).attr('type');
+            selectWorkerIds = '';
+            $('.danger').each(function(index,ele){
+                 workerId = $(this).attr('data-key');
+                 selectWorkerIds += workerId+','
+            })
+            if(selectWorkerIds){
+                selectWorkerIds = selectWorkerIds.substring(0,selectWorkerIds.length-1);
+                url = url.substring(0,url.indexOf("=")+1)+selectWorkerIds+'&vacationType='+vacationType
+            }else{
+                alert('请选择阿姨');
+                return false;
+            }
+            $('#vacationModal .modal-body').eq(0).load(url);
+        });
+JSCONTENT
+);
      ?>
 
 </div>
