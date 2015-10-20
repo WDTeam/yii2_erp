@@ -14,7 +14,7 @@ use Yii;
  * @property string $created_at
  * @property string $updated_at
  * @property integer $isdel
- * @property integer $order_ip
+ * @property string $order_ip
  * @property integer $order_service_type_id
  * @property string $order_service_type_name
  * @property integer $order_src_id
@@ -164,10 +164,10 @@ class Order extends ActiveRecord
     {
         return [
             [['admin_id','order_service_type_id','order_src_id','order_booked_begin_time','address_id'],'required'],
-            [['order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'isdel', 'order_ip', 'order_service_type_id', 'order_src_id', 'channel_id', 'order_booked_count', 'order_booked_begin_time', 'order_booked_end_time', 'address_id', 'order_booked_worker_id', 'checking_id','version'], 'integer'],
+            [['order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'isdel', 'order_service_type_id', 'order_src_id', 'channel_id', 'order_booked_count', 'order_booked_begin_time', 'order_booked_end_time', 'address_id', 'order_booked_worker_id', 'checking_id','version'], 'integer'],
             [['order_unit_money', 'order_money'], 'number'],
             [['order_code', 'order_channel_name'], 'string', 'max' => 64],
-            [['order_service_type_name', 'order_src_name'], 'string', 'max' => 128],
+            [['order_service_type_name', 'order_ip','order_src_name'], 'string', 'max' => 128],
             [['order_address', 'order_cs_memo'], 'string', 'max' => 255],
             [['order_code'], 'unique'],
             [$this->attributesExt,'safe']
@@ -312,6 +312,7 @@ class Order extends ActiveRecord
         $transaction = static::getDb()->beginTransaction(); //开启一个事务
         $is_new_record = $this->isNewRecord;
         if(!$this->isNewRecord)$this->version++;
+
         if ($this->save()) {
             //格式化数据开始
             $attributes = $this->attributes;
@@ -422,6 +423,7 @@ class Order extends ActiveRecord
                 'order_cs_memo' => $this->order_cs_memo,
                 'admin_id' => $this->admin_id,
             ]);
+
             if (!$OrderHistory->save()) {
                 $transaction->rollBack();//插入不成功就回滚事务
                 return false;
