@@ -14,6 +14,9 @@ use yii\bootstrap\Modal;
 $this->title = Yii::t('finance', '门店结算');
 $this->params['breadcrumbs'][] = $this->title;
 $this->params['review_section']=$searchModel->review_section;
+//是否需要进行财务打款确认
+$isFinacePayedConfirm = ($searchModel->finance_shop_settle_apply_status == FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED);
+$this->params['isFinacePayedConfirm'] = $isFinacePayedConfirm;
 ?>
 <form id ="financeSettleApplyForm">
    
@@ -49,13 +52,13 @@ $this->params['review_section']=$searchModel->review_section;
                         ]);
                     },
                     'agree' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-ok"></span>', Yii::$app->urlManager->createUrl(['/finance/finance-shop-settle-apply/review', 'id' => $model->id,'review_section'=>$this->params['review_section'],'is_ok'=>1]), [
-                            'title' => Yii::t('yii', '审核通过'),
+                        return Html::a('<span class="glyphicon glyphicon-ok"></span>', Yii::$app->urlManager->createUrl(['/finance/finance-shop-settle-apply/review', 'id' => $model->id,'review_section'=>$this->params['review_section'],'isFinacePayedConfirm'=>$this->params['isFinacePayedConfirm'],'is_ok'=>1]), [
+                            'title' => Yii::t('yii', $this->params['isFinacePayedConfirm']?'确认打款':'审核通过'),
                             'class'=>'agree',
                         ]);
                     },
                     'disagree' => function ($url, $model,$review_section) {
-                        return Html::a('<span class="glyphicon glyphicon-remove"></span>',
+                        return Html::a('<span class="glyphicon glyphicon-remove" style = "display:'.($this->params['isFinacePayedConfirm']?'none':'block').'"></span>',
                             [
                                 '/finance/finance-shop-settle-apply/review-failed-reason',
                                 'id' => $model->id, 'review_section'=>$this->params['review_section'],'is_ok'=>0,
