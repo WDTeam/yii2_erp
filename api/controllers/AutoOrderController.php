@@ -41,7 +41,7 @@ class AutoOrderController extends \api\components\Controller
     }
     /**
      *
-     * @api {POST} /ivr/send-sms 自动派单专用IVR
+     * @api {POST} /ivr/send-ivr 自动派单专用IVR
      * @apiName autoOrderIVR
      * @apiGroup SMS
      *
