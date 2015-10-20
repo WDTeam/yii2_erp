@@ -165,12 +165,22 @@ class Order extends OrderModel
             'created_at'=>$order->created_at
         ];
         Yii::$app->redis->executeCommand('zAdd',['WaitAssignOrdersPool',$order->order_booked_begin_time.$order_id,json_encode($redis_order)]);
-//        //TODO 开始系统指派
-//        if(self::sysAssignStart($order_id))
-//        {
-//            //TODO 系统指派失败
-//            self::sysAssignUndone($order_id);
-//        }
+        // 开始系统指派
+        self::sysAssignStart($order_id);
+    }
+
+    public static function push($order_id)
+    {
+        $order = Order::findOne($order_id);
+        if($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START){ //开始系统指派的订单
+            if(time()-$order->orderExtStatus->updated_at<300){ //TODO 5分钟内的订单推送给全职阿姨 5分钟需要配置
+
+            }elseif(time()-$order->orderExtStatus->updated_at<900){ //TODO 15分钟的订单推送给兼职阿姨 15分钟需要配置
+
+            }else{ //系统指派失败
+                self::sysAssignUndone($order_id);
+            }
+        }
     }
 
     /**
@@ -365,7 +375,8 @@ class Order extends OrderModel
         ]);
         $this->setAttributes([
             'order_money'=> $this->order_unit_money*$this->order_booked_count/60, //订单总价
-            'order_address'=>$address['customer_address_detail'].','.$address['customer_address_nickname'].','.$address['customer_address_phone'],//地址信息
+            'district_id'=> $goods['district_id'],
+            'order_address'=>$address['operation_province_name'].','.$address['operation_city_name'].','.$address['operation_area_name'].','.$address['customer_address_detail'].','.$address['customer_address_nickname'].','.$address['customer_address_phone'],//地址信息
         ]);
 
 
@@ -503,7 +514,9 @@ class Order extends OrderModel
             $goods = OperationGoodsController::getGoodsList($shop_district_info['data']['operation_city_id'], $shop_district_info['data']['operation_shop_district_id']);
             if(isset($goods['status'])&&$goods['status']==1){
                 if($goods_id==0){
-                    return ['code'=>200,'data'=>$goods['data']];
+                    $data = $goods['data'];
+                    $data['district_id'] = $shop_district_info['data']['operation_shop_district_id'];
+                    return ['code'=>200,'data'=>$data];
                 }else{
                     foreach($goods['data'] as $v){
                         if($v['operation_goods_id']==$goods_id){

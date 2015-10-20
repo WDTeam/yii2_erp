@@ -1078,6 +1078,14 @@ class OrderController extends \api\components\Controller
      *  }
      *
      */
+
+
+
+    public function actionPush($order_id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return Order::push($order_id);
+    }
 }
 
 ?>
