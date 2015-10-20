@@ -105,14 +105,14 @@ class Order extends OrderModel
 //     阿姨拒绝订单
     const EVENT_REJECT_BY_WORKER = 'event_reject_by_worker';
     
-    public function behaviors()
-    {
-        return [
-            [
-                'class'=>WorkerTaskBehavior::className(),
-            ]
-        ];
-    }
+//     public function behaviors()
+//     {
+//         return [
+//             [
+//                 'class'=>WorkerTaskBehavior::className(),
+//             ]
+//         ];
+//     }
     /**
      * 创建新订单
      * @param $attributes [
