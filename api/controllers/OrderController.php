@@ -234,10 +234,8 @@ class OrderController extends \api\components\Controller
             $attributes['order_is_use_balance'] = $args['order_is_use_balance'];
         }
 
-        $attributes['order_ip'] = ip2long(Yii::$app->getRequest()->getUserIP());
-        var_dump(Yii::$app->getRequest()->getUserIP());
-        $this->send(var_dump(Yii::$app->getRequest()->getUserIP()));
-        die();
+        $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
+
 
         $attributes['admin_id'] = 0;
         $order = new \core\models\order\Order();
