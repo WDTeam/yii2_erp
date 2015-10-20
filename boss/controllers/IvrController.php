@@ -11,6 +11,9 @@ class IvrController extends Controller
     public function actionCallback()
     {
         $data = \Yii::$app->ivr->cb_data;
+        $data['orderId'];
+        $data['press'];
+        $data['telephone'];
         if(isset($data['postType']) && $data['postType']==1){
             // code=1表示接单成功
             return json_encode([

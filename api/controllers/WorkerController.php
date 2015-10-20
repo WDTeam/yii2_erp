@@ -1,17 +1,22 @@
 <?php
+namespace api\controllers;
 
-class WorkerController
+use Yii;
+use \core\models\worker\Worker;
+use \core\models\worker\WorkerExt;
+class WorkerController extends \api\components\Controller
 {
+
     /**
      *
-     * @api {GET} /aunt/workinfo 查看阿姨信息
+     * @api {GET} /worker/work-info 查看阿姨信息 (田玉星 80% 原因:等待model的支持)
      *
      *
      * @apiName WorkerInfo
      * 
      * @apiGroup Worker
      *
-     * @apiParam {String} worker_id 阿姨id
+     * @apiParam {String} access_token 阿姨登录token
      *
      *
      *
@@ -21,7 +26,7 @@ class WorkerController
      *       "code": "ok",
      *       "msg": "查询成功",
      *       ret:{
-     *          "aunt":{
+     *          
      *          }
      *       }
      *
@@ -50,7 +55,95 @@ class WorkerController
      *
      */
     public function actionWorkerInfo(){
-    
+          $param = Yii::$app->request->post();
+          if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+          }
+          $worker = WorkerAccessToken::getWorker($param['access_token']);
+          if (!empty($worker) && !empty($worker->id)) {
+               $workerInfo = Worker::getWorkerInfo(1);
+               //数据整理
+               $ret = array(
+                   "order_count"=> "",
+                   "cancel_count"=>"",
+                   "worker_total_score"=>"",
+                   "my_rewards"=>array(),
+                   "user_phone"=>$workerInfo['worker_phone'],
+                   "worker_name"=>$workerInfo['worker_name'],
+                   "worker_age"=> "",
+                   "quality_score_clause_url"=>"",
+                   "live_place"=> "",
+                   "home_town"=> "",
+                   "identity_card"=> $workerInfo['worker_idcard'],
+                   "good_rate"=> array(),
+                   "bad_rate"=> array(),
+                   "total_rate"=> array(),
+                   "my_money"=> "",
+                   "rank_list" => array(),
+                   "my_rank"=>array(
+                         "worker_name"=>"",
+                         "rank"=> "",
+                         "money"=> ""
+                    ),
+                    "star_count_list"=>array(),
+                    "me_star_list"=>array(
+                         "worker_name"=>"",
+                         "rank"=>"",
+                         "money"=> "0"
+                    ),
+                    "personal_skill"=>array(
+                         "title"=>"",
+                         "type"=>"",
+                         "value"=>""
+                    ),
+                    "druing_time"=> "",
+                    "rest_score"=>"",
+                    "complain_num"=> "",
+                    "un_pay_money"=> "",
+                    "is_pay_money"=> "",
+                    "un_pay_list"=>array(),
+                    "is_pay_list"=>array(),
+                    "my_money_list"=>array(),
+                    "rest_day"=>"",
+                    "score_list"=>array(),
+                    "fine_money"=>"",
+                    "un_complain_list"=>array(),
+                    "rest_day_str"=>"",
+                    "complain_str"=> "",
+                    "complain_clause_url"=> "",
+                    "today_finish_order"=> "",
+                    "today_finish_money"=> "",
+                    "month_finish_order"=> "",
+                    "month_finish_money"=> "",
+                    "succ_rate"=> "",
+                    "driver_level"=> "",
+                    "alert_type"=> "",
+                    "account_rest_money"=> "",
+                    "pay_money" =>"",
+                    "charge_money"=>"",
+                    "driver_company"=>"",
+                    "cur_car_id"=>"",
+                    "cur_car_brand"=>"",
+                    "cur_car_number"=>"",
+                    "cur_car_color"=>"",
+                    "cur_color"=>"",
+                    "cur_car_type"=> "",
+                    "is_open_start"=>"",
+                    "result"=>"1",
+                    "head_url"=>"",
+                    "worker_degree"=> "",
+                    "worker_work_age"=> "",
+                    "worker_language"=> "",
+                    "health_card"=>"",
+                    "department"=> "",
+                    "server_range"=> "",
+                    "transportation"=> "",
+                    "activity_url"=> ""
+               );
+               return $this->send($ret, "阿姨信息查询成功", "ok");
+         } else {
+             return $this->send(null, "阿姨不存在.", "error", 403);
+         }
     }
     
     /**
@@ -694,11 +787,11 @@ class WorkerController
     
     
     /**
-     * @api {get} /mobileapidriver2/amend_password  修改密码
+     * @api {get} /worker/amend_password  修改密码(田玉星)
      * @apiName actionAmendPassword
      * @apiGroup Worker
      *  
-     * @apiParam {String} session_id    会话id.
+     * @apiParam {String} access_token    阿姨登录token.
      * @apiParam {String} platform_version 平台版本号.
      * @apiParam {String} password  原始密码.
      * @apiParam {String} new_password  新密码.
@@ -728,9 +821,18 @@ class WorkerController
      *
      */
     
+    public function amend_password(){
+
+    }
+
+
+
+
+
+
     
     /**
-     * @api {get} /mobileapidriver2/getWorkerPlaceById  获取阿姨住址
+     * @api {get} /worker/get-worker-place-by-id  获取阿姨住址(田玉星 90% 原因:等待model的支持)
      * @apiName actionGetWorkerPlaceById
      * @apiGroup Worker
      * @apiDescription 获取阿姨住址 用来查看路线
@@ -759,7 +861,24 @@ class WorkerController
      *  }
      *
      */
-    
+    public function actionGetWorkerPlaceById(){
+          $param = Yii::$app->request->post();
+          if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+          }
+          $worker = WorkerAccessToken::getWorker($param['access_token']);
+          if (!empty($worker) && !empty($worker->id)) {
+               //$filed = array('worker_live_province','worker_live_city','worker_live_area','worker_live_street');
+               //$workerInfo = Worker::getWorkerListByIds($worker->id,implode(',',$filed));
+               $ret = array(
+                    "result"=>'',
+                    "live_place"=>"测试等待model支持"
+               );
+               return $this->send($ret, "阿姨不存在.", "ok");
+          }else{
+               return $this->send(null, "阿姨不存在.", "error", 403);
+          }
+    }
     /**
      * @api {get} /v2/FixedUserPeriod.php  固定客户列表
      * @apiName actionFixedUserPeriod
