@@ -232,6 +232,7 @@ class PayController extends \api\components\Controller
                 $ext_params['customer_address'] = $data[$name]['ext_params']['customer_address'];  //用户地址
                 $ext_params['order_source_url'] = $data[$name]['ext_params']['order_source_url'];  //订单详情地址
                 $ext_params['page_url'] = $data[$name]['ext_params']['page_url'];  //订单跳转地址
+                $ext_params['goods_name'] = $data[$name]['ext_params']['goods_name'];  //订单跳转地址
                 $ext_params['detail'] = $data[$name]['ext_params']['detail'];  //订单详情
             }else{
                 $model->scenario = 'pay';
@@ -249,6 +250,7 @@ class PayController extends \api\components\Controller
                 $ext_params['customer_address'] = $data[$name]['ext_params']['customer_address'];  //用户地址
                 $ext_params['order_source_url'] = $data[$name]['ext_params']['order_source_url'];  //订单详情地址
                 $ext_params['page_url'] = $data[$name]['ext_params']['page_url'];  //订单跳转地址
+                $ext_params['goods_name'] = $data[$name]['ext_params']['goods_name'];  //订单跳转地址
                 $ext_params['detail'] = $data[$name]['ext_params']['detail'];  //订单详情
             }else{
                 $model->scenario = 'online_pay';
@@ -515,14 +517,63 @@ class PayController extends \api\components\Controller
     public function actionUpAppNotify()
     {
         $obj = new GeneralPay();
-        $obj->UpAppNotify(yii::$app->request->get());
+        $obj->UpAppNotify(yii::$app->request->post());
         exit;
     }
 
+    /**
+     * 支付宝APP回调
+     */
+    public function actionAlipayAppNotify()
+    {
+        $obj = new GeneralPay();
+        $obj->alipayAppNotify(yii::$app->request->post());
+        exit;
+    }
 
-    public function actionTest(){
-        $data = \core\models\CustomerTransRecord\CustomerTransRecord::queryRecord(1);
-        dump($data);
+    /**
+     * 微信APP回调
+     */
+    public function actionWxAppNotify()
+    {
+        $obj = new GeneralPay();
+        $obj->wxAppNotify(yii::$app->request->get());
+        exit;
+    }
+
+    /**
+     * 百付宝APP回调
+     */
+    public function actionBfbAppNotify()
+    {
+        $obj = new GeneralPay();
+        $obj->bfbAppNotify(yii::$app->request->get());
+        exit;
+    }
+
+    /**
+     * 微信H5回调
+     */
+    public function actionWxH5Notify()
+    {
+        $obj = new GeneralPay();
+        $obj->wxH5Notify($GLOBALS['HTTP_RAW_POST_DATA']);
+        exit;
+    }
+
+    /**
+     * 直达号H5回调
+     */
+    public function actionZhidahaoH5Notify()
+    {
+        $obj = new GeneralPay();
+        $obj->zhidahaoH5Notify(yii::$app->request->get());
+        exit;
+    }
+
+    public function actionTest()
+    {
+        dump(yii::$app->controller->id);
     }
 }
 

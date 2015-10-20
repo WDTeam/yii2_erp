@@ -263,7 +263,6 @@ class GeneralPayController extends Controller
     public function actionZhidahaoH5Notify()
     {
         $request = yii::$app->request;
-        file_put_contents('/tmp/pay/getzdh.php',json_encode($_GET));
         if(!empty($_REQUEST['debug'])){
 
             $post = [
