@@ -39,7 +39,7 @@ class GeneralPay extends \yii\db\ActiveRecord
 {
     public $partner;
     public $pay_type;
-    /*
+
     public $openid;
     //直达号
     public $customer_name; //商品名称
@@ -48,7 +48,7 @@ class GeneralPay extends \yii\db\ActiveRecord
     public $order_source_url; //订单详情地址
     public $page_url; //订单跳转地址
     public $detail; //订单详情
-    */
+
     /**
      * @inheritdoc
      */
