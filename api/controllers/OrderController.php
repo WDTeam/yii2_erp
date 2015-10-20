@@ -108,7 +108,7 @@ class OrderController extends \api\components\Controller
 
     /**
      *
-     * @api {POST} /order/create-order 创建订单 (xieyi 80% 目前block再ipv6地址不能存储，渠道号未定义)
+     * @api {POST} /order/create-order 创建订单 (xieyi 90% 创建已完成 渠道号更改 依赖林洪优)
      *
      *
      * @apiName ActionCreateOrder
@@ -139,16 +139,35 @@ class OrderController extends \api\components\Controller
      * @apiSuccess {Object} order 成功订单对象.
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/order/action-append-order
      * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "code": "ok",
-     *       "msg": "以下单成功，正在等待阿姨抢单",
-     *       "ret":{
-     *           order对象
-     *
-     *       }
-     *
-     *     }
+     * HTTP/1.1 200 OK
+     * {
+     *  "code": "ok",
+     *  "msg": "创建订单成功",
+     *  "ret": {
+     *          "order_service_type_id": "1",
+     *          "order_src_id": "2",
+     *          "order_booked_begin_time": "1445251619",
+     *          "order_booked_end_time": "1445255219",
+     *          "address_id": "1",
+     *          "channel_id": "20",
+     *          "order_ip": "::1",
+     *          "order_parent_id": 0,
+     *          "order_is_parent": 0,
+     *          "order_unit_money": "20.0000",
+     *          "order_service_type_name": "Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机",
+     *          "order_booked_count": 60,
+     *          "order_money": 20,
+     *          "order_address": "光华路soho,张三,18622344432",
+     *          "order_code": "1110",
+     *          "order_src_name": "IOS",
+     *          "order_channel_name": "后台下单",
+     *          "checking_id": 0,
+     *          "isdel": 0,
+     *          "created_at": 1445320069,
+     *          "updated_at": 1445320069,
+     *          "id": 8
+     *      }
+     *  }
      *
      * @apiError UserNotFound 用户认证已经过期.
      *
@@ -255,7 +274,7 @@ class OrderController extends \api\components\Controller
 
     /**
      *
-     * @api {POST} v1/order/append-order 追加订单(xieyi 80%和创建订单一样)
+     * @api {POST} v1/order/append-order 追加订单(xieyi 90%和创建订单一样)
      *
      * @apiName ActionAppendOrder
      * @apiGroup Order
