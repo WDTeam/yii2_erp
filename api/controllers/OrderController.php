@@ -14,7 +14,7 @@ class OrderController extends \api\components\Controller
 {
     /**
      *
-     * @api {POST} /order/choose-service-time 可服务时间表 (赵顺利%20 block linhongyou provide the feature)
+     * @api {POST} /order/choose-service-time 可服务时间表 (20%赵顺利 block linhongyou provide the feature)
      *
      * @apiDescription 选择服务时间接口服务器依据用户的当前位置提供时间表
      * @apiName ChooseServiceTime
@@ -108,7 +108,7 @@ class OrderController extends \api\components\Controller
 
     /**
      *
-     * @api {POST} /order/create-order 创建订单 (xieyi 90% 创建已完成 渠道号更改 依赖林洪优)
+     * @api {POST} /order/create-order 创建订单 (90%xieyi  创建已完成 渠道号更改 依赖林洪优)
      *
      *
      * @apiName ActionCreateOrder
@@ -413,7 +413,7 @@ class OrderController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /order/query-orders 查询订单(xieyi %70已经将后台接口完成，创建也完成缺少测试)
+     * @api {GET} /order/query-orders 查询订单(xieyi 70%已经将后台接口完成，创建也完成缺少测试)
      *
      *
      * @apiName QueryOrders
