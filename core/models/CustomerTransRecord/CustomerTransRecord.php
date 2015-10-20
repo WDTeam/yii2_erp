@@ -49,7 +49,6 @@ class CustomerTransRecord extends \common\models\CustomerTransRecord
     public static function analysisRecord($data)
     {
         //公用部分
-        $data['order_id'] = $data['id'];
         $data['order_channel_id'] = $data['general_pay_source']; //订单渠道
         $data['customer_trans_record_transaction_id'] = !empty($data['general_pay_transaction_id']) ? $data['general_pay_transaction_id'] : 0; //交易流水号
 

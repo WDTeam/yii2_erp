@@ -517,7 +517,7 @@ class PayController extends \api\components\Controller
     public function actionUpAppNotify()
     {
         $obj = new GeneralPay();
-        $obj->UpAppNotify(yii::$app->request->post());
+        $obj->UpAppNotify(yii::$app->request->get());
         exit;
     }
 
@@ -527,7 +527,7 @@ class PayController extends \api\components\Controller
     public function actionAlipayAppNotify()
     {
         $obj = new GeneralPay();
-        $obj->alipayAppNotify(yii::$app->request->post());
+        $obj->alipayAppNotify(yii::$app->request->get());
         exit;
     }
 
@@ -557,7 +557,7 @@ class PayController extends \api\components\Controller
     public function actionWxH5Notify()
     {
         $obj = new GeneralPay();
-        $obj->wxH5Notify($GLOBALS['HTTP_RAW_POST_DATA']);
+        $obj->wxH5Notify(yii::$app->request->get());
         exit;
     }
 
