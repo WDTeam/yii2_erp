@@ -14,7 +14,9 @@ $("#order-order_customer_phone").keyup(function(e){
 
 $("#order-order_customer_phone").blur(getCustomerInfo);
 
-
+$("#submit").click(function(){
+    $(this).parents('form').submit();
+});
 
 
 
@@ -35,9 +37,7 @@ $(document).on("change","#order-order_service_type_id input",function(){
     getCoupons();
 });
 
-$(document).on("click","#submit",function(){
-    $(this).parents('form').submit();
-});
+
 
 $(document).on("change","#order-address_id input[type='radio']",function(){
     $("#order-order_address").val($("#order-address_id input:checked").parent().text());
