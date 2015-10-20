@@ -115,7 +115,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
                 ->andFilterWhere(['like', 'worker_rule_name', $this->worker_rule_name])
             ->andFilterWhere(['like', 'finance_settle_apply_cycle_des', $this->finance_settle_apply_cycle_des])
             ->andFilterWhere(['like', 'finance_settle_apply_reviewer', $this->finance_settle_apply_reviewer]);
-        $dataProvider->query->orderBy(['updated_at'=>SORT_DESC,'created_at'=>SORT_DESC]);
+        $dataProvider->query->orderBy(['created_at'=>SORT_DESC]);
         return $dataProvider;
     }
     

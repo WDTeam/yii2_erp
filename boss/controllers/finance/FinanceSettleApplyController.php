@@ -195,7 +195,9 @@ class FinanceSettleApplyController extends BaseAuthController
             $financeWorkerOrderIncomeSearch->finance_worker_order_income_type = $requestParams['finance_worker_order_income_type'];
         }
         $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProviderFromOrder($financeSettleApplySearch->worder_id);
-        return $this->render('selfFulltimeWorkerSettleView', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider]);
+        $cashOrderDataProvider = $financeWorkerOrderIncomeSearch->getCashOrderDataProviderFromOrder($financeSettleApplySearch->worder_id);
+        $nonCashOrderDataProvider = $financeWorkerOrderIncomeSearch->getNonCashOrderDataProviderFromOrder($financeSettleApplySearch->worder_id);
+        return $this->render('selfFulltimeWorkerSettleView', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider,'cashOrderDataProvider'=>$cashOrderDataProvider,'nonCashOrderDataProvider'=>$nonCashOrderDataProvider]);
     }
     
     
@@ -422,7 +424,8 @@ class FinanceSettleApplyController extends BaseAuthController
         }
         $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProviderFromOrder($financeSettleApplySearch->worder_id);
         $cashOrderDataProvider = $financeWorkerOrderIncomeSearch->getCashOrderDataProviderFromOrder($financeSettleApplySearch->worder_id);
-        return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider,'cashOrderDataProvider'=>$cashOrderDataProvider]);
+        $nonCashOrderDataProvider = $financeWorkerOrderIncomeSearch->getNonCashOrderDataProviderFromOrder($financeSettleApplySearch->worder_id);
+        return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider,'cashOrderDataProvider'=>$cashOrderDataProvider,'nonCashOrderDataProvider'=>$nonCashOrderDataProvider]);
     }
     
     /**
@@ -439,20 +442,6 @@ class FinanceSettleApplyController extends BaseAuthController
         return $this->redirect('self-fulltime-worker-settle-index?settle_type='.$settle_type.'&review_section='.$review_section);
     }
     
-    /**
-    * 小家政人工结算
-    */
-    public function actionHomemakingManualSettlementIndex(){
-        $financeSettleApplySearch= new FinanceSettleApplySearch;
-        $requestModel = Yii::$app->request->getQueryParams();
-        if(isset($requestModel["FinanceSettleApplySearch"])){
-            $financeSettleApplySearch = $requestModel["FinanceSettleApplySearch"];
-        }
-//        $financeSettleApplySearch = $financeSettleApplySearch->getWorkerInfo($workerId);//获取阿姨的信息
-        $searchModel = new FinanceWorkerOrderIncomeSearch;
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-        return $this->render('homemakingManualSettlementIndex', ['model'=>$financeSettleApplySearch,'dataProvider'=>$dataProvider]);
-    }
     
     
     

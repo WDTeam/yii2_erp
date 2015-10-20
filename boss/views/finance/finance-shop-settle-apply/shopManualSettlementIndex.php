@@ -126,7 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             ['attribute'=>'worder_id',
                  'content'=>function($model,$key,$index)
-                        {return  Html::a('<u>'.$model->worder_id.'</u>',[Yii::$app->urlManager->createUrl(['order/view/','id' => $model->worder_id])],['target'=>'_blank']);}],
+                        {return  Html::a('<u>'.$model->worder_id.'</u>',[Yii::$app->urlManager->createUrl(['worker/view/','id' => $model->worder_id])],['data-pjax'=>'0','target' => '_blank',]);}],
             'worder_tel',
             'worker_type_name',
             'worker_rule_name', 
