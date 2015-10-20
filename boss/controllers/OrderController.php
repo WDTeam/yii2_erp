@@ -88,7 +88,7 @@ class OrderController extends BaseAuthController
                 {
                     "id": 2,
                     "coupon_name": "40优惠券",
-                    "coupon_money": 30
+                    "coupon_money": 40
                 },
                 {
                     "id": 3,
@@ -153,66 +153,48 @@ class OrderController extends BaseAuthController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $order_id =  Yii::$app->request->get('order_id');
         $order = Order::findOne($order_id);
+        
+        $district_id = $order->district_id;
         try{
-            $address = CustomerAddress::getAddress($order->address_id);
+            $used_worker_list = Customer::getCustomerUsedWorkers($order->orderExtCustomer->customer_id);
+            $used_worker_ids = [];
+            if (is_array($used_worker_list)) {
+                foreach ($used_worker_list as $v) {
+                    $used_worker_ids[] = $v['worker_id'];
+                }
+            }
         }catch (Exception $e){
-            return ['code'=>500,'msg'=>'获取客户地址接口异常！'];
-        }
-        if(isset($address->customer_address_longitude) && isset($address->customer_address_latitude)) {
-            //根据地址经纬度获取商圈
-            try{
-                $shop_district_info = OperationShopDistrictController::getCoordinateShopDistrict($address->customer_address_longitude, $address->customer_address_latitude);
-            }catch (Exception $e){
-                return ['code'=>500,'msg'=>'获取商圈信息异常！'];
-            }
-            if(isset($shop_district_info['status']) && $shop_district_info['status']==1) {
-                $district_id = $shop_district_info['data']['operation_shop_district_id'];
-                try{
-                    $used_worker_list = Customer::getCustomerUsedWorkers($order->orderExtCustomer->customer_id);
-                    $used_worker_ids = [];
-                    if (is_array($used_worker_list)) {
-                        foreach ($used_worker_list as $v) {
-                            $used_worker_ids[] = $v['worker_id'];
-                        }
-                    }
-                }catch (Exception $e){
 
-                }
-                //根据商圈获取阿姨列表 第二个参数 1自有 2非自有
-                try {
-                    $worker_list = array_merge(Worker::getDistrictFreeWorker($district_id, 1, $order->order_booked_begin_time, $order->order_booked_end_time), Worker::getDistrictFreeWorker($district_id, 2, $order->order_booked_begin_time, $order->order_booked_end_time));
-                }catch (Exception $e){
-                    return ['code'=>500,'msg'=>'获取阿姨列表接口异常！'];
-                }
-                $worker_ids = [];
-                $workers = [];
-                if (is_array($worker_list)) {
-                    foreach ($worker_list as $k => $v) {
-                        $worker_ids[] = $v['id'];
-                        $workers[$v['id']] = $worker_list[$k];
-                        $workers[$v['id']]['tag'] = in_array($v['id'], $used_worker_ids) ? '服务过' : "";
-                        $workers[$v['id']]['tag'] = ($v['id'] == $order->order_booked_worker_id) ? '指定阿姨' : $workers[$v['id']]['tag'];
-                        $workers[$v['id']]['order_booked_time_range'] = [];
-                        $workers[$v['id']]['memo'] = [];
-                        $workers[$v['id']]['status'] = [];
-                    }
-                    $worker_orders = OrderSearch::getListByWorkerIds($worker_ids, $order->order_booked_begin_time);
-                    foreach ($worker_orders as $v) {
-                        $workers[$v->orderExtWorker->worker_id]['order_booked_time_range'][] = date('H:i', $v->order_booked_begin_time) . '-' . date('H:i', $v->order_booked_end_time);
-                    }
-                    $order_worker_relations = OrderWorkerRelation::getListByOrderIdAndWorkerIds($order_id, $worker_ids);
-                    foreach ($order_worker_relations as $v) {
-                        $workers[$v->worker_id]['memo'][] = $v->order_worker_relation_memo;
-                        $workers[$v->worker_id]['status'][] = $v->order_worker_relation_status;
-                    }
-                }
-                return ['code'=>200,'data'=>$workers];
-            }else{
-                return ['code'=>500,'msg'=>'获取阿姨列表失败：没有匹配到商圈'];
-            }
-        }else{
-            return ['code'=>500,'msg'=>'获取阿姨列表失败：没有匹配到经纬度'];
         }
+        //根据商圈获取阿姨列表 第二个参数 1自有 2非自有
+        try {
+            $worker_list = array_merge(Worker::getDistrictFreeWorker($district_id, 1, $order->order_booked_begin_time, $order->order_booked_end_time), Worker::getDistrictFreeWorker($district_id, 2, $order->order_booked_begin_time, $order->order_booked_end_time));
+        }catch (Exception $e){
+            return ['code'=>500,'msg'=>'获取阿姨列表接口异常！'];
+        }
+        $worker_ids = [];
+        $workers = [];
+        if (is_array($worker_list)) {
+            foreach ($worker_list as $k => $v) {
+                $worker_ids[] = $v['id'];
+                $workers[$v['id']] = $worker_list[$k];
+                $workers[$v['id']]['tag'] = in_array($v['id'], $used_worker_ids) ? '服务过' : "";
+                $workers[$v['id']]['tag'] = ($v['id'] == $order->order_booked_worker_id) ? '指定阿姨' : $workers[$v['id']]['tag'];
+                $workers[$v['id']]['order_booked_time_range'] = [];
+                $workers[$v['id']]['memo'] = [];
+                $workers[$v['id']]['status'] = [];
+            }
+            $worker_orders = OrderSearch::getListByWorkerIds($worker_ids, $order->order_booked_begin_time);
+            foreach ($worker_orders as $v) {
+                $workers[$v->orderExtWorker->worker_id]['order_booked_time_range'][] = date('H:i', $v->order_booked_begin_time) . '-' . date('H:i', $v->order_booked_end_time);
+            }
+            $order_worker_relations = OrderWorkerRelation::getListByOrderIdAndWorkerIds($order_id, $worker_ids);
+            foreach ($order_worker_relations as $v) {
+                $workers[$v->worker_id]['memo'][] = $v->order_worker_relation_memo;
+                $workers[$v->worker_id]['status'][] = $v->order_worker_relation_status;
+            }
+        }
+        return ['code'=>200,'data'=>$workers];
 
     }
 
@@ -321,6 +303,7 @@ class OrderController extends BaseAuthController
             $model->order_booked_worker_id=0; //不指定阿姨
             $model->orderBookedTimeRange = '08:00-10:00';//预约时间段初始值
             $model->order_pay_type = 1;//支付方式 初始值
+            $model->order_flag_sys_assign = 1;//是否系统指派
         }
         return $this->render('create', [
             'model' => $model,

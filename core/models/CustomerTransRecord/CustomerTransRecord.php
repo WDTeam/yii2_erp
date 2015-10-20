@@ -9,6 +9,16 @@ use yii\behaviors\TimestampBehavior;
 
 class CustomerTransRecord extends \common\models\CustomerTransRecord
 {
+
+    /**
+     * 根据用户ID返回消费记录
+     * @param $customer_id
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function queryRecord($customer_id)
+    {
+        return CustomerTransRecord::find()->asArray()->all();
+    }
     /**
      * 创建交易记录
      * @param $data 数据

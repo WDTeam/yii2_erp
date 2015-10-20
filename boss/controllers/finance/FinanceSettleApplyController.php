@@ -132,6 +132,10 @@ class FinanceSettleApplyController extends BaseAuthController
         if(isset($requestParams['comment'])){
             $model->comment = $requestParams['comment'];
         }
+         $isFinacePayedConfirm = false;
+        if(isset($requestParams['isFinacePayedConfirm'])){
+            $isFinacePayedConfirm = $requestParams['isFinacePayedConfirm'];
+        }
         if($review_section== FinanceShopSettleApplySearch::BUSINESS_REVIEW){
             if($is_ok == 1){
                 $model->finance_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED;
@@ -141,10 +145,14 @@ class FinanceSettleApplyController extends BaseAuthController
         }elseif($review_section == FinanceShopSettleApplySearch::FINANCE_REVIEW){
             if($is_ok == 1){
                 $model->finance_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED;
+                if($isFinacePayedConfirm == true){
+                    $model->finance_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PAYED;
+                }
             }else{
                 $model->finance_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED;
             }
         }
+        $model->updated_at = time();
         $model->save();
         $financeSettleApplyLogSearch = new FinanceSettleApplyLogSearch;
         $financeSettleApplyLogSearch->finance_settle_apply_id = $id;
@@ -186,7 +194,7 @@ class FinanceSettleApplyController extends BaseAuthController
         if(isset($requestParams['finance_worker_order_income_type'])){
             $financeWorkerOrderIncomeSearch->finance_worker_order_income_type = $requestParams['finance_worker_order_income_type'];
         }
-        $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProvider($financeSettleApplySearch->worder_id);
+        $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProviderFromOrder($financeSettleApplySearch->worder_id);
         return $this->render('selfFulltimeWorkerSettleView', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider]);
     }
     
@@ -393,8 +401,17 @@ class FinanceSettleApplyController extends BaseAuthController
         $review_section = $requestParams['review_section'];
         $settle_type = $requestParams['settle_type'];
         $financeSettleApplySearch->load($requestParams);
+        if($settle_type == FinanceSettleApplySearch::SHOP_WORKER_SETTELE){
+            $worker_type = FinanceSettleApplySearch::NON_SELF_OPERATION;
+        }else{
+            $worker_type = FinanceSettleApplySearch::SELF_OPERATION;
+        }
+        if(!empty($financeSettleApplySearch->worder_tel) && !$financeSettleApplySearch->isWorkerExist($financeSettleApplySearch->worder_tel, $worker_type)){
+            Yii::$app->getSession()->setFlash('default', "未找到该阿姨的信息，请确认阿姨类型");
+            $financeSettleApplySearch->worder_tel = "";
+        }
         $financeSettleApplySearch->getWorkerInfo($financeSettleApplySearch->worder_tel);//获取阿姨的信息
-        
+        //如果是门店阿姨结算，阿姨角色肯定是
         $financeSettleApplySearch->settle_type = $settle_type;
         $financeSettleApplySearch->review_section = $review_section;
         $financeSettleApplySearch = $financeSettleApplySearch->getWorkerSettlementSummaryInfo($financeSettleApplySearch->worder_id);

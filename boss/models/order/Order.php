@@ -41,6 +41,18 @@ class Order extends OrderModel
         return ["120" => "两小时", "150" => "两个半小时", "180" => "三小时", "210" => "三个半小时", "240" => "四小时", "270" => "四个半小时", "300" => "五小时", "330" => "五个半小时", "360" => "六小时"];
     }
 
+    public function getCustomerNeeds()
+    {
+        return [
+            '重点打扫厨房'=>'重点打扫厨房',
+            '重点打扫卫生间'=>'重点打扫卫生间',
+            '家有爱宠'=>'家有爱宠',
+            '上门前打个电话'=>'上门前打个电话',
+            '很久没打扫了'=>'很久没打扫了',
+            '阿姨不要很多话'=>'阿姨不要很多话'
+        ];
+    }
+
     /**
      * TODO 获取开通省份列表
      * @return array
@@ -98,9 +110,10 @@ class Order extends OrderModel
     public function createNew($post)
     {
         $post['Order']['admin_id'] = Yii::$app->user->id;
-        $post['Order']['order_ip'] = ip2long(Yii::$app->request->userIP);
+        $post['Order']['order_ip'] = Yii::$app->request->userIP;
         $post['Order']['order_src_id'] = 1; //订单来源BOSS
         $post['Order']['channel_id'] = empty($post['Order']['channel_id'])?20:$post['Order']['channel_id']; //订单渠道
+        $post['Order']['order_customer_need'] = implode(',',$post['Order']['order_customer_need']); //客户需求
         //预约时间处理
         $time = explode('-',$post['Order']['orderBookedTimeRange']);
         $post['Order']['order_booked_begin_time'] = strtotime($post['Order']['orderBookedDate'].' '.$time[0].':00');

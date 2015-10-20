@@ -96,7 +96,7 @@ echo Menu::widget(
                 ],
             ],
             [
-                'label' => '订单管理(45%)',
+                'label' => '订单管理(50%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-tag',
                 'visible' => (Yii::$app->user->can('order')),
@@ -110,7 +110,7 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '创建新订单(90%)',
+                        'label' => '创建新订单(95%)',
                         'url' => ['/order/create'],
                         'icon' => 'fa fa-angle-right',
                     ],

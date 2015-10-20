@@ -43,7 +43,7 @@ use yii\helpers\ArrayHelper;
  * @property integer $order_flag_exception
  * @property integer $order_flag_sys_assign
  * @property integer $order_flag_lock
- * @property integer $order_ip
+ * @property string $order_ip
  * @property integer $order_service_type_id
  * @property string $order_service_type_name
  * @property integer $order_src_id
@@ -93,11 +93,21 @@ use yii\helpers\ArrayHelper;
  */
 class Order extends OrderModel
 {
+    //用户创建订单
+    const EVENT_CREATE_BY_USER = 'event_create_by_user';
+//     阿姨订单完成
+    const EVENT_DONE_BY_WORKER = 'event_done_by_worker';
+//     阿姨接受订单
+    const EVENT_ACCEPT_BY_WORKER = 'event_accept_by_worker';
+//     阿姨取消订单
+    const EVENT_CANCEL_BY_WORKER = 'event_cancel_by_worker';
+//     阿姨拒绝订单
+    const EVENT_REJECT_BY_WORKER = 'event_reject_by_worker';
 
     /**
      * 创建新订单
      * @param $attributes [
-     *  integer $order_ip 下单IP地址 必填
+     *  string $order_ip 下单IP地址 必填
      *  integer $order_service_type_id 服务类型 商品id 必填
      *  integer $order_src_id 订单来源id 必填
      *  string $channel_id 下单渠道 必填
@@ -149,15 +159,27 @@ class Order extends OrderModel
      */
     public static function addOrderToPool($order_id)
     {
-       //放入订单池 zset 根据预约开始时间+订单id排序
-//        $redis = new Redis();
-//        $redis->zAdd('WaitAssignOrdersPool',$order->order_booked_begin_time.$order_id,$order);
+        $order = Order::findOne($order_id);
+        $redis_order = [
+            'order_id'=>$order_id,
+            'created_at'=>$order->created_at
+        ];
+        Yii::$app->redis->executeCommand('zAdd',['WaitAssignOrdersPool',$order->order_booked_begin_time.$order_id,json_encode($redis_order)]);
+        // 开始系统指派
+        self::sysAssignStart($order_id);
+    }
 
-        //TODO 开始系统指派
-        if(self::sysAssignStart($order_id))
-        {
-            //TODO 系统指派失败
-            self::sysAssignUndone($order_id);
+    public static function push($order_id)
+    {
+        $order = Order::findOne($order_id);
+        if($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START){ //开始系统指派的订单
+            if(time()-$order->orderExtStatus->updated_at<300){ //TODO 5分钟内的订单推送给全职阿姨 5分钟需要配置
+
+            }elseif(time()-$order->orderExtStatus->updated_at<900){ //TODO 15分钟的订单推送给兼职阿姨 15分钟需要配置
+
+            }else{ //系统指派失败
+                self::sysAssignUndone($order_id);
+            }
         }
     }
 
@@ -181,7 +203,7 @@ class Order extends OrderModel
     public static function workerSMSPushFlag($order_id)
     {
         $order = OrderSearch::getOne($order_id);
-        $order->order_flag_worker_sms = 1;
+        $order->order_flag_worker_sms = $order->orderExtFlag->order_flag_worker_sms+1;
         return $order->doSave(['OrderExtFlag']);
     }
 
@@ -193,7 +215,7 @@ class Order extends OrderModel
     public static function workerJPushFlag($order_id)
     {
         $order = OrderSearch::getOne($order_id);
-        $order->order_flag_worker_jpush = 1;
+        $order->order_flag_worker_jpush = $order->orderExtFlag->order_flag_worker_jpush+1;
         return $order->doSave(['OrderExtFlag']);
     }
 
@@ -205,7 +227,7 @@ class Order extends OrderModel
     public static function workerIVRPushFlag($order_id)
     {
         $order = OrderSearch::getOne($order_id);
-        $order->order_flag_worker_ivr = 1;
+        $order->order_flag_worker_ivr = $order->orderExtFlag->order_flag_worker_ivr+1;
         return $order->doSave(['OrderExtFlag']);
     }
 
@@ -353,7 +375,8 @@ class Order extends OrderModel
         ]);
         $this->setAttributes([
             'order_money'=> $this->order_unit_money*$this->order_booked_count/60, //订单总价
-            'order_address'=>$address['customer_address_detail'].','.$address['customer_address_nickname'].','.$address['customer_address_phone'],//地址信息
+            'district_id'=> $goods['district_id'],
+            'order_address'=>$address['operation_province_name'].','.$address['operation_city_name'].','.$address['operation_area_name'].','.$address['customer_address_detail'].','.$address['customer_address_nickname'].','.$address['customer_address_phone'],//地址信息
         ]);
 
 
@@ -421,6 +444,7 @@ class Order extends OrderModel
                 Order::addOrderToPool($event->sender->id);
             });
             $order = $this->attributes;
+            $order['order_id'] = $order['id'];
             $order_model = OrderSearch::getOne($this->id);
             switch($this->orderExtPay->order_pay_type){
                 case self::ORDER_PAY_TYPE_OFF_LINE://现金支付
@@ -460,8 +484,6 @@ class Order extends OrderModel
         return false;
     }
 
-
-
     /**
      * 获取订单来源名称
      * @param $id
@@ -492,7 +514,9 @@ class Order extends OrderModel
             $goods = OperationGoodsController::getGoodsList($shop_district_info['data']['operation_city_id'], $shop_district_info['data']['operation_shop_district_id']);
             if(isset($goods['status'])&&$goods['status']==1){
                 if($goods_id==0){
-                    return ['code'=>200,'data'=>$goods['data']];
+                    $data = $goods['data'];
+                    $data['district_id'] = $shop_district_info['data']['operation_shop_district_id'];
+                    return ['code'=>200,'data'=>$data];
                 }else{
                     foreach($goods['data'] as $v){
                         if($v['operation_goods_id']==$goods_id){

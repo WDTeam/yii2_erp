@@ -3,21 +3,24 @@
 use yii\helpers\Html;
 use kartik\detail\DetailView;
 use kartik\datecontrol\DateControl;
+use core\models\worker\WorkerTask;
+use core\models\order\Order;
 
 /**
  * @var yii\web\View $this
  * @var core\models\worker\WorkerTask $model
  */
 
+$order = Order::find()->one();
+var_dump($order);exit;
+$order->trigger(Order::EVENT_ACCEPT_BY_WORKER);
+
 $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Worker Tasks'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="worker-task-view">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
-
 
     <?= DetailView::widget([
             'model' => $model,
@@ -31,17 +34,22 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'worker_task_name',
-            'worker_task_start',
-            'worker_task_end',
+//             'worker_task_cycle',
+            'worker_task_start:date',
+            'worker_task_end:date',
             'worker_type',
             'worker_rule_id',
             'worker_task_city_id',
             'worker_task_description',
             'worker_task_description_url:url',
-            'conditions:ntext',
-            'created_at',
-            'updated_at',
-            'is_del',
+            [
+                'label'=>'条件',
+                'format'=>'raw',
+                'value'=>$this->render('show_conditions',['models'=>$model->getConditions()])
+            ],
+//             'created_at',
+//             'updated_at',
+//             'is_del',
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],

@@ -35,7 +35,7 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'worker_task_description_url') ?>
 
-    <?php // echo $form->field($model, 'conditions') ?>
+    <?php // echo $form->field($model, 'worker_task_conditions') ?>
 
     <?php // echo $form->field($model, 'created_at') ?>
 

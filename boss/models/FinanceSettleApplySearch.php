@@ -65,7 +65,8 @@ class FinanceSettleApplySearch extends FinanceSettleApply
        FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_FAILED=>'业务部门审核不通过',
        FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT=>'提出申请，正在业务部门审核',
        FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED=>'业务部门审核通过，等待财务审核',
-       FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED=>'财务审核通过'];
+       FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED=>'财务审核通过',
+       FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PAYED=>'财务已确认打款',];
    
     public function rules()
     {
@@ -114,7 +115,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
                 ->andFilterWhere(['like', 'worker_rule_name', $this->worker_rule_name])
             ->andFilterWhere(['like', 'finance_settle_apply_cycle_des', $this->finance_settle_apply_cycle_des])
             ->andFilterWhere(['like', 'finance_settle_apply_reviewer', $this->finance_settle_apply_reviewer]);
-        $dataProvider->query->orderBy(['created_at'=>SORT_DESC]);
+        $dataProvider->query->orderBy(['updated_at'=>SORT_DESC,'created_at'=>SORT_DESC]);
         return $dataProvider;
     }
     
@@ -137,18 +138,21 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         return $workerIncomeAndDetail;
     }
     
-    
+    public function isWorkerExist($workerPhone,$worker_type){
+        $isWorkerExist = false;
+        $worker = Worker::getWorkerInfoByPhone($workerPhone);
+        if(isset($worker['id']) && ($worker['worker_type'] == $worker_type)){
+            return true;
+        }
+        return $isWorkerExist;
+    }
     
     /**
      * 根据阿姨手机号获取阿姨信息
      * @param type $workerPhone
      */
     public function getWorkerInfo($workerPhone){
-        $workerSimple = Worker::getWorkerInfoByPhone($workerPhone);
-        $workerInfo = [];
-        if(isset($workerSimple['id'])){
-            $workerInfo = Worker::getWorkerInfo($workerSimple['id']);
-        }
+        $workerInfo = Worker::getWorkerInfoByPhone($workerPhone);
         if(count($workerInfo)> 0){
              $this->worder_id =$workerInfo['id'];
             $this->worder_name = $workerInfo['worker_name'];

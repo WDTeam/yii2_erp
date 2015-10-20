@@ -531,7 +531,7 @@ class WorkerController extends BaseAuthController
 
     public function actionTest(){
         echo '<pre>';
-        var_dump(Worker::getDistrictFreeWorker(1,1,1,1000));
+        var_dump(Worker::checkWorkerPassword(1317777825111,1));
         die;
 
         $a = Worker::getWorkerInfo(16351);

@@ -156,7 +156,8 @@ class FinanceHeaderController extends BaseAuthController
        	$post['FinanceHeader']['create_time'] = time();
        	$post['FinanceHeader']['is_del'] =0;
        	$i=0;
-       	foreach ($sheetData[1] as $value){
+       	foreach (array_filter($sheetData[1]) as $value){
+       		//if(!$value){ return $this->redirect(['index']); }
        		$post['FinanceHeader']['finance_header_key'] =$i;
        		$post['FinanceHeader']['finance_header_name'] = $value;
        		$_model = clone $model;

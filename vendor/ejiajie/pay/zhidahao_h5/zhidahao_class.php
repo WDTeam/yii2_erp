@@ -35,7 +35,8 @@ class zhidahao_class
      *
      * @return bool
      */
-    public function callback(){
+    public function callback()
+    {
         if($_REQUEST['sp_no'] != zhidahao::SP_NO){
             return false;
         }
@@ -47,8 +48,10 @@ class zhidahao_class
         if($_REQUEST['sign'] != zhidahao::getSignature($_REQUEST)){
             return false;
         }
+
         $errorCode = zhidahao::queryOrder($_REQUEST);
-        if( $errorCode['status'] == 1 ){
+
+        if( $errorCode['status'] != 1 ){
             return false;
         }
 

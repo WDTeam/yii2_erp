@@ -36,6 +36,7 @@ class GeneralPayController extends Controller
      * @param integer $order_id 订单ID
      * @param integer $partner 第三方合作号
      */
+    /*
     public function actionGetPay()
     {
         //接收数据
@@ -111,7 +112,7 @@ class GeneralPayController extends Controller
         }
 
     }
-
+    */
     /**
      * 接收第三方支付数据
      * @return mixed
@@ -135,6 +136,7 @@ class GeneralPayController extends Controller
      * 支付宝APP回调
      * wx-js-notify
      */
+    /*
     public function actionWxH5Notify()
     {
         if(!empty($_GET['debug'])){
@@ -255,26 +257,29 @@ class GeneralPayController extends Controller
             }
         }
     }
-
+    */
     /**
      * 支付宝APP回调
      * wx-js-notify
      */
+    /*
     public function actionZhidahaoH5Notify()
     {
         $request = yii::$app->request;
-        if(!empty($_GET['debug'])){
-            $post = array (
-                "order_id" => "",//直达号中心订单号
-                "order_no" => "",//第三方的订单号
-                "pay_time" => "",//支付时间
-                "pay_result" => "",//1 支付成功,2 等待支付, 3 退款成功
-                "sp_no" => "",//商户号
-                "paid_amount" => "",//成功支付现金金额(单位分)
-                "coupons" => "",//优惠券使用金额(单位分)
-                "promotion" => "",//立减金额(单位分)
-                "sign" => "",//签名
-            );
+        if(!empty($_REQUEST['debug'])){
+
+            $post = [
+                "order_no" => "15101980901",    //第三方的订单号
+                "order_id" => "17600075",       //直达号中心订单号
+                "sp_no" => "1049",              //商户号
+                "pay_time" => "1445252232",     //支付时间
+                "pay_result" => "1",            //1 支付成功,2 等待支付, 3 退款成功
+                "paid_amount" => "1",           //成功支付现金金额(单位分)
+                "coupons" => "0",               //优惠券使用金额(单位分)
+                "promotion" => "0",             //立减金额(单位分)
+                "sign" => "192efb9b70c26c4135d7550628f3e7cd"    //签名
+            ];
+            $_REQUEST = $post;
         }else{
             $post = $request->get();
         }
@@ -301,7 +306,7 @@ class GeneralPayController extends Controller
         $model = new GeneralPay();
 
         //获取交易ID
-        $GeneralPayId = $model->getGeneralPayId($post['out_trade_no']);
+        $GeneralPayId = $model->getGeneralPayId($post['order_no']);
 
         //查询支付记录
         $model = GeneralPay::find()->where(['id'=>$GeneralPayId,'general_pay_status'=>0])->one();
@@ -309,21 +314,19 @@ class GeneralPayController extends Controller
         //验证支付结果
         if(!empty($model))
         {
-            //验证签名
-            //调用微信数据
-            $class = new \wxjspay_class();
-            $class->callback();
-            $status = $class->notify();
+            //调用直达号数据
+            $class = new \zhidahao_class();
+            $status = $class->callback();
 
             //签名验证成功
-            if($status == 'SUCCESS')
+            if( !empty($status) )
             {
                 $model->id = $GeneralPayId; //ID
                 $model->general_pay_status = 1; //支付状态
-                $model->general_pay_actual_money = $post['total_fee'];
-                $model->general_pay_transaction_id = $post['transaction_id'];
+                $model->general_pay_actual_money = $model->toMoney($post['paid_amount'],100,'/');
+                $model->general_pay_transaction_id = $post['order_id'];
                 $model->general_pay_is_coupon = 1;
-                $model->general_pay_eo_order_id = $post['out_trade_no'];
+                $model->general_pay_eo_order_id = $post['order_no'];
                 $model->general_pay_verify = $model->makeSign();
 
                 //commit
@@ -342,7 +345,7 @@ class GeneralPayController extends Controller
                     }
 
                     $transaction->commit();
-
+                    echo $class->notify();
                     //发送短信事件
                     $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
                     $this->trigger('paySms');
@@ -354,11 +357,12 @@ class GeneralPayController extends Controller
             }
         }
     }
-
+    */
 
     /**
      * 支付宝APP回调
      */
+    /*
     public function actionAlipayAppNotify()
     {
         $request = yii::$app->request;
@@ -475,11 +479,12 @@ class GeneralPayController extends Controller
             }
         }
     }
-
+    */
     /**
      * 微信APP回调
      * 金额单位为【分】
      */
+    /*
     public function actionWxAppNotify()
     {
         //file_put_contents('/tmp/pay/test.txt',json_encode($_POST));
@@ -590,11 +595,12 @@ class GeneralPayController extends Controller
         }
 
     }
-
+    */
     /**
      *  百付宝APP回调
      *  金额单位为【分】
      */
+    /*
     public function actionBfbAppNotify()
     {
         $request = yii::$app->request;
@@ -699,10 +705,11 @@ class GeneralPayController extends Controller
 
         }
     }
-
+    */
     /**
      * 银联APP回调
      */
+    /*
     public function actionUpAppNotify()
     {
         $request = yii::$app->request;
@@ -807,7 +814,7 @@ class GeneralPayController extends Controller
             }
         }
     }
-
+    */
     /**
      * 用户服务卡支付
      */

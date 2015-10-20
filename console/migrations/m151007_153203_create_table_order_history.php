@@ -41,7 +41,7 @@ class m151007_153203_create_table_order_history extends Migration
             'order_flag_worker_ivr' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'是否给阿姨发了IVR\'',
 
 //===============================下单信息
-            'order_ip' => Schema::TYPE_INTEGER.'(10) NOT NULL DEFAULT 0 COMMENT \'下单IP\'',
+            'order_ip' => Schema::TYPE_STRING.'(128) NOT NULL DEFAULT \'\' COMMENT \'下单IP\'',
             'order_service_type_id' => Schema::TYPE_SMALLINT . '(4) unsigned NOT NULL DEFAULT 0 COMMENT \'订单服务类别ID\'',
             'order_service_type_name' => Schema::TYPE_STRING . '(128) NOT NULL DEFAULT \'\' COMMENT \'订单服务类别\'',
             'order_src_id' => Schema::TYPE_SMALLINT . '(4) unsigned DEFAULT 0 COMMENT \'订单来源，订单入口id\'',
@@ -55,6 +55,7 @@ class m151007_153203_create_table_order_history extends Migration
             'order_booked_begin_time' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 0 COMMENT \'预约开始时间\'',
             'order_booked_end_time' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 0 COMMENT \'预约结束时间\'',
             'address_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'地址ID\'',
+            'district_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'商圈ID\'',
             'order_address'=>Schema::TYPE_STRING.'(255) NOT NULL DEFAULT \'\' COMMENT \'详细地址 包括 联系人 手机号\'',
             'order_booked_worker_id' => Schema::TYPE_INTEGER.'(10) unsigned DEFAULT 0 COMMENT \'指定阿姨\'',
 //================================第三方信息
