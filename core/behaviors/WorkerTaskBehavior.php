@@ -4,6 +4,7 @@ namespace core\behaviors;
 use yii\base\Behavior;
 use core\models\order\Order;
 use core\models\worker\WorkerTaskLog;
+use common\models\OrderExtWorker;
 class WorkerTaskBehavior extends Behavior
 {
     public function events(){
@@ -32,7 +33,22 @@ class WorkerTaskBehavior extends Behavior
             $log = new WorkerTaskLog();
             $log->worker_id = $ext_worker->worker_id;
         }
-        
+    }
+    /**
+     * 指定时间段内阿姨各个条件完成值
+     *  条件类型：
+     *  1=>'取消订单 ',
+        2=>'拒绝订单',
+        3=>'服务老用户',
+        4=>'主动接单',
+        5=>'完成工时',
+        6=>'完成小保养 ',个数
+     * @param unknown $start_time
+     * @param unknown $end_time
+     * @param unknown $worker_id
+     */
+    public function getConditionsValues($start_time, $end_time, $worker_id)
+    {
         
     }
 }

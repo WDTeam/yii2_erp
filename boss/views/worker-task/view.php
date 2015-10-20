@@ -11,8 +11,8 @@ use core\models\order\Order;
  * @var core\models\worker\WorkerTask $model
  */
 
-// $order = Order::find()->one();
-// $order->trigger(Order::EVENT_ACCEPT_BY_WORKER);
+$order = Order::find()->one();
+$order->trigger(Order::EVENT_ACCEPT_BY_WORKER);
 
 $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Worker Tasks'), 'url' => ['index']];
