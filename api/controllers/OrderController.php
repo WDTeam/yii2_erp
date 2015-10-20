@@ -14,7 +14,7 @@ class OrderController extends \api\components\Controller
 {
     /**
      *
-     * @api {POST} /order/choose-service-time 可服务时间表
+     * @api {POST} /order/choose-service-time 可服务时间表 (赵顺利%20 block linhongyou provide the feature)
      *
      * @apiDescription 选择服务时间接口服务器依据用户的当前位置提供时间表
      * @apiName ChooseServiceTime
