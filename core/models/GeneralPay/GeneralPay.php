@@ -183,7 +183,7 @@ class GeneralPay extends \common\models\GeneralPay
         if( $model->validate() && $model->save() )
         {
             //返回组装数据
-            return $model->call_pay($data);
+            return ['status'=>0 , 'info'=>'数据返回成功', 'data'=>$model->call_pay($data)];
         }
         else
         {

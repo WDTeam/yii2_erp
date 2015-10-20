@@ -261,8 +261,7 @@ class PayController extends \api\components\Controller
         if($model->load($data) && $model->validate())
         {
             $retInfo= GeneralPay::getPayParams($model->pay_money,$model->customer_id,$model->channel_id,$model->partner,$model->order_id,$ext_params);
-            return $retInfo;
-           return $this->send($retInfo['data'], $retInfo['info'], $retInfo['status']);
+            return $this->send($retInfo['data']);
         }
         return $this->send(null, $model->errors, "error");
 

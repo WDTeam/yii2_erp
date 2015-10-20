@@ -68,10 +68,6 @@ class AuthController extends \api\components\Controller
     }
 
     /**
-<<<<<<< HEAD
-     * @api {post} /mobileapidriver2/driver_login 阿姨登录(李勇0%)
-=======
-     *
      * @api {POST} /auth/loginfrompop 客户登录(第三方渠道) (已实现)
      * @apiName LoginFromPop
      * @apiGroup Auth
@@ -135,7 +131,6 @@ class AuthController extends \api\components\Controller
 
     /**
      * @api {post} /mobileapidriver2/driver_login 阿姨登录
->>>>>>> 72390c443a8562e76ecca17c926416d5795d2d4c
      * @apiName actionDriverLogin
      * @apiGroup Auth
      *
