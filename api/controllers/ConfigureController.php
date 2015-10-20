@@ -108,8 +108,8 @@ class ConfigureController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /configure/ 轮播图等初始化
-     * @apiName InitConfigure
+     * @api {POST} /configure/user-init 用户端首页初始化 （赵顺利0%）
+     * @apiName actionUserInit
      * @apiGroup configure
      * @apiDescription 获得开通城市列表，广告轮播图 等初始化数据
      * @apiParam {String} city 城市
@@ -177,8 +177,8 @@ class ConfigureController extends \api\components\Controller
      */
 
     /**
-     * @api {GET} /v2/worker/check_update.php 检查阿姨端版本更新
-     * @apiName actionCheckUpdate
+     * @api {POST} /configure/worker-check-update 检查阿姨端版本更新 （赵顺利0%）
+     * @apiName actionWorkerCheckUpdate
      * @apiGroup configure
      *
      * @apiParam {String} session_id    会话id.
@@ -212,9 +212,10 @@ class ConfigureController extends \api\components\Controller
      */
 
     /**
-     * @api {get} /v2/worker/home_page.php 阿姨app初始化
-     * @apiName actionIndex
+     * @api {POST} /configure/worker-init 阿姨app初始化 （赵顺利0%）
+     * @apiName actionWorkerInit
      * @apiGroup configure
+     *
      * @apiParam {String} session_id 会话id.
      * @apiParam {String} platform_version 平台版本号.
      *
