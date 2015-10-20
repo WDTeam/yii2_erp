@@ -130,7 +130,7 @@ class AuthController extends \api\components\Controller
     }
 
     /**
-     * @api {post} /mobileapidriver2/driver_login 阿姨登录
+     * @api {post} /mobileapidriver2/driver_login 阿姨登录（李勇90%）[core中没有AccessToken的类，写好后给我]
      * @apiName actionDriverLogin
      * @apiGroup Auth
      *
@@ -172,21 +172,20 @@ class AuthController extends \api\components\Controller
      *
      */
     public function actionWorkerLogin(){
-        $username=Yii::$app->request->get('username');//要改get
+        $phone=Yii::$app->request->get('phone');
         $password=Yii::$app->request->get('password');
-        if(empty($username) || empty($password)){
+        if(empty($phone) || empty($password)){
             return $this->send(null, "用户名或密码不能为空", "error",403,"数据不完整");
         }
-        //$checkRet = WorkerCode::checkCode($username,$password);//要改
-        $checkRet=1;
-        if($checkRet){
-            //$token = CustomerAccessToken::generateAccessToken($username,$password);//要改为阿姨accessToken
+        $checkRet = Worker::checkWorkerPassword($phone,$password);
+        if($checkRet['result']=='1'){
+            //$token = WorkerAccessToken::generateAccessToken($username,$password);
             $token=1;
             if (empty($token)) {
                 return $this->send(null, "生成token错误","error");
             }else{
-                $worker = Worker::getWorkerInfo($checkRet);
-               /* $ret = [
+                $worker = Worker::getWorkerDetailInfo($checkRet);
+                $ret = [
                     "worker_name" => $worker['worker_name'],
                     "worker_rule_id" => $worker['worker_rule_id'],
                     "worker_rule_description" => $worker['worker_rule_description'],
@@ -194,17 +193,6 @@ class AuthController extends \api\components\Controller
                     "access_token" => $token,
                     "worker_id" => $worker['id'],
                     "shop_id" => $worker['shop_id'],
-                    "result" =>'',
-                    "msg" =>''
-                ];*/
-                 $ret = [
-                    "worker_name" => '李勇',
-                    "worker_rule_id" => 1,
-                    "worker_rule_description" => '全职',
-                    "work_photo" => '头像',
-                    "access_token" => $token,
-                    "worker_id" =>1,
-                    "shop_id" => 2,
                     "result" =>'',
                     "msg" =>''
                 ];
