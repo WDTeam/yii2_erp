@@ -69,9 +69,12 @@ class WorkerTask extends \common\models\WorkerTask
     {
         $names = self::CONDITION_NAME;
         $data = (array)json_decode($this->worker_task_conditions, true);
-        var_dump($names, $data);
         foreach ($data as $item){
-            $data[$item['id']]['name'] = $names[$item['id']];
+            if(isset($names[$item['id']])){
+                $data[$item['id']]['name'] = $names[$item['id']];
+            }else{
+                unset($data[$item['id']]);
+            }
         }
         return $data;
     }
