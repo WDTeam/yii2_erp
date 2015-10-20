@@ -144,10 +144,9 @@ class GeneralPay extends \yii\db\ActiveRecord
      * 4=APP银联,
      * 5=APP支付宝,
      * 6=WEB支付宝,
-     * 7=HT淘宝,
-     * 8=H5百度直达号,
-     * 9=HT刷卡,
-     * 10=HT现金,
+     * 7=H5百度直达号,
+     * 20=后台支付,
+     * 21=微博支付,
      */
     public function source($source_id)
     {
@@ -1132,7 +1131,7 @@ class GeneralPay extends \yii\db\ActiveRecord
      */
     public function getGeneralPayId($out_trade_no)
     {
-        return substr($out_trade_no,10);
+        return substr($out_trade_no,12);
     }
 
     /**
