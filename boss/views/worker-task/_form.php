@@ -39,7 +39,7 @@ var_dump($model->getErrors());
         <label class="control-label col-md-2">任务条件</label>
         <?php foreach ($conditions as $con){?>
         <div class="row col-md-10" style="padding-left:50px">
-            <span class="col-md-1">
+            <span class="col-md-2">
                 <?php echo Html::dropDownList("WorkerTask[conditions][{$con['id']}][id]", $conditions[$con['id']]['id'], WorkerTask::CONDITION_NAME);?>
             </span>
             <?php echo Html::dropDownList("WorkerTask[conditions][{$con['id']}][judge]", $conditions[$con['id']]['judge'], WorkerTask::CONDITION_JUDGE);?>

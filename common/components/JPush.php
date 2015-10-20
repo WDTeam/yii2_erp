@@ -23,13 +23,27 @@ class JPush extends Object
         $this->client = new JPushClient($this->app_key, $this->master_secret);
         return parent::init();
     }
-
+    /**
+     * 给指定tags推送
+     * @param unknown $tags
+     * @param unknown $msg
+     * @param unknown $extras
+     */
+    public function push($tags, $msg, $extras=[])
+    {
+        $result = $this->client->push()
+        ->setPlatform(M\platform(M\all))
+        ->setAudience(M\Audience(M\Tag($tags)))
+        ->setNotification(M\notification($msg))
+        ->send();
+        return $result;
+    }
     /**
      * 推送消息
      * @param string $msg 消息内容
      * @return \JPush\Model\PushResponse
      */
-    public function push($msg='hi')
+    public function pushAll($msg='hi')
     {
         $result = $this->client->push()
         ->setPlatform(M\all)

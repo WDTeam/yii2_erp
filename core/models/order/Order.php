@@ -24,6 +24,7 @@ use common\models\OrderSrc;
 use common\models\FinanceOrderChannel;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
+use core\behaviors\WorkerTaskBehavior;
 
 /**
  * This is the model class for table "{{%order}}".
@@ -103,7 +104,15 @@ class Order extends OrderModel
     const EVENT_CANCEL_BY_WORKER = 'event_cancel_by_worker';
 //     阿姨拒绝订单
     const EVENT_REJECT_BY_WORKER = 'event_reject_by_worker';
-
+    
+    public function behaviors()
+    {
+        return [
+            [
+                'class'=>WorkerTaskBehavior::className(),
+            ]
+        ];
+    }
     /**
      * 创建新订单
      * @param $attributes [
