@@ -4,6 +4,7 @@ namespace core\models\worker;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "{{%worker_task_log}}".
@@ -20,6 +21,16 @@ use yii\helpers\ArrayHelper;
  */
 class WorkerTaskLog extends \common\models\WorkerTaskLog
 {
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+            ],
+        ];
+    }
     /**
      * 获取每个条件对应的所有数值
      */

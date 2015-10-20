@@ -95,6 +95,12 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
         return $dataProvider;
     }
     
+    public function getNonCashOrderDataProviderFromOrder($worker_id){
+        $query = Order::find()->where(['order_booked_worker_id'=>$worker_id]);
+        $dataProvider = new ActiveDataProvider([ 'query' => $query,]);
+        return $dataProvider;
+    }
+    
      public function attributeLabels()
     {
         $parentAttributeLabels = parent::attributeLabels();

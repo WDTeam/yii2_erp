@@ -45,22 +45,22 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="panel-body settle-detail-body">
             <div class='col-md-2'>
-                爱佳家政
+                <?php echo $model->shop_manager_name?>
             </div>
             <div class='col-md-2'>
-                爱佳家政北京双井店
+                <?php echo $shopModel->name?>
             </div>
             <div class='col-md-2'>
-                20
+                <?php echo $shopModel->worker_count?>
             </div>
             <div class='col-md-2'>
-                张三
+                <?php echo $shopModel->principal?>
             </div>
             <div class='col-md-2'>
-                13456789000
+                <?php echo $shopModel->tel?>
             </div>
             <div class='col-md-2'>
-                2015-09-10 17:30:00
+                <?php echo  date('Y:m:d H:i:s',$shopModel->created_at)?>
             </div>
         </div>
         <div class="panel-heading">
@@ -76,10 +76,10 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="panel-body settle-detail-body">
             <div class='col-md-6'>
-                250
+                <?php echo $model->finance_shop_settle_apply_order_count ?>
             </div>
             <div class='col-md-6'>
-                2500
+                <?php echo $model->finance_shop_settle_apply_fee ?>
             </div>
         </div>
         <div class="panel-heading">

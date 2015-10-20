@@ -27,7 +27,6 @@ class AutoOrderController extends \api\components\Controller
      *       "tel": "15011152243",
      *     }
      *
-     * @apiSampleRequest 
      */
     public function actionSendSms()
     {
@@ -59,7 +58,6 @@ class AutoOrderController extends \api\components\Controller
      *       "tel": "15011152243",
      *     }
      *
-     * @apiSampleRequest
      */
     public function actionSendIvr()
     {
