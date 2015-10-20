@@ -3,6 +3,7 @@
 namespace core\models\worker;
 
 
+use core\models\Operation\CoreOperationArea;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\ForbiddenHttpException;
@@ -116,15 +117,52 @@ class Worker extends \common\models\Worker
         }
     }
 
+    /**
+     * 验证阿姨密码
+     * @param $phone 阿姨电话
+     * @param $password 阿姨登陆密码
+     * @return mixed
+     */
+    public static function checkWorkerPassword($phone,$password){
+
+        if(empty($phone) || empty($password)){
+            $result['result'] = 0;
+            $result['msg'] = '阿姨电话密码为空';
+            return $result;
+        }
+
+        $workerResult = self::find()->where(['worker_phone'=>$phone])->select('id,worker_password,worker_is_block,worker_is_blacklist')->asArray()->one();
+        if($workerResult){
+            //暂不验证密码
+            //if($workerResult['password'])){
+            if(1){
+                if($workerResult['worker_is_block']==1){
+                    $result['result'] = 0;
+                    $result['msg'] = '阿姨正处于黑名单中,';
+                }elseif($workerResult['worker_is_blacklist']==1){
+                    $result['result'] = 0;
+                    $result['msg'] = '阿姨正处于封号中';
+                }else{
+                    $result['result'] = 1;
+                    $result['msg'] = '';
+                    $result['worker_id'] = $workerResult['id'];
+                }
+            }
+        }else{
+            $result['result'] = 0;
+            $result['msg'] = '阿姨电话密码错误';
+        }
+        return $result;
+    }
 
     /**
-     * 获取单个阿姨详细信息
+     * 获取单个阿姨信息
      * @param integer worker_id  阿姨id
-     * @return array 阿姨详细信息
+     * @return array 阿姨信息
      */
     public static function getWorkerInfo($worker_id){
 
-        $workerInfo = self::find()->where((['id'=>$worker_id]))->select('id,shop_id,worker_name,worker_phone,worker_idcard,worker_type,worker_rule_id,created_ad')->asArray()->one();
+        $workerInfo = self::find()->where((['id'=>$worker_id]))->select('id,shop_id,worker_name,worker_phone,worker_idcard,worker_type,worker_photo,worker_rule_id,created_ad')->asArray()->one();
         if($workerInfo){
             //门店名称,家政公司名称
             $shopInfo = Shop::findone($workerInfo['shop_id']);
@@ -141,6 +179,61 @@ class Worker extends \common\models\Worker
         return $workerInfo;
     }
 
+    /**
+     * 获取阿姨详细信息
+     * @param $worker_id
+     * @return array
+     */
+    public static function getWorkerDetailInfo($worker_id){
+        $workerDetailResult = self::find()
+            ->where(['id'=>$worker_id])
+            ->select('id,shop_id,worker_name,worker_phone,worker_photo,worker_age,worker_type,worker_rule_id,worker_sex,worker_edu,worker_stat_order_num,worker_stat_order_refuse,worker_stat_order_complaint,worker_stat_order_money,worker_live_province,worker_live_city,worker_live_area,worker_live_street')
+            ->joinWith('workerExtRelation')
+            ->joinWith('workerStatRelation')
+            ->asArray()
+            ->one();
+
+        if($workerDetailResult){
+            $workerDetailResult['worker_sex'] = Worker::getWorkerSexShow($workerDetailResult['worker_sex']);
+            $workerDetailResult['worker_type_description'] = self::getWorkerTypeShow($workerDetailResult['worker_type']);
+            $workerDetailResult['worker_rule_description'] = WorkerRuleConfig::getWorkerRuleShow($workerDetailResult['worker_rule_id']);
+            $workerDetailResult['worker_live_place'] = self::getWorkerPlaceShow($workerDetailResult['worker_live_province'],$workerDetailResult['worker_live_city'],$workerDetailResult['worker_live_area'],$workerDetailResult['worker_live_street']);
+            unset($workerDetailResult['workerStatRelation']);
+            unset($workerDetailResult['workerExtRelation']);
+        }else{
+            return [];
+        }
+        return $workerDetailResult;
+    }
+
+    /**
+     * 获取阿姨地址
+     * @param $province_id
+     * @param $city_id
+     * @param $area_id
+     * @param $street
+     * @return string
+     */
+    public static function getWorkerPlaceShow($province_id,$city_id,$area_id,$street=''){
+        $provinceName = self::getArea($province_id);
+        $cityName = self::getArea($city_id);
+        $areaName = self::getArea($area_id);
+        $workerPlace = $provinceName.$cityName.$areaName.$street;
+        return $workerPlace;
+    }
+
+    /**
+     * 获取区域名称
+     * @param $id
+     * @return string
+     */
+    public static function getArea($id){
+        if(empty($id)){
+            return '';
+        }
+        $areaResult = CoreOperationArea::getOneFromId($id);
+        return isset($areaResult['area_name'])?$areaResult['area_name']:'';
+    }
 
     /*
      * 通过电话获取可用阿姨信息
