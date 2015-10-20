@@ -296,20 +296,17 @@ class GeneralPay extends \yii\db\ActiveRecord
      */
     private function zhidahao_h5($data)
     {
-        $get = yii::$app->request->get();
-        $detail = $get['params']['detail'];
-
         $param = [
             'out_trade_no'=>$this->create_out_trade_no(),
-            'goods_name'=>$get['params']['goods_name'],
+            'goods_name'=>$data['goods_name'],
             'general_pay_money'=>$this->toMoney($this->general_pay_money,100,'*',0),
-            'detail' => $detail,
-            'order_source_url' => $get['params']['order_source_url'],
+            'detail' => $data['detail'],
+            'order_source_url' => $data['order_source_url'],
             'return_url' => $this->notify_url('zhidahao-h5'),
-            'page_url' => $get['params']['page_url'],
-            'customer_name' => $get['params']['customer_name'],
-            'customer_mobile' => $get['params']['customer_mobile'],
-            'customer_address' => $get['params']['customer_address'],
+            'page_url' => $data['page_url'],
+            'customer_name' => $data['customer_name'],
+            'customer_mobile' => $data['customer_mobile'],
+            'customer_address' => $data['customer_address'],
         ];
         $class = new \zhidahao_class();
         $msg = $class->get($param);
@@ -334,7 +331,7 @@ class GeneralPay extends \yii\db\ActiveRecord
      */
     private function notify_url($type_name)
     {
-        $http = "http://".$_SERVER['HTTP_HOST']."/general-pay/".$type_name."-notify";
+        $http = "http://".$_SERVER['HTTP_HOST']."/".yii::$app->controller->id."/".$type_name."-notify";
         return $http;
     }
 
@@ -358,15 +355,29 @@ class GeneralPay extends \yii\db\ActiveRecord
 
     /**
      * 生成第三方订单号
+     * 年月日+交易类型+随机数+自增ID
+     * 01 正常订单 02 退款 03 赔付
      * @return bool|string 订单号
      */
-    private function create_out_trade_no()
+    private function create_out_trade_no($type=1)
     {
         if(empty($this->id)) return false;
+        switch($type)
+        {
+            case 1 :
+                $transType = '01';
+                break;
+            case 2 :
+                $transType = '02';
+                break;
+            case 3 :
+                $transType = '03';
+                break;
+        }
         //组装支付订单号
         $rand = mt_rand(1000,9999);
         $date = date("ymd",time());
-        return $date.$rand.$this->id;
+        return $date.$transType.$rand.$this->id;
     }
 
     /**
@@ -779,7 +790,6 @@ class GeneralPay extends \yii\db\ActiveRecord
      */
     public function upAppNotify($data)
     {
-
         //POST数据
         if(!empty($data['debug'])){
             $_POST = array (
@@ -1107,7 +1117,7 @@ class GeneralPay extends \yii\db\ActiveRecord
      */
     public function getGeneralPayId($out_trade_no)
     {
-        return substr($out_trade_no,10);
+        return substr($out_trade_no,12);
     }
 
     /**
