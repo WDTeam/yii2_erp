@@ -9,7 +9,7 @@ use yii\web\BadRequestHttpException;
 use common\models\CustomerAddress;
 use common\models\CustomerWorker;
 use common\models\Worker;
-use common\models\CustomerExtBalance;
+//use common\models\CustomerExtBalance;
 use common\models\GeneralRegion;
 use common\models\OrderExtCustomer;
 use common\models\Operation\CommonOperationCity;
@@ -47,7 +47,7 @@ class Customer extends \common\models\Customer
             return false;
         }
         
-        $customerBalance = CustomerExtBalance::find()->where(array(
+        $customerBalance = \common\models\CustomerExtBalance::find()->where(array(
             'customer_id'=>$customer->id,
             ))->one();
         // if ($customerBalance == NULL) {

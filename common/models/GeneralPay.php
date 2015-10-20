@@ -39,6 +39,7 @@ class GeneralPay extends \yii\db\ActiveRecord
 {
     public $partner;
     public $pay_type;
+
     public $openid;
     //直达号
     public $customer_name; //商品名称
@@ -47,7 +48,6 @@ class GeneralPay extends \yii\db\ActiveRecord
     public $order_source_url; //订单详情地址
     public $page_url; //订单跳转地址
     public $detail; //订单详情
-    public $extParams; //附加参数
 
     /**
      * @inheritdoc
@@ -1156,9 +1156,31 @@ class GeneralPay extends \yii\db\ActiveRecord
         return md5(md5($str).'1jiajie.com');
     }
 
+    /**
+     * 返回支付数据
+     * @param $order_id 订单ID
+     * @param $general_pay_status 支付状态
+     * @return array|null|\yii\db\ActiveRecord
+     */
+    public function getPayStatus($order_id,$general_pay_status){
+        $where = ['order_id'=>$order_id,'general_pay_status'=>$general_pay_status];
+        return GeneralPay::find()->where($where)->one();
+    }
 
     /**
-     * 订单退款
+     * 支付成功发送短信
+     * @param $customer_id 用户ID
+     */
+    public function smsSend($data)
+    {
+        $phone = Customer::getCustomerPhone($data->data['customer_id']);
+        $msg = !empty($data->data['msg']) ? $data->data['msg'] : '支付成功!!!';
+        Yii::$app->sms->send($phone,$msg);
+    }
+
+
+    /**
+     * 微信APP订单退款
      * @param $out_trade_no    商户订单号
      * @param $transaction_id   交易流水号
      * @param $out_refund_no    退款订单号
@@ -1166,7 +1188,7 @@ class GeneralPay extends \yii\db\ActiveRecord
      * @param $refund_fee   退款金额(单位/分)
      * @param $op_user_passwd   退款密码(MD5)
      */
-    public function wx_app_refund( $out_refund_no,$total_fee,$refund_fee,$op_user_passwd,$out_trade_no=0,$transaction_id=0 )
+    public function wxAppRefund( $out_refund_no,$total_fee,$refund_fee,$op_user_passwd,$out_trade_no=0,$transaction_id=0 )
     {
         if( empty($out_trade_no) && empty($transaction_id) ){
             return $msg = "out_trade_no和transaction_id至少一个必填，同时存在时transaction_id优先";
@@ -1188,12 +1210,13 @@ class GeneralPay extends \yii\db\ActiveRecord
 
 
     /**
+     * 微信APP订单查询
      * @param int $out_trade_no     支付订单号
      * @param int $transaction_id   支付交易流水号
      * @param int $out_refund_no    退款交易流水号
      * @param int $refund_id        退款订单号
      */
-    public function wx_app_refund_query( $out_trade_no=0,$transaction_id=0,$out_refund_no=0,$refund_id=0 )
+    public function wxAppRefundQuery( $out_trade_no=0,$transaction_id=0,$out_refund_no=0,$refund_id=0 )
     {
         if( empty($out_trade_no) && empty($transaction_id) ){
             return $msg = "out_trade_no和transaction_id、out_refund_no、refund_id至少一个必填";
@@ -1211,21 +1234,25 @@ class GeneralPay extends \yii\db\ActiveRecord
         return $data;
     }
 
-    public function getPayStatus($order_id,$general_pay_status){
-        $where = ['order_id'=>$order_id,'general_pay_status'=>$general_pay_status];
-        return GeneralPay::find()->where($where)->one();
+    /**
+     * 百度APP订单退款
+     */
+    public function bfbAppRefund( $return_url,$sp_refund_no,$order_no,$cashback_amount )
+    {
+
+        $params = [
+            'return_url' => $return_url,    //服务器异步通知地址
+            'sp_refund_no' => $sp_refund_no,   //退款订单号
+            'order_no' => $order_no,            //商户订单号
+            'cashback_amount' => $cashback_amount,      //退款金额(单位/分)
+        ];
+
+        $class = new \bfbrefund_class();
+        $data = $class->refund($params);
+        return $data;
+
     }
 
-    /**
-     * 支付成功发送短信
-     * @param $customer_id 用户ID
-     */
-    public function smsSend($data)
-    {
-        $phone = Customer::getCustomerPhone($data->data['customer_id']);
-        $msg = !empty($data->data['msg']) ? $data->data['msg'] : '支付成功!!!';
-        Yii::$app->sms->send($phone,$msg);
-    }
 
     /**
      * @inheritdoc
