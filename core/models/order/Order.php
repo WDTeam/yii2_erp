@@ -178,18 +178,54 @@ class Order extends OrderModel
         self::sysAssignStart($order_id);
     }
 
+    /**
+     * 智能推送
+     * @param $order_id
+     */
     public static function push($order_id)
     {
         $order = Order::findOne($order_id);
         if($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START){ //开始系统指派的订单
-            if(time()-$order->orderExtStatus->updated_at<300){ //TODO 5分钟内的订单推送给全职阿姨 5分钟需要配置
+            if(time()-$order->orderExtStatus->updated_at<300 && $order->orderExtFlag->order_flag_worker_ivr==0 && $order->orderExtFlag->order_flag_worker_jpush==0){ //TODO 5分钟内的订单推送给全职阿姨 5分钟需要配置
+                $workers = Worker::getDistrictFreeWorker($order->district_id, 1, $order->order_booked_begin_time, $order->order_booked_end_time);
+                if(!empty($workers)) {
+                    self::pushToWorkers($order,$workers);
+                }else{ //如果查询不到指派的全职阿姨则直接推送兼职阿姨
+                    $workers = Worker::getDistrictFreeWorker($order->district_id, 2, $order->order_booked_begin_time, $order->order_booked_end_time);
+                    if(!empty($workers)) {
+                        self::pushToWorkers($order,$workers);
+                    }else{//如果查询不到兼职阿姨则系统指派失败
+                        self::sysAssignUndone($order_id);
+                    }
+                }
 
-            }elseif(time()-$order->orderExtStatus->updated_at<900){ //TODO 15分钟的订单推送给兼职阿姨 15分钟需要配置
-
+            }elseif(time()-$order->orderExtStatus->updated_at<900 && $order->orderExtFlag->order_flag_worker_ivr==1 && $order->orderExtFlag->order_flag_worker_jpush==1){ //TODO 15分钟的订单推送给兼职阿姨 15分钟需要配置
+                $workers = Worker::getDistrictFreeWorker($order->district_id, 2, $order->order_booked_begin_time, $order->order_booked_end_time);
+                if(!empty($workers)) {
+                    self::pushToWorkers($order,$workers);
+                }else{//如果查询不到兼职阿姨则系统指派失败
+                    self::sysAssignUndone($order_id);
+                }
             }else{ //系统指派失败
                 self::sysAssignUndone($order_id);
             }
         }
+    }
+
+    /**
+     * 推送给阿姨
+     * @param $order
+     * @param $workers
+     */
+    public static function pushToWorkers($order,$workers){
+        $worker_ids = [];
+        foreach ($workers as $v) {
+            Yii::$app->ivr->send($v['worker_phone'], $order->id, "开始时间叉叉叉，时长插插插，地址插插插插！");
+            $worker_ids[] = "worker_{$v['id']}";
+        }
+        Yii::$app->jpush->push(implode(',', $worker_ids), '订单来啦！');
+        self::workerJPushFlag($order->id);
+        self::workerIVRPushFlag($order->id);
     }
 
     /**
@@ -523,12 +559,11 @@ class Order extends OrderModel
             $goods = OperationGoodsController::getGoodsList($shop_district_info['data']['operation_city_id'], $shop_district_info['data']['operation_shop_district_id']);
             if(isset($goods['status'])&&$goods['status']==1){
                 if($goods_id==0){
-                    $data = $goods['data'];
-                    $data['district_id'] = $shop_district_info['data']['operation_shop_district_id'];
-                    return ['code'=>200,'data'=>$data];
+                    return ['code'=>200,'data'=>$goods['data']];
                 }else{
                     foreach($goods['data'] as $v){
                         if($v['operation_goods_id']==$goods_id){
+                            $v['district_id'] = $shop_district_info['data']['operation_shop_district_id'];
                             return $v;
                         }
                     }
