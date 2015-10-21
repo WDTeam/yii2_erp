@@ -10,7 +10,6 @@ use core\models\worker\Worker;
  * @var yii\data\ActiveDataProvider $dataProvider
  * @var boss\models\WorkerSearch $searchModel
  */
-$this->title = Yii::t('app', '阿姨管理');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 

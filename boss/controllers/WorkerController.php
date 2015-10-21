@@ -19,6 +19,7 @@ use common\models\WorkerBlockLog;
 use core\models\worker\Worker;
 use core\models\worker\WorkerExt;
 use core\models\worker\WorkerDistrict;
+use core\models\worker\WorkerAuth;
 use boss\models\worker\WorkerSearch;
 use boss\models\Operation;
 use core\models\shop\Shop;
@@ -174,6 +175,38 @@ class WorkerController extends BaseAuthController
                 'model' => $model,
             ]);
         }
+    }
+
+    public function actionAuth($id){
+        if(Yii::$app->request->post('WorkerAuth')){
+            $param = Yii::$app->request->post('WorkerAuth');
+            $workerModel = Worker::findone($id);
+            $workerAuthModel = WorkerAuth::findOne($id);
+            if($workerAuthModel->load(Yii::$app->request->post()) && $workerAuthModel->save()){
+                if(isset($param['worker_auth_status']) && $param['worker_auth_status']==1){
+                    $workerModel->worker_auth_status = 1;
+                    $workerModel->save();
+                }elseif(isset($param['worker_basic_training_status']) && $param['worker_basic_training_status']==1){
+                    $workerModel->worker_auth_status = 2;
+                    $workerModel->save();
+                } elseif(isset($param['worker_ontrial_status']) && $param['worker_ontrial_status']==1){
+                    $workerModel->worker_auth_status = 3;
+                    $workerModel->save();
+                }elseif(isset($param['worker_onboard_status']) && $param['worker_onboard_status']==1){
+                    $workerModel->worker_auth_status = 4;
+                    $workerModel->save();
+                }elseif(isset($param['worker_rasing_training_status']) && $param['worker_rasing_training_status']==1){
+                    $workerModel->worker_auth_status = 5;
+                    $workerModel->save();
+                }
+                //worker_ontrial_status worker_onboard_status worker_rising_training_status
+            }
+            //var_dump($workerAuthModel->getErrors());die;
+//            var_dump(Yii::$app->request->post());
+//            die;
+        }
+        $workerAuthModel = WorkerAuth::find()->where(['worker_id'=>$id])->one();
+        return $this->render('view_auth',['worker_id'=>$id,'workerAuthModel'=>$workerAuthModel]);
     }
 
     /**
@@ -506,10 +539,14 @@ class WorkerController extends BaseAuthController
                 $workerStatArr['worker_stat_order_num'] = intval($val['order_num']);
                 $workerStatArr['worker_stat_sale_cards'] = intval($val['sale_card']);
 
+                $workerAuthArr['worker_id'] = $val['id'];
+
                 $batchWorker[] = $workerArr;
                 $batchWorkerExt[] = $workerExtArr;
                 $batchWorkerDevice[] = $workerDeviceArr;
                 $batchWorkerStat[] = $workerStatArr;
+                $batchWorkerAuth[] = $workerAuthArr;
+
             }
 
             $workerColumns = array_keys($workerArr);
@@ -520,6 +557,8 @@ class WorkerController extends BaseAuthController
             $connectionNew->createCommand()->batchInsert('{{%worker_device}}',$workerDeviceColumns, $batchWorkerDevice)->execute();
             $workerStatColumns = array_keys($workerStatArr);
             $connectionNew->createCommand()->batchInsert('{{%worker_stat}}',$workerStatColumns, $batchWorkerStat)->execute();
+            $workerAuthColumns = array_keys($workerAuthArr);
+            $connectionNew->createCommand()->batchInsert('{{%worker_auth}}',$workerAuthColumns, $batchWorkerAuth)->execute();
         }
 
         //die;
@@ -531,7 +570,7 @@ class WorkerController extends BaseAuthController
 
     public function actionTest(){
         echo '<pre>';
-        var_dump(Worker::checkWorkerPassword(1317777825111,1));
+        var_dump(Worker::getWorkerDetailInfo(16351));
         die;
 
         $a = Worker::getWorkerInfo(16351);
