@@ -205,7 +205,7 @@ class OrderController extends \api\components\Controller
             $attributes['order_service_type_id'] = $args['order_service_type_id'];
         } else {
             // order from pop,第三方目前没有真实的order_service_type_id
-            $attributes['order_service_type_id'] = 1//$args['server_item'];
+            $attributes['order_service_type_id'] = 1;//$args['server_item'];
         }
 
         if(@is_null($args['order_src'])){
