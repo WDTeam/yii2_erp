@@ -34,9 +34,9 @@ class WorkerTask extends \common\models\WorkerTask
      * 任务奖励类型
      */
     const REWARD_TYPES = [
-        1=>'现金',
-        2=>'当月流量',
-        3=>'次月流量',
+        1=>'现金(元)',
+        2=>'当月流量(MB)',
+        3=>'次月流量(MB)',
     ];
     
     const TASK_CYCLES = [
@@ -191,6 +191,14 @@ class WorkerTask extends \common\models\WorkerTask
             }
         }
         return implode(', ', $res);
+    }
+    /**
+     * 周期显示
+     */
+    public function getCycleLabel()
+    {
+        $cycles = self::TASK_CYCLES;
+        return $cycles[$this->worker_task_cycle];
     }
     
     

@@ -7,9 +7,7 @@ use yii\helpers\Html;
  * @var core\models\worker\WorkerTask $model
  */
 
-$this->title = Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Worker Task',
-]);
+$this->title = Yii::t('app', '新建阿姨任务');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Worker Tasks'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
