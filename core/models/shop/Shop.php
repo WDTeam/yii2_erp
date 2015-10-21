@@ -10,6 +10,7 @@ use yii\web\BadRequestHttpException;
 use yii2tech\ar\softdelete\SoftDeleteBehavior;
 use core\models\worker\Worker;
 use core\behaviors\ShopStatusBehavior;
+use yii\helpers\ArrayHelper;
 class Shop extends \common\models\Shop
 {
     public static $audit_statuses = [
@@ -190,5 +191,26 @@ class Shop extends \common\models\Shop
     {
         return self::find()->select(['id as shop_id','shop_manager_id'])
         ->where('isdel is null or isdel=0')->asArray()->all();
+    }
+    /**
+     * 通过省ID查询SHOP列表
+     */
+    public static function getCitesByProvinceId($province_id)
+    {
+        return self::findAll(['province_id'=>$province_id]);
+    }
+    /**
+     * 通过市ID查询SHOP列表
+     */
+    public static function getCitesByCityId($city_id)
+    {
+        return self::findAll(['city_id'=>$city_id]);
+    }
+    /**
+     * 通过县ID查询SHOP列表
+     */
+    public static function getCitesByCountyId($county_id)
+    {
+        return self::findAll(['county_id'=>$county_id]);
     }
 }
