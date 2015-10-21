@@ -1,6 +1,7 @@
 <?php
 namespace boss\controllers;
 
+use core\models\order\Order;
 use yii\web\Controller;
 class IvrController extends Controller
 {
@@ -14,12 +15,16 @@ class IvrController extends Controller
         $data['orderId'];
         $data['press'];
         $data['telephone'];
-        if(isset($data['postType']) && $data['postType']==1){
+        $order_id = intval(str_replace('pushToWorker_','',$data['orderId']));
+        if(isset($data['postType']) && $data['postType']==1 && isset($data['press']) && $data['press']==1){
             // code=1表示接单成功
+            Order::ivrAssignDone($order_id, $data['telephone']);
             return json_encode([
                 'code'=>1
             ]);
         }
+        Order::ivrPushToWorker($order_id); //继续推送该订单的ivr
+
     }
     
     public function actionTest()
