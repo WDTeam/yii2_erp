@@ -13,7 +13,6 @@ use core\models\customer\CustomerAddress;
 class OrderController extends \api\components\Controller
 {
     /**
-     *
      * @api {POST} /order/choose-service-time 可服务时间表 (20%赵顺利 block linhongyou provide the feature)
      *
      * @apiDescription 选择服务时间接口服务器依据用户的当前位置提供时间表
@@ -107,7 +106,6 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     *
      * @api {POST} /order/create-order 创建订单 (90%xieyi  创建已完成 渠道号更改 依赖林洪优)
      *
      *
@@ -296,7 +294,6 @@ class OrderController extends \api\components\Controller
 
 
     /**
-     *
      * @api {POST} v1/order/append-order 追加订单(xieyi 90%和创建订单一样)
      *
      * @apiName ActionAppendOrder
@@ -435,7 +432,6 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     *
      * @api {GET} /order/query-orders 查询订单(xieyi 70%已经将后台接口完成，创建也完成缺少测试)
      *
      *
@@ -548,7 +544,6 @@ class OrderController extends \api\components\Controller
 
 
     /**
-     *
      * @api {GET} /order/cancelorder 取消订单(xieyi %0  )
      *
      * @apiParam {String} access_token 用户认证
@@ -626,7 +621,6 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     *
      * @api {GET} /order/addcomment 评价订单（xieyi %0）
      *
      * @apiParam {String} access_token 用户认证
@@ -667,7 +661,6 @@ class OrderController extends \api\components\Controller
 
 
     /**
-     *
      * @api {GET} /order/hiddenorder 删除订单（xieyi %0 ）
      *
      * @apiParam {String} access_token 用户认证
@@ -694,7 +687,6 @@ class OrderController extends \api\components\Controller
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
-     *
      */
     public function actionHidenOrder()
     {
@@ -813,9 +805,6 @@ class OrderController extends \api\components\Controller
      *  }
      *
      */
-
-
-
 
     /**
      * @api {get} /mobileapidriver2/worker_history_order 阿姨历史订单(zhaoshunli 100%)
@@ -1120,8 +1109,6 @@ class OrderController extends \api\components\Controller
      *  }
      *
      */
-
-
 
     public function actionPush($order_id)
     {

@@ -13,7 +13,6 @@ class ConfigureController extends \api\components\Controller
      * @apiName actionAllServices
      * @apiGroup configure
      *
-     * @apiParam {string} access_token 用户认证
      * @apiParam {String} city_name 城市
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
@@ -60,9 +59,6 @@ class ConfigureController extends \api\components\Controller
     public function actionAllServices()
     {
         $param = Yii::$app->request->post();
-        if (empty(@$param['access_token']) || !CustomerAccessToken::checkAccessToken(@$param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
-        }
 
         if (empty(@$param['city_name'])) {
             return $this->send(null, "未取得城市信息", "error", "403");
@@ -113,8 +109,7 @@ class ConfigureController extends \api\components\Controller
      * @apiGroup configure
      * @apiDescription 获得开通城市列表，广告轮播图 等初始化数据
      * @apiParam {String} city 城市
-     * @apiParam {String} app_version 访问源(android_4.2.2)
-     *
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -175,6 +170,12 @@ class ConfigureController extends \api\components\Controller
      *       "msg": "城市尚未开通"
      *     }
      */
+    public function actionUserInit()
+    {
+        //获取城市列表
+        //获取首页轮播图
+        //获取首页服务类型
+    }
 
     /**
      * @api {POST} /configure/worker-check-update 检查阿姨端版本更新 （赵顺利0%）
