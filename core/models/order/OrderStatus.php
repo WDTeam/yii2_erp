@@ -50,7 +50,7 @@ class OrderStatus extends Model
         if(self::statusChange($order,$status,$must_models)){
             //支付成功后如果需要系统派单则把订单放入订单池
             if($order->orderExtFlag->order_flag_sys_assign==1) {
-                Yii::$app->trigger('addOrderToPool', new Event(['sender' => $order]));
+                Order::addOrderToPool($order->id);
             }
             return true;
         }

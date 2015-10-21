@@ -121,13 +121,7 @@ class WorkerController extends \api\components\Controller
                     "account_rest_money"=> "",
                     "pay_money" =>"",
                     "charge_money"=>"",
-                    "driver_company"=>"",
-                    "cur_car_id"=>"",
-                    "cur_car_brand"=>"",
-                    "cur_car_number"=>"",
-                    "cur_car_color"=>"",
-                    "cur_color"=>"",
-                    "cur_car_type"=> "",
+                    "worker_company"=>"",
                     "is_open_start"=>"",
                     "result"=>"1",
                     "head_url"=>"",
@@ -909,63 +903,13 @@ class WorkerController extends \api\components\Controller
           if (!empty($worker) && !empty($worker->id)) {
                
                //调取阿姨请假历史情况
-                 return $this->send($result,"操作成功","ok");
-              
+               return $this->send($result,"操作成功","ok");
           }else{
+
                return $this->send(null, "阿姨不存在.", "error", 403);
           }
           
      }
-
-
-
-
-
-
-
-    /**
-     * @api {get} /worker/amend_password  修改密码(田玉星)
-     * @apiName actionAmendPassword
-     * @apiGroup Worker
-     *  
-     * @apiParam {String} access_token    阿姨登录token.
-     * @apiParam {String} platform_version 平台版本号.
-     * @apiParam {String} password  原始密码.
-     * @apiParam {String} new_password  新密码.
-     *
-     * @apiSuccessExample {json} Success-Response:
-     * HTTP/1.1 200 OK
-     * {
-     *      "code": "ok",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      {
-     *          "result": "0",
-     *          "msg": "原始密码错误"
-     *      }
-     * }
-     *
-     * @apiError SessionIdNotFound 未找到会话ID.
-     * @apiError PwdNotFound 未找到密码.
-     * @apiError NewPwdNotFound 未找到新密码.
-     *
-     * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
-     *  {
-     *      "code":"Failed",
-     *      "msg": "SessionIdNotFound"
-     *  }
-     *
-     */
-    
-    public function amend_password(){
-
-    }
-
-
-
-
-
 
     
     /**
