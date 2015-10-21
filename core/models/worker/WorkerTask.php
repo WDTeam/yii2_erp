@@ -39,6 +39,12 @@ class WorkerTask extends \common\models\WorkerTask
         3=>'次月流量',
     ];
     
+    const TASK_CYCLES = [
+        1=>'月',
+        2=>'周',
+        3=>'天'
+    ];
+    
     public function behaviors()
     {
         return [
@@ -140,6 +146,53 @@ class WorkerTask extends \common\models\WorkerTask
         return $res;
     }
     
+    /**
+     * 显示已选的角色类型
+     */
+    public function getWorkerTypeLabels()
+    {
+        $types = Worker::getWorkerTypeList();
+        $cur_typeids = $this->getWorker_types();
+        $res = [];
+        foreach ($cur_typeids as $id){
+            if(isset($types[$id])){
+                $res[] = $types[$id];
+            }
+        }
+        return implode(', ', $res);
+    }
+    /**
+     * 显示已选的身份类型
+     */
+    public function getWorkerRuleLabels()
+    {
+        $types = WorkerRuleConfig::getWorkerRuleList();
+        $cur_ruleids = $this->getWorker_rules();
+        $res = [];
+        foreach ($cur_ruleids as $id){
+            if(isset($types[$id])){
+                $res[] = $types[$id];
+            }
+        }
+        return implode(', ', $res);
+    }
+    
+    /**
+     * 显示已选的城市
+     */
+    public function getWorkerCityLabels()
+    {
+        $types = WorkerTask::getOnlineCites();
+        $cur_cityids = $this->getWorker_cites();
+        $res = [];
+        foreach ($cur_cityids as $id){
+            if(isset($types[$id])){
+                $res[] = $types[$id];
+            }
+        }
+        return implode(', ', $res);
+    }
+    
     
     /**
      * 计算符合阿姨条件的任务列表
@@ -159,6 +212,27 @@ class WorkerTask extends \common\models\WorkerTask
         return $tasks;
     }
     /**
+     * 获取周期开始和结束时间
+     * @param int $cycle 周期单位 1:月，2：周，3：天
+     */
+    public static function getCycleTimes($cycle)
+    {
+        if($cycle==1){
+            $start = mktime(0,0,0,date('m'),1,date('Y'));
+            $end = mktime(23,59,59,date('m'),date('t'),date('Y'));
+            $cycle_number = 'm'.date('Ym');
+        }elseif ($cycle==2){
+            $start = mktime(0, 0 , 0,date("m"),date("d")-date("w")+1,date("Y"));
+            $end = mktime(23,59,59,date("m"),date("d")-date("w")+7,date("Y"));
+            $cycle_number = 'w'.date('YW');
+        }elseif($cycle==3){
+            $start = mktime(0,0,0,date('m'),date('d'),date('Y'));
+            $end = mktime(0,0,0,date('m'),date('d')+1,date('Y'))-1;
+            $cycle_number = 'd'.date('Ymd');
+        }
+        return [$cycle_number, $start, $cycle_number];
+    }
+    /**
      * 自动生成阿姨任务
      */
     public static function autoCreateTaskLog($worker_id)
@@ -166,9 +240,11 @@ class WorkerTask extends \common\models\WorkerTask
         $data = [];
         $tasks = (array)self::getTaskListByWorkerId($worker_id);
         foreach($tasks as $task){
+            $cycletime = self::getCycleTimes($task->worker_task_cycle);
             $log = WorkerTaskLog::find()->where([
                 'worker_id'=>$worker_id,
                 'worker_task_id'=>$task->id,
+                'worker_task_cycle_number'=>$cycletime[0],
             ])->one();
             if(empty($log)){
                 $log = new WorkerTaskLog();
@@ -176,9 +252,10 @@ class WorkerTask extends \common\models\WorkerTask
             $log->setAttributes([
                 'worker_id'=>$worker_id,
                 'worker_task_id'=>$task->id,
+                'worker_task_cycle_number'=>$cycletime[0],
                 'worker_task_name'=>$task->worker_task_name,
-                'worker_task_start'=>$task->worker_task_start,
-                'worker_task_end'=>$task->worker_task_end,
+                'worker_task_log_start'=>$cycletime[1],
+                'worker_task_log_end'=>$cycletime[2],
                 'worker_task_reward_type'=>$task->worker_task_reward_type,
                 'worker_task_reward_value'=>$task->worker_task_reward_value,
             ]);

@@ -94,25 +94,7 @@ use core\behaviors\WorkerTaskBehavior;
  */
 class Order extends OrderModel
 {
-    //用户创建订单
-    const EVENT_CREATE_BY_USER = 'event_create_by_user';
-//     阿姨订单完成
-    const EVENT_DONE_BY_WORKER = 'event_done_by_worker';
-//     阿姨接受订单
-    const EVENT_ACCEPT_BY_WORKER = 'event_accept_by_worker';
-//     阿姨取消订单
-    const EVENT_CANCEL_BY_WORKER = 'event_cancel_by_worker';
-//     阿姨拒绝订单
-    const EVENT_REJECT_BY_WORKER = 'event_reject_by_worker';
-    
-//     public function behaviors()
-//     {
-//         return [
-//             [
-//                 'class'=>WorkerTaskBehavior::className(),
-//             ]
-//         ];
-//     }
+
     /**
      * 创建新订单
      * @param $attributes [
@@ -168,14 +150,15 @@ class Order extends OrderModel
      */
     public static function addOrderToPool($order_id)
     {
-        $order = Order::findOne($order_id);
-        $redis_order = [
-            'order_id'=>$order_id,
-            'created_at'=>$order->created_at
-        ];
-        Yii::$app->redis->executeCommand('zAdd',['WaitAssignOrdersPool',$order->order_booked_begin_time.$order_id,json_encode($redis_order)]);
         // 开始系统指派
-        self::sysAssignStart($order_id);
+        if(self::sysAssignStart($order_id)) {
+            $order = Order::findOne($order_id);
+            $redis_order = [
+                'order_id' => $order_id,
+                'created_at' => $order->orderExtStatus->updated_at
+            ];
+            Yii::$app->redis->executeCommand('zAdd', [Yii::$app->params['order']['WAIT_ASSIGN_ORDERS_POOL'], $order->order_booked_begin_time . $order_id, json_encode($redis_order)]);
+        }
     }
 
     /**
@@ -186,7 +169,8 @@ class Order extends OrderModel
     {
         $order = Order::findOne($order_id);
         if($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START){ //开始系统指派的订单
-            if(time()-$order->orderExtStatus->updated_at<300 && $order->orderExtFlag->order_flag_worker_ivr==0 && $order->orderExtFlag->order_flag_worker_jpush==0){ //TODO 5分钟内的订单推送给全职阿姨 5分钟需要配置
+            if(time()-$order->orderExtStatus->updated_at<300){ //TODO 5分钟内的订单推送给全职阿姨 5分钟需要配置
+                //获取全职阿姨
                 $workers = Worker::getDistrictFreeWorker($order->district_id, 1, $order->order_booked_begin_time, $order->order_booked_end_time);
                 if(!empty($workers)) {
                     self::pushToWorkers($order,$workers);
@@ -199,7 +183,7 @@ class Order extends OrderModel
                     }
                 }
 
-            }elseif(time()-$order->orderExtStatus->updated_at<900 && $order->orderExtFlag->order_flag_worker_ivr==1 && $order->orderExtFlag->order_flag_worker_jpush==1){ //TODO 15分钟的订单推送给兼职阿姨 15分钟需要配置
+            }elseif(time()-$order->orderExtStatus->updated_at<900){ //TODO 15分钟内的订单推送给兼职阿姨 15分钟需要配置
                 $workers = Worker::getDistrictFreeWorker($order->district_id, 2, $order->order_booked_begin_time, $order->order_booked_end_time);
                 if(!empty($workers)) {
                     self::pushToWorkers($order,$workers);
@@ -210,6 +194,8 @@ class Order extends OrderModel
                 self::sysAssignUndone($order_id);
             }
         }
+        $order = Order::findOne($order->id);
+        return ['order_id'=>$order->id,'created_at'=>$order->created_at,'sms'=>$order->orderExtFlag->order_flag_worker_sms,'jpush'=>$order->orderExtFlag->order_flag_worker_jpush,'ivr'=>$order->orderExtFlag->order_flag_worker_ivr];
     }
 
     /**
@@ -220,10 +206,14 @@ class Order extends OrderModel
     public static function pushToWorkers($order,$workers){
         $worker_ids = [];
         foreach ($workers as $v) {
-            Yii::$app->ivr->send($v['worker_phone'], $order->id, "开始时间叉叉叉，时长插插插，地址插插插插！"); //TODO 发送内容
+           $result = Yii::$app->ivr->send($v['worker_phone'], $order->id, "开始时间叉叉叉，时长插插插，地址插插插插！"); //TODO 发送内容
+            if(isset($result['result']) && $result['result']==0) {
+                OrderWorkerRelation::addOrderWorkerRelation($order->id, $v['id'], 'IVR已推送', '', 1);
+            }
             $worker_ids[] = "worker_{$v['id']}";
         }
         Yii::$app->jpush->push(implode(',', $worker_ids), '订单来啦！'); //TODO 发送内容
+
         self::workerJPushFlag($order->id);
         self::workerIVRPushFlag($order->id);
     }
@@ -285,7 +275,14 @@ class Order extends OrderModel
     {
         $order = OrderSearch::getOne($order_id);
         $order->admin_id=1;
-        return OrderStatus::sysAssignUndone($order,[]);
+        if($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //开始系统指派的订单
+            $redis_order = ['order_id' => $order_id, 'created_at' => $order->orderExtStatus->updated_at];
+            if (OrderStatus::sysAssignUndone($order, [])) {
+                Yii::$app->redis->executeCommand('zrem', [Yii::$app->params['order']['WAIT_ASSIGN_ORDERS_POOL'], json_encode($redis_order)]);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -484,10 +481,6 @@ class Order extends OrderModel
         ]);
 
         if ($this->doSave()) {
-            //订单创建成功绑定添加到订单池的事件 支付成功后触发
-            Yii::$app->on('addOrderToPool', function ($event) {
-                Order::addOrderToPool($event->sender->id);
-            });
             $order = $this->attributes;
             $order['order_id'] = $order['id'];
             $order_model = OrderSearch::getOne($this->id);

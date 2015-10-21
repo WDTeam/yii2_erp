@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
+use yii\bootstrap\Modal;
 
 /**
  * @var yii\web\View $this
@@ -40,9 +41,27 @@ $this->params['breadcrumbs'][] = $this->title;
             'worker_task_name',
             'worker_task_start:date',
             'worker_task_end:date',
-            'worker_type',
-            'worker_rule_id', 
-            'worker_task_city_id', 
+            [
+                'attribute'=>'worker_type',
+                'label'=>'阿姨角色',
+                'value'=>function($model){
+                    return $model->getWorkerTypeLabels();
+                },
+            ],
+            [
+                'attribute'=>'worker_rule_id',
+                'label'=>'阿姨身份',
+                'value'=>function($model){
+                    return $model->getWorkerRuleLabels();
+                },
+            ],
+            [
+                'attribute'=>'worker_task_city_id',
+                'label'=>'适用城市',
+                'value'=>function($model){
+                    return $model->getWorkerCityLabels();
+                },
+            ],
 //             'worker_task_description', 
 //             'worker_task_description_url:url', 
 //             'conditions:ntext', 
@@ -52,11 +71,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
+                'template'=>'{view} {update}',
                 'buttons' => [
-                'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['worker-task/view','id' => $model->id,'edit'=>'t']), [
-                                                    'title' => Yii::t('yii', 'Edit'),
-                                                  ]);}
 
                 ],
             ],
