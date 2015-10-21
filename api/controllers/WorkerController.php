@@ -3,7 +3,7 @@ namespace api\controllers;
 
 use Yii;
 use \core\models\worker\Worker;
-use \core\models\worker\WorkerExt;
+use \core\models\worker\WorkerAccessToken;
 class WorkerController extends \api\components\Controller
 {
 
@@ -576,6 +576,7 @@ class WorkerController extends \api\components\Controller
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
           }
           $worker = WorkerAccessToken::getWorker($param['access_token']);
+          print_r($worker);die;
           if (!empty($worker) && !empty($worker->id)) {
                //$filed = array('worker_live_province','worker_live_city','worker_live_area','worker_live_street');
                //$workerInfo = Worker::getWorkerListByIds($worker->id,implode(',',$filed));
@@ -716,7 +717,7 @@ class WorkerController extends \api\components\Controller
 
     
     /**
-     * @api {get} /worker/handle_worker_leave  阿姨请假（田玉星 95%）
+     * @api {get} /worker/handle-worker-leave  阿姨请假（田玉星 98%）
      * @apiName actionHandleWorkerLeave
      * @apiGroup Worker
      * 
@@ -760,14 +761,14 @@ class WorkerController extends \api\components\Controller
           if (!empty($worker) && !empty($worker->id)) {
                $attributes = [];
                $attributes['worker_id'] = $worker->id;
-               $attributes['worker_vacation_type'] = $param['type'];
-               if(empty($attributes['worker_vacation_type']||!in_array($param['type'], array(1,2)))){
+               if(!isset($param['type'])||!$param['type']||!in_array($param['type'], array(1,2))){
                     return $this->send(null, "数据不完整,请选择请假类型", "error", 403);
                }
-
+               $attributes['worker_vacation_type'] = $param['type'];
+               
                //请假时间范围判断
-               if(empty($param['date'])){
-                    return $this->send(null, "数据不完整,请选择请假类型", "error", 403);
+               if(!isset($param['date'])||!$param['date']){
+                    return $this->send(null, "数据不完整,请选择请假时间", "error", 403);
                }
                $vacation_start_time = time();
                $vacation_end_time = strtotime(date('Y-m-d',strtotime("+14 days")));
@@ -872,8 +873,8 @@ class WorkerController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"Failed",
-     *      "msg": "SessionIdNotFound"
+     *      "code":"error",
+     *      "msg": "阿姨不存在"
      *  }
      *
      */
@@ -891,7 +892,7 @@ class WorkerController extends \api\components\Controller
                );
                return $this->send($ret, "操作成功.", "ok");
           }else{
-               return $this->send(null, "阿姨不存在.", "error", 403);
+               return $this->send(null, "阿姨不存在.", "error", 404);
           }
     }
     /**
