@@ -30,7 +30,7 @@ class IvrController extends Controller
     
     public function actionJpush()
     {
-        $res = \Yii::$app->jpush->push2android(['wworker_uuu_ttt2','worker_ldg_test', 'wworker_uuu_ttt'], 'test');
+        $res = \Yii::$app->jpush->push(['wworker_uuu_ttt2', 'worker_ldg111_test', 'wworker_uuu_ttt'], 'test', ['test'=>'自定义数据']);
         var_dump($res);
     }
 }

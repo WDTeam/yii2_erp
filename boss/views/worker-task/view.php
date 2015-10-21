@@ -4,15 +4,11 @@ use yii\helpers\Html;
 use kartik\detail\DetailView;
 use kartik\datecontrol\DateControl;
 use core\models\worker\WorkerTask;
-use core\models\order\Order;
 
 /**
  * @var yii\web\View $this
  * @var core\models\worker\WorkerTask $model
  */
-
-$order = Order::find()->one();
-$order->trigger(Order::EVENT_ACCEPT_BY_WORKER);
 
 $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Worker Tasks'), 'url' => ['index']];
@@ -50,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute'=>'worker_task_online',
-                'value'=>(Boolean)$model->worker_task_online
+                'value'=>(Boolean)$model->worker_task_online,
             ],
             'worker_task_description',
             'worker_task_description_url:url',
