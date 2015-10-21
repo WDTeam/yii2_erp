@@ -781,11 +781,11 @@ class WorkerController extends \api\components\Controller
     
     
     /**
-     * @api {get} /mobileapidriver2/handleWorkerLeave  请假
+     * @api {get} /worker/handle_worker_leave  阿姨请假（田玉星 95%）
      * @apiName actionHandleWorkerLeave
      * @apiGroup Worker
      * 
-     * @apiParam {String} session_id    会话id.
+     * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} platform_version 平台版本号.
      * @apiParam {String} date 请假时间.
      * @apiParam {String} type 请假类型.
@@ -814,7 +814,48 @@ class WorkerController extends \api\components\Controller
      *  }
      *
      */
-    
+     public function actionHandleWorkerLeave(){
+          $param = Yii::$app->request->post();
+          if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+          }
+
+          $worker = WorkerAccessToken::getWorker($param['access_token']);
+          if (!empty($worker) && !empty($worker->id)) {
+               $attributes = [];
+               $attributes['worker_id'] = $worker->id;
+               $attributes['worker_vacation_type'] = $param['type'];
+               if(empty($attributes['worker_vacation_type']||!in_array($param['type'], array(1,2)))){
+                    return $this->send(null, "数据不完整,请选择请假类型", "error", 403);
+               }
+
+               //请假时间范围判断
+               if(empty($param['date'])){
+                    return $this->send(null, "数据不完整,请选择请假类型", "error", 403);
+               }
+               $vacation_start_time = time();
+               $vacation_end_time = strtotime(date('Y-m-d',strtotime("+14 days")));
+               $current_vacation_time = strtotime($param['date']);
+               if($current_vacation_time<=$vacation_start_time||$current_vacation_time>$vacation_end_time){
+                    return $this->send(null, "请假时间不在请假时间范围内,请选择未来14天的日期", "error", 403);
+               }
+               $attributes['worker_vacation_start_time'] = $attributes['worker_vacation_finish_time'] = $current_vacation_time;
+               
+               //请假入库
+               $workerVacation = new \core\models\order\WorkerVacation();
+               $is_success = $workerVacation -> createNew($attributes);    
+               if ($is_success) {
+                    $result = array(
+                         'result' => 1;
+                         "msg"    => "您的请假已提交，请耐心等待审批。"
+                    );
+                 return $this->send($result,"操作成功","ok");
+               } else {
+
+                 return $this->send(null,$workerVacation->errors,  "error",403);
+               }
+          
+     }
     
     
     /**
