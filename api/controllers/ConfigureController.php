@@ -58,7 +58,8 @@ class ConfigureController extends \api\components\Controller
      */
     public function actionAllServices()
     {
-        $param = Yii::$app->request->post();
+        $param = Yii::$app->request->post()or
+        $param= json_decode(Yii::$app->request->getRawBody(),true);
 
         if (empty(@$param['city_name'])) {
             return $this->send(null, "未取得城市信息", "error", "403");
