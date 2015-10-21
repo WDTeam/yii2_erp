@@ -3,6 +3,7 @@ namespace api\controllers;
 
 use Faker\Provider\DateTime;
 use Yii;
+use common\models\OrderSrc;
 use core\models\order\Order;
 use core\models\order\OrderSearch;
 use core\models\order\OrderStatus;
@@ -212,7 +213,7 @@ class OrderController extends \api\components\Controller
             }
             $attributes['order_src_id'] = $args['order_src_id'];
         }else{
-            $orderSrc = OrderSrc::find()->where(['order_src_name'=>$args['order_src']]);
+	    $orderSrc = OrderSrc::find()->where(['order_src_name'=>$args['order_src']])->one();
             if(!empty($orderSrc)){
                 $attributes['order_src_id'] = $orderSrc['id'];
             }else{
