@@ -40,9 +40,13 @@ class ShopSelect extends InputWidget
         }
         parent::init();
     }
+    /**
+     * 小家政列表，不包含自营家政
+     */
     public function getShopManagerArray()
     {
-        $models = ShopManager::find()->select(['id','name'])->where('isdel is NULL or isdel=0')->all();
+        $models = ShopManager::find()->select(['id','name'])
+        ->where('(isdel is NULL or isdel=0) AND id>1')->all();
         return ArrayHelper::map($models, 'id', 'name');
     }
     public function getShopArray()

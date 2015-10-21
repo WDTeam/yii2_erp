@@ -1,24 +1,14 @@
 <?php
-
 use yii\helpers\Html;
 use kartik\grid\GridView;
-use kartik\widgets\ActiveForm;
 use yii\widgets\Pjax;
-use boss\models\FinanceWorkerOrderIncomeSearch;
-/**
- * @var yii\web\View $this
- * @var yii\data\ActiveDataProvider $dataProvider
- * @var boss\models\WorkerSearch $searchModel
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
-$this->title = Yii::t('app', '阿姨结算');
-$this->params['breadcrumbs'][] = $this->title;
-
 ?>
-<div class="worker-index">
-    <div id = "manualSettle" class="panel panel-info">
-
-        <div id = "manualSettleInfo">
-            <div class="panel-heading">
+        <div class="panel-heading">
                 <h3 class="panel-title">阿姨信息</h3>
         </div>
         <div class="panel-body settle-detail-body">
@@ -252,10 +242,6 @@ $this->params['breadcrumbs'][] = $this->title;
            echo '</div></div>';
            
             ?>
-        
-        </div>
-    </div>
-</div>
 
  <?php 
          
@@ -280,4 +266,3 @@ JS;
                 $js
         );
          ?>
-

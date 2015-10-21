@@ -97,6 +97,14 @@ if(isset($order_channel_info->finance_order_channel_name)){
     		],
             'finance_pop_order_finance_time:datetime',
             'create_time:datetime',
+    		'finance_pop_order_msg',
+    		[
+    		'attribute' => 'finance_pop_order_msg',
+    		'type' => DetailView::INPUT_TEXT,
+    		'format'=>'raw',
+    		'displayOnly' => true,
+    		'value'=>'<font color="red">'.$model->finance_pop_order_msg.'</font>',
+    		],
     		[
     		'attribute' => 'finance_pop_order_info_msg',
     		'type' => DetailView::INPUT_TEXT,

@@ -7,9 +7,9 @@ class SendSmsController extends \api\components\Controller
 {
     /**
      *
-     * @api {GET} /sms/send 发短消息
-     * @apiName SendSMS
-     * @apiGroup SMS
+     * @api {GET} /send-sms/send-v 发短消息 （赵顺利0%）
+     * @apiName actionSendV
+     * @apiGroup SendSms
      *
      * @apiParam {String} platform_version 平台版本
      * @apiParam {Number} telephone 电话
@@ -53,13 +53,12 @@ class SendSmsController extends \api\components\Controller
 
     /**
      *
-     * @api {POST} /send-sms/send-message-code 短信验证码
-     * @apiName SendMessageCode
-     * @apiGroup SMS
+     * @api {GET} /send-sms/send-message-code 短信验证码 （已完成）
+     * @apiName actionSendMessageCode
+     * @apiGroup SendSms
      * @apiDescription 请求向用户手机发送验证码用于登录
      * @apiParam {String} phone 用户手机号
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     *
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -79,7 +78,7 @@ class SendSmsController extends \api\components\Controller
      */
     public function actionSendMessageCode()
     {
-        @$phone = Yii::$app->request->post('phone');
+        @$phone = Yii::$app->request->get('phone');
         @$app_version = Yii::$app->request->post('app_version');
         if (preg_match("/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/", $phone)) {
             //验证通过

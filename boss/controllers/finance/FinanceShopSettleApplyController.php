@@ -77,6 +77,10 @@ class FinanceShopSettleApplyController extends Controller
         if(isset($requestParams['comment'])){
             $model->comment = $requestParams['comment'];
         }
+        $isFinacePayedConfirm = false;
+        if(isset($requestParams['isFinacePayedConfirm'])){
+            $isFinacePayedConfirm = $requestParams['isFinacePayedConfirm'];
+        }
         if($review_section== FinanceShopSettleApplySearch::BUSINESS_REVIEW){
             if($is_ok == 1){
                 $model->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED;
@@ -86,12 +90,15 @@ class FinanceShopSettleApplyController extends Controller
         }elseif($review_section == FinanceShopSettleApplySearch::FINANCE_REVIEW){
             if($is_ok == 1){
                 $model->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED;
+                if($isFinacePayedConfirm == true){
+                    $model->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PAYED;
+                }
             }else{
                 $model->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED;
             }
         }
         $model->save();
-        return $this->actionIndex();
+        return $this->redirect('index?review_section='.$review_section);
     }
     
     /**
@@ -104,6 +111,9 @@ class FinanceShopSettleApplyController extends Controller
         $searchModel = new FinanceShopSettleApplySearch;
         $searchModel->review_section = Yii::$app->request->getQueryParams()['review_section'];
         $searchModel->load($requestParams);
+        var_dump($searchModel->shop_id);
+        var_dump($searchModel->shop_id);
+        var_dump($searchModel->shop_id);
         $shopModel = Shop::findById($searchModel->shop_id);
         $shopManagerModel = ShopManager::findById($searchModel->shop_manager_id);
         if(count($shopManagerModel) > 0){
@@ -144,8 +154,8 @@ class FinanceShopSettleApplyController extends Controller
     public function actionQuery()
     {
         $searchModel = new FinanceShopSettleApplySearch;
-        $searchModel->finance_shop_settle_apply_starttime = strtotime('-1 week last monday');//统计结束时间,上周第一天
-        $searchModel->finance_shop_settle_apply_endtime = strtotime('last sunday');//统计结束时间,上周最后一天
+//        $searchModel->finance_shop_settle_apply_starttime = strtotime('-1 week last monday');//统计结束时间,上周第一天
+//        $searchModel->finance_shop_settle_apply_endtime = strtotime('last sunday');//统计结束时间,上周最后一天
         $requestParams = Yii::$app->request->getQueryParams();
         $searchModel->load($requestParams);
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
@@ -203,13 +213,15 @@ class FinanceShopSettleApplyController extends Controller
     public function actionView($id)
     {
          $orderIncomeSearchModel = new FinanceWorkerOrderIncomeSearch;
+         $orderIncomeSearchModel->finance_settle_apply_id = $id;
         $orderIncomeDataProvider = $orderIncomeSearchModel->search(Yii::$app->request->getQueryParams());
         $searchModel = new FinanceShopSettleApplySearch;
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        $searchModel = $searchModel->find()->where(['id'=>$id])->one();
+        $shopModel = Shop::findById($searchModel->shop_id);
         return $this->render('view', [
-            'dataProvider' => $dataProvider,
             'orderIncomeDataProvider' => $orderIncomeDataProvider,
             'model' => $searchModel,
+            'shopModel' => $shopModel,
         ]);
     }
 
@@ -303,6 +315,8 @@ class FinanceShopSettleApplyController extends Controller
             $shopManagerModel = ShopManager::findById($shop['shop_manager_id']);
             $searchModel->shop_name = $shopModel->name;
             $searchModel->shop_manager_name = $shopManagerModel->name;
+            $searchModel->shop_id = $shop['shop_id'];
+            $searchModel->shop_manager_id = $shop['shop_manager_id'];
             $searchModel->getShopSettleInfo($shop['shop_id']);
             $searchModel->finance_shop_settle_apply_fee_per_order = FinanceShopSettleApplySearch::MANAGE_FEE_PER_ORDER;
             $searchModel->finance_shop_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_INIT;

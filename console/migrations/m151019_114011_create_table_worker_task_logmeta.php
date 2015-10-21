@@ -18,10 +18,6 @@ class m151019_114011_create_table_worker_task_logmeta extends Migration
             'worker_id'=>Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'阿姨ID\'',
             'worker_tasklog_condition' => Schema::TYPE_SMALLINT . '(3) DEFAULT NULL COMMENT \'条件索引\'',
             'worker_tasklog_value' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'条件值\'',
-            'worker_tasklog_is_done' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'是否完成条件\'',
-
-            'created_at'=>  Schema::TYPE_INTEGER.'(11) DEFAULT 0 COMMENT \'创建时间\'' ,
-            'updated_at'=>  Schema::TYPE_INTEGER.'(11) DEFAULT 0 COMMENT \'更新时间\'' ,
         ], $tableOptions);
     }
 

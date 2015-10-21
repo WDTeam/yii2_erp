@@ -132,6 +132,10 @@ class FinanceSettleApplyController extends BaseAuthController
         if(isset($requestParams['comment'])){
             $model->comment = $requestParams['comment'];
         }
+         $isFinacePayedConfirm = false;
+        if(isset($requestParams['isFinacePayedConfirm'])){
+            $isFinacePayedConfirm = $requestParams['isFinacePayedConfirm'];
+        }
         if($review_section== FinanceShopSettleApplySearch::BUSINESS_REVIEW){
             if($is_ok == 1){
                 $model->finance_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED;
@@ -141,10 +145,14 @@ class FinanceSettleApplyController extends BaseAuthController
         }elseif($review_section == FinanceShopSettleApplySearch::FINANCE_REVIEW){
             if($is_ok == 1){
                 $model->finance_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED;
+                if($isFinacePayedConfirm == true){
+                    $model->finance_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PAYED;
+                }
             }else{
                 $model->finance_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED;
             }
         }
+        $model->updated_at = time();
         $model->save();
         $financeSettleApplyLogSearch = new FinanceSettleApplyLogSearch;
         $financeSettleApplyLogSearch->finance_settle_apply_id = $id;
@@ -186,8 +194,10 @@ class FinanceSettleApplyController extends BaseAuthController
         if(isset($requestParams['finance_worker_order_income_type'])){
             $financeWorkerOrderIncomeSearch->finance_worker_order_income_type = $requestParams['finance_worker_order_income_type'];
         }
-        $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProvider($financeSettleApplySearch->worder_id);
-        return $this->render('selfFulltimeWorkerSettleView', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider]);
+        $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProviderFromOrder($financeSettleApplySearch->worder_id);
+        $cashOrderDataProvider = $financeWorkerOrderIncomeSearch->getCashOrderDataProviderFromOrder($financeSettleApplySearch->worder_id);
+        $nonCashOrderDataProvider = $financeWorkerOrderIncomeSearch->getNonCashOrderDataProviderFromOrder($financeSettleApplySearch->worder_id);
+        return $this->render('selfFulltimeWorkerSettleView', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider,'cashOrderDataProvider'=>$cashOrderDataProvider,'nonCashOrderDataProvider'=>$nonCashOrderDataProvider]);
     }
     
     
@@ -414,7 +424,8 @@ class FinanceSettleApplyController extends BaseAuthController
         }
         $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProviderFromOrder($financeSettleApplySearch->worder_id);
         $cashOrderDataProvider = $financeWorkerOrderIncomeSearch->getCashOrderDataProviderFromOrder($financeSettleApplySearch->worder_id);
-        return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider,'cashOrderDataProvider'=>$cashOrderDataProvider]);
+        $nonCashOrderDataProvider = $financeWorkerOrderIncomeSearch->getNonCashOrderDataProviderFromOrder($financeSettleApplySearch->worder_id);
+        return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider,'cashOrderDataProvider'=>$cashOrderDataProvider,'nonCashOrderDataProvider'=>$nonCashOrderDataProvider]);
     }
     
     /**
@@ -431,20 +442,6 @@ class FinanceSettleApplyController extends BaseAuthController
         return $this->redirect('self-fulltime-worker-settle-index?settle_type='.$settle_type.'&review_section='.$review_section);
     }
     
-    /**
-    * 小家政人工结算
-    */
-    public function actionHomemakingManualSettlementIndex(){
-        $financeSettleApplySearch= new FinanceSettleApplySearch;
-        $requestModel = Yii::$app->request->getQueryParams();
-        if(isset($requestModel["FinanceSettleApplySearch"])){
-            $financeSettleApplySearch = $requestModel["FinanceSettleApplySearch"];
-        }
-//        $financeSettleApplySearch = $financeSettleApplySearch->getWorkerInfo($workerId);//获取阿姨的信息
-        $searchModel = new FinanceWorkerOrderIncomeSearch;
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-        return $this->render('homemakingManualSettlementIndex', ['model'=>$financeSettleApplySearch,'dataProvider'=>$dataProvider]);
-    }
     
     
     

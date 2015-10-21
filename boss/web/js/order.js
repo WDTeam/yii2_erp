@@ -6,76 +6,19 @@ window.cards = new Array();
 var address_list = new Object();
 var goods_list = new Array();
 
-
-
-$("#order-order_customer_phone").blur(function(){
-    var phone = $(this).val();
-    var reg = /^1[3-9][0-9]{9}$/;
-    if(reg.test(phone)) {
-        $.ajax({
-            type: "GET",
-            url: "/order/customer/?phone=" + phone,
-            dataType: "json",
-            success: function (customer) {
-                window.customer=customer;
-                if (customer.id) {
-                    $("#order-customer_id").val(customer.id);
-                    $("#customer_balance").text(customer.customer_balance);
-                    $.ajax({
-                        type: "GET",
-                        url: "/order/customer-address/?id=" + customer.id,
-                        dataType: "json",
-                        success: function (address) {
-                                address_list = address;
-                                $("#order-address_id").html('');
-                                for(var k in address){
-                                    var v = address[k];
-                                    $("#order-address_id").append(
-                                        '<div class="radio" id="address_'+ v.id +'"><label class="col-sm-7"><input type="radio" value="'+ v.id +'" '
-                                        +' name="Order[address_id]"> '
-                                        + v.operation_province_name+' '
-                                        + v.operation_city_name+' '
-                                        + v.operation_area_name+' '
-                                        + v.customer_address_detail+' '
-                                        + v.customer_address_nickname+' '
-                                        + v.customer_address_phone+'</label>' +
-                                        '<label class="col-sm-4" style="color: #FF0000;">' +
-                                        (v.customer_address_longitude* v.customer_address_latitude==0?'该地址没有匹配到经纬度':'该地址可以下单')+
-                                        '</label>' +
-                                        '<button class="btn btn-xs btn-warning col-sm-1 update_address_btn" type="button">编辑</button>' +
-                                        '</div>'
-                                    );
-                                }
-                            }
-                    });
-
-                    $.ajax({
-                        type: "GET",
-                        url: "/order/customer-used-workers/?id=" + customer.id,
-                        dataType: "json",
-                        success: function (worker) {
-                            if (worker.length>0) {
-                                $("#order-order_booked_worker_id").html('<label class="radio-inline"><input type="radio" checked="" value="0" name="Order[order_booked_worker_id]"> 不指定</label>');
-                                for(var k in worker){
-                                    var v = worker[k];
-                                    $("#order-order_booked_worker_id").append(
-                                        '<label class="radio-inline"><input type="radio" value="'+ v.worker_id
-                                        +'" name="Order[order_booked_worker_id]"> '+ v.worker_name+'</label>'
-                                    );
-                                }
-                            }
-                        }
-                    });
-
-                    getCards();
-
-                }
-            }
-        });
-    }else{
-        $("#address_div").hide();
+$("#order-order_customer_phone").keyup(function(e){
+    if(e.keyCode == 13){
+       getCustomerInfo();
     }
 });
+
+$("#order-order_customer_phone").blur(getCustomerInfo);
+
+$("#submit").click(function(){
+    $(this).parents('form').submit();
+});
+
+
 
 
 $(document).on("change","#order-order_service_type_id input",function(){
@@ -93,6 +36,8 @@ $(document).on("change","#order-order_service_type_id input",function(){
     setOrderMoney();
     getCoupons();
 });
+
+
 
 $(document).on("change","#order-address_id input[type='radio']",function(){
     $("#order-order_address").val($("#order-address_id input:checked").parent().text());
@@ -339,6 +284,75 @@ function getCards(){
                 }
             }
         });
+    }
+}
+
+function getCustomerInfo(){
+    var phone = $("#order-order_customer_phone").val();
+    var reg = /^1[3-9][0-9]{9}$/;
+    if(reg.test(phone)) {
+        $.ajax({
+            type: "GET",
+            url: "/order/customer/?phone=" + phone,
+            dataType: "json",
+            success: function (customer) {
+                window.customer=customer;
+                if (customer.id) {
+                    $("#order-customer_id").val(customer.id);
+                    $("#customer_balance").text(customer.customer_balance);
+                    $.ajax({
+                        type: "GET",
+                        url: "/order/customer-address/?id=" + customer.id,
+                        dataType: "json",
+                        success: function (address) {
+                            address_list = address;
+                            $("#order-address_id").html('');
+                            for(var k in address){
+                                var v = address[k];
+                                $("#order-address_id").append(
+                                    '<div class="radio" id="address_'+ v.id +'"><label class="col-sm-7"><input type="radio" value="'+ v.id +'" '
+                                    +' name="Order[address_id]"> '
+                                    + v.operation_province_name+' '
+                                    + v.operation_city_name+' '
+                                    + v.operation_area_name+' '
+                                    + v.customer_address_detail+' '
+                                    + v.customer_address_nickname+' '
+                                    + v.customer_address_phone+'</label>' +
+                                    '<label class="col-sm-4" style="color: #FF0000;">' +
+                                    (v.customer_address_longitude* v.customer_address_latitude==0?'该地址没有匹配到经纬度':'该地址可以下单')+
+                                    '</label>' +
+                                    '<button class="btn btn-xs btn-warning col-sm-1 update_address_btn" type="button">编辑</button>' +
+                                    '</div>'
+                                );
+                            }
+                        }
+                    });
+
+                    $.ajax({
+                        type: "GET",
+                        url: "/order/customer-used-workers/?id=" + customer.id,
+                        dataType: "json",
+                        success: function (worker) {
+                            if (worker.length>0) {
+                                $("#order-order_booked_worker_id").html('<label class="radio-inline"><input type="radio" checked="" value="0" name="Order[order_booked_worker_id]"> 不指定</label>');
+                                for(var k in worker){
+                                    var v = worker[k];
+                                    $("#order-order_booked_worker_id").append(
+                                        '<label class="radio-inline"><input type="radio" value="'+ v.worker_id
+                                        +'" name="Order[order_booked_worker_id]"> '+ v.worker_name+'</label>'
+                                    );
+                                }
+                            }
+                        }
+                    });
+
+                    getCards();
+
+                }
+            }
+        });
+    }else{
+        $("#address_div").hide();
     }
 }
 

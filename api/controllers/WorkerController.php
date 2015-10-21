@@ -1,17 +1,22 @@
 <?php
+namespace api\controllers;
 
-class WorkerController
+use Yii;
+use \core\models\worker\Worker;
+use \core\models\worker\WorkerExt;
+class WorkerController extends \api\components\Controller
 {
+
     /**
      *
-     * @api {GET} /aunt/workinfo 查看阿姨信息
+     * @api {GET} /worker/work-info 查看阿姨信息 (田玉星 80%)
      *
      *
      * @apiName WorkerInfo
      * 
      * @apiGroup Worker
      *
-     * @apiParam {String} worker_id 阿姨id
+     * @apiParam {String} access_token 阿姨登录token
      *
      *
      *
@@ -21,7 +26,7 @@ class WorkerController
      *       "code": "ok",
      *       "msg": "查询成功",
      *       ret:{
-     *          "aunt":{
+     *          
      *          }
      *       }
      *
@@ -50,7 +55,95 @@ class WorkerController
      *
      */
     public function actionWorkerInfo(){
-    
+          $param = Yii::$app->request->post();
+          if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+          }
+          $worker = WorkerAccessToken::getWorker($param['access_token']);
+          if (!empty($worker) && !empty($worker->id)) {
+               $workerInfo = Worker::getWorkerInfo(1);
+               //数据整理
+               $ret = array(
+                   "order_count"=> "",
+                   "cancel_count"=>"",
+                   "worker_total_score"=>"",
+                   "my_rewards"=>array(),
+                   "user_phone"=>$workerInfo['worker_phone'],
+                   "worker_name"=>$workerInfo['worker_name'],
+                   "worker_age"=> "",
+                   "quality_score_clause_url"=>"",
+                   "live_place"=> "",
+                   "home_town"=> "",
+                   "identity_card"=> $workerInfo['worker_idcard'],
+                   "good_rate"=> array(),
+                   "bad_rate"=> array(),
+                   "total_rate"=> array(),
+                   "my_money"=> "",
+                   "rank_list" => array(),
+                   "my_rank"=>array(
+                         "worker_name"=>"",
+                         "rank"=> "",
+                         "money"=> ""
+                    ),
+                    "star_count_list"=>array(),
+                    "me_star_list"=>array(
+                         "worker_name"=>"",
+                         "rank"=>"",
+                         "money"=> "0"
+                    ),
+                    "personal_skill"=>array(
+                         "title"=>"",
+                         "type"=>"",
+                         "value"=>""
+                    ),
+                    "druing_time"=> "",
+                    "rest_score"=>"",
+                    "complain_num"=> "",
+                    "un_pay_money"=> "",
+                    "is_pay_money"=> "",
+                    "un_pay_list"=>array(),
+                    "is_pay_list"=>array(),
+                    "my_money_list"=>array(),
+                    "rest_day"=>"",
+                    "score_list"=>array(),
+                    "fine_money"=>"",
+                    "un_complain_list"=>array(),
+                    "rest_day_str"=>"",
+                    "complain_str"=> "",
+                    "complain_clause_url"=> "",
+                    "today_finish_order"=> "",
+                    "today_finish_money"=> "",
+                    "month_finish_order"=> "",
+                    "month_finish_money"=> "",
+                    "succ_rate"=> "",
+                    "driver_level"=> "",
+                    "alert_type"=> "",
+                    "account_rest_money"=> "",
+                    "pay_money" =>"",
+                    "charge_money"=>"",
+                    "driver_company"=>"",
+                    "cur_car_id"=>"",
+                    "cur_car_brand"=>"",
+                    "cur_car_number"=>"",
+                    "cur_car_color"=>"",
+                    "cur_color"=>"",
+                    "cur_car_type"=> "",
+                    "is_open_start"=>"",
+                    "result"=>"1",
+                    "head_url"=>"",
+                    "worker_degree"=> "",
+                    "worker_work_age"=> "",
+                    "worker_language"=> "",
+                    "health_card"=>"",
+                    "department"=> "",
+                    "server_range"=> "",
+                    "transportation"=> "",
+                    "activity_url"=> ""
+               );
+               return $this->send($ret, "阿姨信息查询成功", "ok");
+         } else {
+             return $this->send(null, "阿姨不存在.", "error", 403);
+         }
     }
     
     /**
@@ -496,7 +589,7 @@ class WorkerController
     
     
     /**
-     * @api {get} /worker/worker_time_table.php  周期服务时间表
+     * @api {get} /worker/worker_time_table.php  周期服务时间表(李勇80%缺少model)
      * @apiName actionWorkerTimeTable
      * @apiGroup Worker
      * @apiDescription 帮客户下单，周期服务
@@ -539,7 +632,38 @@ class WorkerController
      *  }
      *
      */
-    
+    public function actionWorkerTimeTable(){
+          $param = Yii::$app->request->post();
+          if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+          }
+          $worker = WorkerAccessToken::getWorker($param['access_token']);
+          if (!empty($worker) && !empty($worker->id)) {
+               //$filed = array('worker_live_province','worker_live_city','worker_live_area','worker_live_street');
+               //$workerInfo = Worker::getWorkerListByIds($worker->id,implode(',',$filed));
+               $ret = array(
+                    "select_time_area": "6",
+                    "max_plan_time": "6",
+                    "min_plan_time": "2",
+                    "msg_style": "",
+                    "alert_msg": "",
+                    "worker_time":
+                    [
+                        {
+                            "date_name": "09月13日",
+                            "date_week": "周日",
+                            "date_week_every": "每周日",
+                            "date_time":
+                            ["14:00-16:00","14:30-16:30","15:00-17:00","15:30-17:30","16:00-18:00","16:30-18:30","17:00-19:00","17:30-19:30","18:00-20:00"],
+                            "date_name_tag": "09月13日(今天)"
+                        }
+                    ]
+               );
+               return $this->send($ret, "操作成功.", "ok");
+          }else{
+               return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+          }
+    }
     
     /**
      * @api {get} /v2/worker/help_user_create_period_order.php  提交周期订单
@@ -655,13 +779,20 @@ class WorkerController
      *
      */
     
+
+
+
+
+
+
+
     
     /**
-     * @api {get} /mobileapidriver2/handleWorkerLeave  请假
+     * @api {get} /worker/handle_worker_leave  阿姨请假（田玉星 95%）
      * @apiName actionHandleWorkerLeave
      * @apiGroup Worker
      * 
-     * @apiParam {String} session_id    会话id.
+     * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} platform_version 平台版本号.
      * @apiParam {String} date 请假时间.
      * @apiParam {String} type 请假类型.
@@ -690,15 +821,114 @@ class WorkerController
      *  }
      *
      */
-    
-    
+     public function actionHandleWorkerLeave(){
+          $param = Yii::$app->request->post();
+          if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+          }
+
+          $worker = WorkerAccessToken::getWorker($param['access_token']);
+          if (!empty($worker) && !empty($worker->id)) {
+               $attributes = [];
+               $attributes['worker_id'] = $worker->id;
+               $attributes['worker_vacation_type'] = $param['type'];
+               if(empty($attributes['worker_vacation_type']||!in_array($param['type'], array(1,2)))){
+                    return $this->send(null, "数据不完整,请选择请假类型", "error", 403);
+               }
+
+               //请假时间范围判断
+               if(empty($param['date'])){
+                    return $this->send(null, "数据不完整,请选择请假类型", "error", 403);
+               }
+               $vacation_start_time = time();
+               $vacation_end_time = strtotime(date('Y-m-d',strtotime("+14 days")));
+               $current_vacation_time = strtotime($param['date']);
+               if($current_vacation_time<=$vacation_start_time||$current_vacation_time>$vacation_end_time){
+                    return $this->send(null, "请假时间不在请假时间范围内,请选择未来14天的日期", "error", 403);
+               }
+               $attributes['worker_vacation_start_time'] = $attributes['worker_vacation_finish_time'] = $current_vacation_time;
+               
+               //请假入库
+               $workerVacation = new \core\models\order\WorkerVacation();
+               $is_success = $workerVacation -> createNew($attributes);    
+               if ($is_success) {
+                    $result = array(
+                         'result' => 1;
+                         "msg"    => "您的请假已提交，请耐心等待审批。"
+                    );
+                 return $this->send($result,"操作成功","ok");
+               } else {
+
+                 return $this->send(null,$workerVacation->errors,  "error",403);
+               }
+          }else{
+               return $this->send(null, "阿姨不存在.", "error", 403);
+          }
+          
+     }
     
     /**
-     * @api {get} /mobileapidriver2/amend_password  修改密码
+     * @api {get} /worker/handle_worker_leave_history  阿姨请假历史（田玉星 95%）
+     * @apiName actionHandleWorkerLeaveHistory
+     * @apiGroup Worker
+     * 
+     * @apiParam {String} access_token    阿姨登录 token.
+     * @apiParam {String} platform_version 平台版本号.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *      "code": "ok",
+     *      "msg":"操作成功",
+     *      "ret":
+     *      {
+     *          "result": "1",
+     *          "msg": "您的请假已提交，请耐心等待审批。"
+     *      }
+     * }
+     *
+     * @apiError SessionIdNotFound 未找到会话ID.
+     * @apiError TimesNotFound 未找到时间段信息.
+     * @apiError TypeNotFound 未找到类型信息.
+     *
+     * @apiErrorExample Error-Response:
+     *  HTTP/1.1 404 Not Found
+     *  {
+     *      "code":"Failed",
+     *      "msg": "SessionIdNotFound"
+     *  }
+     *
+     */
+     public function actionHandleWorkerLeaveHistory(){
+          $param = Yii::$app->request->post();
+          if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+          }
+
+          $worker = WorkerAccessToken::getWorker($param['access_token']);
+          if (!empty($worker) && !empty($worker->id)) {
+               
+               //调取阿姨请假历史情况
+                 return $this->send($result,"操作成功","ok");
+              
+          }else{
+               return $this->send(null, "阿姨不存在.", "error", 403);
+          }
+          
+     }
+
+
+
+
+
+
+
+    /**
+     * @api {get} /worker/amend_password  修改密码(田玉星)
      * @apiName actionAmendPassword
      * @apiGroup Worker
      *  
-     * @apiParam {String} session_id    会话id.
+     * @apiParam {String} access_token    阿姨登录token.
      * @apiParam {String} platform_version 平台版本号.
      * @apiParam {String} password  原始密码.
      * @apiParam {String} new_password  新密码.
@@ -728,9 +958,18 @@ class WorkerController
      *
      */
     
+    public function amend_password(){
+
+    }
+
+
+
+
+
+
     
     /**
-     * @api {get} /mobileapidriver2/getWorkerPlaceById  获取阿姨住址
+     * @api {get} /worker/get-worker-place-by-id  获取阿姨住址(田玉星 90% )
      * @apiName actionGetWorkerPlaceById
      * @apiGroup Worker
      * @apiDescription 获取阿姨住址 用来查看路线
@@ -759,7 +998,24 @@ class WorkerController
      *  }
      *
      */
-    
+    public function actionGetWorkerPlaceById(){
+          $param = Yii::$app->request->post();
+          if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+          }
+          $worker = WorkerAccessToken::getWorker($param['access_token']);
+          if (!empty($worker) && !empty($worker->id)) {
+               //$filed = array('worker_live_province','worker_live_city','worker_live_area','worker_live_street');
+               //$workerInfo = Worker::getWorkerListByIds($worker->id,implode(',',$filed));
+               $ret = array(
+                    "result"=>'',
+                    "live_place"=>"测试等待model支持"
+               );
+               return $this->send($ret, "阿姨不存在.", "ok");
+          }else{
+               return $this->send(null, "阿姨不存在.", "error", 403);
+          }
+    }
     /**
      * @api {get} /v2/FixedUserPeriod.php  固定客户列表
      * @apiName actionFixedUserPeriod

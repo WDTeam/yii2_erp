@@ -27,6 +27,9 @@ if($searchModel->settle_type == FinanceSettleApplySearch::ALL_WORKER_SETTELE){
 $this->params['breadcrumbs'][] = $this->title;
 $this->params['settle_type'] = $searchModel->settle_type;
 $this->params['review_section'] = $searchModel->review_section;
+//是否需要进行财务打款确认
+$isFinacePayedConfirm = ($searchModel->finance_settle_apply_status == FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED);
+$this->params['isFinacePayedConfirm'] = $isFinacePayedConfirm;
 ?>
 <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.js"></script>
 <script src="//cdn.bootcss.com/angular-strap/2.3.3/modules/popover.js"></script>
@@ -77,13 +80,13 @@ $this->params['review_section'] = $searchModel->review_section;
                         ]);
                     },
                     'agree' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-ok"></span>', Yii::$app->urlManager->createUrl(['/finance/finance-settle-apply/self-fulltime-worker-settle-done', 'id' => $model->id, 'settle_type'=>$this->params['settle_type'],'is_ok'=>1, 'review_section'=>$this->params['review_section']]), [
-                            'title' => Yii::t('yii', '审核通过'),
+                        return Html::a('<span class="glyphicon glyphicon-ok"></span>', Yii::$app->urlManager->createUrl(['/finance/finance-settle-apply/self-fulltime-worker-settle-done', 'id' => $model->id, 'settle_type'=>$this->params['settle_type'],'is_ok'=>1,'isFinacePayedConfirm'=>$this->params['isFinacePayedConfirm'], 'review_section'=>$this->params['review_section']]), [
+                            'title' => Yii::t('yii', $this->params['isFinacePayedConfirm']?'确认打款':'审核通过'),
                             'class'=>'agree',
                         ]);
                     },
                     'disagree' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-remove"></span>',
+                        return Html::a('<span class="glyphicon glyphicon-remove" style = "display:'.($this->params['isFinacePayedConfirm']?'none':'block').'"></span>',
                             [
                                 '/finance/finance-settle-apply/review-failed-reason',
                                 'id' => $model->id, 

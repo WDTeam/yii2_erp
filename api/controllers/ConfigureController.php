@@ -1,172 +1,53 @@
 <?php
+namespace api\controllers;
 
-class ConfigureController
+use Yii;
+use core\models\Operation\CoreOperationShopDistrictGoods;
+use core\models\Operation\CoreOperationCategory;
+use \core\models\customer\CustomerAccessToken;
+
+class ConfigureController extends \api\components\Controller
 {
     /**
-     *
-     * @api {GET} /configure/services 城市服务初始化
-     * @apiName GetServicesInfoByCity
+     * @api {POST} /configure/all-services 城市服务初始化 （已完成）
+     * @apiName actionAllServices
      * @apiGroup configure
-     * 
-     * @apiParam {String} city 城市
-     * @apiParam {String} app_version 访问源(android_4.2.2)
      *
+     * @apiParam {string} access_token 用户认证
+     * @apiParam {String} city_name 城市
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "code": "ok",
-     *       "msg": "",
-     *       "ret":{
-     *       "webViewUrl": "http://wap.1jiajie.com/serverinfo/ejiajie.html?cn=city_name&type=service_type",
-     *       "city_price": [
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "code": "ok",
+     *      "msg": "",
+     *      "ret":
+     *      [
+     *      {
+     *          "category_id":"", 服务品类id
+     *          "category_name":"专业保洁",  服务品类名
+     *          "goodses":
+     *          [
      *          {
-     *           "city_name": "北京",
-     *           "price": {
-     *               "1": 25
+     *              "goods_id": "2", 服务类型id
+     *              "goods_no": null,  服务类型编号
+     *              "goods_name": "空调清洗",  服务类型名
+     *              "goods_introduction": "", 服务类型简介
+     *              "goods_english_name": "", 服务类型英文名称
+     *              "goods_img": "", 服务类型图片
+     *              "goods_app_ico": null,  APP端图标(序列化方式存储|首页大图，首页小图，分类页小图，订单页小图)
+     *              "goods_pc_ico": null,  PC端图标(序列化方式存储|首页大图，首页小图，分类页小图，订单页小图)
+     *              "goods_price": "0.0000", 价格
+     *              "goods_price_unit": "件",  单位
+     *              "goods_price_description": "1232131"
      *          },
-     *          "top_text": {
-     *              "baojie_money": "单次25元/小时（2小时起）",
-     *              "xinju_money": "50平米以下,300元;50平米以上,6元/平米",
-     *              "chufanggaowen_money": "450元/套",
-     *              "weishengjian_money": "240元/间",
-     *              "caboli_money": "12元/平米，10平米起",
-     *              "dimianjinghua_money": "12元/平米",
-     *              "360danchen_money": "5元/平米，300元起",
-     *              "chuangsha_money": "平推40元-80元/扇,隐形150元-280元/套",
-     *              "youyanji_money": "中式160元/台，欧式200元/台",
-     *              "kongtiao_money": "壁挂式190元/台，柜机200元/台",
-     *              "weibolu_money": "100元/台",
-     *              "dianbingxiang_money": "120元/台起，最高200元/台",
-     *              "yinshuiji_money": "100元/台",
-     *              "kaoxiang_money": "100元/台",
-     *              "xiyiji_money": "120元/台",
-     *              "pizhishafa_money": "300元起，单体120元/座",
-     *              "muzhijiaju_money": "200元/套，5套以上100元/套",
-     *              "ditan_money": "20元/平米+300元出车费",
-     *              "dibandala_money": "20元/平米，200元起",
-     *              "chuangpinchuman_money": "成人180/床，婴儿150/床",
-     *              "buyishafa_money": "1-1-3规格600元/套，单体120元/座",
-     *              "chuanglian_money": "10元/平米起",
-     *              "shicaijiejing_money": "50元/平米",
-     *              "xiyi_money": "洗衣单件9元起，99元/袋",
-     *              "pixiebaoyang_money": "低帮鞋15元，低腰鞋20元，高腰鞋25元",
-     *              "aibaoqingxi_money": "普通包20元起，奢侈品包200元起",
-     *              "xixie_money": "洗鞋15元起",
-     *              "baomu_money": "13000元-5000元",
-     *              "yuesao_money": "5000元-18000元",
-     *              "yuersao_money": "3000元-8000元",
-     *              "baoyue_money": "1000元-8000元",
-     *              "shachong_money": "100元/50平米+300元出车费",
-     *              "matong_money": "200元/眼",
-     *              "guandao_money": "160元/眼"
-     *          },
-     *          "main_menu": [
-     *              {
-     *                  "专业保洁": [
-     *                       "擦玻璃"
-     *                   ]
-     *               },
-     *               {
-     *                   "家电清洗": [
-     *                       "空调清洗"
-     *                   ]
-     *               },
-     *               {
-     *                   "家电清洗": [
-     *                       "油烟机清洗"
-     *                   ]
-     *               }
-     *           ],
-     *           "second_menu": [
-     *               {
-     *                   "专业保洁": [
-     *                       "家庭保洁",
-     *                       "新居开荒",
-     *                       "厨房高温保洁",
-     *                       "卫生间保洁",
-     *                       "擦玻璃",
-     *                       "地面净化除菌",
-     *                       "360°掸尘",
-     *                       "窗纱更换"
-     *                   ]
-     *               },
-     *               {
-     *                   "家电清洗": [
-     *                       "油烟机清洗",
-     *                       "空调清洗",
-     *                       "微波炉清洗",
-     *                       "电冰箱清洗",
-     *                       "饮水机清洗",
-     *                       "烤箱清洗",
-     *                       "洗衣机清洗"
-     *                   ]
-     *               },
-     *               {
-     *                   "家居养护": [
-     *                       "皮质沙发保养",
-     *                       "木质家居保养",
-     *                       "地毯保养",
-     *                       "地板抛光打蜡",
-     *                       "床品除螨",
-     *                       "布艺沙发除螨",
-     *                       "窗帘清洗",
-     *                       "石材结晶保养"
-     *                   ]
-     *               },
-     *               {
-     *                   "洗护服务": [
-     *                       "洗衣",
-     *                       "洗鞋",
-     *                       "皮鞋保养",
-     *                       "爱包清洗"
-     *                   ]
-     *               },
-     *               {
-     *                   "生活急救箱": [
-     *                      "管道疏通",
-     *                       "马桶疏通",
-     *                       "杀虫"
-     *                   ]
-     *               }
-     *           ]
-     *       },
-     *       
-     *   ],
-     *   "items": {
-     *       "专业保洁": {
-     *           "家庭保洁": {
-     *               "name": "家庭保洁",
-     *               "top": "baojie_money",
-     *               "thum": "http://webapi2.1jiajie.com/app/images/jiatingbaojie_them.png",
-     *               "pic": "http://webapi2.1jiajie.com/app/images/jiatingbaojie_pic.png",
-     *               "pic_v4": "http://webapi2.1jiajie.com/app/images/jiatingbaojie_pic_v4.png",
-     *               "type_id": 1
-     *           },
-     *           "clean": {
-     *               "name": "clean",
-     *               "top": "baojie_money",
-     *               "thum": "http://webapi2.1jiajie.com/app/images/jiatingbaojie_them.png",
-     *               "pic": "http://webapi2.1jiajie.com/app/images/jiatingbaojie_pic.png",
-     *               "pic_v4": "http://webapi2.1jiajie.com/app/images/jiatingbaojie_pic_v4.png",
-     *               "type_id": 1
-     *           },
-     *       "暂无服务": {
-     *           "暂无服务": {
-     *              "top": "zanwufuwu_money",
-     *               "name": "暂无服务",
-     *               "thum": "http://webapi2.1jiajie.com/app/images/xiyi_them.png",
-     *               "pic": "http://webapi2.1jiajie.com/app/images/xiyi_pic.png",
-     *               "pic_v4": "http://webapi2.1jiajie.com/app/images/xiyi_pic_v4.png",
-     *               "type_id": 99
-     *           }
+     *          ]
      *       }
-     *   }
-     *  
+     *       ],
+     *  }
      *
-     *
-     * 
-     * @apiError CityNotSupportFound 该城市未开通. 
+     * @apiError CityNotSupportFound 该城市暂未开通.
      *
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 404 Not Found
@@ -176,15 +57,59 @@ class ConfigureController
      *     }
      * @apiDescription 获取城市服务配置项价格介绍页面以及分类的全部服务项目
      */
-    public function actionGetServicesInfoByCity()
+    public function actionAllServices()
     {
-    
+        $param = Yii::$app->request->post();
+        if (empty(@$param['access_token']) || !CustomerAccessToken::checkAccessToken(@$param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
+
+        if (empty(@$param['city_name'])) {
+            return $this->send(null, "未取得城市信息", "error", "403");
+        }
+
+        $categoryes = CoreOperationCategory::getAllCategory();
+        $goodses = CoreOperationShopDistrictGoods::getGoodsByCity($param['city_name']);
+
+        if (empty($categoryes) || empty($goodses)) {
+            return $this->send(null, "该城市暂未开通", "error", "403");
+        }
+        $cDate = [];
+        foreach ($categoryes as $cItem) {
+            $gDate = [];
+            foreach ($goodses as $gItem) {
+                if ($cItem['id'] == $gItem['operation_category_id']) {
+                    $gobject = [
+                        'goods_id' => $gItem['goods_id'],
+                        'goods_no' => $gItem['operation_goods_no'],
+                        'goods_name' => $gItem['operation_goods_name'],
+                        'goods_introduction' => $gItem['operation_goods_introduction'],
+                        'goods_english_name' => $gItem['operation_goods_english_name'],
+                        'goods_img' => $gItem['operation_goods_img'],
+                        'goods_app_ico' => $gItem['operation_goods_app_ico'],
+                        'goods_pc_ico' => $gItem['operation_goods_pc_ico'],
+                        'goods_price' => $gItem['operation_goods_price'],
+                        'goods_price_unit' => $gItem['operation_spec_strategy_unit'],
+                        'goods_price_description' => $gItem['operation_goods_price_description'],
+                    ];
+                    $gDate[] = $gobject;
+                }
+
+            }
+            $cObject = [
+                'category_id' => $cItem['id'],
+                'category_name' => $cItem['operation_category_name'],
+                'goodses' => $gDate
+            ];
+            $cDate[] = $cObject;
+        }
+
+        return $this->send($cDate, "数据获取成功", "ok");
     }
-    
+
     /**
-     *
-     * @api {GET} /configure/ 轮播图等初始化
-     * @apiName InitConfigure
+     * @api {POST} /configure/user-init 用户端首页初始化 （赵顺利0%）
+     * @apiName actionUserInit
      * @apiGroup configure
      * @apiDescription 获得开通城市列表，广告轮播图 等初始化数据
      * @apiParam {String} city 城市
@@ -226,7 +151,7 @@ class ConfigureController
      *              "url_title": ""
      *            }
      *          ]
-     *       
+     *
      *        },
      *        "isUpdate": 0,
      *        "updateContent": "",
@@ -250,13 +175,12 @@ class ConfigureController
      *       "msg": "城市尚未开通"
      *     }
      */
-    public function actionInitConfigureByCity(){}
-    
+
     /**
-     * @api {GET} /v2/worker/check_update.php 检查阿姨端版本更新
-     * @apiName actionCheckUpdate
+     * @api {POST} /configure/worker-check-update 检查阿姨端版本更新 （赵顺利0%）
+     * @apiName actionWorkerCheckUpdate
      * @apiGroup configure
-     * 
+     *
      * @apiParam {String} session_id    会话id.
      * @apiParam {String} platform_version 平台版本号.
      *
@@ -286,11 +210,12 @@ class ConfigureController
      *  }
      *
      */
-    
+
     /**
-     * @api {get} /v2/worker/home_page.php 阿姨app初始化
-     * @apiName actionIndex
+     * @api {POST} /configure/worker-init 阿姨app初始化 （赵顺利0%）
+     * @apiName actionWorkerInit
      * @apiGroup configure
+     *
      * @apiParam {String} session_id 会话id.
      * @apiParam {String} platform_version 平台版本号.
      *
