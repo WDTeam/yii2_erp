@@ -40,7 +40,7 @@ class WorkerTask extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['worker_task_start', 'worker_task_end', 'worker_task_cycle', 'worker_task_reward_type', 'worker_task_reward_value', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['worker_task_online','worker_task_start', 'worker_task_end', 'worker_task_cycle', 'worker_task_reward_type', 'worker_task_reward_value', 'created_at', 'updated_at', 'is_del'], 'integer'],
             [['worker_task_conditions'], 'string'],
             [['worker_task_name', 'worker_type', 'worker_rule_id', 'worker_task_city_id', 'worker_task_description', 'worker_task_description_url'], 'string', 'max' => 255]
         ];
@@ -65,6 +65,7 @@ class WorkerTask extends \yii\db\ActiveRecord
             'worker_task_conditions' => Yii::t('app', '任务条件(JSON)'),
             'worker_task_reward_type' => Yii::t('app', '任务奖励类型'),
             'worker_task_reward_value' => Yii::t('app', '任务奖励值'),
+            'worker_task_online' => Yii::t('app', '任务在线？'),
             'created_at' => Yii::t('app', '创建时间'),
             'updated_at' => Yii::t('app', '更新时间'),
             'is_del' => Yii::t('app', '是否逻辑删除'),

@@ -77,7 +77,7 @@ use kartik\date\DatePicker;
     
     
     <div class="form-group">
-    <div class='col-md-2' style="    margin-top: 22px;">
+    <div class='col-md-2' style="margin-top:22px;">
         <?= Html::submitButton(Yii::t('app', '提交'), ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton(Yii::t('app', '重置'), ['class' => 'btn btn-default']) ?>
     </div>

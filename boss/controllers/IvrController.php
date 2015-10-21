@@ -32,4 +32,14 @@ class IvrController extends Controller
         $res = \Yii::$app->ivr->send('15110249233', 'A1444808735', '洗衣');
         var_dump($res);
     }
+    
+    public function actionJpush()
+    {
+        $res = \Yii::$app->jpush->push(['wworker_uuu_ttt2', 'worker_ldg_test', 'wworker_uuu_ttt'], 'test', ['test'=>'自定义数据']);
+        var_dump($res);
+        if(isset($res->msg_id)){
+            echo '<br/>'.'<br/>'.'<br/>';
+            var_dump(\Yii::$app->jpush->getReport($res->msg_id));
+        }
+    }
 }

@@ -1,18 +1,18 @@
 <?php
 
-namespace boss\controllers;
+namespace boss\controllers\finance;
 
 use Yii;
-use core\models\worker\WorkerTask;
-use core\models\worker\WorkerTaskSearch;
-use boss\components\BaseAuthController;
+use common\models\FinanceCompensate;
+use core\models\search\FinanceCompensate as FinanceCompensateSearch;
+use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * WorkerTaskController implements the CRUD actions for WorkerTask model.
+ * FinanceCompensateController implements the CRUD actions for FinanceCompensate model.
  */
-class WorkerTaskController extends BaseAuthController
+class FinanceCompensateController extends Controller
 {
     public function behaviors()
     {
@@ -27,12 +27,12 @@ class WorkerTaskController extends BaseAuthController
     }
 
     /**
-     * Lists all WorkerTask models.
+     * Lists all FinanceCompensate models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new WorkerTaskSearch;
+        $searchModel = new FinanceCompensateSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
         return $this->render('index', [
@@ -42,7 +42,7 @@ class WorkerTaskController extends BaseAuthController
     }
 
     /**
-     * Displays a single WorkerTask model.
+     * Displays a single FinanceCompensate model.
      * @param integer $id
      * @return mixed
      */
@@ -58,13 +58,13 @@ class WorkerTaskController extends BaseAuthController
     }
 
     /**
-     * Creates a new WorkerTask model.
+     * Creates a new FinanceCompensate model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new WorkerTask;
+        $model = new FinanceCompensate;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -76,7 +76,7 @@ class WorkerTaskController extends BaseAuthController
     }
 
     /**
-     * Updates an existing WorkerTask model.
+     * Updates an existing FinanceCompensate model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -85,7 +85,7 @@ class WorkerTaskController extends BaseAuthController
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()){   
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
@@ -95,7 +95,7 @@ class WorkerTaskController extends BaseAuthController
     }
 
     /**
-     * Deletes an existing WorkerTask model.
+     * Deletes an existing FinanceCompensate model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -108,29 +108,18 @@ class WorkerTaskController extends BaseAuthController
     }
 
     /**
-     * Finds the WorkerTask model based on its primary key value.
+     * Finds the FinanceCompensate model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return WorkerTask the loaded model
+     * @return FinanceCompensate the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = WorkerTask::findOne($id)) !== null) {
+        if (($model = FinanceCompensate::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
-        }
-    }
-    /**
-     * 任务下线
-     */
-    public function actionSetOnline($id, $online)
-    {
-        $model = $this->findModel($id);
-        $model->worker_task_online = $online;
-        if($model->save()){
-            return $this->redirect('index');
         }
     }
 }
