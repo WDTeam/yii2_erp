@@ -139,6 +139,8 @@ class WorkerTask extends \common\models\WorkerTask
         }
         return $res;
     }
+    
+    
     /**
      * 计算符合阿姨条件的任务列表
      */
@@ -155,6 +157,35 @@ class WorkerTask extends \common\models\WorkerTask
         ->andFilterWhere(['>','worker_task_end', $cur_time])
         ->all();
         return $tasks;
+    }
+    /**
+     * 自动生成阿姨任务
+     */
+    public static function autoCreateTaskLog($worker_id)
+    {
+        $data = [];
+        $tasks = (array)self::getTaskListByWorkerId($worker_id);
+        foreach($tasks as $task){
+            $log = WorkerTaskLog::find()->where([
+                'worker_id'=>$worker_id,
+                'worker_task_id'=>$task->id,
+            ])->one();
+            if(empty($log)){
+                $log = new WorkerTaskLog();
+            }
+            $log->setAttributes([
+                'worker_id'=>$worker_id,
+                'worker_task_id'=>$task->id,
+                'worker_task_name'=>$task->worker_task_name,
+                'worker_task_start'=>$task->worker_task_start,
+                'worker_task_end'=>$task->worker_task_end,
+                'worker_task_reward_type'=>$task->worker_task_reward_type,
+                'worker_task_reward_value'=>$task->worker_task_reward_value,
+            ]);
+            $log->save();
+            $data[] = $log;
+        }
+        return $data;
     }
     /**
      * 给定数据判断是否完成
@@ -176,9 +207,28 @@ class WorkerTask extends \common\models\WorkerTask
         }
         return $isfalse<=0;
     }
+    /**
+     * 开通的城市列表
+     */
     public static function getOnlineCites()
     {
         $cites = CoreOperationCity::getCityOnlineInfoList();
         return ArrayHelper::map($cites, 'city_id', 'city_name');
+    }
+    /**
+     * 指定时间内阿姨已完成的任务记录列表,用于结算
+     * 而且是金钱奖励
+     */
+    public static function getDoneTasksByWorkerId($start_time, $end_time, $worker_id)
+    {
+        $models = WorkerTaskLog::find()->where([
+            'worker_id'=>$worker_id,
+            'worker_task_is_done'=>1,
+            'worker_task_reward_type'=>1
+        ])
+        ->filterWhere(['>=','worker_task_done_time', $start_time])
+        ->filterWhere(['<','worker_task_done_time', $end_time])
+        ->all();
+        return $models;
     }
 }

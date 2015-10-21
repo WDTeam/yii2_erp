@@ -29,6 +29,8 @@ use core\models\GeneralPay\GeneralPaySearch;
 use boss\controllers\GeneralPayController;
 use common\models\FinanceRecordLog;
 use crazyfd\qiniu\Qiniu;
+
+
 /**
  * FinancePopOrderController implements the CRUD actions for FinancePopOrder model.
  */
@@ -56,7 +58,6 @@ class FinancePopOrderController extends Controller
     **/
     public function actionIndex()
     {
-    	
     	$model = new FinancePopOrderSearch;
     	$modelinfo= new FinancePopOrder;
     	if(Yii::$app->request->isPost) {
@@ -337,8 +338,8 @@ class FinancePopOrderController extends Controller
     public function actionGeneralpaylist()
     { 
     	//输出部分
-    	$ordedata= new FinanceOrderChannel;
-    	$ordewhere['is_del']=0;
+    	 $ordedata= new FinanceOrderChannel;
+    	$ordewhere['is_del']='0';
     	$ordewhere['finance_order_channel_is_lock']=1;
     	$payatainfo=$ordedata::find()->where($ordewhere)->asArray()->all();
     	foreach ($payatainfo as $errt){
@@ -346,12 +347,15 @@ class FinancePopOrderController extends Controller
     		$tydtui[]=$errt['finance_order_channel_name'];
     	}
     	$tyu= array_combine($tyd,$tydtui);
+    	 
+    	
     	//我有三没有开始处理 从订单表里面开始查询
     	$searchModel= new GeneralPaySearch;
     	$dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
     	return $this->render('generalpaylist', [
     			'dataProvider' => $dataProvider,
     			'searchModel' => $searchModel,
+    			
     			]);
     
     }
@@ -541,6 +545,40 @@ class FinancePopOrderController extends Controller
         }
     }
 
+    
+    
+    
+    
+   /**
+   * 返回坏账记录标示框
+   * @date: 2015-10-20
+   * @author: peak pan
+   * @return:
+   **/
+    public function actionForminfo()
+    {
+    	$post=\Yii::$app->request->post();
+    	if($post){
+    	$searchModel = new FinancePopOrderSearch;
+    	$requestModel = Yii::$app->request->get();
+    	$model=$searchModel::findOne($requestModel['id']);
+    	
+    	
+    	//var_dump($requestModel);exit;
+    	if($requestModel['edit']=='baksite'){
+    		//回滚财务审核
+    		$model->finance_pop_order_pay_status='3';
+    		$model->finance_pop_order_msg=$post['FinancePopOrder']['finance_pop_order_msg'];
+    	}
+    	$model->save();
+    	return $this->redirect(['index', 'id' =>$requestModel['oid']]);
+    	}else{
+    	$model = new FinancePopOrder;
+    	return $this->renderAjax('forminfo',['workerVacationModel'=>$model]);
+    	}
+    }
+    
+      
    /**
    * 公用删除方法
    * @date: 2015-9-23

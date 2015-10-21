@@ -44,12 +44,48 @@ class WorkerTaskLog extends \common\models\WorkerTaskLog
     }
     /**
      * 计算是否完成
+     * 调用WorkerTask类里的方法判断完成
      */
     public function calculateIsDone()
     {
+        if($this->worker_task_is_done==1){
+            return true;
+        }
         $task = WorkerTask::findOne(['id'=>$this->worker_task_id]);
         $is_done = $task->calculateValuesIsDone($this->getConditionsValues());
-        $this->worker_task_is_done = $is_done;
-        return $this->save();
+        if($is_done){
+            $this->worker_task_is_done = 1;
+            $this->worker_task_done_time = time();
+            return $this->save();
+        }
+        return $is_done;
+    }
+    /**
+     * 存数值
+     * @param array $metas. eg: ['1'=>5,2=>6]
+     */
+    public function setValues($metas)
+    {
+        foreach ($metas as $condition=>$value){
+            $_meta = WorkerTaskLogmeta::find()->where([
+                'worker_task_id'=>$this->worker_task_id,
+                'worker_tasklog_id'=>$this->id,
+                'worker_id'=>$this->worker_id,
+                'worker_tasklog_condition'=>$condition,
+            ])->one();
+            if(empty($_meta)){
+                $_meta = new WorkerTaskLogmeta();
+                $_meta->setAttributes([
+                    'worker_task_id'=>$this->worker_task_id,
+                    'worker_tasklog_id'=>$this->id,
+                    'worker_id'=>$this->worker_id,
+                    'worker_tasklog_condition'=>$condition,
+                ]);
+            }else{
+                $_meta->worker_tasklog_value = $value;
+                $_meta->save();
+            }
+        }
+        return true;
     }
 }
