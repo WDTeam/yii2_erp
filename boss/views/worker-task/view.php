@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute'=>'worker_task_online',
-                'value'=>(Boolean)$model->worker_task_online,
+                'value'=>$model->worker_task_online==1?'在线':'下线',
             ],
             'worker_task_description',
             'worker_task_description_url:url',

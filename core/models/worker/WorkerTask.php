@@ -11,12 +11,12 @@ class WorkerTask extends \common\models\WorkerTask
      * 条件名
      */
     const CONDITION_NAME = [
-        1=>'无取消订单 ',
-        2=>'无拒绝订单',
+        1=>'取消订单 ',
+        2=>'拒绝订单',
         3=>'服务老用户',
         4=>'主动接单',
         5=>'完成工时',
-        6=>'完成小保养 ',
+        6=>'完成小保养个数 ',
     ];
     /**
      * 条件判断符
