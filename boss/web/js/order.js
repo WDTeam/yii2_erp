@@ -14,9 +14,6 @@ $("#order-order_customer_phone").keyup(function(e){
 
 $("#order-order_customer_phone").blur(getCustomerInfo);
 
-$("#submit").click(function(){
-    $(this).parents('form').submit();
-});
 
 
 
