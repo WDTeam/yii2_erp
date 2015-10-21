@@ -40,6 +40,12 @@ class OrderWorkerRelation extends OrderWorkerRelationModel
         return self::find()->where(['order_id'=>$order_id,'worker_id'=>$worker_ids])->all();
     }
 
+    /**
+     * 获取阿姨id数组 根据订单id和订单跟阿姨的关系状态
+     * @param $order_id
+     * @param $status
+     * @return array
+     */
     public static function getWorkerIdsByOrderIdAndStatus($order_id,$status)
     {
         $result = self::find()->select('worker_id')->where(['order_id'=>$order_id,'order_worker_relation_status'=>$status])->all();
