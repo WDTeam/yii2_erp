@@ -238,7 +238,7 @@ class GeneralPay extends \yii\db\ActiveRecord
             'out_trade_no'=>$this->create_out_trade_no(),
             'subject'=>$this->subject(),
             'body'=>$this->body(),
-            'general_pay_money'=>$this->toMoney($this->general_pay_money,100,'*'),
+            'general_pay_money'=>$this->toMoney($this->general_pay_money,100,'*',0),
             'notify_url'=>$this->notify_url('bfb-app'),
         ];
 
