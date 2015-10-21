@@ -3,25 +3,21 @@
 use yii\helpers\Html;
 use kartik\detail\DetailView;
 use kartik\datecontrol\DateControl;
-
+use common\models\FinanceRefund;
 /**
  * @var yii\web\View $this
  * @var common\models\FinanceRefund $model
  */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Finance Refunds'), 'url' => ['index']];
+$this->title = $model->finance_refund_tel;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '确认财务审核'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="finance-refund-view">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
-
-
     <?= DetailView::widget([
             'model' => $model,
             'condensed'=>false,
+    		'buttons1'=>'<a href="javascript:history.go(-1)">返回</a>',
             'hover'=>true,
             'mode'=>Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
             'panel'=>[
@@ -29,21 +25,42 @@ $this->params['breadcrumbs'][] = $this->title;
             'type'=>DetailView::TYPE_INFO,
         ],
         'attributes' => [
-            'id',
-            'finance_refund_tel',
-            'finance_refund_money',
-            'finance_refund_stype',
-            'finance_refund_reason',
-            'finance_refund_discount',
-            'finance_refund_pay_create_time:datetime',
-            'finance_pay_channel_id',
-            'finance_pay_channel_name',
-            'finance_refund_pay_flow_num',
-            'finance_refund_pay_status',
-            'finance_refund_worker_id',
-            'finance_refund_worker_tel',
-            'create_time:datetime',
-            'is_del',
+    		'finance_refund_pop_nub',
+    		'finance_refund_tel',
+    		'finance_refund_money',
+    		[
+    		'attribute' => 'finance_refund_stype',
+    		'type' => DetailView::INPUT_TEXT,
+    		'displayOnly' => true,
+    		'value'=>$model->finance_refund_stype==1 ?'用户取消':'未知',
+    		],
+    		'finance_refund_reason',
+    		'finance_refund_discount',
+    		'finance_refund_pay_create_time:datetime',
+    		'finance_pay_channel_title',
+    		[
+    		'attribute' => 'finance_refund_pay_status',
+    		'type' => DetailView::INPUT_TEXT,
+    		'displayOnly' => true,
+    		'value'=>$model->finance_refund_pay_status==1?'已支付':'未支付',
+    		],
+    		'finance_refund_pay_flow_num',
+    		'finance_order_channel_title',
+    		[
+    		'attribute' => 'finance_refund_worker_id',
+    		'type' => DetailView::INPUT_TEXT,
+    		'displayOnly' => true,
+    		'value'=>FinanceRefund::get_adminname($model->finance_refund_worker_id),
+    		],
+    		'finance_refund_worker_tel',
+    		'finance_refund_check_name',
+		    [
+		    'attribute' => 'isstatus',
+		    'type' => DetailView::INPUT_TEXT,
+		    'displayOnly' => true,
+		    'value'=>FinanceRefund::get_status($model->isstatus),
+		    ],
+    		'create_time:datetime',
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],

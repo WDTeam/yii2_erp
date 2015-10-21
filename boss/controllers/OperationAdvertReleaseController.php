@@ -48,6 +48,11 @@ class OperationAdvertReleaseController extends BaseAuthController
             'dataProvider' => $dataProvider,
         ]);
     }
+    
+    public function actionTest(){
+        $data = OperationAdvertRelease::getAdvertList(110100, 5, 6, 6);
+        var_dump($data);
+    }
 
     /**
      * Displays a single OperationAdvertRelease model.
