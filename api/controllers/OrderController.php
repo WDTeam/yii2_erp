@@ -214,7 +214,7 @@ class OrderController extends \api\components\Controller
             }
             $attributes['order_src_id'] = $args['order_src_id'];
         }else{
-            $orderSrc = OrderSrc::find()->where(['order_src_name'=>$args['order_src'])]);
+            $orderSrc = OrderSrc::find()->where(['order_src_name'=>$args['order_src']]);
             if(!empty($orderSrc)){
                 $attributes['order_src_id'] = $orderSrc['id'];
             }else{
