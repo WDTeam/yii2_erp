@@ -7,21 +7,21 @@ use yii\widgets\Pjax;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
- * @var core\models\search\FinanceCompensate $searchModel
+ * @var boss\models\CustomerCommentTagSearch $searchModel
  */
 
-$this->title = Yii::t('app', 'Finance Compensates');
+$this->title = Yii::t('boss', 'Customer Comment Tags');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="finance-compensate-index">
+<div class="customer-comment-tag-index">
     <div class="page-header">
             <h1><?= Html::encode($this->title) ?></h1>
     </div>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Finance Compensate',
+        <?php /* echo Html::a(Yii::t('boss', 'Create {modelClass}', [
+    'modelClass' => 'Customer Comment Tag',
 ]), ['create'], ['class' => 'btn btn-success'])*/  ?>
     </p>
 
@@ -32,25 +32,18 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'finance_compensate_oa_code',
-            'finance_complaint_id',
-            'worker_id',
-            'customer_id',
-//            'finance_compensate_coupon', 
-//            'finance_compensate_money', 
-//            'finance_compensate_reason:ntext', 
-//            'finance_compensate_proposer', 
-//            'finance_compensate_auditor', 
-//            'comment:ntext', 
+            'customer_comment_tag_name',
+            'customer_comment_level',
+            'is_online',
+            'created_at',
 //            'updated_at', 
-//            'created_at', 
-            'finance_compensate_status', 
+//            'is_del', 
 
             [
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
                 'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance-compensate/view','id' => $model->id,'edit'=>'t']), [
+                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['customer-comment-tag/view','id' => $model->id,'edit'=>'t']), [
                                                     'title' => Yii::t('yii', 'Edit'),
                                                   ]);}
 

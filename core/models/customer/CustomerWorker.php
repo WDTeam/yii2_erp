@@ -101,7 +101,7 @@ class CustomerWorker extends \yii\db\ActiveRecord
     /**
      * 黑名单阿姨列表      郝建设
      * @param $costomer_id int 用户id
-     * @param $worker      int 阿姨id
+     * @param $is_block      int 黑名单标示
      * return  array 阿姨黑名单数据 
      */
     public static function blacklistworkers($costomer_id, $is_block)

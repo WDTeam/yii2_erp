@@ -17,10 +17,11 @@ use Yii;
  * @property string $finance_compensate_reason
  * @property string $finance_compensate_proposer
  * @property string $finance_compensate_auditor
+ * @property integer $finance_compensate_status
  * @property string $comment
  * @property integer $updated_at
  * @property integer $created_at
- * @property integer $is_del
+ * @property integer $isdel
  */
 class FinanceCompensate extends \yii\db\ActiveRecord
 {
@@ -38,9 +39,9 @@ class FinanceCompensate extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['finance_complaint_id', 'worker_id', 'customer_id', 'updated_at', 'created_at', 'is_del'], 'integer'],
+            [['finance_complaint_id', 'worker_id', 'customer_id', 'updated_at', 'created_at', 'is_del','finance_compensate_status'], 'integer'],
             [['finance_compensate_money'], 'number'],
-            [['finance_compensate_reason', 'comment'], 'string'],
+            [['finance_compensate_reason', 'comment','worker_tel','worker_name','customer_name'], 'string'],
             [['finance_compensate_oa_code'], 'string', 'max' => 40],
             [['finance_compensate_coupon'], 'string', 'max' => 150],
             [['finance_compensate_proposer', 'finance_compensate_auditor'], 'string', 'max' => 20]
@@ -57,16 +58,20 @@ class FinanceCompensate extends \yii\db\ActiveRecord
             'finance_compensate_oa_code' => Yii::t('app', 'OA批号'),
             'finance_complaint_id' => Yii::t('app', '投诉Id'),
             'worker_id' => Yii::t('app', '阿姨Id'),
-            'customer_id' => Yii::t('app', '阿姨Id'),
-            'finance_compensate_coupon' => Yii::t('app', ' 优惠券,可能是多个优惠券，用分号分隔'),
+            'worker_tel' => Yii::t('app', '阿姨电话'),
+            'worker_name' => Yii::t('app', '阿姨姓名'),
+            'customer_id' => Yii::t('app', '客户Id'),
+            'customer_name' => Yii::t('app', '客户姓名'),
+            'finance_compensate_coupon' => Yii::t('app', ' 优惠券'),
             'finance_compensate_money' => Yii::t('app', ' 赔偿金额'),
             'finance_compensate_reason' => Yii::t('app', '赔偿原因'),
             'finance_compensate_proposer' => Yii::t('app', '申请人'),
             'finance_compensate_auditor' => Yii::t('app', '审核人'),
-            'comment' => Yii::t('app', '备注，可能是未通过原因'),
+            'finance_compensate_status' => Yii::t('app', '审核状态'),
+            'comment' => Yii::t('app', '备注'),
             'updated_at' => Yii::t('app', '审核时间'),
             'created_at' => Yii::t('app', '申请时间'),
-            'is_del' => Yii::t('app', '0 正常 1删除'),
+            'isdel' => Yii::t('app', '0 正常 1删除'),
         ];
     }
 }
