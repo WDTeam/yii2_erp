@@ -929,9 +929,6 @@ class GeneralPayController extends Controller
         }
     }
 
-    public function show(){
-        file_put_contents('/tmp/pay/zhidaohao_refund.php',$_REQUEST);
-    }
 
     /**
      * 财务是否对账
@@ -946,6 +943,14 @@ class GeneralPayController extends Controller
         $model->id = $id;
         $model->is_reconciliation = intval($status);
         return $model->save(false);
+    }
+
+
+
+
+    public function actionShow(){
+        file_put_contents('/tmp/pay/zhidaohao_refund.php',$_REQUEST);
+        echo 1;
     }
 
     public function actionTest()
