@@ -15,4 +15,7 @@
 return [
     'Finance Settle Applies'=>'确认结算',
     'Export'=>'导出',
+    'Finance Compensates Confirm List'=>'赔偿确认列表',
+    'Finance Compensates Query'=>'赔偿查询',
+    'Finance Compensate Create'=>'申请赔偿',
 ];

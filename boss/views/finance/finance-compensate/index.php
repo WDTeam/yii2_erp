@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'comment:ntext', 
 //            'updated_at', 
 //            'created_at', 
-//            'is_del', 
+            'finance_compensate_status', 
 
             [
                 'class' => 'yii\grid\ActionColumn',
