@@ -10,7 +10,7 @@ use core\models\Order\Order;
 /**
  * AutoOrderSerach represents the model behind the search form about `\core\models\Order\Order`.
  */
-class AutoOrderSerach extends Order
+class AutoAssignSerach extends Order
 {
     public function rules()
     {

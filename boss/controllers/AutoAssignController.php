@@ -1,10 +1,15 @@
 <?php
-
+/*
+ * BOSS 自动派单运行服务实例
+ * @author 张旭刚<zhangxugang@corp.1jiajie.com>
+ * @link http://boss.1jiajie.com/auto-assign/
+ * @copyright Copyright (c) 2015 E家洁 LLC
+*/
 namespace boss\controllers;
 
 use Yii;
 use core\models\Order\Order;
-use boss\models\AutoOrderSerach;
+use boss\models\AutoAssignSerach;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use boss\components\BaseAuthController;
@@ -12,7 +17,7 @@ use boss\components\BaseAuthController;
 /**
  * AutoOrderController implements the CRUD actions for Order model.
  */
-class AutoOrderController extends BaseAuthController
+class AutoAssignController extends BaseAuthController
 {
     public function behaviors()
     {
@@ -38,7 +43,16 @@ class AutoOrderController extends BaseAuthController
      */
     public function actionIndex()
     {
-        $searchModel = new AutoOrderSerach;
+        $data = (array)json_decode(Yii::$app->redis->get('_SWOOLE_SOCKET_RUN_STATUS_'));
+        return $this->render('index', ['data' => $data]);
+    }
+    /**
+     * Lists all Order models.
+     * @return mixed
+     */
+    public function actionIndexbak()
+    {
+        $searchModel = new AutoAssignSerach;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
         return $this->render('index', [
@@ -46,7 +60,6 @@ class AutoOrderController extends BaseAuthController
             'searchModel' => $searchModel,
         ]);
     }
-
     /**
      * Displays a single Order model.
      * @param string $id
