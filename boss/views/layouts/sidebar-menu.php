@@ -120,8 +120,8 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '智能派单(0%)',
-                        'url' => ['autoassign'],
+                        'label' => '智能派单(80%)',
+                        'url' => ['/auto-assign'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],
