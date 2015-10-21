@@ -121,7 +121,7 @@ echo Menu::widget(
                     ],
                     [
                         'label' => '智能派单(0%)',
-                        'url' => ['/auto-order/index'],
+                        'url' => ['autoassign'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],
