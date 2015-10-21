@@ -48,6 +48,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute'=>'worker_task_city_id',
                 'value'=>$model->getWorkerCityLabels()
             ],
+            [
+                'attribute'=>'worker_task_online',
+                'value'=>(Boolean)$model->worker_task_online
+            ],
             'worker_task_description',
             'worker_task_description_url:url',
             [

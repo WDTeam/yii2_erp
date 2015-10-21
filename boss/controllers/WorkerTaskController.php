@@ -122,4 +122,15 @@ class WorkerTaskController extends BaseAuthController
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+    /**
+     * 任务下线
+     */
+    public function actionSetOnline($id, $online)
+    {
+        $model = $this->findModel($id);
+        $model->worker_task_online = $online;
+        if($model->save()){
+            return $this->redirect('index');
+        }
+    }
 }

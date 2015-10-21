@@ -30,8 +30,7 @@ class IvrController extends Controller
     
     public function actionJpush()
     {
-        $res = date('YW', strtotime('2015-01-09'));
-//         $res = \Yii::$app->jpush->push2android(['worker_12196'], 'test');
+        $res = \Yii::$app->jpush->push2android(['wworker_uuu_ttt2','worker_ldg_test', 'wworker_uuu_ttt'], 'test');
         var_dump($res);
     }
 }

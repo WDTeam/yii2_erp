@@ -71,9 +71,23 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template'=>'{view} {update}',
+                'template'=>'{view} {update} {online}',
                 'buttons' => [
-
+                    'online'=>function($url, $model){
+                        if($model->worker_task_online==1){
+                            return Html::a('下线', [
+                                'worker-task/set-online',
+                                'id'=>$model->id,
+                                'online'=>0
+                            ]);
+                        }else{
+                            return Html::a('上线', [
+                                'worker-task/set-online',
+                                'id'=>$model->id,
+                                'online'=>1
+                            ]);
+                        }
+                    },
                 ],
             ],
         ],
