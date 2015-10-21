@@ -19,7 +19,7 @@ use core\models\worker\Worker;
  * @var boss\models\WorkerSearch $searchModel
  */
 $this->title = Yii::t('app', '阿姨管理');
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][1] = $this->title;
 
 ?>
 <div class="worker-index">
@@ -131,7 +131,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'kartik\grid\ActionColumn',
                 'header' => '操作',
                 'width' => "9%",
-                'template' =>'{view} {update} {vacation} {block} {delete}',
+                'template' =>'{view} {auth} {vacation} {block} {delete}',
                 'contentOptions'=>[
                     'style'=>'font-size: 12px;padding-right:2px',
                 ],
@@ -139,29 +139,28 @@ $this->params['breadcrumbs'][] = $this->title;
                     'style'=>'margin-right:3px'
                 ],
                 'buttons' => [
-                    'update' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['worker/view', 'id' => $model->id, 'edit' => 't']), [
-                            'title' => Yii::t('yii', '修改'),
+                    'auth' => function ($url, $model) {
+                        return Html::a('<span class="fa fa-fw fa-th-list"></span>', Yii::$app->urlManager->createUrl(['worker/auth', 'id' => $model->id]), [
+                            'title' =>'审核管理',
                             'style' => 'margin-right:3px'
                         ]);
                     },
-
-                    'vacation' => function ($url, $model) {
-                        return Html::a('<span class="fa fa-fw fa-history"></span>',
-                            [
-                                '/worker/create-vacation',
-                                'workerIds' => $model->id
-                            ]
-                            ,
-                            [
-                                'title' => Yii::t('yii', '请假信息录入'),
-                                'data-toggle' => 'modal',
-                                'data-target' => '#vacationModal',
-                                'class'=>'vacation',
-                                'data-id'=>$model->id,
-                                'style' => 'margin-right:3px'
-                            ]);
-                    },
+//                    'vacation' => function ($url, $model) {
+//                        return Html::a('<span class="fa fa-fw fa-history"></span>',
+//                            [
+//                                '/worker/create-vacation',
+//                                'workerIds' => $model->id
+//                            ]
+//                            ,
+//                            [
+//                                'title' => Yii::t('yii', '请假信息录入'),
+//                                'data-toggle' => 'modal',
+//                                'data-target' => '#vacationModal',
+//                                'class'=>'vacation',
+//                                'data-id'=>$model->id,
+//                                'style' => 'margin-right:3px'
+//                            ]);
+//                    },
                 ],
             ],
         ],

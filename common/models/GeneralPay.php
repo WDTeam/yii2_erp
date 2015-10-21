@@ -358,9 +358,10 @@ class GeneralPay extends \yii\db\ActiveRecord
      * 01 正常订单 02 退款 03 赔付
      * @return bool|string 订单号
      */
-    private function create_out_trade_no($type=1)
+    public function create_out_trade_no($type=1,$order_id=0)
     {
-        if(empty($this->id)) return false;
+        $id = empty($this->id) ?  $order_id : $this->id;
+        if( empty($id) ) return false;
         switch($type)
         {
             case 1 :
@@ -376,7 +377,7 @@ class GeneralPay extends \yii\db\ActiveRecord
         //组装支付订单号
         $rand = mt_rand(1000,9999);
         $date = date("ymd",time());
-        return $date.$transType.$rand.$this->id;
+        return $date.$transType.$rand.$id;
     }
 
     /**

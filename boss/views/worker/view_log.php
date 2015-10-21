@@ -10,7 +10,6 @@ use common\models\SystemUser;
  * @var yii\data\ActiveDataProvider $dataProvider
  * @var boss\models\WorkerSearch $searchModel
  */
-$this->params['breadcrumbs'][] = $this->title;
 //var_dump($workerBlockData->workerBlock->worker_block_start_time);die;
 ?>
 

@@ -929,6 +929,10 @@ class GeneralPayController extends Controller
         }
     }
 
+    public function show(){
+        file_put_contents('/tmp/pay/zhidaohao_refund.php',$_REQUEST);
+    }
+
     /**
      * 财务是否对账
      * @param $id   对账ID
@@ -946,24 +950,21 @@ class GeneralPayController extends Controller
 
     public function actionTest()
     {
-        //'2088801136967007','898111448161364','1500610004','1217983401'
+        $model = new GeneralPay();
         $param = [
-            "pay_money" => 100,
-            "customer_id" => 1,
-            "channel_id" => 3,
-            "partner" => '1217983401',
+            'refund_url' => 'http://dev.boss.1jiajie.com/general-pay/show',//退款总金额
+            'order_id' => '1',   //退款总金额
         ];
 
-        $data = \core\models\GeneralPay\GeneralPay::getPayParams(100,1,5,'1217983401');
-        dump($data);
+        $zhidahao = new \zhidahao_refund_class();
+        $re = $zhidahao->refund($param);
+        dump($re);
+
         exit;
-        $param = [
-            'sp_refund_no' => date("ymd",time()).mt_rand(1000,9999).'1',
-            'order_no' => '150927830311',   //订单号
-            'cashback_amount' => '1',     //退款总额(分单位)
-            'return_url' => "http://".$_SERVER['HTTP_HOST']."/general-pay/bfb-refund-notify",   //服务器异步通知地址
-        ];
-
+        $wx = new \wxjsrefund_class();
+        $re = $wx->refund($param);
+        dump($re);
+        exit;
         $bfb = new \bfbrefund_class();
         $bfb->refund($param);
 
