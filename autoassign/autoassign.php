@@ -15,6 +15,7 @@ class server
     private $redis;
     private $ip = '0.0.0.0';
     private $port = 9501;
+    private $isRun = true;
     //private $server;
  
     /**
@@ -78,7 +79,9 @@ class server
             'qend' => $data[4],
             'jstart' => $data[5],
             'jend' => $data[6],
+            'isRun' => $data[7],
         );
+        $this->isRun = $d['isRun'];
         return $d;
     }
     
@@ -105,8 +108,10 @@ class server
         $this->ws = $ws;
 //        $server->push($ws->fd, json_encode(["start", "thread"]));
         swoole_timer_add($data['interval']*1000, function ($interval) {
-            $this->saveStatus();
-            $this->processOrders($this->serv, $this->data, $this->ws);
+            if($this->isRun){
+                $this->saveStatus();
+                $this->processOrders($this->serv, $this->data, $this->ws);
+            }
         });
     }
     
@@ -135,7 +140,8 @@ class server
             $d['updated_at'] = isset($d['updated_at']) ? date('Y-m-d H:i:s', $d['updated_at']) : '';
             $d = json_encode($d);
             echo 'start:'. $order['order_id']."\n";
-            $server->push($ws->fd, $d);
+            
+            if(empty($server)){$server->push($ws->fd, $d);}
             $this->serv->task($order);
             $n++;
             if($n > $count){break;}
@@ -234,7 +240,7 @@ class server
         $data['updated_at'] = isset($data['updated_at']) ? date('Y-m-d H:i:s', $data['updated_at']) : '';
         $d = json_encode($data);
         echo 'end'. $data['order_id']."\n";
-        $server->push($this->ws->fd, $d);
+        if(empty($server)){$server->push($this->ws->fd, $d);}
 //        $this->broadcast($d);
     }
     

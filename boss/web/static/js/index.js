@@ -1,5 +1,6 @@
 $(document).ready(function(){
-    $('#start').click(function(){startAutoAssignOrder();});
+    $('#start').click(function(){startAutoAssignOrder(true);});
+    $('#stop').click(function(){startAutoAssignOrder(false);});
     $('#connect').click(function(){websocketConnect();});
 });
 
@@ -13,7 +14,7 @@ function websocketConnect(){
             console.log("Connected to WebSocket server."+evt.data);
             $('#connect').attr('disabled', true);
             $('#connectStatus').html('连接成功！');
-            startAutoAssignOrder();
+            startAutoAssignOrder(true);
         }; 
     }
 }
@@ -61,8 +62,8 @@ function getStatus(status){
     }
 }
 
-function startAutoAssignOrder(){
-    var data = $('#interval').val()+','+$('#taskName').val()+','+$('#theadNum').val()+','+$('#qstart').val()+','+$('#qend').val()+','+$('#jstart').val()+','+$('#jend').val();
+function startAutoAssignOrder(status){
+    var data = $('#interval').val()+','+$('#taskName').val()+','+$('#theadNum').val()+','+$('#qstart').val()+','+$('#qend').val()+','+$('#jstart').val()+','+$('#jend').val()+','+status;
     websocket.send(data);
     $('#connectStatus').html('自动派单开始！');
     $('#start').attr('disabled', false);

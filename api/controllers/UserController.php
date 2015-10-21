@@ -353,7 +353,7 @@ class UserController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /user/set-default-city 设置默认城市 （没有此需求）
+     * @api {GET} /user/set-default-city 设置默认城市 （0%）
      *
      * @apiName SetDefaultCity
      * @apiGroup User
@@ -426,7 +426,7 @@ class UserController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /user/setdefaultcity 获取用户个性化配置和优惠劵 （没有此需求）
+     * @api {GET} /user/setdefaultcity 获取用户个性化配置和优惠劵 （郝建设0%）
      *
      * @apiName GetCouponsAndPersonality
      * @apiGroup User
@@ -532,7 +532,7 @@ class UserController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /user/getsharetext 获取分享优惠文本 （没有此需求）
+     * @api {GET} /user/getsharetext 获取分享优惠文本 （郝建设0%）
      *
      * @apiName GetShareText
      * @apiGroup User
@@ -579,7 +579,7 @@ class UserController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /user/deleteUsedWorker 删除常用阿姨 （没有此需求）
+     * @api {GET} /user/deleteUsedWorker 删除常用阿姨 （完成100%）
      *
      *
      * @apiName deleteUsedWorker
@@ -618,14 +618,20 @@ class UserController extends \api\components\Controller
      *     }
      *
      */
-    public function deleteUsedWorker()
+    public function actionDelWorker()
     {
-        
+        $deleteData = \core\models\customer\CustomerWorker::deleteWorker(1, 2, 1);
+        if ($deleteData) {
+            $deleteData = array(1);
+            return $this->send($deleteData, "删除成功", "ok");
+        } else {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
     }
 
     /**
      *
-     * @api {GET} /user/blacklistworkers 黑名单阿姨列表 （没有此需求）
+     * @api {GET} /user/blacklistworkers 黑名单阿姨列表 （功能已经完成,需要核实传递参数和返回数据格式 已完成100%）
      * @apiDescription 获得该用户添加进黑名单的阿姨
      *
      * @apiName blacklistworkers
@@ -672,17 +678,22 @@ class UserController extends \api\components\Controller
      *
      *
      */
-    public function blackListWorkers()
+    public function actionBlackWorkers()
     {
-        
+        $workerData = \core\models\customer\CustomerWorker::blacklistworkers(1, 1);
+        if ($workerData) {
+            return $this->send($workerData, "阿姨列表查询", "ok");
+        } else {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
     }
 
     /**
      *
-     * @api {GET} /user/removeblacklistworker 移除黑名单中的阿姨 （没有此需求）
+     * @api {GET} /user/RemoveWorker 移除黑名单中的阿姨 （功能已经实现,需要再次确认传递参数 已完成100%）
      *
      *
-     * @apiName RemoveBlackListWorker
+     * @apiName RemoveWorker
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -709,14 +720,26 @@ class UserController extends \api\components\Controller
      *
      *
      */
-    public function removeBlackListWorker()
+    public function actionRemoveWorker()
     {
-        
+
+        $params = Yii::$app->request->post();
+        $accessToken = $params['access_token'];
+        $addressId = $params['worker_id'];
+
+
+        $deleteData = \core\models\customer\CustomerWorker::deleteWorker(1, 2, 0, 0);
+        if ($deleteData) {
+            $deleteData = array(1);
+            return $this->send($deleteData, "移除成功", "ok");
+        } else {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
     }
 
     /**
      *
-     * @api {GET} /user/chooseusedworker 选择常用阿姨 （没有此需求）
+     * @api {GET} /user/chooseusedworker 选择常用阿姨 （郝建设0%）
      * @apiDescription 获得曾经使用过的所有阿姨和用户打扫时间空闲的阿姨
      *
      *
@@ -781,7 +804,7 @@ class UserController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /user/usermoney 用户余额和消费记录 （已完成100%）
+     * @api {GET} /user/usermoney 用户余额和消费记录 （已完成99% 数据已经全部取出,需要给出所需字段,然后给予返回;）
      *
      *
      * @apiName UserMoney
@@ -829,7 +852,7 @@ class UserController extends \api\components\Controller
     public function actionUserMoney()
     {
         $param = Yii::$app->request->post();
-        
+
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
         }
@@ -847,16 +870,32 @@ class UserController extends \api\components\Controller
 
             return $this->send($userRecord, "查询成功", "ok");
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录111.", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
         }
+    }
 
+    /**
+     * 发送验证码
+     */
+    public function actionSetUser()
+    {
+        \core\models\customer\CustomerCode::generateAndSend('13683118946');
+    }
+
+    #生成access_token
+
+    public function actionAddUser()
+    {
+        $daat = \core\models\customer\CustomerAccessToken::generateAccessToken('13683118946', '1295');
+
+        print_r($daat);
     }
 
     #f214e8a8d6cde5cc434a97d1a888373
 
     /**
      *
-     * @api {GET} /user/userscore 用户积分明细 （没有此需求）
+     * @api {GET} /user/userscore 用户积分明细 （功能已实现,不明确需求端所需字段格式 90%）
      *
      * @apiDescription 获取用户当前积分，积分兑换奖品信息，怎样获取积分信息
      * @apiName Userscore
@@ -916,12 +955,14 @@ class UserController extends \api\components\Controller
      */
     public function actionUserScore()
     {
-        
+        $userscore = \core\models\customer\CustomerExtScore::getCustomerScoreList(1);
+
+        print_r($userscore);
     }
 
     /**
      *
-     * @api {POST} /user/usersuggest 用户提交意见反馈 （没有此需求）
+     * @api {POST} /user/usersuggest 用户提交意见反馈 （郝建设0%）
      *
      * @apiName UserSuggest
      * @apiGroup User
