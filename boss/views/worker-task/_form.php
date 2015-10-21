@@ -57,6 +57,9 @@ $conditions = $model->getFullConditions();
         'worker_task_cycle'=>[
             'type'=>Form::INPUT_DROPDOWN_LIST,
             'items'=>WorkerTask::TASK_CYCLES,
+            'options'=>[
+                'disabled'=>$model->getIsNewRecord()?false:'readonly'
+            ],
         ],
         
         'worker_task_start'=>[
