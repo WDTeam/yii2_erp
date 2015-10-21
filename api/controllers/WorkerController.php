@@ -9,7 +9,7 @@ class WorkerController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /worker/work-info 查看阿姨信息 (田玉星 80%)
+     * @api {GET} /worker/work-info 查看阿姨信息 (田玉星 90%)
      *
      *
      * @apiName WorkerInfo
@@ -60,7 +60,8 @@ class WorkerController extends \api\components\Controller
      *
      */
     public function actionWorkerInfo(){
-          $param = Yii::$app->request->post();
+          $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+
           if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
           }
@@ -570,7 +571,7 @@ class WorkerController extends \api\components\Controller
      *
      */
     public function actionWorkerTimeTable(){
-          $param = Yii::$app->request->post();
+          $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
           if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
           }
@@ -759,7 +760,8 @@ class WorkerController extends \api\components\Controller
      *
      */
      public function actionHandleWorkerLeave(){
-          $param = Yii::$app->request->post();
+          $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+          
           if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
           }
@@ -837,7 +839,7 @@ class WorkerController extends \api\components\Controller
      *
      */
      public function actionHandleWorkerLeaveHistory(){
-          $param = Yii::$app->request->post();
+          $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
           if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
           }
@@ -886,7 +888,7 @@ class WorkerController extends \api\components\Controller
      *
      */
     public function actionGetWorkerPlaceById(){
-          $param = Yii::$app->request->post();
+          $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
           if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
           }
