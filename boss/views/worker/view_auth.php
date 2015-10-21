@@ -25,7 +25,6 @@ if($workerBlockModel!==null){
     $workerBlockModel = new WorkerBlock();
     $workerBlockModel->worker_block_status = 1;
 }
-
 if($worker->worker_auth_status==0){
     if($workerAuthModel->worker_auth_status==0){
         $currentAuthState= '审核中';
@@ -51,9 +50,9 @@ if($worker->worker_auth_status==0){
         $currentAuthState = '上岗不通过';
     }
 }elseif($worker->worker_auth_status==4){
-    if($workerAuthModel->worker_rasing_training_status==0){
+    if($workerAuthModel->worker_upgrade_training_status==0){
         $currentAuthState= '晋升培训中';
-    }elseif($workerAuthModel->worker_rasing_training_status==2){
+    }elseif($workerAuthModel->worker_upgrade_training_status==2){
         $currentAuthState = '晋升培训不通过';
     }
 }elseif($worker->worker_auth_status==5){
@@ -112,7 +111,7 @@ echo $this->render('auth/_auth',['workerAuthModel'=>$workerAuthModel,'worker_aut
 echo $this->render('auth/_basic_training',['workerAuthModel'=>$workerAuthModel,'worker_auth_status'=>$worker->worker_auth_status]);
 echo $this->render('auth/_ontrial',['workerAuthModel'=>$workerAuthModel,'worker_auth_status'=>$worker->worker_auth_status]);
 echo $this->render('auth/_onboard',['workerAuthModel'=>$workerAuthModel,'worker_auth_status'=>$worker->worker_auth_status]);
-echo $this->render('auth/_rising_training',['workerAuthModel'=>$workerAuthModel,'worker_auth_status'=>$worker->worker_auth_status]);
+echo $this->render('auth/_upgrade_training',['workerAuthModel'=>$workerAuthModel,'worker_auth_status'=>$worker->worker_auth_status]);
 
 
 

@@ -32,7 +32,7 @@ if($worker_auth_status>=5){
     ];
 }else{
     $attributes =  [       // 2 column layout
-        'worker_rising_training_status'=>[   // radio list
+        'worker_upgrade_training_status'=>[   // radio list
             'label'=>'初级培训',
             'type'=>Form::INPUT_RADIO_LIST,
             'items'=>[1=>'通过',2=>'不通过'],

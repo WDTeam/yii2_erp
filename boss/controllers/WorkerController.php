@@ -178,10 +178,11 @@ class WorkerController extends BaseAuthController
     }
 
     public function actionAuth($id){
+        $workerAuthModel = WorkerAuth::findOne($id);
+
         if(Yii::$app->request->post('WorkerAuth')){
             $param = Yii::$app->request->post('WorkerAuth');
             $workerModel = Worker::findone($id);
-            $workerAuthModel = WorkerAuth::findOne($id);
             if($workerAuthModel->load(Yii::$app->request->post()) && $workerAuthModel->save()){
                 if(isset($param['worker_auth_status']) && $param['worker_auth_status']==1){
                     $workerModel->worker_auth_status = 1;
@@ -195,7 +196,7 @@ class WorkerController extends BaseAuthController
                 }elseif(isset($param['worker_onboard_status']) && $param['worker_onboard_status']==1){
                     $workerModel->worker_auth_status = 4;
                     $workerModel->save();
-                }elseif(isset($param['worker_rasing_training_status']) && $param['worker_rasing_training_status']==1){
+                }elseif(isset($param['worker_upgrade_training_status']) && $param['worker_upgrade_training_status']==1){
                     $workerModel->worker_auth_status = 5;
                     $workerModel->save();
                 }
@@ -205,7 +206,6 @@ class WorkerController extends BaseAuthController
 //            var_dump(Yii::$app->request->post());
 //            die;
         }
-        $workerAuthModel = WorkerAuth::find()->where(['worker_id'=>$id])->one();
         return $this->render('view_auth',['worker_id'=>$id,'workerAuthModel'=>$workerAuthModel]);
     }
 

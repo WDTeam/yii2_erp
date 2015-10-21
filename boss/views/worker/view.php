@@ -21,23 +21,22 @@ $this->title = $workerModel->worker_name;
 //$this->params['breadcrumbs'][] = ['label' => '阿姨查看', 'url' => ['index']];
 //$this->params['breadcrumbs'][] = $this->title;
 $content1 = $this->render('view_worker',['model'=>$workerModel]);
-$content2 = $this->render('view_auth',['worker_id'=>$worker_id]);
+$content2 = $this->render('view_schedule',['model'=>$workerModel]);
 $content3 = $this->render('view_vacation',['workerVacationData'=>$workerVacationData]);
 $content4 = $this->render('view_block',['worker_id'=>$worker_id]);
 $content5 = $this->render('view_log',['workerBlockLogData'=>$workerBlockLogData]);
-
 $items = [
     [
         'label'=>'<i class="glyphicon glyphicon-user"></i> 阿姨信息',
         'content'=>$content1,
         'active'=>true
     ],
-//    [
-//        'label'=>'<i class="fa  fa-fw fa-th-list"></i> 审核管理',
-//        'content'=>$content2,
-//        //'linkOptions'=>['data-url'=>\yii\helpers\Url::to(['/site/tabs-data'])],
-//        'active'=>false
-//    ],
+    [
+        'label'=>'<i class="fa  fa-fw fa-th-list"></i> 排班表',
+        'content'=>$content2,
+        //'linkOptions'=>['data-url'=>\yii\helpers\Url::to(['/site/tabs-data'])],
+        'active'=>false
+    ],
     [
         'label'=>'<i class="fa  fa-fw fa-history"></i> 请假信息',
         'content'=>$content3,

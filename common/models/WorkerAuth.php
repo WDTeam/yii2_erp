@@ -33,7 +33,7 @@ class WorkerAuth extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['worker_id', 'worker_auth_status', 'worker_basic_training_status', 'worker_ontrial_status', 'worker_onboard_status', 'worker_rising_training_status'], 'integer'],
+            [['worker_id', 'worker_auth_status', 'worker_basic_training_status', 'worker_ontrial_status', 'worker_onboard_status', 'worker_upgrade_training_status'], 'integer'],
             [['worker_auth_failed_reason', 'worker_ontrial_failed_reason', 'worker_onboard_failed_reason'], 'string', 'max' => 255]
         ];
     }
@@ -52,7 +52,7 @@ class WorkerAuth extends \yii\db\ActiveRecord
             'worker_ontrial_failed_reason' => Yii::t('app', '试工不通过原因'),
             'worker_onboard_status' => Yii::t('app', '阿姨上岗状态(0上岗)'),
             'worker_onboard_failed_reason' => Yii::t('app', 'Worker Onboard Failed Reason'),
-            'worker_rising_training_status' => Yii::t('app', '阿姨晋升培训状态(0培训中1培训通过2培训不通过)'),
+            'worker_upgrade_training_status' => Yii::t('app', '阿姨晋升培训状态(0培训中1培训通过2培训不通过)'),
         ];
     }
 }
