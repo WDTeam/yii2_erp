@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
+use yii\bootstrap\Modal;
 
 /**
  * @var yii\web\View $this
@@ -40,9 +41,24 @@ $this->params['breadcrumbs'][] = $this->title;
             'worker_task_name',
             'worker_task_start:date',
             'worker_task_end:date',
-            'worker_type',
-            'worker_rule_id', 
-            'worker_task_city_id', 
+            [
+                'attribute'=>'worker_type',
+                'value'=>function($model){
+                    return $model->getWorkerTypeLabels();
+                },
+            ],
+            [
+                'attribute'=>'worker_rule_id',
+                'value'=>function($model){
+                    return $model->getWorkerRuleLabels();
+                },
+            ],
+            [
+                'attribute'=>'worker_task_city_id',
+                'value'=>function($model){
+                    return $model->getWorkerCityLabels();
+                },
+            ],
 //             'worker_task_description', 
 //             'worker_task_description_url:url', 
 //             'conditions:ntext', 
@@ -52,12 +68,20 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
+                'template'=>'{view} {update} {copy}',
                 'buttons' => [
-                'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['worker-task/view','id' => $model->id,'edit'=>'t']), [
-                                                    'title' => Yii::t('yii', 'Edit'),
-                                                  ]);}
-
+                    'copy'=>function ($url, $model) {
+                        return Html::a('复制', [
+                            'worker-task/copy',
+                            'id' => $model->id
+                        ], [
+                            'title' => Yii::t('app', '任务复制'),
+                            'data-toggle'=>'modal',
+                            'data-target'=>'#modal',
+                            'data-id'=>$model->id,
+                            'class'=>'btn btn-success btn-sm',
+                        ]);
+                    },
                 ],
             ],
         ],
@@ -79,3 +103,14 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); Pjax::end(); ?>
 
 </div>
+<?php echo Modal::widget([
+    'header' => '<h4 class="modal-title">任务复制</h4>',
+    'id' =>'modal',
+]);?>
+<?php $this->registerJs(<<<JSCONTENT
+    $('.join-list-btn').click(function(){
+        $('#modal .modal-body').html('加载中……');
+        $('#modal .modal-body').eq(0).load(this.href);
+    });
+JSCONTENT
+);?>

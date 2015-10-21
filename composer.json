@@ -71,13 +71,14 @@
       "files":[
         "vendor/ejiajie/pay/alipay_app/alipay_class.php",
         "vendor/ejiajie/pay/wx_js/wxjspay_class.php",
+        "vendor/ejiajie/pay/wx_js/wxjsrefund_class.php",
         "vendor/ejiajie/pay/wx_app/wxpay_class.php",
         "vendor/ejiajie/pay/bfb_app/bfbpay_class.php",
         "vendor/ejiajie/pay/upacp_app/uppay_class.php",
         "vendor/ejiajie/pay/wx_app_refund/wxrefund_class.php",
         "vendor/ejiajie/pay/bfb_app_refund/bfbrefund_class.php",
-        "vendor/ejiajie/pay/zhidahao_h5/zhidahao_class.php"
-
+        "vendor/ejiajie/pay/zhidahao_h5/zhidahao_class.php",
+        "vendor/ejiajie/pay/zhidahao_h5/zhidahao_refund_class.php"
       ]
     }
 }

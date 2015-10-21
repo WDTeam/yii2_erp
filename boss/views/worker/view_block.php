@@ -12,8 +12,6 @@ use yii\data\ActiveDataProvider;
  * @var yii\data\ActiveDataProvider $dataProvider
  * @var boss\models\WorkerSearch $searchModel
  */
-$this->title = Yii::t('app', '阿姨管理');
-$this->params['breadcrumbs'][] = $this->title;
 $worker = Worker::find()->select('worker_name')->where(['id'=>$worker_id])->one();
 $workerBlockModel = WorkerBlock::find()->where(['worker_id'=>$worker_id])->one();
 

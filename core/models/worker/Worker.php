@@ -181,8 +181,8 @@ class Worker extends \common\models\Worker
 
     /**
      * 获取阿姨详细信息
-     * @param $worker_id
-     * @return array
+     * @param $worker_id 阿姨id
+     * @return array 阿姨详细信息
      */
     public static function getWorkerDetailInfo($worker_id){
         $workerDetailResult = self::find()

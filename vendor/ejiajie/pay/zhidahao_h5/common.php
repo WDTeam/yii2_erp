@@ -87,5 +87,46 @@ class zhidahao {
 		}
 	}
 
+	/**
+	 * 退款
+	 * @param $params
+	 * @return string
+	 */
+	public static function refundOrder($params)
+	{
+		if( empty($params['order_id']) && empty($params['order_no']) )
+		{
+			return 'order_id直达号订单ID和order_on第三方商户订单号至少包含一个';
+		}
+
+		if( empty($params['refund_url']) )
+		{
+			return '退款毁掉通知URL必须包含';
+		}
+
+		if( empty($params['reason']) )
+		{
+			$params['reason'] = '交易未成功,转入退款流程';
+		}
+
+		$params['sp_no'] = self::SP_NO;
+		$params['sign'] = self::getSignature($params);
+
+		// 按数组键名 正序排序
+		$url = 'http://m.baidu.com/lightapp/pay/order/refund';
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+		$output = curl_exec($ch);
+		curl_close($ch);
+		return json_decode($output, true);
+	}
+
+	public static function refundQuery()
+	{
+
+	}
+
 }
 

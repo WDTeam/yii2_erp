@@ -13,16 +13,15 @@ use kartik\widgets\Select2; // or kartik\select2\Select2
 use kartik\tabs\TabsX;
 
 use yii\helpers\ArrayHelper;
-//var_dump($model->workertypeshow);
 /**
  * @var yii\web\View $this
  * @var common\models\Worker $model
  */
 $this->title = $workerModel->worker_name;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Workers'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+//$this->params['breadcrumbs'][] = ['label' => '阿姨查看', 'url' => ['index']];
+//$this->params['breadcrumbs'][] = $this->title;
 $content1 = $this->render('view_worker',['model'=>$workerModel]);
-$content2 = $this->render('view_auth',['worker_id'=>$worker_id]);
+$content2 = $this->render('view_schedule',['model'=>$workerModel]);
 $content3 = $this->render('view_vacation',['workerVacationData'=>$workerVacationData]);
 $content4 = $this->render('view_block',['worker_id'=>$worker_id]);
 $content5 = $this->render('view_log',['workerBlockLogData'=>$workerBlockLogData]);
@@ -33,7 +32,7 @@ $items = [
         'active'=>true
     ],
     [
-        'label'=>'<i class="fa  fa-fw fa-th-list"></i> 审核管理',
+        'label'=>'<i class="fa  fa-fw fa-th-list"></i> 排班表',
         'content'=>$content2,
         //'linkOptions'=>['data-url'=>\yii\helpers\Url::to(['/site/tabs-data'])],
         'active'=>false

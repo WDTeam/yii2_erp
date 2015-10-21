@@ -208,6 +208,57 @@ class WorkerTask extends \common\models\WorkerTask
         return $isfalse<=0;
     }
     /**
+     * 显示已选的角色类型
+     */
+    public function getWorkerTypeLabels()
+    {
+        $types = Worker::getWorkerTypeList();
+        $cur_typeids = $this->getWorker_types();
+        $res = [];
+        foreach ($cur_typeids as $id){
+            if(isset($types[$id])){
+                $res[] = $types[$id];
+            }
+        }
+        return implode(', ', $res);
+    }
+    /**
+     * 显示已选的身份类型
+     */
+    public function getWorkerRuleLabels()
+    {
+        $types = WorkerRuleConfig::getWorkerRuleList();
+        $cur_ruleids = $this->getWorker_rules();
+        $res = [];
+        foreach ($cur_ruleids as $id){
+            if(isset($types[$id])){
+                $res[] = $types[$id];
+            }
+        }
+        return implode(', ', $res);
+    }
+    
+    /**
+     * 显示已选的城市
+     */
+    public function getWorkerCityLabels()
+    {
+        $types = WorkerTask::getOnlineCites();
+        $cur_cityids = $this->getWorker_cites();
+        $res = [];
+        foreach ($cur_cityids as $id){
+            if(isset($types[$id])){
+                $res[] = $types[$id];
+            }
+        }
+        return implode(', ', $res);
+    }
+    
+    
+    
+    
+    
+    /**
      * 开通的城市列表
      */
     public static function getOnlineCites()
