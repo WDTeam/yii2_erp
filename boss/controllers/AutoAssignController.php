@@ -1,5 +1,10 @@
 <?php
-
+/*
+ * BOSS 自动派单运行服务实例
+ * @author 张旭刚<zhangxugang@corp.1jiajie.com>
+ * @link http://boss.1jiajie.com/auto-assign/
+ * @copyright Copyright (c) 2015 E家洁 LLC
+*/
 namespace boss\controllers;
 
 use Yii;
