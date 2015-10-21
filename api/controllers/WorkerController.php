@@ -55,89 +55,23 @@ class WorkerController extends \api\components\Controller
      *
      */
     public function actionWorkerInfo(){
-          $param = Yii::$app->request->post();
-          if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
-          }
-          $worker = WorkerAccessToken::getWorker($param['access_token']);
-          if (!empty($worker) && !empty($worker->id)) {
+          // $param = Yii::$app->request->post();
+          // if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
+          //   return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+          // }
+          // $worker = WorkerAccessToken::getWorker($param['access_token']);
+          // if (!empty($worker) && !empty($worker->id)) {
                $workerInfo = Worker::getWorkerInfo(1);
                //数据整理
                $ret = array(
-                   "order_count"=> "",
-                   "cancel_count"=>"",
-                   "worker_total_score"=>"",
-                   "my_rewards"=>array(),
                    "user_phone"=>$workerInfo['worker_phone'],
                    "worker_name"=>$workerInfo['worker_name'],
-                   "worker_age"=> "",
-                   "quality_score_clause_url"=>"",
-                   "live_place"=> "",
-                   "home_town"=> "",
                    "identity_card"=> $workerInfo['worker_idcard'],
-                   "good_rate"=> array(),
-                   "bad_rate"=> array(),
-                   "total_rate"=> array(),
-                   "my_money"=> "",
-                   "rank_list" => array(),
-                   "my_rank"=>array(
-                         "worker_name"=>"",
-                         "rank"=> "",
-                         "money"=> ""
-                    ),
-                    "star_count_list"=>array(),
-                    "me_star_list"=>array(
-                         "worker_name"=>"",
-                         "rank"=>"",
-                         "money"=> "0"
-                    ),
-                    "personal_skill"=>array(
-                         "title"=>"",
-                         "type"=>"",
-                         "value"=>""
-                    ),
-                    "druing_time"=> "",
-                    "rest_score"=>"",
-                    "complain_num"=> "",
-                    "un_pay_money"=> "",
-                    "is_pay_money"=> "",
-                    "un_pay_list"=>array(),
-                    "is_pay_list"=>array(),
-                    "my_money_list"=>array(),
-                    "rest_day"=>"",
-                    "score_list"=>array(),
-                    "fine_money"=>"",
-                    "un_complain_list"=>array(),
-                    "rest_day_str"=>"",
-                    "complain_str"=> "",
-                    "complain_clause_url"=> "",
-                    "today_finish_order"=> "",
-                    "today_finish_money"=> "",
-                    "month_finish_order"=> "",
-                    "month_finish_money"=> "",
-                    "succ_rate"=> "",
-                    "driver_level"=> "",
-                    "alert_type"=> "",
-                    "account_rest_money"=> "",
-                    "pay_money" =>"",
-                    "charge_money"=>"",
-                    "worker_company"=>"",
-                    "is_open_start"=>"",
-                    "result"=>"1",
-                    "head_url"=>"",
-                    "worker_degree"=> "",
-                    "worker_work_age"=> "",
-                    "worker_language"=> "",
-                    "health_card"=>"",
-                    "department"=> "",
-                    "server_range"=> "",
-                    "transportation"=> "",
-                    "activity_url"=> ""
                );
                return $this->send($ret, "阿姨信息查询成功", "ok");
-         } else {
-             return $this->send(null, "阿姨不存在.", "error", 403);
-         }
+         // } else {
+         //     return $this->send(null, "阿姨不存在.", "error", 403);
+         // }
     }
     
     /**
@@ -635,24 +569,24 @@ class WorkerController extends \api\components\Controller
           if (!empty($worker) && !empty($worker->id)) {
                //$filed = array('worker_live_province','worker_live_city','worker_live_area','worker_live_street');
                //$workerInfo = Worker::getWorkerListByIds($worker->id,implode(',',$filed));
-               $ret = array(
-                    "select_time_area": "6",
-                    "max_plan_time": "6",
-                    "min_plan_time": "2",
-                    "msg_style": "",
-                    "alert_msg": "",
-                    "worker_time":
-                    [
-                        {
-                            "date_name": "09月13日",
-                            "date_week": "周日",
-                            "date_week_every": "每周日",
-                            "date_time":
-                            ["14:00-16:00","14:30-16:30","15:00-17:00","15:30-17:30","16:00-18:00","16:30-18:30","17:00-19:00","17:30-19:30","18:00-20:00"],
-                            "date_name_tag": "09月13日(今天)"
-                        }
-                    ]
-               );
+               // $ret = array(
+               //      "select_time_area": "6",
+               //      "max_plan_time": "6",
+               //      "min_plan_time": "2",
+               //      "msg_style": "",
+               //      "alert_msg": "",
+               //      "worker_time":
+               //      [
+               //          {
+               //              "date_name": "09月13日",
+               //              "date_week": "周日",
+               //              "date_week_every": "每周日",
+               //              "date_time":
+               //              ["14:00-16:00","14:30-16:30","15:00-17:00","15:30-17:30","16:00-18:00","16:30-18:30","17:00-19:00","17:30-19:30","18:00-20:00"],
+               //              "date_name_tag": "09月13日(今天)"
+               //          }
+               //      ]
+               // );
                return $this->send($ret, "操作成功.", "ok");
           }else{
                return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
