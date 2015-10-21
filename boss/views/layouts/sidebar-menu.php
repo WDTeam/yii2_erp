@@ -254,7 +254,7 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],*/
                     [
-                        'label' => '阿姨任务管理(20%)',
+                        'label' => '阿姨任务管理(60%)',
                         'url' => ['/worker-task/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -404,29 +404,13 @@ echo Menu::widget(
                         ],
                         'items' => [
                         [
-                        'label' => '确认退款审核(5%)',
+                        'label' => '确认退款审核(60%)',
                         'url' => ['/finance-refund/'],
                         'icon' => 'fa fa-angle-right',
                         ],
                         [
-                        'label' => '退款确认退款审批(5%)',
-                        'url' => ['/finance-refund/'],
-                        'icon' => 'fa fa-angle-right',
-                        ],[
-                        'label' => '会计执行银行退款(5%)',
-                        'url' => ['/finance-refund/'],
-                        'icon' => 'fa fa-angle-right',
-                        ],[
-                        'label' => '确认银行退款(5%)',
-                        'url' => ['/finance-refund/'],
-                        'icon' => 'fa fa-angle-right',
-                        ],[
-                        'label' => '退款详情(5%)',
-                        'url' => ['/finance-refund/'],
-                        'icon' => 'fa fa-angle-right',
-                        ],[
-                        'label' => '退款统计(5%)',
-                        'url' => ['/finance-refund/'],
+                        'label' => '退款统计(80%)',
+                        'url' => ['/finance-refund/countinfo'],
                         'icon' => 'fa fa-angle-right',
                         ]
                         ]

@@ -79,7 +79,7 @@ class SendSmsController extends \api\components\Controller
     public function actionSendMessageCode()
     {
         @$phone = Yii::$app->request->get('phone');
-        @$app_version = Yii::$app->request->post('app_version');
+        @$app_version = Yii::$app->request->get('app_version');
         if (preg_match("/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/", $phone)) {
             //验证通过
             if (!CustomerCode::generateAndSend($phone)) {

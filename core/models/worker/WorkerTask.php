@@ -34,7 +34,7 @@ class WorkerTask extends \common\models\WorkerTask
      * 任务奖励类型
      */
     const REWARD_TYPES = [
-        1=>'金额',
+        1=>'现金',
         2=>'当月流量',
         3=>'次月流量',
     ];
@@ -205,7 +205,9 @@ class WorkerTask extends \common\models\WorkerTask
             throw new InvalidParamException('阿姨不存在');
         }
         $tasks = self::find()
-        ->where("FIND_IN_SET({$worker->worker_type}, worker_type) AND FIND_IN_SET({$worker->worker_rule_id}, worker_rule_id)")
+        ->where("FIND_IN_SET({$worker->worker_type}, worker_type) 
+            AND FIND_IN_SET({$worker->worker_rule_id}, worker_rule_id) 
+            AND worker_task_online=1")
         ->andFilterWhere(['<','worker_task_start', $cur_time])
         ->andFilterWhere(['>','worker_task_end', $cur_time])
         ->all();
