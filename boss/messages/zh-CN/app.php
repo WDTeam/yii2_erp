@@ -148,4 +148,6 @@ return [
     'Operation Specs' => '规格管理',
     'Spec' => '规格',
     'release' => '开通',
+    
+    'Worker Tasks'=>'阿姨任务'
 ];
