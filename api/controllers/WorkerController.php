@@ -9,7 +9,7 @@ class WorkerController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /worker/work-info 查看阿姨信息 (田玉星 90%)
+     * @api {GET} /worker/work-info 查看阿姨信息 (田玉星 95%)
      *
      *
      * @apiName WorkerInfo
@@ -751,7 +751,7 @@ class WorkerController extends \api\components\Controller
      */
      public function actionHandleWorkerLeave(){
           $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
-          
+
           if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
           }
@@ -797,7 +797,7 @@ class WorkerController extends \api\components\Controller
      }
     
     /**
-     * @api {get} /worker/handle_worker_leave_history  阿姨请假历史（田玉星 95%）
+     * @api {get} /worker/handle_worker_leave_history  阿姨请假历史（田玉星 70%）
      * @apiName actionHandleWorkerLeaveHistory
      * @apiGroup Worker
      * 
@@ -848,7 +848,7 @@ class WorkerController extends \api\components\Controller
 
     
     /**
-     * @api {get} /worker/get-worker-place-by-id  获取阿姨住址(田玉星 90% )
+     * @api {get} /worker/get-worker-place-by-id  获取阿姨住址(田玉星 100% )
      * @apiName actionGetWorkerPlaceById
      * @apiGroup Worker
      * @apiDescription 获取阿姨住址 用来查看路线
@@ -884,13 +884,12 @@ class WorkerController extends \api\components\Controller
           }
           $worker = WorkerAccessToken::getWorker($param['access_token']);
           if (!empty($worker) && !empty($worker->id)) {
-               //$filed = array('worker_live_province','worker_live_city','worker_live_area','worker_live_street');
-               //$workerInfo = Worker::getWorkerListByIds($worker->id,implode(',',$filed));
+               $workerInfo = Worker::getWorkerDetailInfo($worker->id);
                $ret = array(
-                    "result"=>'',
-                    "live_place"=>"测试等待model支持"
+                    "result"=>'1',
+                    "live_place"=>$workerInfo['worker_live_place']
                );
-               return $this->send($ret, "阿姨不存在.", "ok");
+               return $this->send($ret, "操作成功.", "ok");
           }else{
                return $this->send(null, "阿姨不存在.", "error", 403);
           }
