@@ -5,6 +5,7 @@ use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use yii\bootstrap\Modal;
 
+
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -15,13 +16,7 @@ $this->title = Yii::t('app', 'Worker Tasks');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="worker-task-index">
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Worker Task',
-]), ['create'], ['class' => 'btn btn-success'])*/  ?>
-    </p>
+    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
@@ -41,6 +36,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'worker_task_name',
             'worker_task_start:date',
             'worker_task_end:date',
+            [
+                'attribute'=>'worker_task_cycle',
+                'value'=>function($model){
+                    return $model->getCycleLabel();
+                },
+            ],
             [
                 'attribute'=>'worker_type',
                 'label'=>'阿姨角色',

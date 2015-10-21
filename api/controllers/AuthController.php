@@ -199,7 +199,7 @@ class AuthController extends \api\components\Controller
                     "worker_name" => $worker['worker_name'],
                     "worker_rule_id" => $worker['worker_rule_id'],
                     "worker_rule_description" => $worker['worker_rule_description'],
-                    "work_photo" => $worker['worker_photo'],
+                    "worker_photo" => $worker['worker_photo'],
                     "access_token" => $token,
                     "worker_id" => $worker['id'],
                     "shop_id" => $worker['shop_id'],
