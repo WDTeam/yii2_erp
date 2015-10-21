@@ -13,8 +13,8 @@ class m151021_035240_create_table_customer_comment_level extends Migration
         }
         $this->createTable('{{%customer_comment_level}}', [
             'id' => Schema::TYPE_PK .'  AUTO_INCREMENT ',
-	    'customer_comment_level' => Schema::TYPE_SMALLINT .'(8) DEFAULT 0 COMMENT \''\,
-           'customer_comment_level_name' => Schema::TYPE_SMALLINT .'(4)  DEFAULT 0 COMMENT \'评价等级\'',
+	    'customer_comment_level' => Schema::TYPE_SMALLINT .'(8) DEFAULT 0 COMMENT \'评价等级\'',
+           'customer_comment_level_name' => Schema::TYPE_STRING  .'(255) DEFAULT NULL COMMENT \'评价等级\'',
             'created_at'  => Schema::TYPE_INTEGER . '(10) DEFAULT 0 COMMENT \'创建时间\'',
             'updated_at'  => Schema::TYPE_INTEGER . '(10) DEFAULT 0 COMMENT \'更新时间\'',
             'is_del'  => Schema::TYPE_BOOLEAN . '(1) DEFAULT 0 COMMENT \'删除\'',
@@ -28,7 +28,7 @@ class m151021_035240_create_table_customer_comment_level extends Migration
              [
                 [1,0,'满意',time(), 0,0],
                 [2,1,'一般', time(),0,0],
-		[2,2,'不满意', time(),0,0],
+		[3,2,'不满意', time(),0,0],
             ]);
 
     }
