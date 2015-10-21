@@ -22,12 +22,12 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="worker-task-view">
 
     <?= DetailView::widget([
-            'model' => $model,
-            'condensed'=>false,
-            'hover'=>true,
-            'mode'=>Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
-            'panel'=>[
-            'heading'=>$this->title,
+        'model' => $model,
+        'condensed'=>false,
+        'hover'=>true,
+        'mode'=>Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
+        'panel'=>[
+            'heading'=>$model->worker_task_name,
             'type'=>DetailView::TYPE_INFO,
         ],
         'attributes' => [
@@ -36,9 +36,18 @@ $this->params['breadcrumbs'][] = $this->title;
 //             'worker_task_cycle',
             'worker_task_start:date',
             'worker_task_end:date',
-            'worker_type',
-            'worker_rule_id',
-            'worker_task_city_id',
+            [
+                'attribute'=>'worker_type',
+                'value'=>$model->getWorkerTypeLabels()
+            ],
+            [
+                'attribute'=>'worker_rule_id',
+                'value'=>$model->getWorkerRuleLabels()
+            ],
+            [
+                'attribute'=>'worker_task_city_id',
+                'value'=>$model->getWorkerCityLabels()
+            ],
             'worker_task_description',
             'worker_task_description_url:url',
             [
@@ -53,11 +62,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],
         'data'=>[
-        'confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'),
-        'method'=>'post',
+            'confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'),
+            'method'=>'post',
         ],
         ],
-        'enableEditMode'=>true,
+        'enableEditMode'=>false,
     ]) ?>
 
 </div>
