@@ -9,7 +9,7 @@ class WorkerController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /worker/work-info 查看阿姨信息 (田玉星 80% 原因:等待model的支持)
+     * @api {GET} /worker/work-info 查看阿姨信息 (田玉星 80%)
      *
      *
      * @apiName WorkerInfo
@@ -121,13 +121,7 @@ class WorkerController extends \api\components\Controller
                     "account_rest_money"=> "",
                     "pay_money" =>"",
                     "charge_money"=>"",
-                    "driver_company"=>"",
-                    "cur_car_id"=>"",
-                    "cur_car_brand"=>"",
-                    "cur_car_number"=>"",
-                    "cur_car_color"=>"",
-                    "cur_color"=>"",
-                    "cur_car_type"=> "",
+                    "worker_company"=>"",
                     "is_open_start"=>"",
                     "result"=>"1",
                     "head_url"=>"",
@@ -779,13 +773,20 @@ class WorkerController extends \api\components\Controller
      *
      */
     
+
+
+
+
+
+
+
     
     /**
-     * @api {get} /mobileapidriver2/handleWorkerLeave  请假
+     * @api {get} /worker/handle_worker_leave  阿姨请假（田玉星 95%）
      * @apiName actionHandleWorkerLeave
      * @apiGroup Worker
      * 
-     * @apiParam {String} session_id    会话id.
+     * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} platform_version 平台版本号.
      * @apiParam {String} date 请假时间.
      * @apiParam {String} type 请假类型.
@@ -814,18 +815,59 @@ class WorkerController extends \api\components\Controller
      *  }
      *
      */
-    
-    
+     public function actionHandleWorkerLeave(){
+          $param = Yii::$app->request->post();
+          if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+          }
+
+          $worker = WorkerAccessToken::getWorker($param['access_token']);
+          if (!empty($worker) && !empty($worker->id)) {
+               $attributes = [];
+               $attributes['worker_id'] = $worker->id;
+               $attributes['worker_vacation_type'] = $param['type'];
+               if(empty($attributes['worker_vacation_type']||!in_array($param['type'], array(1,2)))){
+                    return $this->send(null, "数据不完整,请选择请假类型", "error", 403);
+               }
+
+               //请假时间范围判断
+               if(empty($param['date'])){
+                    return $this->send(null, "数据不完整,请选择请假类型", "error", 403);
+               }
+               $vacation_start_time = time();
+               $vacation_end_time = strtotime(date('Y-m-d',strtotime("+14 days")));
+               $current_vacation_time = strtotime($param['date']);
+               if($current_vacation_time<=$vacation_start_time||$current_vacation_time>$vacation_end_time){
+                    return $this->send(null, "请假时间不在请假时间范围内,请选择未来14天的日期", "error", 403);
+               }
+               $attributes['worker_vacation_start_time'] = $attributes['worker_vacation_finish_time'] = $current_vacation_time;
+               
+               //请假入库
+               $workerVacation = new \core\models\order\WorkerVacation();
+               $is_success = $workerVacation -> createNew($attributes);    
+               if ($is_success) {
+                    $result = array(
+                         'result' => 1;
+                         "msg"    => "您的请假已提交，请耐心等待审批。"
+                    );
+                 return $this->send($result,"操作成功","ok");
+               } else {
+
+                 return $this->send(null,$workerVacation->errors,  "error",403);
+               }
+          }else{
+               return $this->send(null, "阿姨不存在.", "error", 403);
+          }
+          
+     }
     
     /**
-     * @api {get} /worker/amend_password  修改密码(田玉星)
-     * @apiName actionAmendPassword
+     * @api {get} /worker/handle_worker_leave_history  阿姨请假历史（田玉星 95%）
+     * @apiName actionHandleWorkerLeaveHistory
      * @apiGroup Worker
-     *  
-     * @apiParam {String} access_token    阿姨登录token.
+     * 
+     * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} platform_version 平台版本号.
-     * @apiParam {String} password  原始密码.
-     * @apiParam {String} new_password  新密码.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -834,14 +876,14 @@ class WorkerController extends \api\components\Controller
      *      "msg":"操作成功",
      *      "ret":
      *      {
-     *          "result": "0",
-     *          "msg": "原始密码错误"
+     *          "result": "1",
+     *          "msg": "您的请假已提交，请耐心等待审批。"
      *      }
      * }
      *
      * @apiError SessionIdNotFound 未找到会话ID.
-     * @apiError PwdNotFound 未找到密码.
-     * @apiError NewPwdNotFound 未找到新密码.
+     * @apiError TimesNotFound 未找到时间段信息.
+     * @apiError TypeNotFound 未找到类型信息.
      *
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
@@ -851,19 +893,27 @@ class WorkerController extends \api\components\Controller
      *  }
      *
      */
-    
-    public function amend_password(){
+     public function actionHandleWorkerLeaveHistory(){
+          $param = Yii::$app->request->post();
+          if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+          }
 
-    }
+          $worker = WorkerAccessToken::getWorker($param['access_token']);
+          if (!empty($worker) && !empty($worker->id)) {
+               
+               //调取阿姨请假历史情况
+               return $this->send($result,"操作成功","ok");
+          }else{
 
-
-
-
-
+               return $this->send(null, "阿姨不存在.", "error", 403);
+          }
+          
+     }
 
     
     /**
-     * @api {get} /worker/get-worker-place-by-id  获取阿姨住址(田玉星 90% 原因:等待model的支持)
+     * @api {get} /worker/get-worker-place-by-id  获取阿姨住址(田玉星 90% )
      * @apiName actionGetWorkerPlaceById
      * @apiGroup Worker
      * @apiDescription 获取阿姨住址 用来查看路线

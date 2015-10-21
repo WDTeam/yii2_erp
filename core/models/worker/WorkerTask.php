@@ -139,6 +139,8 @@ class WorkerTask extends \common\models\WorkerTask
         }
         return $res;
     }
+    
+    
     /**
      * 计算符合阿姨条件的任务列表
      */
@@ -155,6 +157,35 @@ class WorkerTask extends \common\models\WorkerTask
         ->andFilterWhere(['>','worker_task_end', $cur_time])
         ->all();
         return $tasks;
+    }
+    /**
+     * 自动生成阿姨任务
+     */
+    public static function autoCreateTaskLog($worker_id)
+    {
+        $data = [];
+        $tasks = (array)self::getTaskListByWorkerId($worker_id);
+        foreach($tasks as $task){
+            $log = WorkerTaskLog::find()->where([
+                'worker_id'=>$worker_id,
+                'worker_task_id'=>$task->id,
+            ])->one();
+            if(empty($log)){
+                $log = new WorkerTaskLog();
+            }
+            $log->setAttributes([
+                'worker_id'=>$worker_id,
+                'worker_task_id'=>$task->id,
+                'worker_task_name'=>$task->worker_task_name,
+                'worker_task_start'=>$task->worker_task_start,
+                'worker_task_end'=>$task->worker_task_end,
+                'worker_task_reward_type'=>$task->worker_task_reward_type,
+                'worker_task_reward_value'=>$task->worker_task_reward_value,
+            ]);
+            $log->save();
+            $data[] = $log;
+        }
+        return $data;
     }
     /**
      * 给定数据判断是否完成
@@ -176,6 +207,57 @@ class WorkerTask extends \common\models\WorkerTask
         }
         return $isfalse<=0;
     }
+    /**
+     * 显示已选的角色类型
+     */
+    public function getWorkerTypeLabels()
+    {
+        $types = Worker::getWorkerTypeList();
+        $cur_typeids = $this->getWorker_types();
+        $res = [];
+        foreach ($cur_typeids as $id){
+            if(isset($types[$id])){
+                $res[] = $types[$id];
+            }
+        }
+        return implode(', ', $res);
+    }
+    /**
+     * 显示已选的身份类型
+     */
+    public function getWorkerRuleLabels()
+    {
+        $types = WorkerRuleConfig::getWorkerRuleList();
+        $cur_ruleids = $this->getWorker_rules();
+        $res = [];
+        foreach ($cur_ruleids as $id){
+            if(isset($types[$id])){
+                $res[] = $types[$id];
+            }
+        }
+        return implode(', ', $res);
+    }
+    
+    /**
+     * 显示已选的城市
+     */
+    public function getWorkerCityLabels()
+    {
+        $types = WorkerTask::getOnlineCites();
+        $cur_cityids = $this->getWorker_cites();
+        $res = [];
+        foreach ($cur_cityids as $id){
+            if(isset($types[$id])){
+                $res[] = $types[$id];
+            }
+        }
+        return implode(', ', $res);
+    }
+    
+    
+    
+    
+    
     /**
      * 开通的城市列表
      */

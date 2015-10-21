@@ -25,8 +25,8 @@ use core\models\worker\workerExt;
  * @var common\models\Worker $model
  */
 $this->title = $model->worker_name;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Workers'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+//$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Workers'), 'url' => ['index']];
+//$this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <div class="worker-view">

@@ -48,6 +48,9 @@ class WorkerTaskLog extends \common\models\WorkerTaskLog
      */
     public function calculateIsDone()
     {
+        if($this->worker_task_is_done==1){
+            return true;
+        }
         $task = WorkerTask::findOne(['id'=>$this->worker_task_id]);
         $is_done = $task->calculateValuesIsDone($this->getConditionsValues());
         if($is_done){

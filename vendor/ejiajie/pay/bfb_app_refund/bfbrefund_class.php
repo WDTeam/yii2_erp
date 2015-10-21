@@ -66,9 +66,9 @@ class bfbrefund_class
             'currency' => sp_refund_conf::BFB_INTERFACE_CURRENTCY,
             'sp_refund_no' => $sp_refund_no
         );
-
+        dump($params);
         $refund_url = $bfb_sdk->create_baifubao_Refund_url($params, sp_refund_conf::BFB_REFUND_URL);
-
+        dump($refund_url);exit;
         if(false === $refund_url){
             $bfb_sdk->log('create the url for baifubao pay interface failed');
         }

@@ -10,8 +10,6 @@ use yii\bootstrap\Modal;
  * @var yii\data\ActiveDataProvider $dataProvider
  * @var boss\models\WorkerSearch $searchModel
  */
-$this->title = Yii::t('app', '阿姨管理');
-$this->params['breadcrumbs'][] = $this->title;
 $workerVacationModel = new \common\models\WorkerVacation();
 $workerModel = new \common\models\Worker();
 ?>

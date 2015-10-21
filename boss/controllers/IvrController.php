@@ -24,6 +24,7 @@ class IvrController extends Controller
     
     public function actionTest()
     {
-        \Yii::$app->ivr->send('15110249233', 'A1444808735', '洗衣');
+        $res = \Yii::$app->ivr->send('15110249233', 'A1444808735', '洗衣');
+        var_dump($res);
     }
 }
