@@ -47,6 +47,30 @@ class JPush extends Object
         }
     }
     /**
+     * 复杂应用完整信息push
+     * @param array $tags 标签
+     * @param string $msg 消息内容
+     * @param array $extras 自定义字段
+     * @param string $category 消息分类
+     */
+    public function fullPush($tags, $title, $msg, $extras=[], $category=null)
+    {
+        try{
+            $result = $this->client->push()
+            ->setPlatform(M\platform('ios', 'android'))
+            ->setAudience(M\Audience(M\Tag($tags)))
+            ->setNotification(M\notification($title,
+                M\android($title, $title, null, $extras),
+                M\ios($title, $title, null, true, $extras, $category)
+            ))
+            ->setMessage(M\message($msg, $title, $category, $extras))
+            ->send();
+            return $result;
+        }catch(APIRequestException $e){
+            return $e;
+        }
+    }
+    /**
      * 推送消息,不建议使用,仅供参考
      * @param string $msg 消息内容
      * @return \JPush\Model\PushResponse
