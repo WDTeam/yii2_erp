@@ -25,6 +25,12 @@ class AutoOrderController extends BaseAuthController
             ],
         ];
     }
+    
+    public function actionAutoassign(){
+        $data = (array)json_decode(Yii::$app->redis->get('_SWOOLE_SOCKET_RUN_STATUS_'));
+        
+        return $this->render('autoassign', ['data' => $data]);
+    }
 
     /**
      * Lists all Order models.

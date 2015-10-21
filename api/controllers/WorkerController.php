@@ -24,12 +24,17 @@ class WorkerController extends \api\components\Controller
      *     HTTP/1.1 200 OK
      *     {
      *       "code": "ok",
-     *       "msg": "查询成功",
+     *       "msg": "阿姨信息查询成功",
      *       ret:{
-     *          
-     *          }
-     *       }
-     *
+     *           "worker_name": "刘红霞",
+     *            "user_phone": "15010208249",
+     *            "head_url": "",
+     *            "worker_rule": "兼职",
+     *            "livePlace": "北京市通州区土桥",
+     *            "personal_skill": [
+     *                  []
+     *              ]
+     *           }
      *     }
      *
      * @apiError UserNotFound 用户认证已经过期.
@@ -55,23 +60,27 @@ class WorkerController extends \api\components\Controller
      *
      */
     public function actionWorkerInfo(){
-          // $param = Yii::$app->request->post();
-          // if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
-          //   return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
-          // }
-          // $worker = WorkerAccessToken::getWorker($param['access_token']);
-          // if (!empty($worker) && !empty($worker->id)) {
-               $workerInfo = Worker::getWorkerInfo(1);
+          $param = Yii::$app->request->post();
+          if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+          }
+          $worker = WorkerAccessToken::getWorker($param['access_token']);
+          if (!empty($worker) && !empty($worker->id)) {
+               $workerInfo = Worker::getWorkerDetailInfo($worker->id);
                //数据整理
                $ret = array(
-                   "user_phone"=>$workerInfo['worker_phone'],
-                   "worker_name"=>$workerInfo['worker_name'],
-                   "identity_card"=> $workerInfo['worker_idcard'],
+                    "worker_name" => $workerInfo['worker_name'],
+                    "user_phone" => $workerInfo['worker_phone'],
+                    "head_url" => $workerInfo['worker_photo'],
+                    "worker_rule" => $workerInfo['worker_rule_description'],
+                    "livePlace" => $workerInfo['worker_live_place'],
+                    "personal_skill" =>array(array())
                );
+  
                return $this->send($ret, "阿姨信息查询成功", "ok");
-         // } else {
-         //     return $this->send(null, "阿姨不存在.", "error", 403);
-         // }
+         } else {
+             return $this->send(null, "阿姨不存在.", "error", 403);
+         }
     }
     
     /**
@@ -781,7 +790,7 @@ class WorkerController extends \api\components\Controller
                $is_success = $workerVacation -> createNew($attributes);    
                if ($is_success) {
                     $result = array(
-                         'result' => 1;
+                         'result' => 1,
                          "msg"    => "您的请假已提交，请耐心等待审批。"
                     );
                  return $this->send($result,"操作成功","ok");

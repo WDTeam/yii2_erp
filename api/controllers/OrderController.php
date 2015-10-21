@@ -129,12 +129,18 @@ class OrderController extends \api\components\Controller
      * @apiParam {String} [order_pop_group_buy_code] 第三方团购号
      * @apiParam {Integer} [order_pop_order_money] 第三方订单金额,预付金额
      * @apiParam {String} [coupon_id] 优惠劵id
+     * @apiParam {String} [coupon] 优惠劵
      * @apiParam {String} [channel_id] 下单渠道
+     * @apiParam {String} [order_channel_name] 下单渠道名
      * @apiParam {String} [order_booked_worker_id] 指定阿姨id
      * @apiParam {Number} [order_customer_need] 客户需求
      * @apiParam {String} [order_customer_memo] 客户备注
      * @apiParam {Integer} [order_is_use_balance] 是否使用余额 1 使用 0 不适用 默认1
-     *
+     * @apiParam {String} address_latitude 纬度
+     * @apiParam {String} address_longitude 经度
+     * @apiParam {String} worker_num 需要阿姨数量
+     * @apiParam {String} no_auto_assign 是否自动派单
+	 
      *
      * @apiSuccess {Object} order 成功订单对象.
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/order/action-append-order
@@ -190,14 +196,31 @@ class OrderController extends \api\components\Controller
             return $this->send(null, "用户无效,请先登录");
         }
         $attributes['customer_id'] = $user->id;
-        if (is_null($args['order_service_type_id'])) {
-            return $this->send(null, "请输入商品类型");
+		
+        if(@is_null($args['server_item'])){
+            // server_item is null, order from app
+            if (is_null($args['order_service_type_id'])) {
+                return $this->send(null, "请输入商品类型");
+            }
+            $attributes['order_service_type_id'] = $args['order_service_type_id'];
+        } else {
+            // order from pop,第三方目前没有真实的order_service_type_id
+            $attributes['order_service_type_id'] = 1;//$args['server_item'];
         }
-        $attributes['order_service_type_id'] = $args['order_service_type_id'];
-        if (is_null($args['order_src_id'])) {
-            return $this->send(null, "数据不完整,缺少订单来源");
+
+        if(@is_null($args['order_src'])){
+            if (is_null($args['order_src_id'])) {
+                return $this->send(null, "数据不完整,缺少订单来源");
+            }
+            $attributes['order_src_id'] = $args['order_src_id'];
+        }else{
+            $orderSrc = OrderSrc::find()->where(['order_src_name'=>$args['order_src'])]);
+            if(!empty($orderSrc)){
+                $attributes['order_src_id'] = $orderSrc['id'];
+            }else{
+                return $this->send(null, "数据不完整,没有配置订单来源：".$args['order_src']);
+            }
         }
-        $attributes['order_src_id'] = $args['order_src_id'];
 
         if (is_null($args['order_booked_begin_time'])) {
             return $this->send(null, "数据不完整,请输入初始时间");
