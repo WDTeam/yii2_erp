@@ -3,6 +3,7 @@ namespace api\controllers;
 
 use Faker\Provider\DateTime;
 use Yii;
+use common\models\FinanceOrderChannel;
 use common\models\OrderSrc;
 use core\models\order\Order;
 use core\models\order\OrderSearch;
@@ -257,8 +258,12 @@ class OrderController extends \api\components\Controller
 
         if (isset($args['channel_id'])) {
             $attributes['channel_id'] = $args['channel_id'];
+        } elseif (isset($args['order_channel_name'])) {
+            $orderChannel = FinanceOrderChannel::find()->where(['finance_order_channel_name'=>$args['order_channel_name']])->one();
+            if(!empty($orderChannel)){
+                $attributes['channel_id'] = $orderChannel['id'];
+            }
         }
-
         if (isset($args['order_booked_worker_id'])) {
             $attributes['order_booked_worker_id'] = $args['order_booked_worker_id'];
         }
