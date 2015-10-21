@@ -44,10 +44,9 @@ class FinanceRefundController extends BaseAuthController
     		$tydtui[]=$errt['finance_order_channel_name'];
     	}
     	$tyu= array_combine($tyd,$tydtui);
-    	
-    	
         $searchModel = new FinanceRefundSearch;
         $searchModel->load(Yii::$app->request->getQueryParams());
+        $searchModel->statusstype='index';
         $searchModel->isstatus='4';
         $dataProvider = $searchModel->search();
         return $this->render('index', [
@@ -60,6 +59,35 @@ class FinanceRefundController extends BaseAuthController
         ]);
     }
 
+    
+    
+   /**
+   * 退款统计
+   * @date: 2015-10-21
+   * @author: peak pan
+   * @return:
+   **/
+    public function actionCountinfo()
+    {
+    	$searchModel = new FinanceRefundSearch;
+    	
+    	
+    	//var_dump(Yii::$app->request->getQueryParams());exit;
+    	
+    	
+    	$searchModel->load(Yii::$app->request->getQueryParams());
+    	$searchModel->isstatus='4';
+    	$dataProvider = $searchModel->search();
+    	return $this->render('countinfo', [
+    			'dataProvider' => $dataProvider,
+    			'searchModel' => $searchModel,
+    			]);
+    }
+    
+    
+    
+    
+    
     /**
      * Displays a single FinanceRefund model.
      * @param integer $id
