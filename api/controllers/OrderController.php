@@ -237,7 +237,8 @@ class OrderController extends \api\components\Controller
         }
         if (@is_null($args['address_id'])) {
             //add address into customer and return customer id
-            $model = CustomerAddress::addAddress($user->id, $args['city'], $args['address'],
+	    $area_name = '朝阳区'; // add for test
+            $model = CustomerAddress::addAddress($user->id, $area_name, $args['address'],
                 $args['order_customer_phone'], $args['order_customer_phone']);
             $attributes['address_id'] = $model->id;
         } else {
