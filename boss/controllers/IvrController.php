@@ -24,6 +24,14 @@ class IvrController extends Controller
     
     public function actionTest()
     {
-        \Yii::$app->ivr->send('15110249233', 'A1444808735', '洗衣');
+        $res = \Yii::$app->ivr->send('15110249233', 'A1444808735', '洗衣');
+        var_dump($res);
+    }
+    
+    public function actionJpush()
+    {
+        $res = date('YW', strtotime('2015-01-09'));
+//         $res = \Yii::$app->jpush->push2android(['worker_12196'], 'test');
+        var_dump($res);
     }
 }

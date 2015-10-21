@@ -17,7 +17,7 @@ yii2-dynagrid
 $this->title = Yii::t('app', '录入新阿姨', [
     'modelClass' => 'Worker',
 ]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Workers'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => '阿姨管理', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 $worker_ext->worker_is_health=1;
 $worker_ext->worker_is_insurance=1;
