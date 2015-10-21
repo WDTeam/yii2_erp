@@ -24,4 +24,31 @@ class CommonOperationAdvertRelease extends \yii\db\ActiveRecord
     {
         return '{{%operation_advert_release}}';
     }
+    
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['city_name'], 'string'],
+            [['created_at', 'updated_at', 'city_id'], 'integer'],
+            [['operation_release_contents'], 'string'],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => '编号',
+            'city_name' => '城市名称',
+            'city_id' => '城市编号',
+            'operation_release_contents' => '发布详情',
+            'created_at' => '首次发布时间',
+            'updated_at' => '最后发布时间',
+        ];
+    }
 }

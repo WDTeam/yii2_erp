@@ -17,5 +17,21 @@ use common\models\Operation\CommonOperationAdvertRelease;
  */
 class CoreOperationAdvertRelease extends CommonOperationAdvertRelease
 {
+    public function getAdvertList($city_id, $platform_id = 0, $version_id = 0, $position_id = 0){
+        $data = CoreOperationAdvertRelease::find()->asArray()->where(['city_id' => $city_id])->all();
+        $d = array();
+        $ids = array();
+        foreach ((array)$data as $key => $value){
+            $contents = unserialize($value['operation_release_contents']);
+            array_push($d, $contents);
+            array_push($ids, $contents['id'][0]);
+        }
+        $adverts = self::getAdvertListFrom($ids, $platform_id, $version_id, $position_id);
+        return $adverts;
+    }
     
+    static private function getAdvertListFrom($ids, $platform_id, $version_id, $position_id){
+//        foreach($contents)
+//        $adverts = $this->getAdvertListFromPosition($position_id);
+    }
 }
