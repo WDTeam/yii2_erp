@@ -579,25 +579,15 @@ class WorkerController extends \api\components\Controller
           if (!empty($worker) && !empty($worker->id)) {
                //$filed = array('worker_live_province','worker_live_city','worker_live_area','worker_live_street');
                //$workerInfo = Worker::getWorkerListByIds($worker->id,implode(',',$filed));
-               // $ret = array(
-               //      "select_time_area": "6",
-               //      "max_plan_time": "6",
-               //      "min_plan_time": "2",
-               //      "msg_style": "",
-               //      "alert_msg": "",
-               //      "worker_time":
-               //      [
-               //          {
-               //              "date_name": "09月13日",
-               //              "date_week": "周日",
-               //              "date_week_every": "每周日",
-               //              "date_time":
-               //              ["14:00-16:00","14:30-16:30","15:00-17:00","15:30-17:30","16:00-18:00","16:30-18:30","17:00-19:00","17:30-19:30","18:00-20:00"],
-               //              "date_name_tag": "09月13日(今天)"
-               //          }
-               //      ]
-               // );
-               return $this->send($ret, "操作成功.", "ok");
+               $ret = array(
+                        "select_time_area"=> "6",
+                        "max_plan_time"=> "6",
+                        "min_plan_time"=> "2",
+                        "msg_style"=> "",
+                        "alert_msg"=> "",
+                        "worker_time"=>""
+               );
+                 return $this->send($ret, "操作成功.", "ok");
           }else{
                return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
           }
