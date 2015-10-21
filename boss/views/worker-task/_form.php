@@ -7,6 +7,7 @@ use core\models\worker\WorkerTask;
 use kartik\helpers\Html;
 use core\models\worker\WorkerRuleConfig;
 use core\models\worker\Worker;
+use core\models\worker\WorkerTaskLog;
 
 /**
  * @var yii\web\View $this
@@ -53,7 +54,11 @@ $conditions = $model->getFullConditions();
     'form' => $form,
     'columns' => 1,
     'attributes' => [
-
+        'worker_task_cycle'=>[
+            'type'=>Form::INPUT_DROPDOWN_LIST,
+            'items'=>WorkerTask::TASK_CYCLES,
+        ],
+        
         'worker_task_start'=>[
             'type'=> Form::INPUT_WIDGET, 
             'widgetClass'=>DateControl::classname(),
