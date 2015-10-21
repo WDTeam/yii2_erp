@@ -18,7 +18,7 @@ class GeneralPaySearch extends GeneralPay
     public function rules()
     {
         return [
-            [['id', 'customer_id', 'order_id', 'general_pay_source', 'general_pay_mode', 'general_pay_status', 'general_pay_is_coupon', 'admin_id', 'worker_id', 'handle_admin_id', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['id', 'customer_id', 'order_id', 'general_pay_source', 'general_pay_mode', 'general_pay_status', 'general_pay_is_coupon', 'admin_id', 'worker_id', 'handle_admin_id', 'created_at', 'updated_at'], 'integer'],
             [['general_pay_money', 'general_pay_actual_money'], 'number'],
             [['general_pay_source_name', 'general_pay_transaction_id', 'general_pay_eo_order_id', 'general_pay_memo', 'general_pay_admin_name', 'general_pay_handle_admin_id', 'general_pay_verify'], 'safe'],
         ];
@@ -70,8 +70,7 @@ class GeneralPaySearch extends GeneralPay
             'worker_id' => $this->worker_id,
             'handle_admin_id' => $this->handle_admin_id,
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'is_del' => $this->is_del,
+            'updated_at' => $this->updated_at
         ]);
 
         $query->andFilterWhere(['like', 'general_pay_source_name', $this->general_pay_source_name])
