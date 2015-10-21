@@ -433,9 +433,29 @@ echo Menu::widget(
                             
                     ],
                     [
-                        'label' => '赔偿管理(5%)',
-                        'url' => ['/finance-compensate/'],
+                        'label' => '赔偿管理',
+                        'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
+                        'options' => [
+                        'class' => 'treeview',
+                        ],
+                        'items' => [
+                        [
+                        'label' => '财务确认赔偿(5%)',
+                        'url' => ['/finance/'],
+                        'icon' => 'fa fa-angle-right',
+                        ],
+                        [
+                        'label' => '赔偿查询(5%)',
+                        'url' => ['/finance/finance-compensate/index'],
+                        'icon' => 'fa fa-angle-right',
+                        ],[
+                        'label' => '赔偿统计(0%)',
+                        'url' => ['#'],
+                        'icon' => 'fa fa-angle-right',
+                        ],
+                        ]
+                            
                     ],
                     [
                         'label' => '报表管理(0%)',
