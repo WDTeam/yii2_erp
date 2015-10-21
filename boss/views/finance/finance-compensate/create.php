@@ -7,18 +7,15 @@ use yii\helpers\Html;
  * @var common\models\FinanceCompensate $model
  */
 
-$this->title = Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Finance Compensate',
+$this->title = Yii::t('finance', 'Finance Compensate Create', [
+    'modelClass' => 'Finance Compensate Create',
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Finance Compensates'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="finance-compensate-create">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
-
+    
 </div>

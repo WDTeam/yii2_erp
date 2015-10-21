@@ -82,6 +82,10 @@ class UserController extends \api\components\Controller
     {
         $param = Yii::$app->request->post();
 
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
         }
@@ -159,6 +163,11 @@ class UserController extends \api\components\Controller
     public function actionAddresses()
     {
         @$accessToken = Yii::$app->request->post('access_token');
+
+        if (empty($accessToken)) {
+            $accessToken = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+
         if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
         }
@@ -209,6 +218,10 @@ class UserController extends \api\components\Controller
     public function actionDeleteAddress()
     {
         $params = Yii::$app->request->post();
+        if (empty($params)) {
+            $params = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+
         @$accessToken = $params['access_token'];
         @$addressId = $params['address_id'];
         if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
@@ -257,6 +270,10 @@ class UserController extends \api\components\Controller
     public function actionSetDefaultAddress()
     {
         $params = Yii::$app->request->post();
+        if (empty($params)) {
+            $params = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+
         @$accessToken = $params['access_token'];
         @$addressId = $params['address_id'];
         if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
@@ -327,6 +344,9 @@ class UserController extends \api\components\Controller
     public function actionUpdateAddress()
     {
         $params = Yii::$app->request->post();
+        if (empty($params)) {
+            $params = json_decode(Yii::$app->request->getRawBody(), true);
+        }
         @$accessToken = $params['access_token'];
         @$addressId = $params['address_id'];
         if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
@@ -353,7 +373,7 @@ class UserController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /user/set-default-city 设置默认城市 （0%）
+     * @api {GET} /user/set-default-city 设置默认城市 （需求不明确；0%）
      *
      * @apiName SetDefaultCity
      * @apiGroup User
@@ -426,7 +446,7 @@ class UserController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /user/setdefaultcity 获取用户个性化配置和优惠劵 （郝建设0%）
+     * @api {GET} /user/setdefaultcity 获取用户个性化配置和优惠劵 （需求不明确；郝建设0%）
      *
      * @apiName GetCouponsAndPersonality
      * @apiGroup User
@@ -532,7 +552,7 @@ class UserController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /user/getsharetext 获取分享优惠文本 （郝建设0%）
+     * @api {GET} /user/getsharetext 获取分享优惠文本 （需求不明确；郝建设0%）
      *
      * @apiName GetShareText
      * @apiGroup User
@@ -579,7 +599,7 @@ class UserController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /user/deleteUsedWorker 删除常用阿姨 （完成100%）
+     * @api {GET} /user/deleteUsedWorker 删除常用阿姨 （功能已经实现,需再次核实 100%）
      *
      *
      * @apiName deleteUsedWorker
@@ -620,12 +640,33 @@ class UserController extends \api\components\Controller
      */
     public function actionDelWorker()
     {
-        $deleteData = \core\models\customer\CustomerWorker::deleteWorker(1, 2, 1);
-        if ($deleteData) {
-            $deleteData = array(1);
-            return $this->send($deleteData, "删除成功", "ok");
-        } else {
+        $param = Yii::$app->request->post();
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+        $worker_id = $param['worker_id'];
+        $app_version = $param['app_version'];
+        $app_version = $param['access_token'];
+
+        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
+
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+
+        if (!empty($customer) && !empty($customer->id)) {
+            /**
+             * @param $customer->id int 用户id
+             * @param $worker      int 阿姨id
+             * @param $type        int 标示类型，1时判断黑名单阿姨，0时判断常用阿姨
+             */
+            $deleteData = \core\models\customer\CustomerWorker::deleteWorker(1, 2, 1);
+            if ($deleteData) {
+                $deleteData = array(1);
+                return $this->send($deleteData, "删除成功", "ok");
+            } else {
+                return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            }
         }
     }
 
@@ -680,11 +721,27 @@ class UserController extends \api\components\Controller
      */
     public function actionBlackWorkers()
     {
-        $workerData = \core\models\customer\CustomerWorker::blacklistworkers(1, 1);
-        if ($workerData) {
-            return $this->send($workerData, "阿姨列表查询", "ok");
-        } else {
+        $param = Yii::$app->request->post();
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+        $app_version = $param['app_version']; #版本
+
+        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+        if (!empty($customer) && !empty($customer->id)) {
+            /**
+             * @param $customer->id int 用户id
+             * @param $is_block      int 阿姨id
+             */
+            $workerData = \core\models\customer\CustomerWorker::blacklistworkers(1, 1);
+            if ($workerData) {
+                return $this->send($workerData, "阿姨列表查询", "ok");
+            } else {
+                return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            }
         }
     }
 
@@ -723,17 +780,36 @@ class UserController extends \api\components\Controller
     public function actionRemoveWorker()
     {
 
-        $params = Yii::$app->request->post();
-        $accessToken = $params['access_token'];
-        $addressId = $params['worker_id'];
+//        $params = Yii::$app->request->post();
+//        $accessToken = $params['access_token'];
+//        $addressId = $params['worker_id'];
 
+        $param = Yii::$app->request->post();
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
 
-        $deleteData = \core\models\customer\CustomerWorker::deleteWorker(1, 2, 0, 0);
-        if ($deleteData) {
-            $deleteData = array(1);
-            return $this->send($deleteData, "移除成功", "ok");
-        } else {
+        $app_version = $param['app_version']; #版本
+        $worker_id = $param['worker_id']; #阿姨id
+
+        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+        if (!empty($customer) && !empty($customer->id)) {
+            /**
+             * @param $costomer_id int 用户id
+             * @param $worker      int 阿姨id
+             * @param $type        int 标示类型，1时判断黑名单阿姨，0时判断常用阿姨
+             * @param $is_block        int 标示类型，数据逻辑删除 1黑名单阿姨 0不是黑名单阿姨
+             */
+            $deleteData = \core\models\customer\CustomerWorker::deleteWorker(1, 2, 0, 0);
+            if ($deleteData) {
+                $deleteData = array(1);
+                return $this->send($deleteData, "移除成功", "ok");
+            } else {
+                return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            }
         }
     }
 
@@ -851,46 +927,59 @@ class UserController extends \api\components\Controller
      */
     public function actionUserMoney()
     {
+
         $param = Yii::$app->request->post();
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+
+        $app_version = $param['app_version']; #版本
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
         }
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+        if (!empty($customer) && !empty($customer->id)) {
+            /**
+             * 获取客户余额
+             * @param int $customer 用户id
+             */
+            $userBalance = \core\models\customer\CustomerExtBalance::getCustomerBalance(1);
 
-        #获取用户用户余额
-        $userBalance = \core\models\customer\CustomerExtBalance::getCustomerBalance(1);
+            if ($userBalance) {
+                /**
+                 * 获取用户消费记录
+                 * @param int $customer 用户id
+                 */
+                $userRecord = \core\models\CustomerTransRecord\CustomerTransRecord::queryRecord(1);
 
-        if ($userBalance) {
-            #获取用户消费记录
-            $userRecord = \core\models\CustomerTransRecord\CustomerTransRecord::queryRecord(1);
+                foreach ($userRecord as $key => $val) {
+                    $userRecord[$key]['userBalance'] = $userBalance;
+                }
 
-            foreach ($userRecord as $key => $val) {
-                $userRecord[$key]['userBalance'] = $userBalance;
+                return $this->send($userRecord, "查询成功", "ok");
+            } else {
+                return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
             }
-
-            return $this->send($userRecord, "查询成功", "ok");
-        } else {
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
         }
     }
 
-    /**
-     * 发送验证码
-     */
-    public function actionSetUser()
-    {
-        \core\models\customer\CustomerCode::generateAndSend('13683118946');
-    }
-
-    #生成access_token
-
-    public function actionAddUser()
-    {
-        $daat = \core\models\customer\CustomerAccessToken::generateAccessToken('13683118946', '1295');
-
-        print_r($daat);
-    }
-
+//    /**
+//     * 发送验证码
+//     */
+//    public function actionSetUser()
+//    {
+//        \core\models\customer\CustomerCode::generateAndSend('13683118946');
+//    }
+//
+//    #生成access_token
+//
+//    public function actionAddUser()
+//    {
+//        $daat = \core\models\customer\CustomerAccessToken::generateAccessToken('13683118946', '1295');
+//
+//        print_r($daat);
+//    }
     #f214e8a8d6cde5cc434a97d1a888373
 
     /**
@@ -955,14 +1044,35 @@ class UserController extends \api\components\Controller
      */
     public function actionUserScore()
     {
-        $userscore = \core\models\customer\CustomerExtScore::getCustomerScoreList(1);
+        $param = Yii::$app->request->post();
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
 
-        print_r($userscore);
+        $app_version = $param['app_version']; #版本
+
+        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
+
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+        if (!empty($customer) && !empty($customer->id)) {
+            /**
+             *  @param int $customer_id 用户id
+             */
+            $userscore = \core\models\customer\CustomerExtScore::getCustomerScoreList(1);
+
+            if ($userscore) {
+                return $this->send($userscore, "用户积分明细列表", "ok");
+            } else {
+                return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            }
+        }
     }
 
     /**
      *
-     * @api {POST} /user/usersuggest 用户提交意见反馈 （郝建设0%）
+     * @api {POST} /user/usersuggest 用户提交意见反馈 （需要再次核实需求;郝建设0%）
      *
      * @apiName UserSuggest
      * @apiGroup User
