@@ -47,7 +47,7 @@ class JPush extends Object
         }
     }
     /**
-     * 推送消息
+     * 推送消息,不建议使用,仅供参考
      * @param string $msg 消息内容
      * @return \JPush\Model\PushResponse
      */
