@@ -15,8 +15,8 @@ class FinanceRefundSearch extends FinanceRefund
     public function rules()
     {
         return [
-            [['id', 'finance_refund_stype', 'finance_refund_pay_create_time', 'finance_pay_channel_id', 'finance_refund_pay_status', 'finance_refund_worker_id', 'create_time', 'is_del'], 'integer'],
-            [['finance_refund_tel', 'finance_refund_reason', 'finance_pay_channel_name', 'finance_refund_pay_flow_num', 'finance_refund_worker_tel'], 'safe'],
+            [['id', 'finance_refund_stype', 'finance_refund_pay_create_time', 'finance_pay_channel_id', 'finance_refund_pay_status','finance_refund_pop_nub','finance_order_channel_id','finance_refund_worker_id',  'is_del'], 'integer'],
+            [['finance_refund_tel','isstatus','create_time','finance_refund_check_name','finance_refund_reason', 'finance_pay_channel_title', 'finance_refund_pay_flow_num', 'finance_refund_worker_tel'], 'safe'],
             [['finance_refund_money', 'finance_refund_discount'], 'number'],
         ];
     }
@@ -27,7 +27,7 @@ class FinanceRefundSearch extends FinanceRefund
         return Model::scenarios();
     }
 
-    public function search($params)
+    public function search()
     {
         $query = FinanceRefund::find();
 
@@ -35,12 +35,14 @@ class FinanceRefundSearch extends FinanceRefund
             'query' => $query,
         ]);
 
-        if (!($this->load($params) && $this->validate())) {
+        /*  if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
-        }
+        }  */
 
         $query->andFilterWhere([
             'id' => $this->id,
+        	'finance_refund_pop_nub' => $this->finance_refund_pop_nub,
+        	'finance_order_channel_id' => $this->finance_order_channel_id,
             'finance_refund_money' => $this->finance_refund_money,
             'finance_refund_stype' => $this->finance_refund_stype,
             'finance_refund_discount' => $this->finance_refund_discount,
@@ -53,8 +55,11 @@ class FinanceRefundSearch extends FinanceRefund
         ]);
 
         $query->andFilterWhere(['like', 'finance_refund_tel', $this->finance_refund_tel])
+            ->andFilterWhere(['>=', 'create_time', strtotime($this->create_time)])
+            ->andFilterWhere(['!=', 'isstatus', $this->isstatus])
+            ->andFilterWhere(['like', 'finance_refund_check_name', $this->finance_refund_check_name])
             ->andFilterWhere(['like', 'finance_refund_reason', $this->finance_refund_reason])
-            ->andFilterWhere(['like', 'finance_pay_channel_name', $this->finance_pay_channel_name])
+            ->andFilterWhere(['like', 'finance_pay_channel_title', $this->finance_pay_channel_title])
             ->andFilterWhere(['like', 'finance_refund_pay_flow_num', $this->finance_refund_pay_flow_num])
             ->andFilterWhere(['like', 'finance_refund_worker_tel', $this->finance_refund_worker_tel]);
 
