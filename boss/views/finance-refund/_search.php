@@ -2,56 +2,71 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
-/**
- * @var yii\web\View $this
- * @var boss\models\FinanceRefundSearch $model
- * @var yii\widgets\ActiveForm $form
- */
+use kartik\widgets\Select2;
+use kartik\date\DatePicker;
 ?>
 
-<div class="finance-refund-search">
+<div class="finance-refund-search" >
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
-
-    <?= $form->field($model, 'id') ?>
-
+    <div class='col-md-1'>
+    <?= $form->field($model, 'finance_refund_pop_nub') ?>
+	</div> 
+    <div class='col-md-1'>
     <?= $form->field($model, 'finance_refund_tel') ?>
+	</div> 
+    <div class='col-md-1'>
+    <?= $form->field($model, 'finance_refund_worker_tel') ?>
+	</div> 
+	<div class='col-md-2'>
+    <?= $form->field($model, 'finance_order_channel_id')->widget(Select2::classname(), [
+        'name' => '订单渠道',
+        'hideSearch' => true,
+        'data' => $ordedat,
+        'options' => ['placeholder' => '选择订单渠道','class' => 'col-md-2'],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]);
+   
+    ?>
+     </div>
+     
 
-    <?= $form->field($model, 'finance_refund_money') ?>
-
-    <?= $form->field($model, 'finance_refund_stype') ?>
-
-    <?= $form->field($model, 'finance_refund_reason') ?>
-
-    <?php // echo $form->field($model, 'finance_refund_discount') ?>
-
-    <?php // echo $form->field($model, 'finance_refund_pay_create_time') ?>
-
-    <?php // echo $form->field($model, 'finance_pay_channel_id') ?>
-
-    <?php // echo $form->field($model, 'finance_pay_channel_name') ?>
-
-    <?php // echo $form->field($model, 'finance_refund_pay_flow_num') ?>
-
-    <?php // echo $form->field($model, 'finance_refund_pay_status') ?>
-
-    <?php // echo $form->field($model, 'finance_refund_worker_id') ?>
-
-    <?php // echo $form->field($model, 'finance_refund_worker_tel') ?>
-
-    <?php // echo $form->field($model, 'create_time') ?>
-
-    <?php // echo $form->field($model, 'is_del') ?>
-
+    <div class='col-md-2'>
+    <?php echo $form->field($model, 'finance_refund_pay_status')->widget(Select2::classname(), [
+            'name' => 'finance_refund_pay_status',
+            'hideSearch' => true,
+            'data' => [1 => '已支付', 0 => '未支付',2=>'其他'],
+            'options' => ['placeholder' => '请选择支付状态', 'inline' => true],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]); ?>
+	</div> 
+     <div class='col-md-1'>
+    <?= $form->field($model, 'finance_refund_check_name') ?>
+	</div>      
+    <div class='col-md-2'>
+    <?= $form->field($model, 'create_time')->widget(DatePicker::classname(), [
+    		'name' => 'create_time',
+    		'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+    		'pluginOptions' => [
+    		'autoclose' => true,
+    		'format' => 'yyyy-mm-dd'
+    		]
+            ]); ?>
+      </div>      
+  
     <div class="form-group">
+     <div class='col-md-2' style="    margin-top: 22px;">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
     </div>
-
+		</div>
     <?php ActiveForm::end(); ?>
 
 </div>

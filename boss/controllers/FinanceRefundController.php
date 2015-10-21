@@ -8,6 +8,7 @@ use boss\models\FinanceRefundSearch;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\models\FinanceOrderChannel;
 
 /**
  * FinanceRefundController implements the CRUD actions for FinanceRefund model.
@@ -32,12 +33,30 @@ class FinanceRefundController extends BaseAuthController
      */
     public function actionIndex()
     {
+    	
+    	//输出部分
+    	$ordedata= new FinanceOrderChannel;
+    	$ordewhere['is_del']='0';
+    	$ordewhere['finance_order_channel_is_lock']=1;
+    	$payatainfo=$ordedata::find()->where($ordewhere)->asArray()->all();
+    	foreach ($payatainfo as $errt){
+    		$tyd[]=$errt['id'];
+    		$tydtui[]=$errt['finance_order_channel_name'];
+    	}
+    	$tyu= array_combine($tyd,$tydtui);
+    	
+    	
         $searchModel = new FinanceRefundSearch;
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-
+        $searchModel->load(Yii::$app->request->getQueryParams());
+        $searchModel->isstatus='4';
+        $dataProvider = $searchModel->search();
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+        	'ordedat' => $tyu,
+        		
+        		
+        		
         ]);
     }
 
@@ -49,7 +68,6 @@ class FinanceRefundController extends BaseAuthController
     public function actionView($id)
     {
         $model = $this->findModel($id);
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
         return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -75,6 +93,35 @@ class FinanceRefundController extends BaseAuthController
         }
     }
 
+    
+    /**
+    * 开始退款
+    * @date: 2015-10-21
+    * @author: peak pan
+    * @return:
+    **/
+    
+    public function actionRefund()
+    {
+    	    $requestModel = Yii::$app->request->get();
+    		$model=FinanceRefund::findOne($requestModel['id']);
+    		if($requestModel['edit']=='baksite'){
+    	    //退款
+    		$model->finance_pop_order_pay_status='4';
+    		}else{	
+    		$model->finance_pop_order_pay_status='2';
+    		}
+    		$model->save();
+    		return $this->redirect(['index', 'id' =>$requestModel['oid']]);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Updates an existing FinanceRefund model.
      * If update is successful, the browser will be redirected to the 'view' page.
