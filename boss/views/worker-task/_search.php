@@ -9,45 +9,25 @@ use yii\widgets\ActiveForm;
  * @var yii\widgets\ActiveForm $form
  */
 ?>
-
-<div class="worker-task-search">
-
-    <?php $form = ActiveForm::begin([
-        'action' => ['index'],
-        'method' => 'get',
-    ]); ?>
-
-    <?= $form->field($model, 'id') ?>
-
-    <?= $form->field($model, 'worker_task_name') ?>
-
-    <?= $form->field($model, 'worker_task_start') ?>
-
-    <?= $form->field($model, 'worker_task_end') ?>
-
-    <?= $form->field($model, 'worker_type') ?>
-
-    <?php // echo $form->field($model, 'worker_rule_id') ?>
-
-    <?php // echo $form->field($model, 'worker_task_city_id') ?>
-
-    <?php // echo $form->field($model, 'worker_task_description') ?>
-
-    <?php // echo $form->field($model, 'worker_task_description_url') ?>
-
-    <?php // echo $form->field($model, 'worker_task_conditions') ?>
-
-    <?php // echo $form->field($model, 'created_at') ?>
-
-    <?php // echo $form->field($model, 'updated_at') ?>
-
-    <?php // echo $form->field($model, 'is_del') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
+<div class="worker-task-search panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 任务搜索</h3>
     </div>
+    <div class="panel-body row">
+        <?php $form = ActiveForm::begin([
+            'action' => ['index'],
+            'method' => 'get',
+        ]); ?>
+        
+        <div class="col-md-4">
+            <?php echo $form->field($model, 'worker_task_name');?>
+        </div>
 
-    <?php ActiveForm::end(); ?>
-
+        <div class="col-md-2" style="margin-top:22px;">
+            <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
+            <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
+        </div>
+    
+        <?php ActiveForm::end(); ?>
+    </div>
 </div>

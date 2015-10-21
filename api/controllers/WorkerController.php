@@ -3,13 +3,13 @@ namespace api\controllers;
 
 use Yii;
 use \core\models\worker\Worker;
-use \core\models\worker\WorkerExt;
+use \core\models\worker\WorkerAccessToken;
 class WorkerController extends \api\components\Controller
 {
 
     /**
      *
-     * @api {GET} /worker/work-info 查看阿姨信息 (田玉星 80%)
+     * @api {GET} /worker/work-info 查看阿姨信息 (田玉星 95%)
      *
      *
      * @apiName WorkerInfo
@@ -24,12 +24,17 @@ class WorkerController extends \api\components\Controller
      *     HTTP/1.1 200 OK
      *     {
      *       "code": "ok",
-     *       "msg": "查询成功",
+     *       "msg": "阿姨信息查询成功",
      *       ret:{
-     *          
-     *          }
-     *       }
-     *
+     *           "worker_name": "刘红霞",
+     *            "user_phone": "15010208249",
+     *            "head_url": "",
+     *            "worker_rule": "兼职",
+     *            "livePlace": "北京市通州区土桥",
+     *            "personal_skill": [
+     *                  []
+     *              ]
+     *           }
      *     }
      *
      * @apiError UserNotFound 用户认证已经过期.
@@ -55,85 +60,24 @@ class WorkerController extends \api\components\Controller
      *
      */
     public function actionWorkerInfo(){
-          $param = Yii::$app->request->post();
+          $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+
           if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
           }
           $worker = WorkerAccessToken::getWorker($param['access_token']);
           if (!empty($worker) && !empty($worker->id)) {
-               $workerInfo = Worker::getWorkerInfo(1);
+               $workerInfo = Worker::getWorkerDetailInfo($worker->id);
                //数据整理
                $ret = array(
-                   "order_count"=> "",
-                   "cancel_count"=>"",
-                   "worker_total_score"=>"",
-                   "my_rewards"=>array(),
-                   "user_phone"=>$workerInfo['worker_phone'],
-                   "worker_name"=>$workerInfo['worker_name'],
-                   "worker_age"=> "",
-                   "quality_score_clause_url"=>"",
-                   "live_place"=> "",
-                   "home_town"=> "",
-                   "identity_card"=> $workerInfo['worker_idcard'],
-                   "good_rate"=> array(),
-                   "bad_rate"=> array(),
-                   "total_rate"=> array(),
-                   "my_money"=> "",
-                   "rank_list" => array(),
-                   "my_rank"=>array(
-                         "worker_name"=>"",
-                         "rank"=> "",
-                         "money"=> ""
-                    ),
-                    "star_count_list"=>array(),
-                    "me_star_list"=>array(
-                         "worker_name"=>"",
-                         "rank"=>"",
-                         "money"=> "0"
-                    ),
-                    "personal_skill"=>array(
-                         "title"=>"",
-                         "type"=>"",
-                         "value"=>""
-                    ),
-                    "druing_time"=> "",
-                    "rest_score"=>"",
-                    "complain_num"=> "",
-                    "un_pay_money"=> "",
-                    "is_pay_money"=> "",
-                    "un_pay_list"=>array(),
-                    "is_pay_list"=>array(),
-                    "my_money_list"=>array(),
-                    "rest_day"=>"",
-                    "score_list"=>array(),
-                    "fine_money"=>"",
-                    "un_complain_list"=>array(),
-                    "rest_day_str"=>"",
-                    "complain_str"=> "",
-                    "complain_clause_url"=> "",
-                    "today_finish_order"=> "",
-                    "today_finish_money"=> "",
-                    "month_finish_order"=> "",
-                    "month_finish_money"=> "",
-                    "succ_rate"=> "",
-                    "driver_level"=> "",
-                    "alert_type"=> "",
-                    "account_rest_money"=> "",
-                    "pay_money" =>"",
-                    "charge_money"=>"",
-                    "worker_company"=>"",
-                    "is_open_start"=>"",
-                    "result"=>"1",
-                    "head_url"=>"",
-                    "worker_degree"=> "",
-                    "worker_work_age"=> "",
-                    "worker_language"=> "",
-                    "health_card"=>"",
-                    "department"=> "",
-                    "server_range"=> "",
-                    "transportation"=> "",
-                    "activity_url"=> ""
+                    "worker_name" => $workerInfo['worker_name'],
+                    "user_phone" => $workerInfo['worker_phone'],
+                    "head_url" => $workerInfo['worker_photo'],
+                    "worker_rule" => $workerInfo['worker_rule_description'],
+                    "livePlace" => $workerInfo['worker_live_place'],
+                    "personal_skill" =>array(array())
                );
+  
                return $this->send($ret, "阿姨信息查询成功", "ok");
          } else {
              return $this->send(null, "阿姨不存在.", "error", 403);
@@ -627,33 +571,24 @@ class WorkerController extends \api\components\Controller
      *
      */
     public function actionWorkerTimeTable(){
-          $param = Yii::$app->request->post();
+          $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
           if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
           }
           $worker = WorkerAccessToken::getWorker($param['access_token']);
+          print_r($worker);die;
           if (!empty($worker) && !empty($worker->id)) {
                //$filed = array('worker_live_province','worker_live_city','worker_live_area','worker_live_street');
                //$workerInfo = Worker::getWorkerListByIds($worker->id,implode(',',$filed));
                $ret = array(
-                    "select_time_area": "6",
-                    "max_plan_time": "6",
-                    "min_plan_time": "2",
-                    "msg_style": "",
-                    "alert_msg": "",
-                    "worker_time":
-                    [
-                        {
-                            "date_name": "09月13日",
-                            "date_week": "周日",
-                            "date_week_every": "每周日",
-                            "date_time":
-                            ["14:00-16:00","14:30-16:30","15:00-17:00","15:30-17:30","16:00-18:00","16:30-18:30","17:00-19:00","17:30-19:30","18:00-20:00"],
-                            "date_name_tag": "09月13日(今天)"
-                        }
-                    ]
+                        "select_time_area"=> "6",
+                        "max_plan_time"=> "6",
+                        "min_plan_time"=> "2",
+                        "msg_style"=> "",
+                        "alert_msg"=> "",
+                        "worker_time"=>""
                );
-               return $this->send($ret, "操作成功.", "ok");
+                 return $this->send($ret, "操作成功.", "ok");
           }else{
                return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
           }
@@ -782,7 +717,7 @@ class WorkerController extends \api\components\Controller
 
     
     /**
-     * @api {get} /worker/handle_worker_leave  阿姨请假（田玉星 95%）
+     * @api {get} /worker/handle-worker-leave  阿姨请假（田玉星 98%）
      * @apiName actionHandleWorkerLeave
      * @apiGroup Worker
      * 
@@ -816,7 +751,8 @@ class WorkerController extends \api\components\Controller
      *
      */
      public function actionHandleWorkerLeave(){
-          $param = Yii::$app->request->post();
+          $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+
           if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
           }
@@ -825,14 +761,14 @@ class WorkerController extends \api\components\Controller
           if (!empty($worker) && !empty($worker->id)) {
                $attributes = [];
                $attributes['worker_id'] = $worker->id;
-               $attributes['worker_vacation_type'] = $param['type'];
-               if(empty($attributes['worker_vacation_type']||!in_array($param['type'], array(1,2)))){
+               if(!isset($param['type'])||!$param['type']||!in_array($param['type'], array(1,2))){
                     return $this->send(null, "数据不完整,请选择请假类型", "error", 403);
                }
-
+               $attributes['worker_vacation_type'] = $param['type'];
+               
                //请假时间范围判断
-               if(empty($param['date'])){
-                    return $this->send(null, "数据不完整,请选择请假类型", "error", 403);
+               if(!isset($param['date'])||!$param['date']){
+                    return $this->send(null, "数据不完整,请选择请假时间", "error", 403);
                }
                $vacation_start_time = time();
                $vacation_end_time = strtotime(date('Y-m-d',strtotime("+14 days")));
@@ -847,7 +783,7 @@ class WorkerController extends \api\components\Controller
                $is_success = $workerVacation -> createNew($attributes);    
                if ($is_success) {
                     $result = array(
-                         'result' => 1;
+                         'result' => 1,
                          "msg"    => "您的请假已提交，请耐心等待审批。"
                     );
                  return $this->send($result,"操作成功","ok");
@@ -862,7 +798,7 @@ class WorkerController extends \api\components\Controller
      }
     
     /**
-     * @api {get} /worker/handle_worker_leave_history  阿姨请假历史（田玉星 95%）
+     * @api {get} /worker/handle_worker_leave_history  阿姨请假历史（田玉星 70%）
      * @apiName actionHandleWorkerLeaveHistory
      * @apiGroup Worker
      * 
@@ -894,7 +830,7 @@ class WorkerController extends \api\components\Controller
      *
      */
      public function actionHandleWorkerLeaveHistory(){
-          $param = Yii::$app->request->post();
+          $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
           if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
           }
@@ -913,7 +849,7 @@ class WorkerController extends \api\components\Controller
 
     
     /**
-     * @api {get} /worker/get-worker-place-by-id  获取阿姨住址(田玉星 90% )
+     * @api {get} /worker/get-worker-place-by-id  获取阿姨住址(田玉星 100% )
      * @apiName actionGetWorkerPlaceById
      * @apiGroup Worker
      * @apiDescription 获取阿姨住址 用来查看路线
@@ -937,27 +873,26 @@ class WorkerController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"Failed",
-     *      "msg": "SessionIdNotFound"
+     *      "code":"error",
+     *      "msg": "阿姨不存在"
      *  }
      *
      */
     public function actionGetWorkerPlaceById(){
-          $param = Yii::$app->request->post();
+          $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
           if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
           }
           $worker = WorkerAccessToken::getWorker($param['access_token']);
           if (!empty($worker) && !empty($worker->id)) {
-               //$filed = array('worker_live_province','worker_live_city','worker_live_area','worker_live_street');
-               //$workerInfo = Worker::getWorkerListByIds($worker->id,implode(',',$filed));
+               $workerInfo = Worker::getWorkerDetailInfo($worker->id);
                $ret = array(
-                    "result"=>'',
-                    "live_place"=>"测试等待model支持"
+                    "result"=>'1',
+                    "live_place"=>$workerInfo['worker_live_place']
                );
-               return $this->send($ret, "阿姨不存在.", "ok");
+               return $this->send($ret, "操作成功.", "ok");
           }else{
-               return $this->send(null, "阿姨不存在.", "error", 403);
+               return $this->send(null, "阿姨不存在.", "error", 404);
           }
     }
     /**

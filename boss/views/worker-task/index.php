@@ -5,6 +5,7 @@ use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use yii\bootstrap\Modal;
 
+
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -15,13 +16,7 @@ $this->title = Yii::t('app', 'Worker Tasks');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="worker-task-index">
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Worker Task',
-]), ['create'], ['class' => 'btn btn-success'])*/  ?>
-    </p>
+    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
@@ -42,19 +37,28 @@ $this->params['breadcrumbs'][] = $this->title;
             'worker_task_start:date',
             'worker_task_end:date',
             [
+                'attribute'=>'worker_task_cycle',
+                'value'=>function($model){
+                    return $model->getCycleLabel();
+                },
+            ],
+            [
                 'attribute'=>'worker_type',
+                'label'=>'阿姨角色',
                 'value'=>function($model){
                     return $model->getWorkerTypeLabels();
                 },
             ],
             [
                 'attribute'=>'worker_rule_id',
+                'label'=>'阿姨身份',
                 'value'=>function($model){
                     return $model->getWorkerRuleLabels();
                 },
             ],
             [
                 'attribute'=>'worker_task_city_id',
+                'label'=>'适用城市',
                 'value'=>function($model){
                     return $model->getWorkerCityLabels();
                 },
@@ -68,19 +72,22 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template'=>'{view} {update} {copy}',
+                'template'=>'{view} {update} {online}',
                 'buttons' => [
-                    'copy'=>function ($url, $model) {
-                        return Html::a('复制', [
-                            'worker-task/copy',
-                            'id' => $model->id
-                        ], [
-                            'title' => Yii::t('app', '任务复制'),
-                            'data-toggle'=>'modal',
-                            'data-target'=>'#modal',
-                            'data-id'=>$model->id,
-                            'class'=>'btn btn-success btn-sm',
-                        ]);
+                    'online'=>function($url, $model){
+                        if($model->worker_task_online==1){
+                            return Html::a('下线', [
+                                'worker-task/set-online',
+                                'id'=>$model->id,
+                                'online'=>0
+                            ]);
+                        }else{
+                            return Html::a('上线', [
+                                'worker-task/set-online',
+                                'id'=>$model->id,
+                                'online'=>1
+                            ]);
+                        }
                     },
                 ],
             ],
@@ -103,14 +110,3 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); Pjax::end(); ?>
 
 </div>
-<?php echo Modal::widget([
-    'header' => '<h4 class="modal-title">任务复制</h4>',
-    'id' =>'modal',
-]);?>
-<?php $this->registerJs(<<<JSCONTENT
-    $('.join-list-btn').click(function(){
-        $('#modal .modal-body').html('加载中……');
-        $('#modal .modal-body').eq(0).load(this.href);
-    });
-JSCONTENT
-);?>

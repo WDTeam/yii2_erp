@@ -2,6 +2,7 @@
 /**
  * 极光推送
  * @see http://docs.jpush.cn/display/dev/Push-API-v3#Push-API-v3-%E6%8E%A8%E9%80%81%E5%AF%B9%E8%B1%A1
+ * 客户端安装后，测试用到的账号：13401096964  密码：123456
  */
 namespace common\components;
 
@@ -25,21 +26,52 @@ class JPush extends Object
     }
     /**
      * 给指定tags推送
-     * @param unknown $tags
-     * @param unknown $msg
-     * @param unknown $extras
+     * iOS Notification 长度限制提升为2000字节；
+     * iOS Message 长度限制修改为1000字节；
+     * Android,WinPhone平台的Notification+Message长度限制修改为1000字节。
+     * @param array $tags ['wworker_uuu_ttt2','worker_ldg_test', 'wworker_uuu_ttt']
+     * @param string $msg
+     * @param object $extras 附加发送的自定义数据
      */
     public function push($tags, $msg, $extras=[])
     {
-        $result = $this->client->push()
-        ->setPlatform(M\platform(M\all))
-        ->setAudience(M\Audience(M\Tag($tags)))
-        ->setNotification(M\notification($msg))
-        ->send();
-        return $result;
+        try{
+            $result = $this->client->push()
+            ->setPlatform(M\platform('ios', 'android'))
+            ->setAudience(M\Audience(M\Tag($tags)))
+            ->setNotification(M\notification($msg))
+            ->send();
+            return $result;
+        }catch(APIRequestException $e){
+            return $e;
+        }
     }
     /**
-     * 推送消息
+     * 复杂应用完整信息push
+     * @param array $tags 标签
+     * @param string $msg 消息内容
+     * @param array $extras 自定义字段
+     * @param string $category 消息分类
+     */
+    public function fullPush($tags, $title, $msg, $extras=[], $category=null)
+    {
+        try{
+            $result = $this->client->push()
+            ->setPlatform(M\platform('ios', 'android'))
+            ->setAudience(M\Audience(M\Tag($tags)))
+            ->setNotification(M\notification($title,
+                M\android($title, $title, null, $extras),
+                M\ios($title, $title, null, true, $extras, $category)
+            ))
+            ->setMessage(M\message($msg, $title, $category, $extras))
+            ->send();
+            return $result;
+        }catch(APIRequestException $e){
+            return $e;
+        }
+    }
+    /**
+     * 推送消息,不建议使用,仅供参考
      * @param string $msg 消息内容
      * @return \JPush\Model\PushResponse
      */
@@ -54,7 +86,7 @@ class JPush extends Object
     }
     /**
      * 给指定android推送
-     * @param string $tags 客户端标签    如给指定阿姨端发送  eg: 'worker_1,worker_2'
+     * @param array $tags 客户端标签    如给指定阿姨端发送  eg: ['worker_1','worker_2']
      * @param string $msg
      * @param array $extras 附加发送的自定义数据
      */
@@ -69,7 +101,7 @@ class JPush extends Object
     }
     /**
      * 给指定ios推送
-     * @param string $tags 客户端标签    如给指定阿姨端发送  eg: 'worker_1,worker_2'
+     * @param array $tags 客户端标签    如给指定阿姨端发送  eg: 'worker_1,worker_2'
      * @param string $msg
      * @param array $extras 附加发送的自定义数据
      */
