@@ -96,6 +96,7 @@ class Order extends OrderModel
 
     const WAIT_IVR_PUSH_ORDERS_POOL = 'WAIT_IVR_PUSH_ORDERS_POOL';
     const WAIT_ASSIGN_ORDERS_POOL = 'WaitAssignOrdersPool';
+    const PUSH_ORDER_LOCK = 'PUSH_ORDER_LOCK';
 
     /**
      * 创建新订单
@@ -200,33 +201,39 @@ class Order extends OrderModel
      */
     public static function push($order_id)
     {
-        $order = OrderSearch::getOne($order_id);
-        if ($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //开始系统指派的订单
-            if (time() - $order->orderExtStatus->updated_at < 300) { //TODO 5分钟内的订单推送给全职阿姨 5分钟需要配置
-                //获取全职阿姨
-                $workers = Worker::getDistrictFreeWorker($order->district_id, 1, $order->order_booked_begin_time, $order->order_booked_end_time);
-                if (!empty($workers)) {
-                    self::pushToWorkers($order_id, $workers);
-                } else { //如果查询不到指派的全职阿姨则直接推送兼职阿姨
+        //并发锁
+        if(empty(Yii::$app->cache->get(self::PUSH_ORDER_LOCK.'_'.$order_id))) {
+            Yii::$app->cache->set(self::PUSH_ORDER_LOCK . '_' . $order_id, $order_id);
+            $order = OrderSearch::getOne($order_id);
+            if ($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //开始系统指派的订单
+                if (time() - $order->orderExtStatus->updated_at < 300) { //TODO 5分钟内的订单推送给全职阿姨 5分钟需要配置
+                    //获取全职阿姨
+                    $workers = Worker::getDistrictFreeWorker($order->district_id, 1, $order->order_booked_begin_time, $order->order_booked_end_time);
+                    if (!empty($workers)) {
+                        self::pushToWorkers($order_id, $workers);
+                    } else { //如果查询不到指派的全职阿姨则直接推送兼职阿姨
+                        $workers = Worker::getDistrictFreeWorker($order->district_id, 2, $order->order_booked_begin_time, $order->order_booked_end_time);
+                        if (!empty($workers)) {
+                            self::pushToWorkers($order_id, $workers);
+                        } else {//如果查询不到兼职阿姨则系统指派失败
+                            self::sysAssignUndone($order_id);
+                        }
+                    }
+                } elseif (time() - $order->orderExtStatus->updated_at < 900) { //TODO 15分钟内的订单推送给兼职阿姨 15分钟需要配置
                     $workers = Worker::getDistrictFreeWorker($order->district_id, 2, $order->order_booked_begin_time, $order->order_booked_end_time);
                     if (!empty($workers)) {
                         self::pushToWorkers($order_id, $workers);
                     } else {//如果查询不到兼职阿姨则系统指派失败
                         self::sysAssignUndone($order_id);
                     }
-                }
-            } elseif (time() - $order->orderExtStatus->updated_at < 900) { //TODO 15分钟内的订单推送给兼职阿姨 15分钟需要配置
-                $workers = Worker::getDistrictFreeWorker($order->district_id, 2, $order->order_booked_begin_time, $order->order_booked_end_time);
-                if (!empty($workers)) {
-                    self::pushToWorkers($order_id, $workers);
-                } else {//如果查询不到兼职阿姨则系统指派失败
+                } else { //系统指派失败
                     self::sysAssignUndone($order_id);
                 }
-            } else { //系统指派失败
-                self::sysAssignUndone($order_id);
+            } else {
+                self::remOrderToPool($order_id);
             }
-        }else{
-            self::remOrderToPool($order_id);
+
+            Yii::$app->cache->delete(self::PUSH_ORDER_LOCK . '_' . $order_id);
         }
         $order = OrderSearch::getOne($order_id);
         return ['order_id' => $order->id, 'created_at' => $order->created_at, 'sms' => $order->orderExtFlag->order_flag_worker_sms, 'jpush' => $order->orderExtFlag->order_flag_worker_jpush, 'ivr' => $order->orderExtFlag->order_flag_worker_ivr];
@@ -594,7 +601,7 @@ class Order extends OrderModel
                     //交易记录
                     $order['customer_trans_record_pre_pay'] = $this->orderExtPop->order_pop_order_money;
                     $order['general_pay_source'] = $this->channel_id;
-                    if (GeneralPay::perPay($order)) {
+                    if (GeneralPay::prePay($order)) {
                         $order_model->admin_id = $attributes['admin_id'];
                         OrderStatus::payment($order_model, ['OrderExtPay']);
                     }
