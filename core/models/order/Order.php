@@ -315,6 +315,7 @@ class Order extends OrderModel
     public static function workerJPushFlag($order_id)
     {
         $order = OrderSearch::getOne($order_id);
+        $order->admin_id = 1;
         $order->order_flag_worker_jpush = $order->orderExtFlag->order_flag_worker_jpush + 1;
         return $order->doSave(['OrderExtFlag']);
     }
@@ -327,6 +328,7 @@ class Order extends OrderModel
     public static function workerIVRPushFlag($order_id)
     {
         $order = OrderSearch::getOne($order_id);
+        $order->admin_id = 1;
         $order->order_flag_worker_ivr = $order->orderExtFlag->order_flag_worker_ivr + 1;
         return $order->doSave(['OrderExtFlag']);
     }
