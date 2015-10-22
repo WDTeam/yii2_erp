@@ -40,21 +40,21 @@ function showOrders(data){
     var id = 'order_'+order.order_id;
     var obj = $('#'+id);
     order.status = getStatus(order.status);
-    if(order.sms == null || order.sms == false){
-        order.sms = '未发送';
+    if(order.sms == true){
+        order.sms = '已发送';
     }else{
         order.sms = '已发送';
     }
-    if(order.ivr == null || order.ivr == false){
-        order.ivr = '未发送';
-    }else{
+    if(order.ivr == true){
         order.ivr = '已发送';
+    }else{
+        order.ivr = '未发送';
     }
     
-    if(order.jpush == null || order.jpush == false){
-        order.jpush = '未发送';
-    }else{
+    if(order.jpush == true){
         order.jpush = '已发送';
+    }else{
+        order.jpush = '未发送';
     }
     
     if(order.updated_at == null){
