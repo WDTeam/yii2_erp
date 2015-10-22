@@ -17,7 +17,7 @@ class CustomerTransRecord extends \common\models\CustomerTransRecord
      */
     public static function queryRecord($customer_id)
     {
-        return CustomerTransRecord::find()->asArray()->all();
+        return CustomerTransRecord::find()->where(['customer_id'=>$customer_id])->asArray()->all();
     }
     /**
      * 创建交易记录
