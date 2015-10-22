@@ -49,7 +49,7 @@ $(document).on("click",'.worker_assign',function(){
             data: "order_id="+window.order_data.order.id+"&worker_id="+refuse_worker_id,
             dataType:"json",
             success: function (msg) {
-                if(msg){
+                if(msg.status){
                     window.continue_work_count_down = 10;
                     $("#work_console").html(
                         '<button id="stop_work" class="btn btn-warning" type="button">收工啦</button>' +

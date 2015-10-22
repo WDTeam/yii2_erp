@@ -1,7 +1,11 @@
 <?php
 
 namespace common\models;
-
+use Yii;
+use yii\base\ErrorException;
+use yii\base\Exception;
+use core\models\CustomerTransRecord\CustomerTransRecord;
+use core\models\order\OrderSearch;
 class GeneralPay extends GeneralPayCommon
 {
     /**

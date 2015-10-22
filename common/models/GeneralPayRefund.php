@@ -1,5 +1,8 @@
 <?php
 namespace common\models;
+use Yii;
+use yii\base\ErrorException;
+use yii\base\Exception;
 use core\models\CustomerTransRecord\CustomerTransRecord;
 use core\models\order\OrderSearch;
 
@@ -32,7 +35,7 @@ class GeneralPayRefund extends GeneralPayCommon
         //分配退款渠道
         $this->source($payData['general_pay_source']);
         $fun = $this->pay_type;
-        $this->$fun($payData);
+        return $this->$fun($payData);
     }
 
     /**
@@ -87,26 +90,13 @@ class GeneralPayRefund extends GeneralPayCommon
         return $source;
     }
 
-
-    /**
-     * 支付宝APPTUIK
-     */
-    private function alipay_app_refund(){}
-
-    /**
-     * 银联APP订单退款
-     */
-    private function up_app_refund(){}
-
-
     /**
      * 微信APP订单退款
      */
-    private function wx_h5_refund($data){
-        //['status'=>$status,'msg'=>$msg,'result'=>$result]
+    private function wx_app_refund($data){
         //创建退款交易
         $data['general_pay_mode'] = 3;
-        $data['general_pay_eo_order_id'] = 3;
+        $data['general_pay_eo_order_id'] = $this->create_out_trade_no(2);
         $data['is_reconciliation'] = 0;
         $data['general_pay_status'] = 1;
         $data['general_pay_transaction_id'] = 0;
@@ -118,27 +108,220 @@ class GeneralPayRefund extends GeneralPayCommon
 
         //调用退余额
         if( !empty($data['order_id']) && !empty($data['customer_id'])){
-            $orderInfo = self::orderInfo($data['order_id']);
-            //获取余额支付
-            $balancePay = $orderInfo->orderExtPay->order_use_acc_balance;  //余额支付
-
-            //获取服务卡支付
-            $service_card_on = $orderInfo->orderExtPay->card_id;    //服务卡ID
-            $service_card_pay = $orderInfo->orderExtPay->order_use_card_money;   //服务卡内容
-
-            //执行自有退款
-            if( !empty($balancePay) ){
-                //余额支付退款
-                Customer::incBalance($data['customer_id'],$balancePay);
-            }elseif( !empty($service_card_on) && !empty($service_card_pay) ){
-                //服务卡支付退款
-            }
+            GeneralPayCommon::orderRefund($data);
         }
 
         //调用交易记录
-        CustomerTransRecord::refundRecord($data);
+        return CustomerTransRecord::refundRecord($data);
+    }
+
+    /**
+     * 微信H5订单退款
+     */
+    private function wx_h5_refund($data){
+        //创建退款交易
+        $data['general_pay_mode'] = 3;
+        $data['general_pay_eo_order_id'] = $this->create_out_trade_no(2);
+        $data['is_reconciliation'] = 0;
+        $data['general_pay_status'] = 1;
+        $data['general_pay_transaction_id'] = 0;
+        $this->scenario = 'refund';
+        $this->attributes = $data;
+        $this->insert();
+
+        //调用第三方退款
+
+        //调用退余额
+        if( !empty($data['order_id']) && !empty($data['customer_id'])){
+            GeneralPayCommon::orderRefund($data);
+        }
+
+        //调用交易记录
+        return CustomerTransRecord::refundRecord($data);
 
     }
+
+    /**
+     * 百度钱包APP订单退款
+     */
+    private function bfb_app_refund($data)
+    {
+
+        //创建退款交易
+        $data['general_pay_mode'] = 3;
+        $data['general_pay_eo_order_id'] = $this->create_out_trade_no(2);
+        $data['is_reconciliation'] = 0;
+        $data['general_pay_status'] = 1;
+        $data['general_pay_transaction_id'] = 0;
+        $this->scenario = 'refund';
+        $this->attributes = $data;
+        $this->insert();
+
+        //调用第三方退款
+
+        //调用退余额
+        if( !empty($data['order_id']) && !empty($data['customer_id'])){
+            GeneralPayCommon::orderRefund($data);
+        }
+
+        //调用交易记录
+        return CustomerTransRecord::refundRecord($data);
+    }
+
+    /**
+     * 银联APP订单退款
+     */
+    private function up_app_refund($data){
+        //创建退款交易
+        $data['general_pay_mode'] = 3;
+        $data['general_pay_eo_order_id'] = $this->create_out_trade_no(2);
+        $data['is_reconciliation'] = 0;
+        $data['general_pay_status'] = 1;
+        $data['general_pay_transaction_id'] = 0;
+        $this->scenario = 'refund';
+        $this->attributes = $data;
+        $this->insert();
+
+        //调用第三方退款
+
+        //调用退余额
+        if( !empty($data['order_id']) && !empty($data['customer_id'])){
+            GeneralPayCommon::orderRefund($data);
+        }
+
+        //调用交易记录
+        return CustomerTransRecord::refundRecord($data);
+    }
+
+    /**
+     * 支付宝APP订单退款
+     */
+    private function alipay_app_refund($data){
+        //创建退款交易
+        $data['general_pay_mode'] = 3;
+        $data['general_pay_eo_order_id'] = $this->create_out_trade_no(2);
+        $data['is_reconciliation'] = 0;
+        $data['general_pay_status'] = 1;
+        $data['general_pay_transaction_id'] = 0;
+        $this->scenario = 'refund';
+        $this->attributes = $data;
+        $this->insert();
+
+        //调用第三方退款
+
+        //调用退余额
+        if( !empty($data['order_id']) && !empty($data['customer_id'])){
+            GeneralPayCommon::orderRefund($data);
+        }
+
+        //调用交易记录
+        return CustomerTransRecord::refundRecord($data);
+    }
+
+    /**
+     * 支付宝WEB订单退款
+     */
+    private function alipay_web_refund($data){
+        //创建退款交易
+        $data['general_pay_mode'] = 3;
+        $data['general_pay_eo_order_id'] = $this->create_out_trade_no(2);
+        $data['is_reconciliation'] = 0;
+        $data['general_pay_status'] = 1;
+        $data['general_pay_transaction_id'] = 0;
+        $this->scenario = 'refund';
+        $this->attributes = $data;
+        $this->insert();
+
+        //调用第三方退款
+
+        //调用退余额
+        if( !empty($data['order_id']) && !empty($data['customer_id'])){
+            GeneralPayCommon::orderRefund($data);
+        }
+
+        //调用交易记录
+        return CustomerTransRecord::refundRecord($data);
+    }
+
+    /**
+     * 百度直达号APP订单退款
+     */
+    private function zhidahao_h5_refund($data){
+        //创建退款交易
+        $data['general_pay_mode'] = 3;
+        $data['general_pay_eo_order_id'] = $this->create_out_trade_no(2);
+        $data['is_reconciliation'] = 0;
+        $data['general_pay_status'] = 1;
+        $data['general_pay_transaction_id'] = 0;
+        $this->scenario = 'refund';
+        $this->attributes = $data;
+        $this->insert();
+
+        //调用第三方退款
+
+        //调用退余额
+        if( !empty($data['order_id']) && !empty($data['customer_id'])){
+            GeneralPayCommon::orderRefund($data);
+        }
+
+        //调用交易记录
+        return CustomerTransRecord::refundRecord($data);
+    }
+
+    /**
+     * 后台订单退款
+     */
+    private function pay_ht_refund($data){
+        //创建退款交易
+        $data['general_pay_mode'] = 3;
+        $data['general_pay_eo_order_id'] = $this->create_out_trade_no(2);
+        $data['is_reconciliation'] = 0;
+        $data['general_pay_status'] = 1;
+        $data['general_pay_transaction_id'] = 0;
+        $this->scenario = 'refund';
+        $this->attributes = $data;
+        $this->insert();
+
+        //调用第三方退款
+
+        //调用退余额
+        if( !empty($data['order_id']) && !empty($data['customer_id'])){
+            GeneralPayCommon::orderRefund($data);
+        }
+
+        //调用交易记录
+        return CustomerTransRecord::refundRecord($data);
+    }
+
+
+    /**
+     * 微博支付H5订单退款
+     */
+    private function weibo_h5_refund($data){
+        //创建退款交易
+        $data['general_pay_mode'] = 3;
+        $data['general_pay_eo_order_id'] = $this->create_out_trade_no(2);
+        $data['is_reconciliation'] = 0;
+        $data['general_pay_status'] = 1;
+        $data['general_pay_transaction_id'] = 0;
+        $this->scenario = 'refund';
+        $this->attributes = $data;
+        $this->insert();
+
+        //调用第三方退款
+
+        //调用退余额
+        if( !empty($data['order_id']) && !empty($data['customer_id'])){
+            GeneralPayCommon::orderRefund($data);
+        }
+
+        //调用交易记录
+        return CustomerTransRecord::refundRecord($data);
+    }
+
+
+
+
 
 
     /**
@@ -150,6 +333,7 @@ class GeneralPayRefund extends GeneralPayCommon
      * @param $refund_fee   退款金额(单位/分)
      * @param $op_user_passwd   退款密码(MD5)
      */
+    /*
     public function wx_app_refund( $out_refund_no,$total_fee,$refund_fee,$op_user_passwd,$out_trade_no=0,$transaction_id=0 )
     {
         if( empty($out_trade_no) && empty($transaction_id) ){
@@ -169,7 +353,7 @@ class GeneralPayRefund extends GeneralPayCommon
         $data = $class->refund($params);
         return $data;
     }
-
+    */
 
     /**
      * 微信APP订单查询
@@ -178,6 +362,7 @@ class GeneralPayRefund extends GeneralPayCommon
      * @param int $out_refund_no    退款交易流水号
      * @param int $refund_id        退款订单号
      */
+    /*
     public function wx_app_refund_query( $out_trade_no=0,$transaction_id=0,$out_refund_no=0,$refund_id=0 )
     {
         if( empty($out_trade_no) && empty($transaction_id) ){
@@ -195,16 +380,12 @@ class GeneralPayRefund extends GeneralPayCommon
         $data = $class->refundQuery($params);
         return $data;
     }
-
-    /**
-     * 直达号H5订单退款
-     */
-    private function zhifubaoH5Refund(){}
-
+    */
 
     /**
      * 百度APP订单退款
      */
+    /*
     public function bfbAppRefund( $return_url,$sp_refund_no,$order_no,$cashback_amount )
     {
 
@@ -220,7 +401,7 @@ class GeneralPayRefund extends GeneralPayCommon
         return $data;
 
     }
-
+    */
 
     /**
      * @inheritdoc

@@ -1,0 +1,6 @@
+[2015-10-22 02:02:07 *17295.3]	WARN	zm_deactivate_swoole: Fatal error: Uncaught exception 'RedisException' with message 'read error on connection' in /opt/lampp/htdocs/ejj-enterprise-boss/autoassign/server.php:115
+Stack trace:
+#0 /opt/lampp/htdocs/ejj-enterprise-boss/autoassign/server.php(115): Redis->set('_SWOOLE_SOCKET_...', '{"ip":"192.168....')
+#1 /opt/lampp/htdocs/ejj-enterprise-boss/autoassign/server.php(104): server->saveStatus()
+#2 [internal function]: server->{closure}(6000)
+#3 /opt/lampp/htdocs/ejj-enterprise-boss/autoassign/server
