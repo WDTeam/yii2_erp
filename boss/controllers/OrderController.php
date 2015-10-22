@@ -32,6 +32,7 @@ class OrderController extends BaseAuthController
        // print_r($statusHistoryInfo);
         $orderInfo = OrderSearch::getOne($orderid);
         $workInfo = Worker::getWorkerInfo($orderInfo->orderExtWorker->worker_id);
+        
         $FinanceRefundadd=new FinanceRefundadd;
         $FinanceRefundadd->finance_refund_pop_nub=$orderInfo->orderExtPop->order_pop_order_code;//第三方订单号，后期使用
         $FinanceRefundadd->finance_refund_tel=$orderInfo->orderExtCustomer->order_customer_phone;//下单者电话
@@ -54,6 +55,7 @@ class OrderController extends BaseAuthController
         $FinanceRefundadd->isstatus=2; //1 取消 2 退款的 3 财务已经审核 4 财务已经退款 0 不确定
         $FinanceRefundadd->create_time=$orderInfo->created_at; //创建时间
         $FinanceRefundadd->is_del=$orderInfo->isdel; //是否删除  0  正常 1 删除  默认是0
+        /*
         $infodate=$FinanceRefundadd->add();
         $result = json_decode($infodate);
         if($result->status!=200)
@@ -62,6 +64,7 @@ class OrderController extends BaseAuthController
             exit;
         }
         var_dump($result);
+        */
       
     }
 
