@@ -125,4 +125,26 @@ class Coupon extends \common\models\coupon\Coupon
 			'coupon_customer_type_name'=>$coupon->coupon_customer_type_name,
 		);
 	}
+
+	/**
+	 * get coupon rule coupon time types
+	 */
+	public static function getTimeTypes(){
+		return array(
+			0=>'领取时间段和使用时间段一致',
+			1=>'使用时间段领取后开始计算',
+		);
+	}
+	
+	/**
+	 * get coupon rule coupon promote types
+	 */
+	public static function getPromoteTypes(){
+		return array(
+			0=>'立减',
+			1=>'满减',
+			2=>'每减',
+		);
+	}
+
 }

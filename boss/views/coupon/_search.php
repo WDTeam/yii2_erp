@@ -44,9 +44,7 @@ use \common\models\OperationCity;
 	</div>
 
 	<div class='col-md-2'>
-    	<?php 
-			//$form->field($model, 'coupon_code')->label('请输入优惠码'); 
-		?>
+    	<?= $form->field($model, 'coupon_code')->label('请输入优惠码') ?>
 	</div>
 
     <?php
