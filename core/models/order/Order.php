@@ -263,13 +263,13 @@ class Order extends OrderModel
                 }
             }
         }
-        self::ivrPushToWorker($order_id); //开始ivr推送
-        if ($jpush_flag) {
-            self::workerJPushFlag($order_id); //标记极光推送
-        }
         if ($ivr_flag) {
             self::workerIVRPushFlag($order_id); //标记ivr推送
         }
+        if ($jpush_flag) {
+            self::workerJPushFlag($order_id); //标记极光推送
+        }
+        self::ivrPushToWorker($order_id); //开始ivr推送
     }
 
     /**
