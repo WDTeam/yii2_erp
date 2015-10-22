@@ -19,6 +19,7 @@ use core\models\worker\Worker;
 use Yii;
 use common\models\Order as OrderModel;
 use common\models\OrderStatusDict;
+use common\models\OrderExtCustomer;
 use common\models\OrderSrc;
 use common\models\FinanceOrderChannel;
 use yii\base\Exception;
@@ -712,7 +713,8 @@ class Order extends OrderModel
      * @param   $order_id       int  订单id
      * @return  int
      */
-    public static function validationOrderCustomer($customer_id, $order_id)
+    
+    public static function validationOrderCoustomer($customer_id, $order_id)
     {
         return OrderExtCustomer::find()->where(["customer_id" => $customer_id, "order_id" => $order_id])->count();
     }
