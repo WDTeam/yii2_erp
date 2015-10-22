@@ -142,7 +142,7 @@ class AuthController extends \api\components\Controller
      *
      * @apiSuccess {Object} user 阿姨信息.
      * @apiSuccess {String} access_token 访问令牌字符串.
-     *
+     * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
