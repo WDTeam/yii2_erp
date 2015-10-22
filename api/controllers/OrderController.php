@@ -10,6 +10,7 @@ use core\models\order\OrderSearch;
 use core\models\order\OrderStatus;
 use core\models\customer\CustomerAccessToken;
 use core\models\customer\CustomerAddress;
+use yii\web\Response;
 
 
 class OrderController extends \api\components\Controller
@@ -1123,10 +1124,10 @@ class OrderController extends \api\components\Controller
      *
      */
 
-    public function actionPush($order_id)
+    public function actionPush($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        return Order::push($order_id);
+        return Order::push($id);
     }
 }
 

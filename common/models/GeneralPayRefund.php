@@ -35,7 +35,7 @@ class GeneralPayRefund extends GeneralPayCommon
         //分配退款渠道
         $this->source($payData['general_pay_source']);
         $fun = $this->pay_type;
-        $this->$fun($payData);
+        return $this->$fun($payData);
     }
 
     /**
