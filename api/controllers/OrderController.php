@@ -612,12 +612,12 @@ class OrderController extends \api\components\Controller
                 if (!in_array($param['order_cancel_reason'], $order_cancel_reason)) {
                     $param['order_cancel_reason'] = '其他原因#' . $param['order_cancel_reason'];
                 }
-                
+
                 if (\core\models\order\Order::cancel($param['order_id'], 0, $param['order_cancel_reason'])) {
                     return $this->send([1], $param['order_id'] . "订单取消成功", "ok");
                 }
             } else {
-                return $this->send(null, "用户认证已经过期,请重新登录11.", "error", 403);
+                return $this->send(null, "用户认证已经过期,请重新登录.", "error", 403);
             }
         } else {
             return $this->send(null, "用户认证已经过期,请重新登录222.", "error", 403);
@@ -750,7 +750,18 @@ class OrderController extends \api\components\Controller
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
 
         if (!empty($customer) && !empty($customer->id)) {
-            
+            /**
+             * access_token和订单验证
+             * $customer->id 用户
+             * $order_id     订单号
+             */
+            $orderValidation = \core\models\order\Order::validationOrderCoustomer($customer->id, $param['order_id']);
+
+            if (\core\models\order\Order::customerDel($param['order_id'], 0)) {
+                return $this->send([], "删除订单成功", "ok");
+            } else {
+                return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            }
         }
     }
 
