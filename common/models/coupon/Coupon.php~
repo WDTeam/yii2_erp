@@ -105,26 +105,27 @@ class Coupon extends \yii\db\ActiveRecord
 	/**
  	 * validate coupon_price 
 	 */
-	//public function validateCouponPrice($attribute, $params){
-		//if (!in_array($this->$attribute, ['USA', 'Web'])) {
-        //    $this->addError($attribute, 'coupon price must be decimal');
-       // }
-	//}
+	public function validateCouponPrice($attribute, $params){
+		if (!is_number($this->$attribute)) {
+            $this->addError($attribute, '优惠券金额必须为数字');
+        }
+		if ($this->$attribute <= 0) {
+            $this->addError($attribute, '优惠券金额必须为正数');
+        }
+	}
 
 	/**
  	 *	validate coupon_order_min_price
 	 */
-	//public function validateCouponOrderMinPrice(){
-		
-	//}
+	public function validateCouponOrderMinPrice(){
+		if (!is_number($this->$attribute)) {
+            $this->addError($attribute, '订单最小金额必须为数字');
+        }
+		if ($this->$attribute <= 0) {
+            $this->addError($attribute, '订单最小金额必须为正数');
+        }
+	}
 
-
-//public function validateCountry($attribute, $params)
-    //{
-      //  if (!in_array($this->$attribute, ['USA', 'Web'])) {
-        //    $this->addError($attribute, 'The country must be either "USA" or "Web".');
-       // }
-   // }
 }
 
 
