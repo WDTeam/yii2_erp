@@ -177,7 +177,7 @@ use core\models\worker\WorkerRuleConfig;
 
     </div>
 <?php
-echo Html::submitButton($worker->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $worker->isNewRecord ? 'btn btn-success' : 'btn btn-primary']);
+echo Html::submitButton('创建', ['class' => $worker->isNewRecord ? 'btn btn-success' : 'btn btn-primary']);
 
 ActiveForm::end(); ?>
 </div>
