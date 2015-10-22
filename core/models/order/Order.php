@@ -95,6 +95,9 @@ use core\behaviors\WorkerTaskBehavior;
 class Order extends OrderModel
 {
 
+    const WAIT_IVR_PUSH_ORDERS_POOL = 'WAIT_IVR_PUSH_ORDERS_POOL';
+    const WAIT_ASSIGN_ORDERS_POOL = 'WaitAssignOrdersPool';
+    
     /**
      * 创建新订单
      * @param $attributes [
@@ -168,7 +171,7 @@ class Order extends OrderModel
                 'order_id' => $order_id,
                 'created_at' => $order->orderExtStatus->updated_at
             ];
-            Yii::$app->redis->executeCommand('zAdd', [Yii::$app->params['order']['WAIT_ASSIGN_ORDERS_POOL'], $order->order_booked_begin_time . $order_id, json_encode($redis_order)]);
+            Yii::$app->redis->executeCommand('zAdd', [self::WAIT_ASSIGN_ORDERS_POOL, $order->order_booked_begin_time . $order_id, json_encode($redis_order)]);
         }
     }
 
@@ -224,7 +227,7 @@ class Order extends OrderModel
         foreach ($workers as $v) {
             if(!in_array($v,$is_ivr_worker_ids)) { //判断该阿姨有没有推送过该订单，防止重复推送。
                 //把该推送ivr的阿姨放入该订单的队列中
-                Yii::$app->redis->executeCommand('rPush', [Yii::$app->params['order']['WAIT_IVR_PUSH_ORDERS_POOL'].'_'.$order_id,json_encode(['id'=>$v['id'],'worker_phone'=>$v['worker_phone']])]);
+                Yii::$app->redis->executeCommand('rPush', [self::WAIT_IVR_PUSH_ORDERS_POOL.'_'.$order_id,json_encode(['id'=>$v['id'],'worker_phone'=>$v['worker_phone']])]);
                 $ivr_flag = true;
             }
             if(!in_array($v,$is_jpush_worker_ids)) {
@@ -253,7 +256,7 @@ class Order extends OrderModel
     {
         $order = OrderSearch::getOne($order_id);
         if($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //开始系统指派的订单
-            $worker = json_decode(Yii::$app->redis->executeCommand('lPop', [Yii::$app->params['order']['WAIT_IVR_PUSH_ORDERS_POOL'].'_'.$order_id]),true);
+            $worker = json_decode(Yii::$app->redis->executeCommand('lPop', [self::WAIT_IVR_PUSH_ORDERS_POOL.'_'.$order_id]),true);
             if(!empty($worker)) {
                 $result = Yii::$app->ivr->send($worker['worker_phone'], 'pushToWorker_' . $order_id, "开始时间叉叉叉，时长插插插，地址插插插插！"); //TODO 发送内容
                 if (isset($result['result']) && $result['result'] == 0) {
@@ -262,7 +265,7 @@ class Order extends OrderModel
             }
         }else{
             //移除该订单的队列
-            Yii::$app->redis->executeCommand('del', [Yii::$app->params['order']['WAIT_IVR_PUSH_ORDERS_POOL'].'_'.$order_id]);
+            Yii::$app->redis->executeCommand('del', [self::WAIT_IVR_PUSH_ORDERS_POOL.'_'.$order_id]);
         }
 
     }
@@ -317,7 +320,7 @@ class Order extends OrderModel
         if($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //开始系统指派的订单
             $redis_order = ['order_id' => $order_id, 'created_at' => $order->orderExtStatus->updated_at];
             if (OrderStatus::sysAssignUndone($order, [])) {
-                Yii::$app->redis->executeCommand('zrem', [Yii::$app->params['order']['WAIT_ASSIGN_ORDERS_POOL'], json_encode($redis_order)]);
+                Yii::$app->redis->executeCommand('zrem', [self::WAIT_ASSIGN_ORDERS_POOL, json_encode($redis_order)]);
                 return true;
             }
         }

@@ -14,7 +14,7 @@ use core\models\worker\WorkerTaskLog;
  * @var core\models\worker\WorkerTask $model
  * @var yii\widgets\ActiveForm $form
  */
- 
+
 $conditions = $model->getFullConditions();
 // var_dump($model->getErrors());
 ?>

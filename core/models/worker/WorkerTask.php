@@ -305,6 +305,8 @@ class WorkerTask extends \common\models\WorkerTask
     /**
      * 指定时间内阿姨已完成的任务记录列表,用于结算
      * 而且是金钱奖励
+     * eg:$log = WorkerTask::getDoneTasksByWorkerId(1441036800, 1443627800, 12);
+     * var_dump($log);exit;
      */
     public static function getDoneTasksByWorkerId($start_time, $end_time, $worker_id)
     {
