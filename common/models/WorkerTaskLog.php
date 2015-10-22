@@ -12,8 +12,8 @@ use Yii;
  * @property integer $worker_task_id
  * @property string $worker_task_cycle_number
  * @property string $worker_task_name
- * @property integer $worker_task_start
- * @property integer $worker_task_end
+ * @property integer $worker_task_log_start
+ * @property integer $worker_task_log_end
  * @property integer $worker_task_is_done
  * @property integer $worker_task_done_time
  * @property integer $worker_task_reward_type
@@ -38,7 +38,7 @@ class WorkerTaskLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['worker_id', 'worker_task_id', 'worker_task_start', 'worker_task_end', 'worker_task_is_done', 'worker_task_done_time', 'worker_task_reward_type', 'worker_task_reward_value', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['worker_id', 'worker_task_id', 'worker_task_log_start', 'worker_task_log_end', 'worker_task_is_done', 'worker_task_done_time', 'worker_task_reward_type', 'worker_task_reward_value', 'created_at', 'updated_at', 'is_del'], 'integer'],
             [['worker_task_cycle_number'], 'string', 'max' => 50],
             [['worker_task_name'], 'string', 'max' => 255]
         ];
@@ -55,9 +55,9 @@ class WorkerTaskLog extends \yii\db\ActiveRecord
             'worker_task_id' => Yii::t('app', '任务ID'),
             'worker_task_cycle_number' => Yii::t('app', '任务周期序号'),
             'worker_task_name' => Yii::t('app', '任务名称'),
-            'worker_task_start' => Yii::t('app', '任务开始时间'),
-            'worker_task_end' => Yii::t('app', '任务结束时间'),
-            'worker_task_is_done' => Yii::t('app', '任务结束时间'),
+            'worker_task_log_start' => Yii::t('app', '任务本周期开始时间'),
+            'worker_task_log_end' => Yii::t('app', '任务本周期结束时间'),
+            'worker_task_is_done' => Yii::t('app', '任务是否完成'),
             'worker_task_done_time' => Yii::t('app', '任务完成时间'),
             'worker_task_reward_type' => Yii::t('app', '任务奖励类型'),
             'worker_task_reward_value' => Yii::t('app', '任务奖励值'),

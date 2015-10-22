@@ -396,7 +396,7 @@ class Order extends OrderModel
      */
     public static function manualAssignUnlock()
     {
-        $lockedOrders = OrderExtFlag::find()->where(['>', 'order_flag_lock', 0])->andWhere(['<', 'updated_at', time() - Order::MANUAL_ASSIGN_lONG_TIME])->all();
+        $lockedOrders = OrderExtFlag::find()->where(['>', 'order_flag_lock', 0])->andWhere(['<', 'order_flag_lock_time', time() - Order::MANUAL_ASSIGN_lONG_TIME])->all();
         foreach ($lockedOrders as $v) {//解锁操作超时订单
             self::manualAssignUndone($v['order_id']);
         }
@@ -425,6 +425,8 @@ class Order extends OrderModel
      * @param $assign_type
      * @return array
      * TODO 避免同一时间 给阿姨指派多个订单问题 需要处理
+     * TODO 判断已锁订单
+     * TODO 修改阿姨接单数量
      */
     public static function assignDone($order_id, $worker, $admin_id, $assign_type)
     {
