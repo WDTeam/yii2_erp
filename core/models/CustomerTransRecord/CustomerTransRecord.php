@@ -47,7 +47,7 @@ class CustomerTransRecord extends \common\models\CustomerTransRecord
      * @param $data 数据对象
      * @return bool
      */
-    public static function analysisRecord($data,$mode=2)
+    public static function analysisRecord($data)
     {
         //公用部分
         $data['order_channel_id'] = $data['general_pay_source']; //订单渠道
