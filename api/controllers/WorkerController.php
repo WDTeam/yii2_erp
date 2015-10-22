@@ -65,6 +65,7 @@ class WorkerController extends \api\components\Controller
                 "worker_identity"  =>$workerInfo['worker_rule_description'],//身份
                 "worker_role" => "保姆",
                 'worker_start'=> 4.5,
+                'total_money' =>1000,
                 "personal_skill" =>['煮饭','开荒','护老','擦玻璃','带孩子'],
             ];
               return $this->send($ret, "阿姨信息查询成功", "ok");
@@ -156,7 +157,8 @@ class WorkerController extends \api\components\Controller
      * @apiGroup Worker
      *
      * @apiParam {String} access_token    阿姨登录 token.
-     * @apiParam {String} [page_num]   页码数，默认1 
+     * @apiParam {String} per_page   页码数
+     * @apiParam {String} page_num   每页显示数
      * @apiParam {String} [platform_version] 平台版本号.
      * 
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/handle-worker-leave-history
@@ -191,11 +193,15 @@ class WorkerController extends \api\components\Controller
         $worker = WorkerAccessToken::getWorker($param['access_token']);
         if (!empty($worker) && !empty($worker->id)) {
             //判断页码
+            if(!isset($param['per_page'])||!intval($param['per_page'])){
+                $param['per_page'] = 1;
+            }
+            $per_page = intval($param['per_page']);
+            //每页显示数据数
             if(!isset($param['page_num'])||!intval($param['page_num'])){
-                $param['page_num'] = 1;
+                $param['page_num'] = 10;
             }
             $page_num = intval($param['page_num']);
-            
             //调取阿姨请假历史情况
             $ret = [
                 [
@@ -279,7 +285,8 @@ class WorkerController extends \api\components\Controller
      * 
      * @apiParam {String} access_token    阿姨登录token
      * @apiParam {String} comment_type 评论类型 【1：满意 2：一般 3差评】
-     * @apiParam {String} [page_num]   页码数，默认1 
+     * @apiParam {String} per_page   页码数
+     * @apiParam {String} page_num   每页显示数
      * @apiParam {String} [platform_version] 平台版本号.
      * 
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-comment
@@ -320,8 +327,13 @@ class WorkerController extends \api\components\Controller
             return $this->send(null, "评论类型不正确", "error", 403);
         }
         //判断页码
+        if(!isset($param['per_page'])||!intval($param['per_page'])){
+            $param['per_page'] = 1;
+        }
+        $per_page = intval($param['per_page']);
+        //每页显示数
         if(!isset($param['page_num'])||!intval($param['page_num'])){
-            $param['page_num'] = 1;
+            $param['page_num'] = 10;
         }
         $page_num = intval($param['page_num']);
         
@@ -359,7 +371,8 @@ class WorkerController extends \api\components\Controller
      * @apiGroup Worker
      * 
      * @apiParam {String} access_token    阿姨登录token
-     * @apiParam {String} [page_num]   页码数，默认1 
+     * @apiParam {String} per_page    第几页
+     * @apiParam {String} page_num   每页显示的数据数量 
      * @apiParam {String} [platform_version] 平台版本号.
      * 
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-complain
@@ -397,8 +410,13 @@ class WorkerController extends \api\components\Controller
         }
   
         //判断页码
+        if(!isset($param['per_page'])||!intval($param['per_page'])){
+            $param['per_page'] = 1;
+        }
+        $per_page = intval($param['per_page']);
+        //每页显示数据量
         if(!isset($param['page_num'])||!intval($param['page_num'])){
-            $param['page_num'] = 1;
+            $param['page_num'] = 10;
         }
         $page_num = intval($param['page_num']);
         
