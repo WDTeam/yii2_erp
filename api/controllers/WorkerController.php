@@ -345,7 +345,81 @@ class WorkerController extends \api\components\Controller
         ];
         return $this->send($ret, "操作成功.", "ok");
     }
-     
+     /**
+     * @api {GET} /worker/get-worker-complain 获取阿姨对应的投诉 (田玉星 80%)
+     * 
+     * @apiDescription 【备注：等待model底层支持】
+     * 
+     * @apiName actionGetWorkerComplain
+     * @apiGroup Worker
+     * 
+     * @apiParam {String} access_token    阿姨登录token
+     * @apiParam {String} [page_num]   页码数，默认1 
+     * @apiParam {String} [platform_version] 平台版本号.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *      "code": "ok",
+     *      "msg": "操作成功.",
+     *      "ret": [
+     *         {
+     *             "complain_id": "1",
+     *             "complain": "这是第一条投诉",
+     *             "complain_date": "2015-10-22"
+     *         },
+     *         {
+     *             "complain_id": "1",
+     *             "complain": "这是第二条投诉",
+     *             "complain_date": "2015-10-22"
+     *         }
+     *      ]
+     * }
+     *
+     * @apiErrorExample Error-Response:
+     *  HTTP/1.1 404 Not Found
+     *  {
+     *      "code":"error",
+     *      "msg": "用户认证已经过期,请重新登录"
+     *  }
+     */
+    public function  actionGetWorkerComplain(){
+        $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
+           return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
+  
+        //判断页码
+        if(!isset($param['page_num'])||!intval($param['page_num'])){
+            $param['page_num'] = 1;
+        }
+        $page_num = intval($param['page_num']);
+        
+        //判断用户是否存在
+        $worker = WorkerAccessToken::getWorker($param['access_token']);
+        if (!$worker||!$worker->id){
+             return $this->send(null, "阿姨不存在.", "error", 404);
+        }
+        //数据返回
+        $ret = [
+            [
+                "comment_id"=>'1',
+                "comment"=>"这是第一条投诉",
+                'comment_date'=>date('Y-m-d')
+            ],
+            [
+                "comment_id"=>'1',
+                "comment"=>"这是第二条投诉",
+                'comment_date'=>date('Y-m-d')
+            ],
+            [
+                "comment_id"=>'1',
+                "comment"=>"这是第三条投诉",
+                'comment_date'=>date('Y-m-d')
+            ],
+        ];
+        return $this->send($ret, "操作成功.", "ok");
+    }
     
     
      
