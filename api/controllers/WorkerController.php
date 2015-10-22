@@ -61,8 +61,7 @@ class WorkerController extends \api\components\Controller
      */
     public function actionWorkerInfo(){
           $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
-
-          if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
+          if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
           }
           $worker = WorkerAccessToken::getWorker($param['access_token']);
@@ -572,9 +571,9 @@ class WorkerController extends \api\components\Controller
      */
     public function actionWorkerTimeTable(){
           $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
-          if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
+        if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
-          }
+        }
           $worker = WorkerAccessToken::getWorker($param['access_token']);
           print_r($worker);die;
           if (!empty($worker) && !empty($worker->id)) {
@@ -751,12 +750,10 @@ class WorkerController extends \api\components\Controller
      *
      */
      public function actionHandleWorkerLeave(){
-          $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
-
-          if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
+        $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
-          }
-
+        }
           $worker = WorkerAccessToken::getWorker($param['access_token']);
           if (!empty($worker) && !empty($worker->id)) {
                $attributes = [];
@@ -798,7 +795,7 @@ class WorkerController extends \api\components\Controller
      }
     
     /**
-     * @api {get} /worker/handle_worker_leave_history  阿姨请假历史（田玉星 70%）
+     * @api {get} /worker/handle-worker-leave-history  阿姨请假历史（田玉星 70%）
      * @apiName actionHandleWorkerLeaveHistory
      * @apiGroup Worker
      * 
@@ -812,8 +809,7 @@ class WorkerController extends \api\components\Controller
      *      "msg":"操作成功",
      *      "ret":
      *      {
-     *          "result": "1",
-     *          "msg": "您的请假已提交，请耐心等待审批。"
+     *         
      *      }
      * }
      *
@@ -824,26 +820,25 @@ class WorkerController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"Failed",
-     *      "msg": "SessionIdNotFound"
+     *      "code":"error",
+     *      "msg": "阿姨不存在"
      *  }
      *
      */
      public function actionHandleWorkerLeaveHistory(){
-          $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
-          if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
+        $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
-          }
+        }
+        $worker = WorkerAccessToken::getWorker($param['access_token']);
+        if (!empty($worker) && !empty($worker->id)) {
 
-          $worker = WorkerAccessToken::getWorker($param['access_token']);
-          if (!empty($worker) && !empty($worker->id)) {
-               
-               //调取阿姨请假历史情况
-               return $this->send($result,"操作成功","ok");
-          }else{
+             //调取阿姨请假历史情况
+             return $this->send(null,"操作成功","ok");
+        }else{
 
-               return $this->send(null, "阿姨不存在.", "error", 403);
-          }
+             return $this->send(null, "阿姨不存在.", "error", 403);
+        }
           
      }
 
@@ -879,21 +874,21 @@ class WorkerController extends \api\components\Controller
      *
      */
     public function actionGetWorkerPlaceById(){
-          $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
-          if (empty(@$param['access_token']) || !WorkerAccessToken::checkAccessToken(@$param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
-          }
-          $worker = WorkerAccessToken::getWorker($param['access_token']);
-          if (!empty($worker) && !empty($worker->id)) {
-               $workerInfo = Worker::getWorkerDetailInfo($worker->id);
-               $ret = array(
-                    "result"=>'1',
-                    "live_place"=>$workerInfo['worker_live_place']
-               );
-               return $this->send($ret, "操作成功.", "ok");
-          }else{
-               return $this->send(null, "阿姨不存在.", "error", 404);
-          }
+        $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
+          return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
+        $worker = WorkerAccessToken::getWorker($param['access_token']);
+        if (!empty($worker) && !empty($worker->id)) {
+             $workerInfo = Worker::getWorkerDetailInfo($worker->id);
+             $ret = array(
+                  "result"=>'1',
+                  "live_place"=>$workerInfo['worker_live_place']
+             );
+             return $this->send($ret, "操作成功.", "ok");
+        }else{
+             return $this->send(null, "阿姨不存在.", "error", 404);
+        }
     }
     /**
      * @api {get} /v2/FixedUserPeriod.php  固定客户列表
@@ -987,6 +982,28 @@ class WorkerController extends \api\components\Controller
     
    
     }
+
+
+/**
+ * 获得所有投诉
+ */
+
+/**
+ * 提交请假
+ */
+
+/**
+ * 查看请假历史
+ */
+/**
+ * 获取对阿姨的评论
+ */
+/**
+ * 获取该阿姨的消息列表
+ */
+/**
+ * 删除阿姨消息
+ */
     
     
 

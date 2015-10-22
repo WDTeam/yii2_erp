@@ -1070,6 +1070,7 @@ class OrderController extends \api\components\Controller
      */
 
 
+
     /**
      * @api {get} v1/order/no_settlement_order_list.php  未结算订单(0%zhaoshunli)
      * @apiName actionNoSettlementOrderList
@@ -1119,6 +1120,42 @@ class OrderController extends \api\components\Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
         return Order::push($order_id);
     }
+
+    /**
+     * 获得某个订单的状态历史信息
+     */
+
+    /**
+     * 评价订单
+     */
+
+    /**
+     * 增加积分
+     */
+
+    /**
+     * 查询订单可被抢单 10条来自周期订单 10条来自普通订单
+     */
+
+    /**
+     * 查看该阿姨所有未交罚款记录
+     */
+
+    /**
+     * 获得该阿姨所有未领取任务奖励记录
+     */
+    /**
+     * 获得所有该阿姨已经完成未对账订单
+     */
+    /**
+     * 提交订单确认无误
+     */
+    /**
+     * 获得该阿姨在各个状态的 任务列表
+     */
+    /**
+     * 依据任务id 查询任务详情
+     */
 }
 
 ?>

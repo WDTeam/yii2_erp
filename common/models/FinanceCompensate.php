@@ -39,7 +39,7 @@ class FinanceCompensate extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['finance_complaint_id', 'worker_id', 'customer_id', 'updated_at', 'created_at', 'is_del','finance_compensate_status'], 'integer'],
+            [['finance_complaint_id', 'worker_id', 'customer_id', 'updated_at', 'created_at', 'isdel','finance_compensate_status'], 'integer'],
             [['finance_compensate_money'], 'number'],
             [['finance_compensate_reason', 'comment','worker_tel','worker_name','customer_name'], 'string'],
             [['finance_compensate_oa_code'], 'string', 'max' => 40],
@@ -64,6 +64,10 @@ class FinanceCompensate extends \yii\db\ActiveRecord
             'customer_name' => Yii::t('app', '客户姓名'),
             'finance_compensate_coupon' => Yii::t('app', ' 优惠券'),
             'finance_compensate_money' => Yii::t('app', ' 赔偿金额'),
+            'finance_compensate_total_money' => Yii::t('app', ' 赔偿总金额'),
+            'finance_compensate_insurance_money' => Yii::t('app', ' 保险理赔金额'),
+            'finance_compensate_company_money' => Yii::t('app', ' 公司理赔金额'),
+            'finance_compensate_worker_money' => Yii::t('app', ' 阿姨赔付金额'),
             'finance_compensate_reason' => Yii::t('app', '赔偿原因'),
             'finance_compensate_proposer' => Yii::t('app', '申请人'),
             'finance_compensate_auditor' => Yii::t('app', '审核人'),

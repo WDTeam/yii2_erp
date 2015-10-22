@@ -242,7 +242,7 @@ class UserController extends \api\components\Controller
     /**
      *
      * @api {POST} /user/set-default-address 设置默认地址 (已完成100%) 
-     *
+     * @apiDescription 用户每次下完单都会将该次地址设置为默认地址，下次下单优先使用默认地址
      * @apiName SetDefaultAddress
      * @apiGroup User
      *
@@ -444,64 +444,7 @@ class UserController extends \api\components\Controller
      *     }
      */
 
-    /**
-     *
-     * @api {GET} /user/setdefaultcity 获取用户个性化配置和优惠劵 （需求不明确；郝建设0%）
-     *
-     * @apiName GetCouponsAndPersonality
-     * @apiGroup User
-     *
-     * @apiParam {String} access_token 用户认证
-     * @apiParam {String} city 城市
-     * @apiParam {String} app_version 访问源(android_4.2.2)
-     *
-     * @apiSuccess {Object[]} myCoupons 用户拥有优惠劵.
-     * @apiSuccess {Object[]} personality 用户可以选择的个性化需求.
-     *
-     * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "code": "ok",
-     *       "msg": "设置成功"
-     *       "ret":{
-     *          "myCoupons": [
-     *           {
-     *               "is_expires": "0",
-     *               "expires_time": "2015.04.21-2016.04.20",
-     *               "freeStr": "30元擦玻璃充值券",
-     *               "service_second": "擦玻璃",
-     *               "service_main": "专业保洁",
-     *               "is_selected": "0",
-     *               "free_money": "30",
-     *               "free_code": "rr_27794"
-     *           }],
-     *          "personality": [
-     *              "重点打扫厨房",
-     *              "重点打扫卫生间",
-     *              "家有爱宠",
-     *              "上门前打个电话",
-     *              "很久没打扫了",
-     *              "阿姨不要很多话"
-     *           ]
-     *
-     *        }
-     *
-     *     }
-     *
-     * @apiError UserNotFound The id of the User was not found.
-     *
-     * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "error",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
-     */
-    public function actionGetCouponsAndPersonality()
-    {
-        
-    }
+
 
     /**
      *
@@ -552,7 +495,7 @@ class UserController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /user/getsharetext 获取分享优惠文本 （需求不明确；郝建设0%）
+     * @api {GET} /user/getsharetext 获取分享优惠文本 （待确定；郝建设0%）
      *
      * @apiName GetShareText
      * @apiGroup User
@@ -813,70 +756,7 @@ class UserController extends \api\components\Controller
         }
     }
 
-    /**
-     *
-     * @api {GET} /user/chooseusedworker 选择常用阿姨 （郝建设0%）
-     * @apiDescription 获得曾经使用过的所有阿姨和用户打扫时间空闲的阿姨
-     *
-     *
-     * @apiName ChooseUsedWorker
-     * @apiGroup User
-     *
-     * @apiParam {String} access_token 用户认证
-     * @apiParam {String} app_version 访问源(android_4.2.2)
-     * @apiParam {String} lng 经度
-     * @apiParam {String} lat 纬度
-     * @apiParam {String} date_format 预约日期
-     * @apiParam {String} time 预约时间段
-     * @apiParam {String} city 城市
-     *
-     * @apiSuccess {Object[]} usedWork 曾经服务过的阿姨.
-     * @apiSuccess {Object[]} now_free 在该时间段空闲阿姨.
-     *
-     * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "code": "ok",
-     *       "msg": ""
-     *       "ret":{
-     *          "usedWorker": [
-     *           {
-     *              "worker_id": "12507",
-     *              "face": "http://static.1jiajie.com/worker/face/12507.jpg",
-     *              "name": "陈琴昭测试",
-     *              "order_num": "服务:129次",
-     *              "kilometer": ">15km",
-     *              "star_rate": "0",
-     *              "last_serve_time": "最后服务时间:2015-08-24 18:06:30",
-     *              "shop_id": "1",
-     *              "is_fulltime": "兼职",
-     *              "telephone": "13401096964",
-     *              "isFull": "0"
-     *           }
-     *          ],
-     *          "now_free": []
-     *
-     *          }
-     *      }
-     *
-     *
-     *     }
-     *
-     * @apiError UserNotFound 用户认证已经过期.
-     *
-     * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "error",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
-     *
-     */
-    public function actionChooseUsedWorker()
-    {
-        
-    }
+
 
     /**
      *
