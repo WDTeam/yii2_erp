@@ -249,7 +249,7 @@ class server
         $url = 'http://dev.api.1jiajie.com/order/push/'.$data['order_id'];
 //        $url = 'http://api.me/order/push/'.$data['order_id'];
         $d = @file_get_contents($url);
-        $data = (array)json_decode($d);
+        $data1 = (array)json_decode($d);
         var_dump($d);
         return $data;
     }
@@ -264,6 +264,7 @@ class server
         $d = json_encode($data);
         var_dump($d);
         echo 'end:'. $data['order_id']."\n";
+        $server->push($this->ws->fd, $d);
         if(empty($this->ws)){$server->push($this->ws->fd, $d);}
 //        $this->broadcast($d);
     }
