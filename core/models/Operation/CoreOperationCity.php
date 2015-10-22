@@ -24,6 +24,15 @@ class CoreOperationCity extends CommonOperationCity
         }
         return $d;
     }
+
+    public static function getOnlineCitys($online = 1){
+        $data = self::find()->where(['operation_city_is_online' => $online])->all();
+        $d = array();
+        foreach((array)$data as $key => $value){
+            $d[$value['city_id'].'-'.$value['city_name']] = $value['city_name'];
+        }
+        return $data;
+    }
     
     public static function getCityList(){
         $data = self::find()->all();

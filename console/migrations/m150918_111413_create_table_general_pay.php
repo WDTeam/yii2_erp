@@ -29,7 +29,7 @@ class m150918_111413_create_table_general_pay extends Migration
             'general_pay_admin_name' => Schema::TYPE_STRING . '(30) DEFAULT \'\' NOT NULL COMMENT \'管理员名称\'' ,
             'worker_id' => Schema::TYPE_INTEGER . '(10) unsigned NOT NULL DEFAULT 0 COMMENT \'销售卡阿姨ID\'' ,
             'handle_admin_id' => Schema::TYPE_INTEGER . '(10) unsigned NOT NULL DEFAULT 0 COMMENT \'办卡人ID\'' ,
-            'general_pay_handle_admin_id' => Schema::TYPE_STRING . '(30) NOT NULL DEFAULT \'\' COMMENT \'办卡人名称\'' ,
+            'general_pay_handle_admin_name' => Schema::TYPE_STRING . '(30) NOT NULL DEFAULT \'\' COMMENT \'办卡人名称\'' ,
             'general_pay_verify' => Schema::TYPE_STRING . '(32) NOT NULL DEFAULT \'\' COMMENT \'支付验证\'' ,
             'is_reconciliation' => Schema::TYPE_BOOLEAN . '(1) NOT NULL DEFAULT 0 COMMENT \'是否对账\'' ,
             'created_at' => Schema::TYPE_INTEGER . '(10) unsigned NOT NULL DEFAULT 0 COMMENT \'创建时间\'' ,

@@ -1,6 +1,7 @@
 <?php
 
 namespace boss\controllers;
+use common\models\GeneralPayRefund;
 use Yii;
 use core\models\Customer;
 use core\models\CustomerTransRecord\CustomerTransRecord;
@@ -955,12 +956,58 @@ class GeneralPayController extends Controller
 
     public function actionTest()
     {
-        $model = new GeneralPay();
+        $obj = new GeneralPayRefund();
+        $condition['order_id'] = 1;
+        $condition['customer_id'] = 1;
+        $obj->call_pay_refund($condition['order_id'],$condition['customer_id']);
+        exit;
+        //微信APP退款
+        //商户订单号                  $param['out_trade_no'];
+        //财付通订单号                $param['transaction_id'];
+        //必须保证全局唯一，同个退款单号财付通认为是同笔请求
+        //商户退款单号                $param['out_refund_no']
+        //订单总金额,以分为单位        $param['total_fee'];
+        //退款金额,以分为单位          $param['refund_fee']
+        //操作员密码,MD5处理          $param['op_user_passwd']
+        //---------------------------------------------
+        //微信h5退款
+        //退款交易流水号               $param['transaction_id']
+        //退款订单号                  $param['out_trade_no']
+        //退款总金额,以分为单位        $param["total_fee"]
+        //退款金额,以分为单位          $param["refund_fee"];
+        //退款订单ID                  $param["trade_no"];
+        //---------------------------------------------
+        //百度APP退款
+        //服务器异步通知地址             $param['return_url'];
+        //退款订单号                     $param['sp_refund_no'];
+        //商户订单号                     $param['order_no'];
+        //退款金额(单位/分),以分为单位     $param['cashback_amount'];
+        //---------------------------------------------
+        //百度闭环退款
+        //服务器异步通知地址             $param['refund_url'];
+        //闭环订单号                     $param['order_id']
+        //商户订单号                     $param['order_no']
+
+        /**
+         * $order_id    订单ID
+         * $refund_fee 退款金额
+         * @return bool
+         */
+
+        //function requestRefund($order_id,$out_trade_no,$refund_fee);
+        //function confirmRefund
+
         $param = [
-            'refund_url' => 'http://dev.boss.1jiajie.com/general-pay/show',//退款总金额
-            'order_id' => '1',   //退款总金额
+            'return_url' => 'http://dev.boss.1jiajie.com/general-pay/show',//退款总金额
+            'sp_refund_no' => '1510210261185',   //退款订单号
+            'order_no' => '1510210133051',   //商户订单号
+            'cashback_amount' => 1,
         ];
 
+        $bfb = new \bfbrefund_class();
+        $bfb->refund($param);
+
+        exit;
         $zhidahao = new \zhidahao_refund_class();
         $re = $zhidahao->refund($param);
         dump($re);
