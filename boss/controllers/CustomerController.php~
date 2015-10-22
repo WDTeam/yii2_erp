@@ -348,8 +348,7 @@ class CustomerController extends Controller
                 $customer->general_region_id = 1;
                 $customer->customer_live_address_detail = $val['street'];
                 
-                // $customer->customer_balance = $val['charge_money'];
-                // $customer->customer_score = 0;
+     
                 $customer->customer_level = $val['level'];
                 $customer->customer_complaint_times = 0;
                 
@@ -359,8 +358,8 @@ class CustomerController extends Controller
                 $customer->customer_login_ip = '';
                 $customer->customer_login_time = 0;
                 $customer->customer_is_vip = $val['user_type'];
-                $customer->created_at = intval(strtotime($val['create_time']));
-                $customer->updated_at = intval(strtotime($val['update_time']));
+                $customer->created_at = strtotime($val['create_time']);
+                $customer->updated_at = 0;
                 $customer->is_del = $val['is_block'];
                 $customer->customer_del_reason = '辱骂阿姨';
                 $customer->validate();
@@ -402,43 +401,39 @@ class CustomerController extends Controller
                 }
                 $customerScore->save();
 
-                $command = $connection->createCommand("SELECT * FROM user_comment where id=".$val['id']);
-                $userComment = $command->queryAll();
-                if ($userComment) {
-                    // print_r($userComment);
-                    // exit();
-                    $customerComment = new CustomerComment;
-                    $customerComment->customer_id = $customer->id;
-                    $customerComment->order_id = $userComment[0]['order_id'];
-                    $customerComment->customer_comment_phone = $userComment[0]['user_telephone'];
-                    $customerComment->customer_comment_content = $userComment[0]['comment'];
-                    $customerComment->customer_comment_level = $userComment[0]['star_rate'];
+                //$command = $connection->createCommand("SELECT * FROM user_comment where id=".$val['id']);
+                //$userComment = $command->queryAll();
+                //if ($userComment) {
+                 //   $customerComment = new CustomerComment;
+                  //  $customerComment->customer_id = $customer->id;
+                    //$customerComment->order_id = $userComment[0]['order_id'];
+                   // $customerComment->customer_comment_phone = $userComment[0]['user_telephone'];
+                    //$customerComment->customer_comment_content = $userComment[0]['comment'];
+                   // $customerComment->customer_comment_level = $userComment[0]['star_rate'];
                     
-                    switch ($userComment[0]['is_anonymous']) {
-                        case 1:
-                            $customer_comment_anonymous = 0;
-                            break;
-                        case 0:
-                            $customer_comment_anonymous = 1;
-                            break;
-                        
-                        default:
+                   // switch ($userComment[0]['is_anonymous']) {
+                    //    case 1:
+                           // $customer_comment_anonymous = 0;
+                     //       break;
+                     //   case 0:
+                            //$customer_comment_anonymous = 1;
+                     //    //   break;
+                     //   
+                    //    default:
                             # code...
-                            break;
-                    }
-                    $customerComment->customer_comment_anonymous = $customer_comment_anonymous;
+                   //         break;
+                   // }
+                   // $customerComment->customer_comment_anonymous = $customer_comment_anonymous;
                     
-                    $customerComment->created_at = strtotime($userComment[0]['create_time']);
-                    $customerComment->is_del = $userComment[0]['is_hide'];
-                    $customerComment->validate();
-                    if ($customerComment->hasErrors()) {
-                        // var_dump($customerComment->getErrors());
-                        // die();
-                        echo "<br/>数据有误略过";
-                        continue;
-                    }
-                    $customerComment->save();
-                }
+                   // $customerComment->created_at = strtotime($userComment[0]['create_time']);
+                    //$customerComment->is_del = $userComment[0]['is_hide'];
+                   // $customerComment->validate();
+                    //if ($customerComment->hasErrors()) {
+                     //   echo "<br/>数据有误略过";
+                    //    continue;
+                   // }
+                   // $customerComment->save();
+                //}
                 
                 $customerAddress = new CustomerAddress;
                 $customerAddress->customer_id = $customer->id;
