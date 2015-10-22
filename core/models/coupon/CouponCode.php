@@ -29,7 +29,7 @@ class CouponCode extends \common\models\coupon\CouponCode
 			return false;
 		}
 		$couponCode = self::find()->where(['coupon_id'=>$id])->all();
-		if(empty($couponCode){
+		if(empty($couponCode)){
 			return false;
 		}
 		return $couponCode;

@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 
+use core\models\coupon\Coupon;
 use core\models\coupon\CouponCode;
 
 /**
@@ -47,7 +48,15 @@ $this->params['breadcrumbs'][] = $this->title;
 			['class' => 'yii\grid\CheckboxColumn',],
 
             //'id',
-            'coupon_name',
+            //'coupon_name',
+			[
+                'format' => 'raw',
+                'label' => '优惠券名称',
+                'value' => function ($dataProvider) {
+                    return $dataProvider->coupon_name == '' ? '-' : $dataProvider->coupon_name;
+                },
+                'width' => "120px",
+            ],
 			[
                 'format' => 'raw',
                 'label' => '优惠码',
@@ -72,17 +81,32 @@ $this->params['breadcrumbs'][] = $this->title;
 						return $coupon_code_str;
 					}
                 },
+                'width' => "120px",
+            ],
+			[
+                'format' => 'raw',
+                'label' => '优惠券面值',
+                'value' => function ($dataProvider) {
+                    return $dataProvider->coupon_price == '' ? '-' : $dataProvider->coupon_price;
+                },
                 'width' => "80px",
             ],
-            'coupon_price',
             //'coupon_type',
 			
-            'coupon_type_name',
+            //'coupon_type_name',
+			[
+                'format' => 'raw',
+                'label' => '优惠券类型名称',
+                'value' => function ($dataProvider) {
+                    return $dataProvider->coupon_type_name == '' ? '-' : $dataProvider->coupon_type_name;
+                },
+                'width' => "80px",
+            ],
 //            'coupon_service_type_id', 
 //            'coupon_service_type_name', 
 //            'coupon_service_id', 
 //            'coupon_service_name', 
-				[
+			[
                 'format' => 'raw',
                 'label' => '服务',
                 'value' => function ($dataProvider) {
@@ -112,7 +136,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'coupon_city_limit', 
 //            'coupon_city_id', 
 //            'coupon_city_name', 
-				[
+			[
                 'format' => 'raw',
                 'label' => '城市',
                 'value' => function ($dataProvider) {
@@ -176,7 +200,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template'=>'{edit}{disable}{view}',
+                'template'=>'{edit} | {disable} | {view}',
                 'buttons' => [
                     'edit' => function ($url, $model) {
                         return Html::a('编辑', [
