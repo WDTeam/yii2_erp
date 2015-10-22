@@ -16,7 +16,6 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $customer_trans_record_pay_channel
  * @property integer $customer_trans_record_mode
  * @property integer $customer_trans_record_mode_name
- * @property string $customer_trans_record_promo_code_money
  * @property string $customer_trans_record_coupon_money
  * @property string $customer_trans_record_cash
  * @property string $customer_trans_record_pre_pay
@@ -118,7 +117,7 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         return [
             [['customer_id', 'customer_trans_record_order_channel', 'pay_channel_id', 'customer_trans_record_pay_channel', 'customer_trans_record_mode_name', 'customer_trans_record_refund_money', 'customer_trans_record_verify'], 'required'],
             [['customer_id', 'order_id', 'order_channel_id',  'pay_channel_id', 'customer_trans_record_mode',  'created_at', 'updated_at', 'is_del'], 'integer'],
-            [['customer_trans_record_promo_code_money', 'customer_trans_record_coupon_money', 'customer_trans_record_cash', 'customer_trans_record_pre_pay', 'customer_trans_record_online_pay', 'customer_trans_record_online_balance_pay', 'customer_trans_record_online_service_card_pay','customer_trans_record_online_service_card_current_balance','customer_trans_record_online_service_card_befor_balance', 'customer_trans_record_refund_money',  'customer_trans_record_order_total_money', 'customer_trans_record_total_money', 'customer_trans_record_current_balance', 'customer_trans_record_befor_balance','customer_trans_record_compensate_money'], 'number'],
+            [['customer_trans_record_coupon_money', 'customer_trans_record_cash', 'customer_trans_record_pre_pay', 'customer_trans_record_online_pay', 'customer_trans_record_online_balance_pay', 'customer_trans_record_online_service_card_pay','customer_trans_record_online_service_card_current_balance','customer_trans_record_online_service_card_befor_balance', 'customer_trans_record_refund_money',  'customer_trans_record_order_total_money', 'customer_trans_record_total_money', 'customer_trans_record_current_balance', 'customer_trans_record_befor_balance','customer_trans_record_compensate_money'], 'number'],
             //[['customer_trans_record_online_service_card_on'], 'string', 'max' => 30],
             //[['customer_trans_record_transaction_id'], 'string', 'max' => 40],
             [['customer_trans_record_remark'], 'string', 'max' => 255],
@@ -154,7 +153,6 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
                 'customer_trans_record_pay_channel',    //支付渠道名称
                 'customer_trans_record_mode',   //交易方式:1消费,2=充值,3=退款,4=补偿
                 'customer_trans_record_mode_name',  //交易方式:1消费,2=充值,3=退款,4=补偿
-                'customer_trans_record_promo_code_money',   //优惠码金额
                 'customer_trans_record_coupon_money',   //优惠券金额
                 'customer_trans_record_online_pay', //在线支付
                 'customer_trans_record_online_balance_pay', //在线余额支付
@@ -287,7 +285,6 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
                 'customer_trans_record_pay_channel',    //支付渠道名称
                 'customer_trans_record_mode',   //交易方式:1消费,2=充值,3=退款,4=补偿
                 'customer_trans_record_mode_name',  //交易方式:1消费,2=充值,3=退款,4=补偿
-                'customer_trans_record_promo_code_money',   //优惠码金额
                 'customer_trans_record_coupon_money',   //优惠券金额
                 'customer_trans_record_online_pay', //在线支付
                 'customer_trans_record_order_total_money',  //订单总额
@@ -532,11 +529,15 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         //之前余额
         $this->customer_trans_record_befor_balance = $lastResult['customer_trans_record_befor_balance'] ? $lastResult['customer_trans_record_befor_balance'] : 0;
         //当前余额
-        $this->customer_trans_record_current_balance = $lastResult['customer_trans_record_befor_balance'] ? $lastResult['customer_trans_record_befor_balance'] : 0;
+        $this->customer_trans_record_current_balance = bcadd($lastResult['customer_trans_record_befor_balance'], $this->customer_trans_record_online_balance_pay);
         //服务卡之前余额
         $this->customer_trans_record_online_service_card_befor_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] ? $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] : 0;
         //服务卡当前余额
-        $this->customer_trans_record_online_service_card_current_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] ? $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] : 0;
+        $this->customer_trans_record_online_service_card_current_balance = bcadd($lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] , $this->customer_trans_record_online_service_card_pay);
+        //交易总额
+        $this->customer_trans_record_total_money = bcsub($lastResult['customer_trans_record_total_money'],$this->customer_trans_record_order_total_money);
+        //退款总额
+        $this->customer_trans_record_refund_money = bcadd(bcadd(bcadd($this->customer_trans_record_coupon_money, $this->customer_trans_record_online_service_card_pay),$this->customer_trans_record_online_balance_pay),$this->customer_trans_record_online_pay);
 
         return $this->insert();
     }
@@ -640,7 +641,6 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
             'customer_trans_record_pay_channel' => Yii::t('app', '支付渠道名称'),
             'customer_trans_record_mode' => Yii::t('app', '交易方式:1消费,2=充值,3=退款,4=补偿'),
             'customer_trans_record_mode_name' => Yii::t('app', '交易方式名称'),
-            'customer_trans_record_promo_code_money' => Yii::t('app', '优惠码金额'),
             'customer_trans_record_coupon_money' => Yii::t('app', '优惠券金额'),
             'customer_trans_record_cash' => Yii::t('app', '现金支付'),
             'customer_trans_record_pre_pay' => Yii::t('app', '预付费金额（第三方）'),
