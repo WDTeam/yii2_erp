@@ -956,10 +956,11 @@ class GeneralPayController extends Controller
 
     public function actionTest()
     {
-        $obj = new GeneralPayRefund();
+        $obj = new \core\models\GeneralPay\GeneralPayRefund();
         $condition['order_id'] = 1;
         $condition['customer_id'] = 1;
-        $obj->call_pay_refund($condition['order_id'],$condition['customer_id']);
+        $s = $obj->call_pay_refund($condition['order_id'],$condition['customer_id']);
+        var_dump($s);
         exit;
         //微信APP退款
         //商户订单号                  $param['out_trade_no'];
