@@ -18,6 +18,19 @@ class FinanceCompensate extends FinanceCompensateModel
     
     const FINANCE_COMPENSATE_REVIEW_FAILED = -1;//不通过
     
+    private $financeCompensateStatusArr = [self::FINANCE_COMPENSATE_REVIEW_INIT=>'提出申请，待财务打款确认',
+        self::FINANCE_COMPENSATE_REVIEW_PASSED=>'财务已打款确认',
+        self::FINANCE_COMPENSATE_REVIEW_FAILED=>'财务不通过',
+        ];
+    
+    const FINANCE_COMPENSATE_DELETE = 1;//已被逻辑删除
+    
+    const FINANCE_COMPENSATE_NO_DELETE = 0;//未被逻辑删除
+    
+    public $finance_compensate_starttime;//赔偿申请开始时间
+    
+    public $finance_compensate_endtime;//赔偿申请结束时间
+    
     public function rules()
     {
         return [
@@ -35,7 +48,7 @@ class FinanceCompensate extends FinanceCompensateModel
 
     public function search($params)
     {
-        $query = FinanceCompensateModel::find();
+        $query = FinanceCompensate::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -62,5 +75,19 @@ class FinanceCompensate extends FinanceCompensateModel
             ->andFilterWhere(['like', 'comment', $this->comment]);
 
         return $dataProvider;
+    }
+    
+    public function  getFinanceCompensateStatusDes($status){
+        return $this->financeCompensateStatusArr[$status];
+    }
+    
+    public function attributeLabels()
+    {
+        $parentAttributeLabels = parent::attributeLabels();
+        $addAttributeLabels = [
+            'finance_compensate_starttime' => Yii::t('app', '赔偿申请开始时间'),
+            'finance_compensate_endtime' => Yii::t('app', '赔偿申请结束时间'),
+        ];
+        return array_merge($addAttributeLabels,$parentAttributeLabels);
     }
 }
