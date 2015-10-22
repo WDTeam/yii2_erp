@@ -19,6 +19,7 @@ use core\models\worker\Worker;
 use Yii;
 use common\models\Order as OrderModel;
 use common\models\OrderStatusDict;
+use common\models\OrderExtCustomer;
 use common\models\OrderSrc;
 use common\models\FinanceOrderChannel;
 use yii\base\Exception;
