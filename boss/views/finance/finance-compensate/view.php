@@ -1,8 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use kartik\detail\DetailView;
-use kartik\datecontrol\DateControl;
+use kartik\widgets\ActiveForm;
 
 /**
  * @var yii\web\View $this
@@ -15,42 +14,33 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="finance-compensate-view">
   <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">赔偿详细信息</h3>
+        </div>
         <div class="panel-body">
-
-                <?= DetailView::widget([
-                        'model' => $model,
-                        'condensed'=>false,
-                        'hover'=>true,
-                        'mode'=>Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
-                        'panel'=>[
-                        'heading'=>$this->title,
-                        'type'=>DetailView::TYPE_INFO,
-                    ],
-                    'attributes' => [
-                        'id',
-                        'finance_compensate_oa_code',
-                        'finance_complaint_id',
-                        'worker_id',
-                        'customer_id',
-                        'finance_compensate_coupon',
-                        'finance_compensate_money',
-                        'finance_compensate_reason:ntext',
-                        'finance_compensate_proposer',
-                        'finance_compensate_auditor',
-                        'comment:ntext',
-                        'updated_at',
-                        'created_at',
-                        'isdel',
-                    ],
-                    'deleteOptions'=>[
-                    'url'=>['delete', 'id' => $model->id],
-                    'data'=>[
-                    'confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'),
-                    'method'=>'post',
-                    ],
-                    ],
-                    'enableEditMode'=>true,
-                ]) ?>
+        <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL,'readonly'=>true,]); 
+        ?>
+            <?= $form->field($model, 'finance_compensate_oa_code'); ?>
+            <?= $form->field($model, 'finance_compensate_money'); ?>
+            <div class="form-group compensateCouponList">
+                <label class="control-label col-md-2" for="financecompensate-finance_compensate_coupon"> 优惠券</label>
+                <?php 
+                    $finance_compensate_coupon =  $model->finance_compensate_coupon;
+                    $finance_compensate_coupon_money =  $model->finance_compensate_coupon_money;
+                    $finance_compensate_coupon_arr = explode(";", $finance_compensate_coupon);
+                    $finance_compensate_coupon_money_arr = explode(";", $finance_compensate_coupon_money);
+                    $i = 0;
+                    foreach($finance_compensate_coupon_arr as $key => $value){
+                        echo '<div class="col-md-10"><input type="text" class="form-control" value = "'.$value.'"style="width:500px;height:35px;"   name="finance_compensate_coupon[]" id = "finance_compensate_coupon" readonly>&nbsp;&nbsp;<label style="color: #F00;" class = "coupon_money">金额：'.$finance_compensate_coupon_money_arr[$i].'</label></div>';
+                        $i++;
+                    }
+                ?>
+            </div>
+            <?= $form->field($model, 'finance_compensate_total_money'); ?>
+            <?= $form->field($model, 'finance_compensate_insurance_money'); ?>
+            <?= $form->field($model, 'finance_compensate_company_money'); ?>
+            <?= $form->field($model, 'finance_compensate_worker_money'); ?>
+            <?= $form->field($model, 'finance_compensate_reason'); ?>
         </div>
     </div>
     <div class="panel panel-info">

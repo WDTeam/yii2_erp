@@ -272,6 +272,29 @@ class GeneralPayCommon extends \yii\db\ActiveRecord
     }
 
     /**
+     * 订单支付退款
+     * @param $data
+     */
+    public static function orderRefund($data)
+    {
+        $orderInfo = self::orderInfo($data['order_id']);
+        //获取余额支付
+        $balancePay = $orderInfo->orderExtPay->order_use_acc_balance;  //余额支付
+
+        //获取服务卡支付
+        $service_card_on = $orderInfo->orderExtPay->card_id;    //服务卡ID
+        $service_card_pay = $orderInfo->orderExtPay->order_use_card_money;   //服务卡内容
+
+        //执行自有退款
+        if( !empty($balancePay) ){
+            //余额支付退款
+            Customer::incBalance($data['customer_id'],$balancePay);
+        }elseif( !empty($service_card_on) && !empty($service_card_pay) ){
+            //服务卡支付退款
+        }
+    }
+
+    /**
      * 获取记录ID
      * @param $out_trade_no 交易ID
      */

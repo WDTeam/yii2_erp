@@ -27,6 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'worker_tel',
             'customer_id',
             'finance_compensate_coupon', 
+            'finance_compensate_coupon_money', 
             'finance_compensate_money', 
             'finance_compensate_insurance_money',
             'finance_compensate_company_money',
@@ -42,8 +43,12 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
+                'view' => function ($url, $model) {
+                                return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Yii::$app->urlManager->createUrl(['/finance/finance-compensate/view','id' => $model->id]), [
+                                                'title' => Yii::t('yii', 'View'),'data-pjax'=>'0','target' => '_blank',
+                                              ]);},
                 'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['/finance/finance-compensate/view','id' => $model->id,'edit'=>'t']), [
+                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['/finance/finance-compensate/create','id' => $model->id]), [
                                                     'title' => Yii::t('yii', 'Edit'),
                                                   ]);}
 

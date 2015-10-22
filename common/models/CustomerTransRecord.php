@@ -269,10 +269,13 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
                 'customer_trans_record_pay_channel',    //支付渠道名称
                 'customer_trans_record_mode',   //交易方式:1消费,2=充值,3=退款,4=补偿
                 'customer_trans_record_mode_name',  //交易方式:1消费,2=充值,3=退款,4=补偿
+                'customer_trans_record_online_pay', //线上支付
+                'customer_trans_record_online_service_card_on', //服务卡ID
+                'customer_trans_record_online_service_card_pay', //服务卡内容
+                'customer_trans_record_coupon_money',   //优惠券金额
+                'customer_trans_record_online_balance_pay', //余额支付
                 'customer_trans_record_order_total_money',  //订单总额
                 'customer_trans_record_refund_money',   //退款金额
-                'customer_trans_record_online_service_card_on', //服务卡号
-                'customer_trans_record_online_service_card_pay',    //服务卡支付金额
                 'customer_trans_record_transaction_id', //交易流水号
             ],
             //1=在线支付（在线）onlinePay

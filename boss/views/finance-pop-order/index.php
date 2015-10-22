@@ -109,7 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'format' => 'raw',
             'label' => '状态',
             'value' => function ($dataProvider) {
-            if($dataProvider->finance_pop_order_status==1){ $status='结算';}elseif($dataProvider->finance_pop_order_status==2){ $status='<font color="red">退款</font>';}elseif($dataProvider->finance_pop_order_status==3){ $status='<font color="red">服务费</font>';}elseif($dataProvider->finance_pop_order_status==4){ $status='<font color="red">转账</font>';}
+            if($dataProvider->finance_pop_order_status==1){ $status='结算';}elseif($dataProvider->finance_pop_order_status==2){ $status='<font color="red">退款</font>';}elseif($dataProvider->finance_pop_order_status==3){ $status='<font color="red">服务费</font>';}elseif($dataProvider->finance_pop_order_status==4){ $status='<font color="red">转账</font>';}elseif($dataProvider->finance_pop_order_status==5){ $status='<font color="red">交易失败</font>';}
             	return $status;
             },
             'width' => "100px",
@@ -179,11 +179,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'type'=>'info',
            'before'=>
            Html::submitButton(Yii::t('app', '批量 '), ['class' => 'btn btn-default','style' => 'margin-right:10px']).
-           Html::a('<i class="glyphicon" ></i>对账成功(总额:'.$searchModel->OrderPayStatus(1,$lastidRecordLogid).')', ['index?FinancePopOrderSearch[finance_pop_order_pay_status_type]=1&id='.$lastidRecordLogid], ['class' => 'btn btn-'.$searchModel->defaultcss(1,$statusdeflde).'', 'style' => 'margin-right:10px']) .
-Html::a('<i class="glyphicon" ></i>我有你没 (总额:'.$searchModel->OrderPayStatus(3,$lastidRecordLogid).')', ['orderlist?FinancePopOrderSearch[finance_pop_order_pay_status_type]=3&id='.$lastidRecordLogid], ['class' => 'btn btn-'.$searchModel->defaultcss(3,$statusdeflde).'', 'style' => 'margin-right:10px']) .
-Html::a('<i class="glyphicon" ></i>你有我没 (总额:'.$searchModel->OrderPayStatus('2',$lastidRecordLogid).')', ['index?FinancePopOrderSearch[finance_pop_order_pay_status_type]=2&id='.$lastidRecordLogid], ['class' => 'btn btn-'.$searchModel->defaultcss(2,$statusdeflde).'', 'style' => 'margin-right:10px']) .
-Html::a('<i class="glyphicon" ></i>金额不对 (总额:'.$searchModel->OrderPayStatus(4,$lastidRecordLogid).')', ['index?FinancePopOrderSearch[finance_pop_order_pay_status_type]=4&id='.$lastidRecordLogid], ['class' => 'btn btn-'.$searchModel->defaultcss(4,$statusdeflde).'', 'style' => 'margin-right:10px']) .
-Html::a('<i class="glyphicon" ></i>状态不对(总额:'.$searchModel->OrderPayStatus(5,$lastidRecordLogid).')', ['index?FinancePopOrderSearch[finance_pop_order_pay_status_type]=5&id='.$lastidRecordLogid], ['class' => 'btn btn-'.$searchModel->defaultcss(5,$statusdeflde).'', 'style' => 'margin-right:10px']),
+           Html::a('<i class="glyphicon" ></i>对账成功(总额:'.$searchModel->OrderPayStatus(1,$lastidRecordLogid,$channleid).')', ['index?FinancePopOrderSearch[finance_pop_order_pay_status_type]=1&id='.$lastidRecordLogid], ['class' => 'btn btn-'.$searchModel->defaultcss(1,$statusdeflde).'', 'style' => 'margin-right:10px']) .
+Html::a('<i class="glyphicon" ></i>我有你没 (总额:'.$searchModel->OrderPayStatus(3,$lastidRecordLogid,$channleid).')', ['orderlist?FinancePopOrderSearch[finance_pop_order_pay_status_type]=3&id='.$lastidRecordLogid], ['class' => 'btn btn-'.$searchModel->defaultcss(3,$statusdeflde).'', 'style' => 'margin-right:10px']) .
+Html::a('<i class="glyphicon" ></i>你有我没 (总额:'.$searchModel->OrderPayStatus('2',$lastidRecordLogid,$channleid).')', ['index?FinancePopOrderSearch[finance_pop_order_pay_status_type]=2&id='.$lastidRecordLogid], ['class' => 'btn btn-'.$searchModel->defaultcss(2,$statusdeflde).'', 'style' => 'margin-right:10px']) .
+Html::a('<i class="glyphicon" ></i>金额不对 (总额:'.$searchModel->OrderPayStatus(4,$lastidRecordLogid,$channleid).')', ['index?FinancePopOrderSearch[finance_pop_order_pay_status_type]=4&id='.$lastidRecordLogid], ['class' => 'btn btn-'.$searchModel->defaultcss(4,$statusdeflde).'', 'style' => 'margin-right:10px']) .
+Html::a('<i class="glyphicon" ></i>状态不对(总额:'.$searchModel->OrderPayStatus(5,$lastidRecordLogid,$channleid).')', ['index?FinancePopOrderSearch[finance_pop_order_pay_status_type]=5&id='.$lastidRecordLogid], ['class' => 'btn btn-'.$searchModel->defaultcss(5,$statusdeflde).'', 'style' => 'margin-right:10px']),
 			/* 'after' => Html::a('批量审核',
 			['index'],
 			['class' => 'btn btn-default']), */
