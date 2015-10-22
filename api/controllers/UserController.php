@@ -1,4 +1,4 @@
-<?php
+o<?php
 
 namespace api\controllers;
 
@@ -308,10 +308,10 @@ class UserController extends \api\components\Controller
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      * @apiParam {String} address_id 地址id
-     * @apiParam {String} operation_area_name 地区名（朝阳区）
-     * @apiParam {String} address_detail 详细地址信息
-     * @apiParam {String} address_nickname 联系人
-     * @apiParam {String} address_phone 联系电话
+     * @apiParam {String} [operation_area_name] 地区名（朝阳区）
+     * @apiParam {String} [address_detail] 详细地址信息
+     * @apiParam {String} [address_nickname] 联系人
+     * @apiParam {String} [address_phone] 联系电话
      *
      * @apiSuccess {Object[]} address 新增地址.
      *
@@ -444,11 +444,9 @@ class UserController extends \api\components\Controller
      *     }
      */
 
-
-
     /**
      *
-     * @api {GET} /user/exchangecoupon 兑换优惠劵 （没有此需求）
+     * @api {GET} /user/exchange-coupon 兑换优惠劵 （没有此需求）
      *
      * @apiName ExchangeCoupon
      * @apiGroup User
@@ -456,7 +454,7 @@ class UserController extends \api\components\Controller
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} city 城市
      * @apiParam {String} coupon_code 优惠码
-     * @apiParam {String} app_version 访问源(android_4.2.2)
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      *
      * @apiSuccessExample Success-Response:
@@ -495,13 +493,13 @@ class UserController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /user/getsharetext 获取分享优惠文本 （待确定；郝建设0%）
+     * @api {GET} /user/get-share-text 获取分享优惠文本 （待确定；郝建设0%）
      *
      * @apiName GetShareText
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} app_version 访问源(android_4.2.2)
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      *
      * @apiSuccessExample Success-Response:
@@ -542,14 +540,14 @@ class UserController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /user/deleteUsedWorker 删除常用阿姨 （功能已经实现,需再次核实 100%）
+     * @api {GET} /user/delete-used-worker 删除常用阿姨 （功能已经实现,需再次核实 100%）
      *
      *
      * @apiName deleteUsedWorker
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} app_version 访问源(android_4.2.2)
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
      * @apiParam {String} worker_id  阿姨id
      *
      * @apiSuccessExample Success-Response:
@@ -581,7 +579,7 @@ class UserController extends \api\components\Controller
      *     }
      *
      */
-    public function actionDelWorker()
+    public function actionDeleteUserWorker()
     {
         $param = Yii::$app->request->post();
         if (empty($param)) {
@@ -615,14 +613,14 @@ class UserController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /user/blacklistworkers 黑名单阿姨列表 （功能已经完成,需要核实传递参数和返回数据格式 已完成100%）
+     * @api {GET} /user/black-list-workers 黑名单阿姨列表 （功能已经完成,需要核实传递参数和返回数据格式 已完成100%）
      * @apiDescription 获得该用户添加进黑名单的阿姨
      *
      * @apiName blacklistworkers
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} app_version 访问源(android_4.2.2)
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -662,7 +660,7 @@ class UserController extends \api\components\Controller
      *
      *
      */
-    public function actionBlackWorkers()
+    public function actionBlackListWorkers()
     {
         $param = Yii::$app->request->post();
         if (empty($param)) {
@@ -690,14 +688,14 @@ class UserController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /user/RemoveWorker 移除黑名单中的阿姨 （功能已经实现,需要再次确认传递参数 已完成100%）
+     * @api {GET} /user/remove-worker 移除黑名单中的阿姨 （功能已经实现,需要再次确认传递参数 已完成100%）
      *
      *
      * @apiName RemoveWorker
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} app_version 访问源(android_4.2.2)
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
      * @apiParam {String} worker_id 阿姨id
      *
      * @apiSuccessExample Success-Response:
@@ -722,11 +720,6 @@ class UserController extends \api\components\Controller
      */
     public function actionRemoveWorker()
     {
-
-//        $params = Yii::$app->request->post();
-//        $accessToken = $params['access_token'];
-//        $addressId = $params['worker_id'];
-
         $param = Yii::$app->request->post();
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
@@ -756,19 +749,17 @@ class UserController extends \api\components\Controller
         }
     }
 
-
-
     /**
      *
-     * @api {GET} /user/usermoney 用户余额和消费记录 （已完成99% 数据已经全部取出,需要给出所需字段,然后给予返回;）
-     *
+     * @api {GET} /user/user-money 用户余额和消费记录 （已完成99% 数据已经全部取出,需要给出所需字段,然后给予返回;）
+     *user-money
      *
      * @apiName UserMoney
      *
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} app_version 访问源(android_4.2.2)
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      * @apiSuccess {Object} UserMoney 用户当前余额和消费记录对象
      *
@@ -864,14 +855,14 @@ class UserController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /user/userscore 用户积分明细 （功能已实现,不明确需求端所需字段格式 90%）
+     * @api {GET} /user/user-score 用户积分明细 （功能已实现,不明确需求端所需字段格式 90%）
      *
      * @apiDescription 获取用户当前积分，积分兑换奖品信息，怎样获取积分信息
      * @apiName Userscore
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} app_version 访问源(android_4.2.2)
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -952,14 +943,14 @@ class UserController extends \api\components\Controller
 
     /**
      *
-     * @api {POST} /user/usersuggest 用户提交意见反馈 （需要再次核实需求;郝建设0%）
+     * @api {POST} /user/user-suggest 用户提交意见反馈 （需要再次核实需求;郝建设0%）
      *
      * @apiName UserSuggest
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} app_version 访问源(android_4.2.2)
-     * @apiParam {String} suggest 用户意见
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} [suggest] 用户意见
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -986,5 +977,4 @@ class UserController extends \api\components\Controller
     }
 
 }
-
 ?>
