@@ -47,6 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'worker_tel',
             'customer_id',
             'finance_compensate_coupon', 
+            'finance_compensate_coupon_money', 
             'finance_compensate_money', 
             'finance_compensate_insurance_money',
             'finance_compensate_company_money',

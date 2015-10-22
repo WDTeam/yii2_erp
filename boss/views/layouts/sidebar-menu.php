@@ -437,7 +437,7 @@ echo Menu::widget(
                             
                     ],
                     [
-                        'label' => '赔偿管理(65%)',
+                        'label' => '赔偿管理(95%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                         'options' => [
@@ -445,12 +445,12 @@ echo Menu::widget(
                         ],
                         'items' => [
                         [
-                        'label' => '财务确认赔偿(80%)',
+                        'label' => '财务确认赔偿(95%)',
                         'url' => ['/finance/finance-compensate/finance-confirm-index'],
                         'icon' => 'fa fa-angle-right',
                         ],
                         [
-                        'label' => '赔偿查询(50%)',
+                        'label' => '赔偿查询(95%)',
                         'url' => ['/finance/finance-compensate/index'],
                         'icon' => 'fa fa-angle-right',
                         ],
