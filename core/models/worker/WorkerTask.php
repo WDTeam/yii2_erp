@@ -16,7 +16,7 @@ class WorkerTask extends \common\models\WorkerTask
         3=>'服务老用户',
         4=>'主动接单',
         5=>'完成工时',
-        6=>'完成小保养个数 ',
+//         6=>'完成小保养个数 ',
     ];
     /**
      * 条件判断符
