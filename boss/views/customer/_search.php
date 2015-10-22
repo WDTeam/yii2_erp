@@ -49,7 +49,7 @@ use \common\models\OperationCity;
                 'format' => 'yyyy-m-d',
                 'todayHighlight' => true
             ]
-        ]); 
+        ])->label('开始时间'); 
         ?>
     </div>
 
@@ -62,7 +62,7 @@ use \common\models\OperationCity;
                 'format' => 'yyyy-m-d',
                 'todayHighlight' => true
             ]
-        ]); 
+        ])->label('结束时间'); 
         ?>
     </div>
 
@@ -75,7 +75,7 @@ use \common\models\OperationCity;
             'pluginOptions' => [
                 'allowClear' => true
             ],
-        ]); ?>
+        ])->label('选择客户身份'); ?>
     </div>
 
     <div class='col-md-2'>
