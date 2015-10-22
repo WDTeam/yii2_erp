@@ -1,4 +1,4 @@
-o<?php
+<?php
 
 namespace api\controllers;
 
@@ -752,7 +752,7 @@ class UserController extends \api\components\Controller
     /**
      *
      * @api {GET} /user/user-money 用户余额和消费记录 （已完成99% 数据已经全部取出,需要给出所需字段,然后给予返回;）
-     *user-money
+     * user-money
      *
      * @apiName UserMoney
      *
@@ -803,35 +803,32 @@ class UserController extends \api\components\Controller
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
-
         $app_version = $param['app_version']; #版本
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录111", "error", 403);
         }
+        #获取用户id
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
+
         if (!empty($customer) && !empty($customer->id)) {
             /**
              * 获取客户余额
              * @param int $customer 用户id
              */
-            $userBalance = \core\models\customer\CustomerExtBalance::getCustomerBalance(1);
-
-            if ($userBalance) {
-                /**
-                 * 获取用户消费记录
-                 * @param int $customer 用户id
-                 */
-                $userRecord = \core\models\CustomerTransRecord\CustomerTransRecord::queryRecord(1);
-
-                foreach ($userRecord as $key => $val) {
-                    $userRecord[$key]['userBalance'] = $userBalance;
-                }
-
-                return $this->send($userRecord, "查询成功", "ok");
-            } else {
-                return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            $userBalance = \core\models\customer\CustomerExtBalance::getCustomerBalance($customer->id);
+            /**
+             * 获取用户消费记录
+             * @param int $customer 用户id
+             */
+            $userRecord = \core\models\CustomerTransRecord\CustomerTransRecord::queryRecord($customer->id);
+            foreach ($userRecord as $key => $val) {
+                $userRecord[$key]['userBalance'] = $userBalance;
             }
+
+            return $this->send($userRecord, "查询成功", "ok");
+
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
         }
     }
 
@@ -851,7 +848,7 @@ class UserController extends \api\components\Controller
 //
 //        print_r($daat);
 //    }
-    #f214e8a8d6cde5cc434a97d1a888373
+#f214e8a8d6cde5cc434a97d1a888373
 
     /**
      *
@@ -977,4 +974,5 @@ class UserController extends \api\components\Controller
     }
 
 }
+
 ?>

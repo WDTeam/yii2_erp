@@ -45,16 +45,12 @@ class AuthController extends \api\components\Controller
      */
     public function actionLogin()
     {
-        $param=Yii::$app->request->post();
-        if(empty($param))
-        {
-            $param= json_decode(Yii::$app->request->getRawBody(),true);
+        $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        if(!isset($param['phone'])||!$param['phone']||!isset($param['verify_code'])||!$param['verify_code']){
+                    return $this->send(null, "用户名或验证码不能为空", "error", 403);
         }
         $phone = $param['phone'];
         $verifyCode = $param['verify_code'];
-        if(empty($phone)||empty($verifyCode)){
-            return $this->send(null, "用户名或验证码不能为空", "error",403,"数据不完整");
-        }
         $checkRet = CustomerCode::checkCode($phone,$verifyCode);
         if ($checkRet) {
             $token = CustomerAccessToken::generateAccessToken($phone, $verifyCode);
@@ -136,18 +132,17 @@ class AuthController extends \api\components\Controller
     }
 
     /**
-     * @api {post} /mobileapidriver2/driver_login 阿姨登录（李勇100%)
-     * @apiName actionDriverLogin
+     * @api {post} /auth/worker-login 阿姨登录（李勇50%)[原因手机号和密码登录版本的已经做完，需求改成手机号和验证码缺少model支持]
+     * @apiName actionWorkerLogin
      * @apiGroup Auth
      *
-     * @apiParam {String} session_id    会话id.
-     * @apiParam {String} platform_version 平台版本号.
-     * @apiParam {String} username  用户名.
-     * @apiParam {String} Password   密码.
-     * @apiParam {String} client_version 版本号.
-     * @apiParam {String} version_name 版本名.
-     * @apiParam {String} macAdd  机器码.
+     * @apiParam {String} [phone] 阿姨电话号码
+     * @apiParam {String} [verify_code] 短信验证码
+     * @apiParam {String} app_version 访问源(android_4.2.2)
      *
+     * @apiSuccess {Object} user 阿姨信息.
+     * @apiSuccess {String} access_token 访问令牌字符串.
+     * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
@@ -155,42 +150,34 @@ class AuthController extends \api\components\Controller
      *      "msg":"操作成功",
      *      "ret":
      *      {
-     *          "driverName": "陈测试1",
-     *          "isFullTime": 0,
-     *          "fullTimeName": "兼职",
-     *          "driverHeadUrl": "http://static.1jiajie.com/worker/face/1111116.jpg",
-     *          "session_id": "hXjooooooooAPXzo5jjbMnz80dccYgwoooooooowoooooooo-1111116",
+     *          "worker_name": "陈测试1",
+     *          "worker_rule_id": 0,
+     *          "worker_rule_description": "兼职",
+     *          "worker_photo": "http://static.1jiajie.com/worker/face/1111116.jpg",
+     *          "access_token": "hXjooooooooAPXzo5jjbMnz80dccYgwoooooooowoooooooo-1111116",
      *          "worker_id": "1111116",
-     *          "shop_id": "68",
-     *          "result": "1",
-     *          "msg": ""
-     *      }
-     * }
+     *          "shop_id": "68"
+     *
      *
      * @apiError SessionIdNotFound 未找到会话ID.
      *
      * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
-     *  {
-     *      "code":"Failed",
-     *      "msg": "SessionIdNotFound"
-     *  }
-     *
+     *     HTTP/1.1 403 Not Found
+     *     { 
+     *       "code":"error",
+     *       "msg": "用户名或验证码错误"
+     *     }
      */
     public function actionWorkerLogin(){
-		$param=Yii::$app->request->post();
-        if(empty($param))
-        {
-            $param= json_decode(Yii::$app->request->getRawBody(),true);
+	$param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        if(!isset($param['phone'])||!$param['phone']||!isset($param['verify_code'])||!$param['verify_code']){
+                    return $this->send(null, "用户名或验证码不能为空", "error", 403);
         }
         $phone = $param['phone'];
-        $password = $param['password'];
-        if(empty($phone) || empty($password)){
-            return $this->send(null, "用户名或密码不能为空", "error",403,"数据不完整");
-        }
-        $checkRet = Worker::checkWorkerPassword($phone,$password);
+        $verify_code = $param['verify_code'];
+        $checkRet = Worker::checkWorkerPassword($phone,$verify_code);
         if($checkRet['result']=='1'){
-            $token = WorkerAccessToken::generateAccessToken($phone,$password);
+            $token = WorkerAccessToken::generateAccessToken($phone,$verify_code);
             if (empty($token)) {
                 return $this->send(null, "生成token错误","error");
             }else{
@@ -202,9 +189,7 @@ class AuthController extends \api\components\Controller
                     "worker_photo" => $worker['worker_photo'],
                     "access_token" => $token,
                     "worker_id" => $worker['id'],
-                    "shop_id" => $worker['shop_id'],
-                    "result" =>'',
-                    "msg" =>''
+                    "shop_id" => $worker['shop_id']
                 ];
                 return $this->send($ret, "操作成功");
             }

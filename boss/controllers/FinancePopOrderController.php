@@ -61,7 +61,7 @@ class FinancePopOrderController extends Controller
     	$model = new FinancePopOrderSearch;
     	$modelinfo= new FinancePopOrder;
     	if(Yii::$app->request->isPost) {
-    		if(false){
+    		if(Yii::$app->params['uploadpath']){
     		//开启七牛上传，文件存储在七牛
     			$data = \Yii::$app->request->post();
     			$model->load($data);
@@ -308,18 +308,40 @@ class FinancePopOrderController extends Controller
     		$tydtui[]=$errt['finance_order_channel_name'];
     	}
     	$tyu= array_combine($tyd,$tydtui);
-    	$sta=3;
-    		
+    	
+    	
+    	
+    	
+    	
+    	//id  通过id查找账期
+    	
+    	
+    	$dateinfo=Yii::$app->request->getQueryParams();
+    	if($dateinfo['id']){
+    	$info=FinanceRecordLogSearch::get_financerecordloginfo($dateinfo['id']);
+    	}
+    	/* if($info->finance_pay_channel_id=='4'){
+    	//银联充值	
+	
+    	}else {
+    	//渠道下单	
+	
+    	}
+    	 */
     			//我有三没有开始处理 从订单表里面开始查询
     			$searchModel= new OrderSearch;
-    			$financerecordloginfo=FinanceRecordLogSearch::get_financerecordloginfo($sta);
-    			if($financerecordloginfo){
+    			
     				//$search_infoModel->created_at=$financerecordloginfo['finance_record_log_statime'];
     				//$searchModel_info->created_at=$financerecordloginfo['finance_record_log_endtime'];
-    				$searchModel->channel_id=$sta;
-    			}
-    			$searchModel->channel_id=$sta;
+    			//	$searchModel->channel_id=$sta;
+    		
+    			//$searchModel->channel_id=$sta;
+    			
     			$dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());	
+    			
+    			
+    			
+    			
     	return $this->render('orderlist', [
     			'dataProvider' => $dataProvider,
     			'searchModel' => $searchModel,

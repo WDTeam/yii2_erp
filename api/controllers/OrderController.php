@@ -10,7 +10,6 @@ use core\models\order\OrderSearch;
 use core\models\order\OrderStatus;
 use core\models\customer\CustomerAccessToken;
 use core\models\customer\CustomerAddress;
-use yii\web\Response;
 
 
 class OrderController extends \api\components\Controller
@@ -234,8 +233,13 @@ class OrderController extends \api\components\Controller
         }
         if (@is_null($args['address_id'])) {
             //add address into customer and return customer id
-
-            $area_name = '朝阳区'; // add for test
+            $area_name = $args['address'];
+            if(strpos($area_name,'市')>0){
+                $area_name = substr($area_name,strpos($area_name,'市')+strlen('市'));
+            }
+            if(strpos($area_name,'区')>0){
+                $area_name = substr($area_name,0,strpos($area_name,'区'));
+            }
             $model = CustomerAddress::addAddress($user->id, $area_name, $args['address'],
                 $args['order_customer_phone'], $args['order_customer_phone']);
             $attributes['address_id'] = $model->id;
@@ -1071,7 +1075,6 @@ class OrderController extends \api\components\Controller
      */
 
 
-
     /**
      * @api {get} v1/order/no_settlement_order_list.php  未结算订单(0%zhaoshunli)
      * @apiName actionNoSettlementOrderList
@@ -1116,47 +1119,11 @@ class OrderController extends \api\components\Controller
      *
      */
 
-    public function actionPush($id)
+    public function actionPush($order_id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        return Order::push($id);
+        return Order::push($order_id);
     }
-
-    /**
-     * 获得某个订单的状态历史信息
-     */
-
-    /**
-     * 评价订单
-     */
-
-    /**
-     * 增加积分
-     */
-
-    /**
-     * 查询订单可被抢单 10条来自周期订单 10条来自普通订单
-     */
-
-    /**
-     * 查看该阿姨所有未交罚款记录
-     */
-
-    /**
-     * 获得该阿姨所有未领取任务奖励记录
-     */
-    /**
-     * 获得所有该阿姨已经完成未对账订单
-     */
-    /**
-     * 提交订单确认无误
-     */
-    /**
-     * 获得该阿姨在各个状态的 任务列表
-     */
-    /**
-     * 依据任务id 查询任务详情
-     */
 }
 
 ?>

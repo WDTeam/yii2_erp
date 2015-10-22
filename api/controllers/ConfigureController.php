@@ -4,6 +4,7 @@ namespace api\controllers;
 use Yii;
 use core\models\Operation\CoreOperationShopDistrictGoods;
 use core\models\Operation\CoreOperationCategory;
+use core\models\Operation\CoreOperationCity;
 use \core\models\customer\CustomerAccessToken;
 
 class ConfigureController extends \api\components\Controller
@@ -58,8 +59,8 @@ class ConfigureController extends \api\components\Controller
      */
     public function actionAllServices()
     {
-        $param = Yii::$app->request->post()or
-        $param= json_decode(Yii::$app->request->getRawBody(),true);
+        $param = Yii::$app->request->post() or
+        $param = json_decode(Yii::$app->request->getRawBody(), true);
 
         if (empty(@$param['city_name'])) {
             return $this->send(null, "未取得城市信息", "error", "403");
@@ -105,61 +106,121 @@ class ConfigureController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} /configure/user-init 用户端首页初始化 （赵顺利0%）
+     * @api {POST} v1/configure/user-init 用户端首页初始化 （赵顺利20% 假数据）
      * @apiName actionUserInit
      * @apiGroup configure
      * @apiDescription 获得开通城市列表，广告轮播图 等初始化数据
-     * @apiParam {String} city 城市
+     *
+     * @apiParam {String} city_name 城市
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
-     *       "msg":"获取成功"
-     *       "ret":{
-     *         "default_city": "北京",
-     *         "is_black_user": "0",
-     *         "city_list": [
-     *          "北京",
-     *          "上海",
-     *          "广州",
-     *          "深圳",
-     *          "成都",
-     *          "南京"
-     *         ],
-     *         "callcenter": "4006767636",
-     *         "ad_top_v4_city": {
-     *           "北京": [
-     *            {
-     *              "img_path": "http://webapi2.1jiajie.com/app/images/ios_banner_1.png",
-     *              "link": "http://wap.1jiajie.com/trainAuntie1.html",
-     *              "url_title": "标准服务"
-     *            },
-     *            {
-     *              "img_path": "http://webapi2.1jiajie.com/app/images/20150603ad_top_v4_1.png",
-     *              "link": "http://wap.1jiajie.com/pledge.html",
-     *              "url_title": "服务承诺"
-     *            },
-     *            {
-     *              "img_path": "http://webapi2.1jiajie.com/app/images/20150311ad_top_v4_3.png",
-     *              "link": "",
-     *              "url_title": ""
-     *            }
+     *          "code": "ok",
+     *          "msg": "操作成功",
+     *          "ret": {
+     *              "city_list": [
+     *              {
+     *                  "id": 1,
+     *                  "province_id": 120000,
+     *                  "province_name": "天津",
+     *                  "city_id": 120100,
+     *                  "city_name": "天津市",
+     *                  "operation_city_is_online": 1,
+     *                  "created_at": 1444283773,
+     *                  "updated_at": 1444283773
+     *              },
+     *              {
+     *                  "id": 2,
+     *                  "province_id": 110000,
+     *                  "province_name": "北京",
+     *                  "city_id": 110100,
+     *                  "city_name": "北京市",
+     *                  "operation_city_is_online": 1,
+     *                  "created_at": 1444368462,
+     *                  "updated_at": 1444368462
+     *              },
+     *              {
+     *                  "id": 3,
+     *                  "province_id": 140000,
+     *                  "province_name": "山西省",
+     *                  "city_id": 140300,
+     *                  "city_name": "阳泉市",
+     *                  "operation_city_is_online": 1,
+     *                  "created_at": 1444413962,
+     *                  "updated_at": 1444413962
+     *              },
+     *              {
+     *                  "id": 4,
+     *                  "province_id": 140000,
+     *                  "province_name": "山西省",
+     *                  "city_id": 140100,
+     *                  "city_name": "太原市",
+     *                  "operation_city_is_online": 1,
+     *                  "created_at": 1444635891,
+     *                  "updated_at": 1444635891
+     *              }
+     *              ],
+     *              "pic_list": [
+     *              {
+     *                  "img_path": "http://webapi2.1jiajie.com/app/images/ios_banner_1.png",
+     *                  "link": "http://wap.1jiajie.com/trainAuntie1.html",
+     *                  "url_title": "标准服务"
+     *              },
+     *              {
+     *                  "img_path": "http://webapi2.1jiajie.com/app/images/20150603ad_top_v4_1.png",
+     *                  "link": "http://wap.1jiajie.com/pledge.html",
+     *                  "url_title": "服务承诺"
+     *              },
+     *              {
+     *                  "img_path": "http://webapi2.1jiajie.com/app/images/20150311ad_top_v4_3.png",
+     *                  "link": "",
+     *                  "url_title": ""
+     *              }
+     *              ],
+     *              "server_list": [
+     *              {
+     *                  "goods_id": "1",
+     *                  "goods_no": "",
+     *                  "goods_name": "管道疏通",
+     *                  "goods_introduction": "含：专业设备+专业技师+上门服务",
+     *                  "goods_english_name": "",
+     *                  "goods_img": "",
+     *                  "goods_app_ico": "",
+     *                  "goods_pc_ico": "",
+     *                  "goods_price": "160.00",
+     *                  "goods_price_unit": "眼",
+     *                  "goods_price_description": ""
+     *              },
+     *              {
+     *                  "goods_id": "2",
+     *                  "goods_no": "",
+     *                  "goods_name": "家电维修",
+     *                  "goods_introduction": "含：专业设备+专业技师+上门服务",
+     *                  "goods_english_name": "",
+     *                  "goods_img": "",
+     *                  "goods_app_ico": "",
+     *                  "goods_pc_ico": "",
+     *                  "goods_price": "160.00",
+     *                  "goods_price_unit": "次",
+     *                  "goods_price_description": ""
+     *              },
+     *              {
+     *                  "goods_id": "3",
+     *                  "goods_no": "",
+     *                  "goods_name": "家具组装",
+     *                  "goods_introduction": "含：专业设备+专业技师+上门服务",
+     *                  "goods_english_name": "",
+     *                  "goods_img": "",
+     *                  "goods_app_ico": "",
+     *                  "goods_pc_ico": "",
+     *                  "goods_price": "160.00",
+     *                  "goods_price_unit": "次",
+     *                  "goods_price_description": ""
+     *              }
      *          ]
-     *
-     *        },
-     *        "isUpdate": 0,
-     *        "updateContent": "",
-     *        "updateUrl": "https://itunes.apple.com/cn/app/e-jia-jie/id718617336?ls=1&mt=8",
-     *        "servicePromiseUrl": "http://wap.1jiajie.com/pledge.html",
-     *        "alertMsg": "",
-     *        "maxReserveDay": "7",
-     *        "ShowWorkerBusyTime": "0",
-     *        "isShareExp": "0",
-     *        "isShowGiveStar": "1",
-     *        "is_show_pay_way": "0"
-     *}
+     *      }
      * }
      *
      * @apiError CityNotFound 城市尚未开通.
@@ -173,9 +234,82 @@ class ConfigureController extends \api\components\Controller
      */
     public function actionUserInit()
     {
+        $param = Yii::$app->request->post() or
+        $param = json_decode(Yii::$app->request->getRawBody(), true);
+
+        if (empty(@$param['city_name'])) {
+            return $this->send(null, "未取得城市信息", "error", "403");
+        }
         //获取城市列表
+        $city_list = CoreOperationCity::getOnlineCitys();
         //获取首页轮播图
-        //获取该城市的所有服务类型
+        $pic_list = [
+            [
+                "img_path" => "http://webapi2.1jiajie.com/app/images/ios_banner_1.png",
+                "link" => "http://wap.1jiajie.com/trainAuntie1.html",
+                "url_title" => "标准服务"
+            ],
+            [
+                "img_path" => "http://webapi2.1jiajie.com/app/images/20150603ad_top_v4_1.png",
+                "link" => "http://wap.1jiajie.com/pledge.html",
+                "url_title" => "服务承诺"
+            ],
+            [
+                "img_path" => "http://webapi2.1jiajie.com/app/images/20150311ad_top_v4_3.png",
+                "link" => "",
+                "url_title" => ""
+            ]
+        ];
+        //获取该城市的首页服务类型
+        $server_list = [
+            [
+                'goods_id' => '1',
+                'goods_no' => '',
+                'goods_name' => '管道疏通',
+                'goods_introduction' => '含：专业设备+专业技师+上门服务',
+                'goods_english_name' => '',
+                'goods_img' => '',
+                'goods_app_ico' => '',
+                'goods_pc_ico' => '',
+                'goods_price' => '160.00',
+                'goods_price_unit' => '眼',
+                'goods_price_description' => ''
+            ],
+            [
+                'goods_id' => '2',
+                'goods_no' => '',
+                'goods_name' => '家电维修',
+                'goods_introduction' => '含：专业设备+专业技师+上门服务',
+                'goods_english_name' => '',
+                'goods_img' => '',
+                'goods_app_ico' => '',
+                'goods_pc_ico' => '',
+                'goods_price' => '160.00',
+                'goods_price_unit' => '次',
+                'goods_price_description' => ''
+            ],
+            [
+                'goods_id' => '3',
+                'goods_no' => '',
+                'goods_name' => '家具组装',
+                'goods_introduction' => '含：专业设备+专业技师+上门服务',
+                'goods_english_name' => '',
+                'goods_img' => '',
+                'goods_app_ico' => '',
+                'goods_pc_ico' => '',
+                'goods_price' => '160.00',
+                'goods_price_unit' => '次',
+                'goods_price_description' => ''
+            ],
+        ];
+
+        $ret = [
+            'city_list' => $city_list,
+            'pic_list' => $pic_list,
+            'server_list' => $server_list,
+        ];
+
+        return $this->send($ret, '操作成功', 'ok');
     }
 
     /**
