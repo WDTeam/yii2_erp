@@ -440,9 +440,9 @@ class Order extends OrderModel
 //            Yii::$app->cache->set(self::ORDER_ASSIGN_WORKER_LOCK . '_ORDER_' . $order_id, $order_id);
 //            Yii::$app->cache->set(self::ORDER_ASSIGN_WORKER_LOCK . '_WORKER_' . $worker['id'], $worker['id']);
             $order = OrderSearch::getOne($order_id);
-            if(OrderSearch::WorkerOrderExistsConflict($worker['id'],$order->order_booked_begin_time,$order->order_booked_end_time)){
-                $errors[] = '存在冲突订单';
-            }else {
+//            if(OrderSearch::WorkerOrderExistsConflict($worker['id'],$order->order_booked_begin_time,$order->order_booked_end_time)){
+//                $errors[] = '存在冲突订单';
+//            }else {
                 $order->order_flag_lock = 0;
                 $order->worker_id = $worker['id'];
                 $order->worker_type_id = $worker['worker_type'];
@@ -455,7 +455,7 @@ class Order extends OrderModel
                 } else {
                     $result = OrderStatus::sysAssignDone($order, ['OrderExtFlag', 'OrderExtWorker']);
                 }
-            }
+//            }
 //            Yii::$app->cache->delete(self::ORDER_ASSIGN_WORKER_LOCK.'_ORDER_'.$order_id);
 //            Yii::$app->cache->delete(self::ORDER_ASSIGN_WORKER_LOCK.'_WORKER_'.$worker['id']);
 //        }
