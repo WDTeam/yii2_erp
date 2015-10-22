@@ -41,6 +41,14 @@ class WorkerTaskBehavior extends Behavior
      */
     public function getConditionsValues($start_time, $end_time, $worker_id)
     {
+        $sql = "SELECT COUNT(1) FROM {{%order_ext_worker}} AS a 
+                LEFT JOIN {{%order_history}} AS b 
+                ON a.`order_id`=b.order_id  
+                AND b.`order_status_dict_id`=16
+                WHERE b.`order_status_dict_id`=16 
+                AND b.created_at>={$start_time} 
+                AND b.created_at<{$end_time} 
+                AND a.worker_id={$worker_id}";
         return [
             1=>3,
             2=>5,
