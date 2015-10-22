@@ -7,6 +7,7 @@ use common\models\FinanceOrderChannel;
 use common\models\FinancePayChannel;
 use core\models\Customer;
 use common\models\SystemUser;
+use common\models\FinancePopOrder;
 /**
  * @var yii\web\View $this
  * @var common\models\FinancePopOrder $model
@@ -45,13 +46,13 @@ if(isset($order_channel_info->finance_order_channel_name)){
         ],
         'attributes' => [
 
-            'id',
-    		[
+            //'id',
+    		/* [
     		'attribute' => 'finance_pop_order_no',
     		'type' => DetailView::INPUT_TEXT,
     		'displayOnly' => true,
     		'value'=>'坏账',
-    		],
+    		], */
             'finance_pop_order_number',
     		[
     		'attribute' => 'finance_order_channel_title',
@@ -80,7 +81,13 @@ if(isset($order_channel_info->finance_order_channel_name)){
             'finance_pop_order_order2',
             'finance_pop_order_channel_order',
             'finance_pop_order_order_type',
-            'finance_pop_order_status',
+    		[
+    		'attribute' => 'finance_pop_order_status',
+    		'type' => DetailView::INPUT_TEXT,
+    		'displayOnly' => true,
+    		'format'=>'raw',
+    		'value'=>FinancePopOrder::get_pay_status($model->finance_pop_order_status),
+    		],
            // 'finance_pop_order_finance_isok',
             'finance_pop_order_discount_pay',
             'finance_pop_order_reality_pay',
@@ -102,7 +109,7 @@ if(isset($order_channel_info->finance_order_channel_name)){
     		'type' => DetailView::INPUT_TEXT,
     		'format'=>'raw',
     		'displayOnly' => true,
-    		'value'=>'<font color="red">'.$model->finance_pop_order_msg.'</font>',
+    		'value'=>'<font color="red">'.$model->finance_pop_order_msg?$model->finance_pop_order_msg:'暂无'.'</font>',
     		],
     		[
     		'attribute' => 'finance_pop_order_info_msg',

@@ -97,6 +97,7 @@ class Order extends OrderModel
     const WAIT_IVR_PUSH_ORDERS_POOL = 'WAIT_IVR_PUSH_ORDERS_POOL';
     const WAIT_ASSIGN_ORDERS_POOL = 'WaitAssignOrdersPool';
     const PUSH_ORDER_LOCK = 'PUSH_ORDER_LOCK';
+    const ORDER_ASSIGN_WORKER_LOCK = 'ORDER_ASSIGN_WORKER_LOCK';
 
     /**
      * 创建新订单
@@ -182,15 +183,11 @@ class Order extends OrderModel
     public static function remOrderToPool($order_id)
     {
         $orders = Yii::$app->redis->executeCommand('zrange', [self::WAIT_ASSIGN_ORDERS_POOL, 0, -1]);
-        $redis_order = '';
         foreach ($orders as $v) {
             $redis_order_item = json_decode($v, true);
             if ($redis_order_item['order_id'] == $order_id) {
-                $redis_order = $v;
+                Yii::$app->redis->executeCommand('zrem', [self::WAIT_ASSIGN_ORDERS_POOL, $v]);
             }
-        }
-        if(!empty($redis_order)) {
-            Yii::$app->redis->executeCommand('zrem', [self::WAIT_ASSIGN_ORDERS_POOL, $redis_order]);
         }
     }
 
@@ -356,7 +353,7 @@ class Order extends OrderModel
      * ivr指派成功 阿姨接单
      * @param $order_id
      * @param $worker_phone
-     * @return bool
+     * @return array
      */
     public static function ivrAssignDone($order_id, $worker_phone)
     {
@@ -368,7 +365,7 @@ class Order extends OrderModel
      * 系统指派成功 阿姨接单
      * @param $order_id
      * @param $worker_id
-     * @return bool
+     * @return array
      */
     public static function sysAssignDone($order_id, $worker_id)
     {
@@ -399,7 +396,7 @@ class Order extends OrderModel
      */
     public static function manualAssignUnlock()
     {
-        $lockedOrders = OrderExtFlag::find()->where(['>', 'order_flag_lock', 0])->andWhere(['<', 'updated_at', time() - Order::MANUAL_ASSIGN_lONG_TIME])->all();
+        $lockedOrders = OrderExtFlag::find()->where(['>', 'order_flag_lock', 0])->andWhere(['<', 'order_flag_lock_time', time() - Order::MANUAL_ASSIGN_lONG_TIME])->all();
         foreach ($lockedOrders as $v) {//解锁操作超时订单
             self::manualAssignUndone($v['order_id']);
         }
@@ -411,8 +408,7 @@ class Order extends OrderModel
      * @param $worker_id
      * @param $admin_id
      *  @param bool $isCS
-     * @return bool
-     * TODO 避免同一时间 给阿姨指派多个订单问题 需要处理
+     * @return array
      */
     public static function manualAssignDone($order_id, $worker_id, $admin_id, $isCS = false)
     {
@@ -427,23 +423,40 @@ class Order extends OrderModel
      * @param $worker
      * @param $admin_id
      * @param $assign_type
-     * @return bool
+     * @return array
+     * TODO 避免同一时间 给阿姨指派多个订单问题 需要处理
+     * TODO 判断已锁订单
+     * TODO 修改阿姨接单数量
      */
     public static function assignDone($order_id, $worker, $admin_id, $assign_type)
     {
-        $order = OrderSearch::getOne($order_id);
-        $order->order_flag_lock = 0;
-        $order->worker_id = $worker['id'];
-        $order->worker_type_id = $worker['worker_type'];
-        $order->order_worker_type_name = $worker['worker_type_description'];
-        $order->shop_id = $worker["shop_id"];
-        $order->order_worker_assign_type = $assign_type; //接单方式
-        $order->admin_id = $admin_id;
-        if ($admin_id > 1) { //大于1属于人工操作
-            return OrderStatus::manualAssignDone($order, ['OrderExtFlag', 'OrderExtWorker']);
-        } else {
-            return OrderStatus::sysAssignDone($order, ['OrderExtFlag', 'OrderExtWorker']);
+        $result = false;
+        $errors = [];
+        //并发锁
+        if(empty(Yii::$app->cache->get(self::ORDER_ASSIGN_WORKER_LOCK.'_ORDER_'.$order_id)) && empty(Yii::$app->cache->get(self::ORDER_ASSIGN_WORKER_LOCK.'_WORKER_'.$worker['id']))) {
+            Yii::$app->cache->set(self::ORDER_ASSIGN_WORKER_LOCK . '_ORDER_' . $order_id, $order_id);
+            Yii::$app->cache->set(self::ORDER_ASSIGN_WORKER_LOCK . '_WORKER_' . $worker['id'], $worker['id']);
+            $order = OrderSearch::getOne($order_id);
+            if(OrderSearch::WorkerOrderExistsConflict($worker['id'],$order->order_booked_begin_time,$order->order_booked_end_time)){
+                $errors[] = '存在冲突订单';
+            }else {
+                $order->order_flag_lock = 0;
+                $order->worker_id = $worker['id'];
+                $order->worker_type_id = $worker['worker_type'];
+                $order->order_worker_type_name = $worker['worker_type_description'];
+                $order->shop_id = $worker["shop_id"];
+                $order->order_worker_assign_type = $assign_type; //接单方式
+                $order->admin_id = $admin_id;
+                if ($admin_id > 1) { //大于1属于人工操作
+                    $result = OrderStatus::manualAssignDone($order, ['OrderExtFlag', 'OrderExtWorker']);
+                } else {
+                    $result = OrderStatus::sysAssignDone($order, ['OrderExtFlag', 'OrderExtWorker']);
+                }
+            }
+            Yii::$app->cache->delete(self::ORDER_ASSIGN_WORKER_LOCK.'_ORDER_'.$order_id);
+            Yii::$app->cache->delete(self::ORDER_ASSIGN_WORKER_LOCK.'_WORKER_'.$worker['id']);
         }
+        return ['status'=>$result,'errors'=>$errors];
     }
 
     /**

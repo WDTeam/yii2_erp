@@ -30,21 +30,21 @@ class OrderController extends BaseAuthController
         $orderInfo = OrderSearch::getOne($orderid);
        // print_r($orderInfo);
         $FinanceRefundadd=new FinanceRefundadd;
-        $FinanceRefundadd->finance_refund_pop_nub='123456789988';//第三方订单号，后期使用
-        $FinanceRefundadd->finance_refund_tel='15172543897';//下单者电话
-        $FinanceRefundadd->finance_refund_money='56.00';//退款金额
-        $FinanceRefundadd->finance_refund_stype=1; //申请方式  1 用户取消订单 2 官方工作人员操作 3 其他
-        $FinanceRefundadd->finance_refund_reason='有钱就是任性';//退款理由
-        $FinanceRefundadd->finance_refund_discount='0';//优惠价格
+        $FinanceRefundadd->finance_refund_pop_nub=intval($orderInfo->order_pop_order_code);//第三方订单号，后期使用
+        $FinanceRefundadd->finance_refund_tel=$orderInfo->order_customer_phone;//下单者电话
+        $FinanceRefundadd->finance_refund_money=$orderInfo->order_pay_money;//退款金额
+        $FinanceRefundadd->finance_refund_stype=2; //申请方式  1 用户取消订单 2 官方工作人员操作 3 其他
+        $FinanceRefundadd->finance_refund_reason= yii::$app->request->get('refund_reason',"有钱就是任性");//退款理由
+        $FinanceRefundadd->finance_refund_discount=$orderInfo->order_use_card_money+$orderInfo->order_use_coupon_money+$orderInfo->order_use_promotion_money;//优惠价格
          
         $FinanceRefundadd->finance_refund_pay_create_time=1435665333;//订单支付时间
-        $FinanceRefundadd->finance_refund_pay_status=1;//支付状态 1支付 0 未支付 2 其他
-        $FinanceRefundadd->finance_refund_pay_flow_num='77123';//我们系统订单号
-        $FinanceRefundadd->finance_order_channel_id=1;//订单渠道id
-        $FinanceRefundadd->finance_order_channel_title='美团团购';//订单渠道名称
+        $FinanceRefundadd->finance_refund_pay_status=$orderInfo->order_status_name;//支付状态 1支付 0 未支付 2 其他
+        $FinanceRefundadd->finance_refund_pay_flow_num=$orderInfo->order_code;//我们系统订单号
+        $FinanceRefundadd->finance_order_channel_id=$orderInfo->channel_id;//订单渠道id
+        $FinanceRefundadd->finance_order_channel_title=$orderInfo->order_channel_name;//订单渠道名称
          
-        $FinanceRefundadd->finance_pay_channel_id=1;//支付渠道id
-        $FinanceRefundadd->finance_pay_channel_title='美团团购';//支付渠道名称
+        $FinanceRefundadd->finance_pay_channel_id=$orderInfo->pay_channel_id;//支付渠道id
+        $FinanceRefundadd->finance_pay_channel_title=$orderInfo->order_pay_channel_name;//支付渠道名称
          
         $FinanceRefundadd->finance_refund_worker_id=15;//服务阿姨uid
         $FinanceRefundadd->finance_refund_worker_tel='1517723454';//阿姨电话
@@ -98,7 +98,7 @@ class OrderController extends BaseAuthController
        return Order::getGoods($longitude,$latitude);
     }
 
-    public function actionGetCity()
+public function actionGetCity()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $province_id = Yii::$app->request->get('province_id');
@@ -119,17 +119,17 @@ class OrderController extends BaseAuthController
         return '[
                 {
                     "id": 1,
-                    "coupon_name": "浼樻儬鍒�30",
+                    "coupon_name": "优惠券30",
                     "coupon_money": 30
                 },
                 {
                     "id": 2,
-                    "coupon_name": "40浼樻儬鍒�",
+                    "coupon_name": "40优惠券",
                     "coupon_money": 40
                 },
                 {
                     "id": 3,
-                    "coupon_name": "50浼樻儬鍒�",
+                    "coupon_name": "50优惠券",
                     "coupon_money": 50
                 }
             ]';
@@ -158,7 +158,7 @@ class OrderController extends BaseAuthController
 
 
     /**
-     * 鑾峰彇寰呮墜宸ユ寚娲剧殑璁㈠崟
+     * 获取待手工指派的订单
      * @return $this|static
      */
     public function actionGetWaitManualAssignOrder()
@@ -182,7 +182,7 @@ class OrderController extends BaseAuthController
     }
 
     /**
-     * 鑾峰彇鍙寚娲鹃樋濮ㄧ殑鍒楄〃
+     * 获取可指派阿姨的列表
      * @return array
      */
     public function actionGetCanAssignWorkerList()
@@ -203,11 +203,11 @@ class OrderController extends BaseAuthController
         }catch (Exception $e){
 
         }
-        //鏍规嵁鍟嗗湀鑾峰彇闃垮Ж鍒楄〃 绗簩涓弬鏁� 1鑷湁 2闈炶嚜鏈�
+        //根据商圈获取阿姨列表 第二个参数 1自有 2非自有
         try {
             $worker_list = array_merge(Worker::getDistrictFreeWorker($district_id, 1, $order->order_booked_begin_time, $order->order_booked_end_time), Worker::getDistrictFreeWorker($district_id, 2, $order->order_booked_begin_time, $order->order_booked_end_time));
         }catch (Exception $e){
-            return ['code'=>500,'msg'=>'鑾峰彇闃垮Ж鍒楄〃鎺ュ彛寮傚父锛�'];
+            return ['code'=>500,'msg'=>'获取阿姨列表接口异常！'];
         }
         $worker_ids = [];
         $workers = [];
@@ -215,8 +215,8 @@ class OrderController extends BaseAuthController
             foreach ($worker_list as $k => $v) {
                 $worker_ids[] = $v['id'];
                 $workers[$v['id']] = $worker_list[$k];
-                $workers[$v['id']]['tag'] = in_array($v['id'], $used_worker_ids) ? '鏈嶅姟杩�' : "";
-                $workers[$v['id']]['tag'] = ($v['id'] == $order->order_booked_worker_id) ? '鎸囧畾闃垮Ж' : $workers[$v['id']]['tag'];
+                $workers[$v['id']]['tag'] = in_array($v['id'], $used_worker_ids) ? '服务过' : "";
+                $workers[$v['id']]['tag'] = ($v['id'] == $order->order_booked_worker_id) ? '指定阿姨' : $workers[$v['id']]['tag'];
                 $workers[$v['id']]['order_booked_time_range'] = [];
                 $workers[$v['id']]['memo'] = [];
                 $workers[$v['id']]['status'] = [];
@@ -250,11 +250,11 @@ class OrderController extends BaseAuthController
                 $used_worker_ids[] = $v['worker_id'];
             }
         }
-        //鏍规嵁鍟嗗湀鑾峰彇闃垮Ж鍒楄〃 绗簩涓弬鏁� 1鑷湁 2闈炶嚜鏈�
+        //根据商圈获取阿姨列表 第二个参数 1自有 2非自有
         try {
             $worker_list = Worker::searchWorker($worker_name, $phone);
         }catch (Exception $e){
-            return ['code'=>500,'msg'=>'鑾峰彇闃垮Ж鍒楄〃鎺ュ彛寮傚父锛�'];
+            return ['code'=>500,'msg'=>'获取阿姨列表接口异常！'];
         }
         $worker_ids = [];
         $workers = [];
@@ -262,8 +262,8 @@ class OrderController extends BaseAuthController
             foreach ($worker_list as $k => $v) {
                 $worker_ids[] = $v['id'];
                 $workers[$v['id']] = $worker_list[$k];
-                $workers[$v['id']]['tag'] = in_array($v['id'], $used_worker_ids) ? '鏈嶅姟杩�' : "";
-                $workers[$v['id']]['tag'] = ($v['id'] == $order->order_booked_worker_id) ? '鎸囧畾闃垮Ж' : $workers[$v['id']]['tag'];
+                $workers[$v['id']]['tag'] = in_array($v['id'], $used_worker_ids) ? '服务过' : "";
+                $workers[$v['id']]['tag'] = ($v['id'] == $order->order_booked_worker_id) ? '指定阿姨' : $workers[$v['id']]['tag'];
                 $workers[$v['id']]['order_booked_time_range'] = [];
                 $workers[$v['id']]['memo'] = [];
                 $workers[$v['id']]['status'] = [];
@@ -293,16 +293,13 @@ class OrderController extends BaseAuthController
     {
         $searchModel = new OrderSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-        $list =  $dataProvider->query->all();
-       // print_r($list);
-       // exit;
+
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
-            'list' =>$list
         ]);
     }
-   
+
     /**
      * Displays a single Order model.
      * @param string $id
@@ -339,11 +336,11 @@ class OrderController extends BaseAuthController
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }else{//init
-            $model->order_booked_count = 120; //鏈嶅姟鏃堕暱鍒濆鍊�120鍒嗛挓
-            $model->order_booked_worker_id=0; //涓嶆寚瀹氶樋濮�
-            $model->orderBookedTimeRange = '08:00-10:00';//棰勭害鏃堕棿娈靛垵濮嬪��
-            $model->order_pay_type = 1;//鏀粯鏂瑰紡 鍒濆鍊�
-            $model->order_flag_sys_assign = 1;//鏄惁绯荤粺鎸囨淳
+            $model->order_booked_count = 120; //服务时长初始值120分钟
+            $model->order_booked_worker_id=0; //不指定阿姨
+            $model->orderBookedTimeRange = '08:00-10:00';//预约时间段初始值
+            $model->order_pay_type = 1;//支付方式 初始值
+            $model->order_flag_sys_assign = 1;//是否系统指派
         }
         return $this->render('create', [
             'model' => $model,
@@ -351,7 +348,7 @@ class OrderController extends BaseAuthController
     }
 
     /**
-     * 璁㈠崟鎸囨淳椤甸潰
+     * 订单指派页面
      * @return string
      */
     public function actionAssign()
@@ -360,7 +357,7 @@ class OrderController extends BaseAuthController
     }
 
     /**
-     * 涓嶈兘鎸囨淳
+     * 不能指派
      * @return array|bool
      */
     public function actionCanNotAssign()
@@ -371,7 +368,7 @@ class OrderController extends BaseAuthController
     }
     
     /**
-     * 鎸囨淳
+     * 指派
      * @return array|bool
      */
     public function actionDoAssign()
@@ -384,7 +381,7 @@ class OrderController extends BaseAuthController
 
 
     /**
-     * 娣诲姞璁㈠崟鍜岄樋濮ㄧ殑鍏崇郴淇℃伅
+     * 添加订单和阿姨的关系信息
      *
      */
     public function actionCreateOrderWorkerRelation()
@@ -409,16 +406,16 @@ class OrderController extends BaseAuthController
         $phone = Yii::$app->request->post('phone');
         $customer_id = Yii::$app->request->post('customer_id');
         if($address_id>0){
-            //淇敼
+            //修改
             $address = CustomerAddress::updateAddress($address_id,$county_name,$detail,$nickname,$phone);
         }else{
-            //娣诲姞
+            //添加
             $address = CustomerAddress::addAddress($customer_id,$county_name,$detail,$nickname,$phone);
         }
         if($address){
             return ['code'=>200,'data'=>$address];
         }else{
-            return ['code'=>500,'error'=>'淇濆瓨澶辫触'];
+            return ['code'=>500,'error'=>'保存失败'];
         }
     }
 

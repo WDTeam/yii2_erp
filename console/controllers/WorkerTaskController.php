@@ -16,7 +16,7 @@ class WorkerTaskController extends Controller
      */
     private function autoRunWorkerTask($worker_id)
     {
-        $tasks = WorkerTask::autoCreateTaskLog($worker_id);
+        $tasks = (array)WorkerTask::autoCreateTaskLog($worker_id);
         foreach ($tasks as $task){
             $conVals = $this->getConditionsValues($task->worker_task_log_start, $task->worker_task_log_end, $worker_id);
             $task->setValues($conVals);
@@ -59,7 +59,7 @@ class WorkerTaskController extends Controller
             LEFT JOIN ejj_order_ext_customer AS c 
             ON c.`order_id`=a.`order_id`
             WHERE b.`order_status_dict_id`=11 
-            AND b.created_at>{$start_time}
+            AND b.created_at>={$start_time}
             AND b.created_at<{$end_time}
             AND a.`worker_id`={$worker_id} 
             GROUP BY c.`comment_id`";
@@ -70,7 +70,8 @@ class WorkerTaskController extends Controller
                 $fdl++;
             }
         }
-        $data[3] = (int)(($fdl/count($args))*100);
+        $division = count($args)==0?1:count($args);
+        $data[3] = (int)(($fdl/$division)*100);
         //主动接单
         $sql = "SELECT COUNT(1) FROM {{%order_ext_worker}} AS a
             LEFT JOIN {{%order_status_history}} AS b 
@@ -79,17 +80,17 @@ class WorkerTaskController extends Controller
             WHERE a.order_worker_assign_type=1 
             AND a.worker_id={$worker_id} 
             AND b.order_status_dict_id=4
-            AND b.`created_at`>{$start_time} 
+            AND b.`created_at`>={$start_time} 
             AND b.`created_at`<{$end_time}";
         $data[4] = (int)\Yii::$app->db->createCommand($sql)->queryScalar();
         //完成工时
-        $sql = "SELECT SUM(c.order_booked_count) 
+        $sql = "SELECT COUNT(1) 
             FROM {{%order_ext_worker}} AS a 
             LEFT JOIN {{%order_history}} AS b ON a.`order_id`=b.order_id
             LEFT JOIN {{%order}} AS c ON c.`id`=a.`order_id`
             WHERE b.order_status_dict_id=11
             AND a.worker_id={$worker_id} 
-            AND b.created_at>{$start_time}  
+            AND b.created_at>={$start_time}  
             AND b.created_at<{$end_time}";
         $data[5] = (int)\Yii::$app->db->createCommand($sql)->queryScalar();
         
@@ -103,7 +104,7 @@ class WorkerTaskController extends Controller
         echo "worker total: {$total}".PHP_EOL;
         foreach ($models as $model){
             $res = $this->autoRunWorkerTask($model->id);
-            var_dump($res).PHP_EOL;
+            echo count($res).PHP_EOL;
         }
     }
 }

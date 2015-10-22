@@ -9,7 +9,7 @@ function websocketConnect() {
     var ip = $('#serverip').val();
     var port = $('#serverport').val();
     if (ip != '' && port != '') {
-        var wsServer = 'ws://' + ip + ':' + port;
+        wsServer = 'ws://' + ip + ':' + port;
         websocket = new WebSocket(wsServer);
         websocket.onopen = function (evt) {
             console.log("Connected to WebSocket server." + evt.data);
