@@ -66,7 +66,28 @@ class FinancePopOrder extends \yii\db\ActiveRecord
     }
     
     
-    
+    public static function get_pay_status($statusid)
+    {
+    	switch ($statusid)
+    	{
+    		case 1:
+    			return '结算';
+    			break;
+    		case 2:
+    			return '退款';
+    			break;
+    		case 3:
+    			return '服务费';
+    			break;
+    		case 4:
+    			return '转账';
+    			break;
+    		case 5:
+    			return '交易失败';
+    			break;
+    	}
+    }
+
     
     /**
      * @inheritdoc

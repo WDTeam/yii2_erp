@@ -12,6 +12,7 @@ class zhidahao_refund_class
 
     public function refund($param)
     {
+
         //初始化参数
         $params['refund_url'] = $param['refund_url'];
         if( !empty($param['order_id']) ){

@@ -165,17 +165,6 @@ class OrderStatus extends Model
         return self::statusChange($order,$status,$must_models);
     }
 
-    /**
-     * 申请结算
-     * @param $order
-     * @param $must_models
-     * @return bool
-     */
-    public static function applyWagesDone(&$order,$must_models=[])
-    {
-        $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_APPLY_WAGES_DONE);
-        return self::statusChange($order,$status,$must_models);
-    }
 
     /**
      * 已核实 已对账
