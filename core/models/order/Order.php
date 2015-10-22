@@ -188,7 +188,9 @@ class Order extends OrderModel
                 $redis_order = $v;
             }
         }
-        Yii::$app->redis->executeCommand('zrem', [self::WAIT_ASSIGN_ORDERS_POOL, $redis_order]);
+        if(!empty($redis_order)) {
+            Yii::$app->redis->executeCommand('zrem', [self::WAIT_ASSIGN_ORDERS_POOL, $redis_order]);
+        }
     }
 
     /**
@@ -223,6 +225,8 @@ class Order extends OrderModel
             } else { //系统指派失败
                 self::sysAssignUndone($order_id);
             }
+        }else{
+            self::remOrderToPool($order_id);
         }
         $order = OrderSearch::getOne($order_id);
         return ['order_id' => $order->id, 'created_at' => $order->created_at, 'sms' => $order->orderExtFlag->order_flag_worker_sms, 'jpush' => $order->orderExtFlag->order_flag_worker_jpush, 'ivr' => $order->orderExtFlag->order_flag_worker_ivr];
@@ -333,10 +337,8 @@ class Order extends OrderModel
         $order->admin_id = 1;
         if ($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //开始系统指派的订单
             if (OrderStatus::sysAssignUndone($order, [])) {
-                if (!empty($redis_order)) {
-                    //把订单从订单池中移除
-                    self::remOrderToPool($order_id);
-                }
+                //把订单从订单池中移除
+                self::remOrderToPool($order_id);
                 return true;
             }
         }
@@ -449,7 +451,7 @@ class Order extends OrderModel
         $order = OrderSearch::getOne($order_id);
         $order->admin_id = $admin_id;
         $order->order_customer_memo = $memo;
-        return OrderStatus::cancel($order, []);
+        return OrderStatus::cancel($order, ['OrderExtCustomer']);
     }
 
     /**
@@ -707,13 +709,13 @@ class Order extends OrderModel
 
     /**
      * 核实用户订单唯一性
-     * @param   $coustomer_id   int 用户id
+     * @param   $customer_id   int 用户id
      * @param   $order_id       int  订单id
      * @return  int
      */
-    public static function validationOrderCoustomer($coustmer_id, $order_id)
+    public static function validationOrderCustomer($customer_id, $order_id)
     {
-        return OrderExtCustomer::find()->where(["customer_id" => $coustmer_id, "order_id" => $order_id])->count();
+        return OrderExtCustomer::find()->where(["customer_id" => $customer_id, "order_id" => $order_id])->count();
     }
 
 }
