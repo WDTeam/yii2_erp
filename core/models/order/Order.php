@@ -19,7 +19,6 @@ use core\models\worker\Worker;
 use Yii;
 use common\models\Order as OrderModel;
 use common\models\OrderStatusDict;
-use common\models\OrderExtCustomer;
 use common\models\OrderSrc;
 use common\models\FinanceOrderChannel;
 use yii\base\Exception;
@@ -164,13 +163,8 @@ class Order extends OrderModel
     public static function addOrderToPool($order_id)
     {
         // 开始系统指派
-<<<<<<< HEAD
         if (self::sysAssignStart($order_id)) {
-            $order = Order::findOne($order_id);
-=======
-        if(self::sysAssignStart($order_id)) {
             $order = OrderSearch::getOne($order_id);
->>>>>>> f231f0bae78e1f82a4b2f9f143076d098f8d28c6
             $redis_order = [
                 'order_id' => $order_id,
                 'created_at' => $order->orderExtStatus->updated_at
@@ -185,11 +179,11 @@ class Order extends OrderModel
      */
     public static function remOrderToPool($order_id)
     {
-        $orders = Yii::$app->redis->executeCommand('zrange', [self::WAIT_ASSIGN_ORDERS_POOL,0,-1]);
+        $orders = Yii::$app->redis->executeCommand('zrange', [self::WAIT_ASSIGN_ORDERS_POOL, 0, -1]);
         $redis_order = '';
-        foreach($orders as $v){
-            $redis_order_item = json_decode($v,true);
-            if($redis_order_item['order_id']==$order_id){
+        foreach ($orders as $v) {
+            $redis_order_item = json_decode($v, true);
+            if ($redis_order_item['order_id'] == $order_id) {
                 $redis_order = $v;
             }
         }
@@ -245,20 +239,12 @@ class Order extends OrderModel
         $is_ivr_worker_ids = OrderWorkerRelation::getWorkerIdsByOrderIdAndStatus($order_id, 'IVR已推送');
         $is_jpush_worker_ids = OrderWorkerRelation::getWorkerIdsByOrderIdAndStatus($order_id, 'JPUSH已推送');
         foreach ($workers as $v) {
-<<<<<<< HEAD
-            if (!in_array($v, $is_ivr_worker_ids)) { //判断该阿姨有没有推送过该订单，防止重复推送。
-=======
-            if(!in_array($v['id'],$is_ivr_worker_ids)) { //判断该阿姨有没有推送过该订单，防止重复推送。
->>>>>>> f231f0bae78e1f82a4b2f9f143076d098f8d28c6
+            if (!in_array($v['id'], $is_ivr_worker_ids)) { //判断该阿姨有没有推送过该订单，防止重复推送。
                 //把该推送ivr的阿姨放入该订单的队列中
                 Yii::$app->redis->executeCommand('rPush', [self::WAIT_IVR_PUSH_ORDERS_POOL . '_' . $order_id, json_encode(['id' => $v['id'], 'worker_phone' => $v['worker_phone']])]);
                 $ivr_flag = true;
             }
-<<<<<<< HEAD
-            if (!in_array($v, $is_jpush_worker_ids)) {
-=======
-            if(!in_array($v['id'],$is_jpush_worker_ids)) {
->>>>>>> f231f0bae78e1f82a4b2f9f143076d098f8d28c6
+            if (!in_array($v['id'], $is_jpush_worker_ids)) {
                 $result = Yii::$app->jpush->push(["worker_{$v['id']}"], '订单来啦！'); //TODO 发送内容
                 if (isset($result->isOK)) {
                     $worker_id = intval(str_replace('worker_', '', $v));
@@ -283,21 +269,14 @@ class Order extends OrderModel
     public static function ivrPushToWorker($order_id)
     {
         $order = OrderSearch::getOne($order_id);
-<<<<<<< HEAD
         if ($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //开始系统指派的订单
             $worker = json_decode(Yii::$app->redis->executeCommand('lPop', [self::WAIT_IVR_PUSH_ORDERS_POOL . '_' . $order_id]), true);
             if (!empty($worker)) {
-                $result = Yii::$app->ivr->send($worker['worker_phone'], 'pushToWorker_' . $order_id, "开始时间叉叉叉，时长插插插，地址插插插插！"); //TODO 发送内容
-=======
-        if($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //开始系统指派的订单
-            $worker = json_decode(Yii::$app->redis->executeCommand('lPop', [self::WAIT_IVR_PUSH_ORDERS_POOL.'_'.$order_id]),true);
-            if(!empty($worker)) {
-                $result = Yii::$app->ivr->send($worker['worker_phone'], 'pushToWorker_' . $order_id, "开始时间".date('y年m月d日H点',$order->order_booked_begin_time)."，时长".intval($order->order_booked_count/60)."个".($order->order_booked_count%60>0?"半":"")."小时，地址{$order->order_address}！"); //TODO 发送内容
->>>>>>> f231f0bae78e1f82a4b2f9f143076d098f8d28c6
+                $result = Yii::$app->ivr->send($worker['worker_phone'], 'pushToWorker_' . $order_id, "开始时间" . date('y年m月d日H点', $order->order_booked_begin_time) . "，时长" . intval($order->order_booked_count / 60) . "个" . ($order->order_booked_count % 60 > 0 ? "半" : "") . "小时，地址{$order->order_address}！"); //TODO 发送内容
                 if (isset($result['result']) && $result['result'] == 0) {
                     OrderWorkerRelation::addOrderWorkerRelation($order_id, $worker['id'], '', 'IVR已推送', 1);
-                }else{
-
+                } else {
+                    
                 }
             }
         } else {
@@ -350,16 +329,10 @@ class Order extends OrderModel
     public static function sysAssignUndone($order_id)
     {
         $order = OrderSearch::getOne($order_id);
-<<<<<<< HEAD
         $order->admin_id = 1;
         if ($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //开始系统指派的订单
-            $redis_order = ['order_id' => $order_id, 'created_at' => $order->orderExtStatus->updated_at];
-=======
-        $order->admin_id=1;
-        if($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //开始系统指派的订单
->>>>>>> f231f0bae78e1f82a4b2f9f143076d098f8d28c6
             if (OrderStatus::sysAssignUndone($order, [])) {
-                if(!empty($redis_order)){
+                if (!empty($redis_order)) {
                     //把订单从订单池中移除
                     self::remOrderToPool($order_id);
                 }
@@ -470,22 +443,13 @@ class Order extends OrderModel
      * @param $memo
      * @return bool
      */
-<<<<<<< HEAD
-    public static function cancel($order_id, $admin_id)
+    public static function cancel($order_id, $admin_id, $memo = '')
     {
         $order = OrderSearch::getOne($order_id);
         $order->admin_id = $admin_id;
-        return OrderStatus::cancel($order, []);
-=======
-    public static function cancel($order_id,$admin_id,$memo='')
-    {
-        $order = OrderSearch::getOne($order_id);
-        $order->admin_id=$admin_id;
         $order->order_customer_memo = $memo;
-        return OrderStatus::cancel($order,[]);
->>>>>>> f231f0bae78e1f82a4b2f9f143076d098f8d28c6
+        return OrderStatus::cancel($order, []);
     }
-
 
     /**
      * 客户删除订单
@@ -493,7 +457,7 @@ class Order extends OrderModel
      * @param $admin_id
      * @return bool
      */
-    public static function customerDel($order_id,$admin_id=0)
+    public static function customerDel($order_id, $admin_id = 0)
     {
         $order = OrderSearch::getOne($order_id);
         $order->order_customer_hidden = 1;
