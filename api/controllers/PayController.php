@@ -1,5 +1,6 @@
 <?php
 namespace api\controllers;
+
 use Yii;
 use \api\models\PayParam;
 use \core\models\GeneralPay\GeneralPay;
@@ -7,14 +8,12 @@ use \core\models\GeneralPay\GeneralPay;
 class PayController extends \api\components\Controller
 {
 
-    
 
-    
     /**
      * @api {get} /v2/online_pay_for_member.php 会员余额支付
      * @apiName actionOnlinePayForMember
      * @apiGroup Pay
-     * 
+     *
      * @apiParam {String} session_id    会话id.
      * @apiParam {String} platform_version 平台版本号.
      * @apiParam {String} order_id    订单ID.
@@ -44,20 +43,37 @@ class PayController extends \api\components\Controller
      *  }
      *
      */
-    
 
-    
+
     /**
      * @api {post} pay/pay 支付接口 （已完成）
      * @apiName actionPay
      * @apiGroup Pay
-     * 
+     *
      * @apiParam integer pay_money 支付金额
      * @apiParam integer customer_id 消费者ID
      * @apiParam integer channel_id 渠道ID
+     *                              1=APP微信,
+     *                              2=H5微信,
+     *                              3=APP百度钱包,
+     *                              4=APP银联,
+     *                              5=APP支付宝,
+     *                              6=WEB支付宝,
+     *                              7=H5百度直达号,
+     *                              20=后台支付,(未实现)
+     *                              21=微博支付,（未实现）
      * @apiParam integer [order_id] 订单ID,没有订单号表示充值
      * @apiParam integer partner 第三方合作号
-     * @apiParam integer [ext_params] 扩展参数,用于微信/百度直达号
+     *
+     * @apiParam object [ext_params] 扩展参数,用于微信/百度直达号（即channel_id=2或4 必填）
+     * @apiParam string [ext_params.openid] （channel_id=2 必填）
+     * @apiParam string [ext_params.customer_name]
+     * @apiParam string [ext_params.customer_mobile]
+     * @apiParam string [ext_params.customer_address]
+     * @apiParam string [ext_params.order_source_url]
+     * @apiParam string [ext_params.page_url]
+     * @apiParam string [ext_params.goods_name]
+     * @apiParam string [ext_params.detail]
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -86,18 +102,18 @@ class PayController extends \api\components\Controller
      *
      */
 
-    public function actionPay(){
-        $model=new PayParam();
+    public function actionPay()
+    {
+        $model = new PayParam();
         $name = $model->formName();
-        $data[$name] = Yii::$app->request->get();
+        $data[$name] = Yii::$app->request->post();
         $ext_params = [];
         //在线支付（online_pay），在线充值（pay）
-        if(empty($data[$name]['order_id']))
-        {
-            if($data[$name]['channel_id'] == '2'){
+        if (empty($data[$name]['order_id'])) {
+            if ($data[$name]['channel_id'] == '2') {
                 $model->scenario = 'wx_h5_pay';
                 $ext_params['openid'] = $data[$name]['ext_params']['openid'];    //微信openid
-            }elseif($data[$name]['channel_id'] == '7'){
+            } elseif ($data[$name]['channel_id'] == '7') {
                 $model->scenario = 'zhidahao_h5_pay';
                 $ext_params['customer_name'] = $data[$name]['ext_params']['customer_name'];  //商品名称
                 $ext_params['customer_mobile'] = $data[$name]['ext_params']['customer_mobile'];  //用户电话
@@ -106,16 +122,14 @@ class PayController extends \api\components\Controller
                 $ext_params['page_url'] = $data[$name]['ext_params']['page_url'];  //订单跳转地址
                 $ext_params['goods_name'] = $data[$name]['ext_params']['goods_name'];  //订单跳转地址
                 $ext_params['detail'] = $data[$name]['ext_params']['detail'];  //订单详情
-            }else{
+            } else {
                 $model->scenario = 'pay';
             }
-        }
-        else
-        {
-            if($data[$name]['channel_id'] == '2'){
+        } else {
+            if ($data[$name]['channel_id'] == '2') {
                 $model->scenario = 'wx_h5_online_pay';
                 $ext_params['openid'] = $data[$name]['ext_params']['openid'];    //微信openid
-            }elseif($data[$name]['channel_id'] == '7'){
+            } elseif ($data[$name]['channel_id'] == '7') {
                 $model->scenario = 'zhidahao_h5_online_pay';
                 $ext_params['customer_name'] = $data[$name]['ext_params']['customer_name'];  //商品名称
                 $ext_params['customer_mobile'] = $data[$name]['ext_params']['customer_mobile'];  //用户电话
@@ -124,17 +138,16 @@ class PayController extends \api\components\Controller
                 $ext_params['page_url'] = $data[$name]['ext_params']['page_url'];  //订单跳转地址
                 $ext_params['goods_name'] = $data[$name]['ext_params']['goods_name'];  //订单跳转地址
                 $ext_params['detail'] = $data[$name]['ext_params']['detail'];  //订单详情
-            }else{
+            } else {
                 $model->scenario = 'online_pay';
             }
         }
 
-        $data[$name] = array_merge($data[$name],$ext_params);
+        $data[$name] = array_merge($data[$name], $ext_params);
         $model->attributes = $data[$name];
 
-        if($model->load($data) && $model->validate())
-        {
-            $retInfo= GeneralPay::getPayParams($model->pay_money,$model->customer_id,$model->channel_id,$model->partner,$model->order_id,$ext_params);
+        if ($model->load($data) && $model->validate()) {
+            $retInfo = GeneralPay::getPayParams($model->pay_money, $model->customer_id, $model->channel_id, $model->partner, $model->order_id, $ext_params);
             return $this->send($retInfo['data']);
         }
         return $this->send(null, $model->errors, "error");
@@ -145,7 +158,7 @@ class PayController extends \api\components\Controller
      * @api {get} v2/member_card.json  成为会员接口
      * @apiName actionMemberCard
      * @apiGroup Pay
-     * 
+     *
      * @apiParam {String} session_id    会话id.
      * @apiParam {String} platform_version 平台版本号.
      *
