@@ -57,7 +57,6 @@ class CustomerTransRecordLogControllerSearch extends CustomerTransRecordLog
             'customer_trans_record_online_service_card_befor_balance' => $this->customer_trans_record_online_service_card_befor_balance,
             'customer_trans_record_compensate_money' => $this->customer_trans_record_compensate_money,
             'customer_trans_record_refund_money' => $this->customer_trans_record_refund_money,
-            'customer_trans_record_money' => $this->customer_trans_record_money,
             'customer_trans_record_order_total_money' => $this->customer_trans_record_order_total_money,
             'customer_trans_record_total_money' => $this->customer_trans_record_total_money,
             'customer_trans_record_current_balance' => $this->customer_trans_record_current_balance,

@@ -34,7 +34,6 @@ class m150918_141238_create_table_customer_trans_record extends Migration
             'customer_trans_record_online_service_card_befor_balance'  => Schema::TYPE_DECIMAL . '(8,2) NOT NULL DEFAULT 0 COMMENT \'服务卡之前余额\'',
             'customer_trans_record_compensate_money'  => Schema::TYPE_DECIMAL . '(8,2) unsigned  DEFAULT 0 COMMENT \'补偿金额\'',
             'customer_trans_record_refund_money'  => Schema::TYPE_DECIMAL . '(8,2) unsigned  DEFAULT 0 COMMENT \'退款金额\'',
-            'customer_trans_record_money'  => Schema::TYPE_DECIMAL . '(8,2) unsigned  DEFAULT 0 COMMENT \'余额支付\'',
             'customer_trans_record_order_total_money'  => Schema::TYPE_DECIMAL . '(7,2) unsigned NOT NULL DEFAULT 0 COMMENT \'订单总额\'',
             'customer_trans_record_total_money'  => Schema::TYPE_DECIMAL . '(9,2) unsigned  DEFAULT 0 COMMENT \'交易总额\'',
             'customer_trans_record_current_balance'  => Schema::TYPE_DECIMAL . '(8,2) NOT NULL DEFAULT 0 COMMENT \'当前余额\'',
