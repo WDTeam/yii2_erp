@@ -1,20 +1,37 @@
 $(document).ready(function(){
-    $('#start').click(function(){startAutoAssignOrder();});
+    $('#start').click(function(){startAutoAssignOrder(true);});
+    $('#stop').click(function(){startAutoAssignOrder(false);});
     $('#connect').click(function(){websocketConnect();});
+    $('#connect').click();
 });
 
-function websocketConnect(){
+function websocketConnect() {
     var ip = $('#serverip').val();
     var port = $('#serverport').val();
-    if(ip != '' && port != ''){
-        var wsServer = 'ws://'+ip+':'+port;
+    if (ip != '' && port != '') {
+        var wsServer = 'ws://' + ip + ':' + port;
         websocket = new WebSocket(wsServer);
-        websocket.onopen = function (evt) { 
-            console.log("Connected to WebSocket server."+evt.data);
+        websocket.onopen = function (evt) {
+            console.log("Connected to WebSocket server." + evt.data);
             $('#connect').attr('disabled', true);
             $('#connectStatus').html('连接成功！');
-            startAutoAssignOrder();
-        }; 
+            startAutoAssignOrder(true);
+        };
+        websocket.onclose = function (evt) {
+            console.log("Disconnected");
+            $('#connectStatus').html('链接断开！');
+            $('#connect').attr('disabled', false);
+        };
+
+        websocket.onmessage = function (evt) {
+            console.log('Retrieved data from server: ' + evt.data);
+            showOrders(evt.data);
+        };
+
+        websocket.onerror = function (evt, e) {
+            console.log('Error occured: ' + evt.data);
+            $('#connect').attr('disabled', false);
+        };
     }
 }
 
@@ -61,38 +78,9 @@ function getStatus(status){
     }
 }
 
-function startAutoAssignOrder(){
-    var data = $('#interval').val()+','+$('#taskName').val()+','+$('#theadNum').val()+','+$('#qstart').val()+','+$('#qend').val()+','+$('#jstart').val()+','+$('#jend').val();
+function startAutoAssignOrder(status){
+    var data = $('#interval').val()+','+$('#taskName').val()+','+$('#theadNum').val()+','+$('#qstart').val()+','+$('#qend').val()+','+$('#jstart').val()+','+$('#jend').val()+','+status;
     websocket.send(data);
     $('#connectStatus').html('自动派单开始！');
     $('#start').attr('disabled', false);
-}
-
-
-var ip = $('#serverip').val();
-var port = $('#serverport').val();
-if(ip != '' && port != ''){
-    var wsServer = 'ws://'+ip+':'+port;
-    var websocket = new WebSocket(wsServer);
-    websocket.onopen = function (evt) {
-        console.log("Connected to WebSocket server."+evt.data);
-        $('#connect').attr('disabled', true);
-        $('#connectStatus').html('连接成功！');
-    };
-
-    websocket.onclose = function (evt) { 
-        console.log("Disconnected"); 
-        $('#connectStatus').html('链接断开！');
-        $('#connect').attr('disabled', false);
-    }; 
-
-    websocket.onmessage = function (evt) {
-        console.log('Retrieved data from server: ' + evt.data); 
-        showOrders(evt.data);
-    };
-
-    websocket.onerror = function (evt, e) {
-        console.log('Error occured: ' + evt.data);
-        $('#connect').attr('disabled', false);
-    };
 }

@@ -11,12 +11,12 @@ class WorkerTask extends \common\models\WorkerTask
      * 条件名
      */
     const CONDITION_NAME = [
-        1=>'无取消订单 ',
-        2=>'无拒绝订单',
+        1=>'取消订单 ',
+        2=>'拒绝订单',
         3=>'服务老用户',
         4=>'主动接单',
         5=>'完成工时',
-        6=>'完成小保养 ',
+        6=>'完成小保养个数 ',
     ];
     /**
      * 条件判断符
@@ -34,9 +34,9 @@ class WorkerTask extends \common\models\WorkerTask
      * 任务奖励类型
      */
     const REWARD_TYPES = [
-        1=>'现金',
-        2=>'当月流量',
-        3=>'次月流量',
+        1=>'现金(元)',
+        2=>'当月流量(MB)',
+        3=>'次月流量(MB)',
     ];
     
     const TASK_CYCLES = [
@@ -191,6 +191,14 @@ class WorkerTask extends \common\models\WorkerTask
             }
         }
         return implode(', ', $res);
+    }
+    /**
+     * 周期显示
+     */
+    public function getCycleLabel()
+    {
+        $cycles = self::TASK_CYCLES;
+        return $cycles[$this->worker_task_cycle];
     }
     
     

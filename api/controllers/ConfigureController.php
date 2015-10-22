@@ -58,7 +58,8 @@ class ConfigureController extends \api\components\Controller
      */
     public function actionAllServices()
     {
-        $param = Yii::$app->request->post();
+        $param = Yii::$app->request->post()or
+        $param= json_decode(Yii::$app->request->getRawBody(),true);
 
         if (empty(@$param['city_name'])) {
             return $this->send(null, "未取得城市信息", "error", "403");
@@ -174,7 +175,7 @@ class ConfigureController extends \api\components\Controller
     {
         //获取城市列表
         //获取首页轮播图
-        //获取首页服务类型
+        //获取该城市的所有服务类型
     }
 
     /**
@@ -296,6 +297,19 @@ class ConfigureController extends \api\components\Controller
      *  }
      *
      */
+
+    /**
+     * 支付方式展示api 获得各个支付方式的配置 折叠显示列表，默认支付方式，非折叠显示列表
+     */
+
+    /**
+     * 通过广告位置 获取广告
+     */
+
+    /**
+     * 是否强制更新
+     */
 }
+
 
 ?>

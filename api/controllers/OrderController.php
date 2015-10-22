@@ -3,6 +3,7 @@ namespace api\controllers;
 
 use Faker\Provider\DateTime;
 use Yii;
+use common\models\FinanceOrderChannel;
 use common\models\OrderSrc;
 use core\models\order\Order;
 use core\models\order\OrderSearch;
@@ -73,18 +74,19 @@ class OrderController extends \api\components\Controller
      */
     public function actionChooseServiceTime()
     {
-        $params = Yii::$app->request->post();
+        $params = Yii::$app->request->post() or
+        $params = json_decode(Yii::$app->request->getRawBody(), true);
         @$accessToken = $params['access_token'];
 
-        if (empty($accessToken)&&!CustomerAccessToken::checkAccessToken($accessToken)) {
+        if (empty($accessToken) && !CustomerAccessToken::checkAccessToken($accessToken)) {
             return $this->send(empty($accessToken), "用户认证已经过期,请重新登录.", "error", 403);
         }
         $appointment = array();
         for ($i = 0; $i <= 7; $i++) {
             $item = [
-                'date_format' => date('m月d日',strtotime('+'.$i.' day')),
-                'date_stamp' => time(date('m月d日',strtotime('+'.$i.' day'))),
-                'week' => $i==1? '明天':'',
+                'date_format' => date('m月d日', strtotime('+' . $i . ' day')),
+                'date_stamp' => time(date('m月d日', strtotime('+' . $i . ' day'))),
+                'week' => $i == 1 ? '明天' : '',
                 'have_worker' => '1',
                 'hour' =>
                     [
@@ -98,10 +100,10 @@ class OrderController extends \api\components\Controller
                         ]
                     ]
             ];
-            $appointment[]=$item;
+            $appointment[] = $item;
         }
 
-        $ret=["appointment"=>$appointment];
+        $ret = ["appointment" => $appointment];
         return $this->send($ret, "获取可服务时间表成功", "ok");
 
     }
@@ -128,18 +130,12 @@ class OrderController extends \api\components\Controller
      * @apiParam {String} [order_pop_group_buy_code] 第三方团购号
      * @apiParam {Integer} [order_pop_order_money] 第三方订单金额,预付金额
      * @apiParam {String} [coupon_id] 优惠劵id
-     * @apiParam {String} [coupon] 优惠劵
      * @apiParam {String} [channel_id] 下单渠道
-     * @apiParam {String} [order_channel_name] 下单渠道名
      * @apiParam {String} [order_booked_worker_id] 指定阿姨id
      * @apiParam {Number} [order_customer_need] 客户需求
      * @apiParam {String} [order_customer_memo] 客户备注
      * @apiParam {Integer} [order_is_use_balance] 是否使用余额 1 使用 0 不适用 默认1
-     * @apiParam {String} address_latitude 纬度
-     * @apiParam {String} address_longitude 经度
-     * @apiParam {String} worker_num 需要阿姨数量
-     * @apiParam {String} no_auto_assign 是否自动派单
-	 
+     *
      *
      * @apiSuccess {Object} order 成功订单对象.
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/order/action-append-order
@@ -187,7 +183,8 @@ class OrderController extends \api\components\Controller
      */
     public function actionCreateOrder()
     {
-        $args = Yii::$app->request->post();
+        $args = Yii::$app->request->post() or
+        $args = json_decode(Yii::$app->request->getRawBody(), true);
         $attributes = [];
         @$token=$args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
@@ -195,7 +192,7 @@ class OrderController extends \api\components\Controller
             return $this->send(null, "用户无效,请先登录");
         }
         $attributes['customer_id'] = $user->id;
-		
+
         if(@is_null($args['server_item'])){
             // server_item is null, order from app
             if (is_null($args['order_service_type_id'])) {
@@ -213,7 +210,7 @@ class OrderController extends \api\components\Controller
             }
             $attributes['order_src_id'] = $args['order_src_id'];
         }else{
-	    $orderSrc = OrderSrc::find()->where(['order_src_name'=>$args['order_src']])->one();
+            $orderSrc = OrderSrc::find()->where(['order_src_name'=>$args['order_src']])->one();
             if(!empty($orderSrc)){
                 $attributes['order_src_id'] = $orderSrc['id'];
             }else{
@@ -236,7 +233,9 @@ class OrderController extends \api\components\Controller
         }
         if (@is_null($args['address_id'])) {
             //add address into customer and return customer id
-            $model = CustomerAddress::addAddress($user->id, $args['city'], $args['address'],
+
+            $area_name = '朝阳区'; // add for test
+            $model = CustomerAddress::addAddress($user->id, $area_name, $args['address'],
                 $args['order_customer_phone'], $args['order_customer_phone']);
             $attributes['address_id'] = $model->id;
         } else {
@@ -257,8 +256,12 @@ class OrderController extends \api\components\Controller
 
         if (isset($args['channel_id'])) {
             $attributes['channel_id'] = $args['channel_id'];
+        } elseif (isset($args['order_channel_name'])) {
+            $orderChannel = FinanceOrderChannel::find()->where(['finance_order_channel_name'=>$args['order_channel_name']])->one();
+            if(!empty($orderChannel)){
+                $attributes['channel_id'] = $orderChannel['id'];
+            }
         }
-
         if (isset($args['order_booked_worker_id'])) {
             $attributes['order_booked_worker_id'] = $args['order_booked_worker_id'];
         }
@@ -289,8 +292,6 @@ class OrderController extends \api\components\Controller
             $msg = '创建订单失败';
             $this->send($order->errors, $msg, "error");
         }
-
-
     }
 
 
@@ -350,7 +351,8 @@ class OrderController extends \api\components\Controller
      */
     public function actionAppendOrder()
     {
-        $args = Yii::$app->request->post();
+        $args = Yii::$app->request->post() or
+        $args = json_decode(Yii::$app->request->getRawBody(), true);
         $attributes = [];
         $user = CustomerAccessToken::getCustomer($args['access_token']);
         if (is_null($user)) {
@@ -379,11 +381,11 @@ class OrderController extends \api\components\Controller
         if (is_null($args['address_id']) and (is_null($args['address_id']) or is_null($args['city']))) {
             return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名");
         }
-        if(is_null($args['address_id'])){
+        if (is_null($args['address_id'])) {
             $model = CustomerAddress::addAddress($user->id, $args['city'], $args['address'],
                 $args['order_customer_phone'], $args['order_customer_phone']);
             $attributes['address_id'] = $model->id;
-        }else{
+        } else {
             $attributes['address_id'] = $args['address_id'];
         }
 
@@ -506,21 +508,23 @@ class OrderController extends \api\components\Controller
      *     }
      *
      */
-    public function actionQueryOrders(){
-        $args = Yii::$app->request->post();
+    public function actionQueryOrders()
+    {
+        $args = Yii::$app->request->post() or
+        $args = json_decode(Yii::$app->request->getRawBody(), true);
 
         @$limit = $args['limit'];
         @$offset = $args['offset'];
 
         @$orderStatus = $args['order_status'];
         @$isAsc = $args['is_asc'];
-        if(is_null($isAsc)){
+        if (is_null($isAsc)) {
             $isAsc = true;
         }
-        if(!isset($args['limit'])){
+        if (!isset($args['limit'])) {
             $limit = 10;
         }
-        if(!isset($offset)){
+        if (!isset($offset)) {
             $offset = 1;
         }
         @$from = $args['from'];
@@ -528,18 +532,18 @@ class OrderController extends \api\components\Controller
 
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
-        if(empty($user)){
+        if (empty($user)) {
             return $this->send(null, "用户无效,请先登录");
         }
 
-        $orderSearch =new \core\models\order\OrderSearch();
-        $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus , $from, $to);
+        $orderSearch = new \core\models\order\OrderSearch();
+        $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus, $from, $to);
         $orders = $orderSearch->searchOrdersWithOrderStatus($args, $isAsc, $offset, $limit, $orderStatus, $from, $to);
         $ret = [];
-        $ret['page']=$count;
-        $ret['limit']= $limit;
-        $ret['offset']=$offset;
-        $ret['orders']=$orders;
+        $ret['page'] = $count;
+        $ret['limit'] = $limit;
+        $ret['offset'] = $offset;
+        $ret['orders'] = $orders;
         $this->send($ret, $msg = "操作成功", $code = "ok", $value = 200, $text = null);
     }
 
@@ -575,7 +579,6 @@ class OrderController extends \api\components\Controller
      *     }
      *
      */
-
 
 
     /**
@@ -1067,6 +1070,7 @@ class OrderController extends \api\components\Controller
      */
 
 
+
     /**
      * @api {get} v1/order/no_settlement_order_list.php  未结算订单(0%zhaoshunli)
      * @apiName actionNoSettlementOrderList
@@ -1116,6 +1120,42 @@ class OrderController extends \api\components\Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
         return Order::push($order_id);
     }
+
+    /**
+     * 获得某个订单的状态历史信息
+     */
+
+    /**
+     * 评价订单
+     */
+
+    /**
+     * 增加积分
+     */
+
+    /**
+     * 查询订单可被抢单 10条来自周期订单 10条来自普通订单
+     */
+
+    /**
+     * 查看该阿姨所有未交罚款记录
+     */
+
+    /**
+     * 获得该阿姨所有未领取任务奖励记录
+     */
+    /**
+     * 获得所有该阿姨已经完成未对账订单
+     */
+    /**
+     * 提交订单确认无误
+     */
+    /**
+     * 获得该阿姨在各个状态的 任务列表
+     */
+    /**
+     * 依据任务id 查询任务详情
+     */
 }
 
 ?>

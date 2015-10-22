@@ -16,19 +16,33 @@ use Yii;
  */
 class CustomerExtScore extends \common\models\CustomerExtScore
 {
-    
+
     /**
      * 获取客户积分
      */
-    public static function getCustomerScore($customer_id){
+    public static function getCustomerScore($customer_id)
+    {
         $customer = Customer::findOne($customer_id);
         if ($customer == NULL) {
             return false;
         }
-        $customerExtScore = self::find()->where(['customer_id'=>$customer_id])->one();
+        $customerExtScore = self::find()->where(['customer_id' => $customer_id])->one();
         if ($customerExtScore == NULL) {
             return 0;
         }
         return $customerExtScore->customer_score;
     }
+
+    /**
+     *  获取客户积分列表
+     *  @param int $customer_id 用户id
+     *  @author 郝建设
+     *  @return array 积分列表数据
+     */
+    public static function getCustomerScoreList($customer_id)
+    {
+
+        return CustomerExtScore::find()->where(['customer_id' => $customer_id])->asArray()->all();
+    }
+
 }

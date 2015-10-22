@@ -4,6 +4,7 @@ namespace api\controllers;
 use Yii;
 use \core\models\customer\CustomerCode;
 use \core\models\customer\CustomerAccessToken;
+use \core\models\worker\WorkerAccessToken;
 use \core\models\worker\Worker;
 class AuthController extends \api\components\Controller
 {
@@ -135,7 +136,7 @@ class AuthController extends \api\components\Controller
     }
 
     /**
-     * @api {post} /mobileapidriver2/driver_login 阿姨登录（李勇90%）[core中没有AccessToken的类，写好后给我]
+     * @api {post} /mobileapidriver2/driver_login 阿姨登录（李勇100%)
      * @apiName actionDriverLogin
      * @apiGroup Auth
      *
@@ -177,15 +178,19 @@ class AuthController extends \api\components\Controller
      *
      */
     public function actionWorkerLogin(){
-        $phone=Yii::$app->request->post('phone');
-        $password=Yii::$app->request->post('password');
+		$param=Yii::$app->request->post();
+        if(empty($param))
+        {
+            $param= json_decode(Yii::$app->request->getRawBody(),true);
+        }
+        $phone = $param['phone'];
+        $password = $param['password'];
         if(empty($phone) || empty($password)){
             return $this->send(null, "用户名或密码不能为空", "error",403,"数据不完整");
         }
         $checkRet = Worker::checkWorkerPassword($phone,$password);
         if($checkRet['result']=='1'){
-            //$token = WorkerAccessToken::generateAccessToken($username,$password);
-            $token=1;
+            $token = WorkerAccessToken::generateAccessToken($phone,$password);
             if (empty($token)) {
                 return $this->send(null, "生成token错误","error");
             }else{
@@ -194,7 +199,7 @@ class AuthController extends \api\components\Controller
                     "worker_name" => $worker['worker_name'],
                     "worker_rule_id" => $worker['worker_rule_id'],
                     "worker_rule_description" => $worker['worker_rule_description'],
-                    "work_photo" => $worker['work_photo'],
+                    "worker_photo" => $worker['worker_photo'],
                     "access_token" => $token,
                     "worker_id" => $worker['id'],
                     "shop_id" => $worker['shop_id'],

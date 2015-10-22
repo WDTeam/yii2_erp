@@ -1,10 +1,13 @@
 <?php
 /*
- 自动派单运行实例
+ * BOSS 自动派单运行服务实例
+ * @author 张航 <zhanghang@1jiajie.com>
+ * @author 张旭刚<zhangxugang@corp.1jiajie.com>
+ * @link http://boss.1jiajie.com/auto-assign/
+ * @copyright Copyright (c) 2015 E家洁 LLC
 */
 define('DEBUG', 'on');
 define("WEBPATH", str_replace("\\","/", __DIR__));
-//require __DIR__ . '/matyhtf/swoole_framework/libs/lib_config.php';
  
 class server
 {
@@ -15,6 +18,7 @@ class server
     private $redis;
     private $ip = '0.0.0.0';
     private $port = 9501;
+    private $isRun = true;
     //private $server;
  
     /**
@@ -28,7 +32,7 @@ class server
         //初始化swoole服务
         $this->serv->set(array(
             'worker_num'  => 8,
-            'daemonize'   => false, //是否作为守护进程,此配置一般配合log_file使用
+            'daemonize'   => false,
             'max_request' => 1000,
             'log_file'    => './swoole.log',
             'task_worker_num' => 8
@@ -37,7 +41,6 @@ class server
         //设置监听
         $this->serv->on('Start', array($this, 'onStart'));
         $this->serv->on('Connect', array($this, 'onConnect'));
-//        $this->serv->on("Receive", array($this, 'onReceive'));
         $this->serv->on("Close", array($this, 'onClose'));
         $this->serv->on("Task", array($this, 'onTask'));
         $this->serv->on("Finish", array($this, 'onFinish'));
@@ -46,7 +49,7 @@ class server
         //开启 
         $this->serv->start();
     }
-    
+
     public function serverIP(){   
         $ss = exec('/sbin/ifconfig eth0 | sed -n \'s/^ *.*addr:\\([0-9.]\\{7,\\}\\) .*$/\\1/p\'',$arr);
         $ret = $arr[0];
@@ -78,35 +81,29 @@ class server
             'qend' => $data[4],
             'jstart' => $data[5],
             'jend' => $data[6],
+            'isRun' => $data[7],
         );
+        $this->isRun = $d['isRun'];
         return $d;
     }
     
     function onMessage($server, $ws)
     {
-//        echo 'On Message.\n';
         $data = $this->getParams($ws);
-//        var_dump($data);exit;
         $this->startTimer($server, $data, $ws);
-//        echo "message: ".$ws->data;
-//        $this->serv->push($ws->fd, json_encode(["hello", "world"]));
-        
         return;
     }
-    
-    private $workerTimerIsRunning; // 标志 workerTimer 运行中
-    private $workerTimerInterval;
-    private $workerTaskNumber;
     
     public function startTimer($server,$data, $ws)
     {   
         $this->serv = $server;
         $this->data = $data;
         $this->ws = $ws;
-//        $server->push($ws->fd, json_encode(["start", "thread"]));
         swoole_timer_add($data['interval']*1000, function ($interval) {
-            $this->saveStatus();
-            $this->processOrders($this->serv, $this->data, $this->ws);
+            if($this->isRun){
+                $this->saveStatus();
+                $this->processOrders($this->serv, $this->data, $this->ws);
+            }
         });
     }
     
@@ -135,14 +132,13 @@ class server
             $d['updated_at'] = isset($d['updated_at']) ? date('Y-m-d H:i:s', $d['updated_at']) : '';
             $d = json_encode($d);
             echo 'start:'. $order['order_id']."\n";
-            $server->push($ws->fd, $d);
+            
+            if(empty($server)){$server->push($ws->fd, $d);}
             $this->serv->task($order);
             $n++;
             if($n > $count){break;}
         }
-//        $server->push($ws->fd, json_encode(["start"]));
     }
-    
     
     public function getOrderStatus($order, $data){
         if(isset($order['updated_at'])){
@@ -175,45 +171,13 @@ class server
         foreach($orders as $key => $value){
             $orders[$key] = (array)json_decode($value);
         }
-//        var_dump($orders);
-//        var_dump($orders);
-//        $orders = array(
-//            array('order_id' => '1111111111', 'created_at' => 111111111111, 'updated_at' => ''),
-//            array('order_id' => '1111111111', 'created_at' => 111111111111, 'updated_at' => ''),
-//            array('order_id' => '1111111111', 'created_at' => 111111111111, 'updated_at' => ''),
-//            array('order_id' => '1111111111', 'created_at' => 111111111111, 'updated_at' => ''),
-//            array('order_id' => '1111111111', 'created_at' => 111111111111, 'updated_at' => ''),
-//            array('order_id' => '1111111111', 'created_at' => 111111111111, 'updated_at' => ''),
-//            array('order_id' => '1111111111', 'created_at' => 111111111111, 'updated_at' => ''),
-//            array('order_id' => '1111111111', 'created_at' => 111111111111, 'updated_at' => ''),
-//            array('order_id' => '1111111111', 'created_at' => 111111111111, 'updated_at' => ''),
-//            array('order_id' => '1111111111', 'created_at' => 111111111111, 'updated_at' => ''),
-//            array('order_id' => '1111111111', 'created_at' => 111111111111, 'updated_at' => ''),
-//            array('order_id' => '1111111111', 'created_at' => 111111111111, 'updated_at' => ''),
-//        );
         return (array)$orders;
     }
  
     public function onConnect($server, $fd) {
         echo $fd."Client Connect.\n";
         return true;
-//        foreach($server->connections as $clid => $info){
-//            $server->send($fd, 'sssssssssss');
-//        }
     }
- 
-//    public function onReceive($server, $fd, $from_id, $data) {
-//        echo "Get Message From Client {$fd}:{$data}\n";
-//        // send a task to task worker.
-//        $param = array(
-//            'fd' => $fd
-//        );
-//        // start a task
-//        $server->task(json_encode($param));
-// 
-//        echo "Continue Handle Worker\n";
-//    }
- 
     public function onClose($server, $fd) {
         echo "Client Close.\n";
     }
@@ -234,7 +198,7 @@ class server
         $data['updated_at'] = isset($data['updated_at']) ? date('Y-m-d H:i:s', $data['updated_at']) : '';
         $d = json_encode($data);
         echo 'end'. $data['order_id']."\n";
-        $server->push($this->ws->fd, $d);
+        if(empty($server)){$server->push($this->ws->fd, $d);}
 //        $this->broadcast($d);
     }
     

@@ -120,8 +120,8 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '智能派单(0%)',
-                        'url' => ['autoassign'],
+                        'label' => '智能派单(80%)',
+                        'url' => ['/auto-assign'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],
@@ -216,12 +216,32 @@ echo Menu::widget(
 //                        'icon' => 'fa fa-angle-right',
 //                        
 //                    ],
-//                    [
-//                        'label' => '促销管理(0%)',
-//                        'url' => ['#'],
-//                        'icon' => 'fa fa-angle-right',
-//                        
-//                    ],
+					[
+                        'label' => '促销管理(10%)',
+                        'url' => ['#'],
+                        'icon' => 'fa fa-angle-right',
+                        'options' => [
+                            'class' => 'treeview ',
+                        ],
+                        'items' => [
+                            [
+                                'label' => '优惠券列表(10%)',
+                                'url' => ['coupon/index'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                            [
+                                'label' => '添加新优惠券(10%)',
+                                'url' => ['coupon/add'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                            [
+                                'label' => '绑定用户',
+                                'url' => ['coupon/index'],
+                                'icon' => 'fa fa-angle-right',
+                                
+                            ],
+                        ]
+                    ],
 
 //                     [
 
@@ -254,7 +274,7 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],*/
                     [
-                        'label' => '阿姨任务管理(60%)',
+                        'label' => '阿姨任务管理(85%)',
                         'url' => ['/worker-task/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -417,7 +437,7 @@ echo Menu::widget(
                             
                     ],
                     [
-                        'label' => '赔偿管理',
+                        'label' => '赔偿管理(65%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                         'options' => [
@@ -425,17 +445,13 @@ echo Menu::widget(
                         ],
                         'items' => [
                         [
-                        'label' => '财务确认赔偿(5%)',
-                        'url' => ['/finance/'],
+                        'label' => '财务确认赔偿(80%)',
+                        'url' => ['/finance/finance-compensate/finance-confirm-index'],
                         'icon' => 'fa fa-angle-right',
                         ],
                         [
-                        'label' => '赔偿查询(5%)',
+                        'label' => '赔偿查询(50%)',
                         'url' => ['/finance/finance-compensate/index'],
-                        'icon' => 'fa fa-angle-right',
-                        ],[
-                        'label' => '赔偿统计(0%)',
-                        'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                         ],
                         ]
