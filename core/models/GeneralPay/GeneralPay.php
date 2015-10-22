@@ -34,15 +34,10 @@ class GeneralPay extends \common\models\GeneralPay
      */
     public static function serviceCradPay($data)
     {
-        try{
-            //用户服务卡扣款
-            //ServiceCard();
-            //用户交易记录
-            CustomerTransRecord::analysisRecord($data);
-            return true;
-        } catch(Exception $e) {
-            return false;
-        }
+        //用户服务卡扣款
+        //ServiceCard();
+        //用户交易记录
+        return CustomerTransRecord::analysisRecord($data);
     }
 
     /**
@@ -51,15 +46,10 @@ class GeneralPay extends \common\models\GeneralPay
      */
     public static function balancePay($data)
     {
-        try{
-            //用户服务卡扣款
-            Customer::decBalance($data['customer_id'],$data['general_pay_actual_money']);
-            //用户交易记录
-            CustomerTransRecord::analysisRecord($data);
-            return true;
-        } catch(Exception $e) {
-            return false;
-        }
+        //用户服务卡扣款
+        Customer::decBalance($data['customer_id'],$data['general_pay_actual_money']);
+        //用户交易记录
+        return CustomerTransRecord::analysisRecord($data);
     }
 
     /**
@@ -68,30 +58,19 @@ class GeneralPay extends \common\models\GeneralPay
      */
     public static function cashPay($data)
     {
-        try{
-            //用户交易记录
-            CustomerTransRecord::analysisRecord($data);
-            return true;
-        } catch(Exception $e) {
-            return false;
-        }
+        //用户交易记录
+        return CustomerTransRecord::analysisRecord($data);
     }
 
     /**
      * 预付费
      * @param $data 订单数据
      */
-    public static function perPay($data)
+    public static function prePay($data)
     {
-        try{
-            //用户交易记录
-            CustomerTransRecord::analysisRecord($data);
-            return true;
-        } catch(Exception $e) {
-            return false;
-        }
+        //用户交易记录
+        return CustomerTransRecord::analysisRecord($data);
     }
-
 
     /**
      * 调用(调起)在线支付,发送给支付接口的数据
@@ -189,7 +168,6 @@ class GeneralPay extends \common\models\GeneralPay
         {
             return ['status'=>0 , 'info'=>'数据返回失败', 'data'=>$model->errors];
         }
-
     }
 
 
