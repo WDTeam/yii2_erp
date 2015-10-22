@@ -299,7 +299,7 @@ echo Menu::widget(
                         'items' => [
                             [
                                 'label' => '渠道管理(95%)',
-                                'url' => ['/finance-order-channel/'],
+                                'url' => ['/finance-pay-channel/'],
                                 'icon' => 'fa fa-angle-right',
                             ],[
                                 'label' => '配置对账表头(95%)',

@@ -23,7 +23,7 @@ use common\models\FinanceOrderChannel;
 use common\models\FinancePayChannel;
 use boss\models\FinancePayChannelSearch;
 use boss\models\FinanceOrderChannelSearch;
-
+use crazyfd\qiniu\Qiniu;
 
 /**
  * FinanceHeaderController implements the CRUD actions for FinanceHeader model.
@@ -118,18 +118,36 @@ class FinanceHeaderController extends BaseAuthController
     {
        $model = new FinanceHeader;
        if(Yii::$app->request->isPost) {
-       	$model->finance_uplod_url = UploadedFile::getInstance($model, 'finance_uplod_url');
-       	if ($model->finance_uplod_url && $model->validate()) {
-       		//if(!file_exists('data/upload/'.$uid))mkdir('data/upload/'.$uid);
-       		$path='upload/';
-       		if(!file_exists($path))mkdir($path);
-       		$filename=time().'.'.$model->finance_uplod_url->extension;
-       		if(!$model->finance_uplod_url->saveAs($path.$filename)){
-       			return ["result"=>"Fail"];
+       	if(Yii::$app->params['uploadpath']){
+       		//开启七牛上传，文件存储在七牛
+       		$data = \Yii::$app->request->post();
+       		$model->load($data);
+       		$file = UploadedFile::getInstance($model, 'finance_uplod_url');
+       		 
+       		$filenamesitename=$file->baseName;
+       		if($file){
+       			$qiniu = new Qiniu();
+       			$path = $qiniu->uploadFile($file->tempName);
+       			$model->finance_uplod_url = $path['key'];
        		}
+       		$qiniuurl=$qiniu->getLink($path['key']);
+       		$filePath=$file->tempName;
+       	}else{
+       		//文件存储在本地
+       		$model->finance_uplod_url = UploadedFile::getInstance($model, 'finance_uplod_url');
+       		if ($model->finance_uplod_url && $model->validate()) {
+       			$path='upload/';
+       			if(!file_exists($path))mkdir($path);
+       			$filenamesitename=$model->finance_uplod_url->baseName;
+       			$filename=time().'.'.$model->finance_uplod_url->extension;
+       			$qiniuurl='0';
+       			if(!$model->finance_uplod_url->saveAs($path.$filename)){
+       				return ["result"=>"Fail"];
+       			}
+       		}
+       		$filePath = $path.$filename;
        	}
        	
-       	$filePath = $path.$filename;
        //	$filePath = './uploads/14430836465880.xls'; // 要读取的文件的路径
        	$objPHPExcel = \PHPExcel_IOFactory::load($filePath);
        	$sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
