@@ -221,6 +221,7 @@ class Order extends ActiveRecord
             'order_flag_lock_time' => '加锁时间',
             'order_flag_worker_sms' => '是否给阿姨发过短信',
             'order_flag_worker_jpush' => '是否给阿姨发过极光',
+            'order_flag_worker_ivr' => '是否给阿姨发过ivr',
             'order_pop_order_code' => '第三方订单编号',
             'order_pop_group_buy_code' => '第三方团购码',
             'order_pop_operation_money' => '第三方运营费',
