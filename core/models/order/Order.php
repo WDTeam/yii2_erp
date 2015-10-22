@@ -174,6 +174,23 @@ class Order extends OrderModel
     }
 
     /**
+     * 把订单移出订单池
+     * @param $order_id
+     */
+    public static function remOrderToPool($order_id)
+    {
+        $orders = Yii::$app->redis->executeCommand('zrange', [self::WAIT_ASSIGN_ORDERS_POOL,0,-1]);
+        $redis_order = '';
+        foreach($orders as $v){
+            $redis_order_item = json_decode($v,true);
+            if($redis_order_item['order_id']==$order_id){
+                $redis_order = $v;
+            }
+        }
+        Yii::$app->redis->executeCommand('zrem', [self::WAIT_ASSIGN_ORDERS_POOL, $redis_order]);
+    }
+
+    /**
      * 智能推送
      * @param $order_id
      * @return array
@@ -318,18 +335,10 @@ class Order extends OrderModel
         $order = OrderSearch::getOne($order_id);
         $order->admin_id=1;
         if($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //开始系统指派的订单
-            $orders = Yii::$app->redis->executeCommand('zrange', [self::WAIT_ASSIGN_ORDERS_POOL,0,-1]);
-            $redis_order = '';
-            foreach($orders as $v){
-                $redis_order_item = json_decode($v,true);
-                if($redis_order_item['order_id']==$order_id){
-                    $redis_order = $v;
-                }
-            }
             if (OrderStatus::sysAssignUndone($order, [])) {
                 if(!empty($redis_order)){
                     //把订单从订单池中移除
-                    Yii::$app->redis->executeCommand('zrem', [self::WAIT_ASSIGN_ORDERS_POOL, $redis_order]);
+                    self::remOrderToPool($order_id);
                 }
                 return true;
             }
