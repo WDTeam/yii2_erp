@@ -545,7 +545,7 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /order/cancelorder 取消订单(郝建设 100%  )
+     * @api {GET} /order/cancel-order 取消订单(郝建设 100%  )
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
@@ -707,7 +707,7 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /order/hiddenorder 删除订单（郝建设 100% ）
+     * @api {GET} /order/hidden-order 删除订单（郝建设 100% ）
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
