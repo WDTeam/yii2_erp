@@ -21,7 +21,6 @@ class m150928_104616_create_table_customer_trans_record_log extends Migration
             'customer_trans_record_pay_channel' => Schema::TYPE_STRING . "(30) COMMENT '支付渠道名称'",
             'customer_trans_record_mode' => Schema::TYPE_SMALLINT . "(4) COMMENT '交易方式:1消费,2=充值,3=退款,4=赔偿'",
             'customer_trans_record_mode_name' => Schema::TYPE_STRING . "(20) COMMENT '交易方式名称'",
-            'customer_trans_record_promo_code_money' => Schema::TYPE_DECIMAL . "(5,2)  COMMENT '优惠码金额'",
             'customer_trans_record_coupon_money' => Schema::TYPE_DECIMAL . "(5,2)  COMMENT '优惠券金额'",
             'customer_trans_record_cash' => Schema::TYPE_DECIMAL . "(5,2)  COMMENT '现金支付'",
             'customer_trans_record_pre_pay' => Schema::TYPE_DECIMAL . "(5,2)  COMMENT '预付费金额（第三方）'",

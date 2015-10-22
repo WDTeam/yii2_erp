@@ -96,8 +96,8 @@ class WorkerTaskLog extends \common\models\WorkerTaskLog
         $time = time();
         return self::find()->where([
             'worker_id'=>$worker_id
-        ])->filterWhere(['<', 'worker_task_log_start', $time])
-        ->filterWhere(['>=', 'worker_task_log_end', $time])
+        ])->filterWhere(['<=', 'worker_task_log_start', $time])
+        ->filterWhere(['>', 'worker_task_log_end', $time])
         ->all();
     }
 }

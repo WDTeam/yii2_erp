@@ -1,5 +1,6 @@
 <?php
 namespace common\models;
+use core\models\CustomerTransRecord\CustomerTransRecord;
 use core\models\order\OrderSearch;
 
 class GeneralPayRefund extends GeneralPayCommon
@@ -108,10 +109,11 @@ class GeneralPayRefund extends GeneralPayCommon
         $data['general_pay_eo_order_id'] = 3;
         $data['is_reconciliation'] = 0;
         $data['general_pay_status'] = 1;
+        $data['general_pay_transaction_id'] = 0;
         $this->scenario = 'refund';
         $this->attributes = $data;
         $this->insert();
-        dump($this->errors);
+
         //调用第三方退款
 
         //调用退余额
@@ -134,7 +136,7 @@ class GeneralPayRefund extends GeneralPayCommon
         }
 
         //调用交易记录
-
+        CustomerTransRecord::refundRecord($data);
 
     }
 
