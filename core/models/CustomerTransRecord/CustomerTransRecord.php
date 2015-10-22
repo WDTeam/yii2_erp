@@ -17,7 +17,7 @@ class CustomerTransRecord extends \common\models\CustomerTransRecord
      */
     public static function queryRecord($customer_id)
     {
-        return CustomerTransRecord::find()->where(['customer_id'=>$customer_id])->asArray()->all();
+        return CustomerTransRecord::find()->asArray()->all();
     }
     /**
      * 创建交易记录
@@ -43,10 +43,11 @@ class CustomerTransRecord extends \common\models\CustomerTransRecord
 
     /**
      * 分析创建交易记录
+     * @param $mode
      * @param $data 数据对象
      * @return bool
      */
-    public static function analysisRecord($data)
+    public static function analysisRecord($data,$mode=2)
     {
         //公用部分
         $data['order_channel_id'] = $data['general_pay_source']; //订单渠道
@@ -121,7 +122,7 @@ class CustomerTransRecord extends \common\models\CustomerTransRecord
                 exit('没有此条件');
             }
         }
-        self::createRecord($data);
+        return self::createRecord($data);
     }
 }
 
