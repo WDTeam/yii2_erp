@@ -46,8 +46,8 @@ $promote_types = Coupon::getPromoteTypes();
                 <h3 class="panel-title">优惠券基本信息</h3>
             </div>
             <div class="panel-body">
-                <?= $form->field($model, 'coupon_name')->textInput(['maxlength' => 255])->label('优惠券名称'); ?>
-				<?= $form->field($model, 'coupon_price')->textInput(['maxlength' => 255])->label('优惠券价值'); ?>
+                <?= $form->field($model, 'coupon_name')->textInput()->label('优惠券名称') ?>
+				<?= $form->field($model, 'coupon_price')->textInput()->label('优惠券价值') ?>
             </div>
 
             <div class="panel-heading">
@@ -122,17 +122,16 @@ $promote_types = Coupon::getPromoteTypes();
             </div>
             <div class="panel-body">
                 <?= $form->field($model, 'coupon_promote_type')->inline()->radioList($promote_types)->label('优惠券优惠类型') ?>
-                <?= $form->field($model, 'coupon_order_min_price')->textInput(['maxlength' => true])->label('订单最小金额') ?>
+                <?= $form->field($model, 'coupon_order_min_price')->textInput()->label('订单最小金额') ?>
             </div>
 
 			<div class="panel-heading">
                 <h3 class="panel-title">优惠码规则</h3>
             </div>
             <div class="panel-body">
-                <?= $form->field($model, 'coupon_code_num')->textInput(['maxlength' => true])->label('优惠码个数') ?>
-                <?= $form->field($model, 'coupon_code_max_customer_num')->textInput(['maxlength' => true])->label('领取后过期天数') ?>
+                <?= $form->field($model, 'coupon_code_num')->textInput()->label('优惠码个数') ?>
+                <?= $form->field($model, 'coupon_code_max_customer_num')->textInput()->label('领取后过期天数') ?>
             </div>
-
 
             <div class="panel-footer">
                 <div class="form-group">

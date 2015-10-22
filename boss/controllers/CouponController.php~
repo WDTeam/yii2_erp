@@ -69,7 +69,8 @@ class CouponController extends Controller
     {
         $model = new Coupon;
 		
-        if ($model->load(Yii::$app->request->post()) ) {
+		
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
 			//create coupon logic
 			//coupon basic info
 
@@ -77,12 +78,12 @@ class CouponController extends Controller
 			switch ($model->coupon_type)
 			{
 				case 0:
-					# code...
-					
+			//		# code...
+			//		
 				break;
 				case 1:
 					# code...
-					//service_types
+				//	//service_types
 				break;
 				case 2:
 					# code...
@@ -154,7 +155,7 @@ class CouponController extends Controller
 				break;
 			}
 		
-			//
+			
 			
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
