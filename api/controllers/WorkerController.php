@@ -84,7 +84,9 @@ class WorkerController extends \api\components\Controller
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} [platform_version] 平台版本号.
      * @apiParam {String} date 请假时间.
-     * @apiParam {String} type 请假类型.
+     * @apiParam {String} type 请假类型
+     * .
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/handle-worker-leave
      * 
      * @apiSuccessExample {json} Success-Response:
      *  HTTP/1.1 200 OK
@@ -157,7 +159,8 @@ class WorkerController extends \api\components\Controller
      * @apiParam {String} [page_num]   页码数，默认1 
      * @apiParam {String} [platform_version] 平台版本号.
      * 
-     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/handle-worker-leave
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/handle-worker-leave-history
+     * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
@@ -279,6 +282,8 @@ class WorkerController extends \api\components\Controller
      * @apiParam {String} [page_num]   页码数，默认1 
      * @apiParam {String} [platform_version] 平台版本号.
      * 
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-comment
+     * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
@@ -356,6 +361,8 @@ class WorkerController extends \api\components\Controller
      * @apiParam {String} access_token    阿姨登录token
      * @apiParam {String} [page_num]   页码数，默认1 
      * @apiParam {String} [platform_version] 平台版本号.
+     * 
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-complain
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
