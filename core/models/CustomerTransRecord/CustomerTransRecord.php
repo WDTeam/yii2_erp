@@ -4,6 +4,7 @@ namespace core\models\CustomerTransRecord;
 
 use common\models\CustomerTransRecordLog;
 use common\models\FinancePayChannel;
+use common\models\GeneralPayCommon;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 
@@ -43,6 +44,7 @@ class CustomerTransRecord extends \common\models\CustomerTransRecord
 
     /**
      * 分析创建交易记录
+     * @param $mode 交易方式:1消费,2=充值,3=退款,4=补偿
      * @param $data 数据对象
      * @return bool
      */
@@ -71,8 +73,7 @@ class CustomerTransRecord extends \common\models\CustomerTransRecord
         //支付订单
 
             //查询订单信息
-            $orderSearch = new \core\models\order\OrderSearch;
-            $orderInfo = $orderSearch->search(['OrderSearch'=>['id'=>$data['order_id']]])->query->one();
+            $orderInfo = GeneralPayCommon::orderInfo($data['order_id']);
             $data['customer_trans_record_online_service_card_on'] = $orderInfo->orderExtPay->card_id;    //服务卡ID
             $data['customer_trans_record_online_service_card_pay'] = $orderInfo->orderExtPay->order_use_card_money;   //服务卡内容
             $data['customer_trans_record_coupon_money'] = $orderInfo->orderExtPay->order_use_coupon_money; //优惠券金额
@@ -121,7 +122,33 @@ class CustomerTransRecord extends \common\models\CustomerTransRecord
                 exit('没有此条件');
             }
         }
-        self::createRecord($data);
+        return self::createRecord($data);
+    }
+
+    /**
+     * 退款交易记录
+     * @param $data
+     */
+    public static function refundRecord($data)
+    {
+        //公用部分
+        $data['order_channel_id'] = $data['general_pay_source']; //订单渠道
+        $data['customer_trans_record_online_pay'] = !empty($data['general_pay_actual_money']) ? $data['general_pay_actual_money'] : 0;  //在线支付
+        $data['customer_trans_record_transaction_id'] = !empty($data['general_pay_transaction_id']) ? $data['general_pay_transaction_id'] : 0; //交易流水号
+        $data['customer_trans_record_mode'] = 3; //交易方式:1消费,2=充值,3=退款,4=补偿
+
+        //查询订单信息
+        $orderInfo = GeneralPayCommon::orderInfo($data['order_id']);
+        $data['customer_trans_record_online_service_card_on'] = $orderInfo->orderExtPay->card_id;    //服务卡ID
+        $data['customer_trans_record_online_service_card_pay'] = $orderInfo->orderExtPay->order_use_card_money;   //服务卡内容
+        $data['customer_trans_record_coupon_money'] = $orderInfo->orderExtPay->order_use_coupon_money; //优惠券金额
+        $data['customer_trans_record_online_balance_pay'] = $orderInfo->orderExtPay->order_use_acc_balance;  //余额支付
+        $data['customer_trans_record_order_total_money'] = $orderInfo->order_money;  //订单总额
+        $data['customer_trans_record_pre_pay'] = $orderInfo->orderExtPop->order_pop_order_money;  //预付费
+        $data['customer_trans_record_cash'] = !empty($data['customer_trans_record_cash']) ? $data['customer_trans_record_cash'] : 0;  //现金支付
+
+        $data['scenario'] = 9;  //支付场景
+        return self::createRecord($data);
     }
 }
 

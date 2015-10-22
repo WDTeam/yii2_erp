@@ -14,7 +14,7 @@ use core\models\worker\WorkerTaskLog;
  * @var core\models\worker\WorkerTask $model
  * @var yii\widgets\ActiveForm $form
  */
- 
+
 $conditions = $model->getFullConditions();
 // var_dump($model->getErrors());
 ?>
@@ -45,7 +45,7 @@ $conditions = $model->getFullConditions();
             </span>
             <?php echo Html::dropDownList("WorkerTask[conditions][{$con['id']}][judge]", $conditions[$con['id']]['judge'], WorkerTask::CONDITION_JUDGE);?>
             <?php echo Html::textInput("WorkerTask[conditions][{$con['id']}][value]", $conditions[$con['id']]['value']);?>
-            <button class="btn" type="button">删除</button>
+            <button onclick="$(this).parent().remove()" class="btn" type="button">删除</button>
         </div>
         <?php }?>
     </div>

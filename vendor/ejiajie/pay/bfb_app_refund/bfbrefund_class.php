@@ -31,7 +31,7 @@ class bfbrefund_class
 
         $output_type = 1;   //响应数据的格式,默认XML
         $output_charset = 1;    //响应数据的编码,默认GBK
-        $return_method= 2;    //后台通知请求模式,1=GET,2=POST
+        $return_method= 1;    //后台通知请求模式,1=GET,2=POST
         $cashback_time= date("YmdHis"); //退款请求时间
         $return_url = $param['return_url'];     //服务器异步通知地址
         $sp_refund_no = $param['sp_refund_no'];     //退款订单号
@@ -66,9 +66,9 @@ class bfbrefund_class
             'currency' => sp_refund_conf::BFB_INTERFACE_CURRENTCY,
             'sp_refund_no' => $sp_refund_no
         );
-        dump($params);
+
         $refund_url = $bfb_sdk->create_baifubao_Refund_url($params, sp_refund_conf::BFB_REFUND_URL);
-        dump($refund_url);exit;
+
         if(false === $refund_url){
             $bfb_sdk->log('create the url for baifubao pay interface failed');
         }

@@ -93,7 +93,6 @@ class server
         $this->startTimer($server, $data, $ws);
         return;
     }
-    
     public function startTimer($server,$data, $ws)
     {   
         $this->serv = $server;
@@ -114,9 +113,17 @@ class server
         $data = json_encode($d);
         $this->redis->set($key, $data);
     }
-    
+    private $workerTaskIsRunning;
     public function processOrders($server, $data, $ws) {
 //        echo 'Process Orders.\n';
+
+        if ($timerIsRunning)
+        {
+            return;
+        }else{
+            $workerTaskIsRunning = true;
+        }
+       
         //取得订单启动任务foreach orders
         $orders = $this->getOrders();
         $count = count($orders);
@@ -134,10 +141,19 @@ class server
             echo 'start:'. $order['order_id']."\n";
             
             if(empty($server)){$server->push($ws->fd, $d);}
+            /*
+             * TODO:
+             * 需要判断订单的时间频率，而不是每次都去调API    -- by zhanghang
+             * 
+             * if 0-5分钟  call 推送全职
+             * if 5-15分钟 call 推送兼职
+             * if >15 分钟 call 人工指派
+             */
             $this->serv->task($order);
             $n++;
             if($n > $count){break;}
         }
+        $workerTaskIsRunning = false;
     }
     
     public function getOrderStatus($order, $data){
@@ -187,7 +203,7 @@ class server
     }
     
     public function taskOrder($data){
-        $url = 'http://api.1jiajie.com/order/push/'.$data['order_id'];
+        $url = 'http://dev.api.1jiajie.com/order/push/'.$data['order_id'];
         $d = file_get_contents($url);
         $data = (array)json_decode($d);
         return $data;
@@ -202,7 +218,7 @@ class server
 //        $this->broadcast($d);
     }
     
-    public function broadcast($msg, $server)
+    public function broadcast($server, $msg)
     {
         $msg = json_encode($msg);
         foreach ($this->serv->connections as $clid => $info)

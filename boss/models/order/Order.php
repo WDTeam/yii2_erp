@@ -113,7 +113,7 @@ class Order extends OrderModel
         $post['Order']['order_ip'] = Yii::$app->request->userIP;
         $post['Order']['order_src_id'] = 1; //订单来源BOSS
         $post['Order']['channel_id'] = empty($post['Order']['channel_id'])?20:$post['Order']['channel_id']; //订单渠道
-        $post['Order']['order_customer_need'] = implode(',',$post['Order']['order_customer_need']); //客户需求
+        $post['Order']['order_customer_need'] = (isset($post['Order']['order_customer_need']) && is_array($post['Order']['order_customer_need']))?implode(',',$post['Order']['order_customer_need']):''; //客户需求
         //预约时间处理
         $time = explode('-',$post['Order']['orderBookedTimeRange']);
         $post['Order']['order_booked_begin_time'] = strtotime($post['Order']['orderBookedDate'].' '.$time[0].':00');
