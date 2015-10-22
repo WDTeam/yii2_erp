@@ -251,6 +251,10 @@ class OrderController extends \api\components\Controller
             $attributes['order_pop_order_code'] = $args['order_pop_order_code'];
         }
 
+        if (isset($args['order_pop_order_money'])) {
+            $attributes['order_pop_order_money'] = $args['order_pop_order_money'];
+        }
+
         if (isset($args['order_pop_group_buy_code'])) {
             $attributes['order_pop_group_buy_code'] = $args['order_pop_group_buy_code'];
         }
