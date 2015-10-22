@@ -9,7 +9,9 @@ class WorkerController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /worker/worker-info 查看阿姨信息 (田玉星 80% model支持不全)
+     * @api {GET} /worker/worker-info 查看阿姨信息 (田玉星 80%)
+     * 
+     * @apiDescription 【备注：阿姨身份、星级、个人技能等待model底层】
      * 
      * @apiName WorkerInfo
      * @apiGroup Worker
@@ -72,7 +74,9 @@ class WorkerController extends \api\components\Controller
     }
      
     /**
-     * @api {GET} /worker/handle-worker-leave  阿姨请假（田玉星 80% model阿姨请假）
+     * @api {GET} /worker/handle-worker-leave  阿姨请假（田玉星 80%）
+     * 
+     * @apiDescription 【备注：等待model底层支持】
      * 
      * @apiName actionHandleWorkerLeave
      * @apiGroup Worker
@@ -93,7 +97,6 @@ class WorkerController extends \api\components\Controller
      *          "msg": "您的请假已提交，请耐心等待审批。"
      *      }
      *  }
-     * @apiError UserNotFound 用户认证已经过期.
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
@@ -144,8 +147,9 @@ class WorkerController extends \api\components\Controller
      }
      
     /**
-     * @api {GET} /worker/handle-worker-leave-history  查看阿姨请假历史（田玉星 80% model阿姨请假）
+     * @api {GET} /worker/handle-worker-leave-history  查看阿姨请假历史（田玉星 80%）
      * 
+     * @apiDescription 【备注：等待model底层支持】
      * @apiName actionHandleWorkerLeaveHistory
      * @apiGroup Worker
      *
@@ -168,7 +172,6 @@ class WorkerController extends \api\components\Controller
      *     ]
      *   }
      * 
-     * @apiError SessionIdNotFound 阿姨不存在.
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
@@ -185,11 +188,10 @@ class WorkerController extends \api\components\Controller
         $worker = WorkerAccessToken::getWorker($param['access_token']);
         if (!empty($worker) && !empty($worker->id)) {
             //判断页码
-            if(!isset($param['page_num'])){
-                $page_num = 1;
-            }else{
-                $page_num = intval($param['page_num'])?intval($param['page_num']):1;
+            if(!isset($param['page_num'])||!intval($param['page_num'])){
+                $param['page_num'] = 1;
             }
+            $page_num = intval($param['page_num']);
             
             //调取阿姨请假历史情况
             $ret = [
@@ -238,8 +240,6 @@ class WorkerController extends \api\components\Controller
      *      }
      * }
      *
-     * @apiError SessionIdNotFound 阿姨不存在.
-     *
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
@@ -266,7 +266,85 @@ class WorkerController extends \api\components\Controller
        }
     }
     
-    
+    /**
+     * @api {GET} /worker/get-worker-comment 获取阿姨对应的评论 (田玉星 80%)
+     * 
+     * @apiDescription 【备注：等待model底层支持】
+     * 
+     * @apiName actionGetWorkerComment
+     * @apiGroup Worker
+     * 
+     * @apiParam {String} access_token    阿姨登录token
+     * @apiParam {String} comment_type 评论类型 【1：满意 2：一般 3差评】
+     * @apiParam {String} [page_num]   页码数，默认1 
+     * @apiParam {String} [platform_version] 平台版本号.
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *      "code": "ok",
+     *      "msg": "操作成功.",
+     *      "ret": [
+     *         {
+     *             "comment_id": "1",
+     *             "comment": "这是第一条评论类型为2评论",
+     *             "comment_date": "2015-10-22"
+     *         },
+     *         {
+     *             "comment_id": "1",
+     *             "comment": "这是第二条评论类型为2评论",
+     *            "comment_date": "2015-10-22"
+     *         }
+     *      ]
+     * }
+     *
+     * @apiErrorExample Error-Response:
+     *  HTTP/1.1 404 Not Found
+     *  {
+     *      "code":"error",
+     *      "msg": "用户认证已经过期,请重新登录"
+     *  }
+     */
+    public function  actionGetWorkerComment(){
+        $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
+           return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
+        
+        if(!isset($param['comment_type'])|| !intval($param['comment_type'])||!in_array($param['comment_type'],array(1,2,3))){
+            return $this->send(null, "评论类型不正确", "error", 403);
+        }
+        //判断页码
+        if(!isset($param['page_num'])||!intval($param['page_num'])){
+            $param['page_num'] = 1;
+        }
+        $page_num = intval($param['page_num']);
+        
+        //判断用户是否存在
+        $worker = WorkerAccessToken::getWorker($param['access_token']);
+        if (!$worker||!$worker->id){
+             return $this->send(null, "阿姨不存在.", "error", 404);
+        }
+        //数据返回
+        $ret = [
+            [
+                "comment_id"=>'1',
+                "comment"=>"这是第一条评论类型为".$param['comment_type']."评论",
+                'comment_date'=>date('Y-m-d')
+            ],
+            [
+                "comment_id"=>'1',
+                "comment"=>"这是第二条评论类型为".$param['comment_type']."评论",
+                'comment_date'=>date('Y-m-d')
+            ],
+            [
+                "comment_id"=>'1',
+                "comment"=>"这是第三条评论类型为".$param['comment_type']."评论",
+                'comment_date'=>date('Y-m-d')
+            ],
+        ];
+        return $this->send($ret, "操作成功.", "ok");
+    }
      
     
     
