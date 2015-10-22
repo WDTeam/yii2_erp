@@ -713,7 +713,8 @@ class Order extends OrderModel
      * @param   $order_id       int  订单id
      * @return  int
      */
-    public static function validationOrderCustomer($customer_id, $order_id)
+    
+    public static function validationOrderCoustomer($customer_id, $order_id)
     {
         return OrderExtCustomer::find()->where(["customer_id" => $customer_id, "order_id" => $order_id])->count();
     }
