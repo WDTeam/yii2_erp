@@ -214,7 +214,7 @@ class WorkerTask extends \common\models\WorkerTask
         }
         $tasks = self::find()
         ->where("FIND_IN_SET({$worker->worker_type}, worker_type) 
-            AND FIND_IN_SET({$worker->worker_rule_id}, worker_rule_id) 
+            AND FIND_IN_SET({$worker->worker_identity_id}, worker_rule_id) 
             AND worker_task_online=1")
         ->andFilterWhere(['<','worker_task_start', $cur_time])
         ->andFilterWhere(['>','worker_task_end', $cur_time])

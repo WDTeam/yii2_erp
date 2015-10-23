@@ -36,10 +36,14 @@ use yii\helpers\Url;
             'columns' => 1,
             'attributes' => [
                 
-                'name'=>['type'=> Form::INPUT_TEXT, 'options'=>[ 'maxlength'=>100]], 
+                'name'=>[
+                    'type'=> Form::INPUT_TEXT, 
+                    'options'=>[ 'maxlength'=>100],
+                    'label'=>'店名 *'
+                ], 
                 
                 'shop_manager_id'=>[
-                    'label'=>'归属家政',
+                    'label'=>'归属家政 *',
                     'type'=> Form::INPUT_WIDGET, 
                     'widgetClass'=>Select2::classname(),
                     'options'=>[
@@ -60,7 +64,19 @@ use yii\helpers\Url;
                     ]
                 ], 
                 
-                'street'=>['type'=> Form::INPUT_TEXT, 'options'=>[ 'maxlength'=>255]], 
+                'street'=>['type'=> Form::INPUT_TEXT, 'options'=>[ 'maxlength'=>255]],
+                
+                'city_id'=>[
+                    'type'=>Form::INPUT_WIDGET,
+                    'widgetClass'=>AreaCascade::className(),
+                    'options'=>[
+                        'model' => $model,
+                        'options' => ['class' => 'form-control inline'],
+                        'label' =>'选择城市',
+                        'grades' => 'county',
+                        'is_minui'=>true,
+                    ],
+                ],
                 
                 'principal'=>['type'=> Form::INPUT_TEXT, 'options'=>[ 'maxlength'=>50]], 
                 
@@ -99,14 +115,6 @@ use yii\helpers\Url;
             
             ]);
         }?>
-        <?php 
-        echo AreaCascade::widget([
-            'model' => $model,
-            'options' => ['class' => 'form-control inline'],
-            'label' =>'选择城市',
-            'grades' => 'county',
-        ]);
-        ?>
         </div>
 
         <div class="panel-heading">
