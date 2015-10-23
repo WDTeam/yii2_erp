@@ -72,7 +72,6 @@ class OrderController extends BaseAuthController
             $FinanceRefundadd->is_del=$orderInfo->isdel; //是否删除  0  正常 1 删除  默认是0
             //测试数据开始
             $infodate=$FinanceRefundadd->add();
-            print_r($FinanceRefundadd);
             $result = json_decode($infodate);
             if($result->status!=200)
             {

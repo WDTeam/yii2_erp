@@ -184,8 +184,8 @@ class AuthController extends \api\components\Controller
                 $worker = Worker::getWorkerDetailInfo($checkRet);
                 $ret = [
                     "worker_name" => $worker['worker_name'],
-                    "worker_rule_id" => $worker['worker_rule_id'],
-                    "worker_rule_description" => $worker['worker_rule_description'],
+                    "worker_rule_id" =>"",
+                    "worker_rule_description" =>"",
                     "worker_photo" => $worker['worker_photo'],
                     "access_token" => $token,
                     "worker_id" => $worker['id'],
