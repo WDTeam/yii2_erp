@@ -210,30 +210,23 @@ class Order extends OrderModel
             if (time() - $order->orderExtStatus->updated_at < 300) { //TODO 5分钟内的订单推送给全职阿姨 5分钟需要配置
                 //获取全职阿姨
                 $workers = Worker::getDistrictFreeWorker($order->district_id, $full_time, $order->order_booked_begin_time, $order->order_booked_end_time);
-                if (!empty($workers)) {
-                    self::pushToWorkers($order_id, $workers, $full_time);
-                    $push_status = $full_time;
-                } else { //如果查询不到指派的全职阿姨则直接推送兼职阿姨
+                $push_status = $full_time;
+                if (empty($workers)) {
+                    //没有全职阿姨 获取兼职阿姨
                     $workers = Worker::getDistrictFreeWorker($order->district_id, $part_time, $order->order_booked_begin_time, $order->order_booked_end_time);
-                    if (!empty($workers)) {
-                        self::pushToWorkers($order_id, $workers, $part_time);
-                        $push_status = $part_time;
-                    } else {//如果查询不到兼职阿姨则系统指派失败
-                        self::sysAssignUndone($order_id);
-                    }
+                    $push_status = $part_time;
                 }
             } elseif (time() - $order->orderExtStatus->updated_at < 900) { //TODO 15分钟内的订单推送给兼职阿姨 15分钟需要配置
                 $workers = Worker::getDistrictFreeWorker($order->district_id, 2, $order->order_booked_begin_time, $order->order_booked_end_time);
-                if (!empty($workers)) {
-                    self::pushToWorkers($order_id, $workers,$part_time);
-                    $push_status = $part_time;
-                } else {//如果查询不到兼职阿姨则系统指派失败
-                    self::sysAssignUndone($order_id);
-                }
-            } else { //系统指派失败
+                $push_status = $part_time;
+            }
+            if (!empty($workers)) {
+                self::pushToWorkers($order_id, $workers, $push_status);
+            } else {//如果查询不到兼职阿姨则系统指派失败
                 self::sysAssignUndone($order_id);
             }
         } else {
+            //状态不是智能指派中直接从订单池中删除
             self::remOrderToPool($order_id);
         }
 
@@ -245,6 +238,7 @@ class Order extends OrderModel
      * 推送给阿姨
      * @param $order_id
      * @param $workers
+     * @param $identity
      */
     public static function pushToWorkers($order_id, $workers, $identity)
     {
