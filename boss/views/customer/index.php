@@ -89,7 +89,8 @@ $this->params['breadcrumbs'][] = $this->title;
             //     'width' => "0px",
             // ],
             [
-                'class' => 'yii\grid\CheckboxColumn',
+                'class'=>'kartik\grid\CheckboxColumn',
+                'headerOptions'=>['class'=>'kartik-sheet-style'],
             ],
 
             // [
@@ -196,7 +197,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'label' => '投诉',
                 'value' => function ($dataProvider) {
-                    return '<a href="/order/index?OrderSearch[customer_id]='. $dataProvider->id .'">' . $dataProvider->customer_complaint_times . '</a>';
+                    return $dataProvider->customer_complaint_times;
                 },
                 'width' => "50px",
             ],
