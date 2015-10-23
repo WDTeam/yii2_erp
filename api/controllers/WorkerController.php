@@ -202,6 +202,7 @@ class WorkerController extends \api\components\Controller
                 $param['page_num'] = 10;
             }
             $page_num = intval($param['page_num']);
+            
             //调取阿姨请假历史情况
             $ret = [
                 [
@@ -284,7 +285,7 @@ class WorkerController extends \api\components\Controller
      * @apiGroup Worker
      * 
      * @apiParam {String} access_token    阿姨登录token
-     * @apiParam {String} comment_type 评论类型 【1：满意 2：一般 3差评】
+     * @apiParam {String} comment_type 评论类型 【1：满意 2：一般 3：差评】
      * @apiParam {String} per_page   页码数
      * @apiParam {String} page_num   每页显示数
      * @apiParam {String} [platform_version] 平台版本号.
@@ -446,11 +447,11 @@ class WorkerController extends \api\components\Controller
         return $this->send($ret, "操作成功.", "ok");
     }
     
-    
+    public function 
      
      
     /**
-     * @api {get} /mobileapidriver2/driver_get_now_order_list_hide 阿姨去不了
+     * @api {GET} /mobileapidriver2/driver_get_now_order_list_hide 阿姨去不了
      * @apiName actionDriverGetNowOrderListHide
      * @apiGroup Worker
      * @apiParam {String} session_id    会话id.
