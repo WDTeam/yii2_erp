@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use kartik\widgets\ActiveForm;
 use yii\widgets\Pjax;
-use boss\models\FinanceWorkerOrderIncomeSearch;
+use core\models\finance\FinanceWorkerOrderIncomeSearch;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -63,11 +63,6 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="panel-heading">
             <label class="panel-title">结算明细</label>
-        <?php
-            if($model->finance_settle_apply_order_count > 0){
-                echo Html::a('结算', ['worker-manual-settlement-done?worker_id='.$model->worder_id.'&settle_type='.$model->settle_type.'&review_section='.$model->review_section], ['class' => 'btn btn-success ']);
-            }
-         ?>
         </div>
         <div class="panel-body settle-detail-body">
             <div class='settleDetail'>

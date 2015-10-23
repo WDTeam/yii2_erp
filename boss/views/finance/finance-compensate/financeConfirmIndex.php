@@ -9,7 +9,7 @@ use yii\bootstrap\Modal;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
- * @var core\models\search\FinanceCompensate $searchModel
+ * @var core\models\finance\FinanceCompensate $searchModel
  */
 
 $this->title = Yii::t('finance', 'Finance Compensates Confirm List');

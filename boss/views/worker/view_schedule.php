@@ -104,137 +104,137 @@ use kartik\daterange\DateRangePicker;
     <tbody>
     <tr>
         <th scope="row" weekday="1">周一</th>
-        <td>8:00</td>
-        <td>9:00</td>
-        <td>10:00</td>
-        <td>11:00</td>
-        <td>12:00</td>
-        <td>13:00</td>
-        <td>14:00</td>
-        <td>15:00</td>
-        <td>16:00</td>
-        <td>17:00</td>
-        <td>18:00</td>
-        <td>19:00</td>
-        <td>20:00</td>
-        <td>21:00</td>
-        <td>22:00</td>
+        <td class="success">8:00</td>
+        <td class="success">9:00</td>
+        <td class="success">10:00</td>
+        <td class="success">11:00</td>
+        <td class="success">12:00</td>
+        <td class="success">13:00</td>
+        <td class="success">14:00</td>
+        <td class="success">15:00</td>
+        <td class="success">16:00</td>
+        <td class="success">17:00</td>
+        <td class="success">18:00</td>
+        <td class="success">19:00</td>
+        <td class="success">20:00</td>
+        <td class="success">21:00</td>
+        <td class="success">22:00</td>
         <th>
             <input type="checkbox" id="blankCheckbox" value="option1" aria-label="...">
         </th>
     </tr>
     <tr>
         <th scope="row" weekday="2">周二</th>
-        <td>8:00</td>
-        <td>9:00</td>
-        <td>10:00</td>
-        <td>11:00</td>
-        <td>12:00</td>
-        <td>13:00</td>
-        <td>14:00</td>
-        <td>15:00</td>
-        <td>16:00</td>
-        <td>17:00</td>
-        <td>18:00</td>
-        <td>19:00</td>
-        <td>20:00</td>
-        <td>21:00</td>
-        <td>22:00</td>
+        <td class="success">8:00</td>
+        <td class="success">9:00</td>
+        <td class="success">10:00</td>
+        <td class="success">11:00</td>
+        <td class="success">12:00</td>
+        <td class="success">13:00</td>
+        <td class="success">14:00</td>
+        <td class="success">15:00</td>
+        <td class="success">16:00</td>
+        <td class="success">17:00</td>
+        <td class="success">18:00</td>
+        <td class="success">19:00</td>
+        <td class="success">20:00</td>
+        <td class="success">21:00</td>
+        <td class="success">22:00</td>
         <th><input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."></th>
     </tr>
     <tr>
         <th scope="row" weekday="3">周三</th>
-        <td>8:00</td>
-        <td>9:00</td>
-        <td>10:00</td>
-        <td>11:00</td>
-        <td>12:00</td>
-        <td>13:00</td>
-        <td>14:00</td>
-        <td>15:00</td>
-        <td>16:00</td>
-        <td>17:00</td>
-        <td>18:00</td>
-        <td>19:00</td>
-        <td>20:00</td>
-        <td>21:00</td>
-        <td>22:00</td>
+        <td class="success">8:00</td>
+        <td class="success">9:00</td>
+        <td class="success">10:00</td>
+        <td class="success">11:00</td>
+        <td class="success">12:00</td>
+        <td class="success">13:00</td>
+        <td class="success">14:00</td>
+        <td class="success">15:00</td>
+        <td class="success">16:00</td>
+        <td class="success">17:00</td>
+        <td class="success">18:00</td>
+        <td class="success">19:00</td>
+        <td class="success">20:00</td>
+        <td class="success">21:00</td>
+        <td class="success">22:00</td>
         <th><input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."></th>
     </tr>
     <tr>
         <th scope="row" weekday="4">周四</th>
-        <td>8:00</td>
-        <td>9:00</td>
-        <td>10:00</td>
-        <td>11:00</td>
-        <td>12:00</td>
-        <td>13:00</td>
-        <td>14:00</td>
-        <td>15:00</td>
-        <td>16:00</td>
-        <td>17:00</td>
-        <td>18:00</td>
-        <td>19:00</td>
-        <td>20:00</td>
-        <td>21:00</td>
-        <td>22:00</td>
+        <td class="success">8:00</td>
+        <td class="success">9:00</td>
+        <td class="success">10:00</td>
+        <td class="success">11:00</td>
+        <td class="success">12:00</td>
+        <td class="success">13:00</td>
+        <td class="success">14:00</td>
+        <td class="success">15:00</td>
+        <td class="success">16:00</td>
+        <td class="success">17:00</td>
+        <td class="success">18:00</td>
+        <td class="success">19:00</td>
+        <td class="success">20:00</td>
+        <td class="success">21:00</td>
+        <td class="success">22:00</td>
         <th><input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."></th>
     </tr>
     <tr>
         <th scope="row" weekday="5">周五</th>
-        <td>8:00</td>
-        <td>9:00</td>
-        <td>10:00</td>
-        <td>11:00</td>
-        <td>12:00</td>
-        <td>13:00</td>
-        <td>14:00</td>
-        <td>15:00</td>
-        <td>16:00</td>
-        <td>17:00</td>
-        <td>18:00</td>
-        <td>19:00</td>
-        <td>20:00</td>
-        <td>21:00</td>
-        <td>22:00</td>
+        <td  class="success">8:00</td>
+        <td  class="success">9:00</td>
+        <td  class="success">10:00</td>
+        <td  class="success">11:00</td>
+        <td  class="success">12:00</td>
+        <td  class="success">13:00</td>
+        <td  class="success">14:00</td>
+        <td  class="success">15:00</td>
+        <td  class="success">16:00</td>
+        <td  class="success">17:00</td>
+        <td  class="success">18:00</td>
+        <td  class="success">19:00</td>
+        <td  class="success">20:00</td>
+        <td  class="success">21:00</td>
+        <td  class="success">22:00</td>
         <th><input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."></th>
     </tr>
     <tr>
         <th scope="row" weekday="6">周六</th>
-        <td>8:00</td>
-        <td>9:00</td>
-        <td>10:00</td>
-        <td>11:00</td>
-        <td>12:00</td>
-        <td>13:00</td>
-        <td>14:00</td>
-        <td>15:00</td>
-        <td>16:00</td>
-        <td>17:00</td>
-        <td>18:00</td>
-        <td>19:00</td>
-        <td>20:00</td>
-        <td>21:00</td>
-        <td>22:00</td>
+        <td  class="success">8:00</td>
+        <td  class="success">9:00</td>
+        <td  class="success">10:00</td>
+        <td  class="success">11:00</td>
+        <td  class="success">12:00</td>
+        <td  class="success">13:00</td>
+        <td  class="success">14:00</td>
+        <td  class="success">15:00</td>
+        <td  class="success">16:00</td>
+        <td  class="success">17:00</td>
+        <td  class="success">18:00</td>
+        <td  class="success">19:00</td>
+        <td  class="success">20:00</td>
+        <td  class="success">21:00</td>
+        <td  class="success">22:00</td>
         <th><input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."></th>
     </tr>
     <tr>
         <th scope="row" weekday="7">周日</th>
-        <td>8:00</td>
-        <td>9:00</td>
-        <td>10:00</td>
-        <td>11:00</td>
-        <td>12:00</td>
-        <td>13:00</td>
-        <td>14:00</td>
-        <td>15:00</td>
-        <td>16:00</td>
-        <td>17:00</td>
-        <td>18:00</td>
-        <td>19:00</td>
-        <td>20:00</td>
-        <td>21:00</td>
-        <td>22:00</td>
+        <td  class="success">8:00</td>
+        <td  class="success">9:00</td>
+        <td  class="success">10:00</td>
+        <td  class="success">11:00</td>
+        <td  class="success">12:00</td>
+        <td  class="success">13:00</td>
+        <td  class="success">14:00</td>
+        <td  class="success">15:00</td>
+        <td  class="success">16:00</td>
+        <td  class="success">17:00</td>
+        <td  class="success">18:00</td>
+        <td  class="success">19:00</td>
+        <td  class="success">20:00</td>
+        <td  class="success">21:00</td>
+        <td  class="success">22:00</td>
         <th><input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."></th>
     </tr>
     </tbody>

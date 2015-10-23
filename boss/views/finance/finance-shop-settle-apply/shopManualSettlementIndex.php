@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use kartik\widgets\ActiveForm;
 use yii\widgets\Pjax;
-use boss\models\FinanceShopSettleApplySearch;
+use core\models\finance\FinanceShopSettleApplySearch;
 use boss\widgets\ShopSelect;
 /**
  * @var yii\web\View $this

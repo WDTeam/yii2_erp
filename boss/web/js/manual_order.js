@@ -236,7 +236,7 @@ function timer(){
         var time = parseInt(now.getTime()/1000);
         $("#create_to_current_time").text(sec2time(time-window.order_data.order.created_at));
         $("#current_to_begin_service_time").text(sec2time(window.order_data.order.order_booked_begin_time-time));
-        var count_down = window.order_data.ext_flag.updated_at*1+window.order_data.operation_long_time*1-time;
+        var count_down = window.order_data.ext_flag.order_flag_lock_time*1+window.order_data.operation_long_time*1-time;
         $("#count_down").text(sec2time(count_down));
         if(count_down<=0 && window.count_down_flag){
             canNotAssign();

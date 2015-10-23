@@ -63,6 +63,7 @@ class OrderSearch extends Order
             if(!empty($order)){
                 //获取到订单后加锁并置为已开始人工派单的状态
                 $order->order_flag_lock = $admin_id;
+                $order->order_flag_lock_time = time(); //加锁时间
                 $order->order_flag_send = $order->orderExtFlag->order_flag_send+($isCS?1:2); //指派时先标记是谁指派不了
                 $order->admin_id = $admin_id;
                 if (OrderStatus::manualAssignStart($order, ['OrderExtFlag'])) {

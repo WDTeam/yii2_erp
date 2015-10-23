@@ -19,7 +19,7 @@ function websocketConnect() {
         };
         websocket.onclose = function (evt) {
             console.log("Disconnected");
-            $('#connectStatus').html('链接断开！');
+            $('#connectStatus').html('链接断开！请检查服务器地址是否正确，或被网络防火墙禁止访问');
             $('#connect').attr('disabled', false);
         };
 
@@ -30,6 +30,7 @@ function websocketConnect() {
 
         websocket.onerror = function (evt, e) {
             console.log('Error occured: ' + evt.data);
+            $('#connectStatus').html('连接错误，请检查网络环境是否正常！');
             $('#connect').attr('disabled', false);
         };
     }
@@ -40,14 +41,20 @@ function showOrders(data){
     var id = 'order_'+order.order_id;
     var obj = $('#'+id);
     order.status = getStatus(order.status);
-    if(order.sms == null){
-        order.sms = '未发送';
+    if(order.sms == true){
+        order.sms = '已发送';
+    }else{
+        order.sms = '已发送';
     }
-    if(order.ivr == null){
+    if(order.ivr == true){
+        order.ivr = '已发送';
+    }else{
         order.ivr = '未发送';
     }
     
-    if(order.jpush == null){
+    if(order.jpush == true){
+        order.jpush = '已发送';
+    }else{
         order.jpush = '未发送';
     }
     
@@ -69,11 +76,11 @@ function getStatus(status){
     if(status == null){
         return '正在指派给全职阿姨';
     }else{
-        //: （0-5分）: 1，(5-10)：2，已失败转到人工处理：
+        //: （0-5分）: 1，(5-10)：2，已失败转到人工处理：1001
         switch(status){
             case '1': return '正在指派给全职阿姨';break;
             case '2': return '正在指派给兼职阿姨';break;
-            case '1001' : return '已失败转到人工处理'; break;
+            case '1001' : return '系统派单失败转人工处理'; break;
         }
     }
 }

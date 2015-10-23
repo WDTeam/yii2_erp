@@ -1,7 +1,7 @@
 <?php
 use common\widgets\Menu;
-use boss\models\FinanceShopSettleApplySearch;
-use boss\models\FinanceSettleApplySearch;
+use core\models\finance\FinanceShopSettleApplySearch;
+use core\models\finance\FinanceSettleApplySearch;
 
 $ctrl = Yii::$app->controller;
 
@@ -120,7 +120,7 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '智能派单(80%)',
+                        'label' => '智能派单(90%)',
                         'url' => ['/auto-assign'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -231,15 +231,15 @@ echo Menu::widget(
                             ],
                             [
                                 'label' => '添加新优惠券(10%)',
-                                'url' => ['coupon/add'],
+                                'url' => ['coupon/create'],
                                 'icon' => 'fa fa-angle-right',
                             ],
-                            [
-                                'label' => '绑定用户',
-                                'url' => ['coupon/index'],
-                                'icon' => 'fa fa-angle-right',
+                            //[
+                              //  'label' => '绑定用户',
+                               // 'url' => ['coupon/index'],
+                               // 'icon' => 'fa fa-angle-right',
                                 
-                            ],
+                            //],
                         ]
                     ],
 

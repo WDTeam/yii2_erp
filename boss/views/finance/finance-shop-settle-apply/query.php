@@ -3,11 +3,11 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
-use boss\models\FinanceSettleApplySearch;
+use core\models\finance\FinanceSettleApplySearch;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
- * @var boss\models\FinanceSettleApplySearch $searchModel
+ * @var core\models\finance\FinanceSettleApplySearch $searchModel
  */
 
 $this->title = Yii::t('finance', '门店结算查询');
