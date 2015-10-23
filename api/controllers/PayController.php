@@ -10,7 +10,7 @@ class PayController extends \api\components\Controller
 
 
     /**
-     * @api {get} /v2/online_pay_for_member.php 会员余额支付
+     * @api {get} /v2/online_pay_for_member.php 会员余额支付 (赵顺利0%)
      * @apiName actionOnlinePayForMember
      * @apiGroup Pay
      *
@@ -46,7 +46,7 @@ class PayController extends \api\components\Controller
 
 
     /**
-     * @api {post} pay/pay 支付接口 （已完成）
+     * @api {post} v1/pay/pay 支付接口 （已完成）
      * @apiName actionPay
      * @apiGroup Pay
      *
@@ -65,30 +65,73 @@ class PayController extends \api\components\Controller
      * @apiParam integer [order_id] 订单ID,没有订单号表示充值
      * @apiParam integer partner 第三方合作号
      *
-     * @apiParam object [ext_params] 扩展参数,用于微信/百度直达号（即channel_id=2或4 必填）
+     * @apiParam object [ext_params] 扩展参数,用于微信/百度直达号（即channel_id=2或7 必填）
      * @apiParam string [ext_params.openid] （channel_id=2 必填）
-     * @apiParam string [ext_params.customer_name]
-     * @apiParam string [ext_params.customer_mobile]
-     * @apiParam string [ext_params.customer_address]
-     * @apiParam string [ext_params.order_source_url]
-     * @apiParam string [ext_params.page_url]
-     * @apiParam string [ext_params.goods_name]
-     * @apiParam string [ext_params.detail]
+     * @apiParam string [ext_params.customer_name] （channel_id=7必填）
+     * @apiParam string [ext_params.customer_mobile] （channel_id=7必填）
+     * @apiParam string [ext_params.customer_address] （channel_id=7必填）
+     * @apiParam string [ext_params.order_source_url] （channel_id=7必填）
+     * @apiParam string [ext_params.page_url] （channel_id=7必填）
+     * @apiParam string [ext_params.goods_name] （channel_id=7必填）
+     * @apiParam string [ext_params.detail] （channel_id=7必填）
+     *
+     * @apiParamExample {json} Request-Example:
+     *  {
+     *      "channel_id":"7",
+     *      "partner":"1217983401",
+     *      "customer_id":"1",
+     *      "pay_money":"0.01",
+     *      "order_id":"0",
+     *      "ext_params":
+     *      {
+     *          "openid":"o7Kvajh91Fmh_KYzhwX0LWZtpMPM",
+     *          "goods_name":"%E6%B5%8B%E8%AF%95%E5%95%86%E5%93%81",
+     *          "customer_name":"%E6%B5%8B%E8%AF%95%E5%95%86%E5%93%81",
+     *          "customer_mobile":"18001305711",
+     *          "goods_name":"18001305711",
+     *          "customer_address":"%E5%8C%97%E4%BA%AC%E7%9C%81",
+     *          "order_source_url":"http://www.baidu.com",
+     *          "page_url":"http://www.qq.com",
+     *          "detail":
+     *          [
+     *          {
+     *              "item_id":"1",
+     *              "cat_id":"1",
+     *              "name":"寿司",
+     *              "desc":"很好吃",
+     *              "price":"1"
+     *          },
+     *          ]
+     *      }
+     * }
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *   code: "ok",
-     *   msg: "操作成功",
-     *   ret: {
-     *           appId: "wx7558e67c2d61eb8f",
-     *           nonceStr: "bw49b49oypsepjwu72rxr6vm2l1w2yrh",
-     *           package: "prepay_id=wx2015102019101737c5eba0520251793495",
-     *           signType: "MD5",
-     *           timeStamp: "1445339417",
-     *           paySign: "6C4C398E98ACB00DAD672098C71DB4F2"
+     *      "code": 0,
+     *      "msg": "数据返回成功",
+     *      "ret": {
+     *          "sp_no": 1049,
+     *          "order_no": "15102301277257",
+     *          "total_amount": "1",
+     *          "goods_name": "18001305711",
+     *          "return_url": "http://127.0.0.1/pay/zhidahao-h5-notify",
+     *          "page_url": "http://www.qq.com",
+     *          "detail": [
+     *          {
+     *              "item_id": "1",
+     *              "cat_id": "1",
+     *              "name": "寿司",
+     *              "desc": "很好吃",
+     *              "price": "1"
+     *          }
+     *          ],
+     *          "order_source_url": "http://www.baidu.com",
+     *          "customer_name": "%E6%B5%8B%E8%AF%95%E5%95%86%E5%93%81",
+     *          "customer_mobile": "18001305711",
+     *          "customer_address": "%E5%8C%97%E4%BA%AC%E7%9C%81"
      *      }
-     *   }
+     *  }
      *
      * @apiError SessionIdNotFound 未找到会话ID.
      * @apiError OrderIdNotFound 未找到订单ID.
@@ -106,7 +149,9 @@ class PayController extends \api\components\Controller
     {
         $model = new PayParam();
         $name = $model->formName();
-        $data[$name] = Yii::$app->request->post();
+        $data[$name] = Yii::$app->request->post() or
+        $data[$name] = json_decode(Yii::$app->request->rawBody, true);
+        //return $data[$name];
         $ext_params = [];
         //在线支付（online_pay），在线充值（pay）
         if (empty($data[$name]['order_id'])) {
@@ -120,7 +165,7 @@ class PayController extends \api\components\Controller
                 $ext_params['customer_address'] = $data[$name]['ext_params']['customer_address'];  //用户地址
                 $ext_params['order_source_url'] = $data[$name]['ext_params']['order_source_url'];  //订单详情地址
                 $ext_params['page_url'] = $data[$name]['ext_params']['page_url'];  //订单跳转地址
-                $ext_params['goods_name'] = $data[$name]['ext_params']['goods_name'];  //订单跳转地址
+                $ext_params['goods_name'] = $data[$name]['ext_params']['goods_name'];  //订单名称
                 $ext_params['detail'] = $data[$name]['ext_params']['detail'];  //订单详情
             } else {
                 $model->scenario = 'pay';
@@ -136,7 +181,7 @@ class PayController extends \api\components\Controller
                 $ext_params['customer_address'] = $data[$name]['ext_params']['customer_address'];  //用户地址
                 $ext_params['order_source_url'] = $data[$name]['ext_params']['order_source_url'];  //订单详情地址
                 $ext_params['page_url'] = $data[$name]['ext_params']['page_url'];  //订单跳转地址
-                $ext_params['goods_name'] = $data[$name]['ext_params']['goods_name'];  //订单跳转地址
+                $ext_params['goods_name'] = $data[$name]['ext_params']['goods_name'];  //订单名称
                 $ext_params['detail'] = $data[$name]['ext_params']['detail'];  //订单详情
             } else {
                 $model->scenario = 'online_pay';
@@ -148,7 +193,7 @@ class PayController extends \api\components\Controller
 
         if ($model->load($data) && $model->validate()) {
             $retInfo = GeneralPay::getPayParams($model->pay_money, $model->customer_id, $model->channel_id, $model->partner, $model->order_id, $ext_params);
-            return $this->send($retInfo['data']);
+            return $this->send($retInfo['data'],$retInfo['info'],$retInfo['status']);
         }
         return $this->send(null, $model->errors, "error");
 
