@@ -56,7 +56,7 @@ class WorkerTaskLog extends \common\models\WorkerTaskLog
         if($is_done){
             $this->worker_task_is_done = 1;
             $this->worker_task_done_time = time();
-        }else{
+        }elseif($task->worker_task_end<time()){//如果结束时间小于当前时间，则永远为未完成
             $this->worker_task_is_done = -1;
         }
         $this->save();
