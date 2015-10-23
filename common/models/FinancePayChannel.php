@@ -133,12 +133,15 @@ class FinancePayChannel extends \yii\db\ActiveRecord
     	 $ordewhere['is_del']=0;
     	$ordewhere['finance_pay_channel_is_lock']=2;
     	 $payatainfo=FinancePayChannel::find()->where($ordewhere)->asArray()->all();
+    	 if(count($payatainfo)>0){
     	foreach ($payatainfo as $errt){
     		$tyd[]=$errt['id'];
     		$tydtui[]=$errt['finance_pay_channel_name'];
     	}
     	$tyu= array_combine($tyd,$tydtui);
-    
+    	 }else{
+    	 	$tyu='';
+    	 }
     	return $tyu;
     }
     

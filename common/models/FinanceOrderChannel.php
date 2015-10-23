@@ -142,12 +142,15 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
     public static function get_order_channel_listes(){
     	$ordewhere['is_del']=0;
     	$payatainfo=FinanceOrderChannel::find()->where($ordewhere)->asArray()->all();
+    	if(count($payatainfo)>0){
     	foreach ($payatainfo as $errt){
     		$tyd[]=$errt['id'];
     		$tydtui[]=$errt['finance_order_channel_name'];
     	}
     	$tyu= array_combine($tyd,$tydtui);
-    
+    	}else{
+    		$tyu='';
+    	}
     	return $tyu;
     }
     
