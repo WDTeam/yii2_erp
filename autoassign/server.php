@@ -20,6 +20,8 @@ class server
     private $port = 9501;
     private $isRun = true;
     //private $server;
+    private $assignOrdersPool;
+    private $workerTaskIsRunning = false;
  
     /**
      * [__construct description]
@@ -28,6 +30,7 @@ class server
     public function __construct() {
         $this->connectRedis();
         $this->saveStatus();
+        $workerTaskIsRunning=false;
         $this->serv = new swoole_websocket_server($this->ip, $this->port);
         //初始化swoole服务
         $this->serv->set(array(
@@ -131,15 +134,14 @@ class server
         $data = json_encode($d);
         $this->redis->set($key, $data);
     }
-    private $workerTaskIsRunning;
     public function processOrders($server, $data, $ws) {
 //        echo 'Process Orders.\n';
         echo 'processOrders'."\n";
-        if ($timerIsRunning)
+        if ($this->$workerTaskIsRunning==true)
         {
             return;
         }else{
-            $workerTaskIsRunning = true;
+            $this->$workerTaskIsRunning = true;
         }
        
         //取得订单启动任务foreach orders
@@ -232,8 +234,13 @@ class server
 //        if($data == 'start_timer'){
 //            swoole_timer_add(1000, function($interval){echo 'timer_add';});
 //        }else{
+        if ($data[lock]==false)
+        {
             $this->lockOrder($data);//加入状态锁
             return $this->taskOrder($data, $server);
+        }
+//            $this->lockOrder($data);//加入状态锁
+//            return $this->taskOrder($data, $server);
 //        }
     }
     
