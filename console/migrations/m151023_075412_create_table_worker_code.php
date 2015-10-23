@@ -1,7 +1,7 @@
 <?php
 
 use yii\db\Schema;
-use jamband\schemadump\Migration;
+use yii\db\Migration;
 
 class m151023_075412_create_table_worker_code extends Migration
 {
