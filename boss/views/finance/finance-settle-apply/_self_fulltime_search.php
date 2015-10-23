@@ -4,9 +4,9 @@ use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use kartik\datecontrol\DateControl;
 use kartik\date\DatePicker;
-use boss\models\FinanceSettleApplySearch;
+use core\models\finance\FinanceSettleApplySearch;
 use boss\widgets\ShopSelect;
-use boss\models\FinanceShopSettleApplySearch;
+use core\models\finance\FinanceShopSettleApplySearch;
 ?>
 
 <div class="worker-search">

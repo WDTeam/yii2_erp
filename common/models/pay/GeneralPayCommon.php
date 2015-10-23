@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models;
+namespace common\models\pay;
 
 use core\models\Customer;
 use core\models\CustomerTransRecord\CustomerTransRecord;
@@ -49,6 +49,9 @@ class GeneralPayCommon extends \yii\db\ActiveRecord
     public $order_source_url; //订单详情地址
     public $page_url; //订单跳转地址
     public $detail; //订单详情
+    //支付宝WEB
+    public $show_url; //订单显示地址
+    public $return_url; //订单同步回调地址
 
     /**
      * @inheritdoc
@@ -71,7 +74,7 @@ class GeneralPayCommon extends \yii\db\ActiveRecord
             [['general_pay_transaction_id'], 'string', 'max' => 40],
             [['order_id', 'general_pay_admin_name', 'general_pay_handle_admin_name'], 'string', 'max' => 30],
             [['customer_id','order_id'],'match','pattern'=>'%^[1-9]\d*$%'],   //必须为数字，不能是0
-            [['general_pay_memo'], 'string', 'max' => 255],
+            [['general_pay_memo','show_url','return_url'], 'string', 'max' => 255],
             [['general_pay_verify'], 'string', 'max' => 32],
             /**********以下自定义属性**********/
             [['partner'], 'required'],
@@ -93,6 +96,10 @@ class GeneralPayCommon extends \yii\db\ActiveRecord
     public function scenarios()
     {
         return[
+            //支付宝WEB
+            'alipay_web_pay'    =>['general_pay_money','customer_id','partner','general_pay_source','general_pay_source_name','general_pay_mode','return_url','show_url'],
+            //支付宝WEB
+            'alipay_web_online_pay'    =>['general_pay_money','customer_id','partner','general_pay_source','general_pay_source_name','general_pay_mode','order_id','return_url','show_url'],
             //在线充值
             'pay'       =>['general_pay_money','customer_id','partner','general_pay_source','general_pay_source_name','general_pay_mode'],
             //在线支付
@@ -217,7 +224,7 @@ class GeneralPayCommon extends \yii\db\ActiveRecord
      */
     public static function orderInfo($order_id){
         $orderSearch = new OrderSearch();
-        $orderInfo = $orderSearch->search(['OrderSearch'=>['id'=>$order_id]])->query->one();
+        $orderInfo = $orderSearch->getOne($order_id);
         return $orderInfo;
     }
 

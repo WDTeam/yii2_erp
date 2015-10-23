@@ -20,6 +20,9 @@ $(document).on('click','.close',function(){
     $(this).parents('.schedule_content').remove();
 });
 $('#btn-add').on('click',function(){
+    /*
+     留个验证时间不能重复的口
+     */
     var date_range = $('input[name=date_range]').val();
     if(!date_range){
         alert('请选择时间');

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use kartik\widgets\ActiveForm;
 use yii\widgets\Pjax;
-use boss\models\FinanceWorkerOrderIncomeSearch;
+use core\models\finance\FinanceWorkerOrderIncomeSearch;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
