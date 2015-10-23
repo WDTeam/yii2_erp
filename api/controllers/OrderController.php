@@ -6,6 +6,7 @@ use Faker\Provider\DateTime;
 use Yii;
 use common\models\FinanceOrderChannel;
 use common\models\OrderSrc;
+use common\models\CustomerAddress as CommonCustomerAddress;
 use core\models\order\Order;
 use core\models\order\OrderSearch;
 use core\models\order\OrderStatus;
@@ -228,23 +229,39 @@ class OrderController extends \api\components\Controller
         }
         $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
 
-        if (@is_null($args['address_id']) and @ is_null($args['city'])) {
-            return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名");
+        if (is_null($args['city'])) {
+            return $this->send(null, "数据不完整,请输入城市名");
         }
-        if (@is_null($args['address_id'])) {
-            //add address into customer and return customer id
-            $area_name = $args['address'];
-            if (strpos($area_name, '市') > 0) {
-                $area_name = substr($area_name, strpos($area_name, '市') + strlen('市'));
-            }
-            if (strpos($area_name, '区') > 0) {
-                $area_name = substr($area_name, 0, strpos($area_name, '区'));
-            }
-            $model = CustomerAddress::addAddress($user->id, $area_name, $args['address'], $args['order_customer_phone'], $args['order_customer_phone']);
-            $attributes['address_id'] = $model->id;
-        } else {
+
+        if (isset($args['address_id'])) {
             $attributes['address_id'] = $args['address_id'];
-        }
+        } elseif(isset($args['address'])) {
+            //add address into customer and return customer id
+			$address = $args['address'];
+			$customerAddress = CommonCustomerAddress::find()->where(['customer_id'=>$user->id, 'customer_address_detail'=>$address])->one();
+			if(!empty($customerAddress)){
+				// found the address
+				$attributes['address_id'] = $customerAddress['id'];
+			}else{
+				// address not found, add new address for the customer
+                $area_name = $address;
+                if(strpos($area_name,'市')>0){
+                    $area_name = substr($area_name,strpos($area_name,'市')+strlen('市'));
+                }
+                if(strpos($area_name,'区')>0){
+                    $area_name = substr($area_name,0,strpos($area_name,'区'));
+                }
+                $model = CustomerAddress::addAddress($user->id, $area_name, $address,
+                    $args['order_customer_phone'], $args['order_customer_phone']);
+				if(!empty($model)){
+                    $attributes['address_id'] = $model->id;
+                }else{
+					return $this->send(null, "地址数据不完整,请输入常用地址id或者城市,地址名（包括区）");
+				}
+            }
+        }else{
+			return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名");
+		}
 
         if (isset($args['order_pop_order_code'])) {
             $attributes['order_pop_order_code'] = $args['order_pop_order_code'];
