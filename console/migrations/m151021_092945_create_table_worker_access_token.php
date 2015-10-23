@@ -1,7 +1,7 @@
 <?php
 
 use yii\db\Schema;
-use jamband\schemadump\Migration;
+use yii\db\Migration;
 
 class m151021_092945_create_table_worker_access_token extends Migration
 {
