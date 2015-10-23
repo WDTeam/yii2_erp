@@ -12,7 +12,7 @@ use boss\models\order\Order;
 use yii\base\Exception;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
-use core\models\Customer;
+use core\models\customer\Customer;
 use core\models\order\OrderStatusHistory;
 
 /**
@@ -85,7 +85,11 @@ class OrderController extends BaseAuthController
     {
         $phone = Yii::$app->request->get('phone');
         Yii::$app->response->format = Response::FORMAT_JSON;
-        return Customer::getCustomerInfo($phone);
+        $customer = Customer::getCustomerInfo($phone);
+        if(empty($customer)){
+            $customer = Customer::adminAddCustomer($phone);
+        }
+        return $customer;
 
     }
 
