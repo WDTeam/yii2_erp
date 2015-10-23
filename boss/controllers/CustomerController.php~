@@ -9,11 +9,14 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 use core\models\customer\Customer;
-use core\models\customer\CustomerBlockLog;
 use core\models\customer\CustomerAddress;
+use core\models\customer\CustomerWorker;
 use core\models\customer\CustomerExtSrc;
+use core\models\customer\CustomerChannal;
+use core\models\customer\CustomerPlatform;
 use core\models\customer\CustomerExtBalance;
 use core\models\customer\CustomerExtScore;
+use core\models\customer\CustomerBlockLog;
 use core\models\customer\CustomerComment;
 /**
  * CustomerController implements the CRUD actions for Customer model.
@@ -304,7 +307,49 @@ class CustomerController extends Controller
         }
     }
 
+	public function actionClearData(){
+		Customer::deleteAll();
+		CustomerAddress::deleteAll();
+		CustomerWorker::deleteAll();
+		CustomerPlatform::deleteAll();
+		CustomerChannal::deleteAll();
+		CustomerExtSrc::deleteAll();
+		CustomerExtBalance::deleteAll();
+		CustomerExtScore::deleteAll();
+		CustomerCode::deleteAll();
+		CustomerAccessToken::deleteAll();
+	}
 
+	public function actionInitChannal(){
+		$customerChannal = new CustomerChannal;
+		$customerChannal->channal_name = '美团';
+		$customerChannal->channal_ename = 'meituan';
+		$customerChannal->pid = 0;
+		$customerChannal->created_at = time();
+		$customerChannal->updated_at = 0;
+		$custoemrChannal->is_del = 0;
+		$custoemrChannal->save();
+		
+		$customerChannal->channal_name = '美团';
+		$customerChannal->channal_ename = 'meituan';
+		$custoemrChannal->save();
+		
+		$customerChannal->channal_name = '美团';
+		$customerChannal->channal_ename = 'meituan';
+		$custoemrChannal->save();
+
+		$customerChannal->channal_name = '美团';
+		$customerChannal->channal_ename = 'meituan';
+		$custoemrChannal->save();
+
+		$customerChannal->channal_name = '美团';
+		$customerChannal->channal_ename = 'meituan';
+		$custoemrChannal->save();
+
+		$customerChannal->channal_name = '美团';
+		$customerChannal->channal_ename = 'meituan';
+		
+	}
 
     public $global_cur_page_no = 1;
     public function actionData(){
@@ -371,6 +416,37 @@ class CustomerController extends Controller
                 }
                 $customer->save();
 
+				$customerAddress = new CustomerAddress;
+                $customerAddress->customer_id = $customer->id;
+                $customerAddress->operation_province_id = 110000;
+                $customerAddress->operation_city_id = 110100;
+                $customerAddress->operation_area_id = 110105;
+
+                $customerAddress->operation_province_name = '北京';
+                $customerAddress->operation_city_name = '北京市';
+                $customerAddress->operation_area_name = '朝阳区';
+
+                $customerAddress->operation_province_short_name = '北京';
+                $customerAddress->operation_city_short_name = '北京';
+                $customerAddress->operation_area_short_name = '朝阳';
+
+                $customerAddress->customer_address_detail = 'SOHO一期2单元908';
+                $customerAddress->customer_address_status = 1;
+                $customerAddress->customer_address_longitude = '116.48641';
+                $customerAddress->customer_address_latitude = '39.92149';
+                $customerAddress->customer_address_nickname = '测试昵称';
+                $customerAddress->customer_address_phone = '18519654001';
+                $customerAddress->created_at = time();
+                $customerAddress->updated_at = 0;
+                $customerAddress->is_del = 0;
+                if ($customerAddress->hasErrors()) {
+                    var_dump($customer->getErrors());
+                    die();
+                }
+                $customerAddress->save();
+				
+				
+
                 $customerBalance = new CustomerExtBalance;
                 $customerBalance->customer_id = $customer->id;
                 $customerBalance->customer_balance = $val['charge_money'];
@@ -435,35 +511,7 @@ class CustomerController extends Controller
                    // $customerComment->save();
                 //}
                 
-                $customerAddress = new CustomerAddress;
-                $customerAddress->customer_id = $customer->id;
-                $customerAddress->operation_province_id = 110000;
-                $customerAddress->operation_city_id = 110100;
-                $customerAddress->operation_area_id = 110105;
-
-                $customerAddress->operation_province_name = '北京';
-                $customerAddress->operation_city_name = '北京市';
-                $customerAddress->operation_area_name = '朝阳区';
-
-                $customerAddress->operation_province_short_name = '北京';
-                $customerAddress->operation_city_short_name = '北京';
-                $customerAddress->operation_area_short_name = '朝阳';
-
-                $customerAddress->customer_address_detail = 'SOHO一期2单元908';
-                $customerAddress->customer_address_status = 1;
-                $customerAddress->customer_address_longitude = '116.48641';
-                $customerAddress->customer_address_latitude = '39.92149';
-                $customerAddress->customer_address_nickname = '测试昵称';
-                $customerAddress->customer_address_phone = '18519654001';
-                $customerAddress->created_at = time();
-                $customerAddress->updated_at = 0;
-                $customerAddress->is_del = 0;
-                if ($customerAddress->hasErrors()) {
-                    var_dump($customer->getErrors());
-                    die();
-                }
-                $customerAddress->save();
-
+                
                 $customerExtSrc = new CustomerExtSrc;
                 $customerExtSrc->customer_id = $customer->id;
                 $customerExtSrc->platform_id = 0;
@@ -609,37 +657,7 @@ class CustomerController extends Controller
         
     }
 
-    public function actionData4(){
-        $connection = new \yii\db\Connection([
-            'dsn' => 'mysql:host=rdsh52vh252q033a4ci5.mysql.rds.aliyuncs.com;dbname=dev-boss-db',
-            'username' => 'dev_boss_db_dbo',
-            'password' => 'devboss',
-        ]);
-        $connectionNew = new \yii\db\Connection([
-            'dsn' => 'mysql:host=localhost;dbname=dev-boss-db',
-            'username' => 'root',
-            'password' => 'root',
-        ]);
-
-        $connection->open();
-        $command = $connection->createCommand("SELECT * FROM ejj_operation_area limit 2000");
-        $operation_areas = $command->queryAll();
-        // var_dump($operation_areas);
-        // exit();
-        // $connectionNew->createCommand()->batchInsert('ejj_operation_area',$operation_areas[0], $operation_areas)->execute();
-        foreach ($operation_areas as $operation_area) {
-            $operationArea = new \common\models\Operation\CommonOperationArea;
-            $operationArea->area_name = $operation_area['area_name'];
-            $operationArea->parent_id = $operation_area['parent_id'];
-            $operationArea->short_name = $operation_area['short_name'];
-            $operationArea->longitude = $operation_area['longitude'];
-            $operationArea->latitude = $operation_area['latitude'];
-            $operationArea->level = $operation_area['level'];
-            $operationArea->position = $operation_area['position'];
-            $operationArea->sort = $operation_area['sort'];
-            $operationArea->save();
-        }
-    }
+    
 
     public function actionData5(){
         //创建客户
@@ -820,6 +838,8 @@ class CustomerController extends Controller
 
         // $res =  \core\models\customer\CustomerAddress::addAddress(1, '东城区', '详细地址', '刘道强', '18519654001');
         // var_dump($res);
+		$res = Customer::adminAddCustomer('18519654001');
+		var_dump($res);
     }
 
     public function testAddress(){

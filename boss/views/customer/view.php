@@ -35,29 +35,38 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php 
 //城市
 $city_name = Customer::getCityName($model->id);
+//var_dump($city_name);
+
 //来源
 $customerExtSrc = CustomerExtSrc::getFirstSrc($model->id);
-$platform_name = $customerExtSrc == false ? '-' : $customerExtSrc->platform_name; 
-$channal_name = $customerExtSrc == false ? '-' : $customerExtSrc->channal_name; 
-$device_name = $customerExtSrc == false ? '-' : $customerExtSrc->device_name;
-$device_no = $customerExtSrc == false ? '-' : $customerExtSrc->device_no;
+$platform_name = $customerExtSrc == false ? '-' : $customerExtSrc->platform_name == '' ? '-' : $customerExtSrc->platform_name; 
+$channal_name = $customerExtSrc == false ? '-' : $customerExtSrc->channal_name == '' ? '-' : $customerExtSrc->channal_name; 
+$device_name = $customerExtSrc == false ? '-' : $customerExtSrc->device_name == '' ? '-' : $customerExtSrc->device_name; 
+$device_no = $customerExtSrc == false ? '-' : $customerExtSrc->device_no == '' ? '-' : $customerExtSrc->device_no;
+//var_dump($platform_name);
+//var_dump($channal_name);
+//var_dump($device_name);
+//var_dump($device_no);
+//exit();
 
 //全部服务地址
 $customerAddress = CustomerAddress::listAddress($model->id);
-if (empty($customerAddress)) {
-    return '-';
-}
+
 $addressStr = '';
-foreach ($customerAddress as $address) {
-    if ($address != NULL) {
-        $addressStr .= $address->operation_province_name
-            .$address->operation_city_name
-            .$address->operation_area_name
-            .$address->customer_address_detail
-            .' | '.$address->customer_address_nickname
-            .' | '.$address->customer_address_phone;
-    }
+if(!empty($customerAddress)){
+	foreach ($customerAddress as $address) {
+		if ($address != NULL) {
+		    $addressStr .= $address->operation_province_name
+		        .$address->operation_city_name
+		        .$address->operation_area_name
+		        .$address->customer_address_detail
+		        .' | '.$address->customer_address_nickname
+		        .' | '.$address->customer_address_phone . '<br/>';
+		}
+	}
 }
+//var_dump($addressStr);
+//exit();
 
 //订单
 $order_count = OrderSearch::getCustomerOrderCount($model->id);
