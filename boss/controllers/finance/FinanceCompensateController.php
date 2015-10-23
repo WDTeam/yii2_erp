@@ -3,8 +3,8 @@
 namespace boss\controllers\finance;
 
 use Yii;
-use common\models\FinanceCompensate;
-use core\models\search\FinanceCompensate as FinanceCompensateSearch;
+use common\models\finance\FinanceCompensate;
+use core\models\finance\FinanceCompensate as FinanceCompensateSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -120,7 +120,19 @@ class FinanceCompensateController extends Controller
     public function actionCreate()
     {
         $model = new FinanceCompensate;
-        if ($model->load(Yii::$app->request->post())) {
+        $postParams = null;
+        if(Yii::$app->request->post() != null){
+            $postParams = Yii::$app->request->post();
+        }
+        $getParams = null;
+        if(Yii::$app->request->get() != null){
+            $getParams = Yii::$app->request->get();
+        }
+        $id = null;
+        if(isset($getParams['id'])){
+            $id = $getParams['id'];
+        }
+        if ($model->load($postParams)) {
             $model->finance_complaint_id = 1111;
             $model->worker_tel = '13810998888';
             $model->worker_id = 33;
@@ -129,9 +141,31 @@ class FinanceCompensateController extends Controller
             $model->customer_name = '肖先生';
             $model->finance_compensate_proposer = '客服A';
             $model->created_at = time();
+            if(!empty($postParams) && isset($postParams['finance_compensate_coupon'])){
+                $finance_compensate_coupon_arr = $postParams['finance_compensate_coupon'];
+                $finance_compensate_coupon_money_arr = [];
+                $finance_compensate_coupon = null;
+                $finance_compensate_coupon_money = null;
+                foreach($finance_compensate_coupon_arr as $key=>$value){
+                    if(empty($value)){
+                        unset($finance_compensate_coupon_arr[$key]);
+                        continue;
+                    }
+                    $finance_compensate_coupon_money_arr[] = 50;
+                }
+                 if(count($finance_compensate_coupon_arr)> 0){
+                     $finance_compensate_coupon = implode(";", $finance_compensate_coupon_arr);
+                     $finance_compensate_coupon_money = implode(";", $finance_compensate_coupon_money_arr);
+                     $model->finance_compensate_coupon = $finance_compensate_coupon;
+                     $model->finance_compensate_coupon_money = $finance_compensate_coupon_money;
+                 }
+            }
             $model->save();
             return $this->redirect(['finance-confirm-index']);
         } else {
+            if(!empty($id)){
+                 $model = $this->findModel($id);
+            }
             return $this->render('create', [
                 'model' => $model,
             ]);

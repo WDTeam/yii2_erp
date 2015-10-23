@@ -23,7 +23,7 @@ $model->is_del=0;
     'columns' => 1,
     'attributes' => [
 
-     		'finance_order_channel_rate'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'比例%...']], 
+     		'finance_order_channel_rate'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'比例...']], 
      		
 //'finance_order_channel_sort'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'排序...']], 
 

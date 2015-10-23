@@ -240,7 +240,7 @@ class WorkerTask extends \common\models\WorkerTask
             $end = mktime(0,0,0,date('m'),date('d')+1,date('Y'))-1;
             $cycle_number = 'd'.date('Ymd');
         }
-        return [$cycle_number, $start, $cycle_number];
+        return [$cycle_number, $start, $end];
     }
     /**
      * 自动生成阿姨任务
@@ -285,7 +285,8 @@ class WorkerTask extends \common\models\WorkerTask
         foreach($cons as $con){
             foreach ($tasklogmetas as $meta){
                 if($con['id']==$meta['worker_tasklog_condition']){
-                    $is_done = eval($meta['worker_tasklog_value'].$con['judge'].$con['value']);
+                    $code = "return {$meta['worker_tasklog_value']}{$con['judge']}{$con['value']};";
+                    $is_done = eval($code);
                     if($is_done==false){
                         $isfalse++;
                     }

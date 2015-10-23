@@ -2,11 +2,13 @@
 
 namespace core\models\GeneralPay;
 
+use common\models\pay\GeneralPayCommon;
+use common\models\pay\GeneralPayRefund;
 use core\models\CustomerTransRecord\CustomerTransRecord;
 use core\models\Customer;
 use Yii;
 
-class GeneralPay extends \common\models\GeneralPay
+class GeneralPay extends \common\models\pay\GeneralPay
 {
 
     /**
@@ -82,6 +84,27 @@ class GeneralPay extends \common\models\GeneralPay
      */
     public static function getPayParams( $pay_money,$customer_id,$channel_id,$partner,$order_id=0,$ext_params=[] )
     {
+        //实例化模型
+        $model = new GeneralPay();
+
+        //查询订单是否已经支付过
+        if( !empty($order_id) )
+        {
+            $order = $model->getPayStatus($order_id,1);
+
+            if(!empty($order))
+            {
+                return ['status'=>0 , 'info'=>'订单已经支付过', 'data'=>''];
+            }
+
+            //获取订单支付金额
+            $orderInfo = GeneralPayCommon::orderInfo($order_id);
+            $pay_money = $orderInfo->orderExtPay->order_pay_money;
+            if( $pay_money <= 0 )
+            {
+                return ['status'=>0 , 'info'=>'未找到订单支付金额', 'data'=>''];
+            }
+        }
 
         $data = [
             "general_pay_money" => $pay_money,
@@ -90,22 +113,7 @@ class GeneralPay extends \common\models\GeneralPay
             "partner" => $partner,
             "order_id" => $order_id
         ];
-
         $data = array_merge($data,$ext_params);
-
-        //实例化模型
-        $model = new GeneralPay();
-
-        //查询订单是否已经支付过
-        if( !empty($data['order_id']) )
-        {
-            $order = $model->getPayStatus($data['order_id'],1);
-
-            if(!empty($order))
-            {
-                return ['status'=>0 , 'info'=>'订单已经支付过', 'data'=>''];
-            }
-        }
 
         //在线支付（online_pay），在线充值（pay）
         if(empty($data['order_id']))
@@ -113,6 +121,10 @@ class GeneralPay extends \common\models\GeneralPay
             if($channel_id == '2'){
                 $scenario = 'wx_h5_pay';
                 $data['openid'] = $ext_params['openid'];    //微信openid
+            }elseif($channel_id == '6'){
+                $scenario = 'alipay_web_pay';
+                $data['return_url'] = $ext_params['return_url'];    //同步回调地址
+                $data['show_url'] = $ext_params['show_url'];    //显示商品URL
             }elseif($channel_id == '7'){
                 $scenario = 'zhidahao_h5_pay';
                 $data['customer_name'] = $ext_params['customer_name'];  //商品名称
@@ -133,6 +145,10 @@ class GeneralPay extends \common\models\GeneralPay
             if($channel_id == '2'){
                 $scenario = 'wx_h5_online_pay';
                 $data['openid'] = $ext_params['openid'];    //微信openid
+            }elseif($channel_id == '6'){
+                $scenario = 'alipay_web_online_pay';
+                $data['return_url'] = $ext_params['return_url'];    //同步回调地址
+                $data['show_url'] = $ext_params['show_url'];    //显示商品URL
             }elseif($channel_id == '7'){
                 $scenario = 'zhidahao_h5_online_pay';
                 $data['customer_name'] = $ext_params['customer_name'];  //商品名称

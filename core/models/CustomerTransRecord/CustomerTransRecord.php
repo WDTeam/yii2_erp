@@ -43,8 +43,7 @@ class CustomerTransRecord extends \common\models\CustomerTransRecord
     }
 
     /**
-     * 分析创建交易记录
-     * @param $mode 交易方式:1消费,2=充值,3=退款,4=补偿
+     * 分析创建(支付/充值)交易记录
      * @param $data 数据对象
      * @return bool
      */

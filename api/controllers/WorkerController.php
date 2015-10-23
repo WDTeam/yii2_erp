@@ -65,6 +65,7 @@ class WorkerController extends \api\components\Controller
                 "worker_identity"  =>$workerInfo['worker_rule_description'],//身份
                 "worker_role" => "保姆",
                 'worker_start'=> 4.5,
+                'total_money' =>1000,
                 "personal_skill" =>['煮饭','开荒','护老','擦玻璃','带孩子'],
             ];
               return $this->send($ret, "阿姨信息查询成功", "ok");
@@ -84,7 +85,9 @@ class WorkerController extends \api\components\Controller
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} [platform_version] 平台版本号.
      * @apiParam {String} date 请假时间.
-     * @apiParam {String} type 请假类型.
+     * @apiParam {String} type 请假类型
+     * .
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/handle-worker-leave
      * 
      * @apiSuccessExample {json} Success-Response:
      *  HTTP/1.1 200 OK
@@ -154,10 +157,12 @@ class WorkerController extends \api\components\Controller
      * @apiGroup Worker
      *
      * @apiParam {String} access_token    阿姨登录 token.
-     * @apiParam {String} [page_num]   页码数，默认1 
+     * @apiParam {String} per_page   页码数
+     * @apiParam {String} page_num   每页显示数
      * @apiParam {String} [platform_version] 平台版本号.
      * 
-     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/handle-worker-leave
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/handle-worker-leave-history
+     * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
@@ -188,8 +193,13 @@ class WorkerController extends \api\components\Controller
         $worker = WorkerAccessToken::getWorker($param['access_token']);
         if (!empty($worker) && !empty($worker->id)) {
             //判断页码
+            if(!isset($param['per_page'])||!intval($param['per_page'])){
+                $param['per_page'] = 1;
+            }
+            $per_page = intval($param['per_page']);
+            //每页显示数据数
             if(!isset($param['page_num'])||!intval($param['page_num'])){
-                $param['page_num'] = 1;
+                $param['page_num'] = 10;
             }
             $page_num = intval($param['page_num']);
             
@@ -275,9 +285,12 @@ class WorkerController extends \api\components\Controller
      * @apiGroup Worker
      * 
      * @apiParam {String} access_token    阿姨登录token
-     * @apiParam {String} comment_type 评论类型 【1：满意 2：一般 3差评】
-     * @apiParam {String} [page_num]   页码数，默认1 
+     * @apiParam {String} comment_type 评论类型 【1：满意 2：一般 3：差评】
+     * @apiParam {String} per_page   页码数
+     * @apiParam {String} page_num   每页显示数
      * @apiParam {String} [platform_version] 平台版本号.
+     * 
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-comment
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -315,8 +328,13 @@ class WorkerController extends \api\components\Controller
             return $this->send(null, "评论类型不正确", "error", 403);
         }
         //判断页码
+        if(!isset($param['per_page'])||!intval($param['per_page'])){
+            $param['per_page'] = 1;
+        }
+        $per_page = intval($param['per_page']);
+        //每页显示数
         if(!isset($param['page_num'])||!intval($param['page_num'])){
-            $param['page_num'] = 1;
+            $param['page_num'] = 10;
         }
         $page_num = intval($param['page_num']);
         
@@ -354,8 +372,11 @@ class WorkerController extends \api\components\Controller
      * @apiGroup Worker
      * 
      * @apiParam {String} access_token    阿姨登录token
-     * @apiParam {String} [page_num]   页码数，默认1 
+     * @apiParam {String} per_page    第几页
+     * @apiParam {String} page_num   每页显示的数据数量 
      * @apiParam {String} [platform_version] 平台版本号.
+     * 
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-complain
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -390,8 +411,13 @@ class WorkerController extends \api\components\Controller
         }
   
         //判断页码
+        if(!isset($param['per_page'])||!intval($param['per_page'])){
+            $param['per_page'] = 1;
+        }
+        $per_page = intval($param['per_page']);
+        //每页显示数据量
         if(!isset($param['page_num'])||!intval($param['page_num'])){
-            $param['page_num'] = 1;
+            $param['page_num'] = 10;
         }
         $page_num = intval($param['page_num']);
         
@@ -421,11 +447,11 @@ class WorkerController extends \api\components\Controller
         return $this->send($ret, "操作成功.", "ok");
     }
     
-    
+    public function 
      
      
     /**
-     * @api {get} /mobileapidriver2/driver_get_now_order_list_hide 阿姨去不了
+     * @api {GET} /mobileapidriver2/driver_get_now_order_list_hide 阿姨去不了
      * @apiName actionDriverGetNowOrderListHide
      * @apiGroup Worker
      * @apiParam {String} session_id    会话id.
@@ -784,45 +810,87 @@ class WorkerController extends \api\components\Controller
     
     
     /**
-     * @api {get} /v2/worker_time_table.php  单次服务排班表
-     * @apiName actionWorkerTimeTable
+     * @api {post} /worker/single-worker-time.php  单次服务排班表(李勇80%缺少core/model支持)
+     * @apiName SingleWorkerTime
      * @apiGroup Worker
      * @apiDescription 帮客户下单，单次服务获取服务时间
-     * @apiParam {String} session_id    会话id.
-     * @apiParam {String} platform_version 平台版本号.
-     * @apiParam {String} service_name  服务名称，家庭保洁不用传.
-     *
+     * @apiParam {String} access_token    用户认证.
+     * @apiParam {String} [district_id]   商圈id
+     * @apiParam {String} [plan_time] 计划服务时长
+     * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *      "code": "ok",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      {
-     *          "msgStyle": "toast",
-     *          "alertMsg": "",
-     *          "workerTimeTable":
-     *          [
-     *          {
-     *              "date_name": "09月13日",
-     *              "date_week": "今天",
-     *              "date_time": ["13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00"]
-     *          }
-     *          ]
-     *      }
-     * }
-     *
-     * @apiError SessionIdNotFound 未找到会话ID.
-     *
-     * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"Failed",
-     *      "msg": "SessionIdNotFound"
-     *  }
+     *       "code": "ok",
+     *       "msg": "获取单次服务排班表成功"
+     *       "ret":{
+     *          "appointment": [
+     *              {
+     *                  "date_format": "10月10日",
+     *                  "date_stamp": 1444406400,
+     *                  "week": "明天",
+     *                  "have_worker": 1,
+     *                  "hour": [
+     *                      {
+     *                          "time": "08:00-10:00",
+     *                          "status": "0"
+     *                      },
+     *                      {
+     *                          "time": "18:00-20:00",
+     *                          "status": "1"
+     *                      }
+     *                  ]
+     *              }
+     *          ]
+     *       }
+     *     }
+     *
+     *  @apiError UserNotFound 用户认证已经过期.
+     *
+     *  @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "error",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *
+     *     }
      *
      */
-    
+    function actionSingleWorkerTime(){
+        $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
+        if(!isset($param['district_id'])||!$param['district_id']||!isset($param['plan_time'])||!$param['plan_time']){
+                    return $this->send(null, "请填写服务地址或服务时长", "error", 403);
+        }
+        $district_id = $param['district_id'];
+        $plan_time=$param['plan_time'];
+        $appointment = array();
+        for ($i = 1; $i <= 7; $i++) {
+            $item = [
+                'date_format' => date('m月d日', strtotime('+' . $i . ' day')),
+                'date_stamp' => time(date('m月d日', strtotime('+' . $i . ' day'))),
+                'week' => $i == 1 ? '明天' : '',
+                'have_worker' => '1',
+                'hour' =>
+                    [
+                        ['time' => '08:00-10:00',
+                            'status' => '0']
+
+                        ,
+                        [
+                            "time" => "18:00-20:00",
+                            "status" => "1"
+                        ]
+                    ]
+            ];
+            $appointment[] = $item;
+        }
+
+        $ret = ["appointment" => $appointment];
+        return $this->send($ret, "获取单次服务排班表成功", "ok");
+    }
     
     /**
      * @api {get} /worker/help_user_create_one_order.php  
@@ -867,12 +935,14 @@ class WorkerController extends \api\components\Controller
     
     
     /**
-     * @api {get} /worker/worker_time_table.php  周期服务时间表(李勇80%缺少model)
-     * @apiName actionWorkerTimeTable
+     * @api {get} /worker/recursive-worker-time.php  周期服务时间表(李勇80%缺少model)
+     * @apiName actionRecursiveWorkerTime
      * @apiGroup Worker
      * @apiDescription 帮客户下单，周期服务
-     * @apiParam {String} session_id    会话id.
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} access_token    用户认证.
+     * @apiParam {String} [district_id]   商圈id
+     * @apiParam {String} [worker_id]   阿姨id
+     * @apiParam {String} [plan_time] 计划服务时长
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -900,38 +970,58 @@ class WorkerController extends \api\components\Controller
      *      }
      * }
      *
-     * @apiError SessionIdNotFound 未找到会话ID.
+     *  @apiError UserNotFound 用户认证已经过期.
      *
-     * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
-     *  {
-     *      "code":"Failed",
-     *      "msg": "SessionIdNotFound"
-     *  }
+     *  @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "error",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *
+     *     }
      *
      */
-    public function actionWorkerTimeTable(){
-          $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+    function actionRecursiveWorkerTime(){
+        $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
         if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
         }
-          $worker = WorkerAccessToken::getWorker($param['access_token']);
-          print_r($worker);die;
-          if (!empty($worker) && !empty($worker->id)) {
-               //$filed = array('worker_live_province','worker_live_city','worker_live_area','worker_live_street');
-               //$workerInfo = Worker::getWorkerListByIds($worker->id,implode(',',$filed));
-               $ret = array(
-                        "select_time_area"=> "6",
-                        "max_plan_time"=> "6",
-                        "min_plan_time"=> "2",
-                        "msg_style"=> "",
-                        "alert_msg"=> "",
-                        "worker_time"=>""
+        if(!isset($param['worker_id'])||!$param['worker_id']||!isset($param['district_id'])||!$param['district_id']||!isset($param['plan_time'])||!$param['plan_time']){
+                    return $this->send(null, "请填写服务地址或服务时长或阿姨", "error", 403);
+        }
+        $district_id = $param['district_id'];
+        $plan_time=$param['plan_time'];
+        $worker_id=$param['worker_id'];
+        $workerTime = array();
+        for ($i = 7; $i <= 36; $i++) {
+            $item = [
+                'date_name' => date('m月d日', strtotime('+' . $i . ' day')),
+                'date_week' => date('w', strtotime('+' . $i . ' day')),
+                'date_week_every' => '每周日',
+                'date_time' =>
+                    [
+                        ['time' => '08:00-10:00',
+                            'status' => '0']
+
+                        ,
+                        [
+                            "time" => "18:00-20:00",
+                            "status" => "1"
+                        ]
+                    ],
+                'date_name_tag'=>date('m月d日', strtotime('+' . $i . ' day')).'（今天）'
+            ];
+            $workerTime[] = $item;
+        }
+        $ret = array(
+                    "selectTimeArea" =>'6',
+                    "maxPlanTime" => '3',
+                    "minPlanTime" => '2',
+                    "msgStyle" => 'msgStyle',
+                    "alertMsg" => 'alertMsg'
                );
-                 return $this->send($ret, "操作成功.", "ok");
-          }else{
-               return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
-          }
+        $ret = ["workerTime" => $workerTime];
+        return $this->send($ret, "获取周期服务时间表成功", "ok");
     }
     
     /**

@@ -1,7 +1,7 @@
 <?php
 use common\widgets\Menu;
-use boss\models\FinanceShopSettleApplySearch;
-use boss\models\FinanceSettleApplySearch;
+use core\models\finance\FinanceShopSettleApplySearch;
+use core\models\finance\FinanceSettleApplySearch;
 
 $ctrl = Yii::$app->controller;
 
@@ -120,7 +120,7 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '智能派单(80%)',
+                        'label' => '智能派单(90%)',
                         'url' => ['/auto-assign'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -231,15 +231,15 @@ echo Menu::widget(
                             ],
                             [
                                 'label' => '添加新优惠券(10%)',
-                                'url' => ['coupon/add'],
+                                'url' => ['coupon/create'],
                                 'icon' => 'fa fa-angle-right',
                             ],
-                            [
-                                'label' => '绑定用户',
-                                'url' => ['coupon/index'],
-                                'icon' => 'fa fa-angle-right',
+                            //[
+                              //  'label' => '绑定用户',
+                               // 'url' => ['coupon/index'],
+                               // 'icon' => 'fa fa-angle-right',
                                 
-                            ],
+                            //],
                         ]
                     ],
 
@@ -274,7 +274,7 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],*/
                     [
-                        'label' => '阿姨任务管理(85%)',
+                        'label' => '阿姨任务管理(95%)',
                         'url' => ['/worker-task/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -299,7 +299,7 @@ echo Menu::widget(
                         'items' => [
                             [
                                 'label' => '渠道管理(95%)',
-                                'url' => ['/finance-order-channel/'],
+                                'url' => ['/finance-pay-channel/'],
                                 'icon' => 'fa fa-angle-right',
                             ],[
                                 'label' => '配置对账表头(95%)',
@@ -437,7 +437,7 @@ echo Menu::widget(
                             
                     ],
                     [
-                        'label' => '赔偿管理(65%)',
+                        'label' => '赔偿管理(95%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                         'options' => [
@@ -445,12 +445,12 @@ echo Menu::widget(
                         ],
                         'items' => [
                         [
-                        'label' => '财务确认赔偿(80%)',
+                        'label' => '财务确认赔偿(95%)',
                         'url' => ['/finance/finance-compensate/finance-confirm-index'],
                         'icon' => 'fa fa-angle-right',
                         ],
                         [
-                        'label' => '赔偿查询(50%)',
+                        'label' => '赔偿查询(95%)',
                         'url' => ['/finance/finance-compensate/index'],
                         'icon' => 'fa fa-angle-right',
                         ],

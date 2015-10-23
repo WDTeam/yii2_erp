@@ -17,6 +17,7 @@ use kartik\date\DatePicker;
 
 use common\models\Shop;
 use core\models\worker\Worker;
+use core\models\worker\WorkerIdentityConfig;
 use core\models\worker\WorkerRuleConfig;
 use core\models\worker\workerExt;
 
@@ -50,7 +51,7 @@ $this->title = $model->worker_name;
                 'type' => DetailView::INPUT_WIDGET,
                 'widgetOptions' => [
                     'class'=>\kartik\widgets\Select2::className(),
-                    'name' => 'worker_rule_id',
+                    'name' => 'worker_identity_id',
                     'hideSearch' => true,
                     'data' => $model::getOnlineCityList(),
                     'options' => ['placeholder' => '选择城市', 'inline' => true],
@@ -277,17 +278,17 @@ $this->title = $model->worker_name;
             ],
 
             [
-                'attribute' => 'worker_rule_id',
+                'attribute' => 'worker_identity_id',
                 'type' => DetailView::INPUT_WIDGET,
                 'widgetOptions' => [
                     'class'=>\kartik\widgets\Select2::className(),
-                    'data' => WorkerRuleConfig::getWorkerRuleList(),
+                    'data' => WorkerIdentityConfig::getWorkerIdentityList(),
                     'hideSearch' => true,
                     'options'=>[
                         'placeholder' => '选择阿姨身份',
                     ]
                 ],
-                'value'=>WorkerRuleConfig::getWorkerRuleShow($model->worker_rule_id),
+                'value'=>WorkerIdentityConfig::getWorkerIdentityShow($model->worker_identity_id),
             ],
             [
                 'attribute' => 'worker_auth_status',

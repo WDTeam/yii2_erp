@@ -57,6 +57,7 @@ class Order extends ActiveRecord
     public $order_flag_exception;
     public $order_flag_sys_assign;
     public $order_flag_lock;
+    public $order_flag_lock_time;
     public $order_flag_worker_sms;
     public $order_flag_worker_jpush;
     public $order_flag_worker_ivr;
@@ -103,6 +104,7 @@ class Order extends ActiveRecord
         'order_flag_exception',
         'order_flag_sys_assign',
         'order_flag_lock',
+        'order_flag_lock_time',
         'order_flag_worker_sms',
         'order_flag_worker_jpush',
         'order_flag_worker_ivr',
@@ -216,9 +218,10 @@ class Order extends ActiveRecord
             'order_flag_exception' => '异常 1无经纬度',
             'order_flag_sys_assign' => '是否需要系统指派 1是 0否',
             'order_flag_lock' => '是否锁定 1锁定 0未锁定',
-            'order_flag_lock' => '是否锁定 0未锁定',
+            'order_flag_lock_time' => '加锁时间',
             'order_flag_worker_sms' => '是否给阿姨发过短信',
             'order_flag_worker_jpush' => '是否给阿姨发过极光',
+            'order_flag_worker_ivr' => '是否给阿姨发过ivr',
             'order_pop_order_code' => '第三方订单编号',
             'order_pop_group_buy_code' => '第三方团购码',
             'order_pop_operation_money' => '第三方运营费',
@@ -374,6 +377,7 @@ class Order extends ActiveRecord
                 'order_flag_exception' => $orderExtFlag->order_flag_exception,
                 'order_flag_sys_assign' => $orderExtFlag->order_flag_sys_assign,
                 'order_flag_lock' => $orderExtFlag->order_flag_lock,
+                'order_flag_lock_time' => $orderExtFlag->order_flag_lock_time,
                 'order_flag_worker_sms' => $orderExtFlag->order_flag_worker_sms,
                 'order_flag_worker_jpush' => $orderExtFlag->order_flag_worker_jpush,
                 'order_flag_worker_ivr' => $orderExtFlag->order_flag_worker_ivr,
@@ -461,6 +465,7 @@ class Order extends ActiveRecord
             'order_flag_exception' => $orderExtFlag->order_flag_exception,
             'order_flag_sys_assign' => $orderExtFlag->order_flag_sys_assign,
             'order_flag_lock' => $orderExtFlag->order_flag_lock,
+            'order_flag_lock_time' => $orderExtFlag->order_flag_lock_time,
             'order_flag_worker_sms' => $orderExtFlag->order_flag_worker_sms,
             'order_flag_worker_jpush' => $orderExtFlag->order_flag_worker_jpush,
             'order_flag_worker_ivr' => $orderExtFlag->order_flag_worker_ivr,

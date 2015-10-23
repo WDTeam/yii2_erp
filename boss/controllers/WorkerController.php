@@ -3,6 +3,7 @@
 namespace boss\controllers;
 
 
+use core\models\worker\WorkerStat;
 use Yii;
 use yii\db\Query;
 use yii\web\ForbiddenHttpException;
@@ -10,7 +11,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\data\ActiveDataProvider;
-
+use yii\helpers\Json;
 use boss\components\BaseAuthController;
 
 use common\models\WorkerBlock;
@@ -23,7 +24,7 @@ use core\models\worker\WorkerAuth;
 use boss\models\worker\WorkerSearch;
 use boss\models\Operation;
 use core\models\shop\Shop;
-
+use core\models\worker\WorkerSchedule;
 
 
 /**
@@ -121,8 +122,38 @@ class WorkerController extends BaseAuthController
             $workerBlockLogData = new ActiveDataProvider([
                 'query' => WorkerBlockLog::find()->where(['worker_id'=>$id])->orderBy('id desc'),
             ]);
-            return $this->render('view', ['workerModel' => $workerModel,'worker_id'=>$id,'workerVacationData'=>$workerVacationData,'workerBlockLogData'=>$workerBlockLogData]);
+            $schedule = WorkerSchedule::find()->where(['worker_id'=>$workerModel->id])->asArray()->all();
+
+            return $this->render('view', ['workerModel' => $workerModel,'worker_id'=>$id,'workerVacationData'=>$workerVacationData,'workerBlockLogData'=>$workerBlockLogData,'schedule'=>$schedule]);
         }
+    }
+
+    /**
+     *
+     */
+    public function actionOpeationSchedule($id){
+        $scheduleModel = new WorkerSchedule();
+        if(Yii::$app->request->post()){
+              $scheduleParam = Yii::$app->request->post('schedule_data');
+              $scheduleParam = json_decode($scheduleParam,1);
+              $scheduleModel->deleteAll(['worker_id'=>$id]);
+              foreach ($scheduleParam as $key=>$val) {
+                  $scheduleModel = new WorkerSchedule();
+                  $dateRange = explode('至',$key);
+                  $scheduleModel->worker_schedule_start_date = strtotime(trim($dateRange[0]));
+                  $scheduleModel->worker_schedule_end_date = strtotime(trim($dateRange[1]));
+                  $scheduleModel->worker_id = $id;
+                  $scheduleModel->worker_schedule_timeline = json_encode($val);
+                  $scheduleModel->created_ad = time();
+                  $scheduleModel->save();
+                  //var_dump($scheduleModel->getErrors());
+              }
+          }
+        //$schedule = $scheduleModel->find()->where(['worker_id'=>$id])->asArray()->all();
+        return $this->redirect(['view', 'id' => $id,'tab'=>2]);
+        //return  $this->renderPartial('view_schedule',['worker_id'=>$id,'schedule'=>$schedule]);
+        //$html = $this->render('view_schedule',['worker_id'=>$id,'schedule'=>$schedule]);
+        //return Json::encode($html);
     }
 
     /**
@@ -134,11 +165,17 @@ class WorkerController extends BaseAuthController
     {
         $workerModel = new Worker;
         $workerExtModel = new WorkerExt;
+        $workerStatModel = new WorkerStat();
+        $workerAuthModel = new WorkerAuth();
         if ($workerModel->load(Yii::$app->request->post()) && $workerExtModel->load(Yii::$app->request->post())) {
             $workerModel->created_ad = time();
             $workerModel->uploadImgToQiniu('worker_photo');
             $workerModel->save();
             $workerModel->link('workerExtRelation',$workerExtModel);
+            $workerStatModel->worker_id = $workerModel->id;
+            $workerStatModel->save();
+            $workerAuthModel->worker_id = $workerModel->id;
+            $workerAuthModel->save();
             $workerParam = Yii::$app->request->post('Worker');
             if($workerParam['worker_district']){
                 foreach($workerParam['worker_district'] as $val){
@@ -149,7 +186,7 @@ class WorkerController extends BaseAuthController
                     $workerDistrictModel->save();
                 }
             }
-            return $this->redirect(['view', 'id' => $workerModel->id]);
+            return $this->redirect(['view', 'id' => $workerModel->id,'tab'=>2]);
         } else {
             return $this->render('create', [
                 'worker' => $workerModel,
@@ -460,9 +497,9 @@ class WorkerController extends BaseAuthController
                 $workerArr['created_ad'] = strtotime($val['create_time']);
                 //原有阿姨身份太凌乱，暂时只取兼职和全职
                 if(strpos($val['is_fulltime'],'兼职')){
-                    $workerArr['worker_rule_id']=2;
+                    $workerArr['worker_identity_id']=2;
                 }else{
-                    $workerArr['worker_rule_id']=1;
+                    $workerArr['worker_identity_id']=1;
                 }
 
                 //获取城市
@@ -563,10 +600,6 @@ class WorkerController extends BaseAuthController
 
         //die;
     }
-
-
-
-
 
     public function actionTest(){
         echo '<pre>';

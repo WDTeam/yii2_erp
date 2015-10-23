@@ -45,7 +45,7 @@ class WorkerRuleConfig extends \common\models\WorkerRuleConfig
     {
         return [
             'id' => Yii::t('app', '阿姨身份配置表自增id'),
-            'worker_rule_name' => Yii::t('app', '主表阿姨id'),
+            'worker_rule_name' => Yii::t('app', '主表角色名称'),
             'created_ad' => Yii::t('app', '创建时间'),
             'updated_ad' => Yii::t('app', '最后更新时间'),
             'admin_id' => Yii::t('app', '操作管理员id'),

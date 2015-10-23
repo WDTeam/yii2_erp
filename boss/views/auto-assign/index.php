@@ -12,8 +12,6 @@ $this->title = Yii::t('order', '智能派单');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('order', '订单'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<script type="text/javascript" src="/static/js/jquery.js"></script>
-<script type="text/javascript" src="/static/js/index.js"></script>
 <div class="container">
     <div class="row">
         <div class="col-md-7 form-group">
@@ -30,34 +28,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-md-6  form-group"><label>兼职阿姨派单：</label><input id="jstart" class="form-control" name="qstart" value="5" /> 至 <input id="jend" class="form-control" name="qend" value="10" />分钟</div>
     </div>
     <hr>
-    <div class="row form-inline">
-        <div class="col-md-4 form-group"><label>频率：</label><input id="interval" class="form-control" name="interval" value="6" /><label>秒</label></div>
-        <div class="col-md-4 form-group"><label>任务：</label>
-            <select id="taskName" class="form-control" name="taskName">
-                <option value="">选择任务</option>
-                <option value="orders">派单任务</option>
-            </select>
-        </div>
-        <div class="col-md-4"><label>线程数：</label><input id="theadNum" class="form-control" name="theadNum" /></div>
-    </div>
-    <hr>
     <div class="row">
         <div class="col-md-4 btn-group">
             <button class="btn btn-default" id="start" name="start">开始自动派单</button>
             <button class="btn btn-default" id="stop" name="start">停止自动派单</button>
         </div>
         <div id="connectStatus" class="col-md-4"></div>
-        <div id="connectStatus" class="col-md-4">
-            <?php
-//            if(!empty($data['time'])){
-//                if(time() - $data['time'] > 300){
-//                    echo '服务已停止，请先检查服务！';
-//                }else{
-//                    echo '服务正在运行';
-//                }
-//            }
-            ?>
-        </div>
     </div>
     <hr>
     <table class="table table-hover">
@@ -83,3 +59,6 @@ $this->params['breadcrumbs'][] = $this->title;
         </tbody>
     </table>
 </div>
+
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<script type="text/javascript" src="/static/js/index.js"></script>

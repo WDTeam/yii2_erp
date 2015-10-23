@@ -39,7 +39,7 @@ class FinanceRecordLogSearch extends FinanceRecordLog
     public static  function get_financerecordloginfo($id)
     {
     	
-    	$alinfo=FinanceRecordLogSearch::find()->select('finance_order_channel_name,finance_pay_channel_name,finance_record_log_statime,finance_record_log_endtime')->andWhere(['=','finance_order_channel_id',$id])->max('id');
+    	$alinfo=FinanceRecordLogSearch::find()->andWhere(['=','id',$id])->one();
     	if(count($alinfo)){
     		return $alinfo;
     	}else {
@@ -47,13 +47,6 @@ class FinanceRecordLogSearch extends FinanceRecordLog
     	}
     	
     }
-    
-    
-    
-    
-    
-    
-    
     
     public function search($params)
     {

@@ -63,6 +63,7 @@ class OrderSearch extends Order
             if(!empty($order)){
                 //获取到订单后加锁并置为已开始人工派单的状态
                 $order->order_flag_lock = $admin_id;
+                $order->order_flag_lock_time = time(); //加锁时间
                 $order->order_flag_send = $order->orderExtFlag->order_flag_send+($isCS?1:2); //指派时先标记是谁指派不了
                 $order->admin_id = $admin_id;
                 if (OrderStatus::manualAssignStart($order, ['OrderExtFlag'])) {
@@ -75,11 +76,55 @@ class OrderSearch extends Order
         return false;
     }
 
+    /**
+     * 根据预约开始时间获取多个阿姨当天订单
+     * @param $worker_ids
+     * @param $booked_begin_time
+     * @return array|\yii\db\ActiveRecord[]
+     */
     public static function getListByWorkerIds($worker_ids, $booked_begin_time)
     {
         $day_begin = strtotime(date('Y:m:d 00:00:00', $booked_begin_time));
         $day_end = strtotime(date('Y:m:d 23:59:59', $booked_begin_time));
         return Order::find()->joinWith(['orderExtWorker'])->where(['worker_id' => $worker_ids])->andWhere(['between', 'order_booked_begin_time', $day_begin, $day_end])->all();
+    }
+
+    /**
+     * 根据预约的开始时间获取单个阿姨当天订单
+     * @param $worker_id
+     * @param $booked_begin_time
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function getListByWorkerId($worker_id, $booked_begin_time)
+    {
+        return self::getListByWorkerIds([$worker_id], $booked_begin_time);
+    }
+
+    /**
+     * 是否存在冲突订单
+     * @param $worker_id
+     * @param $booked_begin_time
+     * @param $booked_end_time
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function WorkerOrderExistsConflict($worker_id,$booked_begin_time,$booked_end_time)
+    {
+        return Order::find()->joinWith(['orderExtWorker'])->where(['worker_id' => $worker_id])
+            ->andWhere([
+                'or',
+                [
+                    ['<=','order_booked_begin_time',$booked_begin_time],
+                    ['>=','order_booked_end_time',$booked_begin_time]
+                ],
+                [
+                    ['<=','order_booked_begin_time',$booked_end_time],
+                    ['>=','order_booked_end_time',$booked_end_time]
+                ],
+                [
+                    ['>=','order_booked_begin_time',$booked_begin_time],
+                    ['<=','order_booked_end_time',$booked_end_time]
+                ],
+            ])->count();
     }
 
     /**
