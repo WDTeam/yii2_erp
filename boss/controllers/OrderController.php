@@ -94,7 +94,7 @@ class OrderController extends BaseAuthController
     public function actionCustomerAddress($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $address_list = Customer::getCustomerAddresses($id);
+        $address_list = CustomerAddress::listAddress($id);
         $address = [];
         if(is_array($address_list)) {
             foreach ($address_list as $v) {
