@@ -29,6 +29,7 @@ class OrderController extends BaseAuthController
             echo "order canlel module error";
             exit;
         }
+        echo "取消订单成功，正在执行退款<br>";
         $statusHistoryInfo = OrderStatusHistory::getOrderStatusHistory($orderid);
        // print_r($statusHistoryInfo);
         $orderInfo = OrderSearch::getOne($orderid);
@@ -76,6 +77,7 @@ class OrderController extends BaseAuthController
         }
         var_dump($result);
         */
+        echo "退款成功";
       
     }
 
