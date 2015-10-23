@@ -330,19 +330,15 @@ class FinancePopOrderController extends Controller
     	}else {
     	//渠道下单	 开始时间   我有三没有开始处理 从订单表里面开始查询
     	$searchModel= new OrderSearch;
-    	
-    	
+    	//var_dump(FinancePopOrder::get_in_list_id($dateinfo['id']));exit;
     	
     	$searchModel->load(Yii::$app->request->getQueryParams());
     	$searchModel->created_at=$info->finance_record_log_statime;
     	//$searchModel_info->created_at=$info->finance_record_log_statime;
-    	$searchModel->channel_id=$info->finance_pay_channel_id;
+    	$searchModel->order_pop_order_code=FinancePopOrder::get_in_list_id($dateinfo['id']);
+    	//$searchModel->channel_id=$info->finance_pay_channel_id;
     	$dataProvider = $searchModel->searchpoplist();	
-    	
-    	
-    	
     	}	
-    	
     	
     	return $this->render('orderlist', [
     			'dataProvider' => $dataProvider,
