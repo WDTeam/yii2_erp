@@ -16,9 +16,6 @@ use yii\bootstrap\Modal;
 $this->title = Yii::t('app', '对账管理');
 $this->params['breadcrumbs'][] = $this->title;
 
-
-
-
 ?>
 <div class="finance-pop-order-index hideTemp">
       <div class="panel panel-info">
@@ -26,10 +23,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <h3 class="panel-title"><i class="glyphicon glyphicon-upload"></i> 上传对账单</h3>
     </div>
     <div class="panel-body">
-        <?php  echo $this->render('_search', ['model' => $searchModel,'ordedat' => $ordedatainfo]); ?>
+        <?php  echo $this->render('_search', ['model' => $searchModel,'ordedat' => $ordedatainfo,'paydat'=>$paydat]); ?>
     </div>
     </div>
-    <?php  //echo $this->render('_search', ['model' => $searchModel]); ?>
 </div>
     <?php
    

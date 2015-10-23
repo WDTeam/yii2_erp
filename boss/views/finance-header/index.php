@@ -14,9 +14,6 @@ $this->title = Yii::t('boss', '添加账单配置');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="finance-header-index hideTemp">
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    
     <div class="panel panel-info">
     <div class="panel-heading">
         <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 账单配置查询</h3>
@@ -25,12 +22,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php  echo $this->render('_search', ['model' => $searchModel,'odrinfo'=>$payatainfo,'ordedat' => $ordedatainfo]); ?>
     </div>
     </div>
-    <p>
-        <?php /* echo Html::a(Yii::t('boss', 'Create {modelClass}', [
-    'modelClass' => 'Finance Header',
-]), ['create'], ['class' => 'btn btn-success'])*/  ?>
-    </p>
-
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
