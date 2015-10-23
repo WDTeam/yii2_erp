@@ -28,9 +28,16 @@ class OrderController extends BaseAuthController
         {
             echo "order canlel module error";
         }
+        var_dump($orderid);
         $statusHistoryInfo = OrderStatusHistory::getOrderStatusHistory($orderid);
        // print_r($statusHistoryInfo);
         $orderInfo = OrderSearch::getOne($orderid);
+        var_dump($orderInfo);
+        if($orderInfo==false) 
+        {
+            echo "没有此订单";
+            exit;
+        }
         $workInfo = Worker::getWorkerInfo($orderInfo->orderExtWorker->worker_id);
         
         $FinanceRefundadd=new FinanceRefundadd;
@@ -55,7 +62,7 @@ class OrderController extends BaseAuthController
         $FinanceRefundadd->isstatus=2; //1 取消 2 退款的 3 财务已经审核 4 财务已经退款 0 不确定
         $FinanceRefundadd->create_time=$orderInfo->created_at; //创建时间
         $FinanceRefundadd->is_del=$orderInfo->isdel; //是否删除  0  正常 1 删除  默认是0
-        /*
+        /* 暂时注释，目前测试订单过少，一旦退款后就会失败，正式使用时去掉注释
         $infodate=$FinanceRefundadd->add();
         $result = json_decode($infodate);
         if($result->status!=200)
