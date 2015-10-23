@@ -238,7 +238,7 @@ class Order extends OrderModel
                     $push_status = $part_time;
                 }
             } elseif (time() - $order->orderExtStatus->updated_at < 900) { //TODO 15分钟内的订单推送给兼职阿姨 15分钟需要配置
-                $workers = Worker::getDistrictFreeWorker($order->district_id, 2, $order->order_booked_begin_time, $order->order_booked_end_time);
+                $workers = Worker::getDistrictFreeWorker($order->district_id, $part_time, $order->order_booked_begin_time, $order->order_booked_end_time);
                 $push_status = $part_time;
             }
             if (!empty($workers)) {
