@@ -7,23 +7,7 @@ use core\models\worker\Worker;
 use yii\helpers\ArrayHelper;
 class WorkerTaskController extends Controller
 {
-    /**
-     * 自动处理阿姨任务数据
-     * 实现思路：
-     * 1、自动生成阿姨任务记录，有则取，无则建
-     * 2、循环任务，查询获取在符合任务时间段内各项条件的数值
-     * 3、保存数值，运算是否达到条件完成。
-     */
-    private function autoRunWorkerTask($worker_id)
-    {
-        $tasks = (array)WorkerTask::autoCreateTaskLog($worker_id);
-        foreach ($tasks as $task){
-            $conVals = $this->getConditionsValues($task->worker_task_log_start, $task->worker_task_log_end, $worker_id);
-            $task->setValues($conVals);
-            $task->calculateIsDone();
-        }
-        return $tasks;
-    }
+
     /**
      * 指定时间段内阿姨各个条件完成值
      *  条件类型：
@@ -95,6 +79,23 @@ class WorkerTaskController extends Controller
         $data[5] = (int)\Yii::$app->db->createCommand($sql)->queryScalar();
         
         return $data;
+    }
+    /**
+     * 自动处理阿姨任务数据
+     * 实现思路：
+     * 1、自动生成阿姨任务记录，有则取，无则建
+     * 2、循环任务，查询获取在符合任务时间段内各项条件的数值
+     * 3、保存数值，运算是否达到条件完成。
+     */
+    private function autoRunWorkerTask($worker_id)
+    {
+        $tasks = (array)WorkerTask::autoCreateTaskLog($worker_id);
+        foreach ($tasks as $task){
+            $conVals = $this->getConditionsValues($task->worker_task_log_start, $task->worker_task_log_end, $worker_id);
+            $task->setValues($conVals);
+            //             $task->calculateIsDone();
+        }
+        return $tasks;
     }
     
     public function actionIndex()
