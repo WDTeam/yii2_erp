@@ -22,6 +22,8 @@
 //合作身份者id，以2088开头的16位纯数字
 $alipay_config['partner']		= '2088801136967007';
 $alipay_config['seller_email']		= '47632990@qq.com';
+//安全检验码，以数字和字母组成的32位字符
+$alipay_config['key']			= 'ptd4lbjltmwpx64g80qhil5eckr98opf';
 //商户的私钥（后缀是.pen）文件相对路径
 $alipay_config['private_key_path']	= dirname(__FILE__).'/key/rsa_private_key.pem';
 
@@ -34,7 +36,8 @@ $alipay_config['it_b_pay'] = "300m";
 
 //↑↑↑↑↑↑↑↑↑↑请在这里配置您的基本信息↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
-
+//签名方式 不需修改
+$alipay_config['sign_type_md5']    = strtoupper('MD5');
 //签名方式 不需修改
 $alipay_config['sign_type']    = strtoupper('RSA');
 
