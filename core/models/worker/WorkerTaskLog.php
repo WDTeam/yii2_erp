@@ -56,8 +56,10 @@ class WorkerTaskLog extends \common\models\WorkerTaskLog
         if($is_done){
             $this->worker_task_is_done = 1;
             $this->worker_task_done_time = time();
-            return $this->save();
+        }else{
+            $this->worker_task_is_done = -1;
         }
+        $this->save();
         return $is_done;
     }
     /**
