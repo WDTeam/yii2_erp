@@ -1,4 +1,5 @@
 <?php
+
 namespace api\controllers;
 
 use Faker\Provider\DateTime;
@@ -12,9 +13,9 @@ use core\models\customer\CustomerAccessToken;
 use core\models\customer\CustomerAddress;
 use yii\web\Response;
 
-
 class OrderController extends \api\components\Controller
 {
+
     /**
      * @api {POST} /order/choose-service-time 可服务时间表 (20%赵顺利 block linhongyou provide the feature)
      *
@@ -76,7 +77,7 @@ class OrderController extends \api\components\Controller
     public function actionChooseServiceTime()
     {
         $params = Yii::$app->request->post() or
-        $params = json_decode(Yii::$app->request->getRawBody(), true);
+                $params = json_decode(Yii::$app->request->getRawBody(), true);
         @$accessToken = $params['access_token'];
 
         if (empty($accessToken) && !CustomerAccessToken::checkAccessToken($accessToken)) {
@@ -90,23 +91,21 @@ class OrderController extends \api\components\Controller
                 'week' => $i == 1 ? '明天' : '',
                 'have_worker' => '1',
                 'hour' =>
+                [
+                    ['time' => '08:00-10:00',
+                        'status' => '0']
+                    ,
                     [
-                        ['time' => '08:00-10:00',
-                            'status' => '0']
-
-                        ,
-                        [
-                            "time" => "18:00-20:00",
-                            "status" => "1"
-                        ]
+                        "time" => "18:00-20:00",
+                        "status" => "1"
                     ]
+                ]
             ];
             $appointment[] = $item;
         }
 
         $ret = ["appointment" => $appointment];
         return $this->send($ret, "获取可服务时间表成功", "ok");
-
     }
 
     /**
@@ -185,16 +184,16 @@ class OrderController extends \api\components\Controller
     public function actionCreateOrder()
     {
         $args = Yii::$app->request->post() or
-        $args = json_decode(Yii::$app->request->getRawBody(), true);
+                $args = json_decode(Yii::$app->request->getRawBody(), true);
         $attributes = [];
-        @$token=$args['access_token'];
+        @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
             return $this->send(null, "用户无效,请先登录");
         }
         $attributes['customer_id'] = $user->id;
 
-        if(@is_null($args['server_item'])){
+        if (@is_null($args['server_item'])) {
             // server_item is null, order from app
             if (is_null($args['order_service_type_id'])) {
                 return $this->send(null, "请输入商品类型");
@@ -202,20 +201,20 @@ class OrderController extends \api\components\Controller
             $attributes['order_service_type_id'] = $args['order_service_type_id'];
         } else {
             // order from pop,第三方目前没有真实的order_service_type_id
-            $attributes['order_service_type_id'] = 1;//$args['server_item'];
+            $attributes['order_service_type_id'] = 1; //$args['server_item'];
         }
 
-        if(@is_null($args['order_src'])){
+        if (@is_null($args['order_src'])) {
             if (is_null($args['order_src_id'])) {
                 return $this->send(null, "数据不完整,缺少订单来源");
             }
             $attributes['order_src_id'] = $args['order_src_id'];
-        }else{
-            $orderSrc = OrderSrc::find()->where(['order_src_name'=>$args['order_src']])->one();
-            if(!empty($orderSrc)){
+        } else {
+            $orderSrc = OrderSrc::find()->where(['order_src_name' => $args['order_src']])->one();
+            if (!empty($orderSrc)) {
                 $attributes['order_src_id'] = $orderSrc['id'];
-            }else{
-                return $this->send(null, "数据不完整,没有配置订单来源：".$args['order_src']);
+            } else {
+                return $this->send(null, "数据不完整,没有配置订单来源：" . $args['order_src']);
             }
         }
 
@@ -229,20 +228,19 @@ class OrderController extends \api\components\Controller
         }
         $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
 
-        if (@is_null($args['address_id']) and @is_null($args['city'])) {
+        if (@is_null($args['address_id']) and @ is_null($args['city'])) {
             return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名");
         }
         if (@is_null($args['address_id'])) {
             //add address into customer and return customer id
             $area_name = $args['address'];
-            if(strpos($area_name,'市')>0){
-                $area_name = substr($area_name,strpos($area_name,'市')+strlen('市'));
+            if (strpos($area_name, '市') > 0) {
+                $area_name = substr($area_name, strpos($area_name, '市') + strlen('市'));
             }
-            if(strpos($area_name,'区')>0){
-                $area_name = substr($area_name,0,strpos($area_name,'区'));
+            if (strpos($area_name, '区') > 0) {
+                $area_name = substr($area_name, 0, strpos($area_name, '区'));
             }
-            $model = CustomerAddress::addAddress($user->id, $area_name, $args['address'],
-                $args['order_customer_phone'], $args['order_customer_phone']);
+            $model = CustomerAddress::addAddress($user->id, $area_name, $args['address'], $args['order_customer_phone'], $args['order_customer_phone']);
             $attributes['address_id'] = $model->id;
         } else {
             $attributes['address_id'] = $args['address_id'];
@@ -267,8 +265,8 @@ class OrderController extends \api\components\Controller
         if (isset($args['channel_id'])) {
             $attributes['channel_id'] = $args['channel_id'];
         } elseif (isset($args['order_channel_name'])) {
-            $orderChannel = FinanceOrderChannel::find()->where(['finance_order_channel_name'=>$args['order_channel_name']])->one();
-            if(!empty($orderChannel)){
+            $orderChannel = FinanceOrderChannel::find()->where(['finance_order_channel_name' => $args['order_channel_name']])->one();
+            if (!empty($orderChannel)) {
                 $attributes['channel_id'] = $orderChannel['id'];
             }
         }
@@ -303,7 +301,6 @@ class OrderController extends \api\components\Controller
             $this->send($order->errors, $msg, "error");
         }
     }
-
 
     /**
      * @api {POST} v1/order/append-order 追加订单(xieyi 90%和创建订单一样)
@@ -362,7 +359,7 @@ class OrderController extends \api\components\Controller
     public function actionAppendOrder()
     {
         $args = Yii::$app->request->post() or
-        $args = json_decode(Yii::$app->request->getRawBody(), true);
+                $args = json_decode(Yii::$app->request->getRawBody(), true);
         $attributes = [];
         $user = CustomerAccessToken::getCustomer($args['access_token']);
         if (is_null($user)) {
@@ -388,12 +385,11 @@ class OrderController extends \api\components\Controller
         }
         $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
 
-        if (is_null($args['address_id']) and (is_null($args['address_id']) or is_null($args['city']))) {
+        if (is_null($args['address_id']) and ( is_null($args['address_id']) or is_null($args['city']))) {
             return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名");
         }
         if (is_null($args['address_id'])) {
-            $model = CustomerAddress::addAddress($user->id, $args['city'], $args['address'],
-                $args['order_customer_phone'], $args['order_customer_phone']);
+            $model = CustomerAddress::addAddress($user->id, $args['city'], $args['address'], $args['order_customer_phone'], $args['order_customer_phone']);
             $attributes['address_id'] = $model->id;
         } else {
             $attributes['address_id'] = $args['address_id'];
@@ -521,7 +517,7 @@ class OrderController extends \api\components\Controller
     public function actionQueryOrders()
     {
         $args = Yii::$app->request->post() or
-        $args = json_decode(Yii::$app->request->getRawBody(), true);
+                $args = json_decode(Yii::$app->request->getRawBody(), true);
 
         @$limit = $args['limit'];
         @$offset = $args['offset'];
@@ -557,22 +553,17 @@ class OrderController extends \api\components\Controller
         $this->send($ret, $msg = "操作成功", $code = "ok", $value = 200, $text = null);
     }
 
-
     /**
-<<<<<<< HEAD
-     * @api {GET} /order/cancel-order 取消订单(郝建设 100%  )
-=======
-     * @api {GET} /order/cancelorder 取消订单(xieyi %0  )
->>>>>>> ed3c4fbfe1aa0bfdd8302b13ec490c87718b5163
+     * @api {GET} /order/cancelorder 取消订单(郝建设 100%  )
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} app_version 访问源(android_4.2.2)
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_cancel_reason 取消原因
      * @apiName CancelOrder
      * @apiGroup Order
      *
      * @apiParam {String} recursive_order_id 周期订单
      * @apiParam {String} order_id 订单id
-     *
      *
      *
      * @apiSuccessExample Success-Response:
@@ -593,7 +584,54 @@ class OrderController extends \api\components\Controller
      *     }
      *
      */
+    public function actionCancelOrder()
+    {
+        $param = Yii::$app->request->post();
 
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+
+        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
+
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+
+        if (!empty($customer) && !empty($customer->id)) {
+            /**
+             * access_token和订单验证
+             * $customer->id 用户
+             * $order_id     订单号
+             */
+            $orderValidation = \core\models\order\Order::validationOrderCoustomer($customer->id, $param['order_id']);
+
+            if ($orderValidation) {
+                /**
+                 * $order_id订单号
+                 * $amdin_id管理员id,没有请填写0 
+                 * $param['order_cancel_reason'] 取消原因 
+                 * 
+                 */
+                $order_cancel_reason = array(
+                    '临时有事，改约',
+                    '信息填写有误，重新下单',
+                    '不需要服务了',
+                );
+                if (!in_array($param['order_cancel_reason'], $order_cancel_reason)) {
+                    $param['order_cancel_reason'] = '其他原因#' . $param['order_cancel_reason'];
+                }
+
+                if (\core\models\order\Order::cancel($param['order_id'], 0, $param['order_cancel_reason'])) {
+                    return $this->send([1], $param['order_id'] . "订单取消成功", "ok");
+                }
+            } else {
+                return $this->send(null, "用户认证已经过期,请重新登录.", "error", 403);
+            }
+        } else {
+            return $this->send(null, "用户认证已经过期,请重新登录222.", "error", 403);
+        }
+    }
 
     /**
      * @api {get} /mobileapidriver2/worker_request_order 抢单（xieyi %0）
@@ -635,7 +673,7 @@ class OrderController extends \api\components\Controller
      */
     public function actionObtainOrder()
     {
-
+        
     }
 
     /**
@@ -674,19 +712,15 @@ class OrderController extends \api\components\Controller
      */
     public function actionAddComment()
     {
-
+        
     }
 
-
     /**
-<<<<<<< HEAD
-     * @api {GET} /order/hidden-order 删除订单（郝建设 100% ）
-=======
-     * @api {GET} /order/hiddenorder 删除订单（xieyi %0 ）
->>>>>>> ed3c4fbfe1aa0bfdd8302b13ec490c87718b5163
+     * @api {GET} /order/hiddenorder 删除订单（郝建设 100% ）
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} app_version 访问源(android_4.2.2)
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} order_id 订单号
      * @apiName HiddenOrder
      * @apiGroup Order
      * @apiDescription  客户端删除订单，后台软删除 隐藏订单
@@ -712,7 +746,32 @@ class OrderController extends \api\components\Controller
      */
     public function actionHidenOrder()
     {
+        $param = Yii::$app->request->post();
 
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+
+        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
+
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+
+        if (!empty($customer) && !empty($customer->id)) {
+            /**
+             * access_token和订单验证
+             * $customer->id 用户
+             * $order_id     订单号
+             */
+            $orderValidation = \core\models\order\Order::validationOrderCoustomer($customer->id, $param['order_id']);
+
+            if (\core\models\order\Order::customerDel($param['order_id'], 0)) {
+                return $this->send([], "删除订单成功", "ok");
+            } else {
+                return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            }
+        }
     }
 
     /**
@@ -766,7 +825,6 @@ class OrderController extends \api\components\Controller
      *  }
      *
      */
-
     /**
      * @api {get} /mobileapidriver2/driver_get_now_order_list 待接活订单(zhaoshunli 0%)
      * @apiName actionDriverGetNowOrderList
@@ -827,7 +885,6 @@ class OrderController extends \api\components\Controller
      *  }
      *
      */
-
     /**
      * @api {get} /mobileapidriver2/worker_history_order 阿姨历史订单(zhaoshunli 100%)
      * @apiName actionWorkerHistoryOrder
@@ -898,7 +955,6 @@ class OrderController extends \api\components\Controller
      *  }
      *
      */
-
     /**
      * @api {get} v2/worker/account_checking.php 日常订单列表(zhaoshunli %0)
      * @apiName actionAccountChecking
@@ -942,8 +998,6 @@ class OrderController extends \api\components\Controller
      *  }
      *
      */
-
-
     /**
      * @api {get} v2/worker/all_order_common.php 全部订单月份列表(zhaoshunli 0%)
      * @apiName actionAllOrderCommon
@@ -985,7 +1039,6 @@ class OrderController extends \api\components\Controller
      *  }
      *
      */
-
     /**
      * @api {get} v2/worker/all_order_common_list.php 日常订单列表(zhaoshunli 0%)
      * @apiName actionAllOrderCommonList
@@ -1031,7 +1084,6 @@ class OrderController extends \api\components\Controller
      *  }
      *
      */
-
     /**
      * @api {get} /v2/FixedUserOrder.php 固定客户以及订单列表(zhaoshunli 0%)
      * @apiName actionFixedUserOrder
@@ -1087,7 +1139,6 @@ class OrderController extends \api\components\Controller
      *
      */
 
-
     /**
      * @api {get} v1/order/no_settlement_order_list.php  未结算订单(0%zhaoshunli)
      * @apiName actionNoSettlementOrderList
@@ -1131,12 +1182,12 @@ class OrderController extends \api\components\Controller
      *  }
      *
      */
-
     public function actionPush($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         return Order::push($id);
     }
+
 }
 
 ?>
