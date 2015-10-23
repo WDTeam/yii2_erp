@@ -237,7 +237,7 @@ class OrderController extends \api\components\Controller
             $attributes['address_id'] = $args['address_id'];
         } elseif(isset($args['address'])) {
             //add address into customer and return customer id
-			$address = = $args['address'];
+			$address = $args['address'];
 			$customerAddress = CommonCustomerAddress::find()->where(['customer_id'=>$user->id, 'customer_address_detail'=>$address])->one();
 			if(!empty($customerAddress)){
 				// found the address
