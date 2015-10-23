@@ -694,9 +694,9 @@ class UserController extends \api\components\Controller
      * @apiName RemoveWorker
      * @apiGroup User
      *
-     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} access_token  用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {String} worker_id 阿姨id
+     * @apiParam {String} worker_id      阿姨id
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -752,7 +752,7 @@ class UserController extends \api\components\Controller
     /**
      *
      * @api {GET} /user/user-money 用户余额和消费记录 （已完成99% 数据已经全部取出,需要给出所需字段,然后给予返回;）
-     * user-money
+     * 
      *
      * @apiName UserMoney
      *
