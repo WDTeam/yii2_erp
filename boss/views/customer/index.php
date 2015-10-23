@@ -44,8 +44,8 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
     <?php
     $b= Html::a('<i class="glyphicon" ></i>全部 '.$searchModel->countALLCustomer(), ['index'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']). 
-    Html::a('<i class="glyphicon" ></i>黑名单 '.$searchModel->countBlockCustomer(), ['index?CustomerSearch[is_del]=1'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']).
-    Html::a('<i class="glyphicon" ></i>按时间从大到小 ', ['index', 'sort'=>'created_at'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']);
+    Html::a('<i class="glyphicon" ></i>黑名单 '.$searchModel->countBlockCustomer(), ['index?CustomerSearch[is_del]=1'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']);
+    //Html::a('<i class="glyphicon" ></i>按时间从大到小 ', ['index', 'sort'=>'created_at'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']);
     // Html::a('<i class="glyphicon" ></i>按订单量从大到小 ', ['index', 'sort'=>'order_count'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']);
    
     ?>
@@ -89,7 +89,8 @@ $this->params['breadcrumbs'][] = $this->title;
             //     'width' => "0px",
             // ],
             [
-                'class' => 'yii\grid\CheckboxColumn',
+                'class'=>'kartik\grid\CheckboxColumn',
+                'headerOptions'=>['class'=>'kartik-sheet-style'],
             ],
 
             // [
@@ -133,21 +134,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'label' => '订单地址',
                 'value' => function ($dataProvider) {
-                    $customerAddress = CustomerAddress::listAddress($dataProvider->id);
-                    if (empty($customerAddress)) {
+                    $currentAddress = CustomerAddress::getCurrentAddress($dataProvider->id);
+                    if ($currentAddress == false) {
                         return '-';
                     }
                     $addressStr = '';
-                    foreach ($customerAddress as $address) {
-                        if ($address != NULL) {
-                            $addressStr .= $address->operation_province_name
-                                .$address->operation_city_name
-                                .$address->operation_area_name
-                                .$address->customer_address_detail
-                                .'|'.$address->customer_address_nickname
-                                .'|'.$address->customer_address_phone;
-                        }
-                    }
+                    $addressStr = $currentAddress->operation_province_name
+                        .$currentAddress->operation_city_name
+                        .$currentAddress->operation_area_name
+                        .$currentAddress->customer_address_detail
+                        .'|'.$currentAddress->customer_address_nickname
+                        .'|'.$currentAddress->customer_address_phone;
                     return $addressStr;
                 },
                 'width' => "300px",
@@ -200,7 +197,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'label' => '投诉',
                 'value' => function ($dataProvider) {
-                    return '<a href="/order/index?OrderSearch[customer_id]='. $dataProvider->id .'">' . $dataProvider->customer_complaint_times . '</a>';
+                    return $dataProvider->customer_complaint_times;
                 },
                 'width' => "50px",
             ],

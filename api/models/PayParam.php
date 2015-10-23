@@ -17,6 +17,8 @@ class PayParam extends Model
     public $order_source_url;
     public $page_url;
     public $detail;
+    public $return_url;
+    public $show_url;
 
     public function rules()
     {
@@ -49,6 +51,9 @@ class PayParam extends Model
             'zhidahao_h5_pay' =>        ['pay_money','customer_id','channel_id','partner','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail'],
             //微信在线支付
             'zhidahao_h5_online_pay'=>  ['pay_money','customer_id','channel_id','partner','order_id','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail'],
+            //支付宝WEB
+            'alipay_web_pay'    =>      ['pay_money','customer_id','channel_id','partner','return_url','show_url'],
+
         ];
     }
 

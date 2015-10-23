@@ -101,6 +101,7 @@ $this->title = $model->worker_name;
                         ],
                     ]
                 ],
+                'value'=>$model->worker_photo
             ],
             [
                 'attribute' => 'worker_source',

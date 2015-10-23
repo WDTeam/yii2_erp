@@ -37,7 +37,7 @@ class IvrController extends Controller
     
     public function actionJpush()
     {
-        $res = \Yii::$app->jpush->push(['wworker_uuu_ttt2', 'worker_ldg_test', 'wworker_uuu_ttt'], 'test', ['test'=>'自定义数据']);
+        $res = \Yii::$app->jpush->push(['Dhkk', 'worker_ldg_test', '15110249233'], 'test', ['test'=>'自定义数据']);
         var_dump($res);
         if(isset($res->msg_id)){
             echo '<br/>'.'<br/>'.'<br/>';

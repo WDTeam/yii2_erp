@@ -16,9 +16,9 @@ return [
             'defaultRoles' => ['guest'],
         ],
         'cache' => [
-//            'class' => 'yii\caching\FileCache',
+            'class' => 'yii\caching\FileCache',
 //            'class'=>'yii\caching\DbCache',
-            'class' => 'yii\redis\Cache',
+//            'class' => 'yii\redis\Cache',
         ],
         'i18n' => [
             'translations' => [
