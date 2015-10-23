@@ -314,7 +314,9 @@ public function actionGetCity()
      */
     public function actionIndex()
     {
-        $searchModel = new OrderSearch;
+        //Yii::info('xiaobo: '.json_encode(Yii::$app->request->getQueryParams()));
+        
+        $searchModel = new OrderSearch; 
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
         return $this->render('index', [
