@@ -160,18 +160,12 @@ class OrderSearch extends Order
 
 
     /**
-     * @param $attributes
-     * @param bool|false $is_asc
-     * @param int $offset
-     * @param int $limit
-     * @param null $order_status
-     * @param null $from
-     * @param null $to
-     * @return int
-     */
-    public function searchOrdersWithStatusCount($attributes, $is_asc = false, $offset = 1, $limit = 10, $order_status = null, $from = null, $to = null)
+    * 分页查询带状态订单数量
+    * @param $customer_id
+    * @return int|string
+    */
+    public function searchOrdersWithStatusCount($attributes,  $order_status = null, $from = null, $to = null)
     {
-        $sort = $is_asc ? SORT_AESC : SORT_DESC;
         $params['OrderSearch'] = $attributes;
         $query = $this->search($params)->query;
         return $query->count();
@@ -185,7 +179,7 @@ class OrderSearch extends Order
     public function searchOrdersWithStatusProvider($attributes, $order_status = null, $from = null, $to = null)
     {
 
-        $params['OrderSearch'] = $attributes;
+
         $query = Order::find()->joinWith(['orderExtPop', 'orderExtStatus']);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -203,7 +197,7 @@ class OrderSearch extends Order
                 'orderExtStatus.order_status_dict_id' => $order_status
             ]);
         }
-        if ($this->load($params) && $this->validate()) {
+        if ($this->load($attributes) && $this->validate()) {
             $query->andFilterWhere([
                 'id' => $this->id,
                 'order_parent_id' => $this->order_parent_id,
@@ -229,6 +223,7 @@ class OrderSearch extends Order
             ]);
             $query = $query->andFilterWhere(['like', 'order_service_type_name', $this->order_service_type_name]
             );
+
         }
         return $query;
     }

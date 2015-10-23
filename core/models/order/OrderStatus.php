@@ -13,6 +13,7 @@ use yii\base\Event;
 use yii\base\Exception;
 use yii\base\Model;
 use common\models\OrderStatusDict;
+use common\models\OrderStatusHistory;
 
 class OrderStatus extends Model
 {
@@ -255,5 +256,12 @@ class OrderStatus extends Model
         }catch (Exception $e){
             return false;
         }
+    }
+
+    /**
+     * 查询订单状态历史
+     */
+    public static function searchOrderStatusHistory($order_id){
+        return OrderStatusHistory::find()->where(["order_id"=>$order_id])->orderBy(["created_at"=>SORT_DESC])->all();
     }
 }

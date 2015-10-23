@@ -2,6 +2,7 @@
 
 namespace api\controllers;
 
+use common\models\OrderStatusHistory;
 use Faker\Provider\DateTime;
 use Yii;
 use common\models\FinanceOrderChannel;
@@ -108,7 +109,7 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} /order/create-order 创建订单 (90%xieyi  创建已完成 渠道号更改 依赖林洪优)
+     * @api {POST} /order/create-order 创建订单 (99%xieyi  创建已完成 渠道号更改 依赖林洪优)
      *
      *
      * @apiName ActionCreateOrder
@@ -444,7 +445,7 @@ class OrderController extends \api\components\Controller
         $attributes['order_ip'] = Yii::app()->request->userHostAddress;
         $attributes['admin_id'] = 0;
         $order = new \core\models\order\Order();
-        $is_success = $order->createNew($attributes);
+        $is_success = $order->addNew($attributes);
         if ($is_success) {
             $msg = '追加订单成功';
             $this->send($order, $msg);
@@ -455,7 +456,7 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /order/query-orders 查询订单(xieyi 70%已经将后台接口完成，创建也完成缺少测试)
+     * @api {GET} /order/user-orders 查询订单(xieyi 70%已经将后台接口完成，创建也完成缺少测试)
      *
      *
      * @apiName QueryOrders
@@ -528,7 +529,7 @@ class OrderController extends \api\components\Controller
      *     }
      *
      */
-    public function actionQueryOrders()
+    public function actionUserOrders()
     {
         $args = Yii::$app->request->post() or
                 $args = json_decode(Yii::$app->request->getRawBody(), true);
@@ -568,12 +569,134 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /order/cancel-order 取消订单(郝建设 100%  )
-     * 
-     * 
-     * @apiName CancelOrder
+     * @api {GET} /order/order-status-history 查询某个订单状态历史状态记录(xieyi 70%已经将后台接口完成，创建也完成缺少测试)
+     *
+     *
+     * @apiName OrderStatusHistory
      * @apiGroup Order
-     * 
+     *
+     * @apiParam {String} order_id 订单id
+     * @apiParam {String} access_token 认证令牌
+     *
+     * @apiSuccess {Object[]} status_list 该状态订单.
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "code": "1",
+     *       "msg": "以下单成功，正在等待阿姨抢单",
+     *       "ret":{
+     *           "status_list": [
+     *              {
+     *
+     *              }
+     *          ],
+     *
+     *          "pageNum": "1",
+     *          "totalPage": "2",
+     *          "totalNum": "29"
+     *      }
+     *
+     *
+     *
+     *     }
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "error",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *
+     *     }
+     *
+     */
+    public function actionOrderStatusHistory()
+    {
+        $args = Yii::$app->request->get() or
+        $args = json_decode(Yii::$app->request->getRawBody(), true);
+        @$token = $args['access_token'];
+
+        $user = CustomerAccessToken::getCustomer($token);
+        if (empty($user)) {
+            return $this->send(null, "用户无效,请先登录","0");
+        }
+        @$orderId = $args['order_id'];
+        if(is_numeric($orderId)){
+            return $this->send(null, ",请先登录","0");
+        }
+        $ret = OrderStatus::searchOrderStatusHistory($orderId);
+
+        $this->send($ret, $msg = "操作成功", $code = "ok", $value = 200, $text = null);
+    }
+
+    /**
+     * @api {GET} /order/order-status-history 查询某个订单状态订单数量(xieyi 70%已经将后台接口完成，创建也完成缺少测试)
+     *
+     *
+     * @apiName OrderStatusHistory
+     * @apiGroup Order
+     *
+     * @apiParam {String} order_id 订单id
+     * @apiParam {String} access_token 认证令牌
+     *
+     * @apiSuccess {Object[]} status_list 该状态订单.
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "code": "1",
+     *       "msg": "以下单成功，正在等待阿姨抢单",
+     *       "ret":{
+     *           "status_list": [
+     *              {
+     *
+     *              }
+     *          ],
+     *
+     *          "pageNum": "1",
+     *          "totalPage": "2",
+     *          "totalNum": "29"
+     *      }
+     *
+     *
+     *
+     *     }
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "error",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *
+     *     }
+     *
+     */
+    public function actionUserOrderCount()
+    {
+        $args = Yii::$app->request->get() or
+        $args = json_decode(Yii::$app->request->getRawBody(), true);
+        @$token = $args['access_token'];
+
+        $user = CustomerAccessToken::getCustomer($token);
+        if (empty($user)) {
+            return $this->send(null, "用户无效,请先登录","0");
+        }
+        @$orderId = $args['order_id'];
+        if(is_numeric($orderId)){
+            return $this->send(null, ",请先登录","0");
+        }
+        $ret = OrderStatus::searchOrderStatusHistory($orderId);
+
+        $this->send($ret, $msg = "操作成功", $code = "ok", $value = 200, $text = null);
+    }
+
+
+    /**
+     * @api {GET} /order/cancelorder 取消订单(haojianse %0  )
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      * @apiParam {String} order_cancel_reason 取消原因
@@ -695,7 +818,7 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /order/add-comment 评价订单（xieyi %0）
+     * @api {POST} /order/comment 评价订单（haojianse %0）
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} app_version 访问源(android_4.2.2)
@@ -728,13 +851,13 @@ class OrderController extends \api\components\Controller
      *     }
      *
      */
-    public function actionAddComment()
+    public function actionComment()
     {
         
     }
 
     /**
-     * @api {GET} /order/hiden-order 删除订单（郝建设 100% ）
+     * @api {DELETE} /order/hidden-order 删除订单（郝建设 100% ）
      * 
      * 
      * @apiName HidenOrder
@@ -765,7 +888,7 @@ class OrderController extends \api\components\Controller
      *
      *     }
      */
-    public function actionHidenOrder()
+    public function actionHiddenOrder()
     {
         $param = Yii::$app->request->post();
 
@@ -796,7 +919,7 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {get} /order/search_push_order.php 获得推送订单信息 (xieyi 0%)
+     * @api {GET} /order/search_push_order.php 获得推送订单信息 (xieyi 0%)
      * @apiName actionSearchPushOrder
      * @apiGroup Order
      * @apiDescription 推送过来的订单，通过id获取订单信息
@@ -847,7 +970,7 @@ class OrderController extends \api\components\Controller
      *
      */
     /**
-     * @api {get} /mobileapidriver2/driver_get_now_order_list 待接活订单(zhaoshunli 0%)
+     * @api {GET} /mobileapidriver2/driver_get_now_order_list 待接活订单(zhaoshunli 0%)
      * @apiName actionDriverGetNowOrderList
      * @apiGroup Order
      * @apiDescription 阿姨查看带接活订单
@@ -1060,105 +1183,6 @@ class OrderController extends \api\components\Controller
      *  }
      *
      */
-    /**
-     * @api {get} v2/worker/all_order_common_list.php 日常订单列表(zhaoshunli 0%)
-     * @apiName actionAllOrderCommonList
-     * @apiGroup Order
-     * @apiDescription 对账日常订单，全部订单
-     * @apiParam {String} session_id    会话id.
-     * @apiParam {String} platform_version 平台版本号.
-     * @apiParam {String} page_num  每页显示多少条数据.
-     * @apiParam {String} cur_page  当前页.
-     * @apiParam {String} time  那个月份.
-     *
-     * @apiSuccessExample {json} Success-Response:
-     * HTTP/1.1 200 OK
-     * {
-     *      "code": "ok",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      {
-     *          "title": "2015年09月 单数：8单 工时：23.5小时",
-     *          "info":
-     *          [
-     *          {
-     *              "order_id": "1115",
-     *              "finish_time": "第39周 09月27日 12:00结束",
-     *              "order_price": 50,
-     *              "palce": "北京密云县密云1",
-     *              "cash": "50",
-     *              "status": "现金¥50"
-     *          }
-     *          ],
-     *          "msgStyle": "",
-     *          "alertMsg": ""
-     *      }
-     * }
-     *
-     * @apiError SessionIdNotFound 未找到会话ID.
-     *
-     * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
-     *  {
-     *      "code":"Failed",
-     *      "msg": "SessionIdNotFound"
-     *  }
-     *
-     */
-    /**
-     * @api {get} /v2/FixedUserOrder.php 固定客户以及订单列表(zhaoshunli 0%)
-     * @apiName actionFixedUserOrder
-     * @apiGroup Order
-     * @apiDescription 对账固定客户首页，全部固定客户订单
-     * @apiParam {String} session_id    会话id.
-     * @apiParam {String} platform_version 平台版本号.
-     * @apiParam {String} period_id  周期id，首页传0.
-     * @apiParam {String} worker_is_nearby  是否首页，首页传1.
-     * @apiParam {String} per_page  每页显示多少条.
-     * @apiParam {String} page  第几页.
-     *
-     * @apiSuccessExample {json} Success-Response:
-     * HTTP/1.1 200 OK
-     * {
-     *      "code": "ok",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      {
-     *          "alertMsg": "",
-     *          "fixedUserPeriod":
-     *          [
-     *          {
-     *              "telephone": "13636363636",
-     *              "street": "海淀区定慧北里",
-     *              "place_detail": "6换10",
-     *              "order_num": "2",
-     *              "order_time": "5.5小时"
-     *          }
-     *          ],
-     *          "fixedUserOrder":
-     *          [
-     *          {
-     *              "wage_record_id": "0",
-     *              "finish_time": "2015-09-11 18:37:04",
-     *              "order_id": "174",
-     *              "pay_worker_money": "87.5",
-     *              "cash": "87.5",
-     *              "is_fulltime": 0
-     *          }
-     *          ]
-     *      }
-     * }
-     *
-     * @apiError SessionIdNotFound 未找到会话ID.
-     *
-     * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
-     *  {
-     *      "code":"Failed",
-     *      "msg": "SessionIdNotFound"
-     *  }
-     *
-     */
 
     /**
      * @api {get} v1/order/no_settlement_order_list.php  未结算订单(0%zhaoshunli)
@@ -1209,6 +1233,42 @@ class OrderController extends \api\components\Controller
         return Order::push($id);
     }
 
+    /**
+     * 获得某个订单的状态历史信息
+     */
+
+    /**
+     * 评价订单，增加积分
+     */
+
+
+    /**
+     * 查询订单可被抢单 10条来自周期订单 10条来自普通订单
+     */
+
+    /**
+     * 查看该阿姨所有未交罚款记录
+     */
+
+    /**
+     * 获得该阿姨所有未领取任务奖励记录
+     */
+
+    /**
+     * 获得所有该阿姨已经完成未对账订单
+     */
+
+    /**
+     * 提交订单确认无误
+     */
+
+    /**
+     * 获得该阿姨在各个状态的 任务列表
+     */
+
+    /**
+     * 依据任务id 查询任务详情
+     */
 }
 
 ?>
