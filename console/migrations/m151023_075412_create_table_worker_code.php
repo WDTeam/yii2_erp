@@ -5,7 +5,7 @@ use yii\db\Migration;
 
 class m151023_075412_create_table_worker_code extends Migration
 {
-    public function safeUp()
+    public function up()
     {
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {

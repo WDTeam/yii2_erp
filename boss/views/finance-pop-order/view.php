@@ -20,9 +20,6 @@ $this->params['breadcrumbs'][] =$this->title;
 $userinfo=Customer::getCustomerById($model->finance_pop_order_worker_uid);
 
 if(isset($userinfo->customer_name)){$username=$userinfo->customer_name;}else{$username='未查到';}
-
-
-
 $admininfo=SystemUser::findIdentity($model->finance_pop_order_worker_uid);
 if($admininfo){$adminname=$admininfo->username;}else{$adminname='未查到';}
 $order_channel_info=FinanceOrderChannel::get_order_channel_info($model->finance_order_channel_id);
@@ -32,6 +29,8 @@ if(isset($order_channel_info->finance_order_channel_name)){
 }else{
 	$channel_title='未知';
 }
+
+
 ?>
 <div class="finance-pop-order-view">
     <?= DetailView::widget([

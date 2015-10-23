@@ -49,30 +49,16 @@ class FinanceHeaderController extends BaseAuthController
      */
     public function actionIndex()
     {
+    	
+    	//获取下单渠道
+    	$tyu= FinanceOrderChannel::get_order_channel_listes();
+    	//获取支付渠道
+    	$ordesite= FinancePayChannel::get_pay_channel_list();
+    
         $searchModel = new FinanceHeaderSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         $dataProvider->query->orderBy(['id'=>SORT_DESC]);
         
-		//支付渠道数据
-        $ordedata= new FinanceOrderChannel;
-        $ordewhere['is_del']=0;
-        $ordewhere['finance_order_channel_is_lock']=1;
-        $payatainfo=$ordedata::find()->where($ordewhere)->asArray()->all();
-        foreach ($payatainfo as $errt){
-        	$tyd[]=$errt['id'];
-        	$tydtui[]=$errt['finance_order_channel_name'];
-        }
-       $tyu= array_combine($tyd,$tydtui);
-        //订单渠道数据
-        $paydata= new FinancePayChannel;
-        $payewhere['finance_pay_channel_is_lock']=1;
-        $payewhere['is_del']=0;
-        $ordedatainfo=$paydata::find()->where($payewhere)->asArray()->all();
-        foreach ($ordedatainfo as $ordein){
-        	$tydoed[]=$ordein['id'];
-        	$tydoedname[]=$ordein['finance_pay_channel_name'];
-        }
-        $ordesite= array_combine($tydoed,$tydoedname);
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
@@ -148,7 +134,7 @@ class FinanceHeaderController extends BaseAuthController
        		$filePath = $path.$filename;
        	}
        	
-       //	$filePath = './uploads/14430836465880.xls'; // 要读取的文件的路径
+       
        	$objPHPExcel = \PHPExcel_IOFactory::load($filePath);
        	$sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
        	header("Content-Type: text/html; charset=utf-8");
@@ -186,24 +172,10 @@ class FinanceHeaderController extends BaseAuthController
        	}
        	return $this->redirect(['index']);
        }else{
-       	//支付渠道数据
-       	$ordedata= new FinanceOrderChannel;
-       	$ordewhere['is_del']=0;
-       	$payatainfo=$ordedata::find()->where($ordewhere)->asArray()->all();
-       	foreach ($payatainfo as $errt){
-       		$tyd[]=$errt['id'];
-       		$tydtui[]=$errt['finance_order_channel_name'];
-       	}
-       	$tyu= array_combine($tyd,$tydtui);
-       	//订单渠道数据
-       	$paydata= new FinancePayChannel;
-       	$payewhere['is_del']=0;
-       	$ordedatainfo=$paydata::find()->where($payewhere)->asArray()->all();
-       	foreach ($ordedatainfo as $ordein){
-       		$tydoed[]=$ordein['id'];
-       		$tydoedname[]=$ordein['finance_pay_channel_name'];
-       	}
-       	$ordesite= array_combine($tydoed,$tydoedname);
+       //获取下单渠道
+    	$tyu= FinanceOrderChannel::get_order_channel_listes();
+    	//获取支付渠道
+    	$ordesite= FinancePayChannel::get_pay_channel_list(); 
        	return $this->render('create', [
        			'model' => $model,'ordeinfo' => $ordesite,'payinfo' => $tyu,
        			]);
