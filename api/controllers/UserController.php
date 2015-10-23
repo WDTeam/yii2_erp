@@ -844,7 +844,7 @@ class UserController extends \api\components\Controller
 
     public function actionAddUser()
     {
-        $daat = \core\models\customer\CustomerAccessToken::generateAccessToken('13683118946', '4041');
+        $daat = \core\models\customer\CustomerAccessToken::generateAccessToken('13683118946', '0330');
 
         print_r($daat);
     }
@@ -991,6 +991,120 @@ class UserController extends \api\components\Controller
                 return $this->send([1], "添加评论成功", "ok");
             } else {
                 return $this->send(null, "添加评论失败", "error", 403);
+            }
+        } else {
+            return $this->send(null, "用户认证已经过期,请重新登录.", "error", 403);
+        }
+    }
+
+    /**
+     *
+     * @api {POST} /user/get-comment-level 获取用户评价等级 （郝建设 100%）
+     *
+     * @apiName GetCommentLevel
+     * @apiGroup User
+     *
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "code": "ok",
+     *       "msg": "获取评论级别成功",
+     *       "ret": {
+     *          "id": "1",
+     *          "customer_comment_level": "级别代号",
+     *          "customer_comment_level_name": "级别名称",
+     *          "is_del": "是否删除",
+     *
+     *           }
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "error",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *
+     *     }
+     *
+     */
+    public function actionGetCommentLevel()
+    {
+        $param = Yii::$app->request->post();
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+        
+        if (!empty($customer) && !empty($customer->id)) {
+
+            $level = \core\models\comment\CustomerCommentLevel::getCommentLevel();
+            if (!empty($level)) {
+                $ret = ['comment' => $level];
+                return $this->send($ret, "获取评论级别成功", "ok");
+            } else {
+                return $this->send(null, "获取评论级别失败", "error", 403);
+            }
+        } else {
+            return $this->send(null, "用户认证已经过期,请重新登录.", "error", 403);
+        }
+    }
+
+    /**
+     *
+     * @api {POST} /user/get-comment-level-tag 获取用户评价等级下面的标签 （郝建设 100%）
+     *
+     * @apiName GetCommentLevelTag
+     * @apiGroup User
+     *
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} customer_comment_level 级别id
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "code": "ok",
+     *       "msg": "获取评论标签成功",
+     *       "ret": {
+     *          "id": "1",
+     *          "customer_tag_name": "评价标签名称",
+     *          "customer_comment_level": "评价等级",
+     *          "is_online": "是否上线",
+     *          "is_del": "删除",
+     *
+     *           }
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "error",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *
+     *     }
+     *
+     */
+    public function actionGetCommentLevelTag()
+    {
+        $param = Yii::$app->request->post();
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+        if (!empty($customer) && !empty($customer->id)) {
+
+            $level = \core\models\comment\CustomerCommentTag::getCommentTag($param['customer_comment_level']);
+           
+            if (!empty($level)) {
+                $ret = ['commentTag' => $level];
+                return $this->send($ret, "获取评论标签成功", "ok");
+            } else {
+                return $this->send(null, "获取评论标签失败", "error", 403);
             }
         } else {
             return $this->send(null, "用户认证已经过期,请重新登录.", "error", 403);
