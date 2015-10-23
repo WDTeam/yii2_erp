@@ -4,6 +4,7 @@ namespace api\controllers;
 use Yii;
 use \api\models\PayParam;
 use \core\models\GeneralPay\GeneralPay;
+use \core\models\customer\CustomerAccessToken;
 
 class PayController extends \api\components\Controller
 {
@@ -46,12 +47,13 @@ class PayController extends \api\components\Controller
 
 
     /**
-     * @api {post} v1/pay/pay 支付接口 （已完成）
-     * @apiName actionPay
+     * @api {post} v1/pay/online-pay 在线支付接口 （已完成）
+     * @apiName actionOnlinePay
      * @apiGroup Pay
      *
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
      * @apiParam integer pay_money 支付金额
-     * @apiParam integer customer_id 消费者ID
      * @apiParam integer channel_id 渠道ID
      *                              1=APP微信,
      *                              2=H5微信,
@@ -66,20 +68,22 @@ class PayController extends \api\components\Controller
      * @apiParam integer partner 第三方合作号
      *
      * @apiParam object [ext_params] 扩展参数,用于微信/百度直达号（即channel_id=2或7 必填）
-     * @apiParam string [ext_params.openid] （channel_id=2 必填）
-     * @apiParam string [ext_params.customer_name] （channel_id=7必填）
-     * @apiParam string [ext_params.customer_mobile] （channel_id=7必填）
-     * @apiParam string [ext_params.customer_address] （channel_id=7必填）
-     * @apiParam string [ext_params.order_source_url] （channel_id=7必填）
-     * @apiParam string [ext_params.page_url] （channel_id=7必填）
-     * @apiParam string [ext_params.goods_name] （channel_id=7必填）
-     * @apiParam string [ext_params.detail] （channel_id=7必填）
+     * @apiParam string [ext_params.openid] 微信openid （channel_id=2 必填）
+     * @apiParam string [ext_params.return_url] 同步回调地址 （channel_id=6必填）
+     * @apiParam string [ext_params.show_url] 显示商品URL（channel_id=6必填）
+     * @apiParam string [ext_params.customer_name] 商品名称（channel_id=7必填）
+     * @apiParam string [ext_params.customer_mobile] 用户电话（channel_id=7必填）
+     * @apiParam string [ext_params.customer_address] 用户地址（channel_id=7必填）
+     * @apiParam string [ext_params.order_source_url] 订单详情地址（channel_id=7必填）
+     * @apiParam string [ext_params.page_url] 订单跳转地址（channel_id=7必填）
+     * @apiParam string [ext_params.goods_name] 订单名称（channel_id=7必填）
+     * @apiParam string [ext_params.detail] 订单详情 （channel_id=7必填）
      *
      * @apiParamExample {json} Request-Example:
      *  {
      *      "channel_id":"7",
      *      "partner":"1217983401",
-     *      "customer_id":"1",
+     *      "access_token":"00ca52a593ca85ffdb5256372aa642d2",
      *      "pay_money":"0.01",
      *      "order_id":"0",
      *      "ext_params":
@@ -145,20 +149,31 @@ class PayController extends \api\components\Controller
      *
      */
 
-    public function actionPay()
+    public function actionOnlinePay()
     {
         $model = new PayParam();
         $name = $model->formName();
         $data[$name] = Yii::$app->request->post() or
         $data[$name] = json_decode(Yii::$app->request->rawBody, true);
-        //return $data[$name];
+
+        if (empty($data[$name]['access_token']) || !CustomerAccessToken::checkAccessToken($data[$name]['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
+        $customer = CustomerAccessToken::getCustomer($data[$name]['access_token']);
+
+        $data[$name]['customer_id']=$customer->id;
+
         $ext_params = [];
         //在线支付（online_pay），在线充值（pay）
         if (empty($data[$name]['order_id'])) {
             if ($data[$name]['channel_id'] == '2') {
                 $model->scenario = 'wx_h5_pay';
                 $ext_params['openid'] = $data[$name]['ext_params']['openid'];    //微信openid
-            } elseif ($data[$name]['channel_id'] == '7') {
+            } elseif($data[$name]['channel_id'] == '6'){
+                $model->scenario = 'alipay_web_pay';
+                $ext_params['return_url'] = $data[$name]['ext_params']['return_url'];    //同步回调地址
+                $ext_params['show_url'] = $data[$name]['ext_params']['show_url'];    //显示商品URL
+            }elseif ($data[$name]['channel_id'] == '7') {
                 $model->scenario = 'zhidahao_h5_pay';
                 $ext_params['customer_name'] = $data[$name]['ext_params']['customer_name'];  //商品名称
                 $ext_params['customer_mobile'] = $data[$name]['ext_params']['customer_mobile'];  //用户电话
@@ -174,6 +189,10 @@ class PayController extends \api\components\Controller
             if ($data[$name]['channel_id'] == '2') {
                 $model->scenario = 'wx_h5_online_pay';
                 $ext_params['openid'] = $data[$name]['ext_params']['openid'];    //微信openid
+            }elseif($data[$name]['channel_id'] == '6'){
+                $model->scenario = 'alipay_web_pay';
+                $ext_params['return_url'] = $data[$name]['ext_params']['return_url'];    //同步回调地址
+                $ext_params['show_url'] = $data[$name]['ext_params']['show_url'];    //显示商品URL
             } elseif ($data[$name]['channel_id'] == '7') {
                 $model->scenario = 'zhidahao_h5_online_pay';
                 $ext_params['customer_name'] = $data[$name]['ext_params']['customer_name'];  //商品名称
