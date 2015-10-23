@@ -12,7 +12,7 @@ use Yii;
  * @property integer $operation_shop_district_id
  * @property integer $created_ad
  */
-class WorkerDistrict extends \core\models\worker\WorkerExt
+class WorkerDistrict extends \core\models\worker\WorkerDistrict
 {
 
 }
