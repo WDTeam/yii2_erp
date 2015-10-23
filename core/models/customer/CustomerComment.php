@@ -20,12 +20,38 @@ use Yii;
  */
 class CustomerComment extends \common\models\CustomerComment
 {
-    
+
     /**
      * 获取客户评价数量
      */
-    public static function getCustomerCommentCount($customer_id){
-        $comment_count = self::find()->where(['customer_id'=>$customer_id])->count();
+    public static function getCustomerCommentCount($customer_id)
+    {
+        $comment_count = self::find()->where(['customer_id' => $customer_id])->count();
         return $comment_count;
     }
+
+    /**
+     * 获取客户评价数量
+     */
+    public static function addUserSuggest($customer_id, $order_id, $customer_comment_phone, $customer_comment_content, $customer_comment_tag_ids, $customer_comment_level)
+    {
+        $transaction = \Yii::$app->db->beginTransaction();
+        try {
+            $customerComment = new CustomerComment;
+            $customerComment->customer_id = $customer_id;
+            $customerComment->order_id = $order_id;
+            $customerComment->customer_comment_phone = $customer_comment_phone;
+            $customerComment->customer_comment_content = $customer_comment_content;
+            $customerComment->customer_comment_tag_ids = $customer_comment_tag_ids;
+            $customerComment->customer_comment_level = $customer_comment_level;
+            $customerComment->validate();
+            $customerComment->save();
+            $transaction->commit();
+            return $customerComment;
+        } catch (\Exception $e) {
+            $transaction->rollback();
+            return false;
+        }
+    }
+
 }

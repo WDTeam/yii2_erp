@@ -12,7 +12,7 @@ use boss\models\order\Order;
 use yii\base\Exception;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
-use core\models\Customer;
+use core\models\customer\Customer;
 use core\models\order\OrderStatusHistory;
 
 /**
@@ -83,14 +83,18 @@ class OrderController extends BaseAuthController
     {
         $phone = Yii::$app->request->get('phone');
         Yii::$app->response->format = Response::FORMAT_JSON;
-        return Customer::getCustomerInfo($phone);
+        $customer = Customer::getCustomerInfo($phone);
+        if(empty($customer)){
+            $customer = Customer::adminAddCustomer($phone);
+        }
+        return $customer;
 
     }
 
     public function actionCustomerAddress($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $address_list = Customer::getCustomerAddresses($id);
+        $address_list = CustomerAddress::listAddress($id);
         $address = [];
         if(is_array($address_list)) {
             foreach ($address_list as $v) {
@@ -314,7 +318,9 @@ public function actionGetCity()
      */
     public function actionIndex()
     {
-        $searchModel = new OrderSearch;
+        //Yii::info('xiaobo: '.json_encode(Yii::$app->request->getQueryParams()));
+        
+        $searchModel = new OrderSearch; 
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
         return $this->render('index', [
