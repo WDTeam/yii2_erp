@@ -302,49 +302,30 @@ class FinancePopOrderController extends Controller
     	$dateinfo=Yii::$app->request->getQueryParams();
     	if($dateinfo['id']){
     	$info=FinanceRecordLogSearch::get_financerecordloginfo($dateinfo['id']);
-    	}
     	
-    	
-    	/* 'finance_order_channel_id' => int 1
-    	'finance_order_channel_name' => string '京东到家' (length=12)
-    	'finance_pay_channel_id' => int 10
-    	'finance_pay_channel_name' => string '京东到家' (length=12)
-    	'finance_record_log_succeed_count' => int 1
-    	'finance_record_log_succeed_sum_money' => string '50.00' (length=5)
-    	'finance_record_log_manual_count' => int 0
-    	'finance_record_log_manual_sum_money' => string '0.00' (length=4)
-    	'finance_record_log_failure_count' => int 1
-    	'finance_record_log_failure_money' => string '25.00' (length=5)
-    	'finance_record_log_confirm_name' => string 'admin' (length=5)
-    	'finance_record_log_fee' => string '0.00' (length=4)
-    	'finance_record_log_statime' => int 1435680000
-    	'finance_record_log_endtime' => int 1443628800
-    	'finance_record_log_qiniuurl' => string '0' (length=1)
-    	'create_time' => int 1445588917
-    	'is_del' => int 0 */
-    	
-    	
-    	 if($info->finance_pay_channel_id=='10' && $info->finance_pay_channel_id=='7' &&$info->finance_pay_channel_id=='8' && $info->finance_pay_channel_id=='12' ){
-    	//银联充值	
-			echo  '开发中....';exit;
+    	if($info->finance_pay_channel_id=='10' && $info->finance_pay_channel_id=='7' &&$info->finance_pay_channel_id=='8' && $info->finance_pay_channel_id=='12' ){
+    		//银联充值
+    		echo  '开发中....';exit;
     	}else {
-    	//渠道下单	 开始时间   我有三没有开始处理 从订单表里面开始查询
-    	$searchModel= new OrderSearch;
-    	//var_dump(FinancePopOrder::get_in_list_id($dateinfo['id']));exit;
-    	
-    	$searchModel->load(Yii::$app->request->getQueryParams());
-    	$searchModel->created_at=$info->finance_record_log_statime;
-    	//$searchModel_info->created_at=$info->finance_record_log_statime;
-    	$searchModel->order_pop_order_code=FinancePopOrder::get_in_list_id($dateinfo['id']);
-    	//$searchModel->channel_id=$info->finance_pay_channel_id;
-    	$dataProvider = $searchModel->searchpoplist();	
-    	}	
-    	
+    		//渠道下单	 开始时间   我有三没有开始处理 从订单表里面开始查询
+    		$searchModel= new OrderSearch;
+    		//var_dump(FinancePopOrder::get_in_list_id($dateinfo['id']));exit;
+    		 
+    		$searchModel->load(Yii::$app->request->getQueryParams());
+    		$searchModel->created_at=$info->finance_record_log_statime;
+    		//$searchModel_info->created_at=$info->finance_record_log_statime;
+    		$searchModel->order_pop_order_code=FinancePopOrder::get_in_list_id($dateinfo['id']);
+    		//$searchModel->channel_id=$info->finance_pay_channel_id;
+    		$dataProvider = $searchModel->searchpoplist();
+    	}
     	return $this->render('orderlist', [
     			'dataProvider' => $dataProvider,
     			'searchModel' => $searchModel,
     			]);
-
+    	
+    	}else {
+    		return $this->redirect(['index']);
+    	}
     }
     
     
