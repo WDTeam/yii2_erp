@@ -62,8 +62,8 @@ class WorkerController extends \api\components\Controller
                 "worker_name" => $workerInfo['worker_name'],
                 "worker_phone" => $workerInfo['worker_phone'],
                 "head_url" => $workerInfo['worker_photo'],
-                "worker_identity"  =>$workerInfo['worker_rule_description'],//身份
-                "worker_role" => "保姆",
+                "worker_identity"  =>$workerInfo['worker_identity_description'],//身份
+                "worker_role" => $workerInfo["worker_type_description"],
                 'worker_start'=> 4.5,
                 'total_money' =>1000,
                 "personal_skill" =>['煮饭','开荒','护老','擦玻璃','带孩子'],
