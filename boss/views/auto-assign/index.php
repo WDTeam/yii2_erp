@@ -45,17 +45,8 @@ $this->params['breadcrumbs'][] = $this->title;
             <button class="btn btn-default" id="stop" name="start">停止自动派单</button>
         </div>
         <div id="connectStatus" class="col-md-4"></div>
-        <div id="connectStatus" class="col-md-4">
-            <?php
-//            if(!empty($data['time'])){
-//                if(time() - $data['time'] > 300){
-//                    echo '服务已停止，请先检查服务！';
-//                }else{
-//                    echo '服务正在运行';
-//                }
-//            }
-            ?>
-        </div>
+<!--        <div id="connectStatus" class="col-md-4">
+        </div>-->
     </div>
     <hr>
     <table class="table table-hover">

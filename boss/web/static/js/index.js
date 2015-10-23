@@ -19,7 +19,7 @@ function websocketConnect() {
         };
         websocket.onclose = function (evt) {
             console.log("Disconnected");
-            $('#connectStatus').html('链接断开！');
+            $('#connectStatus').html('链接断开！请检查服务器地址是否正确，或被网络防火墙禁止访问');
             $('#connect').attr('disabled', false);
         };
 
@@ -30,6 +30,7 @@ function websocketConnect() {
 
         websocket.onerror = function (evt, e) {
             console.log('Error occured: ' + evt.data);
+            $('#connectStatus').html('连接错误，请检查网络环境是否正常！');
             $('#connect').attr('disabled', false);
         };
     }
