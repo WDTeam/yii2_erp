@@ -48,7 +48,7 @@ class CustomerController extends Controller
         $is_del = isset($_GET['CustomerSearch']['is_del']) ? $_GET['CustomerSearch']['is_del'] : 0;
         $sort = \Yii::$app->request->get('sort', 'created_at');
         if ($sort == 'created_at') {
-            $dataProvider->query->orderBy(['created_at' => SORT_DESC ]);
+            $dataProvider->query->orderBy(['created_at' => SORT_ASC ]);
         }else if ($sort == 'order_count') {
             
         }else{
@@ -838,7 +838,7 @@ class CustomerController extends Controller
 
         // $res =  \core\models\customer\CustomerAddress::addAddress(1, '东城区', '详细地址', '刘道强', '18519654001');
         // var_dump($res);
-		$res = Customer::adminAddCustomer('18519654001');
+		$res = Customer::adminAddCustomer('18519654002');
 		var_dump($res);
     }
 

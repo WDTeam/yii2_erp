@@ -159,7 +159,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             $this->worder_tel= $workerInfo['worker_phone'];
             $this->workerOnboardTime= $workerInfo['created_ad'];
             $this->worker_type_id = $workerInfo['worker_type'];
-            $this->worker_rule_id = $workerInfo['worker_rule_id'];
+            $this->worker_rule_id = $workerInfo['worker_identity_id'];
             $this->workerTypeDes= $this->getWorkerTypeDes();
             $this->finance_settle_apply_cycle_des = $this->getSettleCycleByWorkerType($this->worker_type_id,$this->worker_rule_id);
             $this->latestSettleTime = time();
@@ -218,9 +218,9 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             $this->worder_tel = $workerInfo['worker_phone'];
             $this->worder_name = $workerInfo['worker_name'];
             $this->worker_type_id = $workerInfo['worker_type'];
-            $this->worker_rule_id = $workerInfo['worker_rule_id'];
+            $this->worker_rule_id = $workerInfo['worker_identity_id'];
             $this->worker_type_name = $this->getWorkerTypeName($workerInfo['worker_type']);
-            $this->worker_rule_name = $this->getWorkerRuleDes($workerInfo['worker_rule_id']);
+            $this->worker_rule_name = $this->getWorkerRuleDes($workerInfo['worker_identity_id']);
         }
         $this->finance_settle_apply_cycle = $this->getSettleCycleIdByWorkerType($this->worker_type_id, $this->worker_rule_id);//结算周期Id
         $this->finance_settle_apply_cycle_des = $this->getSettleCycleByWorkerType($this->worker_type_id, $this->worker_rule_id);//结算周期描述
