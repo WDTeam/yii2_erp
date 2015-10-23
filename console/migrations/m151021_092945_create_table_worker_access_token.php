@@ -1,11 +1,11 @@
 <?php
 
 use yii\db\Schema;
-use jamband\schemadump\Migration;
+use yii\db\Migration;
 
 class m151021_092945_create_table_worker_access_token extends Migration
 {
-    public function safeUp()
+    public function up()
     {
          $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
@@ -24,7 +24,7 @@ class m151021_092945_create_table_worker_access_token extends Migration
             ], $tableOptions);
     }
 
-    public function safeDown()
+    public function down()
     {
         $this->dropTable('{{%worker_access_token}}');
 

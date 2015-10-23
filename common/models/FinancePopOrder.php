@@ -90,6 +90,44 @@ class FinancePopOrder extends \yii\db\ActiveRecord
 
     
     /**
+    * 通过渠道的第三方的账期id
+    * @date: 2015-10-23
+    * @author: peak pan
+    * @return:
+    **/
+    
+    
+   static  public function get_in_list_id($id){
+
+   	$alinfo=FinancePopOrder::find()
+   	->select('finance_pop_order_number')
+   	->andWhere(['=','finance_record_log_id',$id])
+   	->asArray()->All();
+   	
+   	foreach ($alinfo as $rty){
+   		$rtystye[]=$rty['finance_pop_order_number'];
+   	}
+   	if(count($rtystye)>0){
+   		return $rtystye;
+   	}else{
+   		return 1;
+   	}
+   	
+   	
+   }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /**
      * @inheritdoc
      */
     public function rules()

@@ -40,7 +40,7 @@ class Shop extends \common\models\Shop
     public function rules()
     {
         return array_merge(parent::rules(),[
-            [['name', 'street', 'principal', 'tel', 'shop_manager_id'], 'required'],
+            [['name','city_id', 'street', 'principal', 'tel', 'shop_manager_id'], 'required'],
             [['shop_manager_id', 'province_id', 'city_id', 'county_id', 'is_blacklist', 
                  'audit_status', 'worker_count', 
                 'complain_coutn', 'tel', 'bankcard_number'], 'integer'],

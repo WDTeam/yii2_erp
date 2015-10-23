@@ -30,7 +30,7 @@ class FinancePayChannel extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['finance_pay_channel_rank', 'finance_pay_channel_is_lock', 'create_time', 'is_del'], 'integer'],
+            [['finance_pay_channel_rank','pay_channel_id', 'finance_pay_channel_is_lock', 'create_time', 'is_del'], 'integer'],
             [['finance_pay_channel_name'], 'string', 'max' => 50]
         ];
     }
@@ -96,7 +96,8 @@ class FinancePayChannel extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('boss', '主键id'),
+            'id' => Yii::t('boss', '主键id'), 
+            'pay_channel_id' => Yii::t('boss', '支付渠道'),
             'finance_pay_channel_name' => Yii::t('boss', '渠道名称'),
             'finance_pay_channel_rank' => Yii::t('boss', '排序'),
             'finance_pay_channel_is_lock' => Yii::t('boss', '状态'),
@@ -115,11 +116,32 @@ class FinancePayChannel extends \yii\db\ActiveRecord
 
     public static function get_pay_channel_info($pay_id)
     {
-    	$pay_info = FinancePayChannel::findOne($pay_id);
-
-    	return $pay_info != NULL ? $pay_info : '未知';
+   
+    	if($pay_id && $pay_id!=0){
+    		$pay_info = FinancePayChannel::findOne($pay_id);
+    		//var_dump($pay_info);exit;
+    		//var_dump($pay_info->finance_pay_channel_name);exit;
+    		return $pay_info->finance_pay_channel_name != NULL ? $pay_info->finance_pay_channel_name : '未知';
+    	}else{
+    		return '未知';
+    	}
+    	
     }
 
-
+    
+    public static function get_pay_channel_list(){
+    	 $ordewhere['is_del']=0;
+    	$ordewhere['finance_pay_channel_is_lock']=2;
+    	 $payatainfo=FinancePayChannel::find()->where($ordewhere)->asArray()->all();	
+    	foreach ($payatainfo as $errt){
+    		$tyd[]=$errt['id'];
+    		$tydtui[]=$errt['finance_pay_channel_name'];
+    	}
+    	$tyu= array_combine($tyd,$tydtui);
+    	 
+    	return $tyu;
+    }
+    
+    
 
 }

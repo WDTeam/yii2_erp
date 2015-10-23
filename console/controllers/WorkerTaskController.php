@@ -5,25 +5,10 @@ use yii\console\Controller;
 use core\models\worker\WorkerTask;
 use core\models\worker\Worker;
 use yii\helpers\ArrayHelper;
+use core\models\worker\WorkerTaskLog;
 class WorkerTaskController extends Controller
 {
-    /**
-     * 自动处理阿姨任务数据
-     * 实现思路：
-     * 1、自动生成阿姨任务记录，有则取，无则建
-     * 2、循环任务，查询获取在符合任务时间段内各项条件的数值
-     * 3、保存数值，运算是否达到条件完成。
-     */
-    private function autoRunWorkerTask($worker_id)
-    {
-        $tasks = (array)WorkerTask::autoCreateTaskLog($worker_id);
-        foreach ($tasks as $task){
-            $conVals = $this->getConditionsValues($task->worker_task_log_start, $task->worker_task_log_end, $worker_id);
-            $task->setValues($conVals);
-            $task->calculateIsDone();
-        }
-        return $tasks;
-    }
+
     /**
      * 指定时间段内阿姨各个条件完成值
      *  条件类型：
@@ -96,14 +81,31 @@ class WorkerTaskController extends Controller
         
         return $data;
     }
-    
+    /**
+     * 定时处理已结束的任务周期
+     * 定时生成阿姨任务
+     * 实现思路：
+     * 1、循环任务，查询获取昨日完成的任务
+     * 2、计算时间段内各项条件的数值，保存数值，运算是否达到条件完成。
+     * 3、自动生成阿姨任务记录，有则取，无则建.
+     */
     public function actionIndex()
     {
+        $tasks = (array)WorkerTaskLog::find()
+        ->where('worker_task_is_done is NULL or worker_task_is_done=0')
+        ->filterWhere(['<=','worker_task_log_end', strtotime("-1 day")])
+        ->all();
+        foreach ($tasks as $task){
+            $conVals = $this->getConditionsValues($task->worker_task_log_start, $task->worker_task_log_end, $task->worker_id);
+            $task->setValues($conVals);
+            $task->calculateIsDone();
+        }
+        
         $models = Worker::find()->all();
         $total = count($models);
         echo "worker total: {$total}".PHP_EOL;
         foreach ($models as $model){
-            $res = $this->autoRunWorkerTask($model->id);
+            $res =  (array)WorkerTask::autoCreateTaskLog($model->id);
             echo count($res).PHP_EOL;
         }
     }
