@@ -35,6 +35,8 @@ class CustomerComment extends \yii\db\ActiveRecord
     {
         return [
             [['order_id', 'customer_id', 'customer_comment_phone'], 'required'],
+            #郝建设修改，去掉了'customer_comment_star_rate' 字段，和数据库字段不符合。不能正常insert用户评论
+           # [['order_id', 'customer_id', 'customer_comment_star_rate', 'customer_comment_anonymous', 'created_at', 'updated_at', 'is_del'], 'integer'],
             [['order_id', 'customer_id',  'customer_comment_anonymous', 'created_at', 'updated_at', 'is_del'], 'integer'],
             [['customer_comment_phone'], 'string', 'max' => 11],
             [['customer_comment_content'], 'string', 'max' => 255]
