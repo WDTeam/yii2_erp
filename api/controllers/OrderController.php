@@ -6,7 +6,7 @@ use Faker\Provider\DateTime;
 use Yii;
 use common\models\FinanceOrderChannel;
 use common\models\OrderSrc;
-use common\models\CustomerAddress;
+use common\models\CustomerAddress as CommonCustomerAddress;
 use core\models\order\Order;
 use core\models\order\OrderSearch;
 use core\models\order\OrderStatus;
@@ -238,7 +238,7 @@ class OrderController extends \api\components\Controller
         } elseif(isset($args['address'])) {
             //add address into customer and return customer id
 			$address = = $args['address'];
-			$customerAddress = CustomerAddress::find()->where(['customer_id'=>$user->id, 'customer_address_detail'=>$address])->one();
+			$customerAddress = CommonCustomerAddress::find()->where(['customer_id'=>$user->id, 'customer_address_detail'=>$address])->one();
 			if(!empty($customerAddress)){
 				// found the address
 				$attributes['address_id'] = $customerAddress['id'];
