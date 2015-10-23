@@ -76,11 +76,11 @@ function getStatus(status){
     if(status == null){
         return '正在指派给全职阿姨';
     }else{
-        //: （0-5分）: 1，(5-10)：2，已失败转到人工处理：
+        //: （0-5分）: 1，(5-10)：2，已失败转到人工处理：1001
         switch(status){
             case '1': return '正在指派给全职阿姨';break;
             case '2': return '正在指派给兼职阿姨';break;
-            case '1001' : return '已失败转到人工处理'; break;
+            case '1001' : return '系统派单失败转人工处理'; break;
         }
     }
 }
