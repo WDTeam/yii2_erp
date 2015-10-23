@@ -497,9 +497,9 @@ class WorkerController extends BaseAuthController
                 $workerArr['created_ad'] = strtotime($val['create_time']);
                 //原有阿姨身份太凌乱，暂时只取兼职和全职
                 if(strpos($val['is_fulltime'],'兼职')){
-                    $workerArr['worker_rule_id']=2;
+                    $workerArr['worker_identity_id']=2;
                 }else{
-                    $workerArr['worker_rule_id']=1;
+                    $workerArr['worker_identity_id']=1;
                 }
 
                 //获取城市
