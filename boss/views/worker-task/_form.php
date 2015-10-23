@@ -75,7 +75,7 @@ $conditions = $model->getFullConditions();
                         'autoclose' => true
                     ]
                 ]
-            ]
+            ],
         ], 
         
         'worker_task_end'=>[
@@ -108,8 +108,7 @@ $conditions = $model->getFullConditions();
         
         'worker_cites'=>[
             'type'=> Form::INPUT_CHECKBOX_LIST, 
-            'options'=>['placeholder'=>'Enter 适用城市...'],
-            'items'=>WorkerTask::getOnlineCites()
+            'items'=>WorkerTask::getOnlineCites(),
         ], 
         
         'worker_task_reward_type'=>[

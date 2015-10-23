@@ -5,6 +5,8 @@ use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
 use kartik\widgets\Select2;
+use common\models\FinancePayChannel;
+use common\models\FinanceOrderChannel;
 /**
  * @var yii\web\View $this
  * @var common\models\FinanceHeader $model
@@ -24,14 +26,16 @@ use kartik\widgets\Select2;
     'attributes' => [
   		
 'finance_header_title'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'当前名称...', 'maxlength'=>100],'class' => 'col-md-2'],
-  'finance_order_channel_name'=>['type'=> Form::INPUT_DROPDOWN_LIST, 'items'=>$htmlpayinfo,'class' => 'col-md-2'],
- 'finance_pay_channel_name'=>['type'=> Form::INPUT_DROPDOWN_LIST, 'items'=>$htmlordeinfo,'class' => 'col-md-2'],
- 			
+  'finance_order_channel_name'=>['type'=> Form::INPUT_DROPDOWN_LIST, 'items'=>FinanceOrderChannel::get_order_channel_listes(),'options' => [
+     		'prompt' => '请选择下单渠道',
+     		],'class' => 'col-md-2'],
+    		'finance_pay_channel_name'=>['type'=> Form::INPUT_DROPDOWN_LIST, 'items'=>FinancePayChannel::get_pay_channel_list(),'options' => [
+    		'prompt' => '请选择支付渠道',
+    		],'class' => 'col-md-2'],	
  'finance_uplod_url'=>['type'=> Form::INPUT_FILE, 'options'=>['placeholder'=>'上传exl名称...', 'maxlength'=>100],'class' => 'col-md-2'],
     ]
     ]);
-    
-
+   
     //echo $form->field($model, 'finance_uplod_url')->fileInput();
     echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']);
     ActiveForm::end(); ?>

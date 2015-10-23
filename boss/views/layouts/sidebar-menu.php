@@ -12,7 +12,7 @@ echo Menu::widget(
         ],
         'items' => [
             [
-                'label' => '家政公司管理(90%)',
+                'label' => '家政公司管理(100%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-slideshare',
                 'options' => [
@@ -21,7 +21,7 @@ echo Menu::widget(
                 'visible' => (Yii::$app->user->can('housekeep')),
                 'items' => [
                     [
-                        'label' => '查看所有家政公司(80%)',
+                        'label' => '查看所有家政公司(100%)',
                         'url' => ['shop-manager/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -33,7 +33,7 @@ echo Menu::widget(
                 ],
             ],
             [
-                'label' => '门店管理(95%)',
+                'label' => '门店管理(100%)',
                 'url' => ['#'],
                 'icon' => 'fa fa-flag',
                 'visible' => (Yii::$app->user->can('shop')),
@@ -42,7 +42,7 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有合作门店(90%)',
+                        'label' => '查看所有合作门店(100%)',
                         'url' => ['shop/index'],
                         'icon' => 'fa fa-angle-right',
                     ],

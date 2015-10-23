@@ -36,7 +36,7 @@ AppAsset::addScript($this, 'js/order_search/riqi/jquery-ui-timepicker-zh-CN.js')
 $this->title = '订单管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
+     <div id="m_warp">
 		  <div class="box">
 		  	 <div class="conter"> 
 		  	 	 <div class="m_frist">
@@ -51,19 +51,20 @@ $this->params['breadcrumbs'][] = $this->title;
                         'action' => ['order/index'],
                         'method' => 'get',
                     ]); ?>						
-						<?php echo $form->field($searchModel, 'order_customer_phone')->TextInput(['class' => 'm_ipu'])->label('用户电话', ['class' => 'm_ipone']); ?>
-						<?php echo $form->field($searchModel, 'order_customer_phone')->TextInput(['class' => 'm_ipu'])->label('阿姨电话', ['class' => 'm_ipone']); ?>
-						<?php echo $form->field($searchModel, 'order_code')->TextInput(['class' => 'm_ipu'])->label('订单编号', ['class' => 'm_ipone']); ?>
+						<?php echo $form->field($searchModel, 'order_customer_phone')->TextInput(['class' => 'm_ipu'])->label('用户电话 :', ['class' => 'm_ipone']); ?>
+						<?php echo $form->field($searchModel, 'worker_id')->TextInput(['class' => 'm_ipu'])->label('阿姨电话 :', ['class' => 'm_ipone']); ?>
+						<?php echo $form->field($searchModel, 'order_code')->TextInput(['class' => 'm_ipu'])->label('订单编号 :', ['class' => 'm_ipone']); ?>
 						
 						<div class="m_riqi">
 							<label class="m_ipone">下单时间:</label>
-							<input type="text" name="datetime" class="ui_timepicker" value="" placeholder="日期时间"> 到
-							<input type="text" name="datetime" class="ui_timepicker" value="" placeholder="日期时间">
+							<input type="text" name="datetime" class="ui_timepicker" value="" placeholder=""> 到
+							<input type="text" name="datetime" class="ui_timepicker" value="" placeholder="">
 
 							<label class="m_ipone m_iponeleft">服务时间:</label>
+
 							<input type="text" name="datetime" class="ui_timepicker" value="" placeholder="日期时间"> 到
 							<input type="text" name="datetime" class="ui_timepicker" value="" placeholder="日期时间">
-						    <p class="cd-popup-trigger"><a href="javascript:;">搜索</a></p>
+						    <?= Html::submitButton('查询', ['class' => 'btn btn-primary']) ?>
 						</div>
 					<?php ActiveForm::end(); ?>
 					</div>
@@ -119,50 +120,13 @@ $this->params['breadcrumbs'][] = $this->title;
 						     </div>
 						    
 							 <div class="m_from">
-						    	<div class="m_shuji">
-								  <h3 class="panel-title">共查询出 <span>24445</span> 条记录</h3>
-						       </div>
 						     
-						     <div class="m_tab">
-						       <div class="m_cek"><input type="checkbox" /></div>
-						       <table cellspacing="0" cellpadding="0" border="1">
-										<tr class="first">
-					                    	<th style="width: 28%;">订单编号：17135929<span>服务类型</span></th>
-					                        <th>支付状态</th>
-					                        <th></th>  
-					                        <th></th>
-					                        <th class="m_colo">订单状态</th>
-					                    </tr>
-					                    <tr>
-					                    	<td>18612345678<br />
-					                    	    App下单<br />
-					                    	    2015-09-18   9:00-11:00<br />
-					                    	          北京，中国水科院南小区，9号楼130
-					                    	</td>
-					                        <td>18612345678<br />
-					                    	    App下单<br />
-					                    	    2015-09-18   9:00-11:00<br />
-					                    	          北京，中国水科院南小区，9号楼130
-					                    	</td>
-					                    	<td>18612345678<br />
-					                    	    App下单<br />
-					                    	    2015-09-18   9:00-11:00<br />
-					                    	          北京，中国水科院南小区，9号楼130
-					                    	</td>
-					                    	<td>18612345678<br />
-					                    	    App下单<br />
-					                    	    2015-09-18   9:00-11:00<br />
-					                    	          北京，中国水科院南小区，9号楼130
-					                    	</td>
-					                    	<td>
-					                    		<p><a href="###">查看订单</a></p>
-					                    		<p><a href="###">投诉</a></p>
-					                    		<p><a href="###">发送短信</a></p>
-					                    		<p><a href="###">取消订单</a></p>
-					                    	</td>
-					                    </tr>
-									</table>
-		  	                   </div>  
+    <?php 
+    echo ListView::widget([
+        'dataProvider' => $dataProvider,
+        'itemView' => '_item',
+    ]);    
+    ?>  
 		  	 
 						    	<div class="clear"></div>
 						    </div>
@@ -263,7 +227,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		  	 	 </div>
 		  	 </div>
 		  </div>
-		  
+		</div>
 <?php 
 $this->registerJs('
 	    $(function () {
