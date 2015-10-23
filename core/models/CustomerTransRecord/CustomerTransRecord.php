@@ -4,7 +4,7 @@ namespace core\models\CustomerTransRecord;
 
 use common\models\CustomerTransRecordLog;
 use common\models\FinancePayChannel;
-use common\models\GeneralPayCommon;
+use common\models\pay\GeneralPayCommon;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 
