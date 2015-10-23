@@ -27,7 +27,15 @@ use kartik\tabs\TabsX;
 
             'id',
             'finance_pay_channel_name',
-            'finance_pay_channel_rank',
+	   		[
+	   		'format' => 'raw',
+	   		'label' => '分类',
+	   		'value' => function ($dataProvider) {
+	   			return $dataProvider->finance_pay_channel_is_lock==1 ? '<font cloro:red>下单</font>':'支付';
+	   		},
+	   		'width' => "100px",
+	   		],
+            //'finance_pay_channel_rank',
 	   		[
 	   		'format' => 'raw',
 	   		'label' => '状态',
@@ -36,9 +44,7 @@ use kartik\tabs\TabsX;
 	   		},
 	   		'width' => "100px",
 	   		],
-            'create_time:datetime',
-//            'is_del', 
-
+            'create_time:datetime', 
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' =>'{view} {update}',

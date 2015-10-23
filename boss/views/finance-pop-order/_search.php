@@ -39,6 +39,23 @@ use kartik\date\DatePicker;
     ?>
      </div>
      
+  
+  
+   <div class='col-md-2'>
+    <?= $form->field($model, 'finance_pay_channel_id')->widget(Select2::classname(), [
+        'name' => '支付渠道',
+        'hideSearch' => true,
+        'data' => $paydat,
+        'options' => ['placeholder' => '选择支付渠道','class' => 'col-md-2'],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]);
+   
+    ?>
+     </div>
+       
+     
     <div class='col-md-2'>
     <?= $form->field($model, 'finance_order_channel_statuspayment')->widget(DatePicker::classname(), [
     		'name' => 'finance_order_channel_statuspayment',
@@ -47,7 +64,7 @@ use kartik\date\DatePicker;
     		'autoclose' => true,
     		'format' => 'yyyy-mm-dd'
     		]
-            ]); ?>
+            ]);  ?>
            
      </div>
       <div class='col-md-2'>
@@ -64,17 +81,9 @@ use kartik\date\DatePicker;
      
      
      
-     
-     
     <div class='col-md-3'>
       <?= $form->field($model, 'finance_uplod_url')->fileInput(['maxlength' => true]) ?>
     </div> 
-    
-    
-    
-    
-    
-    
     
     <div class="form-group">
     <div class='col-md-2' style="margin-top:22px;">

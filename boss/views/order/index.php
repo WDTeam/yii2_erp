@@ -36,7 +36,7 @@ AppAsset::addScript($this, 'js/order_search/riqi/jquery-ui-timepicker-zh-CN.js')
 $this->title = '订单管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
+     <div id="m_warp">
 		  <div class="box">
 		  	 <div class="conter"> 
 		  	 	 <div class="m_frist">
@@ -51,16 +51,17 @@ $this->params['breadcrumbs'][] = $this->title;
                         'action' => ['order/index'],
                         'method' => 'get',
                     ]); ?>						
-						<?php echo $form->field($searchModel, 'order_customer_phone')->TextInput(['class' => 'm_ipu'])->label('用户电话', ['class' => 'm_ipone']); ?>
-						<?php echo $form->field($searchModel, 'worker_id')->TextInput(['class' => 'm_ipu'])->label('阿姨电话', ['class' => 'm_ipone']); ?>
-						<?php echo $form->field($searchModel, 'order_code')->TextInput(['class' => 'm_ipu'])->label('订单编号', ['class' => 'm_ipone']); ?>
+						<?php echo $form->field($searchModel, 'order_customer_phone')->TextInput(['class' => 'm_ipu'])->label('用户电话 :', ['class' => 'm_ipone']); ?>
+						<?php echo $form->field($searchModel, 'worker_id')->TextInput(['class' => 'm_ipu'])->label('阿姨电话 :', ['class' => 'm_ipone']); ?>
+						<?php echo $form->field($searchModel, 'order_code')->TextInput(['class' => 'm_ipu'])->label('订单编号 :', ['class' => 'm_ipone']); ?>
 						
 						<div class="m_riqi">
 							<label class="m_ipone">下单时间:</label>
-							<input type="text" name="datetime" class="ui_timepicker" value="" placeholder="日期时间"> 到
-							<input type="text" name="datetime" class="ui_timepicker" value="" placeholder="日期时间">
+							<input type="text" name="datetime" class="ui_timepicker" value="" placeholder=""> 到
+							<input type="text" name="datetime" class="ui_timepicker" value="" placeholder="">
 
 							<label class="m_ipone m_iponeleft">服务时间:</label>
+
 							<input type="text" name="datetime" class="ui_timepicker" value="" placeholder="日期时间"> 到
 							<input type="text" name="datetime" class="ui_timepicker" value="" placeholder="日期时间">
 						    <?= Html::submitButton('查询', ['class' => 'btn btn-primary']) ?>
@@ -226,7 +227,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		  	 	 </div>
 		  	 </div>
 		  </div>
-		  
+		</div>
 <?php 
 $this->registerJs('
 	    $(function () {

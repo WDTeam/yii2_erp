@@ -3,7 +3,7 @@
 namespace common\models;
 
 use Yii;
-
+use common\models\FinancePayChannel;
 /**
  * This is the model class for table "{{%finance_order_channel}}".
  *
@@ -42,15 +42,29 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('boss', '主键id'),
+            'pay_channel_id' => Yii::t('boss', '支付渠道'),
             'finance_order_channel_name' => Yii::t('boss', '渠道名称'),
             'finance_order_channel_rate' => Yii::t('boss', '比例'),
             'finance_order_channel_sort' => Yii::t('boss', '排序'),
-            'finance_order_channel_is_lock' => Yii::t('boss', '状态'),
+            'finance_order_channel_is_lock' => Yii::t('boss', '第三方开启'),
             'create_time' => Yii::t('boss', '增加时间'),
-            'is_del' => Yii::t('boss', '0 正常 1 删除'),
+            'is_del' => Yii::t('boss', '状态'),
         ];
     }
     
+    
+    /**
+    * 获取支付渠道name
+    * @date: 2015-10-22
+    * @author: peak pan
+    * @return:
+    **/
+    public static function get_pay_name($id)
+    {
+   		$ordewhere['id']=$id;	
+		$payatainfo=FinancePayChannel::find()->select('finance_pay_channel_name')->where($ordewhere)->asArray()->one();
+    	return $payatainfo['finance_pay_channel_name'];
+    }
     /**
     * 获取订单渠道列表
     * @date: 2015-10-9
@@ -65,8 +79,8 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
     	return json_decode($orderchannellist,true);
 	    }else{
 	    	$ordewhere['is_del']=0;
-	    	$ordewhere['finance_order_channel_is_lock']=1;
-	    	$payatainfo=FinanceOrderChannel::find()->select('id,finance_order_channel_name')->where($ordewhere)->asArray()->all();
+	    	$ordewhere['finance_order_channel_is_lock']=1; //2 第三方不显示  1 第三方显示
+	$payatainfo=FinanceOrderChannel::find()->select('id,finance_order_channel_name')->where($ordewhere)->asArray()->all();
 	    	\Yii::$app->cache->set('orderchannellist', json_encode($payatainfo));
 	    	return $payatainfo;
 	  }
@@ -94,7 +108,7 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
         self::createCache($cacheName,$data);
 
         //返回渠道名称
-        return $data['finance_order_channel_name'];
+        return $data['finance_order_channel_name']?$data['finance_order_channel_name']:'官方支付对账';
     }
 
     /**
@@ -120,6 +134,28 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
     	
     	return $channel_info != NULL ? $channel_info : '未知';
     }
+    
+    
+    
+    
+    
+    public static function get_order_channel_listes(){
+    	$ordewhere['is_del']=0;
+    	$payatainfo=FinanceOrderChannel::find()->where($ordewhere)->asArray()->all();
+    	foreach ($payatainfo as $errt){
+    		$tyd[]=$errt['id'];
+    		$tydtui[]=$errt['finance_order_channel_name'];
+    	}
+    	$tyu= array_combine($tyd,$tydtui);
+    
+    	return $tyu;
+    }
+    
+    
+    
+    
+    
+    
     
     
     

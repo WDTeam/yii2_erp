@@ -3,7 +3,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\tabs\TabsX;
-
+use common\models\FinanceOrderChannel;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -29,12 +29,29 @@ use kartik\tabs\TabsX;
      		//'id',
      		'finance_order_channel_name',
     		'finance_order_channel_rate',
+    		
+    		[
+    		'format' => 'raw',
+    		'label' => '支付渠道',
+    		'value' => function ($dataProvider) {
+    			return FinanceOrderChannel::get_pay_name($dataProvider->pay_channel_id);
+    		},
+    		'width' => "100px",
+    		],
+    		[
+    		'format' => 'raw',
+    		'label' => '第三方显示',
+    		'value' => function ($dataProvider) {
+    			return $dataProvider->finance_order_channel_is_lock==1 ? '<font cloro:red>确定</font>':'取消';
+    		},
+    		'width' => "100px",
+    		],
      		//'finance_order_channel_sort',
     		[
     		'format' => 'raw',
     		'label' => '状态',
     		'value' => function ($dataProvider) {
-    			return $dataProvider->finance_order_channel_is_lock ? '<font cloro:red>开启</font>' : '关闭';
+    			return $dataProvider->finance_order_channel_is_lock ? '开启' : '关闭';
     		},
     		'width' => "100px",
     		],
