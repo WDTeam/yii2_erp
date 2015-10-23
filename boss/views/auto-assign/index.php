@@ -29,14 +29,14 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <hr>
     <div class="row form-inline">
-        <div class="col-md-4 form-group"><label>频率：</label><input id="interval" class="form-control" name="interval" value="6" /><label>秒</label></div>
+<!--        <div class="col-md-4 form-group"><label>频率：</label><input id="interval" class="form-control" name="interval" value="6" /><label>秒</label></div>
         <div class="col-md-4 form-group"><label>任务：</label>
             <select id="taskName" class="form-control" name="taskName">
                 <option value="">选择任务</option>
                 <option value="orders">派单任务</option>
             </select>
-        </div>
-        <div class="col-md-4"><label>线程数：</label><input id="theadNum" class="form-control" name="theadNum" /></div>
+        </div>-->
+<!--        <div class="col-md-4"><label>线程数：</label><input id="theadNum" class="form-control" name="theadNum" /></div>-->
     </div>
     <hr>
     <div class="row">
