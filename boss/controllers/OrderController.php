@@ -27,19 +27,22 @@ class OrderController extends BaseAuthController
         if($result==false) 
         {
             echo "order canlel module error";
+            exit;
         }
-        var_dump($orderid);
         $statusHistoryInfo = OrderStatusHistory::getOrderStatusHistory($orderid);
        // print_r($statusHistoryInfo);
         $orderInfo = OrderSearch::getOne($orderid);
-        var_dump($orderInfo);
-        if($orderInfo==false) 
+        if($orderInfo->order_code==false) 
         {
             echo "没有此订单";
             exit;
         }
         $workInfo = Worker::getWorkerInfo($orderInfo->orderExtWorker->worker_id);
-        
+        if($workInfo==false)
+        {
+            echo "该订单没有分配阿姨";
+            exit;
+        }
         $FinanceRefundadd=new FinanceRefundadd;
         $FinanceRefundadd->finance_refund_pop_nub=$orderInfo->orderExtPop->order_pop_order_code;//第三方订单号，后期使用
         $FinanceRefundadd->finance_refund_tel=$orderInfo->orderExtCustomer->order_customer_phone;//下单者电话
@@ -67,6 +70,7 @@ class OrderController extends BaseAuthController
         $result = json_decode($infodate);
         if($result->status!=200)
         {
+        
            echo "退款更新库失败，请检查";
             exit;
         }
