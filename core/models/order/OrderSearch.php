@@ -283,24 +283,23 @@ class OrderSearch extends Order
         return $dataProvider;
     }
     
-
-    public function searchpoplist($params)
+	/**
+	* 第三方对账专用
+	* @date: 2015-10-23
+	* @author: peak pan
+	* @return:
+	**/
+    public function searchpoplist()
     {
     	$query = Order::find()->joinWith(['orderExtPop']);
     	$dataProvider = new ActiveDataProvider([
     			'query' => $query,
     			]);
-    
-    	/* if (!($this->load($params) && $this->validate())) {
-    	 return $dataProvider;
-    	} */
-    
-    
+
     	$query->andFilterWhere([
     			'id' => $this->id,
     			'order_parent_id' => $this->order_parent_id,
     			'order_is_parent' => $this->order_is_parent,
-    			'created_at' => $this->created_at,
     			'updated_at' => $this->updated_at,
     			'isdel' => $this->isdel,
     			'order_ip' => $this->order_ip,
@@ -315,11 +314,13 @@ class OrderSearch extends Order
     			'address_id' => $this->address_id,
     			'order_booked_worker_id' => $this->order_booked_worker_id,
     			'checking_id' => $this->checking_id,
-    			'order_pop_order_code' => $this->order_pop_order_code,
+
     			]);
     
     	$query->andFilterWhere(['like', 'order_code', $this->order_code])
     	->andFilterWhere(['like', 'order_service_type_name', $this->order_service_type_name])
+    	->andFilterWhere(['>=', 'ejj_order.created_at', $this->created_at])
+    	->andFilterWhere(['not in', 'orderExtPop.order_pop_order_code', $this->order_pop_order_code])
     	->andFilterWhere(['like', 'order_src_name', $this->order_src_name])
     	->andFilterWhere(['like', 'order_channel_name', $this->order_channel_name])
     	->andFilterWhere(['like', 'order_address', $this->order_address])

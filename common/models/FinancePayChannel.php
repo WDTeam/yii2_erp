@@ -132,13 +132,13 @@ class FinancePayChannel extends \yii\db\ActiveRecord
     public static function get_pay_channel_list(){
     	 $ordewhere['is_del']=0;
     	$ordewhere['finance_pay_channel_is_lock']=2;
-    	 $payatainfo=FinancePayChannel::find()->where($ordewhere)->asArray()->all();
+    	 $payatainfo=FinancePayChannel::find()->where($ordewhere)->asArray()->all();	
     	foreach ($payatainfo as $errt){
     		$tyd[]=$errt['id'];
     		$tydtui[]=$errt['finance_pay_channel_name'];
     	}
     	$tyu= array_combine($tyd,$tydtui);
-    
+    	 
     	return $tyu;
     }
     
