@@ -37,6 +37,9 @@ class Controller extends \yii\rest\Controller
         $response->format = Yii\web\Response::FORMAT_JSON;
         $response->data = $result;
         $response->setStatusCode($value, $text);
+        $response->headers->set("Access-Control-Allow-Origin", "*");
+        $response->headers->set("Access-Control-Allow-Methods", "*");
+        $response->headers->set("Access-Control-Allow-Headers", "*");
         return $response;
     }
 
