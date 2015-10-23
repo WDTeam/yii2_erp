@@ -14,7 +14,7 @@ use core\models\worker\WorkerStat;
  */
 $this->title = Yii::t('app', '阿姨管理');
 $this->params['breadcrumbs'][] = $this->title;
-$workerModel = new \common\models\Worker();
+$workerModel = Worker::findOne($worker_id);
 $worker = Worker::find()->select('worker_name,worker_auth_status')->where(['id'=>$worker_id])->one();
 
 $workerBlockModel = WorkerBlock::find()->where(['worker_id'=>$worker_id])->one();
@@ -78,28 +78,28 @@ Modal::begin([
     'header' => '<h4 class="modal-title">休假操作</h4>',
     'toggleButton' => ['label' => '<i ></i>休假', 'class' => 'btn btn-success']
 ]);
-echo $this->render('create_block',['worker_id'=>$worker_id,'worker_name'=>$worker['worker_name'],'workerBlockModel'=>$workerBlockModel]);
+echo $this->render('create_vacation',['worker_id'=>$worker_id,'worker_name'=>$worker['worker_name'],'type'=>1]);
 Modal::end();
 
 Modal::begin([
     'header' => '<h4 class="modal-title">事假操作</h4>',
     'toggleButton' => ['label' => '<i ></i>事假', 'class' => 'btn btn-success']
 ]);
-echo $this->render('create_block',['worker_id'=>$worker_id,'worker_name'=>$worker['worker_name'],'workerBlockModel'=>$workerBlockModel]);
+echo $this->render('create_vacation',['worker_id'=>$worker_id,'worker_name'=>$worker['worker_name'],'type'=>2]);
 Modal::end();
 
 Modal::begin([
     'header' => '<h4 class="modal-title">黑名单操作</h4>',
     'toggleButton' => ['label' => '<i ></i>黑名单', 'class' => 'btn btn-success']
 ]);
-echo $this->render('create_block',['worker_id'=>$worker_id,'worker_name'=>$worker['worker_name'],'workerBlockModel'=>$workerBlockModel]);
+echo $this->render('operate_blacklist',['workerModel'=>$workerModel]);
 Modal::end();
 
 Modal::begin([
     'header' => '<h4 class="modal-title">离职操作</h4>',
     'toggleButton' => ['label' => '<i ></i>离职', 'class' => 'btn btn-success']
 ]);
-echo $this->render('create_block',['worker_id'=>$worker_id,'worker_name'=>$worker['worker_name'],'workerBlockModel'=>$workerBlockModel]);
+echo $this->render('operate_dimission',['workerModel'=>$workerModel]);
 Modal::end();
 
 ?>
