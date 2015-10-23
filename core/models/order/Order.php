@@ -162,9 +162,8 @@ class Order extends OrderModel
     /**
      * 把订单放入订单池
      * @param $order_id
-     * @param $worker_identity
      */
-    public static function addOrderToPool($order_id,$worker_identity=0)
+    public static function addOrderToPool($order_id)
     {
         // 开始系统指派
         if (self::sysAssignStart($order_id)) {
@@ -174,7 +173,7 @@ class Order extends OrderModel
                 'created_at' => $order->orderExtStatus->updated_at,
                 'jpush' => $order->orderExtFlag->order_flag_worker_jpush,
                 'ivr' => $order->orderExtFlag->order_flag_worker_ivr,
-                'worker_identity'=> $worker_identity,
+                'worker_identity'=> 0,
             ];
             Yii::$app->redis->executeCommand('zAdd', [self::WAIT_ASSIGN_ORDERS_POOL, $order->order_booked_begin_time . $order_id, json_encode($redis_order)]);
         }
@@ -196,6 +195,27 @@ class Order extends OrderModel
     }
 
     /**
+     * 重新加入订单池
+     * @param $order_id
+     * @param int $worker_identity
+     */
+    public static function updateOrderToPool($order_id,$worker_identity=0)
+    {
+        //把订单从订单池中移除
+        self::remOrderToPool($order_id);
+        //重新加入订单池
+        $order = OrderSearch::getOne($order_id);
+        $redis_order = [
+            'order_id' => $order_id,
+            'created_at' => $order->orderExtStatus->updated_at,
+            'jpush' => $order->orderExtFlag->order_flag_worker_jpush,
+            'ivr' => $order->orderExtFlag->order_flag_worker_ivr,
+            'worker_identity'=> $worker_identity,
+        ];
+        Yii::$app->redis->executeCommand('zAdd', [self::WAIT_ASSIGN_ORDERS_POOL, $order->order_booked_begin_time . $order_id, json_encode($redis_order)]);
+    }
+
+    /**
      * 智能推送
      * @param $order_id
      * @return array
@@ -203,6 +223,7 @@ class Order extends OrderModel
     public static function push($order_id)
     {
         $order = OrderSearch::getOne($order_id);
+
         $full_time = 1; //全职
         $part_time = 2; //兼职
         $push_status = 0; //推送状态 0系统指派失败
@@ -268,10 +289,8 @@ class Order extends OrderModel
             self::workerJPushFlag($order_id); //标记极光推送
         }
 
-        //把订单从订单池中移除
-        self::remOrderToPool($order_id);
         //重新加入订单池
-        self::addOrderToPool($order_id,$identity);
+        self::updateOrderToPool($order_id,$identity);
 
         self::ivrPushToWorker($order_id); //开始ivr推送
     }
