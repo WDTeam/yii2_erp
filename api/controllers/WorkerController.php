@@ -447,7 +447,7 @@ class WorkerController extends \api\components\Controller
         return $this->send($ret, "操作成功.", "ok");
     }
     
-    public function 
+    
      
      
     /**
