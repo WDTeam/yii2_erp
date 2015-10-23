@@ -58,8 +58,8 @@ class PayController extends \api\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam integer pay_money 支付金额
-     * @apiParam integer channel_id 渠道ID
+     * @apiParam {String} pay_money 支付金额
+     * @apiParam {String} channel_id 渠道ID
      *                              1=APP微信,
      *                              2=H5微信,
      *                              3=APP百度钱包,
@@ -67,22 +67,22 @@ class PayController extends \api\components\Controller
      *                              5=APP支付宝,
      *                              6=WEB支付宝,
      *                              7=H5百度直达号,
-     *                              20=后台支付,(未实现)
-     *                              21=微博支付,（未实现）
-     * @apiParam integer [order_id] 订单ID,没有订单号表示充值
-     * @apiParam integer partner 第三方合作号
+     *                              20=后台支付（未实现）,
+     *                              21=微博支付（未实现）,
+     * @apiParam {String} [order_id] 订单ID,没有订单号表示充值
+     * @apiParam {String} partner 第三方合作号
      *
-     * @apiParam object [ext_params] 扩展参数,用于微信/百度直达号（即channel_id=2或7 必填）
-     * @apiParam string [ext_params.openid] 微信openid （channel_id=2 必填）
-     * @apiParam string [ext_params.return_url] 同步回调地址 （channel_id=6必填）
-     * @apiParam string [ext_params.show_url] 显示商品URL（channel_id=6必填）
-     * @apiParam string [ext_params.customer_name] 商品名称（channel_id=7必填）
-     * @apiParam string [ext_params.customer_mobile] 用户电话（channel_id=7必填）
-     * @apiParam string [ext_params.customer_address] 用户地址（channel_id=7必填）
-     * @apiParam string [ext_params.order_source_url] 订单详情地址（channel_id=7必填）
-     * @apiParam string [ext_params.page_url] 订单跳转地址（channel_id=7必填）
-     * @apiParam string [ext_params.goods_name] 订单名称（channel_id=7必填）
-     * @apiParam string [ext_params.detail] 订单详情 （channel_id=7必填）
+     * @apiParam {Object} [ext_params] 扩展参数,用于微信/百度直达号（即channel_id=2或7 必填）
+     * @apiParam {String} [ext_params.openid] 微信openid （channel_id=2 必填）
+     * @apiParam {String} [ext_params.return_url] 同步回调地址 （channel_id=6必填）
+     * @apiParam {String} [ext_params.show_url] 显示商品URL（channel_id=6必填）
+     * @apiParam {String} [ext_params.customer_name] 商品名称（channel_id=7必填）
+     * @apiParam {String} [ext_params.customer_mobile] 用户电话（channel_id=7必填）
+     * @apiParam {String} [ext_params.customer_address] 用户地址（channel_id=7必填）
+     * @apiParam {String} [ext_params.order_source_url] 订单详情地址（channel_id=7必填）
+     * @apiParam {String} [ext_params.page_url] 订单跳转地址（channel_id=7必填）
+     * @apiParam {String} [ext_params.goods_name] 订单名称（channel_id=7必填）
+     * @apiParam {String} [ext_params.detail] 订单详情 （channel_id=7必填）
      *
      * @apiParamExample {json} Request-Example:
      *  {
