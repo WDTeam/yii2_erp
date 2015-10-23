@@ -35,7 +35,9 @@ class CustomerComment extends \yii\db\ActiveRecord
     {
         return [
             [['order_id', 'customer_id', 'customer_comment_phone'], 'required'],
-            [['order_id', 'customer_id', 'customer_comment_star_rate', 'customer_comment_anonymous', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            #郝建设修改，去掉了'customer_comment_star_rate' 字段，和数据库字段不符合。不能正常insert用户评论
+           # [['order_id', 'customer_id', 'customer_comment_star_rate', 'customer_comment_anonymous', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['order_id', 'customer_id',  'customer_comment_anonymous', 'created_at', 'updated_at', 'is_del'], 'integer'],
             [['customer_comment_phone'], 'string', 'max' => 11],
             [['customer_comment_content'], 'string', 'max' => 255]
         ];
@@ -52,7 +54,7 @@ class CustomerComment extends \yii\db\ActiveRecord
             'customer_id' => Yii::t('boss', '用户ID'),
             'customer_comment_phone' => Yii::t('boss', '用户电话'),
             'customer_comment_content' => Yii::t('boss', '评论内容'),
-            'customer_comment_star_rate' => Yii::t('boss', '评论星级,0为评价,1-5星'),
+           # 'customer_comment_star_rate' => Yii::t('boss', '评论星级,0为评价,1-5星'),
             'customer_comment_anonymous' => Yii::t('boss', '是否匿名评价,0匿名,1非匿名'),
             'created_at' => Yii::t('boss', '创建时间'),
             'updated_at' => Yii::t('boss', '更新时间'),

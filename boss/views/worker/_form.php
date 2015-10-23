@@ -16,6 +16,7 @@ use boss\components\AreaCascade;
 use core\models\worker\Worker;
 use core\models\worker\WorkerExt;
 use core\models\worker\WorkerRuleConfig;
+use core\models\worker\WorkerIdentityConfig;
 /**
  * @var yii\web\View $this
  * @var common\models\Worker $worker
@@ -139,10 +140,10 @@ use core\models\worker\WorkerRuleConfig;
             <?= $form->field($worker_ext, 'worker_is_health')->radioList(['1' => '是', '0' => '否'], ['inline' => true]); ?>
             <?= $form->field($worker_ext, 'worker_is_insurance')->radioList(['1' => '是', '0' => '否'], ['inline' => true]); ?>
             <?= $form->field($worker, 'worker_type')->radioList(['1' => '自有', '2' => '非自有'], ['inline' => true]); ?>
-            <?= $form->field($worker, 'worker_rule_id')->widget(Select2::classname(), [
-                'name' => 'worker_rule_id',
+            <?= $form->field($worker, 'worker_identity_id')->widget(Select2::classname(), [
+                'name' => 'worker_identity_id',
                 'hideSearch' => true,
-                'data' =>WorkerRuleConfig::getWorkerRuleList(),
+                'data' =>WorkerIdentityConfig::getWorkerIdentityList(),
                 'options' => ['placeholder' => '选择阿姨身份'],
                 'pluginOptions' => [
                     'allowClear' => true

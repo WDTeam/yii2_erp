@@ -7,7 +7,7 @@ use yii\widgets\Pjax;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
- * @var core\models\search\FinanceCompensate $searchModel
+ * @var core\models\finance\FinanceCompensate $searchModel
  */
 
 $this->title = Yii::t('finance', 'Finance Compensates Query');

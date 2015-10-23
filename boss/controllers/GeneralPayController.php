@@ -1,12 +1,12 @@
 <?php
 
 namespace boss\controllers;
-use common\models\GeneralPayRefund;
+use common\models\pay\GeneralPayRefund;
 use Yii;
 use core\models\Customer;
 use core\models\CustomerTransRecord\CustomerTransRecord;
-use common\models\GeneralPay;
-use common\models\GeneralPayLog;
+use common\models\pay\GeneralPay;
+use common\models\pay\GeneralPayLog;
 use yii\data\ActiveDataProvider;
 use yii\rest\Controller;
 use yii\web\NotFoundHttpException;
@@ -956,6 +956,20 @@ class GeneralPayController extends Controller
 
     public function actionTest()
     {
+        $model = new \core\models\GeneralPay\GeneralPay;
+        $model->getPayParams( 10,1,6,'1217983401',0,$ext_params=["return_url"	=> 'www.baidu.com', "show_url"	=> 'www.page.com'] );
+        $param = [
+            'out_trade_no'=>$model->create_out_trade_no(),
+            'subject'=>$model->subject(),
+            'body'=>$model->body(),
+            'total_fee'=>50,
+            'notify_url'=>$model->notify_url('alipay-web'),
+            "return_url"	=> 'www.baidu.com',
+            "show_url"	=> 'www.page.com',
+        ];
+
+        dump($param);
+        exit;
         $obj = new \core\models\GeneralPay\GeneralPayRefund();
         $condition['order_id'] = 1;
         $condition['customer_id'] = 1;
