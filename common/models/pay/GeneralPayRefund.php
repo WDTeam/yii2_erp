@@ -1,5 +1,5 @@
 <?php
-namespace common\models;
+namespace common\models\pay;
 use Yii;
 use yii\base\ErrorException;
 use yii\base\Exception;

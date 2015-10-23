@@ -1,6 +1,8 @@
 <?php
 
-namespace common\models;
+namespace common\models\pay;
+use common\models\FinancePayChannel;
+use common\models\FinanceOrderChannel;
 use Yii;
 use yii\base\ErrorException;
 use yii\base\Exception;
@@ -171,7 +173,24 @@ class GeneralPay extends GeneralPayCommon
      * 2 服务端将支付所需参数返回给客户端
      * 3 服务端创建支付记录（未支付状态）
      */
-    private function alipay_web(){}
+    private function alipay_web($data)
+    {
+        $param = [
+            'out_trade_no'=>$this->create_out_trade_no(),
+            'subject'=>$this->subject(),
+            'body'=>$this->body(),
+            'total_fee'=>$this->general_pay_money,
+            'notify_url'=>$this->notify_url('alipay-web'),
+            "return_url"	=> $data['return_url'],
+            "show_url"	=> $data['show_url'],
+        ];
+        $class = new \alipay_web_class();
+        $msg = $class->get($param);
+        return $msg;
+
+
+
+    }
 
     /**
      * 直达号支付(7)
