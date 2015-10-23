@@ -11,12 +11,13 @@ class PayController extends \api\components\Controller
 
 
     /**
-     * @api {get} /v2/online_pay_for_member.php 会员余额支付 (赵顺利0%)
-     * @apiName actionOnlinePayForMember
+     * @api {POST} v1/pay/balance-pay 会员余额支付 (赵顺利0%)
+     * @apiName actionBalancePay
      * @apiGroup Pay
      *
-     * @apiParam {String} session_id    会话id.
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam integer pay_money 支付金额
      * @apiParam {String} order_id    订单ID.
      * @apiParam {String} money 支付金额.
      * @apiParam {String} telephone 用户电话.
@@ -44,6 +45,10 @@ class PayController extends \api\components\Controller
      *  }
      *
      */
+    public function actionBalancePay()
+    {
+
+    }
 
 
     /**
@@ -161,7 +166,7 @@ class PayController extends \api\components\Controller
         }
         $customer = CustomerAccessToken::getCustomer($data[$name]['access_token']);
 
-        $data[$name]['customer_id']=$customer->id;
+        $data[$name]['customer_id'] = $customer->id;
 
         $ext_params = [];
         //在线支付（online_pay），在线充值（pay）
@@ -169,11 +174,11 @@ class PayController extends \api\components\Controller
             if ($data[$name]['channel_id'] == '2') {
                 $model->scenario = 'wx_h5_pay';
                 $ext_params['openid'] = $data[$name]['ext_params']['openid'];    //微信openid
-            } elseif($data[$name]['channel_id'] == '6'){
+            } elseif ($data[$name]['channel_id'] == '6') {
                 $model->scenario = 'alipay_web_pay';
                 $ext_params['return_url'] = $data[$name]['ext_params']['return_url'];    //同步回调地址
                 $ext_params['show_url'] = $data[$name]['ext_params']['show_url'];    //显示商品URL
-            }elseif ($data[$name]['channel_id'] == '7') {
+            } elseif ($data[$name]['channel_id'] == '7') {
                 $model->scenario = 'zhidahao_h5_pay';
                 $ext_params['customer_name'] = $data[$name]['ext_params']['customer_name'];  //商品名称
                 $ext_params['customer_mobile'] = $data[$name]['ext_params']['customer_mobile'];  //用户电话
@@ -189,7 +194,7 @@ class PayController extends \api\components\Controller
             if ($data[$name]['channel_id'] == '2') {
                 $model->scenario = 'wx_h5_online_pay';
                 $ext_params['openid'] = $data[$name]['ext_params']['openid'];    //微信openid
-            }elseif($data[$name]['channel_id'] == '6'){
+            } elseif ($data[$name]['channel_id'] == '6') {
                 $model->scenario = 'alipay_web_pay';
                 $ext_params['return_url'] = $data[$name]['ext_params']['return_url'];    //同步回调地址
                 $ext_params['show_url'] = $data[$name]['ext_params']['show_url'];    //显示商品URL
@@ -212,7 +217,7 @@ class PayController extends \api\components\Controller
 
         if ($model->load($data) && $model->validate()) {
             $retInfo = GeneralPay::getPayParams($model->pay_money, $model->customer_id, $model->channel_id, $model->partner, $model->order_id, $ext_params);
-            return $this->send($retInfo['data'],$retInfo['info'],$retInfo['status']);
+            return $this->send($retInfo['data'], $retInfo['info'], $retInfo['status']);
         }
         return $this->send(null, $model->errors, "error");
 
