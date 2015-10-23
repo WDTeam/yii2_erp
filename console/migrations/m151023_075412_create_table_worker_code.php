@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use jamband\schemadump\Migration;
 
-class m151023_064144_create_table_worker_code extends Migration
+class m151023_075412_create_table_worker_code extends Migration
 {
     public function safeUp()
     {
@@ -22,7 +22,7 @@ class m151023_064144_create_table_worker_code extends Migration
             ], $tableOptions);
     }
 
-    public function safeDown()
+    public function down()
     {
         $this->dropTable('{{%worker_code}}');
 
