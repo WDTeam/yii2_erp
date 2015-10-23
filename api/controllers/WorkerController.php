@@ -451,7 +451,7 @@ class WorkerController extends \api\components\Controller
      
      
     /**
-     * @api {GET} /mobileapidriver2/driver_get_now_order_list_hide 阿姨去不了
+     * @api {GET} /mobileapidriver2/driver_get_now_order_list_hide 阿姨去不了(田玉星0%)
      * @apiName actionDriverGetNowOrderListHide
      * @apiGroup Worker
      * @apiParam {String} session_id    会话id.
@@ -483,7 +483,7 @@ class WorkerController extends \api\components\Controller
     }
     
     /**
-     * @api {get} /mobileapidriver2/get_driver_info 个人中心首页
+     * @api {get} /mobileapidriver2/get_driver_info 个人中心首页 (田玉星0%)
      * @apiName actionGetDriverInfo
      * @apiGroup Worker
      *
@@ -598,7 +598,7 @@ class WorkerController extends \api\components\Controller
     
     
     /**
-     * @api {get} /v2/worker_busy_list.php  工作时间
+     * @api {get} /v2/worker_busy_list.php  工作时间 (田玉星0%)
      * @apiName actionWorkerBusyList
      * @apiGroup Worker
      * 
@@ -719,7 +719,7 @@ class WorkerController extends \api\components\Controller
     
     
     /**
-     * @api {get} /v2/worker_busy.php  提交工作时间
+     * @api {get} /v2/worker_busy.php  提交工作时间 (田玉星0%)
      * @apiName actionWorkerBusy
      * @apiGroup Worker
      * 
@@ -756,7 +756,7 @@ class WorkerController extends \api\components\Controller
      */
     
     /**
-     * @api {get} /mobileapidriver2/helpUserCreateOrder  查询帮用户下的订单
+     * @api {get} /mobileapidriver2/helpUserCreateOrder  查询帮用户下的订单(田玉星0%)
      * @apiName actionHelpUserCreateOrder
      * @apiGroup Worker
      * @apiDescription 查询帮助用户创建的订单
@@ -893,7 +893,7 @@ class WorkerController extends \api\components\Controller
     }
     
     /**
-     * @api {get} /worker/help_user_create_one_order.php  
+     * @api {get} /worker/help_user_create_one_order.php  (田玉星0%)
      * @apiName actionHelpUserCreateOneOrder
      * @apiGroup Worker
      * 
@@ -1074,7 +1074,7 @@ class WorkerController extends \api\components\Controller
     
     
     /**
-     * @api {get} /mobileapidriver2/system_news  通知中心
+     * @api {get} /mobileapidriver2/system_news  通知中心(田玉星0%)
      * @apiName actionSystemNews
      * @apiGroup Worker
      * 
@@ -1105,7 +1105,7 @@ class WorkerController extends \api\components\Controller
      */
     
     /**
-     * @api {get} /mobileapidriver2/workerLeave  查看请假情况
+     * @api {get} /mobileapidriver2/workerLeave  查看请假情况 (田玉星0%)
      * @apiName actionWorkerLeave
      * @apiGroup Worker
      * 
@@ -1150,7 +1150,7 @@ class WorkerController extends \api\components\Controller
     
     
     /**
-     * @api {get} /v2/FixedUserPeriod.php  固定客户列表
+     * @api {get} /v2/FixedUserPeriod.php  固定客户列表 (田玉星0%)
      * @apiName actionFixedUserPeriod
      * @apiGroup Worker
      * @apiDescription 对账固定客户（点击查看全部）
