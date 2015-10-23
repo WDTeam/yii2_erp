@@ -3,13 +3,13 @@
 namespace boss\controllers\finance;
 
 use Yii;
-use common\models\FinanceShopSettleApply;
-use boss\models\FinanceShopSettleApplySearch;
+use common\models\finance\FinanceShopSettleApply;
+use core\models\finance\FinanceShopSettleApplySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use boss\models\FinanceWorkerOrderIncomeSearch;
-use boss\models\FinanceSettleApplySearch;
+use core\models\finance\FinanceWorkerOrderIncomeSearch;
+use core\models\finance\FinanceSettleApplySearch;
 use PHPExcel;
 use PHPExcel_IOFactory;
 use core\models\shop\Shop;

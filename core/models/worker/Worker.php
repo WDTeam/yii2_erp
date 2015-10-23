@@ -14,6 +14,7 @@ use common\models\OrderExtWorker;
 use common\models\ShopManager;
 use core\models\worker\WorkerStat;
 use core\models\worker\WorkerExt;
+use core\models\worker\WorkerIdentityConfig;
 use core\models\worker\WorkerRuleConfig;
 use core\models\Operation\CoreOperationShopDistrict;
 use core\models\Operation\CoreOperationCity;
@@ -43,6 +44,7 @@ use crazyfd\qiniu\Qiniu;
  * @property double $worker_work_lat
  * @property integer $worker_type
  * @property integer $worker_rule_id
+ * @property integer $worker_identity_id
  * @property integer $worker_is_block
  * @property integer $worker_is_blacklist
  * @property integer $worker_is_vacation
@@ -60,9 +62,9 @@ class Worker extends \common\models\Worker
      * @param  int $rule_id 阿姨身份id
      * @return array 阿姨ID列表
      */
-    public static function getWorkerIds($type,$rule_id){
+    public static function getWorkerIds($type,$identity_id){
         $condition['worker_type'] = $type;
-        $condition['worker_rule_id'] = $rule_id;
+        $condition['worker_identity_id'] = $identity_id;
         $workerList = self::find()->select('id')->where($condition)->asArray()->all();
         return $workerList?ArrayHelper::getColumn($workerList,'id'):[];
     }
@@ -80,7 +82,7 @@ class Worker extends \common\models\Worker
         //$condition = array_merge($defaultCondition,$filterCondition);
         //获取所属商圈中所有阿姨
         $districtWorkerResult = Worker::find()
-            ->select('{{%worker}}.id,shop_id,worker_name,worker_phone,worker_idcard,worker_rule_id,worker_type,name as shop_name,worker_stat_order_num,worker_stat_order_refuse')
+            ->select('{{%worker}}.id,shop_id,worker_name,worker_phone,worker_idcard,worker_identity_id,worker_type,name as shop_name,worker_stat_order_num,worker_stat_order_refuse')
             ->joinWith('workerStatRelation') //关联worker WorkerStatRelation方法
             ->joinWith('shopRelation') //关联worker shopRelation方法
             ->where($defaultCondition)
@@ -89,7 +91,7 @@ class Worker extends \common\models\Worker
             ->asArray()
             ->all();
 
-        $workerRuleConfigArr = WorkerRuleConfig::getWorkerRuleList();
+        $workerIdentityConfigArr = WorkerIdentityConfig::getWorkerIdentityList();
 
         if(empty($districtWorkerResult)){
             return [];
@@ -98,7 +100,7 @@ class Worker extends \common\models\Worker
 
                 $val['worker_id'] = $val['id'];
                 $val['worker_type_description'] = self::getWorkerTypeShow($val['worker_type']);
-                $val['worker_rule_description'] = $workerRuleConfigArr[$val['worker_rule_id']];
+                $val['worker_identity_description'] = $workerIdentityConfigArr[$val['worker_identity_id']];
 
                 $val['shop_name'] = isset($val['shop_name'])?$val['shop_name']:'';
                 $val['worker_stat_order_num'] = intval($val['worker_stat_order_num']);
@@ -162,7 +164,7 @@ class Worker extends \common\models\Worker
      */
     public static function getWorkerInfo($worker_id){
 
-        $workerInfo = self::find()->where((['id'=>$worker_id]))->select('id,shop_id,worker_name,worker_phone,worker_idcard,worker_type,worker_photo,worker_rule_id,created_ad')->asArray()->one();
+        $workerInfo = self::find()->where((['id'=>$worker_id]))->select('id,shop_id,worker_name,worker_phone,worker_idcard,worker_type,worker_photo,worker_identity_id,created_ad')->asArray()->one();
         if($workerInfo){
             //门店名称,家政公司名称
             $shopInfo = Shop::findone($workerInfo['shop_id']);
@@ -172,7 +174,7 @@ class Worker extends \common\models\Worker
             $workerInfo['shop_name'] = isset($shopInfo['name'])?$shopInfo['name']:'';
             $workerInfo['shop_manager_name'] = isset($shopManagerInfo['name'])?$shopManagerInfo['name']:'';
             $workerInfo['worker_type_description'] = self::getWorkerTypeShow($workerInfo['worker_type']);
-            $workerInfo['worker_rule_description'] = WorkerRuleConfig::getWorkerRuleShow($workerInfo['worker_rule_id']);
+            $workerInfo['worker_identity_description'] = WorkerIdentityConfig::getWorkerIdentityShow($workerInfo['worker_identity_id']);
         }else{
             $workerInfo = [];
         }
@@ -187,7 +189,7 @@ class Worker extends \common\models\Worker
     public static function getWorkerDetailInfo($worker_id){
         $workerDetailResult = self::find()
             ->where(['id'=>$worker_id])
-            ->select('id,shop_id,worker_name,worker_phone,worker_photo,worker_age,worker_type,worker_rule_id,worker_sex,worker_edu,worker_stat_order_num,worker_stat_order_refuse,worker_stat_order_complaint,worker_stat_order_money,worker_live_province,worker_live_city,worker_live_area,worker_live_street')
+            ->select('id,shop_id,worker_name,worker_phone,worker_photo,worker_age,worker_type,worker_identity_id,worker_sex,worker_edu,worker_stat_order_num,worker_stat_order_refuse,worker_stat_order_complaint,worker_stat_order_money,worker_live_province,worker_live_city,worker_live_area,worker_live_street')
             ->joinWith('workerExtRelation')
             ->joinWith('workerStatRelation')
             ->asArray()
@@ -196,7 +198,7 @@ class Worker extends \common\models\Worker
         if($workerDetailResult){
             $workerDetailResult['worker_sex'] = Worker::getWorkerSexShow($workerDetailResult['worker_sex']);
             $workerDetailResult['worker_type_description'] = self::getWorkerTypeShow($workerDetailResult['worker_type']);
-            $workerDetailResult['worker_rule_description'] = WorkerRuleConfig::getWorkerRuleShow($workerDetailResult['worker_rule_id']);
+            $workerDetailResult['worker_identity_description'] = WorkerIdentityConfig::getWorkerIdentityShow($workerDetailResult['worker_identity_id']);
             $workerDetailResult['worker_live_place'] = self::getWorkerPlaceShow($workerDetailResult['worker_live_province'],$workerDetailResult['worker_live_city'],$workerDetailResult['worker_live_area'],$workerDetailResult['worker_live_street']);
             unset($workerDetailResult['workerStatRelation']);
             unset($workerDetailResult['workerExtRelation']);
@@ -243,7 +245,7 @@ class Worker extends \common\models\Worker
      public static function getWorkerInfoByPhone($phone){
 
         $condition = ['worker_phone'=>$phone,'isdel'=>0,'worker_is_block'=>0,'worker_is_vacation'=>0,'worker_is_blacklist'=>0];
-        $workerInfo = worker::find()->where($condition)->select('id,shop_id,worker_name,worker_phone,worker_idcard,worker_type,worker_rule_id,created_ad')->asArray()->one();
+        $workerInfo = worker::find()->where($condition)->select('id,shop_id,worker_name,worker_phone,worker_idcard,worker_type,worker_identity_id,created_ad')->asArray()->one();
         if($workerInfo){
              //门店名称,家政公司名称
              $shopInfo = Shop::findone($workerInfo['shop_id']);
@@ -255,7 +257,7 @@ class Worker extends \common\models\Worker
              //阿姨类型描述信息
              $workerInfo['worker_type_description'] = self::getWorkerTypeShow($workerInfo['worker_type']);
              //阿姨身份描述信息
-             $workerInfo['worker_rule_description'] = WorkerRuleConfig::getWorkerRuleShow($workerInfo['worker_rule_id']);
+             $workerInfo['worker_identity_description'] = WorkerIdentityConfig::getWorkerIdentityShow($workerInfo['worker_identity_id']);
         }else{
              $workerInfo = [];
         }
@@ -279,7 +281,7 @@ class Worker extends \common\models\Worker
          $condition = array_merge($defaultCondition,$filterCondition);
          //获取所属商圈中所有阿姨
          $districtWorkerResult = Worker::find()
-             ->select('{{%worker}}.id,shop_id,worker_name,worker_phone,worker_idcard,worker_rule_id,worker_type,name as shop_name,worker_stat_order_num,worker_stat_order_refuse')
+             ->select('{{%worker}}.id,shop_id,worker_name,worker_phone,worker_idcard,worker_identity_id,worker_type,name as shop_name,worker_stat_order_num,worker_stat_order_refuse')
              ->innerJoinWith('workerDistrictRelation') //关联worker workerDistrictRelation方法
              ->andOnCondition(['operation_shop_district_id'=>$districtId])
              ->joinWith('workerStatRelation') //关联worker WorkerStatRelation方法
@@ -293,7 +295,7 @@ class Worker extends \common\models\Worker
 
 
     /*
-     * 获取商圈中 所有可用阿姨id
+     * 获取商圈中 所有可用阿姨
      * @param int districtId 商圈id
      * @param int worker_type 阿姨类型 1自营2非自营
      * @param int orderBookBeginTime 待指派订单预约开始时间
@@ -302,7 +304,7 @@ class Worker extends \common\models\Worker
      */
     public static function getDistrictFreeWorker($districtId=1,$workerType=1,$orderBookBeginTime,$orderBookeEndTime){
 
-        $workerRuleConfigArr = WorkerRuleConfig::getWorkerRuleList();
+        $workerIdentityConfigArr = WorkerIdentityConfig::getWorkerIdentityList();
 
         //获取商圈中所有阿姨
         $condition['worker_type'] = $workerType;
@@ -317,7 +319,7 @@ class Worker extends \common\models\Worker
 
                 $val['worker_id'] = $val['id'];
                 $val['worker_type_description'] = self::getWorkerTypeShow($val['worker_type']);
-                $val['worker_rule_description'] = $workerRuleConfigArr[$val['worker_rule_id']];
+                $val['worker_identity_description'] = $workerIdentityConfigArr[$val['worker_identity_id']];
 
                 $val['shop_name'] = isset($val['shop_name'])?$val['shop_name']:'';
                 $val['worker_stat_order_num'] = intval($val['worker_stat_order_num']);
@@ -633,8 +635,8 @@ class Worker extends \common\models\Worker
     /*
      * 统计各个身份的阿姨数量
      */
-    public static function CountWorkerRule($workerRuleId){
-        return self::find()->where(['worker_rule_id'=>$workerRuleId,'isdel'=>0])->count();
+    public static function CountWorkerIdentity($workerIdentityId){
+        return self::find()->where(['worker_identity_id'=>$workerIdentityId,'isdel'=>0])->count();
     }
     /*
      * 统计各个审核状态的阿姨数量
@@ -690,13 +692,13 @@ class Worker extends \common\models\Worker
             return 'btn-success-selected';
         }elseif($btnCate==3 && isset($workerParams['worker_auth_status']) && $workerParams['worker_auth_status']==2){
             return 'btn-success-selected';
-        }elseif($btnCate==4 && array_key_exists('worker_rule_id',$workerParams) && $workerParams['worker_rule_id']==1){
+        }elseif($btnCate==4 && array_key_exists('worker_identity_id',$workerParams) && $workerParams['worker_identity_id']==1){
             return 'btn-success-selected';
-        }elseif($btnCate==5 && array_key_exists('worker_rule_id',$workerParams) && $workerParams['worker_rule_id']==2){
+        }elseif($btnCate==5 && array_key_exists('worker_identity_id',$workerParams) && $workerParams['worker_identity_id']==2){
             return 'btn-success-selected';
-        }elseif($btnCate==6 && array_key_exists('worker_rule_id',$workerParams) && $workerParams['worker_rule_id']==3){
+        }elseif($btnCate==6 && array_key_exists('worker_identity_id',$workerParams) && $workerParams['worker_identity_id']==3){
             return 'btn-success-selected';
-        }elseif($btnCate==7 && array_key_exists('worker_rule_id',$workerParams) && $workerParams['worker_rule_id']==4){
+        }elseif($btnCate==7 && array_key_exists('worker_identity_id',$workerParams) && $workerParams['worker_identity_id']==4){
             return 'btn-success-selected';
         }elseif($btnCate==8 && array_key_exists('worker_is_vacation',$workerParams)){
             return 'btn-success-selected';

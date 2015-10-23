@@ -3,8 +3,8 @@
 namespace boss\controllers\finance;
 
 use Yii;
-use common\models\FinanceCompensate;
-use core\models\search\FinanceCompensate as FinanceCompensateSearch;
+use common\models\finance\FinanceCompensate;
+use core\models\finance\FinanceCompensate as FinanceCompensateSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
