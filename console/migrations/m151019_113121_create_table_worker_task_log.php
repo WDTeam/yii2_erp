@@ -19,7 +19,7 @@ class m151019_113121_create_table_worker_task_log extends Migration
             'worker_task_name' => Schema::TYPE_STRING . '(255) DEFAULT NULL COMMENT \'任务名称\'',
             'worker_task_log_start' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'任务本周期开始时间\'',
             'worker_task_log_end' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'任务本周期结束时间\'',
-            'worker_task_is_done' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'任务是否完成\'',
+            'worker_task_is_done' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'任务是否完成,0未处理，1完成，-1结束且未完成\'',
             'worker_task_done_time' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'任务完成时间\'',
             'worker_task_reward_type'=>Schema::TYPE_SMALLINT . '(3) DEFAULT 0 COMMENT \'任务奖励类型\'',
             'worker_task_reward_value'=>Schema::TYPE_INTEGER . '(8) DEFAULT 0 COMMENT \'任务奖励值\'',

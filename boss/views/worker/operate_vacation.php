@@ -5,10 +5,6 @@ use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
 use kartik\date\DatePicker;
 use kartik\widgets\Select2; // or kartik\select2\Select2
-use boss\models\worker\WorkerVacation;
-$workerVacationModel =  new WorkerVacation;
-//$workerVacationResult = WorkerVacation::find()->where(['worker_id'=>$worker_id,'worker_vacation_type'=>$type])->asArray()->one();
-
 ?>
 
 <div class="">
@@ -21,7 +17,7 @@ $workerVacationModel =  new WorkerVacation;
     ?>
     <div class="form-group field-worker-worker_name required">
         <label class="control-label col-sm-3" for="worker-worker_name">阿姨姓名</label>
-        <div class="col-sm-9"><textarea id="worker-worker_name" class="form-control" name="Worker[worker_name]" disabled="" ><?php echo 123?></textarea></div>
+        <div class="col-sm-9"><textarea id="worker-worker_name" class="form-control" name="Worker[worker_name]" disabled="" ><?php echo $workerName?></textarea></div>
         <div class="col-sm-offset-3 col-sm-9"></div>
         <div class="col-sm-offset-3 col-sm-9"><div class="help-block"></div></div>
     </div>

@@ -46,6 +46,7 @@ class WorkerExt extends \yii\db\ActiveRecord
         return [
             [['worker_age', 'worker_sex', 'worker_is_health', 'worker_is_insurance', 'worker_live_province', 'worker_live_city', 'worker_live_area', 'created_ad', 'updated_ad','worker_bank_card','worker_height'], 'integer'],
             [['worker_live_lng', 'worker_live_lat'], 'number'],
+            [['worker_age','worker_sex','worker_source','worker_bank_name','worker_bank_from','worker_bank_area','worker_bank_card'],'required'],
             [['worker_edu', 'worker_bank_card'], 'string', 'max' => 30],
             [['worker_source', 'worker_live_street'], 'string', 'max' => 50],
             [['worker_bank_name'], 'string', 'max' => 10],
