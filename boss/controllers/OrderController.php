@@ -23,61 +23,69 @@ class OrderController extends BaseAuthController
     public function actionCancelOrder()
     {   
         $orderid = yii::$app->request->get('orderid',1);
-        $result = Order::cancel($orderid,Yii::$app->user->id);
-        if($result==false) 
-        {
-            echo "order canlel module error";
-            exit;
-        }
-        echo "取消订单成功，正在执行退款<br>";
-        $statusHistoryInfo = OrderStatusHistory::getOrderStatusHistory($orderid);
-       // print_r($statusHistoryInfo);
         $orderInfo = OrderSearch::getOne($orderid);
-        if($orderInfo->order_code==false) 
+        $orderStatus= $orderInfo->orderExtStatus->order_status_dict_id;
+       // var_dump($orderStatus);
+        if($orderInfo->order_code==false)
         {
             echo "没有此订单";
             exit;
         }
-        $workInfo = Worker::getWorkerInfo($orderInfo->orderExtWorker->worker_id);
-        if($workInfo==false)
-        {
-            echo "该订单没有分配阿姨";
-            exit;
-        }
-        $FinanceRefundadd=new FinanceRefundadd;
-        $FinanceRefundadd->finance_refund_pop_nub=$orderInfo->orderExtPop->order_pop_order_code;//第三方订单号，后期使用
-        $FinanceRefundadd->finance_refund_tel=$orderInfo->orderExtCustomer->order_customer_phone;//下单者电话
-        $FinanceRefundadd->finance_refund_money=intval($orderInfo->orderExtPay->order_pay_money);//退款金额
-        $FinanceRefundadd->finance_refund_stype=2; //申请方式  1 用户取消订单 2 官方工作人员操作 3 其他
-        $FinanceRefundadd->finance_refund_reason= yii::$app->request->get('refund_reason',"有钱就是任性");//退款理由
-        $FinanceRefundadd->finance_refund_discount=$orderInfo->orderExtPay->order_use_card_money+$orderInfo->orderExtPay->order_use_coupon_money+$orderInfo->orderExtPay->order_use_promotion_money;//优惠价格
-         
-        $FinanceRefundadd->finance_refund_pay_create_time=$statusHistoryInfo->created_at;//订单支付时间
-        $FinanceRefundadd->finance_refund_pay_status=$orderInfo->order_status_name;//支付状态 1支付 0 未支付 2 其他
-        $FinanceRefundadd->finance_refund_pay_flow_num=$orderInfo->order_code;//我们系统订单号
-        $FinanceRefundadd->finance_order_channel_id=$orderInfo->channel_id;//订单渠道id
-        $FinanceRefundadd->finance_order_channel_title=$orderInfo->order_channel_name;//订单渠道名称
-         
-        $FinanceRefundadd->finance_pay_channel_id=$orderInfo->orderExtPay->pay_channel_id;//支付渠道id
-        $FinanceRefundadd->finance_pay_channel_title=$orderInfo->orderExtPay->order_pay_channel_name;//支付渠道名称
-         
-        $FinanceRefundadd->finance_refund_worker_id= $orderInfo->orderExtWorker->worker_id;//服务阿姨uid
-        $FinanceRefundadd->finance_refund_worker_tel=$workInfo['worker_phone'];//阿姨电话
-        $FinanceRefundadd->isstatus=2; //1 取消 2 退款的 3 财务已经审核 4 财务已经退款 0 不确定
-        $FinanceRefundadd->create_time=$orderInfo->created_at; //创建时间
-        $FinanceRefundadd->is_del=$orderInfo->isdel; //是否删除  0  正常 1 删除  默认是0
-        /* 暂时注释，目前测试订单过少，一旦退款后就会失败，正式使用时去掉注释
-        $infodate=$FinanceRefundadd->add();
-        $result = json_decode($infodate);
-        if($result->status!=200)
-        {
-        
-           echo "退款更新库失败，请检查";
-            exit;
-        }
-        var_dump($result);
+        /** 方便测试关闭了，正式使用时请打开
+       $result = Order::cancel($orderid,Yii::$app->user->id);
+       if($result==false)  exit("order canlel module error");
         */
-        echo "退款成功";
+        echo "取消订单成功，正在执行退款<br>";
+        $paytime=0;
+         $statusHistoryInfo = OrderStatusHistory::getOrderStatusHistory($orderid);
+         if($statusHistoryInfo) $paytime = $statusHistoryInfo->created_at;
+
+        if($orderInfo->orderExtPop->order_pop_order_code) echo "pop取消订单，已执行完毕";
+        $worker_phone = 0;
+        if($orderInfo->orderExtWorker->worker_id){
+            $workInfo = Worker::getWorkerInfo($orderInfo->orderExtWorker->worker_id);
+            $worker_phone = $workInfo['worker_phone'];
+        } 
+         if($orderInfo->orderExtPay->order_pay_type==2 && $orderInfo->orderExtStatus->order_status_dict_id==2)
+        //if($orderInfo->orderExtPay->order_pay_type==2)
+          {
+            $FinanceRefundadd=new FinanceRefundadd;
+            $FinanceRefundadd->finance_refund_pop_nub=empty($orderInfo->orderExtPop->order_pop_order_code)?0:$orderInfo->orderExtPop->order_pop_order_code;//第三方订单号，后期使用
+            $FinanceRefundadd->finance_refund_tel=empty($orderInfo->orderExtCustomer->order_customer_phone)?0:$orderInfo->orderExtCustomer->order_customer_phone;//下单者电话
+            $FinanceRefundadd->finance_refund_money=intval($orderInfo->orderExtPay->order_pay_money);//退款金额
+            $FinanceRefundadd->finance_refund_stype=2; //申请方式  1 用户取消订单 2 官方工作人员操作 3 其他
+            $FinanceRefundadd->finance_refund_reason= yii::$app->request->get('refund_reason',"有钱就是任性");//退款理由
+            $FinanceRefundadd->finance_refund_discount=$orderInfo->orderExtPay->order_use_card_money+$orderInfo->orderExtPay->order_use_coupon_money+$orderInfo->orderExtPay->order_use_promotion_money;//优惠价格
+            $FinanceRefundadd->finance_refund_pay_create_time=$paytime;//订单支付时间
+            $FinanceRefundadd->finance_refund_pay_status=$orderInfo->orderExtStatus->order_status_dict_id;//支付状态 1支付 0 未支付 2 其他
+            $FinanceRefundadd->finance_refund_pay_flow_num=$orderInfo->order_code;//我们系统订单号
+            $FinanceRefundadd->finance_order_channel_id=$orderInfo->channel_id;//订单渠道id
+            $FinanceRefundadd->finance_order_channel_title=$orderInfo->order_channel_name;//订单渠道名称
+         
+            $FinanceRefundadd->finance_pay_channel_id=$orderInfo->orderExtPay->pay_channel_id;//支付渠道id
+            $FinanceRefundadd->finance_pay_channel_title=$orderInfo->orderExtPay->order_pay_channel_name;//支付渠道名称
+         
+            $FinanceRefundadd->finance_refund_worker_id= intval($orderInfo->orderExtWorker->worker_id);//服务阿姨uid
+            $FinanceRefundadd->finance_refund_worker_tel=$worker_phone;//阿姨电话
+            $FinanceRefundadd->isstatus=2; //1 取消 2 退款的 3 财务已经审核 4 财务已经退款 0 不确定
+            $FinanceRefundadd->create_time=$orderInfo->created_at; //创建时间
+            $FinanceRefundadd->is_del=$orderInfo->isdel; //是否删除  0  正常 1 删除  默认是0
+            //测试数据开始
+            $infodate=$FinanceRefundadd->add();
+            print_r($FinanceRefundadd);
+            $result = json_decode($infodate);
+            if($result->status!=200)
+            {
+                echo "退款更新库失败，请检查";
+                exit;
+            }
+            var_dump($result);
+            echo "退款成功";
+            }
+            else
+            {
+                echo "该订单不是线上支付或者还未支付，不需要退款<br>";
+            }
       
     }
 
