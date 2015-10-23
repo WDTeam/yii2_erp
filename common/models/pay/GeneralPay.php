@@ -328,11 +328,14 @@ class GeneralPay extends GeneralPayCommon
 
                     $transaction->commit();
 
+                    /*
                     if(empty($data['debug'])){
                         //发送短信事件
                         $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
                         $this->trigger('paySms');
                     }
+                    */
+
                     echo $class->notify();
                 }
                 catch(Exception $e)
@@ -434,11 +437,13 @@ class GeneralPay extends GeneralPayCommon
                 $transaction->commit();
                 $class->notify();
 
+                /*
                 if(empty($data['debug'])){
                     //发送短信事件
                     $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
                     $this->trigger('paySms');
                 }
+                */
 
             } catch(Exception $e) {
                 $transaction->rollBack();
@@ -541,11 +546,13 @@ class GeneralPay extends GeneralPayCommon
 
                 $transaction->commit();
 
+                /*
                 if(empty($data['debug'])){
                     //发送短信事件
                     $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
                     $this->trigger('paySms');
                 }
+                */
 
                 $class->notify();
             } catch(Exception $e) {
@@ -649,11 +656,13 @@ class GeneralPay extends GeneralPayCommon
                 }
                 $transaction->commit();
 
+                /*
                 if(empty($data['debug'])){
                     //发送短信事件
                     $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
                     $this->trigger('paySms');
                 }
+                */
 
                 $class->notify();
             } catch(Exception $e) {
@@ -777,11 +786,13 @@ class GeneralPay extends GeneralPayCommon
 
                     $transaction->commit();
 
+                    /*
                     if(empty($data['debug'])){
                         //发送短信事件
                         $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
                         $this->trigger('paySms');
                     }
+                    */
                 }
                 catch(Exception $e)
                 {
@@ -877,12 +888,16 @@ class GeneralPay extends GeneralPayCommon
                     }
 
                     $transaction->commit();
-                    echo $class->notify();
+
+                    /*
                     if(empty($data['debug'])){
                         //发送短信事件
                         $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
                         $this->trigger('paySms');
                     }
+                    */
+
+                    echo $class->notify();
                 }
                 catch(Exception $e)
                 {

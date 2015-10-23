@@ -48,6 +48,9 @@ class GeneralPay extends \common\models\pay\GeneralPay
      */
     public static function balancePay($data)
     {
+        //获取订单数据
+        $orderInfo = GeneralPayCommon::orderInfo($data['order_id']);
+
         //用户服务卡扣款
         Customer::decBalance($data['customer_id'],$data['general_pay_actual_money']);
         //用户交易记录
