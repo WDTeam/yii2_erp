@@ -132,7 +132,7 @@ class AuthController extends \api\components\Controller
     }
 
     /**
-     * @api {post} /auth/worker-login 阿姨登录（李勇50%)[原因手机号和密码登录版本的已经做完，需求改成手机号和验证码缺少model支持]
+     * @api {post} /auth/worker-login 阿姨登录（李勇100%)
      * @apiName actionWorkerLogin
      * @apiGroup Auth
      *
