@@ -85,7 +85,9 @@ class OrderController extends BaseAuthController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $customer = Customer::getCustomerInfo($phone);
         if(empty($customer)){
-            $customer = Customer::adminAddCustomer($phone);
+            if(Customer::adminAddCustomer($phone)) {
+                $customer = Customer::getCustomerInfo($phone);
+            }
         }
         return $customer;
 
