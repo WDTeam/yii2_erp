@@ -1071,8 +1071,10 @@ class UserController extends \api\components\Controller
      *       "msg": "获取评论标签成功",
      *       "ret": {
      *          "id": "1",
-     *          "customer_comment_level": "0",
-     *          "customer_comment_level_name": "",
+     *          "customer_tag_name": "评价标签名称",
+     *          "customer_comment_level": "评价等级",
+     *          "is_online": "是否上线",
+     *          "is_del": "删除",
      *
      *           }
      *
