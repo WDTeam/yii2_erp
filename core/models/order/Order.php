@@ -162,15 +162,19 @@ class Order extends OrderModel
     /**
      * 把订单放入订单池
      * @param $order_id
+     * @param $worker_identity
      */
-    public static function addOrderToPool($order_id)
+    public static function addOrderToPool($order_id,$worker_identity=0)
     {
         // 开始系统指派
         if (self::sysAssignStart($order_id)) {
             $order = OrderSearch::getOne($order_id);
             $redis_order = [
                 'order_id' => $order_id,
-                'created_at' => $order->orderExtStatus->updated_at
+                'created_at' => $order->orderExtStatus->updated_at,
+                'jpush' => $order->orderExtFlag->order_flag_worker_jpush,
+                'ivr' => $order->orderExtFlag->order_flag_worker_ivr,
+                'worker_identity'=> $worker_identity,
             ];
             Yii::$app->redis->executeCommand('zAdd', [self::WAIT_ASSIGN_ORDERS_POOL, $order->order_booked_begin_time . $order_id, json_encode($redis_order)]);
         }
@@ -198,43 +202,43 @@ class Order extends OrderModel
      */
     public static function push($order_id)
     {
-        //并发锁
-        $lock = Yii::$app->cache->get(self::PUSH_ORDER_LOCK.'_'.$order_id);
-        if(empty($lock)) {
-            Yii::$app->cache->set(self::PUSH_ORDER_LOCK . '_' . $order_id, $order_id);
-            $order = OrderSearch::getOne($order_id);
-            if ($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //开始系统指派的订单
-                if (time() - $order->orderExtStatus->updated_at < 300) { //TODO 5分钟内的订单推送给全职阿姨 5分钟需要配置
-                    //获取全职阿姨
-                    $workers = Worker::getDistrictFreeWorker($order->district_id, 1, $order->order_booked_begin_time, $order->order_booked_end_time);
+        $order = OrderSearch::getOne($order_id);
+        $full_time = 1; //全职
+        $part_time = 2; //兼职
+        $push_status = 0; //推送状态 0系统指派失败
+        if ($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //开始系统指派的订单
+            if (time() - $order->orderExtStatus->updated_at < 300) { //TODO 5分钟内的订单推送给全职阿姨 5分钟需要配置
+                //获取全职阿姨
+                $workers = Worker::getDistrictFreeWorker($order->district_id, $full_time, $order->order_booked_begin_time, $order->order_booked_end_time);
+                if (!empty($workers)) {
+                    self::pushToWorkers($order_id, $workers, $full_time);
+                    $push_status = $full_time;
+                } else { //如果查询不到指派的全职阿姨则直接推送兼职阿姨
+                    $workers = Worker::getDistrictFreeWorker($order->district_id, $part_time, $order->order_booked_begin_time, $order->order_booked_end_time);
                     if (!empty($workers)) {
-                        self::pushToWorkers($order_id, $workers);
-                    } else { //如果查询不到指派的全职阿姨则直接推送兼职阿姨
-                        $workers = Worker::getDistrictFreeWorker($order->district_id, 2, $order->order_booked_begin_time, $order->order_booked_end_time);
-                        if (!empty($workers)) {
-                            self::pushToWorkers($order_id, $workers);
-                        } else {//如果查询不到兼职阿姨则系统指派失败
-                            self::sysAssignUndone($order_id);
-                        }
-                    }
-                } elseif (time() - $order->orderExtStatus->updated_at < 900) { //TODO 15分钟内的订单推送给兼职阿姨 15分钟需要配置
-                    $workers = Worker::getDistrictFreeWorker($order->district_id, 2, $order->order_booked_begin_time, $order->order_booked_end_time);
-                    if (!empty($workers)) {
-                        self::pushToWorkers($order_id, $workers);
+                        self::pushToWorkers($order_id, $workers, $part_time);
+                        $push_status = $part_time;
                     } else {//如果查询不到兼职阿姨则系统指派失败
                         self::sysAssignUndone($order_id);
                     }
-                } else { //系统指派失败
+                }
+            } elseif (time() - $order->orderExtStatus->updated_at < 900) { //TODO 15分钟内的订单推送给兼职阿姨 15分钟需要配置
+                $workers = Worker::getDistrictFreeWorker($order->district_id, 2, $order->order_booked_begin_time, $order->order_booked_end_time);
+                if (!empty($workers)) {
+                    self::pushToWorkers($order_id, $workers,$part_time);
+                    $push_status = $part_time;
+                } else {//如果查询不到兼职阿姨则系统指派失败
                     self::sysAssignUndone($order_id);
                 }
-            } else {
-                self::remOrderToPool($order_id);
+            } else { //系统指派失败
+                self::sysAssignUndone($order_id);
             }
-
-            Yii::$app->cache->delete(self::PUSH_ORDER_LOCK . '_' . $order_id);
+        } else {
+            self::remOrderToPool($order_id);
         }
+
         $order = OrderSearch::getOne($order_id);
-        return ['order_id' => $order->id, 'created_at' => $order->created_at, 'sms' => $order->orderExtFlag->order_flag_worker_sms, 'jpush' => $order->orderExtFlag->order_flag_worker_jpush, 'ivr' => $order->orderExtFlag->order_flag_worker_ivr];
+        return ['order_id' => $order->id, 'created_at' => $order->orderExtStatus->updated_at, 'jpush' => $order->orderExtFlag->order_flag_worker_jpush, 'ivr' => $order->orderExtFlag->order_flag_worker_ivr, 'push_status'=>$push_status];
     }
 
     /**
@@ -242,7 +246,7 @@ class Order extends OrderModel
      * @param $order_id
      * @param $workers
      */
-    public static function pushToWorkers($order_id, $workers)
+    public static function pushToWorkers($order_id, $workers, $identity)
     {
         $ivr_flag = false;
         $jpush_flag = false;
@@ -269,6 +273,12 @@ class Order extends OrderModel
         if ($jpush_flag) {
             self::workerJPushFlag($order_id); //标记极光推送
         }
+
+        //把订单从订单池中移除
+        self::remOrderToPool($order_id);
+        //重新加入订单池
+        self::addOrderToPool($order_id,$identity);
+
         self::ivrPushToWorker($order_id); //开始ivr推送
     }
 
