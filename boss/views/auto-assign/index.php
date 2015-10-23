@@ -12,8 +12,6 @@ $this->title = Yii::t('order', '智能派单');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('order', '订单'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<script type="text/javascript" src="/static/js/jquery.js"></script>
-<script type="text/javascript" src="/static/js/index.js"></script>
 <div class="container">
     <div class="row">
         <div class="col-md-7 form-group">
@@ -83,3 +81,6 @@ $this->params['breadcrumbs'][] = $this->title;
         </tbody>
     </table>
 </div>
+
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<script type="text/javascript" src="/static/js/index.js"></script>

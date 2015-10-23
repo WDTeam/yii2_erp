@@ -9,7 +9,7 @@ function websocketConnect() {
     var ip = $('#serverip').val();
     var port = $('#serverport').val();
     if (ip != '' && port != '') {
-        var wsServer = 'ws://' + ip + ':' + port;
+        wsServer = 'ws://' + ip + ':' + port;
         websocket = new WebSocket(wsServer);
         websocket.onopen = function (evt) {
             console.log("Connected to WebSocket server." + evt.data);
@@ -40,14 +40,20 @@ function showOrders(data){
     var id = 'order_'+order.order_id;
     var obj = $('#'+id);
     order.status = getStatus(order.status);
-    if(order.sms == null){
-        order.sms = '未发送';
+    if(order.sms == true){
+        order.sms = '已发送';
+    }else{
+        order.sms = '已发送';
     }
-    if(order.ivr == null){
+    if(order.ivr == true){
+        order.ivr = '已发送';
+    }else{
         order.ivr = '未发送';
     }
     
-    if(order.jpush == null){
+    if(order.jpush == true){
+        order.jpush = '已发送';
+    }else{
         order.jpush = '未发送';
     }
     

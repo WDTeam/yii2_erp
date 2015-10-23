@@ -37,7 +37,7 @@ class WorkerTaskLog extends \common\models\WorkerTaskLog
     public function getConditionsValues()
     {
         $models = (array)WorkerTaskLogmeta::find()
-        ->select(['worker_tasklog_condition', 'worker_tasklog_value', 'worker_tasklog_is_done'])
+        ->select(['worker_tasklog_condition', 'worker_tasklog_value'])
         ->where(['worker_tasklog_id'=>$this->id])
         ->asArray()->all();
         return $models;

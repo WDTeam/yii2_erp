@@ -120,7 +120,7 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '智能派单(80%)',
+                        'label' => '智能派单(90%)',
                         'url' => ['/auto-assign'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -231,15 +231,15 @@ echo Menu::widget(
                             ],
                             [
                                 'label' => '添加新优惠券(10%)',
-                                'url' => ['coupon/add'],
+                                'url' => ['coupon/create'],
                                 'icon' => 'fa fa-angle-right',
                             ],
-                            [
-                                'label' => '绑定用户',
-                                'url' => ['coupon/index'],
-                                'icon' => 'fa fa-angle-right',
+                            //[
+                              //  'label' => '绑定用户',
+                               // 'url' => ['coupon/index'],
+                               // 'icon' => 'fa fa-angle-right',
                                 
-                            ],
+                            //],
                         ]
                     ],
 
@@ -274,7 +274,7 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],*/
                     [
-                        'label' => '阿姨任务管理(85%)',
+                        'label' => '阿姨任务管理(95%)',
                         'url' => ['/worker-task/index'],
                         'icon' => 'fa fa-angle-right',
                     ],

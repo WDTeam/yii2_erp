@@ -35,7 +35,8 @@ class server
             'daemonize'   => false,
             'max_request' => 1000,
             'log_file'    => './swoole.log',
-            'task_worker_num' => 8
+            'task_worker_num' => 8,
+            
         ));
 
         //设置监听
@@ -61,13 +62,27 @@ class server
         $this->redis->connect('101.200.179.70', '6379');
     }
     
-    public function onOpen($server, $req) {
-        echo "connection open: ".$req->fd;
-        return true;
-    }
+//    public function onOpen($server, $req) {
+//        echo "connection open: ".$req->fd;
+//        return true;
+//    }
     
-    public function onStart($serv) {
+    public function onStart($server) {
         echo SWOOLE_VERSION . " onStart\n";
+//        $data = array(
+//            'interval' => 1000,
+//            'taskName' => 'orders',
+//            'theadnum' => 100,
+//            'qstart' => 0,
+//            'qend' => 5,
+//            'jstart' => 5,
+//            'jend' => 10,
+//            'isRun' => true,
+//        );
+//        $this->startTimer($server, $data, '');
+        //swoole_timer_add(1000, function($interval){echo 'timer_add';});
+//        $this->serv->task('start_timer');
+//        $this->onMessage($server,$ws);
         return true;
     }
     
@@ -89,12 +104,14 @@ class server
     
     function onMessage($server, $ws)
     {
+//        $server->push($ws->fd, 'dfdfsdfs');
         $data = $this->getParams($ws);
         $this->startTimer($server, $data, $ws);
         return;
     }
     public function startTimer($server,$data, $ws)
     {   
+        echo 'startTimer'."\n";
         $this->serv = $server;
         $this->data = $data;
         $this->ws = $ws;
@@ -107,6 +124,7 @@ class server
     }
     
     public function saveStatus(){
+        echo 'saveStatus'."\n";
         $key = '_SWOOLE_SOCKET_RUN_STATUS_';
         $d = array('ip' => $this->serverIP(), 'port' => $this->port, 'time' => time());
 //        var_dump($d);
@@ -116,7 +134,7 @@ class server
     private $workerTaskIsRunning;
     public function processOrders($server, $data, $ws) {
 //        echo 'Process Orders.\n';
-
+        echo 'processOrders'."\n";
         if ($timerIsRunning)
         {
             return;
@@ -126,6 +144,7 @@ class server
        
         //取得订单启动任务foreach orders
         $orders = $this->getOrders();
+//        var_dump($orders);
         $count = count($orders);
         $n = 0;
         foreach($orders as $key => $order){
@@ -138,9 +157,7 @@ class server
             $d['created_at'] = date('Y-m-d H:i:s', $d['created_at']);
             $d['updated_at'] = isset($d['updated_at']) ? date('Y-m-d H:i:s', $d['updated_at']) : '';
             $d = json_encode($d);
-            echo 'start:'. $order['order_id']."\n";
             
-            if(empty($server)){$server->push($ws->fd, $d);}
             /*
              * TODO:
              * 需要判断订单的时间频率，而不是每次都去调API    -- by zhanghang
@@ -149,6 +166,12 @@ class server
              * if 5-15分钟 call 推送兼职
              * if >15 分钟 call 人工指派
              */
+//            var_dump($order);
+//            if(!in_array($order['status'],array('1', '2'))){echo var_dump($order);;break;}
+            
+            echo 'start:'. $order['order_id']."\n";
+            //进行推送
+            if(!empty($ws)){$server->push($ws->fd, $d);}
             $this->serv->task($order);
             $n++;
             if($n > $count){break;}
@@ -157,6 +180,7 @@ class server
     }
     
     public function getOrderStatus($order, $data){
+        echo 'getOrderStatus'."\n";
         if(isset($order['updated_at'])){
             $qstart = $data['qstart'] * 60;
             $qend = $data['qend'] * 60;
@@ -183,8 +207,13 @@ class server
     }
     
     public function getOrders(){
+        echo 'start:'. $order['order_id']."\n";
         $orders = $this->redis->zrange('WaitAssignOrdersPool',0,-1);
         foreach($orders as $key => $value){
+            if(isset($value['lock']) && $value['lock']){
+                unset($orders[$key]);
+                break;
+            }
             $orders[$key] = (array)json_decode($value);
         }
         return (array)$orders;
@@ -199,22 +228,44 @@ class server
     }
  
     public function onTask($server, $task_id, $from_id, $data) {
-        return $this->taskOrder($data, $server);
+        echo 'onTask';
+//        if($data == 'start_timer'){
+//            swoole_timer_add(1000, function($interval){echo 'timer_add';});
+//        }else{
+            $this->lockOrder($data);//加入状态锁
+            return $this->taskOrder($data, $server);
+//        }
+    }
+    
+    
+    public function lockOrder($order){
+        echo 'lockOrder';
+        $order['lock'] = true;
+        $this->redis->zadd($order);
     }
     
     public function taskOrder($data){
+        echo 'taskOrder';
         $url = 'http://dev.api.1jiajie.com/order/push/'.$data['order_id'];
-        $d = file_get_contents($url);
-        $data = (array)json_decode($d);
+//        $url = 'http://api.me/order/push/'.$data['order_id'];
+        $d = @file_get_contents($url);
+        $data1 = (array)json_decode($d);
+        var_dump($d);
         return $data;
     }
  
     public function onFinish($server,$task_id, $data) {
+        $data['ivr'] = true;
+        $data['sms'] = true;
+        $data['jpush'] = true;
+        
         $data['created_at'] = date('Y-m-d H:i:s', $data['created_at']);
         $data['updated_at'] = isset($data['updated_at']) ? date('Y-m-d H:i:s', $data['updated_at']) : '';
         $d = json_encode($data);
-        echo 'end'. $data['order_id']."\n";
-        if(empty($server)){$server->push($this->ws->fd, $d);}
+        var_dump($d);
+        echo 'end:'. $data['order_id']."\n";
+        $server->push($this->ws->fd, $d);
+        if(empty($this->ws)){$server->push($this->ws->fd, $d);}
 //        $this->broadcast($d);
     }
     
