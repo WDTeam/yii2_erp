@@ -1,16 +1,16 @@
 <?php
 
-namespace boss\models;
+namespace core\models\finance;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\FinanceSettleApply;
+use common\models\finance\FinanceSettleApply;
 use core\models\worker\Worker;
 use core\models\order\Order;
 
 /**
- * FinanceSettleApplySearch represents the model behind the search form about `common\models\FinanceSettleApply`.
+ * FinanceSettleApplySearch represents the model behind the search form about `common\models\finance\FinanceSettleApply`.
  */
 class FinanceSettleApplySearch extends FinanceSettleApply
 {

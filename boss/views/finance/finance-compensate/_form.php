@@ -5,7 +5,7 @@ use kartik\widgets\ActiveForm;
 
 /**
  * @var yii\web\View $this
- * @var common\models\FinanceCompensate $model
+ * @var common\models\finance\FinanceCompensate $model
  * @var yii\widgets\ActiveForm $form
  */
 

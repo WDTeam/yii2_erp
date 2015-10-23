@@ -1,14 +1,14 @@
 <?php
 
-namespace boss\models;
+namespace core\models\finance;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\FinanceWorkerNonOrderIncome;
+use common\models\finance\FinanceWorkerNonOrderIncome;
 
 /**
- * FinanceWorkerNonOrderIncomeSearch represents the model behind the search form about `common\models\FinanceWorkerNonOrderIncome`.
+ * FinanceWorkerNonOrderIncomeSearch represents the model behind the search form about `common\models\finance\FinanceWorkerNonOrderIncome`.
  */
 class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
 {

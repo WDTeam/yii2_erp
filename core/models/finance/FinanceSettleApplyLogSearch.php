@@ -1,14 +1,14 @@
 <?php
 
-namespace boss\models;
+namespace core\models\finance;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\FinanceSettleApplyLog;
+use common\models\finance\FinanceSettleApplyLog;
 
 /**
- * FinanceSettleApplyLogSearch represents the model behind the search form about `common\models\FinanceSettleApplyLog`.
+ * FinanceSettleApplyLogSearch represents the model behind the search form about `common\models\finance\FinanceSettleApplyLog`.
  */
 class FinanceSettleApplyLogSearch extends FinanceSettleApplyLog
 {

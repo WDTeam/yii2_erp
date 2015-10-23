@@ -3,17 +3,17 @@
 namespace boss\controllers\finance;
 error_reporting(E_ALL);
 use Yii;
-use common\models\FinanceSettleApply;
-use boss\models\FinanceSettleApplySearch;
-use boss\models\FinanceSettleApplyLogSearch;
+use common\models\finance\FinanceSettleApply;
+use core\models\finance\FinanceSettleApplySearch;
+use core\models\finance\FinanceSettleApplyLogSearch;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use common\models\FinanceWorkerOrderIncome;
-use common\models\FinanceWorkerNonOrderIncome;
-use boss\models\FinanceWorkerOrderIncomeSearch;
-use boss\models\FinanceWorkerNonOrderIncomeSearch;
-use boss\models\FinanceShopSettleApplySearch;
+use common\models\finance\FinanceWorkerOrderIncome;
+use common\models\finance\FinanceWorkerNonOrderIncome;
+use core\models\finance\FinanceWorkerOrderIncomeSearch;
+use core\models\finance\FinanceWorkerNonOrderIncomeSearch;
+use core\models\finance\FinanceShopSettleApplySearch;
 use PHPExcel;
 use PHPExcel_IOFactory;
 
