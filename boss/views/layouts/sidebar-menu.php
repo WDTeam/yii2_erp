@@ -1,7 +1,7 @@
 <?php
 use common\widgets\Menu;
-use boss\models\FinanceShopSettleApplySearch;
-use boss\models\FinanceSettleApplySearch;
+use core\models\finance\FinanceShopSettleApplySearch;
+use core\models\finance\FinanceSettleApplySearch;
 
 $ctrl = Yii::$app->controller;
 

@@ -3,14 +3,14 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
-use boss\models\FinanceSettleApplySearch;
-use boss\models\FinanceWorkerNonOrderIncomeSearch;
+use core\models\finance\FinanceSettleApplySearch;
+use core\models\finance\FinanceWorkerNonOrderIncomeSearch;
 use yii\bootstrap\Modal;
 
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
- * @var boss\models\FinanceSettleApplySearch $searchModel
+ * @var core\models\finance\FinanceSettleApplySearch $searchModel
  */
 if($searchModel->settle_type == FinanceSettleApplySearch::SELF_FULLTIME_WORKER_SETTELE){
     $this->title = Yii::t('finance', '自营全职结算');

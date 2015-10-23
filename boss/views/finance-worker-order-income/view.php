@@ -6,7 +6,7 @@ use kartik\datecontrol\DateControl;
 
 /**
  * @var yii\web\View $this
- * @var common\models\FinanceWorkerOrderIncome $model
+ * @var common\models\finance\FinanceWorkerOrderIncome $model
  */
 
 $this->title = $model->id;
