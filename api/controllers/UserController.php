@@ -835,19 +835,20 @@ class UserController extends \api\components\Controller
 //    /**
 //     * 发送验证码
 //     */
-//    public function actionSetUser()
-//    {
-//        \core\models\customer\CustomerCode::generateAndSend('13683118946');
-//    }
-//
-//    #生成access_token
-//
-//    public function actionAddUser()
-//    {
-//        $daat = \core\models\customer\CustomerAccessToken::generateAccessToken('13683118946', '1295');
-//
-//        print_r($daat);
-//    }
+    public function actionSetUser()
+    {
+        \core\models\customer\CustomerCode::generateAndSend('13683118946');
+    }
+
+    #生成access_token
+
+    public function actionAddUser()
+    {
+        $daat = \core\models\customer\CustomerAccessToken::generateAccessToken('13683118946', '4041');
+
+        print_r($daat);
+    }
+
 #f214e8a8d6cde5cc434a97d1a888373
 
     /**
@@ -931,6 +932,7 @@ class UserController extends \api\components\Controller
             $userscore = \core\models\customer\CustomerExtScore::getCustomerScoreList(1);
 
             if ($userscore) {
+                $ret["scoreCategory"] = $userscore;
                 return $this->send($userscore, "用户积分明细列表", "ok");
             } else {
                 return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
@@ -940,14 +942,17 @@ class UserController extends \api\components\Controller
 
     /**
      *
-     * @api {POST} /user/user-suggest 用户提交意见反馈 （需要再次核实需求;郝建设0%）
+     * @api {POST} /user/user-suggest 用户提交意见反馈 （需要再次核实需求;郝建设 100%）
      *
      * @apiName UserSuggest
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {String} [suggest] 用户意见
+     * @apiParam {String} customer_comment_phone 用户电话
+     * @apiParam {String} customer_comment_level 评价级别
+     * @apiParam {String} [customer_comment_tag_ids] 评价标签
+     * @apiParam {String} [customer_comment_content] 评价内容
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -970,7 +975,26 @@ class UserController extends \api\components\Controller
      */
     public function actionUserSuggest()
     {
-        
+        $param = Yii::$app->request->post();
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
+
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+
+        if (!empty($customer) && !empty($customer->id)) {
+            $model = \core\models\customer\CustomerComment::addUserSuggest($customer->id, $param['order_id'], $param['customer_comment_phone'], $param['customer_comment_content'], $param['customer_comment_tag_ids'], $param['customer_comment_level']);
+            if (!empty($model)) {
+                return $this->send([1], "添加评论成功", "ok");
+            } else {
+                return $this->send(null, "添加评论失败", "error", 403);
+            }
+        } else {
+            return $this->send(null, "用户认证已经过期,请重新登录.", "error", 403);
+        }
     }
 
 }
