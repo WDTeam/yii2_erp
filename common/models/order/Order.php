@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models;
+namespace common\models\order;
 
 use Yii;
 
@@ -339,7 +339,7 @@ class Order extends ActiveRecord
 
             //各类执行保存操作
             foreach($save_models as $modelClassName){
-                $class = '\common\models\\'.$modelClassName;
+                $class = '\common\models\order\\'.$modelClassName;
                 if($is_new_record || $modelClassName=='OrderStatusHistory'){//状态历史只新建不更新
                     $$modelClassName = new $class();
                     $$modelClassName->order_id = $attributes['order_id'];

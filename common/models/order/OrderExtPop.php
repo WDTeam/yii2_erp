@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models;
+namespace common\models\order;
 
 use Yii;
 
@@ -18,7 +18,7 @@ use Yii;
  *
  * @property Order $order
  */
-class OrderExtPop extends \common\models\ActiveRecord
+class OrderExtPop extends \common\models\order\ActiveRecord
 {
     /**
      * @inheritdoc
