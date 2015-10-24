@@ -54,7 +54,7 @@ class GeneralPay extends \common\models\pay\GeneralPay
         //用户服务卡扣款
         Customer::decBalance($data['customer_id'],$orderInfo['order_use_acc_balance']);
         //用户交易记录
-        return CustomerTransRecord::analysisRecord(array_merge($data,$orderInfo));
+        return CustomerTransRecord::analysisRecord(array_merge($orderInfo,$data));
     }
 
     /**
