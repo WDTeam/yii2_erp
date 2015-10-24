@@ -234,11 +234,11 @@ class WorkerController extends BaseAuthController
     }
 
     public function actionAuth($id){
-        $workerAuthModel = WorkerAuth::findOne($id);
+        $workerAuthModel = WorkerAuth::findModel($id);
 
         if(Yii::$app->request->post('WorkerAuth')){
             $param = Yii::$app->request->post('WorkerAuth');
-            $workerModel = Worker::findone($id);
+            $workerModel = $this->findModel($id);
             if($workerAuthModel->load(Yii::$app->request->post()) && $workerAuthModel->save()){
                 if(isset($param['worker_auth_status']) && $param['worker_auth_status']==1){
                     $workerModel->worker_auth_status = 1;

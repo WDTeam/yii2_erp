@@ -4,7 +4,7 @@ namespace common\models\pay;
 
 use core\models\Customer;
 use core\models\CustomerTransRecord\CustomerTransRecord;
-use core\models\order\OrderStatus;
+use core\models\order\Order;
 use core\models\order\OrderSearch;
 use Yii;
 use yii\base\ErrorException;
@@ -264,7 +264,7 @@ class GeneralPayCommon extends \yii\db\ActiveRecord
         if( $attribute['general_pay_money'] == $attribute['general_pay_actual_money'] )
         {
             $orderChannel = FinanceOrderChannel::get_order_channel_info($attribute['general_pay_source']);
-            OrderStatus::isPaymentOnline($attribute['order_id'],0,$orderChannel['id'],$orderChannel['finance_pay_channel_name'],$attribute['general_pay_transaction_id']);
+            Order::isPaymentOnline($attribute['order_id'],0,$orderChannel['id'],$orderChannel['finance_pay_channel_name'],$attribute['general_pay_transaction_id']);
         }
 
     }
