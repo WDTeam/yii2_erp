@@ -17,6 +17,9 @@ class Customer extends \common\models\customer\Customer
 
 	public static function getCityName($customer_id){
 		$customer = self::findOne($customer_id);
+		if($customer == NULL){
+			return false;
+		}
 		
 	}
 

@@ -2,7 +2,7 @@
 
 namespace boss\controllers\order;
 
-use core\models\finance_refund\FinanceRefundadd;
+use core\models\finance\FinanceRefundadd;
 use core\models\customer\CustomerAddress;
 use core\models\order\OrderWorkerRelation;
 use core\models\worker\Worker;
