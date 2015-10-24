@@ -11,7 +11,7 @@ use boss\components\SearchBox;
  * @var yii\data\ActiveDataProvider $dataProvider
  */
 
-$this->title = Yii::t('app', 'Operation Goods');
+$this->title = Yii::t('app', 'Operation Selected Service');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-goods-index">
@@ -28,6 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'selected_service_scene',
             'selected_service_area',
             'selected_service_sub_area',
+            'selected_service_standard',
             'selected_service_price',
             'selected_service_unit',
             [
@@ -45,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'title' => Yii::t('yii', 'Edit'), 'class' => 'btn btn-info btn-sm'
                             ]);},
                         'delete' => function ($url, $model) {
-                            return '';
+                            //return '';
                             return Html::a(
                                 '<span class="glyphicon glyphicon-trash"></span>',
                                 Yii::$app->urlManager->createUrl(['operation-selected-service/delete','id' => $model->id]),

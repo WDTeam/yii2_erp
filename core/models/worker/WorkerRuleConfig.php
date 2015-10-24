@@ -15,7 +15,7 @@ use yii\helpers\ArrayHelper;
  * @property integer $admin_id
  * @property double $isdel
  */
-class WorkerRuleConfig extends \common\models\WorkerRuleConfig
+class WorkerRuleConfig extends \common\models\worker\WorkerRuleConfig
 {
     /**
      * @inheritdoc

@@ -52,7 +52,7 @@ use crazyfd\qiniu\Qiniu;
  * @property integer $updated_ad
  * @property integer $isdel
  */
-class Worker extends \common\models\Worker
+class Worker extends \common\models\worker\Worker
 {
 
 

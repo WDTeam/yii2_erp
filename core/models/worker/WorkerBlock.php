@@ -16,7 +16,7 @@ use Yii;
  * @property integer $created_ad
  * @property integer $updated_ad
  */
-class WorkerBlock extends \common\models\WorkerBlock
+class WorkerBlock extends \common\models\worker\WorkerBlock
 {
 
 }

@@ -9,19 +9,12 @@ use yii\widgets\Pjax;
  * @var yii\data\ActiveDataProvider $dataProvider
  */
 
-$this->title = Yii::t('app', 'Customer Trans Records');
+$this->title = Yii::t('app', '用户交易记录');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="customer-trans-record-index">
-    <div class="page-header">
-            <h1><?= Html::encode($this->title) ?></h1>
-    </div>
 
-    <p>
-        <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Customer Trans Record',
-]), ['create'], ['class' => 'btn btn-success'])*/  ?>
-    </p>
+    <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
@@ -37,7 +30,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'customer_trans_record_pay_channel',
             //'customer_trans_record_mode',
             'customer_trans_record_mode_name',
-            'customer_trans_record_promo_code_money',
             'customer_trans_record_coupon_money',
             'customer_trans_record_cash',
             'customer_trans_record_pre_pay',
@@ -49,7 +41,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'customer_trans_record_online_service_card_befor_balance',
             'customer_trans_record_compensate_money',
             'customer_trans_record_refund_money',
-            'customer_trans_record_money',
             'customer_trans_record_order_total_money',
             'customer_trans_record_total_money',
             'customer_trans_record_current_balance',

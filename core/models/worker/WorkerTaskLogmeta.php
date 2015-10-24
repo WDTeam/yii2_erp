@@ -14,7 +14,7 @@ use Yii;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class WorkerTaskLogmeta extends \common\models\WorkerTaskLogmeta
+class WorkerTaskLogmeta extends \common\models\worker\WorkerTaskLogmeta
 {
 
 }
