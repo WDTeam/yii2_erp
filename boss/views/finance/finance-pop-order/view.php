@@ -1,11 +1,9 @@
 <?php
-
 use yii\helpers\Html;
 use kartik\detail\DetailView;
-use kartik\datecontrol\DateControl;
 use common\models\finance\FinanceOrderChannel;
 use common\models\finance\FinancePayChannel;
-use core\models\Customer;
+use core\models\Customer\Customer;
 use common\models\SystemUser;
 use common\models\finance\FinancePopOrder;
 /**

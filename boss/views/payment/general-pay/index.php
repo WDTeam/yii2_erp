@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
-use boss\models\pay\GeneralPay;
+use boss\models\payment\GeneralPay;
 
 /**
  * @var yii\web\View $this

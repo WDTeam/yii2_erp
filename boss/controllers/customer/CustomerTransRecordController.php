@@ -1,11 +1,11 @@
 <?php
 
-namespace boss\controllers;
+namespace boss\controllers\customer;
 
 use Yii;
-use common\models\CustomerTransRecord;
-use common\models\CustomerTransRecordLog;
-use boss\models\CustomerTransRecordSearch;
+use common\models\customer\CustomerTransRecord;
+use common\models\customer\CustomerTransRecordLog;
+use boss\models\customer\CustomerTransRecordSearch;
 use yii\rest\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

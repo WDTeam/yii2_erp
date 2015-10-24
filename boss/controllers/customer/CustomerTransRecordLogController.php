@@ -1,18 +1,18 @@
 <?php
 
-namespace boss\controllers;
+namespace boss\controllers\customer;
 
 use Yii;
-use common\models\FinanceInvoice;
-use boss\models\FinanceInvoiceSearch;
-use boss\components\BaseAuthController;
+use common\models\customer\CustomerTransRecordLog;
+use yii\data\ActiveDataProvider;
+use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * FinanceInvoiceController implements the CRUD actions for FinanceInvoice model.
+ * CustomerTransRecordLogController implements the CRUD actions for CustomerTransRecordLog model.
  */
-class FinanceInvoiceController extends BaseAuthController
+class CustomerTransRecordLogController extends Controller
 {
     public function behaviors()
     {
@@ -27,22 +27,22 @@ class FinanceInvoiceController extends BaseAuthController
     }
 
     /**
-     * Lists all FinanceInvoice models.
+     * Lists all CustomerTransRecordLog models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new FinanceInvoiceSearch;
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        $dataProvider = new ActiveDataProvider([
+            'query' => CustomerTransRecordLog::find(),
+        ]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel,
         ]);
     }
 
     /**
-     * Displays a single FinanceInvoice model.
+     * Displays a single CustomerTransRecordLog model.
      * @param integer $id
      * @return mixed
      */
@@ -58,13 +58,13 @@ class FinanceInvoiceController extends BaseAuthController
     }
 
     /**
-     * Creates a new FinanceInvoice model.
+     * Creates a new CustomerTransRecordLog model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new FinanceInvoice;
+        $model = new CustomerTransRecordLog;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -76,7 +76,7 @@ class FinanceInvoiceController extends BaseAuthController
     }
 
     /**
-     * Updates an existing FinanceInvoice model.
+     * Updates an existing CustomerTransRecordLog model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -95,7 +95,7 @@ class FinanceInvoiceController extends BaseAuthController
     }
 
     /**
-     * Deletes an existing FinanceInvoice model.
+     * Deletes an existing CustomerTransRecordLog model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -108,15 +108,15 @@ class FinanceInvoiceController extends BaseAuthController
     }
 
     /**
-     * Finds the FinanceInvoice model based on its primary key value.
+     * Finds the CustomerTransRecordLog model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return FinanceInvoice the loaded model
+     * @return CustomerTransRecordLog the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = FinanceInvoice::findOne($id)) !== null) {
+        if (($model = CustomerTransRecordLog::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
