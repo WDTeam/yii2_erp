@@ -1,6 +1,6 @@
 <?php
 
-namespace boss\models\Operation;
+namespace core\models\Operation;
 
 use Yii;
 use core\models\Operation\CoreOperationSpec;

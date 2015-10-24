@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m151024_082423_create_table_server_card extends Migration
+class m151024_082423_create_table_operation_server_card extends Migration
 {
     public function up()
     {
@@ -12,7 +12,7 @@ class m151024_082423_create_table_server_card extends Migration
 			$tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'服务卡信息表\'';
 		}
 		
-		$this->createTable('{{%server_card}}',[
+		$this->createTable('{{%operation_server_card}}',[
 			'id'=> Schema::TYPE_BIGPK .'(20) NOT NULL AUTO_INCREMENT COMMENT \'编号\'',
 			'card_name' 	=> Schema::TYPE_STRING.'(64) NOT NULL DEFAULT \'\' COMMENT \'卡名\'',
 			'card_type' 	=> Schema::TYPE_INTEGER.'(10) NOT NULL DEFAULT 0 COMMENT \'卡类型\'',
@@ -29,7 +29,7 @@ class m151024_082423_create_table_server_card extends Migration
 
     public function down()
     {
-         $this->dropTable('{{%server_card}}');
+         $this->dropTable('{{%operation_server_card}}');
 
         return true;
     }
