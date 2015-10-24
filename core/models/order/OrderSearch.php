@@ -101,7 +101,7 @@ class OrderSearch extends Order
     }
 
     /**
-     * 是否存在冲突订单 TODO 不能用
+     * 是否存在冲突订单
      * @param $worker_id
      * @param $booked_begin_time
      * @param $booked_end_time
@@ -110,16 +110,26 @@ class OrderSearch extends Order
     public static function WorkerOrderExistsConflict($worker_id, $booked_begin_time, $booked_end_time)
     {
         return Order::find()->joinWith(['orderExtWorker'])->where(['worker_id' => $worker_id])
-            ->orWhere(
-                ['<=', 'order_booked_begin_time', $booked_begin_time],
-                ['>=', 'order_booked_end_time', $booked_begin_time]
-            )->orWhere(
-                ['<=', 'order_booked_begin_time', $booked_end_time],
-                ['>=', 'order_booked_end_time', $booked_end_time])
-            ->orWhere(
-                ['>=', 'order_booked_begin_time', $booked_begin_time],
-                ['<=', 'order_booked_end_time', $booked_end_time])
-            ->count();
+            ->andWhere(
+                ['or',
+                    [
+                        'and',
+                        ['<=', 'order_booked_begin_time', $booked_begin_time],
+                        ['>=', 'order_booked_end_time', $booked_begin_time]
+                    ],
+                    [
+                        'and',
+                        ['<=', 'order_booked_begin_time', $booked_end_time],
+                        ['>=', 'order_booked_end_time', $booked_end_time]
+                    ],
+                    [
+                        'and',
+                        ['>=', 'order_booked_begin_time', $booked_begin_time],
+                        ['<=', 'order_booked_end_time', $booked_end_time]
+                    ]
+                ]
+
+            )->count();
     }
 
     /**
