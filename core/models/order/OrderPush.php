@@ -22,6 +22,8 @@ class OrderPush extends Order
      * 智能推送
      * @param $order_id
      * @return array
+     *
+     *
      */
     public static function push($order_id)
     {
@@ -29,9 +31,11 @@ class OrderPush extends Order
 
         $full_time = 1; //全职
         $part_time = 2; //兼职
-        $push_status = 0; //推送状态 0系统指派失败
+        $push_status = 0; //推送状态
         if ($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //开始系统指派的订单
-            if (time() - $order->orderExtStatus->updated_at < 300) { //TODO 5分钟内的订单推送给全职阿姨 5分钟需要配置
+            if($order->order_booked_worker_id>0 && time() - $order->orderExtStatus->updated_at < 900){ //先判断有没有指定阿姨
+                $workers[] = Worker::getWorkerInfo($order->order_booked_worker_id);
+            }elseif (time() - $order->orderExtStatus->updated_at < 300) { //TODO 5分钟内的订单推送给全职阿姨 5分钟需要配置
                 //获取全职阿姨
                 $workers = Worker::getDistrictFreeWorker($order->district_id, $full_time, $order->order_booked_begin_time, $order->order_booked_end_time);
                 $push_status = $full_time;
