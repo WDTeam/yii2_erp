@@ -195,7 +195,7 @@ class OrderSearch extends Order
         if (!is_null($order_status)) {
                 foreach($order_status as $status_str){
                     $query = $query->orFilterWhere([
-                        'orderExtStatus.order_status_dict_id' => $status_str
+                        'os.order_status_dict_id' => $status_str
                     ]);
                 }
         }
