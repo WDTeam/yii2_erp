@@ -1,10 +1,10 @@
 <?php
 
-namespace core\models\GeneralPay;
+namespace core\models\general_pay;
 
 use common\models\pay\GeneralPayCommon;
 use common\models\pay\GeneralPayRefund;
-use core\models\CustomerTransRecord\CustomerTransRecord;
+use core\models\customer_trans_record\CustomerTransRecord;
 use core\models\Customer;
 use Yii;
 

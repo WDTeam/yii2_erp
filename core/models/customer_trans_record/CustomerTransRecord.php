@@ -1,10 +1,10 @@
 <?php
 
-namespace core\models\CustomerTransRecord;
+namespace core\models\customer;
 
-use common\models\CustomerTransRecordLog;
-use common\models\FinancePayChannel;
-use common\models\pay\GeneralPayCommon;
+use common\models\customer\CustomerTransRecordLog;
+use common\models\finance\FinancePayChannel;
+use common\models\payment\GeneralPayCommon;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 

@@ -1,9 +1,9 @@
 <?php
-namespace common\models\pay;
+namespace common\models\payment;
 use Yii;
 use yii\base\ErrorException;
 use yii\base\Exception;
-use core\models\CustomerTransRecord\CustomerTransRecord;
+use core\models\customer\CustomerTransRecord;
 use core\models\order\OrderSearch;
 
 class GeneralPayRefund extends GeneralPayCommon
