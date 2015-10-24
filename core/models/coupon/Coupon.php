@@ -68,7 +68,7 @@ class Coupon extends \common\models\coupon\Coupon
             'coupon_type' => $coupon->coupon_type,
             'coupon_type_name' => $coupon->coupon_type_name,
             'coupon_service_type_id' => $coupon->coupon_service_type_id,
-            'coupon_service_type_id' => $coupon->coupon_service_type_id,
+            'coupon_service_type_name' => $coupon->coupon_service_type_name,
             'coupon_service_id' => $coupon->coupon_service_id,
             'coupon_service_name' => $coupon->coupon_service_name,
         );
@@ -164,5 +164,4 @@ class Coupon extends \common\models\coupon\Coupon
     }
 
 	
-
 }

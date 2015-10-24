@@ -266,36 +266,28 @@ class Order extends OrderModel
     public static function assignDone($order_id, $worker, $admin_id, $assign_type)
     {
         $result = false;
-        $error = '';
-        //并发锁
-//        if(empty(Yii::$app->cache->get(self::ORDER_ASSIGN_WORKER_LOCK.'_ORDER_'.$order_id)) && empty(Yii::$app->cache->get(self::ORDER_ASSIGN_WORKER_LOCK.'_WORKER_'.$worker['id']))) {
-//            Yii::$app->cache->set(self::ORDER_ASSIGN_WORKER_LOCK . '_ORDER_' . $order_id, $order_id);
-//            Yii::$app->cache->set(self::ORDER_ASSIGN_WORKER_LOCK . '_WORKER_' . $worker['id'], $worker['id']);
-            $order = OrderSearch::getOne($order_id);
-            if($order->orderExtFlag->order_flag_lock>0 && $order->orderExtFlag->order_flag_lock!=$admin_id && time()-$order->orderExtFlag->order_flag_lock_time<Order::MANUAL_ASSIGN_lONG_TIME){
-                $error = '订单正在进行人工指派！';
-            }elseif(OrderSearch::WorkerOrderExistsConflict($worker['id'],$order->order_booked_begin_time,$order->order_booked_end_time)){
-                $error = '阿姨服务时间冲突！';
-            }elseif($order->orderExtWorker->worker_id>0){
-                $error = '订单已经指派阿姨！';
-            }else {
-                $order->order_flag_lock = 0;
-                $order->worker_id = $worker['id'];
-                $order->worker_type_id = $worker['worker_type'];
-                $order->order_worker_type_name = $worker['worker_type_description'];
-                $order->shop_id = $worker["shop_id"];
-                $order->order_worker_assign_type = $assign_type; //接单方式
-                $order->admin_id = $admin_id;
-                if ($admin_id > 1) { //大于1属于人工操作
-                    $result = OrderStatus::_manualAssignDone($order, ['OrderExtFlag', 'OrderExtWorker']);
-                } else {
-                    $result = OrderStatus::_sysAssignDone($order, ['OrderExtFlag', 'OrderExtWorker']);
-                }
+        $order = OrderSearch::getOne($order_id);
+        if($order->orderExtFlag->order_flag_lock>0 && $order->orderExtFlag->order_flag_lock!=$admin_id && time()-$order->orderExtFlag->order_flag_lock_time<Order::MANUAL_ASSIGN_lONG_TIME){
+            $order->addError('id','订单正在进行人工指派！');
+        }elseif(OrderSearch::WorkerOrderExistsConflict($worker['id'],$order->order_booked_begin_time,$order->order_booked_end_time)){
+            $order->addError('id','阿姨服务时间冲突！');
+        }elseif($order->orderExtWorker->worker_id>0){
+            $order->addError('id','订单已经指派阿姨！');
+        }else {
+            $order->order_flag_lock = 0;
+            $order->worker_id = $worker['id'];
+            $order->worker_type_id = $worker['worker_type'];
+            $order->order_worker_type_name = $worker['worker_type_description'];
+            $order->shop_id = $worker["shop_id"];
+            $order->order_worker_assign_type = $assign_type; //接单方式
+            $order->admin_id = $admin_id;
+            if ($admin_id > 1) { //大于1属于人工操作
+                $result = OrderStatus::_manualAssignDone($order, ['OrderExtFlag', 'OrderExtWorker']);
+            } else {
+                $result = OrderStatus::_sysAssignDone($order, ['OrderExtFlag', 'OrderExtWorker']);
             }
-//            Yii::$app->cache->delete(self::ORDER_ASSIGN_WORKER_LOCK.'_ORDER_'.$order_id);
-//            Yii::$app->cache->delete(self::ORDER_ASSIGN_WORKER_LOCK.'_WORKER_'.$worker['id']);
-//        }
-        return ['status'=>$result,'error'=>$error];
+        }
+        return ['status'=>$result,'errors'=>$order->errors];
     }
 
     /**
@@ -482,7 +474,7 @@ class Order extends OrderModel
      */
     public function getOrderChannelList($channel_id = 0)
     {
-        $list = FinanceOrderChannel::get_order_channel_list_info();
+        $list = FinanceOrderChannel::get_order_channel_list();
         $channel = ArrayHelper::map($list, 'id', 'finance_order_channel_name');
         return $channel_id == 0 ? $channel : (isset($channel[$channel_id]) ? $channel[$channel_id] : false);
     }
