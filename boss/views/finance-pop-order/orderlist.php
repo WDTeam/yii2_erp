@@ -200,7 +200,7 @@ $items = [
 'label'=>'<i class="glyphicon glyphicon-king"></i> 充值对账',
 'content'=>'',
 'active'=>false,
-'url' => ['finance-pop-order/generalpaylist']
+'url' => ['finance-pop-order/generalpaylist?id='.$id]
 ]
 ];
     echo TabsX::widget([
