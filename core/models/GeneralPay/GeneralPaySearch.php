@@ -83,4 +83,47 @@ class GeneralPaySearch extends GeneralPay
 
         return $dataProvider;
     }
+    
+    
+    
+    public  $finance_record_log_statime; 
+    public  $finance_record_log_endtime;
+    
+    public function searchpaylist()
+    {
+    	$query = GeneralPay::find();
+    
+    	$dataProvider = new ActiveDataProvider([
+    			'query' => $query,
+    			]);
+    	$query->andFilterWhere([
+    			'id' => $this->id,
+    			'customer_id' => $this->customer_id,
+    			'order_id' => $this->order_id,
+    			'general_pay_money' => $this->general_pay_money,
+    			'general_pay_actual_money' => $this->general_pay_actual_money,
+    			'general_pay_source' => $this->general_pay_source,
+    			'general_pay_mode' => $this->general_pay_mode,
+    			'general_pay_status' => $this->general_pay_status,
+    			'general_pay_is_coupon' => $this->general_pay_is_coupon,
+    			'admin_id' => $this->admin_id,
+    			'worker_id' => $this->worker_id,
+    			'handle_admin_id' => $this->handle_admin_id,
+    			'updated_at' => $this->updated_at
+    			]);
+    
+    	$query->andFilterWhere(['like', 'general_pay_source_name', $this->general_pay_source_name])
+    	->andFilterWhere(['like', 'general_pay_transaction_id', $this->general_pay_transaction_id])
+    	->andFilterWhere(['between', 'created_at', $this->finance_record_log_statime,$this->finance_record_log_endtime])
+    	->andFilterWhere(['not in', 'general_pay_transaction_id', $this->general_pay_transaction_id])
+    	->andFilterWhere(['like', 'general_pay_eo_order_id', $this->general_pay_eo_order_id])
+    	->andFilterWhere(['like', 'general_pay_memo', $this->general_pay_memo])
+    	->andFilterWhere(['like', 'general_pay_admin_name', $this->general_pay_admin_name])
+    	->andFilterWhere(['like', 'general_pay_handle_admin_name', $this->general_pay_handle_admin_name])
+    	->andFilterWhere(['like', 'general_pay_verify', $this->general_pay_verify]);
+    
+    	return $dataProvider;
+    } 
+    
+    
 }

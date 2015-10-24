@@ -163,4 +163,6 @@ class Coupon extends \common\models\coupon\Coupon
         return Coupon::find()->select('coupon_name,coupon_price,coupon_type_name,coupon_service_type_id,coupon_service_type_name,coupon_service_id,coupon_service_name')->where(["id" => $coupon_id,"coupon_city_name" => $city_name])->asArray()->all();
     }
 
+	
+
 }

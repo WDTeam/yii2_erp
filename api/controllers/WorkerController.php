@@ -1209,7 +1209,19 @@ class WorkerController extends \api\components\Controller
 /**
  * 删除阿姨消息
  */
-    
+
+/**
+ * 查看该阿姨所有未交罚款记录
+ */
+
+/**
+ * 获得该阿姨所有未领取任务奖励记录
+ */
+
+/**
+ * 获得所有该阿姨已经完成未对账订单
+ */
+
     
 
 ?>

@@ -26,35 +26,35 @@ if($workerBlockModel!==null){
     $workerBlockModel->worker_block_status = 1;
 }
 if($worker->worker_auth_status==0){
-    if($workerAuthModel->worker_auth_status==0){
-        $currentAuthState= '审核中';
-    }elseif($workerAuthModel->worker_auth_status==2){
-        $currentAuthState = '审核不通过';
-    }
+if($workerAuthModel->worker_auth_status==0){
+    $currentAuthState= '审核中';
+}elseif($workerAuthModel->worker_auth_status==2){
+    $currentAuthState = '审核不通过';
+}
 }elseif($worker->worker_auth_status==1){
-    if($workerAuthModel->worker_basic_training_status==0){
-        $currentAuthState= '基础培训中';
-    }elseif($workerAuthModel->worker_basic_training_status==2){
-        $currentAuthState = '基础培训不通过';
-    }
+if($workerAuthModel->worker_basic_training_status==0){
+    $currentAuthState= '基础培训中';
+}elseif($workerAuthModel->worker_basic_training_status==2){
+    $currentAuthState = '基础培训不通过';
+}
 }elseif($worker->worker_auth_status==2){
-    if($workerAuthModel->worker_ontrial_status==0){
-        $currentAuthState= '试工中';
-    }elseif($workerAuthModel->worker_ontrial_status=2){
-        $currentAuthState = '试工不通过';
-    }
+if($workerAuthModel->worker_ontrial_status==0){
+    $currentAuthState= '试工中';
+}elseif($workerAuthModel->worker_ontrial_status=2){
+    $currentAuthState = '试工不通过';
+}
 }elseif($worker->worker_auth_status==3){
-    if($workerAuthModel->worker_onboard_status==0){
-        $currentAuthState= '上岗中';
-    }elseif($workerAuthModel->worker_onboard_status==2){
-        $currentAuthState = '上岗不通过';
-    }
+if($workerAuthModel->worker_onboard_status==0){
+    $currentAuthState= '上岗中';
+}elseif($workerAuthModel->worker_onboard_status==2){
+    $currentAuthState = '上岗不通过';
+}
 }elseif($worker->worker_auth_status==4){
-    if($workerAuthModel->worker_upgrade_training_status==0){
-        $currentAuthState= '晋升培训中';
-    }elseif($workerAuthModel->worker_upgrade_training_status==2){
-        $currentAuthState = '晋升培训不通过';
-    }
+if($workerAuthModel->worker_upgrade_training_status==0){
+    $currentAuthState= '晋升培训中';
+}elseif($workerAuthModel->worker_upgrade_training_status==2){
+    $currentAuthState = '晋升培训不通过';
+}
 }elseif($worker->worker_auth_status==5){
     $currentAuthState= '已通过晋升培训';
 }

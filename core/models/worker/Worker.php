@@ -581,13 +581,13 @@ class Worker extends \common\models\Worker
             case 0:
                 return '新录入';
             case 1:
-                return '已验证';
+                return '已审核';
             case 2:
-                return '已试工';
+                return '已通过基础培训';
             case 3:
                 return '已上岗';
             case 4:
-                return '已离职';
+                return '已通过晋升培训';
         }
        /* if($worker_auth_status==1){
             return '通过';

@@ -4,6 +4,8 @@ namespace api\controllers;
 use Yii;
 use core\models\Operation\CoreOperationShopDistrictGoods;
 use core\models\Operation\CoreOperationCategory;
+use core\models\Operation\CoreOperationShopDistrictCoordinate;
+
 
 class ServiceController extends \api\components\Controller
 {
@@ -16,6 +18,7 @@ class ServiceController extends \api\components\Controller
      * @apiName actionHomeServices
      * @apiGroup service
      * @apiDescription 获取城市首页服务项目信息简介
+     *
      * @apiParam {String} city_name 城市
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
@@ -136,6 +139,7 @@ class ServiceController extends \api\components\Controller
      * @api {POST} v1/service/all-services 依据城市 获取所有服务列表 （已完成）
      * @apiName actionAllServices
      * @apiGroup service
+     * @apiDescription 获取城市所以服务类型列表
      *
      * @apiParam {String} city_name 城市
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
@@ -178,7 +182,6 @@ class ServiceController extends \api\components\Controller
      *       "code":"error",
      *       "msg": "该城市暂未开通"
      *     }
-     * @apiDescription 获取城市服务配置项价格介绍页面以及分类的全部服务项目
      */
     public function actionAllServices()
     {
@@ -232,9 +235,61 @@ class ServiceController extends \api\components\Controller
      * 依据地址 获取某项服务在某个地址从今天开始7天商圈的阿姨可服务时间表
      */
 
+
     /**
-     * 获取某城市某商品的价格备注信息
+     * @api {GET} v1/service/goods-price 获取某城市某商品的价格及备注信息（赵顺利 100%）
+     * @apiName actionGoodsPrice
+     * @apiGroup service
+     * @apiDescription 获取某城市某商品的价格及备注信息
+     *
+     * @apiParam {String} city_id 城市id
+     * @apiParam {String} longitude 经度
+     * @apiParam {String} latitude 纬度
+     * @apiParam {String} goods_id 服务品类id
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "code": "ok",
+     *      "msg": "",
+     *      "ret":
+     *      [
+     *          "goods_price": "0.0000", 价格
+     *          "goods_price_description": "1232131" 价格备注
+     *      ],
+     *  }
+     *
+     * @apiError CityNotSupportFound 错误的城市信息.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "code":"error",
+     *       "msg": "错误的城市信息"
+     *     }
      */
+    public function actionGoodsPrice()
+    {
+        $params = Yii::$app->request->get();
+        if (empty($params['longitude']) || empty($params['latitude'])) {
+            return $this->send(null, "经纬度信息不存在", "error", "403");
+        }
+        $shopDistrict = CoreOperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($params['longitude'], $params['latitude']);
+        if (empty($shopDistrict)) {
+            return $this->send(null, "没有上线商圈", "error", "403");
+        }
+        $goods = CoreOperationShopDistrictGoods::getShopDistrictGoodsInfo($params['city_id'], $shopDistrict->id, $params['goods_id']);
+        if (empty($goods)) {
+            return $this->send(null, "该商圈没有上线当前服务品类", "error", "403");
+        }
+        $ret = [
+            'goods_price' => $goods->operation_shop_district_goods_price,
+            'goods_price_description' => $goods->operation_shop_district_goods_price_description,
+        ];
+
+        return $this->send($ret, "数据获取成功", "ok");
+    }
 
     /**
      * 获得所有精品保洁项目
