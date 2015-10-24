@@ -873,7 +873,7 @@ class WorkerController extends \api\components\Controller
      *
      */
     function actionSingleWorkerTime(){
-        $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
         if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
         }
@@ -1024,7 +1024,7 @@ class WorkerController extends \api\components\Controller
      *
      */
     function actionRecursiveWorkerTime(){
-        $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
         if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
         }
