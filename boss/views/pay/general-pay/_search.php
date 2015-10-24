@@ -50,7 +50,7 @@ use kartik\widgets\Affix;
                     'allowClear' => true,
                     'minimumInputLength' => 0,
                     'ajax' => [
-                        'url' => Url::to(['general-pay/order-channel']),
+                        'url' => Url::to(['order-channel']),
                         'dataType' => 'json',
                         //'data' => new JsExpression('function(params) { return console.log(params);{q:params.term}; }')
                     ],

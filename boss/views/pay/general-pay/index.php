@@ -17,11 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'rowOptions' => function ($model, $key, $index, $grid){
-            if($model->id == 1){
-                return $layout = "{items}";
-            }
-        },
         'columns' =>
         [
             ['class' => 'yii\grid\SerialColumn'],
@@ -76,7 +71,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
         ],
-
         'responsive'=>true,
         'hover'=>true,
         'condensed'=>true,

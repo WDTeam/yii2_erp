@@ -1,6 +1,6 @@
 <?php
 
-namespace boss\controllers;
+namespace boss\controllers\pay;
 use common\models\FinanceOrderChannel;
 use common\models\pay\GeneralPayRefund;
 use boss\models\pay\GeneralPaySearch;
