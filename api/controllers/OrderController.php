@@ -544,17 +544,16 @@ class OrderController extends \api\components\Controller
         $user = CustomerAccessToken::getCustomer($token);
 
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录",0);
+            return $this->send(null, "用户无效,请先登录", 0);
         }
         $orderStatus = null;
-        if(isset($args['order_status'])){
-            $orderStatus = explode(".",$args['order_status']);
-
+        if (isset($args['order_status'])) {
+            $orderStatus = explode(".", $args['order_status']);
         }
 
         $channels = null;
-        if(isset($args['channels'])){
-            $channels = explode(".",$args['channels']);
+        if (isset($args['channels'])) {
+            $channels = explode(".", $args['channels']);
         }
 
         @$isAsc = $args['is_asc'];
@@ -569,17 +568,17 @@ class OrderController extends \api\components\Controller
         if (isset($args['page'])) {
             $page = $args['page'];
         }
-        $offset = ($page-1)*$limit;
+        $offset = ($page - 1) * $limit;
         @$from = $args['from'];
         @$to = $args['to'];
 
         $args["oc.customer_id"] = $user->id;
         $orderSearch = new \core\models\order\OrderSearch();
         $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus);
-        $orders = $orderSearch->searchOrdersWithStatus($args, $isAsc, $offset, $limit, $orderStatus, $channels,$from, $to);
+        $orders = $orderSearch->searchOrdersWithStatus($args, $isAsc, $offset, $limit, $orderStatus, $channels, $from, $to);
         $ret = [];
         $ret['limit'] = $limit;
-        $ret['page_total'] = ceil($count/$limit);
+        $ret['page_total'] = ceil($count / $limit);
         $ret['page'] = $page;
         $ret['orders'] = $orders;
         $this->send($ret, $msg = "操作成功", $code = "1", $value = 200, $text = null);
@@ -634,21 +633,21 @@ class OrderController extends \api\components\Controller
         @$token = $args["access_token"];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录",0);
+            return $this->send(null, "用户无效,请先登录", 0);
         }
         $orderStatus = null;
-        if(isset($args['order_status'])){
-            $orderStatus = explode(".",$args['order_status']);
+        if (isset($args['order_status'])) {
+            $orderStatus = explode(".", $args['order_status']);
         }
         $channels = null;
-        if(isset($args['channels'])){
-            $channels = explode(".",$args['channels']);
+        if (isset($args['channels'])) {
+            $channels = explode(".", $args['channels']);
         }
         @$from = $args['from'];
         @$to = $args['to'];
         $args["oc.customer_id"] = $user->id;
         $orderSearch = new \core\models\order\OrderSearch();
-        $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus,$channels);
+        $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus, $channels);
         $ret['count'] = $count;
         $this->send($ret, $msg = "操作成功", $code = "1", $value = 200, $text = null);
     }
@@ -712,29 +711,29 @@ class OrderController extends \api\components\Controller
         @$token = $args["access_token"];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录",0,403);
+            return $this->send(null, "用户无效,请先登录", 0, 403);
         }
         $orderStatus = null;
-        if(isset($args['order_status'])){
-            $orderStatus = explode(".",$args['order_status']);
+        if (isset($args['order_status'])) {
+            $orderStatus = explode(".", $args['order_status']);
         }
         $channels = null;
-        if(isset($args['channels'])){
-            $channels = explode(".",$args['channels']);
+        if (isset($args['channels'])) {
+            $channels = explode(".", $args['channels']);
         }
         @$from = $args['from'];
         @$to = $args['to'];
         $args["oc.customer_id"] = $user->id;
         $orderSearch = new \core\models\order\OrderSearch();
         $ret = [];
-        if(!empty($orderStatus)){
-            foreach($orderStatus as $statuStr){
-                $count = $orderSearch->searchOrdersWithStatusCount($args, array($statuStr),$channels);
-                $ret[$statuStr]=$count;
+        if (!empty($orderStatus)) {
+            foreach ($orderStatus as $statuStr) {
+                $count = $orderSearch->searchOrdersWithStatusCount($args, array($statuStr), $channels);
+                $ret[$statuStr] = $count;
             }
-        }else{
-            $count = $orderSearch->searchOrdersWithStatusCount($args,$orderStatus,$channels);
-            $ret['count']=$count;
+        } else {
+            $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus, $channels);
+            $ret['count'] = $count;
         }
         $this->send($ret, $msg = "操作成功", $code = "1", $value = 200, $text = null);
     }
@@ -810,23 +809,20 @@ class OrderController extends \api\components\Controller
     public function actionOrderStatusHistory()
     {
         $args = Yii::$app->request->get() or
-        $args = json_decode(Yii::$app->request->getRawBody(), true);
+                $args = json_decode(Yii::$app->request->getRawBody(), true);
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录","0");
+            return $this->send(null, "用户无效,请先登录", "0");
         }
         @$orderId = $args['order_id'];
-        if(!is_numeric($orderId)){
-            return $this->send(null, "该订单不存在","0");
+        if (!is_numeric($orderId)) {
+            return $this->send(null, "该订单不存在", "0");
         }
         $ret = \core\models\order\OrderStatus::searchOrderStatusHistory($orderId);
 
         $this->send($ret, $msg = "操作成功", $code = "ok", $value = 200, $text = null);
     }
-
-
-
 
     /**
      * @api {PUT} /order/cancel-order 取消订单(haojianse 100% ) 
@@ -849,6 +845,9 @@ class OrderController extends \api\components\Controller
      *     {
      *       "code": "ok",
      *       "msg": "693345订单取消成功",
+     *       "ret":{
+     *         1
+     *       }
      *     }
      *
      * @apiError UserNotFound 用户认证已经过期.
@@ -1015,6 +1014,9 @@ class OrderController extends \api\components\Controller
      *     {
      *       "code": "ok",
      *       "msg": "订单删除成功",
+     *      "ret":{
+     *         1
+     *       }
      *     }
      *
      * @apiError UserNotFound 用户认证已经过期.
@@ -1050,7 +1052,7 @@ class OrderController extends \api\components\Controller
             $orderValidation = \core\models\order\Order::validationOrderCoustomer($customer->id, $param['order_id']);
 
             if (\core\models\order\Order::customerDel($param['order_id'], 0)) {
-                return $this->send([], "删除订单成功", "ok");
+                return $this->send([1], "删除订单成功", "ok");
             } else {
                 return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
             }
