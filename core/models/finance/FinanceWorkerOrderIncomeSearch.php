@@ -7,6 +7,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\finance\FinanceWorkerOrderIncome;
 use core\models\order\Order;
+use common\models\OrderExtWorker;
 
 /**
  * FinanceWorkerOrderIncomeSearch represents the model behind the search form about `common\models\finance\FinanceWorkerOrderIncome`.
@@ -37,7 +38,7 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
     public function rules()
     {
         return [
-            [['id', 'worder_id', 'order_id', 'finance_worker_order_income_type', 'order_booked_count', 'isSettled', 'finance_settle_apply_id', 'isdel', 'updated_at', 'created_at'], 'integer'],
+            [['id', 'worker_id', 'order_id', 'finance_worker_order_income_type', 'order_booked_count', 'isSettled', 'finance_settle_apply_id', 'isdel', 'updated_at', 'created_at'], 'integer'],
             [['finance_worker_order_income'], 'number'],
         ];
     }
@@ -68,7 +69,7 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'worder_id' => $this->worder_id,
+            'worker_id' => $this->worker_id,
             'order_id' => $this->order_id,
             'finance_worker_order_income_type' => $this->finance_worker_order_income_type,
             'finance_worker_order_income' => $this->finance_worker_order_income,
@@ -84,19 +85,19 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
     }
     
     public function getOrderDataProviderFromOrder($worker_id){
-        $query = Order::find()->where(['order_booked_worker_id'=>$worker_id]);
+        $query = Order::find()->joinWith('orderExtWorker')->where(['orderExtWorker.worker_id'=>$worker_id]);
         $dataProvider = new ActiveDataProvider([ 'query' => $query,]);
         return $dataProvider;
     }
     
     public function getCashOrderDataProviderFromOrder($worker_id){
-        $query = Order::find()->where(['order_booked_worker_id'=>$worker_id]);
+        $query = Order::find()->joinWith('orderExtWorker')->where(['orderExtWorker.worker_id'=>$worker_id]);
         $dataProvider = new ActiveDataProvider([ 'query' => $query,]);
         return $dataProvider;
     }
     
     public function getNonCashOrderDataProviderFromOrder($worker_id){
-        $query = Order::find()->where(['order_booked_worker_id'=>$worker_id]);
+        $query = Order::find()->joinWith('orderExtWorker')->where(['orderExtWorker.worker_id'=>$worker_id]);
         $dataProvider = new ActiveDataProvider([ 'query' => $query,]);
         return $dataProvider;
     }

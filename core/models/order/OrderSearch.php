@@ -101,7 +101,7 @@ class OrderSearch extends Order
     }
 
     /**
-     * 是否存在冲突订单 TODO 不能用
+     * 是否存在冲突订单
      * @param $worker_id
      * @param $booked_begin_time
      * @param $booked_end_time
@@ -110,16 +110,26 @@ class OrderSearch extends Order
     public static function WorkerOrderExistsConflict($worker_id, $booked_begin_time, $booked_end_time)
     {
         return Order::find()->joinWith(['orderExtWorker'])->where(['worker_id' => $worker_id])
-            ->orWhere(
-                ['<=', 'order_booked_begin_time', $booked_begin_time],
-                ['>=', 'order_booked_end_time', $booked_begin_time]
-            )->orWhere(
-                ['<=', 'order_booked_begin_time', $booked_end_time],
-                ['>=', 'order_booked_end_time', $booked_end_time])
-            ->orWhere(
-                ['>=', 'order_booked_begin_time', $booked_begin_time],
-                ['<=', 'order_booked_end_time', $booked_end_time])
-            ->count();
+            ->andWhere(
+                ['or',
+                    [
+                        'and',
+                        ['<=', 'order_booked_begin_time', $booked_begin_time],
+                        ['>=', 'order_booked_end_time', $booked_begin_time]
+                    ],
+                    [
+                        'and',
+                        ['<=', 'order_booked_begin_time', $booked_end_time],
+                        ['>=', 'order_booked_end_time', $booked_end_time]
+                    ],
+                    [
+                        'and',
+                        ['>=', 'order_booked_begin_time', $booked_begin_time],
+                        ['<=', 'order_booked_end_time', $booked_end_time]
+                    ]
+                ]
+
+            )->count();
     }
 
     /**
@@ -180,7 +190,8 @@ class OrderSearch extends Order
     {
         $query = new \yii\db\Query();
 
-        $query->from('{{%order}} as order')->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id');
+        $query->from('{{%order}} as order')->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id');
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -195,7 +206,7 @@ class OrderSearch extends Order
         if (!is_null($order_status)) {
                 foreach($order_status as $status_str){
                     $query = $query->orFilterWhere([
-                        'orderExtStatus.order_status_dict_id' => $status_str
+                        'os.order_status_dict_id' => $status_str
                     ]);
                 }
         }
@@ -229,7 +240,7 @@ class OrderSearch extends Order
                 'order_booked_worker_id' => $this->order_booked_worker_id,
                 'checking_id' => $this->checking_id,
                 'order_pop_order_code' => $this->order_pop_order_code,
-                'customer_id' => $this->customer_id,
+                'oc.customer_id' => $attributes["OrderSearch"]["oc.customer_id"],
             ]);
             $query->andFilterWhere(['like', 'order_service_type_name', $this->order_service_type_name]
             );

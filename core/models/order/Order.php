@@ -261,21 +261,24 @@ class Order extends OrderModel
      * @param $assign_type
      * @return array
      * TODO 避免同一时间 给阿姨指派多个订单问题 需要处理
-     * TODO 判断已锁订单
      * TODO 修改阿姨接单数量
      */
     public static function assignDone($order_id, $worker, $admin_id, $assign_type)
     {
         $result = false;
-        $errors = [];
+        $error = '';
         //并发锁
 //        if(empty(Yii::$app->cache->get(self::ORDER_ASSIGN_WORKER_LOCK.'_ORDER_'.$order_id)) && empty(Yii::$app->cache->get(self::ORDER_ASSIGN_WORKER_LOCK.'_WORKER_'.$worker['id']))) {
 //            Yii::$app->cache->set(self::ORDER_ASSIGN_WORKER_LOCK . '_ORDER_' . $order_id, $order_id);
 //            Yii::$app->cache->set(self::ORDER_ASSIGN_WORKER_LOCK . '_WORKER_' . $worker['id'], $worker['id']);
             $order = OrderSearch::getOne($order_id);
-//            if(OrderSearch::WorkerOrderExistsConflict($worker['id'],$order->order_booked_begin_time,$order->order_booked_end_time)){
-//                $errors[] = '存在冲突订单';
-//            }else {
+            if($order->orderExtFlag->order_flag_lock>0 && $order->orderExtFlag->order_flag_lock!=$admin_id && time()-$order->orderExtFlag->order_flag_lock_time<Order::MANUAL_ASSIGN_lONG_TIME){
+                $error = '订单正在进行人工指派！';
+            }elseif(OrderSearch::WorkerOrderExistsConflict($worker['id'],$order->order_booked_begin_time,$order->order_booked_end_time)){
+                $error = '阿姨服务时间冲突！';
+            }elseif($order->orderExtWorker->worker_id>0){
+                $error = '订单已经指派阿姨！';
+            }else {
                 $order->order_flag_lock = 0;
                 $order->worker_id = $worker['id'];
                 $order->worker_type_id = $worker['worker_type'];
@@ -288,11 +291,11 @@ class Order extends OrderModel
                 } else {
                     $result = OrderStatus::_sysAssignDone($order, ['OrderExtFlag', 'OrderExtWorker']);
                 }
-//            }
+            }
 //            Yii::$app->cache->delete(self::ORDER_ASSIGN_WORKER_LOCK.'_ORDER_'.$order_id);
 //            Yii::$app->cache->delete(self::ORDER_ASSIGN_WORKER_LOCK.'_WORKER_'.$worker['id']);
 //        }
-        return ['status'=>$result,'errors'=>$errors];
+        return ['status'=>$result,'error'=>$error];
     }
 
     /**

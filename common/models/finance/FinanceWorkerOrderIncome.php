@@ -8,7 +8,7 @@ use Yii;
  * This is the model class for table "{{%finance_worker_order_income}}".
  *
  * @property integer $id
- * @property integer $worder_id
+ * @property integer $worker_id
  * @property integer $order_id
  * @property integer $finance_worker_order_income_type
  * @property string $finance_worker_order_income
@@ -35,8 +35,8 @@ class FinanceWorkerOrderIncome extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['worder_id', 'finance_worker_order_income_type'], 'required'],
-            [['worder_id', 'order_id', 'finance_worker_order_income_type','finance_worker_order_complete_time', 'order_booked_count', 'isSettled', 'finance_settle_apply_id', 'isdel', 'updated_at', 'created_at','finance_worker_order_income_starttime','finance_worker_order_income_endtime'], 'integer'],
+            [['worker_id', 'finance_worker_order_income_type'], 'required'],
+            [['worker_id', 'order_id', 'finance_worker_order_income_type','finance_worker_order_complete_time', 'order_booked_count', 'isSettled', 'finance_settle_apply_id', 'isdel', 'updated_at', 'created_at','finance_worker_order_income_starttime','finance_worker_order_income_endtime'], 'integer'],
             [['finance_worker_order_income'], 'number']
         ];
     }
@@ -48,7 +48,7 @@ class FinanceWorkerOrderIncome extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', '主键'),
-            'worder_id' => Yii::t('app', '阿姨编号'),
+            'worker_id' => Yii::t('app', '阿姨编号'),
             'order_id' => Yii::t('app', '订单号'),
             'finance_worker_order_income_type' => Yii::t('app', '订单类型'),
             'finance_worker_order_income' => Yii::t('app', '订单金额'),

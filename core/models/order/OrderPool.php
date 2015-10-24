@@ -55,7 +55,7 @@ class OrderPool extends Model
     public static function updateOrder($order_id,$worker_identity=0)
     {
         //把订单从订单池中移除
-        self::rem($order_id);
+        self::remOrder($order_id);
         //重新加入订单池
         self::addOrder($order_id,$worker_identity);
     }
