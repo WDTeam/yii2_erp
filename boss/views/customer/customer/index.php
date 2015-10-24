@@ -15,7 +15,7 @@ use yii\web\JsExpression;
 use yii\base\Widget;
 use yii\widgets\ActiveForm;
 
-use common\models\OrderExtCustomer;
+use common\models\order\OrderExtCustomer;
 
 use core\models\customer\CustomerAddress;
 use core\models\customer\CustomerExtBalance;
