@@ -18,5 +18,12 @@ use Yii;
  */
 class WorkerBlock extends \core\models\worker\WorkerBlock
 {
-
+    public function getDateRange(){
+        if(empty($this->worker_block_start_time) || empty($this->worker_block_finish_time)){
+            $dateRange = '';
+        }else{
+            $dateRange = date('Y-m-d',$this->worker_block_start_time).'至'.date('Y-m-d',$this->worker_block_finish_time);
+        }
+        return $dateRange;
+    }
 }

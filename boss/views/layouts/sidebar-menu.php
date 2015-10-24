@@ -278,6 +278,11 @@ echo Menu::widget(
                         'url' => ['/worker-task/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
+                    [
+                        'label' => '精品保洁管理',
+                        'url' => ['/operation-selected-service'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
                 ],
             ],
             [

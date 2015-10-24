@@ -36,6 +36,10 @@ AppAsset::addScript($this, 'js/order_search/riqi/jquery-ui-timepicker-zh-CN.js')
 $this->title = '订单管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<style>
+	span {color: #000;}
+	#m_warp .m_from table tr th {background: #f3f3f3;padding: 10px 0;}
+</style>
      <div id="m_warp">
 		  <div class="box">
 		  	 <div class="conter"> 
@@ -145,8 +149,8 @@ $this->params['breadcrumbs'][] = $this->title;
 						    
 						     <div class="m_tab">
 						       <div class="m_cek"><input type="checkbox" /></div>
-						       <table cellspacing="0" cellpadding="0" border="1">
-										<tr class="first">
+						       <table cellspacing="0" cellpadding="0">
+										<tr>
 					                    	<th style="width: 28%;">订单编号：17135929<span>服务类型</span></th>
 					                        <th>支付状态</th>
 					                        <th></th>  
@@ -154,25 +158,25 @@ $this->params['breadcrumbs'][] = $this->title;
 					                        <th class="m_colo">订单状态</th>
 					                    </tr>
 					                    <tr>
-					                    	<td>18612345678<br />
-					                    	    App下单<br />
-					                    	    2015-09-18   9:00-11:00<br />
-					                    	          北京，中国水科院南小区，9号楼130
+					                    	<td><label for="">b手机号：</label><span>18612345678</span><br />
+					                    	    <label for="">下单渠道：</label><span>App下单</span><br />
+					                    	    <label for="">下单时间：</label><span>2015-09-18   9:00-11:00</span><br />
+				                    	        <label for="">服务地址：</label><span>北京，中国水科院南小区，9号楼130</span>
 					                    	</td>
-					                        <td>18612345678<br />
-					                    	    App下单<br />
-					                    	    2015-09-18   9:00-11:00<br />
-					                    	          北京，中国水科院南小区，9号楼130
+					                        <td><label for="">手机号：</label><span>18612345678</span><br />
+					                    	    <label for="">下单渠道：</label><span>App下单</span><br />
+					                    	    <label for="">下单时间：</label><span>2015-09-18   9:00-11:00</span><br />
+				                    	        <label for="">服务地址：</label><span>北京，中国水科院南小区，9号楼130</span>
 					                    	</td>
-					                    	<td>18612345678<br />
-					                    	    App下单<br />
-					                    	    2015-09-18   9:00-11:00<br />
-					                    	          北京，中国水科院南小区，9号楼130
+					                    	<td><label for="">手机号：</label><span>18612345678</span><br />
+					                    	    <label for="">下单渠道：</label><span>App下单</span><br />
+					                    	    <label for="">下单时间：</label><span>2015-09-18   9:00-11:00</span><br />
+				                    	        <label for="">服务地址：</label><span>北京，中国水科院南小区，9号楼130</span>
 					                    	</td>
-					                    	<td>18612345678<br />
-					                    	    App下单<br />
-					                    	    2015-09-18   9:00-11:00<br />
-					                    	          北京，中国水科院南小区，9号楼130
+					                    	<td><label for="">手机号：</label><span>18612345678</span><br />
+					                    	    <label for="">下单渠道：</label><span>App下单</span><br />
+					                    	    <label for="">下单时间：</label><span>2015-09-18   9:00-11:00</span><br />
+				                    	        <label for="">服务地址：</label><span>北京，中国水科院南小区，9号楼130</span>
 					                    	</td>
 					                    	<td>
 					                    		<p><a href="###">查看订单</a></p>
