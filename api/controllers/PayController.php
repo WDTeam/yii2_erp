@@ -11,7 +11,7 @@ class PayController extends \api\components\Controller
 
 
     /**
-     * @api {POST} v1/pay/balance-pay 会员余额支付 (赵顺利0%)
+     * @api {POST} v1/pay/balance-pay 会员余额支付 (赵顺利100%)
      * @apiName actionBalancePay
      * @apiGroup Pay
      *
