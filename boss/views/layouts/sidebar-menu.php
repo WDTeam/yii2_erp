@@ -293,7 +293,7 @@ echo Menu::widget(
 						'items' => [
 							[
 								'label' => '服务卡信息管理',
-								'url' => ['server-card/index'],
+								'url' => ['operation-server-card/index'],
 								'icon' => 'fa fa-angle-right',
 							],
 							[
