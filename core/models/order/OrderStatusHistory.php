@@ -8,25 +8,23 @@
 namespace core\models\order;
 
 
+use common\models\OrderStatusDict;
 use Yii;
-use yii\base\Event;
-use yii\base\Exception;
-use yii\base\Model;
+
 class OrderStatusHistory extends \common\models\OrderStatusHistory
 {
 
     /**
-     * 在线支付完后调用修改订单状态
-     * @param $order_id int 订单id
-     * @param $admin_id int  后台管理员id 系统0 客户1
-     * @param $pay_channel_id int  支付渠道id
-     * @param $order_pay_channel_name string 支付渠道名称
-     * @param $order_pay_flow_num string 支付流水号
-     * @return bool
+     * 获取订单已支付待指派的时间
+     * @param $order_id
+     * @return array|null|\yii\db\ActiveRecord
      */
     public static function getOrderStatusHistory($order_id)
     {
-       return  self::find()->where((['order_id'=>$order_id,'order_before_status_dict_id'=>2]))->select('order_id,created_at,order_before_status_dict_id,order_status_dict_id')->one();
+       return  self::find()->where([
+           'order_id'=>$order_id,
+           'order_status_dict_id'=>OrderStatusDict::ORDER_WAIT_ASSIGN
+       ])->select('order_id,created_at,order_before_status_dict_id,order_status_dict_id')->one();
     }
 
    

@@ -46,11 +46,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'general_pay_admin_name',
             'worker_id',
             'handle_admin_id',
-            'general_pay_handle_admin_id',
+            'general_pay_handle_admin_name',
             'general_pay_verify',
             'created_at',
             'updated_at',
-            'is_del',
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],

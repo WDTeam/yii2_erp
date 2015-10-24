@@ -56,17 +56,20 @@ $this->params['breadcrumbs'][] = $this->title;
 						<?php echo $form->field($searchModel, 'order_code')->TextInput(['class' => 'm_ipu'])->label('订单编号 :', ['class' => 'm_ipone']); ?>
 						
 						<div class="m_riqi">
+						  <div class="m_fr">	
 							<label class="m_ipone">下单时间:</label>
 							<input type="text" name="datetime" class="ui_timepicker" value="" placeholder=""> 到
 							<input type="text" name="datetime" class="ui_timepicker" value="" placeholder="">
-
-							<label class="m_ipone m_iponeleft">服务时间:</label>
-
-							<input type="text" name="datetime" class="ui_timepicker" value="" placeholder="日期时间"> 到
-							<input type="text" name="datetime" class="ui_timepicker" value="" placeholder="日期时间">
+                         </div>
+						  <div class="m_fr">	
+                            <label class="m_ipone">下单时间:</label>
+							<input type="text" name="datetime" class="ui_timepicker" value="" placeholder=""> 到
+							<input type="text" name="datetime" class="ui_timepicker" value="" placeholder="">
+						   </div>
 						    <?= Html::submitButton('查询', ['class' => 'btn btn-primary']) ?>
 						</div>
 					<?php ActiveForm::end(); ?>
+					  <div class="clear"></div>
 					</div>
 						
 						<!---------------------查询开始-------------------->

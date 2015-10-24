@@ -10,8 +10,8 @@ use kartik\nav\NavX;
 use kartik\grid\GridView;
 use kartik\grid\ActionColumn;
 
-use common\models\Shop;
-use core\models\worker\Worker;
+use core\models\shop\Shop;
+use boss\models\worker\Worker;
 
 /**
  * @var yii\web\View $this
@@ -20,7 +20,6 @@ use core\models\worker\Worker;
  */
 $this->title = Yii::t('app', '阿姨管理');
 $this->params['breadcrumbs'][1] = $this->title;
-
 ?>
 <div class="worker-index">
     <div class="panel panel-info">
@@ -45,17 +44,18 @@ $this->params['breadcrumbs'][1] = $this->title;
     <?php
 
     $b =
-        Html::a('<i class="glyphicon" ></i>全部 ', ['/worker'], ['class' => 'btn '.Worker::getSearchBtnCss(0), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>待验证 '.Worker::CountWorkerStatus(0), ['index?WorkerSearch[worker_auth_status]=0'], ['class' => 'btn '.Worker::getSearchBtnCss(1), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>待试工 '.Worker::CountWorkerStatus(1), ['index?WorkerSearch[worker_auth_status]=1'], ['class' => 'btn '.Worker::getSearchBtnCss(2), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>待上岗 '.Worker::CountWorkerStatus(2), ['index?WorkerSearch[worker_auth_status]=2'], ['class' => 'btn '.Worker::getSearchBtnCss(3), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>全职 '.Worker::CountWorkerIdentity(1), ['index?WorkerSearch[worker_identity_id]=1'], ['class' => 'btn '.Worker::getSearchBtnCss(4), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>兼职 '.Worker::CountWorkerIdentity(2), ['index?WorkerSearch[worker_identity_id]=2'], ['class' => 'btn '.Worker::getSearchBtnCss(5), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>时段 '.Worker::CountWorkerIdentity(3), ['index?WorkerSearch[worker_identity_id]=3'], ['class' => 'btn '.Worker::getSearchBtnCss(6), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>高峰 '.Worker::CountWorkerIdentity(4), ['index?WorkerSearch[worker_identity_id]=4'], ['class' => 'btn '.Worker::getSearchBtnCss(7), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>请假 '.Worker::CountVacationWorker(), ['index?WorkerSearch[worker_is_vacation]=1'], ['class' => 'btn '.Worker::getSearchBtnCss(8), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>封号 '.Worker::CountBlockWorker(), ['index?WorkerSearch[worker_is_block]=1'], ['class' => 'btn '.Worker::getSearchBtnCss(9), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>黑名单 '.Worker::CountBlackListWorker(), ['index?WorkerSearch[worker_is_blacklist]=1'], ['class' => 'btn '.Worker::getSearchBtnCss(10), 'style' => 'margin-right:10px']);
+        Html::a('<i class="glyphicon" ></i>全部 ', ['/worker'], ['class' => 'btn '.Worker::setBtnCss(0), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>待审核 '.Worker::CountWorkerStatus(0), ['index?WorkerSearch[worker_auth_status]=0'], ['class' => 'btn '.Worker::setBtnCss(1), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>待试工 '.Worker::CountWorkerStatus(1), ['index?WorkerSearch[worker_auth_status]=2   '], ['class' => 'btn '.Worker::setBtnCss(2), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>待上岗 '.Worker::CountWorkerStatus(2), ['index?WorkerSearch[worker_auth_status]=3'], ['class' => 'btn '.Worker::setBtnCss(3), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>全职 '.Worker::CountWorkerIdentity(1), ['index?WorkerSearch[worker_identity_id]=1'], ['class' => 'btn '.Worker::setBtnCss(4), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>兼职 '.Worker::CountWorkerIdentity(2), ['index?WorkerSearch[worker_identity_id]=2'], ['class' => 'btn '.Worker::setBtnCss(5), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>时段 '.Worker::CountWorkerIdentity(3), ['index?WorkerSearch[worker_identity_id]=3'], ['class' => 'btn '.Worker::setBtnCss(6), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>高峰 '.Worker::CountWorkerIdentity(4), ['index?WorkerSearch[worker_identity_id]=4'], ['class' => 'btn '.Worker::setBtnCss(7), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>请假 '.Worker::CountVacationWorker(), ['index?WorkerSearch[worker_is_vacation]=1'], ['class' => 'btn '.Worker::setBtnCss(8), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>封号 '.Worker::CountBlockWorker(), ['index?WorkerSearch[worker_is_block]=1'], ['class' => 'btn '.Worker::setBtnCss(9), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>黑名单 '.Worker::CountBlackListWorker(), ['index?WorkerSearch[worker_is_blacklist]=1'], ['class' => 'btn '.Worker::setBtnCss(10), 'style' => 'margin-right:10px']).
+        Html::a('<i class="glyphicon" ></i>离职 '.Worker::CountDimissionWorker(), ['index?WorkerSearch[worker_is_dimission]=1'], ['class' => 'btn '.Worker::setBtnCss(11), 'style' => 'margin-right:10px']);
 
     ?>
     <?php
@@ -111,9 +111,11 @@ $this->params['breadcrumbs'][1] = $this->title;
                 },
                 'width' => "8%",
             ],
+            /******* 选中其他状态显示列 ********/
             [
                 'format' => 'raw',
                 'label' => '状态',
+                'hidden' => Worker::columnsIsHidden('other'),
                 'value' => function($dataProvider){
                     return Worker::getWorkerAuthStatusShow($dataProvider->worker_auth_status);
                 },
@@ -122,11 +124,72 @@ $this->params['breadcrumbs'][1] = $this->title;
             [
                 'format' => 'raw',
                 'label' => '阿姨入职时间',
+                'hidden' => Worker::columnsIsHidden('other'),
                 'value' => function ($dataProvider) {
                     return date('Y-m-d H:i', $dataProvider->created_ad);
                 },
                 'width' => "120px",
             ],
+            /******* 选中其他状态显示列 ********/
+            /****** 选中黑名单显示列 ******/
+            [
+                'format' => 'raw',
+                'hidden' => Worker::columnsIsHidden('blacklist'),
+                'label' => '状态',
+                'value' => function ($dataProvider) {
+                    return '黑名单';
+                },
+                'width' => "120px",
+            ],
+            [
+                'format' => 'raw',
+                'hidden' => Worker::columnsIsHidden('blacklist'),
+                'label' => '列入黑名单时间',
+                'value' => function ($dataProvider) {
+                    return date('Y-m-d H:i', $dataProvider->worker_blacklist_time);
+                },
+                'width' => "120px",
+            ],
+            [
+                'format' => 'raw',
+                'hidden' => Worker::columnsIsHidden('blacklist'),
+                'label' => '黑名单原因',
+                'value' => function ($dataProvider) {
+                    return $dataProvider->worker_blacklist_reason;
+                },
+                'width' => "120px",
+            ],
+            /****** 选中黑名单显示列 ******/
+            /****** 选中离职显示列 ******/
+            [
+                'format' => 'raw',
+                'hidden' => Worker::columnsIsHidden('dimission'),
+                'label' => '状态',
+                'value' => function ($dataProvider) {
+                    return '离职';
+                },
+                'width' => "120px",
+            ],
+            [
+                'format' => 'raw',
+                'hidden' => Worker::columnsIsHidden('dimission'),
+                'label' => '离职时间',
+                'value' => function ($dataProvider) {
+                    return date('Y-m-d H:i', $dataProvider->worker_dimission_time);
+                },
+                'width' => "120px",
+            ],
+            [
+                'format' => 'raw',
+                'hidden' => Worker::columnsIsHidden('dimission'),
+                'label' => '离职原因',
+                'value' => function ($dataProvider) {
+                    return $dataProvider->worker_dimission_reason;
+                },
+                'width' => "120px",
+            ],
+            /****** 选中离职显示列 ******/
+
             [
                 'class' => 'kartik\grid\ActionColumn',
                 'header' => '操作',

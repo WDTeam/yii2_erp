@@ -20,7 +20,7 @@ class GeneralPaySearch extends GeneralPay
         return [
             [['id', 'customer_id', 'order_id', 'general_pay_source', 'general_pay_mode', 'general_pay_status', 'general_pay_is_coupon', 'admin_id', 'worker_id', 'handle_admin_id', 'created_at', 'updated_at'], 'integer'],
             [['general_pay_money', 'general_pay_actual_money'], 'number'],
-            [['general_pay_source_name', 'general_pay_transaction_id', 'general_pay_eo_order_id', 'general_pay_memo', 'general_pay_admin_name', 'general_pay_handle_admin_id', 'general_pay_verify'], 'safe'],
+            [['general_pay_source_name', 'general_pay_transaction_id', 'general_pay_eo_order_id', 'general_pay_memo', 'general_pay_admin_name', 'general_pay_handle_admin_name', 'general_pay_verify'], 'safe'],
         ];
     }
 
@@ -78,7 +78,7 @@ class GeneralPaySearch extends GeneralPay
             ->andFilterWhere(['like', 'general_pay_eo_order_id', $this->general_pay_eo_order_id])
             ->andFilterWhere(['like', 'general_pay_memo', $this->general_pay_memo])
             ->andFilterWhere(['like', 'general_pay_admin_name', $this->general_pay_admin_name])
-            ->andFilterWhere(['like', 'general_pay_handle_admin_id', $this->general_pay_handle_admin_id])
+            ->andFilterWhere(['like', 'general_pay_handle_admin_name', $this->general_pay_handle_admin_name])
             ->andFilterWhere(['like', 'general_pay_verify', $this->general_pay_verify]);
 
         return $dataProvider;

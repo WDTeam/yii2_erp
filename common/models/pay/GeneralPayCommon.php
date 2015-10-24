@@ -4,7 +4,7 @@ namespace common\models\pay;
 
 use core\models\Customer;
 use core\models\CustomerTransRecord\CustomerTransRecord;
-use core\models\order\OrderStatus;
+use core\models\order\Order;
 use core\models\order\OrderSearch;
 use Yii;
 use yii\base\ErrorException;
@@ -260,8 +260,13 @@ class GeneralPayCommon extends \yii\db\ActiveRecord
          * @param $order_pay_channel_name   支付渠道名称
          * @param $order_pay_flow_num   支付流水号
          */
-        $orderChannel = FinanceOrderChannel::get_order_channel_info($attribute['general_pay_source']);
-        OrderStatus::isPaymentOnline($attribute['order_id'],0,$orderChannel['id'],$orderChannel['finance_pay_channel_name'],$attribute['general_pay_transaction_id']);
+        //验证支付金额是否一致
+        if( $attribute['general_pay_money'] == $attribute['general_pay_actual_money'] )
+        {
+            $orderChannel = FinanceOrderChannel::get_order_channel_info($attribute['general_pay_source']);
+            Order::isPaymentOnline($attribute['order_id'],0,$orderChannel['id'],$orderChannel['finance_pay_channel_name'],$attribute['general_pay_transaction_id']);
+        }
+
     }
 
     /**
@@ -367,7 +372,7 @@ class GeneralPayCommon extends \yii\db\ActiveRecord
             'general_pay_actual_money' => Yii::t('app', '实际充值/交易金额'),
             'general_pay_source' => Yii::t('app', '数据来源:1=APP微信,2=H5微信,3=APP百度钱包,4=APP银联,5=APP支付宝,6=WEB支付宝,7=HT淘宝,8=H5百度直达号,9=HT刷卡,10=HT现金,11=HT刷卡'),
             'general_pay_source_name' => Yii::t('app', '数据来源名称'),
-            'general_pay_mode' => Yii::t('app', '交易方式:1=充值,2=余额支付,3=在线支付,4=退款,5=赔偿'),
+            'general_pay_mode' => Yii::t('app', '交易方式:1=消费,2=充值,3=退款,4=补偿'),
             'general_pay_status' => Yii::t('app', '状态：0=失败,1=成功'),
             'general_pay_transaction_id' => Yii::t('app', '第三方交易流水号'),
             'general_pay_eo_order_id' => Yii::t('app', '商户ID(第三方交易)'),

@@ -14,17 +14,17 @@ use yii\data\ActiveDataProvider;
 use yii\helpers\Json;
 use boss\components\BaseAuthController;
 
-use common\models\WorkerBlock;
-use common\models\WorkerVacation;
 use common\models\WorkerBlockLog;
-use core\models\worker\Worker;
-use core\models\worker\WorkerExt;
-use core\models\worker\WorkerDistrict;
-use core\models\worker\WorkerAuth;
+use boss\models\worker\WorkerBlock;
+use boss\models\worker\WorkerVacation;
+use boss\models\worker\Worker;
+use boss\models\worker\WorkerExt;
+use boss\models\worker\WorkerDistrict;
+use boss\models\worker\WorkerAuth;
+use boss\models\worker\WorkerSchedule;
 use boss\models\worker\WorkerSearch;
 use boss\models\Operation;
 use core\models\shop\Shop;
-use core\models\worker\WorkerSchedule;
 
 
 /**
@@ -156,6 +156,25 @@ class WorkerController extends BaseAuthController
         //return Json::encode($html);
     }
 
+
+    public function actionOperateBlacklist($id){
+        $workerModel = $this->findModel($id);
+        if($workerModel->load(Yii::$app->request->post())){
+            $workerModel->worker_dimission_time = time();
+            $workerModel->save();
+
+        }
+        return $this->redirect(['auth', 'id' => $id]);
+    }
+
+    public function actionOperateDimission($id){
+        $workerModel = $this->findModel($id);
+        if($workerModel->load(Yii::$app->request->post())){
+            $workerModel->worker_blacklist_time = time();
+            $workerModel->save();
+        }
+        return $this->redirect(['auth', 'id' => $id]);
+    }
     /**
      * 录入新阿姨
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -215,11 +234,11 @@ class WorkerController extends BaseAuthController
     }
 
     public function actionAuth($id){
-        $workerAuthModel = WorkerAuth::findOne($id);
+        $workerAuthModel = WorkerAuth::findModel($id);
 
         if(Yii::$app->request->post('WorkerAuth')){
             $param = Yii::$app->request->post('WorkerAuth');
-            $workerModel = Worker::findone($id);
+            $workerModel = $this->findModel($id);
             if($workerAuthModel->load(Yii::$app->request->post()) && $workerAuthModel->save()){
                 if(isset($param['worker_auth_status']) && $param['worker_auth_status']==1){
                     $workerModel->worker_auth_status = 1;
@@ -603,7 +622,7 @@ class WorkerController extends BaseAuthController
 
     public function actionTest(){
         echo '<pre>';
-        var_dump(Worker::getWorkerDetailInfo(16351));
+        var_dump(Worker::getWorkerIds(1,1));
         die;
 
         $a = Worker::getWorkerInfo(16351);

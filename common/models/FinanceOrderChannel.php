@@ -45,8 +45,8 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
             'pay_channel_id' => Yii::t('boss', '支付渠道'),
             'finance_order_channel_name' => Yii::t('boss', '渠道名称'),
             'finance_order_channel_rate' => Yii::t('boss', '比例'),
-            'finance_order_channel_sort' => Yii::t('boss', '排序'),
-            'finance_order_channel_is_lock' => Yii::t('boss', '第三方开启'),
+            'finance_order_channel_sort' => Yii::t('boss', '支付显示'),
+            'finance_order_channel_is_lock' => Yii::t('boss', '下单显示'),
             'create_time' => Yii::t('boss', '增加时间'),
             'is_del' => Yii::t('boss', '状态'),
         ];
@@ -66,7 +66,7 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
     	return $payatainfo['finance_pay_channel_name'];
     }
     /**
-    * 获取订单渠道列表
+    * 获取订单渠道列表  支付使用
     * @date: 2015-10-9
     * @author: peak pan
     * @return:
@@ -79,13 +79,33 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
     	return json_decode($orderchannellist,true);
 	    }else{
 	    	$ordewhere['is_del']=0;
-	    	$ordewhere['finance_order_channel_is_lock']=1; //2 第三方不显示  1 第三方显示
+	    	$ordewhere['finance_order_channel_sort']=1;
 	$payatainfo=FinanceOrderChannel::find()->select('id,finance_order_channel_name')->where($ordewhere)->asArray()->all();
 	    	\Yii::$app->cache->set('orderchannellist', json_encode($payatainfo));
 	    	return $payatainfo;
 	  }
     }
     
+    /**
+     * 获取订单渠道列表  下单使用
+     * @date: 2015-10-9
+     * @author: peak pan
+     * @return:
+     **/
+    
+    public static function get_order_channel_list_info()
+    {
+    	if(\Yii::$app->cache->exists('orderchannellistinfo')){
+    		$orderchannellist= \Yii::$app->cache->get('orderchannellist');
+    		return json_decode($orderchannellist,true);
+    	}else{
+    		$ordewhere['is_del']=0;
+    		$ordewhere['finance_order_channel_is_lock']=1; //2 第三方不显示  1 第三方显示
+    		$payatainfo=FinanceOrderChannel::find()->select('id,finance_order_channel_name')->where($ordewhere)->asArray()->all();
+    		\Yii::$app->cache->set('orderchannellistinfo', json_encode($payatainfo));
+    		return $payatainfo;
+    	}
+    }
     
     
     /**
@@ -141,13 +161,12 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
     
     public static function get_order_channel_listes(){
     	$ordewhere['is_del']=0;
-    	$payatainfo=FinanceOrderChannel::find()->where($ordewhere)->asArray()->all();
+    	$payatainfo=FinanceOrderChannel::find()->where($ordewhere)->asArray()->all();   	
     	foreach ($payatainfo as $errt){
     		$tyd[]=$errt['id'];
     		$tydtui[]=$errt['finance_order_channel_name'];
     	}
     	$tyu= array_combine($tyd,$tydtui);
-    
     	return $tyu;
     }
     

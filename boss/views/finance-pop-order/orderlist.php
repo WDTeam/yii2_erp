@@ -83,8 +83,38 @@ $this->params['breadcrumbs'][] = $this->title;
      		},
      		'width' => "85px",
      		],
-     		
-     		
+     		[
+     		'format' => 'raw',
+     		'label' => '使用余额',
+     		'value' => function ($dataProvider) {
+     			return $dataProvider->order_use_acc_balance;
+     		},
+     		'width' => "85px",
+     		],
+     		[
+     		'format' => 'raw',
+     		'label' => '使用服务卡金额',
+     		'value' => function ($dataProvider) {
+     			return $dataProvider->order_use_card_money;
+     		},
+     		'width' => "85px",
+     		],
+     		[
+     		'format' => 'raw',
+     		'label' => '使用优惠卷金额',
+     		'value' => function ($dataProvider) {
+     			return $dataProvider->order_use_coupon_money;
+     		},
+     		'width' => "85px",
+     		], 
+     		[
+     		'format' => 'raw',
+     		'label' => '使用促销金额',
+     		'value' => function ($dataProvider) {
+     			return $dataProvider->order_use_promotion_money;
+     		},
+     		'width' => "85px",
+     		],
      		[
      		'format' => 'raw',
      		'label' => '使用余额',
@@ -129,7 +159,8 @@ $this->params['breadcrumbs'][] = $this->title;
      		},
      		'width' => "100px",
      		],
-            [
+     		'order_cs_memo',
+           /*  [
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
                 'update' => function ($url, $model) {
@@ -138,7 +169,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                   ]);}
 
                 ],
-            ],
+            ], */
         ],
         'responsive'=>true,
         'hover'=>true,
@@ -150,10 +181,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '. Html::encode($this->title) . ' </h3>',
             'type'=>'info',
            'before'=>
-           Html::submitButton(Yii::t('app', '批量 '), ['class' => 'btn btn-default','style' => 'margin-right:10px']),
+              /* Html::submitButton(Yii::t('app', '批量 '), ['class' => 'btn btn-default','style' => 'margin-right:10px']) */'',
 			/* 'after' => Html::a('批量审核',
 			['index'],
-			['class' => 'btn btn-default']), */
+			['class' => 'btn btn-default']), */ 
             'showFooter'=>false,
         ],
     ]);

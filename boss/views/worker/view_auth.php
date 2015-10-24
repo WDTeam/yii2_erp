@@ -14,7 +14,7 @@ use core\models\worker\WorkerStat;
  */
 $this->title = Yii::t('app', '阿姨管理');
 $this->params['breadcrumbs'][] = $this->title;
-$workerModel = new \common\models\Worker();
+$workerModel = Worker::findOne($worker_id);
 $worker = Worker::find()->select('worker_name,worker_auth_status')->where(['id'=>$worker_id])->one();
 
 $workerBlockModel = WorkerBlock::find()->where(['worker_id'=>$worker_id])->one();
@@ -26,35 +26,35 @@ if($workerBlockModel!==null){
     $workerBlockModel->worker_block_status = 1;
 }
 if($worker->worker_auth_status==0){
-    if($workerAuthModel->worker_auth_status==0){
-        $currentAuthState= '审核中';
-    }elseif($workerAuthModel->worker_auth_status==2){
-        $currentAuthState = '审核不通过';
-    }
+if($workerAuthModel->worker_auth_status==0){
+    $currentAuthState= '审核中';
+}elseif($workerAuthModel->worker_auth_status==2){
+    $currentAuthState = '审核不通过';
+}
 }elseif($worker->worker_auth_status==1){
-    if($workerAuthModel->worker_basic_training_status==0){
-        $currentAuthState= '基础培训中';
-    }elseif($workerAuthModel->worker_basic_training_status==2){
-        $currentAuthState = '基础培训不通过';
-    }
+if($workerAuthModel->worker_basic_training_status==0){
+    $currentAuthState= '基础培训中';
+}elseif($workerAuthModel->worker_basic_training_status==2){
+    $currentAuthState = '基础培训不通过';
+}
 }elseif($worker->worker_auth_status==2){
-    if($workerAuthModel->worker_ontrial_status==0){
-        $currentAuthState= '试工中';
-    }elseif($workerAuthModel->worker_ontrial_status=2){
-        $currentAuthState = '试工不通过';
-    }
+if($workerAuthModel->worker_ontrial_status==0){
+    $currentAuthState= '试工中';
+}elseif($workerAuthModel->worker_ontrial_status=2){
+    $currentAuthState = '试工不通过';
+}
 }elseif($worker->worker_auth_status==3){
-    if($workerAuthModel->worker_onboard_status==0){
-        $currentAuthState= '上岗中';
-    }elseif($workerAuthModel->worker_onboard_status==2){
-        $currentAuthState = '上岗不通过';
-    }
+if($workerAuthModel->worker_onboard_status==0){
+    $currentAuthState= '上岗中';
+}elseif($workerAuthModel->worker_onboard_status==2){
+    $currentAuthState = '上岗不通过';
+}
 }elseif($worker->worker_auth_status==4){
-    if($workerAuthModel->worker_upgrade_training_status==0){
-        $currentAuthState= '晋升培训中';
-    }elseif($workerAuthModel->worker_upgrade_training_status==2){
-        $currentAuthState = '晋升培训不通过';
-    }
+if($workerAuthModel->worker_upgrade_training_status==0){
+    $currentAuthState= '晋升培训中';
+}elseif($workerAuthModel->worker_upgrade_training_status==2){
+    $currentAuthState = '晋升培训不通过';
+}
 }elseif($worker->worker_auth_status==5){
     $currentAuthState= '已通过晋升培训';
 }
@@ -78,28 +78,28 @@ Modal::begin([
     'header' => '<h4 class="modal-title">休假操作</h4>',
     'toggleButton' => ['label' => '<i ></i>休假', 'class' => 'btn btn-success']
 ]);
-echo $this->render('create_block',['worker_id'=>$worker_id,'worker_name'=>$worker['worker_name'],'workerBlockModel'=>$workerBlockModel]);
+echo $this->render('create_vacation',['worker_id'=>$worker_id,'worker_name'=>$worker['worker_name'],'type'=>1]);
 Modal::end();
 
 Modal::begin([
     'header' => '<h4 class="modal-title">事假操作</h4>',
     'toggleButton' => ['label' => '<i ></i>事假', 'class' => 'btn btn-success']
 ]);
-echo $this->render('create_block',['worker_id'=>$worker_id,'worker_name'=>$worker['worker_name'],'workerBlockModel'=>$workerBlockModel]);
+echo $this->render('create_vacation',['worker_id'=>$worker_id,'worker_name'=>$worker['worker_name'],'type'=>2]);
 Modal::end();
 
 Modal::begin([
     'header' => '<h4 class="modal-title">黑名单操作</h4>',
     'toggleButton' => ['label' => '<i ></i>黑名单', 'class' => 'btn btn-success']
 ]);
-echo $this->render('create_block',['worker_id'=>$worker_id,'worker_name'=>$worker['worker_name'],'workerBlockModel'=>$workerBlockModel]);
+echo $this->render('operate_blacklist',['workerModel'=>$workerModel]);
 Modal::end();
 
 Modal::begin([
     'header' => '<h4 class="modal-title">离职操作</h4>',
     'toggleButton' => ['label' => '<i ></i>离职', 'class' => 'btn btn-success']
 ]);
-echo $this->render('create_block',['worker_id'=>$worker_id,'worker_name'=>$worker['worker_name'],'workerBlockModel'=>$workerBlockModel]);
+echo $this->render('operate_dimission',['workerModel'=>$workerModel]);
 Modal::end();
 
 ?>

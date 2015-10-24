@@ -40,13 +40,21 @@ use common\models\FinanceOrderChannel;
     		],
     		[
     		'format' => 'raw',
-    		'label' => '第三方显示',
+    		'label' => '支付显示',
+    		'value' => function ($dataProvider) {
+    			return $dataProvider->finance_order_channel_sort==1 ? '<font cloro:red>确定</font>':'取消';
+    		},
+    		'width' => "100px",
+    		],
+    		
+    		[
+    		'format' => 'raw',
+    		'label' => '下单显示',
     		'value' => function ($dataProvider) {
     			return $dataProvider->finance_order_channel_is_lock==1 ? '<font cloro:red>确定</font>':'取消';
     		},
     		'width' => "100px",
     		],
-     		//'finance_order_channel_sort',
     		[
     		'format' => 'raw',
     		'label' => '状态',

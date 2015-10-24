@@ -560,6 +560,19 @@ class Worker extends \common\models\Worker
         }
     }
 
+    /**
+     * 获取是否离职
+     * @param $worker_is_dimission
+     * @return string
+     */
+    public static function getWorkerIsDimissionShow($worker_is_dimission){
+        if($worker_is_dimission==1){
+            return '是';
+        }else{
+            return '否';
+        }
+    }
+
     /*
      * 获取审核状态
      */
@@ -568,13 +581,13 @@ class Worker extends \common\models\Worker
             case 0:
                 return '新录入';
             case 1:
-                return '已验证';
+                return '已审核';
             case 2:
-                return '已试工';
+                return '已通过基础培训';
             case 3:
                 return '已上岗';
             case 4:
-                return '已离职';
+                return '已通过晋升培训';
         }
        /* if($worker_auth_status==1){
             return '通过';
@@ -626,6 +639,13 @@ class Worker extends \common\models\Worker
     }
 
     /*
+     * 统计各个审核状态的阿姨数量
+     */
+    public static function CountDimissionWorker(){
+        return self::find()->where(['worker_is_dimission'=>1])->count();
+    }
+
+    /*
      * 统计请假的阿姨数量的数量
      */
     public static function CountVacationWorker(){
@@ -638,12 +658,14 @@ class Worker extends \common\models\Worker
     public static function CountWorkerIdentity($workerIdentityId){
         return self::find()->where(['worker_identity_id'=>$workerIdentityId,'isdel'=>0])->count();
     }
+
     /*
      * 统计各个审核状态的阿姨数量
      */
     public static function CountWorkerStatus($workerStatus){
         return self::find()->where(['worker_auth_status'=>$workerStatus])->count();
     }
+
 
 
     /*
@@ -676,40 +698,7 @@ class Worker extends \common\models\Worker
         return false;
     }
 
-   /*
-   * 获取阿姨首页按钮css样式class
-   * @param int $btnCate 按钮所属类型 0-10
-   * @return string 按钮css样式class   btn-success-selected(按钮被选中) or btn-success(按钮未选中)
-   */
-    public static function getSearchBtnCss($btnCate){
-        $params = Yii::$app->request->getQueryParams();
-        $workerParams = isset($params['WorkerSearch'])?$params['WorkerSearch']:[];
-        if($btnCate==0 && !isset($params['WorkerSearch'])){
-            return 'btn-success-selected';
-        }elseif($btnCate==1 && isset($workerParams['worker_auth_status']) && $workerParams['worker_auth_status']==0){
-            return 'btn-success-selected';
-        }elseif($btnCate==2 && isset($workerParams['worker_auth_status']) && $workerParams['worker_auth_status']==1){
-            return 'btn-success-selected';
-        }elseif($btnCate==3 && isset($workerParams['worker_auth_status']) && $workerParams['worker_auth_status']==2){
-            return 'btn-success-selected';
-        }elseif($btnCate==4 && array_key_exists('worker_identity_id',$workerParams) && $workerParams['worker_identity_id']==1){
-            return 'btn-success-selected';
-        }elseif($btnCate==5 && array_key_exists('worker_identity_id',$workerParams) && $workerParams['worker_identity_id']==2){
-            return 'btn-success-selected';
-        }elseif($btnCate==6 && array_key_exists('worker_identity_id',$workerParams) && $workerParams['worker_identity_id']==3){
-            return 'btn-success-selected';
-        }elseif($btnCate==7 && array_key_exists('worker_identity_id',$workerParams) && $workerParams['worker_identity_id']==4){
-            return 'btn-success-selected';
-        }elseif($btnCate==8 && array_key_exists('worker_is_vacation',$workerParams)){
-            return 'btn-success-selected';
-        }elseif($btnCate==9 && array_key_exists('worker_is_block',$workerParams)){
-            return 'btn-success-selected';
-        }elseif($btnCate==10 && array_key_exists('worker_is_blacklist',$workerParams)){
-            return 'btn-success-selected';
-        }else{
-            return 'btn-success';
-        }
-    }
+
 
     /*
      * 阿姨附属表连表方法

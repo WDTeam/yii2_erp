@@ -3,17 +3,18 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
+use boss\models\pay\GeneralPay;
 
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
  */
 
-$this->title = Yii::t('app', '支付查看列表');
+$this->title = Yii::t('app', '支付列表');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="general-pay-index">
-
+    <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
@@ -26,10 +27,19 @@ $this->params['breadcrumbs'][] = $this->title;
             'general_pay_actual_money',
             //'general_pay_source',
             'general_pay_source_name',
-            'general_pay_mode',
-            'general_pay_status',[
+            [
+                'attribute' => 'general_pay_mode',
+                'options'=>['width'=>80,],
+                "value" => function($model){
+                    return GeneralPay::$PAY_MODE[$model->general_pay_mode];
+                }
+            ],
+            [
                 'attribute' => 'general_pay_status',
-
+                'options'=>['width'=>50,],
+                "value" => function($model){
+                    return GeneralPay::$PAY_STATUS[$model->general_pay_status];
+                }
             ],
             'general_pay_transaction_id',
             'general_pay_eo_order_id',
@@ -41,15 +51,18 @@ $this->params['breadcrumbs'][] = $this->title;
             //'handle_admin_id',
             //'general_pay_handle_admin_id',
             //'general_pay_verify',
-            'created_at',[
+            [
                 'attribute' => 'created_at',
                 'format' => ['date', 'Y-m-d H:i:s'],
             ],
-            //'updated_at',
-            //'is_del',
+            [
+                'attribute' => 'updated_at',
+                'format' => ['date', 'Y-m-d H:i:s'],
+            ],
 
             [
                 'class' => 'yii\grid\ActionColumn',
+
                 'buttons' => [
                 'update' => function ($url, $model)
                 {

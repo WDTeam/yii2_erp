@@ -2,6 +2,7 @@
 
 namespace api\controllers;
 
+use core\models\order\OrderPush;
 use Faker\Provider\DateTime;
 use Yii;
 use common\models\FinanceOrderChannel;
@@ -233,33 +234,32 @@ class OrderController extends \api\components\Controller
 
         if (isset($args['address_id'])) {
             $attributes['address_id'] = $args['address_id'];
-        } elseif(isset($args['address'])) {
+        } elseif (isset($args['address'])) {
             //add address into customer and return customer id
-			$address = $args['address'];
-			$customerAddress = CommonCustomerAddress::find()->where(['customer_id'=>$user->id, 'customer_address_detail'=>$address])->one();
-			if(!empty($customerAddress)){
-				// found the address
-				$attributes['address_id'] = $customerAddress['id'];
-			}else{
-				// address not found, add new address for the customer
+            $address = $args['address'];
+            $customerAddress = CommonCustomerAddress::find()->where(['customer_id' => $user->id, 'customer_address_detail' => $address])->one();
+            if (!empty($customerAddress)) {
+                // found the address
+                $attributes['address_id'] = $customerAddress['id'];
+            } else {
+                // address not found, add new address for the customer
                 $area_name = $address;
-                if(strpos($area_name,'市')>0){
-                    $area_name = substr($area_name,strpos($area_name,'市')+strlen('市'));
+                if (strpos($area_name, '市') > 0) {
+                    $area_name = substr($area_name, strpos($area_name, '市') + strlen('市'));
                 }
-                if(strpos($area_name,'区')>0){
-                    $area_name = substr($area_name,0,strpos($area_name,'区'));
+                if (strpos($area_name, '区') > 0) {
+                    $area_name = substr($area_name, 0, strpos($area_name, '区'));
                 }
-                $model = CustomerAddress::addAddress($user->id, $area_name, $address,
-                    $args['order_customer_phone'], $args['order_customer_phone']);
-				if(!empty($model)){
+                $model = CustomerAddress::addAddress($user->id, $area_name, $address, $args['order_customer_phone'], $args['order_customer_phone']);
+                if (!empty($model)) {
                     $attributes['address_id'] = $model->id;
-                }else{
-					return $this->send(null, "地址数据不完整,请输入常用地址id或者城市,地址名（包括区）");
-				}
+                } else {
+                    return $this->send(null, "地址数据不完整,请输入常用地址id或者城市,地址名（包括区）");
+                }
             }
-        }else{
-			return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名");
-		}
+        } else {
+            return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名");
+        }
 
         if (isset($args['order_pop_order_code'])) {
             $attributes['order_pop_order_code'] = $args['order_pop_order_code'];
@@ -569,13 +569,17 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /order/cancelorder 取消订单(郝建设 100%  )
-     *
+     * @api {GET} /order/cancel-order 取消订单(郝建设 100%  )
+     * 
+     * 
+     * @apiName CancelOrder
+     * @apiGroup Order
+     * 
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      * @apiParam {String} order_cancel_reason 取消原因
-     * @apiName CancelOrder
-     * @apiGroup Order
+     * @apiParam {String} order_id 订单号
+
      *
      * @apiParam {String} recursive_order_id 周期订单
      * @apiParam {String} order_id 订单id
@@ -692,7 +696,7 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /order/addcomment 评价订单（xieyi %0）
+     * @api {GET} /order/add-comment 评价订单（xieyi %0）
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} app_version 访问源(android_4.2.2)
@@ -731,13 +735,16 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /order/hiddenorder 删除订单（郝建设 100% ）
-     *
+     * @api {GET} /order/hiden-order 删除订单（郝建设 100% ）
+     * 
+     * 
+     * @apiName HidenOrder
+     * @apiGroup Order
+     * 
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      * @apiParam {String} order_id 订单号
-     * @apiName HiddenOrder
-     * @apiGroup Order
+
      * @apiDescription  客户端删除订单，后台软删除 隐藏订单
      * @apiParam {String} order_id 订单id
      *
@@ -1200,7 +1207,7 @@ class OrderController extends \api\components\Controller
     public function actionPush($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        return Order::push($id);
+        return OrderPush::push($id);
     }
 
 }

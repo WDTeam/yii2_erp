@@ -68,10 +68,21 @@ a:hover{color:#f6a202;}
 #m_warp .box .conter .m_frist .m_kefu ul h2{width: 80px; float: left;height:30px; line-height: 30px; }
 #m_warp .box .conter .m_frist .m_kefu ul li{float: left; height:30px; line-height: 30px; }
 #m_warp .box .conter .m_frist .heading{color:#000; background-color: #fff;border: none;padding: 10px 15px;border-bottom: 1px solid rgba(0, 0, 0, 0.1);}
-#m_warp .box .conter .m_frist .heading h3{ font-family:宋体; font-size: 16px;}
+#m_warp .box .conter .m_frist .heading h3{ font-size: 16px;}
 #m_warp .m_from{padding: 10px 15px;display: block; position: relative;}
 #m_warp .m_from .m_ipu{ margin-right: 30px; padding-left: 4px;width: 175px;height: 25px;}
 #m_warp .m_riqi{margin-top: 20px;}
+#m_warp .m_riqi .m_fr{float: left;margin-right: 30px;}
+#m_warp .m_riqi .m_fr input{padding-left: 4px;}
+#m_warp .m_riqi .btn{float: right;
+background: #f6a202;
+text-align: center;
+height: 26px;
+line-height: 26px;
+font-size: 14px;
+padding: 0px 8px;
+border-radius: 3px;}
+
 #m_warp .m_riqi .m_iponeleft{margin-left: 30px;}
 #m_warp .m_riqi p,.m_from .m_daoc{ float: right; background: #f6a202;text-align: center;height: 26px;line-height: 26px;font-size: 14px; padding: 0px 5px; border-radius: 3px;}
 #m_warp .m_riqi p a,.m_from .m_daoc a{color: #fff;}
@@ -89,7 +100,7 @@ a:hover{color:#f6a202;}
 #m_warp .form-group{width: 330px;float: left;}
 
 
-#m_warp .m_tab .m_cek input,#m_warp .m_quan .m_cek input{width: 30px; height: 15px; float: left; }
+#m_warp .m_tab .m_cek input,#m_warp .m_quan .m_cek input{width: 27px; height: 15px;margin-top: 3px; float: left; }
 #m_warp .m_from table{height:100%; width:95%; background:#fff; margin-top: 20px;} 
 #m_warp .m_from table .first{ background:#F3F3F3;}
 #m_warp .m_from table .first th{ width:20%; height:30px; line-height:30px;  text-align:left; padding-left:8px; border:1px solid #E8E7E7; color:#45464B; font-size:15px;}
@@ -122,7 +133,7 @@ line-height: 30px;display: block;text-align: center;margin-top: 7px;margin-right
 
 #m_warp .m_from .m_daoc{margin-top: 10px;}
 #m_warp .m_from h6{position: absolute; right: 120px;margin-top: 15px;}
-#m_warp .m_from h6 input{width: 20px; height: 15px;}
+#m_warp .m_from h6 input{width: 20px; height: 15px;margin-top: -2px;}
 
 #m_warp .m_data{ width: 98%; margin: 20px auto;}
 #m_warp .m_data p{margin: 0 auto; width:430px;}
