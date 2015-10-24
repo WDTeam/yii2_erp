@@ -4,6 +4,7 @@ namespace api\controllers;
 use Yii;
 use \core\models\worker\Worker;
 use \core\models\worker\WorkerAccessToken;
+use \core\models\Operation\CoreOperationShopDistrictCoordinate;
 class WorkerController extends \api\components\Controller
 {
 
@@ -810,13 +811,14 @@ class WorkerController extends \api\components\Controller
     
     
     /**
-     * @api {post} /worker/single-worker-time.php  单次服务排班表(李勇80%缺少core/model支持)
+     * @api {get} /worker/single-worker-time.php  单次服务排班表(李勇90%缺少model支持)
      * @apiName SingleWorkerTime
      * @apiGroup Worker
-     * @apiDescription 帮客户下单，单次服务获取服务时间
+     * @apiDescription 单次服务获取服务时间
      * @apiParam {String} access_token    用户认证.
-     * @apiParam {String} [district_id]   商圈id
-     * @apiParam {String} [plan_time] 计划服务时长
+     * @apiParam {String} longitude     当前经度.
+     * @apiParam {String} latitude      当前纬度.
+     * @apiParam {String} plan_time 计划服务时长
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -824,26 +826,40 @@ class WorkerController extends \api\components\Controller
      *       "code": "ok",
      *       "msg": "获取单次服务排班表成功"
      *       "ret":{
-     *          "appointment": [
-     *              {
-     *                  "date_format": "10月10日",
-     *                  "date_stamp": 1444406400,
-     *                  "week": "明天",
-     *                  "have_worker": 1,
-     *                  "hour": [
-     *                      {
-     *                          "time": "08:00-10:00",
-     *                          "status": "0"
-     *                      },
-     *                      {
-     *                          "time": "18:00-20:00",
-     *                          "status": "1"
-     *                      }
-     *                  ]
-     *              }
+     *          "single_worker_time": [
+     *               {
+     *                   "date_format": "10月25日",
+     *                   "date_stamp": 1445669758,
+     *                   "week": "明天",
+     *                   "hour": [
+     *                       {
+     *                           "time": "08:00-10:00",
+     *                           "status": "0"
+     *                       },
+     *                       {
+     *                           "time": "18:00-20:00",
+     *                           "status": "1"
+     *                       }
+     *                   ]
+     *               },
+     *               {
+     *                   "date_format": "10月26日",
+     *                   "date_stamp": 1445669758,
+     *                   "week": "",
+     *                   "hour": [
+     *                       {
+     *                           "time": "08:00-10:00",
+     *                           "status": "0"
+     *                       },
+     *                       {
+     *                           "time": "18:00-20:00",
+     *                           "status": "1"
+     *                       }
+     *                   ]
+     *               },
      *          ]
      *       }
-     *     }
+     *   }
      *
      *  @apiError UserNotFound 用户认证已经过期.
      *
@@ -861,18 +877,27 @@ class WorkerController extends \api\components\Controller
         if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
         }
-        if(!isset($param['district_id'])||!$param['district_id']||!isset($param['plan_time'])||!$param['plan_time']){
+        if(!isset($param['longitude'])||!$param['longitude']||!isset($param['latitude'])||!$param['latitude']||!isset($param['plan_time'])||!$param['plan_time']){
                     return $this->send(null, "请填写服务地址或服务时长", "error", 403);
         }
-        $district_id = $param['district_id'];
+        $longitude = $param['longitude'];
+        $latitude =$param['latitude'];
         $plan_time=$param['plan_time'];
-        $appointment = array();
+        //根据经纬度获取商圈id
+        $ShopDistrictInfo=CoreOperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
+        if(empty($ShopDistrictInfo)){
+            return $this->send(null, "商圈不存在", "error", 403);
+        }else{
+            $district_id=$ShopDistrictInfo['id'];
+        }
+        //获取单次服务排班表
+        //$single_worker_time=Worker::getSingleWorkerTable($district_id,$plan_time);
+        $single_worker_time = array();
         for ($i = 1; $i <= 7; $i++) {
             $item = [
                 'date_format' => date('m月d日', strtotime('+' . $i . ' day')),
                 'date_stamp' => time(date('m月d日', strtotime('+' . $i . ' day'))),
                 'week' => $i == 1 ? '明天' : '',
-                'have_worker' => '1',
                 'hour' =>
                     [
                         ['time' => '08:00-10:00',
@@ -885,10 +910,10 @@ class WorkerController extends \api\components\Controller
                         ]
                     ]
             ];
-            $appointment[] = $item;
+            $single_worker_time[] = $item;
         }
 
-        $ret = ["appointment" => $appointment];
+        $ret = ["single_worker_time" => $single_worker_time];
         return $this->send($ret, "获取单次服务排班表成功", "ok");
     }
     
@@ -935,40 +960,57 @@ class WorkerController extends \api\components\Controller
     
     
     /**
-     * @api {get} /worker/recursive-worker-time.php  周期服务时间表(李勇80%缺少model)
+     * @api {get} /worker/recursive-worker-time.php  周期服务时间表(李勇90%缺少model)
      * @apiName actionRecursiveWorkerTime
      * @apiGroup Worker
-     * @apiDescription 帮客户下单，周期服务
+     * @apiDescription 周期服务时间表
      * @apiParam {String} access_token    用户认证.
-     * @apiParam {String} [district_id]   商圈id
-     * @apiParam {String} [worker_id]   阿姨id
-     * @apiParam {String} [plan_time] 计划服务时长
+     * @apiParam {String} longitude     当前经度.
+     * @apiParam {String} latitude      当前纬度.
+     * @apiParam {String} is_recommend  是否使用推荐阿姨（0：不是，1：是）
+     * @apiParam {String} worker_id   阿姨id.
+     * @apiParam {String} plan_time 计划服务时长.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *      "code": "ok",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      {
-     *          "selectTimeArea": "6",
-     *          "maxPlanTime": "6",
-     *          "minPlanTime": "2",
-     *          "msgStyle": "",
-     *          "alertMsg": "",
-     *          "workerTime":
-     *          [
-     *          {
-     *              "date_name": "09月13日",
-     *              "date_week": "周日",
-     *              "date_week_every": "每周日",
-     *              "date_time":
-     *     ["14:00-16:00","14:30-16:30","15:00-17:00","15:30-17:30","16:00-18:00","16:30-18:30","17:00-19:00","17:30-19:30","18:00-20:00"],
-     *              "date_name_tag": "09月13日(今天)"
-     *          }
+     *       "code": "ok",
+     *       "msg": "获取周期服务时间表成功"
+     *       "ret":{
+     *          "recursive_worker_time": [
+     *               {
+     *                   "date_format": "10月25日",
+     *                   "date_stamp": 1445669758,
+     *                   "week": "明天",
+     *                   "hour": [
+     *                       {
+     *                           "time": "08:00-10:00",
+     *                           "status": "0"
+     *                       },
+     *                       {
+     *                           "time": "18:00-20:00",
+     *                           "status": "1"
+     *                       }
+     *                   ]
+     *               },
+     *               {
+     *                   "date_format": "10月26日",
+     *                   "date_stamp": 1445669758,
+     *                   "week": "",
+     *                   "hour": [
+     *                       {
+     *                           "time": "08:00-10:00",
+     *                           "status": "0"
+     *                       },
+     *                       {
+     *                           "time": "18:00-20:00",
+     *                           "status": "1"
+     *                       }
+     *                   ]
+     *               },
      *          ]
-     *      }
-     * }
+     *       }
+     *   }
      *
      *  @apiError UserNotFound 用户认证已经过期.
      *
@@ -986,13 +1028,28 @@ class WorkerController extends \api\components\Controller
         if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
         }
-        if(!isset($param['worker_id'])||!$param['worker_id']||!isset($param['district_id'])||!$param['district_id']||!isset($param['plan_time'])||!$param['plan_time']){
-                    return $this->send(null, "请填写服务地址或服务时长或阿姨", "error", 403);
+        if(!isset($param['longitude'])||!$param['longitude']||!isset($param['latitude'])||!$param['latitude']||!isset($param['is_recommend'])||!isset($param['plan_time'])||!$param['plan_time']){
+                    return $this->send(null, "请填写服务地址或服务时长", "error", 403);
         }
-        $district_id = $param['district_id'];
+        $longitude = $param['longitude'];
+        $latitude =$param['latitude'];
+        $is_recommend=$param['is_recommend'];
         $plan_time=$param['plan_time'];
-        $worker_id=$param['worker_id'];
-        $workerTime = array();
+        if($is_recommend==1){
+            if(!isset($param['worker_id'])||!$param['worker_id']){
+                return $this->send(null,"请选择服务阿姨","error",403);
+            }else{
+                $worker_id=$param['worker_id'];
+            }
+        }
+        //根据经纬度获取商圈id
+        $ShopDistrictInfo=CoreOperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
+        if(empty($ShopDistrictInfo)){
+            return $this->send(null, "商圈不存在", "error", 403);
+        }else{
+            $district_id=$ShopDistrictInfo['id'];
+        }
+        $recursive_worker_time=array();
         for ($i = 7; $i <= 36; $i++) {
             $item = [
                 'date_name' => date('m月d日', strtotime('+' . $i . ' day')),
@@ -1011,16 +1068,9 @@ class WorkerController extends \api\components\Controller
                     ],
                 'date_name_tag'=>date('m月d日', strtotime('+' . $i . ' day')).'（今天）'
             ];
-            $workerTime[] = $item;
+            $recursive_worker_time[] = $item;
         }
-        $ret = array(
-                    "selectTimeArea" =>'6',
-                    "maxPlanTime" => '3',
-                    "minPlanTime" => '2',
-                    "msgStyle" => 'msgStyle',
-                    "alertMsg" => 'alertMsg'
-               );
-        $ret = ["workerTime" => $workerTime];
+        $ret = ["recursive_worker_time" => $recursive_worker_time];
         return $this->send($ret, "获取周期服务时间表成功", "ok");
     }
     
