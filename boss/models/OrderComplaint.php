@@ -5,7 +5,7 @@ namespace boss\models;
 use Yii;
 
 /**
- * This is the model class for table "ejj_complaint_order".
+ * This is the model class for table "ejj_order_complaint".
  *
  * @property integer $id
  * @property integer $order_id
@@ -17,14 +17,14 @@ use Yii;
  * @property string $complaint_content
  * @property integer $complaint_time
  */
-class ComplaintOrder extends \yii\db\ActiveRecord
+class OrderComplaint extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'ejj_complaint_order';
+        return 'ejj_order_complaint';
     }
 
     /**

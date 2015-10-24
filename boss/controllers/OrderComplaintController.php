@@ -3,16 +3,15 @@
 namespace boss\controllers;
 
 use Yii;
-use boss\models\ComplaintOrder;
-use boss\models\ComplaintOrderSearch;
+use boss\models\OrderComplaint;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * ComplaintOrderController implements the CRUD actions for ComplaintOrder model.
+ * OrderComplaintController implements the CRUD actions for OrderComplaint model.
  */
-class ComplaintOrderController extends BaseAuthController
+class OrderComplaintController extends BaseAuthController
 {
     public function behaviors()
     {
@@ -27,23 +26,18 @@ class ComplaintOrderController extends BaseAuthController
     }
 
     /**
-     * Lists all ComplaintOrder models.
+     * Lists all OrderComplaint models.
      * @return mixed
      */
     public function actionIndex()
     {   
-        $searchModel = new ComplaintOrderSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-		
+    	
         return $this->render("index");
-        /* return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]); */
+        
     }
 public function actionAdd(){
-	$model = new ComplaintOrder();
-    	$arr = array('ComplaintOrder'=>array(
+	$model = new OrderComplaint();
+    	$arr = array('OrderComplaint'=>array(
     			'order_id'=>'1234',
     			'worker_id'=>'123123',
     			'complaint_type'=>'1',
@@ -59,7 +53,7 @@ public function actionAdd(){
     }
 
     /**
-     * Displays a single ComplaintOrder model.
+     * Displays a single OrderComplaint model.
      * @param integer $id
      * @return mixed
      */
@@ -71,13 +65,13 @@ public function actionAdd(){
     }
 
     /**
-     * Creates a new ComplaintOrder model.
+     * Creates a new OrderComplaint model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new ComplaintOrder();
+        $model = new OrderComplaint();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -89,7 +83,7 @@ public function actionAdd(){
     }
 
     /**
-     * Updates an existing ComplaintOrder model.
+     * Updates an existing OrderComplaint model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -108,7 +102,7 @@ public function actionAdd(){
     }
 
     /**
-     * Deletes an existing ComplaintOrder model.
+     * Deletes an existing OrderComplaint model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -121,15 +115,15 @@ public function actionAdd(){
     }
 
     /**
-     * Finds the ComplaintOrder model based on its primary key value.
+     * Finds the OrderComplaint model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return ComplaintOrder the loaded model
+     * @return OrderComplaint the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = ComplaintOrder::findOne($id)) !== null) {
+        if (($model = OrderComplaint::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

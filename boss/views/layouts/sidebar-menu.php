@@ -125,8 +125,8 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                 	[
-                		'label' => '投诉订单(30%)',
-                		'url' => ['/complaint-order'],
+                		'label' => '订单投诉(30%)',
+                		'url' => ['/order-complaint'],
                 		'icon' => 'fa fa-angle-right',
                 	],
                 ],
