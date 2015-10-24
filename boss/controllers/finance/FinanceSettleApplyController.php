@@ -170,10 +170,10 @@ class FinanceSettleApplyController extends BaseAuthController
     public function actionReviewFailedReason(){
         $searchModel = new FinanceSettleApplySearch;
         $requestParams = Yii::$app->request->getQueryParams();
+        $searchModel = $searchModel->find()->where(['id'=>$requestParams['id']])->one();
         $settle_type = $requestParams['settle_type'];
         $searchModel->settle_type = $settle_type;
         $searchModel->review_section = $requestParams['review_section'];
-        $searchModel->id = $requestParams['id'];
         return $this->renderAjax('reviewFailedReason', [
             'model' => $searchModel,
         ]);
@@ -454,9 +454,9 @@ class FinanceSettleApplyController extends BaseAuthController
     *   按收入类型分组的订单总金额，保存到结算表
     */
     public function actionSelfPartTimeWorkerCycleSettlement(){
-        $settleStartTime = date('Y-m-d 00:00:00', strtotime('-1 week last monday'));;//统计开始时间,上周第一天
+        $settleStartTime = FinanceSettleApplySearch::getFirstDayOfLastWeek();//统计开始时间,上周第一天
         echo $settleStartTime.'------';
-        $settleEndTime = date('Y-m-d 23:59:59', strtotime('last sunday'));//统计结束时间,上周最后一天
+        $settleEndTime = FinanceSettleApplySearch::getLastDayOfLastWeek();//统计结束时间,上周最后一天
         echo $settleEndTime.'------';
         //获取阿姨的数组信息
         $partimeWorkerArr = array(['worker_id'=>'555','worker_name'=>'阿姨1','worker_idcard'=>'4210241983','worker_bank_card'=>'62217978'],['worker_id'=>'666','worker_name'=>'阿姨2','worker_idcard'=>'4210241984','worker_bank_card'=>'622174747']);
@@ -473,9 +473,9 @@ class FinanceSettleApplyController extends BaseAuthController
     *   按收入类型分组的订单总金额，保存到结算表
     */
     public function actionSelfFullTimeWorkerCycleSettlement(){
-        $settleStartTime = $this->getFirstDayOfSpecifiedMonth();//统计开始时间,上个月的第一天
+        $settleStartTime = FinanceSettleApplySearch::getFirstDayOfSpecifiedMonth();//统计开始时间,上个月的第一天
         echo date('Y-m-01 00:00:00', strtotime('-1 month')).'------';
-        $settleEndTime = $this->getLastDayOfSpecifiedMonth();//统计结束时间,上个月的最后一天
+        $settleEndTime = FinanceSettleApplySearch::getLastDayOfSpecifiedMonth();//统计结束时间,上个月的最后一天
         echo date('Y-m-t 23:59:59', strtotime('-1 month')).'------';
         //获取所有"自营全职"得阿姨的Id列表,不考虑以下状态：拉黑、封号、离职、请假、休假
         $partimeWorkerArr = array(['worker_id'=>'555','worker_name'=>'阿姨1','worker_idcard'=>'4210241983','worker_bank_card'=>'62217978'],['worker_id'=>'666','worker_name'=>'阿姨2','worker_idcard'=>'4210241984','worker_bank_card'=>'622174747']);
@@ -483,26 +483,7 @@ class FinanceSettleApplyController extends BaseAuthController
     }
     
     
-    /**
-     * 获取指定月份的第一天
-     * @return type
-     */
-    private function getFirstDayOfSpecifiedMonth($yearAndMonth = null){
-        if($yearAndMonth == null){
-            $yearAndMonth = date('Y-m', strtotime('-1 month'));
-        }
-        return strtotime(date('Y-m-01 00:00:00', strtotime($yearAndMonth)));
-    }
     
-    /**
-     * 获取指定月份的最后一天
-     */
-    private function getLastDayOfSpecifiedMonth($yearAndMonth = null){
-        if($yearAndMonth == null){
-            $yearAndMonth = date('Y-m', strtotime('-1 month'));
-        }
-        return strtotime(date('Y-m-t 23:59:59', strtotime($yearAndMonth)));
-    }
     
     private function saveAndGenerateSettleData($workerArr,$settleStartTime,$settleEndTime){
         $financeSettleApplySearch = new FinanceSettleApplySearch();
