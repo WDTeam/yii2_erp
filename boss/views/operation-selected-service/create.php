@@ -7,7 +7,7 @@ use yii\helpers\Html;
  * @var boss\models\Operation\OperationGoods $model
  */
 
-$this->title = Yii::t('app', 'Create').Yii::t('app', 'Goods');
+$this->title = Yii::t('app', 'Create').Yii::t('app', 'Operation Selected Service');
 //$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Goods'), 'url' => ['/operation-create']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
