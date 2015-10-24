@@ -11,27 +11,19 @@ class PayController extends \api\components\Controller
 
 
     /**
-     * @api {POST} v1/pay/balance-pay 会员余额支付 (赵顺利0%)
+     * @api {POST} v1/pay/balance-pay 会员余额支付 (赵顺利100%)
      * @apiName actionBalancePay
      * @apiGroup Pay
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam integer pay_money 支付金额
      * @apiParam {String} order_id    订单ID.
-     * @apiParam {String} money 支付金额.
-     * @apiParam {String} telephone 用户电话.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
      *      "code": "ok",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      {
-     *          "msgStyle":"toast",
-     *          "alertMsg":"\u8ba2\u5355\u5df2\u7ecf\u652f\u4ed8\u8fc7,\u8bf7\u52ff\u91cd\u590d\u63d0\u4ea4"
-     *      }
+     *      "msg":"支付成功",
      * }
      *
      * @apiError SessionIdNotFound 未找到会话ID.
@@ -40,19 +32,36 @@ class PayController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"Failed",
-     *      "msg": "SessionIdNotFound"
+     *      "code":"error",
+     *      "msg": "支付失败"
      *  }
      *
      */
     public function actionBalancePay()
     {
+        $params = Yii::$app->request->post() or
+        $params = json_decode(Yii::$app->request->rawBody, true);
 
+        if (empty($params['access_token']) || !CustomerAccessToken::checkAccessToken($params['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
+        $customer = CustomerAccessToken::getCustomer($params['access_token']);
+        $date=[
+            'customer_id'=>$customer->id,
+            'order_id'=>$params['order_id'],
+        ];
+
+        if(empty(GeneralPay::balancePay($date)))
+        {
+            return $this->send(null, "支付失败", "error", 403);
+        }
+
+        return $this->send(null, "支付成功", "ok");
     }
 
 
     /**
-     * @api {post} v1/pay/online-pay 在线支付接口 （已完成）
+     * @api {POST} v1/pay/online-pay 在线支付接口 （已完成）
      * @apiName actionOnlinePay
      * @apiGroup Pay
      *
@@ -148,8 +157,8 @@ class PayController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"Failed",
-     *      "msg": "SessionIdNotFound"
+     *      "code":"error",
+     *      "msg": "支付失败"
      *  }
      *
      */

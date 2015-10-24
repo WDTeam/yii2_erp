@@ -39,8 +39,10 @@ use kartik\widgets\Affix;
 
         <div class="col-md-2">
 
-            <?php echo $form->field($model, 'general_pay_source')->widget(Select2::classname(),[
-                'initValueText' => '', // set the initial display text
+            <?php
+                $name = \common\models\FinanceOrderChannel::getOrderChannelByName($model->general_pay_source);
+                echo $form->field($model, 'general_pay_source')->widget(Select2::classname(),[
+                'initValueText' => $name, // set the initial display text
                 'attribute'=>'general_pay_source',
                 'model'=>$model,
                 'options' => ['placeholder' => '请选择数据来源 ...'],
@@ -50,28 +52,28 @@ use kartik\widgets\Affix;
                     'ajax' => [
                         'url' => Url::to(['general-pay/order-channel']),
                         'dataType' => 'json',
-                        'data' => new JsExpression('function(params) { return {q:params.term}; }')
+                        //'data' => new JsExpression('function(params) { return console.log(params);{q:params.term}; }')
                     ],
-                    'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-                    'templateResult' => new JsExpression('function(model) { return model.finance_order_channel_name; }'),
-                    'templateSelection' => new JsExpression('function (model) { return model.finance_order_channel_name; }')
+                    //'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                    //'templateResult' => new JsExpression('function(model) { return model.finance_order_channel_name; }'),
+                    //'templateSelection' => new JsExpression('function (model) { return model.finance_order_channel_name; }')
                 ]
             ]);?>
 
         </div>
 
         <div class="col-md-2">
-            <label class="control-label" for="generalpaysearch-general_pay_source_name">交易方式</label>
-            <?php echo Select2::widget([
-                'initValueText' => '请选择', // set the initial display text
+            <?php echo $form->field($model, 'general_pay_mode')->widget(Select2::classname(),[
+                'initValueText' => '', // set the initial display text
                 'attribute'=>'general_pay_mode',
                 'model'=>$model,
                 'options' => ['placeholder' => '请选择交易方式 ...'],
                 'data' => \boss\models\pay\GeneralPay::$PAY_MODE,
                 'pluginOptions' => [
                     'allowClear' => true
-                ],
+                ]
             ]);?>
+
 
         </div>
 

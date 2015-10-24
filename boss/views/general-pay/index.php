@@ -17,9 +17,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'columns' => [
+        'rowOptions' => function ($model, $key, $index, $grid){
+            if($model->id == 1){
+                return $layout = "{items}";
+            }
+        },
+        'columns' =>
+        [
             ['class' => 'yii\grid\SerialColumn'],
-
             'id',
             'customer_id',
             'order_id',
@@ -59,25 +64,23 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'updated_at',
                 'format' => ['date', 'Y-m-d H:i:s'],
             ],
-
             [
                 'class' => 'yii\grid\ActionColumn',
-
                 'buttons' => [
-                'update' => function ($url, $model)
-                {
-                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>',Yii::$app->urlManager->createUrl(['general-pay/view','id' => $model->id,'edit'=>'t']),
-                        ['title' => Yii::t('yii', 'Edit'),]);
-                }
-
+                    'update' => function ($url, $model)
+                    {
+                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>',Yii::$app->urlManager->createUrl(['general-pay/view','id' => $model->id,'edit'=>'t']),
+                            ['title' => Yii::t('yii', 'Edit'),]);
+                    }
                 ],
             ],
+
         ],
+
         'responsive'=>true,
         'hover'=>true,
         'condensed'=>true,
         'floatHeader'=>true,
-
         'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type'=>'info',

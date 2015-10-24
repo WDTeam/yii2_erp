@@ -190,7 +190,8 @@ class OrderSearch extends Order
     {
         $query = new \yii\db\Query();
 
-        $query->from('{{%order}} as order')->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id');
+        $query->from('{{%order}} as order')->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id');
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -205,7 +206,7 @@ class OrderSearch extends Order
         if (!is_null($order_status)) {
                 foreach($order_status as $status_str){
                     $query = $query->orFilterWhere([
-                        'orderExtStatus.order_status_dict_id' => $status_str
+                        'os.order_status_dict_id' => $status_str
                     ]);
                 }
         }
@@ -239,7 +240,7 @@ class OrderSearch extends Order
                 'order_booked_worker_id' => $this->order_booked_worker_id,
                 'checking_id' => $this->checking_id,
                 'order_pop_order_code' => $this->order_pop_order_code,
-                'customer_id' => $this->customer_id,
+                'oc.customer_id' => $attributes["OrderSearch"]["oc.customer_id"],
             ]);
             $query->andFilterWhere(['like', 'order_service_type_name', $this->order_service_type_name]
             );

@@ -14,10 +14,10 @@ class ServiceController extends \api\components\Controller
      */
 
     /**
-     * @api {POST} v1/service/home-services 依据城市 获取首页服务列表 （赵顺利 20% 假数据，未与boss关联）
+     * @api {GET} v1/service/home-services 依据城市 获取全部服务列表 （赵顺利 20% 假数据，未与boss关联）
      * @apiName actionHomeServices
      * @apiGroup service
-     * @apiDescription 获取城市首页服务项目信息简介
+     * @apiDescription 获取城市更多服务项目信息简介
      *
      * @apiParam {String} city_name 城市
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
@@ -82,8 +82,7 @@ class ServiceController extends \api\components\Controller
      */
     public function actionHomeServices()
     {
-        $param = Yii::$app->request->post() or
-        $param = json_decode(Yii::$app->request->getRawBody(), true);
+        $param = Yii::$app->request->get();
 
         if (empty(@$param['city_name'])) {
             return $this->send(null, "未取得城市信息", "error", "403");
@@ -136,7 +135,7 @@ class ServiceController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} v1/service/all-services 依据城市 获取所有服务列表 （已完成）
+     * @api {GET} v1/service/all-services 依据城市 获取所有服务列表 （已完成）
      * @apiName actionAllServices
      * @apiGroup service
      * @apiDescription 获取城市所以服务类型列表
@@ -185,8 +184,7 @@ class ServiceController extends \api\components\Controller
      */
     public function actionAllServices()
     {
-        $param = Yii::$app->request->post() or
-        $param = json_decode(Yii::$app->request->getRawBody(), true);
+        $param = Yii::$app->request->get();
 
         if (empty(@$param['city_name'])) {
             return $this->send(null, "未取得城市信息", "error", "403");
@@ -256,7 +254,6 @@ class ServiceController extends \api\components\Controller
      *      "ret":
      *      [
      *          "goods_price": "0.0000", 价格
-     *          "goods_price_description": "1232131" 价格备注
      *      ],
      *  }
      *
@@ -272,6 +269,7 @@ class ServiceController extends \api\components\Controller
     public function actionGoodsPrice()
     {
         $params = Yii::$app->request->get();
+
         if (empty($params['longitude']) || empty($params['latitude'])) {
             return $this->send(null, "经纬度信息不存在", "error", "403");
         }
@@ -279,13 +277,14 @@ class ServiceController extends \api\components\Controller
         if (empty($shopDistrict)) {
             return $this->send(null, "没有上线商圈", "error", "403");
         }
-        $goods = CoreOperationShopDistrictGoods::getShopDistrictGoodsInfo($params['city_id'], $shopDistrict->id, $params['goods_id']);
+        $goods = CoreOperationShopDistrictGoods::getShopDistrictGoodsInfo($params['city_id'], $shopDistrict['operation_shop_district_id'], $params['goods_id']);
+
         if (empty($goods)) {
             return $this->send(null, "该商圈没有上线当前服务品类", "error", "403");
         }
+
         $ret = [
-            'goods_price' => $goods->operation_shop_district_goods_price,
-            'goods_price_description' => $goods->operation_shop_district_goods_price_description,
+            'goods_price' => $goods['operation_shop_district_goods_price'],
         ];
 
         return $this->send($ret, "数据获取成功", "ok");

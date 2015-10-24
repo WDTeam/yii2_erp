@@ -10,7 +10,7 @@ use \core\models\customer\CustomerAccessToken;
 class ConfigureController extends \api\components\Controller
 {
     /**
-     * @api {POST} /configure/all-services 城市服务初始化 （已完成）
+     * @api {GET} /configure/all-services 城市服务初始化 （已完成）
      * @apiName actionAllServices
      * @apiGroup configure
      *
@@ -59,8 +59,7 @@ class ConfigureController extends \api\components\Controller
      */
     public function actionAllServices()
     {
-        $param = Yii::$app->request->post() or
-        $param = json_decode(Yii::$app->request->getRawBody(), true);
+        $param = Yii::$app->request->get();
 
         if (empty(@$param['city_name'])) {
             return $this->send(null, "未取得城市信息", "error", "403");
@@ -106,7 +105,7 @@ class ConfigureController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} v1/configure/user-init 用户端首页初始化 （赵顺利20% 假数据）
+     * @api {GET} v1/configure/user-init 用户端首页初始化 （赵顺利20% 假数据）
      * @apiName actionUserInit
      * @apiGroup configure
      * @apiDescription 获得开通城市列表，广告轮播图 等初始化数据
@@ -234,8 +233,7 @@ class ConfigureController extends \api\components\Controller
      */
     public function actionUserInit()
     {
-        $param = Yii::$app->request->post() or
-        $param = json_decode(Yii::$app->request->getRawBody(), true);
+        $param = Yii::$app->request->get();
 
         if (empty(@$param['city_name'])) {
             return $this->send(null, "未取得城市信息", "error", "403");
