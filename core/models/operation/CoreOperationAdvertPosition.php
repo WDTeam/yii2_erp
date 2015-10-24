@@ -1,9 +1,9 @@
 <?php
 
-namespace core\models\Operation;
+namespace core\models\operation;
 
 use Yii;
-use common\models\Operation\CommonOperationAdvertPosition;
+use common\models\operation\CommonOperationAdvertPosition;
 /**
  * This is the model class for table "{{%operation_advert_position}}".
  *

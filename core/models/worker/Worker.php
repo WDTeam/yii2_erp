@@ -4,7 +4,6 @@ namespace core\models\worker;
 
 
 use boss\models\worker\WorkerSchedule;
-use core\models\Operation\CoreOperationArea;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\ForbiddenHttpException;
@@ -17,11 +16,10 @@ use core\models\worker\WorkerStat;
 use core\models\worker\WorkerExt;
 use core\models\worker\WorkerIdentityConfig;
 use core\models\worker\WorkerRuleConfig;
-use core\models\Operation\CoreOperationShopDistrict;
-use core\models\Operation\CoreOperationCity;
+use core\models\operation\CoreOperationShopDistrict;
+use core\models\operation\CoreOperationCity;
+use core\models\operation\CoreOperationArea;
 use core\models\shop\Shop;
-use boss\models\Operation\OperationCity;
-use boss\models\Operation\OperationShopDistrict;
 use crazyfd\qiniu\Qiniu;
 
 /**
@@ -259,7 +257,7 @@ class Worker extends \common\models\worker\Worker
 
     public static function getWorkerTimeLine($district_id,$time){
         $districtWorkerResult = self::getDistrictAllWorker($district_id);
-
+        return $districtWorkerResult;
     }
 
 
@@ -269,7 +267,7 @@ class Worker extends \common\models\worker\Worker
      * @param array $filterCondition 阿姨筛选条件
      * @return array 阿姨列表
      */
-     public static function getDistrictAllWorker($district_id,$filterCondition=[]){
+     protected static function getDistrictAllWorker($district_id,$filterCondition=[]){
          if(empty($districtId) || !is_array($filterCondition)){
              return [];
          }
@@ -391,8 +389,7 @@ class Worker extends \common\models\worker\Worker
      * @return array [city_id=>city_name,...]
      */
     public static function getOnlineCityList(){
-        $onlineCityList = OperationCity::getCityOnlineInfoList();
-        //$onlineCityList= CoreOperationCity::find()->select('city_id,city_name')->asArray()->all();
+        $onlineCityList = CoreOperationCity::getCityOnlineInfoList();
         return $onlineCityList?ArrayHelper::map($onlineCityList,'city_id','city_name'):[];
     }
 
@@ -424,7 +421,6 @@ class Worker extends \common\models\worker\Worker
      */
     public static function getDistrictList(){
         $districtList = OperationShopDistrict::getCityShopDistrictList();
-        //$districtList = CoreOperationShopDistrict::find()->select('id,operation_shop_district_name')->asArray()->all();
         return $districtList?ArrayHelper::map($districtList,'id','operation_shop_district_name'):[];
     }
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace core\models\Operation;
+namespace core\models\operation;
 
 use Yii;
-use common\models\Operation\CommonOperationArea;
+use common\models\operation\CommonOperationArea;
 
 /**
  * This is the model class for table "{{%operation_area}}".

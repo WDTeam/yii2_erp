@@ -1,7 +1,7 @@
 <?php
-namespace core\models\Operation;
+namespace core\models\operation;
 use Yii;
-use common\models\Operation\CommonOperationBootPageCity;
+use common\models\operation\CommonOperationBootPageCity;
 
 /**
  * This is the model class for table "{{%operation_boot_page_city}}".

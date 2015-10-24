@@ -1,9 +1,9 @@
 <?php
 
-namespace core\models\Operation;
+namespace core\models\operation;
 
 use Yii;
-use common\models\Operation\CommonOperationShopDistrict;
+use common\models\operation\CommonOperationShopDistrict;
 
 
 /**

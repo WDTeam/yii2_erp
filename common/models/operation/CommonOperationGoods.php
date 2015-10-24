@@ -1,6 +1,6 @@
 <?php
 
-namespace Common\models\Operation;
+namespace common\models\operation;
 
 use Yii;
 /**

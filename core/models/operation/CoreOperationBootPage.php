@@ -1,8 +1,8 @@
 <?php
-namespace core\models\Operation;
+namespace core\models\operation;
 
 use Yii;
-use common\models\Operation\CommonOperationBootPage;
+use common\models\operation\CommonOperationBootPage;
 /**
  * This is the model class for table "{{%operation_category}}".
  *

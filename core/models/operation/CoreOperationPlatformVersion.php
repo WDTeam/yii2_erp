@@ -1,6 +1,6 @@
 <?php
 
-namespace core\models\Operation;
+namespace core\models\operation;
 
 use Yii;
 use common\models\Operation\CommonOperationPlatformVersion;

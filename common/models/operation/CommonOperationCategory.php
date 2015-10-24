@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models\Operation;
+namespace common\models\operation;
 
 use Yii;
 use common\models\Operation\CommonOperationCategoryQuery;

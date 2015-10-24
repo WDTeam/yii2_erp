@@ -1,9 +1,9 @@
 <?php
 
-namespace core\models\Operation;
+namespace core\models\operation;
 
 use Yii;
-use common\models\Operation\CommonOperationAdvertRelease;
+use common\models\operation\CommonOperationAdvertRelease;
 /**
  * This is the model class for table "{{%operation_advert_release}}".
  *
