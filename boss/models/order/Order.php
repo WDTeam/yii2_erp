@@ -106,6 +106,18 @@ class Order extends OrderModel
         ];
     }
 
+    /**
+     * 获取订单渠道
+     * @param int $channel_id
+     * @return array|bool
+     */
+    public function getOrderChannelList($channel_id = 0)
+    {
+        $list = FinanceOrderChannel::get_order_channel_list_info();
+        $channel = ArrayHelper::map($list, 'id', 'finance_order_channel_name');
+        return $channel_id == 0 ? $channel : (isset($channel[$channel_id]) ? $channel[$channel_id] : false);
+    }
+
 
     public function createNew($post)
     {
