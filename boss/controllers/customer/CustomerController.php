@@ -1,9 +1,9 @@
 <?php
 
-namespace boss\controllers;
+namespace boss\controllers\customer;
 use Yii;
 //use common\models\Customer;
-use boss\models\CustomerSearch;
+use boss\models\customer\CustomerSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

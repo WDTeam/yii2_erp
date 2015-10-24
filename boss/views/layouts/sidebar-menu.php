@@ -90,7 +90,7 @@ echo Menu::widget(
                 'items' => [
                     [
                         'label' => '查看所有顾客(90%)',
-                        'url' => ['/customer/index?CustomerSearch[is_del]=0'],
+                        'url' => ['/customer/customer/index?CustomerSearch[is_del]=0'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],
