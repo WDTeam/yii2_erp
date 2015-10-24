@@ -188,7 +188,7 @@ class FinanceSettleApplyController extends BaseAuthController
         $requestParams = Yii::$app->request->getQueryParams();
         $financeSettleApplySearch->load($requestParams);
         $financeSettleApplySearch = $financeSettleApplySearch->findOne(['id'=>$financeSettleApplySearch->id]);
-        $financeSettleApplySearch->workerTypeDes = $financeSettleApplySearch->getWorkerTypeDes();
+        $financeSettleApplySearch->workerTypeDes = $financeSettleApplySearch->getWorkerTypeDes($financeSettleApplySearch->worker_type_id,$financeSettleApplySearch->worker_rule_id);
         $financeWorkerOrderIncomeSearch = new FinanceWorkerOrderIncomeSearch;
         $financeWorkerOrderIncomeSearch->load($requestParams);
         if(isset($requestParams['finance_worker_order_income_type'])){

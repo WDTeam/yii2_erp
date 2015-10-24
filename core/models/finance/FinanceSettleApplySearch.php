@@ -160,15 +160,15 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             $this->workerOnboardTime= $workerInfo['created_ad'];
             $this->worker_type_id = $workerInfo['worker_type'];
             $this->worker_rule_id = $workerInfo['worker_identity_id'];
-            $this->workerTypeDes= $this->getWorkerTypeDes();
+            $this->workerTypeDes= $this->getWorkerTypeDes($this->worker_type_id,$this->worker_rule_id);
             $this->finance_settle_apply_cycle_des = $this->getSettleCycleByWorkerType($this->worker_type_id,$this->worker_rule_id);
             $this->latestSettleTime = time();
         }
 //        $financeSettleApplySearch->latestSettleTime = $this->getWorkerLatestSettledTime($workerId);
     }
     
-    public function getWorkerTypeDes(){
-          return $this->getWorkerTypeName($this->worker_type_id).$this->getWorkerRuleDes($this->worker_rule_id);
+    public function getWorkerTypeDes($worker_type_id,$worker_rule_id){
+          return $this->getWorkerTypeName($worker_type_id).$this->getWorkerRuleDes($worker_rule_id);
     }
     
     public function getSettleApplyStatusDes($settleApplyStatus){
