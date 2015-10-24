@@ -3,7 +3,7 @@ namespace api\controllers;
 
 use Yii;
 use \api\models\PayParam;
-use \core\models\GeneralPay\GeneralPay;
+use \core\models\payment\GeneralPay;
 use \core\models\customer\CustomerAccessToken;
 
 class PayController extends \api\components\Controller
