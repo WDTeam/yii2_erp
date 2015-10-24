@@ -32,6 +32,7 @@ use Yii;
  * @property string $order_booked_worker_id
  * @property string $checking_id
  * @property string $order_cs_memo
+ * @property string $order_sys_memo
  *
  * @property OrderExtCustomer $orderExtCustomer
  * @property OrderExtFlag $orderExtFlag
@@ -171,7 +172,7 @@ class Order extends ActiveRecord
             [['order_unit_money', 'order_money'], 'number'],
             [['order_code', 'order_channel_name'], 'string', 'max' => 64],
             [['order_service_type_name', 'order_ip','order_src_name'], 'string', 'max' => 128],
-            [['order_address', 'order_cs_memo'], 'string', 'max' => 255],
+            [['order_address', 'order_cs_memo','order_sys_memo'], 'string', 'max' => 255],
             [['order_code'], 'unique'],
             [$this->attributesExt,'safe']
         ];
@@ -208,6 +209,7 @@ class Order extends ActiveRecord
             'order_booked_worker_id' => '指定阿姨',
             'checking_id' => '对账id',
             'order_cs_memo' => '客服备注',
+            'order_sys_memo' => '系统备注',
 
             'order_before_status_dict_id' => '状态变更前订单状态字典ID',
             'order_before_status_name' => '状态变更前订单状态',
@@ -427,6 +429,7 @@ class Order extends ActiveRecord
                 'shop_id' => $orderExtWorker->shop_id,
                 'checking_id' => $this->checking_id,
                 'order_cs_memo' => $this->order_cs_memo,
+                'order_sys_memo' => $this->order_sys_memo,
                 'admin_id' => $this->admin_id,
             ]);
 
