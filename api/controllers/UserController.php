@@ -784,13 +784,12 @@ class UserController extends \api\components\Controller
      */
     public function actionUserMoney()
     {
-        
+
         $param = Yii::$app->request->post();
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
-        
-        
+
         @$app_version = $param['app_version']; #版本
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
@@ -804,17 +803,15 @@ class UserController extends \api\components\Controller
              * 获取客户余额
              * @param int $customer 用户id
              */
-            $userBalance = \core\models\customer\CustomerExtBalance::getCustomerBalance($customer->id);
+            $userBalance = \core\models\customer\CustomerExtBalance::getCustomerBalance(1);
             /**
              * 获取用户消费记录
              * @param int $customer 用户id
              */
-            $userRecord = \core\models\CustomerTransRecord\CustomerTransRecord::queryRecord($customer->id);
-            foreach ($userRecord as $key => $val) {
-                $userRecord[$key]['userBalance'] = $userBalance;
-            }
-
-            return $this->send($userRecord, "查询成功", "ok");
+            $userRecord = \core\models\CustomerTransRecord\CustomerTransRecord::queryRecord(1);
+            $ret["userBalance"] = $userBalance;
+            $ret["userRecord"] = $userRecord;
+            return $this->send($ret, "查询成功", "ok");
 
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
         }
@@ -825,6 +822,7 @@ class UserController extends \api\components\Controller
      */
     public function actionSetUser()
     {
+
         \core\models\customer\CustomerCode::generateAndSend('13683118946');
     }
 
@@ -915,7 +913,7 @@ class UserController extends \api\components\Controller
              *  @param int $customer_id 用户id
              */
             $userscore = \core\models\customer\CustomerExtScore::getCustomerScoreList($customer->id);
-          
+
             if ($userscore) {
                 $ret["scoreCategory"] = $userscore;
                 return $this->send($ret, "用户积分明细列表", "ok");
@@ -1094,5 +1092,3 @@ class UserController extends \api\components\Controller
     }
 
 }
-
-?>
