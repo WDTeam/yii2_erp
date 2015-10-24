@@ -90,9 +90,11 @@ class UserController extends \api\components\Controller
         }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
-
+        
+      
         if (!empty($customer) && !empty($customer->id)) {
-            $model = CustomerAddress::addAddress($customer->id, @$param['operation_area_name'], @$param['address_detail'], @$param['address_nickname'], @$param['address_phone']);
+            $model = CustomerAddress::addAddress($customer->id, @$param['operation_city_name'], @$param['operation_area_name'], @$param['customer_address_detail'], @$param['customer_address_nickname'],@$param['customer_address_phone']);
+         
             if (!empty($model)) {
                 $ret = ['address' => $model];
                 return $this->send($ret, "常用地址添加成功", "ok");
@@ -105,7 +107,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} /user/get-addresses 常用地址列表 (已完成100%)
+     * @api {GET} /user/get-addresses 常用地址列表 (已完成100%)
      *
      * @apiName GetAddresses
      * @apiGroup User
@@ -160,7 +162,7 @@ class UserController extends \api\components\Controller
      */
     public function actionGetAddresses()
     {
-        @$accessToken = Yii::$app->request->post('access_token');
+        @$accessToken = Yii::$app->request->get('access_token');
 
         if (empty($accessToken)) {
             $accessToken = json_decode(Yii::$app->request->getRawBody(), true);
@@ -187,7 +189,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} /user/delete-address 删除用户常用地址 (已完成100%) 
+     * @api {DELETE} /user/delete-address 删除用户常用地址 (已完成100%) 
      *
      * @apiName DeleteAddress
      * @apiGroup User
@@ -237,7 +239,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} /user/set-default-address 设置默认地址 (已完成100%) 
+     * @api {PUT} /user/set-default-address 设置默认地址 (已完成100%) 
      * @apiDescription 用户每次下完单都会将该次地址设置为默认地址，下次下单优先使用默认地址
      * @apiName SetDefaultAddress
      * @apiGroup User
@@ -295,7 +297,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} /user/update-address 修改常用地址 (已完成100%) 
+     * @api {PUT} /user/update-address 修改常用地址 (已完成100%) 
      *
      * @apiName UpdateAddress
      * @apiGroup User
@@ -367,7 +369,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /user/set-default-city 设置默认城市 （需求不明确；0%）
+     * @api {PUT} /user/set-default-city 设置默认城市 （需求不明确；0%）
      *
      * @apiName SetDefaultCity
      * @apiGroup User
@@ -528,7 +530,7 @@ class UserController extends \api\components\Controller
      */
     public function actionGetCouponCustomer()
     {
-        $param = Yii::$app->request->post();
+        $param = Yii::$app->request->get();
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
@@ -569,7 +571,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} /user/get-coupon-count 获取用户优惠码数量 （功能已经实现 100%）
+     * @api {GET} /user/get-coupon-count 获取用户优惠码数量 （功能已经实现 100%）
      *
      *
      * @apiName GetCouponCount
@@ -613,7 +615,7 @@ class UserController extends \api\components\Controller
      */
     public function actionGetCouponCount()
     {
-        $param = Yii::$app->request->post();
+        $param = Yii::$app->request->get();
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
@@ -755,7 +757,7 @@ class UserController extends \api\components\Controller
      */
     public function actionBlackListWorkers()
     {
-        $param = Yii::$app->request->post();
+        $param = Yii::$app->request->get();
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
@@ -842,7 +844,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} /user/get-user-money 用户余额和消费记录 （数据已经全部取出,需要给出所需字段,然后给予返回 已完成99% ;）
+     * @api {GET} /user/get-user-money 用户余额和消费记录 （数据已经全部取出,需要给出所需字段,然后给予返回 已完成99% ;）
      * 
      *
      * @apiName GetUserMoney
@@ -912,7 +914,7 @@ class UserController extends \api\components\Controller
     public function actionGetUserMoney()
     {
 
-        $param = Yii::$app->request->post();
+        $param = Yii::$app->request->get();
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
@@ -948,7 +950,7 @@ class UserController extends \api\components\Controller
     public function actionSetUser()
     {
 
-        \core\models\customer\CustomerCode::generateAndSend('13683118946');
+        $aaa = \core\models\customer\CustomerCode::generateAndSend('13683118946');
     }
 
     #生成access_token
@@ -961,7 +963,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} /user/get-user-score 用户积分明细 （功能已实现,不明确需求端所需字段格式 90%）
+     * @api {GET} /user/get-user-score 用户积分明细 （功能已实现,不明确需求端所需字段格式 90%）
      *
      * @apiDescription 获取用户当前积分，积分兑换奖品信息，怎样获取积分信息
      * @apiName GetUserScore
@@ -1021,7 +1023,7 @@ class UserController extends \api\components\Controller
      */
     public function actionGetUserScore()
     {
-        $param = Yii::$app->request->post();
+        $param = Yii::$app->request->get();
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
@@ -1139,7 +1141,7 @@ class UserController extends \api\components\Controller
      */
     public function actionGetCommentLevel()
     {
-        $param = Yii::$app->request->post();
+        $param = Yii::$app->request->get();
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
@@ -1196,7 +1198,7 @@ class UserController extends \api\components\Controller
      */
     public function actionGetCommentLevelTag()
     {
-        $param = Yii::$app->request->post();
+        $param = Yii::$app->request->get();
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
