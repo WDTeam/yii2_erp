@@ -147,6 +147,9 @@ class GeneralPayController extends Controller
     public function actionOrderChannel($q = null, $id = null)
     {
         $channel = FinanceOrderChannel::get_order_channel_list();
+        foreach( $channel as $k=>$v ){
+            $channel[$k]['text'] = $v['finance_order_channel_name'];
+        }
         return json_encode(['results'=>$channel]);
     }
 
@@ -158,6 +161,10 @@ class GeneralPayController extends Controller
 
     public function actionTest()
     {
+
+        $model = new \core\models\GeneralPay\GeneralPay;
+        $model->balancePay(['order_id'=>1,'customer_id'=>1]);
+        exit;
         $model = new \core\models\GeneralPay\GeneralPay;
         $model->getPayParams( 10,1,6,'1217983401',0,$ext_params=["return_url"	=> 'www.baidu.com', "show_url"	=> 'www.page.com'] );
         $param = [
