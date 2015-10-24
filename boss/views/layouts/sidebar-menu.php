@@ -334,27 +334,27 @@ echo Menu::widget(
                         'items' => [
                             [
                                 'label' => '渠道管理(95%)',
-                                'url' => ['/finance-pay-channel/'],
+                                'url' => ['/finance/finance-pay-channel/'],
                                 'icon' => 'fa fa-angle-right',
                             ],[
                                 'label' => '配置对账表头(95%)',
-                                'url' => ['/finance-header/index'],
+                                'url' => ['/finance/finance-header/index'],
                                 'icon' => 'fa fa-angle-right',
                             ],[
                             'label' => '开始对账(85%)',
-                                'url' => ['/finance-pop-order/'],
+                                'url' => ['/finance/finance-pop-order/'],
                                 'icon' => 'fa fa-angle-right',
                             ],[
                                 'label' => '查看历史对账记录(95%)',
-                                'url' => ['/finance-record-log/'],
+                                'url' => ['/finance/finance-record-log/'],
                                 'icon' => 'fa fa-angle-right',
                             ],[
                                 'label' => '对账记录详情(90%)',
-                                'url' => ['/finance-pop-order/billinfo'],
+                                'url' => ['/finance/finance-pop-order/billinfo'],
                                 'icon' => 'fa fa-angle-right',
                             ],[
                                 'label' => '坏账管理(90%)',
-                                'url' => ['/finance-pop-order/bad'],
+                                'url' => ['/finance/finance-pop-order/bad'],
                                 'icon' => 'fa fa-angle-right',
                             ]
         
@@ -459,13 +459,13 @@ echo Menu::widget(
                         ],
                         'items' => [
                         [
-                        'label' => '确认退款审核(60%)',
-                        'url' => ['/finance-refund/'],
+                        'label' => '确认退款审核(80%)',
+                        'url' => ['/finance/finance-refund/'],
                         'icon' => 'fa fa-angle-right',
                         ],
                         [
                         'label' => '退款统计(80%)',
-                        'url' => ['/finance-refund/countinfo'],
+                        'url' => ['/finance/finance-refund/countinfo'],
                         'icon' => 'fa fa-angle-right',
                         ]
                         ]
