@@ -1,6 +1,6 @@
 <?php
 
-namespace boss\controllers\pay;
+namespace boss\controllers\payment;
 
 use Yii;
 use common\models\GeneralPayLog;

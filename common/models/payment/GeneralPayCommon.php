@@ -1,9 +1,9 @@
 <?php
 
-namespace common\models\pay;
+namespace common\models\payment;
 
 use core\models\Customer;
-use core\models\CustomerTransRecord\CustomerTransRecord;
+use core\models\customer\CustomerTransRecord;
 use core\models\order\Order;
 use core\models\order\OrderSearch;
 use Yii;

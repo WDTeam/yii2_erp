@@ -1,6 +1,6 @@
 <?php
 
-namespace boss\models\pay;
+namespace boss\models\payment;
 
 use Yii;
 use yii\base\Model;

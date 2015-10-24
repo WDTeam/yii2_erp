@@ -1,10 +1,10 @@
 <?php
 
-namespace boss\models\pay;
+namespace boss\models\payment;
 use Yii;
 use yii\base\ErrorException;
 use yii\base\Exception;
-class GeneralPay extends \core\models\GeneralPay\GeneralPay
+class GeneralPay extends \core\models\payment\GeneralPay
 {
     //支付状态
     public static $PAY_STATUS = [

@@ -1,12 +1,12 @@
 <?php
 
-namespace common\models\pay;
-use common\models\FinancePayChannel;
-use common\models\FinanceOrderChannel;
+namespace common\models\payment;
+use common\models\finance\FinancePayChannel;
+use common\models\finance\FinanceOrderChannel;
 use Yii;
 use yii\base\ErrorException;
 use yii\base\Exception;
-use core\models\CustomerTransRecord\CustomerTransRecord;
+use core\models\customer\CustomerTransRecord;
 use core\models\order\OrderSearch;
 class GeneralPay extends GeneralPayCommon
 {

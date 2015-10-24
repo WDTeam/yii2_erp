@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models\pay;
+namespace common\models\payment;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
