@@ -148,5 +148,4 @@ class Coupon extends \common\models\coupon\Coupon
 	}
 
 	
-
 }
