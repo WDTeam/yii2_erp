@@ -842,7 +842,8 @@ class CustomerController extends Controller
 		var_dump($res);
     }
 
-    public function testAddress(){
-        
+    public function actionTestAddress(){
+        $addr = CustomerAddress::addAddress(1, '7777', '北京市', '9999', '光华路SOHO一期二单元', 'aaaaa', '18519654001');
+		var_dump($addr);
     }
 }
