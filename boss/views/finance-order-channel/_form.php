@@ -33,7 +33,9 @@ $model->is_del=0;
      		
      		'finance_order_channel_rate'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'比例...']], 
      		
-//'finance_order_channel_sort'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'排序...']], 
+'finance_order_channel_sort'=>['type'=> Form::INPUT_RADIO_LIST, 'items'=>['1' => '确定', '2' => '取消'],'options'=>[
+    		
+]], 
 
     		'finance_order_channel_is_lock'=>['type'=> Form::INPUT_RADIO_LIST, 'items'=>['1' => '确定', '2' => '取消'],
     		'options'=>[

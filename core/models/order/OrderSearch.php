@@ -293,6 +293,9 @@ class OrderSearch extends Order
 	* @author: peak pan
 	* @return:
 	**/
+    
+    public  $finance_record_log_endtime;
+    
     public function searchpoplist()
     {
     	$query = Order::find()->joinWith(['orderExtPop']);
@@ -323,7 +326,7 @@ class OrderSearch extends Order
     
     	$query->andFilterWhere(['like', 'order_code', $this->order_code])
     	->andFilterWhere(['like', 'order_service_type_name', $this->order_service_type_name])
-    	->andFilterWhere(['>=', 'ejj_order.created_at', $this->created_at])
+    	->andFilterWhere(['between', 'ejj_order.created_at', $this->created_at,$this->finance_record_log_endtime])
     	->andFilterWhere(['not in', 'orderExtPop.order_pop_order_code', $this->order_pop_order_code])
     	->andFilterWhere(['like', 'order_src_name', $this->order_src_name])
     	->andFilterWhere(['like', 'order_channel_name', $this->order_channel_name])
@@ -332,7 +335,6 @@ class OrderSearch extends Order
     
     	return $dataProvider;
     }
-    
     
     
 }

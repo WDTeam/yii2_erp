@@ -312,7 +312,13 @@ class FinancePopOrderController extends Controller
     		//var_dump(FinancePopOrder::get_in_list_id($dateinfo['id']));exit;
     		 
     		$searchModel->load(Yii::$app->request->getQueryParams());
+    		
+    		//var_dump($info);exit;
+    		
     		$searchModel->created_at=$info->finance_record_log_statime;
+    		$searchModel->finance_record_log_endtime=$info->finance_record_log_endtime;
+    		
+    		
     		//$searchModel_info->created_at=$info->finance_record_log_statime;
     		$searchModel->order_pop_order_code=FinancePopOrder::get_in_list_id($dateinfo['id']);
     		//$searchModel->channel_id=$info->finance_pay_channel_id;
