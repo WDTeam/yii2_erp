@@ -148,6 +148,20 @@ class Order extends OrderModel
     }
 
     /**
+     * 在线支付完后调用修改订单状态
+     * @param $order_id int 订单id
+     * @param $admin_id int  后台管理员id 系统0 客户1
+     * @param $pay_channel_id int  支付渠道id
+     * @param $order_pay_channel_name string 支付渠道名称
+     * @param $order_pay_flow_num string 支付流水号
+     * @return bool
+     */
+    public static function isPaymentOnline($order_id,$admin_id,$pay_channel_id,$order_pay_channel_name,$order_pay_flow_num)
+    {
+       return OrderStatus::isPaymentOnline($order_id,$admin_id,$pay_channel_id,$order_pay_channel_name,$order_pay_flow_num);
+    }
+
+    /**
      * 开始系统指派
      * @param $order_id
      * @return bool
