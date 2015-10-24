@@ -80,7 +80,6 @@ class UserController extends \api\components\Controller
     public function actionAddAddress()
     {
         $param = Yii::$app->request->post();
-
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
@@ -90,11 +89,10 @@ class UserController extends \api\components\Controller
         }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
-        
-      
+
         if (!empty($customer) && !empty($customer->id)) {
-            $model = CustomerAddress::addAddress($customer->id, @$param['operation_city_name'], @$param['operation_area_name'], @$param['customer_address_detail'], @$param['customer_address_nickname'],@$param['customer_address_phone']);
-         
+            $model = CustomerAddress::addAddress($customer->id, @$param['operation_province_name'], @$param['operation_city_name'], @$param['operation_area_name'], @$param['customer_address_detail'], @$param['customer_address_nickname'], @$param['customer_address_phone']);
+
             if (!empty($model)) {
                 $ret = ['address' => $model];
                 return $this->send($ret, "常用地址添加成功", "ok");
