@@ -27,7 +27,7 @@ use Yii;
  * @property integer $created_ad
  * @property integer $updated_ad
  */
-class WorkerExt extends \common\models\WorkerExt
+class WorkerExt extends \common\models\worker\WorkerExt
 {
 
     /*
