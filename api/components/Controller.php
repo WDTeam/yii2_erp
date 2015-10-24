@@ -25,7 +25,7 @@ class Controller extends \yii\rest\Controller
      * @param integer $error_code 错误码
      * @param string $msg 信息
      */
-    public function send($ret, $msg = "操作成功", $code = "ok", $value = 200, $text = null)
+    public function send($ret, $msg = "操作成功", $code = 1, $value = 200, $text = null)
     {
         $result = [
             'code' => $code,
@@ -36,6 +36,7 @@ class Controller extends \yii\rest\Controller
         $response = Yii::$app->response;
         $response->format = Yii\web\Response::FORMAT_JSON;
         $response->data = $result;
+
         $response->setStatusCode($value, $text);
         $response->headers->set("Access-Control-Allow-Origin", "*");
         $response->headers->set("Access-Control-Allow-Methods", "*");

@@ -51,7 +51,7 @@ class FinancePayChannelController extends BaseAuthController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        return $this->redirect(['view', 'id' => $model->id]);
+        return $this->redirect(['index']);
         } else {
         return $this->render('view', ['model' => $model]);
 }

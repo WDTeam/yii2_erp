@@ -34,8 +34,8 @@ $time_types = Coupon::getTimeTypes();
 $promote_types = Coupon::getPromoteTypes();
 
 ?>
-<div class="order-create">
-    <div class="order-form">
+<div class="coupon-create">
+    <div class="coupon-form">
         <?php if($model->hasErrors()):?>
         <div class="alert alert-danger" role="alert"><?=Html::errorSummary($model); ?></div>
         <?php endif;?>
@@ -146,4 +146,7 @@ $promote_types = Coupon::getPromoteTypes();
 
     </div>
 </div>
+<?php
+$this->registerJsFile('/js/coupon.js',['depends'=>[ 'yii\web\YiiAsset','yii\bootstrap\BootstrapAsset']]);
+?>
 
