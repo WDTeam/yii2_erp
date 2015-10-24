@@ -3,7 +3,7 @@
 namespace boss\controllers;
 
 use Yii;
-use boss\models\ServerCard;
+use boss\models\Operation\OperationServerCard;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -12,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * ServerCardController implements the CRUD actions for ServerCard model.
  */
-class ServerCardController extends Controller
+class OperationServerCardController extends Controller
 {
     public function behaviors()
     {
@@ -27,13 +27,13 @@ class ServerCardController extends Controller
     }
 
     /**
-     * Lists all ServerCard models.
+     * Lists all OperationServerCard models.
      * @return mixed
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => ServerCard::find(),
+            'query' => OperationServerCard::find(),
         ]);
 		
         return $this->render('index', [
@@ -42,7 +42,7 @@ class ServerCardController extends Controller
     }
 
     /**
-     * Displays a single ServerCard model.
+     * Displays a single OperationServerCard model.
      * @param string $id
      * @return mixed
      */
@@ -58,13 +58,13 @@ class ServerCardController extends Controller
     }
 
     /**
-     * Creates a new ServerCard model.
+     * Creates a new OperationServerCard model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new ServerCard;
+        $model = new OperationServerCard;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -76,7 +76,7 @@ class ServerCardController extends Controller
     }
 
     /**
-     * Updates an existing ServerCard model.
+     * Updates an existing OperationServerCard model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param string $id
      * @return mixed
@@ -95,7 +95,7 @@ class ServerCardController extends Controller
     }
 
     /**
-     * Deletes an existing ServerCard model.
+     * Deletes an existing OperationServerCard model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param string $id
      * @return mixed
@@ -116,7 +116,7 @@ class ServerCardController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = ServerCard::findOne($id)) !== null) {
+        if (($model = OperationServerCard::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
