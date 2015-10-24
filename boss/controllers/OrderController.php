@@ -25,13 +25,13 @@ class OrderController extends BaseAuthController
     {   
         $orderid = yii::$app->request->get('orderid',1);
         $orderInfo = OrderSearch::getOne($orderid);
-        $orderStatus= $orderInfo->orderExtStatus->order_status_dict_id;
        // var_dump($orderStatus);
         if($orderInfo->order_code==false)
         {
             echo "没有此订单";
             exit;
         }
+        $orderStatus= $orderInfo->orderExtStatus->order_status_dict_id;
         $FinanceRefundadd=new FinanceRefundadd;
         /** 方便测试关闭了，正式使用时请打开
        $result = Order::cancel($orderid,Yii::$app->user->id);
