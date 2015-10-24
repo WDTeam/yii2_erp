@@ -11,7 +11,6 @@ namespace core\models\order;
 use common\models\OrderStatusDict;
 use Yii;
 use core\models\worker\Worker;
-use yii\db\Exception;
 
 class OrderPush extends Order
 {

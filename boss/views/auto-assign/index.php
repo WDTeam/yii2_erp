@@ -41,21 +41,13 @@ $this->params['breadcrumbs'][] = $this->title;
             <tr>
                 <th>订单编号</th>
                 <th>状态</th>
-                <th>短信状态</th>
-                <th>ivr状态</th>
+                <th>IVR状态</th>
                 <th>App推送</th>
                 <th>创建时间</th>
                 <th>处理时间</th>
             </tr>
         </thead>
         <tbody id="tbody">
-<!--                    <tr>
-                <td>1</td>
-                <td>1000</td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>-->
         </tbody>
     </table>
 </div>
