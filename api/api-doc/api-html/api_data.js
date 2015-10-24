@@ -249,85 +249,6 @@ define({ "api": [
     "groupTitle": "Auth"
   },
   {
-    "type": "GET",
-    "url": "/order/cancelorder",
-    "title": "取消订单(haojianse %0  )",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户认证</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "order_cancel_reason",
-            "description": "<p>取消原因</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "order_id",
-            "description": "<p>订单号</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "recursive_order_id",
-            "description": "<p>周期订单</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"693345订单取消成功\",\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
-    "group": "D__code_ejj_enterprise_boss_api_controllers_OrderController_php",
-    "groupTitle": "D__code_ejj_enterprise_boss_api_controllers_OrderController_php",
-    "name": "GetOrderCancelorder"
-  },
-  {
     "type": "POST",
     "url": "v1/order/append-order",
     "title": "追加订单(xieyi 90%和创建订单一样)",
@@ -823,6 +744,85 @@ define({ "api": [
     "groupTitle": "Order"
   },
   {
+    "type": "PUT",
+    "url": "/order/cancel-order",
+    "title": "取消订单(haojianse 100% )",
+    "name": "CancelOrder",
+    "group": "Order",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_cancel_reason",
+            "description": "<p>取消原因</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_id",
+            "description": "<p>订单号</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "recursive_order_id",
+            "description": "<p>周期订单</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"693345订单取消成功\",\n  \"ret\":{\n    1\n  }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/OrderController.php",
+    "groupTitle": "Order"
+  },
+  {
     "type": "POST",
     "url": "/order/choose-service-time",
     "title": "可服务时间表 (20%赵顺利 block linhongyou provide the feature)",
@@ -935,7 +935,7 @@ define({ "api": [
     "groupTitle": "Order"
   },
   {
-    "type": "GET",
+    "type": "DELETE",
     "url": "/order/hiden-order",
     "title": "删除订单（郝建设 100% ）",
     "name": "HidenOrder",
@@ -972,7 +972,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"订单删除成功\",\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"订单删除成功\",\n \"ret\":{\n    1\n  }\n}",
           "type": "json"
         }
       ]
@@ -2583,6 +2583,20 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
+            "field": "operation_province_name",
+            "description": "<p>省</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "operation_city_name",
+            "description": "<p>市名</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
             "field": "operation_area_name",
             "description": "<p>地区名（朝阳区）</p> "
           },
@@ -2590,22 +2604,22 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "address_detail",
-            "description": "<p>详细地址信息</p> "
+            "field": "customer_address_detail",
+            "description": "<p>详细地址</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "address_nickname",
-            "description": "<p>联系人</p> "
+            "field": "customer_address_nickname",
+            "description": "<p>被服务者昵称</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "address_phone",
-            "description": "<p>联系电话</p> "
+            "field": "customer_address_phone",
+            "description": "<p>被服务者手机</p> "
           }
         ]
       }
