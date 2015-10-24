@@ -149,5 +149,7 @@ return [
     'Spec' => '规格',
     'release' => '开通',
     
-    'Worker Tasks'=>'阿姨任务'
+    'Worker Tasks'=>'阿姨任务',
+
+    'Operation Selected Service' => '精品保洁',
 ];

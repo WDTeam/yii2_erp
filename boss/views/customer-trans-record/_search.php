@@ -10,22 +10,27 @@ use yii\widgets\ActiveForm;
  */
 ?>
 
-<div class="customer-trans-record-search">
+<div class="customer-trans-record-search  panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 交易记录搜索</h3>
+    </div>
 
-    <?php $form = ActiveForm::begin([
-        'action' => ['index'],
-        'method' => 'get',
-    ]); ?>
+    <div class="panel-body row">
+        <?php $form = ActiveForm::begin([
+            'action' => ['index'],
+            'method' => 'get',
+        ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+        <div class="col-md-2">
+            <?= $form->field($model, 'customer_id') ?>
+        </div>
 
-    <?= $form->field($model, 'customer_id') ?>
+        <div class="col-md-2">
+            <?= $form->field($model, 'order_id') ?>
+        </div>
 
-    <?= $form->field($model, 'order_id') ?>
 
-    <?= $form->field($model, 'order_channel_id') ?>
 
-    <?= $form->field($model, 'customer_trans_record_order_channel') ?>
 
     <?php // echo $form->field($model, 'pay_channel_id') ?>
 
@@ -83,5 +88,5 @@ use yii\widgets\ActiveForm;
     </div>
 
     <?php ActiveForm::end(); ?>
-
+    </div>
 </div>
