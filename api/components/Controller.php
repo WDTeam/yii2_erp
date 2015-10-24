@@ -25,7 +25,7 @@ class Controller extends \yii\rest\Controller
      * @param integer $error_code 错误码
      * @param string $msg 信息
      */
-    public function send($ret, $msg = "操作成功", $code = "1", $value = 200, $text = null)
+    public function send($ret, $msg = "操作成功", $code = 1, $value = 200, $text = null)
     {
         $result = [
             'code' => $code,

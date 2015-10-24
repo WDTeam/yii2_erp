@@ -25,7 +25,8 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
-        //'filterModel' => $searchModel,
+       // 'filterModel' => $searchModel,
+    	//'showPageSummary'=>true,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             'finance_refund_tel',
@@ -82,17 +83,57 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 ],
             ],
+
+            
+            
+            
+            
+            
+            
+            
+
+            
+            
+            
+            
+            
+            [ 'filterInputOptions'=>['placeholder'=>'Any supplier'],
+            				'group'=>true,
+            						'groupFooter'=>function ($model, $key, $index, $widget) { 
+            						return [
+            						'mergeColumns'=>[[3]],
+            						'content'=>[           
+            						3=>GridView::F_SUM,
+            								],
+            								'contentFormats'=>[],
+            								'contentOptions'=>[ ],
+												'options'=>['class'=>'danger','style'=>'font-weight:bold;']
+            												];
+            					}
+            														],
+            
+   
+            
+ 
+  
+            
         ],
         'responsive'=>true,
         'hover'=>true,
         'condensed'=>true,
         'floatHeader'=>true,
-
         'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type'=>'info',
+			'before' =>$this->render('_query_links', ['model' => $searchModel]),
             'showFooter'=>true
         ],
-    ]); Pjax::end(); ?>
+
+
+
+
+    ]);
+
+    Pjax::end(); ?>
 
 </div>

@@ -9,6 +9,8 @@ use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\FinanceOrderChannel;
+use PHPExcel;
+use PHPExcel_IOFactory;
 
 /**
  * FinanceRefundController implements the CRUD actions for FinanceRefund model.
@@ -33,17 +35,9 @@ class FinanceRefundController extends BaseAuthController
      */
     public function actionIndex()
     {
-    	
-    	//输出部分
-    	$ordedata= new FinanceOrderChannel;
-    	$ordewhere['is_del']='0';
-    	$ordewhere['finance_order_channel_is_lock']=1;
-    	$payatainfo=$ordedata::find()->where($ordewhere)->asArray()->all();
-    	foreach ($payatainfo as $errt){
-    		$tyd[]=$errt['id'];
-    		$tydtui[]=$errt['finance_order_channel_name'];
-    	}
-    	$tyu= array_combine($tyd,$tydtui);
+         //获取下单渠道
+         $tyu= FinanceOrderChannel::get_order_channel_listes(); 
+         
         $searchModel = new FinanceRefundSearch;
         $searchModel->load(Yii::$app->request->getQueryParams());
         $searchModel->statusstype='index';
@@ -53,9 +47,6 @@ class FinanceRefundController extends BaseAuthController
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         	'ordedat' => $tyu,
-        		
-        		
-        		
         ]);
     }
 
@@ -135,17 +126,32 @@ class FinanceRefundController extends BaseAuthController
     		$model=FinanceRefund::findOne($requestModel['id']);
     		if($requestModel['edit']=='baksite'){
     	    //退款
-    		$model->finance_pop_order_pay_status='4';
+    			$obj = new \core\models\GeneralPay\GeneralPayRefund();
+    			if(!isset($model->finance_refund_pop_nub) || !isset($model->customer_id)){
+    			\Yii::$app->getSession()->setFlash('default','充值记录查询无此记录,退款失败！');
+    			return $this->redirect(['index', 'id' =>$requestModel['id']]);
+    			}
+    			$s = $obj->call_pay_refund($model->finance_refund_pop_nub,$model->customer_id);
+    			if($s){
+    				//成功
+    				$model->finance_pop_order_pay_status='4';
+    			}else{
+    				
+    				//失败就回滚
+    				$model->finance_pop_order_pay_status='2';
+    			}
     		}else{	
     		$model->finance_pop_order_pay_status='2';
     		}
     		$model->save();
-    		return $this->redirect(['index', 'id' =>$requestModel['oid']]);
+    		
+    		if(!$s || $requestModel['edit']=='baksite'){
+    			\Yii::$app->getSession()->setFlash('default','充值记录查询无此记录,退款失败！');
+    			return $this->redirect(['index', 'id' =>$requestModel['id']]);
+    		}else{
+    			return $this->redirect(['index', 'id' =>$requestModel['id']]);
+    		}	
     }
-    
-    
-    
-    
     
     
     
@@ -197,4 +203,65 @@ class FinanceRefundController extends BaseAuthController
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+      
+    public function actionExport(){
+    	$data = FinanceRefund::find()->all();
+    	$objPHPExcel=new PHPExcel();
+    	ob_start();
+    	$objPHPExcel->getProperties()->setCreator('ejiajie')
+    	->setLastModifiedBy('ejiajie')
+    	->setTitle('Office 2007 XLSX Document')
+    	->setSubject('Office 2007 XLSX Document')
+    	->setDescription('Document for Office 2007 XLSX, generated using PHP classes.')
+    	->setKeywords('office 2007 openxml php')
+    	->setCategory('Result file');
+    	$objPHPExcel->setActiveSheetIndex(0)
+    	->setCellValue('A1','用户电话')
+    	->setCellValue('B1','退款申请时间')
+    	->setCellValue('C1','退款金额')
+    	->setCellValue('D1','退款理由')
+    	->setCellValue('E1','优惠价格')
+    	->setCellValue('F1','订单支付时间')
+    	->setCellValue('G1','支付方式名称')
+    	->setCellValue('H1','流水号')
+    	->setCellValue('I1','支付状态')
+    	->setCellValue('J1','服务阿姨')
+    	->setCellValue('K1','阿姨电话')
+    	->setCellValue('L1','地区')
+    	->setCellValue('M1','财务处理人');
+    	$i=2;
+    	foreach($data as $k=>$v){
+    		$objPHPExcel->setActiveSheetIndex(0)
+    		->setCellValue('A'.$i,$v['finance_refund_tel'])
+    		->setCellValue('B'.$i,date('Y-m-d H:i:s',$v['create_time']))
+    		->setCellValue('C'.$i,$v['finance_refund_money'])
+    		->setCellValue('D'.$i,$v['finance_refund_reason'])
+    		->setCellValue('E'.$i,$v['finance_refund_discount'])
+    		->setCellValue('F'.$i,date('Y-m-d H:i:s',$v['finance_refund_pay_create_time']))
+    		->setCellValue('G'.$i,$v['finance_pay_channel_title'])
+    		->setCellValue('H'.$i,$v['finance_refund_pay_flow_num'])
+    		->setCellValue('I'.$i,$v['finance_refund_pay_status'])
+    		->setCellValue('J'.$i,$v['finance_refund_worker_id'])
+    		->setCellValue('K'.$i,$v['finance_refund_worker_tel'])
+    		->setCellValue('L'.$i,$v['finance_refund_city_id'])
+    		->setCellValue('M'.$i,$v['finance_refund_check_name']);
+    		$i++;
+    	}
+    	$objPHPExcel->getActiveSheet()->setTitle('退款');
+    	$objPHPExcel->setActiveSheetIndex(0);
+    	$filename=urlencode('退款数据导出').'_'.date('Y-m-dHis');
+    	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+    	ob_end_clean();
+    	header('Content-Type: application/vnd.ms-excel');
+    	header('Content-Disposition: attachment;filename="' . $filename . '.xls"');
+    	header('Cache-Control: max-age=0');
+    	$objWriter->save('php://output');
+    	exit;
+    }
+    
+    
+    
+    
+    
+    
 }

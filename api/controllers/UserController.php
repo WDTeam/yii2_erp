@@ -18,17 +18,19 @@ class UserController extends \api\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} operation_province_name 省
+     * @apiParam {String} operation_city_name 市名
      * @apiParam {String} operation_area_name 地区名（朝阳区）
-     * @apiParam {String} address_detail 详细地址信息
-     * @apiParam {String} address_nickname 联系人
-     * @apiParam {String} address_phone 联系电话
+     * @apiParam {String} customer_address_detail 详细地址
+     * @apiParam {String} customer_address_nickname 被服务者昵称
+     * @apiParam {String} customer_address_phone 被服务者手机
      *
      * @apiSuccess {Object[]} address 新增地址.
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "地址添加成功"
      *       "ret":{
      *       "address":
@@ -63,7 +65,7 @@ class UserController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录。"
      *
      *     }
@@ -72,7 +74,7 @@ class UserController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 address Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "常用地址添加失败"
      *
      *     }
@@ -80,34 +82,34 @@ class UserController extends \api\components\Controller
     public function actionAddAddress()
     {
         $param = Yii::$app->request->post();
-
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
 
         if (!empty($customer) && !empty($customer->id)) {
-            $model = CustomerAddress::addAddress($customer->id, @$param['operation_area_name'], @$param['address_detail'], @$param['address_nickname'], @$param['address_phone']);
+            $model = CustomerAddress::addAddress($customer->id, @$param['operation_province_name'], @$param['operation_city_name'], @$param['operation_area_name'], @$param['customer_address_detail'], @$param['customer_address_nickname'], @$param['customer_address_phone']);
+
             if (!empty($model)) {
                 $ret = ['address' => $model];
-                return $this->send($ret, "常用地址添加成功", "ok");
+                return $this->send($ret, "常用地址添加成功");
             } else {
-                return $this->send(null, "常用地址添加失败", "error", 403);
+                return $this->send(null, "常用地址添加失败", 0, 403);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录.", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
         }
     }
 
     /**
-     * @api {POST} /user/addresses 常用地址列表 (已完成100%)
+     * @api {GET} /user/get-addresses 常用地址列表 (已完成100%)
      *
-     * @apiName Addresses
+     * @apiName GetAddresses
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -118,7 +120,7 @@ class UserController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "获取地址列表成功"
      *       "ret":{
      *       "addresses": [
@@ -153,22 +155,23 @@ class UserController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
      */
-    public function actionAddresses()
+    public function actionGetAddresses()
     {
-        @$accessToken = Yii::$app->request->post('access_token');
+        @$accessToken = Yii::$app->request->get('access_token');
 
         if (empty($accessToken)) {
             $accessToken = json_decode(Yii::$app->request->getRawBody(), true);
         }
 
         if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
+
         $customer = CustomerAccessToken::getCustomer($accessToken);
 
         if (!empty($customer) && !empty($customer->id)) {
@@ -179,14 +182,14 @@ class UserController extends \api\components\Controller
                 $addresses[] = $model;
             }
             $ret = ['addresses' => $addresses];
-            return $this->send($ret, "获取地址列表成功", "ok");
+            return $this->send($ret, "获取地址列表成功");
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
     }
 
     /**
-     * @api {POST} /user/delete-address 删除用户常用地址 (已完成100%) 
+     * @api {DELETE} /user/delete-address 删除用户常用地址 (已完成100%) 
      *
      * @apiName DeleteAddress
      * @apiGroup User
@@ -198,7 +201,7 @@ class UserController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "删除成功"
      *     }
      *
@@ -207,7 +210,7 @@ class UserController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录."
      *     }
      */
@@ -221,22 +224,21 @@ class UserController extends \api\components\Controller
         @$accessToken = $params['access_token'];
         @$addressId = $params['address_id'];
         if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
-            return $this->send(null, "用户认证已经过期,请重新登录.", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
         }
         if (empty($addressId)) {
-            return $this->send(null, "地址信息获取失败", "error", 403);
+            return $this->send(null, "地址信息获取失败", 0, 403);
         }
 
         if (CustomerAddress::deleteAddress($addressId)) {
-            return $this->send(null, "删除成功", "ok");
+            return $this->send(null, "删除成功");
         } else {
-
-            return $this->send(null, "删除失败", "error", 403);
+            return $this->send(null, "删除失败", 0, 403);
         }
     }
 
     /**
-     * @api {POST} /user/set-default-address 设置默认地址 (已完成100%) 
+     * @api {PUT} /user/set-default-address 设置默认地址 (已完成100%) 
      * @apiDescription 用户每次下完单都会将该次地址设置为默认地址，下次下单优先使用默认地址
      * @apiName SetDefaultAddress
      * @apiGroup User
@@ -249,7 +251,7 @@ class UserController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "设置成功"
      *     }
      *
@@ -258,7 +260,7 @@ class UserController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录，"
      *     }
      */
@@ -272,29 +274,29 @@ class UserController extends \api\components\Controller
         @$accessToken = $params['access_token'];
         @$addressId = $params['address_id'];
         if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
-            return $this->send(null, "用户认证已经过期,请重新登录.", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
         }
         if (empty($addressId)) {
-            return $this->send(null, "地址信息获取失败", "error", 403);
+            return $this->send(null, "地址信息获取失败", 0, 403);
         }
 
         $model = CustomerAddress::getAddress($addressId);
 
         if (empty($model)) {
-            return $this->send(null, "地址信息获取失败", "error", 403);
+            return $this->send(null, "地址信息获取失败", 0, 403);
         }
 
         if (CustomerAddress::updateAddress($model->id, $model->operation_area_name, $model->customer_address_detail, $model->customer_address_nickname, $model->customer_address_phone)
         ) {
-            return $this->send(null, "设置默认地址成功", "ok");
+            return $this->send(null, "设置默认地址成功");
         } else {
 
-            return $this->send(null, "设置默认地址失败", "error", 403);
+            return $this->send(null, "设置默认地址失败", 0, 403);
         }
     }
 
     /**
-     * @api {POST} /user/update-address 修改常用地址 (已完成100%) 
+     * @api {PUT} /user/update-address 修改常用地址 (已完成100%) 
      *
      * @apiName UpdateAddress
      * @apiGroup User
@@ -312,7 +314,7 @@ class UserController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "修改常用地址成功"
      *     }
      *
@@ -321,7 +323,7 @@ class UserController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录。"
      *
      *     }
@@ -330,7 +332,7 @@ class UserController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 200 address Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "地址信息获取失败"
      *
      *     }
@@ -344,29 +346,29 @@ class UserController extends \api\components\Controller
         @$accessToken = $params['access_token'];
         @$addressId = $params['address_id'];
         if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
-            return $this->send(null, "用户认证已经过期,请重新登录.", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
         }
         if (empty($addressId)) {
-            return $this->send(null, "地址信息获取失败", "error", 403);
+            return $this->send(null, "地址信息获取失败", 0, 403);
         }
 
         $model = CustomerAddress::getAddress($addressId);
 
         if (empty($model)) {
-            return $this->send(null, "地址信息获取失败", "error", 403);
+            return $this->send(null, "地址信息获取失败", 0, 403);
         }
 
         if (CustomerAddress::updateAddress($model->id, @$params['operation_area_name'], @$params['address_detail'], @$params['address_nickname'], @$params['address_phone'])
         ) {
-            return $this->send(null, "修改常用地址成功", "ok");
+            return $this->send(null, "修改常用地址成功");
         } else {
 
-            return $this->send(null, "修改常用地址失败", "error", 403);
+            return $this->send(null, "修改常用地址失败", 0, 403);
         }
     }
 
     /**
-     * @api {GET} /user/set-default-city 设置默认城市 （需求不明确；0%）
+     * @api {PUT} /user/set-default-city 设置默认城市 （需求不明确；0%）
      *
      * @apiName SetDefaultCity
      * @apiGroup User
@@ -381,7 +383,7 @@ class UserController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "设置成功"
      *       "ret":{
      *          "services":{}
@@ -395,66 +397,29 @@ class UserController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
-     */
-    /**
-     * @api {GET} /user/update-city 修改载入城市
-     *
-     * @apiName UpdateCity
-     * @apiGroup User
-     *
-     * @apiParam {String} access_token 用户认证
-     * @apiParam {String} city_name 城市
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     *
-     * @apiSuccess {Object[]} services 该城市提供的服务.
-     * @apiSuccess {Object[]} appInfoWithCity 该城市相关初始化配置.
-     *
-     * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "code": "ok",
-     *       "msg": "设置成功"
-     *       "ret":{
-     *          "services":{}
-     *          "appInfoWithCity":{}
-     *        }
-     *
-     *     }
-     *
-     * @apiError UserNotFound The id of the User was not found.
-     *
-     * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
      */
 
     /**
-     * @api {GET} /user/exchange-coupon 兑换优惠劵 （没有此需求）
+     * @api {GET} /user/exchange-coupon 兑换优惠劵 （郝建设 0%）
      *
      * @apiName ExchangeCoupon
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} city 城市
-     * @apiParam {String} coupon_code 优惠码
+     * @apiParam {String} [city] 城市
+     * @apiParam {String} [coupon_code] 优惠码
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "兑换成功"
-     *
-     *
      *     }
      *
      * @apiError UserNotFound 用户认证已经过期.
@@ -462,7 +427,7 @@ class UserController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
@@ -472,7 +437,7 @@ class UserController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "优惠码不存在，"
      *
      *     }
@@ -483,32 +448,31 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /user/get-share-text 获取分享优惠文本 （待确定；郝建设0%）
+     * @api {GET} /user/get-coupon-customer 获取用户优惠码或同城市 （郝建设100%）
      *
-     * @apiName GetShareText
+     * @apiName GetCouponCustomer
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     *
+     * @apiParam {String} [city_name]  城市
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": {
-     *               "wxCnt": "送你e家洁的10元免费体验邀请码：1011685，关注下e家洁的微信账号：
-     *     ejiajie，十几分钟保洁阿姨就到了，关键是还便宜！只需50元就可以将家里彻底打扫一遍，快告诉你好友吧！",
-     *               "wbCnt": "最近用了【e家洁】App找保洁小时工，阿姨准时登门，干活麻利，门后墙角都干干净净的，2小时才50元，必须推荐给你们！http://t.cn/8siFiZZ
-     *     下载后输入体验邀请码：1011685，你们还可以获得10元优惠券哦！",
-     *                "wxGroupCnt": "最近用了【e家洁】App找保洁小时工，阿姨准时登门，干活麻利，门后墙角都干干净净的，2小时才50元，必须推荐给你们！http://t.cn/8siFiZZ
-     *     下载后输入体验邀请码：1011685，你们还可以获得10元优惠券哦！",
-     *                "wxFriendGroupShare": "品质生活  从e家洁开始",
-     *                "wbShare": "最近使用的保洁打扫利器，新居开荒家电清洗洗衣洗护样样齐全，优质服务省事贴心！快来体验更多~ http://t.cn/8siFiZZ",
-     *                "sms": "最近用了【e家洁】App找保洁小时工，阿姨准时登门，干活麻利，门后墙角都干干净净的，2小时才50元，必须推荐给你们！http://t.cn/8siFiZZ
-     *     下载后输入体验邀请码：1011685，你们还可以获得10元优惠券哦！"
+     *           "coupon":[
+     *             {
+     *               "id": "1",
+     *               "coupon_name": "优惠码名称",
+     *                "coupon_price": "优惠码价格",
+     *                "coupon_type_name": "优惠券类型名称",
+     *                "coupon_service_type_id": "服务类别id",
+     *                "coupon_service_type_name": "服务类别名称",
      *               }
-     *
+     *            ]
+     *           }
      *
      *     }
      *
@@ -517,19 +481,126 @@ class UserController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录，"
+     *
+     *     }
+     *  *     {
+     *       "code": "0",
+     *       "msg": "优惠码列表为空"
      *
      *     }
      *
      */
-    public function actionGetShareText()
+    public function actionGetCouponCustomer()
     {
-        
+        $param = Yii::$app->request->get();
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+
+        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
+
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+        if (!empty($customer) && !empty($customer->id)) {
+            if (@$param['city_name']) {
+                /**
+                 * 获取改用户city_name下面,所有的优惠券
+                 */
+                $CouponData = \core\models\coupon\CouponCustomer::getCouponCustomer($customer->id);
+                if (!empty($CouponData)) {
+                    $ret = array();
+                    foreach ($CouponData as $key => $val) {
+                        $Coupon = \core\models\coupon\Coupon::getCoupon($val['coupon_id'], $param['city_name']);
+                        foreach ($Coupon as $key => $val) {
+                            $ret['coupon'][] = $val;
+                        }
+                    }
+
+                    return $this->send($ret, $param['city_name'] . "优惠码列表");
+                } else {
+                    return $this->send([1], "优惠码列表为空", 0);
+                }
+            } else {
+                $CouponData = \core\models\coupon\CouponCustomer::getCouponCustomer($customer->id, 1);
+
+                $ret['couponCustomer'] = $CouponData;
+                return $this->send($ret, "优惠码列表");
+            }
+        } else {
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
     }
 
     /**
-     * @api {GET} /user/delete-used-worker 删除常用阿姨 （功能已经实现,需再次核实 100%）
+     * @api {GET} /user/get-coupon-count 获取用户优惠码数量 （功能已经实现 100%）
+     *
+     *
+     * @apiName GetCouponCount
+     * @apiGroup User
+     *
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "code": "1",
+     *       "msg": "获取成功"
+     *       "ret":{
+     *            "couponCount":{
+     *            "count":'10'
+     *             }
+     *          }
+     *     }
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "0",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *
+     *     }
+     *
+
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "0",
+     *       "msg": "用户认证已经过期,请重新登录"
+     *
+     *     }
+     *
+     */
+    public function actionGetCouponCount()
+    {
+        $param = Yii::$app->request->get();
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
+
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+
+        if (!empty($customer) && !empty($customer->id)) {
+            $CouponCount = \core\models\coupon\CouponCustomer::CouponCount(1);
+
+            $ret['couponCount'] = $CouponCount;
+            return $this->send($ret, "用户优惠码数量");
+        } else {
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
+    }
+
+    /**
+     * @api {DELETE} /user/delete-used-worker 删除常用阿姨 （功能已经实现,需再次核实 100%）
      *
      *
      * @apiName deleteUsedWorker
@@ -542,7 +613,7 @@ class UserController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "删除成功"
      *
      *     }
@@ -552,7 +623,7 @@ class UserController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
@@ -562,7 +633,7 @@ class UserController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "不存在要删除的阿姨"
      *
      *     }
@@ -579,7 +650,7 @@ class UserController extends \api\components\Controller
         $app_version = $param['access_token'];
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
@@ -593,9 +664,9 @@ class UserController extends \api\components\Controller
             $deleteData = \core\models\customer\CustomerWorker::deleteWorker(1, 2, 1);
             if ($deleteData) {
                 $deleteData = array(1);
-                return $this->send($deleteData, "删除成功", "ok");
+                return $this->send($deleteData, "删除成功");
             } else {
-                return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+                return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
             }
         }
     }
@@ -613,7 +684,7 @@ class UserController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "删除成功"
      *       "ret":{
      *         "blockWorkers": [
@@ -641,7 +712,7 @@ class UserController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
@@ -650,14 +721,14 @@ class UserController extends \api\components\Controller
      */
     public function actionBlackListWorkers()
     {
-        $param = Yii::$app->request->post();
+        $param = Yii::$app->request->get();
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
         $app_version = $param['app_version']; #版本
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
@@ -667,15 +738,15 @@ class UserController extends \api\components\Controller
              */
             $workerData = \core\models\customer\CustomerWorker::blacklistworkers(1, 1);
             if ($workerData) {
-                return $this->send($workerData, "阿姨列表查询", "ok");
+                return $this->send($workerData, "阿姨列表查询");
             } else {
-                return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+                return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
             }
         }
     }
 
     /**
-     * @api {GET} /user/remove-worker 移除黑名单中的阿姨 （功能已经实现,需要再次确认传递参数 已完成100%）
+     * @api {DELETE} /user/remove-worker 移除黑名单中的阿姨 （功能已经实现,需要再次确认传递参数 已完成100%）
      *
      *
      * @apiName RemoveWorker
@@ -688,7 +759,7 @@ class UserController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "移除成功"
      *
      *     }
@@ -698,7 +769,7 @@ class UserController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
@@ -716,7 +787,7 @@ class UserController extends \api\components\Controller
         $worker_id = $param['worker_id']; #阿姨id
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
         }
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
@@ -729,18 +800,18 @@ class UserController extends \api\components\Controller
             $deleteData = \core\models\customer\CustomerWorker::deleteWorker(1, 2, 0, 0);
             if ($deleteData) {
                 $deleteData = array(1);
-                return $this->send($deleteData, "移除成功", "ok");
+                return $this->send($deleteData, "移除成功");
             } else {
-                return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+                return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
             }
         }
     }
 
     /**
-     * @api {GET} /user/user-money 用户余额和消费记录 （数据已经全部取出,需要给出所需字段,然后给予返回 已完成99% ;）
+     * @api {GET} /user/get-user-money 用户余额和消费记录 （数据已经全部取出,需要给出所需字段,然后给予返回 已完成99% ;）
      * 
      *
-     * @apiName UserMoney
+     * @apiName GetUserMoney
      *
      * @apiGroup User
      *
@@ -751,49 +822,69 @@ class UserController extends \api\components\Controller
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
-     *     {
-     *       "code": "ok",
-     *       "msg": "查询成功"
-     *       "ret": {
-     *          "msgStyle": "toast",
-     *          "alertMsg": "",
-     *          "totalMoney": "9863.00元",
-     *          "cardName": "您好！铂金卡会员",
-     *          "isMember": "1",
-     *          "payRecord": [
-     *              {
-     *                  "desc": "家庭保洁",
-     *                  "balanceMoney": "余额支付:¥0",
-     *                  "time": "2015-09-14",
-     *                  "payDetails": "总额:¥25"
-     *              }
-     *          ]
-     *        }
-     *     }
+     * {
+     * "code": "1",
+     * "msg": "查询成功",
+     * "ret": {
+     * "userBalance": "100.00",
+     * "userRecord": [
+     * {
+     * "id": "1",
+     * "customer_id": "1",
+     *  "order_id": "0",
+     * "order_channel_id": "0",
+     * "customer_trans_record_order_channel": null,
+     * "pay_channel_id": "0",
+     * "customer_trans_record_pay_channel": null,
+     *  "customer_trans_record_mode": "0",
+     * "customer_trans_record_mode_name": null,
+     * "customer_trans_record_coupon_money": "0.00",
+     * "customer_trans_record_cash": "0.00",
+     * "customer_trans_record_pre_pay": "0.00",
+     * "customer_trans_record_online_pay": "0.00",
+     * "customer_trans_record_online_balance_pay": "0.00",
+     * "customer_trans_record_online_service_card_on": "0",
+     * "customer_trans_record_online_service_card_pay": "0.00",
+     * "customer_trans_record_online_service_card_current_balance": "0.00",
+     * "customer_trans_record_online_service_card_befor_balance": "0.00",
+     * "customer_trans_record_compensate_money": "0.00",
+     * "customer_trans_record_refund_money": "0.00",
+     * "customer_trans_record_order_total_money": "0.00",
+     * "customer_trans_record_total_money": "0.00",
+     * "customer_trans_record_current_balance": "0.00",
+     * "customer_trans_record_befor_balance": "0.00",
+     * "customer_trans_record_transaction_id": "0",
+     * "customer_trans_record_remark": "",
+     * "customer_trans_record_verify": "",
+     * "created_at": "0",
+     * "updated_at": "0",
+     * "is_del": "1"
+     * }
+     * ]
+     * }
+     * }
      *
      * @apiError UserNotFound 用户认证已经过期.
      *
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
      *
      */
-    public function actionUserMoney()
+    public function actionGetUserMoney()
     {
 
-        $param = Yii::$app->request->post();
+        $param = Yii::$app->request->get();
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
 
-        @$app_version = $param['app_version']; #版本
-
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
         #获取用户id
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
@@ -803,17 +894,17 @@ class UserController extends \api\components\Controller
              * 获取客户余额
              * @param int $customer 用户id
              */
-            $userBalance = \core\models\customer\CustomerExtBalance::getCustomerBalance(1);
+            $userBalance = \core\models\customer\CustomerExtBalance::getCustomerBalance($customer->id);
             /**
              * 获取用户消费记录
              * @param int $customer 用户id
              */
-            $userRecord = \core\models\CustomerTransRecord\CustomerTransRecord::queryRecord(1);
+            $userRecord = \core\models\CustomerTransRecord\CustomerTransRecord::queryRecord($customer->id);
             $ret["userBalance"] = $userBalance;
             $ret["userRecord"] = $userRecord;
-            return $this->send($ret, "查询成功", "ok");
+            return $this->send($ret, "查询成功");
 
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
     }
 
@@ -823,7 +914,7 @@ class UserController extends \api\components\Controller
     public function actionSetUser()
     {
 
-        \core\models\customer\CustomerCode::generateAndSend('13683118946');
+        $aaa = \core\models\customer\CustomerCode::generateAndSend('13683118946');
     }
 
     #生成access_token
@@ -836,10 +927,10 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /user/user-score 用户积分明细 （功能已实现,不明确需求端所需字段格式 90%）
+     * @api {GET} /user/get-user-score 用户积分明细 （功能已实现,不明确需求端所需字段格式 90%）
      *
      * @apiDescription 获取用户当前积分，积分兑换奖品信息，怎样获取积分信息
-     * @apiName Userscore
+     * @apiName GetUserScore
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -848,7 +939,7 @@ class UserController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "提交成功"
      *       "ret":{
      *          "scoreCategory": [
@@ -888,15 +979,15 @@ class UserController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
      *
      */
-    public function actionUserScore()
+    public function actionGetUserScore()
     {
-        $param = Yii::$app->request->post();
+        $param = Yii::$app->request->get();
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
@@ -904,7 +995,7 @@ class UserController extends \api\components\Controller
         $app_version = $param['app_version']; #版本
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
         }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
@@ -916,9 +1007,9 @@ class UserController extends \api\components\Controller
 
             if ($userscore) {
                 $ret["scoreCategory"] = $userscore;
-                return $this->send($ret, "用户积分明细列表", "ok");
+                return $this->send($ret, "用户积分明细列表", 1);
             } else {
-                return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+                return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
             }
         }
     }
@@ -939,7 +1030,7 @@ class UserController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "提交成功"
      *
      *     }
@@ -949,7 +1040,7 @@ class UserController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
@@ -962,7 +1053,7 @@ class UserController extends \api\components\Controller
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
@@ -970,17 +1061,17 @@ class UserController extends \api\components\Controller
         if (!empty($customer) && !empty($customer->id)) {
             $model = \core\models\customer\CustomerComment::addUserSuggest($customer->id, $param['order_id'], $param['customer_comment_phone'], $param['customer_comment_content'], $param['customer_comment_tag_ids'], $param['customer_comment_level']);
             if (!empty($model)) {
-                return $this->send([1], "添加评论成功", "ok");
+                return $this->send([1], "添加评论成功");
             } else {
-                return $this->send(null, "添加评论失败", "error", 403);
+                return $this->send(null, "添加评论失败", 0, 403);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录.", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
         }
     }
 
     /**
-     * @api {POST} /user/get-comment-level 获取用户评价等级 （郝建设 100%）
+     * @api {GET} /user/get-comment-level 获取用户评价等级 （郝建设 100%）
      *
      * @apiName GetCommentLevel
      * @apiGroup User
@@ -991,7 +1082,7 @@ class UserController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "获取评论级别成功",
      *       "ret": {
      *          "id": "1",
@@ -1006,7 +1097,7 @@ class UserController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
@@ -1014,7 +1105,7 @@ class UserController extends \api\components\Controller
      */
     public function actionGetCommentLevel()
     {
-        $param = Yii::$app->request->post();
+        $param = Yii::$app->request->get();
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
@@ -1025,17 +1116,17 @@ class UserController extends \api\components\Controller
             $level = \core\models\comment\CustomerCommentLevel::getCommentLevel();
             if (!empty($level)) {
                 $ret = ['comment' => $level];
-                return $this->send($ret, "获取评论级别成功", "ok");
+                return $this->send($ret, "获取评论级别成功");
             } else {
-                return $this->send(null, "获取评论级别失败", "error", 403);
+                return $this->send(null, "获取评论级别失败", 0, 403);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录.", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
         }
     }
 
     /**
-     * @api {POST} /user/get-comment-level-tag 获取用户评价等级下面的标签 （郝建设 100%）
+     * @api {GET} /user/get-comment-level-tag 获取用户评价等级下面的标签 （郝建设 100%）
      *
      * @apiName GetCommentLevelTag
      * @apiGroup User
@@ -1047,7 +1138,7 @@ class UserController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "获取评论标签成功",
      *       "ret": {
      *          "id": "1",
@@ -1063,7 +1154,7 @@ class UserController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
@@ -1071,7 +1162,7 @@ class UserController extends \api\components\Controller
      */
     public function actionGetCommentLevelTag()
     {
-        $param = Yii::$app->request->post();
+        $param = Yii::$app->request->get();
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
@@ -1082,12 +1173,67 @@ class UserController extends \api\components\Controller
 
             if (!empty($level)) {
                 $ret = ['commentTag' => $level];
-                return $this->send($ret, "获取评论标签成功", "ok");
+                return $this->send($ret, "获取评论标签成功");
             } else {
-                return $this->send(null, "获取评论标签失败", "error", 403);
+                return $this->send(null, "获取评论标签失败", 0, 403);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录.", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
+        }
+    }
+
+    /**
+     * @api {GET} /user/get-goods 获取给定经纬度范围内是否有该服务 （郝建设 100%）
+     *
+     * @apiName GetGoods
+     * @apiGroup User
+     *
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} longitude 经度
+     * @apiParam {String} latitude 纬度
+     * @apiParam {String} order_service_type_id 服务id
+     * 
+
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "code": "1",
+     *       "msg": "有该服务",
+     *       "ret": {
+     *          "1",
+     *           }
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "0",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *
+     *     }
+     *
+     */
+    public function actionGetGoods()
+    {
+        $param = Yii::$app->request->get();
+
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+        if (!empty($customer) && !empty($customer->id)) {
+
+
+            $service = \core\models\order\Order::getGoods($param['longitude'], $param['latitude'], $param['order_service_type_id']);
+            if ($service) {
+                return $this->send(1, "该服务获取成功");
+            } else {
+                return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+            }
+        } else {
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
     }
 
