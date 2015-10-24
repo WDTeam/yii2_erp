@@ -26,9 +26,9 @@ class m151024_082845_create_table_server_card_record extends Migration
 
     public function down()
     {
-        echo "m151024_082845_create_table_server_card_record cannot be reverted.\n";
+        $this->dropTable('{{%server_card_record}}');
 
-        return false;
+        return true;
     }
 
     /*

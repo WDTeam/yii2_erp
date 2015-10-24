@@ -124,6 +124,11 @@ echo Menu::widget(
                         'url' => ['/auto-assign'],
                         'icon' => 'fa fa-angle-right',
                     ],
+                	[
+                		'label' => '投诉订单(30%)',
+                		'url' => ['/complaint-order'],
+                		'icon' => 'fa fa-angle-right',
+                	],
                 ],
             ],
             [

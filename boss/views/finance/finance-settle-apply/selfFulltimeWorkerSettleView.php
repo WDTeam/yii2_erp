@@ -64,13 +64,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?=  $model->finance_settle_apply_cycle_des; ?>
             </div>
             <div class='col-md-2'>
-                <?=  date('Y:m:d H:i:s',$model->latestSettleTime); ?>
+                <?=  date('Y-m-d',$model->finance_settle_apply_starttime).'至'.date('Y-m-d',$model->finance_settle_apply_endtime); ?>
             </div>
             <div class='col-md-2'>
-                <?=  date('Y:m:d H:i:s',$model->latestSettleTime); ?>
+                <?=  date('Y:m:d H:i:s',$model->created_at); ?>
             </div>
             <div class='col-md-2'>
-                <?=  date('Y:m:d H:i:s',$model->latestSettleTime); ?>
+                <?php
+                    if($model->latestSettleTime != null){
+                        echo date('Y:m:d H:i:s',$model->latestSettleTime); 
+                    }else{
+                        echo "之前未成功结算";
+                    }
+                ?>
             </div>
         </div>
         <div class="panel-heading">
@@ -78,34 +84,34 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="panel-body settle-detail-body">
             <div class='settleDetail'>
-                完成总单量
+                完成总工时
             </div>
             <div class='settleDetail'>
-                现金订单
+                工时费小计
             </div>
             <div class='settleDetail'>
-                收取现金
-            </div>
-            <div class='settleDetail'>
-                非现金订单
-            </div>
-            <div class='settleDetail'>
-                工时费应结
+                底薪补贴
             </div>
             <div class='settleDetail'>
                 完成任务
             </div>
             <div class='settleDetail'>
-                任务奖励
+                任务小计
             </div>
             <div class='settleDetail'>
-                小保养订单
+                扣款小计
             </div>
             <div class='settleDetail'>
-                小保养
+                本次应结合计
             </div>
             <div class='settleDetail'>
-                应结
+                现金订单
+            </div>
+            <div class='settleDetail'>
+                已收现金小计
+            </div>
+            <div class='settleDetail'>
+                本次应付合计
             </div>
         </div>
         <div class="panel-body settle-detail-body">
@@ -121,42 +127,56 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class='settleDetail'>
                  <?php
-                    if($model->finance_settle_apply_order_cash_count > 0){
-                        echo '<span class = "cashordercount" style = "cursor:pointer"><u>'.$model->finance_settle_apply_order_cash_count.'</u></span>';
-                    }else{
-                        echo $model->finance_settle_apply_order_cash_count;
-                    }
+                    echo $model->finance_settle_apply_order_money;
                 ?>
             </div>
             <div class='settleDetail'>
-                <?php echo $model->finance_settle_apply_order_cash_money ?>
+               <?php
+                    echo $model->finance_settle_apply_base_salary_subsidy;
+                ?>
             </div>
             <div class='settleDetail'>
                 <?php
-                    if($model->finance_settle_apply_order_noncash_count > 0){
-                        echo '<span class = "noncashordercount" style = "cursor:pointer"><u>'.$model->finance_settle_apply_order_noncash_count.'</u></span>';
-                    }else{
-                        echo $model->finance_settle_apply_order_noncash_count;
-                    }
+                    if($model->finance_settle_apply_task_count > 0){
+                            echo '<span class = "ordercount" style = "cursor:pointer"><u>'.$model->finance_settle_apply_task_count.'</u></span>';
+                        }else{
+                            echo $model->finance_settle_apply_task_count;
+                        }
                 ?>
             </div>
             <div class='settleDetail'>
-                <?php echo $model->finance_settle_apply_order_money_except_cash ?>
+                 <?php
+                    echo $model->finance_settle_apply_task_money;
+                ?>
             </div>
             <div class='settleDetail'>
-                0
+                <?php
+                    echo $model->finance_settle_apply_money_deduction;
+                ?>
             </div>
             <div class='settleDetail'>
-                0
+                <?php
+                    echo $model->finance_settle_apply_money_except_cash;
+                ?>
             </div>
             <div class='settleDetail'>
-                0
+                <?php
+                    if($model->finance_settle_apply_order_cash_count > 0){
+                            echo '<span class = "cashordercount" style = "cursor:pointer"><u>'.$model->finance_settle_apply_order_cash_count.'</u></span>';
+                        }else{
+                            echo $model->finance_settle_apply_order_cash_count;
+                        }
+                ?>
             </div>
             <div class='settleDetail'>
-                0
+                <?php
+                    echo $model->finance_settle_apply_order_cash_money;
+                ?>
             </div>
             <div class='settleDetail'>
-                0
+                <?php
+                    echo $model->finance_settle_apply_money;
+                ?>
             </div>
         </div>
         
