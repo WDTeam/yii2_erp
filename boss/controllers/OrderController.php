@@ -26,7 +26,7 @@ class OrderController extends BaseAuthController
         $orderid = yii::$app->request->get('orderid',1);
         $orderInfo = OrderSearch::getOne($orderid);
        // var_dump($orderStatus);
-        if($orderInfo->order_code==false)
+        if(!isset($orderInfo->order_code))
         {
             echo "没有此订单";
             exit;
