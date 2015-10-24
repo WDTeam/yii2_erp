@@ -1,10 +1,10 @@
 <?php
 
-namespace boss\controllers;
+namespace boss\controllers\finance;
 
 use Yii;
-use common\models\FinanceInvoice;
-use boss\models\FinanceInvoiceSearch;
+use common\models\finance\FinanceInvoice;
+use boss\models\finance\FinanceInvoiceSearch;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
