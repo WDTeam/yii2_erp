@@ -178,13 +178,6 @@ $this->params['breadcrumbs'][] = $this->title;
 					                    	</td>
 					                    </tr>
 									</table>
-		  	                   </div>  
-		  	                   <div class="m_quan">
-						             <div class="m_cek"><input type="checkbox" /><a href="javascript:;">全选</a></div>
-		  	                         <ul class="lis liss" id="list">
-						    		      <li>申请发票</li>
-						    		      <li>取消订单 </li>
-						    	     </ul>
 		  	                   </div>
 		  	                  
 						    	<div class="clear"></div>
