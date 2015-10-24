@@ -1,11 +1,11 @@
 <?php
 
-namespace core\models\GeneralPay;
+namespace core\models\payment;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use core\models\GeneralPay\GeneralPay;
+use core\models\payment\GeneralPay;
 
 /**
  * GeneralPaySearch represents the model behind the search form about `\core\models\GeneralPay\GeneralPay`.

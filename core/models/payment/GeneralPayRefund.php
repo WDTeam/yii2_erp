@@ -1,9 +1,9 @@
 <?php
 
-namespace core\models\GeneralPay;
+namespace core\models\payment;
 use Yii;
 
-class GeneralPayRefund extends \common\models\pay\GeneralPayRefund
+class GeneralPayRefund extends \common\models\payment\GeneralPayRefund
 {
 
 

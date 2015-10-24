@@ -1,6 +1,6 @@
 <?php
 
-namespace core\models\GeneralPay;
+namespace core\models\payment;
 
 /**
  * This is the ActiveQuery class for [[GeneralPay]].
