@@ -256,11 +256,7 @@ class WorkerController extends BaseAuthController
                     $workerModel->worker_auth_status = 5;
                     $workerModel->save();
                 }
-                //worker_ontrial_status worker_onboard_status worker_rising_training_status
             }
-            //var_dump($workerAuthModel->getErrors());die;
-//            var_dump(Yii::$app->request->post());
-//            die;
         }
         return $this->render('view_auth',['worker_id'=>$id,'workerAuthModel'=>$workerAuthModel]);
     }
@@ -343,33 +339,87 @@ class WorkerController extends BaseAuthController
         }
     }
 
+    public function actionOperateVacation($workerId){
+        $param = Yii::$app->request->post('WorkerVacation');
+
+        if($param){
+            if(empty($param['id'])){
+                $workerVacationModel = new WorkerVacation();
+            }else{
+                $workerVacationModel = WorkerVacation::findOne($param['id']);
+            }
+            $dateRange = explode('至',$param['daterange']);
+            $startDate = $dateRange[0];
+            $finishDate = $dateRange[1];
+            $workerVacationModel->worker_id = $workerId;
+            $workerVacationModel->worker_vacation_start_time = strtotime($startDate);
+            $workerVacationModel->worker_vacation_finish_time = strtotime($finishDate);
+            $workerVacationModel->worker_vacation_type = $param['worker_vacation_type'];
+            $workerVacationModel->worker_vacation_extend = $param['worker_vacation_extend'];
+            $workerVacationModel->worker_vacation_status = $param['worker_vacation_status'];
+            if($workerVacationModel->save()){
+                $workerModel = Worker::findOne($workerId);
+                if(empty($param['id'])){
+                    if($param['worker_vacation_status']==1){
+                        $workerModel->worker_is_vacation = 1;
+                        $workerModel->save();
+                    }elseif($param['worker_vacation_status']==0){
+                        $workerModel->worker_is_vacation = 0;
+                        $workerModel->save();
+                    }
+                }else{
+                    $modifiedAttributes = $workerVacationModel->getDirtyAttributes();
+                    if($modifiedAttributes['worker_vacation_status']==1){
+                        $workerModel->worker_is_vacation = 1;
+                        $workerModel->save();
+                    }elseif($modifiedAttributes['worker_vacation_status']==0){
+                        $workerModel->worker_is_vacation = 0;
+                        $workerModel->save();
+                    }
+                }
+            }
+        }
+        return $this->redirect(['auth', 'id' => $workerId]);
+    }
+
+
     /**
      * 创建阿姨封号信息
      * @param integer workerId 阿姨Id
      * @return empty
      */
     public function actionOperateBlock($workerId){
-        $workerModel = $this->findModel($workerId);
-        $post = \Yii::$app->request->post('WorkerBlock');
-        if($post){
-            $workerBlockModel = WorkerBlock::findone($post['id'])?WorkerBlock::findone($post['id']):new WorkerBlock();
-            if(empty($post['id'])){
+        $param = \Yii::$app->request->post('WorkerBlock');
+
+        if($param){
+            if(empty($param['id'])){
                 $workerBlockModel = new WorkerBlock();
             }else{
-                $workerBlockModel = WorkerBlock::findone($post['id']);
+                $workerBlockModel = WorkerBlock::findone($param['id']);
             }
+            $dateRange = explode('至',$param['daterange']);
+            $startDate = $dateRange[0];
+            $finishDate = $dateRange[1];
             $workerBlockModel->worker_id = intval($workerId);
-            $workerBlockModel->worker_block_start_time = strtotime($post['worker_block_start_time']);
-            $workerBlockModel->worker_block_finish_time = strtotime($post['worker_block_finish_time']);
-            $workerBlockModel->worker_block_reason = $post['worker_block_reason'];
-            $workerBlockModel->worker_block_status = intval($post['worker_block_status']);
+            $workerBlockModel->worker_block_start_time = strtotime($startDate);
+            $workerBlockModel->worker_block_finish_time = strtotime($finishDate);
+            $workerBlockModel->worker_block_reason = $param['worker_block_reason'];
+            $workerBlockModel->worker_block_status = intval($param['worker_block_status']);
             //为更改前的阿姨封号属性
             $oldAttributes = $workerBlockModel->oldAttributes;
             //更改的阿姨封号属性
             $modifiedAttributes = $workerBlockModel->getDirtyAttributes();
             //记录阿姨日志
             if($workerBlockModel->save()){
-                if(empty($post['id'])){
+                $workerModel = $this->findModel($workerId);
+                if(empty($param['id'])){
+                    if($param['worker_block_status']==1){
+                        $workerModel->worker_is_block = 1;
+                        $workerModel->save();
+                    }elseif($modifiedAttributes['worker_block_status']==0){
+                        $workerModel->worker_is_block = 0;
+                        $workerModel->save();
+                    }
                     $this->CreateBlockLog($workerId,$workerBlockModel->id,1);
                 }else{
                     if(isset($modifiedAttributes['worker_block_finish_time'])){
@@ -395,7 +445,7 @@ class WorkerController extends BaseAuthController
 
                 }
             }
-            return $this->redirect(['/worker/'.$workerId]);
+            return $this->redirect(['auth', 'id' => $workerId]);
         }
     }
 
@@ -419,15 +469,15 @@ class WorkerController extends BaseAuthController
             }
             //更改封号结束时间
             if(isset($workerBlockArr['finishtime'])){
-                $finish_ime = strtotime($workerBlockArr['finishtime']);
-                if($old_finish_time>$finish_ime){
+                $finish_time = strtotime($workerBlockArr['finishtime']);
+                if($old_finish_time>$finish_time){
                     //缩短封号时间
                     $this->CreateBlockLog($worker_id,$block_id,2);
                 }else{
                     //延长封号时间
                     $this->CreateBlockLog($worker_id,$block_id,3);
                 }
-                $workerBlockModel->worker_block_finish_time = $finish_ime;
+                $workerBlockModel->worker_block_finish_time = $finish_time;
             //更改封号状态
             }elseif(isset($workerBlockArr['worker_block_status']) && $workerBlockArr['worker_block_status']==1){
                 $workerBlockModel->worker_block_status = $workerBlockArr['worker_block_status'];
