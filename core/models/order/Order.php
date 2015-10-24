@@ -14,7 +14,7 @@ use boss\controllers\OperationShopDistrictController;
 use common\models\order\OrderExtFlag;
 use core\models\Customer;
 use core\models\customer\CustomerAddress;
-use core\models\GeneralPay\GeneralPay;
+use core\models\payment\GeneralPay;
 use core\models\worker\Worker;
 use Yii;
 use common\models\order\Order as OrderModel;
