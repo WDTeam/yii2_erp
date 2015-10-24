@@ -126,7 +126,7 @@ class PayController extends \api\components\Controller
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *      "code": 0,
+     *      "code": 1,
      *      "msg": "数据返回成功",
      *      "ret": {
      *          "sp_no": 1049,
@@ -157,7 +157,7 @@ class PayController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"error",
+     *      "code":"0",
      *      "msg": "支付失败"
      *  }
      *
@@ -171,7 +171,7 @@ class PayController extends \api\components\Controller
         $data[$name] = json_decode(Yii::$app->request->rawBody, true);
 
         if (empty($data[$name]['access_token']) || !CustomerAccessToken::checkAccessToken($data[$name]['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
         $customer = CustomerAccessToken::getCustomer($data[$name]['access_token']);
 
@@ -228,7 +228,7 @@ class PayController extends \api\components\Controller
             $retInfo = GeneralPay::getPayParams($model->pay_money, $model->customer_id, $model->channel_id, $model->partner, $model->order_id, $ext_params);
             return $this->send($retInfo['data'], $retInfo['info'], $retInfo['status']);
         }
-        return $this->send(null, $model->errors, "error");
+        return $this->send(null, $model->errors,0);
 
     }
 

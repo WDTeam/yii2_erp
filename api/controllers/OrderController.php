@@ -36,7 +36,7 @@ class OrderController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "获取可服务时间表成功"
      *       "ret":{
      *          "appointment": [
@@ -68,7 +68,7 @@ class OrderController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
@@ -81,7 +81,7 @@ class OrderController extends \api\components\Controller
         @$accessToken = $params['access_token'];
 
         if (empty($accessToken) && !CustomerAccessToken::checkAccessToken($accessToken)) {
-            return $this->send(empty($accessToken), "用户认证已经过期,请重新登录.", "error", 403);
+            return $this->send(empty($accessToken), "用户认证已经过期,请重新登录.", 0, 403);
         }
         $appointment = array();
         for ($i = 0; $i <= 7; $i++) {
@@ -105,7 +105,7 @@ class OrderController extends \api\components\Controller
         }
 
         $ret = ["appointment" => $appointment];
-        return $this->send($ret, "获取可服务时间表成功", "ok");
+        return $this->send($ret, "获取可服务时间表成功");
     }
 
     /**
@@ -142,7 +142,7 @@ class OrderController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *  "code": "ok",
+     *  "code": "1",
      *  "msg": "创建订单成功",
      *  "ret": {
      *          "order_service_type_id": "1",
@@ -175,7 +175,7 @@ class OrderController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
@@ -189,14 +189,14 @@ class OrderController extends \api\components\Controller
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录");
+            return $this->send(null, "用户无效,请先登录",0);
         }
         $attributes['customer_id'] = $user->id;
 
         if (@is_null($args['server_item'])) {
             // server_item is null, order from app
             if (is_null($args['order_service_type_id'])) {
-                return $this->send(null, "请输入商品类型");
+                return $this->send(null, "请输入商品类型",0);
             }
             $attributes['order_service_type_id'] = $args['order_service_type_id'];
         } else {
@@ -206,7 +206,7 @@ class OrderController extends \api\components\Controller
 
         if (@is_null($args['order_src'])) {
             if (is_null($args['order_src_id'])) {
-                return $this->send(null, "数据不完整,缺少订单来源");
+                return $this->send(null, "数据不完整,缺少订单来源",0);
             }
             $attributes['order_src_id'] = $args['order_src_id'];
         } else {
@@ -214,22 +214,22 @@ class OrderController extends \api\components\Controller
             if (!empty($orderSrc)) {
                 $attributes['order_src_id'] = $orderSrc['id'];
             } else {
-                return $this->send(null, "数据不完整,没有配置订单来源：" . $args['order_src']);
+                return $this->send(null, "数据不完整,没有配置订单来源：" . $args['order_src'],0);
             }
         }
 
         if (is_null($args['order_booked_begin_time'])) {
-            return $this->send(null, "数据不完整,请输入初始时间");
+            return $this->send(null, "数据不完整,请输入初始时间",0);
         }
         $attributes['order_booked_begin_time'] = $args['order_booked_begin_time'];
 
         if (is_null($args['order_booked_end_time'])) {
-            return $this->send(null, "数据不完整,请输入完成时间");
+            return $this->send(null, "数据不完整,请输入完成时间",0);
         }
         $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
 
         if (is_null($args['city'])) {
-            return $this->send(null, "数据不完整,请输入城市名");
+            return $this->send(null, "数据不完整,请输入城市名",0);
         }
 
         if (isset($args['address_id'])) {
@@ -254,11 +254,11 @@ class OrderController extends \api\components\Controller
                 if (!empty($model)) {
                     $attributes['address_id'] = $model->id;
                 } else {
-                    return $this->send(null, "地址数据不完整,请输入常用地址id或者城市,地址名（包括区）");
+                    return $this->send(null, "地址数据不完整,请输入常用地址id或者城市,地址名（包括区）",0);
                 }
             }
         } else {
-            return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名");
+            return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名",0);
         }
 
         if (isset($args['order_pop_order_code'])) {
@@ -313,7 +313,7 @@ class OrderController extends \api\components\Controller
             $this->send($order, $msg);
         } else {
             $msg = '创建订单失败';
-            $this->send($order->errors, $msg, "error");
+            $this->send($order->errors, $msg, 0);
         }
     }
 
@@ -351,7 +351,7 @@ class OrderController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "以下单成功，正在等待阿姨抢单",
      *       "ret":{
      *           "order": {}
@@ -365,7 +365,7 @@ class OrderController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
@@ -378,30 +378,30 @@ class OrderController extends \api\components\Controller
         $attributes = [];
         $user = CustomerAccessToken::getCustomer($args['access_token']);
         if (is_null($user)) {
-            return $this->send(null, "用户无效,请先登录");
+            return $this->send(null, "用户无效,请先登录",0);
         }
         $attributes['customer_id'] = $user->id;
         if (is_null($args['order_service_type_id'])) {
-            return $this->send(null, "请输入商品类型");
+            return $this->send(null, "请输入商品类型",0);
         }
         $attributes['order_service_type_id'] = $args['order_service_type_id'];
         if (is_null($args['order_src_id'])) {
-            return $this->send(null, "数据不完整,缺少订单来源");
+            return $this->send(null, "数据不完整,缺少订单来源",0);
         }
         $attributes['order_src_id'] = $args['order_src_id'];
 
         if (is_null($args['order_booked_begin_time'])) {
-            return $this->send(null, "数据不完整,请输入初始时间");
+            return $this->send(null, "数据不完整,请输入初始时间",0);
         }
         $attributes['order_booked_begin_time'] = $args['order_booked_begin_time'];
 
         if (is_null($args['order_booked_end_time'])) {
-            return $this->send(null, "数据不完整,请输入完成时间");
+            return $this->send(null, "数据不完整,请输入完成时间",0);
         }
         $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
 
         if (is_null($args['address_id']) and ( is_null($args['address_id']) or is_null($args['city']))) {
-            return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名");
+            return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名",0);
         }
         if (is_null($args['address_id'])) {
             $model = CustomerAddress::addAddress($user->id, $args['city'], $args['address'], $args['order_customer_phone'], $args['order_customer_phone']);
@@ -451,7 +451,7 @@ class OrderController extends \api\components\Controller
             $this->send($order, $msg);
         } else {
             $msg = '追加订单失败';
-            $this->send($order, $msg, "error");
+            $this->send($order, $msg, 0);
         }
     }
 
@@ -479,7 +479,7 @@ class OrderController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *    "code": "ok",
+     *    "code": "1",
      *    "msg": "操作成功",
      *    "ret": {
      *    "limit": "1",
@@ -529,7 +529,7 @@ class OrderController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
@@ -581,7 +581,7 @@ class OrderController extends \api\components\Controller
         $ret['page_total'] = ceil($count / $limit);
         $ret['page'] = $page;
         $ret['orders'] = $orders;
-        $this->send($ret, $msg = "操作成功", $code = "1", $value = 200, $text = null);
+        $this->send($ret, "操作成功", 1);
     }
 
     /**
@@ -620,7 +620,7 @@ class OrderController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
@@ -649,7 +649,7 @@ class OrderController extends \api\components\Controller
         $orderSearch = new \core\models\order\OrderSearch();
         $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus, $channels);
         $ret['count'] = $count;
-        $this->send($ret, $msg = "操作成功", $code = "1", $value = 200, $text = null);
+        $this->send($ret, "操作成功", 1, 200);
     }
 
     /**
@@ -698,7 +698,7 @@ class OrderController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
@@ -735,7 +735,7 @@ class OrderController extends \api\components\Controller
             $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus, $channels);
             $ret['count'] = $count;
         }
-        $this->send($ret, $msg = "操作成功", $code = "1", $value = 200, $text = null);
+        $this->send($ret, "操作成功");
     }
 
     /**
@@ -813,15 +813,16 @@ class OrderController extends \api\components\Controller
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录", "0");
+            return $this->send(null, "用户无效,请先登录",0);
         }
         @$orderId = $args['order_id'];
-        if (!is_numeric($orderId)) {
-            return $this->send(null, "该订单不存在", "0");
+        if(!is_numeric($orderId)){
+            return $this->send(null, "该订单不存在",0);
         }
+        //TODO check whether the orders belong the user
         $ret = \core\models\order\OrderStatus::searchOrderStatusHistory($orderId);
 
-        $this->send($ret, $msg = "操作成功", $code = "ok", $value = 200, $text = null);
+        $this->send($ret, "操作成功");
     }
 
     /**
@@ -870,7 +871,7 @@ class OrderController extends \api\components\Controller
         }
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
@@ -900,13 +901,13 @@ class OrderController extends \api\components\Controller
                 }
 
                 if (\core\models\order\Order::cancel($param['order_id'], 0, $param['order_cancel_reason'])) {
-                    return $this->send([1], $param['order_id'] . "订单取消成功", "ok");
+                    return $this->send([1], $param['order_id'] . "订单取消成功");
                 }
             } else {
-                return $this->send(null, "用户认证已经过期,请重新登录.", "error", 403);
+                return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录222.", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
         }
     }
 
@@ -1038,7 +1039,7 @@ class OrderController extends \api\components\Controller
         }
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
@@ -1052,9 +1053,9 @@ class OrderController extends \api\components\Controller
             $orderValidation = \core\models\order\Order::validationOrderCoustomer($customer->id, $param['order_id']);
 
             if (\core\models\order\Order::customerDel($param['order_id'], 0)) {
-                return $this->send([1], "删除订单成功", "ok");
+                return $this->send([], "删除订单成功");
             } else {
-                return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+                return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
             }
         }
     }

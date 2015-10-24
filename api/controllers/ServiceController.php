@@ -25,7 +25,7 @@ class ServiceController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *      "code": "ok",
+     *      "code": 1,
      *      "msg": "信息获取成功",
      *      "ret":
      *      [
@@ -76,7 +76,7 @@ class ServiceController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 404 Not Found
      *     {
-     *       "code":"error",
+     *       "code":0,
      *       "msg": "该城市暂未开通"
      *     }
      */
@@ -85,7 +85,7 @@ class ServiceController extends \api\components\Controller
         $param = Yii::$app->request->get();
 
         if (empty(@$param['city_name'])) {
-            return $this->send(null, "未取得城市信息", "error", "403");
+            return $this->send(null, "未取得城市信息", 0, 403);
         }
 
         $ret = [
@@ -131,7 +131,7 @@ class ServiceController extends \api\components\Controller
 
         ];
 
-        return $this->send($ret, "信息获取成功", "ok");
+        return $this->send($ret, "信息获取成功");
     }
 
     /**
@@ -187,14 +187,14 @@ class ServiceController extends \api\components\Controller
         $param = Yii::$app->request->get();
 
         if (empty(@$param['city_name'])) {
-            return $this->send(null, "未取得城市信息", "error", "403");
+            return $this->send(null, "未取得城市信息", 0, 403);
         }
 
         $categoryes = CoreOperationCategory::getAllCategory();
         $goodses = CoreOperationShopDistrictGoods::getGoodsByCity($param['city_name']);
 
         if (empty($categoryes) || empty($goodses)) {
-            return $this->send(null, "该城市暂未开通", "error", "403");
+            return $this->send(null, "该城市暂未开通", 0, 403);
         }
         $cDate = [];
         foreach ($categoryes as $cItem) {
@@ -226,7 +226,7 @@ class ServiceController extends \api\components\Controller
             $cDate[] = $cObject;
         }
 
-        return $this->send($cDate, "数据获取成功", "ok");
+        return $this->send($cDate, "数据获取成功");
     }
 
     /**
@@ -249,7 +249,7 @@ class ServiceController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *      "code": "ok",
+     *      "code": 1,
      *      "msg": "",
      *      "ret":
      *      [
@@ -262,7 +262,7 @@ class ServiceController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 404 Not Found
      *     {
-     *       "code":"error",
+     *       "code":0,
      *       "msg": "错误的城市信息"
      *     }
      */
@@ -271,23 +271,23 @@ class ServiceController extends \api\components\Controller
         $params = Yii::$app->request->get();
 
         if (empty($params['longitude']) || empty($params['latitude'])) {
-            return $this->send(null, "经纬度信息不存在", "error", "403");
+            return $this->send(null, "经纬度信息不存在", 0,403);
         }
         $shopDistrict = CoreOperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($params['longitude'], $params['latitude']);
         if (empty($shopDistrict)) {
-            return $this->send(null, "没有上线商圈", "error", "403");
+            return $this->send(null, "没有上线商圈", 0,403);
         }
         $goods = CoreOperationShopDistrictGoods::getShopDistrictGoodsInfo($params['city_id'], $shopDistrict['operation_shop_district_id'], $params['goods_id']);
 
         if (empty($goods)) {
-            return $this->send(null, "该商圈没有上线当前服务品类", "error", "403");
+            return $this->send(null, "该商圈没有上线当前服务品类", 0,403);
         }
 
         $ret = [
             'goods_price' => $goods['operation_shop_district_goods_price'],
         ];
 
-        return $this->send($ret, "数据获取成功", "ok");
+        return $this->send($ret, "数据获取成功");
     }
 
     /**
