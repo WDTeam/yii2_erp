@@ -403,44 +403,9 @@ class UserController extends \api\components\Controller
      *
      *     }
      */
-    /**
-     * @api {GET} /user/update-city 修改载入城市
-     *
-     * @apiName UpdateCity
-     * @apiGroup User
-     *
-     * @apiParam {String} access_token 用户认证
-     * @apiParam {String} city_name 城市
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     *
-     * @apiSuccess {Object[]} services 该城市提供的服务.
-     * @apiSuccess {Object[]} appInfoWithCity 该城市相关初始化配置.
-     *
-     * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "code": "1",
-     *       "msg": "设置成功"
-     *       "ret":{
-     *          "services":{}
-     *          "appInfoWithCity":{}
-     *        }
-     *
-     *     }
-     *
-     * @apiError UserNotFound The id of the User was not found.
-     *
-     * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
-     */
 
     /**
-     * @api {GET} /user/exchange-coupon 兑换优惠劵 （没有此需求）
+     * @api {GET} /user/exchange-coupon 兑换优惠劵 （郝建设 0%）
      *
      * @apiName ExchangeCoupon
      * @apiGroup User
