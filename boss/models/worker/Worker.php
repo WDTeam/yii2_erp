@@ -96,4 +96,52 @@ class Worker extends \core\models\worker\Worker
             return true;
         }
     }
+
+    public static function getWorkerPhotoShow($worker_photo){
+        if($worker_photo){
+            return \yii\helpers\Html::img($worker_photo, ['class'=>'file-preview-image']);
+        }
+    }
+
+    /*
+     * 统计被列入黑名单的阿姨的数量
+     */
+    public static function CountBlockWorker(){
+        return self::find()->where(['worker_is_block'=>1,'isdel'=>0])->count();
+    }
+
+    /*
+     * 统计被封号的阿姨的数量
+     */
+    public static function CountBlackListWorker(){
+        return self::find()->where(['worker_is_blacklist'=>1,'isdel'=>0])->count();
+    }
+
+    /*
+     * 统计各个审核状态的阿姨数量
+     */
+    public static function CountDimissionWorker(){
+        return self::find()->where(['worker_is_dimission'=>1])->count();
+    }
+
+    /*
+     * 统计请假的阿姨数量的数量
+     */
+    public static function CountVacationWorker(){
+        return self::find()->where(['worker_is_vacation'=>1,'isdel'=>0])->count();
+    }
+
+    /*
+     * 统计各个身份的阿姨数量
+     */
+    public static function CountWorkerIdentity($workerIdentityId){
+        return self::find()->where(['worker_identity_id'=>$workerIdentityId,'isdel'=>0])->count();
+    }
+
+    /*
+     * 统计各个审核状态的阿姨数量
+     */
+    public static function CountWorkerStatus($workerStatus){
+        return self::find()->where(['worker_auth_status'=>$workerStatus])->count();
+    }
 }
