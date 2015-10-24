@@ -1,9 +1,8 @@
 <?php
 
-namespace core\models\worker;
+namespace common\models\worker;
 
 use Yii;
-use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "{{%worker_rule_config}}".
@@ -15,7 +14,7 @@ use yii\helpers\ArrayHelper;
  * @property integer $admin_id
  * @property double $isdel
  */
-class WorkerRuleConfig extends \common\models\worker\WorkerRuleConfig
+class WorkerRuleConfig extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
@@ -37,7 +36,6 @@ class WorkerRuleConfig extends \common\models\worker\WorkerRuleConfig
         ];
     }
 
-
     /**
      * @inheritdoc
      */
@@ -52,26 +50,4 @@ class WorkerRuleConfig extends \common\models\worker\WorkerRuleConfig
             'isdel' => Yii::t('app', '是否删除 0正常1删除'),
         ];
     }
-
-    /*
-     * 获取阿姨所有身份
-     * @return array ['id'=>'worker_rule_name',..]
-     */
-    public static function getWorkerRuleList(){
-        $workerRuleList = self::find()->select('id,worker_rule_name')->where(['isdel'=>0])->asArray()->all();
-        return \yii\helpers\ArrayHelper::map($workerRuleList,'id','worker_rule_name');
-    }
-
-    /*
-     * 获取阿姨身份名称
-     * @param int worker_rule
-     * @return String worker_rule_name
-     */
-    public static function getWorkerRuleShow($workerRuleId){
-
-        $workerRuleInfo = self::find()->where(['id'=>$workerRuleId,'isdel'=>0])->asArray()->one();
-
-        return $workerRuleInfo['worker_rule_name'];
-    }
-
 }

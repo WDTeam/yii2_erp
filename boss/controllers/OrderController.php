@@ -455,6 +455,8 @@ public function actionGetCity()
         $province_id = Yii::$app->request->post('province_id');
         $city_id = Yii::$app->request->post('city_id');
         $county_id = Yii::$app->request->post('county_id');
+        $province_name = Yii::$app->request->post('province_name');
+        $city_name = Yii::$app->request->post('city_name');
         $county_name = Yii::$app->request->post('county_name');
         $detail = Yii::$app->request->post('detail');
         $nickname = Yii::$app->request->post('nickname');
@@ -462,10 +464,10 @@ public function actionGetCity()
         $customer_id = Yii::$app->request->post('customer_id');
         if($address_id>0){
             //修改
-            $address = CustomerAddress::updateAddress($address_id,$county_name,$detail,$nickname,$phone);
+            $address = CustomerAddress::updateAddress($address_id,$province_name,$city_name,$county_name,$detail,$nickname,$phone);
         }else{
             //添加
-            $address = CustomerAddress::addAddress($customer_id,$county_name,$detail,$nickname,$phone);
+            $address = CustomerAddress::addAddress($customer_id,$province_name,$city_name,$county_name,$detail,$nickname,$phone);
         }
         if($address){
             return ['code'=>200,'data'=>$address];

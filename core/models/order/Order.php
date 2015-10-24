@@ -89,6 +89,7 @@ use yii\helpers\ArrayHelper;
  * @property string $shop_id
  * @property string $checking_id
  * @property string $order_cs_memo
+ * @property string $order_sys_memo
  * @property string $admin_id
  */
 class Order extends OrderModel

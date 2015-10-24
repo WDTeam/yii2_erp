@@ -64,12 +64,12 @@ echo Menu::widget(
                 'items' => [
                     [
                         'label' => '查看所有阿姨(90%)',
-                        'url' => ['/worker'],
+                        'url' => ['/worker/worker'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
                         'label' => '录入新阿姨(90%)',
-                        'url' => ['/worker/create'],
+                        'url' => ['/worker/worker/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
 //                     [

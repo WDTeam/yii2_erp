@@ -9,6 +9,7 @@
 namespace boss\models\order;
 
 use boss\models\Operation\OperationCity;
+use common\models\FinanceOrderChannel;
 use core\models\Operation\CoreOperationArea;
 use core\models\order\OrderPay;
 use Yii;
