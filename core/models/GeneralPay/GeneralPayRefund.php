@@ -3,7 +3,7 @@
 namespace core\models\GeneralPay;
 use Yii;
 
-class GeneralPayRefund extends \common\models\GeneralPayRefund
+class GeneralPayRefund extends \common\models\pay\GeneralPayRefund
 {
 
 
