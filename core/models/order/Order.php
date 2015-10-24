@@ -266,14 +266,13 @@ class Order extends OrderModel
     public static function assignDone($order_id, $worker, $admin_id, $assign_type)
     {
         $result = false;
-        $error = '';
         $order = OrderSearch::getOne($order_id);
         if($order->orderExtFlag->order_flag_lock>0 && $order->orderExtFlag->order_flag_lock!=$admin_id && time()-$order->orderExtFlag->order_flag_lock_time<Order::MANUAL_ASSIGN_lONG_TIME){
-            $error = '订单正在进行人工指派！';
+            $order->addError('id','订单正在进行人工指派！');
         }elseif(OrderSearch::WorkerOrderExistsConflict($worker['id'],$order->order_booked_begin_time,$order->order_booked_end_time)){
-            $error = '阿姨服务时间冲突！';
+            $order->addError('id','阿姨服务时间冲突！');
         }elseif($order->orderExtWorker->worker_id>0){
-            $error = '订单已经指派阿姨！';
+            $order->addError('id','订单已经指派阿姨！');
         }else {
             $order->order_flag_lock = 0;
             $order->worker_id = $worker['id'];
@@ -288,7 +287,7 @@ class Order extends OrderModel
                 $result = OrderStatus::_sysAssignDone($order, ['OrderExtFlag', 'OrderExtWorker']);
             }
         }
-        return ['status'=>$result,'error'=>$error];
+        return ['status'=>$result,'errors'=>$order->errors];
     }
 
     /**

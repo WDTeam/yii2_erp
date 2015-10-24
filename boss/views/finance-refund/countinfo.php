@@ -83,7 +83,40 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 ],
             ],
-                    
+
+            
+            
+            
+            
+            
+            
+            
+
+            
+            
+            
+            
+            
+            [ 'filterInputOptions'=>['placeholder'=>'Any supplier'],
+            				'group'=>true,
+            						'groupFooter'=>function ($model, $key, $index, $widget) { 
+            						return [
+            						'mergeColumns'=>[[3]],
+            						'content'=>[           
+            						3=>GridView::F_SUM,
+            								],
+            								'contentFormats'=>[],
+            								'contentOptions'=>[ ],
+												'options'=>['class'=>'danger','style'=>'font-weight:bold;']
+            												];
+            					}
+            														],
+            
+   
+            
+ 
+  
+            
         ],
         'responsive'=>true,
         'hover'=>true,

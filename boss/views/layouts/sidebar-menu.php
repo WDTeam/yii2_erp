@@ -303,6 +303,11 @@ echo Menu::widget(
                     ],
                 ],
             ],
+                    [
+                        'label' => '精品保洁管理',
+                        'url' => ['/operation-selected-service'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
                 ],
             ],
             [
