@@ -228,9 +228,7 @@ class OrderController extends \api\components\Controller
         }
         $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
 
-        if (is_null($args['city'])) {
-            return $this->send(null, "数据不完整,请输入城市名",0);
-        }
+
 
         if (isset($args['address_id'])) {
             $attributes['address_id'] = $args['address_id'];
@@ -400,10 +398,11 @@ class OrderController extends \api\components\Controller
         }
         $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
 
-        if (is_null($args['address_id']) and ( is_null($args['address_id']) or is_null($args['city']))) {
-            return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名",0);
-        }
+
         if (is_null($args['address_id'])) {
+            if ( is_null($args['address_id']) or is_null($args['city'])) {
+                return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名",0);
+            }
             $model = CustomerAddress::addAddress($user->id, $args['city'], $args['address'], $args['order_customer_phone'], $args['order_customer_phone']);
             $attributes['address_id'] = $model->id;
         } else {

@@ -13,27 +13,33 @@ class m150918_140930_create_table_finance_settle_apply extends Migration
         }
         $this->createTable('{{%finance_settle_apply}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT  COMMENT \'主键\'' ,
-            'worder_id' => Schema::TYPE_INTEGER . '(10) NOT NULL COMMENT \'阿姨id\'',
-            'worder_name' => Schema::TYPE_STRING . '(30) NOT NULL COMMENT \'阿姨姓名\'',
-            'worder_tel' => Schema::TYPE_STRING . '(11) NOT NULL COMMENT \'阿姨电话\'',
+            'worker_id' => Schema::TYPE_INTEGER . '(10) NOT NULL COMMENT \'阿姨id\'',
+            'worker_name' => Schema::TYPE_STRING . '(30) NOT NULL COMMENT \'阿姨姓名\'',
+            'worker_tel' => Schema::TYPE_STRING . '(11) NOT NULL COMMENT \'阿姨电话\'',
             'worker_type_id' => Schema::TYPE_INTEGER . '(2) NOT NULL COMMENT \'阿姨类型Id,1自营 2非自营\'',
-            'worker_type_name' => Schema::TYPE_STRING . '(30) NOT NULL COMMENT \'阿姨职位类型\'',
-            'worker_rule_id' => Schema::TYPE_INTEGER . '(2) NOT NULL COMMENT \'阿姨类型Id,1全职 2兼职 3高峰 4时段 \'',
-            'worker_rule_name' => Schema::TYPE_STRING . '(30) NOT NULL COMMENT \'阿姨角色类型\'',
+            'worker_type_name' => Schema::TYPE_STRING . '(30) NOT NULL COMMENT \'阿姨职位描述\'',
+            'worker_identity_id' => Schema::TYPE_INTEGER . '(2) NOT NULL COMMENT \'阿姨身份Id,1全职 2兼职 3高峰 4时段 \'',
+            'worker_identity_name' => Schema::TYPE_STRING . '(30) NOT NULL COMMENT \'阿姨身份描述\'',
             'shop_id' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL COMMENT \'门店id\'',
             'shop_name' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'门店名称\'',
             'shop_manager_id' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL COMMENT \'归属家政id\'',
             'shop_manager_name' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'归属家政名称\'',
             'finance_settle_apply_order_count' => Schema::TYPE_INTEGER . '(10) NOT NULL DEFAULT 0  COMMENT \'总单量\'',
             'finance_settle_apply_man_hour' => Schema::TYPE_INTEGER . '(10) NOT NULL DEFAULT 0  COMMENT \'订单总工时\'',
-            'finance_settle_apply_order_money' => Schema::TYPE_DECIMAL . '(10,2) NOT NULL DEFAULT 0  COMMENT \'工时费\'',
-            'finance_settle_apply_order_cash_count' => Schema::TYPE_INTEGER . '(10) NOT NULL DEFAULT 0  COMMENT \'现金订单\'',
+            'finance_settle_apply_order_money' => Schema::TYPE_DECIMAL . '(10,2) NOT NULL DEFAULT 0  COMMENT \'工时费小计\'',
+            'finance_settle_apply_task_count' => Schema::TYPE_INTEGER . '(10) NOT NULL DEFAULT 0  COMMENT \'完成任务数\'',
+            'finance_settle_apply_task_money' => Schema::TYPE_DECIMAL . '(10,2) NOT NULL DEFAULT 0  COMMENT \'完成任务奖励\'',
+            'finance_settle_apply_base_salary' => Schema::TYPE_DECIMAL . '(10,2) NOT NULL DEFAULT 0  COMMENT \'底薪\'',
+            'finance_settle_apply_base_salary_subsidy' => Schema::TYPE_DECIMAL . '(10,2) NOT NULL DEFAULT 0  COMMENT \'底薪补贴\'',
+            'finance_settle_apply_money_except_deduct_cash' => Schema::TYPE_DECIMAL . '(10,2) NOT NULL DEFAULT 0  COMMENT \'应结合计,没有减除扣款和现金\'',
+            'finance_settle_apply_money_deduction' => Schema::TYPE_DECIMAL . '(10,2) NOT NULL DEFAULT 0  COMMENT \'扣款小计\'',
+            'finance_settle_apply_money_except_cash' => Schema::TYPE_DECIMAL . '(10,2) NOT NULL DEFAULT 0  COMMENT \'本次应结合计，没有减除现金\'',
+            'finance_settle_apply_order_cash_count' => Schema::TYPE_INTEGER . '(10) NOT NULL DEFAULT 0  COMMENT \'现金订单数\'',
             'finance_settle_apply_order_cash_money' => Schema::TYPE_DECIMAL . '(10,2) DEFAULT 0 COMMENT \'收取现金\'',
+            'finance_settle_apply_money' => Schema::TYPE_DECIMAL . '(10,2) NOT NULL  DEFAULT 0  COMMENT \'本次应付合计\'',
             'finance_settle_apply_order_noncash_count' => Schema::TYPE_INTEGER . '(10) NOT NULL DEFAULT 0  COMMENT \'非现金订单\'',
-            'finance_settle_apply_order_money_except_cash' => Schema::TYPE_DECIMAL . '(10,2) NOT NULL COMMENT \'工时费应结\'',
-            'finance_settle_apply_subsidy' => Schema::TYPE_DECIMAL . '(10,2) DEFAULT 0 COMMENT \'总补助费\'',
-             'finance_settle_apply_money' => Schema::TYPE_DECIMAL . '(10,2) NOT NULL  DEFAULT 0  COMMENT \'应结算金额\'',
-            'finance_settle_apply_status' => Schema::TYPE_INTEGER . '(2) NOT NULL DEFAULT 0  COMMENT \'申请结算状态，-4财务确认结算未通过;-3财务审核不通过；-2线下审核不通过；-1门店财务审核不通过；0提出申请，正在门店财务审核；1门店财务审核通过，等待线下审核；2线下审核通过，等待财务审核；3财务审核通过，等待财务确认结算；4财务确认结算；\'',
+            'finance_settle_apply_order_money_except_cash' => Schema::TYPE_DECIMAL . '(10,2) NOT NULL COMMENT \'工时费应结，扣除了现金\'',
+            'finance_settle_apply_status' => Schema::TYPE_INTEGER . '(2) NOT NULL DEFAULT 0  COMMENT \'申请结算状态，-2财务审核不通过；-1业务部门审核不通过；0提出申请；1业务部门审核通过；2财务审核通过；3财务确认打款；\'',
             'finance_settle_apply_cycle' => Schema::TYPE_INTEGER . '(1) NOT NULL COMMENT \'结算周期，1周结，2月结\'',
             'finance_settle_apply_cycle_des' => Schema::TYPE_TEXT . '(20) NOT NULL COMMENT \'结算周期，周结，月结\'',
             'finance_settle_apply_reviewer' => Schema::TYPE_STRING . '(20)  COMMENT \'审核人姓名\'',
@@ -46,105 +52,40 @@ class m150918_140930_create_table_finance_settle_apply extends Migration
              'comment' => Schema::TYPE_TEXT. ' COMMENT \'备注，可能是审核不通过原因\'',
         ], $tableOptions);
         $this->batchInsert('{{%finance_settle_apply}}',
-            ['id','worder_id','worder_name','worder_tel','worker_type_id','worker_type_name','worker_rule_id','worker_rule_name','finance_settle_apply_man_hour',
-                'finance_settle_apply_order_money','finance_settle_apply_order_cash_money','finance_settle_apply_order_money_except_cash',
-				'finance_settle_apply_subsidy','finance_settle_apply_money',
+            ['id','worker_id','worker_name','worker_tel','worker_type_id','worker_type_name','worker_identity_id','worker_identity_name',
+                'shop_id','shop_name','shop_manager_id','shop_manager_name',
+                'finance_settle_apply_order_count','finance_settle_apply_man_hour','finance_settle_apply_order_money','finance_settle_apply_task_count',
+                'finance_settle_apply_task_money','finance_settle_apply_base_salary','finance_settle_apply_base_salary_subsidy','finance_settle_apply_money_except_deduct_cash',
+                'finance_settle_apply_money_deduction','finance_settle_apply_money_except_cash','finance_settle_apply_order_cash_count','finance_settle_apply_order_cash_money',
+		'finance_settle_apply_money','finance_settle_apply_order_noncash_count','finance_settle_apply_order_money_except_cash',
                 'finance_settle_apply_status','finance_settle_apply_cycle','finance_settle_apply_cycle_des','finance_settle_apply_reviewer',
-
                 'finance_settle_apply_starttime','finance_settle_apply_endtime',
                 'isdel','updated_at','created_at'],
             [
-                [1,111,'刘阿姨','13888888888',1,'自营',1,'全职',6,150,0,150,70,220,0,2,'月结','刘阿姨',
-
+                [1,111,'刘阿姨','13888888888',1,'自营',1,'全职',
+                    1,'望京门店',0,'e家洁',
+                    3,6,150,0,
+                    0,100,0,150,
+                    0,150,0,0,
+                    150,6,150,
+                    0,2,'月结','刘阿姨',
                     strtotime(date('Y-m-01 00:00:00', strtotime('2015-09'))),strtotime(date('Y-m-t 23:59:59', strtotime('2015-09'))),0,time(),time()],
-                [2,111,'陈阿姨','13888888888',1,'自营',1,'全职',6,150,0,150,70,220,0,2,'月结','陈阿姨',
-
+                [221,222,'卫阿姨','13888888886',1,'自营',2,'兼职',
+                    1,'望京门店',0,'e家洁',
+                    3,6,150,0,
+                    0,100,0,150,
+                    0,150,0,0,
+                    150,6,150,
+                    0,1,'周结','',
                     strtotime(date('Y-m-01 00:00:00', strtotime('2015-09'))),strtotime(date('Y-m-t 23:59:59', strtotime('2015-09'))),0,time(),time()],
-                [3,111,'谢阿姨','13888888888',1,'自营',1,'全职',6,150,0,150,70,220,0,2,'月结','谢阿姨',
-
+                [338,333,'陶阿姨','13899999999',2,'非自营',2,'兼职',
+                    1,'望京门店',1,'武大家政',
+                    3,6,150,0,
+                    0,100,0,150,
+                    0,150,0,0,
+                    150,6,150,
+                    0,1,'周结','',
                     strtotime(date('Y-m-01 00:00:00', strtotime('2015-09'))),strtotime(date('Y-m-t 23:59:59', strtotime('2015-09'))),0,time(),time()],
-                [4,111,'肖阿姨','13888888888',1,'自营',1,'全职',6,150,0,150,70,220,0,2,'月结','肖阿姨',
-
-                    strtotime(date('Y-m-01 00:00:00', strtotime('2015-09'))),strtotime(date('Y-m-t 23:59:59', strtotime('2015-09'))),0,time(),time()],
-                [5,111,'周阿姨','13888888888',1,'自营',1,'全职',6,150,0,150,70,220,0,2,'月结','周阿姨',
-
-                    strtotime(date('Y-m-01 00:00:00', strtotime('2015-09'))),strtotime(date('Y-m-t 23:59:59', strtotime('2015-09'))),0,time(),time()],
-                [6,111,'吴阿姨','13888888888',1,'自营',1,'全职',6,150,0,150,70,220,0,2,'月结','吴阿姨',
-
-                    strtotime(date('Y-m-01 00:00:00', strtotime('2015-09'))),strtotime(date('Y-m-t 23:59:59', strtotime('2015-09'))),0,time(),time()],
-                [7,111,'郑阿姨','13888888888',1,'自营',1,'全职',6,150,0,150,70,220,0,2,'月结','郑阿姨',
-
-                    strtotime(date('Y-m-01 00:00:00', strtotime('2015-09'))),strtotime(date('Y-m-t 23:59:59', strtotime('2015-09'))),0,time(),time()],
-                [8,111,'王阿姨','13888888888',1,'自营',1,'全职',6,150,0,150,70,220,0,2,'月结','王阿姨',
-
-                    strtotime(date('Y-m-01 00:00:00', strtotime('2015-09'))),strtotime(date('Y-m-t 23:59:59', strtotime('2015-09'))),0,time(),time()],
-                [9,111,'赵阿姨','13888888888',1,'自营',1,'全职',6,150,0,150,70,220,0,2,'月结','赵阿姨',
-
-                    strtotime(date('Y-m-01 00:00:00', strtotime('2015-09'))),strtotime(date('Y-m-t 23:59:59', strtotime('2015-09'))),0,time(),time()],
-                [10,111,'钱阿姨','13888888888',1,'自营',1,'全职',6,150,0,150,70,220,0,2,'月结','钱阿姨',
-
-                    strtotime(date('Y-m-01 00:00:00', strtotime('2015-09'))),strtotime(date('Y-m-t 23:59:59', strtotime('2015-09'))),0,time(),time()],
-                [11,111,'孙阿姨','13888888888',1,'自营',1,'全职',6,150,0,150,70,220,0,2,'月结','孙阿姨',
-
-                    strtotime(date('Y-m-01 00:00:00', strtotime('2015-09'))),strtotime(date('Y-m-t 23:59:59', strtotime('2015-09'))),0,time(),time()],
-                [12,111,'李阿姨','13888888888',1,'自营',1,'全职',6,150,0,150,70,220,0,2,'月结','李阿姨',
-
-                    strtotime(date('Y-m-01 00:00:00', strtotime('2015-09'))),strtotime(date('Y-m-t 23:59:59', strtotime('2015-09'))),0,time(),time()],
-                [13,111,'冯阿姨','13888888888',1,'自营',1,'全职',6,150,0,150,70,220,0,2,'月结','冯阿姨',
-
-                    strtotime(date('Y-m-01 00:00:00', strtotime('2015-09'))),strtotime(date('Y-m-t 23:59:59', strtotime('2015-09'))),0,time(),time()],
-                [221,222,'卫阿姨','13899999999',1,'自营',2,'兼职',8,200,0,200,0,200,0,1,'周结','卫阿姨',
-
-                    strtotime("-2 month"),strtotime("-1 month"),0,time(),time()],
-                [222,222,'蒋阿姨','13899999999',1,'自营',2,'兼职',8,200,0,200,0,200,0,1,'周结','蒋阿姨',
-
-                    strtotime("-2 month"),strtotime("-1 month"),0,time(),time()],
-                [223,222,'沈阿姨','13899999999',1,'自营',2,'兼职',8,200,0,200,0,200,0,1,'周结','沈阿姨',
-
-                    strtotime("-2 month"),strtotime("-1 month"),0,time(),time()],
-                [224,222,'韩阿姨','13899999999',1,'自营',2,'兼职',8,200,0,200,0,200,0,1,'周结','韩阿姨',
-
-                    strtotime("-2 month"),strtotime("-1 month"),0,time(),time()],
-                [225,222,'杨阿姨','13899999999',1,'自营',2,'兼职',8,200,0,200,0,200,0,1,'周结','杨阿姨',
-
-                    strtotime("-2 month"),strtotime("-1 month"),0,time(),time()],
-                [226,222,'朱阿姨','13899999999',1,'自营',2,'兼职',8,200,0,200,0,200,0,1,'周结','朱阿姨',
-
-                    strtotime("-2 month"),strtotime("-1 month"),0,time(),time()],
-                [227,222,'秦阿姨','13899999999',1,'自营',2,'兼职',8,200,0,200,0,200,0,1,'周结','秦阿姨',
-
-                    strtotime("-2 month"),strtotime("-1 month"),0,time(),time()],
-                [228,222,'尤阿姨','13899999999',1,'自营',2,'兼职',8,200,0,200,0,200,0,1,'周结','尤阿姨',
-
-                    strtotime("-2 month"),strtotime("-1 month"),0,time(),time()],
-                [229,222,'许阿姨','13899999999',1,'自营',2,'兼职',8,200,0,200,0,200,0,1,'周结','许阿姨',
-
-                    strtotime("-2 month"),strtotime("-1 month"),0,time(),time()],
-                [230,222,'何阿姨','13899999999',1,'自营',2,'兼职',8,200,0,200,0,200,0,1,'周结','何阿姨',
-
-                    strtotime("-2 month"),strtotime("-1 month"),0,time(),time()],
-                [231,222,'吕阿姨','13899999999',1,'自营',2,'兼职',8,200,0,200,0,200,0,1,'周结','吕阿姨',
-
-                    strtotime("-2 month"),strtotime("-1 month"),0,time(),time()],
-                
-                [338,333,'陶阿姨','13899999999',2,'非自营',2,'兼职',10,250,0,250,0,250,0,1,'周结','陶阿姨',
-
-                    strtotime("-2 month"),strtotime("-1 month"),0,time(),time()],
-                [339,333,'姜阿姨','13899999999',2,'非自营',2,'兼职',10,250,0,250,0,250,0,1,'周结','姜阿姨',
-
-                    strtotime("-2 month"),strtotime("-1 month"),0,time(),time()],
-                [340,333,'章阿姨','13899999999',2,'非自营',2,'兼职',10,250,0,250,0,250,0,1,'周结','章阿姨',
-
-                    strtotime("-2 month"),strtotime("-1 month"),0,time(),time()],
-                [341,333,'郭阿姨','13899999999',2,'非自营',2,'兼职',10,250,0,250,0,250,0,1,'周结','郭阿姨',
-
-                    strtotime("-2 month"),strtotime("-1 month"),0,time(),time()],
-                [342,333,'林阿姨','13899999999',2,'非自营',2,'兼职',10,250,0,250,0,250,0,1,'周结','林阿姨',
-
-                    strtotime("-2 month"),strtotime("-1 month"),0,time(),time()],
-                [343,333,'薛阿姨','13899999999',2,'非自营',2,'兼职',10,250,0,250,0,250,0,1,'周结','薛阿姨',
-
-                    strtotime("-2 month"),strtotime("-1 month"),0,time(),time()],
             ]);
     }
 

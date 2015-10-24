@@ -12,40 +12,52 @@ use yii\widgets\Pjax;
                 <h3 class="panel-title">阿姨信息</h3>
         </div>
         <div class="panel-body settle-detail-body">
-            <div class='col-md-2'>
+            <div class='col-md-1'>
                 阿姨姓名
             </div>
-            <div class='col-md-2'>
+            <div class='col-md-1'>
                 手机号
             </div>
             <div class='col-md-2'>
                 入职日期
             </div>
-            <div class='col-md-2'>
+            <div class='col-md-1'>
                 阿姨类型
+            </div>
+            <div class='col-md-1'>
+                结算类型
             </div>
             <div class='col-md-2'>
                 结算周期
+            </div>
+            <div class='col-md-2'>
+                本次结算时间
             </div>
             <div class='col-md-2'>
                 上次结算时间
             </div>
         </div>
         <div class="panel-body settle-detail-body">
-            <div class='col-md-2'>
-                <?=  $model->worder_name; ?>
+            <div class='col-md-1'>
+                <?=  $model->worker_name; ?>
             </div>
-            <div class='col-md-2'>
-                <?=  $model->worder_tel; ?>
+            <div class='col-md-1'>
+                <?=  $model->worker_tel; ?>
             </div>
             <div class='col-md-2'>
                 <?=  date('Y:m:d H:i:s',$model->workerOnboardTime); ?>
             </div>
-            <div class='col-md-2'>
+            <div class='col-md-1'>
                 <?=  $model->workerTypeDes; ?>
             </div>
-            <div class='col-md-2'>
+            <div class='col-md-1'>
                 <?=  $model->finance_settle_apply_cycle_des; ?>
+            </div>
+            <div class='col-md-2'>
+                <?=  date('Y:m:d H:i:s',$model->latestSettleTime); ?>
+            </div>
+            <div class='col-md-2'>
+                <?=  date('Y:m:d H:i:s',$model->latestSettleTime); ?>
             </div>
             <div class='col-md-2'>
                 <?=  date('Y:m:d H:i:s',$model->latestSettleTime); ?>
@@ -55,40 +67,40 @@ use yii\widgets\Pjax;
             <label class="panel-title">结算明细</label>
         <?php
             if($model->finance_settle_apply_order_count > 0){
-                echo Html::a('结算', ['worker-manual-settlement-done?worker_id='.$model->worder_id.'&settle_type='.$model->settle_type.'&review_section='.$model->review_section], ['class' => 'btn btn-success ']);
+                echo Html::a('结算', ['worker-manual-settlement-done?worker_id='.$model->worker_id.'&settle_type='.$model->settle_type.'&review_section='.$model->review_section], ['class' => 'btn btn-success ']);
             }
          ?>
         </div>
         <div class="panel-body settle-detail-body">
             <div class='settleDetail'>
-                完成总单量
+                完成总工时
             </div>
             <div class='settleDetail'>
-                现金订单
+                工时费小计
             </div>
             <div class='settleDetail'>
-                收取现金
-            </div>
-            <div class='settleDetail'>
-                非现金订单
-            </div>
-            <div class='settleDetail'>
-                工时费应结
+                底薪补贴
             </div>
             <div class='settleDetail'>
                 完成任务
             </div>
             <div class='settleDetail'>
-                任务奖励
+                任务小计
             </div>
             <div class='settleDetail'>
-                小保养订单
+                扣款小计
             </div>
             <div class='settleDetail'>
-                小保养
+                本次应结合计
             </div>
             <div class='settleDetail'>
-                应结
+                现金订单
+            </div>
+            <div class='settleDetail'>
+                已收现金小计
+            </div>
+            <div class='settleDetail'>
+                本次应付合计
             </div>
         </div>
         <div class="panel-body settle-detail-body">
@@ -104,42 +116,56 @@ use yii\widgets\Pjax;
             </div>
             <div class='settleDetail'>
                  <?php
-                    if($model->finance_settle_apply_order_cash_count > 0){
-                        echo '<span class = "cashordercount" style = "cursor:pointer"><u>'.$model->finance_settle_apply_order_cash_count.'</u></span>';
-                    }else{
-                        echo $model->finance_settle_apply_order_cash_count;
-                    }
+                    echo $model->finance_settle_apply_order_money;
                 ?>
             </div>
             <div class='settleDetail'>
-                <?php echo $model->finance_settle_apply_order_cash_money ?>
+               <?php
+                    echo $model->finance_settle_apply_base_salary_subsidy;
+                ?>
             </div>
             <div class='settleDetail'>
                 <?php
-                    if($model->finance_settle_apply_order_noncash_count > 0){
-                        echo '<span class = "noncashordercount" style = "cursor:pointer"><u>'.$model->finance_settle_apply_order_noncash_count.'</u></span>';
-                    }else{
-                        echo $model->finance_settle_apply_order_noncash_count;
-                    }
+                    if($model->finance_settle_apply_task_count > 0){
+                            echo '<span class = "ordercount" style = "cursor:pointer"><u>'.$model->finance_settle_apply_task_count.'</u></span>';
+                        }else{
+                            echo $model->finance_settle_apply_task_count;
+                        }
                 ?>
             </div>
             <div class='settleDetail'>
-                <?php echo $model->finance_settle_apply_order_money_except_cash ?>
+                 <?php
+                    echo $model->finance_settle_apply_task_money;
+                ?>
             </div>
             <div class='settleDetail'>
-                0
+                <?php
+                    echo $model->finance_settle_apply_money_deduction;
+                ?>
             </div>
             <div class='settleDetail'>
-                0
+                <?php
+                    echo $model->finance_settle_apply_money_except_cash;
+                ?>
             </div>
             <div class='settleDetail'>
-                0
+                <?php
+                    if($model->finance_settle_apply_order_cash_count > 0){
+                            echo '<span class = "cashordercount" style = "cursor:pointer"><u>'.$model->finance_settle_apply_order_cash_count.'</u></span>';
+                        }else{
+                            echo $model->finance_settle_apply_order_cash_count;
+                        }
+                ?>
             </div>
             <div class='settleDetail'>
-                0
+                <?php
+                    echo $model->finance_settle_apply_order_cash_money;
+                ?>
             </div>
             <div class='settleDetail'>
-                0
+                <?php
+                    echo $model->finance_settle_apply_money;
+                ?>
             </div>
         </div>
         
