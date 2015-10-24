@@ -109,8 +109,7 @@ class OrderPush extends Order
         if ($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //开始系统指派的订单
             $worker = json_decode(Yii::$app->redis->executeCommand('lPop', [self::WAIT_IVR_PUSH_ORDERS_POOL . '_' . $order_id]), true);
             if (!empty($worker)) {
-//                $result = Yii::$app->ivr->send($worker['worker_phone'], 'pushToWorker_' . $order_id, "开始时间" . date('y年m月d日H点', $order->order_booked_begin_time) . "，时长" . intval($order->order_booked_count / 60) . "个" . ($order->order_booked_count % 60 > 0 ? "半" : "") . "小时，地址{$order->order_address}！"); //TODO 发送内容
-                $result['result']=0;
+                $result = Yii::$app->ivr->send($worker['worker_phone'], 'pushToWorker_' . $order_id, "开始时间" . date('y年m月d日H点', $order->order_booked_begin_time) . "，时长" . intval($order->order_booked_count / 60) . "个" . ($order->order_booked_count % 60 > 0 ? "半" : "") . "小时，地址{$order->order_address}！"); //TODO 发送内容
                 if (isset($result['result']) && $result['result'] == 0) {
                     OrderWorkerRelation::addOrderWorkerRelation($order_id, $worker['id'], '', 'IVR已推送', 1);
                 } else {
