@@ -11,17 +11,17 @@ namespace core\models\order;
 
 use boss\controllers\OperationGoodsController;
 use boss\controllers\OperationShopDistrictController;
-use common\models\OrderExtFlag;
+use common\models\order\OrderExtFlag;
 use core\models\Customer;
 use core\models\customer\CustomerAddress;
 use core\models\GeneralPay\GeneralPay;
 use core\models\worker\Worker;
 use Yii;
-use common\models\Order as OrderModel;
-use common\models\OrderStatusDict;
-use common\models\OrderExtCustomer;
-use common\models\OrderSrc;
-use common\models\FinanceOrderChannel;
+use common\models\order\Order as OrderModel;
+use common\models\order\OrderStatusDict;
+use common\models\order\OrderExtCustomer;
+use common\models\order\OrderSrc;
+use common\models\finance\FinanceOrderChannel;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models;
+namespace common\models\order;
 
 use Yii;
 
@@ -17,7 +17,7 @@ use Yii;
  * @property string $order_worker_relation_status
  * @property integer $isdel
  */
-class OrderWorkerRelation extends \common\models\ActiveRecord
+class OrderWorkerRelation extends \common\models\order\ActiveRecord
 {
     /**
      * @inheritdoc

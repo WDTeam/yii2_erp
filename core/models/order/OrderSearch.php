@@ -2,16 +2,16 @@
 
 namespace core\models\order;
 
-use common\models\OrderExtCustomer;
-use common\models\OrderExtFlag;
-use common\models\OrderExtStatus;
-use common\models\OrderStatusDict;
+use common\models\order\OrderExtCustomer;
+use common\models\order\OrderExtFlag;
+use common\models\order\OrderExtStatus;
+use common\models\order\OrderStatusDict;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 /**
- * OrderSearch represents the model behind the search form about `common\models\Order`.
+ * OrderSearch represents the model behind the search form about `common\models\order\Order`.
  */
 class OrderSearch extends Order
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models;
+namespace common\models\order;
 
 use Yii;
 
@@ -15,7 +15,7 @@ use Yii;
  * @property string $updated_at
  * @property integer $isdel
  */
-class OrderStatusDict extends \common\models\ActiveRecord
+class OrderStatusDict extends \common\models\order\ActiveRecord
 {
     const ORDER_INIT = 1;
     const ORDER_WAIT_ASSIGN = 2;

@@ -10,8 +10,8 @@ namespace core\models\order;
 
 use Yii;
 use yii\base\Exception;
-use common\models\OrderStatusDict;
-use common\models\OrderStatusHistory;
+use common\models\order\OrderStatusDict;
+use common\models\order\OrderStatusHistory;
 
 class OrderStatus extends Order
 {

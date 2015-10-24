@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models;
+namespace common\models\order;
 
 use Yii;
 
@@ -13,7 +13,7 @@ use Yii;
  * @property string $order_src_name
  * @property integer $isdel
  */
-class OrderSrc extends \common\models\ActiveRecord
+class OrderSrc extends \common\models\order\ActiveRecord
 {
     /**
      * @inheritdoc

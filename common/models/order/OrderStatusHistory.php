@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models;
+namespace common\models\order;
 
 use Yii;
 
@@ -17,7 +17,7 @@ use Yii;
  * @property string $order_status_name
  * @property string $admin_id
  */
-class OrderStatusHistory extends \common\models\ActiveRecord
+class OrderStatusHistory extends \common\models\order\ActiveRecord
 {
     /**
      * @inheritdoc
