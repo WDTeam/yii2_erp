@@ -1,9 +1,9 @@
 <?php
 
-namespace boss\controllers;
+namespace boss\controllers\customer;
 
 use Yii;
-use common\models\CustomerTransRecordLog;
+use common\models\customer\CustomerTransRecordLog;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;

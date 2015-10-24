@@ -61,11 +61,6 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         ];
     }
 
-    public function ccc()
-    {
-        echo "test";
-    }
-
     /**
      * 验证数据之前组装数据
      */
