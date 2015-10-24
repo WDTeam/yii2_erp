@@ -20,7 +20,7 @@ class ConfigureController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *      "code": "ok",
+     *      "code": "1",
      *      "msg": "",
      *      "ret":
      *      [
@@ -52,7 +52,7 @@ class ConfigureController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 404 Not Found
      *     {
-     *       "code":"error",
+     *       "code":"0",
      *       "msg": "该城市暂未开通"
      *     }
      * @apiDescription 获取城市服务配置项价格介绍页面以及分类的全部服务项目
@@ -62,14 +62,14 @@ class ConfigureController extends \api\components\Controller
         $param = Yii::$app->request->get();
 
         if (empty(@$param['city_name'])) {
-            return $this->send(null, "未取得城市信息", "error", "403");
+            return $this->send(null, "未取得城市信息", 0, 403);
         }
 
         $categoryes = CoreOperationCategory::getAllCategory();
         $goodses = CoreOperationShopDistrictGoods::getGoodsByCity($param['city_name']);
 
         if (empty($categoryes) || empty($goodses)) {
-            return $this->send(null, "该城市暂未开通", "error", "403");
+            return $this->send(null, "该城市暂未开通", 0, 403);
         }
         $cDate = [];
         foreach ($categoryes as $cItem) {
@@ -101,7 +101,7 @@ class ConfigureController extends \api\components\Controller
             $cDate[] = $cObject;
         }
 
-        return $this->send($cDate, "数据获取成功", "ok");
+        return $this->send($cDate, "数据获取成功", 1);
     }
 
     /**
@@ -116,7 +116,7 @@ class ConfigureController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *          "code": "ok",
+     *          "code": "1",
      *          "msg": "操作成功",
      *          "ret": {
      *              "city_list": [
@@ -227,7 +227,7 @@ class ConfigureController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code":"error",
+     *       "code":"0",
      *       "msg": "城市尚未开通"
      *     }
      */
@@ -236,7 +236,7 @@ class ConfigureController extends \api\components\Controller
         $param = Yii::$app->request->get();
 
         if (empty(@$param['city_name'])) {
-            return $this->send(null, "未取得城市信息", "error", "403");
+            return $this->send(null, "未取得城市信息", 0, 403);
         }
         //获取城市列表
         $city_list = CoreOperationCity::getOnlineCitys();
@@ -307,7 +307,7 @@ class ConfigureController extends \api\components\Controller
             'server_list' => $server_list,
         ];
 
-        return $this->send($ret, '操作成功', 'ok');
+        return $this->send($ret, '操作成功');
     }
 
     /**
@@ -321,7 +321,7 @@ class ConfigureController extends \api\components\Controller
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *      "code": "ok",
+     *      "code": "1",
      *      "msg":"操作成功",
      *      "ret":
      *      {
@@ -339,7 +339,7 @@ class ConfigureController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"Failed",
+     *      "code":"0",
      *      "msg": "SessionIdNotFound"
      *  }
      *
