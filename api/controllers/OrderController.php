@@ -546,23 +546,24 @@ class OrderController extends \api\components\Controller
         if (empty($user)) {
             return $this->send(null, "用户无效,请先登录",0);
         }
-
+        $orderStatus = null;
         if(isset($args['order_status'])){
             $orderStatus = explode(".",$args['order_status']);
 
         }
+
         $channels = null;
         if(isset($args['channels'])){
             $channels = explode(".",$args['channels']);
         }
 
-        @$orderStatus = $args['order_status'];
         @$isAsc = $args['is_asc'];
         if (is_null($isAsc)) {
             $isAsc = true;
         }
-        if (!isset($args['limit'])) {
-            $limit = 10;
+        $limit = 10;
+        if (isset($args['limit'])) {
+            $limit = $args['limit'];
         }
         $page = 1;
         if (isset($args['page'])) {
@@ -571,7 +572,8 @@ class OrderController extends \api\components\Controller
         $offset = ($page-1)*$limit;
         @$from = $args['from'];
         @$to = $args['to'];
-        $args["custum_id"] = $user->id;
+
+        $args["oc.customer_id"] = $user->id;
         $orderSearch = new \core\models\order\OrderSearch();
         $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus);
         $orders = $orderSearch->searchOrdersWithStatus($args, $isAsc, $offset, $limit, $orderStatus, $channels,$from, $to);
@@ -644,7 +646,7 @@ class OrderController extends \api\components\Controller
         }
         @$from = $args['from'];
         @$to = $args['to'];
-        $args["custum_id"] = $user->id;
+        $args["oc.customer_id"] = $user->id;
         $orderSearch = new \core\models\order\OrderSearch();
         $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus,$channels);
         $ret['count'] = $count;
@@ -722,7 +724,7 @@ class OrderController extends \api\components\Controller
         }
         @$from = $args['from'];
         @$to = $args['to'];
-        $args["custum_id"] = $user->id;
+        $args["oc.customer_id"] = $user->id;
         $orderSearch = new \core\models\order\OrderSearch();
         $ret = [];
         if(!empty($orderStatus)){
