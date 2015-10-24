@@ -2,6 +2,7 @@
 
 namespace api\controllers;
 
+use core\models\order\OrderPush;
 use Faker\Provider\DateTime;
 use Yii;
 use common\models\FinanceOrderChannel;
@@ -1206,7 +1207,7 @@ class OrderController extends \api\components\Controller
     public function actionPush($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        return Order::push($id);
+        return OrderPush::push($id);
     }
 
 }

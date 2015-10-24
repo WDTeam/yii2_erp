@@ -2,6 +2,7 @@
 namespace boss\controllers;
 
 use core\models\order\Order;
+use core\models\order\OrderPush;
 use yii\web\Controller;
 class IvrController extends Controller
 {
@@ -25,7 +26,7 @@ class IvrController extends Controller
                 return json_encode(['code'=>0]);
             }
         }
-        Order::ivrPushToWorker($order_id); //继续推送该订单的ivr
+        OrderPush::ivrPushToWorker($order_id); //继续推送该订单的ivr
 
     }
     
