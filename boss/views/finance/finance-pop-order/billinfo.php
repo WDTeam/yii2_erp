@@ -90,7 +90,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' =>'{view} {tagssign}',
                 'buttons' => [
                 'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance-pop-order/view','id' => $model->id,'edit'=>'t']), [
+                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance/finance-pop-order/view','id' => $model->id,'edit'=>'t']), [
                                                     'title' => Yii::t('yii', 'Edit'),
                                                   ]);},
 'tagssign' => function ($url, $model, $key) {
@@ -101,7 +101,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	'data-method' => 'post',
 	'data-pjax' => '0'
 			];
-	return Html::a('<span class="glyphicon glyphicon-backward"></span>', Yii::$app->urlManager->createUrl(['finance-pop-order/tagssign','id' => $model->id,'edit'=>'bakinfo','oid'=>$model->finance_record_log_id]), $options);
+	return Html::a('<span class="glyphicon glyphicon-backward"></span>', Yii::$app->urlManager->createUrl(['finance/finance-pop-order/tagssign','id' => $model->id,'edit'=>'bakinfo','oid'=>$model->finance_record_log_id]), $options);
 }
 
                 ],

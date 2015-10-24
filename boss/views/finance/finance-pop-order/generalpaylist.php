@@ -138,7 +138,7 @@ $items = [
 'label'=>'<i class="glyphicon glyphicon-list-alt"></i> 订单对账',
 'content'=>'',
 'active'=>false,
-'url' => ['finance-pop-order/orderlist?id='.$id]
+'url' => ['finance/finance-pop-order/orderlist?id='.$id]
 ],
 [
 'label'=>'<i class="glyphicon glyphicon-king"></i> 充值对账',

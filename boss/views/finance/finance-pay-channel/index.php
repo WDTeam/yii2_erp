@@ -50,7 +50,7 @@ use kartik\tabs\TabsX;
                 'template' =>'{view} {update}',
                 'buttons' => [
                 'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance-pay-channel/view','id' => $model->id,'edit'=>'t']), [
+                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance/finance-pay-channel/view','id' => $model->id,'edit'=>'t']), [
                                                     'title' => Yii::t('yii', 'Edit'),
                                                   ]);}
 
@@ -74,7 +74,7 @@ $items = [
 'label'=>'<i class="glyphicon glyphicon-list-alt"></i> 订单渠道管理',
 'content'=>'',
 'active'=>false,
-'url' => ['finance-order-channel/index']
+'url' => ['finance/finance-order-channel/index']
 ],
 [
 'label'=>'<i class="glyphicon glyphicon-king"></i> 支付渠道管理',
