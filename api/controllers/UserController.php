@@ -495,6 +495,8 @@ class UserController extends \api\components\Controller
      *     {
      *       "code": "ok",
      *       "msg": {
+     *           "coupon":[
+     *             {
      *               "id": "1",
      *               "coupon_name": "优惠码名称",
      *                "coupon_price": "优惠码价格",
@@ -502,6 +504,8 @@ class UserController extends \api\components\Controller
      *                "coupon_service_type_id": "服务类别id",
      *                "coupon_service_type_name": "服务类别名称",
      *               }
+     *            ]
+     *           }
      *
      *     }
      *
