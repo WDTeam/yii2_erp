@@ -2067,7 +2067,7 @@ define({ "api": [
   {
     "type": "POST",
     "url": "v1/pay/balance-pay",
-    "title": "会员余额支付 (赵顺利0%)",
+    "title": "会员余额支付 (赵顺利100%)",
     "name": "actionBalancePay",
     "group": "Pay",
     "parameter": {
@@ -3977,12 +3977,12 @@ define({ "api": [
     "groupTitle": "User"
   },
   {
-    "type": "post",
+    "type": "get",
     "url": "/worker/single-worker-time.php",
-    "title": "单次服务排班表(李勇80%缺少core/model支持)",
+    "title": "单次服务排班表(李勇90%缺少model支持)",
     "name": "SingleWorkerTime",
     "group": "Worker",
-    "description": "<p>帮客户下单，单次服务获取服务时间</p> ",
+    "description": "<p>单次服务获取服务时间</p> ",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -3996,14 +3996,21 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "district_id",
-            "description": "<p>商圈id</p> "
+            "optional": false,
+            "field": "longitude",
+            "description": "<p>当前经度.</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
+            "optional": false,
+            "field": "latitude",
+            "description": "<p>当前纬度.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
             "field": "plan_time",
             "description": "<p>计划服务时长</p> "
           }
@@ -4014,7 +4021,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n {\n      \"code\": \"ok\",\n      \"msg\": \"获取单次服务排班表成功\"\n      \"ret\":{\n         \"appointment\": [\n             {\n                 \"date_format\": \"10月10日\",\n                 \"date_stamp\": 1444406400,\n                 \"week\": \"明天\",\n                 \"have_worker\": 1,\n                 \"hour\": [\n                     {\n                         \"time\": \"08:00-10:00\",\n                         \"status\": \"0\"\n                     },\n                     {\n                         \"time\": \"18:00-20:00\",\n                         \"status\": \"1\"\n                     }\n                 ]\n             }\n         ]\n      }\n    }",
+          "content": "HTTP/1.1 200 OK\n {\n      \"code\": \"ok\",\n      \"msg\": \"获取单次服务排班表成功\"\n      \"ret\":{\n         \"single_worker_time\": [\n              {\n                  \"date_format\": \"10月25日\",\n                  \"date_stamp\": 1445669758,\n                  \"week\": \"明天\",\n                  \"hour\": [\n                      {\n                          \"time\": \"08:00-10:00\",\n                          \"status\": \"0\"\n                      },\n                      {\n                          \"time\": \"18:00-20:00\",\n                          \"status\": \"1\"\n                      }\n                  ]\n              },\n              {\n                  \"date_format\": \"10月26日\",\n                  \"date_stamp\": 1445669758,\n                  \"week\": \"\",\n                  \"hour\": [\n                      {\n                          \"time\": \"08:00-10:00\",\n                          \"status\": \"0\"\n                      },\n                      {\n                          \"time\": \"18:00-20:00\",\n                          \"status\": \"1\"\n                      }\n                  ]\n              },\n         ]\n      }\n  }",
           "type": "json"
         }
       ]
@@ -4910,10 +4917,10 @@ define({ "api": [
   {
     "type": "get",
     "url": "/worker/recursive-worker-time.php",
-    "title": "周期服务时间表(李勇80%缺少model)",
+    "title": "周期服务时间表(李勇90%缺少model)",
     "name": "actionRecursiveWorkerTime",
     "group": "Worker",
-    "description": "<p>帮客户下单，周期服务</p> ",
+    "description": "<p>周期服务时间表</p> ",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -4927,23 +4934,37 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "district_id",
-            "description": "<p>商圈id</p> "
+            "optional": false,
+            "field": "longitude",
+            "description": "<p>当前经度.</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
+            "optional": false,
+            "field": "latitude",
+            "description": "<p>当前纬度.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "is_recommend",
+            "description": "<p>是否使用推荐阿姨（0：不是，1：是）</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
             "field": "worker_id",
-            "description": "<p>阿姨id</p> "
+            "description": "<p>阿姨id.</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
+            "optional": false,
             "field": "plan_time",
-            "description": "<p>计划服务时长</p> "
+            "description": "<p>计划服务时长.</p> "
           }
         ]
       }
@@ -4952,7 +4973,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"selectTimeArea\": \"6\",\n         \"maxPlanTime\": \"6\",\n         \"minPlanTime\": \"2\",\n         \"msgStyle\": \"\",\n         \"alertMsg\": \"\",\n         \"workerTime\":\n         [\n         {\n             \"date_name\": \"09月13日\",\n             \"date_week\": \"周日\",\n             \"date_week_every\": \"每周日\",\n             \"date_time\":\n    [\"14:00-16:00\",\"14:30-16:30\",\"15:00-17:00\",\"15:30-17:30\",\"16:00-18:00\",\"16:30-18:30\",\"17:00-19:00\",\"17:30-19:30\",\"18:00-20:00\"],\n             \"date_name_tag\": \"09月13日(今天)\"\n         }\n         ]\n     }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n      \"code\": \"ok\",\n      \"msg\": \"获取周期服务时间表成功\"\n      \"ret\":{\n         \"recursive_worker_time\": [\n              {\n                  \"date_format\": \"10月25日\",\n                  \"date_stamp\": 1445669758,\n                  \"week\": \"明天\",\n                  \"hour\": [\n                      {\n                          \"time\": \"08:00-10:00\",\n                          \"status\": \"0\"\n                      },\n                      {\n                          \"time\": \"18:00-20:00\",\n                          \"status\": \"1\"\n                      }\n                  ]\n              },\n              {\n                  \"date_format\": \"10月26日\",\n                  \"date_stamp\": 1445669758,\n                  \"week\": \"\",\n                  \"hour\": [\n                      {\n                          \"time\": \"08:00-10:00\",\n                          \"status\": \"0\"\n                      },\n                      {\n                          \"time\": \"18:00-20:00\",\n                          \"status\": \"1\"\n                      }\n                  ]\n              },\n         ]\n      }\n  }",
           "type": "json"
         }
       ]
@@ -5300,7 +5321,7 @@ define({ "api": [
     "groupTitle": "Worker"
   },
   {
-    "type": "POST",
+    "type": "GET",
     "url": "/configure/all-services",
     "title": "城市服务初始化 （已完成）",
     "name": "actionAllServices",
@@ -5359,7 +5380,7 @@ define({ "api": [
     "groupTitle": "configure"
   },
   {
-    "type": "POST",
+    "type": "GET",
     "url": "v1/configure/user-init",
     "title": "用户端首页初始化 （赵顺利20% 假数据）",
     "name": "actionUserInit",
