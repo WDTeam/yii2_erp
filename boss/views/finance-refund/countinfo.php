@@ -44,7 +44,18 @@ $this->params['breadcrumbs'][] = $this->title;
     		'finance_refund_discount',
     		'finance_refund_pay_create_time:datetime',
     		'finance_pay_channel_title',
-    		'finance_refund_pop_nub',
+    		
+    		
+    		[
+    		'format' => 'raw',
+    		'label' => '流水号',
+    		'value' => function ($dataProvider) {
+    			return $dataProvider->finance_refund_pop_nub;
+    		},
+    		'width' => "80px",
+    		],
+    		
+    		//'finance_refund_pop_nub',
     		[
     		'format' => 'raw',
     		'label' => '支付状态',
@@ -71,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			},
 			'width' => "60px",
 			],
-            [
+            /* [
                 'class' => 'yii\grid\ActionColumn',
                 'template' =>'{view}',
                 'buttons' => [
@@ -82,40 +93,36 @@ $this->params['breadcrumbs'][] = $this->title;
                                                   
 
                 ],
-            ],
+            ], */
+          
+			[
+			'attribute'=>'refund_money',
+			'width'=>'80px',
+			'value'=>function ($model, $key, $index, $widget) {
+				return '合计';
+			},
 
-            
-            
-            
-            
-            
-            
-            
-
-            
-            
-            
-            
-            
-            [ 'filterInputOptions'=>['placeholder'=>'Any supplier'],
+			'filterWidgetOptions'=>[
+			'pluginOptions'=>['allowClear'=>false],
+			],
+			'filterInputOptions'=>['placeholder'=>'Any supplier'],
             				'group'=>true,
-            						'groupFooter'=>function ($model, $key, $index, $widget) { 
+            				'groupFooter'=>function ($model, $key, $index, $widget) { 
             						return [
-            						'mergeColumns'=>[[3]],
-            						'content'=>[           
-            						3=>GridView::F_SUM,
-            								],
-            								'contentFormats'=>[],
-            								'contentOptions'=>[ ],
-												'options'=>['class'=>'danger','style'=>'font-weight:bold;']
-            												];
-            					}
-            														],
+            						'mergeColumns'=>[[1,1,3,4,5,6]],
+     						'content'=>[
+										1=>'合计',
+										3=>GridView::F_SUM,
+										6=>GridView::F_SUM
+										],
+									'options'=>['class'=>'danger','style'=>'font-weight:bold;']
+            							   ];
+            							}
+            						],
             
-   
-            
- 
-  
+            						
+            						
+            						
             
         ],
         'responsive'=>true,
