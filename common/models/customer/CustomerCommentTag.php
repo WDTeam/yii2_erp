@@ -1,6 +1,6 @@
 <?php
 
-namespace core\models\customer;
+namespace common\models\customer;
 
 use Yii;
 
@@ -15,7 +15,7 @@ use Yii;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class CustomerCommentTag extends \common\models\customer\CustomerCommentTag
+class CustomerCommentTag extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
@@ -43,13 +43,13 @@ class CustomerCommentTag extends \common\models\customer\CustomerCommentTag
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('core', 'ID'),
-            'customer_comment_tag_name' => Yii::t('core', '评价标签名称'),
-            'customer_comment_level' => Yii::t('core', '评价等级'),
-            'is_online' => Yii::t('core', '是否上线'),
-            'created_at' => Yii::t('core', '创建时间'),
-            'updated_at' => Yii::t('core', '更新时间'),
-            'is_del' => Yii::t('core', '删除'),
+            'id' => Yii::t('common', 'ID'),
+            'customer_comment_tag_name' => Yii::t('common', '评价标签名称'),
+            'customer_comment_level' => Yii::t('common', '评价等级'),
+            'is_online' => Yii::t('common', '是否上线'),
+            'created_at' => Yii::t('common', '创建时间'),
+            'updated_at' => Yii::t('common', '更新时间'),
+            'is_del' => Yii::t('common', '删除'),
         ];
     }
 }

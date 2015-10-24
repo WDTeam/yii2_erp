@@ -1,6 +1,6 @@
 <?php
 
-namespace core\models\customer;
+namespace common\models\customer;
 
 use Yii;
 
@@ -15,7 +15,7 @@ use Yii;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class CustomerChannal extends \common\models\customer\CustomerChannal
+class CustomerChannal extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc

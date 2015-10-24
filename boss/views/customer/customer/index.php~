@@ -43,8 +43,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php //echo Html::a(Yii::t('app', 'Create {modelClass}', ['modelClass' => 'Worker',]), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?php
-    $b= Html::a('<i class="glyphicon" ></i>全部 '.$searchModel->countALLCustomer(), ['index'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']). 
-    Html::a('<i class="glyphicon" ></i>黑名单 '.$searchModel->countBlockCustomer(), ['index?CustomerSearch[is_del]=1'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']).
+    $b= Html::a('<i class="glyphicon" ></i>全部 '.$searchModel->countALLCustomer(), ['customer/customer/index'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']). 
+    Html::a('<i class="glyphicon" ></i>黑名单 '.$searchModel->countBlockCustomer(), ['customer/customer/index?CustomerSearch[is_del]=1'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']).
     Html::a('<i class="glyphicon" ></i>按时间从大到小 ', ['index', 'sort'=>'created_at'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']).
     Html::a('<i class="glyphicon" ></i>按订单量从大到小 ', ['index', 'sort'=>'order_count'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']);
    
@@ -126,7 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => '电话',
                 'value' => function ($dataProvider) {
                     // return '<a href="/customer/' . $dataProvider->id . '">'.$dataProvider->customer_phone.'</a>';
-                    return Html::a('<i class="glyphicon">'.$dataProvider->customer_phone.'</i>', ['customer/view', 'id'=>$dataProvider->id]);
+                    return Html::a('<i class="glyphicon">'.$dataProvider->customer_phone.'</i>', ['customer/customer/view', 'id'=>$dataProvider->id]);
                 },
                 'width' => "80px",
             ],
@@ -180,7 +180,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => '订单',
                 'value' => function ($dataProvider) {
                     $order_count = OrderExtCustomer::find()->where(['customer_id'=>$dataProvider->id])->count();
-                    return '<a href="/order/index?OrderSearch[customer_id]='. $dataProvider->id .'">'.$order_count.'</a>';
+                    return '<a href="order/order/index?OrderSearch[customer_id]='. $dataProvider->id .'">'.$order_count.'</a>';
                 },
                 'width' => "50px",
             ],
@@ -216,7 +216,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'buttons' => [
                     'block' => function ($url, $model) {
                         return empty($model->is_del) ? Html::a('加入黑名单', [
-                            'customer/add-to-block',
+                            'customer/customer/add-to-block',
                             'id' => $model->id
                         ], [
                             'title' => Yii::t('app', '加入黑名单'),
@@ -225,7 +225,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-id'=>$model->id,
                             'class'=>'block-btn',
                         ]) : Html::a('解除黑名单', [
-                            'customer/remove-from-block',
+                            'customer/customer/remove-from-block',
                             'id' => $model->id
                             
                         ], [
