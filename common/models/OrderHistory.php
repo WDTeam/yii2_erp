@@ -76,6 +76,7 @@ use Yii;
  * @property string $shop_id
  * @property string $checking_id
  * @property string $order_cs_memo
+ * @property string $order_sys_memo
  * @property string $admin_id
  */
 class OrderHistory extends \common\models\ActiveRecord
@@ -99,7 +100,7 @@ class OrderHistory extends \common\models\ActiveRecord
             [['order_unit_money', 'order_money', 'order_pop_operation_money', 'order_pop_order_money', 'order_pop_pay_money', 'order_pay_money', 'order_use_acc_balance', 'order_use_card_money', 'order_use_coupon_money', 'order_use_promotion_money'], 'number'],
             [['order_code', 'order_channel_name', 'order_worker_type_name'], 'string', 'max' => 64],
             [['order_before_status_name', 'order_status_name', 'order_service_type_name', 'order_src_name', 'order_ip','order_pay_channel_name'], 'string', 'max' => 128],
-            [['order_address', 'order_pop_order_code', 'order_pop_group_buy_code', 'order_customer_need', 'order_customer_memo', 'order_pay_flow_num', 'order_cs_memo'], 'string', 'max' => 255],
+            [['order_address', 'order_pop_order_code', 'order_pop_group_buy_code', 'order_customer_need', 'order_customer_memo', 'order_pay_flow_num', 'order_cs_memo','order_sys_memo'], 'string', 'max' => 255],
             [['order_customer_phone'], 'string', 'max' => 16]
         ];
     }
@@ -179,6 +180,7 @@ class OrderHistory extends \common\models\ActiveRecord
             'shop_id' => '工人所属门店id',
             'checking_id' => '对账id',
             'order_cs_memo' => '客服备注',
+            'order_sys_memo' => '系统备注',
             'admin_id' => '操作人id  0客户操作 1系统操作',
         ];
     }

@@ -124,6 +124,11 @@ echo Menu::widget(
                         'url' => ['/auto-assign'],
                         'icon' => 'fa fa-angle-right',
                     ],
+                	[
+                		'label' => '投诉订单(30%)',
+                		'url' => ['/complaint-order'],
+                		'icon' => 'fa fa-angle-right',
+                	],
                 ],
             ],
             [
@@ -276,6 +281,36 @@ echo Menu::widget(
                     [
                         'label' => '阿姨任务管理(95%)',
                         'url' => ['/worker-task/index'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
+					[
+                'label' => '服务卡管理',
+                'url' => ['#'],
+                'icon' => 'fa fa-slideshare',
+                'options' => [
+                    'class' => 'treeview active',
+                ],
+                'items' => [
+                    [
+                        'label' => '服务卡信息管理',
+                        'url' => ['server-card/index'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
+                    [
+                        'label' => '客户服务卡管理',
+                        'url' => ['#'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
+					[
+                        'label' => '服务卡付款管理',
+                        'url' => ['#'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
+                ],
+            ],
+                    [
+                        'label' => '精品保洁管理',
+                        'url' => ['/operation-selected-service'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],
@@ -514,6 +549,7 @@ echo Menu::widget(
                     
                 ],
             ],
+			
 //             [
 //                 'label' => 'POP管理',
 //                 'url' => ['#'],

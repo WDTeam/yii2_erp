@@ -14,6 +14,7 @@ use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use core\models\customer\Customer;
 use core\models\order\OrderStatusHistory;
+use core\models\shop\Shop;
 
 /**
  * OrderController implements the CRUD actions for Order model.
@@ -24,13 +25,14 @@ class OrderController extends BaseAuthController
     {   
         $orderid = yii::$app->request->get('orderid',1);
         $orderInfo = OrderSearch::getOne($orderid);
-        $orderStatus= $orderInfo->orderExtStatus->order_status_dict_id;
        // var_dump($orderStatus);
-        if($orderInfo->order_code==false)
+        if(!isset($orderInfo->order_code))
         {
             echo "没有此订单";
             exit;
         }
+        $orderStatus= $orderInfo->orderExtStatus->order_status_dict_id;
+        $FinanceRefundadd=new FinanceRefundadd;
         /** 方便测试关闭了，正式使用时请打开
        $result = Order::cancel($orderid,Yii::$app->user->id);
        if($result==false)  exit("order canlel module error");
@@ -45,11 +47,20 @@ class OrderController extends BaseAuthController
         if($orderInfo->orderExtWorker->worker_id){
             $workInfo = Worker::getWorkerInfo($orderInfo->orderExtWorker->worker_id);
             $worker_phone = $workInfo['worker_phone'];
-        } 
+        }
+
+        if($orderInfo->orderExtWorker->shop_id)
+        {
+            $shopInfo = Shop::findById($orderInfo->orderExtWorker->shop_id);
+            $FinanceRefundadd->finance_refund_province_id=empty($shopInfo->province_id)?0:$shopInfo->province_id ;
+            $FinanceRefundadd->finance_refund_city_id=empty($shopInfo->city_id)?0:$shopInfo->city_id ;
+            $FinanceRefundadd->finance_refund_county_id=empty($shopInfo->county_id)?0:$shopInfo->county_id ;
+        }
          if($orderInfo->orderExtPay->order_pay_type==2 && $orderInfo->orderExtStatus->order_status_dict_id==2)
         //if($orderInfo->orderExtPay->order_pay_type==2)
           {
-            $FinanceRefundadd=new FinanceRefundadd;
+
+            $FinanceRefundadd->customer_id=$orderInfo->orderExtCustomer->customer_id;
             $FinanceRefundadd->finance_refund_pop_nub=empty($orderInfo->orderExtPop->order_pop_order_code)?0:$orderInfo->orderExtPop->order_pop_order_code;//第三方订单号，后期使用
             $FinanceRefundadd->finance_refund_tel=empty($orderInfo->orderExtCustomer->order_customer_phone)?0:$orderInfo->orderExtCustomer->order_customer_phone;//下单者电话
             $FinanceRefundadd->finance_refund_money=intval($orderInfo->orderExtPay->order_pay_money);//退款金额
@@ -70,6 +81,10 @@ class OrderController extends BaseAuthController
             $FinanceRefundadd->isstatus=2; //1 取消 2 退款的 3 财务已经审核 4 财务已经退款 0 不确定
             $FinanceRefundadd->create_time=$orderInfo->created_at; //创建时间
             $FinanceRefundadd->is_del=$orderInfo->isdel; //是否删除  0  正常 1 删除  默认是0
+            $FinanceRefundadd->finance_refund_check_name=0 ;
+            $FinanceRefundadd->finance_refund_shop_id=empty($orderInfo->orderExtWorker->shop_id)?0:$orderInfo->orderExtWorker->shop_id ;
+
+            print_r($FinanceRefundadd);
             //测试数据开始
             $infodate=$FinanceRefundadd->add();
             $result = json_decode($infodate);
@@ -440,6 +455,8 @@ public function actionGetCity()
         $province_id = Yii::$app->request->post('province_id');
         $city_id = Yii::$app->request->post('city_id');
         $county_id = Yii::$app->request->post('county_id');
+        $province_name = Yii::$app->request->post('province_name');
+        $city_name = Yii::$app->request->post('city_name');
         $county_name = Yii::$app->request->post('county_name');
         $detail = Yii::$app->request->post('detail');
         $nickname = Yii::$app->request->post('nickname');
@@ -447,10 +464,10 @@ public function actionGetCity()
         $customer_id = Yii::$app->request->post('customer_id');
         if($address_id>0){
             //修改
-            $address = CustomerAddress::updateAddress($address_id,$county_name,$detail,$nickname,$phone);
+            $address = CustomerAddress::updateAddress($address_id,$province_name,$city_name,$county_name,$detail,$nickname,$phone);
         }else{
             //添加
-            $address = CustomerAddress::addAddress($customer_id,$county_name,$detail,$nickname,$phone);
+            $address = CustomerAddress::addAddress($customer_id,$province_name,$city_name,$county_name,$detail,$nickname,$phone);
         }
         if($address){
             return ['code'=>200,'data'=>$address];

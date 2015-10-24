@@ -36,8 +36,7 @@ class FinanceRefundController extends BaseAuthController
     public function actionIndex()
     {
          //获取下单渠道
-         $tyu= FinanceOrderChannel::get_order_channel_listes();
-         
+         $tyu= FinanceOrderChannel::get_order_channel_listes(); 
          
         $searchModel = new FinanceRefundSearch;
         $searchModel->load(Yii::$app->request->getQueryParams());

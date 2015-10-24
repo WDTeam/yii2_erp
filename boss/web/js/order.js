@@ -120,6 +120,8 @@ $(document).on("click",".save_address_btn",function(){
     var city_id = $('#address_'+address_id+' .city_form').val();
     var county_id = $('#address_'+address_id+' .county_form').val();
     var county_name = $('#address_'+address_id+' .county_form option:selected').text();
+    var city_name = $('#address_'+address_id+' .city_form option:selected').text();
+    var province_name = $('#address_'+address_id+' .province_form option:selected').text();
     var detail = $('#address_'+address_id+' .detail_form').val();
     var nickname = $('#address_'+address_id+' .nickname_form').val();
     var phone = $('#address_'+address_id+' .phone_form').val();
@@ -131,7 +133,7 @@ $(document).on("click",".save_address_btn",function(){
     $.ajax({
         type: "POST",
         url: "/order/save-address/?address_id=" + address_id,
-        data: "province_id="+province_id+"&city_id="+city_id+"&county_id="+county_id+"&county_name="+county_name+"&detail="+detail+"&nickname="+nickname+"&phone="+phone+"&customer_id="+customer_id,
+        data: "province_id="+province_id+"&city_id="+city_id+"&county_id="+county_id+"&county_name="+county_name+"&city_name="+city_name+"&province_name="+province_name+"&detail="+detail+"&nickname="+nickname+"&phone="+phone+"&customer_id="+customer_id,
         dataType: "json",
         success: function (msg) {
             if(msg.code==200) {

@@ -537,9 +537,9 @@ class WorkerController extends BaseAuthController
         }
 
         $connection = new \yii\db\Connection([
-            'dsn' => 'mysql:host=rdsh52vh252q033a4ci5.mysql.rds.aliyuncs.com;dbname=sq_ejiajie_v2',
-            'username' => 'sq_ejiajie',
-            'password' => 'test_sq_ejiajie',
+            'dsn' => 'mysql:host=localhost;dbname=sq_ejiajie_v2',
+            'username' => 'root',
+            'password' => '123456',
             'charset' => 'utf8',
         ]);
         $connection->open();
