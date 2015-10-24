@@ -829,12 +829,16 @@ class OrderController extends \api\components\Controller
 
 
     /**
-     * @api {GET} /order/cancelorder 取消订单(haojianse %0  )
+     * @api {PUT} /order/cancel-order 取消订单(haojianse 100% ) 
+     * 
+     * @apiName CancelOrder
+     * @apiGroup Order
+     * 
+     * 
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      * @apiParam {String} order_cancel_reason 取消原因
      * @apiParam {String} order_id 订单号
-
      *
      * @apiParam {String} recursive_order_id 周期订单
      * @apiParam {String} order_id 订单id
@@ -909,8 +913,10 @@ class OrderController extends \api\components\Controller
 
     /**
      * @api {get} /mobileapidriver2/worker_request_order 抢单（xieyi %0）
+     * 
      * @apiName actionDriverRequestOrder
      * @apiGroup Order
+     * 
      * @apiDescription 阿姨抢单
      * @apiParam {String} session_id    会话id.
      * @apiParam {String} platform_version 平台版本号.
@@ -990,7 +996,7 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /order/hiden-order 删除订单（郝建设 100% ）
+     * @api {DELETE} /order/hiden-order 删除订单（郝建设 100% ）
      * 
      * 
      * @apiName HidenOrder
