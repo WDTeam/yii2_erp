@@ -22,40 +22,52 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h3 class="panel-title">阿姨信息</h3>
         </div>
         <div class="panel-body settle-detail-body">
-            <div class='col-md-2'>
+            <div class='col-md-1'>
                 阿姨姓名
             </div>
-            <div class='col-md-2'>
+            <div class='col-md-1'>
                 手机号
             </div>
             <div class='col-md-2'>
                 入职日期
             </div>
-            <div class='col-md-2'>
+            <div class='col-md-1'>
                 阿姨类型
+            </div>
+            <div class='col-md-1'>
+                结算类型
             </div>
             <div class='col-md-2'>
                 结算周期
+            </div>
+            <div class='col-md-2'>
+                本次结算时间
             </div>
             <div class='col-md-2'>
                 上次结算时间
             </div>
         </div>
         <div class="panel-body settle-detail-body">
-            <div class='col-md-2'>
-                <?=  $model->worder_name; ?>
+            <div class='col-md-1'>
+                <?=  $model->worker_name; ?>
             </div>
-            <div class='col-md-2'>
-                <?=  $model->worder_tel; ?>
+            <div class='col-md-1'>
+                <?=  $model->worker_tel; ?>
             </div>
             <div class='col-md-2'>
                 <?=  date('Y:m:d H:i:s',$model->workerOnboardTime); ?>
             </div>
-            <div class='col-md-2'>
+            <div class='col-md-1'>
                 <?=  $model->workerTypeDes; ?>
             </div>
-            <div class='col-md-2'>
+            <div class='col-md-1'>
                 <?=  $model->finance_settle_apply_cycle_des; ?>
+            </div>
+            <div class='col-md-2'>
+                <?=  date('Y:m:d H:i:s',$model->latestSettleTime); ?>
+            </div>
+            <div class='col-md-2'>
+                <?=  date('Y:m:d H:i:s',$model->latestSettleTime); ?>
             </div>
             <div class='col-md-2'>
                 <?=  date('Y:m:d H:i:s',$model->latestSettleTime); ?>

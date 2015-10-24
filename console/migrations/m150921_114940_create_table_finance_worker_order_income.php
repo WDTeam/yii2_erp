@@ -13,7 +13,7 @@ class m150921_114940_create_table_finance_worker_order_income extends Migration
         }
         $this->createTable('{{%finance_worker_order_income}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT  COMMENT \'主键\'' ,
-            'worder_id' => Schema::TYPE_INTEGER . '(10) NOT NULL COMMENT \'阿姨id\'',
+            'worker_id' => Schema::TYPE_INTEGER . '(10) NOT NULL COMMENT \'阿姨id\'',
             'order_id' => Schema::TYPE_INTEGER . '(10) NOT NULL COMMENT \'订单id\'',
             'finance_worker_order_income_type' => Schema::TYPE_SMALLINT . '(1) NOT NULL COMMENT \'阿姨收入类型，0订单收入（线上支付），1订单收入（现金）\'',
             'finance_worker_order_income' => Schema::TYPE_DECIMAL . '(10,2)  COMMENT \'阿姨收入\'',
@@ -28,7 +28,7 @@ class m150921_114940_create_table_finance_worker_order_income extends Migration
             'created_at' => Schema::TYPE_INTEGER. '(11) COMMENT \'创建时间\'',
         ], $tableOptions);
         $this->batchInsert('{{%finance_worker_order_income}}',
-            ['id','worder_id','order_id','finance_worker_order_income_type','finance_worker_order_income',
+            ['id','worker_id','order_id','finance_worker_order_income_type','finance_worker_order_income',
                 'finance_worker_order_complete_time',
                 'order_booked_count','isSettled',
                 'finance_worker_order_income_starttime','finance_worker_order_income_endtime',

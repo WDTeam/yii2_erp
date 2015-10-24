@@ -84,13 +84,13 @@ class FinanceSettleApplyController extends BaseAuthController
             $searchModel->settleMonth = date('Y-m', strtotime('-1 month'));
             $searchModel->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT;
             $searchModel->worker_type_id = 1;
-            $searchModel->worker_rule_id = 1;
+            $searchModel->worker_identity_id = 1;
 //            $searchModel->finance_settle_apply_starttime = $this->getFirstDayOfSpecifiedMonth();
 //            $searchModel->finance_settle_apply_endtime = $this->getLastDayOfSpecifiedMonth();
             if(isset($requestParams['FinanceSettleApplySearch'])){
                 $requestModel = $requestParams['FinanceSettleApplySearch'];
-                if(isset($requestModel['worder_tel'])){
-                    $searchModel->worder_tel = $requestModel['worder_tel'];
+                if(isset($requestModel['worker_tel'])){
+                    $searchModel->worker_tel = $requestModel['worker_tel'];
                 }
 //                if(isset($requestModel['settleMonth'])){
 //                    $searchModel->settleMonth = $requestModel['settleMonth'];
@@ -102,7 +102,7 @@ class FinanceSettleApplyController extends BaseAuthController
         if($settle_type == FinanceSettleApplySearch::SELF_PARTTIME_WORKER_SETTELE){
             $searchModel->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT;
             $searchModel->worker_type_id = 1;
-            $searchModel->worker_rule_id = 2;
+            $searchModel->worker_identity_id = 2;
 //            $searchModel->finance_settle_apply_starttime = strtotime('-1 week last monday');
 //            $searchModel->finance_settle_apply_endtime = strtotime('last sunday');
         }
@@ -188,15 +188,15 @@ class FinanceSettleApplyController extends BaseAuthController
         $requestParams = Yii::$app->request->getQueryParams();
         $financeSettleApplySearch->load($requestParams);
         $financeSettleApplySearch = $financeSettleApplySearch->findOne(['id'=>$financeSettleApplySearch->id]);
-        $financeSettleApplySearch->workerTypeDes = $financeSettleApplySearch->getWorkerTypeDes($financeSettleApplySearch->worker_type_id,$financeSettleApplySearch->worker_rule_id);
+        $financeSettleApplySearch->workerTypeDes = $financeSettleApplySearch->getWorkerTypeDes($financeSettleApplySearch->worker_type_id,$financeSettleApplySearch->worker_identity_id);
         $financeWorkerOrderIncomeSearch = new FinanceWorkerOrderIncomeSearch;
         $financeWorkerOrderIncomeSearch->load($requestParams);
         if(isset($requestParams['finance_worker_order_income_type'])){
             $financeWorkerOrderIncomeSearch->finance_worker_order_income_type = $requestParams['finance_worker_order_income_type'];
         }
-        $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProviderFromOrder($financeSettleApplySearch->worder_id);
-        $cashOrderDataProvider = $financeWorkerOrderIncomeSearch->getCashOrderDataProviderFromOrder($financeSettleApplySearch->worder_id);
-        $nonCashOrderDataProvider = $financeWorkerOrderIncomeSearch->getNonCashOrderDataProviderFromOrder($financeSettleApplySearch->worder_id);
+        $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
+        $cashOrderDataProvider = $financeWorkerOrderIncomeSearch->getCashOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
+        $nonCashOrderDataProvider = $financeWorkerOrderIncomeSearch->getNonCashOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
         return $this->render('selfFulltimeWorkerSettleView', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider,'cashOrderDataProvider'=>$cashOrderDataProvider,'nonCashOrderDataProvider'=>$nonCashOrderDataProvider]);
     }
     
@@ -408,23 +408,22 @@ class FinanceSettleApplyController extends BaseAuthController
         }else{
             $worker_type = FinanceSettleApplySearch::SELF_OPERATION;
         }
-        if(!empty($financeSettleApplySearch->worder_tel) && !$financeSettleApplySearch->isWorkerExist($financeSettleApplySearch->worder_tel, $worker_type)){
+        if(!empty($financeSettleApplySearch->worker_tel) && !$financeSettleApplySearch->isWorkerExist($financeSettleApplySearch->worker_tel, $worker_type)){
             Yii::$app->getSession()->setFlash('default', "未找到该阿姨的信息，请确认阿姨类型");
-            $financeSettleApplySearch->worder_tel = "";
+            $financeSettleApplySearch->worker_tel = "";
         }
-        $financeSettleApplySearch->getWorkerInfo($financeSettleApplySearch->worder_tel);//获取阿姨的信息
-        //如果是门店阿姨结算，阿姨角色肯定是
+        $financeSettleApplySearch->getWorkerInfo($financeSettleApplySearch->worker_tel);//获取阿姨的信息
         $financeSettleApplySearch->settle_type = $settle_type;
         $financeSettleApplySearch->review_section = $review_section;
-        $financeSettleApplySearch = $financeSettleApplySearch->getWorkerSettlementSummaryInfo($financeSettleApplySearch->worder_id);
+        $financeSettleApplySearch = $financeSettleApplySearch->getWorkerSettlementSummaryInfo($financeSettleApplySearch->worker_id);
         $financeWorkerOrderIncomeSearch = new FinanceWorkerOrderIncomeSearch;
         $financeWorkerOrderIncomeSearch->load($requestParams);
         if(isset($requestParams['finance_worker_order_income_type'])){
             $financeWorkerOrderIncomeSearch->finance_worker_order_income_type = $requestParams['finance_worker_order_income_type'];
         }
-        $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProviderFromOrder($financeSettleApplySearch->worder_id);
-        $cashOrderDataProvider = $financeWorkerOrderIncomeSearch->getCashOrderDataProviderFromOrder($financeSettleApplySearch->worder_id);
-        $nonCashOrderDataProvider = $financeWorkerOrderIncomeSearch->getNonCashOrderDataProviderFromOrder($financeSettleApplySearch->worder_id);
+        $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
+        $cashOrderDataProvider = $financeWorkerOrderIncomeSearch->getCashOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
+        $nonCashOrderDataProvider = $financeWorkerOrderIncomeSearch->getNonCashOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
         return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider,'cashOrderDataProvider'=>$cashOrderDataProvider,'nonCashOrderDataProvider'=>$nonCashOrderDataProvider]);
     }
     
@@ -517,7 +516,7 @@ class FinanceSettleApplyController extends BaseAuthController
             $financeWorkerOrderIncomeArr = array();
             foreach($orderIncomeDetail as $orderIncome){
                 $financeWorkerOrder = new FinanceWorkerOrderIncome;
-                $financeWorkerOrder->worder_id = $workerId;
+                $financeWorkerOrder->worker_id = $workerId;
                 $financeWorkerOrder->order_id = $orderIncome['id'];
                 $financeWorkerOrder->finance_worker_order_income_type = $orderIncome->orderExtPay->order_pay_type;
                 $financeWorkerOrder->finance_worker_order_income =  $orderIncome['order_money'];
@@ -535,7 +534,7 @@ class FinanceSettleApplyController extends BaseAuthController
             $financeWorkerNonOrderIncomeArr = [];
             foreach($workerSubsidyArr as $workerSubsidy){
                 $financeWorkerNonOrderIncome = new FinanceWorkerNonOrderIncome;
-                $financeWorkerNonOrderIncome->worder_id = $workerId;
+                $financeWorkerNonOrderIncome->worker_id = $workerId;
                 $financeWorkerNonOrderIncome->finance_worker_non_order_income_type = $workerSubsidy['finance_worker_non_order_income_type'];
                 $financeWorkerNonOrderIncome->finance_worker_non_order_income_type_des = $workerSubsidy['finance_worker_non_order_income_type_des'];
                 $financeWorkerNonOrderIncome->finance_worker_non_order_income = $workerSubsidy['finance_worker_non_order_income'];
@@ -547,7 +546,7 @@ class FinanceSettleApplyController extends BaseAuthController
             }
             $transaction =  Yii::$app->db->beginTransaction();
             try{
-                $existCount = FinanceSettleApply::find()->where(['worder_id'=>$financeSettleApplySearch->worder_id,'finance_settle_apply_starttime'=>$settleStartTime,'finance_settle_apply_endtime'=>$settleEndTime])->count();
+                $existCount = FinanceSettleApply::find()->where(['worker_id'=>$financeSettleApplySearch->worker_id,'finance_settle_apply_starttime'=>$settleStartTime,'finance_settle_apply_endtime'=>$settleEndTime])->count();
                 echo '---'.$existCount;
                 if($existCount == 0){
                     if($financeSettleApplySearch->save()){

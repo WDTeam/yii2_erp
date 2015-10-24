@@ -18,7 +18,7 @@ class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
     public function rules()
     {
         return [
-            [['id', 'worder_id', 'finance_worker_non_order_income_type', 'finance_worker_non_order_income_starttime', 'finance_worker_non_order_income_endtime', 'finance_worker_non_order_income_isSettled', 'finance_settle_apply_id', 'isdel', 'updated_at', 'created_at'], 'integer'],
+            [['id', 'worker_id', 'finance_worker_non_order_income_type', 'finance_worker_non_order_income_starttime', 'finance_worker_non_order_income_endtime', 'finance_worker_non_order_income_isSettled', 'finance_settle_apply_id', 'isdel', 'updated_at', 'created_at'], 'integer'],
             [['finance_worker_non_order_income'], 'number'],
             [['finance_worker_non_order_income_des'], 'safe'],
         ];
@@ -58,7 +58,7 @@ class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'worder_id' => $this->worder_id,
+            'worker_id' => $this->worker_id,
             'finance_worker_non_order_income_type' => $this->finance_worker_non_order_income_type,
             'finance_worker_non_order_income' => $this->finance_worker_non_order_income,
             'finance_worker_non_order_income_starttime' => $this->finance_worker_non_order_income_starttime,

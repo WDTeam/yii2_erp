@@ -8,22 +8,31 @@ use Yii;
  * This is the model class for table "{{%finance_settle_apply}}".
  *
  * @property integer $id
- * @property integer $worder_id
- * @property string $worder_tel
+ * @property integer $worker_id
+ * @property string $worker_tel
  * @property integer $worker_type_id
  * @property string $worker_type_name
- * @property integer $worker_rule_id
- * @property string $worker_rule_name
+ * @property integer $worker_identity_id
+ * @property string $worker_identity_name
  * @property integer $shop_id
  * @property string $shop_name
  * @property integer $shop_manager_id
  * @property string $shop_manager_name
+ * @property integer $finance_settle_apply_order_count
  * @property integer $finance_settle_apply_man_hour
  * @property string $finance_settle_apply_order_money
+ * @property integer $finance_settle_apply_task_count
+ * @property string $finance_settle_apply_task_money
+ * @property integer $finance_settle_apply_base_salary
+ * @property string $finance_settle_apply_base_salary_subsidy
+ * @property string $finance_settle_apply_money_except_deduct_cash
+ * @property string $finance_settle_apply_money_deduction
+ * @property string $finance_settle_apply_money_except_cash
+ * @property string $finance_settle_apply_order_cash_count
  * @property string $finance_settle_apply_order_cash_money
- * @property string $finance_settle_apply_order_money_except_cash
- * @property string $finance_settle_apply_subsidy
  * @property string $finance_settle_apply_money
+ * @property string $finance_settle_apply_order_noncash_count
+ * @property string $finance_settle_apply_order_money_except_cash
  * @property integer $finance_settle_apply_status
  * @property integer $finance_settle_apply_cycle
  * @property string $finance_settle_apply_cycle_des
@@ -72,11 +81,11 @@ class FinanceSettleApply extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-//            [['worder_id', 'worder_tel', 'worker_type_id', 'worker_type_name', 'finance_settle_apply_man_hour', 'finance_settle_apply_order_money', 'finance_settle_apply_order_money_except_cash', 'finance_settle_apply_money', 'finance_settle_apply_status', 'finance_settle_apply_cycle', 'finance_settle_apply_cycle_des'], 'required'],
-            [['worder_id', 'worker_type_id', 'finance_settle_apply_man_hour', 'finance_settle_apply_status', 'finance_settle_apply_cycle', 'finance_settle_apply_starttime', 'finance_settle_apply_endtime', 'isdel', 'updated_at', 'created_at'], 'integer'],
-            [['finance_settle_apply_order_money', 'finance_settle_apply_order_cash_money', 'finance_settle_apply_order_money_except_cash', 'finance_settle_apply_subsidy', 'finance_settle_apply_money'], 'number'],
+//            [['worker_id', 'worker_tel', 'worker_type_id', 'worker_type_name', 'finance_settle_apply_man_hour', 'finance_settle_apply_order_money', 'finance_settle_apply_order_money_except_cash', 'finance_settle_apply_money', 'finance_settle_apply_status', 'finance_settle_apply_cycle', 'finance_settle_apply_cycle_des'], 'required'],
+            [['worker_id', 'worker_type_id', 'finance_settle_apply_man_hour', 'finance_settle_apply_status', 'finance_settle_apply_cycle', 'finance_settle_apply_starttime', 'finance_settle_apply_endtime', 'isdel', 'updated_at', 'created_at'], 'integer'],
+            [['finance_settle_apply_order_money', 'finance_settle_apply_order_cash_money', 'finance_settle_apply_order_money_except_cash',  'finance_settle_apply_money','finance_settle_apply_task_count','finance_settle_apply_task_money','finance_settle_apply_base_salary','finance_settle_apply_base_salary_subsidy','finance_settle_apply_money_except_deduct_cash','finance_settle_apply_money_deduction','finance_settle_apply_money_except_cash',], 'number'],
             [['finance_settle_apply_cycle_des'], 'string'],
-            [['worder_tel'], 'string', 'max' => 11],
+            [['worker_tel'], 'string', 'max' => 11],
             [['worker_type_name'], 'string', 'max' => 30],
             [['finance_settle_apply_reviewer'], 'string', 'max' => 20]
         ];
@@ -89,26 +98,32 @@ class FinanceSettleApply extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', '主键'),
-            'worder_id' => Yii::t('app', '阿姨id'),
-            'worder_name' => Yii::t('app', '阿姨姓名'),
-            'worder_tel' => Yii::t('app', '阿姨电话'),
+            'worker_id' => Yii::t('app', '阿姨id'),
+            'worker_name' => Yii::t('app', '阿姨姓名'),
+            'worker_tel' => Yii::t('app', '阿姨电话'),
             'worker_type_id' => Yii::t('app', '阿姨类型Id'),
             'worker_type_name' => Yii::t('app', '阿姨职位类型'),
-            'worker_rule_id' => Yii::t('app', '阿姨类型Id'),
-            'worker_rule_name' => Yii::t('app', '阿姨职位类型'),
+            'worker_identity_id' => Yii::t('app', '阿姨身份Id'),
+            'worker_identity_name' => Yii::t('app', '阿姨身份描述'),
             'shop_id' => Yii::t('app', '门店id'),
             'shop_name' => Yii::t('app', '门店名称'),
             'shop_manager_id' => Yii::t('app', '归属家政id'),
             'shop_manager_name' => Yii::t('app', '归属家政名称'),
-            'finance_settle_apply_man_hour' => Yii::t('app', '订单总工时'),
             'finance_settle_apply_order_count' => Yii::t('app', '总单量'),
+            'finance_settle_apply_man_hour' => Yii::t('app', '订单总工时'),
             'finance_settle_apply_order_money' => Yii::t('app', '工时费小计'),
+            'finance_settle_apply_task_count' => Yii::t('app', '完成任务数'),
+            'finance_settle_apply_task_money' => Yii::t('app', '完成任务奖励'),
+            'finance_settle_apply_base_salary' => Yii::t('app', '底薪'),
+            'finance_settle_apply_base_salary_subsidy' => Yii::t('app', '底薪补贴'),
+            'finance_settle_apply_money_except_deduct_cash' => Yii::t('app', '应结合计'),
+            'finance_settle_apply_money_deduction' => Yii::t('app', '扣款小计'),
+            'finance_settle_apply_money_except_cash' => Yii::t('app', '本次应结合计'),
             'finance_settle_apply_order_cash_count' => Yii::t('app', '现金订单'),
             'finance_settle_apply_order_cash_money' => Yii::t('app', '已收现金小计'),
+            'finance_settle_apply_money' => Yii::t('app', '本次应付合计'),
             'finance_settle_apply_order_noncash_count' => Yii::t('app', '非现金订单'),
             'finance_settle_apply_order_money_except_cash' => Yii::t('app', '工时费应结'),
-            'finance_settle_apply_subsidy' => Yii::t('app', '总补助费'),
-            'finance_settle_apply_money' => Yii::t('app', '应结算金额'),
             'finance_settle_apply_status' => Yii::t('app', '结算状态'),
             'finance_settle_apply_cycle' => Yii::t('app', '结算周期'),
             'finance_settle_apply_cycle_des' => Yii::t('app', '结算类型'),
