@@ -784,15 +784,17 @@ class UserController extends \api\components\Controller
      */
     public function actionUserMoney()
     {
-
+        
         $param = Yii::$app->request->post();
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
-        $app_version = $param['app_version']; #版本
+        
+        
+        @$app_version = $param['app_version']; #版本
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录111", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
         }
         #获取用户id
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
@@ -912,11 +914,11 @@ class UserController extends \api\components\Controller
             /**
              *  @param int $customer_id 用户id
              */
-            $userscore = \core\models\customer\CustomerExtScore::getCustomerScoreList(1);
-
+            $userscore = \core\models\customer\CustomerExtScore::getCustomerScoreList($customer->id);
+          
             if ($userscore) {
                 $ret["scoreCategory"] = $userscore;
-                return $this->send($userscore, "用户积分明细列表", "ok");
+                return $this->send($ret, "用户积分明细列表", "ok");
             } else {
                 return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
             }
