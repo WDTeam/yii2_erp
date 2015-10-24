@@ -10,7 +10,7 @@ use \core\models\customer\CustomerAccessToken;
 class ConfigureController extends \api\components\Controller
 {
     /**
-     * @api {POST} /configure/all-services 城市服务初始化 （已完成）
+     * @api {GET} /configure/all-services 城市服务初始化 （已完成）
      * @apiName actionAllServices
      * @apiGroup configure
      *
@@ -20,7 +20,7 @@ class ConfigureController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *      "code": "ok",
+     *      "code": "1",
      *      "msg": "",
      *      "ret":
      *      [
@@ -52,25 +52,24 @@ class ConfigureController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 404 Not Found
      *     {
-     *       "code":"error",
+     *       "code":"0",
      *       "msg": "该城市暂未开通"
      *     }
      * @apiDescription 获取城市服务配置项价格介绍页面以及分类的全部服务项目
      */
     public function actionAllServices()
     {
-        $param = Yii::$app->request->post() or
-        $param = json_decode(Yii::$app->request->getRawBody(), true);
+        $param = Yii::$app->request->get();
 
         if (empty(@$param['city_name'])) {
-            return $this->send(null, "未取得城市信息", "error", "403");
+            return $this->send(null, "未取得城市信息", 0, 403);
         }
 
         $categoryes = CoreOperationCategory::getAllCategory();
         $goodses = CoreOperationShopDistrictGoods::getGoodsByCity($param['city_name']);
 
         if (empty($categoryes) || empty($goodses)) {
-            return $this->send(null, "该城市暂未开通", "error", "403");
+            return $this->send(null, "该城市暂未开通", 0, 403);
         }
         $cDate = [];
         foreach ($categoryes as $cItem) {
@@ -102,11 +101,11 @@ class ConfigureController extends \api\components\Controller
             $cDate[] = $cObject;
         }
 
-        return $this->send($cDate, "数据获取成功", "ok");
+        return $this->send($cDate, "数据获取成功", 1);
     }
 
     /**
-     * @api {POST} v1/configure/user-init 用户端首页初始化 （赵顺利20% 假数据）
+     * @api {GET} v1/configure/user-init 用户端首页初始化 （赵顺利20% 假数据）
      * @apiName actionUserInit
      * @apiGroup configure
      * @apiDescription 获得开通城市列表，广告轮播图 等初始化数据
@@ -117,7 +116,7 @@ class ConfigureController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *          "code": "ok",
+     *          "code": "1",
      *          "msg": "操作成功",
      *          "ret": {
      *              "city_list": [
@@ -228,17 +227,16 @@ class ConfigureController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code":"error",
+     *       "code":"0",
      *       "msg": "城市尚未开通"
      *     }
      */
     public function actionUserInit()
     {
-        $param = Yii::$app->request->post() or
-        $param = json_decode(Yii::$app->request->getRawBody(), true);
+        $param = Yii::$app->request->get();
 
         if (empty(@$param['city_name'])) {
-            return $this->send(null, "未取得城市信息", "error", "403");
+            return $this->send(null, "未取得城市信息", 0, 403);
         }
         //获取城市列表
         $city_list = CoreOperationCity::getOnlineCitys();
@@ -309,7 +307,7 @@ class ConfigureController extends \api\components\Controller
             'server_list' => $server_list,
         ];
 
-        return $this->send($ret, '操作成功', 'ok');
+        return $this->send($ret, '操作成功');
     }
 
     /**
@@ -323,7 +321,7 @@ class ConfigureController extends \api\components\Controller
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *      "code": "ok",
+     *      "code": "1",
      *      "msg":"操作成功",
      *      "ret":
      *      {
@@ -341,7 +339,7 @@ class ConfigureController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"Failed",
+     *      "code":"0",
      *      "msg": "SessionIdNotFound"
      *  }
      *

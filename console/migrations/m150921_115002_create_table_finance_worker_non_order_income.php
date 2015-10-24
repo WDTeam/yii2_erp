@@ -13,7 +13,7 @@ class m150921_115002_create_table_finance_worker_non_order_income extends Migrat
         }
         $this->createTable('{{%finance_worker_non_order_income}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT  COMMENT \'主键\'' ,
-            'worder_id' => Schema::TYPE_INTEGER . '(10) NOT NULL COMMENT \'阿姨id\'',
+            'worker_id' => Schema::TYPE_INTEGER . '(10) NOT NULL COMMENT \'阿姨id\'',
             'finance_worker_non_order_income_type' => Schema::TYPE_SMALLINT . '(1) NOT NULL COMMENT \'阿姨收入类型，例如：办卡提成，推荐服务提成等\'',
             'finance_worker_non_order_income_type_des' => Schema::TYPE_TEXT . '(1) COMMENT \'阿姨收入类型描述\'',
             'finance_worker_non_order_income' => Schema::TYPE_DECIMAL . '(10,2)  COMMENT \'阿姨收入\'',
@@ -27,7 +27,7 @@ class m150921_115002_create_table_finance_worker_non_order_income extends Migrat
             'created_at' => Schema::TYPE_INTEGER. '(11) COMMENT \'创建时间\'',
         ], $tableOptions);
         $this->batchInsert('{{%finance_worker_non_order_income}}',
-            ['id','worder_id','finance_worker_non_order_income_type','finance_worker_non_order_income_type_des','finance_worker_non_order_income',
+            ['id','worker_id','finance_worker_non_order_income_type','finance_worker_non_order_income_type_des','finance_worker_non_order_income',
                 'finance_worker_non_order_income_des',
                 'finance_worker_non_order_income_starttime','finance_worker_non_order_income_endtime',
                 'finance_worker_non_order_income_isSettled','finance_settle_apply_id','isdel','updated_at','created_at'],

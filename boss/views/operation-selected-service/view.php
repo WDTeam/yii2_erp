@@ -6,19 +6,14 @@ use kartik\datecontrol\DateControl;
 
 /**
  * @var yii\web\View $this
- * @var common\models\finance\FinanceWorkerOrderIncome $model
+ * @var boss\models\Operation\OperationGoods $model
  */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Finance Worker Order Incomes'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Goods'), 'url' => ['/operation-category']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="finance-worker-order-income-view">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
-
-
+<div class="operation-goods-view">
     <?= DetailView::widget([
             'model' => $model,
             'condensed'=>false,
@@ -30,19 +25,16 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'attributes' => [
             'id',
-            'worder_id',
-            'order_id',
-            'finance_worker_order_income_type',
-            'finance_worker_order_income',
-            'finance_worker_order_complete_time:datetime',
-            'order_booked_count',
-            'isSettled',
-            'finance_worker_order_income_starttime:datetime',
-            'finance_worker_order_income_endtime:datetime',
-            'finance_settle_apply_id',
-            'isdel',
-            'updated_at',
-            'created_at',
+            'operation_goods_name',
+            'operation_category_id',
+            'operation_category_name',
+            'operation_goods_introduction:ntext',
+            'operation_goods_english_name',
+            'operation_goods_service_interval_time',
+            'operation_goods_price_description:ntext',
+            'operation_tags:ntext',
+            'created_at:datetime',
+            'updated_at:datetime',
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],

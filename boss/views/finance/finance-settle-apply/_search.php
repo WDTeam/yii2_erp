@@ -50,7 +50,7 @@ use kartik\grid\GridView;
     ?>
   </div> 
     <div class='col-md-2'>
-        <?= $form->field($model, 'worder_tel') ?>
+        <?= $form->field($model, 'worker_tel') ?>
     </div>
 
 

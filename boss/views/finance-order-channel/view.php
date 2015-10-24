@@ -28,10 +28,17 @@ $this->params['breadcrumbs'][] = $this->title;
            // 'id',
             'finance_order_channel_name',
     		'finance_order_channel_rate',
-            //'finance_order_channel_sort',
     		[
     		'format' => 'raw',
-    		'label' => '第三方显示',
+    		'label' => '支付显示',
+    		'attribute'=>'finance_order_channel_sort',
+    		'type'=> DetailView::INPUT_RADIO_LIST,
+    		'items'=>['1' => '确定', '2' => '取消'],
+    		],
+    		
+    		[
+    		'format' => 'raw',
+    		'label' => '下单显示',
     		'attribute'=>'finance_order_channel_is_lock',
     		'type'=> DetailView::INPUT_RADIO_LIST,
     		'items'=>['1' => '确定', '2' => '取消'],

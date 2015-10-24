@@ -309,11 +309,9 @@ class FinancePopOrderController extends Controller
     	}else {
     		//渠道下单	 开始时间   我有三没有开始处理 从订单表里面开始查询
     		$searchModel= new OrderSearch;
-    		//var_dump(FinancePopOrder::get_in_list_id($dateinfo['id']));exit;
-    		 
     		$searchModel->load(Yii::$app->request->getQueryParams());
     		$searchModel->created_at=$info->finance_record_log_statime;
-    		//$searchModel_info->created_at=$info->finance_record_log_statime;
+    		$searchModel->finance_record_log_endtime=$info->finance_record_log_endtime;
     		$searchModel->order_pop_order_code=FinancePopOrder::get_in_list_id($dateinfo['id']);
     		//$searchModel->channel_id=$info->finance_pay_channel_id;
     		$dataProvider = $searchModel->searchpoplist();
@@ -321,6 +319,7 @@ class FinancePopOrderController extends Controller
     	return $this->render('orderlist', [
     			'dataProvider' => $dataProvider,
     			'searchModel' => $searchModel,
+    			'id'=>$dateinfo['id']?$dateinfo['id']:0,
     			]);
     	
     	}else {
@@ -342,17 +341,31 @@ class FinancePopOrderController extends Controller
     	$tyu= FinanceOrderChannel::get_order_channel_listes();
 
     	//我有三没有开始处理 从订单表里面开始查询
-    	$searchModel= new GeneralPaySearch;
-    	$dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-    	return $this->render('generalpaylist', [
-    			'dataProvider' => $dataProvider,
-    			'searchModel' => $searchModel,
-    			
-    			]);
-    
+    	
+    	
+    	$dateinfo=Yii::$app->request->getQueryParams();
+    	if($dateinfo['id']){
+    		$info=FinanceRecordLogSearch::get_financerecordloginfo($dateinfo['id']);
+    		 
+    		if($info->finance_pay_channel_id=='10' && $info->finance_pay_channel_id=='7' &&$info->finance_pay_channel_id=='8' && $info->finance_pay_channel_id=='12' ){
+    			//银联充值
+    			$searchModel= new GeneralPaySearch;
+    			$searchModel->load(Yii::$app->request->getQueryParams());
+    			$searchModel->finance_record_log_statime=$info->finance_record_log_statime;
+    			$searchModel->finance_record_log_endtime=$info->finance_record_log_endtime;
+    			$searchModel->general_pay_transaction_id=FinancePopOrder::get_in_list_id($dateinfo['id']);
+    			$dataProvider = $searchModel->searchpaylist();
+    			return $this->render('generalpaylist', [
+    					'dataProvider' => $dataProvider,
+    					'searchModel' => $searchModel,
+    					'id' => $dateinfo['id']?$dateinfo['id']:0,
+    					]);
+    		}else {
+    			\Yii::$app->getSession()->setFlash('default','无充值订单！');
+    			return $this->redirect(['orderlist','id' =>$dateinfo['id']?$dateinfo['id']:0]);
     }
-
-    
+    }
+    }
     /**
     * 坏账列表
     * @date: 2015-9-27

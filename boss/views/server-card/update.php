@@ -4,17 +4,17 @@ use yii\helpers\Html;
 
 /**
  * @var yii\web\View $this
- * @var common\models\finance\FinanceWorkerOrderIncome $model
+ * @var common\models\ServerCard $model
  */
 
 $this->title = Yii::t('app', 'Update {modelClass}: ', [
-    'modelClass' => 'Finance Worker Order Income',
+    'modelClass' => 'Server Card',
 ]) . ' ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Finance Worker Order Incomes'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Server Cards'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
-<div class="finance-worker-order-income-update">
+<div class="server-card-update">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

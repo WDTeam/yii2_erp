@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'dataProvider' => $dataProvider,
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
-                'worder_tel',
+                'worker_tel',
                 'worker_type_name',
                 'finance_settle_apply_cycle_des',
                 'finance_settle_apply_money', 

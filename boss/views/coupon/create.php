@@ -34,8 +34,8 @@ $time_types = Coupon::getTimeTypes();
 $promote_types = Coupon::getPromoteTypes();
 
 ?>
-<div class="order-create">
-    <div class="order-form">
+<div class="coupon-create">
+    <div class="coupon-form">
         <?php if($model->hasErrors()):?>
         <div class="alert alert-danger" role="alert"><?=Html::errorSummary($model); ?></div>
         <?php endif;?>
@@ -54,7 +54,7 @@ $promote_types = Coupon::getPromoteTypes();
                 <h3 class="panel-title">优惠券类型信息</h3>
             </div>
             <div class="panel-body">
-                <?= $form->field($model, 'coupon_type')->inline()->radioList($coupon_types)->label('优惠券类型'); ?>
+                <?= $form->field($model, 'coupon_type')->inline()->radioList($coupon_types)->label('优惠券类型') ?>
 				<?= $form->field($model, 'coupon_service_type_id')->dropDownList([""=>"请选择服务类别"],['maxlength' => true])->label('服务类别') ?>
 				<?= $form->field($model, 'coupon_service_id')->dropDownList([""=>"请选择服务"],['maxlength' => true])->label('服务') ?>
                 
@@ -110,10 +110,13 @@ $promote_types = Coupon::getPromoteTypes();
                         'autoclose' => true,
                         'format' => 'yyyy-mm-dd',
                         'startDate' => date('Y-m-d'),
+
+
+
                     ],
                     'language'=>'zh-CN'
                 ]);?>
-				<?= $form->field($model, 'coupon_get_end_at')->textInput(['maxlength' => 255])->label('领取后过期天数') ?>
+				<?= $form->field($model, 'coupon_use_end_days')->textInput(['maxlength' => 255])->label('领取后过期天数') ?>
             </div>
 
 
@@ -146,4 +149,7 @@ $promote_types = Coupon::getPromoteTypes();
 
     </div>
 </div>
+<?php
+$this->registerJsFile('/js/coupon.js',['depends'=>[ 'yii\web\YiiAsset','yii\bootstrap\BootstrapAsset']]);
+?>
 

@@ -14,3 +14,12 @@
         
         
     }
+    2:leftjoin多表关联
+      ->select('a.id as id,title,create_time,modify_time,username,name')
+        ->from('yii_article AS a')
+        ->leftJoin('yii_user AS u','u.id = a.user_id')
+        ->leftJoin('yii_category AS c','c.id = a.category_id')
+        ->where(['c.name'=>'新闻分类'])
+        ->limit(4)
+        ->orderBy('id DESC')
+        ->All();

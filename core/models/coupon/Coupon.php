@@ -3,7 +3,6 @@
 namespace core\models\coupon;
 
 use Yii;
-
 use core\models\coupon\CouponCode;
 
 /**
@@ -43,108 +42,126 @@ use core\models\coupon\CouponCode;
  */
 class Coupon extends \common\models\coupon\Coupon
 {
+
+    /**
+     * get coupon rule service types
+     */
+    public static function getServiceTypes()
+    {
+        return array(
+            0 => '全网优惠券',
+            1 => '类别优惠券',
+            2 => '商品优惠券',
+        );
+    }
+
+    /**
+     * get coupon rule service
+     */
+    public static function getServiceInfo($id)
+    {
+        $coupon = self::findOne($id);
+        if ($coupon == NULL) {
+            return false;
+        }
+        return array(
+            'coupon_type' => $coupon->coupon_type,
+            'coupon_type_name' => $coupon->coupon_type_name,
+            'coupon_service_type_id' => $coupon->coupon_service_type_id,
+            'coupon_service_type_name' => $coupon->coupon_service_type_name,
+            'coupon_service_id' => $coupon->coupon_service_id,
+            'coupon_service_name' => $coupon->coupon_service_name,
+        );
+    }
+
+    /**
+     * get coupon rule customer city types
+     */
+    public static function getCityTypes()
+    {
+        return array(
+            0 => '全部城市',
+            1 => '单个城市',
+        );
+    }
+
+    /**
+     * get coupon rule city 
+     */
+    public static function getCityInfo($id)
+    {
+        $coupon = self::findOne($id);
+        if ($coupon == NULL) {
+            return false;
+        }
+        return array(
+            'coupon_city_limit' => $coupon->coupon_city_limit,
+            'coupon_city_id' => $coupon->coupon_city_id,
+            'coupon_city_name' => $coupon->coupon_city_name,
+        );
+    }
+
+    /**
+     * get coupon rule customer types
+     */
+    public static function getCustomerTypes()
+    {
+        return array(
+            0 => '所有用户',
+            1 => '新用户',
+            2 => '老用户',
+            3 => '会员',
+            4 => '非会员',
+        );
+    }
+
+    /**
+     * get coupon rule customer type
+     */
+    public static function getCustomerTypeInfo($id)
+    {
+        $coupon = self::findOne($id);
+        if ($coupon == NULL) {
+            return false;
+        }
+        return array(
+            'coupon_customer_type' => $coupon->coupon_customer_type,
+            'coupon_customer_type_name' => $coupon->coupon_customer_type_name,
+        );
+    }
+
+    /**
+     * get coupon rule coupon time types
+     */
+    public static function getTimeTypes()
+    {
+        return array(
+            0 => '领取时间段和使用时间段一致',
+            1 => '使用时间段领取后开始计算',
+        );
+    }
+
+    /**
+     * get coupon rule coupon promote types
+     */
+    public static function getPromoteTypes()
+    {
+        return array(
+            0 => '立减',
+            1 => '满减',
+            2 => '每减',
+        );
+    }
+
+    /**
+     * 优惠名称
+     * @param int  $coupon_id 优惠码规则id
+     * @return array 优惠信息
+     */
+    public static function getCoupon($coupon_id,$city_name)
+    {
+        return Coupon::find()->select('coupon_name,coupon_price,coupon_type_name,coupon_service_type_id,coupon_service_type_name,coupon_service_id,coupon_service_name')->where(["id" => $coupon_id,"coupon_city_name" => $city_name])->asArray()->all();
+    }
+
 	
-	/**
-	 * get coupon rule service types
-	 */
-	public static function getServiceTypes(){
-		return array(
-			0=>'全网优惠券',
-			1=>'类别优惠券',
-			2=>'商品优惠券',
-		);
-	}
-	
-	/**
-	 * get coupon rule service
-	 */
-	public static function getServiceInfo($id){
-		$coupon = self::findOne($id);
-		if($coupon == NULL){
-			return false;		
-		}
-		return array(
-			'coupon_type'=>$coupon->coupon_type,
-			'coupon_type_name'=>$coupon->coupon_type_name,
-			'coupon_service_type_id'=>$coupon->coupon_service_type_id,
-			'coupon_service_type_id'=>$coupon->coupon_service_type_id,
-			'coupon_service_id'=>$coupon->coupon_service_id,
-			'coupon_service_name'=>$coupon->coupon_service_name,
-		);
-	}
-
-	/**
-	 * get coupon rule customer city types
-	 */
-	public static function getCityTypes(){
-		return array(
-			0=>'全部城市',
-			1=>'单个城市',
-		);
-	}
-
-
-	/**
-	 * get coupon rule city 
-	 */
-	public static function getCityInfo($id){
-		$coupon = self::findOne($id);
-		if($coupon == NULL){
-			return false;		
-		}
-		return array(
-			'coupon_city_limit'=>$coupon->coupon_city_limit,
-			'coupon_city_id'=>$coupon->coupon_city_id,
-			'coupon_city_name'=>$coupon->coupon_city_name,
-		);
-	}
-
-	/**
-	 * get coupon rule customer types
-	 */
-	public static function getCustomerTypes(){
-		return array(
-			0=>'所有用户',
-			1=>'新用户',
-			2=>'老用户',
-			3=>'会员',
-			4=>'非会员',
-		);
-	}
-
-	/**
-	 * get coupon rule customer type
-	 */
-	public static function getCustomerTypeInfo($id){
-		$coupon = self::findOne($id);
-		if($coupon == NULL){
-			return false;		
-		}
-		return array(
-			'coupon_customer_type'=>$coupon->coupon_customer_type,
-			'coupon_customer_type_name'=>$coupon->coupon_customer_type_name,
-		);
-	}
-
-	/**
-	 * get coupon rule coupon time types
-	 */
-	public static function getTimeTypes(){
-		return array(
-			0=>'领取时间段和使用时间段一致',
-			1=>'使用时间段领取后开始计算',
-		);
-	}
-	
-	/**
-	 * get coupon rule coupon promote types
-	 */
-	public static function getPromoteTypes(){
-		return array(
-			0=>'立减',
-			1=>'满减',
-			2=>'每减',
-		);
-	}
-
 }

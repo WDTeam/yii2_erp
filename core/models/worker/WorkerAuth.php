@@ -3,6 +3,8 @@
 namespace core\models\worker;
 
 use Yii;
+use yii\web\BadRequestHttpException;
+USE yii\web\NotFoundHttpException;
 
 /**
  * This is the model class for table "ejj_worker_auth".
@@ -19,11 +21,17 @@ use Yii;
  */
 class WorkerAuth extends \common\models\WorkerAuth
 {
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return 'ejj_worker_auth';
+    public static function findModel($worker_id){
+        if(empty($worker_id)){
+            throw new BadRequestHttpException('worker_id not found.');
+        }
+        $workerAuthModel = self::findOne($worker_id);
+
+        if($workerAuthModel!==null){
+            return $workerAuthModel;
+        }else{
+            throw new NotFoundHttpException('The workerAuth info not exist.');
+
+        }
     }
 }

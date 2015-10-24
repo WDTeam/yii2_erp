@@ -20,7 +20,7 @@ class m150918_135715_create_table_finance_pay_channel extends Migration
         ], $tableOptions);
 
         $this->execute(
-            "INSERT INTO `ejj_finance_pay_channel` VALUES ('1', '三快', '1', '1', '1443339882', '0');
+            "INSERT INTO {{%finance_pay_channel}} VALUES ('1', '三快', '1', '1', '1443339882', '0');
 		INSERT INTO {{%finance_pay_channel}} VALUES ('2', '汉海', '2', '1', '1443339882', '0');
 		INSERT INTO {{%finance_pay_channel}} VALUES ('3', '京东后台', '3', '1', '1443339882', '0');
 		INSERT INTO {{%finance_pay_channel}} VALUES ('4', '快钱', '4', '1', '1443339882', '0');

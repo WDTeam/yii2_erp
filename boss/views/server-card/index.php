@@ -7,50 +7,43 @@ use yii\widgets\Pjax;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
- * @var core\models\finance\FinanceWorkerOrderIncomeSearch $searchModel
  */
 
-$this->title = Yii::t('app', 'Finance Worker Order Incomes');
+$this->title = Yii::t('app', 'Server Cards');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="finance-worker-order-income-index">
+<div class="server-card-index">
     <div class="page-header">
             <h1><?= Html::encode($this->title) ?></h1>
     </div>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
         <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Finance Worker Order Income',
+    'modelClass' => 'Server Card',
 ]), ['create'], ['class' => 'btn btn-success'])*/  ?>
     </p>
 
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'worder_id',
-            'order_id',
-            'finance_worker_order_income_type',
-            'finance_worker_order_income',
-//            'finance_worker_order_complete_time:datetime', 
-//            'order_booked_count', 
-//            'isSettled', 
-//            'finance_worker_order_income_starttime:datetime', 
-//            'finance_worker_order_income_endtime:datetime', 
-//            'finance_settle_apply_id', 
-//            'isdel', 
-//            'updated_at', 
+            'card_name',
+            'card_type',
+            'card_level',
+            'par_value',
+//            'reb_value', 
+//            'use_scope', 
+//            'valid_days', 
 //            'created_at', 
+//            'updated_at', 
 
             [
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
                 'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance-worker-order-income/view','id' => $model->id,'edit'=>'t']), [
+                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['server-card/view','id' => $model->id,'edit'=>'t']), [
                                                     'title' => Yii::t('yii', 'Edit'),
                                                   ]);}
 
