@@ -40,9 +40,9 @@ class m151024_082822_create_table_server_card_customer extends Migration
 
     public function down()
     {
-        echo "m151024_082822_create_table_server_card_customer cannot be reverted.\n";
+        $this->dropTable('{{%server_card_customer}}');
 
-        return false;
+        return true;
     }
 
     /*
