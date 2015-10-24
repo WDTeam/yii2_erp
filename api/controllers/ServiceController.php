@@ -14,10 +14,10 @@ class ServiceController extends \api\components\Controller
      */
 
     /**
-     * @api {POST} v1/service/home-services 依据城市 获取首页服务列表 （赵顺利 20% 假数据，未与boss关联）
+     * @api {GET} v1/service/home-services 依据城市 获取全部服务列表 （赵顺利 20% 假数据，未与boss关联）
      * @apiName actionHomeServices
      * @apiGroup service
-     * @apiDescription 获取城市首页服务项目信息简介
+     * @apiDescription 获取城市更多服务项目信息简介
      *
      * @apiParam {String} city_name 城市
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
@@ -82,8 +82,7 @@ class ServiceController extends \api\components\Controller
      */
     public function actionHomeServices()
     {
-        $param = Yii::$app->request->post() or
-        $param = json_decode(Yii::$app->request->getRawBody(), true);
+        $param = Yii::$app->request->get();
 
         if (empty(@$param['city_name'])) {
             return $this->send(null, "未取得城市信息", "error", "403");
@@ -136,7 +135,7 @@ class ServiceController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} v1/service/all-services 依据城市 获取所有服务列表 （已完成）
+     * @api {GET} v1/service/all-services 依据城市 获取所有服务列表 （已完成）
      * @apiName actionAllServices
      * @apiGroup service
      * @apiDescription 获取城市所以服务类型列表
@@ -185,8 +184,7 @@ class ServiceController extends \api\components\Controller
      */
     public function actionAllServices()
     {
-        $param = Yii::$app->request->post() or
-        $param = json_decode(Yii::$app->request->getRawBody(), true);
+        $param = Yii::$app->request->get();
 
         if (empty(@$param['city_name'])) {
             return $this->send(null, "未取得城市信息", "error", "403");
@@ -270,9 +268,7 @@ class ServiceController extends \api\components\Controller
      */
     public function actionGoodsPrice()
     {
-        //return $this->send("1111", "数据获取成功", "ok");
-        $params = Yii::$app->request->post() or
-        $params=json_decode(Yii::$app->request->rawBody,true);
+        $params = Yii::$app->request->get();
 
         if (empty($params['longitude']) || empty($params['latitude'])) {
             return $this->send(null, "经纬度信息不存在", "error", "403");
