@@ -23,6 +23,7 @@ use Yii;
  */
 class CouponCustomer extends \common\models\coupon\CouponCustomer
 {
+
     /**
      * @inheritdoc
      */
@@ -64,4 +65,22 @@ class CouponCustomer extends \common\models\coupon\CouponCustomer
             'is_del' => Yii::t('coupon', '是否逻辑删除'),
         ];
     }
+
+    /**
+     * 获取用户优惠码
+     * @customer_id int    用户id
+     * @city_name   string 城市名称
+     * @type   int   标示 来区别用户是否调用该城市下面的优惠码
+     * @return  array 用户优惠码
+     */
+    public static function getCouponCustomer($customer_id, $type = '')
+    {
+        if ($type) {
+            $coupon_id = 'coupon_code,coupon_name,coupon_price,coupon_code_id';
+        } else {
+            $coupon_id = 'coupon_id';
+        }
+        return CouponCustomer::find()->select($coupon_id)->where(["customer_id" => $customer_id])->asArray()->all();
+    }
+
 }

@@ -443,8 +443,8 @@ class UserController extends \api\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} city 城市
-     * @apiParam {String} coupon_code 优惠码
+     * @apiParam {String} [city] 城市
+     * @apiParam {String} [coupon_code] 优惠码
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      *
@@ -453,8 +453,6 @@ class UserController extends \api\components\Controller
      *     {
      *       "code": "ok",
      *       "msg": "兑换成功"
-     *
-     *
      *     }
      *
      * @apiError UserNotFound 用户认证已经过期.
@@ -483,32 +481,27 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /user/get-share-text 获取分享优惠文本 （待确定；郝建设0%）
+     * @api {GET} /user/get-coupon-customer 获取用户优惠码或同城市 （郝建设100%）
      *
-     * @apiName GetShareText
+     * @apiName GetCouponCustomer
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     *
+     * @apiParam {String} [city_name]  城市
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
      *       "code": "ok",
      *       "msg": {
-     *               "wxCnt": "送你e家洁的10元免费体验邀请码：1011685，关注下e家洁的微信账号：
-     *     ejiajie，十几分钟保洁阿姨就到了，关键是还便宜！只需50元就可以将家里彻底打扫一遍，快告诉你好友吧！",
-     *               "wbCnt": "最近用了【e家洁】App找保洁小时工，阿姨准时登门，干活麻利，门后墙角都干干净净的，2小时才50元，必须推荐给你们！http://t.cn/8siFiZZ
-     *     下载后输入体验邀请码：1011685，你们还可以获得10元优惠券哦！",
-     *                "wxGroupCnt": "最近用了【e家洁】App找保洁小时工，阿姨准时登门，干活麻利，门后墙角都干干净净的，2小时才50元，必须推荐给你们！http://t.cn/8siFiZZ
-     *     下载后输入体验邀请码：1011685，你们还可以获得10元优惠券哦！",
-     *                "wxFriendGroupShare": "品质生活  从e家洁开始",
-     *                "wbShare": "最近使用的保洁打扫利器，新居开荒家电清洗洗衣洗护样样齐全，优质服务省事贴心！快来体验更多~ http://t.cn/8siFiZZ",
-     *                "sms": "最近用了【e家洁】App找保洁小时工，阿姨准时登门，干活麻利，门后墙角都干干净净的，2小时才50元，必须推荐给你们！http://t.cn/8siFiZZ
-     *     下载后输入体验邀请码：1011685，你们还可以获得10元优惠券哦！"
+     *               "id": "1",
+     *               "coupon_name": "优惠码名称",
+     *                "coupon_price": "优惠码价格",
+     *                "coupon_type_name": "优惠券类型名称",
+     *                "coupon_service_type_id": "服务类别id",
+     *                "coupon_service_type_name": "服务类别名称",
      *               }
-     *
      *
      *     }
      *
@@ -521,15 +514,55 @@ class UserController extends \api\components\Controller
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
+     *  *     {
+     *       "code": "error",
+     *       "msg": "优惠码列表为空"
+     *
+     *     }
      *
      */
-    public function actionGetShareText()
+    public function actionGetCouponCustomer()
     {
-        
+        $param = Yii::$app->request->post();
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+
+        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
+
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+        if (!empty($customer) && !empty($customer->id)) {
+            if (@$param['city_name']) {
+                /**
+                 * 获取改用户city_name下面,所有的优惠券
+                 */
+                $CouponData = \core\models\coupon\CouponCustomer::getCouponCustomer($customer->id);
+                if (!empty($CouponData)) {
+                    $ret = array();
+                    foreach ($CouponData as $key => $val) {
+                        $Coupon = \core\models\coupon\Coupon::getCoupon($val['coupon_id'], $param['city_name']);
+                        foreach ($Coupon as $key => $val) {
+                            $ret['coupon'][] = $val;
+                        }
+                    }
+
+                    return $this->send($ret, $param['city_name'] . "优惠码列表", "ok");
+                } else {
+                    return $this->send([1], "优惠码列表为空", "error");
+                }
+            } else {
+                $CouponData = \core\models\coupon\CouponCustomer::getCouponCustomer($customer->id, 1);
+
+                $ret['couponCustomer'] = $CouponData;
+                return $this->send($ret, "优惠码列表", "ok");
+            }
+        }
     }
 
     /**
-     * @api {GET} /user/delete-used-worker 删除常用阿姨 （功能已经实现,需再次核实 100%）
+     * @api {DELETE} /user/delete-used-worker 删除常用阿姨 （功能已经实现,需再次核实 100%）
      *
      *
      * @apiName deleteUsedWorker
@@ -675,7 +708,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /user/remove-worker 移除黑名单中的阿姨 （功能已经实现,需要再次确认传递参数 已完成100%）
+     * @api {DELETE} /user/remove-worker 移除黑名单中的阿姨 （功能已经实现,需要再次确认传递参数 已完成100%）
      *
      *
      * @apiName RemoveWorker
@@ -737,7 +770,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /user/user-money 用户余额和消费记录 （数据已经全部取出,需要给出所需字段,然后给予返回 已完成99% ;）
+     * @api {POST} /user/user-money 用户余额和消费记录 （数据已经全部取出,需要给出所需字段,然后给予返回 已完成99% ;）
      * 
      *
      * @apiName UserMoney
@@ -751,25 +784,47 @@ class UserController extends \api\components\Controller
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
-     *     {
-     *       "code": "ok",
-     *       "msg": "查询成功"
-     *       "ret": {
-     *          "msgStyle": "toast",
-     *          "alertMsg": "",
-     *          "totalMoney": "9863.00元",
-     *          "cardName": "您好！铂金卡会员",
-     *          "isMember": "1",
-     *          "payRecord": [
-     *              {
-     *                  "desc": "家庭保洁",
-     *                  "balanceMoney": "余额支付:¥0",
-     *                  "time": "2015-09-14",
-     *                  "payDetails": "总额:¥25"
-     *              }
-     *          ]
-     *        }
-     *     }
+     * {
+     * "code": "ok",
+     * "msg": "查询成功",
+     * "ret": {
+     * "userBalance": "100.00",
+     * "userRecord": [
+     * {
+     * "id": "1",
+     * "customer_id": "1",
+     *  "order_id": "0",
+     * "order_channel_id": "0",
+     * "customer_trans_record_order_channel": null,
+     * "pay_channel_id": "0",
+     * "customer_trans_record_pay_channel": null,
+     *  "customer_trans_record_mode": "0",
+     * "customer_trans_record_mode_name": null,
+     * "customer_trans_record_coupon_money": "0.00",
+     * "customer_trans_record_cash": "0.00",
+     * "customer_trans_record_pre_pay": "0.00",
+     * "customer_trans_record_online_pay": "0.00",
+     * "customer_trans_record_online_balance_pay": "0.00",
+     * "customer_trans_record_online_service_card_on": "0",
+     * "customer_trans_record_online_service_card_pay": "0.00",
+     * "customer_trans_record_online_service_card_current_balance": "0.00",
+     * "customer_trans_record_online_service_card_befor_balance": "0.00",
+     * "customer_trans_record_compensate_money": "0.00",
+     * "customer_trans_record_refund_money": "0.00",
+     * "customer_trans_record_order_total_money": "0.00",
+     * "customer_trans_record_total_money": "0.00",
+     * "customer_trans_record_current_balance": "0.00",
+     * "customer_trans_record_befor_balance": "0.00",
+     * "customer_trans_record_transaction_id": "0",
+     * "customer_trans_record_remark": "",
+     * "customer_trans_record_verify": "",
+     * "created_at": "0",
+     * "updated_at": "0",
+     * "is_del": "1"
+     * }
+     * ]
+     * }
+     * }
      *
      * @apiError UserNotFound 用户认证已经过期.
      *
@@ -803,12 +858,12 @@ class UserController extends \api\components\Controller
              * 获取客户余额
              * @param int $customer 用户id
              */
-            $userBalance = \core\models\customer\CustomerExtBalance::getCustomerBalance(1);
+            $userBalance = \core\models\customer\CustomerExtBalance::getCustomerBalance($customer->id);
             /**
              * 获取用户消费记录
              * @param int $customer 用户id
              */
-            $userRecord = \core\models\CustomerTransRecord\CustomerTransRecord::queryRecord(1);
+            $userRecord = \core\models\CustomerTransRecord\CustomerTransRecord::queryRecord($customer->id);
             $ret["userBalance"] = $userBalance;
             $ret["userRecord"] = $userRecord;
             return $this->send($ret, "查询成功", "ok");
@@ -836,7 +891,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /user/user-score 用户积分明细 （功能已实现,不明确需求端所需字段格式 90%）
+     * @api {POST} /user/user-score 用户积分明细 （功能已实现,不明确需求端所需字段格式 90%）
      *
      * @apiDescription 获取用户当前积分，积分兑换奖品信息，怎样获取积分信息
      * @apiName Userscore
@@ -980,7 +1035,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} /user/get-comment-level 获取用户评价等级 （郝建设 100%）
+     * @api {GET} /user/get-comment-level 获取用户评价等级 （郝建设 100%）
      *
      * @apiName GetCommentLevel
      * @apiGroup User
@@ -1035,7 +1090,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} /user/get-comment-level-tag 获取用户评价等级下面的标签 （郝建设 100%）
+     * @api {GET} /user/get-comment-level-tag 获取用户评价等级下面的标签 （郝建设 100%）
      *
      * @apiName GetCommentLevelTag
      * @apiGroup User
