@@ -83,4 +83,17 @@ class CouponCustomer extends \common\models\coupon\CouponCustomer
         return CouponCustomer::find()->select($coupon_id)->where(["customer_id" => $customer_id])->asArray()->all();
     }
 
+    
+    /**
+     * 获取用户优惠码
+     * @customer_id int    用户id
+     * @return  array 用户优惠码
+     */
+    public static function CouponCount($customer_id)
+    {
+       
+        return CouponCustomer::find()->where(["customer_id" => $customer_id])->count();
+    }
+
+    
 }

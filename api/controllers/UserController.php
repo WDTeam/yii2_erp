@@ -105,9 +105,9 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} /user/addresses 常用地址列表 (已完成100%)
+     * @api {POST} /user/get-addresses 常用地址列表 (已完成100%)
      *
-     * @apiName Addresses
+     * @apiName GetAddresses
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -158,7 +158,7 @@ class UserController extends \api\components\Controller
      *
      *     }
      */
-    public function actionAddresses()
+    public function actionGetAddresses()
     {
         @$accessToken = Yii::$app->request->post('access_token');
 
@@ -169,6 +169,7 @@ class UserController extends \api\components\Controller
         if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
         }
+
         $customer = CustomerAccessToken::getCustomer($accessToken);
 
         if (!empty($customer) && !empty($customer->id)) {
@@ -562,6 +563,73 @@ class UserController extends \api\components\Controller
                 $ret['couponCustomer'] = $CouponData;
                 return $this->send($ret, "优惠码列表", "ok");
             }
+        } else {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
+    }
+
+    /**
+     * @api {POST} /user/get-coupon-count 获取用户优惠码数量 （功能已经实现 100%）
+     *
+     *
+     * @apiName GetCouponCount
+     * @apiGroup User
+     *
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "code": "ok",
+     *       "msg": "获取成功"
+     *       "ret":{
+     *            "couponCount":{
+     *            "count":'10'
+     *             }
+     *          }
+     *     }
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "error",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *
+     *     }
+     *
+
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "error",
+     *       "msg": "用户认证已经过期,请重新登录"
+     *
+     *     }
+     *
+     */
+    public function actionGetCouponCount()
+    {
+        $param = Yii::$app->request->post();
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
+
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+
+        if (!empty($customer) && !empty($customer->id)) {
+            $CouponCount = \core\models\coupon\CouponCustomer::CouponCount(1);
+
+            $ret['couponCount'] = $CouponCount;
+            return $this->send($ret, "用户优惠码数量", "ok");
+        } else {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
         }
     }
 
@@ -774,10 +842,10 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} /user/user-money 用户余额和消费记录 （数据已经全部取出,需要给出所需字段,然后给予返回 已完成99% ;）
+     * @api {POST} /user/get-user-money 用户余额和消费记录 （数据已经全部取出,需要给出所需字段,然后给予返回 已完成99% ;）
      * 
      *
-     * @apiName UserMoney
+     * @apiName GetUserMoney
      *
      * @apiGroup User
      *
@@ -841,15 +909,13 @@ class UserController extends \api\components\Controller
      *     }
      *
      */
-    public function actionUserMoney()
+    public function actionGetUserMoney()
     {
 
         $param = Yii::$app->request->post();
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
-
-        @$app_version = $param['app_version']; #版本
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
@@ -895,10 +961,10 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} /user/user-score 用户积分明细 （功能已实现,不明确需求端所需字段格式 90%）
+     * @api {POST} /user/get-user-score 用户积分明细 （功能已实现,不明确需求端所需字段格式 90%）
      *
      * @apiDescription 获取用户当前积分，积分兑换奖品信息，怎样获取积分信息
-     * @apiName Userscore
+     * @apiName GetUserScore
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -953,7 +1019,7 @@ class UserController extends \api\components\Controller
      *     }
      *
      */
-    public function actionUserScore()
+    public function actionGetUserScore()
     {
         $param = Yii::$app->request->post();
         if (empty($param)) {
