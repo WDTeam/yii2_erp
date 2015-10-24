@@ -3,7 +3,7 @@
 namespace common\models\finance;
 
 use Yii;
-
+use boss\models\SystemUser;
 /**
  * This is the model class for table "{{%finance_refund}}".
  *

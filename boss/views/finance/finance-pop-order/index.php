@@ -130,7 +130,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' =>'{view} {tagssign}',
                 'buttons' => [
                 'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance-pop-order/view','id' => $model->id,'edit'=>'t']), [
+                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance/finance-pop-order/view','id' => $model->id,'edit'=>'t']), [
                                                     'title' => Yii::t('yii', 'Edit'),
                                                   ]);},
                                                   
@@ -138,7 +138,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                   'tagssign' => function ($url, $model) {
                                                   	return Html::a('<span class="fa fa-fw fa-history"></span>',
                                                   			[
-                                                  			'finance-pop-order/forminfo',
+                                                  			'finance/finance-pop-order/forminfo',
                                                   			'id' => $model->id,
                                                   			'edit'=>'baksite',
                                                   			'oid'=>$model->finance_record_log_id

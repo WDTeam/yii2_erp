@@ -126,7 +126,7 @@ class FinanceRefundController extends BaseAuthController
     		$model=FinanceRefund::findOne($requestModel['id']);
     		if($requestModel['edit']=='baksite'){
     	    //退款
-    			$obj = new \core\models\GeneralPay\GeneralPayRefund();
+    			$obj = new \core\models\payment\GeneralPayRefund();
     			if(!isset($model->finance_refund_pop_nub) || !isset($model->customer_id)){
     			\Yii::$app->getSession()->setFlash('default','充值记录查询无此记录,退款失败！');
     			return $this->redirect(['index', 'id' =>$requestModel['id']]);

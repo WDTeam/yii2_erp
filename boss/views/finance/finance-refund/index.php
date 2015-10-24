@@ -101,7 +101,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type'=>'info',
-             'before'=>Html::a('<i class="glyphicon" ></i>退款总额:1000)', ['countinfo'], ['class' => 'btn btn-info', 'style' => 'margin-right:10px']),
             'showFooter'=>false,
         ],
     ]); Pjax::end(); ?>
