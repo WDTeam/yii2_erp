@@ -350,9 +350,7 @@ class FinancePopOrderController extends Controller
     		if($info->finance_pay_channel_id=='10' && $info->finance_pay_channel_id=='7' &&$info->finance_pay_channel_id=='8' && $info->finance_pay_channel_id=='12' ){
     			//银联充值
     			$searchModel= new GeneralPaySearch;
-    			
     			$searchModel->load(Yii::$app->request->getQueryParams());
-    			
     			$searchModel->finance_record_log_statime=$info->finance_record_log_statime;
     			$searchModel->finance_record_log_endtime=$info->finance_record_log_endtime;
     			$searchModel->general_pay_transaction_id=FinancePopOrder::get_in_list_id($dateinfo['id']);

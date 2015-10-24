@@ -86,7 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                   	'data-method' => 'post',
                                                   	'data-pjax' => '0'
                                                   			];
-                                                  	return Html::a('<span class="glyphicon glyphicon-tags"></span>', Yii::$app->urlManager->createUrl(['finance-refund/Refund','id' => $model->id,'edit'=>'baksite']), $options);
+                                                  	return Html::a('<span class="glyphicon glyphicon-tags"></span>', Yii::$app->urlManager->createUrl(['finance-refund/refund','id' => $model->id,'edit'=>'baksite']), $options);
                                                   }
                                                   
 
@@ -101,9 +101,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type'=>'info',
-            
-            /* 'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> Add', ['create'], ['class' => 'btn btn-success']),                                                                                                                                                          'after'=>Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List', ['index'], ['class' => 'btn btn-info']), */
-            'showFooter'=>true
+             'before'=>Html::a('<i class="glyphicon" ></i>退款总额:1000)', ['countinfo'], ['class' => 'btn btn-info', 'style' => 'margin-right:10px']),
+            'showFooter'=>false,
         ],
     ]); Pjax::end(); ?>
 
