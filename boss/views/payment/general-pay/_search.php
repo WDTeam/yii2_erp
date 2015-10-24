@@ -7,9 +7,11 @@ use yii\web\JsExpression;
 use yii\helpers\Url;
 use yii\base\Widget;
 use kartik\widgets\Affix;
+use common\models\finance\FinanceOrderChannel;
+use boss\models\payment\GeneralPay;
 /**
  * @var yii\web\View $this
- * @var common\models\pay\GeneralPaySearch $model
+ * @var common\models\payment\GeneralPaySearch $model
  * @var yii\widgets\ActiveForm $form
  */
 ?>
@@ -40,7 +42,7 @@ use kartik\widgets\Affix;
         <div class="col-md-2">
 
             <?php
-                $name = \common\models\FinanceOrderChannel::getOrderChannelByName($model->general_pay_source);
+                $name = FinanceOrderChannel::getOrderChannelByName($model->general_pay_source);
                 echo $form->field($model, 'general_pay_source')->widget(Select2::classname(),[
                 'initValueText' => $name, // set the initial display text
                 'attribute'=>'general_pay_source',
@@ -68,7 +70,7 @@ use kartik\widgets\Affix;
                 'attribute'=>'general_pay_mode',
                 'model'=>$model,
                 'options' => ['placeholder' => '请选择交易方式 ...'],
-                'data' => \boss\models\pay\GeneralPay::$PAY_MODE,
+                'data' => GeneralPay::$PAY_MODE,
                 'pluginOptions' => [
                     'allowClear' => true
                 ]
