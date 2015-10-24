@@ -54,13 +54,19 @@ use yii\widgets\Pjax;
                 <?=  $model->finance_settle_apply_cycle_des; ?>
             </div>
             <div class='col-md-2'>
-                <?=  date('Y:m:d H:i:s',$model->latestSettleTime); ?>
+                <?=  date('Y-m-d',$model->finance_settle_apply_starttime).'至'.date('Y-m-d',$model->finance_settle_apply_endtime); ?>
             </div>
             <div class='col-md-2'>
-                <?=  date('Y:m:d H:i:s',$model->latestSettleTime); ?>
+                <?=  date('Y:m:d H:i:s',time()); ?>
             </div>
             <div class='col-md-2'>
-                <?=  date('Y:m:d H:i:s',$model->latestSettleTime); ?>
+                <?php
+                    if($model->latestSettleTime != null){
+                        echo date('Y:m:d H:i:s',$model->latestSettleTime); 
+                    }else{
+                        echo "之前未成功结算";
+                    }
+                ?>
             </div>
         </div>
         <div class="panel-heading">
