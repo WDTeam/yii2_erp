@@ -7,9 +7,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\finance\FinancePopOrder;
 use common\models\finance\FinanceHeader;
-use common\models\GeneralPay;
 use core\models\Customer;
-use core\models\order\OrderSearch;
 use core\models\order\Order;
 use core\models\worker\Worker;
 use common\models\finance\FinanceOrderChannel;
@@ -602,7 +600,7 @@ class FinancePopOrderSearch extends FinancePopOrder
     	if($getorder_money >=1000){
     		//查询胜强的充值表
     		//查询存在
-    		$alinfo_es=\core\models\GeneralPay\GeneralPay::getGeneralPayByInfo(['general_pay_transaction_id'=>$getorder],'general_pay_status,customer_id,created_at,general_pay_money,general_pay_source,general_pay_transaction_id,general_pay_mode');
+    		$alinfo_es=\core\models\payment\GeneralPay::getGeneralPayByInfo(['general_pay_transaction_id'=>$getorder],'general_pay_status,customer_id,created_at,general_pay_money,general_pay_source,general_pay_transaction_id,general_pay_mode');
     
     
     		/* 	 if($alinfo_es){
@@ -784,7 +782,7 @@ class FinancePopOrderSearch extends FinancePopOrder
     	if($getorder_money >=1000){
     		//查询胜强的充值表
     		//查询存在
-    		$alinfo_es=\core\models\GeneralPay\GeneralPay::getGeneralPayByInfo(['general_pay_transaction_id'=>$getorder],'general_pay_status,customer_id,created_at,general_pay_money,general_pay_source,general_pay_transaction_id,general_pay_mode');
+    		$alinfo_es=\core\models\payment\GeneralPay::getGeneralPayByInfo(['general_pay_transaction_id'=>$getorder],'general_pay_status,customer_id,created_at,general_pay_money,general_pay_source,general_pay_transaction_id,general_pay_mode');
     
     
     		/* 	 if($alinfo_es){
@@ -883,7 +881,7 @@ class FinancePopOrderSearch extends FinancePopOrder
      	//手续费	
      	$decrease=0;
      	//查询存在
-		$alinfo_es=\core\models\GeneralPay\GeneralPay::getGeneralPayByInfo(['general_pay_transaction_id'=>$getorder],'general_pay_status,customer_id,created_at,general_pay_money,general_pay_source,general_pay_transaction_id,general_pay_mode');
+		$alinfo_es=\core\models\payment\GeneralPay::getGeneralPayByInfo(['general_pay_transaction_id'=>$getorder],'general_pay_status,customer_id,created_at,general_pay_money,general_pay_source,general_pay_transaction_id,general_pay_mode');
      			 
      	 if($alinfo_es){
      			 //充值订单存在 开始比对金额
@@ -1082,7 +1080,7 @@ class FinancePopOrderSearch extends FinancePopOrder
     		if($getorder_money >=1000){
     			//查询胜强的充值表
     			//查询存在
-    			$alinfo_es=\core\models\GeneralPay\GeneralPay::getGeneralPayByInfo(['general_pay_transaction_id'=>$getorder],'general_pay_status,customer_id,created_at,general_pay_money,general_pay_source,general_pay_transaction_id,general_pay_mode');
+    			$alinfo_es=\core\models\payment\GeneralPay::getGeneralPayByInfo(['general_pay_transaction_id'=>$getorder],'general_pay_status,customer_id,created_at,general_pay_money,general_pay_source,general_pay_transaction_id,general_pay_mode');
     	
     	
     			/* 	 if($alinfo_es){
@@ -1389,7 +1387,7 @@ class FinancePopOrderSearch extends FinancePopOrder
     		if($getorder_money >=1000){
     			//查询胜强的充值表
     			//查询存在
-    			$alinfo_es=\core\models\GeneralPay\GeneralPay::getGeneralPayByInfo(['general_pay_transaction_id'=>$getorder],'general_pay_status,customer_id,created_at,general_pay_money,general_pay_source,general_pay_transaction_id,general_pay_mode');
+    			$alinfo_es=\core\models\payment\GeneralPay::getGeneralPayByInfo(['general_pay_transaction_id'=>$getorder],'general_pay_status,customer_id,created_at,general_pay_money,general_pay_source,general_pay_transaction_id,general_pay_mode');
     	
     	
     			/* 	 if($alinfo_es){
