@@ -46,6 +46,7 @@ class WorkerBlock extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'worker_id' => Yii::t('app', '阿姨ID'),
+            'daterange' => Yii::t('app', '阿姨封号时间'),
             'worker_block_start_time' => Yii::t('app', '阿姨封号开始时间'),
             'worker_block_finish_time' => Yii::t('app', '阿姨封号结束时间'),
             'worker_block_reason' => Yii::t('app', '阿姨封号原因'),

@@ -160,7 +160,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     public function getWorkerInfo($workerPhone){
         $workerInfo = Worker::getWorkerInfoByPhone($workerPhone);
         if(count($workerInfo)> 0){
-             $this->worker_id =$workerInfo['id'];
+            $this->worker_id =$workerInfo['id'];
             $this->worker_name = $workerInfo['worker_name'];
             $this->worker_tel= $workerInfo['worker_phone'];
             $this->workerOnboardTime= $workerInfo['created_ad'];
@@ -168,9 +168,8 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             $this->worker_identity_id = $workerInfo['worker_identity_id'];
             $this->workerTypeDes= $this->getWorkerTypeDes($this->worker_type_id,$this->worker_identity_id);
             $this->finance_settle_apply_cycle_des = $this->getSettleCycleByWorkerType($this->worker_type_id,$this->worker_identity_id);
-            $this->latestSettleTime = time();
+            $this->latestSettleTime = $this->getWorkerLatestSettledTime($workerInfo['id']);
         }
-//        $financeSettleApplySearch->latestSettleTime = $this->getWorkerLatestSettledTime($workerId);
     }
     
     public function getWorkerTypeDes($worker_type_id,$worker_identity_id){
@@ -221,7 +220,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         $apply_money_except_cash = $apply_money_except_deduct_cash - $apply_money_deduction;//订单金额+底薪补贴+任务奖励-扣款
         $apply_money = $apply_money_except_cash - $order_cash_money;//订单金额+底薪补贴+任务奖励-扣款-现金订单金额
         $this->finance_settle_apply_order_count = $order_count;//总单量
-        $this->finance_settle_apply_man_hour = $apply_man_hour;//总工时
+        $this->finance_settle_apply_man_hour = $apply_man_hour/60;//总工时
         $this->finance_settle_apply_order_money = $apply_order_money;//工时费小计
         $this->finance_settle_apply_task_count = $apply_task_count;//完成任务数
         $this->finance_settle_apply_task_money = $apply_task_money;//完成任务奖励
@@ -249,8 +248,13 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         $this->finance_settle_apply_cycle = $this->getSettleCycleIdByWorkerType($this->worker_type_id, $this->worker_identity_id);//结算周期Id
         $this->finance_settle_apply_cycle_des = $this->getSettleCycleByWorkerType($this->worker_type_id, $this->worker_identity_id);//结算周期描述
         $this->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT;//提交结算申请
-        $this->finance_settle_apply_starttime = time();//结算开始日期
-        $this->finance_settle_apply_endtime = time();//结算截止日期
+        if(($this->worker_type_id ==self::SELF_OPERATION ) && ($this->worker_identity_id == self::FULLTIME)){
+            $this->finance_settle_apply_starttime = self::getFirstDayOfSpecifiedMonth();//结算开始日期
+            $this->finance_settle_apply_endtime = self::getLastDayOfSpecifiedMonth();//结算截止日期
+        }else{
+            $this->finance_settle_apply_starttime = self::getFirstDayOfLastWeek();//结算开始日期
+            $this->finance_settle_apply_endtime = self::getLastDayOfLastWeek();//结算截止日期
+        }
         $this->created_at = time();//申请创建时间
         return $this;
 
@@ -305,13 +309,42 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         $latestSettledTime = null;
         $worker = $this->find()
                 ->select(['updated_at'])
-                ->where(['worker_id'=>$workerId,'finance_settle_apply_status'=>FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_COMPLETED])
+                ->where(['worker_id'=>$workerId,'finance_settle_apply_status'=>FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PAYED])
                 ->orderBy("updated_at DESC")
                 ->one();
         if($worker != null){
             $latestSettledTime = $worker->updated_at;
         }
         return $latestSettledTime;
+    }
+    
+    /**
+     * 获取指定月份的第一天
+     * @return type
+     */
+    public static function getFirstDayOfSpecifiedMonth($yearAndMonth = null){
+        if($yearAndMonth == null){
+            $yearAndMonth = date('Y-m', strtotime('-1 month'));
+        }
+        return strtotime(date('Y-m-01 00:00:00', strtotime($yearAndMonth)));
+    }
+    
+    /**
+     * 获取指定月份的最后一天
+     */
+    public static function getLastDayOfSpecifiedMonth($yearAndMonth = null){
+        if($yearAndMonth == null){
+            $yearAndMonth = date('Y-m', strtotime('-1 month'));
+        }
+        return strtotime(date('Y-m-t 23:59:59', strtotime($yearAndMonth)));
+    }
+    
+    public static function getFirstDayOfLastWeek(){
+        return strtotime(date('Y-m-d 00:00:00', strtotime('-1 week last monday')));
+    }
+    
+    public static function getLastDayOfLastWeek(){
+        return strtotime(date('Y-m-d 23:59:59', strtotime('last sunday')));
     }
     
     public function attributeLabels()

@@ -30,7 +30,7 @@ class WorkerAuth extends \common\models\WorkerAuth
         if($workerAuthModel!==null){
             return $workerAuthModel;
         }else{
-            throw new NotFoundHttpException('The worker authInfo not exist.');
+            throw new NotFoundHttpException('The workerAuth info not exist.');
 
         }
     }
