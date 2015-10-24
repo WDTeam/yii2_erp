@@ -22,11 +22,10 @@ use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use common\models\finance\FinanceOrderChannel;
 use common\models\finance\FinanceHeader;
-use boss\models\FinanceRecordLogSearch;
+use boss\models\finance\FinanceRecordLogSearch;
 use boss\models\finance\FinanceOrderChannelSearch;
 use core\models\order\OrderSearch;
-use core\models\GeneralPay\GeneralPaySearch;
-use boss\controllers\GeneralPayController;
+use core\models\payment\GeneralPaySearch;
 use common\models\finance\FinanceRecordLog;
 use crazyfd\qiniu\Qiniu;
 use common\models\finance\FinancePayChannel;
@@ -470,10 +469,10 @@ class FinancePopOrderController extends Controller
     	/*胜强提供接口，目前未提供  */
     	 $searchModel = new FinancePopOrderSearch;
     	 $requestModel = Yii::$app->request->post();
-    	$GeneralPay= new GeneralPayController;
-    	foreach ($requestModel['ids'] as $iddate){
-    	$GeneralPay->modifyRecontiliation($iddate,1);
-    	} 
+    	//$GeneralPay= new GeneralPayController;
+    	//foreach ($requestModel['ids'] as $iddate){
+    	//$GeneralPay->modifyRecontiliation($iddate,1);
+    	//} 
     	return $this->redirect(['index']);
     }
     
