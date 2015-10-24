@@ -35,7 +35,7 @@ class OrderComplaintController extends BaseAuthController
         return $this->render("index");
         
     }
-public function actionAdd(){
+	public function actionAdd(){
 	$model = new OrderComplaint();
     	$arr = array('OrderComplaint'=>array(
     			'order_id'=>'1234',
