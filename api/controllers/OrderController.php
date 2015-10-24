@@ -228,10 +228,6 @@ class OrderController extends \api\components\Controller
         }
         $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
 
-        if (is_null($args['city'])) {
-            return $this->send(null, "数据不完整,请输入城市名");
-        }
-
         if (isset($args['address_id'])) {
             $attributes['address_id'] = $args['address_id'];
         } elseif (isset($args['address'])) {
@@ -381,9 +377,14 @@ class OrderController extends \api\components\Controller
             return $this->send(null, "用户无效,请先登录");
         }
         $attributes['customer_id'] = $user->id;
+        if (is_null($args['order_parent_id'])) {
+            return $this->send(null, "缺少追加订单父订单");
+        }
+        $attributes['order_parent_id'] = $args['order_parent_id'];
         if (is_null($args['order_service_type_id'])) {
             return $this->send(null, "请输入商品类型");
         }
+
         $attributes['order_service_type_id'] = $args['order_service_type_id'];
         if (is_null($args['order_src_id'])) {
             return $this->send(null, "数据不完整,缺少订单来源");
@@ -442,7 +443,7 @@ class OrderController extends \api\components\Controller
             $attributes['order_is_use_balance'] = $args['order_is_use_balance'];
         }
 
-        $attributes['order_ip'] = Yii::app()->request->userHostAddress;
+        $attributes['order_ip'] = Yii::$app->getRequest()->getUserIP();
         $attributes['admin_id'] = 0;
         $order = new \core\models\order\Order();
         $is_success = $order->addNew($attributes);
@@ -462,10 +463,16 @@ class OrderController extends \api\components\Controller
      * @apiName QueryOrders
      * @apiGroup Order
      *
-     * @apiParam {String} order_status 订单状态
-     * @apiParam {String} order_id 订单id
-     * @apiParam {String} per_page 第几页
-     * @apiParam {String} page_num 每页包含订单数
+     * @apiParam {String} [access_token] 订单状态
+     * @apiParam {String} [order_status] 订单状态
+     * @apiParam {String} [order_id] 订单id
+     * @apiParam {String} [page] 第几页
+     * @apiParam {String} [limit] 每页包含订单数
+     * @apiParam {String} [channels] 渠道号按'.'分隔
+     * @apiParam {String} [order_status] 订单状态按'.'分隔
+     * @apiParam {String} [is_asc] 排序方式
+     * @apiParam {String} [from] 开始时间
+     * @apiParam {String} [to] 结束时间
      *
      *
      * @apiSuccess {Object[]} orderList 该状态订单.
@@ -478,34 +485,7 @@ class OrderController extends \api\components\Controller
      *       "ret":{
      *           "orderList": [
      *              {
-     *                  "extend_info": "没有特殊需求",
-     *                  "id": "6925042",
-     *                  "service_type": "9",
-     *                  "place_detail": "北京市滚滚滚哈哈哈回家",
-     *                  "reserve_time": "2015-09-17 09:00",
-     *                  "status": "0",
-     *                  "worker_list": "",
-     *                  "create_time": "2015-09-15 19:26:27",
-     *                  "user_id": "48080",
-     *                  "is_paid": "0",
-     *                  "active_code_id": "0",
-     *                  "charge_reward_id": "0",
-     *                  "reserve_type_id": "0",
-     *                  "pop_channel": "App下单",
-     *                  "order_id": "6925042",
-     *                  "show_cancel": "0",
-     *                  "service_main": "家电清洗",
-     *                  "service_second": "油烟机清洗",
-     *                  "create_way": "",
-     *                  "sub_order": [],
-     *                  "order_status": [
-     *                      "2015-09-15 19:26 下单成功"
-     *                  ],
-     *                  "complain_status": [],
-     *                  "active_code": "",
-     *                  "active_code_value": "0",
-     *                  "suggest_worked_time": "",
-     *                  "show_appointment": "0"
+     *
      *              }
      *          ],
      *
@@ -531,38 +511,49 @@ class OrderController extends \api\components\Controller
      */
     public function actionUserOrders()
     {
-        $args = Yii::$app->request->post() or
-                $args = json_decode(Yii::$app->request->getRawBody(), true);
+        $args = Yii::$app->request->get();
 
-        @$limit = $args['limit'];
-        @$offset = $args['offset'];
+        @$token = $args["access_token"];
 
-        @$orderStatus = $args['order_status'];
-        @$isAsc = $args['is_asc'];
-        if (is_null($isAsc)) {
-            $isAsc = true;
+        $user = CustomerAccessToken::getCustomer($token);
+
+        if (empty($user)) {
+            return $this->send(null, "用户无效,请先登录",0);
         }
-        if (!isset($args['limit'])) {
-            $limit = 10;
+
+        $orderStatus = null;
+
+        if(isset($args['order_status'])){
+            $orderStatus = explode(".",$orderStatus);
         }
-        if (!isset($offset)) {
-            $offset = 1;
+
+        $channels = null;
+        if(isset($args['channels'])){
+            $channels = explode(".",$orderStatus);
+        }
+
+        $isAsc = true;
+        if(isset($args['is_asc'])){
+            $isAsc = $args['is_asc'];
+        }
+
+        $limit = 10;
+        if (isset($args['limit'])) {
+           $limit = $args['limit'];
+        }
+        $offset = 0;
+        if (isset($page)) {
+            $offset = $offset + $page*$limit;
         }
         @$from = $args['from'];
         @$to = $args['to'];
-
-        @$token = $args['access_token'];
-        $user = CustomerAccessToken::getCustomer($token);
-        if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录");
-        }
-
+        $args["custum_id"] = $user->id;
         $orderSearch = new \core\models\order\OrderSearch();
-        $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus, $from, $to);
-        $orders = $orderSearch->searchOrdersWithOrderStatus($args, $isAsc, $offset, $limit, $orderStatus, $from, $to);
+        $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus);
+        $orders = $orderSearch->searchOrdersWithStatus($args, $isAsc, $offset, $limit, $orderStatus, $channels,$from, $to);
         $ret = [];
-        $ret['page'] = $count;
         $ret['limit'] = $limit;
+        $ret['page'] = ceil($count/$limit);
         $ret['offset'] = $offset;
         $ret['orders'] = $orders;
         $this->send($ret, $msg = "操作成功", $code = "ok", $value = 200, $text = null);
