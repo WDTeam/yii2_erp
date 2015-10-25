@@ -175,6 +175,10 @@ class AuthController extends \api\components\Controller
         }
         $phone = $param['phone'];
         $verify_code = $param['verify_code'];
+        //验证手机号
+        if (!preg_match("/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/", $phone)){
+           return $this->send(null, "请输入正确的手机号", 0, 403);
+        } 
         $checkRet = Worker::checkWorkerPassword($phone,$verify_code);
         if($checkRet['result']=='1'){
             $token = WorkerAccessToken::generateAccessToken($phone,$verify_code);

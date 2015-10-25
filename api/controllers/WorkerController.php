@@ -1155,11 +1155,12 @@ class WorkerController extends \api\components\Controller
      */
     
     /**
-     * @api {get} /mobileapidriver2/workerLeave  查看请假情况 (田玉星0%)
+     * @api {get} /worker/worker-leave  查看请假情况 (李勇80%)
      * @apiName actionWorkerLeave
      * @apiGroup Worker
      * 
-     * @apiParam {String} session_id    会话id.
+     * @apiParam {String} access_token    阿姨登录 token.
+     * @apiParam {String} type 请假类型
      * @apiParam {String} platform_version 平台版本号.
      *
      * @apiSuccessExample {json} Success-Response:
@@ -1173,31 +1174,49 @@ class WorkerController extends \api\components\Controller
      *          "msg": "ok",
      *          "titleMsg": "您本月已请假0天，本月剩余请假2天",
      *          "orderTimeList": ["2015-09-14","2015-09-15",],
-     *          "workerLeaveList": []
+     *          "workerLeaveList": ["2015-09-13","2015-09-16",],
      *      }
      * }
      *
      * @apiError SessionIdNotFound 未找到会话ID.
      *
      * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
-     *  {
-     *      "code":"Failed",
-     *      "msg": "SessionIdNotFound"
-     *  }
-     *
+     *     HTTP/1.1 403 Not Found
+     *     { 
+     *       "code":"0",
+     *       "msg": "阿姨不存在"
+     *     }
      */
-    
+    public function actionWorkerLeave(){
+        $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
+        $worker = WorkerAccessToken::getWorker($param['access_token']);
+        if (!empty($worker) && !empty($worker->id)) {
+             if(!isset($param['type'])||!$param['type']||!in_array($param['type'], array(1,2))){
+                  return $this->send(null, "请选择请假类型", 0, 403);
+             }
+             $worker_id=$worker->id;
+             $type = $param['type'];
+             //$ret= Worker::getWorkerLeave($worker_id,$type);
+             $ret = [
+                    "result" => 1,
+                    "msg" =>"ok",
+                    "titleMsg" =>"您本月已请假0天，本月剩余请假2天",
+                    "orderTimeList" => ["2015-09-14","2015-09-15"],
+                    "workerLeaveList" =>["2015-09-14","2015-09-15"]
+                        
+                ];
+                return $this->send($ret, "操作成功",1);
+             
+        }else{
+                return $this->send(null, "阿姨不存在.", 0, 403);
+        }
+     }
 
 
 
-
-
-
-
-   
-  
-    
     
     /**
      * @api {get} /v2/FixedUserPeriod.php  固定客户列表 (田玉星0%)
