@@ -918,7 +918,7 @@ class WorkerController extends \api\components\Controller
     }
     
     /**
-     * @api {get} /worker/help_user_create_one_order.php  (田玉星0%)
+     * @api {get} /worker/help_user_create_one_order.php 帮客户下单，单次服务确认下单 (田玉星0%)
      * @apiName actionHelpUserCreateOneOrder
      * @apiGroup Worker
      * 

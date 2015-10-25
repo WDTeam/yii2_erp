@@ -303,11 +303,6 @@ class ServiceController extends \api\components\Controller
     }
 
     /**
-     * 依据地址 获取某项服务在某个地址从今天开始7天商圈的阿姨可服务时间表
-     */
-
-
-    /**
      * @api {GET} v1/service/goods-price 获取某城市某商品的价格及备注信息（赵顺利 100%）
      * @apiName actionGoodsPrice
      * @apiGroup service
@@ -364,7 +359,59 @@ class ServiceController extends \api\components\Controller
     }
 
     /**
-     * 获得所有精品保洁项目
+     * @api {GET} v1/service/goods-service-time 依据地址 获取某服务从今天开始7天商圈的阿姨可服务时间表(赵顺利0%)
+     * @apiName actionGoodsServiceTime
+     * @apiGroup service
+     * @apiDescription 依据地址 获取某项服务在某个地址从今天开始7天商圈的阿姨可服务时间表
+     *
+     * @apiParam {String} city_name 城市
+     * @apiParam {String} goods_id 服务类型id
+     * @apiParam {String} address_id 地址id
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "code": "ok",
+     *      "msg": "",
+     *      "ret":
+     *  }
+     *
+     * @apiError CityNotSupportFound 该城市暂未开通.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "code":"error",
+     *       "msg": "该城市暂未开通"
+     *     }
+     */
+
+    /**
+     * @api {GET} v1/service/boutique-cleaning 获得所有精品保洁项目（赵顺利0%）
+     * @apiGroup service
+     * @apiName actionBoutiqueCleaning
+     * @apiDescription 获取城市所有精品保洁
+     *
+     * @apiParam {String} city_name 城市
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "code": "ok",
+     *      "msg": "",
+     *      "ret":
+     *  }
+     *
+     * @apiError CityNotSupportFound 该城市暂未开通.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "code":"error",
+     *       "msg": "该城市暂未开通"
+     *     }
      */
 
 }
