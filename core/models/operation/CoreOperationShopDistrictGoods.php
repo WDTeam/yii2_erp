@@ -346,12 +346,40 @@ class CoreOperationShopDistrictGoods extends CommonOperationShopDistrictGoods
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+        return $dataProvider->query->all();
+    }
 
-//        $query->andFilterWhere([
-//            'operation_city_name' => $city_name,
-//            'operation_shop_district_goods_status' => 1,
-//        ]);
-        //$query->distinct(true);
+    public static function getGoodsByCityCategory($city_name,$category_id)
+    {
+        $query = new \yii\db\Query();
+        $query = $query->select([
+            'sdgoods.operation_city_id',
+            'sdgoods.operation_city_name',
+            'sdgoods.operation_category_id',
+            'sdgoods.operation_category_name',
+
+            'goods.id as goods_id',
+            'goods.operation_goods_no',
+            'goods.operation_goods_name',
+            'goods.operation_goods_introduction',
+            'goods.operation_goods_english_name',
+            'goods.operation_goods_img',
+            'goods.operation_goods_app_ico',
+            'goods.operation_goods_pc_ico',
+            'goods.operation_goods_price',
+            'goods.operation_spec_strategy_unit',
+            'goods.operation_goods_price_description',
+        ])->distinct()
+            ->from('{{%operation_shop_district_goods}} as sdgoods')
+            ->leftJoin('{{%operation_goods}} as goods','sdgoods.operation_goods_id = goods.id')
+            ->andFilterWhere([
+                'operation_city_name' => $city_name,
+                'sdgoods.operation_category_id' => $category_id,
+                'operation_shop_district_goods_status' => 1,
+            ]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
         return $dataProvider->query->all();
     }
 
