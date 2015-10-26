@@ -36,3 +36,5 @@ boss/config/main-local.php
 /api/runtime/*
 /autoassign/swoole.log
 /autoassign/restart.log
+/common/config/main.php~
+/swoole.log

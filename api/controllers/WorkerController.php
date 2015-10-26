@@ -12,14 +12,12 @@ class WorkerController extends \api\components\Controller
 {
 
     /**
-     * @api {GET} /worker/worker-info 查看阿姨信息 (田玉星 80%)
-     *
-     * @apiDescription 【备注：阿姨身份、星级、个人技能等待model底层】
+     * @api {GET} /worker/worker-info 查看阿姨信息 (田玉星 100%)
      *
      * @apiName WorkerInfo
      * @apiGroup Worker
      *
-     * @apiParam {String} access_token 阿姨登录token/用户登录token
+     * @apiParam {String} access_token 用户登录token
      * @apiParam {String} [worker_id]  阿姨id
      *
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/worker-info
@@ -56,40 +54,29 @@ class WorkerController extends \api\components\Controller
     public function actionWorkerInfo()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-
-        $workerId = 0;
-        if (!isset($param['access_token']) || !$param['access_token'] || !WorkerAccessToken::checkAccessToken($param['access_token'])) {
-            if (!isset($param['access_token']) || !$param['access_token'] || !isset($param['worker_id']) || !$param['worker_id'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-                return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
-            } else {
-                // 用户登录，按阿姨id获取阿姨信息
-                $workerId = $param['worker_id'];
-            }
-        } else {
-            // 阿姨登陆，获取阿姨信息
-            $worker = WorkerAccessToken::getWorker($param['access_token']);
-            if (!empty($worker)) {
-                $workerId = $worker->id;
-            }
+        if (!isset($param['access_token']) || !$param['access_token'] || !isset($param['worker_id']) || !$param['worker_id'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
-
-        if ($workerId > 0) {
+        // 按阿姨id获取阿姨信息
+        $workerId = intval($param['worker_id']);
+        if ($workerId ) {
             $workerInfo = Worker::getWorkerDetailInfo($workerId);
             //数据整理
-            $ret = [
-                "worker_name" => $workerInfo['worker_name'],
-                "worker_phone" => $workerInfo['worker_phone'],
-                "head_url" => $workerInfo['worker_photo'],
-                "worker_identity" => $workerInfo['worker_identity_description'],//身份
-                "worker_role" => $workerInfo["worker_type_description"],
-                'worker_start' => 4.5,
-                'total_money' => 1000,
-                "personal_skill" => WorkerSkill::getWorkerSkill($workerId),
-            ];
-            return $this->send($ret, "阿姨信息查询成功");
-        } else {
-            return $this->send(null, "阿姨不存在.", 0, 403);
+            if(!empty($workerInfo)){
+                $ret = [
+                    "worker_name" => $workerInfo['worker_name'],
+                    "worker_phone" => $workerInfo['worker_phone'],
+                    "head_url" => $workerInfo['worker_photo'],
+                    "worker_identity" => $workerInfo['worker_identity_description'],//身份
+                    "worker_role" => $workerInfo["worker_type_description"],
+                    'worker_start' => $workerInfo["worker_star"],
+                    'total_money' => $workerInfo['worker_stat_order_money'],
+                    "personal_skill" => WorkerSkill::getWorkerSkill($workerId),
+                ];
+                return $this->send($ret, "阿姨信息查询成功");
+            }
         }
+        return $this->send(null, "阿姨不存在.", 0, 403);
     }
 
     /**
@@ -627,7 +614,7 @@ class WorkerController extends \api\components\Controller
      * @apiGroup Worker
      * 
      * @apiParam {String} access_token    阿姨登录token
-     * @apiParam {String} bill_id  每页显示多少条.
+     * @apiParam {String} bill_id  账单唯一标识.
      * @apiParam {String} [platform_version] 平台版本号.
      * 
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-bill-list
@@ -678,121 +665,145 @@ class WorkerController extends \api\components\Controller
         return $this->send($ret, "操作成功.");
     }
    
-    
     /**
-     * @api {get} /mobileapidriver2/get_driver_info 个人中心首页 (田玉星0%)
-     * @apiName actionGetDriverInfo
+     * @api {GET} /worker/get-worker-tasktime 获取阿姨工时列表 (田玉星 60%)
+     * 
+     * @apiDescription 【备注：等待model底层支持】
+     * 
+     * @apiName actionGetWorkerTasktime
      * @apiGroup Worker
-     *
-     * @apiParam {String} session_id    会话id.
-     * @apiParam {String} platform_version 平台版本号
-     * @apiParam {String} Sign  传了123.
-     *
+     * 
+     * @apiParam {String} access_token    阿姨登录token
+     * @apiParam {String} per_page  每页显示多少条.
+     * @apiParam {String} page  第几页.
+     * @apiParam {String} [platform_version] 平台版本号.
+     * 
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-tasktime
+     * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *      "code": "ok",
-     *      "msg":"",
-     *      "ret":
-     *      {
-     *          "orderCount": 0,
-     *          "cancelCount": "",
-     *          "driverTotalScore": "",
-     *          "myRewards": [],
-     *          "userPhone": "13401096964",
-     *          "driverName": "陈琴昭测试",
-     *          "driverAge": "32",
-     *          "qualityScoreClauseUrl": "http://wap.1jiajie.com/serverinfo/complainManage.html",
-     *          "livePlace": "北京市房山区长阳",
-     *          "homeTown": "河北省",
-     *          "identityCard": "********",
-     *          "goodRate": [],
-     *          "badRate": [],
-     *          "totalRate": [],
-     *          "myMoney": "0.0元",
-     *          "rankList": [],
-     *          "myRank":
-     *          [
-     *          {
-     *              "driver_name": "",
-     *              "rank": "100+",
-     *              "money": "0"
-     *          }
-     *          ],
-     *          "starCountList": [],
-     *          "meStarList":
-     *          [
-     *          {
-     *              "driver_name": "冷桂艳",
-     *              "rank": "100+",
-     *              "money": "0"
-     *          }
-     *          ],
-     *          "personal_skill":
-     *          [
-     *          {
-     *              "title": "洗衣",
-     *              "type": 1,
-     *              "value": null
-     *          }
-     *          ],
-     *          "druingTime": "2015.9.1  一  2015.9.13",
-     *          "restScore": "分",
-     *          "complainNum": "1个",
-     *          "unPayMoney": "0.0元",
-     *          "isPayMoney": "0.0元",
-     *          "unPayList": [],
-     *          "isPayList": [],
-     *          "myMoneyList": [],
-     *          "restDay": "剩余周期135天",
-     *          "scoreList": [],
-     *          "fineMoney": "0.00",
-     *          "unComplainList": [],
-     *          "restDayStr": "您本次的积分周期自2014-01-02至2014-05-06止",
-     *          "complainStr": "",
-     *          "complainClauseUrl": "http://wap.1jiajie.com/serverinfo/punishManage.html",
-     *          "todayFinishOrder": 0,
-     *          "todayFinishMoney": 0,
-     *          "monthFinishOrder": 0,
-     *          "monthFinishMoney": 0,
-     *          "succRate": 100,
-     *          "driverLevel": "",
-     *          "alertType": 0,
-     *          "accountRestMoney": 0,
-     *          "payMoney": 0,
-     *          "chargeMoney": 0,
-     *          "driverCompany": "家政公司",
-     *          "curCarId": null,
-     *          "curCarBrand": null,
-     *          "curCarNumber": null,
-     *          "curCarColor": null,
-     *          "curColor": null,
-     *          "curCarType": 1,
-     *          "isOpenStart": true,
-     *          "result": "1",
-     *          "headUrl": "http://static.1jiajie.com/picture_default.jpg",
-     *          "driverDegree": "高中",
-     *          "driverWorkAge": "2年",
-     *          "driverLanguage": "普通话",
-     *          "healthCard": "无",
-     *          "department": "北京大悦城店",
-     *          "serverRange": "5公里",
-     *          "tranSportation": "无",
-     *          "activity_url": "http://wap.1jiajie.com/wap_theme_activity/ayiduan/index.html"
-     *      }
-     * }
-     *
-     * @apiError SessionIdNotFound 未找到会话ID.
+     *   "code": 1,
+     *   "msg": "操作成功.",
+     *    "ret": {
+     *       "title_msg": {
+     *           "order_count": 10,
+     *           "salary": 160
+     *       },
+     *       "order_list": [
+     *           {
+     *               "service_time": "9.10 14:00-16:00",
+     *               "order_num": "32341334352",
+     *               "service_addr": "北京市朝阳区光华路SOHO"
+     *           }
+     *       ]
+     *   }
+    }
      *
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"Failed",
-     *      "msg": "SessionIdNotFound"
+     *      "code":"error",
+     *      "msg": "用户认证已经过期,请重新登录"
      *  }
-     *
      */
-
+    public function  actionGetWorkerTasktime(){
+        $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
+           return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
+        $worker = WorkerAccessToken::getWorker($param['access_token']);
+        if (!$worker|| !$worker->id) {
+            return $this->send(null, "阿姨不存在", 0, 403);
+        }
+        $ret = [
+            "title_msg"=>[
+                'order_count'=>10,
+                'salary'=>160.0
+            ],
+            'order_list'=>[
+                [ 
+                    'service_time'=>'9.10 14:00-16:00',
+                    'order_num' =>'32341334352',
+                    'service_addr'=>'北京市朝阳区光华路SOHO'
+                ],
+                [ 
+                    'service_time'=>'9.11 14:00-16:00',
+                    'order_num' =>'32341334352',
+                    'service_addr'=>'北京市朝阳区建外SOHO东区'
+                ],
+            ]
+        ];
+        return $this->send($ret, "操作成功.");
+        
+    }
+    
+    /**
+     * @api {GET} /worker/get-worker-center 个人中心首页 (田玉星 100%)
+     *
+     * @apiName getWorkerCenter
+     * @apiGroup Worker
+     *
+     * @apiParam {String} access_token 阿姨登录token
+     *
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-center
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "code": "ok",
+     *      "msg": "阿姨信息查询成功",
+     *      "ret": {
+     *          "worker_name": "李刘珍",
+     *          "worker_phone": "13121999270",
+     *          "head_url": "",
+     *          "worker_identity": "兼职",
+     *          "worker_role": "保姆",
+     *          "worker_start": 4.5,
+     *          "personal_skill": [
+     *              "煮饭",
+     *              "开荒",
+     *              "护老",
+     *              "擦玻璃",
+     *              "带孩子"
+     *          ]
+     *        }
+     *     }
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "error",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *     }
+     */
+    public function getWorkerCenter(){
+        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        if (!isset($param['access_token']) || !$param['access_token'] || !WorkerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
+        $worker = WorkerAccessToken::getWorker($param['access_token']);
+        if (!$worker || !$worker->id) {
+            return $this->send(null, "阿姨不存在", 0, 403);
+        }
+        
+        $workerInfo = Worker::getWorkerDetailInfo($workerId);
+        //数据整理
+        $ret = [
+            "worker_name" => $workerInfo['worker_name'],
+            "worker_phone" => $workerInfo['worker_phone'],
+            "head_url" => $workerInfo['worker_photo'],
+            "worker_identity" => $workerInfo['worker_identity_description'],//身份
+            "worker_role" => $workerInfo["worker_type_description"],
+            'worker_start' => $workerInfo["worker_star"],
+            'total_money' => $workerInfo['worker_stat_order_money'],
+            "personal_skill" => WorkerSkill::getWorkerSkill($workerId),
+        ];
+        return $this->send($ret, "阿姨信息查询成功");
+    }
+    
+    
+    
+    
     /**
      * @api {get} /mobileapidriver2/system_news  通知中心(田玉星0%)
      * @apiName actionSystemNews
