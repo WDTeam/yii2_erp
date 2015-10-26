@@ -4,8 +4,8 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 
-use core\models\coupon\Coupon;
-use core\models\coupon\CouponCode;
+use core\models\operation\coupon\Coupon;
+use core\models\operation\coupon\CouponCode;
 
 /**
  * @var yii\web\View $this

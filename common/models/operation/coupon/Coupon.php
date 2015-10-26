@@ -1,6 +1,7 @@
 <?php
 
-namespace common\models\coupon;
+namespace common\models\operation\coupon;
+
 
 use Yii;
 
