@@ -355,6 +355,26 @@ public function actionGetCity()
             'searchModel' => $searchModel,
         ]);
     }
+    
+    /**
+     * 通过搜索关键字获取门店信息
+     * 联想搜索通过ajax返回
+     * @param q string 关键字
+     * @return result array 门店信息
+     */
+    public function actionShowShop($q = null)
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = ['results' => ['id' => '', 'text' => '']];
+        $condition = '';
+        if($q!=null){
+            $condition = 'name LIKE "%' . $q .'%"';
+        }
+        $shopResult = Shop::find()->where($condition)->select('id, name AS text')->asArray()->all();
+        $out['results'] = array_values($shopResult);
+        //$out['results'] = [['id' => '1', 'text' => '门店'], ['id' => '2', 'text' => '门店2'], ['id' => '2', 'text' => '门店3']];
+        return $out;
+    }
 
     /**
      * Displays a single Order model.

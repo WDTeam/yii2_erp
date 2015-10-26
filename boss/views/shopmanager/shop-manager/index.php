@@ -33,14 +33,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
 //         'filterModel' => $searchModel,
         'toolbar' =>[
-            'content'=>Html::a('<i class="glyphicon glyphicon-plus"></i>', [
-                'shop-manager/create',
-                
-            ], [
-                'class' => 'btn btn-default',
-                'title' => Yii::t('app', '添加小家政')
-            ]),
-        ],
+                        'content'=>Html::a('<i class="glyphicon glyphicon-plus"></i>', [
+                            'create'
+                        ], [
+                            'class' => 'btn btn-default',
+                            'title' => Yii::t('app', '添加小家政')
+                        ]),
+                    ],
         'columns' => [
 //            ['class' => 'yii\grid\SerialColumn'],
             
@@ -117,7 +116,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'buttons' => [
                     'update' => function ($url, $model) {
                         return Html::a(Yii::t('yii', '编辑'), [
-                            'shop-manager/view',
+                            'view',
                             'id' => $model->id,
                             'edit'=>'t'
                         ], [
@@ -127,7 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'joinblacklist' => function ($url, $model) {
                         return empty($model->is_blacklist)?Html::a('加入黑名单', [
-                            'shop-manager/join-blacklist',
+                            'join-blacklist',
                             'id' => $model->id
                         ], [
                             'title' => Yii::t('app', '加入黑名单'),
@@ -136,7 +135,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-id'=>$model->id,
                             'class'=>'join-list-btn btn btn-success btn-sm',
                         ]):Html::a('解除黑名单', [
-                            'shop-manager/remove-blacklist',
+                            'remove-blacklist',
                             'id' => $model->id
                             
                         ], [
