@@ -4,6 +4,7 @@ namespace common\models\customer;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use common\models\finance\FinanceOrderChannel;
 /**
  * This is the model class for table "{{%customer_trans_record}}".
  *

@@ -2,6 +2,7 @@
 
 namespace common\models\customer;
 
+use common\models\finance\FinanceOrderChannel;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 
@@ -81,7 +82,6 @@ class CustomerTransRecordLog extends \yii\db\ActiveRecord
 
         $this->on('writeTextLog',[$this,'writeTextLog'],$writeLog);
         $this->trigger('writeTextLog');
-
         $orderChannelInfo = FinanceOrderChannel::get_order_channel_info($param->data['order_channel_id']);
 
         //支付渠道

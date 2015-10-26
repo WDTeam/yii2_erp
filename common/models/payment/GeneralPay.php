@@ -67,7 +67,7 @@ class GeneralPay extends GeneralPayCommon
             case 21:
                 $this->pay_type = 'weibo_h5';
                 break;
-            case 22:
+            case 23:
                 $this->pay_type = 'wx_native';
                 break;
         }
