@@ -606,7 +606,6 @@ class WorkerController extends \api\components\Controller
         return $this->send($ret, "操作成功.");
     }
 
-
     /**
      * @api {GET} /worker/get-worker-bill-detail 获取阿姨对账单列表详情 (田玉星 70%)
      * 
@@ -908,9 +907,7 @@ class WorkerController extends \api\components\Controller
     }
     
     
-    
-    
-    /**
+    /** 
      * @api {get} /mobileapidriver2/system_news  通知中心(田玉星0%)
      * @apiName actionSystemNews
      * @apiGroup Worker
