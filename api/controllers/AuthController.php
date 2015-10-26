@@ -176,7 +176,11 @@ class AuthController extends \api\components\Controller
         //验证手机号
         if (!preg_match("/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/", $phone)){
            return $this->send(null, "请输入正确的手机号", 0, 403);
-        } 
+        }
+        $if_exist = Worker::getWorkerInfoByPhone($phone);
+        if(empty($if_exist)){
+             return $this->send(null, "该用户不存在", 0, 403);
+        }
         $checkRet = WorkerCode::checkCode($phone,$verify_code);
         if($checkRet){
             $token = WorkerAccessToken::generateAccessToken($phone,$verify_code);
