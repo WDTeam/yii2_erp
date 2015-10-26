@@ -5,7 +5,7 @@ namespace core\models\operation;
 use Yii;
 
 /**
- * This is the model class for table "et_operation_server_card_order".
+ * This is the model class for table "{{%operation_server_card_order}}".
  *
  * @property string $id
  * @property string $order_code
