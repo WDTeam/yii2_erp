@@ -11,7 +11,7 @@ use yii\filters\VerbFilter;
 use common\models\finance\FinanceOrderChannel;
 use PHPExcel;
 use PHPExcel_IOFactory;
-
+use core\models\shop\Shop;
 /**
  * FinanceRefundController implements the CRUD actions for FinanceRefund model.
  */
@@ -64,11 +64,46 @@ class FinanceRefundController extends BaseAuthController
     	//var_dump(Yii::$app->request->getQueryParams());exit;
     	$searchModel->load(Yii::$app->request->getQueryParams());
     	$searchModel->isstatus='4';
+    	$datainfo=Yii::$app->request->getQueryParams();
+
+    	if(isset($datainfo['FinanceRefundSearch']['create_time'])){ 
+    		$searchModel->create_time=$datainfo['FinanceRefundSearch']['create_time'];
+    	}
+    	
+    	if(isset($datainfo['FinanceRefundSearch']['create_time_end'])){
+    		$searchModel->create_time_end=$datainfo['FinanceRefundSearch']['create_time_end'];
+    	}
+    	
     	$dataProvider = $searchModel->search();
     	return $this->render('countinfo', [
     			'dataProvider' => $dataProvider,
     			'searchModel' => $searchModel,
     			]);
+    }
+    
+    
+    
+    /**
+    * 通过搜索关键字获取门店信息  联想搜索通过ajax返回
+    * @date: 2015-10-26
+    * @param q string 关键字
+    * @return result array 门店信息
+    * @author: peak pan
+    * @return:
+    **/
+    
+    public function actionShowShop($q = null)
+    {
+    	\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    	$out = ['results' => ['id' => '', 'text' => '']];
+    	$condition = '';
+    	if($q!=null){
+    		$condition = 'name LIKE "%' . $q .'%"';
+    	}
+    	$shopResult = Shop::find()->where($condition)->select('id, name AS text')->asArray()->all();
+    	$out['results'] = array_values($shopResult);
+    	//$out['results'] = [['id' => '1', 'text' => '门店'], ['id' => '2', 'text' => '门店2'], ['id' => '2', 'text' => '门店3']];
+    	return $out;
     }
     
     

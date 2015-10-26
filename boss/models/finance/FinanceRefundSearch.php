@@ -42,6 +42,11 @@ class FinanceRefundSearch extends FinanceRefund
         /*  if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }  */
+        
+        
+        if($this->create_time){ $statime=strtotime($this->create_time);}else { $statime= null;}
+        if($this->create_time_end){$endtime=strtotime($this->create_time_end);}else{$endtime= null; }
+        
          if($this->statusstype=='index'){
          $infoname='!=';	
         }else {
@@ -66,7 +71,8 @@ class FinanceRefundSearch extends FinanceRefund
         ]);
 
         $query->andFilterWhere(['like', 'finance_refund_tel', $this->finance_refund_tel])
-            ->andFilterWhere(['>=', 'create_time', strtotime($this->create_time)])
+            ->andFilterWhere(['between', 'create_time',$statime,$endtime])
+            
             ->andFilterWhere([$infoname, 'isstatus', $this->isstatus])
             ->andFilterWhere(['like', 'finance_refund_check_name', $this->finance_refund_check_name])
             ->andFilterWhere(['like', 'finance_refund_reason', $this->finance_refund_reason])

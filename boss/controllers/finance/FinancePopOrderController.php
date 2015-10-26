@@ -137,7 +137,6 @@ class FinancePopOrderController extends Controller
     			//去除表头
     			if($n>1 && !empty($value['A'])){
     			$statusinfo=$model->PopOrderstatus($alinfo,$value,$channelid,$paychannelid);
-    		
     			$postdate['finance_record_log_id'] =$lastidRecordLog;
     			$postdate['finance_pop_order_number'] =$statusinfo['order_channel_order_num'];
     			$postdate['finance_order_channel_id'] =$channelid;
@@ -178,8 +177,7 @@ class FinancePopOrderController extends Controller
     			$postdate['finance_order_channel_endpayment'] =strtotime($post['FinancePopOrderSearch']['finance_order_channel_endpayment']);
     			$postdate['create_time'] = time();
     			$postdate['is_del'] =0;
-    			
-    			
+    		
     			$_model = clone $model;
     			$_model->setAttributes($postdate);
     			$_model->save();
