@@ -6,6 +6,7 @@ use \core\models\customer\CustomerCode;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\worker\WorkerAccessToken;
 use \core\models\worker\Worker;
+use \core\models\worker\WorkerCode;
 class AuthController extends \api\components\Controller
 {
 
@@ -179,27 +180,22 @@ class AuthController extends \api\components\Controller
         if (!preg_match("/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/", $phone)){
            return $this->send(null, "请输入正确的手机号", 0, 403);
         } 
-        $checkRet = Worker::checkWorkerPassword($phone,$verify_code);
-        if($checkRet['result']=='1'){
+        $checkRet = WorkerCode::checkCode($phone,$verify_code);
+        if($checkRet){
             $token = WorkerAccessToken::generateAccessToken($phone,$verify_code);
             if (empty($token)) {
                 return $this->send(null, "生成token错误",0);
             }else{
-                $worker = Worker::getWorkerDetailInfo($checkRet);
+                $user = WorkerAccessToken::getWorker($token);
                 $ret = [
-                    "worker_name" => $worker['worker_name'],
-                    "worker_rule_id" =>"",
-                    "worker_rule_description" =>"",
-                    "worker_photo" => $worker['worker_photo'],
-                    "access_token" => $token,
-                    "worker_id" => $worker['id'],
-                    "shop_id" => $worker['shop_id']
+                    "user" => $user,
+                    "access_token" => $token
                 ];
-                return $this->send($ret, "操作成功");
+                return $this->send($ret, "登陆成功",1);
             }
             
         } else {
-            return $this->send(null, "用户名或密码错误", 0,403);
+            return $this->send(null, "用户名或验证码错误", 0,403);
         }
     }
 

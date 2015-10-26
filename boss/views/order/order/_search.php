@@ -24,7 +24,7 @@ use boss\models\order\Order;
     'method' => 'get',
 ]); ?>						
 	<?php echo $form->field($searchModel, 'order_customer_phone')->TextInput(['class' => 'm_ipu'])->label('用户电话 :', ['class' => 'm_ipone']); ?>
-	<?php echo $form->field($searchModel, 'worker_phone')->TextInput(['class' => 'm_ipu'])->label('阿姨电话 :', ['class' => 'm_ipone']); ?>
+	<?php echo $form->field($searchModel, 'order_worker_phone')->TextInput(['class' => 'm_ipu'])->label('阿姨电话 :', ['class' => 'm_ipone']); ?>
 	<?php echo $form->field($searchModel, 'order_code')->TextInput(['class' => 'm_ipu'])->label('订单编号 :', ['class' => 'm_ipone']); ?>
 	
 	<div class="m_riqi">
@@ -66,7 +66,7 @@ use boss\models\order\Order;
             ],
         ])->label('商圈', ['class' => 'm_ipone']); ?>        	   
 	   <?php echo $form->field($searchModel, 'order_address')->TextInput(['class' => 'm_ipu'])->label('客户地址 :', ['class' => 'm_ipone']); ?>
-	   <?= Html::submitButton('查询', ['class' => 'btn btn-primary']) ?>
+	   <?= Html::submitButton('搜索', ['class' => 'btn btn-primary']) ?>
 	</div>
 	
 	
