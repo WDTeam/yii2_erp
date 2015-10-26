@@ -3,8 +3,10 @@ namespace api\controllers;
 
 use Yii;
 use \core\models\worker\Worker;
+use \core\models\worker\WorkerSkill;
 use \core\models\worker\WorkerAccessToken;
 use \core\models\Operation\CoreOperationShopDistrictCoordinate;
+ 
 class WorkerController extends \api\components\Controller
 {
 
@@ -67,7 +69,7 @@ class WorkerController extends \api\components\Controller
                 "worker_role" => $workerInfo["worker_type_description"],
                 'worker_start'=> 4.5,
                 'total_money' =>1000,
-                "personal_skill" =>['煮饭','开荒','护老','擦玻璃','带孩子'],
+                "personal_skill" =>WorkerSkill::getWorkerSkill($worker->id),
             ];
               return $this->send($ret, "阿姨信息查询成功");
         } else {
@@ -502,7 +504,7 @@ class WorkerController extends \api\components\Controller
     }
     
     /**
-     * @api {GET} /worker/get-worker-bill-list 获取阿姨服务信息 (田玉星 50%)
+     * @api {GET} /worker/get-worker-bill-list 获取阿姨服务信息 (田玉星 60%)
      * 
      * @apiDescription 【备注：等待model底层支持】
      * 
@@ -560,7 +562,7 @@ class WorkerController extends \api\components\Controller
             $param['page_num'] = 10;
         }
         $page_num = intval($param['page_num']);
-        调取model层
+        //调取model层
         $ret = [
             [
                 'bill_type' =>"1",

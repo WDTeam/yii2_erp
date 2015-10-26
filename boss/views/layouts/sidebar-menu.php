@@ -105,7 +105,7 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有订单(0%)',
+                        'label' => '查看所有订单(20%)',
                         'url' => ['/order/order'],
                         'icon' => 'fa fa-angle-right',
                     ],
