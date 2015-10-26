@@ -58,8 +58,8 @@ class ShopManager extends \common\models\shop\ShopManager
     {
         return array_merge(parent::rules(),[
             [['name', 'street', 'principal', 'tel', 
-            
             ], 'required'],
+            [['audit_status', 'is_blacklist'], 'default', 'value'=>0],
         ]);
     }
     /**
