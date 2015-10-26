@@ -8,8 +8,6 @@ use \core\models\customer\CustomerAccessToken;
 
 class PayController extends \api\components\Controller
 {
-
-
     /**
      * @api {POST} v1/pay/balance-pay 会员余额支付 (赵顺利100%)
      * @apiName actionBalancePay
@@ -46,19 +44,17 @@ class PayController extends \api\components\Controller
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
         }
         $customer = CustomerAccessToken::getCustomer($params['access_token']);
-        $date=[
-            'customer_id'=>$customer->id,
-            'order_id'=>$params['order_id'],
+        $date = [
+            'customer_id' => $customer->id,
+            'order_id' => $params['order_id'],
         ];
 
-        if(empty(GeneralPay::balancePay($date)))
-        {
+        if (empty(GeneralPay::balancePay($date))) {
             return $this->send(null, "支付失败", "error", 403);
         }
 
         return $this->send(null, "支付成功", "ok");
     }
-
 
     /**
      * @api {POST} v1/pay/online-pay 在线支付接口 (赵顺利100%)
@@ -164,7 +160,6 @@ class PayController extends \api\components\Controller
      *  }
      *
      */
-
     public function actionOnlinePay()
     {
         $model = new PayParam();
@@ -229,7 +224,7 @@ class PayController extends \api\components\Controller
             $retInfo = GeneralPay::getPayParams($model->pay_money, $model->customer_id, $model->channel_id, $model->partner, $model->order_id, $ext_params);
             return $this->send($retInfo['data'], $retInfo['info'], $retInfo['status']);
         }
-        return $this->send(null, $model->errors,0);
+        return $this->send(null, $model->errors, 0);
 
     }
 

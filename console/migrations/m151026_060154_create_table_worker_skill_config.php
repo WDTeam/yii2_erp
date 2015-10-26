@@ -13,7 +13,7 @@ class m151026_060154_create_table_worker_skill_config extends Migration
         }
         $this->createTable('{{%worker_skill_config}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT COMMENT \'阿姨技能配置表自增id\'' ,
-            'worker_skill_name' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL COMMENT \'阿姨技能名称\'',
+            'worker_skill_name' => Schema::TYPE_STRING . '(10) DEFAULT NULL COMMENT \'阿姨技能名称\'',
             'created_ad' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'创建时间\'',
             'updated_ad' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'最后更新时间\'',
             'admin_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'操作管理员id\'',
@@ -21,7 +21,7 @@ class m151026_060154_create_table_worker_skill_config extends Migration
         ], $tableOptions);
         $this->execute(
             "INSERT INTO {{%worker_skill_config}} VALUES ('1', '开荒', null, null, null, '0');
-             INSERT INTO {{%worker_skill_config}} VALUES ('2', '煮饭', null, null, null, '0');
+             INSERT INTO {{%worker_skill_config}} VALUES ('2', '煮饭', null, null, null, '0');-
              INSERT INTO {{%worker_skill_config}} VALUES ('3', '护老', null, null, null, '0');
              INSERT INTO {{%worker_skill_config}} VALUES ('4', '擦玻璃', null, null, null, '0');"
         );

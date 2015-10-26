@@ -29,17 +29,6 @@ class WorkerAccessToken extends \common\models\worker\WorkerAccessToken
 
         $transaction = \Yii::$app->db->beginTransaction();
         try{
-            //没有客户则创建
-            $worker = Worker::find()->where(['worker_phone'=>$phone])->one();
-            if ($worker == NULL) {
-                $worker = new Worker;
-                $worker->worker_phone = $phone;
-                $worker->created_at = time();
-                $worker->updated_at = 0;
-                $worker->is_del = 0;
-                $worker->save();
-            }
-
             $workerAccessTokens = self::find()->where(['worker_phone'=>$phone])->all();
             foreach ($workerAccessTokens as $workerAccessToken) {
                 $workerAccessToken->is_del = 1;
