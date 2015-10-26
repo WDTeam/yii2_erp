@@ -9,10 +9,10 @@ use \core\models\customer\CustomerAccessToken;
 class CouponController extends \api\components\Controller
 {
     /**
-     * @api {POST} /user/exchange-coupon 兑换优惠劵 （李勇 80%）
+     * @api {POST} /coupon/exchange-coupon 兑换优惠劵 （李勇 80%）
      *
      * @apiName ExchangeCoupon
-     * @apiGroup User
+     * @apiGroup coupon
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [city] 城市
