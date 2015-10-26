@@ -12,9 +12,7 @@ class WorkerController extends \api\components\Controller
 {
 
     /**
-     * @api {GET} /worker/worker-info 查看阿姨信息 (田玉星 80%)
-     *
-     * @apiDescription 【备注：阿姨身份、星级、个人技能等待model底层】
+     * @api {GET} /worker/worker-info 查看阿姨信息 (田玉星 100%)
      *
      * @apiName WorkerInfo
      * @apiGroup Worker
@@ -668,7 +666,7 @@ class WorkerController extends \api\components\Controller
    
     
 /**
-     * @api {GET} /worker/get-worker-center 个人中心首页 (田玉星 80%)
+     * @api {GET} /worker/get-worker-center 个人中心首页 (田玉星 100%)
      *
      * @apiName getWorkerCenter
      * @apiGroup Worker
@@ -710,7 +708,6 @@ class WorkerController extends \api\components\Controller
         if (!isset($param['access_token']) || !$param['access_token'] || !WorkerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
-
         $worker = WorkerAccessToken::getWorker($param['access_token']);
         if (!$worker || !$worker->id) {
             return $this->send(null, "阿姨不存在", 0, 403);
