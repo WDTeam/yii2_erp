@@ -1,10 +1,10 @@
 <?php
 
-namespace boss\models\Operation;
+namespace boss\models\operation;
 
 use Yii;
 
-use core\models\Operation\CoreOperationAdvertContent;
+use core\models\operation\CoreOperationAdvertContent;
 /**
  * This is the model class for table "{{%operation_advert_content}}".
  *

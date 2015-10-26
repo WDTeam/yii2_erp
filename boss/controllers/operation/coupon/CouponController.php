@@ -1,16 +1,16 @@
 <?php
 
-namespace boss\controllers\customer;
+namespace boss\controllers\operation\coupon;
 
 use Yii;
 
-use boss\models\customer\CouponSearch;
+use boss\models\operation\coupon\CouponSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-use core\models\coupon\Coupon;
-use core\models\coupon\CouponCode;
+use core\models\operation\coupon\Coupon;
+use core\models\operation\coupon\CouponCode;
 
 /**
  * CouponController implements the CRUD actions for Coupon model.

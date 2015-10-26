@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\Operation\CommonOperationTag;
+use common\models\operation\CommonOperationTag;
 
 /**
  * This is the model class for table "{{%operation_tag}}".

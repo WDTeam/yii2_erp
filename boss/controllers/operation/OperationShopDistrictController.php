@@ -3,10 +3,10 @@
 namespace boss\controllers\operation;
 
 use Yii;
-use boss\models\Operation\OperationShopDistrict;
-use boss\models\Operation\OperationShopDistrictCoordinate;
-use boss\models\Operation\OperationCity;
-use boss\models\Operation\OperationArea;
+use boss\models\operation\OperationShopDistrict;
+use boss\models\operation\OperationShopDistrictCoordinate;
+use boss\models\operation\OperationCity;
+use boss\models\operation\OperationArea;
 use yii\data\ActiveDataProvider;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
@@ -41,7 +41,7 @@ class OperationShopDistrictController extends BaseAuthController
         }else{
             $this->city_id = $_COOKIE['city_id'];
             if(empty($this->city_id)){
-                return $this->redirect(['operation-city/index']);
+                return $this->redirect(['/operation/operation-city/index']);
             }
         }
         $this->city_name = OperationCity::getCityName($this->city_id);
@@ -186,7 +186,7 @@ class OperationShopDistrictController extends BaseAuthController
     }
     
     public function actionGoodslist($id){
-        return $this->redirect(['operation-goods/index']);
+        return $this->redirect(['/operation/operation-goods/index']);
     }
 
     public function actionGoline($id){

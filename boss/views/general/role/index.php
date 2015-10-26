@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //         'filterModel' => $searchModel,
         'toolbar' =>[
             'content'=>Html::a('<i class="glyphicon glyphicon-plus"></i>', [
-                'role/create'
+                'create'
             ], [
                 'class' => 'btn btn-default',
                 'title' => Yii::t('app', '添加角色')

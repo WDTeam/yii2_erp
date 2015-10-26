@@ -1,9 +1,10 @@
-﻿<?php
+<?php
+
 /**
  * Created by PhpStorm.
  * User: LinHongYou
- * Date: 2015/10/24
- * Time: 13:53
+ * Date: 2015/9/23
+ * Time: 18:30
  */
 namespace core\models\order;
 
@@ -21,15 +22,15 @@ class OrderPool extends Model
      */
     public static function addOrder($order_id,$worker_identity=0)
     {
-            $order = OrderSearch::getOne($order_id);
-            $redis_order = [
-                'order_id' => $order_id,
-                'created_at' => $order->orderExtStatus->updated_at,
-                'jpush' => $order->orderExtFlag->order_flag_worker_jpush,
-                'ivr' => $order->orderExtFlag->order_flag_worker_ivr,
-                'worker_identity'=> $worker_identity,
-            ];
-            Yii::$app->redis->executeCommand('zAdd', [self::WAIT_ASSIGN_ORDERS_POOL, $order->order_booked_begin_time . $order_id, json_encode($redis_order)]);
+        $order = OrderSearch::getOne($order_id);
+        $redis_order = [
+            'order_id' => $order_id,
+            'created_at' => $order->orderExtStatus->updated_at,
+            'jpush' => $order->orderExtFlag->order_flag_worker_jpush,
+            'ivr' => $order->orderExtFlag->order_flag_worker_ivr,
+            'worker_identity'=> $worker_identity,
+        ];
+        Yii::$app->redis->executeCommand('zAdd', [self::WAIT_ASSIGN_ORDERS_POOL, $order->order_booked_begin_time . $order_id, json_encode($redis_order)]);
     }
 
     /**

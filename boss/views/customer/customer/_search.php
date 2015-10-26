@@ -11,7 +11,7 @@ use kartik\date\DatePicker;
 use boss\components\AreaCascade;
 use yii\helpers\ArrayHelper;
 
-use \common\models\OperationCity;
+//use \common\models\OperationCity;
 
 /**
  * @var yii\web\View $this
@@ -29,15 +29,18 @@ use \common\models\OperationCity;
     ]); ?>
 
     <div class='col-md-2'>
-        <?php echo $form->field($model, 'operation_city_id')->widget(Select2::classname(), [
+        <?php
+        echo $form->field($model, 'operation_city_id')->widget(Select2::classname(), [
             'name' => 'id',
             'hideSearch' => true,
-            'data' => ArrayHelper::map(OperationCity::find()->asArray()->all(), 'id', 'city_name'),
+       //     'data' => ArrayHelper::map(OperationCity::find()->asArray()->all(), 'id', 'city_name'),
+            'options'=>array(),
             'options' => ['placeholder' => '选择城市', 'inline' => true],
             'pluginOptions' => [
                 'allowClear' => true
             ],
-        ]); ?>
+        ]);
+       ?>
     </div>
 
    <div class='col-md-2'>

@@ -7,6 +7,7 @@ use Yii;
 use \core\models\customer\CustomerAddress;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\operation\coupon\CouponCustomer;
+use \core\models\operation\coupon\Coupon;
 
 class UserController extends \api\components\Controller
 {
@@ -463,6 +464,8 @@ class UserController extends \api\components\Controller
         }
         $city=$param['city'];
         $coupon_code=$param['coupon_code'];
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+        $customer_id= $customer->id;
         //验证优惠码是否存在
         //$exist_coupon=CouponCustomer::existCoupon($city,$coupon_code);
         $exist_coupon=1;
@@ -470,7 +473,7 @@ class UserController extends \api\components\Controller
              return $this->send(null, "优惠码不存在", 0, 403);
         }
         //兑换优惠码
-       // $exchange_coupon=CouponCustomer::exchangeCoupon($city,$coupon_code);
+       // $exchange_coupon=CouponCustomer::exchangeCoupon($city,$coupon_code,$customer_id);
         $exchange_coupon=[
                     "id" => 1,
                     "coupon_id" => 2,
@@ -485,7 +488,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} /user/get-coupon-customer 获取用户优惠码或同城市 （郝建设100%）
+     * @api {GET} /user/get-coupon-customer 获取用户优惠码或同城市 （郝建设100%）
      *
      * @apiName GetCouponCustomer
      * @apiGroup User
@@ -532,12 +535,13 @@ class UserController extends \api\components\Controller
      */
     public function actionGetCouponCustomer()
     {
-        $param = Yii::$app->request->post();
+
+        $param = Yii::$app->request->get();
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录3", "0", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
         }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
@@ -547,7 +551,8 @@ class UserController extends \api\components\Controller
              */
             if (!empty($param['city_name']) && $param['coupon_type'] == 1) {
 
-                $CouponData = \core\models\coupon\CouponCustomer::getCouponCustomer($customer->id);
+                $CouponData = CouponCustomer::getCouponCustomer($customer->id);
+                
                 if (!empty($CouponData)) {
                     $ret = array();
                     foreach ($CouponData as $key => $val) {
@@ -567,7 +572,7 @@ class UserController extends \api\components\Controller
              * 返回全国范围内的优惠码
              */
             if (empty($param['city_name']) && $param['coupon_type'] == 1) {
-                $CouponData = \core\models\coupon\CouponCustomer::getCouponCustomer($customer->id, 1);
+                $CouponData = CouponCustomer::getCouponCustomer($customer->id, 1);
                 $ret['couponCustomer'] = $CouponData;
                 return $this->send($ret, "全国范围优惠码列表", "1");
             }
@@ -577,12 +582,12 @@ class UserController extends \api\components\Controller
              */
             if (@$param['city_name'] && $param['coupon_type'] == 2) {
 
-                $CouponData = \core\models\coupon\CouponCustomer::getCouponCustomer($customer->id);
+                $CouponData = CouponCustomer::getCouponCustomer($customer->id);
 
                 if (!empty($CouponData)) {
                     $ret = array();
                     foreach ($CouponData as $key => $val) {
-                        $Coupon = \core\models\coupon\Coupon::getCoupon($val['coupon_id'], $param['city_name']);
+                        $Coupon = Coupon::getCoupon($val['coupon_id'], $param['city_name']);
                         foreach ($Coupon as $key => $val) {
                             $ret['coupon'][] = $val;
                         }
@@ -590,16 +595,17 @@ class UserController extends \api\components\Controller
                     #return $this->send($ret, $param['city_name'] . "优惠码列表", "1");
                 }
 
-                $CouponCount = \core\models\coupon\CouponCustomer::getCouponCustomer($customer->id, 1);
+                $CouponCount =CouponCustomer::getCouponCustomer($customer->id, 1);
                 $ret['couponCustomer'][] = $CouponCount;
 
                 return $this->send($ret, '城市' . $param['city_name'] . "优惠码和全国优惠码列表", "1");
             } else {
-                return $this->send(null, "用户认证已经过期,请重新登录2", "0", 403);
+                return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
             }
         } else {
+
             return $this->send(null, "用户认证已经过期,请重新登录1", "0", 403);
-        } 
+        }
     }
 
     /**
@@ -1083,7 +1089,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} /user/user-suggest 用户提交意见反馈 （需要再次核实需求;郝建设 100%）
+     * @api {POST} /user/user-suggest 用户评价 （需要再次核实需求;郝建设 100%）
      *
      * @apiName UserSuggest
      * @apiGroup User
@@ -1099,7 +1105,7 @@ class UserController extends \api\components\Controller
      *     HTTP/1.1 200 OK
      *     {
      *       "code": "1",
-     *       "msg": "提交成功"
+     *       "msg": "用户评价提交成功"
      *
      *     }
      *

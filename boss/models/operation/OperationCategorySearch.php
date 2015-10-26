@@ -1,11 +1,11 @@
 <?php
 
-namespace boss\models\Operation;
+namespace boss\models\operation;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use core\models\Operation\CoreOperationCategory;
+use core\models\operation\CoreOperationCategory;
 
 /**
  * OperationCategorySearch represents the model behind the search form about `common\models\OperationCategory`.

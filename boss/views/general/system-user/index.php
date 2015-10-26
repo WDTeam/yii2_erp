@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         'toolbar' =>[
             'content'=>Html::a('<i class="glyphicon glyphicon-plus"></i>', [
-                'system-user/create'
+                'create'
             ], [
                 'class' => 'btn btn-default',
                 'title' => Yii::t('app', '添加系统用户')

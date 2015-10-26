@@ -1,18 +1,18 @@
 <?php
 
-namespace boss\controllers;
+namespace boss\controllers\operation;
 
 use Yii;
-use boss\models\Operation\OperationAdvertContent;
+use boss\models\operation\OperationAdvertContent;
 use yii\data\ActiveDataProvider;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use boss\components\UploadFile;
-use boss\models\Operation\OperationPlatform;
-use boss\models\Operation\OperationPlatformVersion;
-use boss\models\Operation\OperationCity;
-use boss\models\Operation\OperationAdvertPosition;
+use boss\models\operation\OperationPlatform;
+use boss\models\operation\OperationPlatformVersion;
+use boss\models\operation\OperationCity;
+use boss\models\operation\OperationAdvertPosition;
 
 /**
  * OperationAdvertContentController implements the CRUD actions for OperationAdvertContent model.
