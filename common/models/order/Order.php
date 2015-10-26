@@ -9,6 +9,7 @@ use Yii;
  *
  * @property string $id
  * @property string $order_code
+ * @property string $order_batch_code
  * @property string $order_parent_id
  * @property integer $order_is_parent
  * @property string $created_at
@@ -63,6 +64,7 @@ class Order extends ActiveRecord
     public $order_flag_worker_sms;
     public $order_flag_worker_jpush;
     public $order_flag_worker_ivr;
+    public $order_flag_cancel_cause;
     public $order_pop_order_code;
     public $order_pop_group_buy_code;
     public $order_pop_operation_money;
@@ -114,6 +116,7 @@ class Order extends ActiveRecord
         'order_flag_worker_sms',
         'order_flag_worker_jpush',
         'order_flag_worker_ivr',
+        'order_flag_cancel_cause',
         'order_pop_order_code',
         'order_pop_group_buy_code',
         'order_pop_operation_money',
@@ -179,7 +182,7 @@ class Order extends ActiveRecord
             [['admin_id','order_service_type_id','order_src_id','order_booked_begin_time','address_id'],'required'],
             [['order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'isdel', 'order_service_type_id', 'order_src_id', 'channel_id', 'order_booked_count', 'order_booked_begin_time', 'order_booked_end_time', 'city_id', 'address_id', 'district_id', 'order_booked_worker_id', 'checking_id','version'], 'integer'],
             [['order_unit_money', 'order_money'], 'number'],
-            [['order_code', 'order_channel_name'], 'string', 'max' => 64],
+            [['order_code', 'order_channel_name', 'order_batch_code'], 'string', 'max' => 64],
             [['order_service_type_name', 'order_ip','order_src_name'], 'string', 'max' => 128],
             [['order_address', 'order_cs_memo','order_sys_memo'], 'string', 'max' => 255],
             [['order_code'], 'unique'],
@@ -195,6 +198,7 @@ class Order extends ActiveRecord
         return [
             'id' => '编号',
             'order_code' => '订单号',
+            'order_batch_code' => '周期订单号',
             'order_parent_id' => '父级id',
             'order_is_parent' => '有无子订单 1有 0无',
             'created_at' => '创建时间',
@@ -234,6 +238,7 @@ class Order extends ActiveRecord
             'order_flag_worker_sms' => '是否给阿姨发过短信',
             'order_flag_worker_jpush' => '是否给阿姨发过极光',
             'order_flag_worker_ivr' => '是否给阿姨发过ivr',
+            'order_flag_cancel_cause' => '取消原因 1公司原因 2个人原因',
             'order_pop_order_code' => '第三方订单编号',
             'order_pop_group_buy_code' => '第三方团购码',
             'order_pop_operation_money' => '第三方运营费',
@@ -379,6 +384,7 @@ class Order extends ActiveRecord
             $OrderHistory->setAttributes([
                 'order_id' => $this->id,
                 'order_code' => $this->order_code,
+                'order_batch_code' => $this->order_batch_code,
                 'order_parent_id' => $this->order_parent_id,
                 'order_is_parent' => $this->order_is_parent,
                 'order_created_at' => $this->created_at,
@@ -397,6 +403,7 @@ class Order extends ActiveRecord
                 'order_flag_worker_sms' => $orderExtFlag->order_flag_worker_sms,
                 'order_flag_worker_jpush' => $orderExtFlag->order_flag_worker_jpush,
                 'order_flag_worker_ivr' => $orderExtFlag->order_flag_worker_ivr,
+                'order_flag_cancel_cause' => $orderExtFlag->order_flag_cancel_cause,
                 'order_ip' => $this->order_ip,
                 'order_service_type_id' => $this->order_service_type_id,
                 'order_service_type_name' => $this->order_service_type_name,
@@ -492,6 +499,7 @@ class Order extends ActiveRecord
             'order_flag_worker_sms' => $orderExtFlag->order_flag_worker_sms,
             'order_flag_worker_jpush' => $orderExtFlag->order_flag_worker_jpush,
             'order_flag_worker_ivr' => $orderExtFlag->order_flag_worker_ivr,
+            'order_flag_cancel_cause' => $orderExtFlag->order_flag_cancel_cause,
             'order_pop_order_code' => $orderExtPop->order_pop_order_code,
             'order_pop_group_buy_code' => $orderExtPop->order_pop_group_buy_code,
             'order_pop_operation_money' => $orderExtPop->order_pop_operation_money,

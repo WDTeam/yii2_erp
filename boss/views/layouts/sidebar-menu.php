@@ -139,6 +139,11 @@ echo Menu::widget(
                 		'url' => ['/order-complaint'],
                 		'icon' => 'fa fa-angle-right',
                 	],
+                    [
+                        'label' => '交易记录',
+                        'url' => ['customer/customer-trans-record/index'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
                 ],
             ],
             [

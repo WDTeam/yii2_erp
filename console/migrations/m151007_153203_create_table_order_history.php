@@ -20,6 +20,7 @@ class m151007_153203_create_table_order_history extends Migration
 
             'order_id'=> Schema::TYPE_BIGINT .'(20) unsigned NOT NULL COMMENT \'编号\'',
             'order_code' => Schema::TYPE_STRING.'(64) NOT NULL DEFAULT \'\' COMMENT \'订单号\'',
+            'order_batch_code' => Schema::TYPE_STRING.'(64) NOT NULL DEFAULT \'\' COMMENT \'周期订单号\'',
             'order_parent_id' => Schema::TYPE_BIGINT.'(20) unsigned  DEFAULT 0 COMMENT \'父级id\'',
             'order_is_parent' => Schema::TYPE_BOOLEAN . '(1) unsigned  DEFAULT 0 COMMENT \'有无子订单 1有 0无\'',
             'order_created_at' => Schema::TYPE_INTEGER.'(11) unsigned  DEFAULT 0 COMMENT \'下单时间\'',
@@ -40,6 +41,7 @@ class m151007_153203_create_table_order_history extends Migration
             'order_flag_worker_sms' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'是否给阿姨发了短信\'',
             'order_flag_worker_jpush' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'是否给阿姨发了极光推送\'',
             'order_flag_worker_ivr' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'是否给阿姨发了IVR\'',
+            'order_flag_cancel_cause' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'取消原因 1公司原因 2个人原因\'',
 
 //===============================下单信息
             'order_ip' => Schema::TYPE_STRING.'(128) NOT NULL DEFAULT \'\' COMMENT \'下单IP\'',

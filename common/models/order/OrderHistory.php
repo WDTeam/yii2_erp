@@ -12,6 +12,7 @@ use Yii;
  * @property string $updated_at
  * @property string $order_id
  * @property string $order_code
+ * @property string $order_batch_code
  * @property string $order_parent_id
  * @property integer $order_is_parent
  * @property string $order_created_at
@@ -29,6 +30,7 @@ use Yii;
  * @property integer $order_flag_worker_sms
  * @property integer $order_flag_worker_jpush
  * @property integer $order_flag_worker_ivr
+ * @property integer $order_flag_cancel_cause
  * @property string $order_ip
  * @property integer $order_service_type_id
  * @property string $order_service_type_name
@@ -102,13 +104,13 @@ class OrderHistory extends \common\models\order\ActiveRecord
         return [
             [['created_at', 'updated_at', 'order_id', 'order_parent_id', 'order_is_parent', 'order_created_at', 'order_isdel', 'order_before_status_dict_id',
                 'order_status_dict_id', 'order_flag_send', 'order_flag_urgent', 'order_flag_exception', 'order_flag_sys_assign', 'order_flag_lock', 'order_flag_lock_time',
-                'order_flag_worker_sms', 'order_flag_worker_jpush', 'order_flag_worker_ivr',  'order_service_type_id', 'order_src_id', 'channel_id', 'order_booked_count', 'order_booked_begin_time', 'order_booked_end_time',
+                'order_flag_worker_sms', 'order_flag_worker_jpush', 'order_flag_worker_ivr','order_flag_cancel_cause',  'order_service_type_id', 'order_src_id', 'channel_id', 'order_booked_count', 'order_booked_begin_time', 'order_booked_end_time',
                 'address_id', 'district_id', 'city_id', 'order_booked_worker_id', 'customer_id', 'comment_id', 'order_customer_is_vip', 'invoice_id', 'order_customer_hidden',
                 'order_pay_type', 'pay_channel_id', 'card_id', 'coupon_id', 'promotion_id', 'worker_id', 'worker_type_id', 'order_worker_assign_type', 'shop_id', 'checking_id', 'admin_id'], 'integer'],
             [['order_id'], 'required'],
             [['order_unit_money', 'order_money', 'order_pop_operation_money', 'order_pop_order_money', 'order_pop_pay_money', 'order_pay_money', 'order_use_acc_balance', 'order_use_card_money',
                 'order_use_coupon_money', 'order_use_promotion_money'], 'number'],
-            [['order_code', 'order_channel_name', 'order_worker_type_name','order_worker_phone','order_worker_name'], 'string', 'max' => 64],
+            [['order_code','order_batch_code', 'order_channel_name', 'order_worker_type_name','order_worker_phone','order_worker_name'], 'string', 'max' => 64],
             [['order_before_status_name', 'order_status_name', 'order_service_type_name', 'order_src_name', 'order_ip','order_pay_channel_name'], 'string', 'max' => 128],
             [['order_address', 'order_pop_order_code', 'order_pop_group_buy_code', 'order_customer_need', 'order_customer_memo', 'order_pay_flow_num', 'order_cs_memo','order_sys_memo','order_worker_memo'], 'string', 'max' => 255],
             [['order_customer_phone'], 'string', 'max' => 16]
@@ -126,6 +128,7 @@ class OrderHistory extends \common\models\order\ActiveRecord
             'updated_at' => '快照修改时间',
             'order_id' => '编号',
             'order_code' => '订单号',
+            'order_batch_code' => '周期订单号',
             'order_parent_id' => '父级id',
             'order_is_parent' => '有无子订单 1有 0无',
             'order_created_at' => '下单时间',
@@ -143,6 +146,7 @@ class OrderHistory extends \common\models\order\ActiveRecord
             'order_flag_worker_sms' => '是否给阿姨发过短信',
             'order_flag_worker_jpush' => '是否给阿姨发过极光',
             'order_flag_worker_ivr' => '是否给阿姨发过IVR',
+            'order_flag_cancel_cause' => '取消原因 1公司原因 2个人原因',
             'order_ip' => '下单IP',
             'order_service_type_id' => '订单服务类别ID',
             'order_service_type_name' => '订单服务类别',
