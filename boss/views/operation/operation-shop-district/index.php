@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
  */
 
 $this->title = Yii::t('operation', 'Operation Shop Districts');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Cities'), 'url' => ['operation-city/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Cities'), 'url' => ['/operation/operation-city/index']];
 $this->params['breadcrumbs'][] = ['label' => $city_name];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -48,24 +48,24 @@ $this->params['breadcrumbs'][] = $this->title;
 //                        );
 //                    },
                     'update' => function ($url, $model) {
-                        return Html::a(Yii::t('yii', '编辑'), ['operation-shop-district/update', 'id' => $model->id], ['class' => 'btn btn-info btn-sm']);
+                        return Html::a(Yii::t('yii', '编辑'), ['/operation/operation-shop-district/update', 'id' => $model->id], ['class' => 'btn btn-info btn-sm']);
                         return Html::a(
                             '<span class="glyphicon glyphicon-pencil"></span>', 
-                            Yii::$app->urlManager->createUrl(['operation-shop-district/update','id' => $model->id]),
+                            Yii::$app->urlManager->createUrl(['/operation/operation-shop-district/update','id' => $model->id]),
                             ['title' => Yii::t('yii', 'Update'), 'class' => 'btn btn-info btn-sm']
                         );
                     },
                     'delete' => function ($url, $model) {
-                        return Html::a(Yii::t('yii', '删除'), ['operation-shop-district/delete', 'id' => $model->id], ['class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]);
+                        return Html::a(Yii::t('yii', '删除'), ['/operation/operation-shop-district/delete', 'id' => $model->id], ['class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]);
                         return Html::a(
                             '<span class="glyphicon glyphicon-trash"></span>', 
-                            Yii::$app->urlManager->createUrl(['operation-shop-district/delete','id' => $model->id]),
+                            Yii::$app->urlManager->createUrl(['/operation/operation-shop-district/delete','id' => $model->id]),
                             ['title' => Yii::t('yii', 'Delete'), 'class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
                         );
                     },      
                     'listbtn' => function ($url, $model) {
                         return '';
-                        return Html::a('<span class="glyphicon glyphicon-list"></span>',Yii::$app->urlManager->createUrl(['operation-shop-district/goodslist','id' => $model->id]),['title' => Yii::t('yii', '商圈商品列表'), 'class' => 'btn btn-warning btn-sm']);
+                        return Html::a('<span class="glyphicon glyphicon-list"></span>',Yii::$app->urlManager->createUrl(['/operation/operation-shop-district/goodslist','id' => $model->id]),['title' => Yii::t('yii', '商圈商品列表'), 'class' => 'btn btn-warning btn-sm']);
                     },
                 ],
             ],

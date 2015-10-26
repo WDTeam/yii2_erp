@@ -128,7 +128,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type'=>'info',
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> 增加服务品类', ['create'], ['class' => 'btn btn-success']).Html::a('<i class="glyphicon glyphicon-plus"></i> 增加商品', ['/operation-goods/create'], ['class' => 'btn btn-success']).Html::a('<i class="glyphicon glyphicon-list"></i> 规格管理',['/operation-spec'], ['class' => 'btn btn-success']),
+            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> 增加服务品类', ['create'], ['class' => 'btn btn-success']).Html::a('<i class="glyphicon glyphicon-plus"></i> 增加商品', ['/operation/operation-goods/create'], ['class' => 'btn btn-success']).Html::a('<i class="glyphicon glyphicon-list"></i> 规格管理',['/operation/operation-spec'], ['class' => 'btn btn-success']),
             'after'=>false,//Html::a('<i class="glyphicon glyphicon-repeat"></i> '.Yii::t('app', 'Reset List'), ['index'], ['class' => 'btn btn-info']),
             'showFooter'=>false,
             'footer' => false
