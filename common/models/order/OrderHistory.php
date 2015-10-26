@@ -52,6 +52,7 @@ use Yii;
  * @property string $order_pop_pay_money
  * @property string $customer_id
  * @property string $order_customer_phone
+ * @property string $order_customer_is_vip
  * @property string $order_customer_need
  * @property string $order_customer_memo
  * @property string $comment_id
@@ -97,7 +98,7 @@ class OrderHistory extends \common\models\order\ActiveRecord
     public function rules()
     {
         return [
-            [['created_at', 'updated_at', 'order_id', 'order_parent_id', 'order_is_parent', 'order_created_at', 'order_isdel', 'order_before_status_dict_id', 'order_status_dict_id', 'order_flag_send', 'order_flag_urgent', 'order_flag_exception', 'order_flag_sys_assign', 'order_flag_lock', 'order_flag_lock_time', 'order_flag_worker_sms', 'order_flag_worker_jpush', 'order_flag_worker_ivr',  'order_service_type_id', 'order_src_id', 'channel_id', 'order_booked_count', 'order_booked_begin_time', 'order_booked_end_time', 'address_id', 'district_id', 'order_booked_worker_id', 'customer_id', 'comment_id', 'invoice_id', 'order_customer_hidden', 'order_pay_type', 'pay_channel_id', 'card_id', 'coupon_id', 'promotion_id', 'worker_id', 'worker_type_id', 'order_worker_assign_type', 'shop_id', 'checking_id', 'admin_id'], 'integer'],
+            [['created_at', 'updated_at', 'order_id', 'order_parent_id', 'order_is_parent', 'order_created_at', 'order_isdel', 'order_before_status_dict_id', 'order_status_dict_id', 'order_flag_send', 'order_flag_urgent', 'order_flag_exception', 'order_flag_sys_assign', 'order_flag_lock', 'order_flag_lock_time', 'order_flag_worker_sms', 'order_flag_worker_jpush', 'order_flag_worker_ivr',  'order_service_type_id', 'order_src_id', 'channel_id', 'order_booked_count', 'order_booked_begin_time', 'order_booked_end_time', 'address_id', 'district_id', 'order_booked_worker_id', 'customer_id', 'comment_id', 'order_customer_is_vip', 'invoice_id', 'order_customer_hidden', 'order_pay_type', 'pay_channel_id', 'card_id', 'coupon_id', 'promotion_id', 'worker_id', 'worker_type_id', 'order_worker_assign_type', 'shop_id', 'checking_id', 'admin_id'], 'integer'],
             [['order_id'], 'required'],
             [['order_unit_money', 'order_money', 'order_pop_operation_money', 'order_pop_order_money', 'order_pop_pay_money', 'order_pay_money', 'order_use_acc_balance', 'order_use_card_money', 'order_use_coupon_money', 'order_use_promotion_money'], 'number'],
             [['order_code', 'order_channel_name', 'order_worker_type_name','order_worker_phone'], 'string', 'max' => 64],
@@ -158,6 +159,7 @@ class OrderHistory extends \common\models\order\ActiveRecord
             'order_pop_pay_money' => '合作方结算金额 负数表示合作方结算规则不规律无法计算该值。',
             'customer_id' => '客户ID',
             'order_customer_phone' => '客户手机号',
+            'order_customer_is_vip' => '是否是会员',
             'order_customer_need' => '客户需求',
             'order_customer_memo' => '客户备注',
             'comment_id' => '评价id',

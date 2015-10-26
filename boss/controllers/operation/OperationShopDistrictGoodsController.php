@@ -36,7 +36,7 @@ class OperationShopDistrictGoodsController extends Controller
         }else{
             $this->city_id = $_COOKIE['city_id'];
             if(empty($this->city_id)){
-                return $this->redirect(['operation-city/index']);
+                return $this->redirect(['/operation/operation-city/index']);
             }
         }
         $this->city_name = OperationCity::getCityName($this->city_id);
