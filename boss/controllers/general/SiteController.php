@@ -1,5 +1,5 @@
 <?php
-namespace boss\controllers;
+namespace boss\controllers\general;
 
 use Yii;
 use yii\filters\AccessControl;

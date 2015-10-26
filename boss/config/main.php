@@ -25,7 +25,7 @@ return [
     ],
     'components' => [
         'user' => [
-            'identityClass' => 'common\models\SystemUser',
+            'identityClass' => 'common\models\general\SystemUser',
             'enableAutoLogin' => true,
         ],
         
