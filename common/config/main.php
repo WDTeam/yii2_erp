@@ -15,11 +15,11 @@ return [
             'class' => 'yii\rbac\DbManager',
             'defaultRoles' => ['guest'],
         ],
-        //'cache' => [
+        'cache' => [
             //'class' => 'yii\caching\FileCache',
 //            'class'=>'yii\caching\DbCache',
-//            'class' => 'yii\redis\Cache',
-        //],
+            'class' => 'yii\redis\Cache',
+        ],
         'i18n' => [
             'translations' => [
                 '*' => [
@@ -122,13 +122,13 @@ return [
          *   <?php
          *      ini_set('default_socket_timeout', -1);
          */
-        //'redis' => [
-            //'class' => 'yii\redis\Connection',
-            //'hostname' => '101.200.179.70', // 配置为 dev环境 redis 服务器地址 test环境 101.200.200.74 ，prod环境 待定
+        'redis' => [
+            'class' => 'yii\redis\Connection',
+            'hostname' => '101.200.179.70', // 配置为 dev环境 redis 服务器地址 test环境 101.200.200.74 ，prod环境 待定
 //            'hostname' => '127.0.0.1', // 配置为 dev环境 redis 服务器地址 test环境 101.200.200.74 ，prod环境 待定
-            //'port' => 6379,
-            //'database' => 0,
-        //],
+            'port' => 6379,
+            'database' => 0,
+        ],
         /**
          * 配置 mongodb
          * 使用参考：http://www.yiiframework.com/doc-2.0/ext-mongodb-index.html
