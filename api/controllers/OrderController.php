@@ -573,7 +573,7 @@ class OrderController extends \api\components\Controller
 
         $args["oc.customer_id"] = $user->id;
         $orderSearch = new \core\models\order\OrderSearch();
-        $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus);
+        $count = $orderSearch->searchOrdersWithStatusCount($args , $orderStatus);
         $orders = $orderSearch->searchOrdersWithStatus($args, $isAsc, $offset, $limit, $orderStatus, $channels, $from, $to);
         $ret = [];
         $ret['limit'] = $limit;
