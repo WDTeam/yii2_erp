@@ -495,14 +495,14 @@ class WorkerController extends \api\components\Controller
             "worker_name"=>"张",
              "service_count"=> "60",
             "service_family_count"=> "60",
-            "total_income"=>"23888.00"
+            "salary"=>"23888.00"
         ];
          return $this->send($ret, "操作成功.");
         
     }
     
     /**
-     * @api {GET} /worker/get-worker-bill-list 获取阿姨服务信息 (田玉星 80%)
+     * @api {GET} /worker/get-worker-bill-list 获取阿姨服务信息 (田玉星 50%)
      * 
      * @apiDescription 【备注：等待model底层支持】
      * 
@@ -510,6 +510,8 @@ class WorkerController extends \api\components\Controller
      * @apiGroup Worker
      * 
      * @apiParam {String} access_token    阿姨登录token
+     *  @apiParam {String} per_page  每页显示多少条.
+     * @apiParam {String} page  第几页.
      * @apiParam {String} [platform_version] 平台版本号.
      * 
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-bill-list
@@ -536,17 +538,34 @@ class WorkerController extends \api\components\Controller
      */
     public function actionGetWorkerBillList(){
         $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
-                var_dump(WorkerAccessToken::checkAccessToken($param['access_token']));die;
-
         if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
-        
+         
         $worker = WorkerAccessToken::getWorker($param['access_token']);
-        print_r($worker);die;
         if (!$worker|| !$worker->id) {
             return $this->send(null, "阿姨不存在", 0, 403);
         }
+        //获取阿姨身份:兼职/全职
+        $workerInfo =Worker::getWorkerInfo($worker->id);
+        $identify = $workerInfo['worker_identity_id'];
+        
+         //判断页码
+        if(!isset($param['per_page'])||!intval($param['per_page'])){
+            $param['per_page'] = 1;
+        }
+        $per_page = intval($param['per_page']);
+        //每页显示数据量
+        if(!isset($param['page_num'])||!intval($param['page_num'])){
+            $param['page_num'] = 10;
+        }
+        $page_num = intval($param['page_num']);
+        //调取model层
+        $ret = array(
+            'bill_date'=>'09年07月-09月13日',
+            'order_count'=>10,
+            'salary'=>32
+        );
     }
      
     /**
