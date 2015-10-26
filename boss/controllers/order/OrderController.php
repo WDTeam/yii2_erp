@@ -152,12 +152,12 @@ class OrderController extends BaseAuthController
        return Order::getGoods($longitude,$latitude);
     }
 
-public function actionGetCity()
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $province_id = Yii::$app->request->get('province_id');
-        return Order::getOnlineCityList($province_id);
-    }
+//     public function actionGetCity()
+//     {
+//         Yii::$app->response->format = Response::FORMAT_JSON;
+//         $province_id = Yii::$app->request->get('province_id');
+//         return Order::getOnlineCityList($province_id);
+//     }
 
     public function actionGetCounty()
     {
