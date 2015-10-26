@@ -50,7 +50,7 @@ use yii\web\JsExpression;
                     'allowClear' => true,
                     'minimumInputLength' => 0,
                     'ajax' => [
-                        'url' => Url::to(['shop-manager/search-by-name']),
+                        'url' => Url::to(['shopmanager/shop-manager/search-by-name']),
                         'dataType' => 'json',
                         'data' => new JsExpression('function(params) { return {name:params.term}; }')
                     ],

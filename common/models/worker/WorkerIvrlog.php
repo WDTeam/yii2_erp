@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models;
+namespace common\models\worker;
 
 use Yii;
 
@@ -26,14 +26,14 @@ use Yii;
  * @property string $ivrlog_cb_webcall_request_unique_id
  * @property integer $ivrlog_cb_time
  */
-class Ivrlog extends \yii\db\ActiveRecord
+class WorkerIvrlog extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%ivrlog}}';
+        return '{{%worker_ivrlog}}';
     }
 
     /**

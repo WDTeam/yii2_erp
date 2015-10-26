@@ -2196,7 +2196,7 @@
   {
     "type": "POST",
     "url": "v1/pay/online-pay",
-    "title": "在线支付接口 （已完成）",
+    "title": "在线支付接口 (赵顺利100%)",
     "name": "actionOnlinePay",
     "group": "Pay",
     "parameter": {
@@ -2228,7 +2228,7 @@
             "type": "<p>String</p> ",
             "optional": false,
             "field": "channel_id",
-            "description": "<p>渠道ID 1=APP微信, 2=H5微信, 3=APP百度钱包, 4=APP银联, 5=APP支付宝, 6=WEB支付宝, 7=H5百度直达号, 20=后台支付（未实现）, 21=微博支付（未实现）,</p> "
+            "description": "<p>渠道ID 1=APP微信, 2=H5微信, 3=APP百度钱包, 4=APP银联, 5=APP支付宝, 6=WEB支付宝, 7=H5百度直达号, 20=后台支付（未实现）, 21=微博支付（未实现）, 23=微信native,</p> "
           },
           {
             "group": "Parameter",
@@ -2335,7 +2335,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": 1,\n     \"msg\": \"数据返回成功\",\n     \"ret\": {\n         \"sp_no\": 1049,\n         \"order_no\": \"15102301277257\",\n         \"total_amount\": \"1\",\n         \"goods_name\": \"18001305711\",\n         \"return_url\": \"http://127.0.0.1/pay/zhidahao-h5-notify\",\n         \"page_url\": \"http://www.qq.com\",\n         \"detail\": [\n         {\n             \"item_id\": \"1\",\n             \"cat_id\": \"1\",\n             \"name\": \"寿司\",\n             \"desc\": \"很好吃\",\n             \"price\": \"1\"\n         }\n         ],\n         \"order_source_url\": \"http://www.baidu.com\",\n         \"customer_name\": \"%E6%B5%8B%E8%AF%95%E5%95%86%E5%93%81\",\n         \"customer_mobile\": \"18001305711\",\n         \"customer_address\": \"%E5%8C%97%E4%BA%AC%E7%9C%81\"\n     }\n }",
+          "content": "HTTP/1.1 200 OK\n{\n     \"code\": 1,\n     \"msg\": \"数据返回成功\",\n     \"ret\": {\n         \"sp_no\": 1049,\n         \"code_url\":\"weixin://wxpay/bizpayurl?pr=kK7sllh\",\n         \"order_no\": \"15102301277257\",\n         \"total_amount\": \"1\",\n         \"goods_name\": \"18001305711\",\n         \"return_url\": \"http://127.0.0.1/pay/zhidahao-h5-notify\",\n         \"page_url\": \"http://www.qq.com\",\n         \"detail\": [\n         {\n             \"item_id\": \"1\",\n             \"cat_id\": \"1\",\n             \"name\": \"寿司\",\n             \"desc\": \"很好吃\",\n             \"price\": \"1\"\n         }\n         ],\n         \"order_source_url\": \"http://www.baidu.com\",\n         \"customer_name\": \"%E6%B5%8B%E8%AF%95%E5%95%86%E5%93%81\",\n         \"customer_mobile\": \"18001305711\",\n         \"customer_address\": \"%E5%8C%97%E4%BA%AC%E7%9C%81\"\n     }\n }",
           "type": "json"
         }
       ]
@@ -2372,7 +2372,7 @@
   {
     "type": "GET",
     "url": "/send-sms/send-message-code",
-    "title": "短信验证码 （已完成）",
+    "title": "短信验证码 (赵顺利100%)",
     "name": "actionSendMessageCode",
     "group": "SendSms",
     "description": "<p>请求向用户手机发送验证码用于登录</p> ",
@@ -2431,7 +2431,7 @@
   {
     "type": "GET",
     "url": "/send-sms/send-v",
-    "title": "发短消息 （赵顺利0%）",
+    "title": "发短消息 （赵顺利 0% 不使用）",
     "name": "actionSendV",
     "group": "SendSms",
     "parameter": {
@@ -2827,9 +2827,9 @@
     "groupTitle": "User"
   },
   {
-    "type": "GET",
+    "type": "POST",
     "url": "/user/exchange-coupon",
-    "title": "兑换优惠劵 （郝建设 0%）",
+    "title": "兑换优惠劵 （李勇 80%）",
     "name": "ExchangeCoupon",
     "group": "User",
     "parameter": {
@@ -2870,7 +2870,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"兑换成功\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"兑换成功\",\n  \"ret\":{\n      \"id\":1,\n      \"coupon_id\":1,\n      \"coupon_name\":\"优惠券名称\",\n      \"coupon_price\":123\n }\n}",
           "type": "json"
         }
       ]
@@ -3165,7 +3165,7 @@
     "groupTitle": "User"
   },
   {
-    "type": "GET",
+    "type": "POST",
     "url": "/user/get-coupon-customer",
     "title": "获取用户优惠码或同城市 （郝建设100%）",
     "name": "GetCouponCustomer",
@@ -3193,6 +3193,13 @@
             "optional": true,
             "field": "city_name",
             "description": "<p>城市</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>int</p> ",
+            "optional": false,
+            "field": "coupon_type",
+            "description": "<p>优惠码表示 1获取提供城市或者全国的优惠码 2获取全国和给定城市的优惠码</p> "
           }
         ]
       }
@@ -4328,6 +4335,60 @@
   },
   {
     "type": "GET",
+    "url": "/worker/get-worker-bill-list",
+    "title": "获取阿姨服务信息 (田玉星 80%)",
+    "description": "<p>【备注：等待model底层支持】</p> ",
+    "name": "actionGetWorkerBillList",
+    "group": "Worker",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>阿姨登录token</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "platform_version",
+            "description": "<p>平台版本号.</p> "
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "http://dev.api.1jiajie.com/v1/worker/get-worker-bill-list"
+      }
+    ],
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\": \"操作成功.\",\n     \"ret\": [\n            \"worker_name\": \"张\",\n            \"service_count\": \"60\",\n            \"service_family_count\": \"60\",\n             \"total_income\"=>\"23888.00\"\n     ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"error\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/WorkerController.php",
+    "groupTitle": "Worker"
+  },
+  {
+    "type": "GET",
     "url": "/worker/get-worker-comment",
     "title": "获取阿姨对应的评论 (田玉星 80%)",
     "description": "<p>【备注：等待model底层支持】</p> ",
@@ -4514,6 +4575,60 @@
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"error\",\n    \"msg\": \"阿姨不存在\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/WorkerController.php",
+    "groupTitle": "Worker"
+  },
+  {
+    "type": "GET",
+    "url": "/worker/get-worker-service-info",
+    "title": "获取阿姨服务信息 (田玉星 80%)",
+    "description": "<p>【备注：等待model底层支持】</p> ",
+    "name": "actionGetWorkerServiceInfo",
+    "group": "Worker",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>阿姨登录token</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "platform_version",
+            "description": "<p>平台版本号.</p> "
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "http://dev.api.1jiajie.com/v1/worker/get-worker-service-info"
+      }
+    ],
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\": \"操作成功.\",\n     \"ret\": [\n            \"worker_name\": \"张\",\n            \"service_count\": \"60\",\n            \"service_family_count\": \"60\",\n             \"total_income\"=>\"23888.00\"\n     ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"error\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -5274,8 +5389,8 @@
   },
   {
     "type": "get",
-    "url": "/mobileapidriver2/workerLeave",
-    "title": "查看请假情况 (田玉星0%)",
+    "url": "/worker/worker-leave",
+    "title": "查看请假情况 (李勇80%)",
     "name": "actionWorkerLeave",
     "group": "Worker",
     "parameter": {
@@ -5285,8 +5400,15 @@
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "session_id",
-            "description": "<p>会话id.</p> "
+            "field": "access_token",
+            "description": "<p>阿姨登录 token.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "type",
+            "description": "<p>请假类型</p> "
           },
           {
             "group": "Parameter",
@@ -5302,7 +5424,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"result\": \"1\",\n         \"msg\": \"ok\",\n         \"titleMsg\": \"您本月已请假0天，本月剩余请假2天\",\n         \"orderTimeList\": [\"2015-09-14\",\"2015-09-15\",],\n         \"workerLeaveList\": []\n     }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"result\": \"1\",\n         \"msg\": \"ok\",\n         \"titleMsg\": \"您本月已请假0天，本月剩余请假2天\",\n         \"orderTimeList\": [\"2015-09-14\",\"2015-09-15\",],\n         \"workerLeaveList\": [\"2015-09-13\",\"2015-09-16\",],\n     }\n}",
           "type": "json"
         }
       ]
@@ -5321,7 +5443,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"Failed\",\n    \"msg\": \"SessionIdNotFound\"\n}",
+          "content": "HTTP/1.1 403 Not Found\n{ \n  \"code\":\"0\",\n  \"msg\": \"阿姨不存在\"\n}",
           "type": "json"
         }
       ]
@@ -5333,7 +5455,7 @@
   {
     "type": "GET",
     "url": "/configure/all-services",
-    "title": "城市服务初始化 （已完成）",
+    "title": "城市服务初始化 （赵顺利100%）",
     "name": "actionAllServices",
     "group": "configure",
     "parameter": {
@@ -5567,7 +5689,7 @@
   {
     "type": "GET",
     "url": "v1/service/all-services",
-    "title": "依据城市 获取所有服务列表 （已完成）",
+    "title": "依据城市 获取所有服务列表 (赵顺利100%)",
     "name": "actionAllServices",
     "group": "service",
     "description": "<p>获取城市所以服务类型列表</p> ",

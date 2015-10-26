@@ -7,7 +7,7 @@ use yii\base\Object;
 use core\models\shop\ShopStatus;
 use common\models\ActiveRecord;
 use common\components\Ivr;
-use common\models\Ivrlog;
+use common\models\worker\WorkerIvrlog;
 class IvrlogBehavior extends Behavior
 {
 
@@ -22,7 +22,7 @@ class IvrlogBehavior extends Behavior
     public function sendAfter($event)
     {
         $data = $this->owner->request_data;
-        $model = new Ivrlog();
+        $model = new WorkerIvrlog();
         $model->ivrlog_req_tel = $data['tel'];
         $model->ivrlog_req_app_id = $data['appId'];
         $model->ivrlog_req_sign = $data['sign'];
@@ -51,7 +51,7 @@ class IvrlogBehavior extends Behavior
 //         ->send();
         
         $cbdata = (object)$this->owner->cb_data;
-        $model = Ivrlog::find()->where([
+        $model = WorkerIvrlog::find()->where([
             'ivrlog_req_tel'=>$cbdata->telephone,
             'ivrlog_req_order_id'=>$cbdata->orderId,
         ])->one();

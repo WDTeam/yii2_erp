@@ -3,8 +3,10 @@ namespace api\controllers;
 
 use Yii;
 use \core\models\worker\Worker;
+use \core\models\worker\WorkerSkill;
 use \core\models\worker\WorkerAccessToken;
 use \core\models\Operation\CoreOperationShopDistrictCoordinate;
+ 
 class WorkerController extends \api\components\Controller
 {
 
@@ -67,7 +69,7 @@ class WorkerController extends \api\components\Controller
                 "worker_role" => $workerInfo["worker_type_description"],
                 'worker_start'=> 4.5,
                 'total_money' =>1000,
-                "personal_skill" =>['煮饭','开荒','护老','擦玻璃','带孩子'],
+                "personal_skill" =>WorkerSkill::getWorkerSkill($worker->id),
             ];
               return $this->send($ret, "阿姨信息查询成功");
         } else {
@@ -447,9 +449,140 @@ class WorkerController extends \api\components\Controller
         ];
         return $this->send($ret, "操作成功.");
     }
+    /**
+     * @api {GET} /worker/get-worker-service-info 获取阿姨服务信息 (田玉星 80%)
+     * 
+     * @apiDescription 【备注：等待model底层支持】
+     * 
+     * @apiName actionGetWorkerServiceInfo
+     * @apiGroup Worker
+     * 
+     * @apiParam {String} access_token    阿姨登录token
+     * @apiParam {String} [platform_version] 平台版本号.
+     * 
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-service-info
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *      "code": "ok",
+     *      "msg": "操作成功.",
+     *      "ret": [
+     *             "worker_name": "张",
+     *             "service_count": "60",
+     *             "service_family_count": "60",
+     *              "total_income"=>"23888.00"
+     *      ]
+     * }
+     *
+     * @apiErrorExample Error-Response:
+     *  HTTP/1.1 404 Not Found
+     *  {
+     *      "code":"error",
+     *      "msg": "用户认证已经过期,请重新登录"
+     *  }
+     */
+    public function actionGetWorkerServiceInfo(){
+        $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
+           return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
+        $worker = WorkerAccessToken::getWorker($param['access_token']);
+        if (!$worker|| !$worker->id) {
+            return $this->send(null, "阿姨不存在", 0, 403);
+        }
+        
+        //TODO:通过MODEL获取阿姨服务信息d378a0c76007a68888ac300e8a821f29
+        $ret = [
+            "worker_name"=>"张",
+             "service_count"=> "60",
+            "service_family_count"=> "60",
+            "salary"=>"23888.00"
+        ];
+         return $this->send($ret, "操作成功.");
+        
+    }
     
-    
-     
+    /**
+     * @api {GET} /worker/get-worker-bill-list 获取阿姨服务信息 (田玉星 60%)
+     * 
+     * @apiDescription 【备注：等待model底层支持】
+     * 
+     * @apiName actionGetWorkerBillList
+     * @apiGroup Worker
+     * 
+     * @apiParam {String} access_token    阿姨登录token
+     *  @apiParam {String} per_page  每页显示多少条.
+     * @apiParam {String} page  第几页.
+     * @apiParam {String} [platform_version] 平台版本号.
+     * 
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-bill-list
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *      "code": "ok",
+     *      "msg": "操作成功.",
+     *      "ret": [
+     *             "worker_name": "张",
+     *             "service_count": "60",
+     *             "service_family_count": "60",
+     *              "total_income"=>"23888.00"
+     *      ]
+     * }
+     *
+     * @apiErrorExample Error-Response:
+     *  HTTP/1.1 404 Not Found
+     *  {
+     *      "code":"error",
+     *      "msg": "用户认证已经过期,请重新登录"
+     *  }
+     */
+    public function actionGetWorkerBillList(){
+        $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
+           return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
+        
+        $worker = WorkerAccessToken::getWorker($param['access_token']);
+        if (!$worker|| !$worker->id) {
+            return $this->send(null, "阿姨不存在", 0, 403);
+        }
+        //获取阿姨身份:兼职/全职
+        $workerInfo =Worker::getWorkerInfo($worker->id);
+        $identify = $workerInfo['worker_identity_id'];
+        
+         //判断页码
+        if(!isset($param['per_page'])||!intval($param['per_page'])){
+            $param['per_page'] = 1;
+        }
+        $per_page = intval($param['per_page']);
+        //每页显示数据量
+        if(!isset($param['page_num'])||!intval($param['page_num'])){
+            $param['page_num'] = 10;
+        }
+        $page_num = intval($param['page_num']);
+        //调取model层
+        $ret = [
+            [
+                'bill_type' =>"1",
+                'bill_explain'=>"这是一个周期账单说明",
+                'bill_date'=>'09年07月-09月13日',
+                'order_count'=>'10',
+                'salary'=>'320.00',
+                'balance_status'=>"1"
+            ],
+            [
+                'bill_type' =>"2",
+                'bill_explain'=>"这是一个月结账单说明",
+                'bill_date'=>'8月',
+                'order_count'=>'10',
+                'salary'=>'320.00',
+                'balance_status'=>"2"
+            ]
+       ];
+       return $this->send($ret, "操作成功.");
+    }
      
     /**
      * @api {GET} /mobileapidriver2/driver_get_now_order_list_hide 阿姨去不了(田玉星0%)

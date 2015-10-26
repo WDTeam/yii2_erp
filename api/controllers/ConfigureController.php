@@ -10,7 +10,7 @@ use \core\models\customer\CustomerAccessToken;
 class ConfigureController extends \api\components\Controller
 {
     /**
-     * @api {GET} /configure/all-services 城市服务初始化 （已完成）
+     * @api {GET} /configure/all-services 城市服务初始化 （赵顺利100%）
      * @apiName actionAllServices
      * @apiGroup configure
      *

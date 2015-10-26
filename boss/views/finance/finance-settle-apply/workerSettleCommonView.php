@@ -181,20 +181,51 @@ use yii\widgets\Pjax;
                'dataProvider' => $orderDataProvider,
                'columns' => [
                    ['class' => 'yii\grid\SerialColumn'],
-                   ['attribute'=>'id',
+                   ['attribute'=>'order_id',
                        'header' => Yii::t('app', '订单号'),
                         'content'=>function($model,$key,$index)
-                               {return  Html::a('<u>'.$model->id.'</u>',[Yii::$app->urlManager->createUrl(['order/view/','id' => $model->id])],['data-pjax'=>'0','target' => '_blank',]);}],
-                   [
+                               {return  Html::a('<u>'.$model['order_id'].'</u>',[Yii::$app->urlManager->createUrl(['order/order/view/','id' => $model['order_id']])],['data-pjax'=>'0','target' => '_blank',]);}
+                    ],
+                    ['attribute'=>'order_service_type_name',
+                       'header' => Yii::t('app', '服务类型'),],
+                    ['attribute'=>'order_channel_name',
+                       'header' => Yii::t('app', '渠道'),],
+                    [
                        'header' => Yii::t('app', '支付方式'),
-                        'attribute' => 'order_pay_type',
-                       'content'=>function($model,$key,$index){
-                                   return $model->order_pay_type==null?'':$model->order_pay_type;
+                        'attribute' => 'order_pay_type_id',
+                    ],
+                    ['attribute'=>'order_booked_begin_time',
+                       'header' => Yii::t('app', '服务开始时间'),
+                        'content'=>function($model,$key,$index){
+                                   return date('Y-m-d h:m:s',$model['order_booked_begin_time']);
+                       },
+                    ], 
+                    ['attribute'=>'order_booked_count',
+                       'header' => Yii::t('app', '服务工时（小时）'),
+                        'content'=>function($model,$key,$index){
+                                   return $model['order_booked_count']/60;
+                       },
+                    ], 
+                    ['attribute'=>'order_unit_money',
+                       'header' => Yii::t('app', '费率（元/小时）'),
+                    ], 
+                    ['attribute'=>'order_money',
+                       'header' => Yii::t('app', '订单总金额（元）'),
+                    ], 
+                    [
+                       'header' => Yii::t('app', '优惠金额（元）'),
+                        'content'=>function($model,$key,$index){
+                                   return 0;
                        },
                     ],
-                   'order_money',
-                   'order_booked_begin_time:datetime', 
-                   'order_booked_count', 
+                    [
+                       'attribute'=>'finance_worker_order_income_discount_amount',
+                       'header' => Yii::t('app', '用户支付金额（元）'),
+                    ],
+                    [
+                       'attribute'=>'order_pay_money',
+                       'header' => Yii::t('app', '阿姨结算金额（元）'),
+                    ],
                ],
                'responsive'=>true,
                'hover'=>true,
@@ -215,20 +246,51 @@ use yii\widgets\Pjax;
                'dataProvider' => $cashOrderDataProvider,
                'columns' => [
                    ['class' => 'yii\grid\SerialColumn'],
-                   ['attribute'=>'id',
+                   ['attribute'=>'order_id',
                        'header' => Yii::t('app', '订单号'),
                         'content'=>function($model,$key,$index)
-                               {return  Html::a('<u>'.$model->id.'</u>',[Yii::$app->urlManager->createUrl(['order/view/','id' => $model->id])],['data-pjax'=>'0','target' => '_blank',]);}],
-                   [
+                               {return  Html::a('<u>'.$model['order_id'].'</u>',[Yii::$app->urlManager->createUrl(['order/order/view/','id' => $model['order_id']])],['data-pjax'=>'0','target' => '_blank',]);}
+                    ],
+                    ['attribute'=>'order_service_type_name',
+                       'header' => Yii::t('app', '服务类型'),],
+                    ['attribute'=>'order_channel_name',
+                       'header' => Yii::t('app', '渠道'),],
+                    [
                        'header' => Yii::t('app', '支付方式'),
-                        'attribute' => 'order_pay_type',
-                       'content'=>function($model,$key,$index){
-                                   return $model->order_pay_type==null?'':$model->order_pay_type;
+                        'attribute' => 'order_pay_type_id',
+                    ],
+                    ['attribute'=>'order_booked_begin_time',
+                       'header' => Yii::t('app', '服务开始时间'),
+                        'content'=>function($model,$key,$index){
+                                   return date('Y-m-d h:m:s',$model['order_booked_begin_time']);
+                       },
+                    ], 
+                    ['attribute'=>'order_booked_count',
+                       'header' => Yii::t('app', '服务工时（小时）'),
+                        'content'=>function($model,$key,$index){
+                                   return $model['order_booked_count']/60;
+                       },
+                    ], 
+                    ['attribute'=>'order_unit_money',
+                       'header' => Yii::t('app', '费率（元/小时）'),
+                    ], 
+                    ['attribute'=>'order_money',
+                       'header' => Yii::t('app', '订单总金额（元）'),
+                    ], 
+                    [
+                       'header' => Yii::t('app', '优惠金额（元）'),
+                        'content'=>function($model,$key,$index){
+                                   return 0;
                        },
                     ],
-                   'order_money',
-                   'order_booked_begin_time:datetime', 
-                   'order_booked_count', 
+                    [
+                       'attribute'=>'finance_worker_order_income_discount_amount',
+                       'header' => Yii::t('app', '用户支付金额（元）'),
+                    ],
+                    [
+                       'attribute'=>'order_pay_money',
+                       'header' => Yii::t('app', '阿姨结算金额（元）'),
+                    ],
                ],
                'responsive'=>true,
                'hover'=>true,
@@ -248,20 +310,51 @@ use yii\widgets\Pjax;
                'dataProvider' => $nonCashOrderDataProvider,
                'columns' => [
                    ['class' => 'yii\grid\SerialColumn'],
-                   ['attribute'=>'id',
+                   ['attribute'=>'order_id',
                        'header' => Yii::t('app', '订单号'),
                         'content'=>function($model,$key,$index)
-                               {return  Html::a('<u>'.$model->id.'</u>',[Yii::$app->urlManager->createUrl(['order/view/','id' => $model->id])],['data-pjax'=>'0','target' => '_blank',]);}],
-                   [
+                               {return  Html::a('<u>'.$model['order_id'].'</u>',[Yii::$app->urlManager->createUrl(['order/order/view/','id' => $model['order_id']])],['data-pjax'=>'0','target' => '_blank',]);}
+                    ],
+                    ['attribute'=>'order_service_type_name',
+                       'header' => Yii::t('app', '服务类型'),],
+                    ['attribute'=>'order_channel_name',
+                       'header' => Yii::t('app', '渠道'),],
+                    [
                        'header' => Yii::t('app', '支付方式'),
-                        'attribute' => 'order_pay_type',
-                       'content'=>function($model,$key,$index){
-                                   return $model->order_pay_type==null?'':$model->order_pay_type;
+                        'attribute' => 'order_pay_type_id',
+                    ],
+                    ['attribute'=>'order_booked_begin_time',
+                       'header' => Yii::t('app', '服务开始时间'),
+                        'content'=>function($model,$key,$index){
+                                   return date('Y-m-d h:m:s',$model['order_booked_begin_time']);
+                       },
+                    ], 
+                    ['attribute'=>'order_booked_count',
+                       'header' => Yii::t('app', '服务工时（小时）'),
+                        'content'=>function($model,$key,$index){
+                                   return $model['order_booked_count']/60;
+                       },
+                    ], 
+                    ['attribute'=>'order_unit_money',
+                       'header' => Yii::t('app', '费率（元/小时）'),
+                    ], 
+                    ['attribute'=>'order_money',
+                       'header' => Yii::t('app', '订单总金额（元）'),
+                    ], 
+                    [
+                       'header' => Yii::t('app', '优惠金额（元）'),
+                        'content'=>function($model,$key,$index){
+                                   return 0;
                        },
                     ],
-                   'order_money',
-                   'order_booked_begin_time:datetime', 
-                   'order_booked_count', 
+                    [
+                       'attribute'=>'finance_worker_order_income_discount_amount',
+                       'header' => Yii::t('app', '用户支付金额（元）'),
+                    ],
+                    [
+                       'attribute'=>'order_pay_money',
+                       'header' => Yii::t('app', '阿姨结算金额（元）'),
+                    ],
                ],
                'responsive'=>true,
                'hover'=>true,

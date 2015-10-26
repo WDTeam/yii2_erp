@@ -2,6 +2,7 @@
 
 namespace common\models\payment;
 
+use common\models\finance\FinancePayChannel;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 /**
@@ -61,7 +62,7 @@ class GeneralPayLog extends \yii\db\ActiveRecord
         $this->trigger('writeTextLog');
 
         //渠道名称
-        $param->data['pay_channel_name'] = \common\models\FinancePayChannel::getPayChannelByName($param->data['pay_channel_id']);
+        $param->data['pay_channel_name'] = FinancePayChannel::getPayChannelByName($param->data['pay_channel_id']);
         //写入数据库日志
         $this->attributes = $param->data;
         $this->insert(false);
