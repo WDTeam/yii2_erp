@@ -495,7 +495,7 @@ class WorkerController extends \api\components\Controller
             "worker_name"=>"张",
              "service_count"=> "60",
             "service_family_count"=> "60",
-            "total_income"=>"23888.00"
+            "salary"=>"23888.00"
         ];
          return $this->send($ret, "操作成功.");
         
@@ -562,7 +562,9 @@ class WorkerController extends \api\components\Controller
         $page_num = intval($param['page_num']);
         //调取model层
         $ret = array(
-            
+            'bill_date'=>'09年07月-09月13日',
+            'order_count'=>10,
+            'salary'=>32
         );
     }
      
