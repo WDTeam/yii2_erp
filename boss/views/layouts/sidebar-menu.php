@@ -303,7 +303,12 @@ echo Menu::widget(
 							],
 							[
 								'label' => '服务卡付款管理',
-								'url' => ['#'],
+								'url' => ['operation/operation-server-card-record'],
+								'icon' => 'fa fa-angle-right',
+							],
+							[
+								'label' => '服务卡订单管理',
+								'url' => ['operation/operation-server-card-order'],
 								'icon' => 'fa fa-angle-right',
 							],
                 ],
