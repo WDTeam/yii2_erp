@@ -43,6 +43,7 @@ use Yii;
  * @property string $order_booked_end_time
  * @property string $address_id
  * @property string $district_id
+ * @property string $city_id
  * @property string $order_address
  * @property string $order_booked_worker_id
  * @property string $order_pop_order_code
@@ -72,6 +73,7 @@ use Yii;
  * @property string $order_use_promotion_money
  * @property string $worker_id
  * @property string $order_worker_phone
+ * @property string $order_worker_name
  * @property string $order_worker_memo
  * @property string $worker_type_id
  * @property string $order_worker_type_name
@@ -98,10 +100,15 @@ class OrderHistory extends \common\models\order\ActiveRecord
     public function rules()
     {
         return [
-            [['created_at', 'updated_at', 'order_id', 'order_parent_id', 'order_is_parent', 'order_created_at', 'order_isdel', 'order_before_status_dict_id', 'order_status_dict_id', 'order_flag_send', 'order_flag_urgent', 'order_flag_exception', 'order_flag_sys_assign', 'order_flag_lock', 'order_flag_lock_time', 'order_flag_worker_sms', 'order_flag_worker_jpush', 'order_flag_worker_ivr',  'order_service_type_id', 'order_src_id', 'channel_id', 'order_booked_count', 'order_booked_begin_time', 'order_booked_end_time', 'address_id', 'district_id', 'order_booked_worker_id', 'customer_id', 'comment_id', 'order_customer_is_vip', 'invoice_id', 'order_customer_hidden', 'order_pay_type', 'pay_channel_id', 'card_id', 'coupon_id', 'promotion_id', 'worker_id', 'worker_type_id', 'order_worker_assign_type', 'shop_id', 'checking_id', 'admin_id'], 'integer'],
+            [['created_at', 'updated_at', 'order_id', 'order_parent_id', 'order_is_parent', 'order_created_at', 'order_isdel', 'order_before_status_dict_id',
+                'order_status_dict_id', 'order_flag_send', 'order_flag_urgent', 'order_flag_exception', 'order_flag_sys_assign', 'order_flag_lock', 'order_flag_lock_time',
+                'order_flag_worker_sms', 'order_flag_worker_jpush', 'order_flag_worker_ivr',  'order_service_type_id', 'order_src_id', 'channel_id', 'order_booked_count', 'order_booked_begin_time', 'order_booked_end_time',
+                'address_id', 'district_id', 'city_id', 'order_booked_worker_id', 'customer_id', 'comment_id', 'order_customer_is_vip', 'invoice_id', 'order_customer_hidden',
+                'order_pay_type', 'pay_channel_id', 'card_id', 'coupon_id', 'promotion_id', 'worker_id', 'worker_type_id', 'order_worker_assign_type', 'shop_id', 'checking_id', 'admin_id'], 'integer'],
             [['order_id'], 'required'],
-            [['order_unit_money', 'order_money', 'order_pop_operation_money', 'order_pop_order_money', 'order_pop_pay_money', 'order_pay_money', 'order_use_acc_balance', 'order_use_card_money', 'order_use_coupon_money', 'order_use_promotion_money'], 'number'],
-            [['order_code', 'order_channel_name', 'order_worker_type_name','order_worker_phone'], 'string', 'max' => 64],
+            [['order_unit_money', 'order_money', 'order_pop_operation_money', 'order_pop_order_money', 'order_pop_pay_money', 'order_pay_money', 'order_use_acc_balance', 'order_use_card_money',
+                'order_use_coupon_money', 'order_use_promotion_money'], 'number'],
+            [['order_code', 'order_channel_name', 'order_worker_type_name','order_worker_phone','order_worker_name'], 'string', 'max' => 64],
             [['order_before_status_name', 'order_status_name', 'order_service_type_name', 'order_src_name', 'order_ip','order_pay_channel_name'], 'string', 'max' => 128],
             [['order_address', 'order_pop_order_code', 'order_pop_group_buy_code', 'order_customer_need', 'order_customer_memo', 'order_pay_flow_num', 'order_cs_memo','order_sys_memo','order_worker_memo'], 'string', 'max' => 255],
             [['order_customer_phone'], 'string', 'max' => 16]
@@ -150,6 +157,7 @@ class OrderHistory extends \common\models\order\ActiveRecord
             'order_booked_end_time' => '预约结束时间',
             'address_id' => '地址ID',
             'district_id' => '商圈ID',
+            'city_id' => '城市ID',
             'order_address' => '详细地址 包括 联系人 手机号',
             'order_booked_worker_id' => '指定阿姨',
             'order_pop_order_code' => '第三方订单编号',
@@ -179,6 +187,7 @@ class OrderHistory extends \common\models\order\ActiveRecord
             'order_use_promotion_money' => '使用促销金额',
             'worker_id' => '工人id',
             'order_worker_phone' => '工人手机号',
+            'order_worker_name' => '工人姓名',
             'order_worker_memo' => '工人备注',
             'worker_type_id' => '工人职位类型ID',
             'order_worker_type_name' => '工人职位类型',
