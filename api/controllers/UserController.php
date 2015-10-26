@@ -12,11 +12,7 @@ use \core\models\operation\coupon\Coupon;
 class UserController extends \api\components\Controller
 {
     /**
-<<<<<<< HEAD
      * @api {POST} v1/user/add-address 添加常用地址 (已完成100%) 
-=======
-     * @api {POST} /user/add-address 添加常用地址 (已完成100%)
->>>>>>> a12ff13ca9503d94d2ad0036bb767c876c69dc04
      *
      * @apiName AddAddress
      * @apiGroup User
@@ -194,11 +190,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-<<<<<<< HEAD
      * @api {DELETE} v1/user/delete-address 删除用户常用地址 (已完成100%) 
-=======
-     * @api {DELETE} /user/delete-address 删除用户常用地址 (已完成100%)
->>>>>>> a12ff13ca9503d94d2ad0036bb767c876c69dc04
      *
      * @apiName DeleteAddress
      * @apiGroup User
@@ -247,11 +239,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-<<<<<<< HEAD
      * @api {PUT} v1/user/set-default-address 设置默认地址 (已完成100%) 
-=======
-     * @api {PUT} /user/set-default-address 设置默认地址 (已完成100%)
->>>>>>> a12ff13ca9503d94d2ad0036bb767c876c69dc04
      * @apiDescription 用户每次下完单都会将该次地址设置为默认地址，下次下单优先使用默认地址
      * @apiName SetDefaultAddress
      * @apiGroup User
@@ -309,11 +297,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-<<<<<<< HEAD
      * @api {PUT} v1/user/update-address 修改常用地址 (已完成100%) 
-=======
-     * @api {PUT} /user/update-address 修改常用地址 (已完成100%)
->>>>>>> a12ff13ca9503d94d2ad0036bb767c876c69dc04
      *
      * @apiName UpdateAddress
      * @apiGroup User
@@ -626,9 +610,6 @@ class UserController extends \api\components\Controller
 
     /**
      * @api {GET} v1/user/get-coupon-count 获取用户优惠码数量 （功能已经实现 100%）
-=======
-     * @api {GET} /user/get-coupon-count 获取用户优惠码数量 （功能已经实现 100%）
->>>>>>> a12ff13ca9503d94d2ad0036bb767c876c69dc04
      *
      *
      * @apiName GetCouponCount
@@ -900,13 +881,8 @@ class UserController extends \api\components\Controller
     }
 
     /**
-<<<<<<< HEAD
      * @api {GET} v1/user/get-user-money 用户余额和消费记录 （数据已经全部取出,需要给出所需字段,然后给予返回 已完成99% ;）
      * 
-=======
-     * @api {GET} /user/get-user-money 用户余额和消费记录 （数据已经全部取出,需要给出所需字段,然后给予返回 已完成99% ;）
-     *
->>>>>>> a12ff13ca9503d94d2ad0036bb767c876c69dc04
      *
      * @apiName GetUserMoney
      *
@@ -1028,9 +1004,6 @@ class UserController extends \api\components\Controller
 
     /**
      * @api {GET} v1/user/get-user-score 用户积分明细 （功能已实现,不明确需求端所需字段格式 90%）
-=======
-     * @api {GET} /user/get-user-score 用户积分明细 （功能已实现,不明确需求端所需字段格式 90%）
->>>>>>> a12ff13ca9503d94d2ad0036bb767c876c69dc04
      *
      * @apiDescription 获取用户当前积分，积分兑换奖品信息，怎样获取积分信息
      * @apiName GetUserScore
