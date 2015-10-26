@@ -87,7 +87,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' =>'{view}',
                 'buttons' => [
                 'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance-refund/view','id' => $model->id,'edit'=>'t']), [
+                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance/finance-refund/view','id' => $model->id,'edit'=>'t']), [
                                                     'title' => Yii::t('yii', '修改'),
                                                   ]);}
                                                   

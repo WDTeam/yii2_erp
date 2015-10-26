@@ -75,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' =>'{view} {tagssign}',
                 'buttons' => [
                 'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance-refund/view','id' => $model->id,'edit'=>'t']), [
+                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['/finance/finance-refund/view','id' => $model->id,'edit'=>'t']), [
                                                     'title' => Yii::t('yii', '修改'),
                                                   ]);},
                                                   'tagssign' => function ($url, $model, $key) {
@@ -86,7 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                   	'data-method' => 'post',
                                                   	'data-pjax' => '0'
                                                   			];
-                                                  	return Html::a('<span class="glyphicon glyphicon-tags"></span>', Yii::$app->urlManager->createUrl(['finance-refund/refund','id' => $model->id,'edit'=>'baksite']), $options);
+                                                  	return Html::a('<span class="glyphicon glyphicon-tags"></span>', Yii::$app->urlManager->createUrl(['finance/finance-refund/refund','id' => $model->id,'edit'=>'baksite']), $options);
                                                   }
                                                   
 
