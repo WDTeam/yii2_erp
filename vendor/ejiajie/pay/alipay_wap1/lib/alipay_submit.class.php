@@ -78,7 +78,7 @@ class AlipaySubmit {
 	function buildRequestParaToString($para_temp) {
 		//待请求参数数组
 		$para = $this->buildRequestPara($para_temp);
-
+		
 		//把参数组中所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串，并对字符串做urlencode编码
 		$request_data = createLinkstringUrlencode($para);
 		
@@ -95,7 +95,7 @@ class AlipaySubmit {
 	function buildRequestForm($para_temp, $method, $button_name) {
 		//待请求参数数组
 		$para = $this->buildRequestPara($para_temp);
-
+		
 		$sHtml = "<form id='alipaysubmit' name='alipaysubmit' action='".$this->alipay_gateway_new."_input_charset=".trim(strtolower($this->alipay_config['input_charset']))."' method='".$method."'>";
 		while (list ($key, $val) = each ($para)) {
             $sHtml.= "<input type='hidden' name='".$key."' value='".$val."'/>";
@@ -103,32 +103,12 @@ class AlipaySubmit {
 
 		//submit按钮控件请不要含有name属性
         $sHtml = $sHtml."<input type='submit' value='".$button_name."'></form>";
-        print_r($sHtml);exit;
+		
 		$sHtml = $sHtml."<script>document.forms['alipaysubmit'].submit();</script>";
-
+		
 		return $sHtml;
 	}
-
-	/**
-
-	 * 建立请求，以表单HTML形式构造（默认）
-	 * @param $para_temp 请求参数数组
-	 * @param $method 提交方式。两个值可选：post、get
-	 * @param $button_name 确认按钮显示文字
-	 * @return 提交表单HTML文本
-	 */
-	function buildRequestUrl($para_temp, $method, $button_name) {
-		//待请求参数数组
-		$para = $this->buildRequestPara($para_temp);
-		$urlParma = $this->alipay_gateway_new;//."_input_charset=".trim(strtolower($this->alipay_config['input_charset']));
-		while (list ($key, $val) = each ($para)) {
-			$urlParma .= $key.'='.$val.'&';
-		}
-		$urlParma = trim($urlParma,'&');
-		return $urlParma;
-
-	}
-
+	
 	/**
      * 建立请求，以模拟远程HTTP的POST请求方式构造并获取支付宝的处理结果
      * @param $para_temp 请求参数数组
