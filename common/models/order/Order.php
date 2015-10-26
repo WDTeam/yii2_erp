@@ -87,7 +87,8 @@ class Order extends ActiveRecord
     public $promotion_id;
     public $order_use_promotion_money;
     public $worker_id;
-    public $worker_phone;
+    public $order_worker_phone;
+    public $order_worker_memo;
     public $worker_type_id;
     public $order_worker_type_name;
     public $order_worker_assign_type;
@@ -135,6 +136,8 @@ class Order extends ActiveRecord
         'promotion_id',
         'order_use_promotion_money',
         'worker_id',
+        'order_worker_phone',
+        'order_worker_memo',
         'worker_type_id',
         'order_worker_type_name',
         'order_worker_assign_type',
@@ -250,6 +253,8 @@ class Order extends ActiveRecord
             'promotion_id' => '促销id',
             'order_use_promotion_money' => '使用促销金额',
             'worker_id' => '工人id',
+            'order_worker_phone' => '工人手机号',
+            'order_worker_memo' => '工人备注',
             'worker_type_id' => '工人职位类型ID',
             'order_worker_type_name' => '工人职位类型',
             'order_worker_assign_type' => '工人接单方式 0未接单 1工人抢单 2客服指派 3门店指派',
@@ -424,6 +429,8 @@ class Order extends ActiveRecord
                 'promotion_id' => $orderExtPay->promotion_id,
                 'order_use_promotion_money' => $orderExtPay->order_use_promotion_money,
                 'worker_id' => $orderExtWorker->worker_id,
+                'order_worker_phone' => $orderExtWorker->order_worker_phone,
+                'order_worker_memo' => $orderExtWorker->order_worker_memo,
                 'worker_type_id' => $orderExtWorker->worker_type_id,
                 'order_worker_type_name' => $orderExtWorker->order_worker_type_name,
                 'order_worker_assign_type' => $orderExtWorker->order_worker_assign_type,
@@ -498,6 +505,8 @@ class Order extends ActiveRecord
             'promotion_id' => $orderExtPay->promotion_id,
             'order_use_promotion_money' => $orderExtPay->order_use_promotion_money,
             'worker_id' => $orderExtWorker->worker_id,
+            'order_worker_phone' => $orderExtWorker->order_worker_phone,
+            'order_worker_memo' => $orderExtWorker->order_worker_memo,
             'worker_type_id' => $orderExtWorker->worker_type_id,
             'order_worker_type_name' => $orderExtWorker->order_worker_type_name,
             'order_worker_assign_type' => $orderExtWorker->order_worker_assign_type,

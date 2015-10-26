@@ -1,10 +1,10 @@
 <?php
 
-namespace boss\controllers;
+namespace boss\controllers\operation;
 
 use Yii;
-use boss\models\Operation\OperationPriceStrategy;
-use boss\models\Operation\OperationCategory;
+use boss\models\operation\OperationPriceStrategy;
+use boss\models\operation\OperationCategory;
 use yii\data\ActiveDataProvider;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
