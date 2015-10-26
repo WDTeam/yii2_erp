@@ -49,8 +49,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-<<<<<<< HEAD:boss/views/operation/server-card/index.php
-=======
                 'buttons' => [
                 'update' => function ($url, $model) {
                                     return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['operation/operation-server-card/view','id' => $model->id,'edit'=>'t']), [
@@ -58,7 +56,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                                   ]);}
 
                 ],
->>>>>>> develop:boss/views/operation/operation-server-card/index.php
             ],
         ],
         'responsive'=>true,
