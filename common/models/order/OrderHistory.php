@@ -73,6 +73,7 @@ use Yii;
  * @property string $order_use_promotion_money
  * @property string $worker_id
  * @property string $order_worker_phone
+ * @property string $order_worker_name
  * @property string $order_worker_memo
  * @property string $worker_type_id
  * @property string $order_worker_type_name
@@ -107,7 +108,7 @@ class OrderHistory extends \common\models\order\ActiveRecord
             [['order_id'], 'required'],
             [['order_unit_money', 'order_money', 'order_pop_operation_money', 'order_pop_order_money', 'order_pop_pay_money', 'order_pay_money', 'order_use_acc_balance', 'order_use_card_money',
                 'order_use_coupon_money', 'order_use_promotion_money'], 'number'],
-            [['order_code', 'order_channel_name', 'order_worker_type_name','order_worker_phone'], 'string', 'max' => 64],
+            [['order_code', 'order_channel_name', 'order_worker_type_name','order_worker_phone','order_worker_name'], 'string', 'max' => 64],
             [['order_before_status_name', 'order_status_name', 'order_service_type_name', 'order_src_name', 'order_ip','order_pay_channel_name'], 'string', 'max' => 128],
             [['order_address', 'order_pop_order_code', 'order_pop_group_buy_code', 'order_customer_need', 'order_customer_memo', 'order_pay_flow_num', 'order_cs_memo','order_sys_memo','order_worker_memo'], 'string', 'max' => 255],
             [['order_customer_phone'], 'string', 'max' => 16]
@@ -186,6 +187,7 @@ class OrderHistory extends \common\models\order\ActiveRecord
             'order_use_promotion_money' => '使用促销金额',
             'worker_id' => '工人id',
             'order_worker_phone' => '工人手机号',
+            'order_worker_name' => '工人姓名',
             'order_worker_memo' => '工人备注',
             'worker_type_id' => '工人职位类型ID',
             'order_worker_type_name' => '工人职位类型',
