@@ -1,9 +1,9 @@
 <?php
 
-namespace boss\models\Operation;
+namespace core\models\operation;
 
-use Yii;
-use core\models\Operation\CoreOperationServerCard;
+use yii;
+
 /**
  * This is the model class for table "{{%server_card}}".
  *
@@ -18,11 +18,9 @@ use core\models\Operation\CoreOperationServerCard;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationServerCard extends CoreOperationServerCard
+class ServerCard extends \common\models\operation\ServerCard
 {
-    
-
-    /**
+	 /**
      * @inheritdoc
      */
     public function rules()
@@ -52,4 +50,5 @@ class OperationServerCard extends CoreOperationServerCard
             'updated_at' => Yii::t('app', '更改时间'),
         ];
     }
+    
 }

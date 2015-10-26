@@ -1,9 +1,9 @@
 <?php
 
-namespace core\models\operation;
+namespace boss\models\operation;
 
-use Yii;
-use common\models\Operation\CommonOperationServerCard;
+use yii;
+
 /**
  * This is the model class for table "{{%server_card}}".
  *
@@ -18,7 +18,9 @@ use common\models\Operation\CommonOperationServerCard;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class CoreOperationServerCard extends CommonOperationServerCard
+class ServerCard extends \core\models\operation\ServerCard
 {
     
+
+   
 }
