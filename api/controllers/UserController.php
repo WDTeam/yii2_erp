@@ -449,7 +449,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /user/get-coupon-customer 获取用户优惠码或同城市 （郝建设100%）
+     * @api {POST} /user/get-coupon-customer 获取用户优惠码或同城市 （郝建设100%）
      *
      * @apiName GetCouponCustomer
      * @apiGroup User
@@ -457,6 +457,7 @@ class UserController extends \api\components\Controller
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      * @apiParam {String} [city_name]  城市
+     * @apiParam {int} coupon_type  优惠码表示 1获取提供城市或者全国的优惠码 2获取全国和给定城市的优惠码
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -495,21 +496,21 @@ class UserController extends \api\components\Controller
      */
     public function actionGetCouponCustomer()
     {
-        $param = Yii::$app->request->get();
+        $param = Yii::$app->request->post();
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
-
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录3", "0", 403);
         }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
-            if (@$param['city_name']) {
-                /**
-                 * 获取改用户city_name下面,所有的优惠券
-                 */
+            /**
+             * 获取改用户city_name下面,所有的优惠券
+             */
+            if (!empty($param['city_name']) && $param['coupon_type'] == 1) {
+
                 $CouponData = \core\models\coupon\CouponCustomer::getCouponCustomer($customer->id);
                 if (!empty($CouponData)) {
                     $ret = array();
@@ -522,16 +523,47 @@ class UserController extends \api\components\Controller
 
                     return $this->send($ret, $param['city_name'] . "优惠码列表", "1");
                 } else {
-                    return $this->send([1], "优惠码列表为空", "0");
+                    return $this->send([1], "规定城市优惠码列表为空", "0");
                 }
-            } else {
-                $CouponData = \core\models\coupon\CouponCustomer::getCouponCustomer($customer->id, 1);
+            }
 
+            /**
+             * 返回全国范围内的优惠码
+             */
+            if (empty($param['city_name']) && $param['coupon_type'] == 1) {
+                $CouponData = \core\models\coupon\CouponCustomer::getCouponCustomer($customer->id, 1);
                 $ret['couponCustomer'] = $CouponData;
-                return $this->send($ret, "优惠码列表", "1");
+                return $this->send($ret, "全国范围优惠码列表", "1");
+            }
+
+            /**
+             * 返回规定城市和全国范围内的优惠码
+             */
+            if (@$param['city_name'] && $param['coupon_type'] == 2) {
+
+                $CouponData = \core\models\coupon\CouponCustomer::getCouponCustomer($customer->id);
+
+
+                if (!empty($CouponData)) {
+                    $ret = array();
+                    foreach ($CouponData as $key => $val) {
+                        $Coupon = \core\models\coupon\Coupon::getCoupon($val['coupon_id'], $param['city_name']);
+                        foreach ($Coupon as $key => $val) {
+                            $ret['coupon'][] = $val;
+                        }
+                    }
+                    #return $this->send($ret, $param['city_name'] . "优惠码列表", "1");
+                }
+
+                $CouponCount = \core\models\coupon\CouponCustomer::getCouponCustomer($customer->id, 1);
+                $ret['couponCustomer'][] = $CouponCount;
+
+                return $this->send($ret, '城市' . $param['city_name'] . "优惠码和全国优惠码列表", "1");
+            } else {
+                return $this->send(null, "用户认证已经过期,请重新登录2", "0", 403);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录1", "0", 403);
         }
     }
 
