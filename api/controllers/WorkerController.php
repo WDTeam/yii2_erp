@@ -3,8 +3,10 @@ namespace api\controllers;
 
 use Yii;
 use \core\models\worker\Worker;
+use \core\models\worker\WorkerSkill;
 use \core\models\worker\WorkerAccessToken;
 use \core\models\Operation\CoreOperationShopDistrictCoordinate;
+ 
 class WorkerController extends \api\components\Controller
 {
 
@@ -67,7 +69,7 @@ class WorkerController extends \api\components\Controller
                 "worker_role" => $workerInfo["worker_type_description"],
                 'worker_start'=> 4.5,
                 'total_money' =>1000,
-                "personal_skill" =>['煮饭','开荒','护老','擦玻璃','带孩子'],
+                "personal_skill" =>WorkerSkill::getWorkerSkill($worker->id),
             ];
               return $this->send($ret, "阿姨信息查询成功");
         } else {
