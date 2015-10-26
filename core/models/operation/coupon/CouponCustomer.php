@@ -1,6 +1,6 @@
 <?php
 
-namespace core\models\coupon;
+namespace core\models\operation\coupon;
 
 use Yii;
 use core\models\customer\Customer;
@@ -21,9 +21,9 @@ use core\models\Operation\coupon\CouponCode;
  * @property integer $is_used
  * @property integer $created_at
  * @property integer $updated_at
- * @property integer $is_del
+* @property integer $is_del
  */
-class CouponCustomer extends \common\models\coupon\CouponCustomer
+class CouponCustomer extends \common\models\operation\coupon\CouponCustomer
 {
 
     

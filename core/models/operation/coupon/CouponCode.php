@@ -20,7 +20,7 @@ use core\models\operation\coupon\CouponCustomer;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class CouponCode extends \common\models\coupon\CouponCode
+class CouponCode extends \common\models\operation\coupon\CouponCode
 {
     /**
      * get coupon code by id
