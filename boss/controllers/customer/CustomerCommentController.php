@@ -1,10 +1,10 @@
 <?php
 
-namespace boss\controllers;
+namespace boss\controllers\customer;
 
 use Yii;
-use common\models\CustomerComment;
-use boss\models\CustomerCommentSearch;
+use common\models\customer\CustomerComment;
+use boss\models\customer\CustomerCommentSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

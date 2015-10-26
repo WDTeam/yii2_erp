@@ -24,6 +24,7 @@ use common\models\order\OrderSrc;
 use common\models\finance\FinanceOrderChannel;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
+use core\models\operation\CoreOperationShopDistrict;
 
 /**
  * This is the model class for table "{{%order}}".
@@ -578,6 +579,21 @@ class Order extends OrderModel
         return $card[$id];
     }
 
+    
+    /**
+     * 获取已上线商圈列表
+     * @date: 2015-10-26
+     * @author: peak pan
+     * @return:
+     **/
+    
+    public static function getDistrictList()
+    {
+    	$districtList = CoreOperationShopDistrict::getCityShopDistrictList();
+    	return $districtList?ArrayHelper::map($districtList,'id','operation_shop_district_name'):[];
+    }
+    
+    
     /**
      * 核实用户订单唯一性
      * @param   $customer_id   int 用户id

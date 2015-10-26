@@ -7,16 +7,14 @@ use yii\helpers\Html;
  * @var common\models\CustomerCommentTag $model
  */
 
-$this->title = Yii::t('boss', 'Create {modelClass}', [
-    'modelClass' => 'Customer Comment Tag',
+$this->title = Yii::t('boss', ' 添加{modelClass}', [
+    'modelClass' => '标签',
 ]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('boss', 'Customer Comment Tags'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('boss', '标签管理'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="customer-comment-tag-create">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
+
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>

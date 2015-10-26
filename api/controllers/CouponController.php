@@ -5,7 +5,8 @@ use Yii;
 use core\models\Operation\CoreOperationShopDistrictGoods;
 use core\models\Operation\CoreOperationCategory;
 use \core\models\customer\CustomerAccessToken;
-
+use \core\models\operation\coupon\CouponCustomer;
+use \core\models\operation\coupon\Coupon;
 class CouponController extends \api\components\Controller
 {
     /**
@@ -91,21 +92,22 @@ class CouponController extends \api\components\Controller
     }
 
     /**
-     * @api {Get} /user/coupons 获取用户优惠码或同城市 （李勇 80%）
+     * @api {Get} /coupon/coupons 获取用户优惠码列表（包括该用户该城市下的优惠码和通用的优惠码） （李勇 80%）
      *
-     * @apiName GetCouponCustomer
+     * @apiName Coupons
      * @apiGroup coupon
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {String} [good_type]
-     * @apiParam {String} [city_name]  城市
+     * @apiParam {String} [good_type] 商品类型 
+     * @apiParam {String} [city_id]  城市
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
      *       "code": "1",
-     *       "msg": {
+     *       "msg":
+     *       "ret": {
      *           "coupon":[
      *             {
      *               "id": "1",
@@ -136,80 +138,47 @@ class CouponController extends \api\components\Controller
      *     }
      *
      */
-    public function actionGetCouponCustomer()
+    public function actionCoupons()
     {
 
-        $param = Yii::$app->request->post();
-        if (empty($param)) {
-            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
-        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
+        if (!isset($param['good_type']) || !$param['good_type'] || !isset($param['city_id']) || !$param['city_id']) {
+            return $this->send(null, "请填写商品类型或城市名称", 0, 403);
         }
-
+        $good_type = $param['good_type'];
+        $city_id = $param['city_id'];
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
-        if (!empty($customer) && !empty($customer->id)) {
-            /**
-             * 获取改用户city_name下面,所有的优惠券
-             */
-            if (!empty($param['city_name']) && $param['coupon_type'] == 1) {
-
-                $CouponData = CouponCustomer::getCouponCustomer($customer->id);
-
-                if (!empty($CouponData)) {
-                    $ret = array();
-                    foreach ($CouponData as $key => $val) {
-                        $Coupon = \core\models\coupon\Coupon::getCoupon($val['coupon_id'], $param['city_name']);
-                        foreach ($Coupon as $key => $val) {
-                            $ret['coupon'][] = $val;
-                        }
-                    }
-
-                    return $this->send($ret, $param['city_name'] . "优惠码列表");
-                } else {
-                    return $this->send([1], "规定城市优惠码列表为空", "0");
-                }
-            }
-
-            /**
-             * 返回全国范围内的优惠码
-             */
-            if (empty($param['city_name']) && $param['coupon_type'] == 1) {
-                $CouponData = CouponCustomer::getCouponCustomer($customer->id, 1);
-                $ret['couponCustomer'] = $CouponData;
-                return $this->send($ret, "全国范围优惠码列表", "1");
-            }
-
-            /**
-             * 返回规定城市和全国范围内的优惠码
-             */
-            if (@$param['city_name'] && $param['coupon_type'] == 2) {
-
-                $CouponData = CouponCustomer::getCouponCustomer($customer->id);
-
-                if (!empty($CouponData)) {
-                    $ret = array();
-                    foreach ($CouponData as $key => $val) {
-                        $Coupon = Coupon::getCoupon($val['coupon_id'], $param['city_name']);
-                        foreach ($Coupon as $key => $val) {
-                            $ret['coupon'][] = $val;
-                        }
-                    }
-                    #return $this->send($ret, $param['city_name'] . "优惠码列表", "1");
-                }
-
-                $CouponCount = CouponCustomer::getCouponCustomer($customer->id, 1);
-                $ret['couponCustomer'][] = $CouponCount;
-
-                return $this->send($ret, '城市' . $param['city_name'] . "优惠码和全国优惠码列表", "1");
-            } else {
-                return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
-            }
+        $customer_id = $customer->id;
+         //获取该用户该城市的优惠码列表
+        // $coupons=CouponCustomer::getCoupons($city_id,$good_type,$customer_id);
+        $coupons = [
+              [
+                  "id"=> "1",
+                    "coupon_name"=>"优惠码名称",
+                    "coupon_price"=>"优惠码价格",
+                    "coupon_type_name"=>"优惠券类型名称",
+                    "coupon_service_type_id"=>"服务类别id",
+                    "coupon_service_type_name"=> "服务类别名称"
+              ],
+              [
+                  "id"=> "2",
+                    "coupon_name"=>"优惠码名称2",
+                    "coupon_price"=>"优惠码价格2",
+                    "coupon_type_name"=>"优惠券类型名称2",
+                    "coupon_service_type_id"=>"服务类别id2",
+                    "coupon_service_type_name"=> "服务类别名称2"
+              ]
+                    
+        ];
+        if (!empty($coupons)) {
+            return $this->send($coupons, "获取优惠码列表成功", 1);
         } else {
-
-            return $this->send(null, "用户认证已经过期,请重新登录1", "0", 403);
+            return $this->send(null, "优惠码列表为空", 0);
         }
+        
     }
 }
-
 ?>

@@ -207,6 +207,14 @@ class GeneralPay extends \common\models\payment\GeneralPay
     }
 
     /**
+     * 支付宝APP回调
+     * @param $data
+     */
+    public function alipayWapNotify($data){
+        parent::alipayWapNotify($data);
+    }
+
+    /**
      * 微信APP回调
      * @param $data
      */

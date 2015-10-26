@@ -93,6 +93,16 @@ echo Menu::widget(
                         'url' => ['/customer/customer/index?CustomerSearch[is_del]=0'],
                         'icon' => 'fa fa-angle-right',
                     ],
+					[
+					'label' => '评价列表(70%)',
+					'url' => ['/customer/customer-comment'],
+					'icon' => 'fa fa-angle-right',
+					],
+					[
+					'label' => '评价标签管理(70%)',
+					'url' => ['/customer/customer-comment-tag'],
+					'icon' => 'fa fa-angle-right',
+					],
                 ],
             ],
             [
