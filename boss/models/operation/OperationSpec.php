@@ -1,9 +1,9 @@
 <?php
 
-namespace boss\models\Operation;
+namespace boss\models\operation;
 
 use Yii;
-use core\models\Operation\CoreOperationSpec;
+use core\models\operation\CoreOperationSpec;
 
 /**
  * This is the model class for table "{{%operation_spec}}".

@@ -7,7 +7,7 @@ class SendSmsController extends \api\components\Controller
 {
     /**
      *
-     * @api {GET} /send-sms/send-v 发短消息 （赵顺利0%）
+     * @api {GET} /send-sms/send-v 发短消息 （赵顺利 0% 不使用）
      * @apiName actionSendV
      * @apiGroup SendSms
      *
@@ -53,7 +53,7 @@ class SendSmsController extends \api\components\Controller
 
     /**
      *
-     * @api {GET} /send-sms/send-message-code 短信验证码 （已完成）
+     * @api {GET} /send-sms/send-message-code 短信验证码 (赵顺利100%)
      * @apiName actionSendMessageCode
      * @apiGroup SendSms
      * @apiDescription 请求向用户手机发送验证码用于登录

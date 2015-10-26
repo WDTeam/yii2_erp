@@ -8,7 +8,7 @@ class m151014_104903_create_table_ivrlog extends Migration
     public function safeUp()
     {
         $this->execute("
-            CREATE TABLE IF NOT EXISTS {{%ivrlog}} (
+            CREATE TABLE IF NOT EXISTS {{%worker_ivrlog}} (
               `id` int(11) NOT NULL AUTO_INCREMENT,
 			  `ivrlog_req_tel` varchar(100) DEFAULT NULL COMMENT '电话号码',
 			  `ivrlog_req_app_id` varchar(11) DEFAULT NULL COMMENT 'app_id',
@@ -37,6 +37,6 @@ class m151014_104903_create_table_ivrlog extends Migration
 
     public function safeDown()
     {
-        $this->dropTable('{{%ivrlog}}');
+        $this->dropTable('{{%worker_ivrlog}}');
     }
 }

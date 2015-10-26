@@ -208,7 +208,7 @@ class ServiceController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} v1/service/all-services 依据城市 获取所有服务列表 （已完成）
+     * @api {GET} v1/service/all-services 依据城市 获取所有服务列表 (赵顺利100%)
      * @apiName actionAllServices
      * @apiGroup service
      * @apiDescription 获取城市所以服务类型列表

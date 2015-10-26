@@ -3,9 +3,9 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\Operation\CommonOperationShopDistrictGoods;
-use core\models\Operation\CoreOperationShopDistrict;
-use core\models\Operation\CoreOperationCity;
+use common\models\operation\CommonOperationShopDistrictGoods;
+use core\models\operation\CoreOperationShopDistrict;
+use core\models\operation\CoreOperationCity;
 use yii\data\ActiveDataProvider;
 
 class CoreOperationShopDistrictGoods extends CommonOperationShopDistrictGoods

@@ -3,6 +3,7 @@
 namespace common\models\customer;
 
 use common\models\finance\FinanceOrderChannel;
+use common\models\finance\FinancePayChannel;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 

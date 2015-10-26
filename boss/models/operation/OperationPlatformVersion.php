@@ -1,9 +1,9 @@
 <?php
 
-namespace boss\models\Operation;
+namespace boss\models\operation;
 
 use Yii;
-use core\models\Operation\CoreOperationPlatformVersion;
+use core\models\operation\CoreOperationPlatformVersion;
 /**
  * This is the model class for table "{{%operation_platform_version}}".
  *
