@@ -10,8 +10,8 @@ namespace core\models\order;
 
 use Yii;
 use yii\base\Exception;
-use common\models\OrderStatusDict;
-use common\models\OrderStatusHistory;
+use common\models\order\OrderStatusDict;
+use common\models\order\OrderStatusHistory;
 
 class OrderStatus extends Order
 {
@@ -81,7 +81,7 @@ class OrderStatus extends Order
      * @param $must_models
      * @return bool
      */
-    protected static function _manualAssignStart(&$order,$must_models=[])
+    public static function manualAssignStart(&$order,$must_models=[])
     {
         $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_MANUAL_ASSIGN_START);
         return self::_statusChange($order,$status,$must_models);

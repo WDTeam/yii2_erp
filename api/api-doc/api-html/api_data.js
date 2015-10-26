@@ -54,7 +54,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"登录成功\"，\n  \"ret\":{\n     \"user\":{}\n     \"access_token\":\"\"\n  }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"登录成功\"，\n  \"ret\":{\n     \"user\":{}\n     \"access_token\":\"\"\n  }\n}",
           "type": "json"
         }
       ]
@@ -73,7 +73,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{ \n  \"code\":\"error\",\n  \"msg\": \"用户名或验证码错误\"\n}",
+          "content": "HTTP/1.1 403 Not Found\n{ \n  \"code\":\"0\",\n  \"msg\": \"用户名或验证码错误\"\n}",
           "type": "json"
         }
       ]
@@ -137,7 +137,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"登录成功\"，\n  \"ret\":{\n     \"user\":{}\n     \"access_token\":\"\"\n  }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"登录成功\"，\n  \"ret\":{\n     \"user\":{}\n     \"access_token\":\"\"\n  }\n}",
           "type": "json"
         }
       ]
@@ -156,7 +156,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{ \n  \"code\":\"error\",\n  \"msg\": \"用户名,签名或渠道名称错误\"\n}",
+          "content": "HTTP/1.1 403 Not Found\n{ \n  \"code\":\"0\",\n  \"msg\": \"用户名,签名或渠道名称错误\"\n}",
           "type": "json"
         }
       ]
@@ -220,7 +220,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"worker_name\": \"陈测试1\",\n         \"worker_rule_id\": 0,\n         \"worker_rule_description\": \"兼职\",\n         \"worker_photo\": \"http://static.1jiajie.com/worker/face/1111116.jpg\",\n         \"access_token\": \"hXjooooooooAPXzo5jjbMnz80dccYgwoooooooowoooooooo-1111116\",\n         \"worker_id\": \"1111116\",\n         \"shop_id\": \"68\"",
+          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"1\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"worker_name\": \"陈测试1\",\n         \"worker_rule_id\": 0,\n         \"worker_rule_description\": \"兼职\",\n         \"worker_photo\": \"http://static.1jiajie.com/worker/face/1111116.jpg\",\n         \"access_token\": \"hXjooooooooAPXzo5jjbMnz80dccYgwoooooooowoooooooo-1111116\",\n         \"worker_id\": \"1111116\",\n         \"shop_id\": \"68\"",
           "type": "json"
         }
       ]
@@ -239,7 +239,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{ \n  \"code\":\"error\",\n  \"msg\": \"用户名或验证码错误\"\n}",
+          "content": "HTTP/1.1 403 Not Found\n{ \n  \"code\":\"0\",\n  \"msg\": \"用户名或验证码错误\"\n}",
           "type": "json"
         }
       ]
@@ -421,7 +421,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"以下单成功，正在等待阿姨抢单\",\n  \"ret\":{\n      \"order\": {}\n\n  }\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"以下单成功，正在等待阿姨抢单\",\n  \"ret\":{\n      \"order\": {}\n\n  }\n\n}",
           "type": "json"
         }
       ]
@@ -440,7 +440,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
           "type": "json"
         }
       ]
@@ -610,7 +610,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n \"code\": \"ok\",\n \"msg\": \"创建订单成功\",\n \"ret\": {\n         \"order_service_type_id\": \"1\",\n         \"order_src_id\": \"2\",\n         \"order_booked_begin_time\": \"1445251619\",\n         \"order_booked_end_time\": \"1445255219\",\n         \"address_id\": \"1\",\n         \"channel_id\": \"20\",\n         \"order_ip\": \"::1\",\n         \"order_parent_id\": 0,\n         \"order_is_parent\": 0,\n         \"order_unit_money\": \"20.0000\",\n         \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n         \"order_booked_count\": 60,\n         \"order_money\": 20,\n         \"order_address\": \"光华路soho,张三,18622344432\",\n         \"order_code\": \"1110\",\n         \"order_src_name\": \"IOS\",\n         \"order_channel_name\": \"后台下单\",\n         \"checking_id\": 0,\n         \"isdel\": 0,\n         \"created_at\": 1445320069,\n         \"updated_at\": 1445320069,\n         \"id\": 8\n     }\n }",
+          "content": "HTTP/1.1 200 OK\n{\n \"code\": \"1\",\n \"msg\": \"创建订单成功\",\n \"ret\": {\n         \"order_service_type_id\": \"1\",\n         \"order_src_id\": \"2\",\n         \"order_booked_begin_time\": \"1445251619\",\n         \"order_booked_end_time\": \"1445255219\",\n         \"address_id\": \"1\",\n         \"channel_id\": \"20\",\n         \"order_ip\": \"::1\",\n         \"order_parent_id\": 0,\n         \"order_is_parent\": 0,\n         \"order_unit_money\": \"20.0000\",\n         \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n         \"order_booked_count\": 60,\n         \"order_money\": 20,\n         \"order_address\": \"光华路soho,张三,18622344432\",\n         \"order_code\": \"1110\",\n         \"order_src_name\": \"IOS\",\n         \"order_channel_name\": \"后台下单\",\n         \"checking_id\": 0,\n         \"isdel\": 0,\n         \"created_at\": 1445320069,\n         \"updated_at\": 1445320069,\n         \"id\": 8\n     }\n }",
           "type": "json"
         }
       ]
@@ -634,7 +634,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
           "type": "json"
         }
       ]
@@ -906,7 +906,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"获取可服务时间表成功\"\n  \"ret\":{\n     \"appointment\": [\n         {\n             \"date_format\": \"10月10日\",\n             \"date_stamp\": 1444406400,\n             \"week\": \"明天\",\n             \"have_worker\": 1,\n             \"hour\": [\n                 {\n                     \"time\": \"08:00-10:00\",\n                     \"status\": \"0\"\n                 },\n                 {\n                     \"time\": \"18:00-20:00\",\n                     \"status\": \"1\"\n                 }\n             ]\n         }\n     ]\n  }\n}\n\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"获取可服务时间表成功\"\n  \"ret\":{\n     \"appointment\": [\n         {\n             \"date_format\": \"10月10日\",\n             \"date_stamp\": 1444406400,\n             \"week\": \"明天\",\n             \"have_worker\": 1,\n             \"hour\": [\n                 {\n                     \"time\": \"08:00-10:00\",\n                     \"status\": \"0\"\n                 },\n                 {\n                     \"time\": \"18:00-20:00\",\n                     \"status\": \"1\"\n                 }\n             ]\n         }\n     ]\n  }\n}\n\n\n}",
           "type": "json"
         }
       ]
@@ -925,7 +925,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
           "type": "json"
         }
       ]
@@ -1159,7 +1159,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n {\n\"code\": \"ok\",\n\"msg\": \"操作成功\",\n\"ret\": {\n\"limit\": \"1\",\n\"page_total\": 4,\n\"offset\": 0,\n\"orders\": [\n{\n\"id\": \"2\",\n\"order_code\": \"339710\",\n\"order_parent_id\": \"0\",\n\"order_is_parent\": \"0\",\n\"created_at\": \"1445347126\",\n\"updated_at\": \"1445347126\",\n\"isdel\": \"0\",\n\"ver\": \"3\",\n\"version\": \"3\",\n\"order_ip\": \"58.135.77.96\",\n\"order_service_type_id\": \"1\",\n\"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n\"order_src_id\": \"1\",\n\"order_src_name\": \"BOSS\",\n\"channel_id\": \"20\",\n\"order_channel_name\": \"后台下单\",\n\"order_unit_money\": \"20.00\",\n\"order_money\": \"40.00\",\n\"order_booked_count\": \"120\",\n\"order_booked_begin_time\": \"1446249600\",\n\"order_booked_end_time\": \"1446256800\",\n\"address_id\": \"397\",\n\"district_id\": \"3\",\n\"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n\"order_booked_worker_id\": \"0\",\n\"checking_id\": \"0\",\n\"order_cs_memo\": \"\",\n\"order_id\": \"2\",\n\"order_before_status_dict_id\": \"2\",\n\"order_before_status_name\": \"已支付\",\n\"order_status_dict_id\": \"3\",\n\"order_status_name\": \"已开始智能指派\"\n}\n]\n}",
+          "content": " HTTP/1.1 200 OK\n {\n\"code\": \"1\",\n\"msg\": \"操作成功\",\n\"ret\": {\n\"limit\": \"1\",\n\"page_total\": 4,\n\"offset\": 0,\n\"orders\": [\n{\n\"id\": \"2\",\n\"order_code\": \"339710\",\n\"order_parent_id\": \"0\",\n\"order_is_parent\": \"0\",\n\"created_at\": \"1445347126\",\n\"updated_at\": \"1445347126\",\n\"isdel\": \"0\",\n\"ver\": \"3\",\n\"version\": \"3\",\n\"order_ip\": \"58.135.77.96\",\n\"order_service_type_id\": \"1\",\n\"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n\"order_src_id\": \"1\",\n\"order_src_name\": \"BOSS\",\n\"channel_id\": \"20\",\n\"order_channel_name\": \"后台下单\",\n\"order_unit_money\": \"20.00\",\n\"order_money\": \"40.00\",\n\"order_booked_count\": \"120\",\n\"order_booked_begin_time\": \"1446249600\",\n\"order_booked_end_time\": \"1446256800\",\n\"address_id\": \"397\",\n\"district_id\": \"3\",\n\"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n\"order_booked_worker_id\": \"0\",\n\"checking_id\": \"0\",\n\"order_cs_memo\": \"\",\n\"order_id\": \"2\",\n\"order_before_status_dict_id\": \"2\",\n\"order_before_status_name\": \"已支付\",\n\"order_status_dict_id\": \"3\",\n\"order_status_name\": \"已开始智能指派\"\n}\n]\n}",
           "type": "json"
         }
       ]
@@ -1178,7 +1178,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
           "type": "json"
         }
       ]
@@ -1275,7 +1275,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
           "type": "json"
         }
       ]
@@ -1373,7 +1373,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
           "type": "json"
         }
       ]
@@ -2335,7 +2335,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": 0,\n     \"msg\": \"数据返回成功\",\n     \"ret\": {\n         \"sp_no\": 1049,\n         \"order_no\": \"15102301277257\",\n         \"total_amount\": \"1\",\n         \"goods_name\": \"18001305711\",\n         \"return_url\": \"http://127.0.0.1/pay/zhidahao-h5-notify\",\n         \"page_url\": \"http://www.qq.com\",\n         \"detail\": [\n         {\n             \"item_id\": \"1\",\n             \"cat_id\": \"1\",\n             \"name\": \"寿司\",\n             \"desc\": \"很好吃\",\n             \"price\": \"1\"\n         }\n         ],\n         \"order_source_url\": \"http://www.baidu.com\",\n         \"customer_name\": \"%E6%B5%8B%E8%AF%95%E5%95%86%E5%93%81\",\n         \"customer_mobile\": \"18001305711\",\n         \"customer_address\": \"%E5%8C%97%E4%BA%AC%E7%9C%81\"\n     }\n }",
+          "content": "HTTP/1.1 200 OK\n{\n     \"code\": 1,\n     \"msg\": \"数据返回成功\",\n     \"ret\": {\n         \"sp_no\": 1049,\n         \"order_no\": \"15102301277257\",\n         \"total_amount\": \"1\",\n         \"goods_name\": \"18001305711\",\n         \"return_url\": \"http://127.0.0.1/pay/zhidahao-h5-notify\",\n         \"page_url\": \"http://www.qq.com\",\n         \"detail\": [\n         {\n             \"item_id\": \"1\",\n             \"cat_id\": \"1\",\n             \"name\": \"寿司\",\n             \"desc\": \"很好吃\",\n             \"price\": \"1\"\n         }\n         ],\n         \"order_source_url\": \"http://www.baidu.com\",\n         \"customer_name\": \"%E6%B5%8B%E8%AF%95%E5%95%86%E5%93%81\",\n         \"customer_mobile\": \"18001305711\",\n         \"customer_address\": \"%E5%8C%97%E4%BA%AC%E7%9C%81\"\n     }\n }",
           "type": "json"
         }
       ]
@@ -2360,7 +2360,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"error\",\n    \"msg\": \"支付失败\"\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"0\",\n    \"msg\": \"支付失败\"\n}",
           "type": "json"
         }
       ]
@@ -2528,7 +2528,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n   \"code\":\"ok\"\n   \"msg\": \"短信发送成功\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n   \"code\":1\n   \"msg\": \"短信发送成功\"\n}",
           "type": "json"
         }
       ]
@@ -2547,7 +2547,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n  \"code\":\"error\",\n  \"msg\": \"电话号码不符合规则\"\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"code\":0,\n  \"msg\": \"电话号码不符合规则\"\n}",
           "type": "json"
         }
       ]
@@ -2639,7 +2639,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"地址添加成功\"\n  \"ret\":{\n  \"address\":\n     {\n     \"id\": 2,\n     \"customer_id\": 1,\n     \"operation_province_id\": 110000,\n     \"operation_city_id\": 110100,\n     \"operation_area_id\": 110105,\n     \"operation_province_name\": \"北京\",\n     \"operation_city_name\": \"北京市\",\n     \"operation_area_name\": \"朝阳区\",\n     \"operation_province_short_name\": \"北京\",\n     \"operation_city_short_name\": \"北京\",\n     \"operation_area_short_name\": \"朝阳\",\n     \"customer_address_detail\": \"某某小区8栋3单元512\",\n     \"customer_address_status\": 1,客户地址类型,1为默认地址，0为非默认地址\n     \"customer_address_longitude\": 116.48641,\n     \"customer_address_latitude\": 39.92149,\n     \"customer_address_nickname\": \"王小明\",\n     \"customer_address_phone\": \"18210922324\",\n     \"created_at\": 1445063798,\n     \"updated_at\": 0,\n     \"is_del\": 0\n     }\n   }\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"地址添加成功\"\n  \"ret\":{\n  \"address\":\n     {\n     \"id\": 2,\n     \"customer_id\": 1,\n     \"operation_province_id\": 110000,\n     \"operation_city_id\": 110100,\n     \"operation_area_id\": 110105,\n     \"operation_province_name\": \"北京\",\n     \"operation_city_name\": \"北京市\",\n     \"operation_area_name\": \"朝阳区\",\n     \"operation_province_short_name\": \"北京\",\n     \"operation_city_short_name\": \"北京\",\n     \"operation_area_short_name\": \"朝阳\",\n     \"customer_address_detail\": \"某某小区8栋3单元512\",\n     \"customer_address_status\": 1,客户地址类型,1为默认地址，0为非默认地址\n     \"customer_address_longitude\": 116.48641,\n     \"customer_address_latitude\": 39.92149,\n     \"customer_address_nickname\": \"王小明\",\n     \"customer_address_phone\": \"18210922324\",\n     \"created_at\": 1445063798,\n     \"updated_at\": 0,\n     \"is_del\": 0\n     }\n   }\n\n}",
           "type": "json"
         }
       ]
@@ -2664,12 +2664,12 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录。\"\n\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录。\"\n\n}",
           "type": "json"
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 address Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"常用地址添加失败\"\n\n}",
+          "content": "HTTP/1.1 200 address Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"常用地址添加失败\"\n\n}",
           "type": "json"
         }
       ]
@@ -2715,7 +2715,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"删除成功\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"删除成功\"\n}",
           "type": "json"
         }
       ]
@@ -2734,7 +2734,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录.\"\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录.\"\n}",
           "type": "json"
         }
       ]
@@ -2829,7 +2829,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/user/exchange-coupon",
-    "title": "兑换优惠劵 （没有此需求）",
+    "title": "兑换优惠劵 （郝建设 0%）",
     "name": "ExchangeCoupon",
     "group": "User",
     "parameter": {
@@ -2870,7 +2870,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"兑换成功\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"兑换成功\"\n}",
           "type": "json"
         }
       ]
@@ -2895,12 +2895,12 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
           "type": "json"
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"优惠码不存在，\"\n\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"优惠码不存在，\"\n\n}",
           "type": "json"
         }
       ]
@@ -2950,7 +2950,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"获取地址列表成功\"\n  \"ret\":{\n  \"addresses\": [\n     {\n     \"id\": 2,\n     \"customer_id\": 1,\n     \"operation_province_id\": 110000,\n     \"operation_city_id\": 110100,\n     \"operation_area_id\": 110105,\n     \"operation_province_name\": \"北京\",\n     \"operation_city_name\": \"北京市\",\n     \"operation_area_name\": \"朝阳区\",\n     \"operation_province_short_name\": \"北京\",\n     \"operation_city_short_name\": \"北京\",\n     \"operation_area_short_name\": \"朝阳\",\n     \"customer_address_detail\": \"某某小区8栋3单元512\",\n     \"customer_address_status\": 1,客户地址类型,1为默认地址，0为非默认地址\n     \"customer_address_longitude\": 116.48641,\n     \"customer_address_latitude\": 39.92149,\n     \"customer_address_nickname\": \"王小明\",\n     \"customer_address_phone\": \"18210922324\",\n     \"created_at\": 1445063798,\n     \"updated_at\": 0,\n     \"is_del\": 0\n     },\n    ]\n   }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"获取地址列表成功\"\n  \"ret\":{\n  \"addresses\": [\n     {\n     \"id\": 2,\n     \"customer_id\": 1,\n     \"operation_province_id\": 110000,\n     \"operation_city_id\": 110100,\n     \"operation_area_id\": 110105,\n     \"operation_province_name\": \"北京\",\n     \"operation_city_name\": \"北京市\",\n     \"operation_area_name\": \"朝阳区\",\n     \"operation_province_short_name\": \"北京\",\n     \"operation_city_short_name\": \"北京\",\n     \"operation_area_short_name\": \"朝阳\",\n     \"customer_address_detail\": \"某某小区8栋3单元512\",\n     \"customer_address_status\": 1,客户地址类型,1为默认地址，0为非默认地址\n     \"customer_address_longitude\": 116.48641,\n     \"customer_address_latitude\": 39.92149,\n     \"customer_address_nickname\": \"王小明\",\n     \"customer_address_phone\": \"18210922324\",\n     \"created_at\": 1445063798,\n     \"updated_at\": 0,\n     \"is_del\": 0\n     },\n    ]\n   }\n}",
           "type": "json"
         }
       ]
@@ -2969,7 +2969,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
           "type": "json"
         }
       ]
@@ -3008,7 +3008,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"获取评论级别成功\",\n  \"ret\": {\n     \"id\": \"1\",\n     \"customer_comment_level\": \"级别代号\",\n     \"customer_comment_level_name\": \"级别名称\",\n     \"is_del\": \"是否删除\",\n\n      }",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"获取评论级别成功\",\n  \"ret\": {\n     \"id\": \"1\",\n     \"customer_comment_level\": \"级别代号\",\n     \"customer_comment_level_name\": \"级别名称\",\n     \"is_del\": \"是否删除\",\n\n      }",
           "type": "json"
         }
       ]
@@ -3027,7 +3027,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
           "type": "json"
         }
       ]
@@ -3073,7 +3073,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"获取评论标签成功\",\n  \"ret\": {\n     \"id\": \"1\",\n     \"customer_tag_name\": \"评价标签名称\",\n     \"customer_comment_level\": \"评价等级\",\n     \"is_online\": \"是否上线\",\n     \"is_del\": \"删除\",\n\n      }",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"获取评论标签成功\",\n  \"ret\": {\n     \"id\": \"1\",\n     \"customer_tag_name\": \"评价标签名称\",\n     \"customer_comment_level\": \"评价等级\",\n     \"is_online\": \"是否上线\",\n     \"is_del\": \"删除\",\n\n      }",
           "type": "json"
         }
       ]
@@ -3092,7 +3092,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
           "type": "json"
         }
       ]
@@ -3131,7 +3131,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"获取成功\"\n  \"ret\":{\n       \"couponCount\":{\n       \"count\":'10'\n        }\n     }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"获取成功\"\n  \"ret\":{\n       \"couponCount\":{\n       \"count\":'10'\n        }\n     }\n}",
           "type": "json"
         }
       ]
@@ -3150,12 +3150,12 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
           "type": "json"
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录\"\n\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录\"\n\n}",
           "type": "json"
         }
       ]
@@ -3201,7 +3201,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": {\n      \"coupon\":[\n        {\n          \"id\": \"1\",\n          \"coupon_name\": \"优惠码名称\",\n           \"coupon_price\": \"优惠码价格\",\n           \"coupon_type_name\": \"优惠券类型名称\",\n           \"coupon_service_type_id\": \"服务类别id\",\n           \"coupon_service_type_name\": \"服务类别名称\",\n          }\n       ]\n      }\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": {\n      \"coupon\":[\n        {\n          \"id\": \"1\",\n          \"coupon_name\": \"优惠码名称\",\n           \"coupon_price\": \"优惠码价格\",\n           \"coupon_type_name\": \"优惠券类型名称\",\n           \"coupon_service_type_id\": \"服务类别id\",\n           \"coupon_service_type_name\": \"服务类别名称\",\n          }\n       ]\n      }\n\n}",
           "type": "json"
         }
       ]
@@ -3220,7 +3220,86 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "   HTTP/1.1 403 Not Found\n   {\n     \"code\": \"error\",\n     \"msg\": \"用户认证已经过期,请重新登录，\"\n\n   }\n*     {\n     \"code\": \"error\",\n     \"msg\": \"优惠码列表为空\"\n\n   }",
+          "content": "   HTTP/1.1 403 Not Found\n   {\n     \"code\": \"0\",\n     \"msg\": \"用户认证已经过期,请重新登录，\"\n\n   }\n*     {\n     \"code\": \"0\",\n     \"msg\": \"优惠码列表为空\"\n\n   }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/UserController.php",
+    "groupTitle": "User"
+  },
+  {
+    "type": "GET",
+    "url": "/user/get-goods",
+    "title": "获取给定经纬度范围内是否有该服务 （郝建设 100%）",
+    "name": "GetGoods",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "longitude",
+            "description": "<p>经度</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "latitude",
+            "description": "<p>纬度</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_service_type_id",
+            "description": "<p>服务id</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"有该服务\",\n  \"ret\": {\n     \"1\",\n      }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
           "type": "json"
         }
       ]
@@ -3270,7 +3349,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "    HTTP/1.1 200 OK\n{\n\"code\": \"ok\",\n\"msg\": \"查询成功\",\n\"ret\": {\n\"userBalance\": \"100.00\",\n\"userRecord\": [\n{\n\"id\": \"1\",\n\"customer_id\": \"1\",\n \"order_id\": \"0\",\n\"order_channel_id\": \"0\",\n\"customer_trans_record_order_channel\": null,\n\"pay_channel_id\": \"0\",\n\"customer_trans_record_pay_channel\": null,\n \"customer_trans_record_mode\": \"0\",\n\"customer_trans_record_mode_name\": null,\n\"customer_trans_record_coupon_money\": \"0.00\",\n\"customer_trans_record_cash\": \"0.00\",\n\"customer_trans_record_pre_pay\": \"0.00\",\n\"customer_trans_record_online_pay\": \"0.00\",\n\"customer_trans_record_online_balance_pay\": \"0.00\",\n\"customer_trans_record_online_service_card_on\": \"0\",\n\"customer_trans_record_online_service_card_pay\": \"0.00\",\n\"customer_trans_record_online_service_card_current_balance\": \"0.00\",\n\"customer_trans_record_online_service_card_befor_balance\": \"0.00\",\n\"customer_trans_record_compensate_money\": \"0.00\",\n\"customer_trans_record_refund_money\": \"0.00\",\n\"customer_trans_record_order_total_money\": \"0.00\",\n\"customer_trans_record_total_money\": \"0.00\",\n\"customer_trans_record_current_balance\": \"0.00\",\n\"customer_trans_record_befor_balance\": \"0.00\",\n\"customer_trans_record_transaction_id\": \"0\",\n\"customer_trans_record_remark\": \"\",\n\"customer_trans_record_verify\": \"\",\n\"created_at\": \"0\",\n\"updated_at\": \"0\",\n\"is_del\": \"1\"\n}\n]\n}\n}",
+          "content": "    HTTP/1.1 200 OK\n{\n\"code\": \"1\",\n\"msg\": \"查询成功\",\n\"ret\": {\n\"userBalance\": \"100.00\",\n\"userRecord\": [\n{\n\"id\": \"1\",\n\"customer_id\": \"1\",\n \"order_id\": \"0\",\n\"order_channel_id\": \"0\",\n\"customer_trans_record_order_channel\": null,\n\"pay_channel_id\": \"0\",\n\"customer_trans_record_pay_channel\": null,\n \"customer_trans_record_mode\": \"0\",\n\"customer_trans_record_mode_name\": null,\n\"customer_trans_record_coupon_money\": \"0.00\",\n\"customer_trans_record_cash\": \"0.00\",\n\"customer_trans_record_pre_pay\": \"0.00\",\n\"customer_trans_record_online_pay\": \"0.00\",\n\"customer_trans_record_online_balance_pay\": \"0.00\",\n\"customer_trans_record_online_service_card_on\": \"0\",\n\"customer_trans_record_online_service_card_pay\": \"0.00\",\n\"customer_trans_record_online_service_card_current_balance\": \"0.00\",\n\"customer_trans_record_online_service_card_befor_balance\": \"0.00\",\n\"customer_trans_record_compensate_money\": \"0.00\",\n\"customer_trans_record_refund_money\": \"0.00\",\n\"customer_trans_record_order_total_money\": \"0.00\",\n\"customer_trans_record_total_money\": \"0.00\",\n\"customer_trans_record_current_balance\": \"0.00\",\n\"customer_trans_record_befor_balance\": \"0.00\",\n\"customer_trans_record_transaction_id\": \"0\",\n\"customer_trans_record_remark\": \"\",\n\"customer_trans_record_verify\": \"\",\n\"created_at\": \"0\",\n\"updated_at\": \"0\",\n\"is_del\": \"1\"\n}\n]\n}\n}",
           "type": "json"
         }
       ]
@@ -3289,7 +3368,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
           "type": "json"
         }
       ]
@@ -3329,7 +3408,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"提交成功\"\n  \"ret\":{\n     \"scoreCategory\": [\n         {\n             \"desc\": \"在线支付后评价订单\",\n             \"score\": \"¥*5\"\n         },\n         {\n             \"desc\": \"在线支付\",\n             \"score\": \"¥*5\"\n         },\n         {\n             \"desc\": \"分享给朋友\",\n             \"score\": \"10\"\n         }\n     ],\n     \"scoreDetail\": [],\n     \"score\": \"0分\",\n     \"userPrize\": [\n         {\n             \"prizeId\": \"3\",\n             \"prizeName\": \"e家洁厨房高温保养\",\n             \"prizeCost\": \"1500\",\n             \"prizeRule\": [\n                 \"如需咨询请拨打客服电话：400-6767-636\"\n             ],\n             \"prizeThumb\": \"http://webapi2.1jiajie.com/app/images/gaowenbaojie_small3.png\",\n             \"prizePic\": \"http://static.1jiajie.com/prizePhoto/gaowenbaojie_big.png\"\n         }\n     ],\n   }\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"提交成功\"\n  \"ret\":{\n     \"scoreCategory\": [\n         {\n             \"desc\": \"在线支付后评价订单\",\n             \"score\": \"¥*5\"\n         },\n         {\n             \"desc\": \"在线支付\",\n             \"score\": \"¥*5\"\n         },\n         {\n             \"desc\": \"分享给朋友\",\n             \"score\": \"10\"\n         }\n     ],\n     \"scoreDetail\": [],\n     \"score\": \"0分\",\n     \"userPrize\": [\n         {\n             \"prizeId\": \"3\",\n             \"prizeName\": \"e家洁厨房高温保养\",\n             \"prizeCost\": \"1500\",\n             \"prizeRule\": [\n                 \"如需咨询请拨打客服电话：400-6767-636\"\n             ],\n             \"prizeThumb\": \"http://webapi2.1jiajie.com/app/images/gaowenbaojie_small3.png\",\n             \"prizePic\": \"http://static.1jiajie.com/prizePhoto/gaowenbaojie_big.png\"\n         }\n     ],\n   }\n\n}",
           "type": "json"
         }
       ]
@@ -3348,7 +3427,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
           "type": "json"
         }
       ]
@@ -3394,7 +3473,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"移除成功\"\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"移除成功\"\n\n}",
           "type": "json"
         }
       ]
@@ -3413,7 +3492,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
           "type": "json"
         }
       ]
@@ -3460,7 +3539,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"设置成功\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"设置成功\"\n}",
           "type": "json"
         }
       ]
@@ -3479,7 +3558,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n}",
           "type": "json"
         }
       ]
@@ -3543,7 +3622,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"设置成功\"\n  \"ret\":{\n     \"services\":{}\n     \"appInfoWithCity\":{}\n   }\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"设置成功\"\n  \"ret\":{\n     \"services\":{}\n     \"appInfoWithCity\":{}\n   }\n\n}",
           "type": "json"
         }
       ]
@@ -3562,7 +3641,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
           "type": "json"
         }
       ]
@@ -3647,7 +3726,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"修改常用地址成功\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"修改常用地址成功\"\n}",
           "type": "json"
         }
       ]
@@ -3672,95 +3751,12 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录。\"\n\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录。\"\n\n}",
           "type": "json"
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 200 address Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"地址信息获取失败\"\n\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/UserController.php",
-    "groupTitle": "User"
-  },
-  {
-    "type": "GET",
-    "url": "/user/update-city",
-    "title": "修改载入城市",
-    "name": "UpdateCity",
-    "group": "User",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户认证</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "city_name",
-            "description": "<p>城市</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "<p>Object[]</p> ",
-            "optional": false,
-            "field": "services",
-            "description": "<p>该城市提供的服务.</p> "
-          },
-          {
-            "group": "Success 200",
-            "type": "<p>Object[]</p> ",
-            "optional": false,
-            "field": "appInfoWithCity",
-            "description": "<p>该城市相关初始化配置.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"设置成功\"\n  \"ret\":{\n     \"services\":{}\n     \"appInfoWithCity\":{}\n   }\n\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>The id of the User was not found.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 200 address Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"地址信息获取失败\"\n\n}",
           "type": "json"
         }
       ]
@@ -3827,7 +3823,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"提交成功\"\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"提交成功\"\n\n}",
           "type": "json"
         }
       ]
@@ -3846,7 +3842,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
           "type": "json"
         }
       ]
@@ -3886,7 +3882,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"删除成功\"\n  \"ret\":{\n    \"blockWorkers\": [\n    {\n      \"worker_id\": \"12409\",\n      \"face\": \"http://static.1jiajie.com/worker/face/12409.jpg\",\n      \"name\": \"夏测试\",\n      \"order_num\": \"服务:168次\",\n      \"kilometer\": \"\",\n      \"star_rate\": \"0\",\n      \"last_serve_time\": \"最后服务时间:2015-04-22 16:00:34\",\n      \"shop_id\": \"68\",\n      \"is_fulltime\": \"全职全日\",\n      \"telephone\": \"18610932174\"\n    }\n   ]\n  }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"删除成功\"\n  \"ret\":{\n    \"blockWorkers\": [\n    {\n      \"worker_id\": \"12409\",\n      \"face\": \"http://static.1jiajie.com/worker/face/12409.jpg\",\n      \"name\": \"夏测试\",\n      \"order_num\": \"服务:168次\",\n      \"kilometer\": \"\",\n      \"star_rate\": \"0\",\n      \"last_serve_time\": \"最后服务时间:2015-04-22 16:00:34\",\n      \"shop_id\": \"68\",\n      \"is_fulltime\": \"全职全日\",\n      \"telephone\": \"18610932174\"\n    }\n   ]\n  }\n}",
           "type": "json"
         }
       ]
@@ -3905,7 +3901,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
           "type": "json"
         }
       ]
@@ -3951,7 +3947,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"删除成功\"\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"删除成功\"\n\n}",
           "type": "json"
         }
       ]
@@ -3976,12 +3972,12 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
           "type": "json"
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"不存在要删除的阿姨\"\n\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"不存在要删除的阿姨\"\n\n}",
           "type": "json"
         }
       ]
@@ -4665,7 +4661,7 @@ define({ "api": [
   {
     "type": "get",
     "url": "/worker/help_user_create_one_order.php",
-    "title": "(田玉星0%)",
+    "title": "帮客户下单，单次服务确认下单 (田玉星0%)",
     "name": "actionHelpUserCreateOneOrder",
     "group": "Worker",
     "description": "<p>帮客户下单，单次服务确认下单</p> ",
@@ -5364,7 +5360,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"code\": \"ok\",\n    \"msg\": \"\",\n    \"ret\":\n    [\n    {\n        \"category_id\":\"\", 服务品类id\n        \"category_name\":\"专业保洁\",  服务品类名\n        \"goodses\":\n        [\n        {\n            \"goods_id\": \"2\", 服务类型id\n            \"goods_no\": null,  服务类型编号\n            \"goods_name\": \"空调清洗\",  服务类型名\n            \"goods_introduction\": \"\", 服务类型简介\n            \"goods_english_name\": \"\", 服务类型英文名称\n            \"goods_img\": \"\", 服务类型图片\n            \"goods_app_ico\": null,  APP端图标(序列化方式存储|首页大图，首页小图，分类页小图，订单页小图)\n            \"goods_pc_ico\": null,  PC端图标(序列化方式存储|首页大图，首页小图，分类页小图，订单页小图)\n            \"goods_price\": \"0.0000\", 价格\n            \"goods_price_unit\": \"件\",  单位\n            \"goods_price_description\": \"1232131\"\n        },\n        ]\n     }\n     ],\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"code\": \"1\",\n    \"msg\": \"\",\n    \"ret\":\n    [\n    {\n        \"category_id\":\"\", 服务品类id\n        \"category_name\":\"专业保洁\",  服务品类名\n        \"goodses\":\n        [\n        {\n            \"goods_id\": \"2\", 服务类型id\n            \"goods_no\": null,  服务类型编号\n            \"goods_name\": \"空调清洗\",  服务类型名\n            \"goods_introduction\": \"\", 服务类型简介\n            \"goods_english_name\": \"\", 服务类型英文名称\n            \"goods_img\": \"\", 服务类型图片\n            \"goods_app_ico\": null,  APP端图标(序列化方式存储|首页大图，首页小图，分类页小图，订单页小图)\n            \"goods_pc_ico\": null,  PC端图标(序列化方式存储|首页大图，首页小图，分类页小图，订单页小图)\n            \"goods_price\": \"0.0000\", 价格\n            \"goods_price_unit\": \"件\",  单位\n            \"goods_price_description\": \"1232131\"\n        },\n        ]\n     }\n     ],\n}",
           "type": "json"
         }
       ]
@@ -5383,7 +5379,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n  \"code\":\"error\",\n  \"msg\": \"该城市暂未开通\"\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"code\":\"0\",\n  \"msg\": \"该城市暂未开通\"\n}",
           "type": "json"
         }
       ]
@@ -5424,7 +5420,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "    HTTP/1.1 200 OK\n    {\n         \"code\": \"ok\",\n         \"msg\": \"操作成功\",\n         \"ret\": {\n             \"city_list\": [\n             {\n                 \"id\": 1,\n                 \"province_id\": 120000,\n                 \"province_name\": \"天津\",\n                 \"city_id\": 120100,\n                 \"city_name\": \"天津市\",\n                 \"operation_city_is_online\": 1,\n                 \"created_at\": 1444283773,\n                 \"updated_at\": 1444283773\n             },\n             {\n                 \"id\": 2,\n                 \"province_id\": 110000,\n                 \"province_name\": \"北京\",\n                 \"city_id\": 110100,\n                 \"city_name\": \"北京市\",\n                 \"operation_city_is_online\": 1,\n                 \"created_at\": 1444368462,\n                 \"updated_at\": 1444368462\n             },\n             {\n                 \"id\": 3,\n                 \"province_id\": 140000,\n                 \"province_name\": \"山西省\",\n                 \"city_id\": 140300,\n                 \"city_name\": \"阳泉市\",\n                 \"operation_city_is_online\": 1,\n                 \"created_at\": 1444413962,\n                 \"updated_at\": 1444413962\n             },\n             {\n                 \"id\": 4,\n                 \"province_id\": 140000,\n                 \"province_name\": \"山西省\",\n                 \"city_id\": 140100,\n                 \"city_name\": \"太原市\",\n                 \"operation_city_is_online\": 1,\n                 \"created_at\": 1444635891,\n                 \"updated_at\": 1444635891\n             }\n             ],\n             \"pic_list\": [\n             {\n                 \"img_path\": \"http://webapi2.1jiajie.com/app/images/ios_banner_1.png\",\n                 \"link\": \"http://wap.1jiajie.com/trainAuntie1.html\",\n                 \"url_title\": \"标准服务\"\n             },\n             {\n                 \"img_path\": \"http://webapi2.1jiajie.com/app/images/20150603ad_top_v4_1.png\",\n                 \"link\": \"http://wap.1jiajie.com/pledge.html\",\n                 \"url_title\": \"服务承诺\"\n             },\n             {\n                 \"img_path\": \"http://webapi2.1jiajie.com/app/images/20150311ad_top_v4_3.png\",\n                 \"link\": \"\",\n                 \"url_title\": \"\"\n             }\n             ],\n             \"server_list\": [\n             {\n                 \"goods_id\": \"1\",\n                 \"goods_no\": \"\",\n                 \"goods_name\": \"管道疏通\",\n                 \"goods_introduction\": \"含：专业设备+专业技师+上门服务\",\n                 \"goods_english_name\": \"\",\n                 \"goods_img\": \"\",\n                 \"goods_app_ico\": \"\",\n                 \"goods_pc_ico\": \"\",\n                 \"goods_price\": \"160.00\",\n                 \"goods_price_unit\": \"眼\",\n                 \"goods_price_description\": \"\"\n             },\n             {\n                 \"goods_id\": \"2\",\n                 \"goods_no\": \"\",\n                 \"goods_name\": \"家电维修\",\n                 \"goods_introduction\": \"含：专业设备+专业技师+上门服务\",\n                 \"goods_english_name\": \"\",\n                 \"goods_img\": \"\",\n                 \"goods_app_ico\": \"\",\n                 \"goods_pc_ico\": \"\",\n                 \"goods_price\": \"160.00\",\n                 \"goods_price_unit\": \"次\",\n                 \"goods_price_description\": \"\"\n             },\n             {\n                 \"goods_id\": \"3\",\n                 \"goods_no\": \"\",\n                 \"goods_name\": \"家具组装\",\n                 \"goods_introduction\": \"含：专业设备+专业技师+上门服务\",\n                 \"goods_english_name\": \"\",\n                 \"goods_img\": \"\",\n                 \"goods_app_ico\": \"\",\n                 \"goods_pc_ico\": \"\",\n                 \"goods_price\": \"160.00\",\n                 \"goods_price_unit\": \"次\",\n                 \"goods_price_description\": \"\"\n             }\n         ]\n     }\n}",
+          "content": "    HTTP/1.1 200 OK\n    {\n         \"code\": \"1\",\n         \"msg\": \"操作成功\",\n         \"ret\": {\n             \"city_list\": [\n             {\n                 \"id\": 1,\n                 \"province_id\": 120000,\n                 \"province_name\": \"天津\",\n                 \"city_id\": 120100,\n                 \"city_name\": \"天津市\",\n                 \"operation_city_is_online\": 1,\n                 \"created_at\": 1444283773,\n                 \"updated_at\": 1444283773\n             },\n             {\n                 \"id\": 2,\n                 \"province_id\": 110000,\n                 \"province_name\": \"北京\",\n                 \"city_id\": 110100,\n                 \"city_name\": \"北京市\",\n                 \"operation_city_is_online\": 1,\n                 \"created_at\": 1444368462,\n                 \"updated_at\": 1444368462\n             },\n             {\n                 \"id\": 3,\n                 \"province_id\": 140000,\n                 \"province_name\": \"山西省\",\n                 \"city_id\": 140300,\n                 \"city_name\": \"阳泉市\",\n                 \"operation_city_is_online\": 1,\n                 \"created_at\": 1444413962,\n                 \"updated_at\": 1444413962\n             },\n             {\n                 \"id\": 4,\n                 \"province_id\": 140000,\n                 \"province_name\": \"山西省\",\n                 \"city_id\": 140100,\n                 \"city_name\": \"太原市\",\n                 \"operation_city_is_online\": 1,\n                 \"created_at\": 1444635891,\n                 \"updated_at\": 1444635891\n             }\n             ],\n             \"pic_list\": [\n             {\n                 \"img_path\": \"http://webapi2.1jiajie.com/app/images/ios_banner_1.png\",\n                 \"link\": \"http://wap.1jiajie.com/trainAuntie1.html\",\n                 \"url_title\": \"标准服务\"\n             },\n             {\n                 \"img_path\": \"http://webapi2.1jiajie.com/app/images/20150603ad_top_v4_1.png\",\n                 \"link\": \"http://wap.1jiajie.com/pledge.html\",\n                 \"url_title\": \"服务承诺\"\n             },\n             {\n                 \"img_path\": \"http://webapi2.1jiajie.com/app/images/20150311ad_top_v4_3.png\",\n                 \"link\": \"\",\n                 \"url_title\": \"\"\n             }\n             ],\n             \"server_list\": [\n             {\n                 \"goods_id\": \"1\",\n                 \"goods_no\": \"\",\n                 \"goods_name\": \"管道疏通\",\n                 \"goods_introduction\": \"含：专业设备+专业技师+上门服务\",\n                 \"goods_english_name\": \"\",\n                 \"goods_img\": \"\",\n                 \"goods_app_ico\": \"\",\n                 \"goods_pc_ico\": \"\",\n                 \"goods_price\": \"160.00\",\n                 \"goods_price_unit\": \"眼\",\n                 \"goods_price_description\": \"\"\n             },\n             {\n                 \"goods_id\": \"2\",\n                 \"goods_no\": \"\",\n                 \"goods_name\": \"家电维修\",\n                 \"goods_introduction\": \"含：专业设备+专业技师+上门服务\",\n                 \"goods_english_name\": \"\",\n                 \"goods_img\": \"\",\n                 \"goods_app_ico\": \"\",\n                 \"goods_pc_ico\": \"\",\n                 \"goods_price\": \"160.00\",\n                 \"goods_price_unit\": \"次\",\n                 \"goods_price_description\": \"\"\n             },\n             {\n                 \"goods_id\": \"3\",\n                 \"goods_no\": \"\",\n                 \"goods_name\": \"家具组装\",\n                 \"goods_introduction\": \"含：专业设备+专业技师+上门服务\",\n                 \"goods_english_name\": \"\",\n                 \"goods_img\": \"\",\n                 \"goods_app_ico\": \"\",\n                 \"goods_pc_ico\": \"\",\n                 \"goods_price\": \"160.00\",\n                 \"goods_price_unit\": \"次\",\n                 \"goods_price_description\": \"\"\n             }\n         ]\n     }\n}",
           "type": "json"
         }
       ]
@@ -5443,7 +5439,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\":\"error\",\n  \"msg\": \"城市尚未开通\"\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\":\"0\",\n  \"msg\": \"城市尚未开通\"\n}",
           "type": "json"
         }
       ]
@@ -5482,7 +5478,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"curAndroidVersion\": 23,\n         \"androidVersionUrl\": \"http://webapi2.1jiajie.com/app/aunt_2.5.apk\",\n         \"androidVersionAlertMsg\": \"1、兼职阿姨也可登录阿姨端。2、兼职阿姨可修改自己的工作时间。3、新增待接活订单推送通知。\",\n         \"isAndroidUpdateForce\": false,\n         \"msgStyle\": \"\",\n         \"alertMsg\": \"\"\n     }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"1\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"curAndroidVersion\": 23,\n         \"androidVersionUrl\": \"http://webapi2.1jiajie.com/app/aunt_2.5.apk\",\n         \"androidVersionAlertMsg\": \"1、兼职阿姨也可登录阿姨端。2、兼职阿姨可修改自己的工作时间。3、新增待接活订单推送通知。\",\n         \"isAndroidUpdateForce\": false,\n         \"msgStyle\": \"\",\n         \"alertMsg\": \"\"\n     }\n}",
           "type": "json"
         }
       ]
@@ -5501,7 +5497,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"Failed\",\n    \"msg\": \"SessionIdNotFound\"\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"0\",\n    \"msg\": \"SessionIdNotFound\"\n}",
           "type": "json"
         }
       ]
@@ -5629,6 +5625,65 @@ define({ "api": [
   },
   {
     "type": "GET",
+    "url": "v1/service/boutique-cleaning",
+    "title": "获得所有精品保洁项目（赵顺利0%）",
+    "group": "service",
+    "name": "actionBoutiqueCleaning",
+    "description": "<p>获取城市所有精品保洁</p> ",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "city_name",
+            "description": "<p>城市</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"code\": \"ok\",\n    \"msg\": \"\",\n    \"ret\":\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CityNotSupportFound",
+            "description": "<p>该城市暂未开通.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"code\":\"error\",\n  \"msg\": \"该城市暂未开通\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/ServiceController.php",
+    "groupTitle": "service"
+  },
+  {
+    "type": "GET",
     "url": "v1/service/goods-price",
     "title": "获取某城市某商品的价格及备注信息（赵顺利 100%）",
     "name": "actionGoodsPrice",
@@ -5679,7 +5734,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"code\": \"ok\",\n    \"msg\": \"\",\n    \"ret\":\n    [\n        \"goods_price\": \"0.0000\", 价格\n    ],\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"code\": 1,\n    \"msg\": \"\",\n    \"ret\":\n    [\n        \"goods_price\": \"0.0000\", 价格\n    ],\n}",
           "type": "json"
         }
       ]
@@ -5698,7 +5753,80 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n  \"code\":\"error\",\n  \"msg\": \"错误的城市信息\"\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"code\":0,\n  \"msg\": \"错误的城市信息\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/ServiceController.php",
+    "groupTitle": "service"
+  },
+  {
+    "type": "GET",
+    "url": "v1/service/goods-service-time",
+    "title": "依据地址 获取某服务从今天开始7天商圈的阿姨可服务时间表(赵顺利0%)",
+    "name": "actionGoodsServiceTime",
+    "group": "service",
+    "description": "<p>依据地址 获取某项服务在某个地址从今天开始7天商圈的阿姨可服务时间表</p> ",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "city_name",
+            "description": "<p>城市</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "goods_id",
+            "description": "<p>服务类型id</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "address_id",
+            "description": "<p>地址id</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"code\": \"ok\",\n    \"msg\": \"\",\n    \"ret\":\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CityNotSupportFound",
+            "description": "<p>该城市暂未开通.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"code\":\"error\",\n  \"msg\": \"该城市暂未开通\"\n}",
           "type": "json"
         }
       ]
@@ -5710,10 +5838,10 @@ define({ "api": [
   {
     "type": "GET",
     "url": "v1/service/home-services",
-    "title": "依据城市 获取全部服务列表 （赵顺利 20% 假数据，未与boss关联）",
+    "title": "依据城市 获取首页服务列表 （赵顺利 20% 假数据，未与boss关联）",
     "name": "actionHomeServices",
     "group": "service",
-    "description": "<p>获取城市更多服务项目信息简介</p> ",
+    "description": "<p>获取城市首页服务项目信息简介</p> ",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -5738,7 +5866,73 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"code\": \"ok\",\n    \"msg\": \"信息获取成功\",\n    \"ret\":\n    [\n    {\n        \"goods_id\": \"1\",\n        \"goods_no\": \"\",\n        \"goods_name\": \"管道疏通\",\n        \"goods_introduction\": \"含：专业设备+专业技师+上门服务\",\n        \"goods_english_name\": \"\",\n        \"goods_img\": \"\",\n        \"goods_app_ico\": \"\",\n        \"goods_pc_ico\": \"\",\n        \"goods_price\": \"160.00\",\n        \"goods_price_unit\": \"眼\",\n        \"goods_price_description\": \"\"\n    },\n    {\n        \"goods_id\": \"2\",\n        \"goods_no\": \"\",\n        \"goods_name\": \"家电维修\",\n        \"goods_introduction\": \"含：专业设备+专业技师+上门服务\",\n        \"goods_english_name\": \"\",\n        \"goods_img\": \"\",\n        \"goods_app_ico\": \"\",\n        \"goods_pc_ico\": \"\",\n        \"goods_price\": \"160.00\",\n        \"goods_price_unit\": \"次\",\n        \"goods_price_description\": \"\"\n    },\n    {\n        \"goods_id\": \"3\",\n        \"goods_no\": \"\",\n        \"goods_name\": \"家具组装\",\n        \"goods_introduction\": \"含：专业设备+专业技师+上门服务\",\n        \"goods_english_name\": \"\",\n        \"goods_img\": \"\",\n        \"goods_app_ico\": \"\",\n        \"goods_pc_ico\": \"\",\n        \"goods_price\": \"160.00\",\n        \"goods_price_unit\": \"次\",\n        \"goods_price_description\": \"\"\n    }\n    ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"code\": 1,\n    \"msg\": \"信息获取成功\",\n    \"ret\":\n    [\n    {\n        \"goods_id\": \"1\",\n        \"goods_no\": \"\",\n        \"goods_name\": \"管道疏通\",\n        \"goods_introduction\": \"含：专业设备+专业技师+上门服务\",\n        \"goods_english_name\": \"\",\n        \"goods_img\": \"\",\n        \"goods_app_ico\": \"\",\n        \"goods_pc_ico\": \"\",\n        \"goods_price\": \"160.00\",\n        \"goods_price_unit\": \"眼\",\n        \"goods_price_description\": \"\"\n    },\n    {\n        \"goods_id\": \"2\",\n        \"goods_no\": \"\",\n        \"goods_name\": \"家电维修\",\n        \"goods_introduction\": \"含：专业设备+专业技师+上门服务\",\n        \"goods_english_name\": \"\",\n        \"goods_img\": \"\",\n        \"goods_app_ico\": \"\",\n        \"goods_pc_ico\": \"\",\n        \"goods_price\": \"160.00\",\n        \"goods_price_unit\": \"次\",\n        \"goods_price_description\": \"\"\n    },\n    {\n        \"goods_id\": \"3\",\n        \"goods_no\": \"\",\n        \"goods_name\": \"家具组装\",\n        \"goods_introduction\": \"含：专业设备+专业技师+上门服务\",\n        \"goods_english_name\": \"\",\n        \"goods_img\": \"\",\n        \"goods_app_ico\": \"\",\n        \"goods_pc_ico\": \"\",\n        \"goods_price\": \"160.00\",\n        \"goods_price_unit\": \"次\",\n        \"goods_price_description\": \"\"\n    }\n    ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CityNotSupportFound",
+            "description": "<p>该城市暂未开通.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"code\":0,\n  \"msg\": \"该城市暂未开通\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/ServiceController.php",
+    "groupTitle": "service"
+  },
+  {
+    "type": "GET",
+    "url": "v1/service/service-goods",
+    "title": "依据城市和服务品类 获取服务类型列表 （赵顺利 80%url不能获取）",
+    "name": "actionServiceGoods",
+    "group": "service",
+    "description": "<p>获得某城市下某服务的所有子服务列表，返回子服务数组[服务名,服务描述,服务图标，服务id，url]</p> ",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "city_name",
+            "description": "<p>城市</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "category_id",
+            "description": "<p>服务品类id</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"code\": \"ok\",\n    \"msg\": \"\",\n    \"ret\":\n    [\n        {\n            \"goods_id\": \"2\", 服务类型id\n            \"goods_no\": null,  服务类型编号\n            \"goods_name\": \"空调清洗\",  服务类型名\n            \"goods_introduction\": \"\", 服务类型简介\n            \"goods_english_name\": \"\", 服务类型英文名称\n            \"goods_img\": \"\", 服务类型图片\n            \"goods_app_ico\": null,  APP端图标(序列化方式存储|首页大图，首页小图，分类页小图，订单页小图)\n            \"goods_pc_ico\": null,  PC端图标(序列化方式存储|首页大图，首页小图，分类页小图，订单页小图)\n            \"goods_price\": \"0.0000\", 价格\n            \"goods_price_unit\": \"件\",  单位\n            \"goods_price_description\": \"1232131\"\n            \"goods_page_url\": \"\"\n        },\n     ],\n}",
           "type": "json"
         }
       ]

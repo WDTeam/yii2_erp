@@ -9,6 +9,7 @@
 namespace boss\models\order;
 
 use boss\models\Operation\OperationCity;
+use common\models\finance\FinanceOrderChannel;
 use core\models\Operation\CoreOperationArea;
 use core\models\order\OrderPay;
 use Yii;
@@ -104,6 +105,18 @@ class Order extends OrderModel
             'orderBookedDate' => '预约服务日期',
             'orderBookedTimeRange' => '预约服务时间',
         ];
+    }
+
+    /**
+     * 获取订单渠道
+     * @param int $channel_id
+     * @return array|bool
+     */
+    public function getOrderChannelList($channel_id = 0)
+    {
+        $list = FinanceOrderChannel::get_order_channel_list_info();
+        $channel = ArrayHelper::map($list, 'id', 'finance_order_channel_name');
+        return $channel_id == 0 ? $channel : (isset($channel[$channel_id]) ? $channel[$channel_id] : false);
     }
 
 

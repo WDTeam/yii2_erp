@@ -124,10 +124,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $financeSettleApplyDataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            ['attribute'=>'worder_id',
+            ['attribute'=>'worker_id',
                  'content'=>function($model,$key,$index)
-                        {return  Html::a('<u>'.$model->worder_id.'</u>',[Yii::$app->urlManager->createUrl(['worker/view/','id' => $model->worder_id])],['data-pjax'=>'0','target' => '_blank',]);}],
-            'worder_tel',
+                        {return  Html::a('<u>'.$model->worker_id.'</u>',[Yii::$app->urlManager->createUrl(['worker/view/','id' => $model->worker_id])],['data-pjax'=>'0','target' => '_blank',]);}],
+            'worker_tel',
             'worker_type_name',
             'worker_rule_name', 
             'finance_settle_apply_order_count', 

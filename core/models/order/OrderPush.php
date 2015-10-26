@@ -1,4 +1,4 @@
-<?php
+ï»¿<?php
 /**
  * Created by PhpStorm.
  * User: LinHongYou
@@ -8,7 +8,7 @@
 namespace core\models\order;
 
 
-use common\models\OrderStatusDict;
+use common\models\order\OrderStatusDict;
 use Yii;
 use core\models\worker\Worker;
 
@@ -19,38 +19,42 @@ class OrderPush extends Order
     const PUSH_ORDER_LOCK = 'PUSH_ORDER_LOCK';
 
     /**
-     * ÖÇÄÜÍÆËÍ
+     * æ™ºèƒ½æ¨é€
      * @param $order_id
      * @return array
+     *
+     *
      */
     public static function push($order_id)
     {
         $order = OrderSearch::getOne($order_id);
 
-        $full_time = 1; //È«Ö°
-        $part_time = 2; //¼æÖ°
-        $push_status = 0; //ÍÆËÍ×´Ì¬ 0ÏµÍ³Ö¸ÅÉÊ§°Ü
-        if ($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //¿ªÊ¼ÏµÍ³Ö¸ÅÉµÄ¶©µ¥
-            if (time() - $order->orderExtStatus->updated_at < 300) { //TODO 5·ÖÖÓÄÚµÄ¶©µ¥ÍÆËÍ¸øÈ«Ö°°¢ÒÌ 5·ÖÖÓĞèÒªÅäÖÃ
-                //»ñÈ¡È«Ö°°¢ÒÌ
+        $full_time = 1; //å…¨èŒ
+        $part_time = 2; //å…¼èŒ
+        $push_status = 0; //æ¨é€çŠ¶æ€
+        if ($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //å¼€å§‹ç³»ç»ŸæŒ‡æ´¾çš„è®¢å•
+            if($order->order_booked_worker_id>0 && time() - $order->orderExtStatus->updated_at < 900){ //å…ˆåˆ¤æ–­æœ‰æ²¡æœ‰æŒ‡å®šé˜¿å§¨
+                $workers[] = Worker::getWorkerInfo($order->order_booked_worker_id);
+            }elseif (time() - $order->orderExtStatus->updated_at < 300) { //TODO 5åˆ†é’Ÿå†…çš„è®¢å•æ¨é€ç»™å…¨èŒé˜¿å§¨ 5åˆ†é’Ÿéœ€è¦é…ç½®
+                //è·å–å…¨èŒé˜¿å§¨
                 $workers = Worker::getDistrictFreeWorker($order->district_id, $full_time, $order->order_booked_begin_time, $order->order_booked_end_time);
                 $push_status = $full_time;
                 if (empty($workers)) {
-                    //Ã»ÓĞÈ«Ö°°¢ÒÌ »ñÈ¡¼æÖ°°¢ÒÌ
+                    //æ²¡æœ‰å…¨èŒé˜¿å§¨ è·å–å…¼èŒé˜¿å§¨
                     $workers = Worker::getDistrictFreeWorker($order->district_id, $part_time, $order->order_booked_begin_time, $order->order_booked_end_time);
                     $push_status = $part_time;
                 }
-            } elseif (time() - $order->orderExtStatus->updated_at < 900) { //TODO 15·ÖÖÓÄÚµÄ¶©µ¥ÍÆËÍ¸ø¼æÖ°°¢ÒÌ 15·ÖÖÓĞèÒªÅäÖÃ
+            } elseif (time() - $order->orderExtStatus->updated_at < 900) { //TODO 15åˆ†é’Ÿå†…çš„è®¢å•æ¨é€ç»™å…¼èŒé˜¿å§¨ 15åˆ†é’Ÿéœ€è¦é…ç½®
                 $workers = Worker::getDistrictFreeWorker($order->district_id, $part_time, $order->order_booked_begin_time, $order->order_booked_end_time);
                 $push_status = $part_time;
             }
             if (!empty($workers)) {
                 self::pushToWorkers($order_id, $workers, $push_status);
-            } else {//Èç¹û²éÑ¯²»µ½¼æÖ°°¢ÒÌÔòÏµÍ³Ö¸ÅÉÊ§°Ü
+            } else {//å¦‚æœæŸ¥è¯¢ä¸åˆ°å…¼èŒé˜¿å§¨åˆ™ç³»ç»ŸæŒ‡æ´¾å¤±è´¥
                 Order::sysAssignUndone($order_id);
             }
         } else {
-            //×´Ì¬²»ÊÇÖÇÄÜÖ¸ÅÉÖĞÖ±½Ó´Ó¶©µ¥³ØÖĞÉ¾³ı
+            //çŠ¶æ€ä¸æ˜¯æ™ºèƒ½æŒ‡æ´¾ä¸­ç›´æ¥ä»è®¢å•æ± ä¸­åˆ é™¤
             OrderPool::remOrder($order_id);
         }
 
@@ -59,7 +63,7 @@ class OrderPush extends Order
     }
 
     /**
-     * ÍÆËÍ¸ø°¢ÒÌ
+     * æ¨é€ç»™é˜¿å§¨
      * @param $order_id
      * @param $workers
      * @param $identity
@@ -68,61 +72,61 @@ class OrderPush extends Order
     {
         $ivr_flag = false;
         $jpush_flag = false;
-        $is_ivr_worker_ids = OrderWorkerRelation::getWorkerIdsByOrderIdAndStatus($order_id, 'IVRÒÑÍÆËÍ');
-        $is_jpush_worker_ids = OrderWorkerRelation::getWorkerIdsByOrderIdAndStatus($order_id, 'JPUSHÒÑÍÆËÍ');
+        $is_ivr_worker_ids = OrderWorkerRelation::getWorkerIdsByOrderIdAndStatus($order_id, 'IVRå·²æ¨é€');
+        $is_jpush_worker_ids = OrderWorkerRelation::getWorkerIdsByOrderIdAndStatus($order_id, 'JPUSHå·²æ¨é€');
         foreach ($workers as $v) {
-            if (!in_array($v['id'], $is_ivr_worker_ids)) { //ÅĞ¶Ï¸Ã°¢ÒÌÓĞÃ»ÓĞÍÆËÍ¹ı¸Ã¶©µ¥£¬·ÀÖ¹ÖØ¸´ÍÆËÍ¡£
-                //°Ñ¸ÃÍÆËÍivrµÄ°¢ÒÌ·ÅÈë¸Ã¶©µ¥µÄ¶ÓÁĞÖĞ
+            if (!in_array($v['id'], $is_ivr_worker_ids)) { //åˆ¤æ–­è¯¥é˜¿å§¨æœ‰æ²¡æœ‰æ¨é€è¿‡è¯¥è®¢å•ï¼Œé˜²æ­¢é‡å¤æ¨é€ã€‚
+                //æŠŠè¯¥æ¨é€ivrçš„é˜¿å§¨æ”¾å…¥è¯¥è®¢å•çš„é˜Ÿåˆ—ä¸­
                 Yii::$app->redis->executeCommand('rPush', [self::WAIT_IVR_PUSH_ORDERS_POOL . '_' . $order_id, json_encode(['id' => $v['id'], 'worker_phone' => $v['worker_phone']])]);
                 $ivr_flag = true;
             }
             if (!in_array($v['id'], $is_jpush_worker_ids)) {
-                $result = Yii::$app->jpush->push(["worker_{$v['id']}"], '¶©µ¥À´À²£¡'); //TODO ·¢ËÍÄÚÈİ
+                $result = Yii::$app->jpush->push(["worker_{$v['id']}"], 'è®¢å•æ¥å•¦ï¼'); //TODO å‘é€å†…å®¹
                 if (isset($result->isOK)) {
                     $worker_id = intval(str_replace('worker_', '', $v));
-                    OrderWorkerRelation::addOrderWorkerRelation($order_id, $worker_id, '', 'JPUSHÒÑÍÆËÍ', 1);
+                    OrderWorkerRelation::addOrderWorkerRelation($order_id, $worker_id, '', 'JPUSHå·²æ¨é€', 1);
                     $jpush_flag = true;
                 }
             }
         }
         if ($ivr_flag) {
-            self::workerIVRPushFlag($order_id); //±ê¼ÇivrÍÆËÍ
+            self::workerIVRPushFlag($order_id); //æ ‡è®°ivræ¨é€
         }
         if ($jpush_flag) {
-            self::workerJPushFlag($order_id); //±ê¼Ç¼«¹âÍÆËÍ
+            self::workerJPushFlag($order_id); //æ ‡è®°æå…‰æ¨é€
         }
 
-        //ÖØĞÂ¼ÓÈë¶©µ¥³Ø
+        //é‡æ–°åŠ å…¥è®¢å•æ± 
         OrderPool::updateOrder($order_id,$identity);
 
-        self::ivrPushToWorker($order_id); //¿ªÊ¼ivrÍÆËÍ
+        self::ivrPushToWorker($order_id); //å¼€å§‹ivræ¨é€
     }
 
     /**
-     * ivrÍÆËÍ¸øµ¥¸ö°¢ÒÌ
+     * ivræ¨é€ç»™å•ä¸ªé˜¿å§¨
      * @param $order_id
      */
     public static function ivrPushToWorker($order_id)
     {
         $order = OrderSearch::getOne($order_id);
-        if ($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //¿ªÊ¼ÏµÍ³Ö¸ÅÉµÄ¶©µ¥
+        if ($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //å¼€å§‹ç³»ç»ŸæŒ‡æ´¾çš„è®¢å•
             $worker = json_decode(Yii::$app->redis->executeCommand('lPop', [self::WAIT_IVR_PUSH_ORDERS_POOL . '_' . $order_id]), true);
             if (!empty($worker)) {
-                $result = Yii::$app->ivr->send($worker['worker_phone'], 'pushToWorker_' . $order_id, "¿ªÊ¼Ê±¼ä" . date('yÄêmÔÂdÈÕHµã', $order->order_booked_begin_time) . "£¬Ê±³¤" . intval($order->order_booked_count / 60) . "¸ö" . ($order->order_booked_count % 60 > 0 ? "°ë" : "") . "Ğ¡Ê±£¬µØÖ·{$order->order_address}£¡"); //TODO ·¢ËÍÄÚÈİ
+                $result = Yii::$app->ivr->send($worker['worker_phone'], 'pushToWorker_' . $order_id, "å¼€å§‹æ—¶é—´" . date('yå¹´mæœˆdæ—¥Hç‚¹', $order->order_booked_begin_time) . "ï¼Œæ—¶é•¿" . intval($order->order_booked_count / 60) . "ä¸ª" . ($order->order_booked_count % 60 > 0 ? "åŠ" : "") . "å°æ—¶ï¼Œåœ°å€{$order->order_address}ï¼"); //TODO å‘é€å†…å®¹
                 if (isset($result['result']) && $result['result'] == 0) {
-                    OrderWorkerRelation::addOrderWorkerRelation($order_id, $worker['id'], '', 'IVRÒÑÍÆËÍ', 1);
+                    OrderWorkerRelation::addOrderWorkerRelation($order_id, $worker['id'], '', 'IVRå·²æ¨é€', 1);
                 } else {
-                    OrderWorkerRelation::addOrderWorkerRelation($order_id, $worker['id'], '', 'IVRÍÆËÍÊ§°Ü', 1);
+                    OrderWorkerRelation::addOrderWorkerRelation($order_id, $worker['id'], '', 'IVRæ¨é€å¤±è´¥', 1);
                 }
             }
         } else {
-            //ÒÆ³ı¸Ã¶©µ¥µÄ¶ÓÁĞ
+            //ç§»é™¤è¯¥è®¢å•çš„é˜Ÿåˆ—
             Yii::$app->redis->executeCommand('del', [self::WAIT_IVR_PUSH_ORDERS_POOL . '_' . $order_id]);
         }
     }
 
     /**
-     * ±ê¼Ç¶©µ¥ÒÑ·¢ËÍ¶ÌĞÅ¸ø°¢ÒÌ
+     * æ ‡è®°è®¢å•å·²å‘é€çŸ­ä¿¡ç»™é˜¿å§¨
      * @param $order_id
      * @return bool
      */
@@ -134,7 +138,7 @@ class OrderPush extends Order
     }
 
     /**
-     * ±ê¼Ç¶©µ¥ÒÑÍÆËÍ¼«¹â¸ø°¢ÒÌ
+     * æ ‡è®°è®¢å•å·²æ¨é€æå…‰ç»™é˜¿å§¨
      * @param $order_id
      * @return bool
      */
@@ -147,7 +151,7 @@ class OrderPush extends Order
     }
 
     /**
-     * ±ê¼Ç¶©µ¥ÒÑ·¢ËÍIVR¸ø°¢ÒÌ
+     * æ ‡è®°è®¢å•å·²å‘é€IVRç»™é˜¿å§¨
      * @param $order_id
      * @return bool
      */

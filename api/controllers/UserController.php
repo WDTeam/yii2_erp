@@ -87,7 +87,7 @@ class UserController extends \api\components\Controller
         }
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
@@ -97,12 +97,12 @@ class UserController extends \api\components\Controller
 
             if (!empty($model)) {
                 $ret = ['address' => $model];
-                return $this->send($ret, "常用地址添加成功", "1");
+                return $this->send($ret, "常用地址添加成功");
             } else {
-                return $this->send(null, "常用地址添加失败", "0", 403);
+                return $this->send(null, "常用地址添加失败", 0, 403);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录.", "0", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
         }
     }
 
@@ -169,7 +169,7 @@ class UserController extends \api\components\Controller
         }
 
         if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
 
         $customer = CustomerAccessToken::getCustomer($accessToken);
@@ -182,9 +182,9 @@ class UserController extends \api\components\Controller
                 $addresses[] = $model;
             }
             $ret = ['addresses' => $addresses];
-            return $this->send($ret, "获取地址列表成功", "1");
+            return $this->send($ret, "获取地址列表成功");
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
     }
 
@@ -224,17 +224,16 @@ class UserController extends \api\components\Controller
         @$accessToken = $params['access_token'];
         @$addressId = $params['address_id'];
         if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
-            return $this->send(null, "用户认证已经过期,请重新登录.", "0", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
         }
         if (empty($addressId)) {
-            return $this->send(null, "地址信息获取失败", "0", 403);
+            return $this->send(null, "地址信息获取失败", 0, 403);
         }
 
         if (CustomerAddress::deleteAddress($addressId)) {
-            return $this->send(null, "删除成功", "1");
+            return $this->send(null, "删除成功");
         } else {
-
-            return $this->send(null, "删除失败", "0", 403);
+            return $this->send(null, "删除失败", 0, 403);
         }
     }
 
@@ -275,24 +274,24 @@ class UserController extends \api\components\Controller
         @$accessToken = $params['access_token'];
         @$addressId = $params['address_id'];
         if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
-            return $this->send(null, "用户认证已经过期,请重新登录.", "0", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
         }
         if (empty($addressId)) {
-            return $this->send(null, "地址信息获取失败", "0", 403);
+            return $this->send(null, "地址信息获取失败", 0, 403);
         }
 
         $model = CustomerAddress::getAddress($addressId);
 
         if (empty($model)) {
-            return $this->send(null, "地址信息获取失败", "0", 403);
+            return $this->send(null, "地址信息获取失败", 0, 403);
         }
 
         if (CustomerAddress::updateAddress($model->id, $model->operation_area_name, $model->customer_address_detail, $model->customer_address_nickname, $model->customer_address_phone)
         ) {
-            return $this->send(null, "设置默认地址成功", "1");
+            return $this->send(null, "设置默认地址成功");
         } else {
 
-            return $this->send(null, "设置默认地址失败", "0", 403);
+            return $this->send(null, "设置默认地址失败", 0, 403);
         }
     }
 
@@ -347,24 +346,24 @@ class UserController extends \api\components\Controller
         @$accessToken = $params['access_token'];
         @$addressId = $params['address_id'];
         if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
-            return $this->send(null, "用户认证已经过期,请重新登录.", "0", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
         }
         if (empty($addressId)) {
-            return $this->send(null, "地址信息获取失败", "0", 403);
+            return $this->send(null, "地址信息获取失败", 0, 403);
         }
 
         $model = CustomerAddress::getAddress($addressId);
 
         if (empty($model)) {
-            return $this->send(null, "地址信息获取失败", "0", 403);
+            return $this->send(null, "地址信息获取失败", 0, 403);
         }
 
         if (CustomerAddress::updateAddress($model->id, @$params['operation_area_name'], @$params['address_detail'], @$params['address_nickname'], @$params['address_phone'])
         ) {
-            return $this->send(null, "修改常用地址成功", "1");
+            return $this->send(null, "修改常用地址成功");
         } else {
 
-            return $this->send(null, "修改常用地址失败", "0", 403);
+            return $this->send(null, "修改常用地址失败", 0, 403);
         }
     }
 
@@ -521,7 +520,7 @@ class UserController extends \api\components\Controller
                         }
                     }
 
-                    return $this->send($ret, $param['city_name'] . "优惠码列表", "1");
+                    return $this->send($ret, $param['city_name'] . "优惠码列表");
                 } else {
                     return $this->send([1], "规定城市优惠码列表为空", "0");
                 }
@@ -542,7 +541,6 @@ class UserController extends \api\components\Controller
             if (@$param['city_name'] && $param['coupon_type'] == 2) {
 
                 $CouponData = \core\models\coupon\CouponCustomer::getCouponCustomer($customer->id);
-
 
                 if (!empty($CouponData)) {
                     $ret = array();
@@ -617,7 +615,7 @@ class UserController extends \api\components\Controller
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
@@ -626,9 +624,9 @@ class UserController extends \api\components\Controller
             $CouponCount = \core\models\coupon\CouponCustomer::CouponCount(1);
 
             $ret['couponCount'] = $CouponCount;
-            return $this->send($ret, "用户优惠码数量", "1");
+            return $this->send($ret, "用户优惠码数量");
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
     }
 
@@ -683,7 +681,7 @@ class UserController extends \api\components\Controller
         $app_version = $param['access_token'];
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
@@ -697,9 +695,9 @@ class UserController extends \api\components\Controller
             $deleteData = \core\models\customer\CustomerWorker::deleteWorker(1, 2, 1);
             if ($deleteData) {
                 $deleteData = array(1);
-                return $this->send($deleteData, "删除成功", "1");
+                return $this->send($deleteData, "删除成功");
             } else {
-                return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
+                return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
             }
         }
     }
@@ -761,7 +759,7 @@ class UserController extends \api\components\Controller
         $app_version = $param['app_version']; #版本
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
@@ -771,9 +769,9 @@ class UserController extends \api\components\Controller
              */
             $workerData = \core\models\customer\CustomerWorker::blacklistworkers(1, 1);
             if ($workerData) {
-                return $this->send($workerData, "阿姨列表查询", "1");
+                return $this->send($workerData, "阿姨列表查询");
             } else {
-                return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
+                return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
             }
         }
     }
@@ -833,9 +831,9 @@ class UserController extends \api\components\Controller
             $deleteData = \core\models\customer\CustomerWorker::deleteWorker(1, 2, 0, 0);
             if ($deleteData) {
                 $deleteData = array(1);
-                return $this->send($deleteData, "移除成功", "1");
+                return $this->send($deleteData, "移除成功");
             } else {
-                return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
+                return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
             }
         }
     }
@@ -917,7 +915,7 @@ class UserController extends \api\components\Controller
         }
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
         #获取用户id
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
@@ -935,9 +933,9 @@ class UserController extends \api\components\Controller
             $userRecord = \core\models\CustomerTransRecord\CustomerTransRecord::queryRecord($customer->id);
             $ret["userBalance"] = $userBalance;
             $ret["userRecord"] = $userRecord;
-            return $this->send($ret, "查询成功", "1");
+            return $this->send($ret, "查询成功");
 
-            return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
     }
 
@@ -1040,9 +1038,9 @@ class UserController extends \api\components\Controller
 
             if ($userscore) {
                 $ret["scoreCategory"] = $userscore;
-                return $this->send($ret, "用户积分明细列表", "1");
+                return $this->send($ret, "用户积分明细列表", 1);
             } else {
-                return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
+                return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
             }
         }
     }
@@ -1086,7 +1084,7 @@ class UserController extends \api\components\Controller
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
@@ -1094,12 +1092,12 @@ class UserController extends \api\components\Controller
         if (!empty($customer) && !empty($customer->id)) {
             $model = \core\models\customer\CustomerComment::addUserSuggest($customer->id, $param['order_id'], $param['customer_comment_phone'], $param['customer_comment_content'], $param['customer_comment_tag_ids'], $param['customer_comment_level']);
             if (!empty($model)) {
-                return $this->send([1], "添加评论成功", "1");
+                return $this->send([1], "添加评论成功");
             } else {
-                return $this->send(null, "添加评论失败", "0", 403);
+                return $this->send(null, "添加评论失败", 0, 403);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录.", "0", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
         }
     }
 
@@ -1149,12 +1147,12 @@ class UserController extends \api\components\Controller
             $level = \core\models\comment\CustomerCommentLevel::getCommentLevel();
             if (!empty($level)) {
                 $ret = ['comment' => $level];
-                return $this->send($ret, "获取评论级别成功", "1");
+                return $this->send($ret, "获取评论级别成功");
             } else {
-                return $this->send(null, "获取评论级别失败", "0", 403);
+                return $this->send(null, "获取评论级别失败", 0, 403);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录.", "0", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
         }
     }
 
@@ -1206,12 +1204,12 @@ class UserController extends \api\components\Controller
 
             if (!empty($level)) {
                 $ret = ['commentTag' => $level];
-                return $this->send($ret, "获取评论标签成功", "1");
+                return $this->send($ret, "获取评论标签成功");
             } else {
-                return $this->send(null, "获取评论标签失败", "0", 403);
+                return $this->send(null, "获取评论标签失败", 0, 403);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录.", "0", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
         }
     }
 
@@ -1261,12 +1259,12 @@ class UserController extends \api\components\Controller
 
             $service = \core\models\order\Order::getGoods($param['longitude'], $param['latitude'], $param['order_service_type_id']);
             if ($service) {
-                return $this->send(1, "该服务获取成功", "1");
+                return $this->send(1, "该服务获取成功");
             } else {
-                return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
+                return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
     }
 

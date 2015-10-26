@@ -8,7 +8,7 @@ function getSonList(obj, targetids, deftext){
     var showend = obj.attr('showend');
     if(showend === 'yes'){return false;}
     if(parent_id > 0){
-        var url = '/operation-city/get-area';
+        var url = 'operation/operation-city/get-area';
         var data = {'parent_id':parent_id};
         $.post(url, data, function(t){
             if(t.result == true){

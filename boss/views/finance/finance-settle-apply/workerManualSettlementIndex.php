@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ?>
             <div class='col-md-6'>
-                <?= $form->field($model, 'worder_tel')->textInput(['id'=>'worder_tel']) ?>
+                <?= $form->field($model, 'worker_tel')->textInput(['id'=>'worker_tel']) ?>
             </div>
             <div class='col-md-2' style='margin-top: 22px;'>
                 <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
@@ -51,8 +51,8 @@ $this->params['breadcrumbs'][] = $this->title;
             $js=<<<JS
                     $(document).ready(
                         function(){
-                            var worder_tel = $('#worder_tel').val();
-                            if(worder_tel == ''){
+                            var worker_tel = $('#worker_tel').val();
+                            if(worker_tel == ''){
                                 $('#manualSettleInfo').html('<h4  class="col-sm-12">请输入查询条件进行人工结算</h4>');
                                 $('#manualSettleInfo').show();
                             }else{

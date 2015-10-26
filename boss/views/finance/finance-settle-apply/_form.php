@@ -21,9 +21,9 @@ use kartik\datecontrol\DateControl;
     'columns' => 1,
     'attributes' => [
 
-'worder_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 阿姨id...']], 
+'worker_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 阿姨id...']], 
 
-'worder_tel'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 阿姨电话...', 'maxlength'=>10]], 
+'worker_tel'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 阿姨电话...', 'maxlength'=>10]], 
 
 'worker_type_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 阿姨类型Id...']], 
 

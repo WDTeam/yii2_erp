@@ -153,7 +153,7 @@ function canNotAssign(){
     window.count_down_flag = false;
     $.ajax({
         type: "GET",
-        url: "/order/can-not-assign?order_id="+window.order_data.order.id,
+        url: "/order/order/can-not-assign?order_id="+window.order_data.order.id,
         dataType:"json",
         success: function (msg) {
             if(!msg) {
@@ -175,7 +175,7 @@ function canNotAssign(){
 function getWaitManualAssignOrder(){
     $.ajax({
         type: "GET",
-        url: "/order/get-wait-manual-assign-order",
+        url: "/order/order/get-wait-manual-assign-order",
         dataType:"json",
         success: function (data) {
             if(data){
@@ -200,7 +200,7 @@ function getWaitManualAssignOrder(){
 function getCanAssignWorkerList(){
     $.ajax({
         type: "GET",
-        url: "/order/get-can-assign-worker-list?order_id="+window.order_data.order.id,
+        url: "/order/order/get-can-assign-worker-list?order_id="+window.order_data.order.id,
         dataType:"json",
         success: function (data) {
             if(data.code==200){

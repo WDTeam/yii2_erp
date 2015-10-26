@@ -17,7 +17,7 @@ use Yii;
  * @property integer $updated_ad
  * @property integer $admin_id
  */
-class WorkerVacation extends \common\models\WorkerVacation
+class WorkerVacation extends \common\models\worker\WorkerVacation
 {
 
 }

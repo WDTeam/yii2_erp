@@ -2,16 +2,16 @@
 
 namespace core\models\order;
 
-use common\models\OrderExtCustomer;
-use common\models\OrderExtFlag;
-use common\models\OrderExtStatus;
-use common\models\OrderStatusDict;
+use common\models\order\OrderExtCustomer;
+use common\models\order\OrderExtFlag;
+use common\models\order\OrderExtStatus;
+use common\models\order\OrderStatusDict;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 /**
- * OrderSearch represents the model behind the search form about `common\models\Order`.
+ * OrderSearch represents the model behind the search form about `common\models\order\Order`.
  */
 class OrderSearch extends Order
 {
@@ -45,11 +45,14 @@ class OrderSearch extends Order
             'orderExtFlag.order_flag_lock' => $admin_id
         ])->orderBy(['order_booked_begin_time' => SORT_ASC])->one();
         if (empty($order)) {//如果没有正在指派的订单再查询待指派的订单
-            $order = Order::find()->joinWith(['orderExtStatus', 'orderExtFlag'])->where(
-                ['>', 'order_booked_begin_time', time()] //服务开始时间大于当前时间
-            )->andWhere([
-                'orderExtFlag.order_flag_send' => [0, $flag_send], //0可指派 1客服指派不了 2小家政指派不了
-                'orderExtFlag.order_flag_lock' => 0,
+            $order = Order::find()->joinWith(['orderExtStatus', 'orderExtFlag'])->where([
+                'and',
+                ['>', 'order_booked_begin_time', time()], //服务开始时间大于当前时间
+                ['orderExtFlag.order_flag_send' => [0, $flag_send]] //0可指派 1客服指派不了 2小家政指派不了
+            ])->andWhere([
+                'or',
+                ['orderExtFlag.order_flag_lock' => 0],
+                ['<','orderExtFlag.order_flag_lock_time',time()-Order::MANUAL_ASSIGN_lONG_TIME] //查询超时未解锁的订单
             ])->andWhere([ //系统指派失败的 或者 已支付待指派并且标记不需要系统指派的订单
                 'or',
                 [
