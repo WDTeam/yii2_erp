@@ -1,9 +1,9 @@
 <?php
 
-namespace boss\models\Operation;
+namespace boss\models\operation;
 
 use Yii;
-use core\models\Operation\CoreOperationPriceStrategy;
+use core\models\operation\CoreOperationPriceStrategy;
 /**
  * This is the model class for table "{{%operation_price_strategy}}".
  *

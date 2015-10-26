@@ -95,11 +95,7 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
     public function getOrderDataProviderFromOrder($worker_id){
         $data = [];
         $orders = Order::find()->joinWith('orderExtWorker')->where(['orderExtWorker.worker_id'=>$worker_id])->all();
-        $i = 0;
-        foreach($orders as $order){
-            $data[$i] = $this->transferOrderToFinanceWorkerOrderIncome($order);
-            $i++;
-        }
+        $data = $this->getWorkerOrderIncomeArrayFromOrders($orders);
         $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
         return $dataProvider;
     }
@@ -108,11 +104,7 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
     public function getCashOrderDataProviderFromOrder($worker_id){
         $data = [];
         $orders = Order::find()->joinWith('orderExtWorker')->joinWith('orderExtPay')->where(['orderExtWorker.worker_id'=>$worker_id,'orderExtPay.order_pay_type'=>1])->all();
-        $i = 0;
-        foreach($orders as $order){
-            $data[$i] = $this->transferOrderToFinanceWorkerOrderIncome($order);
-            $i++;
-        }
+        $data = $this->getWorkerOrderIncomeArrayFromOrders($orders);
         $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
         return $dataProvider;
     }
@@ -120,13 +112,29 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
     public function getNonCashOrderDataProviderFromOrder($worker_id){
         $data = [];
         $orders = Order::find()->joinWith('orderExtWorker')->joinWith('orderExtPay')->where(['orderExtWorker.worker_id'=>$worker_id,'orderExtPay.order_pay_type'=>[2,3]])->all();
+        $data = $this->getWorkerOrderIncomeArrayFromOrders($orders);
+        $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
+        return $dataProvider;
+    }
+    
+    public function getWorkerOrderIncomeArrayByWorkerId($worker_id){
+        $data = [];
+        $orders = Order::find()->joinWith('orderExtWorker')->where(['orderExtWorker.worker_id'=>$worker_id])->all();
+        return $this->getWorkerOrderIncomeArrayFromOrders($orders);
+    }
+    /**
+     * 根据订单列表信息获取订单收入数组
+     * @param type $orders
+     * @return type
+     */
+    public function getWorkerOrderIncomeArrayFromOrders($orders){
+        $data = [];
         $i = 0;
         foreach($orders as $order){
             $data[$i] = $this->transferOrderToFinanceWorkerOrderIncome($order);
             $i++;
         }
-        $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
-        return $dataProvider;
+        return $data;
     }
     
     private function transferOrderToFinanceWorkerOrderIncome($order){

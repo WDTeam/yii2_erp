@@ -111,10 +111,11 @@ class FinanceShopSettleApplyController extends Controller
         $searchModel = new FinanceShopSettleApplySearch;
         $searchModel->review_section = Yii::$app->request->getQueryParams()['review_section'];
         $searchModel->load($requestParams);
-        var_dump($searchModel->shop_id);
-        var_dump($searchModel->shop_id);
-        var_dump($searchModel->shop_id);
-        $shopModel = Shop::findById($searchModel->shop_id);
+        $shopModel = new Shop();
+        if(!empty($searchModel->shop_id)){
+            $shopModel = Shop::findById($searchModel->shop_id);
+        }
+        $shopManagerModel = new ShopManager();
         $shopManagerModel = ShopManager::findById($searchModel->shop_manager_id);
         if(count($shopManagerModel) > 0){
             $searchModel->shop_manager_name = $shopManagerModel->name;

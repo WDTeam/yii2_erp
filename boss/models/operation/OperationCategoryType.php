@@ -1,9 +1,9 @@
 <?php
 
-namespace boss\models\Operation;
+namespace boss\models\operation;
 
 use Yii;
-use core\models\Operation\CoreOperationCategoryType;
+use core\models\operation\CoreOperationCategoryType;
 /**
  * This is the model class for table "{{%operation_category_type}}".
  *
