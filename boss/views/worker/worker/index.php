@@ -59,8 +59,8 @@ $this->params['breadcrumbs'][1] = $this->title;
     $requestParam = \Yii::$app->request->getQueryParams();
 
     $vacationBtn =
-         Html::a('<i ></i>批量休假',['create-vacation?workerIds='],['disabled'=>'disabled','class' => ' btn btn-success batchVacation','data-target' => '#vacationModal','data-toggle' => 'modal','type'=>1,'style'=>'margin-right:20px'])
-        .Html::a('<i></i>批量事假',['create-vacation?workerIds='],['disabled'=>'disabled','class' => 'btn btn-success batchVacation','type'=>2,'data-target' => '#vacationModal','data-toggle' => 'modal']);
+         Html::a('<i ></i>批量休假',['create-vacation?workerIds='],['class' => ' btn btn-success batchVacation','data-target' => '#vacationModal','data-toggle' => 'modal','type'=>1,'style'=>'margin-right:20px'])
+        .Html::a('<i></i>批量事假',['create-vacation?workerIds='],['class' => 'btn btn-success batchVacation','type'=>2,'data-target' => '#vacationModal','data-toggle' => 'modal']);
 //        $vacationBtn =
 //            Html::a('<i ></i>批量休假',['create-vacation?workerIds='],['disabled'=>'disabled','style'=>'margin-right:20px'])
 //            .Html::a('<i></i>批量事假',['create-vacation?workerIds='],['disabled'=>'disabled']);

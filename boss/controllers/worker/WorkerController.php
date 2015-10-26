@@ -4,6 +4,7 @@ namespace boss\controllers\worker;
 
 
 use core\models\operation\CoreOperationArea;
+use core\models\worker\WorkerSkill;
 use core\models\worker\WorkerStat;
 use Yii;
 use yii\web\ForbiddenHttpException;
@@ -667,7 +668,7 @@ class WorkerController extends BaseAuthController
 
     public function actionTest(){
         echo '<pre>';
-        var_dump(Worker::getWorkerInfo(1));
+        var_dump(WorkerSkill::getWorkerSkill(18517));
         die;
 
         $a = Worker::getWorkerInfo(16351);

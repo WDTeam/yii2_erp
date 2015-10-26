@@ -30,7 +30,7 @@ class m150919_092739_create_table_worker extends Migration
             'worker_work_street' => Schema::TYPE_STRING . '(50) DEFAULT NULL COMMENT \'阿姨常用工作地址\'',
             'worker_work_lng' =>Schema::TYPE_FLOAT.' DEFAULT NULL COMMENT \'阿姨常用工作经度\'',
             'worker_work_lat' =>Schema::TYPE_FLOAT.' DEFAULT NULL COMMENT \'阿姨常用工作纬度\'',
-            'worker_star' => Schema::TYPE_BOOLEAN . '(4) NOT NULL  DEFAULT  0 COMMENT \'阿姨星级\'',
+            'worker_star' => Schema::TYPE_BOOLEAN . '(4) NOT NULL  DEFAULT  3 COMMENT \'阿姨星级\'',
             'worker_type' => Schema::TYPE_BOOLEAN  . '(1) NOT NULL DEFAULT 1 COMMENT \'阿姨类型 1自有 2非自有\'',
             'worker_rule_id' => Schema::TYPE_BOOLEAN  . '(3) NOT NULL  DEFAULT  1 COMMENT \'阿姨角色id \'',
             'worker_identity_id' => Schema::TYPE_BOOLEAN  . '(3) NOT NULL  DEFAULT  1 COMMENT \'阿姨身份id \'',
