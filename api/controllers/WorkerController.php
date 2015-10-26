@@ -606,7 +606,7 @@ class WorkerController extends \api\components\Controller
 
 
      /**
-     * @api {GET} /worker/get-worker-bill-detail 获取阿姨对账单列表 (田玉星 80%)
+     * @api {GET} /worker/get-worker-bill-detail 获取阿姨对账单列表详情 (田玉星 80%)
      * 
      * @apiDescription 【备注：等待model底层支持】
      * 
@@ -647,7 +647,7 @@ class WorkerController extends \api\components\Controller
      *      "msg": "用户认证已经过期,请重新登录"
      *  }
      */
-    public function actionGetWorkerSalaryByBill(){
+    public function actionGetWorkerBillDetail(){
         $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
         if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
