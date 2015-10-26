@@ -10,6 +10,7 @@ use Yii;
  * @property string $order_id
  * @property string $customer_id
  * @property string $order_customer_phone
+ * @property string $order_customer_is_vip
  * @property string $order_customer_need
  * @property string $order_customer_memo
  * @property string $comment_id
@@ -36,7 +37,7 @@ class OrderExtCustomer extends \common\models\order\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'comment_id', 'invoice_id', 'order_customer_hidden', 'created_at', 'updated_at'], 'integer'],
+            [['customer_id', 'comment_id', 'invoice_id', 'order_customer_hidden', 'order_customer_is_vip', 'created_at', 'updated_at'], 'integer'],
             [['order_customer_phone'], 'string', 'max' => 16],
             [['order_customer_need', 'order_customer_memo'], 'string', 'max' => 255]
         ];
@@ -51,6 +52,7 @@ class OrderExtCustomer extends \common\models\order\ActiveRecord
             'order_id' => '订单id',
             'customer_id' => '客户ID',
             'order_customer_phone' => '客户手机号',
+            'order_customer_is_vip' => '是否是vip',
             'order_customer_need' => '客户需求',
             'order_customer_memo' => '客户备注',
             'comment_id' => '评价id',

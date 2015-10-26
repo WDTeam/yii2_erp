@@ -1,13 +1,13 @@
 <?php
 
-namespace boss\models;
+namespace boss\models\operation\coupon;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\coupon\Coupon;
+use common\models\operation\coupon\Coupon;
 
-use \core\models\coupon\CouponCode;
+use \core\models\operation\coupon\CouponCode;
 
 /**
  * CouponSearch represents the model behind the search form about `\common\models\coupon\Coupon`.

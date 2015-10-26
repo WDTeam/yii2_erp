@@ -348,10 +348,6 @@ class PayController extends \api\components\Controller
         exit;
     }
 
-    public function actionTest()
-    {
-        dump(yii::$app->controller->id);
-    }
 }
 
 ?>

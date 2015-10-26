@@ -74,10 +74,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         if(empty($model['goods_id'])){
 
                         }else {
-                            return Html::a(Yii::t('yii', 'View'), ['operation-goods/view','id' => $model['goods_id']], ['class' => 'btn btn-success btn-sm']);
+                            return Html::a(Yii::t('yii', 'View'), ['/operation/operation-goods/view','id' => $model['goods_id']], ['class' => 'btn btn-success btn-sm']);
                             return Html::a(
                                 '<span class="glyphicon glyphicon-eye-open">创建</span>',
-                                Yii::$app->urlManager->createUrl(['operation-goods/view','id' => $model['goods_id']]),
+                                Yii::$app->urlManager->createUrl(['/operation/operation-goods/view','id' => $model['goods_id']]),
                                 ['title' => Yii::t('yii', 'View'), 'class' => 'btn btn-success btn-sm']
                             );
                         }
@@ -86,10 +86,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         if(empty($model['goods_id'])){
 
                         }else {
-                             return Html::a(Yii::t('yii', '编辑'), ['operation-goods/update', 'id' => $model['goods_id']], ['class' => 'btn btn-info btn-sm']);
+                             return Html::a(Yii::t('yii', '编辑'), ['/operation/operation-goods/update', 'id' => $model['goods_id']], ['class' => 'btn btn-info btn-sm']);
                             return Html::a(
                             '<span class="glyphicon glyphicon-pencil"></span>',
-                            Yii::$app->urlManager->createUrl(['operation-goods/update', 'id' => $model['goods_id']]),
+                            Yii::$app->urlManager->createUrl(['/operation/operation-goods/update', 'id' => $model['goods_id']]),
                             ['title' => Yii::t('yii', 'Edit'), 'class' => 'btn btn-info btn-sm',]
                              );
                         }
@@ -98,10 +98,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         if(empty($model['goods_id'])){
 
                         }else{
-                            return Html::a(Yii::t('yii', '删除'), ['operation-goods/delete', 'id' => $model['goods_id']], ['class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]);
+                            return Html::a(Yii::t('yii', '删除'), ['/operation/operation-goods/delete', 'id' => $model['goods_id']], ['class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]);
                             return Html::a(
                                 '<span class="glyphicon glyphicon-trash">删除</span>',
-                                Yii::$app->urlManager->createUrl(['operation-goods/delete','id' => $model['goods_id']]),
+                                Yii::$app->urlManager->createUrl(['/operation/operation-goods/delete','id' => $model['goods_id']]),
                                 ['title' => Yii::t('yii', 'Delete'), 'class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
                             );
                         }
@@ -110,7 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return '';
                         return Html::a(
                             '<span class="glyphicon glyphicon-list"></span>',
-                            Yii::$app->urlManager->createUrl(['operation-category-type','category_id' => $model->id]),
+                            Yii::$app->urlManager->createUrl(['/operation/operation-category-type','category_id' => $model->id]),
                             ['title' => Yii::t('yii', '服务类型列表'), 'class' => 'btn btn-warning btn-sm',]
                         );
                     },
@@ -128,7 +128,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type'=>'info',
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> 增加服务品类', ['create'], ['class' => 'btn btn-success']).Html::a('<i class="glyphicon glyphicon-plus"></i> 增加商品', ['/operation-goods/create'], ['class' => 'btn btn-success']).Html::a('<i class="glyphicon glyphicon-list"></i> 规格管理',['/operation-spec'], ['class' => 'btn btn-success']),
+            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> 增加服务品类', ['create'], ['class' => 'btn btn-success']).Html::a('<i class="glyphicon glyphicon-plus"></i> 增加商品', ['/operation/operation-goods/create'], ['class' => 'btn btn-success']).Html::a('<i class="glyphicon glyphicon-list"></i> 规格管理',['/operation/operation-spec'], ['class' => 'btn btn-success']),
             'after'=>false,//Html::a('<i class="glyphicon glyphicon-repeat"></i> '.Yii::t('app', 'Reset List'), ['index'], ['class' => 'btn btn-info']),
             'showFooter'=>false,
             'footer' => false

@@ -1,11 +1,11 @@
 <?php
 
-namespace boss\controllers;
+namespace boss\controllers\operation;
 
 use Yii;
-use boss\models\Operation\OperationBootPage;
-use boss\models\Operation\OperationCity;
-use boss\models\Operation\OperationBootPageCity;
+use boss\models\operation\OperationBootPage;
+use boss\models\operation\OperationCity;
+use boss\models\operation\OperationBootPageCity;
 use yii\data\ActiveDataProvider;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
