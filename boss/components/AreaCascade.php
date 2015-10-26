@@ -19,7 +19,7 @@
 namespace boss\components;
 
 use Yii;
-use boss\models\Operation\OperationArea;
+use boss\models\operation\OperationArea;
 use yii\helpers\Html;
 use yii\base\Widget;
 //use kartik\widgets\Select2;
