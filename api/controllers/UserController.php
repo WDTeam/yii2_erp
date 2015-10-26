@@ -452,38 +452,38 @@ class UserController extends \api\components\Controller
      */
     public function actionExchangeCoupon()
     {
-        $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
-        if(!isset($param['access_token'])||!$param['access_token']||!CustomerAccessToken::checkAccessToken($param['access_token'])){
-          return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
-        if(!isset($param['city'])|| !intval($param['city'])){
+        if (!isset($param['city']) || !intval($param['city'])) {
             return $this->send(null, "请选择城市", 0, 403);
         }
-        if(!isset($param['coupon_code'])|| !intval($param['coupon_code'])){
+        if (!isset($param['coupon_code']) || !intval($param['coupon_code'])) {
             return $this->send(null, "请填写优惠码或邀请码", 0, 403);
         }
-        $city=$param['city'];
-        $coupon_code=$param['coupon_code'];
+        $city = $param['city'];
+        $coupon_code = $param['coupon_code'];
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
-        $customer_id= $customer->id;
+        $customer_id = $customer->id;
         //验证优惠码是否存在
         //$exist_coupon=CouponCustomer::existCoupon($city,$coupon_code);
-        $exist_coupon=1;
-        if(!$exist_coupon){
-             return $this->send(null, "优惠码不存在", 0, 403);
+        $exist_coupon = 1;
+        if (!$exist_coupon) {
+            return $this->send(null, "优惠码不存在", 0, 403);
         }
         //兑换优惠码
-       // $exchange_coupon=CouponCustomer::exchangeCoupon($city,$coupon_code,$customer_id);
-        $exchange_coupon=[
-                    "id" => 1,
-                    "coupon_id" => 2,
-                    "coupon_name" => "优惠券名称",
-                    "coupon_price" => 123
-                ];
-        if($exchange_coupon){
-              return $this->send($exchange_coupon, "兑换成功", 1);
-        }else{
-              return $this->send(null, "兑换失败", 0);        
+        // $exchange_coupon=CouponCustomer::exchangeCoupon($city,$coupon_code,$customer_id);
+        $exchange_coupon = [
+            "id" => 1,
+            "coupon_id" => 2,
+            "coupon_name" => "优惠券名称",
+            "coupon_price" => 123
+        ];
+        if ($exchange_coupon) {
+            return $this->send($exchange_coupon, "兑换成功", 1);
+        } else {
+            return $this->send(null, "兑换失败", 0);
         }
     }
 
@@ -552,7 +552,7 @@ class UserController extends \api\components\Controller
             if (!empty($param['city_name']) && $param['coupon_type'] == 1) {
 
                 $CouponData = CouponCustomer::getCouponCustomer($customer->id);
-                
+
                 if (!empty($CouponData)) {
                     $ret = array();
                     foreach ($CouponData as $key => $val) {
@@ -595,7 +595,7 @@ class UserController extends \api\components\Controller
                     #return $this->send($ret, $param['city_name'] . "优惠码列表", "1");
                 }
 
-                $CouponCount =CouponCustomer::getCouponCustomer($customer->id, 1);
+                $CouponCount = CouponCustomer::getCouponCustomer($customer->id, 1);
                 $ret['couponCustomer'][] = $CouponCount;
 
                 return $this->send($ret, '城市' . $param['city_name'] . "优惠码和全国优惠码列表", "1");
