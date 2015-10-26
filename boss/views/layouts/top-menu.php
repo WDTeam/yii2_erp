@@ -12,11 +12,11 @@ use yii\bootstrap\NavBar;
 $menuItems = [
     [
         'label' => Yii::t('app', 'Home'),
-        'url' => ['/site/index']
+        'url' => ['/']
     ],
     [
         'label' => Yii::t('app', 'Logout') . '(' . Yii::$app->user->identity->username . ')',
-        'url' => ['/site/logout'],
+        'url' => ['/general/site/logout'],
         'linkOptions' => ['data-method' => 'post']
     ]
 ];
@@ -58,15 +58,15 @@ $menuItemsMain = [
         'items' => [
             [
                 'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', 'User'),
-                'url' => ['/system-user'],
+                'url' => ['/general/system-user'],
             ],
             [
                 'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', 'Role'),
-                'url' => ['/role'],
+                'url' => ['/general/role'],
             ],
             [
                 'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', 'Auths'),
-                'url' => ['/auth'],
+                'url' => ['/general/auth'],
             ],
         ],
     ],
@@ -78,7 +78,7 @@ $menuItemsMain = [
         'items' => [
             [
                 'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', '登出'),
-                'url' => ['/site/logout'],
+                'url' => ['/general/site/logout'],
             ],
 //             [
 //                 'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', '授权列表'),
@@ -106,11 +106,11 @@ $menuItemsMain = [
         'items' => [
             [
                 'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', 'User'),
-                'url' => ['/user'],
+                'url' => ['/general/user'],
             ],
             [
                 'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', 'Role'),
-                'url' => ['/role'],
+                'url' => ['/general/role'],
             ],
         ],
     ],

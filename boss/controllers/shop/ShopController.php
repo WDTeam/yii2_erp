@@ -1,6 +1,6 @@
 <?php
 
-namespace boss\controllers;
+namespace boss\controllers\shop;
 
 use Yii;
 use core\models\shop\Shop;

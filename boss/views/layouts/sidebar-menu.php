@@ -22,12 +22,12 @@ echo Menu::widget(
                 'items' => [
                     [
                         'label' => '查看所有家政公司(100%)',
-                        'url' => ['shop-manager/index'],
+                        'url' => ['shopmanager/shop-manager/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
                         'label' => '新合作公司(100%)',
-                        'url' => ['shop-manager/create'],
+                        'url' => ['shopmanager/shop-manager/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],
@@ -43,12 +43,12 @@ echo Menu::widget(
                 'items' => [
                     [
                         'label' => '查看所有合作门店(100%)',
-                        'url' => ['shop/index'],
+                        'url' => ['shop/shop/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
                         'label' => '添加新门店(100%)',
-                        'url' => ['shop/create'],
+                        'url' => ['shop/shop/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],
@@ -280,7 +280,7 @@ echo Menu::widget(
                     ],*/
                     [
                         'label' => '阿姨任务管理(95%)',
-                        'url' => ['/worker-task/index'],
+                        'url' => ['/worker/worker-task/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
 					[

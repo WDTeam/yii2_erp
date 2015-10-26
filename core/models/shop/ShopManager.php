@@ -7,7 +7,7 @@ use yii\base\Object;
 use core\models\shop\ShopStatus;
 use crazyfd\qiniu\Qiniu;
 use core\behaviors\ShopStatusBehavior;
-class ShopManager extends \common\models\ShopManager
+class ShopManager extends \common\models\shop\ShopManager
 {
     /**
      * 营业执照注册类型

@@ -3,7 +3,7 @@ namespace boss\controllers\general;
 
 use Yii;
 use yii\filters\AccessControl;
-use boss\models\LoginForm;
+use boss\models\general\LoginForm;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 

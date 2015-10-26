@@ -1,5 +1,5 @@
 <?php
-namespace boss\models;
+namespace boss\models\general;
 
 use Yii;
 use yii\base\Model;
