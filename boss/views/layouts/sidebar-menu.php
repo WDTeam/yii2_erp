@@ -231,20 +231,20 @@ echo Menu::widget(
                         'items' => [
                             [
                                 'label' => '优惠券列表(10%)',
-                                'url' => ['coupon/index'],
+                                'url' => ['operation/coupon/coupon/index'],
                                 'icon' => 'fa fa-angle-right',
                             ],
                             [
                                 'label' => '添加新优惠券(10%)',
-                                'url' => ['coupon/create'],
+                                'url' => ['operation/coupon/coupon/create'],
                                 'icon' => 'fa fa-angle-right',
                             ],
-                            //[
-                              //  'label' => '绑定用户',
-                               // 'url' => ['coupon/index'],
-                               // 'icon' => 'fa fa-angle-right',
+                            [
+                                'label' => '绑定用户',
+                                'url' => ['operation/coupon/coupon/bundle'],
+                                'icon' => 'fa fa-angle-right',
                                 
-                            //],
+                            ],
                         ]
                     ],
 

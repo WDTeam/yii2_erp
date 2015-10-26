@@ -5,7 +5,7 @@ use kartik\widgets\ActiveForm;
 use kartik\widgets\Select2;
 use yii\helpers\ArrayHelper;
 
-use \common\models\OperationCity;
+//use \common\models\Operation\OperationCity;
 
 /**
  * @var yii\web\View $this
@@ -23,15 +23,17 @@ use \common\models\OperationCity;
     ]); ?>
 
 	<div class='col-md-2'>
-        <?php echo $form->field($model, 'coupon_city_id')->widget(Select2::classname(), [
-            'name' => 'id',
-            'hideSearch' => true,
-            'data' => ArrayHelper::map(OperationCity::find()->asArray()->all(), 'id', 'city_name'),
-            'options' => ['placeholder' => '选择城市', 'inline' => true],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-        ]); ?>
+        <?php
+        //echo $form->field($model, 'coupon_city_id')->widget(Select2::classname(), [
+          //  'name' => 'id',
+           // 'hideSearch' => true,
+  //          'data' => ArrayHelper::map(OperationCity::find()->asArray()->all(), 'id', 'city_name'),
+           // 'options' => ['placeholder' => '选择城市', 'inline' => true],
+           // 'pluginOptions' => [
+             //   'allowClear' => true
+           // ],
+       // ]);
+       ?>
     </div>
 
 

@@ -5,9 +5,9 @@ use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use dosamigos\datepicker\DatePicker;
 
-use \common\models\OperationCity;
+//use \common\models\OperationCity;
 
-use \core\models\coupon\Coupon;
+use \core\models\operation\coupon\Coupon;
 
 
 /**
@@ -25,7 +25,7 @@ $coupon_types = Coupon::getServiceTypes();
 //city types
 $city_types = Coupon::getCityTypes();
 //citys
-$citys = ArrayHelper::map(OperationCity::find()->asArray()->all(), 'id', 'city_name');
+//$citys = ArrayHelper::map(OperationCity::find()->asArray()->all(), 'id', 'city_name');
 //customer types
 $customer_types = Coupon::getCustomerTypes();
 //time types
@@ -65,7 +65,8 @@ $promote_types = Coupon::getPromoteTypes();
             </div>
             <div class="panel-body">
                 <?= $form->field($model, 'coupon_city_limit')->inline()->radioList($city_types)->label('城市限制类型') ?>
-                <?= $form->field($model, 'coupon_city_id')->inline()->radioList($citys)->label('城市') ?>
+                <?php //$form->field($model, 'coupon_city_id')->inline()->radioList($citys)->label('城市')
+                ?>
             </div>
 
             <div class="panel-heading">
