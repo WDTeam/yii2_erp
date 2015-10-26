@@ -12,7 +12,7 @@ namespace core\models\order;
 use boss\controllers\operation\OperationGoodsController;
 use boss\controllers\operation\OperationShopDistrictController;
 use common\models\order\OrderExtFlag;
-use core\models\Customer;
+use core\models\customer\Customer;
 use core\models\customer\CustomerAddress;
 use core\models\payment\GeneralPay;
 use core\models\worker\Worker;
@@ -278,6 +278,7 @@ class Order extends OrderModel
             $order->order_flag_lock = 0;
             $order->worker_id = $worker['id'];
             $order->worker_type_id = $worker['worker_type'];
+            $order->order_worker_phone = $worker['worker_phone'];
             $order->order_worker_type_name = $worker['worker_type_description'];
             $order->shop_id = $worker["shop_id"];
             $order->order_worker_assign_type = $assign_type; //接单方式
@@ -332,6 +333,13 @@ class Order extends OrderModel
         $status_to = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //初始化订单状态
         $order_count = OrderSearch::getCustomerOrderCount($this->customer_id); //该用户的订单数量
         $order_code = strlen($this->customer_id) . $this->customer_id . strlen($order_count) . $order_count; //TODO 订单号待优化
+
+        $customer = Customer::getCustomerById($this->customer_id);
+        $this->setAttributes([
+            'order_customer_phone' => $customer->customer_phone,
+            'customer_is_vip' => $customer->customer_is_vip,
+        ]);
+
         try {
             $address = CustomerAddress::getAddress($this->address_id);
         } catch (Exception $e) {

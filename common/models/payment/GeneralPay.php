@@ -70,6 +70,9 @@ class GeneralPay extends GeneralPayCommon
             case 23:
                 $this->pay_type = 'wx_native';
                 break;
+            case 24:
+                $this->pay_type = 'alipay_wap';
+                break;
         }
         return $source;
     }
@@ -247,6 +250,25 @@ class GeneralPay extends GeneralPayCommon
         ];
         $class = new \wxjspay_class();
         $msg = $class->nativeGet($param);
+        return $msg;
+    }
+
+    /**
+     * 支付宝APP(24)
+     */
+    private function alipay_wap($data)
+    {
+        $param = [
+            'out_trade_no'=>$this->create_out_trade_no(),
+            'subject'=>$this->subject(),
+            'body'=>$this->body(),
+            'total_fee'=>$this->general_pay_money,
+            'notify_url'=>$this->notify_url('alipay-wap'),
+            'return_url'=>empty($data['return_url']) ? '' : $data['return_url'],
+            'show_url'=>empty($data['show_url']) ? '' : $data['show_url'],
+        ];
+        $class = new \alipay_wap_class();
+        $msg = $class->get($param);
         return $msg;
     }
 

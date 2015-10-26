@@ -2,8 +2,8 @@
 
 namespace boss\controllers\operation;
 
-use yii;
-use boss\models\operation\ServerCard;
+use Yii;
+use boss\models\operation\OperationServerCard;
 use boss\components\BaseAuthController;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -11,9 +11,9 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * ServerCardController implements the CRUD actions for ServerCard model.
+ * ServerCardController implements the CRUD actions for OperationServerCard model.
  */
-class ServerCardController extends BaseAuthController
+class OperationServerCardController extends BaseAuthController
 {
     public function behaviors()
     {
@@ -34,7 +34,7 @@ class ServerCardController extends BaseAuthController
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => ServerCard::find(),
+            'query' => OperationServerCard::find(),
         ]);
 		
         return $this->render('index', [
@@ -43,7 +43,7 @@ class ServerCardController extends BaseAuthController
     }
 
     /**
-     * Displays a single ServerCard model.
+     * Displays a single OperationServerCard model.
      * @param string $id
      * @return mixed
      */
@@ -59,13 +59,13 @@ class ServerCardController extends BaseAuthController
     }
 
     /**
-     * Creates a new ServerCard model.
+     * Creates a new OperationServerCard model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new ServerCard;
+        $model = new OperationServerCard;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -77,7 +77,7 @@ class ServerCardController extends BaseAuthController
     }
 
     /**
-     * Updates an existing ServerCard model.
+     * Updates an existing OperationServerCard model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param string $id
      * @return mixed
@@ -96,7 +96,7 @@ class ServerCardController extends BaseAuthController
     }
 
     /**
-     * Deletes an existing ServerCard model.
+     * Deletes an existing OperationServerCard model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param string $id
      * @return mixed
@@ -109,15 +109,15 @@ class ServerCardController extends BaseAuthController
     }
 
     /**
-     * Finds the ServerCard model based on its primary key value.
+     * Finds the OperationServerCard model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id
-     * @return ServerCard the loaded model
+     * @return OperationServerCard the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = ServerCard::findOne($id)) !== null) {
+        if (($model = OperationServerCard::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

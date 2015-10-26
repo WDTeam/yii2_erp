@@ -124,10 +124,10 @@ class GeneralPay extends \common\models\payment\GeneralPay
             if($channel_id == '2'){
                 $scenario = 'wx_h5_pay';
                 $data['openid'] = $ext_params['openid'];    //微信openid
-            }elseif($channel_id == '6'){
+            }elseif($channel_id == '6' || $channel_id == '24'){
                 $scenario = 'alipay_web_pay';
-                $data['return_url'] = $ext_params['return_url'];    //同步回调地址
-                $data['show_url'] = $ext_params['show_url'];    //显示商品URL
+                $data['return_url'] = !empty($ext_params['return_url']) ? $ext_params['return_url'] :'';    //同步回调地址
+                $data['show_url'] = !empty($ext_params['show_url']) ? $ext_params['show_url']: '';    //显示商品URL
             }elseif($channel_id == '7'){
                 $scenario = 'zhidahao_h5_pay';
                 $data['customer_name'] = $ext_params['customer_name'];  //商品名称
@@ -148,10 +148,10 @@ class GeneralPay extends \common\models\payment\GeneralPay
             if($channel_id == '2'){
                 $scenario = 'wx_h5_online_pay';
                 $data['openid'] = $ext_params['openid'];    //微信openid
-            }elseif($channel_id == '6'){
+            }elseif($channel_id == '6' || $channel_id == '24'){
                 $scenario = 'alipay_web_online_pay';
-                $data['return_url'] = $ext_params['return_url'];    //同步回调地址
-                $data['show_url'] = $ext_params['show_url'];    //显示商品URL
+                $data['return_url'] = !empty($ext_params['return_url']) ? $ext_params['return_url'] :'';    //同步回调地址
+                $data['show_url'] = !empty($ext_params['show_url']) ? $ext_params['show_url']: '';    //显示商品URL
             }elseif($channel_id == '7'){
                 $scenario = 'zhidahao_h5_online_pay';
                 $data['customer_name'] = $ext_params['customer_name'];  //商品名称
