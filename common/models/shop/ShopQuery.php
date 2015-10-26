@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models;
+namespace common\models\shop;
 
 /**
  * This is the ActiveQuery class for [[Shop]].
