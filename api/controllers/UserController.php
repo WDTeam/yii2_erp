@@ -552,7 +552,7 @@ class UserController extends \api\components\Controller
             if (!empty($param['city_name']) && $param['coupon_type'] == 1) {
 
                 $CouponData = CouponCustomer::getCouponCustomer($customer->id);
-
+ 
                 if (!empty($CouponData)) {
                     $ret = array();
                     foreach ($CouponData as $key => $val) {
