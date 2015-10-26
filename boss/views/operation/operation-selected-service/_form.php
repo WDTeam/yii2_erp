@@ -6,6 +6,7 @@ use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
 use dosamigos\datetimepicker\DateTimePicker;
 use boss\components\GoodsTypeCascade;
+use kartik\widgets\FileInput;
 
 /**
  * @var yii\web\View $this
@@ -46,6 +47,16 @@ use boss\components\GoodsTypeCascade;
                 'selected_service_unit'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'请输入时间...', 'maxlength'=>64]],
 
                 ]]); ?>
+            <?= $form->field($model, 'selected_service_photo')->widget(FileInput::classname(), [
+                'options' => ['multiple' => true],
+                'pluginOptions' => [
+                    'previewFileType' => 'any',
+                    'showPreview' => true,
+                    'showCaption' => false,
+                    'showRemove' => true,
+                    'showUpload' => false,
+                ]
+            ])?>
                 <?php
         //            echo $form->field($model, 'operation_goods_start_time')->widget(DateTimePicker::className(), [
         //            'language' => 'es',

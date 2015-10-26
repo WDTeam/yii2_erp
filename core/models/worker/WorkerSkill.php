@@ -3,7 +3,7 @@
 namespace core\models\worker;
 
 use Yii;
-
+use boss\models\worker\WorkerSkillConfig;
 /**
  * This is the model class for table "{{%worker_skill}}".
  *
@@ -15,10 +15,17 @@ use Yii;
 class WorkerSkill extends \common\models\worker\WorkerSkill
 {
     public static function getWorkerSkill($worker_id){
-        $workerSkill = self::find()->where(['worker_id'=>$worker_id])->asArray()->all();
-        foreach ((array)$workerSkill as $key=>$val) {
-            $workerSkill[$key];
+        $workerSkillConfig = WorkerSkillConfig::getWorkerSkillConfig();
+        $workerSkillResult = self::find()->select('worker_skill_id')->where(['worker_id'=>$worker_id])->asArray()->all();
+        $workerSkill = [];
+        foreach ((array)$workerSkillResult as $key=>$val) {
+            if(isset($workerSkillConfig[$val['worker_skill_id']])){
+                $workerSkill[] = [
+                    'worker_skill_id'=>$val['worker_skill_id'],
+                    'worker_skill_name'=>$workerSkillConfig[$val['worker_skill_id']]
+                ];
+            }
         }
-
+        return $workerSkill;
     }
 }

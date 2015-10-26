@@ -21,24 +21,14 @@ use core\models\worker\Worker;
 class WorkerAccessToken extends \common\models\worker\WorkerAccessToken
 {
     public static function generateAccessToken($phone, $code){
-        $check_code = Worker::checkWorkerPassword($phone, $code);
-        if ($check_code['result'] ==0) {
-            return false;
+         $check_code = WorkerCode::checkCode($phone, $code);
+        if ($check_code == false) {
+            return $check_code;
         }
+
 
         $transaction = \Yii::$app->db->beginTransaction();
         try{
-            //没有客户则创建
-            $worker = Worker::find()->where(['worker_phone'=>$phone])->one();
-            if ($worker == NULL) {
-                $worker = new Worker;
-                $worker->worker_phone = $phone;
-                $worker->created_at = time();
-                $worker->updated_at = 0;
-                $worker->is_del = 0;
-                $worker->save();
-            }
-
             $workerAccessTokens = self::find()->where(['worker_phone'=>$phone])->all();
             foreach ($workerAccessTokens as $workerAccessToken) {
                 $workerAccessToken->is_del = 1;

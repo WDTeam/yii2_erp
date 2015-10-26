@@ -280,25 +280,25 @@ echo Menu::widget(
                     ],*/
                     [
                         'label' => '阿姨任务管理(95%)',
-                        'url' => ['/operation/worker/worker-task/index'],
+                        'url' => ['/worker/worker-task/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
 					[
 						'label' => '服务卡管理',
 						'url' => ['#'],
-						'icon' => 'fa fa-slideshare',
+						'icon' => 'fa fa-angle-right',
 						'options' => [
 							'class' => 'treeview active',
 						],
 						'items' => [
 							[
 								'label' => '服务卡信息管理',
-								'url' => ['operation/server-card/index'],
+								'url' => ['operation/operation-server-card/index'],
 								'icon' => 'fa fa-angle-right',
 							],
 							[
 								'label' => '客户服务卡管理',
-								'url' => ['#'],
+								'url' => ['operation/operation-server-card-customer/index'],
 								'icon' => 'fa fa-angle-right',
 							],
 							[

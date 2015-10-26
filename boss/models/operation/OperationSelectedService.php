@@ -58,8 +58,10 @@ class OperationSelectedService extends CoreOperationSelectedService
             'selected_service_sub_area' => Yii::t('app', '子区域'),
             'selected_service_standard' => Yii::t('app', '标准'),
             'selected_service_price' => Yii::t('app', '价格'),
-            'selected_service_unit' => Yii::t('app', '单位'),
+            'selected_service_unit' => Yii::t('app', '时间'),
+            'selected_service_photo' => Yii::t('app', '图片'),
             'created_at' => Yii::t('app', '创建时间'),
+            'updated_at' => Yii::t('app', '编辑时间'),
             'remark' => Yii::t('app', '备注'),
         ];
     }
