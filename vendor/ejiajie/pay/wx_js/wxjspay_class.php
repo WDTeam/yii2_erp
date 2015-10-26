@@ -93,6 +93,7 @@ class wxjspay_class extends WxPayNotify{
      */
     public function nativeGet($param)
     {
+        dump($param);exit;
         $notify = new NativePay();
         $input = new WxPayUnifiedOrder();
         $input->SetBody($param['body']);
@@ -106,6 +107,8 @@ class wxjspay_class extends WxPayNotify{
         $input->SetTrade_type($param['trade_type']);
         $input->SetProduct_id($param['out_trade_no']);
         $result = $notify->GetPayUrl($input);
+        dump($result);exit;
+
         return $result;
     }
 

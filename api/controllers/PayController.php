@@ -61,7 +61,7 @@ class PayController extends \api\components\Controller
 
 
     /**
-     * @api {POST} v1/pay/online-pay 在线支付接口 （已完成）
+     * @api {POST} v1/pay/online-pay 在线支付接口 (赵顺利100%)
      * @apiName actionOnlinePay
      * @apiGroup Pay
      *
@@ -78,6 +78,7 @@ class PayController extends \api\components\Controller
      *                              7=H5百度直达号,
      *                              20=后台支付（未实现）,
      *                              21=微博支付（未实现）,
+     *                              23=微信native,
      * @apiParam {String} [order_id] 订单ID,没有订单号表示充值
      * @apiParam {String} partner 第三方合作号
      *
@@ -130,6 +131,7 @@ class PayController extends \api\components\Controller
      *      "msg": "数据返回成功",
      *      "ret": {
      *          "sp_no": 1049,
+     *          "code_url":"weixin://wxpay/bizpayurl?pr=kK7sllh",
      *          "order_no": "15102301277257",
      *          "total_amount": "1",
      *          "goods_name": "18001305711",
@@ -169,7 +171,6 @@ class PayController extends \api\components\Controller
         $name = $model->formName();
         $data[$name] = Yii::$app->request->post() or
         $data[$name] = json_decode(Yii::$app->request->rawBody, true);
-
         if (empty($data[$name]['access_token']) || !CustomerAccessToken::checkAccessToken($data[$name]['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
@@ -347,10 +348,6 @@ class PayController extends \api\components\Controller
         exit;
     }
 
-    public function actionTest()
-    {
-        dump(yii::$app->controller->id);
-    }
 }
 
 ?>

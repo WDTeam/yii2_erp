@@ -7,7 +7,6 @@ use yii\base\Model;
 use yii\data\ArrayDataProvider;
 use yii\data\ActiveDataProvider;
 use core\models\order\Order;
-use common\models\OrderExtWorker;
 use core\models\worker\Worker;
 use common\models\finance\FinanceWorkerOrderIncome;
 use core\models\finance\FinanceSettleApplySearch;
@@ -96,13 +95,46 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
     public function getOrderDataProviderFromOrder($worker_id){
         $data = [];
         $orders = Order::find()->joinWith('orderExtWorker')->where(['orderExtWorker.worker_id'=>$worker_id])->all();
+        $data = $this->getWorkerOrderIncomeArrayFromOrders($orders);
+        $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
+        return $dataProvider;
+    }
+    
+    
+    public function getCashOrderDataProviderFromOrder($worker_id){
+        $data = [];
+        $orders = Order::find()->joinWith('orderExtWorker')->joinWith('orderExtPay')->where(['orderExtWorker.worker_id'=>$worker_id,'orderExtPay.order_pay_type'=>1])->all();
+        $data = $this->getWorkerOrderIncomeArrayFromOrders($orders);
+        $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
+        return $dataProvider;
+    }
+    
+    public function getNonCashOrderDataProviderFromOrder($worker_id){
+        $data = [];
+        $orders = Order::find()->joinWith('orderExtWorker')->joinWith('orderExtPay')->where(['orderExtWorker.worker_id'=>$worker_id,'orderExtPay.order_pay_type'=>[2,3]])->all();
+        $data = $this->getWorkerOrderIncomeArrayFromOrders($orders);
+        $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
+        return $dataProvider;
+    }
+    
+    public function getWorkerOrderIncomeArrayByWorkerId($worker_id){
+        $data = [];
+        $orders = Order::find()->joinWith('orderExtWorker')->where(['orderExtWorker.worker_id'=>$worker_id])->all();
+        return $this->getWorkerOrderIncomeArrayFromOrders($orders);
+    }
+    /**
+     * 根据订单列表信息获取订单收入数组
+     * @param type $orders
+     * @return type
+     */
+    public function getWorkerOrderIncomeArrayFromOrders($orders){
+        $data = [];
         $i = 0;
         foreach($orders as $order){
             $data[$i] = $this->transferOrderToFinanceWorkerOrderIncome($order);
             $i++;
         }
-        $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
-        return $dataProvider;
+        return $data;
     }
     
     private function transferOrderToFinanceWorkerOrderIncome($order){
@@ -120,7 +152,7 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
         $financeWorkerOrderIncomeSearch->order_unit_money = $order->order_unit_money;
         $financeWorkerOrderIncomeSearch->order_money = $order->order_money;
         $financeWorkerOrderIncomeSearch->finance_worker_order_income_discount_amount = $order->order_use_coupon_money;
-        $financeWorkerOrderIncomeSearch->order_pay_money = $order->order_pay_money;
+        $financeWorkerOrderIncomeSearch->order_pay_money = $order->order_money;
         $financeWorkerOrderIncomeSearch->finance_worker_order_income_money = $order->order_money;
         $worker = Worker::getWorkerInfo($financeWorkerOrderIncomeSearch->worker_id);
         if(($worker['worker_type'] ==FinanceSettleApplySearch::SELF_OPERATION ) && ($worker['worker_identity_id'] == FinanceSettleApplySearch::FULLTIME)){
@@ -132,18 +164,6 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
         }
         $financeWorkerOrderIncomeSearch->created_at = time();//申请创建时间
         return $financeWorkerOrderIncomeSearch;
-    }
-    
-    public function getCashOrderDataProviderFromOrder($worker_id){
-        $query = Order::find()->joinWith('orderExtWorker')->where(['orderExtWorker.worker_id'=>$worker_id]);
-        $dataProvider = new ActiveDataProvider([ 'query' => $query,]);
-        return $dataProvider;
-    }
-    
-    public function getNonCashOrderDataProviderFromOrder($worker_id){
-        $query = Order::find()->joinWith('orderExtWorker')->where(['orderExtWorker.worker_id'=>$worker_id]);
-        $dataProvider = new ActiveDataProvider([ 'query' => $query,]);
-        return $dataProvider;
     }
     
      public function attributeLabels()

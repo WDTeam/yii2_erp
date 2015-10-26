@@ -30,26 +30,29 @@ $this->params['breadcrumbs'][] = $this->title;
             'selected_service_sub_area',
             'selected_service_standard',
             'selected_service_price',
-            'selected_service_unit',
+            [
+                'header'=>"单位(分钟)",
+                'attribute'=>'selected_service_unit',
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
                         'view' => function ($url, $model) {
                             return Html::a(
                                 '<span class="glyphicon glyphicon-eye-open"></span>',
-                                Yii::$app->urlManager->createUrl(['operation-selected-service/view','id' => $model->id]),
+                                Yii::$app->urlManager->createUrl(['/operation/operation-selected-service/view','id' => $model->id]),
                                 ['title' => Yii::t('yii', 'View'), 'class' => 'btn btn-success btn-sm']
                             );
                         },
                         'update' => function ($url, $model) {
-                            return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['operation-selected-service/update','id' => $model->id]), [
+                            return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['/operation/operation-selected-service/update','id' => $model->id]), [
                                 'title' => Yii::t('yii', 'Edit'), 'class' => 'btn btn-info btn-sm'
                             ]);},
                         'delete' => function ($url, $model) {
                             //return '';
                             return Html::a(
                                 '<span class="glyphicon glyphicon-trash"></span>',
-                                Yii::$app->urlManager->createUrl(['operation-selected-service/delete','id' => $model->id]),
+                                Yii::$app->urlManager->createUrl(['/operation/operation-selected-service/delete','id' => $model->id]),
                                 ['title' => Yii::t('yii', 'Delete'), 'class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
                             );
                         },

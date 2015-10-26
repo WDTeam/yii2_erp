@@ -15,7 +15,6 @@ class m151021_092648_create_table_coupon_customer extends Migration
                 'id' => Schema::TYPE_PK . ' AUTO_INCREMENT  COMMENT \'主键\'',
 
 		'customer_id'=>  Schema::TYPE_INTEGER. '(8) DEFAULT 0 COMMENT \'客户id\'',
-		'order_id'=>  Schema::TYPE_INTEGER. '(8) DEFAULT 0 COMMENT \'订单id\'',
 		'coupon_id'=>  Schema::TYPE_INTEGER. '(8) DEFAULT 0 COMMENT \'优惠规则id\'',
 		'coupon_code_id'=>  Schema::TYPE_INTEGER. '(8) DEFAULT 0 COMMENT \'优惠码id\'',
 		'coupon_code'=>  Schema::TYPE_STRING. '(255) DEFAULT NULL COMMENT \'优惠码\'',

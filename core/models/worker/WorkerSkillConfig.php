@@ -3,6 +3,7 @@
 namespace core\models\worker;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "{{%worker_skill_config}}".
@@ -17,6 +18,7 @@ use Yii;
 class WorkerSkillConfig extends \common\models\worker\WorkerSkillConfig
 {
     public static function getWorkerSkillConfig(){
-        return self::findAll(['isdel'=>0]);
+        $result = self::findAll(['isdel'=>0]);
+        return ArrayHelper::map($result,'id','worker_skill_name');
     }
 }
