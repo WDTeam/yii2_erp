@@ -619,13 +619,14 @@ class ServiceController extends \api\components\Controller
      * @api {GET} v1/service/baidu-map 根据地址获取百度地图数据（赵顺利0%）
      * @apiGroup service
      * @apiName actionBaiduMap
-     * @apiDescription 获取城市所有精品保洁
+     * @apiDescription 根据地址获取百度地图数据
      *
      * @apiParam {String} query 查询关键字
      * @apiParam {String} location 经纬度
      * @apiParam {String} radius 半径
      * @apiParam {String} output 输出方式
      * @apiParam {String} ak
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/service/baidu-map
      *
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
@@ -635,16 +636,16 @@ class ServiceController extends \api\components\Controller
      *      "ret":
      *  }
      *
-     * @apiError CityNotSupportFound 该城市暂未开通.
+     * @apiError queryNotSupportFound 关键字不能为空.
      *
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 404 Not Found
      *     {
      *       "code":"error",
-     *       "msg": "该城市暂未开通"
+     *       "msg": "关键字不能为空"
      *     }
      */
-    public function actionBaiduMap()
+    public  function actionBaiduMap()
     {
         $params=Yii::$app->request->get();
 
@@ -655,7 +656,6 @@ class ServiceController extends \api\components\Controller
         }
         $url="http://api.map.baidu.com/place/v2/search?query=".$params['query'].'&location='.$params['location'].
            '&radius='.$params['radius'].'&output='.$params['output'].'&ak='.$params['ak'];
-        //$url=$this->createUrl();
 
         $date=file_get_contents($url);
 
