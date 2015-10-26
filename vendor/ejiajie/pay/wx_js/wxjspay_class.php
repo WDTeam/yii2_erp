@@ -1,6 +1,7 @@
 <?php
 require_once dirname(__FILE__)."/lib/WxPay.Api.php";
 require_once dirname(__FILE__)."/example/WxPay.JsApiPay.php";
+require_once dirname(__FILE__)."/example/WxPay.NativePay.php";
 require_once dirname(__FILE__)."/lib/WxPay.Notify.php";
 require_once dirname(__FILE__)."/lib/WxPay.Data.php";
 
@@ -68,6 +69,7 @@ class wxjspay_class extends WxPayNotify{
     //重写回调处理函数
     public function NotifyProcess($data, &$msg)
     {
+        file_put_contents('/tmp/pay/wx-navite.php',$data);
         //Log::DEBUG("call back:" . json_encode($data));
         $notfiyOutput = array();
 
@@ -81,6 +83,30 @@ class wxjspay_class extends WxPayNotify{
             return false;
         }
         return true;
+    }
+
+    //--------------------------------------------
+    /**
+     * native
+     * @param $param
+     * @return mixed
+     */
+    public function nativeGet($param)
+    {
+        $notify = new NativePay();
+        $input = new WxPayUnifiedOrder();
+        $input->SetBody($param['body']);
+        $input->SetAttach($param['subject']);
+        $input->SetOut_trade_no($param['out_trade_no']);
+        $input->SetTotal_fee($param['general_pay_money']);
+        $input->SetTime_start($param['time_start']);
+        $input->SetTime_expire($param['time_expire']);
+        $input->SetGoods_tag($param['subject']);
+        $input->SetNotify_url($param['notify_url']);
+        $input->SetTrade_type($param['trade_type']);
+        $input->SetProduct_id($param['out_trade_no']);
+        $result = $notify->GetPayUrl($input);
+        return $result;
     }
 
 }

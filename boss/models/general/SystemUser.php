@@ -1,5 +1,5 @@
 <?php
-namespace boss\models;
+namespace boss\models\general;
 
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -19,7 +19,7 @@ use yii\helpers\ArrayHelper;
  * @property integer $updated_at
  * @property string $password write-only password
  */
-class SystemUser extends \common\models\SystemUser
+class SystemUser extends \common\models\general\SystemUser
 {
     public $repassword;
     private $_statusLabel;

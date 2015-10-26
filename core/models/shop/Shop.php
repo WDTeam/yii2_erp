@@ -11,7 +11,7 @@ use yii2tech\ar\softdelete\SoftDeleteBehavior;
 use core\models\worker\Worker;
 use core\behaviors\ShopStatusBehavior;
 use yii\helpers\ArrayHelper;
-class Shop extends \common\models\Shop
+class Shop extends \common\models\shop\Shop
 {
     public static $audit_statuses = [
         0=>'待审核',

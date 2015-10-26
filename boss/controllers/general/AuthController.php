@@ -1,6 +1,6 @@
 <?php
 
-namespace boss\controllers;
+namespace boss\controllers\general;
 
 use Yii;
 use core\models\auth\Auth;

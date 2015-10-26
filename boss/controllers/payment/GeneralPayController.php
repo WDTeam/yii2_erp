@@ -153,4 +153,10 @@ class GeneralPayController extends Controller
         return json_encode(['results'=>$channel]);
     }
 
+    public function actionTest()
+    {
+        $data = \core\models\payment\GeneralPay::getPayParams('0.01',1,22,'1500610004');
+        dump($data);
+    }
+
 }

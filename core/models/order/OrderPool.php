@@ -1,4 +1,4 @@
-<?php
+ï»¿<?php
 /**
  * Created by PhpStorm.
  * User: LinHongYou
@@ -15,7 +15,7 @@ class OrderPool extends Model
 {
     const WAIT_ASSIGN_ORDERS_POOL = 'WaitAssignOrdersPool';
     /**
-     * °Ñ¶©µ¥·ÅÈë¶©µ¥³Ø
+     * æŠŠè®¢å•æ”¾å…¥è®¢å•æ± 
      * @param $order_id
      * @param $worker_identity
      */
@@ -33,7 +33,7 @@ class OrderPool extends Model
     }
 
     /**
-     * °Ñ¶©µ¥ÒÆ³ö¶©µ¥³Ø
+     * æŠŠè®¢å•ç§»å‡ºè®¢å•æ± 
      * @param $order_id
      */
     public static function remOrder($order_id)
@@ -48,15 +48,15 @@ class OrderPool extends Model
     }
 
     /**
-     * ÖØÐÂ¼ÓÈë¶©µ¥³Ø
+     * é‡æ–°åŠ å…¥è®¢å•æ± 
      * @param $order_id
      * @param int $worker_identity
      */
     public static function updateOrder($order_id,$worker_identity=0)
     {
-        //°Ñ¶©µ¥´Ó¶©µ¥³ØÖÐÒÆ³ý
+        //æŠŠè®¢å•ä»Žè®¢å•æ± ä¸­ç§»é™¤
         self::remOrder($order_id);
-        //ÖØÐÂ¼ÓÈë¶©µ¥³Ø
+        //é‡æ–°åŠ å…¥è®¢å•æ± 
         self::addOrder($order_id,$worker_identity);
     }
 }

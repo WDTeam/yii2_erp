@@ -49,7 +49,8 @@ class m150918_125452_create_table_finance_order_channel extends Migration
 			INSERT INTO {{%finance_order_channel}} VALUES ('19', '1', '美团团购', '0.01', '1', '1', '1443339882', '0');
 			INSERT INTO {{%finance_order_channel}} VALUES ('20', '14', '后台下单', '1', '1', '1', '1443339882', '0');
 			INSERT INTO {{%finance_order_channel}} VALUES ('21', '15', '新浪微博', '1', '1', '2', '1443339882', '0');
-			INSERT INTO {{%finance_order_channel}} VALUES ('22', '2', '大众点评退款', '1', '2', '2', '1443339882', '0');"
+			INSERT INTO {{%finance_order_channel}} VALUES ('22', '2', '大众点评退款', '1', '2', '2', '1443339882', '0');
+			INSERT INTO {{%finance_order_channel}} VALUES ('23', '10', '微信NAVITE', '1', '1', '1', '1443339882', '0');"
         );
     }
 
