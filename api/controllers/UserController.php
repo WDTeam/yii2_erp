@@ -488,7 +488,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} /user/get-coupon-customer 获取用户优惠码或同城市 （郝建设100%）
+     * @api {GET} /user/get-coupon-customer 获取用户优惠码或同城市 （郝建设100%）
      *
      * @apiName GetCouponCustomer
      * @apiGroup User
@@ -536,7 +536,7 @@ class UserController extends \api\components\Controller
     public function actionGetCouponCustomer()
     {
 
-        $param = Yii::$app->request->post();
+        $param = Yii::$app->request->get();
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
