@@ -91,10 +91,10 @@ class CouponController extends \api\components\Controller
     }
 
     /**
-     * @api {Get} /user/coupons获取用户优惠码或同城市 （李勇 80%）
+     * @api {Get} /user/coupons 获取用户优惠码或同城市 （李勇 80%）
      *
      * @apiName GetCouponCustomer
-     * @apiGroup Coupon
+     * @apiGroup coupon
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
