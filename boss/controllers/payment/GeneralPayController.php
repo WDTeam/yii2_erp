@@ -155,6 +155,9 @@ class GeneralPayController extends Controller
 
     public function actionTest()
     {
+        $data = \core\models\payment\GeneralPay::getPayParams('0.01',1,24,'1500610004');
+        dump($data);
+        exit;
         $data = \core\models\payment\GeneralPay::getPayParams('0.01',1,23,'1500610004');
         dump($data);
     }

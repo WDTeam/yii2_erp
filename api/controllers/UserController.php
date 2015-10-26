@@ -11,9 +11,12 @@ use \core\models\operation\coupon\Coupon;
 
 class UserController extends \api\components\Controller
 {
-
     /**
+<<<<<<< HEAD
      * @api {POST} v1/user/add-address 添加常用地址 (已完成100%) 
+=======
+     * @api {POST} /user/add-address 添加常用地址 (已完成100%)
+>>>>>>> a12ff13ca9503d94d2ad0036bb767c876c69dc04
      *
      * @apiName AddAddress
      * @apiGroup User
@@ -191,7 +194,11 @@ class UserController extends \api\components\Controller
     }
 
     /**
+<<<<<<< HEAD
      * @api {DELETE} v1/user/delete-address 删除用户常用地址 (已完成100%) 
+=======
+     * @api {DELETE} /user/delete-address 删除用户常用地址 (已完成100%)
+>>>>>>> a12ff13ca9503d94d2ad0036bb767c876c69dc04
      *
      * @apiName DeleteAddress
      * @apiGroup User
@@ -240,7 +247,11 @@ class UserController extends \api\components\Controller
     }
 
     /**
+<<<<<<< HEAD
      * @api {PUT} v1/user/set-default-address 设置默认地址 (已完成100%) 
+=======
+     * @api {PUT} /user/set-default-address 设置默认地址 (已完成100%)
+>>>>>>> a12ff13ca9503d94d2ad0036bb767c876c69dc04
      * @apiDescription 用户每次下完单都会将该次地址设置为默认地址，下次下单优先使用默认地址
      * @apiName SetDefaultAddress
      * @apiGroup User
@@ -298,7 +309,11 @@ class UserController extends \api\components\Controller
     }
 
     /**
+<<<<<<< HEAD
      * @api {PUT} v1/user/update-address 修改常用地址 (已完成100%) 
+=======
+     * @api {PUT} /user/update-address 修改常用地址 (已完成100%)
+>>>>>>> a12ff13ca9503d94d2ad0036bb767c876c69dc04
      *
      * @apiName UpdateAddress
      * @apiGroup User
@@ -406,6 +421,7 @@ class UserController extends \api\components\Controller
      */
 
     /**
+<<<<<<< HEAD
      * @api {POST} v1/user/exchange-coupon 兑换优惠劵 （李勇 80%）
      *
      * @apiName ExchangeCoupon
@@ -610,6 +626,9 @@ class UserController extends \api\components\Controller
 
     /**
      * @api {GET} v1/user/get-coupon-count 获取用户优惠码数量 （功能已经实现 100%）
+=======
+     * @api {GET} /user/get-coupon-count 获取用户优惠码数量 （功能已经实现 100%）
+>>>>>>> a12ff13ca9503d94d2ad0036bb767c876c69dc04
      *
      *
      * @apiName GetCouponCount
@@ -640,7 +659,6 @@ class UserController extends \api\components\Controller
      *
      *     }
      *
-
      *
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
@@ -731,7 +749,7 @@ class UserController extends \api\components\Controller
 
         if (!empty($customer) && !empty($customer->id)) {
             /**
-             * @param $customer->id int 用户id
+             * @param $customer ->id int 用户id
              * @param $worker      int 阿姨id
              * @param $type        int 标示类型，1时判断黑名单阿姨，0时判断常用阿姨
              */
@@ -807,7 +825,7 @@ class UserController extends \api\components\Controller
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
             /**
-             * @param $customer->id int 用户id
+             * @param $customer ->id int 用户id
              * @param $is_block      int 阿姨id
              */
             $workerData = \core\models\customer\CustomerWorker::blacklistworkers(1, 1);
@@ -882,8 +900,13 @@ class UserController extends \api\components\Controller
     }
 
     /**
+<<<<<<< HEAD
      * @api {GET} v1/user/get-user-money 用户余额和消费记录 （数据已经全部取出,需要给出所需字段,然后给予返回 已完成99% ;）
      * 
+=======
+     * @api {GET} /user/get-user-money 用户余额和消费记录 （数据已经全部取出,需要给出所需字段,然后给予返回 已完成99% ;）
+     *
+>>>>>>> a12ff13ca9503d94d2ad0036bb767c876c69dc04
      *
      * @apiName GetUserMoney
      *
@@ -966,11 +989,13 @@ class UserController extends \api\components\Controller
         if (!empty($customer) && !empty($customer->id)) {
             /**
              * 获取客户余额
+             *
              * @param int $customer 用户id
              */
             $userBalance = \core\models\customer\CustomerExtBalance::getCustomerBalance($customer->id);
             /**
              * 获取用户消费记录
+             *
              * @param int $customer 用户id
              */
             $userRecord = \core\models\CustomerTransRecord\CustomerTransRecord::queryRecord($customer->id);
@@ -983,6 +1008,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
+<<<<<<< HEAD
      * 发送验证码
      */
     public function actionSetUser()
@@ -1002,6 +1028,9 @@ class UserController extends \api\components\Controller
 
     /**
      * @api {GET} v1/user/get-user-score 用户积分明细 （功能已实现,不明确需求端所需字段格式 90%）
+=======
+     * @api {GET} /user/get-user-score 用户积分明细 （功能已实现,不明确需求端所需字段格式 90%）
+>>>>>>> a12ff13ca9503d94d2ad0036bb767c876c69dc04
      *
      * @apiDescription 获取用户当前积分，积分兑换奖品信息，怎样获取积分信息
      * @apiName GetUserScore
@@ -1075,7 +1104,7 @@ class UserController extends \api\components\Controller
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
             /**
-             *  @param int $customer_id 用户id
+             * @param int $customer_id 用户id
              */
             $userscore = \core\models\customer\CustomerExtScore::getCustomerScoreList($customer->id);
 
@@ -1267,8 +1296,7 @@ class UserController extends \api\components\Controller
      * @apiParam {String} longitude 经度
      * @apiParam {String} latitude 纬度
      * @apiParam {String} order_service_type_id 服务id
-     * 
-
+     *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
