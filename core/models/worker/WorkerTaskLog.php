@@ -91,6 +91,14 @@ class WorkerTaskLog extends \common\models\worker\WorkerTaskLog
         return true;
     }
     /**
+     * 任务描述
+     */
+    public function getWorker_task_description()
+    {
+        $model = WorkerTask::findOne(['id'=>$this->worker_task_id]);
+        return $model->worker_task_description;
+    }
+    /**
      * 当前阿姨任务列表
      */
     public static function getCurListByWorkerId($worker_id)
@@ -102,4 +110,5 @@ class WorkerTaskLog extends \common\models\worker\WorkerTaskLog
         ->andFilterWhere(['>', 'worker_task_log_end', $time])
         ->all();
     }
+    
 }

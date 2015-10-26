@@ -312,9 +312,9 @@ class WorkerTask extends \common\models\worker\WorkerTask
     public static function getDoneTasksByWorkerId($start_time, $end_time, $worker_id)
     {
         $models = WorkerTaskLog::find()->where([
-            'worker_id1'=>$worker_id,
-            'worker_task_is_done1'=>1,
-            'worker_task_reward_type1'=>1
+            'worker_id'=>$worker_id,
+            'worker_task_is_done'=>1,
+            'worker_task_reward_type'=>1
         ])
         ->andFilterWhere(['>=','worker_task_done_time', $start_time])
         ->andFilterWhere(['<','worker_task_done_time', $end_time])
