@@ -10,6 +10,7 @@ use Yii;
  * @property string $order_id
  * @property string $worker_id
  * @property string $order_worker_phone
+ * @property string $order_worker_memo
  * @property string $worker_type_id
  * @property string $order_worker_type_name
  * @property integer $order_worker_assign_type
@@ -36,7 +37,8 @@ class OrderExtWorker extends ActiveRecord
     {
         return [
             [['worker_id', 'worker_type_id', 'order_worker_assign_type', 'shop_id', 'created_at', 'updated_at'], 'integer'],
-            [['order_worker_type_name','order_worker_phone'], 'string', 'max' => 64]
+            [['order_worker_type_name','order_worker_phone'], 'string', 'max' => 64],
+            [['order_worker_memo'], 'string', 'max' => 255]
         ];
     }
 
@@ -49,6 +51,7 @@ class OrderExtWorker extends ActiveRecord
             'order_id' => '订单id',
             'worker_id' => '工人id',
             'order_worker_phone' => '工人手机号',
+            'order_worker_memo' => '工人备注',
             'worker_type_id' => '工人职位类型ID',
             'order_worker_type_name' => '工人职位类型',
             'order_worker_assign_type' => '工人接单方式 0未接单 1工人抢单 2客服指派 3门店指派',

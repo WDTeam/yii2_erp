@@ -69,6 +69,7 @@ class Order extends ActiveRecord
     public $order_pop_pay_money;
     public $customer_id;
     public $order_customer_phone;
+    public $order_customer_is_vip;
     public $order_customer_need;
     public $order_customer_memo;
     public $comment_id;
@@ -118,6 +119,7 @@ class Order extends ActiveRecord
         'order_pop_pay_money',
         'customer_id',
         'order_customer_phone',
+        'order_customer_is_vip',
         'order_customer_need',
         'order_customer_memo',
         'comment_id',
@@ -235,6 +237,7 @@ class Order extends ActiveRecord
             'order_pop_pay_money' => '合作方结算金额 负数表示合作方结算规则不规律无法计算该值。',
             'customer_id' => '客户ID',
             'order_customer_phone' => '客户手机号',
+            'order_customer_is_vip' => '是否是会员',
             'order_customer_need' => '客户需求',
             'order_customer_memo' => '客户备注',
             'comment_id' => '评价id',
@@ -411,6 +414,7 @@ class Order extends ActiveRecord
                 'order_pop_pay_money' => $orderExtPop->order_pop_pay_money,
                 'customer_id' => $orderExtCustomer->customer_id,
                 'order_customer_phone' => $orderExtCustomer->order_customer_phone,
+                'order_customer_is_vip' => $orderExtCustomer->order_customer_is_vip,
                 'order_customer_need' => $orderExtCustomer->order_customer_need,
                 'order_customer_memo' => $orderExtCustomer->order_customer_memo,
                 'comment_id' => $orderExtCustomer->comment_id,
@@ -487,6 +491,7 @@ class Order extends ActiveRecord
             'order_pop_pay_money' => $orderExtPop->order_pop_pay_money,
             'customer_id' => $orderExtCustomer->customer_id,
             'order_customer_phone' => $orderExtCustomer->order_customer_phone,
+            'order_customer_is_vip' => $orderExtCustomer->order_customer_is_vip,
             'order_customer_need' => $orderExtCustomer->order_customer_need,
             'order_customer_memo' => $orderExtCustomer->order_customer_memo,
             'comment_id' => $orderExtCustomer->comment_id,
