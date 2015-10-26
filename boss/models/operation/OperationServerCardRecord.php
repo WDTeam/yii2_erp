@@ -18,14 +18,7 @@ use Yii;
  */
 class OperationServerCardRecord extends \core\models\operation\OperationServerCardRecord
 {
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return 'et_operation_server_card_record';
-    }
-
+  
     /**
      * @inheritdoc
      */
