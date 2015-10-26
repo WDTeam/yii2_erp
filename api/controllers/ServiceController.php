@@ -615,6 +615,53 @@ class ServiceController extends \api\components\Controller
         return $this->send($ret, "获取周期服务时间表成功");
     }
 
+    /**
+     * @api {GET} v1/service/baidu-map 根据地址获取百度地图数据（赵顺利0%）
+     * @apiGroup service
+     * @apiName actionBaiduMap
+     * @apiDescription 获取城市所有精品保洁
+     *
+     * @apiParam {String} query 查询关键字
+     * @apiParam {String} location 经纬度
+     * @apiParam {String} radius 半径
+     * @apiParam {String} output 输出方式
+     * @apiParam {String} ak
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "code": "ok",
+     *      "msg": "",
+     *      "ret":
+     *  }
+     *
+     * @apiError CityNotSupportFound 该城市暂未开通.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "code":"error",
+     *       "msg": "该城市暂未开通"
+     *     }
+     */
+    public function actionBaiduMap()
+    {
+        $params=Yii::$app->request->get();
+
+        $path="http://api.map.baidu.com/place/v2/search";
+        if(empty($params)||empty($params['query'])||empty($params['location'])||empty($params['radius'])||empty($params['output'])||empty($params['ak']))
+        {
+            return $this->send(null,'参数不完成','error','403');
+        }
+        $url="http://api.map.baidu.com/place/v2/search?query=".$params['query'].'&location='.$params['location'].
+           '&radius='.$params['radius'].'&output='.$params['output'].'&ak='.$params['ak'];
+        //$url=$this->createUrl();
+
+        $date=file_get_contents($url);
+
+        return $this->send(json_decode($date),'操作成功','ok');
+
+    }
 }
 
 ?>

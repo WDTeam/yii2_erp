@@ -24,10 +24,7 @@ $this->title = Yii::t('boss', '评论管理');
         <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
     </div>
     </div>
-    <p>
-        <?php //echo Html::a(Yii::t('app', 'Create {modelClass}', ['modelClass' => 'Worker',]), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
+  
     <?php
     echo GridView::widget([
         'dataProvider' => $dataProvider,
@@ -45,7 +42,17 @@ $this->title = Yii::t('boss', '评论管理');
                 'class' => 'yii\grid\CheckboxColumn',
             ],
             // ['class' => 'yii\grid\SerialColumn'],
-            // 'id',
+    		'created_at',
+    		'city_id',
+    		'operation_shop_district_id',
+    		'customer_comment_level',
+    		'customer_comment_tag_names',
+    		'customer_comment_content',
+    		'order_id',
+    		'customer_id',
+    		'worker_id',
+    		/* 
+    		
             'order_id',
             [
                 'format' => 'raw',
@@ -81,7 +88,7 @@ $this->title = Yii::t('boss', '评论管理');
                     return $dataProvider->created_at;
                 },
                 'width' => "120px",
-            ],
+            ], */
            // 'updated_at', 
            // 'is_del', 
             // [

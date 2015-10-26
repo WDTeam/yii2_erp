@@ -24,6 +24,7 @@ use common\models\order\OrderSrc;
 use common\models\finance\FinanceOrderChannel;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
+use core\models\operation\CoreOperationShopDistrict;
 
 /**
  * This is the model class for table "{{%order}}".
@@ -89,6 +90,7 @@ use yii\helpers\ArrayHelper;
  * @property string $order_worker_type_name
  * @property integer $order_worker_assign_type
  * @property string $shop_id
+ * @property string $order_worker_shop_name
  * @property string $checking_id
  * @property string $order_cs_memo
  * @property string $order_sys_memo
@@ -284,6 +286,7 @@ class Order extends OrderModel
             $order->order_worker_name = $worker['worker_name'];
             $order->order_worker_type_name = $worker['worker_type_description'];
             $order->shop_id = $worker["shop_id"];
+            $order->order_worker_shop_name = $worker["shop_name"];
             $order->order_worker_assign_type = $assign_type; //接单方式
             $order->admin_id = $admin_id;
             if ($admin_id > 1) { //大于1属于人工操作
@@ -300,14 +303,27 @@ class Order extends OrderModel
      * @param $order_id
      * @param $admin_id
      * @param $memo
+     * @param $cause 1公司原因 2个人原因
      * @return bool
      */
-    public static function cancel($order_id, $admin_id, $memo = '')
+    public static function cancel($order_id, $admin_id, $cause,$memo = '')
     {
         $order = OrderSearch::getOne($order_id);
         $order->admin_id = $admin_id;
-        $order->order_customer_memo = $memo;
-        return OrderStatus::_cancel($order, ['OrderExtCustomer']);
+        $order->order_flag_cancel_cause = $cause;
+        if($admin_id==0) {
+            $order->order_customer_memo = $memo;
+            return OrderStatus::_cancel($order, ['OrderExtCustomer']);
+        }elseif($admin_id==1){
+            $order->order_sys_memo = $memo;
+            return OrderStatus::_cancel($order);
+        }elseif($admin_id==2){
+            $order->order_worker_memo = $memo;
+            return OrderStatus::_cancel($order, ['OrderExtWorker']);
+        }elseif($admin_id>2){
+            $order->order_cs_memo = $memo;
+            return OrderStatus::_cancel($order);
+        }
     }
 
     /**
@@ -578,6 +594,21 @@ class Order extends OrderModel
         return $card[$id];
     }
 
+    
+    /**
+     * 获取已上线商圈列表
+     * @date: 2015-10-26
+     * @author: peak pan
+     * @return:
+     **/
+    
+    public static function getDistrictList()
+    {
+    	$districtList = CoreOperationShopDistrict::getCityShopDistrictList();
+    	return $districtList?ArrayHelper::map($districtList,'id','operation_shop_district_name'):[];
+    }
+    
+    
     /**
      * 核实用户订单唯一性
      * @param   $customer_id   int 用户id
