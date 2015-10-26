@@ -762,7 +762,7 @@ class WorkerController extends \api\components\Controller
      *   "ret": [
      *      {
      *         "task_name": "单次抢单",
-     *         "order_price": "25.00",
+     *         "reward_money": "25.00",
      *        }
      *      ]
      *   }
@@ -787,7 +787,61 @@ class WorkerController extends \api\components\Controller
         $ret = [
             [
             "task_name" => "单次抢单",
-            "order_price" => "25.00",
+            "reward_money" => "25.00",
+            ]
+        ];
+        return $this->send($ret, "操作成功.");
+    }
+    
+    /**
+     * @api {GET} /worker/get-worker-punish-list 获取阿姨受处罚列表 (田玉星 70%)
+     * 
+     * @apiDescription 【备注：等待model底层支持】
+     * 
+     * @apiName actionGetWorkerPunishList
+     * @apiGroup Worker
+     * 
+     * @apiParam {String} access_token    阿姨登录token
+     * @apiParam {String} bill_id  账单唯一标识.
+     * @apiParam {String} [platform_version] 平台版本号.
+     * 
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-punish-list
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *   "code": 1,
+     *   "msg": "操作成功.",
+     *   "ret": [
+     *      {
+     *         "punish_date": "2015.09.08",
+     *         "punish_money": "25.00",
+     *        }
+     *      ]
+     *   }
+     *
+     * @apiErrorExample Error-Response:
+     *  HTTP/1.1 404 Not Found
+     *  {
+     *      "code":"error",
+     *      "msg": "用户认证已经过期,请重新登录"
+     *  }
+     */
+    public function actionGetWorkerPunishList(){
+        $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        //检测阿姨是否登录
+        $checkResult = $this->checkWorkerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
+        }
+        //数据整理
+        $bill_id = intval($param['bill_id']);//账单ID
+        //获取受处罚列表
+        $ret = [
+            [
+            "punish_date" => "2015.09.08",
+            "punish_money" => "25.00",
+            "punish_reason" =>"打扫不干净"
             ]
         ];
         return $this->send($ret, "操作成功.");
