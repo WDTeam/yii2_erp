@@ -3,7 +3,9 @@
 namespace core\models\coupon;
 
 use Yii;
-
+use core\models\customer\Customer;
+use core\models\Operation\coupon\Coupon;
+use core\models\Operation\coupon\CouponCode;
 /**
  * This is the model class for table "{{%coupon_customer}}".
  *
@@ -24,48 +26,21 @@ use Yii;
 class CouponCustomer extends \common\models\coupon\CouponCustomer
 {
 
+    
     /**
-     * @inheritdoc
+     * list customer's coupon while phone is access
      */
-    public static function tableName()
-    {
-        return '{{%coupon_customer}}';
-    }
+    public static function listCustomerCoupon($phone){
+        //check customer is exist 
+        $customer =  Customer::find()->where(['customer_phone'=>$phone])->one();
+        if($customer == NULL) return false;
 
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['customer_id', 'order_id', 'coupon_id', 'coupon_code_id', 'expirate_at', 'is_used', 'created_at', 'updated_at', 'is_del'], 'integer'],
-            [['coupon_price'], 'number'],
-            [['coupon_code', 'coupon_name'], 'string', 'max' => 255]
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => Yii::t('coupon', '主键'),
-            'customer_id' => Yii::t('coupon', '客户id'),
-            'order_id' => Yii::t('coupon', '订单id'),
-            'coupon_id' => Yii::t('coupon', '优惠规则id'),
-            'coupon_code_id' => Yii::t('coupon', '优惠码id'),
-            'coupon_code' => Yii::t('coupon', '优惠码'),
-            'coupon_name' => Yii::t('coupon', '优惠券名称'),
-            'coupon_price' => Yii::t('coupon', '优惠券价值'),
-            'expirate_at' => Yii::t('coupon', '过期时间'),
-            'is_used' => Yii::t('coupon', '是否已经使用'),
-            'created_at' => Yii::t('coupon', '创建时间'),
-            'updated_at' => Yii::t('coupon', '更新时间'),
-            'is_del' => Yii::t('coupon', '是否逻辑删除'),
-        ];
-    }
-
+        //list coupon
+        $couponCustomer = self::find()->where(['customer_id'=>$customer->id])->joinWith(['coupon', 'coupon_code'])
+            ->orderBy('coupon_customer.expirate_at asc, coupon.coupon_price desc')->all();      
+   
+        return $couponCustomer;
+   }
     /**
      * 获取用户优惠码
      * @customer_id int    用户id
