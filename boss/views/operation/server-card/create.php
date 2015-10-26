@@ -7,16 +7,13 @@ use yii\helpers\Html;
  * @var common\models\ServerCard $model
  */
 
-$this->title = Yii::t('app', 'Create {modelClass}', [
+$this->title = Yii::t('app', '新增服务卡', [
     'modelClass' => 'Server Card',
 ]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Server Cards'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '服务卡信息管理'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="server-card-create">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>

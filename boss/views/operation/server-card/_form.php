@@ -29,9 +29,37 @@ use kartik\datecontrol\DateControl;
 
 'valid_days'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 有效时间(天)...']], 
 
-'created_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 创建时间...']], 
+'created_at'=>[
+                'type'=> Form::INPUT_WIDGET, 
+                'widgetClass'=>DateControl::classname(),
+                'options' => [
+                    'type'=>DateControl::FORMAT_DATE,
+                    'ajaxConversion'=>false,
+                    'displayFormat' => 'php:Y-m-d',
+                    'saveFormat'=>'php:U',
+                    'options' => [
+                        'pluginOptions' => [
+                            'autoclose' => true
+                        ]
+                    ]
+                ]
+            ], 
 
-'updated_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 更改时间...']], 
+'updated_at'=>[
+                'type'=> Form::INPUT_WIDGET, 
+                'widgetClass'=>DateControl::classname(),
+                'options' => [
+                    'type'=>DateControl::FORMAT_DATE,
+                    'ajaxConversion'=>false,
+                    'displayFormat' => 'php:Y-m-d',
+                    'saveFormat'=>'php:U',
+                    'options' => [
+                        'pluginOptions' => [
+                            'autoclose' => true
+                        ]
+                    ]
+                ]
+            ], 
 
 'par_value'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 卡面金额...', 'maxlength'=>8]], 
 
