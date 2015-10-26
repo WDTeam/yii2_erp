@@ -363,6 +363,7 @@ class Order extends OrderModel
         ]);
         $this->setAttributes([
             'order_money' => $this->order_unit_money * $this->order_booked_count / 60, //订单总价
+            'city_id' =>$address['operation_city_id'],
             'district_id' => $goods['district_id'],
             'order_address' => $address['operation_province_name'] . ',' . $address['operation_city_name'] . ',' . $address['operation_area_name'] . ',' . $address['customer_address_detail'] . ',' . $address['customer_address_nickname'] . ',' . $address['customer_address_phone'], //地址信息
         ]);
