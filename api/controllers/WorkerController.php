@@ -519,7 +519,7 @@ class WorkerController extends \api\components\Controller
     }
     
     /**
-     * @api {GET} /worker/get-worker-bill-list 获取阿姨服务信息 (田玉星 60%)
+     * @api {GET} /worker/get-worker-bill-list 获取阿姨对账单列表 (田玉星 80%)
      * 
      * @apiDescription 【备注：等待model底层支持】
      * 
@@ -539,11 +539,17 @@ class WorkerController extends \api\components\Controller
      *      "code": "ok",
      *      "msg": "操作成功.",
      *      "ret": [
-     *             "worker_name": "张",
-     *             "service_count": "60",
-     *             "service_family_count": "60",
-     *              "total_income"=>"23888.00"
+     *      {
+     *         'bill_type' =>"1",
+     *         'bill_explain'=>"每周四，E家洁会为您结算上周一至周日的保洁服务订单收入及各类服务补贴。您可通过每周的周期下拉菜单进行选择，点击查看，了解每周收入明细。",
+     *         'bill_date'=>'09年07月-09月13日',
+     *         'order_count'=>'10',
+     *         'salary'=>'320.00',
+     *         'balance_status'=>"1",
+     *         "bill_id"=>"32"
+     *       }
      *      ]
+     *       
      * }
      *
      * @apiErrorExample Error-Response:
@@ -581,24 +587,116 @@ class WorkerController extends \api\components\Controller
         $ret = [
             [
                 'bill_type' =>"1",
-                'bill_explain'=>"这是一个周期账单说明",
+                'bill_explain'=>"每周四，E家洁会为您结算上周一至周日的保洁服务订单收入及各类服务补贴。您可通过每周的周期下拉菜单进行选择，点击查看，了解每周收入明细。",
                 'bill_date'=>'09年07月-09月13日',
                 'order_count'=>'10',
                 'salary'=>'320.00',
-                'balance_status'=>"1"
+                'balance_status'=>"1",
+                "bill_id"=>"32"
             ],
             [
                 'bill_type' =>"2",
-                'bill_explain'=>"这是一个月结账单说明",
+                'bill_explain'=>"每周四，E家洁会为您结算上周一至周日的保洁服务订单收入及各类服务补贴。您可通过每周的周期下拉菜单进行选择，点击查看，了解每周收入明细。",
                 'bill_date'=>'8月',
                 'order_count'=>'10',
                 'salary'=>'320.00',
-                'balance_status'=>"2"
+                'balance_status'=>"2",
+                "bill_id"=>"33"
             ]
        ];
        return $this->send($ret, "操作成功.");
     }
 
+     /**
+     * @api {GET} /worker/get-worker-bill-detail 获取阿姨对账单列表 (田玉星 80%)
+     * 
+     * @apiDescription 【备注：等待model底层支持】
+     * 
+     * @apiName actionGetWorkerBillDetail
+     * @apiGroup Worker
+     * 
+     * @apiParam {String} access_token    阿姨登录token
+     * @apiParam {String} bill_id  每页显示多少条.
+     * @apiParam {String} [platform_version] 平台版本号.
+     * 
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-bill-list
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *      "code": "ok",
+     *      "msg": "操作成功.",
+     *      "ret": [
+     *      {
+     *         'bill_type' =>"1",
+     *         'bill_explain'=>"每周四，E家洁会为您结算上周一至周日的保洁服务订单收入及各类服务补贴。您可通过每周的周期下拉菜单进行选择，点击查看，了解每周收入明细。",
+     *         'bill_date'=>'09年07月-09月13日',
+     *         'order_count'=>'10',
+     *         'salary'=>'320.00',
+     *         'balance_status'=>"1",
+     *         "bill_id"=>"32"
+     *       }
+     *      ]
+     *       
+     * }
+     *
+     * @apiErrorExample Error-Response:
+     *  HTTP/1.1 404 Not Found
+     *  {
+     *      "code":"error",
+     *      "msg": "用户认证已经过期,请重新登录"
+     *  }
+     */
+    public function actionGetWorkerSalaryByBill(){
+        $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
+           return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
+        
+        $worker = WorkerAccessToken::getWorker($param['access_token']);
+        if (!$worker|| !$worker->id) {
+            return $this->send(null, "阿姨不存在", 0, 403);
+        }
+        $bill_id = intval($param['bill_id']);//账单ID
+        
+        //TODO:获取账单
+        $ret = [
+            'salary'=>'6000.00',
+            'salary_constitute'=>"3000元(底薪)+2000元(工时服务)+1100元(奖励)-100元(处罚)"
+        ];
+        return $this->send($ret, "操作成功.");
+    }
+    
+    /**
+     * @api {GET} /mobileapidriver2/driver_get_now_order_list_hide 阿姨去不了(田玉星0%)
+     * @apiName actionDriverGetNowOrderListHide
+     * @apiGroup Worker
+     * @apiParam {String} session_id    会话id.
+     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} order_id  订单id.
+     * @apiParam {String} list_type  订单类型.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *      "code": "ok",
+     *      "msg":"操作成功",
+     *      "ret":
+     *      {
+     *      }
+     * }
+     *
+     * @apiError SessionIdNotFound 未找到会话ID.
+     *
+     * @apiErrorExample Error-Response:
+     *  HTTP/1.1 404 Not Found
+     *  {
+     *      "code":"Failed",
+     *      "msg": "SessionIdNotFound"
+     *  }
+     */
+    public function actionWorkerCancelService(){
+    }
     
     /**
      * @api {get} /mobileapidriver2/get_driver_info 个人中心首页 (田玉星0%)
