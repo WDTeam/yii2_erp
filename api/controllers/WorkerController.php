@@ -62,20 +62,21 @@ class WorkerController extends \api\components\Controller
         if ($workerId ) {
             $workerInfo = Worker::getWorkerDetailInfo($workerId);
             //数据整理
-            $ret = [
-               "worker_name" => $workerInfo['worker_name'],
-                "worker_phone" => $workerInfo['worker_phone'],
-                "head_url" => $workerInfo['worker_photo'],
-                "worker_identity" => $workerInfo['worker_identity_description'],//身份
-                "worker_role" => $workerInfo["worker_type_description"],
-                'worker_start' => $workerInfo["worker_star"],
-                'total_money' => $workerInfo['worker_stat_order_money'],
-                "personal_skill" => WorkerSkill::getWorkerSkill($workerId),
-            ];
-            return $this->send($ret, "阿姨信息查询成功");
-        } else {
-            return $this->send(null, "阿姨不存在.", 0, 403);
+            if(!empty($workerInfo)){
+                $ret = [
+                    "worker_name" => $workerInfo['worker_name'],
+                    "worker_phone" => $workerInfo['worker_phone'],
+                    "head_url" => $workerInfo['worker_photo'],
+                    "worker_identity" => $workerInfo['worker_identity_description'],//身份
+                    "worker_role" => $workerInfo["worker_type_description"],
+                    'worker_start' => $workerInfo["worker_star"],
+                    'total_money' => $workerInfo['worker_stat_order_money'],
+                    "personal_skill" => WorkerSkill::getWorkerSkill($workerId),
+                ];
+                return $this->send($ret, "阿姨信息查询成功");
+            }
         }
+        return $this->send(null, "阿姨不存在.", 0, 403);
     }
 
     /**
