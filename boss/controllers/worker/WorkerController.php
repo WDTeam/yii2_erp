@@ -668,7 +668,7 @@ class WorkerController extends BaseAuthController
 
     public function actionTest(){
         echo '<pre>';
-        var_dump(WorkerSkill::getWorkerSkill(18517));
+        var_dump(Worker::getWorkerDetailInfo(18517));
         die;
 
         $a = Worker::getWorkerInfo(16351);
