@@ -113,6 +113,7 @@ class OperationSelectedServiceController extends Controller
         if ($model->load($post)) {
 
             $model->created_at = time();
+            $model->uploadImgToQiniu('selected_service_photo');
 
             if($model->save()){
 

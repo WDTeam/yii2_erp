@@ -251,7 +251,7 @@
   {
     "type": "POST",
     "url": "v1/order/append-order",
-    "title": "追加订单(xieyi 90%和创建订单一样)",
+    "title": "追加订单(xieyi 90% 目前产品已删除该需求 )",
     "name": "ActionAppendOrder",
     "group": "Order",
     "description": "<p>追加订单</p> ",
@@ -452,7 +452,7 @@
   {
     "type": "POST",
     "url": "/order/create-order",
-    "title": "创建订单 (90%xieyi  创建已完成 渠道号更改 依赖林洪优)",
+    "title": "创建订单 (90%xieyi  缺少周期订单和精品保洁，缺少后台模块支持)",
     "name": "ActionCreateOrder",
     "group": "Order",
     "description": "<p>创建订单v1</p> ",
@@ -518,6 +518,13 @@
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
+            "optional": false,
+            "field": "channel_id",
+            "description": "<p>下单渠道</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
             "optional": true,
             "field": "address",
             "description": "<p>订单地址</p> "
@@ -556,13 +563,6 @@
             "optional": true,
             "field": "coupon_id",
             "description": "<p>优惠劵id</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "channel_id",
-            "description": "<p>下单渠道</p> "
           },
           {
             "group": "Parameter",
@@ -823,118 +823,6 @@
     "groupTitle": "Order"
   },
   {
-    "type": "POST",
-    "url": "/order/choose-service-time",
-    "title": "可服务时间表 (20%赵顺利 block linhongyou provide the feature)",
-    "description": "<p>选择服务时间接口服务器依据用户的当前位置提供时间表</p> ",
-    "name": "ChooseServiceTime",
-    "group": "Order",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户认证</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "lng",
-            "description": "<p>经度</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "lat",
-            "description": "<p>纬度</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "show_common",
-            "description": "<p>是否使用常用阿姨</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "plan_time",
-            "description": "<p>计划服务时间</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "city",
-            "description": "<p>城市</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "service_item",
-            "description": "<p>服务种类</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "<p>Object[]</p> ",
-            "optional": false,
-            "field": "appointment",
-            "description": "<p>可选时间表.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"获取可服务时间表成功\"\n  \"ret\":{\n     \"appointment\": [\n         {\n             \"date_format\": \"10月10日\",\n             \"date_stamp\": 1444406400,\n             \"week\": \"明天\",\n             \"have_worker\": 1,\n             \"hour\": [\n                 {\n                     \"time\": \"08:00-10:00\",\n                     \"status\": \"0\"\n                 },\n                 {\n                     \"time\": \"18:00-20:00\",\n                     \"status\": \"1\"\n                 }\n             ]\n         }\n     ]\n  }\n}\n\n\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
-    "groupTitle": "Order"
-  },
-  {
     "type": "DELETE",
     "url": "/order/hiden-order",
     "title": "删除订单（郝建设 100% ）",
@@ -1003,7 +891,7 @@
   {
     "type": "GET",
     "url": "/order/order-status-history",
-    "title": "查询某个订单状态历史状态记录(xieyi 70%已经将后台接口完成，创建也完成缺少测试)",
+    "title": "查询某个订单状态历史状态记录(xieyi 70%缺少周期订单)",
     "name": "OrderStatusHistory",
     "group": "Order",
     "parameter": {
@@ -1072,7 +960,7 @@
   {
     "type": "GET",
     "url": "/order/orders",
-    "title": "查询订单(xieyi 100%已经将后台接口完成，创建也完成缺少测试)",
+    "title": "查询订单(xieyi 90%已经将后台接口完成,缺少周期订单)",
     "name": "Orders",
     "group": "Order",
     "parameter": {
@@ -1190,7 +1078,7 @@
   {
     "type": "GET",
     "url": "/order/orders-count",
-    "title": "查询订单数量(xieyi 70%已经将后台接口完成，创建也完成缺少测试)",
+    "title": "查询订单数量(xieyi 70%缺少周期订单)",
     "name": "OrdersCount",
     "group": "Order",
     "parameter": {
@@ -1287,7 +1175,7 @@
   {
     "type": "GET",
     "url": "/order/status-orders-count",
-    "title": "查询订单数量(xieyi 70%已经将后台接口完成，创建也完成缺少测试)",
+    "title": "查询不通状态订单数量(xieyi 70%缺少周期订单)",
     "name": "StatusOrdersCount",
     "group": "Order",
     "description": "<p>获得各种状态的订单数量</p> ",
@@ -1510,7 +1398,7 @@
   {
     "type": "get",
     "url": "v2/worker/all_order_common_list.php",
-    "title": "日常订单列表(zhaoshunli 0%)",
+    "title": "历史单列表(xieyi 0%)",
     "name": "actionAllOrderCommonList",
     "group": "Order",
     "description": "<p>对账日常订单，全部订单</p> ",
@@ -1676,7 +1564,7 @@
   {
     "type": "get",
     "url": "/mobileapidriver2/worker_request_order",
-    "title": "抢单（xieyi %0）",
+    "title": "抢单（haojianshe %0）",
     "name": "actionDriverRequestOrder",
     "group": "Order",
     "description": "<p>阿姨抢单</p> ",
@@ -1740,165 +1628,6 @@
         {
           "title": "Success-Response:",
           "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"result\": \"0\",\n         \"msg\": \"抢单失败，当天该时间段已有其他订单\",\n         \"goPage\": 1,\n         \"isSuc\": false,\n         \"telephone\": \"4006767636\"\n     }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "SessionIdNotFound",
-            "description": "<p>未找到会话ID.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"Failed\",\n    \"msg\": \"SessionIdNotFound\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
-    "groupTitle": "Order"
-  },
-  {
-    "type": "get",
-    "url": "/v2/FixedUserOrder.php",
-    "title": "固定客户以及订单列表(zhaoshunli 0%)",
-    "name": "actionFixedUserOrder",
-    "group": "Order",
-    "description": "<p>对账固定客户首页，全部固定客户订单</p> ",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "session_id",
-            "description": "<p>会话id.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "period_id",
-            "description": "<p>周期id，首页传0.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "worker_is_nearby",
-            "description": "<p>是否首页，首页传1.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "per_page",
-            "description": "<p>每页显示多少条.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "page",
-            "description": "<p>第几页.</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"alertMsg\": \"\",\n         \"fixedUserPeriod\":\n         [\n         {\n             \"telephone\": \"13636363636\",\n             \"street\": \"海淀区定慧北里\",\n             \"place_detail\": \"6换10\",\n             \"order_num\": \"2\",\n             \"order_time\": \"5.5小时\"\n         }\n         ],\n         \"fixedUserOrder\":\n         [\n         {\n             \"wage_record_id\": \"0\",\n             \"finish_time\": \"2015-09-11 18:37:04\",\n             \"order_id\": \"174\",\n             \"pay_worker_money\": \"87.5\",\n             \"cash\": \"87.5\",\n             \"is_fulltime\": 0\n         }\n         ]\n     }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "SessionIdNotFound",
-            "description": "<p>未找到会话ID.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"Failed\",\n    \"msg\": \"SessionIdNotFound\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
-    "groupTitle": "Order"
-  },
-  {
-    "type": "get",
-    "url": "v1/order/no_settlement_order_list.php",
-    "title": "未结算订单(0%zhaoshunli)",
-    "name": "actionNoSettlementOrderList",
-    "group": "Order",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "session_id",
-            "description": "<p>会话id.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "page_num",
-            "description": "<p>每页显示都少条数据.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "cur_page",
-            "description": "<p>当前页.</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"order_info\":\n         [\n         {\n             \"order_id\": \"673\",\n             \"finish_time\": \"2015年09月15日 12:00结束\",\n             \"order_price\": \"100\",\n             \"palce\": \"北京 朝阳区大悦城 测试测试\",\n             \"cash\": \"0\",\n             \"status\": \"未结算\"\n         }\n         ],\n         \"msgStyle\": \"\",\n         \"alertMsg\": \"\"\n     }\n}",
           "type": "json"
         }
       ]
@@ -2745,172 +2474,6 @@
   },
   {
     "type": "GET",
-    "url": "/user/exchangecoupon",
-    "title": "兑换优惠劵",
-    "name": "ExchangeCoupon",
-    "group": "User",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户认证</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "city",
-            "description": "<p>城市</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "coupon_code",
-            "description": "<p>优惠码</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"兑换成功\"\n\n\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "CouponNotFound",
-            "description": "<p>优惠码不存在.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
-          "type": "json"
-        },
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"优惠码不存在，\"\n\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/CouponController.php",
-    "groupTitle": "User"
-  },
-  {
-    "type": "POST",
-    "url": "/user/exchange-coupon",
-    "title": "兑换优惠劵 （李勇 80%）",
-    "name": "ExchangeCoupon",
-    "group": "User",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户认证</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "city",
-            "description": "<p>城市</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "coupon_code",
-            "description": "<p>优惠码</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"兑换成功\",\n  \"ret\":{\n      \"id\":1,\n      \"coupon_id\":1,\n      \"coupon_name\":\"优惠券名称\",\n      \"coupon_price\":123\n }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "CouponNotFound",
-            "description": "<p>优惠码不存在.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
-          "type": "json"
-        },
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"优惠码不存在，\"\n\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/UserController.php",
-    "groupTitle": "User"
-  },
-  {
-    "type": "GET",
     "url": "/user/get-addresses",
     "title": "常用地址列表 (已完成100%)",
     "name": "GetAddresses",
@@ -3156,78 +2719,6 @@
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录\"\n\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/UserController.php",
-    "groupTitle": "User"
-  },
-  {
-    "type": "POST",
-    "url": "/user/get-coupon-customer",
-    "title": "获取用户优惠码或同城市 （郝建设100%）",
-    "name": "GetCouponCustomer",
-    "group": "User",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户认证</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "city_name",
-            "description": "<p>城市</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>int</p> ",
-            "optional": false,
-            "field": "coupon_type",
-            "description": "<p>优惠码表示 1获取提供城市或者全国的优惠码 2获取全国和给定城市的优惠码</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": {\n      \"coupon\":[\n        {\n          \"id\": \"1\",\n          \"coupon_name\": \"优惠码名称\",\n           \"coupon_price\": \"优惠码价格\",\n           \"coupon_type_name\": \"优惠券类型名称\",\n           \"coupon_service_type_id\": \"服务类别id\",\n           \"coupon_service_type_name\": \"服务类别名称\",\n          }\n       ]\n      }\n\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "   HTTP/1.1 403 Not Found\n   {\n     \"code\": \"0\",\n     \"msg\": \"用户认证已经过期,请重新登录，\"\n\n   }\n*     {\n     \"code\": \"0\",\n     \"msg\": \"优惠码列表为空\"\n\n   }",
           "type": "json"
         }
       ]
@@ -3775,7 +3266,7 @@
   {
     "type": "POST",
     "url": "/user/user-suggest",
-    "title": "用户提交意见反馈 （需要再次核实需求;郝建设 100%）",
+    "title": "用户评价 （需要再次核实需求;郝建设 100%）",
     "name": "UserSuggest",
     "group": "User",
     "parameter": {
@@ -3830,7 +3321,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"提交成功\"\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"用户评价提交成功\"\n\n}",
           "type": "json"
         }
       ]
@@ -3994,79 +3485,6 @@
     "groupTitle": "User"
   },
   {
-    "type": "get",
-    "url": "/worker/single-worker-time.php",
-    "title": "单次服务排班表(李勇90%缺少model支持)",
-    "name": "SingleWorkerTime",
-    "group": "Worker",
-    "description": "<p>单次服务获取服务时间</p> ",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户认证.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "longitude",
-            "description": "<p>当前经度.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "latitude",
-            "description": "<p>当前纬度.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "plan_time",
-            "description": "<p>计划服务时长</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n {\n      \"code\": \"ok\",\n      \"msg\": \"获取单次服务排班表成功\"\n      \"ret\":{\n         \"single_worker_time\": [\n              {\n                  \"date_format\": \"10月25日\",\n                  \"date_stamp\": 1445669758,\n                  \"week\": \"明天\",\n                  \"hour\": [\n                      {\n                          \"time\": \"08:00-10:00\",\n                          \"status\": \"0\"\n                      },\n                      {\n                          \"time\": \"18:00-20:00\",\n                          \"status\": \"1\"\n                      }\n                  ]\n              },\n              {\n                  \"date_format\": \"10月26日\",\n                  \"date_stamp\": 1445669758,\n                  \"week\": \"\",\n                  \"hour\": [\n                      {\n                          \"time\": \"08:00-10:00\",\n                          \"status\": \"0\"\n                      },\n                      {\n                          \"time\": \"18:00-20:00\",\n                          \"status\": \"1\"\n                      }\n                  ]\n              },\n         ]\n      }\n  }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
-    "groupTitle": "Worker"
-  },
-  {
     "type": "GET",
     "url": "/worker/worker-info",
     "title": "查看阿姨信息 (田玉星 80%)",
@@ -4081,7 +3499,14 @@
             "type": "<p>String</p> ",
             "optional": false,
             "field": "access_token",
-            "description": "<p>阿姨登录token</p> "
+            "description": "<p>阿姨登录token/用户登录token</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "worker_id",
+            "description": "<p>阿姨id</p> "
           }
         ]
       }
@@ -4115,151 +3540,6 @@
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
-    "groupTitle": "Worker"
-  },
-  {
-    "type": "GET",
-    "url": "/mobileapidriver2/driver_get_now_order_list_hide",
-    "title": "阿姨去不了(田玉星0%)",
-    "name": "actionDriverGetNowOrderListHide",
-    "group": "Worker",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "session_id",
-            "description": "<p>会话id.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "order_id",
-            "description": "<p>订单id.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "list_type",
-            "description": "<p>订单类型.</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n     }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "SessionIdNotFound",
-            "description": "<p>未找到会话ID.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"Failed\",\n    \"msg\": \"SessionIdNotFound\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
-    "groupTitle": "Worker"
-  },
-  {
-    "type": "get",
-    "url": "/v2/FixedUserPeriod.php",
-    "title": "固定客户列表 (田玉星0%)",
-    "name": "actionFixedUserPeriod",
-    "group": "Worker",
-    "description": "<p>对账固定客户（点击查看全部）</p> ",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "session_id",
-            "description": "<p>会话id.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "per_page",
-            "description": "<p>每页显示多少条.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "page",
-            "description": "<p>第几页.</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"alertMsg\": \"\",\n         \"fixedUserPeriod\":\n         [\n         {\n             \"period_id\": \"15\",\n             \"place_detail\": \"6换10\",\n             \"street\": \"海淀区定慧北里\",\n             \"telephone\": \"136****3636\",\n             \"order_num\": 2,\n             \"order_time\": \"5.5小时\"\n         }\n         ]\n     }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "SessionIdNotFound",
-            "description": "<p>未找到会话ID.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"Failed\",\n    \"msg\": \"SessionIdNotFound\"\n}",
           "type": "json"
         }
       ]
@@ -4336,7 +3616,7 @@
   {
     "type": "GET",
     "url": "/worker/get-worker-bill-list",
-    "title": "获取阿姨服务信息 (田玉星 80%)",
+    "title": "获取阿姨服务信息 (田玉星 60%)",
     "description": "<p>【备注：等待model底层支持】</p> ",
     "name": "actionGetWorkerBillList",
     "group": "Worker",
@@ -4349,6 +3629,20 @@
             "optional": false,
             "field": "access_token",
             "description": "<p>阿姨登录token</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "per_page",
+            "description": "<p>每页显示多少条.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "page",
+            "description": "<p>第几页.</p> "
           },
           {
             "group": "Parameter",
@@ -4775,359 +4069,6 @@
   },
   {
     "type": "get",
-    "url": "/worker/help_user_create_one_order.php",
-    "title": "帮客户下单，单次服务确认下单 (田玉星0%)",
-    "name": "actionHelpUserCreateOneOrder",
-    "group": "Worker",
-    "description": "<p>帮客户下单，单次服务确认下单</p> ",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "session_id",
-            "description": "<p>会话id.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "order_id",
-            "description": "<p>订单id.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "order_type",
-            "description": "<p>订单类型，非家庭保洁传空.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "work_time",
-            "description": "<p>服务时长.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "reserve_time",
-            "description": "<p>服务时间.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "no_auto_assign",
-            "description": "<ol> <li></li> </ol> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"code\": \"-1\",\n         \"msg\":\n         {\n             \"msgStyle\": \"toast\",\n             \"alertMsg\": \"下单失败，下单时段您有其他服务。\"\n         }\n     }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "SessionIdNotFound",
-            "description": "<p>未找到会话ID.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"Failed\",\n    \"msg\": \"SessionIdNotFound\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
-    "groupTitle": "Worker"
-  },
-  {
-    "type": "get",
-    "url": "/mobileapidriver2/helpUserCreateOrder",
-    "title": "查询帮用户下的订单(田玉星0%)",
-    "name": "actionHelpUserCreateOrder",
-    "group": "Worker",
-    "description": "<p>查询帮助用户创建的订单</p> ",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "session_id",
-            "description": "<p>会话id.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "tel",
-            "description": "<p>查询的电话号码.</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"result\": 1,\n         \"msg\": \"\",\n         \"orderList\":\n         [\n         {\n             \"orderId\": \"6924842\",\n             \"orderType\": \"家庭保洁\",\n             \"orderPlace\": \"北京 定慧福里(北门) 25号楼\",\n             \"longitude\": \"0\",\n             \"latitude\": \"0\",\n             \"orderDate\": \"2015-08-31\",\n             \"orderStartTime\": \"08:00\",\n             \"orderEndTime\": \"10:00\",\n             \"orderAllTime\": \"2.0\",\n             \"userPhone\": \"13521516291\",\n             \"userName\": \"\",\n             \"cityName\": \"北京\",\n             \"extendInfo\": \"重点打扫厨房,重点打扫卫生间##重点打扫厨房,重点打扫卫生间,\",\n             \"timestamp\": 1440979200,\n             \"userType\": \"1\"\n         }\n         ]\n     }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "SessionIdNotFound",
-            "description": "<p>未找到会话ID.</p> "
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "PhoneNotFound",
-            "description": "<p>未找到电话信息.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"Failed\",\n    \"msg\": \"SessionIdNotFound\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
-    "groupTitle": "Worker"
-  },
-  {
-    "type": "get",
-    "url": "/v2/worker/help_user_create_period_order.php",
-    "title": "提交周期订单",
-    "name": "actionHelpUserCreatePeriodOrder",
-    "group": "Worker",
-    "description": "<p>帮客户下单，周期服务提交订单</p> ",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "session_id",
-            "description": "<p>会话id.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "begin_time",
-            "description": "<p>开始时间.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "place_detail",
-            "description": "<p>详细地址.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "reserve_time",
-            "description": "<p>周期服务时间.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "order_id",
-            "description": "<p>订单id.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "no_auto_assign",
-            "description": "<ol> <li></li> </ol> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"code\": \"-1\",\n         \"msg\":\n         {\n             \"orderId\": 0,\n             \"popMsg\": \"\",\n             \"pageMsg\": \"\",\n             \"dupOrderInfo\": [],\n             \"total_score\": 0,\n             \"PeriodOrderId\": 0,\n             \"alertMsg\": \"已选择过此阿姨进行周期服务，不可重复提交\",\n             \"msgStyle\": \"\"\n         }\n     }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "SessionIdNotFound",
-            "description": "<p>未找到会话ID.</p> "
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "StartTimeNotFound",
-            "description": "<p>未找到开始时间.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"Failed\",\n    \"msg\": \"SessionIdNotFound\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
-    "groupTitle": "Worker"
-  },
-  {
-    "type": "get",
-    "url": "/worker/recursive-worker-time.php",
-    "title": "周期服务时间表(李勇90%缺少model)",
-    "name": "actionRecursiveWorkerTime",
-    "group": "Worker",
-    "description": "<p>周期服务时间表</p> ",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户认证.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "longitude",
-            "description": "<p>当前经度.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "latitude",
-            "description": "<p>当前纬度.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "is_recommend",
-            "description": "<p>是否使用推荐阿姨（0：不是，1：是）</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "worker_id",
-            "description": "<p>阿姨id.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "plan_time",
-            "description": "<p>计划服务时长.</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n      \"code\": \"ok\",\n      \"msg\": \"获取周期服务时间表成功\"\n      \"ret\":{\n         \"recursive_worker_time\": [\n              {\n                  \"date_format\": \"10月25日\",\n                  \"date_stamp\": 1445669758,\n                  \"week\": \"明天\",\n                  \"hour\": [\n                      {\n                          \"time\": \"08:00-10:00\",\n                          \"status\": \"0\"\n                      },\n                      {\n                          \"time\": \"18:00-20:00\",\n                          \"status\": \"1\"\n                      }\n                  ]\n              },\n              {\n                  \"date_format\": \"10月26日\",\n                  \"date_stamp\": 1445669758,\n                  \"week\": \"\",\n                  \"hour\": [\n                      {\n                          \"time\": \"08:00-10:00\",\n                          \"status\": \"0\"\n                      },\n                      {\n                          \"time\": \"18:00-20:00\",\n                          \"status\": \"1\"\n                      }\n                  ]\n              },\n         ]\n      }\n  }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
-    "groupTitle": "Worker"
-  },
-  {
-    "type": "get",
     "url": "/mobileapidriver2/system_news",
     "title": "通知中心(田玉星0%)",
     "name": "actionSystemNews",
@@ -5169,209 +4110,6 @@
             "optional": false,
             "field": "SessionIdNotFound",
             "description": "<p>未找到会话ID.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"Failed\",\n    \"msg\": \"SessionIdNotFound\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
-    "groupTitle": "Worker"
-  },
-  {
-    "type": "get",
-    "url": "/v2/worker_busy.php",
-    "title": "提交工作时间 (田玉星0%)",
-    "name": "actionWorkerBusy",
-    "group": "Worker",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "session_id",
-            "description": "<p>会话id.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "busy_time",
-            "description": "<p>忙碌的时间段.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "report_type",
-            "description": "<ol> <li></li> </ol> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "busy_type",
-            "description": "<p>1，忙碌类型.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "admin_id",
-            "description": "<ol start=\"702\"> <li></li> </ol> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "city_code",
-            "description": "<p>城市code.</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"\",\n     \"ret\":\n     {\n         \"workerId\": 12507,\n         \"alertMsg\": \"更新成功\"\n     }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "SessionIdNotFound",
-            "description": "<p>未找到会话ID.</p> "
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "CityCodeNotFound",
-            "description": "<p>未找到城市编码.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"Failed\",\n    \"msg\": \"SessionIdNotFound\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
-    "groupTitle": "Worker"
-  },
-  {
-    "type": "get",
-    "url": "/v2/worker_busy_list.php",
-    "title": "工作时间 (田玉星0%)",
-    "name": "actionWorkerBusyList",
-    "group": "Worker",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "session_id",
-            "description": "<p>会话id.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "worker_id",
-            "description": "<p>阿姨id.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "is_assign_info",
-            "description": "<ol> <li></li> </ol> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "start_time",
-            "description": "<p>查询那一天的.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "select_day",
-            "description": "<p>查询几天 1.</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"orderCount\": 0,\n         \"cancelCount\": null,\n         \"driverTotalScore\": null,\n         \"myRewards\": [],\n         \"userPhone\": \"13401096964\",\n         \"driverName\": \"陈测试1\",\n         \"driverAge\": \"32\",\n         \"qualityScoreClauseUrl\": \"http://wap.1jiajie.com/serverinfo/complainManage.html\",\n         \"livePlace\": \"北京市密云县密云\",\n         \"homeTown\": \"河北省\",\n         \"identityCard\": \"********\",\n         \"goodRate\": [],\n         \"badRate\": [],\n         \"totalRate\": [],\n         \"myMoney\": \"0.0元\",\n         \"rankList\": [],\n         \"myRank\":\n         [\n         {\n             \"driver_name\": \"\",\n             \"rank\": \"100+\",\n             \"money\": \"0\"\n         }\n         ],\n         \"starCountList\": [],\n         \"meStarList\":\n         [\n         {\n             \"driver_name\": \"\",\n             \"rank\": \"100+\",\n             \"money\": \"0\"\n         }\n         ],\n         \"personal_skill\":\n         [\n         {\n             \"title\": \"洗衣\",\n             \"type\": 1,\n             \"value\": null\n         }\n         ],\n         \"druingTime\": \"2015.9.1  一  2015.9.13\",\n         \"restScore\": \"分\",\n         \"complainNum\": \"0个\",\n         \"unPayMoney\": \"0.0元\",\n         \"isPayMoney\": \"0.0元\",\n         \"unPayList\": [],\n         \"isPayList\": [],\n         \"myMoneyList\": [],\n         \"restDay\": \"剩余周期135天\",\n         \"scoreList\": [],\n         \"fineMoney\": \"0.00\",\n         \"unComplainList\": [],\n         \"restDayStr\": \"您本次的积分周期自2014-01-02至2014-05-06止\",\n         \"complainStr\": \"\",\n         \"complainClauseUrl\": \"http://wap.1jiajie.com/serverinfo/punishManage.html\",\n         \"todayFinishOrder\": 0,\n         \"todayFinishMoney\": 0,\n         \"monthFinishOrder\": 0,\n         \"monthFinishMoney\": 0,\n         \"succRate\": 100,\n         \"driverLevel\": \"\",\n         \"alertType\": 0,\n         \"accountRestMoney\": 0,\n         \"payMoney\": 0,\n         \"chargeMoney\": 0,\n         \"driverCompany\": \"家政公司\",\n         \"curCarId\": null,\n         \"curCarBrand\": null,\n         \"curCarNumber\": null,\n         \"curCarColor\": null,\n         \"curColor\": null,\n         \"curCarType\": 1,\n         \"isOpenStart\": true,\n         \"result\": \"1\",\n         \"headUrl\": \"http://static.1jiajie.com/picture_default.jpg\",\n         \"driverDegree\": \"大学\",\n         \"driverWorkAge\": \"1年\",\n         \"driverLanguage\": \"普通话\",\n         \"healthCard\": \"无\",\n         \"department\": \"测试用门店\",\n         \"serverRange\": \"5公里\",\n         \"tranSportation\": \"无\",\n         \"activity_url\": \"http://wap.1jiajie.com/wap_theme_activity/ayiduan/index.html\"\n     }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "SessionIdNotFound",
-            "description": "<p>未找到会话ID.</p> "
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "WorkerIdNotFound",
-            "description": "<p>未找到阿姨ID.</p> "
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "StartTimeNotFound",
-            "description": "<p>未找到开始时间.</p> "
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "TimesNotFound",
-            "description": "<p>未找到时间段信息.</p> "
           }
         ]
       },
@@ -5687,6 +4425,241 @@
     "groupTitle": "configure"
   },
   {
+    "type": "POST",
+    "url": "/coupon/exchange-coupon",
+    "title": "兑换优惠劵 （李勇 80%）",
+    "name": "ExchangeCoupon",
+    "group": "coupon",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "city",
+            "description": "<p>城市</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "coupon_code",
+            "description": "<p>优惠码</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"兑换成功\",\n  \"ret\":{\n      \"id\":1,\n      \"coupon_id\":1,\n      \"coupon_name\":\"优惠券名称\",\n      \"coupon_price\":123\n }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CouponNotFound",
+            "description": "<p>优惠码不存在.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"优惠码不存在，\"\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/CouponController.php",
+    "groupTitle": "coupon"
+  },
+  {
+    "type": "Get",
+    "url": "/user/coupons",
+    "title": "获取用户优惠码或同城市 （李勇 80%）",
+    "name": "GetCouponCustomer",
+    "group": "coupon",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "good_type",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "city_name",
+            "description": "<p>城市</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": {\n      \"coupon\":[\n        {\n          \"id\": \"1\",\n          \"coupon_name\": \"优惠码名称\",\n           \"coupon_price\": \"优惠码价格\",\n           \"coupon_type_name\": \"优惠券类型名称\",\n           \"coupon_service_type_id\": \"服务类别id\",\n           \"coupon_service_type_name\": \"服务类别名称\",\n          }\n       ]\n      }\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "   HTTP/1.1 403 Not Found\n   {\n     \"code\": \"0\",\n     \"msg\": \"用户认证已经过期,请重新登录，\"\n\n   }\n*     {\n     \"code\": \"0\",\n     \"msg\": \"优惠码列表为空\"\n\n   }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/CouponController.php",
+    "groupTitle": "coupon"
+  },
+  {
+    "type": "get",
+    "url": "v1/service/single-service-time.php",
+    "title": "单次服务排班表(李勇90%缺少model支持)",
+    "name": "SingleServiceTime",
+    "group": "service",
+    "description": "<p>单次服务获取服务时间</p> ",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "service_type",
+            "description": "<p>服务类型</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "longitude",
+            "description": "<p>当前经度.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "latitude",
+            "description": "<p>当前纬度.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "plan_time",
+            "description": "<p>计划服务时长</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n {\n      \"code\": \"ok\",\n      \"msg\": \"获取单次服务排班表成功\"\n      \"ret\":{\n         \"single_worker_time\": [\n              {\n                  \"date_format\": \"10月25日\",\n                  \"date_stamp\": 1445669758,\n                  \"week\": \"明天\",\n                  \"hour\": [\n                      {\n                          \"time\": \"08:00-10:00\",\n                          \"status\": \"0\"\n                      },\n                      {\n                          \"time\": \"18:00-20:00\",\n                          \"status\": \"1\"\n                      }\n                  ]\n              },\n              {\n                  \"date_format\": \"10月26日\",\n                  \"date_stamp\": 1445669758,\n                  \"week\": \"\",\n                  \"hour\": [\n                      {\n                          \"time\": \"08:00-10:00\",\n                          \"status\": \"0\"\n                      },\n                      {\n                          \"time\": \"18:00-20:00\",\n                          \"status\": \"1\"\n                      }\n                  ]\n              },\n         ]\n      }\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/ServiceController.php",
+    "groupTitle": "service"
+  },
+  {
     "type": "GET",
     "url": "v1/service/all-services",
     "title": "依据城市 获取所有服务列表 (赵顺利100%)",
@@ -5886,79 +4859,6 @@
   },
   {
     "type": "GET",
-    "url": "v1/service/goods-service-time",
-    "title": "依据地址 获取某服务从今天开始7天商圈的阿姨可服务时间表(赵顺利0%)",
-    "name": "actionGoodsServiceTime",
-    "group": "service",
-    "description": "<p>依据地址 获取某项服务在某个地址从今天开始7天商圈的阿姨可服务时间表</p> ",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "city_name",
-            "description": "<p>城市</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "goods_id",
-            "description": "<p>服务类型id</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "address_id",
-            "description": "<p>地址id</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"code\": \"ok\",\n    \"msg\": \"\",\n    \"ret\":\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "CityNotSupportFound",
-            "description": "<p>该城市暂未开通.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n  \"code\":\"error\",\n  \"msg\": \"该城市暂未开通\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/ServiceController.php",
-    "groupTitle": "service"
-  },
-  {
-    "type": "GET",
     "url": "v1/service/home-services",
     "title": "依据城市 获取首页服务列表 （赵顺利 20% 假数据，未与boss关联）",
     "name": "actionHomeServices",
@@ -6008,6 +4908,100 @@
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 404 Not Found\n{\n  \"code\":0,\n  \"msg\": \"该城市暂未开通\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/ServiceController.php",
+    "groupTitle": "service"
+  },
+  {
+    "type": "get",
+    "url": "/worker/recursive-service-time.php",
+    "title": "周期服务时间表(李勇90%缺少model)",
+    "name": "actionRecursiveWorkerTime",
+    "group": "service",
+    "description": "<p>周期服务时间表</p> ",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "service_type",
+            "description": "<p>服务类型</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "longitude",
+            "description": "<p>当前经度.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "latitude",
+            "description": "<p>当前纬度.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "is_recommend",
+            "description": "<p>是否使用推荐阿姨（0：不是，1：是）</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "worker_id",
+            "description": "<p>阿姨id.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "plan_time",
+            "description": "<p>计划服务时长.</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n      \"code\": \"ok\",\n      \"msg\": \"获取周期服务时间表成功\"\n      \"ret\":{\n         \"recursive_worker_time\": [\n              {\n                  \"date_format\": \"10月25日\",\n                  \"date_stamp\": 1445669758,\n                  \"week\": \"明天\",\n                  \"hour\": [\n                      {\n                          \"time\": \"08:00-10:00\",\n                          \"status\": \"0\"\n                      },\n                      {\n                          \"time\": \"18:00-20:00\",\n                          \"status\": \"1\"\n                      }\n                  ]\n              },\n              {\n                  \"date_format\": \"10月26日\",\n                  \"date_stamp\": 1445669758,\n                  \"week\": \"\",\n                  \"hour\": [\n                      {\n                          \"time\": \"08:00-10:00\",\n                          \"status\": \"0\"\n                      },\n                      {\n                          \"time\": \"18:00-20:00\",\n                          \"status\": \"1\"\n                      }\n                  ]\n              },\n         ]\n      }\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
           "type": "json"
         }
       ]

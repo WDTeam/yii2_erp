@@ -2,10 +2,6 @@
 namespace core\behaviors;
 
 use yii\base\Behavior;
-use yii\base\InvalidValueException;
-use yii\base\Object;
-use core\models\shop\ShopStatus;
-use common\models\ActiveRecord;
 use common\components\Ivr;
 use common\models\worker\WorkerIvrlog;
 class IvrlogBehavior extends Behavior

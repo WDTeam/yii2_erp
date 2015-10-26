@@ -11,9 +11,8 @@ use \core\models\operation\coupon\Coupon;
 
 class UserController extends \api\components\Controller
 {
-
     /**
-     * @api {POST} /user/add-address 添加常用地址 (已完成100%) 
+     * @api {POST} /user/add-address 添加常用地址 (已完成100%)
      *
      * @apiName AddAddress
      * @apiGroup User
@@ -191,7 +190,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {DELETE} /user/delete-address 删除用户常用地址 (已完成100%) 
+     * @api {DELETE} /user/delete-address 删除用户常用地址 (已完成100%)
      *
      * @apiName DeleteAddress
      * @apiGroup User
@@ -240,7 +239,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {PUT} /user/set-default-address 设置默认地址 (已完成100%) 
+     * @api {PUT} /user/set-default-address 设置默认地址 (已完成100%)
      * @apiDescription 用户每次下完单都会将该次地址设置为默认地址，下次下单优先使用默认地址
      * @apiName SetDefaultAddress
      * @apiGroup User
@@ -298,7 +297,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {PUT} /user/update-address 修改常用地址 (已完成100%) 
+     * @api {PUT} /user/update-address 修改常用地址 (已完成100%)
      *
      * @apiName UpdateAddress
      * @apiGroup User
@@ -406,209 +405,6 @@ class UserController extends \api\components\Controller
      */
 
     /**
-     * @api {POST} /user/exchange-coupon 兑换优惠劵 （李勇 80%）
-     *
-     * @apiName ExchangeCoupon
-     * @apiGroup User
-     *
-     * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [city] 城市
-     * @apiParam {String} [coupon_code] 优惠码
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     *
-     *
-     * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "code": "1",
-     *       "msg": "兑换成功",
-     *       "ret":{
-     *           "id":1,
-     *           "coupon_id":1,
-     *           "coupon_name":"优惠券名称",
-     *           "coupon_price":123
-     *      }
-     *     }
-     *
-     * @apiError UserNotFound 用户认证已经过期.
-     *
-     * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
-     *
-     * @apiError CouponNotFound 优惠码不存在.
-     *
-     * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "优惠码不存在，"
-     *
-     *     }
-     */
-    public function actionExchangeCoupon()
-    {
-        $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
-        if(!isset($param['access_token'])||!$param['access_token']||!CustomerAccessToken::checkAccessToken($param['access_token'])){
-          return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
-        }
-        if(!isset($param['city'])|| !intval($param['city'])){
-            return $this->send(null, "请选择城市", 0, 403);
-        }
-        if(!isset($param['coupon_code'])|| !intval($param['coupon_code'])){
-            return $this->send(null, "请填写优惠码或邀请码", 0, 403);
-        }
-        $city=$param['city'];
-        $coupon_code=$param['coupon_code'];
-        $customer = CustomerAccessToken::getCustomer($param['access_token']);
-        $customer_id= $customer->id;
-        //验证优惠码是否存在
-        //$exist_coupon=CouponCustomer::existCoupon($city,$coupon_code);
-        $exist_coupon=1;
-        if(!$exist_coupon){
-             return $this->send(null, "优惠码不存在", 0, 403);
-        }
-        //兑换优惠码
-       // $exchange_coupon=CouponCustomer::exchangeCoupon($city,$coupon_code,$customer_id);
-        $exchange_coupon=[
-                    "id" => 1,
-                    "coupon_id" => 2,
-                    "coupon_name" => "优惠券名称",
-                    "coupon_price" => 123
-                ];
-        if($exchange_coupon){
-              return $this->send($exchange_coupon, "兑换成功", 1);
-        }else{
-              return $this->send(null, "兑换失败", 0);        
-        }
-    }
-
-    /**
-     * @api {GET} /user/get-coupon-customer 获取用户优惠码或同城市 （郝建设100%）
-     *
-     * @apiName GetCouponCustomer
-     * @apiGroup User
-     *
-     * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {String} [city_name]  城市
-     * @apiParam {int} coupon_type  优惠码表示 1获取提供城市或者全国的优惠码 2获取全国和给定城市的优惠码
-     *
-     * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "code": "1",
-     *       "msg": {
-     *           "coupon":[
-     *             {
-     *               "id": "1",
-     *               "coupon_name": "优惠码名称",
-     *                "coupon_price": "优惠码价格",
-     *                "coupon_type_name": "优惠券类型名称",
-     *                "coupon_service_type_id": "服务类别id",
-     *                "coupon_service_type_name": "服务类别名称",
-     *               }
-     *            ]
-     *           }
-     *
-     *     }
-     *
-     * @apiError UserNotFound 用户认证已经过期.
-     *
-     * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
-     *  *     {
-     *       "code": "0",
-     *       "msg": "优惠码列表为空"
-     *
-     *     }
-     *
-     */
-    public function actionGetCouponCustomer()
-    {
-
-        $param = Yii::$app->request->get();
-        if (empty($param)) {
-            $param = json_decode(Yii::$app->request->getRawBody(), true);
-        }
-        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
-        }
-
-        $customer = CustomerAccessToken::getCustomer($param['access_token']);
-        if (!empty($customer) && !empty($customer->id)) {
-            /**
-             * 获取改用户city_name下面,所有的优惠券
-             */
-            if (!empty($param['city_name']) && $param['coupon_type'] == 1) {
-
-                $CouponData = CouponCustomer::getCouponCustomer($customer->id);
-                
-                if (!empty($CouponData)) {
-                    $ret = array();
-                    foreach ($CouponData as $key => $val) {
-                        $Coupon = \core\models\coupon\Coupon::getCoupon($val['coupon_id'], $param['city_name']);
-                        foreach ($Coupon as $key => $val) {
-                            $ret['coupon'][] = $val;
-                        }
-                    }
-
-                    return $this->send($ret, $param['city_name'] . "优惠码列表");
-                } else {
-                    return $this->send([1], "规定城市优惠码列表为空", "0");
-                }
-            }
-
-            /**
-             * 返回全国范围内的优惠码
-             */
-            if (empty($param['city_name']) && $param['coupon_type'] == 1) {
-                $CouponData = CouponCustomer::getCouponCustomer($customer->id, 1);
-                $ret['couponCustomer'] = $CouponData;
-                return $this->send($ret, "全国范围优惠码列表", "1");
-            }
-
-            /**
-             * 返回规定城市和全国范围内的优惠码
-             */
-            if (@$param['city_name'] && $param['coupon_type'] == 2) {
-
-                $CouponData = CouponCustomer::getCouponCustomer($customer->id);
-
-                if (!empty($CouponData)) {
-                    $ret = array();
-                    foreach ($CouponData as $key => $val) {
-                        $Coupon = Coupon::getCoupon($val['coupon_id'], $param['city_name']);
-                        foreach ($Coupon as $key => $val) {
-                            $ret['coupon'][] = $val;
-                        }
-                    }
-                    #return $this->send($ret, $param['city_name'] . "优惠码列表", "1");
-                }
-
-                $CouponCount =CouponCustomer::getCouponCustomer($customer->id, 1);
-                $ret['couponCustomer'][] = $CouponCount;
-
-                return $this->send($ret, '城市' . $param['city_name'] . "优惠码和全国优惠码列表", "1");
-            } else {
-                return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
-            }
-        } else {
-
-            return $this->send(null, "用户认证已经过期,请重新登录1", "0", 403);
-        }
-    }
-
-    /**
      * @api {GET} /user/get-coupon-count 获取用户优惠码数量 （功能已经实现 100%）
      *
      *
@@ -640,7 +436,6 @@ class UserController extends \api\components\Controller
      *
      *     }
      *
-
      *
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
@@ -731,7 +526,7 @@ class UserController extends \api\components\Controller
 
         if (!empty($customer) && !empty($customer->id)) {
             /**
-             * @param $customer->id int 用户id
+             * @param $customer ->id int 用户id
              * @param $worker      int 阿姨id
              * @param $type        int 标示类型，1时判断黑名单阿姨，0时判断常用阿姨
              */
@@ -807,7 +602,7 @@ class UserController extends \api\components\Controller
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
             /**
-             * @param $customer->id int 用户id
+             * @param $customer ->id int 用户id
              * @param $is_block      int 阿姨id
              */
             $workerData = \core\models\customer\CustomerWorker::blacklistworkers(1, 1);
@@ -883,7 +678,7 @@ class UserController extends \api\components\Controller
 
     /**
      * @api {GET} /user/get-user-money 用户余额和消费记录 （数据已经全部取出,需要给出所需字段,然后给予返回 已完成99% ;）
-     * 
+     *
      *
      * @apiName GetUserMoney
      *
@@ -966,11 +761,13 @@ class UserController extends \api\components\Controller
         if (!empty($customer) && !empty($customer->id)) {
             /**
              * 获取客户余额
+             *
              * @param int $customer 用户id
              */
             $userBalance = \core\models\customer\CustomerExtBalance::getCustomerBalance($customer->id);
             /**
              * 获取用户消费记录
+             *
              * @param int $customer 用户id
              */
             $userRecord = \core\models\CustomerTransRecord\CustomerTransRecord::queryRecord($customer->id);
@@ -980,24 +777,6 @@ class UserController extends \api\components\Controller
 
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
-    }
-
-    /**
-     * 发送验证码
-     */
-    public function actionSetUser()
-    {
-
-        $aaa = \core\models\customer\CustomerCode::generateAndSend('13683118946');
-    }
-
-    #生成access_token
-
-    public function actionAddUser()
-    {
-        $daat = \core\models\customer\CustomerAccessToken::generateAccessToken('13683118946', '0330');
-
-        print_r($daat);
     }
 
     /**
@@ -1075,7 +854,7 @@ class UserController extends \api\components\Controller
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
             /**
-             *  @param int $customer_id 用户id
+             * @param int $customer_id 用户id
              */
             $userscore = \core\models\customer\CustomerExtScore::getCustomerScoreList($customer->id);
 
@@ -1267,8 +1046,7 @@ class UserController extends \api\components\Controller
      * @apiParam {String} longitude 经度
      * @apiParam {String} latitude 纬度
      * @apiParam {String} order_service_type_id 服务id
-     * 
-
+     *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {

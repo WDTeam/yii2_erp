@@ -70,6 +70,8 @@ class Worker extends \common\models\worker\Worker
                 $shopManagerInfo = ShopManager::findOne($shopInfo['shop_manager_id']);
             }
             $workerInfo['shop_name'] = isset($shopInfo['name'])?$shopInfo['name']:'';
+            $workerInfo['shop_manager_id'] = isset($shopInfo['shop_manager_id'])?$shopInfo['shop_manager_id']:'';
+            $workerInfo['worker_skill'] = WorkerSkill::getWorkerSkill($worker_id);
             $workerInfo['shop_manager_name'] = isset($shopManagerInfo['name'])?$shopManagerInfo['name']:'';
             $workerInfo['worker_type_description'] = self::getWorkerTypeShow($workerInfo['worker_type']);
             $workerInfo['worker_identity_description'] = WorkerIdentityConfig::getWorkerIdentityShow($workerInfo['worker_identity_id']);
