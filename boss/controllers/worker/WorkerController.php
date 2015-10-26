@@ -3,6 +3,7 @@
 namespace boss\controllers\worker;
 
 
+use core\models\operation\CoreOperationArea;
 use core\models\worker\WorkerStat;
 use Yii;
 use yii\web\ForbiddenHttpException;
@@ -525,7 +526,7 @@ class WorkerController extends BaseAuthController
      */
     public function actionGetDataFromOldDataBase(){
 
-        $operationArea = new Operation\OperationArea();
+        $operationArea = new CoreOperationArea();
 
         $connectionNew =  \Yii::$app->db;
         $command = $connectionNew->createCommand('select id from {{%worker}} ORDER by id asc limit 1');
@@ -666,7 +667,7 @@ class WorkerController extends BaseAuthController
 
     public function actionTest(){
         echo '<pre>';
-        var_dump(Worker::getWorkerTimeLine(1,2));
+        var_dump(Worker::getWorkerInfo(1));
         die;
 
         $a = Worker::getWorkerInfo(16351);

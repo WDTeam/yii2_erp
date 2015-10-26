@@ -3,23 +3,24 @@
 namespace core\models\worker;
 
 
-use boss\models\worker\WorkerSchedule;
 use Yii;
 use yii\helpers\ArrayHelper;
-use yii\web\ForbiddenHttpException;
 use yii\web\BadRequestHttpException;
 use yii\web\UploadedFile;
 
 use common\models\order\OrderExtWorker;
-use common\models\ShopManager;
+use core\models\shop\ShopManager;
+use core\models\shop\Shop;
 use core\models\worker\WorkerStat;
 use core\models\worker\WorkerExt;
 use core\models\worker\WorkerIdentityConfig;
 use core\models\worker\WorkerRuleConfig;
+use core\models\worker\WorkerSkill;
+use core\models\worker\WorkerSkillConfig;
+use core\models\worker\WorkerSchedule;
 use core\models\operation\CoreOperationShopDistrict;
 use core\models\operation\CoreOperationCity;
 use core\models\operation\CoreOperationArea;
-use core\models\shop\Shop;
 use crazyfd\qiniu\Qiniu;
 
 /**
@@ -61,7 +62,7 @@ class Worker extends \common\models\worker\Worker
      */
     public static function getWorkerInfo($worker_id){
 
-        $workerInfo = self::find()->where((['id'=>$worker_id]))->select('id,shop_id,worker_name,worker_phone,worker_idcard,worker_type,worker_photo,worker_identity_id,created_ad')->asArray()->one();
+        $workerInfo = self::find()->where((['id'=>$worker_id]))->select('id,shop_id,worker_name,worker_phone,worker_idcard,worker_type,worker_photo,worker_identity_id,worker_star,created_ad')->asArray()->one();
         if($workerInfo){
             //门店名称,家政公司名称
             $shopInfo = Shop::findone($workerInfo['shop_id']);
@@ -88,7 +89,7 @@ class Worker extends \common\models\worker\Worker
     public static function getWorkerDetailInfo($worker_id){
         $workerDetailResult = self::find()
             ->where(['id'=>$worker_id])
-            ->select('id,shop_id,worker_name,worker_phone,worker_photo,worker_age,worker_type,worker_identity_id,worker_sex,worker_edu,worker_stat_order_num,worker_stat_order_refuse,worker_stat_order_complaint,worker_stat_order_money,worker_live_province,worker_live_city,worker_live_area,worker_live_street')
+            ->select('id,shop_id,worker_name,worker_phone,worker_photo,worker_age,worker_type,worker_identity_id,worker_star,worker_sex,worker_edu,worker_stat_order_num,worker_stat_order_refuse,worker_stat_order_complaint,worker_stat_order_money,worker_live_province,worker_live_city,worker_live_area,worker_live_street')
             ->joinWith('workerExtRelation')
             ->joinWith('workerStatRelation')
             ->asArray()
@@ -99,6 +100,7 @@ class Worker extends \common\models\worker\Worker
             $workerDetailResult['worker_type_description'] = self::getWorkerTypeShow($workerDetailResult['worker_type']);
             $workerDetailResult['worker_identity_description'] = WorkerIdentityConfig::getWorkerIdentityShow($workerDetailResult['worker_identity_id']);
             $workerDetailResult['worker_live_place'] = self::getWorkerPlaceShow($workerDetailResult['worker_live_province'],$workerDetailResult['worker_live_city'],$workerDetailResult['worker_live_area'],$workerDetailResult['worker_live_street']);
+            $workerDetailResult['worker_skill'] = WorkerSkill::getWorkerSkill($worker_id);
             unset($workerDetailResult['workerStatRelation']);
             unset($workerDetailResult['workerExtRelation']);
         }else{
@@ -109,7 +111,7 @@ class Worker extends \common\models\worker\Worker
 
 
     /*
-     * 通过电话获取可用阿姨信息
+     * 通过电话获取阿姨信息
      * @param string $phone 阿姨电话
      * @return array 阿姨详细信息(阿姨id，阿姨姓名)
      */
@@ -149,10 +151,11 @@ class Worker extends \common\models\worker\Worker
     }
 
 
-    /*
+    /**
      * 通过阿姨id批量获取阿姨信息
      * @param array $workerIdsArr 阿姨id数组
-     * @param str 返回字段
+     * @param string $field 返回字段
+     * @return array|\yii\db\ActiveRecord[]
      */
     public static function getWorkerListByIds($workerIdsArr,$field='worker_name'){
         if(empty($workerIdsArr)){
@@ -245,15 +248,15 @@ class Worker extends \common\models\worker\Worker
      }
 
 
-    /*
+    /**
      * 获取商圈中 所有可用阿姨
-     * @param int districtId 商圈id
+     * @param int district_d 商圈id
      * @param int worker_type 阿姨类型 1自营2非自营
      * @param int orderBookBeginTime 待指派订单预约开始时间
-     * @param int orderBookeEndTime 待指派订单预约结束时间
+     * @param int orderBookEndTime 待指派订单预约结束时间
      * @return array freeWorkerArr 所有可用阿姨列表
      */
-    public static function getDistrictFreeWorker($district_id=1,$worker_type=1,$orderBookBeginTime,$orderBookeEndTime){
+    public static function getDistrictFreeWorker($district_id=1,$worker_type=1,$orderBookBeginTime,$orderBookEndTime){
 
         $workerIdentityConfigArr = WorkerIdentityConfig::getWorkerIdentityList();
 
@@ -289,10 +292,10 @@ class Worker extends \common\models\worker\Worker
         }
 
         //获取在指派时间段内已被预约的阿姨
-        //$condition = "(order_booked_begin_time>$orderBookeEndTime or order_booked_end_time<$orderBookBeginTime)";
+        //$condition = "(order_booked_begin_time>$orderBookEndTime or order_booked_end_time<$orderBookBeginTime)";
         $condition = "	(ejj_order.order_booked_begin_time<=$orderBookBeginTime AND ejj_order.order_booked_end_time>=$orderBookBeginTime )";
-        $condition.= " OR ( ejj_order.order_booked_begin_time<=$orderBookeEndTime AND ejj_order.order_booked_end_time>=$orderBookeEndTime )";
-        $condition.= " OR ( ejj_order.order_booked_begin_time>=$orderBookBeginTime AND ejj_order.order_booked_end_time<=$orderBookeEndTime )";
+        $condition.= " OR ( ejj_order.order_booked_begin_time<=$orderBookEndTime AND ejj_order.order_booked_end_time>=$orderBookEndTime )";
+        $condition.= " OR ( ejj_order.order_booked_begin_time>=$orderBookBeginTime AND ejj_order.order_booked_end_time<=$orderBookEndTime )";
         $orderWorkerResult = OrderExtWorker::find()
             ->innerJoinWith('order')
             ->onCondition($condition)
@@ -597,9 +600,10 @@ class Worker extends \common\models\worker\Worker
         }
     }
 
-    /*
+    /**
      * 加入黑名单
      * @param string $cause 原因
+     * @return bool
      */
     public function joinBlacklist($cause='')
     {
@@ -610,10 +614,13 @@ class Worker extends \common\models\worker\Worker
         return false;
     }
 
-    /*
+    /**
      * 移出黑名单
      * @param string $cause 原因
+     * @return bool
+     * @throws BadRequestHttpException
      */
+
     public function removeBlacklist($cause='')
     {
         $sm = Shop::find()->where(['id'=>$this->shop_id])->one();
@@ -629,28 +636,28 @@ class Worker extends \common\models\worker\Worker
 
 
 
-    /*
+    /**
      * 阿姨附属表连表方法
      */
     public function getWorkerExtRelation(){
         return $this->hasOne(WorkerExt::className(),['worker_id'=>'id']);
     }
 
-    /*
+    /**
      * 阿姨商圈表连表方法
      */
     public function getWorkerDistrictRelation(){
         return $this->hasOne(WorkerDistrict::className(),['worker_id'=>'id'])->select('worker_id,operation_shop_district_id');
     }
 
-    /*
+    /**
      * 阿姨统计表连表方法
      */
     public function getWorkerStatRelation(){
         return $this->hasOne(WorkerStat::className(),['worker_id'=>'id']);
     }
 
-    /*
+    /**
      * 商铺表连表方法
      */
     public function getShopRelation(){
@@ -658,13 +665,20 @@ class Worker extends \common\models\worker\Worker
     }
 
     /**
-     * 阿姨排班表方法
+     * 阿姨排班表连表方法
      */
     public function getWorkerScheduleRelation(){
         return $this->hasOne(WorkerSchedule::className(),['worker_id'=>'id']);
     }
 
-    /*
+    /**
+     * 阿姨技能关联表连表方法
+     */
+    public function getWorkerSkillRelation(){
+        return $this->hasOne(WorkerSkill::className(),['worker_id'=>'id']);
+    }
+
+    /**
      * 设置worker_district属性
      */
     public function getworker_district(){
