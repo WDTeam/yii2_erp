@@ -55,7 +55,7 @@ class NativeNotifyCallBack extends WxPayNotify
 		{
 		 	$msg = "统一下单失败";
 		 	return false;
-		 }
+		}
 		
 		$this->SetData("appid", $result["appid"]);
 		$this->SetData("mch_id", $result["mch_id"]);
