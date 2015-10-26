@@ -11,7 +11,9 @@ use kartik\datecontrol\DateControl;
  * @var yii\widgets\ActiveForm $form
  */
 ?>
-
+<style>
+    .panel-footer{padding: 0; background: #000;}
+</style>
 <div class="server-card-form">
 
     <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); echo Form::widget([
@@ -70,8 +72,13 @@ use kartik\datecontrol\DateControl;
     ]
 
 
-    ]);
-    echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']);
-    ActiveForm::end(); ?>
-
+    ]);?>
+    <div class="panel-footer">
+            <div class="form-group">
+                <div class="col-sm-offset-0 col-sm-12">
+                    <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success btn-lg btn-block' : 'btn btn-primary btn-lg btn-block']);?>
+                </div>
+            </div>
+    </div>
+    <? ActiveForm::end(); ?>
 </div>

@@ -29,11 +29,23 @@ $this->params['breadcrumbs'][] = $this->title;
             'card_type',
             'card_level',
             'par_value',
-//            'reb_value', 
-//            'use_scope', 
-//            'valid_days', 
-//            'created_at', 
-//            'updated_at', 
+            'reb_value', 
+            'use_scope', 
+            'valid_days', 
+            [
+                'attribute'=>'created_at',
+                'value'=>function($model){
+                    return date('Y-m-d', $model->created_at);
+                },
+                'filter'=>false,
+            ],
+            [
+                'attribute'=>'updated_at',
+                'value'=>function($model){
+                    return date('Y-m-d', $model->updated_at);
+                },
+                'filter'=>false,
+            ],
 
             [
                 'class' => 'yii\grid\ActionColumn',
