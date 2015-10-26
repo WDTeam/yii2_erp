@@ -25,7 +25,9 @@ class alipay_wap_class{
         //建立请求
         require_once("lib/alipay_submit.class.php");
         $alipaySubmit = new AlipaySubmit($alipay_config);
-        $parameter['send_url'] = $html_text = $alipaySubmit->buildRequestUrl($parameter,"get", "确认");
+        $html_text = $alipaySubmit->buildRequestUrl($parameter);
+        echo $html_text;
+
         return $parameter;
     }
 }
