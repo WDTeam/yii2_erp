@@ -28,6 +28,7 @@ use Yii;
  * @property string $order_booked_end_time
  * @property string $address_id
  * @property string $district_id
+ * @property string $city_id
  * @property string $order_address
  * @property string $order_booked_worker_id
  * @property string $checking_id
@@ -174,7 +175,7 @@ class Order extends ActiveRecord
     {
         return [
             [['admin_id','order_service_type_id','order_src_id','order_booked_begin_time','address_id'],'required'],
-            [['order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'isdel', 'order_service_type_id', 'order_src_id', 'channel_id', 'order_booked_count', 'order_booked_begin_time', 'order_booked_end_time', 'address_id', 'district_id', 'order_booked_worker_id', 'checking_id','version'], 'integer'],
+            [['order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'isdel', 'order_service_type_id', 'order_src_id', 'channel_id', 'order_booked_count', 'order_booked_begin_time', 'order_booked_end_time', 'city_id', 'address_id', 'district_id', 'order_booked_worker_id', 'checking_id','version'], 'integer'],
             [['order_unit_money', 'order_money'], 'number'],
             [['order_code', 'order_channel_name'], 'string', 'max' => 64],
             [['order_service_type_name', 'order_ip','order_src_name'], 'string', 'max' => 128],
@@ -209,6 +210,7 @@ class Order extends ActiveRecord
             'order_booked_count' => '预约服务数量（时长）',
             'order_booked_begin_time' => '预约开始时间',
             'order_booked_end_time' => '预约结束时间',
+            'city_id' => '城市ID',
             'address_id' => '地址ID',
             'district_id' => '商圈ID',
             'order_address' => '详细地址 包括 联系人 手机号',
@@ -404,6 +406,8 @@ class Order extends ActiveRecord
                 'order_booked_count' => $this->order_booked_count,
                 'order_booked_begin_time' => $this->order_booked_begin_time,
                 'order_booked_end_time' => $this->order_booked_end_time,
+                'city_id' => $this->city_id,
+                'district_id' => $this->district_id,
                 'address_id' => $this->address_id,
                 'order_address' => $this->order_address,
                 'order_booked_worker_id' => $this->order_booked_worker_id,
