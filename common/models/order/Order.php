@@ -98,6 +98,7 @@ class Order extends ActiveRecord
     public $order_worker_type_name;
     public $order_worker_assign_type;
     public $shop_id;
+    public $order_worker_shop_name;
     public $admin_id;
 
     public $order_is_use_balance;
@@ -150,6 +151,7 @@ class Order extends ActiveRecord
         'order_worker_type_name',
         'order_worker_assign_type',
         'shop_id',
+        'order_worker_shop_name',
         'admin_id',
         'order_is_use_balance'
     ];
@@ -272,6 +274,7 @@ class Order extends ActiveRecord
             'order_worker_type_name' => '工人职位类型',
             'order_worker_assign_type' => '工人接单方式 0未接单 1工人抢单 2客服指派 3门店指派',
             'shop_id' => '工人所属门店id',
+            'order_worker_shop_name' => '工人所属门店',
             'admin_id' => '操作人id  0客户操作 1系统操作',
             'order_is_use_balance'=>'是否使用余额 1是 0否'
         ];
@@ -454,6 +457,7 @@ class Order extends ActiveRecord
                 'order_worker_type_name' => $orderExtWorker->order_worker_type_name,
                 'order_worker_assign_type' => $orderExtWorker->order_worker_assign_type,
                 'shop_id' => $orderExtWorker->shop_id,
+                'order_worker_shop_name' => $orderExtWorker->order_worker_shop_name,
                 'checking_id' => $this->checking_id,
                 'order_cs_memo' => $this->order_cs_memo,
                 'order_sys_memo' => $this->order_sys_memo,
@@ -533,6 +537,7 @@ class Order extends ActiveRecord
             'order_worker_type_name' => $orderExtWorker->order_worker_type_name,
             'order_worker_assign_type' => $orderExtWorker->order_worker_assign_type,
             'shop_id' => $orderExtWorker->shop_id,
+            'order_worker_shop_name' => $orderExtWorker->order_worker_shop_name,
         ]);
 
         return $order;

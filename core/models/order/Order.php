@@ -90,6 +90,7 @@ use core\models\operation\CoreOperationShopDistrict;
  * @property string $order_worker_type_name
  * @property integer $order_worker_assign_type
  * @property string $shop_id
+ * @property string $order_worker_shop_name
  * @property string $checking_id
  * @property string $order_cs_memo
  * @property string $order_sys_memo
@@ -285,6 +286,7 @@ class Order extends OrderModel
             $order->order_worker_name = $worker['worker_name'];
             $order->order_worker_type_name = $worker['worker_type_description'];
             $order->shop_id = $worker["shop_id"];
+            $order->order_worker_shop_name = $worker["shop_name"];
             $order->order_worker_assign_type = $assign_type; //接单方式
             $order->admin_id = $admin_id;
             if ($admin_id > 1) { //大于1属于人工操作
