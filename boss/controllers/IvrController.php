@@ -44,4 +44,9 @@ class IvrController extends Controller
             var_dump(\Yii::$app->jpush->getReport($res->msg_id));
         }
     }
+    public function actionSms()
+    {
+        $res = \Yii::$app->sms->send('15110249233', 'A1444808735');
+        var_dump($res);
+    }
 }
