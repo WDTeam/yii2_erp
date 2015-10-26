@@ -300,14 +300,27 @@ class Order extends OrderModel
      * @param $order_id
      * @param $admin_id
      * @param $memo
+     * @param $cause 1公司原因 2个人原因
      * @return bool
      */
-    public static function cancel($order_id, $admin_id, $memo = '')
+    public static function cancel($order_id, $admin_id, $cause,$memo = '')
     {
         $order = OrderSearch::getOne($order_id);
         $order->admin_id = $admin_id;
-        $order->order_customer_memo = $memo;
-        return OrderStatus::_cancel($order, ['OrderExtCustomer']);
+        $order->order_flag_cancel_cause = $cause;
+        if($admin_id==0) {
+            $order->order_customer_memo = $memo;
+            return OrderStatus::_cancel($order, ['OrderExtCustomer']);
+        }elseif($admin_id==1){
+            $order->order_sys_memo = $memo;
+            return OrderStatus::_cancel($order);
+        }elseif($admin_id==2){
+            $order->order_worker_memo = $memo;
+            return OrderStatus::_cancel($order, ['OrderExtWorker']);
+        }elseif($admin_id>2){
+            $order->order_cs_memo = $memo;
+            return OrderStatus::_cancel($order);
+        }
     }
 
     /**
