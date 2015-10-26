@@ -15,101 +15,8 @@ use yii\web\Response;
 
 class OrderController extends \api\components\Controller
 {
-
     /**
-     * @api {POST} /order/choose-service-time 可服务时间表 (20%赵顺利 block linhongyou provide the feature)
-     *
-     * @apiDescription 选择服务时间接口服务器依据用户的当前位置提供时间表
-     * @apiName ChooseServiceTime
-     * @apiGroup Order
-     *
-     * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {String} lng 经度
-     * @apiParam {String} lat 纬度
-     * @apiParam {String} show_common 是否使用常用阿姨
-     * @apiParam {String} plan_time 计划服务时间
-     * @apiParam {String} city 城市
-     * @apiParam {String} service_item 服务种类
-     *
-     * @apiSuccess {Object[]} appointment 可选时间表.
-     * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *       "code": "1",
-     *       "msg": "获取可服务时间表成功"
-     *       "ret":{
-     *          "appointment": [
-     *              {
-     *                  "date_format": "10月10日",
-     *                  "date_stamp": 1444406400,
-     *                  "week": "明天",
-     *                  "have_worker": 1,
-     *                  "hour": [
-     *                      {
-     *                          "time": "08:00-10:00",
-     *                          "status": "0"
-     *                      },
-     *                      {
-     *                          "time": "18:00-20:00",
-     *                          "status": "1"
-     *                      }
-     *                  ]
-     *              }
-     *          ]
-     *       }
-     *     }
-     *
-     *
-     *     }
-     *
-     * @apiError UserNotFound 用户认证已经过期.
-     *
-     * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
-     *
-     */
-    public function actionChooseServiceTime()
-    {
-        $params = Yii::$app->request->post() or
-                $params = json_decode(Yii::$app->request->getRawBody(), true);
-        @$accessToken = $params['access_token'];
-
-        if (empty($accessToken) && !CustomerAccessToken::checkAccessToken($accessToken)) {
-            return $this->send(empty($accessToken), "用户认证已经过期,请重新登录.", 0, 403);
-        }
-        $appointment = array();
-        for ($i = 0; $i <= 7; $i++) {
-            $item = [
-                'date_format' => date('m月d日', strtotime('+' . $i . ' day')),
-                'date_stamp' => time(date('m月d日', strtotime('+' . $i . ' day'))),
-                'week' => $i == 1 ? '明天' : '',
-                'have_worker' => '1',
-                'hour' =>
-                [
-                    ['time' => '08:00-10:00',
-                        'status' => '0']
-                    ,
-                    [
-                        "time" => "18:00-20:00",
-                        "status" => "1"
-                    ]
-                ]
-            ];
-            $appointment[] = $item;
-        }
-
-        $ret = ["appointment" => $appointment];
-        return $this->send($ret, "获取可服务时间表成功");
-    }
-
-    /**
-     * @api {POST} /order/create-order 创建订单 (90%xieyi  创建已完成 渠道号更改 依赖林洪优)
+     * @api {POST} /order/create-order 创建订单 (90%xieyi  缺少周期订单和精品保洁，缺少后台模块支持)
      *
      *
      * @apiName ActionCreateOrder
@@ -124,13 +31,13 @@ class OrderController extends \api\components\Controller
      * @apiParam {String} order_customer_phone 用户手机号
      * @apiParam {String} order_pay_type 支付方式 1现金 2线上 3第三方 必填
      * @apiParam {String} address_id 订单地址id
+     * @apiParam {String} channel_id 下单渠道
      * @apiParam {String} [address] 订单地址
      * @apiParam {String} [city]城市
      * @apiParam {String} [order_pop_order_code] 第三方订单号
      * @apiParam {String} [order_pop_group_buy_code] 第三方团购号
      * @apiParam {Integer} [order_pop_order_money] 第三方订单金额,预付金额
      * @apiParam {String} [coupon_id] 优惠劵id
-     * @apiParam {String} [channel_id] 下单渠道
      * @apiParam {String} [order_booked_worker_id] 指定阿姨id
      * @apiParam {Number} [order_customer_need] 客户需求
      * @apiParam {String} [order_customer_memo] 客户备注
@@ -316,7 +223,7 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} v1/order/append-order 追加订单(xieyi 90%和创建订单一样)
+     * @api {POST} v1/order/append-order 追加订单(xieyi 90% 目前产品已删除该需求 )
      *
      * @apiName ActionAppendOrder
      * @apiGroup Order
@@ -455,7 +362,7 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /order/orders 查询订单(xieyi 100%已经将后台接口完成，创建也完成缺少测试)
+     * @api {GET} /order/orders 查询订单(xieyi 90%已经将后台接口完成,缺少周期订单)
      *
      *
      * @apiName Orders
@@ -584,7 +491,7 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /order/orders-count 查询订单数量(xieyi 70%已经将后台接口完成，创建也完成缺少测试)
+     * @api {GET} /order/orders-count 查询订单数量(xieyi 70%缺少周期订单)
      *
      *
      * @apiName OrdersCount
@@ -652,7 +559,7 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /order/status-orders-count 查询订单数量(xieyi 70%已经将后台接口完成，创建也完成缺少测试)
+     * @api {GET} /order/status-orders-count 查询不通状态订单数量(xieyi 70%缺少周期订单)
      *
      *
      * @apiName StatusOrdersCount
@@ -738,7 +645,7 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /order/order-status-history 查询某个订单状态历史状态记录(xieyi 70%已经将后台接口完成，创建也完成缺少测试)
+     * @api {GET} /order/order-status-history 查询某个订单状态历史状态记录(xieyi 70%缺少周期订单)
      *
      *
      * @apiName OrderStatusHistory
@@ -911,7 +818,7 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {get} /mobileapidriver2/worker_request_order 抢单（xieyi %0）
+     * @api {get} /mobileapidriver2/worker_request_order 抢单（haojianshe %0）
      * 
      * @apiName actionDriverRequestOrder
      * @apiGroup Order
@@ -1325,7 +1232,7 @@ class OrderController extends \api\components\Controller
      *
      */
     /**
-     * @api {get} v2/worker/all_order_common_list.php 日常订单列表(zhaoshunli 0%)
+     * @api {get} v2/worker/all_order_common_list.php 历史单列表(xieyi 0%)
      * @apiName actionAllOrderCommonList
      * @apiGroup Order
      * @apiDescription 对账日常订单，全部订单
@@ -1369,109 +1276,7 @@ class OrderController extends \api\components\Controller
      *  }
      *
      */
-    /**
-     * @api {get} /v2/FixedUserOrder.php 固定客户以及订单列表(zhaoshunli 0%)
-     * @apiName actionFixedUserOrder
-     * @apiGroup Order
-     * @apiDescription 对账固定客户首页，全部固定客户订单
-     * @apiParam {String} session_id    会话id.
-     * @apiParam {String} platform_version 平台版本号.
-     * @apiParam {String} period_id  周期id，首页传0.
-     * @apiParam {String} worker_is_nearby  是否首页，首页传1.
-     * @apiParam {String} per_page  每页显示多少条.
-     * @apiParam {String} page  第几页.
-     *
-     * @apiSuccessExample {json} Success-Response:
-     * HTTP/1.1 200 OK
-     * {
-     *      "code": "ok",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      {
-     *          "alertMsg": "",
-     *          "fixedUserPeriod":
-     *          [
-     *          {
-     *              "telephone": "13636363636",
-     *              "street": "海淀区定慧北里",
-     *              "place_detail": "6换10",
-     *              "order_num": "2",
-     *              "order_time": "5.5小时"
-     *          }
-     *          ],
-     *          "fixedUserOrder":
-     *          [
-     *          {
-     *              "wage_record_id": "0",
-     *              "finish_time": "2015-09-11 18:37:04",
-     *              "order_id": "174",
-     *              "pay_worker_money": "87.5",
-     *              "cash": "87.5",
-     *              "is_fulltime": 0
-     *          }
-     *          ]
-     *      }
-     * }
-     *
-     * @apiError SessionIdNotFound 未找到会话ID.
-     *
-     * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
-     *  {
-     *      "code":"Failed",
-     *      "msg": "SessionIdNotFound"
-     *  }
-     *
-     */
 
-    /**
-     * @api {get} v1/order/no_settlement_order_list.php  未结算订单(0%zhaoshunli)
-     * @apiName actionNoSettlementOrderList
-     * @apiGroup Order
-     *
-     * @apiParam {String} session_id    会话id.
-     * @apiParam {String} platform_version 平台版本号.
-     * @apiParam {String} page_num   每页显示都少条数据.
-     * @apiParam {String} cur_page  当前页.
-     *
-     * @apiSuccessExample {json} Success-Response:
-     * HTTP/1.1 200 OK
-     * {
-     *      "code": "ok",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      {
-     *          "order_info":
-     *          [
-     *          {
-     *              "order_id": "673",
-     *              "finish_time": "2015年09月15日 12:00结束",
-     *              "order_price": "100",
-     *              "palce": "北京 朝阳区大悦城 测试测试",
-     *              "cash": "0",
-     *              "status": "未结算"
-     *          }
-     *          ],
-     *          "msgStyle": "",
-     *          "alertMsg": ""
-     *      }
-     * }
-     *
-     * @apiError SessionIdNotFound 未找到会话ID.
-     *
-     * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
-     *  {
-     *      "code":"Failed",
-     *      "msg": "SessionIdNotFound"
-     *  }
-     *
-     */
-    public function actionPush($id)
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        return OrderPush::push($id);
-    }
 
 }
 

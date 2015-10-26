@@ -358,34 +358,6 @@ class ServiceController extends \api\components\Controller
         return $this->send($ret, "数据获取成功");
     }
 
-    /**
-     * @api {GET} v1/service/goods-service-time 依据地址 获取某服务从今天开始7天商圈的阿姨可服务时间表(赵顺利0%)
-     * @apiName actionGoodsServiceTime
-     * @apiGroup service
-     * @apiDescription 依据地址 获取某项服务在某个地址从今天开始7天商圈的阿姨可服务时间表
-     *
-     * @apiParam {String} city_name 城市
-     * @apiParam {String} goods_id 服务类型id
-     * @apiParam {String} address_id 地址id
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     *
-     * @apiSuccessExample Success-Response:
-     *  HTTP/1.1 200 OK
-     *  {
-     *      "code": "ok",
-     *      "msg": "",
-     *      "ret":
-     *  }
-     *
-     * @apiError CityNotSupportFound 该城市暂未开通.
-     *
-     * @apiErrorExample Error-Response:
-     *     HTTP/1.1 404 Not Found
-     *     {
-     *       "code":"error",
-     *       "msg": "该城市暂未开通"
-     *     }
-     */
 
     /**
      * @api {GET} v1/service/boutique-cleaning 获得所有精品保洁项目（赵顺利0%）
@@ -413,6 +385,230 @@ class ServiceController extends \api\components\Controller
      *       "msg": "该城市暂未开通"
      *     }
      */
+
+    /**
+     * @api {get} v1/service/single-service-time.php  单次服务排班表(李勇90%缺少model支持)
+     * @apiName SingleServiceTime
+     * @apiGroup service
+     * @apiDescription 单次服务获取服务时间
+     * @apiParam {String} access_token    用户认证.
+     * @apiParam {String} service_type  服务类型
+     * @apiParam {String} longitude     当前经度.
+     * @apiParam {String} latitude      当前纬度.
+     * @apiParam {String} plan_time 计划服务时长
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     *  {
+     *       "code": "ok",
+     *       "msg": "获取单次服务排班表成功"
+     *       "ret":{
+     *          "single_worker_time": [
+     *               {
+     *                   "date_format": "10月25日",
+     *                   "date_stamp": 1445669758,
+     *                   "week": "明天",
+     *                   "hour": [
+     *                       {
+     *                           "time": "08:00-10:00",
+     *                           "status": "0"
+     *                       },
+     *                       {
+     *                           "time": "18:00-20:00",
+     *                           "status": "1"
+     *                       }
+     *                   ]
+     *               },
+     *               {
+     *                   "date_format": "10月26日",
+     *                   "date_stamp": 1445669758,
+     *                   "week": "",
+     *                   "hour": [
+     *                       {
+     *                           "time": "08:00-10:00",
+     *                           "status": "0"
+     *                       },
+     *                       {
+     *                           "time": "18:00-20:00",
+     *                           "status": "1"
+     *                       }
+     *                   ]
+     *               },
+     *          ]
+     *       }
+     *   }
+     *
+     *  @apiError UserNotFound 用户认证已经过期.
+     *
+     *  @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "error",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *
+     *     }
+     *
+     */
+    function actionSingleWorkerTime(){
+        $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
+        if(!isset($param['longitude'])||!$param['longitude']||!isset($param['latitude'])||!$param['latitude']||!isset($param['plan_time'])||!$param['plan_time']){
+            return $this->send(null, "请填写服务地址或服务时长", 0, 403);
+        }
+        $longitude = $param['longitude'];
+        $latitude =$param['latitude'];
+        $plan_time=$param['plan_time'];
+        //根据经纬度获取商圈id
+        $ShopDistrictInfo=CoreOperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
+        if(empty($ShopDistrictInfo)){
+            return $this->send(null, "商圈不存在", 0, 403);
+        }else{
+            $district_id=$ShopDistrictInfo['id'];
+        }
+        //获取单次服务排班表
+        //$single_worker_time=Worker::getSingleWorkerTable($district_id,$plan_time);
+        $single_worker_time = array();
+        for ($i = 1; $i <= 7; $i++) {
+            $item = [
+                'date_format' => date('m月d日', strtotime('+' . $i . ' day')),
+                'date_stamp' => time(date('m月d日', strtotime('+' . $i . ' day'))),
+                'week' => $i == 1 ? '明天' : '',
+                'hour' =>
+                    [
+                        ['time' => '08:00-10:00',
+                            'status' => '0']
+
+                        ,
+                        [
+                            "time" => "18:00-20:00",
+                            "status" => "1"
+                        ]
+                    ]
+            ];
+            $single_worker_time[] = $item;
+        }
+
+        $ret = ["single_worker_time" => $single_worker_time];
+        return $this->send($ret, "获取单次服务排班表成功");
+    }
+
+    /**
+     * @api {get} /worker/recursive-service-time.php  周期服务时间表(李勇90%缺少model)
+     * @apiName actionRecursiveWorkerTime
+     * @apiGroup service
+     * @apiDescription 周期服务时间表
+     * @apiParam {String} access_token    用户认证.
+     * @apiParam {String} service_type  服务类型
+     * @apiParam {String} longitude     当前经度.
+     * @apiParam {String} latitude      当前纬度.
+     * @apiParam {String} is_recommend  是否使用推荐阿姨（0：不是，1：是）
+     * @apiParam {String} worker_id   阿姨id.
+     * @apiParam {String} plan_time 计划服务时长.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *       "code": "ok",
+     *       "msg": "获取周期服务时间表成功"
+     *       "ret":{
+     *          "recursive_worker_time": [
+     *               {
+     *                   "date_format": "10月25日",
+     *                   "date_stamp": 1445669758,
+     *                   "week": "明天",
+     *                   "hour": [
+     *                       {
+     *                           "time": "08:00-10:00",
+     *                           "status": "0"
+     *                       },
+     *                       {
+     *                           "time": "18:00-20:00",
+     *                           "status": "1"
+     *                       }
+     *                   ]
+     *               },
+     *               {
+     *                   "date_format": "10月26日",
+     *                   "date_stamp": 1445669758,
+     *                   "week": "",
+     *                   "hour": [
+     *                       {
+     *                           "time": "08:00-10:00",
+     *                           "status": "0"
+     *                       },
+     *                       {
+     *                           "time": "18:00-20:00",
+     *                           "status": "1"
+     *                       }
+     *                   ]
+     *               },
+     *          ]
+     *       }
+     *   }
+     *
+     *  @apiError UserNotFound 用户认证已经过期.
+     *
+     *  @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "error",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *
+     *     }
+     *
+     */
+    function actionRecursiveWorkerTime(){
+        $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
+        if(!isset($param['longitude'])||!$param['longitude']||!isset($param['latitude'])||!$param['latitude']||!isset($param['is_recommend'])||!isset($param['plan_time'])||!$param['plan_time']){
+            return $this->send(null, "请填写服务地址或服务时长", 0, 403);
+        }
+        $longitude = $param['longitude'];
+        $latitude =$param['latitude'];
+        $is_recommend=$param['is_recommend'];
+        $plan_time=$param['plan_time'];
+        if($is_recommend==1){
+            if(!isset($param['worker_id'])||!$param['worker_id']){
+                return $this->send(null,"请选择服务阿姨",0,403);
+            }else{
+                $worker_id=$param['worker_id'];
+            }
+        }
+        //根据经纬度获取商圈id
+        $ShopDistrictInfo=CoreOperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
+        if(empty($ShopDistrictInfo)){
+            return $this->send(null, "商圈不存在", 0, 403);
+        }else{
+            $district_id=$ShopDistrictInfo['id'];
+        }
+        $recursive_worker_time=array();
+        for ($i = 7; $i <= 36; $i++) {
+            $item = [
+                'date_name' => date('m月d日', strtotime('+' . $i . ' day')),
+                'date_week' => date('w', strtotime('+' . $i . ' day')),
+                'date_week_every' => '每周日',
+                'date_time' =>
+                    [
+                        ['time' => '08:00-10:00',
+                            'status' => '0']
+
+                        ,
+                        [
+                            "time" => "18:00-20:00",
+                            "status" => "1"
+                        ]
+                    ],
+                'date_name_tag'=>date('m月d日', strtotime('+' . $i . ' day')).'（今天）'
+            ];
+            $recursive_worker_time[] = $item;
+        }
+        $ret = ["recursive_worker_time" => $recursive_worker_time];
+        return $this->send($ret, "获取周期服务时间表成功");
+    }
 
 }
 
