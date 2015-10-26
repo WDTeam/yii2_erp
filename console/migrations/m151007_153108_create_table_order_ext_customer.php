@@ -32,7 +32,7 @@ class m151007_153108_create_table_order_ext_customer extends Migration
 
         ], $tableOptions);
 
-        $this->createIndex('idx-order_ext_customer-order_customer_id', '{{%order_ext_customer}}', 'order_customer_id');
+        $this->createIndex('idx-order_ext_customer-customer_id', '{{%order_ext_customer}}', 'customer_id');
         $this->createIndex('idx-order_ext_customer-order_customer_phone', '{{%order_ext_customer}}', 'order_customer_phone');
         $this->createIndex('idx-order_ext_customer-order_customer_is_vip', '{{%order_ext_customer}}', 'order_customer_is_vip');
     }
