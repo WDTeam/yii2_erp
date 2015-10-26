@@ -6,6 +6,7 @@ use \core\models\customer\Customer;
 use Yii;
 use \core\models\customer\CustomerAddress;
 use \core\models\customer\CustomerAccessToken;
+use \core\models\operation\coupon\CouponCustomer;
 
 class UserController extends \api\components\Controller
 {
@@ -404,7 +405,7 @@ class UserController extends \api\components\Controller
      */
 
     /**
-     * @api {GET} /user/exchange-coupon 兑换优惠劵 （郝建设 0%）
+     * @api {POST} /user/exchange-coupon 兑换优惠劵 （李勇 80%）
      *
      * @apiName ExchangeCoupon
      * @apiGroup User
@@ -419,7 +420,13 @@ class UserController extends \api\components\Controller
      *     HTTP/1.1 200 OK
      *     {
      *       "code": "1",
-     *       "msg": "兑换成功"
+     *       "msg": "兑换成功",
+     *       "ret":{
+     *           "id":1,
+     *           "coupon_id":1,
+     *           "coupon_name":"优惠券名称",
+     *           "coupon_price":123
+     *      }
      *     }
      *
      * @apiError UserNotFound 用户认证已经过期.
@@ -444,7 +451,37 @@ class UserController extends \api\components\Controller
      */
     public function actionExchangeCoupon()
     {
-        
+        $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        if(!isset($param['access_token'])||!$param['access_token']||!CustomerAccessToken::checkAccessToken($param['access_token'])){
+          return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
+        if(!isset($param['city'])|| !intval($param['city'])){
+            return $this->send(null, "请选择城市", 0, 403);
+        }
+        if(!isset($param['coupon_code'])|| !intval($param['coupon_code'])){
+            return $this->send(null, "请填写优惠码或邀请码", 0, 403);
+        }
+        $city=$param['city'];
+        $coupon_code=$param['coupon_code'];
+        //验证优惠码是否存在
+        //$exist_coupon=CouponCustomer::existCoupon($city,$coupon_code);
+        $exist_coupon=1;
+        if(!$exist_coupon){
+             return $this->send(null, "优惠码不存在", 0, 403);
+        }
+        //兑换优惠码
+       // $exchange_coupon=CouponCustomer::exchangeCoupon($city,$coupon_code);
+        $exchange_coupon=[
+                    "id" => 1,
+                    "coupon_id" => 2,
+                    "coupon_name" => "优惠券名称",
+                    "coupon_price" => 123
+                ];
+        if($exchange_coupon){
+              return $this->send($exchange_coupon, "兑换成功", 1);
+        }else{
+              return $this->send(null, "兑换失败", 0);        
+        }
     }
 
     /**
