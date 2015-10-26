@@ -1,10 +1,8 @@
 <?php
 
-use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
-use boss\models\worker\Worker;
-use common\models\SystemUser;
+use common\models\general\SystemUser;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
