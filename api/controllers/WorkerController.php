@@ -502,7 +502,7 @@ class WorkerController extends \api\components\Controller
     }
     
     /**
-     * @api {GET} /worker/get-worker-bill-list 获取阿姨服务信息 (田玉星 50%)
+     * @api {GET} /worker/get-worker-bill-list 获取阿姨服务信息 (田玉星 60%)
      * 
      * @apiDescription 【备注：等待model底层支持】
      * 
@@ -560,7 +560,7 @@ class WorkerController extends \api\components\Controller
             $param['page_num'] = 10;
         }
         $page_num = intval($param['page_num']);
-        调取model层
+        //调取model层
         $ret = [
             [
                 'bill_type' =>"1",
