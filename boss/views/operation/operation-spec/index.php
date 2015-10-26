@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
-use boss\models\Operation\OperationSpec;
+use boss\models\operation\OperationSpec;
 
 /**
  * @var yii\web\View $this

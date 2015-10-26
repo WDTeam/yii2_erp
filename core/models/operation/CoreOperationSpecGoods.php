@@ -3,8 +3,8 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\Operation\CommonOperationSpecGoods;
-use common\models\Operation\CommonOperationGoods;
+use common\models\operation\CommonOperationSpecGoods;
+use common\models\operation\CommonOperationGoods;
 
 /**
  * This is the model class for table "{{%operation_spec_goods}}".
