@@ -2,6 +2,7 @@
 namespace api\controllers;
 
 use Yii;
+use \core\models\customer\CustomerAccessToken;
 use \core\models\worker\Worker;
 use \core\models\worker\WorkerSkill;
 use \core\models\worker\WorkerAccessToken;
@@ -19,7 +20,8 @@ class WorkerController extends \api\components\Controller
      * @apiName WorkerInfo
      * @apiGroup Worker
      * 
-     * @apiParam {String} access_token 阿姨登录token
+     * @apiParam {String} access_token 阿姨登录token/用户登录token
+     * @apiParam {String} [worker_id]  阿姨id
      * 
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/worker-info
      * @apiSuccessExample Success-Response:
@@ -52,14 +54,28 @@ class WorkerController extends \api\components\Controller
      *       "msg": "用户认证已经过期,请重新登录，"
      *     }
      */
-    public function actionWorkerInfo(){
-        $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
-        if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
-          return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+    public function actionWorkerInfo()
+    {
+        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+
+        $workerId = 0;
+        if (!isset($param['access_token']) || !$param['access_token'] || !WorkerAccessToken::checkAccessToken($param['access_token'])) {
+            if (!isset($param['access_token']) || !$param['access_token'] || !isset($param['worker_id']) || !$param['worker_id'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+		return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+            } else {
+                // 用户登录，按阿姨id获取阿姨信息
+                $workerId = $param['worker_id'];
+            }
+        } else {
+            // 阿姨登陆，获取阿姨信息
+            $worker = WorkerAccessToken::getWorker($param['access_token']);
+            if (!empty($worker)) {
+                $workerId = $worker->id;
+            }
         }
-        $worker = WorkerAccessToken::getWorker($param['access_token']);
-        if (!empty($worker) && !empty($worker->id)) {
-            $workerInfo = Worker::getWorkerDetailInfo($worker->id);
+
+        if ($workerId > 0) {
+            $workerInfo = Worker::getWorkerDetailInfo($workerId);
             //数据整理
             $ret =[
                 "worker_name" => $workerInfo['worker_name'],
@@ -69,7 +85,7 @@ class WorkerController extends \api\components\Controller
                 "worker_role" => $workerInfo["worker_type_description"],
                 'worker_start'=> 4.5,
                 'total_money' =>1000,
-                "personal_skill" =>WorkerSkill::getWorkerSkill($worker->id),
+                "personal_skill" =>WorkerSkill::getWorkerSkill($workerId),
             ];
               return $this->send($ret, "阿姨信息查询成功");
         } else {
