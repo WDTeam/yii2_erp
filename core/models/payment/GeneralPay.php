@@ -12,15 +12,6 @@ class GeneralPay extends \common\models\payment\GeneralPay
 {
 
     /**
-     * @inheritdoc
-     * @return GeneralPayQuery the active query used by this AR class.
-     */
-    public static function find()
-    {
-        return new GeneralPayQuery(get_called_class());
-    }
-
-    /**
      * @param $condition
      * @param $fileds
      * @return array|GeneralPay|null
