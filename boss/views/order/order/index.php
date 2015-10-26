@@ -6,6 +6,7 @@ use yii\widgets\Pjax;
 use yii\widgets\ListView;
 use boss\assets\AppAsset;
 use kartik\widgets\ActiveForm;
+use boss\models\order\Order;
 
 /**
  * @var yii\web\View $this
@@ -58,22 +59,31 @@ $this->params['breadcrumbs'][] = $this->title;
 						    
 						    <div class="m_from">
 						    	<ul class="lis" id="list">
+						    		<p>城市：</p>
+						    		<li class="cur">全部</li>
+						    		<?php 
+						    		foreach (Order::getOnlineCityList() as $key => $value)
+						    		{
+						    		    echo '<li>'.$value.'</li>';
+						    		}
+						    		?>
+						    	</ul>
+						    	<ul class="lis" id="list">
 						    		<p>服务类型：</p>
 						    		<li class="cur">全部</li>
 						    		<li>专业保洁</li>
 						    		<li>家电清洗</li>
 						    		<li>家居养护</li>
-						    	</ul>
-						    	
+						    	</ul>						    	
 						    	<ul class="lis" id="list">
 						    		<p>订单状态：</p>
 						    		<li class="cur">全部</li>
-						    		<li>待付款</li>
-						    		<li>待指派</li>
-						    		<li>待服务</li>
-						    		<li>已完成</li>
-						    		<li>已取消</li>
-						    		<li>投诉订单</li>
+						    		<?php 
+						    		foreach (Order::getStatusList() as $key => $value)
+						    		{
+						    		    echo '<li>'.$value.'</li>';
+						    		}
+						    		?>						    		
 						    	</ul>
 						    	
 						    	<ul class="lis" id="list">

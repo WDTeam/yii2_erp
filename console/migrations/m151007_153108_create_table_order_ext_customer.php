@@ -19,6 +19,7 @@ class m151007_153108_create_table_order_ext_customer extends Migration
             //================================客户信息
             'customer_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'客户ID\'',
             'order_customer_phone' => Schema::TYPE_STRING .'(16) NOT NULL DEFAULT \'\' COMMENT \'客户手机号\'',
+            'order_customer_is_vip' => Schema::TYPE_BOOLEAN .'(1) unsigned  DEFAULT 0 COMMENT \'是否是vip\'',
 
             'order_customer_need' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'客户需求\'',
             'order_customer_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'客户备注\'',
@@ -30,6 +31,10 @@ class m151007_153108_create_table_order_ext_customer extends Migration
             'updated_at' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 0 COMMENT \'修改时间\'',
 
         ], $tableOptions);
+
+        $this->createIndex('idx-order_ext_customer-order_customer_id', '{{%order_ext_customer}}', 'order_customer_id');
+        $this->createIndex('idx-order_ext_customer-order_customer_phone', '{{%order_ext_customer}}', 'order_customer_phone');
+        $this->createIndex('idx-order_ext_customer-order_customer_is_vip', '{{%order_ext_customer}}', 'order_customer_is_vip');
     }
 
     public function down()

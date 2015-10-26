@@ -35,7 +35,7 @@ $this->title = Yii::t('app', 'Opened City').'管理';
                         <td>
                             <a href="<?= Yii::$app->urlManager->createUrl(
                                 [
-                                    'operation-city/settinggoodsinfo',
+                                    '/operation/operation-city/settinggoodsinfo',
                                     'city_id' => $value['city_id'],
                                     'goods_id'=> $v['operation_goods_id'],
                                     'cityAddGoods' => 'editGoods'
