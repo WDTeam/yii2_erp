@@ -1,19 +1,19 @@
 <?php
 
-namespace boss\controllers;
+namespace boss\controllers\operation;
 
 use Yii;
-use boss\models\Operation\OperationCity;
-use boss\models\Operation\OperationCitySearch;
-use boss\models\Operation\OperationShopDistrict;
-use boss\models\Operation\OperationShopDistrictGoods;
-use boss\models\Operation\OperationCategory;
-use boss\models\Operation\OperationGoods;
+use boss\models\operation\OperationCity;
+use boss\models\operation\OperationCitySearch;
+use boss\models\operation\OperationShopDistrict;
+use boss\models\operation\OperationShopDistrictGoods;
+use boss\models\operation\OperationCategory;
+use boss\models\operation\OperationGoods;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 //use boss\components\AreaCascade;
-use boss\models\Operation\OperationArea;
+use boss\models\operation\OperationArea;
 use boss\components\UploadFile;
 
 /**

@@ -1,15 +1,15 @@
 <?php
 
-namespace boss\controllers;
+namespace boss\controllers\operation;
 
 use Yii;
-use boss\models\Operation\OperationGoods;
+use boss\models\operation\OperationGoods;
 //use boss\models\Operation\OperationPriceStrategy;
-use boss\models\Operation\OperationTag;
-use boss\models\Operation\OperationCategory;
-use boss\models\Operation\OperationSpec;
-use boss\models\Operation\OperationSpecGoods;
-use boss\models\Operation\OperationShopDistrictGoods;
+use boss\models\operation\OperationTag;
+use boss\models\operation\OperationCategory;
+use boss\models\operation\OperationSpec;
+use boss\models\operation\OperationSpecGoods;
+use boss\models\operation\OperationShopDistrictGoods;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -217,7 +217,7 @@ class OperationGoodsController extends Controller
             
             if($model->save()){
 //                return $this->redirect(['view', 'id' => $model->id]);
-                return $this->redirect(['/operation-category']);
+                return $this->redirect(['/operation/operation-category']);
             }
         } else {
             $OperationCategorydata = OperationCategory::getCategoryList(0, '', ['id', 'operation_category_name']);
@@ -286,7 +286,7 @@ class OperationGoodsController extends Controller
             
             if($model->save()){
 //                return $this->redirect(['view', 'id' => $model->id]);
-                return $this->redirect(['/operation-category']);
+                return $this->redirect(['/operation/operation-category']);
             }
         } else {
             $OperationCategorydata = OperationCategory::getCategoryList(0, '', ['id', 'operation_category_name']);

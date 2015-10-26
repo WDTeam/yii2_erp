@@ -4,9 +4,9 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use boss\components\SearchBox;
-use boss\models\Operation\OperationCity;
-use boss\models\Operation\OperationShopDistrict;
-use boss\models\Operation\OperationShopDistrictGoods;
+use boss\models\operation\OperationCity;
+use boss\models\operation\OperationShopDistrict;
+use boss\models\operation\OperationShopDistrictGoods;
 
 
 /**

@@ -1,9 +1,9 @@
 <?php
 
-namespace boss\models\Operation;
+namespace boss\models\operation;
 
 use Yii;
-use core\models\Operation\CoreOperationServerCard;
+use core\models\operation\CoreOperationServerCard;
 /**
  * This is the model class for table "{{%server_card}}".
  *

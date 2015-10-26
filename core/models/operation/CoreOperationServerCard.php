@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\Operation\CommonOperationServerCard;
+use common\models\operation\CommonOperationServerCard;
 /**
  * This is the model class for table "{{%server_card}}".
  *
