@@ -8,16 +8,16 @@
 
 namespace boss\models\order;
 
-use boss\models\Operation\OperationCity;
+use boss\models\operation\OperationCity;
 use common\models\finance\FinanceOrderChannel;
-use core\models\Operation\CoreOperationArea;
+use core\models\operation\CoreOperationArea;
 use core\models\order\OrderPay;
 use Yii;
 use core\models\order\Order as OrderModel;
 use core\models\worker\Worker;
 use yii\helpers\ArrayHelper;
-use boss\models\Operation\OperationShopDistrict;
-use core\models\Operation\CoreOperationCity;
+use boss\models\operation\OperationShopDistrict;
+use core\models\operation\CoreOperationCity;
 use common\models\order\OrderStatusDict;
 
 
