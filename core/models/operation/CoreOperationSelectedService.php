@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\Operation\CommonOperationSelectedService;
+use common\models\operation\CommonOperationSelectedService;
 
 /**
  * This is the model class for table "ejj_operation_selected_service".

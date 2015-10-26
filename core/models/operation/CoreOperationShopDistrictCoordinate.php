@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\Operation\CommonOperationShopDistrictCoordinate;
+use common\models\operation\CommonOperationShopDistrictCoordinate;
 
 /**
  * This is the model class for table "{{%operation_price_strategy}}".

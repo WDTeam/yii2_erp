@@ -1,8 +1,8 @@
 <?php
-namespace boss\models\Operation;
+namespace boss\models\operation;
 
 use Yii;
-use core\models\Operation\CoreOperationSelectedService;
+use core\models\operation\CoreOperationSelectedService;
 
 /**
  * This is the model class for table "ejj_operation_selected_service".

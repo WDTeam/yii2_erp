@@ -3,8 +3,10 @@ namespace api\controllers;
 
 use Yii;
 use \core\models\worker\Worker;
+use \core\models\worker\WorkerSkill;
 use \core\models\worker\WorkerAccessToken;
 use \core\models\Operation\CoreOperationShopDistrictCoordinate;
+ 
 class WorkerController extends \api\components\Controller
 {
 
@@ -67,7 +69,7 @@ class WorkerController extends \api\components\Controller
                 "worker_role" => $workerInfo["worker_type_description"],
                 'worker_start'=> 4.5,
                 'total_money' =>1000,
-                "personal_skill" =>['煮饭','开荒','护老','擦玻璃','带孩子'],
+                "personal_skill" =>WorkerSkill::getWorkerSkill($worker->id),
             ];
               return $this->send($ret, "阿姨信息查询成功");
         } else {
@@ -502,7 +504,7 @@ class WorkerController extends \api\components\Controller
     }
     
     /**
-     * @api {GET} /worker/get-worker-bill-list 获取阿姨服务信息 (田玉星 50%)
+     * @api {GET} /worker/get-worker-bill-list 获取阿姨服务信息 (田玉星 60%)
      * 
      * @apiDescription 【备注：等待model底层支持】
      * 
@@ -541,7 +543,7 @@ class WorkerController extends \api\components\Controller
         if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
-         
+        
         $worker = WorkerAccessToken::getWorker($param['access_token']);
         if (!$worker|| !$worker->id) {
             return $this->send(null, "阿姨不存在", 0, 403);
@@ -561,11 +563,25 @@ class WorkerController extends \api\components\Controller
         }
         $page_num = intval($param['page_num']);
         //调取model层
-        $ret = array(
-            'bill_date'=>'09年07月-09月13日',
-            'order_count'=>10,
-            'salary'=>32
-        );
+        $ret = [
+            [
+                'bill_type' =>"1",
+                'bill_explain'=>"这是一个周期账单说明",
+                'bill_date'=>'09年07月-09月13日',
+                'order_count'=>'10',
+                'salary'=>'320.00',
+                'balance_status'=>"1"
+            ],
+            [
+                'bill_type' =>"2",
+                'bill_explain'=>"这是一个月结账单说明",
+                'bill_date'=>'8月',
+                'order_count'=>'10',
+                'salary'=>'320.00',
+                'balance_status'=>"2"
+            ]
+       ];
+       return $this->send($ret, "操作成功.");
     }
      
     /**

@@ -87,6 +87,7 @@ class Order extends ActiveRecord
     public $promotion_id;
     public $order_use_promotion_money;
     public $worker_id;
+    public $worker_phone;
     public $worker_type_id;
     public $order_worker_type_name;
     public $order_worker_assign_type;

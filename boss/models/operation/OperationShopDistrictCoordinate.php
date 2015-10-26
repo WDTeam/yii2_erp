@@ -1,9 +1,9 @@
 <?php
 
-namespace boss\models\Operation;
+namespace boss\models\operation;
 
 use Yii;
-use core\models\Operation\CoreOperationShopDistrictCoordinate;
+use core\models\operation\CoreOperationShopDistrictCoordinate;
 
 /**
  * This is the model class for table "{{%operation_shop_district}}".

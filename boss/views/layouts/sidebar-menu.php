@@ -105,7 +105,7 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有订单(0%)',
+                        'label' => '查看所有订单(20%)',
                         'url' => ['/order/order'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -157,13 +157,13 @@ echo Menu::widget(
 //                    ],
                     [
                         'label' => '服务和品类管理(80%)',
-                        'url' => ['/operation-category/'],
+                        'url' => ['/operation/operation-category/'],
                         'icon' => 'fa fa-angle-right',
 
                     ],
                     [
                         'label' => '城市和商圈管理(90%)',
-                        'url' => ['/operation-city'],
+                        'url' => ['/operation/operation-city'],
                         'icon' => 'fa fa-angle-right',
 
                     ],
@@ -175,7 +175,7 @@ echo Menu::widget(
 //                    ],
                     [
                         'label' => '已开通城市管理',
-                        'url' => ['/operation-city/opencity'],
+                        'url' => ['/operation/operation-city/opencity'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
@@ -188,7 +188,7 @@ echo Menu::widget(
                         'items' => [
                             [
                                 'label' => '平台管理',
-                                'url' => ['/operation-platform'],
+                                'url' => ['/operation/operation-platform'],
                                 'icon' => 'fa fa-angle-right',
                             ],
                             //                            [
@@ -198,18 +198,18 @@ echo Menu::widget(
                                 //                            ],
                             [
                                 'label' => '广告位置管理',
-                                'url' => ['/operation-advert-position'],
+                                'url' => ['/operation/operation-advert-position'],
                                 'icon' => 'fa fa-angle-right',
                             ],
                             [
                                 'label' => '活动内容管理',
-                                'url' => ['/operation-advert-content'],
+                                'url' => ['/operation/operation-advert-content'],
                                 'icon' => 'fa fa-angle-right',
                                 
                             ],
                             [
                                 'label' => '广告发布',
-                                'url' => ['/operation-advert-release'],
+                                'url' => ['/operation/operation-advert-release'],
                                 'icon' => 'fa fa-angle-right',
                                 
                             ],
@@ -231,20 +231,20 @@ echo Menu::widget(
                         'items' => [
                             [
                                 'label' => '优惠券列表(10%)',
-                                'url' => ['coupon/index'],
+                                'url' => ['operation/coupon/coupon/index'],
                                 'icon' => 'fa fa-angle-right',
                             ],
                             [
                                 'label' => '添加新优惠券(10%)',
-                                'url' => ['coupon/create'],
+                                'url' => ['operation/coupon/coupon/create'],
                                 'icon' => 'fa fa-angle-right',
                             ],
-                            //[
-                              //  'label' => '绑定用户',
-                               // 'url' => ['coupon/index'],
-                               // 'icon' => 'fa fa-angle-right',
+                            [
+                                'label' => '绑定用户',
+                                'url' => ['operation/coupon/coupon/bundle'],
+                                'icon' => 'fa fa-angle-right',
                                 
-                            //],
+                            ],
                         ]
                     ],
 
@@ -264,7 +264,7 @@ echo Menu::widget(
                     
                     [
                         'label' => '启动页管理(90%)',
-                        'url' => ['/operation-boot-page'],
+                        'url' => ['/operation/operation-boot-page'],
                         'icon' => 'fa fa-angle-right',
                         
                     ],
@@ -280,7 +280,7 @@ echo Menu::widget(
                     ],*/
                     [
                         'label' => '阿姨任务管理(95%)',
-                        'url' => ['/worker/worker-task/index'],
+                        'url' => ['/operation/worker/worker-task/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
 					[
@@ -310,7 +310,7 @@ echo Menu::widget(
             ],
                     [
                         'label' => '精品保洁管理',
-                        'url' => ['/operation-selected-service'],
+                        'url' => ['/operation/operation-selected-service'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],

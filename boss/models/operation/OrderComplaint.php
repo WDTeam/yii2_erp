@@ -1,6 +1,6 @@
 <?php
 
-namespace boss\models;
+namespace boss\models\operation;
 
 use Yii;
 

@@ -16,6 +16,7 @@ use Yii;
 use core\models\order\Order as OrderModel;
 use core\models\worker\Worker;
 use yii\helpers\ArrayHelper;
+use boss\models\Operation\OperationShopDistrict;
 
 
 class Order extends OrderModel
@@ -132,6 +133,15 @@ class Order extends OrderModel
         $post['Order']['order_booked_begin_time'] = strtotime($post['Order']['orderBookedDate'].' '.$time[0].':00');
         $post['Order']['order_booked_end_time'] = strtotime(($time[1]=='24:00')?date('Y-m-d H:i:s',strtotime($post['Order']['orderBookedDate'].'00:00:00 +1 days')):$post['Order']['orderBookedDate'].' '.$time[1].':00');
         return parent::createNew($post['Order']);
+    }
+    
+    /*
+     * 获取已上线商圈列表
+     * @return array [id=>operation_shop_district_name,...]
+     */
+    public static function getDistrictList(){
+        $districtList = OperationShopDistrict::getCityShopDistrictList();
+        return $districtList?ArrayHelper::map($districtList,'id','operation_shop_district_name'):[];
     }
 
 }
