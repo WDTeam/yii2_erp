@@ -2,6 +2,7 @@
 class alipay_wap_class{
 
     public function get($param){
+        header("Content-type:text/html;charset=utf-8");
         require_once("alipay.config.php");
         //构造要请求的参数数组，无需改动
         $parameter = array(
@@ -21,11 +22,10 @@ class alipay_wap_class{
             "_input_charset"	=> trim(strtolower($alipay_config['input_charset']))
         );
 
-
         //建立请求
         require_once("lib/alipay_submit.class.php");
         $alipaySubmit = new AlipaySubmit($alipay_config);
-        $parameter['send_url'] = $html_text = $alipaySubmit->buildRequestUrl($parameter,"get", "确认");
+        $parameter['send_url'] = $alipaySubmit->buildRequestUrl($parameter,"get", "确认");
         return $parameter;
     }
 }

@@ -5,7 +5,7 @@ namespace boss\models\operation;
 use Yii;
 
 /**
- * This is the model class for table "et_operation_server_card_record".
+ * This is the model class for table "{{%operation_server_card_record}}".
  *
  * @property string $id
  * @property string $trade_id
@@ -18,14 +18,7 @@ use Yii;
  */
 class OperationServerCardRecord extends \core\models\operation\OperationServerCardRecord
 {
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return 'et_operation_server_card_record';
-    }
-
+  
     /**
      * @inheritdoc
      */

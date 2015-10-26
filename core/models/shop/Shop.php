@@ -88,7 +88,7 @@ class Shop extends \common\models\shop\Shop
      */
     public static function getAuditStatusCountByNumber($number)
     {
-        return (int)self::find()->where(['audit_status'=>$number])->scalar();
+        return (int)self::find()->select('COUNT(1)')->where(['audit_status'=>$number])->scalar();
     }
     /**
      * 获取地址全称,直辖市不需要显示省字段
@@ -114,14 +114,14 @@ class Shop extends \common\models\shop\Shop
      */
     public static function getTotal()
     {
-        return (int)self::find()->where('isdel is null or isdel=0')->scalar();
+        return (int)self::find()->select('COUNT(1)')->where('isdel is null or isdel=0')->scalar();
     }
     /**
      * 获取黑名单数
      */
     public static function getIsBlacklistCount()
     {
-        return (int)self::find()->where(['is_blacklist'=>1])->scalar();
+        return (int)self::find()->select('COUNT(1)')->where(['is_blacklist'=>1])->scalar();
     }
     /**
      * 加入黑名单

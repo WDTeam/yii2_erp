@@ -15,11 +15,11 @@ return [
             'class' => 'yii\rbac\DbManager',
             'defaultRoles' => ['guest'],
         ],
-        //'cache' => [
+        'cache' => [
             //'class' => 'yii\caching\FileCache',
 //            'class'=>'yii\caching\DbCache',
-//            'class' => 'yii\redis\Cache',
-        //],
+            'class' => 'yii\redis\Cache',
+        ],
         'i18n' => [
             'translations' => [
                 '*' => [
@@ -122,13 +122,13 @@ return [
          *   <?php
          *      ini_set('default_socket_timeout', -1);
          */
-        //'redis' => [
-            //'class' => 'yii\redis\Connection',
-            //'hostname' => '101.200.179.70', // 配置为 dev环境 redis 服务器地址 test环境 101.200.200.74 ，prod环境 待定
+        'redis' => [
+            'class' => 'yii\redis\Connection',
+            'hostname' => '101.200.179.70', // 配置为 dev环境 redis 服务器地址 test环境 101.200.200.74 ，prod环境 待定
 //            'hostname' => '127.0.0.1', // 配置为 dev环境 redis 服务器地址 test环境 101.200.200.74 ，prod环境 待定
-            //'port' => 6379,
-            //'database' => 0,
-        //],
+            'port' => 6379,
+            'database' => 0,
+        ],
         /**
          * 配置 mongodb
          * 使用参考：http://www.yiiframework.com/doc-2.0/ext-mongodb-index.html
@@ -137,40 +137,7 @@ return [
             //'class' => '\yii\mongodb\Connection',
             //'dsn' => 'mongodb://developer:password@localhost:27017/mydatabase',
         //],
-        /**
-         * 极光推送,默认为开发环境配置
-         * //正式
-         $app_key='507d4a12d19ebbab7205f6bb';
-         $master_secret = '30d1653625e797b7f80b56bb';
-         // 测试
-         $app_key='6b79c45db3ed3aa1706778f9';
-         $master_secret = '7bcba44668a3ff6469fb57a5';
-         //dev
-         $app_key='3037ca7c859cca4c996f7144';
-         $master_secret = 'a064811d7e4596c32d0e6884';
-         */
-        'jpush'=>[
-            'class'=>'common\components\JPush',
-            'app_key'=>'3037ca7c859cca4c996f7144',
-            'master_secret'=>'a064811d7e4596c32d0e6884'
-        ],
-        /**
-         * 发短信配置
-         */
-        'sms'=>[
-            'class'=>'common\components\Sms',
-            'userId'=>'J02356',
-            'password'=>'556201',
-        ],
-        /**
-         * IVR
-         */
-        'ivr'=>[
-            'class'=>'common\components\Ivr',
-            'app_id'=>'5000040',
-            'token'=>'8578b07ba71ff7dfd6ddeca95d69828c',
-            'redirect_uri'=>'ivr/callback'
-        ],
+        
         /**
          * 配置控制台命令
          * 

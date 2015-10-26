@@ -103,7 +103,6 @@ class AlipaySubmit {
 
 		//submit按钮控件请不要含有name属性
         $sHtml = $sHtml."<input type='submit' value='".$button_name."'></form>";
-        print_r($sHtml);exit;
 		$sHtml = $sHtml."<script>document.forms['alipaysubmit'].submit();</script>";
 
 		return $sHtml;
@@ -120,13 +119,9 @@ class AlipaySubmit {
 	function buildRequestUrl($para_temp, $method, $button_name) {
 		//待请求参数数组
 		$para = $this->buildRequestPara($para_temp);
-		$urlParma = $this->alipay_gateway_new;//."_input_charset=".trim(strtolower($this->alipay_config['input_charset']));
-		while (list ($key, $val) = each ($para)) {
-			$urlParma .= $key.'='.$val.'&';
-		}
-		$urlParma = trim($urlParma,'&');
+		$urlParma = $this->alipay_gateway_new;
+		$urlParma .= http_build_query($para);
 		return $urlParma;
-
 	}
 
 	/**

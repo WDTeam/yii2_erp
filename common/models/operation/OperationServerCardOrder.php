@@ -5,7 +5,7 @@ namespace common\models\operation;
 use Yii;
 
 /**
- * This is the model class for table "et_operation_server_card_order".
+ * This is the model class for table "{{%operation_server_card_order}}".
  *
  * @property string $id
  * @property string $order_code
@@ -41,7 +41,7 @@ class OperationServerCardOrder extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'et_operation_server_card_order';
+        return '{{%operation_server_card_order}}';
     }
 
 }
