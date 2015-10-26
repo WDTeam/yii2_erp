@@ -488,7 +488,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} /user/get-coupon-customer 获取用户优惠码或同城市 （郝建设100%）
+     * @api {GET} /user/get-coupon-customer 获取用户优惠码或同城市 （郝建设100%）
      *
      * @apiName GetCouponCustomer
      * @apiGroup User
@@ -535,7 +535,8 @@ class UserController extends \api\components\Controller
      */
     public function actionGetCouponCustomer()
     {
-        $param = Yii::$app->request->post();
+
+        $param = Yii::$app->request->get();
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
@@ -551,6 +552,7 @@ class UserController extends \api\components\Controller
             if (!empty($param['city_name']) && $param['coupon_type'] == 1) {
 
                 $CouponData = CouponCustomer::getCouponCustomer($customer->id);
+                
                 if (!empty($CouponData)) {
                     $ret = array();
                     foreach ($CouponData as $key => $val) {
@@ -601,8 +603,9 @@ class UserController extends \api\components\Controller
                 return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
-        } 
+
+            return $this->send(null, "用户认证已经过期,请重新登录1", "0", 403);
+        }
     }
 
     /**
@@ -992,7 +995,7 @@ class UserController extends \api\components\Controller
 
     public function actionAddUser()
     {
-        $daat = \core\models\customer\CustomerAccessToken::generateAccessToken('13683118946', '0330');
+        $daat = \core\models\customer\CustomerAccessToken::generateAccessToken('13683118946', '4820');
 
         print_r($daat);
     }
@@ -1086,7 +1089,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} /user/user-suggest 用户提交意见反馈 （需要再次核实需求;郝建设 100%）
+     * @api {POST} /user/user-suggest 用户评价 （需要再次核实需求;郝建设 100%）
      *
      * @apiName UserSuggest
      * @apiGroup User
@@ -1102,7 +1105,7 @@ class UserController extends \api\components\Controller
      *     HTTP/1.1 200 OK
      *     {
      *       "code": "1",
-     *       "msg": "提交成功"
+     *       "msg": "用户评价提交成功"
      *
      *     }
      *

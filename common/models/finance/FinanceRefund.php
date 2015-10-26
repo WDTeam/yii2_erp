@@ -95,6 +95,7 @@ class FinanceRefund extends \yii\db\ActiveRecord
      */
     
     public $refund_money;
+    public $create_time_end;
     public function attributeLabels()
     {
         return [
@@ -122,7 +123,8 @@ class FinanceRefund extends \yii\db\ActiveRecord
             'finance_refund_city_id' => Yii::t('core', '城市'),
             'finance_refund_county_id' => Yii::t('core', '区'),
             'isstatus' => Yii::t('core', '处理状态'),//是否取消1 取消 2 退款的 3 财务已经审核 4 财务已经退款
-            'create_time' => Yii::t('core', '退款时间'),
+            'create_time' => Yii::t('core', '退款开始时间'),
+            'create_time_end' => Yii::t('core', '退款结束时间'),
             'refund_money' => Yii::t('core', '统计行'),
             'is_del' => Yii::t('core', '0 正常 1删除'),
         ];

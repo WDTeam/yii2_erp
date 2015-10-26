@@ -69,6 +69,7 @@ class Order extends ActiveRecord
     public $order_pop_pay_money;
     public $customer_id;
     public $order_customer_phone;
+    public $order_customer_is_vip;
     public $order_customer_need;
     public $order_customer_memo;
     public $comment_id;
@@ -87,6 +88,8 @@ class Order extends ActiveRecord
     public $promotion_id;
     public $order_use_promotion_money;
     public $worker_id;
+    public $order_worker_phone;
+    public $order_worker_memo;
     public $worker_type_id;
     public $order_worker_type_name;
     public $order_worker_assign_type;
@@ -116,6 +119,7 @@ class Order extends ActiveRecord
         'order_pop_pay_money',
         'customer_id',
         'order_customer_phone',
+        'order_customer_is_vip',
         'order_customer_need',
         'order_customer_memo',
         'comment_id',
@@ -134,6 +138,8 @@ class Order extends ActiveRecord
         'promotion_id',
         'order_use_promotion_money',
         'worker_id',
+        'order_worker_phone',
+        'order_worker_memo',
         'worker_type_id',
         'order_worker_type_name',
         'order_worker_assign_type',
@@ -231,6 +237,7 @@ class Order extends ActiveRecord
             'order_pop_pay_money' => '合作方结算金额 负数表示合作方结算规则不规律无法计算该值。',
             'customer_id' => '客户ID',
             'order_customer_phone' => '客户手机号',
+            'order_customer_is_vip' => '是否是会员',
             'order_customer_need' => '客户需求',
             'order_customer_memo' => '客户备注',
             'comment_id' => '评价id',
@@ -249,6 +256,8 @@ class Order extends ActiveRecord
             'promotion_id' => '促销id',
             'order_use_promotion_money' => '使用促销金额',
             'worker_id' => '工人id',
+            'order_worker_phone' => '工人手机号',
+            'order_worker_memo' => '工人备注',
             'worker_type_id' => '工人职位类型ID',
             'order_worker_type_name' => '工人职位类型',
             'order_worker_assign_type' => '工人接单方式 0未接单 1工人抢单 2客服指派 3门店指派',
@@ -405,6 +414,7 @@ class Order extends ActiveRecord
                 'order_pop_pay_money' => $orderExtPop->order_pop_pay_money,
                 'customer_id' => $orderExtCustomer->customer_id,
                 'order_customer_phone' => $orderExtCustomer->order_customer_phone,
+                'order_customer_is_vip' => $orderExtCustomer->order_customer_is_vip,
                 'order_customer_need' => $orderExtCustomer->order_customer_need,
                 'order_customer_memo' => $orderExtCustomer->order_customer_memo,
                 'comment_id' => $orderExtCustomer->comment_id,
@@ -423,6 +433,8 @@ class Order extends ActiveRecord
                 'promotion_id' => $orderExtPay->promotion_id,
                 'order_use_promotion_money' => $orderExtPay->order_use_promotion_money,
                 'worker_id' => $orderExtWorker->worker_id,
+                'order_worker_phone' => $orderExtWorker->order_worker_phone,
+                'order_worker_memo' => $orderExtWorker->order_worker_memo,
                 'worker_type_id' => $orderExtWorker->worker_type_id,
                 'order_worker_type_name' => $orderExtWorker->order_worker_type_name,
                 'order_worker_assign_type' => $orderExtWorker->order_worker_assign_type,
@@ -479,6 +491,7 @@ class Order extends ActiveRecord
             'order_pop_pay_money' => $orderExtPop->order_pop_pay_money,
             'customer_id' => $orderExtCustomer->customer_id,
             'order_customer_phone' => $orderExtCustomer->order_customer_phone,
+            'order_customer_is_vip' => $orderExtCustomer->order_customer_is_vip,
             'order_customer_need' => $orderExtCustomer->order_customer_need,
             'order_customer_memo' => $orderExtCustomer->order_customer_memo,
             'comment_id' => $orderExtCustomer->comment_id,
@@ -497,6 +510,8 @@ class Order extends ActiveRecord
             'promotion_id' => $orderExtPay->promotion_id,
             'order_use_promotion_money' => $orderExtPay->order_use_promotion_money,
             'worker_id' => $orderExtWorker->worker_id,
+            'order_worker_phone' => $orderExtWorker->order_worker_phone,
+            'order_worker_memo' => $orderExtWorker->order_worker_memo,
             'worker_type_id' => $orderExtWorker->worker_type_id,
             'order_worker_type_name' => $orderExtWorker->order_worker_type_name,
             'order_worker_assign_type' => $orderExtWorker->order_worker_assign_type,

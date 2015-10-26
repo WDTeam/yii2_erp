@@ -21,10 +21,11 @@ use core\models\worker\Worker;
 class WorkerAccessToken extends \common\models\worker\WorkerAccessToken
 {
     public static function generateAccessToken($phone, $code){
-        $check_code = Worker::checkWorkerPassword($phone, $code);
-        if ($check_code['result'] ==0) {
-            return false;
+         $check_code = WorkerCode::checkCode($phone, $code);
+        if ($check_code == false) {
+            return $check_code;
         }
+
 
         $transaction = \Yii::$app->db->beginTransaction();
         try{

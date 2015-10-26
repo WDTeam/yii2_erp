@@ -80,21 +80,21 @@ $this->params['breadcrumbs'][] = $this->title;
                     'view' => function ($url, $model) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-eye-open"></span>', 
-                            Yii::$app->urlManager->createUrl(['operation-category-type/view','id' => $model->id, 'category_id'=> $model->operation_category_id]),
+                            Yii::$app->urlManager->createUrl(['/operation/operation-category-type/view','id' => $model->id, 'category_id'=> $model->operation_category_id]),
                             ['title' => Yii::t('yii', 'View'), 'class' => 'btn btn-success btn-sm']
                         );
                     },
                     'update' => function ($url, $model) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-pencil"></span>', 
-                            Yii::$app->urlManager->createUrl(['operation-category-type/update','id' => $model->id, 'category_id'=> $model->operation_category_id]), 
+                            Yii::$app->urlManager->createUrl(['/operation/operation-category-type/update','id' => $model->id, 'category_id'=> $model->operation_category_id]), 
                             ['title' => Yii::t('yii', 'Edit'), 'class' => 'btn btn-info btn-sm',]
                         );
                     },
                     'delete' => function ($url, $model) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-trash"></span>', 
-                            Yii::$app->urlManager->createUrl(['operation-category-type/delete','id' => $model->id, 'category_id'=> $model->operation_category_id]),
+                            Yii::$app->urlManager->createUrl(['/operation/operation-category-type/delete','id' => $model->id, 'category_id'=> $model->operation_category_id]),
                             ['title' => Yii::t('yii', 'Delete'), 'class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
                         );
                     },

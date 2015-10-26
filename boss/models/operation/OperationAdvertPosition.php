@@ -1,9 +1,9 @@
 <?php
 
-namespace boss\models\Operation;
+namespace boss\models\operation;
 
 use Yii;
-use core\models\Operation\CoreOperationAdvertPosition;
+use core\models\operation\CoreOperationAdvertPosition;
 /**
  * This is the model class for table "{{%operation_advert_position}}".
  *

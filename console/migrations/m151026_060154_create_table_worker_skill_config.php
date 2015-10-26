@@ -19,6 +19,12 @@ class m151026_060154_create_table_worker_skill_config extends Migration
             'admin_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'操作管理员id\'',
             'isdel' => Schema::TYPE_DOUBLE . '(1) DEFAULT NULL COMMENT \'是否删除 0正常1删除\'',
         ], $tableOptions);
+        $this->execute(
+            "INSERT INTO {{%worker_skill_config}} VALUES ('1', '开荒', null, null, null, '0');
+             INSERT INTO {{%worker_skill_config}} VALUES ('2', '煮饭', null, null, null, '0');
+             INSERT INTO {{%worker_skill_config}} VALUES ('3', '护老', null, null, null, '0');
+             INSERT INTO {{%worker_skill_config}} VALUES ('4', '擦玻璃', null, null, null, '0');"
+        );
     }
 
     public function down()

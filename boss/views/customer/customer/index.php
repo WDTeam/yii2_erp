@@ -74,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     // Html::a('<i class="glyphicon">批量移除黑名单</i>', ['customer/multi-remove-from-block'], [
                     //     'class' => 'btn btn-default multi-remove-from-block',
                     // ]),
-                    Html::a('<i class="glyphicon">导入测试数据</i>', ['customer/data'], [
+                    Html::a('<i class="glyphicon">导入测试数据</i>', ['customer/customer/data'], [
                         'class' => 'btn btn-default',
                     ]),
             ],

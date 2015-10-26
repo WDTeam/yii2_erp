@@ -1,9 +1,9 @@
 <?php
 
-namespace core\models\coupon;
+namespace core\models\operation\coupon;
 
 use Yii;
-use core\models\coupon\CouponCode;
+use core\models\operation\coupon\CouponCode;
 
 /**
  * This is the model class for table "{{%coupon}}".
@@ -40,7 +40,7 @@ use core\models\coupon\CouponCode;
  * @property integer $system_user_id
  * @property string $system_user_name
  */
-class Coupon extends \common\models\coupon\Coupon
+class Coupon extends \common\models\operation\coupon\Coupon
 {
 
     /**
