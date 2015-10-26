@@ -44,10 +44,7 @@ class Shop extends \common\models\shop\Shop
             [['shop_manager_id', 'province_id', 'city_id', 'county_id', 'is_blacklist', 
                  'audit_status', 'worker_count', 
                 'complain_coutn', 'tel', 'bankcard_number'], 'integer'],
-            [['name', 'account_person'], 'string', 'max' => 100],
-            [['street', 'opening_address'], 'string', 'max' => 255],
-            [['principal', 'tel', 'bankcard_number', 'level'], 'string', 'max' => 50],
-            [['other_contact', 'opening_bank', 'sub_branch'], 'string', 'max' => 200],
+            [['audit_status', 'is_blacklist'], 'default', 'value'=>0],
         ]);
     }
     /**
@@ -88,7 +85,7 @@ class Shop extends \common\models\shop\Shop
      */
     public static function getAuditStatusCountByNumber($number)
     {
-        return (int)self::find()->select('COUNT(1)')->where(['audit_status'=>$number])->scalar();
+        return (int)self::find()->where(['audit_status'=>$number])->count();
     }
     /**
      * 获取地址全称,直辖市不需要显示省字段
@@ -114,14 +111,14 @@ class Shop extends \common\models\shop\Shop
      */
     public static function getTotal()
     {
-        return (int)self::find()->select('COUNT(1)')->where('isdel is null or isdel=0')->scalar();
+        return (int)self::find()->where('isdel is null or isdel=0')->count();
     }
     /**
      * 获取黑名单数
      */
     public static function getIsBlacklistCount()
     {
-        return (int)self::find()->select('COUNT(1)')->where(['is_blacklist'=>1])->scalar();
+        return (int)self::find()->where(['is_blacklist'=>1])->count();
     }
     /**
      * 加入黑名单

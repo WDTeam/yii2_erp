@@ -36,13 +36,13 @@ class m150923_034111_create_table_shopmanager extends Migration
               `bl_business` text COMMENT '营业范围',
               `created_at` int(11) DEFAULT '0' COMMENT '创建时间',
               `updated_at` int(11) DEFAULT '0' COMMENT '修改时间',
-              `is_blacklist` int(3) DEFAULT NULL COMMENT '是否是黑名单：0正常，1黑名单',
-              `audit_status` tinyint(1) DEFAULT NULL COMMENT '审核状态：0未审核，1通过，2不通过',
-              `shop_count` int(11) DEFAULT NULL COMMENT '门店数量',
-              `worker_count` int(11) DEFAULT NULL COMMENT '阿姨数量',
-              `complain_coutn` int(11) DEFAULT NULL COMMENT '投诉数量',
+              `is_blacklist` int(3) DEFAULT 0 COMMENT '是否是黑名单：0正常，1黑名单',
+              `audit_status` tinyint(1) DEFAULT 0 COMMENT '审核状态：0未审核，1通过，2不通过',
+              `shop_count` int(11) DEFAULT 0 COMMENT '门店数量',
+              `worker_count` int(11) DEFAULT 0 COMMENT '阿姨数量',
+              `complain_coutn` int(11) DEFAULT 0 COMMENT '投诉数量',
               `level` varchar(50) DEFAULT NULL COMMENT '评级',
-              `isdel` tinyint(1) DEFAULT NULL COMMENT '是否删除',
+              `isdel` tinyint(1) DEFAULT 0 COMMENT '是否删除',
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
