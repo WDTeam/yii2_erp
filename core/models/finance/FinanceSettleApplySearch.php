@@ -8,8 +8,7 @@ use yii\data\ActiveDataProvider;
 use common\models\finance\FinanceSettleApply;
 use core\models\worker\Worker;
 use core\models\order\Order;
-use common\models\OrderExtWorker;
-use core\models\worker\WorkerTask;
+use core\models\finance\FinanceWorkerNonOrderIncomeSearch;
 
 /**
  * FinanceSettleApplySearch represents the model behind the search form about `common\models\finance\FinanceSettleApply`.
@@ -209,8 +208,8 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             $this->finance_settle_apply_starttime = self::getFirstDayOfLastWeek();//结算开始日期
             $this->finance_settle_apply_endtime = self::getLastDayOfLastWeek();//结算截止日期
         }
-        $apply_task_count = $this->getTaskAwardCount(12, -1, 100000000000);
-        $apply_task_money = $this->getTaskAwardMoney(12, -1, 100000000000);
+        $apply_task_count = FinanceWorkerNonOrderIncomeSearch::getTaskAwardCount(12, -1, 100000000000);
+        $apply_task_money = FinanceWorkerNonOrderIncomeSearch::getTaskAwardMoney(12, -1, 100000000000);
         if(count($orders) > 0){
            $order_count = count($orders);
            foreach($orders as $order){
@@ -267,46 +266,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
 
     }
     
-    /**
-     * 获取任务奖励金额
-     * @param type $workerId
-     * @param type $finance_settle_apply_starttime
-     * @param type $finance_settle_apply_endtime
-     * @return type
-     */
-    public function getTaskAwardMoney($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
-        $taskAwardMoney = 0;
-        $taskAwardList = $this->getTaskAwardList($workerId, $finance_settle_apply_starttime, $finance_settle_apply_endtime);
-        foreach($taskAwardList as $taskAward){
-            $taskAwardMoney += $taskAward ->worker_task_reward_value;
-        }
-        return $taskAwardMoney;
-    }
     
-    /**
-     * 获取任务数
-     * @param type $workerId
-     * @param type $finance_settle_apply_starttime
-     * @param type $finance_settle_apply_endtime
-     * @return type
-     */
-    public function getTaskAwardCount($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
-        $taskAwardList = $this->getTaskAwardList($workerId, $finance_settle_apply_starttime, $finance_settle_apply_endtime);
-        var_dump($taskAwardList);
-        var_dump($taskAwardList);
-        return count($taskAwardList);
-    }
-    
-    /**
-     * 获取任务奖励列表
-     * @param type $workerId
-     * @param type $finance_settle_apply_starttime
-     * @param type $finance_settle_apply_endtime
-     * @return type
-     */
-    public function getTaskAwardList($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
-        return WorkerTask::getDoneTasksByWorkerId($finance_settle_apply_starttime, $finance_settle_apply_endtime, $workerId);
-    }
     
     public function getWorkerOrderInfo($workerId){
         return  Order::find()->joinWith('orderExtWorker')->where(['orderExtWorker.worker_id'=>$workerId])->all();
