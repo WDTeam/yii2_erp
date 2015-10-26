@@ -19,7 +19,7 @@ class WorkerController extends \api\components\Controller
      * @apiName WorkerInfo
      * @apiGroup Worker
      *
-     * @apiParam {String} access_token 阿姨登录token/用户登录token
+     * @apiParam {String} access_token 用户登录token
      * @apiParam {String} [worker_id]  阿姨id
      *
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/worker-info
@@ -58,19 +58,11 @@ class WorkerController extends \api\components\Controller
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
 
         $workerId = 0;
-        if (!isset($param['access_token']) || !$param['access_token'] || !WorkerAccessToken::checkAccessToken($param['access_token'])) {
-            if (!isset($param['access_token']) || !$param['access_token'] || !isset($param['worker_id']) || !$param['worker_id'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-                return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
-            } else {
-                // 用户登录，按阿姨id获取阿姨信息
-                $workerId = $param['worker_id'];
-            }
+        if (!isset($param['access_token']) || !$param['access_token'] || !isset($param['worker_id']) || !$param['worker_id'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         } else {
-            // 阿姨登陆，获取阿姨信息
-            $worker = WorkerAccessToken::getWorker($param['access_token']);
-            if (!empty($worker)) {
-                $workerId = $worker->id;
-            }
+            // 用户登录，按阿姨id获取阿姨信息
+            $workerId = $param['worker_id'];
         }
 
         if ($workerId > 0) {
