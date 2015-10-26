@@ -653,7 +653,12 @@ class ServiceController extends \api\components\Controller
         {
             return $this->send(null,'参数不完成','error','403');
         }
-        
+        $url="http://api.map.baidu.com/place/v2/search?query=".$params['query'].'&location='.$params['location'].
+            '&radius='.$params['radius'].'&output='.$params['output'].'$ak='.$params['ak'];
+
+        $date=\Yii::$app->response->redirect($url, 301);
+
+        return $this->send($date,'操作成功','ok');
 
     }
 }
