@@ -541,7 +541,7 @@ class WorkerController extends \api\components\Controller
         if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
-         
+        
         $worker = WorkerAccessToken::getWorker($param['access_token']);
         if (!$worker|| !$worker->id) {
             return $this->send(null, "阿姨不存在", 0, 403);
@@ -560,12 +560,26 @@ class WorkerController extends \api\components\Controller
             $param['page_num'] = 10;
         }
         $page_num = intval($param['page_num']);
-        //调取model层
-        $ret = array(
-            'bill_date'=>'09年07月-09月13日',
-            'order_count'=>10,
-            'salary'=>32
-        );
+        调取model层
+        $ret = [
+            [
+                'bill_type' =>"1",
+                'bill_explain'=>"这是一个周期账单说明",
+                'bill_date'=>'09年07月-09月13日',
+                'order_count'=>'10',
+                'salary'=>'320.00',
+                'balance_status'=>"1"
+            ],
+            [
+                'bill_type' =>"2",
+                'bill_explain'=>"这是一个月结账单说明",
+                'bill_date'=>'8月',
+                'order_count'=>'10',
+                'salary'=>'320.00',
+                'balance_status'=>"2"
+            ]
+       ];
+       return $this->send($ret, "操作成功.");
     }
      
     /**
