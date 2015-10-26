@@ -1,18 +1,19 @@
 <?php
 
-namespace boss\controllers\customer;
+namespace boss\controllers\operation;
 
 use Yii;
-use common\models\customer\CustomerComment;
-use boss\models\customer\CustomerCommentSearch;
+use boss\models\operation\OperationServerCardOrder;
+use boss\components\BaseAuthController;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * CustomerCommentController implements the CRUD actions for CustomerComment model.
+ * OperationServerCardOrderController implements the CRUD actions for OperationServerCardOrder model.
  */
-class CustomerCommentController extends Controller
+class OperationServerCardOrderController extends Controller
 {
     public function behaviors()
     {
@@ -27,23 +28,23 @@ class CustomerCommentController extends Controller
     }
 
     /**
-     * Lists all CustomerComment models.
+     * Lists all OperationServerCardOrder models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new CustomerCommentSearch;
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        $dataProvider = new ActiveDataProvider([
+            'query' => OperationServerCardOrder::find(),
+        ]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel,
         ]);
     }
 
     /**
-     * Displays a single CustomerComment model.
-     * @param integer $id
+     * Displays a single OperationServerCardOrder model.
+     * @param string $id
      * @return mixed
      */
     public function actionView($id)
@@ -58,13 +59,13 @@ class CustomerCommentController extends Controller
     }
 
     /**
-     * Creates a new CustomerComment model.
+     * Creates a new OperationServerCardOrder model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new CustomerComment;
+        $model = new OperationServerCardOrder;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -76,9 +77,9 @@ class CustomerCommentController extends Controller
     }
 
     /**
-     * Updates an existing CustomerComment model.
+     * Updates an existing OperationServerCardOrder model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      */
     public function actionUpdate($id)
@@ -95,9 +96,9 @@ class CustomerCommentController extends Controller
     }
 
     /**
-     * Deletes an existing CustomerComment model.
+     * Deletes an existing OperationServerCardOrder model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      */
     public function actionDelete($id)
@@ -108,15 +109,15 @@ class CustomerCommentController extends Controller
     }
 
     /**
-     * Finds the CustomerComment model based on its primary key value.
+     * Finds the OperationServerCardOrder model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return CustomerComment the loaded model
+     * @param string $id
+     * @return OperationServerCardOrder the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = CustomerComment::findOne($id)) !== null) {
+        if (($model = OperationServerCardOrder::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

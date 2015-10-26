@@ -20,6 +20,29 @@ class alipay_wap_class{
             "extern_token"	=> '',
             "_input_charset"	=> trim(strtolower($alipay_config['input_charset']))
         );
+
+        //建立请求
+        require_once("lib/alipay_submit.class.php");
+        $alipaySubmit = new AlipaySubmit($alipay_config);
+        $parameter['send_url'] = $alipaySubmit->buildRequestUrl($parameter,"get", "确认");
         return $parameter;
+    }
+
+    /**
+     * 回调
+     */
+    public function callback(){
+        require_once("alipay.config.php");
+        $alipayNotify = new AlipayNotify($alipay_config);
+        $verify_result = $alipayNotify->verifyNotify();
+        if($verify_result) {//验证成功
+            if($_POST['trade_status'] == 'TRADE_FINISHED' || $_POST['trade_status'] == 'TRADE_SUCCESS') {
+                return true;
+            }
+        }
+    }
+
+    public function notify(){
+        echo "success";		//请不要修改或删除
     }
 }

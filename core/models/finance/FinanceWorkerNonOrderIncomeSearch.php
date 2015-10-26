@@ -2,16 +2,19 @@
 
 namespace core\models\finance;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\finance\FinanceWorkerNonOrderIncome;
+use core\models\worker\WorkerTask;
+use yii\data\ArrayDataProvider;
 
 /**
  * FinanceWorkerNonOrderIncomeSearch represents the model behind the search form about `common\models\finance\FinanceWorkerNonOrderIncome`.
  */
 class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
 {
+    const NON_ORDER_INCOME_TASK = 1;//阿姨任务收入
+    
     /**
      * @inheritdoc
      */
@@ -79,9 +82,81 @@ class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
         $detail = "";
         $nonIncomeArr = FinanceWorkerNonOrderIncome::find()->where(['finance_settle_apply_id'=>$settleApplyId])->all();
         foreach($nonIncomeArr as $nonIncome){
-            $detail.=$nonIncome->finance_worker_non_order_income_type_des.':'.$nonIncome->finance_worker_non_order_income.'|';
+            $detail.=$nonIncome->finance_worker_non_order_income_name.':'.$nonIncome->finance_worker_non_order_income.'|';
         }
         return $detail;
+    }
+    
+    /**
+     * 获取任务奖励金额
+     * @param type $workerId
+     * @param type $finance_settle_apply_starttime
+     * @param type $finance_settle_apply_endtime
+     * @return type
+     */
+    public static function getTaskAwardMoney($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
+        $taskAwardMoney = 0;
+        $taskAwardList = self::getTaskAwardList($workerId, $finance_settle_apply_starttime, $finance_settle_apply_endtime);
+        foreach($taskAwardList as $taskAward){
+            $taskAwardMoney += $taskAward ->worker_task_reward_value;
+        }
+        return $taskAwardMoney;
+    }
+    
+    /**
+     * 获取任务数
+     * @param type $workerId
+     * @param type $finance_settle_apply_starttime
+     * @param type $finance_settle_apply_endtime
+     * @return type
+     */
+    public static function getTaskAwardCount($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
+        $taskAwardList = self::getTaskAwardList($workerId, $finance_settle_apply_starttime, $finance_settle_apply_endtime);
+        return count($taskAwardList);
+    }
+    
+    /**
+     * 获取任务奖励列表
+     * @param type $workerId
+     * @param type $finance_settle_apply_starttime
+     * @param type $finance_settle_apply_endtime
+     * @return type
+     */
+    public static function getTaskAwardList($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
+        return WorkerTask::getDoneTasksByWorkerId($finance_settle_apply_starttime, $finance_settle_apply_endtime, $workerId);
+    }
+    
+    public function getTaskArrByWorkerId($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
+        $data = [];
+        $taskAwardList = self::getTaskAwardList($workerId, $finance_settle_apply_starttime, $finance_settle_apply_endtime);
+        $i = 0;
+        foreach($taskAwardList as $taskAward){
+            $data[$i] = $this->transferWorkerTasksToWorkerNonOrderIncome($taskAward);
+            $i++;
+        }
+        $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
+        return $dataProvider;
+    }
+    
+    private function transferWorkerTasksToWorkerNonOrderIncome($taskAward){
+        $financeWorkerNonOrderIncome = new FinanceWorkerNonOrderIncome();
+        $financeWorkerNonOrderIncome->worker_id = $taskAward->worker_id;
+        $financeWorkerNonOrderIncome->finance_worker_non_order_income_code = $taskAward->worker_task_id;
+        $financeWorkerNonOrderIncome->finance_worker_non_order_income_type = self::NON_ORDER_INCOME_TASK;
+        $financeWorkerNonOrderIncome->finance_worker_non_order_income_name = $taskAward->worker_task_name;
+        $financeWorkerNonOrderIncome->finance_worker_non_order_income = $taskAward->worker_task_reward_value;
+        $financeWorkerNonOrderIncome->finance_worker_non_order_income_des = '描述';
+        $financeWorkerNonOrderIncome->finance_worker_non_order_income_complete_time = $taskAward->worker_task_done_time;
+        $worker = Worker::getWorkerInfo($financeWorkerNonOrderIncome->worker_id);
+        if(($worker['worker_type'] ==FinanceSettleApplySearch::SELF_OPERATION ) && ($worker['worker_identity_id'] == FinanceSettleApplySearch::FULLTIME)){
+            $financeWorkerNonOrderIncome->finance_worker_non_order_income_starttime = FinanceSettleApplySearch::getFirstDayOfSpecifiedMonth();//结算开始日期
+            $financeWorkerNonOrderIncome->finance_worker_non_order_income_endtime = FinanceSettleApplySearch::getLastDayOfSpecifiedMonth();//结算截止日期
+        }else{
+            $financeWorkerNonOrderIncome->finance_worker_non_order_income_starttime = FinanceSettleApplySearch::getFirstDayOfLastWeek();//结算开始日期
+            $financeWorkerNonOrderIncome->finance_worker_non_order_income_endtime = FinanceSettleApplySearch::getLastDayOfLastWeek();//结算截止日期
+        }
+        $financeWorkerNonOrderIncome->created_at = time();
+        return $financeWorkerNonOrderIncome;
     }
     
     public function getNonOrderIncomeBySettleApplyId($settleApplyId){

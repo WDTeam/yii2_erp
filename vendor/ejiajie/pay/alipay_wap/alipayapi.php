@@ -30,29 +30,37 @@ require_once("lib/alipay_submit.class.php");
         $payment_type = "1";
         //必填，不能修改
         //服务器异步通知页面路径
-        $notify_url = "http://商户网关地址/alipay.wap.create.direct.pay.by.user-PHP-UTF-8/notify_url.php";
-        //需http://格式的完整路径，不能加?id=123这类自定义参数
+        $notify_url = "http://dev.1jiajie.com/alipay.wap.create.direct.pay.by.user-PHP-UTF-8/notify_url.php";
+        //需http://格式的完整路径，不能加?id=123这类自定义参数
+
         //页面跳转同步通知页面路径
-        $return_url = "http://商户网关地址/alipay.wap.create.direct.pay.by.user-PHP-UTF-8/return_url.php";
-        //需http://格式的完整路径，不能加?id=123这类自定义参数，不能写成http://localhost/
+        $return_url = "http://dev.1jiajie.com/alipay.wap.create.direct.pay.by.user-PHP-UTF-8/return_url.php";
+        //需http://格式的完整路径，不能加?id=123这类自定义参数，不能写成http://localhost/
+
         //商户订单号
         $out_trade_no = $_POST['WIDout_trade_no'];
-        //商户网站订单系统中唯一订单号，必填
+        //商户网站订单系统中唯一订单号，必填
+
         //订单名称
         $subject = $_POST['WIDsubject'];
-        //必填
+        //必填
+
         //付款金额
         $total_fee = $_POST['WIDtotal_fee'];
-        //必填
+        //必填
+
         //商品展示地址
         $show_url = $_POST['WIDshow_url'];
-        //必填，需以http://开头的完整路径，例如：http://www.商户网址.com/myorder.html
+        //必填，需以http://开头的完整路径，例如：http://www.商户网址.com/myorder.html
+
         //订单描述
         $body = $_POST['WIDbody'];
-        //选填
+        //选填
+
         //超时时间
         $it_b_pay = $_POST['WIDit_b_pay'];
-        //选填
+        //选填
+
         //钱包token
         $extern_token = $_POST['WIDextern_token'];
         //选填
@@ -77,10 +85,11 @@ $parameter = array(
 		"extern_token"	=> $extern_token,
 		"_input_charset"	=> trim(strtolower($alipay_config['input_charset']))
 );
-
 //建立请求
 $alipaySubmit = new AlipaySubmit($alipay_config);
+
 $html_text = $alipaySubmit->buildRequestForm($parameter,"get", "确认");
+
 echo $html_text;
 
 ?>

@@ -9,16 +9,12 @@ use kartik\datecontrol\DateControl;
  * @var common\models\CustomerCommentTag $model
  */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('boss', 'Customer Comment Tags'), 'url' => ['index']];
+$this->title = $model->customer_tag_name;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('boss', '标签管理'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="customer-comment-tag-view">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
-
-
+    
     <?= DetailView::widget([
             'model' => $model,
             'condensed'=>false,
@@ -30,12 +26,30 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'attributes' => [
             'id',
-            'customer_comment_tag_name',
-            'customer_comment_level',
-            'is_online',
-            'created_at',
-            'updated_at',
-            'is_del',
+            'customer_tag_name',
+    		[
+    		'format' => 'raw',
+    		'label' => '分类',
+    		'attribute'=>'customer_tag_type',
+    		'type'=> DetailView::INPUT_RADIO_LIST,
+    		'items'=>['1' => '评价', '2' => '退款','3' => '其他'],
+    		],
+    		[
+    		'format' => 'raw',
+    		'label' => '评价等级',
+    		'attribute'=>'customer_comment_level',
+    		'type'=> DetailView::INPUT_RADIO_LIST,
+    		'items'=>['1' => '满意', '2' => '一般','3' => '不满意'],
+    		],
+			[
+			'format' => 'raw',
+			'label' => '开启状态',
+			'attribute'=>'is_online',
+			'type'=> DetailView::INPUT_RADIO_LIST,
+			'items'=>['1' => '开启', '2' => '关闭'],
+			],
+    		
+    		
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],

@@ -49,11 +49,10 @@ class CustomerCommentTagController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post()) &&  $model->save()) {
+        return $this->redirect(['index', 'id' => $model->id]);
         } else {
-        return $this->render('view', ['model' => $model]);
+       return $this->render('view', ['model' => $model]);
 }
     }
 
@@ -66,7 +65,10 @@ class CustomerCommentTagController extends Controller
     {
         $model = new CustomerCommentTag;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) ) {
+        	$model->created_at= time();
+        	$model->updated_at= time();
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [

@@ -93,6 +93,16 @@ echo Menu::widget(
                         'url' => ['/customer/customer/index?CustomerSearch[is_del]=0'],
                         'icon' => 'fa fa-angle-right',
                     ],
+					[
+					'label' => '评价列表(70%)',
+					'url' => ['/customer/customer-comment'],
+					'icon' => 'fa fa-angle-right',
+					],
+					[
+					'label' => '评价标签管理(70%)',
+					'url' => ['/customer/customer-comment-tag'],
+					'icon' => 'fa fa-angle-right',
+					],
                 ],
             ],
             [
@@ -303,7 +313,12 @@ echo Menu::widget(
 							],
 							[
 								'label' => '服务卡付款管理',
-								'url' => ['#'],
+								'url' => ['operation/operation-server-card-record'],
+								'icon' => 'fa fa-angle-right',
+							],
+							[
+								'label' => '服务卡订单管理',
+								'url' => ['operation/operation-server-card-order'],
 								'icon' => 'fa fa-angle-right',
 							],
                 ],

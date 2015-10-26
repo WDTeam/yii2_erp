@@ -16,7 +16,7 @@ class CustomerCommentTagSearch extends CustomerCommentTag
     {
         return [
             [['id', 'customer_comment_level', 'is_online', 'created_at', 'updated_at', 'is_del'], 'integer'],
-            [['customer_comment_tag_name'], 'safe'],
+            [['customer_tag_name'], 'safe'],
         ];
     }
 
@@ -47,7 +47,7 @@ class CustomerCommentTagSearch extends CustomerCommentTag
             'is_del' => $this->is_del,
         ]);
 
-        $query->andFilterWhere(['like', 'customer_comment_tag_name', $this->customer_comment_tag_name]);
+        $query->andFilterWhere(['like', 'customer_tag_name', $this->customer_tag_name]);
 
         return $dataProvider;
     }
