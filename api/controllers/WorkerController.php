@@ -847,6 +847,56 @@ class WorkerController extends \api\components\Controller
     }
     
     /**
+     * @api {PUT} /worker/worker-bill-confirm 确定账单无误 (田玉星 70%)
+     * 
+     * @apiDescription 【备注：等待model底层支持】
+     * 
+     * @apiName actionWorkerBillConfirm
+     * @apiGroup Worker
+     * 
+     * @apiParam {String} access_token    阿姨登录token
+     * @apiParam {String} bill_id  账单唯一标识.
+     * @apiParam {String} [platform_version] 平台版本号.
+     * 
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/worker-bill-confirm
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *   "code": 1,
+     *   "msg": "操作成功.",
+     *   "ret": {
+     *         "result": "1",
+     *         "msg": "账单已确认",
+     *        }
+     *   }
+     *
+     * @apiErrorExample Error-Response:
+     *  HTTP/1.1 404 Not Found
+     *  {
+     *      "code":"error",
+     *      "msg": "用户认证已经过期,请重新登录"
+     *  }
+     */
+    public function actionWorkerBillConfirm(){
+        $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        //检测阿姨是否登录
+        $checkResult = $this->checkWorkerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
+        }
+        //数据整理
+        $bill_id = intval($param['bill_id']);//账单ID
+        
+        //账单
+        $ret = [
+            "result" => "1",
+            "msg" => "账单已确认"
+        ];
+        return $this->send($ret, "操作成功.");
+    }
+    
+    /**
      * @api {GET} /worker/get-worker-center 个人中心首页 (田玉星 100%)
      *
      * @apiName getWorkerCenter
