@@ -9,8 +9,8 @@
 
 namespace core\models\order;
 
-use boss\controllers\OperationGoodsController;
-use boss\controllers\OperationShopDistrictController;
+use boss\controllers\operation\OperationGoodsController;
+use boss\controllers\operation\OperationShopDistrictController;
 use common\models\order\OrderExtFlag;
 use core\models\Customer;
 use core\models\customer\CustomerAddress;
