@@ -62,13 +62,12 @@ function showOrders(data){
         order.updated_at = '';
     }
     if(obj[0] == null){
-        var str = '<tr id="'+id+'"><td>'+order.order_id+'</td><td>'+order.status+'</td><td>'+order.sms+'</td><td>'+order.ivr+'</td><td>'+order.jpush+'</td><td>'+order.created_at+'</td><td>'+order.updated_at+'</td></tr>';
+        var str = '<tr id="'+id+'"><td>'+order.order_id+'</td><td>'+order.status+'</td><td>'+order.ivr+'</td><td>'+order.jpush+'</td><td>'+order.created_at+'</td><td>'+order.updated_at+'</td></tr>';
         $('#tbody').append(str);
     }else{
         $($('#'+id).children('td')[1]).html(order.status);
-        $($('#'+id).children('td')[2]).html(order.sms);
-        $($('#'+id).children('td')[3]).html(order.ivr);
-        $($('#'+id).children('td')[4]).html(order.jpush);
+        $($('#'+id).children('td')[2]).html(order.ivr);
+        $($('#'+id).children('td')[3]).html(order.jpush);
     }
 }
 

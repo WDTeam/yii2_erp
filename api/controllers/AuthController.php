@@ -26,7 +26,7 @@ class AuthController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "登录成功"，
      *       "ret":{
      *          "user":{}
@@ -39,7 +39,7 @@ class AuthController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     { 
-     *       "code":"error",
+     *       "code":"0",
      *       "msg": "用户名或验证码错误"
      *     }
      */
@@ -47,7 +47,7 @@ class AuthController extends \api\components\Controller
     {
         $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
         if(!isset($param['phone'])||!$param['phone']||!isset($param['verify_code'])||!$param['verify_code']){
-                    return $this->send(null, "用户名或验证码不能为空", "error", 403);
+                    return $this->send(null, "用户名或验证码不能为空", 0, 403);
         }
         $phone = $param['phone'];
         $verifyCode = $param['verify_code'];
@@ -55,7 +55,7 @@ class AuthController extends \api\components\Controller
         if ($checkRet) {
             $token = CustomerAccessToken::generateAccessToken($phone, $verifyCode);
             if (empty($token)) {
-                return $this->send($token, "生成token错误","error");
+                return $this->send($token, "生成token错误",0);
             }else{
                 $user = CustomerAccessToken::getCustomer($token);
                 $ret = [
@@ -65,7 +65,7 @@ class AuthController extends \api\components\Controller
                 return $this->send($ret, "登陆成功");
             }
         } else {
-            return $this->send(null, "用户名或验证码错误", "error",403);
+            return $this->send(null, "用户名或验证码错误", 0,403);
         }
     }
 
@@ -84,7 +84,7 @@ class AuthController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "登录成功"，
      *       "ret":{
      *          "user":{}
@@ -97,7 +97,7 @@ class AuthController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     { 
-     *       "code":"error",
+     *       "code":"0",
      *       "msg": "用户名,签名或渠道名称错误"
      *     }
      */
@@ -109,7 +109,7 @@ class AuthController extends \api\components\Controller
 
         if (empty($phone) || empty($sign) || empty($channel_name)) {
             // param error
-            return $this->send(null, "用户名,签名,渠道名称不能为空", "error", 403, "数据不完整");
+            return $this->send(null, "用户名,签名,渠道名称不能为空", 0, 403, "数据不完整");
         }
 
         $checkRet = CustomerAccessToken::checkSign($phone, $sign, $channel_name);
@@ -117,7 +117,7 @@ class AuthController extends \api\components\Controller
         if ($checkRet) {
             $token = CustomerAccessToken::generateAccessTokenForPop($phone, $sign, $channel_name);
             if (empty($token)) {
-                return $this->send(null, "生成token错误", "error");
+                return $this->send(null, "生成token错误", 0);
             } else {
                 $user = CustomerAccessToken::getCustomer($token);
                 $ret = [
@@ -127,7 +127,7 @@ class AuthController extends \api\components\Controller
                 return $this->send($ret, "登陆成功");
             }
         } else {
-            return $this->send(null, "用户名,签名或渠道名称错误", "error", 403);
+            return $this->send(null, "用户名,签名或渠道名称错误", 0, 403);
         }
     }
 
@@ -146,7 +146,7 @@ class AuthController extends \api\components\Controller
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *      "code": "ok",
+     *      "code": "1",
      *      "msg":"操作成功",
      *      "ret":
      *      {
@@ -164,28 +164,32 @@ class AuthController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     { 
-     *       "code":"error",
+     *       "code":"0",
      *       "msg": "用户名或验证码错误"
      *     }
      */
     public function actionWorkerLogin(){
 	$param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
         if(!isset($param['phone'])||!$param['phone']||!isset($param['verify_code'])||!$param['verify_code']){
-                    return $this->send(null, "用户名或验证码不能为空", "error", 403);
+                    return $this->send(null, "用户名或验证码不能为空", 0, 403);
         }
         $phone = $param['phone'];
         $verify_code = $param['verify_code'];
+        //验证手机号
+        if (!preg_match("/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/", $phone)){
+           return $this->send(null, "请输入正确的手机号", 0, 403);
+        } 
         $checkRet = Worker::checkWorkerPassword($phone,$verify_code);
         if($checkRet['result']=='1'){
             $token = WorkerAccessToken::generateAccessToken($phone,$verify_code);
             if (empty($token)) {
-                return $this->send(null, "生成token错误","error");
+                return $this->send(null, "生成token错误",0);
             }else{
                 $worker = Worker::getWorkerDetailInfo($checkRet);
                 $ret = [
                     "worker_name" => $worker['worker_name'],
-                    "worker_rule_id" => $worker['worker_rule_id'],
-                    "worker_rule_description" => $worker['worker_rule_description'],
+                    "worker_rule_id" =>"",
+                    "worker_rule_description" =>"",
                     "worker_photo" => $worker['worker_photo'],
                     "access_token" => $token,
                     "worker_id" => $worker['id'],
@@ -195,7 +199,7 @@ class AuthController extends \api\components\Controller
             }
             
         } else {
-            return $this->send(null, "用户名或密码错误", "error",403);
+            return $this->send(null, "用户名或密码错误", 0,403);
         }
     }
 

@@ -8,7 +8,7 @@ use Yii;
  * This is the model class for table "{{%finance_worker_non_order_income}}".
  *
  * @property integer $id
- * @property integer $worder_id
+ * @property integer $worker_id
  * @property integer $finance_worker_non_order_income_type
  * @property string $finance_worker_non_order_income
  * @property string $finance_worker_non_order_income_des
@@ -36,8 +36,8 @@ class FinanceWorkerNonOrderIncome extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['worder_id', 'finance_worker_non_order_income_type'], 'required'],
-            [['worder_id', 'finance_worker_non_order_income_type', 'finance_worker_non_order_income_starttime', 'finance_worker_non_order_income_endtime', 'finance_worker_non_order_income_isSettled', 'finance_settle_apply_id', 'isdel', 'updated_at', 'created_at'], 'integer'],
+            [['worker_id', 'finance_worker_non_order_income_type'], 'required'],
+            [['worker_id', 'finance_worker_non_order_income_type', 'finance_worker_non_order_income_starttime', 'finance_worker_non_order_income_endtime', 'finance_worker_non_order_income_isSettled', 'finance_settle_apply_id', 'isdel', 'updated_at', 'created_at'], 'integer'],
             [['finance_worker_non_order_income'], 'number'],
             [['finance_worker_non_order_income_des','finance_worker_non_order_income_type_des'], 'string']
         ];
@@ -50,7 +50,7 @@ class FinanceWorkerNonOrderIncome extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', '主键'),
-            'worder_id' => Yii::t('app', '阿姨id'),
+            'worker_id' => Yii::t('app', '阿姨id'),
             'finance_worker_non_order_income_type' => Yii::t('app', '阿姨收入类型，1办卡提成，2推荐服务提成，3全勤奖，4无投诉奖，5日常违规扣款，6投诉处罚扣款，7赔偿扣款,8阿姨任务奖励,9小保养'),
              'finance_worker_non_order_income_type_des' => Yii::t('app', '补贴类型'),
             'finance_worker_non_order_income' => Yii::t('app', '补贴金额'),

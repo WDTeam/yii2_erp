@@ -2,7 +2,7 @@
 namespace api\controllers;
 use Yii;
 use \core\models\customer\CustomerCode;
-
+use \core\models\worker\WorkerCode;
 class SendSmsController extends \api\components\Controller
 {
     /**
@@ -47,7 +47,7 @@ class SendSmsController extends \api\components\Controller
 
             return $this->send($ret, "登陆成功");
         } else {
-            return $this->send(null, "用户名或验证码错误", "error");
+            return $this->send(null, "用户名或验证码错误", 0);
         }
     }
 
@@ -83,14 +83,56 @@ class SendSmsController extends \api\components\Controller
         if (preg_match("/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/", $phone)) {
             //验证通过
             if (!CustomerCode::generateAndSend($phone)) {
-                return $this->send(null, "短信发送失败", "error",403);
+                return $this->send(null, "短信发送失败", 0,403);
 
             }
         } else {
-            return $this->send(null, "电话号码不符合规则", "error",403);
+            return $this->send(null, "电话号码不符合规则", 0,403);
 
         }
-        return $this->send(null, "短信发送成功", "ok");
+        return $this->send(null, "短信发送成功", 1);
+    }
+    
+    /**
+     *
+     * @api {GET} /send-sms/send-worker-message-code 阿姨登录短信验证码 （李勇100%）
+     * @apiName actionSendWorkerMessageCode
+     * @apiGroup SendSms
+     * @apiDescription 请求向阿姨手机发送验证码用于登录
+     * @apiParam {String} phone 用户手机号
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *        "code":1
+     *        "msg": "短信发送成功"
+     *     }
+     *
+     * @apiError PhoneNotFound The id of the User was not found.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "code":0,
+     *       "msg": "电话号码不符合规则"
+     *     }
+     */
+    public function actionSendWorkerMessageCode()
+    {
+        @$phone = Yii::$app->request->get('phone');
+        @$app_version = Yii::$app->request->get('app_version');
+        if (preg_match("/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/", $phone)) {
+            //验证通过
+            if (!WorkerCode::generateAndSend($phone)) {
+                return $this->send(null, "短信发送失败", 0,403);
+
+            }
+        } else {
+            return $this->send(null, "电话号码不符合规则", 0,403);
+
+        }
+        return $this->send(null, "短信发送成功");
     }
 
 }

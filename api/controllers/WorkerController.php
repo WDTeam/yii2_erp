@@ -4,6 +4,7 @@ namespace api\controllers;
 use Yii;
 use \core\models\worker\Worker;
 use \core\models\worker\WorkerAccessToken;
+use \core\models\Operation\CoreOperationShopDistrictCoordinate;
 class WorkerController extends \api\components\Controller
 {
 
@@ -52,7 +53,7 @@ class WorkerController extends \api\components\Controller
     public function actionWorkerInfo(){
         $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
         if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
-          return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+          return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
         $worker = WorkerAccessToken::getWorker($param['access_token']);
         if (!empty($worker) && !empty($worker->id)) {
@@ -68,9 +69,9 @@ class WorkerController extends \api\components\Controller
                 'total_money' =>1000,
                 "personal_skill" =>['煮饭','开荒','护老','擦玻璃','带孩子'],
             ];
-              return $this->send($ret, "阿姨信息查询成功", "ok");
+              return $this->send($ret, "阿姨信息查询成功");
         } else {
-            return $this->send(null, "阿姨不存在.", "error", 403);
+            return $this->send(null, "阿姨不存在.", 0, 403);
         }
     }
      
@@ -110,26 +111,26 @@ class WorkerController extends \api\components\Controller
      public function actionHandleWorkerLeave(){
         $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
         if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
         $worker = WorkerAccessToken::getWorker($param['access_token']);
         if (!empty($worker) && !empty($worker->id)) {
              $attributes = [];
              $attributes['worker_id'] = $worker->id;
              if(!isset($param['type'])||!$param['type']||!in_array($param['type'], array(1,2))){
-                  return $this->send(null, "数据不完整,请选择请假类型", "error", 403);
+                  return $this->send(null, "数据不完整,请选择请假类型", 0, 403);
              }
              $attributes['worker_vacation_type'] = $param['type'];
 
              //请假时间范围判断
              if(!isset($param['date'])||!$param['date']){
-                return $this->send(null, "数据不完整,请选择请假时间", "error", 403);
+                return $this->send(null, "数据不完整,请选择请假时间", 0, 403);
              }
              $vacation_start_time = time();
              $vacation_end_time = strtotime(date('Y-m-d',strtotime("+14 days")));
              $current_vacation_time = strtotime($param['date']);
              if($current_vacation_time<=$vacation_start_time||$current_vacation_time>$vacation_end_time){
-                return $this->send(null, "请假时间不在请假时间范围内,请选择未来14天的日期", "error", 403);
+                return $this->send(null, "请假时间不在请假时间范围内,请选择未来14天的日期", 0, 403);
              }
              $attributes['worker_vacation_start_time'] = $attributes['worker_vacation_finish_time'] = $current_vacation_time;
              //请假入库
@@ -140,12 +141,12 @@ class WorkerController extends \api\components\Controller
                      'result' => 1,
                      "msg"    => "您的请假已提交，请耐心等待审批。"
                 );
-                return $this->send($result,"操作成功","ok");
+                return $this->send($result,"操作成功");
              } else {
-                return $this->send(null,$workerVacation->errors,  "error",403);
+                return $this->send(null,$workerVacation->errors,  0,403);
              }
         }else{
-                return $this->send(null, "阿姨不存在.", "error", 403);
+                return $this->send(null, "阿姨不存在.", 0, 403);
         }
      }
      
@@ -188,7 +189,7 @@ class WorkerController extends \api\components\Controller
      public function actionHandleWorkerLeaveHistory(){
         $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
         if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
-           return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+           return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
         $worker = WorkerAccessToken::getWorker($param['access_token']);
         if (!empty($worker) && !empty($worker->id)) {
@@ -221,9 +222,9 @@ class WorkerController extends \api\components\Controller
                     'leave_status'=>'失败'
                 ],
             ];
-            return $this->send($ret,"操作成功","ok");
+            return $this->send($ret,"操作成功");
         }else{
-            return $this->send(null, "阿姨不存在.", "error", 403);
+            return $this->send(null, "阿姨不存在.", 0, 403);
         }
           
      }
@@ -270,9 +271,9 @@ class WorkerController extends \api\components\Controller
                  "result"=>'1',
                  "live_place"=>$workerInfo['worker_live_place']
             );
-            return $this->send($ret, "操作成功.", "ok");
+            return $this->send($ret, "操作成功.");
        }else{
-            return $this->send(null, "阿姨不存在.", "error", 404);
+            return $this->send(null, "阿姨不存在.", 0, 404);
        }
     }
     
@@ -321,11 +322,11 @@ class WorkerController extends \api\components\Controller
     public function  actionGetWorkerComment(){
         $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
         if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
-           return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+           return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
         
         if(!isset($param['comment_type'])|| !intval($param['comment_type'])||!in_array($param['comment_type'],array(1,2,3))){
-            return $this->send(null, "评论类型不正确", "error", 403);
+            return $this->send(null, "评论类型不正确", 0, 403);
         }
         //判断页码
         if(!isset($param['per_page'])||!intval($param['per_page'])){
@@ -341,7 +342,7 @@ class WorkerController extends \api\components\Controller
         //判断用户是否存在
         $worker = WorkerAccessToken::getWorker($param['access_token']);
         if (!$worker||!$worker->id){
-             return $this->send(null, "阿姨不存在.", "error", 404);
+             return $this->send(null, "阿姨不存在.", 0, 404);
         }
         //数据返回
         $ret = [
@@ -361,7 +362,7 @@ class WorkerController extends \api\components\Controller
                 'comment_date'=>date('Y-m-d')
             ],
         ];
-        return $this->send($ret, "操作成功.", "ok");
+        return $this->send($ret, "操作成功.");
     }
      /**
      * @api {GET} /worker/get-worker-complain 获取阿姨对应的投诉 (田玉星 80%)
@@ -407,7 +408,7 @@ class WorkerController extends \api\components\Controller
     public function  actionGetWorkerComplain(){
         $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
         if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
-           return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+           return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
   
         //判断页码
@@ -424,7 +425,7 @@ class WorkerController extends \api\components\Controller
         //判断用户是否存在
         $worker = WorkerAccessToken::getWorker($param['access_token']);
         if (!$worker||!$worker->id){
-             return $this->send(null, "阿姨不存在.", "error", 404);
+             return $this->send(null, "阿姨不存在.", 0, 404);
         }
         //数据返回
         $ret = [
@@ -444,7 +445,7 @@ class WorkerController extends \api\components\Controller
                 'comment_date'=>date('Y-m-d')
             ],
         ];
-        return $this->send($ret, "操作成功.", "ok");
+        return $this->send($ret, "操作成功.");
     }
     
     
@@ -810,13 +811,14 @@ class WorkerController extends \api\components\Controller
     
     
     /**
-     * @api {post} /worker/single-worker-time.php  单次服务排班表(李勇80%缺少core/model支持)
+     * @api {get} /worker/single-worker-time.php  单次服务排班表(李勇90%缺少model支持)
      * @apiName SingleWorkerTime
      * @apiGroup Worker
-     * @apiDescription 帮客户下单，单次服务获取服务时间
+     * @apiDescription 单次服务获取服务时间
      * @apiParam {String} access_token    用户认证.
-     * @apiParam {String} [district_id]   商圈id
-     * @apiParam {String} [plan_time] 计划服务时长
+     * @apiParam {String} longitude     当前经度.
+     * @apiParam {String} latitude      当前纬度.
+     * @apiParam {String} plan_time 计划服务时长
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -824,26 +826,40 @@ class WorkerController extends \api\components\Controller
      *       "code": "ok",
      *       "msg": "获取单次服务排班表成功"
      *       "ret":{
-     *          "appointment": [
-     *              {
-     *                  "date_format": "10月10日",
-     *                  "date_stamp": 1444406400,
-     *                  "week": "明天",
-     *                  "have_worker": 1,
-     *                  "hour": [
-     *                      {
-     *                          "time": "08:00-10:00",
-     *                          "status": "0"
-     *                      },
-     *                      {
-     *                          "time": "18:00-20:00",
-     *                          "status": "1"
-     *                      }
-     *                  ]
-     *              }
+     *          "single_worker_time": [
+     *               {
+     *                   "date_format": "10月25日",
+     *                   "date_stamp": 1445669758,
+     *                   "week": "明天",
+     *                   "hour": [
+     *                       {
+     *                           "time": "08:00-10:00",
+     *                           "status": "0"
+     *                       },
+     *                       {
+     *                           "time": "18:00-20:00",
+     *                           "status": "1"
+     *                       }
+     *                   ]
+     *               },
+     *               {
+     *                   "date_format": "10月26日",
+     *                   "date_stamp": 1445669758,
+     *                   "week": "",
+     *                   "hour": [
+     *                       {
+     *                           "time": "08:00-10:00",
+     *                           "status": "0"
+     *                       },
+     *                       {
+     *                           "time": "18:00-20:00",
+     *                           "status": "1"
+     *                       }
+     *                   ]
+     *               },
      *          ]
      *       }
-     *     }
+     *   }
      *
      *  @apiError UserNotFound 用户认证已经过期.
      *
@@ -857,22 +873,31 @@ class WorkerController extends \api\components\Controller
      *
      */
     function actionSingleWorkerTime(){
-        $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
         if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
-        if(!isset($param['district_id'])||!$param['district_id']||!isset($param['plan_time'])||!$param['plan_time']){
-                    return $this->send(null, "请填写服务地址或服务时长", "error", 403);
+        if(!isset($param['longitude'])||!$param['longitude']||!isset($param['latitude'])||!$param['latitude']||!isset($param['plan_time'])||!$param['plan_time']){
+                    return $this->send(null, "请填写服务地址或服务时长", 0, 403);
         }
-        $district_id = $param['district_id'];
+        $longitude = $param['longitude'];
+        $latitude =$param['latitude'];
         $plan_time=$param['plan_time'];
-        $appointment = array();
+        //根据经纬度获取商圈id
+        $ShopDistrictInfo=CoreOperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
+        if(empty($ShopDistrictInfo)){
+            return $this->send(null, "商圈不存在", 0, 403);
+        }else{
+            $district_id=$ShopDistrictInfo['id'];
+        }
+        //获取单次服务排班表
+        //$single_worker_time=Worker::getSingleWorkerTable($district_id,$plan_time);
+        $single_worker_time = array();
         for ($i = 1; $i <= 7; $i++) {
             $item = [
                 'date_format' => date('m月d日', strtotime('+' . $i . ' day')),
                 'date_stamp' => time(date('m月d日', strtotime('+' . $i . ' day'))),
                 'week' => $i == 1 ? '明天' : '',
-                'have_worker' => '1',
                 'hour' =>
                     [
                         ['time' => '08:00-10:00',
@@ -885,15 +910,15 @@ class WorkerController extends \api\components\Controller
                         ]
                     ]
             ];
-            $appointment[] = $item;
+            $single_worker_time[] = $item;
         }
 
-        $ret = ["appointment" => $appointment];
-        return $this->send($ret, "获取单次服务排班表成功", "ok");
+        $ret = ["single_worker_time" => $single_worker_time];
+        return $this->send($ret, "获取单次服务排班表成功");
     }
     
     /**
-     * @api {get} /worker/help_user_create_one_order.php  (田玉星0%)
+     * @api {get} /worker/help_user_create_one_order.php 帮客户下单，单次服务确认下单 (田玉星0%)
      * @apiName actionHelpUserCreateOneOrder
      * @apiGroup Worker
      * 
@@ -935,40 +960,57 @@ class WorkerController extends \api\components\Controller
     
     
     /**
-     * @api {get} /worker/recursive-worker-time.php  周期服务时间表(李勇80%缺少model)
+     * @api {get} /worker/recursive-worker-time.php  周期服务时间表(李勇90%缺少model)
      * @apiName actionRecursiveWorkerTime
      * @apiGroup Worker
-     * @apiDescription 帮客户下单，周期服务
+     * @apiDescription 周期服务时间表
      * @apiParam {String} access_token    用户认证.
-     * @apiParam {String} [district_id]   商圈id
-     * @apiParam {String} [worker_id]   阿姨id
-     * @apiParam {String} [plan_time] 计划服务时长
+     * @apiParam {String} longitude     当前经度.
+     * @apiParam {String} latitude      当前纬度.
+     * @apiParam {String} is_recommend  是否使用推荐阿姨（0：不是，1：是）
+     * @apiParam {String} worker_id   阿姨id.
+     * @apiParam {String} plan_time 计划服务时长.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *      "code": "ok",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      {
-     *          "selectTimeArea": "6",
-     *          "maxPlanTime": "6",
-     *          "minPlanTime": "2",
-     *          "msgStyle": "",
-     *          "alertMsg": "",
-     *          "workerTime":
-     *          [
-     *          {
-     *              "date_name": "09月13日",
-     *              "date_week": "周日",
-     *              "date_week_every": "每周日",
-     *              "date_time":
-     *     ["14:00-16:00","14:30-16:30","15:00-17:00","15:30-17:30","16:00-18:00","16:30-18:30","17:00-19:00","17:30-19:30","18:00-20:00"],
-     *              "date_name_tag": "09月13日(今天)"
-     *          }
+     *       "code": "ok",
+     *       "msg": "获取周期服务时间表成功"
+     *       "ret":{
+     *          "recursive_worker_time": [
+     *               {
+     *                   "date_format": "10月25日",
+     *                   "date_stamp": 1445669758,
+     *                   "week": "明天",
+     *                   "hour": [
+     *                       {
+     *                           "time": "08:00-10:00",
+     *                           "status": "0"
+     *                       },
+     *                       {
+     *                           "time": "18:00-20:00",
+     *                           "status": "1"
+     *                       }
+     *                   ]
+     *               },
+     *               {
+     *                   "date_format": "10月26日",
+     *                   "date_stamp": 1445669758,
+     *                   "week": "",
+     *                   "hour": [
+     *                       {
+     *                           "time": "08:00-10:00",
+     *                           "status": "0"
+     *                       },
+     *                       {
+     *                           "time": "18:00-20:00",
+     *                           "status": "1"
+     *                       }
+     *                   ]
+     *               },
      *          ]
-     *      }
-     * }
+     *       }
+     *   }
      *
      *  @apiError UserNotFound 用户认证已经过期.
      *
@@ -982,17 +1024,32 @@ class WorkerController extends \api\components\Controller
      *
      */
     function actionRecursiveWorkerTime(){
-        $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
         if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
-        if(!isset($param['worker_id'])||!$param['worker_id']||!isset($param['district_id'])||!$param['district_id']||!isset($param['plan_time'])||!$param['plan_time']){
-                    return $this->send(null, "请填写服务地址或服务时长或阿姨", "error", 403);
+        if(!isset($param['longitude'])||!$param['longitude']||!isset($param['latitude'])||!$param['latitude']||!isset($param['is_recommend'])||!isset($param['plan_time'])||!$param['plan_time']){
+                    return $this->send(null, "请填写服务地址或服务时长", 0, 403);
         }
-        $district_id = $param['district_id'];
+        $longitude = $param['longitude'];
+        $latitude =$param['latitude'];
+        $is_recommend=$param['is_recommend'];
         $plan_time=$param['plan_time'];
-        $worker_id=$param['worker_id'];
-        $workerTime = array();
+        if($is_recommend==1){
+            if(!isset($param['worker_id'])||!$param['worker_id']){
+                return $this->send(null,"请选择服务阿姨",0,403);
+            }else{
+                $worker_id=$param['worker_id'];
+            }
+        }
+        //根据经纬度获取商圈id
+        $ShopDistrictInfo=CoreOperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
+        if(empty($ShopDistrictInfo)){
+            return $this->send(null, "商圈不存在", 0, 403);
+        }else{
+            $district_id=$ShopDistrictInfo['id'];
+        }
+        $recursive_worker_time=array();
         for ($i = 7; $i <= 36; $i++) {
             $item = [
                 'date_name' => date('m月d日', strtotime('+' . $i . ' day')),
@@ -1011,17 +1068,10 @@ class WorkerController extends \api\components\Controller
                     ],
                 'date_name_tag'=>date('m月d日', strtotime('+' . $i . ' day')).'（今天）'
             ];
-            $workerTime[] = $item;
+            $recursive_worker_time[] = $item;
         }
-        $ret = array(
-                    "selectTimeArea" =>'6',
-                    "maxPlanTime" => '3',
-                    "minPlanTime" => '2',
-                    "msgStyle" => 'msgStyle',
-                    "alertMsg" => 'alertMsg'
-               );
-        $ret = ["workerTime" => $workerTime];
-        return $this->send($ret, "获取周期服务时间表成功", "ok");
+        $ret = ["recursive_worker_time" => $recursive_worker_time];
+        return $this->send($ret, "获取周期服务时间表成功");
     }
     
     /**
@@ -1105,11 +1155,12 @@ class WorkerController extends \api\components\Controller
      */
     
     /**
-     * @api {get} /mobileapidriver2/workerLeave  查看请假情况 (田玉星0%)
+     * @api {get} /worker/worker-leave  查看请假情况 (李勇80%)
      * @apiName actionWorkerLeave
      * @apiGroup Worker
      * 
-     * @apiParam {String} session_id    会话id.
+     * @apiParam {String} access_token    阿姨登录 token.
+     * @apiParam {String} type 请假类型
      * @apiParam {String} platform_version 平台版本号.
      *
      * @apiSuccessExample {json} Success-Response:
@@ -1123,31 +1174,49 @@ class WorkerController extends \api\components\Controller
      *          "msg": "ok",
      *          "titleMsg": "您本月已请假0天，本月剩余请假2天",
      *          "orderTimeList": ["2015-09-14","2015-09-15",],
-     *          "workerLeaveList": []
+     *          "workerLeaveList": ["2015-09-13","2015-09-16",],
      *      }
      * }
      *
      * @apiError SessionIdNotFound 未找到会话ID.
      *
      * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
-     *  {
-     *      "code":"Failed",
-     *      "msg": "SessionIdNotFound"
-     *  }
-     *
+     *     HTTP/1.1 403 Not Found
+     *     { 
+     *       "code":"0",
+     *       "msg": "阿姨不存在"
+     *     }
      */
-    
+    public function actionWorkerLeave(){
+        $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
+        $worker = WorkerAccessToken::getWorker($param['access_token']);
+        if (!empty($worker) && !empty($worker->id)) {
+             if(!isset($param['type'])||!$param['type']||!in_array($param['type'], array(1,2))){
+                  return $this->send(null, "请选择请假类型", 0, 403);
+             }
+             $worker_id=$worker->id;
+             $type = $param['type'];
+             //$ret= Worker::getWorkerLeave($worker_id,$type);
+             $ret = [
+                    "result" => 1,
+                    "msg" =>"ok",
+                    "titleMsg" =>"您本月已请假0天，本月剩余请假2天",
+                    "orderTimeList" => ["2015-09-14","2015-09-15"],
+                    "workerLeaveList" =>["2015-09-14","2015-09-15"]
+                        
+                ];
+                return $this->send($ret, "操作成功",1);
+             
+        }else{
+                return $this->send(null, "阿姨不存在.", 0, 403);
+        }
+     }
 
 
 
-
-
-
-
-   
-  
-    
     
     /**
      * @api {get} /v2/FixedUserPeriod.php  固定客户列表 (田玉星0%)
@@ -1209,7 +1278,19 @@ class WorkerController extends \api\components\Controller
 /**
  * 删除阿姨消息
  */
-    
+
+/**
+ * 查看该阿姨所有未交罚款记录
+ */
+
+/**
+ * 获得该阿姨所有未领取任务奖励记录
+ */
+
+/**
+ * 获得所有该阿姨已经完成未对账订单
+ */
+
     
 
 ?>

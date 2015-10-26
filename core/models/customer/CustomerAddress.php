@@ -23,13 +23,13 @@ use core\models\customer\Customer;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class CustomerAddress extends \common\models\CustomerAddress
+class CustomerAddress extends \common\models\customer\CustomerAddress
 {
     
     /**
      * 新增服务地址
      */
-    public static function addAddress($customer_id, $operation_area_name, $customer_address_detail, $customer_address_nickname, $customer_address_phone){
+    public static function addAddress($customer_id, $operation_province_name, $operation_city_name, $operation_area_name, $customer_address_detail, $customer_address_nickname, $customer_address_phone){
         $transaction = \Yii::$app->db->beginTransaction();
         try{
             //先将该客户所有的地址状态设为0
@@ -46,39 +46,43 @@ class CustomerAddress extends \common\models\CustomerAddress
             $customerAddress->customer_id = $customer_id;
 
             //根据区名查询省市区
-            $operationArea = CommonOperationArea::find()->where([
-                'area_name'=>$operation_area_name,
-                'level'=>3,
-                ])->asArray()->one();
-            
-            $operation_area_id = $operationArea['id'];
-            $operation_area_name = $operationArea['area_name'];
-            $operation_area_short_name = $operationArea['short_name'];
-            $operation_city_id = $operationArea['parent_id'];
-
-            $operationCity = CommonOperationArea::find()->where([
-                'id'=>$operation_city_id,
-                'level'=>2,
-                ])->asArray()->one();
-            $operation_city_id = $operationCity['id'];
-            $operation_city_name = $operationCity['area_name'];
-            $operation_city_short_name = $operationCity['short_name'];
-            $operation_province_id = $operationCity['parent_id'];
-
-            $operationProvince = CommonOperationArea::find()->where([
-                'id'=>$operation_province_id,
-                'level'=>1,
-                ])->asArray()->one();
-    
-            $operation_province_name = $operationProvince['area_name'];
+			$operationProvince = CommonOperationArea::find()->where([
+				'area_name'=>$operation_province_name,
+				'level'=>1,
+				])->asArray()->one();
+			$operation_province_id = $operationProvince['id'];
+			$operation_province_name = $operationProvince['area_name'];
             $operation_province_short_name = $operationProvince['short_name'];
+
+			$operationCity = CommonOperationArea::find()->where([
+				'area_name'=>$operation_city_name,
+				'level'=>2,
+				])->asArray()->one();
+			$operation_city_id = $operationCity['id'];
+			$operation_city_name = $operationCity['area_name'];
+            $operation_city_short_name = $operationCity['short_name'];
+
+			$operationArea = CommonOperationArea::find()->where([
+				'area_name'=>$operation_area_name,
+				'level'=>3,
+				])->asArray()->one();
+			$operation_area_id = $operationArea['id'];
+			$operation_area_name = $operationArea['area_name'];
+            $operation_area_short_name = $operationArea['short_name'];
+
 
             $city_encode = urlencode($operation_city_name);
             $detail_encode = urlencode($operation_province_name.$operation_city_name.$operation_area_name.$customer_address_detail);
             $address_encode = file_get_contents("http://api.map.baidu.com/geocoder/v2/?city=".$city_encode."&address=".$detail_encode."&output=json&ak=AEab3d1da1e282618154e918602a4b98");
             $address_decode = json_decode($address_encode, true);
-            $operation_longitude = $address_decode['result']['location']['lng'];
-            $operation_latitude = $address_decode['result']['location']['lat'];
+			
+			if($address_decode['status'] == 0){
+				$operation_longitude = $address_decode['result']['location']['lng'];
+            	$operation_latitude = $address_decode['result']['location']['lat'];
+			}else{
+				$operation_longitude = '';
+	  			$operation_latitude = '';
+			}
 
             $customerAddress->operation_province_id = $operation_province_id;
             $customerAddress->operation_city_id = $operation_city_id;
@@ -101,7 +105,12 @@ class CustomerAddress extends \common\models\CustomerAddress
             $customerAddress->created_at = time();
             $customerAddress->updated_at = 0;
             $customerAddress->is_del = 0;
+			//var_dump($customerAddress);
+			//exit();
             $customerAddress->validate();
+			if($customerAddress->hasErrors()){
+				var_dump($customerAddress->getErrors());
+			}
             $customerAddress->save();
             $transaction->commit();
             return $customerAddress;
@@ -131,7 +140,7 @@ class CustomerAddress extends \common\models\CustomerAddress
     /**
      * 修改服务地址
      */
-    public static function updateAddress($id, $operation_area_name, $customer_address_detail, $customer_address_nickname, $customer_address_phone){
+    public static function updateAddress($id, $operation_province_name, $operation_city_name, $operation_area_name, $customer_address_detail, $customer_address_nickname, $customer_address_phone){
         $transaction = \Yii::$app->db->beginTransaction();
         try{
             //先将该客户所有的地址状态设为0
@@ -147,32 +156,29 @@ class CustomerAddress extends \common\models\CustomerAddress
             }
             $customerAddress = self::findOne($id);
             //根据区名查询省市区
-            $operationArea = CommonOperationArea::find()->where([
-                'area_name'=>$operation_area_name,
-                'level'=>3,
-                ])->asArray()->one();
-            
-            $operation_area_id = $operationArea['id'];
-            $operation_area_name = $operationArea['area_name'];
-            $operation_area_short_name = $operationArea['short_name'];
-            $operation_city_id = $operationArea['parent_id'];
-
-            $operationCity = CommonOperationArea::find()->where([
-                'id'=>$operation_city_id,
-                'level'=>2,
-                ])->asArray()->one();
-            $operation_city_id = $operationCity['id'];
-            $operation_city_name = $operationCity['area_name'];
-            $operation_city_short_name = $operationCity['short_name'];
-            $operation_province_id = $operationCity['parent_id'];
-
-            $operationProvince = CommonOperationArea::find()->where([
-                'id'=>$operation_province_id,
-                'level'=>1,
-                ])->asArray()->one();
-    
-            $operation_province_name = $operationProvince['area_name'];
+            $operationProvince = ComponOperationArea::find()->where([
+				'area_name'=>$operation_province_name,
+				'level'=>1,
+				])->asArray()->one();
+			$operation_province_id = $operationProvicne['id'];
+			$operation_province_name = $operationProvince['area_name'];
             $operation_province_short_name = $operationProvince['short_name'];
+
+			$operationCity = ComponOperationArea::find()->where([
+				'area_name'=>$operation_city_name,
+				'level'=>2,
+				])->asArray()->one();
+			$operation_city_id = $operationCity['id'];
+			$operation_city_name = $operationCity['area_name'];
+            $operation_city_short_name = $operationCity['short_name'];
+
+			$operationArea = ComponOperationArea::find()->where([
+				'area_name'=>$operation_area_name,
+				'level'=>3,
+				])->asArray()->one();
+			$operation_area_id = $operationArea['id'];
+			$operation_area_name = $operationArea['area_name'];
+            $operation_area_short_name = $operationArea['short_name'];
 
             // $operation_longitude = $operationArea['longitude'];
             // $operation_latitude = $operationArea['latitude'];

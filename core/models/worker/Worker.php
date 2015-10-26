@@ -3,24 +3,23 @@
 namespace core\models\worker;
 
 
-use core\models\Operation\CoreOperationArea;
+use boss\models\worker\WorkerSchedule;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\ForbiddenHttpException;
 use yii\web\BadRequestHttpException;
 use yii\web\UploadedFile;
 
-use common\models\OrderExtWorker;
+use common\models\order\OrderExtWorker;
 use common\models\ShopManager;
 use core\models\worker\WorkerStat;
 use core\models\worker\WorkerExt;
 use core\models\worker\WorkerIdentityConfig;
 use core\models\worker\WorkerRuleConfig;
-use core\models\Operation\CoreOperationShopDistrict;
-use core\models\Operation\CoreOperationCity;
+use core\models\operation\CoreOperationShopDistrict;
+use core\models\operation\CoreOperationCity;
+use core\models\operation\CoreOperationArea;
 use core\models\shop\Shop;
-use boss\models\Operation\OperationCity;
-use boss\models\Operation\OperationShopDistrict;
 use crazyfd\qiniu\Qiniu;
 
 /**
@@ -52,15 +51,15 @@ use crazyfd\qiniu\Qiniu;
  * @property integer $updated_ad
  * @property integer $isdel
  */
-class Worker extends \common\models\Worker
+class Worker extends \common\models\worker\Worker
 {
 
 
     /**
-     * 获取阿姨列表
+     * 批量获取阿姨id
      * @param  int $type 阿姨类型 1自营 2非自营
-     * @param  int $rule_id 阿姨身份id
-     * @return array 阿姨ID列表
+     * @param  int $identity_id 阿姨身份id
+     * @return array 阿姨id列表
      */
     public static function getWorkerIds($type,$identity_id){
         $condition['worker_type'] = $type;
@@ -69,10 +68,27 @@ class Worker extends \common\models\Worker
         return $workerList?ArrayHelper::getColumn($workerList,'id'):[];
     }
 
+
+    /*
+     * 通过阿姨id批量获取阿姨信息
+     * @param array $workerIdsArr 阿姨id数组
+     * @param str 返回字段
+     */
+    public static function getWorkerListByIds($workerIdsArr,$field='worker_name'){
+        if(empty($workerIdsArr)){
+            return [];
+        }else{
+            $condition['id'] = $workerIdsArr;
+            $workerResult = Worker::find()->where($condition)->select($field)->asArray()->all();
+
+            return $workerResult;
+        }
+    }
+
     /**
      * 根据条件搜索阿姨
-     * @param $worker_name 阿姨姓名 不搜索此项传null
-     * @param $worker_phone 阿姨电话 不搜索此项传null
+     * @param $worker_name 阿姨姓名(不搜索此项传null)
+     * @param $worker_phone 阿姨电话(不搜索此项传null)
      * @return array 阿姨列表
      */
     public static function searchWorker($worker_name=null,$worker_phone=null){
@@ -159,7 +175,7 @@ class Worker extends \common\models\Worker
 
     /**
      * 获取单个阿姨信息
-     * @param integer worker_id  阿姨id
+     * @param integer $worker_id  阿姨id
      * @return array 阿姨信息
      */
     public static function getWorkerInfo($worker_id){
@@ -180,6 +196,8 @@ class Worker extends \common\models\Worker
         }
         return $workerInfo;
     }
+
+
 
     /**
      * 获取阿姨详细信息
@@ -208,39 +226,11 @@ class Worker extends \common\models\Worker
         return $workerDetailResult;
     }
 
-    /**
-     * 获取阿姨地址
-     * @param $province_id
-     * @param $city_id
-     * @param $area_id
-     * @param $street
-     * @return string
-     */
-    public static function getWorkerPlaceShow($province_id,$city_id,$area_id,$street=''){
-        $provinceName = self::getArea($province_id);
-        $cityName = self::getArea($city_id);
-        $areaName = self::getArea($area_id);
-        $workerPlace = $provinceName.$cityName.$areaName.$street;
-        return $workerPlace;
-    }
-
-    /**
-     * 获取区域名称
-     * @param $id
-     * @return string
-     */
-    public static function getArea($id){
-        if(empty($id)){
-            return '';
-        }
-        $areaResult = CoreOperationArea::getOneFromId($id);
-        return isset($areaResult['area_name'])?$areaResult['area_name']:'';
-    }
 
     /*
      * 通过电话获取可用阿姨信息
      * @param string $phone 阿姨电话
-     * @return array $workerInfo 阿姨详细信息(阿姨id，阿姨姓名)
+     * @return array 阿姨详细信息(阿姨id，阿姨姓名)
      */
      public static function getWorkerInfoByPhone($phone){
 
@@ -262,18 +252,24 @@ class Worker extends \common\models\Worker
              $workerInfo = [];
         }
         return $workerInfo;
-     }
+    }
+
+
+    public static function getWorkerTimeLine($district_id,$time){
+        $districtWorkerResult = self::getDistrictAllWorker($district_id);
+        return $districtWorkerResult;
+    }
 
 
     /**
      * 获取商圈中所有阿姨
-     * @param $districtId
+     * @param $district_id
      * @param array $filterCondition 阿姨筛选条件
      * @return array 阿姨列表
      */
-     public static function getDistrictAllWorker($districtId,$filterCondition=[]){
+     protected static function getDistrictAllWorker($district_id,$filterCondition=[]){
          if(empty($districtId) || !is_array($filterCondition)){
-            return [];
+             return [];
          }
          $defaultCondition['worker_is_block'] = 0;
          $defaultCondition['worker_is_vacation'] = 0;
@@ -283,8 +279,9 @@ class Worker extends \common\models\Worker
          $districtWorkerResult = Worker::find()
              ->select('{{%worker}}.id,shop_id,worker_name,worker_phone,worker_idcard,worker_identity_id,worker_type,name as shop_name,worker_stat_order_num,worker_stat_order_refuse')
              ->innerJoinWith('workerDistrictRelation') //关联worker workerDistrictRelation方法
-             ->andOnCondition(['operation_shop_district_id'=>$districtId])
+             ->andOnCondition(['operation_shop_district_id'=>$district_id])
              ->joinWith('workerStatRelation') //关联worker WorkerStatRelation方法
+             ->joinWith('workerScheduleRelation') //关联WorkerScheduleRelation方法
              ->joinWith('shopRelation') //关联worker shopRelation方法
              ->where($condition)
              ->asArray()
@@ -302,13 +299,13 @@ class Worker extends \common\models\Worker
      * @param int orderBookeEndTime 待指派订单预约结束时间
      * @return array freeWorkerArr 所有可用阿姨列表
      */
-    public static function getDistrictFreeWorker($districtId=1,$workerType=1,$orderBookBeginTime,$orderBookeEndTime){
+    public static function getDistrictFreeWorker($district_id=1,$worker_type=1,$orderBookBeginTime,$orderBookeEndTime){
 
         $workerIdentityConfigArr = WorkerIdentityConfig::getWorkerIdentityList();
 
         //获取商圈中所有阿姨
-        $condition['worker_type'] = $workerType;
-        $districtWorkerResult = self::getDistrictAllWorker($districtId,$condition);
+        $condition['worker_type'] = $worker_type;
+        $districtWorkerResult = self::getDistrictAllWorker($district_id,$condition);
 
         if(empty($districtWorkerResult)){
             return [];
@@ -370,21 +367,6 @@ class Worker extends \common\models\Worker
     }
 
 
-    /*
-     * 通过阿姨id批量获取阿姨信息
-     * @param array 阿姨id数组
-     * @param str 返回字段
-     */
-    public static function getWorkerListByIds($workerIdsArr,$field='worker_name'){
-        if(empty($workerIdsArr)){
-            return [];
-        }else{
-            $condition['id'] = $workerIdsArr;
-            $workerResult = Worker::find()->where($condition)->select($field)->asArray()->all();
-
-            return $workerResult;
-        }
-    }
 
     /**
      * 上传图片到七牛服务器
@@ -407,8 +389,7 @@ class Worker extends \common\models\Worker
      * @return array [city_id=>city_name,...]
      */
     public static function getOnlineCityList(){
-        $onlineCityList = OperationCity::getCityOnlineInfoList();
-        //$onlineCityList= CoreOperationCity::find()->select('city_id,city_name')->asArray()->all();
+        $onlineCityList = CoreOperationCity::getCityOnlineInfoList();
         return $onlineCityList?ArrayHelper::map($onlineCityList,'city_id','city_name'):[];
     }
 
@@ -440,7 +421,6 @@ class Worker extends \common\models\Worker
      */
     public static function getDistrictList(){
         $districtList = OperationShopDistrict::getCityShopDistrictList();
-        //$districtList = CoreOperationShopDistrict::find()->select('id,operation_shop_district_name')->asArray()->all();
         return $districtList?ArrayHelper::map($districtList,'id','operation_shop_district_name'):[];
     }
 
@@ -462,6 +442,35 @@ class Worker extends \common\models\Worker
         }else{
             return [];
         }
+    }
+
+    /**
+     * 获取阿姨地址
+     * @param $province_id
+     * @param $city_id
+     * @param $area_id
+     * @param $street
+     * @return string
+     */
+    public static function getWorkerPlaceShow($province_id,$city_id,$area_id,$street=''){
+        $provinceName = self::getArea($province_id);
+        $cityName = self::getArea($city_id);
+        $areaName = self::getArea($area_id);
+        $workerPlace = $provinceName.$cityName.$areaName.$street;
+        return $workerPlace;
+    }
+
+    /**
+     * 获取区域名称
+     * @param $id
+     * @return string
+     */
+    public static function getArea($id){
+        if(empty($id)){
+            return '';
+        }
+        $areaResult = CoreOperationArea::getOneFromId($id);
+        return isset($areaResult['area_name'])?$areaResult['area_name']:'';
     }
 
     /*
@@ -541,6 +550,11 @@ class Worker extends \common\models\Worker
         }
     }
 
+    /**
+     * 获取是否请假
+     * @param $worker_is_vacation
+     * @return string
+     */
     public static function getWorkerIsVacationShow($worker_is_vacation){
         if($worker_is_vacation==1){
             return '是';
@@ -560,6 +574,19 @@ class Worker extends \common\models\Worker
         }
     }
 
+    /**
+     * 获取是否离职
+     * @param $worker_is_dimission
+     * @return string
+     */
+    public static function getWorkerIsDimissionShow($worker_is_dimission){
+        if($worker_is_dimission==1){
+            return '是';
+        }else{
+            return '否';
+        }
+    }
+
     /*
      * 获取审核状态
      */
@@ -568,13 +595,13 @@ class Worker extends \common\models\Worker
             case 0:
                 return '新录入';
             case 1:
-                return '已验证';
+                return '已审核';
             case 2:
-                return '已试工';
+                return '通过基础培训';
             case 3:
                 return '已上岗';
             case 4:
-                return '已离职';
+                return '通过晋升培训';
         }
        /* if($worker_auth_status==1){
             return '通过';
@@ -604,47 +631,6 @@ class Worker extends \common\models\Worker
             return '未通过';
         }
     }
-
-    public static function getWorkerPhotoShow($worker_photo){
-        if($worker_photo){
-            return \yii\helpers\Html::img($worker_photo, ['class'=>'file-preview-image']);
-        }
-    }
-
-    /*
-     * 统计被列入黑名单的阿姨的数量
-     */
-    public static function CountBlockWorker(){
-        return self::find()->where(['worker_is_block'=>1,'isdel'=>0])->count();
-    }
-
-    /*
-     * 统计被封号的阿姨的数量
-     */
-    public static function CountBlackListWorker(){
-        return self::find()->where(['worker_is_blacklist'=>1,'isdel'=>0])->count();
-    }
-
-    /*
-     * 统计请假的阿姨数量的数量
-     */
-    public static function CountVacationWorker(){
-        return self::find()->where(['worker_is_vacation'=>1,'isdel'=>0])->count();
-    }
-
-    /*
-     * 统计各个身份的阿姨数量
-     */
-    public static function CountWorkerIdentity($workerIdentityId){
-        return self::find()->where(['worker_identity_id'=>$workerIdentityId,'isdel'=>0])->count();
-    }
-    /*
-     * 统计各个审核状态的阿姨数量
-     */
-    public static function CountWorkerStatus($workerStatus){
-        return self::find()->where(['worker_auth_status'=>$workerStatus])->count();
-    }
-
 
     /*
      * 加入黑名单
@@ -676,40 +662,7 @@ class Worker extends \common\models\Worker
         return false;
     }
 
-   /*
-   * 获取阿姨首页按钮css样式class
-   * @param int $btnCate 按钮所属类型 0-10
-   * @return string 按钮css样式class   btn-success-selected(按钮被选中) or btn-success(按钮未选中)
-   */
-    public static function getSearchBtnCss($btnCate){
-        $params = Yii::$app->request->getQueryParams();
-        $workerParams = isset($params['WorkerSearch'])?$params['WorkerSearch']:[];
-        if($btnCate==0 && !isset($params['WorkerSearch'])){
-            return 'btn-success-selected';
-        }elseif($btnCate==1 && isset($workerParams['worker_auth_status']) && $workerParams['worker_auth_status']==0){
-            return 'btn-success-selected';
-        }elseif($btnCate==2 && isset($workerParams['worker_auth_status']) && $workerParams['worker_auth_status']==1){
-            return 'btn-success-selected';
-        }elseif($btnCate==3 && isset($workerParams['worker_auth_status']) && $workerParams['worker_auth_status']==2){
-            return 'btn-success-selected';
-        }elseif($btnCate==4 && array_key_exists('worker_identity_id',$workerParams) && $workerParams['worker_identity_id']==1){
-            return 'btn-success-selected';
-        }elseif($btnCate==5 && array_key_exists('worker_identity_id',$workerParams) && $workerParams['worker_identity_id']==2){
-            return 'btn-success-selected';
-        }elseif($btnCate==6 && array_key_exists('worker_identity_id',$workerParams) && $workerParams['worker_identity_id']==3){
-            return 'btn-success-selected';
-        }elseif($btnCate==7 && array_key_exists('worker_identity_id',$workerParams) && $workerParams['worker_identity_id']==4){
-            return 'btn-success-selected';
-        }elseif($btnCate==8 && array_key_exists('worker_is_vacation',$workerParams)){
-            return 'btn-success-selected';
-        }elseif($btnCate==9 && array_key_exists('worker_is_block',$workerParams)){
-            return 'btn-success-selected';
-        }elseif($btnCate==10 && array_key_exists('worker_is_blacklist',$workerParams)){
-            return 'btn-success-selected';
-        }else{
-            return 'btn-success';
-        }
-    }
+
 
     /*
      * 阿姨附属表连表方法
@@ -739,12 +692,18 @@ class Worker extends \common\models\Worker
         return $this->hasOne(Shop::className(),['id'=>'shop_id']);
     }
 
+    /**
+     * 阿姨排班表方法
+     */
+    public function getWorkerScheduleRelation(){
+        return $this->hasOne(WorkerSchedule::className(),['worker_id'=>'id']);
+    }
+
     /*
-     * 赋值worker_district属性
+     * 设置worker_district属性
      */
     public function getworker_district(){
         $workerDistrictArr = self::getWorkerDistrict($this->id);
-//        var_dump(ArrayHelper::getColumn($workerDistrictArr,'operation_shop_district_id'));die;
         return $workerDistrictArr?ArrayHelper::getColumn($workerDistrictArr,'operation_shop_district_id'):[];
     }
 

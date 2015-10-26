@@ -83,7 +83,7 @@ use core\models\finance\FinanceShopSettleApplySearch;
     ?>
   
     <div class='col-md-2'>
-        <?= $form->field($model, 'worder_tel'); ?>
+        <?= $form->field($model, 'worker_tel'); ?>
     </div>
     
      <?php 
