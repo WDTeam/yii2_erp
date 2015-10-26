@@ -995,7 +995,7 @@ class UserController extends \api\components\Controller
 
     public function actionAddUser()
     {
-        $daat = \core\models\customer\CustomerAccessToken::generateAccessToken('13683118946', '0330');
+        $daat = \core\models\customer\CustomerAccessToken::generateAccessToken('13683118946', '4820');
 
         print_r($daat);
     }
