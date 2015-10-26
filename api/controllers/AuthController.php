@@ -9,8 +9,6 @@ use \core\models\worker\Worker;
 use \core\models\worker\WorkerCode;
 class AuthController extends \api\components\Controller
 {
-
-
     /**
      * @api {POST} /auth/login 客户登录（李勇100%）
      * @apiName Login

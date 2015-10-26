@@ -358,7 +358,6 @@ class ServiceController extends \api\components\Controller
         return $this->send($ret, "数据获取成功");
     }
 
-
     /**
      * @api {GET} v1/service/boutique-cleaning 获得所有精品保洁项目（赵顺利0%）
      * @apiGroup service
@@ -438,9 +437,9 @@ class ServiceController extends \api\components\Controller
      *       }
      *   }
      *
-     *  @apiError UserNotFound 用户认证已经过期.
+     * @apiError UserNotFound 用户认证已经过期.
      *
-     *  @apiErrorExample Error-Response:
+     * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
      *       "code": "error",
@@ -449,23 +448,24 @@ class ServiceController extends \api\components\Controller
      *     }
      *
      */
-    function actionSingleWorkerTime(){
-        $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
-        if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
+    function actionSingleWorkerTime()
+    {
+        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        if (!isset($param['access_token']) || !$param['access_token'] || !WorkerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
-        if(!isset($param['longitude'])||!$param['longitude']||!isset($param['latitude'])||!$param['latitude']||!isset($param['plan_time'])||!$param['plan_time']){
+        if (!isset($param['longitude']) || !$param['longitude'] || !isset($param['latitude']) || !$param['latitude'] || !isset($param['plan_time']) || !$param['plan_time']) {
             return $this->send(null, "请填写服务地址或服务时长", 0, 403);
         }
         $longitude = $param['longitude'];
-        $latitude =$param['latitude'];
-        $plan_time=$param['plan_time'];
+        $latitude = $param['latitude'];
+        $plan_time = $param['plan_time'];
         //根据经纬度获取商圈id
-        $ShopDistrictInfo=CoreOperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
-        if(empty($ShopDistrictInfo)){
+        $ShopDistrictInfo = CoreOperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
+        if (empty($ShopDistrictInfo)) {
             return $this->send(null, "商圈不存在", 0, 403);
-        }else{
-            $district_id=$ShopDistrictInfo['id'];
+        } else {
+            $district_id = $ShopDistrictInfo['id'];
         }
         //获取单次服务排班表
         //$single_worker_time=Worker::getSingleWorkerTable($district_id,$plan_time);
@@ -548,9 +548,9 @@ class ServiceController extends \api\components\Controller
      *       }
      *   }
      *
-     *  @apiError UserNotFound 用户认证已经过期.
+     * @apiError UserNotFound 用户认证已经过期.
      *
-     *  @apiErrorExample Error-Response:
+     * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
      *       "code": "error",
@@ -559,33 +559,34 @@ class ServiceController extends \api\components\Controller
      *     }
      *
      */
-    function actionRecursiveWorkerTime(){
-        $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
-        if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
+    function actionRecursiveWorkerTime()
+    {
+        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        if (!isset($param['access_token']) || !$param['access_token'] || !WorkerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
-        if(!isset($param['longitude'])||!$param['longitude']||!isset($param['latitude'])||!$param['latitude']||!isset($param['is_recommend'])||!isset($param['plan_time'])||!$param['plan_time']){
+        if (!isset($param['longitude']) || !$param['longitude'] || !isset($param['latitude']) || !$param['latitude'] || !isset($param['is_recommend']) || !isset($param['plan_time']) || !$param['plan_time']) {
             return $this->send(null, "请填写服务地址或服务时长", 0, 403);
         }
         $longitude = $param['longitude'];
-        $latitude =$param['latitude'];
-        $is_recommend=$param['is_recommend'];
-        $plan_time=$param['plan_time'];
-        if($is_recommend==1){
-            if(!isset($param['worker_id'])||!$param['worker_id']){
-                return $this->send(null,"请选择服务阿姨",0,403);
-            }else{
-                $worker_id=$param['worker_id'];
+        $latitude = $param['latitude'];
+        $is_recommend = $param['is_recommend'];
+        $plan_time = $param['plan_time'];
+        if ($is_recommend == 1) {
+            if (!isset($param['worker_id']) || !$param['worker_id']) {
+                return $this->send(null, "请选择服务阿姨", 0, 403);
+            } else {
+                $worker_id = $param['worker_id'];
             }
         }
         //根据经纬度获取商圈id
-        $ShopDistrictInfo=CoreOperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
-        if(empty($ShopDistrictInfo)){
+        $ShopDistrictInfo = CoreOperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
+        if (empty($ShopDistrictInfo)) {
             return $this->send(null, "商圈不存在", 0, 403);
-        }else{
-            $district_id=$ShopDistrictInfo['id'];
+        } else {
+            $district_id = $ShopDistrictInfo['id'];
         }
-        $recursive_worker_time=array();
+        $recursive_worker_time = array();
         for ($i = 7; $i <= 36; $i++) {
             $item = [
                 'date_name' => date('m月d日', strtotime('+' . $i . ' day')),
@@ -602,7 +603,7 @@ class ServiceController extends \api\components\Controller
                             "status" => "1"
                         ]
                     ],
-                'date_name_tag'=>date('m月d日', strtotime('+' . $i . ' day')).'（今天）'
+                'date_name_tag' => date('m月d日', strtotime('+' . $i . ' day')) . '（今天）'
             ];
             $recursive_worker_time[] = $item;
         }

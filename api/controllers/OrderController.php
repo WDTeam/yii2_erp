@@ -91,19 +91,19 @@ class OrderController extends \api\components\Controller
     public function actionCreateOrder()
     {
         $args = Yii::$app->request->post() or
-                $args = json_decode(Yii::$app->request->getRawBody(), true);
+        $args = json_decode(Yii::$app->request->getRawBody(), true);
         $attributes = [];
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录",0);
+            return $this->send(null, "用户无效,请先登录", 0);
         }
         $attributes['customer_id'] = $user->id;
 
         if (@is_null($args['server_item'])) {
             // server_item is null, order from app
             if (is_null($args['order_service_type_id'])) {
-                return $this->send(null, "请输入商品类型",0);
+                return $this->send(null, "请输入商品类型", 0);
             }
             $attributes['order_service_type_id'] = $args['order_service_type_id'];
         } else {
@@ -113,7 +113,7 @@ class OrderController extends \api\components\Controller
 
         if (@is_null($args['order_src'])) {
             if (is_null($args['order_src_id'])) {
-                return $this->send(null, "数据不完整,缺少订单来源",0);
+                return $this->send(null, "数据不完整,缺少订单来源", 0);
             }
             $attributes['order_src_id'] = $args['order_src_id'];
         } else {
@@ -121,20 +121,19 @@ class OrderController extends \api\components\Controller
             if (!empty($orderSrc)) {
                 $attributes['order_src_id'] = $orderSrc['id'];
             } else {
-                return $this->send(null, "数据不完整,没有配置订单来源：" . $args['order_src'],0);
+                return $this->send(null, "数据不完整,没有配置订单来源：" . $args['order_src'], 0);
             }
         }
 
         if (is_null($args['order_booked_begin_time'])) {
-            return $this->send(null, "数据不完整,请输入初始时间",0);
+            return $this->send(null, "数据不完整,请输入初始时间", 0);
         }
         $attributes['order_booked_begin_time'] = $args['order_booked_begin_time'];
 
         if (is_null($args['order_booked_end_time'])) {
-            return $this->send(null, "数据不完整,请输入完成时间",0);
+            return $this->send(null, "数据不完整,请输入完成时间", 0);
         }
         $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
-
 
 
         if (isset($args['address_id'])) {
@@ -159,11 +158,11 @@ class OrderController extends \api\components\Controller
                 if (!empty($model)) {
                     $attributes['address_id'] = $model->id;
                 } else {
-                    return $this->send(null, "地址数据不完整,请输入常用地址id或者城市,地址名（包括区）",0);
+                    return $this->send(null, "地址数据不完整,请输入常用地址id或者城市,地址名（包括区）", 0);
                 }
             }
         } else {
-            return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名",0);
+            return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名", 0);
         }
 
         if (isset($args['order_pop_order_code'])) {
@@ -279,36 +278,36 @@ class OrderController extends \api\components\Controller
     public function actionAppendOrder()
     {
         $args = Yii::$app->request->post() or
-                $args = json_decode(Yii::$app->request->getRawBody(), true);
+        $args = json_decode(Yii::$app->request->getRawBody(), true);
         $attributes = [];
         $user = CustomerAccessToken::getCustomer($args['access_token']);
         if (is_null($user)) {
-            return $this->send(null, "用户无效,请先登录",0);
+            return $this->send(null, "用户无效,请先登录", 0);
         }
         $attributes['customer_id'] = $user->id;
         if (is_null($args['order_service_type_id'])) {
-            return $this->send(null, "请输入商品类型",0);
+            return $this->send(null, "请输入商品类型", 0);
         }
         $attributes['order_service_type_id'] = $args['order_service_type_id'];
         if (is_null($args['order_src_id'])) {
-            return $this->send(null, "数据不完整,缺少订单来源",0);
+            return $this->send(null, "数据不完整,缺少订单来源", 0);
         }
         $attributes['order_src_id'] = $args['order_src_id'];
 
         if (is_null($args['order_booked_begin_time'])) {
-            return $this->send(null, "数据不完整,请输入初始时间",0);
+            return $this->send(null, "数据不完整,请输入初始时间", 0);
         }
         $attributes['order_booked_begin_time'] = $args['order_booked_begin_time'];
 
         if (is_null($args['order_booked_end_time'])) {
-            return $this->send(null, "数据不完整,请输入完成时间",0);
+            return $this->send(null, "数据不完整,请输入完成时间", 0);
         }
         $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
 
 
         if (is_null($args['address_id'])) {
-            if ( is_null($args['address_id']) or is_null($args['city'])) {
-                return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名",0);
+            if (is_null($args['address_id']) or is_null($args['city'])) {
+                return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名", 0);
             }
             $model = CustomerAddress::addAddress($user->id, $args['city'], $args['address'], $args['order_customer_phone'], $args['order_customer_phone']);
             $attributes['address_id'] = $model->id;
@@ -480,7 +479,7 @@ class OrderController extends \api\components\Controller
 
         $args["oc.customer_id"] = $user->id;
         $orderSearch = new \core\models\order\OrderSearch();
-        $count = $orderSearch->searchOrdersWithStatusCount($args , $orderStatus);
+        $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus);
         $orders = $orderSearch->searchOrdersWithStatus($args, $isAsc, $offset, $limit, $orderStatus, $channels, $from, $to);
         $ret = [];
         $ret['limit'] = $limit;
@@ -715,15 +714,15 @@ class OrderController extends \api\components\Controller
     public function actionOrderStatusHistory()
     {
         $args = Yii::$app->request->get() or
-                $args = json_decode(Yii::$app->request->getRawBody(), true);
+        $args = json_decode(Yii::$app->request->getRawBody(), true);
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录",0);
+            return $this->send(null, "用户无效,请先登录", 0);
         }
         @$orderId = $args['order_id'];
-        if(!is_numeric($orderId)){
-            return $this->send(null, "该订单不存在",0);
+        if (!is_numeric($orderId)) {
+            return $this->send(null, "该订单不存在", 0);
         }
         //TODO check whether the orders belong the user
         $ret = \core\models\order\OrderStatus::searchOrderStatusHistory($orderId);
@@ -732,12 +731,12 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {PUT} /order/cancel-order 取消订单(haojianse 100% ) 
-     * 
+     * @api {PUT} /order/cancel-order 取消订单(haojianse 100% )
+     *
      * @apiName CancelOrder
      * @apiGroup Order
-     * 
-     * 
+     *
+     *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      * @apiParam {String} order_cancel_reason 取消原因
@@ -793,9 +792,9 @@ class OrderController extends \api\components\Controller
             if ($orderValidation) {
                 /**
                  * $order_id订单号
-                 * $amdin_id管理员id,没有请填写0 
-                 * $param['order_cancel_reason'] 取消原因 
-                 * 
+                 * $amdin_id管理员id,没有请填写0
+                 * $param['order_cancel_reason'] 取消原因
+                 *
                  */
                 $order_cancel_reason = array(
                     '临时有事，改约',
@@ -819,10 +818,10 @@ class OrderController extends \api\components\Controller
 
     /**
      * @api {get} /mobileapidriver2/worker_request_order 抢单（haojianshe %0）
-     * 
+     *
      * @apiName actionDriverRequestOrder
      * @apiGroup Order
-     * 
+     *
      * @apiDescription 阿姨抢单
      * @apiParam {String} session_id    会话id.
      * @apiParam {String} platform_version 平台版本号.
@@ -859,7 +858,7 @@ class OrderController extends \api\components\Controller
      */
     public function actionObtainOrder()
     {
-        
+
     }
 
     /**
@@ -898,20 +897,19 @@ class OrderController extends \api\components\Controller
      */
     public function actionAddComment()
     {
-        
+
     }
 
     /**
      * @api {DELETE} /order/hiden-order 删除订单（郝建设 100% ）
-     * 
-     * 
+     *
+     *
      * @apiName HidenOrder
      * @apiGroup Order
-     * 
+     *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      * @apiParam {String} order_id 订单号
-
      * @apiDescription  客户端删除订单，后台软删除 隐藏订单
      * @apiParam {String} order_id 订单id
      *
@@ -1017,6 +1015,7 @@ class OrderController extends \api\components\Controller
      *  }
      *
      */
+
     /**
      * @api {get} /mobileapidriver2/driver_get_now_order_list 待接活订单(zhaoshunli 0%)
      * @apiName actionDriverGetNowOrderList
@@ -1077,6 +1076,7 @@ class OrderController extends \api\components\Controller
      *  }
      *
      */
+
     /**
      * @api {get} /mobileapidriver2/worker_history_order 阿姨历史订单(zhaoshunli 100%)
      * @apiName actionWorkerHistoryOrder
@@ -1147,6 +1147,7 @@ class OrderController extends \api\components\Controller
      *  }
      *
      */
+
     /**
      * @api {get} v2/worker/account_checking.php 日常订单列表(zhaoshunli %0)
      * @apiName actionAccountChecking
@@ -1190,6 +1191,7 @@ class OrderController extends \api\components\Controller
      *  }
      *
      */
+
     /**
      * @api {get} v2/worker/all_order_common.php 全部订单月份列表(zhaoshunli 0%)
      * @apiName actionAllOrderCommon
@@ -1231,6 +1233,7 @@ class OrderController extends \api\components\Controller
      *  }
      *
      */
+
     /**
      * @api {get} v2/worker/all_order_common_list.php 历史单列表(xieyi 0%)
      * @apiName actionAllOrderCommonList
