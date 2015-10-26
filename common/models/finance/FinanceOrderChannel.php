@@ -74,16 +74,16 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
     
     public static function get_order_channel_list()
     {
-    	if(\Yii::$app->cache->exists('orderchannellist')){
-        $orderchannellist= \Yii::$app->cache->get('orderchannellist');
-    	return json_decode($orderchannellist,true);
-	    }else{
+    	//if(\Yii::$app->cache->exists('orderchannellist')){
+      //  $orderchannellist= \Yii::$app->cache->get('orderchannellist');
+    	///return json_decode($orderchannellist,true);
+	   // }else{
 	    	$ordewhere['is_del']=0;
 	    	$ordewhere['finance_order_channel_sort']=1;
 	$payatainfo=FinanceOrderChannel::find()->select('id,finance_order_channel_name')->where($ordewhere)->asArray()->all();
-	    	\Yii::$app->cache->set('orderchannellist', json_encode($payatainfo));
+	    	//\Yii::$app->cache->set('orderchannellist', json_encode($payatainfo));
 	    	return $payatainfo;
-	  }
+	 // }
     }
     
     /**
@@ -95,16 +95,16 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
     
     public static function get_order_channel_list_info()
     {
-    	if(\Yii::$app->cache->exists('orderchannellistinfo')){
+    	/* if(\Yii::$app->cache->exists('orderchannellistinfo')){
     		$orderchannellist= \Yii::$app->cache->get('orderchannellist');
     		return json_decode($orderchannellist,true);
-    	}else{
+    	}else{ */
     		$ordewhere['is_del']=0;
     		$ordewhere['finance_order_channel_is_lock']=1; //2 第三方不显示  1 第三方显示
     		$payatainfo=FinanceOrderChannel::find()->select('id,finance_order_channel_name')->where($ordewhere)->asArray()->all();
-    		\Yii::$app->cache->set('orderchannellistinfo', json_encode($payatainfo));
+    		//\Yii::$app->cache->set('orderchannellistinfo', json_encode($payatainfo));
     		return $payatainfo;
-    	}
+    	//}
     }
     
     

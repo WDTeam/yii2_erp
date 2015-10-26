@@ -61,11 +61,7 @@ class FinanceRefundController extends BaseAuthController
     public function actionCountinfo()
     {
     	$searchModel = new FinanceRefundSearch;
-    	
-    	
     	//var_dump(Yii::$app->request->getQueryParams());exit;
-    	
-    	
     	$searchModel->load(Yii::$app->request->getQueryParams());
     	$searchModel->isstatus='4';
     	$dataProvider = $searchModel->search();
