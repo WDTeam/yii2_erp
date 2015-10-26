@@ -22,6 +22,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 		color: #fff !important;
 		border: none !important;
 	}
+</style>
 <div class="server-card-customer-update">
 
     <?= $this->render('_form', [
