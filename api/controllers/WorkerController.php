@@ -617,25 +617,27 @@ class WorkerController extends \api\components\Controller
      * @apiParam {String} bill_id  账单唯一标识.
      * @apiParam {String} [platform_version] 平台版本号.
      * 
-     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-bill-list
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-bill-detail
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *      "code": "ok",
-     *      "msg": "操作成功.",
-     *      "ret": [
-     *      {
-     *         'bill_type' =>"1",
-     *         'bill_explain'=>"每周四，E家洁会为您结算上周一至周日的保洁服务订单收入及各类服务补贴。您可通过每周的周期下拉菜单进行选择，点击查看，了解每周收入明细。",
-     *         'bill_date'=>'09年07月-09月13日',
-     *         'order_count'=>'10',
-     *         'salary'=>'320.00',
-     *         'balance_status'=>"1",
-     *         "bill_id"=>"32"
-     *       }
-     *      ]
-     *       
+     *   "code": 1,
+     *   "msg": "操作成功.",
+     *    "ret": {
+     *       "title_msg": {
+     *           "salary": '6000.00',
+     *           "salary_constitute": '3000元(底薪)+2000元(工时服务)+1100元(奖励)-100元(处罚)'
+     *       },
+     *       "order_list": [
+     *           {
+     *               "service_time": "9.10 14:00-16:00",
+     *               "order_num": "32341334352",
+      *              "order_price":"25.00",
+     *               "service_addr": "北京市朝阳区光华路SOHO"
+     *           }
+     *       ]
+     *   }
      * }
      *
      * @apiErrorExample Error-Response:
@@ -659,85 +661,28 @@ class WorkerController extends \api\components\Controller
         
         //TODO:获取账单
         $ret = [
-            'salary'=>'6000.00',
-            'salary_constitute'=>"3000元(底薪)+2000元(工时服务)+1100元(奖励)-100元(处罚)"
-        ];
-        return $this->send($ret, "操作成功.");
-    }
-   
-    /**
-     * @api {GET} /worker/get-worker-tasktime 获取阿姨工时列表 (田玉星 60%)
-     * 
-     * @apiDescription 【备注：等待model底层支持】
-     * 
-     * @apiName actionGetWorkerTasktime
-     * @apiGroup Worker
-     * 
-     * @apiParam {String} access_token    阿姨登录token
-     * @apiParam {String} per_page  每页显示多少条.
-     * @apiParam {String} page  第几页.
-     * @apiParam {String} [platform_version] 平台版本号.
-     * 
-     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-tasktime
-     * 
-     * @apiSuccessExample {json} Success-Response:
-     * HTTP/1.1 200 OK
-     * {
-     *   "code": 1,
-     *   "msg": "操作成功.",
-     *    "ret": {
-     *       "title_msg": {
-     *           "order_count": 10,
-     *           "salary": 160
-     *       },
-     *       "order_list": [
-     *           {
-     *               "service_time": "9.10 14:00-16:00",
-     *               "order_num": "32341334352",
-     *               "service_addr": "北京市朝阳区光华路SOHO"
-     *           }
-     *       ]
-     *   }
-    }
-     *
-     * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
-     *  {
-     *      "code":"error",
-     *      "msg": "用户认证已经过期,请重新登录"
-     *  }
-     */
-    public function  actionGetWorkerTasktime(){
-        $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
-        if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
-           return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
-        }
-        $worker = WorkerAccessToken::getWorker($param['access_token']);
-        if (!$worker|| !$worker->id) {
-            return $this->send(null, "阿姨不存在", 0, 403);
-        }
-        $ret = [
-            "title_msg"=>[
-                'order_count'=>10,
-                'salary'=>160.0
+            "title_info"=>[
+                'salary'=>'6000.00',
+                'salary_constitute'=>"3000元(底薪)+2000元(工时服务)+1100元(奖励)-100元(处罚)"
             ],
             'order_list'=>[
                 [ 
                     'service_time'=>'9.10 14:00-16:00',
                     'order_num' =>'32341334352',
+                    "order_price"=>"25.00",
                     'service_addr'=>'北京市朝阳区光华路SOHO'
                 ],
                 [ 
                     'service_time'=>'9.11 14:00-16:00',
                     'order_num' =>'32341334352',
+                    "order_price"=>"25.00",
                     'service_addr'=>'北京市朝阳区建外SOHO东区'
                 ],
             ]
         ];
         return $this->send($ret, "操作成功.");
-        
     }
-    
+   
     /**
      * @api {GET} /worker/get-worker-center 个人中心首页 (田玉星 100%)
      *
