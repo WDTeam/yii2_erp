@@ -127,10 +127,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{view} {update} {delete} {listbtn}',
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        return Html::a(Yii::t('yii', 'View'), ['operation-city/view','id' => $model->id], ['class' => 'btn btn-success btn-sm']);
+                        return Html::a(Yii::t('yii', 'View'), ['/operation/operation-city/view','id' => $model->id], ['class' => 'btn btn-success btn-sm']);
                         return Html::a(
                             '<span class="glyphicon glyphicon-eye-open"></span>', 
-                            Yii::$app->urlManager->createUrl(['operation-city/view','id' => $model->id]),
+                            Yii::$app->urlManager->createUrl(['/operation/operation-city/view','id' => $model->id]),
                             ['title' => Yii::t('yii', 'View'), 'class' => 'btn btn-success btn-sm']
                         );
                     },
@@ -138,7 +138,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return '';
                         return Html::a(
                             '<span class="glyphicon glyphicon-pencil"></span>', 
-                            Yii::$app->urlManager->createUrl(['operation-city/update','id' => $model->id]),
+                            Yii::$app->urlManager->createUrl(['/operation/operation-city/update','id' => $model->id]),
                             ['title' => Yii::t('yii', 'Update'), 'class' => 'btn btn-info btn-sm']
                         );
                     },
@@ -146,13 +146,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         return '';
                         return Html::a(
                             '<span class="glyphicon glyphicon-trash"></span>', 
-                            Yii::$app->urlManager->createUrl(['operation-city/delete','id' => $model->id]),
+                            Yii::$app->urlManager->createUrl(['/operation/operation-city/delete','id' => $model->id]),
                             ['title' => Yii::t('yii', 'Delete'), 'class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
                         );
                     },
                     'listbtn' => function ($url, $model) {
-                        return Html::a(Yii::t('yii', '商圈列表'), ['/operation-shop-district','city_id' => $model->city_id], ['class' => 'btn btn-warning btn-sm']);
-                        return Html::a('<span class="glyphicon glyphicon-list"></span>',Yii::$app->urlManager->createUrl(['operation-shop-district','city_id' => $model->city_id]),['title' => Yii::t('yii', '商圈列表'), 'class' => 'btn btn-warning btn-sm']);
+                        return Html::a(Yii::t('yii', '商圈列表'), ['/operation/operation-shop-district','city_id' => $model->city_id], ['class' => 'btn btn-warning btn-sm']);
+                        return Html::a('<span class="glyphicon glyphicon-list"></span>',Yii::$app->urlManager->createUrl(['/operation/operation-shop-district','city_id' => $model->city_id]),['title' => Yii::t('yii', '商圈列表'), 'class' => 'btn btn-warning btn-sm']);
                         //.Html::a('<span class="glyphicon glyphicon-list"></span>',Yii::$app->urlManager->createUrl(['operation-shop-district-goods','city_id' => $model->city_id]),['title' => Yii::t('yii', '城市商品列表'), 'class' => 'btn btn-warning btn-sm']);
                     },
                 ],

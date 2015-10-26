@@ -73,22 +73,22 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="panel-body settle-detail-body">
             <div class='col-md-2'>
-                <?php echo $model->shop_manager_name?>
+                <?php echo $model->shop_manager_name  ?>
             </div>
             <div class='col-md-2'>
-                <?php echo $shopModel->name?>
+                <?php echo $shopModel->name ?>
             </div>
             <div class='col-md-2'>
-                <?php echo $shopModel->worker_count?>
+                <?php echo $shopModel->worker_count ?>
             </div>
             <div class='col-md-2'>
-                <?php echo $shopModel->principal?>
+                <?php echo $shopModel->principal ?>
             </div>
             <div class='col-md-2'>
-                <?php echo $shopModel->tel?>
+                <?php echo $shopModel->tel ?>
             </div>
             <div class='col-md-2'>
-                <?php echo  date('Y:m:d H:i:s',$shopModel->created_at)?>
+                <?php echo  date('Y:m:d H:i:s',$shopModel->created_at) ?>
             </div>
         </div>
         <div class="panel-heading">
@@ -129,7 +129,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         {return  Html::a('<u>'.$model->worker_id.'</u>',[Yii::$app->urlManager->createUrl(['worker/view/','id' => $model->worker_id])],['data-pjax'=>'0','target' => '_blank',]);}],
             'worker_tel',
             'worker_type_name',
-            'worker_rule_name', 
+            'worker_identity_name', 
             'finance_settle_apply_order_count', 
              [
                 'header' => Yii::t('app', '服务费'),

@@ -483,29 +483,15 @@ class FinanceSettleApplyController extends BaseAuthController
     
     private function saveAndGenerateSettleData($workerArr,$settleStartTime,$settleEndTime){
         $financeSettleApplySearch = new FinanceSettleApplySearch();
+        $financeWorkerOrderIncomeSearch = new FinanceWorkerOrderIncomeSearch();
         foreach($workerArr as $worker){
             //根据阿姨Id获取阿姨信息
             $workerId = $worker['worker_id'];
             //订单收入明细
             //已对账的订单，且没有投诉和赔偿的订单
-            $orderIncomeDetail = $financeSettleApplySearch->getWorkerOrderInfo($workerId);
-
-            $financeWorkerOrderIncomeArr = array();
-            foreach($orderIncomeDetail as $orderIncome){
-                $financeWorkerOrder = new FinanceWorkerOrderIncome;
-                $financeWorkerOrder->worker_id = $workerId;
-                $financeWorkerOrder->order_id = $orderIncome['id'];
-                $financeWorkerOrder->finance_worker_order_income_type = $orderIncome->orderExtPay->order_pay_type;
-                $financeWorkerOrder->finance_worker_order_income =  $orderIncome['order_money'];
-                $financeWorkerOrder->order_booked_count = $orderIncome['order_booked_count'];
-                $financeWorkerOrder->finance_worker_order_income_starttime = $settleStartTime;
-                $financeWorkerOrder->finance_worker_order_income_endtime = $settleEndTime;
-                $financeWorkerOrder->created_at = time();
-                $financeWorkerOrderIncomeArr[]= $financeWorkerOrder;
-            }
+            $financeWorkerOrderIncomeArr = $financeWorkerOrderIncomeSearch->getWorkerOrderIncomeArrayByWorkerId($workerId);
             //获取订单总收入
             $financeSettleApplySearch = $financeSettleApplySearch->getWorkerSettlementSummaryInfo($workerId);
-
             //获取阿姨的奖励信息
             $workerSubsidyArr = Array(['finance_worker_non_order_income_type'=>1,'finance_worker_non_order_income_type_des'=>'补贴','finance_worker_non_order_income'=>10,'finance_worker_non_order_income_des'=>'路补超过7公里，补助10元'],);
             $financeWorkerNonOrderIncomeArr = [];
@@ -524,7 +510,6 @@ class FinanceSettleApplyController extends BaseAuthController
             $transaction =  Yii::$app->db->beginTransaction();
             try{
                 $existCount = FinanceSettleApply::find()->where(['worker_id'=>$financeSettleApplySearch->worker_id,'finance_settle_apply_starttime'=>$settleStartTime,'finance_settle_apply_endtime'=>$settleEndTime])->count();
-                echo '---'.$existCount;
                 if($existCount == 0){
                     if($financeSettleApplySearch->save()){
                         foreach($financeWorkerOrderIncomeArr as $financeWorkerOrderIncome){
