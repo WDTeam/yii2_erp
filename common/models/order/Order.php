@@ -90,6 +90,7 @@ class Order extends ActiveRecord
     public $order_use_promotion_money;
     public $worker_id;
     public $order_worker_phone;
+    public $order_worker_name;
     public $order_worker_memo;
     public $worker_type_id;
     public $order_worker_type_name;
@@ -140,6 +141,7 @@ class Order extends ActiveRecord
         'order_use_promotion_money',
         'worker_id',
         'order_worker_phone',
+        'order_worker_name',
         'order_worker_memo',
         'worker_type_id',
         'order_worker_type_name',
@@ -259,6 +261,7 @@ class Order extends ActiveRecord
             'order_use_promotion_money' => '使用促销金额',
             'worker_id' => '工人id',
             'order_worker_phone' => '工人手机号',
+            'order_worker_name' => '工人姓名',
             'order_worker_memo' => '工人备注',
             'worker_type_id' => '工人职位类型ID',
             'order_worker_type_name' => '工人职位类型',
@@ -438,6 +441,7 @@ class Order extends ActiveRecord
                 'order_use_promotion_money' => $orderExtPay->order_use_promotion_money,
                 'worker_id' => $orderExtWorker->worker_id,
                 'order_worker_phone' => $orderExtWorker->order_worker_phone,
+                'order_worker_name' => $orderExtWorker->order_worker_name,
                 'order_worker_memo' => $orderExtWorker->order_worker_memo,
                 'worker_type_id' => $orderExtWorker->worker_type_id,
                 'order_worker_type_name' => $orderExtWorker->order_worker_type_name,
@@ -515,6 +519,7 @@ class Order extends ActiveRecord
             'order_use_promotion_money' => $orderExtPay->order_use_promotion_money,
             'worker_id' => $orderExtWorker->worker_id,
             'order_worker_phone' => $orderExtWorker->order_worker_phone,
+            'order_worker_name' => $orderExtWorker->order_worker_name,
             'order_worker_memo' => $orderExtWorker->order_worker_memo,
             'worker_type_id' => $orderExtWorker->worker_type_id,
             'order_worker_type_name' => $orderExtWorker->order_worker_type_name,
