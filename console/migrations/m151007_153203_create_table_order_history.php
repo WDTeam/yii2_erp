@@ -20,7 +20,7 @@ class m151007_153203_create_table_order_history extends Migration
 
             'order_id'=> Schema::TYPE_BIGINT .'(20) unsigned NOT NULL COMMENT \'编号\'',
             'order_code' => Schema::TYPE_STRING.'(64) NOT NULL DEFAULT \'\' COMMENT \'订单号\'',
-            'order_batch_code' => Schema::TYPE_STRING.'(64) NOT NULL DEFAULT \'\' COMMENT \'周期订单号\'',
+            'order_batch_code' => Schema::TYPE_STRING.'(64) DEFAULT \'\' COMMENT \'周期订单号\'',
             'order_parent_id' => Schema::TYPE_BIGINT.'(20) unsigned  DEFAULT 0 COMMENT \'父级id\'',
             'order_is_parent' => Schema::TYPE_BOOLEAN . '(1) unsigned  DEFAULT 0 COMMENT \'有无子订单 1有 0无\'',
             'order_created_at' => Schema::TYPE_INTEGER.'(11) unsigned  DEFAULT 0 COMMENT \'下单时间\'',

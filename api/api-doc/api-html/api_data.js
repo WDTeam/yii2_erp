@@ -2287,7 +2287,7 @@ define({ "api": [
   },
   {
     "type": "POST",
-    "url": "/user/add-address",
+    "url": "v1/user/add-address",
     "title": "添加常用地址 (已完成100%)",
     "name": "AddAddress",
     "group": "User",
@@ -2409,7 +2409,7 @@ define({ "api": [
   },
   {
     "type": "DELETE",
-    "url": "/user/delete-address",
+    "url": "v1/user/delete-address",
     "title": "删除用户常用地址 (已完成100%)",
     "name": "DeleteAddress",
     "group": "User",
@@ -2473,8 +2473,91 @@ define({ "api": [
     "groupTitle": "User"
   },
   {
+    "type": "POST",
+    "url": "v1/user/exchange-coupon",
+    "title": "兑换优惠劵 （李勇 80%）",
+    "name": "ExchangeCoupon",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "city",
+            "description": "<p>城市</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "coupon_code",
+            "description": "<p>优惠码</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"兑换成功\",\n  \"ret\":{\n      \"id\":1,\n      \"coupon_id\":1,\n      \"coupon_name\":\"优惠券名称\",\n      \"coupon_price\":123\n }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CouponNotFound",
+            "description": "<p>优惠码不存在.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"优惠码不存在，\"\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/UserController.php",
+    "groupTitle": "User"
+  },
+  {
     "type": "GET",
-    "url": "/user/get-addresses",
+    "url": "v1/user/get-addresses",
     "title": "常用地址列表 (已完成100%)",
     "name": "GetAddresses",
     "group": "User",
@@ -2543,7 +2626,7 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "/user/get-comment-level",
+    "url": "v1/user/get-comment-level",
     "title": "获取用户评价等级 （郝建设 100%）",
     "name": "GetCommentLevel",
     "group": "User",
@@ -2601,7 +2684,7 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "/user/get-comment-level-tag",
+    "url": "v1/user/get-comment-level-tag",
     "title": "获取用户评价等级下面的标签 （郝建设 100%）",
     "name": "GetCommentLevelTag",
     "group": "User",
@@ -2666,7 +2749,7 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "/user/get-coupon-count",
+    "url": "v1/user/get-coupon-count",
     "title": "获取用户优惠码数量 （功能已经实现 100%）",
     "name": "GetCouponCount",
     "group": "User",
@@ -2729,7 +2812,79 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "/user/get-goods",
+    "url": "v1/user/get-coupon-customer",
+    "title": "获取用户优惠码或同城市 （郝建设100%）",
+    "name": "GetCouponCustomer",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "city_name",
+            "description": "<p>城市</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>int</p> ",
+            "optional": false,
+            "field": "coupon_type",
+            "description": "<p>优惠码表示 1获取提供城市或者全国的优惠码 2获取全国和给定城市的优惠码</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": {\n      \"coupon\":[\n        {\n          \"id\": \"1\",\n          \"coupon_name\": \"优惠码名称\",\n           \"coupon_price\": \"优惠码价格\",\n           \"coupon_type_name\": \"优惠券类型名称\",\n           \"coupon_service_type_id\": \"服务类别id\",\n           \"coupon_service_type_name\": \"服务类别名称\",\n          }\n       ]\n      }\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "   HTTP/1.1 403 Not Found\n   {\n     \"code\": \"0\",\n     \"msg\": \"用户认证已经过期,请重新登录，\"\n\n   }\n*     {\n     \"code\": \"0\",\n     \"msg\": \"优惠码列表为空\"\n\n   }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/UserController.php",
+    "groupTitle": "User"
+  },
+  {
+    "type": "GET",
+    "url": "v1/user/get-goods",
     "title": "获取给定经纬度范围内是否有该服务 （郝建设 100%）",
     "name": "GetGoods",
     "group": "User",
@@ -2808,7 +2963,7 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "/user/get-user-money",
+    "url": "v1/user/get-user-money",
     "title": "用户余额和消费记录 （数据已经全部取出,需要给出所需字段,然后给予返回 已完成99% ;）",
     "name": "GetUserMoney",
     "group": "User",
@@ -2877,7 +3032,7 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "/user/get-user-score",
+    "url": "v1/user/get-user-score",
     "title": "用户积分明细 （功能已实现,不明确需求端所需字段格式 90%）",
     "description": "<p>获取用户当前积分，积分兑换奖品信息，怎样获取积分信息</p> ",
     "name": "GetUserScore",
@@ -2936,7 +3091,7 @@ define({ "api": [
   },
   {
     "type": "DELETE",
-    "url": "/user/remove-worker",
+    "url": "v1/user/remove-worker",
     "title": "移除黑名单中的阿姨 （功能已经实现,需要再次确认传递参数 已完成100%）",
     "name": "RemoveWorker",
     "group": "User",
@@ -3001,7 +3156,7 @@ define({ "api": [
   },
   {
     "type": "PUT",
-    "url": "/user/set-default-address",
+    "url": "v1/user/set-default-address",
     "title": "设置默认地址 (已完成100%)",
     "description": "<p>用户每次下完单都会将该次地址设置为默认地址，下次下单优先使用默认地址</p> ",
     "name": "SetDefaultAddress",
@@ -3067,7 +3222,7 @@ define({ "api": [
   },
   {
     "type": "PUT",
-    "url": "/user/set-default-city",
+    "url": "v1/user/set-default-city",
     "title": "设置默认城市 （需求不明确；0%）",
     "name": "SetDefaultCity",
     "group": "User",
@@ -3150,7 +3305,7 @@ define({ "api": [
   },
   {
     "type": "PUT",
-    "url": "/user/update-address",
+    "url": "v1/user/update-address",
     "title": "修改常用地址 (已完成100%)",
     "name": "UpdateAddress",
     "group": "User",
@@ -3265,7 +3420,7 @@ define({ "api": [
   },
   {
     "type": "POST",
-    "url": "/user/user-suggest",
+    "url": "v1/user/user-suggest",
     "title": "用户评价 （需要再次核实需求;郝建设 100%）",
     "name": "UserSuggest",
     "group": "User",
@@ -3351,7 +3506,7 @@ define({ "api": [
   },
   {
     "type": "GET",
-    "url": "/user/black-list-workers",
+    "url": "v1/user/black-list-workers",
     "title": "黑名单阿姨列表 （功能已经完成,需要核实传递参数和返回数据格式 已完成100%）",
     "description": "<p>获得该用户添加进黑名单的阿姨</p> ",
     "name": "blacklistworkers",
@@ -3410,7 +3565,7 @@ define({ "api": [
   },
   {
     "type": "DELETE",
-    "url": "/user/delete-used-worker",
+    "url": "v1/user/delete-used-worker",
     "title": "删除常用阿姨 （功能已经实现,需再次核实 100%）",
     "name": "deleteUsedWorker",
     "group": "User",
@@ -3487,8 +3642,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/worker/worker-info",
-    "title": "查看阿姨信息 (田玉星 80%)",
-    "description": "<p>【备注：阿姨身份、星级、个人技能等待model底层】</p> ",
+    "title": "查看阿姨信息 (田玉星 100%)",
     "name": "WorkerInfo",
     "group": "Worker",
     "parameter": {
@@ -3499,7 +3653,7 @@ define({ "api": [
             "type": "<p>String</p> ",
             "optional": false,
             "field": "access_token",
-            "description": "<p>阿姨登录token/用户登录token</p> "
+            "description": "<p>用户登录token</p> "
           },
           {
             "group": "Parameter",
@@ -3549,10 +3703,11 @@ define({ "api": [
     "groupTitle": "Worker"
   },
   {
-    "type": "get",
-    "url": "/mobileapidriver2/get_driver_info",
-    "title": "个人中心首页 (田玉星0%)",
-    "name": "actionGetDriverInfo",
+    "type": "GET",
+    "url": "/worker/get-worker-bill-detail",
+    "title": "获取阿姨对账单列表详情 (田玉星 70%)",
+    "description": "<p>【备注：等待model底层支持】</p> ",
+    "name": "actionGetWorkerBillDetail",
     "group": "Worker",
     "parameter": {
       "fields": {
@@ -3561,50 +3716,45 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "session_id",
-            "description": "<p>会话id.</p> "
+            "field": "access_token",
+            "description": "<p>阿姨登录token</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
+            "field": "bill_id",
+            "description": "<p>账单唯一标识.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
             "field": "platform_version",
-            "description": "<p>平台版本号</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "Sign",
-            "description": "<p>传了123.</p> "
+            "description": "<p>平台版本号.</p> "
           }
         ]
       }
     },
+    "sampleRequest": [
+      {
+        "url": "http://dev.api.1jiajie.com/v1/worker/get-worker-bill-detail"
+      }
+    ],
     "success": {
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"\",\n     \"ret\":\n     {\n         \"orderCount\": 0,\n         \"cancelCount\": \"\",\n         \"driverTotalScore\": \"\",\n         \"myRewards\": [],\n         \"userPhone\": \"13401096964\",\n         \"driverName\": \"陈琴昭测试\",\n         \"driverAge\": \"32\",\n         \"qualityScoreClauseUrl\": \"http://wap.1jiajie.com/serverinfo/complainManage.html\",\n         \"livePlace\": \"北京市房山区长阳\",\n         \"homeTown\": \"河北省\",\n         \"identityCard\": \"********\",\n         \"goodRate\": [],\n         \"badRate\": [],\n         \"totalRate\": [],\n         \"myMoney\": \"0.0元\",\n         \"rankList\": [],\n         \"myRank\":\n         [\n         {\n             \"driver_name\": \"\",\n             \"rank\": \"100+\",\n             \"money\": \"0\"\n         }\n         ],\n         \"starCountList\": [],\n         \"meStarList\":\n         [\n         {\n             \"driver_name\": \"冷桂艳\",\n             \"rank\": \"100+\",\n             \"money\": \"0\"\n         }\n         ],\n         \"personal_skill\":\n         [\n         {\n             \"title\": \"洗衣\",\n             \"type\": 1,\n             \"value\": null\n         }\n         ],\n         \"druingTime\": \"2015.9.1  一  2015.9.13\",\n         \"restScore\": \"分\",\n         \"complainNum\": \"1个\",\n         \"unPayMoney\": \"0.0元\",\n         \"isPayMoney\": \"0.0元\",\n         \"unPayList\": [],\n         \"isPayList\": [],\n         \"myMoneyList\": [],\n         \"restDay\": \"剩余周期135天\",\n         \"scoreList\": [],\n         \"fineMoney\": \"0.00\",\n         \"unComplainList\": [],\n         \"restDayStr\": \"您本次的积分周期自2014-01-02至2014-05-06止\",\n         \"complainStr\": \"\",\n         \"complainClauseUrl\": \"http://wap.1jiajie.com/serverinfo/punishManage.html\",\n         \"todayFinishOrder\": 0,\n         \"todayFinishMoney\": 0,\n         \"monthFinishOrder\": 0,\n         \"monthFinishMoney\": 0,\n         \"succRate\": 100,\n         \"driverLevel\": \"\",\n         \"alertType\": 0,\n         \"accountRestMoney\": 0,\n         \"payMoney\": 0,\n         \"chargeMoney\": 0,\n         \"driverCompany\": \"家政公司\",\n         \"curCarId\": null,\n         \"curCarBrand\": null,\n         \"curCarNumber\": null,\n         \"curCarColor\": null,\n         \"curColor\": null,\n         \"curCarType\": 1,\n         \"isOpenStart\": true,\n         \"result\": \"1\",\n         \"headUrl\": \"http://static.1jiajie.com/picture_default.jpg\",\n         \"driverDegree\": \"高中\",\n         \"driverWorkAge\": \"2年\",\n         \"driverLanguage\": \"普通话\",\n         \"healthCard\": \"无\",\n         \"department\": \"北京大悦城店\",\n         \"serverRange\": \"5公里\",\n         \"tranSportation\": \"无\",\n         \"activity_url\": \"http://wap.1jiajie.com/wap_theme_activity/ayiduan/index.html\"\n     }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功.\",\n   \"ret\": {\n      \"title_msg\": {\n          \"salary\": '6000.00',\n          \"salary_constitute\": '3000元(底薪)+2000元(工时服务)+1100元(奖励)-100元(处罚)'\n      },\n      \"order_list\": [\n          {\n              \"service_time\": \"9.10 14:00-16:00\",\n              \"order_num\": \"32341334352\",\n             \"order_price\":\"25.00\",\n              \"service_addr\": \"北京市朝阳区光华路SOHO\"\n          }\n      ]\n  }\n}",
           "type": "json"
         }
       ]
     },
     "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "SessionIdNotFound",
-            "description": "<p>未找到会话ID.</p> "
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"Failed\",\n    \"msg\": \"SessionIdNotFound\"\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"error\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -3616,7 +3766,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/worker/get-worker-bill-list",
-    "title": "获取阿姨服务信息 (田玉星 60%)",
+    "title": "获取阿姨对账单列表 (田玉星 80%)",
     "description": "<p>【备注：等待model底层支持】</p> ",
     "name": "actionGetWorkerBillList",
     "group": "Worker",
@@ -3663,7 +3813,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\": \"操作成功.\",\n     \"ret\": [\n            \"worker_name\": \"张\",\n            \"service_count\": \"60\",\n            \"service_family_count\": \"60\",\n             \"total_income\"=>\"23888.00\"\n     ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\": \"操作成功.\",\n     \"ret\": [\n     {\n        'bill_type' =>\"1\",\n        'bill_explain'=>\"每周四，E家洁会为您结算上周一至周日的保洁服务订单收入及各类服务补贴。您可通过每周的周期下拉菜单进行选择，点击查看，了解每周收入明细。\",\n        'bill_date'=>'09年07月-09月13日',\n        'order_count'=>'10',\n        'salary'=>'320.00',\n        'balance_status'=>\"1\",\n        \"bill_id\"=>\"32\"\n      }\n     ]\n      \n}",
           "type": "json"
         }
       ]
@@ -3879,6 +4029,67 @@ define({ "api": [
   },
   {
     "type": "GET",
+    "url": "/worker/get-worker-punish-list",
+    "title": "获取阿姨受处罚列表 (田玉星 70%)",
+    "description": "<p>【备注：等待model底层支持】</p> ",
+    "name": "actionGetWorkerPunishList",
+    "group": "Worker",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>阿姨登录token</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "bill_id",
+            "description": "<p>账单唯一标识.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "platform_version",
+            "description": "<p>平台版本号.</p> "
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "http://dev.api.1jiajie.com/v1/worker/get-worker-punish-list"
+      }
+    ],
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功.\",\n  \"ret\": [\n     {\n        \"punish_date\": \"2015.09.08\",\n        \"punish_money\": \"25.00\",\n       }\n     ]\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"error\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/WorkerController.php",
+    "groupTitle": "Worker"
+  },
+  {
+    "type": "GET",
     "url": "/worker/get-worker-service-info",
     "title": "获取阿姨服务信息 (田玉星 80%)",
     "description": "<p>【备注：等待model底层支持】</p> ",
@@ -3914,6 +4125,128 @@ define({ "api": [
         {
           "title": "Success-Response:",
           "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\": \"操作成功.\",\n     \"ret\": [\n            \"worker_name\": \"张\",\n            \"service_count\": \"60\",\n            \"service_family_count\": \"60\",\n             \"total_income\"=>\"23888.00\"\n     ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"error\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/WorkerController.php",
+    "groupTitle": "Worker"
+  },
+  {
+    "type": "GET",
+    "url": "/worker/get-worker-taskreward-list",
+    "title": "获取阿姨奖励列表 (田玉星 70%)",
+    "description": "<p>【备注：等待model底层支持】</p> ",
+    "name": "actionGetWorkerTaskrewardList",
+    "group": "Worker",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>阿姨登录token</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "bill_id",
+            "description": "<p>账单唯一标识.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "platform_version",
+            "description": "<p>平台版本号.</p> "
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "http://dev.api.1jiajie.com/v1/worker/get-worker-taskreward-list"
+      }
+    ],
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功.\",\n  \"ret\": [\n     {\n        \"task_name\": \"单次抢单\",\n        \"reward_money\": \"25.00\",\n       }\n     ]\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"error\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/WorkerController.php",
+    "groupTitle": "Worker"
+  },
+  {
+    "type": "GET",
+    "url": "/worker/get-worker-tasktime-list",
+    "title": "获取阿姨工时列表 (田玉星 70%)",
+    "description": "<p>【备注：等待model底层支持】</p> ",
+    "name": "actionGetWorkerTasktimeList",
+    "group": "Worker",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>阿姨登录token</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "bill_id",
+            "description": "<p>账单唯一标识.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "platform_version",
+            "description": "<p>平台版本号.</p> "
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "http://dev.api.1jiajie.com/v1/worker/get-worker-tasktime-list"
+      }
+    ],
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功.\",\n  \"ret\": [\n     {\n        \"service_time\": \"9.10 14:00-16:00\",\n        \"order_price\": \"25.00\",\n        \"order_num\": \"32341334352\",\n        \"service_addr\": \"北京市朝阳区光华路SOHO\"\n       }\n     ]\n  }",
           "type": "json"
         }
       ]
@@ -4192,6 +4525,52 @@ define({ "api": [
   },
   {
     "type": "GET",
+    "url": "/worker/get-worker-center",
+    "title": "个人中心首页 (田玉星 100%)",
+    "name": "getWorkerCenter",
+    "group": "Worker",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>阿姨登录token</p> "
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "http://dev.api.1jiajie.com/v1/worker/get-worker-center"
+      }
+    ],
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n \"msg\": \"阿姨信息查询成功\",\n \"ret\": {\n     \"worker_name\": \"李刘珍\",\n     \"worker_phone\": \"13121999270\",\n     \"head_url\": \"\",\n     \"worker_identity\": \"兼职\",\n     \"worker_role\": \"保姆\",\n     \"worker_start\": 4.5,\n     \"personal_skill\": [\n         \"煮饭\",\n         \"开荒\",\n         \"护老\",\n         \"擦玻璃\",\n         \"带孩子\"\n     ]\n   }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/WorkerController.php",
+    "groupTitle": "Worker"
+  },
+  {
+    "type": "GET",
     "url": "/configure/all-services",
     "title": "城市服务初始化 （赵顺利100%）",
     "name": "actionAllServices",
@@ -4425,6 +4804,78 @@ define({ "api": [
     "groupTitle": "configure"
   },
   {
+    "type": "Get",
+    "url": "/coupon/coupons",
+    "title": "获取用户优惠码列表（包括该用户该城市下的优惠码和通用的优惠码） （李勇 80%）",
+    "name": "Coupons",
+    "group": "coupon",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "good_type",
+            "description": "<p>商品类型</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "city_id",
+            "description": "<p>城市</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\":\n  \"ret\": {\n      \"coupon\":[\n        {\n          \"id\": \"1\",\n          \"coupon_name\": \"优惠码名称\",\n           \"coupon_price\": \"优惠码价格\",\n           \"coupon_type_name\": \"优惠券类型名称\",\n           \"coupon_service_type_id\": \"服务类别id\",\n           \"coupon_service_type_name\": \"服务类别名称\",\n          }\n       ]\n      }\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "   HTTP/1.1 403 Not Found\n   {\n     \"code\": \"0\",\n     \"msg\": \"用户认证已经过期,请重新登录，\"\n\n   }\n*     {\n     \"code\": \"0\",\n     \"msg\": \"优惠码列表为空\"\n\n   }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/CouponController.php",
+    "groupTitle": "coupon"
+  },
+  {
     "type": "POST",
     "url": "/coupon/exchange-coupon",
     "title": "兑换优惠劵 （李勇 80%）",
@@ -4508,80 +4959,8 @@ define({ "api": [
     "groupTitle": "coupon"
   },
   {
-    "type": "Get",
-    "url": "/user/coupons",
-    "title": "获取用户优惠码或同城市 （李勇 80%）",
-    "name": "GetCouponCustomer",
-    "group": "coupon",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户认证</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "good_type",
-            "description": ""
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "city_name",
-            "description": "<p>城市</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": {\n      \"coupon\":[\n        {\n          \"id\": \"1\",\n          \"coupon_name\": \"优惠码名称\",\n           \"coupon_price\": \"优惠码价格\",\n           \"coupon_type_name\": \"优惠券类型名称\",\n           \"coupon_service_type_id\": \"服务类别id\",\n           \"coupon_service_type_name\": \"服务类别名称\",\n          }\n       ]\n      }\n\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "   HTTP/1.1 403 Not Found\n   {\n     \"code\": \"0\",\n     \"msg\": \"用户认证已经过期,请重新登录，\"\n\n   }\n*     {\n     \"code\": \"0\",\n     \"msg\": \"优惠码列表为空\"\n\n   }",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/CouponController.php",
-    "groupTitle": "coupon"
-  },
-  {
     "type": "get",
-    "url": "v1/service/single-service-time.php",
+    "url": "v1/service/single-service-time",
     "title": "单次服务排班表(李勇90%缺少model支持)",
     "name": "SingleServiceTime",
     "group": "service",
@@ -4710,6 +5089,91 @@ define({ "api": [
         {
           "title": "Error-Response:",
           "content": "HTTP/1.1 404 Not Found\n{\n  \"code\":\"error\",\n  \"msg\": \"该城市暂未开通\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/ServiceController.php",
+    "groupTitle": "service"
+  },
+  {
+    "type": "GET",
+    "url": "v1/service/baidu-map",
+    "title": "根据地址获取百度地图数据（赵顺利0%）",
+    "group": "service",
+    "name": "actionBaiduMap",
+    "description": "<p>根据地址获取百度地图数据</p> ",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "query",
+            "description": "<p>查询关键字</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "location",
+            "description": "<p>经纬度</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "radius",
+            "description": "<p>半径</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "output",
+            "description": "<p>输出方式</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "ak",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "http://dev.api.1jiajie.com/v1/service/baidu-map"
+      }
+    ],
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"code\": \"ok\",\n    \"msg\": \"\",\n    \"ret\":\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "queryNotSupportFound",
+            "description": "<p>关键字不能为空.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"code\":\"error\",\n  \"msg\": \"关键字不能为空\"\n}",
           "type": "json"
         }
       ]
@@ -4918,9 +5382,9 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/worker/recursive-service-time.php",
+    "url": "/worker/recursive-service-time",
     "title": "周期服务时间表(李勇90%缺少model)",
-    "name": "actionRecursiveWorkerTime",
+    "name": "actionRecursiveServiceTime",
     "group": "service",
     "description": "<p>周期服务时间表</p> ",
     "parameter": {
