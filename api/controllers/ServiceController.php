@@ -5,6 +5,8 @@ use Yii;
 use core\models\Operation\CoreOperationShopDistrictGoods;
 use core\models\Operation\CoreOperationCategory;
 use core\models\Operation\CoreOperationShopDistrictCoordinate;
+use \core\models\worker\Worker;
+use \core\models\customer\CustomerAccessToken;
 
 
 class ServiceController extends \api\components\Controller
@@ -386,7 +388,7 @@ class ServiceController extends \api\components\Controller
      */
 
     /**
-     * @api {get} v1/service/single-service-time.php  单次服务排班表(李勇90%缺少model支持)
+     * @api {get} v1/service/single-service-time  单次服务排班表(李勇90%缺少model支持)
      * @apiName SingleServiceTime
      * @apiGroup service
      * @apiDescription 单次服务获取服务时间
@@ -448,10 +450,10 @@ class ServiceController extends \api\components\Controller
      *     }
      *
      */
-    function actionSingleWorkerTime()
+    function actionSingleServiceTime()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-        if (!isset($param['access_token']) || !$param['access_token'] || !WorkerAccessToken::checkAccessToken($param['access_token'])) {
+        if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
         if (!isset($param['longitude']) || !$param['longitude'] || !isset($param['latitude']) || !$param['latitude'] || !isset($param['plan_time']) || !$param['plan_time']) {
@@ -495,8 +497,8 @@ class ServiceController extends \api\components\Controller
     }
 
     /**
-     * @api {get} /worker/recursive-service-time.php  周期服务时间表(李勇90%缺少model)
-     * @apiName actionRecursiveWorkerTime
+     * @api {get} /worker/recursive-service-time  周期服务时间表(李勇90%缺少model)
+     * @apiName actionRecursiveServiceTime
      * @apiGroup service
      * @apiDescription 周期服务时间表
      * @apiParam {String} access_token    用户认证.
@@ -559,10 +561,10 @@ class ServiceController extends \api\components\Controller
      *     }
      *
      */
-    function actionRecursiveWorkerTime()
+    function actionRecursiveServiceTime()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-        if (!isset($param['access_token']) || !$param['access_token'] || !WorkerAccessToken::checkAccessToken($param['access_token'])) {
+        if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
         if (!isset($param['longitude']) || !$param['longitude'] || !isset($param['latitude']) || !$param['latitude'] || !isset($param['is_recommend']) || !isset($param['plan_time']) || !$param['plan_time']) {
@@ -586,6 +588,8 @@ class ServiceController extends \api\components\Controller
         } else {
             $district_id = $ShopDistrictInfo['id'];
         }
+        //获取周期服务时间表
+        //$recursive_worker_time=Worker::getRecursiveWorkerTable($district_id,$plan_time);
         $recursive_worker_time = array();
         for ($i = 7; $i <= 36; $i++) {
             $item = [
