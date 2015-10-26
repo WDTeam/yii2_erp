@@ -47,36 +47,9 @@ $this->params['breadcrumbs'][] = $this->title;
 		  	 <div class="conter"> 
 		  	 	 <div class="m_frist">
 		  	 	 	<!---------------------查询开始-------------------->
-		  	 	 	<div class="heading">
-						<h3 class="panel-title">查询</h3>
-					</div>
-					
-					<div class="m_from">
-                    <?php $form = ActiveForm::begin([
-                        //'type' => ActiveForm::TYPE_VERTICAL,
-                        'action' => ['order/index'],
-                        'method' => 'get',
-                    ]); ?>						
-						<?php echo $form->field($searchModel, 'order_customer_phone')->TextInput(['class' => 'm_ipu'])->label('用户电话 :', ['class' => 'm_ipone']); ?>
-						<?php echo $form->field($searchModel, 'worker_id')->TextInput(['class' => 'm_ipu'])->label('阿姨电话 :', ['class' => 'm_ipone']); ?>
-						<?php echo $form->field($searchModel, 'order_code')->TextInput(['class' => 'm_ipu'])->label('订单编号 :', ['class' => 'm_ipone']); ?>
-						
-						<div class="m_riqi">
-						  <div class="m_fr">	
-							<label class="m_ipone">下单时间:</label>
-							<input type="text" name="datetime" class="ui_timepicker" value="" placeholder=""> 到
-							<input type="text" name="datetime" class="ui_timepicker" value="" placeholder="">
-                         </div>
-						  <div class="m_fr">	
-                            <label class="m_ipone">下单时间:</label>
-							<input type="text" name="datetime" class="ui_timepicker" value="" placeholder=""> 到
-							<input type="text" name="datetime" class="ui_timepicker" value="" placeholder="">
-						   </div>
-						    <?= Html::submitButton('查询', ['class' => 'btn btn-primary']) ?>
-						</div>
-					<?php ActiveForm::end(); ?>
-					  <div class="clear"></div>
-					</div>
+                    <?php            
+                    echo $this->render('_search', ['searchModel' => $searchModel]);
+                    ?>
 						
 						<!---------------------查询开始-------------------->
 				  	 	 	<div class="heading heading_top">
