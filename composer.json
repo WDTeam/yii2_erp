@@ -69,13 +69,12 @@
     },
     "autoload":{
       "files":[
-        "vendor/ejiajie/pay/alipay/alipay_app_class.php",
+
         "vendor/ejiajie/pay/wx_js/wxjspay_class.php",
         "vendor/ejiajie/pay/wx_app/wxpay_class.php",
         "vendor/ejiajie/pay/bfb_app/bfbpay_class.php",
         "vendor/ejiajie/pay/upacp_app/uppay_class.php",
         "vendor/ejiajie/pay/zhidahao_h5/zhidahao_class.php",
-        "vendor/ejiajie/pay/alipay/alipay_web_class.php",
         "vendor/ejiajie/pay/alipay_wap/alipay_wap_class.php"
       ]
     }

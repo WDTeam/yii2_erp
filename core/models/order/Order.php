@@ -83,6 +83,8 @@ use yii\helpers\ArrayHelper;
  * @property string $promotion_id
  * @property string $order_use_promotion_money
  * @property string $worker_id
+ * @property string $order_worker_phone
+ * @property string $order_worker_name
  * @property string $worker_type_id
  * @property string $order_worker_type_name
  * @property integer $order_worker_assign_type
@@ -279,6 +281,7 @@ class Order extends OrderModel
             $order->worker_id = $worker['id'];
             $order->worker_type_id = $worker['worker_type'];
             $order->order_worker_phone = $worker['worker_phone'];
+            $order->order_worker_name = $worker['worker_name'];
             $order->order_worker_type_name = $worker['worker_type_description'];
             $order->shop_id = $worker["shop_id"];
             $order->order_worker_assign_type = $assign_type; //接单方式

@@ -19,6 +19,7 @@ class m151007_153201_create_table_order_ext_worker extends Migration
             //===========================工人信息
             'worker_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'工人id\'',
             'order_worker_phone' => Schema::TYPE_STRING.'(64) DEFAULT \'\' COMMENT \'工人手机号\'',
+            'order_worker_name' => Schema::TYPE_STRING.'(64) DEFAULT \'\' COMMENT \'工人姓名\'',
             'worker_type_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'工人职位类型ID\'',
             'order_worker_type_name' => Schema::TYPE_STRING.'(64)  DEFAULT \'\' COMMENT \'工人职位类型\'',
             'order_worker_assign_type' => Schema::TYPE_SMALLINT.'(4) unsigned  DEFAULT 0 COMMENT \'工人接单方式 0未接单 1工人抢单 2客服指派 3门店指派\'',

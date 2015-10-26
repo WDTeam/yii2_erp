@@ -11,15 +11,15 @@ use yii\helpers\HtmlPurifier;
                 <th>支付状态</th>
                 <th></th>  
                 <th></th>
-                <th class="m_colo">订单状态</th>
+                <th class="m_colo"><?= Html::encode($model->orderExtStatus->order_status_name) ?></th>
             </tr>
             <tr>
-            	<td><?= empty($model->orderExtCustomer->order_customer_phone) ? '用户电话' : Html::encode($model->orderExtCustomer->order_customer_phone) ?>　用户身份<br />
+            	<td><?= empty($model->orderExtCustomer->order_customer_phone) ? '用户手机' : Html::encode($model->orderExtCustomer->order_customer_phone) ?>　用户身份<br />
             	    <?= Html::encode($model->order_src_name) ?>下单<br />
             	    2015-09-18   9:00-11:00<br />
             	    <?= HtmlPurifier::process($model->order_address) ?>
             	</td>
-                <td>总金额：50元<br />
+                <td>总金额：<?= Html::encode($model->order_money) ?>元<br />
             	           优惠券：10元<br />
             	           需支付：40元<br />
             	          支付方式：线上付款
@@ -35,7 +35,7 @@ use yii\helpers\HtmlPurifier;
             		<p><a href="###">查看订单</a></p>
             		<p><a href="###">投诉</a></p>
             		<p><a href="###">发送短信</a></p>
-            		<p><a href="###">取消订单</a></p>
+            		<p><a href="order/cancel-order?orderid=<?= Html::encode($model->id) ?>">取消订单</a></p>
             	</td>
             </tr>
 		</table>

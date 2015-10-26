@@ -16,5 +16,16 @@ return [
             'tablePrefix' => 'ejj_',
             'charset' => 'utf8',
         ],
+        'cache' => [
+            //'class' => 'yii\caching\FileCache',
+//            'class'=>'yii\caching\DbCache',
+            'class' => 'yii\redis\Cache',
+            ],
+        'redis' => [
+            'class' => 'yii\redis\Connection',
+            'hostname' => '101.200.179.70', // 配置为 dev环境 redis 服务器地址 test环境 101.200.200.74 ，prod环境 待定
+            'port' => 6379,
+            'database' => 0,
+            ],
     ]
 ];
