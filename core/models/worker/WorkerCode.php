@@ -16,7 +16,7 @@ use \core\models\worker\Worker;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class WorkerCode extends \common\models\WorkerCode
+class WorkerCode extends \common\models\worker\WorkerCode
 {
 
     /**
@@ -37,7 +37,7 @@ class WorkerCode extends \common\models\WorkerCode
                 $worker_code .= rand(0, 9);
             }
             
-            $workerCode->worker_code = $customer_code;
+            $workerCode->worker_code = $worker_code;
             $workerCode->worker_code_expiration = 90;
             $workerCode->worker_phone = $phone;
             $workerCode->created_at = time();
@@ -48,7 +48,7 @@ class WorkerCode extends \common\models\WorkerCode
                 var_dump($workerCode->getErrors());
             }
             $workerCode->save();
-            $msg = '您本次的验证码为'.$workerCode.', 欢迎使用e家洁APP';
+            $msg = '您本次的验证码为'.$worker_code.', 欢迎使用e家洁APP';
             $string = Yii::$app->sms->send($phone, $msg, 1);
             $transaction->commit();
             return true;

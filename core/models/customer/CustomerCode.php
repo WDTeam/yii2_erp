@@ -16,7 +16,7 @@ use \core\models\customer\Customer;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class CustomerCode extends \common\models\CustomerCode
+class CustomerCode extends \common\models\customer\CustomerCode
 {
 
     /**
@@ -25,7 +25,7 @@ class CustomerCode extends \common\models\CustomerCode
     public static function generateAndSend($phone){
         $transaction = \Yii::$app->db->beginTransaction();
         try{
-            $has_customer = Customer::hasCustomer($phone);
+            //$has_customer = Customer::hasCustomer($phone);
             $customerCodes = self::find()->where(['customer_phone'=>$phone])->all();
             foreach ($customerCodes as $customerCode) {
                 $customerCode->is_del = 1;

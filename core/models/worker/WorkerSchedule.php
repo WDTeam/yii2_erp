@@ -14,7 +14,7 @@ use Yii;
  * @property string $worker_schedule_timeline
  * @property integer $created_ad
  */
-class WorkerSchedule extends \common\models\WorkerSchedule
+class WorkerSchedule extends \common\models\worker\WorkerSchedule
 {
     public static function getWeekdayShow($weekday){
         switch($weekday){

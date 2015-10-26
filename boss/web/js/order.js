@@ -120,6 +120,8 @@ $(document).on("click",".save_address_btn",function(){
     var city_id = $('#address_'+address_id+' .city_form').val();
     var county_id = $('#address_'+address_id+' .county_form').val();
     var county_name = $('#address_'+address_id+' .county_form option:selected').text();
+    var city_name = $('#address_'+address_id+' .city_form option:selected').text();
+    var province_name = $('#address_'+address_id+' .province_form option:selected').text();
     var detail = $('#address_'+address_id+' .detail_form').val();
     var nickname = $('#address_'+address_id+' .nickname_form').val();
     var phone = $('#address_'+address_id+' .phone_form').val();
@@ -130,8 +132,8 @@ $(document).on("click",".save_address_btn",function(){
     }
     $.ajax({
         type: "POST",
-        url: "/order/save-address/?address_id=" + address_id,
-        data: "province_id="+province_id+"&city_id="+city_id+"&county_id="+county_id+"&county_name="+county_name+"&detail="+detail+"&nickname="+nickname+"&phone="+phone+"&customer_id="+customer_id,
+        url: "/order/order/save-address/?address_id=" + address_id,
+        data: "province_id="+province_id+"&city_id="+city_id+"&county_id="+county_id+"&county_name="+county_name+"&city_name="+city_name+"&province_name="+province_name+"&detail="+detail+"&nickname="+nickname+"&phone="+phone+"&customer_id="+customer_id,
         dataType: "json",
         success: function (msg) {
             if(msg.code==200) {
@@ -168,7 +170,7 @@ function getCity(province_id,address_id,city_id,county_id)
 {
     $.ajax({
         type: "GET",
-        url: "/order/get-city/?province_id=" + province_id,
+        url: "/order/order/get-city/?province_id=" + province_id,
         dataType: "json",
         success: function (city) {
             $('#address_'+address_id+' .city_form').html('<option value="">请选择城市</option>');
@@ -186,7 +188,7 @@ function getCounty(city_id,address_id,county_id)
 {
     $.ajax({
         type: "GET",
-        url: "/order/get-county/?city_id=" + city_id,
+        url: "/order/order/get-county/?city_id=" + city_id,
         dataType: "json",
         success: function (county) {
             $('#address_'+address_id+' .county_form').html('<option value="">请选择区县</option>');
@@ -219,7 +221,7 @@ function getGoods(){
 
     $.ajax({
         type: "GET",
-        url: "/order/get-goods/?lng=" + lng + "&lat=" + lat,
+        url: "/order/order/get-goods/?lng=" + lng + "&lat=" + lat,
         dataType: "json",
         success: function (data) {
             if(data.code==200){
@@ -245,7 +247,7 @@ function getCoupons(){
     if(window.customer != undefined) {
         $.ajax({
             type: "GET",
-            url: "/order/coupons/?id=" + window.customer.id+"&service_id="+$('#order-order_service_type_id input:checked').val(),
+            url: "/order/order/coupons/?id=" + window.customer.id+"&service_id="+$('#order-order_service_type_id input:checked').val(),
             dataType: "json",
             success: function (coupons) {
                 if (coupons.length > 0) {
@@ -266,7 +268,7 @@ function getCards(){
     if(window.customer != undefined) {
         $.ajax({
             type: "GET",
-            url: "/order/cards/?id=" + window.customer.id,
+            url: "/order/order/cards/?id=" + window.customer.id,
             dataType: "json",
             success: function (cards) {
                 if (cards.length > 0) {
@@ -290,7 +292,7 @@ function getCustomerInfo(){
     if(reg.test(phone)) {
         $.ajax({
             type: "GET",
-            url: "/order/customer/?phone=" + phone,
+            url: "/order/order/customer/?phone=" + phone,
             dataType: "json",
             success: function (customer) {
                 window.customer=customer;
@@ -299,7 +301,7 @@ function getCustomerInfo(){
                     $("#customer_balance").text(customer.customer_balance);
                     $.ajax({
                         type: "GET",
-                        url: "/order/customer-address/?id=" + customer.id,
+                        url: "/order/order/customer-address/?id=" + customer.id,
                         dataType: "json",
                         success: function (address) {
                             address_list = address;
@@ -327,7 +329,7 @@ function getCustomerInfo(){
 
                     $.ajax({
                         type: "GET",
-                        url: "/order/customer-used-workers/?id=" + customer.id,
+                        url: "/order/order/customer-used-workers/?id=" + customer.id,
                         dataType: "json",
                         success: function (worker) {
                             if (worker.length>0) {

@@ -10,7 +10,7 @@ use kartik\widgets\ActiveForm;
         'action' => ['self-fulltime-worker-settle-done?id='.$model->id.'&settle_type='.$model->settle_type.'&review_section='.$model->review_section.'&is_ok=0'],
         'method' => 'get',
     ]);
-    echo $form->field($model, 'workerName')->textInput(['disabled' => true,'value'=>'陈阿姨'])->label('阿姨姓名');
+    echo $form->field($model, 'worker_name')->textInput(['disabled' => true])->label('阿姨姓名');
 
     echo $form->field($model, 'comment')->textarea(['name'=>'comment'])->label("审核不通过原因");
 

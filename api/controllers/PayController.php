@@ -3,7 +3,7 @@ namespace api\controllers;
 
 use Yii;
 use \api\models\PayParam;
-use \core\models\GeneralPay\GeneralPay;
+use \core\models\payment\GeneralPay;
 use \core\models\customer\CustomerAccessToken;
 
 class PayController extends \api\components\Controller
@@ -11,26 +11,19 @@ class PayController extends \api\components\Controller
 
 
     /**
-     * @api {get} /v2/online_pay_for_member.php 会员余额支付 (赵顺利0%)
-     * @apiName actionOnlinePayForMember
+     * @api {POST} v1/pay/balance-pay 会员余额支付 (赵顺利100%)
+     * @apiName actionBalancePay
      * @apiGroup Pay
      *
-     * @apiParam {String} session_id    会话id.
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
      * @apiParam {String} order_id    订单ID.
-     * @apiParam {String} money 支付金额.
-     * @apiParam {String} telephone 用户电话.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
      *      "code": "ok",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      {
-     *          "msgStyle":"toast",
-     *          "alertMsg":"\u8ba2\u5355\u5df2\u7ecf\u652f\u4ed8\u8fc7,\u8bf7\u52ff\u91cd\u590d\u63d0\u4ea4"
-     *      }
+     *      "msg":"支付成功",
      * }
      *
      * @apiError SessionIdNotFound 未找到会话ID.
@@ -39,22 +32,43 @@ class PayController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"Failed",
-     *      "msg": "SessionIdNotFound"
+     *      "code":"error",
+     *      "msg": "支付失败"
      *  }
      *
      */
+    public function actionBalancePay()
+    {
+        $params = Yii::$app->request->post() or
+        $params = json_decode(Yii::$app->request->rawBody, true);
+
+        if (empty($params['access_token']) || !CustomerAccessToken::checkAccessToken($params['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
+        $customer = CustomerAccessToken::getCustomer($params['access_token']);
+        $date=[
+            'customer_id'=>$customer->id,
+            'order_id'=>$params['order_id'],
+        ];
+
+        if(empty(GeneralPay::balancePay($date)))
+        {
+            return $this->send(null, "支付失败", "error", 403);
+        }
+
+        return $this->send(null, "支付成功", "ok");
+    }
 
 
     /**
-     * @api {post} v1/pay/online-pay 在线支付接口 （已完成）
+     * @api {POST} v1/pay/online-pay 在线支付接口 （已完成）
      * @apiName actionOnlinePay
      * @apiGroup Pay
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam integer pay_money 支付金额
-     * @apiParam integer channel_id 渠道ID
+     * @apiParam {String} pay_money 支付金额
+     * @apiParam {String} channel_id 渠道ID
      *                              1=APP微信,
      *                              2=H5微信,
      *                              3=APP百度钱包,
@@ -62,22 +76,22 @@ class PayController extends \api\components\Controller
      *                              5=APP支付宝,
      *                              6=WEB支付宝,
      *                              7=H5百度直达号,
-     *                              20=后台支付,(未实现)
-     *                              21=微博支付,（未实现）
-     * @apiParam integer [order_id] 订单ID,没有订单号表示充值
-     * @apiParam integer partner 第三方合作号
+     *                              20=后台支付（未实现）,
+     *                              21=微博支付（未实现）,
+     * @apiParam {String} [order_id] 订单ID,没有订单号表示充值
+     * @apiParam {String} partner 第三方合作号
      *
-     * @apiParam object [ext_params] 扩展参数,用于微信/百度直达号（即channel_id=2或7 必填）
-     * @apiParam string [ext_params.openid] 微信openid （channel_id=2 必填）
-     * @apiParam string [ext_params.return_url] 同步回调地址 （channel_id=6必填）
-     * @apiParam string [ext_params.show_url] 显示商品URL（channel_id=6必填）
-     * @apiParam string [ext_params.customer_name] 商品名称（channel_id=7必填）
-     * @apiParam string [ext_params.customer_mobile] 用户电话（channel_id=7必填）
-     * @apiParam string [ext_params.customer_address] 用户地址（channel_id=7必填）
-     * @apiParam string [ext_params.order_source_url] 订单详情地址（channel_id=7必填）
-     * @apiParam string [ext_params.page_url] 订单跳转地址（channel_id=7必填）
-     * @apiParam string [ext_params.goods_name] 订单名称（channel_id=7必填）
-     * @apiParam string [ext_params.detail] 订单详情 （channel_id=7必填）
+     * @apiParam {Object} [ext_params] 扩展参数,用于微信/百度直达号（即channel_id=2或7 必填）
+     * @apiParam {String} [ext_params.openid] 微信openid （channel_id=2 必填）
+     * @apiParam {String} [ext_params.return_url] 同步回调地址 （channel_id=6必填）
+     * @apiParam {String} [ext_params.show_url] 显示商品URL（channel_id=6必填）
+     * @apiParam {String} [ext_params.customer_name] 商品名称（channel_id=7必填）
+     * @apiParam {String} [ext_params.customer_mobile] 用户电话（channel_id=7必填）
+     * @apiParam {String} [ext_params.customer_address] 用户地址（channel_id=7必填）
+     * @apiParam {String} [ext_params.order_source_url] 订单详情地址（channel_id=7必填）
+     * @apiParam {String} [ext_params.page_url] 订单跳转地址（channel_id=7必填）
+     * @apiParam {String} [ext_params.goods_name] 订单名称（channel_id=7必填）
+     * @apiParam {String} [ext_params.detail] 订单详情 （channel_id=7必填）
      *
      * @apiParamExample {json} Request-Example:
      *  {
@@ -112,7 +126,7 @@ class PayController extends \api\components\Controller
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *      "code": 0,
+     *      "code": 1,
      *      "msg": "数据返回成功",
      *      "ret": {
      *          "sp_no": 1049,
@@ -143,8 +157,8 @@ class PayController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"Failed",
-     *      "msg": "SessionIdNotFound"
+     *      "code":"0",
+     *      "msg": "支付失败"
      *  }
      *
      */
@@ -157,11 +171,11 @@ class PayController extends \api\components\Controller
         $data[$name] = json_decode(Yii::$app->request->rawBody, true);
 
         if (empty($data[$name]['access_token']) || !CustomerAccessToken::checkAccessToken($data[$name]['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
         $customer = CustomerAccessToken::getCustomer($data[$name]['access_token']);
 
-        $data[$name]['customer_id']=$customer->id;
+        $data[$name]['customer_id'] = $customer->id;
 
         $ext_params = [];
         //在线支付（online_pay），在线充值（pay）
@@ -169,11 +183,11 @@ class PayController extends \api\components\Controller
             if ($data[$name]['channel_id'] == '2') {
                 $model->scenario = 'wx_h5_pay';
                 $ext_params['openid'] = $data[$name]['ext_params']['openid'];    //微信openid
-            } elseif($data[$name]['channel_id'] == '6'){
+            } elseif ($data[$name]['channel_id'] == '6') {
                 $model->scenario = 'alipay_web_pay';
                 $ext_params['return_url'] = $data[$name]['ext_params']['return_url'];    //同步回调地址
                 $ext_params['show_url'] = $data[$name]['ext_params']['show_url'];    //显示商品URL
-            }elseif ($data[$name]['channel_id'] == '7') {
+            } elseif ($data[$name]['channel_id'] == '7') {
                 $model->scenario = 'zhidahao_h5_pay';
                 $ext_params['customer_name'] = $data[$name]['ext_params']['customer_name'];  //商品名称
                 $ext_params['customer_mobile'] = $data[$name]['ext_params']['customer_mobile'];  //用户电话
@@ -189,7 +203,7 @@ class PayController extends \api\components\Controller
             if ($data[$name]['channel_id'] == '2') {
                 $model->scenario = 'wx_h5_online_pay';
                 $ext_params['openid'] = $data[$name]['ext_params']['openid'];    //微信openid
-            }elseif($data[$name]['channel_id'] == '6'){
+            } elseif ($data[$name]['channel_id'] == '6') {
                 $model->scenario = 'alipay_web_pay';
                 $ext_params['return_url'] = $data[$name]['ext_params']['return_url'];    //同步回调地址
                 $ext_params['show_url'] = $data[$name]['ext_params']['show_url'];    //显示商品URL
@@ -212,9 +226,9 @@ class PayController extends \api\components\Controller
 
         if ($model->load($data) && $model->validate()) {
             $retInfo = GeneralPay::getPayParams($model->pay_money, $model->customer_id, $model->channel_id, $model->partner, $model->order_id, $ext_params);
-            return $this->send($retInfo['data'],$retInfo['info'],$retInfo['status']);
+            return $this->send($retInfo['data'], $retInfo['info'], $retInfo['status']);
         }
-        return $this->send(null, $model->errors, "error");
+        return $this->send(null, $model->errors,0);
 
     }
 
