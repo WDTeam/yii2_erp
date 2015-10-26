@@ -648,17 +648,18 @@ class ServiceController extends \api\components\Controller
     {
         $params=Yii::$app->request->get();
 
-        $url="http://api.map.baidu.com/place/v2/search";
+        $path="http://api.map.baidu.com/place/v2/search";
         if(empty($params)||empty($params['query'])||empty($params['location'])||empty($params['radius'])||empty($params['output'])||empty($params['ak']))
         {
             return $this->send(null,'参数不完成','error','403');
         }
         $url="http://api.map.baidu.com/place/v2/search?query=".$params['query'].'&location='.$params['location'].
-            '&radius='.$params['radius'].'&output='.$params['output'].'$ak='.$params['ak'];
+           '&radius='.$params['radius'].'&output='.$params['output'].'&ak='.$params['ak'];
+        //$url=$this->createUrl();
 
-        $date=\Yii::$app->response->redirect($url, 301);
+        $date=file_get_contents($url);
 
-        return $this->send($date,'操作成功','ok');
+        return $this->send(json_decode($date),'操作成功','ok');
 
     }
 }
