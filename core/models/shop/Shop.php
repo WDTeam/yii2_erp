@@ -44,10 +44,7 @@ class Shop extends \common\models\shop\Shop
             [['shop_manager_id', 'province_id', 'city_id', 'county_id', 'is_blacklist', 
                  'audit_status', 'worker_count', 
                 'complain_coutn', 'tel', 'bankcard_number'], 'integer'],
-            [['name', 'account_person'], 'string', 'max' => 100],
-            [['street', 'opening_address'], 'string', 'max' => 255],
-            [['principal', 'tel', 'bankcard_number', 'level'], 'string', 'max' => 50],
-            [['other_contact', 'opening_bank', 'sub_branch'], 'string', 'max' => 200],
+            [['audit_status', 'is_blacklist'], 'default', 'value'=>0],
         ]);
     }
     /**
