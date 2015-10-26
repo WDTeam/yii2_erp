@@ -19,8 +19,15 @@ USE yii\web\NotFoundHttpException;
  * @property string $worker_onboard_failed_reason
  * @property integer $worker_rising_training_status
  */
-class WorkerAuth extends \common\models\WorkerAuth
+class WorkerAuth extends \common\models\worker\WorkerAuth
 {
+    /**
+     * 获取阿姨审核Model
+     * @param $worker_id
+     * @return null|static
+     * @throws BadRequestHttpException
+     * @throws NotFoundHttpException
+     */
     public static function findModel($worker_id){
         if(empty($worker_id)){
             throw new BadRequestHttpException('worker_id not found.');

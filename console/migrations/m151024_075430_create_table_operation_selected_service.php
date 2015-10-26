@@ -21,7 +21,7 @@ class m151024_075430_create_table_operation_selected_service extends Migration
             'selected_service_area' => Schema::TYPE_STRING . '(32) NOT NULL COMMENT \'区域\'',
             'selected_service_sub_area' => Schema::TYPE_STRING . '(64) NOT NULL COMMENT \'子区域\'',
             'selected_service_standard' => Schema::TYPE_STRING . '(128) NOT NULL COMMENT \'标准\'',
-            'selected_service_price' => Schema::TYPE_MONEY . ' NOT NULL COMMENT \'价格\'',
+            'selected_service_price' => 'decimal(19,2) NOT NULL COMMENT \'价格\'',
             'selected_service_unit' => Schema::TYPE_INTEGER . '(11) NOT NULL COMMENT \'单位时间，分钟\'',
             'created_at' => Schema::TYPE_INTEGER. '(11) DEFAULT NULL COMMENT \'创建时间\'',
             'updated_at' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'编辑时间\'',

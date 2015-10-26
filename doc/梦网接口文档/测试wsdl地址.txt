@@ -1,0 +1,2 @@
+≤‚ ‘wsdlµÿ÷∑£∫
+http://ws.montnets.com:9002/MWGate/wmgw.asmx?wsdl

@@ -9,19 +9,19 @@
 
 namespace core\models\order;
 
-use boss\controllers\OperationGoodsController;
-use boss\controllers\OperationShopDistrictController;
-use common\models\OrderExtFlag;
+use boss\controllers\operation\OperationGoodsController;
+use boss\controllers\operation\OperationShopDistrictController;
+use common\models\order\OrderExtFlag;
 use core\models\Customer;
 use core\models\customer\CustomerAddress;
-use core\models\GeneralPay\GeneralPay;
+use core\models\payment\GeneralPay;
 use core\models\worker\Worker;
 use Yii;
-use common\models\Order as OrderModel;
-use common\models\OrderStatusDict;
-use common\models\OrderExtCustomer;
-use common\models\OrderSrc;
-use common\models\FinanceOrderChannel;
+use common\models\order\Order as OrderModel;
+use common\models\order\OrderStatusDict;
+use common\models\order\OrderExtCustomer;
+use common\models\order\OrderSrc;
+use common\models\finance\FinanceOrderChannel;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 
@@ -89,6 +89,7 @@ use yii\helpers\ArrayHelper;
  * @property string $shop_id
  * @property string $checking_id
  * @property string $order_cs_memo
+ * @property string $order_sys_memo
  * @property string $admin_id
  */
 class Order extends OrderModel
