@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //         'filterModel' => $searchModel,
         'toolbar' =>[
             'content'=>Html::a('<i class="glyphicon glyphicon-plus"></i>', [
-                'worker-task/create'
+                'create'
             ], [
                 'class' => 'btn btn-default',
                 'title' => Yii::t('app', '添加任务')
@@ -77,13 +77,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     'online'=>function($url, $model){
                         if($model->worker_task_online==1){
                             return Html::a('下线', [
-                                'worker-task/set-online',
+                                'set-online',
                                 'id'=>$model->id,
                                 'online'=>0
                             ]);
                         }else{
                             return Html::a('上线', [
-                                'worker-task/set-online',
+                                'set-online',
                                 'id'=>$model->id,
                                 'online'=>1
                             ]);

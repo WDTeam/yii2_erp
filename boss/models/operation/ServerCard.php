@@ -1,8 +1,8 @@
 <?php
 
-namespace common\models\operation;
+namespace boss\models\operation;
 
-use Yii;
+use yii;
 
 /**
  * This is the model class for table "{{%server_card}}".
@@ -18,14 +18,9 @@ use Yii;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class CommonOperationServerCard extends \yii\db\ActiveRecord
+class ServerCard extends \core\models\operation\ServerCard
 {
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return '{{%operation_server_card}}';
-    }
+    
 
+   
 }

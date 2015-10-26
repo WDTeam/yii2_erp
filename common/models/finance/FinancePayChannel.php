@@ -42,16 +42,16 @@ class FinancePayChannel extends \yii\db\ActiveRecord
     public static function getPayChannelByList()
     {
         //定义缓存名称
-        $cacheName = 'payChannelList';
+       /*  $cacheName = 'payChannelList';
 
         //判断是否存在缓存
         if( $cache = Yii::$app->cache->get($cacheName) ){
             return $cache;
         }
-
+ */
         //生成缓存数据
         $data = self::find()->asArray()->all();
-        self::createCache($cacheName,$data);
+    //    self::createCache($cacheName,$data);
 
         //返回渠道名称
         return $data;
@@ -65,16 +65,16 @@ class FinancePayChannel extends \yii\db\ActiveRecord
     public static function getPayChannelByName($id)
     {
         //定义缓存名称
-        $cacheName = 'payChannel_'.$id;
+       // $cacheName = 'payChannel_'.$id;
 
         //判断是否存在缓存
-        if( $cache = Yii::$app->cache->get($cacheName) ){
+       /*  if( $cache = Yii::$app->cache->get($cacheName) ){
             return $cache['finance_pay_channel_name'];
-        }
+        } */
 
         //生成缓存数据
         $data = self::find()->where(['id'=>$id])->asArray()->one();
-        self::createCache($cacheName,$data);
+      //  self::createCache($cacheName,$data);
 
         //返回渠道名称
         return $data['finance_pay_channel_name'];
@@ -85,10 +85,10 @@ class FinancePayChannel extends \yii\db\ActiveRecord
      * @param $name 缓存名称
      * @param $data 缓存数据
      */
-    private static function createCache($name,$data)
+   /*  private static function createCache($name,$data)
     {
         \Yii::$app->cache->set($name, $data);
-    }
+    } */
 
     /**
      * @inheritdoc

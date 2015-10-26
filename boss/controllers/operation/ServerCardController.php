@@ -2,17 +2,18 @@
 
 namespace boss\controllers\operation;
 
-use Yii;
-use core\models\worker\WorkerTask;
-use core\models\worker\WorkerTaskSearch;
+use yii;
+use boss\models\operation\ServerCard;
 use boss\components\BaseAuthController;
+use yii\data\ActiveDataProvider;
+use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * WorkerTaskController implements the CRUD actions for WorkerTask model.
+ * ServerCardController implements the CRUD actions for ServerCard model.
  */
-class WorkerTaskController extends BaseAuthController
+class ServerCardController extends BaseAuthController
 {
     public function behaviors()
     {
@@ -27,23 +28,23 @@ class WorkerTaskController extends BaseAuthController
     }
 
     /**
-     * Lists all WorkerTask models.
+     * Lists all OperationServerCard models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new WorkerTaskSearch;
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-
+        $dataProvider = new ActiveDataProvider([
+            'query' => ServerCard::find(),
+        ]);
+		
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel,
         ]);
     }
 
     /**
-     * Displays a single WorkerTask model.
-     * @param integer $id
+     * Displays a single ServerCard model.
+     * @param string $id
      * @return mixed
      */
     public function actionView($id)
@@ -58,13 +59,13 @@ class WorkerTaskController extends BaseAuthController
     }
 
     /**
-     * Creates a new WorkerTask model.
+     * Creates a new ServerCard model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new WorkerTask;
+        $model = new ServerCard;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -76,16 +77,16 @@ class WorkerTaskController extends BaseAuthController
     }
 
     /**
-     * Updates an existing WorkerTask model.
+     * Updates an existing ServerCard model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()){   
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
@@ -95,9 +96,9 @@ class WorkerTaskController extends BaseAuthController
     }
 
     /**
-     * Deletes an existing WorkerTask model.
+     * Deletes an existing ServerCard model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      */
     public function actionDelete($id)
@@ -108,29 +109,18 @@ class WorkerTaskController extends BaseAuthController
     }
 
     /**
-     * Finds the WorkerTask model based on its primary key value.
+     * Finds the ServerCard model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return WorkerTask the loaded model
+     * @param string $id
+     * @return ServerCard the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = WorkerTask::findOne($id)) !== null) {
+        if (($model = ServerCard::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
-        }
-    }
-    /**
-     * 任务下线
-     */
-    public function actionSetOnline($id, $online)
-    {
-        $model = $this->findModel($id);
-        $model->worker_task_online = $online;
-        if($model->save()){
-            return $this->redirect('index');
         }
     }
 }

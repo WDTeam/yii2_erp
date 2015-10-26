@@ -74,16 +74,16 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
     
     public static function get_order_channel_list()
     {
-    	if(\Yii::$app->cache->exists('orderchannellist')){
-        $orderchannellist= \Yii::$app->cache->get('orderchannellist');
-    	return json_decode($orderchannellist,true);
-	    }else{
+    	//if(\Yii::$app->cache->exists('orderchannellist')){
+      //  $orderchannellist= \Yii::$app->cache->get('orderchannellist');
+    	///return json_decode($orderchannellist,true);
+	   // }else{
 	    	$ordewhere['is_del']=0;
 	    	$ordewhere['finance_order_channel_sort']=1;
 	$payatainfo=FinanceOrderChannel::find()->select('id,finance_order_channel_name')->where($ordewhere)->asArray()->all();
-	    	\Yii::$app->cache->set('orderchannellist', json_encode($payatainfo));
+	    	//\Yii::$app->cache->set('orderchannellist', json_encode($payatainfo));
 	    	return $payatainfo;
-	  }
+	 // }
     }
     
     /**
@@ -95,16 +95,16 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
     
     public static function get_order_channel_list_info()
     {
-    	if(\Yii::$app->cache->exists('orderchannellistinfo')){
+    	/* if(\Yii::$app->cache->exists('orderchannellistinfo')){
     		$orderchannellist= \Yii::$app->cache->get('orderchannellist');
     		return json_decode($orderchannellist,true);
-    	}else{
+    	}else{ */
     		$ordewhere['is_del']=0;
     		$ordewhere['finance_order_channel_is_lock']=1; //2 第三方不显示  1 第三方显示
     		$payatainfo=FinanceOrderChannel::find()->select('id,finance_order_channel_name')->where($ordewhere)->asArray()->all();
-    		\Yii::$app->cache->set('orderchannellistinfo', json_encode($payatainfo));
+    		//\Yii::$app->cache->set('orderchannellistinfo', json_encode($payatainfo));
     		return $payatainfo;
-    	}
+    	//}
     }
     
     
@@ -125,7 +125,7 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
 
         //生成缓存数据
         $data = self::find()->where(['id'=>$id])->asArray()->one();
-        self::createCache($cacheName,$data);
+       // self::createCache($cacheName,$data);
 
         //返回渠道名称
         return $data['finance_order_channel_name']?$data['finance_order_channel_name']:'官方支付对账';
@@ -136,10 +136,10 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
      * @param $name 缓存名称
      * @param $data 缓存数据
      */
-    private static function createCache($name,$data)
+   /*  private static function createCache($name,$data)
     {
         \Yii::$app->cache->set($name, $data);
-    }
+    } */
     
     /**
      * 根据渠道id获取渠道名称判断

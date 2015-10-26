@@ -417,10 +417,6 @@ class FinanceSettleApplyController extends BaseAuthController
         $financeSettleApplySearch->review_section = $review_section;
         $financeSettleApplySearch = $financeSettleApplySearch->getWorkerSettlementSummaryInfo($financeSettleApplySearch->worker_id);
         $financeWorkerOrderIncomeSearch = new FinanceWorkerOrderIncomeSearch;
-        $financeWorkerOrderIncomeSearch->load($requestParams);
-        if(isset($requestParams['finance_worker_order_income_type'])){
-            $financeWorkerOrderIncomeSearch->finance_worker_order_income_type = $requestParams['finance_worker_order_income_type'];
-        }
         $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
         $cashOrderDataProvider = $financeWorkerOrderIncomeSearch->getCashOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
         $nonCashOrderDataProvider = $financeWorkerOrderIncomeSearch->getNonCashOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);

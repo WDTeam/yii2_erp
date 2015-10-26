@@ -106,22 +106,22 @@ echo Menu::widget(
                 'items' => [
                     [
                         'label' => '查看所有订单(0%)',
-                        'url' => ['/order'],
+                        'url' => ['/order/order'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
                         'label' => '创建新订单(95%)',
-                        'url' => ['/order/create'],
+                        'url' => ['/order/order/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
                         'label' => '人工派单(90%)',
-                        'url' => ['/order/assign'],
+                        'url' => ['/order/order/assign'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
                         'label' => '智能派单(90%)',
-                        'url' => ['/auto-assign'],
+                        'url' => ['/order/auto-assign'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 	[
@@ -293,7 +293,7 @@ echo Menu::widget(
 						'items' => [
 							[
 								'label' => '服务卡信息管理',
-								'url' => ['/operation/operation-server-card/index'],
+								'url' => ['operation/server-card/index'],
 								'icon' => 'fa fa-angle-right',
 							],
 							[

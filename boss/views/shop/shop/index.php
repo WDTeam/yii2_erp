@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //         'filterModel' => $searchModel,
         'toolbar' =>[
             'content'=>Html::a('<i class="glyphicon glyphicon-plus"></i>', [
-            'shop/create'
+            'create'
             ], [
                 'class' => 'btn btn-default',
                 'title' => Yii::t('app', '添加新门店')
@@ -88,27 +88,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->getManagerName();
                 },
                 'options'=>['width'=>200,],
-                'filter'=>Select2::widget([
-                    'initValueText' => '', // set the initial display text
-                    'model'=>$searchModel,
-                    'attribute'=>'shop_manager_id',
-                    'options'=>[
-                        
-                    ],
-                    'pluginOptions' => [
-                        'allowClear' => true,
-                        
-                        'minimumInputLength' => 0,
-                        'ajax' => [
-                            'url' => Url::to(['shop-manager/search-by-name']),
-                            'dataType' => 'json',
-                            'data' => new JsExpression('function(params) { return {name:params.term}; }')
-                        ],
-                        //                     'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-                        'templateResult' => new JsExpression('function(model) { return model.name; }'),
-                        'templateSelection' => new JsExpression('function (model) { return model.name; }'),
-                    ],
-                ])
             ],
             'worker_count',
             'complain_coutn',
@@ -118,7 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template'=>'{update} {delete} {joinblacklist}',
                 'buttons' => [
                     'update' => function ($url, $model) {
-                        return Html::a(Yii::t('yii', '编辑'), Yii::$app->urlManager->createUrl(['shop/view', 'id' => $model->id, 'edit' => 't']), [
+                        return Html::a(Yii::t('yii', '编辑'), ['view', 'id' => $model->id, 'edit' => 't'], [
                             'title' => Yii::t('yii', '编辑'),
                             'class' => 'btn btn-success btn-sm'
                         ]);
@@ -126,13 +105,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     'delete' => function ($url, $model) {
                         return Html::a(
                             Yii::t('yii', 'Delete'),
-                            Yii::$app->urlManager->createUrl(['shop/delete','id' => $model->id, 'id'=> $model->id]),
+                            ['delete','id' => $model->id, 'id'=> $model->id],
                             ['title' => Yii::t('yii', 'Delete'), 'class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
                         );
                     },
                     'joinblacklist' => function ($url, $model) {
                         return empty($model->is_blacklist)?Html::a('加入黑名单', [
-                            'shop/join-blacklist',
+                            'join-blacklist',
                             'id' => $model->id
                         ], [
                             'title' => Yii::t('app', '加入黑名单'),
@@ -141,7 +120,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-id'=>$model->id,
                             'class'=>'join-list-btn btn btn-success btn-sm',
                         ]):Html::a('解除黑名单', [
-                            'shop/remove-blacklist',
+                            'remove-blacklist',
                             'id' => $model->id
                         
                         ], [
