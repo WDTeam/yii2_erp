@@ -613,7 +613,7 @@ class WorkerController extends \api\components\Controller
      * @apiGroup Worker
      * 
      * @apiParam {String} access_token    阿姨登录token
-     * @apiParam {String} bill_id  每页显示多少条.
+     * @apiParam {String} bill_id  账单唯一标识.
      * @apiParam {String} [platform_version] 平台版本号.
      * 
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-bill-list
@@ -664,8 +664,80 @@ class WorkerController extends \api\components\Controller
         return $this->send($ret, "操作成功.");
     }
    
+    /**
+     * @api {GET} /worker/get-worker-tasktime 获取阿姨工时列表 (田玉星 60%)
+     * 
+     * @apiDescription 【备注：等待model底层支持】
+     * 
+     * @apiName actionGetWorkerTasktime
+     * @apiGroup Worker
+     * 
+     * @apiParam {String} access_token    阿姨登录token
+     * @apiParam {String} per_page  每页显示多少条.
+     * @apiParam {String} page  第几页.
+     * @apiParam {String} [platform_version] 平台版本号.
+     * 
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-tasktime
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *   "code": 1,
+     *   "msg": "操作成功.",
+     *    "ret": {
+     *       "title_msg": {
+     *           "order_count": 10,
+     *           "salary": 160
+     *       },
+     *       "order_list": [
+     *           {
+     *               "service_time": "9.10 14:00-16:00",
+     *               "order_num": "32341334352",
+     *               "service_addr": "北京市朝阳区光华路SOHO"
+     *           }
+     *       ]
+     *   }
+    }
+     *
+     * @apiErrorExample Error-Response:
+     *  HTTP/1.1 404 Not Found
+     *  {
+     *      "code":"error",
+     *      "msg": "用户认证已经过期,请重新登录"
+     *  }
+     */
+    public function  actionGetWorkerTasktime(){
+        $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
+           return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
+        $worker = WorkerAccessToken::getWorker($param['access_token']);
+        if (!$worker|| !$worker->id) {
+            return $this->send(null, "阿姨不存在", 0, 403);
+        }
+        $ret = [
+            "title_msg"=>[
+                'order_count'=>10,
+                'salary'=>160.0
+            ],
+            'order_list'=>[
+                [ 
+                    'service_time'=>'9.10 14:00-16:00',
+                    'order_num' =>'32341334352',
+                    'service_addr'=>'北京市朝阳区光华路SOHO'
+                ],
+                [ 
+                    'service_time'=>'9.11 14:00-16:00',
+                    'order_num' =>'32341334352',
+                    'service_addr'=>'北京市朝阳区建外SOHO东区'
+                ],
+            ]
+        ];
+        return $this->send($ret, "操作成功.");
+        
+    }
     
-/**
+    /**
      * @api {GET} /worker/get-worker-center 个人中心首页 (田玉星 100%)
      *
      * @apiName getWorkerCenter
@@ -727,6 +799,9 @@ class WorkerController extends \api\components\Controller
         ];
         return $this->send($ret, "阿姨信息查询成功");
     }
+    
+    
+    
     
     /**
      * @api {get} /mobileapidriver2/system_news  通知中心(田玉星0%)
