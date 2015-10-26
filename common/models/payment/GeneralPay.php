@@ -67,6 +67,9 @@ class GeneralPay extends GeneralPayCommon
             case 21:
                 $this->pay_type = 'weibo_h5';
                 break;
+            case 23:
+                $this->pay_type = 'wx_native';
+                break;
         }
         return $source;
     }
@@ -225,6 +228,27 @@ class GeneralPay extends GeneralPayCommon
      * 新浪微博支付(21)
      */
     private function weibo_h5(){}
+
+    /**
+     * 微信native(22)
+     * @return mixed
+     */
+    private function wx_native($data)
+    {
+        $param = [
+            "body"	=> $this->body(),
+            "out_trade_no"	=> $this->create_out_trade_no(1,1),
+            "general_pay_money"	=> $this->toMoney($this->general_pay_money,100,'*',0),
+            'time_start' => date("YmdHis"),
+            'time_expire' => date("YmdHis", time() + 600000),
+            "trade_type" => "NATIVE",
+            "subject" => $this->subject(),
+            "notify_url" => $this->notify_url('wx-native'),
+        ];
+        $class = new \wxjspay_class();
+        $msg = $class->nativeGet($param);
+        return $msg;
+    }
 
     /**
      * 支付宝APP回调
