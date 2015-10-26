@@ -136,10 +136,10 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
      * @param $name 缓存名称
      * @param $data 缓存数据
      */
-    private static function createCache($name,$data)
+   /*  private static function createCache($name,$data)
     {
         \Yii::$app->cache->set($name, $data);
-    }
+    } */
     
     /**
      * 根据渠道id获取渠道名称判断
