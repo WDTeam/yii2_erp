@@ -125,7 +125,7 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
 
         //生成缓存数据
         $data = self::find()->where(['id'=>$id])->asArray()->one();
-        self::createCache($cacheName,$data);
+       // self::createCache($cacheName,$data);
 
         //返回渠道名称
         return $data['finance_order_channel_name']?$data['finance_order_channel_name']:'官方支付对账';
