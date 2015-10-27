@@ -383,4 +383,12 @@ class OperationShopDistrictGoods extends CommonOperationShopDistrictGoods
         return $dataProvider->query->all();
     }
 
+    public static function getGoodsCategoryInfo($city_id,$shop_district_id,$category_name)
+    {
+        return self::find()->where(['operation_city_id'=>$city_id,
+            'operation_category_name'=>$category_name,'operation_shop_district_id'=>$shop_district_id,
+        'operation_shop_district_goods_status'=>'1']);
+    }
+
+
 }
