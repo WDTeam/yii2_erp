@@ -180,7 +180,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => '订单',
                 'value' => function ($dataProvider) {
                     $order_count = OrderExtCustomer::find()->where(['customer_id'=>$dataProvider->id])->count();
-                    return '<a href="order/order/index?OrderSearch[customer_id]='. $dataProvider->id .'">'.$order_count.'</a>';
+					return Html::a($order_count, ['order/order/index', 'OrderSearch[customer_id]'=>$dataProvider->id]);
                 },
                 'width' => "50px",
             ],

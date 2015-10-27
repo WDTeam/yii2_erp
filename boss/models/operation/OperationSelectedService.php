@@ -2,7 +2,6 @@
 namespace boss\models\operation;
 
 use Yii;
-use core\models\operation\OperationSelectedService as CoreOperationSelectedService;
 use yii\data\ActiveDataProvider;
 
 /**
@@ -19,7 +18,7 @@ use yii\data\ActiveDataProvider;
  * @property string $created_at
  * @property string $remark
  */
-class OperationSelectedService extends CoreOperationSelectedService
+class OperationSelectedService extends \core\models\operation\OperationSelectedService
 {
 
     /**

@@ -40,4 +40,10 @@ class DemoController extends BaseAuthController
             'res'=>$res,
         ]);
     }
+
+    public function actionIvr()
+    {
+        $res = \Yii::$app->ivr->send('15110249233', 'A1444808735', '洗衣');
+        var_dump($res);
+    }
 }

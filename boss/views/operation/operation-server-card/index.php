@@ -14,9 +14,6 @@ $this->title = Yii::t('app', '服务卡信息管理');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-server-card-index">
-    <div class="page-header">
-            <h1><?= Html::encode($this->title) ?></h1>
-    </div>
     <?php  echo $this->render('_search', ['model' => $searchModel,'deploy'=>$deploy,]); ?>
 
 

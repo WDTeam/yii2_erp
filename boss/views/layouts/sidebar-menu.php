@@ -294,7 +294,7 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],*/
                     [
-                        'label' => '阿姨任务管理(95%)',
+                        'label' => '阿姨任务管理(100%)',
                         'url' => ['/worker/worker-task/index'],
                         'icon' => 'fa fa-angle-right',
                     ],

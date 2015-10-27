@@ -78,6 +78,19 @@ use yii\helpers\Url;
                     ],
                 ],
                 
+                'operation_shop_district_id'=>[
+                    'type'=>Form::INPUT_WIDGET,
+                    'widgetClass'=>Select2::classname(),
+                    'options' => [
+                        'data'=>Shop::getShopDistrictList(),
+                        'hideSearch' => false,
+                        'options'=>[
+                            'placeholder' => '选择商圈',
+                        ]
+                    ],
+                    
+                ],
+                
                 'principal'=>['type'=> Form::INPUT_TEXT, 'options'=>[ 'maxlength'=>50]], 
                 
                 'tel'=>['type'=> Form::INPUT_TEXT, 'options'=>['maxlength'=>50]], 
