@@ -6,19 +6,17 @@ use kartik\datecontrol\DateControl;
 
 /**
  * @var yii\web\View $this
- * @var common\models\ServerCard $model
+ * @var common\models\operation\OperationServerCard $model
  */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Server Cards'), 'url' => ['index']];
+$this->title = $model->card_name;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '服务卡信息'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="server-card-view">
+<div class="operation-server-card-view">
     <div class="page-header">
         <h1><?= Html::encode($this->title) ?></h1>
     </div>
-
-
     <?= DetailView::widget([
             'model' => $model,
             'condensed'=>false,

@@ -1,4 +1,8 @@
 <?php
 return [
-    'order'
+    'order'=>[
+        'redis'=>[
+            ''=>''
+        ]
+    ]
 ];

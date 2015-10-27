@@ -1,5 +1,17 @@
 <?php
 
+/**
+* 评价控制器
+* ==========================
+* 北京一家洁 版权所有 2015-2018 
+* ----------------------------
+* 这不是一个自由软件，未经授权不许任何使用和传播。
+* ==========================
+* @date: 2015-10-27
+* @author: peak pan 
+* @version:1.0
+*/
+
 namespace boss\controllers\customer;
 
 use Yii;
@@ -33,7 +45,20 @@ class CustomerCommentController extends Controller
     public function actionIndex()
     {
         $searchModel = new CustomerCommentSearch;
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        
+        
+        $searchModel->load(Yii::$app->request->getQueryParams());
+        $searchModel->is_del=1;
+        $datainfo=Yii::$app->request->getQueryParams();
+        
+        if(isset($datainfo['CustomerCommentSearch']['created_at'])){
+        	$searchModel->created_at=$datainfo['CustomerCommentSearch']['created_at'];
+        }
+         
+        if(isset($datainfo['CustomerCommentSearch']['created_at_end'])){
+        	$searchModel->created_at_end=$datainfo['CustomerCommentSearch']['created_at_end'];
+        }
+        $dataProvider = $searchModel->search();
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
