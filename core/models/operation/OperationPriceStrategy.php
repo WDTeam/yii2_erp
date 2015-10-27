@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationPriceStrategy;
+use common\models\operation\OperationPriceStrategy as CommonOperationPriceStrategy;
 
 /**
  * This is the model class for table "{{%operation_price_strategy}}".
@@ -15,7 +15,7 @@ use common\models\operation\OperationPriceStrategy;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationPriceStrategy extends OperationPriceStrategy
+class OperationPriceStrategy extends CommonOperationPriceStrategy
 {
 
 }

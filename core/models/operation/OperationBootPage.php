@@ -2,7 +2,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationBootPage;
+use common\models\operation\OperationBootPage as CommonOperationBootPage;
 /**
  * This is the model class for table "{{%operation_category}}".
  *
@@ -11,7 +11,7 @@ use common\models\operation\OperationBootPage;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationBootPage extends OperationBootPage
+class OperationBootPage extends CommonOperationBootPage
 {
 
 }

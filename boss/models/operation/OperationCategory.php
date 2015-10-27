@@ -3,7 +3,7 @@
 namespace boss\models\operation;
 
 use Yii;
-use core\models\operation\OperationCategory;
+use core\models\operation\OperationCategory as CoreOperationCategory;
 /**
  * This is the model class for table "{{%operation_category}}".
  *
@@ -12,7 +12,7 @@ use core\models\operation\OperationCategory;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationCategory extends OperationCategory
+class OperationCategory extends CoreOperationCategory
 {
     /**
      * @inheritdoc

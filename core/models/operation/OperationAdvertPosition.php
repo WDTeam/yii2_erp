@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationAdvertPosition;
+use common\models\operation\OperationAdvertPosition as CommonOperationAdvertPosition;
 /**
  * This is the model class for table "{{%operation_advert_position}}".
  *
@@ -20,7 +20,7 @@ use common\models\operation\OperationAdvertPosition;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationAdvertPosition extends OperationAdvertPosition
+class OperationAdvertPosition extends CommonOperationAdvertPosition
 {
    
 }

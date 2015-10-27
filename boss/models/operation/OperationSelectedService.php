@@ -2,7 +2,7 @@
 namespace boss\models\operation;
 
 use Yii;
-use core\models\operation\CoreOperationSelectedService;
+use core\models\operation\OperationSelectedService as CoreOperationSelectedService;
 use yii\data\ActiveDataProvider;
 
 /**
@@ -87,7 +87,7 @@ class OperationSelectedService extends CoreOperationSelectedService
      */
     public function search($params)
     {
-        $query = CoreOperationSelectedService::find();
+        $query = OperationSelectedService::find();
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);

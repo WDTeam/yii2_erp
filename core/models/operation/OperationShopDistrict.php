@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationShopDistrict;
+use common\models\operation\OperationShopDistrict as CommonOperationShopDistrict;
 
 
 /**
@@ -16,7 +16,7 @@ use common\models\operation\OperationShopDistrict;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationShopDistrict extends OperationShopDistrict
+class OperationShopDistrict extends CommonOperationShopDistrict
 {
     /**
      * 上线商圈列表

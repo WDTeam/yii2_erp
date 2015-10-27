@@ -1,7 +1,7 @@
 <?php
 namespace core\models\operation;
 use Yii;
-use common\models\operation\OperationBootPageCity;
+use common\models\operation\OperationBootPageCity as CommonOperationBootPageCity;
 
 /**
  * This is the model class for table "{{%operation_boot_page_city}}".
@@ -13,7 +13,7 @@ use common\models\operation\OperationBootPageCity;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationBootPageCity extends OperationBootPageCity
+class OperationBootPageCity extends CommonOperationBootPageCity
 {
     public static function getBootPageCityList($BootPageId){
         $data = self::find()->where(['operation_boot_page_id' => $BootPageId])->all();

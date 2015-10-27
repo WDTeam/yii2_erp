@@ -3,7 +3,7 @@
 namespace boss\models\operation;
 
 use Yii;
-use core\models\operation\OperationGoods;
+use core\models\operation\OperationGoods as CoreOperationGoods;
 /**
  * This is the model class for table "{{%operation_goods}}".
  *
@@ -32,7 +32,7 @@ use core\models\operation\OperationGoods;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationGoods extends OperationGoods
+class OperationGoods extends CoreOperationGoods
 {
 
     /**

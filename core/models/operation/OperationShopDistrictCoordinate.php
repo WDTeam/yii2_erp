@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationShopDistrictCoordinate;
+use common\models\operation\OperationShopDistrictCoordinate as CommonOperationShopDistrictCoordinate;
 
 /**
  * This is the model class for table "{{%operation_price_strategy}}".
@@ -15,7 +15,7 @@ use common\models\operation\OperationShopDistrictCoordinate;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationShopDistrictCoordinate extends OperationShopDistrictCoordinate
+class OperationShopDistrictCoordinate extends CommonOperationShopDistrictCoordinate
 {
     public static function setShopDistrictCoordinate($coordinate){
         $fields = ['operation_shop_district_id', 'operation_shop_district_name', 'operation_city_id', 'operation_city_name', 'operation_shop_district_coordinate_start_longitude', 'operation_shop_district_coordinate_start_latitude', 'operation_shop_district_coordinate_end_longitude', 'operation_shop_district_coordinate_end_latitude', 'operation_area_id', 'operation_area_name', 'created_at', 'updated_at'];

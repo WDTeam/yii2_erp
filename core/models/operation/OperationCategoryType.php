@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationCategoryType;
+use common\models\operation\OperationCategoryType as CommonOperationCategoryType;
 /**
  * This is the model class for table "{{%operation_category_type}}".
  *
@@ -31,7 +31,7 @@ use common\models\operation\OperationCategoryType;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationCategoryType extends OperationCategoryType
+class OperationCategoryType extends CommonOperationCategoryType
 {
 
 }

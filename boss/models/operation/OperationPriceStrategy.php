@@ -3,7 +3,7 @@
 namespace boss\models\operation;
 
 use Yii;
-use core\models\operation\CoreOperationPriceStrategy;
+use core\models\operation\OperationPriceStrategy as CoreOperationPriceStrategy;
 /**
  * This is the model class for table "{{%operation_price_strategy}}".
  *

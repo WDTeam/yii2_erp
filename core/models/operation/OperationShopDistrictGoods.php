@@ -3,12 +3,12 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationShopDistrictGoods;
+use common\models\operation\OperationShopDistrictGoods as CommonOperationShopDistrictGoods;
 use core\models\operation\OperationShopDistrict;
 use core\models\operation\OperationCity;
 use yii\data\ActiveDataProvider;
 
-class OperationShopDistrictGoods extends OperationShopDistrictGoods
+class OperationShopDistrictGoods extends CommonOperationShopDistrictGoods
 {
     public static $city_id;
     /**

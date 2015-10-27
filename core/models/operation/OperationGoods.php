@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationGoods;
+use common\models\operation\OperationGoods as CommonOperationGoods;
 use boss\models\operation\OperationShopDistrictGoods;
 
 /**
@@ -34,7 +34,7 @@ use boss\models\operation\OperationShopDistrictGoods;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationGoods extends OperationGoods
+class OperationGoods extends CommonOperationGoods
 {
     public static function getCategoryGoods($categoryid){
         return self::find()->asArray()->where(['operation_category_id' => $categoryid])->All();
