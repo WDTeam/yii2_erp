@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="customer-view">
 <?php 
 //城市
-$city_name = core\models\operation\CoreOperationCity::getCityName($model->operation_city_id);
+$city_name = core\models\operation\OperationCity::getCityName($model->operation_city_id);
 //var_dump($city_name);
 
 //来源
