@@ -243,8 +243,8 @@ class Worker extends \common\models\worker\Worker
      * @param array $filterCondition 阿姨筛选条件
      * @return array 阿姨列表
      */
-     protected static function getDistrictAllWorker($district_id,$filterCondition=[]){
-         if(empty($districtId) || !is_array($filterCondition)){
+     protected static function getDistrictAllWorker($district_id,$filterCondition=[],$start){
+         if(empty($district_id) || !is_array($filterCondition)){
              return [];
          }
          $defaultCondition['worker_is_block'] = 0;
@@ -256,16 +256,37 @@ class Worker extends \common\models\worker\Worker
              ->select('{{%worker}}.id,shop_id,worker_name,worker_phone,worker_idcard,worker_identity_id,worker_type,name as shop_name,worker_stat_order_num,worker_stat_order_refuse')
              ->innerJoinWith('workerDistrictRelation') //关联worker workerDistrictRelation方法
              ->andOnCondition(['operation_shop_district_id'=>$district_id])
-             ->innerjoinWith('shopRelation') //关联worker shopRelation方法
+             ->innerJoinWith('shopRelation') //关联worker shopRelation方法
+             //->innerJoinWith('workerScheduleRelation') //关联WorkerScheduleRelation方法
+             ->andOnCondition([])
              ->joinWith('workerStatRelation') //关联worker WorkerStatRelation方法
-             ->joinWith('workerScheduleRelation') //关联WorkerScheduleRelation方法
              ->where($condition)
              ->asArray()
              ->all();
-
          return $districtWorkerResult;
      }
 
+    /**
+     *
+     * @param $district_id 商圈id
+     * @param $time 服务时长
+     * @return array
+     */
+    public static function getWorkerTimeLine($district_id,$time){
+        $districtWorkerResult = self::getDistrictAllWorker($district_id,[]);
+        $startTime = strtotime(date('Y-m-d'));
+        $endTime = strtotime('+7 day',$startTime);
+
+        foreach($districtWorkerResult as $val){
+            foreach ($val['workerScheduleRelation'] as $schedule_val) {
+                if($schedule_val){
+
+                }
+            }
+
+        }
+        return $districtWorkerResult;
+    }
 
     /**
      * 获取商圈中 所有可用阿姨
@@ -343,16 +364,7 @@ class Worker extends \common\models\worker\Worker
     }
 
 
-    /**
-     *
-     * @param $district_id 商圈id
-     * @param $time 服务时长
-     * @return array
-     */
-    public static function getWorkerTimeLine($district_id,$time){
-        $districtWorkerResult = self::getDistrictAllWorker($district_id);
-        return $districtWorkerResult;
-    }
+
 
 
     /**
