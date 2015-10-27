@@ -41,16 +41,24 @@ class OrderController extends BaseAuthController
         }
         $orderStatus= $orderInfo->orderExtStatus->order_status_dict_id;
         $FinanceRefundadd=new FinanceRefundadd;
+        if($orderInfo->orderExtStatus->order_status_dict_id>=OrderStatusDict::ORDER_SERVICE_START)
+        {
+            echo "订单已开始服务，不允许取消订单";
+            exit;
+        }
         /** 方便测试关闭了，正式使用时请打开
        $result = Order::cancel($orderid,Yii::$app->user->id);
        if($result==false)  exit("order canlel module error");
         */
-        echo "取消订单成功，正在执行退款<br>";
+         echo "取消订单成功，正在执行退款<br>";
          $paytime=0;
          $statusHistoryInfo = OrderStatusHistory::getOrderStatusHistory($orderid);
          if($statusHistoryInfo) $paytime = $statusHistoryInfo->created_at;
 
-        if($orderInfo->orderExtPop->order_pop_order_code) echo "pop取消订单，已执行完毕";
+        if($orderInfo->orderExtPop->order_pop_order_code) {
+            echo "pop取消订单，已执行完毕";
+            exit;
+        }
         if($orderInfo->orderExtWorker->shop_id)
         {
             $shopInfo = Shop::findById($orderInfo->orderExtWorker->shop_id);
@@ -58,7 +66,7 @@ class OrderController extends BaseAuthController
             $FinanceRefundadd->finance_refund_city_id=empty($shopInfo->city_id)?0:$shopInfo->city_id ;
             $FinanceRefundadd->finance_refund_county_id=empty($shopInfo->county_id)?0:$shopInfo->county_id ;
         }
-         if($orderInfo->orderExtPay->order_pay_type==2 && $orderInfo->orderExtStatus->order_status_dict_id>=OrderStatusDict::ORDER_WAIT_ASSIGN && $orderInfo->orderExtStatus->order_status_dict_id<OrderStatusDict::ORDER_SERVICE_START)
+         if($orderInfo->orderExtPay->order_pay_type==2 && $orderInfo->orderExtStatus->order_status_dict_id>=OrderStatusDict::ORDER_WAIT_ASSIGN)
         //if($orderInfo->orderExtPay->order_pay_type==2)
           {
 
