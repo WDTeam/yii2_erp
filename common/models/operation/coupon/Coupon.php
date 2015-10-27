@@ -64,17 +64,17 @@ class Coupon extends \yii\db\ActiveRecord
 				    $this->addError($attribute, '优惠券金额不能小于或等于0');
 				}
             }],
-			['coupon_order_min_price', function ($attribute, $params) {
-                if (!is_numeric($this->$attribute)) {
-                    $this->addError($attribute, '优惠券金额不是数字');
-                }
-				if ($this->$attribute <= 0) {
-				    $this->addError($attribute, '优惠券金额不能小于或等于0');
-				}
-            }],
+//			['coupon_order_min_price', function ($attribute, $params) {
+ //               if (!is_numeric($this->$attribute)) {
+   //                 $this->addError($attribute, '优惠券金额不是数字');
+     //           }
+	//			if ($this->$attribute <= 0) {
+	//			    $this->addError($attribute, '优惠券金额不能小于或等于0');
+	//			}
+     //       }],
 			[['coupon_name', 'coupon_price', 'coupon_type', 'coupon_city_limit', 'coupon_customer_type', 'coupon_time_type', 'coupon_promote_type', 'coupon_code_num', 'coupon_code_max_customer_num'], 'required'],
             [['coupon_price', 'coupon_order_min_price'], 'number'],
-            [['coupon_type', 'coupon_service_type_id', 'coupon_service_id', 'coupon_city_limit', 'coupon_city_id', 'coupon_customer_type', 'coupon_time_type', 'coupon_begin_at', 'coupon_end_at', 'coupon_get_end_at',   'coupon_use_end_days', 'coupon_promote_type', 'coupon_code_num', 'coupon_code_max_customer_num', 'is_disabled', 'created_at', 'updated_at', 'is_del', 'system_user_id'], 'integer'],
+            [['coupon_type', 'coupon_service_type_id', 'coupon_service_id', 'coupon_city_limit', 'coupon_city_id', 'coupon_customer_type', 'coupon_time_type', 'coupon_use_end_days', 'coupon_promote_type', 'coupon_code_num', 'coupon_code_max_customer_num', 'is_disabled', 'created_at', 'updated_at', 'is_del', 'system_user_id'], 'integer'],
 			//[['coupon_code_num', 'coupon_code_max_customer_num'], ['min'=>0]],
             [['coupon_name', 'coupon_type_name', 'coupon_service_type_name', 'coupon_service_name', 'coupon_city_name', 'coupon_customer_type_name', 'coupon_time_type_name', 'coupon_promote_type_name', 'system_user_name'], 'string'],
 			
