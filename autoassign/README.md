@@ -5,10 +5,10 @@
 ## 部署说明：
 
 ```
-	1、本程序运行在 linux 或 windows 环境，需要 PHP 5.4+ / swoole扩展 / redis 扩展
-	2、手动输入命令 PHP server.php 启动；
+        1、本程序运行在 linux 或 windows 环境，需要 PHP 5.4+ / swoole扩展 / redis 扩展
+        2、手动输入命令 PHP server.php 启动；
         3、自动启动: 在linux系统的crontab中加入： */1 * * * * ./startup.sh
-	4、浏览器打开BOSS系统 -> 订单管理 -> 智能派单-> "连接派单服务器"
+        4、浏览器打开BOSS系统 -> 订单管理 -> 智能派单-> "连接派单服务器"
         5、界面上提示 “自动派单开始”
 
 ```
