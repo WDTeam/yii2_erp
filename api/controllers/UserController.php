@@ -12,7 +12,7 @@ use \core\models\operation\coupon\Coupon;
 class UserController extends \api\components\Controller
 {
     /**
-     * @api {POST} v1/user/add-address 添加常用地址 (已完成100%) 
+     * @api {POST} v1/user/add-address 添加常用地址 (已完成100%)
      *
      * @apiName AddAddress
      * @apiGroup User
@@ -190,7 +190,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {DELETE} v1/user/delete-address 删除用户常用地址 (已完成100%) 
+     * @api {DELETE} v1/user/delete-address 删除用户常用地址 (已完成100%)
      *
      * @apiName DeleteAddress
      * @apiGroup User
@@ -239,7 +239,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {PUT} v1/user/set-default-address 设置默认地址 (已完成100%) 
+     * @api {PUT} v1/user/set-default-address 设置默认地址 (已完成100%)
      * @apiDescription 用户每次下完单都会将该次地址设置为默认地址，下次下单优先使用默认地址
      * @apiName SetDefaultAddress
      * @apiGroup User
@@ -297,7 +297,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {PUT} v1/user/update-address 修改常用地址 (已完成100%) 
+     * @api {PUT} v1/user/update-address 修改常用地址 (已完成100%)
      *
      * @apiName UpdateAddress
      * @apiGroup User
@@ -365,6 +365,89 @@ class UserController extends \api\components\Controller
         } else {
 
             return $this->send(null, "修改常用地址失败", 0, 403);
+        }
+    }
+
+    /**
+     * @api {GET} v1/user/default-address 获取默认地址 (赵顺利100%)
+     * @apiName actionDefaultAddress
+     * @apiGroup User
+     *
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "code": "ok",
+     *       "msg": "修改常用地址成功"
+     *       "ret":{
+     *       "address":
+     *          {
+     *          "id": 2,
+     *          "customer_id": 1,
+     *          "operation_province_id": 110000,
+     *          "operation_city_id": 110100,
+     *          "operation_area_id": 110105,
+     *          "operation_province_name": "北京",
+     *          "operation_city_name": "北京市",
+     *          "operation_area_name": "朝阳区",
+     *          "operation_province_short_name": "北京",
+     *          "operation_city_short_name": "北京",
+     *          "operation_area_short_name": "朝阳",
+     *          "customer_address_detail": "某某小区8栋3单元512",
+     *          "customer_address_status": 1,客户地址类型,1为默认地址，0为非默认地址
+     *          "customer_address_longitude": 116.48641,
+     *          "customer_address_latitude": 39.92149,
+     *          "customer_address_nickname": "王小明",
+     *          "customer_address_phone": "18210922324",
+     *          "created_at": 1445063798,
+     *          "updated_at": 0,
+     *          "is_del": 0
+     *          }
+     *        }
+     *
+     *     }
+     *
+     * @apiError UserNotFound 用户认证失败.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "0",
+     *       "msg": "用户认证已经过期,请重新登录。"
+     *
+     *     }
+     * @apiError AddressNotFound 地址信息获取失败.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 200 address Not Found
+     *     {
+     *       "code": "error",
+     *       "msg": "地址信息获取失败"
+     *
+     *     }
+     */
+    public function actionDefaultAddress()
+    {
+        $params = Yii::$app->request->get() or
+        $params = json_decode(Yii::$app->request->getRawBody(), true);
+
+        if (empty($params['access_token']) || !CustomerAccessToken::checkAccessToken($params['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
+
+        $customer = CustomerAccessToken::getCustomer($params['access_token']);
+
+        if (!empty($customer) && !empty($customer->id)) {
+            $Address = CustomerAddress::getCurrentAddress($customer->id);
+            if (empty($Address)) {
+                return $this->send(null, "该用户没有默认地址", "error", 403);
+            }
+            $ret = ['address' => $Address];
+            return $this->send($ret, "获取默认地址成功","ok");
+        } else {
+            return $this->send(null, "获取用户信息失败", "error", 403);
         }
     }
 
@@ -614,7 +697,7 @@ class UserController extends \api\components\Controller
 
     /**
      * @api {GET} v1/user/get-user-money 用户余额和消费记录 （数据已经全部取出,需要给出所需字段,然后给予返回 已完成99% ;）
-     * 
+     *
      *
      * @apiName GetUserMoney
      *
@@ -706,7 +789,7 @@ class UserController extends \api\components\Controller
              *
              * @param int $customer 用户id
              */
-            $userRecord = \core\models\CustomerTransRecord\CustomerTransRecord::queryRecord($customer->id);
+            $userRecord = \core\models\Customer\CustomerTransRecord::queryRecord($customer->id);
             $ret["userBalance"] = $userBalance;
             $ret["userRecord"] = $userRecord;
             return $this->send($ret, "查询成功");
@@ -716,7 +799,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-<<<<<<< HEAD
+     * <<<<<<< HEAD
      * 发送验证码
      */
     public function actionSetUser()
