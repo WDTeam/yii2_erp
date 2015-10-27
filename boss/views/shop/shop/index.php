@@ -36,31 +36,36 @@ $columns[] = [
     },
     'filter'=>false,
 ];
-$columns[] = 'principal';
+if($searchModel->is_blacklist==0){
+    $columns[] = 'principal';
+}
 $columns[] = 'tel';
 if($searchModel->is_blacklist==1){
     $columns[] = [
         'label'=>'加入黑名单原因备注',
         'value'=>function ($model){
-            return $model->getLastJoinBlackList()->cause;
+            return $model->getLastJoinBlackListCause();
         }
     ];
 }
-$columns[] = [
-    'attribute'=>'created_at',
-    'value'=>function($model){
-            return date('Y-m-d', $model->created_at);
-    },
-    'filter'=>false,
-];
-$columns[] = [
-    'attribute'=>'audit_status',
-    'options'=>['width'=>100,],
-    'value'=>function($model){
-        return Shop::$audit_statuses[$model->audit_status];
-    },
-    'filter'=>Shop::$audit_statuses,
-];
+
+if($searchModel->is_blacklist==0){
+    $columns[] = [
+        'attribute'=>'created_at',
+        'value'=>function($model){
+                return date('Y-m-d', $model->created_at);
+        },
+        'filter'=>false,
+    ];
+    $columns[] = [
+        'attribute'=>'audit_status',
+        'options'=>['width'=>100,],
+        'value'=>function($model){
+            return Shop::$audit_statuses[$model->audit_status];
+        },
+        'filter'=>Shop::$audit_statuses,
+    ];
+}
 $columns[] = [
     'attribute'=>'shop_manager_id',
     'value'=>function ($model){
@@ -68,6 +73,14 @@ $columns[] = [
     },
     'options'=>['width'=>200,],
 ];
+if($searchModel->is_blacklist==1){
+    $columns[] = [
+        'label'=>'加入黑名单时间',
+        'value'=>function ($model){
+            return $model->getLastJoinBlackListTime();
+        }
+    ];
+}
 $columns[] = 'worker_count';
 $columns[] = 'complain_coutn';
 $columns[] = 'level';
