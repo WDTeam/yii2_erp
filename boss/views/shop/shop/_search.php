@@ -27,7 +27,7 @@ use yii\web\JsExpression;
             'method' => 'get',
         ]); ?>
         
-        <div class="col-md-4">
+        <div class="col-md-3">
             <label class="control-label" for="workersearch-worker_work_city">所在城市</label>
             <div>
             <?php echo AreaCascade::widget([
@@ -39,13 +39,30 @@ use yii\web\JsExpression;
             ]);?>
             </div>
         </div>
-        <div class="col-md-3">
-            <label class="control-label" for="workersearch-worker_work_city">小家政</label>
+        <div class="col-md-2">
+            <label class="control-label" for="workersearch-worker_work_city">选择商圈</label>
+            <div>
             <?php echo Select2::widget([
-                'initValueText' => $model->getManagerName(), // set the initial display text
+                'model' => $model,
+                'attribute'=>'operation_shop_district_id',
+                'data'=>Shop::getShopDistrictList(),
+                'hideSearch' => false,
+                'options'=>[
+                    'placeholder' => '选择商圈',
+                ]
+            ]);?>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <label class="control-label" for="workersearch-worker_work_city">
+                                    小家政
+            </label>
+            <?php echo Select2::widget([
                 'attribute'=>'shop_manager_id',
                 'model'=>$model,
-                'options' => [],
+                'options' => [
+                    'placeholder' => $model->getManagerName(),
+                ],
                 'pluginOptions' => [
                     'allowClear' => true,
                     'minimumInputLength' => 0,
@@ -54,7 +71,13 @@ use yii\web\JsExpression;
                         'dataType' => 'json',
                         'data' => new JsExpression('function(params) { return {name:params.term}; }')
                     ],
-                    //                     'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                    'initSelection'=> new JsExpression('function (element, callback) { 
+                        callback({
+                            id:'.$model->shop_manager_id.',
+                            name:"'.$model->getManagerName().'"
+                        }); 
+                    }'),
+                    'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
                     'templateResult' => new JsExpression('function(model) { return model.name; }'),
                     'templateSelection' => new JsExpression('function (model) { return model.name; }'),
                 ],
