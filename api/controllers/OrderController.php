@@ -15,6 +15,7 @@ use yii\web\Response;
 
 class OrderController extends \api\components\Controller
 {
+
     /**
      * @api {POST} /order/create-order 创建订单 (90%xieyi  缺少周期订单和精品保洁，缺少后台模块支持)
      *
@@ -91,7 +92,7 @@ class OrderController extends \api\components\Controller
     public function actionCreateOrder()
     {
         $args = Yii::$app->request->post() or
-        $args = json_decode(Yii::$app->request->getRawBody(), true);
+                $args = json_decode(Yii::$app->request->getRawBody(), true);
         $attributes = [];
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
@@ -278,7 +279,7 @@ class OrderController extends \api\components\Controller
     public function actionAppendOrder()
     {
         $args = Yii::$app->request->post() or
-        $args = json_decode(Yii::$app->request->getRawBody(), true);
+                $args = json_decode(Yii::$app->request->getRawBody(), true);
         $attributes = [];
         $user = CustomerAccessToken::getCustomer($args['access_token']);
         if (is_null($user)) {
@@ -714,7 +715,7 @@ class OrderController extends \api\components\Controller
     public function actionOrderStatusHistory()
     {
         $args = Yii::$app->request->get() or
-        $args = json_decode(Yii::$app->request->getRawBody(), true);
+                $args = json_decode(Yii::$app->request->getRawBody(), true);
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
@@ -767,15 +768,15 @@ class OrderController extends \api\components\Controller
     public function actionWorkerServiceOrderCount()
     {
         $args = Yii::$app->request->get() or
-        $args = json_decode(Yii::$app->request->getRawBody(), true);
+                $args = json_decode(Yii::$app->request->getRawBody(), true);
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录",0);
+            return $this->send(null, "用户无效,请先登录", 0);
         }
         @$orderId = $args['order_id'];
-        if(!is_numeric($orderId)){
-            return $this->send(null, "该订单不存在",0);
+        if (!is_numeric($orderId)) {
+            return $this->send(null, "该订单不存在", 0);
         }
         //TODO check whether the orders belong the user
         $ret = \core\models\order\OrderStatus::searchOrderStatusHistory($orderId);
@@ -911,7 +912,7 @@ class OrderController extends \api\components\Controller
      */
     public function actionObtainOrder()
     {
-
+        
     }
 
     /**
@@ -950,7 +951,7 @@ class OrderController extends \api\components\Controller
      */
     public function actionAddComment()
     {
-
+        
     }
 
     /**
@@ -1017,7 +1018,6 @@ class OrderController extends \api\components\Controller
         }
     }
 
-
     /**
      * @api {get} v1/order/worker-history-orders.php 阿姨全部订单月份列表(zhaoshunli 0%)
      * @apiName actionAllOrderCommon
@@ -1059,10 +1059,11 @@ class OrderController extends \api\components\Controller
      *  }
      *
      */
-    public function actionWorkerHistoryOrders(){
+    public function actionWorkerHistoryOrders()
+    {
         
     }
-    
+
     /**
      * @api {get} v1/order/get-worker-orders.php 指定阿姨订单数/待抢单订单订单数/指定阿姨订单列表/待抢单订单列表 (haojianshe 0%)
      * @apiName actionGetWorkerOrders
@@ -1117,12 +1118,12 @@ class OrderController extends \api\components\Controller
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
 
-        $customer = \core\models\worker\WorkerAccessToken::getWorker($param['access_token']);
+        $worker = \core\models\worker\WorkerAccessToken::getWorker($param['access_token']);
 
         if (!isset($param['leveltype']) && !isset($param['access_token'])) {
             return $this->send(null, "缺少规定的参数", 0, 403);
         }
-        if (!empty($customer) && !empty($customer->id)) {
+        if (!empty($worker) && !empty($worker->id)) {
 
             /**
               'order_id' => $order_id,
@@ -1143,7 +1144,7 @@ class OrderController extends \api\components\Controller
 
             if ($param['leveltype'] == 3) {
                 try {
-                    $workerCount = \core\models\order\Order::getPushWorkerOrders($param['access_token'], $param['page_size'], $param['page'], 1);
+                    $workerCount = \core\models\order\OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 1);
                     $ret['workerData'] = $workerCount;
                     return $this->send($ret, $workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
@@ -1152,7 +1153,7 @@ class OrderController extends \api\components\Controller
                 }
             } else if ($param['leveltype'] == 4) {
                 try {
-                    $workerCount = \core\models\order\Order::getPushWorkerOrders($param['access_token'], $param['page_size'], $param['page'], 0);
+                    $workerCount = \core\models\order\OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 0);
                     $ret['workerData'] = $workerCount;
                     return $this->send($ret, $workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
@@ -1161,7 +1162,7 @@ class OrderController extends \api\components\Controller
                 }
             } else if ($param['leveltype'] == 1) {
                 try {
-                    $workerCount = \core\models\order\Order::getPushWorkerOrdersCount($param['access_token'], 1);
+                    $workerCount = \core\models\order\OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
                     $ret['workerData'] = $workerCount;
                     return $this->send($ret, $workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
@@ -1170,8 +1171,7 @@ class OrderController extends \api\components\Controller
                 }
             } else if ($param['leveltype'] == 2) {
                 try {
-                    $workerCount = \core\models\order\Order::getPushWorkerOrdersCount($param['access_token'], 0);
-
+                    $workerCount = \core\models\order\OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
                     $ret['workerData'] = $workerCount;
                     return $this->send($ret, $workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
@@ -1221,12 +1221,12 @@ class OrderController extends \api\components\Controller
             return $this->send(null, "缺少规定的参数", 0, 403);
         }
 
-        $customer = \core\models\worker\WorkerAccessToken::getWorker($param['access_token']);
+        $worker = \core\models\worker\WorkerAccessToken::getWorker($param['access_token']);
 
-        if (!empty($customer) && !empty($customer->id)) {
+        if (!empty($worker) && !empty($worker->id)) {
 
             try {
-                $setWorker = \core\models\order\Order::sysAssignDone($param['order_id'], $param['access_token']);
+                $setWorker = \core\models\order\Order::sysAssignDone($param['order_id'], $worker->id);
                 $ret['workerSend'] = $setWorker;
                 return $this->send($ret, "操作成功", 1);
             } catch (Exception $e) {
@@ -1235,8 +1235,6 @@ class OrderController extends \api\components\Controller
             }
         }
     }
-
-
 
 }
 
