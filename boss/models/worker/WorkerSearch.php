@@ -15,7 +15,7 @@ class WorkerSearch extends Worker
     public function rules()
     {
         return [
-            [['id', 'shop_id', 'worker_level', 'worker_auth_status', 'worker_ontrial_status', 'worker_onboard_status', 'worker_work_city', 'worker_work_area', 'worker_type', 'worker_identity_id', 'worker_rule_id','worker_is_block', 'worker_is_blacklist', 'worker_is_vacation','worker_is_dimission','created_ad', 'updated_ad', 'isdel'], 'integer'],
+            [['id', 'shop_id', 'worker_level', 'worker_auth_status',  'worker_work_city', 'worker_work_area', 'worker_type', 'worker_identity_id', 'worker_rule_id','worker_is_block', 'worker_is_blacklist', 'worker_is_vacation','worker_is_dimission','created_ad', 'updated_ad', 'isdel'], 'integer'],
             [['worker_name', 'worker_phone', 'worker_idcard', 'worker_password', 'worker_photo', 'worker_work_street'], 'safe'],
             [['worker_work_lng', 'worker_work_lat'], 'number'],
         ];
@@ -44,8 +44,8 @@ class WorkerSearch extends Worker
             'shop_id' => $this->shop_id,
             'worker_level' => $this->worker_level,
             'worker_auth_status' => $this->worker_auth_status,
-            'worker_ontrial_status' => $this->worker_ontrial_status,
-            'worker_onboard_status' => $this->worker_onboard_status,
+//            'worker_ontrial_status' => $this->worker_ontrial_status,
+//            'worker_onboard_status' => $this->worker_onboard_status,
             'worker_work_city' => $this->worker_work_city,
             'worker_work_area' => $this->worker_work_area,
             'worker_work_lng' => $this->worker_work_lng,

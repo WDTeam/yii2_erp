@@ -31,7 +31,7 @@ class OperationArea extends CommonOperationArea
     
 
 	/**
-    * 根据id获取城市名称
+    * 鑾峰彇鍩庡競鍚嶇О
     * @date: 2015-10-27
     * @author: peak pan
     * @return:

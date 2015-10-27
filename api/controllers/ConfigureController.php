@@ -2,9 +2,9 @@
 namespace api\controllers;
 
 use Yii;
-use core\models\Operation\OperationShopDistrictGoods;
-use core\models\Operation\OperationCategory;
-use core\models\Operation\OperationCity;
+use \core\models\operation\OperationShopDistrictGoods;
+use \core\models\operation\OperationCategory;
+use \core\models\operation\OperationCity;
 use \core\models\customer\CustomerAccessToken;
 
 class ConfigureController extends \api\components\Controller
