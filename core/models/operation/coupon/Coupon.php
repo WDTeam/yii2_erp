@@ -154,7 +154,7 @@ class Coupon extends \common\models\operation\coupon\Coupon
     }
 
     /**
-     * 优惠名称
+     * 优惠名称 
      * @param int  $coupon_id 优惠码规则id
      * @return array 优惠信息
      */

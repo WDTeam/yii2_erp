@@ -75,7 +75,7 @@ class CouponCode extends \common\models\operation\coupon\CouponCode
         
     }
     /**
-     * 验证活动码是否可用
+     * 验证活动码是否可用 
      */
     public static function checkCouponCodeIsAble($code){
         $couponCode = self::find()->where(['coupon_code'=>$code, 'is_del'=>0])->one();

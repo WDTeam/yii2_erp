@@ -129,15 +129,15 @@ class CouponController extends \api\components\Controller
         if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
-        if (!isset($param['service_id']) || !$param['service_id'] || !isset($param['city_id']) || !$param['city_id']) {
-            return $this->send(null, "请填写服务或城市名称", 0, 403);
+        if ( !isset($param['city_id']) || !$param['city_id']) {
+            return $this->send(null, "请选择城市", 0, 403);
         }
         $city_id = $param['city_id'];
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         $customer_id = $customer->id;
-         //获取该用户该城市的优惠码列表
-       //$coupons=CouponCustomer::GetCustomerCouponList($customer_id,$city_id);
-        $coupons = [
+        //获取该用户该城市的优惠码列表
+        $coupons=CouponCustomer::GetCustomerCouponList($customer_id,$city_id);
+        /*$coupons = [
               [
                   "id"=> "1",
                     "coupon_name"=>"优惠码名称",
@@ -155,7 +155,7 @@ class CouponController extends \api\components\Controller
                     "coupon_service_type_name"=> "服务类别名称2"
               ]
                     
-        ];
+        ];*/
         if (!empty($coupons)) {
             return $this->send($coupons, "获取优惠码列表成功", 1);
         } else {
@@ -164,9 +164,9 @@ class CouponController extends \api\components\Controller
         
     }
     /**
-     * @api {Get} /coupon/coupons 获取用户全部优惠码列表（包括可用的、不可用的、所有城市的、通用的） （李勇 80%）
+     * @api {Get} /coupon/all-coupons 获取用户全部优惠码列表（包括可用的、不可用的、所有城市的、通用的） （李勇 80%）
      *
-     * @apiName Coupons
+     * @apiName AllCoupons
      * @apiGroup coupon
      *
      * @apiParam {String} access_token 用户认证
@@ -209,7 +209,7 @@ class CouponController extends \api\components\Controller
      *     }
      *
      */
-    public function actionCoupons()
+    public function actionAllCoupons()
     {
 
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
