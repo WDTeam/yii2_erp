@@ -2,7 +2,7 @@
 namespace core\models\worker;
 
 use yii\base\InvalidParamException;
-use core\models\Operation\CoreOperationCity;
+use core\models\operation\OperationCity;
 use yii\helpers\ArrayHelper;
 use yii\behaviors\TimestampBehavior;
 class WorkerTask extends \common\models\worker\WorkerTask
@@ -300,7 +300,7 @@ class WorkerTask extends \common\models\worker\WorkerTask
      */
     public static function getOnlineCites()
     {
-        $cites = CoreOperationCity::getCityOnlineInfoList();
+        $cites = OperationCity::getCityOnlineInfoList();
         return ArrayHelper::map($cites, 'city_id', 'city_name');
     }
     /**

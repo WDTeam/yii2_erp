@@ -19,6 +19,105 @@ use yii\base\Widget;
 
 $this->title = Yii::t('app', '所有家政公司');
 $this->params['breadcrumbs'][] = $this->title; 
+
+$columns[] = [
+    'attribute'=>'name',
+    'format'=>'raw',
+    'value'=>function ($model){
+        return Html::a($model->name,['view', 'id'=>$model->id]);
+    }
+];
+$columns[] = [
+    'attribute'=>'city_id',
+    'value'=>function ($model){
+        return $model->getCityName();
+    },
+    'filter'=>false,
+];
+$columns[] = 'principal';
+$columns[] = 'tel';
+if($searchModel->is_blacklist==1){
+    $columns[] = [
+        'label'=>'加入黑名单原因备注',
+        'value'=>function ($model){
+            return $model->getLastJoinBlackListCause();
+        }
+    ];
+}
+
+if($searchModel->is_blacklist==1){
+    $columns[] = [
+        'label'=>'加入黑名单时间',
+        'value'=>function ($model){
+            return $model->getLastJoinBlackListTime();
+        }
+    ];
+}
+$columns[] = [
+    'attribute'=>'created_at',
+    'value'=>function($model){
+        return date('Y-m-d', $model->created_at);
+    },
+    'filter'=>false,
+];
+$columns[] = [
+    'attribute'=>'shop_count',
+    'options'=>['width'=>70],
+    'value'=>function ($model){
+        return Html::a($model->shop_count, ['shop/index', 'ShopSearch'=>[
+            'shop_manager_id'=>$model->id
+        ]]);
+    },
+    'format'=>'raw',
+];
+$columns[] = [
+    'attribute'=>'worker_count',
+    'options'=>['width'=>70],
+];
+$columns[] = [
+    'attribute'=>'complain_coutn',
+    'options'=>['width'=>70]
+];
+$columns[] = [
+    'attribute'=>'level',
+    'options'=>['width'=>70]
+];
+
+$columns[] = [
+    'class' => 'yii\grid\ActionColumn',
+    'template'=>'{update} {joinblacklist}',
+    'buttons' => [
+        'update' => function ($url, $model) {
+            return Html::a(Yii::t('yii', '编辑'), [
+                'view',
+                'id' => $model->id,
+                'edit'=>'t'
+            ], [
+                'title' => Yii::t('yii', '编辑'),
+                'class' => 'btn btn-success btn-sm'
+            ]);
+        },
+        'joinblacklist' => function ($url, $model) {
+            return empty($model->is_blacklist)?Html::a('加入黑名单', [
+                'join-blacklist',
+                'id' => $model->id
+            ], [
+                'title' => Yii::t('app', '加入黑名单'),
+                'data-toggle'=>'modal',
+                'data-target'=>'#modal',
+                'data-id'=>$model->id,
+                'class'=>'join-list-btn btn btn-success btn-sm',
+            ]):Html::a('解除黑名单', [
+                'remove-blacklist',
+                'id' => $model->id
+                
+            ], [
+                'title' => Yii::t('app', '解除黑名单'),
+                'class'=>'join-list-btn btn btn-success btn-sm',
+            ]);
+        },
+    ],
+];
 ?>
 <div class="shop-manager-index">
     <div class="panel panel-info">
@@ -42,111 +141,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'title' => Yii::t('app', '添加小家政')
             ]),
         ],
-        'columns' => [
-//            ['class' => 'yii\grid\SerialColumn'],
-            
-//             [
-//                 'attribute'=>'id',
-//                 'options'=>['width'=>10]
-//             ],
-            [
-                'attribute'=>'name',
-                'format'=>'raw',
-                'value'=>function ($model){
-                    return Html::a($model->name,['view', 'id'=>$model->id]);
-                }
-            ],
-            //             'province_id',
-            [
-                'attribute'=>'city_id',
-                'value'=>function ($model){
-                    return $model->getCityName();
-                },
-                'filter'=>false,
-            ],
-            //             'county_id',
-            // 'street',
-            'principal',
-            'tel',
-            [
-                'attribute'=>'created_at',
-                'value'=>function($model){
-                    return date('Y-m-d', $model->created_at);
-                },
-                'filter'=>false,
-            ],
-//            [
-//                'attribute'=>'audit_status',
-//                'options'=>['width'=>100,],
-//                'value'=>function($model){
-//                    return ShopManager::$audit_statuses[$model->audit_status];
-//                },
-//                'filter'=>ShopManager::$audit_statuses,
-//            ],
-            [
-                'attribute'=>'shop_count',
-                'options'=>['width'=>70],
-                'value'=>function ($model){
-                    return Html::a($model->shop_count, ['shop/index', 'ShopSearch'=>[
-                        'shop_manager_id'=>$model->id
-                    ]]);
-                },
-                'format'=>'raw',
-            ],
-            [
-                'attribute'=>'worker_count',
-                'options'=>['width'=>70],
-//                 'value'=>function ($model){
-//                     return Html::a($model->worker_count, ['worker/index', 'ShopSearch'=>[
-//                         'shop_manager_id'=>$model->id
-//                     ]]);
-//                 },
-//                 'format'=>'raw',
-            ],
-            [
-                'attribute'=>'complain_coutn',
-                'options'=>['width'=>70]
-            ],
-            [
-                'attribute'=>'level',
-                'options'=>['width'=>70]
-            ],
-
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template'=>'{update} {joinblacklist}',
-                'buttons' => [
-                    'update' => function ($url, $model) {
-                        return Html::a(Yii::t('yii', '编辑'), [
-                            'view',
-                            'id' => $model->id,
-                            'edit'=>'t'
-                        ], [
-                            'title' => Yii::t('yii', '编辑'),
-                            'class' => 'btn btn-success btn-sm'
-                        ]);
-                    },
-                    'joinblacklist' => function ($url, $model) {
-                        return empty($model->is_blacklist)?Html::a('加入黑名单', [
-                            'join-blacklist',
-                            'id' => $model->id
-                        ], [
-                            'title' => Yii::t('app', '加入黑名单'),
-                            'data-toggle'=>'modal',
-                            'data-target'=>'#modal',
-                            'data-id'=>$model->id,
-                            'class'=>'join-list-btn btn btn-success btn-sm',
-                        ]):Html::a('解除黑名单', [
-                            'remove-blacklist',
-                            'id' => $model->id
-                            
-                        ], [
-                            'title' => Yii::t('app', '解除黑名单'),
-                        ]);
-                    },
-                ],
-            ],
-        ],
+        'columns' => $columns,
         'responsive'=>true,
         'hover'=>true,
         'condensed'=>true,

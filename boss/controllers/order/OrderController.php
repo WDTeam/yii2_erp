@@ -4,6 +4,7 @@ namespace boss\controllers\order;
 
 use core\models\finance\FinanceRefundadd;
 use core\models\customer\CustomerAddress;
+use core\models\order\OrderTool;
 use core\models\order\OrderWorkerRelation;
 use core\models\worker\Worker;
 use Yii;
@@ -17,12 +18,17 @@ use yii\web\Response;
 use core\models\customer\Customer;
 use core\models\order\OrderStatusHistory;
 use core\models\shop\Shop;
+use common\models\order\OrderStatusDict;
 
 /**
  * OrderController implements the CRUD actions for Order model.
  */
 class OrderController extends BaseAuthController
 {
+    public function actionTest()
+    {
+        return OrderTool::createOrderCode();
+    }
     public function actionCancelOrder()
     {   
         $orderid = yii::$app->request->get('orderid',1);
@@ -35,16 +41,24 @@ class OrderController extends BaseAuthController
         }
         $orderStatus= $orderInfo->orderExtStatus->order_status_dict_id;
         $FinanceRefundadd=new FinanceRefundadd;
+        if($orderInfo->orderExtStatus->order_status_dict_id>=OrderStatusDict::ORDER_SERVICE_START)
+        {
+            echo "订单已开始服务，不允许取消订单";
+            exit;
+        }
         /** 方便测试关闭了，正式使用时请打开
        $result = Order::cancel($orderid,Yii::$app->user->id);
        if($result==false)  exit("order canlel module error");
         */
-        echo "取消订单成功，正在执行退款<br>";
-        $paytime=0;
+         echo "取消订单成功，正在执行退款<br>";
+         $paytime=0;
          $statusHistoryInfo = OrderStatusHistory::getOrderStatusHistory($orderid);
          if($statusHistoryInfo) $paytime = $statusHistoryInfo->created_at;
 
-        if($orderInfo->orderExtPop->order_pop_order_code) echo "pop取消订单，已执行完毕";
+        if($orderInfo->orderExtPop->order_pop_order_code) {
+            echo "pop取消订单，已执行完毕";
+            exit;
+        }
         if($orderInfo->orderExtWorker->shop_id)
         {
             $shopInfo = Shop::findById($orderInfo->orderExtWorker->shop_id);
@@ -52,8 +66,8 @@ class OrderController extends BaseAuthController
             $FinanceRefundadd->finance_refund_city_id=empty($shopInfo->city_id)?0:$shopInfo->city_id ;
             $FinanceRefundadd->finance_refund_county_id=empty($shopInfo->county_id)?0:$shopInfo->county_id ;
         }
-         //if($orderInfo->orderExtPay->order_pay_type==2 && $orderInfo->orderExtStatus->order_status_dict_id==2)
-        if($orderInfo->orderExtPay->order_pay_type==2)
+         if($orderInfo->orderExtPay->order_pay_type==2 && $orderInfo->orderExtStatus->order_status_dict_id>=OrderStatusDict::ORDER_WAIT_ASSIGN)
+        //if($orderInfo->orderExtPay->order_pay_type==2)
           {
 
             $FinanceRefundadd->customer_id=$orderInfo->orderExtCustomer->customer_id;
@@ -526,8 +540,4 @@ class OrderController extends BaseAuthController
         }
     }
     
-    public function actionTest()
-    {
-        print_r(Yii::$app->request->post());
-    }
 }
