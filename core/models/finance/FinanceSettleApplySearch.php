@@ -392,22 +392,27 @@ class FinanceSettleApplySearch extends FinanceSettleApply
                 ->where(['worker_id'=>$worker_id])
                 ->offset($offset)->limit($per_page_num)
                 ->asArray()->all();
+        $i = 0;
         foreach($workerIncomeArr as $workerIncome){
-            $finalWorkerIncomeArr['settle_year'] = date('Y',$workerIncome['settle_starttime']);
-            $finalWorkerIncomeArr['settle_starttime'] = date('Y-m-d',$workerIncome['settle_starttime']);
-            $finalWorkerIncomeArr['settle_endtime'] =  date('Y-m-d',$workerIncome['settle_endtime']);
-            $finalWorkerIncomeArr['order_count'] = $workerIncome['order_count'];
-            $finalWorkerIncomeArr['worker_income'] = $workerIncome['worker_income'];
-            $finalWorkerIncomeArr['settle_cycle_des'] = $workerIncome['settle_cycle_des'];
-            $finalWorkerIncomeArr['settle_task_money'] = $workerIncome['settle_task_money'];
-            $finalWorkerIncomeArr['base_salary_subsidy'] = $workerIncome['base_salary_subsidy'];
-            $finalWorkerIncomeArr['money_deduction'] = $workerIncome['money_deduction'];
-            $finalWorkerIncomeArr['order_money_except_cash'] = $workerIncome['order_money_except_cash'];
+            $finalWorkerIncome = [];
+            $finalWorkerIncome['settle_id'] = $workerIncome['settle_id'];
+            $finalWorkerIncome['settle_year'] = date('Y',$workerIncome['settle_starttime']);
+            $finalWorkerIncome['settle_starttime'] = date('Y-m-d',$workerIncome['settle_starttime']);
+            $finalWorkerIncome['settle_endtime'] =  date('Y-m-d',$workerIncome['settle_endtime']);
+            $finalWorkerIncome['order_count'] = $workerIncome['order_count'];
+            $finalWorkerIncome['worker_income'] = $workerIncome['worker_income'];
+            $finalWorkerIncome['settle_cycle_des'] = $workerIncome['settle_cycle_des'];
+            $finalWorkerIncome['settle_task_money'] = $workerIncome['settle_task_money'];
+            $finalWorkerIncome['base_salary_subsidy'] = $workerIncome['base_salary_subsidy'];
+            $finalWorkerIncome['money_deduction'] = $workerIncome['money_deduction'];
+            $finalWorkerIncome['order_money_except_cash'] = $workerIncome['order_money_except_cash'];
             if($workerIncome['settle_status'] == self::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PAYED){
-                 $finalWorkerIncomeArr['settle_status'] = 1;//已结算
+                 $finalWorkerIncome['settle_status'] = 1;//已结算
             }else{
-                 $finalWorkerIncomeArr['settle_status'] = 0;//未结算
+                 $finalWorkerIncome['settle_status'] = 0;//未结算
             }
+            $finalWorkerIncomeArr[$i] = $finalWorkerIncome;
+            $i++;
         }
         return $finalWorkerIncomeArr;
     }

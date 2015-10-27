@@ -38,18 +38,46 @@ class WorkerFinanceController extends \api\components\Controller{
         }
     }
     
-     public function actionGetTaskList(){
+    public function actionGetWorkerOrderIncomeList(){
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         // 按阿姨id获取阿姨信息
-        $workerId = intval($param['worker_id']);
-        if (!empty($workerId) ) {
-            $workerIncomeList = FinanceSettleApplySearch::getSettledWorkerIncomeListByWorkerId($workerId,1,5);
-            if(!empty($workerIncomeList)){
-                return $this->send($workerIncomeList, "阿姨收入信息查询成功");
+        $settle_id = intval($param['settle_id']);
+        if (!empty($settle_id) ) {
+            $orderArray = FinanceSettleApplySearch::getOrderArrayBySettleId($settle_id);
+            if(!empty($orderArray) && (count($orderArray)>0)){
+                return $this->send($orderArray, "阿姨收入信息查询成功");
             }
         }
     }
     
+    public function actionGetTaskList(){
+        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        // 按阿姨id获取阿姨信息
+        $settle_id = intval($param['settle_id']);
+        if (!empty($settle_id) ) {
+            $taskArray = FinanceSettleApplySearch::getTaskArrayBySettleId($settle_id);
+            if(!empty($taskArray)){
+                return $this->send($taskArray, "阿姨收入信息查询成功");
+            }
+        }
+    }
+    
+    public function actionGetDeductionList(){
+        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        // 按阿姨id获取阿姨信息
+        $settle_id = intval($param['settle_id']);
+        if (!empty($settle_id) ) {
+            $deductionArray = FinanceSettleApplySearch::getDeductionArrayBySettleId($settle_id);
+            if(!empty($deductionArray)){
+                return $this->send($deductionArray, "阿姨收入信息查询成功");
+            }
+        }
+    }
+    
+    /**
+     * 阿姨确认结算单
+     * @return type
+     */
     public function actionWorkerConfirmSettlement(){
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         // 按阿姨id获取阿姨信息
