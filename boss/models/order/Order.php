@@ -8,16 +8,15 @@
 
 namespace boss\models\order;
 
-use boss\models\operation\OperationCity;
 use common\models\finance\FinanceOrderChannel;
-use core\models\operation\CoreOperationArea;
+use core\models\operation\OperationArea;
 use core\models\order\OrderPay;
 use Yii;
 use core\models\order\Order as OrderModel;
 use core\models\worker\Worker;
 use yii\helpers\ArrayHelper;
 use boss\models\operation\OperationShopDistrict;
-use core\models\operation\CoreOperationCity;
+use core\models\operation\OperationCity;
 use common\models\order\OrderStatusDict;
 
 
@@ -73,13 +72,13 @@ class Order extends OrderModel
 //         $city_list = OperationCity::find()->select(['city_id','city_name'])->where(['province_id'=>$province_id,'operation_city_is_online'=>1])->all();
 //         return ArrayHelper::map($city_list,'city_id','city_name');
         
-        $onlineCityList = CoreOperationCity::getCityOnlineInfoList();
+        $onlineCityList = OperationCity::getCityOnlineInfoList();
         return $onlineCityList?ArrayHelper::map($onlineCityList,'city_id','city_name'):[];
     }
 
     public static function getCountyList($city_id)
     {
-        $county_list = CoreOperationArea::getAreaList($city_id);
+        $county_list = OperationArea::getAreaList($city_id);
         $countys = [];
         if(is_array($county_list)) {
             foreach ($county_list as $k => $v) {
