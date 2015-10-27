@@ -11,7 +11,7 @@ use yii2tech\ar\softdelete\SoftDeleteBehavior;
 use core\models\worker\Worker;
 use core\behaviors\ShopStatusBehavior;
 use yii\helpers\ArrayHelper;
-use core\models\operation\CoreOperationShopDistrict;
+use core\models\operation\OperationShopDistrict;
 class Shop extends \common\models\shop\Shop
 {
     public static $audit_statuses = [
@@ -183,7 +183,7 @@ class Shop extends \common\models\shop\Shop
      */
     public static function getShopDistrictList($city_id=null)
     {
-        $models = CoreOperationShopDistrict::getCityShopDistrictList($city_id);
+        $models = OperationShopDistrict::getCityShopDistrictList($city_id);
         return ArrayHelper::map($models, 'id', 'operation_shop_district_name');
     }
     /**
@@ -191,7 +191,7 @@ class Shop extends \common\models\shop\Shop
      */
     public function getOperation_shop_district_name()
     {
-        return CoreOperationShopDistrict::getShopDistrictName($this->operation_shop_district_id);
+        return OperationShopDistrict::getShopDistrictName($this->operation_shop_district_id);
     }
     /**
      * 软删除
