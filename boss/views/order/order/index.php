@@ -16,9 +16,11 @@ use boss\models\order\Order;
  
 AppAsset::addCss($this, 'css/order_search/style.css');
 AppAsset::addCss($this, 'css/order_search/dalog/animate.min.css');
+
 AppAsset::addScript($this, 'js/order_search/script.js');
 AppAsset::addScript($this, 'js/order_search/My97DatePicker/WdatePicker.js');
 AppAsset::addScript($this, 'js/order_search/dalog/jquery.hDialog.min.js');	
+
 // $this->registerCssFile('css/order_search/style.css');
 // $this->registerCssFile('css/order_search/jquery-ui-1.8.17.custom.css');
 // $this->registerCssFile('css/order_search/jquery-ui-timepicker-addon.css');
@@ -112,10 +114,11 @@ $this->params['breadcrumbs'][] = $this->title;
 							        'itemView' => '_item',
 							    ]);    
 							    ?>  
-									  	 
+								
 						    	<div class="clear"></div>
 						    </div>
-						    
+
+<!-- 周期订单暂时还不支持					    
 						    <div class="heading heading_top">
 								<h3 class="panel-title">周期订单展示</h3>
 						   </div>
@@ -175,7 +178,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		  	                  
 						    	<div class="clear"></div>
 						    </div>
-						<!------------------翻页开始------------------>
+
 						    <div class="com_pages_list">
 					              <dl class="pages_list">
 					                <dd><a href="###">«</a></dd>
@@ -189,6 +192,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					                <dd><a href="###">»</a></dd>
 					              </dl>
 					         </div>
+-->					         
 						<!------------------弹出层开始------------------>
 						
 						<div class="cd-popup" role="alert">
@@ -261,7 +265,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					<li>
 						<strong>* 投诉详情</strong>
 						<div class="fl">
-                          <textarea type="text" placeholder="" class="form-control"></textarea>	
+                          <textarea id="complaint_detail" type="text" placeholder="" class="form-control"></textarea>	
                          </div>
 					</li>
 					
@@ -282,13 +286,13 @@ $this->params['breadcrumbs'][] = $this->title;
 					<li class="radioLi">
 						<strong>* 投诉部门</strong>
 						<div class="fl jsRadio">
-							<label class="mr10"><input type="radio" name="yin" value="2" class="xuanzhong"/>线下运营部</label>
-							<label class="mr10"><input type="radio" name="yin" value="2"/>客服部</label>
-							<label class="mr10"><input type="radio" name="yin" value="2"/>线下推广部</label>
-							<label class="mr10"><input type="radio" name="yin" value="2"/>公司</label>
-							<label class="mr10"><input type="radio" name="yin" value="2"/>财务</label>
-							<label class="mr10"><input type="radio" name="yin" value="2"/>系统</label>
-							<label class="mr10"><input type="radio" name="yin" value="2"/>活动</label>
+							<label class="mr10"><input type="radio" name="radio_department" value="1" class="xuanzhong"/>线下运营部</label>
+							<label class="mr10"><input type="radio" name="radio_department" value="2"/>客服部</label>
+							<label class="mr10"><input type="radio" name="radio_department" value="3"/>线下推广部</label>
+							<label class="mr10"><input type="radio" name="radio_department" value="4"/>公司</label>
+							<label class="mr10"><input type="radio" name="radio_department" value="5"/>财务</label>
+							<label class="mr10"><input type="radio" name="radio_department" value="6"/>系统</label>
+							<label class="mr10"><input type="radio" name="radio_department" value="7"/>活动</label>
 						</div>
 					</li>
 					<li class="m_disd">
@@ -381,55 +385,3 @@ $this->params['breadcrumbs'][] = $this->title;
 				</ul>
 			</form>
 		</div>
-<?php 
-$this->registerJs('
-	    $(function () {
-	    	var $el = $(".dialog");
-				$el.hDialog(); //默认调用
-				//改变宽和高
-				$(".m_quxiao").hDialog({width:600,height: 400});
-				$(".m_tousu").hDialog({ box:"#HBox2", width:800,height: 600});
-				$(".m_meagg").hDialog({ box:"#HBox3", width:600,height: 400});
-				$(".m_tousu").click(function(){
-					$(".xuanzhong").attr("checked","checked");
-				});
-				$(".m_quxiao").click(function(){
-					$(".xuanzhong").attr("checked","checked");
-				});
-				$(".m_meagg").click(function(){
-					$(".xuanzhong").attr("checked","checked");
-				});
-				$(".jsRadio label").click(function(){
-					var indexval=$(this).index();
-					$(this).parents(".radioLi").next("li").children(".js_radio_tab").hide();
-					$(this).parents(".radioLi").next("li").children(".js_radio_tab").eq(indexval).show();
-				});
-				
-				$(".submitBtn").click(function(){
-					$(".m_queren").show();
-					$(".radioLi").hide();
-					$(".m_disd").hide();
-					$(".m_disd").hide();
-					$(".submitBtntt").show();
-
-				});
-				
-				$(".m_subm").click(function(){
-					$(".m_queren").show();
-					$(".radioLi").show();
-					$(".m_disd").show();
-					$(".m_disd").show();
-					$(".submitBtntt").hide();
-				});
-        	$("#list li").click(
-		       	function(){
-					$(this).addClass("cur");
-					$(this).siblings("li").removeClass("cur");
-			   }
-		     );
-			 
-			 
-        })
-    ');
-
-?>
