@@ -1,12 +1,13 @@
 <?php
 
-namespace boss\controllers;
+namespace boss\controllers\order;
 
 use Yii;
-use boss\models\OrderComplaint;
+use boss\models\order\OrderComplaint;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use boss\models\order\OrderComplaintSearch;
 
 /**
  * OrderComplaintController implements the CRUD actions for OrderComplaint model.
@@ -31,8 +32,24 @@ class OrderComplaintController extends BaseAuthController
      */
     public function actionIndex()
     {   
-    	
-        return $this->render("index");
+    	$searchModel = new OrderComplaintSearch();
+    	$orderComplaint = new OrderComplaint();
+    	$comStatus = $orderComplaint->ComplaintStatus();
+    	$comLevel = $orderComplaint->ComplaintLevel();
+    	$comType = $orderComplaint->ComplaintType();
+    	$params = Yii::$app->request->getQueryParams();
+    	$dataProvider = $searchModel->search($params);
+    	//print_r($dataProvider->getData());exit();
+    	$url = $_SERVER['HTTP_HOST'].$_SERVER['QUERY_STRING'];
+    	return $this->render('index', [
+    			'dataProvider' => $dataProvider,
+    			'searchModel' => $searchModel,
+    			'comStatus' => $comStatus,
+    			'comLevel' => $comLevel,
+    			'comType' => $comType,
+    			'params' => $params,
+    			'url' => $url
+    	]);
         
     }
 	public function actionAdd(){
@@ -128,5 +145,8 @@ class OrderComplaintController extends BaseAuthController
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    public function actionApp(){
+    	echo "你好";exit();
     }
 }
