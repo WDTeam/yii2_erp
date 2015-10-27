@@ -5,8 +5,6 @@ use Yii;
 
 class GeneralPayRefund extends \common\models\payment\GeneralPayRefund
 {
-
-
     /**
      * 订单退款
      * @param $order_id

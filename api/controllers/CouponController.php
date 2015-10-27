@@ -180,5 +180,67 @@ class CouponController extends \api\components\Controller
         }
         
     }
+     /**
+     * @api {GET} v1/coupon/get-coupon-count 获取用户优惠码数量 （功能已经实现 100%）
+     *
+     *
+     * @apiName GetCouponCount
+     * @apiGroup Coupon
+     *
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "code": "1",
+     *       "msg": "获取成功"
+     *       "ret":{
+     *            "couponCount":{
+     *            "count":'10'
+     *             }
+     *          }
+     *     }
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "0",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *
+     *     }
+     *
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "0",
+     *       "msg": "用户认证已经过期,请重新登录"
+     *
+     *     }
+     *
+     */
+    public function actionGetCouponCount()
+    {
+        $param = Yii::$app->request->get();
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
+
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+
+        if (!empty($customer) && !empty($customer->id)) {
+            $CouponCount =CouponCustomer::CouponCount($customer->id);
+            $ret['couponCount'] = $CouponCount;
+            return $this->send($ret, "用户优惠码数量");
+        } else {
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
+    }
 }
 ?>

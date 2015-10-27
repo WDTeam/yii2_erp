@@ -31,7 +31,7 @@ class CustomerTransRecordController extends Controller
     /**
      * 创建交易记录
      * @param $data 数据
-     */
+
     public function createRecord($data)
     {
         //验证之前将数据插入记录表
@@ -49,7 +49,7 @@ class CustomerTransRecordController extends Controller
         $model->attributes = $data;
         return $model->add();
     }
-
+*/
 
     /**
      * Lists all CustomerTransRecord models.
@@ -86,7 +86,7 @@ class CustomerTransRecordController extends Controller
      * Creates a new CustomerTransRecord model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
-     */
+
     public function actionCreate()
     {
         $model = new CustomerTransRecord;
@@ -102,13 +102,13 @@ class CustomerTransRecordController extends Controller
             ]);
         }
     }
-
+     */
     /**
      * Updates an existing CustomerTransRecord model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
-     */
+
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -121,26 +121,26 @@ class CustomerTransRecordController extends Controller
             ]);
         }
     }
-
+     */
     /**
      * Deletes an existing CustomerTransRecord model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
-     */
+
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
         return $this->redirect(['index']);
     }
-
+*/
     /**
      * Finds the CustomerTransRecord model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
      * @return CustomerTransRecord the loaded model
      * @throws NotFoundHttpException if the model cannot be found
-     */
+
     protected function findModel($id)
     {
         if (($model = CustomerTransRecord::findOne($id)) !== null) {
@@ -149,7 +149,7 @@ class CustomerTransRecordController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-
+     */
     public function actionTest()
     {
 
