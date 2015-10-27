@@ -184,15 +184,21 @@ $this->params['breadcrumbs'][] = $this->title;
         'enableEditMode'=>true,
     ]) ?>
     
+    <div class="panel panel-info">
     <?php $form = ActiveForm::begin([
         'action' => ['set-audit-status', 'id'=>$model->id],
         'method' => 'post',
-        'class'=>'panel-body row'
     ]); ?>
-    <?php echo Html::activeRadioList($model, 'audit_status', Shop::$audit_statuses,[
-        'class'=>'col-md-3',
-        'id'=>'set_audit_status'
-    ]);?>
-    <?php echo Html::submitInput('保存',['class'=>'btn btn-primary']);?>
+        <div class="panel-body row">
+            <div class="col-md-3">
+                <?php echo Html::activeRadioList($model, 'audit_status', Shop::$audit_statuses,[
+                    'id'=>'set_audit_status'
+                ]);?>
+            </div>
+            <div class="col-md-2">
+                <?php echo Html::submitInput('确认',['class'=>'btn btn-primary']);?>
+            </div>
+        </div>
     <?php ActiveForm::end(); ?>
+    </div>
 </div>
