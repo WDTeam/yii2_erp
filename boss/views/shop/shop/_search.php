@@ -73,7 +73,7 @@ use yii\web\JsExpression;
                     ],
                     'initSelection'=> new JsExpression('function (element, callback) { 
                         callback({
-                            id:'.$model->shop_manager_id.',
+                            id:"'.$model->shop_manager_id.'",
                             name:"'.$model->getManagerName().'"
                         }); 
                     }'),

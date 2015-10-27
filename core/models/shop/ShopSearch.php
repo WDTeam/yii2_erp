@@ -41,15 +41,16 @@ class ShopSearch extends Shop
         $query->andFilterWhere([
             'id' => $this->id,
             'shop_manager_id' => $this->shop_manager_id,
-            'province_id' => $this->province_id,
-            'city_id' => $this->city_id,
-            'county_id' => $this->county_id,
+            'province_id' => empty($this->province_id)?null:$this->province_id,
+            'city_id' => empty($this->city_id)?null:$this->city_id,
+            'county_id' => empty($this->county_id)?null:$this->county_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'is_blacklist' => $this->is_blacklist,
             'audit_status' => $this->audit_status,
             'worker_count' => $this->worker_count,
             'complain_coutn' => $this->complain_coutn,
+            'operation_shop_district_id'=>$this->operation_shop_district_id,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])

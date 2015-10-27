@@ -76,6 +76,20 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute'=>'street',
             ],
+            [
+                'attribute'=>'operation_shop_district_id',
+                'type'=>DetailView::INPUT_WIDGET,
+                'widgetOptions' => [
+                    'name'=>'audit_status',
+                    'class'=>\kartik\widgets\Select2::className(),
+                    'data' => Shop::getShopDistrictList($model->city_id),
+                    'hideSearch' => false,
+                    'options'=>[
+                        'placeholder' => '选择商圈',
+                    ]
+                ],
+                'value'=>$model->operation_shop_district_name,
+            ],
             'principal',
             'tel',
             'other_contact',

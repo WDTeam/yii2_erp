@@ -166,13 +166,21 @@ class Shop extends \common\models\shop\Shop
         }
         return false;
     }
+    
     /**
      * 获取商圈数组
      */
-    public static function getShopDistrictList()
+    public static function getShopDistrictList($city_id=null)
     {
-        $models = CoreOperationShopDistrict::getCityShopDistrictList();
+        $models = CoreOperationShopDistrict::getCityShopDistrictList($city_id);
         return ArrayHelper::map($models, 'id', 'operation_shop_district_name');
+    }
+    /**
+     * 商圈名称
+     */
+    public function getOperation_shop_district_name()
+    {
+        return CoreOperationShopDistrict::getShopDistrictName($this->operation_shop_district_id);
     }
     /**
      * 软删除
