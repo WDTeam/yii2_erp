@@ -510,7 +510,7 @@ class WorkerController extends \api\components\Controller
      *             "worker_name": "张",
      *             "order_count": "60",
      *             "service_family_count": "60",
-     *             "salary"=>"23888.00"
+     *             "worker_income"=>"23888.00"
      *      ]
      * }
      *
@@ -540,7 +540,7 @@ class WorkerController extends \api\components\Controller
         $ret = [
             "worker_name" => $service['worker_name'],
             "order_count" => $service['all_order_count'],
-            "salary" => $service['all_worker_money'],
+            "worker_income" => $service['all_worker_money'],
             "service_family_count" => $workerInfo[''],//todo:等待model返回字段
         ];
         return $this->send($ret, "操作成功.");
@@ -548,9 +548,9 @@ class WorkerController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-settle-list 获取阿姨对账单列表 (田玉星 80%)
+     * @api {GET} /worker/get-worker-settle-list 获取阿姨对账单列表 (田玉星 95%)
      * 
-     * @apiDescription 【备注：等待model底层支持】
+     * @apiDescription 【备注：model微调】
      *
      * @apiName actionGetWorkerSettleList 
      * @apiGroup Worker
@@ -569,13 +569,14 @@ class WorkerController extends \api\components\Controller
      *      "msg": "操作成功.",
      *      "ret": [
      *      {
-     *         'bill_type' =>"1",
-     *         'bill_explain'=>"每周四，E家洁会为您结算上周一至周日的保洁服务订单收入及各类服务补贴。您可通过每周的周期下拉菜单进行选择，点击查看，了解每周收入明细。",
-     *         'bill_date'=>'09年07月-09月13日',
+     *         "settle_id"=>"32"
+     *         'settle_type' =>"1",
+     *         'settle_year' =>"2014"
+     *         'settle_date'=>'09年07月-09月13日',
+     *         'settle_type' =>1,
      *         'order_count'=>'10',
-     *         'salary'=>'320.00',
-     *         'balance_status'=>"1",
-     *         "bill_id"=>"32"
+     *         'worker_income'=>'320.00',
+     *         'settle_status'=>"1"
      *       }
      *      ]
      *       
@@ -609,31 +610,29 @@ class WorkerController extends \api\components\Controller
         $page_num = intval($param['page_num']);
         //调取model层
         try{
-            $billList = FinanceSettleApplySearch::getSettledWorkerIncomeListByWorkerId($checkResult['worker_id'],$per_page,$page_num);
+            $settleList = FinanceSettleApplySearch::getSettledWorkerIncomeListByWorkerId($checkResult['worker_id'],$per_page,$page_num);
          }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
+        
+        $settleArr = array();
+        foreach($settleList as $key=>$val){
+            $settleArr[$key]['settle_id'] = $val['settle_id'];
+            $settleArr[$key]['settle_year'] = $val['settle_year'];
+            if($val['settle_cycle_type']==1){//周结账单
+                $settleArr[$key]['settle_date'] = $val['settle_starttime'].'-'.$val['settle_endtime'];
+            }else{
+                $settleArr[$key]['settle_date'] = date('m',strtotime($val['settle_starttime']));
+            }
+            $settleArr[$key]['settle_type'] = $val['settle_cycle_type'];
+            $settleArr[$key]['order_count'] = $val['order_count'];
+            $settleArr[$key]['worker_income'] = $val['worker_income'];
+            $settleArr[$key]['settle_status'] = $val['settle_status'];
+        }
         $ret = [
-            [
-                "bill_id"=>"32",
-                'bill_year'=>'2014',
-                'bill_date'=>'09年07月-09月13日',
-                'bill_type' =>"1",
-                'bill_explain'=>"每周四，E家洁会为您结算上周一至周日的保洁服务订单收入及各类服务补贴。您可通过每周的周期下拉菜单进行选择，点击查看，了解每周收入明细。",
-                'order_count'=>'10',
-                'salary'=>'320.00',
-                'balance_status'=>"1",
-            ],
-            [
-                "bill_id"=>"32",
-                'bill_year'=>'2014',
-                'bill_type' =>"2",
-                'bill_explain'=>"每周四，E家洁会为您结算上周一至周日的保洁服务订单收入及各类服务补贴。您可通过每周的周期下拉菜单进行选择，点击查看，了解每周收入明细。",
-                'bill_date'=>'8月',
-                'order_count'=>'10',
-                'salary'=>'320.00',
-                'balance_status'=>"2",
-                ]
+            'per_page' => $per_page,
+            'page_num' => $page_num,
+            'data'  => $settleArr
         ];
         return $this->send($ret, "操作成功.");
     }
