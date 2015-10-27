@@ -12,7 +12,13 @@ use boss\models\order\Order;
  * @var yii\widgets\ActiveForm $form
  */
 ?>
+<style type="text/css">
+	.select2-container--krajee {
+display: block;
+float: right;
+}
 
+</style>
 <div class="heading">
 	<h3 class="panel-title">查询</h3>
 </div>
@@ -24,7 +30,7 @@ use boss\models\order\Order;
     'method' => 'get',
 ]); ?>						
 	<?php echo $form->field($searchModel, 'order_customer_phone')->TextInput(['class' => 'm_ipu'])->label('用户电话 :', ['class' => 'm_ipone']); ?>
-	<?php echo $form->field($searchModel, 'worker_phone')->TextInput(['class' => 'm_ipu'])->label('阿姨电话 :', ['class' => 'm_ipone']); ?>
+	<?php echo $form->field($searchModel, 'order_worker_phone')->TextInput(['class' => 'm_ipu'])->label('阿姨电话 :', ['class' => 'm_ipone']); ?>
 	<?php echo $form->field($searchModel, 'order_code')->TextInput(['class' => 'm_ipu'])->label('订单编号 :', ['class' => 'm_ipone']); ?>
 	
 	<div class="m_riqi">
@@ -33,16 +39,17 @@ use boss\models\order\Order;
 		<input type="text" name="datetime" class="ui_timepicker" value="" placeholder=""> 到
 		<input type="text" name="datetime" class="ui_timepicker" value="" placeholder="">
      </div>
-	  <div class="m_fr">	
+	  <div class="m_fr" style="margin-bottom: 20px;">	
         <label class="m_ipone">服务时间:</label>
 		<input type="text" name="datetime" class="ui_timepicker" value="" placeholder=""> 到
 		<input type="text" name="datetime" class="ui_timepicker" value="" placeholder="">
 	   </div>
 
         <?= $form->field($searchModel, 'shop_id')->widget(Select2::classname(), [
-            'initValueText' => '门店', // set the initial display text
+            'initValueText' => '门店:', // set the initial display text
             'options' => ['placeholder' => '选择门店', 'class' => 'm_ipu'],
             'pluginOptions' => [
+                'width' => '80%',
                 'allowClear' => true,
                 'minimumInputLength' => 0,
                 'ajax' => [
@@ -54,19 +61,20 @@ use boss\models\order\Order;
                 'templateResult' => new JsExpression('function(city) { return city.text; }'),
                 'templateSelection' => new JsExpression('function (city) { return city.text; }'),
             ],
-        ])->label('门店', ['class' => 'm_ipone']); ?>
+        ])->label('门店:', ['class' => 'm_ipone','style'=>'line-height:35px']); ?>
         <?= $form->field($searchModel, 'district_id')->widget(Select2::classname(), [
             'name' => 'worker_district',
             'hideSearch' => true,
             'data' => Order::getDistrictList(),
             'options' => ['placeholder' => '选择商圈', 'class' => 'm_ipu'],
             'pluginOptions' => [
+                'width' => '80%',
                 'tags' => true,
                 'maximumInputLength' => 10
             ],
-        ])->label('商圈', ['class' => 'm_ipone']); ?>        	   
-	   <?php echo $form->field($searchModel, 'order_address')->TextInput(['class' => 'm_ipu'])->label('客户地址 :', ['class' => 'm_ipone']); ?>
-	   <?= Html::submitButton('查询', ['class' => 'btn btn-primary']) ?>
+        ])->label('商圈:', ['class' => 'm_ipone','style'=>'line-height:35px']); ?>        	   
+	   <?php echo $form->field($searchModel, 'order_address')->TextInput(['class' => 'm_ipu'])->label('客户地址 :', ['class' => 'm_ipone','style'=>'margin-left:20px;']); ?>
+	   <?= Html::submitButton('搜索', ['class' => 'btn btn-primary']) ?>
 	</div>
 	
 	

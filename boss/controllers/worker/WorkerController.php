@@ -4,7 +4,9 @@ namespace boss\controllers\worker;
 
 
 use core\models\operation\CoreOperationArea;
+use core\models\worker\WorkerSkill;
 use core\models\worker\WorkerStat;
+use core\models\worker\WorkerVacationApplication;
 use Yii;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
@@ -666,9 +668,13 @@ class WorkerController extends BaseAuthController
     }
 
     public function actionTest(){
+
         echo '<pre>';
-        var_dump(Worker::getWorkerInfo(1));
+        var_dump(WorkerVacationApplication::getApplicationTimeLine(18517));
+        var_dump(WorkerVacationApplication::createVacationApplication(18517,'2015-10-31',1));
+        var_dump(WorkerVacationApplication::getApplicationList(18517,1,10));
         die;
+        var_dump(WorkerVacationApplication::getApplicationList(18517));
 
         $a = Worker::getWorkerInfo(16351);
         var_dump($a);

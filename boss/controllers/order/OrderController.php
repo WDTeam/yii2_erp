@@ -10,6 +10,7 @@ use Yii;
 use boss\components\BaseAuthController;
 use boss\models\order\OrderSearch;
 use boss\models\order\Order;
+use yii\base\ErrorException;
 use yii\base\Exception;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -152,12 +153,12 @@ class OrderController extends BaseAuthController
        return Order::getGoods($longitude,$latitude);
     }
 
-public function actionGetCity()
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $province_id = Yii::$app->request->get('province_id');
-        return Order::getOnlineCityList($province_id);
-    }
+     public function actionGetCity()
+     {
+         Yii::$app->response->format = Response::FORMAT_JSON;
+         $province_id = Yii::$app->request->get('province_id');
+         return Order::getOnlineCityList($province_id);
+     }
 
     public function actionGetCounty()
     {
@@ -470,6 +471,11 @@ public function actionGetCity()
     }
 
 
+    /**
+     * 添加修改客户地址
+     * @param $address_id
+     * @return array
+     */
     public function actionSaveAddress($address_id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -485,7 +491,7 @@ public function actionGetCity()
         $customer_id = Yii::$app->request->post('customer_id');
         if($address_id>0){
             //修改
-            $address = CustomerAddress::updateAddress($address_id,$province_name,$city_name,$county_name,$detail,$nickname,$phone);
+            $address = CustomerAddress::updateAddress($address_id, $province_name, $city_name, $county_name, $detail, $nickname, $phone);
         }else{
             //添加
             $address = CustomerAddress::addAddress($customer_id,$province_name,$city_name,$county_name,$detail,$nickname,$phone);

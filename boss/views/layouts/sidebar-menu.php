@@ -93,6 +93,16 @@ echo Menu::widget(
                         'url' => ['/customer/customer/index?CustomerSearch[is_del]=0'],
                         'icon' => 'fa fa-angle-right',
                     ],
+					[
+					'label' => '评价列表(70%)',
+					'url' => ['/customer/customer-comment'],
+					'icon' => 'fa fa-angle-right',
+					],
+					[
+					'label' => '评价标签管理(70%)',
+					'url' => ['/customer/customer-comment-tag'],
+					'icon' => 'fa fa-angle-right',
+					],
                 ],
             ],
             [
@@ -129,6 +139,11 @@ echo Menu::widget(
                 		'url' => ['/order-complaint'],
                 		'icon' => 'fa fa-angle-right',
                 	],
+                    [
+                        'label' => '交易记录',
+                        'url' => ['customer/customer-trans-record/index'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
                 ],
             ],
             [
@@ -286,24 +301,29 @@ echo Menu::widget(
 					[
 						'label' => '服务卡管理',
 						'url' => ['#'],
-						'icon' => 'fa fa-slideshare',
+						'icon' => 'fa fa-angle-right',
 						'options' => [
 							'class' => 'treeview active',
 						],
 						'items' => [
 							[
 								'label' => '服务卡信息管理',
-								'url' => ['operation/server-card/index'],
+								'url' => ['operation/operation-server-card/index'],
 								'icon' => 'fa fa-angle-right',
 							],
 							[
 								'label' => '客户服务卡管理',
-								'url' => ['#'],
+								'url' => ['operation/operation-server-card-customer/index'],
 								'icon' => 'fa fa-angle-right',
 							],
 							[
 								'label' => '服务卡付款管理',
-								'url' => ['#'],
+								'url' => ['operation/operation-server-card-record'],
+								'icon' => 'fa fa-angle-right',
+							],
+							[
+								'label' => '服务卡订单管理',
+								'url' => ['operation/operation-server-card-order'],
 								'icon' => 'fa fa-angle-right',
 							],
                 ],

@@ -12,15 +12,6 @@ class GeneralPay extends \common\models\payment\GeneralPay
 {
 
     /**
-     * @inheritdoc
-     * @return GeneralPayQuery the active query used by this AR class.
-     */
-    public static function find()
-    {
-        return new GeneralPayQuery(get_called_class());
-    }
-
-    /**
      * @param $condition
      * @param $fileds
      * @return array|GeneralPay|null
@@ -124,10 +115,10 @@ class GeneralPay extends \common\models\payment\GeneralPay
             if($channel_id == '2'){
                 $scenario = 'wx_h5_pay';
                 $data['openid'] = $ext_params['openid'];    //微信openid
-            }elseif($channel_id == '6'){
+            }elseif($channel_id == '6' || $channel_id == '24'){
                 $scenario = 'alipay_web_pay';
-                $data['return_url'] = $ext_params['return_url'];    //同步回调地址
-                $data['show_url'] = $ext_params['show_url'];    //显示商品URL
+                $data['return_url'] = !empty($ext_params['return_url']) ? $ext_params['return_url'] :'';    //同步回调地址
+                $data['show_url'] = !empty($ext_params['show_url']) ? $ext_params['show_url']: '';    //显示商品URL
             }elseif($channel_id == '7'){
                 $scenario = 'zhidahao_h5_pay';
                 $data['customer_name'] = $ext_params['customer_name'];  //商品名称
@@ -148,10 +139,10 @@ class GeneralPay extends \common\models\payment\GeneralPay
             if($channel_id == '2'){
                 $scenario = 'wx_h5_online_pay';
                 $data['openid'] = $ext_params['openid'];    //微信openid
-            }elseif($channel_id == '6'){
+            }elseif($channel_id == '6' || $channel_id == '24'){
                 $scenario = 'alipay_web_online_pay';
-                $data['return_url'] = $ext_params['return_url'];    //同步回调地址
-                $data['show_url'] = $ext_params['show_url'];    //显示商品URL
+                $data['return_url'] = !empty($ext_params['return_url']) ? $ext_params['return_url'] :'';    //同步回调地址
+                $data['show_url'] = !empty($ext_params['show_url']) ? $ext_params['show_url']: '';    //显示商品URL
             }elseif($channel_id == '7'){
                 $scenario = 'zhidahao_h5_online_pay';
                 $data['customer_name'] = $ext_params['customer_name'];  //商品名称
@@ -204,6 +195,14 @@ class GeneralPay extends \common\models\payment\GeneralPay
      */
     public function alipayAppNotify($data){
         parent::alipayAppNotify($data);
+    }
+
+    /**
+     * 支付宝APP回调
+     * @param $data
+     */
+    public function alipayWapNotify($data){
+        parent::alipayWapNotify($data);
     }
 
     /**

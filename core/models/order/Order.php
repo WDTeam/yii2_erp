@@ -12,7 +12,7 @@ namespace core\models\order;
 use boss\controllers\operation\OperationGoodsController;
 use boss\controllers\operation\OperationShopDistrictController;
 use common\models\order\OrderExtFlag;
-use core\models\Customer;
+use core\models\customer\Customer;
 use core\models\customer\CustomerAddress;
 use core\models\payment\GeneralPay;
 use core\models\worker\Worker;
@@ -24,6 +24,7 @@ use common\models\order\OrderSrc;
 use common\models\finance\FinanceOrderChannel;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
+use core\models\operation\CoreOperationShopDistrict;
 
 /**
  * This is the model class for table "{{%order}}".
@@ -83,10 +84,13 @@ use yii\helpers\ArrayHelper;
  * @property string $promotion_id
  * @property string $order_use_promotion_money
  * @property string $worker_id
+ * @property string $order_worker_phone
+ * @property string $order_worker_name
  * @property string $worker_type_id
  * @property string $order_worker_type_name
  * @property integer $order_worker_assign_type
  * @property string $shop_id
+ * @property string $order_worker_shop_name
  * @property string $checking_id
  * @property string $order_cs_memo
  * @property string $order_sys_memo
@@ -278,8 +282,11 @@ class Order extends OrderModel
             $order->order_flag_lock = 0;
             $order->worker_id = $worker['id'];
             $order->worker_type_id = $worker['worker_type'];
+            $order->order_worker_phone = $worker['worker_phone'];
+            $order->order_worker_name = $worker['worker_name'];
             $order->order_worker_type_name = $worker['worker_type_description'];
             $order->shop_id = $worker["shop_id"];
+            $order->order_worker_shop_name = $worker["shop_name"];
             $order->order_worker_assign_type = $assign_type; //接单方式
             $order->admin_id = $admin_id;
             if ($admin_id > 1) { //大于1属于人工操作
@@ -296,14 +303,27 @@ class Order extends OrderModel
      * @param $order_id
      * @param $admin_id
      * @param $memo
+     * @param $cause 1公司原因 2个人原因
      * @return bool
      */
-    public static function cancel($order_id, $admin_id, $memo = '')
+    public static function cancel($order_id, $admin_id, $cause,$memo = '')
     {
         $order = OrderSearch::getOne($order_id);
         $order->admin_id = $admin_id;
-        $order->order_customer_memo = $memo;
-        return OrderStatus::_cancel($order, ['OrderExtCustomer']);
+        $order->order_flag_cancel_cause = $cause;
+        if($admin_id==0) {
+            $order->order_customer_memo = $memo;
+            return OrderStatus::_cancel($order, ['OrderExtCustomer']);
+        }elseif($admin_id==1){
+            $order->order_sys_memo = $memo;
+            return OrderStatus::_cancel($order);
+        }elseif($admin_id==2){
+            $order->order_worker_memo = $memo;
+            return OrderStatus::_cancel($order, ['OrderExtWorker']);
+        }elseif($admin_id>2){
+            $order->order_cs_memo = $memo;
+            return OrderStatus::_cancel($order);
+        }
     }
 
     /**
@@ -332,6 +352,13 @@ class Order extends OrderModel
         $status_to = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //初始化订单状态
         $order_count = OrderSearch::getCustomerOrderCount($this->customer_id); //该用户的订单数量
         $order_code = strlen($this->customer_id) . $this->customer_id . strlen($order_count) . $order_count; //TODO 订单号待优化
+
+        $customer = Customer::getCustomerById($this->customer_id);
+        $this->setAttributes([
+            'order_customer_phone' => $customer->customer_phone,
+            'customer_is_vip' => $customer->customer_is_vip,
+        ]);
+
         try {
             $address = CustomerAddress::getAddress($this->address_id);
         } catch (Exception $e) {
@@ -355,6 +382,7 @@ class Order extends OrderModel
         ]);
         $this->setAttributes([
             'order_money' => $this->order_unit_money * $this->order_booked_count / 60, //订单总价
+            'city_id' =>$address['operation_city_id'],
             'district_id' => $goods['district_id'],
             'order_address' => $address['operation_province_name'] . ',' . $address['operation_city_name'] . ',' . $address['operation_area_name'] . ',' . $address['customer_address_detail'] . ',' . $address['customer_address_nickname'] . ',' . $address['customer_address_phone'], //地址信息
         ]);
@@ -566,6 +594,21 @@ class Order extends OrderModel
         return $card[$id];
     }
 
+    
+    /**
+     * 获取已上线商圈列表
+     * @date: 2015-10-26
+     * @author: peak pan
+     * @return:
+     **/
+    
+    public static function getDistrictList()
+    {
+    	$districtList = CoreOperationShopDistrict::getCityShopDistrictList();
+    	return $districtList?ArrayHelper::map($districtList,'id','operation_shop_district_name'):[];
+    }
+    
+    
     /**
      * 核实用户订单唯一性
      * @param   $customer_id   int 用户id

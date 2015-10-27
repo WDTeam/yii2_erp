@@ -399,6 +399,7 @@ class FinanceSettleApplyController extends BaseAuthController
     */
     public function actionWorkerManualSettlementIndex(){
         $financeSettleApplySearch= new FinanceSettleApplySearch;
+        $financeWorkerNonOrderIncomeSearch = new FinanceWorkerNonOrderIncomeSearch();
         $requestParams = Yii::$app->request->getQueryParams();
         $review_section = $requestParams['review_section'];
         $settle_type = $requestParams['settle_type'];
@@ -420,7 +421,8 @@ class FinanceSettleApplyController extends BaseAuthController
         $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
         $cashOrderDataProvider = $financeWorkerOrderIncomeSearch->getCashOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
         $nonCashOrderDataProvider = $financeWorkerOrderIncomeSearch->getNonCashOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
-        return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider,'cashOrderDataProvider'=>$cashOrderDataProvider,'nonCashOrderDataProvider'=>$nonCashOrderDataProvider]);
+        $taskDataProvider = $financeWorkerNonOrderIncomeSearch->getTaskArrByWorkerId($financeSettleApplySearch->worker_id, null, null);
+        return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider,'cashOrderDataProvider'=>$cashOrderDataProvider,'nonCashOrderDataProvider'=>$nonCashOrderDataProvider,'$taskDataProvider'=>$taskDataProvider]);
     }
     
     /**
@@ -493,13 +495,13 @@ class FinanceSettleApplyController extends BaseAuthController
             //获取订单总收入
             $financeSettleApplySearch = $financeSettleApplySearch->getWorkerSettlementSummaryInfo($workerId);
             //获取阿姨的奖励信息
-            $workerSubsidyArr = Array(['finance_worker_non_order_income_type'=>1,'finance_worker_non_order_income_type_des'=>'补贴','finance_worker_non_order_income'=>10,'finance_worker_non_order_income_des'=>'路补超过7公里，补助10元'],);
+            $workerSubsidyArr = Array(['finance_worker_non_order_income_type'=>1,'finance_worker_non_order_income_name'=>'补贴','finance_worker_non_order_income'=>10,'finance_worker_non_order_income_des'=>'路补超过7公里，补助10元'],);
             $financeWorkerNonOrderIncomeArr = [];
             foreach($workerSubsidyArr as $workerSubsidy){
                 $financeWorkerNonOrderIncome = new FinanceWorkerNonOrderIncome;
                 $financeWorkerNonOrderIncome->worker_id = $workerId;
                 $financeWorkerNonOrderIncome->finance_worker_non_order_income_type = $workerSubsidy['finance_worker_non_order_income_type'];
-                $financeWorkerNonOrderIncome->finance_worker_non_order_income_type_des = $workerSubsidy['finance_worker_non_order_income_type_des'];
+                $financeWorkerNonOrderIncome->finance_worker_non_order_income_name = $workerSubsidy['finance_worker_non_order_income_name'];
                 $financeWorkerNonOrderIncome->finance_worker_non_order_income = $workerSubsidy['finance_worker_non_order_income'];
                 $financeWorkerNonOrderIncome->finance_worker_non_order_income_des = $workerSubsidy['finance_worker_non_order_income_des'];
                 $financeWorkerNonOrderIncome->finance_worker_non_order_income_starttime = $settleStartTime;

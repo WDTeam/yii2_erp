@@ -259,7 +259,7 @@ class OrderSearch extends Order
 
     public function search($params)
     {
-        $query = Order::find()->joinWith(['orderExtPop', 'orderExtCustomer', 'orderExtWorker']);
+        $query = Order::find()->joinWith(['orderExtPop', 'orderExtCustomer', 'orderExtWorker', 'orderExtStatus']);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -289,7 +289,7 @@ class OrderSearch extends Order
             'checking_id' => $this->checking_id,
             'order_pop_order_code' => $this->order_pop_order_code,
             'order_customer_phone' => $this->order_customer_phone,
-            'worker_phone' => $this->worker_phone,
+            'worker_phone' => $this->order_worker_phone,
             'shop_id' => $this->shop_id,
             'district_id' => $this->district_id,
         ]);

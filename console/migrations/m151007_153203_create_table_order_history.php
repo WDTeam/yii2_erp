@@ -20,6 +20,7 @@ class m151007_153203_create_table_order_history extends Migration
 
             'order_id'=> Schema::TYPE_BIGINT .'(20) unsigned NOT NULL COMMENT \'编号\'',
             'order_code' => Schema::TYPE_STRING.'(64) NOT NULL DEFAULT \'\' COMMENT \'订单号\'',
+            'order_batch_code' => Schema::TYPE_STRING.'(64) DEFAULT \'\' COMMENT \'周期订单号\'',
             'order_parent_id' => Schema::TYPE_BIGINT.'(20) unsigned  DEFAULT 0 COMMENT \'父级id\'',
             'order_is_parent' => Schema::TYPE_BOOLEAN . '(1) unsigned  DEFAULT 0 COMMENT \'有无子订单 1有 0无\'',
             'order_created_at' => Schema::TYPE_INTEGER.'(11) unsigned  DEFAULT 0 COMMENT \'下单时间\'',
@@ -40,6 +41,7 @@ class m151007_153203_create_table_order_history extends Migration
             'order_flag_worker_sms' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'是否给阿姨发了短信\'',
             'order_flag_worker_jpush' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'是否给阿姨发了极光推送\'',
             'order_flag_worker_ivr' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'是否给阿姨发了IVR\'',
+            'order_flag_cancel_cause' => Schema::TYPE_BOOLEAN.'(1) unsigned  DEFAULT 0 COMMENT \'取消原因 1公司原因 2个人原因\'',
 
 //===============================下单信息
             'order_ip' => Schema::TYPE_STRING.'(128) NOT NULL DEFAULT \'\' COMMENT \'下单IP\'',
@@ -55,8 +57,9 @@ class m151007_153203_create_table_order_history extends Migration
             'order_booked_count' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'预约服务数量（时长）\'',
             'order_booked_begin_time' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 0 COMMENT \'预约开始时间\'',
             'order_booked_end_time' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 0 COMMENT \'预约结束时间\'',
-            'address_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'地址ID\'',
+            'city_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'城市ID\'',
             'district_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'商圈ID\'',
+            'address_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'地址ID\'',
             'order_address'=>Schema::TYPE_STRING.'(255) NOT NULL DEFAULT \'\' COMMENT \'详细地址 包括 联系人 手机号\'',
             'order_booked_worker_id' => Schema::TYPE_INTEGER.'(10) unsigned DEFAULT 0 COMMENT \'指定阿姨\'',
 //================================第三方信息
@@ -68,6 +71,7 @@ class m151007_153203_create_table_order_history extends Migration
 //================================客户信息
             'customer_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'客户ID\'',
             'order_customer_phone' => Schema::TYPE_STRING .'(16) NOT NULL DEFAULT \'\' COMMENT \'客户手机号\'',
+            'order_customer_is_vip' => Schema::TYPE_BOOLEAN .'(1) unsigned  DEFAULT 0 COMMENT \'是否是vip\'',
             'order_customer_need' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'客户需求\'',
             'order_customer_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'客户备注\'',
             'comment_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'评价id\'',
@@ -90,11 +94,13 @@ class m151007_153203_create_table_order_history extends Migration
 
 //===========================工人信息
             'worker_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'工人id\'',
-            'order_worker_phone' => Schema::TYPE_STRING.'(64) unsigned  DEFAULT 0 COMMENT \'工人手机号\'',
+            'order_worker_phone' => Schema::TYPE_STRING.'(64) DEFAULT \'\' COMMENT \'工人手机号\'',
+            'order_worker_name' => Schema::TYPE_STRING.'(64) DEFAULT \'\' COMMENT \'工人姓名\'',
             'worker_type_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'工人职位类型ID\'',
             'order_worker_type_name' => Schema::TYPE_STRING.'(64)  DEFAULT \'\' COMMENT \'工人职位类型\'',
             'order_worker_assign_type' => Schema::TYPE_SMALLINT.'(4) unsigned  DEFAULT 0 COMMENT \'工人接单方式 0未接单 1工人抢单 2客服指派 3门店指派\'',
             'shop_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'工人所属门店id\'',
+            'order_worker_shop_name' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'工人所属门店名称\'',
             'order_worker_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'阿姨备注\'',
 
 //===========================对账信息

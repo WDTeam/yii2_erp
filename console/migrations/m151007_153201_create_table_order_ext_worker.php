@@ -18,11 +18,13 @@ class m151007_153201_create_table_order_ext_worker extends Migration
 
             //===========================工人信息
             'worker_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'工人id\'',
-            'order_worker_phone' => Schema::TYPE_STRING.'(64) unsigned  DEFAULT 0 COMMENT \'工人手机号\'',
+            'order_worker_phone' => Schema::TYPE_STRING.'(64) DEFAULT \'\' COMMENT \'工人手机号\'',
+            'order_worker_name' => Schema::TYPE_STRING.'(64) DEFAULT \'\' COMMENT \'工人姓名\'',
             'worker_type_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'工人职位类型ID\'',
             'order_worker_type_name' => Schema::TYPE_STRING.'(64)  DEFAULT \'\' COMMENT \'工人职位类型\'',
             'order_worker_assign_type' => Schema::TYPE_SMALLINT.'(4) unsigned  DEFAULT 0 COMMENT \'工人接单方式 0未接单 1工人抢单 2客服指派 3门店指派\'',
             'shop_id' => Schema::TYPE_INTEGER.'(10) unsigned  DEFAULT 0 COMMENT \'工人所属门店id\'',
+            'order_worker_shop_name' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'工人所属门店名称\'',
             'order_worker_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' COMMENT \'阿姨备注\'',
 
             'created_at' => Schema::TYPE_INTEGER.'(11) unsigned NOT NULL DEFAULT 0 COMMENT \'创建时间\'',
@@ -30,6 +32,7 @@ class m151007_153201_create_table_order_ext_worker extends Migration
 
         ], $tableOptions);
 
+        $this->createIndex('idx-order_ext_worker-worker_id', '{{%order_ext_worker}}', 'worker_id');
         $this->createIndex('idx-order_ext_worker-order_worker_phone', '{{%order_ext_worker}}', 'order_worker_phone');
     }
 
