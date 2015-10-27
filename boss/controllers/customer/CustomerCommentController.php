@@ -1,10 +1,10 @@
 <?php
 
-namespace boss\controllers;
+namespace boss\controllers\customer;
 
 use Yii;
-use common\models\CustomerComment;
-use boss\models\CustomerCommentSearch;
+use common\models\customer\CustomerComment;
+use boss\models\customer\CustomerCommentSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -33,7 +33,21 @@ class CustomerCommentController extends Controller
     public function actionIndex()
     {
         $searchModel = new CustomerCommentSearch;
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        
+        
+        $searchModel->load(Yii::$app->request->getQueryParams());
+        $searchModel->is_del=0;
+        $datainfo=Yii::$app->request->getQueryParams();
+        
+        
+        if(isset($datainfo['CustomerCommentSearch']['created_at'])){
+        	$searchModel->created_at=$datainfo['CustomerCommentSearch']['created_at'];
+        }
+         
+        if(isset($datainfo['CustomerCommentSearch']['created_at_end'])){
+        	$searchModel->created_at_end=$datainfo['CustomerCommentSearch']['created_at_end'];
+        }
+        $dataProvider = $searchModel->search();
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,

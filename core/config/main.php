@@ -62,5 +62,5 @@ return [
         ],
 
     ],
-    'params' => include 'params-local.php',
+    'params' => include 'params.php',
 ];

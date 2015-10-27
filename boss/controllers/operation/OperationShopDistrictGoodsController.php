@@ -1,10 +1,10 @@
 <?php
 
-namespace boss\controllers;
+namespace boss\controllers\operation;
 
 use Yii;
-use boss\models\Operation\OperationShopDistrictGoods;
-use boss\models\Operation\OperationCity;
+use boss\models\operation\OperationShopDistrictGoods;
+use boss\models\operation\OperationCity;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -36,7 +36,7 @@ class OperationShopDistrictGoodsController extends Controller
         }else{
             $this->city_id = $_COOKIE['city_id'];
             if(empty($this->city_id)){
-                return $this->redirect(['operation-city/index']);
+                return $this->redirect(['/operation/operation-city/index']);
             }
         }
         $this->city_name = OperationCity::getCityName($this->city_id);

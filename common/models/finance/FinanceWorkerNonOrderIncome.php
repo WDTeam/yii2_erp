@@ -9,9 +9,12 @@ use Yii;
  *
  * @property integer $id
  * @property integer $worker_id
+ * @property integer $finance_worker_non_order_income_code
  * @property integer $finance_worker_non_order_income_type
+ * @property integer $finance_worker_non_order_income_name
  * @property string $finance_worker_non_order_income
  * @property string $finance_worker_non_order_income_des
+ * @property integer $finance_worker_non_order_income_complete_time
  * @property integer $finance_worker_non_order_income_starttime
  * @property integer $finance_worker_non_order_income_endtime
  * @property integer $finance_worker_non_order_income_isSettled
@@ -39,7 +42,7 @@ class FinanceWorkerNonOrderIncome extends \yii\db\ActiveRecord
             [['worker_id', 'finance_worker_non_order_income_type'], 'required'],
             [['worker_id', 'finance_worker_non_order_income_type', 'finance_worker_non_order_income_starttime', 'finance_worker_non_order_income_endtime', 'finance_worker_non_order_income_isSettled', 'finance_settle_apply_id', 'isdel', 'updated_at', 'created_at'], 'integer'],
             [['finance_worker_non_order_income'], 'number'],
-            [['finance_worker_non_order_income_des','finance_worker_non_order_income_type_des'], 'string']
+            [['finance_worker_non_order_income_des','finance_worker_non_order_income_name'], 'string']
         ];
     }
 
@@ -51,10 +54,12 @@ class FinanceWorkerNonOrderIncome extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', '主键'),
             'worker_id' => Yii::t('app', '阿姨id'),
-            'finance_worker_non_order_income_type' => Yii::t('app', '阿姨收入类型，1办卡提成，2推荐服务提成，3全勤奖，4无投诉奖，5日常违规扣款，6投诉处罚扣款，7赔偿扣款,8阿姨任务奖励,9小保养'),
-             'finance_worker_non_order_income_type_des' => Yii::t('app', '补贴类型'),
+            'finance_worker_non_order_income_code' => Yii::t('app', '阿姨收入id，可能是任务Id，也可能是赔偿Id'),
+            'finance_worker_non_order_income_type' => Yii::t('app', '阿姨收入类型，1,任务；2赔偿'),
+             'finance_worker_non_order_income_name' => Yii::t('app', '阿姨收入名称，可能是任务名称，也可能是赔偿名称'),
             'finance_worker_non_order_income' => Yii::t('app', '补贴金额'),
             'finance_worker_non_order_income_des' => Yii::t('app', '补贴规则描述'),
+            'finance_worker_non_order_income_complete_time' => Yii::t('app', '收入完成时间'),
             'finance_worker_non_order_income_starttime' => Yii::t('app', '本次结算开始时间(统计)，例如：2015.9.1 00:00:00对应的int值'),
             'finance_worker_non_order_income_endtime' => Yii::t('app', '本次结算结束时间(统计)，例如：2015.9.30 23:59:59对应的int值'),
             'finance_worker_non_order_income_isSettled' => Yii::t('app', '是否已结算，0为未结算，1为已结算'),

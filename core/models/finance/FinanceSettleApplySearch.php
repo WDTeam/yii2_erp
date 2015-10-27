@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use common\models\finance\FinanceSettleApply;
 use core\models\worker\Worker;
 use core\models\order\Order;
-use common\models\OrderExtWorker;
+use core\models\finance\FinanceWorkerNonOrderIncomeSearch;
 
 /**
  * FinanceSettleApplySearch represents the model behind the search form about `common\models\finance\FinanceSettleApply`.
@@ -201,6 +201,15 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         $apply_money = 0;//本次应付合计
         $order_noncash_count = 0;//非现金订单
         $order_money_except_cash = 0;//工时费应结，扣除了现金
+        if(($this->worker_type_id ==self::SELF_OPERATION ) && ($this->worker_identity_id == self::FULLTIME)){
+            $this->finance_settle_apply_starttime = self::getFirstDayOfSpecifiedMonth();//结算开始日期
+            $this->finance_settle_apply_endtime = self::getLastDayOfSpecifiedMonth();//结算截止日期
+        }else{
+            $this->finance_settle_apply_starttime = self::getFirstDayOfLastWeek();//结算开始日期
+            $this->finance_settle_apply_endtime = self::getLastDayOfLastWeek();//结算截止日期
+        }
+        $apply_task_count = FinanceWorkerNonOrderIncomeSearch::getTaskAwardCount(12, -1, 100000000000);
+        $apply_task_money = FinanceWorkerNonOrderIncomeSearch::getTaskAwardMoney(12, -1, 100000000000);
         if(count($orders) > 0){
            $order_count = count($orders);
            foreach($orders as $order){
@@ -244,21 +253,20 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             $this->worker_identity_id = $workerInfo['worker_identity_id'];
             $this->worker_type_name = $this->getWorkerTypeName($workerInfo['worker_type']);
             $this->worker_identity_name = $this->getWorkerIdentityDes($workerInfo['worker_identity_id']);
+            $this->shop_id = $workerInfo['shop_id'];
+            $this->shop_name = $workerInfo['shop_name'];
+            $this->shop_manager_name = $workerInfo['shop_manager_name'];
         }
         $this->finance_settle_apply_cycle = $this->getSettleCycleIdByWorkerType($this->worker_type_id, $this->worker_identity_id);//结算周期Id
         $this->finance_settle_apply_cycle_des = $this->getSettleCycleByWorkerType($this->worker_type_id, $this->worker_identity_id);//结算周期描述
         $this->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT;//提交结算申请
-        if(($this->worker_type_id ==self::SELF_OPERATION ) && ($this->worker_identity_id == self::FULLTIME)){
-            $this->finance_settle_apply_starttime = self::getFirstDayOfSpecifiedMonth();//结算开始日期
-            $this->finance_settle_apply_endtime = self::getLastDayOfSpecifiedMonth();//结算截止日期
-        }else{
-            $this->finance_settle_apply_starttime = self::getFirstDayOfLastWeek();//结算开始日期
-            $this->finance_settle_apply_endtime = self::getLastDayOfLastWeek();//结算截止日期
-        }
+       
         $this->created_at = time();//申请创建时间
         return $this;
 
     }
+    
+    
     
     public function getWorkerOrderInfo($workerId){
         return  Order::find()->joinWith('orderExtWorker')->where(['orderExtWorker.worker_id'=>$workerId])->all();

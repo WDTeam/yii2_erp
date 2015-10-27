@@ -1,13 +1,14 @@
 <?php
 namespace api\controllers;
+
 use Yii;
 use \core\models\customer\CustomerCode;
 use \core\models\worker\WorkerCode;
+
 class SendSmsController extends \api\components\Controller
 {
     /**
-     *
-     * @api {GET} /send-sms/send-v 发短消息 （赵顺利0%）
+     * @api {GET} /send-sms/send-v 发短消息 （赵顺利 0% 不使用）
      * @apiName actionSendV
      * @apiGroup SendSms
      *
@@ -31,7 +32,7 @@ class SendSmsController extends \api\components\Controller
      */
     public function actionSendV()
     {
-        $content=true;
+        $content = true;
         if ($content) {
             $id = $content['id'];
             $token = Yii::$app->cache->get($id);
@@ -52,8 +53,7 @@ class SendSmsController extends \api\components\Controller
     }
 
     /**
-     *
-     * @api {GET} /send-sms/send-message-code 短信验证码 （已完成）
+     * @api {GET} /send-sms/send-message-code 短信验证码 (赵顺利100%)
      * @apiName actionSendMessageCode
      * @apiGroup SendSms
      * @apiDescription 请求向用户手机发送验证码用于登录
@@ -83,18 +83,17 @@ class SendSmsController extends \api\components\Controller
         if (preg_match("/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/", $phone)) {
             //验证通过
             if (!CustomerCode::generateAndSend($phone)) {
-                return $this->send(null, "短信发送失败", 0,403);
+                return $this->send(null, "短信发送失败", 0, 403);
 
             }
         } else {
-            return $this->send(null, "电话号码不符合规则", 0,403);
+            return $this->send(null, "电话号码不符合规则", 0, 403);
 
         }
         return $this->send(null, "短信发送成功", 1);
     }
-    
+
     /**
-     *
      * @api {GET} /send-sms/send-worker-message-code 阿姨登录短信验证码 （李勇100%）
      * @apiName actionSendWorkerMessageCode
      * @apiGroup SendSms
@@ -125,11 +124,11 @@ class SendSmsController extends \api\components\Controller
         if (preg_match("/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/", $phone)) {
             //验证通过
             if (!WorkerCode::generateAndSend($phone)) {
-                return $this->send(null, "短信发送失败", 0,403);
+                return $this->send(null, "短信发送失败", 0, 403);
 
             }
         } else {
-            return $this->send(null, "电话号码不符合规则", 0,403);
+            return $this->send(null, "电话号码不符合规则", 0, 403);
 
         }
         return $this->send(null, "短信发送成功");

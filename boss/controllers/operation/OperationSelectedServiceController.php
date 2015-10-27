@@ -1,14 +1,8 @@
 <?php
 
-namespace boss\controllers;
+namespace boss\controllers\operation;
 
 use Yii;
-use boss\models\Operation\OperationGoods;
-use boss\models\Operation\OperationTag;
-use boss\models\Operation\OperationCategory;
-use boss\models\Operation\OperationSpec;
-use boss\models\Operation\OperationSpecGoods;
-use boss\models\Operation\OperationShopDistrictGoods;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -17,7 +11,7 @@ use yii\web\UploadedFile;
 use crazyfd\qiniu\Qiniu;
 
 
-use boss\models\Operation\OperationSelectedService;
+use boss\models\operation\OperationSelectedService;
 
 /**
  * OperationSelectedServiceController implements the CRUD actions for OperationGoods model.
@@ -26,8 +20,7 @@ class OperationSelectedServiceController extends Controller
 {
     static $jsondata = [
         'msg' => '',    // 提示消息 失败提示信息
-        'status' => 0, //状态 0: 失败 1：成功
-        'data' => '',  //数据 
+        'status' => 0, //状态 0: 失败 1：成功 'data' => '',  //数据 
         ];
     
     public function behaviors()
@@ -120,10 +113,11 @@ class OperationSelectedServiceController extends Controller
         if ($model->load($post)) {
 
             $model->created_at = time();
+            $model->uploadImgToQiniu('selected_service_photo');
 
             if($model->save()){
 
-                return $this->redirect(['/operation-selected-service']);
+                return $this->redirect(['/operation/operation-selected-service']);
             }
         } else {
             return $this->render('create', [
@@ -162,7 +156,7 @@ class OperationSelectedServiceController extends Controller
             $model->updated_at = time();
             
             if($model->save()){
-                return $this->redirect(['/operation-selected-service']);
+                return $this->redirect(['/operation/operation-selected-service']);
             }
         } else {
             return $this->render('update', [

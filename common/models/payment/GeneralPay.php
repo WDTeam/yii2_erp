@@ -67,8 +67,11 @@ class GeneralPay extends GeneralPayCommon
             case 21:
                 $this->pay_type = 'weibo_h5';
                 break;
-            case 22:
+            case 23:
                 $this->pay_type = 'wx_native';
+                break;
+            case 24:
+                $this->pay_type = 'alipay_wap';
                 break;
         }
         return $source;
@@ -251,6 +254,25 @@ class GeneralPay extends GeneralPayCommon
     }
 
     /**
+     * 支付宝APP(24)
+     */
+    private function alipay_wap($data)
+    {
+        $param = [
+            'out_trade_no'=>$this->create_out_trade_no(),
+            'subject'=>$this->subject(),
+            'body'=>$this->body(),
+            'total_fee'=>$this->general_pay_money,
+            'notify_url'=>$this->notify_url('alipay-wap'),
+            'return_url'=>empty($data['return_url']) ? '' : $data['return_url'],
+            'show_url'=>empty($data['show_url']) ? '' : $data['show_url'],
+        ];
+        $class = new \alipay_wap_class();
+        $msg = $class->get($param);
+        return $msg;
+    }
+
+    /**
      * 支付宝APP回调
      */
     public function alipayAppNotify($data)
@@ -317,6 +339,127 @@ class GeneralPay extends GeneralPayCommon
         {
             //验证签名
             $class = new \alipay_class;
+            $verify_result = $class->callback();
+
+            if(!empty($_GET['debug']))
+            {
+                $verify_result = true;
+            }
+
+            //签名验证成功
+            if($verify_result)
+            {
+                $model->id = $GeneralPayId; //ID
+                $model->general_pay_status = 1; //支付状态
+                $model->general_pay_actual_money = $post['total_fee'];
+                $model->general_pay_transaction_id = $post['trade_no'];
+                $model->general_pay_is_coupon = 1;
+                $model->general_pay_eo_order_id = $post['out_trade_no'];
+                $model->general_pay_verify = $model->makeSign();
+
+                //commit
+                $connection  = \Yii::$app->db;
+                $transaction = $connection->beginTransaction();
+                try
+                {
+                    $model->save(false);
+                    $attribute = $model->getAttributes();
+                    if(!empty($model->order_id)){
+                        //支付订单
+                        GeneralPay::orderPay($attribute);
+                    }else{
+                        //充值支付
+                        GeneralPay::pay($attribute);
+                    }
+
+                    $transaction->commit();
+
+                    /*
+                    if(empty($data['debug'])){
+                        //发送短信事件
+                        $this->on("paySms",[new GeneralPay,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
+                        $this->trigger('paySms');
+                    }
+                    */
+
+                    echo $class->notify();
+                }
+                catch(Exception $e)
+                {
+                    $transaction->rollBack();
+                }
+            }
+        }
+    }
+
+
+    /**
+     * 支付宝APP回调
+     */
+    public function alipayWapNotify($data)
+    {
+        //POST数据
+        if(!empty($data['debug'])){
+            $_POST = array (
+                "discount"=> "0.00",
+                "payment_type"=> "1",
+                "subject"=> "e家洁会员充值",
+                "trade_no"=> "2015092510165",
+                "buyer_email"=> "lsqpy@163.com",
+                "gmt_create"=> "2015-09-25 21:13:20",
+                "notify_type"=> "trade_status_sync",
+                "quantity"=> "1",
+                "out_trade_no"=> "150925846765",
+                "seller_id"=> "2088801136967007",
+                "notify_time"=> "2015-09-25 21:13:21",
+                "body"=> "e家洁会员充值0.01元",
+                "trade_status"=> "TRADE_FINISHED",
+                "is_total_fee_adjust"=> "N",
+                "total_fee"=> "0.01",
+                "gmt_payment"=> "2015-09-25 21:13:21",
+                "seller_email"=> "47632990@qq.com",
+                "gmt_close"=> "2015-09-25 21:13:21",
+                "price"=> "0.01",
+                "buyer_id"=> "2088002074138164",
+                "notify_id"=> "6260ae5cc41e6aa3a42824ec032071df2w",
+                "use_coupon"=> "N",
+                "sign_type"=> "RSA",
+                "sign"=> "T4Bkh9KljoFOTIossu5QtYPRUwj/7by/YLXNQ7efaxe0AwYDjFDFWTFts4h8yq2ceCH8weqYVBklj2btkF2/hKPuUifuJNB6lk8EtHckmJg0MzhGIBAvpteUAo+5Gs+wlI5eS5zmryBskuHOXSM7svb9wNCcL9pHAv8CM06Au+A="
+            );
+            $post = $_POST;
+        }else{
+            $post = yii::$app->request->post();
+        }
+
+        //实例化模型
+        $GeneralPayLogModel = new GeneralPayLog();
+
+        //记录日志
+        $dataLog = array(
+            'general_pay_log_price' => $post['total_fee'],   //支付金额
+            'general_pay_log_shop_name' => $post['subject'],   //商品名称
+            'general_pay_log_eo_order_id' => $post['out_trade_no'],   //订单ID
+            'general_pay_log_transaction_id' => $post['buyer_id'],   //交易流水号
+            'general_pay_log_status_bool' => $GeneralPayLogModel->statusBool($post['trade_status']),   //支付状态
+            'general_pay_log_status' => $post['trade_status'],   //支付状态
+            'pay_channel_id' => 6,  //支付渠道ID
+            'general_pay_log_json_aggregation' => json_encode($post),
+            'data' => $post //文件数据
+        );
+        $this->on('insertLog',[$GeneralPayLogModel,'insertLog'],$dataLog);
+        $this->trigger('insertLog');
+
+        //获取交易ID
+        $GeneralPayId = $this->getGeneralPayId($post['out_trade_no']);
+
+        //查询支付记录
+        $model = GeneralPay::find()->where(['id'=>$GeneralPayId,'general_pay_status'=>0])->one();
+
+        //验证支付结果
+        if(!empty($model))
+        {
+            //验证签名
+            $class = new \alipay_wap_class();
             $verify_result = $class->callback();
 
             if(!empty($_GET['debug']))

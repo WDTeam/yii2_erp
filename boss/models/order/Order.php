@@ -8,14 +8,17 @@
 
 namespace boss\models\order;
 
-use boss\models\Operation\OperationCity;
+use boss\models\operation\OperationCity;
 use common\models\finance\FinanceOrderChannel;
-use core\models\Operation\CoreOperationArea;
+use core\models\operation\CoreOperationArea;
 use core\models\order\OrderPay;
 use Yii;
 use core\models\order\Order as OrderModel;
 use core\models\worker\Worker;
 use yii\helpers\ArrayHelper;
+use boss\models\operation\OperationShopDistrict;
+use core\models\operation\CoreOperationCity;
+use common\models\order\OrderStatusDict;
 
 
 class Order extends OrderModel
@@ -63,12 +66,15 @@ class Order extends OrderModel
         return ArrayHelper::map($province_list,'province_id','province_name');
     }
     /**
-     * TODO 获取开通城市列表
+     * 获取已开通城市列表
      * @return array
      */
-    public static function getOnlineCityList($province_id){
-        $city_list = OperationCity::find()->select(['city_id','city_name'])->where(['province_id'=>$province_id,'operation_city_is_online'=>1])->all();
-        return ArrayHelper::map($city_list,'city_id','city_name');
+    public static function getOnlineCityList(){
+//         $city_list = OperationCity::find()->select(['city_id','city_name'])->where(['province_id'=>$province_id,'operation_city_is_online'=>1])->all();
+//         return ArrayHelper::map($city_list,'city_id','city_name');
+        
+        $onlineCityList = CoreOperationCity::getCityOnlineInfoList();
+        return $onlineCityList?ArrayHelper::map($onlineCityList,'city_id','city_name'):[];
     }
 
     public static function getCountyList($city_id)
@@ -133,5 +139,23 @@ class Order extends OrderModel
         $post['Order']['order_booked_end_time'] = strtotime(($time[1]=='24:00')?date('Y-m-d H:i:s',strtotime($post['Order']['orderBookedDate'].'00:00:00 +1 days')):$post['Order']['orderBookedDate'].' '.$time[1].':00');
         return parent::createNew($post['Order']);
     }
-
+    
+    /*
+     * 获取已上线商圈列表
+     * @return array [id=>operation_shop_district_name,...]
+     */
+    public static function getDistrictList()
+    {
+        $districtList = OperationShopDistrict::getCityShopDistrictList();
+        return $districtList?ArrayHelper::map($districtList,'id','operation_shop_district_name'):[];
+    }
+    
+    /**
+     * 获取订单状态列表
+     */
+    public static function getStatusList()
+    {
+        $statusList = OrderStatusDict::find()->asArray()->all();
+        return $statusList ? ArrayHelper::map($statusList, 'id', 'order_status_name') : [];
+    }
 }

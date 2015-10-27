@@ -4,7 +4,7 @@ namespace core\models\comment;
 
 use Yii;
 
-class CustomerCommentLevel extends \common\models\CustomerCommentLevel
+class CustomerCommentLevel extends \common\models\customer\CustomerCommentLevel
 {
 
     /**

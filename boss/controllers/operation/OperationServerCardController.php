@@ -1,18 +1,19 @@
 <?php
 
-namespace boss\controllers;
+namespace boss\controllers\operation;
 
 use Yii;
-use boss\models\Operation\OperationServerCard;
+use boss\models\operation\OperationServerCard;
+use boss\components\BaseAuthController;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * ServerCardController implements the CRUD actions for ServerCard model.
+ * ServerCardController implements the CRUD actions for OperationServerCard model.
  */
-class OperationServerCardController extends Controller
+class OperationServerCardController extends BaseAuthController
 {
     public function behaviors()
     {
@@ -108,10 +109,10 @@ class OperationServerCardController extends Controller
     }
 
     /**
-     * Finds the ServerCard model based on its primary key value.
+     * Finds the OperationServerCard model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id
-     * @return ServerCard the loaded model
+     * @return OperationServerCard the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)

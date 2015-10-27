@@ -69,6 +69,7 @@ class wxjspay_class extends WxPayNotify{
     //重写回调处理函数
     public function NotifyProcess($data, &$msg)
     {
+        file_put_contents('/tmp/pay/wx-navite.php',$data);
         //Log::DEBUG("call back:" . json_encode($data));
         $notfiyOutput = array();
 
@@ -105,6 +106,7 @@ class wxjspay_class extends WxPayNotify{
         $input->SetTrade_type($param['trade_type']);
         $input->SetProduct_id($param['out_trade_no']);
         $result = $notify->GetPayUrl($input);
+
         return $result;
     }
 

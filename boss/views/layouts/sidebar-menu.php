@@ -93,6 +93,16 @@ echo Menu::widget(
                         'url' => ['/customer/customer/index?CustomerSearch[is_del]=0'],
                         'icon' => 'fa fa-angle-right',
                     ],
+					[
+					'label' => '评价列表(70%)',
+					'url' => ['/customer/customer-comment'],
+					'icon' => 'fa fa-angle-right',
+					],
+					[
+					'label' => '评价标签管理(70%)',
+					'url' => ['/customer/customer-comment-tag'],
+					'icon' => 'fa fa-angle-right',
+					],
                 ],
             ],
             [
@@ -105,7 +115,7 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有订单(0%)',
+                        'label' => '查看所有订单(20%)',
                         'url' => ['/order/order'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -129,6 +139,11 @@ echo Menu::widget(
                 		'url' => ['/order/order-complaint'],
                 		'icon' => 'fa fa-angle-right',
                 	],
+                    [
+                        'label' => '交易记录',
+                        'url' => ['customer/customer-trans-record/index'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
                 ],
             ],
             [
@@ -157,13 +172,13 @@ echo Menu::widget(
 //                    ],
                     [
                         'label' => '服务和品类管理(80%)',
-                        'url' => ['/operation-category/'],
+                        'url' => ['/operation/operation-category/'],
                         'icon' => 'fa fa-angle-right',
 
                     ],
                     [
                         'label' => '城市和商圈管理(90%)',
-                        'url' => ['/operation-city'],
+                        'url' => ['/operation/operation-city'],
                         'icon' => 'fa fa-angle-right',
 
                     ],
@@ -175,7 +190,7 @@ echo Menu::widget(
 //                    ],
                     [
                         'label' => '已开通城市管理',
-                        'url' => ['/operation-city/opencity'],
+                        'url' => ['/operation/operation-city/opencity'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
@@ -188,7 +203,7 @@ echo Menu::widget(
                         'items' => [
                             [
                                 'label' => '平台管理',
-                                'url' => ['/operation-platform'],
+                                'url' => ['/operation/operation-platform'],
                                 'icon' => 'fa fa-angle-right',
                             ],
                             //                            [
@@ -198,18 +213,18 @@ echo Menu::widget(
                                 //                            ],
                             [
                                 'label' => '广告位置管理',
-                                'url' => ['/operation-advert-position'],
+                                'url' => ['/operation/operation-advert-position'],
                                 'icon' => 'fa fa-angle-right',
                             ],
                             [
                                 'label' => '活动内容管理',
-                                'url' => ['/operation-advert-content'],
+                                'url' => ['/operation/operation-advert-content'],
                                 'icon' => 'fa fa-angle-right',
                                 
                             ],
                             [
                                 'label' => '广告发布',
-                                'url' => ['/operation-advert-release'],
+                                'url' => ['/operation/operation-advert-release'],
                                 'icon' => 'fa fa-angle-right',
                                 
                             ],
@@ -231,20 +246,20 @@ echo Menu::widget(
                         'items' => [
                             [
                                 'label' => '优惠券列表(10%)',
-                                'url' => ['coupon/index'],
+                                'url' => ['operation/coupon/coupon/index'],
                                 'icon' => 'fa fa-angle-right',
                             ],
                             [
                                 'label' => '添加新优惠券(10%)',
-                                'url' => ['coupon/create'],
+                                'url' => ['operation/coupon/coupon/create'],
                                 'icon' => 'fa fa-angle-right',
                             ],
-                            //[
-                              //  'label' => '绑定用户',
-                               // 'url' => ['coupon/index'],
-                               // 'icon' => 'fa fa-angle-right',
+                            [
+                                'label' => '绑定用户',
+                                'url' => ['operation/coupon/coupon/bundle'],
+                                'icon' => 'fa fa-angle-right',
                                 
-                            //],
+                            ],
                         ]
                     ],
 
@@ -264,7 +279,7 @@ echo Menu::widget(
                     
                     [
                         'label' => '启动页管理(90%)',
-                        'url' => ['/operation-boot-page'],
+                        'url' => ['/operation/operation-boot-page'],
                         'icon' => 'fa fa-angle-right',
                         
                     ],
@@ -286,31 +301,36 @@ echo Menu::widget(
 					[
 						'label' => '服务卡管理',
 						'url' => ['#'],
-						'icon' => 'fa fa-slideshare',
+						'icon' => 'fa fa-angle-right',
 						'options' => [
 							'class' => 'treeview active',
 						],
 						'items' => [
 							[
 								'label' => '服务卡信息管理',
-								'url' => ['operation-server-card/index'],
+								'url' => ['operation/operation-server-card/index'],
 								'icon' => 'fa fa-angle-right',
 							],
 							[
 								'label' => '客户服务卡管理',
-								'url' => ['#'],
+								'url' => ['operation/operation-server-card-customer/index'],
 								'icon' => 'fa fa-angle-right',
 							],
 							[
 								'label' => '服务卡付款管理',
-								'url' => ['#'],
+								'url' => ['operation/operation-server-card-record'],
+								'icon' => 'fa fa-angle-right',
+							],
+							[
+								'label' => '服务卡订单管理',
+								'url' => ['operation/operation-server-card-order'],
 								'icon' => 'fa fa-angle-right',
 							],
                 ],
             ],
                     [
                         'label' => '精品保洁管理',
-                        'url' => ['/operation-selected-service'],
+                        'url' => ['/operation/operation-selected-service'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],

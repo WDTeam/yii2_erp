@@ -3,7 +3,10 @@
 namespace boss\controllers\worker;
 
 
+use core\models\operation\CoreOperationArea;
+use core\models\worker\WorkerSkill;
 use core\models\worker\WorkerStat;
+use core\models\worker\WorkerVacationApplication;
 use Yii;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
@@ -525,7 +528,7 @@ class WorkerController extends BaseAuthController
      */
     public function actionGetDataFromOldDataBase(){
 
-        $operationArea = new Operation\OperationArea();
+        $operationArea = new CoreOperationArea();
 
         $connectionNew =  \Yii::$app->db;
         $command = $connectionNew->createCommand('select id from {{%worker}} ORDER by id asc limit 1');
@@ -537,9 +540,9 @@ class WorkerController extends BaseAuthController
         }
 
         $connection = new \yii\db\Connection([
-            'dsn' => 'mysql:host=localhost;dbname=sq_ejiajie_v2',
-            'username' => 'root',
-            'password' => '123456',
+            'dsn' => 'mysql:host=rdsh52vh252q033a4ci5.mysql.rds.aliyuncs.com;dbname=sq_ejiajie_v2',
+            'username' => 'sq_ejiajie',
+            'password' => 'test_sq_ejiajie',
             'charset' => 'utf8',
         ]);
         $connection->open();
@@ -665,9 +668,13 @@ class WorkerController extends BaseAuthController
     }
 
     public function actionTest(){
+
         echo '<pre>';
-        var_dump(Worker::getWorkerTimeLine(1,2));
+        var_dump(WorkerVacationApplication::getApplicationTimeLine(18517));
+        var_dump(WorkerVacationApplication::createVacationApplication(18517,'2015-10-31',1));
+        var_dump(WorkerVacationApplication::getApplicationList(18517,1,10));
         die;
+        var_dump(WorkerVacationApplication::getApplicationList(18517));
 
         $a = Worker::getWorkerInfo(16351);
         var_dump($a);

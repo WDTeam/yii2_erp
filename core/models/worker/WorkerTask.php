@@ -316,8 +316,8 @@ class WorkerTask extends \common\models\worker\WorkerTask
             'worker_task_is_done'=>1,
             'worker_task_reward_type'=>1
         ])
-        ->filterWhere(['>=','worker_task_done_time', $start_time])
-        ->filterWhere(['<','worker_task_done_time', $end_time])
+        ->andFilterWhere(['>=','worker_task_done_time', $start_time])
+        ->andFilterWhere(['<','worker_task_done_time', $end_time])
         ->all();
         return $models;
     }
