@@ -70,6 +70,7 @@ class OrderSearch extends Order
                 $order->order_flag_send = $order->orderExtFlag->order_flag_send + ($isCS ? 1 : 2); //指派时先标记是谁指派不了
                 $order->admin_id = $admin_id;
                 if (OrderStatus::manualAssignStart($order, ['OrderExtFlag'])) {
+                    OrderPool::remOrderForWorkerPushList($order->id); //从接单大厅中删除此订单
                     return Order::findOne($order->id);
                 }
             }
@@ -133,6 +134,28 @@ class OrderSearch extends Order
                 ]
 
             )->count();
+    }
+
+    /**
+     * 返回推送给阿姨的订单列表
+     * @param $worker_id
+     * @param int $page_size
+     * @param int $page
+     * @return mixed
+     */
+    public static function getPushWorkerOrders($worker_id,$page_size=20,$page=1)
+    {
+        return OrderPool::getOrdersFromWorkerPushList($worker_id,$page_size,$page);
+    }
+
+    /**
+     * 返回推送给阿姨的订单总数
+     * @param $worker_id
+     * @return mixed
+     */
+    public static function getPushWorkerOrdersCount($worker_id)
+    {
+        return OrderPool::getOrdersCountFromWorkerPushList($worker_id);
     }
 
     /**

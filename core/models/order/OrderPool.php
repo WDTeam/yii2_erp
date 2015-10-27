@@ -41,14 +41,29 @@ class OrderPool extends Model
     }
 
     /**
-     * 从推送的阿姨列表中把订单删除
+     * 重新添加到推送的阿姨列表
      * @param $order_id
      */
-    public static function remOrderForWorkerPushList($order_id)
+    public static function reAddOrderToWorkerPushList($order_id){
+        $worker_ids = Yii::$app->redis->executeCommand('zRange', [self::PUSH_ORDER_WORKERS.'_'.$order_id, 0, -1]);
+        foreach($worker_ids as $worker_id) {
+           self::addOrderToWorkerPushList($order_id,$worker_id);
+        }
+    }
+
+    /**
+     * 从推送的阿姨列表中把订单删除
+     * @param $order_id
+     * @param bool $remPushOrderWorkers 是否永久从接单大厅中移除 移除后不可恢复
+     */
+    public static function remOrderForWorkerPushList($order_id,$remPushOrderWorkers = false)
     {
         $worker_ids = Yii::$app->redis->executeCommand('zRange', [self::PUSH_ORDER_WORKERS.'_'.$order_id, 0, -1]);
         foreach($worker_ids as $worker_id) {
             Yii::$app->redis->executeCommand('zRemRangeByScore', [self::PUSH_WORKER_ORDERS . '_' . $worker_id, $order_id, $order_id]);
+        }
+        if($remPushOrderWorkers){
+            Yii::$app->redis->executeCommand('zRemRangeRyRank', [self::PUSH_ORDER_WORKERS.'_'.$order_id, 0, -1]);
         }
     }
 

@@ -226,8 +226,10 @@ class Order extends OrderModel
         $order->order_flag_lock = 0;
         $order->admin_id = $admin_id;
         if ($order->orderExtFlag->order_flag_send == 3) { //小家政和客服都无法指派出去
+            OrderPool::remOrderForWorkerPushList($order->id,true); //永久从接单大厅中删除此订单
             return OrderStatus::_manualAssignUndone($order, ['OrderExtFlag']);
         } else {//客服或小家政还没指派过则进入待人工指派的状态
+            OrderPool::reAddOrderToWorkerPushList($order_id); //重新添加到接单大厅
             return OrderStatus::_sysAssignUndone($order, ['OrderExtFlag']);
         }
     }
@@ -294,6 +296,7 @@ class Order extends OrderModel
             } else {
                 $result = OrderStatus::_sysAssignDone($order, ['OrderExtFlag', 'OrderExtWorker']);
             }
+            OrderPool::remOrderForWorkerPushList($order->id,true); //永久从接单大厅中删除此订单
         }
         return ['status'=>$result,'errors'=>$order->errors];
     }
@@ -311,6 +314,7 @@ class Order extends OrderModel
         $order = OrderSearch::getOne($order_id);
         $order->admin_id = $admin_id;
         $order->order_flag_cancel_cause = $cause;
+        OrderPool::remOrderForWorkerPushList($order->id,true); //永久从接单大厅中删除此订单
         if($admin_id==0) {
             $order->order_customer_memo = $memo;
             return OrderStatus::_cancel($order, ['OrderExtCustomer']);
