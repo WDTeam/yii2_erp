@@ -18,12 +18,8 @@ AppAsset::addCss($this, 'css/order_search/style.css');
 AppAsset::addCss($this, 'css/order_search/jquery-ui-1.8.17.custom.css');
 AppAsset::addCss($this, 'css/order_search/jquery-ui-timepicker-addon.css');
 AppAsset::addCss($this, 'css/order_search/dalog/animate.min.css');
-AppAsset::addScript($this, 'js/order_search/jquery-2.0.3.min.js');
 AppAsset::addScript($this, 'js/order_search/script.js');
-AppAsset::addScript($this, 'js/order_search/riqi/jquery-1.7.1.min.js');
-AppAsset::addScript($this, 'js/order_search/riqi/jquery-ui-1.8.17.custom.min.js');
-AppAsset::addScript($this, 'js/order_search/riqi/jquery-ui-timepicker-addon.js');
-AppAsset::addScript($this, 'js/order_search/riqi/jquery-ui-timepicker-zh-CN.js');
+AppAsset::addScript($this, 'js/order_search/My97DatePicker/WdatePicker.js');
 AppAsset::addScript($this, 'js/order_search/dalog/jquery.hDialog.min.js');
 
 // $this->registerCssFile('css/order_search/style.css');
@@ -166,7 +162,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					                    	<td>
 					                    		<p><a href="###">查看订单</a></p>
 					                    		<p><a href="javascript:;" class="m_tousu">投诉</a></p>
-					                    		<p><a href="###">发送短信</a></p>
+					                    		<p><a href="javascript:;" class="m_meagg">发送短信</a></p>
 					                    		<p id="m_tanqu"><a href="javascript:;" class="m_quxiao">取消订单</a></p>
 					                    	</td>
 					                    </tr>
@@ -363,6 +359,31 @@ $this->params['breadcrumbs'][] = $this->title;
 				</ul>
 			</form>
 		</div>
+		
+		<!------------------发送短信弹出层开始------------------>
+		<div id="HBox3" style="display: none;">
+			<form action="" method="post" onsubmit="return false;">
+				<h1>投诉</h1>
+				<ul class="list">
+					<li class="radioLi">
+						<strong>通知对象</strong>
+						<div class="fl jsRadio">
+							<label class="mr10"><input type="radio" name="yin" value="2" class="xuanzhong"/>用户</label>
+							<label class="mr10"><input type="radio" name="yin" value="2"/>阿姨</label>
+						</div>
+					</li>
+					<li>
+						<strong>短信内容</strong>
+						<div class="fl">
+                          <textarea type="text" placeholder="" class="form-control"></textarea>	
+                         </div>
+					</li>
+					
+					<li class="m_disd"><input type="submit" value="保存" class="submitBtn" />
+					</li>
+				</ul>
+			</form>
+		</div>
 		 
 <?php 
 $this->registerJs('
@@ -372,10 +393,14 @@ $this->registerJs('
 				//改变宽和高
 				$(".m_quxiao").hDialog({width:600,height: 400});
 				$(".m_tousu").hDialog({ box:"#HBox2", width:800,height: 600});
+				$(".m_meagg").hDialog({ box:"#HBox3", width:600,height: 400});
 				$(".m_tousu").click(function(){
 					$(".xuanzhong").attr("checked","checked");
 				});
 				$(".m_quxiao").click(function(){
+					$(".xuanzhong").attr("checked","checked");
+				});
+				$(".m_meagg").click(function(){
 					$(".xuanzhong").attr("checked","checked");
 				});
 				$(".jsRadio label").click(function(){
