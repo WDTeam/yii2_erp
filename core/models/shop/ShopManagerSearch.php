@@ -40,9 +40,9 @@ class ShopManagerSearch extends ShopManager
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'province_id' => $this->province_id,
-            'city_id' => $this->city_id,
-            'county_id' => $this->county_id,
+            'province_id' => empty($this->province_id)?null:$this->province_id,
+            'city_id' => empty($this->city_id)?null:$this->city_id,
+            'county_id' => empty($this->county_id)?null:$this->county_id,
             'bl_type' => $this->bl_type,
             'bl_create_time' => $this->bl_create_time,
             'bl_audit' => $this->bl_audit,
