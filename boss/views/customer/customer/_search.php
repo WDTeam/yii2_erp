@@ -24,7 +24,7 @@ use yii\helpers\ArrayHelper;
 
     <?php $form = ActiveForm::begin([
         'type' => ActiveForm::TYPE_VERTICAL,
-        'action' => ['customer/index'],
+        'action' => ['customer/customer/index'],
         'method' => 'get',
     ]); ?>
 
