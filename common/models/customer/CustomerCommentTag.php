@@ -40,10 +40,13 @@ class CustomerCommentTag extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    
+    public  $name_tag_name;
     public function attributeLabels()
     {
         return [
             'id' => Yii::t('common', 'ID'),
+            'name_tag_name' => Yii::t('common', '不满意标签'),
             'customer_tag_name' => Yii::t('common', '评价标签名称'),
             'customer_tag_type' => Yii::t('common', '分类'),
             'customer_comment_level' => Yii::t('common', '评价等级'),

@@ -54,7 +54,7 @@ class OrderComplaint extends \common\models\order\OrderComplaint
     			'8' =>'活动',
     	);
     }
-    public static  function ComplaintTypes(){
+    public static function ComplaintTypes(){
     	return array(
     			'1'=>array(
     					'1'=>'爽约','2'=>'迟到（已补时）',
@@ -126,11 +126,11 @@ class OrderComplaint extends \common\models\order\OrderComplaint
      * app投诉添加业务逻辑
      * @param array $arr
      */
-    public static  function appModel($arr){
+    public static function appModel($arr){
     	if(!empty($arr) && is_array($arr)){
     		$arr['complaint_channel'] = '1';
     		$narr = array('OrderComplaint'=>$arr);
-    		$this->load($data);
+    		$this->load($narr);
     		$this->save();
     	}else{
     		return false;
