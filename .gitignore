@@ -38,3 +38,4 @@ boss/config/main-local.php
 /autoassign/restart.log
 /common/config/main.php~
 /swoole.log
+/autoassign/server.log

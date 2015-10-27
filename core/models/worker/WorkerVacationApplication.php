@@ -76,7 +76,7 @@ class WorkerVacationApplication extends \common\models\worker\WorkerVacationAppl
      * @return array
      */
     public static function getApplicationList($worker_id,$page=1,$pageNum=10){
-        $start = ($page-1)*10;
+        $start = ($page-1)*$pageNum;
         $result = self::find()->where(['worker_id'=>$worker_id])->offset($start)->limit($pageNum)->asArray()->all();
         $data = ['page'=>$page,'pageNum'=>$pageNum,'data'=>$result];
         return $data;
