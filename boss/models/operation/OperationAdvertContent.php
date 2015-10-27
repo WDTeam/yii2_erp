@@ -4,7 +4,6 @@ namespace boss\models\operation;
 
 use Yii;
 
-use core\models\operation\OperationAdvertContent as CoreOperationAdvertContent;
 /**
  * This is the model class for table "{{%operation_advert_content}}".
  *
@@ -21,7 +20,7 @@ use core\models\operation\OperationAdvertContent as CoreOperationAdvertContent;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationAdvertContent extends CoreOperationAdvertContent
+class OperationAdvertContent extends \core\models\operation\OperationAdvertContent
 {
     /**
      * @inheritdoc

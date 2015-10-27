@@ -5,22 +5,63 @@ namespace core\models\customer;
 
 use Yii;
 // use common\models\Customer;
-use common\models\customer\CustomerAddress;
-use common\models\customer\CustomerWorker;
+use core\models\customer\CustomerAddress;
+use core\models\customer\CustomerWorker;
 use common\models\Worker;
-use common\models\customer\CustomerExtBalance;
+use core\models\customer\CustomerExtBalance;
+use core\models\customer\CustomerExtScore;
 use common\models\customer\GeneralRegion;
 use yii\web\BadRequestHttpException;
 
 class Customer extends \common\models\customer\Customer
 {
 
-	public static function getCityName($customer_id){
-		$customer = self::findOne($customer_id);
-		if($customer == NULL){
+	/**
+	 * add customer while customer is not exist by phone
+	 */
+	public static function addCustomer($phone){
+		$customer = self::find()->where(['customer_phone'=>$phone])->one();
+		if($customer != NULL){
 			return false;
+		}else if(!preg_match('/^1([0-9]{9})/', $phone)){
+			return false;
+		}else{
+			$transaction = \Yii::$app->db->beginTransaction();
+			try{
+				//customer basic info
+				$customer = new Customer;
+				$customer->customer_phone = $phone;
+				$customer->created_at = time();
+				$customer->updated_at = 0;
+				$customer->is_del = 0;
+				$customer->save();
+			
+				//customer balance
+				$customerExtBalance = new CustomerExtBalance;
+				$customerExtBalance->customer_id = $customer->id;
+				$customerExtBalance->customer_balance = 0;
+				$customerExtBalance->created_at = time();
+				$customerExtBalance->updated_at = 0;
+				$customerExtBalance->is_del = 0;
+				$customerExtBalance->save();
+
+				//customer score
+				$customerExtScore = new CustomerExtScore;
+				$customerExtScore->customer_id = $customer->id;
+				$customerExtScore->customer_score = 0;
+				$customerExtScore->created_at = time();
+				$customerExtScore->updated_at = 0;
+				$customerExtScore->is_del = 0;
+				$customerExtScore->save();
+				
+				$transaction->commit();
+				return true;
+			}catch(\Exception $e){
+
+				$transaction->rollback();
+				return false;
+			}
 		}
-		
 	}
 
     /**

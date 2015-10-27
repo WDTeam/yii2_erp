@@ -19,6 +19,9 @@ use common\models\order\OrderExtWorker;
  * @property string $complaint_content
  * @property integer $complaint_time
  */
+
+
+
 class OrderComplaint extends \common\models\order\ActiveRecord
 {
 	public $order_customer_phone;

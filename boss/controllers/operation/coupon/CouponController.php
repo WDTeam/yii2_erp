@@ -67,15 +67,8 @@ class CouponController extends Controller
      */
     public function actionCreate()
     {
-     //  echo "1";
-      // echo strtotime("2015-10-26");
-     //  exit();
-     //   $transaction = \Yii::$app->db->beginTransaction();
-       // try{
         $model = new Coupon;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			//basic	info
-			//coupon service type
 			$service_types = Coupon::getServiceTypes();
 			$model->coupon_type_name = $service_types[$model->coupon_type];
 			switch ($model->coupon_type)
@@ -195,18 +188,9 @@ class CouponController extends Controller
                      $couponCodeTemp =  CouponCode::find()->where(['coupon_code'=>$coupon_code_str])->one();
                 }
                 $couponCode->coupon_code = $coupon_code_str;
-                $couponCode->save();
-           
-                
+                $couponCode->save(); 
            }
-         //  $transaction->commit();
-
-	    			return $this->redirect(['view', 'id' => $model->id]);
-          // } catch(\Exception $e){
-          //  $transaction->rollback();
-
-	//			return $this->render('create', ['model' => $model]);
-      //     }
+	    	return $this->redirect(['view', 'id' => $model->id]);
             
 		}else{
 			return $this->render('create', ['model' => $model]);

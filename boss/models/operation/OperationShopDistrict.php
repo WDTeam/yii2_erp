@@ -3,7 +3,6 @@
 namespace boss\models\operation;
 
 use Yii;
-use core\models\operation\OperationShopDistrict as CoreOperationShopDistrict;
 
 /**
  * This is the model class for table "{{%operation_shop_district}}".
@@ -16,7 +15,7 @@ use core\models\operation\OperationShopDistrict as CoreOperationShopDistrict;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationShopDistrict extends CoreOperationShopDistrict
+class OperationShopDistrict extends \core\models\operation\OperationShopDistrict
 {
     /**
      * @inheritdoc
