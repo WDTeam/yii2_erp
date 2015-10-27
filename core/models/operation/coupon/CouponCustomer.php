@@ -4,8 +4,8 @@ namespace core\models\operation\coupon;
 
 use Yii;
 use core\models\customer\Customer;
-use core\models\Operation\coupon\Coupon;
-use core\models\Operation\coupon\CouponCode;
+use core\models\operation\coupon\Coupon;
+use core\models\operation\coupon\CouponCode;
 /**
  * This is the model class for table "{{%coupon_customer}}".
  *
@@ -26,7 +26,19 @@ use core\models\Operation\coupon\CouponCode;
 class CouponCustomer extends \common\models\operation\coupon\CouponCustomer
 {
 
-    
+    /**
+     * relation coupon code
+     */
+    public function getCouponCode(){
+       return $this->hasMany(CouponCode::className(), ['id'=>'coupon_code_id'])->onCondition([]);
+    }
+    /**
+     * relation coupon
+     */
+    public function getCoupon(){
+        return $this->hasMany(Coupon::className(), ['id'=>'coupon_id'])->onCondition([]);
+    }
+
     /**
      * list customer's coupon while phone is access
      */
@@ -36,8 +48,12 @@ class CouponCustomer extends \common\models\operation\coupon\CouponCustomer
         if($customer == NULL) return false;
 
         //list coupon
-        $couponCustomer = self::find()->where(['customer_id'=>$customer->id])->joinWith(['coupon', 'coupon_code'])
-            ->orderBy('coupon_customer.expirate_at asc, coupon.coupon_price desc')->all();      
+        $couponCustomer = self::find()->where(['customer_id'=>$customer->id])
+            ->joinWith('coupon')
+            ->joinWith('couponCode')
+            ->orderBy('expirate_at asc, coupon_price desc')
+            ->all();      
+                    
    
         return $couponCustomer;
    }

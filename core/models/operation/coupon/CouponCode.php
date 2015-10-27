@@ -22,6 +22,7 @@ use core\models\operation\coupon\CouponCustomer;
  */
 class CouponCode extends \common\models\operation\coupon\CouponCode
 {
+  
     /**
      * get coupon code by id
 	 */
@@ -51,7 +52,7 @@ class CouponCode extends \common\models\operation\coupon\CouponCode
 		$coupon_code_element = '';
 		for ($i = 0; $i < $coupon_code['length']; $i++)
 		{
-			$coupon_code_element = $coupon_code['element_lib'][rand(0, 62)];
+			$coupon_code_element = $coupon_code['element_lib'][rand(0, 61)];
 			$coupon_code_str .= $coupon_code_element;
 		}
 		return $coupon_code_str;
