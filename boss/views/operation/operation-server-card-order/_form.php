@@ -75,8 +75,21 @@ use kartik\datecontrol\DateControl;
 
 'pay_channel_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 支付渠道id...']], 
 
-'paid_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 支付时间...']], 
-
+'paid_at'=>[
+                'type'=> Form::INPUT_WIDGET, 
+                'widgetClass'=>DateControl::classname(),
+                'options' => [
+                    'type'=>DateControl::FORMAT_DATE,
+                    'ajaxConversion'=>false,
+                    'displayFormat' => 'php:Y-m-d',
+                    'saveFormat'=>'php:U',
+                    'options' => [
+                        'pluginOptions' => [
+                            'autoclose' => true
+                        ]
+                    ]
+                ]
+            ], 
 'par_value'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 卡面值...', 'maxlength'=>8]], 
 
 'reb_value'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 卡优惠值...', 'maxlength'=>8]], 

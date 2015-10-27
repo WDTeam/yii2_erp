@@ -7,10 +7,10 @@ use yii\helpers\Html;
  * @var common\models\operation\OperationServerCardRecord $model
  */
 
-$this->title = Yii::t('app', 'Update {modelClass}: ', [
+$this->title = Yii::t('app', '更新服务卡信息 ', [
     'modelClass' => 'Operation Server Card Record',
 ]) . ' ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Server Card Records'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '服务卡付款管理'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
@@ -24,9 +24,6 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 	}
 </style>
 <div class="operation-server-card-record-update">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>

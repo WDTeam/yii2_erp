@@ -9,7 +9,7 @@ use yii\widgets\Pjax;
  * @var yii\data\ActiveDataProvider $dataProvider
  */
 
-$this->title = Yii::t('app', 'Operation Server Card Orders');
+$this->title = Yii::t('app', '服务卡订单管理');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-server-card-order-index">
@@ -53,13 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'buttons' => [
-                'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['operation-server-card-order/view','id' => $model->id,'edit'=>'t']), [
-                                                    'title' => Yii::t('yii', 'Edit'),
-                                                  ]);}
-
-                ],
+                
             ],
         ],
         'responsive'=>true,
