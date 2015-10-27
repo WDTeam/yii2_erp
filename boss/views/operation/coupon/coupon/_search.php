@@ -5,7 +5,7 @@ use kartik\widgets\ActiveForm;
 use kartik\widgets\Select2;
 use yii\helpers\ArrayHelper;
 
-use \core\models\operation\CoreOperationCity;
+use \core\models\operation\OperationCity;
 
 //use \common\models\Operation\OperationCity;
 
@@ -26,7 +26,7 @@ use \core\models\operation\CoreOperationCity;
 
 	<div class='col-md-2'>
         <?php
-		$cityOnlineList = CoreOperationCity::getCityOnlineInfoList();
+		$cityOnlineList = OperationCity::getCityOnlineInfoList();
 		$cities = array();
 		if(!empty($cityOnlineList)){
 			foreach($cityOnlineList as $value){
