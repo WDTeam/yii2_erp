@@ -363,6 +363,29 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         return $workerSummaryInfo;
     }
     
+    /**
+     * 根据阿姨Id获取已结算阿姨的收入列表
+     * @param type $worker_id
+     * @param type $current_page
+     * @param type $per_page_num
+     */
+    public static function getSettledWorkerIncomeListByWorkerId($worker_id,$current_page,$per_page_num){
+        $offset = ($current_page - 1)*$per_page_num;
+        $workerIncomeList = self::find()
+                ->select([
+                    'YEAR(FROM_UNIXTIME(finance_settle_apply_starttime,\'%Y-%m-%d\')) as settle_year',
+                    'FROM_UNIXTIME(finance_settle_apply_starttime,\'%Y-%m-%d\') as settle_starttime',
+                    'FROM_UNIXTIME(finance_settle_apply_endtime,\'%Y-%m-%d\') as settle_endtime',
+                    'finance_settle_apply_order_count as order_count',
+                    'finance_settle_apply_money as worker_income',
+                    'id as settle_id'
+                    ])
+                ->where(['worker_id'=>$worker_id])
+//                ->offset($offset)->limit($per_page_num)
+                ->asArray()->all();
+        return $workerIncomeList;
+    }
+    
     public function attributeLabels()
     {
         $parentAttributeLabels = parent::attributeLabels();
