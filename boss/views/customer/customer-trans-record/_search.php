@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use common\models\finance\FinanceOrderChannel;
 use boss\models\payment\GeneralPay;
 use kartik\widgets\Select2;
+use yii\helpers\Url;
 /**
  * @var yii\web\View $this
  * @var boss\models\CustomerTransRecordSearch $model
@@ -29,6 +30,31 @@ use kartik\widgets\Select2;
 
         <div class="col-md-2">
             <?= $form->field($model, 'order_id') ?>
+        </div>
+
+        <div class="col-md-2">
+
+            <?php
+            $name = FinanceOrderChannel::getOrderChannelByName($model->customer_trans_record_pay_channel);
+            echo $form->field($model, 'customer_trans_record_pay_channel')->widget(Select2::classname(),[
+                'initValueText' => $name, // set the initial display text
+                'attribute'=>'customer_trans_record_pay_channel',
+                'model'=>$model,
+                'options' => ['placeholder' => '请选择数据来源 ...'],
+                'pluginOptions' => [
+                    'allowClear' => true,
+                    'minimumInputLength' => 0,
+                    'ajax' => [
+                        'url' => Url::to(['payment/general-pay/order-channel']),
+                        'dataType' => 'json',
+                        //'data' => new JsExpression('function(params) { return console.log(params);{q:params.term}; }')
+                    ],
+                    //'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                    //'templateResult' => new JsExpression('function(model) { return model.finance_order_channel_name; }'),
+                    //'templateSelection' => new JsExpression('function (model) { return model.finance_order_channel_name; }')
+                ]
+            ]);?>
+
         </div>
 
         <div class="col-md-2">
