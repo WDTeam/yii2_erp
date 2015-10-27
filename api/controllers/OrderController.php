@@ -840,7 +840,7 @@ class OrderController extends \api\components\Controller
              * $customer->id 用户
              * $order_id     订单号
              */
-            $orderValidation = \core\models\order\Order::validationOrderCoustomer($customer->id, $param['order_id']);
+            $orderValidation = \core\models\order\Order::validationOrderCustomer($customer->id, $param['order_id']);
 
             if ($orderValidation) {
                 /**
