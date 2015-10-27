@@ -326,22 +326,21 @@ class WorkerController extends \api\components\Controller
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *      "code": "ok",
-     *      "msg": "操作成功.",
-     *      "ret": [
-     *         {
-     *             "comment_id": "1",
-     *             "comment": "这是第一条评论类型为2评论",
-     *             "comment_date": "2015-10-22"
-     *         },
-     *         {
-     *             "comment_id": "1",
-     *             "comment": "这是第二条评论类型为2评论",
-     *            "comment_date": "2015-10-22"
-     *         }
-     *      ]
-     * }
+     *   {
+     *       "code": 1,
+     *       "msg": "操作成功.",
+     *       "ret": {
+     *           "per_page": 1,
+     *           "page_num": 10,
+     *           "data": [
+     *               {
+     *                   "comment_id": "1",
+     *                   "comment": "这是第一条评论类型为评论",
+     *                   "comment_date": "2015-10-27"
+     *               }
+     *           ]
+     *       }
+     *   }
      *
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
@@ -375,21 +374,25 @@ class WorkerController extends \api\components\Controller
 
         //数据返回
         $ret = [
-            [
+            'per_page'=>$per_page,
+            'page_num'=>$page_num,
+            'data'=>[
+                [
                 "comment_id" => '1',
                 "comment" => "这是第一条评论类型为" . $param['comment_type'] . "评论",
                 'comment_date' => date('Y-m-d')
-            ],
-            [
-                "comment_id" => '1',
-                "comment" => "这是第二条评论类型为" . $param['comment_type'] . "评论",
-                'comment_date' => date('Y-m-d')
-            ],
-            [
-                "comment_id" => '1',
-                "comment" => "这是第三条评论类型为" . $param['comment_type'] . "评论",
-                'comment_date' => date('Y-m-d')
-            ],
+                ],
+                [
+                    "comment_id" => '1',
+                    "comment" => "这是第二条评论类型为" . $param['comment_type'] . "评论",
+                    'comment_date' => date('Y-m-d')
+                ],
+                [
+                    "comment_id" => '1',
+                    "comment" => "这是第三条评论类型为" . $param['comment_type'] . "评论",
+                    'comment_date' => date('Y-m-d')
+                ]
+            ]
         ];
         return $this->send($ret, "操作成功.");
     }
@@ -579,9 +582,7 @@ class WorkerController extends \api\components\Controller
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
         //获取阿姨身份:兼职/全职
-        $workerInfo = Worker::getWorkerInfo($checkResult['worker_id']);
-        $identify = $workerInfo['worker_identity_id'];
-
+        $worker_id = $checkResult['worker_id'];
         //判断页码
         if (!isset($param['per_page']) || !intval($param['per_page'])) {
             $param['per_page'] = 1;
@@ -593,25 +594,31 @@ class WorkerController extends \api\components\Controller
         }
         $page_num = intval($param['page_num']);
         //调取model层
+        try{
+            
+        }catch (Exception $e) {
+           return $this->send(null, "boss系统错误", 1024, 403);
+        }
         $ret = [
             [
-
+                "bill_id"=>"32",
+                'bill_year'=>'2014',
+                'bill_date'=>'09年07月-09月13日',
                 'bill_type' =>"1",
                 'bill_explain'=>"每周四，E家洁会为您结算上周一至周日的保洁服务订单收入及各类服务补贴。您可通过每周的周期下拉菜单进行选择，点击查看，了解每周收入明细。",
-                'bill_date'=>'09年07月-09月13日',
                 'order_count'=>'10',
                 'salary'=>'320.00',
                 'balance_status'=>"1",
-                "bill_id"=>"32"
             ],
             [
+                "bill_id"=>"32",
+                'bill_year'=>'2014',
                 'bill_type' =>"2",
                 'bill_explain'=>"每周四，E家洁会为您结算上周一至周日的保洁服务订单收入及各类服务补贴。您可通过每周的周期下拉菜单进行选择，点击查看，了解每周收入明细。",
                 'bill_date'=>'8月',
                 'order_count'=>'10',
                 'salary'=>'320.00',
                 'balance_status'=>"2",
-                "bill_id"=>"33"
                 ]
         ];
         return $this->send($ret, "操作成功.");
