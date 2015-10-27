@@ -179,10 +179,10 @@ class PayController extends \api\components\Controller
             if ($data[$name]['channel_id'] == '2') {
                 $model->scenario = 'wx_h5_pay';
                 $ext_params['openid'] = $data[$name]['ext_params']['openid'];    //微信openid
-            } elseif ($data[$name]['channel_id'] == '6') {
+            } elseif ($data[$name]['channel_id'] == '6' || $data[$name]['channel_id'] == '24') {
                 $model->scenario = 'alipay_web_pay';
-                $ext_params['return_url'] = $data[$name]['ext_params']['return_url'];    //同步回调地址
-                $ext_params['show_url'] = $data[$name]['ext_params']['show_url'];    //显示商品URL
+                $ext_params['return_url'] = !empty($data[$name]['ext_params']['return_url']) ? $data[$name]['ext_params']['return_url'] :'';    //同步回调地址
+                $ext_params['show_url'] = !empty($data[$name]['ext_params']['show_url']) ? $data[$name]['ext_params']['show_url']: '';    //显示商品URL
             } elseif ($data[$name]['channel_id'] == '7') {
                 $model->scenario = 'zhidahao_h5_pay';
                 $ext_params['customer_name'] = $data[$name]['ext_params']['customer_name'];  //商品名称
@@ -199,10 +199,10 @@ class PayController extends \api\components\Controller
             if ($data[$name]['channel_id'] == '2') {
                 $model->scenario = 'wx_h5_online_pay';
                 $ext_params['openid'] = $data[$name]['ext_params']['openid'];    //微信openid
-            } elseif ($data[$name]['channel_id'] == '6') {
+            } elseif ($data[$name]['channel_id'] == '6' || $data[$name]['channel_id'] == '24') {
                 $model->scenario = 'alipay_web_pay';
-                $ext_params['return_url'] = $data[$name]['ext_params']['return_url'];    //同步回调地址
-                $ext_params['show_url'] = $data[$name]['ext_params']['show_url'];    //显示商品URL
+                $ext_params['return_url'] = !empty($data[$name]['ext_params']['return_url']) ? $data[$name]['ext_params']['return_url'] :'';    //同步回调地址
+                $ext_params['show_url'] = !empty($data[$name]['ext_params']['show_url']) ? $data[$name]['ext_params']['show_url']: '';    //显示商品URL
             } elseif ($data[$name]['channel_id'] == '7') {
                 $model->scenario = 'zhidahao_h5_online_pay';
                 $ext_params['customer_name'] = $data[$name]['ext_params']['customer_name'];  //商品名称
@@ -216,10 +216,8 @@ class PayController extends \api\components\Controller
                 $model->scenario = 'online_pay';
             }
         }
-
         $data[$name] = array_merge($data[$name], $ext_params);
         $model->attributes = $data[$name];
-
         if ($model->load($data) && $model->validate()) {
             $retInfo = GeneralPay::getPayParams($model->pay_money, $model->customer_id, $model->channel_id, $model->partner, $model->order_id, $ext_params);
             return $this->send($retInfo['data'], $retInfo['info'], $retInfo['status']);

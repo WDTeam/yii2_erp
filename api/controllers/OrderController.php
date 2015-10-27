@@ -731,8 +731,61 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {PUT} /order/cancel-order 取消订单(haojianse 100% )
+     * @api {GET} /order/worker-service-order-count 查询阿姨带服务订单个数(xieyi 10%)
      *
+     *
+     * @apiName WorkerServiceOrderCount
+     * @apiGroup Order
+     *
+     * @apiParam {String} order_id 订单id
+     * @apiParam {String} access_token 阿姨认证令牌
+     *
+     * @apiSuccess {Object[]} status_list 该状态订单.
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *         "code": "ok",
+     *         "msg": "操作成功",
+     *         "ret":
+     *         {
+     *            count:1
+     *         }
+     *     }
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "error",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *
+     *     }
+     *
+     */
+    public function actionWorkerServiceOrderCount()
+    {
+        $args = Yii::$app->request->get() or
+        $args = json_decode(Yii::$app->request->getRawBody(), true);
+        @$token = $args['access_token'];
+        $user = CustomerAccessToken::getCustomer($token);
+        if (empty($user)) {
+            return $this->send(null, "用户无效,请先登录",0);
+        }
+        @$orderId = $args['order_id'];
+        if(!is_numeric($orderId)){
+            return $this->send(null, "该订单不存在",0);
+        }
+        //TODO check whether the orders belong the user
+        $ret = \core\models\order\OrderStatus::searchOrderStatusHistory($orderId);
+
+        $this->send($ret, "操作成功");
+    }
+
+    /**
+     * @api {PUT} /order/cancel-order 取消订单(haojianse 100% ) 
+     * 
      * @apiName CancelOrder
      * @apiGroup Order
      *
@@ -862,7 +915,7 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /order/add-comment 评价订单（xieyi %0）
+     * @api {GET} /order/add-comment 评价订单（haojianse %0）
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} app_version 访问源(android_4.2.2)
@@ -964,240 +1017,13 @@ class OrderController extends \api\components\Controller
         }
     }
 
-    /**
-     * @api {get} /order/search_push_order.php 获得推送订单信息 (xieyi 0%)
-     * @apiName actionSearchPushOrder
-     * @apiGroup Order
-     * @apiDescription 推送过来的订单，通过id获取订单信息
-     * @apiParam {String} session_id    会话id.
-     * @apiParam {String} platform_version 平台版本号.
-     * @apiParam {String} order_id  订单id.
-     * @apiParam {String} service_type  1.
-     *
-     * @apiSuccessExample {json} Success-Response:
-     * HTTP/1.1 200 OK
-     * {
-     *      "code": "ok",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      {
-     *          "orderInfo":
-     *          [
-     *          {
-     *              "orderId": "1340",
-     *              "reserveTime": "2015-10-14 16:00:52",
-     *              "start_place": "密云县密云",
-     *              "cityName": "北京",
-     *              "user_type": "1",
-     *              "longitude": "116.849716",
-     *              "latitude": "40.382129",
-     *              "extendInfo": "",
-     *              "orderAllTime": "2.0",
-     *              "orderInfoStr": "有顾客预约叫保洁。工作时间：2015-10-14 16:00:52，工作地点：密云县密云。备注：。距离你 0 公里",
-     *              "serviceTypeName": "家庭保洁",
-     *              "receiveOrderMsg": "您确认要接此订单吗？如果找不到客户家的路，请拨打客服电话，尽量不要骚扰客户",
-     *              "distanceStr": "距我家 0 </font>km",
-     *              "assign_status": 0,
-     *              "small_maintail": []
-     *          }
-     *          ],
-     *          "alertMsg": "请求成功"
-     *      }
-     * }
-     *
-     * @apiError SessionIdNotFound 未找到会话ID.
-     * @apiError OrderIdNotFound 未找到订单ID.
-     * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
-     *  {
-     *      "code":"Failed",
-     *      "msg": "SessionIdNotFound"
-     *  }
-     *
-     */
 
     /**
-     * @api {get} /mobileapidriver2/driver_get_now_order_list 待接活订单(zhaoshunli 0%)
-     * @apiName actionDriverGetNowOrderList
-     * @apiGroup Order
-     * @apiDescription 阿姨查看带接活订单
-     *
-     * @apiParam {String} session_id    会话id.
-     * @apiParam {String} platform_version 平台版本号.
-     * @apiParam {String} push          默认传0.
-     * @apiParam {String} longitude     当前经度.
-     * @apiParam {String} latitude      当前纬度.
-     *
-     * @apiSuccessExample {json} Success-Response:
-     * HTTP/1.1 200 OK
-     * {
-     *     "code":"OK",
-     *     "msg":"待接单信息获取成功",
-     *     "ret":
-     *      {
-     *          "locationType": 1,
-     *          "result": 1,
-     *          "orderListTitleStr": "",
-     *          "allOrderList":
-     *          [
-     *          {
-     *              "orderId": "374",
-     *              "reserveTime": "2015-09-12 10:00:00",
-     *              "start_place": "北京 光华路soho 301",
-     *              "distance": "0.0",
-     *              "cityName": "北京",
-     *              "user_type": "0",
-     *              "longitude": "116.459003",
-     *              "latitude": "39.918741",
-     *              "extendInfo": "测试测试",
-     *              "orderAllTime": "2.0小时",
-     *              "orderInfoStr": "有顾客预约叫保洁。工作时间：2015-09-12 10:00:00，工作地点：301。备注：测试测试。距离你0.0公里",
-     *              "isVoiceOrder": "false",
-     *              "orderReserveTime": "10:00",
-     *              "orderReserveDate": "2015-09-12",
-     *              "serviceTypeName": "家庭保洁",
-     *              "timestamp": 1442023200,
-     *              "showDate": "明天",
-     *              "receiveOrderMsg": "您确认要接此订单吗？如果找不到客户家的路，请拨打客服电话，尽量不要骚扰客户。",
-     *              "distanceStr": "距我当天第1个订单0.0</font>km"
-     *          }
-     *          ]
-     *      }
-     * }
-     *
-     * @apiError SessionIdNotFound 未找到会话ID.
-     * @apiError PositionNotFound 未找到坐标位置.
-     *
-     * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
-     *  {
-     *      "code":"Failed",
-     *      "msg": "SessionIdNotFound"
-     *  }
-     *
-     */
-
-    /**
-     * @api {get} /mobileapidriver2/worker_history_order 阿姨历史订单(zhaoshunli 100%)
-     * @apiName actionWorkerHistoryOrder
-     * @apiGroup Order
-     * @apiDescription 阿姨查看历史订单
-     * @apiParam {String} session_id    会话id.
-     * @apiParam {String} platform_version 平台版本号.
-     *
-     * @apiSuccessExample {json} Success-Response:
-     * HTTP/1.1 200 OK
-     * {
-     *      "code": "ok",
-     *      "msg":"",
-     *      "ret":
-     *      {
-     *          "result": 1,
-     *          "msg": "",
-     *          "cannelOrderList":
-     *          [
-     *          {
-     *              "orderId": "244",
-     *              "orderType": "家庭保洁",
-     *              "orderPlace": "北京 海淀区 1334",
-     *              "longitude": "116.353337",
-     *              "latitude": "40.036104",
-     *              "orderDate": "2015-09-21",
-     *              "orderStartTime": "08:00",
-     *              "orderEndTime": "10:00",
-     *              "orderAllTime": "2.0小时",
-     *              "userPhone": "13772427406",
-     *              "userName": "",
-     *              "cityName": "北京",
-     *              "extendInfo": "无",
-     *              "timestamp": 1442793600,
-     *              "userType": "0"
-     *          }
-     *          ],
-     *          "finishOrderList":
-     *          [
-     *          {
-     *              "orderId": "174",
-     *              "orderType": "家庭保洁",
-     *              "orderPlace": "北京 海淀区定慧北里 6换10",
-     *              "longitude": "0",
-     *              "latitude": "0",
-     *              "orderDate": "2015-09-17",
-     *              "orderStartTime": "11:30",
-     *              "orderEndTime": "13:30",
-     *              "orderAllTime": "2.0小时",
-     *              "userPhone": "13636363636",
-     *              "userName": "",
-     *              "cityName": "北京",
-     *              "extendInfo": "无",
-     *              "timestamp": 1442460600,
-     *              "userType": "0"
-     *          }
-     *          ]
-     *      }
-     * }
-     *
-     * @apiError SessionIdNotFound 未找到会话ID.
-     *
-     * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
-     *  {
-     *      "code":"Failed",
-     *      "msg": "SessionIdNotFound"
-     *  }
-     *
-     */
-
-    /**
-     * @api {get} v2/worker/account_checking.php 日常订单列表(zhaoshunli %0)
-     * @apiName actionAccountChecking
-     * @apiGroup Order
-     * @apiDescription 对账首页，日常订单
-     * @apiParam {String} session_id    会话id.
-     * @apiParam {String} platform_version 平台版本号.
-     * @apiParam {String} page_num   默认传3.
-     *
-     * @apiSuccessExample {json} Success-Response:
-     * HTTP/1.1 200 OK
-     * {
-     *      "code": "ok",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      {
-     *          "msgStyle": "",
-     *          "alertMsg": "",
-     *          "total_price": 88,
-     *          "common_order_info":
-     *          [
-     *          {
-     *              "order_id": "673",
-     *              "finish_time": "2015年09月15日 12:00结束",
-     *              "order_price": "100",
-     *              "palce": "北京 朝阳区大悦城 测试测试",
-     *              "cash": "0",
-     *              "status": "未结算"
-     *          }
-     *          ]
-     *      }
-     * }
-     *
-     * @apiError SessionIdNotFound 未找到会话ID.
-     *
-     * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
-     *  {
-     *      "code":"Failed",
-     *      "msg": "SessionIdNotFound"
-     *  }
-     *
-     */
-
-    /**
-     * @api {get} v2/worker/all_order_common.php 全部订单月份列表(zhaoshunli 0%)
+     * @api {get} v1/order/worker-history-orders.php 阿姨全部订单月份列表(zhaoshunli 0%)
      * @apiName actionAllOrderCommon
      * @apiGroup Order
      * @apiDescription 对账日常订单查看全部，月份列表
-     * @apiParam {String} session_id    会话id.
+     * @apiParam {String} access-token    会话id.
      * @apiParam {String} platform_version 平台版本号.
      *
      * @apiSuccessExample {json} Success-Response:
@@ -1233,52 +1059,10 @@ class OrderController extends \api\components\Controller
      *  }
      *
      */
+    public function actionWorkerHistoryOrders(){
+        
+    }
 
-    /**
-     * @api {get} v2/worker/all_order_common_list.php 历史单列表(xieyi 0%)
-     * @apiName actionAllOrderCommonList
-     * @apiGroup Order
-     * @apiDescription 对账日常订单，全部订单
-     * @apiParam {String} session_id    会话id.
-     * @apiParam {String} platform_version 平台版本号.
-     * @apiParam {String} page_num  每页显示多少条数据.
-     * @apiParam {String} cur_page  当前页.
-     * @apiParam {String} time  那个月份.
-     *
-     * @apiSuccessExample {json} Success-Response:
-     * HTTP/1.1 200 OK
-     * {
-     *      "code": "ok",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      {
-     *          "title": "2015年09月 单数：8单 工时：23.5小时",
-     *          "info":
-     *          [
-     *          {
-     *              "order_id": "1115",
-     *              "finish_time": "第39周 09月27日 12:00结束",
-     *              "order_price": 50,
-     *              "palce": "北京密云县密云1",
-     *              "cash": "50",
-     *              "status": "现金¥50"
-     *          }
-     *          ],
-     *          "msgStyle": "",
-     *          "alertMsg": ""
-     *      }
-     * }
-     *
-     * @apiError SessionIdNotFound 未找到会话ID.
-     *
-     * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
-     *  {
-     *      "code":"Failed",
-     *      "msg": "SessionIdNotFound"
-     *  }
-     *
-     */
 
 
 }

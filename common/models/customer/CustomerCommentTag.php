@@ -31,9 +31,9 @@ class CustomerCommentTag extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_comment_tag_name'], 'required'],
+            [['customer_tag_name'], 'required'],
             [['customer_comment_level', 'is_online', 'created_at', 'updated_at', 'is_del'], 'integer'],
-            [['customer_comment_tag_name'], 'string', 'max' => 255]
+            [['customer_tag_name'], 'string', 'max' => 255]
         ];
     }
 
@@ -44,7 +44,8 @@ class CustomerCommentTag extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('common', 'ID'),
-            'customer_comment_tag_name' => Yii::t('common', '评价标签名称'),
+            'customer_tag_name' => Yii::t('common', '评价标签名称'),
+            'customer_tag_type' => Yii::t('common', '分类'),
             'customer_comment_level' => Yii::t('common', '评价等级'),
             'is_online' => Yii::t('common', '是否上线'),
             'created_at' => Yii::t('common', '创建时间'),
