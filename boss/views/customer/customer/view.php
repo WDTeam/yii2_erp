@@ -17,10 +17,14 @@ use core\models\customer\Customer;
 use core\models\customer\CustomerExtSrc;
 use core\models\customer\CustomerAddress;
 use core\models\order\OrderSearch;
-//use core\models\customer\CustomerComment;
+use core\models\customer\CustomerComment;
 use core\models\customer\CustomerExtScore;
 use core\models\customer\CustomerExtBalance;
 use core\models\customer\CustomerBlockLog;
+
+use core\models\operation\coupon\Coupon;
+use core\models\operation\coupon\CouponCustomer;
+use core\models\operation\coupon\CouponCode;
 
 /**
  * @var yii\web\View $this
@@ -34,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="customer-view">
 <?php 
 //城市
-//$city_name = Customer::getCityName($model->id);
+$city_name = core\models\operation\CoreOperationCity::getCityName($model->operation_city_id);
 //var_dump($city_name);
 
 //来源
@@ -71,7 +75,8 @@ if(!empty($customerAddress)){
 //订单
 $order_count = OrderSearch::getCustomerOrderCount($model->id);
 //评价数量
-//$comment_count = CustomerComment::getCustomerCommentCount($model->id);
+$comment_count = CustomerComment::getCustomerCommentCount($model->id);
+//$comment_count = 0;
 //积分
 $score = CustomerExtScore::getCustomerScore($model->id);
 //余额
@@ -99,15 +104,15 @@ echo DetailView::widget([
         //     'valueColOptions'=>['style'=>'width:90%']
         // ],
         
-        // 'customer_name',
-        //[
-          //  'attribute'=>'', 
-            //'label'=>'城市',
-            //'format'=>'raw',
-            //'value'=>$city_name,
-            //'type'=>DetailView::INPUT_TEXT,
-            //'valueColOptions'=>['style'=>'width:90%']
-        //],
+         'customer_name',
+        [
+            'attribute'=>'', 
+            'label'=>'城市',
+            'format'=>'raw',
+            'value'=>$city_name,
+            'type'=>DetailView::INPUT_TEXT,
+            'valueColOptions'=>['style'=>'width:90%']
+        ],
         'customer_phone',
         [
             'attribute'=>'', 
@@ -189,30 +194,6 @@ echo DetailView::widget([
 //     'enableEditMode'=>false,
 // ]); 
 
-// echo DetailView::widget([
-//     'model' => $model,
-//     'condensed'=>false,
-//     'hover'=>true,
-//     'mode'=>Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
-//     'panel'=>[
-//         'heading'=>'剩余优惠券',
-//         'type'=>DetailView::TYPE_INFO,
-//     ],
-//     'attributes' => [
-//         [
-//             'attribute'=>'', 
-//             'label'=>'',
-//             'format'=>'raw',
-//             'value'=> '',
-//             'type'=>DetailView::INPUT_TEXT,
-//             'valueColOptions'=>['style'=>'width:90%']
-//         ],
-//     ],
-//     'enableEditMode'=>true,
-// ]); 
-
-
-// $customerBlockLog = \common\models\CustomerBlockLog::findAll('customer_id'=>$model->id);
 echo DetailView::widget([
     'model' => $model,
     'condensed'=>false,
@@ -239,14 +220,14 @@ echo DetailView::widget([
             'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],
-        //[
-           // 'attribute'=>'', 
-           // 'label'=>'评价总数',
-           // 'format'=>'raw',
-           // 'value'=>Html::a($comment_count, ['customer-comment/index', 'CustomerCommentSearch[customer_id]'=>$model->id]),
-           // 'type'=>DetailView::INPUT_TEXT,
-            //'valueColOptions'=>['style'=>'width:90%']
-        //],
+        [
+            'attribute'=>'', 
+            'label'=>'评价总数',
+            'format'=>'raw',
+            'value'=>Html::a($comment_count, ['customer/customer-comment/index', 'CustomerCommentSearch[customer_id]'=>$model->id]),
+            'type'=>DetailView::INPUT_TEXT,
+            'valueColOptions'=>['style'=>'width:90%']
+        ],
         [
             'attribute'=>'', 
             'label'=>'账户余额',
@@ -267,7 +248,53 @@ echo DetailView::widget([
     'enableEditMode'=>false,
 ]); 
 
-$customerBlockLogProvider = new ActiveDataProvider(['query' => \core\models\customer\CustomerBlockLog::find(),]);
+//listCustomerCoupon($phone);
+$couponCustomerProvider = new ActiveDataProvider([
+	'query' => \core\models\operation\coupon\CouponCustomer::find()->where(['customer_id'=>$model->id])
+]);
+echo GridView::widget([
+    'dataProvider' => $couponCustomerProvider,
+    // 'responsive' => false,
+    // 'hover' => false,
+    // 'condensed' => false,
+    // 'floatHeader' => false,
+    // 'panel' => [
+    //     'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i>历史状态信息</h3>',
+    //     'type' => 'info',
+    //     'before' =>'',
+    //     'after' =>'',
+    //     'showFooter' => false
+    // ],
+    'columns'=>[
+        [
+            'format' => 'raw',
+            'label' => '类别',
+            'value' => function($couponCustomerProvider){
+				$coupon = Coupon::find($couponCustomerProvider->coupon_id);
+				return $coupon->coupon_type_name;
+			},
+            'width' => "80px",
+        ],
+        [
+            'format' => 'raw',
+            'label' => '金额',
+            'value' => function($couponCustomerProvider){
+				return $couponCustomerProvider->coupon_price;
+			},
+            'width' => "80px",
+        ],
+        [
+            'format' => 'raw',
+            'label' => '到期日',
+            'value' => function($couponCustomerProvider){
+				return date('Y-m-d H:i:s', $couponCustomerProvider->expirate_at);
+			},
+            'width' => "80px",
+        ],
+    ],
+]);
+
+$customerBlockLogProvider = new ActiveDataProvider(['query' => \core\models\customer\CustomerBlockLog::find()->where(['customer_id'=>$model->id])]);
 echo GridView::widget([
     'dataProvider' => $customerBlockLogProvider,
     // 'responsive' => false,
