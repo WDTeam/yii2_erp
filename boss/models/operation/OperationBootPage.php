@@ -1,13 +1,13 @@
 <?php
 namespace boss\models\operation;
 use Yii;
-use core\models\operation\CoreOperationBootPage;
+use core\models\operation\OperationBootPage;
 
 
 /**
  * OperationCitySearch represents the model behind the search form about `common\models\OperationCity`.
  */
-class OperationBootPage extends CoreOperationBootPage
+class OperationBootPage extends OperationBootPage
 {
     /**
      * @inheritdoc

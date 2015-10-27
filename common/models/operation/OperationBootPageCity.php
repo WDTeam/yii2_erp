@@ -1,7 +1,6 @@
 <?php
-namespace boss\models\operation;
+namespace common\models\operation;
 use Yii;
-use core\models\operation\OperationBootPageCity;
 
 /**
  * This is the model class for table "{{%operation_boot_page_city}}".
@@ -13,21 +12,13 @@ use core\models\operation\OperationBootPageCity;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationBootPageCity extends OperationBootPageCity
-{
-
-    /**
+class OperationBootPageCity extends \yii\db\ActiveRecord
+{/**
      * @inheritdoc
      */
-    public function rules()
+    public static function tableName()
     {
+        return '{{%operation_boot_page_city}}';
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        
-    }
+    
 }

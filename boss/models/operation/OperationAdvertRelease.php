@@ -3,7 +3,7 @@
 namespace boss\models\operation;
 
 use Yii;
-use core\models\operation\CoreOperationAdvertRelease;
+use core\models\operation\OperationAdvertRelease;
 /**
  * This is the model class for table "{{%operation_advert_release}}".
  *
@@ -15,7 +15,7 @@ use core\models\operation\CoreOperationAdvertRelease;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationAdvertRelease extends CoreOperationAdvertRelease
+class OperationAdvertRelease extends OperationAdvertRelease
 {
     
 }
