@@ -5,7 +5,7 @@ namespace core\models\payment;
 use common\models\payment\GeneralPayCommon;
 use common\models\payment\GeneralPayRefund;
 use core\models\customer\CustomerTransRecord;
-use core\models\Customer;
+use core\models\customer\Customer;
 use Yii;
 
 class GeneralPay extends \common\models\payment\GeneralPay
@@ -39,9 +39,15 @@ class GeneralPay extends \common\models\payment\GeneralPay
      */
     public static function balancePay($data)
     {
+
         $data['general_pay_source'] = 20;
-            //获取订单数据
-        $orderInfo = GeneralPayCommon::orderInfo($data['order_id'])->getAttributes();
+        //获取订单数据
+        $orderInfo = GeneralPayCommon::orderInfo($data['order_id']);
+        $orderInfo = array_merge($orderInfo->getAttributes(),$orderInfo->orderExtPay->getAttributes());
+
+        //支付来源,定义分发支付渠道
+        self::getPayParams( $orderInfo['order_use_acc_balance'],$orderInfo['customer_id'],20,'1217983401',$data['order_id']);
+
         //用户服务卡扣款
         Customer::decBalance($data['customer_id'],$orderInfo['order_use_acc_balance']);
         //用户交易记录
@@ -160,7 +166,6 @@ class GeneralPay extends \common\models\payment\GeneralPay
         }
 
         //支付来源,定义分发支付渠道
-
         $data['general_pay_source_name'] = $model->source($data['general_pay_source']);
 
         //使用场景

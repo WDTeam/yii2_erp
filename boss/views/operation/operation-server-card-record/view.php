@@ -10,14 +10,10 @@ use kartik\datecontrol\DateControl;
  */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Server Card Records'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '服务卡付款管理'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-server-card-record-view">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
-
 
     <?= DetailView::widget([
             'model' => $model,

@@ -3,7 +3,7 @@
 namespace boss\models\operation;
 
 use Yii;
-use core\models\operation\CoreOperationShopDistrictCoordinate;
+use core\models\operation\OperationShopDistrictCoordinate as CoreOperationShopDistrictCoordinate;
 
 /**
  * This is the model class for table "{{%operation_shop_district}}".
@@ -26,6 +26,10 @@ class OperationShopDistrictCoordinate extends CoreOperationShopDistrictCoordinat
         return [
             [['operation_city_id', 'created_at', 'updated_at'], 'integer'],
 //            [['operation_shop_district_latitude_longitude'], 'string'],
+            [['operation_shop_district_coordinate_start_longitude'], 'number', 'min' => 0, 'max' => 180],
+            [['operation_shop_district_coordinate_end_longitude'], 'number', 'min' => 0, 'max' => 180],
+            [['operation_shop_district_coordinate_start_latitude'], 'number', 'min' => 0, 'max' => 90],
+            [['operation_shop_district_coordinate_end_latitude'], 'number', 'min' => 0, 'max' => 90],
             [['operation_shop_district_name'], 'string', 'max' => 60],
             [['operation_shop_district_name'], 'string', 'max' => 60],
             [['operation_city_name'], 'string', 'max' => 50]

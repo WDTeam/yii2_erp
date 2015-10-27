@@ -4,14 +4,13 @@ namespace boss\controllers\operation;
 
 use Yii;
 use boss\models\operation\OperationServerCardRecord;
-use boss\components\BaseAuthController;
-use yii\data\ActiveDataProvider;
+use core\models\operation\OperationServerCardRecordSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * ServerCardRecordController implements the CRUD actions for OperationServerCardRecord model.
+ * OperationServerCardRecordController implements the CRUD actions for OperationServerCardRecord model.
  */
 class OperationServerCardRecordController extends Controller
 {
@@ -33,12 +32,12 @@ class OperationServerCardRecordController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => OperationServerCardRecord::find(),
-        ]);
+        $searchModel = new OperationServerCardRecordSearch;
+        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
         ]);
     }
 

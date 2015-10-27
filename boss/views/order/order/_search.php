@@ -36,13 +36,13 @@ float: right;
 	<div class="m_riqi">
 	  <div class="m_fr">	
 		<label class="m_ipone">下单时间:</label>
-		<input type="text" name="datetime" class="ui_timepicker" value="" placeholder=""> 到
-		<input type="text" name="datetime" class="ui_timepicker" value="" placeholder="">
+		 <input type="text" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})" value=""/> 到
+		 <input type="text" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})" value=""/>
      </div>
 	  <div class="m_fr" style="margin-bottom: 20px;">	
         <label class="m_ipone">服务时间:</label>
-		<input type="text" name="datetime" class="ui_timepicker" value="" placeholder=""> 到
-		<input type="text" name="datetime" class="ui_timepicker" value="" placeholder="">
+		  <input type="text" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})" value=""/> 到
+		  <input type="text" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})" value=""/>
 	   </div>
 
         <?= $form->field($searchModel, 'shop_id')->widget(Select2::classname(), [

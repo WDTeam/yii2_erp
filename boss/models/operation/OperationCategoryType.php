@@ -3,7 +3,7 @@
 namespace boss\models\operation;
 
 use Yii;
-use core\models\operation\CoreOperationCategoryType;
+use core\models\operation\OperationCategoryType as CoreOperationCategoryType;
 /**
  * This is the model class for table "{{%operation_category_type}}".
  *

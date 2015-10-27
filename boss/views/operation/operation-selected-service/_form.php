@@ -25,13 +25,6 @@ use kartik\widgets\FileInput;
         </div>
         <div class="panel-body">
             <?php
-        //        echo GoodsTypeCascade::widget([
-        //            'model' => $model,
-        //            'options' => ['class' => 'form-control'],
-        //            'name' => 'OperationGoods[operation_category_ids][]',
-        //        ]);
-            ?>
-            <?php
             echo Form::widget([
 
             'model' => $model,
@@ -43,10 +36,11 @@ use kartik\widgets\FileInput;
                 'selected_service_area'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'请输入区域...', 'maxlength'=>32]],
                 'selected_service_sub_area'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'请输入子区域...', 'maxlength'=>64]],
                 'selected_service_standard'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'请输入清洁标准...', 'maxlength'=>128]],
-                'selected_service_price'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'请输入价格...', 'maxlength'=>64]],
+                //'selected_service_price'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'请输入价格...', 'maxlength'=>64]],
                 'selected_service_unit'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'请输入时间...', 'maxlength'=>64]],
 
                 ]]); ?>
+            <?= $form->field($model, 'selected_service_area_standard')->dropDownList(['1' => '小于100平米', 2 => '大于100平米'], ['prompt' => '请选择分类'])->label('选择面积分类') ?>
             <?= $form->field($model, 'selected_service_photo')->widget(FileInput::classname(), [
                 'options' => ['multiple' => true],
                 'pluginOptions' => [
@@ -57,57 +51,6 @@ use kartik\widgets\FileInput;
                     'showUpload' => false,
                 ]
             ])?>
-                <?php
-        //            echo $form->field($model, 'operation_goods_start_time')->widget(DateTimePicker::className(), [
-        //            'language' => 'es',
-        //            'size' => 'ms',
-        //            'template' => '{input}',
-        //            'pickButtonIcon' => 'glyphicon glyphicon-time',
-        //            'inline' => true,
-        //            'clientOptions' => [
-        //                'startView' => 1,
-        //                'minView' => 0,
-        //                'maxView' => 1,
-        //                'autoclose' => true,
-        //                'linkFormat' => 'HH:ii', // if inline = true
-        //                // 'format' => 'HH:ii P', // if inline = false
-        //                'todayBtn' => true
-        //            ]
-        //        ]);?>
-                <?php
-        //            echo $form->field($model, 'operation_goods_end_time')->widget(DateTimePicker::className(), [
-        //            'language' => 'es',
-        //            'size' => 'ms',
-        //            'template' => '{input}',
-        //            'pickButtonIcon' => 'glyphicon glyphicon-time',
-        //            'inline' => true,
-        //            'clientOptions' => [
-        //                'startView' => 1,
-        //                'minView' => 0,
-        //                'maxView' => 1,
-        //                'autoclose' => true,
-        //                'linkFormat' => 'HH:ii P', // if inline = true
-        //                'todayBtn' => true
-        //            ]
-        //        ]);?>
-
-                <?php //echo $form->field($model, 'operation_spec_info')->dropDownList($OperationSpec, ['prompt' => '请选择规格', 'id' => 'operationSpec'])->label('选择规格') ?>
-
-                <div id="SpecInfo">
-                    <?php
-        //            if($status == 'update') {
-        //                echo $this->render('specinfo', [
-        //                    'specvalues' => $specvalues,
-        //                ]);
-        //            }
-                    ?>
-                </div>
-
-
-
-
-
-
 
         </div>
         <div class="panel-footer">

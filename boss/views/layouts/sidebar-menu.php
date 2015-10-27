@@ -136,7 +136,7 @@ echo Menu::widget(
                     ],
                 	[
                 		'label' => '订单投诉(30%)',
-                		'url' => ['/order-complaint'],
+                		'url' => ['/order/order-complaint'],
                 		'icon' => 'fa fa-angle-right',
                 	],
                     [
@@ -171,7 +171,7 @@ echo Menu::widget(
 //                        'icon' => 'fa fa-angle-right',
 //                    ],
                     [
-                        'label' => '服务和品类管理(80%)',
+                        'label' => '服务项目和类型管理(80%)',
                         'url' => ['/operation/operation-category/'],
                         'icon' => 'fa fa-angle-right',
 
@@ -294,7 +294,7 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],*/
                     [
-                        'label' => '阿姨任务管理(95%)',
+                        'label' => '阿姨任务管理(100%)',
                         'url' => ['/worker/worker-task/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -303,7 +303,7 @@ echo Menu::widget(
 						'url' => ['#'],
 						'icon' => 'fa fa-angle-right',
 						'options' => [
-							'class' => 'treeview active',
+							'class' => 'treeview',
 						],
 						'items' => [
 							[
@@ -312,20 +312,21 @@ echo Menu::widget(
 								'icon' => 'fa fa-angle-right',
 							],
 							[
+								'label' => '服务卡订单管理',
+								'url' => ['operation/operation-server-card-order'],
+								'icon' => 'fa fa-angle-right',
+							],
+							[
 								'label' => '客户服务卡管理',
 								'url' => ['operation/operation-server-card-customer/index'],
 								'icon' => 'fa fa-angle-right',
 							],
 							[
-								'label' => '服务卡付款管理',
+								'label' => '服务卡流水管理',
 								'url' => ['operation/operation-server-card-record'],
 								'icon' => 'fa fa-angle-right',
 							],
-							[
-								'label' => '服务卡订单管理',
-								'url' => ['operation/operation-server-card-order'],
-								'icon' => 'fa fa-angle-right',
-							],
+							
                 ],
             ],
                     [

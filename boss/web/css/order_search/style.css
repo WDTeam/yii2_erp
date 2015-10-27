@@ -53,7 +53,7 @@ table {
 body {font-size:14px; background: #f9f9f9;}
 img{border:0; width: 100%; height:100%;}
 
-#m_warp select,input{vertical-align:middle; height: 29px;border: 1px solid #ccc !important;background-color: #fff !important;color: #555; }
+#m_warp select,input{vertical-align:middle; height: 33px;border: 1px solid #ccc !important;background-color: #fff !important;color: #555;border-radius: 4px; }
 .clear { display:block !important; clear:both !important; float:none !important; margin:0 !important; padding:0 !important; height:0; line-height:0; font-size:0; overflow:hidden;}
 .clearfix { zoom:1; }
 .clearfix:after { content:""; display:block; clear:both; height:0; }
@@ -70,7 +70,7 @@ a:hover{color:#f6a202;}
 #m_warp .box .conter .m_frist .heading{color:#000; background-color: #fff;border: none;padding: 10px 15px;border-bottom: 1px solid rgba(0, 0, 0, 0.1);}
 #m_warp .box .conter .m_frist .heading h3{ font-size: 16px;}
 #m_warp .m_from{padding: 10px 15px;display: block; position: relative;}
-#m_warp .m_from .m_ipu{ margin-right: 30px; padding-left: 4px;width: 175px;height: 28px;}
+#m_warp .m_from .m_ipu{ margin-right: 30px; padding-left: 4px;width: 175px;height: 32px;border-radius: 4px;}
 #m_warp .m_riqi{margin-top: 20px;}
 #m_warp .m_riqi .m_fr{float: left;margin-right: 30px;}
 #m_warp .m_riqi .m_fr input{padding-left: 4px;}
@@ -81,8 +81,8 @@ line-height: 26px;font-size: 14px;padding: 0px 8px;border-radius: 3px;}
 #m_warp .m_riqi p,.m_from .m_daoc{ float: right; background: #f6a202;text-align: center;height: 26px;line-height: 26px;font-size: 14px; padding: 0px 5px; border-radius: 3px;}
 #m_warp .m_riqi p a,.m_from .m_daoc a{color: #fff;}
 #m_warp .heading_top{ margin-top: 40px;}
-#m_warp .m_from .lis{width: 700px; color: #000;float: left; }
-#m_warp .m_from .lis p{float: left;height: 26px; line-height: 26px;margin-top: 3px; font-size: 16px;}
+#m_warp .m_from .lis{width: 950px; color: #000;float: left; margin-bottom: 10px;}
+#m_warp .m_from .lis p{float: left;height: 26px; min-width: 80px;text-align: right;line-height: 26px;margin-top: 3px; font-size: 16px;}
 #m_warp .m_from .lis li{margin-top: 5px;text-align: center;float: left;height: 26px;line-height: 26px;font-size: 14px; padding: 0px 3px; border-radius: 3px; 
                 margin-right: 8px; cursor:pointer;}
 #m_warp .m_from .lis .cur{background: #f6a202; color: #fff;}
@@ -90,7 +90,7 @@ line-height: 26px;font-size: 14px;padding: 0px 8px;border-radius: 3px;}
 
 #m_warp .m_from .liss li{border: #ccc 1px solid;border-radius: 3px;}
 #m_warp .m_from .m_shuji h3 span{color: #f6a202; }
-#m_warp .m_from .m_ipone{float: left; margin-right: 5px; line-height: 25px;}
+#m_warp .m_from .m_ipone{float: left; margin-right: 5px; line-height: 32px;min-width: 60px;text-align: right;}
 #m_warp .form-group{width: 330px;float: left;}
 
 
@@ -178,7 +178,7 @@ line-height: 30px;display: block;text-align: center;margin-top: 7px;margin-right
   }
 }
 
-#HBox h1,#HBox2 h1{ text-align: center;height: 42px;line-height: 42px;border-bottom: 1px solid #ccc;font-size: 16px;  }
+#HBox h1,#HBox2 h1,#HBox3 h1{ text-align: center;height: 42px;line-height: 42px;border-bottom: 1px solid #ccc;font-size: 16px;  }
 .list{padding:10px 0;}
 .list li{width: 98%;margin:0px auto auto;overflow: hidden; line-height: 36px;}
 .list li strong{width:15%;float:left;display:inline-block;margin-right:10px;text-align: right;color: #f6a202;}
@@ -195,9 +195,6 @@ color: #fff !important;padding: 0;font-size: 16px;margin-top: 15px; float: left;
 .ipt:focus{border-color:#66afe9;box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 6px rgba(102, 175, 233, 0.6);-webkit-box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 6px rgba(102, 175, 233, 0.6);}
 .submitBtn,.submitq{width:80%;height:32px;border: none; border-radius:3px; line-height:30px;cursor:pointer;margin:10px auto;display:block;text-align:center;background-color:#f6a202 !important;color:#fff !important;padding:0;
             font-size: 16px;margin-top: 15px;}
-
-
-
 
 
 

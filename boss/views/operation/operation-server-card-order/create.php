@@ -7,16 +7,13 @@ use yii\helpers\Html;
  * @var common\models\operation\OperationServerCardOrder $model
  */
 
-$this->title = Yii::t('app', 'Create {modelClass}', [
+$this->title = Yii::t('app', '新增', [
     'modelClass' => 'Operation Server Card Order',
 ]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Server Card Orders'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '服务卡订单管理'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-server-card-order-create">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>

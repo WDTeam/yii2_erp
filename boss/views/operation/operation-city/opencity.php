@@ -6,7 +6,7 @@ $this->title = Yii::t('app', 'Opened City').'管理';
     <div class="panel panel-info">
         <div class="panel-heading">
             <h3 class="panel-title" style="display: inline-block">开通城市列表<span class="badge"></span></h3>
-            <a style="float:right" class="btn btn-primary btn-xs" href="/operation-city/release">上线城市</a>
+            <a style="float:right" class="btn btn-primary btn-xs" href="/operation/operation-city/release">上线城市</a>
         </div>
         <div class="panel-body">
             <table class="table table-bordered">

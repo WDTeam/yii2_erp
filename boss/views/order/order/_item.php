@@ -14,6 +14,7 @@ use yii\helpers\HtmlPurifier;
                 <th class="m_colo"><?= Html::encode($model->orderExtStatus->order_status_name) ?></th>
             </tr>
             <tr>
+            	<input type="hidden" value="<?= Html::encode($model->id) ?>" />
             	<td><?= empty($model->orderExtCustomer->order_customer_phone) ? '用户手机' : Html::encode($model->orderExtCustomer->order_customer_phone) ?>　用户身份<br />
             	    <?= Html::encode($model->order_src_name) ?>下单<br />
             	    2015-09-18   9:00-11:00<br />
