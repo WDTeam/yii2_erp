@@ -14,9 +14,6 @@ $this->title = Yii::t('app', '服务卡订单管理');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-server-card-order-index">
-    <div class="page-header">
-            <h1><?= Html::encode($this->title) ?></h1>
-    </div>
     <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
     <p>
         <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [

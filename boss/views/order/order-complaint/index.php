@@ -36,6 +36,11 @@ AppAsset::addScript($this, 'js/order_search/riqi/jquery-ui-timepicker-zh-CN.js')
 $this->title = '订单投诉管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<!-- 新增样式表 -->
+<style>
+	.mar-t {margin-top: 15px;}
+	#m_warp .m_riqi .btn {margin: 0px 80px;width: 160px;height: 33px; background-color: #f6a202 !important;color: #fff !important;}
+</style>
      <div id="m_warp">
 		  <div class="box">
 		  	 <div class="conter"> 
@@ -56,29 +61,26 @@ $this->params['breadcrumbs'][] = $this->title;
 						<?php //echo $form->field($searchModel, 'order_code')->TextInput(['class' => 'm_ipu'])->label('订单编号 :', ['class' => 'm_ipone']); ?>
 						
 						<div class="m_riqi">
-						 <div class="m_fr">
-						 	<label class="m_iphone">
-						 	用户电话<input type="text" name="complaint_phone" value=""/>
-						 	</label>
-						 	<label class="m_iphone">
-						 	阿姨电话<input type="text" name="worker_phone" value=""/>
-						 	</label><label class="m_iphone">
-						 	订单编号<input type="text" name="order_id" value=""/>
-						 	</label><label class="m_iphone">
-						 	投诉编号<input type="text" name="id" value=""/>
-						 	</label>
-						 </div>
-						<div class="m_fr">
-							<label class="m_iphone">
-						  		阿姨姓名
-						  	</label><input type="text" name="worker_name" value=""/>
-						</div>
-						 <div class="m_fr">
-                            <label class="m_ipone">下单时间:</label>
-							<input type="text" name="starttime" class="ui_timepicker" value="" placeholder=""> 到
-							<input type="text" name="endtime" class="ui_timepicker" value="" placeholder="">
-						   </div>
-						    <?= Html::submitButton('查询', ['class' => 'btn btn-primary']) ?>
+							<div class="m_fr">
+							 	<label class="m_iphone">用户电话：</label>
+							 	<input type="text" name="complaint_phone" value=""/>
+							 	<label class="m_iphone">阿姨电话：</label>
+							 	<input type="text" name="worker_phone" value=""/>
+							 	<label class="m_iphone">阿姨姓名：</label>
+								<input type="text" name="worker_name" value=""/>
+							</div>
+							<div class="m_fr mar-t">
+								<label class="m_iphone">投诉编号：</label>
+							 	<input type="text" name="id" value=""/>
+							 	<label class="m_iphone">订单编号：</label>
+							 	<input type="text" name="order_id" value=""/>
+							 	<?= Html::submitButton('查询', ['class' => 'btn btn-primary']) ?>
+							</div>
+							<div class="m_fr mar-t">
+	                            <label class="m_ipone">下单时间：</label>
+								<input type="text" name="starttime" class="ui_timepicker" value="" placeholder=""> 到
+								<input type="text" name="endtime" class="ui_timepicker" value="" placeholder="">
+						    </div>
 						</div>
 					<?php ActiveForm::end(); ?>
 					  <div class="clear"></div>
