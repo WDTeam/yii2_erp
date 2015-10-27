@@ -27,5 +27,6 @@ class OperationServerCard extends \yii\db\ActiveRecord
     {
         return '{{%operation_server_card}}';
     }
-
+	
+	
 }
