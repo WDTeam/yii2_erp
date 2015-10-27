@@ -48,7 +48,13 @@ if($searchModel->is_blacklist==1){
         }
     ];
 }
-
+$columns[] = [
+    'attribute'=>'shop_manager_id',
+    'value'=>function ($model){
+        return $model->getManagerName();
+    },
+    'options'=>['width'=>200,],
+];
 if($searchModel->is_blacklist==0){
     $columns[] = [
         'attribute'=>'created_at',
@@ -66,13 +72,7 @@ if($searchModel->is_blacklist==0){
         'filter'=>Shop::$audit_statuses,
     ];
 }
-$columns[] = [
-    'attribute'=>'shop_manager_id',
-    'value'=>function ($model){
-        return $model->getManagerName();
-    },
-    'options'=>['width'=>200,],
-];
+
 if($searchModel->is_blacklist==1){
     $columns[] = [
         'label'=>'加入黑名单时间',
