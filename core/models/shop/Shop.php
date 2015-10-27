@@ -141,6 +141,7 @@ class Shop extends \common\models\shop\Shop
     public function joinBlacklist($cause='')
     {
         $this->is_blacklist = 1;
+        $this->cause = $cause;
         if($this->save()){
             //门店阿姨全拉黑
             $workers = $this->getWorkers();
@@ -161,6 +162,7 @@ class Shop extends \common\models\shop\Shop
             throw new BadRequestHttpException('所在的小家政未移出黑名单');
         }
         $this->is_blacklist = 0;
+        $this->cause = $cause;
         return $this->save();
     }
     /**
