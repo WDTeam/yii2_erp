@@ -47,7 +47,7 @@ $this->title = Yii::t('boss', '评论管理');
     		'format' => 'raw',
     		'label' => '城市',
     		'value' => function ($dataProvider) {
-    		$cityname=core\models\operation\CoreOperationArea::getAreaname($dataProvider->city_id);
+    		$cityname=core\models\operation\OperationArea::getAreaname($dataProvider->city_id);
     		return  $cityname;
     		},
     		'width' => "100px",
@@ -57,7 +57,14 @@ $this->title = Yii::t('boss', '评论管理');
     		'format' => 'raw',
     		'label' => '商圈地址',
     		'value' => function ($dataProvider) {
-    			return  core\models\operation\CoreOperationShopDistrict::getShopDistrictName($dataProvider->operation_shop_district_id);
+    		$Shopname=core\models\operation\OperationShopDistrict::getShopDistrictName($dataProvider->operation_shop_district_id);
+				if(isset($Shopname)){
+				return	$Shopname;
+				}else{
+					return	'无';
+				}
+    			
+    			  
     		},
     		'width' => "100px",
     		],

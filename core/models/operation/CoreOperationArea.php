@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationArea as CommonOperationArea;
+use common\models\operation\CommonOperationArea;
 
 /**
  * This is the model class for table "{{%operation_area}}".
@@ -18,7 +18,7 @@ use common\models\operation\OperationArea as CommonOperationArea;
  * @property string $position
  * @property integer $sort
  */
-class OperationArea extends CommonOperationArea
+class CoreOperationArea extends CommonOperationArea
 {
     public static function getAreaList($parent_id){
         $data = self::find()->select(['id', 'area_name'])->asArray()->where(['parent_id' => $parent_id])->all();
@@ -29,9 +29,8 @@ class OperationArea extends CommonOperationArea
         return $d;
     }
     
-
-	/**
-    * 获取城市名称
+    /**
+    * 根据id获取城市名称
     * @date: 2015-10-27
     * @author: peak pan
     * @return:
@@ -40,8 +39,9 @@ class OperationArea extends CommonOperationArea
     	$data = self::find()->select(['area_name'])->asArray()->where(['parent_id' => $parent_id])->one();
     	return $data['area_name'];
     }
-
-
+    
+    
+    
     public static function getProvinces($parent_id = 0){
         $where = ['parent_id' => $parent_id];
         return self::getAllData($where);
