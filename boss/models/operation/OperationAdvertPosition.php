@@ -3,7 +3,7 @@
 namespace boss\models\operation;
 
 use Yii;
-use core\models\operation\CoreOperationAdvertPosition;
+use core\models\operation\OperationAdvertPosition as CoreOperationAdvertPosition;
 /**
  * This is the model class for table "{{%operation_advert_position}}".
  *

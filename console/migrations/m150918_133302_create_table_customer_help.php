@@ -18,7 +18,8 @@ class m150918_133302_create_table_customer_help extends Migration
             'help_status'=>  Schema::TYPE_SMALLINT.'(4) NOT NULL COMMENT \'0隐藏，1显示\'',
             'help_sort'=>  Schema::TYPE_SMALLINT.'(4) NOT NULL COMMENT \'排序,越小排在前面\'',
             'created_at'=>  Schema::TYPE_INTEGER.'(11) COMMENT \'创建时间\'',
-            'update_at'=>  Schema::TYPE_INTEGER.'(11) COMMENT \'更新时间\'',
+            'updated_at'=>  Schema::TYPE_INTEGER.'(11) COMMENT \'更新时间\'',
+            'is_softdel'=>  Schema::TYPE_INTEGER.'(11) COMMENT \'更新时间\'',
             ], $tableOptions);
     }
 

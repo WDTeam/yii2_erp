@@ -236,7 +236,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 					'view' => function ($url, $model) {
                         return Html::a('详情', [
-                            'coupon/view',
+                            'operation/coupon/coupon/view',
                             'id' => $model->id
                         ], [
                             'title' => Yii::t('app', '详情'),

@@ -7,24 +7,29 @@ use yii\widgets\Pjax;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
+ * @var common\models\operation\OperationServerCardSearch $searchModel
  */
 
 $this->title = Yii::t('app', '服务卡信息管理');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="server-card-index">
+<div class="operation-server-card-index">
+    <?php  echo $this->render('_search', ['model' => $searchModel,'deploy'=>$deploy,]); ?>
+
+
     <p>
         <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Server Card',
+    'modelClass' => 'Operation Server Card',
 ]), ['create'], ['class' => 'btn btn-success'])*/  ?>
     </p>
 
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
+        //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+           // 'id',
             'card_name',
             'card_type',
             'card_level',
@@ -51,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
                 'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['operation/operation-server-card/view','id' => $model->id,'edit'=>'t']), [
+                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['operation-server-card/view','id' => $model->id,'edit'=>'t']), [
                                                     'title' => Yii::t('yii', 'Edit'),
                                                   ]);}
 

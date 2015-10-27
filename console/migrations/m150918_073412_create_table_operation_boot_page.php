@@ -19,6 +19,7 @@ class m150918_073412_create_table_operation_boot_page extends Migration
             'operation_boot_page_residence_time' => Schema::TYPE_INTEGER . '(11) DEFAULT 5 COMMENT \'停留时间 单位为：秒 (默认5秒)\'',
             'operation_boot_page_online_time' => Schema::TYPE_INTEGER. '(11) DEFAULT NULL COMMENT \'上线时间 （时间戳）\'',
             'operation_boot_page_offline_time' => Schema::TYPE_INTEGER. '(11) DEFAULT NULL COMMENT \'下线时间 （时间戳）\'',
+            'is_softdel' => Schema::TYPE_SMALLINT . '(1) unsigned NOT NULL DEFAULT 1 COMMENT \'状态\'',
             'created_at' => Schema::TYPE_INTEGER. '(11) DEFAULT NULL COMMENT \'创建时间\'',
             'updated_at' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'编辑时间\'',
         ], $tableOptions);

@@ -38,6 +38,7 @@ class m151026_093223_create_table_operation_server_card_order extends Migration
 			'pay_channel_name' 		=> Schema::TYPE_STRING.'(64) NOT NULL DEFAULT \'\' COMMENT \'支付渠道名称\'',
 			'order_pay_flow_num' 	=> Schema::TYPE_STRING.'(255) NOT NULL DEFAULT \'\' COMMENT \'支付流水号\'',
 			'order_pay_money' 		=> Schema::TYPE_DECIMAL.'(8,2) NOT NULL DEFAULT 0 COMMENT \'支付金额\'',
+			'pay_account' 	=> Schema::TYPE_INTEGER.'(30) NOT NULL DEFAULT 0 COMMENT \'支付帐号\'',
 			'paid_at' 				=> Schema::TYPE_INTEGER.'(11) NOT NULL DEFAULT 0 COMMENT \'支付时间\'',
 		]);
 

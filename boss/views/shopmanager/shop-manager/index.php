@@ -33,13 +33,15 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
 //         'filterModel' => $searchModel,
         'toolbar' =>[
-                        'content'=>Html::a('<i class="glyphicon glyphicon-plus"></i>', [
-                            'create'
-                        ], [
-                            'class' => 'btn btn-default',
-                            'title' => Yii::t('app', '添加小家政')
-                        ]),
-                    ],
+            'content'=>Html::a('<i class="glyphicon glyphicon-plus"></i>', [
+
+                'shop-manager/create',
+                
+            ], [
+                'class' => 'btn btn-default',
+                'title' => Yii::t('app', '添加小家政')
+            ]),
+        ],
         'columns' => [
 //            ['class' => 'yii\grid\SerialColumn'],
             

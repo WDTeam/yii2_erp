@@ -69,10 +69,10 @@ class CouponCustomer extends \common\models\operation\coupon\CouponCustomer
                 ['ejj_coupon_customer.is_del' => 0],
                 ['ejj_coupon.coupon_city_limit' => 1],
                 ['ejj_coupon.coupon_city_id' => $city_id]
-            ])->andWhere([
+            ])->orWhere([
                 'or',
                 ['ejj_coupon.coupon_city_limit' => 0],
-            ])->orderBy('ejj_coupon_customer.expirate_at asc, ejj_coupon_customer.coupon_price desc')
+            ])->orderBy('expirate_at asc,coupon_price desc')
               ->all();
         return $couponCustomer;
    }
@@ -82,7 +82,6 @@ class CouponCustomer extends \common\models\operation\coupon\CouponCustomer
     public static function GetAllCustomerCouponList($customer_id,$city_id){
         $couponCustomer = self::find()->where(['customer_id'=>$customer_id])
             ->joinWith('coupon')
-            ->joinWith('couponCode')
             ->orderBy('expirate_at asc, coupon_price desc')
             ->all();       
         return $couponCustomer;

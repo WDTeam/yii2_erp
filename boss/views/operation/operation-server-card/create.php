@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 /**
  * @var yii\web\View $this
- * @var common\models\ServerCard $model
+ * @var common\models\operation\OperationServerCard $model
  */
 
 $this->title = Yii::t('app', '新增服务卡', [
@@ -13,9 +13,10 @@ $this->title = Yii::t('app', '新增服务卡', [
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '服务卡信息管理'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="server-card-create">
+<div class="operation-server-card-create">
     <?= $this->render('_form', [
         'model' => $model,
+		'deploy' => $deploy,
     ]) ?>
 
 </div>

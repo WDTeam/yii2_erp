@@ -16,5 +16,12 @@ class CustomerCommentTag extends \common\models\customer\CustomerCommentTag
     {
         return self::find()->select('id,customer_tag_name,customer_comment_level,is_online,is_del')->where(["customer_comment_level" => $type])->asArray()->all();
     }
+    
+    
+    
+     
+    
+    
+    
 
 }
