@@ -430,7 +430,7 @@ class Order extends OrderModel
                 } else {
                     $this->order_use_acc_balance = $this->order_pay_money; //使用余额为需支付金额
                 }
-                $this->order_pay_money -= $this->order_use_coupon_money;
+                $this->order_pay_money -= $this->order_use_acc_balance;
             }
         }
 
