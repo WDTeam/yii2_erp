@@ -14,10 +14,6 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Server Car
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-server-card-order-view">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
-
 
     <?= DetailView::widget([
             'model' => $model,
