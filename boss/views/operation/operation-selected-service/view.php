@@ -10,7 +10,7 @@ use kartik\datecontrol\DateControl;
  */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Goods'), 'url' => ['/operation-category']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Goods'), 'url' => ['operation/operation-category']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-goods-view">
@@ -25,14 +25,11 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'attributes' => [
             'id',
-            'operation_goods_name',
-            'operation_category_id',
-            'operation_category_name',
-            'operation_goods_introduction:ntext',
-            'operation_goods_english_name',
-            'operation_goods_service_interval_time',
-            'operation_goods_price_description:ntext',
-            'operation_tags:ntext',
+            'selected_service_scene',
+            'selected_service_area',
+            'selected_service_sub_area',
+            'selected_service_standard',
+            ['attribute' => 'selected_service_area_standard', 'value' => ($model->selected_service_area_standard == 1) ? '面积小于100平米' : '面积小于100平米'],
             'created_at:datetime',
             'updated_at:datetime',
         ],
