@@ -57,8 +57,8 @@ class OrderController extends BaseAuthController
             $FinanceRefundadd->finance_refund_city_id=empty($shopInfo->city_id)?0:$shopInfo->city_id ;
             $FinanceRefundadd->finance_refund_county_id=empty($shopInfo->county_id)?0:$shopInfo->county_id ;
         }
-         //if($orderInfo->orderExtPay->order_pay_type==2 && $orderInfo->orderExtStatus->order_status_dict_id==2)
-        if($orderInfo->orderExtPay->order_pay_type==2)
+         if($orderInfo->orderExtPay->order_pay_type==2 && $orderInfo->orderExtStatus->order_status_dict_id==2)
+        //if($orderInfo->orderExtPay->order_pay_type==2)
           {
 
             $FinanceRefundadd->customer_id=$orderInfo->orderExtCustomer->customer_id;
