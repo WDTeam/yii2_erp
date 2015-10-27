@@ -160,7 +160,7 @@ class CustomerAddress extends \common\models\customer\CustomerAddress
 				'area_name'=>$operation_province_name,
 				'level'=>1,
 				])->asArray()->one();
-			$operation_province_id = $operationProvicne['id'];
+			$operation_province_id = $operationProvince['id'];
 			$operation_province_name = $operationProvince['area_name'];
             $operation_province_short_name = $operationProvince['short_name'];
 
