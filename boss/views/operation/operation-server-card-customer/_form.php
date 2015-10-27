@@ -7,12 +7,12 @@ use kartik\datecontrol\DateControl;
 
 /**
  * @var yii\web\View $this
- * @var common\models\operation\ServerCardCustomer $model
+ * @var common\models\operation\OperationServerCardCustomer $model
  * @var yii\widgets\ActiveForm $form
  */
 ?>
 
-<div class="server-card-customer-form">
+<div class="operation-server-card-customer-form">
 
     <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); echo Form::widget([
 

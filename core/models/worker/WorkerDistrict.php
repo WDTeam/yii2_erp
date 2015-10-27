@@ -5,7 +5,7 @@ namespace core\models\worker;
 use common\models\Shop;
 use Yii;
 use core\models\worker\Worker;
-use core\models\operation\CoreOperationShopDistrict;
+use core\models\operation\OperationShopDistrict;
 /**
  * This is the model class for table "{{%worker_district}}".
  *
@@ -23,7 +23,7 @@ class WorkerDistrict extends \common\models\worker\WorkerDistrict
      * 关联District表
      */
     public function getDistrict(){
-        return $this->hasMany(CoreOperationShopDistrict::className(),['id'=>'operation_shop_district_id']);
+        return $this->hasMany(OperationShopDistrict::className(),['id'=>'operation_shop_district_id']);
     }
 
 }

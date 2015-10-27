@@ -66,10 +66,27 @@ class CustomerCommentTagController extends Controller
         $model = new CustomerCommentTag;
 
         if ($model->load(Yii::$app->request->post()) ) {
-        	$model->created_at= time();
-        	$model->updated_at= time();
-            $model->save();
-            return $this->redirect(['view', 'id' => $model->id]);
+        	$date=Yii::$app->request->post();
+        	
+        	if($date['CustomerCommentTag']['customer_tag_name']){	
+        	$dataname=explode('|',$date['CustomerCommentTag']['customer_tag_name']);
+        	}
+
+        	$model = new CustomerCommentTag;
+        	foreach ($dataname as $datatagname){
+        		$postdate['customer_comment_level']=$date['CustomerCommentTag']['customer_comment_level'];
+        		$postdate['is_online']=$date['CustomerCommentTag']['is_online'];
+        		$postdate['customer_tag_type']=$date['CustomerCommentTag']['customer_tag_type'];
+        		$postdate['customer_tag_name']=$datatagname;
+        		$postdate['created_at']=time();
+        		$postdate['updated_at']=time();
+        		$postdate['is_del']=0;
+        		$_model = clone $model;
+        		$_model->setAttributes($postdate);
+        		$_model->save();
+        		unset($postdate);
+        	}
+            return $this->redirect('index');
         } else {
             return $this->render('create', [
                 'model' => $model,

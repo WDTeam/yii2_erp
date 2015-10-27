@@ -24,7 +24,7 @@ use common\models\order\OrderSrc;
 use common\models\finance\FinanceOrderChannel;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
-use core\models\operation\CoreOperationShopDistrict;
+use core\models\operation\OperationShopDistrict;
 
 /**
  * This is the model class for table "{{%order}}".
@@ -115,7 +115,7 @@ class Order extends OrderModel
      *  int $admin_id 操作人id 0客户 1系统 必填
      *  int $order_pay_type 支付方式 1现金 2线上 3第三方 必填
      *  int $coupon_id 优惠券id
-     *  int $order_is_use_balance 是否使用余额 0否 1是
+     *  int $order_is_use_balance 是否使用余额 0否 1是 必填
      *  string $order_booked_worker_id 指定阿姨id
      *  string $order_pop_order_code 第三方订单号
      *  string $order_pop_group_buy_code 第三方团购号
@@ -226,8 +226,10 @@ class Order extends OrderModel
         $order->order_flag_lock = 0;
         $order->admin_id = $admin_id;
         if ($order->orderExtFlag->order_flag_send == 3) { //小家政和客服都无法指派出去
+            OrderPool::remOrderForWorkerPushList($order->id,true); //永久从接单大厅中删除此订单
             return OrderStatus::_manualAssignUndone($order, ['OrderExtFlag']);
         } else {//客服或小家政还没指派过则进入待人工指派的状态
+            OrderPool::reAddOrderToWorkerPushList($order_id); //重新添加到接单大厅
             return OrderStatus::_sysAssignUndone($order, ['OrderExtFlag']);
         }
     }
@@ -291,9 +293,12 @@ class Order extends OrderModel
             $order->admin_id = $admin_id;
             if ($admin_id > 1) { //大于1属于人工操作
                 $result = OrderStatus::_manualAssignDone($order, ['OrderExtFlag', 'OrderExtWorker']);
-            } else {
+            } elseif($order->orderExtStatus->order_status_dict_id==OrderStatusDict::ORDER_SYS_ASSIGN_START){ //当前状态如果是开始智能派单 就到智能派单成功 否则 到阿姨自助接单
                 $result = OrderStatus::_sysAssignDone($order, ['OrderExtFlag', 'OrderExtWorker']);
+            }else {
+                $result = OrderStatus::_workerBindOrder($order, ['OrderExtFlag', 'OrderExtWorker']);
             }
+            OrderPool::remOrderForWorkerPushList($order->id,true); //永久从接单大厅中删除此订单
         }
         return ['status'=>$result,'errors'=>$order->errors];
     }
@@ -311,18 +316,34 @@ class Order extends OrderModel
         $order = OrderSearch::getOne($order_id);
         $order->admin_id = $admin_id;
         $order->order_flag_cancel_cause = $cause;
-        if($admin_id==0) {
-            $order->order_customer_memo = $memo;
-            return OrderStatus::_cancel($order, ['OrderExtCustomer']);
-        }elseif($admin_id==1){
-            $order->order_sys_memo = $memo;
-            return OrderStatus::_cancel($order);
-        }elseif($admin_id==2){
-            $order->order_worker_memo = $memo;
-            return OrderStatus::_cancel($order, ['OrderExtWorker']);
-        }elseif($admin_id>2){
-            $order->order_cs_memo = $memo;
-            return OrderStatus::_cancel($order);
+        $current_status = $order->orderExtStatus->order_status_dict_id;
+        if(in_array($current_status,[  //只有在以下状态下才可以取消订单
+            OrderStatusDict::ORDER_INIT,
+            OrderStatusDict::ORDER_WAIT_ASSIGN,
+            OrderStatusDict::ORDER_SYS_ASSIGN_DONE,
+            OrderStatusDict::ORDER_SYS_ASSIGN_UNDONE,
+            OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE,
+            OrderStatusDict::ORDER_MANUAL_ASSIGN_UNDONE,
+        ])) {
+            OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
+            if ($admin_id == 0) {
+                $order->order_customer_memo = $memo;
+                $result = OrderStatus::_cancel($order, ['OrderExtCustomer']);
+            } elseif ($admin_id == 1) {
+                $order->order_sys_memo = $memo;
+                $result = OrderStatus::_cancel($order);
+            } elseif ($admin_id == 2) {
+                $order->order_worker_memo = $memo;
+                $result = OrderStatus::_cancel($order, ['OrderExtWorker']);
+            } elseif ($admin_id > 2) {
+                $order->order_cs_memo = $memo;
+                $result = OrderStatus::_cancel($order);
+            }
+            if($result && $order->orderExtPay->order_pay_type==2 && $current_status!=OrderStatusDict::ORDER_INIT){
+                //TODO 调高峰的退款接口
+            }
+        }else{
+            return false;
         }
     }
 
@@ -393,7 +414,8 @@ class Order extends OrderModel
         } elseif ($this->order_pay_type == 2) {//线上支付
             $this->order_pay_money = $this->order_money; //支付金额
             if (!empty($this->coupon_id)) {//是否使用了优惠券
-                $this->order_use_coupon_money = self::getCouponById($this->coupon_id);
+                $coupon = self::getCouponById($this->coupon_id);
+                $this->order_use_coupon_money = $coupon['coupon_money'];
                 $this->order_pay_money -= $this->order_use_coupon_money;
             }
             if ($this->order_is_use_balance == 1) {
@@ -408,7 +430,7 @@ class Order extends OrderModel
                 } else {
                     $this->order_use_acc_balance = $this->order_pay_money; //使用余额为需支付金额
                 }
-                $this->order_pay_money -= $this->order_use_coupon_money;
+                $this->order_pay_money -= $this->order_use_acc_balance;
             }
         }
 
@@ -604,7 +626,7 @@ class Order extends OrderModel
     
     public static function getDistrictList()
     {
-    	$districtList = CoreOperationShopDistrict::getCityShopDistrictList();
+    	$districtList = OperationShopDistrict::getCityShopDistrictList();
     	return $districtList?ArrayHelper::map($districtList,'id','operation_shop_district_name'):[];
     }
     

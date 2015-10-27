@@ -7,14 +7,14 @@ use kartik\datecontrol\DateControl;
 
 /**
  * @var yii\web\View $this
- * @var common\models\ServerCard $model
+ * @var common\models\operation\OperationServerCard $model
  * @var yii\widgets\ActiveForm $form
  */
 ?>
 <style>
     .panel-footer{padding: 0; background: #000;}
 </style>
-<div class="server-card-form">
+<div class="operation-server-card-form">
 
     <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); echo Form::widget([
 
@@ -22,10 +22,11 @@ use kartik\datecontrol\DateControl;
     'form' => $form,
     'columns' => 1,
     'attributes' => [
+'card_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 卡名...', 'maxlength'=>64]], 
 
-'card_type'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 卡类型...']], 
+'card_type'=>['type'=> Form::INPUT_DROPDOWN_LIST,'items'=>$deploy['card_type']], 
 
-'card_level'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 卡级别...']], 
+'card_level'=>['type'=> Form::INPUT_DROPDOWN_LIST,'items'=>$deploy['card_level']],
 
 'use_scope'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 使用范围...']], 
 
@@ -67,12 +68,13 @@ use kartik\datecontrol\DateControl;
 
 'reb_value'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 优惠金额...', 'maxlength'=>8]], 
 
-'card_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 卡名...', 'maxlength'=>64]], 
+
 
     ]
 
 
     ]);?>
+
     <div class="form-group">
         <div class="col-sm-offset-0 col-sm-12">
             <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success btn-lg btn-block' : 'btn btn-primary btn-lg btn-block']);?>

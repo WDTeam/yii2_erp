@@ -3,7 +3,6 @@
 namespace boss\models\operation;
 
 use Yii;
-use core\models\operation\CoreOperationSpecGoods;
 
 /**
  * This is the model class for table "{{%operation_spec_goods}}".
@@ -25,7 +24,7 @@ use core\models\operation\CoreOperationSpecGoods;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationSpecGoods extends CoreOperationSpecGoods
+class OperationSpecGoods extends \core\models\operation\OperationSpecGoods
 {
     /**
      * @inheritdoc

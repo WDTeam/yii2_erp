@@ -138,14 +138,8 @@ class ShopManager extends \common\models\shop\ShopManager
     public function joinBlacklist($cause='')
     {
         $this->is_blacklist = 1;
+        $this->cause = $cause;
         if($this->save()){
-            $status = new ShopStatus();
-            $status->status_number = 1;
-            $status->model_name = ShopStatus::MODEL_SHOPMANAGER;
-            $status->status_type = 2;
-            $status->created_at = time();
-            $status->cause = $cause;
-            $status->save();
             $this->affShopJoinBlacklist($cause);
             return true;
         }
@@ -169,15 +163,9 @@ class ShopManager extends \common\models\shop\ShopManager
     public function removeBlacklist($cause='')
     {
         $this->is_blacklist = 0;
+        $this->cause = $cause;
         if($this->save()){
-            $status = new ShopStatus();
-            $status->model_id = $this->id;
-            $status->status_number = 0;
-            $status->model_name = ShopStatus::MODEL_SHOPMANAGER;
-            $status->status_type = 2;
-            $status->created_at = time();
-            $status->cause = $cause;
-            return $status->save();
+            return true;
         }
         return false;
     }
@@ -189,15 +177,9 @@ class ShopManager extends \common\models\shop\ShopManager
     public function changeAuditStatus($number, $cause='')
     {
         $this->audit_status = $number;
+        $this->cause = $cause;
         if($this->save()){
-            $status = new ShopStatus();
-            $status->model_id = $this->id;
-            $status->status_number = $this->audit_status;
-            $status->model_name = ShopStatus::MODEL_SHOPMANAGER;
-            $status->status_type = 1;
-            $status->created_at = time();
-            $status->cause = $cause;
-            return $status->save();
+            return true;
         }
         return false;
     }

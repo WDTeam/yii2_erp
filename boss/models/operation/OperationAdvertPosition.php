@@ -3,7 +3,6 @@
 namespace boss\models\operation;
 
 use Yii;
-use core\models\operation\CoreOperationAdvertPosition;
 /**
  * This is the model class for table "{{%operation_advert_position}}".
  *
@@ -20,7 +19,7 @@ use core\models\operation\CoreOperationAdvertPosition;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationAdvertPosition extends CoreOperationAdvertPosition
+class OperationAdvertPosition extends \core\models\operation\OperationAdvertPosition
 {
     /**
      * @inheritdoc

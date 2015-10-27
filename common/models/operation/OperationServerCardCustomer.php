@@ -39,8 +39,5 @@ class OperationServerCardCustomer extends \yii\db\ActiveRecord
     {
         return '{{%operation_server_card_customer}}';
     }
-	
-	
-
    
 }

@@ -1,23 +1,21 @@
 <?php
 
+/**
+* 评价api接口
+* ==========================
+* 北京一家洁 版权所有 2015-2018 
+* ----------------------------
+* 这不是一个自由软件，未经授权不许任何使用和传播。
+* ==========================
+* @date: 2015-10-27
+* @author: peak pan 
+* @version:1.0
+*/
+
 namespace core\models\customer;
 
 use Yii;
 
-/**
- * This is the model class for table "{{%customer_comment}}".
- *
- * @property integer $id
- * @property string $order_id
- * @property string $customer_id
- * @property string $customer_comment_phone
- * @property string $customer_comment_content
- * @property integer $customer_comment_star_rate
- * @property integer $customer_comment_anonymous
- * @property string $created_at
- * @property string $updated_at
- * @property integer $is_del
- */
 class CustomerComment extends \common\models\customer\CustomerComment
 {
 
@@ -31,40 +29,94 @@ class CustomerComment extends \common\models\customer\CustomerComment
     }
 
     /**
-     * 获取客户评价数量
-     */
-    public static function addUserSuggest($customer_id, $order_id, $customer_comment_phone, $customer_comment_content, $customer_comment_tag_ids, $customer_comment_level)
+    * 根据阿姨的id获取评价列表
+    * @date: 2015-10-27
+    * @author: peak pan
+    * @return:
+    **/
+    
+    
+    public static function getCustomerCommentworkerlist($worker_id)
     {
+    	$comment_list = self::find()->where(['worker_id' => $worker_id])->all();
+    	return $comment_list;
+    }
+    
+    
+    
+    /**
+	  * 增加评价
+	  * @date: 2015-10-27
+	  * @author: peak pan
+	  * @return:
+	  **/
+    
+    
+    public static function addUserSuggest($array)
+    {
+    	if(count($array)>0){
         $transaction = \Yii::$app->db->beginTransaction();
         try {
             $customerComment = new CustomerComment;
-            $customerComment->customer_id = $customer_id;
-            $customerComment->order_id = $order_id;
-            $customerComment->customer_comment_phone = $customer_comment_phone;
-            $customerComment->customer_comment_content = $customer_comment_content;
-            $customerComment->customer_comment_tag_ids = $customer_comment_tag_ids;
-            $customerComment->customer_comment_level = $customer_comment_level;
-            $customerComment->validate();
+            $customerComment->order_id = $array['order_id'];
+            $customerComment->customer_id = $array['customer_id'];
+
+            $customerComment->worker_id = $array['worker_id'];
+            $customerComment->worker_tel = $array['worker_tel'];
+            $customerComment->operation_shop_district_id = 			$array['operation_shop_district_id'];//商圈id
+            $customerComment->province_id = $array['province_id'];
+            $customerComment->city_id = $array['city_id'];
+            $customerComment->county_id = $array['county_id'];
+            $customerComment->customer_comment_phone = $array['customer_comment_phone'];;
+            $customerComment->customer_comment_content = $array['customer_comment_content'];
+            $customerComment->customer_comment_level = $array['customer_comment_level'];
+            $customerComment->customer_comment_level_name = $array['customer_comment_level_name'];
+            $customerComment->customer_comment_tag_ids = $array['customer_comment_tag_ids'];
+            $customerComment->customer_comment_tag_names = $array['customer_comment_tag_names'];
+            $customerComment->customer_comment_anonymous = $array['customer_comment_anonymous'];
+            $customerComment->created_at =time();
+            $customerComment->updated_at =time();
+            $customerComment->is_del = 1;
             $customerComment->save();
+           // var_dump($customerComment->errors);
             $transaction->commit();
             return $customerComment;
-        } catch (\Exception $e) {
+        		} catch (\Exception $e) {
             $transaction->rollback();
             return false;
-        }
+	        }
+			} else{
+	        	return false;
+	        } 
+	    }
+
+
+  
+    public static function issetes($array)
+    {
+    	 
+    		$transaction = \Yii::$app->db->beginTransaction();
+    		try {
+    			$customerComment = new CustomerComment;
+    			$customerComment->order_id = $array['order_id'];
+    			$customerComment->validate();//安全验证
+    			$customer_info = $customerComment::findOne($customerComment);
+    			if($customer_info){
+    				return $customer_info;
+    			}else{
+    				return false;
+    			}	
+    			
+    		} catch (\Exception $e) {
+    			$transaction->rollback();
+    			return false;
+    		}
     }
-
-
-
-
-
-
-
-
-
-
-
-
+    
+    
+    
+    
+    
 
 
 

@@ -11,6 +11,7 @@ use \core\models\operation\coupon\Coupon;
 
 class UserController extends \api\components\Controller
 {
+
     /**
      * @api {POST} v1/user/add-address 添加常用地址 (已完成100%) 
      *
@@ -267,13 +268,10 @@ class UserController extends \api\components\Controller
      */
     public function actionSetDefaultAddress()
     {
-        $params = Yii::$app->request->post();
-        if (empty($params)) {
-            $params = json_decode(Yii::$app->request->getRawBody(), true);
-        }
-
+        $params = json_decode(Yii::$app->request->getRawBody(), true);
         @$accessToken = $params['access_token'];
         @$addressId = $params['address_id'];
+
         if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
             return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
         }
@@ -287,12 +285,16 @@ class UserController extends \api\components\Controller
             return $this->send(null, "地址信息获取失败", 0, 403);
         }
 
-        if (CustomerAddress::updateAddress($model->id, $model->operation_area_name, $model->customer_address_detail, $model->customer_address_nickname, $model->customer_address_phone)
-        ) {
-            return $this->send(null, "设置默认地址成功");
-        } else {
+        try {
+            if (CustomerAddress::updateAddress($model->id, $model->operation_area_name, $model->customer_address_detail, $model->customer_address_nickname, $model->customer_address_phone)
+            ) {
+                return $this->send(null, "设置默认地址成功");
+            } else {
 
-            return $this->send(null, "设置默认地址失败", 0, 403);
+                return $this->send(null, "设置默认地址失败", 0, 403);
+            }
+        } catch (Exception $e) {
+            return $this->send(null, "boss系统错误", 0, 1024);
         }
     }
 
@@ -340,12 +342,11 @@ class UserController extends \api\components\Controller
      */
     public function actionUpdateAddress()
     {
-        $params = Yii::$app->request->post();
-        if (empty($params)) {
-            $params = json_decode(Yii::$app->request->getRawBody(), true);
-        }
+
+        $params = json_decode(Yii::$app->request->getRawBody(), true);
         @$accessToken = $params['access_token'];
         @$addressId = $params['address_id'];
+
         if (empty($accessToken) || !CustomerAccessToken::checkAccessToken($accessToken)) {
             return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
         }
@@ -359,50 +360,106 @@ class UserController extends \api\components\Controller
             return $this->send(null, "地址信息获取失败", 0, 403);
         }
 
-        if (CustomerAddress::updateAddress($model->id, @$params['operation_area_name'], @$params['address_detail'], @$params['address_nickname'], @$params['address_phone'])
-        ) {
-            return $this->send(null, "修改常用地址成功");
-        } else {
+        try {
+            if (CustomerAddress::updateAddress($model->id, @$params['operation_area_name'], @$params['address_detail'], @$params['address_nickname'], @$params['address_phone'])
+            ) {
+                return $this->send(null, "修改常用地址成功");
+            } else {
 
-            return $this->send(null, "修改常用地址失败", 0, 403);
+                return $this->send(null, "修改常用地址失败", 0, 403);
+            }
+        } catch (Exception $e) {
+            return $this->send(null, "boss系统错误", 0, 1024);
         }
     }
 
     /**
-     * @api {PUT} v1/user/set-default-city 设置默认城市 （需求不明确；0%）
-     *
-     * @apiName SetDefaultCity
+     * @api {GET} v1/user/default-address 获取默认地址 (赵顺利100%)
+     * @apiName actionDefaultAddress
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} city_name 城市名称
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     *
-     * @apiSuccess {Object[]} services 该城市提供的服务.
-     * @apiSuccess {Object[]} appInfoWithCity 该城市相关初始化配置.
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "1",
-     *       "msg": "设置成功"
+     *       "code": "ok",
+     *       "msg": "修改常用地址成功"
      *       "ret":{
-     *          "services":{}
-     *          "appInfoWithCity":{}
+     *       "address":
+     *          {
+     *          "id": 2,
+     *          "customer_id": 1,
+     *          "operation_province_id": 110000,
+     *          "operation_city_id": 110100,
+     *          "operation_area_id": 110105,
+     *          "operation_province_name": "北京",
+     *          "operation_city_name": "北京市",
+     *          "operation_area_name": "朝阳区",
+     *          "operation_province_short_name": "北京",
+     *          "operation_city_short_name": "北京",
+     *          "operation_area_short_name": "朝阳",
+     *          "customer_address_detail": "某某小区8栋3单元512",
+     *          "customer_address_status": 1,客户地址类型,1为默认地址，0为非默认地址
+     *          "customer_address_longitude": 116.48641,
+     *          "customer_address_latitude": 39.92149,
+     *          "customer_address_nickname": "王小明",
+     *          "customer_address_phone": "18210922324",
+     *          "created_at": 1445063798,
+     *          "updated_at": 0,
+     *          "is_del": 0
+     *          }
      *        }
      *
      *     }
      *
-     * @apiError UserNotFound The id of the User was not found.
+     * @apiError UserNotFound 用户认证失败.
      *
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
      *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
+     *       "msg": "用户认证已经过期,请重新登录。"
+     *
+     *     }
+     * @apiError AddressNotFound 地址信息获取失败.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 200 address Not Found
+     *     {
+     *       "code": "error",
+     *       "msg": "地址信息获取失败"
      *
      *     }
      */
+    public function actionDefaultAddress()
+    {
+        $params = Yii::$app->request->get() or
+                $params = json_decode(Yii::$app->request->getRawBody(), true);
+
+        if (empty($params['access_token']) || !CustomerAccessToken::checkAccessToken($params['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        }
+
+        $customer = CustomerAccessToken::getCustomer($params['access_token']);
+
+        if (!empty($customer) && !empty($customer->id)) {
+
+            try {
+                $Address = CustomerAddress::getCurrentAddress($customer->id);
+                if (empty($Address)) {
+                    return $this->send(null, "该用户没有默认地址", "error", 403);
+                }
+                $ret = ['address' => $Address];
+                return $this->send($ret, "获取默认地址成功", "ok");
+            } catch (Exception $e) {
+                return $this->send(null, "boss系统错误", 0, 1024);
+            }
+        } else {
+            return $this->send(null, "获取用户信息失败", "error", 403);
+        }
+    }
 
     /**
      * @api {DELETE} v1/user/delete-used-worker 删除常用阿姨 （功能已经实现,需再次核实 100%）
@@ -695,28 +752,32 @@ class UserController extends \api\components\Controller
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
 
         if (!empty($customer) && !empty($customer->id)) {
-            /**
-             * 获取客户余额
-             *
-             * @param int $customer 用户id
-             */
-            $userBalance = \core\models\customer\CustomerExtBalance::getCustomerBalance($customer->id);
-            /**
-             * 获取用户消费记录
-             *
-             * @param int $customer 用户id
-             */
-            $userRecord = \core\models\CustomerTransRecord\CustomerTransRecord::queryRecord($customer->id);
-            $ret["userBalance"] = $userBalance;
-            $ret["userRecord"] = $userRecord;
-            return $this->send($ret, "查询成功");
+
+            try {
+                /**
+                 * 获取客户余额
+                 *
+                 * @param int $customer 用户id
+                 */
+                $userBalance = \core\models\customer\CustomerExtBalance::getCustomerBalance($customer->id);
+                /**
+                 * 获取用户消费记录
+                 *
+                 * @param int $customer 用户id
+                 */
+                $userRecord = \core\models\Customer\CustomerTransRecord::queryRecord($customer->id);
+                $ret["userBalance"] = $userBalance;
+                $ret["userRecord"] = $userRecord;
+                return $this->send($ret, "查询成功");
+            } catch (Exception $e) {
+                return $this->send(null, "boss系统错误", 0, 1024);
+            }
 
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
     }
 
     /**
-<<<<<<< HEAD
      * 发送验证码
      */
     public function actionSetUser()
@@ -808,16 +869,19 @@ class UserController extends \api\components\Controller
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
-            /**
-             * @param int $customer_id 用户id
-             */
-            $userscore = \core\models\customer\CustomerExtScore::getCustomerScoreList($customer->id);
-
-            if ($userscore) {
-                $ret["scoreCategory"] = $userscore;
-                return $this->send($ret, "用户积分明细列表", 1);
-            } else {
-                return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+            try {
+                /**
+                 * @param int $customer_id 用户id
+                 */
+                $userscore = \core\models\customer\CustomerExtScore::getCustomerScoreList($customer->id);
+                if ($userscore) {
+                    $ret["scoreCategory"] = $userscore;
+                    return $this->send($ret, "用户积分明细列表", 1);
+                } else {
+                    return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+                }
+            } catch (Exception $e) {
+                return $this->send(null, "boss系统错误", 0, 1024);
             }
         }
     }
@@ -867,11 +931,15 @@ class UserController extends \api\components\Controller
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
 
         if (!empty($customer) && !empty($customer->id)) {
-            $model = \core\models\customer\CustomerComment::addUserSuggest($customer->id, $param['order_id'], $param['customer_comment_phone'], $param['customer_comment_content'], $param['customer_comment_tag_ids'], $param['customer_comment_level']);
-            if (!empty($model)) {
-                return $this->send([1], "添加评论成功");
-            } else {
-                return $this->send(null, "添加评论失败", 0, 403);
+            try {
+                $model = \core\models\customer\CustomerComment::addUserSuggest($customer->id, $param['order_id'], $param['customer_comment_phone'], $param['customer_comment_content'], $param['customer_comment_tag_ids'], $param['customer_comment_level']);
+                if (!empty($model)) {
+                    return $this->send([1], "添加评论成功");
+                } else {
+                    return $this->send(null, "添加评论失败", 0, 403);
+                }
+            } catch (Exception $e) {
+                return $this->send(null, "boss系统错误", 0, 1024);
             }
         } else {
             return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
@@ -920,13 +988,16 @@ class UserController extends \api\components\Controller
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
 
         if (!empty($customer) && !empty($customer->id)) {
-
-            $level = \core\models\comment\CustomerCommentLevel::getCommentLevel();
-            if (!empty($level)) {
-                $ret = ['comment' => $level];
-                return $this->send($ret, "获取评论级别成功");
-            } else {
-                return $this->send(null, "获取评论级别失败", 0, 403);
+            try {
+                $level = \core\models\comment\CustomerCommentLevel::getCommentLevel();
+                if (!empty($level)) {
+                    $ret = ['comment' => $level];
+                    return $this->send($ret, "获取评论级别成功");
+                } else {
+                    return $this->send(null, "获取评论级别失败", 0, 403);
+                }
+            } catch (Exception $e) {
+                return $this->send(null, "boss系统错误", 0, 1024);
             }
         } else {
             return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
@@ -976,14 +1047,17 @@ class UserController extends \api\components\Controller
         }
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
+            try {
+                $level = \core\models\comment\CustomerCommentTag::getCommentTag($param['customer_comment_level']);
 
-            $level = \core\models\comment\CustomerCommentTag::getCommentTag($param['customer_comment_level']);
-
-            if (!empty($level)) {
-                $ret = ['commentTag' => $level];
-                return $this->send($ret, "获取评论标签成功");
-            } else {
-                return $this->send(null, "获取评论标签失败", 0, 403);
+                if (!empty($level)) {
+                    $ret = ['commentTag' => $level];
+                    return $this->send($ret, "获取评论标签成功");
+                } else {
+                    return $this->send(null, "获取评论标签失败", 0, 403);
+                }
+            } catch (Exception $e) {
+                return $this->send(null, "boss系统错误", 0, 1024);
             }
         } else {
             return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
@@ -1031,13 +1105,15 @@ class UserController extends \api\components\Controller
         }
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
-
-
-            $service = \core\models\order\Order::getGoods($param['longitude'], $param['latitude'], $param['order_service_type_id']);
-            if ($service) {
-                return $this->send(1, "该服务获取成功");
-            } else {
-                return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+            try {
+                $service = \core\models\order\Order::getGoods($param['longitude'], $param['latitude'], $param['order_service_type_id']);
+                if ($service) {
+                    return $this->send(1, "该服务获取成功");
+                } else {
+                    return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+                }
+            } catch (Exception $e) {
+                return $this->send(null, "boss系统错误", 0, 1024);
             }
         } else {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);

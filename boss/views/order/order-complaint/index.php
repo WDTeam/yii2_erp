@@ -33,9 +33,14 @@ AppAsset::addScript($this, 'js/order_search/riqi/jquery-ui-timepicker-zh-CN.js')
 // $this->registerJsFile('js/order_search/riqi/jquery-ui-timepicker-addon.js');
 // $this->registerJsFile('js/order_search/riqi/jquery-ui-timepicker-zh-CN.js');
 
-$this->title = '订单管理';
+$this->title = '订单投诉管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<!-- 新增样式表 -->
+<style>
+	.mar-t {margin-top: 15px;}
+	#m_warp .m_riqi .btn {margin: 0px 80px;width: 160px;height: 33px; background-color: #f6a202 !important;color: #fff !important;}
+</style>
      <div id="m_warp">
 		  <div class="box">
 		  	 <div class="conter"> 
@@ -48,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					<div class="m_from">
                     <?php $form = ActiveForm::begin([
                         //'type' => ActiveForm::TYPE_VERTICAL,
-                        'action' => ['order/index'],
+                        'action' => ['order/order-complaint/index'],
                         'method' => 'get',
                     ]); ?>						
 						<?php //echo $form->field($searchModel, 'order_customer_phone')->TextInput(['class' => 'm_ipu'])->label('用户电话 :', ['class' => 'm_ipone']); ?>
@@ -56,29 +61,26 @@ $this->params['breadcrumbs'][] = $this->title;
 						<?php //echo $form->field($searchModel, 'order_code')->TextInput(['class' => 'm_ipu'])->label('订单编号 :', ['class' => 'm_ipone']); ?>
 						
 						<div class="m_riqi">
-						 <div class="m_fr">
-						 	<label class="m_iphone">
-						 	用户电话<input type="text" name="" value=""/>
-						 	</label>
-						 	<label class="m_iphone">
-						 	阿姨电话<input type="text" name="" value=""/>
-						 	</label><label class="m_iphone">
-						 	订单编号<input type="text" name="" value=""/>
-						 	</label><label class="m_iphone">
-						 	投诉编号<input type="text" name="" value=""/>
-						 	</label>
-						 </div>
-						<div class="m_fr">
-							<label class="m_iphone">
-						  		阿姨姓名
-						  	</label><input type="text" name="" value=""/>
-						</div>
-						 <div class="m_fr">
-                            <label class="m_ipone">下单时间:</label>
-							<input type="text" name="datetime" class="ui_timepicker" value="" placeholder=""> 到
-							<input type="text" name="datetime" class="ui_timepicker" value="" placeholder="">
-						   </div>
-						    <?= Html::submitButton('查询', ['class' => 'btn btn-primary']) ?>
+							<div class="m_fr">
+							 	<label class="m_iphone">用户电话：</label>
+							 	<input type="text" name="complaint_phone" value=""/>
+							 	<label class="m_iphone">阿姨电话：</label>
+							 	<input type="text" name="worker_phone" value=""/>
+							 	<label class="m_iphone">阿姨姓名：</label>
+								<input type="text" name="worker_name" value=""/>
+							</div>
+							<div class="m_fr mar-t">
+								<label class="m_iphone">投诉编号：</label>
+							 	<input type="text" name="id" value=""/>
+							 	<label class="m_iphone">订单编号：</label>
+							 	<input type="text" name="order_id" value=""/>
+							 	<?= Html::submitButton('查询', ['class' => 'btn btn-primary']) ?>
+							</div>
+							<div class="m_fr mar-t">
+	                            <label class="m_ipone">下单时间：</label>
+								<input type="text" name="starttime" class="ui_timepicker" value="" placeholder=""> 到
+								<input type="text" name="endtime" class="ui_timepicker" value="" placeholder="">
+						    </div>
 						</div>
 					<?php ActiveForm::end(); ?>
 					  <div class="clear"></div>
@@ -93,40 +95,40 @@ $this->params['breadcrumbs'][] = $this->title;
 						    	<ul class="lis" id="list">
 						    		<p>投诉类型：</p>
 						    		<li class="cur">全部</li>
-						    		<li>订单投诉</li>
-						    		<li>非订单投诉</li>
+						    		<?php if(!empty($comType)){
+						    		foreach ($comType as $keyt=>$valt){?>					    		
+						    		<li <?php if(!empty($params['complaint_type']) && $keyt == $params['complaint_type']){?>class="cur"<?php }?>><a href="<?php echo $url."&complaint_type={$keyt}";?>"><?php echo $valt;?></a></li>
+						    		<?php }} ?>
 						    	</ul>
 						    	
 						    	<ul class="lis" id="list">
 						    		<p>订单状态：</p>
-						    		<li class="cur">全部</li>
-						    		<li>待付款</li>
-						    		<li>待指派</li>
-						    		<li>待服务</li>
-						    		<li>已完成</li>
-						    		<li>已取消</li>
-						    		<li>投诉订单</li>
+						    		<li <?php if(!isset($params['complaint_status'])){?> class="cur" ><?php }?>全部</li>
+						    		<?php if(!empty($comStatus)){
+						    			foreach ($comStatus as $key=>$val){?>
+						    		<li <?php if(!empty($params['complaint_status']) && $key == $params['complaint_status']){?>class="cur"<?php }?>><a href="<?php echo "index.php?complaint_status={$key}";?>"><?php echo $val;?></a></li>
+						    		<?php }}?>
 						    	</ul>
 						    	
 						    	<ul class="lis" id="list">
 						    		<p>投诉渠道：</p>
 						    		<li class="cur">全部</li>
-						    		<li>App</li>
-						    		<li>第三方</li>
-						    		<li>后台</li>
+						    		<li><a href="">App</a></li>
+						    		<li><a href="">第三方</a></li>
+						    		<li><a href="">后台</a></li>
 						    	</ul>
 						    	<ul class="lis" id="list">
 						    		<p>投诉级别：</p>
-						    		<li class="cur">全部</li>
-						    		<li>S</li>
-						    		<li>A</li>
-						    		<li>B</li>
-						    		<li>C</li>
+						    		<li <?php if(!isset($params['complaint_level'])){?> class="cur" ><?php }?>全部</li>
+						    		<?php if(!empty($comLevel)){
+						    			foreach ($comLevel as $keyl=>$vall){?>
+						    		<li <?php if(!empty($params['complaint_level']) && $vall == $params['complaint_level']){?>class="cur"<?php }?>><a href="<?php echo "index.php?complaint_level={$vall}";?>"><?php echo $vall;?></a></li>
+						    		<?php }}?>
 						    	</ul>
 						    	<ul class="lis" id="list">
 						    		<p>投诉部门：</p>
 						    		<li class="cur">全部</li>
-						    		<li>线下运营</li>
+						    		<li><a href="">线下运营</a></li>
 						    		<li>客服</li>
 						    		<li>线下推广</li>
 						    		<li>财务</li>
@@ -137,6 +139,15 @@ $this->params['breadcrumbs'][] = $this->title;
 						    </div>
 						
 						<!---------------------订单状态开始-------------------->
+											 <div class="m_from">	     
+    <?php 
+    echo ListView::widget([
+        'dataProvider' => $dataProvider,
+        'itemView' => '_item',
+    ]);    
+    ?>   
+						    	<div class="clear"></div>
+						    </div>
 		  	 	 	       <div class="heading heading_top">
 								<h3 class="panel-title">当前刷选条件</h3>
 						   </div>

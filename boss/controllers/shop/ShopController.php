@@ -167,4 +167,16 @@ class ShopController extends BaseAuthController
     
         return $this->redirect(['index']);
     }
+    /**
+     * 设置审核状态
+     */
+    public function actionSetAuditStatus($id) 
+    {
+        $model = Shop::findOne(['id'=>$id]);
+        $model->load(\Yii::$app->request->post());
+        if($model->save()){
+            \Yii::$app->session->setFlash('defautl', '修改成功');
+            return $this->redirect(['view', 'id'=>$model->id]);
+        }
+    }
 }

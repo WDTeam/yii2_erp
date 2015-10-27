@@ -6,6 +6,7 @@ use common\models\order\OrderExtCustomer;
 use common\models\order\OrderExtFlag;
 use common\models\order\OrderExtStatus;
 use common\models\order\OrderStatusDict;
+use core\models\customer\Customer;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -25,6 +26,50 @@ class OrderSearch extends Order
             [['order_service_type_name', 'order_src_name'], 'string', 'max' => 128],
             [['order_address', 'order_cs_memo'], 'string', 'max' => 255],
         ];
+    }
+
+    /**
+     * 通过阿姨ID获取指定月份的所有订单(包括结算状态)
+     * @param $worker_id 阿姨ID
+     * @param $month 指定月份
+     */
+    public static function getWorkerAndOrderAndMonth($worker_id,$year,$month=1,$day=1)
+    {
+        $year = !empty($year) ? $year : date("Y",time());
+        //制造时间戳
+        $month_begin = mktime(0,0,0,$month,$day,$year);
+        $month_end = mktime(0,0,0,$month+1,$day,$year);
+        $query = new \yii\db\Query();
+        $data = $query->from('{{%order}} as order')
+            ->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')
+            ->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')
+            ->innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id')
+            ->innerJoin('{{%order_ext_worker}} as ow','order.id = ow.order_id')
+            ->select('*')
+            ->where(['ow.worker_id'=>$worker_id])
+            ->andWhere(['between', 'order.created_at', $month_begin, $month_end])
+            //->createCommand()->getRawSql();
+            ->all();
+        return $data;
+    }
+
+    /**
+     * 通过订单ID获取带用户信息的订单
+     * @param $order_id 订单ID
+     */
+    public static function getOrderAndCustomer($order_id)
+    {
+        $query = new \yii\db\Query();
+        $data = $query->from('{{%order}} as order')
+            ->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')
+            ->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')
+            ->innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id')
+            ->innerJoin('{{%order_ext_worker}} as ow','order.id = ow.order_id')
+            ->select('*')
+            ->where(['id'=>$order_id])
+            ->one();
+        $data['customer'] = Customer::getCustomerById($data['customer_id'])->getAttributes();
+        return $data;
     }
 
     /**
@@ -70,6 +115,7 @@ class OrderSearch extends Order
                 $order->order_flag_send = $order->orderExtFlag->order_flag_send + ($isCS ? 1 : 2); //指派时先标记是谁指派不了
                 $order->admin_id = $admin_id;
                 if (OrderStatus::manualAssignStart($order, ['OrderExtFlag'])) {
+                    OrderPool::remOrderForWorkerPushList($order->id); //从接单大厅中删除此订单
                     return Order::findOne($order->id);
                 }
             }
@@ -133,6 +179,30 @@ class OrderSearch extends Order
                 ]
 
             )->count();
+    }
+
+    /**
+     * 返回推送给阿姨的订单列表
+     * @param $worker_id
+     * @param int $page_size
+     * @param int $page
+     * @param bool $is_booked
+     * @return mixed
+     */
+    public static function getPushWorkerOrders($worker_id,$page_size=20,$page=1,$is_booked)
+    {
+        return OrderPool::getOrdersFromWorkerPushList($worker_id,$page_size,$page,$is_booked);
+    }
+
+    /**
+     * 返回推送给阿姨的订单总数
+     * @param $worker_id
+     * @param bool $is_booked
+     * @return mixed
+     */
+    public static function getPushWorkerOrdersCount($worker_id,$is_booked)
+    {
+        return OrderPool::getOrdersCountFromWorkerPushList($worker_id,$is_booked);
     }
 
     /**
@@ -215,7 +285,7 @@ class OrderSearch extends Order
         }
 
         if (!is_null($channels)) {
-            foreach($order_status as $channels_str){
+            foreach($channels as $channels_str){
                 $query = $query->orFilterWhere([
                     'channel_id' => $channels_str
                 ]);
