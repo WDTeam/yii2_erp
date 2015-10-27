@@ -6,6 +6,7 @@ use \core\models\customer\CustomerAccessToken;
 use \core\models\worker\Worker;
 use \core\models\worker\WorkerSkill;
 use core\models\worker\WorkerVacationApplication;
+use core\models\finance\FinanceSettleApplySearch;
 use \core\models\worker\WorkerAccessToken;
 use \core\models\Operation\OperationShopDistrictCoordinate;
 
@@ -86,11 +87,22 @@ class WorkerController extends \api\components\Controller
      */
     private function checkWorkerLogin($param=array()){
         $msg = array('code'=>0,'msg'=>'','worker_id'=>0);
-        if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
-           $msg['msg'] = '用户认证已经过期,请重新登录';
+        if(!isset($param['access_token'])||!$param['access_token']){
+           $msg['msg'] = '请登录';
            return $msg;
         }
-        $worker = WorkerAccessToken::getWorker($param['access_token']);
+        try{
+            $isright_token = WorkerAccessToken::checkAccessToken($param['access_token']);
+            $worker = WorkerAccessToken::getWorker($param['access_token']);
+        }catch (\Exception $e) {
+            $msg['code'] = '1024';
+            $msg['msg'] = 'boss系统错3误';
+            return $msg;
+        }
+        if(!$isright_token){
+            $msg['msg'] = '用户认证已经过期,请重新登录';
+            return $msg;
+        }
         if (!$worker|| !$worker->id) {
             $msg['msg'] = '阿姨不存在';
             return $msg;
@@ -479,9 +491,7 @@ class WorkerController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-service-info 获取阿姨服务信息 (田玉星 80%)
-     *
-     * @apiDescription 【备注：等待model底层支持】
+     * @api {GET} /worker/get-worker-service-info 获取账单阿姨服务信息 (田玉星 98%)
      *
      * @apiName actionGetWorkerServiceInfo
      * @apiGroup Worker
@@ -498,9 +508,9 @@ class WorkerController extends \api\components\Controller
      *      "msg": "操作成功.",
      *      "ret": [
      *             "worker_name": "张",
-     *             "service_count": "60",
+     *             "order_count": "60",
      *             "service_family_count": "60",
-     *              "total_income"=>"23888.00"
+     *             "salary"=>"23888.00"
      *      ]
      * }
      *
@@ -518,15 +528,20 @@ class WorkerController extends \api\components\Controller
         $checkResult = $this->checkWorkerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
-        } 
-        
-
-        //TODO:通过MODEL获取阿姨服务信息d378a0c76007a68888ac300e8a821f29
+        }
+        //获取数据
+        try{
+            $service = FinanceSettleApplySearch::getWorkerIncomeSummaryInfoByWorkerId($checkResult['worker_id']);
+            $workerInfo = Worker::getWorkerStatInfo($checkResult['worker_id']);
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
+        //数据整理返回
         $ret = [
-            "worker_name" => "张",
-            "service_count" => "60",
-            "service_family_count" => "60",
-            "salary" => "23888.00"
+            "worker_name" => $service['worker_name'],
+            "order_count" => $service['all_order_count'],
+            "salary" => $worker['all_worker_money'],
+            "service_family_count" => $workerInfo[''],
         ];
         return $this->send($ret, "操作成功.");
 
