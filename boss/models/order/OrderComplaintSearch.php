@@ -10,8 +10,8 @@ class OrderComplaintSearch extends OrderComplaint{
 	
 	public function rules(){
 		return [
-				[['id','order_id','ejj_worker.id'], 'integer'],
-				[['complaint_content', 'order_customer_phone', 'worker_phone','worker_name'], 'safe'],
+				[['id','order_id','worker_id'], 'integer'],
+				[['complaint_content', 'order_customer_phone', 'order_worker_phone','order_worker_name','order_worker_type_name','order_worker_shop_name'], 'safe'],
 		];
 	}
 	
@@ -38,6 +38,27 @@ class OrderComplaintSearch extends OrderComplaint{
 		$query->andFilterWhere([
 				'order_id' => $this->order_id,
 				'ejj_worker.id' => $this->id
+		]);
+		$query->andFilterWhere([
+				'id' => $this->id,
+				'worker_id' => $this->worker_id,
+				'order_id'=> $this->order_id,
+				'complaint_type' => $this->complaint_type,
+				'complaint_status' => $this->complaint_status,
+				'complaint_channel' => $this->complaint_channel,
+				'complaint_phone' => $this->complaint_phone,
+				'complaint_section' => $this->complaint_section,
+				'complaint_level' => $this->complaint_level,
+				'complaint_content' => $this->complaint_content,
+				'complaint_time' => $this->complaint_time,
+				'created_at' => $this->created_at,
+				'updated_at' => $this->updated_at,
+				'order_customer_phone' => $this->order_customer_phone,
+				'order_worker_phone' => $this->order_worker_phone,
+				'order_worker_name' => $this->order_worker_name,
+				'order_worker_type_name' => $this->order_worker_type_name,
+				'order_worker_shop_name' => $this->order_worker_shop_name
+				
 		]);
 		
 		$query->andFilterWhere(['like','worker_name',$this->worker_name])->
