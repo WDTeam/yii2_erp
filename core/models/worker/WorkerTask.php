@@ -2,7 +2,7 @@
 namespace core\models\worker;
 
 use yii\base\InvalidParamException;
-use core\models\Operation\OperationCity;
+use core\models\operation\OperationCity;
 use yii\helpers\ArrayHelper;
 use yii\behaviors\TimestampBehavior;
 class WorkerTask extends \common\models\worker\WorkerTask
