@@ -2,13 +2,13 @@
 namespace api\controllers;
 
 use Yii;
-use core\models\Operation\OperationShopDistrictGoods;
-use core\models\Operation\OperationCategory;
-use core\models\Operation\OperationShopDistrictCoordinate;
+use \core\models\operation\OperationShopDistrictGoods;
+use \core\models\operation\OperationCategory;
+use \core\models\operation\OperationShopDistrictCoordinate;
 use \core\models\worker\Worker;
 use \core\models\customer\CustomerAccessToken;
-use core\models\operation\OperationSelectedService;
-use core\models\customer\CustomerAddress;
+use \core\models\operation\OperationSelectedService;
+use \core\models\customer\CustomerAddress;
 
 
 class ServiceController extends \api\components\Controller
