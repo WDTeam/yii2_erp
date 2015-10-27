@@ -291,7 +291,6 @@ class WorkerController extends \api\components\Controller
      *      "msg":"查询地址成功",
      *      "ret":
      *      {
-     *          "result": 1,
      *          "live_place": "北京市密云县密云"
      *      }
      * }
@@ -314,7 +313,6 @@ class WorkerController extends \api\components\Controller
         }
         $workerInfo = Worker::getWorkerDetailInfo($checkResult['worker_id']);
         $ret = array(
-            "result" => '1',
             "live_place" => $workerInfo['worker_live_place']
         );
         return $this->send($ret, "操作成功.");
@@ -491,8 +489,10 @@ class WorkerController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-service-info 获取账单阿姨服务信息 (田玉星 98%)
+     * @api {GET} /worker/get-worker-service-info 获取账单阿姨服务信息 (田玉星 95%)
      *
+     * @apiDescription 【备注：缺少worker提供阿姨服的家庭数量】
+     * 
      * @apiName actionGetWorkerServiceInfo
      * @apiGroup Worker
      *
@@ -638,7 +638,7 @@ class WorkerController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-bill-detail 获取阿姨对账单列表详情 (田玉星 70%)
+     * @api {GET} /worker/get-worker-settle-detail 获取阿姨对账单列表详情 (田玉星 70%)
      * 
      * @apiDescription 【备注：等待model底层支持】
      * 
