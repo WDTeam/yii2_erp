@@ -165,7 +165,7 @@ class Coupon extends \common\models\operation\coupon\Coupon
      /**
      * 获取优惠券有效时间类型
      */
-    public static function coupon_time_type($coupon_id)
+    public static function couponTimeType($coupon_id)
     {
         $coupon = self::findOne($coupon_id);
         if ($coupon == NULL) {

@@ -7,6 +7,7 @@ use boss\models\customer\CustomerSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\ActiveDataProvider;
 
 use core\models\customer\Customer;
 use core\models\customer\CustomerAddress;

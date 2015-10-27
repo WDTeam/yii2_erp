@@ -62,11 +62,14 @@ class Shop extends \common\models\shop\Shop
             'shop_manager_id'=>Yii::t('app', '归属家政'),
         ]);
     }
-    
+    /**
+     * 默认自营门店审核通过
+     * @see \yii\db\BaseActiveRecord::beforeSave($insert)
+     */
     public function beforeSave($insert)
     {
-        if($this->getIsNewRecord()){
-            
+        if($this->getIsNewRecord() && $this->shop_manager_id==1){
+            $this->audit_status = 1;
         }
         return parent::beforeSave($insert);
     }
