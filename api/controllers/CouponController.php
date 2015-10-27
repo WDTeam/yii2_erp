@@ -137,25 +137,6 @@ class CouponController extends \api\components\Controller
         $customer_id = $customer->id;
         //获取该用户该城市的优惠码列表
         $coupons=CouponCustomer::GetCustomerCouponList($customer_id,$city_id);
-        /*$coupons = [
-              [
-                  "id"=> "1",
-                    "coupon_name"=>"优惠码名称",
-                    "coupon_price"=>"优惠码价格",
-                    "coupon_type_name"=>"优惠券类型名称",
-                    "coupon_service_type_id"=>"服务类别id",
-                    "coupon_service_type_name"=> "服务类别名称"
-              ],
-              [
-                  "id"=> "2",
-                    "coupon_name"=>"优惠码名称2",
-                    "coupon_price"=>"优惠码价格2",
-                    "coupon_type_name"=>"优惠券类型名称2",
-                    "coupon_service_type_id"=>"服务类别id2",
-                    "coupon_service_type_name"=> "服务类别名称2"
-              ]
-                    
-        ];*/
         if (!empty($coupons)) {
             return $this->send($coupons, "获取优惠码列表成功", 1);
         } else {
@@ -216,33 +197,14 @@ class CouponController extends \api\components\Controller
         if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
-        if (!isset($param['service_id']) || !$param['service_id'] || !isset($param['city_id']) || !$param['city_id']) {
+        if (!isset($param['city_id']) || !$param['city_id']) {
             return $this->send(null, "请填写服务或城市名称", 0, 403);
         }
         $city_id = $param['city_id'];
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         $customer_id = $customer->id;
          //获取该用户该城市的优惠码列表
-       //$coupons=CouponCustomer::GetAllCustomerCouponList($customer_id,$city_id);
-        $coupons = [
-              [
-                  "id"=> "1",
-                    "coupon_name"=>"优惠码名称",
-                    "coupon_price"=>"优惠码价格",
-                    "coupon_type_name"=>"优惠券类型名称",
-                    "coupon_service_type_id"=>"服务类别id",
-                    "coupon_service_type_name"=> "服务类别名称"
-              ],
-              [
-                  "id"=> "2",
-                    "coupon_name"=>"优惠码名称2",
-                    "coupon_price"=>"优惠码价格2",
-                    "coupon_type_name"=>"优惠券类型名称2",
-                    "coupon_service_type_id"=>"服务类别id2",
-                    "coupon_service_type_name"=> "服务类别名称2"
-              ]
-                    
-        ];
+       $coupons=CouponCustomer::GetAllCustomerCouponList($customer_id,$city_id);
         if (!empty($coupons)) {
             return $this->send($coupons, "获取优惠码列表成功", 1);
         } else {
