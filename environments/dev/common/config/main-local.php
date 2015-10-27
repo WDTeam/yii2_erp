@@ -53,8 +53,8 @@ return [
          */
         'ivr'=>[
             'class'=>'common\components\Ivr',
-            'app_id'=>'5000040',
-            'token'=>'8578b07ba71ff7dfd6ddeca95d69828c',
+            'app_id'=>'5000058',
+            'token'=>'57b62a3462b52a1413a4e1934a60d983',
             'redirect_uri'=>'ivr/callback'
         ],
     ]
