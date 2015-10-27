@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationPlatform;
+use common\models\operation\OperationPlatform as  CommonOperationPlatform;
 /**
  * This is the model class for table "{{%operation_platform}}".
  *
@@ -12,7 +12,7 @@ use common\models\operation\OperationPlatform;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationPlatform extends OperationPlatform
+class OperationPlatform extends CommonOperationPlatform
 {
    
 }

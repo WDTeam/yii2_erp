@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationSpecGoods;
+use common\models\operation\OperationSpecGoods as CommonOperationSpecGoods;
 use common\models\operation\OperationGoods;
 
 /**
@@ -26,7 +26,7 @@ use common\models\operation\OperationGoods;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationSpecGoods extends OperationSpecGoods
+class OperationSpecGoods extends CommonOperationSpecGoods
 {
     /**
      * 插入规格商品

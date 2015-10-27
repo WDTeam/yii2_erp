@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationCity;
+use common\models\operation\OperationCity as CommonOperationCity;
 
 /**
  * This is the model class for table "{{%operation_city}}".
@@ -14,7 +14,7 @@ use common\models\operation\OperationCity;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationCity extends OperationCity
+class OperationCity extends CommonOperationCity
 {
     public static function getOnlineCityList($online = 1){
         $data = self::find()->where(['operation_city_is_online' => $online])->all();

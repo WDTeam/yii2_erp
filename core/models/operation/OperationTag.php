@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationTag;
+use common\models\operation\OperationTag as CommonOperationTag;
 
 /**
  * This is the model class for table "{{%operation_tag}}".
@@ -15,7 +15,7 @@ use common\models\operation\OperationTag;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationTag extends OperationTag
+class OperationTag extends CommonOperationTag
 {
     public static function setTagInfo($tags){
         $fields = ['operation_tag_name', 'operation_applicable_scope_id', 'operation_applicable_scope_name', 'created_at', 'updated_at'];

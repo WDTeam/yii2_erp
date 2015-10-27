@@ -4,7 +4,7 @@ namespace boss\models\operation;
 
 use Yii;
 
-use core\models\operation\CoreOperationAdvertContent;
+use core\models\operation\OperationAdvertContent as CoreOperationAdvertContent;
 /**
  * This is the model class for table "{{%operation_advert_content}}".
  *

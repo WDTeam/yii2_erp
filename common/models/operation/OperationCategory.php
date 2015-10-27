@@ -29,7 +29,7 @@ class OperationCategory extends \yii\db\ActiveRecord
      */
     public static function find()
     {
-        return new CommonOperationCategoryQuery(get_called_class());
+        return new OperationCategoryQuery(get_called_class());
     }
     
     public static function getAllData($where, $orderby = '', $select){

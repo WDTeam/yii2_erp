@@ -2,7 +2,8 @@
 namespace boss\models\operation;
 
 use Yii;
-use core\models\operation\CoreOperationSelectedService;
+use core\models\operation\OperationSelectedService as CoreOperationSelectedService;
+use yii\data\ActiveDataProvider;
 
 /**
  * This is the model class for table "ejj_operation_selected_service".
@@ -20,13 +21,6 @@ use core\models\operation\CoreOperationSelectedService;
  */
 class OperationSelectedService extends CoreOperationSelectedService
 {
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return 'ejj_operation_selected_service';
-    }
 
     /**
      * @inheritdoc
@@ -64,5 +58,48 @@ class OperationSelectedService extends CoreOperationSelectedService
             'updated_at' => Yii::t('app', '编辑时间'),
             'remark' => Yii::t('app', '备注'),
         ];
+    }
+
+    /**
+     * 获取精品保洁按钮css样式class
+     *
+     * @param  int $btnCate 按钮所属类型 1-2
+     * @return string 按钮css样式class   btn-success-selected(按钮被选中) or btn-success(按钮未选中)
+     */
+    public static function setBtnCss($btnCate){
+        $params = Yii::$app->request->getQueryParams();
+        $selectedParams = isset($params['OperationSelectedService'])?$params['OperationSelectedService']:[];
+
+        if($btnCate==1 && isset($selectedParams['selected_service_area_standard']) && $selectedParams['selected_service_area_standard'] == 1){
+            return 'btn-success-selected';
+        }elseif($btnCate==2 && isset($selectedParams['selected_service_area_standard']) && $selectedParams['selected_service_area_standard'] == 2){
+            return 'btn-success-selected';
+        } else{
+            return 'btn-success';
+        }
+    }
+
+    /**
+     * 渲染view层的表格
+     */
+    public function search($params)
+    {
+        $query = OperationSelectedService::find();
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        //if (!($this->load($params) && $this->validate())) {
+        if (!($this->load($params))) {
+            return $dataProvider;
+        }
+        
+        $query->andFilterWhere([
+            'selected_service_area_standard' => $this->selected_service_area_standard,
+        ]);
+
+        $query->orderBy(['selected_service_scene' => SORT_DESC]);
+
+        return $dataProvider;
     }
 }

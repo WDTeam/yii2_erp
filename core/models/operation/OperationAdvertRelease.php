@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationAdvertRelease;
+use common\models\operation\OperationAdvertRelease as CommonOperationAdvertRelease;
 /**
  * This is the model class for table "{{%operation_advert_release}}".
  *
@@ -15,7 +15,7 @@ use common\models\operation\OperationAdvertRelease;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationAdvertRelease extends OperationAdvertRelease
+class OperationAdvertRelease extends CommonOperationAdvertRelease
 {
     public function getAdvertList($city_id, $platform_id = 0, $version_id = 0, $position_id = 0){
         $data = OperationAdvertRelease::find()->asArray()->where(['city_id' => $city_id])->all();

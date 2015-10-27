@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationArea;
+use common\models\operation\OperationArea as CommonOperationArea;
 
 /**
  * This is the model class for table "{{%operation_area}}".
@@ -18,7 +18,7 @@ use common\models\operation\OperationArea;
  * @property string $position
  * @property integer $sort
  */
-class OperationArea extends OperationArea
+class OperationArea extends CommonOperationArea
 {
     public static function getAreaList($parent_id){
         $data = self::find()->select(['id', 'area_name'])->asArray()->where(['parent_id' => $parent_id])->all();

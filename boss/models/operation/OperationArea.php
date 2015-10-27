@@ -3,7 +3,7 @@
 namespace boss\models\operation;
 
 use Yii;
-use core\models\operation\OperationArea;
+use core\models\operation\OperationArea as CoreOperationArea;
 /**
  * This is the model class for table "{{%operation_area}}".
  *
@@ -17,7 +17,7 @@ use core\models\operation\OperationArea;
  * @property string $position
  * @property integer $sort
  */
-class OperationArea extends OperationArea
+class OperationArea extends CoreOperationArea
 {
     /**
      * @inheritdoc

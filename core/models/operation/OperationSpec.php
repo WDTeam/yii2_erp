@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationSpec;
+use common\models\operation\OperationSpec as CommonOperationSpec;
 
 /**
  * This is the model class for table "{{%operation_spec}}".
@@ -15,7 +15,7 @@ use common\models\operation\OperationSpec;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationSpec extends OperationSpec
+class OperationSpec extends CommonOperationSpec
 {
     public static function hanldeSpecValues($operation_spec_values){
         if(!empty($operation_spec_values)){

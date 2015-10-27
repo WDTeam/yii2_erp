@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationSelectedService;
+use common\models\operation\OperationSelectedService as CommonOperationSelectedService;
 use yii\web\UploadedFile;
 use crazyfd\qiniu\Qiniu;
 
@@ -21,7 +21,7 @@ use crazyfd\qiniu\Qiniu;
  * @property string $created_at
  * @property string $remark
  */
-class OperationSelectedService extends OperationSelectedService
+class OperationSelectedService extends CommonOperationSelectedService
 {
     /**
      * 上传图片到七牛服务器
