@@ -2,8 +2,8 @@
 namespace api\controllers;
 
 use Yii;
-use core\models\Operation\OperationShopDistrictGoods;
-use core\models\Operation\OperationCategory;
+use \core\models\operation\CoreOperationShopDistrictGoods;
+use \core\models\operation\CoreOperationCategory;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\operation\coupon\CouponCustomer;
 use \core\models\operation\coupon\Coupon;

@@ -2,15 +2,15 @@
 
 namespace api\controllers;
 
-use core\models\order\OrderPush;
+use \core\models\order\OrderPush;
 use Faker\Provider\DateTime;
 use Yii;
 use common\models\finance\FinanceOrderChannel;
 use common\models\order\OrderSrc;
 use common\models\customer\CustomerAddress as CommonCustomerAddress;
-use core\models\order\Order;
-use core\models\customer\CustomerAccessToken;
-use core\models\customer\CustomerAddress;
+use \core\models\order\Order;
+use \core\models\customer\CustomerAccessToken;
+use \core\models\customer\CustomerAddress;
 use yii\web\Response;
 
 class OrderController extends \api\components\Controller
