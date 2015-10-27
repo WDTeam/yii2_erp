@@ -29,25 +29,4 @@ class IvrController extends Controller
         OrderPush::ivrPushToWorker($order_id); //继续推送该订单的ivr
 
     }
-    
-    public function actionTest()
-    {
-        $res = \Yii::$app->ivr->send('15110249233', 'A1444808735', '洗衣');
-        var_dump($res);
-    }
-    
-    public function actionJpush()
-    {
-        $res = \Yii::$app->jpush->push(['Dhkk', 'worker_ldg_test', '15110249233'], 'test', ['test'=>'自定义数据']);
-        var_dump($res);
-        if(isset($res->msg_id)){
-            echo '<br/>'.'<br/>'.'<br/>';
-            var_dump(\Yii::$app->jpush->getReport($res->msg_id));
-        }
-    }
-    public function actionSms()
-    {
-        $res = \Yii::$app->sms->send('15110249233', 'A1444808735');
-        var_dump($res);
-    }
 }

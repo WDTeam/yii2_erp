@@ -3,7 +3,6 @@
 namespace boss\models\operation;
 
 use Yii;
-use core\models\operation\CoreOperationPlatformVersion;
 /**
  * This is the model class for table "{{%operation_platform_version}}".
  *
@@ -14,7 +13,7 @@ use core\models\operation\CoreOperationPlatformVersion;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationPlatformVersion extends CoreOperationPlatformVersion
+class OperationPlatformVersion extends \core\models\operation\OperationPlatformVersion
 {
     /**
      * @inheritdoc

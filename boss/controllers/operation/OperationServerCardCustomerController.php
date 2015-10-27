@@ -2,10 +2,9 @@
 
 namespace boss\controllers\operation;
 
-use yii;
+use Yii;
 use boss\models\operation\OperationServerCardCustomer;
-use boss\components\BaseAuthController;
-use yii\data\ActiveDataProvider;
+use core\models\operation\OperationServerCardCustomerSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -13,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * OperationServerCardCustomerController implements the CRUD actions for OperationServerCardCustomer model.
  */
-class OperationServerCardCustomerController extends BaseAuthController
+class OperationServerCardCustomerController extends Controller
 {
     public function behaviors()
     {
@@ -33,13 +32,12 @@ class OperationServerCardCustomerController extends BaseAuthController
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => OperationServerCardCustomer::find(),
-        ]);
-		//$aaa = $model->attributeLabels();
-		//print_r($aaa);exit;
+        $searchModel = new OperationServerCardCustomerSearch;
+        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
         ]);
     }
 

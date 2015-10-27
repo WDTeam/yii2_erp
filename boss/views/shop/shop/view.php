@@ -9,6 +9,7 @@ use yii\helpers\Url;
 use core\models\shop\Shop;
 use boss\components\AreaCascade;
 use common\components\BankHelper;
+use yii\widgets\ActiveForm;
 
 /**
  * @var yii\web\View $this
@@ -75,28 +76,55 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute'=>'street',
             ],
+            [
+                'attribute'=>'operation_shop_district_id',
+                'type'=>DetailView::INPUT_WIDGET,
+                'widgetOptions' => [
+                    'name'=>'audit_status',
+                    'class'=>\kartik\widgets\Select2::className(),
+                    'data' => Shop::getShopDistrictList($model->city_id),
+                    'hideSearch' => false,
+                    'options'=>[
+                        'placeholder' => '选择商圈',
+                    ]
+                ],
+                'value'=>$model->operation_shop_district_name,
+            ],
             'principal',
             'tel',
             'other_contact',
+            'level',
             [
-                'attribute'=>'worker_count',
-                'type' => DetailView::INPUT_HIDDEN,
+                'label'=>'添加时间',
+                'value'=>date('Y-m-d H:i:s', $model->created_at),
+            ],
+        ],
+        'deleteOptions'=>[
+        'url'=>['delete', 'id' => $model->id],
+        'data'=>[
+        'confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'),
+        'method'=>'post',
+        ],
+        ],
+        'enableEditMode'=>true,
+    ]) ?>
+    <?= DetailView::widget([
+            'model' => $model,
+            'condensed'=>false,
+            'hover'=>true,
+            'mode'=>Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
+            'panel'=>[
+            'heading'=>'当前状态信息',
+            'type'=>DetailView::TYPE_INFO,
+        ],
+        'attributes' => [
+            [
+            'attribute'=>'worker_count',
+            'type' => DetailView::INPUT_HIDDEN,
             ],
             [
                 'attribute'=>'complain_coutn',
                 'type' => DetailView::INPUT_HIDDEN,
-            ],
-            'level',
-            
-            [
-                'attribute'=>'created_at',
-                'type' => DetailView::INPUT_HIDDEN,
-                'value'=>date('Y-m-d H:i:s', $model->created_at),
-            ],
-            [
-                'attribute'=>'updated_at',
-                'type' => DetailView::INPUT_HIDDEN,
-                'value'=>date('Y-m-d H:i:s', $model->updated_at),
             ],
             [
                 'attribute' => 'audit_status',
@@ -161,13 +189,30 @@ $this->params['breadcrumbs'][] = $this->title;
             'account_person',
         ],
         'deleteOptions'=>[
-        'url'=>['delete', 'id' => $model->id],
-        'data'=>[
-        'confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'),
-        'method'=>'post',
-        ],
+            'url'=>['delete', 'id' => $model->id],
+            'data'=>[
+                'confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'),
+                'method'=>'post',
+            ],
         ],
         'enableEditMode'=>true,
     ]) ?>
-
+    
+    <div class="panel panel-info">
+    <?php $form = ActiveForm::begin([
+        'action' => ['set-audit-status', 'id'=>$model->id],
+        'method' => 'post',
+    ]); ?>
+        <div class="panel-body row">
+            <div class="col-md-3">
+                <?php echo Html::activeRadioList($model, 'audit_status', Shop::$audit_statuses,[
+                    'id'=>'set_audit_status'
+                ]);?>
+            </div>
+            <div class="col-md-2">
+                <?php echo Html::submitInput('确认',['class'=>'btn btn-primary']);?>
+            </div>
+        </div>
+    <?php ActiveForm::end(); ?>
+    </div>
 </div>

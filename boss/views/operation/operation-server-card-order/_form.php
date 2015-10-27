@@ -39,16 +39,57 @@ use kartik\datecontrol\DateControl;
 
 'order_status_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 订单状态id...']], 
 
-'created_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 订单创建时间...']], 
+'created_at'=>[
+                'type'=> Form::INPUT_WIDGET, 
+                'widgetClass'=>DateControl::classname(),
+                'options' => [
+                    'type'=>DateControl::FORMAT_DATE,
+                    'ajaxConversion'=>false,
+                    'displayFormat' => 'php:Y-m-d',
+                    'saveFormat'=>'php:U',
+                    'options' => [
+                        'pluginOptions' => [
+                            'autoclose' => true
+                        ]
+                    ]
+                ]
+            ], 
 
-'updated_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 订单更改时间...']], 
+'updated_at'=>[
+                'type'=> Form::INPUT_WIDGET, 
+                'widgetClass'=>DateControl::classname(),
+                'options' => [
+                    'type'=>DateControl::FORMAT_DATE,
+                    'ajaxConversion'=>false,
+                    'displayFormat' => 'php:Y-m-d',
+                    'saveFormat'=>'php:U',
+                    'options' => [
+                        'pluginOptions' => [
+                            'autoclose' => true
+                        ]
+                    ]
+                ]
+            ], 
 
 'order_pay_type'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 支付方式...']], 
 
 'pay_channel_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 支付渠道id...']], 
 
-'paid_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 支付时间...']], 
-
+'paid_at'=>[
+                'type'=> Form::INPUT_WIDGET, 
+                'widgetClass'=>DateControl::classname(),
+                'options' => [
+                    'type'=>DateControl::FORMAT_DATE,
+                    'ajaxConversion'=>false,
+                    'displayFormat' => 'php:Y-m-d',
+                    'saveFormat'=>'php:U',
+                    'options' => [
+                        'pluginOptions' => [
+                            'autoclose' => true
+                        ]
+                    ]
+                ]
+            ], 
 'par_value'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 卡面值...', 'maxlength'=>8]], 
 
 'reb_value'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 卡优惠值...', 'maxlength'=>8]], 
@@ -74,8 +115,12 @@ use kartik\datecontrol\DateControl;
     ]
 
 
-    ]);
-    echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']);
-    ActiveForm::end(); ?>
+    ]);?>
+    <div class="form-group">
+        <div class="col-sm-offset-0 col-sm-12">
+            <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success btn-lg btn-block' : 'btn btn-primary btn-lg btn-block']);?>
+        </div>
+    </div>
+    <? ActiveForm::end(); ?>
 
 </div>

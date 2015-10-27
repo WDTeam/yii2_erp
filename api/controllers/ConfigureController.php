@@ -2,15 +2,15 @@
 namespace api\controllers;
 
 use Yii;
-use core\models\Operation\CoreOperationShopDistrictGoods;
-use core\models\Operation\CoreOperationCategory;
-use core\models\Operation\CoreOperationCity;
+use core\models\Operation\OperationShopDistrictGoods;
+use core\models\Operation\OperationCategory;
+use core\models\Operation\OperationCity;
 use \core\models\customer\CustomerAccessToken;
 
 class ConfigureController extends \api\components\Controller
 {
     /**
-     * @api {GET} /configure/all-services 城市服务初始化 （赵顺利100%）
+     * @api {GET} /configure/all-services 获取城市全部上线服务 （赵顺利100%）
      * @apiName actionAllServices
      * @apiGroup configure
      *
@@ -65,8 +65,8 @@ class ConfigureController extends \api\components\Controller
             return $this->send(null, "未取得城市信息", 0, 403);
         }
 
-        $categoryes = CoreOperationCategory::getAllCategory();
-        $goodses = CoreOperationShopDistrictGoods::getGoodsByCity($param['city_name']);
+        $categoryes = OperationCategory::getAllCategory();
+        $goodses = OperationShopDistrictGoods::getGoodsByCity($param['city_name']);
 
         if (empty($categoryes) || empty($goodses)) {
             return $this->send(null, "该城市暂未开通", 0, 403);
@@ -178,46 +178,39 @@ class ConfigureController extends \api\components\Controller
      *                  "url_title": ""
      *              }
      *              ],
+     *              "home_order_server": {
+     *                  "category_id": "1",
+     *                  "category_name": "专业保洁",
+     *                  "category_icon": "",
+     *                  "category_url": "",
+     *                  "category_introduction": "44项定制清洁服务",
+     *                  "category_price": "25.00",
+     *                  "category_price_unit": "小时",
+     *                  "category_price_description": "￥25/小时"
+     *              },
      *              "server_list": [
      *              {
-     *                  "goods_id": "1",
-     *                  "goods_no": "",
-     *                  "goods_name": "管道疏通",
-     *                  "goods_introduction": "含：专业设备+专业技师+上门服务",
-     *                  "goods_english_name": "",
-     *                  "goods_img": "",
-     *                  "goods_app_ico": "",
-     *                  "goods_pc_ico": "",
-     *                  "goods_price": "160.00",
-     *                  "goods_price_unit": "眼",
-     *                  "goods_price_description": ""
+     *                  "category_id": "6",   服务品类id
+     *                  "category_name": "精品保洁",  服务品类名
+     *                  "category_icon": "",   小图片
+     *                  "category_url": "",    调转地址url
+     *                  "category_introduction": "",  简介
+     *                  "category_price": "",  价格
+     *                  "category_price_unit": "",  价格单位
+     *                  "category_price_description": "",  价格备注
+     *                  "sort": "1"   排序
      *              },
      *              {
-     *                  "goods_id": "2",
-     *                  "goods_no": "",
-     *                  "goods_name": "家电维修",
-     *                  "goods_introduction": "含：专业设备+专业技师+上门服务",
-     *                  "goods_english_name": "",
-     *                  "goods_img": "",
-     *                  "goods_app_ico": "",
-     *                  "goods_pc_ico": "",
-     *                  "goods_price": "160.00",
-     *                  "goods_price_unit": "次",
-     *                  "goods_price_description": ""
+     *                  "category_id": "1",
+     *                  "category_name": "专业保洁",
+     *                  "category_icon": "",
+     *                  "category_url": "",
+     *                  "category_introduction": "44项定制清洁服务",
+     *                  "category_price": "25.00",
+     *                  "category_price_unit": "小时",
+     *                  "category_price_description": "￥25/小时",
+     *                  "sort": "2"
      *              },
-     *              {
-     *                  "goods_id": "3",
-     *                  "goods_no": "",
-     *                  "goods_name": "家具组装",
-     *                  "goods_introduction": "含：专业设备+专业技师+上门服务",
-     *                  "goods_english_name": "",
-     *                  "goods_img": "",
-     *                  "goods_app_ico": "",
-     *                  "goods_pc_ico": "",
-     *                  "goods_price": "160.00",
-     *                  "goods_price_unit": "次",
-     *                  "goods_price_description": ""
-     *              }
      *          ]
      *      }
      * }
@@ -239,7 +232,7 @@ class ConfigureController extends \api\components\Controller
             return $this->send(null, "未取得城市信息", 0, 403);
         }
         //获取城市列表
-        $city_list = CoreOperationCity::getOnlineCitys();
+        $city_list = OperationCity::getOnlineCitys();
         //获取首页轮播图
         $pic_list = [
             [
@@ -258,52 +251,92 @@ class ConfigureController extends \api\components\Controller
                 "url_title" => ""
             ]
         ];
+        $home_order_server = [
+            'category_id' => '1',
+            'category_name' => '专业保洁',
+            'category_icon' => '',
+            'category_url' => '',
+            'category_introduction' => '44项定制清洁服务',
+            'category_price' => '25.00',
+            'category_price_unit' => '小时',
+            'category_price_description' => '￥25/小时',
+        ];
         //获取该城市的首页服务类型
         $server_list = [
             [
-                'goods_id' => '1',
-                'goods_no' => '',
-                'goods_name' => '管道疏通',
-                'goods_introduction' => '含：专业设备+专业技师+上门服务',
-                'goods_english_name' => '',
-                'goods_img' => '',
-                'goods_app_ico' => '',
-                'goods_pc_ico' => '',
-                'goods_price' => '160.00',
-                'goods_price_unit' => '眼',
-                'goods_price_description' => ''
+                'category_id' => '6',
+                'category_name' => '精品保洁',
+                'category_icon' => '',
+                'category_url' => '',
+                'category_introduction' => '',
+                'category_price' => '',
+                'category_price_unit' => '',
+                'category_price_description' => '',
+                'sort' => '1',
+
             ],
             [
-                'goods_id' => '2',
-                'goods_no' => '',
-                'goods_name' => '家电维修',
-                'goods_introduction' => '含：专业设备+专业技师+上门服务',
-                'goods_english_name' => '',
-                'goods_img' => '',
-                'goods_app_ico' => '',
-                'goods_pc_ico' => '',
-                'goods_price' => '160.00',
-                'goods_price_unit' => '次',
-                'goods_price_description' => ''
+                'category_id' => '1',
+                'category_name' => '专业保洁',
+                'category_icon' => '',
+                'category_url' => '',
+                'category_introduction' => '44项定制清洁服务',
+                'category_price' => '25.00',
+                'category_price_unit' => '小时',
+                'category_price_description' => '￥25/小时',
+                'sort' => '2',
+
             ],
             [
-                'goods_id' => '3',
-                'goods_no' => '',
-                'goods_name' => '家具组装',
-                'goods_introduction' => '含：专业设备+专业技师+上门服务',
-                'goods_english_name' => '',
-                'goods_img' => '',
-                'goods_app_ico' => '',
-                'goods_pc_ico' => '',
-                'goods_price' => '160.00',
-                'goods_price_unit' => '次',
-                'goods_price_description' => ''
+                'category_id' => '2',
+                'category_name' => '洗护服务',
+                'category_icon' => '',
+                'category_url' => '',
+                'category_introduction' => '衣服、皮鞋、美包',
+                'category_price' => '9.00',
+                'category_price_unit' => '件',
+                'category_price_description' => '￥9/件起',
+                'sort' => '3',
+            ],
+            [
+                'category_id' => '3',
+                'category_name' => '家电维修',
+                'category_icon' => '',
+                'category_url' => '',
+                'category_introduction' => '油烟机、空调等深度清洁',
+                'category_price' => '100.00',
+                'category_price_unit' => '台',
+                'category_price_description' => '￥100/台起',
+                'sort' => '4',
+            ],
+            [
+                'category_id' => '4',
+                'category_name' => '家具养护',
+                'category_icon' => '',
+                'category_url' => '',
+                'category_introduction' => '地板家具深度养护、除螨',
+                'category_price' => '',
+                'category_price_unit' => '',
+                'category_price_description' => '￥250起',
+                'sort' => '5',
+            ],
+            [
+                'category_id' => '5',
+                'category_name' => '生活急救箱',
+                'category_icon' => '',
+                'category_url' => '',
+                'category_introduction' => '管道维修疏通、除虫',
+                'category_price' => '',
+                'category_price_unit' => '',
+                'category_price_description' => '￥160起',
+                'sort' => '6',
             ],
         ];
 
         $ret = [
             'city_list' => $city_list,
             'pic_list' => $pic_list,
+            'home_order_server' => $home_order_server,
             'server_list' => $server_list,
         ];
 

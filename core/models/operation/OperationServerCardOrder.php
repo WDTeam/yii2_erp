@@ -36,5 +36,38 @@ use Yii;
  */
 class OperationServerCardOrder extends \common\models\operation\OperationServerCardOrder
 {
-   
+   /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => Yii::t('app', 'id'),
+            'order_code' => Yii::t('app', '订单号'),
+            'usere_id' => Yii::t('app', '用户id'),
+            'order_customer_phone' => Yii::t('app', '用户手机号'),
+            'server_card_id' => Yii::t('app', '卡id'),
+            'card_name' => Yii::t('app', '卡名'),
+            'card_type' => Yii::t('app', '卡类型'),
+            'card_level' => Yii::t('app', '卡级别'),
+            'par_value' => Yii::t('app', '卡面值'),
+            'reb_value' => Yii::t('app', '卡优惠值'),
+            'order_money' => Yii::t('app', '订单金额'),
+            'order_src_id' => Yii::t('app', '订单来源id'),
+            'order_src_name' => Yii::t('app', '订单来源名称'),
+            'order_channel_id' => Yii::t('app', '订单渠道id'),
+            'order_channel_name' => Yii::t('app', '订单渠道名称'),
+            'order_lock_status' => Yii::t('app', '是否锁定'),
+            'order_status_id' => Yii::t('app', '订单状态id'),
+            'order_status_name' => Yii::t('app', '订单状态名称'),
+            'created_at' => Yii::t('app', '订单创建时间'),
+            'updated_at' => Yii::t('app', '订单更改时间'),
+            'order_pay_type' => Yii::t('app', '支付方式'),
+            'pay_channel_id' => Yii::t('app', '支付渠道id'),
+            'pay_channel_name' => Yii::t('app', '支付渠道名称'),
+            'order_pay_flow_num' => Yii::t('app', '支付流水号'),
+            'order_pay_money' => Yii::t('app', '支付金额'),
+            'paid_at' => Yii::t('app', '支付时间'),
+        ];
+    }
 }

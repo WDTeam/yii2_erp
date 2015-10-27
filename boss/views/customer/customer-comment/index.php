@@ -3,7 +3,6 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
-
 use \core\models\customer\Customer;
 
 /**
@@ -42,64 +41,50 @@ $this->title = Yii::t('boss', '评论管理');
                 'class' => 'yii\grid\CheckboxColumn',
             ],
             // ['class' => 'yii\grid\SerialColumn'],
-    		'created_at',
-    		'city_id',
-    		'operation_shop_district_id',
-    		'customer_comment_level',
+    		'created_at:datetime',
+    		
+    		[
+    		'format' => 'raw',
+    		'label' => '城市',
+    		'value' => function ($dataProvider) {
+    		$cityname=core\models\operation\CoreOperationArea::getAreaname($dataProvider->city_id);
+    		return  $cityname;
+    		},
+    		'width' => "100px",
+    		],
+
+    		[
+    		'format' => 'raw',
+    		'label' => '商圈地址',
+    		'value' => function ($dataProvider) {
+    			return  core\models\operation\CoreOperationShopDistrict::getShopDistrictName($dataProvider->operation_shop_district_id);
+    		},
+    		'width' => "100px",
+    		],
+    		'customer_comment_level_name',
     		'customer_comment_tag_names',
     		'customer_comment_content',
     		'order_id',
-    		'customer_id',
-    		'worker_id',
-    		/* 
-    		
-            'order_id',
-            [
-                'format' => 'raw',
-                'label' => '客户名称',
-                'value' => function ($dataProvider) {
-                    $customer = Customer::findOne($dataProvider->customer_id);
-                    return $customer == NULL ? '-' : $customer->customer_name;
-                },
-                'width' => "80px",
-            ],
-            [
-                'format' => 'raw',
-                'label' => '客户手机',
-                'value' => function ($dataProvider) {
-                    return $dataProvider->customer_comment_phone;
-                },
-                'width' => "80px",
-            ],
-            'customer_comment_content',
-            'customer_comment_star_rate', 
-            [
-                'format' => 'raw',
-                'label' => '身份',
-                'value' => function ($dataProvider) {
-                    return $dataProvider->customer_comment_anonymous ? '匿名' : '非匿名';
-                },
-                'width' => "80px",
-            ],
-            [
-                'format' => 'datetime',
-                'label' => '创建时间',
-                'value' => function ($dataProvider) {
-                    return $dataProvider->created_at;
-                },
-                'width' => "120px",
-            ], */
-           // 'updated_at', 
-           // 'is_del', 
-            // [
-            //     'class' => 'yii\grid\ActionColumn',
-            //     'buttons' => [
-            //     'update' => function ($url, $model) {
-            //         return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['customer-comment/view','id' => $model->id,'edit'=>'t']), [
-            //             'title' => Yii::t('yii', 'Edit'),
-            //         ]);}
-            //     ],
-            // ],
+    		[
+    		'format' => 'raw',
+    		'label' => '客户名称',
+    		'value' => function ($dataProvider) {
+    			$info=core\models\customer\Customer::getCustomerById($dataProvider->customer_id);
+    			if(count($info)>0){$name=$info['customer_name']; }else{ $name='暂无';}
+    			return  $name;
+    		},
+    		'width' => "100px",
+    		],
+    		[
+    		'format' => 'raw',
+    		'label' => '阿姨姓名',
+    		'value' => function ($dataProvider) {
+				$info=core\models\worker\Worker::getWorkerInfo($dataProvider->worker_id);
+				if(count($info)>0){$name=$info['worker_name']; }else{ $name='暂无';}
+    			return  $name;
+    		},
+    		'width' => "100px",
+    		],
         ],
         'responsive' => true,
         'hover' => true,

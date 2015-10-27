@@ -112,6 +112,18 @@ class OrderStatus extends Order
     }
 
     /**
+     * 阿姨自助接单
+     * @param $order
+     * @param $must_models
+     * @return bool
+     */
+    protected static function _workerBindOrder(&$order,$must_models=[])
+    {
+        $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_WORKER_BIND_ORDER);
+        return self::_statusChange($order,$status,$must_models);
+    }
+
+    /**
      * 开始服务
      * @param $order
      * @param $must_models

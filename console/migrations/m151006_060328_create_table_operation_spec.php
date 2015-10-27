@@ -17,6 +17,7 @@ class m151006_060328_create_table_operation_spec extends Migration
             'operation_spec_description' => Schema::TYPE_TEXT . ' DEFAULT NULL COMMENT \'规格备注\'',
             'operation_spec_strategy_unit' => Schema::TYPE_STRING . '(60) DEFAULT NULL COMMENT \'计量单位\'',
             'operation_spec_values' => Schema::TYPE_TEXT . ' DEFAULT NULL COMMENT \'规格值(序列化属性)\'',
+            'is_softdel' => Schema::TYPE_SMALLINT . '(1) unsigned NOT NULL DEFAULT 1 COMMENT \'状态\'',
             'created_at' => Schema::TYPE_INTEGER. '(11) DEFAULT NULL COMMENT \'创建时间\'',
             'updated_at' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'编辑时间\'',
         ], $tableOptions);
