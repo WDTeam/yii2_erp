@@ -138,7 +138,7 @@ if(isset($model->review_section)){
             <div class='settleDetail'>
                 <?php
                     if($model->finance_settle_apply_task_count > 0){
-                            echo '<span class = "ordercount" style = "cursor:pointer"><u>'.$model->finance_settle_apply_task_count.'</u></span>';
+                            echo '<span class = "taskcount" style = "cursor:pointer"><u>'.$model->finance_settle_apply_task_count.'</u></span>';
                         }else{
                             echo $model->finance_settle_apply_task_count;
                         }
@@ -373,6 +373,36 @@ if(isset($model->review_section)){
            
             ?>
 
+<?php 
+            echo '<div id = "taskInfo" style = "display:none">';
+            Pjax::begin(); echo GridView::widget([
+               'dataProvider' => $taskDataProvider,
+               'columns' => [
+                   ['class' => 'yii\grid\SerialColumn'],
+                    ['attribute'=>'finance_worker_non_order_income_name',
+                       'header' => Yii::t('app', '任务名称'),],
+                    ['attribute'=>'finance_worker_non_order_income_des',
+                       'header' => Yii::t('app', '任务说明'),],
+                    [
+                       'header' => Yii::t('app', '完成时间'),
+                        'attribute' => 'finance_worker_non_order_income_complete_time',
+                    ],
+                    ['attribute'=>'finance_worker_non_order_income',
+                       'header' => Yii::t('app', '奖励（元）'),
+                    ], 
+               ],
+               'responsive'=>true,
+               'hover'=>true,
+               'condensed'=>true,
+               'floatHeader'=>true,
+              'panel' => [
+                    'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> 奖励明细 </h3>',
+                ],
+           ]); Pjax::end(); 
+           echo '</div></div>';
+           
+            ?>
+
  <?php 
          
             $js=<<<JS
@@ -380,16 +410,25 @@ if(isset($model->review_section)){
                         $("#allOrderInfo").css('display','block');
                         $("#cashOrderInfo").css('display','none');
                         $("#nonCashOrderInfo").css('display','none');
+                        $("#taskInfo").css('display','none');
                     });
                     $(".cashordercount").click(function(){
                         $("#allOrderInfo").css('display','none');
                         $("#cashOrderInfo").css('display','block');
                         $("#nonCashOrderInfo").css('display','none');
+                        $("#taskInfo").css('display','none');
                     });
-                     $(".noncashordercount").click(function(){
+                    $(".noncashordercount").click(function(){
                         $("#allOrderInfo").css('display','none');
                         $("#cashOrderInfo").css('display','none');
                         $("#nonCashOrderInfo").css('display','block');
+                        $("#taskInfo").css('display','none');
+                    });
+                    $(".taskcount").click(function(){
+                        $("#allOrderInfo").css('display','none');
+                        $("#cashOrderInfo").css('display','none');
+                        $("#nonCashOrderInfo").css('display','none');
+                        $("#taskInfo").css('display','block');
                     });
 JS;
         $this->registerJs(

@@ -33,6 +33,7 @@ class m151005_090605_create_table_operation_spec_goods extends Migration
 
             'operation_spec_goods_commission_mode' => Schema::TYPE_INTEGER . '(1) DEFAULT 2 COMMENT \'收取佣金方式（1: 百分比 2: 金额）\'',
             'operation_spec_goods_commission' => Schema::TYPE_MONEY . ' DEFAULT 0 COMMENT \'佣金值\'',
+            'is_softdel' => Schema::TYPE_SMALLINT . '(1) unsigned NOT NULL DEFAULT 1 COMMENT \'状态\'',
 
             'created_at' => Schema::TYPE_INTEGER. '(11) DEFAULT NULL COMMENT \'创建时间\'',
             'updated_at' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'编辑时间\'', 
