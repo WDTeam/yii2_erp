@@ -101,15 +101,13 @@ class AuthController extends \api\components\Controller
      */
     public function actionLoginFromPop()
     {
-        $phone = Yii::$app->request->post('phone');
-        $sign = Yii::$app->request->post('sign');
-        $channel_name = Yii::$app->request->post('channel_name');
-
-        if (empty($phone) || empty($sign) || empty($channel_name)) {
-            // param error
+        $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        if(!isset($param['phone'])||!$param['phone']||!isset($param['sign'])||!$param['sign']||!isset($param['channel_name'])||!$param['channel_name']){
             return $this->send(null, "用户名,签名,渠道名称不能为空", 0, 403, "数据不完整");
         }
-
+        $phone = $param['phone'];
+        $sign = $param['sign'];
+        $channel_name = $param['channel_name'];
         $checkRet = CustomerAccessToken::checkSign($phone, $sign, $channel_name);
 
         if ($checkRet) {

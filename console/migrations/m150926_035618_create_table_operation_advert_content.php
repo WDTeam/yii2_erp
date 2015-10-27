@@ -28,6 +28,7 @@ class m150926_035618_create_table_operation_advert_content extends Migration
             'operation_advert_offline_time' => Schema::TYPE_INTEGER. '(11) DEFAULT NULL COMMENT \'广告下线时间\'',
             'operation_advert_picture_text' => Schema::TYPE_STRING. '(255) DEFAULT NULL COMMENT \'广告图片或广告文字\'',
             'operation_advert_url' => Schema::TYPE_STRING. '(255) DEFAULT NULL COMMENT \'广告链接地址\'',
+            'is_softdel' => Schema::TYPE_SMALLINT . '(1) unsigned NOT NULL DEFAULT 1 COMMENT \'状态\'',
             'created_at' => Schema::TYPE_INTEGER. '(11) DEFAULT NULL COMMENT \'创建时间\'',
             'updated_at' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'编辑时间\'',
             'operation_advert_content_orders' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'排序\'',

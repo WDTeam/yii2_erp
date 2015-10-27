@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
         
         <?php
 
-            echo $this->render('workerSettleCommonView', ['model'=>$model,'orderDataProvider'=>$orderDataProvider,'cashOrderDataProvider'=>$cashOrderDataProvider,'nonCashOrderDataProvider'=>$nonCashOrderDataProvider]);
+            echo $this->render('workerSettleCommonView', ['model'=>$model,'orderDataProvider'=>$orderDataProvider,'cashOrderDataProvider'=>$cashOrderDataProvider,'nonCashOrderDataProvider'=>$nonCashOrderDataProvider,'taskDataProvider'=>$taskDataProvider]);
             ?>
         
     </div>

@@ -68,7 +68,7 @@ class FinanceCompensate extends \yii\db\ActiveRecord
             'customer_id' => Yii::t('app', '客户Id'),
             'customer_name' => Yii::t('app', '客户姓名'),
             'finance_compensate_coupon' => Yii::t('app', ' 优惠券'),
-            'finance_compensate_coupon_money' => Yii::t('app', ' 优惠券'),
+            'finance_compensate_coupon_money' => Yii::t('app', ' 优惠券金额'),
             'finance_compensate_money' => Yii::t('app', ' 赔偿金额'),
             'finance_compensate_total_money' => Yii::t('app', ' 赔偿总金额'),
             'finance_compensate_insurance_money' => Yii::t('app', ' 保险理赔金额'),

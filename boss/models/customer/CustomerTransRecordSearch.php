@@ -5,7 +5,6 @@ namespace boss\models\customer;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\customer\CustomerTransRecord;
 
 /**
  * CustomerTransRecordSearch represents the model behind the search form about `common\models\CustomerTransRecord`.
@@ -16,9 +15,13 @@ class CustomerTransRecordSearch extends CustomerTransRecord
     {
         return [
             [['id', 'customer_id', 'order_id', 'order_channel_id', 'customer_trans_record_order_channel', 'pay_channel_id', 'customer_trans_record_pay_channel', 'customer_trans_record_mode', 'customer_trans_record_mode_name', 'created_at', 'updated_at', 'is_del'], 'integer'],
-            [['customer_trans_record_promo_code_money', 'customer_trans_record_coupon_money', 'customer_trans_record_cash', 'customer_trans_record_pre_pay', 'customer_trans_record_online_pay', 'customer_trans_record_online_balance_pay', 'customer_trans_record_online_service_card_pay', 'customer_trans_record_compensate_money', 'customer_trans_record_refund_money', 'customer_trans_record_order_total_money', 'customer_trans_record_total_money', 'customer_trans_record_current_balance', 'customer_trans_record_befor_balance'], 'number'],
+            [['customer_trans_record_coupon_money', 'customer_trans_record_cash', 'customer_trans_record_pre_pay', 'customer_trans_record_online_pay', 'customer_trans_record_online_balance_pay', 'customer_trans_record_online_service_card_pay', 'customer_trans_record_compensate_money', 'customer_trans_record_refund_money', 'customer_trans_record_order_total_money', 'customer_trans_record_total_money', 'customer_trans_record_current_balance', 'customer_trans_record_befor_balance'], 'number'],
             [['customer_trans_record_online_service_card_on', 'customer_trans_record_transaction_id', 'customer_trans_record_remark', 'customer_trans_record_verify'], 'safe'],
         ];
+    }
+
+    public function beforeValidate(){
+        return true;
     }
 
     public function scenarios()
@@ -49,7 +52,6 @@ class CustomerTransRecordSearch extends CustomerTransRecord
             'customer_trans_record_pay_channel' => $this->customer_trans_record_pay_channel,
             'customer_trans_record_mode' => $this->customer_trans_record_mode,
             'customer_trans_record_mode_name' => $this->customer_trans_record_mode_name,
-            'customer_trans_record_promo_code_money' => $this->customer_trans_record_promo_code_money,
             'customer_trans_record_coupon_money' => $this->customer_trans_record_coupon_money,
             'customer_trans_record_cash' => $this->customer_trans_record_cash,
             'customer_trans_record_pre_pay' => $this->customer_trans_record_pre_pay,

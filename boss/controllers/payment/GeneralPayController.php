@@ -1,6 +1,7 @@
 <?php
 
 namespace boss\controllers\payment;
+
 use common\models\finance\FinanceOrderChannel;
 use common\models\payment\GeneralPayRefund;
 use boss\models\payment\GeneralPaySearch;
@@ -56,10 +57,10 @@ class GeneralPayController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
-        return $this->render('view', ['model' => $model]);
-}
+            return $this->render('view', ['model' => $model]);
+        }
     }
 
     /**
@@ -136,7 +137,7 @@ class GeneralPayController extends Controller
      * @return bool
      * @throws NotFoundHttpException
      */
-    public function modifyRecontiliation($id , $status)
+    public function modifyRecontiliation($id, $status)
     {
         $model = $this->findModel($id);
         $model->id = $id;
@@ -144,21 +145,32 @@ class GeneralPayController extends Controller
         return $model->save(false);
     }
 
+    /**
+     * 获取订单渠道
+     * @return string
+     */
     public function actionOrderChannel()
     {
         $channel = FinanceOrderChannel::get_order_channel_list();
-        foreach( $channel as $k=>$v ){
+        foreach ($channel as $k => $v) {
             $channel[$k]['text'] = $v['finance_order_channel_name'];
         }
-        return json_encode(['results'=>$channel]);
+        return json_encode(['results' => $channel]);
     }
 
     public function actionTest()
     {
-        $data = \core\models\payment\GeneralPay::getPayParams('0.01',1,24,'1500610004');
+
+        $data = \core\models\order\OrderSearch::getWorkerAndOrderAndMonth(1, 2015, 10);
         dump($data);
         exit;
-        $data = \core\models\payment\GeneralPay::getPayParams('0.01',1,23,'1500610004');
+        $data = \core\models\order\OrderSearch::getOrderAndCustomer(3);
+        dump($data);
+        exit;
+        $data = \core\models\payment\GeneralPay::getPayParams('0.01', 1, 24, '1500610004', 0, ['return_url' => 'http://www.baidu.com']);
+        dump($data);
+        exit;
+        $data = \core\models\payment\GeneralPay::getPayParams('0.01', 1, 23, '1500610004');
         dump($data);
     }
 

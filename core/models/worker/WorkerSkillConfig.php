@@ -17,6 +17,10 @@ use yii\helpers\ArrayHelper;
  */
 class WorkerSkillConfig extends \common\models\worker\WorkerSkillConfig
 {
+    /**
+     * 获取阿姨技能配置信息
+     * @return array
+     */
     public static function getWorkerSkillConfig(){
         $result = self::findAll(['isdel'=>0]);
         return ArrayHelper::map($result,'id','worker_skill_name');

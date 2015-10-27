@@ -14,6 +14,11 @@ use boss\models\worker\WorkerSkillConfig;
  */
 class WorkerSkill extends \common\models\worker\WorkerSkill
 {
+    /**
+     * 获取阿姨所有技能
+     * @param $worker_id
+     * @return array
+     */
     public static function getWorkerSkill($worker_id){
         $workerSkillConfig = WorkerSkillConfig::getWorkerSkillConfig();
         $workerSkillResult = self::find()->select('worker_skill_id')->where(['worker_id'=>$worker_id])->asArray()->all();
