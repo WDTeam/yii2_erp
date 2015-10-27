@@ -18,6 +18,7 @@ use yii\web\Response;
 use core\models\customer\Customer;
 use core\models\order\OrderStatusHistory;
 use core\models\shop\Shop;
+use common\models\order\OrderStatusDict;
 
 /**
  * OrderController implements the CRUD actions for Order model.
@@ -45,7 +46,7 @@ class OrderController extends BaseAuthController
        if($result==false)  exit("order canlel module error");
         */
         echo "取消订单成功，正在执行退款<br>";
-        $paytime=0;
+         $paytime=0;
          $statusHistoryInfo = OrderStatusHistory::getOrderStatusHistory($orderid);
          if($statusHistoryInfo) $paytime = $statusHistoryInfo->created_at;
 
@@ -57,7 +58,8 @@ class OrderController extends BaseAuthController
             $FinanceRefundadd->finance_refund_city_id=empty($shopInfo->city_id)?0:$shopInfo->city_id ;
             $FinanceRefundadd->finance_refund_county_id=empty($shopInfo->county_id)?0:$shopInfo->county_id ;
         }
-         if($orderInfo->orderExtPay->order_pay_type==2 && $orderInfo->orderExtStatus->order_status_dict_id==2)
+        echo $orderInfo->orderExtStatus->order_status_dict_id;
+         if($orderInfo->orderExtPay->order_pay_type==2 && $orderInfo->orderExtStatus->order_status_dict_id>=OrderStatusDict::ORDER_WAIT_ASSIGN && $orderInfo->orderExtStatus->order_status_dict_id<OrderStatusDict::ORDER_CANCEL)
         //if($orderInfo->orderExtPay->order_pay_type==2)
           {
 
