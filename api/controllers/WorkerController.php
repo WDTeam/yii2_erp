@@ -540,19 +540,19 @@ class WorkerController extends \api\components\Controller
         $ret = [
             "worker_name" => $service['worker_name'],
             "order_count" => $service['all_order_count'],
-            "salary" => $worker['all_worker_money'],
-            "service_family_count" => $workerInfo[''],
+            "salary" => $service['all_worker_money'],
+            "service_family_count" => $workerInfo[''],//todo:等待model返回字段
         ];
         return $this->send($ret, "操作成功.");
 
     }
 
     /**
-     * @api {GET} /worker/get-worker-bill-list 获取阿姨对账单列表 (田玉星 80%)
+     * @api {GET} /worker/get-worker-settle-list 获取阿姨对账单列表 (田玉星 80%)
      * 
      * @apiDescription 【备注：等待model底层支持】
      *
-     * @apiName actionGetWorkerBillList
+     * @apiName actionGetWorkerSettleList 
      * @apiGroup Worker
      *
      * @apiParam {String} access_token    阿姨登录token
@@ -588,7 +588,7 @@ class WorkerController extends \api\components\Controller
      *      "msg": "用户认证已经过期,请重新登录"
      *  }
      */
-    public function actionGetWorkerBillList()
+    public function actionGetWorkerSettleList()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //检测阿姨是否登录
@@ -596,8 +596,7 @@ class WorkerController extends \api\components\Controller
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
-        //获取阿姨身份:兼职/全职
-        $worker_id = $checkResult['worker_id'];
+        $checkResult['worker_id'] = 18475;
         //判断页码
         if (!isset($param['per_page']) || !intval($param['per_page'])) {
             $param['per_page'] = 1;
@@ -610,9 +609,9 @@ class WorkerController extends \api\components\Controller
         $page_num = intval($param['page_num']);
         //调取model层
         try{
-            
-        }catch (Exception $e) {
-           return $this->send(null, "boss系统错误", 1024, 403);
+            $billList = FinanceSettleApplySearch::getSettledWorkerIncomeListByWorkerId($checkResult['worker_id'],$per_page,$page_num);
+         }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
         }
         $ret = [
             [
