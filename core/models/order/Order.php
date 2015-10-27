@@ -115,7 +115,7 @@ class Order extends OrderModel
      *  int $admin_id 操作人id 0客户 1系统 必填
      *  int $order_pay_type 支付方式 1现金 2线上 3第三方 必填
      *  int $coupon_id 优惠券id
-     *  int $order_is_use_balance 是否使用余额 0否 1是
+     *  int $order_is_use_balance 是否使用余额 0否 1是 必填
      *  string $order_booked_worker_id 指定阿姨id
      *  string $order_pop_order_code 第三方订单号
      *  string $order_pop_group_buy_code 第三方团购号
@@ -414,7 +414,8 @@ class Order extends OrderModel
         } elseif ($this->order_pay_type == 2) {//线上支付
             $this->order_pay_money = $this->order_money; //支付金额
             if (!empty($this->coupon_id)) {//是否使用了优惠券
-                $this->order_use_coupon_money = self::getCouponById($this->coupon_id);
+                $coupon = self::getCouponById($this->coupon_id);
+                $this->order_use_coupon_money = $coupon['coupon_money'];
                 $this->order_pay_money -= $this->order_use_coupon_money;
             }
             if ($this->order_is_use_balance == 1) {
