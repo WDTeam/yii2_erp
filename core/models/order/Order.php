@@ -371,8 +371,7 @@ class Order extends OrderModel
         $this->setAttributes($attributes);
         $status_from = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //创建订单状态
         $status_to = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //初始化订单状态
-        $order_count = OrderSearch::getCustomerOrderCount($this->customer_id); //该用户的订单数量
-        $order_code = strlen($this->customer_id) . $this->customer_id . strlen($order_count) . $order_count; //TODO 订单号待优化
+        $order_code = OrderTool::createOrderCode(); //创建订单号
 
         $customer = Customer::getCustomerById($this->customer_id);
         $this->setAttributes([
