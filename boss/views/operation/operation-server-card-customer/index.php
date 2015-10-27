@@ -7,27 +7,34 @@ use yii\widgets\Pjax;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
+ * @var common\models\operation\OperationServerCardCustomerSearch $searchModel
  */
 
 $this->title = Yii::t('app', '客户服务卡管理');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="server-card-customer-index">
+<div class="operation-server-card-customer-index">
+    <div class="page-header">
+            <h1><?= Html::encode($this->title) ?></h1>
+    </div>
+    <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
+
     <p>
         <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Server Card Customer',
+    'modelClass' => 'Operation Server Card Customer',
 ]), ['create'], ['class' => 'btn btn-success'])*/  ?>
     </p>
 
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
+       // 'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'order_id',
+//            'id',
+//            'order_id',
             'order_code',
-            'card_id',
+//            'card_id',
             'card_no',
             'card_name', 
             // 'card_type', 
@@ -35,15 +42,15 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'pay_value', 
             // 'par_value', 
             // 'reb_value', 
-            // 'res_value', 
-            'customer_id', 
+             'res_value', 
+//            'customer_id', 
             'customer_name', 
             'customer_phone', 
-            'use_scope', 
+//            'use_scope', 
             // 'buy_at', 
-            // 'valid_at', 
-            // 'activated_at', 
-            // 'freeze_flag', 
+             'valid_at', 
+             'activated_at', 
+             'freeze_flag', 
             // 'created_at', 
             // 'updated_at', 
 
@@ -51,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
                 'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['operation/operation-server-card-customer/view','id' => $model->id,'edit'=>'t']), [
+                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['operation-server-card-customer/view','id' => $model->id,'edit'=>'t']), [
                                                     'title' => Yii::t('yii', 'Edit'),
                                                   ]);}
 

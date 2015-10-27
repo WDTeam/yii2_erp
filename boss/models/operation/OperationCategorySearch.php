@@ -5,12 +5,12 @@ namespace boss\models\operation;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use core\models\operation\CoreOperationCategory;
+use core\models\operation\OperationCategory;
 
 /**
  * OperationCategorySearch represents the model behind the search form about `common\models\OperationCategory`.
  */
-class OperationCategorySearch extends CoreOperationCategory
+class OperationCategorySearch extends OperationCategory
 {
     public function rules()
     {

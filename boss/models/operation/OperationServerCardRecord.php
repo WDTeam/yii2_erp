@@ -30,20 +30,5 @@ class OperationServerCardRecord extends \core\models\operation\OperationServerCa
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => Yii::t('app', 'id'),
-            'trade_id' => Yii::t('app', '交易id'),
-            'cus_card_id' => Yii::t('app', '客户服务卡'),
-            'front_value' => Yii::t('app', '使用前金额'),
-            'behind_value' => Yii::t('app', '使用后金额'),
-            'use_value' => Yii::t('app', '使用金额'),
-            'created_at' => Yii::t('app', '创建时间'),
-            'updated_at' => Yii::t('app', '更改时间'),
-        ];
-    }
+    
 }

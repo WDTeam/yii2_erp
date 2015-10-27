@@ -121,10 +121,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class'=>'join-list-btn btn btn-success btn-sm',
                         ]):Html::a('解除黑名单', [
                             'remove-blacklist',
-                            'id' => $model->id
-                        
+                            'id' => $model->id,
                         ], [
                             'title' => Yii::t('app', '解除黑名单'),
+                            'class'=>'join-list-btn btn btn-success btn-sm',
                         ]);
                     },
                 ],

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 /**
  * @var yii\web\View $this
- * @var common\models\ServerCard $model
+ * @var common\models\operation\OperationServerCard $model
  */
 
 $this->title = Yii::t('app', '修改服务卡信息 ', [
@@ -23,8 +23,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 		border: none !important;
 	}
 </style>
-<div class="server-card-update">
-
+<div class="operation-server-card-update">
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>

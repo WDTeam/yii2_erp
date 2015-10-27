@@ -11,6 +11,7 @@ use yii2tech\ar\softdelete\SoftDeleteBehavior;
 use core\models\worker\Worker;
 use core\behaviors\ShopStatusBehavior;
 use yii\helpers\ArrayHelper;
+use core\models\operation\CoreOperationShopDistrict;
 class Shop extends \common\models\shop\Shop
 {
     public static $audit_statuses = [
@@ -44,7 +45,7 @@ class Shop extends \common\models\shop\Shop
             [['shop_manager_id', 'province_id', 'city_id', 'county_id', 'is_blacklist', 
                  'audit_status', 'worker_count', 
                 'complain_coutn', 'tel', 'bankcard_number'], 'integer'],
-            [['audit_status', 'is_blacklist'], 'default', 'value'=>0],
+            [['audit_status', 'is_blacklist', 'operation_shop_district_id'], 'default', 'value'=>0],
         ]);
     }
     /**
@@ -61,14 +62,27 @@ class Shop extends \common\models\shop\Shop
             'shop_manager_id'=>Yii::t('app', '归属家政'),
         ]);
     }
+    /**
+     * 默认自营门店审核通过
+     * @see \yii\db\BaseActiveRecord::beforeSave($insert)
+     */
+    public function beforeSave($insert)
+    {
+        if($this->getIsNewRecord() && $this->shop_manager_id==1){
+            $this->audit_status = 1;
+        }
+        return parent::beforeSave($insert);
+    }
 
     /**
      * 获取家政名称
      */
     public function getManagerName()
     {
-        $model = ShopManager::find()->where(['id'=>$this->shop_manager_id])->one();
-        return isset($model)?$model->name:'';
+        $name = ShopManager::find()
+        ->select(['name'])
+        ->where(['id'=>$this->shop_manager_id])->scalar();
+        return $name;
     }
     /**
      * 获取城市名称
@@ -162,6 +176,22 @@ class Shop extends \common\models\shop\Shop
             return true;
         }
         return false;
+    }
+    
+    /**
+     * 获取商圈数组
+     */
+    public static function getShopDistrictList($city_id=null)
+    {
+        $models = CoreOperationShopDistrict::getCityShopDistrictList($city_id);
+        return ArrayHelper::map($models, 'id', 'operation_shop_district_name');
+    }
+    /**
+     * 商圈名称
+     */
+    public function getOperation_shop_district_name()
+    {
+        return CoreOperationShopDistrict::getShopDistrictName($this->operation_shop_district_id);
     }
     /**
      * 软删除
