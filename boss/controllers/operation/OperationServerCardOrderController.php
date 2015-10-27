@@ -4,7 +4,7 @@ namespace boss\controllers\operation;
 
 use Yii;
 use boss\models\operation\OperationServerCardOrder;
-use boss\models\operation\OperationServerCardOrderSearch;
+use core\models\operation\OperationServerCardOrderSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

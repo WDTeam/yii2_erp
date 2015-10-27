@@ -22,10 +22,11 @@ use kartik\datecontrol\DateControl;
     'form' => $form,
     'columns' => 1,
     'attributes' => [
+'card_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 卡名...', 'maxlength'=>64]], 
 
-'card_type'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 卡类型...']], 
+'card_type'=>['type'=> Form::INPUT_DROPDOWN_LIST,'items'=>$deploy['card_type']], 
 
-'card_level'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 卡级别...']], 
+'card_level'=>['type'=> Form::INPUT_DROPDOWN_LIST,'items'=>$deploy['card_level']],
 
 'use_scope'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 使用范围...']], 
 
@@ -67,7 +68,7 @@ use kartik\datecontrol\DateControl;
 
 'reb_value'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 优惠金额...', 'maxlength'=>8]], 
 
-'card_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 卡名...', 'maxlength'=>64]], 
+
 
     ]
 

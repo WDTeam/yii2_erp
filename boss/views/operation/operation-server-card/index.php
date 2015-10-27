@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="page-header">
             <h1><?= Html::encode($this->title) ?></h1>
     </div>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php  echo $this->render('_search', ['model' => $searchModel,'deploy'=>$deploy,]); ?>
 
 
     <p>
@@ -28,11 +28,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+           // 'id',
             'card_name',
             'card_type',
             'card_level',

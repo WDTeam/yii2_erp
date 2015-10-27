@@ -16,16 +16,33 @@ use yii\widgets\ActiveForm;
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
+	<div class="col-md-2">
+	 <?= $form->field($model, 'order_code') ?>
+	</div>
+	<div class="col-md-2">
+	 <?= $form->field($model, 'order_customer_phone') ?>
+	</div>
+	<div class="col-md-2">
+	 <?= $form->field($model, 'card_level') ?>
+	</div>
+	<div class="col-md-2">
+	 <?= $form->field($model, 'order_channel_name') ?>
+	</div>
+	<div class="col-md-2">
+	 <?= $form->field($model, 'order_pay_type') ?>
+	</div>
+	<div class="col-md-2">
+	 <?= $form->field($model, 'order_lock_status') ?>
+	</div>
+    <?php // $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'id') ?>
+    <?php // $form->field($model, 'order_code') ?>
 
-    <?= $form->field($model, 'order_code') ?>
+    <?php // $form->field($model, 'usere_id') ?>
 
-    <?= $form->field($model, 'usere_id') ?>
+    <?php // $form->field($model, 'order_customer_phone') ?>
 
-    <?= $form->field($model, 'order_customer_phone') ?>
-
-    <?= $form->field($model, 'server_card_id') ?>
+    <?php // $form->field($model, 'server_card_id') ?>
 
     <?php // echo $form->field($model, 'card_name') ?>
 

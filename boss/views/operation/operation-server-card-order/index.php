@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="page-header">
             <h1><?= Html::encode($this->title) ?></h1>
     </div>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
     <p>
         <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
     'modelClass' => 'Operation Server Card Order',
@@ -26,36 +26,36 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+//            'id',
             'order_code',
-            'usere_id',
+//            'usere_id',
             'order_customer_phone',
-            'server_card_id',
+//            'server_card_id',
 //            'card_name', 
 //            'card_type', 
-//            'card_level', 
+            'card_level', 
 //            'par_value', 
 //            'reb_value', 
 //            'order_money', 
 //            'order_src_id', 
 //            'order_src_name', 
 //            'order_channel_id', 
-//            'order_channel_name', 
+            'order_channel_name', 
 //            'order_lock_status', 
 //            'order_status_id', 
-//            'order_status_name', 
-//            'created_at', 
+            'order_status_name', 
+            'created_at', 
 //            'updated_at', 
-//            'order_pay_type', 
+            'order_pay_type', 
 //            'pay_channel_id', 
-//            'pay_channel_name', 
-//            'order_pay_flow_num', 
-//            'order_pay_money', 
-//            'paid_at', 
+            'pay_channel_name', 
+            'order_pay_flow_num', 
+            'order_pay_money', 
+            'paid_at', 
 
             [
                 'class' => 'yii\grid\ActionColumn',

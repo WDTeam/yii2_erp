@@ -1,14 +1,14 @@
 <?php
 
-namespace boss\models\operation;
+namespace core\models\operation;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use boss\models\operation\OperationServerCard;
+use core\models\operation\OperationServerCard;
 
 /**
- * OperationServerCardSearch represents the model behind the search form about `\common\models\operation\OperationServerCard`.
+ * OperationServerCardSearch represents the model behind the search form about `\core\models\operation\OperationServerCard`.
  */
 class OperationServerCardSearch extends OperationServerCard
 {

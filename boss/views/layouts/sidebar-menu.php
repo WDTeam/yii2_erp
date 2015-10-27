@@ -303,7 +303,7 @@ echo Menu::widget(
 						'url' => ['#'],
 						'icon' => 'fa fa-angle-right',
 						'options' => [
-							'class' => 'treeview active',
+							'class' => 'treeview',
 						],
 						'items' => [
 							[
@@ -312,20 +312,21 @@ echo Menu::widget(
 								'icon' => 'fa fa-angle-right',
 							],
 							[
+								'label' => '服务卡订单管理',
+								'url' => ['operation/operation-server-card-order'],
+								'icon' => 'fa fa-angle-right',
+							],
+							[
 								'label' => '客户服务卡管理',
 								'url' => ['operation/operation-server-card-customer/index'],
 								'icon' => 'fa fa-angle-right',
 							],
 							[
-								'label' => '服务卡付款管理',
+								'label' => '服务卡流水管理',
 								'url' => ['operation/operation-server-card-record'],
 								'icon' => 'fa fa-angle-right',
 							],
-							[
-								'label' => '服务卡订单管理',
-								'url' => ['operation/operation-server-card-order'],
-								'icon' => 'fa fa-angle-right',
-							],
+							
                 ],
             ],
                     [

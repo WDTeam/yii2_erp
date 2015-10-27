@@ -9,7 +9,7 @@ use kartik\datecontrol\DateControl;
  * @var common\models\operation\OperationServerCard $model
  */
 
-$this->title = $model->id;
+$this->title = $model->card_name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '服务卡信息'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

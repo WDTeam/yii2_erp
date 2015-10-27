@@ -16,16 +16,23 @@ use yii\widgets\ActiveForm;
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
-
-    <?= $form->field($model, 'id') ?>
-
+  
+	 <div class="col-md-3">
     <?= $form->field($model, 'card_name') ?>
-
-    <?= $form->field($model, 'card_type') ?>
-
-    <?= $form->field($model, 'card_level') ?>
-
+	</div>
+   <div class="col-md-3">
+	<?= $form->field($model, 'card_type')->dropDownList($deploy['card_type'], ['prompt'=>'请选择']) ?>
+	</div>
+	 <div class="col-md-3">
+	<?= $form->field($model, 'card_level')->dropDownList($deploy['card_level'], ['prompt'=>'请选择',]) ?>
+	 </div>
+    
+	 <div class="col-md-3">
     <?= $form->field($model, 'par_value') ?>
+	</div>
+	 <?php //echo  $form->field($model, 'id') ?>
+	  <?php // echo $form->field($model, 'card_type') ?>
+	  <?php //echo $form->field($model, 'card_level') ?>
 
     <?php // echo $form->field($model, 'reb_value') ?>
 

@@ -4,7 +4,7 @@ namespace boss\controllers\operation;
 
 use Yii;
 use boss\models\operation\OperationServerCard;
-use boss\models\operation\OperationServerCardSearch;
+use core\models\operation\OperationServerCardSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -34,10 +34,13 @@ class OperationServerCardController extends Controller
     {
         $searchModel = new OperationServerCardSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+		$model = new OperationServerCard;
+		$deploy = $model->getServerCardDeploy();
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+			'deploy' => $deploy,
         ]);
     }
 
@@ -65,12 +68,14 @@ class OperationServerCardController extends Controller
     public function actionCreate()
     {
         $model = new OperationServerCard;
+		$deploy = $model->getServerCardDeploy();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+				'deploy' => $deploy,
             ]);
         }
     }
