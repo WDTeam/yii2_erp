@@ -11,7 +11,7 @@ use boss\components\SearchBox;
  * @var yii\data\ActiveDataProvider $dataProvider
  */
 
-$this->title = Yii::t('app', 'Operation Goods');
+$this->title = Yii::t('app', 'Operation Item');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-goods-index">
