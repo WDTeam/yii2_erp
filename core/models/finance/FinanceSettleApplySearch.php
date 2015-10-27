@@ -355,6 +355,14 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         return strtotime(date('Y-m-d 23:59:59', strtotime('last sunday')));
     }
     
+    public static function getWorkerIncomeSummaryInfoByWorkerId($worker_id){
+        $workerSummaryInfo = self::find()->select(['sum(finance_settle_apply_order_count) as all_order_count','sum(finance_settle_apply_money) as all_worker_money'])
+                ->where(['worker_id'=>$worker_id])->asArray()->one();
+        $workerInfo = Worker::getWorkerInfo($worker_id);
+        $workerSummaryInfo['worker_name'] = $workerInfo['worker_name'];
+        return $workerSummaryInfo;
+    }
+    
     public function attributeLabels()
     {
         $parentAttributeLabels = parent::attributeLabels();
