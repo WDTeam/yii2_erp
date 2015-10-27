@@ -2,9 +2,9 @@
 namespace api\controllers;
 
 use Yii;
-use core\models\Operation\CoreOperationShopDistrictGoods;
-use core\models\Operation\CoreOperationCategory;
-use core\models\Operation\CoreOperationCity;
+use core\models\Operation\OperationShopDistrictGoods;
+use core\models\Operation\OperationCategory;
+use core\models\Operation\OperationCity;
 use \core\models\customer\CustomerAccessToken;
 
 class ConfigureController extends \api\components\Controller
@@ -65,8 +65,8 @@ class ConfigureController extends \api\components\Controller
             return $this->send(null, "未取得城市信息", 0, 403);
         }
 
-        $categoryes = CoreOperationCategory::getAllCategory();
-        $goodses = CoreOperationShopDistrictGoods::getGoodsByCity($param['city_name']);
+        $categoryes = OperationCategory::getAllCategory();
+        $goodses = OperationShopDistrictGoods::getGoodsByCity($param['city_name']);
 
         if (empty($categoryes) || empty($goodses)) {
             return $this->send(null, "该城市暂未开通", 0, 403);
@@ -232,7 +232,7 @@ class ConfigureController extends \api\components\Controller
             return $this->send(null, "未取得城市信息", 0, 403);
         }
         //获取城市列表
-        $city_list = CoreOperationCity::getOnlineCitys();
+        $city_list = OperationCity::getOnlineCitys();
         //获取首页轮播图
         $pic_list = [
             [

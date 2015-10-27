@@ -2,12 +2,12 @@
 namespace api\controllers;
 
 use Yii;
-use core\models\Operation\CoreOperationShopDistrictGoods;
-use core\models\Operation\CoreOperationCategory;
-use core\models\Operation\CoreOperationShopDistrictCoordinate;
+use core\models\Operation\OperationShopDistrictGoods;
+use core\models\Operation\OperationCategory;
+use core\models\Operation\OperationShopDistrictCoordinate;
 use \core\models\worker\Worker;
 use \core\models\customer\CustomerAccessToken;
-use core\models\operation\CoreOperationSelectedService;
+use core\models\operation\OperationSelectedService;
 use core\models\customer\CustomerAddress;
 
 
@@ -64,7 +64,7 @@ class ServiceController extends \api\components\Controller
             return $this->send(null, "未取得城市信息", 0, 403);
         }
 
-        $goodses = CoreOperationShopDistrictGoods::getGoodsByCityCategory($param['city_name'], $param['category_id']);
+        $goodses = OperationShopDistrictGoods::getGoodsByCityCategory($param['city_name'], $param['category_id']);
 
         if (empty($goodses)) {
             return $this->send(null, "该城市暂未开通该类型的服务", 0, 403);
@@ -267,8 +267,8 @@ class ServiceController extends \api\components\Controller
             return $this->send(null, "未取得城市信息", 0, 403);
         }
 
-        $categoryes = CoreOperationCategory::getAllCategory();
-        $goodses = CoreOperationShopDistrictGoods::getGoodsByCity($param['city_name']);
+        $categoryes = OperationCategory::getAllCategory();
+        $goodses = OperationShopDistrictGoods::getGoodsByCity($param['city_name']);
 
         if (empty($categoryes) || empty($goodses)) {
             return $this->send(null, "该城市暂未开通", 0, 403);
@@ -345,11 +345,11 @@ class ServiceController extends \api\components\Controller
         if (empty($params['longitude']) || empty($params['latitude'])) {
             return $this->send(null, "经纬度信息不存在", 0, 403);
         }
-        $shopDistrict = CoreOperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($params['longitude'], $params['latitude']);
+        $shopDistrict = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($params['longitude'], $params['latitude']);
         if (empty($shopDistrict)) {
             return $this->send(null, "没有上线商圈", 0, 403);
         }
-        $goods = CoreOperationShopDistrictGoods::getShopDistrictGoodsInfo($params['city_id'], $shopDistrict['operation_shop_district_id'], $params['goods_id']);
+        $goods = OperationShopDistrictGoods::getShopDistrictGoodsInfo($params['city_id'], $shopDistrict['operation_shop_district_id'], $params['goods_id']);
 
         if (empty($goods)) {
             return $this->send(null, "该商圈没有上线当前服务品类", 0, 403);
@@ -413,14 +413,14 @@ class ServiceController extends \api\components\Controller
         if (empty($address)) return $this->send(null, "获取地址信息失败", '0', 403);
 
         //获取商圈
-        $shopDistrict = CoreOperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($address['customer_address_longitude'], $address['customer_address_latitude']);
+        $shopDistrict = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($address['customer_address_longitude'], $address['customer_address_latitude']);
         if (empty($shopDistrict)) return $this->send(null, "未找到相应商圈", '0', 403);
 
         //获取商圈品类上线
-        $goodses = CoreOperationShopDistrictGoods::getGoodsCategoryInfo($params['city_id'], $shopDistrict['id'], '精品保洁');
+        $goodses = OperationShopDistrictGoods::getGoodsCategoryInfo($params['city_id'], $shopDistrict['id'], '精品保洁');
         if (empty($goodses)) return $this->send(null, "该商圈未上线精品保洁", '0', 403);
 
-        $date = CoreOperationSelectedService::getSelectedServiceList($params['build_area']);
+        $date = OperationSelectedService::getSelectedServiceList($params['build_area']);
 
         if (empty($date)) return $this->send(null, "获取精品保洁商品信息失败", "0", "403");
 
@@ -504,7 +504,7 @@ class ServiceController extends \api\components\Controller
         $latitude = $param['latitude'];
         $plan_time = $param['plan_time'];
         //根据经纬度获取商圈id
-        $ShopDistrictInfo = CoreOperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
+        $ShopDistrictInfo = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
         if (empty($ShopDistrictInfo)) {
             return $this->send(null, "商圈不存在", 0, 403);
         } else {
@@ -623,7 +623,7 @@ class ServiceController extends \api\components\Controller
             }
         }
         //根据经纬度获取商圈id
-        $ShopDistrictInfo = CoreOperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
+        $ShopDistrictInfo = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
         if (empty($ShopDistrictInfo)) {
             return $this->send(null, "商圈不存在", 0, 403);
         } else {
