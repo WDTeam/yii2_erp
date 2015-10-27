@@ -17,10 +17,10 @@ use Yii;
  */
 class OrderStatusDict extends \common\models\order\ActiveRecord
 {
-    const ORDER_INIT = 1;
-    const ORDER_WAIT_ASSIGN = 2;
-    const ORDER_SYS_ASSIGN_START = 3;
-    const ORDER_SYS_ASSIGN_DONE = 4;
+    const ORDER_INIT = 1; //已创建
+    const ORDER_WAIT_ASSIGN = 2; //待指派
+    const ORDER_SYS_ASSIGN_START = 3; //智能指派开始
+    const ORDER_SYS_ASSIGN_DONE = 4; //智能指派完成
     const ORDER_SYS_ASSIGN_UNDONE = 5; //未完成智能指派 待人工指派
     const ORDER_MANUAL_ASSIGN_START = 6; //开始人工指派
     const ORDER_MANUAL_ASSIGN_DONE = 7; //完成人工指派

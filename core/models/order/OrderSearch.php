@@ -141,21 +141,23 @@ class OrderSearch extends Order
      * @param $worker_id
      * @param int $page_size
      * @param int $page
+     * @param bool $is_booked
      * @return mixed
      */
-    public static function getPushWorkerOrders($worker_id,$page_size=20,$page=1)
+    public static function getPushWorkerOrders($worker_id,$page_size=20,$page=1,$is_booked)
     {
-        return OrderPool::getOrdersFromWorkerPushList($worker_id,$page_size,$page);
+        return OrderPool::getOrdersFromWorkerPushList($worker_id,$page_size,$page,$is_booked);
     }
 
     /**
      * 返回推送给阿姨的订单总数
      * @param $worker_id
+     * @param bool $is_booked
      * @return mixed
      */
-    public static function getPushWorkerOrdersCount($worker_id)
+    public static function getPushWorkerOrdersCount($worker_id,$is_booked)
     {
-        return OrderPool::getOrdersCountFromWorkerPushList($worker_id);
+        return OrderPool::getOrdersCountFromWorkerPushList($worker_id,$is_booked);
     }
 
     /**

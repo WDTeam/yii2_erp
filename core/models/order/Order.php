@@ -314,19 +314,30 @@ class Order extends OrderModel
         $order = OrderSearch::getOne($order_id);
         $order->admin_id = $admin_id;
         $order->order_flag_cancel_cause = $cause;
-        OrderPool::remOrderForWorkerPushList($order->id,true); //永久从接单大厅中删除此订单
-        if($admin_id==0) {
-            $order->order_customer_memo = $memo;
-            return OrderStatus::_cancel($order, ['OrderExtCustomer']);
-        }elseif($admin_id==1){
-            $order->order_sys_memo = $memo;
-            return OrderStatus::_cancel($order);
-        }elseif($admin_id==2){
-            $order->order_worker_memo = $memo;
-            return OrderStatus::_cancel($order, ['OrderExtWorker']);
-        }elseif($admin_id>2){
-            $order->order_cs_memo = $memo;
-            return OrderStatus::_cancel($order);
+        if(in_array($order->orderExtStatus->order_status_dict_id,[  //只有在以下状态下才可以取消订单
+            OrderStatusDict::ORDER_INIT,
+            OrderStatusDict::ORDER_WAIT_ASSIGN,
+            OrderStatusDict::ORDER_SYS_ASSIGN_DONE,
+            OrderStatusDict::ORDER_SYS_ASSIGN_UNDONE,
+            OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE,
+            OrderStatusDict::ORDER_MANUAL_ASSIGN_UNDONE,
+        ])) {
+            OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
+            if ($admin_id == 0) {
+                $order->order_customer_memo = $memo;
+                return OrderStatus::_cancel($order, ['OrderExtCustomer']);
+            } elseif ($admin_id == 1) {
+                $order->order_sys_memo = $memo;
+                return OrderStatus::_cancel($order);
+            } elseif ($admin_id == 2) {
+                $order->order_worker_memo = $memo;
+                return OrderStatus::_cancel($order, ['OrderExtWorker']);
+            } elseif ($admin_id > 2) {
+                $order->order_cs_memo = $memo;
+                return OrderStatus::_cancel($order);
+            }
+        }else{
+            return false;
         }
     }
 
