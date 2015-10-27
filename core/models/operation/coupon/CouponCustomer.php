@@ -57,6 +57,32 @@ class CouponCustomer extends \common\models\operation\coupon\CouponCustomer
    
         return $couponCustomer;
    }
+     /**
+     * 获取用户优惠券列表（列表包括下单所在城市的和所有城市都通用的券）
+     */
+    public function GetCustomerCouponList($customer_id,$city_id){
+        $couponCustomer = self::find()->where(['customer_id'=>$customer_id])
+            ->joinWith('coupon')
+            ->joinWith('couponCode')
+            ->orderBy('expirate_at asc, coupon_price desc')
+            ->all();      
+    print_r($couponCustomer);die;          
+   
+        return $couponCustomer;
+   }
+    /**
+     * 获取用户全部优惠券列表（包括可用的、不可用的、所有城市的、通用的）
+     */
+    public function GetAllCustomerCouponList($customer_id,$city_id){
+        $couponCustomer = self::find()->where(['customer_id'=>$customer_id])
+            ->joinWith('coupon')
+            ->joinWith('couponCode')
+            ->orderBy('expirate_at asc, coupon_price desc')
+            ->all();      
+    print_r($couponCustomer);die;          
+   
+        return $couponCustomer;
+   }
     /**
      * 获取用户优惠码
      * @customer_id int    用户id

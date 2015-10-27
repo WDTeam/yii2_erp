@@ -74,7 +74,37 @@ class CouponCode extends \common\models\operation\coupon\CouponCode
         return true;
         
     }
-
+    /**
+     * 验证活动码是否可用
+     */
+    public static function checkCouponCodeIsAble($code){
+        $couponCode = self::find()->where(['coupon_code'=>$code, 'is_del'=>0])->one();
+        if($couponCode == NULL){
+            return false;
+        }
+        $coupon_id = $couponCode->coupon_id;
+        //根据活动码的活动码有效时间类型（coupon_time_type）获得不同的活动码结束时间
+        $coupon_time_type=Coupon::getCouponTimeTypes($coupon_id);
+        if($coupon_time_type['coupon_time_type']==0){
+            //领取时间和使用时间一致时的结束时间
+            $coupon = Coupon::find()->where('id=:coupon_id and is_disabled=0 and is_del=0 and coupon_begin_at < '.time().' and coupon_end_at > '.time())->addParams([':coupon_id' => $coupon_id])->one();
+            if($coupon == NULL){
+                return false;
+            }else{
+                return true;
+            }
+            
+        }elseif($coupon_time_type['coupon_time_type']==1){
+            //领取时间和使用时间不一致时的领取结束时间
+            $coupon = Coupon::find()->where('id=:coupon_id and is_disabled=0 and is_del=0 and coupon_begin_at < '.time().' and coupon_get_end_at > '.time())->addParams([':coupon_id' => $coupon_id])->one();
+            if($coupon == NULL){
+                return false;
+            }else{
+                return true;
+            }
+        }
+        
+    }
     /**
      * generate coupon for customer by code
      */
@@ -82,6 +112,7 @@ class CouponCode extends \common\models\operation\coupon\CouponCode
         //check customer exists
    
         $customer = Customer::find()->where(['customer_phone'=>$phone])->one();
+        //如果用户不存在就创建用户
         if($customer == NULL){
             return false;
         }
@@ -135,7 +166,7 @@ class CouponCode extends \common\models\operation\coupon\CouponCode
             return false;
         }
         $couponCustomer->save();
-        return true;
+        return $couponCustomer;
                      
     }
 }
