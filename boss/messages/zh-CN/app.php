@@ -113,9 +113,9 @@ return [
     'Add Service' => '添加服务',
     'Set Service' => '设置服务',
     
-    'Operation Categories' => '服务品类',
-    'Operation And Categories' => '服务和品类',
-    'Category Types' => '服务类型',
+    'Operation Categories' => '服务类型',
+    'Operation And Categories' => '服务项目和类型',
+    'Category Types' => '服务项类型',
     
     'Auths'=>'授权项',
     'Create Auth'=>'创建授权项',
@@ -143,8 +143,8 @@ return [
     'forget_pwd'=>'忘记密码？',
     'Advert Release' => '广告发布',
     'Release Advert' => '发布广告',
-    'Operation Goods' => '商品管理',
-    'Goods' => '商品',
+    'Operation Item' => '服务项目管理',
+    'Item' => '服务项目',
     'Operation Specs' => '规格管理',
     'Spec' => '规格',
     'release' => '开通',

@@ -14,9 +14,16 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Server Car
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
+<style>
+	.btn-success,
+	.btn.btn-primary,
+	.btn.btn-default{
+		background-color: #f6a202 !important;
+		color: #fff !important;
+		border: none !important;
+	}
+</style>
 <div class="operation-server-card-order-update">
-
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
         'model' => $model,

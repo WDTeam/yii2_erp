@@ -133,13 +133,14 @@ class FinanceCompensateController extends Controller
             $id = $getParams['id'];
         }
         if ($model->load($postParams)) {
-            $model->finance_complaint_id = 1111;
-            $model->worker_tel = '13810998888';
-            $model->worker_id = 33;
-            $model->worker_name = '丁阿姨';
-            $model->customer_id = 55;
-            $model->customer_name = '肖先生';
-            $model->finance_compensate_proposer = '客服A';
+              //此处需要根据投诉Id获取阿姨信息
+//            $model->finance_complaint_id = 1111;
+//            $model->worker_tel = '13810998888';
+//            $model->worker_id = 33;
+//            $model->worker_name = '丁阿姨';
+//            $model->customer_id = 55;
+//            $model->customer_name = '肖先生';
+//            $model->finance_compensate_proposer = '客服A';
             $model->created_at = time();
             if(!empty($postParams) && isset($postParams['finance_compensate_coupon'])){
                 $finance_compensate_coupon_arr = $postParams['finance_compensate_coupon'];

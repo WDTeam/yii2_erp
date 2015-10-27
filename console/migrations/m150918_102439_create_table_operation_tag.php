@@ -16,6 +16,7 @@ class m150918_102439_create_table_operation_tag extends Migration
             'operation_tag_name' => Schema::TYPE_STRING . '(30) DEFAULT NULL COMMENT \'标签名称\'',
             'operation_applicable_scope_id' => Schema::TYPE_INTEGER . '(11) DEFAULT 1 COMMENT \'适用范围编号\'',
             'operation_applicable_scope_name' => Schema::TYPE_STRING . '(30) DEFAULT \'服务类型\' COMMENT \'适用范围名称\'',
+            'is_softdel' => Schema::TYPE_SMALLINT . '(1) unsigned NOT NULL DEFAULT 1 COMMENT \'状态\'',
             'created_at' => Schema::TYPE_INTEGER. '(11) DEFAULT NULL COMMENT \'创建时间\'',
             'updated_at' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'编辑时间\'',
         ], $tableOptions);

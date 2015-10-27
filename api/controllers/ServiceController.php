@@ -5,6 +5,10 @@ use Yii;
 use core\models\Operation\CoreOperationShopDistrictGoods;
 use core\models\Operation\CoreOperationCategory;
 use core\models\Operation\CoreOperationShopDistrictCoordinate;
+use \core\models\worker\Worker;
+use \core\models\customer\CustomerAccessToken;
+use core\models\operation\CoreOperationSelectedService;
+use core\models\customer\CustomerAddress;
 
 
 class ServiceController extends \api\components\Controller
@@ -364,7 +368,9 @@ class ServiceController extends \api\components\Controller
      * @apiName actionBoutiqueCleaning
      * @apiDescription 获取城市所有精品保洁
      *
-     * @apiParam {String} city_name 城市
+     * @apiParam {String} city_id 城市
+     * @apiParam {String} address_id 地址id
+     * @apiParam {String} build_area 建筑面积 传面积类型 1\2; 1是小于100平米的，2是大于100平米的
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      * @apiSuccessExample Success-Response:
@@ -384,9 +390,34 @@ class ServiceController extends \api\components\Controller
      *       "msg": "该城市暂未开通"
      *     }
      */
+    public function actionBoutiqueCleaning()
+    {
+        $params = Yii::$app->request->get();
+        if (empty($params) || empty($params['city_id']) || empty($params['build_area']))
+            return $this->send(null, "参数信息不完整", 'error', 403);
+
+        //获取地址信息
+        $address = CustomerAddress::getAddress($params['city_id']);
+        if (empty($address)) return $this->send(null, "获取地址信息失败", 'error', 403);
+
+        //获取商圈
+        $shopDistrict=CoreOperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($address['customer_address_longitude'],$address['customer_address_latitude']);
+        if (empty($shopDistrict)) return $this->send(null, "未找到相应商圈", 'error', 403);
+
+        //获取商圈品类上线
+        $goodses = CoreOperationShopDistrictGoods::getGoodsCategoryInfo($params['city_id'],$shopDistrict['id'], '精品保洁');
+        if(empty($goodses)) return $this->send(null, "该商圈未上线精品保洁", 'error', 403);
+
+        $date = CoreOperationSelectedService::getSelectedServiceList($params['build_area']);
+
+        if(empty($date)) return $this->send(null,"获取精品保洁商品信息失败","error","403");
+
+        return $this->send($date,"获取精品保洁商品  信息成功","ok","403");
+
+    }
 
     /**
-     * @api {get} v1/service/single-service-time.php  单次服务排班表(李勇90%缺少model支持)
+     * @api {get} v1/service/single-service-time  单次服务排班表(李勇90%缺少model支持)
      * @apiName SingleServiceTime
      * @apiGroup service
      * @apiDescription 单次服务获取服务时间
@@ -448,10 +479,10 @@ class ServiceController extends \api\components\Controller
      *     }
      *
      */
-    function actionSingleWorkerTime()
+    function actionSingleServiceTime()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-        if (!isset($param['access_token']) || !$param['access_token'] || !WorkerAccessToken::checkAccessToken($param['access_token'])) {
+        if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
         if (!isset($param['longitude']) || !$param['longitude'] || !isset($param['latitude']) || !$param['latitude'] || !isset($param['plan_time']) || !$param['plan_time']) {
@@ -495,8 +526,8 @@ class ServiceController extends \api\components\Controller
     }
 
     /**
-     * @api {get} /worker/recursive-service-time.php  周期服务时间表(李勇90%缺少model)
-     * @apiName actionRecursiveWorkerTime
+     * @api {get} /worker/recursive-service-time  周期服务时间表(李勇90%缺少model)
+     * @apiName actionRecursiveServiceTime
      * @apiGroup service
      * @apiDescription 周期服务时间表
      * @apiParam {String} access_token    用户认证.
@@ -559,10 +590,10 @@ class ServiceController extends \api\components\Controller
      *     }
      *
      */
-    function actionRecursiveWorkerTime()
+    function actionRecursiveServiceTime()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-        if (!isset($param['access_token']) || !$param['access_token'] || !WorkerAccessToken::checkAccessToken($param['access_token'])) {
+        if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
         if (!isset($param['longitude']) || !$param['longitude'] || !isset($param['latitude']) || !$param['latitude'] || !isset($param['is_recommend']) || !isset($param['plan_time']) || !$param['plan_time']) {
@@ -586,6 +617,8 @@ class ServiceController extends \api\components\Controller
         } else {
             $district_id = $ShopDistrictInfo['id'];
         }
+        //获取周期服务时间表
+        //$recursive_worker_time=Worker::getRecursiveWorkerTable($district_id,$plan_time);
         $recursive_worker_time = array();
         for ($i = 7; $i <= 36; $i++) {
             $item = [
@@ -611,6 +644,52 @@ class ServiceController extends \api\components\Controller
         return $this->send($ret, "获取周期服务时间表成功");
     }
 
+    /**
+     * @api {GET} v1/service/baidu-map 根据地址获取百度地图数据（赵顺利 100%）
+     * @apiGroup service
+     * @apiName actionBaiduMap
+     * @apiDescription 根据地址获取百度地图数据
+     *
+     * @apiParam {String} query 查询关键字
+     * @apiParam {String} location 经纬度
+     * @apiParam {String} radius 半径
+     * @apiParam {String} output 输出方式
+     * @apiParam {String} ak
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/service/baidu-map
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *      "code": "ok",
+     *      "msg": "",
+     *      "ret":
+     *  }
+     *
+     * @apiError queryNotSupportFound 关键字不能为空.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "code":"error",
+     *       "msg": "关键字不能为空"
+     *     }
+     */
+    public function actionBaiduMap()
+    {
+        $params = Yii::$app->request->get();
+
+        $path = "http://api.map.baidu.com/place/v2/search";
+        if (empty($params) || empty($params['query']) || empty($params['location']) || empty($params['radius']) || empty($params['output']) || empty($params['ak'])) {
+            return $this->send(null, '参数不完成', 'error', '403');
+        }
+        $url = "http://api.map.baidu.com/place/v2/search?query=" . $params['query'] . '&location=' . $params['location'] .
+            '&radius=' . $params['radius'] . '&output=' . $params['output'] . '&ak=' . $params['ak'];
+
+        $date = file_get_contents($url);
+
+        return $this->send(json_decode($date), '操作成功', 'ok');
+
+    }
 }
 
 ?>

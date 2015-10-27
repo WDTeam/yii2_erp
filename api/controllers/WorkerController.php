@@ -5,6 +5,7 @@ use Yii;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\worker\Worker;
 use \core\models\worker\WorkerSkill;
+use core\models\worker\WorkerVacationApplication;
 use \core\models\worker\WorkerAccessToken;
 use \core\models\Operation\CoreOperationShopDistrictCoordinate;
 
@@ -62,34 +63,54 @@ class WorkerController extends \api\components\Controller
         if ($workerId ) {
             $workerInfo = Worker::getWorkerDetailInfo($workerId);
             //数据整理
-            $ret = [
-               "worker_name" => $workerInfo['worker_name'],
-                "worker_phone" => $workerInfo['worker_phone'],
-                "head_url" => $workerInfo['worker_photo'],
-                "worker_identity" => $workerInfo['worker_identity_description'],//身份
-                "worker_role" => $workerInfo["worker_type_description"],
-                'worker_start' => $workerInfo["worker_star"],
-                'total_money' => $workerInfo['worker_stat_order_money'],
-                "personal_skill" => WorkerSkill::getWorkerSkill($workerId),
-            ];
-            return $this->send($ret, "阿姨信息查询成功");
-        } else {
-            return $this->send(null, "阿姨不存在.", 0, 403);
+            if(!empty($workerInfo)){
+                $ret = [
+                    "worker_name" => $workerInfo['worker_name'],
+                    "worker_phone" => $workerInfo['worker_phone'],
+                    "head_url" => $workerInfo['worker_photo'],
+                    "worker_identity" => $workerInfo['worker_identity_description'],//身份
+                    "worker_role" => $workerInfo["worker_type_description"],
+                    'worker_start' => $workerInfo["worker_star"],
+                    'total_money' => $workerInfo['worker_stat_order_money'],
+                    "personal_skill" => WorkerSkill::getWorkerSkill($workerId),
+                ];
+                return $this->send($ret, "阿姨信息查询成功");
+            }
         }
+        return $this->send(null, "阿姨不存在.", 0, 403);
     }
 
     /**
+     * 公用检测阿姨登录情况
+     * @param type $param 
+     */
+    private function checkWorkerLogin($param=array()){
+        $msg = array('code'=>0,'msg'=>'','worker_id'=>0);
+        if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
+           $msg['msg'] = '用户认证已经过期,请重新登录';
+           return $msg;
+        }
+        $worker = WorkerAccessToken::getWorker($param['access_token']);
+        if (!$worker|| !$worker->id) {
+            $msg['msg'] = '阿姨不存在';
+            return $msg;
+        }
+        //验证通过
+        $msg['code'] = 1;
+        $msg['msg'] = '验证通过';
+        $msg['worker_id'] = $worker->id;
+        return $msg;
+    }
+    /**
      * @api {POST} /worker/handle-worker-leave  阿姨请假（田玉星 80%）
-     *
-     * @apiDescription 【备注：等待model底层支持】
      *
      * @apiName actionHandleWorkerLeave
      * @apiGroup Worker
      *
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} [platform_version] 平台版本号.
-     * @apiParam {String} date 请假时间.
-     * @apiParam {String} type 请假类型
+     * @apiParam {String} leave_date 请假时间.
+     * @apiParam {String} leave_type 请假类型
      * .
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/handle-worker-leave
      *
@@ -114,51 +135,49 @@ class WorkerController extends \api\components\Controller
     public function actionHandleWorkerLeave()
     {
         $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-        if (!isset($param['access_token']) || !$param['access_token'] || !WorkerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        //检测阿姨是否登录
+        $checkResult = $this->checkWorkerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
+        } 
+        //判断数据完整
+        if(!isset($param['leave_type']) || !$param['leave_type']){
+            return $this->send(null, "数据不完整,请选择请假类型", 0, 403);
         }
-        $worker = WorkerAccessToken::getWorker($param['access_token']);
-        if (!empty($worker) && !empty($worker->id)) {
-            $attributes = [];
-            $attributes['worker_id'] = $worker->id;
-            if (!isset($param['type']) || !$param['type'] || !in_array($param['type'], array(1, 2))) {
-                return $this->send(null, "数据不完整,请选择请假类型", 0, 403);
-            }
-            $attributes['worker_vacation_type'] = $param['type'];
+        if (!in_array($param['leave_type'], array(1, 2))) {
+            return $this->send(null, "请假类型不正确", 0, 403);
+        }
+        $vacationType = intval($param['leave_type']);
 
-            //请假时间范围判断
-            if (!isset($param['date']) || !$param['date']) {
-                return $this->send(null, "数据不完整,请选择请假时间", 0, 403);
-            }
-            $vacation_start_time = time();
-            $vacation_end_time = strtotime(date('Y-m-d', strtotime("+14 days")));
-            $current_vacation_time = strtotime($param['date']);
-            if ($current_vacation_time <= $vacation_start_time || $current_vacation_time > $vacation_end_time) {
-                return $this->send(null, "请假时间不在请假时间范围内,请选择未来14天的日期", 0, 403);
-            }
-            $attributes['worker_vacation_start_time'] = $attributes['worker_vacation_finish_time'] = $current_vacation_time;
-            //请假入库
-            $workerVacation = new \core\models\order\WorkerVacation();
-            $is_success = $workerVacation->createNew($attributes);
-            if ($is_success) {
-                $result = array(
-                    'result' => 1,
-                    "msg" => "您的请假已提交，请耐心等待审批。"
-                );
-                return $this->send($result, "操作成功");
-            } else {
-                return $this->send(null, $workerVacation->errors, 0, 403);
-            }
+        //请假时间范围判断
+        if (!isset($param['leave_date']) || !$param['leave_date']) {
+            return $this->send(null, "数据不完整,请选择请假时间", 0, 403);
+        }
+       
+        $vacation_start_time = time();
+        $vacation_end_time = strtotime(date('Y-m-d', strtotime("+14 days")));
+        $current_vacation_time = strtotime($param['leave_date']);
+        if ($current_vacation_time <= $vacation_start_time || $current_vacation_time > $vacation_end_time) {
+            return $this->send(null, "请假时间不在请假时间范围内,请选择未来14天的日期", 0, 403);
+        }
+        $vacationDate = date("Y-m-d",$current_vacation_time);
+        //请假入库
+        $is_success = WorkerVacationApplication::createVacationApplication($checkResult['worker_id'],$vacationDate,$vacationType);
+        if ($is_success) {
+            $result = array(
+                'result' => 1,
+                "msg" => "您的请假已提交，请耐心等待审批。"
+            );
+            return $this->send($result, "操作成功");
         } else {
-            return $this->send(null, "阿姨不存在.", 0, 403);
+            return $this->send(null,"插入失败", 0, 403);
         }
     }
 
     /**
-     * @api {GET} /worker/handle-worker-leave-history  查看阿姨请假历史（田玉星 80%）
+     * @api {GET} /worker/get-worker-leave-history  查看阿姨请假历史（田玉星 100%）
      *
-     * @apiDescription 【备注：等待model底层支持】
-     * @apiName actionHandleWorkerLeaveHistory
+     * @apiName actionGetWorkerLeaveHistory
      * @apiGroup Worker
      *
      * @apiParam {String} access_token    阿姨登录 token.
@@ -166,20 +185,24 @@ class WorkerController extends \api\components\Controller
      * @apiParam {String} page_num   每页显示数
      * @apiParam {String} [platform_version] 平台版本号.
      *
-     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/handle-worker-leave-history
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-leave-history
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *       "code": "ok",
-     *        "msg": "操作成功",
-     *       "ret": [
-     *          {
-     *              "leave_type": "休假",
-     *              "leave_date": "2015-10-01",
-     *              "leave_status": "待审批"
-     *          }
-     *     ]
+     *   "code": 1,
+     *   "msg": "操作成功",
+     *   "ret": {
+     *       "per_page": 1,
+     *       "page_num": 1,
+     *       "data": [
+     *           {
+     *               "leave_type": "休假",
+     *               "leave_date": "2015-10-30",
+     *               "leave_status": "待审核"
+     *           }
+     *       ]
+     *      }
      *   }
      *
      * @apiErrorExample Error-Response:
@@ -190,48 +213,53 @@ class WorkerController extends \api\components\Controller
      *  }
      *
      */
-    public function actionHandleWorkerLeaveHistory()
+    public function actionGetWorkerLeaveHistory()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-        if (!isset($param['access_token']) || !$param['access_token'] || !WorkerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        //检测阿姨是否登录
+        $checkResult = $this->checkWorkerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
+        } 
+        //判断页码
+        if (!isset($param['per_page']) || !intval($param['per_page'])) {
+            $param['per_page'] = 1;
         }
-        $worker = WorkerAccessToken::getWorker($param['access_token']);
-        if (!empty($worker) && !empty($worker->id)) {
-            //判断页码
-            if (!isset($param['per_page']) || !intval($param['per_page'])) {
-                $param['per_page'] = 1;
-            }
-            $per_page = intval($param['per_page']);
-            //每页显示数据数
-            if (!isset($param['page_num']) || !intval($param['page_num'])) {
-                $param['page_num'] = 10;
-            }
-            $page_num = intval($param['page_num']);
-
-            //调取阿姨请假历史情况
-            $ret = [
-                [
-                    'leave_type' => '休假',
-                    'leave_date' => '2015-10-01',
-                    'leave_status' => '待审批'
-                ],
-                [
-                    'leave_type' => '事假',
-                    'leave_date' => '2015-10-11',
-                    'leave_status' => '成功'
-                ],
-                [
-                    'leave_type' => '事假',
-                    'leave_date' => '2015-10-12',
-                    'leave_status' => '失败'
-                ],
-            ];
-            return $this->send($ret, "操作成功");
-        } else {
-            return $this->send(null, "阿姨不存在.", 0, 403);
+        $per_page = intval($param['per_page']);
+        //每页显示数据数
+        if (!isset($param['page_num']) || !intval($param['page_num'])) {
+            $param['page_num'] = 10;
         }
+        $page_num = intval($param['page_num']);
 
+        //调取阿姨请假历史情况
+        $data = WorkerVacationApplication::getApplicationList($checkResult['worker_id'],$per_page,$page_num);
+        $pageData = array();
+        if($data['data']){
+            foreach($data['data'] as $key => $val){
+                $pageData[$key]['leave_type'] = $val['worker_vacation_application_type']==1?"休假":"事假";
+                $pageData[$key]['leave_date'] =  date('Y-m-d',$val['worker_vacation_application_start_time']);
+                switch($val['worker_vacation_application_approve_status']){
+                    case "0":
+                        $pageData[$key]['leave_status'] = "待审核";
+                        break;
+                    case "1":
+                        $pageData[$key]['leave_status'] = "审核通过";
+                        break;
+                    case "2":
+                        $pageData[$key]['leave_status'] = "审核不通过";
+                        break;
+                    default :
+                        $pageData[$key]['leave_status'] = "未知";
+                }
+            }
+        } 
+        $ret = [
+            'per_page'=> $data['page'],
+            'page_num'=> $data['pageNum'],
+            'data'    => $pageData
+        ];
+        return $this->send($ret, "操作成功");
     }
 
     /**
@@ -267,20 +295,17 @@ class WorkerController extends \api\components\Controller
     public function actionGetWorkerPlaceById()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-        if (!isset($param['access_token']) || !$param['access_token'] || !WorkerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+        //检测阿姨是否登录
+        $checkResult = $this->checkWorkerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
         }
-        $worker = WorkerAccessToken::getWorker($param['access_token']);
-        if (!empty($worker) && !empty($worker->id)) {
-            $workerInfo = Worker::getWorkerDetailInfo($worker->id);
-            $ret = array(
-                "result" => '1',
-                "live_place" => $workerInfo['worker_live_place']
-            );
-            return $this->send($ret, "操作成功.");
-        } else {
-            return $this->send(null, "阿姨不存在.", 0, 404);
-        }
+        $workerInfo = Worker::getWorkerDetailInfo($checkResult['worker_id']);
+        $ret = array(
+            "result" => '1',
+            "live_place" => $workerInfo['worker_live_place']
+        );
+        return $this->send($ret, "操作成功.");
     }
 
     /**
@@ -301,22 +326,21 @@ class WorkerController extends \api\components\Controller
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *      "code": "ok",
-     *      "msg": "操作成功.",
-     *      "ret": [
-     *         {
-     *             "comment_id": "1",
-     *             "comment": "这是第一条评论类型为2评论",
-     *             "comment_date": "2015-10-22"
-     *         },
-     *         {
-     *             "comment_id": "1",
-     *             "comment": "这是第二条评论类型为2评论",
-     *            "comment_date": "2015-10-22"
-     *         }
-     *      ]
-     * }
+     *   {
+     *       "code": 1,
+     *       "msg": "操作成功.",
+     *       "ret": {
+     *           "per_page": 1,
+     *           "page_num": 10,
+     *           "data": [
+     *               {
+     *                   "comment_id": "1",
+     *                   "comment": "这是第一条评论类型为评论",
+     *                   "comment_date": "2015-10-27"
+     *               }
+     *           ]
+     *       }
+     *   }
      *
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
@@ -328,10 +352,12 @@ class WorkerController extends \api\components\Controller
     public function  actionGetWorkerComment()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-        if (!isset($param['access_token']) || !$param['access_token'] || !WorkerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
-        }
-
+        //检测阿姨是否登录
+        $checkResult = $this->checkWorkerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
+        } 
+        //判断评论类型
         if (!isset($param['comment_type']) || !intval($param['comment_type']) || !in_array($param['comment_type'], array(1, 2, 3))) {
             return $this->send(null, "评论类型不正确", 0, 403);
         }
@@ -346,28 +372,27 @@ class WorkerController extends \api\components\Controller
         }
         $page_num = intval($param['page_num']);
 
-        //判断用户是否存在
-        $worker = WorkerAccessToken::getWorker($param['access_token']);
-        if (!$worker || !$worker->id) {
-            return $this->send(null, "阿姨不存在.", 0, 404);
-        }
         //数据返回
         $ret = [
-            [
+            'per_page'=>$per_page,
+            'page_num'=>$page_num,
+            'data'=>[
+                [
                 "comment_id" => '1',
                 "comment" => "这是第一条评论类型为" . $param['comment_type'] . "评论",
                 'comment_date' => date('Y-m-d')
-            ],
-            [
-                "comment_id" => '1',
-                "comment" => "这是第二条评论类型为" . $param['comment_type'] . "评论",
-                'comment_date' => date('Y-m-d')
-            ],
-            [
-                "comment_id" => '1',
-                "comment" => "这是第三条评论类型为" . $param['comment_type'] . "评论",
-                'comment_date' => date('Y-m-d')
-            ],
+                ],
+                [
+                    "comment_id" => '1',
+                    "comment" => "这是第二条评论类型为" . $param['comment_type'] . "评论",
+                    'comment_date' => date('Y-m-d')
+                ],
+                [
+                    "comment_id" => '1',
+                    "comment" => "这是第三条评论类型为" . $param['comment_type'] . "评论",
+                    'comment_date' => date('Y-m-d')
+                ]
+            ]
         ];
         return $this->send($ret, "操作成功.");
     }
@@ -416,10 +441,11 @@ class WorkerController extends \api\components\Controller
     public function  actionGetWorkerComplain()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-        if (!isset($param['access_token']) || !$param['access_token'] || !WorkerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
-        }
-
+        //检测阿姨是否登录
+        $checkResult = $this->checkWorkerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
+        } 
         //判断页码
         if (!isset($param['per_page']) || !intval($param['per_page'])) {
             $param['per_page'] = 1;
@@ -430,12 +456,7 @@ class WorkerController extends \api\components\Controller
             $param['page_num'] = 10;
         }
         $page_num = intval($param['page_num']);
-
-        //判断用户是否存在
-        $worker = WorkerAccessToken::getWorker($param['access_token']);
-        if (!$worker || !$worker->id) {
-            return $this->send(null, "阿姨不存在.", 0, 404);
-        }
+        
         //数据返回
         $ret = [
             [
@@ -493,13 +514,12 @@ class WorkerController extends \api\components\Controller
     public function actionGetWorkerServiceInfo()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-        if (!isset($param['access_token']) || !$param['access_token'] || !WorkerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
-        }
-        $worker = WorkerAccessToken::getWorker($param['access_token']);
-        if (!$worker || !$worker->id) {
-            return $this->send(null, "阿姨不存在", 0, 403);
-        }
+         //检测阿姨是否登录
+        $checkResult = $this->checkWorkerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
+        } 
+        
 
         //TODO:通过MODEL获取阿姨服务信息d378a0c76007a68888ac300e8a821f29
         $ret = [
@@ -556,18 +576,13 @@ class WorkerController extends \api\components\Controller
     public function actionGetWorkerBillList()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-        if (!isset($param['access_token']) || !$param['access_token'] || !WorkerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
-        }
-
-        $worker = WorkerAccessToken::getWorker($param['access_token']);
-        if (!$worker || !$worker->id) {
-            return $this->send(null, "阿姨不存在", 0, 403);
-        }
+        //检测阿姨是否登录
+        $checkResult = $this->checkWorkerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
+        } 
         //获取阿姨身份:兼职/全职
-        $workerInfo = Worker::getWorkerInfo($worker->id);
-        $identify = $workerInfo['worker_identity_id'];
-
+        $worker_id = $checkResult['worker_id'];
         //判断页码
         if (!isset($param['per_page']) || !intval($param['per_page'])) {
             $param['per_page'] = 1;
@@ -579,33 +594,38 @@ class WorkerController extends \api\components\Controller
         }
         $page_num = intval($param['page_num']);
         //调取model层
+        try{
+            
+        }catch (Exception $e) {
+           return $this->send(null, "boss系统错误", 1024, 403);
+        }
         $ret = [
             [
-
+                "bill_id"=>"32",
+                'bill_year'=>'2014',
+                'bill_date'=>'09年07月-09月13日',
                 'bill_type' =>"1",
                 'bill_explain'=>"每周四，E家洁会为您结算上周一至周日的保洁服务订单收入及各类服务补贴。您可通过每周的周期下拉菜单进行选择，点击查看，了解每周收入明细。",
-                'bill_date'=>'09年07月-09月13日',
                 'order_count'=>'10',
                 'salary'=>'320.00',
                 'balance_status'=>"1",
-                "bill_id"=>"32"
             ],
             [
+                "bill_id"=>"32",
+                'bill_year'=>'2014',
                 'bill_type' =>"2",
                 'bill_explain'=>"每周四，E家洁会为您结算上周一至周日的保洁服务订单收入及各类服务补贴。您可通过每周的周期下拉菜单进行选择，点击查看，了解每周收入明细。",
                 'bill_date'=>'8月',
                 'order_count'=>'10',
                 'salary'=>'320.00',
                 'balance_status'=>"2",
-                "bill_id"=>"33"
                 ]
         ];
         return $this->send($ret, "操作成功.");
     }
 
-
-     /**
-     * @api {GET} /worker/get-worker-bill-detail 获取阿姨对账单列表 (田玉星 80%)
+    /**
+     * @api {GET} /worker/get-worker-bill-detail 获取阿姨对账单列表详情 (田玉星 70%)
      * 
      * @apiDescription 【备注：等待model底层支持】
      * 
@@ -613,28 +633,30 @@ class WorkerController extends \api\components\Controller
      * @apiGroup Worker
      * 
      * @apiParam {String} access_token    阿姨登录token
-     * @apiParam {String} bill_id  每页显示多少条.
+     * @apiParam {String} bill_id  账单唯一标识.
      * @apiParam {String} [platform_version] 平台版本号.
      * 
-     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-bill-list
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-bill-detail
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *      "code": "ok",
-     *      "msg": "操作成功.",
-     *      "ret": [
-     *      {
-     *         'bill_type' =>"1",
-     *         'bill_explain'=>"每周四，E家洁会为您结算上周一至周日的保洁服务订单收入及各类服务补贴。您可通过每周的周期下拉菜单进行选择，点击查看，了解每周收入明细。",
-     *         'bill_date'=>'09年07月-09月13日',
-     *         'order_count'=>'10',
-     *         'salary'=>'320.00',
-     *         'balance_status'=>"1",
-     *         "bill_id"=>"32"
-     *       }
-     *      ]
-     *       
+     *   "code": 1,
+     *   "msg": "操作成功.",
+     *    "ret": {
+     *       "title_msg": {
+     *           "salary": '6000.00',
+     *           "salary_constitute": '3000元(底薪)+2000元(工时服务)+1100元(奖励)-100元(处罚)'
+     *       },
+     *       "order_list": [
+     *           {
+     *               "service_time": "9.10 14:00-16:00",
+     *               "order_num": "32341334352",
+      *              "order_price":"25.00",
+     *               "service_addr": "北京市朝阳区光华路SOHO"
+     *           }
+     *       ]
+     *   }
      * }
      *
      * @apiErrorExample Error-Response:
@@ -644,28 +666,255 @@ class WorkerController extends \api\components\Controller
      *      "msg": "用户认证已经过期,请重新登录"
      *  }
      */
-    public function actionGetWorkerSalaryByBill(){
+    public function actionGetWorkerBillDetail(){
         $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
-        if(!isset($param['access_token'])||!$param['access_token']||!WorkerAccessToken::checkAccessToken($param['access_token'])){
-           return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
-        }
-        
-        $worker = WorkerAccessToken::getWorker($param['access_token']);
-        if (!$worker|| !$worker->id) {
-            return $this->send(null, "阿姨不存在", 0, 403);
-        }
+        //检测阿姨是否登录
+        $checkResult = $this->checkWorkerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
+        }  
+        //数据整理
         $bill_id = intval($param['bill_id']);//账单ID
         
         //TODO:获取账单
         $ret = [
-            'salary'=>'6000.00',
-            'salary_constitute'=>"3000元(底薪)+2000元(工时服务)+1100元(奖励)-100元(处罚)"
+            "title_info"=>[
+                'salary'=>'6000.00',
+                'salary_constitute'=>"3000元(底薪)+2000元(工时服务)+1100元(奖励)-100元(处罚)"
+            ],
+            'order_list'=>[
+                [ 
+                    'service_time'=>'9.10 14:00-16:00',
+                    'order_num' =>'32341334352',
+                    "order_price"=>"25.00",
+                    'service_addr'=>'北京市朝阳区光华路SOHO'
+                ],
+                [ 
+                    'service_time'=>'9.11 14:00-16:00',
+                    'order_num' =>'32341334352',
+                    "order_price"=>"25.00",
+                    'service_addr'=>'北京市朝阳区建外SOHO东区'
+                ],
+            ]
         ];
         return $this->send($ret, "操作成功.");
     }
-   
+    /**
+     * @api {GET} /worker/get-worker-tasktime-list 获取阿姨工时列表 (田玉星 70%)
+     * 
+     * @apiDescription 【备注：等待model底层支持】
+     * 
+     * @apiName actionGetWorkerTasktimeList
+     * @apiGroup Worker
+     * 
+     * @apiParam {String} access_token    阿姨登录token
+     * @apiParam {String} bill_id  账单唯一标识.
+     * @apiParam {String} [platform_version] 平台版本号.
+     * 
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-tasktime-list
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *   "code": 1,
+     *   "msg": "操作成功.",
+     *   "ret": [
+     *      {
+     *         "service_time": "9.10 14:00-16:00",
+     *         "order_price": "25.00",
+     *         "order_num": "32341334352",
+     *         "service_addr": "北京市朝阳区光华路SOHO"
+     *        }
+     *      ]
+     *   }
+     *
+     * @apiErrorExample Error-Response:
+     *  HTTP/1.1 404 Not Found
+     *  {
+     *      "code":"error",
+     *      "msg": "用户认证已经过期,请重新登录"
+     *  }
+     */
+    public function actionGetWorkerTasktimeList(){
+         $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        //检测阿姨是否登录
+        $checkResult = $this->checkWorkerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
+        }  
+        //数据整理
+        $bill_id = intval($param['bill_id']);//账单ID
+        
+        //获取工时列表
+        $ret = [
+            [
+            "service_time" => "9.10 14:00-16:00",
+            "order_price" => "25.00",
+             'order_num' =>'32341334352',
+            "service_addr" => "北京市朝阳区光华路SOHO"
+            ]
+        ];
+        return $this->send($ret, "操作成功.");
+    }
     
-/**
+    /**
+     * @api {GET} /worker/get-worker-taskreward-list 获取阿姨奖励列表 (田玉星 70%)
+     * 
+     * @apiDescription 【备注：等待model底层支持】
+     * 
+     * @apiName actionGetWorkerTaskrewardList
+     * @apiGroup Worker
+     * 
+     * @apiParam {String} access_token    阿姨登录token
+     * @apiParam {String} bill_id  账单唯一标识.
+     * @apiParam {String} [platform_version] 平台版本号.
+     * 
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-taskreward-list
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *   "code": 1,
+     *   "msg": "操作成功.",
+     *   "ret": [
+     *      {
+     *         "task_name": "单次抢单",
+     *         "reward_money": "25.00",
+     *        }
+     *      ]
+     *   }
+     *
+     * @apiErrorExample Error-Response:
+     *  HTTP/1.1 404 Not Found
+     *  {
+     *      "code":"error",
+     *      "msg": "用户认证已经过期,请重新登录"
+     *  }
+     */
+    public function actionGetWorkerTaskrewardList(){
+        $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        //检测阿姨是否登录
+        $checkResult = $this->checkWorkerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
+        }
+        //数据整理
+        $bill_id = intval($param['bill_id']);//账单ID
+        //获取任务奖励列表
+        $ret = [
+            [
+            "task_name" => "单次抢单",
+            "reward_money" => "25.00",
+            ]
+        ];
+        return $this->send($ret, "操作成功.");
+    }
+    
+    /**
+     * @api {GET} /worker/get-worker-punish-list 获取阿姨受处罚列表 (田玉星 70%)
+     * 
+     * @apiDescription 【备注：等待model底层支持】
+     * 
+     * @apiName actionGetWorkerPunishList
+     * @apiGroup Worker
+     * 
+     * @apiParam {String} access_token    阿姨登录token
+     * @apiParam {String} bill_id  账单唯一标识.
+     * @apiParam {String} [platform_version] 平台版本号.
+     * 
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-punish-list
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *   "code": 1,
+     *   "msg": "操作成功.",
+     *   "ret": [
+     *      {
+     *         "punish_date": "2015.09.08",
+     *         "punish_money": "25.00",
+     *        }
+     *      ]
+     *   }
+     *
+     * @apiErrorExample Error-Response:
+     *  HTTP/1.1 404 Not Found
+     *  {
+     *      "code":"error",
+     *      "msg": "用户认证已经过期,请重新登录"
+     *  }
+     */
+    public function actionGetWorkerPunishList(){
+        $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        //检测阿姨是否登录
+        $checkResult = $this->checkWorkerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
+        }
+        //数据整理
+        $bill_id = intval($param['bill_id']);//账单ID
+        //获取受处罚列表
+        $ret = [
+            [
+            "punish_date" => "2015.09.08",
+            "punish_money" => "25.00",
+            "punish_reason" =>"打扫不干净"
+            ]
+        ];
+        return $this->send($ret, "操作成功.");
+    }
+    
+    /**
+     * @api {PUT} /worker/worker-bill-confirm 确定账单无误 (田玉星 70%)
+     * 
+     * @apiDescription 【备注：等待model底层支持】
+     * 
+     * @apiName actionWorkerBillConfirm
+     * @apiGroup Worker
+     * 
+     * @apiParam {String} access_token    阿姨登录token
+     * @apiParam {String} bill_id  账单唯一标识.
+     * @apiParam {String} [platform_version] 平台版本号.
+     * 
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/worker-bill-confirm
+     * 
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *   "code": 1,
+     *   "msg": "操作成功.",
+     *   "ret": {
+     *         "result": "1",
+     *         "msg": "账单已确认",
+     *        }
+     *   }
+     *
+     * @apiErrorExample Error-Response:
+     *  HTTP/1.1 404 Not Found
+     *  {
+     *      "code":"error",
+     *      "msg": "用户认证已经过期,请重新登录"
+     *  }
+     */
+    public function actionWorkerBillConfirm(){
+        $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        //检测阿姨是否登录
+        $checkResult = $this->checkWorkerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
+        }
+        //数据整理
+        $bill_id = intval($param['bill_id']);//账单ID
+        
+        //账单
+        $ret = [
+            "result" => "1",
+            "msg" => "账单已确认"
+        ];
+        return $this->send($ret, "操作成功.");
+    }
+    
+    /**
      * @api {GET} /worker/get-worker-center 个人中心首页 (田玉星 100%)
      *
      * @apiName getWorkerCenter
@@ -703,18 +952,15 @@ class WorkerController extends \api\components\Controller
      *       "msg": "用户认证已经过期,请重新登录，"
      *     }
      */
-    public function getWorkerCenter(){
+    public function actionGetWorkerCenter(){
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-        if (!isset($param['access_token']) || !$param['access_token'] || !WorkerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
-        }
-        $worker = WorkerAccessToken::getWorker($param['access_token']);
-        if (!$worker || !$worker->id) {
-            return $this->send(null, "阿姨不存在", 0, 403);
-        }
-        
-        $workerInfo = Worker::getWorkerDetailInfo($workerId);
+        //检测阿姨是否登录
+        $checkResult = $this->checkWorkerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
+        }  
         //数据整理
+        $workerInfo = Worker::getWorkerDetailInfo($checkResult['worker_id']);
         $ret = [
             "worker_name" => $workerInfo['worker_name'],
             "worker_phone" => $workerInfo['worker_phone'],
@@ -723,12 +969,13 @@ class WorkerController extends \api\components\Controller
             "worker_role" => $workerInfo["worker_type_description"],
             'worker_start' => $workerInfo["worker_star"],
             'total_money' => $workerInfo['worker_stat_order_money'],
-            "personal_skill" => WorkerSkill::getWorkerSkill($workerId),
+            "personal_skill" => WorkerSkill::getWorkerSkill($checkResult['worker_id']),
         ];
         return $this->send($ret, "阿姨信息查询成功");
     }
     
-    /**
+    
+    /** 
      * @api {get} /mobileapidriver2/system_news  通知中心(田玉星0%)
      * @apiName actionSystemNews
      * @apiGroup Worker
@@ -795,30 +1042,26 @@ class WorkerController extends \api\components\Controller
     public function actionWorkerLeave()
     {
         $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-        if (!isset($param['access_token']) || !$param['access_token'] || !WorkerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        //检测阿姨是否登录
+        $checkResult = $this->checkWorkerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
+        } 
+        if (!isset($param['type']) || !$param['type'] || !in_array($param['type'], array(1, 2))) {
+            return $this->send(null, "请选择请假类型", 0, 403);
         }
-        $worker = WorkerAccessToken::getWorker($param['access_token']);
-        if (!empty($worker) && !empty($worker->id)) {
-            if (!isset($param['type']) || !$param['type'] || !in_array($param['type'], array(1, 2))) {
-                return $this->send(null, "请选择请假类型", 0, 403);
-            }
-            $worker_id = $worker->id;
-            $type = $param['type'];
-            //$ret= Worker::getWorkerLeave($worker_id,$type);
-            $ret = [
-                "result" => 1,
-                "msg" => "ok",
-                "titleMsg" => "您本月已请假0天，本月剩余请假2天",
-                "orderTimeList" => ["2015-09-14", "2015-09-15"],
-                "workerLeaveList" => ["2015-09-14", "2015-09-15"]
+        $worker_id = $checkResult['worker_id'];
+        $type = $param['type'];
+        //$ret= Worker::getWorkerLeave($worker_id,$type);
+        $ret = [
+            "result" => 1,
+            "msg" => "ok",
+            "titleMsg" => "您本月已请假0天，本月剩余请假2天",
+            "orderTimeList" => ["2015-09-14", "2015-09-15"],
+            "workerLeaveList" => ["2015-09-14", "2015-09-15"]
 
-            ];
-            return $this->send($ret, "操作成功", 1);
-
-        } else {
-            return $this->send(null, "阿姨不存在.", 0, 403);
-        }
+        ];
+        return $this->send($ret, "操作成功", 1);
     }
 
     /**

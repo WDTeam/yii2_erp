@@ -4,7 +4,7 @@ namespace boss\models\operation;
 
 use Yii;
 
-use core\models\operation\CoreOperationPlatform;
+use core\models\operation\OperationPlatform as CoreOperationPlatform;
 /**
  * This is the model class for table "{{%operation_platform}}".
  *

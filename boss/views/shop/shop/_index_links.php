@@ -23,7 +23,7 @@ echo Html::a('全部('.Shop::getTotal().')',[
 ]);
 echo ' ';
 
-echo Html::a('待审核('.Shop::getAuditStatusCountByNumber(0).')',[
+echo Html::a('待验证('.Shop::getAuditStatusCountByNumber(0).')',[
     'index','ShopSearch'=>['audit_status'=>0]
 ], [
     'class'=>'btn btn-success'
@@ -42,7 +42,7 @@ echo Html::a('验证通过('.Shop::getAuditStatusCountByNumber(1).')',[
 ]);
 echo ' ';
 echo Html::a('黑名单('.Shop::getIsBlacklistCount().')',[
-    'index','ShopSearch[is_blacklist]'=>0
+    'index','ShopSearch[is_blacklist]'=>1
 ],[
     'class'=>'btn btn-success'
 ]);

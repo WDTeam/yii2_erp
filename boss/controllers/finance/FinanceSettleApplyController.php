@@ -185,6 +185,7 @@ class FinanceSettleApplyController extends BaseAuthController
      */
     public function actionSelfFulltimeWorkerSettleView(){
         $financeSettleApplySearch= new FinanceSettleApplySearch;
+         $financeWorkerNonOrderIncomeSearch = new FinanceWorkerNonOrderIncomeSearch();
         $requestParams = Yii::$app->request->getQueryParams();
         $financeSettleApplySearch->load($requestParams);
         $financeSettleApplySearch = $financeSettleApplySearch->findOne(['id'=>$financeSettleApplySearch->id]);
@@ -197,7 +198,8 @@ class FinanceSettleApplyController extends BaseAuthController
         $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
         $cashOrderDataProvider = $financeWorkerOrderIncomeSearch->getCashOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
         $nonCashOrderDataProvider = $financeWorkerOrderIncomeSearch->getNonCashOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
-        return $this->render('selfFulltimeWorkerSettleView', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider,'cashOrderDataProvider'=>$cashOrderDataProvider,'nonCashOrderDataProvider'=>$nonCashOrderDataProvider]);
+        $taskDataProvider = $financeWorkerNonOrderIncomeSearch->getTaskDataProviderByWorkerId($financeSettleApplySearch->worker_id, null, null);
+        return $this->render('selfFulltimeWorkerSettleView', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider,'cashOrderDataProvider'=>$cashOrderDataProvider,'nonCashOrderDataProvider'=>$nonCashOrderDataProvider,'taskDataProvider'=>$taskDataProvider]);
     }
     
     
@@ -399,6 +401,7 @@ class FinanceSettleApplyController extends BaseAuthController
     */
     public function actionWorkerManualSettlementIndex(){
         $financeSettleApplySearch= new FinanceSettleApplySearch;
+        $financeWorkerNonOrderIncomeSearch = new FinanceWorkerNonOrderIncomeSearch();
         $requestParams = Yii::$app->request->getQueryParams();
         $review_section = $requestParams['review_section'];
         $settle_type = $requestParams['settle_type'];
@@ -420,7 +423,8 @@ class FinanceSettleApplyController extends BaseAuthController
         $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
         $cashOrderDataProvider = $financeWorkerOrderIncomeSearch->getCashOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
         $nonCashOrderDataProvider = $financeWorkerOrderIncomeSearch->getNonCashOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
-        return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider,'cashOrderDataProvider'=>$cashOrderDataProvider,'nonCashOrderDataProvider'=>$nonCashOrderDataProvider]);
+        $taskDataProvider = $financeWorkerNonOrderIncomeSearch->getTaskDataProviderByWorkerId($financeSettleApplySearch->worker_id, null, null);
+        return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider,'cashOrderDataProvider'=>$cashOrderDataProvider,'nonCashOrderDataProvider'=>$nonCashOrderDataProvider,'taskDataProvider'=>$taskDataProvider]);
     }
     
     /**
@@ -484,6 +488,7 @@ class FinanceSettleApplyController extends BaseAuthController
     private function saveAndGenerateSettleData($workerArr,$settleStartTime,$settleEndTime){
         $financeSettleApplySearch = new FinanceSettleApplySearch();
         $financeWorkerOrderIncomeSearch = new FinanceWorkerOrderIncomeSearch();
+        $financeWorkerNonOrderIncomeSearch = new FinanceWorkerNonOrderIncomeSearch();
         foreach($workerArr as $worker){
             //根据阿姨Id获取阿姨信息
             $workerId = $worker['worker_id'];
@@ -493,20 +498,7 @@ class FinanceSettleApplyController extends BaseAuthController
             //获取订单总收入
             $financeSettleApplySearch = $financeSettleApplySearch->getWorkerSettlementSummaryInfo($workerId);
             //获取阿姨的奖励信息
-            $workerSubsidyArr = Array(['finance_worker_non_order_income_type'=>1,'finance_worker_non_order_income_type_des'=>'补贴','finance_worker_non_order_income'=>10,'finance_worker_non_order_income_des'=>'路补超过7公里，补助10元'],);
-            $financeWorkerNonOrderIncomeArr = [];
-            foreach($workerSubsidyArr as $workerSubsidy){
-                $financeWorkerNonOrderIncome = new FinanceWorkerNonOrderIncome;
-                $financeWorkerNonOrderIncome->worker_id = $workerId;
-                $financeWorkerNonOrderIncome->finance_worker_non_order_income_type = $workerSubsidy['finance_worker_non_order_income_type'];
-                $financeWorkerNonOrderIncome->finance_worker_non_order_income_type_des = $workerSubsidy['finance_worker_non_order_income_type_des'];
-                $financeWorkerNonOrderIncome->finance_worker_non_order_income = $workerSubsidy['finance_worker_non_order_income'];
-                $financeWorkerNonOrderIncome->finance_worker_non_order_income_des = $workerSubsidy['finance_worker_non_order_income_des'];
-                $financeWorkerNonOrderIncome->finance_worker_non_order_income_starttime = $settleStartTime;
-                $financeWorkerNonOrderIncome->finance_worker_non_order_income_endtime = $settleStartTime;
-                $financeWorkerNonOrderIncome->created_at = time();
-                $financeWorkerNonOrderIncomeArr[] = $financeWorkerNonOrderIncome;
-            }
+            $financeWorkerNonOrderIncomeArr = $financeWorkerNonOrderIncomeSearch->getTaskArrByWorkerId($workerId, null, null);
             $transaction =  Yii::$app->db->beginTransaction();
             try{
                 $existCount = FinanceSettleApply::find()->where(['worker_id'=>$financeSettleApplySearch->worker_id,'finance_settle_apply_starttime'=>$settleStartTime,'finance_settle_apply_endtime'=>$settleEndTime])->count();

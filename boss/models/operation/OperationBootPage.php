@@ -1,7 +1,7 @@
 <?php
 namespace boss\models\operation;
 use Yii;
-use core\models\operation\CoreOperationBootPage;
+use core\models\operation\OperationBootPage as CoreOperationBootPage;
 
 
 /**

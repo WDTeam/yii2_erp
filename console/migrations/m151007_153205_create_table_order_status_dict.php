@@ -29,19 +29,20 @@ class m151007_153205_create_table_order_status_dict extends Migration
                 [1, '已创建','待支付','',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
                 [2, '已支付','待指派','',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
                 [3, '已开始智能指派','指派中','待接单',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
-                [4, '阿姨已抢单','待服务','已接单',YII_BEGIN_TIME,YII_BEGIN_TIME,0], //已完成智能指派
-                [5, '待人工指派','指派中','待接单',YII_BEGIN_TIME,YII_BEGIN_TIME,0], //未完成智能指派
+                [4, '已完成智能指派','待服务','已接单',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
+                [5, '未完成智能指派','指派中','待接单',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
                 [6, '已开始人工指派','指派中','待接单',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
-                [7, '已指派阿姨','待服务','已接单',YII_BEGIN_TIME,YII_BEGIN_TIME,0], //已完成人工指派
-                [8, '未完成人工指派','指派中','待接单',YII_BEGIN_TIME,YII_BEGIN_TIME,0], //指派失败待响应
-                [9, '已开始服务','服务中','服务中',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
-                [10, '已完成服务','服务完成请评价','服务完成待评价',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
-                [11, '已完成评价','评价已完成','客户已完成评价',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
-                [12, '已核实订单','评价已完成','已核实结算请求-打款中',YII_BEGIN_TIME,YII_BEGIN_TIME,0], //包括 第三方已对账
-                [13, '已完成结算','评价已完成','已完成结算-打款完毕-请查收',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
-                [14, '已完成门店结算','评价已完成','已完成结算-打款完毕-请查收',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
-                [15, '已取消','已关闭','已取消',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
-                [16, '已归档','','',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
+                [7, '已完成人工指派','待服务','已接单',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
+                [8, '未完成人工指派','指派中','待接单',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
+                [9, '阿姨已抢单','待服务','已接单',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
+                [10, '已开始服务','服务中','服务中',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
+                [11, '已完成服务','服务完成请评价','服务完成待评价',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
+                [12, '已完成评价','评价已完成','客户已完成评价',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
+                [13, '已核实订单','评价已完成','已核实结算请求-打款中',YII_BEGIN_TIME,YII_BEGIN_TIME,0], //包括 第三方已对账
+                [14, '已完成结算','评价已完成','已完成结算-打款完毕-请查收',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
+                [15, '已完成门店结算','评价已完成','已完成结算-打款完毕-请查收',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
+                [16, '已取消','已关闭','已取消',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
+                [17, '已归档','','',YII_BEGIN_TIME,YII_BEGIN_TIME,0],
             ]
         );
     }

@@ -2,7 +2,7 @@
 namespace boss\models\operation;
 
 use Yii;
-use core\models\operation\CoreOperationCity;
+use core\models\operation\OperationCity as CoreOperationCity;
 /**
  * This is the model class for table "{{%operation_city}}".
  *

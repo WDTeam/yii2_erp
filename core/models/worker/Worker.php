@@ -97,7 +97,7 @@ class Worker extends \common\models\worker\Worker
             ->asArray()
             ->one();
 
-        if($workerDetailResult){
+        if(!empty($workerDetailResult)){
             $workerDetailResult['worker_sex'] = Worker::getWorkerSexShow($workerDetailResult['worker_sex']);
             $workerDetailResult['worker_type_description'] = self::getWorkerTypeShow($workerDetailResult['worker_type']);
             $workerDetailResult['worker_identity_description'] = WorkerIdentityConfig::getWorkerIdentityShow($workerDetailResult['worker_identity_id']);
@@ -111,8 +111,25 @@ class Worker extends \common\models\worker\Worker
         return $workerDetailResult;
     }
 
+    /**
+     * 获取阿姨统计信息
+     * @param $worker_id 阿姨id
+     * @return array 阿姨统计信息
+     */
+    public static function getWorkerStatInfo($worker_id){
+        $workerStatResult = self::find()
+            ->where(['id'=>$worker_id])
+            ->select('id,shop_id,worker_name,worker_phone,worker_stat_order_num,worker_stat_order_refuse,worker_stat_order_complaint,worker_stat_order_money')
+            ->joinWith('workerStatRelation')
+            ->asArray()
+            ->one();
+        if($workerStatResult){
+            unset($workerStatResult['workerStatRelation']);
+        }
+        return $workerStatResult;
+    }
 
-    /*
+    /**
      * 通过电话获取阿姨信息
      * @param string $phone 阿姨电话
      * @return array 阿姨详细信息(阿姨id，阿姨姓名)
@@ -252,10 +269,10 @@ class Worker extends \common\models\worker\Worker
 
     /**
      * 获取商圈中 所有可用阿姨
-     * @param int district_d 商圈id
-     * @param int worker_type 阿姨类型 1自营2非自营
-     * @param int orderBookBeginTime 待指派订单预约开始时间
-     * @param int orderBookEndTime 待指派订单预约结束时间
+     * @param int $district_id 商圈id
+     * @param int $worker_type 阿姨类型 1自营2非自营
+     * @param int $orderBookBeginTime 待指派订单预约开始时间
+     * @param int $orderBookEndTime 待指派订单预约结束时间
      * @return array freeWorkerArr 所有可用阿姨列表
      */
     public static function getDistrictFreeWorker($district_id=1,$worker_type=1,$orderBookBeginTime,$orderBookEndTime){
@@ -443,7 +460,7 @@ class Worker extends \common\models\worker\Worker
         return isset($areaResult['area_name'])?$areaResult['area_name']:'';
     }
 
-    /*
+    /**
      * 获取阿姨所属商圈名称
      */
     public static function getWorkerDistrictShow($worker_id){
@@ -456,7 +473,7 @@ class Worker extends \common\models\worker\Worker
         }
     }
 
-    /*
+    /**
      * 获取阿姨性别名称
      */
     public static function getWorkerSexShow($worker_sex){
@@ -467,7 +484,7 @@ class Worker extends \common\models\worker\Worker
         }
     }
 
-    /*
+    /**
      * 阿姨是否有健康证
      */
     public static function getWorkerIsHealthShow($worker_is_health){
@@ -478,7 +495,7 @@ class Worker extends \common\models\worker\Worker
         }
     }
 
-    /*
+    /**
      * 阿姨是否上保险
      */
     public static function getWorkerIsInsuranceShow($worker_is_insurance){
@@ -498,7 +515,7 @@ class Worker extends \common\models\worker\Worker
         return [1=>'自有',2=>'非自有'];
     }
 
-    /*
+    /**
      * 获取阿姨类型名称
      */
     public static function getWorkerTypeShow($worker_type){
@@ -670,7 +687,7 @@ class Worker extends \common\models\worker\Worker
      * 阿姨排班表连表方法
      */
     public function getWorkerScheduleRelation(){
-        return $this->hasOne(WorkerSchedule::className(),['worker_id'=>'id']);
+        return $this->hasMany(WorkerSchedule::className(),['worker_id'=>'id']);
     }
 
     /**
