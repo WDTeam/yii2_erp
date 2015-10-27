@@ -16,6 +16,10 @@ class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
 {
     const NON_ORDER_INCOME_TASK = 1;//阿姨任务收入
     
+    const NON_ORDER_INCOME_DEDUCTION_COMPLAINT = 2;//阿姨投诉扣款
+    
+    const NON_ORDER_INCOME_DEDUCTION_COMPANSATE = 3;//阿姨赔偿扣款
+    
     /**
      * @inheritdoc
      */

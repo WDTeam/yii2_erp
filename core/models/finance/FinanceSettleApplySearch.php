@@ -9,6 +9,7 @@ use common\models\finance\FinanceSettleApply;
 use core\models\worker\Worker;
 use core\models\order\Order;
 use core\models\finance\FinanceWorkerNonOrderIncomeSearch;
+use core\models\finance\FinanceWorkerOrderIncomeSearch;
 
 /**
  * FinanceSettleApplySearch represents the model behind the search form about `common\models\finance\FinanceSettleApply`.
@@ -60,6 +61,8 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     public $latestSettleTime;//上次结算日期
     
     public $settleMonth;//结算月份
+    
+    const WORKER_CONFIRM_SETTLEMENT = 1;//阿姨确认结算单
    
    public $financeSettleApplyStatusArr = [
        FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED=>'财务审核不通过',
@@ -408,6 +411,41 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         }
         return $finalWorkerIncomeArr;
     }
+    
+    /**
+     * 
+     * @param type $settle_id
+     * @return type
+     */
+    public static function getOrderArrayBySettleId($settle_id){
+        $orderArray = FinanceWorkerOrderIncomeSearch::find()
+                ->select(['order_id','order_money'])
+                ->where(['finance_settle_apply_id'=>$settle_id])->asArray()->all();
+        return $orderArray;
+    }
+    
+    public static function getTaskArrayBySettleId($settle_id){
+      $taskArray = FinanceWorkerNonOrderIncomeSearch::find()
+              ->select(['finance_worker_non_order_income as task_money','finance_worker_non_order_income_des as task_des'])
+              ->where(['finance_settle_apply_id'=>$settle_id,'finance_worker_non_order_income_type'=>FinanceWorkerNonOrderIncomeSearch::NON_ORDER_INCOME_TASK])
+              ->asArray()->all();
+      return $taskArray;
+    }
+    
+    public static function getDeductionArrayBySettleId($settle_id){
+      $deductionArray = FinanceWorkerNonOrderIncomeSearch::find()
+              ->select(['finance_worker_non_order_income as task_money','finance_worker_non_order_income_des as task_des'])
+              ->where(['finance_settle_apply_id'=>$settle_id,'finance_worker_non_order_income_type'=>[FinanceWorkerNonOrderIncomeSearch::NON_ORDER_INCOME_DEDUCTION_COMPLAINT,FinanceWorkerNonOrderIncomeSearch::NON_ORDER_INCOME_DEDUCTION_COMPANSATE]])
+              ->asArray()->all();
+      return $deductionArray;
+    }
+    
+    public static function workerConfirmSettlement($settle_id){
+        $financeSettleApplySearch = self::find()->where(['id'=>$settle_id])->one();
+        $financeSettleApplySearch->isWorkerConfirmed = self::WORKER_CONFIRM_SETTLEMENT;
+        return $financeSettleApplySearch->save();
+    }
+    
     
     
     public function attributeLabels()

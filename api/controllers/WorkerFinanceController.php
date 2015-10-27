@@ -37,4 +37,26 @@ class WorkerFinanceController extends \api\components\Controller{
             }
         }
     }
+    
+     public function actionGetTaskList(){
+        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        // 按阿姨id获取阿姨信息
+        $workerId = intval($param['worker_id']);
+        if (!empty($workerId) ) {
+            $workerIncomeList = FinanceSettleApplySearch::getSettledWorkerIncomeListByWorkerId($workerId,1,5);
+            if(!empty($workerIncomeList)){
+                return $this->send($workerIncomeList, "阿姨收入信息查询成功");
+            }
+        }
+    }
+    
+    public function actionWorkerConfirmSettlement(){
+        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        // 按阿姨id获取阿姨信息
+        $settle_id = intval($param['settle_id']);
+        if (!empty($settle_id) ) {
+            $isSucceed = FinanceSettleApplySearch::workerConfirmSettlement($settle_id);
+            return $this->send($isSucceed, "阿姨结算状态更新成功");
+        }
+    }
 }
