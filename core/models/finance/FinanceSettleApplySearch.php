@@ -208,8 +208,8 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             $this->finance_settle_apply_starttime = self::getFirstDayOfLastWeek();//结算开始日期
             $this->finance_settle_apply_endtime = self::getLastDayOfLastWeek();//结算截止日期
         }
-        $apply_task_count = FinanceWorkerNonOrderIncomeSearch::getTaskAwardCount(12, -1, 100000000000);
-        $apply_task_money = FinanceWorkerNonOrderIncomeSearch::getTaskAwardMoney(12, -1, 100000000000);
+        $apply_task_count = FinanceWorkerNonOrderIncomeSearch::getTaskAwardCount($workerId, $this->finance_settle_apply_starttime, $this->finance_settle_apply_endtime);
+        $apply_task_money = FinanceWorkerNonOrderIncomeSearch::getTaskAwardMoney($workerId, $this->finance_settle_apply_starttime, $this->finance_settle_apply_endtime);
         if(count($orders) > 0){
            $order_count = count($orders);
            foreach($orders as $order){

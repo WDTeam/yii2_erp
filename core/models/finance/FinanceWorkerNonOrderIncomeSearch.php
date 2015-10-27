@@ -7,6 +7,7 @@ use yii\data\ActiveDataProvider;
 use common\models\finance\FinanceWorkerNonOrderIncome;
 use core\models\worker\WorkerTask;
 use yii\data\ArrayDataProvider;
+use core\models\worker\Worker;
 
 /**
  * FinanceWorkerNonOrderIncomeSearch represents the model behind the search form about `common\models\finance\FinanceWorkerNonOrderIncome`.
@@ -126,6 +127,12 @@ class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
         return WorkerTask::getDoneTasksByWorkerId($finance_settle_apply_starttime, $finance_settle_apply_endtime, $workerId);
     }
     
+    public function getTaskDataProviderByWorkerId($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
+        $data = $this->getTaskArrByWorkerId($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime);
+        $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
+        return $dataProvider;
+    }
+    
     public function getTaskArrByWorkerId($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
         $data = [];
         $taskAwardList = self::getTaskAwardList($workerId, $finance_settle_apply_starttime, $finance_settle_apply_endtime);
@@ -134,8 +141,7 @@ class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
             $data[$i] = $this->transferWorkerTasksToWorkerNonOrderIncome($taskAward);
             $i++;
         }
-        $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
-        return $dataProvider;
+        return $data;
     }
     
     private function transferWorkerTasksToWorkerNonOrderIncome($taskAward){
@@ -145,7 +151,7 @@ class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
         $financeWorkerNonOrderIncome->finance_worker_non_order_income_type = self::NON_ORDER_INCOME_TASK;
         $financeWorkerNonOrderIncome->finance_worker_non_order_income_name = $taskAward->worker_task_name;
         $financeWorkerNonOrderIncome->finance_worker_non_order_income = $taskAward->worker_task_reward_value;
-        $financeWorkerNonOrderIncome->finance_worker_non_order_income_des = '描述';
+        $financeWorkerNonOrderIncome->finance_worker_non_order_income_des = $taskAward->worker_task_description;
         $financeWorkerNonOrderIncome->finance_worker_non_order_income_complete_time = $taskAward->worker_task_done_time;
         $worker = Worker::getWorkerInfo($financeWorkerNonOrderIncome->worker_id);
         if(($worker['worker_type'] ==FinanceSettleApplySearch::SELF_OPERATION ) && ($worker['worker_identity_id'] == FinanceSettleApplySearch::FULLTIME)){
