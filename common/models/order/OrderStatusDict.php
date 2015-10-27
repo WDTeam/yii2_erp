@@ -25,14 +25,15 @@ class OrderStatusDict extends \common\models\order\ActiveRecord
     const ORDER_MANUAL_ASSIGN_START = 6; //开始人工指派
     const ORDER_MANUAL_ASSIGN_DONE = 7; //完成人工指派
     const ORDER_MANUAL_ASSIGN_UNDONE = 8; //未完成人工指派，如果客服和小家政都未完成人工指派则去响应，否则重回待指派状态。
-    const ORDER_SERVICE_START = 9; //开始服务
-    const ORDER_SERVICE_DONE = 10; //完成服务
-    const ORDER_CUSTOMER_ACCEPT_DONE = 11; //完成评价 可申请结算
-    const ORDER_CHECKED = 12; //已核实 已对账
-    const ORDER_PAYOFF_DONE = 13; //已完成结算
-    const ORDER_PAYOFF_SHOP_DONE = 14; //已完成门店结算
-    const ORDER_CANCEL = 15; //已取消
-    const ORDER_DIED = 16; //已归档
+    const ORDER_WORKER_BIND_ORDER = 9; //阿姨自助抢单
+    const ORDER_SERVICE_START = 10; //开始服务
+    const ORDER_SERVICE_DONE = 11; //完成服务
+    const ORDER_CUSTOMER_ACCEPT_DONE = 12; //完成评价 可申请结算
+    const ORDER_CHECKED = 13; //已核实 已对账
+    const ORDER_PAYOFF_DONE = 14; //已完成结算
+    const ORDER_PAYOFF_SHOP_DONE = 15; //已完成门店结算
+    const ORDER_CANCEL = 16; //已取消
+    const ORDER_DIED = 17; //已归档
 
 
     /**

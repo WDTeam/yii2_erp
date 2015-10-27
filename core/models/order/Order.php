@@ -293,8 +293,10 @@ class Order extends OrderModel
             $order->admin_id = $admin_id;
             if ($admin_id > 1) { //大于1属于人工操作
                 $result = OrderStatus::_manualAssignDone($order, ['OrderExtFlag', 'OrderExtWorker']);
-            } else {
+            } elseif($order->orderExtStatus->order_status_dict_id==OrderStatusDict::ORDER_SYS_ASSIGN_START){ //当前状态如果是开始智能派单 就到智能派单成功 否则 到阿姨自助接单
                 $result = OrderStatus::_sysAssignDone($order, ['OrderExtFlag', 'OrderExtWorker']);
+            }else {
+                $result = OrderStatus::_workerBindOrder($order, ['OrderExtFlag', 'OrderExtWorker']);
             }
             OrderPool::remOrderForWorkerPushList($order->id,true); //永久从接单大厅中删除此订单
         }
@@ -314,7 +316,8 @@ class Order extends OrderModel
         $order = OrderSearch::getOne($order_id);
         $order->admin_id = $admin_id;
         $order->order_flag_cancel_cause = $cause;
-        if(in_array($order->orderExtStatus->order_status_dict_id,[  //只有在以下状态下才可以取消订单
+        $current_status = $order->orderExtStatus->order_status_dict_id;
+        if(in_array($current_status,[  //只有在以下状态下才可以取消订单
             OrderStatusDict::ORDER_INIT,
             OrderStatusDict::ORDER_WAIT_ASSIGN,
             OrderStatusDict::ORDER_SYS_ASSIGN_DONE,
@@ -325,16 +328,19 @@ class Order extends OrderModel
             OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
             if ($admin_id == 0) {
                 $order->order_customer_memo = $memo;
-                return OrderStatus::_cancel($order, ['OrderExtCustomer']);
+                $result = OrderStatus::_cancel($order, ['OrderExtCustomer']);
             } elseif ($admin_id == 1) {
                 $order->order_sys_memo = $memo;
-                return OrderStatus::_cancel($order);
+                $result = OrderStatus::_cancel($order);
             } elseif ($admin_id == 2) {
                 $order->order_worker_memo = $memo;
-                return OrderStatus::_cancel($order, ['OrderExtWorker']);
+                $result = OrderStatus::_cancel($order, ['OrderExtWorker']);
             } elseif ($admin_id > 2) {
                 $order->order_cs_memo = $memo;
-                return OrderStatus::_cancel($order);
+                $result = OrderStatus::_cancel($order);
+            }
+            if($result && $order->orderExtPay->order_pay_type==2 && $current_status!=OrderStatusDict::ORDER_INIT){
+                //TODO 调高峰的退款接口
             }
         }else{
             return false;
