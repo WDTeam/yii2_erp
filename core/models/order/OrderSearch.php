@@ -6,6 +6,7 @@ use common\models\order\OrderExtCustomer;
 use common\models\order\OrderExtFlag;
 use common\models\order\OrderExtStatus;
 use common\models\order\OrderStatusDict;
+use core\models\customer\Customer;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -25,6 +26,50 @@ class OrderSearch extends Order
             [['order_service_type_name', 'order_src_name'], 'string', 'max' => 128],
             [['order_address', 'order_cs_memo'], 'string', 'max' => 255],
         ];
+    }
+
+    /**
+     * 通过阿姨ID获取指定月份的所有订单(包括结算状态)
+     * @param $worker_id 阿姨ID
+     * @param $month 指定月份
+     */
+    public static function getWorkerAndOrderAndMonth($worker_id,$year,$month=1,$day=1)
+    {
+        $year = !empty($year) ? $year : date("Y",time());
+        //制造时间戳
+        $month_begin = mktime(0,0,0,$month,$day,$year);
+        $month_end = mktime(0,0,0,$month+1,$day,$year);
+        $query = new \yii\db\Query();
+        $data = $query->from('{{%order}} as order')
+            ->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')
+            ->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')
+            ->innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id')
+            ->innerJoin('{{%order_ext_worker}} as ow','order.id = ow.order_id')
+            ->select('*')
+            ->where(['ow.worker_id'=>$worker_id])
+            ->andWhere(['between', 'order.created_at', $month_begin, $month_end])
+            //->createCommand()->getRawSql();
+            ->all();
+        return $data;
+    }
+
+    /**
+     * 通过订单ID获取带用户信息的订单
+     * @param $order_id 订单ID
+     */
+    public static function getOrderAndCustomer($order_id)
+    {
+        $query = new \yii\db\Query();
+        $data = $query->from('{{%order}} as order')
+            ->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')
+            ->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')
+            ->innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id')
+            ->innerJoin('{{%order_ext_worker}} as ow','order.id = ow.order_id')
+            ->select('*')
+            ->where(['id'=>$order_id])
+            ->one();
+        $data['customer'] = Customer::getCustomerById($data['customer_id'])->getAttributes();
+        return $data;
     }
 
     /**
