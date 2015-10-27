@@ -32,7 +32,7 @@ class CustomerCommentTag extends \yii\db\ActiveRecord
     {
         return [
             [['customer_tag_name'], 'required'],
-            [['customer_comment_level', 'is_online', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['customer_comment_level','customer_tag_type','is_online', 'created_at', 'updated_at', 'is_del'], 'integer'],
             [['customer_tag_name'], 'string', 'max' => 255]
         ];
     }

@@ -17,6 +17,9 @@ class OrderWorkerRelation extends OrderWorkerRelationModel
      * @param $status
      * @param $admin_id
      * @return bool
+     *
+     * TODO 需要修改阿姨拒单数量接口
+     *
      */
     public static function addOrderWorkerRelation($order_id,$worker_id,$memo,$status,$admin_id)
     {

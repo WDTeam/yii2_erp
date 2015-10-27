@@ -25,10 +25,36 @@ use kartik\datecontrol\DateControl;
 
 'cus_card_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 客户服务卡...', 'maxlength'=>20]], 
 
-'created_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 创建时间...']], 
-
-'updated_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 更改时间...']], 
-
+'created_at'=>[
+                'type'=> Form::INPUT_WIDGET, 
+                'widgetClass'=>DateControl::classname(),
+                'options' => [
+                    'type'=>DateControl::FORMAT_DATE,
+                    'ajaxConversion'=>false,
+                    'displayFormat' => 'php:Y-m-d',
+                    'saveFormat'=>'php:U',
+                    'options' => [
+                        'pluginOptions' => [
+                            'autoclose' => true
+                        ]
+                    ]
+                ]
+            ], 
+'updated_at'=>[
+                'type'=> Form::INPUT_WIDGET, 
+                'widgetClass'=>DateControl::classname(),
+                'options' => [
+                    'type'=>DateControl::FORMAT_DATE,
+                    'ajaxConversion'=>false,
+                    'displayFormat' => 'php:Y-m-d',
+                    'saveFormat'=>'php:U',
+                    'options' => [
+                        'pluginOptions' => [
+                            'autoclose' => true
+                        ]
+                    ]
+                ]
+            ], 
 'front_value'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 使用前金额...', 'maxlength'=>8]], 
 
 'behind_value'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 使用后金额...', 'maxlength'=>8]], 
@@ -38,8 +64,12 @@ use kartik\datecontrol\DateControl;
     ]
 
 
-    ]);
-    echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']);
-    ActiveForm::end(); ?>
+    ]);?>
+    <div class="form-group">
+        <div class="col-sm-offset-0 col-sm-12">
+            <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success btn-lg btn-block' : 'btn btn-primary btn-lg btn-block']);?>
+        </div>
+    </div>
+    <? ActiveForm::end(); ?>
 
 </div>

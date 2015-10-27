@@ -3,7 +3,6 @@
 namespace boss\models\operation;
 
 use Yii;
-use core\models\operation\CoreOperationSpec;
 
 /**
  * This is the model class for table "{{%operation_spec}}".
@@ -15,7 +14,7 @@ use core\models\operation\CoreOperationSpec;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationSpec extends CoreOperationSpec
+class OperationSpec extends \core\models\operation\OperationSpec
 {
 
     /**

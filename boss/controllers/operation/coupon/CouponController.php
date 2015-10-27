@@ -69,9 +69,6 @@ class CouponController extends Controller
     {
         $model = new Coupon;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			
-			//basic	info
-			//coupon service type
 			$service_types = Coupon::getServiceTypes();
 			$model->coupon_type_name = $service_types[$model->coupon_type];
 			switch ($model->coupon_type)
@@ -121,15 +118,16 @@ class CouponController extends Controller
 			switch ($model->coupon_time_type)
 			{
 				case 0:
-					$model->coupon_begin_at = strtotime($model->coupon_begin_at);
-					$model->coupon_end_at = strtotime($model->coupon_end_at);
+					$model->coupon_begin_at = strtotime($_POST['Coupon']['coupon_begin_at']);
+					$model->coupon_end_at = strtotime($_POST['Coupon']['coupon_end_at']);
 					$model->coupon_get_end_at = 0;
 					$model->coupon_use_end_days = 0;
 				break;
 				case 1:
-					$model->coupon_begin_at = strtotime($model->coupon_begin_at);
+                    
+					$model->coupon_begin_at = strtotime($_POST['Coupon']['coupon_begin_at']);
 					$model->coupon_end_at = 0;
-					$model->coupon_get_end_at = strtotime($model->coupon_get_end_at);
+					$model->coupon_get_end_at = strtotime($_POST['Coupon']['coupon_get_end_at']);
 					
 				break;
 						
@@ -167,11 +165,32 @@ class CouponController extends Controller
 			$model->system_user_id = 0;
 			$model->system_user_name = '';
 			$model->validate();
-			if($model->save()){
-				return $this->redirect(['view', 'id' => $model->id]);
-			}else{
-				return $this->render('create', ['model' => $model]);
-			}
+            $model->save();
+		//	if($model->save()){
+		//		return $this->redirect(['view', 'id' => $model->id]);
+		//	}else{
+		//		return $this->render('create', ['model' => $model]);
+		//	}
+            //insert into coupon code
+            $couponCode = new CouponCode;
+            $couponCode->coupon_id = $model->id;
+            $couponCode->coupon_name = $model->coupon_name;
+            $couponCode->coupon_price = $model->coupon_price;
+            $couponCode->created_at = time();
+            $couponCode->updated_at = 0;
+            $couponCode->is_del = 0;
+            for($i=0; $i<$_POST['Coupon']['coupon_code_num']; $i++){
+                $coupon_code_str = CouponCode::generateCouponCode();
+                $couponCodeTemp =  CouponCode::find()->where(['coupon_code'=>$coupon_code_str])->one();
+                while($couponCodeTemp){
+                    
+                     $coupon_code_str = CouponCode::generateCouponCode();
+                     $couponCodeTemp =  CouponCode::find()->where(['coupon_code'=>$coupon_code_str])->one();
+                }
+                $couponCode->coupon_code = $coupon_code_str;
+                $couponCode->save(); 
+           }
+	    	return $this->redirect(['view', 'id' => $model->id]);
             
 		}else{
 			return $this->render('create', ['model' => $model]);
@@ -224,5 +243,9 @@ class CouponController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    public function actionTest(){
+        $customerCoupon = \core\models\operation\coupon\CouponCustomer::listCustomerCoupon('18500041311');
+        var_dump($customerCoupon);
     }
 }

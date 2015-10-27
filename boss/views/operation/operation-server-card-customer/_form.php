@@ -7,12 +7,12 @@ use kartik\datecontrol\DateControl;
 
 /**
  * @var yii\web\View $this
- * @var common\models\operation\ServerCardCustomer $model
+ * @var common\models\operation\OperationServerCardCustomer $model
  * @var yii\widgets\ActiveForm $form
  */
 ?>
 
-<div class="server-card-customer-form">
+<div class="operation-server-card-customer-form">
 
     <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); echo Form::widget([
 
@@ -32,18 +32,85 @@ use kartik\datecontrol\DateControl;
 'customer_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 持卡人id...']], 
 
 'use_scope'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 使用范围...']], 
-
-'buy_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 购买日期...']], 
-
-'valid_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 有效截止日期...']], 
-
-'activated_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 激活日期...']], 
+'buy_at'=>[
+                'type'=> Form::INPUT_WIDGET, 
+                'widgetClass'=>DateControl::classname(),
+                'options' => [
+                    'type'=>DateControl::FORMAT_DATE,
+                    'ajaxConversion'=>false,
+                    'displayFormat' => 'php:Y-m-d',
+                    'saveFormat'=>'php:U',
+                    'options' => [
+                        'pluginOptions' => [
+                            'autoclose' => true
+                        ]
+                    ]
+                ]
+            ], 
+'valid_at'=>[
+                'type'=> Form::INPUT_WIDGET, 
+                'widgetClass'=>DateControl::classname(),
+                'options' => [
+                    'type'=>DateControl::FORMAT_DATE,
+                    'ajaxConversion'=>false,
+                    'displayFormat' => 'php:Y-m-d',
+                    'saveFormat'=>'php:U',
+                    'options' => [
+                        'pluginOptions' => [
+                            'autoclose' => true
+                        ]
+                    ]
+                ]
+            ], 
+'activated_at'=>[
+                'type'=> Form::INPUT_WIDGET, 
+                'widgetClass'=>DateControl::classname(),
+                'options' => [
+                    'type'=>DateControl::FORMAT_DATE,
+                    'ajaxConversion'=>false,
+                    'displayFormat' => 'php:Y-m-d',
+                    'saveFormat'=>'php:U',
+                    'options' => [
+                        'pluginOptions' => [
+                            'autoclose' => true
+                        ]
+                    ]
+                ]
+            ], 
 
 'freeze_flag'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 冻结标识...']], 
 
-'created_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 创建时间...']], 
+'created_at'=>[
+                'type'=> Form::INPUT_WIDGET, 
+                'widgetClass'=>DateControl::classname(),
+                'options' => [
+                    'type'=>DateControl::FORMAT_DATE,
+                    'ajaxConversion'=>false,
+                    'displayFormat' => 'php:Y-m-d',
+                    'saveFormat'=>'php:U',
+                    'options' => [
+                        'pluginOptions' => [
+                            'autoclose' => true
+                        ]
+                    ]
+                ]
+            ], 
 
-'updated_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 更改时间...']], 
+'updated_at'=>[
+                'type'=> Form::INPUT_WIDGET, 
+                'widgetClass'=>DateControl::classname(),
+                'options' => [
+                    'type'=>DateControl::FORMAT_DATE,
+                    'ajaxConversion'=>false,
+                    'displayFormat' => 'php:Y-m-d',
+                    'saveFormat'=>'php:U',
+                    'options' => [
+                        'pluginOptions' => [
+                            'autoclose' => true
+                        ]
+                    ]
+                ]
+            ], 
 
 'pay_value'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 实收金额...', 'maxlength'=>8]], 
 
@@ -66,8 +133,12 @@ use kartik\datecontrol\DateControl;
     ]
 
 
-    ]);
-    echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']);
-    ActiveForm::end(); ?>
+    ]);?>
+    <div class="form-group">
+        <div class="col-sm-offset-0 col-sm-12">
+            <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success btn-lg btn-block' : 'btn btn-primary btn-lg btn-block']);?>
+        </div>
+    </div>
+    <? ActiveForm::end(); ?>
 
 </div>

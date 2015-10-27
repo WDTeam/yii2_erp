@@ -3,7 +3,6 @@
 namespace boss\models\operation;
 
 use Yii;
-use core\models\operation\CoreOperationPriceStrategy;
 /**
  * This is the model class for table "{{%operation_price_strategy}}".
  *
@@ -14,7 +13,7 @@ use core\models\operation\CoreOperationPriceStrategy;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationPriceStrategy extends CoreOperationPriceStrategy
+class OperationPriceStrategy extends \core\models\operation\OperationPriceStrategy
 {
     /**
      * @inheritdoc

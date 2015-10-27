@@ -8,16 +8,15 @@
 
 namespace boss\models\order;
 
-use boss\models\operation\OperationCity;
 use common\models\finance\FinanceOrderChannel;
-use core\models\operation\CoreOperationArea;
+use core\models\operation\OperationArea;
 use core\models\order\OrderPay;
 use Yii;
 use core\models\order\Order as OrderModel;
 use core\models\worker\Worker;
 use yii\helpers\ArrayHelper;
 use boss\models\operation\OperationShopDistrict;
-use core\models\operation\CoreOperationCity;
+use core\models\operation\OperationCity;
 use common\models\order\OrderStatusDict;
 
 
@@ -73,13 +72,13 @@ class Order extends OrderModel
 //         $city_list = OperationCity::find()->select(['city_id','city_name'])->where(['province_id'=>$province_id,'operation_city_is_online'=>1])->all();
 //         return ArrayHelper::map($city_list,'city_id','city_name');
         
-        $onlineCityList = CoreOperationCity::getCityOnlineInfoList();
+        $onlineCityList = OperationCity::getCityOnlineInfoList();
         return $onlineCityList?ArrayHelper::map($onlineCityList,'city_id','city_name'):[];
     }
 
     public static function getCountyList($city_id)
     {
-        $county_list = CoreOperationArea::getAreaList($city_id);
+        $county_list = OperationArea::getAreaList($city_id);
         $countys = [];
         if(is_array($county_list)) {
             foreach ($county_list as $k => $v) {
@@ -131,6 +130,7 @@ class Order extends OrderModel
         $post['Order']['admin_id'] = Yii::$app->user->id;
         $post['Order']['order_ip'] = Yii::$app->request->userIP;
         $post['Order']['order_src_id'] = 1; //订单来源BOSS
+        $post['Order']['order_is_use_balance'] =  $post['Order']['order_pay_type']==2?1:0; //是否使用余额
         $post['Order']['channel_id'] = empty($post['Order']['channel_id'])?20:$post['Order']['channel_id']; //订单渠道
         $post['Order']['order_customer_need'] = (isset($post['Order']['order_customer_need']) && is_array($post['Order']['order_customer_need']))?implode(',',$post['Order']['order_customer_need']):''; //客户需求
         //预约时间处理

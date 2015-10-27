@@ -2,7 +2,6 @@
 namespace boss\models\operation;
 
 use Yii;
-use core\models\operation\CoreOperationCity;
 /**
  * This is the model class for table "{{%operation_city}}".
  *
@@ -12,7 +11,7 @@ use core\models\operation\CoreOperationCity;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationCity extends CoreOperationCity
+class OperationCity extends \core\models\operation\OperationCity
 {
     /**
      * @inheritdoc

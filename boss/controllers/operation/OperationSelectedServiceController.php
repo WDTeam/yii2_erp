@@ -41,63 +41,14 @@ class OperationSelectedServiceController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => OperationSelectedService::find(),
-        ]);
+        $searchModel = new  OperationSelectedService; 
+
+        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
         ]);
-    }
-
-    /**
-     * 获取商品列表
-     * @param type $city_id 城市id
-     * @param type $shop_district 商圈id
-     * @param type $goods_id 商品id
-     */
-    public static function getGoodsList($city_id = '', $shop_district = ''){
-        if(empty($city_id) || empty($shop_district)){
-            self::$jsondata['msg'] = '参数传递有误';
-            self::$jsondata['status'] = 0;
-        }else{
-            $goodsListInfo = OperationShopDistrictGoods::getShopDistrictGoodsList($city_id, $shop_district);
-            if(empty($goodsListInfo)){
-                self::$jsondata['msg'] = '该商圈下面没商品';
-                self::$jsondata['status'] = 0;
-            }else{
-                self::$jsondata['status'] = 1;
-                self::$jsondata['data'] = $goodsListInfo;
-            }
-        }
-        return self::$jsondata;
-    }
-
-    
-    /**
-     * 设置商品规格数据
-     */
-    private function actionHandlespec($goods_id){
-        $specGoods = OperationSpecGoods::getSpecGoods($goods_id);
-        $specvalues = array();
-        if(!empty($specGoods)){
-            $specvalues['operation_spec_name'] = $specGoods[0]['operation_spec_name'];
-            foreach((array)$specGoods as $key => $value){
-                $specvalues['info'][$key]['operation_spec_goods_no'] = $value['operation_spec_goods_no'];  //货号
-                $specvalues['info'][$key]['operation_spec_value'] = $value['operation_spec_value'];   //规格属性
-
-                $specvalues['info'][$key]['operation_spec_goods_market_price'] = $value['operation_spec_goods_market_price'];   //市场价格
-                $specvalues['info'][$key]['operation_spec_goods_sell_price'] = $value['operation_spec_goods_sell_price'];   //销售价格
-                $specvalues['info'][$key]['operation_spec_goods_cost_price'] = $value['operation_spec_goods_cost_price'];   //成本价格
-                $specvalues['info'][$key]['operation_spec_goods_settlement_price'] = $value['operation_spec_goods_settlement_price'];   //结算价格
-                $specvalues['info'][$key]['operation_spec_goods_lowest_consume_number'] = $value['operation_spec_goods_lowest_consume_number'];   //最低消费数量
-                $specvalues['info'][$key]['operation_spec_strategy_unit'] = $value['operation_spec_strategy_unit']; //计量单位
-
-                $specvalues['info'][$key]['operation_spec_goods_commission_mode'] = $value['operation_spec_goods_commission_mode'];   //收取佣金方式（1: 百分比 2: 金额） 默认：金额
-                $specvalues['info'][$key]['operation_spec_goods_commission'] = $value['operation_spec_goods_commission'];   //佣金值
-            }
-        }
-        return $specvalues;
     }
 
     /**
@@ -111,6 +62,7 @@ class OperationSelectedServiceController extends Controller
         $post = Yii::$app->request->post();
 
         if ($model->load($post)) {
+            $model->selected_service_area_standard = $post['OperationSelectedService']['selected_service_area_standard'];
 
             $model->created_at = time();
             $model->uploadImgToQiniu('selected_service_photo');
@@ -124,20 +76,6 @@ class OperationSelectedServiceController extends Controller
                 'model' => $model,
             ]);
         }
-    }
-    
-    private function handleGoodsImgs($model, $files = array()){
-        $qiniu = new Qiniu();
-        $data = array();
-        foreach((array)$files as $filekey => $filevalue){
-            $fileinfo = UploadedFile::getInstance($model, $filevalue);
-            if(!empty($fileinfo)){
-                $key = time().mt_rand('1000', '9999').uniqid();
-                $qiniu->uploadFile($fileinfo->tempName, $key);
-                $data[$filevalue] = $qiniu->getLink($key);
-            }
-        }
-        return $data;
     }
 
     /**
@@ -191,6 +129,22 @@ class OperationSelectedServiceController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    /**
+     * Displays a single OperationSelectService model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionView($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            return $this->render('view', ['model' => $model]);
         }
     }
 }

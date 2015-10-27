@@ -3,7 +3,6 @@
 namespace boss\models\operation;
 
 use Yii;
-use core\models\operation\CoreOperationShopDistrict;
 
 /**
  * This is the model class for table "{{%operation_shop_district}}".
@@ -16,7 +15,7 @@ use core\models\operation\CoreOperationShopDistrict;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationShopDistrict extends CoreOperationShopDistrict
+class OperationShopDistrict extends \core\models\operation\OperationShopDistrict
 {
     /**
      * @inheritdoc
@@ -25,7 +24,7 @@ class OperationShopDistrict extends CoreOperationShopDistrict
     {
         return [
             [['operation_city_id', 'created_at', 'updated_at'], 'integer'],
-//            [['operation_shop_district_latitude_longitude'], 'string'],
+            //[['operation_shop_district_latitude_longitude'], 'string'],
             [['operation_shop_district_name'], 'string', 'max' => 60],
             [['operation_city_name'], 'string', 'max' => 50],
             [['operation_shop_district_name'], 'required'],

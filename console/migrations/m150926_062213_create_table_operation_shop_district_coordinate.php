@@ -26,6 +26,7 @@ class m150926_062213_create_table_operation_shop_district_coordinate extends Mig
             'operation_shop_district_coordinate_end_longitude' => Schema::TYPE_STRING . '(50) DEFAULT NULL COMMENT \'结束经度\'',
             'operation_shop_district_coordinate_end_latitude' => Schema::TYPE_STRING . '(50) DEFAULT NULL COMMENT \'结束纬度\'',
 
+            'is_softdel' => Schema::TYPE_SMALLINT . '(1) unsigned NOT NULL DEFAULT 1 COMMENT \'状态\'',
             'created_at' => Schema::TYPE_INTEGER. '(11) DEFAULT NULL COMMENT \'创建时间\'',
             'updated_at' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'编辑时间\'',
         ], $tableOptions);

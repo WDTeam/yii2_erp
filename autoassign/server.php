@@ -222,7 +222,7 @@ class server
      * 获取待指派订单
      */
     public function getOrders(){
-        $orders = $this->redis->zrange('WaitAssignOrdersPool',0,-1);
+        $orders = $this->redis->zrange('WAIT_ASSIGN_ORDERS_POOL',0,-1);
         foreach($orders as $key => $value){
             // 加锁与解锁
             if(isset($value['lock']) && $value['lock']){

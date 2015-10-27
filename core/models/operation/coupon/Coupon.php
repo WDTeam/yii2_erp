@@ -154,7 +154,7 @@ class Coupon extends \common\models\operation\coupon\Coupon
     }
 
     /**
-     * 优惠名称
+     * 优惠名称 
      * @param int  $coupon_id 优惠码规则id
      * @return array 优惠信息
      */
@@ -162,6 +162,18 @@ class Coupon extends \common\models\operation\coupon\Coupon
     {
         return Coupon::find()->select('coupon_name,coupon_price,coupon_type_name,coupon_service_type_id,coupon_service_type_name,coupon_service_id,coupon_service_name')->where(["id" => $coupon_id,"coupon_city_name" => $city_name])->asArray()->all();
     }
-
+     /**
+     * 获取优惠券有效时间类型
+     */
+    public static function couponTimeType($coupon_id)
+    {
+        $coupon = self::findOne($coupon_id);
+        if ($coupon == NULL) {
+            return false;
+        }
+        return array(
+            'coupon_time_type' => $coupon->coupon_time_type,
+        );
+    }
 	
 }

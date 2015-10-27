@@ -1,7 +1,6 @@
 <?php
 namespace boss\models\operation;
 use Yii;
-use core\models\operation\CoreOperationBootPageCity;
 
 /**
  * This is the model class for table "{{%operation_boot_page_city}}".
@@ -13,7 +12,7 @@ use core\models\operation\CoreOperationBootPageCity;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationBootPageCity extends CoreOperationBootPageCity
+class OperationBootPageCity extends \core\models\operation\OperationBootPageCity
 {
 
     /**
