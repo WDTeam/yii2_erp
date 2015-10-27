@@ -14,9 +14,6 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '服务卡信息管�
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-server-card-create">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
     <?= $this->render('_form', [
         'model' => $model,
 		'deploy' => $deploy,

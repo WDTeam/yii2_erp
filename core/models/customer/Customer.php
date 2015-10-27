@@ -20,6 +20,7 @@ class Customer extends \common\models\customer\Customer
 		if($customer == NULL){
 			return false;
 		}
+		return '';
 		
 	}
 

@@ -285,7 +285,7 @@ class OrderSearch extends Order
         }
 
         if (!is_null($channels)) {
-            foreach($order_status as $channels_str){
+            foreach($channels as $channels_str){
                 $query = $query->orFilterWhere([
                     'channel_id' => $channels_str
                 ]);
