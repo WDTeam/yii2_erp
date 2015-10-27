@@ -93,7 +93,7 @@ function categoryGoods(obj){
     var value = obj.attr('value');
     $('.goods_list').remove();
     if(status){
-        var url = '/operation-city/getcategorygoods';
+        var url = '/operation/operation-city/getcategorygoods';
         var city_id = $('.city_id').val();
         var data = {'categoryid': value, 'city_id' : city_id};
         $.post(url, data, function(t){
@@ -132,7 +132,7 @@ function alllist(obj){
 //function getCityShopDistrict(obj){
 //    var value = obj.val();
 //    if(value){
-//        var url = '/operation-city/getcityshopdistrict';
+//        var url = '/operation/operation-city/getcityshopdistrict';
 //        var data = {'city_info': value};
 //        $.post(url, data, function(t){
 //            $('#cityshopdistrict').html(t);
