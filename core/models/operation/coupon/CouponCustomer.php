@@ -4,8 +4,8 @@ namespace core\models\operation\coupon;
 
 use Yii;
 use core\models\customer\Customer;
-use core\models\Operation\coupon\Coupon;
-use core\models\Operation\coupon\CouponCode;
+use core\models\operation\coupon\Coupon;
+use core\models\operation\coupon\CouponCode;
 /**
  * This is the model class for table "{{%coupon_customer}}".
  *
@@ -26,7 +26,19 @@ use core\models\Operation\coupon\CouponCode;
 class CouponCustomer extends \common\models\operation\coupon\CouponCustomer
 {
 
-    
+    /**
+     * relation coupon code
+     */
+    public function getCouponCode(){
+       return $this->hasMany(CouponCode::className(), ['id'=>'coupon_code_id'])->onCondition([]);
+    }
+    /**
+     * relation coupon
+     */
+    public function getCoupon(){
+        return $this->hasMany(Coupon::className(), ['id'=>'coupon_id'])->onCondition([]);
+    }
+
     /**
      * list customer's coupon while phone is access
      */
@@ -36,31 +48,48 @@ class CouponCustomer extends \common\models\operation\coupon\CouponCustomer
         if($customer == NULL) return false;
 
         //list coupon
-        $couponCustomer = self::find()->where(['customer_id'=>$customer->id])->joinWith(['coupon', 'coupon_code'])
-            ->orderBy('coupon_customer.expirate_at asc, coupon.coupon_price desc')->all();      
+        $couponCustomer = self::find()->where(['customer_id'=>$customer->id])
+            ->joinWith('coupon')
+            ->joinWith('couponCode')
+            ->orderBy('expirate_at asc, coupon_price desc')
+            ->all();      
+                    
    
         return $couponCustomer;
    }
-    /**
-     * 获取用户优惠码
-     * @customer_id int    用户id
-     * @city_name   string 城市名称
-     * @type   int   标示 来区别用户是否调用该城市下面的优惠码
-     * @return  array 用户优惠码
+     /**
+     * 获取用户优惠券列表（列表包括下单所在城市的和所有城市都通用的券）
      */
-    public static function getCouponCustomer($customer_id, $type = '')
-    {
-        if ($type) {
-            $coupon_id = 'coupon_code,coupon_name,coupon_price,coupon_code_id';
-        } else {
-            $coupon_id = 'coupon_id';
-        }
-        return CouponCustomer::find()->select($coupon_id)->where(["customer_id" => $customer_id])->asArray()->all();
-    }
-
-    
+    public static function GetCustomerCouponList($customer_id,$city_id){
+         $couponCustomer = CouponCustomer::find()->joinWith('coupon')->where([
+                'and',
+                ['>', 'ejj_coupon_customer.expirate_at', time()],
+                ['ejj_coupon_customer.customer_id' => $customer_id],
+                ['ejj_coupon_customer.is_used' => 0],
+                ['ejj_coupon_customer.is_del' => 0],
+                ['ejj_coupon.coupon_city_limit' => 1],
+                ['ejj_coupon.coupon_city_id' => $city_id]
+            ])->andWhere([
+                'or',
+                ['ejj_coupon.coupon_city_limit' => 0],
+            ])->orderBy('ejj_coupon_customer.expirate_at asc, ejj_coupon_customer.coupon_price desc')
+              ->all();
+        return $couponCustomer;
+   }
     /**
-     * 获取用户优惠码
+     * 获取用户全部优惠券列表（包括可用的、不可用的、所有城市的、通用的）
+     */
+    public static function GetAllCustomerCouponList($customer_id,$city_id){
+        $couponCustomer = self::find()->where(['customer_id'=>$customer_id])
+            ->joinWith('coupon')
+            ->joinWith('couponCode')
+            ->orderBy('expirate_at asc, coupon_price desc')
+            ->all();       
+        return $couponCustomer;
+   }
+       
+    /**
+     * 获取用户优惠码数量
      * @customer_id int    用户id
      * @return  array 用户优惠码
      */
