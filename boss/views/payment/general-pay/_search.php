@@ -75,8 +75,6 @@ use boss\models\payment\GeneralPay;
                     'allowClear' => true
                 ]
             ]);?>
-
-
         </div>
 
 

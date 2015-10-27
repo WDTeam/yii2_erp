@@ -208,8 +208,8 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             $this->finance_settle_apply_starttime = self::getFirstDayOfLastWeek();//结算开始日期
             $this->finance_settle_apply_endtime = self::getLastDayOfLastWeek();//结算截止日期
         }
-        $apply_task_count = FinanceWorkerNonOrderIncomeSearch::getTaskAwardCount(12, -1, 100000000000);
-        $apply_task_money = FinanceWorkerNonOrderIncomeSearch::getTaskAwardMoney(12, -1, 100000000000);
+        $apply_task_count = FinanceWorkerNonOrderIncomeSearch::getTaskAwardCount($workerId, $this->finance_settle_apply_starttime, $this->finance_settle_apply_endtime);
+        $apply_task_money = FinanceWorkerNonOrderIncomeSearch::getTaskAwardMoney($workerId, $this->finance_settle_apply_starttime, $this->finance_settle_apply_endtime);
         if(count($orders) > 0){
            $order_count = count($orders);
            foreach($orders as $order){
@@ -353,6 +353,14 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     
     public static function getLastDayOfLastWeek(){
         return strtotime(date('Y-m-d 23:59:59', strtotime('last sunday')));
+    }
+    
+    public static function getWorkerIncomeSummaryInfoByWorkerId($worker_id){
+        $workerSummaryInfo = self::find()->select(['sum(finance_settle_apply_order_count) as all_order_count','sum(finance_settle_apply_money) as all_worker_money'])
+                ->where(['worker_id'=>$worker_id])->asArray()->one();
+        $workerInfo = Worker::getWorkerInfo($worker_id);
+        $workerSummaryInfo['worker_name'] = $workerInfo['worker_name'];
+        return $workerSummaryInfo;
     }
     
     public function attributeLabels()
