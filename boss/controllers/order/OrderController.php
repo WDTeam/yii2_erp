@@ -4,6 +4,7 @@ namespace boss\controllers\order;
 
 use core\models\finance\FinanceRefundadd;
 use core\models\customer\CustomerAddress;
+use core\models\order\OrderTool;
 use core\models\order\OrderWorkerRelation;
 use core\models\worker\Worker;
 use Yii;
@@ -23,6 +24,10 @@ use core\models\shop\Shop;
  */
 class OrderController extends BaseAuthController
 {
+    public function actionTest()
+    {
+        return OrderTool::createOrderCode();
+    }
     public function actionCancelOrder()
     {   
         $orderid = yii::$app->request->get('orderid',1);
@@ -526,8 +531,4 @@ class OrderController extends BaseAuthController
         }
     }
     
-    public function actionTest()
-    {
-        print_r(Yii::$app->request->post());
-    }
 }
