@@ -15,7 +15,7 @@ class CustomerCommentSearch extends CustomerComment
     public function rules()
     {
         return [
-            [['id', 'order_id', 'customer_id', 'customer_comment_star_rate', 'customer_comment_anonymous', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['id', 'order_id', 'customer_id', 'updated_at', 'is_del'], 'integer'],
             [['customer_comment_phone', 'customer_comment_content'], 'safe'],
         ];
     }
@@ -26,7 +26,8 @@ class CustomerCommentSearch extends CustomerComment
         return Model::scenarios();
     }
 
-    public function search($params)
+    public $created_at_end;
+    public function search()
     {
         $query = CustomerComment::find();
 
@@ -34,23 +35,27 @@ class CustomerCommentSearch extends CustomerComment
             'query' => $query,
         ]);
 
-        if (!($this->load($params) && $this->validate())) {
-            return $dataProvider;
-        }
-
+        if($this->created_at){ $statime=strtotime($this->created_at);}else { $statime= null;}
+        if($this->created_at_end){$endtime=strtotime($this->created_at_end);}else{$endtime= null; }
+        
         $query->andFilterWhere([
             'id' => $this->id,
             'order_id' => $this->order_id,
+	        'worker_tel' => $this->worker_tel,
+	        'operation_shop_district_id' => $this->operation_shop_district_id,
+	        'province_id' => $this->province_id,
+        	'city_id' => $this->city_id,
+        	'county_id' => $this->county_id,
+	        'customer_comment_level' => $this->customer_comment_level,	
             'customer_id' => $this->customer_id,
-            'customer_comment_star_rate' => $this->customer_comment_star_rate,
+            'operation_shop_district_id' => $this->operation_shop_district_id,
             'customer_comment_anonymous' => $this->customer_comment_anonymous,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
             'is_del' => $this->is_del,
         ]);
 
         $query->andFilterWhere(['like', 'customer_comment_phone', $this->customer_comment_phone])
-            ->andFilterWhere(['like', 'customer_comment_content', $this->customer_comment_content]);
+        ->andFilterWhere(['between', 'created_at',$statime,$endtime])
+        ->andFilterWhere(['like', 'customer_comment_content', $this->customer_comment_content]);
 
         return $dataProvider;
     }

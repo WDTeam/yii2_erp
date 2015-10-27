@@ -5,6 +5,7 @@ use kartik\grid\GridView;
 use yii\widgets\Pjax;
 
 use boss\components\SearchBox;
+use boss\models\operation\OperationSelectedService;
 
 /**
  * @var yii\web\View $this
@@ -16,7 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-goods-index">
 
-
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
@@ -24,16 +24,35 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\CheckboxColumn',
                 'name' => 'id',
             ],
-            'id',
-            'selected_service_scene',
-            'selected_service_area',
-            'selected_service_sub_area',
-            'selected_service_standard',
-            'selected_service_price',
             [
-                'header'=>"单位(分钟)",
+                'header'=>"编号",
+                'attribute'=>'id',
+            ],
+            [
+                'header'=>"场景",
+                'attribute'=>'selected_service_scene',
+            ],
+            [
+                'header'=>"区域",
+                'attribute'=>'selected_service_area',
+            ],
+            [
+                'header'=>"子区域",
+                'attribute'=>'selected_service_sub_area',
+            ],
+            [
+                'header'=>"清洁标准",
+                'attribute'=>'selected_service_standard',
+            ],
+            //'selected_service_price',
+            [
+                'header'=>"时长(分钟)",
                 'attribute'=>'selected_service_unit',
             ],
+            //[
+                //'header'=>"面积标准(平米)",
+                //'attribute'=>'selected_service_unit',
+            //],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
@@ -64,15 +83,15 @@ $this->params['breadcrumbs'][] = $this->title;
         'hover'=>true,
         'condensed'=>true,
         'floatHeader'=>true,
-
-
-
+        'striped'=>false,
 
         'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type'=>'info',
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> '.Yii::t('app', 'Add'), ['create'], ['class' => 'btn btn-success']),
-//            'after'=>Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List', ['index'], ['class' => 'btn btn-info']),
+            'before'=>
+            Html::a('<i class="glyphicon glyphicon-plus"></i> '.Yii::t('app', 'Add'), ['create'], ['class' => 'btn btn-success']).
+            Html::a('面积小于100平米', ['index?OperationSelectedService[selected_service_area_standard]=1'], ['class' => 'btn '.OperationSelectedService::setBtnCss(1), 'style' => 'margin-right:10px']).
+            Html::a('面积大于100平米', ['index?OperationSelectedService[selected_service_area_standard]=2'], ['class' => 'btn '.OperationSelectedService::setBtnCss(2), 'style' => 'margin-right:10px']),
             'showFooter'=>false
         ],
     ]); Pjax::end(); ?>

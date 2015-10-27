@@ -23,6 +23,38 @@ use crazyfd\qiniu\Qiniu;
  */
 class CoreOperationSelectedService extends CommonOperationSelectedService
 {
+
+    /**
+     * 获取精品服务数据
+     *
+     * @param  int   $service_area_standard 面积标准类型
+     * @return array                        精品保洁数据
+     */
+    public static function getSelectedServiceList($service_area_standard = ''){
+        if(empty($service_area_standard) || !in_array($service_area_standard, [1, 2])){
+            return '';
+        }else{
+            return self::find()
+                ->select([
+                    'id',
+                    'selected_service_scene',
+                    'selected_service_area',
+                    'selected_service_sub_area',
+                    'selected_service_standard',
+                    'selected_service_area_standard',
+                    'selected_service_unit',
+                    'selected_service_photo',
+                    'created_at',
+                ])
+                ->where([
+                    'selected_service_area_standard' => $service_area_standard, 
+                    'is_softdel' => 1,
+                ])
+                ->asArray()
+                ->All();
+        }
+    }
+
     /**
      * 上传图片到七牛服务器
      * @param string $field 上传文件字段名
