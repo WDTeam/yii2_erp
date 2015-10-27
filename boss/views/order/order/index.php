@@ -15,13 +15,10 @@ use boss\models\order\Order;
  */
  
 AppAsset::addCss($this, 'css/order_search/style.css');
-AppAsset::addCss($this, 'css/order_search/jquery-ui-1.8.17.custom.css');
-AppAsset::addCss($this, 'css/order_search/jquery-ui-timepicker-addon.css');
 AppAsset::addCss($this, 'css/order_search/dalog/animate.min.css');
 AppAsset::addScript($this, 'js/order_search/script.js');
 AppAsset::addScript($this, 'js/order_search/My97DatePicker/WdatePicker.js');
-AppAsset::addScript($this, 'js/order_search/dalog/jquery.hDialog.min.js');
-
+AppAsset::addScript($this, 'js/order_search/dalog/jquery.hDialog.min.js');	
 // $this->registerCssFile('css/order_search/style.css');
 // $this->registerCssFile('css/order_search/jquery-ui-1.8.17.custom.css');
 // $this->registerCssFile('css/order_search/jquery-ui-timepicker-addon.css');
@@ -109,13 +106,13 @@ $this->params['breadcrumbs'][] = $this->title;
 						    
 							 <div class="m_from">
 						     
-    <?php 
-    echo ListView::widget([
-        'dataProvider' => $dataProvider,
-        'itemView' => '_item',
-    ]);    
-    ?>  
-		  	 
+							    <?php 
+							    echo ListView::widget([
+							        'dataProvider' => $dataProvider,
+							        'itemView' => '_item',
+							    ]);    
+							    ?>  
+									  	 
 						    	<div class="clear"></div>
 						    </div>
 						    
@@ -384,7 +381,6 @@ $this->params['breadcrumbs'][] = $this->title;
 				</ul>
 			</form>
 		</div>
-		 
 <?php 
 $this->registerJs('
 	    $(function () {
@@ -425,16 +421,6 @@ $this->registerJs('
 					$(".m_disd").show();
 					$(".submitBtntt").hide();
 				});
-	        $(".ui_timepicker").datetimepicker({
-	            //showOn: "button",
-	            //buttonImage: "./css/images/icon_calendar.gif",
-	            //buttonImageOnly: true,
-	            showSecond: true,
-	            timeFormat: "hh:mm:ss",
-	            stepHour: 1,
-	            stepMinute: 1,
-	            stepSecond: 1
-	        })
         	$("#list li").click(
 		       	function(){
 					$(this).addClass("cur");
