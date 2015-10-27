@@ -46,7 +46,6 @@ class CustomerCommentController extends Controller
     {
         $searchModel = new CustomerCommentSearch;
         
-        
         $searchModel->load(Yii::$app->request->getQueryParams());
         $searchModel->is_del=1;
         $datainfo=Yii::$app->request->getQueryParams();

@@ -21,7 +21,7 @@ use kartik\datecontrol\DateControl;
     'attributes' => [
     	'customer_tag_type'=>['type'=> Form::INPUT_RADIO_LIST, 'items'=>['1' => '评价', '2' => '退款','3' => '其他'],'options'=>[
     		]],
-'customer_tag_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'评价标签名称...', 'maxlength'=>255]], 
+'customer_tag_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'评价标签名称...批量用tag1|tag2|tag3|tag4', 'maxlength'=>255]], 
     		'customer_comment_level'=>['type'=> Form::INPUT_RADIO_LIST, 'items'=>['1' => '满意', '2' => '一般','3' => '不满意'],'options'=>[
     		]],
     		
