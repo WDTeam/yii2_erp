@@ -81,6 +81,7 @@ class OrderPush extends Order
                 $ivr_flag = true;
             }
             if (!in_array($v['id'], $is_jpush_worker_ids)) {
+                OrderPool::addOrderToWorkerPushList($order_id,$v['id']); //把订单添加到接单大厅
                 $result = Yii::$app->jpush->push(["worker_{$v['id']}"], '订单来啦！'); //TODO 发送内容
                 if (isset($result->isOK)) {
                     $worker_id = intval(str_replace('worker_', '', $v));
