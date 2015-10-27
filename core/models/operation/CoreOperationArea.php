@@ -18,7 +18,7 @@ use common\models\operation\CommonOperationArea;
  * @property string $position
  * @property integer $sort
  */
-class CoreOperationArea extends CommonOperationArea
+class OperationArea extends CommonOperationArea
 {
     public static function getAreaList($parent_id){
         $data = self::find()->select(['id', 'area_name'])->asArray()->where(['parent_id' => $parent_id])->all();

@@ -7,7 +7,7 @@ use \core\models\worker\Worker;
 use \core\models\worker\WorkerSkill;
 use core\models\worker\WorkerVacationApplication;
 use \core\models\worker\WorkerAccessToken;
-use \core\models\Operation\CoreOperationShopDistrictCoordinate;
+use \core\models\Operation\OperationShopDistrictCoordinate;
 
 class WorkerController extends \api\components\Controller
 {
