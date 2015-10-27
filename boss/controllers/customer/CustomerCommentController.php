@@ -33,7 +33,21 @@ class CustomerCommentController extends Controller
     public function actionIndex()
     {
         $searchModel = new CustomerCommentSearch;
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        
+        
+        $searchModel->load(Yii::$app->request->getQueryParams());
+        $searchModel->is_del=0;
+        $datainfo=Yii::$app->request->getQueryParams();
+        
+        
+        if(isset($datainfo['CustomerCommentSearch']['created_at'])){
+        	$searchModel->created_at=$datainfo['CustomerCommentSearch']['created_at'];
+        }
+         
+        if(isset($datainfo['CustomerCommentSearch']['created_at_end'])){
+        	$searchModel->created_at_end=$datainfo['CustomerCommentSearch']['created_at_end'];
+        }
+        $dataProvider = $searchModel->search();
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
