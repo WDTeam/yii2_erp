@@ -1052,7 +1052,7 @@ class WorkerController extends \api\components\Controller
         }
         $worker_id = $checkResult['worker_id'];
         $type = $param['type'];
-        //$ret= Worker::getWorkerLeave($worker_id,$type);
+        //$ret= WorkerVacationApplication::getApplicationTimeLine($worker_id,$type);
         $ret = [
             "result" => 1,
             "msg" => "ok",
@@ -1079,12 +1079,351 @@ class WorkerController extends \api\components\Controller
     /**
      * 获得该阿姨所有未领取任务奖励记录
      */
+    
+    
+    
+     /**
+     * @api {get} /worker/task-doing  获得进行中的任务列表 (李勇70%)
+     * @apiName actionTaskDoing
+     * @apiGroup Worker
+     *
+     * @apiParam {String} access_token    阿姨登录 token.
+     * @apiParam {String} platform_version 平台版本号.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *      "code": "ok",
+     *      "msg":"操作成功",
+     *      "ret":
+     *      [
+     *      {
+     *          "id": "任务id",
+     *          "worker_task_name": "任务名称",
+     *          "worker_task_start": "任务开始时间",
+     *          "worker_task_end": "任务结束时间",
+     *          "worker_task_reward_value": "任务奖励值",
+     *          "worker_task_conditions": "任务需要完成次数",
+     *          "worker_task_already": "任务已经完成次数"
+     *      },
+     *      {
+     *          "id": "任务id",
+     *          "worker_task_name": "任务名称",
+     *          "worker_task_start": "任务开始时间",
+     *          "worker_task_end": "任务结束时间",
+     *          "worker_task_reward_value": "任务奖励值",
+     *          "worker_task_conditions": "任务需要完成次数",
+     *          "worker_task_already": "任务已经完成次数"
+     *      }
+     *      ]
+     *      }
+     * }
+     *
+     * @apiError SessionIdNotFound 未找到会话ID.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     { 
+     *       "code":"0",
+     *       "msg": "您没有任务哦"
+     *     }
+     */
+    public function actionTaskDoing()
+    {
+        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        //检测阿姨是否登录
+        $checkResult = $this->checkWorkerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
+        } 
+        $worker_id = $checkResult['worker_id'];
+        //$ret= WorkerVacationApplication::getApplicationTimeLine($worker_id);
+        $ret = [
+                [
+                    "id"=> "任务id",
+                    "worker_task_name"=> "任务名称",
+                    "worker_task_start"=> "任务开始时间",
+                    "worker_task_end"=> "任务结束时间",
+                    "worker_task_reward_value"=> "任务奖励值",
+                    "worker_task_conditions"=> "任务需要完成次数",
+                    "worker_task_already"=> "任务已经完成次数"
+
+                ],
+                [
+                    "id"=> "任务id2",
+                    "worker_task_name"=> "任务名称2",
+                    "worker_task_start"=> "任务开始时间2",
+                    "worker_task_end"=> "任务结束时间2",
+                    "worker_task_reward_value"=> "任务奖励值2",
+                    "worker_task_conditions"=> "任务需要完成次数2",
+                    "worker_task_already"=> "任务已经完成次数2"
+
+                ]
+           ];
+        if(empty($ret)){
+              return $this->send(null, "您没有任务哦", 0);
+        }
+        return $this->send($ret, "操作成功", 1);
+    }
+    
+    
+   
+     /**
+     * @api {get} /worker/task-done  获得已完成的任务列表 (李勇70%)
+     * @apiName actionTaskDone
+     * @apiGroup Worker
+     *
+     * @apiParam {String} access_token    阿姨登录 token.
+     * @apiParam {String} platform_version 平台版本号.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *      "code": "ok",
+     *      "msg":"操作成功",
+     *      "ret":
+     *      [
+     *      {
+     *          "id": "任务id",
+     *          "worker_task_name": "任务名称",
+     *          "worker_task_start": "任务开始时间",
+     *          "worker_task_end": "任务结束时间",
+     *          "worker_task_reward_value": "任务奖励值",
+     *          "worker_task_conditions": "任务需要完成次数",
+     *          "worker_task_already": "任务已经完成次数"
+     *      },
+     *      {
+     *          "id": "任务id",
+     *          "worker_task_name": "任务名称",
+     *          "worker_task_start": "任务开始时间",
+     *          "worker_task_end": "任务结束时间",
+     *          "worker_task_reward_value": "任务奖励值",
+     *          "worker_task_conditions": "任务需要完成次数",
+     *          "worker_task_already": "任务已经完成次数"
+     *      }
+     *      ]
+     *      }
+     * }
+     *
+     * @apiError SessionIdNotFound 未找到会话ID.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     { 
+     *       "code":"0",
+     *       "msg": "您没有已完成任务哦"
+     *     }
+     */
+    public function actionTaskDone()
+    {
+        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        //检测阿姨是否登录
+        $checkResult = $this->checkWorkerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
+        } 
+        $worker_id = $checkResult['worker_id'];
+        //$ret= WorkerVacationApplication::getApplicationTimeLine($worker_id);
+        $ret = [
+                [
+                    "id"=> "任务id",
+                    "worker_task_name"=> "任务名称",
+                    "worker_task_start"=> "任务开始时间",
+                    "worker_task_end"=> "任务结束时间",
+                    "worker_task_reward_value"=> "任务奖励值",
+                    "worker_task_conditions"=> "任务需要完成次数",
+                    "worker_task_already"=> "任务已经完成次数"
+
+                ],
+                [
+                    "id"=> "任务id2",
+                    "worker_task_name"=> "任务名称2",
+                    "worker_task_start"=> "任务开始时间2",
+                    "worker_task_end"=> "任务结束时间2",
+                    "worker_task_reward_value"=> "任务奖励值2",
+                    "worker_task_conditions"=> "任务需要完成次数2",
+                    "worker_task_already"=> "任务已经完成次数2"
+
+                ]
+           ];
+        if(empty($ret)){
+              return $this->send(null, "您没有任务哦", 0);
+        }
+        return $this->send($ret, "操作成功", 1);
+    }
+    
+     /**
+     * @api {get} /worker/task-fail  获得已失败的任务列表 (李勇70%)
+     * @apiName actionTaskFail
+     * @apiGroup Worker
+     *
+     * @apiParam {String} access_token    阿姨登录 token.
+     * @apiParam {String} platform_version 平台版本号.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *      "code": "ok",
+     *      "msg":"操作成功",
+     *      "ret":
+     *      [
+     *      {
+     *          "id": "任务id",
+     *          "worker_task_name": "任务名称",
+     *          "worker_task_start": "任务开始时间",
+     *          "worker_task_end": "任务结束时间",
+     *          "worker_task_reward_value": "任务奖励值",
+     *          "worker_task_conditions": "任务需要完成次数",
+     *          "worker_task_already": "任务已经完成次数"
+     *      },
+     *      {
+     *          "id": "任务id",
+     *          "worker_task_name": "任务名称",
+     *          "worker_task_start": "任务开始时间",
+     *          "worker_task_end": "任务结束时间",
+     *          "worker_task_reward_value": "任务奖励值",
+     *          "worker_task_conditions": "任务需要完成次数",
+     *          "worker_task_already": "任务已经完成次数"
+     *      }
+     *      ]
+     *      }
+     * }
+     *
+     * @apiError SessionIdNotFound 未找到会话ID.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     { 
+     *       "code":"0",
+     *       "msg": "您没有失败的任务哦"
+     *     }
+     */
+    public function actionTaskFail()
+    {
+        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        //检测阿姨是否登录
+        $checkResult = $this->checkWorkerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
+        } 
+        $worker_id = $checkResult['worker_id'];
+        //$ret= WorkerVacationApplication::getApplicationTimeLine($worker_id);
+        $ret = [
+                [
+                    "id"=> "任务id",
+                    "worker_task_name"=> "任务名称",
+                    "worker_task_start"=> "任务开始时间",
+                    "worker_task_end"=> "任务结束时间",
+                    "worker_task_reward_value"=> "任务奖励值",
+                    "worker_task_conditions"=> "任务需要完成次数",
+                    "worker_task_already"=> "任务已经完成次数"
+
+                ],
+                [
+                    "id"=> "任务id2",
+                    "worker_task_name"=> "任务名称2",
+                    "worker_task_start"=> "任务开始时间2",
+                    "worker_task_end"=> "任务结束时间2",
+                    "worker_task_reward_value"=> "任务奖励值2",
+                    "worker_task_conditions"=> "任务需要完成次数2",
+                    "worker_task_already"=> "任务已经完成次数2"
+
+                ]
+           ];
+        if(empty($ret)){
+              return $this->send(null, "您没有任务哦", 0);
+        }
+        return $this->send($ret, "操作成功", 1);
+    }
 
     /**
-     * 获得所有该阿姨已经完成未对账订单
+     * @api {get} /worker/check-task  查看任务的详情 (李勇70%)
+     * @apiName actionCheckTask
+     * @apiGroup Worker
+     *
+     * @apiParam {String} access_token    阿姨登录 token.
+     * @apiParam {String} task_id    任务id
+     * @apiParam {String} platform_version 平台版本号.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *      "code": "ok",
+     *      "msg":"操作成功",
+     *      "ret":
+     *      {
+     *          "id": "任务id",
+     *          "worker_task_name": "任务名称",
+     *          "worker_task_description": "任务描述",
+     *          "worker_task_start": "任务开始时间",
+     *          "worker_task_end": "任务结束时间",
+     *          "worker_task_reward_value": "任务奖励值",
+     *          "worker_task_conditions": "任务需要完成次数",
+     *          "settled":[
+     *               {
+     *                  "order_id": "订单id",
+     *                  "order_time": "订单时间",
+     *                  "work_hours": "工时"
+     *                },
+     *                {
+     *                  "order_id": "订单id",
+     *                  "order_time": "订单时间",
+     *                  "work_hours": "工时"
+     *                }  
+     *           ]
+     *      }
+     * }
+     *
+     * @apiError SessionIdNotFound 未找到会话ID.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     { 
+     *       "code":"0",
+     *       "msg": "查看任务失败"
+     *     }
      */
+    public function actionCheckTask()
+    {
+        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        //检测阿姨是否登录
+        $checkResult = $this->checkWorkerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
+        } 
+        $worker_id = $checkResult['worker_id'];
+        $task_id = $param['task_id'];
+        //$ret= WorkerVacationApplication::getApplicationTimeLine($worker_id,$task_id);
+        $ret = [
+                [
+                    "id"=> "任务id",
+                    "worker_task_name"=> "任务名称",
+                    "worker_task_description"=> "任务描述",
+                    "worker_task_start"=> "任务开始时间",
+                    "worker_task_end"=> "任务结束时间",
+                    "worker_task_reward_value"=> "任务奖励值",
+                    "worker_task_conditions"=> "任务需要完成次数",
+                    "worker_task_already"=> "任务已经完成次数",
+                    "settled"=>[
+                        [
+                            "order_id"=> "订单id",
+                            "order_time"=> "订单时间",
+                            "work_hours"=> "工时"
+                        ],
+                         [
+                            "order_id"=> "订单id2",
+                            "order_time"=> "订单时间2",
+                            "work_hours"=> "工时2"
+                        ]
+                    ]
 
-
+                ]
+           ];
+        if(empty($ret)){
+              return $this->send(null, "查看任务失败", 0);
+        }
+        return $this->send($ret, "操作成功", 1);
+    }
 }
 
 
