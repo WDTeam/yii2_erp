@@ -5,6 +5,7 @@ use Yii;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\worker\Worker;
 use \core\models\worker\WorkerSkill;
+use core\models\worker\WorkerVacationApplication;
 use \core\models\worker\WorkerAccessToken;
 use \core\models\Operation\CoreOperationShopDistrictCoordinate;
 
@@ -103,15 +104,13 @@ class WorkerController extends \api\components\Controller
     /**
      * @api {POST} /worker/handle-worker-leave  阿姨请假（田玉星 80%）
      *
-     * @apiDescription 【备注：等待model底层支持】
-     *
      * @apiName actionHandleWorkerLeave
      * @apiGroup Worker
      *
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} [platform_version] 平台版本号.
-     * @apiParam {String} date 请假时间.
-     * @apiParam {String} type 请假类型
+     * @apiParam {String} leave_date 请假时间.
+     * @apiParam {String} leave_type 请假类型
      * .
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/handle-worker-leave
      *
@@ -141,27 +140,29 @@ class WorkerController extends \api\components\Controller
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
-        $attributes = [];
-        $attributes['worker_id'] = $checkResult['worker_id'];
-        if (!isset($param['type']) || !$param['type'] || !in_array($param['type'], array(1, 2))) {
+        //判断数据完整
+        if(!isset($param['leave_type']) || !$param['leave_type']){
             return $this->send(null, "数据不完整,请选择请假类型", 0, 403);
         }
-        $attributes['worker_vacation_type'] = $param['type'];
+        if (!in_array($param['leave_type'], array(1, 2))) {
+            return $this->send(null, "请假类型不正确", 0, 403);
+        }
+        $vacationType = intval($param['leave_type']);
 
         //请假时间范围判断
-        if (!isset($param['date']) || !$param['date']) {
+        if (!isset($param['leave_date']) || !$param['leave_date']) {
             return $this->send(null, "数据不完整,请选择请假时间", 0, 403);
         }
+       
         $vacation_start_time = time();
         $vacation_end_time = strtotime(date('Y-m-d', strtotime("+14 days")));
-        $current_vacation_time = strtotime($param['date']);
+        $current_vacation_time = strtotime($param['leave_date']);
         if ($current_vacation_time <= $vacation_start_time || $current_vacation_time > $vacation_end_time) {
             return $this->send(null, "请假时间不在请假时间范围内,请选择未来14天的日期", 0, 403);
         }
-        $attributes['worker_vacation_start_time'] = $attributes['worker_vacation_finish_time'] = $current_vacation_time;
+        $vacationDate = date("Y-m-d",$current_vacation_time);
         //请假入库
-        $workerVacation = new \core\models\order\WorkerVacation();
-        $is_success = $workerVacation->createNew($attributes);
+        $is_success = WorkerVacationApplication::createVacationApplication($checkResult['worker_id'],$vacationDate,$vacationType);
         if ($is_success) {
             $result = array(
                 'result' => 1,
@@ -169,15 +170,14 @@ class WorkerController extends \api\components\Controller
             );
             return $this->send($result, "操作成功");
         } else {
-            return $this->send(null, $workerVacation->errors, 0, 403);
+            return $this->send(null,"插入失败", 0, 403);
         }
     }
 
     /**
-     * @api {GET} /worker/handle-worker-leave-history  查看阿姨请假历史（田玉星 80%）
+     * @api {GET} /worker/get-worker-leave-history  查看阿姨请假历史（田玉星 100%）
      *
-     * @apiDescription 【备注：等待model底层支持】
-     * @apiName actionHandleWorkerLeaveHistory
+     * @apiName actionGetWorkerLeaveHistory
      * @apiGroup Worker
      *
      * @apiParam {String} access_token    阿姨登录 token.
@@ -185,20 +185,24 @@ class WorkerController extends \api\components\Controller
      * @apiParam {String} page_num   每页显示数
      * @apiParam {String} [platform_version] 平台版本号.
      *
-     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/handle-worker-leave-history
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-leave-history
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *       "code": "ok",
-     *        "msg": "操作成功",
-     *       "ret": [
-     *          {
-     *              "leave_type": "休假",
-     *              "leave_date": "2015-10-01",
-     *              "leave_status": "待审批"
-     *          }
-     *     ]
+     *   "code": 1,
+     *   "msg": "操作成功",
+     *   "ret": {
+     *       "per_page": 1,
+     *       "page_num": 1,
+     *       "data": [
+     *           {
+     *               "leave_type": "休假",
+     *               "leave_date": "2015-10-30",
+     *               "leave_status": "待审核"
+     *           }
+     *       ]
+     *      }
      *   }
      *
      * @apiErrorExample Error-Response:
@@ -209,7 +213,7 @@ class WorkerController extends \api\components\Controller
      *  }
      *
      */
-    public function actionHandleWorkerLeaveHistory()
+    public function actionGetWorkerLeaveHistory()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //检测阿姨是否登录
@@ -229,22 +233,31 @@ class WorkerController extends \api\components\Controller
         $page_num = intval($param['page_num']);
 
         //调取阿姨请假历史情况
+        $data = WorkerVacationApplication::getApplicationList($checkResult['worker_id'],$per_page,$page_num);
+        $pageData = array();
+        if($data['data']){
+            foreach($data['data'] as $key => $val){
+                $pageData[$key]['leave_type'] = $val['worker_vacation_application_type']==1?"休假":"事假";
+                $pageData[$key]['leave_date'] =  date('Y-m-d',$val['worker_vacation_application_start_time']);
+                switch($val['worker_vacation_application_approve_status']){
+                    case "0":
+                        $pageData[$key]['leave_status'] = "待审核";
+                        break;
+                    case "1":
+                        $pageData[$key]['leave_status'] = "审核通过";
+                        break;
+                    case "2":
+                        $pageData[$key]['leave_status'] = "审核不通过";
+                        break;
+                    default :
+                        $pageData[$key]['leave_status'] = "未知";
+                }
+            }
+        } 
         $ret = [
-            [
-                'leave_type' => '休假',
-                'leave_date' => '2015-10-01',
-                'leave_status' => '待审批'
-            ],
-            [
-                'leave_type' => '事假',
-                'leave_date' => '2015-10-11',
-                'leave_status' => '成功'
-            ],
-            [
-                'leave_type' => '事假',
-                'leave_date' => '2015-10-12',
-                'leave_status' => '失败'
-            ],
+            'per_page'=> $data['page'],
+            'page_num'=> $data['pageNum'],
+            'data'    => $pageData
         ];
         return $this->send($ret, "操作成功");
     }
@@ -282,19 +295,17 @@ class WorkerController extends \api\components\Controller
     public function actionGetWorkerPlaceById()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-        
         //检测阿姨是否登录
         $checkResult = $this->checkWorkerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
-        } 
+        }
         $workerInfo = Worker::getWorkerDetailInfo($checkResult['worker_id']);
         $ret = array(
             "result" => '1',
             "live_place" => $workerInfo['worker_live_place']
         );
         return $this->send($ret, "操作成功.");
-       
     }
 
     /**
@@ -315,22 +326,21 @@ class WorkerController extends \api\components\Controller
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *      "code": "ok",
-     *      "msg": "操作成功.",
-     *      "ret": [
-     *         {
-     *             "comment_id": "1",
-     *             "comment": "这是第一条评论类型为2评论",
-     *             "comment_date": "2015-10-22"
-     *         },
-     *         {
-     *             "comment_id": "1",
-     *             "comment": "这是第二条评论类型为2评论",
-     *            "comment_date": "2015-10-22"
-     *         }
-     *      ]
-     * }
+     *   {
+     *       "code": 1,
+     *       "msg": "操作成功.",
+     *       "ret": {
+     *           "per_page": 1,
+     *           "page_num": 10,
+     *           "data": [
+     *               {
+     *                   "comment_id": "1",
+     *                   "comment": "这是第一条评论类型为评论",
+     *                   "comment_date": "2015-10-27"
+     *               }
+     *           ]
+     *       }
+     *   }
      *
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
@@ -364,21 +374,25 @@ class WorkerController extends \api\components\Controller
 
         //数据返回
         $ret = [
-            [
+            'per_page'=>$per_page,
+            'page_num'=>$page_num,
+            'data'=>[
+                [
                 "comment_id" => '1',
                 "comment" => "这是第一条评论类型为" . $param['comment_type'] . "评论",
                 'comment_date' => date('Y-m-d')
-            ],
-            [
-                "comment_id" => '1',
-                "comment" => "这是第二条评论类型为" . $param['comment_type'] . "评论",
-                'comment_date' => date('Y-m-d')
-            ],
-            [
-                "comment_id" => '1',
-                "comment" => "这是第三条评论类型为" . $param['comment_type'] . "评论",
-                'comment_date' => date('Y-m-d')
-            ],
+                ],
+                [
+                    "comment_id" => '1',
+                    "comment" => "这是第二条评论类型为" . $param['comment_type'] . "评论",
+                    'comment_date' => date('Y-m-d')
+                ],
+                [
+                    "comment_id" => '1',
+                    "comment" => "这是第三条评论类型为" . $param['comment_type'] . "评论",
+                    'comment_date' => date('Y-m-d')
+                ]
+            ]
         ];
         return $this->send($ret, "操作成功.");
     }
@@ -568,9 +582,7 @@ class WorkerController extends \api\components\Controller
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
         //获取阿姨身份:兼职/全职
-        $workerInfo = Worker::getWorkerInfo($checkResult['worker_id']);
-        $identify = $workerInfo['worker_identity_id'];
-
+        $worker_id = $checkResult['worker_id'];
         //判断页码
         if (!isset($param['per_page']) || !intval($param['per_page'])) {
             $param['per_page'] = 1;
@@ -582,25 +594,31 @@ class WorkerController extends \api\components\Controller
         }
         $page_num = intval($param['page_num']);
         //调取model层
+        try{
+            
+        }catch (Exception $e) {
+           return $this->send(null, "boss系统错误", 1024, 403);
+        }
         $ret = [
             [
-
+                "bill_id"=>"32",
+                'bill_year'=>'2014',
+                'bill_date'=>'09年07月-09月13日',
                 'bill_type' =>"1",
                 'bill_explain'=>"每周四，E家洁会为您结算上周一至周日的保洁服务订单收入及各类服务补贴。您可通过每周的周期下拉菜单进行选择，点击查看，了解每周收入明细。",
-                'bill_date'=>'09年07月-09月13日',
                 'order_count'=>'10',
                 'salary'=>'320.00',
                 'balance_status'=>"1",
-                "bill_id"=>"32"
             ],
             [
+                "bill_id"=>"32",
+                'bill_year'=>'2014',
                 'bill_type' =>"2",
                 'bill_explain'=>"每周四，E家洁会为您结算上周一至周日的保洁服务订单收入及各类服务补贴。您可通过每周的周期下拉菜单进行选择，点击查看，了解每周收入明细。",
                 'bill_date'=>'8月',
                 'order_count'=>'10',
                 'salary'=>'320.00',
                 'balance_status'=>"2",
-                "bill_id"=>"33"
                 ]
         ];
         return $this->send($ret, "操作成功.");
@@ -951,7 +969,7 @@ class WorkerController extends \api\components\Controller
             "worker_role" => $workerInfo["worker_type_description"],
             'worker_start' => $workerInfo["worker_star"],
             'total_money' => $workerInfo['worker_stat_order_money'],
-            "personal_skill" => WorkerSkill::getWorkerSkill($workerId),
+            "personal_skill" => WorkerSkill::getWorkerSkill($checkResult['worker_id']),
         ];
         return $this->send($ret, "阿姨信息查询成功");
     }

@@ -225,7 +225,10 @@ class GeneralPay extends GeneralPayCommon
     /**
      * 后台支付(20)
      */
-    private function pay_ht(){}
+    private function pay_ht($data)
+    {
+        dump($data);
+    }
 
     /**
      * 新浪微博支付(21)
