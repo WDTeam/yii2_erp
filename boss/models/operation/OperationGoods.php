@@ -3,7 +3,7 @@
 namespace boss\models\operation;
 
 use Yii;
-use core\models\operation\CoreOperationGoods;
+use core\models\operation\OperationGoods as CoreOperationGoods;
 /**
  * This is the model class for table "{{%operation_goods}}".
  *

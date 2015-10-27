@@ -171,7 +171,7 @@ echo Menu::widget(
 //                        'icon' => 'fa fa-angle-right',
 //                    ],
                     [
-                        'label' => '服务和品类管理(80%)',
+                        'label' => '服务项目和类型管理(80%)',
                         'url' => ['/operation/operation-category/'],
                         'icon' => 'fa fa-angle-right',
 
