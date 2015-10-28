@@ -152,28 +152,10 @@ class OrderComplaintController extends BaseAuthController
      * @return boolean
      */
     public function actionBack(){
-    	$flag = false;
-    	$model = new OrderComplaint();
-    	$params = Yii::$app->request->post();$arr= array();
+    	$params = Yii::$app->request->post();
     	if(!empty($params) && is_array($params)){
-    		foreach ($params as $value){
-    			$arr['OrderComplaint']['order_id'] = $value['order_id'];
-    			$arr['OrderComplaint']['complaint_detail'] = $value['complaint_detail'];
-    			$arr['OrderComplaint']['cumstomer_phone'] = $value['cumstomer_phone'];
-    			$arr['OrderComplaint']['created_at'] = time();
-    			$arr['OrderComplaint']['updated_at'] = time();
-    			$arr['OrderComplaint']['complaint_channel'] = '2';
-    			foreach ($value['data'] as $key=>$val){
-    				$arr['OrderComplaint']['complaint_type'] = $val['type'];
-    				$arr['OrderComplaint']['complaint_section'] = $val['department'];
-    				$arr['OrderComplaint']['complaint_level'] = $val['level'];
-    				if($model->load($arr) && $model->save()){
-    					$flag = true;
-    				}
-    			}
-    		}
-    		
+    			$result = $model->backInsertComplaint($params);
     	}
-    	return $flag;
+    	return $result;
     }
 }
