@@ -7,8 +7,8 @@ use yii\helpers\HtmlPurifier;
    <div class="m_cek"><input type="checkbox" /></div>
    <table cellspacing="0" cellpadding="0" border="1">
 			<tr class="first">
-            	<th style="width: 28%;">订单编号：<?= Html::encode($model->order_code) ?><span>服务类型</span></th>
-                <th>支付状态</th>
+            	<th style="width: 28%;">订单编号：<?= Html::encode($model->order_code) ?><span><?= Html::encode($model->order_service_type_name) ?></span></th>
+                <th><?= $model->orderExtStatus->order_status_dict_id > 1 ? '已支付' : '未支付' ?></th>
                 <th></th>  
                 <th></th>
                 <th class="m_colo"><?= Html::encode($model->orderExtStatus->order_status_name) ?></th>
@@ -16,22 +16,22 @@ use yii\helpers\HtmlPurifier;
             <tr>
             	<input type="hidden" class="order_id" value="<?= Html::encode($model->id) ?>" />
             	<input type="hidden" class="customer_phone" value="<?= Html::encode($model->orderExtCustomer->order_customer_phone) ?>" />
-            	<td><?= empty($model->orderExtCustomer->order_customer_phone) ? '用户手机' : Html::encode($model->orderExtCustomer->order_customer_phone) ?>　用户身份<br />
-            	    <?= Html::encode($model->order_src_name) ?>下单<br />
-            	    2015-09-18   9:00-11:00<br />
+            	<td><?= Html::encode($model->orderExtCustomer->order_customer_phone) ?>　<?= $model->orderExtCustomer->order_customer_is_vip == 1 ? '会员' : '非会员' ?><br />
+            	    <?= Html::encode($model->order_channel_name) ?><br />
+            	    <?= date('Y-m-d H:i', $model->order_booked_begin_time) ?> ~ <?= date('Y-m-d H:i', $model->order_booked_end_time) ?><br />
             	    <?= HtmlPurifier::process($model->order_address) ?>
             	</td>
                 <td>总金额：<?= Html::encode($model->order_money) ?>元<br />
-            	           优惠券：10元<br />
-            	           需支付：40元<br />
-            	          支付方式：线上付款
+            	           优惠券：<?= Html::encode($model->orderExtPay->order_use_coupon_money) ?>元<br />
+            	           需支付：<?= Html::encode($model->orderExtPay->order_pay_money) ?>元<br />
+            	          支付方式：<?= Html::encode($model->orderExtPay->order_pay_channel_name) ?>
             	</td>
-            	<td>指定阿姨：李艳芬<br />
-            	    13478906879<br />
-            	           全职全日<br />
-            	          北京大悦城门店
+            	<td>指定阿姨：<?= Html::encode($model->orderExtWorker->order_worker_name) ?><br />
+            	    <?= Html::encode($model->orderExtWorker->order_worker_phone) ?><br />
+            	    <?= Html::encode($model->orderExtWorker->order_worker_type_name) ?><br />
+            	    <?= Html::encode($model->orderExtWorker->order_worker_shop_name) ?>
             	</td>
-            	<td>2015-09-19 20:00 下单
+            	<td><?= date('Y-m-d H:i', $model->created_at) ?> 下单
             	</td>
             	<td>
             		<p><a href="###">查看订单</a></p>

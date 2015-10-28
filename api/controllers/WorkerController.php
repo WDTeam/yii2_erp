@@ -548,10 +548,8 @@ class WorkerController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-settle-list 获取阿姨对账单列表 (田玉星 95%)
+     * @api {GET} /worker/get-worker-settle-list 获取阿姨对账单列表 (田玉星 100%)
      * 
-     * @apiDescription 【备注：model微调】
-     *
      * @apiName actionGetWorkerSettleList 
      * @apiGroup Worker
      *
@@ -624,7 +622,7 @@ class WorkerController extends \api\components\Controller
             }else{
                 $settleArr[$key]['settle_date'] = date('m',strtotime($val['settle_starttime']));
             }
-            $settleArr[$key]['settle_type'] = $val['settle_cycle_type'];
+            $settleArr[$key]['settle_type'] = $val['settle_cycle'];
             $settleArr[$key]['order_count'] = $val['order_count'];
             $settleArr[$key]['worker_income'] = $val['worker_income'];
             $settleArr[$key]['settle_status'] = $val['settle_status'];
@@ -771,15 +769,13 @@ class WorkerController extends \api\components\Controller
     }
     
     /**
-     * @api {GET} /worker/get-worker-taskreward-list 获取阿姨奖励列表 (田玉星 70%)
-     * 
-     * @apiDescription 【备注：等待model底层支持】
+     * @api {GET} /worker/get-worker-taskreward-list 获取阿姨奖励列表 (田玉星 100%)
      * 
      * @apiName actionGetWorkerTaskrewardList
      * @apiGroup Worker
      * 
      * @apiParam {String} access_token    阿姨登录token
-     * @apiParam {String} bill_id  账单唯一标识.
+     * @apiParam {String} settle_id  账单唯一标识.
      * @apiParam {String} [platform_version] 平台版本号.
      * 
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-taskreward-list
@@ -790,12 +786,12 @@ class WorkerController extends \api\components\Controller
      *   "code": 1,
      *   "msg": "操作成功.",
      *   "ret": [
-     *      {
-     *         "task_name": "单次抢单",
-     *         "reward_money": "25.00",
-     *        }
-     *      ]
-     *   }
+     *       {
+     *           "task_money": "50.00",
+     *           "task_des": "每个月请假不超过4天"
+     *       }
+     *   ]
+     * }
      *
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
@@ -807,19 +803,21 @@ class WorkerController extends \api\components\Controller
     public function actionGetWorkerTaskrewardList(){
         $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
         //检测阿姨是否登录
-        $checkResult = $this->checkWorkerLogin($param);
-        if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 0, 403);
-        }
+//        $checkResult = $this->checkWorkerLogin($param);
+//        if(!$checkResult['code']){
+//            return $this->send(null, $checkResult['msg'], 0, 403);
+//        }
         //数据整理
-        $bill_id = intval($param['bill_id']);//账单ID
-        //获取任务奖励列表
-        $ret = [
-            [
-            "task_name" => "单次抢单",
-            "reward_money" => "25.00",
-            ]
-        ];
+        $settle_id = intval($param['settle_id']);//账单ID
+        if(!$settle_id){
+            return $this->send(null, "账单唯一标识错误", 0, 403);
+        }
+        try{
+            //获取任务奖励列表
+            $ret = FinanceSettleApplySearch::getTaskArrayBySettleId($settle_id);
+         }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
         return $this->send($ret, "操作成功.");
     }
     

@@ -8,6 +8,13 @@ use \core\models\customer\CustomerAddress;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\operation\coupon\CouponCustomer;
 use \core\models\operation\coupon\Coupon;
+use \core\models\customer\CustomerTransRecord;
+use \core\models\customer\CustomerExtBalance;
+use \core\models\order\Order;
+use \core\models\customer\CustomerComment;
+use \core\models\comment\CustomerCommentTag;
+use \core\models\comment\CustomerCommentLevel;
+use \core\models\customer\CustomerExtScore;
 
 class UserController extends \api\components\Controller
 {
@@ -759,13 +766,13 @@ class UserController extends \api\components\Controller
                  *
                  * @param int $customer 用户id
                  */
-                $userBalance = \core\models\customer\CustomerExtBalance::getCustomerBalance($customer->id);
+                $userBalance = CustomerExtBalance::getCustomerBalance($customer->id);
                 /**
                  * 获取用户消费记录
                  *
                  * @param int $customer 用户id
                  */
-                $userRecord = \core\models\Customer\CustomerTransRecord::queryRecord($customer->id);
+                $userRecord = CustomerTransRecord::queryRecord($customer->id);
                 $ret["userBalance"] = $userBalance;
                 $ret["userRecord"] = $userRecord;
                 return $this->send($ret, "查询成功");
@@ -873,7 +880,7 @@ class UserController extends \api\components\Controller
                 /**
                  * @param int $customer_id 用户id
                  */
-                $userscore = \core\models\customer\CustomerExtScore::getCustomerScoreList($customer->id);
+                $userscore = CustomerExtScore::getCustomerScoreList($customer->id);
                 if ($userscore) {
                     $ret["scoreCategory"] = $userscore;
                     return $this->send($ret, "用户积分明细列表", 1);
@@ -932,7 +939,7 @@ class UserController extends \api\components\Controller
 
         if (!empty($customer) && !empty($customer->id)) {
             try {
-                $model = \core\models\customer\CustomerComment::addUserSuggest($customer->id, $param['order_id'], $param['customer_comment_phone'], $param['customer_comment_content'], $param['customer_comment_tag_ids'], $param['customer_comment_level']);
+                $model = CustomerComment::addUserSuggest($customer->id, $param['order_id'], $param['customer_comment_phone'], $param['customer_comment_content'], $param['customer_comment_tag_ids'], $param['customer_comment_level']);
                 if (!empty($model)) {
                     return $this->send([1], "添加评论成功");
                 } else {
@@ -989,7 +996,7 @@ class UserController extends \api\components\Controller
 
         if (!empty($customer) && !empty($customer->id)) {
             try {
-                $level = \core\models\comment\CustomerCommentLevel::getCommentLevel();
+                $level = CustomerCommentLevel::getCommentLevel();
                 if (!empty($level)) {
                     $ret = ['comment' => $level];
                     return $this->send($ret, "获取评论级别成功");
@@ -1048,7 +1055,7 @@ class UserController extends \api\components\Controller
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
             try {
-                $level = \core\models\comment\CustomerCommentTag::getCommentTag($param['customer_comment_level']);
+                $level =CustomerCommentTag::getCommentTag($param['customer_comment_level']);
 
                 if (!empty($level)) {
                     $ret = ['commentTag' => $level];
@@ -1063,6 +1070,147 @@ class UserController extends \api\components\Controller
             return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
         }
     }
+    
+      /**
+     * @api {GET} v1/user/get-level-tag 获取评论的level和tag （郝建设 100%）
+     *
+     * @apiName actionGetLeveltag
+     * @apiGroup User
+     *
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     * {
+     * "code": 1,
+     * "msg": "获取标签和子标签成功",
+     * "ret": [
+     *     {
+     *         "id": "1",
+     *        "customer_comment_level": "0",
+     *        "customer_comment_level_name": "满意",
+     *        "is_del": "0",
+     *        "tag": [
+     *            {
+     *                "id": "2",
+     *                "customer_tag_name": "满意",
+     *                "customer_comment_level": "0",
+     *                "is_online": "0",
+     *                "is_del": "0"
+     *            },
+     *            {
+     *                "id": "6",
+     *                "customer_tag_name": "满意",
+     *                "customer_comment_level": "0",
+     *                "is_online": "0",
+     *                "is_del": "0"
+     *            }
+     *        ]
+     *    },
+     *    {
+     *       "id": "2",
+     *       "customer_comment_level": "1",
+     *       "customer_comment_level_name": "一般",
+     *       "is_del": "0",
+     *       "tag": [
+     *           {
+     *               "id": "1",
+     *               "customer_tag_name": "一般",
+     *               "customer_comment_level": "1",
+     *               "is_online": "1",
+     *               "is_del": "0"
+     *          },
+     *          {
+     *              "id": "5",
+     *              "customer_tag_name": "一般",
+     *              "customer_comment_level": "1",
+     *              "is_online": "0",
+     *              "is_del": "0"
+     *          },
+     *          {
+     *              "id": "7",
+     *              "customer_tag_name": "一般",
+     *              "customer_comment_level": "1",
+     *              "is_online": "0",
+     *              "is_del": "0"
+     *          }
+     *      ]
+     *  },
+     *  {
+     *      "id": "3",
+     *     "customer_comment_level": "2",
+     *     "customer_comment_level_name": "不满意",
+     *     "is_del": "0",
+     *     "tag": [
+     *         {
+     *             "id": "3",
+     *             "customer_tag_name": "不满意",
+     *             "customer_comment_level": "2",
+     *             "is_online": "0",
+     *             "is_del": "0"
+     *         },
+     *         {
+     *             "id": "4",
+     *             "customer_tag_name": "不满意",
+     *             "customer_comment_level": "2",
+     *             "is_online": "0",
+     *             "is_del": "0"
+     *         }
+     *     ]
+     * }
+     * ]
+     * }
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "0",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *     }
+     *
+     */
+    public function actionGetLevelTag()
+    {
+        $param = Yii::$app->request->get();
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+        if (!empty($customer) && !empty($customer->id)) {
+            try {
+                $level = CustomerCommentLevel::getCommentLevel();
+                $array = array();
+                foreach ($level as $key => $val) {
+                    $levelTag = CustomerCommentTag::getCommentTag($val['customer_comment_level']);
+                    foreach ($levelTag as $k => $v) {
+                        $array[$v['customer_comment_level']] = $levelTag;
+                    }
+                }
+                #合并数据组
+                foreach ($level as $kk => $vv) {
+                    foreach ($array as $kv => $vk) {
+                        if ($vv['customer_comment_level'] == $kv) {
+                            $level[$kk]['tag'] = $array[$kv];
+                        }
+                    }
+                }
+
+                if (!empty($level)) {
+                    return $this->send($level, "获取标签和子标签成功");
+                } else {
+                    return $this->send(null, "获取标签和子标签失败", 0, 403);
+                }
+            } catch (Exception $e) {
+                return $this->send(null, "boss系统错误", 0, 1024);
+            }
+        } else {
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
+        }
+    }
+
 
     /**
      * @api {GET} v1/user/get-goods 获取给定经纬度范围内是否有该服务 （郝建设 100%）
@@ -1096,6 +1244,7 @@ class UserController extends \api\components\Controller
      *     }
      *
      */
+    
     public function actionGetGoods()
     {
         $param = Yii::$app->request->get();
@@ -1106,7 +1255,7 @@ class UserController extends \api\components\Controller
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
             try {
-                $service = \core\models\order\Order::getGoods($param['longitude'], $param['latitude'], $param['order_service_type_id']);
+                $service = Order::getGoods($param['longitude'], $param['latitude'], $param['order_service_type_id']);
                 if ($service) {
                     return $this->send(1, "该服务获取成功");
                 } else {
@@ -1118,6 +1267,6 @@ class UserController extends \api\components\Controller
         } else {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
-    }
+    } 
 
 }

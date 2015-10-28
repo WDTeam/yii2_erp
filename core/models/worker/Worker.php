@@ -257,6 +257,9 @@ class Worker extends \common\models\worker\Worker
              ->innerJoinWith('workerDistrictRelation') //关联worker workerDistrictRelation方法
              ->andOnCondition(['operation_shop_district_id'=>$district_id])
              ->innerJoinWith('shopRelation') //关联worker shopRelation方法
+
+             //->innerJoinWith('workerScheduleRelation') //关联WorkerScheduleRelation方法
+             //->andOnCondition([])
              ->innerJoinWith('workerScheduleRelation') //关联WorkerScheduleRelation方法
              ->joinWith('workerStatRelation') //关联worker WorkerStatRelation方法
              ->where($condition)
@@ -278,12 +281,13 @@ class Worker extends \common\models\worker\Worker
         $isEmptyDisabledTime = [];
         foreach($districtWorkerResult as $val){
             for($i=0;$i<7;$i++){
-                if(empty($disabledTimes[$i])){
+                if(empty($disabledTimeLine[$i])){
                     $isEmptyDisabledTime[$i]=true;
                     continue;
                 }
                 $time = strtotime("+$i day",$nowTime);
-                $disabledTimes[$i] = self::filterDisabledTimeLine($time,$val['workerScheduleRelation'],[],$disabledTimes[$i]);
+                $disabledTimeLine[$i] = self::filterDisabledTimeLine($time,$val['workerScheduleRelation'],[],$disabledTimeLine[$i]);
+                //$disabledTimeLine[] = []
             }
             if(count($isEmptyDisabledTime)==7){
                 break;
@@ -294,7 +298,6 @@ class Worker extends \common\models\worker\Worker
     }
 
     /**
-     * 通过阿姨可用时间 过滤 单日的不可用时间
      * @param int $time 日期时间戳
      * @param array $workerSchedule 阿姨后台排班表
      * @param array $workerBookOrderInfo 阿姨预约订单信息
@@ -383,37 +386,42 @@ class Worker extends \common\models\worker\Worker
     protected static function generateTimeLine($disabledTimeLine,$serverDurationTime){
         $nowTime = strtotime(date('Y-m-d'));
         $dayTimes = self::getDayTimes();
-        for($i=0;$i<7;$i++){
-            $time = strtotime("+$i day",$nowTime);
-            $date = date('Y-m-d',$time);
+        for($i=0;$i<7;$i++) {
+            $time = strtotime("+$i day", $nowTime);
+            $date = date('Y-m-d', $time);
             $disabledTime = $disabledTimeLine[$i];
-
-            foreach ($dayTimes as $key=>$val) {
-                $endKey = $key+$serverDurationTime*2;
-                if($endKey>count($dayTimes)-1){
+            foreach ($dayTimes as $key => $val) {
+                $endKey = $key + $serverDurationTime * 2;
+                if ($endKey > count($dayTimes) - 1) {
                     break;
                 }
-                $isDisabled = 0;
-                //获取当前时间段中是否含有不可用的时间
-                foreach ($disabledTime as $d_val) {
-                    $disabledKey = array_search($d_val,$dayTimes);
-                    if($key<=$disabledKey && $endKey>$disabledKey){
-                        $isDisabled = 1;
-                        break;
+                if ($disabledTime) {
+                    $timeLineTmp[] = [$val . '-' . $dayTimes[$endKey] => true];
+                } else {
+                    $timeLineTmp[] = [$val . '-' . $dayTimes[$endKey] => false];
+                    $isDisabled = 0;
+                    //获取当前时间段中是否含有不可用的时间
+                    foreach ($disabledTime as $d_val) {
+                        $disabledKey = array_search($d_val, $dayTimes);
+                        if ($key <= $disabledKey && $endKey > $disabledKey) {
+                            $isDisabled = 1;
+                            break;
+                        }
                     }
-                }
-                if($isDisabled==1){
-                    $timeLineTmp[] = [$val.'-'.$dayTimes[$endKey]=>false];
-                }else{
-                    $timeLineTmp[] = [$val.'-'.$dayTimes[$endKey]=>true];
+                    if ($isDisabled == 1) {
+                        $timeLineTmp[] = [$val . '-' . $dayTimes[$endKey] => false];
+                    } else {
+                        $timeLineTmp[] = [$val . '-' . $dayTimes[$endKey] => true];
+                    }
+
                 }
 
+                $timeLine[$date] = $timeLineTmp;
+                $timeLineTmp = [];
             }
-
-            $timeLine[$date] = $timeLineTmp;
-            $timeLineTmp = [];
         }
         return $timeLine;
+        //var_dump($timeLine);die;
     }
 
     /**

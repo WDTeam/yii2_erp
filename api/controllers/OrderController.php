@@ -5,17 +5,18 @@ namespace api\controllers;
 use \core\models\order\OrderPush;
 use Faker\Provider\DateTime;
 use Yii;
-use common\models\finance\FinanceOrderChannel;
-use common\models\order\OrderSrc;
-use common\models\customer\CustomerAddress as CommonCustomerAddress;
 use \core\models\order\Order;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\customer\CustomerAddress;
+use \core\models\order\OrderSearch;
+use \core\models\worker\WorkerAccessToken;
+use \core\models\order\Order;
 use yii\web\Response;
 
 class OrderController extends \api\components\Controller
 {
 
+    public $workerText = array(1 => '指定阿姨订单数','待抢单订单订单数','指定阿姨订单列表','待抢单订单列表');
     /**
      * @api {POST} /order/create-order 创建订单 (90%xieyi  缺少周期订单和精品保洁，缺少后台模块支持)
      *
@@ -101,30 +102,15 @@ class OrderController extends \api\components\Controller
         }
         $attributes['customer_id'] = $user->id;
 
-        if (@is_null($args['server_item'])) {
-            // server_item is null, order from app
-            if (is_null($args['order_service_type_id'])) {
-                return $this->send(null, "请输入商品类型", 0);
-            }
-            $attributes['order_service_type_id'] = $args['order_service_type_id'];
-        } else {
-            // order from pop,第三方目前没有真实的order_service_type_id
-            $attributes['order_service_type_id'] = 1; //$args['server_item'];
+        if (is_null($args['order_service_type_id'])) {
+            return $this->send(null, "请输入服务类型商品id", 0);
         }
+        $attributes['order_service_type_id'] = $args['order_service_type_id'];
 
-        if (@is_null($args['order_src'])) {
-            if (is_null($args['order_src_id'])) {
-                return $this->send(null, "数据不完整,缺少订单来源", 0);
-            }
-            $attributes['order_src_id'] = $args['order_src_id'];
-        } else {
-            $orderSrc = OrderSrc::find()->where(['order_src_name' => $args['order_src']])->one();
-            if (!empty($orderSrc)) {
-                $attributes['order_src_id'] = $orderSrc['id'];
-            } else {
-                return $this->send(null, "数据不完整,没有配置订单来源：" . $args['order_src'], 0);
-            }
+        if (is_null($args['order_src_id'])) {
+            return $this->send(null, "数据不完整,缺少订单来源", 0);
         }
+        $attributes['order_src_id'] = $args['order_src_id'];
 
         if (is_null($args['order_booked_begin_time'])) {
             return $this->send(null, "数据不完整,请输入初始时间", 0);
@@ -136,31 +122,17 @@ class OrderController extends \api\components\Controller
         }
         $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
 
-
         if (isset($args['address_id'])) {
             $attributes['address_id'] = $args['address_id'];
-        } elseif (isset($args['address'])) {
+        } elseif (isset($args['address']) && isset($args['city'])) {
             //add address into customer and return customer id
             $address = $args['address'];
-            $customerAddress = CommonCustomerAddress::find()->where(['customer_id' => $user->id, 'customer_address_detail' => $address])->one();
-            if (!empty($customerAddress)) {
-                // found the address
-                $attributes['address_id'] = $customerAddress['id'];
+            $city = $args['city'];
+            $model = CustomerAddress::addAddressForPop($user->id, $args['order_customer_phone'], $city, $address);
+            if (!empty($model)) {
+                $attributes['address_id'] = $model->id;
             } else {
-                // address not found, add new address for the customer
-                $area_name = $address;
-                if (strpos($area_name, '市') > 0) {
-                    $area_name = substr($area_name, strpos($area_name, '市') + strlen('市'));
-                }
-                if (strpos($area_name, '区') > 0) {
-                    $area_name = substr($area_name, 0, strpos($area_name, '区'));
-                }
-                $model = CustomerAddress::addAddress($user->id, $area_name, $address, $args['order_customer_phone'], $args['order_customer_phone']);
-                if (!empty($model)) {
-                    $attributes['address_id'] = $model->id;
-                } else {
-                    return $this->send(null, "地址数据不完整,请输入常用地址id或者城市,地址名（包括区）", 0);
-                }
+                return $this->send(null, "地址数据不完整,请输入常用地址id或者城市,地址名（包括区）", 0);
             }
         } else {
             return $this->send(null, "数据不完整,请输入常用地址id或者城市,地址名", 0);
@@ -184,12 +156,8 @@ class OrderController extends \api\components\Controller
 
         if (isset($args['channel_id'])) {
             $attributes['channel_id'] = $args['channel_id'];
-        } elseif (isset($args['order_channel_name'])) {
-            $orderChannel = FinanceOrderChannel::find()->where(['finance_order_channel_name' => $args['order_channel_name']])->one();
-            if (!empty($orderChannel)) {
-                $attributes['channel_id'] = $orderChannel['id'];
-            }
         }
+
         if (isset($args['order_booked_worker_id'])) {
             $attributes['order_booked_worker_id'] = $args['order_booked_worker_id'];
         }
@@ -1083,7 +1051,7 @@ class OrderController extends \api\components\Controller
      *      "msg":"操作成功",
      *      "ret":
      *      {
-     *          "count": 
+     *          "OrderCount": "123"
      *      }
      * }
      * 
@@ -1093,9 +1061,21 @@ class OrderController extends \api\components\Controller
      *      "msg":"操作成功",
      *      "ret":
      *      {
-     *          "orderList":{
-     *            
-     *         } 
+     *          "orderList":
+     *           [ 
+     *           {
+     *            "order_id":"订单号"
+     *            "order_code":"订单编号"
+     *            "batch_code":"周期订单好"
+     *            "booked_begin_time":"服务开始时间"
+     *            "booked_end_time":"服务结束时间"
+     *            "channel_name":"服务类型名称"
+     *            "booked_count":"时常"
+     *            "address":"服务地址"
+     *            "need":""
+     *            "money":"订单价格"
+     *         }
+     *         ]
      *      }
      * }
      *
@@ -1118,7 +1098,7 @@ class OrderController extends \api\components\Controller
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
 
-        $worker = \core\models\worker\WorkerAccessToken::getWorker($param['access_token']);
+        $worker = WorkerAccessToken::getWorker($param['access_token']);
 
         if (!isset($param['leveltype']) && !isset($param['access_token'])) {
             return $this->send(null, "缺少规定的参数", 0, 403);
@@ -1135,47 +1115,42 @@ class OrderController extends \api\components\Controller
               'address' => $order->order_address,
               'need' => $order->orderExtCustomer->order_customer_need
              */
-            $workerText = array(
-                1 => '指定阿姨订单数',
-                '待抢单订单订单数',
-                '指定阿姨订单列表',
-                '待抢单订单列表'
-            );
+            
 
             if ($param['leveltype'] == 3) {
                 try {
-                    $workerCount = \core\models\order\OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 1);
+                    $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 1);
                     $ret['workerData'] = $workerCount;
-                    return $this->send($ret, $workerText[$param['leveltype']], 1);
+                    return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
-                    return $this->send(null, "boss系统错误," . $workerText[$param['leveltype']], 1024);
+                    return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
                     return false;
                 }
             } else if ($param['leveltype'] == 4) {
                 try {
-                    $workerCount = \core\models\order\OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 0);
+                    $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 0);
                     $ret['workerData'] = $workerCount;
-                    return $this->send($ret, $workerText[$param['leveltype']], 1);
+                    return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
-                    return $this->send(null, "boss系统错误," . $workerText[$param['leveltype']], 1024);
+                    return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
                     return false;
                 }
             } else if ($param['leveltype'] == 1) {
                 try {
-                    $workerCount = \core\models\order\OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
+                    $workerCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
                     $ret['workerData'] = $workerCount;
-                    return $this->send($ret, $workerText[$param['leveltype']], 1);
+                    return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
-                    return $this->send(null, "boss系统错误," . $workerText[$param['leveltype']], 1024);
+                    return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
                     return false;
                 }
             } else if ($param['leveltype'] == 2) {
                 try {
-                    $workerCount = \core\models\order\OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
+                    $workerCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
                     $ret['workerData'] = $workerCount;
-                    return $this->send($ret, $workerText[$param['leveltype']], 1);
+                    return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
-                    return $this->send(null, "boss系统错误," . $workerText[$param['leveltype']], 1024);
+                    return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
                     return false;
                 }
             }
@@ -1221,12 +1196,12 @@ class OrderController extends \api\components\Controller
             return $this->send(null, "缺少规定的参数", 0, 403);
         }
 
-        $worker = \core\models\worker\WorkerAccessToken::getWorker($param['access_token']);
+        $worker = WorkerAccessToken::getWorker($param['access_token']);
 
         if (!empty($worker) && !empty($worker->id)) {
 
             try {
-                $setWorker = \core\models\order\Order::sysAssignDone($param['order_id'], $worker->id);
+                $setWorker = Order::sysAssignDone($param['order_id'], $worker->id);
                 $ret['workerSend'] = $setWorker;
                 return $this->send($ret, "操作成功", 1);
             } catch (Exception $e) {

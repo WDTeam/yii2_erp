@@ -102,41 +102,7 @@ class CustomerController extends \api\components\Controller
     	if (!empty($customer) && !empty($customer->id)) {
     		$param['id']=$customer->id;
     		$model = CustomerComment::addUserSuggest($param);
-    		
-    		/* 接口地址：/order/order-complaint/app
-    		接口参数：
-    		字段说明：
-    		主键id: id
-    		订单Id:order_id     int(11)
-    		阿姨Id:worker_id   int(11)
-    		投诉类型：complaint_type  tinyint(2) 订单投诉(1)  非订单投诉(0)
-    		投诉状态：complaint_status  tinyint(2)
-    		投诉渠道：complaint_channel tinyint(2)
-    		投诉电话：complaint_phone int(11)
-    		投诉部门：complaint_section      tinyint(2)
-    		投诉级别：complaint_level            char(2)
-    		投诉详情：complaint_content      varchar(255)
-    		创建时间：complaint_time int  (11)
-    		你把order_id，complaint_content这两项是必选项 */
-    		
-    		
-    		
     		if (!empty($model)) {
-    			if($param['customer_comment_level']=='3'){
-    			//如果是差评 通知投诉接口	
-						$data['order_id']=$param['order_id'];
-						$data['worker_id']=$param['worker_id'];
-						$data['complaint_type']=1;
-						$data['complaint_status']=0;
-						$data['complaint_channel']=0;
-						$data['complaint_phone']=$param['worker_tel'];
-						$data['complaint_section']=0;
-						$data['complaint_level']=3;
-						$data['complaint_content']=$param['customer_comment_content'];
-						$data['complaint_time']=time();
-						//提交给投诉接口
-						$customer::add($data);
-    			}
     			return $this->send([1], "添加评论成功");
     		} else {
     			return $this->send(null, "添加评论失败", 0, 403);
@@ -300,11 +266,18 @@ class CustomerController extends \api\components\Controller
     **/
     public function actionPostControllerworkerlist()
     {
+    	
+    	/* $param['worker_id']=4;
+    	$param['customer_comment_level']=1;
+    	$newpage=0;
+    	
+    	$level = CustomerComment::getCustomerCommentworkerlist($param['worker_id'],$param['customer_comment_level'],$newpage,$countpage=40); */
+    	 
     	$param = Yii::$app->request->post();
     	if (empty($param)) {
     		$param = json_decode(Yii::$app->request->getRawBody(), true);
     	}
-    	$level = CustomerComment::getCustomerCommentworkerlist($param['worker_id']);
+    	$level = CustomerComment::getCustomerCommentworkerlist($param['worker_id'],$param['customer_comment_level'],$param['newpage'],$param['countpage']);
     	if (!empty($level)) {
     		$ret = ['comment' => $level];
     		return $this->send($ret, '阿姨评价列表');
