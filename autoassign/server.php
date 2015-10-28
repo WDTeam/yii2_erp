@@ -31,7 +31,7 @@ class server
      * 构造方法中,初始化 $serv 服务
      */
     public function __construct($config) {
-        echo "自动指派服务启动中";
+        echo date('Y-m-d H:i:s')." 自动指派服务启动中";
         $this->config = $config;
         $this->connectRedis();
         $this->saveStatus(null);
@@ -66,7 +66,7 @@ class server
      */
     public function onStart($server) {
         echo "==>已启动\n";
-        echo "主进程ID：= " .$this->config['SERVER_MASTER_PROCESS_ID']."\n";
+        echo date('Y-m-d H:i:s')." 主进程ID：= " .$this->config['SERVER_MASTER_PROCESS_ID']."\n";
         cli_set_process_title($this->config['SERVER_MASTER_PROCESS_ID']);
     }
 
@@ -80,7 +80,7 @@ class server
         // 只有当worker_id为0时才添加定时器,避免重复添加
         if ($worker_id == 0) {
             $workerProcessNum = $this->config['WORKER_NUM']+$this->config['TASK_WORKER_NUM'];
-            echo '工作进程ID:= '.$this->config['SERVER_WORKER_PROCESS_ID']." 已启动 ".$workerProcessNum." 进程\n"; 
+            echo date('Y-m-d H:i:s').' 工作进程ID:= '.$this->config['SERVER_WORKER_PROCESS_ID']." 已启动 ".$workerProcessNum." 进程\n"; 
             $this->config = require(CONFIG_PATH);
             $this->startTimer($server);
         }
@@ -185,7 +185,7 @@ class server
      * 启动定时器
      */
     public function startTimer($server) {
-        echo '启动定时任务,周期为 '.$this->config['TIMER_INTERVAL']. "秒\n";
+        echo date('Y-m-d H:i:s').' 启动定时任务,周期为 '.$this->config['TIMER_INTERVAL']. "秒\n";
         $this->serv = $server;
 
         $this->timer_id = $server->tick($this->config['TIMER_INTERVAL'] * 1000, function ($id) {
@@ -219,7 +219,7 @@ class server
         }
        
         $this->isWorkerTaskRunning = true;
-        echo '正在获取订单===>';
+        echo date('Y-m-d H:i:s').' 正在获取订单===>';
         //取得订单启动任务foreach orders
         $orders = $this->getOrders();
         //var_dump($orders);
@@ -249,12 +249,12 @@ class server
              * if >15 分钟 call 人工指派
              */
             
-            echo 'start:::'. $order['order_id']."\n";
+            echo date('Y-m-d H:i:s').' 订单:＝ '. $order['order_id']." 派单中==>";
             $isOK = false;
             
             $timerDiff = time() - (int)($order['created_at']);
 
-            echo '已过 '.$timerDiff.' 秒.';
+            echo '已过 '.$timerDiff.' 秒 ==>';
             
             if ( ($timerDiff < $this->config['FULLTIME_WORKER_TIMEOUT'] *60) && ($order['worker_identity']=='0'))
             {
@@ -286,24 +286,20 @@ class server
     /*
      * 获取订单状态
      */
-    public function getOrderStatus($order){
-        echo 'getOrderStatus'."\n";
-        
-            if ($order['worker_identity']=='0')
-            {
-                $order['status'] = '1';
-            }
-            else if ($order['worker_identity']=='1')
-            {
-                $order['status'] = '2';
-            }
-            else if ($order['worker_identity']=='2')
-            {
-                $order['status'] = '1001';
-            }
-            
+    public function getOrderStatus($order) {
+        //echo 'getOrderStatus' . "\n";
+
+        if ($order['worker_identity'] == '0') {
+            $order['status'] = '1';
+        } else if ($order['worker_identity'] == '1') {
+            $order['status'] = '2';
+        } else if ($order['worker_identity'] == '2') {
+            $order['status'] = '1001';
+        }
+
         return $order;
     }
+
     /*
      * 获取待指派订单
      */
@@ -336,7 +332,7 @@ class server
      * 多线程任务
      */
     public function onTask($server, $task_id, $from_id, $data) {
-        echo 'onTask'."\n";
+        //echo 'onTask'."\n";
         $this->serv = $server;
        
         //return $this->taskOrder($data, $server);
@@ -344,22 +340,22 @@ class server
         if ($data['lock']==false)
         {
             $this->lockOrder($data);//加入状态锁
-            return $this->taskOrder($data, $server);
+            return $this->taskOrder($server, $data);
         }
     }
     /*
      * 锁订单，避免重复处理
      */
     public function lockOrder($order){
-        echo 'lockOrder';
+        //echo 'lockOrder';
         $order['lock'] = true;
         $this->redis->zadd($order);
     }
     /*
      * 调用 BOSS API 指派阿姨
      */
-    public function taskOrder($data){
-        echo 'taskOrder'."\n";
+    public function taskOrder($server,$data){
+        //echo 'taskOrder'."\n";
         $url = $this->config['BOSS_API_URL'].$data['order_id'];
         $result =  @file_get_contents($url);
         //$data = (array)json_decode($d);
@@ -370,7 +366,7 @@ class server
      * 任务完成时触发
      */
     public function onFinish($server,$task_id, $data) {
-        echo 'OrderID:'.$data['order_id']." on Finish\n";
+        echo date('Y-m-d H:i:s').'订单:＝ '.$data['order_id']." 本次任务完成\n";
         $data['updated_at'] = isset($data['updated_at']) ? date('Y-m-d H:i:s', $data['updated_at']) : '';
         $d = json_encode($data);
         $this->broadcast($server,$d);
@@ -396,7 +392,7 @@ class server
       $bb=getconfig("./2.php", "bb", "string");
       updateconfig("./2.php", "name", "admin");
      */
-    function get_config($file = CONFIG_PATH, $ini, $type = "string") {
+    function get_config($file = 'config.php', $ini, $type = "string") {
         if (!file_exists($file))
             return false;
         $str = file_get_contents($file);
@@ -414,7 +410,7 @@ class server
     /*
      * 配置文件更新
      */
-    function update_config($file = CONFIG_PATH, $ini, $value, $type = "string") {
+    function update_config($file = 'config.php', $ini, $value, $type = "string") {
         if (!file_exists($file))
             return false;
         $str = file_get_contents($file);
