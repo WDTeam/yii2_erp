@@ -414,9 +414,7 @@ class WorkerController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-complain 获取阿姨对应的投诉 (田玉星 80%)
-     *
-     * @apiDescription 【备注：等待model底层支持】
+     * @api {GET} /worker/get-worker-complain 获取阿姨对应的投诉 (田玉星 100%)
      *
      * @apiName actionGetWorkerComplain
      * @apiGroup Worker
@@ -456,15 +454,13 @@ class WorkerController extends \api\components\Controller
      */
     public function  actionGetWorkerComplain()
     {
-       
-        $complain = OrderComplaint::getWorkerComplain(123);
-        print_R($complain);die;
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //检测阿姨是否登录
         $checkResult = $this->checkWorkerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
+        $checkResult['worker_id'] = 123;
         //判断页码
         if (!isset($param['per_page']) || !intval($param['per_page'])) {
             $param['per_page'] = 1;
@@ -477,26 +473,19 @@ class WorkerController extends \api\components\Controller
         $page_num = intval($param['page_num']);
         try{
             $conplainList = OrderComplaint::getWorkerComplain($checkResult['worker_id']);
+            if($conplainList){
+                foreach($conplainList as $key=>$val){
+                    $conplainList[$key]['complaint_time'] = date('Y-m-d H:i:s',$val['complaint_time']);
+                }
+            }
         }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
         //数据返回
         $ret = [
-            [
-                "comment_id" => '1',
-                "comment" => "这是第一条投诉",
-                'comment_date' => date('Y-m-d')
-            ],
-            [
-                "comment_id" => '1',
-                "comment" => "这是第二条投诉",
-                'comment_date' => date('Y-m-d')
-            ],
-            [
-                "comment_id" => '1',
-                "comment" => "这是第三条投诉",
-                'comment_date' => date('Y-m-d')
-            ],
+            'per_page'=>$per_page,
+            'page_num'=>$page_num,
+            'data'  => $conplainList
         ];
         return $this->send($ret, "操作成功.");
     }

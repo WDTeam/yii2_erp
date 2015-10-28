@@ -166,7 +166,7 @@ class OrderComplaint extends \common\models\order\OrderComplaint
         $query = new \yii\db\Query();
         $query = $query->select([
             'ocomplain.complaint_content',
-            'ocomplain.created_at',
+            'ocomplain.complaint_time',
         ])->from('{{%order}} as order ')
             ->leftJoin('{{%order_complaint}} as ocomplain','order.id = ocomplain.order_id')
             ->andFilterWhere([
