@@ -703,9 +703,7 @@ class WorkerController extends \api\components\Controller
         return $this->send($ret, "操作成功.");
     }
     /**
-     * @api {GET} /worker/get-worker-tasktime-list 获取阿姨工时列表 (田玉星 70%)
-     * 
-     * @apiDescription 【备注：等待model底层支持】
+     * @api {GET} /worker/get-worker-tasktime-list 获取阿姨工时列表 (田玉星 100%)
      * 
      * @apiName actionGetWorkerTasktimeList
      * @apiGroup Worker
@@ -720,16 +718,16 @@ class WorkerController extends \api\components\Controller
      * HTTP/1.1 200 OK
      * {
      *   "code": 1,
-     *   "msg": "操作成功.",
+     *   "msg": "操作成功",
      *   "ret": [
-     *      {
-     *         "service_time": "9.10 14:00-16:00",
-     *         "order_price": "25.00",
-     *         "order_num": "32341334352",
-     *         "service_addr": "北京市朝阳区光华路SOHO"
-     *        }
-     *      ]
-     *   }
+     *       {
+     *           "service_date": "01-01",
+     *           "service_time": "08:01:00-08:01:00",
+     *           "order_code": "1234354",
+     *           "order_money": "150.00"
+     *       }
+     *   ]
+     * }
      *
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
@@ -746,18 +744,28 @@ class WorkerController extends \api\components\Controller
             return $this->send(null, $checkResult['msg'], 0, 403);
         }  
         //数据整理
-        $bill_id = intval($param['bill_id']);//账单ID
-        
+       $settle_id = intval($param['settle_id']);//账单ID
+        if(!$settle_id){
+            return $this->send(null, "账单唯一标识错误", 0, 403);
+        }
+        //调取数据
+        $billData = array();
+        try{
+            $billList = FinanceSettleApplySearch::getOrderArrayBySettleId($settle_id);
+            if($billList){
+                foreach($billList as $key=>$val){
+                    $beginTime = strtotime($val['order_begin_time']);
+                    $billData[$key]['service_date'] = date('m-d',$beginTime);
+                    $billData[$key]['service_time'] = date('H:i:s',$beginTime).'-'.date('H:i:s',strtotime($val['order_end_time']));
+                    $billData[$key]['order_code'] =111;
+                    $billData[$key]['order_money'] = $val['order_money'];
+                }
+            }
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
         //获取工时列表
-        $ret = [
-            [
-            "service_time" => "9.10 14:00-16:00",
-            "order_price" => "25.00",
-             'order_num' =>'32341334352',
-            "service_addr" => "北京市朝阳区光华路SOHO"
-            ]
-        ];
-        return $this->send($ret, "操作成功.");
+        return $this->send($billData, "操作成功");
     }
     
     /**
