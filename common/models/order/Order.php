@@ -379,9 +379,10 @@ class Order extends ActiveRecord
 
             }
             $OrderHistory = new OrderHistory(); //订单历史记录每次都需要插入
-            $models = ['OrderExtCustomer','OrderExtFlag','OrderExtPay','OrderExtPop','OrderExtStatus','OrderExtWorker'];
-            foreach($models as $model) {
-                $instance = $model::findOne($this->id);
+            $modelClassNames = ['OrderExtCustomer','OrderExtFlag','OrderExtPay','OrderExtPop','OrderExtStatus','OrderExtWorker'];
+            foreach($modelClassNames as $modelClassName) {
+                $class = '\common\models\order\\'.$modelClassName;
+                $instance = $class::findOne($this->id);
                 $attributes = $instance->attributes;
                 unset($attributes['order_id']);
                 unset($attributes['created_at']);
@@ -442,9 +443,10 @@ class Order extends ActiveRecord
     public static function findById($id)
     {
         $order = self::findOne($id);
-        $models = ['OrderExtCustomer','OrderExtFlag','OrderExtPay','OrderExtPop','OrderExtStatus','OrderExtWorker'];
-        foreach($models as $model) {
-            $instance = $model::findOne($id);
+        $modelClassNames = ['OrderExtCustomer','OrderExtFlag','OrderExtPay','OrderExtPop','OrderExtStatus','OrderExtWorker'];
+        foreach($modelClassNames as $modelClassName) {
+            $class = '\common\models\order\\'.$modelClassName;
+            $instance = $class::findOne($id);
             $attributes = $instance->attributes;
             unset($attributes['order_id']);
             unset($attributes['created_at']);
