@@ -139,8 +139,25 @@ echo Menu::widget(
                 		'url' => ['/order/order-complaint'],
                 		'icon' => 'fa fa-angle-right',
                 	],
+
+                ],
+            ],
+            [
+                'label' => '交易管理',
+                'url' => ['#'],
+                'icon' => 'fa fa-tag',
+                'visible' => (Yii::$app->user->can('payment')),
+                'options' => [
+                    'class' => 'treeview rootTree',
+                ],
+                'items' => [
                     [
-                        'label' => '交易记录',
+                        'label' => '支付记录查询',
+                        'url' => ['payment/general-pay/index'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
+                    [
+                        'label' => '交易记录查询',
                         'url' => ['customer/customer-trans-record/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
