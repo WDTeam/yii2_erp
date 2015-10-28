@@ -86,8 +86,8 @@ $this->params['breadcrumbs'][] = $this->title;
             },
             'width' => "100px",
             ],
-            'order_money',
-            'finance_pop_order_sum_money', // 总金额
+            'order_money',//系统金额
+            'finance_pop_order_sum_money', // 对账金额
            /* 'finance_pop_order_coupon_count', 
            'finance_pop_order_coupon_id', 
            'finance_pop_order_order2', 

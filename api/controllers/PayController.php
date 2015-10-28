@@ -302,6 +302,16 @@ class PayController extends \api\components\Controller
     }
 
     /**
+     * 支付宝Wap回调
+     */
+    public function actionAlipayWapNotify()
+    {
+        $obj = new GeneralPay();
+        $obj->alipayWapNotify(yii::$app->request->get());
+        exit;
+    }
+
+    /**
      * 微信APP回调
      */
     public function actionWxAppNotify()
