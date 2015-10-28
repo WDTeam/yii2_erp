@@ -274,4 +274,12 @@ class CouponController extends Controller
         $customerCoupon = \core\models\operation\coupon\CouponCustomer::listCustomerCoupon('18500041311');
         var_dump($customerCoupon);
     }
+    
+    public function actionBind($id)
+    {
+        $model = $this->findModel($id);
+        return $this->renderAjax('_bind',[
+            'model'=>$model,
+        ]);
+    }
 }
