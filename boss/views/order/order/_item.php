@@ -34,7 +34,7 @@ use yii\helpers\HtmlPurifier;
             	<td><?= date('Y-m-d H:i', $model->created_at) ?> 下单
             	</td>
             	<td>
-            		<p><a href="###">查看订单</a></p>
+            		<p><a href="order/edit?id=<?= Html::encode($model->id) ?>">查看订单</a></p>
             		<p><a href="###" class="m_tousu">投诉</a></p>
             		<!-- <p><a href="###">发送短信</a></p> -->
             		<p><a href="###" class="m_quxiao">取消订单</a></p>

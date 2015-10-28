@@ -365,6 +365,27 @@ class OrderController extends BaseAuthController
             'model' => $model,
         ]);
     }
+    
+    /**
+     * 查看并编辑订单
+     * @param string $id
+     * @return mixed
+     */
+    public function actionEdit($id)
+    {
+        $model = $this->findModel($id);
+        $post = Yii::$app->request->post();
+        if($model->load($post)) {
+            $post['Order']['admin_id'] = Yii::$app->user->id;
+            $post['Order']['order_ip'] = ip2long(Yii::$app->request->userIP);
+    
+            if ($model->update($post)) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        }
+        return $this->render('view', ['model' => $model]);
+    
+    }
 
     /**
      * 订单指派页面

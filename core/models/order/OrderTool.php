@@ -26,11 +26,18 @@ class OrderTool extends Model
     }
 
     private static function _code($redis_key){
-        if(Yii::$app->redis->executeCommand('GET', [$redis_key.'_'.date('ymd',strtotime('-1 days'))])){
-            Yii::$app->redis->executeCommand('DEL', [$redis_key.'_'.date('ymd',strtotime('-1 days'))]);
+        if(Yii::$app->file_cache->get($redis_key.'_'.date('ymd',strtotime('-1 days')))){
+            Yii::$app->file_cache->delete($redis_key.'_'.date('ymd',strtotime('-1 days')));
         }
-        $code = Yii::$app->redis->executeCommand('INCR', [$redis_key.'_'.date('ymd')]);
-        $code = str_pad($code,6,'0',STR_PAD_LEFT);
+        $num = Yii::$app->file_cache->get($redis_key.'_'.date('ymd'));
+        if(empty($num)){
+            $num = 1;
+        }else{
+            $num++;
+        }
+        Yii::$app->file_cache->set($redis_key.'_'.date('ymd'),$num);
+
+        $code = str_pad($num,6,'0',STR_PAD_LEFT);
         $a = $code{0};
         $b = $code{1};
         $c = $code{2};
