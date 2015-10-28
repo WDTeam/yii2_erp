@@ -64,6 +64,8 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     public $settleMonth;//结算月份
     
     const WORKER_CONFIRM_SETTLEMENT = 1;//阿姨确认结算单
+    
+    const WORKER_VACATION_DAYS = 4;//公司规定阿姨每个月可休假的天数
    
    public $financeSettleApplyStatusArr = [
        FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED=>'财务审核不通过',
@@ -270,7 +272,24 @@ class FinanceSettleApplySearch extends FinanceSettleApply
 
     }
     
-    
+    public function getBaseSalarySubsidy($apply_order_money,$workerType,$workerIdentityId,$finance_settle_apply_starttime){
+        $baseSalarySubsidy = 0;
+        if($this->isSelfAndFulltimeWorker($workerType, $workerIdentityId)){
+             $needWorkDay = date('t',$finance_settle_apply_starttime) - self::WORKER_VACATION_DAYS;//本月应服务天数
+             $realWorkDay = $needWorkDay;//实际工作天数
+        }
+        return $baseSalarySubsidy;
+    }
+    /**
+     * 
+     */
+    public function isSelfAndFulltimeWorker($workerType,$workerIdentityId){
+        $isSelfAndFulltimeWorker = false;
+        if(($workerType == self::SELF_OPERATION) && ($workerIdentityId == self::FULLTIME)){
+            $isSelfAndFulltimeWorker = true;
+        }
+        return $isSelfAndFulltimeWorker;
+    }
     
     public function getWorkerOrderInfo($workerId){
         return  Order::find()->joinWith('orderExtWorker')->where(['orderExtWorker.worker_id'=>$workerId])->all();
@@ -289,8 +308,8 @@ class FinanceSettleApplySearch extends FinanceSettleApply
      * @param type $workerType
      * @param type $workerRuleId
      */
-    public function getSettleCycleByWorkerType($workerType,$workerRuleId){
-        if(($workerType == self::SELF_OPERATION) && ($workerRuleId == self::FULLTIME)){
+    public function getSettleCycleByWorkerType($workerType,$workerIdentityId){
+        if($this->isSelfAndFulltimeWorker($workerType, $workerIdentityId)){
             return self::FINANCE_SETTLE_APPLY_CYCLE_MONTH_DES;
         }else{
             return self::FINANCE_SETTLE_APPLY_CYCLE_WEEK_DES;
@@ -456,7 +475,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     
     public static function getDeductionArrayBySettleId($settle_id){
       $deductionArray = FinanceWorkerNonOrderIncomeSearch::find()
-              ->select(['finance_worker_non_order_income as task_money','finance_worker_non_order_income_des as task_des'])
+              ->select(['finance_worker_non_order_income as deduction_money','finance_worker_non_order_income_des as deduction_des','finance_worker_non_order_income_type as deduction_type','FROM_UNIXTIME(finance_worker_non_order_income_complete_time,\'%Y.%m.%d\') as deduction_time'])
               ->where(['finance_settle_apply_id'=>$settle_id,'finance_worker_non_order_income_type'=>[FinanceWorkerNonOrderIncomeSearch::NON_ORDER_INCOME_DEDUCTION_COMPLAINT,FinanceWorkerNonOrderIncomeSearch::NON_ORDER_INCOME_DEDUCTION_COMPANSATE]])
               ->asArray()->all();
       return $deductionArray;

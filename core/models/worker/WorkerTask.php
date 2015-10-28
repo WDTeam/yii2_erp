@@ -58,7 +58,11 @@ class WorkerTask extends \common\models\worker\WorkerTask
     public function rules()
     {
         return array_merge(parent::rules(),[
-            [['worker_task_name', 'worker_task_start', 'worker_task_end', 'worker_task_reward_type'], 'required'],
+            [['worker_task_name', 'worker_task_start', 
+                'worker_task_end', 'worker_task_reward_type',
+                'worker_rules', 'worker_types', 'worker_cites',
+                'worker_task_cycle',
+            ], 'required'],
             [['worker_types', 'worker_rules', 'worker_cites'], 'safe'],
             [['conditions'], 'validateConditions'],
         ]);

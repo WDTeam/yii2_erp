@@ -71,7 +71,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'condensed' => true,
         'floatHeader' => true,
         'toolbar' => '',
+        'rowOptions' =>function ($model, $key, $index, $grid){
+            if($model->id == 11)
+            {
+                return ['style'=>"color:red"];
+            }
 
+        },
         'panel' => [
             'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> ' . Html::encode($this->title) . ' </h3>',
             'type' => 'info',
