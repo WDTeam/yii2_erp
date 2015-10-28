@@ -787,8 +787,8 @@ class WorkerController extends \api\components\Controller
      *   "msg": "操作成功.",
      *   "ret": [
      *       {
-     *           "task_money": "50.00",
-     *           "task_des": "每个月请假不超过4天"
+     *           "reward_money": "50.00",
+     *           "reward_des": "每个月请假不超过4天"
      *       }
      *   ]
      * }
@@ -803,10 +803,10 @@ class WorkerController extends \api\components\Controller
     public function actionGetWorkerTaskrewardList(){
         $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
         //检测阿姨是否登录
-//        $checkResult = $this->checkWorkerLogin($param);
-//        if(!$checkResult['code']){
-//            return $this->send(null, $checkResult['msg'], 0, 403);
-//        }
+        $checkResult = $this->checkWorkerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
+        } 
         //数据整理
         $settle_id = intval($param['settle_id']);//账单ID
         if(!$settle_id){
@@ -814,7 +814,14 @@ class WorkerController extends \api\components\Controller
         }
         try{
             //获取任务奖励列表
-            $ret = FinanceSettleApplySearch::getTaskArrayBySettleId($settle_id);
+            $rewardList = FinanceSettleApplySearch::getTaskArrayBySettleId($settle_id);
+            $ret = array();
+            if($rewardList){
+                foreach($rewardList as $key=>$val){
+                    $ret[$k]['reward_money'] = $val['task_money'];
+                    $ret[$k]['reward_des'] = $val['task_des'];
+                }
+            }
          }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
@@ -857,13 +864,30 @@ class WorkerController extends \api\components\Controller
      */
     public function actionGetWorkerPunishList(){
         $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
-        //检测阿姨是否登录
-        $checkResult = $this->checkWorkerLogin($param);
-        if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 0, 403);
-        }
+//        //检测阿姨是否登录
+//        $checkResult = $this->checkWorkerLogin($param);
+//        if(!$checkResult['code']){
+//            return $this->send(null, $checkResult['msg'], 0, 403);
+//        }
         //数据整理
-        $bill_id = intval($param['bill_id']);//账单ID
+        $settle_id = 1;//;//账单ID
+        if(!$settle_id){
+            return $this->send(null, "账单唯一标识错误", 0, 403);
+        }
+        try{
+            //获取任务奖励列表
+            $punishList = FinanceSettleApplySearch::getDeductionArrayBySettleId($settle_id);
+            $ret = array();
+            if($punishList){
+                foreach($punishList as $key=>$val){
+                    $ret[$k]['punish_money'] = $val['task_money'];
+                    $ret[$k]['punish_des'] = $val['task_des'];
+                }
+            }
+         }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
+        print_R($ret);die;
         //获取受处罚列表
         $ret = [
             [
