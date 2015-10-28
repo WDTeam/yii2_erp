@@ -3,7 +3,7 @@
 namespace core\models\customer;
 use Yii;
 use common\models\GeneralRegion;
-use common\models\Operation\OperationArea;
+use common\models\operation\OperationArea;
 
 use core\models\customer\Customer;
 
@@ -156,7 +156,7 @@ class CustomerAddress extends \common\models\customer\CustomerAddress
             }
             $customerAddress = self::findOne($id);
             //根据区名查询省市区
-            $operationProvince = ComponOperationArea::find()->where([
+            $operationProvince = OperationArea::find()->where([
 				'area_name'=>$operation_province_name,
 				'level'=>1,
 				])->asArray()->one();
@@ -164,7 +164,7 @@ class CustomerAddress extends \common\models\customer\CustomerAddress
 			$operation_province_name = $operationProvince['area_name'];
             $operation_province_short_name = $operationProvince['short_name'];
 
-			$operationCity = ComponOperationArea::find()->where([
+			$operationCity = OperationArea::find()->where([
 				'area_name'=>$operation_city_name,
 				'level'=>2,
 				])->asArray()->one();
@@ -172,7 +172,7 @@ class CustomerAddress extends \common\models\customer\CustomerAddress
 			$operation_city_name = $operationCity['area_name'];
             $operation_city_short_name = $operationCity['short_name'];
 
-			$operationArea = ComponOperationArea::find()->where([
+			$operationArea = OperationArea::find()->where([
 				'area_name'=>$operation_area_name,
 				'level'=>3,
 				])->asArray()->one();
