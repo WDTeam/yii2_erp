@@ -182,7 +182,7 @@ class server
     public function startTimer($server) {
         echo '启动定时任务,周期为 '.$this->config['TIMER_INTERVAL']. "秒\n";
         $this->serv = $server;
-        //var_dump($this->config['TIMER_INTERVAL'] * 1000);
+
         $this->timer_id = $server->tick($this->config['TIMER_INTERVAL'] * 1000, function ($id) {
             $this->saveStatus($this->serv);
             $this->processOrders($this->serv);
@@ -251,17 +251,17 @@ class server
 
             echo '已过 '.$timerDiff.' 秒.';
             
-            if ( ($timerDiff < FULLTIME_WORKER_TIMEROUT*60) && ($order['worker_identity']=='0'))
+            if ( ($timerDiff < $this->config['FULLTIME_WORKER_TIMEOUT'] *60) && ($order['worker_identity']=='0'))
             {
                 echo 'Order_ID:'.$order['order_id']." 0-5分钟，指派全职阿姨\n";
                 $isOK = true;
             }
-            else if ( ($timerDiff > FULLTIME_WORKER_TIMEROUT*60 && $timerDiff < FREETIME_WORKER_TIMEROUT*60 ) && ( $order['worker_identity']=='1' ))
+            else if ( ($timerDiff > $this->config['FULLTIME_WORKER_TIMEOUT']*60 && $timerDiff < $this->config['FREETIME_WORKER_TIMEOUT']*60 ) && ( $order['worker_identity']=='1' ))
             {
                 echo 'Order_ID:'.$order['order_id']." 5-10分钟，指派兼职阿姨\n";
                 $isOK = true;
             }
-            else if ( $timerDiff > ASSIGN_TIMEOUT*60 )
+            else if ( $timerDiff > $this->config['SYSTEM_ASSIGN_TIMEOUT'] *60 )
             {
                 echo 'Order_ID:'.$order['order_id']." 超过15分钟，转人工指派\n";
                 $isOK = true;
@@ -356,7 +356,7 @@ class server
     public function taskOrder($data){
         echo 'taskOrder'."\n";
         $url = $this->config['BOSS_API_URL'].$data['order_id'];
-        $result = @file_get_contents($url);
+        $result =  @file_get_contents($url);
         //$data = (array)json_decode($d);
         //var_dump($data);
         return $data;

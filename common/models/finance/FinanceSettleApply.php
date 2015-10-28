@@ -40,6 +40,7 @@ use Yii;
  * @property integer $finance_settle_apply_starttime
  * @property integer $finance_settle_apply_endtime 
  * @property integer $isManagementFeeDone
+ * @property integer $isWorkerConfirmed
  * @property integer $isdel
  * @property integer $updated_at
  * @property integer $created_at
@@ -131,6 +132,7 @@ class FinanceSettleApply extends \yii\db\ActiveRecord
             'finance_settle_apply_starttime' => Yii::t('app', '结算开始时间'),
             'finance_settle_apply_endtime' => Yii::t('app', '结算结束时间'),
             'isManagementFeeDone' => Yii::t('app', '门店服务管理费是否已结算，0为未结算，1为已结算'),
+            'isWorkerConfirmed' => Yii::t('app', '阿姨是否已经确认结算'),
             'isdel' => Yii::t('app', '是否被删除，0为启用，1为删除'), 
             'updated_at' => Yii::t('app', '审核时间'),
             'created_at' => Yii::t('app', '创建时间'),
