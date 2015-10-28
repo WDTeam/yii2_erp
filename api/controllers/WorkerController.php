@@ -548,15 +548,8 @@ class WorkerController extends \api\components\Controller
     }
 
     /**
-<<<<<<< HEAD
-     * @api {GET} /worker/get-worker-settle-list 获取阿姨对账单列表 (田玉星 95%)
-     * 
-     * @apiDescription 【备注：model微调】
-     *
-=======
      * @api {GET} /worker/get-worker-settle-list 获取阿姨对账单列表 (田玉星 100%)
      * 
->>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
      * @apiName actionGetWorkerSettleList 
      * @apiGroup Worker
      *
@@ -629,11 +622,7 @@ class WorkerController extends \api\components\Controller
             }else{
                 $settleArr[$key]['settle_date'] = date('m',strtotime($val['settle_starttime']));
             }
-<<<<<<< HEAD
-            $settleArr[$key]['settle_type'] = $val['settle_cycle_type'];
-=======
             $settleArr[$key]['settle_type'] = $val['settle_cycle'];
->>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
             $settleArr[$key]['order_count'] = $val['order_count'];
             $settleArr[$key]['worker_income'] = $val['worker_income'];
             $settleArr[$key]['settle_status'] = $val['settle_status'];
@@ -814,10 +803,10 @@ class WorkerController extends \api\components\Controller
     public function actionGetWorkerTaskrewardList(){
         $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
         //检测阿姨是否登录
-        $checkResult = $this->checkWorkerLogin($param);
-        if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 0, 403);
-        }
+//        $checkResult = $this->checkWorkerLogin($param);
+//        if(!$checkResult['code']){
+//            return $this->send(null, $checkResult['msg'], 0, 403);
+//        }
         //数据整理
         $settle_id = intval($param['settle_id']);//账单ID
         if(!$settle_id){
@@ -1077,11 +1066,7 @@ class WorkerController extends \api\components\Controller
 //        try{
 //            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id,$type);
 //        }catch (\Exception $e) {
-<<<<<<< HEAD
-//            return $this->send(null, "查看请假情况失败", 0, 403);
-=======
 //            return $this->send(null, "boss系统错误", 1024, 403);
->>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
 //        }
         $ret = [
             "result" => 1,
@@ -1170,11 +1155,7 @@ class WorkerController extends \api\components\Controller
 //        try{
 //            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id);
 //        }catch (\Exception $e) {
-<<<<<<< HEAD
-//            return $this->send(null, "您没有任务哦", 0, 403);
-=======
 //            return $this->send(null, "boss系统错误", 1024, 403);
->>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
 //        }
         $ret = [
                 [
@@ -1264,11 +1245,7 @@ class WorkerController extends \api\components\Controller
 //        try{
 //            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id);
 //        }catch (\Exception $e) {
-<<<<<<< HEAD
-//            return $this->send(null, "您没有任务哦", 0, 403);
-=======
 //            return $this->send(null, "boss系统错误", 1024, 403);
->>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
 //        }
         $ret = [
                 [
@@ -1356,11 +1333,7 @@ class WorkerController extends \api\components\Controller
 //        try{
 //            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id);
 //        }catch (\Exception $e) {
-<<<<<<< HEAD
-//            return $this->send(null, "您没有任务哦", 0, 403);
-=======
 //            return $this->send(null, "boss系统错误", 1024, 403);
->>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
 //        }
         $ret = [
                 [
@@ -1450,11 +1423,7 @@ class WorkerController extends \api\components\Controller
 //        try{
 //            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id,$task_id);
 //        }catch (\Exception $e) {
-<<<<<<< HEAD
-//            return $this->send(null, "您没有任务哦", 0, 403);
-=======
 //            return $this->send(null, "boss系统错误", 1024, 403);
->>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
 //        }
         $ret = [
                 [
