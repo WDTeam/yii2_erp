@@ -168,19 +168,25 @@ class CouponController extends Controller
 			//coupon system user
 			$model->system_user_id = 0;
 			$model->system_user_name = '';
-			if($model->validate()){
+			$model->validate();
+			if($model->hasErrors()){
+				var_dump($model->getErrors());
 				return $this->render('create', ['model' => $model]);
 			}
 		    $model->save();
 
 		    //insert into coupon code
-		    $couponCode->coupon_id = $model->id;
-		    $couponCode->coupon_name = $model->coupon_name;
-		    $couponCode->coupon_price = $model->coupon_price;
-		    $couponCode->created_at = time();
-		    $couponCode->updated_at = 0;
-		    $couponCode->is_del = 0;
+			
+			//var_dump($_POST['Coupon']['coupon_code_num']);
+			//exit();
 		    for($i=0; $i<$_POST['Coupon']['coupon_code_num']; $i++){
+				$couponCode = new CouponCode;
+				$couponCode->coupon_id = $model->id;
+				$couponCode->coupon_name = $model->coupon_name;
+				$couponCode->coupon_price = $model->coupon_price;
+				$couponCode->created_at = time();
+				$couponCode->updated_at = 0;
+				$couponCode->is_del = 0;
 		        $coupon_code_str = CouponCode::generateCouponCode();
 		        $couponCodeTemp =  CouponCode::find()->where(['coupon_code'=>$coupon_code_str])->one();
 		        while($couponCodeTemp){
@@ -189,14 +195,13 @@ class CouponController extends Controller
 		             $couponCodeTemp =  CouponCode::find()->where(['coupon_code'=>$coupon_code_str])->one();
 		        }
 		        $couponCode->coupon_code = $coupon_code_str;
+				$couponCode->validate();
+				if($couponCode->hasErrors()){
+					return $this->render('create', ['model' => $model]);
+				}
 		        $couponCode->save(); 
 		    }
-			if($res){
-				return $this->redirect(['view', 'id' => $model->id]);
-			}else{
-				return $this->render('create', ['model' => $model]);
-			}	    	
-            
+			return $this->redirect(['view', 'id' => $model->id]);
 		}else{
 			return $this->render('create', ['model' => $model]);
 		}
