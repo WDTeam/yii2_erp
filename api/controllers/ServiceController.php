@@ -557,7 +557,7 @@ class ServiceController extends \api\components\Controller
     }
 
     /**
-     * @api {get} /worker/recursive-service-time  周期服务时间表(李勇90%缺少model)
+     * @api {get} /worker/recursive-service-time  周期服务时间表(李勇100%)
      * @apiName actionRecursiveServiceTime
      * @apiGroup service
      * @apiDescription 周期服务时间表
@@ -625,8 +625,8 @@ class ServiceController extends \api\components\Controller
         if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
-        if (!isset($param['longitude']) || !$param['longitude'] || !isset($param['latitude']) || !$param['latitude'] || !isset($param['plan_time']) || !$param['plan_time']) {
-            return $this->send(null, "请填写服务地址或服务时长", 0, 403);
+        if (!isset($param['longitude']) || !$param['longitude'] || !isset($param['latitude']) || !$param['latitude'] || !isset($param['plan_time']) || !$param['plan_time']|| !isset($param['worker_id']) || !$param['worker_id']) {
+            return $this->send(null, "请填写服务地址或服务时长或选择阿姨", 0, 403);
         }
         $longitude = $param['longitude'];
         $latitude = $param['latitude'];
@@ -645,36 +645,15 @@ class ServiceController extends \api\components\Controller
         }
         //获取周期服务时间表
         try{
-            $single_worker_time=Worker::getWorkerTimeLine($district_id,$plan_time,strtotime('+7days'),30,$worker_id);
+            $recursive_worker_time=Worker::getWorkerTimeLine($district_id,$plan_time,strtotime('+7days'),30,$worker_id);
         }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
-        }
-        $recursive_worker_time = array();
-        for ($i = 7; $i <= 36; $i++) {
-            $item = [
-                'date_name' => date('m月d日', strtotime('+' . $i . ' day')),
-                'date_week' => date('w', strtotime('+' . $i . ' day')),
-                'date_week_every' => '每周日',
-                'date_time' =>
-                    [
-                        ['time' => '08:00-10:00',
-                            'status' => '0']
-
-                        ,
-                        [
-                            "time" => "18:00-20:00",
-                            "status" => "1"
-                        ]
-                    ],
-                'date_name_tag' => date('m月d日', strtotime('+' . $i . ' day')) . '（今天）'
-            ];
-            $recursive_worker_time[] = $item;
         }
         return $this->send($recursive_worker_time, "获取周期服务时间表成功");
     }
     
      /**
-     * @api {GET} v1/service/server-worker-list 周期服务可用阿姨列表（李勇 80%）
+     * @api {GET} v1/service/server-worker-list 周期服务可用阿姨列表（李勇 80%缺少model支持）
      * @apiGroup service
      * @apiName actionServerWorkerList
      * @apiDescription 获取周期服务可用阿姨列表

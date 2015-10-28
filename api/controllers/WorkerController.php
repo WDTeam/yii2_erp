@@ -1020,18 +1020,25 @@ class WorkerController extends \api\components\Controller
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *      "code": "ok",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      {
-     *          "result": "1",
-     *          "msg": "ok",
-     *          "titleMsg": "您本月已请假0天，本月剩余请假2天",
-     *          "orderTimeList": ["2015-09-14","2015-09-15",],
-     *          "workerLeaveList": ["2015-09-13","2015-09-16",],
-     *      }
-     * }
+     *{
+     *   "code": 1,
+     *   "msg": "操作成功",
+     *   "ret": {
+     *       "2015-10-28": true,
+     *       "2015-10-29": true,
+     *       "2015-10-30": false,
+     *       "2015-10-31": false,
+     *       "2015-11-01": false,
+     *       "2015-11-02": true,
+     *       "2015-11-03": true,
+     *       "2015-11-04": true,
+     *       "2015-11-05": true,
+     *       "2015-11-06": false,
+     *       "2015-11-07": false,
+     *       "2015-11-08": false,
+     *       "2015-11-09": true,
+     *   }
+     *}
      *
      * @apiError SessionIdNotFound 未找到会话ID.
      *
@@ -1294,7 +1301,7 @@ class WorkerController extends \api\components\Controller
     }
 
     /**
-     * @api {get} /worker/check-task  查看任务的详情 (李勇70%)
+     * @api {get} /worker/check-task  查看任务的详情 (李勇100%)
      * @apiName actionCheckTask
      * @apiGroup Worker
      *
@@ -1356,6 +1363,8 @@ class WorkerController extends \api\components\Controller
         }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
+                echo "ee";die;
+
         $worker_task_log_start=$task_log['worker_task_log_start'];
         $worker_task_log_end=$task_log['worker_task_log_end'];
         //获取任务的订单列表

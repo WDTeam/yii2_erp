@@ -87,7 +87,7 @@ class CouponController extends \api\components\Controller
     }
 
     /**
-     * @api {Get} /coupon/coupons 获取用户优惠码列表（包括该用户该城市下的优惠码和通用的优惠码） （李勇 80%）
+     * @api {Get} /coupon/coupons 获取用户优惠码列表（包括该用户该城市下的优惠码和通用的优惠码） （李勇 100%）
      *
      * @apiName Coupons
      * @apiGroup coupon
@@ -159,7 +159,7 @@ class CouponController extends \api\components\Controller
         
     }
     /**
-     * @api {Get} /coupon/all-coupons 获取用户全部优惠码列表（包括可用的、不可用的、所有城市的、通用的） （李勇 80%）
+     * @api {Get} /coupon/all-coupons 获取用户全部优惠码列表（包括可用的、不可用的、所有城市的、通用的） （李勇 100%）
      *
      * @apiName AllCoupons
      * @apiGroup coupon
