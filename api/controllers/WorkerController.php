@@ -122,7 +122,7 @@ class WorkerController extends \api\components\Controller
      *
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} [platform_version] 平台版本号.
-     * @apiParam {String} leave_date 请假时间.
+     * @apiParam {String} leave_time 请假时间.
      * @apiParam {String} leave_type 请假类型
      * .
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/handle-worker-leave
@@ -163,13 +163,13 @@ class WorkerController extends \api\components\Controller
         $vacationType = intval($param['leave_type']);
 
         //请假时间范围判断
-        if (!isset($param['leave_date']) || !$param['leave_date']) {
+        if (!isset($param['leave_time']) || !$param['leave_time']) {
             return $this->send(null, "数据不完整,请选择请假时间", 0, 403);
         }
        
         $vacation_start_time = time();
         $vacation_end_time = strtotime(date('Y-m-d', strtotime("+14 days")));
-        $current_vacation_time = strtotime($param['leave_date']);
+        $current_vacation_time = strtotime($param['leave_time']);
         if ($current_vacation_time <= $vacation_start_time || $current_vacation_time > $vacation_end_time) {
             return $this->send(null, "请假时间不在请假时间范围内,请选择未来14天的日期", 0, 403);
         }
@@ -211,7 +211,7 @@ class WorkerController extends \api\components\Controller
      *       "data": [
      *           {
      *               "leave_type": "休假",
-     *               "leave_date": "2015-10-30",
+     *               "leave_time": "2015-10-30",
      *               "leave_status": "待审核"
      *           }
      *       ]
@@ -251,7 +251,7 @@ class WorkerController extends \api\components\Controller
         if($data['data']){
             foreach($data['data'] as $key => $val){
                 $pageData[$key]['leave_type'] = $val['worker_vacation_application_type']==1?"休假":"事假";
-                $pageData[$key]['leave_date'] =  date('Y-m-d',$val['worker_vacation_application_start_time']);
+                $pageData[$key]['leave_time'] =  date('Y-m-d',$val['worker_vacation_application_start_time']);
                 switch($val['worker_vacation_application_approve_status']){
                     case "0":
                         $pageData[$key]['leave_status'] = "待审核";
@@ -320,7 +320,7 @@ class WorkerController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-comment 获取阿姨对应的评论 (田玉星 80%)
+     * @api {GET} /worker/get-worker-comment 获取阿姨对应的评论 (田玉星 100%)
      *
      * @apiDescription 【备注：等待model底层支持】
      *
@@ -346,8 +346,8 @@ class WorkerController extends \api\components\Controller
      *           "data": [
      *               {
      *                   "comment_id": "1",
-     *                   "comment": "这是第一条评论类型为评论",
-     *                   "comment_date": "2015-10-27"
+     *                   "comment_content": "这是第一条评论类型为评论",
+     *                   "comment_time": "2015-10-27"
      *               }
      *           ]
      *       }
@@ -364,10 +364,10 @@ class WorkerController extends \api\components\Controller
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //检测阿姨是否登录
-//        $checkResult = $this->checkWorkerLogin($param);
-//        if(!$checkResult['code']){
-//            return $this->send(null, $checkResult['msg'], 0, 403);
-//        } 
+        $checkResult = $this->checkWorkerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
+        } 
         //判断评论类型
         if (!isset($param['comment_level']) || !intval($param['comment_level']) || !in_array($param['comment_level'], array(1, 2, 3))) {
             return $this->send(null, "评论类型不正确", 0, 403);
@@ -382,16 +382,16 @@ class WorkerController extends \api\components\Controller
             $param['page_num'] = 10;
         }
         $page_num = intval($param['page_num']);
- 
+        $checkResult['worker_id'] = 21;
         //获取数据
         $retData = array();
         try{
             $commentList = CustomerComment::getCustomerCommentworkerlist($checkResult['worker_id'],$param['comment_level'],$per_page,$page_num);
             if($commentList){
                 foreach($commentList as $key=>$val){
-                    $retData[$key]['comment_id'] = $val['comment_id'];
+                    $retData[$key]['comment_id'] = $val['id'];
                     $retData[$key]['comment_content'] = $val['customer_comment_content'];
-                    $retData[$key]['comment_content'] = $val['customer_comment_content'];
+                    $retData[$key]['comment_time'] = date('Y-m-d',$val['created_at']);
                 }
             }
         }catch (\Exception $e) {
@@ -400,23 +400,7 @@ class WorkerController extends \api\components\Controller
         $ret = [
             'per_page'=>$per_page,
             'page_num'=>$page_num,
-            'data'=>[
-                [
-                "comment_id" => '1',
-                "comment" => "这是第一条评论类型为" . $param['comment_type'] . "评论",
-                'comment_date' => date('Y-m-d')
-                ],
-                [
-                    "comment_id" => '1',
-                    "comment" => "这是第二条评论类型为" . $param['comment_type'] . "评论",
-                    'comment_date' => date('Y-m-d')
-                ],
-                [
-                    "comment_id" => '1',
-                    "comment" => "这是第三条评论类型为" . $param['comment_type'] . "评论",
-                    'comment_date' => date('Y-m-d')
-                ]
-            ]
+            'data'=>$retData
         ];
         return $this->send($ret, "操作成功.");
     }
@@ -577,7 +561,7 @@ class WorkerController extends \api\components\Controller
      *         "settle_id"=>"32"
      *         'settle_type' =>"1",
      *         'settle_year' =>"2014"
-     *         'settle_date'=>'09年07月-09月13日',
+     *         'settle_time'=>'09年07月-09月13日',
      *         'settle_type' =>1,
      *         'order_count'=>'10',
      *         'worker_income'=>'320.00',
@@ -625,9 +609,9 @@ class WorkerController extends \api\components\Controller
             $settleArr[$key]['settle_id'] = $val['settle_id'];
             $settleArr[$key]['settle_year'] = $val['settle_year'];
             if($val['settle_cycle_type']==1){//周结账单
-                $settleArr[$key]['settle_date'] = $val['settle_starttime'].'-'.$val['settle_endtime'];
+                $settleArr[$key]['settle_time'] = $val['settle_starttime'].'-'.$val['settle_endtime'];
             }else{
-                $settleArr[$key]['settle_date'] = date('m',strtotime($val['settle_starttime']));
+                $settleArr[$key]['settle_time'] = date('m',strtotime($val['settle_starttime']));
             }
             $settleArr[$key]['settle_type'] = $val['settle_cycle'];
             $settleArr[$key]['order_count'] = $val['order_count'];
