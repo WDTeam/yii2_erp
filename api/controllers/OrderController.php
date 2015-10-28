@@ -1407,7 +1407,7 @@ class OrderController extends \api\components\Controller
                     $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 1);
                     $ret['workerData'] = $workerCount;
                     #倒计时
-                    $ret['time'] = 900;
+                    $ret['time'] = 7200;
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
                     return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
@@ -1418,7 +1418,7 @@ class OrderController extends \api\components\Controller
                     $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 0);
                     $ret['workerData'] = $workerCount;
                     #倒计时
-                    $ret['time'] = 900;
+                    $ret['time'] =7200;
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
                     return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
