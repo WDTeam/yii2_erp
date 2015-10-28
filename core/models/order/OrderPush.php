@@ -1,10 +1,11 @@
-﻿<?php
+<?php
 /**
  * Created by PhpStorm.
  * User: LinHongYou
- * Date: 2015/10/24
- * Time: 14:18
+ * Date: 2015/10/27
+ * Time: 19:13
  */
+
 namespace core\models\order;
 
 

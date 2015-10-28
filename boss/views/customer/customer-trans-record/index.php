@@ -71,7 +71,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'condensed' => true,
         'floatHeader' => true,
         'toolbar' => '',
+        'rowOptions' =>function ($model, $key, $index, $grid){
+            if($model->customer_trans_record_verify != $model->makeSign())
+            {
+                return ['class'=>'text-red','t1'=>$model->customer_trans_record_verify,'t2'=>$model->makeSign()];
+            }
 
+        },
         'panel' => [
             'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> ' . Html::encode($this->title) . ' </h3>',
             'type' => 'info',

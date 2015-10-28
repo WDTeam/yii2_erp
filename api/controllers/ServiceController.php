@@ -428,8 +428,9 @@ class ServiceController extends \api\components\Controller
 
     }
 
+    
     /**
-     * @api {get} v1/service/single-service-time  单次服务排班表(李勇90%缺少model支持)
+     * @api {get} v1/service/single-service-time  单次服务排班表(李勇100%)
      * @apiName SingleServiceTime
      * @apiGroup service
      * @apiDescription 单次服务获取服务时间
@@ -442,42 +443,74 @@ class ServiceController extends \api\components\Controller
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      *  {
-     *       "code": "1",
-     *       "msg": "获取单次服务排班表成功"
-     *       "ret":{
-     *          "single_worker_time": [
+     *       "code": 1,
+     *       "msg": "获取单次服务排班表成功",
+     *       "ret": {
+     *           "2015-10-28": [
      *               {
-     *                   "date_format": "10月25日",
-     *                   "date_stamp": 1445669758,
-     *                   "week": "明天",
-     *                   "hour": [
-     *                       {
-     *                           "time": "08:00-10:00",
-     *                           "status": "0"
-     *                       },
-     *                       {
-     *                           "time": "18:00-20:00",
-     *                           "status": "1"
-     *                       }
-     *                   ]
+     *                   "8:00-11:00": false
      *               },
      *               {
-     *                   "date_format": "10月26日",
-     *                   "date_stamp": 1445669758,
-     *                   "week": "",
-     *                   "hour": [
-     *                       {
-     *                           "time": "08:00-10:00",
-     *                           "status": "0"
-     *                       },
-     *                       {
-     *                           "time": "18:00-20:00",
-     *                           "status": "1"
-     *                       }
-     *                   ]
+     *                   "8:30-11:30": false
      *               },
-     *          ]
-     *       }
+     *               {
+     *                   "9:00-12:00": false
+     *               },
+     *               {
+     *                   "9:30-12:30": false
+     *               },
+     *               {
+     *                   "10:00-13:00": false
+     *               },
+     *               {
+     *                   "10:30-13:30": false
+     *               },
+     *               {
+     *                   "11:00-14:00": false
+     *               },
+     *               {
+     *                   "11:30-14:30": false
+     *               },
+     *               {
+     *                   "12:00-15:00": false
+     *               },
+     *               {
+     *                   "12:30-16:30": false
+     *               },
+     *               {
+     *                   "13:00-17:00": false
+     *               },
+     *               {
+     *                   "13:30-17:30": false
+     *               },
+     *               {
+     *                   "14:00-18:00": false
+     *               },
+     *               {
+     *                   "14:30-18:30": false
+     *               },
+     *               {
+     *                   "15:00-19:00": false
+     *               },
+     *               {
+     *                   "16:30-19:30": false
+     *               },
+     *               {
+     *                   "17:00-20:00": false
+     *               },
+     *               {
+     *                   "17:30-20:30": false
+     *               },
+     *               {
+     *                   "18:00-21:00": false
+     *               },
+     *               {
+     *                   "18:30-21:30": false
+     *               },
+     *               {
+     *                   "19:00-22:00": false
+     *               }
+     *           ],
      *   }
      *
      * @apiError UserNotFound 用户认证已经过期.
@@ -504,37 +537,23 @@ class ServiceController extends \api\components\Controller
         $latitude = $param['latitude'];
         $plan_time = $param['plan_time'];
         //根据经纬度获取商圈id
-        $ShopDistrictInfo = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
+        try{
+             $ShopDistrictInfo = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
         if (empty($ShopDistrictInfo)) {
             return $this->send(null, "商圈不存在", 0, 403);
         } else {
             $district_id = $ShopDistrictInfo['id'];
         }
         //获取单次服务排班表
-        //$single_worker_time=Worker::getSingleWorkerTable($district_id,$plan_time);
-        $single_worker_time = array();
-        for ($i = 1; $i <= 7; $i++) {
-            $item = [
-                'date_format' => date('m月d日', strtotime('+' . $i . ' day')),
-                'date_stamp' => time(date('m月d日', strtotime('+' . $i . ' day'))),
-                'week' => $i == 1 ? '明天' : '',
-                'hour' =>
-                    [
-                        ['time' => '08:00-10:00',
-                            'status' => '0']
-
-                        ,
-                        [
-                            "time" => "18:00-20:00",
-                            "status" => "1"
-                        ]
-                    ]
-            ];
-            $single_worker_time[] = $item;
+        try{
+            $single_worker_time=Worker::getWorkerTimeLine($district_id,$plan_time);
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
         }
-
-        $ret = ["single_worker_time" => $single_worker_time];
-        return $this->send($ret, "获取单次服务排班表成功");
+        return $this->send($single_worker_time, "获取单次服务排班表成功");
     }
 
     /**
@@ -552,43 +571,75 @@ class ServiceController extends \api\components\Controller
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *       "code": "1",
-     *       "msg": "获取周期服务时间表成功"
-     *       "ret":{
-     *          "recursive_worker_time": [
+      *  {
+     *       "code": 1,
+     *       "msg": "获取单次服务排班表成功",
+     *       "ret": {
+     *           "2015-10-28": [
      *               {
-     *                   "date_format": "10月25日",
-     *                   "date_stamp": 1445669758,
-     *                   "week": "明天",
-     *                   "hour": [
-     *                       {
-     *                           "time": "08:00-10:00",
-     *                           "status": "0"
-     *                       },
-     *                       {
-     *                           "time": "18:00-20:00",
-     *                           "status": "1"
-     *                       }
-     *                   ]
+     *                   "8:00-11:00": false
      *               },
      *               {
-     *                   "date_format": "10月26日",
-     *                   "date_stamp": 1445669758,
-     *                   "week": "",
-     *                   "hour": [
-     *                       {
-     *                           "time": "08:00-10:00",
-     *                           "status": "0"
-     *                       },
-     *                       {
-     *                           "time": "18:00-20:00",
-     *                           "status": "1"
-     *                       }
-     *                   ]
+     *                   "8:30-11:30": false
      *               },
-     *          ]
-     *       }
+     *               {
+     *                   "9:00-12:00": false
+     *               },
+     *               {
+     *                   "9:30-12:30": false
+     *               },
+     *               {
+     *                   "10:00-13:00": false
+     *               },
+     *               {
+     *                   "10:30-13:30": false
+     *               },
+     *               {
+     *                   "11:00-14:00": false
+     *               },
+     *               {
+     *                   "11:30-14:30": false
+     *               },
+     *               {
+     *                   "12:00-15:00": false
+     *               },
+     *               {
+     *                   "12:30-16:30": false
+     *               },
+     *               {
+     *                   "13:00-17:00": false
+     *               },
+     *               {
+     *                   "13:30-17:30": false
+     *               },
+     *               {
+     *                   "14:00-18:00": false
+     *               },
+     *               {
+     *                   "14:30-18:30": false
+     *               },
+     *               {
+     *                   "15:00-19:00": false
+     *               },
+     *               {
+     *                   "16:30-19:30": false
+     *               },
+     *               {
+     *                   "17:00-20:00": false
+     *               },
+     *               {
+     *                   "17:30-20:30": false
+     *               },
+     *               {
+     *                   "18:00-21:00": false
+     *               },
+     *               {
+     *                   "18:30-21:30": false
+     *               },
+     *               {
+     *                   "19:00-22:00": false
+     *               }
+     *           ],
      *   }
      *
      * @apiError UserNotFound 用户认证已经过期.
@@ -623,14 +674,22 @@ class ServiceController extends \api\components\Controller
             }
         }
         //根据经纬度获取商圈id
-        $ShopDistrictInfo = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
+        try{
+            $ShopDistrictInfo = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
         if (empty($ShopDistrictInfo)) {
             return $this->send(null, "商圈不存在", 0, 403);
         } else {
             $district_id = $ShopDistrictInfo['id'];
         }
         //获取周期服务时间表
-        //$recursive_worker_time=Worker::getRecursiveWorkerTable($district_id,$plan_time);
+//        try{
+//            $recursive_worker_time=Worker::getRecursiveWorkerTable($district_id,$plan_time);
+//        }catch (\Exception $e) {
+//            return $this->send(null, "boss系统错误", 1024, 403);
+//        }
         $recursive_worker_time = array();
         for ($i = 7; $i <= 36; $i++) {
             $item = [
@@ -652,8 +711,7 @@ class ServiceController extends \api\components\Controller
             ];
             $recursive_worker_time[] = $item;
         }
-        $ret = ["recursive_worker_time" => $recursive_worker_time];
-        return $this->send($ret, "获取周期服务时间表成功");
+        return $this->send($recursive_worker_time, "获取周期服务时间表成功");
     }
 
     /**

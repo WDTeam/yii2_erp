@@ -9,6 +9,8 @@ use kartik\widgets\ActiveForm;
 use boss\models\order\Order;
 use yii\base\Object;
 use core\models\order\OrderComplaint;
+use yii\helpers\Url;
+use boss\models\search\OrderSearch;
 
 /**
  * @var yii\web\View $this
@@ -44,80 +46,39 @@ $this->params['breadcrumbs'][] = $this->title;
 		  <div class="box">
 		  	 <div class="conter"> 
 		  	 	 <div class="m_frist">
-		  	 	 	<!---------------------查询开始-------------------->
+		  	 	 	<!---------------------订单查询条件-------------------->
                     <?php            
                     echo $this->render('_search', ['searchModel' => $searchModel]);
                     ?>
 						
-						<!---------------------查询开始-------------------->
-				  	 	 	<div class="heading heading_top">
-								<h3 class="panel-title">筛选</h3>
-							</div>
-						    
-						    <div class="m_from">
-						    	<ul class="lis" id="list">
-						    		<p>城市：</p>
-						    		<li class="cur">全部</li>
-						    		<?php 
-						    		foreach (Order::getOnlineCityList() as $key => $value)
-						    		{
-						    		    echo '<li>'.$value.'</li>';
-						    		}
-						    		?>
-						    	</ul>
-						    	<ul class="lis" id="list">
-						    		<p>服务类型：</p>
-						    		<li class="cur">全部</li>
-						    		<li>专业保洁</li>
-						    		<li>家电清洗</li>
-						    		<li>家居养护</li>
-						    	</ul>						    	
-						    	<ul class="lis" id="list">
-						    		<p>订单状态：</p>
-						    		<li class="cur">全部</li>
-						    		<?php 
-						    		foreach (Order::getStatusList() as $key => $value)
-						    		{
-						    		    echo '<li>'.$value.'</li>';
-						    		}
-						    		?>						    		
-						    	</ul>
-						    	
-						    	<ul class="lis" id="list">
-						    		<p>下单渠道：</p>
-						    		<li class="cur">全部</li>
-						    		<li>App</li>
-						    		<li>第三方</li>
-						    		<li>Api</li>
-						    	</ul>
-						    	<div class="clear"></div>
-						    </div>
-						
-						<!---------------------订单状态开始-------------------->
-		  	 	 	       <div class="heading heading_top">
-								<h3 class="panel-title">订单状态</h3>
-						   </div>
-						
-						    <div class="m_from">
-						    	<ul class="lis liss" id="list">
-						    		<li>按下单时间 ↑</li>
-						    		<li>按服务时间 ↑</li>
-						    	</ul>
-						    	<h6><input type="checkbox" /><a href="javascript">可开发票</a></h6>
-						    	<p class="m_daoc"><a href="javascript:;">Excel导出</a></p>
-						    	<div class="clear"></div>
-						     </div>
-						    
-							 <div class="m_from">						     
-							    <?php 
-							    echo ListView::widget([
-							        'dataProvider' => $dataProvider,
-							        'itemView' => '_item',
-							    ]);    
-							    ?>  							    
-						    	<div class="clear"></div>
-						    </div>
+		  	 	 	<!---------------------订单筛选条件-------------------->
+                    <?php            
+                    echo $this->render('_filter', ['searchModel' => $searchModel]);
+                    ?>
 
+<!-- 排序，可开发票筛选，Excel导出稍后做
+
+				    <div class="m_from">
+				    	<ul class="lis liss" id="list">
+				    		<li>按下单时间 ↑</li>
+				    		<li>按服务时间 ↑</li>
+				    	</ul>
+				    	<h6><input type="checkbox" /><a href="javascript">可开发票</a></h6>
+				    	<p class="m_daoc"><a href="javascript:;">Excel导出</a></p>
+				    	<div class="clear"></div>
+				     </div>
+-->				    
+					 <div class="m_from">						     
+					    <?php 
+					    echo ListView::widget([
+					        'dataProvider' => $dataProvider,
+					        'itemView' => '_item',
+					    ]);    
+					    ?>  							    
+				    	<div class="clear"></div>
+				    </div>                    
+
+				    
 <!-- 周期订单暂时还不支持					    
 						    <div class="heading heading_top">
 								<h3 class="panel-title">周期订单展示</h3>
@@ -193,23 +154,26 @@ $this->params['breadcrumbs'][] = $this->title;
 					              </dl>
 					         </div>
 -->					         
-						<!------------------弹出层开始------------------>
-						
-						<div class="cd-popup" role="alert">
-							<div class="cd-popup-container">
-								<p>提示</p>
-								<ul>
-									<li>请填写正确的电话号码或格式！</li>
-									<li>例：19876578988！（11位数）</li>
-								</ul>
-								<a href="#" class="cd-popup-close img-replace"></a>
-							</div> <!-- cd-popup-container -->
-						</div>
+
 		  	 	 </div>
 		  	 </div>
 		  </div>
 		</div>
-		  <!------------------取消订单弹出层开始------------------>
+
+		<!------------------弹出层开始------------------>
+		
+		<div class="cd-popup" role="alert">
+			<div class="cd-popup-container">
+				<p>提示</p>
+				<ul>
+					<li>请填写正确的电话号码或格式！</li>
+					<li>例：19876578988！（11位数）</li>
+				</ul>
+				<a href="#" class="cd-popup-close img-replace"></a>
+			</div> <!-- cd-popup-container -->
+		</div>
+		
+		<!------------------取消订单弹出层开始------------------>
 		  <div id="HBox" style="display: none;">
 			<form action="" method="post" onsubmit="return false;">
 				<h1>取消订单</h1>
@@ -272,8 +236,8 @@ $this->params['breadcrumbs'][] = $this->title;
 					<li class="m_queren" style="display:none;">
 					    <strong>* 投诉部门:</strong>
 						<div class="fl">
-							<input type="submit" value="新增" class="submitBtntt m_subm" />
-							<input type="submit" value="提交" class="submitBtntt" />
+							<input type="submit" value="新增" class="submitBtntt m_add" />
+							<input type="submit" value="提交" class="submitBtntt m_submit" />
                          </div>
 					</li>
 					

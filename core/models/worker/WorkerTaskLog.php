@@ -5,6 +5,7 @@ namespace core\models\worker;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\behaviors\TimestampBehavior;
+use core\models\finance\FinanceWorkerNonOrderIncomeSearch;
 
 /**
  * This is the model class for table "{{%worker_task_log}}".
@@ -99,6 +100,28 @@ class WorkerTaskLog extends \common\models\worker\WorkerTaskLog
         return $model->worker_task_description;
     }
     /**
+     * 任务详情
+     * @return unknown
+     */
+    public function getDetail()
+    {
+        $model = self::findOne(['id'=>$this->id]);
+        $data = $model->attributes;
+        $data['values'] = $model->getConditionsValues();
+        $data['worker_task_description'] = $model->getWorker_task_description();
+        return $data;
+    }
+    /**
+     * 判断并设置结算与否
+     * @return boolean
+     */
+    public function setSettlemented()
+    {
+        $is_sl = FinanceWorkerNonOrderIncomeSearch::isWorkerTaskSettled($this->id);
+        $this->is_settlemented = $is_sl;
+        return $this->save();
+    }
+    /**
      * 当前阿姨任务列表
      */
     public static function getCurListByWorkerId($worker_id)
@@ -110,5 +133,28 @@ class WorkerTaskLog extends \common\models\worker\WorkerTaskLog
         ->andFilterWhere(['>', 'worker_task_log_end', $time])
         ->all();
     }
-    
+    /**
+     * 获取已完成的任务
+     * @param int $worker_id
+     * @param int $is_doned 是否完成.取值范围(-1:任务失败,0:未处理,1:任务成功完成)
+     * @param int $page
+     * @param int $page_size
+     */
+    public static function getDonedTasks($worker_id, $is_doned, $page=1,$page_size=20)
+    {
+        $offset = ($page-1)*$page_size;
+        $models = self::find()
+        ->andFilterWhere(['=', 'worker_id', $worker_id])
+        ->andFilterWhere(['=', 'worker_task_is_done', $is_doned])
+        ->offset($offset)
+        ->limit($page_size)
+        ->all();
+        $data = [];
+        foreach ($models as $key=>$model){
+            $data[$key] = $model->attributes;
+            $data[$key]['values'] = $model->getConditionsValues();
+            $data[$key]['worker_task_description'] = $model->getWorker_task_description();
+        }
+        return $data;
+    }
 }

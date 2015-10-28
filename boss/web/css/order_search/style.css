@@ -83,10 +83,10 @@ line-height: 26px;font-size: 14px;padding: 0px 8px;border-radius: 3px;}
 #m_warp .heading_top{ margin-top: 40px;}
 #m_warp .m_from .lis{width: 950px; color: #000;float: left; margin-bottom: 10px;}
 #m_warp .m_from .lis p{float: left;height: 26px; min-width: 80px;text-align: right;line-height: 26px;margin-top: 3px; font-size: 16px;}
-#m_warp .m_from .lis li{margin-top: 5px;text-align: center;float: left;height: 26px;line-height: 26px;font-size: 14px; padding: 0px 3px; border-radius: 3px; 
+#m_warp .m_from .lis li a{margin-top: 5px;text-align: center;float: left;height: 26px;line-height: 26px;font-size: 14px; padding: 0px 3px; border-radius: 3px; 
                 margin-right: 8px; cursor:pointer;}
-#m_warp .m_from .lis .cur{background: #f6a202; color: #fff;}
-#m_warp .m_from .lis li:hover{background: #f6a202; color: #fff;}
+#m_warp .m_from .lis .cur a{background: #f6a202; color: #fff;}
+#m_warp .m_from .lis li:hover a{background: #f6a202; color: #fff;}
 
 #m_warp .m_from .liss li{border: #ccc 1px solid;border-radius: 3px;}
 #m_warp .m_from .m_shuji h3 span{color: #f6a202; }

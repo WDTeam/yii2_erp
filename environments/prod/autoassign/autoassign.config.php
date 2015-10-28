@@ -7,9 +7,23 @@
  */
 return [
     /*
+<<<<<<< HEAD
      * Redis 服务IP
      */
     'REDIS_SERVER_IP' => '101.200.179.70',
+=======
+     * 自定义主服务进程名ID
+     */
+    'SERVER_MASTER_PROCESS_ID' => 'autoassign-server-master',
+    /*
+     * 自定义 WORKER-TASK 服务进程名ID前缀
+     */
+    'SERVER_WORKER_PROCESS_ID' => 'autoassign-server-worker-id-',    
+    /*
+     * Redis 服务IP（推荐使用域名）
+     */
+    'REDIS_SERVER_IP' => 'boss.1jiajie.com',
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
     /*
      * Redis 服务PORT
      */
@@ -77,6 +91,7 @@ return [
     
     // 超时人工指派 >15分钟
     'SYSTEM_ASSIGN_TIMEOUT' => 15,
+<<<<<<< HEAD
     
     // 配置 Redis IP地址（推荐使用域名）
     'REDIS_IP_ADDRESS' => '101.200.179.70',
@@ -89,4 +104,12 @@ return [
     
     // 配置 BOSS CONFIG 地址
     'BOSS_CONFIG_URL' => 'http://dev.api.1jiajie.com/config/',
+=======
+
+    // 配置 BOSS API 地址
+    'BOSS_API_URL' => 'http://api.1jiajie.com/order/push/',
+    
+    // 配置 BOSS CONFIG 地址
+    'BOSS_CONFIG_URL' => 'http://api.1jiajie.com/config/',
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
 ];

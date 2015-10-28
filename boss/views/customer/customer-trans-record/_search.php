@@ -35,10 +35,10 @@ use yii\helpers\Url;
         <div class="col-md-2">
 
             <?php
-            $name = FinanceOrderChannel::getOrderChannelByName($model->customer_trans_record_pay_channel);
-            echo $form->field($model, 'customer_trans_record_pay_channel')->widget(Select2::classname(),[
+            $name = FinanceOrderChannel::getOrderChannelByName($model->order_channel_id);
+            echo $form->field($model, 'order_channel_id')->widget(Select2::classname(),[
                 'initValueText' => $name, // set the initial display text
-                'attribute'=>'customer_trans_record_pay_channel',
+                'attribute'=>'order_channel_id',
                 'model'=>$model,
                 'options' => ['placeholder' => '请选择数据来源 ...'],
                 'pluginOptions' => [

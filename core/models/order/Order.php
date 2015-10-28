@@ -25,6 +25,7 @@ use common\models\finance\FinanceOrderChannel;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 use core\models\operation\OperationShopDistrict;
+use core\models\operation\OperationGoods;
 
 /**
  * This is the model class for table "{{%order}}".
@@ -301,6 +302,28 @@ class Order extends OrderModel
             OrderPool::remOrderForWorkerPushList($order->id,true); //永久从接单大厅中删除此订单
         }
         return ['status'=>$result,'errors'=>$order->errors];
+    }
+
+    /**
+     * 开始服务
+     * @param $order_id
+     * @return bool
+     */
+    public static function serviceStart($order_id)
+    {
+        $order = OrderSearch::getOne($order_id);
+        return OrderStatus::_serviceStart($order);
+    }
+
+    /**
+     * 服务完成
+     * @param $order_id
+     * @return bool
+     */
+    public static function serviceDone($order_id)
+    {
+        $order = OrderSearch::getOne($order_id);
+        return OrderStatus::_serviceDone($order);
     }
 
     /**
@@ -642,4 +665,22 @@ class Order extends OrderModel
         return OrderExtCustomer::find()->where(["customer_id" => $customer_id, "order_id" => $order_id])->count();
     }
 
+
+    /*
+     * 获取订单状态列表
+     */
+    public static function getStatusList()
+    {
+        $statusList = OrderStatusDict::find()->asArray()->all();
+        return $statusList ? ArrayHelper::map($statusList, 'id', 'order_status_name') : [];
+    }
+    
+    /*
+     * 获取服务项目表
+     */
+    public static function getServiceItems()
+    {
+        $list = OperationGoods::find()->asArray()->all();
+        return $list ? ArrayHelper::map($list, 'id', 'operation_goods_name') : [];
+    }
 }

@@ -151,7 +151,11 @@ if(isset($model->review_section)){
             </div>
             <div class='settleDetail'>
                 <?php
-                    echo $model->finance_settle_apply_money_deduction;
+                    if($model->finance_settle_apply_money_deduction > 0){
+                            echo '<span class = "deductionmoney" style = "cursor:pointer"><u>'.$model->finance_settle_apply_money_deduction.'</u></span>';
+                        }else{
+                            echo $model->finance_settle_apply_money_deduction;
+                        }
                 ?>
             </div>
             <div class='settleDetail'>
@@ -389,6 +393,50 @@ if(isset($model->review_section)){
                     ],
                     ['attribute'=>'finance_worker_non_order_income',
                        'header' => Yii::t('app', '奖励（元）'),
+                    ], 
+               ],
+               'responsive'=>true,
+               'hover'=>true,
+               'condensed'=>true,
+               'floatHeader'=>true,
+              'panel' => [
+                    'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> 奖励明细 </h3>',
+                ],
+           ]); Pjax::end(); 
+           echo '</div></div>';
+           
+            ?>
+    <?php 
+            echo '<div id = "compensateInfo" style = "display:none">';
+            Pjax::begin(); echo GridView::widget([
+               'dataProvider' => $compensateDataProvider,
+               'columns' => [
+                   ['class' => 'yii\grid\SerialColumn'],
+                    ['attribute'=>'id',
+                       'header' => Yii::t('app', '赔偿编号'),],
+                    ['attribute'=>'finance_compensate_oa_code',
+                       'header' => Yii::t('app', 'OA审批号'),],
+                    [
+                       'header' => Yii::t('app', '投诉编号'),
+                        'attribute' => 'finance_complaint_id',
+                    ],
+                    ['attribute'=>'order_id',
+                       'header' => Yii::t('app', '订单编号'),
+                    ], 
+                   ['attribute'=>'finance_compensate_reason',
+                       'header' => Yii::t('app', '赔偿原因'),
+                    ], 
+                   ['attribute'=>'finance_compensate_total_money',
+                       'header' => Yii::t('app', '赔偿总金额'),
+                    ], 
+                   ['attribute'=>'finance_compensate_insurance_money',
+                       'header' => Yii::t('app', '保险赔付金额'),
+                    ], 
+                   ['attribute'=>'finance_compensate_company_money',
+                       'header' => Yii::t('app', '公司赔付金额'),
+                    ], 
+                   ['attribute'=>'finance_compensate_worker_money',
+                       'header' => Yii::t('app', '阿姨赔付金额'),
                     ], 
                ],
                'responsive'=>true,

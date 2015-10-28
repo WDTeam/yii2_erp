@@ -27,90 +27,22 @@ class OrderController extends BaseAuthController
 {
     public function actionTest()
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+       return OrderSearch::getPushWorkerOrders(18513,$page_size=20,$page=1,false);
         return OrderTool::createOrderCode();
     }
+    
     public function actionCancelOrder()
-    {   
-        $orderid = yii::$app->request->get('orderid',1);
-        $orderInfo = OrderSearch::getOne($orderid);
-       // var_dump($orderStatus);
-        if(!isset($orderInfo->order_code))
-        {
-            echo "没有此订单";
-            exit;
-        }
-        $orderStatus= $orderInfo->orderExtStatus->order_status_dict_id;
-        $FinanceRefundadd=new FinanceRefundadd;
-        if($orderInfo->orderExtStatus->order_status_dict_id>=OrderStatusDict::ORDER_SERVICE_START)
-        {
-            echo "订单已开始服务，不允许取消订单";
-            exit;
-        }
-        /** 方便测试关闭了，正式使用时请打开
-       $result = Order::cancel($orderid,Yii::$app->user->id);
-       if($result==false)  exit("order canlel module error");
-        */
-         echo "取消订单成功，正在执行退款<br>";
-         $paytime=0;
-         $statusHistoryInfo = OrderStatusHistory::getOrderStatusHistory($orderid);
-         if($statusHistoryInfo) $paytime = $statusHistoryInfo->created_at;
-
-        if($orderInfo->orderExtPop->order_pop_order_code) {
-            echo "pop取消订单，已执行完毕";
-            exit;
-        }
-        if($orderInfo->orderExtWorker->shop_id)
-        {
-            $shopInfo = Shop::findById($orderInfo->orderExtWorker->shop_id);
-            $FinanceRefundadd->finance_refund_province_id=empty($shopInfo->province_id)?0:$shopInfo->province_id ;
-            $FinanceRefundadd->finance_refund_city_id=empty($shopInfo->city_id)?0:$shopInfo->city_id ;
-            $FinanceRefundadd->finance_refund_county_id=empty($shopInfo->county_id)?0:$shopInfo->county_id ;
-        }
-         if($orderInfo->orderExtPay->order_pay_type==2 && $orderInfo->orderExtStatus->order_status_dict_id>=OrderStatusDict::ORDER_WAIT_ASSIGN)
-        //if($orderInfo->orderExtPay->order_pay_type==2)
-          {
-
-            $FinanceRefundadd->customer_id=$orderInfo->orderExtCustomer->customer_id;
-            $FinanceRefundadd->finance_refund_pop_nub=empty($orderInfo->orderExtPop->order_pop_order_code)?0:$orderInfo->orderExtPop->order_pop_order_code;//第三方订单号，后期使用
-            $FinanceRefundadd->finance_refund_tel=empty($orderInfo->orderExtCustomer->order_customer_phone)?0:$orderInfo->orderExtCustomer->order_customer_phone;//下单者电话
-            $FinanceRefundadd->finance_refund_money=intval($orderInfo->orderExtPay->order_pay_money);//退款金额
-            $FinanceRefundadd->finance_refund_stype=2; //申请方式  1 用户取消订单 2 官方工作人员操作 3 其他
-            $FinanceRefundadd->finance_refund_reason= yii::$app->request->get('refund_reason',"有钱就是任性");//退款理由
-            $FinanceRefundadd->finance_refund_discount=$orderInfo->orderExtPay->order_use_card_money+$orderInfo->orderExtPay->order_use_coupon_money+$orderInfo->orderExtPay->order_use_promotion_money;//优惠价格
-            $FinanceRefundadd->finance_refund_pay_create_time=$paytime;//订单支付时间
-            $FinanceRefundadd->finance_refund_pay_status=$orderInfo->orderExtStatus->order_status_dict_id;//支付状态 1支付 0 未支付 2 其他
-            $FinanceRefundadd->finance_refund_pay_flow_num=$orderInfo->order_code;//我们系统订单号
-            $FinanceRefundadd->finance_order_channel_id=$orderInfo->channel_id;//订单渠道id
-            $FinanceRefundadd->finance_order_channel_title=$orderInfo->order_channel_name;//订单渠道名称
-         
-            $FinanceRefundadd->finance_pay_channel_id=$orderInfo->orderExtPay->pay_channel_id;//支付渠道id
-            $FinanceRefundadd->finance_pay_channel_title=$orderInfo->orderExtPay->order_pay_channel_name;//支付渠道名称
-         
-            $FinanceRefundadd->finance_refund_worker_id= intval($orderInfo->orderExtWorker->worker_id);//服务阿姨uid
-            $FinanceRefundadd->finance_refund_worker_tel=empty($orderInfo->orderExtWorker->order_worker_phone)?0:$orderInfo->orderExtWorker->order_worker_phone;//阿姨电话
-            $FinanceRefundadd->isstatus=2; //1 取消 2 退款的 3 财务已经审核 4 财务已经退款 0 不确定
-            $FinanceRefundadd->create_time=$orderInfo->created_at; //创建时间
-            $FinanceRefundadd->is_del=$orderInfo->isdel; //是否删除  0  正常 1 删除  默认是0
-            $FinanceRefundadd->finance_refund_check_name=0 ;
-            $FinanceRefundadd->finance_refund_shop_id=empty($orderInfo->orderExtWorker->shop_id)?0:$orderInfo->orderExtWorker->shop_id ;
-
-            print_r($FinanceRefundadd);
-            //测试数据开始
-            $infodate=$FinanceRefundadd->add();
-            $result = json_decode($infodate);
-            if($result->status!=200)
-            {
-                echo "退款更新库失败，请检查";
-                exit;
-            }
-            var_dump($result);
-            echo "退款成功";
-            }
-            else
-            {
-                echo "该订单不是线上支付或者还未支付，不需要退款<br>";
-            }
-      
+    {
+        //TODO: Xiaobo
+        $admin_id = 0;
+    
+        $params = yii::$app->request->post();
+        $order_id = $params['order_id'];
+        $cancel_type = $params['cancel_type'];
+        $cancel_note = $params['cancel_note'];
+    
+        return Order::cancel($order_id, $admin_id, $cancel_type, $cancel_note);
     }
 
     public function actionCustomer()
@@ -346,8 +278,6 @@ class OrderController extends BaseAuthController
 
     }
 
-
-
     /**
      * Lists all Order models.
      * @return mixed
@@ -355,6 +285,12 @@ class OrderController extends BaseAuthController
     public function actionIndex()
     {
         //Yii::info('xiaobo: '.json_encode(Yii::$app->request->getQueryParams()));
+        
+//         if (!empty(Yii::$app->request->get()))
+//         {
+//         print_r(Yii::$app->request->get());
+//         return;
+//         }
         
         $searchModel = new OrderSearch; 
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
@@ -430,6 +366,27 @@ class OrderController extends BaseAuthController
         return $this->render('create', [
             'model' => $model,
         ]);
+    }
+    
+    /**
+     * 查看并编辑订单
+     * @param string $id
+     * @return mixed
+     */
+    public function actionEdit($id)
+    {
+        $model = $this->findModel($id);
+        $post = Yii::$app->request->post();
+        if($model->load($post)) {
+            $post['Order']['admin_id'] = Yii::$app->user->id;
+            $post['Order']['order_ip'] = ip2long(Yii::$app->request->userIP);
+    
+            if ($model->update($post)) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        }
+        return $this->render('view', ['model' => $model]);
+    
     }
 
     /**

@@ -20,6 +20,9 @@ return [
 //            'class'=>'yii\caching\DbCache',
             'class' => 'yii\redis\Cache',
         ],
+        'file_cache' => [
+            'class' => 'yii\caching\FileCache',
+        ],
         'i18n' => [
             'translations' => [
                 '*' => [

@@ -94,12 +94,12 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
 					[
-					'label' => '评价列表(70%)',
+					'label' => '评价列表(90%)',
 					'url' => ['/customer/customer-comment'],
 					'icon' => 'fa fa-angle-right',
 					],
 					[
-					'label' => '评价标签管理(70%)',
+					'label' => '评价标签管理(90%)',
 					'url' => ['/customer/customer-comment-tag'],
 					'icon' => 'fa fa-angle-right',
 					],
@@ -139,8 +139,25 @@ echo Menu::widget(
                 		'url' => ['/order/order-complaint'],
                 		'icon' => 'fa fa-angle-right',
                 	],
+
+                ],
+            ],
+            [
+                'label' => '交易管理',
+                'url' => ['#'],
+                'icon' => 'fa fa-tag',
+                'visible' => (Yii::$app->user->can('payment')),
+                'options' => [
+                    'class' => 'treeview rootTree',
+                ],
+                'items' => [
                     [
-                        'label' => '交易记录',
+                        'label' => '支付记录查询',
+                        'url' => ['payment/general-pay/index'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
+                    [
+                        'label' => '交易记录查询',
                         'url' => ['customer/customer-trans-record/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -237,7 +254,7 @@ echo Menu::widget(
 //                        
 //                    ],
 					[
-                        'label' => '促销管理(10%)',
+                        'label' => '优惠券管理(10%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                         'options' => [
@@ -362,7 +379,7 @@ echo Menu::widget(
                                 'url' => ['/finance/finance-header/index'],
                                 'icon' => 'fa fa-angle-right',
                             ],[
-                            'label' => '开始对账(85%)',
+                            'label' => '开始对账(90%)',
                                 'url' => ['/finance/finance-pop-order/'],
                                 'icon' => 'fa fa-angle-right',
                             ],[
@@ -370,11 +387,11 @@ echo Menu::widget(
                                 'url' => ['/finance/finance-record-log/'],
                                 'icon' => 'fa fa-angle-right',
                             ],[
-                                'label' => '对账记录详情(90%)',
+                                'label' => '对账记录详情(95%)',
                                 'url' => ['/finance/finance-pop-order/billinfo'],
                                 'icon' => 'fa fa-angle-right',
                             ],[
-                                'label' => '坏账管理(90%)',
+                                'label' => '坏账管理(95%)',
                                 'url' => ['/finance/finance-pop-order/bad'],
                                 'icon' => 'fa fa-angle-right',
                             ]
@@ -480,12 +497,12 @@ echo Menu::widget(
                         ],
                         'items' => [
                         [
-                        'label' => '确认退款审核(80%)',
+                        'label' => '财务审核确认(85%)',
                         'url' => ['/finance/finance-refund/'],
                         'icon' => 'fa fa-angle-right',
                         ],
                         [
-                        'label' => '退款统计(80%)',
+                        'label' => '退款统计(85%)',
                         'url' => ['/finance/finance-refund/countinfo'],
                         'icon' => 'fa fa-angle-right',
                         ]
