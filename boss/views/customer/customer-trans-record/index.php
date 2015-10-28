@@ -72,9 +72,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'floatHeader' => true,
         'toolbar' => '',
         'rowOptions' =>function ($model, $key, $index, $grid){
-            if($model->id == 11)
+            if($model->customer_trans_record_verify != $model->makeSign())
             {
-                return ['style'=>"color:red"];
+                return ['class'=>'text-red','t1'=>$model->customer_trans_record_verify,'t2'=>$model->makeSign()];
             }
 
         },

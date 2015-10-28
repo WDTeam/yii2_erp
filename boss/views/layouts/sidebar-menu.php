@@ -379,7 +379,7 @@ echo Menu::widget(
                                 'url' => ['/finance/finance-header/index'],
                                 'icon' => 'fa fa-angle-right',
                             ],[
-                            'label' => '开始对账(85%)',
+                            'label' => '开始对账(90%)',
                                 'url' => ['/finance/finance-pop-order/'],
                                 'icon' => 'fa fa-angle-right',
                             ],[
@@ -387,11 +387,11 @@ echo Menu::widget(
                                 'url' => ['/finance/finance-record-log/'],
                                 'icon' => 'fa fa-angle-right',
                             ],[
-                                'label' => '对账记录详情(90%)',
+                                'label' => '对账记录详情(95%)',
                                 'url' => ['/finance/finance-pop-order/billinfo'],
                                 'icon' => 'fa fa-angle-right',
                             ],[
-                                'label' => '坏账管理(90%)',
+                                'label' => '坏账管理(95%)',
                                 'url' => ['/finance/finance-pop-order/bad'],
                                 'icon' => 'fa fa-angle-right',
                             ]
@@ -497,12 +497,12 @@ echo Menu::widget(
                         ],
                         'items' => [
                         [
-                        'label' => '确认退款审核(80%)',
+                        'label' => '财务审核确认(85%)',
                         'url' => ['/finance/finance-refund/'],
                         'icon' => 'fa fa-angle-right',
                         ],
                         [
-                        'label' => '退款统计(80%)',
+                        'label' => '退款统计(85%)',
                         'url' => ['/finance/finance-refund/countinfo'],
                         'icon' => 'fa fa-angle-right',
                         ]
