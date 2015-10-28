@@ -9,6 +9,7 @@ use core\models\worker\WorkerTask;
 use yii\data\ArrayDataProvider;
 use core\models\worker\Worker;
 use core\models\finance\FinanceSettleApplySearch;
+use core\models\finance\FinanceCompensate;
 
 /**
  * FinanceWorkerNonOrderIncomeSearch represents the model behind the search form about `common\models\finance\FinanceWorkerNonOrderIncome`.
@@ -138,6 +139,12 @@ class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
         return $dataProvider;
     }
     
+    public function getCompensateDataProviderByWorkerId($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
+        $data = FinanceCompensate::getFinanceCompensateListByWorkerId($workerId, $finance_settle_apply_starttime, $finance_settle_apply_endtime);
+        $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
+        return $dataProvider;
+    }
+    
     public function getTaskArrByWorkerId($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
         $data = [];
         $taskAwardList = self::getTaskAwardList($workerId, $finance_settle_apply_starttime, $finance_settle_apply_endtime);
@@ -188,6 +195,6 @@ class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
         if($count > 0){
             $isWorkerTaskSettled = true;
         }
-        return isWorkerTaskSettled;
+        return $isWorkerTaskSettled;
     }
 }
