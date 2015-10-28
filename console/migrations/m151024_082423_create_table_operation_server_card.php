@@ -23,6 +23,7 @@ class m151024_082423_create_table_operation_server_card extends Migration
 			'valid_days' 	=> Schema::TYPE_INTEGER.'(10) NOT NULL DEFAULT 0 COMMENT \'有效时间(天)\'',
 			'created_at' 	=> Schema::TYPE_INTEGER.'(11) NOT NULL DEFAULT 0 COMMENT \'创建时间\'',
 			'updated_at' 	=> Schema::TYPE_INTEGER.'(11) NOT NULL DEFAULT 0 COMMENT \'更改时间\'',
+			'is_softdel' => Schema::TYPE_SMALLINT . '(1) unsigned NOT NULL DEFAULT 1 COMMENT \'状态\'',
 		]);
 
     }
