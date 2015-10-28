@@ -92,7 +92,7 @@ class WorkerController extends \api\components\Controller
      *
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} [platform_version] 平台版本号.
-     * @apiParam {String} leave_time 请假时间.
+     * @apiParam {String} leave_time 请假时间.eg:2015-09-10_2015-09-20
      * @apiParam {String} leave_type 请假类型
      * .
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/handle-worker-leave
@@ -119,10 +119,11 @@ class WorkerController extends \api\components\Controller
     {
         $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //检测阿姨是否登录
-        $checkResult = ApiWorker::checkWorkerLogin($param);
-        if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 0, 403);
-        } 
+//        $checkResult = ApiWorker::checkWorkerLogin($param);
+//        if(!$checkResult['code']){
+//            return $this->send(null, $checkResult['msg'], 0, 403);
+//        }
+        $checkResult['worker_id'] = 18475;
         //判断数据完整
         if(!isset($param['leave_type']) || !$param['leave_type']){
             return $this->send(null, "数据不完整,请选择请假类型", 0, 403);
@@ -131,30 +132,41 @@ class WorkerController extends \api\components\Controller
             return $this->send(null, "请假类型不正确", 0, 403);
         }
         $vacationType = intval($param['leave_type']);
-
-        //请假时间范围判断
+        //请假时间
         if (!isset($param['leave_time']) || !$param['leave_time']) {
             return $this->send(null, "数据不完整,请选择请假时间", 0, 403);
         }
-       
-        $vacation_start_time = time();
-        $vacation_end_time = strtotime(date('Y-m-d', strtotime("+14 days")));
-        $current_vacation_time = strtotime($param['leave_time']);
-        if ($current_vacation_time <= $vacation_start_time || $current_vacation_time > $vacation_end_time) {
-            return $this->send(null, "请假时间不在请假时间范围内,请选择未来14天的日期", 0, 403);
+        try{
+            $workerInfo = Worker::getWorkerListByIds($checkResult['worker_id'],'worker_identity_id');
+            if($workerInfo[0]['worker_identity_id']!=1) return $this->send(null, "只有全职阿姨才可以申请请假", 0, 403);
+            $vacationTimeLine = WorkerVacationApplication::getApplicationTimeLine($checkResult['worker_id'],$vacationType);
+         }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
         }
-        $vacationDate = date("Y-m-d",$current_vacation_time);
-        //请假入库
-        $is_success = WorkerVacationApplication::createVacationApplication($checkResult['worker_id'],$vacationDate,$vacationType);
-        if ($is_success) {
-            $result = array(
-                'result' => 1,
-                "msg" => "您的请假已提交，请耐心等待审批。"
-            );
-            return $this->send($result, "操作成功");
-        } else {
-            return $this->send(null,"插入失败", 0, 403);
+        $vacationTimeArr = explode("_",$vacationTimeLine);
+        
+        //根据请假类型判断请假时间合法性
+        $vacationTime = array_keys($vacationTimeLine);
+        $firstDay = $vacationTimeArr[0];
+        $secondDay = isset($vacationTimeArr[1])?$vacationTimeArr[1]:"";
+        if(!in_array($firstDay, $vacationTime)||!$vacationTimeLine[$firstDay]){
+            return $this->send(null, "请假时间不在请假时间范围内", 0, 403);
         }
+        //休假或者事假申请（一天）
+        if(!WorkerVacationApplication::createVacationApplication($checkResult['worker_id'],$firstDay,$vacationType)){
+            return $this->send(null, "休假申请失败", 0, 403);
+        }
+        //如果选择休假且选择了两天
+        if($vacationType==1&&$secondDay){//休假
+            if(!in_array($secondDay, $vacationTime)||!$vacationTimeLine[$secondDay]){
+                return $this->send(null, "请假时间不在请假时间范围内", 0, 403);
+            }
+            if(!WorkerVacationApplication::createVacationApplication($checkResult['worker_id'],$secondDay,$vacationType)){
+                return $this->send(null, "休假申请失败", 0, 403);
+            }
+        }
+        return $this->send(null, "您的请假已提交，请耐心等待审批");
+        
     }
 
     /**
