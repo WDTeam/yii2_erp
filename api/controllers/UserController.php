@@ -917,7 +917,7 @@ class UserController extends \api\components\Controller
      *
      */
     public function actionUserSuggest()
-    { 
+    {  
         $param = Yii::$app->request->post();
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
