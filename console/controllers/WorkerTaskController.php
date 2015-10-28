@@ -112,8 +112,11 @@ class WorkerTaskController extends Controller
         ->where('worker_task_is_done=1')
         ->andWhere('worker_task_is_settlemented is NULL OR worker_task_is_settlemented=0')
         ->all();
+        $total = count($tasks);
+        echo "setSettlemented total: {$total}".PHP_EOL;
         foreach ($tasks as $task){
             $task->setSettlemented();
+            echo 'task: '.$task->worker_task_name.' done.'.PHP_EOL;
         }
     }
 }
