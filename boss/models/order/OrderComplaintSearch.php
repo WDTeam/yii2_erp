@@ -53,13 +53,14 @@ class OrderComplaintSearch extends OrderComplaint{
 				'updated_at' => $this->updated_at,
 				
 		]);
-		/*$query->andFilterWhere(['like','order_ext_worker.order_worker_name',$this->order_worker_name])->
+		$query->andFilterWhere(['like','order_ext_worker.order_worker_name',$this->order_worker_name])->
 		andFilterWhere(['like','complaint_phone',$this->complaint_phone])->
 		andFilterWhere(['like','orderExtWorker.order_worker_phone',$this->order_worker_phone]);
+		print_r($params);exit();
 		 if($this->complaint_time != '')
 		{
-			$query->andFilterWhere(['between', 'complaint_time', $this->complaint_time, $this->reserve_time]);
-		} */
+			$query->andFilterWhere(['between', 'created_at', strtotime($params['starttime']), strtotime($params['endtime'])]);
+		}
 		return 	$dataProvider;
 	}
 }
