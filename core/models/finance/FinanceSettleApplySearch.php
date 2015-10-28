@@ -64,6 +64,8 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     public $settleMonth;//结算月份
     
     const WORKER_CONFIRM_SETTLEMENT = 1;//阿姨确认结算单
+    
+    const WORKER_VACATION_DAYS = 4;//公司规定阿姨每个月可休假的天数
    
    public $financeSettleApplyStatusArr = [
        FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED=>'财务审核不通过',
@@ -270,8 +272,13 @@ class FinanceSettleApplySearch extends FinanceSettleApply
 
     }
     
-    public function getBaseSalarySubsidy($apply_order_money){
-        
+    public function getBaseSalarySubsidy($apply_order_money,$workerType,$workerIdentityId,$finance_settle_apply_starttime){
+        $baseSalarySubsidy = 0;
+        if($this->isSelfAndFulltimeWorker($workerType, $workerIdentityId)){
+             $needWorkDay = date('t',$finance_settle_apply_starttime) - self::WORKER_VACATION_DAYS;//本月应服务天数
+             $realWorkDay = $needWorkDay;//实际工作天数
+        }
+        return $baseSalarySubsidy;
     }
     /**
      * 

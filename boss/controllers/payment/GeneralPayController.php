@@ -161,6 +161,11 @@ class GeneralPayController extends Controller
     public function actionTest()
     {
 
+
+        $data = \core\models\order\OrderSearch::getWorkerAndOrderAndDoneTime(1,'1445948100','1445948900');
+        dump($data);
+        exit;
+
         $data = \core\models\order\OrderSearch::getWorkerAndOrderAndMonth(1, 2015, 10);
         dump($data);
         exit;
