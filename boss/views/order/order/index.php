@@ -9,6 +9,8 @@ use kartik\widgets\ActiveForm;
 use boss\models\order\Order;
 use yii\base\Object;
 use core\models\order\OrderComplaint;
+use yii\helpers\Url;
+use boss\models\search\OrderSearch;
 
 /**
  * @var yii\web\View $this
@@ -58,19 +60,35 @@ $this->params['breadcrumbs'][] = $this->title;
 						    	<ul class="lis" id="list">
 						    		<p>城市：</p>
 						    		<li class="cur">全部</li>
-						    		<?php 
+						    		<?php
+						    		$para_name = 'OrderSearch[city_id]';
+						    		$params = Yii::$app->request->getQueryParams();
+						    		$toUrl = Url::to(['']).'?&i=1';
+						    		if (!empty($params))
+						    		{
+    						    		foreach ($params['OrderSearch'] as $key => $value)
+    						    		{
+    						    		    $key = 'OrderSearch['.$key.']';
+    						    		    if ($key != $para_name)
+    						    		        $toUrl = $toUrl.'&'.$key.'='.$value;
+    						    		}
+						    		}
+						    		
 						    		foreach (Order::getOnlineCityList() as $key => $value)
 						    		{
-						    		    echo '<li>'.$value.'</li>';
+						    		    echo '<li><a href="'.$toUrl.'&'.$para_name.'='.$key.'">'.$value.'</a></li>';
 						    		}
 						    		?>
 						    	</ul>
 						    	<ul class="lis" id="list">
 						    		<p>服务类型：</p>
 						    		<li class="cur">全部</li>
-						    		<li>专业保洁</li>
-						    		<li>家电清洗</li>
-						    		<li>家居养护</li>
+						    		<?php 
+						    		foreach (Order::getServiceItems() as $key => $value)
+						    		{
+						    		    echo '<li>'.$value.'</li>';
+						    		}
+						    		?>	
 						    	</ul>						    	
 						    	<ul class="lis" id="list">
 						    		<p>订单状态：</p>
@@ -86,9 +104,12 @@ $this->params['breadcrumbs'][] = $this->title;
 						    	<ul class="lis" id="list">
 						    		<p>下单渠道：</p>
 						    		<li class="cur">全部</li>
-						    		<li>App</li>
-						    		<li>第三方</li>
-						    		<li>Api</li>
+						    		<?php 
+						    		foreach ($searchModel->getOrderChannelList() as $key => $value)
+						    		{
+						    		    echo '<li>'.$value.'</li>';
+						    		}
+						    		?>
 						    	</ul>
 						    	<div class="clear"></div>
 						    </div>
