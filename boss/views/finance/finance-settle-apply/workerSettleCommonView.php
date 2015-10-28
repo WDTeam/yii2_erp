@@ -244,7 +244,7 @@ if(isset($model->review_section)){
              'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> 所有订单明细 </h3>',
             ],
            ]); Pjax::end(); 
-           echo '</div></div>';
+           echo '</div>';
             ?>
         
         
@@ -309,7 +309,7 @@ if(isset($model->review_section)){
                     'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> 现金订单明细 </h3>',
                 ],
            ]); Pjax::end(); 
-           echo '</div></div>';
+           echo '</div>';
            
             ?>
         
@@ -373,7 +373,7 @@ if(isset($model->review_section)){
                     'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> 非现金订单明细 </h3>',
                 ],
            ]); Pjax::end(); 
-           echo '</div></div>';
+           echo '</div>';
            
             ?>
 
@@ -403,7 +403,7 @@ if(isset($model->review_section)){
                     'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> 奖励明细 </h3>',
                 ],
            ]); Pjax::end(); 
-           echo '</div></div>';
+           echo '</div>';
            
             ?>
     <?php 
@@ -444,10 +444,10 @@ if(isset($model->review_section)){
                'condensed'=>true,
                'floatHeader'=>true,
               'panel' => [
-                    'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> 奖励明细 </h3>',
+                    'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> 赔偿扣款 </h3>',
                 ],
            ]); Pjax::end(); 
-           echo '</div></div>';
+           echo '</div>';
            
             ?>
 
@@ -459,24 +459,35 @@ if(isset($model->review_section)){
                         $("#cashOrderInfo").css('display','none');
                         $("#nonCashOrderInfo").css('display','none');
                         $("#taskInfo").css('display','none');
+                        $("#compensateInfo").css('display','none');
                     });
                     $(".cashordercount").click(function(){
                         $("#allOrderInfo").css('display','none');
                         $("#cashOrderInfo").css('display','block');
                         $("#nonCashOrderInfo").css('display','none');
                         $("#taskInfo").css('display','none');
+                        $("#compensateInfo").css('display','none');
                     });
                     $(".noncashordercount").click(function(){
                         $("#allOrderInfo").css('display','none');
                         $("#cashOrderInfo").css('display','none');
                         $("#nonCashOrderInfo").css('display','block');
                         $("#taskInfo").css('display','none');
-                    });
+                        $("#compensateInfo").css('display','none');
+                    }); 
                     $(".taskcount").click(function(){
                         $("#allOrderInfo").css('display','none');
                         $("#cashOrderInfo").css('display','none');
                         $("#nonCashOrderInfo").css('display','none');
                         $("#taskInfo").css('display','block');
+                        $("#compensateInfo").css('display','none');
+                    });
+                    $(".deductionmoney").click(function(){
+                        $("#allOrderInfo").css('display','none');
+                        $("#cashOrderInfo").css('display','none');
+                        $("#nonCashOrderInfo").css('display','none');
+                        $("#taskInfo").css('display','none');
+                        $("#compensateInfo").css('display','block');
                     });
 JS;
         $this->registerJs(
