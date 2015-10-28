@@ -10,7 +10,6 @@ use \core\models\customer\CustomerAccessToken;
 use \core\models\customer\CustomerAddress;
 use \core\models\order\OrderSearch;
 use \core\models\worker\WorkerAccessToken;
-use \core\models\order\Order;
 use yii\web\Response;
 
 class OrderController extends \api\components\Controller
@@ -1209,6 +1208,20 @@ class OrderController extends \api\components\Controller
                 return false;
             }
         }
+    }
+
+
+    /**
+     * 智能派单自动推送访问接口
+     *
+     * @author  linhongyou
+     * @param $id
+     * @return array
+     */
+    public function actionPush($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return OrderPush::push($id);
     }
 
 }
