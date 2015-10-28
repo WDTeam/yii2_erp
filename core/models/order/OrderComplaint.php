@@ -2,7 +2,7 @@
 namespace core\models\order;
 
 use Yii;
-
+use yii\data\ActiveDataProvider;
 class OrderComplaint extends \common\models\order\OrderComplaint
 {
 	
@@ -151,5 +151,30 @@ class OrderComplaint extends \common\models\order\OrderComplaint
     	}else{
     		return false;
     	} 
+    }
+    
+    /**
+     * 根据阿姨ID获取对应的评论列表
+     * @param type $worker_id 阿姨ID
+     * @param type $current_page 当前页
+     * @param type $per_page_num 每页显示数量
+     * @return type
+     */ 
+    public static function getWorkerComplain($worker_id=0,$current_page=1,$per_page_num=10){
+        $current_page = intval($current_page)>0?intval($current_page):1;
+        $offset = ($current_page - 1) * $per_page_num;
+        $query = new \yii\db\Query();
+        $query = $query->select([
+            'ocomplain.complaint_content',
+            'ocomplain.complaint_time',
+        ])->from('{{%order}} as order ')
+            ->leftJoin('{{%order_complaint}} as ocomplain','order.id = ocomplain.order_id')
+            ->andFilterWhere([
+                'order_booked_worker_id' => $worker_id
+            ])->offset($offset)->limit($per_page_num);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+        return $dataProvider->query->all();
     }
 }
