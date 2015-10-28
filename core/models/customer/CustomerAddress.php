@@ -251,7 +251,7 @@ class CustomerAddress extends \common\models\customer\CustomerAddress
 		    $province_name = $address_decode->result->addressComponent->province;
 
 		    // add address here
-		    return addAddress($customer_id, $province_name, $city_name, $area_name, $address, $address, $customer_address_phone);
+		    return self::addAddress($customer_id, $province_name, $city_name, $area_name, $address, '', $customer_address_phone);
 		}catch(\Exception $e){
 		    return false;
 		}
