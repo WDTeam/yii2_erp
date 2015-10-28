@@ -183,10 +183,10 @@ class OrderController extends \api\components\Controller
         $order->errors;
         if ($is_success) {
             $msg = '创建订单成功';
-            $this->send($order, $msg);
+            return $this->send($order, $msg);
         } else {
             $msg = '创建订单失败';
-            $this->send($order->errors, $msg, 0);
+            return $this->send($order->errors, $msg, 0);
         }
     }
 
@@ -1032,10 +1032,10 @@ class OrderController extends \api\components\Controller
                     return $this->send([1], $param['order_id'] . "订单取消成功");
                 }
             } else {
-                return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
+                return $this->send(null, "核实用户订单唯一性失败，用户id：".$customer->id.",订单id：".$param['order_id'], 0, 403);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
+            return $this->send(null, "获取客户信息失败.access_token：".$param['access_token'], 0, 403);
         }
     }
 
