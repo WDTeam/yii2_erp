@@ -2,7 +2,7 @@
 
 namespace common\models\payment;
 
-use core\models\Customer;
+use core\models\customer\Customer;
 use core\models\customer\CustomerTransRecord;
 use core\models\order\Order;
 use core\models\order\OrderSearch;
@@ -72,7 +72,7 @@ class GeneralPayCommon extends \yii\db\ActiveRecord
             [['general_pay_money', 'general_pay_actual_money'], 'number'],
             [['general_pay_source_name'], 'string', 'max' => 20],
             [['general_pay_transaction_id'], 'string', 'max' => 40],
-            [['order_id', 'general_pay_admin_name', 'general_pay_handle_admin_name'], 'string', 'max' => 30],
+            [['general_pay_admin_name', 'general_pay_handle_admin_name'], 'string', 'max' => 30],
             [['customer_id','order_id'],'match','pattern'=>'%^[1-9]\d*$%'],   //必须为数字，不能是0
             [['general_pay_memo','show_url','return_url'], 'string', 'max' => 255],
             [['general_pay_verify'], 'string', 'max' => 32],
@@ -266,7 +266,6 @@ class GeneralPayCommon extends \yii\db\ActiveRecord
             $orderChannel = FinanceOrderChannel::get_order_channel_info($attribute['general_pay_source']);
             Order::isPaymentOnline($attribute['order_id'],0,$orderChannel['id'],$orderChannel['finance_pay_channel_name'],$attribute['general_pay_transaction_id']);
         }
-
     }
 
     /**

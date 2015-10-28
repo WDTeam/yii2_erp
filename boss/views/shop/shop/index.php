@@ -48,6 +48,15 @@ if($searchModel->is_blacklist==1){
         }
     ];
 }
+
+if($searchModel->is_blacklist==1){
+    $columns[] = [
+        'label'=>'加入黑名单时间',
+        'value'=>function ($model){
+            return $model->getLastJoinBlackListTime();
+        }
+    ];
+}
 $columns[] = [
     'attribute'=>'shop_manager_id',
     'value'=>function ($model){
@@ -73,14 +82,6 @@ if($searchModel->is_blacklist==0){
     ];
 }
 
-if($searchModel->is_blacklist==1){
-    $columns[] = [
-        'label'=>'加入黑名单时间',
-        'value'=>function ($model){
-            return $model->getLastJoinBlackListTime();
-        }
-    ];
-}
 $columns[] = 'worker_count';
 $columns[] = 'complain_coutn';
 $columns[] = 'level';
