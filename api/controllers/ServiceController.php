@@ -549,7 +549,7 @@ class ServiceController extends \api\components\Controller
         }
         //获取单次服务排班表
         try{
-            $single_worker_time=Worker::getWorkerTimeLine($district_id,$plan_time);
+            $single_worker_time=Worker::getWorkerTimeLine($district_id,$plan_time,time(),7);
         }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
@@ -565,83 +565,49 @@ class ServiceController extends \api\components\Controller
      * @apiParam {String} service_type  服务类型
      * @apiParam {String} longitude     当前经度.
      * @apiParam {String} latitude      当前纬度.
-     * @apiParam {String} is_recommend  是否使用推荐阿姨（0：不是，1：是）
      * @apiParam {String} worker_id   阿姨id.
      * @apiParam {String} plan_time 计划服务时长.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-      *  {
-     *       "code": 1,
-     *       "msg": "获取单次服务排班表成功",
-     *       "ret": {
-     *           "2015-10-28": [
+     * {
+     *   "code": 1,
+     *   "msg": "获取周期服务时间表成功",
+     *   "ret": [
+     *        {
+     *           "date_name": "11月04日",
+     *           "date_week": "3",
+     *           "date_week_every": "每周日",
+     *           "date_time": [
      *               {
-     *                   "8:00-11:00": false
+     *                   "time": "08:00-10:00",
+     *                   "status": "0"
      *               },
      *               {
-     *                   "8:30-11:30": false
-     *               },
-     *               {
-     *                   "9:00-12:00": false
-     *               },
-     *               {
-     *                   "9:30-12:30": false
-     *               },
-     *               {
-     *                   "10:00-13:00": false
-     *               },
-     *               {
-     *                   "10:30-13:30": false
-     *               },
-     *               {
-     *                   "11:00-14:00": false
-     *               },
-     *               {
-     *                   "11:30-14:30": false
-     *               },
-     *               {
-     *                   "12:00-15:00": false
-     *               },
-     *               {
-     *                   "12:30-16:30": false
-     *               },
-     *               {
-     *                   "13:00-17:00": false
-     *               },
-     *               {
-     *                   "13:30-17:30": false
-     *               },
-     *               {
-     *                   "14:00-18:00": false
-     *               },
-     *               {
-     *                   "14:30-18:30": false
-     *               },
-     *               {
-     *                   "15:00-19:00": false
-     *               },
-     *               {
-     *                   "16:30-19:30": false
-     *               },
-     *               {
-     *                   "17:00-20:00": false
-     *               },
-     *               {
-     *                   "17:30-20:30": false
-     *               },
-     *               {
-     *                   "18:00-21:00": false
-     *               },
-     *               {
-     *                   "18:30-21:30": false
-     *               },
-     *               {
-     *                   "19:00-22:00": false
+     *                   "time": "18:00-20:00",
+     *                   "status": "1"
      *               }
      *           ],
-     *   }
-     *
+     *           "date_name_tag": "11月04日（今天）"
+     *        },
+     *       {
+     *           "date_name": "11月05日",
+     *           "date_week": "4",
+     *           "date_week_every": "每周日",
+     *           "date_time": [
+     *               {
+     *                   "time": "08:00-10:00",
+     *                   "status": "0"
+     *               },
+     *               {
+     *                   "time": "18:00-20:00",
+     *                   "status": "1"
+     *               }
+     *           ],
+     *           "date_name_tag": "11月05日（今天）"
+     *       }
+     *    ]
+     *  }
      * @apiError UserNotFound 用户认证已经过期.
      *
      * @apiErrorExample Error-Response:
@@ -659,20 +625,13 @@ class ServiceController extends \api\components\Controller
         if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
-        if (!isset($param['longitude']) || !$param['longitude'] || !isset($param['latitude']) || !$param['latitude'] || !isset($param['is_recommend']) || !isset($param['plan_time']) || !$param['plan_time']) {
+        if (!isset($param['longitude']) || !$param['longitude'] || !isset($param['latitude']) || !$param['latitude'] || !isset($param['plan_time']) || !$param['plan_time']) {
             return $this->send(null, "请填写服务地址或服务时长", 0, 403);
         }
         $longitude = $param['longitude'];
         $latitude = $param['latitude'];
-        $is_recommend = $param['is_recommend'];
+        $worker_id = $param['worker_id'];
         $plan_time = $param['plan_time'];
-        if ($is_recommend == 1) {
-            if (!isset($param['worker_id']) || !$param['worker_id']) {
-                return $this->send(null, "请选择服务阿姨", 0, 403);
-            } else {
-                $worker_id = $param['worker_id'];
-            }
-        }
         //根据经纬度获取商圈id
         try{
             $ShopDistrictInfo = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
@@ -685,11 +644,11 @@ class ServiceController extends \api\components\Controller
             $district_id = $ShopDistrictInfo['id'];
         }
         //获取周期服务时间表
-//        try{
-//            $recursive_worker_time=Worker::getRecursiveWorkerTable($district_id,$plan_time);
-//        }catch (\Exception $e) {
-//            return $this->send(null, "boss系统错误", 1024, 403);
-//        }
+        try{
+            $single_worker_time=Worker::getWorkerTimeLine($district_id,$plan_time,strtotime('+7days'),30,$worker_id);
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
         $recursive_worker_time = array();
         for ($i = 7; $i <= 36; $i++) {
             $item = [
