@@ -146,7 +146,7 @@ class OrderComplaint extends \common\models\order\OrderComplaint
     	if(!empty($arr) && is_array($arr)){
     		$arr['complaint_channel'] = '1';
     		$narr = array('OrderComplaint'=>$arr);
-    		$this->load($data);
+    		$this->load($narr);
     		$this->save();
     	}else{
     		return false;

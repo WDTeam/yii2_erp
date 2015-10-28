@@ -8,6 +8,7 @@ use yii\data\ActiveDataProvider;
 use common\models\finance\FinanceSettleApply;
 use core\models\worker\Worker;
 use core\models\order\Order;
+use core\models\order\OrderSearch;
 use core\models\finance\FinanceWorkerNonOrderIncomeSearch;
 use core\models\finance\FinanceWorkerOrderIncomeSearch;
 
@@ -381,6 +382,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
                     'finance_settle_apply_endtime as settle_endtime',
                     'finance_settle_apply_order_count as order_count',
                     'finance_settle_apply_money as worker_income',
+                    'finance_settle_apply_cycle as settle_cycle',
                     'finance_settle_apply_cycle_des as settle_cycle_des',
                     'id as settle_id',
                     'finance_settle_apply_status as settle_status',
@@ -401,6 +403,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             $finalWorkerIncome['settle_endtime'] =  date('Y-m-d',$workerIncome['settle_endtime']);
             $finalWorkerIncome['order_count'] = $workerIncome['order_count'];
             $finalWorkerIncome['worker_income'] = $workerIncome['worker_income'];
+            $finalWorkerIncome['settle_cycle'] = $workerIncome['settle_cycle'];
             $finalWorkerIncome['settle_cycle_des'] = $workerIncome['settle_cycle_des'];
             $finalWorkerIncome['settle_task_money'] = $workerIncome['settle_task_money'];
             $finalWorkerIncome['base_salary_subsidy'] = $workerIncome['base_salary_subsidy'];
@@ -423,10 +426,24 @@ class FinanceSettleApplySearch extends FinanceSettleApply
      * @return type
      */
     public static function getOrderArrayBySettleId($settle_id){
-        $orderArray = FinanceWorkerOrderIncomeSearch::find()
+        $finalOrderArray = [];
+        $orderIncomeArray = FinanceWorkerOrderIncomeSearch::find()
                 ->select(['order_id','order_money'])
                 ->where(['finance_settle_apply_id'=>$settle_id])->asArray()->all();
-        return $orderArray;
+        $i = 0;
+        foreach($orderIncomeArray as $orderIncome){
+            $finalOrder = [];
+            $finalOrder['order_id'] = $orderIncome['order_id'];
+            $finalOrder['order_money'] = $orderIncome['order_money'];
+            $order = OrderSearch::getOne($orderIncome['order_id']);
+            if(count($order) > 0){
+               $finalOrder['order_begin_time'] = date('Y-m-d h:m:s',$order->order_booked_begin_time);
+               $finalOrder['order_end_time'] = date('Y-m-d h:m:s',$order->order_booked_end_time);
+            }
+            $finalOrderArray[$i] = $finalOrder;
+            $i++;
+        }
+        return $finalOrderArray;
     }
     
     public static function getTaskArrayBySettleId($settle_id){

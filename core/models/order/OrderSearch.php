@@ -329,7 +329,7 @@ class OrderSearch extends Order
 
     public function search($params)
     {
-        $query = Order::find()->joinWith(['orderExtPop', 'orderExtCustomer', 'orderExtWorker', 'orderExtStatus']);
+        $query = Order::find()->joinWith(['orderExtPop', 'orderExtCustomer', 'orderExtWorker', 'orderExtStatus', 'orderExtPay']);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 //             'pagination' => [
@@ -373,7 +373,18 @@ class OrderSearch extends Order
             ->andFilterWhere(['like', 'order_channel_name', $this->order_channel_name])
             ->andFilterWhere(['like', 'order_address', $this->order_address])
             ->andFilterWhere(['like', 'order_cs_memo', $this->order_cs_memo]);
+        
+        if (!empty($params['created_from']))
+            $query->andFilterWhere(['>=', Order::tableName().'.created_at', strtotime($params['created_from'])]);
 
+        if (!empty($params['created_to']))
+            $query->andFilterWhere(['<=', Order::tableName().'.created_at', strtotime($params['created_to'])]);
+        
+        if (!empty($params['booked_from']))
+            $query->andFilterWhere(['>=', 'order_booked_begin_time', strtotime($params['booked_from'])]);
+        
+        if (!empty($params['booked_to']))
+            $query->andFilterWhere(['<=', 'order_booked_end_time', strtotime($params['booked_to'])]);
         return $dataProvider;
     }
     
