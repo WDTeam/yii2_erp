@@ -84,7 +84,7 @@ $promote_types = Coupon::getPromoteTypes();
 				<?= $form->field($model, 'coupon_begin_at')->label('开始时间')->widget(
                     DatePicker::className(), [
                     'inline' => true,
-       //             'template' => '<div class="well well-sm" style="background-color: #fff; width:250px;font-size:14px;">{input}</div>',
+                    'template' => '<div class="well well-sm" style="background-color: #fff; width:250px;font-size:14px;">{input}</div>',
                     'clientOptions' => [
                         'autoclose' => true,
                         'format' => 'yyyy-mm-dd',
@@ -95,7 +95,7 @@ $promote_types = Coupon::getPromoteTypes();
 				<?= $form->field($model, 'coupon_end_at')->label('结束时间')->widget(
                     DatePicker::className(), [
                     'inline' => true,
-     //               'template' => '<div class="well well-sm" style="background-color: #fff; width:250px;font-size:14px;">{input}</div>',
+                    'template' => '<div class="well well-sm" style="background-color: #fff; width:250px;font-size:14px;">{input}</div>',
                     'clientOptions' => [
                         'autoclose' => true,
                         'format' => 'yyyy-mm-dd',

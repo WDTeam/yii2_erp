@@ -16,6 +16,7 @@ class m150923_034334_create_table_shop extends Migration
               `city_id` int(11) DEFAULT NULL COMMENT '城市ID',
               `county_id` int(11) DEFAULT NULL COMMENT '区县ID',
               `street` varchar(255) NOT NULL COMMENT '办公街道',
+              `operation_shop_district_id` int(11) DEFAULT 0 COMMENT '商圈ID',
               `principal` varchar(50) NOT NULL COMMENT '负责人',
               `tel` varchar(50) NOT NULL COMMENT '电话',
               `other_contact` varchar(200) DEFAULT NULL COMMENT '其他联系方式',

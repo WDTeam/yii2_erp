@@ -285,7 +285,7 @@ class OrderSearch extends Order
         }
 
         if (!is_null($channels)) {
-            foreach($order_status as $channels_str){
+            foreach($channels as $channels_str){
                 $query = $query->orFilterWhere([
                     'channel_id' => $channels_str
                 ]);
@@ -332,6 +332,9 @@ class OrderSearch extends Order
         $query = Order::find()->joinWith(['orderExtPop', 'orderExtCustomer', 'orderExtWorker', 'orderExtStatus']);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+//             'pagination' => [
+//                 'pageSize' => 2,
+//             ],
         ]);
 
         if (!($this->load($params) && $this->validate())) {

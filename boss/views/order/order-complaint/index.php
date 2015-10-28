@@ -36,8 +36,11 @@ AppAsset::addScript($this, 'js/order_search/riqi/jquery-ui-timepicker-zh-CN.js')
 $this->title = '订单投诉管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<!-- 新增样式表 -->
 <style>
-	.mar-t {margin-top:20px;}
+	.mar-t {margin-top: 15px;}
+	#m_warp .m_riqi .btn {margin: 0px 80px;width: 160px;height: 33px; background-color: #f6a202 !important;color: #fff !important;}
 </style>
      <div id="m_warp">
 		  <div class="box">

@@ -15,6 +15,7 @@ class Controller extends \yii\rest\Controller
 
     public function beforeAction($action)
     {
+
         $this->version = Yii::$app->request->get('version');
         return parent::beforeAction($action);
     }

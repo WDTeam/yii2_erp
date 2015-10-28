@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <nav class="navbar-default">
         <ul class="nav navbar-nav">
             <li class="active platform">
-                <a class="platforma" href="javascript:void(0);" url="operation-advert-content/index">
+                <a class="platforma" href="javascript:void(0);" url="/operation/operation-advert-content/index">
                     <span>全部</span>
                 </a>
             </li>
@@ -102,21 +102,21 @@ $this->params['breadcrumbs'][] = $this->title;
                             'view' => function ($url, $model) {
                                 return Html::a(
                                     '<span class="glyphicon glyphicon-eye-open"></span>', 
-                                    Yii::$app->urlManager->createUrl(['operation-advert-content/view','id' => $model->id]),
+                                    Yii::$app->urlManager->createUrl(['/operation/operation-advert-content/view','id' => $model->id]),
                                     ['title' => Yii::t('yii', 'View'), 'class' => 'btn btn-success btn-sm']
                                 );
                             },
                             'update' => function ($url, $model) {
                                 return Html::a(
                                     '<span class="glyphicon glyphicon-pencil"></span>', 
-                                    Yii::$app->urlManager->createUrl(['operation-advert-content/update','id' => $model->id]),
+                                    Yii::$app->urlManager->createUrl(['/operation/operation-advert-content/update','id' => $model->id]),
                                     ['title' => Yii::t('yii', 'Update'), 'class' => 'btn btn-info btn-sm']
                                 );
                             },
                             'delete' => function ($url, $model) {
                                 return Html::a(
                                     '<span class="glyphicon glyphicon-trash"></span>', 
-                                    Yii::$app->urlManager->createUrl(['operation-advert-content/delete','id' => $model->id]),
+                                    Yii::$app->urlManager->createUrl(['/operation/operation-advert-content/delete','id' => $model->id]),
                                     ['title' => Yii::t('yii', 'Delete'), 'class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
                                 );
                             },

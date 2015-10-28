@@ -2,13 +2,13 @@
 namespace api\controllers;
 
 use Yii;
-use core\models\Operation\CoreOperationShopDistrictGoods;
-use core\models\Operation\CoreOperationCategory;
-use core\models\Operation\CoreOperationShopDistrictCoordinate;
+use \core\models\operation\OperationShopDistrictGoods;
+use \core\models\operation\OperationCategory;
+use \core\models\operation\OperationShopDistrictCoordinate;
 use \core\models\worker\Worker;
 use \core\models\customer\CustomerAccessToken;
-use core\models\operation\CoreOperationSelectedService;
-use core\models\customer\CustomerAddress;
+use \core\models\operation\OperationSelectedService;
+use \core\models\customer\CustomerAddress;
 
 
 class ServiceController extends \api\components\Controller
@@ -26,7 +26,7 @@ class ServiceController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *      "code": "ok",
+     *      "code": "1",
      *      "msg": "",
      *      "ret":
      *      [
@@ -52,7 +52,7 @@ class ServiceController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 404 Not Found
      *     {
-     *       "code":"error",
+     *       "code":"0",
      *       "msg": "该城市暂未开通"
      *     }
      */
@@ -64,7 +64,7 @@ class ServiceController extends \api\components\Controller
             return $this->send(null, "未取得城市信息", 0, 403);
         }
 
-        $goodses = CoreOperationShopDistrictGoods::getGoodsByCityCategory($param['city_name'], $param['category_id']);
+        $goodses = OperationShopDistrictGoods::getGoodsByCityCategory($param['city_name'], $param['category_id']);
 
         if (empty($goodses)) {
             return $this->send(null, "该城市暂未开通该类型的服务", 0, 403);
@@ -223,7 +223,7 @@ class ServiceController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *      "code": "ok",
+     *      "code": "1",
      *      "msg": "",
      *      "ret":
      *      [
@@ -255,7 +255,7 @@ class ServiceController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 404 Not Found
      *     {
-     *       "code":"error",
+     *       "code":"0",
      *       "msg": "该城市暂未开通"
      *     }
      */
@@ -267,8 +267,8 @@ class ServiceController extends \api\components\Controller
             return $this->send(null, "未取得城市信息", 0, 403);
         }
 
-        $categoryes = CoreOperationCategory::getAllCategory();
-        $goodses = CoreOperationShopDistrictGoods::getGoodsByCity($param['city_name']);
+        $categoryes = OperationCategory::getAllCategory();
+        $goodses = OperationShopDistrictGoods::getGoodsByCity($param['city_name']);
 
         if (empty($categoryes) || empty($goodses)) {
             return $this->send(null, "该城市暂未开通", 0, 403);
@@ -345,11 +345,11 @@ class ServiceController extends \api\components\Controller
         if (empty($params['longitude']) || empty($params['latitude'])) {
             return $this->send(null, "经纬度信息不存在", 0, 403);
         }
-        $shopDistrict = CoreOperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($params['longitude'], $params['latitude']);
+        $shopDistrict = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($params['longitude'], $params['latitude']);
         if (empty($shopDistrict)) {
             return $this->send(null, "没有上线商圈", 0, 403);
         }
-        $goods = CoreOperationShopDistrictGoods::getShopDistrictGoodsInfo($params['city_id'], $shopDistrict['operation_shop_district_id'], $params['goods_id']);
+        $goods = OperationShopDistrictGoods::getShopDistrictGoodsInfo($params['city_id'], $shopDistrict['operation_shop_district_id'], $params['goods_id']);
 
         if (empty($goods)) {
             return $this->send(null, "该商圈没有上线当前服务品类", 0, 403);
@@ -363,7 +363,7 @@ class ServiceController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} v1/service/boutique-cleaning 获得所有精品保洁项目（赵顺利0%）
+     * @api {GET} v1/service/boutique-cleaning 获得所有精品保洁项目（赵顺利 100%）
      * @apiGroup service
      * @apiName actionBoutiqueCleaning
      * @apiDescription 获取城市所有精品保洁
@@ -376,9 +376,21 @@ class ServiceController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *      "code": "ok",
+     *      "code": "1",
      *      "msg": "",
-     *      "ret":
+     *      "ret":[
+     *          {
+     *              "id": "1",
+     *              "selected_service_scene": "",
+     *              "selected_service_area": "1",
+     *              "selected_service_sub_area": "1",
+     *              "selected_service_standard": "",
+     *              "selected_service_area_standard": "1",
+     *              "selected_service_unit": "1",
+     *              "selected_service_photo": "1",
+     *              "created_at": "1"
+     *          },
+     *          ]
      *  }
      *
      * @apiError CityNotSupportFound 该城市暂未开通.
@@ -386,7 +398,7 @@ class ServiceController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 404 Not Found
      *     {
-     *       "code":"error",
+     *       "code":"0",
      *       "msg": "该城市暂未开通"
      *     }
      */
@@ -394,25 +406,25 @@ class ServiceController extends \api\components\Controller
     {
         $params = Yii::$app->request->get();
         if (empty($params) || empty($params['city_id']) || empty($params['build_area']))
-            return $this->send(null, "参数信息不完整", 'error', 403);
+            return $this->send(null, "参数信息不完整", '0', 403);
 
         //获取地址信息
         $address = CustomerAddress::getAddress($params['city_id']);
-        if (empty($address)) return $this->send(null, "获取地址信息失败", 'error', 403);
+        if (empty($address)) return $this->send(null, "获取地址信息失败", '0', 403);
 
         //获取商圈
-        $shopDistrict=CoreOperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($address['customer_address_longitude'],$address['customer_address_latitude']);
-        if (empty($shopDistrict)) return $this->send(null, "未找到相应商圈", 'error', 403);
+        $shopDistrict = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($address['customer_address_longitude'], $address['customer_address_latitude']);
+        if (empty($shopDistrict)) return $this->send(null, "未找到相应商圈", '0', 403);
 
         //获取商圈品类上线
-        $goodses = CoreOperationShopDistrictGoods::getGoodsCategoryInfo($params['city_id'],$shopDistrict['id'], '精品保洁');
-        if(empty($goodses)) return $this->send(null, "该商圈未上线精品保洁", 'error', 403);
+        $goodses = OperationShopDistrictGoods::getGoodsCategoryInfo($params['city_id'], $shopDistrict['id'], '精品保洁');
+        if (empty($goodses)) return $this->send(null, "该商圈未上线精品保洁", '0', 403);
 
-        $date = CoreOperationSelectedService::getSelectedServiceList($params['build_area']);
+        $date = OperationSelectedService::getSelectedServiceList($params['build_area']);
 
-        if(empty($date)) return $this->send(null,"获取精品保洁商品信息失败","error","403");
+        if (empty($date)) return $this->send(null, "获取精品保洁商品信息失败", "0", "403");
 
-        return $this->send($date,"获取精品保洁商品  信息成功","ok","403");
+        return $this->send($date, "获取精品保洁商品信息成功");
 
     }
 
@@ -430,7 +442,7 @@ class ServiceController extends \api\components\Controller
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      *  {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "获取单次服务排班表成功"
      *       "ret":{
      *          "single_worker_time": [
@@ -473,7 +485,7 @@ class ServiceController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
@@ -492,7 +504,7 @@ class ServiceController extends \api\components\Controller
         $latitude = $param['latitude'];
         $plan_time = $param['plan_time'];
         //根据经纬度获取商圈id
-        $ShopDistrictInfo = CoreOperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
+        $ShopDistrictInfo = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
         if (empty($ShopDistrictInfo)) {
             return $this->send(null, "商圈不存在", 0, 403);
         } else {
@@ -541,7 +553,7 @@ class ServiceController extends \api\components\Controller
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *       "code": "ok",
+     *       "code": "1",
      *       "msg": "获取周期服务时间表成功"
      *       "ret":{
      *          "recursive_worker_time": [
@@ -584,7 +596,7 @@ class ServiceController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 403 Not Found
      *     {
-     *       "code": "error",
+     *       "code": "0",
      *       "msg": "用户认证已经过期,请重新登录，"
      *
      *     }
@@ -611,7 +623,7 @@ class ServiceController extends \api\components\Controller
             }
         }
         //根据经纬度获取商圈id
-        $ShopDistrictInfo = CoreOperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
+        $ShopDistrictInfo = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
         if (empty($ShopDistrictInfo)) {
             return $this->send(null, "商圈不存在", 0, 403);
         } else {
@@ -660,7 +672,7 @@ class ServiceController extends \api\components\Controller
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
      *  {
-     *      "code": "ok",
+     *      "code": "1",
      *      "msg": "",
      *      "ret":
      *  }
@@ -670,7 +682,7 @@ class ServiceController extends \api\components\Controller
      * @apiErrorExample Error-Response:
      *     HTTP/1.1 404 Not Found
      *     {
-     *       "code":"error",
+     *       "code":"0",
      *       "msg": "关键字不能为空"
      *     }
      */
@@ -680,14 +692,14 @@ class ServiceController extends \api\components\Controller
 
         $path = "http://api.map.baidu.com/place/v2/search";
         if (empty($params) || empty($params['query']) || empty($params['location']) || empty($params['radius']) || empty($params['output']) || empty($params['ak'])) {
-            return $this->send(null, '参数不完成', 'error', '403');
+            return $this->send(null, '参数不完成', '0', '403');
         }
         $url = "http://api.map.baidu.com/place/v2/search?query=" . $params['query'] . '&location=' . $params['location'] .
             '&radius=' . $params['radius'] . '&output=' . $params['output'] . '&ak=' . $params['ak'];
 
         $date = file_get_contents($url);
 
-        return $this->send(json_decode($date), '操作成功', 'ok');
+        return $this->send(json_decode($date), '操作成功');
 
     }
 }

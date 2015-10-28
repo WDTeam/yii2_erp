@@ -29,6 +29,19 @@ class OperationArea extends CommonOperationArea
         return $d;
     }
     
+
+	/**
+    * 获取城市名称
+    * @date: 2015-10-27
+    * @author: peak pan
+    * @return:
+    **/
+    public static function getAreaname($parent_id){
+    	$data = self::find()->select(['area_name'])->asArray()->where(['parent_id' => $parent_id])->one();
+    	return $data['area_name'];
+    }
+
+
     public static function getProvinces($parent_id = 0){
         $where = ['parent_id' => $parent_id];
         return self::getAllData($where);

@@ -26,7 +26,7 @@ function saveOrders(){
     for(var i = 0; i < len; i++){
         data[$(objs[i]).attr('content_id')] = $(objs[i]).val();
     }
-    $.post('/operation-advert-content/save-orders', data, function(t){alert(t);}, 'html');
+    $.post('/operation/operation-advert-content/save-orders', data, function(t){alert(t);}, 'html');
 }
 
 
@@ -36,7 +36,7 @@ function getAdverts(platform_id, version_id){
     }else{
         var data = {'platform_id':platform_id}
     }
-    $.post('/operation-advert-content/adverts', {'version_id':version_id, 'platform_id':platform_id}, function(t){
+    $.post('/operation/operation-advert-content/adverts', {'version_id':version_id, 'platform_id':platform_id}, function(t){
         if($('#step3').html() == ''){
             t = '<label class="control-label" for="operationadvertrelease-city_id">第四步：选择要发布的广告</label>'+t;
         }
@@ -48,7 +48,7 @@ function getPlatformVersions(obj){
     var checked = obj.prop('checked');
     var platform_id = obj.val();
     if(checked){
-        $.post('/operation-platform-version/platform-versions', {platform_id : platform_id}, function(t){
+        $.post('/operation/operation-platform-version/platform-versions', {platform_id : platform_id}, function(t){
             if(t != ''){
                 if($('#step3').html() == ''){
                     t = '<label class="control-label" for="operationadvertrelease-city_id">第三步：选择要的目标版本</label>'+t;
@@ -64,7 +64,7 @@ function getPlatformVersions(obj){
 }
 
 function getPlatforms(){
-    $.get('/operation-platform/platforms', {}, function(t){
+    $.get('/operation/operation-platform/platforms', {}, function(t){
         $("#step2").html(t);
     }, 'html');
 }
@@ -107,7 +107,7 @@ function selectContent(obj){
 //            data[i] = $(objs[i]).attr('content_id');
 //        }
 //    }
-//    var url = '/operation-advert-content/get-list';
+//    var url = '/operation/operation-advert-content/get-list';
 //    if(data.length > 0){
 //        url += '?data='+data;
 //    }
@@ -156,7 +156,7 @@ function getVersions(obj){
     var obox = $('#platformVersion');
     if(check){
         if(platform_id != 0 && platform_id != ''){
-            $.post('/operation-platform-version/version-list', {'platform_id':platform_id}, function(t){
+            $.post('/operation/operation-platform-version/version-list', {'platform_id':platform_id}, function(t){
                 if(t.result){
                     var str = '<div id="versions_list_'+platform_id+'">';
                     for(var i in t.data){
@@ -191,7 +191,7 @@ function SearchPlatform(obj){
         var platform_id = obj.attr('platform_id');
         if(platform_id == null){platform_id = 'all';}
         var data = {'platform_id':platform_id};
-        var url = '/operation-advert-content/ajax-list';
+        var url = '/operation/operation-advert-content/ajax-list';
         $.post(url, data, function(t){
             $('#searchTable').html(t);
         }, 'html');
@@ -207,7 +207,7 @@ function SearchVersion(obj){
     var platform_id = obj.attr('platform_id');
     var version_id = obj.attr('version_id');
     var data = {'platform_id':platform_id, 'version_id':version_id};
-    var url = '/operation-advert-content/ajax-list';
+    var url = '/operation/operation-advert-content/ajax-list';
     $.post(url, data, function(t){
         $('#searchTable').html(t);
         var o1 = obj.parent().prev().children('span[class=version-display]');
@@ -223,7 +223,7 @@ function SearchVersion(obj){
 function getPlatformVersion(obj, sourceid){
     var platform_id = obj.val();
     if(platform_id != 0 && platform_id != ''){
-        $.post('/operation-platform-version/version-list', {'platform_id':platform_id}, function(t){
+        $.post('/operation/operation-platform-version/version-list', {'platform_id':platform_id}, function(t){
             if(t.result){
                 var str = '<option value="0">选择版本</option>';
                 for(var i in t.data){

@@ -9,6 +9,7 @@ use common\models\finance\FinanceSettleApply;
 use core\models\worker\Worker;
 use core\models\order\Order;
 use core\models\finance\FinanceWorkerNonOrderIncomeSearch;
+use core\models\finance\FinanceWorkerOrderIncomeSearch;
 
 /**
  * FinanceSettleApplySearch represents the model behind the search form about `common\models\finance\FinanceSettleApply`.
@@ -60,6 +61,8 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     public $latestSettleTime;//上次结算日期
     
     public $settleMonth;//结算月份
+    
+    const WORKER_CONFIRM_SETTLEMENT = 1;//阿姨确认结算单
    
    public $financeSettleApplyStatusArr = [
        FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED=>'财务审核不通过',
@@ -370,21 +373,85 @@ class FinanceSettleApplySearch extends FinanceSettleApply
      * @param type $per_page_num
      */
     public static function getSettledWorkerIncomeListByWorkerId($worker_id,$current_page,$per_page_num){
-        $offset = ($current_page - 1)*$per_page_num;
-        $workerIncomeList = self::find()
+        $finalWorkerIncomeArr = [];
+        $offset = ($current_page - 1) * $per_page_num;
+        $workerIncomeArr = self::find()
                 ->select([
-                    'YEAR(FROM_UNIXTIME(finance_settle_apply_starttime,\'%Y-%m-%d\')) as settle_year',
-                    'FROM_UNIXTIME(finance_settle_apply_starttime,\'%Y-%m-%d\') as settle_starttime',
-                    'FROM_UNIXTIME(finance_settle_apply_endtime,\'%Y-%m-%d\') as settle_endtime',
+                    'finance_settle_apply_starttime as settle_starttime',
+                    'finance_settle_apply_endtime as settle_endtime',
                     'finance_settle_apply_order_count as order_count',
                     'finance_settle_apply_money as worker_income',
-                    'id as settle_id'
+                    'finance_settle_apply_cycle_des as settle_cycle_des',
+                    'id as settle_id',
+                    'finance_settle_apply_status as settle_status',
+                    'finance_settle_apply_task_money as settle_task_money',
+                    'finance_settle_apply_base_salary_subsidy as base_salary_subsidy',
+                    'finance_settle_apply_money_deduction as money_deduction',
+                    'finance_settle_apply_order_money_except_cash as order_money_except_cash'
                     ])
                 ->where(['worker_id'=>$worker_id])
-//                ->offset($offset)->limit($per_page_num)
+                ->offset($offset)->limit($per_page_num)
                 ->asArray()->all();
-        return $workerIncomeList;
+        $i = 0;
+        foreach($workerIncomeArr as $workerIncome){
+            $finalWorkerIncome = [];
+            $finalWorkerIncome['settle_id'] = $workerIncome['settle_id'];
+            $finalWorkerIncome['settle_year'] = date('Y',$workerIncome['settle_starttime']);
+            $finalWorkerIncome['settle_starttime'] = date('Y-m-d',$workerIncome['settle_starttime']);
+            $finalWorkerIncome['settle_endtime'] =  date('Y-m-d',$workerIncome['settle_endtime']);
+            $finalWorkerIncome['order_count'] = $workerIncome['order_count'];
+            $finalWorkerIncome['worker_income'] = $workerIncome['worker_income'];
+            $finalWorkerIncome['settle_cycle_des'] = $workerIncome['settle_cycle_des'];
+            $finalWorkerIncome['settle_task_money'] = $workerIncome['settle_task_money'];
+            $finalWorkerIncome['base_salary_subsidy'] = $workerIncome['base_salary_subsidy'];
+            $finalWorkerIncome['money_deduction'] = $workerIncome['money_deduction'];
+            $finalWorkerIncome['order_money_except_cash'] = $workerIncome['order_money_except_cash'];
+            if($workerIncome['settle_status'] == self::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PAYED){
+                 $finalWorkerIncome['settle_status'] = 1;//已结算
+            }else{
+                 $finalWorkerIncome['settle_status'] = 0;//未结算
+            }
+            $finalWorkerIncomeArr[$i] = $finalWorkerIncome;
+            $i++;
+        }
+        return $finalWorkerIncomeArr;
     }
+    
+    /**
+     * 
+     * @param type $settle_id
+     * @return type
+     */
+    public static function getOrderArrayBySettleId($settle_id){
+        $orderArray = FinanceWorkerOrderIncomeSearch::find()
+                ->select(['order_id','order_money'])
+                ->where(['finance_settle_apply_id'=>$settle_id])->asArray()->all();
+        return $orderArray;
+    }
+    
+    public static function getTaskArrayBySettleId($settle_id){
+      $taskArray = FinanceWorkerNonOrderIncomeSearch::find()
+              ->select(['finance_worker_non_order_income as task_money','finance_worker_non_order_income_des as task_des'])
+              ->where(['finance_settle_apply_id'=>$settle_id,'finance_worker_non_order_income_type'=>FinanceWorkerNonOrderIncomeSearch::NON_ORDER_INCOME_TASK])
+              ->asArray()->all();
+      return $taskArray;
+    }
+    
+    public static function getDeductionArrayBySettleId($settle_id){
+      $deductionArray = FinanceWorkerNonOrderIncomeSearch::find()
+              ->select(['finance_worker_non_order_income as task_money','finance_worker_non_order_income_des as task_des'])
+              ->where(['finance_settle_apply_id'=>$settle_id,'finance_worker_non_order_income_type'=>[FinanceWorkerNonOrderIncomeSearch::NON_ORDER_INCOME_DEDUCTION_COMPLAINT,FinanceWorkerNonOrderIncomeSearch::NON_ORDER_INCOME_DEDUCTION_COMPANSATE]])
+              ->asArray()->all();
+      return $deductionArray;
+    }
+    
+    public static function workerConfirmSettlement($settle_id){
+        $financeSettleApplySearch = self::find()->where(['id'=>$settle_id])->one();
+        $financeSettleApplySearch->isWorkerConfirmed = self::WORKER_CONFIRM_SETTLEMENT;
+        return $financeSettleApplySearch->save();
+    }
+    
+    
     
     public function attributeLabels()
     {

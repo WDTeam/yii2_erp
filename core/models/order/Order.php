@@ -24,7 +24,7 @@ use common\models\order\OrderSrc;
 use common\models\finance\FinanceOrderChannel;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
-use core\models\operation\CoreOperationShopDistrict;
+use core\models\operation\OperationShopDistrict;
 
 /**
  * This is the model class for table "{{%order}}".
@@ -115,7 +115,7 @@ class Order extends OrderModel
      *  int $admin_id 操作人id 0客户 1系统 必填
      *  int $order_pay_type 支付方式 1现金 2线上 3第三方 必填
      *  int $coupon_id 优惠券id
-     *  int $order_is_use_balance 是否使用余额 0否 1是
+     *  int $order_is_use_balance 是否使用余额 0否 1是 必填
      *  string $order_booked_worker_id 指定阿姨id
      *  string $order_pop_order_code 第三方订单号
      *  string $order_pop_group_buy_code 第三方团购号
@@ -371,8 +371,7 @@ class Order extends OrderModel
         $this->setAttributes($attributes);
         $status_from = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //创建订单状态
         $status_to = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //初始化订单状态
-        $order_count = OrderSearch::getCustomerOrderCount($this->customer_id); //该用户的订单数量
-        $order_code = strlen($this->customer_id) . $this->customer_id . strlen($order_count) . $order_count; //TODO 订单号待优化
+        $order_code = OrderTool::createOrderCode(); //创建订单号
 
         $customer = Customer::getCustomerById($this->customer_id);
         $this->setAttributes([
@@ -414,7 +413,8 @@ class Order extends OrderModel
         } elseif ($this->order_pay_type == 2) {//线上支付
             $this->order_pay_money = $this->order_money; //支付金额
             if (!empty($this->coupon_id)) {//是否使用了优惠券
-                $this->order_use_coupon_money = self::getCouponById($this->coupon_id);
+                $coupon = self::getCouponById($this->coupon_id);
+                $this->order_use_coupon_money = $coupon['coupon_money'];
                 $this->order_pay_money -= $this->order_use_coupon_money;
             }
             if ($this->order_is_use_balance == 1) {
@@ -429,7 +429,7 @@ class Order extends OrderModel
                 } else {
                     $this->order_use_acc_balance = $this->order_pay_money; //使用余额为需支付金额
                 }
-                $this->order_pay_money -= $this->order_use_coupon_money;
+                $this->order_pay_money -= $this->order_use_acc_balance;
             }
         }
 
@@ -625,7 +625,7 @@ class Order extends OrderModel
     
     public static function getDistrictList()
     {
-    	$districtList = CoreOperationShopDistrict::getCityShopDistrictList();
+    	$districtList = OperationShopDistrict::getCityShopDistrictList();
     	return $districtList?ArrayHelper::map($districtList,'id','operation_shop_district_name'):[];
     }
     

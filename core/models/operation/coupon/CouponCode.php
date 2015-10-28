@@ -84,7 +84,7 @@ class CouponCode extends \common\models\operation\coupon\CouponCode
         }
         $coupon_id = $couponCode->coupon_id;
         //根据活动码的活动码有效时间类型（coupon_time_type）获得不同的活动码结束时间
-        $coupon_time_type=Coupon::getCouponTimeTypes($coupon_id);
+        $coupon_time_type=Coupon::couponTimeType($coupon_id);
         if($coupon_time_type['coupon_time_type']==0){
             //领取时间和使用时间一致时的结束时间
             $coupon = Coupon::find()->where('id=:coupon_id and is_disabled=0 and is_del=0 and coupon_begin_at < '.time().' and coupon_end_at > '.time())->addParams([':coupon_id' => $coupon_id])->one();

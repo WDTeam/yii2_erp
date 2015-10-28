@@ -5,10 +5,10 @@
 ## 部署说明：
 
 ```
-	1、本程序运行在 linux 或 windows 环境，需要 PHP 5.4+ / swoole扩展 / redis 扩展
-	2、手动输入命令 PHP server.php 启动；
+        1、本程序运行在 linux 或 windows 环境，需要 PHP 5.4+ / swoole扩展 / redis 扩展
+        2、手动输入命令 PHP server.php 启动；
         3、自动启动: 在linux系统的crontab中加入： */1 * * * * ./startup.sh
-	4、浏览器打开BOSS系统 -> 订单管理 -> 智能派单-> "连接派单服务器"
+        4、浏览器打开BOSS系统 -> 订单管理 -> 智能派单-> "连接派单服务器"
         5、界面上提示 “自动派单开始”
 
 ```
@@ -18,22 +18,38 @@
 ```
     1、配置文件： config.php
     2、配置内容：
-        // 定时器 单位秒
-        define('TIMER_INTERVAL',6);
+    /*
+     * Redis 服务IP
+     */
+    'REDIS_SERVER_IP' => '101.200.179.70',
+    /*
+     * Redis 服务PORT
+     */
+    'REDIS_SERVER_PORT '=> 6379,
+    /*
+     * Redis 服务运行状态
+     */
+    '_REDIS_SERVER_RUN_STATUS_' => '_SWOOLE_SOCKET_RUN_STATUS_',
+    /*
+     * Redis 待指派订单池
+     */
+    '_REDIS_WAIT_ASSIGN_ORDER_POOL_ '=> 'WaitAssignOrdersPool',
+    /*
+     * 服务监听地址（默认 0.0.0.0 勿改）
+     */
+    'SERVER_LISTEN_IP' => '0.0.0.0',
+    
+    /*
+     * 服务监听端口（默认 9501）
+     */
+    'SERVER_LISTEN_PORT' => 9501,
 
-        // 全职阿姨 5分钟
-        define('FULLTIME_WORKER_TIMEROUT',5);
+```
+## TODO LIST：
 
-        // 兼职阿姨 5分钟
-        define('FREETIME_WORKER_TIMEROUT',15);
-
-        // 超时人工指派 15分钟
-        define('ASSIGN_TIMEOUT',15);
-
-        // 配置 Redis IP地址（推荐使用域名）
-        define('REDIS_IPADDRESS','101.200.179.70');
-
-        // 配置 Redis IP端口
-        define('REDIS_IP_PORT',6379);
-
+```
+	1、请在BOSS订单模块，智能指派接口部分，引入 common\autoassign.config.php 使用里面定义好的配置项
+	2、请在BOSS订单模块，智能指派页面，引入 common\models\autoassign\ClientCommand; 枚举控制台命令，传递数据结构应包含 cmd 项
+	3、自动热启动（不用重启服务以更新配置项）
+	4、BOSS控制台页面的控制部分（请找人写）
 ```
