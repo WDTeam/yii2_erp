@@ -106,7 +106,7 @@ class UserController extends \api\components\Controller
 
             if (!empty($model)) {
                 $ret = ['address' => $model];
-                return $this->send($ret, "常用地址添加成功");
+                return $this->send($ret, "常用地址添加成功",1);
             } else {
                 return $this->send(null, "常用地址添加失败", 0, 403);
             }
@@ -191,7 +191,7 @@ class UserController extends \api\components\Controller
                 $addresses[] = $model;
             }
             $ret = ['addresses' => $addresses];
-            return $this->send($ret, "获取地址列表成功");
+            return $this->send($ret, "获取地址列表成功",1);
         } else {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
@@ -240,7 +240,7 @@ class UserController extends \api\components\Controller
         }
 
         if (CustomerAddress::deleteAddress($addressId)) {
-            return $this->send(null, "删除成功");
+            return $this->send(null, "删除成功",1);
         } else {
             return $this->send(null, "删除失败", 0, 403);
         }
@@ -295,7 +295,7 @@ class UserController extends \api\components\Controller
         try {
             if (CustomerAddress::updateAddress($model->id, $model->operation_area_name, $model->customer_address_detail, $model->customer_address_nickname, $model->customer_address_phone)
             ) {
-                return $this->send(null, "设置默认地址成功");
+                return $this->send(null, "设置默认地址成功",1);
             } else {
 
                 return $this->send(null, "设置默认地址失败", 0, 403);
@@ -370,7 +370,7 @@ class UserController extends \api\components\Controller
         try {
             if (CustomerAddress::updateAddress($model->id, @$params['operation_area_name'], @$params['address_detail'], @$params['address_nickname'], @$params['address_phone'])
             ) {
-                return $this->send(null, "修改常用地址成功");
+                return $this->send(null, "修改常用地址成功",1);
             } else {
 
                 return $this->send(null, "修改常用地址失败", 0, 403);
@@ -456,10 +456,10 @@ class UserController extends \api\components\Controller
             try {
                 $Address = CustomerAddress::getCurrentAddress($customer->id);
                 if (empty($Address)) {
-                    return $this->send(null, "该用户没有默认地址", "error", 403);
+                    return $this->send(null, "该用户没有默认地址", 0, 403);
                 }
                 $ret = ['address' => $Address];
-                return $this->send($ret, "获取默认地址成功", "ok");
+                return $this->send($ret, "获取默认地址成功", 1);
             } catch (Exception $e) {
                 return $this->send(null, "boss系统错误", 0, 1024);
             }
@@ -533,7 +533,7 @@ class UserController extends \api\components\Controller
             $deleteData = \core\models\customer\CustomerWorker::deleteWorker(1, 2, 1);
             if ($deleteData) {
                 $deleteData = array(1);
-                return $this->send($deleteData, "删除成功");
+                return $this->send($deleteData, "删除成功",1);
             } else {
                 return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
             }
@@ -607,7 +607,7 @@ class UserController extends \api\components\Controller
              */
             $workerData = \core\models\customer\CustomerWorker::blacklistworkers(1, 1);
             if ($workerData) {
-                return $this->send($workerData, "阿姨列表查询");
+                return $this->send($workerData, "阿姨列表查询",1);
             } else {
                 return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
             }
@@ -669,7 +669,7 @@ class UserController extends \api\components\Controller
             $deleteData = \core\models\customer\CustomerWorker::deleteWorker(1, 2, 0, 0);
             if ($deleteData) {
                 $deleteData = array(1);
-                return $this->send($deleteData, "移除成功");
+                return $this->send($deleteData, "移除成功",1);
             } else {
                 return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
             }
@@ -775,7 +775,7 @@ class UserController extends \api\components\Controller
                 $userRecord = CustomerTransRecord::queryRecord($customer->id);
                 $ret["userBalance"] = $userBalance;
                 $ret["userRecord"] = $userRecord;
-                return $this->send($ret, "查询成功");
+                return $this->send($ret, "查询成功",1);
             } catch (Exception $e) {
                 return $this->send(null, "boss系统错误", 0, 1024);
             }
@@ -941,7 +941,7 @@ class UserController extends \api\components\Controller
             try {
                 $model = CustomerComment::addUserSuggest($customer->id, $param['order_id'], $param['customer_comment_phone'], $param['customer_comment_content'], $param['customer_comment_tag_ids'], $param['customer_comment_level']);
                 if (!empty($model)) {
-                    return $this->send([1], "添加评论成功");
+                    return $this->send([1], "添加评论成功",1);
                 } else {
                     return $this->send(null, "添加评论失败", 0, 403);
                 }
@@ -999,7 +999,7 @@ class UserController extends \api\components\Controller
                 $level = CustomerCommentLevel::getCommentLevel();
                 if (!empty($level)) {
                     $ret = ['comment' => $level];
-                    return $this->send($ret, "获取评论级别成功");
+                    return $this->send($ret, "获取评论级别成功",1);
                 } else {
                     return $this->send(null, "获取评论级别失败", 0, 403);
                 }
@@ -1059,7 +1059,7 @@ class UserController extends \api\components\Controller
 
                 if (!empty($level)) {
                     $ret = ['commentTag' => $level];
-                    return $this->send($ret, "获取评论标签成功");
+                    return $this->send($ret, "获取评论标签成功",1);
                 } else {
                     return $this->send(null, "获取评论标签失败", 0, 403);
                 }
@@ -1199,7 +1199,7 @@ class UserController extends \api\components\Controller
                 }
 
                 if (!empty($level)) {
-                    return $this->send($level, "获取标签和子标签成功");
+                    return $this->send($level, "获取标签和子标签成功",1);
                 } else {
                     return $this->send(null, "获取标签和子标签失败", 0, 403);
                 }
@@ -1257,7 +1257,7 @@ class UserController extends \api\components\Controller
             try {
                 $service = Order::getGoods($param['longitude'], $param['latitude'], $param['order_service_type_id']);
                 if ($service) {
-                    return $this->send(1, "该服务获取成功");
+                    return $this->send(1, "该服务获取成功",1);
                 } else {
                     return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
                 }

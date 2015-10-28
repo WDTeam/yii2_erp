@@ -3,7 +3,7 @@
 namespace boss\controllers\order;
 
 use Yii;
-use common\models\order\OrderComplaint;
+use boss\models\order\OrderComplaint;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -34,17 +34,11 @@ class OrderComplaintController extends BaseAuthController
     {   
     	$searchModel = new OrderComplaintSearch();
     	$orderComplaint = new OrderComplaint();
-<<<<<<< HEAD
-    	$comStatus = $orderComplaint->ComplaintStatus();
-    	$dev = $orderComplaint->Department();
-    	$comLevel = $orderComplaint->ComplaintLevel();
-    	$comType = $orderComplaint->ComplaintType();
-=======
     	$comStatus = OrderComplaint::ComplaintStatus();
+    	$channel = OrderComplaint::complaint_channel();
     	$dev = OrderComplaint::Department();
     	$comLevel = OrderComplaint::ComplaintLevel();
     	$comType = OrderComplaint::ComplaintType();
->>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
     	$params = Yii::$app->request->getQueryParams();
     	$dataProvider = $searchModel->search($params);
     	return $this->render('index', [
@@ -54,6 +48,7 @@ class OrderComplaintController extends BaseAuthController
     			'comLevel' => $comLevel,
     			'comType' => $comType,
     			'devpart' => $dev,
+    			'channel' => $channel,
     			'params' => $params
     	]);
         
@@ -152,7 +147,7 @@ class OrderComplaintController extends BaseAuthController
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-<<<<<<< HEAD
+
     public function actionApp(){
     	$model = new OrderComplaint();
     	$arr = array('OrderComplaint'=>array(
@@ -169,7 +164,7 @@ class OrderComplaintController extends BaseAuthController
     	$model->save();
     	//$result = $model->insertModel($arr);
     	exit();
-=======
+}
     /**
      * 后端订单投诉添加业务逻辑
      * @return boolean
@@ -183,6 +178,9 @@ class OrderComplaintController extends BaseAuthController
     			$arr['OrderComplaint']['order_id'] = $value['order_id'];
     			$arr['OrderComplaint']['complaint_detail'] = $value['complaint_detail'];
     			$arr['OrderComplaint']['cumstomer_phone'] = $value['cumstomer_phone'];
+    			$arr['OrderComplaint']['created_at'] = time();
+    			$arr['OrderComplaint']['updated_at'] = time();
+    			
     			foreach ($value['data'] as $key=>$val){
     				$arr['OrderComplaint']['complaint_type'] = $val['type'];
     				$arr['OrderComplaint']['complaint_section'] = $val['department'];
@@ -195,6 +193,5 @@ class OrderComplaintController extends BaseAuthController
     		
     	}
     	return $flag;
->>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
     }
 }
