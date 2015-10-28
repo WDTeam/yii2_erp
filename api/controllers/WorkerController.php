@@ -10,7 +10,7 @@ use \core\models\finance\FinanceSettleApplySearch;
 use \core\models\order\OrderComplaint;
 use \core\models\worker\WorkerAccessToken;
 use \core\models\operation\OperationShopDistrictCoordinate;
-
+use core\models\customer\CustomerComment;
 class WorkerController extends \api\components\Controller
 {
 
@@ -328,7 +328,7 @@ class WorkerController extends \api\components\Controller
      * @apiGroup Worker
      *
      * @apiParam {String} access_token    阿姨登录token
-     * @apiParam {String} comment_type 评论类型 【1：满意 2：一般 3：差评】
+     * @apiParam {String} comment_level   评论类型 【1：满意 2：一般 3：差评】
      * @apiParam {String} per_page   页码数
      * @apiParam {String} page_num   每页显示数
      * @apiParam {String} [platform_version] 平台版本号.
@@ -364,12 +364,12 @@ class WorkerController extends \api\components\Controller
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //检测阿姨是否登录
-        $checkResult = $this->checkWorkerLogin($param);
-        if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 0, 403);
-        } 
+//        $checkResult = $this->checkWorkerLogin($param);
+//        if(!$checkResult['code']){
+//            return $this->send(null, $checkResult['msg'], 0, 403);
+//        } 
         //判断评论类型
-        if (!isset($param['comment_type']) || !intval($param['comment_type']) || !in_array($param['comment_type'], array(1, 2, 3))) {
+        if (!isset($param['comment_level']) || !intval($param['comment_level']) || !in_array($param['comment_level'], array(1, 2, 3))) {
             return $this->send(null, "评论类型不正确", 0, 403);
         }
         //判断页码
@@ -382,13 +382,21 @@ class WorkerController extends \api\components\Controller
             $param['page_num'] = 10;
         }
         $page_num = intval($param['page_num']);
-        
+ 
         //获取数据
+        $retData = array();
         try{
-            $commentList = CustomerComment::getCustomerCommentworkerlist($checkResult['worker_id'],$param['comment_type'],$per_page,$page_num);
+            $commentList = CustomerComment::getCustomerCommentworkerlist($checkResult['worker_id'],$param['comment_level'],$per_page,$page_num);
+            if($commentList){
+                foreach($commentList as $key=>$val){
+                    $retData[$key]['comment_id'] = $val['comment_id'];
+                    $retData[$key]['comment_content'] = $val['customer_comment_content'];
+                    $retData[$key]['comment_content'] = $val['customer_comment_content'];
+                }
+            }
         }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
-        }
+        
         $ret = [
             'per_page'=>$per_page,
             'page_num'=>$page_num,
@@ -1075,7 +1083,7 @@ class WorkerController extends \api\components\Controller
      */
     public function actionWorkerLeave()
     {
-        $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //检测阿姨是否登录
         $checkResult = $this->checkWorkerLogin($param);
         if(!$checkResult['code']){
@@ -1086,11 +1094,11 @@ class WorkerController extends \api\components\Controller
         }
         $worker_id = $checkResult['worker_id'];
         $type = $param['type'];
-//        try{
-//            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id,$type);
-//        }catch (\Exception $e) {
-//            return $this->send(null, "boss系统错误", 1024, 403);
-//        }
+        try{
+            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id,$type);
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
         $ret = [
             "result" => 1,
             "msg" => "ok",

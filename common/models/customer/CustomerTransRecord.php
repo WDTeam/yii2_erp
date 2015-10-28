@@ -254,6 +254,7 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
                 'customer_trans_record_mode',   //交易方式:1消费,2=充值,3=退款,4=补偿
                 'customer_trans_record_mode_name',  //交易方式:1消费,2=充值,3=退款,4=补偿
                 'customer_trans_record_online_balance_pay',//在线余额支付
+                'customer_trans_record_coupon_money',   //优惠券金额
                 'customer_trans_record_order_total_money',  //订单总额
             ],
             //9=退款（订单）：把订单金额原路退回 refundSourc
@@ -358,7 +359,7 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         //保留两位小数
         bcscale(2);
         //之前余额
-        $this->customer_trans_record_befor_balance = $lastResult['customer_trans_record_befor_balance'] ? $lastResult['customer_trans_record_befor_balance'] : 0;
+        $this->customer_trans_record_befor_balance = $lastResult['customer_trans_record_current_balance'] ? $lastResult['customer_trans_record_current_balance'] : 0;
         //当前余额
         $this->customer_trans_record_current_balance = bcsub($lastResult['customer_trans_record_current_balance'],$this->customer_trans_record_online_balance_pay);
         //服务卡之前余额
@@ -382,9 +383,9 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         //保留两位小数
         bcscale(2);
         //之前余额
-        $this->customer_trans_record_befor_balance = $lastResult['customer_trans_record_befor_balance'] ? $lastResult['customer_trans_record_befor_balance'] : 0;
+        $this->customer_trans_record_befor_balance = $lastResult['customer_trans_record_current_balance'] ? $lastResult['customer_trans_record_current_balance'] : 0;
         //当前余额
-        $this->customer_trans_record_current_balance = $lastResult['customer_trans_record_befor_balance'] ? $lastResult['customer_trans_record_befor_balance'] : 0;
+        $this->customer_trans_record_current_balance = $lastResult['customer_trans_record_current_balance'] ? $lastResult['customer_trans_record_current_balance'] : 0;
         //服务卡之前余额
         $this->customer_trans_record_online_service_card_befor_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] ? $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] : 0;
         //服务卡当前余额
@@ -407,7 +408,7 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         //保留两位小数
         bcscale(2);
         //之前余额
-        $this->customer_trans_record_befor_balance = $lastResult['customer_trans_record_befor_balance'] ? $lastResult['customer_trans_record_befor_balance'] : 0;
+        $this->customer_trans_record_befor_balance = $lastResult['customer_trans_record_current_balance'] ? $lastResult['customer_trans_record_current_balance'] : 0;
         //当前余额
         $this->customer_trans_record_current_balance = $lastResult['customer_trans_record_current_balance'] ? $lastResult['customer_trans_record_current_balance'] : 0;
         //服务卡之前余额
@@ -432,7 +433,7 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         //保留两位小数
         bcscale(2);
         //之前余额
-        $this->customer_trans_record_befor_balance = $lastResult['customer_trans_record_befor_balance'] ? $lastResult['customer_trans_record_befor_balance'] : 0;
+        $this->customer_trans_record_befor_balance = $lastResult['customer_trans_record_current_balance'] ? $lastResult['customer_trans_record_current_balance'] : 0;
         //当前余额
         $this->customer_trans_record_current_balance = $lastResult['customer_trans_record_current_balance'] ? $lastResult['customer_trans_record_current_balance'] : 0;
         //服务卡之前余额
@@ -476,9 +477,9 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         //保留两位小数
         bcscale(2);
         //之前余额
-        $this->customer_trans_record_befor_balance = $lastResult['customer_trans_record_befor_balance'] ? $lastResult['customer_trans_record_befor_balance'] : 0;
+        $this->customer_trans_record_befor_balance = $lastResult['customer_trans_record_current_balance'] ? $lastResult['customer_trans_record_current_balance'] : 0;
         //当前余额
-        $this->customer_trans_record_current_balance = $lastResult['customer_trans_record_befor_balance'] ? $lastResult['customer_trans_record_befor_balance'] : 0;
+        $this->customer_trans_record_current_balance = $lastResult['customer_trans_record_current_balance'] ? $lastResult['customer_trans_record_current_balance'] : 0;
         //服务卡之前余额
         $this->customer_trans_record_online_service_card_befor_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] ? $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] : 0;
         //服务卡当前余额
@@ -498,20 +499,19 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         $lastResult = $this->lastResult();
         //获取最后一次服务卡结果
         $lastResultServiceCard = $this->lastResultServerCard();
-
+        dump($lastResult);
         //保留两位小数
         bcscale(2);
         //之前余额
-        $this->customer_trans_record_befor_balance = $lastResult['customer_trans_record_befor_balance'] ? $lastResult['customer_trans_record_befor_balance'] : 0;
+        $this->customer_trans_record_befor_balance = $lastResult['customer_trans_record_current_balance'] ? $lastResult['customer_trans_record_current_balance'] : 0;
         //当前余额
-        $this->customer_trans_record_current_balance = bcsub($lastResult['customer_trans_record_befor_balance'] , $this->customer_trans_record_online_balance_pay);
+        $this->customer_trans_record_current_balance = bcsub($lastResult['customer_trans_record_current_balance'] , $this->customer_trans_record_online_balance_pay);
         //服务卡之前余额
         $this->customer_trans_record_online_service_card_befor_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] ? $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] : 0;
         //服务卡当前余额
         $this->customer_trans_record_online_service_card_current_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] ? $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] : 0;
         //交易总额
         $this->customer_trans_record_total_money = bcadd($lastResult['customer_trans_record_total_money'],$this->customer_trans_record_order_total_money);
-
         return $this->insert();
     }
 
@@ -527,9 +527,9 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         //保留两位小数
         bcscale(2);
         //之前余额
-        $this->customer_trans_record_befor_balance = $lastResult['customer_trans_record_befor_balance'] ? $lastResult['customer_trans_record_befor_balance'] : 0;
+        $this->customer_trans_record_befor_balance = $lastResult['customer_trans_record_current_balance'] ? $lastResult['customer_trans_record_current_balance'] : 0;
         //当前余额
-        $this->customer_trans_record_current_balance = bcadd($lastResult['customer_trans_record_befor_balance'], $this->customer_trans_record_online_balance_pay);
+        $this->customer_trans_record_current_balance = bcadd($lastResult['customer_trans_record_current_balance'], $this->customer_trans_record_online_balance_pay);
         //服务卡之前余额
         $this->customer_trans_record_online_service_card_befor_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] ? $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] : 0;
         //服务卡当前余额
@@ -554,9 +554,9 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         //保留两位小数
         bcscale(2);
         //之前余额
-        $this->customer_trans_record_befor_balance = $lastResult['customer_trans_record_befor_balance'] ? $lastResult['customer_trans_record_befor_balance'] : 0;
+        $this->customer_trans_record_befor_balance = $lastResult['customer_trans_record_current_balance'] ? $lastResult['customer_trans_record_current_balance'] : 0;
         //当前余额
-        $this->customer_trans_record_current_balance = $lastResult['customer_trans_record_befor_balance'] ? $lastResult['customer_trans_record_befor_balance'] : 0;
+        $this->customer_trans_record_current_balance = $lastResult['customer_trans_record_current_balance'] ? $lastResult['customer_trans_record_current_balance'] : 0;
         //服务卡之前余额
         $this->customer_trans_record_online_service_card_befor_balance = $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] ? $lastResultServiceCard['customer_trans_record_online_service_card_current_balance'] : 0;
         //服务卡当前余额

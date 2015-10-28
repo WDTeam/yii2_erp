@@ -28,17 +28,15 @@ class OrderSearch extends Order
         ];
     }
 
+
     /**
-     * 通过阿姨ID获取指定月份的所有订单(包括结算状态)
+     * 通过阿姨ID获取指定日期的创建时间所有订单
      * @param $worker_id 阿姨ID
-     * @param $month 指定月份
+     * @param $begin_time 开始时间(时间戳)
+     * @param $end_time 结束时间(时间戳)
      */
-    public static function getWorkerAndOrderAndMonth($worker_id,$year,$month=1,$day=1)
+    public static function getWorkerAndOrderAndCreateTime($worker_id,$begin_time,$end_time)
     {
-        $year = !empty($year) ? $year : date("Y",time());
-        //制造时间戳
-        $month_begin = mktime(0,0,0,$month,$day,$year);
-        $month_end = mktime(0,0,0,$month+1,$day,$year);
         $query = new \yii\db\Query();
         $data = $query->from('{{%order}} as order')
             ->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')
@@ -47,8 +45,40 @@ class OrderSearch extends Order
             ->innerJoin('{{%order_ext_worker}} as ow','order.id = ow.order_id')
             ->select('*')
             ->where(['ow.worker_id'=>$worker_id])
-            ->andWhere(['between', 'order.created_at', $month_begin, $month_end])
+            ->andWhere(['between', 'order.created_at', $begin_time, $end_time])
             //->createCommand()->getRawSql();
+            ->all();
+        return $data;
+    }
+
+    /**
+     * 通过阿姨ID获取指定月份的完成时间所有订单
+     * @param $worker_id 阿姨ID
+     * @param $begin_time 开始时间(时间戳)
+     * @param $end_time 结束时间(时间戳)
+     */
+    public static function getWorkerAndOrderAndDoneTime($worker_id,$begin_time,$end_time)
+    {
+        //状态
+        $params = [
+            OrderStatusDict::ORDER_SERVICE_DONE, //完成服务
+            OrderStatusDict::ORDER_CUSTOMER_ACCEPT_DONE, //完成评价 可申请结算
+            OrderStatusDict::ORDER_CHECKED, //已核实 已对账
+            OrderStatusDict::ORDER_PAYOFF_DONE, //已完成结算
+            OrderStatusDict::ORDER_PAYOFF_SHOP_DONE, //已完成门店结算
+            OrderStatusDict::ORDER_DIED, //已归档
+        ];
+        //查询
+        $query = new \yii\db\Query();
+        $data = $query->from('{{%order}} as order')
+            ->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')
+            ->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')
+            ->innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id')
+            ->innerJoin('{{%order_ext_worker}} as ow','order.id = ow.order_id')
+            ->select('*')
+            ->where(['ow.worker_id'=>$worker_id])
+            ->andWhere(['between', 'order.created_at', $begin_time, $end_time])
+            ->andWhere(['in','os.order_status_dict_id',$params])
             ->all();
         return $data;
     }
@@ -236,21 +266,48 @@ class OrderSearch extends Order
         $sort = $is_asc ? SORT_ASC : SORT_DESC;
         $params['OrderSearch'] = $attributes;
         $query = $this->searchOrdersWithStatusProvider($params,$order_status,$channels,$from,$to)->query;
-        $query->orderBy(['os.created_at' => $sort]);
+        $query->orderBy(['order.created_at' => $sort]);
         $query->offset($offset)->limit($limit);
         return $query->all();
     }
 
+    /**
+     * 分页查询阿姨带状态订单
+     * @param $attributes
+     * @return int|string
+     */
+    public function searchWorkerOrdersWithStatus($attributes, $is_asc = false, $offset = 1, $limit = 10, $order_status = null,$channels = null, $from = null, $to = null)
+    {
+        $sort = $is_asc ? SORT_ASC : SORT_DESC;
+        $params['OrderSearch'] = $attributes;
+        $query = $this->searchWorkerOrdersWithStatusProvider($params,$order_status,$channels,$from,$to)->query;
+        $query->orderBy(['order.created_at' => $sort]);
+        $query->offset($offset)->limit($limit);
+        return $query->all();
+    }
 
     /**
-    * 分页查询带状态订单数量
-    * @param $customer_id
-    * @return int|string
-    */
+     * 分页查询带状态订单数量
+     * @param $customer_id
+     * @return int|string
+     */
     public function searchOrdersWithStatusCount($attributes,  $order_status = null,$channels=null,$from=null,y$to=null)
     {
         $params['OrderSearch'] = $attributes;
         $query = $this->searchOrdersWithStatusProvider($params,$order_status,$channels,$from,$to)->query;
+        return $query->count();
+    }
+
+
+    /**
+    * 分页查询阿姨带状态订单数量
+    * @param $customer_id
+    * @return int|string
+    */
+    public function searchWorkerOrdersWithStatusCount($attributes,  $order_status = null,$channels=null,$from=null,y$to=null)
+    {
+        $params['OrderSearch'] = $attributes;
+        $query = $this->searchWorkerOrdersWithStatusProvider($params,$order_status,$channels,$from,$to)->query;
         return $query->count();
     }
 
@@ -314,6 +371,79 @@ class OrderSearch extends Order
                 'checking_id' => $this->checking_id,
                 'order_pop_order_code' => $this->order_pop_order_code,
                 'oc.customer_id' => $attributes["OrderSearch"]["oc.customer_id"],
+            ]);
+            $query->andFilterWhere(['like', 'order_service_type_name', $this->order_service_type_name]
+            );
+        }
+        return $dataProvider;
+    }
+
+
+
+
+    /**
+     *
+     * 依据订单状态 查询带状态的阿姨订单query对象
+     * @return
+     */
+    public function searchWorkerOrdersWithStatusProvider($attributes, $order_status = null,$channels = null, $from = null, $to = null)
+    {
+        $query = new \yii\db\Query();
+
+        $query->from('{{%order}} as order')->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')->
+        innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')->
+        innerJoin('{{%order_worker_relation}} as owr','order.id = owr.order_id');
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $query = $query->select(['*']);
+        if (!is_null($from) && is_numeric($from)) {
+            $query->andFilterWhere(['>', 'order_booked_begin_time', $from]);
+        }
+        if (!is_null($to) && is_numeric($to)) {
+            $query->andFilterWhere(['<', 'order_booked_begin_time', $to]);
+        }
+        if (!is_null($order_status)) {
+            foreach($order_status as $status_str){
+                $query = $query->orFilterWhere([
+                    'os.order_status_dict_id' => $status_str
+                ]);
+            }
+        }
+
+        if (!is_null($channels)) {
+            foreach($channels as $channels_str){
+                $query = $query->orFilterWhere([
+                    'channel_id' => $channels_str
+                ]);
+            }
+        }
+
+        if ($this->load($attributes) && $this->validate()) {
+            $query->andFilterWhere([
+                'id' => $this->id,
+                'order_parent_id' => $this->order_parent_id,
+                'order_is_parent' => $this->order_is_parent,
+                'created_at' => $this->created_at,
+                'updated_at' => $this->updated_at,
+                'isdel' => $this->isdel,
+                'worker_id' => $this->worker_id,
+                'order_ip' => $this->order_ip,
+                'order_service_type_id' => $this->order_service_type_id,
+                'order_src_id' => $this->order_src_id,
+                'order_unit_money' => $this->order_unit_money,
+                'order_money' => $this->order_money,
+                'order_booked_count' => $this->order_booked_count,
+                'order_booked_begin_time' => $this->order_booked_begin_time,
+                'order_booked_end_time' => $this->order_booked_end_time,
+                'address_id' => $this->address_id,
+                'order_booked_worker_id' => $this->order_booked_worker_id,
+                'checking_id' => $this->checking_id,
+                'order_pop_order_code' => $this->order_pop_order_code,
+                'oc.customer_id' => $attributes["OrderSearch"]["oc.customer_id"],
+                'owr.worker_id' => $attributes["OrderSearch"]["owr.worker_id"]
             ]);
             $query->andFilterWhere(['like', 'order_service_type_name', $this->order_service_type_name]
             );
