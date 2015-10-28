@@ -266,7 +266,7 @@ class OrderSearch extends Order
         $sort = $is_asc ? SORT_ASC : SORT_DESC;
         $params['OrderSearch'] = $attributes;
         $query = $this->searchOrdersWithStatusProvider($params,$order_status,$channels,$from,$to)->query;
-        $query->orderBy(['created_at' => $sort]);
+        $query->orderBy(['order.created_at' => $sort]);
         $query->offset($offset)->limit($limit);
         return $query->all();
     }
@@ -281,7 +281,7 @@ class OrderSearch extends Order
         $sort = $is_asc ? SORT_ASC : SORT_DESC;
         $params['OrderSearch'] = $attributes;
         $query = $this->searchWorkerOrdersWithStatusProvider($params,$order_status,$channels,$from,$to)->query;
-        $query->orderBy(['created_at' => $sort]);
+        $query->orderBy(['order.created_at' => $sort]);
         $query->offset($offset)->limit($limit);
         return $query->all();
     }
@@ -294,7 +294,7 @@ class OrderSearch extends Order
     public function searchOrdersWithStatusCount($attributes,  $order_status = null,$channels=null,$from=null,y$to=null)
     {
         $params['OrderSearch'] = $attributes;
-        $query = $this->searchWorkerOrdersWithStatusProvider($params,$order_status,$channels,$from,$to)->query;
+        $query = $this->searchOrdersWithStatusProvider($params,$order_status,$channels,$from,$to)->query;
         return $query->count();
     }
 
@@ -390,7 +390,9 @@ class OrderSearch extends Order
     {
         $query = new \yii\db\Query();
 
-        $query->from('{{%order}} as order')->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')->innerJoin('{{%order_worker_relation}} as owr','order.id = owr.order_id');
+        $query->from('{{%order}} as order')->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')->
+        innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')->
+        innerJoin('{{%order_worker_relation}} as owr','order.id = owr.order_id');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
