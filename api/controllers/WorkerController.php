@@ -11,6 +11,8 @@ use \core\models\order\OrderComplaint;
 use \core\models\worker\WorkerAccessToken;
 use \core\models\operation\OperationShopDistrictCoordinate;
 use core\models\customer\CustomerComment;
+use core\models\worker\WorkerTaskLog;
+
 class WorkerController extends \api\components\Controller
 {
 
@@ -1024,7 +1026,7 @@ class WorkerController extends \api\components\Controller
      */
 
     /**
-     * @api {get} /worker/worker-leave  查看请假情况 (李勇80%)
+     * @api {get} /worker/worker-leave  查看请假情况 (李勇100%)
      * @apiName actionWorkerLeave
      * @apiGroup Worker
      *
@@ -1158,33 +1160,11 @@ class WorkerController extends \api\components\Controller
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
         $worker_id = $checkResult['worker_id'];
-//        try{
-//            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id);
-//        }catch (\Exception $e) {
-//            return $this->send(null, "boss系统错误", 1024, 403);
-//        }
-        $ret = [
-                [
-                    "id"=> "任务id",
-                    "worker_task_name"=> "任务名称",
-                    "worker_task_start"=> "任务开始时间",
-                    "worker_task_end"=> "任务结束时间",
-                    "worker_task_reward_value"=> "任务奖励值",
-                    "worker_task_conditions"=> "任务需要完成次数",
-                    "worker_task_already"=> "任务已经完成次数"
-
-                ],
-                [
-                    "id"=> "任务id2",
-                    "worker_task_name"=> "任务名称2",
-                    "worker_task_start"=> "任务开始时间2",
-                    "worker_task_end"=> "任务结束时间2",
-                    "worker_task_reward_value"=> "任务奖励值2",
-                    "worker_task_conditions"=> "任务需要完成次数2",
-                    "worker_task_already"=> "任务已经完成次数2"
-
-                ]
-           ];
+        try{
+            $ret= WorkerTaskLog::getCurListByWorkerId($worker_id);
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
         if(empty($ret)){
               return $this->send(null, "您没有任务哦", 0);
         }
@@ -1197,7 +1177,8 @@ class WorkerController extends \api\components\Controller
      * @api {get} /worker/task-done  获得已完成的任务列表 (李勇70%)
      * @apiName actionTaskDone
      * @apiGroup Worker
-     *
+     * @apiParam {String} per_page  每页显示多少条.
+     * @apiParam {String} page  第几页.
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} platform_version 平台版本号.
      *
@@ -1246,35 +1227,18 @@ class WorkerController extends \api\components\Controller
         $checkResult = $this->checkWorkerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
-        } 
+        }
+        if(!isset($param['page']) || !$param['page']||!isset($param['per_page']) || !$param['per_page']){
+            return $this->send(null, "数据不完整,请输入每页条数和第几页", 0, 403);
+        }
         $worker_id = $checkResult['worker_id'];
-//        try{
-//            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id);
-//        }catch (\Exception $e) {
-//            return $this->send(null, "boss系统错误", 1024, 403);
-//        }
-        $ret = [
-                [
-                    "id"=> "任务id",
-                    "worker_task_name"=> "任务名称",
-                    "worker_task_start"=> "任务开始时间",
-                    "worker_task_end"=> "任务结束时间",
-                    "worker_task_reward_value"=> "任务奖励值",
-                    "worker_task_conditions"=> "任务需要完成次数",
-                    "worker_task_already"=> "任务已经完成次数"
-
-                ],
-                [
-                    "id"=> "任务id2",
-                    "worker_task_name"=> "任务名称2",
-                    "worker_task_start"=> "任务开始时间2",
-                    "worker_task_end"=> "任务结束时间2",
-                    "worker_task_reward_value"=> "任务奖励值2",
-                    "worker_task_conditions"=> "任务需要完成次数2",
-                    "worker_task_already"=> "任务已经完成次数2"
-
-                ]
-           ];
+        $page = $param['page'];
+        $per_page = $param['per_page'];
+        try{
+            $ret= WorkerTaskLog::getDonedTasks($worker_id,1,$page,$per_page);
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
         if(empty($ret)){
               return $this->send(null, "您没有任务哦", 0);
         }
@@ -1285,7 +1249,8 @@ class WorkerController extends \api\components\Controller
      * @api {get} /worker/task-fail  获得已失败的任务列表 (李勇70%)
      * @apiName actionTaskFail
      * @apiGroup Worker
-     *
+     * @apiParam {String} per_page  每页显示多少条.
+     * @apiParam {String} page  第几页.
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} platform_version 平台版本号.
      *
@@ -1335,34 +1300,17 @@ class WorkerController extends \api\components\Controller
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
+        if(!isset($param['page']) || !$param['page']||!isset($param['per_page']) || !$param['per_page']){
+            return $this->send(null, "数据不完整,请输入每页条数和第几页", 0, 403);
+        }
         $worker_id = $checkResult['worker_id'];
-//        try{
-//            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id);
-//        }catch (\Exception $e) {
-//            return $this->send(null, "boss系统错误", 1024, 403);
-//        }
-        $ret = [
-                [
-                    "id"=> "任务id",
-                    "worker_task_name"=> "任务名称",
-                    "worker_task_start"=> "任务开始时间",
-                    "worker_task_end"=> "任务结束时间",
-                    "worker_task_reward_value"=> "任务奖励值",
-                    "worker_task_conditions"=> "任务需要完成次数",
-                    "worker_task_already"=> "任务已经完成次数"
-
-                ],
-                [
-                    "id"=> "任务id2",
-                    "worker_task_name"=> "任务名称2",
-                    "worker_task_start"=> "任务开始时间2",
-                    "worker_task_end"=> "任务结束时间2",
-                    "worker_task_reward_value"=> "任务奖励值2",
-                    "worker_task_conditions"=> "任务需要完成次数2",
-                    "worker_task_already"=> "任务已经完成次数2"
-
-                ]
-           ];
+        $page = $param['page'];
+        $per_page = $param['per_page'];
+        try{
+            $ret= WorkerTaskLog::getDonedTasks($worker_id,-1,$page,$per_page);
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
         if(empty($ret)){
               return $this->send(null, "您没有任务哦", 0);
         }
