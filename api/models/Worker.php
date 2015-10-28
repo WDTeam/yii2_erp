@@ -1,10 +1,9 @@
 <?php
 namespace api\models;
-use \core\models\worker\WorkerAccessToken;
 /**
  * 阿姨登录验证
  */
-class Worker extends \common\models\worker\Worker
+class Worker 
 {
    /**
      * 公用检测阿姨登录情况
