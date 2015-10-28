@@ -3,7 +3,7 @@
 namespace boss\controllers\order;
 
 use Yii;
-use common\models\order\OrderComplaint;
+use boss\models\order\OrderComplaint;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
