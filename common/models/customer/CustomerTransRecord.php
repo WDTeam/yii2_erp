@@ -499,7 +499,6 @@ class CustomerTransRecord extends \yii\db\ActiveRecord
         $lastResult = $this->lastResult();
         //获取最后一次服务卡结果
         $lastResultServiceCard = $this->lastResultServerCard();
-        dump($lastResult);
         //保留两位小数
         bcscale(2);
         //之前余额
