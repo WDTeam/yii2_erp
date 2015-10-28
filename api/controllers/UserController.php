@@ -1070,6 +1070,147 @@ class UserController extends \api\components\Controller
             return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
         }
     }
+    
+      /**
+     * @api {GET} v1/user/get-level-tag 获取评论的level和tag （郝建设 100%）
+     *
+     * @apiName actionGetLeveltag
+     * @apiGroup User
+     *
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     * {
+     * "code": 1,
+     * "msg": "获取标签和子标签成功",
+     * "ret": [
+     *     {
+     *         "id": "1",
+     *        "customer_comment_level": "0",
+     *        "customer_comment_level_name": "满意",
+     *        "is_del": "0",
+     *        "tag": [
+     *            {
+     *                "id": "2",
+     *                "customer_tag_name": "满意",
+     *                "customer_comment_level": "0",
+     *                "is_online": "0",
+     *                "is_del": "0"
+     *            },
+     *            {
+     *                "id": "6",
+     *                "customer_tag_name": "满意",
+     *                "customer_comment_level": "0",
+     *                "is_online": "0",
+     *                "is_del": "0"
+     *            }
+     *        ]
+     *    },
+     *    {
+     *       "id": "2",
+     *       "customer_comment_level": "1",
+     *       "customer_comment_level_name": "一般",
+     *       "is_del": "0",
+     *       "tag": [
+     *           {
+     *               "id": "1",
+     *               "customer_tag_name": "一般",
+     *               "customer_comment_level": "1",
+     *               "is_online": "1",
+     *               "is_del": "0"
+     *          },
+     *          {
+     *              "id": "5",
+     *              "customer_tag_name": "一般",
+     *              "customer_comment_level": "1",
+     *              "is_online": "0",
+     *              "is_del": "0"
+     *          },
+     *          {
+     *              "id": "7",
+     *              "customer_tag_name": "一般",
+     *              "customer_comment_level": "1",
+     *              "is_online": "0",
+     *              "is_del": "0"
+     *          }
+     *      ]
+     *  },
+     *  {
+     *      "id": "3",
+     *     "customer_comment_level": "2",
+     *     "customer_comment_level_name": "不满意",
+     *     "is_del": "0",
+     *     "tag": [
+     *         {
+     *             "id": "3",
+     *             "customer_tag_name": "不满意",
+     *             "customer_comment_level": "2",
+     *             "is_online": "0",
+     *             "is_del": "0"
+     *         },
+     *         {
+     *             "id": "4",
+     *             "customer_tag_name": "不满意",
+     *             "customer_comment_level": "2",
+     *             "is_online": "0",
+     *             "is_del": "0"
+     *         }
+     *     ]
+     * }
+     * ]
+     * }
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "0",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *     }
+     *
+     */
+    public function actionGetLevelTag()
+    {
+        $param = Yii::$app->request->get();
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+        if (!empty($customer) && !empty($customer->id)) {
+            try {
+                $level = CustomerCommentLevel::getCommentLevel();
+                $array = array();
+                foreach ($level as $key => $val) {
+                    $levelTag = CustomerCommentTag::getCommentTag($val['customer_comment_level']);
+                    foreach ($levelTag as $k => $v) {
+                        $array[$v['customer_comment_level']] = $levelTag;
+                    }
+                }
+                #合并数据组
+                foreach ($level as $kk => $vv) {
+                    foreach ($array as $kv => $vk) {
+                        if ($vv['customer_comment_level'] == $kv) {
+                            $level[$kk]['tag'] = $array[$kv];
+                        }
+                    }
+                }
+
+                if (!empty($level)) {
+                    return $this->send($level, "获取标签和子标签成功");
+                } else {
+                    return $this->send(null, "获取标签和子标签失败", 0, 403);
+                }
+            } catch (Exception $e) {
+                return $this->send(null, "boss系统错误", 0, 1024);
+            }
+        } else {
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
+        }
+    }
+
 
     /**
      * @api {GET} v1/user/get-goods 获取给定经纬度范围内是否有该服务 （郝建设 100%）
@@ -1103,6 +1244,7 @@ class UserController extends \api\components\Controller
      *     }
      *
      */
+    
     public function actionGetGoods()
     {
         $param = Yii::$app->request->get();
