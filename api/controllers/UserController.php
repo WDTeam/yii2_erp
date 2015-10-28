@@ -1121,6 +1121,6 @@ class UserController extends \api\components\Controller
         } else {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
-    }
+    } 
 
 }
