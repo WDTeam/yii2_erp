@@ -10,22 +10,22 @@ class m150923_141751_create_table_finance_refund_log extends Migration
 
 if ($this->db->driverName === 'mysql') {
     		
-			$tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'标头对应记录表\'';
+			$tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'鏍囧ご瀵瑰簲璁板綍琛╘'';
 			}
 	$this->createTable('{{%finance_refund_log}}', [
-	 'id' => Schema::TYPE_PK . '(10) AUTO_INCREMENT COMMENT \'主键\'' ,
-	 'finance_refund_id' => Schema::TYPE_INTEGER. '(8) DEFAULT NULL COMMENT \'表头表id\'' ,
-	  'finance_order_channel_id' => Schema::TYPE_SMALLINT . '(4) DEFAULT NULL COMMENT \'订单渠道id\'' ,
-	  'finance_order_channel_name' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'订单渠道名称\'' ,
-	  'finance_pay_channel_id' => Schema::TYPE_SMALLINT . '(4) DEFAULT NULL COMMENT \'支付渠道id\'' ,
-	  'finance_pay_channel_name' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'支付渠道名称\'' ,
-	  'finance_refund_log_name' => Schema::TYPE_STRING . '(100)  DEFAULT NULL COMMENT \'标头名称\'' ,
-	  'finance_refund_log_order_name' => Schema::TYPE_STRING . '(30) DEFAULT NULL COMMENT \'对应的订单表名称(订单号或比对价格名称)\'' ,
-	  'finance_refund_log_order_namebak1' => Schema::TYPE_STRING . '(20) DEFAULT \'0\' COMMENT \'作为扩展1字段\'' ,
-	  'finance_refund_log_order_namebak2' => Schema::TYPE_STRING . '(20) DEFAULT \'0\' COMMENT \'作为扩展2字段\'' ,
-	  'finance_refund_log_order_describe' => Schema::TYPE_STRING . '(50) DEFAULT \'0\' COMMENT \'描述\'' ,
-	  'create_time' => Schema::TYPE_INTEGER. '(10) DEFAULT NULL COMMENT \'创建时间\'' ,
-	   'is_del' => Schema::TYPE_SMALLINT . '(1) DEFAULT \'0\' COMMENT \'0 正常 1 删除\'' ,
+	 'id' => Schema::TYPE_PK . '(10) AUTO_INCREMENT COMMENT \'涓婚敭\'' ,
+	 'finance_refund_id' => Schema::TYPE_INTEGER. '(8) DEFAULT NULL COMMENT \'琛ㄥご琛╥d\'' ,
+	  'finance_order_channel_id' => Schema::TYPE_SMALLINT . '(4) DEFAULT NULL COMMENT \'璁㈠崟娓犻亾id\'' ,
+	  'finance_order_channel_name' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'璁㈠崟娓犻亾鍚嶇О\'' ,
+	  'finance_pay_channel_id' => Schema::TYPE_SMALLINT . '(4) DEFAULT NULL COMMENT \'鏀粯娓犻亾id\'' ,
+	  'finance_pay_channel_name' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'鏀粯娓犻亾鍚嶇О\'' ,
+	  'finance_refund_log_name' => Schema::TYPE_STRING . '(100)  DEFAULT NULL COMMENT \'鏍囧ご鍚嶇О\'' ,
+	  'finance_refund_log_order_name' => Schema::TYPE_STRING . '(30) DEFAULT NULL COMMENT \'瀵瑰簲鐨勮鍗曡〃鍚嶇О(璁㈠崟鍙锋垨姣斿浠锋牸鍚嶇О)\'' ,
+	  'finance_refund_log_order_namebak1' => Schema::TYPE_STRING . '(20) DEFAULT \'0\' COMMENT \'浣滀负鎵╁睍1瀛楁\'' ,
+	  'finance_refund_log_order_namebak2' => Schema::TYPE_STRING . '(20) DEFAULT \'0\' COMMENT \'浣滀负鎵╁睍2瀛楁\'' ,
+	  'finance_refund_log_order_describe' => Schema::TYPE_STRING . '(50) DEFAULT \'0\' COMMENT \'鎻忚堪\'' ,
+	  'create_time' => Schema::TYPE_INTEGER. '(10) DEFAULT NULL COMMENT \'鍒涘缓鏃堕棿\'' ,
+	   'is_del' => Schema::TYPE_SMALLINT . '(1) DEFAULT \'0\' COMMENT \'0 姝ｅ父 1 鍒犻櫎\'' ,
 		 ], $tableOptions);
     }
 
