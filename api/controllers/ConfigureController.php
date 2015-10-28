@@ -178,16 +178,23 @@ class ConfigureController extends \api\components\Controller
      *                  "url_title": ""
      *              }
      *              ],
-     *              "home_order_server": {
-     *                  "category_id": "1",
-     *                  "category_name": "专业保洁",
-     *                  "category_icon": "",
-     *                  "category_url": "",
-     *                  "category_introduction": "44项定制清洁服务",
-     *                  "category_price": "25.00",
-     *                  "category_price_unit": "小时",
-     *                  "category_price_description": "￥25/小时"
+     *              "home_order_server": [
+     *              {
+     *                  "title"=>"单次保洁",
+     *                  "introduction"=>"新用户第1小时免费",
+     *                  "icon"=>"",
+     *                  "url"=>"",
+     *                  "sort"=>"1",  排序
+     *                  "colour"=>"",  颜色
+     *                  "category_id" => "1",
+     *                  "category_name" => "专业保洁",
+     *                  "category_icon" => "",
+     *                  "category_introduction" => "44项定制清洁服务",
+     *                  "category_price" => "25.00",
+     *                  "category_price_unit" => "小时",
+     *                  "category_price_description" => "￥25/小时",
      *              },
+     *              ],
      *              "server_list": [
      *              {
      *                  "category_id": "6",   服务品类id
@@ -198,6 +205,7 @@ class ConfigureController extends \api\components\Controller
      *                  "category_price": "",  价格
      *                  "category_price_unit": "",  价格单位
      *                  "category_price_description": "",  价格备注
+     *                  "colour"=>"",
      *                  "sort": "1"   排序
      *              },
      *              {
@@ -209,23 +217,26 @@ class ConfigureController extends \api\components\Controller
      *                  "category_price": "25.00",
      *                  "category_price_unit": "小时",
      *                  "category_price_description": "￥25/小时",
+     *                  "colour"=>"",
      *                  "sort": "2"
      *              },
      *              ],
      *              "footer_link":[
      *              {
-     *                  'link_id'=>'1',
-     *                  'title'=>'首页',
-     *                  'url'=>'',   跳转链接
-     *                  'link_icon'=>'',
-     *                  'sort'=>'1'  排序
+     *                  "link_id"=>"1",
+     *                  "title"=>"首页",
+     *                  "url"=>"",   跳转链接
+     *                  "link_icon"=>"",
+     *                  "colour"=>"",
+     *                  "sort"=>"1"  排序
      *              },
      *              {
-     *                  'link_id'=>'2',
-     *                  'title'=>'订单',
-     *                  'url'=>'',
-     *                  'link_icon'=>'',
-     *                  'sort'=>'2'
+     *                  "link_id"=>"2",
+     *                  "title"=>"订单",
+     *                  "url"=>"",
+     *                  "link_icon"=>"",
+     *                  "colour"=>"",
+     *                  "sort"=>"2"
      *              },
      *          ]
      *      }
@@ -268,26 +279,50 @@ class ConfigureController extends \api\components\Controller
             ]
         ];
         $home_order_server = [
-            'category_id' => '1',
-            'category_name' => '专业保洁',
-            'category_icon' => '',
-            'category_url' => '',
-            'category_introduction' => '44项定制清洁服务',
-            'category_price' => '25.00',
-            'category_price_unit' => '小时',
-            'category_price_description' => '￥25/小时',
+            [
+                'title' => '单次保洁',
+                'introduction' => '新用户第1小时免费',
+                'icon' => '',
+                'url' => '',
+                'sort' => '1',
+                'colour' => '',
+                'category_id' => '1',
+                'category_name' => '专业保洁',
+                'category_icon' => '',
+                'category_introduction' => '44项定制清洁服务',
+                'category_price' => '25.00',
+                'category_price_unit' => '小时',
+                'category_price_description' => '￥25/小时',
+            ],
+            [
+                'title' => '周期保洁',
+                'introduction' => '一次下单 清洁无忧',
+                'icon' => '',
+                'url' => '',
+                'sort' => '2',
+                'colour' => '',
+                'category_id' => '1',
+                'category_name' => '专业保洁',
+                'category_icon' => '',
+                'category_introduction' => '44项定制清洁服务',
+                'category_price' => '25.00',
+                'category_price_unit' => '小时',
+                'category_price_description' => '￥25/小时',
+            ]
+
         ];
         //获取该城市的首页服务类型
         $server_list = [
             [
                 'category_id' => '6',
-                'category_name' => '精品保洁',
+                'category_name' => '保洁任务',
                 'category_icon' => '',
                 'category_url' => '',
-                'category_introduction' => '',
-                'category_price' => '',
-                'category_price_unit' => '',
-                'category_price_description' => '',
+                'category_introduction' => '37项定制化精品保洁',
+                'category_price' => '30',
+                'category_price_unit' => '小时',
+                'category_price_description' => '￥30/小时',
+                'colour' => '',
                 'sort' => '1',
 
             ],
@@ -300,6 +335,7 @@ class ConfigureController extends \api\components\Controller
                 'category_price' => '25.00',
                 'category_price_unit' => '小时',
                 'category_price_description' => '￥25/小时',
+                'colour' => '',
                 'sort' => '2',
 
             ],
@@ -312,6 +348,7 @@ class ConfigureController extends \api\components\Controller
                 'category_price' => '9.00',
                 'category_price_unit' => '件',
                 'category_price_description' => '￥9/件起',
+                'colour' => '',
                 'sort' => '3',
             ],
             [
@@ -323,6 +360,7 @@ class ConfigureController extends \api\components\Controller
                 'category_price' => '100.00',
                 'category_price_unit' => '台',
                 'category_price_description' => '￥100/台起',
+                'colour' => '',
                 'sort' => '4',
             ],
             [
@@ -334,6 +372,7 @@ class ConfigureController extends \api\components\Controller
                 'category_price' => '',
                 'category_price_unit' => '',
                 'category_price_description' => '￥250起',
+                'colour' => '',
                 'sort' => '5',
             ],
             [
@@ -345,6 +384,7 @@ class ConfigureController extends \api\components\Controller
                 'category_price' => '',
                 'category_price_unit' => '',
                 'category_price_description' => '￥160起',
+                'colour' => '',
                 'sort' => '6',
             ],
         ];
@@ -355,6 +395,7 @@ class ConfigureController extends \api\components\Controller
                 'title' => '首页',
                 'url' => '',
                 'link_icon' => '',
+                'colour' => '',
                 'sort' => '1',
             ],
             [
@@ -362,6 +403,7 @@ class ConfigureController extends \api\components\Controller
                 'title' => '订单',
                 'url' => '',
                 'link_icon' => '',
+                'colour' => '',
                 'sort' => '2',
             ],
             [
@@ -369,6 +411,7 @@ class ConfigureController extends \api\components\Controller
                 'title' => '优惠券',
                 'url' => '',
                 'link_icon' => '',
+                'colour' => '',
                 'sort' => '3',
             ],
             [
@@ -376,6 +419,7 @@ class ConfigureController extends \api\components\Controller
                 'title' => '我的',
                 'url' => '',
                 'link_icon' => '',
+                'colour' => '',
                 'sort' => '4',
             ],
         ];
