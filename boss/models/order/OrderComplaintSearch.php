@@ -56,8 +56,7 @@ class OrderComplaintSearch extends OrderComplaint{
 		$query->andFilterWhere(['like','order_ext_worker.order_worker_name',$this->order_worker_name])->
 		andFilterWhere(['like','complaint_phone',$this->complaint_phone])->
 		andFilterWhere(['like','orderExtWorker.order_worker_phone',$this->order_worker_phone]);
-		print_r($params);exit();
-		 if($this->complaint_time != '')
+		 if($this->created_at != '')
 		{
 			$query->andFilterWhere(['between', 'created_at', strtotime($params['starttime']), strtotime($params['endtime'])]);
 		}
