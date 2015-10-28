@@ -101,8 +101,6 @@ use yii\helpers\Url;
                 
                 // 'updated_at'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter Update At...']], 
         
-        //         'blacklist_time'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 加入黑名单时间...']], 
-        
                 // 'worker_count'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 阿姨数量...']], 
                 
                 // 'complain_coutn'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 投诉数量...']], 
@@ -120,9 +118,9 @@ use yii\helpers\Url;
                     
                     'level'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 评级...', 'maxlength'=>50]],
             
-                    'is_blacklist'=>['type'=> Form::INPUT_RADIO_LIST, 'items'=>['否', '是'], 'label'=>'是否黑名单', 'options'=>['placeholder'=>'Enter 是否是黑名单：0正常，1黑名单...']],
+                    'is_blacklist'=>['type'=> Form::INPUT_RADIO_LIST, 'items'=>['否', '是'], 'label'=>'是否黑名单', 'options'=>['placeholder'=>'Enter 是否封号：0正常，1封号...']],
     
-                    'blacklist_cause'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 黑名单原因...', 'maxlength'=>255]],
+                    'blacklist_cause'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 封号原因...', 'maxlength'=>255]],
                     
                 ]
             

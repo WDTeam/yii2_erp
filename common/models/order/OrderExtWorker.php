@@ -24,6 +24,10 @@ use Yii;
  */
 class OrderExtWorker extends ActiveRecord
 {
+    const ASSIGN_TYPE_CS = 1; //客服指派
+    const ASSIGN_TYPE_SHOP = 2; //门店指派
+    const ASSIGN_TYPE_WORKER = 3; //阿姨端接单
+    const ASSIGN_TYPE_IVR = 4; //IVR接单
     /**
      * @inheritdoc
      */

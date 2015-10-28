@@ -8,7 +8,7 @@ use dosamigos\datepicker\DatePicker;
 //use \common\models\OperationCity;
 
 use \core\models\operation\coupon\Coupon;
-
+use \core\models\operation\OperationCity;
 
 /**
  * @var yii\web\View $this
@@ -25,7 +25,13 @@ $coupon_types = Coupon::getServiceTypes();
 //city types
 $city_types = Coupon::getCityTypes();
 //citys
-//$citys = ArrayHelper::map(OperationCity::find()->asArray()->all(), 'id', 'city_name');
+$cityOnlineList = OperationCity::getCityOnlineInfoList();
+$cities = array();
+if(!empty($cityOnlineList)){
+	foreach($cityOnlineList as $value){
+		$cities[$value['city_id']] = $value['city_name'];
+	}
+}
 //customer types
 $customer_types = Coupon::getCustomerTypes();
 //time types
@@ -57,7 +63,6 @@ $promote_types = Coupon::getPromoteTypes();
                 <?= $form->field($model, 'coupon_type')->inline()->radioList($coupon_types)->label('优惠券类型') ?>
 				<?= $form->field($model, 'coupon_service_type_id')->dropDownList([""=>"请选择服务类别"],['maxlength' => true])->label('服务类别') ?>
 				<?= $form->field($model, 'coupon_service_id')->dropDownList([""=>"请选择服务"],['maxlength' => true])->label('服务') ?>
-                
             </div>
 
             <div class="panel-heading">
@@ -65,8 +70,7 @@ $promote_types = Coupon::getPromoteTypes();
             </div>
             <div class="panel-body">
                 <?= $form->field($model, 'coupon_city_limit')->inline()->radioList($city_types)->label('城市限制类型') ?>
-                <?php //$form->field($model, 'coupon_city_id')->inline()->radioList($citys)->label('城市')
-                ?>
+                <?= $form->field($model, 'coupon_city_id')->inline()->radioList($cities)->label('城市') ?>
             </div>
 
             <div class="panel-heading">
@@ -134,7 +138,8 @@ $promote_types = Coupon::getPromoteTypes();
             </div>
             <div class="panel-body">
                 <?= $form->field($model, 'coupon_code_num')->textInput()->label('优惠码个数') ?>
-                <?= $form->field($model, 'coupon_code_max_customer_num')->textInput()->label('领取后过期天数') ?>
+                <?php //$form->field($model, 'coupon_code_max_customer_num')->textInput()->label('最大使用人数');
+				?>
             </div>
 
             <div class="panel-footer">

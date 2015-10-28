@@ -741,7 +741,10 @@ class Worker extends \common\models\worker\Worker
      * @return array
      */
     public static function getWorkerTypeList(){
-        return [1=>'自有',2=>'非自有'];
+        return [
+            1=>'自有',
+            2=>'非自有'
+        ];
     }
 
     /**

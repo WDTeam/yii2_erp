@@ -151,7 +151,11 @@ if(isset($model->review_section)){
             </div>
             <div class='settleDetail'>
                 <?php
-                    echo $model->finance_settle_apply_money_deduction;
+                    if($model->finance_settle_apply_money_deduction > 0){
+                            echo '<span class = "deductionmoney" style = "cursor:pointer"><u>'.$model->finance_settle_apply_money_deduction.'</u></span>';
+                        }else{
+                            echo $model->finance_settle_apply_money_deduction;
+                        }
                 ?>
             </div>
             <div class='settleDetail'>
@@ -240,7 +244,7 @@ if(isset($model->review_section)){
              'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> 所有订单明细 </h3>',
             ],
            ]); Pjax::end(); 
-           echo '</div></div>';
+           echo '</div>';
             ?>
         
         
@@ -305,7 +309,7 @@ if(isset($model->review_section)){
                     'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> 现金订单明细 </h3>',
                 ],
            ]); Pjax::end(); 
-           echo '</div></div>';
+           echo '</div>';
            
             ?>
         
@@ -369,7 +373,7 @@ if(isset($model->review_section)){
                     'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> 非现金订单明细 </h3>',
                 ],
            ]); Pjax::end(); 
-           echo '</div></div>';
+           echo '</div>';
            
             ?>
 
@@ -399,7 +403,51 @@ if(isset($model->review_section)){
                     'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> 奖励明细 </h3>',
                 ],
            ]); Pjax::end(); 
-           echo '</div></div>';
+           echo '</div>';
+           
+            ?>
+    <?php 
+            echo '<div id = "compensateInfo" style = "display:none">';
+            Pjax::begin(); echo GridView::widget([
+               'dataProvider' => $compensateDataProvider,
+               'columns' => [
+                   ['class' => 'yii\grid\SerialColumn'],
+                    ['attribute'=>'id',
+                       'header' => Yii::t('app', '赔偿编号'),],
+                    ['attribute'=>'finance_compensate_oa_code',
+                       'header' => Yii::t('app', 'OA审批号'),],
+                    [
+                       'header' => Yii::t('app', '投诉编号'),
+                        'attribute' => 'finance_complaint_id',
+                    ],
+                    ['attribute'=>'order_id',
+                       'header' => Yii::t('app', '订单编号'),
+                    ], 
+                   ['attribute'=>'finance_compensate_reason',
+                       'header' => Yii::t('app', '赔偿原因'),
+                    ], 
+                   ['attribute'=>'finance_compensate_total_money',
+                       'header' => Yii::t('app', '赔偿总金额'),
+                    ], 
+                   ['attribute'=>'finance_compensate_insurance_money',
+                       'header' => Yii::t('app', '保险赔付金额'),
+                    ], 
+                   ['attribute'=>'finance_compensate_company_money',
+                       'header' => Yii::t('app', '公司赔付金额'),
+                    ], 
+                   ['attribute'=>'finance_compensate_worker_money',
+                       'header' => Yii::t('app', '阿姨赔付金额'),
+                    ], 
+               ],
+               'responsive'=>true,
+               'hover'=>true,
+               'condensed'=>true,
+               'floatHeader'=>true,
+              'panel' => [
+                    'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> 赔偿扣款 </h3>',
+                ],
+           ]); Pjax::end(); 
+           echo '</div>';
            
             ?>
 
@@ -411,24 +459,35 @@ if(isset($model->review_section)){
                         $("#cashOrderInfo").css('display','none');
                         $("#nonCashOrderInfo").css('display','none');
                         $("#taskInfo").css('display','none');
+                        $("#compensateInfo").css('display','none');
                     });
                     $(".cashordercount").click(function(){
                         $("#allOrderInfo").css('display','none');
                         $("#cashOrderInfo").css('display','block');
                         $("#nonCashOrderInfo").css('display','none');
                         $("#taskInfo").css('display','none');
+                        $("#compensateInfo").css('display','none');
                     });
                     $(".noncashordercount").click(function(){
                         $("#allOrderInfo").css('display','none');
                         $("#cashOrderInfo").css('display','none');
                         $("#nonCashOrderInfo").css('display','block');
                         $("#taskInfo").css('display','none');
-                    });
+                        $("#compensateInfo").css('display','none');
+                    }); 
                     $(".taskcount").click(function(){
                         $("#allOrderInfo").css('display','none');
                         $("#cashOrderInfo").css('display','none');
                         $("#nonCashOrderInfo").css('display','none');
                         $("#taskInfo").css('display','block');
+                        $("#compensateInfo").css('display','none');
+                    });
+                    $(".deductionmoney").click(function(){
+                        $("#allOrderInfo").css('display','none');
+                        $("#cashOrderInfo").css('display','none');
+                        $("#nonCashOrderInfo").css('display','none');
+                        $("#taskInfo").css('display','none');
+                        $("#compensateInfo").css('display','block');
                     });
 JS;
         $this->registerJs(

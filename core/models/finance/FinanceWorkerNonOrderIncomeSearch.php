@@ -8,6 +8,8 @@ use common\models\finance\FinanceWorkerNonOrderIncome;
 use core\models\worker\WorkerTask;
 use yii\data\ArrayDataProvider;
 use core\models\worker\Worker;
+use core\models\finance\FinanceSettleApplySearch;
+use core\models\finance\FinanceCompensate;
 
 /**
  * FinanceWorkerNonOrderIncomeSearch represents the model behind the search form about `common\models\finance\FinanceWorkerNonOrderIncome`.
@@ -137,6 +139,21 @@ class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
         return $dataProvider;
     }
     
+    public static function getCompensateMoney($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
+        $compensateMoney = 0;
+        $compensateList = FinanceCompensate::getFinanceCompensateListByWorkerId($workerId, $finance_settle_apply_starttime, $finance_settle_apply_endtime);
+        foreach($compensateList as $compensate){
+            $compensateMoney += $compensate ->finance_compensate_total_money;
+        }
+        return $compensateMoney;
+    }
+    
+    public function getCompensateDataProviderByWorkerId($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
+        $data = FinanceCompensate::getFinanceCompensateListByWorkerId($workerId, $finance_settle_apply_starttime, $finance_settle_apply_endtime);
+        $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
+        return $dataProvider;
+    }
+    
     public function getTaskArrByWorkerId($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
         $data = [];
         $taskAwardList = self::getTaskAwardList($workerId, $finance_settle_apply_starttime, $finance_settle_apply_endtime);
@@ -173,5 +190,20 @@ class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
         $nonOrderIncomeArr =  FinanceWorkerNonOrderIncome::find()->select(['finance_worker_non_order_income_type','finance_worker_non_order_income'])
                  ->where(['finance_settle_apply_id'=>$settleApplyId])->all();
         return $nonOrderIncomeArr;
+    }
+    
+    /**
+     * 根据任务Id判断该任务是否已经被结算
+     * @param type $task_id
+     */
+    public static function isWorkerTaskSettled($task_id){
+        $isWorkerTaskSettled = false;
+        $count = self::find()->join('INNER JOIN', '{{%finance_settle_apply}}', 'finance_settle_apply_id={{%finance_settle_apply}}.id')
+                ->where(['finance_worker_non_order_income_code'=>$task_id,'{{%finance_settle_apply}}.finance_settle_apply_status'=>FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PAYED])
+                ->count();
+        if($count > 0){
+            $isWorkerTaskSettled = true;
+        }
+        return $isWorkerTaskSettled;
     }
 }

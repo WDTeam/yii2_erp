@@ -81,18 +81,22 @@ class OrderPool extends Model
      * @param int $page_size
      * @param int $page
      * @param bool $is_booked
-     * @return mixed
+     * @return array
      */
     public static function getOrdersFromWorkerPushList($worker_id,$page_size=20,$page=1,$is_booked=false)
     {
         $begin = ($page-1)*$page_size;
         $end = $begin+$page_size-1;
         if($is_booked){
-            return Yii::$app->redis->executeCommand('zRange', [self::PUSH_BOOKED_WORKER_ORDERS.'_'.$worker_id, $begin, $end]);
+            $orders = Yii::$app->redis->executeCommand('zRange', [self::PUSH_BOOKED_WORKER_ORDERS.'_'.$worker_id, $begin, $end]);
         }else{
-            return Yii::$app->redis->executeCommand('zRange', [self::PUSH_WORKER_ORDERS.'_'.$worker_id, $begin, $end]);
+            $orders = Yii::$app->redis->executeCommand('zRange', [self::PUSH_WORKER_ORDERS.'_'.$worker_id, $begin, $end]);
         }
-
+        $order_list = [];
+        foreach($orders as $order){
+            $order_list[] = json_decode($order,true);
+        }
+        return $order_list;
     }
 
     /**

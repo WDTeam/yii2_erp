@@ -53,6 +53,8 @@ class PayParam extends Model
             'zhidahao_h5_online_pay'=>  ['pay_money','customer_id','channel_id','partner','order_id','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail'],
             //支付宝WEB
             'alipay_web_pay'    =>      ['pay_money','customer_id','channel_id','partner','return_url','show_url'],
+            //支付宝WEB
+            'alipay_web_online_pay' =>  ['pay_money','customer_id','channel_id','partner','order_id','return_url','show_url'],
 
         ];
     }

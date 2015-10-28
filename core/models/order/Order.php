@@ -12,6 +12,7 @@ namespace core\models\order;
 use boss\controllers\operation\OperationGoodsController;
 use boss\controllers\operation\OperationShopDistrictController;
 use common\models\order\OrderExtFlag;
+use common\models\order\OrderExtWorker;
 use core\models\customer\Customer;
 use core\models\customer\CustomerAddress;
 use core\models\payment\GeneralPay;
@@ -200,7 +201,8 @@ class Order extends OrderModel
     public static function ivrAssignDone($order_id, $worker_phone)
     {
         $worker = Worker::getWorkerInfoByPhone($worker_phone);
-        return self::assignDone($order_id, $worker, 1, 1);
+        $assign_type = OrderExtWorker::ASSIGN_TYPE_IVR;
+        return self::assignDone($order_id, $worker, 1, $assign_type);
     }
 
     /**
@@ -212,7 +214,8 @@ class Order extends OrderModel
     public static function sysAssignDone($order_id, $worker_id)
     {
         $worker = Worker::getWorkerInfo($worker_id);
-        return self::assignDone($order_id, $worker, 1, 1);
+        $assign_type = OrderExtWorker::ASSIGN_TYPE_WORKER;
+        return self::assignDone($order_id, $worker, 1, $assign_type);
     }
 
     /**
@@ -256,7 +259,7 @@ class Order extends OrderModel
      */
     public static function manualAssignDone($order_id, $worker_id, $admin_id, $isCS = false)
     {
-        $assign_type = $isCS ? 2 : 3; //2客服指派 3门店指派
+        $assign_type = $isCS ? OrderExtWorker::ASSIGN_TYPE_CS : OrderExtWorker::ASSIGN_TYPE_SHOP;
         $worker = Worker::getWorkerInfo($worker_id);
         return self::assignDone($order_id, $worker, $admin_id, $assign_type);
     }
