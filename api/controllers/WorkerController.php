@@ -1370,7 +1370,7 @@ class WorkerController extends \api\components\Controller
      * @apiError SessionIdNotFound 未找到会话ID.
      *
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
+     *     HTTP/1.1 403 Not Found 
      *     { 
      *       "code":"0",
      *       "msg": "查看任务失败"
