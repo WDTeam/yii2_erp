@@ -967,7 +967,7 @@ class OrderController extends \api\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {String} order_cancel_reason 取消原因
+     * @apiParam {String} [order_cancel_reason] 取消原因
      * @apiParam {String} order_id 订单号
      *
      * @apiParam {String} recursive_order_id 周期订单
@@ -998,11 +998,20 @@ class OrderController extends \api\components\Controller
     public function actionCancelOrder()
     {
         $param = json_decode(Yii::$app->request->getRawBody(), true);
-        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+        if(!isset($param['access_token'])||!$param['access_token']||!isset($param['order_id'])||!$param['order_id']){
+            return $this->send(null, "验证码或订单号不能为空", 0, 403);
+        }
+        $token = $param['access_token'];
+		$orderId = $param['order_id'];
+		$reason = '';
+		if(isset($param['order_cancel_reason'])){
+			$reason = $param['order_cancel_reason'];
+		}
+        if (!CustomerAccessToken::checkAccessToken($token)) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
 
-        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+        $customer = CustomerAccessToken::getCustomer($token);
 
         if (!empty($customer) && !empty($customer->id)) {
             /**
@@ -1010,7 +1019,7 @@ class OrderController extends \api\components\Controller
              * $customer->id 用户
              * $order_id     订单号
              */
-            $orderValidation = \core\models\order\Order::validationOrderCustomer($customer->id, $param['order_id']);
+            $orderValidation = \core\models\order\Order::validationOrderCustomer($customer->id, $orderId);
 
             if ($orderValidation) {
                 /**
@@ -1024,18 +1033,18 @@ class OrderController extends \api\components\Controller
                     '信息填写有误，重新下单',
                     '不需要服务了',
                 );
-                if (!in_array($param['order_cancel_reason'], $order_cancel_reason)) {
-                    $param['order_cancel_reason'] = '其他原因#' . $param['order_cancel_reason'];
+                if (!in_array($reason, $order_cancel_reason)) {
+                    $reason = '其他原因#' . $reason;
                 }
 
-                if (\core\models\order\Order::cancel($param['order_id'], 0, $param['order_cancel_reason'])) {
-                    return $this->send([1], $param['order_id'] . "订单取消成功");
+                if (\core\models\order\Order::cancel($orderId, 0, $reason)) {
+                    return $this->send([1], $orderId . "订单取消成功");
                 }
             } else {
-                return $this->send(null, "核实用户订单唯一性失败，用户id：".$customer->id.",订单id：".$param['order_id'], 0, 403);
+                return $this->send(null, "核实用户订单唯一性失败，用户id：".$customer->id.",订单id：".$orderId, 0, 403);
             }
         } else {
-            return $this->send(null, "获取客户信息失败.access_token：".$param['access_token'], 0, 403);
+            return $this->send(null, "获取客户信息失败.access_token：".$token, 0, 403);
         }
     }
 
