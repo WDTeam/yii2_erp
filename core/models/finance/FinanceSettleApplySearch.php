@@ -403,10 +403,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             $finalWorkerIncome['settle_endtime'] =  date('Y-m-d',$workerIncome['settle_endtime']);
             $finalWorkerIncome['order_count'] = $workerIncome['order_count'];
             $finalWorkerIncome['worker_income'] = $workerIncome['worker_income'];
-<<<<<<< HEAD
-=======
             $finalWorkerIncome['settle_cycle'] = $workerIncome['settle_cycle'];
->>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
             $finalWorkerIncome['settle_cycle_des'] = $workerIncome['settle_cycle_des'];
             $finalWorkerIncome['settle_task_money'] = $workerIncome['settle_task_money'];
             $finalWorkerIncome['base_salary_subsidy'] = $workerIncome['base_salary_subsidy'];
