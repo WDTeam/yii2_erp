@@ -399,11 +399,18 @@ class FinancePopOrderController extends Controller
     	$searchModel = new FinancePopOrderSearch;
     	$requestModel = Yii::$app->request->post();
 		//$idArr = implode(',',);
+    	if(!empty($requestModel) && is_array($requestModel)){
 		foreach ($requestModel['ids'] as $iddate){
 			$model=$searchModel::findOne($iddate);
 			$model->finance_pop_order_pay_status='1';
 			$model->save();
 		}
+		}else{
+			\Yii::$app->getSession()->setFlash('default','请选择需要处理的数据！');
+			return $this->redirect(['index']);
+			
+		}
+		
 		 return $this->redirect(['index']);
     }
     
