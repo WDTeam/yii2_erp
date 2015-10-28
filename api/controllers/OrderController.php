@@ -997,12 +997,7 @@ class OrderController extends \api\components\Controller
      */
     public function actionCancelOrder()
     {
-        $param = Yii::$app->request->post();
-
-        if (empty($param)) {
-            $param = json_decode(Yii::$app->request->getRawBody(), true);
-        }
-
+        $param = json_decode(Yii::$app->request->getRawBody(), true);
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
