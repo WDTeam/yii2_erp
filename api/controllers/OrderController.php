@@ -1097,7 +1097,7 @@ class OrderController extends \api\components\Controller
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
 
-        $worker = \core\models\worker\WorkerAccessToken::getWorker($param['access_token']);
+        $worker = WorkerAccessToken::getWorker($param['access_token']);
 
         if (!isset($param['leveltype']) && !isset($param['access_token'])) {
             return $this->send(null, "缺少规定的参数", 0, 403);
