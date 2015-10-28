@@ -2,19 +2,20 @@
 
 namespace api\controllers;
 
-use core\models\order\OrderPush;
+use \core\models\order\OrderPush;
 use Faker\Provider\DateTime;
 use Yii;
 use common\models\finance\FinanceOrderChannel;
 use common\models\order\OrderSrc;
 use common\models\customer\CustomerAddress as CommonCustomerAddress;
-use core\models\order\Order;
-use core\models\customer\CustomerAccessToken;
-use core\models\customer\CustomerAddress;
+use \core\models\order\Order;
+use \core\models\customer\CustomerAccessToken;
+use \core\models\customer\CustomerAddress;
 use yii\web\Response;
 
 class OrderController extends \api\components\Controller
 {
+
     /**
      * @api {POST} /order/create-order 创建订单 (90%xieyi  缺少周期订单和精品保洁，缺少后台模块支持)
      *
@@ -91,7 +92,7 @@ class OrderController extends \api\components\Controller
     public function actionCreateOrder()
     {
         $args = Yii::$app->request->post() or
-        $args = json_decode(Yii::$app->request->getRawBody(), true);
+                $args = json_decode(Yii::$app->request->getRawBody(), true);
         $attributes = [];
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
@@ -278,7 +279,7 @@ class OrderController extends \api\components\Controller
     public function actionAppendOrder()
     {
         $args = Yii::$app->request->post() or
-        $args = json_decode(Yii::$app->request->getRawBody(), true);
+                $args = json_decode(Yii::$app->request->getRawBody(), true);
         $attributes = [];
         $user = CustomerAccessToken::getCustomer($args['access_token']);
         if (is_null($user)) {
@@ -714,7 +715,7 @@ class OrderController extends \api\components\Controller
     public function actionOrderStatusHistory()
     {
         $args = Yii::$app->request->get() or
-        $args = json_decode(Yii::$app->request->getRawBody(), true);
+                $args = json_decode(Yii::$app->request->getRawBody(), true);
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
@@ -767,15 +768,15 @@ class OrderController extends \api\components\Controller
     public function actionWorkerServiceOrderCount()
     {
         $args = Yii::$app->request->get() or
-        $args = json_decode(Yii::$app->request->getRawBody(), true);
+                $args = json_decode(Yii::$app->request->getRawBody(), true);
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录",0);
+            return $this->send(null, "用户无效,请先登录", 0);
         }
         @$orderId = $args['order_id'];
-        if(!is_numeric($orderId)){
-            return $this->send(null, "该订单不存在",0);
+        if (!is_numeric($orderId)) {
+            return $this->send(null, "该订单不存在", 0);
         }
         //TODO check whether the orders belong the user
         $ret = \core\models\order\OrderStatus::searchOrderStatusHistory($orderId);
@@ -911,7 +912,7 @@ class OrderController extends \api\components\Controller
      */
     public function actionObtainOrder()
     {
-
+        
     }
 
     /**
@@ -950,7 +951,7 @@ class OrderController extends \api\components\Controller
      */
     public function actionAddComment()
     {
-
+        
     }
 
     /**
@@ -1017,7 +1018,6 @@ class OrderController extends \api\components\Controller
         }
     }
 
-
     /**
      * @api {get} v1/order/worker-history-orders.php 阿姨全部订单月份列表(zhaoshunli 0%)
      * @apiName actionAllOrderCommon
@@ -1059,11 +1059,182 @@ class OrderController extends \api\components\Controller
      *  }
      *
      */
-    public function actionWorkerHistoryOrders(){
+    public function actionWorkerHistoryOrders()
+    {
         
     }
 
+    /**
+     * @api {get} v1/order/get-worker-orders.php 指定阿姨订单数/待抢单订单订单数/指定阿姨订单列表/待抢单订单列表 (haojianshe 0%)
+     * @apiName actionGetWorkerOrders
+     * @apiGroup Order
+     * @apiDescription 阿姨抢单数
+     * @apiParam {String} access-token      会话id.
+     * @apiParam {String} platform_version  平台版本号
+     * @apiParam {String} [page_size]         条数
+     * @apiParam {String} [page]              页面
+     * @apiParam {String} leveltype         判断标示 leveltype=1 指定阿姨订单数; leveltype=2 待抢单订单订单数; leveltype=3 指定阿姨订单列表;  leveltype=4 待抢单订单列表;
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * 指定阿姨订单数/待抢单订单订单数
+     * {
+     *      "code": "ok",
+     *      "msg":"操作成功",
+     *      "ret":
+     *      {
+     *          "count": 
+     *      }
+     * }
+     * 
+     *   * 指定阿姨订单列表/待抢单订单列表
+     * {
+     *      "code": "ok",
+     *      "msg":"操作成功",
+     *      "ret":
+     *      {
+     *          "orderList":{
+     *            
+     *         } 
+     *      }
+     * }
+     *
+     * @apiError SessionIdNotFound 未找到会话ID.
+     *
+     * @apiErrorExample Error-Response:
+     *  HTTP/1.1 404 Not Found
+     *  {
+     *      "code":"Failed",
+     *      "msg": "SessionIdNotFound"
+     *  }
+     *
+     */
+    public function actionGetWorkerOrders()
+    {
 
+        $param = Yii::$app->request->get();
+
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+
+        $worker = \core\models\worker\WorkerAccessToken::getWorker($param['access_token']);
+
+        if (!isset($param['leveltype']) && !isset($param['access_token'])) {
+            return $this->send(null, "缺少规定的参数", 0, 403);
+        }
+        if (!empty($worker) && !empty($worker->id)) {
+
+            /**
+              'order_id' => $order_id,
+              'batch_code' => $order->order_batch_code,
+              'booked_begin_time' => $order->order_booked_begin_time,
+              'booked_end_time' => $order->order_booked_end_time,
+              'channel_name' => $order->order_channel_name,
+              'booked_count' => $order->order_booked_count,
+              'address' => $order->order_address,
+              'need' => $order->orderExtCustomer->order_customer_need
+             */
+            $workerText = array(
+                1 => '指定阿姨订单数',
+                '待抢单订单订单数',
+                '指定阿姨订单列表',
+                '待抢单订单列表'
+            );
+
+            if ($param['leveltype'] == 3) {
+                try {
+                    $workerCount = \core\models\order\OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 1);
+                    $ret['workerData'] = $workerCount;
+                    return $this->send($ret, $workerText[$param['leveltype']], 1);
+                } catch (Exception $e) {
+                    return $this->send(null, "boss系统错误," . $workerText[$param['leveltype']], 1024);
+                    return false;
+                }
+            } else if ($param['leveltype'] == 4) {
+                try {
+                    $workerCount = \core\models\order\OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 0);
+                    $ret['workerData'] = $workerCount;
+                    return $this->send($ret, $workerText[$param['leveltype']], 1);
+                } catch (Exception $e) {
+                    return $this->send(null, "boss系统错误," . $workerText[$param['leveltype']], 1024);
+                    return false;
+                }
+            } else if ($param['leveltype'] == 1) {
+                try {
+                    $workerCount = \core\models\order\OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
+                    $ret['workerData'] = $workerCount;
+                    return $this->send($ret, $workerText[$param['leveltype']], 1);
+                } catch (Exception $e) {
+                    return $this->send(null, "boss系统错误," . $workerText[$param['leveltype']], 1024);
+                    return false;
+                }
+            } else if ($param['leveltype'] == 2) {
+                try {
+                    $workerCount = \core\models\order\OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
+                    $ret['workerData'] = $workerCount;
+                    return $this->send($ret, $workerText[$param['leveltype']], 1);
+                } catch (Exception $e) {
+                    return $this->send(null, "boss系统错误," . $workerText[$param['leveltype']], 1024);
+                    return false;
+                }
+            }
+        } else {
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
+    }
+
+    /**
+     * @api {PUT} v1/order/set-worker-order.php 阿姨抢单提交 (haojianshe 0%)
+     * 
+     * @apiName actionSetWorkerOrder
+     * @apiGroup Order
+     * @apiDescription 阿姨抢单提交
+     * 
+     * @apiParam {String} access-token      会话id.
+     * @apiParam {String} platform_version  平台版本号
+     * @apiParam {String} order_id          订单号
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *      "code": "ok",
+     *      "msg":"操作成功",
+     * }
+     *
+     * @apiError SessionIdNotFound 未找到会话ID.
+     *
+     * @apiErrorExample Error-Response:
+     *  HTTP/1.1 404 Not Found
+     *  {
+     *      "code":"0",
+     *      "msg": "操作失败"
+     *  }
+     *
+     */
+    public function actionSetWorkerOrder()
+    {
+
+        $param = json_decode(Yii::$app->request->getRawBody(), true);
+
+        if (!isset($param['order_id']) && !isset($param['access_token'])) {
+            return $this->send(null, "缺少规定的参数", 0, 403);
+        }
+
+        $worker = \core\models\worker\WorkerAccessToken::getWorker($param['access_token']);
+
+        if (!empty($worker) && !empty($worker->id)) {
+
+            try {
+                $setWorker = \core\models\order\Order::sysAssignDone($param['order_id'], $worker->id);
+                $ret['workerSend'] = $setWorker;
+                return $this->send($ret, "操作成功", 1);
+            } catch (Exception $e) {
+                return $this->send(null, "boss系统错误,阿姨抢单提交", 1024);
+                return false;
+            }
+        }
+    }
 
 }
 

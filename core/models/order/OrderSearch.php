@@ -332,6 +332,9 @@ class OrderSearch extends Order
         $query = Order::find()->joinWith(['orderExtPop', 'orderExtCustomer', 'orderExtWorker', 'orderExtStatus']);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+//             'pagination' => [
+//                 'pageSize' => 2,
+//             ],
         ]);
 
         if (!($this->load($params) && $this->validate())) {

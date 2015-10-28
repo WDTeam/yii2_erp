@@ -61,10 +61,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\SerialColumn'
             ],
 
-//            'id',
-            'province_name',
-            'city_name',
             [
+                'header'=>"省(省级市)",
+                'attribute'=>'province_name',
+            ],
+            [
+                'header'=>"市",
+                'attribute'=>'city_name',
+            ],
+            [
+                'header'=>"商圈数量",
                 'attribute'=> 'shopdistrict',
                 'format'=>'html',
                 'value' => function ($model){
