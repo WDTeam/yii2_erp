@@ -237,7 +237,7 @@ echo Menu::widget(
 //                        
 //                    ],
 					[
-                        'label' => '促销管理(10%)',
+                        'label' => '优惠券管理(10%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                         'options' => [

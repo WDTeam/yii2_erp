@@ -33,7 +33,11 @@ class OrderComplaintSearch extends OrderComplaint{
 		$dataProvider = new ActiveDataProvider([
 				'query' => $query,
 		]);
+<<<<<<< HEAD
+		
+=======
 		$model = $dataProvider->getModels();
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
  		if (!($this->load($params) && $this->validate())) {
 			return $dataProvider;
 		}
