@@ -924,10 +924,10 @@ class UserController extends \api\components\Controller
         }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
-
+      
         if (!empty($customer) && !empty($customer->id)) {
             try {
-                $param['id'] = $customer->id;
+                $param['customer_id'] = $customer->id;
                 $model = CustomerComment::addUserSuggest($param);
                 if (!empty($model)) {
                     return $this->send([1], "添加评论成功", 1);
