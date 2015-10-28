@@ -10,8 +10,9 @@ use \core\models\finance\FinanceSettleApplySearch;
 use \core\models\order\OrderComplaint;
 use \core\models\worker\WorkerAccessToken;
 use \core\models\operation\OperationShopDistrictCoordinate;
-use core\models\customer\CustomerComment;
-use core\models\worker\WorkerTaskLog;
+use \core\models\customer\CustomerComment;
+use \core\models\worker\WorkerTaskLog;
+use core\models\order\OrderSearch;
 
 class WorkerController extends \api\components\Controller
 {
@@ -1385,36 +1386,21 @@ class WorkerController extends \api\components\Controller
         } 
         $worker_id = $checkResult['worker_id'];
         $task_id = $param['task_id'];
-//        try{
-//            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id,$task_id);
-//        }catch (\Exception $e) {
-//            return $this->send(null, "boss系统错误", 1024, 403);
-//        }
-        $ret = [
-                [
-                    "id"=> "任务id",
-                    "worker_task_name"=> "任务名称",
-                    "worker_task_description"=> "任务描述",
-                    "worker_task_start"=> "任务开始时间",
-                    "worker_task_end"=> "任务结束时间",
-                    "worker_task_reward_value"=> "任务奖励值",
-                    "worker_task_conditions"=> "任务需要完成次数",
-                    "worker_task_already"=> "任务已经完成次数",
-                    "settled"=>[
-                        [
-                            "order_id"=> "订单id",
-                            "order_time"=> "订单时间",
-                            "work_hours"=> "工时"
-                        ],
-                         [
-                            "order_id"=> "订单id2",
-                            "order_time"=> "订单时间2",
-                            "work_hours"=> "工时2"
-                        ]
-                    ]
-
-                ]
-           ];
+        //获取任务的详情
+        try{
+            $task_log=WorkerTaskLog::findOne(['id'=>$task_id])->getDetail();
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
+        $worker_task_log_start=$task_log['worker_task_log_start'];
+        $worker_task_log_end=$task_log['worker_task_log_end'];
+        //获取任务的订单列表
+        try{
+            $order_list=OrderSearch::getWorkerAndOrderAndDoneTime($worker_id ,$worker_task_log_start,$worker_task_log_end);
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
+        $task_log['order_list']=$order_list;
         if(empty($ret)){
               return $this->send(null, "查看任务失败", 0);
         }
