@@ -11,6 +11,10 @@ use \core\models\operation\coupon\Coupon;
 use \core\models\customer\CustomerTransRecord;
 use \core\models\customer\CustomerExtBalance;
 use \core\models\order\Order;
+use \core\models\customer\CustomerComment;
+use \core\models\comment\CustomerCommentTag;
+use \core\models\comment\CustomerCommentLevel;
+use \core\models\customer\CustomerExtScore;
 
 class UserController extends \api\components\Controller
 {
@@ -876,7 +880,7 @@ class UserController extends \api\components\Controller
                 /**
                  * @param int $customer_id 用户id
                  */
-                $userscore = \core\models\customer\CustomerExtScore::getCustomerScoreList($customer->id);
+                $userscore = CustomerExtScore::getCustomerScoreList($customer->id);
                 if ($userscore) {
                     $ret["scoreCategory"] = $userscore;
                     return $this->send($ret, "用户积分明细列表", 1);
@@ -935,7 +939,7 @@ class UserController extends \api\components\Controller
 
         if (!empty($customer) && !empty($customer->id)) {
             try {
-                $model = \core\models\customer\CustomerComment::addUserSuggest($customer->id, $param['order_id'], $param['customer_comment_phone'], $param['customer_comment_content'], $param['customer_comment_tag_ids'], $param['customer_comment_level']);
+                $model = CustomerComment::addUserSuggest($customer->id, $param['order_id'], $param['customer_comment_phone'], $param['customer_comment_content'], $param['customer_comment_tag_ids'], $param['customer_comment_level']);
                 if (!empty($model)) {
                     return $this->send([1], "添加评论成功");
                 } else {
@@ -992,7 +996,7 @@ class UserController extends \api\components\Controller
 
         if (!empty($customer) && !empty($customer->id)) {
             try {
-                $level = \core\models\comment\CustomerCommentLevel::getCommentLevel();
+                $level = CustomerCommentLevel::getCommentLevel();
                 if (!empty($level)) {
                     $ret = ['comment' => $level];
                     return $this->send($ret, "获取评论级别成功");
@@ -1051,7 +1055,7 @@ class UserController extends \api\components\Controller
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
             try {
-                $level = \core\models\comment\CustomerCommentTag::getCommentTag($param['customer_comment_level']);
+                $level =CustomerCommentTag::getCommentTag($param['customer_comment_level']);
 
                 if (!empty($level)) {
                     $ret = ['commentTag' => $level];
