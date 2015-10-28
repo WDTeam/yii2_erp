@@ -670,7 +670,7 @@ class WorkerController extends BaseAuthController
     public function actionTest(){
 
         echo '<pre>';
-        var_dump(Worker::getWorkerTimeLine(1,2));
+        var_dump(Worker::getWorkerStatInfo(18517));
         die;
         var_dump(WorkerVacationApplication::getApplicationList(18517));
 

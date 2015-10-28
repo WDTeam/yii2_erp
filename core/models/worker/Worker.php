@@ -18,6 +18,7 @@ use core\models\worker\WorkerRuleConfig;
 use core\models\worker\WorkerSkill;
 use core\models\worker\WorkerSkillConfig;
 use core\models\worker\WorkerSchedule;
+use core\models\customer\CustomerWorker;
 use core\models\operation\OperationShopDistrict;
 use core\models\operation\OperationCity;
 use core\models\operation\OperationArea;
@@ -124,6 +125,8 @@ class Worker extends \common\models\worker\Worker
             ->asArray()
             ->one();
         if($workerStatResult){
+            //获取阿姨服务过的用户数
+            $workerStatResult['worker_stat_server_customer'] = CustomerWorker::countWorkerServerAllCustomer($worker_id);
             unset($workerStatResult['workerStatRelation']);
         }
         return $workerStatResult;
