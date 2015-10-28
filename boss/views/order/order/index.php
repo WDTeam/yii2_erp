@@ -7,6 +7,8 @@ use yii\widgets\ListView;
 use boss\assets\AppAsset;
 use kartik\widgets\ActiveForm;
 use boss\models\order\Order;
+use yii\base\Object;
+use core\models\order\OrderComplaint;
 
 /**
  * @var yii\web\View $this
@@ -106,15 +108,13 @@ $this->params['breadcrumbs'][] = $this->title;
 						    	<div class="clear"></div>
 						     </div>
 						    
-							 <div class="m_from">
-						     
+							 <div class="m_from">						     
 							    <?php 
 							    echo ListView::widget([
 							        'dataProvider' => $dataProvider,
 							        'itemView' => '_item',
 							    ]);    
-							    ?>  
-								
+							    ?>  							    
 						    	<div class="clear"></div>
 						    </div>
 
@@ -217,8 +217,8 @@ $this->params['breadcrumbs'][] = $this->title;
 					<li class="radioLi">
 						<strong>* 取消原因 </strong>
 						<div class="fl jsRadio">
-							<label class="mr10"><input type="radio" name="yin" value="2" class="xuanzhong"/>用户原因</label>
-							<label class="mr10"><input type="radio" name="yin" value="2"/>公司原因</label>
+							<label class="mr10"><input type="radio" name="radio_cancelType" value="2" class="xuanzhong"/>用户原因</label>
+							<label class="mr10"><input type="radio" name="radio_cancelType" value="1"/>公司原因</label>
 						</div>
 					</li>
 					<li>
@@ -248,7 +248,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						<li>
 						<strong>* 备注</strong>
 						<div class="fl">
-                          <textarea type="text" placeholder="" class="form-control"></textarea>	
+                          <textarea id="text_CancelNote" type="text" placeholder="" class="form-control"></textarea>	
                          </div>
 					</li>
 					<li><input type="submit" value="确认提交" class="submitq" /></li>
@@ -272,12 +272,6 @@ $this->params['breadcrumbs'][] = $this->title;
 					<li class="m_queren" style="display:none;">
 					    <strong>* 投诉部门:</strong>
 						<div class="fl">
-							<p><span>线下运营部 </span><span>投诉类型：迟到早退</span> <span>投诉级别：A</span>
-								<a href="javascript:;">修改</a>
-							</p>
-							<p><span>线下运营部 </span><span>投诉类型：迟到早退</span> <span>投诉级别：A</span>
-								<a href="javascript:;">修改</a>
-							</p>
 							<input type="submit" value="新增" class="submitBtntt m_subm" />
 							<input type="submit" value="提交" class="submitBtntt" />
                          </div>
@@ -286,73 +280,49 @@ $this->params['breadcrumbs'][] = $this->title;
 					<li class="radioLi">
 						<strong>* 投诉部门</strong>
 						<div class="fl jsRadio">
-							<label class="mr10"><input type="radio" name="radio_department" value="1" class="xuanzhong"/>线下运营部</label>
-							<label class="mr10"><input type="radio" name="radio_department" value="2"/>客服部</label>
-							<label class="mr10"><input type="radio" name="radio_department" value="3"/>线下推广部</label>
-							<label class="mr10"><input type="radio" name="radio_department" value="4"/>公司</label>
-							<label class="mr10"><input type="radio" name="radio_department" value="5"/>财务</label>
-							<label class="mr10"><input type="radio" name="radio_department" value="6"/>系统</label>
-							<label class="mr10"><input type="radio" name="radio_department" value="7"/>活动</label>
+    						<?php
+    						  $i = 0;
+    						  foreach (OrderComplaint::Department() as $key => $value)
+    						  {
+    						      if ($i == 0)
+    						          echo '<label class="mr10"><input type="radio" class="xuanzhong" name="radio_department" value="'.$key.'"/>'.$value.'</label>';
+    						      else
+    						          echo '<label class="mr10"><input type="radio" name="radio_department" value="'.$key.'"/>'.$value.'</label>';
+    						      $i++;
+    						  }    						  
+    						?>
 						</div>
 					</li>
 					<li class="m_disd">
 						<strong>* 投诉类型</strong>
 						
-						<div class="fl js_radio_tab">
-							<label class="mr11"><input type="radio" name="yin1" value="2" class="xuanzhong"/>无阿姨服务</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>浪费物品</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>物品丢失</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>损坏物品</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>爽约</label>
-							<label class="mr11"><input type="radio" name="yin1" value="1"/>未穿工服</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>迟到早退</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>磨洋工</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>打扫不干净</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>工具没带全</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>身上有异味</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>不尊重客户</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>骚扰客户</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>收费不合理</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>不满足客户合理要求</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>与客户发生肢体冲突</label>
-						</div>
-						
-						<div class="fl js_radio_tab" style="display: none;">
-							<label class="mr11"><input type="radio" name="yin1" value="1"/>服务态度不满</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>业务知识欠缺</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>未履行服务承诺</label>
-						</div>
-						<div class="fl js_radio_tab" style="display: none;">
-							<label class="mr11"><input type="radio" name="yin1" value="1"/>胡乱承诺</label>
-						</div>
-						<div class="fl js_radio_tab" style="display: none;">
-							<label class="mr11"><input type="radio" name="yin1" value="1"/>公司制度</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>服务流程</label>
-						</div>
-						<div class="fl js_radio_tab" style="display: none;">
-							<label class="mr11"><input type="radio" name="yin1" value="1"/>无法开具发票</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>金额损失</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>发票错误或延时</label>
-						</div>
-						<div class="fl js_radio_tab" style="display: none;">
-							<label class="mr11"><input type="radio" name="yin1" value="1"/>订单丢失</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>订单取消</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>优惠码不可用</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>线上无法支付</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>合作平台扣费错误</label>
-						</div>
-						<div class="fl js_radio_tab" style="display: none;">
-							<label class="mr11"><input type="radio" name="yin1" value="1"/>活动方案</label>
-						</div>
-						
+						<?php 
+						  $i = 0;
+						  foreach (OrderComplaint::ComplaintTypes() as $key => $value)
+						  {
+						      if ($i == 0)
+						          echo '<div class="fl js_radio_tab">';
+						      else
+						          echo '<div class="fl js_radio_tab" style="display: none;">';
+						      foreach ($value as $type_id => $type_name)
+						      {
+						          echo '<label class="mr11"><input type="radio" name="radio_complaint_type" value="'.$type_id.'"/>'.$type_name.'</label>';
+						      }
+						      echo '</div>';
+						      $i++;
+						  }
+						?>						
 					</li>
 					<li class="m_disd">
 						<strong>* 投诉级别</strong>
 						<div class="fl">
-							<label class="mr11"><input type="radio" checked="checked" name="yin1" value="s" />S</label>
-							<label class="mr11"><input type="radio" checked="checked" name="yin1" value="a" />A</label>
-							<label class="mr11"><input type="radio" checked="checked" name="yin1" value="b" />B</label>
-							<label class="mr11"><input type="radio" checked="checked" name="yin1" value="c" />C</label>
+    						<?php 
+    						  $i = 0;
+    						  foreach (OrderComplaint::ComplaintLevel() as $key => $value)
+    						  {
+   						          echo '<label class="mr11"><input type="radio" checked="checked" name="radio_complaint_level" value="'.$key.'" />'.$value.'</label>';
+    						  }
+    						?>						
 						</div>
 					</li>
 					<li class="m_disd"><input type="submit" value="保存" class="submitBtn" />

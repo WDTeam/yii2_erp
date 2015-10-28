@@ -9,9 +9,9 @@
 			                        <th>处理详情</th>
 			                        <th class="m_colo">订单状态</th>
 			                    </tr>
-			                    <tr><?php print_r($model);?>
+			                    <tr>
 			                    	<td>订   单ID：<?= $model->order_id; ?><br/>
-										客户手机：<?= $model->order_ext_customer->order_customer_phone; ?><br/>
+										客户手机：<?= $model->order_customer_phone; ?><br/>
 										投诉渠道：<?= $model->complaint_channel; ?><br/>
 										投诉部门：<?= $model->complaint_section; ?><br/>
 										投诉级别：<?= $model->complaint_level; ?><br/>
