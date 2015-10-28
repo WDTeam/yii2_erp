@@ -7,6 +7,7 @@ use \core\models\worker\Worker;
 use \core\models\worker\WorkerSkill;
 use \core\models\worker\WorkerVacationApplication;
 use \core\models\finance\FinanceSettleApplySearch;
+use \core\models\order\OrderComplaint;
 use \core\models\worker\WorkerAccessToken;
 use \core\models\operation\OperationShopDistrictCoordinate;
 
@@ -455,6 +456,9 @@ class WorkerController extends \api\components\Controller
      */
     public function  actionGetWorkerComplain()
     {
+       
+        $complain = OrderComplaint::getWorkerComplain(123);
+        print_R($complain);die;
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //检测阿姨是否登录
         $checkResult = $this->checkWorkerLogin($param);
@@ -471,7 +475,11 @@ class WorkerController extends \api\components\Controller
             $param['page_num'] = 10;
         }
         $page_num = intval($param['page_num']);
-        
+        try{
+            $conplainList = OrderComplaint::getWorkerComplain($checkResult['worker_id']);
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
         //数据返回
         $ret = [
             [
