@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'view' => function ($url, $model) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-eye-open"></span>', 
-                            Yii::$app->urlManager->createUrl(['/operation/operation-advert-release/view','id' => $model->id]),
+                            Yii::$app->urlManager->createUrl(['/operation/operation-advert-release/view','city_id' => $model->city_id]),
                             ['title' => Yii::t('yii', 'View'), 'class' => 'btn btn-success btn-sm']
                         );
                     },

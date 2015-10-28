@@ -16,6 +16,7 @@ use boss\models\operation\OperationCity;
 use boss\models\operation\OperationPlatform;
 use boss\models\operation\OperationPlatformVersion;
 //use yii\caching\Cache;
+use boss\models\operation\OperationAdvertReleaseSearch;
 
 /**
  * OperationAdvertReleaseController implements the CRUD actions for OperationAdvertRelease model.
@@ -41,7 +42,7 @@ class OperationAdvertReleaseController extends BaseAuthController
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => OperationAdvertRelease::find(),
+            'query' => OperationAdvertRelease::find()->groupBy(['city_name']),
         ]);
 
         return $this->render('index', [
@@ -59,8 +60,17 @@ class OperationAdvertReleaseController extends BaseAuthController
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
+    public function actionView($city_id = null)
     {
+        $searchModel = new OperationAdvertReleaseSearch;
+        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+
+        return $this->render('view', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+
+        die;
         $model = $this->findModel($id);
         $adverts = unserialize($model->operation_release_contents);
         $advertinfos = OperationAdvertContent::find()->asArray()->where(['id' => $adverts['id']])->all();
@@ -70,7 +80,7 @@ class OperationAdvertReleaseController extends BaseAuthController
             $advertinfos[$key]['endtime'] = $adverts['endtime'][$i];
             $i++;
         }
-//        $model->operation_release_contents = serialize($adverts);
+        //$model->operation_release_contents = serialize($adverts);
         return $this->render('view', [
             'model' => $model,
             'adverts' => $advertinfos,
@@ -91,7 +101,7 @@ class OperationAdvertReleaseController extends BaseAuthController
         } else {
             
             $citys = OperationCity::find()->all();
-//            $c = ['选择要发布的城市'];
+            //$c = ['选择要发布的城市'];
             $c = [];
             foreach($citys as $v){$c[$v->city_id] = $v->city_name;}
             return $this->render('step-first', ['citys' => $c]);
@@ -160,9 +170,11 @@ class OperationAdvertReleaseController extends BaseAuthController
                 $data = [
                     '_csrf' => $post['_csrf'],
                     'OperationAdvertRelease' => [
+                        'advert_content_id' => $post['advert']['id'][0],
                         'city_id' => $city['city_id'],
                         'city_name' => $city['city_name'],
-                        'operation_release_contents' => serialize($post['advert']),
+                        'starttime' => $post['advert']['starttime'][0],
+                        'endtime' => $post['advert']['endtime'][0],
                         'created_at' => time(),
                         'updated_at' => time()
                     ]
