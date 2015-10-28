@@ -925,7 +925,7 @@ class UserController extends \api\components\Controller
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
 
-        if (!empty($param['worker_id']) && !empty($param['order_id'])) {
+        if (empty($param['worker_id']) || empty($param['order_id'])) {
             return $this->send(null, "提交参数中缺少必要的参数.", 0, 403);
         }
 
