@@ -272,8 +272,8 @@ $this->params['breadcrumbs'][] = $this->title;
 					<li class="m_queren" style="display:none;">
 					    <strong>* 投诉部门:</strong>
 						<div class="fl">
-							<input type="submit" value="新增" class="submitBtntt m_subm" />
-							<input type="submit" value="提交" class="submitBtntt" />
+							<input type="submit" value="新增" class="submitBtntt m_add" />
+							<input type="submit" value="提交" class="submitBtntt m_submit" />
                          </div>
 					</li>
 					
