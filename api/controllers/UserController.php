@@ -917,14 +917,18 @@ class UserController extends \api\components\Controller
      *
      */
     public function actionUserSuggest()
-    {  
+    {
         $param = Yii::$app->request->post();
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
-      
+
+        if (!isset($param['worker_id']) && !isset($param['order_id'])) {
+            return $this->send(null, "提交参数中缺少必要的参数.", 0, 403);
+        }
+
         if (!empty($customer) && !empty($customer->id)) {
             try {
                 $param['customer_id'] = $customer->id;
