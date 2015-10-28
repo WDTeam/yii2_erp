@@ -396,7 +396,7 @@ class WorkerController extends \api\components\Controller
             }
         }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
-        
+        }
         $ret = [
             'per_page'=>$per_page,
             'page_num'=>$page_num,
@@ -458,7 +458,7 @@ class WorkerController extends \api\components\Controller
      *      "msg": "用户认证已经过期,请重新登录"
      *  }
      */
-    public function  actionGetWorkerComplain()
+    public function actionGetWorkerComplain()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //检测阿姨是否登录
@@ -466,7 +466,6 @@ class WorkerController extends \api\components\Controller
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
-        $checkResult['worker_id'] = 123;
         //判断页码
         if (!isset($param['per_page']) || !intval($param['per_page'])) {
             $param['per_page'] = 1;
@@ -795,8 +794,8 @@ class WorkerController extends \api\components\Controller
      *   "msg": "操作成功.",
      *   "ret": [
      *       {
-     *           "reward_money": "50.00",
-     *           "reward_des": "每个月请假不超过4天"
+     *           "task_money": "50.00",
+     *           "task_des": "每个月请假不超过4天"
      *       }
      *   ]
      * }
@@ -822,14 +821,7 @@ class WorkerController extends \api\components\Controller
         }
         try{
             //获取任务奖励列表
-            $rewardList = FinanceSettleApplySearch::getTaskArrayBySettleId($settle_id);
-            $ret = array();
-            if($rewardList){
-                foreach($rewardList as $key=>$val){
-                    $ret[$k]['reward_money'] = $val['task_money'];
-                    $ret[$k]['reward_des'] = $val['task_des'];
-                }
-            }
+            $ret = FinanceSettleApplySearch::getTaskArrayBySettleId($settle_id);
          }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
@@ -853,15 +845,18 @@ class WorkerController extends \api\components\Controller
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *   "code": 1,
-     *   "msg": "操作成功.",
-     *   "ret": [
-     *      {
-     *         "punish_date": "2015.09.08",
-     *         "punish_money": "25.00",
-     *        }
-     *      ]
-     *   }
+     *    "code": 1,
+     *     "msg": "操作成功.",
+     *        "ret": [
+     *            {
+     *                "deduction_money": "12.00",
+     *                "deduction_des": "第三大大声点",
+     *                "deduction_type": "2",
+     *                "deduction_time": "2015.10.26",
+     *                "deduction_type_des": "投诉"
+     *            }
+     *       ]
+     * }
      *
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
@@ -872,38 +867,38 @@ class WorkerController extends \api\components\Controller
      */
     public function actionGetWorkerPunishList(){
         $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
-//        //检测阿姨是否登录
-//        $checkResult = $this->checkWorkerLogin($param);
-//        if(!$checkResult['code']){
-//            return $this->send(null, $checkResult['msg'], 0, 403);
-//        }
+        //检测阿姨是否登录
+        $checkResult = $this->checkWorkerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
+        }
         //数据整理
-        $settle_id = 1;//;//账单ID
+        $settle_id = intval($param['settle_id']);//账单ID
         if(!$settle_id){
             return $this->send(null, "账单唯一标识错误", 0, 403);
         }
         try{
             //获取任务奖励列表
             $punishList = FinanceSettleApplySearch::getDeductionArrayBySettleId($settle_id);
-            $ret = array();
             if($punishList){
                 foreach($punishList as $key=>$val){
-                    $ret[$k]['punish_money'] = $val['task_money'];
-                    $ret[$k]['punish_des'] = $val['task_des'];
+                    switch($val['deduction_type']){
+                        case "2":
+                            $punishList[$key]['deduction_type_des'] = "投诉";
+                            break;
+                        case "3":
+                            $punishList[$key]['deduction_type_des'] = "赔偿";
+                            break;
+                        default:
+                            $punishList[$key]['deduction_type_des'] = "未知";
+                    }
                 }
             }
          }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
         //获取受处罚列表
-        $ret = [
-            [
-            "punish_date" => "2015.09.08",
-            "punish_money" => "25.00",
-            "punish_reason" =>"打扫不干净"
-            ]
-        ];
-        return $this->send($ret, "操作成功.");
+        return $this->send($punishList, "操作成功.");
     }
     
     /**
