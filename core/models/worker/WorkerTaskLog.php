@@ -5,7 +5,6 @@ namespace core\models\worker;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\behaviors\TimestampBehavior;
-use core\models\order\Order;
 use core\models\finance\FinanceWorkerNonOrderIncomeSearch;
 
 /**
@@ -110,7 +109,6 @@ class WorkerTaskLog extends \common\models\worker\WorkerTaskLog
         $data = $model->attributes;
         $data['values'] = $model->getConditionsValues();
         $data['worker_task_description'] = $model->getWorker_task_description();
-//         $data['orders'] = Order::
         return $data;
     }
     /**
