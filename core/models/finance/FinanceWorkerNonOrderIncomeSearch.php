@@ -139,6 +139,15 @@ class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
         return $dataProvider;
     }
     
+    public static function getCompensateMoney($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
+        $compensateMoney = 0;
+        $compensateList = FinanceCompensate::getFinanceCompensateListByWorkerId($workerId, $finance_settle_apply_starttime, $finance_settle_apply_endtime);
+        foreach($compensateList as $compensate){
+            $compensateMoney += $compensate ->finance_compensate_total_money;
+        }
+        return $compensateMoney;
+    }
+    
     public function getCompensateDataProviderByWorkerId($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
         $data = FinanceCompensate::getFinanceCompensateListByWorkerId($workerId, $finance_settle_apply_starttime, $finance_settle_apply_endtime);
         $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);

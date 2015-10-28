@@ -1329,7 +1329,7 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {get} v1/order/get-worker-orders.php 指定阿姨订单数/待抢单订单订单数/指定阿姨订单列表/待抢单订单列表 (haojianshe 0%)
+     * @api {get} v1/order/get-worker-orders.php 指定阿姨订单数/待抢单订单订单数/指定阿姨订单列表/待抢单订单列表 (haojianshe 100%)
      * @apiName actionGetWorkerOrders
      * @apiGroup Order
      * @apiDescription 阿姨抢单数
@@ -1357,7 +1357,7 @@ class OrderController extends \api\components\Controller
      *      "msg":"操作成功",
      *      "ret":
      *      {
-     *          "orderList":
+     *          "workerData":
      *           [
      *           {
      *            "order_id":"订单号"
@@ -1371,7 +1371,8 @@ class OrderController extends \api\components\Controller
      *            "need":""
      *            "money":"订单价格"
      *         }
-     *         ]
+     *         ],
+     *         "time":900  倒计时秒
      *      }
      * }
      *
@@ -1405,6 +1406,8 @@ class OrderController extends \api\components\Controller
                 try {
                     $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 1);
                     $ret['workerData'] = $workerCount;
+                    #倒计时
+                    $ret['time'] = 7200;
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
                     return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
@@ -1414,6 +1417,8 @@ class OrderController extends \api\components\Controller
                 try {
                     $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 0);
                     $ret['workerData'] = $workerCount;
+                    #倒计时
+                    $ret['time'] =7200;
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
                     return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
@@ -1444,7 +1449,7 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {PUT} v1/order/set-worker-order.php 阿姨抢单提交 (haojianshe 0%)
+     * @api {PUT} v1/order/set-worker-order.php 阿姨抢单提交 (haojianshe 100%)
      *
      * @apiName actionSetWorkerOrder
      * @apiGroup Order
@@ -1479,7 +1484,6 @@ class OrderController extends \api\components\Controller
         if (!isset($param['order_id']) && !isset($param['access_token'])) {
             return $this->send(null, "缺少规定的参数", 0, 403);
         }
-
         $worker = WorkerAccessToken::getWorker($param['access_token']);
 
         if (!empty($worker) && !empty($worker->id)) {
