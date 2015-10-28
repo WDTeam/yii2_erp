@@ -33,7 +33,7 @@ class OrderComplaintSearch extends OrderComplaint{
 		$dataProvider = new ActiveDataProvider([
 				'query' => $query,
 				'pagination' => [
-                		'pagesize' => '2',
+                		'pagesize' => '20',
 				]
 		]);
  		if (!($this->load($params) && $this->validate())) {
@@ -55,9 +55,10 @@ class OrderComplaintSearch extends OrderComplaint{
 		]);
 		$query->andFilterWhere(['like','ejj_order_ext_worker.order_worker_name',$this->order_worker_name])->
 		andFilterWhere(['like','complaint_phone',$this->complaint_phone])->
-		andFilterWhere(['like','ejj_orderExtWorker.order_worker_phone',$this->order_worker_phone])->
-		andFilterWhere(['between', OrderComplaint::tableName().'.created_at', strtotime($params['starttime']), strtotime($params['endtime'])]);
-		
+		andFilterWhere(['like','ejj_orderExtWorker.order_worker_phone',$this->order_worker_phone]);
+		if(!empty($params['starttime']) && !empty($params['endtime'])){
+			$query->andFilterWhere(['between', OrderComplaint::tableName().'.created_at', strtotime($params['starttime']), strtotime($params['endtime'])]);
+		}
 		return 	$dataProvider;
 	}
 }
