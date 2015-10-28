@@ -548,10 +548,8 @@ class WorkerController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-settle-list 获取阿姨对账单列表 (田玉星 95%)
+     * @api {GET} /worker/get-worker-settle-list 获取阿姨对账单列表 (田玉星 100%)
      * 
-     * @apiDescription 【备注：model微调】
-     *
      * @apiName actionGetWorkerSettleList 
      * @apiGroup Worker
      *
@@ -624,7 +622,7 @@ class WorkerController extends \api\components\Controller
             }else{
                 $settleArr[$key]['settle_date'] = date('m',strtotime($val['settle_starttime']));
             }
-            $settleArr[$key]['settle_type'] = $val['settle_cycle_type'];
+            $settleArr[$key]['settle_type'] = $val['settle_cycle'];
             $settleArr[$key]['order_count'] = $val['order_count'];
             $settleArr[$key]['worker_income'] = $val['worker_income'];
             $settleArr[$key]['settle_status'] = $val['settle_status'];
