@@ -94,12 +94,12 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
 					[
-					'label' => '评价列表(70%)',
+					'label' => '评价列表(90%)',
 					'url' => ['/customer/customer-comment'],
 					'icon' => 'fa fa-angle-right',
 					],
 					[
-					'label' => '评价标签管理(70%)',
+					'label' => '评价标签管理(90%)',
 					'url' => ['/customer/customer-comment-tag'],
 					'icon' => 'fa fa-angle-right',
 					],
@@ -139,8 +139,25 @@ echo Menu::widget(
                 		'url' => ['/order/order-complaint'],
                 		'icon' => 'fa fa-angle-right',
                 	],
+
+                ],
+            ],
+            [
+                'label' => '交易管理',
+                'url' => ['#'],
+                'icon' => 'fa fa-tag',
+                'visible' => (Yii::$app->user->can('payment')),
+                'options' => [
+                    'class' => 'treeview rootTree',
+                ],
+                'items' => [
                     [
-                        'label' => '交易记录',
+                        'label' => '支付记录查询',
+                        'url' => ['payment/general-pay/index'],
+                        'icon' => 'fa fa-angle-right',
+                    ],
+                    [
+                        'label' => '交易记录查询',
                         'url' => ['customer/customer-trans-record/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -237,7 +254,7 @@ echo Menu::widget(
 //                        
 //                    ],
 					[
-                        'label' => '促销管理(10%)',
+                        'label' => '优惠券管理(10%)',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                         'options' => [

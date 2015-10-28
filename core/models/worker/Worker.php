@@ -257,8 +257,12 @@ class Worker extends \common\models\worker\Worker
              ->innerJoinWith('workerDistrictRelation') //关联worker workerDistrictRelation方法
              ->andOnCondition(['operation_shop_district_id'=>$district_id])
              ->innerJoinWith('shopRelation') //关联worker shopRelation方法
+<<<<<<< HEAD
              //->innerJoinWith('workerScheduleRelation') //关联WorkerScheduleRelation方法
              //->andOnCondition([])
+=======
+             ->innerJoinWith('workerScheduleRelation') //关联WorkerScheduleRelation方法
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
              ->joinWith('workerStatRelation') //关联worker WorkerStatRelation方法
              ->where($condition)
              ->asArray()
@@ -275,6 +279,7 @@ class Worker extends \common\models\worker\Worker
     public static function getWorkerTimeLine($district_id,$serverDurationTime){
         $districtWorkerResult = self::getDistrictAllWorker($district_id,[]);
         $nowTime = strtotime(date('Y-m-d'));
+<<<<<<< HEAD
         $disabledTimeLine = self::initWorkerDisabledTimeLine();
         $emptyDisabledTimeLineArr = [];
         foreach($districtWorkerResult as $val){
@@ -288,6 +293,20 @@ class Worker extends \common\models\worker\Worker
                 //$disabledTimeLine[] = []
             }
             if(count($emptyDisabledTimeLineArr)==7){
+=======
+        $disabledTimeLine = self::getInitDisabledTimeLine();
+        $isEmptyDisabledTimeLine = [];
+        foreach($districtWorkerResult as $val){
+            for($i=0;$i<7;$i++){
+                if(empty($disabledTimeLine[$i])){
+                    $isEmptyDisabledTimeLine[$i]=true;
+                    continue;
+                }
+                $time = strtotime("+$i day",$nowTime);
+                $disabledTimeLine[$i] = self::filterOneDayDisabledTime($time,$val['workerScheduleRelation'],[],$disabledTimeLine[$i]);
+            }
+            if(count($isEmptyDisabledTimeLine)==7){
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
                 break;
             }
         }
@@ -297,6 +316,7 @@ class Worker extends \common\models\worker\Worker
     }
 
     /**
+<<<<<<< HEAD
      * 过滤阿姨不可用时间
      * @param $time
      * @param $workerSchedule
@@ -312,6 +332,25 @@ class Worker extends \common\models\worker\Worker
         $haveBookedTime = self::getWorkerHaveBookedTimeFromOrder($time,$workerBookOrderInfo);
         $enableTime = array_diff($enableTime,$haveBookedTime);
         $disabledTime = array_diff($disabledTime,$enableTime);
+=======
+     * 通过单个阿姨可用时间 过滤 某一天的不可用时间
+     * @param int $time 日期时间戳
+     * @param array $workerSchedule 阿姨后台排班表
+     * @param array $workerBookOrderInfo 阿姨预约订单信息
+     * @param array $disabledTime 不可用时间数组
+     * @return array 过滤后的不可用时间 ['8:00','8:30']
+     */
+    protected static function filterDisabledTimeLine($time,$workerSchedule,$workerBookOrderInfo,$disabledTime){
+        $workerEnableTime = self::getWorkerEnabledTimeFromSchedule($time,$workerSchedule);
+        if(empty($workerEnableTime)){
+            return $disabledTime;
+        }
+        $workerHaveBookedTime = self::getWorkerHaveBookedTimeFromOrder($time,$workerBookOrderInfo);
+        //整理单个阿姨可用时间
+        $workerEnableTime = array_diff($workerEnableTime,$workerHaveBookedTime);
+        //通过单个阿姨可用时间 过滤 不可用时间
+        $disabledTime = array_diff($disabledTime,$workerEnableTime);
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
         //var_dump($disabledTimeLine);die;
         return $disabledTime;
     }
@@ -348,10 +387,17 @@ class Worker extends \common\models\worker\Worker
     }
 
     /**
+<<<<<<< HEAD
      * 初始化不能预约排版表数组
      * @return array
      */
     protected static function initWorkerDisabledTimeLine(){
+=======
+     * 初始化一周不能预约时间
+     * @return array
+     */
+    protected static function getInitDisabledTimeLine(){
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
         $disabledTimeLine = [];
         for($w=0;$w<7;$w++){
             $disabledTimeLine[$w] = [
@@ -366,7 +412,11 @@ class Worker extends \common\models\worker\Worker
     }
 
     /**
+<<<<<<< HEAD
      * 初始化不能预约排版表数组
+=======
+     * 初始化全天预约时间
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
      * @return array
      */
     protected static function getInitTimeLine(){
@@ -381,6 +431,10 @@ class Worker extends \common\models\worker\Worker
 
         return $timeLine;
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
     /**
      * 生成排版表
      * @param $disabledTimeLine 不可用的时间
@@ -389,20 +443,43 @@ class Worker extends \common\models\worker\Worker
     protected static function generateTimeLine($disabledTimeLine,$serverDurationTime){
         $nowTime = strtotime(date('Y-m-d'));
         $initTimeLine = self::getInitTimeLine();
+<<<<<<< HEAD
+=======
+        //var_dump($disabledTimeLine);
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
         for($i=0;$i<7;$i++){
             $time = strtotime("+$i day",$nowTime);
             $date = date('Y-m-d',$time);
             $disabledTime = $disabledTimeLine[$i];
+<<<<<<< HEAD
+=======
+
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
             foreach ($initTimeLine as $key=>$val) {
                 //var_dump($key+$serverDurationTime*2+1);
                 $endKey = $key+$serverDurationTime*2;
                 if($endKey>count($initTimeLine)-1){
                     break;
                 }
+<<<<<<< HEAD
                 if($disabledTime){
                     $timeLineTmp[] = [$val.'-'.$initTimeLine[$endKey]=>true];
                 }else{
                     $timeLineTmp[] = [$val.'-'.$initTimeLine[$endKey]=>false];
+=======
+                $isDisabled = 0;
+                foreach ($disabledTime as $d_val) {
+                    $disabledKey = array_search($d_val,$initTimeLine);
+                    if($key<=$disabledKey && $endKey>$disabledKey){
+                        $isDisabled = 1;
+                        break;
+                    }
+                }
+                if($isDisabled==1){
+                    $timeLineTmp[] = [$val.'-'.$initTimeLine[$endKey]=>false];
+                }else{
+                    $timeLineTmp[] = [$val.'-'.$initTimeLine[$endKey]=>true];
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
                 }
 
             }
@@ -410,7 +487,12 @@ class Worker extends \common\models\worker\Worker
             $timeLine[$date] = $timeLineTmp;
             $timeLineTmp = [];
         }
+<<<<<<< HEAD
         print_r($timeLine);die;
+=======
+        return $timeLine;
+        //var_dump($timeLine);die;
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
     }
 
     /**

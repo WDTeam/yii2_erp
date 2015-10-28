@@ -8,8 +8,9 @@
 */
 define('DEBUG', 'on');
 define("WEBPATH", str_replace("\\","/", __DIR__));
+define("CONFIG_PATH", WEBPATH."/autoassign.config.php");
 
-$assign_config = require('autoassign.config.php');
+$assign_config = require(CONFIG_PATH);
 
 use autoassign\ClientCommand;
 
@@ -30,6 +31,7 @@ class server
      * 构造方法中,初始化 $serv 服务
      */
     public function __construct($config) {
+        echo "自动指派服务启动中";
         $this->config = $config;
         $this->connectRedis();
         $this->saveStatus(null);
@@ -53,7 +55,9 @@ class server
         $this->serv->on("Finish", array($this, 'onFinish'));
         $this->serv->on("Message", array($this, 'onMessage'));
         $this->serv->on('Receive', array($this, 'onReceive'));
-
+                
+        echo "==>初始化完成";
+        
         //开启 
         $this->serv->start();
     }
@@ -61,10 +65,9 @@ class server
      * Server 启动
      */
     public function onStart($server) {
-        echo SWOOLE_VERSION . " onStart\n";
-        cli_set_process_title("autoassign-server");
-        
-        return true;
+        echo "==>已启动\n";
+        echo "主进程ID：= " .$this->config['SERVER_MASTER_PROCESS_ID']."\n";
+        cli_set_process_title($this->config['SERVER_MASTER_PROCESS_ID']);
     }
 
     /*
@@ -72,11 +75,13 @@ class server
      */
     function onWorkerStart(swoole_server $server, $worker_id) {
         //echo 'onWorkStart ID:=' . $worker_id . "\n";
-        cli_set_process_title("autoassign-server-worker-id-" . $worker_id);
+        cli_set_process_title($this->config['SERVER_WORKER_PROCESS_ID'] . $worker_id);
 
         // 只有当worker_id为0时才添加定时器,避免重复添加
         if ($worker_id == 0) {
-            $this->config = require('config.php');
+            $workerProcessNum = $this->config['WORKER_NUM']+$this->config['TASK_WORKER_NUM'];
+            echo '工作进程ID:= '.$this->config['SERVER_WORKER_PROCESS_ID']." 已启动 ".$workerProcessNum." 进程\n"; 
+            $this->config = require(CONFIG_PATH);
             $this->startTimer($server);
         }
     }
@@ -391,7 +396,7 @@ class server
       $bb=getconfig("./2.php", "bb", "string");
       updateconfig("./2.php", "name", "admin");
      */
-    function get_config($file = 'config.php', $ini, $type = "string") {
+    function get_config($file = CONFIG_PATH, $ini, $type = "string") {
         if (!file_exists($file))
             return false;
         $str = file_get_contents($file);
@@ -409,7 +414,7 @@ class server
     /*
      * 配置文件更新
      */
-    function update_config($file = 'config.php', $ini, $value, $type = "string") {
+    function update_config($file = CONFIG_PATH, $ini, $value, $type = "string") {
         if (!file_exists($file))
             return false;
         $str = file_get_contents($file);

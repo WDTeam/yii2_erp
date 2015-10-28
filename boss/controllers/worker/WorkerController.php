@@ -670,18 +670,28 @@ class WorkerController extends BaseAuthController
     public function actionTest(){
 
         echo '<pre>';
+<<<<<<< HEAD
         var_dump(Worker::getWorkerTimeLine(1,2));
+=======
+        var_dump(Worker::getWorkerTimeLine(1,4));
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
         die;
         var_dump(WorkerVacationApplication::getApplicationList(18517));
 
         $a = Worker::getWorkerInfo(16351);
         var_dump($a);
         die;
+        Yii::$app->redis->set('worker_1','1,2,3,4');
+        Yii::$app->redis->set('worker_2','2014-05-05');
+        $workers = Yii::$app->redis->mget('worker_1','worker_2','worker_3');
+//          Yii::$app->redis->srem('district_1','16682');
 //        Yii::$app->redis->sadd('district_1','16684','16683','16685','16686','16687','16688','16689','16682');
 //        Yii::$app->redis->sadd('district_2','16694','16693','16695','16696','16697','16698','16699','16692');
 //        Yii::$app->redis->sadd('worker_16694','10','11','9','8','7');
 //        Yii::$app->redis->sadd('worker_16693','10','11');
-        $workers = Yii::$app->redis->smembers('district_1');
+        //$workers = Yii::$app->redis->smembers('district_1');
+        var_dump($workers);
+        die;
         $time = date('H');
         foreach($workers as $val){
             $workerKey = 'worker_'.$val;
