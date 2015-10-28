@@ -94,12 +94,12 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
 					[
-					'label' => '评价列表(70%)',
+					'label' => '评价列表(90%)',
 					'url' => ['/customer/customer-comment'],
 					'icon' => 'fa fa-angle-right',
 					],
 					[
-					'label' => '评价标签管理(70%)',
+					'label' => '评价标签管理(90%)',
 					'url' => ['/customer/customer-comment-tag'],
 					'icon' => 'fa fa-angle-right',
 					],
