@@ -19,7 +19,7 @@ use common\models\order\OrderExtWorker;
  * @property string $complaint_content
  * @property integer $complaint_time
  */
-class OrderComplaint extends \common\models\order\OrderComplaint
+class OrderComplaint extends \core\models\order\OrderComplaint
 {
     
 }

@@ -10,6 +10,7 @@ use Yii;
  * @property integer $id
  * @property string $finance_compensate_oa_code
  * @property integer $finance_complaint_id
+ * @property integer $order_id
  * @property integer $worker_id
  * @property integer $customer_id
  * @property string $finance_compensate_coupon 
@@ -61,7 +62,8 @@ class FinanceCompensate extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', '主键id'),
             'finance_compensate_oa_code' => Yii::t('app', 'OA批号'),
-            'finance_complaint_id' => Yii::t('app', '投诉Id'),
+            'finance_complaint_id' => Yii::t('app', '投诉编号'),
+            'order_id' => Yii::t('app', '订单编号'),
             'worker_id' => Yii::t('app', '阿姨Id'),
             'worker_tel' => Yii::t('app', '阿姨电话'),
             'worker_name' => Yii::t('app', '阿姨姓名'),
@@ -75,7 +77,7 @@ class FinanceCompensate extends \yii\db\ActiveRecord
             'finance_compensate_company_money' => Yii::t('app', ' 公司理赔金额'),
             'finance_compensate_worker_money' => Yii::t('app', ' 阿姨赔付金额'),
             'finance_compensate_reason' => Yii::t('app', '赔偿原因'),
-            'finance_compensate_proposer' => Yii::t('app', '申请人'),
+            'finance_compensate_proposer' => Yii::t('app', '赔偿申请人'),
             'finance_compensate_auditor' => Yii::t('app', '审核人'),
             'finance_compensate_status' => Yii::t('app', '审核状态'),
             'comment' => Yii::t('app', '备注'),
