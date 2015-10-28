@@ -327,6 +327,7 @@ class Coupon extends \common\models\operation\coupon\Coupon
     }
     /**
      * 获取当前优惠券的所有优惠码
+     * @author CoLee
      */
 	public function getCodes()
 	{

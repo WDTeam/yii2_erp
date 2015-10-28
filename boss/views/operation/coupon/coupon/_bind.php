@@ -13,7 +13,7 @@ use kartik\builder\Form;
     'action'=>['bind', 'id'=>$model->id]
 ]); ?>
 
-    <?php echo Html::textInput('cause', '', [
+    <?php echo Html::textInput('mobile', '', [
         'style'=>'width:100%; padding:10px; font-size:24px;'
     ])?>
 
