@@ -713,7 +713,80 @@ class ServiceController extends \api\components\Controller
         }
         return $this->send($recursive_worker_time, "获取周期服务时间表成功");
     }
-
+    
+     /**
+     * @api {GET} v1/service/server-worker-list 周期服务可用阿姨列表（李勇 80%）
+     * @apiGroup service
+     * @apiName actionServerWorkerList
+     * @apiDescription 获取周期服务可用阿姨列表
+     *
+     * @apiParam {String} access_token    用户认证.
+     * @apiParam {String} longitude     当前经度.
+     * @apiParam {String} latitude      当前纬度.
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *   {
+     *       "code": 1,
+     *       "msg": "获取周期服务可用阿姨列表成功",
+     *       "ret": {
+     *           "worker_id": 1,
+     *           "worker_name": "阿姨姓名",
+     *           "worker_phote": "阿姨头像",
+     *           "server_times": "服务次数",
+     *           "server_star": "服务星级",
+     *           "last_time": "最后服务时间"
+     *       }
+     *   }
+     *
+     * @apiError queryNotSupportFound 没有可用阿姨
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "code":"0",
+     *       "msg": "没有可用阿姨"
+     *     }
+     */
+    public function actionServerWorkerList()
+    {
+       $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
+        if (!isset($param['longitude']) || !$param['longitude'] || !isset($param['latitude']) || !$param['latitude']){
+            return $this->send(null, "请填写服务地址", 0, 403);
+        }
+        $longitude = $param['longitude'];
+        $latitude = $param['latitude'];
+        //根据经纬度获取商圈id
+        try{
+            $ShopDistrictInfo = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
+         $district_id = $ShopDistrictInfo['id'];
+         //获取周期订单可用阿姨的列表
+//        try{
+//            $worker_list=Worker::getWorkerList($district_id);
+//        }catch (\Exception $e) {
+//            return $this->send(null, "boss系统错误", 1024, 403);
+//        }
+         $ret = [
+                'worker_id' => 1,
+                'worker_name' => "阿姨姓名",
+                'worker_phote' =>"阿姨头像",
+                'server_times' => '服务次数',
+                'server_star' => '服务星级',
+                'last_time' =>'最后服务时间'
+            ];
+        if(empty($ret)){
+            return $this->send(null, "没有可用阿姨",0);
+        }else{
+            return $this->send($ret, "获取周期服务可用阿姨列表成功",1);
+        }
+    }
+    
     /**
      * @api {GET} v1/service/baidu-map 根据地址获取百度地图数据（赵顺利 100%）
      * @apiGroup service

@@ -1116,7 +1116,7 @@ class WorkerController extends \api\components\Controller
     
     
      /**
-     * @api {get} /worker/task-doing  获得进行中的任务列表 (李勇70%)
+     * @api {get} /worker/task-doing  获得进行中的任务列表 (李勇100%)
      * @apiName actionTaskDoing
      * @apiGroup Worker
      *
@@ -1184,7 +1184,7 @@ class WorkerController extends \api\components\Controller
     
    
      /**
-     * @api {get} /worker/task-done  获得已完成的任务列表 (李勇70%)
+     * @api {get} /worker/task-done  获得已完成的任务列表 (李勇100%)
      * @apiName actionTaskDone
      * @apiGroup Worker
      * @apiParam {String} per_page  每页显示多少条.
@@ -1256,7 +1256,7 @@ class WorkerController extends \api\components\Controller
     }
     
      /**
-     * @api {get} /worker/task-fail  获得已失败的任务列表 (李勇70%)
+     * @api {get} /worker/task-fail  获得已失败的任务列表 (李勇100%)
      * @apiName actionTaskFail
      * @apiGroup Worker
      * @apiParam {String} per_page  每页显示多少条.
@@ -1333,7 +1333,7 @@ class WorkerController extends \api\components\Controller
      * @apiGroup Worker
      *
      * @apiParam {String} access_token    阿姨登录 token.
-     * @apiParam {String} task_id    任务id
+     * @apiParam {String} id    任务id
      * @apiParam {String} platform_version 平台版本号.
      *
      * @apiSuccessExample {json} Success-Response:
@@ -1383,10 +1383,10 @@ class WorkerController extends \api\components\Controller
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
         $worker_id = $checkResult['worker_id'];
-        $task_id = $param['task_id'];
+        $id = $param['id'];
         //获取任务的详情
         try{
-            $task_log=WorkerTaskLog::findOne(['id'=>$task_id])->getDetail();
+            $task_log=WorkerTaskLog::findOne(['id'=>$id])->getDetail();
         }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
