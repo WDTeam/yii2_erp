@@ -141,21 +141,7 @@ $this->params['breadcrumbs'][] = $this->title;
             },
             'width' => "70px",
             ],
-            [
-            'format' => 'raw',
-            'label' => '财务处理时间',
-            'value' => function ($dataProvider) {
-            	return $dataProvider->finance_pop_order_finance_time;
-            },
-            'width' => "70px",
-            ],
-            
-            //'finance_pop_order_pay_title', 
-//            'finance_pop_order_check_id', 
-//            'finance_pop_order_finance_time:datetime', 
-//            'create_time:datetime', 
-//            'is_del', 
-
+            'finance_pop_order_finance_time:datetime',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' =>'{view} {taginfo} {tagssign}',
