@@ -55,7 +55,8 @@ $this->params['breadcrumbs'][1] = $this->title;
         Html::a('<i class="glyphicon" ></i>请假 '.Worker::CountVacationWorker(), ['index?WorkerSearch[worker_is_vacation]=1'], ['class' => 'btn '.Worker::setBtnCss(8), 'style' => 'margin-right:10px']) .
         Html::a('<i class="glyphicon" ></i>封号 '.Worker::CountBlockWorker(), ['index?WorkerSearch[worker_is_block]=1'], ['class' => 'btn '.Worker::setBtnCss(9), 'style' => 'margin-right:10px']) .
         Html::a('<i class="glyphicon" ></i>黑名单 '.Worker::CountBlackListWorker(), ['index?WorkerSearch[worker_is_blacklist]=1'], ['class' => 'btn '.Worker::setBtnCss(10), 'style' => 'margin-right:10px']).
-        Html::a('<i class="glyphicon" ></i>离职 '.Worker::CountDimissionWorker(), ['index?WorkerSearch[worker_is_dimission]=1'], ['class' => 'btn '.Worker::setBtnCss(11), 'style' => 'margin-right:10px']);
+        Html::a('<i class="glyphicon" ></i>离职 '.Worker::CountDimissionWorker(), ['index?WorkerSearch[worker_is_dimission]=1'], ['class' => 'btn '.Worker::setBtnCss(11), 'style' => 'margin-right:10px']).
+        Html::a('<i class="glyphicon" ></i>请假待审核 '.Worker::CountDimissionWorker(), ['index?WorkerSearch[worker_vacation_application_approve_status]=0'], ['class' => 'btn '.Worker::setBtnCss(12), 'style' => 'margin-right:10px']);
     $requestParam = \Yii::$app->request->getQueryParams();
 
     $vacationBtn =

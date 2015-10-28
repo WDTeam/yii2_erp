@@ -3,13 +3,8 @@ use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use kartik\daterange\DateRangePicker;
 use boss\models\worker\WorkerVacation;
-
-$workerVacationModel = WorkerVacation::find()->where(['worker_id'=>$worker_id,'worker_vacation_type'=>2])->one();
-if($workerVacationModel===null){
-    $workerVacationModel = new WorkerVacation;
-    $workerVacationModel->worker_vacation_type = 2;
-    $workerVacationModel->worker_vacation_status = 0;
-}
+$workerVacationModel = new WorkerVacation;
+$workerVacationModel->worker_vacation_type = 2;
 ?>
 
 <div class="">
@@ -17,7 +12,7 @@ if($workerVacationModel===null){
     <?php
         $form = ActiveForm::begin([
             'type' => ActiveForm::TYPE_HORIZONTAL,
-            'action'=>'/worker/operate-vacation?workerId='.$worker_id,
+            'action'=>'operate-vacation?workerId='.$worker_id,
             'formConfig' => ['labelSpan' => 3, 'deviceSize' => ActiveForm::SIZE_SMALL],
         ]);
     ?>
@@ -54,7 +49,6 @@ if($workerVacationModel===null){
     ]);?>
     <?= $form->field($workerVacationModel, 'worker_vacation_extend');?>
 
-    <?= $form->field($workerVacationModel, 'worker_vacation_status')->radioList([ '1' => '开启','0' => '关闭'], ['inline' => true]);?>
     <?=  Html::submitButton('确认',['class'=>'btn btn-primary btn-lg btn-block']);?>
     <?php ActiveForm::end();?>
 

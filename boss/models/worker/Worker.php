@@ -74,6 +74,8 @@ class Worker extends \core\models\worker\Worker
             return 'btn-success-selected';
         }elseif($btnCate==11 && isset($workerParams['worker_is_dimission'])){
             return 'btn-success-selected';
+        }elseif($btnCate==12 && isset($workerParams['worker_vacation_application_approve_status'])){
+            return 'btn-success-selected';
         }else{
             return 'btn-success';
         }
