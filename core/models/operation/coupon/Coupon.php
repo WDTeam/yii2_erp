@@ -325,5 +325,14 @@ class Coupon extends \common\models\operation\coupon\Coupon
             'coupon_time_type' => $coupon->coupon_time_type,
         );
     }
-	
+    /**
+     * 获取当前优惠券的所有优惠码
+     */
+	public function getCodes()
+	{
+	    $models = CouponCode::find()
+	    ->where(['coupon_id'=>$this->id])
+	    ->all();
+	    return (array)$models;
+	}
 }

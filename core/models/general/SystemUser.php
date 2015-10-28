@@ -2,9 +2,7 @@
 
 namespace core\models\general;
 
-use common\models\general\SystemUser;
-
-class SystemUser extends SystemUser
+class SystemUser extends \common\models\general\SystemUser
 {
     
 }
