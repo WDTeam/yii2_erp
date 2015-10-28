@@ -1075,7 +1075,7 @@ class WorkerController extends \api\components\Controller
      */
     public function actionWorkerLeave()
     {
-        $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //检测阿姨是否登录
         $checkResult = $this->checkWorkerLogin($param);
         if(!$checkResult['code']){
@@ -1086,11 +1086,11 @@ class WorkerController extends \api\components\Controller
         }
         $worker_id = $checkResult['worker_id'];
         $type = $param['type'];
-//        try{
-//            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id,$type);
-//        }catch (\Exception $e) {
-//            return $this->send(null, "boss系统错误", 1024, 403);
-//        }
+        try{
+            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id,$type);
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
         $ret = [
             "result" => 1,
             "msg" => "ok",

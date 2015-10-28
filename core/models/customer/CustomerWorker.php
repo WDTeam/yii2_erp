@@ -120,4 +120,14 @@ class CustomerWorker extends \yii\db\ActiveRecord
         }
     }
 
+    /**
+     * 统计阿姨服务过的用户数量
+     * @param $worker_id
+     * @return int|string
+     */
+    public static function countWorkerServerAllCustomer($worker_id){
+        $result = CustomerWorker::find()->where(['worker_id'=>$worker_id])->count();
+        return $result;
+    }
+
 }
