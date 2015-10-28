@@ -147,24 +147,6 @@ class OrderComplaintController extends BaseAuthController
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-
-    public function actionApp(){
-    	$model = new OrderComplaint();
-    	$arr = array('OrderComplaint'=>array(
-    			'order_id'=>'1234',
-    			'complaint_type'=>'1',
-    			'complaint_phone'=>'',
-    			'complaint_section'=>'1',
-    			'complaint_level'=>'2',
-    			'complaint_content'=>'33241234231',
-    			'complaint_time'=>time(),
-    			'created_at' =>time()
-    	));
-    	$model->load($arr);
-    	$model->save();
-    	//$result = $model->insertModel($arr);
-    	exit();
-}
     /**
      * 后端订单投诉添加业务逻辑
      * @return boolean
@@ -180,7 +162,7 @@ class OrderComplaintController extends BaseAuthController
     			$arr['OrderComplaint']['cumstomer_phone'] = $value['cumstomer_phone'];
     			$arr['OrderComplaint']['created_at'] = time();
     			$arr['OrderComplaint']['updated_at'] = time();
-    			
+    			$arr['OrderComplaint']['complaint_channel'] = '2';
     			foreach ($value['data'] as $key=>$val){
     				$arr['OrderComplaint']['complaint_type'] = $val['type'];
     				$arr['OrderComplaint']['complaint_section'] = $val['department'];
