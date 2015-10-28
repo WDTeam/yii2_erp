@@ -16,16 +16,22 @@ class GeneralPayRefund extends GeneralPayCommon
      * @param $customer_id  用户ID
      */
     public function call_pay_refund($order_id,$customer_id){
-        //检查订单支付状态
+        //检查在线支付订单支付状态
         $condition['general_pay_status'] = 1;
         $condition['order_id'] = $order_id;
         $condition['customer_id'] = $customer_id;
         $condition['general_pay_mode'] = 1;
         $payData = GeneralPay::find()->where($condition)->asArray()->one();
-
-        //检查退款状态
-        $condition['general_pay_mode'] = 3;
-        $refundData = GeneralPay::find()->where($condition)->asArray()->one();
+        //判断线上是否支付过,如果没有支付过,查看订单是否产生过
+        if(!empty($payData)){
+            //检查退款状态
+            $condition['general_pay_mode'] = 3;
+            $refundData = GeneralPay::find()->where($condition)->asArray()->one();
+        }else{
+            $payData = $this->orderInfo($order_id)->getAttributes();
+            $payData['order_id'] = $order_id;
+            $payData['customer_id'] = $customer_id;
+        }
 
         //假如没有支付数据 || 已经有过退款数据
         if( empty($payData) || !empty($refundData) ){
@@ -272,17 +278,6 @@ class GeneralPayRefund extends GeneralPayCommon
      * 后台订单退款
      */
     private function pay_ht_refund($data){
-        //创建退款交易
-        $data['general_pay_mode'] = 3;
-        $data['general_pay_eo_order_id'] = $this->create_out_trade_no(2);
-        $data['is_reconciliation'] = 0;
-        $data['general_pay_status'] = 1;
-        $data['general_pay_transaction_id'] = 0;
-        $this->scenario = 'refund';
-        $this->attributes = $data;
-        $this->insert();
-
-        //调用第三方退款
 
         //调用退余额
         if( !empty($data['order_id']) && !empty($data['customer_id'])){
