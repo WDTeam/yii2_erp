@@ -5,7 +5,6 @@ namespace core\models\worker;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\behaviors\TimestampBehavior;
-use core\models\order\Order;
 use core\models\finance\FinanceWorkerNonOrderIncomeSearch;
 
 /**
@@ -103,6 +102,7 @@ class WorkerTaskLog extends \common\models\worker\WorkerTaskLog
     /**
      * 任务详情
      * @return unknown
+     * eg: WorkerTaskLog::findOne(['id'=>$id])->getDetail();
      */
     public function getDetail()
     {
@@ -110,7 +110,6 @@ class WorkerTaskLog extends \common\models\worker\WorkerTaskLog
         $data = $model->attributes;
         $data['values'] = $model->getConditionsValues();
         $data['worker_task_description'] = $model->getWorker_task_description();
-//         $data['orders'] = Order::
         return $data;
     }
     /**
@@ -120,7 +119,7 @@ class WorkerTaskLog extends \common\models\worker\WorkerTaskLog
     public function setSettlemented()
     {
         $is_sl = FinanceWorkerNonOrderIncomeSearch::isWorkerTaskSettled($this->id);
-        $this->is_settlemented = $is_sl;
+        $this->worker_task_is_settlemented = $is_sl;
         return $this->save();
     }
     /**

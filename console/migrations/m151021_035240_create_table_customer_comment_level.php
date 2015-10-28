@@ -28,7 +28,7 @@ class m151021_035240_create_table_customer_comment_level extends Migration
              [
                 [1,0,'满意',time(), 0,0],
                 [2,1,'一般', time(),0,0],
-		[3,2,'不满意', time(),0,0],
+                [3,2,'不满意', time(),0,0],
             ]);
 
     }

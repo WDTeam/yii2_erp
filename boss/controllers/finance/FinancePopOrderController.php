@@ -137,6 +137,16 @@ class FinancePopOrderController extends Controller
     			//去除表头
     			if($n>1 && !empty($value['A'])){
     			$statusinfo=$model->PopOrderstatus($alinfo,$value,$channelid,$paychannelid);
+
+    			$postdate['order_code'] =$statusinfo['order_code']; //系统订单号
+    			$postdate['order_status_name'] =$statusinfo['order_status_name'];  //订单状态
+    			$postdate['order_money'] =$statusinfo['order_money'];// 订单金额
+    			$postdate['finance_status'] =1;// 收款状态 1 未确定 2已确定
+
+    			
+    			//var_dump($postdate);exit;
+    			
+    			
     			$postdate['finance_record_log_id'] =$lastidRecordLog;
     			$postdate['finance_pop_order_number'] =$statusinfo['order_channel_order_num'];
     			$postdate['finance_order_channel_id'] =$channelid;
@@ -153,10 +163,8 @@ class FinancePopOrderController extends Controller
     			//优惠卷id
     			$postdate['finance_pop_order_coupon_id'] =$statusinfo['coupon_id'];  
     			$postdate['finance_pop_order_order2'] =$statusinfo['order_code'];
-    			
     			//获取渠道唯一订单号有问题需要问问
     			$postdate['finance_pop_order_channel_order'] =$statusinfo['order_channel_order_num'];
-    			
     			//$post['FinancePopOrder']['finance_pop_order_order_type'] =$statusinfo['order_service_type_id'];
     			$postdate['finance_pop_order_order_type'] =$statusinfo['order_service_type_id'];
     			$postdate['finance_pop_order_status'] =$statusinfo['order_before_status_dict_id'];
@@ -209,9 +217,8 @@ class FinancePopOrderController extends Controller
     		$customer_info->finance_record_log_succeed_sum_money =$sumt[0]['sumoney'];
     		//人工确认笔数
     		$customer_info->finance_record_log_manual_count =0;
-    	
     		//人工确认金额
-    		$customer_info->finance_record_log_manual_sum_money =$statusinfo['created_at']?$statusinfo['created_at']:'0';
+    		$customer_info->finance_record_log_manual_sum_money =0;
     		//失败笔数
     		$customer_info->finance_record_log_failure_count=$modelinfo::find()
     		->andWhere(['finance_record_log_id' => $lastidRecordLog])

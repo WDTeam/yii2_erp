@@ -797,7 +797,7 @@
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": false,
+            "optional": true,
             "field": "order_cancel_reason",
             "description": "<p>取消原因</p> "
           },
@@ -1795,7 +1795,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n指定阿姨订单数/待抢单订单订单数\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"OrderCount\": \"123\"\n     }\n}\n\n  * 指定阿姨订单列表/待抢单订单列表\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"orderList\":\n          [ \n          {\n           \"order_id\":\"订单号\"\n           \"order_code\":\"订单编号\"\n           \"batch_code\":\"周期订单好\"\n           \"booked_begin_time\":\"服务开始时间\"\n           \"booked_end_time\":\"服务结束时间\"\n           \"channel_name\":\"服务类型名称\"\n           \"booked_count\":\"时常\"\n           \"address\":\"服务地址\"\n           \"need\":\"\"\n           \"money\":\"订单价格\"\n        }\n        ]\n     }\n}",
+          "content": "HTTP/1.1 200 OK\n指定阿姨订单数/待抢单订单订单数\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"OrderCount\": \"123\"\n     }\n}\n\n  * 指定阿姨订单列表/待抢单订单列表\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"orderList\":\n          [\n          {\n           \"order_id\":\"订单号\"\n           \"order_code\":\"订单编号\"\n           \"batch_code\":\"周期订单好\"\n           \"booked_begin_time\":\"服务开始时间\"\n           \"booked_end_time\":\"服务结束时间\"\n           \"channel_name\":\"服务类型名称\"\n           \"booked_count\":\"时常\"\n           \"address\":\"服务地址\"\n           \"need\":\"\"\n           \"money\":\"订单价格\"\n        }\n        ]\n     }\n}",
           "type": "json"
         }
       ]
@@ -3906,7 +3906,7 @@
   },
   {
     "type": "GET",
-    "url": "/worker/get-worker-settle-detail",
+    "url": "/worker/get-worker-bill-detail",
     "title": "获取阿姨对账单列表详情 (田玉星 70%)",
     "description": "<p>【备注：等待model底层支持】</p> ",
     "name": "actionGetWorkerBillDetail",
@@ -3967,8 +3967,75 @@
   },
   {
     "type": "GET",
+    "url": "/worker/get-worker-bill-list",
+    "title": "获取阿姨对账单列表 (田玉星 100%)",
+    "name": "actionGetWorkerBillList",
+    "group": "Worker",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>阿姨登录token</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "per_page",
+            "description": "<p>每页显示多少条.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "page",
+            "description": "<p>第几页.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "platform_version",
+            "description": "<p>平台版本号.</p> "
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "http://dev.api.1jiajie.com/v1/worker/get-worker-bill-list"
+      }
+    ],
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\": \"操作成功.\",\n     \"ret\": [\n     {\n        \"settle_id\"=>\"32\"\n        'settle_type' =>\"1\",\n        'settle_year' =>\"2014\"\n        'settle_time'=>'09年07月-09月13日',\n        'settle_type' =>1,\n        'order_count'=>'10',\n        'worker_income'=>'320.00',\n        'settle_status'=>\"1\"\n      }\n     ]\n      \n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"error\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/WorkerController.php",
+    "groupTitle": "Worker"
+  },
+  {
+    "type": "GET",
     "url": "/worker/get-worker-comment",
-    "title": "获取阿姨对应的评论 (田玉星 80%)",
+    "title": "获取阿姨对应的评论 (田玉星 100%)",
     "description": "<p>【备注：等待model底层支持】</p> ",
     "name": "actionGetWorkerComment",
     "group": "Worker",
@@ -4022,7 +4089,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功.\",\n      \"ret\": {\n          \"per_page\": 1,\n          \"page_num\": 10,\n          \"data\": [\n              {\n                  \"comment_id\": \"1\",\n                  \"comment\": \"这是第一条评论类型为评论\",\n                  \"comment_date\": \"2015-10-27\"\n              }\n          ]\n      }\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功.\",\n      \"ret\": {\n          \"per_page\": 1,\n          \"page_num\": 10,\n          \"data\": [\n              {\n                  \"comment_id\": \"1\",\n                  \"comment_content\": \"这是第一条评论类型为评论\",\n                  \"comment_time\": \"2015-10-27\"\n              }\n          ]\n      }\n  }",
           "type": "json"
         }
       ]
@@ -4156,7 +4223,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"ret\": {\n      \"per_page\": 1,\n      \"page_num\": 1,\n      \"data\": [\n          {\n              \"leave_type\": \"休假\",\n              \"leave_date\": \"2015-10-30\",\n              \"leave_status\": \"待审核\"\n          }\n      ]\n     }\n  }",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"ret\": {\n      \"per_page\": 1,\n      \"page_num\": 1,\n      \"data\": [\n          {\n              \"leave_type\": \"休假\",\n              \"leave_time\": \"2015-10-30\",\n              \"leave_status\": \"待审核\"\n          }\n      ]\n     }\n  }",
           "type": "json"
         }
       ]
@@ -4343,73 +4410,6 @@
   },
   {
     "type": "GET",
-    "url": "/worker/get-worker-settle-list",
-    "title": "获取阿姨对账单列表 (田玉星 100%)",
-    "name": "actionGetWorkerSettleList",
-    "group": "Worker",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>阿姨登录token</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "per_page",
-            "description": "<p>每页显示多少条.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "page",
-            "description": "<p>第几页.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
-          }
-        ]
-      }
-    },
-    "sampleRequest": [
-      {
-        "url": "http://dev.api.1jiajie.com/v1/worker/get-worker-bill-list"
-      }
-    ],
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\": \"操作成功.\",\n     \"ret\": [\n     {\n        \"settle_id\"=>\"32\"\n        'settle_type' =>\"1\",\n        'settle_year' =>\"2014\"\n        'settle_date'=>'09年07月-09月13日',\n        'settle_type' =>1,\n        'order_count'=>'10',\n        'worker_income'=>'320.00',\n        'settle_status'=>\"1\"\n      }\n     ]\n      \n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"error\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
-    "groupTitle": "Worker"
-  },
-  {
-    "type": "GET",
     "url": "/worker/get-worker-taskreward-list",
     "title": "获取阿姨奖励列表 (田玉星 100%)",
     "name": "actionGetWorkerTaskrewardList",
@@ -4556,7 +4556,7 @@
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "leave_date",
+            "field": "leave_time",
             "description": "<p>请假时间.</p> "
           },
           {
@@ -4725,6 +4725,20 @@
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
+            "field": "per_page",
+            "description": "<p>每页显示多少条.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "page",
+            "description": "<p>第几页.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
             "field": "access_token",
             "description": "<p>阿姨登录 token.</p> "
           },
@@ -4783,6 +4797,20 @@
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
+            "field": "per_page",
+            "description": "<p>每页显示多少条.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "page",
+            "description": "<p>第几页.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
             "field": "access_token",
             "description": "<p>阿姨登录 token.</p> "
           },
@@ -4831,8 +4859,7 @@
   {
     "type": "PUT",
     "url": "/worker/worker-bill-confirm",
-    "title": "确定账单无误 (田玉星 70%)",
-    "description": "<p>【备注：等待model底层支持】</p> ",
+    "title": "账单确认 (田玉星 100%)",
     "name": "actionWorkerBillConfirm",
     "group": "Worker",
     "parameter": {
@@ -4849,7 +4876,7 @@
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "bill_id",
+            "field": "settle_id",
             "description": "<p>账单唯一标识.</p> "
           },
           {
@@ -4871,7 +4898,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功.\",\n  \"ret\": {\n        \"result\": \"1\",\n        \"msg\": \"账单已确认\",\n       }\n  }",
+          "content": "HTTP/1.1 200 OK\n{\n   \"code\": 1,\n   \"msg\": \"账单确定成功\",\n   \"ret\": null\n}",
           "type": "json"
         }
       ]
@@ -4892,7 +4919,7 @@
   {
     "type": "get",
     "url": "/worker/worker-leave",
-    "title": "查看请假情况 (李勇80%)",
+    "title": "查看请假情况 (李勇100%)",
     "name": "actionWorkerLeave",
     "group": "Worker",
     "parameter": {
