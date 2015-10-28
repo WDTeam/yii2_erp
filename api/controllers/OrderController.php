@@ -1083,7 +1083,7 @@ class OrderController extends \api\components\Controller
      *      "msg":"操作成功",
      *      "ret":
      *      {
-     *          "count": 
+     *          "OrderCount": "123"
      *      }
      * }
      * 
@@ -1093,9 +1093,21 @@ class OrderController extends \api\components\Controller
      *      "msg":"操作成功",
      *      "ret":
      *      {
-     *          "orderList":{
-     *            
-     *         } 
+     *          "orderList":
+     *           [ 
+     *           {
+     *            "order_id":"订单号"
+     *            "order_code":"订单编号"
+     *            "batch_code":"周期订单好"
+     *            "booked_begin_time":"服务开始时间"
+     *            "booked_end_time":"服务结束时间"
+     *            "channel_name":"服务类型名称"
+     *            "booked_count":"时常"
+     *            "address":"服务地址"
+     *            "need":""
+     *            "money":"订单价格"
+     *         }
+     *         ]
      *      }
      * }
      *
