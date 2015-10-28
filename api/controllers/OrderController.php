@@ -5,10 +5,12 @@ namespace api\controllers;
 use \core\models\order\OrderPush;
 use Faker\Provider\DateTime;
 use Yii;
-
 use \core\models\order\Order;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\customer\CustomerAddress;
+use \core\models\order\OrderSearch;
+use \core\models\worker\WorkerAccessToken;
+use \core\models\order\Order;
 use yii\web\Response;
 
 class OrderController extends \api\components\Controller
@@ -1121,7 +1123,7 @@ class OrderController extends \api\components\Controller
 
             if ($param['leveltype'] == 3) {
                 try {
-                    $workerCount = \core\models\order\OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 1);
+                    $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 1);
                     $ret['workerData'] = $workerCount;
                     return $this->send($ret, $workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
@@ -1130,7 +1132,7 @@ class OrderController extends \api\components\Controller
                 }
             } else if ($param['leveltype'] == 4) {
                 try {
-                    $workerCount = \core\models\order\OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 0);
+                    $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 0);
                     $ret['workerData'] = $workerCount;
                     return $this->send($ret, $workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
@@ -1139,7 +1141,7 @@ class OrderController extends \api\components\Controller
                 }
             } else if ($param['leveltype'] == 1) {
                 try {
-                    $workerCount = \core\models\order\OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
+                    $workerCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
                     $ret['workerData'] = $workerCount;
                     return $this->send($ret, $workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
@@ -1148,7 +1150,7 @@ class OrderController extends \api\components\Controller
                 }
             } else if ($param['leveltype'] == 2) {
                 try {
-                    $workerCount = \core\models\order\OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
+                    $workerCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
                     $ret['workerData'] = $workerCount;
                     return $this->send($ret, $workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
@@ -1198,12 +1200,12 @@ class OrderController extends \api\components\Controller
             return $this->send(null, "缺少规定的参数", 0, 403);
         }
 
-        $worker = \core\models\worker\WorkerAccessToken::getWorker($param['access_token']);
+        $worker = WorkerAccessToken::getWorker($param['access_token']);
 
         if (!empty($worker) && !empty($worker->id)) {
 
             try {
-                $setWorker = \core\models\order\Order::sysAssignDone($param['order_id'], $worker->id);
+                $setWorker = Order::sysAssignDone($param['order_id'], $worker->id);
                 $ret['workerSend'] = $setWorker;
                 return $this->send($ret, "操作成功", 1);
             } catch (Exception $e) {
