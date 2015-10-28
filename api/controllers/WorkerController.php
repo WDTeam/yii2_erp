@@ -395,6 +395,7 @@ class WorkerController extends \api\components\Controller
      *   "ret": {
      *       "per_page": 1,
      *       "page_num": 10,
+     *       "worker_is_block":1,
      *       "data": [
      *           {
      *               "complaint_content": "打扫不干净",
@@ -430,6 +431,8 @@ class WorkerController extends \api\components\Controller
         }
         $page_num = intval($param['page_num']);
         try{
+            $workerInfo = Worker::getWorkerListByIds($checkResult['worker_id'],'worker_is_block');
+            $worker_is_block = $workerInfo[0]['worker_is_block'];   
             $conplainList = OrderComplaint::getWorkerComplain($checkResult['worker_id']);
             if($conplainList){
                 foreach($conplainList as $key=>$val){
@@ -443,6 +446,7 @@ class WorkerController extends \api\components\Controller
         $ret = [
             'per_page'=>$per_page,
             'page_num'=>$page_num,
+            'worker_is_block'=> $worker_is_block,
             'data'  => $conplainList
         ];
         return $this->send($ret, "操作成功.");
@@ -805,9 +809,7 @@ class WorkerController extends \api\components\Controller
      * {
      *    "code": 1,
      *     "msg": "操作成功.",
-     *        "ret": {
-     *             "worker_is_block": "0",
-     *             "data":[
+     *        "ret": [
      *            {
      *                "deduction_money": "12.00",
      *                "deduction_des": "第三大大声点",
@@ -815,8 +817,7 @@ class WorkerController extends \api\components\Controller
      *                "deduction_time": "2015.10.26",
      *                "deduction_type_des": "投诉"
      *            }
-     *           ]
-     *       }
+     *       ]
      * }
      *
      * @apiErrorExample Error-Response:
@@ -838,13 +839,7 @@ class WorkerController extends \api\components\Controller
         if(!$settle_id){
             return $this->send(null, "账单唯一标识错误", 0, 403);
         }
-        $ret =[
-            'worker_is_block'=>1,
-             'data'=>[]
-        ];
         try{
-            $workerInfo = Worker::getWorkerListByIds($checkResult['worker_id'],'worker_is_block');
-            $ret['worker_is_block'] = $workerInfo[0]['worker_is_block'];       
             //获取任务奖励列表
             $punishList = FinanceSettleApplySearch::getDeductionArrayBySettleId($settle_id);
             if($punishList){
@@ -861,12 +856,11 @@ class WorkerController extends \api\components\Controller
                     }
                 }
             }
-            $ret['data'] = $punishList;
         }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
         //获取受处罚列表
-        return $this->send($ret, "操作成功.");
+        return $this->send($punishList, "操作成功.");
     }
     
     /**
