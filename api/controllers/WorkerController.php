@@ -429,21 +429,19 @@ class WorkerController extends \api\components\Controller
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *      "code": "ok",
-     *      "msg": "操作成功.",
-     *      "ret": [
-     *         {
-     *             "complain_id": "1",
-     *             "complain": "这是第一条投诉",
-     *             "complain_date": "2015-10-22"
-     *         },
-     *         {
-     *             "complain_id": "1",
-     *             "complain": "这是第二条投诉",
-     *             "complain_date": "2015-10-22"
-     *         }
-     *      ]
-     * }
+     *   "code": 1,
+     *   "msg": "操作成功.",
+     *   "ret": {
+     *       "per_page": 1,
+     *       "page_num": 10,
+     *       "data": [
+     *           {
+     *               "complaint_content": null,
+     *               "complaint_time": "1970-01-01 08:00:00"
+     *           }
+     *       ]
+     *   }
+     *   }
      *
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
