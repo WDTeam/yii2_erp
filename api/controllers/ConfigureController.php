@@ -223,6 +223,20 @@ class ConfigureController extends \api\components\Controller
      *              ],
      *              "footer_link":[
      *              {
+<<<<<<< HEAD
+     *                  'link_id'=>'1',
+     *                  'title'=>'首页',
+     *                  'url'=>'',   跳转链接
+     *                  'link_icon'=>'',
+     *                  'sort'=>'1'  排序
+     *              },
+     *              {
+     *                  'link_id'=>'2',
+     *                  'title'=>'订单',
+     *                  'url'=>'',
+     *                  'link_icon'=>'',
+     *                  'sort'=>'2'
+=======
      *                  "link_id"=>"1",
      *                  "title"=>"首页",
      *                  "url"=>"",   跳转链接
@@ -237,6 +251,7 @@ class ConfigureController extends \api\components\Controller
      *                  "link_icon"=>"",
      *                  "colour"=>"",
      *                  "sort"=>"2"
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
      *              },
      *          ]
      *      }
@@ -395,7 +410,10 @@ class ConfigureController extends \api\components\Controller
                 'title' => '首页',
                 'url' => '',
                 'link_icon' => '',
+<<<<<<< HEAD
+=======
                 'colour' => '',
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
                 'sort' => '1',
             ],
             [
@@ -403,7 +421,10 @@ class ConfigureController extends \api\components\Controller
                 'title' => '订单',
                 'url' => '',
                 'link_icon' => '',
+<<<<<<< HEAD
+=======
                 'colour' => '',
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
                 'sort' => '2',
             ],
             [
@@ -411,7 +432,10 @@ class ConfigureController extends \api\components\Controller
                 'title' => '优惠券',
                 'url' => '',
                 'link_icon' => '',
+<<<<<<< HEAD
+=======
                 'colour' => '',
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
                 'sort' => '3',
             ],
             [
@@ -419,7 +443,10 @@ class ConfigureController extends \api\components\Controller
                 'title' => '我的',
                 'url' => '',
                 'link_icon' => '',
+<<<<<<< HEAD
+=======
                 'colour' => '',
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
                 'sort' => '4',
             ],
         ];

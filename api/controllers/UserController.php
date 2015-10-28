@@ -8,6 +8,9 @@ use \core\models\customer\CustomerAddress;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\operation\coupon\CouponCustomer;
 use \core\models\operation\coupon\Coupon;
+use \core\models\customer\CustomerTransRecord;
+use \core\models\customer\CustomerExtBalance;
+use \core\models\order\Order;
 
 class UserController extends \api\components\Controller
 {
@@ -759,13 +762,13 @@ class UserController extends \api\components\Controller
                  *
                  * @param int $customer 用户id
                  */
-                $userBalance = \core\models\customer\CustomerExtBalance::getCustomerBalance($customer->id);
+                $userBalance = CustomerExtBalance::getCustomerBalance($customer->id);
                 /**
                  * 获取用户消费记录
                  *
                  * @param int $customer 用户id
                  */
-                $userRecord = \core\models\Customer\CustomerTransRecord::queryRecord($customer->id);
+                $userRecord = CustomerTransRecord::queryRecord($customer->id);
                 $ret["userBalance"] = $userBalance;
                 $ret["userRecord"] = $userRecord;
                 return $this->send($ret, "查询成功");
@@ -1106,7 +1109,7 @@ class UserController extends \api\components\Controller
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
             try {
-                $service = \core\models\order\Order::getGoods($param['longitude'], $param['latitude'], $param['order_service_type_id']);
+                $service = Order::getGoods($param['longitude'], $param['latitude'], $param['order_service_type_id']);
                 if ($service) {
                     return $this->send(1, "该服务获取成功");
                 } else {

@@ -15,7 +15,7 @@
 namespace core\models\customer;
 
 use Yii;
-
+use core\models\order\OrderComplaint;
 class CustomerComment extends \common\models\customer\CustomerComment
 {
 
@@ -36,9 +36,14 @@ class CustomerComment extends \common\models\customer\CustomerComment
     **/
     
     
-    public static function getCustomerCommentworkerlist($worker_id)
+    public static function getCustomerCommentworkerlist($worker_id,$customer_comment_level,$newpage,$countpage=40)
     {
-    	$comment_list = self::find()->where(['worker_id' => $worker_id])->all();
+    	if($newpage==0 && $newpage=='' && $newpage==null){
+    		$newpage=1;
+    	}else{
+    		$newpage=$newpage*$countpage;
+    	}
+    	$comment_list = self::find()->andWhere(['worker_id' =>$worker_id,'customer_comment_level'=>$customer_comment_level])->limit($newpage,$countpage)->asArray()->all();
     	return $comment_list;
     }
     
@@ -80,6 +85,23 @@ class CustomerComment extends \common\models\customer\CustomerComment
             $customerComment->save();
            // var_dump($customerComment->errors);
             $transaction->commit();
+            
+            if($array['customer_comment_level']=='3'){
+            	//如果是差评 通知投诉接口
+            	$data['order_id']=$array['order_id'];
+            	$data['worker_id']=$array['worker_id'];
+            	$data['complaint_type']=1;
+            	$data['complaint_status']=0;
+            	$data['complaint_channel']=0;
+            	$data['complaint_phone']=$array['worker_tel'];
+            	$data['complaint_section']=0;
+            	$data['complaint_level']=3;
+            	$data['complaint_content']=$array['customer_comment_content'];
+            	$data['complaint_time']=time();
+            	//提交给投诉接口
+            	OrderComplaint::appModel($data);
+            }
+            
             return $customerComment;
         		} catch (\Exception $e) {
             $transaction->rollback();
