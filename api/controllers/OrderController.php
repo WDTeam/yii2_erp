@@ -459,6 +459,72 @@ class OrderController extends \api\components\Controller
     }
 
     /**
+     * @api {GET} /order/orders-count 查询用户订单数量(xieyi 70%缺少周期订单)
+     *
+     * @apiName StatusOrdersCount
+     * @apiGroup Order
+     * @apiDescription 获得用户各种状态的订单数量
+     *
+     * @apiParam {String} access_token 用户令牌
+     * @apiParam {String} [order_id] 订单id
+     * @apiParam {String} [channels] 渠道号按'.'分隔
+     * @apiParam {String} [order_status] 订单状态按'.'分隔
+     * @apiParam {String} [from] 开始时间
+     * @apiParam {String} [to] 结束时间     *
+     *
+     * @apiSuccess {Object[]} orderList 该状态订单.
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *      "code": "1",
+     *      "msg": "操作成功",
+     *      "ret": {
+     *          "count": "4"
+     *      }
+     *     }
+     *
+     *
+     *
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "0",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *
+     *     }
+     *
+     */
+    public function actionOrdersCount()
+    {
+        $args = Yii::$app->request->get();
+
+        @$token = $args["access_token"];
+        $user = CustomerAccessToken::getCustomer($token);
+        if (empty($user)) {
+            return $this->send(null, "用户无效,请先登录", 0);
+        }
+        $orderStatus = null;
+        if (isset($args['order_status'])) {
+            $orderStatus = explode(".", $args['order_status']);
+        }
+        $channels = null;
+        if (isset($args['channels'])) {
+            $channels = explode(".", $args['channels']);
+        }
+        @$from = $args['from'];
+        @$to = $args['to'];
+        $args["oc.customer_id"] = $user->id;
+        $orderSearch = new \core\models\order\OrderSearch();
+        $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus, $channels,$from,$to);
+        $ret['count'] = $count;
+        return $this->send($ret, "操作成功", 1, 200);
+    }
+
+    /**
      * @api {GET} /order/worker-orders 查询阿姨订单(xieyi 90%已经将后台接口完成,缺少周期订单)
      *
      *
@@ -668,32 +734,73 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /order/orders-count 查询用户订单数量(xieyi 70%缺少周期订单)
+     * @api {GET} /order/worker-orders-history 查询阿姨三个月的历史订单(xieyi 90%已经将后台接口完成,缺少周期订单)
      *
-     * @apiName StatusOrdersCount
+     *
+     * @apiName Orders
      * @apiGroup Order
-     * @apiDescription 获得用户各种状态的订单数量
      *
-     * @apiParam {String} access_token 用户令牌
+     * @apiParam {String} access_token 阿姨登陆令牌
+     * @apiParam {String} [order_status] 订单状态
      * @apiParam {String} [order_id] 订单id
+     * @apiParam {String} [page] 第几页
+     * @apiParam {String} [limit] 每页包含订单数
      * @apiParam {String} [channels] 渠道号按'.'分隔
      * @apiParam {String} [order_status] 订单状态按'.'分隔
+     * @apiParam {String} [is_asc] 排序方式
      * @apiParam {String} [from] 开始时间
-     * @apiParam {String} [to] 结束时间     *
+     * @apiParam {String} [to] 结束时间
+     * @apiParam {String} [oc.customer_id]客户id
+     *
      *
      * @apiSuccess {Object[]} orderList 该状态订单.
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *      "code": "1",
-     *      "msg": "操作成功",
-     *      "ret": {
-     *          "count": "4"
-     *      }
-     *     }
-     *
-     *
+     *    "code": "1",
+     *    "msg": "操作成功",
+     *    "ret": {
+     *    "limit": "1",
+     *    "page_total": 4,
+     *    "offset": 0,
+     *    "orders": [
+     *    {
+     *    "id": "2",
+     *    "order_code": "339710",
+     *    "order_parent_id": "0",
+     *    "order_is_parent": "0",
+     *    "created_at": "1445347126",
+     *    "updated_at": "1445347126",
+     *    "isdel": "0",
+     *    "ver": "3",
+     *    "version": "3",
+     *    "order_ip": "58.135.77.96",
+     *    "order_service_type_id": "1",
+     *    "order_service_type_name": "Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机",
+     *    "order_src_id": "1",
+     *    "order_src_name": "BOSS",
+     *    "channel_id": "20",
+     *    "order_channel_name": "后台下单",
+     *    "order_unit_money": "20.00",
+     *    "order_money": "40.00",
+     *    "order_booked_count": "120",
+     *    "order_booked_begin_time": "1446249600",
+     *    "order_booked_end_time": "1446256800",
+     *    "address_id": "397",
+     *    "district_id": "3",
+     *    "order_address": "北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001",
+     *    "order_booked_worker_id": "0",
+     *    "checking_id": "0",
+     *    "order_cs_memo": "",
+     *    "order_id": "2",
+     *    "order_before_status_dict_id": "2",
+     *    "order_before_status_name": "已支付",
+     *    "order_status_dict_id": "3",
+     *    "order_status_name": "已开始智能指派"
+     *    }
+     *    ]
+     *    }
      *
      *
      * @apiError UserNotFound 用户认证已经过期.
@@ -707,30 +814,8 @@ class OrderController extends \api\components\Controller
      *     }
      *
      */
-    public function actionOrdersCount()
-    {
-        $args = Yii::$app->request->get();
-
-        @$token = $args["access_token"];
-        $user = CustomerAccessToken::getCustomer($token);
-        if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录", 0);
-        }
-        $orderStatus = null;
-        if (isset($args['order_status'])) {
-            $orderStatus = explode(".", $args['order_status']);
-        }
-        $channels = null;
-        if (isset($args['channels'])) {
-            $channels = explode(".", $args['channels']);
-        }
-        @$from = $args['from'];
-        @$to = $args['to'];
-        $args["oc.customer_id"] = $user->id;
-        $orderSearch = new \core\models\order\OrderSearch();
-        $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus, $channels, $from, $to);
-        $ret['count'] = $count;
-        $this->send($ret, "操作成功", 1, 200);
+    public function actionWorkerOrdersHistory(){
+        getWorkerAndOrderAndDoneTime();
     }
 
     /**
