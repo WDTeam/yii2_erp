@@ -14,7 +14,8 @@ use yii\helpers\HtmlPurifier;
                 <th class="m_colo"><?= Html::encode($model->orderExtStatus->order_status_name) ?></th>
             </tr>
             <tr>
-            	<input type="hidden" value="<?= Html::encode($model->id) ?>" />
+            	<input type="hidden" class="order_id" value="<?= Html::encode($model->id) ?>" />
+            	<input type="hidden" class="customer_phone" value="<?= Html::encode($model->orderExtCustomer->order_customer_phone) ?>" />
             	<td><?= empty($model->orderExtCustomer->order_customer_phone) ? '用户手机' : Html::encode($model->orderExtCustomer->order_customer_phone) ?>　用户身份<br />
             	    <?= Html::encode($model->order_src_name) ?>下单<br />
             	    2015-09-18   9:00-11:00<br />
@@ -34,9 +35,9 @@ use yii\helpers\HtmlPurifier;
             	</td>
             	<td>
             		<p><a href="###">查看订单</a></p>
-            		<p><a href="###">投诉</a></p>
-            		<p><a href="###">发送短信</a></p>
-            		<p><a href="order/cancel-order?orderid=<?= Html::encode($model->id) ?>">取消订单</a></p>
+            		<p><a href="###" class="m_tousu">投诉</a></p>
+            		<!-- <p><a href="###">发送短信</a></p> -->
+            		<p><a href="###" class="m_quxiao">取消订单</a></p>
             	</td>
             </tr>
 		</table>

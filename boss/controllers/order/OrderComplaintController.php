@@ -3,7 +3,7 @@
 namespace boss\controllers\order;
 
 use Yii;
-use boss\models\order\OrderComplaint;
+use common\models\order\OrderComplaint;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -35,20 +35,19 @@ class OrderComplaintController extends BaseAuthController
     	$searchModel = new OrderComplaintSearch();
     	$orderComplaint = new OrderComplaint();
     	$comStatus = $orderComplaint->ComplaintStatus();
+    	$dev = $orderComplaint->Department();
     	$comLevel = $orderComplaint->ComplaintLevel();
     	$comType = $orderComplaint->ComplaintType();
     	$params = Yii::$app->request->getQueryParams();
     	$dataProvider = $searchModel->search($params);
-    	//print_r($dataProvider->getData());exit();
-    	$url = $_SERVER['HTTP_HOST'].$_SERVER['QUERY_STRING'];
     	return $this->render('index', [
     			'dataProvider' => $dataProvider,
     			'searchModel' => $searchModel,
     			'comStatus' => $comStatus,
     			'comLevel' => $comLevel,
     			'comType' => $comType,
-    			'params' => $params,
-    			'url' => $url
+    			'devpart' => $dev,
+    			'params' => $params
     	]);
         
     }
@@ -147,6 +146,20 @@ class OrderComplaintController extends BaseAuthController
         }
     }
     public function actionApp(){
-    	echo "你好";exit();
+    	$model = new OrderComplaint();
+    	$arr = array('OrderComplaint'=>array(
+    			'order_id'=>'1234',
+    			'complaint_type'=>'1',
+    			'complaint_phone'=>'',
+    			'complaint_section'=>'1',
+    			'complaint_level'=>'2',
+    			'complaint_content'=>'33241234231',
+    			'complaint_time'=>time(),
+    			'created_at' =>time()
+    	));
+    	$model->load($arr);
+    	$model->save();
+    	//$result = $model->insertModel($arr);
+    	exit();
     }
 }
