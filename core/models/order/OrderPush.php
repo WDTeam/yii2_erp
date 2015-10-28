@@ -60,7 +60,13 @@ class OrderPush extends Order
         }
 
         $order = OrderSearch::getOne($order_id);
-        return ['order_id' => $order->id, 'created_at' => $order->orderExtStatus->updated_at, 'jpush' => $order->orderExtFlag->order_flag_worker_jpush, 'ivr' => $order->orderExtFlag->order_flag_worker_ivr, 'push_status'=>$push_status];
+        return [
+            'order_id' => $order->id,
+            'created_at' => $order->orderExtStatus->updated_at,
+            'jpush' => $order->orderExtFlag->order_flag_worker_jpush,
+            'ivr' => $order->orderExtFlag->order_flag_worker_ivr,
+            'push_status'=>$push_status
+        ];
     }
 
     /**

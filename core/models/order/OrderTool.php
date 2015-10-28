@@ -22,7 +22,7 @@ class OrderTool extends Model
     }
 
     public static function createOrderBatchCode(){
-        return self::_code(self::ORDER_BATCH_ORDER_CODE);
+        return 'b'.self::_code(self::ORDER_BATCH_ORDER_CODE);
     }
 
     private static function _code($redis_key){

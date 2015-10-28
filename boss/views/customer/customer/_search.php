@@ -42,7 +42,7 @@ use \core\models\operation\OperationCity;
         echo $form->field($model, 'operation_city_id')->widget(Select2::classname(), [
             'name' => 'id',
             'hideSearch' => true,
-            'options'=>$cities(),
+            'data'=>array(),
             'options' => ['placeholder' => '选择城市', 'inline' => true],
             'pluginOptions' => [
                 'allowClear' => true

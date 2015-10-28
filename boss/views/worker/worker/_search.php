@@ -30,7 +30,7 @@ use kartik\date\DatePicker;
             'name' => 'worker_rule_id',
             'hideSearch' => true,
             'data' => $model::getOnlineCityList(),
-            'options' => ['placeholder' => '选择城市', 'inline' => true],
+            'options' => ['placeholder' => '选择城市...', 'inline' => true],
             'pluginOptions' => [
                 'allowClear' => true
             ],

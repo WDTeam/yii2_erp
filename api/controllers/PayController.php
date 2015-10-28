@@ -200,7 +200,7 @@ class PayController extends \api\components\Controller
                 $model->scenario = 'wx_h5_online_pay';
                 $ext_params['openid'] = $data[$name]['ext_params']['openid'];    //微信openid
             } elseif ($data[$name]['channel_id'] == '6' || $data[$name]['channel_id'] == '24') {
-                $model->scenario = 'alipay_web_pay';
+                $model->scenario = 'alipay_web_online_pay';
                 $ext_params['return_url'] = !empty($data[$name]['ext_params']['return_url']) ? $data[$name]['ext_params']['return_url'] :'';    //同步回调地址
                 $ext_params['show_url'] = !empty($data[$name]['ext_params']['show_url']) ? $data[$name]['ext_params']['show_url']: '';    //显示商品URL
             } elseif ($data[$name]['channel_id'] == '7') {
@@ -298,6 +298,16 @@ class PayController extends \api\components\Controller
     {
         $obj = new GeneralPay();
         $obj->alipayAppNotify(yii::$app->request->get());
+        exit;
+    }
+
+    /**
+     * 支付宝Wap回调
+     */
+    public function actionAlipayWapNotify()
+    {
+        $obj = new GeneralPay();
+        $obj->alipayWapNotify(yii::$app->request->get());
         exit;
     }
 

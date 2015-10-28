@@ -22,7 +22,7 @@ class UserController extends \api\components\Controller
     /**
      * @api {POST} v1/user/add-address 添加常用地址 (已完成100%) 
      *
-     * @apiName AddAddress
+     * @apiName actionAddAddress
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -106,7 +106,7 @@ class UserController extends \api\components\Controller
 
             if (!empty($model)) {
                 $ret = ['address' => $model];
-                return $this->send($ret, "常用地址添加成功",1);
+                return $this->send($ret, "常用地址添加成功", 1);
             } else {
                 return $this->send(null, "常用地址添加失败", 0, 403);
             }
@@ -118,7 +118,7 @@ class UserController extends \api\components\Controller
     /**
      * @api {GET} v1/user/get-addresses 常用地址列表 (已完成100%)
      *
-     * @apiName GetAddresses
+     * @apiName actionGetAddresses
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -191,7 +191,7 @@ class UserController extends \api\components\Controller
                 $addresses[] = $model;
             }
             $ret = ['addresses' => $addresses];
-            return $this->send($ret, "获取地址列表成功",1);
+            return $this->send($ret, "获取地址列表成功", 1);
         } else {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
@@ -200,7 +200,7 @@ class UserController extends \api\components\Controller
     /**
      * @api {DELETE} v1/user/delete-address 删除用户常用地址 (已完成100%) 
      *
-     * @apiName DeleteAddress
+     * @apiName actionDeleteAddress
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -240,7 +240,7 @@ class UserController extends \api\components\Controller
         }
 
         if (CustomerAddress::deleteAddress($addressId)) {
-            return $this->send(null, "删除成功",1);
+            return $this->send(null, "删除成功", 1);
         } else {
             return $this->send(null, "删除失败", 0, 403);
         }
@@ -249,7 +249,7 @@ class UserController extends \api\components\Controller
     /**
      * @api {PUT} v1/user/set-default-address 设置默认地址 (已完成100%) 
      * @apiDescription 用户每次下完单都会将该次地址设置为默认地址，下次下单优先使用默认地址
-     * @apiName SetDefaultAddress
+     * @apiName actionSetDefaultAddress
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -295,7 +295,7 @@ class UserController extends \api\components\Controller
         try {
             if (CustomerAddress::updateAddress($model->id, $model->operation_area_name, $model->customer_address_detail, $model->customer_address_nickname, $model->customer_address_phone)
             ) {
-                return $this->send(null, "设置默认地址成功",1);
+                return $this->send(null, "设置默认地址成功", 1);
             } else {
 
                 return $this->send(null, "设置默认地址失败", 0, 403);
@@ -308,7 +308,7 @@ class UserController extends \api\components\Controller
     /**
      * @api {PUT} v1/user/update-address 修改常用地址 (已完成100%) 
      *
-     * @apiName UpdateAddress
+     * @apiName actionUpdateAddress
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -370,7 +370,7 @@ class UserController extends \api\components\Controller
         try {
             if (CustomerAddress::updateAddress($model->id, @$params['operation_area_name'], @$params['address_detail'], @$params['address_nickname'], @$params['address_phone'])
             ) {
-                return $this->send(null, "修改常用地址成功",1);
+                return $this->send(null, "修改常用地址成功", 1);
             } else {
 
                 return $this->send(null, "修改常用地址失败", 0, 403);
@@ -472,7 +472,7 @@ class UserController extends \api\components\Controller
      * @api {DELETE} v1/user/delete-used-worker 删除常用阿姨 （功能已经实现,需再次核实 100%）
      *
      *
-     * @apiName deleteUsedWorker
+     * @apiName actionDeleteUsedWorker
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -533,7 +533,7 @@ class UserController extends \api\components\Controller
             $deleteData = \core\models\customer\CustomerWorker::deleteWorker(1, 2, 1);
             if ($deleteData) {
                 $deleteData = array(1);
-                return $this->send($deleteData, "删除成功",1);
+                return $this->send($deleteData, "删除成功", 1);
             } else {
                 return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
             }
@@ -544,7 +544,7 @@ class UserController extends \api\components\Controller
      * @api {GET} v1/user/black-list-workers 黑名单阿姨列表 （功能已经完成,需要核实传递参数和返回数据格式 已完成100%）
      * @apiDescription 获得该用户添加进黑名单的阿姨
      *
-     * @apiName blacklistworkers
+     * @apiName actionBlackListWorkers
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -607,7 +607,7 @@ class UserController extends \api\components\Controller
              */
             $workerData = \core\models\customer\CustomerWorker::blacklistworkers(1, 1);
             if ($workerData) {
-                return $this->send($workerData, "阿姨列表查询",1);
+                return $this->send($workerData, "阿姨列表查询", 1);
             } else {
                 return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
             }
@@ -618,7 +618,7 @@ class UserController extends \api\components\Controller
      * @api {DELETE} v1/user/remove-worker 移除黑名单中的阿姨 （功能已经实现,需要再次确认传递参数 已完成100%）
      *
      *
-     * @apiName RemoveWorker
+     * @apiName actionRemoveWorker
      * @apiGroup User
      *
      * @apiParam {String} access_token  用户认证
@@ -669,7 +669,7 @@ class UserController extends \api\components\Controller
             $deleteData = \core\models\customer\CustomerWorker::deleteWorker(1, 2, 0, 0);
             if ($deleteData) {
                 $deleteData = array(1);
-                return $this->send($deleteData, "移除成功",1);
+                return $this->send($deleteData, "移除成功", 1);
             } else {
                 return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
             }
@@ -680,7 +680,7 @@ class UserController extends \api\components\Controller
      * @api {GET} v1/user/get-user-money 用户余额和消费记录 （数据已经全部取出,需要给出所需字段,然后给予返回 已完成99% ;）
      * 
      *
-     * @apiName GetUserMoney
+     * @apiName actionGetUserMoney
      *
      * @apiGroup User
      *
@@ -775,7 +775,7 @@ class UserController extends \api\components\Controller
                 $userRecord = CustomerTransRecord::queryRecord($customer->id);
                 $ret["userBalance"] = $userBalance;
                 $ret["userRecord"] = $userRecord;
-                return $this->send($ret, "查询成功",1);
+                return $this->send($ret, "查询成功", 1);
             } catch (Exception $e) {
                 return $this->send(null, "boss系统错误", 0, 1024);
             }
@@ -788,7 +788,7 @@ class UserController extends \api\components\Controller
      * @api {GET} v1/user/get-user-score 用户积分明细 （功能已实现,不明确需求端所需字段格式 90%）
      *
      * @apiDescription 获取用户当前积分，积分兑换奖品信息，怎样获取积分信息
-     * @apiName GetUserScore
+     * @apiName actionGetUserScore
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -878,15 +878,24 @@ class UserController extends \api\components\Controller
     /**
      * @api {POST} v1/user/user-suggest 用户评价 （郝建设 100%）
      *
-     * @apiName UserSuggest
+     * @apiName actionUserSuggest
      * @apiGroup User
-     *
+
+     * @apiParam {int} order_id       '订单ID'
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {String} customer_comment_phone 用户电话
-     * @apiParam {String} customer_comment_level 评价级别
-     * @apiParam {String} [customer_comment_tag_ids] 评价标签
-     * @apiParam {String} [customer_comment_content] 评价内容
+     * @apiParam {int}  worker_id      '阿姨id'
+     * @apiParam {String} worker_tel  '阿姨电话'
+     * @apiParam {int}    operation_shop_district_id '商圈id'
+     * @apiParam {int}   province_id    '省id'
+     * @apiParam {int}   city_id        '市id'
+     * @apiParam {int}   county_id      '区id'
+     * @apiParam {String} customer_comment_phone    '用户电话'
+     * @apiParam {String} customer_comment_content  '评论内容'
+     * @apiParam {int}    customer_comment_level       '评论等级'
+     * @apiParam {String} customer_comment_level_name '评价等级名称'
+     * @apiParam {String} customer_comment_tag_ids  '评价标签'
+     * @apiParam {String} customer_comment_tag_names '评价标签名称'
+     * @apiParam {int}    customer_comment_anonymous  是否匿名评价,0匿名,1非匿名'
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -913,17 +922,19 @@ class UserController extends \api\components\Controller
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
-        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
-        }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
 
+        if (empty($param['worker_id']) || empty($param['order_id'])) {
+            return $this->send(null, "提交参数中缺少必要的参数.", 0, 403);
+        }
+
         if (!empty($customer) && !empty($customer->id)) {
             try {
-                $model = CustomerComment::addUserSuggest($customer->id, $param['order_id'], $param['customer_comment_phone'], $param['customer_comment_content'], $param['customer_comment_tag_ids'], $param['customer_comment_level']);
+                $param['customer_id'] = $customer->id;
+                $model = CustomerComment::addUserSuggest($param);
                 if (!empty($model)) {
-                    return $this->send([1], "添加评论成功",1);
+                    return $this->send([1], "添加评论成功", 1);
                 } else {
                     return $this->send(null, "添加评论失败", 0, 403);
                 }
@@ -938,7 +949,7 @@ class UserController extends \api\components\Controller
     /**
      * @api {GET} v1/user/get-comment-level 获取用户评价等级 （郝建设 100%）
      *
-     * @apiName GetCommentLevel
+     * @apiName actionGetCommentLevel
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -981,7 +992,7 @@ class UserController extends \api\components\Controller
                 $level = CustomerCommentLevel::getCommentLevel();
                 if (!empty($level)) {
                     $ret = ['comment' => $level];
-                    return $this->send($ret, "获取评论级别成功",1);
+                    return $this->send($ret, "获取评论级别成功", 1);
                 } else {
                     return $this->send(null, "获取评论级别失败", 0, 403);
                 }
@@ -996,7 +1007,7 @@ class UserController extends \api\components\Controller
     /**
      * @api {GET} v1/user/get-comment-level-tag 获取用户评价等级下面的标签 （郝建设 100%）
      *
-     * @apiName GetCommentLevelTag
+     * @apiName actionGetCommentLevelTag
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -1037,11 +1048,11 @@ class UserController extends \api\components\Controller
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
             try {
-                $level =CustomerCommentTag::getCommentTag($param['customer_comment_level']);
+                $level = CustomerCommentTag::getCommentTag($param['customer_comment_level']);
 
                 if (!empty($level)) {
                     $ret = ['commentTag' => $level];
-                    return $this->send($ret, "获取评论标签成功",1);
+                    return $this->send($ret, "获取评论标签成功", 1);
                 } else {
                     return $this->send(null, "获取评论标签失败", 0, 403);
                 }
@@ -1052,8 +1063,8 @@ class UserController extends \api\components\Controller
             return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
         }
     }
-    
-      /**
+
+    /**
      * @api {GET} v1/user/get-level-tag 获取评论的level和tag （郝建设 100%）
      *
      * @apiName actionGetLeveltag
@@ -1181,7 +1192,7 @@ class UserController extends \api\components\Controller
                 }
 
                 if (!empty($level)) {
-                    return $this->send($level, "获取标签和子标签成功",1);
+                    return $this->send($level, "获取标签和子标签成功", 1);
                 } else {
                     return $this->send(null, "获取标签和子标签失败", 0, 403);
                 }
@@ -1193,11 +1204,64 @@ class UserController extends \api\components\Controller
         }
     }
 
+    /**
+     * @api {GET} v1/user/get-comment-count 获取用户评价数量 （郝建设 100%）
+     *
+     * @apiName actionGetCommentCount
+     * @apiGroup User
+     *
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "code": "1",
+     *       "msg": "获取用户评论数量成功",
+     *       "ret": {
+     *          "CommentCount":"评论数量"
+     *
+     *           }
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "0",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *
+     *     }
+     *
+     */
+    public function actionGetCommentCount()
+    {
+        $param = Yii::$app->request->get();
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+
+        if (!empty($customer) && !empty($customer->id)) {
+            try {
+
+                $level = CustomerComment::getCustomerCommentCount($customer->id);
+                $ret['CommentCount'] = $level;
+
+                return $this->send($ret, "获取用户评价数量", 1);
+            } catch (Exception $e) {
+                return $this->send(null, "boss系统错误", 0, 1024);
+            }
+        } else {
+            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
+        }
+    }
 
     /**
      * @api {GET} v1/user/get-goods 获取给定经纬度范围内是否有该服务 （郝建设 100%）
      *
-     * @apiName GetGoods
+     * @apiName actionGetGoods
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -1226,7 +1290,6 @@ class UserController extends \api\components\Controller
      *     }
      *
      */
-    
     public function actionGetGoods()
     {
         $param = Yii::$app->request->get();
@@ -1239,7 +1302,7 @@ class UserController extends \api\components\Controller
             try {
                 $service = Order::getGoods($param['longitude'], $param['latitude'], $param['order_service_type_id']);
                 if ($service) {
-                    return $this->send(1, "该服务获取成功",1);
+                    return $this->send(1, "该服务获取成功", 1);
                 } else {
                     return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
                 }
@@ -1249,6 +1312,6 @@ class UserController extends \api\components\Controller
         } else {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
-    } 
+    }
 
 }

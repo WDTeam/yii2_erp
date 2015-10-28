@@ -8,40 +8,10 @@ use \core\models\customer\CustomerAccessToken;
 use \core\models\operation\coupon\CouponCustomer;
 use \core\models\operation\coupon\Coupon;
 use \core\models\operation\coupon\CouponCode;
+use \api\models\LoginCustomer;
 class CouponController extends \api\components\Controller
 {
-     /**
-     * 公用检测客户登录情况
-     * @param type $param 
-     */
-    private function checkCustomerLogin($param=array()){
-        $msg = array('code'=>0,'msg'=>'','customer_id'=>0);
-        if(!isset($param['access_token'])||!$param['access_token']){
-           $msg['msg'] = '请登录';
-           return $msg;
-        }
-        try{
-            $isright_token = CustomerAccessToken::checkAccessToken($param['access_token']);
-            $customer = CustomerAccessToken::getCustomer($param['access_token']);
-        }catch (\Exception $e) {
-            $msg['code'] = '1024';
-            $msg['msg'] = 'boss系统错误';
-            return $msg;
-        }
-        if(!$isright_token){
-            $msg['msg'] = '用户认证已经过期,请重新登录';
-            return $msg;
-        }
-        if (!$customer|| !$customer->id) {
-            $msg['msg'] = '用户不存在';
-            return $msg;
-        }
-        //验证通过
-        $msg['code'] = 1;
-        $msg['msg'] = '验证通过';
-        $msg['customer_id'] = $customer->id;
-        return $msg;
-    }
+    
     /**
      * @api {POST} /coupon/exchange-coupon 兑换优惠劵 （李勇 100%）
      *
@@ -117,7 +87,7 @@ class CouponController extends \api\components\Controller
     }
 
     /**
-     * @api {Get} /coupon/coupons 获取用户优惠码列表（包括该用户该城市下的优惠码和通用的优惠码） （李勇 80%）
+     * @api {Get} /coupon/coupons 获取用户优惠码列表（包括该用户该城市下的优惠码和通用的优惠码） （李勇 100%）
      *
      * @apiName Coupons
      * @apiGroup coupon
@@ -167,7 +137,7 @@ class CouponController extends \api\components\Controller
 
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
          //检测用户是否登录
-        $checkResult = $this->checkCustomerLogin($param);
+        $checkResult =LoginCustomer::checkCustomerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
@@ -189,7 +159,7 @@ class CouponController extends \api\components\Controller
         
     }
     /**
-     * @api {Get} /coupon/all-coupons 获取用户全部优惠码列表（包括可用的、不可用的、所有城市的、通用的） （李勇 80%）
+     * @api {Get} /coupon/all-coupons 获取用户全部优惠码列表（包括可用的、不可用的、所有城市的、通用的） （李勇 100%）
      *
      * @apiName AllCoupons
      * @apiGroup coupon
@@ -239,7 +209,7 @@ class CouponController extends \api\components\Controller
 
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
          //检测用户是否登录
-        $checkResult = $this->checkCustomerLogin($param);
+        $checkResult =LoginCustomer::checkCustomerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
@@ -309,7 +279,7 @@ class CouponController extends \api\components\Controller
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
         //检测用户是否登录
-        $checkResult = $this->checkCustomerLogin($param);
+        $checkResult = LoginCustomer::checkCustomerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         }

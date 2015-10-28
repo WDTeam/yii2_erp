@@ -4,15 +4,15 @@ namespace api\controllers;
 use Yii;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\worker\Worker;
+use \api\models\Worker as ApiWorker;
 use \core\models\worker\WorkerSkill;
 use \core\models\worker\WorkerVacationApplication;
 use \core\models\finance\FinanceSettleApplySearch;
 use \core\models\order\OrderComplaint;
-use \core\models\worker\WorkerAccessToken;
 use \core\models\operation\OperationShopDistrictCoordinate;
 use \core\models\customer\CustomerComment;
 use \core\models\worker\WorkerTaskLog;
-use core\models\order\OrderSearch;
+use \core\models\order\OrderSearch;
 
 class WorkerController extends \api\components\Controller
 {
@@ -85,38 +85,6 @@ class WorkerController extends \api\components\Controller
     }
 
     /**
-     * 公用检测阿姨登录情况
-     * @param type $param 
-     */
-    private function checkWorkerLogin($param=array()){
-        $msg = array('code'=>0,'msg'=>'','worker_id'=>0);
-        if(!isset($param['access_token'])||!$param['access_token']){
-           $msg['msg'] = '请登录';
-           return $msg;
-        }
-        try{
-            $isright_token = WorkerAccessToken::checkAccessToken($param['access_token']);
-            $worker = WorkerAccessToken::getWorker($param['access_token']);
-        }catch (\Exception $e) {
-            $msg['code'] = '1024';
-            $msg['msg'] = 'boss系统错3误';
-            return $msg;
-        }
-        if(!$isright_token){
-            $msg['msg'] = '用户认证已经过期,请重新登录';
-            return $msg;
-        }
-        if (!$worker|| !$worker->id) {
-            $msg['msg'] = '阿姨不存在';
-            return $msg;
-        }
-        //验证通过
-        $msg['code'] = 1;
-        $msg['msg'] = '验证通过';
-        $msg['worker_id'] = $worker->id;
-        return $msg;
-    }
-    /**
      * @api {POST} /worker/handle-worker-leave  阿姨请假（田玉星 80%）
      *
      * @apiName actionHandleWorkerLeave
@@ -151,7 +119,7 @@ class WorkerController extends \api\components\Controller
     {
         $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //检测阿姨是否登录
-        $checkResult = $this->checkWorkerLogin($param);
+        $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
@@ -232,7 +200,7 @@ class WorkerController extends \api\components\Controller
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //检测阿姨是否登录
-        $checkResult = $this->checkWorkerLogin($param);
+        $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
@@ -310,7 +278,7 @@ class WorkerController extends \api\components\Controller
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //检测阿姨是否登录
-        $checkResult = $this->checkWorkerLogin($param);
+        $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         }
@@ -366,7 +334,7 @@ class WorkerController extends \api\components\Controller
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //检测阿姨是否登录
-        $checkResult = $this->checkWorkerLogin($param);
+        $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
@@ -427,6 +395,7 @@ class WorkerController extends \api\components\Controller
      *   "ret": {
      *       "per_page": 1,
      *       "page_num": 10,
+     *       "worker_is_block":1,
      *       "data": [
      *           {
      *               "complaint_content": "打扫不干净",
@@ -447,7 +416,7 @@ class WorkerController extends \api\components\Controller
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //检测阿姨是否登录
-        $checkResult = $this->checkWorkerLogin($param);
+        $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
@@ -462,6 +431,8 @@ class WorkerController extends \api\components\Controller
         }
         $page_num = intval($param['page_num']);
         try{
+            $workerInfo = Worker::getWorkerListByIds($checkResult['worker_id'],'worker_is_block');
+            $worker_is_block = $workerInfo[0]['worker_is_block'];   
             $conplainList = OrderComplaint::getWorkerComplain($checkResult['worker_id']);
             if($conplainList){
                 foreach($conplainList as $key=>$val){
@@ -475,6 +446,7 @@ class WorkerController extends \api\components\Controller
         $ret = [
             'per_page'=>$per_page,
             'page_num'=>$page_num,
+            'worker_is_block'=> $worker_is_block,
             'data'  => $conplainList
         ];
         return $this->send($ret, "操作成功.");
@@ -515,7 +487,7 @@ class WorkerController extends \api\components\Controller
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
          //检测阿姨是否登录
-        $checkResult = $this->checkWorkerLogin($param);
+        $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         }
@@ -581,7 +553,7 @@ class WorkerController extends \api\components\Controller
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //检测阿姨是否登录
-        $checkResult = $this->checkWorkerLogin($param);
+        $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
@@ -665,7 +637,7 @@ class WorkerController extends \api\components\Controller
     public function actionGetWorkerBillDetail(){
         $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
         //检测阿姨是否登录
-        $checkResult = $this->checkWorkerLogin($param);
+        $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         }  
@@ -738,7 +710,7 @@ class WorkerController extends \api\components\Controller
     public function actionGetWorkerTasktimeList(){
          $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
         //检测阿姨是否登录
-        $checkResult = $this->checkWorkerLogin($param);
+        $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         }  
@@ -802,7 +774,7 @@ class WorkerController extends \api\components\Controller
     public function actionGetWorkerTaskrewardList(){
         $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
         //检测阿姨是否登录
-        $checkResult = $this->checkWorkerLogin($param);
+        $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
@@ -858,7 +830,7 @@ class WorkerController extends \api\components\Controller
     public function actionGetWorkerPunishList(){
         $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
         //检测阿姨是否登录
-        $checkResult = $this->checkWorkerLogin($param);
+        $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         }
@@ -921,7 +893,7 @@ class WorkerController extends \api\components\Controller
     public function actionWorkerBillConfirm(){
         $param =  json_decode(Yii::$app->request->getRawBody(),true);
         //检测阿姨是否登录
-        $checkResult = $this->checkWorkerLogin($param);
+        $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         }
@@ -957,7 +929,8 @@ class WorkerController extends \api\components\Controller
      *          "worker_name": "李刘珍",
      *          "worker_phone": "13121999270",
      *          "head_url": "",
-     *          "worker_identity": "兼职",
+     *          "worker_identity": "全职",
+     *          "worker_identity_id":"1",
      *          "worker_role": "保姆",
      *          "worker_start": 4.5,
      *          "personal_skill": [
@@ -980,7 +953,7 @@ class WorkerController extends \api\components\Controller
     public function actionGetWorkerCenter(){
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //检测阿姨是否登录
-        $checkResult = $this->checkWorkerLogin($param);
+        $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         }  
@@ -995,6 +968,7 @@ class WorkerController extends \api\components\Controller
             "worker_phone" => $workerInfo['worker_phone'],
             "head_url" => $workerInfo['worker_photo'],
             "worker_identity" => $workerInfo['worker_identity_description'],//身份
+            "worker_identity_id" => $workerInfo['worker_identity_id'],//身份类型
             "worker_role" => $workerInfo["worker_type_description"],
             'worker_start' => $workerInfo["worker_star"],
             'total_money' => $workerInfo['worker_stat_order_money'],
@@ -1046,18 +1020,25 @@ class WorkerController extends \api\components\Controller
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *      "code": "ok",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      {
-     *          "result": "1",
-     *          "msg": "ok",
-     *          "titleMsg": "您本月已请假0天，本月剩余请假2天",
-     *          "orderTimeList": ["2015-09-14","2015-09-15",],
-     *          "workerLeaveList": ["2015-09-13","2015-09-16",],
-     *      }
-     * }
+     *{
+     *   "code": 1,
+     *   "msg": "操作成功",
+     *   "ret": {
+     *       "2015-10-28": true,
+     *       "2015-10-29": true,
+     *       "2015-10-30": false,
+     *       "2015-10-31": false,
+     *       "2015-11-01": false,
+     *       "2015-11-02": true,
+     *       "2015-11-03": true,
+     *       "2015-11-04": true,
+     *       "2015-11-05": true,
+     *       "2015-11-06": false,
+     *       "2015-11-07": false,
+     *       "2015-11-08": false,
+     *       "2015-11-09": true,
+     *   }
+     *}
      *
      * @apiError SessionIdNotFound 未找到会话ID.
      *
@@ -1072,7 +1053,7 @@ class WorkerController extends \api\components\Controller
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //检测阿姨是否登录
-        $checkResult = $this->checkWorkerLogin($param);
+        $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
@@ -1086,14 +1067,6 @@ class WorkerController extends \api\components\Controller
         }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
-        $ret = [
-            "result" => 1,
-            "msg" => "ok",
-            "titleMsg" => "您本月已请假0天，本月剩余请假2天",
-            "orderTimeList" => ["2015-09-14", "2015-09-15"],
-            "workerLeaveList" => ["2015-09-14", "2015-09-15"]
-
-        ];
         return $this->send($ret, "操作成功", 1);
     }
 
@@ -1116,7 +1089,7 @@ class WorkerController extends \api\components\Controller
     
     
      /**
-     * @api {get} /worker/task-doing  获得进行中的任务列表 (李勇70%)
+     * @api {get} /worker/task-doing  获得进行中的任务列表 (李勇100%)
      * @apiName actionTaskDoing
      * @apiGroup Worker
      *
@@ -1165,7 +1138,7 @@ class WorkerController extends \api\components\Controller
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //检测阿姨是否登录
-        $checkResult = $this->checkWorkerLogin($param);
+        $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
@@ -1184,7 +1157,7 @@ class WorkerController extends \api\components\Controller
     
    
      /**
-     * @api {get} /worker/task-done  获得已完成的任务列表 (李勇70%)
+     * @api {get} /worker/task-done  获得已完成的任务列表 (李勇100%)
      * @apiName actionTaskDone
      * @apiGroup Worker
      * @apiParam {String} per_page  每页显示多少条.
@@ -1234,7 +1207,7 @@ class WorkerController extends \api\components\Controller
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //检测阿姨是否登录
-        $checkResult = $this->checkWorkerLogin($param);
+        $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         }
@@ -1256,7 +1229,7 @@ class WorkerController extends \api\components\Controller
     }
     
      /**
-     * @api {get} /worker/task-fail  获得已失败的任务列表 (李勇70%)
+     * @api {get} /worker/task-fail  获得已失败的任务列表 (李勇100%)
      * @apiName actionTaskFail
      * @apiGroup Worker
      * @apiParam {String} per_page  每页显示多少条.
@@ -1306,7 +1279,7 @@ class WorkerController extends \api\components\Controller
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //检测阿姨是否登录
-        $checkResult = $this->checkWorkerLogin($param);
+        $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
@@ -1328,12 +1301,12 @@ class WorkerController extends \api\components\Controller
     }
 
     /**
-     * @api {get} /worker/check-task  查看任务的详情 (李勇70%)
+     * @api {get} /worker/check-task  查看任务的详情 (李勇100%)
      * @apiName actionCheckTask
      * @apiGroup Worker
      *
      * @apiParam {String} access_token    阿姨登录 token.
-     * @apiParam {String} task_id    任务id
+     * @apiParam {String} id    任务id
      * @apiParam {String} platform_version 平台版本号.
      *
      * @apiSuccessExample {json} Success-Response:
@@ -1378,18 +1351,20 @@ class WorkerController extends \api\components\Controller
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //检测阿姨是否登录
-        $checkResult = $this->checkWorkerLogin($param);
+        $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
         $worker_id = $checkResult['worker_id'];
-        $task_id = $param['task_id'];
+        $id = $param['id'];
         //获取任务的详情
         try{
-            $task_log=WorkerTaskLog::findOne(['id'=>$task_id])->getDetail();
+            $task_log=WorkerTaskLog::findOne(['id'=>$id])->getDetail();
         }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
+                echo "ee";die;
+
         $worker_task_log_start=$task_log['worker_task_log_start'];
         $worker_task_log_end=$task_log['worker_task_log_end'];
         //获取任务的订单列表
