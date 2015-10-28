@@ -36,7 +36,7 @@ use \core\models\operation\OperationCity;
         echo $form->field($model, 'coupon_city_id')->widget(Select2::classname(), [
             'name' => 'id',
             'hideSearch' => true,
-            'data' => $cities(),
+            'data' => array(),
             'options' => ['placeholder' => '选择城市', 'inline' => true],
             'pluginOptions' => [
                 'allowClear' => true
