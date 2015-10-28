@@ -363,10 +363,10 @@ class ServiceController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} v1/service/boutique-cleaning 获得所有精品保洁项目（赵顺利 100%）
+     * @api {GET} v1/service/cleaning-task 获得所有保洁任务项目（赵顺利 100%）
      * @apiGroup service
-     * @apiName actionBoutiqueCleaning
-     * @apiDescription 获取城市所有精品保洁
+     * @apiName actionCleaningTask
+     * @apiDescription 获取城市所有保洁任务
      *
      * @apiParam {String} city_id 城市
      * @apiParam {String} address_id 地址id
@@ -402,7 +402,7 @@ class ServiceController extends \api\components\Controller
      *       "msg": "该城市暂未开通"
      *     }
      */
-    public function actionBoutiqueCleaning()
+    public function actionCleaningTask()
     {
         $params = Yii::$app->request->get();
         if (empty($params) || empty($params['city_id']) || empty($params['build_area']))

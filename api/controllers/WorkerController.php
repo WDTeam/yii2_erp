@@ -7,6 +7,7 @@ use \core\models\worker\Worker;
 use \core\models\worker\WorkerSkill;
 use \core\models\worker\WorkerVacationApplication;
 use \core\models\finance\FinanceSettleApplySearch;
+use \core\models\order\OrderComplaint;
 use \core\models\worker\WorkerAccessToken;
 use \core\models\operation\OperationShopDistrictCoordinate;
 
@@ -381,8 +382,13 @@ class WorkerController extends \api\components\Controller
             $param['page_num'] = 10;
         }
         $page_num = intval($param['page_num']);
-
-        //数据返回
+        
+        //获取数据
+        try{
+            $commentList = CustomerComment::getCustomerCommentworkerlist($checkResult['worker_id'],$param['comment_type'],$per_page,$page_num);
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
         $ret = [
             'per_page'=>$per_page,
             'page_num'=>$page_num,
@@ -408,9 +414,7 @@ class WorkerController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-complain 获取阿姨对应的投诉 (田玉星 80%)
-     *
-     * @apiDescription 【备注：等待model底层支持】
+     * @api {GET} /worker/get-worker-complain 获取阿姨对应的投诉 (田玉星 100%)
      *
      * @apiName actionGetWorkerComplain
      * @apiGroup Worker
@@ -425,21 +429,19 @@ class WorkerController extends \api\components\Controller
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *      "code": "ok",
-     *      "msg": "操作成功.",
-     *      "ret": [
-     *         {
-     *             "complain_id": "1",
-     *             "complain": "这是第一条投诉",
-     *             "complain_date": "2015-10-22"
-     *         },
-     *         {
-     *             "complain_id": "1",
-     *             "complain": "这是第二条投诉",
-     *             "complain_date": "2015-10-22"
-     *         }
-     *      ]
-     * }
+     *   "code": 1,
+     *   "msg": "操作成功.",
+     *   "ret": {
+     *       "per_page": 1,
+     *       "page_num": 10,
+     *       "data": [
+     *           {
+     *               "complaint_content": null,
+     *               "complaint_time": "1970-01-01 08:00:00"
+     *           }
+     *       ]
+     *   }
+     *   }
      *
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
@@ -456,6 +458,7 @@ class WorkerController extends \api\components\Controller
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
+        $checkResult['worker_id'] = 123;
         //判断页码
         if (!isset($param['per_page']) || !intval($param['per_page'])) {
             $param['per_page'] = 1;
@@ -466,24 +469,21 @@ class WorkerController extends \api\components\Controller
             $param['page_num'] = 10;
         }
         $page_num = intval($param['page_num']);
-        
+        try{
+            $conplainList = OrderComplaint::getWorkerComplain($checkResult['worker_id']);
+            if($conplainList){
+                foreach($conplainList as $key=>$val){
+                    $conplainList[$key]['complaint_time'] = date('Y-m-d H:i:s',$val['complaint_time']);
+                }
+            }
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
         //数据返回
         $ret = [
-            [
-                "comment_id" => '1',
-                "comment" => "这是第一条投诉",
-                'comment_date' => date('Y-m-d')
-            ],
-            [
-                "comment_id" => '1',
-                "comment" => "这是第二条投诉",
-                'comment_date' => date('Y-m-d')
-            ],
-            [
-                "comment_id" => '1',
-                "comment" => "这是第三条投诉",
-                'comment_date' => date('Y-m-d')
-            ],
+            'per_page'=>$per_page,
+            'page_num'=>$page_num,
+            'data'  => $conplainList
         ];
         return $this->send($ret, "操作成功.");
     }
@@ -548,10 +548,8 @@ class WorkerController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-settle-list 获取阿姨对账单列表 (田玉星 95%)
+     * @api {GET} /worker/get-worker-settle-list 获取阿姨对账单列表 (田玉星 100%)
      * 
-     * @apiDescription 【备注：model微调】
-     *
      * @apiName actionGetWorkerSettleList 
      * @apiGroup Worker
      *
@@ -624,7 +622,7 @@ class WorkerController extends \api\components\Controller
             }else{
                 $settleArr[$key]['settle_date'] = date('m',strtotime($val['settle_starttime']));
             }
-            $settleArr[$key]['settle_type'] = $val['settle_cycle_type'];
+            $settleArr[$key]['settle_type'] = $val['settle_cycle'];
             $settleArr[$key]['order_count'] = $val['order_count'];
             $settleArr[$key]['worker_income'] = $val['worker_income'];
             $settleArr[$key]['settle_status'] = $val['settle_status'];
@@ -1065,7 +1063,11 @@ class WorkerController extends \api\components\Controller
         }
         $worker_id = $checkResult['worker_id'];
         $type = $param['type'];
-        //$ret= WorkerVacationApplication::getApplicationTimeLine($worker_id,$type);
+//        try{
+//            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id,$type);
+//        }catch (\Exception $e) {
+//            return $this->send(null, "boss系统错误", 1024, 403);
+//        }
         $ret = [
             "result" => 1,
             "msg" => "ok",
@@ -1150,7 +1152,11 @@ class WorkerController extends \api\components\Controller
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
         $worker_id = $checkResult['worker_id'];
-        //$ret= WorkerVacationApplication::getApplicationTimeLine($worker_id);
+//        try{
+//            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id);
+//        }catch (\Exception $e) {
+//            return $this->send(null, "boss系统错误", 1024, 403);
+//        }
         $ret = [
                 [
                     "id"=> "任务id",
@@ -1236,7 +1242,11 @@ class WorkerController extends \api\components\Controller
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
         $worker_id = $checkResult['worker_id'];
-        //$ret= WorkerVacationApplication::getApplicationTimeLine($worker_id);
+//        try{
+//            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id);
+//        }catch (\Exception $e) {
+//            return $this->send(null, "boss系统错误", 1024, 403);
+//        }
         $ret = [
                 [
                     "id"=> "任务id",
@@ -1320,7 +1330,11 @@ class WorkerController extends \api\components\Controller
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
         $worker_id = $checkResult['worker_id'];
-        //$ret= WorkerVacationApplication::getApplicationTimeLine($worker_id);
+//        try{
+//            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id);
+//        }catch (\Exception $e) {
+//            return $this->send(null, "boss系统错误", 1024, 403);
+//        }
         $ret = [
                 [
                     "id"=> "任务id",
@@ -1406,7 +1420,11 @@ class WorkerController extends \api\components\Controller
         } 
         $worker_id = $checkResult['worker_id'];
         $task_id = $param['task_id'];
-        //$ret= WorkerVacationApplication::getApplicationTimeLine($worker_id,$task_id);
+//        try{
+//            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id,$task_id);
+//        }catch (\Exception $e) {
+//            return $this->send(null, "boss系统错误", 1024, 403);
+//        }
         $ret = [
                 [
                     "id"=> "任务id",

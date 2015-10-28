@@ -34,21 +34,20 @@ class OrderComplaintController extends BaseAuthController
     {   
     	$searchModel = new OrderComplaintSearch();
     	$orderComplaint = new OrderComplaint();
-    	$comStatus = $orderComplaint->ComplaintStatus();
-    	$comLevel = $orderComplaint->ComplaintLevel();
-    	$comType = $orderComplaint->ComplaintType();
+    	$comStatus = OrderComplaint::ComplaintStatus();
+    	$dev = OrderComplaint::Department();
+    	$comLevel = OrderComplaint::ComplaintLevel();
+    	$comType = OrderComplaint::ComplaintType();
     	$params = Yii::$app->request->getQueryParams();
     	$dataProvider = $searchModel->search($params);
-    	//print_r($dataProvider->getData());exit();
-    	$url = $_SERVER['HTTP_HOST'].$_SERVER['QUERY_STRING'];
     	return $this->render('index', [
     			'dataProvider' => $dataProvider,
     			'searchModel' => $searchModel,
     			'comStatus' => $comStatus,
     			'comLevel' => $comLevel,
     			'comType' => $comType,
-    			'params' => $params,
-    			'url' => $url
+    			'devpart' => $dev,
+    			'params' => $params
     	]);
         
     }
@@ -146,7 +145,30 @@ class OrderComplaintController extends BaseAuthController
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-    public function actionApp(){
-    	echo "你好";exit();
+    /**
+     * 后端订单投诉添加业务逻辑
+     * @return boolean
+     */
+    public function actionBack(){
+    	$flag = false;
+    	$model = new OrderComplaint();
+    	$params = Yii::$app->request->post();$arr= array();
+    	if(!empty($params) && is_array($params)){
+    		foreach ($params as $value){
+    			$arr['OrderComplaint']['order_id'] = $value['order_id'];
+    			$arr['OrderComplaint']['complaint_detail'] = $value['complaint_detail'];
+    			$arr['OrderComplaint']['cumstomer_phone'] = $value['cumstomer_phone'];
+    			foreach ($value['data'] as $key=>$val){
+    				$arr['OrderComplaint']['complaint_type'] = $val['type'];
+    				$arr['OrderComplaint']['complaint_section'] = $val['department'];
+    				$arr['OrderComplaint']['complaint_level'] = $val['level'];
+    				if($model->load($arr) && $model->save()){
+    					$flag = true;
+    				}
+    			}
+    		}
+    		
+    	}
+    	return $flag;
     }
 }
