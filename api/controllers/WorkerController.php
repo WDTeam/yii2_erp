@@ -1068,7 +1068,7 @@ class WorkerController extends \api\components\Controller
 //        try{
 //            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id,$type);
 //        }catch (\Exception $e) {
-//            return $this->send(null, "查看请假情况失败", 0, 403);
+//            return $this->send(null, "boss系统错误", 1024, 403);
 //        }
         $ret = [
             "result" => 1,
@@ -1157,7 +1157,7 @@ class WorkerController extends \api\components\Controller
 //        try{
 //            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id);
 //        }catch (\Exception $e) {
-//            return $this->send(null, "您没有任务哦", 0, 403);
+//            return $this->send(null, "boss系统错误", 1024, 403);
 //        }
         $ret = [
                 [
@@ -1247,7 +1247,7 @@ class WorkerController extends \api\components\Controller
 //        try{
 //            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id);
 //        }catch (\Exception $e) {
-//            return $this->send(null, "您没有任务哦", 0, 403);
+//            return $this->send(null, "boss系统错误", 1024, 403);
 //        }
         $ret = [
                 [
@@ -1335,7 +1335,7 @@ class WorkerController extends \api\components\Controller
 //        try{
 //            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id);
 //        }catch (\Exception $e) {
-//            return $this->send(null, "您没有任务哦", 0, 403);
+//            return $this->send(null, "boss系统错误", 1024, 403);
 //        }
         $ret = [
                 [
@@ -1425,7 +1425,7 @@ class WorkerController extends \api\components\Controller
 //        try{
 //            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id,$task_id);
 //        }catch (\Exception $e) {
-//            return $this->send(null, "您没有任务哦", 0, 403);
+//            return $this->send(null, "boss系统错误", 1024, 403);
 //        }
         $ret = [
                 [
