@@ -24,16 +24,26 @@ $this->params['breadcrumbs'][] = $this->title;
             'type'=>DetailView::TYPE_INFO,
         ],
         'attributes' => [
-            'id',
+//            'id',
             'card_name',
-            'card_type',
-            'card_level',
+			[
+				'label' =>'服务卡类型','value'=>$deploy['card_type'][$model->card_type],
+			],
+            [
+				'label' =>'服务卡级别','value'=>$deploy['card_level'][$model->card_level],
+			],
             'par_value',
             'reb_value',
             'use_scope',
             'valid_days',
-            'created_at',
-            'updated_at',
+//            'created_at',
+//            'updated_at',
+			[
+				'label' =>'创建时间','value'=>date("Y-m-d",$model->created_at),
+			],
+			[
+				'label' =>'更改时间','value'=>date("Y-m-d",$model->updated_at),
+			]
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],

@@ -13,7 +13,7 @@ return [
     /*
      * 自定义 WORKER-TASK 服务进程名ID前缀
      */
-    'SERVER_WORKER_PROCESS_ID' => 'autoassign-server-worker-id-',    
+    'SERVER_WORKER_PROCESS_ID' => 'autoassign-server-worker-id-',
     /*
      * Redis 服务IP（推荐使用域名）
      */
@@ -34,12 +34,12 @@ return [
      * 服务监听地址（默认 0.0.0.0 勿改）
      */
     'SERVER_LISTEN_IP' => '0.0.0.0',
-    
+
     /*
      * 服务监听端口（默认 9501）
      */
     'SERVER_LISTEN_PORT' => 9501,
-    
+
     /*
      * 设置启动的worker进程数
      * 业务代码是全异步非阻塞的，这里设置为CPU的1-4倍最合理
@@ -49,12 +49,12 @@ return [
      * 所以这里适当即可。不要配置过大。
      */
     'WORKER_NUM' => 2,
-    
+
     /*
      * 配置task进程的数量
      */
     'TASK_WORKER_NUM' => 8,
-    
+
     /*
      * 守护进程化
      * 设置daemonize => 1时，程序将转入后台作为守护进程运行。长时间运行的服务器端程序必须启用此项。
@@ -63,32 +63,32 @@ return [
      * 如果未设置log_file，将重定向到 /dev/null，所有打印屏幕的信息都会被丢弃
      */
     'DAEMONIZE' => false,
-    
+
     /*
      * 日志文件
      */
     'LOG_FILE' => './server.log',
-    
+
     /*
      * 设置worker进程的最大任务数
      */
     'MAX_REQUEST' => 1000,
-    
+
     // 定时器 单位秒
     'TIMER_INTERVAL' => 6,
-    
+
     // 全职阿姨 0-5分钟
     'FULLTIME_WORKER_TIMEOUT' => 5,
-    
+
     // 兼职阿姨 5-15分钟
     'FREETIME_WORKER_TIMEOUT' => 15,
-    
+
     // 超时人工指派 >15分钟
     'SYSTEM_ASSIGN_TIMEOUT' => 15,
-    
+
     // 配置 BOSS API 地址
     'BOSS_API_URL' => 'http://api.me/order/push/',
-    
+
     // 配置 BOSS CONFIG 地址
     'BOSS_CONFIG_URL' => 'http://api.me/config/',
 ];

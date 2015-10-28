@@ -52,11 +52,12 @@ class OperationServerCardController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
-
+		$deploy = $model->getServerCardDeploy();
+	
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
         return $this->redirect(['view', 'id' => $model->id]);
         } else {
-        return $this->render('view', ['model' => $model]);
+        return $this->render('view', ['model' => $model,'deploy'=>$deploy]);
 }
     }
 

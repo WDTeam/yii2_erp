@@ -8,40 +8,10 @@ use \core\models\customer\CustomerAccessToken;
 use \core\models\operation\coupon\CouponCustomer;
 use \core\models\operation\coupon\Coupon;
 use \core\models\operation\coupon\CouponCode;
+use \api\models\LoginCustomer;
 class CouponController extends \api\components\Controller
 {
-     /**
-     * 公用检测客户登录情况
-     * @param type $param 
-     */
-    private function checkCustomerLogin($param=array()){
-        $msg = array('code'=>0,'msg'=>'','customer_id'=>0);
-        if(!isset($param['access_token'])||!$param['access_token']){
-           $msg['msg'] = '请登录';
-           return $msg;
-        }
-        try{
-            $isright_token = CustomerAccessToken::checkAccessToken($param['access_token']);
-            $customer = CustomerAccessToken::getCustomer($param['access_token']);
-        }catch (\Exception $e) {
-            $msg['code'] = '1024';
-            $msg['msg'] = 'boss系统错误';
-            return $msg;
-        }
-        if(!$isright_token){
-            $msg['msg'] = '用户认证已经过期,请重新登录';
-            return $msg;
-        }
-        if (!$customer|| !$customer->id) {
-            $msg['msg'] = '用户不存在';
-            return $msg;
-        }
-        //验证通过
-        $msg['code'] = 1;
-        $msg['msg'] = '验证通过';
-        $msg['customer_id'] = $customer->id;
-        return $msg;
-    }
+    
     /**
      * @api {POST} /coupon/exchange-coupon 兑换优惠劵 （李勇 100%）
      *
@@ -167,7 +137,7 @@ class CouponController extends \api\components\Controller
 
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
          //检测用户是否登录
-        $checkResult = $this->checkCustomerLogin($param);
+        $checkResult =LoginCustomer::checkCustomerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
@@ -177,11 +147,7 @@ class CouponController extends \api\components\Controller
         $city_id = $param['city_id'];
         //获取该用户该城市的优惠码列表
         try{
-<<<<<<< HEAD
-            $coupons=CouponCustomer::GetCustomerCouponList($checkResult['worker_id'],$city_id);
-=======
             $coupons=CouponCustomer::GetCustomerCouponList($checkResult['customer_id'],$city_id);
->>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
         }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
@@ -243,7 +209,7 @@ class CouponController extends \api\components\Controller
 
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
          //检测用户是否登录
-        $checkResult = $this->checkCustomerLogin($param);
+        $checkResult =LoginCustomer::checkCustomerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
@@ -253,11 +219,7 @@ class CouponController extends \api\components\Controller
         $city_id = $param['city_id'];
         //获取该用户该城市的优惠码列表
         try{
-<<<<<<< HEAD
-            $coupons=CouponCustomer::GetAllCustomerCouponList($checkResult['worker_id'],$city_id);
-=======
             $coupons=CouponCustomer::GetAllCustomerCouponList($checkResult['customer_id'],$city_id);
->>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
         }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
@@ -317,16 +279,12 @@ class CouponController extends \api\components\Controller
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
         //检测用户是否登录
-        $checkResult = $this->checkCustomerLogin($param);
+        $checkResult = LoginCustomer::checkCustomerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         }
         try{
-<<<<<<< HEAD
-            $CouponCount =CouponCustomer::CouponCount($checkResult['worker_id']);
-=======
             $CouponCount =CouponCustomer::CouponCount($checkResult['customer_id']);
->>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
         }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }

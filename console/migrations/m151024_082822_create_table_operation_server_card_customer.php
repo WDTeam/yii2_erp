@@ -35,6 +35,7 @@ class m151024_082822_create_table_operation_server_card_customer extends Migrati
 			'freeze_flag' 		=> Schema::TYPE_INTEGER.'(11) NOT NULL DEFAULT 0 COMMENT \'冻结标识\'',
 			'created_at' 		=> Schema::TYPE_INTEGER.'(11) NOT NULL DEFAULT 0 COMMENT \'创建时间\'',
 			'updated_at' 		=> Schema::TYPE_INTEGER.'(11) NOT NULL DEFAULT 0 COMMENT \'更改时间\'',
+			'is_softdel' => Schema::TYPE_SMALLINT . '(1) unsigned NOT NULL DEFAULT 0 COMMENT \'状态\'',
 		]);
     }
 

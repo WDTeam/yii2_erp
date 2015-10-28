@@ -305,7 +305,6 @@ class FinanceShopSettleApplyController extends Controller
         echo $settleEndTime.'------';
         //获取阿姨的数组信息
         $shopArr = Shop::getShopIds();
-        var_dump($shopArr);
         $this->saveAndGenerateSettleData($shopArr,$settleStartTime,$settleEndTime);
     }
     

@@ -40,6 +40,7 @@ class m151026_093223_create_table_operation_server_card_order extends Migration
 			'order_pay_money' 		=> Schema::TYPE_DECIMAL.'(8,2) NOT NULL DEFAULT 0 COMMENT \'支付金额\'',
 			'pay_account' 	=> Schema::TYPE_INTEGER.'(30) NOT NULL DEFAULT 0 COMMENT \'支付帐号\'',
 			'paid_at' 				=> Schema::TYPE_INTEGER.'(11) NOT NULL DEFAULT 0 COMMENT \'支付时间\'',
+			 'is_softdel' => Schema::TYPE_SMALLINT . '(1) unsigned NOT NULL DEFAULT 0 COMMENT \'状态\'',
 		]);
 
     }

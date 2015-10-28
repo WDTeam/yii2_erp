@@ -2,17 +2,21 @@
 
 namespace api\controllers;
 
+use common\models\worker\Worker;
 use \core\models\order\OrderPush;
 use Faker\Provider\DateTime;
 use Yii;
-
 use \core\models\order\Order;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\customer\CustomerAddress;
+use \core\models\order\OrderSearch;
+use \core\models\worker\WorkerAccessToken;
 use yii\web\Response;
 
 class OrderController extends \api\components\Controller
 {
+
+    public $workerText = array(1 => '指定阿姨订单数', '待抢单订单订单数', '指定阿姨订单列表', '待抢单订单列表');
 
     /**
      * @api {POST} /order/create-order 创建订单 (90%xieyi  缺少周期订单和精品保洁，缺少后台模块支持)
@@ -90,7 +94,7 @@ class OrderController extends \api\components\Controller
     public function actionCreateOrder()
     {
         $args = Yii::$app->request->post() or
-                $args = json_decode(Yii::$app->request->getRawBody(), true);
+        $args = json_decode(Yii::$app->request->getRawBody(), true);
         $attributes = [];
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
@@ -180,10 +184,10 @@ class OrderController extends \api\components\Controller
         $order->errors;
         if ($is_success) {
             $msg = '创建订单成功';
-            $this->send($order, $msg);
+            return $this->send($order, $msg);
         } else {
             $msg = '创建订单失败';
-            $this->send($order->errors, $msg, 0);
+            return $this->send($order->errors, $msg, 0);
         }
     }
 
@@ -244,7 +248,7 @@ class OrderController extends \api\components\Controller
     public function actionAppendOrder()
     {
         $args = Yii::$app->request->post() or
-                $args = json_decode(Yii::$app->request->getRawBody(), true);
+        $args = json_decode(Yii::$app->request->getRawBody(), true);
         $attributes = [];
         $user = CustomerAccessToken::getCustomer($args['access_token']);
         if (is_null($user)) {
@@ -327,15 +331,14 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /order/orders 查询订单(xieyi 90%已经将后台接口完成,缺少周期订单)
+     * @api {GET} /order/orders 查询用户订单(xieyi 90%已经将后台接口完成,缺少周期订单)
      *
      *
      * @apiName Orders
      * @apiGroup Order
      *
-     * @apiParam {String} access_token 订单状态
+     * @apiParam {String} access_token 用户令牌
      * @apiParam {String} [order_status] 订单状态
-     * @apiParam {String} [order_id] 订单id
      * @apiParam {String} [page] 第几页
      * @apiParam {String} [limit] 每页包含订单数
      * @apiParam {String} [channels] 渠道号按'.'分隔
@@ -456,20 +459,18 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /order/orders-count 查询订单数量(xieyi 70%缺少周期订单)
+     * @api {GET} /order/orders-count 查询用户订单数量(xieyi 70%缺少周期订单)
      *
-     *
-     * @apiName OrdersCount
+     * @apiName StatusOrdersCount
      * @apiGroup Order
+     * @apiDescription 获得用户各种状态的订单数量
      *
-     * @apiParam {String} access_token 订单状态
-     * @apiParam {String} [order_status] 订单状态
+     * @apiParam {String} access_token 用户令牌
      * @apiParam {String} [order_id] 订单id
      * @apiParam {String} [channels] 渠道号按'.'分隔
      * @apiParam {String} [order_status] 订单状态按'.'分隔
      * @apiParam {String} [from] 开始时间
-     * @apiParam {String} [to] 结束时间
-     *
+     * @apiParam {String} [to] 结束时间     *
      *
      * @apiSuccess {Object[]} orderList 该状态订单.
      *
@@ -518,13 +519,307 @@ class OrderController extends \api\components\Controller
         @$to = $args['to'];
         $args["oc.customer_id"] = $user->id;
         $orderSearch = new \core\models\order\OrderSearch();
-        $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus, $channels);
+        $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus, $channels,$from,$to);
         $ret['count'] = $count;
-        $this->send($ret, "操作成功", 1, 200);
+        return $this->send($ret, "操作成功", 1, 200);
     }
 
     /**
-     * @api {GET} /order/status-orders-count 查询不通状态订单数量(xieyi 70%缺少周期订单)
+     * @api {GET} /order/worker-orders 查询阿姨订单(xieyi 90%已经将后台接口完成,缺少周期订单)
+     *
+     *
+     * @apiName Orders
+     * @apiGroup Order
+     *
+     * @apiParam {String} access_token 阿姨登陆令牌
+     * @apiParam {String} [order_status] 订单状态
+     * @apiParam {String} [order_id] 订单id
+     * @apiParam {String} [page] 第几页
+     * @apiParam {String} [limit] 每页包含订单数
+     * @apiParam {String} [channels] 渠道号按'.'分隔
+     * @apiParam {String} [order_status] 订单状态按'.'分隔
+     * @apiParam {String} [is_asc] 排序方式
+     * @apiParam {String} [from] 开始时间
+     * @apiParam {String} [to] 结束时间
+     * @apiParam {String} [oc.customer_id]客户id
+     *
+     *
+     * @apiSuccess {Object[]} orderList 该状态订单.
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *    "code": "1",
+     *    "msg": "操作成功",
+     *    "ret": {
+     *    "limit": "1",
+     *    "page_total": 4,
+     *    "offset": 0,
+     *    "orders": [
+     *    {
+     *    "id": "2",
+     *    "order_code": "339710",
+     *    "order_parent_id": "0",
+     *    "order_is_parent": "0",
+     *    "created_at": "1445347126",
+     *    "updated_at": "1445347126",
+     *    "isdel": "0",
+     *    "ver": "3",
+     *    "version": "3",
+     *    "order_ip": "58.135.77.96",
+     *    "order_service_type_id": "1",
+     *    "order_service_type_name": "Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机",
+     *    "order_src_id": "1",
+     *    "order_src_name": "BOSS",
+     *    "channel_id": "20",
+     *    "order_channel_name": "后台下单",
+     *    "order_unit_money": "20.00",
+     *    "order_money": "40.00",
+     *    "order_booked_count": "120",
+     *    "order_booked_begin_time": "1446249600",
+     *    "order_booked_end_time": "1446256800",
+     *    "address_id": "397",
+     *    "district_id": "3",
+     *    "order_address": "北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001",
+     *    "order_booked_worker_id": "0",
+     *    "checking_id": "0",
+     *    "order_cs_memo": "",
+     *    "order_id": "2",
+     *    "order_before_status_dict_id": "2",
+     *    "order_before_status_name": "已支付",
+     *    "order_status_dict_id": "3",
+     *    "order_status_name": "已开始智能指派"
+     *    }
+     *    ]
+     *    }
+     *
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "0",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *
+     *     }
+     *
+     */
+    public function actionWorkerOrders()
+    {
+        $args = Yii::$app->request->get();
+
+        @$token = $args["access_token"];
+
+        $worker = WorkerAccessToken::getCustomer($token);
+
+        if (empty($worker)) {
+            return $this->send(null, "用户无效,请先登录", 0);
+        }
+        $orderStatus = null;
+        if (isset($args['order_status'])) {
+            $orderStatus = explode(".", $args['order_status']);
+        }
+
+        $channels = null;
+        if (isset($args['channels'])) {
+            $channels = explode(".", $args['channels']);
+        }
+
+        @$isAsc = $args['is_asc'];
+        if (is_null($isAsc)) {
+            $isAsc = true;
+        }
+        $limit = 10;
+        if (isset($args['limit'])) {
+            $limit = $args['limit'];
+        }
+        $page = 1;
+        if (isset($args['page'])) {
+            $page = $args['page'];
+        }
+        $offset = ($page - 1) * $limit;
+        @$from = $args['from'];
+        @$to = $args['to'];
+
+        $args["owr.worker_id"] = $worker->id;
+        try {
+            $orderSearch = new \core\models\order\OrderSearch();
+            $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $orderStatus, $channels, $from, $to);
+            $orders = $orderSearch->searchWorkerOrdersWithStatus($args, $isAsc, $offset, $limit, $orderStatus, $channels, $from, $to);
+        } catch (Exception $e) {
+            return $this->send($e, "服务异常", 2);
+        }
+        $ret = [];
+        $ret['limit'] = $limit;
+        $ret['page_total'] = ceil($count / $limit);
+        $ret['page'] = $page;
+        $ret['orders'] = $orders;
+        $this->send($ret, "操作成功", 1);
+    }
+
+    /**
+     * @api {GET} /order/worker-orders-count 查询阿姨订单订单数量(xieyi 90%已经将后台接口完成,缺少周期订单)
+     *
+     *
+     * @apiName Orders
+     * @apiGroup Order
+     *
+     * @apiParam {String} access_token 阿姨登陆令牌
+     * @apiParam {String} [order_id] 订单id
+     * @apiParam {String} [channels] 渠道号按'.'分隔
+     * @apiParam {String} [order_status] 订单状态按'.'分隔
+     * @apiParam {String} [oc.customer_id]客户id
+     * @apiParam {String} [from] 开始时间
+     * @apiParam {String} [to] 结束时间
+     *
+     *
+     * @apiSuccess {Object[]} orderList 该状态订单.
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *    "code": "1",
+     *    "msg": "操作成功",
+     *    "ret": {
+     *    }
+     *
+     *    }
+     *
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "0",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *
+     *     }
+     *
+     */
+    public function actionWorkerOrdersCount()
+    {
+        $args = Yii::$app->request->get();
+
+        @$token = $args["access_token"];
+        $worker = WorkerAccessToken::getWorker($token);
+        if (empty($worker)) {
+            return $this->send(null, "用户无效,请先登录", 0, 403);
+        }
+        $orderStatus = null;
+        if (isset($args['order_status'])) {
+            $orderStatus = explode(".", $args['order_status']);
+        }
+        $channels = null;
+        if (isset($args['channels'])) {
+            $channels = explode(".", $args['channels']);
+        }
+        @$from = $args['from'];
+        @$to = $args['to'];
+        $args["owr.worker_id"] = $worker->id;
+        $orderSearch = new \core\models\order\OrderSearch();
+        $ret = [];
+        if (!empty($orderStatus)) {
+            foreach ($orderStatus as $statuStr) {
+                $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, array($statuStr), $channels);
+                $ret[$statuStr] = $count;
+            }
+        } else {
+            $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $orderStatus, $channels);
+            $ret['count'] = $count;
+        }
+        $this->send($ret, "操作成功");
+
+    }
+
+    /**
+     * @api {GET} /order/worker-orders-history 查询阿姨三个月的历史订单(xieyi 90%已经将后台接口完成,缺少周期订单)
+     *
+     *
+     * @apiName Orders
+     * @apiGroup Order
+     *
+     * @apiParam {String} access_token 阿姨登陆令牌
+     * @apiParam {String} [order_status] 订单状态
+     * @apiParam {String} [order_id] 订单id
+     * @apiParam {String} [page] 第几页
+     * @apiParam {String} [limit] 每页包含订单数
+     * @apiParam {String} [channels] 渠道号按'.'分隔
+     * @apiParam {String} [order_status] 订单状态按'.'分隔
+     * @apiParam {String} [is_asc] 排序方式
+     * @apiParam {String} [from] 开始时间
+     * @apiParam {String} [to] 结束时间
+     * @apiParam {String} [oc.customer_id]客户id
+     *
+     *
+     * @apiSuccess {Object[]} orderList 该状态订单.
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *    "code": "1",
+     *    "msg": "操作成功",
+     *    "ret": {
+     *    "limit": "1",
+     *    "page_total": 4,
+     *    "offset": 0,
+     *    "orders": [
+     *    {
+     *    "id": "2",
+     *    "order_code": "339710",
+     *    "order_parent_id": "0",
+     *    "order_is_parent": "0",
+     *    "created_at": "1445347126",
+     *    "updated_at": "1445347126",
+     *    "isdel": "0",
+     *    "ver": "3",
+     *    "version": "3",
+     *    "order_ip": "58.135.77.96",
+     *    "order_service_type_id": "1",
+     *    "order_service_type_name": "Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机",
+     *    "order_src_id": "1",
+     *    "order_src_name": "BOSS",
+     *    "channel_id": "20",
+     *    "order_channel_name": "后台下单",
+     *    "order_unit_money": "20.00",
+     *    "order_money": "40.00",
+     *    "order_booked_count": "120",
+     *    "order_booked_begin_time": "1446249600",
+     *    "order_booked_end_time": "1446256800",
+     *    "address_id": "397",
+     *    "district_id": "3",
+     *    "order_address": "北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001",
+     *    "order_booked_worker_id": "0",
+     *    "checking_id": "0",
+     *    "order_cs_memo": "",
+     *    "order_id": "2",
+     *    "order_before_status_dict_id": "2",
+     *    "order_before_status_name": "已支付",
+     *    "order_status_dict_id": "3",
+     *    "order_status_name": "已开始智能指派"
+     *    }
+     *    ]
+     *    }
+     *
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "0",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *
+     *     }
+     *
+     */
+    public function actionWorkerOrdersHistory(){
+        getWorkerAndOrderAndDoneTime();
+    }
+
+    /**
+     * @api {GET} /order/status-orders-count 查询用户不同状态订单数量(xieyi 70%缺少周期订单)
      *
      *
      * @apiName StatusOrdersCount
@@ -680,7 +975,7 @@ class OrderController extends \api\components\Controller
     public function actionOrderStatusHistory()
     {
         $args = Yii::$app->request->get() or
-                $args = json_decode(Yii::$app->request->getRawBody(), true);
+        $args = json_decode(Yii::$app->request->getRawBody(), true);
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
@@ -733,7 +1028,7 @@ class OrderController extends \api\components\Controller
     public function actionWorkerServiceOrderCount()
     {
         $args = Yii::$app->request->get() or
-                $args = json_decode(Yii::$app->request->getRawBody(), true);
+        $args = json_decode(Yii::$app->request->getRawBody(), true);
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
@@ -750,15 +1045,15 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {PUT} /order/cancel-order 取消订单(haojianse 100% ) 
-     * 
+     * @api {PUT} /order/cancel-order 取消订单(haojianse 100% )
+     *
      * @apiName CancelOrder
      * @apiGroup Order
      *
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {String} order_cancel_reason 取消原因
+     * @apiParam {String} [order_cancel_reason] 取消原因
      * @apiParam {String} order_id 订单号
      *
      * @apiParam {String} recursive_order_id 周期订单
@@ -788,17 +1083,21 @@ class OrderController extends \api\components\Controller
      */
     public function actionCancelOrder()
     {
-        $param = Yii::$app->request->post();
-
-        if (empty($param)) {
-            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        $param = json_decode(Yii::$app->request->getRawBody(), true);
+        if (!isset($param['access_token']) || !$param['access_token'] || !isset($param['order_id']) || !$param['order_id']) {
+            return $this->send(null, "验证码或订单号不能为空", 0, 403);
         }
-
-        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+        $token = $param['access_token'];
+        $orderId = $param['order_id'];
+        $reason = '';
+        if (isset($param['order_cancel_reason'])) {
+            $reason = $param['order_cancel_reason'];
+        }
+        if (!CustomerAccessToken::checkAccessToken($token)) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
 
-        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+        $customer = CustomerAccessToken::getCustomer($token);
 
         if (!empty($customer) && !empty($customer->id)) {
             /**
@@ -806,7 +1105,7 @@ class OrderController extends \api\components\Controller
              * $customer->id 用户
              * $order_id     订单号
              */
-            $orderValidation = \core\models\order\Order::validationOrderCustomer($customer->id, $param['order_id']);
+            $orderValidation = \core\models\order\Order::validationOrderCustomer($customer->id, $orderId);
 
             if ($orderValidation) {
                 /**
@@ -820,18 +1119,18 @@ class OrderController extends \api\components\Controller
                     '信息填写有误，重新下单',
                     '不需要服务了',
                 );
-                if (!in_array($param['order_cancel_reason'], $order_cancel_reason)) {
-                    $param['order_cancel_reason'] = '其他原因#' . $param['order_cancel_reason'];
+                if (!in_array($reason, $order_cancel_reason)) {
+                    $reason = '其他原因#' . $reason;
                 }
 
-                if (\core\models\order\Order::cancel($param['order_id'], 0, $param['order_cancel_reason'])) {
-                    return $this->send([1], $param['order_id'] . "订单取消成功");
+                if (\core\models\order\Order::cancel($orderId, 0, $reason)) {
+                    return $this->send([1], $orderId . "订单取消成功");
                 }
             } else {
-                return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
+                return $this->send(null, "核实用户订单唯一性失败，用户id：" . $customer->id . ",订单id：" . $orderId, 0, 403);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
+            return $this->send(null, "获取客户信息失败.access_token：" . $token, 0, 403);
         }
     }
 
@@ -877,7 +1176,7 @@ class OrderController extends \api\components\Controller
      */
     public function actionObtainOrder()
     {
-        
+
     }
 
     /**
@@ -916,7 +1215,7 @@ class OrderController extends \api\components\Controller
      */
     public function actionAddComment()
     {
-        
+
     }
 
     /**
@@ -1026,11 +1325,11 @@ class OrderController extends \api\components\Controller
      */
     public function actionWorkerHistoryOrders()
     {
-        
+
     }
 
     /**
-     * @api {get} v1/order/get-worker-orders.php 指定阿姨订单数/待抢单订单订单数/指定阿姨订单列表/待抢单订单列表 (haojianshe 0%)
+     * @api {get} v1/order/get-worker-orders.php 指定阿姨订单数/待抢单订单订单数/指定阿姨订单列表/待抢单订单列表 (haojianshe 100%)
      * @apiName actionGetWorkerOrders
      * @apiGroup Order
      * @apiDescription 阿姨抢单数
@@ -1048,19 +1347,32 @@ class OrderController extends \api\components\Controller
      *      "msg":"操作成功",
      *      "ret":
      *      {
-     *          "count": 
+     *          "OrderCount": "123"
      *      }
      * }
-     * 
+     *
      *   * 指定阿姨订单列表/待抢单订单列表
      * {
      *      "code": "ok",
      *      "msg":"操作成功",
      *      "ret":
      *      {
-     *          "orderList":{
-     *            
-     *         } 
+     *          "workerData":
+     *           [
+     *           {
+     *            "order_id":"订单号"
+     *            "order_code":"订单编号"
+     *            "batch_code":"周期订单好"
+     *            "booked_begin_time":"服务开始时间"
+     *            "booked_end_time":"服务结束时间"
+     *            "channel_name":"服务类型名称"
+     *            "booked_count":"时常"
+     *            "address":"服务地址"
+     *            "need":"备注说明"
+     *            "money":"订单价格"
+     *           } 
+     *         ],
+     *         "time":900  倒计时秒
      *      }
      * }
      *
@@ -1083,64 +1395,51 @@ class OrderController extends \api\components\Controller
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
 
-        $worker = \core\models\worker\WorkerAccessToken::getWorker($param['access_token']);
+        $worker = WorkerAccessToken::getWorker($param['access_token']);
 
         if (!isset($param['leveltype']) && !isset($param['access_token'])) {
             return $this->send(null, "缺少规定的参数", 0, 403);
         }
         if (!empty($worker) && !empty($worker->id)) {
 
-            /**
-              'order_id' => $order_id,
-              'batch_code' => $order->order_batch_code,
-              'booked_begin_time' => $order->order_booked_begin_time,
-              'booked_end_time' => $order->order_booked_end_time,
-              'channel_name' => $order->order_channel_name,
-              'booked_count' => $order->order_booked_count,
-              'address' => $order->order_address,
-              'need' => $order->orderExtCustomer->order_customer_need
-             */
-            $workerText = array(
-                1 => '指定阿姨订单数',
-                '待抢单订单订单数',
-                '指定阿姨订单列表',
-                '待抢单订单列表'
-            );
-
             if ($param['leveltype'] == 3) {
                 try {
-                    $workerCount = \core\models\order\OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 1);
+                    $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 1);
                     $ret['workerData'] = $workerCount;
-                    return $this->send($ret, $workerText[$param['leveltype']], 1);
+                    #倒计时
+                    $ret['time'] = 7200;
+                    return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
-                    return $this->send(null, "boss系统错误," . $workerText[$param['leveltype']], 1024);
+                    return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
                     return false;
                 }
             } else if ($param['leveltype'] == 4) {
                 try {
-                    $workerCount = \core\models\order\OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 0);
+                    $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 0);
                     $ret['workerData'] = $workerCount;
-                    return $this->send($ret, $workerText[$param['leveltype']], 1);
+                    #倒计时
+                    $ret['time'] =7200;
+                    return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
-                    return $this->send(null, "boss系统错误," . $workerText[$param['leveltype']], 1024);
+                    return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
                     return false;
                 }
             } else if ($param['leveltype'] == 1) {
                 try {
-                    $workerCount = \core\models\order\OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
+                    $workerCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
                     $ret['workerData'] = $workerCount;
-                    return $this->send($ret, $workerText[$param['leveltype']], 1);
+                    return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
-                    return $this->send(null, "boss系统错误," . $workerText[$param['leveltype']], 1024);
+                    return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
                     return false;
                 }
             } else if ($param['leveltype'] == 2) {
                 try {
-                    $workerCount = \core\models\order\OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
+                    $workerCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
                     $ret['workerData'] = $workerCount;
-                    return $this->send($ret, $workerText[$param['leveltype']], 1);
+                    return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
-                    return $this->send(null, "boss系统错误," . $workerText[$param['leveltype']], 1024);
+                    return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
                     return false;
                 }
             }
@@ -1150,12 +1449,12 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {PUT} v1/order/set-worker-order.php 阿姨抢单提交 (haojianshe 0%)
-     * 
+     * @api {PUT} v1/order/set-worker-order.php 阿姨抢单提交 (haojianshe 100%)
+     *
      * @apiName actionSetWorkerOrder
      * @apiGroup Order
      * @apiDescription 阿姨抢单提交
-     * 
+     *
      * @apiParam {String} access-token      会话id.
      * @apiParam {String} platform_version  平台版本号
      * @apiParam {String} order_id          订单号
@@ -1185,13 +1484,12 @@ class OrderController extends \api\components\Controller
         if (!isset($param['order_id']) && !isset($param['access_token'])) {
             return $this->send(null, "缺少规定的参数", 0, 403);
         }
-
-        $worker = \core\models\worker\WorkerAccessToken::getWorker($param['access_token']);
+        $worker = WorkerAccessToken::getWorker($param['access_token']);
 
         if (!empty($worker) && !empty($worker->id)) {
 
             try {
-                $setWorker = \core\models\order\Order::sysAssignDone($param['order_id'], $worker->id);
+                $setWorker = Order::sysAssignDone($param['order_id'], $worker->id);
                 $ret['workerSend'] = $setWorker;
                 return $this->send($ret, "操作成功", 1);
             } catch (Exception $e) {
@@ -1199,6 +1497,20 @@ class OrderController extends \api\components\Controller
                 return false;
             }
         }
+    }
+
+
+    /**
+     * 智能派单自动推送访问接口
+     *
+     * @author  linhongyou
+     * @param $id
+     * @return array
+     */
+    public function actionPush($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return OrderPush::push($id);
     }
 
 }

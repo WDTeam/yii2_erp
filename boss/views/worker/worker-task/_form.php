@@ -8,6 +8,7 @@ use kartik\helpers\Html;
 use core\models\worker\WorkerRuleConfig;
 use core\models\worker\Worker;
 use core\models\worker\WorkerTaskLog;
+use core\models\worker\WorkerIdentityConfig;
 
 /**
  * @var yii\web\View $this
@@ -97,13 +98,13 @@ $conditions = $model->getFullConditions();
         'worker_types'=>[
             'type'=> Form::INPUT_CHECKBOX_LIST, 
             'options'=>['placeholder'=>'Enter 阿姨角色...'],
-            'items'=>Worker::getWorkerTypeList()
+            'items'=>Worker::getWorkerTypeList(),
         ], 
         
         'worker_rules'=>[
             'type'=> Form::INPUT_CHECKBOX_LIST, 
             'options'=>['placeholder'=>'Enter 阿姨身份...'],
-            'items'=>WorkerRuleConfig::getWorkerRuleList()
+            'items'=>WorkerIdentityConfig::getWorkerIdentityList()
         ], 
         
         'worker_cites'=>[

@@ -10,7 +10,7 @@ use common\models\finance\FinanceRefund;
  * @var boss\models\FinanceRefundSearch $searchModel
  */
 
-$this->title = Yii::t('app', '确认财务审核');
+$this->title = Yii::t('app', '财务审核确认');
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>

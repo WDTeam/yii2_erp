@@ -84,7 +84,7 @@ class CustomerTransRecord extends \common\models\customer\CustomerTransRecord
             $data['customer_trans_record_pre_pay'] = !empty($data['customer_trans_record_pre_pay']) ? $data['customer_trans_record_pre_pay'] : 0;  //预付费
             $data['customer_trans_record_cash'] = !empty($data['customer_trans_record_cash']) ? $data['customer_trans_record_cash'] : 0;
             $data['customer_trans_record_mode'] = 1; //交易方式:1消费,2=充值,3=退款,4=补偿
-            //dump($data);exit;
+
 
             //服务卡 or 余额 + 在线 + 优惠券
             if( (!empty($data['customer_trans_git record_online_service_card_on']) || $data['customer_trans_record_online_balance_pay'] > 0) && $data['customer_trans_record_online_pay'] > 0 )
@@ -121,6 +121,7 @@ class CustomerTransRecord extends \common\models\customer\CustomerTransRecord
                 exit('没有此条件');
             }
         }
+        //dump($data);exit;
         return self::createRecord($data);
     }
 
@@ -149,6 +150,7 @@ class CustomerTransRecord extends \common\models\customer\CustomerTransRecord
         $data['scenario'] = 9;  //支付场景
         return self::createRecord($data);
     }
+
 }
 
 

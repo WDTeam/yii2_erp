@@ -16,6 +16,7 @@ $(document).ready(function($){
 			$(this).removeClass('is-visible');
 		}
 	});
+	
 	//close popup when clicking the esc keyboard button
 	$(document).keyup(function(event){
     	if(event.which=='27'){
@@ -49,9 +50,10 @@ $(document).ready(function($){
             url:  "/order/order/cancel-order",
             data: {order_id: operating_order_id, cancel_type: cancelType, cancel_note: cancelNote},
             dataType:"json",
-            success: function (msg) {
-                if(msg.status){
-                    location.reload();
+            success: function (msg) {alert('11:' + msg);
+                if(msg != false){alert('22');
+                	$("#HBox2").hide();
+                	$("#HOverlay").hide()
                 }else{
                     alert('取消订单失败！');
                 }
@@ -91,7 +93,7 @@ $(document).ready(function($){
 		$(".submitBtntt").show();
 	});
 	
-	$(".m_subm").click(function(){
+	$(".m_add").click(function(){
 		$(".m_queren").show();
 		$(".radioLi").show();
 		$(".m_disd").show();
@@ -99,7 +101,7 @@ $(document).ready(function($){
 		$(".submitBtntt").hide();
 	});
 	
-	$(".submitBtntt").click(function(){
+	$(".m_submit").click(function(){
         var complaints = {
             	order_id: operating_order_id,
             	complaint_detail: $('#complaint_detail').val(),
@@ -109,21 +111,14 @@ $(document).ready(function($){
         
 		$.ajax({
             type: "POST",
-            url:  "order/test",
+            url:  "order-complaint/create",
             data: complaints,
             dataType:"json",
             success: function (msg) {
                 if(msg.status){
-                    window.continue_work_count_down = 10;
-                    $("#work_console").html(
-                        '<button id="stop_work" class="btn btn-warning" type="button">收工啦</button>' +
-                        '<button id="pause_work" class="btn btn-warning" type="button">休息</button>' +
-                        '<button id="continue_work" class="btn btn-warning" type="button">继续（'+window.continue_work_count_down+'s）</button>'
-                    );
-                    $("#order_assign").hide();
-                    $("#work_console").show();
+                    
                 }else{
-                    alert('指派失败！');
+                    alert('提交投诉失败！');
                 }
             }
         });		
