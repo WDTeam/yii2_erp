@@ -12,6 +12,8 @@ use yii\filters\VerbFilter;
 use core\models\operation\coupon\Coupon;
 use core\models\operation\coupon\CouponCode;
 
+use \core\models\operation\OperationCity;
+
 /**
  * CouponController implements the CRUD actions for Coupon model.
  */
@@ -69,11 +71,16 @@ class CouponController extends Controller
     {
         $model = new Coupon;
         if ($model->load(Yii::$app->request->post())) {
-			$service_types = Coupon::getServiceTypes();
+			
 			
 			//coupon basic info
+			
+			//coupon categories
+			$coupon_categories = Coupon::getCategories();
+			$model->coupon_category_name = $coupon_categories[$model->coupon_category];
 
 			//coupon type
+			$service_types = Coupon::getServiceTypes();
 			$model->coupon_type_name = $service_types[$model->coupon_type];
 			switch ($model->coupon_type)
 			{
@@ -97,6 +104,13 @@ class CouponController extends Controller
 		
 			//coupon city
 			$city_types = Coupon::getCityTypes();
+			$cityOnlineList = OperationCity::getCityOnlineInfoList();
+			$cities = array();
+			if(!empty($cityOnlineList)){
+				foreach($cityOnlineList as $value){
+					$cities[$value['city_id']] = $value['city_name'];
+				}
+			}
 			switch ($model->coupon_city_limit)
 			{
 				case 0:
@@ -104,6 +118,7 @@ class CouponController extends Controller
 				break;
 		
 				case 1:
+					$model->coupon_city_name = $cities[$model->coupon_city_id];
 				
 				break;
 		
@@ -112,6 +127,7 @@ class CouponController extends Controller
 					# code...
 				break;
 			}
+
 			//customer type 
 			$customer_types = Coupon::getCustomerTypes();
 			$model->coupon_customer_type_name = $customer_types[$model->coupon_customer_type];

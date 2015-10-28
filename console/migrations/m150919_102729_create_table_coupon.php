@@ -16,6 +16,9 @@ class m150919_102729_create_table_coupon extends Migration
 
 		'coupon_name'=>  Schema::TYPE_STRING. '(255) DEFAULT NULL COMMENT \'优惠券名称\'',
 		'coupon_price'=>  Schema::TYPE_DECIMAL. '(8,2) DEFAULT 0 COMMENT \'优惠券价值\'',
+
+		'coupon_category'=>  Schema::TYPE_SMALLINT . '(4) DEFAULT 0 COMMENT \'优惠券范畴0为一般优惠券1为赔付优惠券\'',
+		'coupon_category_name'=>  Schema::TYPE_STRING . '(255) DEFAULT NULL COMMENT \'优惠券范畴\'',
 		
 		'coupon_type'=>  Schema::TYPE_SMALLINT . '(4) DEFAULT 0 COMMENT \'优惠券类型0为全网优惠券1为类别优惠券2为商品优惠券\'',
 		'coupon_type_name'=>  Schema::TYPE_STRING . '(255) DEFAULT NULL COMMENT \'优惠券类型名称\'',
@@ -27,7 +30,7 @@ class m150919_102729_create_table_coupon extends Migration
 		'coupon_service_name'=>  Schema::TYPE_STRING . '(255) DEFAULT NULL COMMENT \'服务名称\'',
 
 		'coupon_city_limit'=>  Schema::TYPE_SMALLINT . '(4) DEFAULT 0 COMMENT \'城市限制0为不限1为单一城市限制\'',
-		'coupon_city_id'=>  Schema::TYPE_SMALLINT . '(4) DEFAULT 0 COMMENT \'关联城市\'',
+		'coupon_city_id'=>  Schema::TYPE_INTEGER . '(16) DEFAULT 0 COMMENT \'关联城市\'',
 		'coupon_city_name'=>  Schema::TYPE_STRING . '(255) DEFAULT NULL COMMENT \'城市名称\'',
 
 		'coupon_customer_type'=>  Schema::TYPE_SMALLINT . '(4) DEFAULT NULL COMMENT \'适用客户类别逗号分割0为所有用户1为新用户2为老用户3会员4为非会员\'',

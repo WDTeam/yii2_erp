@@ -1,3 +1,25 @@
+//coupon category
+$(":radio[value=0]").attr('checked', true);
+$(document).on("change","#coupon-coupon_category input[type='radio']",function(){
+    var coupon_category = $(this).val();
+	//alert(coupon_category);
+	//exit;
+	switch(coupon_category){
+		case '0':
+			$("#coupon-coupon_code_num").val('');
+			$("#coupon-coupon_code_num").attr('readonly', false);
+		break;	
+		case '1':
+			$("#coupon-coupon_code_num").val(1);
+			$("#coupon-coupon_code_num").attr('readonly', true);
+			
+		break;
+		default:
+		break;
+	}
+});
+
+
 //coupon service type
 $(":radio[value=0]").attr('checked', true);
 $(".field-coupon-coupon_service_type_id, .field-coupon-coupon_service_id").hide();

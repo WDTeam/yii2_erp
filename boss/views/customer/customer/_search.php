@@ -11,6 +11,8 @@ use kartik\date\DatePicker;
 use boss\components\AreaCascade;
 use yii\helpers\ArrayHelper;
 
+use \core\models\operation\OperationCity;
+
 //use \common\models\OperationCity;
 
 /**
@@ -30,11 +32,17 @@ use yii\helpers\ArrayHelper;
 
     <div class='col-md-2'>
         <?php
+		$cityOnlineList = OperationCity::getCityOnlineInfoList();
+		$cities = array();
+		if(!empty($cityOnlineList)){
+			foreach($cityOnlineList as $value){
+				$cities[$value['city_id']] = $value['city_name'];
+			}
+		}
         echo $form->field($model, 'operation_city_id')->widget(Select2::classname(), [
             'name' => 'id',
             'hideSearch' => true,
-       //     'data' => ArrayHelper::map(OperationCity::find()->asArray()->all(), 'id', 'city_name'),
-            'options'=>array(),
+            'data'=>array(),
             'options' => ['placeholder' => '选择城市', 'inline' => true],
             'pluginOptions' => [
                 'allowClear' => true

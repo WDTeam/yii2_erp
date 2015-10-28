@@ -43,6 +43,17 @@ use core\models\operation\coupon\CouponCode;
 class Coupon extends \common\models\operation\coupon\Coupon
 {
 
+	/**
+     * get coupon rule service types
+     */
+    public static function getCategories()
+    {
+        return array(
+            0 => '一般优惠券',
+            1 => '赔付优惠券',
+        );
+    }
+
     /**
      * get coupon rule service types
      */
