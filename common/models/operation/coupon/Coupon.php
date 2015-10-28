@@ -72,11 +72,11 @@ class Coupon extends \yii\db\ActiveRecord
 	//			    $this->addError($attribute, '优惠券金额不能小于或等于0');
 	//			}
      //       }],
-			[['coupon_name', 'coupon_price', 'coupon_type', 'coupon_city_limit', 'coupon_customer_type', 'coupon_time_type', 'coupon_promote_type', 'coupon_code_num', 'coupon_code_max_customer_num'], 'required'],
+			[['coupon_price', 'coupon_category', 'coupon_type', 'coupon_city_limit', 'coupon_customer_type', 'coupon_time_type', 'coupon_promote_type', 'coupon_code_num'], 'required'],
             [['coupon_price', 'coupon_order_min_price'], 'number'],
-            [['coupon_type', 'coupon_service_type_id', 'coupon_service_id', 'coupon_city_limit', 'coupon_city_id', 'coupon_customer_type', 'coupon_time_type', 'coupon_use_end_days', 'coupon_promote_type', 'coupon_code_num', 'coupon_code_max_customer_num', 'is_disabled', 'created_at', 'updated_at', 'is_del', 'system_user_id'], 'integer'],
+            [['coupon_category', 'coupon_type', 'coupon_service_type_id', 'coupon_service_id', 'coupon_city_limit', 'coupon_city_id', 'coupon_customer_type', 'coupon_time_type', 'coupon_use_end_days', 'coupon_promote_type', 'coupon_code_num', 'is_disabled', 'created_at', 'updated_at', 'is_del', 'system_user_id'], 'integer'],
 			//[['coupon_code_num', 'coupon_code_max_customer_num'], ['min'=>0]],
-            [['coupon_name', 'coupon_type_name', 'coupon_service_type_name', 'coupon_service_name', 'coupon_city_name', 'coupon_customer_type_name', 'coupon_time_type_name', 'coupon_promote_type_name', 'system_user_name'], 'string'],
+            [['coupon_name', 'coupon_category', 'coupon_type_name', 'coupon_service_type_name', 'coupon_service_name', 'coupon_city_name', 'coupon_customer_type_name', 'coupon_time_type_name', 'coupon_promote_type_name', 'system_user_name'], 'string'],
 			
         ];
     }
@@ -111,7 +111,7 @@ class Coupon extends \yii\db\ActiveRecord
             'coupon_promote_type_name' => '优惠券优惠类型名称',
             'coupon_order_min_price' => '满减或每减时订单最小金额',
             'coupon_code_num' => '优惠码个数',
-            'coupon_code_max_customer_num' => '单个优惠码最大使用人数',
+            //'coupon_code_max_customer_num' => '单个优惠码最大使用人数',
             'is_disabled' => '是否禁用',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',

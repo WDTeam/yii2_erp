@@ -137,6 +137,13 @@ class FinancePopOrderController extends Controller
     			//去除表头
     			if($n>1 && !empty($value['A'])){
     			$statusinfo=$model->PopOrderstatus($alinfo,$value,$channelid,$paychannelid);
+    			//var_dump($statusinfo);exit;
+    			
+    			$postdate['order_code'] =$statusinfo['order_code']; //系统订单号
+    			$postdate['order_status_name'] =$statusinfo['order_status_name']?$statusinfo['order_status_name']:'未知';  //订单状态
+    			$postdate['order_money'] =$statusinfo['order_money'];// 订单金额
+    			$postdate['finance_status'] =1;// 收款状态 1 未确定 2已确定
+
     			$postdate['finance_record_log_id'] =$lastidRecordLog;
     			$postdate['finance_pop_order_number'] =$statusinfo['order_channel_order_num'];
     			$postdate['finance_order_channel_id'] =$channelid;
@@ -147,16 +154,14 @@ class FinancePopOrderController extends Controller
     			$postdate['finance_pop_order_worker_uid'] =$statusinfo['worker_id'];
     			$postdate['finance_pop_order_booked_time'] =$statusinfo['order_booked_begin_time'];
     			$postdate['finance_pop_order_booked_counttime'] =$statusinfo['order_booked_end_time'];// 按照分钟计算 
-    			$postdate['finance_pop_order_sum_money'] =$statusinfo['order_money']; //总金额
+    			$postdate['finance_pop_order_sum_money'] =$statusinfo['finance_pop_order_sum_money']; //对账金额
     			//优惠卷金额
     			$postdate['finance_pop_order_coupon_count'] =0; 
     			//优惠卷id
     			$postdate['finance_pop_order_coupon_id'] =$statusinfo['coupon_id'];  
     			$postdate['finance_pop_order_order2'] =$statusinfo['order_code'];
-    			
     			//获取渠道唯一订单号有问题需要问问
     			$postdate['finance_pop_order_channel_order'] =$statusinfo['order_channel_order_num'];
-    			
     			//$post['FinancePopOrder']['finance_pop_order_order_type'] =$statusinfo['order_service_type_id'];
     			$postdate['finance_pop_order_order_type'] =$statusinfo['order_service_type_id'];
     			$postdate['finance_pop_order_status'] =$statusinfo['order_before_status_dict_id'];
@@ -171,16 +176,21 @@ class FinancePopOrderController extends Controller
     			$postdate['finance_pop_order_pay_title'] = $filenamesitename;
     			$postdate['finance_pop_order_check_id'] = Yii::$app->user->id;
     			
-    			$postdate['finance_pop_order_finance_time'] = 0;//财务对账提交时间
+    			$postdate['finance_pop_order_finance_time'] =time();//财务对账提交时间
     			
     			$postdate['finance_order_channel_statuspayment'] =strtotime( $post['FinancePopOrderSearch']['finance_order_channel_statuspayment']);
     			$postdate['finance_order_channel_endpayment'] =strtotime($post['FinancePopOrderSearch']['finance_order_channel_endpayment']);
     			$postdate['create_time'] = time();
     			$postdate['is_del'] =0;
     		
+    			
+    			
     			$_model = clone $model;
     			$_model->setAttributes($postdate);
     			$_model->save();
+    			
+    			//var_dump($postdate);exit;
+    			
     			unset($postdate);
     		}
     		$n++;
@@ -209,9 +219,8 @@ class FinancePopOrderController extends Controller
     		$customer_info->finance_record_log_succeed_sum_money =$sumt[0]['sumoney'];
     		//人工确认笔数
     		$customer_info->finance_record_log_manual_count =0;
-    	
     		//人工确认金额
-    		$customer_info->finance_record_log_manual_sum_money =$statusinfo['created_at']?$statusinfo['created_at']:'0';
+    		$customer_info->finance_record_log_manual_sum_money =0;
     		//失败笔数
     		$customer_info->finance_record_log_failure_count=$modelinfo::find()
     		->andWhere(['finance_record_log_id' => $lastidRecordLog])
@@ -402,6 +411,7 @@ class FinancePopOrderController extends Controller
     	if(!empty($requestModel) && is_array($requestModel)){
 		foreach ($requestModel['ids'] as $iddate){
 			$model=$searchModel::findOne($iddate);
+			$model->finance_pop_order_finance_time=time();
 			$model->finance_pop_order_pay_status='1';
 			$model->save();
 		}
@@ -565,8 +575,14 @@ class FinancePopOrderController extends Controller
     	if($requestModel['edit']=='baksite'){
     		//回滚财务审核
     		$model->finance_pop_order_pay_status='3';
+    		$model->finance_pop_order_finance_time=time();
+    		$model->finance_pop_order_msg=$post['FinancePopOrder']['finance_pop_order_msg'];
+    	}elseif ($requestModel['edit']=='baksiteinfo'){
+    		$model->finance_pop_order_pay_status='1';
+    		$model->finance_pop_order_finance_time=time();
     		$model->finance_pop_order_msg=$post['FinancePopOrder']['finance_pop_order_msg'];
     	}
+    	
     	$model->save();
     	return $this->redirect(['index', 'id' =>$requestModel['oid']]);
     	}else{

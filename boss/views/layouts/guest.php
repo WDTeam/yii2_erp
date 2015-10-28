@@ -2,7 +2,7 @@
 use boss\assets\AppAsset;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use common\widgets\Alert;
+use boss\widgets\Alert;
 
 /* @var $this \yii\web\View */
 /* @var $content string */

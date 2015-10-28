@@ -9,6 +9,7 @@ use core\models\worker\WorkerTask;
 use yii\data\ArrayDataProvider;
 use core\models\worker\Worker;
 use core\models\finance\FinanceSettleApplySearch;
+use core\models\finance\FinanceCompensate;
 
 /**
  * FinanceWorkerNonOrderIncomeSearch represents the model behind the search form about `common\models\finance\FinanceWorkerNonOrderIncome`.
@@ -138,6 +139,21 @@ class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
         return $dataProvider;
     }
     
+    public static function getCompensateMoney($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
+        $compensateMoney = 0;
+        $compensateList = FinanceCompensate::getFinanceCompensateListByWorkerId($workerId, $finance_settle_apply_starttime, $finance_settle_apply_endtime);
+        foreach($compensateList as $compensate){
+            $compensateMoney += $compensate ->finance_compensate_total_money;
+        }
+        return $compensateMoney;
+    }
+    
+    public function getCompensateDataProviderByWorkerId($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
+        $data = FinanceCompensate::getFinanceCompensateListByWorkerId($workerId, $finance_settle_apply_starttime, $finance_settle_apply_endtime);
+        $dataProvider = new ArrayDataProvider([ 'allModels' => $data,]);
+        return $dataProvider;
+    }
+    
     public function getTaskArrByWorkerId($workerId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
         $data = [];
         $taskAwardList = self::getTaskAwardList($workerId, $finance_settle_apply_starttime, $finance_settle_apply_endtime);
@@ -188,6 +204,6 @@ class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
         if($count > 0){
             $isWorkerTaskSettled = true;
         }
-        return isWorkerTaskSettled;
+        return $isWorkerTaskSettled;
     }
 }

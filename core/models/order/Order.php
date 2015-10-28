@@ -12,6 +12,7 @@ namespace core\models\order;
 use boss\controllers\operation\OperationGoodsController;
 use boss\controllers\operation\OperationShopDistrictController;
 use common\models\order\OrderExtFlag;
+use common\models\order\OrderExtWorker;
 use core\models\customer\Customer;
 use core\models\customer\CustomerAddress;
 use core\models\payment\GeneralPay;
@@ -78,6 +79,7 @@ use core\models\operation\OperationGoods;
  * @property string $order_pay_flow_num
  * @property string $order_pay_money
  * @property string $order_use_acc_balance
+ * @property string $order_is_use_balance
  * @property string $card_id
  * @property string $order_use_card_money
  * @property string $coupon_id
@@ -130,24 +132,62 @@ class Order extends OrderModel
     {
         $attributes['order_parent_id'] = 0;
         $attributes['order_is_parent'] = 0;
-        return $this->_create($attributes);
+        if($this->_create($attributes)) {
+            $order = $this->attributes;
+            $order['order_id'] = $this->id;
+            $order_model = OrderSearch::getOne($this->id);
+            switch ($this->orderExtPay->order_pay_type) {
+                case self::ORDER_PAY_TYPE_OFF_LINE://现金支付
+                    //交易记录
+                    $order['customer_trans_record_cash'] = $this->order_money;
+                    $order['general_pay_source'] = 20;
+                    if (GeneralPay::cashPay($order)) {
+                        $order_model->admin_id = $attributes['admin_id'];
+                        OrderStatus::_payment($order_model, ['OrderExtPay']);
+                    }
+                    break;
+                case self::ORDER_PAY_TYPE_ON_LINE://线上支付
+                    if ($this->orderExtPay->order_pay_money == 0) { //如果需要支付的金额等于0 则全部走余额支付
+                        //交易记录
+                        $order['customer_trans_record_online_balance_pay'] = $this->orderExtPay->order_use_acc_balance;
+                        $order['general_pay_source'] = 20;
+                        if (GeneralPay::balancePay($order)) {
+                            $order_model->admin_id = $attributes['admin_id'];
+                            OrderStatus::_payment($order_model, ['OrderExtPay']);
+                        }
+                    }
+                    break;
+                case self::ORDER_PAY_TYPE_POP://第三方预付
+                    //交易记录
+                    $order['customer_trans_record_pre_pay'] = $this->orderExtPop->order_pop_order_money;
+                    $order['general_pay_source'] = $this->channel_id;
+                    if (GeneralPay::prePay($order)) {
+                        $order_model->admin_id = $attributes['admin_id'];
+                        OrderStatus::_payment($order_model, ['OrderExtPay']);
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return true;
+        }
+        return false;
     }
 
-    /**
-     * 追加新订单
-     * @param $attributes
-     * @return bool
-     * TODO 追加订单默认是否使用主订单阿姨？
-     */
-    public function addNew($attributes)
+    public function createNewBatch($orders_attributes)
     {
-        if ($attributes['order_parent_id'] <= 0) {
-            $this->addError('order_parent_id', '追加订单必须指定主订单ID！');
-        } else {
-            $attributes['order_is_parent'] = 1;
-            return $this->_create($attributes);
+        foreach($orders_attributes as $attributes){
+            $attributes['order_parent_id'] = 0;
+            $attributes['order_is_parent'] = 0;
+            //如果指定阿姨则是周期订单分配周期订单号
+            if(isset($attributes['order_booked_worker_id']) && $attributes['order_booked_worker_id']>0)
+            {
+                $attributes['order_batch_code'] = OrderTool::createOrderBatchCode();
+            }
+            $this->_create($attributes);
         }
     }
+
 
     /**
      * 在线支付完后调用
@@ -200,7 +240,8 @@ class Order extends OrderModel
     public static function ivrAssignDone($order_id, $worker_phone)
     {
         $worker = Worker::getWorkerInfoByPhone($worker_phone);
-        return self::assignDone($order_id, $worker, 1, 1);
+        $assign_type = OrderExtWorker::ASSIGN_TYPE_IVR;
+        return self::assignDone($order_id, $worker, 1, $assign_type);
     }
 
     /**
@@ -212,7 +253,8 @@ class Order extends OrderModel
     public static function sysAssignDone($order_id, $worker_id)
     {
         $worker = Worker::getWorkerInfo($worker_id);
-        return self::assignDone($order_id, $worker, 1, 1);
+        $assign_type = OrderExtWorker::ASSIGN_TYPE_WORKER;
+        return self::assignDone($order_id, $worker, 1, $assign_type);
     }
 
     /**
@@ -256,7 +298,7 @@ class Order extends OrderModel
      */
     public static function manualAssignDone($order_id, $worker_id, $admin_id, $isCS = false)
     {
-        $assign_type = $isCS ? 2 : 3; //2客服指派 3门店指派
+        $assign_type = $isCS ? OrderExtWorker::ASSIGN_TYPE_CS : OrderExtWorker::ASSIGN_TYPE_SHOP;
         $worker = Worker::getWorkerInfo($worker_id);
         return self::assignDone($order_id, $worker, $admin_id, $assign_type);
     }
@@ -489,45 +531,7 @@ class Order extends OrderModel
             'isdel' => 0,
         ]);
 
-        if ($this->doSave()) {
-            $order = $this->attributes;
-            $order['order_id'] = $order['id'];
-            $order_model = OrderSearch::getOne($this->id);
-            switch ($this->orderExtPay->order_pay_type) {
-                case self::ORDER_PAY_TYPE_OFF_LINE://现金支付
-                    //交易记录
-                    $order['customer_trans_record_cash'] = $this->order_money;
-                    $order['general_pay_source'] = 20;
-                    if (GeneralPay::cashPay($order)) {
-                        $order_model->admin_id = $attributes['admin_id'];
-                        OrderStatus::_payment($order_model, ['OrderExtPay']);
-                    }
-                    break;
-                case self::ORDER_PAY_TYPE_ON_LINE://线上支付
-                    if ($this->orderExtPay->order_pay_money == 0) { //如果需要支付的金额等于0 则全部走余额支付
-                        //交易记录
-                        $order['customer_trans_record_online_balance_pay'] = $this->orderExtPay->order_use_acc_balance;
-                        $order['general_pay_source'] = 20;
-                        if (GeneralPay::balancePay($order)) {
-                            $order_model->admin_id = $attributes['admin_id'];
-                            OrderStatus::_payment($order_model, ['OrderExtPay']);
-                        }
-                    }
-                    break;
-                case self::ORDER_PAY_TYPE_POP://第三方预付
-                    //交易记录
-                    $order['customer_trans_record_pre_pay'] = $this->orderExtPop->order_pop_order_money;
-                    $order['general_pay_source'] = $this->channel_id;
-                    if (GeneralPay::prePay($order)) {
-                        $order_model->admin_id = $attributes['admin_id'];
-                        OrderStatus::_payment($order_model, ['OrderExtPay']);
-                    }
-                    break;
-                default:break;
-            }
-            return true;
-        }
-        return false;
+        return $this->doSave();
     }
 
     /**

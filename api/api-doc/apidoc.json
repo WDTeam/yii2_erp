@@ -1,6 +1,6 @@
 {
   "name": "REST API",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "description": "这里描述了所有客户端需要访问的API，任何的API访问请参考这里的内容",
 
   "header": {

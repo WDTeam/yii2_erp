@@ -81,6 +81,12 @@ class FinanceCompensate extends FinanceCompensateModel
         return $this->financeCompensateStatusArr[$status];
     }
     
+    public static function getFinanceCompensateListByWorkerId($worker_id,$start_time,$end_time){
+        return self::find()->where(['worker_id'=>$worker_id,'finance_compensate_status'=>self::FINANCE_COMPENSATE_REVIEW_PASSED])
+                ->andFilterWhere(['between','updated_at',$start_time,$end_time])
+                ->all();
+    }
+    
     public function attributeLabels()
     {
         $parentAttributeLabels = parent::attributeLabels();

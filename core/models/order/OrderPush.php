@@ -60,7 +60,13 @@ class OrderPush extends Order
         }
 
         $order = OrderSearch::getOne($order_id);
-        return ['order_id' => $order->id, 'created_at' => $order->orderExtStatus->updated_at, 'jpush' => $order->orderExtFlag->order_flag_worker_jpush, 'ivr' => $order->orderExtFlag->order_flag_worker_ivr, 'push_status'=>$push_status];
+        return [
+            'order_id' => $order->id,
+            'created_at' => $order->orderExtStatus->updated_at,
+            'jpush' => $order->orderExtFlag->order_flag_worker_jpush,
+            'ivr' => $order->orderExtFlag->order_flag_worker_ivr,
+            'push_status'=>$push_status
+        ];
     }
 
     /**
@@ -114,7 +120,11 @@ class OrderPush extends Order
         if ($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //开始系统指派的订单
             $worker = json_decode(Yii::$app->redis->executeCommand('lPop', [self::WAIT_IVR_PUSH_ORDERS_POOL . '_' . $order_id]), true);
             if (!empty($worker)) {
-                $result = Yii::$app->ivr->send($worker['worker_phone'], 'pushToWorker_' . $order_id, "开始时间" . date('y年m月d日H点', $order->order_booked_begin_time) . "，时长" . intval($order->order_booked_count / 60) . "个" . ($order->order_booked_count % 60 > 0 ? "半" : "") . "小时，地址{$order->order_address}！"); //TODO 发送内容
+                $week = ['日','一','二','三','四','五','六'];
+                $range =  date('H点', $order->order_booked_begin_time).'至'. date('H点', $order->order_booked_end_time).($order->order_booked_count % 60 > 0 ? "半" : "");
+                $ivr_msg = "服务时间是:" . date('y年m月d日', $order->order_booked_begin_time) . "，星期".$week[date('w', $order->order_booked_begin_time)]."，".$range
+                    ."，时长" . intval($order->order_booked_count / 60) . "个" . ($order->order_booked_count % 60 > 0 ? "半" : "") . "小时。服务地址是：{$order->order_address}！";
+                $result = Yii::$app->ivr->send($worker['worker_phone'], 'pushToWorker_' . $order_id, $ivr_msg);
                 if (isset($result['result']) && $result['result'] == 0) {
                     OrderWorkerRelation::addOrderWorkerRelation($order_id, $worker['id'], '', 'IVR已推送', 1);
                 } else {

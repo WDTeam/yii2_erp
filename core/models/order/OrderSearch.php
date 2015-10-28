@@ -57,7 +57,7 @@ class OrderSearch extends Order
      * @param $begin_time 开始时间(时间戳)
      * @param $end_time 结束时间(时间戳)
      */
-    public static function getWorkerAndOrderAndDoneTime($worker_id,$begin_time,$end_time)
+    public static function getWorkerAndOrderAndDoneTime($worker_id,$begin_time,$end_time,$limit=null,$offset=null)
     {
         //状态
         $params = [
@@ -70,7 +70,7 @@ class OrderSearch extends Order
         ];
         //查询
         $query = new \yii\db\Query();
-        $data = $query->from('{{%order}} as order')
+        $query = $query->from('{{%order}} as order')
             ->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')
             ->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')
             ->innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id')
@@ -78,10 +78,52 @@ class OrderSearch extends Order
             ->select('*')
             ->where(['ow.worker_id'=>$worker_id])
             ->andWhere(['between', 'order.created_at', $begin_time, $end_time])
-            ->andWhere(['in','os.order_status_dict_id',$params])
-            ->all();
+            ->andWhere(['in','os.order_status_dict_id',$params]);
+            if(!is_null($limit)){
+                $query->limit($limit);
+            }
+            if(!is_null($offset)){
+                $query->offset($offset);
+            }
+            $data = $query->all();
+
         return $data;
     }
+
+    /**
+     * 通过阿姨ID获取指定月份的完成时间所有订单
+     * @param $worker_id 阿姨ID
+     * @param $begin_time 开始时间(时间戳)
+     * @param $end_time 结束时间(时间戳)
+     */
+    public static function getWorkerAndOrderAndCancelTime($worker_id,$begin_time,$end_time,$limit=null,$offset=null)
+    {
+        //状态
+        $params = [
+            OrderStatusDict::ORDER_CANCEL//取消服务
+        ];
+        //查询
+        $query = new \yii\db\Query();
+        $query = $query->from('{{%order}} as order')
+            ->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')
+            ->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')
+            ->innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id')
+            ->innerJoin('{{%order_ext_worker}} as ow','order.id = ow.order_id')
+            ->select('*')
+            ->where(['ow.worker_id'=>$worker_id])
+            ->andWhere(['between', 'order.created_at', $begin_time, $end_time])
+            ->andWhere(['in','os.order_status_dict_id',$params]);
+            if(!is_null($limit)){
+                $query->limit($limit);
+            }
+            if(!is_null($offset)){
+                $query->offset($offset);
+            }
+            $data = $query->all();
+
+        return $data;
+    }
+
 
     /**
      * 通过订单ID获取带用户信息的订单
@@ -320,7 +362,9 @@ class OrderSearch extends Order
     {
         $query = new \yii\db\Query();
 
-        $query->from('{{%order}} as order')->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id');
+        $query->from('{{%order}} as order')
+            ->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')
+            ->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -392,7 +436,7 @@ class OrderSearch extends Order
 
         $query->from('{{%order}} as order')->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')->
         innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')->
-        innerJoin('{{%order_worker_relation}} as owr','order.id = owr.order_id');
+        innerJoin('{{%order_ext_worker}} as owr','order.id = owr.order_id');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
