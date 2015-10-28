@@ -2,14 +2,46 @@
 namespace api\controllers;
 
 use Yii;
-use core\models\Operation\CoreOperationShopDistrictGoods;
-use core\models\Operation\CoreOperationCategory;
+use \core\models\operation\CoreOperationShopDistrictGoods;
+use \core\models\operation\CoreOperationCategory;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\operation\coupon\CouponCustomer;
 use \core\models\operation\coupon\Coupon;
 use \core\models\operation\coupon\CouponCode;
 class CouponController extends \api\components\Controller
 {
+     /**
+     * 公用检测客户登录情况
+     * @param type $param 
+     */
+    private function checkCustomerLogin($param=array()){
+        $msg = array('code'=>0,'msg'=>'','customer_id'=>0);
+        if(!isset($param['access_token'])||!$param['access_token']){
+           $msg['msg'] = '请登录';
+           return $msg;
+        }
+        try{
+            $isright_token = CustomerAccessToken::checkAccessToken($param['access_token']);
+            $customer = CustomerAccessToken::getCustomer($param['access_token']);
+        }catch (\Exception $e) {
+            $msg['code'] = '1024';
+            $msg['msg'] = 'boss系统错误';
+            return $msg;
+        }
+        if(!$isright_token){
+            $msg['msg'] = '用户认证已经过期,请重新登录';
+            return $msg;
+        }
+        if (!$customer|| !$customer->id) {
+            $msg['msg'] = '用户不存在';
+            return $msg;
+        }
+        //验证通过
+        $msg['code'] = 1;
+        $msg['msg'] = '验证通过';
+        $msg['customer_id'] = $customer->id;
+        return $msg;
+    }
     /**
      * @api {POST} /coupon/exchange-coupon 兑换优惠劵 （李勇 100%）
      *
@@ -63,12 +95,20 @@ class CouponController extends \api\components\Controller
         $coupon_code = $param['coupon_code'];
         $customer_phone = $param['customer_phone'];
         //验证活动码是否存在
-        $exist_coupon=CouponCode::checkCouponCodeIsAble($coupon_code);
+        try{
+            $exist_coupon=CouponCode::checkCouponCodeIsAble($coupon_code);
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
         if (!$exist_coupon) {
             return $this->send(null, "优惠码不存在", 0, 403);
         }
         //兑换优惠码
-        $exchange_coupon=CouponCode::generateCouponByCode($customer_phone,$coupon_code);
+        try{
+            $exchange_coupon=CouponCode::generateCouponByCode($customer_phone,$coupon_code);
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
         if ($exchange_coupon) {
             return $this->send($exchange_coupon, "兑换成功", 1);
         } else {
@@ -126,17 +166,21 @@ class CouponController extends \api\components\Controller
     {
 
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-        if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
-        }
+         //检测用户是否登录
+        $checkResult = $this->checkCustomerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
+        } 
         if ( !isset($param['city_id']) || !$param['city_id']) {
             return $this->send(null, "请选择城市", 0, 403);
         }
         $city_id = $param['city_id'];
-        $customer = CustomerAccessToken::getCustomer($param['access_token']);
-        $customer_id = $customer->id;
         //获取该用户该城市的优惠码列表
-        $coupons=CouponCustomer::GetCustomerCouponList($customer_id,$city_id);
+        try{
+            $coupons=CouponCustomer::GetCustomerCouponList($checkResult['customer_id'],$city_id);
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
         if (!empty($coupons)) {
             return $this->send($coupons, "获取优惠码列表成功", 1);
         } else {
@@ -194,17 +238,21 @@ class CouponController extends \api\components\Controller
     {
 
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-        if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
-        }
+         //检测用户是否登录
+        $checkResult = $this->checkCustomerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
+        } 
         if (!isset($param['city_id']) || !$param['city_id']) {
             return $this->send(null, "请填写服务或城市名称", 0, 403);
         }
         $city_id = $param['city_id'];
-        $customer = CustomerAccessToken::getCustomer($param['access_token']);
-        $customer_id = $customer->id;
-         //获取该用户该城市的优惠码列表
-       $coupons=CouponCustomer::GetAllCustomerCouponList($customer_id,$city_id);
+        //获取该用户该城市的优惠码列表
+        try{
+            $coupons=CouponCustomer::GetAllCustomerCouponList($checkResult['customer_id'],$city_id);
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
         if (!empty($coupons)) {
             return $this->send($coupons, "获取优惠码列表成功", 1);
         } else {
@@ -217,7 +265,7 @@ class CouponController extends \api\components\Controller
      *
      *
      * @apiName GetCouponCount
-     * @apiGroup Coupon
+     * @apiGroup coupon
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
@@ -260,19 +308,18 @@ class CouponController extends \api\components\Controller
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
-        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        //检测用户是否登录
+        $checkResult = $this->checkCustomerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
         }
-
-        $customer = CustomerAccessToken::getCustomer($param['access_token']);
-
-        if (!empty($customer) && !empty($customer->id)) {
-            $CouponCount =CouponCustomer::CouponCount($customer->id);
-            $ret['couponCount'] = $CouponCount;
-            return $this->send($ret, "用户优惠码数量");
-        } else {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        try{
+            $CouponCount =CouponCustomer::CouponCount($checkResult['customer_id']);
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
         }
+        $ret['couponCount'] = $CouponCount;
+        return $this->send($ret, "用户优惠码数量");
     }
 }
 ?>

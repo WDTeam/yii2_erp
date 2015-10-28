@@ -86,7 +86,9 @@ class ShopStatusBehavior extends Behavior
         $status->cause = $this->owner->cause;
         return $status->save();
     }
-    
+    /**
+     * 最后一个黑名单对象
+     */
     public function getLastJoinBlackList()
     {
         $model = ShopStatus::find()->select(['id','cause', 'created_at', 'status_number'])
@@ -110,5 +112,21 @@ class ShopStatusBehavior extends Behavior
             'status_type'=>1
         ])->orderBy('created_at DESC')->one();
         return empty($model)?new ShopStatus():$model;
+    }
+    /**
+     * 最后一个黑名单原因
+     */
+    public function getLastJoinBlackListCause()
+    {
+        $model = $this->getLastJoinBlackList();
+        return $model->cause;
+    }
+    /**
+     * 最后一个黑名单时间
+     */
+    public function getLastJoinBlackListTime()
+    {
+        $model = $this->getLastJoinBlackList();
+        return date('Y-m-d H:i:s', (int)$model->created_at);
     }
 }

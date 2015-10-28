@@ -2,9 +2,9 @@
 namespace api\controllers;
 
 use Yii;
-use core\models\Operation\OperationShopDistrictGoods;
-use core\models\Operation\OperationCategory;
-use core\models\Operation\OperationCity;
+use \core\models\operation\OperationShopDistrictGoods;
+use \core\models\operation\OperationCategory;
+use \core\models\operation\OperationCity;
 use \core\models\customer\CustomerAccessToken;
 
 class ConfigureController extends \api\components\Controller
@@ -211,6 +211,22 @@ class ConfigureController extends \api\components\Controller
      *                  "category_price_description": "￥25/小时",
      *                  "sort": "2"
      *              },
+     *              ],
+     *              "footer_link":[
+     *              {
+     *                  'link_id'=>'1',
+     *                  'title'=>'首页',
+     *                  'url'=>'',   跳转链接
+     *                  'link_icon'=>'',
+     *                  'sort'=>'1'  排序
+     *              },
+     *              {
+     *                  'link_id'=>'2',
+     *                  'title'=>'订单',
+     *                  'url'=>'',
+     *                  'link_icon'=>'',
+     *                  'sort'=>'2'
+     *              },
      *          ]
      *      }
      * }
@@ -333,11 +349,43 @@ class ConfigureController extends \api\components\Controller
             ],
         ];
 
+        $footer_link = [
+            [
+                'link_id' => '1',
+                'title' => '首页',
+                'url' => '',
+                'link_icon' => '',
+                'sort' => '1',
+            ],
+            [
+                'link_id' => '2',
+                'title' => '订单',
+                'url' => '',
+                'link_icon' => '',
+                'sort' => '2',
+            ],
+            [
+                'link_id' => '3',
+                'title' => '优惠券',
+                'url' => '',
+                'link_icon' => '',
+                'sort' => '3',
+            ],
+            [
+                'link_id' => '4',
+                'title' => '我的',
+                'url' => '',
+                'link_icon' => '',
+                'sort' => '4',
+            ],
+        ];
+
         $ret = [
             'city_list' => $city_list,
             'pic_list' => $pic_list,
             'home_order_server' => $home_order_server,
             'server_list' => $server_list,
+            'footer_link' => $footer_link,
         ];
 
         return $this->send($ret, '操作成功');

@@ -3,7 +3,7 @@
 namespace boss\controllers\worker;
 
 
-use core\models\operation\CoreOperationArea;
+use core\models\operation\OperationArea;
 use core\models\worker\WorkerSkill;
 use core\models\worker\WorkerStat;
 use core\models\worker\WorkerVacationApplication;
@@ -528,7 +528,7 @@ class WorkerController extends BaseAuthController
      */
     public function actionGetDataFromOldDataBase(){
 
-        $operationArea = new CoreOperationArea();
+        $operationArea = new OperationArea();
 
         $connectionNew =  \Yii::$app->db;
         $command = $connectionNew->createCommand('select id from {{%worker}} ORDER by id asc limit 1');
