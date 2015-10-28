@@ -183,10 +183,10 @@ class OrderController extends \api\components\Controller
         $order->errors;
         if ($is_success) {
             $msg = '创建订单成功';
-            $this->send($order, $msg);
+            return $this->send($order, $msg);
         } else {
             $msg = '创建订单失败';
-            $this->send($order->errors, $msg, 0);
+            return $this->send($order->errors, $msg, 0);
         }
     }
 
@@ -997,12 +997,7 @@ class OrderController extends \api\components\Controller
      */
     public function actionCancelOrder()
     {
-        $param = Yii::$app->request->post();
-
-        if (empty($param)) {
-            $param = json_decode(Yii::$app->request->getRawBody(), true);
-        }
-
+        $param = json_decode(Yii::$app->request->getRawBody(), true);
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
@@ -1037,10 +1032,10 @@ class OrderController extends \api\components\Controller
                     return $this->send([1], $param['order_id'] . "订单取消成功");
                 }
             } else {
-                return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
+                return $this->send(null, "核实用户订单唯一性失败，用户id：".$customer->id.",订单id：".$param['order_id'], 0, 403);
             }
         } else {
-            return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
+            return $this->send(null, "获取客户信息失败.access_token：".$param['access_token'], 0, 403);
         }
     }
 
@@ -1310,18 +1305,6 @@ class OrderController extends \api\components\Controller
             return $this->send(null, "缺少规定的参数", 0, 403);
         }
         if (!empty($worker) && !empty($worker->id)) {
-
-            /**
-              'order_id' => $order_id,
-              'batch_code' => $order->order_batch_code,
-              'booked_begin_time' => $order->order_booked_begin_time,
-              'booked_end_time' => $order->order_booked_end_time,
-              'channel_name' => $order->order_channel_name,
-              'booked_count' => $order->order_booked_count,
-              'address' => $order->order_address,
-              'need' => $order->orderExtCustomer->order_customer_need
-             */
-            
 
             if ($param['leveltype'] == 3) {
                 try {
