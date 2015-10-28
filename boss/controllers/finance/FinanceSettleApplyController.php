@@ -498,6 +498,8 @@ class FinanceSettleApplyController extends BaseAuthController
             $financeWorkerOrderIncomeArr = $financeWorkerOrderIncomeSearch->getWorkerOrderIncomeArrayByWorkerId($workerId);
             //获取订单总收入
             $financeSettleApplySearch = $financeSettleApplySearch->getWorkerSettlementSummaryInfo($workerId);
+            var_dump($financeSettleApplySearch);
+            var_dump($financeSettleApplySearch);die;
             //获取阿姨的奖励信息
             $financeWorkerNonOrderIncomeArr = $financeWorkerNonOrderIncomeSearch->getTaskArrByWorkerId($workerId, null, null);
             $transaction =  Yii::$app->db->beginTransaction();

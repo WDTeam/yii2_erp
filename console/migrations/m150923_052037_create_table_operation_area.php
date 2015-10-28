@@ -21,7 +21,7 @@ class m150923_052037_create_table_operation_area extends Migration
             'level' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'行政级别：1省（直辖市），2地级市（地区），3县,区，县级市 ，4：乡镇街道\'',
             'position' => Schema::TYPE_STRING . '(100) DEFAULT NULL COMMENT \'逻辑关系位置\'',
             'sort' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'排序\'',
-            'is_softdel' => Schema::TYPE_SMALLINT . '(1) unsigned NOT NULL DEFAULT 1 COMMENT \'状态\'',
+            'is_softdel' => Schema::TYPE_SMALLINT . '(1) unsigned NOT NULL DEFAULT 0 COMMENT \'状态\'',
             'created_at' => Schema::TYPE_INTEGER. '(11) DEFAULT NULL COMMENT \'创建时间\'',
             'updated_at' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'编辑时间\'',
         ], $tableOptions);

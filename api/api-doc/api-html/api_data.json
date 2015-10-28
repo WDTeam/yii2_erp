@@ -79,7 +79,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/AuthController.php",
+    "filename": "../controllers/AuthController.php",
     "groupTitle": "Auth"
   },
   {
@@ -162,7 +162,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/AuthController.php",
+    "filename": "../controllers/AuthController.php",
     "groupTitle": "Auth"
   },
   {
@@ -245,7 +245,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/AuthController.php",
+    "filename": "../controllers/AuthController.php",
     "groupTitle": "Auth"
   },
   {
@@ -271,7 +271,7 @@
     "type": "",
     "url": "",
     "version": "0.0.0",
-    "filename": "controllers/customer/CustomerController.php",
+    "filename": "../controllers/customer/CustomerController.php",
     "group": "D__code_ejj_enterprise_boss_api_controllers_customer_CustomerController_php",
     "groupTitle": "D__code_ejj_enterprise_boss_api_controllers_customer_CustomerController_php",
     "name": ""
@@ -474,7 +474,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -668,7 +668,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -768,7 +768,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -847,7 +847,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -913,7 +913,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -982,7 +982,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -1093,7 +1093,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -1218,7 +1218,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -1322,7 +1322,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -1447,7 +1447,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -1545,7 +1545,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -1643,7 +1643,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -1712,7 +1712,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -1771,7 +1771,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -1865,7 +1865,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -1945,7 +1945,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -2011,7 +2011,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -2082,7 +2082,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/PayController.php",
+    "filename": "../controllers/PayController.php",
     "groupTitle": "Pay"
   },
   {
@@ -2140,7 +2140,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/PayController.php",
+    "filename": "../controllers/PayController.php",
     "groupTitle": "Pay"
   },
   {
@@ -2316,7 +2316,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/PayController.php",
+    "filename": "../controllers/PayController.php",
     "groupTitle": "Pay"
   },
   {
@@ -2375,7 +2375,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/SendSmsController.php",
+    "filename": "../controllers/SendSmsController.php",
     "groupTitle": "SendSms"
   },
   {
@@ -2444,7 +2444,7 @@
       }
     ],
     "version": "0.0.0",
-    "filename": "controllers/SendSmsController.php",
+    "filename": "../controllers/SendSmsController.php",
     "groupTitle": "SendSms"
   },
   {
@@ -2503,7 +2503,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/SendSmsController.php",
+    "filename": "../controllers/SendSmsController.php",
     "groupTitle": "SendSms"
   },
   {
@@ -2625,7 +2625,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -2690,7 +2690,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -2759,7 +2759,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -2798,13 +2798,13 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/customer/CustomerController.php",
+    "filename": "../controllers/customer/CustomerController.php",
     "groupTitle": "User"
   },
   {
     "type": "GET",
     "url": "v1/user/get-comment-level",
-    "title": "获取用户评价等级 （郝建设 100%）",
+    "title": "获取用户评价11等级 （郝建设 100%）",
     "name": "GetCommentLevel",
     "group": "User",
     "parameter": {
@@ -2856,7 +2856,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -2902,7 +2902,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/customer/CustomerController.php",
+    "filename": "../controllers/customer/CustomerController.php",
     "groupTitle": "User"
   },
   {
@@ -2967,7 +2967,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -3046,7 +3046,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -3115,7 +3115,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -3174,13 +3174,13 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
     "type": "DELETE",
     "url": "v1/user/remove-worker",
-    "title": "移除黑名单中的阿姨 （功能已经实现,需要再次确认传递参数 已完成100%）",
+    "title": "移除黑名单中的阿姨1 （功能已经实现,需要再次确认传递参数 已完成100%）",
     "name": "RemoveWorker",
     "group": "User",
     "parameter": {
@@ -3239,7 +3239,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -3305,7 +3305,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -3420,7 +3420,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -3550,13 +3550,13 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/customer/CustomerController.php",
+    "filename": "../controllers/customer/CustomerController.php",
     "groupTitle": "User"
   },
   {
     "type": "POST",
     "url": "v1/user/user-suggest",
-    "title": "用户评价 （需要再次核实需求;郝建设 100%）",
+    "title": "用户评价111",
     "name": "UserSuggest",
     "group": "User",
     "parameter": {
@@ -3636,7 +3636,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -3705,7 +3705,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -3763,7 +3763,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -3822,7 +3822,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -3898,7 +3898,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -3961,7 +3961,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4026,7 +4026,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4087,7 +4087,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4154,7 +4154,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4229,7 +4229,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4296,7 +4296,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4363,7 +4363,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4416,7 +4416,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4476,7 +4476,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4530,7 +4530,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4590,7 +4590,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4651,7 +4651,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4718,7 +4718,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4776,7 +4776,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4834,7 +4834,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4906,7 +4906,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4978,7 +4978,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -5038,7 +5038,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -5103,7 +5103,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -5149,7 +5149,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -5208,7 +5208,7 @@
     },
     "description": "<p>获取城市服务配置项价格介绍页面以及分类的全部服务项目</p> ",
     "version": "0.0.0",
-    "filename": "controllers/ConfigureController.php",
+    "filename": "../controllers/ConfigureController.php",
     "groupTitle": "configure"
   },
   {
@@ -5267,7 +5267,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/ConfigureController.php",
+    "filename": "../controllers/ConfigureController.php",
     "groupTitle": "configure"
   },
   {
@@ -5325,7 +5325,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/ConfigureController.php",
+    "filename": "../controllers/ConfigureController.php",
     "groupTitle": "configure"
   },
   {
@@ -5383,7 +5383,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/ConfigureController.php",
+    "filename": "../controllers/ConfigureController.php",
     "groupTitle": "configure"
   },
   {
@@ -5448,7 +5448,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/CouponController.php",
+    "filename": "../controllers/CouponController.php",
     "groupTitle": "coupon"
   },
   {
@@ -5513,7 +5513,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/CouponController.php",
+    "filename": "../controllers/CouponController.php",
     "groupTitle": "coupon"
   },
   {
@@ -5589,7 +5589,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/CouponController.php",
+    "filename": "../controllers/CouponController.php",
     "groupTitle": "coupon"
   },
   {
@@ -5652,7 +5652,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/CouponController.php",
+    "filename": "../controllers/CouponController.php",
     "groupTitle": "coupon"
   },
   {
@@ -5732,7 +5732,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/ServiceController.php",
+    "filename": "../controllers/ServiceController.php",
     "groupTitle": "service"
   },
   {
@@ -5791,7 +5791,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/ServiceController.php",
+    "filename": "../controllers/ServiceController.php",
     "groupTitle": "service"
   },
   {
@@ -5876,7 +5876,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/ServiceController.php",
+    "filename": "../controllers/ServiceController.php",
     "groupTitle": "service"
   },
   {
@@ -5949,7 +5949,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/ServiceController.php",
+    "filename": "../controllers/ServiceController.php",
     "groupTitle": "service"
   },
   {
@@ -6029,7 +6029,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/ServiceController.php",
+    "filename": "../controllers/ServiceController.php",
     "groupTitle": "service"
   },
   {
@@ -6088,7 +6088,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/ServiceController.php",
+    "filename": "../controllers/ServiceController.php",
     "groupTitle": "service"
   },
   {
@@ -6182,7 +6182,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/ServiceController.php",
+    "filename": "../controllers/ServiceController.php",
     "groupTitle": "service"
   },
   {
@@ -6248,7 +6248,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/ServiceController.php",
+    "filename": "../controllers/ServiceController.php",
     "groupTitle": "service"
   }
 ]

@@ -27,7 +27,7 @@ class m150919_102729_create_table_coupon extends Migration
 		'coupon_service_name'=>  Schema::TYPE_STRING . '(255) DEFAULT NULL COMMENT \'服务名称\'',
 
 		'coupon_city_limit'=>  Schema::TYPE_SMALLINT . '(4) DEFAULT 0 COMMENT \'城市限制0为不限1为单一城市限制\'',
-		'coupon_city_id'=>  Schema::TYPE_SMALLINT . '(4) DEFAULT 0 COMMENT \'关联城市\'',
+		'coupon_city_id'=>  Schema::TYPE_INTEGER . '(16) DEFAULT 0 COMMENT \'关联城市\'',
 		'coupon_city_name'=>  Schema::TYPE_STRING . '(255) DEFAULT NULL COMMENT \'城市名称\'',
 
 		'coupon_customer_type'=>  Schema::TYPE_SMALLINT . '(4) DEFAULT NULL COMMENT \'适用客户类别逗号分割0为所有用户1为新用户2为老用户3会员4为非会员\'',
