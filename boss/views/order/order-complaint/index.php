@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						 	客户手机<input type="text" name="OrderComplaintSearch[complaint_phone]" value="<?php if(!empty($params['OrderComplaintSearch']['complaint_phone'])){ echo $params['OrderComplaintSearch']['complaint_phone']; }?>"/>
 						 	</label>
 						 	<label class="m_iphone">
-						 	阿姨手机<input type="text" name="OrderComplaint[order_worker_phone]" value="<?php if(!empty($params['OrderComplaintSearch']['order_worker_phone'])){ echo $params['OrderComplaintSearch']['order_worker_phone']; }?>"/>
+						 	阿姨手机<input type="text" name="OrderComplaintSearch[order_worker_phone]" value="<?php if(!empty($params['OrderComplaintSearch']['order_worker_phone'])){ echo $params['OrderComplaintSearch']['order_worker_phone']; }?>"/>
 						 	</label>
 						 	<label class="m_iphone">
 						  		阿姨姓名<input type="text" name="OrderComplaintSearch[order_worker_name]" value="<?php if(!empty($params['OrderComplaintSearch']['order_worker_name'])){ echo $params['OrderComplaintSearch']['order_worker_name'];}?>"/>
