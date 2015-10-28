@@ -829,17 +829,15 @@ class WorkerController extends \api\components\Controller
     public function actionGetWorkerPunishList(){
         $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
         //检测阿姨是否登录
-//        $checkResult = ApiWorker::checkWorkerLogin($param);
-//        if(!$checkResult['code']){
-//            return $this->send(null, $checkResult['msg'], 0, 403);
-//        }
-//        //数据整理
-//        $settle_id = intval($param['settle_id']);//账单ID
-//        if(!$settle_id){
-//            return $this->send(null, "账单唯一标识错误", 0, 403);
-//        }
-        $checkResult['worker_id'] =18475;
-        $settle_id = 1;
+        $checkResult = ApiWorker::checkWorkerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
+        }
+        //数据整理
+        $settle_id = intval($param['settle_id']);//账单ID
+        if(!$settle_id){
+            return $this->send(null, "账单唯一标识错误", 0, 403);
+        }
         $ret =[
             'worker_is_block'=>1,
              'data'=>[]
