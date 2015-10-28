@@ -396,7 +396,7 @@ class server
       $bb=getconfig("./2.php", "bb", "string");
       updateconfig("./2.php", "name", "admin");
      */
-    function get_config($file = 'config.php', $ini, $type = "string") {
+    function get_config($file = CONFIG_PATH, $ini, $type = "string") {
         if (!file_exists($file))
             return false;
         $str = file_get_contents($file);
@@ -414,7 +414,7 @@ class server
     /*
      * 配置文件更新
      */
-    function update_config($file = 'config.php', $ini, $value, $type = "string") {
+    function update_config($file = CONFIG_PATH, $ini, $value, $type = "string") {
         if (!file_exists($file))
             return false;
         $str = file_get_contents($file);
