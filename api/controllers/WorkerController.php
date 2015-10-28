@@ -429,21 +429,19 @@ class WorkerController extends \api\components\Controller
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *      "code": "ok",
-     *      "msg": "操作成功.",
-     *      "ret": [
-     *         {
-     *             "complain_id": "1",
-     *             "complain": "这是第一条投诉",
-     *             "complain_date": "2015-10-22"
-     *         },
-     *         {
-     *             "complain_id": "1",
-     *             "complain": "这是第二条投诉",
-     *             "complain_date": "2015-10-22"
-     *         }
-     *      ]
-     * }
+     *   "code": 1,
+     *   "msg": "操作成功.",
+     *   "ret": {
+     *       "per_page": 1,
+     *       "page_num": 10,
+     *       "data": [
+     *           {
+     *               "complaint_content": null,
+     *               "complaint_time": "1970-01-01 08:00:00"
+     *           }
+     *       ]
+     *   }
+     *   }
      *
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
@@ -550,10 +548,15 @@ class WorkerController extends \api\components\Controller
     }
 
     /**
+<<<<<<< HEAD
      * @api {GET} /worker/get-worker-settle-list 获取阿姨对账单列表 (田玉星 95%)
      * 
      * @apiDescription 【备注：model微调】
      *
+=======
+     * @api {GET} /worker/get-worker-settle-list 获取阿姨对账单列表 (田玉星 100%)
+     * 
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
      * @apiName actionGetWorkerSettleList 
      * @apiGroup Worker
      *
@@ -626,7 +629,11 @@ class WorkerController extends \api\components\Controller
             }else{
                 $settleArr[$key]['settle_date'] = date('m',strtotime($val['settle_starttime']));
             }
+<<<<<<< HEAD
             $settleArr[$key]['settle_type'] = $val['settle_cycle_type'];
+=======
+            $settleArr[$key]['settle_type'] = $val['settle_cycle'];
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
             $settleArr[$key]['order_count'] = $val['order_count'];
             $settleArr[$key]['worker_income'] = $val['worker_income'];
             $settleArr[$key]['settle_status'] = $val['settle_status'];
@@ -1070,7 +1077,11 @@ class WorkerController extends \api\components\Controller
 //        try{
 //            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id,$type);
 //        }catch (\Exception $e) {
+<<<<<<< HEAD
 //            return $this->send(null, "查看请假情况失败", 0, 403);
+=======
+//            return $this->send(null, "boss系统错误", 1024, 403);
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
 //        }
         $ret = [
             "result" => 1,
@@ -1159,7 +1170,11 @@ class WorkerController extends \api\components\Controller
 //        try{
 //            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id);
 //        }catch (\Exception $e) {
+<<<<<<< HEAD
 //            return $this->send(null, "您没有任务哦", 0, 403);
+=======
+//            return $this->send(null, "boss系统错误", 1024, 403);
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
 //        }
         $ret = [
                 [
@@ -1249,7 +1264,11 @@ class WorkerController extends \api\components\Controller
 //        try{
 //            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id);
 //        }catch (\Exception $e) {
+<<<<<<< HEAD
 //            return $this->send(null, "您没有任务哦", 0, 403);
+=======
+//            return $this->send(null, "boss系统错误", 1024, 403);
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
 //        }
         $ret = [
                 [
@@ -1337,7 +1356,11 @@ class WorkerController extends \api\components\Controller
 //        try{
 //            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id);
 //        }catch (\Exception $e) {
+<<<<<<< HEAD
 //            return $this->send(null, "您没有任务哦", 0, 403);
+=======
+//            return $this->send(null, "boss系统错误", 1024, 403);
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
 //        }
         $ret = [
                 [
@@ -1427,7 +1450,11 @@ class WorkerController extends \api\components\Controller
 //        try{
 //            $ret= WorkerVacationApplication::getApplicationTimeLine($worker_id,$task_id);
 //        }catch (\Exception $e) {
+<<<<<<< HEAD
 //            return $this->send(null, "您没有任务哦", 0, 403);
+=======
+//            return $this->send(null, "boss系统错误", 1024, 403);
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
 //        }
         $ret = [
                 [

@@ -49,13 +49,25 @@ class AuthController extends \api\components\Controller
         }
         $phone = $param['phone'];
         $verifyCode = $param['verify_code'];
-        $checkRet = CustomerCode::checkCode($phone,$verifyCode);
+        try{
+            $checkRet = CustomerCode::checkCode($phone,$verifyCode);
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
         if ($checkRet) {
-            $token = CustomerAccessToken::generateAccessToken($phone, $verifyCode);
+            try{
+                $token = CustomerAccessToken::generateAccessToken($phone, $verifyCode);
+            }catch (\Exception $e) {
+                return $this->send(null, "boss系统错误", 1024, 403);
+            }
             if (empty($token)) {
                 return $this->send($token, "生成token错误",0);
             }else{
-                $user = CustomerAccessToken::getCustomer($token);
+                try{
+                    $user = CustomerAccessToken::getCustomer($token);
+                }catch (\Exception $e) {
+                    return $this->send(null, "boss系统错误", 1024, 403);
+                }
                 $ret = [
                     "user" => $user,
                     "access_token" => $token
@@ -68,7 +80,7 @@ class AuthController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} /auth/loginfrompop 客户登录(第三方渠道) (已实现)
+     * @api {POST} /auth/login-from-pop 客户登录(第三方渠道) (已实现)
      * @apiName LoginFromPop
      * @apiGroup Auth
      *
@@ -86,7 +98,7 @@ class AuthController extends \api\components\Controller
      *       "msg": "登录成功"，
      *       "ret":{
      *          "user":{}
-     *          "access_token":""
+     *          "access_token":"807b62127fdc2554607a01529d9e4b7e"
      *       }
      *     }
      *
@@ -96,7 +108,8 @@ class AuthController extends \api\components\Controller
      *     HTTP/1.1 403 Not Found
      *     { 
      *       "code":"0",
-     *       "msg": "用户名,签名或渠道名称错误"
+     *       "msg": "用户名,签名或渠道名称错误",
+     *       "ret": null
      *     }
      */
     public function actionLoginFromPop()
@@ -175,22 +188,34 @@ class AuthController extends \api\components\Controller
         if (!preg_match("/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/", $phone)){
            return $this->send(null, "请输入正确的手机号", 0, 403);
         }
-        $if_exist = Worker::getWorkerInfoByPhone($phone);
+        try{
+            $if_exist = Worker::getWorkerInfoByPhone($phone);
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
         if(empty($if_exist)){
              return $this->send(null, "该用户不存在", 0, 403);
         }
-        $checkRet = WorkerCode::checkCode($phone,$verify_code);
+        try{
+             $checkRet = WorkerCode::checkCode($phone,$verify_code);
+        }catch (\Exception $e) {
+             return $this->send(null, "boss系统错误", 1024, 403);
+        }
         if($checkRet){
-            $token = WorkerAccessToken::generateAccessToken($phone,$verify_code);
+            try{
+                 $token = WorkerAccessToken::generateAccessToken($phone,$verify_code);
+            }catch (\Exception $e) {
+                 return $this->send(null, "boss系统错误", 1024, 403);
+            }
             if (empty($token)) {
-                return $this->send(null, "生成token错误",0);
+                 return $this->send(null, "生成token错误",0);
             }else{
-                $user = WorkerAccessToken::getWorker($token);
-                $ret = [
-                    "user" => $user,
-                    "access_token" => $token
-                ];
-                return $this->send($ret, "登陆成功",1);
+                 $user = WorkerAccessToken::getWorker($token);
+                 $ret = [
+                     "user" => $user,
+                     "access_token" => $token
+                 ];
+                 return $this->send($ret, "登陆成功",1);
             }
             
         } else {

@@ -803,6 +803,11 @@ class CustomerController extends Controller
 
     }
 
+	public function actionTest3(){
+		$a = Customer::addCustomer('18519654005');
+		var_dump($a);
+	}
+
     public function actionTest(){
         // $customer = new Customer;
         // $res = $customer->decBalance(1, 0.01);

@@ -3,7 +3,11 @@
 namespace core\models\customer;
 use Yii;
 use common\models\GeneralRegion;
+<<<<<<< HEAD
 use common\models\Operation\OperationArea;
+=======
+use common\models\operation\OperationArea;
+>>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
 
 use core\models\customer\Customer;
 
