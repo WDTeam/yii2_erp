@@ -270,7 +270,7 @@ class CustomerController extends \api\components\Controller
     	if (empty($param)) {
     		$param = json_decode(Yii::$app->request->getRawBody(), true);
     	}
-    	$level = CustomerComment::getCustomerCommentworkerlist($param['worker_id']);
+    	$level = CustomerComment::getCustomerCommentworkerlist($param['worker_id'],$param['customer_comment_level']);
     	if (!empty($level)) {
     		$ret = ['comment' => $level];
     		return $this->send($ret, '阿姨评价列表');
