@@ -79,6 +79,7 @@ use core\models\operation\OperationGoods;
  * @property string $order_pay_flow_num
  * @property string $order_pay_money
  * @property string $order_use_acc_balance
+ * @property string $order_is_use_balance
  * @property string $card_id
  * @property string $order_use_card_money
  * @property string $coupon_id
@@ -132,8 +133,8 @@ class Order extends OrderModel
         $attributes['order_parent_id'] = 0;
         $attributes['order_is_parent'] = 0;
         if($this->_create($attributes)) {
-            $order = $attributes;
-            $order['order_id'] = $order['id'];
+            $order = $this->attributes;
+            $order['order_id'] = $this->id;
             $order_model = OrderSearch::getOne($this->id);
             switch ($this->orderExtPay->order_pay_type) {
                 case self::ORDER_PAY_TYPE_OFF_LINE://现金支付
