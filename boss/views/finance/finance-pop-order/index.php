@@ -158,14 +158,32 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' =>'{view} {tagssign}',
+                'template' =>'{view} {taginfo} {tagssign}',
                 'buttons' => [
                 'update' => function ($url, $model) {
                                     return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance/finance-pop-order/view','id' => $model->id,'edit'=>'t']), [
                                                     'title' => Yii::t('yii', 'Edit'),
                                                   ]);},
                                                   
-                                                  
+                                                  'taginfo' => function ($url, $model) {
+                                                  	return Html::a('<span class="fa fa-fw fa-linkedin-square"></span>',
+                                                  			[
+                                                  			'finance/finance-pop-order/forminfo',
+                                                  			'id' => $model->id,
+                                                  			'edit'=>'baksite',
+                                                  			'oid'=>$model->finance_record_log_id
+                                                  			]
+                                                  			,
+                                                  			[
+                                                  			'title' => Yii::t('yii', '请输入标记原因'),
+                                                  			'data-toggle' => 'modal',
+                                                  			'data-target' => '#tagModal',
+                                                  			'class'=>'vacationinfo',
+                                                  			'data-id'=>$model->id,
+                                                  			'style' => 'margin-right:3px'
+                                                  			]);
+                                                  },  
+
                                                   'tagssign' => function ($url, $model) {
                                                   	return Html::a('<span class="fa fa-fw fa-history"></span>',
                                                   			[
@@ -183,17 +201,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                                   			'data-id'=>$model->id,
                                                   			'style' => 'margin-right:3px'
                                                   			]);
-                                                  },       
-               /*  'tagssign' => function ($url, $model, $key) {
-                    $options = [
-                        'title' => Yii::t('yii', '标记坏账'),
-                        'aria-label' => Yii::t('yii', '标记坏账'),
-                        'data-confirm' => Yii::t('kvgrid', '你确定标记为坏账吗?'),
-                        'data-method' => 'post',
-                        'data-pjax' => '0'
-                    ];
-                    return Html::a('<span class="glyphicon glyphicon-tags"></span>', Yii::$app->urlManager->createUrl(['finance-pop-order/tagssign','id' => $model->id,'edit'=>'baksite','oid'=>$model->finance_record_log_id]), $options);
-                } */
+                                                  },
+                                                  
+                                                  
                 ],
             ],
         ],
@@ -225,8 +235,15 @@ Html::a('<i class="glyphicon" ></i>状态不对(总额:'.$searchModel->OrderPayS
        		'id'=>'vacationModal',
        		]);
 
-
+       echo Modal::widget([
+       		'header' => '<h4 class="modal-title">标记原因</h4>',
+       		'id'=>'tagModal',
+       		]);
 $this->registerJs(<<<JSCONTENT
+		$('.vacationinfo').click(function() {
+            $('#tagModal .modal-body').html('加载中……');
+            $('#tagModal .modal-body').eq(0).load(this.href);
+        });
         $('.vacation').click(function() {
             $('#vacationModal .modal-body').html('加载中……');
             $('#vacationModal .modal-body').eq(0).load(this.href);
