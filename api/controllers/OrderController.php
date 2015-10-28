@@ -16,7 +16,8 @@ use yii\web\Response;
 class OrderController extends \api\components\Controller
 {
 
-    public $workerText = array(1 => '指定阿姨订单数','待抢单订单订单数','指定阿姨订单列表','待抢单订单列表');
+    public $workerText = array(1 => '指定阿姨订单数', '待抢单订单订单数', '指定阿姨订单列表', '待抢单订单列表');
+
     /**
      * @api {POST} /order/create-order 创建订单 (90%xieyi  缺少周期订单和精品保洁，缺少后台模块支持)
      *
@@ -93,7 +94,7 @@ class OrderController extends \api\components\Controller
     public function actionCreateOrder()
     {
         $args = Yii::$app->request->post() or
-                $args = json_decode(Yii::$app->request->getRawBody(), true);
+        $args = json_decode(Yii::$app->request->getRawBody(), true);
         $attributes = [];
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
@@ -247,7 +248,7 @@ class OrderController extends \api\components\Controller
     public function actionAppendOrder()
     {
         $args = Yii::$app->request->post() or
-                $args = json_decode(Yii::$app->request->getRawBody(), true);
+        $args = json_decode(Yii::$app->request->getRawBody(), true);
         $attributes = [];
         $user = CustomerAccessToken::getCustomer($args['access_token']);
         if (is_null($user)) {
@@ -578,10 +579,10 @@ class OrderController extends \api\components\Controller
         $args["owr.worker_id"] = $worker->id;
         try {
             $orderSearch = new \core\models\order\OrderSearch();
-            $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $orderStatus,$channels,$from,$to);
+            $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $orderStatus, $channels, $from, $to);
             $orders = $orderSearch->searchWorkerOrdersWithStatus($args, $isAsc, $offset, $limit, $orderStatus, $channels, $from, $to);
-        }catch(Exception $e){
-            return $this->send($e,"服务异常",2);
+        } catch (Exception $e) {
+            return $this->send($e, "服务异常", 2);
         }
         $ret = [];
         $ret['limit'] = $limit;
@@ -727,7 +728,7 @@ class OrderController extends \api\components\Controller
         @$to = $args['to'];
         $args["oc.customer_id"] = $user->id;
         $orderSearch = new \core\models\order\OrderSearch();
-        $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus, $channels,$from,$to);
+        $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus, $channels, $from, $to);
         $ret['count'] = $count;
         $this->send($ret, "操作成功", 1, 200);
     }
@@ -889,7 +890,7 @@ class OrderController extends \api\components\Controller
     public function actionOrderStatusHistory()
     {
         $args = Yii::$app->request->get() or
-                $args = json_decode(Yii::$app->request->getRawBody(), true);
+        $args = json_decode(Yii::$app->request->getRawBody(), true);
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
@@ -942,7 +943,7 @@ class OrderController extends \api\components\Controller
     public function actionWorkerServiceOrderCount()
     {
         $args = Yii::$app->request->get() or
-                $args = json_decode(Yii::$app->request->getRawBody(), true);
+        $args = json_decode(Yii::$app->request->getRawBody(), true);
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
@@ -959,8 +960,8 @@ class OrderController extends \api\components\Controller
     }
 
     /**
-     * @api {PUT} /order/cancel-order 取消订单(haojianse 100% ) 
-     * 
+     * @api {PUT} /order/cancel-order 取消订单(haojianse 100% )
+     *
      * @apiName CancelOrder
      * @apiGroup Order
      *
@@ -998,15 +999,15 @@ class OrderController extends \api\components\Controller
     public function actionCancelOrder()
     {
         $param = json_decode(Yii::$app->request->getRawBody(), true);
-        if(!isset($param['access_token'])||!$param['access_token']||!isset($param['order_id'])||!$param['order_id']){
+        if (!isset($param['access_token']) || !$param['access_token'] || !isset($param['order_id']) || !$param['order_id']) {
             return $this->send(null, "验证码或订单号不能为空", 0, 403);
         }
         $token = $param['access_token'];
-		$orderId = $param['order_id'];
-		$reason = '';
-		if(isset($param['order_cancel_reason'])){
-			$reason = $param['order_cancel_reason'];
-		}
+        $orderId = $param['order_id'];
+        $reason = '';
+        if (isset($param['order_cancel_reason'])) {
+            $reason = $param['order_cancel_reason'];
+        }
         if (!CustomerAccessToken::checkAccessToken($token)) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
@@ -1041,10 +1042,10 @@ class OrderController extends \api\components\Controller
                     return $this->send([1], $orderId . "订单取消成功");
                 }
             } else {
-                return $this->send(null, "核实用户订单唯一性失败，用户id：".$customer->id.",订单id：".$orderId, 0, 403);
+                return $this->send(null, "核实用户订单唯一性失败，用户id：" . $customer->id . ",订单id：" . $orderId, 0, 403);
             }
         } else {
-            return $this->send(null, "获取客户信息失败.access_token：".$token, 0, 403);
+            return $this->send(null, "获取客户信息失败.access_token：" . $token, 0, 403);
         }
     }
 
@@ -1090,7 +1091,7 @@ class OrderController extends \api\components\Controller
      */
     public function actionObtainOrder()
     {
-        
+
     }
 
     /**
@@ -1129,7 +1130,7 @@ class OrderController extends \api\components\Controller
      */
     public function actionAddComment()
     {
-        
+
     }
 
     /**
@@ -1239,7 +1240,7 @@ class OrderController extends \api\components\Controller
      */
     public function actionWorkerHistoryOrders()
     {
-        
+
     }
 
     /**
@@ -1264,7 +1265,7 @@ class OrderController extends \api\components\Controller
      *          "OrderCount": "123"
      *      }
      * }
-     * 
+     *
      *   * 指定阿姨订单列表/待抢单订单列表
      * {
      *      "code": "ok",
@@ -1272,7 +1273,7 @@ class OrderController extends \api\components\Controller
      *      "ret":
      *      {
      *          "orderList":
-     *           [ 
+     *           [
      *           {
      *            "order_id":"订单号"
      *            "order_code":"订单编号"
@@ -1359,11 +1360,11 @@ class OrderController extends \api\components\Controller
 
     /**
      * @api {PUT} v1/order/set-worker-order.php 阿姨抢单提交 (haojianshe 0%)
-     * 
+     *
      * @apiName actionSetWorkerOrder
      * @apiGroup Order
      * @apiDescription 阿姨抢单提交
-     * 
+     *
      * @apiParam {String} access-token      会话id.
      * @apiParam {String} platform_version  平台版本号
      * @apiParam {String} order_id          订单号
