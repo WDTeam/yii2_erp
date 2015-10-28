@@ -170,7 +170,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                   			[
                                                   			'finance/finance-pop-order/forminfo',
                                                   			'id' => $model->id,
-                                                  			'edit'=>'baksite',
+                                                  			'edit'=>'baksiteinfo',
                                                   			'oid'=>$model->finance_record_log_id
                                                   			]
                                                   			,
