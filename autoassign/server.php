@@ -354,14 +354,22 @@ class server
     /*
      * 调用 BOSS API 指派阿姨
      */
-    public function taskOrder($server,$data){
-        //echo 'taskOrder'."\n";
-        $url = $this->config['BOSS_API_URL'].$data['order_id'];
-        $result =  @file_get_contents($url);
-        //$data = (array)json_decode($d);
-        //var_dump($data);
-        return $data;
+    public function taskOrder($server, $data) {
+        echo date('Y-m-d H:i:s') . ' 请求API' . $this->config['BOSS_API_URL'] . $data['order_id'] . "\n";
+        $url = $this->config['BOSS_API_URL'] . $data['order_id'];
+        try {
+            $result = @file_get_contents($url);
+            //$data = (array)json_decode($d);
+            //var_dump($data);
+        } catch (Exception $ex) {
+            echo date('Y-m-d H:i:s').$ex->getMessage()."\n";
+            var_dump($data);
+            echo $ex->getTrace()."\n";
+        } finally {
+            return $data;
+        }
     }
+
     /*
      * 任务完成时触发
      */
