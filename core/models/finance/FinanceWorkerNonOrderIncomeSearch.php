@@ -8,6 +8,7 @@ use common\models\finance\FinanceWorkerNonOrderIncome;
 use core\models\worker\WorkerTask;
 use yii\data\ArrayDataProvider;
 use core\models\worker\Worker;
+use core\models\finance\FinanceSettleApplySearch;
 
 /**
  * FinanceWorkerNonOrderIncomeSearch represents the model behind the search form about `common\models\finance\FinanceWorkerNonOrderIncome`.
@@ -173,5 +174,20 @@ class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
         $nonOrderIncomeArr =  FinanceWorkerNonOrderIncome::find()->select(['finance_worker_non_order_income_type','finance_worker_non_order_income'])
                  ->where(['finance_settle_apply_id'=>$settleApplyId])->all();
         return $nonOrderIncomeArr;
+    }
+    
+    /**
+     * 根据任务Id判断该任务是否已经被结算
+     * @param type $task_id
+     */
+    public static function isWorkerTaskSettled($task_id){
+        $isWorkerTaskSettled = false;
+        $count = self::find()->join('INNER JOIN', '{{%finance_settle_apply}}', 'finance_settle_apply_id={{%finance_settle_apply}}.id')
+                ->where(['finance_worker_non_order_income_code'=>$task_id,'{{%finance_settle_apply}}.finance_settle_apply_status'=>FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PAYED])
+                ->count();
+        if($count > 0){
+            $isWorkerTaskSettled = true;
+        }
+        return isWorkerTaskSettled;
     }
 }
