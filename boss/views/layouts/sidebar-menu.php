@@ -1,6 +1,7 @@
 <?php
 use boss\widgets\Menu;
-
+use core\models\finance\FinanceShopSettleApplySearch;
+use core\models\finance\FinanceSettleApplySearch;
 
 $ctrl = Yii::$app->controller;
 
@@ -25,7 +26,7 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '新合作公司(100%)',
+                        'label' => '添加新家政(100%)',
                         'url' => ['shopmanager/shop-manager/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
