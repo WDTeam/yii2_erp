@@ -146,7 +146,7 @@ class OrderComplaint extends \common\models\order\OrderComplaint
     	if(!empty($arr) && is_array($arr)){
     		$arr['complaint_channel'] = '1';
     		$narr = array('OrderComplaint'=>$arr);
-    		$this->load($data);
+    		$this->load($narr);
     		$this->save();
     	}else{
     		return false;
@@ -166,7 +166,7 @@ class OrderComplaint extends \common\models\order\OrderComplaint
         $query = new \yii\db\Query();
         $query = $query->select([
             'ocomplain.complaint_content',
-            'ocomplain.created_at',
+            'ocomplain.complaint_time',
         ])->from('{{%order}} as order ')
             ->leftJoin('{{%order_complaint}} as ocomplain','order.id = ocomplain.order_id')
             ->andFilterWhere([
