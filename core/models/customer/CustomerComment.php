@@ -59,6 +59,7 @@ class CustomerComment extends \common\models\customer\CustomerComment
     
     public static function addUserSuggest($array)
     {
+       
     	if(count($array)>0){
         $transaction = \Yii::$app->db->beginTransaction();
         try {
@@ -68,7 +69,7 @@ class CustomerComment extends \common\models\customer\CustomerComment
 
             $customerComment->worker_id = $array['worker_id'];
             $customerComment->worker_tel = $array['worker_tel'];
-            $customerComment->operation_shop_district_id = 			$array['operation_shop_district_id'];//商圈id
+            $customerComment->operation_shop_district_id = $array['operation_shop_district_id'];//商圈id
             $customerComment->province_id = $array['province_id'];
             $customerComment->city_id = $array['city_id'];
             $customerComment->county_id = $array['county_id'];

@@ -395,6 +395,7 @@ class WorkerController extends \api\components\Controller
      *   "ret": {
      *       "per_page": 1,
      *       "page_num": 10,
+     *       "worker_is_block":1,
      *       "data": [
      *           {
      *               "complaint_content": "打扫不干净",
@@ -430,6 +431,8 @@ class WorkerController extends \api\components\Controller
         }
         $page_num = intval($param['page_num']);
         try{
+            $workerInfo = Worker::getWorkerListByIds($checkResult['worker_id'],'worker_is_block');
+            $worker_is_block = $workerInfo[0]['worker_is_block'];   
             $conplainList = OrderComplaint::getWorkerComplain($checkResult['worker_id']);
             if($conplainList){
                 foreach($conplainList as $key=>$val){
@@ -443,6 +446,7 @@ class WorkerController extends \api\components\Controller
         $ret = [
             'per_page'=>$per_page,
             'page_num'=>$page_num,
+            'worker_is_block'=> $worker_is_block,
             'data'  => $conplainList
         ];
         return $this->send($ret, "操作成功.");
@@ -925,7 +929,8 @@ class WorkerController extends \api\components\Controller
      *          "worker_name": "李刘珍",
      *          "worker_phone": "13121999270",
      *          "head_url": "",
-     *          "worker_identity": "兼职",
+     *          "worker_identity": "全职",
+     *          "worker_identity_id":"1",
      *          "worker_role": "保姆",
      *          "worker_start": 4.5,
      *          "personal_skill": [
@@ -963,6 +968,7 @@ class WorkerController extends \api\components\Controller
             "worker_phone" => $workerInfo['worker_phone'],
             "head_url" => $workerInfo['worker_photo'],
             "worker_identity" => $workerInfo['worker_identity_description'],//身份
+            "worker_identity_id" => $workerInfo['worker_identity_id'],//身份类型
             "worker_role" => $workerInfo["worker_type_description"],
             'worker_start' => $workerInfo["worker_star"],
             'total_money' => $workerInfo['worker_stat_order_money'],
@@ -1054,14 +1060,6 @@ class WorkerController extends \api\components\Controller
         }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
-        $ret = [
-            "result" => 1,
-            "msg" => "ok",
-            "titleMsg" => "您本月已请假0天，本月剩余请假2天",
-            "orderTimeList" => ["2015-09-14", "2015-09-15"],
-            "workerLeaveList" => ["2015-09-14", "2015-09-15"]
-
-        ];
         return $this->send($ret, "操作成功", 1);
     }
 

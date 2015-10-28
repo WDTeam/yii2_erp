@@ -603,14 +603,14 @@ class FinancePopOrderSearch extends FinancePopOrder
     		}
     
     	}else {
-    		$orderdateinfo['order_money']=$getorder_money;
     		$orderdateinfo['finance_pop_order_pay_status_type']=4;
     	}
+    	$orderdateinfo['finance_pop_order_sum_money']=$getorder_money;//对账金额
     }else {	
     	//三有我没有
     	$orderdateinfo['order_channel_order_num']=$getorder;
-    	$orderdateinfo['order_money']=$getorder_money;
-    	//$alinfo['order_channel_promote']=$promote;
+    	$orderdateinfo['order_money']=0;
+    	$orderdateinfo['finance_pop_order_sum_money']=$getorder_money;//对账金额
     	$orderdateinfo['order_status_name']=0;
     	$orderdateinfo['channel_id']=$channelid;
     	$orderdateinfo['order_channel_name']=0;
@@ -806,8 +806,8 @@ class FinancePopOrderSearch extends FinancePopOrder
     		
     	//三有我没有
     	$orderdateinfo['order_channel_order_num']=$getorder;
-    	$orderdateinfo['order_money']=$getorder_money;
-    	//$alinfo['order_channel_promote']=$promote;
+    	$orderdateinfo['order_money']=0;
+    	$orderdateinfo['finance_pop_order_sum_money']=$getorder_money;//对账金额
     	$orderdateinfo['order_status_name']=0;
     	$orderdateinfo['channel_id']=$channelid;
     	$orderdateinfo['order_channel_name']=0;
@@ -902,8 +902,8 @@ class FinancePopOrderSearch extends FinancePopOrder
 
      		//三有我没有
      		$orderdateinfo['order_channel_order_num']=$getorder;
-     		$orderdateinfo['order_money']=$getorder_money;
-     		//$alinfo['order_channel_promote']=$promote;
+     		$orderdateinfo['order_money']=0;
+    		$orderdateinfo['finance_pop_order_sum_money']=$getorder_money;//对账金额
      		$orderdateinfo['order_status_name']=0;
      		$orderdateinfo['channel_id']=$channelid;
      		$orderdateinfo['order_channel_name']=0;
@@ -1121,8 +1121,8 @@ class FinancePopOrderSearch extends FinancePopOrder
     	
     		//三有我没有
     		$orderdateinfo['order_channel_order_num']=$getorder;
-    		$orderdateinfo['order_money']=$getorder_money;
-    		//$alinfo['order_channel_promote']=$promote;
+    		$orderdateinfo['order_money']=0;
+    		$orderdateinfo['finance_pop_order_sum_money']=$getorder_money;//对账金额
     		$orderdateinfo['order_status_name']=0;
     		$orderdateinfo['channel_id']=$channelid;
     		$orderdateinfo['order_channel_name']=0;
@@ -1195,7 +1195,7 @@ class FinancePopOrderSearch extends FinancePopOrder
     	if (isset($orderInfo->order_code)) {
     		$orderdateinfo=$orderInfo->getAttributes();
 		    	$orderdateinfo['order_code'] =$orderInfo->order_code; //系统订单号
-		    	$orderdateinfo['order_money'] =$orderInfo->order_money; // 订单金额
+		    	$orderdateinfo['order_money'] =$orderInfo->order_money; // 系统订单金额
 		    	if(isset($orderInfo->orderExtStatus)){
 		    		$orderdateinfo['order_status_name'] =$orderInfo->order_status_name;   //订单状态	
 		    	}else{
@@ -1249,16 +1249,15 @@ class FinancePopOrderSearch extends FinancePopOrder
     				//无状态
     				$orderdateinfo['finance_pop_order_pay_status_type']=1;
     			}
-    
     		}else {
-    			$orderdateinfo['order_money']=$getorder_money;
     			$orderdateinfo['finance_pop_order_pay_status_type']=4;
     		}
+    		$orderdateinfo['finance_pop_order_sum_money']=$getorder_money;//对账金额
     	}else {
     		//三有我没有
     		$orderdateinfo['order_channel_order_num']=$getorder;
-    		$orderdateinfo['order_money']=$getorder_money;
-    		//$alinfo['order_channel_promote']=$promote;
+    		$orderdateinfo['order_money']=0;
+    		$orderdateinfo['finance_pop_order_sum_money']=$getorder_money;//对账金额
     		$orderdateinfo['order_status_name']=0;
     		$orderdateinfo['channel_id']=$channelid;
     		$orderdateinfo['order_channel_name']=0;
@@ -1343,11 +1342,13 @@ class FinancePopOrderSearch extends FinancePopOrder
     		$orderdateinfo=$orderInfo->getAttributes();
 	    	$orderdateinfo['order_code'] =$orderInfo->order_code; //系统订单号
 	    	$orderdateinfo['order_money'] =$orderInfo->order_money; // 订单金额
+	    	
 	    	if(isset($orderInfo->orderExtStatus)){
 	    		$orderdateinfo['order_status_name'] =$orderInfo->order_status_name;   //订单状态	
 	    	}else{
 	    		$orderdateinfo['order_status_name'] ='无';   //订单状态
 	    	}
+	    	
     		if($orderInfo->orderExtPay){
     			if($orderInfo->orderExtPay->order_pay_type!=0){
     				$orderdateinfo['finance_status'] =2;// 收款状态 1 未确定 2已确定
@@ -1397,13 +1398,14 @@ class FinancePopOrderSearch extends FinancePopOrder
     			}
     	
     		}else {
-    			$orderdateinfo['order_money']=$getorder_money;
     			$orderdateinfo['finance_pop_order_pay_status_type']=4;
     		}
+    		$orderdateinfo['finance_pop_order_sum_money']=$getorder_money;//对账金额
     	}else {
     		//三有我没有
     		$orderdateinfo['order_channel_order_num']=$getorder;
-    		$orderdateinfo['order_money']=$getorder_money;
+    		$orderdateinfo['order_money']=0;
+    		$orderdateinfo['finance_pop_order_sum_money']=$getorder_money;//对账金额
     		//$alinfo['order_channel_promote']=$promote;
     		$orderdateinfo['order_status_name']=0;
     		$orderdateinfo['channel_id']=$channelid;
