@@ -150,6 +150,7 @@ class CustomerTransRecord extends \common\models\customer\CustomerTransRecord
         $data['scenario'] = 9;  //支付场景
         return self::createRecord($data);
     }
+
 }
 
 
