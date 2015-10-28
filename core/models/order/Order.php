@@ -305,6 +305,28 @@ class Order extends OrderModel
     }
 
     /**
+     * 开始服务
+     * @param $order_id
+     * @return bool
+     */
+    public static function serviceStart($order_id)
+    {
+        $order = OrderSearch::getOne($order_id);
+        return OrderStatus::_serviceStart($order);
+    }
+
+    /**
+     * 服务完成
+     * @param $order_id
+     * @return bool
+     */
+    public static function serviceDone($order_id)
+    {
+        $order = OrderSearch::getOne($order_id);
+        return OrderStatus::_serviceDone($order);
+    }
+
+    /**
      * 取消订单
      * @param $order_id
      * @param $admin_id

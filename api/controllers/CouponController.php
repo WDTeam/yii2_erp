@@ -177,11 +177,7 @@ class CouponController extends \api\components\Controller
         $city_id = $param['city_id'];
         //获取该用户该城市的优惠码列表
         try{
-<<<<<<< HEAD
-            $coupons=CouponCustomer::GetCustomerCouponList($checkResult['worker_id'],$city_id);
-=======
             $coupons=CouponCustomer::GetCustomerCouponList($checkResult['customer_id'],$city_id);
->>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
         }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
@@ -253,11 +249,7 @@ class CouponController extends \api\components\Controller
         $city_id = $param['city_id'];
         //获取该用户该城市的优惠码列表
         try{
-<<<<<<< HEAD
-            $coupons=CouponCustomer::GetAllCustomerCouponList($checkResult['worker_id'],$city_id);
-=======
             $coupons=CouponCustomer::GetAllCustomerCouponList($checkResult['customer_id'],$city_id);
->>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
         }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
@@ -322,11 +314,7 @@ class CouponController extends \api\components\Controller
             return $this->send(null, $checkResult['msg'], 0, 403);
         }
         try{
-<<<<<<< HEAD
-            $CouponCount =CouponCustomer::CouponCount($checkResult['worker_id']);
-=======
             $CouponCount =CouponCustomer::CouponCount($checkResult['customer_id']);
->>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
         }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
