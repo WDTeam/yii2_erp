@@ -71,11 +71,16 @@ class CouponController extends Controller
     {
         $model = new Coupon;
         if ($model->load(Yii::$app->request->post())) {
-			$service_types = Coupon::getServiceTypes();
+			
 			
 			//coupon basic info
+			
+			//coupon categories
+			$coupon_categories = Coupon::getCategories();
+			$model->coupon_category_name = $coupon_categories[$model->coupon_category];
 
 			//coupon type
+			$service_types = Coupon::getServiceTypes();
 			$model->coupon_type_name = $service_types[$model->coupon_type];
 			switch ($model->coupon_type)
 			{
