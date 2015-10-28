@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
+use core\models\order\OrderComplaint;
+$rty=OrderComplaint::ComplaintTypes();
 
 /**
  * @var yii\web\View $this
@@ -14,7 +16,8 @@ use kartik\datecontrol\DateControl;
 
 <div class="customer-comment-tag-form">
 
-    <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]); echo Form::widget([
+    <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]);
+     echo Form::widget([
     'model' => $model,
     'form' => $form,
     'columns' => 1,
@@ -23,13 +26,12 @@ use kartik\datecontrol\DateControl;
     		]],
     		'customer_comment_level'=>['type'=> Form::INPUT_RADIO_LIST, 'items'=>['1' => '满意', '2' => '一般','3' => '不满意'],'options'=>[
     		]],
-    		
-
-    		
-    		'customer_tag_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'评价标签名称...批量用tag1|tag2|tag3|tag4', 'maxlength'=>255]],
-    		
-    		
-    		
+    	
+    		'customer_comment_level_es'=>[
+    		'type'=> Form::INPUT_CHECKBOX_LIST,
+    		'options'=>['placeholder'=>'Enter 阿姨身份...','class'=>'test'],
+    		'items'=>$rty['1'],
+    		],		
 'customer_tag_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'评价标签名称...批量用tag1|tag2|tag3|tag4', 'maxlength'=>255]], 
     		
     		'is_online'=>['type'=> Form::INPUT_RADIO_LIST, 'items'=>['1' => '开启', '2' => '关闭'],

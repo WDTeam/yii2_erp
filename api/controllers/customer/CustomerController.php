@@ -266,11 +266,18 @@ class CustomerController extends \api\components\Controller
     **/
     public function actionPostControllerworkerlist()
     {
+    	
+    	/* $param['worker_id']=4;
+    	$param['customer_comment_level']=1;
+    	$newpage=0;
+    	
+    	$level = CustomerComment::getCustomerCommentworkerlist($param['worker_id'],$param['customer_comment_level'],$newpage,$countpage=40); */
+    	 
     	$param = Yii::$app->request->post();
     	if (empty($param)) {
     		$param = json_decode(Yii::$app->request->getRawBody(), true);
     	}
-    	$level = CustomerComment::getCustomerCommentworkerlist($param['worker_id'],$param['customer_comment_level']);
+    	$level = CustomerComment::getCustomerCommentworkerlist($param['worker_id'],$param['customer_comment_level'],$param['newpage'],$param['countpage']);
     	if (!empty($level)) {
     		$ret = ['comment' => $level];
     		return $this->send($ret, '阿姨评价列表');

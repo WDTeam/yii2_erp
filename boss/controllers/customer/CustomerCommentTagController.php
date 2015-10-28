@@ -8,7 +8,7 @@ use boss\models\customer\CustomerCommentTagSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use core\models\order\OrderComplaint;
 /**
  * CustomerCommentTagController implements the CRUD actions for CustomerCommentTag model.
  */
@@ -68,10 +68,21 @@ class CustomerCommentTagController extends Controller
         if ($model->load(Yii::$app->request->post()) ) {
         	$date=Yii::$app->request->post();
         	
+        	//CustomerCommentTag[customer_comment_level_es][]
+        
+        	
         	if($date['CustomerCommentTag']['customer_tag_name']){	
         	$dataname=explode('|',$date['CustomerCommentTag']['customer_tag_name']);
+        	}else{
+        	$tyu=$date['CustomerCommentTag']['customer_comment_level_es'];
+        	$rty=OrderComplaint::ComplaintTypes();
+        	foreach ($tyu as $tyuyyu){
+        		$dataname[]=$rty['1'][$tyuyyu];
+        	}	
         	}
 
+        	
+        	
         	$model = new CustomerCommentTag;
         	foreach ($dataname as $datatagname){
         		$postdate['customer_comment_level']=$date['CustomerCommentTag']['customer_comment_level'];
