@@ -829,7 +829,7 @@ class WorkerController extends \api\components\Controller
     }
     
     /**
-     * @api {GET} /worker/get-worker-punish-list 获取阿姨受处罚列表 (田玉星 70%)
+     * @api {GET} /worker/get-worker-punish-list 获取阿姨受处罚列表 (田玉星 90%)
      * 
      * @apiDescription 【备注：等待model底层支持】
      * 
@@ -887,7 +887,6 @@ class WorkerController extends \api\components\Controller
          }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
-        print_R($ret);die;
         //获取受处罚列表
         $ret = [
             [
