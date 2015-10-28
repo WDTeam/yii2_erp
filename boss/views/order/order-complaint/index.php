@@ -61,20 +61,20 @@ $this->params['breadcrumbs'][] = $this->title;
 						<div class="m_riqi">
 						 <div class="m_fr">
 						 	<label class="m_iphone">
-						 	客户手机<input type="text" name="order_customer_phone" value="<?php if(!empty($params['order_customer_phone'])){ echo $params['order_customer_phone']; }?>"/>
+						 	客户手机<input type="text" name="OrderComplaint[order_customer_phone]" value="<?php if(!empty($params['order_customer_phone'])){ echo $params['order_customer_phone']; }?>"/>
 						 	</label>
 						 	<label class="m_iphone">
-						 	阿姨手机<input type="text" name="order_worker_phone" value="<?php if(!empty($params['order_worker_phone'])){ echo $params['order_worker_phone']; }?>"/>
+						 	阿姨手机<input type="text" name="OrderComplaint[order_worker_phone]" value="<?php if(!empty($params['order_worker_phone'])){ echo $params['order_worker_phone']; }?>"/>
 						 	</label><label class="m_iphone">
-						 	订单编号<input type="text" name="order_id" value="<?php if(!empty($params['order_id'])){echo $params['order_id'];}?>"/>
+						 	订单编号<input type="text" name="OrderComplaint[order_id]" value="<?php if(!empty($params['order_id'])){echo $params['order_id'];}?>"/>
 						 	</label><label class="m_iphone">
-						 	投诉编号<input type="text" name="id" value="<?php if(!empty($params['id'])){ echo $params['id'];}?>"/>
+						 	投诉编号<input type="text" name="OrderComplaint[id]" value="<?php if(!empty($params['id'])){ echo $params['id'];}?>"/>
 						 	</label>
 						 </div>
 						<div class="m_fr mar-t">
 							<label class="m_iphone">
 						  		阿姨姓名
-						  	</label><input type="text" name="order_worker_name" value=""/>
+						  	</label><input type="text" name="OrderComplaint[order_worker_name]" value=""/>
 						</div>
 						 <div class="m_fr mar-t">
                             <label class="m_ipone">下单时间:</label>
@@ -95,19 +95,19 @@ $this->params['breadcrumbs'][] = $this->title;
 						    <div class="m_from">
 						    	<ul class="lis" id="list">
 						    		<p>投诉类型：</p>
-						    		<li <?php if(empty($params['complaint_type'])){?> class="cur" <?php }?>>全部</li>
+						    		<li <?php if(empty($params['OrderComplaint']['complaint_type'])){?> class="cur" <?php }?>>全部</li>
 						    		<?php if(!empty($comType)){
 						    		foreach ($comType as $keyt=>$valt){?>					    		
-						    		<li <?php if(!empty($params['complaint_type']) && $keyt == $params['complaint_type']){?>class="cur"<?php }?>><a href="<?php echo "/order/order-complaint/index?complaint_type={$keyt}";?>"><?php echo $valt;?></a></li>
+						    		<li <?php if(!empty($params['OrderComplaint']['complaint_type']) && $keyt == $params['OrderComplaint']['complaint_type']){?>class="cur"<?php }?>><a href="<?php echo "/order/order-complaint/index?OrderComplaint[complaint_type]={$keyt}";?>"><?php echo $valt;?></a></li>
 						    		<?php }} ?>
 						    	</ul>
 						    	
 						    	<ul class="lis" id="list">
 						    		<p>订单状态：</p>
-						    		<li <?php if(empty($params['complaint_status'])){?> class="cur" <?php }?>>全部</li>
+						    		<li <?php if(empty($params['OrderComplaint']['complaint_status'])){?> class="cur" <?php }?>>全部</li>
 						    		<?php if(!empty($comStatus)){
 						    			foreach ($comStatus as $key=>$val){?>
-						    		<li <?php if(!empty($params['complaint_status']) && $key == $params['complaint_status']){?>class="cur"<?php }?>><a href="<?php echo "/order/order-complaint/index?complaint_status={$key}";?>"><?php echo $val;?></a></li>
+						    		<li <?php if(!empty($params['OrderComplaint']['complaint_status']) && $key == $params['OrderComplaint']['complaint_status']){?>class="cur"<?php }?>><a href="<?php echo "/order/order-complaint/index?OrderComplaint[complaint_status]={$key}";?>"><?php echo $val;?></a></li>
 						    		<?php }}?>
 						    	</ul>
 						    	
@@ -120,18 +120,18 @@ $this->params['breadcrumbs'][] = $this->title;
 						    	</ul>
 						    	<ul class="lis" id="list">
 						    		<p>投诉级别：</p>
-						    		<li <?php if(!isset($params['complaint_level'])){?> class="cur" <?php }?>>全部</li>
+						    		<li <?php if(!isset($params['OrderComplaint']['complaint_level'])){?> class="cur" <?php }?>>全部</li>
 						    		<?php if(!empty($comLevel)){
 						    			foreach ($comLevel as $keyl=>$vall){?>
-						    		<li <?php if(!empty($params['complaint_level']) && $vall == $params['complaint_level']){?>class="cur"<?php }?>><a href="<?php echo "/order/order-complaint/index?complaint_level={$vall}";?>"><?php echo $vall;?></a></li>
+						    		<li <?php if(!empty($params['OrderComplaint']['complaint_level']) && $vall == $params['OrderComplaint']['complaint_level']){?>class="cur"<?php }?>><a href="<?php echo "/order/order-complaint/index?OrderComplaint[complaint_level]={$vall}";?>"><?php echo $vall;?></a></li>
 						    		<?php }}?>
 						    	</ul>
 						    	<ul class="lis" id="list">
 						    		<p>投诉部门：</p>
-						    		<li <?php if(empty($params['complaint_section'])){?> class="cur" <?php }?>>全部</li>
+						    		<li <?php if(empty($params['OrderComplaint']['complaint_section'])){?> class="cur" <?php }?>>全部</li>
 						    		<?php if(!empty($devpart)){
 						    		foreach ($devpart as $keyrt=>$valrt){?>
-						    		<li <?php if(!empty($params['complaint_section']) && $keyrt == $params['complaint_section']){?> class="cur" <?php }?>><a href="<?php echo "/order/order-complaint/index?complaint_section={$keyrt}"?>"><?php echo $valrt;?></a></li>
+						    		<li <?php if(!empty($params['OrderComplaint']['complaint_section']) && $keyrt == $params['OrderComplaint']['complaint_section']){?> class="cur" <?php }?>><a href="<?php echo "/order/order-complaint/index?OrderComplaint[complaint_section]={$keyrt}"?>"><?php echo $valrt;?></a></li>
 									<?php }}?>
 						    	</ul>
 						    	<div class="clear"></div>

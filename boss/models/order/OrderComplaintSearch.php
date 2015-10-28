@@ -5,6 +5,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use boss\models\order\OrderComplaint;
+use yii\base\ExitException;
 
 class OrderComplaintSearch extends OrderComplaint{
 	
@@ -22,6 +23,7 @@ class OrderComplaintSearch extends OrderComplaint{
 	}
 	public function search($params)
 	{
+		unset($params['s']);
 		$query = OrderComplaint::find();
 		$query->joinWith("order_ext_customer");
 		$query->joinWith("order_ext_worker");
@@ -32,13 +34,9 @@ class OrderComplaintSearch extends OrderComplaint{
 				'query' => $query,
 		]);
 		
-		if (!($this->load($params) && $this->validate())) {
+ 		if (!($this->load($params) && $this->validate())) {
 			return $dataProvider;
 		}
-		$query->andFilterWhere([
-				'order_id' => $this->order_id,
-				'ejj_worker.id' => $this->id
-		]);
 		$query->andFilterWhere([
 				'id' => $this->id,
 				'worker_id' => $this->worker_id,
