@@ -1,5 +1,6 @@
 <?php
 namespace api\models;
+use \core\models\worker\WorkerAccessToken;
 /**
  * 阿姨登录验证
  */

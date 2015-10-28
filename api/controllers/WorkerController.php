@@ -805,7 +805,9 @@ class WorkerController extends \api\components\Controller
      * {
      *    "code": 1,
      *     "msg": "操作成功.",
-     *        "ret": [
+     *        "ret": {
+     *             "worker_is_block": "0",
+     *             "data":[
      *            {
      *                "deduction_money": "12.00",
      *                "deduction_des": "第三大大声点",
@@ -813,7 +815,8 @@ class WorkerController extends \api\components\Controller
      *                "deduction_time": "2015.10.26",
      *                "deduction_type_des": "投诉"
      *            }
-     *       ]
+     *           ]
+     *       }
      * }
      *
      * @apiErrorExample Error-Response:
@@ -835,7 +838,13 @@ class WorkerController extends \api\components\Controller
         if(!$settle_id){
             return $this->send(null, "账单唯一标识错误", 0, 403);
         }
+        $ret =[
+            'worker_is_block'=>1,
+             'data'=>[]
+        ];
         try{
+            $workerInfo = Worker::getWorkerListByIds($checkResult['worker_id'],'worker_is_block');
+            $ret['worker_is_block'] = $workerInfo[0]['worker_is_block'];       
             //获取任务奖励列表
             $punishList = FinanceSettleApplySearch::getDeductionArrayBySettleId($settle_id);
             if($punishList){
@@ -852,11 +861,12 @@ class WorkerController extends \api\components\Controller
                     }
                 }
             }
+            $ret['data'] = $punishList;
         }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
         //获取受处罚列表
-        return $this->send($punishList, "操作成功.");
+        return $this->send($ret, "操作成功.");
     }
     
     /**
@@ -925,7 +935,8 @@ class WorkerController extends \api\components\Controller
      *          "worker_name": "李刘珍",
      *          "worker_phone": "13121999270",
      *          "head_url": "",
-     *          "worker_identity": "兼职",
+     *          "worker_identity": "全职",
+     *          "worker_identity_id":"1",
      *          "worker_role": "保姆",
      *          "worker_start": 4.5,
      *          "personal_skill": [
@@ -963,6 +974,7 @@ class WorkerController extends \api\components\Controller
             "worker_phone" => $workerInfo['worker_phone'],
             "head_url" => $workerInfo['worker_photo'],
             "worker_identity" => $workerInfo['worker_identity_description'],//身份
+            "worker_identity_id" => $workerInfo['worker_identity_id'],//身份类型
             "worker_role" => $workerInfo["worker_type_description"],
             'worker_start' => $workerInfo["worker_star"],
             'total_money' => $workerInfo['worker_stat_order_money'],
