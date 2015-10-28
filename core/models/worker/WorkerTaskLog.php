@@ -126,5 +126,12 @@ class WorkerTaskLog extends \common\models\worker\WorkerTaskLog
         ->offset($offset)
         ->limit($page_size)
         ->all();
+        $data = [];
+        foreach ($models as $key=>$model){
+            $data[$key] = $model->attributes;
+            $data[$key]['values'] = $model->getConditionsValues();
+            $data[$key]['worker_task_description'] = $model->getWorker_task_description();
+        }
+        return $data;
     }
 }
