@@ -785,24 +785,6 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * 发送验证码
-     */
-    public function actionSetUser()
-    {
-
-        $aaa = \core\models\customer\CustomerCode::generateAndSend('13683118946');
-    }
-
-    #生成access_token
-
-    public function actionAddUser()
-    {
-        $daat = \core\models\customer\CustomerAccessToken::generateAccessToken('13683118946', '4820');
-
-        print_r($daat);
-    }
-
-    /**
      * @api {GET} v1/user/get-user-score 用户积分明细 （功能已实现,不明确需求端所需字段格式 90%）
      *
      * @apiDescription 获取用户当前积分，积分兑换奖品信息，怎样获取积分信息
@@ -894,7 +876,7 @@ class UserController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} v1/user/user-suggest 用户评价 （需要再次核实需求;郝建设 100%）
+     * @api {POST} v1/user/user-suggest 用户评价 （郝建设 100%）
      *
      * @apiName UserSuggest
      * @apiGroup User
