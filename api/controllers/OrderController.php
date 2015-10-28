@@ -1306,18 +1306,6 @@ class OrderController extends \api\components\Controller
         }
         if (!empty($worker) && !empty($worker->id)) {
 
-            /**
-              'order_id' => $order_id,
-              'batch_code' => $order->order_batch_code,
-              'booked_begin_time' => $order->order_booked_begin_time,
-              'booked_end_time' => $order->order_booked_end_time,
-              'channel_name' => $order->order_channel_name,
-              'booked_count' => $order->order_booked_count,
-              'address' => $order->order_address,
-              'need' => $order->orderExtCustomer->order_customer_need
-             */
-            
-
             if ($param['leveltype'] == 3) {
                 try {
                     $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 1);

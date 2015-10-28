@@ -20,7 +20,7 @@ class OrderSearch extends Order
     public function rules()
     {
         return [
-            [['order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'isdel', 'order_ip', 'order_service_type_id', 'order_src_id', 'channel_id', 'order_booked_count', 'order_booked_begin_time', 'order_booked_end_time', 'address_id', 'order_booked_worker_id', 'checking_id', 'shop_id', 'district_id', 'city_id'], 'integer'],
+            [['order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'isdel', 'order_ip', 'order_service_type_id', 'order_src_id', 'channel_id', 'order_booked_count', 'order_booked_begin_time', 'order_booked_end_time', 'address_id', 'order_booked_worker_id', 'checking_id', 'shop_id', 'district_id', 'city_id', 'order_status_dict_id'], 'integer'],
             [['order_unit_money', 'order_money'], 'number'],
             [['order_code', 'order_channel_name', 'order_customer_phone'], 'string', 'max' => 64],
             [['order_service_type_name', 'order_src_name'], 'string', 'max' => 128],
@@ -496,6 +496,7 @@ class OrderSearch extends Order
             'shop_id' => $this->shop_id,
             'district_id' => $this->district_id,
             'city_id' => $this->city_id,
+            'order_status_dict_id' => $this->order_status_dict_id,
         ]);
 
         $query->andFilterWhere(['like', 'order_code', $this->order_code])
@@ -504,7 +505,7 @@ class OrderSearch extends Order
             ->andFilterWhere(['like', 'order_channel_name', $this->order_channel_name])
             ->andFilterWhere(['like', 'order_address', $this->order_address])
             ->andFilterWhere(['like', 'order_cs_memo', $this->order_cs_memo]);
-        
+                
         if (!empty($params['created_from']))
             $query->andFilterWhere(['>=', Order::tableName().'.created_at', strtotime($params['created_from'])]);
 
