@@ -6,6 +6,7 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use yii\behaviors\TimestampBehavior;
 use core\models\order\Order;
+use core\models\finance\FinanceWorkerNonOrderIncomeSearch;
 
 /**
  * This is the model class for table "{{%worker_task_log}}".
@@ -111,6 +112,16 @@ class WorkerTaskLog extends \common\models\worker\WorkerTaskLog
         $data['worker_task_description'] = $model->getWorker_task_description();
 //         $data['orders'] = Order::
         return $data;
+    }
+    /**
+     * 判断并设置结算与否
+     * @return boolean
+     */
+    public function setSettlemented()
+    {
+        $is_sl = FinanceWorkerNonOrderIncomeSearch::isWorkerTaskSettled($this->id);
+        $this->is_settlemented = $is_sl;
+        return $this->save();
     }
     /**
      * 当前阿姨任务列表

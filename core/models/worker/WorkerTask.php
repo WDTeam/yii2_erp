@@ -279,7 +279,7 @@ class WorkerTask extends \common\models\worker\WorkerTask
         return $data;
     }
     /**
-     * 给定数据判断是否完成
+     * 给定任务数据判断任务是否符合完成条件
      * @param array $tasklogmetas 数值记录
      */
     public function calculateValuesIsDone($tasklogmetas)
