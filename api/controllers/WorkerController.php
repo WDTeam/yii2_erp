@@ -555,9 +555,9 @@ class WorkerController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-settle-list 获取阿姨对账单列表 (田玉星 100%)
+     * @api {GET} /worker/get-worker-bill-list 获取阿姨对账单列表 (田玉星 100%)
      * 
-     * @apiName actionGetWorkerSettleList 
+     * @apiName actionGetWorkerBillList 
      * @apiGroup Worker
      *
      * @apiParam {String} access_token    阿姨登录token
@@ -594,7 +594,7 @@ class WorkerController extends \api\components\Controller
      *      "msg": "用户认证已经过期,请重新登录"
      *  }
      */
-    public function actionGetWorkerSettleList()
+    public function actionGetWorkerBillList()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //检测阿姨是否登录
@@ -615,13 +615,13 @@ class WorkerController extends \api\components\Controller
         $page_num = intval($param['page_num']);
         //调取model层
         try{
-            $settleList = FinanceSettleApplySearch::getSettledWorkerIncomeListByWorkerId($checkResult['worker_id'],$per_page,$page_num);
+            $billList = FinanceSettleApplySearch::getSettledWorkerIncomeListByWorkerId($checkResult['worker_id'],$per_page,$page_num);
          }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
         
         $settleArr = array();
-        foreach($settleList as $key=>$val){
+        foreach($billList as $key=>$val){
             $settleArr[$key]['settle_id'] = $val['settle_id'];
             $settleArr[$key]['settle_year'] = $val['settle_year'];
             if($val['settle_cycle_type']==1){//周结账单
@@ -643,7 +643,7 @@ class WorkerController extends \api\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-settle-detail 获取阿姨对账单列表详情 (田玉星 70%)
+     * @api {GET} /worker/get-worker-bill-detail 获取阿姨对账单列表详情 (田玉星 70%)
      * 
      * @apiDescription 【备注：等待model底层支持】
      * 
@@ -892,7 +892,7 @@ class WorkerController extends \api\components\Controller
                     }
                 }
             }
-         }catch (\Exception $e) {
+        }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
         //获取受处罚列表
@@ -900,15 +900,13 @@ class WorkerController extends \api\components\Controller
     }
     
     /**
-     * @api {PUT} /worker/worker-bill-confirm 确定账单无误 (田玉星 70%)
-     * 
-     * @apiDescription 【备注：等待model底层支持】
+     * @api {PUT} /worker/worker-bill-confirm 账单确认 (田玉星 100%)
      * 
      * @apiName actionWorkerBillConfirm
      * @apiGroup Worker
      * 
      * @apiParam {String} access_token    阿姨登录token
-     * @apiParam {String} bill_id  账单唯一标识.
+     * @apiParam {String} settle_id  账单唯一标识.
      * @apiParam {String} [platform_version] 平台版本号.
      * 
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/worker-bill-confirm
@@ -916,13 +914,10 @@ class WorkerController extends \api\components\Controller
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *   "code": 1,
-     *   "msg": "操作成功.",
-     *   "ret": {
-     *         "result": "1",
-     *         "msg": "账单已确认",
-     *        }
-     *   }
+     *    "code": 1,
+     *    "msg": "账单确定成功",
+     *    "ret": null
+     * }
      *
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
@@ -939,14 +934,17 @@ class WorkerController extends \api\components\Controller
             return $this->send(null, $checkResult['msg'], 0, 403);
         }
         //数据整理
-        $bill_id = intval($param['bill_id']);//账单ID
-        
-        //账单
-        $ret = [
-            "result" => "1",
-            "msg" => "账单已确认"
-        ];
-        return $this->send($ret, "操作成功.");
+        $settle_id = intval($param['settle_id']);//账单ID
+        try{
+            $isSucceed = FinanceSettleApplySearch::workerConfirmSettlement($settle_id);
+         }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
+        if($isSucceed){
+            return $this->send(null, "账单确定成功");
+        }
+        return $this->send(null, "账单确定失败",0,403);
+      
     }
     
     /**
