@@ -3,7 +3,7 @@
 namespace boss\controllers\order;
 
 use Yii;
-use common\models\order\OrderComplaint;
+use boss\models\order\OrderComplaint;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -34,10 +34,10 @@ class OrderComplaintController extends BaseAuthController
     {   
     	$searchModel = new OrderComplaintSearch();
     	$orderComplaint = new OrderComplaint();
-    	$comStatus = $orderComplaint->ComplaintStatus();
-    	$dev = $orderComplaint->Department();
-    	$comLevel = $orderComplaint->ComplaintLevel();
-    	$comType = $orderComplaint->ComplaintType();
+    	$comStatus = OrderComplaint::ComplaintStatus();
+    	$dev = OrderComplaint::Department();
+    	$comLevel = OrderComplaint::ComplaintLevel();
+    	$comType = OrderComplaint::ComplaintType();
     	$params = Yii::$app->request->getQueryParams();
     	$dataProvider = $searchModel->search($params);
     	return $this->render('index', [
@@ -145,21 +145,30 @@ class OrderComplaintController extends BaseAuthController
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-    public function actionApp(){
+    /**
+     * 后端订单投诉添加业务逻辑
+     * @return boolean
+     */
+    public function actionBack(){
+    	$flag = false;
     	$model = new OrderComplaint();
-    	$arr = array('OrderComplaint'=>array(
-    			'order_id'=>'1234',
-    			'complaint_type'=>'1',
-    			'complaint_phone'=>'',
-    			'complaint_section'=>'1',
-    			'complaint_level'=>'2',
-    			'complaint_content'=>'33241234231',
-    			'complaint_time'=>time(),
-    			'created_at' =>time()
-    	));
-    	$model->load($arr);
-    	$model->save();
-    	//$result = $model->insertModel($arr);
-    	exit();
+    	$params = Yii::$app->request->post();$arr= array();
+    	if(!empty($params) && is_array($params)){
+    		foreach ($params as $value){
+    			$arr['OrderComplaint']['order_id'] = $value['order_id'];
+    			$arr['OrderComplaint']['complaint_detail'] = $value['complaint_detail'];
+    			$arr['OrderComplaint']['cumstomer_phone'] = $value['cumstomer_phone'];
+    			foreach ($value['data'] as $key=>$val){
+    				$arr['OrderComplaint']['complaint_type'] = $val['type'];
+    				$arr['OrderComplaint']['complaint_section'] = $val['department'];
+    				$arr['OrderComplaint']['complaint_level'] = $val['level'];
+    				if($model->load($arr) && $model->save()){
+    					$flag = true;
+    				}
+    			}
+    		}
+    		
+    	}
+    	return $flag;
     }
 }
