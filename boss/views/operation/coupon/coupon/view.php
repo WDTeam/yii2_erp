@@ -51,22 +51,22 @@ echo DetailView::widget([
             'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],
-        [
-            'attribute'=>'', 
-            'label'=>'单个优惠码最大使用人数',
-            'format'=>'raw',
-            'value'=>$model->coupon_code_max_customer_num,
-            'type'=>DetailView::INPUT_TEXT,
-            'valueColOptions'=>['style'=>'width:90%']
-        ],
-        [
-            'attribute'=>'', 
-            'label'=>'投放总量',
-            'format'=>'raw',
-            'value'=>$model->coupon_code_num * $model->coupon_code_max_customer_num,
-            'type'=>DetailView::INPUT_SWITCH,
-            'valueColOptions'=>['style'=>'width:90%']
-        ],
+        //[
+            //'attribute'=>'', 
+            //'label'=>'单个优惠码最大使用人数',
+            //'format'=>'raw',
+            //'value'=>$model->coupon_code_max_customer_num,
+            //'type'=>DetailView::INPUT_TEXT,
+            //'valueColOptions'=>['style'=>'width:90%']
+        //],
+        //[
+         //   'attribute'=>'', 
+         //   'label'=>'投放总量',
+         //   'format'=>'raw',
+         //   'value'=>$model->coupon_code_num * $model->coupon_code_max_customer_num,
+        //    'type'=>DetailView::INPUT_SWITCH,
+        //    'valueColOptions'=>['style'=>'width:90%']
+        //],
     ],
     'enableEditMode'=>false,
 ]); 

@@ -12,6 +12,8 @@ use yii\filters\VerbFilter;
 use core\models\operation\coupon\Coupon;
 use core\models\operation\coupon\CouponCode;
 
+use \core\models\operation\OperationCity;
+
 /**
  * CouponController implements the CRUD actions for Coupon model.
  */
@@ -97,6 +99,13 @@ class CouponController extends Controller
 		
 			//coupon city
 			$city_types = Coupon::getCityTypes();
+			$cityOnlineList = OperationCity::getCityOnlineInfoList();
+			$cities = array();
+			if(!empty($cityOnlineList)){
+				foreach($cityOnlineList as $value){
+					$cities[$value['city_id']] = $value['city_name'];
+				}
+			}
 			switch ($model->coupon_city_limit)
 			{
 				case 0:
@@ -104,6 +113,7 @@ class CouponController extends Controller
 				break;
 		
 				case 1:
+					$model->coupon_city_name = $cities[$model->coupon_city_id];
 				
 				break;
 		
@@ -112,6 +122,7 @@ class CouponController extends Controller
 					# code...
 				break;
 			}
+
 			//customer type 
 			$customer_types = Coupon::getCustomerTypes();
 			$model->coupon_customer_type_name = $customer_types[$model->coupon_customer_type];

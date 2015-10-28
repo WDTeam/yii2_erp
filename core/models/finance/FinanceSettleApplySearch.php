@@ -216,6 +216,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         }
         $apply_task_count = FinanceWorkerNonOrderIncomeSearch::getTaskAwardCount($workerId, $this->finance_settle_apply_starttime, $this->finance_settle_apply_endtime);
         $apply_task_money = FinanceWorkerNonOrderIncomeSearch::getTaskAwardMoney($workerId, $this->finance_settle_apply_starttime, $this->finance_settle_apply_endtime);
+        $apply_money_deduction = FinanceWorkerNonOrderIncomeSearch::getCompensateMoney($workerId, $this->finance_settle_apply_starttime, $this->finance_settle_apply_endtime);
         if(count($orders) > 0){
            $order_count = count($orders);
            foreach($orders as $order){
@@ -466,6 +467,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             if(count($order) > 0){
                $finalOrder['order_begin_time'] = date('Y-m-d h:m:s',$order->order_booked_begin_time);
                $finalOrder['order_end_time'] = date('Y-m-d h:m:s',$order->order_booked_end_time);
+               $finalOrder['order_code'] =$order->order_code;
             }
             $finalOrderArray[$i] = $finalOrder;
             $i++;
