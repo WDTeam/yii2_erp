@@ -22,7 +22,7 @@ class UserController extends \api\components\Controller
     /**
      * @api {POST} v1/user/add-address 添加常用地址 (已完成100%) 
      *
-     * @apiName AddAddress
+     * @apiName actionAddAddress
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -118,7 +118,7 @@ class UserController extends \api\components\Controller
     /**
      * @api {GET} v1/user/get-addresses 常用地址列表 (已完成100%)
      *
-     * @apiName GetAddresses
+     * @apiName actionGetAddresses
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -200,7 +200,7 @@ class UserController extends \api\components\Controller
     /**
      * @api {DELETE} v1/user/delete-address 删除用户常用地址 (已完成100%) 
      *
-     * @apiName DeleteAddress
+     * @apiName actionDeleteAddress
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -249,7 +249,7 @@ class UserController extends \api\components\Controller
     /**
      * @api {PUT} v1/user/set-default-address 设置默认地址 (已完成100%) 
      * @apiDescription 用户每次下完单都会将该次地址设置为默认地址，下次下单优先使用默认地址
-     * @apiName SetDefaultAddress
+     * @apiName actionSetDefaultAddress
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -308,7 +308,7 @@ class UserController extends \api\components\Controller
     /**
      * @api {PUT} v1/user/update-address 修改常用地址 (已完成100%) 
      *
-     * @apiName UpdateAddress
+     * @apiName actionUpdateAddress
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -472,7 +472,7 @@ class UserController extends \api\components\Controller
      * @api {DELETE} v1/user/delete-used-worker 删除常用阿姨 （功能已经实现,需再次核实 100%）
      *
      *
-     * @apiName deleteUsedWorker
+     * @apiName actionDeleteUsedWorker
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -544,7 +544,7 @@ class UserController extends \api\components\Controller
      * @api {GET} v1/user/black-list-workers 黑名单阿姨列表 （功能已经完成,需要核实传递参数和返回数据格式 已完成100%）
      * @apiDescription 获得该用户添加进黑名单的阿姨
      *
-     * @apiName blacklistworkers
+     * @apiName actionBlackListWorkers
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -618,7 +618,7 @@ class UserController extends \api\components\Controller
      * @api {DELETE} v1/user/remove-worker 移除黑名单中的阿姨 （功能已经实现,需要再次确认传递参数 已完成100%）
      *
      *
-     * @apiName RemoveWorker
+     * @apiName actionRemoveWorker
      * @apiGroup User
      *
      * @apiParam {String} access_token  用户认证
@@ -680,7 +680,7 @@ class UserController extends \api\components\Controller
      * @api {GET} v1/user/get-user-money 用户余额和消费记录 （数据已经全部取出,需要给出所需字段,然后给予返回 已完成99% ;）
      * 
      *
-     * @apiName GetUserMoney
+     * @apiName actionGetUserMoney
      *
      * @apiGroup User
      *
@@ -788,7 +788,7 @@ class UserController extends \api\components\Controller
      * @api {GET} v1/user/get-user-score 用户积分明细 （功能已实现,不明确需求端所需字段格式 90%）
      *
      * @apiDescription 获取用户当前积分，积分兑换奖品信息，怎样获取积分信息
-     * @apiName GetUserScore
+     * @apiName actionGetUserScore
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -878,7 +878,7 @@ class UserController extends \api\components\Controller
     /**
      * @api {POST} v1/user/user-suggest 用户评价 （郝建设 100%）
      *
-     * @apiName UserSuggest
+     * @apiName actionUserSuggest
      * @apiGroup User
 
      * @apiParam {int} order_id       '订单ID'
@@ -945,7 +945,7 @@ class UserController extends \api\components\Controller
     /**
      * @api {GET} v1/user/get-comment-level 获取用户评价等级 （郝建设 100%）
      *
-     * @apiName GetCommentLevel
+     * @apiName actionGetCommentLevel
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -1003,7 +1003,7 @@ class UserController extends \api\components\Controller
     /**
      * @api {GET} v1/user/get-comment-level-tag 获取用户评价等级下面的标签 （郝建设 100%）
      *
-     * @apiName GetCommentLevelTag
+     * @apiName actionGetCommentLevelTag
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
@@ -1257,7 +1257,7 @@ class UserController extends \api\components\Controller
     /**
      * @api {GET} v1/user/get-goods 获取给定经纬度范围内是否有该服务 （郝建设 100%）
      *
-     * @apiName GetGoods
+     * @apiName actionGetGoods
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
