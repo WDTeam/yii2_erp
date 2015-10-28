@@ -16,6 +16,7 @@ use yii\web\Response;
 class OrderController extends \api\components\Controller
 {
 
+    public $workerText = array(1 => '指定阿姨订单数','待抢单订单订单数','指定阿姨订单列表','待抢单订单列表');
     /**
      * @api {POST} /order/create-order 创建订单 (90%xieyi  缺少周期订单和精品保洁，缺少后台模块支持)
      *
@@ -1114,47 +1115,42 @@ class OrderController extends \api\components\Controller
               'address' => $order->order_address,
               'need' => $order->orderExtCustomer->order_customer_need
              */
-            $workerText = array(
-                1 => '指定阿姨订单数',
-                '待抢单订单订单数',
-                '指定阿姨订单列表',
-                '待抢单订单列表'
-            );
+            
 
             if ($param['leveltype'] == 3) {
                 try {
                     $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 1);
                     $ret['workerData'] = $workerCount;
-                    return $this->send($ret, $workerText[$param['leveltype']], 1);
+                    return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
-                    return $this->send(null, "boss系统错误," . $workerText[$param['leveltype']], 1024);
+                    return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
                     return false;
                 }
             } else if ($param['leveltype'] == 4) {
                 try {
                     $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 0);
                     $ret['workerData'] = $workerCount;
-                    return $this->send($ret, $workerText[$param['leveltype']], 1);
+                    return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
-                    return $this->send(null, "boss系统错误," . $workerText[$param['leveltype']], 1024);
+                    return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
                     return false;
                 }
             } else if ($param['leveltype'] == 1) {
                 try {
                     $workerCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
                     $ret['workerData'] = $workerCount;
-                    return $this->send($ret, $workerText[$param['leveltype']], 1);
+                    return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
-                    return $this->send(null, "boss系统错误," . $workerText[$param['leveltype']], 1024);
+                    return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
                     return false;
                 }
             } else if ($param['leveltype'] == 2) {
                 try {
                     $workerCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
                     $ret['workerData'] = $workerCount;
-                    return $this->send($ret, $workerText[$param['leveltype']], 1);
+                    return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
-                    return $this->send(null, "boss系统错误," . $workerText[$param['leveltype']], 1024);
+                    return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
                     return false;
                 }
             }
