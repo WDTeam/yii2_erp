@@ -482,8 +482,6 @@ class WorkerController extends \api\components\Controller
 
     /**
      * @api {GET} /worker/get-worker-service-info 获取账单阿姨服务信息 (田玉星 100%)
-     *
-     * @apiDescription 【备注：缺少worker提供阿姨服的家庭数量】
      * 
      * @apiName actionGetWorkerServiceInfo
      * @apiGroup Worker
