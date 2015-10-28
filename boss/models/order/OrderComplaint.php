@@ -49,4 +49,37 @@ class OrderComplaint extends \core\models\order\OrderComplaint
     	}
     	return $flag;
     }
+    /**
+     * 根据键值返回渠道
+     * @param unknown $num
+     */
+    public function channel($num){
+    	$arr = self::complaint_channel();
+    	return @$arr[$num];
+    }
+    /**
+     * 根据部门Id,类型Id返回投诉类型
+     * @param unknown $dnum
+     * @param unknown $num
+     */
+    public function ctype($dnum,$num){
+    	$arr = self::ComplaintTypes();
+    	return @$arr[$dnum][$num];
+    }
+    /**
+     * 根据部门Id返回部门
+     * @param unknown $nums
+     */
+    public function section($nums){
+    	$arr = self::Department();
+    	return @$arr[$nums];
+    }
+   	/**
+   	 * 根据投诉的Id返回级别
+   	 * @param unknown $num
+   	 */
+    public function level($num){
+    	$arr = self::ComplaintLevel();
+    	return @$arr[$num];
+    }
 }
