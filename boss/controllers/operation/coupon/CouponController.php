@@ -278,6 +278,7 @@ class CouponController extends Controller
     public function actionBind($id)
     {
         $model = $this->findModel($id);
+        $codeMs = $model->getCodes();
         return $this->renderAjax('_bind',[
             'model'=>$model,
         ]);

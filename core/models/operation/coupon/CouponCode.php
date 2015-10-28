@@ -169,4 +169,24 @@ class CouponCode extends \common\models\operation\coupon\CouponCode
         return $couponCustomer;
                      
     }
+    /**
+     * 当前码绑定手机号
+     */
+    public function bindMobile($mobile)
+    {
+        $model = CouponCustomer::findOne(['coupon_code_id'=>$this->id]);
+        if(empty($model)){
+            $model = new CouponCustomer();
+        }
+        $model->setAttributes([
+            'customer_id'=>'',
+            'coupon_id'=>'',
+            'coupon_code_id'=>'',
+            'coupon_code'=>'',
+            'coupon_name'=>'',
+            'coupon_price'=>'',
+            'expirate_at'=>'',
+        ]);
+        return $model->save();
+    }
 }
