@@ -15,7 +15,6 @@ use core\models\worker\WorkerTaskLog;
 
 class WorkerController extends \api\components\Controller
 {
-
     /**
      * @api {GET} /worker/worker-info 查看阿姨信息 (田玉星 100%)
      *
