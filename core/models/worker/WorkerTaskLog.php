@@ -103,6 +103,7 @@ class WorkerTaskLog extends \common\models\worker\WorkerTaskLog
      * 任务详情
      * @return unknown
      * eg: WorkerTaskLog::findOne(['id'=>$id])->getDetail();
+     * 
      */
     public function getDetail()
     {

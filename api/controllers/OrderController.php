@@ -1368,9 +1368,9 @@ class OrderController extends \api\components\Controller
      *            "channel_name":"服务类型名称"
      *            "booked_count":"时常"
      *            "address":"服务地址"
-     *            "need":""
+     *            "need":"备注说明"
      *            "money":"订单价格"
-     *         }
+     *           } 
      *         ],
      *         "time":900  倒计时秒
      *      }

@@ -38,7 +38,7 @@ $columns[] = 'principal';
 $columns[] = 'tel';
 if($searchModel->is_blacklist==1){
     $columns[] = [
-        'label'=>'加入黑名单原因备注',
+        'label'=>'封号原因',
         'value'=>function ($model){
             return $model->getLastJoinBlackListCause();
         }
@@ -47,7 +47,7 @@ if($searchModel->is_blacklist==1){
 
 if($searchModel->is_blacklist==1){
     $columns[] = [
-        'label'=>'加入黑名单时间',
+        'label'=>'被封号时间',
         'value'=>function ($model){
             return $model->getLastJoinBlackListTime();
         }
@@ -98,21 +98,21 @@ $columns[] = [
             ]);
         },
         'joinblacklist' => function ($url, $model) {
-            return empty($model->is_blacklist)?Html::a('加入黑名单', [
+            return empty($model->is_blacklist)?Html::a('封号', [
                 'join-blacklist',
                 'id' => $model->id
             ], [
-                'title' => Yii::t('app', '加入黑名单'),
+                'title' => Yii::t('app', '封号'),
                 'data-toggle'=>'modal',
                 'data-target'=>'#modal',
                 'data-id'=>$model->id,
                 'class'=>'join-list-btn btn btn-success btn-sm',
-            ]):Html::a('解除黑名单', [
+            ]):Html::a('解除封号', [
                 'remove-blacklist',
                 'id' => $model->id
                 
             ], [
-                'title' => Yii::t('app', '解除黑名单'),
+                'title' => Yii::t('app', '解除封号'),
                 'class'=>'join-list-btn btn btn-success btn-sm',
             ]);
         },
@@ -160,7 +160,7 @@ $columns[] = [
     ]); Pjax::end(); ?>
 </div>
 <?php echo Modal::widget([
-    'header' => '<h4 class="modal-title">黑名单原因</h4>',
+    'header' => '<h4 class="modal-title">封号原因</h4>',
     'id' =>'modal',
 ]);?>
 <?php $this->registerJs(<<<JSCONTENT

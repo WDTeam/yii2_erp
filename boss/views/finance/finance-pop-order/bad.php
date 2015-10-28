@@ -68,6 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
      		'width' => "100px",
      		],
             'finance_pop_order_pay_title', 
+            'finance_pop_order_msg',
 //            'finance_pop_order_check_id', 
 //            'finance_pop_order_finance_time:datetime', 
 //            'create_time:datetime', 

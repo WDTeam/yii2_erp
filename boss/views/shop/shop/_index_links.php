@@ -41,7 +41,7 @@ echo Html::a('验证通过('.Shop::getAuditStatusCountByNumber(1).')',[
     'class'=>'btn btn-success'
 ]);
 echo ' ';
-echo Html::a('黑名单('.Shop::getIsBlacklistCount().')',[
+echo Html::a('封号('.Shop::getIsBlacklistCount().')',[
     'index','ShopSearch[is_blacklist]'=>1
 ],[
     'class'=>'btn btn-success'

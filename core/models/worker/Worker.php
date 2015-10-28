@@ -3,6 +3,8 @@
 namespace core\models\worker;
 
 
+use common\models\Help;
+use Symfony\Component\Console\Helper\Helper;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
@@ -56,6 +58,8 @@ use crazyfd\qiniu\Qiniu;
 class Worker extends \common\models\worker\Worker
 {
 
+    const DISTRICT = 'DISTRICT';
+    const WORKER = 'WORKER';
     /**
      * 获取阿姨基本信息
      * @param integer $worker_id  阿姨id
@@ -240,6 +244,26 @@ class Worker extends \common\models\worker\Worker
         }
     }
 
+
+    public static function getDistrictAllWorkerFromRedis($district_id){
+        $workerIdsArr =  Yii::$app->redis->executeCommand('smembers', [self::DISTRICT.'_'.$district_id]);
+        var_dump($workerIdsArr);
+        if($workerIdsArr){
+            foreach((array)$workerIdsArr as $key=>$val){
+                $workerIdsArr[$key] = self::WORKER.'_'.$val;
+            }
+            $workerInfoArr = Yii::$app->redis->executeCommand('mget',$workerIdsArr);
+            foreach ((array)$workerInfoArr as $val) {
+                if($val!==null){
+                    $new_workerInfoArr[] = $val;
+                }
+            }
+            return $new_workerInfoArr;
+        }else{
+            return [];
+        }
+    }
+
     /**
      * 获取商圈中所有阿姨
      * @param $district_id
@@ -260,10 +284,8 @@ class Worker extends \common\models\worker\Worker
              ->innerJoinWith('workerDistrictRelation') //关联worker workerDistrictRelation方法
              ->andOnCondition(['operation_shop_district_id'=>$district_id])
              ->innerJoinWith('shopRelation') //关联worker shopRelation方法
-
-             //->innerJoinWith('workerScheduleRelation') //关联WorkerScheduleRelation方法
-             //->andOnCondition([])
              ->innerJoinWith('workerScheduleRelation') //关联WorkerScheduleRelation方法
+             //->andOnCondition([])
              ->joinWith('workerStatRelation') //关联worker WorkerStatRelation方法
              ->where($condition)
              ->asArray()
@@ -271,52 +293,125 @@ class Worker extends \common\models\worker\Worker
          return $districtWorkerResult;
      }
 
+    protected static function getWorkerOrderInfo($worker_id){
+        $orderWorkerResult = OrderExtWorker::find()
+            ->where(['worker_id'=>$worker_id])
+            ->innerJoinWith('order')
+            ->asArray()
+            ->all();
+        return $orderWorkerResult;
+    }
+
     /**
      * 获取阿姨时间排班表
      * @param $district_id 商圈id
-     * @param $serverDurationTime 服务时长
+     * @param int $serverDurationTime 服务时长
+     * @param string $beginTime 排班表开始时间 默认当前时间
+     * @param int $timeLineLength 排班表长度 默认返回7天的排班表
+     * @param string $worker_id 阿姨id 通过阿姨id获取指定阿姨的排班表 默认返回所有阿姨排班表
      * @return array
      */
-    public static function getWorkerTimeLine($district_id,$serverDurationTime){
-        $districtWorkerResult = self::getDistrictAllWorker($district_id,[]);
-        $nowTime = strtotime(date('Y-m-d'));
-        $disabledTimes = self::getInitTimes();
+    public static function getWorkerTimeLine($district_id,$serverDurationTime=2,$beginTime='',$timeLineLength=7,$worker_id=''){
+        $disabledTimesArr = self::getCycleTimes($timeLineLength);
+        $beginTime = $beginTime ? $beginTime : time();
+        $beginTime = strtotime(date('Y-m-d'),$beginTime);
+
+        //如果无商圈id,返回不可用排班表
+        if(empty($district_id)){
+            return  self::generateTimeLine($disabledTimesArr,$serverDurationTime,$beginTime,$timeLineLength);
+        }
+
+        $workerCondition = $worker_id ? ['{{%worker}}.id'=>$worker_id] : [];
+        $districtWorkerResult = self::getDistrictAllWorker($district_id,$workerCondition);
+        //如果无阿姨信息,返回不可用排班表
+        if(empty($districtWorkerResult)){
+            return  self::generateTimeLine($disabledTimesArr,$serverDurationTime,$beginTime,$timeLineLength);
+        }
+
         $isEmptyDisabledTime = [];
         foreach($districtWorkerResult as $val){
-            for($i=0;$i<7;$i++){
-                if(empty($disabledTimeLine[$i])){
+            $workerOrderInfo = self::getWorkerOrderInfo($val['id']);
+            for($i=0;$i<$timeLineLength;$i++){
+                if(empty($disabledTimesArr[$i])){
                     $isEmptyDisabledTime[$i]=true;
                     continue;
                 }
-                $time = strtotime("+$i day",$nowTime);
-                $disabledTimeLine[$i] = self::filterDisabledTimeLine($time,$val['workerScheduleRelation'],[],$disabledTimeLine[$i]);
-                //$disabledTimeLine[] = []
+                $time = strtotime("+$i day",$beginTime);
+                $disabledTimesArr[$i] = self::filterDisabledTimeLine($time,$val['workerScheduleRelation'],$workerOrderInfo,$disabledTimesArr[$i]);
             }
-            if(count($isEmptyDisabledTime)==7){
+            if(count($isEmptyDisabledTime)==$timeLineLength){
                 break;
             }
         }
-        $workerTimeLine = self::generateTimeLine($disabledTimes,$serverDurationTime);
+
+        $workerTimeLine = self::generateTimeLine($disabledTimesArr,$serverDurationTime,$beginTime,$timeLineLength);
         return $workerTimeLine;
+    }
+
+
+    /**
+     * 生成排版表
+     * @param array $disabledTimeLine 不可用的时间点
+     * @param int $serverDurationTime 预约时长
+     * @param string $beginTime 排班表开始时间 默认当前时间
+     * @param int $timeLineLength 排班表长度 默认返回7天的排班表
+     * @return mixed
+     */
+
+    protected static function generateTimeLine($disabledTimeLine,$serverDurationTime,$beginTime,$timeLineLength){
+        $dayTimes = self::getDayTimes();
+        for($i=0;$i<$timeLineLength;$i++) {
+            $time = strtotime("+$i day", $beginTime);
+            $date = date('Y-m-d', $time);
+            $disabledTime = $disabledTimeLine[$i];
+            foreach ($dayTimes as $key => $val) {
+                $endKey = $key + $serverDurationTime * 2;
+                if ($endKey > count($dayTimes) - 1) {
+                    break;
+                }
+                $isDisabled = 0;
+                //获取当前时间段中是否含有不可用的时间
+                foreach ($disabledTime as $d_val) {
+                    $disabledKey = array_search($d_val, $dayTimes);
+                    if ($key <= $disabledKey && $endKey > $disabledKey) {
+                        $isDisabled = 1;
+                        break;
+                    }
+                }
+                if ($isDisabled == 1) {
+                    $timeLineTmp[] = [$val . '-' . $dayTimes[$endKey] => false];
+                } else {
+                    $timeLineTmp[] = [$val . '-' . $dayTimes[$endKey] => true];
+                }
+
+                $timeLine[$date] = $timeLineTmp;
+            }
+            $timeLineTmp = [];
+        }
+        return $timeLine;
+
+        //var_dump($timeLine);die;
     }
 
     /**
      * @param int $time 日期时间戳
      * @param array $workerSchedule 阿姨后台排班表
-     * @param array $workerBookOrderInfo 阿姨预约订单信息
+     * @param array $workerOrderInfo 阿姨预约订单信息
      * @param array $disabledTime 不可用时间数组
      * @return array 过滤后的不可用时间 ['8:00','8:30']
      */
-    protected static function filterDisabledTimeLine($time,$workerSchedule,$workerBookOrderInfo,$disabledTime){
-        $workerEnableTime = self::getWorkerEnabledTimeFromSchedule($time,$workerSchedule);
-        if(empty($workerEnableTime)){
+    protected static function filterDisabledTimeLine($time,$workerSchedule,$workerOrderInfo,$disabledTime){
+        $workerScheduleTime = self::getWorkerEnabledTimeFromSchedule($time,$workerSchedule);
+        if(empty($workerScheduleTime)){
             return $disabledTime;
         }
-        $workerHaveBookedTime = self::getWorkerHaveBookedTimeFromOrder($time,$workerBookOrderInfo);
+        $workerHaveBookedTime = self::getWorkerHaveBookedTimeFromOrder($time,$workerOrderInfo);
         //整理阿姨可用时间
-        $workerEnableTime = array_diff($workerEnableTime,$workerHaveBookedTime);
+        $workerEnableTime = array_diff($workerScheduleTime,$workerHaveBookedTime);
+        //var_dump($workerEnableScheduleTime);
         //通过阿姨可用时间 过滤 单日不可用时间
         $disabledTime = array_diff($disabledTime,$workerEnableTime);
+        //var_dump($disabledTime);
         return $disabledTime;
     }
 
@@ -341,18 +436,45 @@ class Worker extends \common\models\worker\Worker
             }
         }
         return $new_enabledTime;
-
     }
     
     /**
      * 根据订单获取阿姨单已预约的时间
      */
-    protected static function getWorkerHaveBookedTimeFromOrder($time,$worker){
-        return ['8:30','9:00','9:30'];
+    protected static function getWorkerHaveBookedTimeFromOrder($time,$workerOrderInfo){
+        $workerHaveBookedTime = [];
+        foreach ((array)$workerOrderInfo as $val) {
+            if(date('Y-m-d',$time) == date('Y-m-d',$val['order']['order_booked_begin_time'])){
+                $beginTime = self::convertDateFormat($val['order']['order_booked_begin_time']);
+                for($i=0;$i<$val['order']['order_booked_count']*2;$i++){
+                    $workerHaveBookedTime[] = date('G:i',strtotime('+'.(30*$i).' minute',$beginTime));
+                }
+            }
+        }
+        return $workerHaveBookedTime;
     }
 
     /**
-     * 获取指定周期的时间点
+     * 转换时间格式 如果阿姨订单预约 开始时间不是 整点时间和半点时间结束
+     * @param $time
+     * @return mixed
+     */
+    protected static function convertDateFormat($time){
+        $date = date('G:i',$time);
+        $dateArr = explode(':',$date);
+        if($dateArr[1]=='00' || $dateArr[1]=='30'){
+            return $time;
+        }else{
+            if($dateArr[1]<30){
+                return $time+(30-$dateArr[1])*60;
+            }else{
+                return $time+(60-$dateArr[1])*60;
+            }
+        }
+    }
+
+    /**
+     * 获取指定周期的所有时间点
      * @param int $cycle
      * @return array
      */
@@ -381,51 +503,7 @@ class Worker extends \common\models\worker\Worker
         return $timeLine;
     }
 
-    /**
-     * 生成排版表
-     * @param $disabledTimeLine 不可用的时间
-     * @param $serverDurationTime 预约时长
-     */
-    protected static function generateTimeLine($disabledTimeLine,$serverDurationTime){
-        $nowTime = strtotime(date('Y-m-d'));
-        $dayTimes = self::getDayTimes();
-        for($i=0;$i<7;$i++) {
-            $time = strtotime("+$i day", $nowTime);
-            $date = date('Y-m-d', $time);
-            $disabledTime = $disabledTimeLine[$i];
-            foreach ($dayTimes as $key => $val) {
-                $endKey = $key + $serverDurationTime * 2;
-                if ($endKey > count($dayTimes) - 1) {
-                    break;
-                }
-                if ($disabledTime) {
-                    $timeLineTmp[] = [$val . '-' . $dayTimes[$endKey] => true];
-                } else {
-                    $timeLineTmp[] = [$val . '-' . $dayTimes[$endKey] => false];
-                    $isDisabled = 0;
-                    //获取当前时间段中是否含有不可用的时间
-                    foreach ($disabledTime as $d_val) {
-                        $disabledKey = array_search($d_val, $dayTimes);
-                        if ($key <= $disabledKey && $endKey > $disabledKey) {
-                            $isDisabled = 1;
-                            break;
-                        }
-                    }
-                    if ($isDisabled == 1) {
-                        $timeLineTmp[] = [$val . '-' . $dayTimes[$endKey] => false];
-                    } else {
-                        $timeLineTmp[] = [$val . '-' . $dayTimes[$endKey] => true];
-                    }
 
-                }
-
-                $timeLine[$date] = $timeLineTmp;
-                $timeLineTmp = [];
-            }
-        }
-        return $timeLine;
-        //var_dump($timeLine);die;
-    }
 
     /**
      * 获取商圈中 所有可用阿姨

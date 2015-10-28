@@ -18,6 +18,9 @@ $this->title = '创建优惠券';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('boss', ''), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
+//coupon categories
+$coupon_categories = Coupon::getCategories();
+
 //coupon types
 $coupon_types = Coupon::getServiceTypes();
 //service_types
@@ -52,12 +55,20 @@ $promote_types = Coupon::getPromoteTypes();
                 <h3 class="panel-title">优惠券基本信息</h3>
             </div>
             <div class="panel-body">
-                <?= $form->field($model, 'coupon_name')->textInput()->label('优惠券名称') ?>
+                <?php //$form->field($model, 'coupon_name')->textInput()->label('优惠券名称') 
+				?>
 				<?= $form->field($model, 'coupon_price')->textInput()->label('优惠券价值') ?>
             </div>
 
+			<div class="panel-heading">
+                <h3 class="panel-title">优惠券类型</h3>
+            </div>
+            <div class="panel-body">
+                <?= $form->field($model, 'coupon_category')->inline()->radioList($coupon_categories)->label('优惠券类型') ?>
+            </div>
+
             <div class="panel-heading">
-                <h3 class="panel-title">优惠券类型信息</h3>
+                <h3 class="panel-title">优惠券服务类型规则</h3>
             </div>
             <div class="panel-body">
                 <?= $form->field($model, 'coupon_type')->inline()->radioList($coupon_types)->label('优惠券类型') ?>

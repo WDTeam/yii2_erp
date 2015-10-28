@@ -139,14 +139,10 @@ class FinancePopOrderController extends Controller
     			$statusinfo=$model->PopOrderstatus($alinfo,$value,$channelid,$paychannelid);
 
     			$postdate['order_code'] =$statusinfo['order_code']; //系统订单号
-    			$postdate['order_status_name'] =$statusinfo['order_status_name'];  //订单状态
+    			$postdate['order_status_name'] =$statusinfo['order_status_name']?$statusinfo['order_status_name']:'未知';  //订单状态
     			$postdate['order_money'] =$statusinfo['order_money'];// 订单金额
     			$postdate['finance_status'] =1;// 收款状态 1 未确定 2已确定
 
-    			
-    			//var_dump($postdate);exit;
-    			
-    			
     			$postdate['finance_record_log_id'] =$lastidRecordLog;
     			$postdate['finance_pop_order_number'] =$statusinfo['order_channel_order_num'];
     			$postdate['finance_order_channel_id'] =$channelid;
@@ -186,9 +182,14 @@ class FinancePopOrderController extends Controller
     			$postdate['create_time'] = time();
     			$postdate['is_del'] =0;
     		
+    			
+    			
     			$_model = clone $model;
     			$_model->setAttributes($postdate);
     			$_model->save();
+    			
+    			//var_dump($postdate);exit;
+    			
     			unset($postdate);
     		}
     		$n++;
@@ -573,7 +574,11 @@ class FinancePopOrderController extends Controller
     		//回滚财务审核
     		$model->finance_pop_order_pay_status='3';
     		$model->finance_pop_order_msg=$post['FinancePopOrder']['finance_pop_order_msg'];
+    	}elseif ($requestModel['edit']=='baksiteinfo'){
+    		$model->finance_pop_order_pay_status='1';
+    		$model->finance_pop_order_msg=$post['FinancePopOrder']['finance_pop_order_msg'];
     	}
+    	
     	$model->save();
     	return $this->redirect(['index', 'id' =>$requestModel['oid']]);
     	}else{
