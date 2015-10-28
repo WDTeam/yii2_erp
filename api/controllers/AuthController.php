@@ -68,7 +68,7 @@ class AuthController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} /auth/loginfrompop 客户登录(第三方渠道) (已实现)
+     * @api {POST} /auth/login-from-pop 客户登录(第三方渠道) (已实现)
      * @apiName LoginFromPop
      * @apiGroup Auth
      *
@@ -86,7 +86,7 @@ class AuthController extends \api\components\Controller
      *       "msg": "登录成功"，
      *       "ret":{
      *          "user":{}
-     *          "access_token":""
+     *          "access_token":"807b62127fdc2554607a01529d9e4b7e"
      *       }
      *     }
      *
@@ -96,7 +96,8 @@ class AuthController extends \api\components\Controller
      *     HTTP/1.1 403 Not Found
      *     { 
      *       "code":"0",
-     *       "msg": "用户名,签名或渠道名称错误"
+     *       "msg": "用户名,签名或渠道名称错误",
+     *       "ret": null
      *     }
      */
     public function actionLoginFromPop()
