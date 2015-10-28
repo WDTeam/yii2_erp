@@ -21,24 +21,41 @@ class WorkerVacationApplication extends \common\models\worker\WorkerVacationAppl
     /**
      * 获取阿姨请假排班表
      * @param $worker_id
+     * @param $vacationType 阿姨请假类型 1休假 2事假
      * @return array
      */
-    public static function getApplicationTimeLine($worker_id){
-        $weekArr = self::getWorkerVacationWeekArr($worker_id);
+    public static function getApplicationTimeLine($worker_id,$vacationType){
+        $weekArr = self::getWorkerVacationWeekArr($worker_id,$vacationType);
         $noWeekday = [0,6,5];
         $timeLine = [];
         for($i=0;$i<14;$i++){
             $time = strtotime("+$i day");
             $date = date('Y-m-d',$time);
-
-            $weekday = (int)date("w",$time);
             $week = (int)date("W",$time);
-            //本周是否已请假
-            if(in_array($week,$weekArr)){
-                $timeLine[$date] = false;
-                continue;
+            if($vacationType==1){
+                //本周是否已请休假
+                if(in_array($week,$weekArr)){
+                    $timeLine[$date] = false;
+                    continue;
+                }
+            }else{
+                //如果本周请了事假,则连续两周都不能请事假
+                if($week%2==1){
+                    if(in_array($week,$weekArr) || in_array($week+1,$weekArr)){
+                        $timeLine[$date] = false;
+                        continue;
+                    }
+                }else{
+                    if(in_array($week,$weekArr) || in_array($week-1,$weekArr)){
+                        $timeLine[$date] = false;
+                        continue;
+                    }
+                }
+
             }
+
             //周5,6,7 不可请假
+            $weekday = (int)date("w",$time);
             if(in_array($weekday,$noWeekday)){
                 $timeLine[$date] = false;
                 continue;
@@ -51,11 +68,20 @@ class WorkerVacationApplication extends \common\models\worker\WorkerVacationAppl
         return $timeLine;
     }
 
-    protected static function getWorkerVacationWeekArr($worker_id){
-        $startTime = strtotime(date('Y-m-d'));
-        $endTime = strtotime('+14 day',$startTime);
+    protected static function getWorkerVacationWeekArr($worker_id,$vacationType){
+        $nowTime = strtotime(date('Y-m-d'));
+        //类型为休假 返回2周阿姨请假信息
+        if($vacationType==1){
+            $startTime = $nowTime;
+            $endTime = strtotime('+14 day',$nowTime);
+        //类型为事假 返回4周阿姨请假信息
+        }else{
+            $startTime = strtotime('-7 day',$nowTime);
+            $endTime = strtotime('+21 day',$nowTime);
+        }
+
         $condition = "(worker_vacation_start_time > $startTime and worker_vacation_start_time < $endTime) or (worker_vacation_finish_time <$startTime and worker_vacation_finish_time >$endTime )";
-        $vacationTimeResult = WorkerVacation::find()->select('worker_vacation_start_time,worker_vacation_finish_time')->AndWhere(['worker_id'=>$worker_id])->AndWhere($condition)->asArray()->all();
+        $vacationTimeResult = WorkerVacation::find()->select('worker_vacation_start_time,worker_vacation_finish_time')->AndWhere(['worker_id'=>$worker_id])->AndWhere(['worker_vacation_type'=>$vacationType])->AndWhere($condition)->asArray()->all();
         $weekArr = [];
         foreach($vacationTimeResult as $val){
             $startWeek = (int)date('W',$val['worker_vacation_start_time']);
