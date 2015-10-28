@@ -102,6 +102,7 @@ class WorkerTaskLog extends \common\models\worker\WorkerTaskLog
     /**
      * 任务详情
      * @return unknown
+     * eg: WorkerTaskLog::findOne(['id'=>$id])->getDetail();
      */
     public function getDetail()
     {
@@ -118,7 +119,7 @@ class WorkerTaskLog extends \common\models\worker\WorkerTaskLog
     public function setSettlemented()
     {
         $is_sl = FinanceWorkerNonOrderIncomeSearch::isWorkerTaskSettled($this->id);
-        $this->is_settlemented = $is_sl;
+        $this->worker_task_is_settlemented = $is_sl;
         return $this->save();
     }
     /**
