@@ -10,7 +10,7 @@ echo Html::a('全部('.ShopManager::getTotal().')',[
     'class'=>'btn btn-success'
 ]);
 echo ' ';
-echo Html::a('黑名单('.ShopManager::getIsBlacklistCount().')',[
+echo Html::a('封号('.ShopManager::getIsBlacklistCount().')',[
     'index','ShopManagerSearch[is_blacklist]'=>1
 ],[
     'class'=>'btn btn-success'
