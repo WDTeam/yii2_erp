@@ -13,7 +13,7 @@ use kartik\widgets\ActiveForm;
  * @var core\models\order\OrderSearch $searchModel
  */
  
-AppAsset::addCss($this, 'css/order_search/style.css');
+/* AppAsset::addCss($this, 'css/order_search/style.css');
 AppAsset::addCss($this, 'css/order_search/jquery-ui-1.8.17.custom.css');
 AppAsset::addCss($this, 'css/order_search/jquery-ui-timepicker-addon.css');
 AppAsset::addScript($this, 'js/order_search/jquery-2.0.3.min.js');
@@ -21,17 +21,14 @@ AppAsset::addScript($this, 'js/order_search/script.js');
 AppAsset::addScript($this, 'js/order_search/riqi/jquery-1.7.1.min.js');
 AppAsset::addScript($this, 'js/order_search/riqi/jquery-ui-1.8.17.custom.min.js');
 AppAsset::addScript($this, 'js/order_search/riqi/jquery-ui-timepicker-addon.js');
-AppAsset::addScript($this, 'js/order_search/riqi/jquery-ui-timepicker-zh-CN.js');
+AppAsset::addScript($this, 'js/order_search/riqi/jquery-ui-timepicker-zh-CN.js'); */
 
-// $this->registerCssFile('css/order_search/style.css');
-// $this->registerCssFile('css/order_search/jquery-ui-1.8.17.custom.css');
-// $this->registerCssFile('css/order_search/jquery-ui-timepicker-addon.css');
-// $this->registerJsFile('js/order_search/jquery-2.0.3.min.js');
-// $this->registerJsFile('js/order_search/script.js');
-// $this->registerJsFile('js/order_search/riqi/jquery-1.7.1.min.js');
-// $this->registerJsFile('js/order_search/riqi/jquery-ui-1.8.17.custom.min.js');
-// $this->registerJsFile('js/order_search/riqi/jquery-ui-timepicker-addon.js');
-// $this->registerJsFile('js/order_search/riqi/jquery-ui-timepicker-zh-CN.js');
+AppAsset::addCss($this, 'css/order_search/style.css');
+AppAsset::addCss($this, 'css/order_search/dalog/animate.min.css');
+
+AppAsset::addScript($this, 'js/order_search/script.js');
+AppAsset::addScript($this, 'js/order_search/My97DatePicker/WdatePicker.js');
+AppAsset::addScript($this, 'js/order_search/dalog/jquery.hDialog.min.js');
 
 $this->title = '订单投诉管理';
 $this->params['breadcrumbs'][] = $this->title;
@@ -56,11 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         //'type' => ActiveForm::TYPE_VERTICAL,
                         'action' => ['order/order-complaint/index'],
                         'method' => 'get',
-                    ]); ?>						
-						<?php //echo $form->field($searchModel, 'order_customer_phone')->TextInput(['class' => 'm_ipu'])->label('用户电话 :', ['class' => 'm_ipone']); ?>
-						<?php //echo $form->field($searchModel, 'worker_id')->TextInput(['class' => 'm_ipu'])->label('阿姨电话 :', ['class' => 'm_ipone']); ?>
-						<?php //echo $form->field($searchModel, 'order_code')->TextInput(['class' => 'm_ipu'])->label('订单编号 :', ['class' => 'm_ipone']); ?>
-						
+                    ]); ?>
 						<div class="m_riqi">
 						 <div class="m_fr">
 						 	<label class="m_iphone">
@@ -68,21 +61,23 @@ $this->params['breadcrumbs'][] = $this->title;
 						 	</label>
 						 	<label class="m_iphone">
 						 	阿姨手机<input type="text" name="OrderComplaint[order_worker_phone]" value="<?php if(!empty($params['OrderComplaintSearch']['order_worker_phone'])){ echo $params['OrderComplaintSearch']['order_worker_phone']; }?>"/>
-						 	</label><label class="m_iphone">
-						 	订单编号<input type="text" name="OrderComplaintSearch[order_id]" value="<?php if(!empty($params['OrderComplaintSearch']['order_id'])){echo $params['OrderComplaintSearch']['order_id'];}?>"/>
-						 	</label><label class="m_iphone">
-						 	投诉编号<input type="text" name="OrderComplaintSearch[id]" value="<?php if(!empty($params['OrderComplaintSearch']['id'])){ echo $params['OrderComplaintSearch']['id'];}?>"/>
 						 	</label>
+						 	<label class="m_iphone">
+						  		阿姨姓名<input type="text" name="OrderComplaintSearch[order_worker_name]" value="<?php if(!empty($params['OrderComplaintSearch']['order_worker_name'])){ echo $params['OrderComplaintSearch']['order_worker_name'];}?>"/>
+						  	</label>
 						 </div>
 						<div class="m_fr mar-t">
 							<label class="m_iphone">
-						  		阿姨姓名
-						  	</label><input type="text" name="OrderComplaintSearch[order_worker_name]" value="<?php if(!empty($params['OrderComplaintSearch']['order_worker_name'])){ echo $params['OrderComplaintSearch']['order_worker_name'];}?>"/>
+						 	订单编号<input type="text" name="OrderComplaintSearch[order_id]" value="<?php if(!empty($params['OrderComplaintSearch']['order_id'])){echo $params['OrderComplaintSearch']['order_id'];}?>"/>
+						 	</label>
+						 	<label class="m_iphone">
+						 	投诉编号<input type="text" name="OrderComplaintSearch[id]" value="<?php if(!empty($params['OrderComplaintSearch']['id'])){ echo $params['OrderComplaintSearch']['id'];}?>"/>
+						 	</label>
 						</div>
 						 <div class="m_fr mar-t">
                             <label class="m_ipone">创建时间:</label>
-							<input type="text" name="starttime" class="ui_timepicker" value="" placeholder=""> 到
-							<input type="text" name="endtime" class="ui_timepicker" value="" placeholder="">
+							<input type="text" name="starttime" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})" value="<?php if(!empty($params['starttime'])){echo $params['starttime'];}?>" placeholder=""> 到
+							<input type="text" name="endtime" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})" value="<?php if(!empty($params['endtime'])){echo $params['endtime'];}?>" placeholder="">
 						   </div>
 						    <?= Html::submitButton('查询', ['class' => 'btn btn-primary']) ?>
 						</div>
@@ -174,6 +169,14 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php 
 $this->registerJs('
 	    $(function () {
+			starttime = $("input[name="starttime"]").val();
+			endtime = $("input[name="endtime"]").val();
+		   // $("input[name="endtime"]").change(function(){
+				
+			//} 
+		
+		
+		
 	        $(".ui_timepicker").datetimepicker({
 	            //showOn: "button",
 	            //buttonImage: "./css/images/icon_calendar.gif",

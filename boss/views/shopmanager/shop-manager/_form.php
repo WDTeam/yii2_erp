@@ -91,7 +91,7 @@ use boss\components\AreaCascade;
                     'is_blacklist'=>[
                         'type'=> Form::INPUT_RADIO_LIST, 
                         'items'=>['否', '是'], 
-                        'label'=>'是否黑名单', 
+                        'label'=>'是否封号', 
                     ],
                 ]
             
