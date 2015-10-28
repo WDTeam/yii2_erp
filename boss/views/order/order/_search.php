@@ -62,6 +62,7 @@ float: right;
                 'templateSelection' => new JsExpression('function (city) { return city.text; }'),
             ],
         ])->label('门店:', ['class' => 'm_ipone','style'=>'line-height:35px']); ?>
+        
         <?= $form->field($searchModel, 'district_id')->widget(Select2::classname(), [
             'name' => 'worker_district',
             'hideSearch' => true,

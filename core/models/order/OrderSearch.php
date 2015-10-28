@@ -20,7 +20,7 @@ class OrderSearch extends Order
     public function rules()
     {
         return [
-            [['order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'isdel', 'order_ip', 'order_service_type_id', 'order_src_id', 'channel_id', 'order_booked_count', 'order_booked_begin_time', 'order_booked_end_time', 'address_id', 'order_booked_worker_id', 'checking_id', 'shop_id', 'district_id', 'city_id'], 'integer'],
+            [['order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'isdel', 'order_ip', 'order_service_type_id', 'order_src_id', 'channel_id', 'order_booked_count', 'order_booked_begin_time', 'order_booked_end_time', 'address_id', 'order_booked_worker_id', 'checking_id', 'shop_id', 'district_id', 'city_id', 'order_status_dict_id'], 'integer'],
             [['order_unit_money', 'order_money'], 'number'],
             [['order_code', 'order_channel_name', 'order_customer_phone'], 'string', 'max' => 64],
             [['order_service_type_name', 'order_src_name'], 'string', 'max' => 128],
@@ -58,6 +58,38 @@ class OrderSearch extends Order
      * @param $end_time 结束时间(时间戳)
      */
     public static function getWorkerAndOrderAndDoneTime($worker_id,$begin_time,$end_time)
+    {
+        //状态
+        $params = [
+            OrderStatusDict::ORDER_SERVICE_DONE, //完成服务
+            OrderStatusDict::ORDER_CUSTOMER_ACCEPT_DONE, //完成评价 可申请结算
+            OrderStatusDict::ORDER_CHECKED, //已核实 已对账
+            OrderStatusDict::ORDER_PAYOFF_DONE, //已完成结算
+            OrderStatusDict::ORDER_PAYOFF_SHOP_DONE, //已完成门店结算
+            OrderStatusDict::ORDER_DIED, //已归档
+        ];
+        //查询
+        $query = new \yii\db\Query();
+        $data = $query->from('{{%order}} as order')
+            ->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')
+            ->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')
+            ->innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id')
+            ->innerJoin('{{%order_ext_worker}} as ow','order.id = ow.order_id')
+            ->select('*')
+            ->where(['ow.worker_id'=>$worker_id])
+            ->andWhere(['between', 'order.created_at', $begin_time, $end_time])
+            ->andWhere(['in','os.order_status_dict_id',$params])
+            ->all();
+        return $data;
+    }
+
+    /**
+     * 通过阿姨ID获取指定月份的完成时间所有订单
+     * @param $worker_id 阿姨ID
+     * @param $begin_time 开始时间(时间戳)
+     * @param $end_time 结束时间(时间戳)
+     */
+    public static function getWorkerAndOrderAndCancelTime($worker_id,$begin_time,$end_time)
     {
         //状态
         $params = [
@@ -320,7 +352,9 @@ class OrderSearch extends Order
     {
         $query = new \yii\db\Query();
 
-        $query->from('{{%order}} as order')->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id');
+        $query->from('{{%order}} as order')
+            ->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')
+            ->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -392,7 +426,7 @@ class OrderSearch extends Order
 
         $query->from('{{%order}} as order')->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')->
         innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')->
-        innerJoin('{{%order_worker_relation}} as owr','order.id = owr.order_id');
+        innerJoin('{{%order_ext_worker}} as owr','order.id = owr.order_id');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -496,6 +530,7 @@ class OrderSearch extends Order
             'shop_id' => $this->shop_id,
             'district_id' => $this->district_id,
             'city_id' => $this->city_id,
+            'order_status_dict_id' => $this->order_status_dict_id,
         ]);
 
         $query->andFilterWhere(['like', 'order_code', $this->order_code])
@@ -504,7 +539,7 @@ class OrderSearch extends Order
             ->andFilterWhere(['like', 'order_channel_name', $this->order_channel_name])
             ->andFilterWhere(['like', 'order_address', $this->order_address])
             ->andFilterWhere(['like', 'order_cs_memo', $this->order_cs_memo]);
-        
+                
         if (!empty($params['created_from']))
             $query->andFilterWhere(['>=', Order::tableName().'.created_at', strtotime($params['created_from'])]);
 

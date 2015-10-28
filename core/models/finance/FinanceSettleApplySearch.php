@@ -64,6 +64,8 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     public $settleMonth;//结算月份
     
     const WORKER_CONFIRM_SETTLEMENT = 1;//阿姨确认结算单
+    
+    const WORKER_VACATION_DAYS = 4;//公司规定阿姨每个月可休假的天数
    
    public $financeSettleApplyStatusArr = [
        FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED=>'财务审核不通过',
@@ -229,6 +231,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
               }
            }
         }
+        
         $apply_money_except_deduct_cash = $apply_order_money + $apply_base_salary_subsidy + $apply_task_money;//订单金额+底薪补贴+任务奖励
         $apply_money_except_cash = $apply_money_except_deduct_cash - $apply_money_deduction;//订单金额+底薪补贴+任务奖励-扣款
         $apply_money = $apply_money_except_cash - $order_cash_money;//订单金额+底薪补贴+任务奖励-扣款-现金订单金额
@@ -238,7 +241,6 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         $this->finance_settle_apply_task_count = $apply_task_count;//完成任务数
         $this->finance_settle_apply_task_money = $apply_task_money;//完成任务奖励
         $this->finance_settle_apply_base_salary = $apply_base_salary;//底薪
-        $this->finance_settle_apply_base_salary_subsidy = $apply_base_salary_subsidy;//底薪补贴
         $this->finance_settle_apply_money_except_deduct_cash = $apply_money_except_deduct_cash;//应结合计,没有减除扣款和现金
         $this->finance_settle_apply_money_deduction = $apply_money_deduction;//扣款小计
         $this->finance_settle_apply_money_except_cash = $apply_money_except_cash;//本次应结合计，没有减除现金
@@ -260,7 +262,9 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             $this->shop_id = $workerInfo['shop_id'];
             $this->shop_name = $workerInfo['shop_name'];
             $this->shop_manager_name = $workerInfo['shop_manager_name'];
+            $apply_base_salary_subsidy = $this->getBaseSalarySubsidy($apply_order_money,$apply_base_salary,$this->worker_type_id,$this->worker_identity_id,$this->finance_settle_apply_starttime,$this->finance_settle_apply_endtime);
         }
+        $this->finance_settle_apply_base_salary_subsidy = $apply_base_salary_subsidy;//底薪补贴
         $this->finance_settle_apply_cycle = $this->getSettleCycleIdByWorkerType($this->worker_type_id, $this->worker_identity_id);//结算周期Id
         $this->finance_settle_apply_cycle_des = $this->getSettleCycleByWorkerType($this->worker_type_id, $this->worker_identity_id);//结算周期描述
         $this->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT;//提交结算申请
@@ -270,9 +274,20 @@ class FinanceSettleApplySearch extends FinanceSettleApply
 
     }
     
-    public function getBaseSalarySubsidy($apply_order_money){
-        
+    public function getBaseSalarySubsidy($apply_order_money,$apply_base_salary,$workerType,$workerIdentityId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
+        $baseSalarySubsidy = 0;
+        if($this->isSelfAndFulltimeWorker($workerType, $workerIdentityId)){
+             $needWorkDay = date('t',$finance_settle_apply_starttime) - self::WORKER_VACATION_DAYS;//本月应服务天数
+             $realWorkDay = $needWorkDay;//实际工作天数,从阿姨接口获取
+             if($realWorkDay >= $needWorkDay){
+                 $realWorkDay = $needWorkDay;
+             }
+             $baseSalarySubsidy = max($apply_order_money,$apply_base_salary/$needWorkDay*$realWorkDay) - $apply_order_money;
+        }
+        return $baseSalarySubsidy;
     }
+    
+    
     /**
      * 
      */

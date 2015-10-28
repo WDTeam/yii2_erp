@@ -38,7 +38,7 @@ class WorkerTaskLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['worker_id', 'worker_task_id', 'worker_task_log_start', 'worker_task_log_end', 'worker_task_is_done', 'worker_task_done_time', 'worker_task_reward_type', 'worker_task_reward_value', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['worker_id', 'worker_task_id', 'worker_task_log_start', 'worker_task_log_end', 'worker_task_is_done', 'worker_task_done_time', 'worker_task_reward_type', 'worker_task_reward_value', 'created_at', 'updated_at', 'is_del', 'worker_task_is_settlemented'], 'integer'],
             [['worker_task_cycle_number'], 'string', 'max' => 50],
             [['worker_task_name'], 'string', 'max' => 255]
         ];
@@ -61,6 +61,7 @@ class WorkerTaskLog extends \yii\db\ActiveRecord
             'worker_task_done_time' => Yii::t('app', '任务完成时间'),
             'worker_task_reward_type' => Yii::t('app', '任务奖励类型'),
             'worker_task_reward_value' => Yii::t('app', '任务奖励值'),
+            'worker_task_is_settlemented' => Yii::t('app', '是否已结算'),
             'created_at' => Yii::t('app', '创建时间'),
             'updated_at' => Yii::t('app', '更新时间'),
             'is_del' => Yii::t('app', '是否逻辑删除'),

@@ -5,6 +5,7 @@ namespace core\models\worker;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\behaviors\TimestampBehavior;
+use core\models\finance\FinanceWorkerNonOrderIncomeSearch;
 
 /**
  * This is the model class for table "{{%worker_task_log}}".
@@ -97,6 +98,29 @@ class WorkerTaskLog extends \common\models\worker\WorkerTaskLog
     {
         $model = WorkerTask::findOne(['id'=>$this->worker_task_id]);
         return $model->worker_task_description;
+    }
+    /**
+     * 任务详情
+     * @return unknown
+     * eg: WorkerTaskLog::findOne(['id'=>$id])->getDetail();
+     */
+    public function getDetail()
+    {
+        $model = self::findOne(['id'=>$this->id]);
+        $data = $model->attributes;
+        $data['values'] = $model->getConditionsValues();
+        $data['worker_task_description'] = $model->getWorker_task_description();
+        return $data;
+    }
+    /**
+     * 判断并设置结算与否
+     * @return boolean
+     */
+    public function setSettlemented()
+    {
+        $is_sl = FinanceWorkerNonOrderIncomeSearch::isWorkerTaskSettled($this->id);
+        $this->worker_task_is_settlemented = $is_sl;
+        return $this->save();
     }
     /**
      * 当前阿姨任务列表
