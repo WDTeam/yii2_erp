@@ -276,8 +276,6 @@ class OrderController extends BaseAuthController
 
     }
 
-
-
     /**
      * Lists all Order models.
      * @return mixed
@@ -285,6 +283,12 @@ class OrderController extends BaseAuthController
     public function actionIndex()
     {
         //Yii::info('xiaobo: '.json_encode(Yii::$app->request->getQueryParams()));
+        
+//         if (!empty(Yii::$app->request->get()))
+//         {
+//         print_r(Yii::$app->request->get());
+//         return;
+//         }
         
         $searchModel = new OrderSearch; 
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
