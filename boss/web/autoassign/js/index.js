@@ -1,6 +1,9 @@
 $(document).ready(function(){
-    $('#start').click(function(){startAutoAssignOrder(true);});
-    $('#stop').click(function(){startAutoAssignOrder(false);});
+    $('#qend').blur(function(){ $('#jstart').val( $('#qend').val());});
+    $('#start').click(function(){execCommand(1);});
+    $('#stop').click(function(){execCommand(2);});
+    $('#reload').click(function(){execCommand(3);});
+    $('#update').click(function(){execCommand(4);});
     $('#connect').click(function(){websocketConnect();});
     $('#connect').click();
 });
@@ -15,7 +18,6 @@ function websocketConnect() {
             console.log("Connected to WebSocket server." + evt.data);
             $('#connect').attr('disabled', true);
             $('#connectStatus').html('连接成功！');
-            startAutoAssignOrder(true);
         };
         websocket.onclose = function (evt) {
             console.log("Disconnected");
@@ -38,6 +40,10 @@ function websocketConnect() {
 
 function showOrders(data){
     var order = $.parseJSON(data);
+    if (order.order_id==null || order.order_id=='')
+    {
+        return;
+    }
     var id = 'order_'+order.order_id;
     var obj = $('#'+id);
     order.status = getStatus(order.status);
@@ -84,8 +90,8 @@ function getStatus(status){
     }
 }
 
-function startAutoAssignOrder(status){
-    var data = $('#interval').val()+','+$('#taskName').val()+','+$('#theadNum').val()+','+$('#qstart').val()+','+$('#qend').val()+','+$('#jstart').val()+','+$('#jend').val()+','+status;
+function execCommand(cmd){
+    var data = cmd +','+$('#qstart').val()+','+$('#qend').val()+','+$('#jstart').val()+','+$('#jend').val()+','+status;
     websocket.send(data);
     $('#connectStatus').html('自动派单开始！');
     $('#start').attr('disabled', false);
