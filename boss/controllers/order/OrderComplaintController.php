@@ -35,6 +35,7 @@ class OrderComplaintController extends BaseAuthController
     	$searchModel = new OrderComplaintSearch();
     	$orderComplaint = new OrderComplaint();
     	$comStatus = OrderComplaint::ComplaintStatus();
+    	$channel = OrderComplaint::complaint_channel();
     	$dev = OrderComplaint::Department();
     	$comLevel = OrderComplaint::ComplaintLevel();
     	$comType = OrderComplaint::ComplaintType();
@@ -47,6 +48,7 @@ class OrderComplaintController extends BaseAuthController
     			'comLevel' => $comLevel,
     			'comType' => $comType,
     			'devpart' => $dev,
+    			'channel' => $channel,
     			'params' => $params
     	]);
         
