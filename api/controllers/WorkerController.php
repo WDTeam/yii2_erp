@@ -1060,14 +1060,6 @@ class WorkerController extends \api\components\Controller
         }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
-        $ret = [
-            "result" => 1,
-            "msg" => "ok",
-            "titleMsg" => "您本月已请假0天，本月剩余请假2天",
-            "orderTimeList" => ["2015-09-14", "2015-09-15"],
-            "workerLeaveList" => ["2015-09-14", "2015-09-15"]
-
-        ];
         return $this->send($ret, "操作成功", 1);
     }
 
