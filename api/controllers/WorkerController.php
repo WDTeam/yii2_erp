@@ -829,15 +829,13 @@ class WorkerController extends \api\components\Controller
     }
     
     /**
-     * @api {GET} /worker/get-worker-punish-list 获取阿姨受处罚列表 (田玉星 90%)
-     * 
-     * @apiDescription 【备注：等待model底层支持】
+     * @api {GET} /worker/get-worker-punish-list 获取阿姨受处罚列表 (田玉星 100%)
      * 
      * @apiName actionGetWorkerPunishList
      * @apiGroup Worker
      * 
      * @apiParam {String} access_token    阿姨登录token
-     * @apiParam {String} bill_id  账单唯一标识.
+     * @apiParam {String} settle_id  账单唯一标识.
      * @apiParam {String} [platform_version] 平台版本号.
      * 
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-punish-list
