@@ -390,6 +390,7 @@ class OrderController extends \restapi\components\Controller
      *    "order_channel_name": "后台下单",
      *    "order_unit_money": "20.00",
      *    "order_money": "40.00",
+     *    "order_pay_type": "支付方式",
      *    "order_booked_count": "120",
      *    "order_booked_begin_time": "1446249600",
      *    "order_booked_end_time": "1446256800",
