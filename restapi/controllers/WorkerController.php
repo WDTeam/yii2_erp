@@ -58,14 +58,21 @@ class WorkerController extends \restapi\components\Controller
     public function actionWorkerInfo()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-        if (!isset($param['access_token']) || !$param['access_token'] || !isset($param['worker_id']) || !$param['worker_id'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+        if (!isset($param['access_token']) || !$param['access_token']|| !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
+        if(!isset($param['worker_id']) ||!$param['worker_id']){
+            return $this->send(null, "阿姨不存在.", 0, 403);
         }
         // 按阿姨id获取阿姨信息
         $workerId = intval($param['worker_id']);
-        if ($workerId ) {
+        if (!$workerId) {
+            return $this->send(null, "阿姨不存在.", 0, 403);
+        }
+        //数据调取
+        try{
             $workerInfo = Worker::getWorkerDetailInfo($workerId);
-            //数据整理
+            $ret = array();
             if(!empty($workerInfo)){
                 $ret = [
                     "worker_name" => $workerInfo['worker_name'],
@@ -75,12 +82,13 @@ class WorkerController extends \restapi\components\Controller
                     "worker_identity_id" => $workerInfo['worker_identity_id'],//身份类型
                     "worker_type_description" => $workerInfo["worker_type_description"],
                     'worker_star' => $workerInfo["worker_star"],
-                    "personal_skill" => WorkerSkill::getWorkerSkill($checkResult['worker_id']),
+                    "personal_skill" =>WorkerSkill::getWorkerSkill($workerId) ,
                 ];
-                return $this->send($ret, "阿姨信息查询成功");
             }
+            return $this->send($ret, "阿姨信息查询成功");
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
         }
-        return $this->send(null, "阿姨不存在.", 0, 403);
     }
 
     /**
