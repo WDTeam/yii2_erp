@@ -1,5 +1,5 @@
 <?php
-namespace api\controllers;
+namespace restapi\controllers;
 
 use Yii;
 use \core\models\operation\OperationShopDistrictGoods;
@@ -7,7 +7,7 @@ use \core\models\operation\OperationCategory;
 use \core\models\operation\OperationCity;
 use \core\models\customer\CustomerAccessToken;
 
-class ConfigureController extends \api\components\Controller
+class ConfigureController extends \restapi\components\Controller
 {
     /**
      * @api {GET} /configure/all-services 获取城市全部上线服务 （赵顺利100%）

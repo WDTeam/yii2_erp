@@ -12,7 +12,7 @@ echo Menu::widget(
         ],
         'items' => [
             [
-                'label' => '家政公司管理(100%)',
+                'label' => '家政公司管理',
                 'url' => ['#'],
                 'icon' => 'fa fa-slideshare',
                 'options' => [
@@ -21,19 +21,19 @@ echo Menu::widget(
                 'visible' => (Yii::$app->user->can('housekeep')),
                 'items' => [
                     [
-                        'label' => '查看所有家政公司(100%)',
+                        'label' => '查看所有家政公司',
                         'url' => ['shopmanager/shop-manager/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '新合作公司(100%)',
+                        'label' => '新合作公司',
                         'url' => ['shopmanager/shop-manager/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],
             ],
             [
-                'label' => '门店管理(100%)',
+                'label' => '门店管理',
                 'url' => ['#'],
                 'icon' => 'fa fa-flag',
                 'visible' => (Yii::$app->user->can('shop')),
@@ -42,19 +42,19 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有合作门店(100%)',
+                        'label' => '查看所有合作门店',
                         'url' => ['shop/shop/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '添加新门店(100%)',
+                        'label' => '添加新门店',
                         'url' => ['shop/shop/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],
             ],
             [
-                'label' => '阿姨管理(90%)',
+                'label' => '阿姨管理',
                 'url' => ['#'],
                 'icon' => 'fa fa-female',
                 'visible' => (Yii::$app->user->can('worker')),
@@ -63,12 +63,12 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有阿姨(90%)',
+                        'label' => '查看所有阿姨',
                         'url' => ['/worker/worker'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '录入新阿姨(90%)',
+                        'label' => '录入新阿姨',
                         'url' => ['/worker/worker/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -80,7 +80,7 @@ echo Menu::widget(
                 ],
             ],
             [
-                'label' => '客户管理(90%)',
+                'label' => '客户管理',
                 'url' => ['#'],
                 'icon' => 'fa fa-user',
                 'visible' => (Yii::$app->user->can('customer')),
@@ -89,24 +89,24 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有顾客(90%)',
+                        'label' => '查看所有顾客',
                         'url' => ['/customer/customer/index?CustomerSearch[is_del]=0'],
                         'icon' => 'fa fa-angle-right',
                     ],
 					[
-					'label' => '评价列表(90%)',
+					'label' => '评价列表',
 					'url' => ['/customer/customer-comment'],
 					'icon' => 'fa fa-angle-right',
 					],
 					[
-					'label' => '评价标签管理(90%)',
+					'label' => '评价标签管理',
 					'url' => ['/customer/customer-comment-tag'],
 					'icon' => 'fa fa-angle-right',
 					],
                 ],
             ],
             [
-                'label' => '订单管理(50%)',
+                'label' => '订单管理',
                 'url' => ['#'],
                 'icon' => 'fa fa-tag',
                 'visible' => (Yii::$app->user->can('order')),
@@ -115,27 +115,27 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有订单(20%)',
+                        'label' => '查看所有订单',
                         'url' => ['/order/order'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '创建新订单(95%)',
+                        'label' => '创建新订单',
                         'url' => ['/order/order/create'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '人工派单(90%)',
+                        'label' => '人工派单',
                         'url' => ['/order/order/assign'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '智能派单(90%)',
+                        'label' => '智能派单',
                         'url' => ['/order/auto-assign'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 	[
-                		'label' => '订单投诉(30%)',
+                		'label' => '订单投诉',
                 		'url' => ['/order/order-complaint'],
                 		'icon' => 'fa fa-angle-right',
                 	],
@@ -196,12 +196,12 @@ echo Menu::widget(
                         ],
                         'items' => [
                             [
-                                'label' => '服务项目和类型管理(95%)',
+                                'label' => '服务项目和类型管理',
                                 'url' => ['/operation/operation-category/'],
                                 'icon' => 'fa fa-angle-right',
                             ],
                             [
-                                'label' => '城市和商圈管理(90%)',
+                                'label' => '城市和商圈管理',
                                 'url' => ['/operation/operation-city'],
                                 'icon' => 'fa fa-angle-right',
                             ],
@@ -225,7 +225,7 @@ echo Menu::widget(
 //                        'visible' => (Yii::$app->user->identity->username == 'admin'),
 //                    ],
                     [
-                        'label' => 'CMS管理(90%)',
+                        'label' => 'CMS管理',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                         'options' => [
@@ -268,7 +268,7 @@ echo Menu::widget(
 //
 //                    ],
 					[
-                        'label' => '优惠券管理(10%)',
+                        'label' => '优惠券管理',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                         'options' => [
@@ -276,12 +276,12 @@ echo Menu::widget(
                         ],
                         'items' => [
                             [
-                                'label' => '优惠券列表(10%)',
+                                'label' => '优惠券列表',
                                 'url' => ['operation/coupon/coupon/index'],
                                 'icon' => 'fa fa-angle-right',
                             ],
                             [
-                                'label' => '添加新优惠券(10%)',
+                                'label' => '添加新优惠券',
                                 'url' => ['operation/coupon/coupon/create'],
                                 'icon' => 'fa fa-angle-right',
                             ],
@@ -309,7 +309,7 @@ echo Menu::widget(
 //                    ],
 
                     [
-                        'label' => '启动页管理(90%)',
+                        'label' => '启动页管理',
                         'url' => ['/operation/operation-boot-page'],
                         'icon' => 'fa fa-angle-right',
 
@@ -325,7 +325,7 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                     ],*/
                     [
-                        'label' => '阿姨任务管理(100%)',
+                        'label' => '阿姨任务管理',
                         'url' => ['/worker/worker-task/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -372,7 +372,7 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '对账管理(90%)',
+                        'label' => '对账管理',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                         'options' => [
@@ -380,27 +380,27 @@ echo Menu::widget(
                         ],
                         'items' => [
                             [
-                                'label' => '渠道管理(95%)',
+                                'label' => '渠道管理',
                                 'url' => ['/finance/finance-pay-channel/'],
                                 'icon' => 'fa fa-angle-right',
                             ],[
-                                'label' => '配置对账表头(95%)',
+                                'label' => '配置对账表头',
                                 'url' => ['/finance/finance-header/index'],
                                 'icon' => 'fa fa-angle-right',
                             ],[
-                            'label' => '开始对账(90%)',
+                            'label' => '开始对账',
                                 'url' => ['/finance/finance-pop-order/'],
                                 'icon' => 'fa fa-angle-right',
                             ],[
-                                'label' => '查看历史对账记录(95%)',
+                                'label' => '查看历史对账记录',
                                 'url' => ['/finance/finance-record-log/'],
                                 'icon' => 'fa fa-angle-right',
                             ],[
-                                'label' => '对账记录详情(95%)',
+                                'label' => '对账记录详情',
                                 'url' => ['/finance/finance-pop-order/billinfo'],
                                 'icon' => 'fa fa-angle-right',
                             ],[
-                                'label' => '坏账管理(95%)',
+                                'label' => '坏账管理',
                                 'url' => ['/finance/finance-pop-order/bad'],
                                 'icon' => 'fa fa-angle-right',
                             ]
@@ -409,7 +409,7 @@ echo Menu::widget(
 
                     ],
                     [
-                        'label' => '结算管理(92%)',
+                        'label' => '结算管理',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                         'options' => [
@@ -425,19 +425,19 @@ echo Menu::widget(
                                 ],
                                'items'=>[
                                     [
-                                        'label' => '全职结算(95%)',
+                                        'label' => '全职结算',
                                         'url' => ['/finance/finance-settle-apply/self-fulltime-worker-settle-index?settle_type='.FinanceSettleApplySearch::SELF_FULLTIME_WORKER_SETTELE.'&review_section='.FinanceShopSettleApplySearch::BUSINESS_REVIEW],
                                         'icon' => 'fa fa-angle-right',
                                     ],
                                    [
-                                        'label' => '兼职结算(95%)',
+                                        'label' => '兼职结算',
                                         'url' => ['/finance/finance-settle-apply/self-fulltime-worker-settle-index?settle_type='.FinanceSettleApplySearch::SELF_PARTTIME_WORKER_SETTELE.'&review_section='.FinanceShopSettleApplySearch::BUSINESS_REVIEW],
                                         'icon' => 'fa fa-angle-right',
                                     ],
                                ]
                             ],
                             [
-                                'label' => '小家政结算(95%)',
+                                'label' => '小家政结算',
                                 'url' => ['#'],
                                 'icon' => 'fa fa-angle-right',
                                 'options' => [
@@ -445,19 +445,19 @@ echo Menu::widget(
                                 ],
                                 'items'=>[
                                     [
-                                        'label' => '门店结算(95%)',
+                                        'label' => '门店结算',
                                         'url' => ['/finance/finance-shop-settle-apply/index?review_section='.FinanceShopSettleApplySearch::BUSINESS_REVIEW],
                                         'icon' => 'fa fa-angle-right',
                                     ],
                                    [
-                                        'label' => '阿姨结算(95%)',
+                                        'label' => '阿姨结算',
                                         'url' => ['/finance/finance-settle-apply/self-fulltime-worker-settle-index?settle_type='.FinanceSettleApplySearch::SHOP_WORKER_SETTELE.'&review_section='.FinanceShopSettleApplySearch::BUSINESS_REVIEW],
                                         'icon' => 'fa fa-angle-right',
                                     ],
                                 ]
                             ],
                             [
-                                'label' => '财务审核(95%)',
+                                'label' => '财务审核',
                                 'url' => ['#'],
                                 'icon' => 'fa fa-angle-right',
                                 'options' => [
@@ -465,18 +465,18 @@ echo Menu::widget(
                                 ],
                                 'items'=>[
                                     [
-                                        'label' => '阿姨结算(95%)',
+                                        'label' => '阿姨结算',
                                         'url' => ['/finance/finance-settle-apply/self-fulltime-worker-settle-index?settle_type='.FinanceSettleApplySearch::ALL_WORKER_SETTELE.'&review_section='.FinanceShopSettleApplySearch::FINANCE_REVIEW],
                                         'icon' => 'fa fa-angle-right',
                                     ],
                                     [
-                                        'label' => '门店结算(95%)',
+                                        'label' => '门店结算',
                                         'url' => ['/finance/finance-shop-settle-apply/index?review_section='.FinanceShopSettleApplySearch::FINANCE_REVIEW],
                                         'icon' => 'fa fa-angle-right',
                                     ],
                                 ]
                             ], [
-                                'label' => '结算查询(90%)',
+                                'label' => '结算查询',
                                  'url' => ['#'],
                                 'icon' => 'fa fa-angle-right',
                                 'options' => [
@@ -484,12 +484,12 @@ echo Menu::widget(
                                 ],
                                 'items'=>[
                                     [
-                                        'label' => '阿姨结算(90%)',
+                                        'label' => '阿姨结算',
                                         'url' => ['/finance/finance-settle-apply/query'],
                                         'icon' => 'fa fa-angle-right',
                                     ],
                                     [
-                                        'label' => '门店结算(90%)',
+                                        'label' => '门店结算',
                                         'url' => ['/finance/finance-shop-settle-apply/query'],
                                         'icon' => 'fa fa-angle-right',
                                     ],
@@ -506,12 +506,12 @@ echo Menu::widget(
                         ],
                         'items' => [
                         [
-                        'label' => '财务审核确认(85%)',
+                        'label' => '财务审核确认',
                         'url' => ['/finance/finance-refund/'],
                         'icon' => 'fa fa-angle-right',
                         ],
                         [
-                        'label' => '退款统计(85%)',
+                        'label' => '退款统计',
                         'url' => ['/finance/finance-refund/countinfo'],
                         'icon' => 'fa fa-angle-right',
                         ]
@@ -519,7 +519,7 @@ echo Menu::widget(
 
                     ],
                     [
-                        'label' => '赔偿管理(95%)',
+                        'label' => '赔偿管理',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                         'options' => [
@@ -527,12 +527,12 @@ echo Menu::widget(
                         ],
                         'items' => [
                         [
-                        'label' => '财务确认赔偿(95%)',
+                        'label' => '财务确认赔偿',
                         'url' => ['/finance/finance-compensate/finance-confirm-index'],
                         'icon' => 'fa fa-angle-right',
                         ],
                         [
-                        'label' => '赔偿查询(95%)',
+                        'label' => '赔偿查询',
                         'url' => ['/finance/finance-compensate/index'],
                         'icon' => 'fa fa-angle-right',
                         ],
@@ -540,12 +540,12 @@ echo Menu::widget(
 
                     ],
                     [
-                        'label' => '报表管理(0%)',
+                        'label' => '报表管理',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
-                        'label' => '发票管理(5%)',
+                        'label' => '发票管理',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                     ],
@@ -564,38 +564,6 @@ echo Menu::widget(
                 ],
             ],
 
-            [
-                'label' => '供应商管理',
-                'url' => ['#'],
-                'icon' => 'fa fa-ambulance',
-                'visible' => (Yii::$app->user->can('supplier')),
-                'options' => [
-                    'class' => 'treeview rootTree',
-                ],
-                'items' => [
-                    [
-                        'label' => '查看所有供应商',
-                        'url' => ['#'],
-                        'icon' => 'fa fa-angle-right',
-                    ],
-                    [
-                        'label' => '添加新供应商',
-                        'url' => ['#'],
-                        'icon' => 'fa fa-angle-right',
-                    ],
-                    [
-                        'label' => '商品供应商',
-                        'url' => ['#'],
-                        'icon' => 'fa fa-angle-right',
-                    ],
-                    [
-                        'label' => '服务供应商',
-                        'url' => ['#'],
-                        'icon' => 'fa fa-angle-right',
-                    ],
-
-                ],
-            ],
 
 //             [
 //                 'label' => 'POP管理',

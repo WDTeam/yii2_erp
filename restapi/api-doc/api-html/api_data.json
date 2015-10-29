@@ -959,6 +959,110 @@
   },
   {
     "type": "GET",
+    "url": "/order/worker-orders-count",
+    "title": "查询阿姨订单订单数量(xieyi 90%已经将后台接口完成,缺少周期订单)",
+    "name": "Orders",
+    "group": "Order",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>阿姨登陆令牌</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "order_id",
+            "description": "<p>订单id</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "channels",
+            "description": "<p>渠道号按'.'分隔</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "order_status",
+            "description": "<p>订单状态按'.'分隔</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "oc.customer_id",
+            "description": "<p>客户id</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "from",
+            "description": "<p>开始时间</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "to",
+            "description": "<p>结束时间</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "<p>Object[]</p> ",
+            "optional": false,
+            "field": "orderList",
+            "description": "<p>该状态订单.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": " HTTP/1.1 200 OK\n {\n\"code\": \"1\",\n\"msg\": \"操作成功\",\n\"ret\": {\n}\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/OrderController.php",
+    "groupTitle": "Order"
+  },
+  {
+    "type": "GET",
     "url": "/order/worker-orders",
     "title": "查询阿姨订单(xieyi 90%已经将后台接口完成,缺少周期订单)",
     "name": "Orders",
@@ -1195,235 +1299,6 @@
   },
   {
     "type": "GET",
-    "url": "/order/worker-orders-history",
-    "title": "查询阿姨三个月的历史订单(xieyi 90%已经将后台接口完成,缺少周期订单)",
-    "name": "Orders",
-    "group": "Order",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>阿姨登陆令牌</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "order_status",
-            "description": "<p>订单状态</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "order_id",
-            "description": "<p>订单id</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "page",
-            "description": "<p>第几页</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "limit",
-            "description": "<p>每页包含订单数</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "channels",
-            "description": "<p>渠道号按'.'分隔</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "is_asc",
-            "description": "<p>排序方式</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "from",
-            "description": "<p>开始时间</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "to",
-            "description": "<p>结束时间</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "oc.customer_id",
-            "description": "<p>客户id</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "<p>Object[]</p> ",
-            "optional": false,
-            "field": "orderList",
-            "description": "<p>该状态订单.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n {\n\"code\": \"1\",\n\"msg\": \"操作成功\",\n\"ret\": {\n\"limit\": \"1\",\n\"page_total\": 4,\n\"offset\": 0,\n\"orders\": [\n{\n\"id\": \"2\",\n\"order_code\": \"339710\",\n\"order_parent_id\": \"0\",\n\"order_is_parent\": \"0\",\n\"created_at\": \"1445347126\",\n\"updated_at\": \"1445347126\",\n\"isdel\": \"0\",\n\"ver\": \"3\",\n\"version\": \"3\",\n\"order_ip\": \"58.135.77.96\",\n\"order_service_type_id\": \"1\",\n\"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n\"order_src_id\": \"1\",\n\"order_src_name\": \"BOSS\",\n\"channel_id\": \"20\",\n\"order_channel_name\": \"后台下单\",\n\"order_unit_money\": \"20.00\",\n\"order_money\": \"40.00\",\n\"order_booked_count\": \"120\",\n\"order_booked_begin_time\": \"1446249600\",\n\"order_booked_end_time\": \"1446256800\",\n\"address_id\": \"397\",\n\"district_id\": \"3\",\n\"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n\"order_booked_worker_id\": \"0\",\n\"checking_id\": \"0\",\n\"order_cs_memo\": \"\",\n\"order_id\": \"2\",\n\"order_before_status_dict_id\": \"2\",\n\"order_before_status_name\": \"已支付\",\n\"order_status_dict_id\": \"3\",\n\"order_status_name\": \"已开始智能指派\"\n}\n]\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
-    "groupTitle": "Order"
-  },
-  {
-    "type": "GET",
-    "url": "/order/worker-orders-count",
-    "title": "查询阿姨订单订单数量(xieyi 90%已经将后台接口完成,缺少周期订单)",
-    "name": "Orders",
-    "group": "Order",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>阿姨登陆令牌</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "order_id",
-            "description": "<p>订单id</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "channels",
-            "description": "<p>渠道号按'.'分隔</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "order_status",
-            "description": "<p>订单状态按'.'分隔</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "oc.customer_id",
-            "description": "<p>客户id</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "from",
-            "description": "<p>开始时间</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "to",
-            "description": "<p>结束时间</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "<p>Object[]</p> ",
-            "optional": false,
-            "field": "orderList",
-            "description": "<p>该状态订单.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n {\n\"code\": \"1\",\n\"msg\": \"操作成功\",\n\"ret\": {\n}\n\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
-    "groupTitle": "Order"
-  },
-  {
-    "type": "GET",
     "url": "/order/orders-count",
     "title": "查询用户订单数量(xieyi 70%缺少周期订单)",
     "name": "StatusOrdersCount",
@@ -1620,8 +1495,160 @@
   },
   {
     "type": "GET",
+    "url": "v1/order/worker-cancel-orders-history",
+    "title": "查询阿姨三个月的完成历史订单(xieyi 90%已经将后台接口完成,缺少周期订单)",
+    "name": "WorkerCancelOrdersHistory",
+    "group": "Order",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>阿姨登陆令牌</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "page",
+            "description": "<p>第几页 从第一页开始</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "limit",
+            "description": "<p>每页包含订单数</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "<p>Object[]</p> ",
+            "optional": false,
+            "field": "orderList",
+            "description": "<p>该状态订单.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": " HTTP/1.1 200 OK\n {\n\"code\": \"1\",\n\"msg\": \"操作成功\",\n\"ret\": {\n\"limit\": \"1\",\n\"page_total\": 4,\n\"offset\": 0,\n\"orders\": [\n{\n\"id\": \"2\",\n\"order_code\": \"339710\",\n\"order_parent_id\": \"0\",\n\"order_is_parent\": \"0\",\n\"created_at\": \"1445347126\",\n\"updated_at\": \"1445347126\",\n\"isdel\": \"0\",\n\"ver\": \"3\",\n\"version\": \"3\",\n\"order_ip\": \"58.135.77.96\",\n\"order_service_type_id\": \"1\",\n\"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n\"order_src_id\": \"1\",\n\"order_src_name\": \"BOSS\",\n\"channel_id\": \"20\",\n\"order_channel_name\": \"后台下单\",\n\"order_unit_money\": \"20.00\",\n\"order_money\": \"40.00\",\n\"order_booked_count\": \"120\",\n\"order_booked_begin_time\": \"1446249600\",\n\"order_booked_end_time\": \"1446256800\",\n\"address_id\": \"397\",\n\"district_id\": \"3\",\n\"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n\"order_booked_worker_id\": \"0\",\n\"checking_id\": \"0\",\n\"order_cs_memo\": \"\",\n\"order_id\": \"2\",\n\"order_before_status_dict_id\": \"2\",\n\"order_before_status_name\": \"已支付\",\n\"order_status_dict_id\": \"3\",\n\"order_status_name\": \"已开始智能指派\"\n}\n]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/OrderController.php",
+    "groupTitle": "Order"
+  },
+  {
+    "type": "GET",
+    "url": "v1/order/worker-done-orders-history",
+    "title": "查询阿姨三个月的完成历史订单(xieyi 90%已经将后台接口完成,缺少周期订单)",
+    "name": "WorkerDoneOrdersHistory",
+    "group": "Order",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>阿姨登陆令牌</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "page",
+            "description": "<p>第几页 从第一页开始</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "limit",
+            "description": "<p>每页包含订单数</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "<p>Object[]</p> ",
+            "optional": false,
+            "field": "orderList",
+            "description": "<p>该状态订单.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": " HTTP/1.1 200 OK\n {\n\"code\": \"1\",\n\"msg\": \"操作成功\",\n\"ret\": {\n\"limit\": \"1\",\n\"page_total\": 4,\n\"offset\": 0,\n\"orders\": [\n{\n\"id\": \"2\",\n\"order_code\": \"339710\",\n\"order_parent_id\": \"0\",\n\"order_is_parent\": \"0\",\n\"created_at\": \"1445347126\",\n\"updated_at\": \"1445347126\",\n\"isdel\": \"0\",\n\"ver\": \"3\",\n\"version\": \"3\",\n\"order_ip\": \"58.135.77.96\",\n\"order_service_type_id\": \"1\",\n\"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n\"order_src_id\": \"1\",\n\"order_src_name\": \"BOSS\",\n\"channel_id\": \"20\",\n\"order_channel_name\": \"后台下单\",\n\"order_unit_money\": \"20.00\",\n\"order_money\": \"40.00\",\n\"order_booked_count\": \"120\",\n\"order_booked_begin_time\": \"1446249600\",\n\"order_booked_end_time\": \"1446256800\",\n\"address_id\": \"397\",\n\"district_id\": \"3\",\n\"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n\"order_booked_worker_id\": \"0\",\n\"checking_id\": \"0\",\n\"order_cs_memo\": \"\",\n\"order_id\": \"2\",\n\"order_before_status_dict_id\": \"2\",\n\"order_before_status_name\": \"已支付\",\n\"order_status_dict_id\": \"3\",\n\"order_status_name\": \"已开始智能指派\"\n}\n]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/OrderController.php",
+    "groupTitle": "Order"
+  },
+  {
+    "type": "GET",
     "url": "/order/worker-service-order-count",
-    "title": "查询阿姨带服务订单个数(xieyi 10%)",
+    "title": "查询阿姨待服务订单个数(xieyi 10%)",
     "name": "WorkerServiceOrderCount",
     "group": "Order",
     "parameter": {
@@ -2482,7 +2509,7 @@
     "type": "POST",
     "url": "v1/user/add-address",
     "title": "添加常用地址 (已完成100%)",
-    "name": "AddAddress",
+    "name": "actionAddAddress",
     "group": "User",
     "parameter": {
       "fields": {
@@ -2601,10 +2628,138 @@
     "groupTitle": "User"
   },
   {
+    "type": "GET",
+    "url": "v1/user/black-list-workers",
+    "title": "黑名单阿姨列表 （功能已经完成,需要核实传递参数和返回数据格式 已完成100%）",
+    "description": "<p>获得该用户添加进黑名单的阿姨</p> ",
+    "name": "actionBlackListWorkers",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"删除成功\"\n  \"ret\":{\n    \"blockWorkers\": [\n    {\n      \"worker_id\": \"12409\",\n      \"face\": \"http://static.1jiajie.com/worker/face/12409.jpg\",\n      \"name\": \"夏测试\",\n      \"order_num\": \"服务:168次\",\n      \"kilometer\": \"\",\n      \"star_rate\": \"0\",\n      \"last_serve_time\": \"最后服务时间:2015-04-22 16:00:34\",\n      \"shop_id\": \"68\",\n      \"is_fulltime\": \"全职全日\",\n      \"telephone\": \"18610932174\"\n    }\n   ]\n  }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/UserController.php",
+    "groupTitle": "User"
+  },
+  {
+    "type": "GET",
+    "url": "v1/user/default-address",
+    "title": "获取默认地址 (赵顺利100%)",
+    "name": "actionDefaultAddress",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"修改常用地址成功\"\n  \"ret\":{\n  \"address\":\n     {\n     \"id\": 2,\n     \"customer_id\": 1,\n     \"operation_province_id\": 110000,\n     \"operation_city_id\": 110100,\n     \"operation_area_id\": 110105,\n     \"operation_province_name\": \"北京\",\n     \"operation_city_name\": \"北京市\",\n     \"operation_area_name\": \"朝阳区\",\n     \"operation_province_short_name\": \"北京\",\n     \"operation_city_short_name\": \"北京\",\n     \"operation_area_short_name\": \"朝阳\",\n     \"customer_address_detail\": \"某某小区8栋3单元512\",\n     \"customer_address_status\": 1,客户地址类型,1为默认地址，0为非默认地址\n     \"customer_address_longitude\": 116.48641,\n     \"customer_address_latitude\": 39.92149,\n     \"customer_address_nickname\": \"王小明\",\n     \"customer_address_phone\": \"18210922324\",\n     \"created_at\": 1445063798,\n     \"updated_at\": 0,\n     \"is_del\": 0\n     }\n   }\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证失败.</p> "
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "AddressNotFound",
+            "description": "<p>地址信息获取失败.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录。\"\n\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 200 address Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"地址信息获取失败\"\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/UserController.php",
+    "groupTitle": "User"
+  },
+  {
     "type": "DELETE",
     "url": "v1/user/delete-address",
     "title": "删除用户常用地址 (已完成100%)",
-    "name": "DeleteAddress",
+    "name": "actionDeleteAddress",
     "group": "User",
     "parameter": {
       "fields": {
@@ -2666,10 +2821,86 @@
     "groupTitle": "User"
   },
   {
+    "type": "DELETE",
+    "url": "v1/user/delete-used-worker",
+    "title": "删除常用阿姨 （功能已经实现,需再次核实 100%）",
+    "name": "actionDeleteUsedWorker",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "worker_id",
+            "description": "<p>阿姨id</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"删除成功\"\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "WorkerNotFound",
+            "description": "<p>该阿姨不存在.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"不存在要删除的阿姨\"\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/UserController.php",
+    "groupTitle": "User"
+  },
+  {
     "type": "GET",
     "url": "v1/user/get-addresses",
     "title": "常用地址列表 (已完成100%)",
-    "name": "GetAddresses",
+    "name": "actionGetAddresses",
     "group": "User",
     "parameter": {
       "fields": {
@@ -2736,9 +2967,67 @@
   },
   {
     "type": "GET",
+    "url": "v1/user/get-comment-count",
+    "title": "获取用户评价数量 （郝建设 100%）",
+    "name": "actionGetCommentCount",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"获取用户评论数量成功\",\n  \"ret\": {\n     \"CommentCount\":\"评论数量\"\n\n      }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/UserController.php",
+    "groupTitle": "User"
+  },
+  {
+    "type": "GET",
     "url": "v1/user/get-comment-level",
     "title": "获取用户评价等级 （郝建设 100%）",
-    "name": "GetCommentLevel",
+    "name": "actionGetCommentLevel",
     "group": "User",
     "parameter": {
       "fields": {
@@ -2796,7 +3085,7 @@
     "type": "GET",
     "url": "v1/user/get-comment-level-tag",
     "title": "获取用户评价等级下面的标签 （郝建设 100%）",
-    "name": "GetCommentLevelTag",
+    "name": "actionGetCommentLevelTag",
     "group": "User",
     "parameter": {
       "fields": {
@@ -2861,7 +3150,7 @@
     "type": "GET",
     "url": "v1/user/get-goods",
     "title": "获取给定经纬度范围内是否有该服务 （郝建设 100%）",
-    "name": "GetGoods",
+    "name": "actionGetGoods",
     "group": "User",
     "parameter": {
       "fields": {
@@ -2938,9 +3227,67 @@
   },
   {
     "type": "GET",
+    "url": "v1/user/get-level-tag",
+    "title": "获取评论的level和tag （郝建设 100%）",
+    "name": "actionGetLeveltag",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "    HTTP/1.1 200 OK\n{\n\"code\": 1,\n\"msg\": \"获取标签和子标签成功\",\n\"ret\": [\n    {\n        \"id\": \"1\",\n       \"customer_comment_level\": \"0\",\n       \"customer_comment_level_name\": \"满意\",\n       \"is_del\": \"0\",\n       \"tag\": [\n           {\n               \"id\": \"2\",\n               \"customer_tag_name\": \"满意\",\n               \"customer_comment_level\": \"0\",\n               \"is_online\": \"0\",\n               \"is_del\": \"0\"\n           },\n           {\n               \"id\": \"6\",\n               \"customer_tag_name\": \"满意\",\n               \"customer_comment_level\": \"0\",\n               \"is_online\": \"0\",\n               \"is_del\": \"0\"\n           }\n       ]\n   },\n   {\n      \"id\": \"2\",\n      \"customer_comment_level\": \"1\",\n      \"customer_comment_level_name\": \"一般\",\n      \"is_del\": \"0\",\n      \"tag\": [\n          {\n              \"id\": \"1\",\n              \"customer_tag_name\": \"一般\",\n              \"customer_comment_level\": \"1\",\n              \"is_online\": \"1\",\n              \"is_del\": \"0\"\n         },\n         {\n             \"id\": \"5\",\n             \"customer_tag_name\": \"一般\",\n             \"customer_comment_level\": \"1\",\n             \"is_online\": \"0\",\n             \"is_del\": \"0\"\n         },\n         {\n             \"id\": \"7\",\n             \"customer_tag_name\": \"一般\",\n             \"customer_comment_level\": \"1\",\n             \"is_online\": \"0\",\n             \"is_del\": \"0\"\n         }\n     ]\n },\n {\n     \"id\": \"3\",\n    \"customer_comment_level\": \"2\",\n    \"customer_comment_level_name\": \"不满意\",\n    \"is_del\": \"0\",\n    \"tag\": [\n        {\n            \"id\": \"3\",\n            \"customer_tag_name\": \"不满意\",\n            \"customer_comment_level\": \"2\",\n            \"is_online\": \"0\",\n            \"is_del\": \"0\"\n        },\n        {\n            \"id\": \"4\",\n            \"customer_tag_name\": \"不满意\",\n            \"customer_comment_level\": \"2\",\n            \"is_online\": \"0\",\n            \"is_del\": \"0\"\n        }\n    ]\n}\n]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "controllers/UserController.php",
+    "groupTitle": "User"
+  },
+  {
+    "type": "GET",
     "url": "v1/user/get-user-money",
     "title": "用户余额和消费记录 （数据已经全部取出,需要给出所需字段,然后给予返回 已完成99% ;）",
-    "name": "GetUserMoney",
+    "name": "actionGetUserMoney",
     "group": "User",
     "parameter": {
       "fields": {
@@ -3010,7 +3357,7 @@
     "url": "v1/user/get-user-score",
     "title": "用户积分明细 （功能已实现,不明确需求端所需字段格式 90%）",
     "description": "<p>获取用户当前积分，积分兑换奖品信息，怎样获取积分信息</p> ",
-    "name": "GetUserScore",
+    "name": "actionGetUserScore",
     "group": "User",
     "parameter": {
       "fields": {
@@ -3068,7 +3415,7 @@
     "type": "DELETE",
     "url": "v1/user/remove-worker",
     "title": "移除黑名单中的阿姨 （功能已经实现,需要再次确认传递参数 已完成100%）",
-    "name": "RemoveWorker",
+    "name": "actionRemoveWorker",
     "group": "User",
     "parameter": {
       "fields": {
@@ -3134,7 +3481,7 @@
     "url": "v1/user/set-default-address",
     "title": "设置默认地址 (已完成100%)",
     "description": "<p>用户每次下完单都会将该次地址设置为默认地址，下次下单优先使用默认地址</p> ",
-    "name": "SetDefaultAddress",
+    "name": "actionSetDefaultAddress",
     "group": "User",
     "parameter": {
       "fields": {
@@ -3199,7 +3546,7 @@
     "type": "PUT",
     "url": "v1/user/update-address",
     "title": "修改常用地址 (已完成100%)",
-    "name": "UpdateAddress",
+    "name": "actionUpdateAddress",
     "group": "User",
     "parameter": {
       "fields": {
@@ -3314,7 +3661,7 @@
     "type": "POST",
     "url": "v1/user/user-suggest",
     "title": "用户评价 （郝建设 100%）",
-    "name": "UserSuggest",
+    "name": "actionUserSuggest",
     "group": "User",
     "parameter": {
       "fields": {
@@ -3461,326 +3808,6 @@
   },
   {
     "type": "GET",
-    "url": "v1/user/default-address",
-    "title": "获取默认地址 (赵顺利100%)",
-    "name": "actionDefaultAddress",
-    "group": "User",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户认证</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n  \"msg\": \"修改常用地址成功\"\n  \"ret\":{\n  \"address\":\n     {\n     \"id\": 2,\n     \"customer_id\": 1,\n     \"operation_province_id\": 110000,\n     \"operation_city_id\": 110100,\n     \"operation_area_id\": 110105,\n     \"operation_province_name\": \"北京\",\n     \"operation_city_name\": \"北京市\",\n     \"operation_area_name\": \"朝阳区\",\n     \"operation_province_short_name\": \"北京\",\n     \"operation_city_short_name\": \"北京\",\n     \"operation_area_short_name\": \"朝阳\",\n     \"customer_address_detail\": \"某某小区8栋3单元512\",\n     \"customer_address_status\": 1,客户地址类型,1为默认地址，0为非默认地址\n     \"customer_address_longitude\": 116.48641,\n     \"customer_address_latitude\": 39.92149,\n     \"customer_address_nickname\": \"王小明\",\n     \"customer_address_phone\": \"18210922324\",\n     \"created_at\": 1445063798,\n     \"updated_at\": 0,\n     \"is_del\": 0\n     }\n   }\n\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证失败.</p> "
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "AddressNotFound",
-            "description": "<p>地址信息获取失败.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录。\"\n\n}",
-          "type": "json"
-        },
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 200 address Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"地址信息获取失败\"\n\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/UserController.php",
-    "groupTitle": "User"
-  },
-  {
-    "type": "GET",
-    "url": "v1/user/get-comment-count",
-    "title": "获取用户评价数量 （郝建设 100%）",
-    "name": "actionGetCommentCount",
-    "group": "User",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户认证</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"获取用户评论数量成功\",\n  \"ret\": {\n     \"CommentCount\":\"评论数量\"\n\n      }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/UserController.php",
-    "groupTitle": "User"
-  },
-  {
-    "type": "GET",
-    "url": "v1/user/get-level-tag",
-    "title": "获取评论的level和tag （郝建设 100%）",
-    "name": "actionGetLeveltag",
-    "group": "User",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户认证</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "    HTTP/1.1 200 OK\n{\n\"code\": 1,\n\"msg\": \"获取标签和子标签成功\",\n\"ret\": [\n    {\n        \"id\": \"1\",\n       \"customer_comment_level\": \"0\",\n       \"customer_comment_level_name\": \"满意\",\n       \"is_del\": \"0\",\n       \"tag\": [\n           {\n               \"id\": \"2\",\n               \"customer_tag_name\": \"满意\",\n               \"customer_comment_level\": \"0\",\n               \"is_online\": \"0\",\n               \"is_del\": \"0\"\n           },\n           {\n               \"id\": \"6\",\n               \"customer_tag_name\": \"满意\",\n               \"customer_comment_level\": \"0\",\n               \"is_online\": \"0\",\n               \"is_del\": \"0\"\n           }\n       ]\n   },\n   {\n      \"id\": \"2\",\n      \"customer_comment_level\": \"1\",\n      \"customer_comment_level_name\": \"一般\",\n      \"is_del\": \"0\",\n      \"tag\": [\n          {\n              \"id\": \"1\",\n              \"customer_tag_name\": \"一般\",\n              \"customer_comment_level\": \"1\",\n              \"is_online\": \"1\",\n              \"is_del\": \"0\"\n         },\n         {\n             \"id\": \"5\",\n             \"customer_tag_name\": \"一般\",\n             \"customer_comment_level\": \"1\",\n             \"is_online\": \"0\",\n             \"is_del\": \"0\"\n         },\n         {\n             \"id\": \"7\",\n             \"customer_tag_name\": \"一般\",\n             \"customer_comment_level\": \"1\",\n             \"is_online\": \"0\",\n             \"is_del\": \"0\"\n         }\n     ]\n },\n {\n     \"id\": \"3\",\n    \"customer_comment_level\": \"2\",\n    \"customer_comment_level_name\": \"不满意\",\n    \"is_del\": \"0\",\n    \"tag\": [\n        {\n            \"id\": \"3\",\n            \"customer_tag_name\": \"不满意\",\n            \"customer_comment_level\": \"2\",\n            \"is_online\": \"0\",\n            \"is_del\": \"0\"\n        },\n        {\n            \"id\": \"4\",\n            \"customer_tag_name\": \"不满意\",\n            \"customer_comment_level\": \"2\",\n            \"is_online\": \"0\",\n            \"is_del\": \"0\"\n        }\n    ]\n}\n]\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/UserController.php",
-    "groupTitle": "User"
-  },
-  {
-    "type": "GET",
-    "url": "v1/user/black-list-workers",
-    "title": "黑名单阿姨列表 （功能已经完成,需要核实传递参数和返回数据格式 已完成100%）",
-    "description": "<p>获得该用户添加进黑名单的阿姨</p> ",
-    "name": "blacklistworkers",
-    "group": "User",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户认证</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"删除成功\"\n  \"ret\":{\n    \"blockWorkers\": [\n    {\n      \"worker_id\": \"12409\",\n      \"face\": \"http://static.1jiajie.com/worker/face/12409.jpg\",\n      \"name\": \"夏测试\",\n      \"order_num\": \"服务:168次\",\n      \"kilometer\": \"\",\n      \"star_rate\": \"0\",\n      \"last_serve_time\": \"最后服务时间:2015-04-22 16:00:34\",\n      \"shop_id\": \"68\",\n      \"is_fulltime\": \"全职全日\",\n      \"telephone\": \"18610932174\"\n    }\n   ]\n  }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/UserController.php",
-    "groupTitle": "User"
-  },
-  {
-    "type": "DELETE",
-    "url": "v1/user/delete-used-worker",
-    "title": "删除常用阿姨 （功能已经实现,需再次核实 100%）",
-    "name": "deleteUsedWorker",
-    "group": "User",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户认证</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "worker_id",
-            "description": "<p>阿姨id</p> "
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"删除成功\"\n\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "UserNotFound",
-            "description": "<p>用户认证已经过期.</p> "
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "WorkerNotFound",
-            "description": "<p>该阿姨不存在.</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
-          "type": "json"
-        },
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"不存在要删除的阿姨\"\n\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/UserController.php",
-    "groupTitle": "User"
-  },
-  {
-    "type": "GET",
     "url": "/worker/worker-info",
     "title": "查看阿姨信息 (田玉星 100%)",
     "name": "WorkerInfo",
@@ -3845,7 +3872,7 @@
   {
     "type": "get",
     "url": "/worker/check-task",
-    "title": "查看任务的详情 (李勇70%)",
+    "title": "查看任务的详情 (李勇100%)",
     "name": "actionCheckTask",
     "group": "Worker",
     "parameter": {
@@ -4158,7 +4185,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功.\",\n  \"ret\": {\n      \"per_page\": 1,\n      \"page_num\": 10,\n      \"data\": [\n          {\n              \"complaint_content\": \"打扫不干净\",\n              \"complaint_time\": \"1970-01-01 08:00:00\"\n          }\n      ]\n  }\n  }",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功.\",\n  \"ret\": {\n      \"per_page\": 1,\n      \"page_num\": 10,\n      \"worker_is_block\":1,\n      \"data\": [\n          {\n              \"complaint_content\": \"打扫不干净\",\n              \"complaint_time\": \"1970-01-01 08:00:00\"\n          }\n      ]\n  }\n  }",
           "type": "json"
         }
       ]
@@ -4532,7 +4559,7 @@
   {
     "type": "POST",
     "url": "/worker/handle-worker-leave",
-    "title": "阿姨请假（田玉星 80%）",
+    "title": "阿姨请假（田玉星 100%）",
     "name": "actionHandleWorkerLeave",
     "group": "Worker",
     "parameter": {
@@ -4557,7 +4584,7 @@
             "type": "<p>String</p> ",
             "optional": false,
             "field": "leave_time",
-            "description": "<p>请假时间.</p> "
+            "description": "<p>请假时间.eg:2015-09-10_2015-09-20</p> "
           },
           {
             "group": "Parameter",
@@ -4578,7 +4605,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n    \"code\": \"ok\",\n    \"msg\":\"操作成功\",\n    \"ret\":\n    {\n        \"result\": \"1\",\n        \"msg\": \"您的请假已提交，请耐心等待审批。\"\n    }\n}",
+          "content": " HTTP/1.1 200 OK\n{\n  \"code\": 0,\n  \"msg\": \"请假时间不在请假时间范围内\",\n  \"ret\": null\n  }",
           "type": "json"
         }
       ]
@@ -4587,7 +4614,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"error\",\n    \"msg\": \"阿姨不存在\"\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"0\",\n    \"msg\": \"阿姨不存在\",\n    \"ret\": null\n}",
           "type": "json"
         }
       ]
@@ -4953,7 +4980,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"result\": \"1\",\n         \"msg\": \"ok\",\n         \"titleMsg\": \"您本月已请假0天，本月剩余请假2天\",\n         \"orderTimeList\": [\"2015-09-14\",\"2015-09-15\",],\n         \"workerLeaveList\": [\"2015-09-13\",\"2015-09-16\",],\n     }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"ret\": {\n      \"2015-10-28\": true,\n      \"2015-10-29\": true,\n      \"2015-10-30\": false,\n      \"2015-10-31\": false,\n      \"2015-11-01\": false,\n      \"2015-11-02\": true,\n      \"2015-11-03\": true,\n      \"2015-11-04\": true,\n      \"2015-11-05\": true,\n      \"2015-11-06\": false,\n      \"2015-11-07\": false,\n      \"2015-11-08\": false,\n      \"2015-11-09\": true,\n  }\n}",
           "type": "json"
         }
       ]
@@ -5009,7 +5036,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n \"msg\": \"阿姨信息查询成功\",\n \"ret\": {\n     \"worker_name\": \"李刘珍\",\n     \"worker_phone\": \"13121999270\",\n     \"head_url\": \"\",\n     \"worker_identity\": \"兼职\",\n     \"worker_role\": \"保姆\",\n     \"worker_start\": 4.5,\n     \"personal_skill\": [\n         \"煮饭\",\n         \"开荒\",\n         \"护老\",\n         \"擦玻璃\",\n         \"带孩子\"\n     ]\n   }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n \"msg\": \"阿姨信息查询成功\",\n \"ret\": {\n     \"worker_name\": \"李刘珍\",\n     \"worker_phone\": \"13121999270\",\n     \"head_url\": \"\",\n     \"worker_identity\": \"全职\",\n     \"worker_identity_id\":\"1\",\n     \"worker_role\": \"保姆\",\n     \"worker_start\": 4.5,\n     \"personal_skill\": [\n         \"煮饭\",\n         \"开荒\",\n         \"护老\",\n         \"擦玻璃\",\n         \"带孩子\"\n     ]\n   }\n}",
           "type": "json"
         }
       ]
@@ -5264,7 +5291,7 @@
   {
     "type": "Get",
     "url": "/coupon/all-coupons",
-    "title": "获取用户全部优惠码列表（包括可用的、不可用的、所有城市的、通用的） （李勇 80%）",
+    "title": "获取用户全部优惠码列表（包括可用的、不可用的、所有城市的、通用的） （李勇 100%）",
     "name": "AllCoupons",
     "group": "coupon",
     "parameter": {
@@ -5329,7 +5356,7 @@
   {
     "type": "Get",
     "url": "/coupon/coupons",
-    "title": "获取用户优惠码列表（包括该用户该城市下的优惠码和通用的优惠码） （李勇 80%）",
+    "title": "获取用户优惠码列表（包括该用户该城市下的优惠码和通用的优惠码） （李勇 100%）",
     "name": "Coupons",
     "group": "coupon",
     "parameter": {
@@ -5969,7 +5996,7 @@
   {
     "type": "get",
     "url": "/worker/recursive-service-time",
-    "title": "周期服务时间表(李勇90%缺少model)",
+    "title": "周期服务时间表(李勇100%)",
     "name": "actionRecursiveServiceTime",
     "group": "service",
     "description": "<p>周期服务时间表</p> ",
@@ -6008,13 +6035,6 @@
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "is_recommend",
-            "description": "<p>是否使用推荐阿姨（0：不是，1：是）</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
             "field": "worker_id",
             "description": "<p>阿姨id.</p> "
           },
@@ -6032,7 +6052,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n {\n      \"code\": 1,\n      \"msg\": \"获取单次服务排班表成功\",\n      \"ret\": {\n          \"2015-10-28\": [\n              {\n                  \"8:00-11:00\": false\n              },\n              {\n                  \"8:30-11:30\": false\n              },\n              {\n                  \"9:00-12:00\": false\n              },\n              {\n                  \"9:30-12:30\": false\n              },\n              {\n                  \"10:00-13:00\": false\n              },\n              {\n                  \"10:30-13:30\": false\n              },\n              {\n                  \"11:00-14:00\": false\n              },\n              {\n                  \"11:30-14:30\": false\n              },\n              {\n                  \"12:00-15:00\": false\n              },\n              {\n                  \"12:30-16:30\": false\n              },\n              {\n                  \"13:00-17:00\": false\n              },\n              {\n                  \"13:30-17:30\": false\n              },\n              {\n                  \"14:00-18:00\": false\n              },\n              {\n                  \"14:30-18:30\": false\n              },\n              {\n                  \"15:00-19:00\": false\n              },\n              {\n                  \"16:30-19:30\": false\n              },\n              {\n                  \"17:00-20:00\": false\n              },\n              {\n                  \"17:30-20:30\": false\n              },\n              {\n                  \"18:00-21:00\": false\n              },\n              {\n                  \"18:30-21:30\": false\n              },\n              {\n                  \"19:00-22:00\": false\n              }\n          ],\n  }",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"获取周期服务时间表成功\",\n  \"ret\": [\n       {\n          \"date_name\": \"11月04日\",\n          \"date_week\": \"3\",\n          \"date_week_every\": \"每周日\",\n          \"date_time\": [\n              {\n                  \"time\": \"08:00-10:00\",\n                  \"status\": \"0\"\n              },\n              {\n                  \"time\": \"18:00-20:00\",\n                  \"status\": \"1\"\n              }\n          ],\n          \"date_name_tag\": \"11月04日（今天）\"\n       },\n      {\n          \"date_name\": \"11月05日\",\n          \"date_week\": \"4\",\n          \"date_week_every\": \"每周日\",\n          \"date_time\": [\n              {\n                  \"time\": \"08:00-10:00\",\n                  \"status\": \"0\"\n              },\n              {\n                  \"time\": \"18:00-20:00\",\n                  \"status\": \"1\"\n              }\n          ],\n          \"date_name_tag\": \"11月05日（今天）\"\n      }\n   ]\n }",
           "type": "json"
         }
       ]
@@ -6063,7 +6083,7 @@
   {
     "type": "GET",
     "url": "v1/service/server-worker-list",
-    "title": "周期服务可用阿姨列表（李勇 80%）",
+    "title": "周期服务可用阿姨列表（李勇 80%缺少model支持）",
     "group": "service",
     "name": "actionServerWorkerList",
     "description": "<p>获取周期服务可用阿姨列表</p> ",
