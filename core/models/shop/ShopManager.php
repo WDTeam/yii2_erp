@@ -2,7 +2,7 @@
 namespace core\models\shop;
 use yii;
 use yii\behaviors\TimestampBehavior;
-use core\models\Operation\OperationArea;
+use core\models\operation\OperationArea;
 use yii\base\Object;
 use core\models\shop\ShopStatus;
 use crazyfd\qiniu\Qiniu;
