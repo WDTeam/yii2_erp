@@ -1,5 +1,5 @@
 <?php
-namespace api\controllers;
+namespace restapi\controllers;
 
 use Yii;
 use \core\models\operation\OperationShopDistrictGoods;
@@ -11,7 +11,7 @@ use \core\models\operation\OperationSelectedService;
 use \core\models\customer\CustomerAddress;
 
 
-class ServiceController extends \api\components\Controller
+class ServiceController extends \restapi\components\Controller
 {
     /**
      * @api {GET} v1/service/service-goods 依据城市和服务品类 获取服务类型列表 （赵顺利 80%url不能获取）

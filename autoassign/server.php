@@ -68,6 +68,7 @@ class server
         echo "==>已启动\n";
         echo date('Y-m-d H:i:s')." 主进程ID：= " .$this->config['SERVER_MASTER_PROCESS_ID']."\n";
         cli_set_process_title($this->config['SERVER_MASTER_PROCESS_ID']);
+        //$this->update_config(CONFIG_PATH, 'FULLTIME_WORKER_TIMEOUT', 226);
     }
 
     /*
@@ -166,6 +167,10 @@ class server
                 $this->update_config(CONFIG_PATH, "FULLTIME_WORKER_TIMEOUT", $data['fulltimeout_end']);
                 $this->update_config(CONFIG_PATH, "FREETIME_WORKER_TIMEOUT", $data['freetimeout_end']);
                 $this->update_config(CONFIG_PATH, "SYSTEM_ASSIGN_TIMEOUT", $data['freetimeout_end']);
+                
+                $this->config['FULLTIME_WORKER_TIMEOUT'] = $data['fulltimeout_end'];
+                $this->config['FREETIME_WORKER_TIMEOUT'] = $data['freetimeout_end'];
+                $this->config['SYSTEM_ASSIGN_TIMEOUT'] = $data['freetimeout_end'];
                 echo date('Y-m-d H:i:s')." 配置已更新\n";
             }
             break;
@@ -433,21 +438,22 @@ class server
     /*
      * 配置文件更新
      */
-    function update_config($file, $ini, $value, $type = "string") {
+    function update_config($file, $name, $value, $type = "string") {
         if (!file_exists($file)) {
             echo "file not exist\n";
             return false;
         }
-        $str = file_get_contents($file);
-        $str2 = "";
+        $srcConfigContent = file_get_contents($file);
+        $newConfigContent = "";
         if ($type == "int") {
-            $str2 = preg_replace("/" . preg_quote($ini) . "=>(.*);/", $ini . "=>" . $value . ";", $str);
+            $newConfigContent = preg_replace("/" . preg_quote($name) . "=>(.*);/", $name . "=>" . $value . ";", $srcConfigContent);
         } else {
-            echo "replace ...\n";
-            $str2 = preg_replace("/\'FULLTIME_WORKER_TIMEOUT\'.*=>.*\d+/",10,"'FULLTIME_WORKER_TIMEOUT' => 5");
-            echo $str2;
+            $rex = "#.\'".preg_quote($name)."\' => *[1-9]\d*.#";
+            $replace = " '".preg_quote($name)."' => ".$value.",";
+            $newConfigContent = preg_replace($rex,$replace,$srcConfigContent);
+            //echo $newConfigContent;
         }
-        file_put_contents($file, $str2);
+        file_put_contents($file, $newConfigContent);
     }
 
 }

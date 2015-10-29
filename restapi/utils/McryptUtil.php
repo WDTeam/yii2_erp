@@ -5,7 +5,7 @@
 class ScreetUtil
 {
 
-	const KEY "1jiajie-boss";
+	const KEY ="1jiajie-boss";
 	const EXPIRATION = 2 * 3600;
 
 	/**
