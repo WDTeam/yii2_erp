@@ -493,7 +493,7 @@ class WorkerController extends \restapi\components\Controller
      *             "worker_name": "阿姨姓名",
      *             "order_count": "服务订单数",
      *             "service_family_count": "服务家庭总数",
-     *             "worker_income"=>"阿姨收入"
+     *             "worker_income":"阿姨收入"
      *      ]
      * }
      *
