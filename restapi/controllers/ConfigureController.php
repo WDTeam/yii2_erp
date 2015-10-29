@@ -473,7 +473,7 @@ class ConfigureController extends \restapi\components\Controller
      */
 
     /**
-     * @api {GET} v1/configure/worker-init 阿姨app初始化 （赵顺利0%）
+     * @api {GET} v1/configure/worker-init 阿姨app初始化 （赵顺利 100%）
      * @apiName actionWorkerInit
      * @apiGroup configure
      *
@@ -633,6 +633,51 @@ class ConfigureController extends \restapi\components\Controller
         return $this->send($ret, "查询成功");
 
     }
+
+    /**
+     * @api {GET} v1/configure/start-page 阿姨端启动页 （赵顺利 0%）
+     * @apiName actionStartPage
+     * @apiGroup configure
+     *
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *          "code": "1",
+     *          "msg": "操作成功",
+     *          "ret": {
+     *              "pages": [
+     *              {
+     *                  "id": "1", 编号
+     *                  "img": "", 图片地址
+     *                  "title": "", 文字
+     *                  "remark": "",  备注
+     *                  "sort": "1" 排序
+     *                  "next_url": "" 下一页url
+     *              },
+     * {
+     *                  "id": "2", 编号
+     *                  "img": "", 图片地址
+     *                  "title": "", 文字
+     *                  "remark": "",  备注
+     *                  "sort": "2" 排序
+     *                  "next_url": "" 下一页url
+     *              },
+     *              ]
+     *      }
+     * }
+     *
+     * @apiError ExceptionService 服务异常.
+     *
+     * @apiErrorExample Error-Response:
+     *  HTTP/1.1 404 Not Found
+     *  {
+     *      "code":"0",
+     *      "msg": "服务异常"
+     *  }
+     *
+     */
 
     /**
      * 支付方式展示api 获得各个支付方式的配置 折叠显示列表，默认支付方式，非折叠显示列表

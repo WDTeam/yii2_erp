@@ -289,7 +289,6 @@ class CouponController extends Controller
                 \Yii::$app->session->setFlash('default', '绑定成功');
             }else{
                 \Yii::$app->session->setFlash('default', '绑定失败');
-                var_dump($codeM->getErrors());exit;
             }
             return $this->redirect(['index']);
         }
