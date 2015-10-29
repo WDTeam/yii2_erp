@@ -117,9 +117,6 @@ $(document).ready(function(){
                 $(".timepicker").timepicker({
                     showInputs: false
                 });
-
-
->>>>>>> fanyuanhe
 	
 });
 
