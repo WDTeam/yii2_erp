@@ -95,4 +95,20 @@ class CustomerWorker extends \common\models\customer\CustomerWorker
         return $result;
     }
 
+    /**
+     * 获取用户常用阿姨列表
+     * @param $customer_id
+     */
+    public static function getCustomerCommonWorkerList($customer_id){
+
+    }
+
+    /**
+     * 获取用户附近阿姨列表
+     * @param $customer_id
+     */
+    public static function getCustomerNearbyWorkerList($customer_id){
+
+    }
+
 }

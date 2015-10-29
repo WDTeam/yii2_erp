@@ -57,7 +57,11 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     
     const PARTTIME = 2;//兼职
     
-    public $roleDes = [self::FULLTIME=>'全职',self::PARTTIME=>'兼职'];
+    const PARKTIME = 3;//高峰
+    
+    const INTERVALTIME = 4;//时段
+    
+    public $roleDes = [self::FULLTIME=>'全职',self::PARTTIME=>'兼职',self::PARKTIME=>'高峰',self::INTERVALTIME=>'时段'];
             
     public $latestSettleTime;//上次结算日期
     
@@ -302,7 +306,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         $baseSalarySubsidy = 0;
         if($this->isSelfAndFulltimeWorker($workerType, $workerIdentityId)){
              $needWorkDay = date('t',$finance_settle_apply_starttime) - self::WORKER_VACATION_DAYS;//本月应服务天数
-             $realWorkDay = date('t',$finance_settle_apply_starttime) - Worker::getWorkerWorkTime($worker_id, $finance_settle_apply_starttime, $finance_settle_apply_endtime);//实际工作天数,从阿姨接口获取
+             $realWorkDay = date('t',$finance_settle_apply_starttime) - Worker::getWorkerNotWorkTime($worker_id, $finance_settle_apply_starttime, $finance_settle_apply_endtime);//实际工作天数,从阿姨接口获取
              if($realWorkDay >= $needWorkDay){
                  $realWorkDay = $needWorkDay;
              }
