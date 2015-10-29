@@ -20,7 +20,7 @@ class m150918_143308_create_table_finance_settle_apply_log extends Migration
             'finance_settle_apply_node_des' => Schema::TYPE_TEXT . ' COMMENT \'审核描述\'',
             'finance_settle_apply_is_passed' => Schema::TYPE_INTEGER . '(1)  COMMENT \'审核是否通过，0审核未通过，1审核通过\'',
             'finance_settle_apply_reviewer_comment' => Schema::TYPE_TEXT . ' COMMENT \'审核人员意见\'',
-            'isdel' => Schema::TYPE_SMALLINT. '(1) DEFAULT 0 COMMENT \'是否被删除，0为启用，1为删除\'',
+            'is_softdel' => Schema::TYPE_SMALLINT. '(1) DEFAULT 0 COMMENT \'是否被删除，0为启用，1为删除\'',
             'updated_at' => Schema::TYPE_INTEGER . '(11)  COMMENT \'更新时间\'',
             'created_at' => Schema::TYPE_INTEGER. '(11) COMMENT \'创建时间\'',
         ], $tableOptions);
