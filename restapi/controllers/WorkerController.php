@@ -46,7 +46,7 @@ class WorkerController extends \api\components\Controller
      *              "带孩子"
      *          ]
      *        }
-     *     }
+     *     } 
      *
      * @apiError UserNotFound 用户认证已经过期.
      * @apiErrorExample Error-Response:
