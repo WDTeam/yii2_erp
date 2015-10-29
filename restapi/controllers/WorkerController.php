@@ -539,27 +539,29 @@ class WorkerController extends \restapi\components\Controller
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *      "code": "ok",
+     *      "code": "1",
      *      "msg": "操作成功.",
      *      "ret": [
      *      {
-     *         "settle_id"=>"32"
-     *         'settle_type' =>"1",
-     *         'settle_year' =>"2014"
-     *         'settle_time'=>'09年07月-09月13日',
-     *         'settle_type' =>1,
-     *         'order_count'=>'10',
-     *         'worker_income'=>'320.00',
-     *         'settle_status'=>"1"
+     *           "settle_year": "2015",
+     *           "order_count": "账单归属年限",
+     *           "worker_income": "该账单阿姨的总收入",
+     *           "settle_cycle": "账单类型【1周期账单 2月结账单】",
+     *           "settle_cycle_des": "账单文字说明",
+     *           "settle_task_money": "任务奖励金额",
+     *           "base_salary_subsidy": "底薪补贴",
+     *           "money_deduction": "处罚金额",
+     *           "order_money_except_cash": "工时服务费",
+     *           "settle_status": 账单状态【0未结算 1已结算】,
+     *           "settle_time": "账单日期"
      *       }
      *      ]
-     *       
      * }
      *
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"error",
+     *      "code":"0",
      *      "msg": "用户认证已经过期,请重新登录"
      *  }
      */
@@ -581,31 +583,25 @@ class WorkerController extends \restapi\components\Controller
             $param['page_num'] = 10;
         }
         $page_num = intval($param['page_num']);
-        //调取model层
+        
         try{
             $billList = FinanceSettleApplySearch::getSettledWorkerIncomeListByWorkerId($checkResult['worker_id'],$per_page,$page_num);
          }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
-        
-        $settleArr = array();
         foreach($billList as $key=>$val){
-            $settleArr[$key]['settle_id'] = $val['settle_id'];
-            $settleArr[$key]['settle_year'] = $val['settle_year'];
-            if($val['settle_cycle_type']==1){//周结账单
-                $settleArr[$key]['settle_time'] = $val['settle_starttime'].'-'.$val['settle_endtime'];
+            if($val['settle_cycle']==1){//周结账单
+                $billList[$key]['settle_time'] = $val['settle_starttime'].'-'.$val['settle_endtime'];
             }else{
-                $settleArr[$key]['settle_time'] = date('m',strtotime($val['settle_starttime']));
+                $billList[$key]['settle_time'] = date('m',strtotime($val['settle_starttime']));
             }
-            $settleArr[$key]['settle_type'] = $val['settle_cycle'];
-            $settleArr[$key]['order_count'] = $val['order_count'];
-            $settleArr[$key]['worker_income'] = $val['worker_income'];
-            $settleArr[$key]['settle_status'] = $val['settle_status'];
+            unset($billList[$key]['settle_starttime']);
+            unset($billList[$key]['settle_endtime']);
         }
         $ret = [
             'per_page' => $per_page,
             'page_num' => $page_num,
-            'data'  => $settleArr
+            'data'  => $billList
         ];
         return $this->send($ret, "操作成功.");
     }
@@ -656,15 +652,16 @@ class WorkerController extends \restapi\components\Controller
             return $this->send(null, $checkResult['msg'], 0, 403);
         }  
         //数据整理
-        $settle_id = intval($param['settle_id']);//账单ID
-        if(!$settle_id){
+        if(!isset($param['settle_id'])||!intval($param['settle_id'])){
             return $this->send(null, "账单唯一标识错误", 0, 403);
         }
+        $settle_id = intval($param['settle_id']);//账单ID
         $billData = array();
         try{
-            $workerIncomeInfoList = FinanceSettleApplySearch::getSettledWorkerIncomeListByWorkerId($checkResult['worker_id'],1,1);
-            $workerIncomeInfo = $workerIncomeInfoList[0];
             $billList = FinanceSettleApplySearch::getOrderArrayBySettleId($settle_id);
+                            print_R($billList);
+                           //FinanceSettleApplySearch:: getSettledWorkerIncomeListByWorkerId();
+die;
             if($billList){
                 foreach($billList as $key=>$val){
                     $beginTime = strtotime($val['order_begin_time']);
@@ -673,6 +670,7 @@ class WorkerController extends \restapi\components\Controller
                     $billData[$key]['order_code'] =111;
                     $billData[$key]['order_money'] = $val['order_money'];
                 }
+            
             }
         }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
