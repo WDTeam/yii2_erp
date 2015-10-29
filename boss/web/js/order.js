@@ -47,7 +47,7 @@ $("#order-order_booked_count input").change(function(){
     $("#order-orderbookedtimerange").html('');
     for(var i=8;i<=18;i++){
         var hour = i<10?'0'+i:i;
-        var hourtime = i+$("#order-order_booked_count input:checked").val()/60;
+        var hourtime = i+$("#order-order_booked_count input:checked").val()*1;
         var hour2 = parseInt(hourtime)<10?'0'+parseInt(hourtime):parseInt(hourtime);
         var minute = (hourtime%1==0)?'00':'30';
         $("#order-orderbookedtimerange").append('<label class="radio-inline"><input type="radio"  value="'+hour+':00-'+hour2+':'+minute+'" name="Order[orderBookedTimeRange]"> '+hour+':00-'+hour2+':'+minute+'</label>');
@@ -202,7 +202,7 @@ function getCounty(city_id,address_id,county_id)
 
 //计算订单金额填写到表单
 function setOrderMoney(){
-    $money = $("#order-order_booked_count input:checked").val()/60*$("#order_unit_money").text();
+    $money = $("#order-order_booked_count input:checked").val()*$("#order_unit_money").text();
     $("#order-order_money").val($money.toFixed(2));
     $(".order_money").text($money.toFixed(2));
 }
