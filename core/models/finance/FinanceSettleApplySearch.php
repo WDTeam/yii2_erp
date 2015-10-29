@@ -302,7 +302,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         $baseSalarySubsidy = 0;
         if($this->isSelfAndFulltimeWorker($workerType, $workerIdentityId)){
              $needWorkDay = date('t',$finance_settle_apply_starttime) - self::WORKER_VACATION_DAYS;//本月应服务天数
-             $realWorkDay = date('t',$finance_settle_apply_starttime) - Worker::getWorkerWorkTime($worker_id, $finance_settle_apply_starttime, $finance_settle_apply_endtime);//实际工作天数,从阿姨接口获取
+             $realWorkDay = date('t',$finance_settle_apply_starttime) - Worker::getWorkerNotWorkTime($worker_id, $finance_settle_apply_starttime, $finance_settle_apply_endtime);//实际工作天数,从阿姨接口获取
              if($realWorkDay >= $needWorkDay){
                  $realWorkDay = $needWorkDay;
              }
