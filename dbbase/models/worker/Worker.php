@@ -97,6 +97,7 @@ class Worker extends \yii\db\ActiveRecord
             'worker_is_dimission' => Yii::t('app', '离职状态'),
             'worker_dimission_reason' => Yii::t('app', '离职原因'),
             'worker_dimission_time' => Yii::t('app', '离职时间'),
+            'worker_star' => Yii::t('app', '阿姨星级'),
             'created_ad' => Yii::t('app', '阿姨录入时间'),
             'updated_ad' => Yii::t('app', '最后更新时间'),
             'isdel' => Yii::t('app', '是否删号'),
