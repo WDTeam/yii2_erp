@@ -632,6 +632,7 @@ class FinancePopOrderSearch extends FinancePopOrder
     	$orderdateinfo['order_pay_money']=0;
     	$orderdateinfo['created_at']=0;
     	$orderdateinfo['coupon_id']=0;
+    	$orderdateinfo['finance_status'] =1;
     	$orderdateinfo['order_before_status_dict_id']=$order_status;
     	$orderdateinfo['finance_pop_order_pay_status_type']=2;
     		
@@ -829,6 +830,7 @@ class FinancePopOrderSearch extends FinancePopOrder
     	$orderdateinfo['order_pay_money']=0;
     	$orderdateinfo['created_at']=0;
     	$orderdateinfo['coupon_id']=0;
+    	$orderdateinfo['finance_status'] =1;
     	$orderdateinfo['order_before_status_dict_id']=$order_status;
     	$orderdateinfo['finance_pop_order_pay_status_type']=2;
     		
@@ -925,6 +927,7 @@ class FinancePopOrderSearch extends FinancePopOrder
      		$orderdateinfo['order_pay_money']=0;
      		$orderdateinfo['created_at']=0;
      		$orderdateinfo['coupon_id']=0;
+     		$orderdateinfo['finance_status'] =1;
      		$orderdateinfo['order_before_status_dict_id']=$order_status;
      		$orderdateinfo['finance_pop_order_pay_status_type']=2;
      	}
@@ -1144,6 +1147,7 @@ class FinancePopOrderSearch extends FinancePopOrder
     		$orderdateinfo['order_pay_money']=0;
     		$orderdateinfo['created_at']=0;
     		$orderdateinfo['coupon_id']=0;
+    		$orderdateinfo['finance_status'] =1;
     		$orderdateinfo['order_before_status_dict_id']=$order_status;
     		$orderdateinfo['finance_pop_order_pay_status_type']=2;
     	
@@ -1283,6 +1287,7 @@ class FinancePopOrderSearch extends FinancePopOrder
     		$orderdateinfo['order_pay_money']=0;
     		$orderdateinfo['created_at']=0;
     		$orderdateinfo['coupon_id']=0;
+    		$orderdateinfo['finance_status'] =1;
     		$orderdateinfo['order_before_status_dict_id']=$order_status;
     		$orderdateinfo['finance_pop_order_pay_status_type']=2;
     
@@ -1432,6 +1437,7 @@ class FinancePopOrderSearch extends FinancePopOrder
     		$orderdateinfo['order_pay_money']=0;
     		$orderdateinfo['created_at']=0;
     		$orderdateinfo['coupon_id']=0;
+    		$orderdateinfo['finance_status'] =1;
     		$orderdateinfo['order_before_status_dict_id']=$order_status;
     		$orderdateinfo['finance_pop_order_pay_status_type']=2;
     	
