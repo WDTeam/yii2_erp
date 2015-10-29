@@ -1,5 +1,5 @@
 <?php
-namespace api\controllers;
+namespace restapi\controllers;
 
 use Yii;
 use \core\models\customer\CustomerCode;
@@ -7,7 +7,7 @@ use \core\models\customer\CustomerAccessToken;
 use \core\models\worker\WorkerAccessToken;
 use \core\models\worker\Worker;
 use \core\models\worker\WorkerCode;
-class AuthController extends \api\components\Controller
+class AuthController extends \restapi\components\Controller
 {
     /**
      * @api {POST} /auth/login 客户登录（李勇100%）

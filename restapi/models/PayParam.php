@@ -1,5 +1,5 @@
 <?php
-namespace api\models;
+namespace restapi\models;
 
 use \yii\base\Model;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace api\controllers;
+namespace restapi\controllers;
 
 use common\models\worker\Worker;
 use \core\models\order\OrderPush;
@@ -13,7 +13,7 @@ use \core\models\order\OrderSearch;
 use \core\models\worker\WorkerAccessToken;
 use yii\web\Response;
 
-class OrderController extends \api\components\Controller
+class OrderController extends \restapi\components\Controller
 {
 
     public $workerText = array(1 => '指定阿姨订单数', '待抢单订单订单数', '指定阿姨订单列表', '待抢单订单列表');
