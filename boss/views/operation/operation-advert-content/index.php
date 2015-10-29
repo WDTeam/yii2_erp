@@ -41,7 +41,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="panel panel-default">
     <div class="container-fluid operation-panel">
         <?= Html::a(Yii::t('app', 'Create').Yii::t('app', 'Advert Content'), ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a(Yii::t('app', '保存排序'), 'javascript:void(0);', ['class' => 'btn btn-primary', 'id' => 'saveOrders']) ?>
         <div id="searchTable">
             <?=SearchBox::widget([
                 'action' => ['ajax-list'],
@@ -64,22 +63,22 @@ $this->params['breadcrumbs'][] = $this->title;
                         'class' => 'yii\grid\SerialColumn'
                     ],
 
-        //            'id',
-                    [
-                        'attribute'=> 'operation_advert_content_orders',
-                        'format'=>'raw',
-                        'value' => function ($model){
-                            return Html::textInput('operation_advert_content_orders[]',$model->operation_advert_content_orders, ['class' => 'operation_advert_content_orders_input', 'content_id' => $model->id]);
-                        }
-                    ],
+                    //'id',
+                    //[
+                        //'attribute'=> 'operation_advert_content_orders',
+                        //'format'=>'raw',
+                        //'value' => function ($model){
+                            //return Html::textInput('operation_advert_content_orders[]',$model->operation_advert_content_orders, ['class' => 'operation_advert_content_orders_input', 'content_id' => $model->id]);
+                        //}
+                    //],
                     'operation_advert_content_name',
                     'position_name',
                     'platform_name',
                     'platform_version_name',
-        //            'operation_advert_start_time:datetime',
-        //             'operation_advert_end_time:datetime',
-//                     'operation_advert_online_time:date',
-//                     'operation_advert_offline_time:date',
+                    //'operation_advert_start_time:datetime',
+                    //'operation_advert_end_time:datetime',
+                    //'operation_advert_online_time:date',
+                    //'operation_advert_offline_time:date',
                     [
                         'attribute'=> 'operation_advert_picture_text',
                         'format'=>'html',
@@ -91,7 +90,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             }
                        }
                     ],
-//                     'operation_advert_url:url',
+                     //'operation_advert_url:url',
                      'created_at:datetime',
                      'updated_at:datetime',
 

@@ -18,6 +18,17 @@ $('#operationadvertrelease-city_id').change(function(){getPlatforms();});
 $(document).on('click', '.step2 > label > input[type=checkbox]', function(){getPlatformVersions($(this));});
 $(document).on('click', '.platform_versions > label > input[type=checkbox]', function(){getAdverts($(this).parent().parent().attr('platform_id'), $(this).val());});
 $('#saveOrders').click(function(){saveOrders();});
+$('#saveReleaseAdvOrders').click(function(){saveReleaseAdvOrders();});
+
+function saveReleaseAdvOrders(){
+    var objs = $('.advert_release_orders_input');
+    var len = objs.length;
+    var data = {};
+    for(var i = 0; i < len; i++){
+        data[$(objs[i]).attr('id')] = $(objs[i]).val();
+    }
+    $.post('/operation/operation-advert-release/save-orders', data, function(t){alert(t);}, 'html');
+}
 
 function saveOrders(){
     var objs = $('.operation_advert_content_orders_input');
