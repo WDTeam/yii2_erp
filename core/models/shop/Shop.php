@@ -2,12 +2,9 @@
 namespace core\models\shop;
 use yii;
 use yii\behaviors\TimestampBehavior;
-use boss\models\Operation\OperationCity;
-use boss\models\Operation\OperationArea;
-use yii\web\HttpException;
-use yii\base\ErrorException;
+use core\models\Operation\OperationCity;
+use core\models\Operation\OperationArea;
 use yii\web\BadRequestHttpException;
-use yii2tech\ar\softdelete\SoftDeleteBehavior;
 use core\models\worker\Worker;
 use core\behaviors\ShopStatusBehavior;
 use yii\helpers\ArrayHelper;
@@ -241,5 +238,13 @@ class Shop extends \common\models\shop\Shop
     public static function getCitesByCountyId($county_id)
     {
         return self::findAll(['county_id'=>$county_id]);
+    }
+    /**
+     * 获取已开通城市列表
+     * @return array [city_id=>city_name,...]
+     */
+    public static function getOnlineCityList(){
+        $onlineCityList = OperationCity::getCityOnlineInfoList();
+        return $onlineCityList?ArrayHelper::map($onlineCityList,'city_id','city_name'):[];
     }
 }

@@ -28,16 +28,17 @@ use yii\web\JsExpression;
         ]); ?>
         
         <div class="col-md-3">
-            <label class="control-label" for="workersearch-worker_work_city">所在城市</label>
-            <div>
-            <?php echo AreaCascade::widget([
-                'model' => $model,
-                'options' => ['class' => 'form-control inline'],
-                'label' =>'选择城市',
-                'grades' => 'city',
-                'is_minui'=>true,
-            ]);?>
-            </div>
+            <?= $form->field($model, 'city_id')->widget(Select2::classname(), [
+            'name' => 'city_id',
+            'hideSearch' => true,
+            'data' => $model::getOnlineCityList(),
+            'options' => [
+                'placeholder' => '选择城市...', 'inline' => true,
+            ],
+            'pluginOptions' => [
+                'allowClear' => true
+            ]
+        ]); ?>
         </div>
         <div class="col-md-2">
             <label class="control-label" for="workersearch-worker_work_city">选择商圈</label>
@@ -45,11 +46,25 @@ use yii\web\JsExpression;
             <?php echo Select2::widget([
                 'model' => $model,
                 'attribute'=>'operation_shop_district_id',
-                'data'=>Shop::getShopDistrictList(),
                 'hideSearch' => false,
                 'options'=>[
                     'placeholder' => '选择商圈',
-                ]
+                ],
+                'pluginOptions' => [
+                    'allowClear' => true,
+                    'minimumInputLength' => 0,
+                    'ajax' => [
+                        'url' => Url::to(['operation/operation-shop-district/list-to-select2']),
+                        'dataType' => 'json',
+                        'data' => new JsExpression('function(params) { return {
+                            city_id: $("#shopsearch-city_id").val(),
+                            name: params.term
+                        }; }')
+                    ],
+                    //                     'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                    'templateResult' => new JsExpression('function(model) { return model.operation_shop_district_name; }'),
+                    'templateSelection' => new JsExpression('function (model) { return model.operation_shop_district_name; }'),
+                ],
             ]);?>
             </div>
         </div>
