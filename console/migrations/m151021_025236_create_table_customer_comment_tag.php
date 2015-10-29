@@ -13,8 +13,8 @@ class m151021_025236_create_table_customer_comment_tag extends Migration
         }
         $this->createTable('{{%customer_comment_tag}}', [
             'id' => Schema::TYPE_PK .'  AUTO_INCREMENT ',
-	    'customer_tag_name' => Schema::TYPE_STRING .'(255) NOT NULL COMMENT \'评价标签名称\'',
         'customer_comment_level' => Schema::TYPE_SMALLINT .'(4)  DEFAULT 0 COMMENT \'评价等级\'',
+	    'customer_tag_name' => Schema::TYPE_STRING .'(255) NOT NULL COMMENT \'评价标签名称\'',
 		'customer_tag_type' => Schema::TYPE_SMALLINT .'(2)  DEFAULT 0 COMMENT \'1 评价 2 退款 3 其他\'',
 		'is_online'  => Schema::TYPE_BOOLEAN . '(1) DEFAULT 0 COMMENT \'是否上线\'',
             'created_at'  => Schema::TYPE_INTEGER . '(10) DEFAULT 0 COMMENT \'创建时间\'',
