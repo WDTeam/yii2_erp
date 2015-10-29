@@ -228,6 +228,14 @@ echo DetailView::widget([
             'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],
+		[
+            'attribute'=>'', 
+            'label'=>'投诉总数',
+            'format'=>'raw',
+            'value'=>'0',
+            'type'=>DetailView::INPUT_TEXT,
+            'valueColOptions'=>['style'=>'width:90%']
+        ],
         [
             'attribute'=>'', 
             'label'=>'账户余额',
