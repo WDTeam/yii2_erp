@@ -114,9 +114,9 @@ class WorkerController extends BaseAuthController
             }
             return $this->redirect(['view', 'id' => $workerModel->id]);
         } else {
-            $workerBlockData = new ActiveDataProvider([
-                'query' => WorkerBlock::find()->select("*,from_unixtime(`worker_block_finish_time`,'%Y-%m-%d')  as `finish_time`")->where(['worker_id'=>$id])->orderBy('id desc'),
-            ]);
+//            $workerBlockData = new ActiveDataProvider([
+//                'query' => WorkerBlock::find()->select("*,from_unixtime(`worker_block_finish_time`,'%Y-%m-%d')  as `finish_time`")->where(['worker_id'=>$id])->orderBy('id desc'),
+//            ]);
             $workerVacationData = new ActiveDataProvider([
                 'query' => WorkerVacation::find()->where(['worker_id'=>$id])->orderBy('id desc'),
             ]);
@@ -258,6 +258,24 @@ class WorkerController extends BaseAuthController
         return $this->render('view_auth',['worker_id'=>$id,'workerAuthModel'=>$workerAuthModel]);
     }
 
+    public function actionOperateVacationApplication($id,$status){
+        $model = WorkerVacationApplication::findOne($id);
+        $model->worker_vacation_application_approve_status = $status;
+        $model->worker_vacation_application_approve_time = time();
+        $model->save();
+        if($status==1){
+            $workerVacationModel = new WorkerVacation;
+            $workerVacationModel->worker_id = $model->worker_id;
+            $workerVacationModel->worker_vacation_start_time = $model->worker_vacation_application_start_time;
+            $workerVacationModel->worker_vacation_finish_time = $model->worker_vacation_application_end_time;
+            $workerVacationModel->worker_vacation_type = $model->worker_vacation_application_type;
+            $workerVacationModel->worker_vacation_source = 1;
+            $workerVacationModel->worker_vacation_status = 1;
+            $workerVacationModel->save();
+        }
+        return $this->redirect(['index','WorkerSearch[worker_vacation_application_approve_status]'=>0]);
+    }
+
     /**
      * 删除阿姨
      * 数据库中不删除阿姨信息，采用软删除
@@ -337,6 +355,34 @@ class WorkerController extends BaseAuthController
     }
 
     public function actionOperateVacation($workerId){
+        $param = Yii::$app->request->post('WorkerVacation');
+
+        if($param){
+            if(empty($param['id'])){
+                $workerVacationModel = new WorkerVacation();
+            }else{
+                $workerVacationModel = WorkerVacation::findOne($param['id']);
+            }
+            $dateRange = explode('至',$param['daterange']);
+            $startDate = $dateRange[0];
+            $finishDate = $dateRange[1];
+            $workerVacationModel->worker_id = $workerId;
+            $workerVacationModel->worker_vacation_start_time = strtotime($startDate);
+            $workerVacationModel->worker_vacation_finish_time = strtotime($finishDate);
+            $workerVacationModel->worker_vacation_type = $param['worker_vacation_type'];
+            $workerVacationModel->worker_vacation_extend = $param['worker_vacation_extend'];
+            $workerVacationModel->worker_vacation_status = 1;
+            $workerVacationModel->worker_vacation_source = 0;
+            if($workerVacationModel->save()){
+                $workerModel = Worker::findOne($workerId);
+                $workerModel->worker_is_vacation = 1;
+                $workerModel->save();
+            }
+        }
+        return $this->redirect(['auth', 'id' => $workerId]);
+    }
+
+    public function actionOperateVacationBak($workerId){
         $param = Yii::$app->request->post('WorkerVacation');
 
         if($param){
@@ -702,8 +748,8 @@ class WorkerController extends BaseAuthController
 //                ],
 //            ]
 //        ];
-//        echo '<pre>';
-        var_dump(Worker::getWorkerTimeLine(2,2,'',30,18745));die;
+        echo '<pre>';
+        var_dump(Worker::getWorkerTimeLine(1,2,'',30));die;
 //        die;
 //        var_dump(WorkerVacationApplication::getApplicationList(18517));
 //

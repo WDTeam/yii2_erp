@@ -52,6 +52,30 @@ $(document).ready(function(){
 		// alert($(this).val());
 		$(this).parent().next().html($(this).val());
 	});
+
+	//评价标签管理部分js
+	//增加form-inline样式，是按钮横向排列
+	$("div.customer-comment-tag-create .form-group").addClass("form-inline");
+	var _good = $("div.customer-comment-tag-create .form-group label");
+	var check_list = $("div.customer-comment-tag-create .col-sm-12").eq(2).addClass("check");
+	var assess_list = $("div.customer-comment-tag-create .col-sm-12").eq(3).addClass("assess_list");
+	_good.eq(5).addClass("good-job");
+	_good.eq(6).addClass("just-so-so");
+	_good.eq(7).addClass("assess");
+	$(".good-job,.just-so-so").click(function(){$(".check").css("display","none")});
+	$(".assess").click(function(){$(".assess_list").css("display","none")});
+	$(".check").css("display","none");
+	$(".assess").click(function(){
+		$(".assess_list").css("display","none");
+		$(".check").css("display","block");
+
+	});
+	$(".just-so-so,.good-job").click(function(){
+		$(".assess_list").css("display","block");
+		$(".check").css("display","none");
+
+	});
+	
 });
 
 function ApplyToRadio(self){
@@ -73,3 +97,4 @@ function ApplyToRadio(self){
 	});
 }
 
+  

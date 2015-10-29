@@ -4,6 +4,7 @@ namespace core\models\worker;
 
 
 use common\models\Help;
+use common\models\worker\WorkerVacationApplication;
 use Symfony\Component\Console\Helper\Helper;
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -163,6 +164,10 @@ class Worker extends \common\models\worker\Worker
         return $workerInfo;
     }
 
+    public static function getWorkerWorkTime($worker_id,$date){
+        $workTime = date('t');
+    }
+
     /**
      * 批量获取阿姨id
      * @param  int $type 阿姨类型 1自营 2非自营
@@ -193,6 +198,8 @@ class Worker extends \common\models\worker\Worker
             return $workerResult;
         }
     }
+
+
 
     /**
      * 根据条件搜索阿姨
@@ -245,14 +252,36 @@ class Worker extends \common\models\worker\Worker
     }
 
 
-    public static function getDistrictAllWorkerFromRedis($district_id){
+
+
+    public static function getDistrictAllWorker($district_id,$worker_id){
+        $dataSource = 2;//1redis 2mysql
+        if($dataSource==1){
+            return self::getDistrictAllWorkerFromRedis($district_id,$worker_id);
+        }else{
+            $workerCondition = $worker_id ? ['{{%worker}}.id'=>$worker_id] : [];
+            $result = self::getDistrictAllWorkerFromMysql($district_id,$workerCondition);
+            foreach ($result as $key=>$val) {
+                $result[$key]['schedule'] = $val['workerScheduleRelation'];
+                $result[$key]['order'] = self::getWorkerOrderInfo($val['id']);
+                unset( $result[$key]['shopRelation']);
+                unset( $result[$key]['workerScheduleRelation']);
+                unset( $result[$key]['workerStatRelation']);
+            }
+            return $result;
+        }
+    }
+
+    public static function getDistrictAllWorkerFromRedis($district_id,$worker_id){
         $workerIdsArr =  Yii::$app->redis->executeCommand('smembers', [self::DISTRICT.'_'.$district_id]);
-        var_dump($workerIdsArr);
         if($workerIdsArr){
             foreach((array)$workerIdsArr as $key=>$val){
                 $workerIdsArr[$key] = self::WORKER.'_'.$val;
             }
             $workerInfoArr = Yii::$app->redis->executeCommand('mget',$workerIdsArr);
+
+            //过滤不存在阿姨
+            $new_workerInfoArr = [];
             foreach ((array)$workerInfoArr as $val) {
                 if($val!==null){
                     $new_workerInfoArr[] = $val;
@@ -270,7 +299,7 @@ class Worker extends \common\models\worker\Worker
      * @param array $filterCondition 阿姨筛选条件
      * @return array 阿姨列表
      */
-     protected static function getDistrictAllWorker($district_id,$filterCondition=[]){
+     protected static function getDistrictAllWorkerFromMysql($district_id,$filterCondition=[]){
          if(empty($district_id) || !is_array($filterCondition)){
              return [];
          }
@@ -304,9 +333,9 @@ class Worker extends \common\models\worker\Worker
 
     /**
      * 获取阿姨时间排班表
-     * @param $district_id 商圈id
+     * @param int $district_id 商圈id
      * @param int $serverDurationTime 服务时长
-     * @param string $beginTime 排班表开始时间 默认当前时间
+     * @param string $beginTime 排班表开始时间 默认今天
      * @param int $timeLineLength 排班表长度 默认返回7天的排班表
      * @param string $worker_id 阿姨id 通过阿姨id获取指定阿姨的排班表 默认返回所有阿姨排班表
      * @return array
@@ -321,23 +350,22 @@ class Worker extends \common\models\worker\Worker
             return  self::generateTimeLine($disabledTimesArr,$serverDurationTime,$beginTime,$timeLineLength);
         }
 
-        $workerCondition = $worker_id ? ['{{%worker}}.id'=>$worker_id] : [];
-        $districtWorkerResult = self::getDistrictAllWorker($district_id,$workerCondition);
+
+        $districtWorkerResult = self::getDistrictAllWorker($district_id,$worker_id);
         //如果无阿姨信息,返回不可用排班表
         if(empty($districtWorkerResult)){
             return  self::generateTimeLine($disabledTimesArr,$serverDurationTime,$beginTime,$timeLineLength);
         }
-
         $isEmptyDisabledTime = [];
         foreach($districtWorkerResult as $val){
-            $workerOrderInfo = self::getWorkerOrderInfo($val['id']);
+
             for($i=0;$i<$timeLineLength;$i++){
                 if(empty($disabledTimesArr[$i])){
                     $isEmptyDisabledTime[$i]=true;
                     continue;
                 }
                 $time = strtotime("+$i day",$beginTime);
-                $disabledTimesArr[$i] = self::filterDisabledTimeLine($time,$val['workerScheduleRelation'],$workerOrderInfo,$disabledTimesArr[$i]);
+                $disabledTimesArr[$i] = self::filterDisabledTimeLine($time,$val['schedule'],$val['order'],$disabledTimesArr[$i]);
             }
             if(count($isEmptyDisabledTime)==$timeLineLength){
                 break;
@@ -379,13 +407,12 @@ class Worker extends \common\models\worker\Worker
                     }
                 }
                 if ($isDisabled == 1) {
-                    $timeLineTmp[] = [$val . '-' . $dayTimes[$endKey] => false];
+                    $timeLineTmp[] = ['time'=>$val . '-' . $dayTimes[$endKey],'enable'=>false];
                 } else {
-                    $timeLineTmp[] = [$val . '-' . $dayTimes[$endKey] => true];
+                    $timeLineTmp[] = ['time'=>$val . '-' . $dayTimes[$endKey],'enable'=> true];
                 }
-
-                $timeLine[$date] = $timeLineTmp;
             }
+            $timeLine[] = ['date'=>$date,'timeline'=>$timeLineTmp];
             $timeLineTmp = [];
         }
         return $timeLine;
@@ -394,6 +421,7 @@ class Worker extends \common\models\worker\Worker
     }
 
     /**
+     * 过滤不可接单时间
      * @param int $time 日期时间戳
      * @param array $workerSchedule 阿姨后台排班表
      * @param array $workerOrderInfo 阿姨预约订单信息
@@ -455,7 +483,7 @@ class Worker extends \common\models\worker\Worker
     }
 
     /**
-     * 转换时间格式 如果阿姨订单预约 开始时间不是 整点时间和半点时间结束
+     * 转换时间格式 如果阿姨订单预约 开始时间不是 整点时间或半点时间
      * @param $time
      * @return mixed
      */
@@ -519,7 +547,7 @@ class Worker extends \common\models\worker\Worker
 
         //获取商圈中所有阿姨
         $condition['worker_type'] = $worker_type;
-        $districtWorkerResult = self::getDistrictAllWorker($district_id,$condition);
+        $districtWorkerResult = self::getDistrictAllWorkerFromMysql($district_id,$condition);
 
         if(empty($districtWorkerResult)){
             return [];
@@ -937,6 +965,8 @@ class Worker extends \common\models\worker\Worker
         return $workerDistrictArr?ArrayHelper::getColumn($workerDistrictArr,'operation_shop_district_id'):[];
     }
 
-
+    public function getWorkerVacationApplicationRelation(){
+        return $this->hasMany(WorkerVacationApplication::className(),['worker_id'=>'id']);
+    }
 
 }

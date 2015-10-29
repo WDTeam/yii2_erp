@@ -274,4 +274,27 @@ class CouponController extends Controller
         $customerCoupon = \core\models\operation\coupon\CouponCustomer::listCustomerCoupon('18500041311');
         var_dump($customerCoupon);
     }
+    /**
+     * 优惠码绑定手机号
+     * @param unknown $id
+     */
+    public function actionBind($id)
+    {
+        $model = $this->findModel($id);
+        if(isset($_POST['mobile'])){
+            $codeMs = $model->getCodes();
+            $codeM = $codeMs[0];
+            $res = $codeM->bindMobile($_POST['mobile']);
+            if($res){
+                \Yii::$app->session->setFlash('default', '绑定成功');
+            }else{
+                \Yii::$app->session->setFlash('default', '绑定失败');
+                var_dump($codeM->getErrors());exit;
+            }
+            return $this->redirect(['index']);
+        }
+        return $this->renderAjax('_bind',[
+            'model'=>$model,
+        ]);
+    }
 }

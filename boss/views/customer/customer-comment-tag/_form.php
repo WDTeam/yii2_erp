@@ -13,7 +13,9 @@ $rty=OrderComplaint::ComplaintTypes();
  * @var yii\widgets\ActiveForm $form
  */
 ?>
-
+<style>
+    label{margin: 0 5px;}
+</style>
 <div class="customer-comment-tag-form">
 
     <?php $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL]);

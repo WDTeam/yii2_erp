@@ -687,4 +687,20 @@ class Order extends OrderModel
         $list = OperationGoods::find()->asArray()->all();
         return $list ? ArrayHelper::map($list, 'id', 'operation_goods_name') : [];
     }
+    
+    /*
+     * 返回订单预订日期的字符串，如2015-09-25
+     */
+    public function getOrderBookedDate()
+    {
+        return date('Y-m-d', $this->order_booked_begin_time);
+    }
+    
+    /*
+     * 返回订单预订的时间范围字符串，如08:00-10:00
+     */
+    public function getOrderBookedTimeArrange()
+    {
+        return date('H:i', $this->order_booked_begin_time).'-'.date('H:i', $this->order_booked_end_time);
+    }
 }
