@@ -175,13 +175,14 @@ class Worker extends \common\models\worker\Worker
     public static function getWorkerNotWorkTime($worker_id,$startTime,$endTime){
         $condition = "(worker_vacation_start_time>=$startTime and worker_vacation_finish_time<$endTime) or (worker_vacation_start_time<=$startTime and worker_vacation_finish_time>$startTime) or (worker_vacation_start_time<$endTime and worker_vacation_finish_time>$endTime)";
         $vacationResult = WorkerVacation::find()->where($condition)->andWhere(['worker_id'=>$worker_id])->select('worker_vacation_start_time,worker_vacation_finish_time')->asArray()->all();
-        $workTime = 0;
+        $vacationTime = 0;
         foreach ((array)$vacationResult as $val) {
              if($val['worker_vacation_start_time']>=$startTime && $val['worker_vacation_finish_time']<$endTime){
-                $workTime = $workTime+intval($val['worker_vacation_start_time']-$val['worker_vacation_start_time']);
+                 $vacationTime = $vacationTime+intval($val['worker_vacation_start_time']-$val['worker_vacation_start_time']);
              }
         }
-        return $workTime;
+        $notWorkTime = $vacationTime;
+        return $notWorkTime;
     }
 
     /**
