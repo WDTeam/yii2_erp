@@ -111,25 +111,33 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
             'class' => 'kartik\grid\ActionColumn',
             'header' => '操作',
             'width' => "9%",
-            'template' =>'{operate_application_success}{operate_application_failed}',
+            'template' =>'{operate_application_success}{operate_application_failed}{view}{auth}',
             'contentOptions'=>[
                 'style'=>'font-size: 12px;padding-right:2px',
             ],
-            'viewOptions'=>[
-                'style'=>'margin-right:3px'
-            ],
             'buttons' => [
-
+                'view' => function ($url, $model) {
+                    return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Yii::$app->urlManager->createUrl(['worker/worker/view', 'id' => $model->worker->id]), [
+                        'title' =>'查看',
+                        'style' => 'margin-right:5px'
+                    ]);
+                },
+                'auth' => function ($url, $model) {
+                    return Html::a('<span class="fa fa-fw fa-th-list"></span>', Yii::$app->urlManager->createUrl(['worker/worker/auth', 'id' => $model->worker->id]), [
+                        'title' =>'审核管理',
+                        'style' => 'margin-right:5px'
+                    ]);
+                },
                 'operate_application_success' => function ($url, $model) {
                     return Html::a('<span onclick="return confirm(\'确认通过申请?\')">通过</span>', Yii::$app->urlManager->createUrl(['worker/worker/operate-vacation-application', 'id' => $model->id,'status'=>1]), [
                         'title' =>'通过',
-                        'style' => 'margin-right:7px'
+                        'style' => 'margin-right:5px'
                     ]);
                 },
                 'operate_application_failed' => function ($url, $model) {
                     return Html::a('<span onclick="return confirm(\'确认拒绝申请?\')" >拒绝</span>', Yii::$app->urlManager->createUrl(['worker/worker/operate-vacation-application', 'id' => $model->id,'status'=>2]), [
                         'title' =>'拒绝',
-                        'style' => 'margin-right:3px'
+                        'style' => 'margin-right:6px'
                     ]);
                 },
 //                    'vacation' => function ($url, $model) {
@@ -180,7 +188,6 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
             },
             'width' => "100px",
         ],
-
         [
             'format' => 'raw',
             'label' => '所属商圈',
@@ -275,10 +282,13 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
             'contentOptions'=>[
                 'style'=>'font-size: 12px;padding-right:2px',
             ],
-            'viewOptions'=>[
-                'style'=>'margin-right:3px'
-            ],
             'buttons' => [
+                'view' => function ($url, $model) {
+                    return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Yii::$app->urlManager->createUrl(['worker/worker/view', 'id' => $model->id]), [
+                        'title' =>'查看',
+                        'style' => 'margin-right:5px'
+                    ]);
+                },
                 'auth' => function ($url, $model) {
                     return Html::a('<span class="fa fa-fw fa-th-list"></span>', Yii::$app->urlManager->createUrl(['worker/worker/auth', 'id' => $model->id]), [
                         'title' =>'审核管理',
@@ -332,8 +342,8 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
     $switchBtn =
         Html::a('<i class="glyphicon" ></i>全部 ', ['/worker/worker'], ['class' => 'btn '.Worker::setBtnCss(0), 'style' => 'margin-right:10px']) .
         Html::a('<i class="glyphicon" ></i>待审核 '.Worker::CountWorkerStatus(0), ['index?WorkerSearch[worker_auth_status]=0'], ['class' => 'btn '.Worker::setBtnCss(1), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>待试工 '.Worker::CountWorkerStatus(1), ['index?WorkerSearch[worker_auth_status]=2   '], ['class' => 'btn '.Worker::setBtnCss(2), 'style' => 'margin-right:10px']) .
-        Html::a('<i class="glyphicon" ></i>待上岗 '.Worker::CountWorkerStatus(2), ['index?WorkerSearch[worker_auth_status]=3'], ['class' => 'btn '.Worker::setBtnCss(3), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>待试工 '.Worker::CountWorkerStatus(2), ['index?WorkerSearch[worker_auth_status]=2'], ['class' => 'btn '.Worker::setBtnCss(2), 'style' => 'margin-right:10px']) .
+        Html::a('<i class="glyphicon" ></i>待上岗 '.Worker::CountWorkerStatus(3), ['index?WorkerSearch[worker_auth_status]=3'], ['class' => 'btn '.Worker::setBtnCss(3), 'style' => 'margin-right:10px']) .
         Html::a('<i class="glyphicon" ></i>全职 '.Worker::CountWorkerIdentity(1), ['index?WorkerSearch[worker_identity_id]=1'], ['class' => 'btn '.Worker::setBtnCss(4), 'style' => 'margin-right:10px']) .
         Html::a('<i class="glyphicon" ></i>兼职 '.Worker::CountWorkerIdentity(2), ['index?WorkerSearch[worker_identity_id]=2'], ['class' => 'btn '.Worker::setBtnCss(5), 'style' => 'margin-right:10px']) .
         Html::a('<i class="glyphicon" ></i>时段 '.Worker::CountWorkerIdentity(3), ['index?WorkerSearch[worker_identity_id]=3'], ['class' => 'btn '.Worker::setBtnCss(6), 'style' => 'margin-right:10px']) .
