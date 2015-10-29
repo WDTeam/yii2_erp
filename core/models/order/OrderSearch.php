@@ -317,6 +317,11 @@ class OrderSearch extends Order
         return Order::findOne($id);
     }
 
+    public static function getBatchOrder($batch_code)
+    {
+        return Order::findAll(['order_batch_code'=>$batch_code]);
+    }
+
     /**
      * 分页查询带状态订单
      * @param $attributes
