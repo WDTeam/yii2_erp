@@ -9,7 +9,6 @@ use \core\models\worker\WorkerSkill;
 use \core\models\worker\WorkerVacationApplication;
 use \core\models\finance\FinanceSettleApplySearch;
 use \core\models\order\OrderComplaint;
-use \core\models\operation\OperationShopDistrictCoordinate;
 use \core\models\customer\CustomerComment;
 use \core\models\worker\WorkerTaskLog;
 use \core\models\order\OrderSearch;
