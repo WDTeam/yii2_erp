@@ -267,6 +267,7 @@ class GeneralPay extends GeneralPayCommon
             'return_url'=>empty($data['return_url']) ? '' : $data['return_url'],
             'show_url'=>empty($data['show_url']) ? '' : $data['show_url'],
         ];
+
         $class = new \alipay_wap_class();
         $msg = $class->get($param);
         return $msg;

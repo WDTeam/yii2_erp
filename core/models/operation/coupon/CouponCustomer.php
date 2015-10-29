@@ -6,6 +6,7 @@ use Yii;
 use core\models\customer\Customer;
 use core\models\operation\coupon\Coupon;
 use core\models\operation\coupon\CouponCode;
+use yii\behaviors\TimestampBehavior;
 /**
  * This is the model class for table "{{%coupon_customer}}".
  *
@@ -25,6 +26,16 @@ use core\models\operation\coupon\CouponCode;
  */
 class CouponCustomer extends \common\models\operation\coupon\CouponCustomer
 {
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+            ],
+        ];
+    }
 
     /**
      * relation coupon code

@@ -12,6 +12,8 @@ use yii\filters\VerbFilter;
 use core\models\operation\coupon\Coupon;
 use core\models\operation\coupon\CouponCode;
 
+use \core\models\operation\OperationCity;
+
 /**
  * CouponController implements the CRUD actions for Coupon model.
  */
@@ -69,11 +71,16 @@ class CouponController extends Controller
     {
         $model = new Coupon;
         if ($model->load(Yii::$app->request->post())) {
-			$service_types = Coupon::getServiceTypes();
+			
 			
 			//coupon basic info
+			
+			//coupon categories
+			$coupon_categories = Coupon::getCategories();
+			$model->coupon_category_name = $coupon_categories[$model->coupon_category];
 
 			//coupon type
+			$service_types = Coupon::getServiceTypes();
 			$model->coupon_type_name = $service_types[$model->coupon_type];
 			switch ($model->coupon_type)
 			{
@@ -97,6 +104,13 @@ class CouponController extends Controller
 		
 			//coupon city
 			$city_types = Coupon::getCityTypes();
+			$cityOnlineList = OperationCity::getCityOnlineInfoList();
+			$cities = array();
+			if(!empty($cityOnlineList)){
+				foreach($cityOnlineList as $value){
+					$cities[$value['city_id']] = $value['city_name'];
+				}
+			}
 			switch ($model->coupon_city_limit)
 			{
 				case 0:
@@ -104,6 +118,7 @@ class CouponController extends Controller
 				break;
 		
 				case 1:
+					$model->coupon_city_name = $cities[$model->coupon_city_id];
 				
 				break;
 		
@@ -112,6 +127,7 @@ class CouponController extends Controller
 					# code...
 				break;
 			}
+
 			//customer type 
 			$customer_types = Coupon::getCustomerTypes();
 			$model->coupon_customer_type_name = $customer_types[$model->coupon_customer_type];
@@ -168,19 +184,25 @@ class CouponController extends Controller
 			//coupon system user
 			$model->system_user_id = 0;
 			$model->system_user_name = '';
-			if($model->validate()){
+			$model->validate();
+			if($model->hasErrors()){
+				var_dump($model->getErrors());
 				return $this->render('create', ['model' => $model]);
 			}
 		    $model->save();
 
 		    //insert into coupon code
-		    $couponCode->coupon_id = $model->id;
-		    $couponCode->coupon_name = $model->coupon_name;
-		    $couponCode->coupon_price = $model->coupon_price;
-		    $couponCode->created_at = time();
-		    $couponCode->updated_at = 0;
-		    $couponCode->is_del = 0;
+			
+			//var_dump($_POST['Coupon']['coupon_code_num']);
+			//exit();
 		    for($i=0; $i<$_POST['Coupon']['coupon_code_num']; $i++){
+				$couponCode = new CouponCode;
+				$couponCode->coupon_id = $model->id;
+				$couponCode->coupon_name = $model->coupon_name;
+				$couponCode->coupon_price = $model->coupon_price;
+				$couponCode->created_at = time();
+				$couponCode->updated_at = 0;
+				$couponCode->is_del = 0;
 		        $coupon_code_str = CouponCode::generateCouponCode();
 		        $couponCodeTemp =  CouponCode::find()->where(['coupon_code'=>$coupon_code_str])->one();
 		        while($couponCodeTemp){
@@ -189,14 +211,13 @@ class CouponController extends Controller
 		             $couponCodeTemp =  CouponCode::find()->where(['coupon_code'=>$coupon_code_str])->one();
 		        }
 		        $couponCode->coupon_code = $coupon_code_str;
+				$couponCode->validate();
+				if($couponCode->hasErrors()){
+					return $this->render('create', ['model' => $model]);
+				}
 		        $couponCode->save(); 
 		    }
-			if($res){
-				return $this->redirect(['view', 'id' => $model->id]);
-			}else{
-				return $this->render('create', ['model' => $model]);
-			}	    	
-            
+			return $this->redirect(['view', 'id' => $model->id]);
 		}else{
 			return $this->render('create', ['model' => $model]);
 		}
@@ -252,5 +273,27 @@ class CouponController extends Controller
     public function actionTest(){
         $customerCoupon = \core\models\operation\coupon\CouponCustomer::listCustomerCoupon('18500041311');
         var_dump($customerCoupon);
+    }
+    /**
+     * 优惠码绑定手机号
+     * @param unknown $id
+     */
+    public function actionBind($id)
+    {
+        $model = $this->findModel($id);
+        if(isset($_POST['mobile'])){
+            $codeMs = $model->getCodes();
+            $codeM = $codeMs[0];
+            $res = $codeM->bindMobile($_POST['mobile']);
+            if($res){
+                \Yii::$app->session->setFlash('default', '绑定成功');
+            }else{
+                \Yii::$app->session->setFlash('default', '绑定失败');
+            }
+            return $this->redirect(['index']);
+        }
+        return $this->renderAjax('_bind',[
+            'model'=>$model,
+        ]);
     }
 }

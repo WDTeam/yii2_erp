@@ -131,8 +131,17 @@ class OrderStatus extends Order
      */
     protected static function _serviceStart(&$order,$must_models=[])
     {
-        $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_SERVICE_START);
-        return self::_statusChange($order,$status,$must_models);
+        $current_status = $order->orderExtStatus->order_status_dict_id;
+        if(in_array($current_status,[  //只有在以下状态下才可以取消订单
+            OrderStatusDict::ORDER_SYS_ASSIGN_DONE, //智能指派完成
+            OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE, //人工指派完成
+            OrderStatusDict::ORDER_WORKER_BIND_ORDER, //阿姨抢单完成
+        ])) {
+            $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_SERVICE_START);
+            return self::_statusChange($order,$status,$must_models);
+        }else{
+            return false;
+        }
     }
 
     /**
@@ -143,8 +152,13 @@ class OrderStatus extends Order
      */
     protected static function _serviceDone(&$order,$must_models=[])
     {
-        $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_SERVICE_DONE);
-        return self::_statusChange($order,$status,$must_models);
+        if($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SERVICE_START) {
+            $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_SERVICE_DONE);
+            return self::_statusChange($order,$status,$must_models);
+        }else{
+            return false;
+        }
+
     }
 
     /**

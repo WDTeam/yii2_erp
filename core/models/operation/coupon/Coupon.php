@@ -43,6 +43,17 @@ use core\models\operation\coupon\CouponCode;
 class Coupon extends \common\models\operation\coupon\Coupon
 {
 
+	/**
+     * get coupon rule service types
+     */
+    public static function getCategories()
+    {
+        return array(
+            0 => '一般优惠券',
+            1 => '赔付优惠券',
+        );
+    }
+
     /**
      * get coupon rule service types
      */
@@ -152,6 +163,42 @@ class Coupon extends \common\models\operation\coupon\Coupon
             2 => '每减',
         );
     }
+
+	/**
+     * get coupon code expirate_at by time type
+	 */
+	public static function getExpirateAtByTimeType($coupon_id, $get_at = time()){
+		$coupon = self::findOne($coupon_id);
+		if($coupon == NULL) return false;
+		
+		$expirate_at = 0;
+		switch ($coupon->coupon_time_type)
+		{
+			case 0;
+				if($get_at > $coupon->coupon_begin_at && $get_at < $coupon->coupon_end_at){
+					$expirate_at = $coupon->coupon_end_at;
+				}else{
+					return false;
+				}
+			break;
+		
+			case 1;
+				if($get_at > $coupon->coupon_begin_at && $get_at < $coupon_get_end_at){
+					$expirate_at =  $get_at + 24 * 3600 * $coupon->coupon_use_end_days;
+				}else{
+					return false;
+				}
+				
+			break;
+		
+			
+		
+			default:
+				# code...
+			break;
+		}
+		return $expirate_at;
+	}
 
 	/**
      * add coupon and coupon code
@@ -314,5 +361,14 @@ class Coupon extends \common\models\operation\coupon\Coupon
             'coupon_time_type' => $coupon->coupon_time_type,
         );
     }
-	
+    /**
+     * 获取当前优惠券的所有优惠码
+     */
+	public function getCodes()
+	{
+	    $models = CouponCode::find()
+	    ->where(['coupon_id'=>$this->id])
+	    ->all();
+	    return (array)$models;
+	}
 }

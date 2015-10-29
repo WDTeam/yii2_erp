@@ -13,7 +13,7 @@ use kartik\widgets\ActiveForm;
  * @var core\models\order\OrderSearch $searchModel
  */
  
-AppAsset::addCss($this, 'css/order_search/style.css');
+/* AppAsset::addCss($this, 'css/order_search/style.css');
 AppAsset::addCss($this, 'css/order_search/jquery-ui-1.8.17.custom.css');
 AppAsset::addCss($this, 'css/order_search/jquery-ui-timepicker-addon.css');
 AppAsset::addScript($this, 'js/order_search/jquery-2.0.3.min.js');
@@ -21,17 +21,14 @@ AppAsset::addScript($this, 'js/order_search/script.js');
 AppAsset::addScript($this, 'js/order_search/riqi/jquery-1.7.1.min.js');
 AppAsset::addScript($this, 'js/order_search/riqi/jquery-ui-1.8.17.custom.min.js');
 AppAsset::addScript($this, 'js/order_search/riqi/jquery-ui-timepicker-addon.js');
-AppAsset::addScript($this, 'js/order_search/riqi/jquery-ui-timepicker-zh-CN.js');
+AppAsset::addScript($this, 'js/order_search/riqi/jquery-ui-timepicker-zh-CN.js'); */
 
-// $this->registerCssFile('css/order_search/style.css');
-// $this->registerCssFile('css/order_search/jquery-ui-1.8.17.custom.css');
-// $this->registerCssFile('css/order_search/jquery-ui-timepicker-addon.css');
-// $this->registerJsFile('js/order_search/jquery-2.0.3.min.js');
-// $this->registerJsFile('js/order_search/script.js');
-// $this->registerJsFile('js/order_search/riqi/jquery-1.7.1.min.js');
-// $this->registerJsFile('js/order_search/riqi/jquery-ui-1.8.17.custom.min.js');
-// $this->registerJsFile('js/order_search/riqi/jquery-ui-timepicker-addon.js');
-// $this->registerJsFile('js/order_search/riqi/jquery-ui-timepicker-zh-CN.js');
+AppAsset::addCss($this, 'css/order_search/style.css');
+AppAsset::addCss($this, 'css/order_search/dalog/animate.min.css');
+
+AppAsset::addScript($this, 'js/order_search/script.js');
+AppAsset::addScript($this, 'js/order_search/My97DatePicker/WdatePicker.js');
+AppAsset::addScript($this, 'js/order_search/dalog/jquery.hDialog.min.js');
 
 $this->title = '订单投诉管理';
 $this->params['breadcrumbs'][] = $this->title;
@@ -56,41 +53,39 @@ $this->params['breadcrumbs'][] = $this->title;
                         //'type' => ActiveForm::TYPE_VERTICAL,
                         'action' => ['order/order-complaint/index'],
                         'method' => 'get',
-                    ]); ?>						
-						<?php //echo $form->field($searchModel, 'order_customer_phone')->TextInput(['class' => 'm_ipu'])->label('用户电话 :', ['class' => 'm_ipone']); ?>
-						<?php //echo $form->field($searchModel, 'worker_id')->TextInput(['class' => 'm_ipu'])->label('阿姨电话 :', ['class' => 'm_ipone']); ?>
-						<?php //echo $form->field($searchModel, 'order_code')->TextInput(['class' => 'm_ipu'])->label('订单编号 :', ['class' => 'm_ipone']); ?>
-						
+                    ]); ?>
 						<div class="m_riqi">
 						 <div class="m_fr">
 						 	<label class="m_iphone">
-						 	客户手机<input type="text" name="OrderComplaint[order_customer_phone]" value="<?php if(!empty($params['order_customer_phone'])){ echo $params['order_customer_phone']; }?>"/>
+						 	客户手机<input type="text" name="OrderComplaintSearch[complaint_phone]" value="<?php if(!empty($params['OrderComplaintSearch']['complaint_phone'])){ echo $params['OrderComplaintSearch']['complaint_phone']; }?>"/>
 						 	</label>
 						 	<label class="m_iphone">
-						 	阿姨手机<input type="text" name="OrderComplaint[order_worker_phone]" value="<?php if(!empty($params['order_worker_phone'])){ echo $params['order_worker_phone']; }?>"/>
-						 	</label><label class="m_iphone">
-						 	订单编号<input type="text" name="OrderComplaint[order_id]" value="<?php if(!empty($params['order_id'])){echo $params['order_id'];}?>"/>
-						 	</label><label class="m_iphone">
-						 	投诉编号<input type="text" name="OrderComplaint[id]" value="<?php if(!empty($params['id'])){ echo $params['id'];}?>"/>
+						 	阿姨手机<input type="text" name="OrderComplaintSearch[order_worker_phone]" value="<?php if(!empty($params['OrderComplaintSearch']['order_worker_phone'])){ echo $params['OrderComplaintSearch']['order_worker_phone']; }?>"/>
 						 	</label>
+						 	<label class="m_iphone">
+						  		阿姨姓名<input type="text" name="OrderComplaintSearch[order_worker_name]" value="<?php if(!empty($params['OrderComplaintSearch']['order_worker_name'])){ echo $params['OrderComplaintSearch']['order_worker_name'];}?>"/>
+						  	</label>
 						 </div>
 						<div class="m_fr mar-t">
 							<label class="m_iphone">
-						  		阿姨姓名
-						  	</label><input type="text" name="OrderComplaint[order_worker_name]" value=""/>
+						 	订单编号<input type="text" name="OrderComplaintSearch[order_id]" value="<?php if(!empty($params['OrderComplaintSearch']['order_id'])){echo $params['OrderComplaintSearch']['order_id'];}?>"/>
+						 	</label>
+						 	<label class="m_iphone">
+						 	投诉编号<input type="text" name="OrderComplaintSearch[id]" value="<?php if(!empty($params['OrderComplaintSearch']['id'])){ echo $params['OrderComplaintSearch']['id'];}?>"/>
+						 	</label>
 						</div>
 						 <div class="m_fr mar-t">
-                            <label class="m_ipone">下单时间:</label>
-							<input type="text" name="starttime" class="ui_timepicker" value="" placeholder=""> 到
-							<input type="text" name="endtime" class="ui_timepicker" value="" placeholder="">
+                            <label class="m_ipone">创建时间:</label>
+							<input type="text" name="starttime" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})" value="<?php if(!empty($params['starttime'])){echo $params['starttime'];}?>" placeholder=""> 到
+							<input type="text" name="endtime" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})" value="<?php if(!empty($params['endtime'])){echo $params['endtime'];}?>" placeholder="">
 						   </div>
 						    <?= Html::submitButton('查询', ['class' => 'btn btn-primary']) ?>
 						</div>
 					<?php ActiveForm::end(); ?>
 					  <div class="clear"></div>
 					</div>
-						
 						<!---------------------查询开始-------------------->
+						
 				  	 	 	<div class="heading heading_top">
 								<h3 class="panel-title">筛选</h3>
 							</div>
@@ -98,80 +93,58 @@ $this->params['breadcrumbs'][] = $this->title;
 						    <div class="m_from">
 						    	<ul class="lis" id="list">
 						    		<p>投诉类型：</p>
-						    		<li <?php if(empty($params['OrderComplaint']['complaint_type'])){?> class="cur" <?php }?>>全部</li>
+						    		<li <?php if(empty($params['OrderComplaintSearch']['complaint_type'])){?> class="cur" <?php }?>><a href="<?php echo "/order/order-complaint/index?OrderComplaintSearch[complaint_type]=0";?>">全部</a></li>
 						    		<?php if(!empty($comType)){
 						    		foreach ($comType as $keyt=>$valt){?>					    		
-						    		<li <?php if(!empty($params['OrderComplaint']['complaint_type']) && $keyt == $params['OrderComplaint']['complaint_type']){?>class="cur"<?php }?>><a href="<?php echo "/order/order-complaint/index?OrderComplaint[complaint_type]={$keyt}";?>"><?php echo $valt;?></a></li>
+						    		<li <?php if(!empty($params['OrderComplaintSearch']['complaint_type']) && $keyt == $params['OrderComplaintSearch']['complaint_type']){?>class="cur"<?php }?>><a href="<?php echo "/order/order-complaint/index?OrderComplaintSearch[complaint_type]={$keyt}";?>"><?php echo $valt;?></a></li>
 						    		<?php }} ?>
 						    	</ul>
 						    	
 						    	<ul class="lis" id="list">
 						    		<p>订单状态：</p>
-						    		<li <?php if(empty($params['OrderComplaint']['complaint_status'])){?> class="cur" <?php }?>>全部</li>
+						    		<li <?php if(empty($params['OrderComplaintSearch']['complaint_status'])){?> class="cur" <?php }?>><a href="<?php echo "/order/order-complaint/index?OrderComplaintSearch[complaint_status]=0";?>">全部</a></li>
 						    		<?php if(!empty($comStatus)){
 						    			foreach ($comStatus as $key=>$val){?>
-						    		<li <?php if(!empty($params['OrderComplaint']['complaint_status']) && $key == $params['OrderComplaint']['complaint_status']){?>class="cur"<?php }?>><a href="<?php echo "/order/order-complaint/index?OrderComplaint[complaint_status]={$key}";?>"><?php echo $val;?></a></li>
+						    		<li <?php if(!empty($params['OrderComplaintSearch']['complaint_status']) && $key == $params['OrderComplaintSearch']['complaint_status']){?>class="cur"<?php }?>><a href="<?php echo "/order/order-complaint/index?OrderComplaintSearch[complaint_status]={$key}";?>"><?php echo $val;?></a></li>
 						    		<?php }}?>
 						    	</ul>
 						    	
 						    	<ul class="lis" id="list">
 						    		<p>投诉渠道：</p>
-						    		<li class="cur">全部</li>
-						    		<li><a href="">App</a></li>
-						    		<li><a href="">第三方</a></li>
-						    		<li><a href="">后台</a></li>
+						    		<li <?php if(empty($params['OrderComplaintSearch']['complaint_channel'])){?> class="cur" <?php }?>><a href="<?php echo "/order/order-complaint/index?OrderComplaintSearch[complaint_channel]=0"?>">全部</a></li>
+						    		<?php if(!empty($channel)){
+						    		foreach ($channel as $keynl=>$valnl){?>
+						    		<li <?php if(!empty($params['OrderComplaintSearch']['complaint_channel']) && $keynl == $params['OrderComplaintSearch']['complaint_channel']){?> class="cur" <?php }?>><a href="<?php echo "/order/order-complaint/index?OrderComplaintSearch[complaint_channel]={$keynl}"?>"><?php echo $valnl;?></a></li>
+									<?php }}?>
 						    	</ul>
 						    	<ul class="lis" id="list">
 						    		<p>投诉级别：</p>
-						    		<li <?php if(!isset($params['OrderComplaint']['complaint_level'])){?> class="cur" <?php }?>>全部</li>
+						    		<li <?php if(!isset($params['OrderComplaintSearch']['complaint_level'])){?> class="cur" <?php }?>><a href="<?php echo "/order/order-complaint/index?OrderComplaintSearch[complaint_level]=0";?>">全部</a></li>
 						    		<?php if(!empty($comLevel)){
 						    			foreach ($comLevel as $keyl=>$vall){?>
-						    		<li <?php if(!empty($params['OrderComplaint']['complaint_level']) && $vall == $params['OrderComplaint']['complaint_level']){?>class="cur"<?php }?>><a href="<?php echo "/order/order-complaint/index?OrderComplaint[complaint_level]={$vall}";?>"><?php echo $vall;?></a></li>
+						    		<li <?php if(!empty($params['OrderComplaintSearch']['complaint_level']) && $vall == $params['OrderComplaintSearch']['complaint_level']){?>class="cur"<?php }?>><a href="<?php echo "/order/order-complaint/index?OrderComplaintSearch[complaint_level]={$vall}";?>"><?php echo $vall;?></a></li>
 						    		<?php }}?>
 						    	</ul>
 						    	<ul class="lis" id="list">
 						    		<p>投诉部门：</p>
-						    		<li <?php if(empty($params['OrderComplaint']['complaint_section'])){?> class="cur" <?php }?>>全部</li>
+						    		<li <?php if(empty($params['OrderComplaintSearch']['complaint_section'])){?> class="cur" <?php }?>><a href="<?php echo "/order/order-complaint/index?OrderComplaintSearch[complaint_section]=0"?>">全部</a></li>
 						    		<?php if(!empty($devpart)){
 						    		foreach ($devpart as $keyrt=>$valrt){?>
-						    		<li <?php if(!empty($params['OrderComplaint']['complaint_section']) && $keyrt == $params['OrderComplaint']['complaint_section']){?> class="cur" <?php }?>><a href="<?php echo "/order/order-complaint/index?OrderComplaint[complaint_section]={$keyrt}"?>"><?php echo $valrt;?></a></li>
+						    		<li <?php if(!empty($params['OrderComplaintSearch']['complaint_section']) && $keyrt == $params['OrderComplaintSearch']['complaint_section']){?> class="cur" <?php }?>><a href="<?php echo "/order/order-complaint/index?OrderComplaintSearch[complaint_section]={$keyrt}"?>"><?php echo $valrt;?></a></li>
 									<?php }}?>
 						    	</ul>
 						    	<div class="clear"></div>
 						    </div>
 						
 						<!---------------------订单状态开始-------------------->
-								<div class="m_from">	     
-				    <div class="clear"></div>
-				    </div>
-  	 	 	       <div class="heading heading_top">
-						<h3 class="panel-title">当前刷选条件</h3>
-				   </div>
+								
 	<?php 
     echo ListView::widget([
         'dataProvider' => $dataProvider,
         'itemView' => '_item'
     ]);    
     ?>
-						 
-						 
-						<!------------------翻页开始------------------>
-						    <div class="com_pages_list">
-					              <dl class="pages_list">
-					                <dd><a href="###">«</a></dd>
-					                <dd class="on"><a href="###">1</a></dd>
-					                <dd><a href="###">2</a></dd>
-					                <dd><a href="###">3</a></dd>
-					                <dd><a href="###">4</a></dd>
-					                <dd><a href="###">5</a></dd>
-					                <dd><a href="###">6</a></dd>
-					                <dd><a href="###">7</a></dd>
-					                <dd><a href="###">»</a></dd>
-					              </dl>
-					         </div>
-
-						
-						
+						 						 																
 						<!------------------弹出层开始------------------>
 						
 						<div class="cd-popup" role="alert">
@@ -196,6 +169,14 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php 
 $this->registerJs('
 	    $(function () {
+			starttime = $("input[name="starttime"]").val();
+			endtime = $("input[name="endtime"]").val();
+		   // $("input[name="endtime"]").change(function(){
+				
+			//} 
+		
+		
+		
 	        $(".ui_timepicker").datetimepicker({
 	            //showOn: "button",
 	            //buttonImage: "./css/images/icon_calendar.gif",

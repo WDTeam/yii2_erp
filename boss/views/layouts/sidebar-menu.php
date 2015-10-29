@@ -1,7 +1,7 @@
 <?php
-use common\widgets\Menu;
-use core\models\finance\FinanceShopSettleApplySearch;
+use boss\widgets\Menu;
 use core\models\finance\FinanceSettleApplySearch;
+use core\models\finance\FinanceShopSettleApplySearch;
 
 $ctrl = Yii::$app->controller;
 
@@ -188,16 +188,35 @@ echo Menu::widget(
 //                        'icon' => 'fa fa-angle-right',
 //                    ],
                     [
-                        'label' => '服务项目和类型管理(95%)',
-                        'url' => ['/operation/operation-category/'],
+                        'label' => '服务管理',
+                        'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
+                        'options' => [
+                            'class' => 'treeview ',
+                        ],
+                        'items' => [
+                            [
+                                'label' => '服务项目和类型管理(95%)',
+                                'url' => ['/operation/operation-category/'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                            [
+                                'label' => '城市和商圈管理(90%)',
+                                'url' => ['/operation/operation-city'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                            [
+                                'label' => '已开通城市管理',
+                                'url' => ['/operation/operation-city/opencity'],
+                                'icon' => 'fa fa-angle-right',
 
-                    ],
-                    [
-                        'label' => '城市和商圈管理(90%)',
-                        'url' => ['/operation/operation-city'],
-                        'icon' => 'fa fa-angle-right',
-
+                            ],
+                            [
+                                'label' => '精品保洁管理',
+                                'url' => ['/operation/operation-selected-service'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                        ]
                     ],
 //                    [
 //                        'label' => '上线城市(80%)',
@@ -205,11 +224,6 @@ echo Menu::widget(
 //                        'icon' => 'fa fa-angle-right',
 //                        'visible' => (Yii::$app->user->identity->username == 'admin'),
 //                    ],
-                    [
-                        'label' => '已开通城市管理',
-                        'url' => ['/operation/operation-city/opencity'],
-                        'icon' => 'fa fa-angle-right',
-                    ],
                     [
                         'label' => 'CMS管理(90%)',
                         'url' => ['#'],
@@ -219,7 +233,7 @@ echo Menu::widget(
                         ],
                         'items' => [
                             [
-                                'label' => '平台管理',
+                                'label' => '应用平台管理',
                                 'url' => ['/operation/operation-platform'],
                                 'icon' => 'fa fa-angle-right',
                             ],
@@ -234,16 +248,16 @@ echo Menu::widget(
                                 'icon' => 'fa fa-angle-right',
                             ],
                             [
-                                'label' => '活动内容管理',
+                                'label' => '广告内容管理',
                                 'url' => ['/operation/operation-advert-content'],
                                 'icon' => 'fa fa-angle-right',
-                                
+
                             ],
                             [
-                                'label' => '广告发布',
+                                'label' => '已发布广告管理',
                                 'url' => ['/operation/operation-advert-release'],
                                 'icon' => 'fa fa-angle-right',
-                                
+
                             ],
                         ]
                     ],
@@ -251,7 +265,7 @@ echo Menu::widget(
 //                        'label' => '通知管理(0%)',
 //                        'url' => ['#'],
 //                        'icon' => 'fa fa-angle-right',
-//                        
+//
 //                    ],
 					[
                         'label' => '优惠券管理(10%)',
@@ -275,7 +289,7 @@ echo Menu::widget(
                                 'label' => '绑定用户',
                                 'url' => ['operation/coupon/coupon/bundle'],
                                 'icon' => 'fa fa-angle-right',
-                                
+
                             ],
                         ]
                     ],
@@ -285,7 +299,7 @@ echo Menu::widget(
 //                        'label' => '商圈管理(40%)',
 //                        'url' => ['/operation-shop-district'],
 //                        'icon' => 'fa fa-angle-right',
-                       
+
 //                    ],
 
 //                    [
@@ -293,12 +307,12 @@ echo Menu::widget(
 //                        'url' => ['/operation-goods'],
 //                        'icon' => 'fa fa-angle-right',
 //                    ],
-                    
+
                     [
                         'label' => '启动页管理(90%)',
                         'url' => ['/operation/operation-boot-page'],
                         'icon' => 'fa fa-angle-right',
-                        
+
                     ],
                     /**[
                      'label' => '引导页管理(0%)',
@@ -315,41 +329,36 @@ echo Menu::widget(
                         'url' => ['/worker/worker-task/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
-					[
-						'label' => '服务卡管理',
-						'url' => ['#'],
-						'icon' => 'fa fa-angle-right',
-						'options' => [
-							'class' => 'treeview',
-						],
-						'items' => [
-							[
-								'label' => '服务卡信息管理',
-								'url' => ['operation/operation-server-card/index'],
-								'icon' => 'fa fa-angle-right',
-							],
-							[
-								'label' => '服务卡订单管理',
-								'url' => ['operation/operation-server-card-order'],
-								'icon' => 'fa fa-angle-right',
-							],
-							[
-								'label' => '客户服务卡管理',
-								'url' => ['operation/operation-server-card-customer/index'],
-								'icon' => 'fa fa-angle-right',
-							],
-							[
-								'label' => '服务卡流水管理',
-								'url' => ['operation/operation-server-card-record'],
-								'icon' => 'fa fa-angle-right',
-							],
-							
-                ],
-            ],
                     [
-                        'label' => '精品保洁管理',
-                        'url' => ['/operation/operation-selected-service'],
+                        'label' => '服务卡管理',
+                        'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
+                        'options' => [
+                            'class' => 'treeview',
+                        ],
+                        'items' => [
+                            [
+                                'label' => '服务卡信息管理',
+                                'url' => ['operation/operation-server-card/index'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                            [
+                                'label' => '服务卡订单管理',
+                                'url' => ['operation/operation-server-card-order'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                            [
+                                'label' => '客户服务卡管理',
+                                'url' => ['operation/operation-server-card-customer/index'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+                            [
+                                'label' => '服务卡流水管理',
+                                'url' => ['operation/operation-server-card-record'],
+                                'icon' => 'fa fa-angle-right',
+                            ],
+
+                        ],
                     ],
                 ],
             ],
@@ -379,7 +388,7 @@ echo Menu::widget(
                                 'url' => ['/finance/finance-header/index'],
                                 'icon' => 'fa fa-angle-right',
                             ],[
-                            'label' => '开始对账(85%)',
+                            'label' => '开始对账(90%)',
                                 'url' => ['/finance/finance-pop-order/'],
                                 'icon' => 'fa fa-angle-right',
                             ],[
@@ -387,15 +396,15 @@ echo Menu::widget(
                                 'url' => ['/finance/finance-record-log/'],
                                 'icon' => 'fa fa-angle-right',
                             ],[
-                                'label' => '对账记录详情(90%)',
+                                'label' => '对账记录详情(95%)',
                                 'url' => ['/finance/finance-pop-order/billinfo'],
                                 'icon' => 'fa fa-angle-right',
                             ],[
-                                'label' => '坏账管理(90%)',
+                                'label' => '坏账管理(95%)',
                                 'url' => ['/finance/finance-pop-order/bad'],
                                 'icon' => 'fa fa-angle-right',
                             ]
-        
+
                        ]
 
                     ],
@@ -497,17 +506,17 @@ echo Menu::widget(
                         ],
                         'items' => [
                         [
-                        'label' => '确认退款审核(80%)',
+                        'label' => '财务审核确认(85%)',
                         'url' => ['/finance/finance-refund/'],
                         'icon' => 'fa fa-angle-right',
                         ],
                         [
-                        'label' => '退款统计(80%)',
+                        'label' => '退款统计(85%)',
                         'url' => ['/finance/finance-refund/countinfo'],
                         'icon' => 'fa fa-angle-right',
                         ]
                         ]
-                            
+
                     ],
                     [
                         'label' => '赔偿管理(95%)',
@@ -528,7 +537,7 @@ echo Menu::widget(
                         'icon' => 'fa fa-angle-right',
                         ],
                         ]
-                            
+
                     ],
                     [
                         'label' => '报表管理(0%)',
@@ -548,9 +557,9 @@ echo Menu::widget(
 //                          'class' => 'treeview',
 //                          ],
 //                          'items' => [
-                            
+
 //                          ]
-                            
+
 //                     ]
                 ],
             ],
@@ -584,10 +593,10 @@ echo Menu::widget(
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
                     ],
-                    
+
                 ],
             ],
-			
+
 //             [
 //                 'label' => 'POP管理',
 //                 'url' => ['#'],

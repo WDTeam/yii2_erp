@@ -9,11 +9,11 @@
 define('DEBUG', 'on');
 define("WEBPATH", str_replace("\\","/", __DIR__));
 define("CONFIG_PATH", WEBPATH."/autoassign.config.php");
+define("REDIS_IS_SERVER_SUSPEND","REDIS_IS_SERVER_SUSPEND");
 
 $assign_config = require(CONFIG_PATH);
 
-use autoassign\ClientCommand;
-
+require_once(WEBPATH."/ClientCommand.php");
 class server
 {
     private $serv;
@@ -31,7 +31,7 @@ class server
      * 构造方法中,初始化 $serv 服务
      */
     public function __construct($config) {
-        echo "自动指派服务启动中";
+        echo date('Y-m-d H:i:s')." 自动指派服务启动中";
         $this->config = $config;
         $this->connectRedis();
         $this->saveStatus(null);
@@ -66,7 +66,7 @@ class server
      */
     public function onStart($server) {
         echo "==>已启动\n";
-        echo "主进程ID：= " .$this->config['SERVER_MASTER_PROCESS_ID']."\n";
+        echo date('Y-m-d H:i:s')." 主进程ID：= " .$this->config['SERVER_MASTER_PROCESS_ID']."\n";
         cli_set_process_title($this->config['SERVER_MASTER_PROCESS_ID']);
     }
 
@@ -80,7 +80,7 @@ class server
         // 只有当worker_id为0时才添加定时器,避免重复添加
         if ($worker_id == 0) {
             $workerProcessNum = $this->config['WORKER_NUM']+$this->config['TASK_WORKER_NUM'];
-            echo '工作进程ID:= '.$this->config['SERVER_WORKER_PROCESS_ID']." 已启动 ".$workerProcessNum." 进程\n"; 
+            echo date('Y-m-d H:i:s').' 工作进程ID:= '.$this->config['SERVER_WORKER_PROCESS_ID']." 已启动 ".$workerProcessNum." 进程\n"; 
             $this->config = require(CONFIG_PATH);
             $this->startTimer($server);
         }
@@ -89,7 +89,7 @@ class server
      * Worker Stop
      */
     function onWorkerStop($server, $worker_id) {
-        echo 'Worker Stop && Reload...'."\n";
+        echo date('Y-m-d H:i:s').' Worker Stop && Reload...'."\n";
         //opcache_reset(); //zend_opcache的      
         //apc, xcache, eacc等其他方式，请调用相关函数  
     }
@@ -99,7 +99,7 @@ class server
      */
     public function serverIP(){
         $localIpArray = swoole_get_local_ip();
-        $localIp = $localIpArray[0];
+        $localIp = current($localIpArray);
 
         return $localIp;
     }
@@ -115,9 +115,11 @@ class server
      */
     function onMessage($server, $ws)
     {
-        echo 'On Message'."\n";
-
-        $this->handleCommandMessage($server, $ws);
+        echo date('Y-m-d H:i:s').' On Message:= '.$ws->data."\n";
+        $this->ws = $ws;
+        $this->fd = $ws->fd;
+        $this->data = $ws->data;
+        $this->handleCommandMessage($server, $ws->data);
 
         return;
     }
@@ -125,41 +127,46 @@ class server
      * 接受 client 消息
      */
     public function onReceive( swoole_server $server, $fd, $from_id, $data ) {
-        echo "Get Message From Client {$fd}:{$data}\n";
-        $this->handleCommandMessage($server, $ws);
+        echo date('Y-m-d H:i:s')." Get Message From Client {$fd}:{$data}\n";
+        $this->handleCommandMessage($server, $data);
         
         return;
     }
     /*
      * 处理消息
      */
-    public function handleCommandMessage($server,$ws)
+    public function handleCommandMessage($server,$data)
     {
-        $this->ws = $ws;
-        $this->fd = $ws->fd;
-        $this->data = $ws->data;
-        $data = $this->getCommand($ws);
+        $data = $this->getCommand($data);
         $cmd = $data['cmd'];
         
         switch ($cmd) {
-            case ClientCommand::START:
+            case autoassign\ClientCommand::START:
             {
+                echo date('Y-m-d H:i:s')." 服务继续\n";
                 $this->isServerSuspend = false;
+                $this->redis->set(REDIS_IS_SERVER_SUSPEND,false);
             }
             break;
-            case ClientCommand::STOP:
+            case autoassign\ClientCommand::STOP:
             {
+                echo date('Y-m-d H:i:s')." 服务暂停\n";
                 $this->isServerSuspend = true;
+                $this->redis->set(REDIS_IS_SERVER_SUSPEND,true);
             }
             break;
-            case ClientCommand::RELOAD:
+            case autoassign\ClientCommand::RELOAD:
             {
+                echo date('Y-m-d H:i:s')." 服务重启\n";
                 $server->reload();
             }
             break;
-            case ClientCommand::UPDAE:
+            case autoassign\ClientCommand::UPDATE:
             {
-                
+                $this->update_config(CONFIG_PATH, "FULLTIME_WORKER_TIMEOUT", $data['fulltimeout_end']);
+                $this->update_config(CONFIG_PATH, "FREETIME_WORKER_TIMEOUT", $data['freetimeout_end']);
+                $this->update_config(CONFIG_PATH, "SYSTEM_ASSIGN_TIMEOUT", $data['freetimeout_end']);
+                echo date('Y-m-d H:i:s')." 配置已更新\n";
             }
             break;
             default:
@@ -170,14 +177,14 @@ class server
     /*
      * 获取 Command
      */
-    public function getCommand($ws){
-        $data = explode(',', $ws->data);
+    public function getCommand($data){
+        $data = explode(',', $data);
         $d = array(
             'cmd' => $data[0],
-            'qstart' => $data[3],
-            'qend' => $data[4],
-            'jstart' => $data[5],
-            'jend' => $data[6],
+            'fulltimeout_start' => $data[1],
+            'fulltimeout_end' => $data[2],
+            'freetimeout_start' => $data[3],
+            'freetimeout_end' => $data[4],
         );
         return $d;
     }
@@ -185,7 +192,7 @@ class server
      * 启动定时器
      */
     public function startTimer($server) {
-        echo '启动定时任务,周期为 '.$this->config['TIMER_INTERVAL']. "秒\n";
+        echo date('Y-m-d H:i:s').' 启动定时任务,周期为 '.$this->config['TIMER_INTERVAL']. "秒\n";
         $this->serv = $server;
 
         $this->timer_id = $server->tick($this->config['TIMER_INTERVAL'] * 1000, function ($id) {
@@ -213,13 +220,13 @@ class server
      * 处理订单
      */
     public function processOrders($server) {
-        if ($this->isServerSuspend)
+        if ($this->redis->get(REDIS_IS_SERVER_SUSPEND)==true)
         {
             return;
         }
        
         $this->isWorkerTaskRunning = true;
-        echo '正在获取订单===>';
+        echo date('Y-m-d H:i:s').' 正在获取订单===>';
         //取得订单启动任务foreach orders
         $orders = $this->getOrders();
         //var_dump($orders);
@@ -233,12 +240,18 @@ class server
             echo "没有待指派订单\n";
         }
         foreach($orders as $key => $order){
+            
+            if ($order['order_id']==null || $order['order_id']=='')
+            {
+                continue;
+            }
+            
             $order = $this->getOrderStatus($order);
 
-            $d = $order;
-            $d['created_at'] = date('Y-m-d H:i:s', $d['created_at']);
-            $d['updated_at'] = isset($d['updated_at']) ? date('Y-m-d H:i:s', $d['updated_at']) : '';
-            $d = json_encode($d);
+//            $d = $order;
+//            $d['created_at'] = date('Y-m-d H:i:s', $d['created_at']);
+//            $d['updated_at'] = isset($d['updated_at']) ? date('Y-m-d H:i:s', $d['updated_at']) : '';
+//            $d = json_encode($d);
             
             /*
              * TODO: 张旭刚
@@ -249,12 +262,12 @@ class server
              * if >15 分钟 call 人工指派
              */
             
-            echo 'start:::'. $order['order_id']."\n";
+            echo date('Y-m-d H:i:s').' 订单:＝ '. $order['order_id']." 派单中==>";
             $isOK = false;
             
             $timerDiff = time() - (int)($order['created_at']);
 
-            echo '已过 '.$timerDiff.' 秒.';
+            echo '已过 '.$timerDiff.' 秒 ==>';
             
             if ( ($timerDiff < $this->config['FULLTIME_WORKER_TIMEOUT'] *60) && ($order['worker_identity']=='0'))
             {
@@ -286,24 +299,20 @@ class server
     /*
      * 获取订单状态
      */
-    public function getOrderStatus($order){
-        echo 'getOrderStatus'."\n";
-        
-            if ($order['worker_identity']=='0')
-            {
-                $order['status'] = '1';
-            }
-            else if ($order['worker_identity']=='1')
-            {
-                $order['status'] = '2';
-            }
-            else if ($order['worker_identity']=='2')
-            {
-                $order['status'] = '1001';
-            }
-            
+    public function getOrderStatus($order) {
+        //echo 'getOrderStatus' . "\n";
+
+        if ($order['worker_identity'] == '0') {
+            $order['status'] = '1';
+        } else if ($order['worker_identity'] == '1') {
+            $order['status'] = '2';
+        } else if ($order['worker_identity'] == '2') {
+            $order['status'] = '1001';
+        }
+
         return $order;
     }
+
     /*
      * 获取待指派订单
      */
@@ -323,20 +332,20 @@ class server
      * 客户端连接时触发
      */
     public function onConnect($server, $fd) {
-        echo $fd."Client Connect.\n";
+        echo date('Y-m-d H:i:s').' '.$fd."Client Connect.\n";
         return true;
     }
     /*
      * 客户端断开时触发
      */
     public function onClose($server, $fd) {
-        echo "Client Close.\n";
+        echo date('Y-m-d H:i:s')." Client Close.\n";
     }
     /*
      * 多线程任务
      */
     public function onTask($server, $task_id, $from_id, $data) {
-        echo 'onTask'."\n";
+        //echo 'onTask'."\n";
         $this->serv = $server;
        
         //return $this->taskOrder($data, $server);
@@ -344,33 +353,41 @@ class server
         if ($data['lock']==false)
         {
             $this->lockOrder($data);//加入状态锁
-            return $this->taskOrder($data, $server);
+            return $this->taskOrder($server, $data);
         }
     }
     /*
      * 锁订单，避免重复处理
      */
     public function lockOrder($order){
-        echo 'lockOrder';
+        //echo 'lockOrder';
         $order['lock'] = true;
         $this->redis->zadd($order);
     }
     /*
      * 调用 BOSS API 指派阿姨
      */
-    public function taskOrder($data){
-        echo 'taskOrder'."\n";
-        $url = $this->config['BOSS_API_URL'].$data['order_id'];
-        $result =  @file_get_contents($url);
-        //$data = (array)json_decode($d);
-        //var_dump($data);
-        return $data;
+    public function taskOrder($server, $data) {
+        echo date('Y-m-d H:i:s') . ' 请求API' . $this->config['BOSS_API_URL'] . $data['order_id'] . "\n";
+        $url = $this->config['BOSS_API_URL'] . $data['order_id'];
+        try {
+            $result = @file_get_contents($url);
+            //$data = (array)json_decode($d);
+            //var_dump($data);
+        } catch (Exception $ex) {
+            echo date('Y-m-d H:i:s').$ex->getMessage()."\n";
+            var_dump($data);
+            echo $ex->getTrace()."\n";
+        } finally {
+            return $data;
+        }
     }
+
     /*
      * 任务完成时触发
      */
     public function onFinish($server,$task_id, $data) {
-        echo 'OrderID:'.$data['order_id']." on Finish\n";
+        echo date('Y-m-d H:i:s').'订单:＝ '.$data['order_id']." 本次任务完成\n";
         $data['updated_at'] = isset($data['updated_at']) ? date('Y-m-d H:i:s', $data['updated_at']) : '';
         $d = json_encode($data);
         $this->broadcast($server,$d);
@@ -393,12 +410,14 @@ class server
      * 调用demo
       $name="admin";//kkkk
       $bb='234';
-      $bb=getconfig("./2.php", "bb", "string");
+      $bb=getconfig("./config.php", "bb", "string");
       updateconfig("./2.php", "name", "admin");
      */
-    function get_config($file = CONFIG_PATH, $ini, $type = "string") {
-        if (!file_exists($file))
+    function get_config($file, $ini, $type = "string") {
+        if (!file_exists($file)){
+            echo "file not exist\n";
             return false;
+        }
         $str = file_get_contents($file);
         if ($type == "int") {
             $config = preg_match("/" . preg_quote($ini) . "=(.*);/", $str, $res);
@@ -414,18 +433,23 @@ class server
     /*
      * 配置文件更新
      */
-    function update_config($file = CONFIG_PATH, $ini, $value, $type = "string") {
-        if (!file_exists($file))
+    function update_config($file, $ini, $value, $type = "string") {
+        if (!file_exists($file)) {
+            echo "file not exist\n";
             return false;
+        }
         $str = file_get_contents($file);
         $str2 = "";
         if ($type == "int") {
-            $str2 = preg_replace("/" . preg_quote($ini) . "=(.*);/", $ini . "=" . $value . ";", $str);
+            $str2 = preg_replace("/" . preg_quote($ini) . "=>(.*);/", $ini . "=>" . $value . ";", $str);
         } else {
-            $str2 = preg_replace("/" . preg_quote($ini) . "=(.*);/", $ini . "=\"" . $value . "\";", $str);
+            echo "replace ...\n";
+            $str2 = preg_replace("/\'FULLTIME_WORKER_TIMEOUT\'.*=>.*\d+/",10,"'FULLTIME_WORKER_TIMEOUT' => 5");
+            echo $str2;
         }
         file_put_contents($file, $str2);
     }
+
 }
 /*
  * 启动服务

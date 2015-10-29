@@ -16,43 +16,8 @@ use Yii;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class CustomerWorker extends \yii\db\ActiveRecord
+class CustomerWorker extends \common\models\customer\CustomerWorker
 {
-
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return '{{%customer_worker}}';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['customer_id', 'woker_id', 'customer_worker_status', 'created_at', 'updated_at'], 'required'],
-            [['customer_id', 'woker_id', 'customer_worker_status', 'created_at', 'updated_at', 'is_del'], 'integer']
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => Yii::t('boss', '主键'),
-            'customer_id' => Yii::t('boss', '关联用户'),
-            'woker_id' => Yii::t('boss', '关联阿姨'),
-            'customer_worker_status' => Yii::t('boss', '阿姨类型1为默认阿姨，-1为非默认阿姨'),
-            'created_at' => Yii::t('boss', '创建时间'),
-            'updated_at' => Yii::t('boss', '更新时间'),
-            'is_del' => Yii::t('boss', '是否逻辑删除'),
-        ];
-    }
 
     /**
      * 删除常用/黑名单阿姨       郝建设
@@ -118,6 +83,16 @@ class CustomerWorker extends \yii\db\ActiveRecord
         } else {
             return false;
         }
+    }
+
+    /**
+     * 统计阿姨服务过的用户数量
+     * @param $worker_id
+     * @return int|string
+     */
+    public static function countWorkerServerAllCustomer($worker_id){
+        $result = CustomerWorker::find()->where(['worker_id'=>$worker_id])->count();
+        return $result;
     }
 
 }

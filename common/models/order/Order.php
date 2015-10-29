@@ -15,6 +15,7 @@ use Yii;
  * @property string $created_at
  * @property string $updated_at
  * @property integer $isdel
+ * @property integer $version
  * @property string $order_ip
  * @property integer $order_service_type_id
  * @property string $order_service_type_name
@@ -378,12 +379,19 @@ class Order extends ActiveRecord
 
             }
             $OrderHistory = new OrderHistory(); //订单历史记录每次都需要插入
-            $orderExtStatus = OrderExtStatus::findOne($this->id);
-            $orderExtFlag = OrderExtFlag::findOne($this->id);
-            $orderExtPop = OrderExtPop::findOne($this->id);
-            $orderExtCustomer = OrderExtCustomer::findOne($this->id);
-            $orderExtPay = OrderExtPay::findOne($this->id);
-            $orderExtWorker = OrderExtWorker::findOne($this->id);
+            $modelClassNames = ['OrderExtCustomer','OrderExtFlag','OrderExtPay','OrderExtPop','OrderExtStatus','OrderExtWorker'];
+            foreach($modelClassNames as $modelClassName) {
+                $class = '\common\models\order\\'.$modelClassName;
+                $instance = $class::findOne($this->id);
+                $attributes = $instance->attributes;
+                unset($attributes['order_id']);
+                unset($attributes['created_at']);
+                unset($attributes['updated_at']);
+                if (isset($attributes['isdel'])) {
+                    unset($attributes['isdel']);
+                }
+                $OrderHistory->setAttributes($attributes);
+            }
             $OrderHistory->setAttributes([
                 'order_id' => $this->id,
                 'order_code' => $this->order_code,
@@ -393,20 +401,6 @@ class Order extends ActiveRecord
                 'order_created_at' => $this->created_at,
                 'order_isdel' => $this->isdel,
                 'order_ver' => $this->version,
-                'order_before_status_dict_id' => $orderExtStatus->order_before_status_dict_id,
-                'order_before_status_name' => $orderExtStatus->order_before_status_name,
-                'order_status_dict_id' => $orderExtStatus->order_status_dict_id,
-                'order_status_name' => $orderExtStatus->order_status_name,
-                'order_flag_send' => $orderExtFlag->order_flag_send,
-                'order_flag_urgent' => $orderExtFlag->order_flag_urgent,
-                'order_flag_exception' => $orderExtFlag->order_flag_exception,
-                'order_flag_sys_assign' => $orderExtFlag->order_flag_sys_assign,
-                'order_flag_lock' => $orderExtFlag->order_flag_lock,
-                'order_flag_lock_time' => $orderExtFlag->order_flag_lock_time,
-                'order_flag_worker_sms' => $orderExtFlag->order_flag_worker_sms,
-                'order_flag_worker_jpush' => $orderExtFlag->order_flag_worker_jpush,
-                'order_flag_worker_ivr' => $orderExtFlag->order_flag_worker_ivr,
-                'order_flag_cancel_cause' => $orderExtFlag->order_flag_cancel_cause,
                 'order_ip' => $this->order_ip,
                 'order_service_type_id' => $this->order_service_type_id,
                 'order_service_type_name' => $this->order_service_type_name,
@@ -424,40 +418,6 @@ class Order extends ActiveRecord
                 'address_id' => $this->address_id,
                 'order_address' => $this->order_address,
                 'order_booked_worker_id' => $this->order_booked_worker_id,
-                'order_pop_order_code' => $orderExtPop->order_pop_order_code,
-                'order_pop_group_buy_code' => $orderExtPop->order_pop_group_buy_code,
-                'order_pop_operation_money' => $orderExtPop->order_pop_operation_money,
-                'order_pop_order_money' => $orderExtPop->order_pop_order_money,
-                'order_pop_pay_money' => $orderExtPop->order_pop_pay_money,
-                'customer_id' => $orderExtCustomer->customer_id,
-                'order_customer_phone' => $orderExtCustomer->order_customer_phone,
-                'order_customer_is_vip' => $orderExtCustomer->order_customer_is_vip,
-                'order_customer_need' => $orderExtCustomer->order_customer_need,
-                'order_customer_memo' => $orderExtCustomer->order_customer_memo,
-                'comment_id' => $orderExtCustomer->comment_id,
-                'invoice_id' => $orderExtCustomer->invoice_id,
-                'order_customer_hidden' => $orderExtCustomer->order_customer_hidden,
-                'order_pay_type' => $orderExtPay->order_pay_type,
-                'pay_channel_id' => $orderExtPay->pay_channel_id,
-                'order_pay_channel_name' => $orderExtPay->order_pay_channel_name,
-                'order_pay_flow_num' => $orderExtPay->order_pay_flow_num,
-                'order_pay_money' => $orderExtPay->order_pay_money,
-                'order_use_acc_balance' => $orderExtPay->order_use_acc_balance,
-                'card_id' => $orderExtPay->card_id,
-                'order_use_card_money' => $orderExtPay->order_use_card_money,
-                'coupon_id' => $orderExtPay->coupon_id,
-                'order_use_coupon_money' => $orderExtPay->order_use_coupon_money,
-                'promotion_id' => $orderExtPay->promotion_id,
-                'order_use_promotion_money' => $orderExtPay->order_use_promotion_money,
-                'worker_id' => $orderExtWorker->worker_id,
-                'order_worker_phone' => $orderExtWorker->order_worker_phone,
-                'order_worker_name' => $orderExtWorker->order_worker_name,
-                'order_worker_memo' => $orderExtWorker->order_worker_memo,
-                'worker_type_id' => $orderExtWorker->worker_type_id,
-                'order_worker_type_name' => $orderExtWorker->order_worker_type_name,
-                'order_worker_assign_type' => $orderExtWorker->order_worker_assign_type,
-                'shop_id' => $orderExtWorker->shop_id,
-                'order_worker_shop_name' => $orderExtWorker->order_worker_shop_name,
                 'checking_id' => $this->checking_id,
                 'order_cs_memo' => $this->order_cs_memo,
                 'order_sys_memo' => $this->order_sys_memo,
@@ -483,63 +443,19 @@ class Order extends ActiveRecord
     public static function findById($id)
     {
         $order = self::findOne($id);
-        $orderExtStatus = OrderExtStatus::findOne($id);
-        $orderExtFlag = OrderExtFlag::findOne($id);
-        $orderExtPop = OrderExtPop::findOne($id);
-        $orderExtCustomer = OrderExtCustomer::findOne($id);
-        $orderExtPay = OrderExtPay::findOne($id);
-        $orderExtWorker = OrderExtWorker::findOne($id);
-        $order->setAttributes([
-            'order_before_status_dict_id' => $orderExtStatus->order_before_status_dict_id,
-            'order_before_status_name' => $orderExtStatus->order_before_status_name,
-            'order_status_dict_id' => $orderExtStatus->order_status_dict_id,
-            'order_status_name' => $orderExtStatus->order_status_name,
-            'order_flag_send' => $orderExtFlag->order_flag_send,
-            'order_flag_urgent' => $orderExtFlag->order_flag_urgent,
-            'order_flag_exception' => $orderExtFlag->order_flag_exception,
-            'order_flag_sys_assign' => $orderExtFlag->order_flag_sys_assign,
-            'order_flag_lock' => $orderExtFlag->order_flag_lock,
-            'order_flag_lock_time' => $orderExtFlag->order_flag_lock_time,
-            'order_flag_worker_sms' => $orderExtFlag->order_flag_worker_sms,
-            'order_flag_worker_jpush' => $orderExtFlag->order_flag_worker_jpush,
-            'order_flag_worker_ivr' => $orderExtFlag->order_flag_worker_ivr,
-            'order_flag_cancel_cause' => $orderExtFlag->order_flag_cancel_cause,
-            'order_pop_order_code' => $orderExtPop->order_pop_order_code,
-            'order_pop_group_buy_code' => $orderExtPop->order_pop_group_buy_code,
-            'order_pop_operation_money' => $orderExtPop->order_pop_operation_money,
-            'order_pop_order_money' => $orderExtPop->order_pop_order_money,
-            'order_pop_pay_money' => $orderExtPop->order_pop_pay_money,
-            'customer_id' => $orderExtCustomer->customer_id,
-            'order_customer_phone' => $orderExtCustomer->order_customer_phone,
-            'order_customer_is_vip' => $orderExtCustomer->order_customer_is_vip,
-            'order_customer_need' => $orderExtCustomer->order_customer_need,
-            'order_customer_memo' => $orderExtCustomer->order_customer_memo,
-            'comment_id' => $orderExtCustomer->comment_id,
-            'invoice_id' => $orderExtCustomer->invoice_id,
-            'order_customer_hidden' => $orderExtCustomer->order_customer_hidden,
-            'order_pay_type' => $orderExtPay->order_pay_type,
-            'pay_channel_id' => $orderExtPay->pay_channel_id,
-            'order_pay_channel_name' => $orderExtPay->order_pay_channel_name,
-            'order_pay_flow_num' => $orderExtPay->order_pay_flow_num,
-            'order_pay_money' => $orderExtPay->order_pay_money,
-            'order_use_acc_balance' => $orderExtPay->order_use_acc_balance,
-            'card_id' => $orderExtPay->card_id,
-            'order_use_card_money' => $orderExtPay->order_use_card_money,
-            'coupon_id' => $orderExtPay->coupon_id,
-            'order_use_coupon_money' => $orderExtPay->order_use_coupon_money,
-            'promotion_id' => $orderExtPay->promotion_id,
-            'order_use_promotion_money' => $orderExtPay->order_use_promotion_money,
-            'worker_id' => $orderExtWorker->worker_id,
-            'order_worker_phone' => $orderExtWorker->order_worker_phone,
-            'order_worker_name' => $orderExtWorker->order_worker_name,
-            'order_worker_memo' => $orderExtWorker->order_worker_memo,
-            'worker_type_id' => $orderExtWorker->worker_type_id,
-            'order_worker_type_name' => $orderExtWorker->order_worker_type_name,
-            'order_worker_assign_type' => $orderExtWorker->order_worker_assign_type,
-            'shop_id' => $orderExtWorker->shop_id,
-            'order_worker_shop_name' => $orderExtWorker->order_worker_shop_name,
-        ]);
-
+        $modelClassNames = ['OrderExtCustomer','OrderExtFlag','OrderExtPay','OrderExtPop','OrderExtStatus','OrderExtWorker'];
+        foreach($modelClassNames as $modelClassName) {
+            $class = '\common\models\order\\'.$modelClassName;
+            $instance = $class::findOne($id);
+            $attributes = $instance->attributes;
+            unset($attributes['order_id']);
+            unset($attributes['created_at']);
+            unset($attributes['updated_at']);
+            if (isset($attributes['isdel'])) {
+                unset($attributes['isdel']);
+            }
+            $order->setAttributes($attributes);
+        }
         return $order;
     }
 

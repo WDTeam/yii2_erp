@@ -116,16 +116,7 @@ class FinancePopOrder extends \yii\db\ActiveRecord
    	
    }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+     
     
     /**
      * @inheritdoc
@@ -133,7 +124,7 @@ class FinancePopOrder extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['finance_order_channel_id','finance_order_channel_statuspayment','finance_order_channel_endpayment','finance_order_channel_title', 'finance_pay_channel_id', 'finance_pay_channel_title'], 'required'],
+            [['finance_order_channel_id','order_code','order_status_name','order_money','finance_status','finance_order_channel_statuspayment','finance_order_channel_endpayment','finance_order_channel_title', 'finance_pay_channel_id', 'finance_pay_channel_title'], 'required'],
             [['finance_record_log_id','finance_order_channel_id', 'finance_pay_channel_id', 'finance_pop_order_worker_uid', 'finance_pop_order_booked_time', 'finance_pop_order_booked_counttime', 'finance_pop_order_coupon_id', 'finance_pop_order_order_type', 'finance_pop_order_status', 'finance_pop_order_finance_isok', 'finance_pop_order_order_time', 'finance_pop_order_pay_time', 'finance_pop_order_pay_status','finance_pop_order_pay_status_type', 'finance_pop_order_check_id', 'finance_pop_order_finance_time', 'create_time', 'is_del'], 'integer'],
             [['finance_pop_order_sum_money', 'finance_pop_order_coupon_count', 'finance_pop_order_discount_pay', 'finance_pop_order_reality_pay'], 'number'],
             [['finance_pop_order_number', 'finance_pop_order_order2', 'finance_pop_order_channel_order'], 'string', 'max' => 40],
@@ -151,6 +142,10 @@ class FinancePopOrder extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', '主键id'),
+            'order_code' => Yii::t('app', '系统订单号'),
+            'order_status_name' => Yii::t('app', '系统状态'),
+            'order_money' => Yii::t('app', '系统金额'),
+            'finance_status' => Yii::t('app', '收款状态'),
             'finance_pop_order_no' => Yii::t('app', '标记坏账'),
             'finance_uplod_url' => Yii::t('app', '上传对账单'),
             'finance_record_log_id' => Yii::t('app', '账期id'),
@@ -183,7 +178,7 @@ class FinancePopOrder extends \yii\db\ActiveRecord
             'finance_order_channel_statuspayment' => Yii::t('app', '开始账期'),
             'finance_order_channel_endpayment' => Yii::t('app', '结束账期'),
             'finance_pop_order_info_msg' => Yii::t('app', '订单状态机'),
-            'finance_pop_order_msg' => Yii::t('app', '坏账原因'),
+            'finance_pop_order_msg' => Yii::t('app', '原因'),
             'create_time' => Yii::t('app', '增加时间'),
             'is_del' => Yii::t('app', '0 正常 1 删除'),
         ];

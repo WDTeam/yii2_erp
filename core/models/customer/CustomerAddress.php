@@ -226,90 +226,35 @@ class CustomerAddress extends \common\models\customer\CustomerAddress
 	/**
  	 * add address for pop while area name and province are unknown
 	 */
-	public static function addAddressForPop($customer_phone, $city_name, $address_detail){
-		$transaction = \Yii::$app->db->beginTransaction();
-        try{
-            //先将该客户所有的地址状态设为0
-            $customerAddress = self::find()->where(['customer_id'=>$customer_id])->all();
-            if (!empty($customerAddress)) {
-                foreach ($customerAddress as $address) {
-                    $address->customer_address_status = 0;
-                    $address->validate();
-                    $address->save();
-                }
-            }
+	public static function addAddressForPop($customer_id, $customer_address_phone, $city_name, $address){
+		try{
+		    $customerAddress = self::find()->where(['customer_id' => $customer_id, 'customer_address_detail' => $address])->one();
+		    if (!empty($customerAddress)) {
+		        // found the address
+		        return $customerAddress;
+		    }
+		    // 地址解析   
+		    $city_encode = urlencode($city_name);
+		    $detail_encode = urlencode($address);
+		    $address_encode = file_get_contents("http://api.map.baidu.com/geocoder/v2/?city=".$city_encode."&address=".$detail_encode."&output=json&ak=AEab3d1da1e282618154e918602a4b98");
+		    $address_decode=json_decode($address_encode);
+		    //逆地址解析
+		    $lat = $address_decode->result->location->lat;
+		    $lng = $address_decode->result->location->lng;
+		    $address_encode = file_get_contents("http://api.map.baidu.com/geocoder/v2/?location=".$lat.",".$lng."&output=json&ak=AEab3d1da1e282618154e918602a4b98");
+		    $address_decode=json_decode($address_encode);
+		    // 获得区名
+		    $area_name = $address_decode->result->addressComponent->district;
+		    // 获得城市名
+		    $city_name = $address_decode->result->addressComponent->city;
+		    // 获得城市名
+		    $province_name = $address_decode->result->addressComponent->province;
 
-            $customerAddress = new CustomerAddress;
-            $customerAddress->customer_id = $customer_id;
-
-            //根据区名查询省市区
-			
-
-			$operationCity = OperationArea::find()->where([
-				'area_name'=>$operation_city_name,
-				'level'=>2,
-				])->asArray()->one();
-			$operation_city_id = $operationCity['id'];
-			$operation_city_name = $operationCity['area_name'];
-            $operation_city_short_name = $operationCity['short_name'];
-			$operation_province_id = $operationCity['parent_id'];
-
-			$operationProvince = OperationArea::find()->where([
-				'id'=>$operation_province_id,
-				'level'=>1,
-				])->asArray()->one();
-			$operation_province_id = $operationProvince['id'];
-			$operation_province_name = $operationProvince['area_name'];
-            $operation_province_short_name = $operationProvince['short_name'];
-
-
-            $city_encode = urlencode($city_name);
-            $detail_encode = urlencode($operation_province_name.$operation_city_name.$customer_address_detail);
-            $address_encode = file_get_contents("http://api.map.baidu.com/geocoder/v2/?city=".$city_encode."&address=".$detail_encode."&output=json&ak=AEab3d1da1e282618154e918602a4b98");
-            $address_decode = json_decode($address_encode, true);
-			
-			if($address_decode['status'] == 0){
-				$operation_longitude = $address_decode['result']['location']['lng'];
-            	$operation_latitude = $address_decode['result']['location']['lat'];
-			}else{
-				$operation_longitude = '';
-	  			$operation_latitude = '';
-			}
-
-            $customerAddress->operation_province_id = $operation_province_id;
-            $customerAddress->operation_city_id = $operation_city_id;
-            //$customerAddress->operation_area_id = $operation_area_id;
-
-            $customerAddress->operation_province_name = $operation_province_name;
-            $customerAddress->operation_city_name = $operation_city_name;
-            //$customerAddress->operation_area_name = $operation_area_name;
-
-            $customerAddress->operation_province_short_name = $operation_province_short_name;
-            $customerAddress->operation_city_short_name = $operation_city_short_name;
-            //$customerAddress->operation_area_short_name = $operation_area_short_name;
-
-            $customerAddress->customer_address_status = 1;
-            $customerAddress->customer_address_detail = $customer_address_detail;
-            $customerAddress->customer_address_longitude = $operation_longitude;
-            $customerAddress->customer_address_latitude = $operation_latitude;
-            $customerAddress->customer_address_nickname = $customer_address_nickname;
-            $customerAddress->customer_address_phone = $customer_address_phone;
-            $customerAddress->created_at = time();
-            $customerAddress->updated_at = 0;
-            $customerAddress->is_del = 0;
-			//var_dump($customerAddress);
-			//exit();
-            $customerAddress->validate();
-			if($customerAddress->hasErrors()){
-				var_dump($customerAddress->getErrors());
-			}
-            $customerAddress->save();
-            $transaction->commit();
-            return $customerAddress;
-        }catch(\Exception $e){
-            $transaction->rollback();
-            return false;
-        }
+		    // add address here
+		    return self::addAddress($customer_id, $province_name, $city_name, $area_name, $address, '', $customer_address_phone);
+		}catch(\Exception $e){
+		    return false;
+		}
 	}
 
     /**

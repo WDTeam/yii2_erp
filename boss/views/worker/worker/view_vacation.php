@@ -58,6 +58,14 @@ $workerVacationModel = new WorkerVacation();
                 },
             ],
             [
+                'attribute'=>'worker_vacation_source',
+                'format' => 'raw',
+                'label' => '请假来源',
+                'value' => function ($dataProvider) {
+                    return $dataProvider->worker_vacation_source==0?'管理员添加':'阿姨申请';
+                },
+            ],
+            [
                 'attribute'=>'worker_vacation_extend',
                 'format' => 'raw',
                 'label' => '请假备注',

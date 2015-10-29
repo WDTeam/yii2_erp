@@ -18,19 +18,17 @@ use common\models\order\OrderExtWorker;
  * @property string $complaint_phone
  * @property string $complaint_content
  * @property integer $complaint_time
+ * @property integer $created_at
+ * @property integer $updated_at
+ * @property integer $updated_at
+ * @property integer $is_softdel
  */
 
 
 
 class OrderComplaint extends \common\models\order\ActiveRecord
 {
-	public $order_customer_phone;
-	public $order_worker_phone;
-	public $order_worker_name;
-	public $order_worker_type_name;
-	public $order_worker_shop_name;
-	public $worker_id;
-	public $order_id;
+	
 
     /**
      * @inheritdoc
@@ -47,7 +45,7 @@ class OrderComplaint extends \common\models\order\ActiveRecord
     {
         return [
             [['order_id', 'complaint_phone', 'complaint_time'], 'required'],
-            [['order_id', 'complaint_type', 'complaint_status', 'complaint_channel', 'complaint_section', 'complaint_time'], 'integer'],
+            [['order_id', 'complaint_type', 'complaint_status', 'complaint_channel', 'complaint_section', 'complaint_time', 'created_at', 'updated_at', 'is_softdel'], 'integer'],
             [['complaint_content'], 'string'],
             [['complaint_level'], 'string', 'max' => 2],
             [['complaint_phone'], 'string', 'max' => 16]
@@ -73,11 +71,11 @@ class OrderComplaint extends \common\models\order\ActiveRecord
         ];
     }
     
-    public function getOrder_ext_customer(){
+    public function getOrderExtCustomer(){
     	return $this->hasOne(OrderExtCustomer::className(), ['order_id'=>'order_id']);
     }
     
-    public function getOrder_ext_worker(){
+    public function getOrderExtWorker(){
     	return $this->hasOne(OrderExtWorker::className(), ['order_id'=>'order_id']);
     }
 }

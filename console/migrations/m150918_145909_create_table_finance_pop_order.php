@@ -14,7 +14,10 @@ class m150918_145909_create_table_finance_pop_order extends Migration
     	}
 			$this->createTable('{{%finance_pop_order}}', [
 		  'id' => Schema::TYPE_PK . ' AUTO_INCREMENT COMMENT \'主键id\'',
-		  'finance_record_log_id' => Schema::TYPE_STRING . '(40) NOT NULL DEFAULT \'0\' COMMENT \'账期对应表id\'',
+			'order_code' => Schema::TYPE_STRING . '(64) NOT NULL DEFAULT \'暂无\' COMMENT \'系统订单号\'',
+			'order_status_name' => Schema::TYPE_STRING . '(128) NOT NULL DEFAULT \'无\' COMMENT \'订单状态\'',
+			'order_money' => Schema::TYPE_DECIMAL . '(8,2) NOT NULL DEFAULT \'0.00\' COMMENT \'系统订单金额\'',
+			'finance_record_log_id' => Schema::TYPE_STRING . '(40) NOT NULL DEFAULT \'0\' COMMENT \'账期对应表id\'',
 		  'finance_pop_order_number' => Schema::TYPE_STRING . '(40) NOT NULL DEFAULT \'0\' COMMENT \'第三方订单号\'',
 		  'finance_order_channel_id' => Schema::TYPE_SMALLINT. '(2) NOT NULL COMMENT \'下单渠道(对应finance_order_channel)\'',
 		  'finance_order_channel_title' => Schema::TYPE_STRING. '(80) NOT NULL COMMENT \'下单渠道名称(对应order_channel)\'',
