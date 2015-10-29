@@ -33,6 +33,7 @@ class alipay_wap_class{
      */
     public function callback(){
         require_once("alipay.config.php");
+        require_once("lib/alipay_notify.class.php");
         $alipayNotify = new AlipayNotify($alipay_config);
         $verify_result = $alipayNotify->verifyNotify();
         if($verify_result) {//验证成功
