@@ -62,15 +62,6 @@ $("#order-order_booked_count input").change(function(){
             }
         }
     });
-    //$("#order-orderbookedtimerange").html('');
-    //for(var i=8;i<=18;i++){
-    //    var hour = i<10?'0'+i:i;
-    //    var hourtime = i+$("#order-order_booked_count input:checked").val()*1;
-    //    var hour2 = parseInt(hourtime)<10?'0'+parseInt(hourtime):parseInt(hourtime);
-    //    var minute = (hourtime%1==0)?'00':'30';
-    //    $("#order-orderbookedtimerange").append('<label class="radio-inline"><input type="radio"  value="'+hour+':00-'+hour2+':'+minute+'" name="Order[orderBookedTimeRange]"> '+hour+':00-'+hour2+':'+minute+'</label>');
-    //}
-
 });
 
 
