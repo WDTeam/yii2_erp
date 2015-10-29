@@ -99,6 +99,11 @@ class UserController extends \api\components\Controller
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
 
+        //控制添加地址时手机号码必须填写
+        if (empty($param['customer_address_phone']) || empty($param['customer_address_nickname'])) {
+            return $this->send(null, "被服务者手机或被服务者昵称不能为空", 0, 403);
+        }
+
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
 
         if (!empty($customer) && !empty($customer->id)) {
@@ -925,8 +930,34 @@ class UserController extends \api\components\Controller
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
 
-        if (empty($param['worker_id']) || empty($param['order_id'])) {
+        if (empty($param['order_id']) || empty($param['customer_comment_phone'])) {
             return $this->send(null, "提交参数中缺少必要的参数.", 0, 403);
+        }
+
+        #是否匿名评价,0匿名,1非匿名'
+        if (empty($param['customer_comment_anonymous'])) {
+            $param['customer_comment_anonymous'] = 0;
+        }
+
+        #商圈id
+        if (empty($param['operation_shop_district_id'])) {
+            $param['operation_shop_district_id'] = 0;
+        }
+        #评价内容
+        if (empty($param['customer_comment_content'])) {
+            $param['customer_comment_content'] = 0;
+        }
+        #评论等级
+        if (empty($param['customer_comment_level'])) {
+            $param['customer_comment_level'] = 0;
+        }
+        #评价等级名称
+        if (empty($param['customer_comment_level_name'])) {
+            $param['customer_comment_level_name'] = 0;
+        }
+        #评价标签
+        if (empty($param['customer_comment_tag_ids'])) {
+            $param['customer_comment_tag_ids'] = 0;
         }
 
         if (!empty($customer) && !empty($customer->id)) {
