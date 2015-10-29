@@ -58,14 +58,21 @@ class WorkerController extends \restapi\components\Controller
     public function actionWorkerInfo()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-        if (!isset($param['access_token']) || !$param['access_token'] || !isset($param['worker_id']) || !$param['worker_id'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+        if (!isset($param['access_token']) || !$param['access_token']|| !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
+        if(!isset($param['worker_id']) ||!$param['worker_id']){
+            return $this->send(null, "阿姨不存在.", 0, 403);
         }
         // 按阿姨id获取阿姨信息
         $workerId = intval($param['worker_id']);
-        if ($workerId ) {
+        if (!$workerId) {
+            return $this->send(null, "阿姨不存在.", 0, 403);
+        }
+        //数据调取
+        try{
             $workerInfo = Worker::getWorkerDetailInfo($workerId);
-            //数据整理
+            $ret = array();
             if(!empty($workerInfo)){
                 $ret = [
                     "worker_name" => $workerInfo['worker_name'],
@@ -75,12 +82,13 @@ class WorkerController extends \restapi\components\Controller
                     "worker_identity_id" => $workerInfo['worker_identity_id'],//身份类型
                     "worker_type_description" => $workerInfo["worker_type_description"],
                     'worker_star' => $workerInfo["worker_star"],
-                    "personal_skill" => WorkerSkill::getWorkerSkill($checkResult['worker_id']),
+                    "personal_skill" =>WorkerSkill::getWorkerSkill($workerId) ,
                 ];
-                return $this->send($ret, "阿姨信息查询成功");
             }
+            return $this->send($ret, "阿姨信息查询成功");
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
         }
-        return $this->send(null, "阿姨不存在.", 0, 403);
     }
 
     /**
@@ -1026,32 +1034,28 @@ class WorkerController extends \restapi\components\Controller
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *      "code": "ok",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      [
-     *      {
-     *          "id": "任务id",
-     *          "worker_task_name": "任务名称",
-     *          "worker_task_start": "任务开始时间",
-     *          "worker_task_end": "任务结束时间",
-     *          "worker_task_reward_value": "任务奖励值",
-     *          "worker_task_conditions": "任务需要完成次数",
-     *          "worker_task_already": "任务已经完成次数"
-     *      },
-     *      {
-     *          "id": "任务id",
-     *          "worker_task_name": "任务名称",
-     *          "worker_task_start": "任务开始时间",
-     *          "worker_task_end": "任务结束时间",
-     *          "worker_task_reward_value": "任务奖励值",
-     *          "worker_task_conditions": "任务需要完成次数",
-     *          "worker_task_already": "任务已经完成次数"
-     *      }
-     *      ]
-     *      }
-     * }
+     *   {
+     *       "code": 1,
+     *       "msg": "操作成功",
+     *       "ret": [
+     *           {
+     *               "id": 2,
+     *               "worker_id": 1,
+     *               "worker_task_id": 2,
+     *               "worker_task_cycle_number": "1",
+     *               "worker_task_name": "任务名称2",
+     *               "worker_task_log_start": 1446096240,
+     *               "worker_task_log_end": 1446297240,
+     *               "worker_task_is_done": 0,
+     *               "worker_task_done_time": 0,
+     *               "worker_task_reward_type": 0,
+     *               "worker_task_reward_value": 0,
+     *               "created_at": 1446097240,
+     *               "updated_at": 0,
+     *               "is_del": 0
+     *           }
+     *       ]
+     *   }
      *
      * @apiError SessionIdNotFound 未找到会话ID.
      *
@@ -1163,32 +1167,30 @@ class WorkerController extends \restapi\components\Controller
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *      "code": "ok",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      [
-     *      {
-     *          "id": "任务id",
-     *          "worker_task_name": "任务名称",
-     *          "worker_task_start": "任务开始时间",
-     *          "worker_task_end": "任务结束时间",
-     *          "worker_task_reward_value": "任务奖励值",
-     *          "worker_task_conditions": "任务需要完成次数",
-     *          "worker_task_already": "任务已经完成次数"
-     *      },
-     *      {
-     *          "id": "任务id",
-     *          "worker_task_name": "任务名称",
-     *          "worker_task_start": "任务开始时间",
-     *          "worker_task_end": "任务结束时间",
-     *          "worker_task_reward_value": "任务奖励值",
-     *          "worker_task_conditions": "任务需要完成次数",
-     *          "worker_task_already": "任务已经完成次数"
-     *      }
-     *      ]
-     *      }
-     * }
+     *   {
+     *       "code": 1,
+     *       "msg": "操作成功",
+     *       "ret": [
+     *           {
+     *               "id": 3,
+     *               "worker_id": 1,
+     *               "worker_task_id": 1,
+     *               "worker_task_cycle_number": "0",
+     *               "worker_task_name": "任务名称3",
+     *               "worker_task_log_start": 1446096240,
+     *               "worker_task_log_end": 1446097240,
+     *               "worker_task_is_done": -1,
+     *               "worker_task_done_time": 0,
+     *               "worker_task_reward_type": 0,
+     *               "worker_task_reward_value": 0,
+     *               "created_at": 1446097240,
+     *               "updated_at": 0,
+     *               "is_del": 0,
+     *               "values": [],
+     *               "worker_task_description": ""
+     *           }
+     *       ]
+     *   }
      *
      * @apiError SessionIdNotFound 未找到会话ID.
      *
@@ -1287,8 +1289,6 @@ class WorkerController extends \restapi\components\Controller
         }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
-                echo "ee";die;
-
         $worker_task_log_start=$task_log['worker_task_log_start'];
         $worker_task_log_end=$task_log['worker_task_log_end'];
         //获取任务的订单列表

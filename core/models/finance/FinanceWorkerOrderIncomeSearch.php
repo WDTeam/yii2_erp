@@ -39,7 +39,7 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
     public function rules()
     {
         return [
-            [['id', 'worker_id', 'order_id', 'order_service_type_id', 'channel_id', 'order_pay_type_id', 'order_booked_begin_time', 'order_booked_count', 'isSettled', 'finance_worker_order_income_starttime', 'finance_worker_order_income_endtime', 'finance_settle_apply_id', 'isdel', 'updated_at', 'created_at'], 'integer'],
+            [['id', 'worker_id', 'order_id', 'order_service_type_id', 'channel_id', 'order_pay_type_id', 'order_booked_begin_time', 'order_booked_count', 'isSettled', 'finance_worker_order_income_starttime', 'finance_worker_order_income_endtime', 'finance_settle_apply_id', 'is_softdel', 'updated_at', 'created_at'], 'integer'],
             [['order_service_type_name', 'order_channel_name', 'order_pay_type_des'], 'safe'],
             [['order_unit_money', 'order_money', 'finance_worker_order_income_discount_amount', 'order_pay_money', 'finance_worker_order_income_money'], 'number'],
         ];
@@ -81,7 +81,7 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
             'finance_worker_order_income_starttime' => $this->finance_worker_order_income_starttime,
             'finance_worker_order_income_endtime' => $this->finance_worker_order_income_endtime,
             'finance_settle_apply_id' => $this->finance_settle_apply_id,
-            'isdel' => $this->isdel,
+            'is_softdel' => $this->is_softdel,
             'updated_at' => $this->updated_at,
             'created_at' => $this->created_at,
         ]);

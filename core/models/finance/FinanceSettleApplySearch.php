@@ -110,7 +110,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             'finance_settle_apply_money' => $this->finance_settle_apply_money,
             'finance_settle_apply_status' => $this->finance_settle_apply_status,
             'finance_settle_apply_cycle' => $this->finance_settle_apply_cycle,
-            'isdel' => $this->isdel,
+            'is_softdel' => $this->is_softdel,
             'updated_at' => $this->updated_at,
             'created_at' => $this->created_at,
             'worker_tel' => $this->worker_tel,
