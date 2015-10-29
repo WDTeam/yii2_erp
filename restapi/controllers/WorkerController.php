@@ -28,21 +28,20 @@ class WorkerController extends \restapi\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *      "msg": "阿姨信息查询成功",
      *      "ret": {
-     *          "worker_name": "李刘珍",
-     *          "worker_phone": "13121999270",
-     *          "head_url": "",
-     *          "worker_identity": "兼职",
-     *          "worker_role": "保姆",
-     *          "worker_start": 4.5,
+      *          "worker_name": "阿姨姓名",
+     *          "worker_phone": "阿姨手机号",
+     *          "worker_photo": "头像地址",
+     *          "worker_identity_description": "阿姨身份说明",
+     *          "worker_identity_id":"阿姨身份标识【1全职 2兼职 3高峰 4时段】",
+     *          "worker_type_description": "角色",
+     *          "worker_star": "星级",
      *          "personal_skill": [
-     *              "煮饭",
-     *              "开荒",
-     *              "护老",
-     *              "擦玻璃",
-     *              "带孩子"
+     *              "阿姨技能1",
+     *              "阿姨技能2",
+     *              "阿姨技能3"
      *          ]
      *        }
      *     } 
@@ -71,12 +70,12 @@ class WorkerController extends \restapi\components\Controller
                 $ret = [
                     "worker_name" => $workerInfo['worker_name'],
                     "worker_phone" => $workerInfo['worker_phone'],
-                    "head_url" => $workerInfo['worker_photo'],
-                    "worker_identity" => $workerInfo['worker_identity_description'],//身份
-                    "worker_role" => $workerInfo["worker_type_description"],
-                    'worker_start' => $workerInfo["worker_star"],
-                    'total_money' => $workerInfo['worker_stat_order_money'],
-                    "personal_skill" => WorkerSkill::getWorkerSkill($workerId),
+                    "worker_photo" => $workerInfo['worker_photo'],
+                    "worker_identity_description" => $workerInfo['worker_identity_description'],//身份
+                    "worker_identity_id" => $workerInfo['worker_identity_id'],//身份类型
+                    "worker_type_description" => $workerInfo["worker_type_description"],
+                    'worker_star' => $workerInfo["worker_star"],
+                    "personal_skill" => WorkerSkill::getWorkerSkill($checkResult['worker_id']),
                 ];
                 return $this->send($ret, "阿姨信息查询成功");
             }
