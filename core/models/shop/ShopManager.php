@@ -59,6 +59,7 @@ class ShopManager extends \common\models\shop\ShopManager
         return array_merge(parent::rules(),[
             [['name', 'street', 'principal', 'tel', 
             ], 'required'],
+            [['password'], 'string'],
             [['audit_status', 'is_blacklist'], 'default', 'value'=>0],
         ]);
     }
@@ -199,6 +200,20 @@ class ShopManager extends \common\models\shop\ShopManager
         $qn = new Qiniu();
         return $qn->getLink().$this->bl_photo_url;
     }
+    /**
+     * 密码处理
+     */
+    public function getPassword()
+    {
+        return '';
+    }
+    public function setPassword($password)
+    {
+        if(!empty($password)){
+            $this->password_hash = \Yii::$app->security->generatePasswordHash($password);
+        }
+    }
+    
     public static function findById($id) {
         return self::findOne(['id'=>$id]);
     }
