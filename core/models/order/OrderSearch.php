@@ -2,10 +2,10 @@
 
 namespace core\models\order;
 
-use common\models\order\OrderExtCustomer;
-use common\models\order\OrderExtFlag;
-use common\models\order\OrderExtStatus;
-use common\models\order\OrderStatusDict;
+use dbbase\models\order\OrderExtCustomer;
+use dbbase\models\order\OrderExtFlag;
+use dbbase\models\order\OrderExtStatus;
+use dbbase\models\order\OrderStatusDict;
 use core\models\customer\Customer;
 use Yii;
 use yii\base\Model;

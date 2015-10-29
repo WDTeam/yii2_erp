@@ -36,7 +36,7 @@ return [
          $master_secret = 'a064811d7e4596c32d0e6884';
          */
         'jpush'=>[
-            'class'=>'common\components\JPush',
+            'class'=>'dbbase\components\JPush',
             'app_key'=>'3037ca7c859cca4c996f7144',
             'master_secret'=>'a064811d7e4596c32d0e6884'
         ],
@@ -44,7 +44,7 @@ return [
          * 发短信配置
          */
         'sms'=>[
-            'class'=>'common\components\Sms',
+            'class'=>'dbbase\components\Sms',
             'userId'=>'J02356',
             'password'=>'556201',
         ],
@@ -52,7 +52,7 @@ return [
          * IVR
          */
         'ivr'=>[
-            'class'=>'common\components\Ivr',
+            'class'=>'dbbase\components\Ivr',
             'app_id'=>'5000058',
             'token'=>'57b62a3462b52a1413a4e1934a60d983',
             'redirect_uri'=>'ivr/callback'

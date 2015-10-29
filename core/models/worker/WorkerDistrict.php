@@ -2,7 +2,7 @@
 
 namespace core\models\worker;
 
-use common\models\Shop;
+use dbbase\models\Shop;
 use Yii;
 use core\models\worker\Worker;
 use core\models\operation\OperationShopDistrict;

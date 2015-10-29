@@ -3,8 +3,8 @@
 namespace boss\models\order;
 
 use Yii;
-use common\models\order\OrderExtCustomer;
-use common\models\order\OrderExtWorker;
+use dbbase\models\order\OrderExtCustomer;
+use dbbase\models\order\OrderExtWorker;
 use yii\caching\ArrayCache;
 /**
  * This is the model class for table "ejj_order_complaint".

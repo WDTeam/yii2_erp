@@ -5,8 +5,8 @@ use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
 use kartik\widgets\Select2;
-use common\models\finance\FinancePayChannel;
-use common\models\finance\FinanceOrderChannel;
+use dbbase\models\finance\FinancePayChannel;
+use dbbase\models\finance\FinanceOrderChannel;
 /**
  * @var yii\web\View $this
  * @var common\models\FinanceHeader $model

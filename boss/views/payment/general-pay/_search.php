@@ -7,7 +7,7 @@ use yii\web\JsExpression;
 use yii\helpers\Url;
 use yii\base\Widget;
 use kartik\widgets\Affix;
-use common\models\finance\FinanceOrderChannel;
+use dbbase\models\finance\FinanceOrderChannel;
 use boss\models\payment\GeneralPay;
 /**
  * @var yii\web\View $this

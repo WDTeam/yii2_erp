@@ -2,13 +2,13 @@
 use yii\helpers\Html;
 
 use kartik\detail\DetailView;
-use common\models\finance\FinanceOrderChannel;
-use common\models\finance\FinancePayChannel;
+use dbbase\models\finance\FinanceOrderChannel;
+use dbbase\models\finance\FinancePayChannel;
 use core\models\Customer\Customer;
 use core\models\general\SystemUser;
 
 
-use common\models\finance\FinancePopOrder;
+use dbbase\models\finance\FinancePopOrder;
 /**
  * @var yii\web\View $this
  * @var common\models\FinancePopOrder $model

@@ -3,7 +3,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\tabs\TabsX;
-use common\models\finance\FinanceOrderChannel;
+use dbbase\models\finance\FinanceOrderChannel;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider

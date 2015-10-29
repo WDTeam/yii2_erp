@@ -5,7 +5,7 @@ namespace boss\models\customer;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\customer\CustomerComment;
+use dbbase\models\customer\CustomerComment;
 
 /**
  * CustomerCommentSearch represents the model behind the search form about `\common\models\CustomerComment`.

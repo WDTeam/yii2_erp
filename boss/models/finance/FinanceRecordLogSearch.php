@@ -5,7 +5,7 @@ namespace boss\models\finance;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\finance\FinanceRecordLog;
+use dbbase\models\finance\FinanceRecordLog;
 
 /**
  * FinanceRecordLogSearch represents the model behind the search form about `common\models\FinanceRecordLog`.

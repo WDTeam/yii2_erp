@@ -1,9 +1,9 @@
 <?php
 
-namespace common\models\operation;
+namespace dbbase\models\operation;
 
 use Yii;
-use common\models\operation\OperationCategoryQuery;
+use dbbase\models\operation\OperationCategoryQuery;
 
 /**
  * This is the model class for table "{{%operation_category}}".

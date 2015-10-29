@@ -3,20 +3,20 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
-use common\models\Shop;
+use dbbase\models\Shop;
 use yii\helpers\ArrayHelper;
 use kartik\nav\NavX;
 use yii\bootstrap\NavBar;
 use yii\bootstrap\Modal;
 
-use common\models\CustomerPlatform;
-use common\models\CustomerChannal;
-use common\models\CustomerAddress;
+use dbbase\models\CustomerPlatform;
+use dbbase\models\CustomerChannal;
+use dbbase\models\CustomerAddress;
 
-use common\models\GeneralRegion;
-use common\models\Order;
-use common\models\OrderExtCustomer;
-use common\models\CustomerExtBalance;
+use dbbase\models\GeneralRegion;
+use dbbase\models\Order;
+use dbbase\models\OrderExtCustomer;
+use dbbase\models\CustomerExtBalance;
 
 /**
  * @var yii\web\View $this

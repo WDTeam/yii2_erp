@@ -8,7 +8,7 @@
 namespace core\models\order;
 
 
-use common\models\order\OrderStatusDict;
+use dbbase\models\order\OrderStatusDict;
 use Yii;
 
 class OrderStatusHistory extends \common\models\order\OrderStatusHistory

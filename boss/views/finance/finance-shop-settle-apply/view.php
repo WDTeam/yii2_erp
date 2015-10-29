@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use kartik\widgets\ActiveForm;
 use yii\widgets\Pjax;
-use common\models\Shop;
+use dbbase\models\Shop;
 use yii\helpers\ArrayHelper;
 use kartik\nav\NavX;
 use yii\bootstrap\NavBar;

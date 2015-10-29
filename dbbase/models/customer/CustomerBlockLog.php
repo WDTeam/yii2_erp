@@ -1,9 +1,9 @@
 <?php
 
-namespace common\models\customer;
+namespace dbbase\models\customer;
 
 use Yii;
-use common\models\customer\Customer;
+use dbbase\models\customer\Customer;
 /**
  * This is the model class for table "{{%customer_block_log}}".
  *

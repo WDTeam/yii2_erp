@@ -5,7 +5,7 @@ namespace core\models\finance;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\finance\FinanceSettleApply;
+use dbbase\models\finance\FinanceSettleApply;
 use core\models\worker\Worker;
 use core\models\order\Order;
 use core\models\order\OrderSearch;

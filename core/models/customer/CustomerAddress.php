@@ -2,9 +2,9 @@
 
 namespace core\models\customer;
 use Yii;
-use common\models\GeneralRegion;
+use dbbase\models\GeneralRegion;
 
-use common\models\operation\OperationArea;
+use dbbase\models\operation\OperationArea;
 
 
 use core\models\customer\Customer;

@@ -1,9 +1,9 @@
 <?php
-namespace common\models\order;
+namespace dbbase\models\order;
 
 use Yii;
-use common\models\order\OrderExtCustomer;
-use common\models\order\OrderExtWorker;
+use dbbase\models\order\OrderExtCustomer;
+use dbbase\models\order\OrderExtWorker;
 /**
  * This is the model class for table "ejj_order_complaint".
  *

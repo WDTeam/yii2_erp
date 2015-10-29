@@ -4,7 +4,7 @@ namespace core\models\finance;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\finance\FinanceWorkerNonOrderIncome;
+use dbbase\models\finance\FinanceWorkerNonOrderIncome;
 use core\models\worker\WorkerTask;
 use yii\data\ArrayDataProvider;
 use core\models\worker\Worker;

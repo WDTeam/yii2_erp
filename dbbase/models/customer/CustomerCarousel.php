@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models\customer;
+namespace dbbase\models\customer;
 
 use Yii;
 

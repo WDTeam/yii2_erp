@@ -15,7 +15,7 @@ use kartik\detail\DetailView;
 use kartik\datecontrol\DateControl;
 use kartik\date\DatePicker;
 
-use common\models\Shop;
+use dbbase\models\Shop;
 use boss\models\worker\Worker;
 use boss\models\worker\WorkerIdentityConfig;
 use boss\models\worker\workerExt;

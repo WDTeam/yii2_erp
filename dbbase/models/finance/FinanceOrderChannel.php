@@ -1,9 +1,9 @@
 <?php
 
-namespace common\models\finance;
+namespace dbbase\models\finance;
 
 use Yii;
-use common\models\finance\FinancePayChannel;
+use dbbase\models\finance\FinancePayChannel;
 /**
  * This is the model class for table "{{%finance_order_channel}}".
  *

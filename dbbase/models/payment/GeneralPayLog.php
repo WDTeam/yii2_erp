@@ -1,8 +1,8 @@
 <?php
 
-namespace common\models\payment;
+namespace dbbase\models\payment;
 
-use common\models\finance\FinancePayChannel;
+use dbbase\models\finance\FinancePayChannel;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 /**

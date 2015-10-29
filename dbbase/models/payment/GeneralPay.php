@@ -1,8 +1,8 @@
 <?php
 
-namespace common\models\payment;
-use common\models\finance\FinancePayChannel;
-use common\models\finance\FinanceOrderChannel;
+namespace dbbase\models\payment;
+use dbbase\models\finance\FinancePayChannel;
+use dbbase\models\finance\FinanceOrderChannel;
 use Yii;
 use yii\base\ErrorException;
 use yii\base\Exception;

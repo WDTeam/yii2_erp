@@ -9,7 +9,7 @@
 namespace core\models\order;
 
 
-use common\models\order\OrderStatusDict;
+use dbbase\models\order\OrderStatusDict;
 use Yii;
 use core\models\worker\Worker;
 

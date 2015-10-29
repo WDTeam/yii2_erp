@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models\worker;
+namespace dbbase\models\worker;
 
 /**
  * This is the ActiveQuery class for [[WorkerTaskLog]].

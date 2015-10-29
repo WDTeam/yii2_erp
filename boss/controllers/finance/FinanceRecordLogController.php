@@ -8,13 +8,13 @@
 namespace boss\controllers\finance;
 
 use Yii;
-use common\models\finance\FinanceRecordLog;
+use dbbase\models\finance\FinanceRecordLog;
 use boss\models\finance\FinanceRecordLogSearch;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use common\models\finance\FinanceOrderChannel;
-use common\models\finance\FinancePopOrder;
+use dbbase\models\finance\FinanceOrderChannel;
+use dbbase\models\finance\FinancePopOrder;
 
 class FinanceRecordLogController extends BaseAuthController
 {

@@ -6,12 +6,12 @@ namespace core\models\customer;
 use Yii;
 
 use yii\web\BadRequestHttpException;
-use common\models\customer\GeneralRegion;
-use common\models\customer\CustomerExtSrc;
+use dbbase\models\customer\GeneralRegion;
+use dbbase\models\customer\CustomerExtSrc;
 
 use core\models\customer\CustomerAddress;
 use core\models\customer\CustomerWorker;
-use common\models\Worker;
+use dbbase\models\Worker;
 use core\models\customer\CustomerExtBalance;
 use core\models\customer\CustomerExtScore;
 use core\models\finance\FinanceOrderChannal;

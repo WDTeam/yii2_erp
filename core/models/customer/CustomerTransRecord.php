@@ -2,9 +2,9 @@
 
 namespace core\models\customer;
 
-use common\models\customer\CustomerTransRecordLog;
-use common\models\finance\FinancePayChannel;
-use common\models\payment\GeneralPayCommon;
+use dbbase\models\customer\CustomerTransRecordLog;
+use dbbase\models\finance\FinancePayChannel;
+use dbbase\models\payment\GeneralPayCommon;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 

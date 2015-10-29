@@ -3,7 +3,7 @@
 namespace tests\codeception\frontend\functional;
 
 use tests\codeception\frontend\_pages\SignupPage;
-use common\models\SystemUser;
+use dbbase\models\SystemUser;
 
 class SignupCest
 {

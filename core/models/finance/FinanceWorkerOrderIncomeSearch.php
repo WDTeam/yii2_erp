@@ -8,9 +8,9 @@ use yii\data\ArrayDataProvider;
 use yii\data\ActiveDataProvider;
 use core\models\order\Order;
 use core\models\worker\Worker;
-use common\models\finance\FinanceWorkerOrderIncome;
+use dbbase\models\finance\FinanceWorkerOrderIncome;
 use core\models\finance\FinanceSettleApplySearch;
-use common\models\order\OrderStatusDict;
+use dbbase\models\order\OrderStatusDict;
 
 /**
  * FinanceWorkerOrderIncomeSearch represents the model behind the search form about `common\models\finance\FinanceWorkerOrderIncome`.

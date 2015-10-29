@@ -3,7 +3,7 @@
 namespace boss\controllers;
 
 use Yii;
-//use common\models\Customer;
+//use dbbase\models\Customer;
 use boss\models\CustomerSearch;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;

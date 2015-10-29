@@ -2,7 +2,7 @@
 
 namespace boss\controllers\customer;
 use Yii;
-//use common\models\Customer;
+//use dbbase\models\Customer;
 use boss\models\customer\CustomerSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;

@@ -5,7 +5,7 @@ namespace core\models\finance;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\finance\FinanceCompensate as FinanceCompensateModel;
+use dbbase\models\finance\FinanceCompensate as FinanceCompensateModel;
 
 /**
  * FinanceCompensate represents the model behind the search form about `common\models\finance\FinanceCompensate`.

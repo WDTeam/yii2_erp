@@ -8,7 +8,7 @@
 
 namespace boss\models\order;
 
-use common\models\finance\FinanceOrderChannel;
+use dbbase\models\finance\FinanceOrderChannel;
 use core\models\operation\OperationArea;
 use core\models\order\OrderPay;
 use Yii;
@@ -17,7 +17,7 @@ use core\models\worker\Worker;
 use yii\helpers\ArrayHelper;
 use boss\models\operation\OperationShopDistrict;
 use core\models\operation\OperationCity;
-use common\models\order\OrderStatusDict;
+use dbbase\models\order\OrderStatusDict;
 
 
 class Order extends OrderModel

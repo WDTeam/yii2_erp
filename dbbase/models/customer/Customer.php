@@ -1,9 +1,9 @@
 <?php
 
-namespace common\models\customer;
+namespace dbbase\models\customer;
 
 use Yii;
-use common\models\customer\CustomerExtBalance;
+use dbbase\models\customer\CustomerExtBalance;
 
 /**
  * This is the model class for table "{{%customer}}".

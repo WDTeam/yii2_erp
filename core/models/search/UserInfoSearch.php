@@ -5,7 +5,7 @@ namespace core\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\sq_ejiajie_v2\UserInfo;
+use dbbase\models\sq_ejiajie_v2\UserInfo;
 
 /**
  * UserInfo represents the model behind the search form about `common\models\UserInfo`.

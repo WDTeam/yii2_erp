@@ -5,7 +5,7 @@ namespace boss\models\finance;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\finance\FinancePayChannel;
+use dbbase\models\finance\FinancePayChannel;
 
 /**
  * FinancePayChannelSearch represents the model behind the search form about `common\models\FinancePayChannel`.

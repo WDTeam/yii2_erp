@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
-use common\models\Shop;
+use dbbase\models\Shop;
 use yii\helpers\ArrayHelper;
 use kartik\nav\NavX;
 use yii\bootstrap\NavBar;
@@ -15,7 +15,7 @@ use yii\web\JsExpression;
 use yii\base\Widget;
 use yii\widgets\ActiveForm;
 
-use common\models\order\OrderExtCustomer;
+use dbbase\models\order\OrderExtCustomer;
 
 use core\models\customer\Customer;
 use core\models\customer\CustomerAddress;

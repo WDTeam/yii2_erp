@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use kartik\detail\DetailView;
 use kartik\datecontrol\DateControl;
 use kartik\date\DatePicker;
-use common\models\Shop;
+use dbbase\models\Shop;
 use kartik\builder\TabularForm;
 use kartik\widgets\SwitchInput;
 use kartik\grid\GridView;

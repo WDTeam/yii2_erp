@@ -1,9 +1,9 @@
 <?php
 
-namespace common\models\customer;
+namespace dbbase\models\customer;
 
-use common\models\finance\FinanceOrderChannel;
-use common\models\finance\FinancePayChannel;
+use dbbase\models\finance\FinanceOrderChannel;
+use dbbase\models\finance\FinancePayChannel;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 
