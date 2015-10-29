@@ -16,7 +16,7 @@ use \core\models\comment\CustomerCommentTag;
 use \core\models\comment\CustomerCommentLevel;
 use \core\models\customer\CustomerExtScore;
 
-class UserController extends \api\components\Controller
+class UserController extends \restapi\components\Controller
 {
 
     /**

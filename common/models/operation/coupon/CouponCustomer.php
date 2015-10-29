@@ -9,7 +9,6 @@ use Yii;
  *
  * @property integer $id
  * @property integer $customer_id
- * @property integer $order_id
  * @property integer $coupon_id
  * @property integer $coupon_code_id
  * @property string $coupon_code
@@ -37,7 +36,7 @@ class CouponCustomer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'order_id', 'coupon_id', 'coupon_code_id', 'expirate_at', 'is_used', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['customer_id', 'coupon_id', 'coupon_code_id', 'expirate_at', 'is_used', 'created_at', 'updated_at', 'is_del'], 'integer'],
             [['coupon_price'], 'number'],
             [['coupon_code', 'coupon_name'], 'string', 'max' => 255]
         ];
@@ -51,7 +50,6 @@ class CouponCustomer extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('common', '主键'),
             'customer_id' => Yii::t('common', '客户id'),
-            'order_id' => Yii::t('common', '订单id'),
             'coupon_id' => Yii::t('common', '优惠规则id'),
             'coupon_code_id' => Yii::t('common', '优惠码id'),
             'coupon_code' => Yii::t('common', '优惠码'),
