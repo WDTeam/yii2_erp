@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use boss\components\AreaCascade;
+use kartik\widgets\Select2;
 
 /**
  * @var yii\web\View $this
@@ -19,16 +20,15 @@ use boss\components\AreaCascade;
     ]); ?>
 
     <div class="col-md-4">
-        <label class="control-label" for="workersearch-worker_work_city">所在城市</label>
-        <div>
-        <?php echo AreaCascade::widget([
-            'model' => $model,
-            'options' => ['class' => 'form-control inline'],
-            'label' =>'选择城市',
-            'grades' => 'city',
-            'is_minui'=>true,
-        ]);?>
-        </div>
+        <?= $form->field($model, 'city_id')->widget(Select2::classname(), [
+            'name' => 'city_id',
+            'hideSearch' => true,
+            'data' => $model::getOnlineCityList(),
+            'options' => ['placeholder' => '选择城市...', 'inline' => true],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]); ?>
     </div>
     
     <div class="col-md-3">

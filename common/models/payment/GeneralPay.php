@@ -482,8 +482,8 @@ class GeneralPay extends GeneralPayCommon
                 //commit
                 $connection  = \Yii::$app->db;
                 $transaction = $connection->beginTransaction();
-                //try
-                //{
+                try
+                {
                     $model->save(false);
                     $attribute = $model->getAttributes();
                     if(!empty($model->order_id)){
@@ -495,7 +495,6 @@ class GeneralPay extends GeneralPayCommon
                     }
 
                     $transaction->commit();
-                    var_dump($model->order_id);
                     /*
                     if(empty($data['debug'])){
                         //发送短信事件
@@ -505,11 +504,11 @@ class GeneralPay extends GeneralPayCommon
                     */
 
                     echo $class->notify();
-                //}
-                //catch(Exception $e)
-                //{
-                //    $transaction->rollBack();
-                //}
+                }
+                catch(Exception $e)
+                {
+                    $transaction->rollBack();
+                }
             }
         }
     }

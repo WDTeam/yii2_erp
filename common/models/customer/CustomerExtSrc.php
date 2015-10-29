@@ -9,8 +9,8 @@ use Yii;
  *
  * @property integer $id
  * @property integer $customer_id
- * @property integer $platform_id
- * @property integer $channal_id
+ * @property integer $customer_phone
+ * @property integer $finance_order_channal_id
  * @property string $platform_name
  * @property string $channal_name
  * @property string $platform_ename
@@ -37,7 +37,7 @@ class CustomerExtSrc extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'platform_id', 'channal_id', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['customer_id', 'customer_phone', 'finance_order_channal_id', 'created_at', 'updated_at', 'is_del'], 'integer'],
             [['created_at', 'updated_at'], 'required'],
             [['platform_name', 'channal_name', 'platform_ename', 'channal_ename', 'device_name', 'device_no'], 'string', 'max' => 255]
         ];
@@ -49,19 +49,19 @@ class CustomerExtSrc extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('boss', '编号'),
-            'customer_id' => Yii::t('boss', '客户'),
-            'platform_id' => Yii::t('boss', '平台'),
-            'channal_id' => Yii::t('boss', '渠道'),
-            'platform_name' => Yii::t('boss', '平台名称'),
-            'channal_name' => Yii::t('boss', '聚道名称'),
-            'platform_ename' => Yii::t('boss', '平台拼音'),
-            'channal_ename' => Yii::t('boss', '聚道拼音'),
-            'device_name' => Yii::t('boss', '设备名称'),
-            'device_no' => Yii::t('boss', '设备号码'),
-            'created_at' => Yii::t('boss', '创建时间'),
-            'updated_at' => Yii::t('boss', '更新时间'),
-            'is_del' => Yii::t('boss', '是否逻辑删除'),
+            'id' => Yii::t('common', '编号'),
+            'customer_id' => Yii::t('common', '客户'),
+            'customer_phone' => Yii::t('common', '客户手机'),
+            'finance_order_channal_id' => Yii::t('common', 'Finance Order Channal ID'),
+            'platform_name' => Yii::t('common', '平台名称'),
+            'channal_name' => Yii::t('common', '聚道名称'),
+            'platform_ename' => Yii::t('common', '平台拼音'),
+            'channal_ename' => Yii::t('common', '聚道拼音'),
+            'device_name' => Yii::t('common', '设备名称'),
+            'device_no' => Yii::t('common', '设备号码'),
+            'created_at' => Yii::t('common', '创建时间'),
+            'updated_at' => Yii::t('common', '更新时间'),
+            'is_del' => Yii::t('common', '是否逻辑删除'),
         ];
     }
 }

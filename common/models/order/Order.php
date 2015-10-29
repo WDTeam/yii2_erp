@@ -47,9 +47,6 @@ use Yii;
 class Order extends ActiveRecord
 {
 
-    const ORDER_PAY_TYPE_OFF_LINE = 1;
-    const ORDER_PAY_TYPE_ON_LINE = 2;
-    const ORDER_PAY_TYPE_POP = 3;
     const MANUAL_ASSIGN_lONG_TIME = 900;
 
     public $order_before_status_dict_id;

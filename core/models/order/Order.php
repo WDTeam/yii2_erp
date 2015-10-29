@@ -12,6 +12,7 @@ namespace core\models\order;
 use boss\controllers\operation\OperationGoodsController;
 use boss\controllers\operation\OperationShopDistrictController;
 use common\models\order\OrderExtFlag;
+use common\models\order\OrderExtPay;
 use common\models\order\OrderExtWorker;
 use core\models\customer\Customer;
 use core\models\customer\CustomerAddress;
@@ -137,7 +138,7 @@ class Order extends OrderModel
             $order['order_id'] = $this->id;
             $order_model = OrderSearch::getOne($this->id);
             switch ($this->orderExtPay->order_pay_type) {
-                case self::ORDER_PAY_TYPE_OFF_LINE://现金支付
+                case OrderExtPay::ORDER_PAY_TYPE_OFF_LINE://现金支付
                     //交易记录
                     $order['customer_trans_record_cash'] = $this->order_money;
                     $order['general_pay_source'] = 20;
@@ -146,7 +147,7 @@ class Order extends OrderModel
                         OrderStatus::_payment($order_model, ['OrderExtPay']);
                     }
                     break;
-                case self::ORDER_PAY_TYPE_ON_LINE://线上支付
+                case OrderExtPay::ORDER_PAY_TYPE_ON_LINE://线上支付
                     if ($this->orderExtPay->order_pay_money == 0) { //如果需要支付的金额等于0 则全部走余额支付
                         //交易记录
                         $order['customer_trans_record_online_balance_pay'] = $this->orderExtPay->order_use_acc_balance;
@@ -157,7 +158,7 @@ class Order extends OrderModel
                         }
                     }
                     break;
-                case self::ORDER_PAY_TYPE_POP://第三方预付
+                case OrderExtPay::ORDER_PAY_TYPE_POP://第三方预付
                     //交易记录
                     $order['customer_trans_record_pre_pay'] = $this->orderExtPop->order_pop_order_money;
                     $order['general_pay_source'] = $this->channel_id;
@@ -508,9 +509,9 @@ class Order extends OrderModel
         ]);
 
 
-        if ($this->order_pay_type == 3) { //第三方预付
+        if ($this->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_POP) { //第三方预付
             $this->order_pop_operation_money = $this->order_money - $this->order_pop_order_money; //渠道运营费
-        } elseif ($this->order_pay_type == 2) {//线上支付
+        } elseif ($this->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_ON_LINE) {//线上支付
             $this->order_pay_money = $this->order_money; //支付金额
             if (!empty($this->coupon_id)) {//是否使用了优惠券
                 $coupon = self::getCouponById($this->coupon_id);

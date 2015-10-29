@@ -39,19 +39,31 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php 
 //城市
 $city_name = core\models\operation\OperationCity::getCityName($model->operation_city_id);
-//var_dump($city_name);
 
-//来源
-$customerExtSrc = CustomerExtSrc::getFirstSrc($model->id);
-$platform_name = $customerExtSrc == false ? '-' : $customerExtSrc->platform_name == '' ? '-' : $customerExtSrc->platform_name; 
-$channal_name = $customerExtSrc == false ? '-' : $customerExtSrc->channal_name == '' ? '-' : $customerExtSrc->channal_name; 
-$device_name = $customerExtSrc == false ? '-' : $customerExtSrc->device_name == '' ? '-' : $customerExtSrc->device_name; 
-$device_no = $customerExtSrc == false ? '-' : $customerExtSrc->device_no == '' ? '-' : $customerExtSrc->device_no;
-//var_dump($platform_name);
-//var_dump($channal_name);
-//var_dump($device_name);
-//var_dump($device_no);
-//exit();
+$customer_ext_srcs = Customer::getSrcs($model->customer_phone);
+$platform_name_str = '';
+$channal_name_str = '';
+$device_name_str = '';
+$device_no_str = '';
+if(empty($customer_ext_srcs)){
+	$platform_name_str = '-';
+	$channal_name_str = '-';
+	$device_name_str = '-';
+	$device_no_str = '-';
+}else{
+	foreach($customer_ext_srcs as $customer_ext_src){
+		$platform_name= empty($customer_ext_src) ? '-' : empty($customer_ext_src['platform_name']) ? '-' : $customer_ext_src['platform_name']; 
+		$channal_name = empty($customer_ext_src) ? '-' : empty($customer_ext_src['channal_name']) ? '-' : $customer_ext_src['channal_name']; 
+		$device_name = empty($customer_ext_src) ? '-' : empty($customer_ext_src['device_name']) ? '-' : $customer_ext_src['device_name']; 
+		$device_no = empty($customer_ext_src) ? '-' : empty($customer_ext_src['device_no']) ? '-' : $customer_ext_src['device_no']; 
+
+		$platform_name_str .= $platform_name.'&nbsp;&nbsp;';
+		$channal_name_str .= $channal_name.'&nbsp;&nbsp;';
+		$device_name_str .= $device_name.'&nbsp;&nbsp;';
+		$device_no_str .= $device_no.'&nbsp;&nbsp;';
+	}
+}
+
 
 //全部服务地址
 $customerAddress = CustomerAddress::listAddress($model->id);
@@ -118,7 +130,7 @@ echo DetailView::widget([
             'attribute'=>'', 
             'label'=>'平台',
             'format'=>'raw',
-            'value'=>$platform_name,
+            'value'=>$platform_name_str,
             'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],
@@ -126,7 +138,7 @@ echo DetailView::widget([
             'attribute'=>'', 
             'label'=>'聚道',
             'format'=>'raw',
-            'value'=>$channal_name,
+            'value'=>$channal_name_str,
             'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],
@@ -134,7 +146,7 @@ echo DetailView::widget([
             'attribute'=>'', 
             'label'=>'设备',
             'format'=>'raw',
-            'value'=>$device_name,
+            'value'=>$device_name_str,
             'type'=>DetailView::INPUT_SWITCH,
             'valueColOptions'=>['style'=>'width:90%']
         ],
@@ -142,7 +154,7 @@ echo DetailView::widget([
             'attribute'=>'', 
             'label'=>'设备号',
             'format'=>'raw',
-            'value'=>$device_no,
+            'value'=>$device_no_str,
             'type'=>DetailView::INPUT_SWITCH,
             'valueColOptions'=>['style'=>'width:90%']
         ],
@@ -225,6 +237,14 @@ echo DetailView::widget([
             'label'=>'评价总数',
             'format'=>'raw',
             'value'=>Html::a($comment_count, ['customer/customer-comment/index', 'CustomerCommentSearch[customer_id]'=>$model->id]),
+            'type'=>DetailView::INPUT_TEXT,
+            'valueColOptions'=>['style'=>'width:90%']
+        ],
+		[
+            'attribute'=>'', 
+            'label'=>'投诉总数',
+            'format'=>'raw',
+            'value'=>'0',
             'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],
