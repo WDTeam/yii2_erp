@@ -1,6 +1,7 @@
 <?php
 /*
  * BOSS 自动派单运行服务实例
+ * @author 张航<zhanghang@1jiajie.com>
  * @author 张旭刚<zhangxugang@corp.1jiajie.com>
  * @author 林洪优<linhongyou@1jiajie.com>
  * @link http://boss.1jiajie.com/auto-assign/
