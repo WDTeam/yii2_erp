@@ -62,8 +62,18 @@ $(document).ready(function(){
 	_good.eq(5).addClass("good-job");
 	_good.eq(6).addClass("just-so-so");
 	_good.eq(7).addClass("assess");
-	$(".good-job,.just-so-so").click(function(){$(".check").css("display","none")});
-	$(".assess").click(function(){$(".assess_list").css("display","none")});
+	$(".check").css("display","none");
+	// $(".good-job,.just-so-so").click(function(){$(".check").css("display","none")});
+	$(".assess").click(function(){
+		$(".assess_list").css("display","none");
+		$(".check").css("display","block");
+
+	});
+	$(".just-so-so,.good-job").click(function(){
+		$(".assess_list").css("display","block");
+		$(".check").css("display","none");
+
+	});
 
 	//时间插件
 
