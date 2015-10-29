@@ -210,7 +210,7 @@ class AuthController extends \restapi\components\Controller
         $verify_code = $param['verify_code'];
         //验证手机号
         if (!preg_match("/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/", $phone)){
-           return $this->send(null, "请输入正确的手机号", 0, 403);
+           return $this->send(null, "请输入正确手机号", 0, 403);
         }
         try{
             $if_exist = Worker::getWorkerInfoByPhone($phone);
@@ -218,7 +218,7 @@ class AuthController extends \restapi\components\Controller
             return $this->send(null, "boss系统错误", 1024, 403);
         }
         if(empty($if_exist)){
-             return $this->send(null, "该用户不存在", 0, 403);
+             return $this->send(null, "获取不到验证码", 0, 403);
         }
         try{
              $checkRet = WorkerCode::checkCode($phone,$verify_code);

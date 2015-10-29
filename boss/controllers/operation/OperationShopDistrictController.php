@@ -262,4 +262,14 @@ class OperationShopDistrictController extends BaseAuthController
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+    /**
+     * 下拉选择组件AJAX获取sh专用
+     */
+    public function actionListToSelect2($city_id=null, $name=null)
+    {
+        $data = OperationShopDistrict::getCityShopDistrictList($city_id);
+        return json_encode([
+            'results'=>$data
+        ]);
+    }
 }

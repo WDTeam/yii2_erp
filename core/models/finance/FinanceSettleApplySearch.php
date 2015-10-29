@@ -57,7 +57,11 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     
     const PARTTIME = 2;//兼职
     
-    public $roleDes = [self::FULLTIME=>'全职',self::PARTTIME=>'兼职'];
+    const PARKTIME = 3;//高峰
+    
+    const INTERVALTIME = 4;//时段
+    
+    public $roleDes = [self::FULLTIME=>'全职',self::PARTTIME=>'兼职',self::PARKTIME=>'高峰',self::INTERVALTIME=>'时段'];
             
     public $latestSettleTime;//上次结算日期
     

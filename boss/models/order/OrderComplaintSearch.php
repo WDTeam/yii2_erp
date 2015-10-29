@@ -6,6 +6,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use boss\models\order\OrderComplaint;
 use yii\base\ExitException;
+use yii\web\Session;
 
 class OrderComplaintSearch extends OrderComplaint{
 	public $order_worker_name;
@@ -55,10 +56,28 @@ class OrderComplaintSearch extends OrderComplaint{
 		]);
 		$query->andFilterWhere(['like','ejj_order_ext_worker.order_worker_name',$this->order_worker_name])->
 		andFilterWhere(['like','complaint_phone',$this->complaint_phone])->
-		andFilterWhere(['like','ejj_orderExtWorker.order_worker_phone',$this->order_worker_phone]);
+		andFilterWhere(['like','ejj_order_ext_worker.order_worker_phone',$this->order_worker_phone]);
 		if(!empty($params['starttime']) && !empty($params['endtime'])){
 			$query->andFilterWhere(['between', OrderComplaint::tableName().'.created_at', strtotime($params['starttime']), strtotime($params['endtime'])]);
 		}
 		return 	$dataProvider;
+	}
+	/**
+	 * 对url的分类进行存储检测
+	 * @param unknown $params
+	 * @return string|boolean
+	 */
+	public function urlParameterProcessing($params){
+		$session = Yii::$app->session;
+		unset($params['s']);
+		if(!empty($params) && is_array($params)){
+			$session->set('param', $params);
+			$param = $session->get("param");$path = $session->get("path");
+			$url = http_build_query($param);
+			return $url;
+		}else{
+			return false;
+		}
+		
 	}
 }

@@ -42,6 +42,12 @@ class OperationCityController extends BaseAuthController
     {
         $searchModel = new OperationCitySearch();
         $params = Yii::$app->request->post();//getQueryParams();
+
+        if (isset($params['fields']) && $params['fields'] == 0) {
+            $params['fields'] = 'province_name';
+            $params['keyword'] = '';
+        }
+
         $dataProvider = $searchModel->search($params);
         return $this->render('index', [
             'dataProvider' => $dataProvider,

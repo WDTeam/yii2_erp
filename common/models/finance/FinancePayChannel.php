@@ -80,6 +80,8 @@ class FinancePayChannel extends \yii\db\ActiveRecord
         return $data['finance_pay_channel_name'];
     }
 
+    
+    
     /**
      * 创建缓存
      * @param $name 缓存名称

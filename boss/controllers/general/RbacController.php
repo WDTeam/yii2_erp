@@ -2,7 +2,7 @@
 namespace boss\controllers\general;
 
 use Yii;
-use boss\models\SystemUser;
+use core\models\general\SystemUser;
 use yii\rbac\Item;
 use core\models\auth\AuthItem;
 use core\models\auth\AuthItemSearch;

@@ -44,6 +44,11 @@ $(document).ready(function($){
 		var cancelType = $(":radio[name='radio_cancelType']:checked").val();
 		var cancelNote = $("#text_CancelNote").val();
 		
+		if (cancelType == undefined){
+			alert("请选择取消原因！");
+			return;
+		}
+		
 		$.ajax({
             type: "POST",
             url:  "/order/order/cancel-order",

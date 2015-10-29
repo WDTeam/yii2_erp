@@ -9,11 +9,10 @@ use core\models\finance\FinanceSettleApplyLogSearch;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use common\models\finance\FinanceWorkerOrderIncome;
-use common\models\finance\FinanceWorkerNonOrderIncome;
 use core\models\finance\FinanceWorkerOrderIncomeSearch;
 use core\models\finance\FinanceWorkerNonOrderIncomeSearch;
 use core\models\finance\FinanceShopSettleApplySearch;
+use core\models\worker\Worker;
 use PHPExcel;
 use PHPExcel_IOFactory;
 
@@ -455,14 +454,17 @@ class FinanceSettleApplyController extends BaseAuthController
     * 3.获取每个阿姨Id，在2015.9.21-2015.9.27已完成订单的总收入信息，
     *   按收入类型分组的订单总金额，保存到结算表
     */
-    public function actionSelfPartTimeWorkerCycleSettlement(){
+    public function actionSelfParttimeWorkerCycleSettlement(){
         $settleStartTime = FinanceSettleApplySearch::getFirstDayOfLastWeek();//统计开始时间,上周第一天
-        echo $settleStartTime.'------';
+        echo date('Y-m-d 00:00:00', strtotime('-1 week last monday')).'------';
         $settleEndTime = FinanceSettleApplySearch::getLastDayOfLastWeek();//统计结束时间,上周最后一天
-        echo $settleEndTime.'------';
-        //获取阿姨的数组信息
-        $partimeWorkerArr = array(['worker_id'=>'555','worker_name'=>'阿姨1','worker_idcard'=>'4210241983','worker_bank_card'=>'62217978'],['worker_id'=>'666','worker_name'=>'阿姨2','worker_idcard'=>'4210241984','worker_bank_card'=>'622174747']);
-        $this->saveAndGenerateSettleData($partimeWorkerArr,$settleStartTime,$settleEndTime);
+        echo date('Y-m-d 23:59:59', strtotime('last sunday')).'------';
+        //自营兼职阿姨的结算
+        $selfPartimeWorkerArr = Worker::getWorkerIds(FinanceSettleApplySearch::SELF_OPERATION, FinanceSettleApplySearch::PARTTIME);
+        $this->saveAndGenerateSettleData($selfPartimeWorkerArr,$settleStartTime,$settleEndTime);
+        //门店阿姨的结算
+        $nonSelfWorkerArr = Worker::getWorkerIds(FinanceSettleApplySearch::NON_SELF_OPERATION, null);
+        $this->saveAndGenerateSettleData($nonSelfWorkerArr,$settleStartTime,$settleEndTime);
     }
     
     /**
@@ -474,13 +476,13 @@ class FinanceSettleApplyController extends BaseAuthController
     * 3.获取每个阿姨Id，在2015.9.1-2015.9.30已完成订单的总收入信息，
     *   按收入类型分组的订单总金额，保存到结算表
     */
-    public function actionSelfFullTimeWorkerCycleSettlement(){
+    public function actionSelfFulltimeWorkerCycleSettlement(){
         $settleStartTime = FinanceSettleApplySearch::getFirstDayOfSpecifiedMonth();//统计开始时间,上个月的第一天
         echo date('Y-m-01 00:00:00', strtotime('-1 month')).'------';
         $settleEndTime = FinanceSettleApplySearch::getLastDayOfSpecifiedMonth();//统计结束时间,上个月的最后一天
         echo date('Y-m-t 23:59:59', strtotime('-1 month')).'------';
         //获取所有"自营全职"得阿姨的Id列表,不考虑以下状态：拉黑、封号、离职、请假、休假
-        $partimeWorkerArr = array(['worker_id'=>'555','worker_name'=>'阿姨1','worker_idcard'=>'4210241983','worker_bank_card'=>'62217978'],['worker_id'=>'666','worker_name'=>'阿姨2','worker_idcard'=>'4210241984','worker_bank_card'=>'622174747']);
+        $partimeWorkerArr = Worker::getWorkerIds(FinanceSettleApplySearch::SELF_OPERATION, FinanceSettleApplySearch::FULLTIME);
         $this->saveAndGenerateSettleData($partimeWorkerArr,$settleStartTime,$settleEndTime);
     }
     
