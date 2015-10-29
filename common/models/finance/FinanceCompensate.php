@@ -27,7 +27,7 @@ use Yii;
  * @property string $comment
  * @property integer $updated_at
  * @property integer $created_at
- * @property integer $isdel
+ * @property integer $is_softdel
  */
 class FinanceCompensate extends \yii\db\ActiveRecord
 {
@@ -45,7 +45,7 @@ class FinanceCompensate extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['finance_complaint_id', 'worker_id', 'customer_id', 'updated_at', 'created_at', 'isdel','finance_compensate_status'], 'integer'],
+            [['finance_complaint_id', 'worker_id', 'customer_id', 'updated_at', 'created_at', 'is_softdel','finance_compensate_status'], 'integer'],
             [['finance_compensate_money','finance_compensate_total_money','finance_compensate_insurance_money','finance_compensate_company_money','finance_compensate_worker_money'], 'number'],
             [['finance_compensate_reason', 'comment','worker_tel','worker_name','customer_name'], 'string'],
             [['finance_compensate_oa_code'], 'string', 'max' => 40],
@@ -83,7 +83,7 @@ class FinanceCompensate extends \yii\db\ActiveRecord
             'comment' => Yii::t('app', '备注'),
             'updated_at' => Yii::t('app', '审核时间'),
             'created_at' => Yii::t('app', '申请时间'),
-            'isdel' => Yii::t('app', '0 正常 1删除'),
+            'is_softdel' => Yii::t('app', '0 正常 1删除'),
         ];
     }
 }

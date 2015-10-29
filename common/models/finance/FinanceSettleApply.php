@@ -41,7 +41,7 @@ use Yii;
  * @property integer $finance_settle_apply_endtime 
  * @property integer $isManagementFeeDone
  * @property integer $isWorkerConfirmed
- * @property integer $isdel
+ * @property integer $is_softdel
  * @property integer $updated_at
  * @property integer $created_at
  * @property text $comment
@@ -83,7 +83,7 @@ class FinanceSettleApply extends \yii\db\ActiveRecord
     {
         return [
 //            [['worker_id', 'worker_tel', 'worker_type_id', 'worker_type_name', 'finance_settle_apply_man_hour', 'finance_settle_apply_order_money', 'finance_settle_apply_order_money_except_cash', 'finance_settle_apply_money', 'finance_settle_apply_status', 'finance_settle_apply_cycle', 'finance_settle_apply_cycle_des'], 'required'],
-            [['worker_id', 'worker_type_id', 'finance_settle_apply_man_hour', 'finance_settle_apply_status', 'finance_settle_apply_cycle', 'finance_settle_apply_starttime', 'finance_settle_apply_endtime', 'isdel', 'updated_at', 'created_at'], 'integer'],
+            [['worker_id', 'worker_type_id', 'finance_settle_apply_man_hour', 'finance_settle_apply_status', 'finance_settle_apply_cycle', 'finance_settle_apply_starttime', 'finance_settle_apply_endtime', 'is_softdel', 'updated_at', 'created_at'], 'integer'],
             [['finance_settle_apply_order_money', 'finance_settle_apply_order_cash_money', 'finance_settle_apply_order_money_except_cash',  'finance_settle_apply_money','finance_settle_apply_task_count','finance_settle_apply_task_money','finance_settle_apply_base_salary','finance_settle_apply_base_salary_subsidy','finance_settle_apply_money_except_deduct_cash','finance_settle_apply_money_deduction','finance_settle_apply_money_except_cash',], 'number'],
             [['finance_settle_apply_cycle_des'], 'string'],
             [['worker_tel'], 'string', 'max' => 11],
@@ -133,7 +133,7 @@ class FinanceSettleApply extends \yii\db\ActiveRecord
             'finance_settle_apply_endtime' => Yii::t('app', '结算结束时间'),
             'isManagementFeeDone' => Yii::t('app', '门店服务管理费是否已结算，0为未结算，1为已结算'),
             'isWorkerConfirmed' => Yii::t('app', '阿姨是否已经确认结算'),
-            'isdel' => Yii::t('app', '是否被删除，0为启用，1为删除'), 
+            'is_softdel' => Yii::t('app', '是否被删除，0为启用，1为删除'), 
             'updated_at' => Yii::t('app', '审核时间'),
             'created_at' => Yii::t('app', '创建时间'),
             'comment' => Yii::t('app', '备注'),

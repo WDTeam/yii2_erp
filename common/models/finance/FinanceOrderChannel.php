@@ -65,6 +65,7 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
 		$payatainfo=FinancePayChannel::find()->select('finance_pay_channel_name')->where($ordewhere)->asArray()->one();
     	return $payatainfo['finance_pay_channel_name'];
     }
+     
     /**
     * 获取订单渠道列表  支付使用
     * @date: 2015-10-9
@@ -131,6 +132,15 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
         return $data['finance_order_channel_name']?$data['finance_order_channel_name']:'官方支付对账';
     }
 
+    
+public static function getOrderChannelByid($name)
+    {
+        $data = self::find()->where(['finance_order_channel_name'=>$name])->asArray()->one();
+        return $data['id']?$data['id']:0;
+    }
+    
+    
+    
     /**
      * 创建缓存
      * @param $name 缓存名称

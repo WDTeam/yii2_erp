@@ -2,6 +2,7 @@
 
 namespace core\models\payment;
 
+use core\models\order\OrderSearch;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -31,6 +32,34 @@ class GeneralPaySearch extends GeneralPay
     {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
+    }
+
+    /**
+     * 获取订单金额总和
+     * @param $order_id intger | array
+     */
+    public static function getOrderSumMoney($order_id)
+    {
+        //查询支付表数据
+        $data = OrderSearch::getOrderExtPayData($order_id);
+        //计算需要支付的金额
+        $order_pay_money = 0;
+        foreach($data as $val)
+        {
+            $order_pay_money += $val['order_pay_money'];
+        }
+        return $order_pay_money;
+    }
+
+    /**
+     * 查询支付状态
+     * @param $order_id 订单ID
+     * @param int $status 支付状态 1成功,0失败
+     * @return array
+     */
+    public static function searchPayStatus($order_id, $status=1){
+        $where = ['order_id'=>$order_id,'general_pay_status'=>$status];
+        return GeneralPay::find()->where($where)->asArray()->one();
     }
 
     /**

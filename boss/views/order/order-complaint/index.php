@@ -65,6 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						 	<label class="m_iphone">
 						  		阿姨姓名<input type="text" name="OrderComplaintSearch[order_worker_name]" value="<?php if(!empty($params['OrderComplaintSearch']['order_worker_name'])){ echo $params['OrderComplaintSearch']['order_worker_name'];}?>"/>
 						  	</label>
+							<?= Html::submitButton('查询', ['class' => 'btn btn-primary']) ?>
 						 </div>
 						<div class="m_fr mar-t">
 							<label class="m_iphone">
@@ -79,7 +80,6 @@ $this->params['breadcrumbs'][] = $this->title;
 							<input type="text" name="starttime" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})" value="<?php if(!empty($params['starttime'])){echo $params['starttime'];}?>" placeholder=""> 到
 							<input type="text" name="endtime" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})" value="<?php if(!empty($params['endtime'])){echo $params['endtime'];}?>" placeholder="">
 						   </div>
-						    <?= Html::submitButton('查询', ['class' => 'btn btn-primary']) ?>
 						</div>
 					<?php ActiveForm::end(); ?>
 					  <div class="clear"></div>

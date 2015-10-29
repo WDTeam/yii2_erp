@@ -263,6 +263,16 @@ class WorkerController extends BaseAuthController
         $model->worker_vacation_application_approve_status = $status;
         $model->worker_vacation_application_approve_time = time();
         $model->save();
+        if($status==1){
+            $workerVacationModel = new WorkerVacation;
+            $workerVacationModel->worker_id = $model->worker_id;
+            $workerVacationModel->worker_vacation_start_time = $model->worker_vacation_application_start_time;
+            $workerVacationModel->worker_vacation_finish_time = $model->worker_vacation_application_end_time;
+            $workerVacationModel->worker_vacation_type = $model->worker_vacation_application_type;
+            $workerVacationModel->worker_vacation_source = 1;
+            $workerVacationModel->worker_vacation_status = 1;
+            $workerVacationModel->save();
+        }
         return $this->redirect(['index','WorkerSearch[worker_vacation_application_approve_status]'=>0]);
     }
 
@@ -739,7 +749,7 @@ class WorkerController extends BaseAuthController
 //            ]
 //        ];
         echo '<pre>';
-        var_dump(Worker::getWorkerTimeLine(1,2,'',30));die;
+        var_dump(Worker::getWorkerWorkTime(1,1446134400,1446254400));die;
 //        die;
 //        var_dump(WorkerVacationApplication::getApplicationList(18517));
 //
@@ -748,7 +758,7 @@ class WorkerController extends BaseAuthController
 //        die;
        // Yii::$app->redis->set('worker_1',json_encode($workerInfo));
        // die;
-        Yii::$app->redis->set('worker_2','2014-05-05');
+        Yii::$app->redis->set('1','2014-05-05');
         $workers = Yii::$app->redis->mget('worker_1','worker_2','worker_3');
 //          Yii::$app->redis->srem('district_1','16682');
 //        Yii::$app->redis->sadd('district_1','16684','16683','16685','16686','16687','16688','16689','16682');

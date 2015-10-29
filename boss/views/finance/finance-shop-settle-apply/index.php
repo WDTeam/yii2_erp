@@ -47,18 +47,18 @@ $this->params['isFinacePayedConfirm'] = $isFinacePayedConfirm;
                 'template' =>'{view} {agree} {disagree}',
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Yii::$app->urlManager->createUrl(['/finance/finance-shop-settle-apply/view', 'id' => $model->id], ['target'=>'_blank']), [
+                        return Html::a('<span class="btn btn-primary">查看</span>', Yii::$app->urlManager->createUrl(['/finance/finance-shop-settle-apply/view', 'id' => $model->id], ['target'=>'_blank']), [
                             'title' => Yii::t('yii', '查看'),'data-pjax'=>'0','target' => '_blank',
                         ]);
                     },
                     'agree' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-ok"></span>', Yii::$app->urlManager->createUrl(['/finance/finance-shop-settle-apply/review', 'id' => $model->id,'review_section'=>$this->params['review_section'],'isFinacePayedConfirm'=>$this->params['isFinacePayedConfirm'],'is_ok'=>1]), [
+                        return Html::a('<span class="btn btn-primary">审核通过</span>', Yii::$app->urlManager->createUrl(['/finance/finance-shop-settle-apply/review', 'id' => $model->id,'review_section'=>$this->params['review_section'],'isFinacePayedConfirm'=>$this->params['isFinacePayedConfirm'],'is_ok'=>1]), [
                             'title' => Yii::t('yii', $this->params['isFinacePayedConfirm']?'确认打款':'审核通过'),
                             'class'=>'agree',
                         ]);
                     },
                     'disagree' => function ($url, $model,$review_section) {
-                        return Html::a('<span class="glyphicon glyphicon-remove" style = "display:'.($this->params['isFinacePayedConfirm']?'none':'block').'"></span>',
+                        return Html::a('<span class="btn btn-primary" style = "display:'.($this->params['isFinacePayedConfirm']?'none':'').'">审核不通过</span>',
                             [
                                 '/finance/finance-shop-settle-apply/review-failed-reason',
                                 'id' => $model->id, 'review_section'=>$this->params['review_section'],'is_ok'=>0,

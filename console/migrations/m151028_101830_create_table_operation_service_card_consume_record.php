@@ -18,7 +18,7 @@ class m151028_101830_create_table_operation_service_card_consume_record extends 
 			'customer_trans_record_transaction_id' => Schema::TYPE_BIGINT.'(20) NOT NULL DEFAULT 0 COMMENT \'服务交易流水\'',
 			'order_id' => Schema::TYPE_BIGINT.'(20) NOT NULL DEFAULT 0 COMMENT \'服务订单id\'',
 			'order_code' => Schema::TYPE_STRING.'(20) NOT NULL DEFAULT \'\' COMMENT \'服务订单号\'',
-			'service_card_with_customer _id' => Schema::TYPE_BIGINT.'(20) NOT NULL DEFAULT 0 COMMENT \'服务卡id\'',
+			'service_card_with_customer_id' => Schema::TYPE_BIGINT.'(20) NOT NULL DEFAULT 0 COMMENT \'服务卡id\'',
 			'service_card_with_customer_code' => Schema::TYPE_STRING.'(64) NOT NULL DEFAULT \'\' COMMENT \'服务卡号\'',
 			'service_card_consume_record_front_money' => Schema::TYPE_DECIMAL.'(8,2) NOT NULL DEFAULT 0 COMMENT \'使用前金额\'',
 			'service_card_consume_record_behind_money' => Schema::TYPE_DECIMAL.'(8,2) NOT NULL DEFAULT 0 COMMENT \'使用后金额\'',

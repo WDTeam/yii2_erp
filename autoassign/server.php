@@ -10,6 +10,7 @@ define('DEBUG', 'on');
 define("WEBPATH", str_replace("\\","/", __DIR__));
 define("CONFIG_PATH", WEBPATH."/autoassign.config.php");
 define("REDIS_IS_SERVER_SUSPEND","REDIS_IS_SERVER_SUSPEND");
+define("REDIS_AUTOASSIGN_CONFIG","REDIS_AUTOASSIGN_CONFIG");
 
 $assign_config = require(CONFIG_PATH);
 
@@ -34,6 +35,7 @@ class server
         echo date('Y-m-d H:i:s')." 自动指派服务启动中";
         $this->config = $config;
         $this->connectRedis();
+        $this->redis->set(REDIS_AUTOASSIGN_CONFIG,json_encode($this->config));
         $this->saveStatus(null);
         $this->serv = new swoole_websocket_server($config['SERVER_LISTEN_IP'], $config['SERVER_LISTEN_PORT']);
         //初始化swoole服务
@@ -171,6 +173,8 @@ class server
                 $this->config['FULLTIME_WORKER_TIMEOUT'] = $data['fulltimeout_end'];
                 $this->config['FREETIME_WORKER_TIMEOUT'] = $data['freetimeout_end'];
                 $this->config['SYSTEM_ASSIGN_TIMEOUT'] = $data['freetimeout_end'];
+                
+                $this->redis->set(REDIS_AUTOASSIGN_CONFIG,json_encode($this->config));
                 echo date('Y-m-d H:i:s')." 配置已更新\n";
             }
             break;
@@ -343,8 +347,13 @@ class server
     /*
      * 客户端断开时触发
      */
-    public function onClose($server, $fd) {
+    public function onClose($server, $client_id, $from_id) {
         echo date('Y-m-d H:i:s')." Client Close.\n";
+        try{
+            parent::onClose($server, $client_id, $from_id);
+        } catch (Exception $ex) {
+            echo date('Y-m-d H:i:s').$ex->getMessage();
+        }
     }
     /*
      * 多线程任务
@@ -383,11 +392,9 @@ class server
             echo date('Y-m-d H:i:s').$ex->getMessage()."\n";
             var_dump($data);
             echo $ex->getTrace()."\n";
-        } finally {
-            return $data;
-        }
+        } 
+        return $data;
     }
-
     /*
      * 任务完成时触发
      */
@@ -405,7 +412,11 @@ class server
         $msg = json_encode($msg);
         foreach ($server->connections as $clid => $info)
         {
-            $server->push($clid, $msg);
+            try{
+                $server->push($clid, $msg);
+            } catch (Exception $ex) {
+                echo date('Y-m-d H:i:s').$ex->getMessage();
+            }
         }
     }
     /**
