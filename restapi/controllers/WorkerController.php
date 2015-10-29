@@ -4,7 +4,7 @@ namespace api\controllers;
 use Yii;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\worker\Worker;
-use \api\models\Worker as ApiWorker;
+use \restapi\models\Worker as ApiWorker;
 use \core\models\worker\WorkerSkill;
 use \core\models\worker\WorkerVacationApplication;
 use \core\models\finance\FinanceSettleApplySearch;
@@ -143,18 +143,23 @@ class WorkerController extends \api\components\Controller
          }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
-        $vacationTimeArr = explode("_",$vacationTimeLine);
-        
-        //根据请假类型判断请假时间合法性
+        $vacationTimeArr = explode("_",$param['leave_time']);
         $vacationTime = array_keys($vacationTimeLine);
+        //根据请假类型判断请假时间合法性
         $firstDay = $vacationTimeArr[0];
         $secondDay = isset($vacationTimeArr[1])?$vacationTimeArr[1]:"";
         if(!in_array($firstDay, $vacationTime)||!$vacationTimeLine[$firstDay]){
             return $this->send(null, "请假时间不在请假时间范围内", 0, 403);
         }
+        if($vacationType==1&&count($vacationTimeArr)>2){
+            return $this->send(null, "休假最多只能选择两天", 0, 403);
+        }
+        if($vacationType==2&&count($vacationTimeArr)>1){
+            return $this->send(null, "事假最多只能选择一天", 0, 403);
+        }
         //休假或者事假申请（一天）
         if(!WorkerVacationApplication::createVacationApplication($checkResult['worker_id'],$firstDay,$vacationType)){
-            return $this->send(null, "休假申请失败", 0, 403);
+            return $this->send(null, "请假申请失败", 0, 403);
         }
         //如果选择休假且选择了两天
         if($vacationType==1&&$secondDay){//休假
@@ -162,7 +167,7 @@ class WorkerController extends \api\components\Controller
                 return $this->send(null, "请假时间不在请假时间范围内", 0, 403);
             }
             if(!WorkerVacationApplication::createVacationApplication($checkResult['worker_id'],$secondDay,$vacationType)){
-                return $this->send(null, "休假申请失败", 0, 403);
+                return $this->send(null, "请假申请失败", 0, 403);
             }
         }
         return $this->send(null, "您的请假已提交，请耐心等待审批");
