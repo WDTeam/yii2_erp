@@ -392,7 +392,7 @@ class Worker extends \dbbase\models\worker\Worker
     public static function getWorkerTimeLine($district_id,$serverDurationTime=2,$beginTime='',$timeLineLength=7,$worker_id=''){
         $disabledTimesArr = self::getCycleTimes($timeLineLength);
         $beginTime = $beginTime ? $beginTime : time();
-        $beginTime = strtotime(date('Y-m-d'),$beginTime);
+        $beginTime = strtotime(date('Y-m-d',$beginTime));
 
         //如果无商圈id,返回不可用排班表
         if(empty($district_id)){

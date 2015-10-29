@@ -8,7 +8,7 @@ use \core\models\customer\CustomerAddress;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\operation\coupon\CouponCustomer;
 use \core\models\operation\coupon\Coupon;
-use \core\models\customer\CustomerTransRecord;
+use \core\models\customer\PaymentCustomerTransRecord;
 use \core\models\customer\CustomerExtBalance;
 use \core\models\order\Order;
 use \core\models\customer\CustomerComment;
@@ -775,7 +775,7 @@ class UserController extends \restapi\components\Controller
                  *
                  * @param int $customer 用户id
                  */
-                $userRecord = CustomerTransRecord::queryRecord($customer->id);
+                $userRecord = PaymentCustomerTransRecord::queryRecord($customer->id);
 
                 $ret["userBalance"] = $userBalance;
                 $ret["userRecord"] = $userRecord;

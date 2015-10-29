@@ -249,7 +249,7 @@ class OrderSearch extends Order
      */
     public static function WorkerOrderExistsConflict($worker_id, $booked_begin_time, $booked_end_time)
     {
-        return Order::find()->joinWith(['orderExtWorker'])->where(['worker_id' => $worker_id])
+       $count = Order::find()->joinWith(['orderExtWorker'])->where(['worker_id' => $worker_id])
             ->andWhere(
                 ['or',
                     [
@@ -270,6 +270,7 @@ class OrderSearch extends Order
                 ]
 
             )->count();
+        return $count;
     }
 
     /**
