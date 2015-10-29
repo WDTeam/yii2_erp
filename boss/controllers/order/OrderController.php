@@ -108,6 +108,15 @@ class OrderController extends BaseAuthController
         return Order::getCountyList($city_id);
     }
 
+    public function actionGetTimeRangeList()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $order_booked_count = Yii::$app->request->get('order_booked_count');
+        $district_id = Yii::$app->request->get('district_id');
+        $date = Yii::$app->request->get('date');
+        return Order::getOrderBookedTimeRangeList($district_id,$order_booked_count,$date);
+    }
+
     public function actionCoupons()
     {
         $id = Yii::$app->request->get('id');
