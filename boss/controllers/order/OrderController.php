@@ -30,9 +30,6 @@ class OrderController extends BaseAuthController
     public function actionTest()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        return Order::isPaymentOnline(14,0,24,'aaa','2015102942279250');
-
-//       return OrderSearch::getPushWorkerOrders(18513,$page_size=20,$page=1,false);
         return OrderTool::createOrderCode();
     }
     
@@ -55,7 +52,7 @@ class OrderController extends BaseAuthController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $customer = Customer::getCustomerInfo($phone);
         if(empty($customer)){
-            if(Customer::adminAddCustomer($phone)) {
+            if(Customer::addCustomer($phone,20)) {
                 $customer = Customer::getCustomerInfo($phone);
             }
         }

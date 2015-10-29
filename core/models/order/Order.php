@@ -237,7 +237,7 @@ class Order extends OrderModel
     {
         $order = OrderSearch::getOne($order_id);
         $order->setAttributes([
-            'order_pay_type' => Order::ORDER_PAY_TYPE_ON_LINE,
+            'order_pay_type' => OrderExtPay::ORDER_PAY_TYPE_ON_LINE,
             'admin_id' => $admin_id,
             'pay_channel_id' => $pay_channel_id,
             'order_pay_channel_name' => $order_pay_channel_name,
@@ -439,7 +439,7 @@ class Order extends OrderModel
                 $order->order_cs_memo = $memo;
                 $result = OrderStatus::_cancel($order);
             }
-            if($result && $order->orderExtPay->order_pay_type==2 && $current_status!=OrderStatusDict::ORDER_INIT){
+            if($result && $order->orderExtPay->order_pay_type==OrderExtPay::ORDER_PAY_TYPE_ON_LINE && $current_status!=OrderStatusDict::ORDER_INIT){
                 //TODO 调高峰的退款接口
             }
         }else{
