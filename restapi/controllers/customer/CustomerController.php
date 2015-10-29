@@ -1,6 +1,6 @@
 <?php
 
-namespace api\controllers\customer;
+namespace restapi\controllers\customer;
 
 use Yii;
 use core\models\customer\CustomerAccessToken;
@@ -11,7 +11,7 @@ use core\models\comment\CustomerCommentTag;
 /**
  * CustomerController implements the CRUD actions for Customer model.
  */
-class CustomerController extends \api\components\Controller
+class CustomerController extends \restapi\components\Controller
 {
 
     /**
