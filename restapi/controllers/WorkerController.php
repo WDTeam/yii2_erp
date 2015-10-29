@@ -539,18 +539,17 @@ class WorkerController extends \restapi\components\Controller
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *      "code": "ok",
+     *      "code": "1",
      *      "msg": "操作成功.",
      *      "ret": [
      *      {
-     *         "settle_id"=>"32"
-     *         'settle_type' =>"1",
-     *         'settle_year' =>"2014"
-     *         'settle_time'=>'09年07月-09月13日',
-     *         'settle_type' =>1,
-     *         'order_count'=>'10',
-     *         'worker_income'=>'320.00',
-     *         'settle_status'=>"1"
+     *         "settle_id"=>"账单唯一标识"
+     *         'settle_year' =>"账单归属年限"
+     *         'settle_time'=>'账单日期',
+     *         'settle_type' =>"账单类型【1周期账单 2月结账单】",
+     *         'order_count'=>'账单周期内完成的订单总数',
+     *         'worker_income'=>'该账单的阿姨收入',
+     *         'settle_status'=>"账单状态【0未结算 1已结算】"
      *       }
      *      ]
      *       
@@ -559,7 +558,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"error",
+     *      "code":"0",
      *      "msg": "用户认证已经过期,请重新登录"
      *  }
      */
