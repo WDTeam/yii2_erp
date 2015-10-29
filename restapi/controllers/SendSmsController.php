@@ -1,11 +1,11 @@
 <?php
-namespace api\controllers;
+namespace restapi\controllers;
 
 use Yii;
 use \core\models\customer\CustomerCode;
 use \core\models\worker\WorkerCode;
 
-class SendSmsController extends \api\components\Controller
+class SendSmsController extends \restapi\components\Controller
 {
     /**
      * @api {GET} /send-sms/send-v 发短消息 （赵顺利 0% 不使用）

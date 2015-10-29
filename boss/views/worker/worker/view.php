@@ -37,21 +37,17 @@ $items = [
         'active'=>$content1View
     ],
     [
-        'label'=>'<i class="fa fa-fw fa-th-list"></i> 排班表',
+        'label'=>'<i class="fa fa-fw  fa-calendar"></i> 排班表',
         'content'=>$content2,
-        //'linkOptions'=>['data-url'=>\yii\helpers\Url::to(['/worker/view-schedule?id='.$workerModel->id])],
         'active'=>$content2View
     ],
     [
         'label'=>'<i class="fa fa-fw fa-th-list"></i> 请假表',
         'content'=>$content3,
-        //'linkOptions'=>['data-url'=>\yii\helpers\Url::to(['/worker/view-schedule?id='.$workerModel->id])],
-        'active'=>$content2View
     ],
     [
         'label'=>'<i class="fa fa-fw fa-book"></i> 操作记录',
         'content'=>$content4,
-        //'linkOptions'=>['data-url'=>\yii\helpers\Url::to(['/site/tabs-data'])],
         'active'=>false
     ],
 ];
