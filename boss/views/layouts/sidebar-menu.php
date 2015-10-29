@@ -339,22 +339,22 @@ echo Menu::widget(
                         'items' => [
                             [
                                 'label' => '服务卡信息管理',
-                                'url' => ['operation/operation-server-card/index'],
+                                'url' => ['operation/operation-service-card-info/index'],
                                 'icon' => 'fa fa-angle-right',
                             ],
                             [
-                                'label' => '服务卡订单管理',
-                                'url' => ['operation/operation-server-card-order'],
+                                'label' => '服务卡销售记录',
+                                'url' => ['operation/operation-service-card-sell-record/index'],
                                 'icon' => 'fa fa-angle-right',
                             ],
                             [
-                                'label' => '客户服务卡管理',
-                                'url' => ['operation/operation-server-card-customer/index'],
+                                'label' => '服务卡客户关系',
+                                'url' => ['operation/operation-service-card-with-customer/index'],
                                 'icon' => 'fa fa-angle-right',
                             ],
                             [
-                                'label' => '服务卡流水管理',
-                                'url' => ['operation/operation-server-card-record'],
+                                'label' => '服务卡消费记录',
+                                'url' => ['operation/operation-service-card-consume-record/index'],
                                 'icon' => 'fa fa-angle-right',
                             ],
 
