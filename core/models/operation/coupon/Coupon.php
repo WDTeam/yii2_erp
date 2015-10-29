@@ -4,6 +4,7 @@ namespace core\models\operation\coupon;
 
 use Yii;
 use core\models\operation\coupon\CouponCode;
+use yii\base\InvalidParamException;
 
 /**
  * This is the model class for table "{{%coupon}}".
@@ -167,10 +168,12 @@ class Coupon extends \common\models\operation\coupon\Coupon
 	/**
      * get coupon code expirate_at by time type
 	 */
-	public static function getExpirateAtByTimeType($coupon_id, $get_at = time()){
+	public static function getExpirateAtByTimeType($coupon_id, $get_at=null){
 		$coupon = self::findOne($coupon_id);
 		if($coupon == NULL) return false;
-		
+
+		if(empty($get_at)) $get_at = time();
+
 		$expirate_at = 0;
 		switch ($coupon->coupon_time_type)
 		{
@@ -178,23 +181,21 @@ class Coupon extends \common\models\operation\coupon\Coupon
 				if($get_at > $coupon->coupon_begin_at && $get_at < $coupon->coupon_end_at){
 					$expirate_at = $coupon->coupon_end_at;
 				}else{
-					return false;
+					throw new InvalidParamException('优惠卷已过期');
 				}
 			break;
 		
 			case 1;
-				if($get_at > $coupon->coupon_begin_at && $get_at < $coupon_get_end_at){
+				if($get_at > $coupon->coupon_begin_at && $get_at < $coupon->coupon_end_at){
 					$expirate_at =  $get_at + 24 * 3600 * $coupon->coupon_use_end_days;
 				}else{
-					return false;
+					throw new InvalidParamException('优惠卷已过期');
 				}
 				
 			break;
 		
-			
-		
 			default:
-				# code...
+				throw new InvalidParamException('无效的时间类型');
 			break;
 		}
 		return $expirate_at;
@@ -371,5 +372,25 @@ class Coupon extends \common\models\operation\coupon\Coupon
 	    ->where(['coupon_id'=>$this->id])
 	    ->all();
 	    return (array)$models;
+	}
+	/**
+	 * 赔付类型的绑定记录
+	 * @author CoLee
+	 */
+	public function getBindLog()
+	{
+	    $bindM = CouponCustomer::find()
+	    ->where([
+	        'coupon_id'=>$this->id
+	    ])->one();
+	    return $bindM;
+	}
+	/**
+	 * 是否可以绑定
+	 * @author CoLee
+	 */
+	public function whetherCanBind()
+	{
+	    return $this->coupon_category==1 && empty($this->getBindLog());
 	}
 }

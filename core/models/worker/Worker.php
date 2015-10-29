@@ -3,6 +3,7 @@
 namespace core\models\worker;
 
 
+use boss\models\worker\WorkerVacation;
 use common\models\Help;
 use common\models\worker\WorkerVacationApplication;
 use Symfony\Component\Console\Helper\Helper;
@@ -165,6 +166,26 @@ class Worker extends \common\models\worker\Worker
     }
 
     /**
+     * 获取指定时间段内阿姨的工作时间
+     * @param $worker_id
+     * @param $startTime
+     * @param $endTime
+     * @return int
+     */
+    public static function getWorkerWorkTime($worker_id,$startTime,$endTime){
+        $condition = "(worker_vacation_start_time>=$startTime and worker_vacation_finish_time<$endTime) or (worker_vacation_start_time<=$startTime and worker_vacation_finish_time>$startTime) or (worker_vacation_start_time<$endTime and worker_vacation_finish_time>$endTime)";
+        $vacationResult = WorkerVacation::find()->where($condition)->andWhere(['worker_id'=>$worker_id])->select('worker_vacation_start_time,worker_vacation_finish_time')->asArray()->all();
+        $workTime = 0;
+        foreach ((array)$vacationResult as $val) {
+             if($val['worker_vacation_start_time']>=$startTime && $val['worker_vacation_finish_time']<$endTime){
+                $workTime = $workTime+intval($val['worker_vacation_start_time']-$val['worker_vacation_start_time']);
+             }
+
+        }
+        return $workTime;
+    }
+
+    /**
      * 批量获取阿姨id
      * @param  int $type 阿姨类型 1自营 2非自营
      * @param  int $identity_id 阿姨身份id
@@ -194,6 +215,8 @@ class Worker extends \common\models\worker\Worker
             return $workerResult;
         }
     }
+
+
 
     /**
      * 根据条件搜索阿姨
@@ -401,13 +424,12 @@ class Worker extends \common\models\worker\Worker
                     }
                 }
                 if ($isDisabled == 1) {
-                    $timeLineTmp[] = [$val . '-' . $dayTimes[$endKey] => false];
+                    $timeLineTmp[] = ['time'=>$val . '-' . $dayTimes[$endKey],'enable'=>false];
                 } else {
-                    $timeLineTmp[] = [$val . '-' . $dayTimes[$endKey] => true];
+                    $timeLineTmp[] = ['time'=>$val . '-' . $dayTimes[$endKey],'enable'=> true];
                 }
-
-                $timeLine[$date] = $timeLineTmp;
             }
+            $timeLine[] = ['date'=>$date,'timeline'=>$timeLineTmp];
             $timeLineTmp = [];
         }
         return $timeLine;
@@ -478,7 +500,7 @@ class Worker extends \common\models\worker\Worker
     }
 
     /**
-     * 转换时间格式 如果阿姨订单预约 开始时间不是 整点时间和半点时间结束
+     * 转换时间格式 如果阿姨订单预约 开始时间不是 整点时间或半点时间
      * @param $time
      * @return mixed
      */

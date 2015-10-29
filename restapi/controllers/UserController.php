@@ -44,23 +44,23 @@ class UserController extends \restapi\components\Controller
      *       "ret":{
      *       "address":
      *          {
-     *          "id": 2,
-     *          "customer_id": 1,
+     *          "id": 主键,
+     *          "customer_id":关联客户,
      *          "operation_province_id": 110000,
-     *          "operation_city_id": 110100,
-     *          "operation_area_id": 110105,
+     *          "operation_city_id": 市,
+     *          "operation_area_id": 区,
      *          "operation_province_name": "北京",
      *          "operation_city_name": "北京市",
      *          "operation_area_name": "朝阳区",
      *          "operation_province_short_name": "北京",
      *          "operation_city_short_name": "北京",
      *          "operation_area_short_name": "朝阳",
-     *          "customer_address_detail": "某某小区8栋3单元512",
+     *          "customer_address_detail": "详细地址",
      *          "customer_address_status": 1,客户地址类型,1为默认地址，0为非默认地址
-     *          "customer_address_longitude": 116.48641,
-     *          "customer_address_latitude": 39.92149,
-     *          "customer_address_nickname": "王小明",
-     *          "customer_address_phone": "18210922324",
+     *          "customer_address_longitude": 经度,
+     *          "customer_address_latitude": 纬度,
+     *          "customer_address_nickname": "用户昵称",
+     *          "customer_address_phone": "被服务者手机",
      *          "created_at": 1445063798,
      *          "updated_at": 0,
      *          "is_del": 0
@@ -97,6 +97,11 @@ class UserController extends \restapi\components\Controller
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
+
+        //控制添加地址时手机号码必须填写
+        if (empty($param['customer_address_phone']) || empty($param['customer_address_nickname'])) {
+            return $this->send(null, "被服务者手机或被服务者昵称不能为空", 0, 403);
         }
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
@@ -291,16 +296,15 @@ class UserController extends \restapi\components\Controller
         if (empty($model)) {
             return $this->send(null, "地址信息获取失败", 0, 403);
         }
-
         try {
-            if (CustomerAddress::updateAddress($model->id, $model->operation_area_name, $model->customer_address_detail, $model->customer_address_nickname, $model->customer_address_phone)
+            if (CustomerAddress::updateAddress($model->id, $model->operation_province_name, $model->operation_city_name, $model->operation_area_name, $model->customer_address_detail, $model->customer_address_nickname, $model->customer_address_phone)
             ) {
                 return $this->send(null, "设置默认地址成功", 1);
             } else {
 
                 return $this->send(null, "设置默认地址失败", 0, 403);
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 0, 1024);
         }
     }
@@ -349,7 +353,6 @@ class UserController extends \restapi\components\Controller
      */
     public function actionUpdateAddress()
     {
-
         $params = json_decode(Yii::$app->request->getRawBody(), true);
         @$accessToken = $params['access_token'];
         @$addressId = $params['address_id'];
@@ -360,7 +363,6 @@ class UserController extends \restapi\components\Controller
         if (empty($addressId)) {
             return $this->send(null, "地址信息获取失败", 0, 403);
         }
-
         $model = CustomerAddress::getAddress($addressId);
 
         if (empty($model)) {
@@ -368,14 +370,14 @@ class UserController extends \restapi\components\Controller
         }
 
         try {
-            if (CustomerAddress::updateAddress($model->id, @$params['operation_area_name'], @$params['address_detail'], @$params['address_nickname'], @$params['address_phone'])
+            if (CustomerAddress::updateAddress($model->id, @$params['operation_province_name'], @$params['operation_city_name'], @$params['operation_area_name'], @$params['customer_address_detail'], @$params['customer_address_nickname'], @$params['customer_address_phone'])
             ) {
                 return $this->send(null, "修改常用地址成功", 1);
             } else {
 
                 return $this->send(null, "修改常用地址失败", 0, 403);
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 0, 1024);
         }
     }
@@ -442,13 +444,11 @@ class UserController extends \restapi\components\Controller
      */
     public function actionDefaultAddress()
     {
-        $params = Yii::$app->request->get() or
-                $params = json_decode(Yii::$app->request->getRawBody(), true);
+        $params = Yii::$app->request->get() or $params = json_decode(Yii::$app->request->getRawBody(), true);
 
         if (empty($params['access_token']) || !CustomerAccessToken::checkAccessToken($params['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
         }
-
         $customer = CustomerAccessToken::getCustomer($params['access_token']);
 
         if (!empty($customer) && !empty($customer->id)) {
@@ -460,7 +460,7 @@ class UserController extends \restapi\components\Controller
                 }
                 $ret = ['address' => $Address];
                 return $this->send($ret, "获取默认地址成功", 1);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return $this->send(null, "boss系统错误", 0, 1024);
             }
         } else {
@@ -695,39 +695,39 @@ class UserController extends \restapi\components\Controller
      * "code": "1",
      * "msg": "查询成功",
      * "ret": {
-     * "userBalance": "100.00",
+     * "userBalance": "用户余额",
      * "userRecord": [
      * {
      * "id": "1",
-     * "customer_id": "1",
-     *  "order_id": "0",
-     * "order_channel_id": "0",
-     * "customer_trans_record_order_channel": null,
-     * "pay_channel_id": "0",
-     * "customer_trans_record_pay_channel": null,
-     *  "customer_trans_record_mode": "0",
-     * "customer_trans_record_mode_name": null,
-     * "customer_trans_record_coupon_money": "0.00",
-     * "customer_trans_record_cash": "0.00",
-     * "customer_trans_record_pre_pay": "0.00",
-     * "customer_trans_record_online_pay": "0.00",
-     * "customer_trans_record_online_balance_pay": "0.00",
-     * "customer_trans_record_online_service_card_on": "0",
-     * "customer_trans_record_online_service_card_pay": "0.00",
-     * "customer_trans_record_online_service_card_current_balance": "0.00",
-     * "customer_trans_record_online_service_card_befor_balance": "0.00",
-     * "customer_trans_record_compensate_money": "0.00",
-     * "customer_trans_record_refund_money": "0.00",
-     * "customer_trans_record_order_total_money": "0.00",
-     * "customer_trans_record_total_money": "0.00",
-     * "customer_trans_record_current_balance": "0.00",
-     * "customer_trans_record_befor_balance": "0.00",
-     * "customer_trans_record_transaction_id": "0",
-     * "customer_trans_record_remark": "",
-     * "customer_trans_record_verify": "",
-     * "created_at": "0",
-     * "updated_at": "0",
-     * "is_del": "1"
+     * "customer_id": "用户ID",
+     *  "order_id": "订单ID",
+     * "order_channel_id": "订单渠道",
+     * "customer_trans_record_order_channel": 订单渠道名称,
+     * "pay_channel_id": "支付渠道",
+     * "customer_trans_record_pay_channel": 支付渠道名称,
+     *  "customer_trans_record_mode": "交易方式:1消费,2=充值,3=退款,4=赔偿",
+     * "customer_trans_record_mode_name": 交易方式名称,
+     * "customer_trans_record_coupon_money": "优惠券金额",
+     * "customer_trans_record_cash": "现金支付",
+     * "customer_trans_record_pre_pay": "预付费金额（第三方）",
+     * "customer_trans_record_online_pay": "在线支付",
+     * "customer_trans_record_online_balance_pay": "在线余额支付",
+     * "customer_trans_record_online_service_card_on": "服务卡号",
+     * "customer_trans_record_online_service_card_pay": "服务卡支付",
+     * "customer_trans_record_online_service_card_current_balance": "服务卡当前余额",
+     * "customer_trans_record_online_service_card_befor_balance": "服务卡之前余额",
+     * "customer_trans_record_compensate_money": "补偿金额",
+     * "customer_trans_record_refund_money": "退款金额",
+     * "customer_trans_record_order_total_money": "订单总额",
+     * "customer_trans_record_total_money:'交易总额',
+     * "customer_trans_record_current_balance:'当前余额',
+     * "customer_trans_record_befor_balance:'之前余额',
+     * "customer_trans_record_transaction_id:'交易流水号',
+     * "customer_trans_record_remark": '备注',
+     * "customer_trans_record_verify": '验证',
+     * "created_at":'创建时间',
+     * "updated_at":'更新时间',
+     * "is_del"：'删除',
      * }
      * ]
      * }
@@ -767,16 +767,20 @@ class UserController extends \restapi\components\Controller
                  * @param int $customer 用户id
                  */
                 $userBalance = CustomerExtBalance::getCustomerBalance($customer->id);
+                if (!$userBalance) {
+                    $userBalance = '0';
+                }
                 /**
                  * 获取用户消费记录
                  *
                  * @param int $customer 用户id
                  */
                 $userRecord = CustomerTransRecord::queryRecord($customer->id);
+
                 $ret["userBalance"] = $userBalance;
                 $ret["userRecord"] = $userRecord;
                 return $this->send($ret, "查询成功", 1);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return $this->send(null, "boss系统错误", 0, 1024);
             }
 
@@ -796,41 +800,23 @@ class UserController extends \restapi\components\Controller
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
-     *     {
-     *       "code": "1",
-     *       "msg": "提交成功"
-     *       "ret":{
-     *          "scoreCategory": [
-     *              {
-     *                  "desc": "在线支付后评价订单",
-     *                  "score": "¥*5"
-     *              },
-     *              {
-     *                  "desc": "在线支付",
-     *                  "score": "¥*5"
-     *              },
-     *              {
-     *                  "desc": "分享给朋友",
-     *                  "score": "10"
-     *              }
-     *          ],
-     *          "scoreDetail": [],
-     *          "score": "0分",
-     *          "userPrize": [
-     *              {
-     *                  "prizeId": "3",
-     *                  "prizeName": "e家洁厨房高温保养",
-     *                  "prizeCost": "1500",
-     *                  "prizeRule": [
-     *                      "如需咨询请拨打客服电话：400-6767-636"
-     *                  ],
-     *                  "prizeThumb": "http://webapi2.1jiajie.com/app/images/gaowenbaojie_small3.png",
-     *                  "prizePic": "http://static.1jiajie.com/prizePhoto/gaowenbaojie_big.png"
-     *              }
-     *          ],
-     *        }
-     *
+     * {
+     * "code": 1,
+     * "msg": "用户积分明细列表",
+     * "ret": {
+     * "scoreCategory": [
+     *      {
+     *       "id": "1",
+     *       "customer_id": "客户",
+     *       "customer_score": "客户积分",
+     *       "created_at": "创建时间",
+     *       "updated_at": "更新时间",
+     *       "is_del": 是否删除
+     *       }
+     *      ]
      *     }
+     *    }
+
      *
      * @apiError UserNotFound 用户认证已经过期.
      *
@@ -850,7 +836,7 @@ class UserController extends \restapi\components\Controller
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
 
-        $app_version = $param['app_version']; #版本
+        @$app_version = $param['app_version']; #版本
 
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", "0", 403);
@@ -869,7 +855,7 @@ class UserController extends \restapi\components\Controller
                 } else {
                     return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return $this->send(null, "boss系统错误", 0, 1024);
             }
         }
@@ -925,8 +911,34 @@ class UserController extends \restapi\components\Controller
 
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
 
-        if (empty($param['worker_id']) || empty($param['order_id'])) {
+        if (empty($param['order_id']) || empty($param['customer_comment_phone'])) {
             return $this->send(null, "提交参数中缺少必要的参数.", 0, 403);
+        }
+
+        #是否匿名评价,0匿名,1非匿名'
+        if (empty($param['customer_comment_anonymous'])) {
+            $param['customer_comment_anonymous'] = 0;
+        }
+
+        #商圈id
+        if (empty($param['operation_shop_district_id'])) {
+            $param['operation_shop_district_id'] = 0;
+        }
+        #评价内容
+        if (empty($param['customer_comment_content'])) {
+            $param['customer_comment_content'] = 0;
+        }
+        #评论等级
+        if (empty($param['customer_comment_level'])) {
+            $param['customer_comment_level'] = 0;
+        }
+        #评价等级名称
+        if (empty($param['customer_comment_level_name'])) {
+            $param['customer_comment_level_name'] = 0;
+        }
+        #评价标签
+        if (empty($param['customer_comment_tag_ids'])) {
+            $param['customer_comment_tag_ids'] = 0;
         }
 
         if (!empty($customer) && !empty($customer->id)) {
@@ -938,7 +950,7 @@ class UserController extends \restapi\components\Controller
                 } else {
                     return $this->send(null, "添加评论失败", 0, 403);
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return $this->send(null, "boss系统错误", 0, 1024);
             }
         } else {
@@ -996,7 +1008,7 @@ class UserController extends \restapi\components\Controller
                 } else {
                     return $this->send(null, "获取评论级别失败", 0, 403);
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return $this->send(null, "boss系统错误", 0, 1024);
             }
         } else {
@@ -1056,7 +1068,7 @@ class UserController extends \restapi\components\Controller
                 } else {
                     return $this->send(null, "获取评论标签失败", 0, 403);
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return $this->send(null, "boss系统错误", 0, 1024);
             }
         } else {
@@ -1196,7 +1208,7 @@ class UserController extends \restapi\components\Controller
                 } else {
                     return $this->send(null, "获取标签和子标签失败", 0, 403);
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return $this->send(null, "boss系统错误", 0, 1024);
             }
         } else {
@@ -1250,7 +1262,7 @@ class UserController extends \restapi\components\Controller
                 $ret['CommentCount'] = $level;
 
                 return $this->send($ret, "获取用户评价数量", 1);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return $this->send(null, "boss系统错误", 0, 1024);
             }
         } else {
@@ -1306,7 +1318,7 @@ class UserController extends \restapi\components\Controller
                 } else {
                     return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return $this->send(null, "boss系统错误", 0, 1024);
             }
         } else {

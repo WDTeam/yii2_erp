@@ -442,77 +442,110 @@ class ServiceController extends \restapi\components\Controller
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     *  {
-     *       "code": 1,
-     *       "msg": "获取单次服务排班表成功",
-     *       "ret": {
-     *           "2015-10-28": [
+     *{
+     *"code": 1,
+     *"msg": "获取单次服务排班表成功",
+     *"ret": [
+     *       {
+     *           "date": "2015-10-29",
+     *           "timeline": [
      *               {
-     *                   "8:00-11:00": false
+     *                   "time": "8:00-10:00",
+     *                   "enable": false
      *               },
      *               {
-     *                   "8:30-11:30": false
+     *                   "time": "8:30-10:30",
+     *                   "enable": false
      *               },
      *               {
-     *                   "9:00-12:00": false
+     *                   "time": "9:00-11:00",
+     *                   "enable": false
      *               },
      *               {
-     *                   "9:30-12:30": false
+     *                   "time": "9:30-11:30",
+     *                   "enable": false
      *               },
      *               {
-     *                   "10:00-13:00": false
+     *                   "time": "10:00-12:00",
+     *                   "enable": false
      *               },
      *               {
-     *                   "10:30-13:30": false
+     *                   "time": "10:30-12:30",
+     *                   "enable": false
      *               },
      *               {
-     *                   "11:00-14:00": false
+     *                   "time": "11:00-13:00",
+     *                   "enable": false
      *               },
      *               {
-     *                   "11:30-14:30": false
+     *                   "time": "11:30-13:30",
+     *                   "enable": false
      *               },
      *               {
-     *                   "12:00-15:00": false
+     *                   "time": "12:00-14:00",
+     *                   "enable": false
      *               },
      *               {
-     *                   "12:30-16:30": false
+     *                   "time": "12:30-14:30",
+     *                   "enable": false
      *               },
      *               {
-     *                   "13:00-17:00": false
+     *                   "time": "13:00-15:00",
+     *                   "enable": false
      *               },
      *               {
-     *                   "13:30-17:30": false
+     *                   "time": "13:30-16:30",
+     *                   "enable": false
      *               },
      *               {
-     *                   "14:00-18:00": false
+     *                   "time": "14:00-17:00",
+     *                   "enable": false
      *               },
      *               {
-     *                   "14:30-18:30": false
+     *                   "time": "14:30-17:30",
+     *                   "enable": false
      *               },
      *               {
-     *                   "15:00-19:00": false
+     *                   "time": "15:00-18:00",
+     *                   "enable": false
      *               },
      *               {
-     *                   "16:30-19:30": false
+     *                   "time": "16:30-18:30",
+     *                   "enable": false
      *               },
      *               {
-     *                   "17:00-20:00": false
+     *                   "time": "17:00-19:00",
+     *                   "enable": false
      *               },
      *               {
-     *                   "17:30-20:30": false
+     *                   "time": "17:30-19:30",
+     *                   "enable": false
      *               },
      *               {
-     *                   "18:00-21:00": false
+     *                   "time": "18:00-20:00",
+     *                   "enable": false
      *               },
      *               {
-     *                   "18:30-21:30": false
+     *                   "time": "18:30-20:30",
+     *                   "enable": false
      *               },
      *               {
-     *                   "19:00-22:00": false
+     *                   "time": "19:00-21:00",
+     *                   "enable": false
+     *               },
+     *               {
+     *                   "time": "19:30-21:30",
+     *                   "enable": false
+     *               },
+     *               {
+     *                   "time": "20:00-22:00",
+     *                   "enable": false
      *               }
-     *           ],
-     *   }
-     *
+     *           ]
+     *       }
+     *    ]
+     * }
+     * 
      * @apiError UserNotFound 用户认证已经过期.
      *
      * @apiErrorExample Error-Response:
@@ -574,40 +607,106 @@ class ServiceController extends \restapi\components\Controller
      *   "code": 1,
      *   "msg": "获取周期服务时间表成功",
      *   "ret": [
-     *        {
-     *           "date_name": "11月04日",
-     *           "date_week": "3",
-     *           "date_week_every": "每周日",
-     *           "date_time": [
-     *               {
-     *                   "time": "08:00-10:00",
-     *                   "status": "0"
-     *               },
-     *               {
-     *                   "time": "18:00-20:00",
-     *                   "status": "1"
-     *               }
-     *           ],
-     *           "date_name_tag": "11月04日（今天）"
-     *        },
      *       {
-     *           "date_name": "11月05日",
-     *           "date_week": "4",
-     *           "date_week_every": "每周日",
-     *           "date_time": [
+     *           "date": "2015-10-29",
+     *           "timeline": [
      *               {
-     *                   "time": "08:00-10:00",
-     *                   "status": "0"
+     *                   "time": "8:00-10:00",
+     *                   "enable": false
+     *               },
+     *               {
+     *                   "time": "8:30-10:30",
+     *                   "enable": false
+     *               },
+     *               {
+     *                   "time": "9:00-11:00",
+     *                   "enable": false
+     *               },
+     *               {
+     *                   "time": "9:30-11:30",
+     *                   "enable": false
+     *               },
+     *               {
+     *                   "time": "10:00-12:00",
+     *                   "enable": false
+     *               },
+     *               {
+     *                   "time": "10:30-12:30",
+     *                   "enable": false
+     *               },
+     *               {
+     *                   "time": "11:00-13:00",
+     *                   "enable": false
+     *               },
+     *               {
+     *                   "time": "11:30-13:30",
+     *                   "enable": false
+     *               },
+     *               {
+     *                   "time": "12:00-14:00",
+     *                   "enable": false
+     *               },
+     *               {
+     *                   "time": "12:30-14:30",
+     *                   "enable": false
+     *               },
+     *               {
+     *                   "time": "13:00-15:00",
+     *                   "enable": false
+     *               },
+     *               {
+     *                   "time": "13:30-16:30",
+     *                   "enable": false
+     *               },
+     *               {
+     *                   "time": "14:00-17:00",
+     *                   "enable": false
+     *               },
+     *               {
+     *                   "time": "14:30-17:30",
+     *                   "enable": false
+     *               },
+     *               {
+     *                   "time": "15:00-18:00",
+     *                   "enable": false
+     *               },
+     *               {
+     *                   "time": "16:30-18:30",
+     *                   "enable": false
+     *               },
+     *               {
+     *                   "time": "17:00-19:00",
+     *                   "enable": false
+     *               },
+     *               {
+     *                   "time": "17:30-19:30",
+     *                   "enable": false
      *               },
      *               {
      *                   "time": "18:00-20:00",
-     *                   "status": "1"
+     *                   "enable": false
+     *               },
+     *               {
+     *                   "time": "18:30-20:30",
+     *                   "enable": false
+     *               },
+     *               {
+     *                   "time": "19:00-21:00",
+     *                   "enable": false
+     *               },
+     *               {
+     *                   "time": "19:30-21:30",
+     *                   "enable": false
+     *               },
+     *               {
+     *                   "time": "20:00-22:00",
+     *                   "enable": false
      *               }
-     *           ],
-     *           "date_name_tag": "11月05日（今天）"
+     *           ]
      *       }
      *    ]
-     *  }
+     * }
+     * 
      * @apiError UserNotFound 用户认证已经过期.
      *
      * @apiErrorExample Error-Response:

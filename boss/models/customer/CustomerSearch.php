@@ -31,40 +31,7 @@ class CustomerSearch extends Customer
 
     public function search($params)
     {
-		switch(\Yii::$app->request->get('sort', 'created_at')){
-			case 'created_at':
-				$query = Customer::find()->orderBy('created_at desc');
-				break;
-			case 'order_count':
-				$query = Customer::find()->orderBy('created_at asc');
-				break;
-			default:
-				break;
-		}
-        //$query = Customer::find();
-		//$sort = \Yii::$app->request->get('sort', 'created_at');
-		//var_dump($sort);
-		//exit();
-		//$searchArr = array();
-        //if ($sort == 'created_at') {
-         //   $sortArr = array(
-		//		'defaultOrder' => array(
-		//		    'created_at' => SORT_DESC,
-		//		)
-		//	);
-        //}else if ($sort == 'order_count') {
-        //   $sortArr = array(
-		//		'defaultOrder' => array(
-		//		    'created_at' => SORT_ASC,
-		//		)
-		//	);
-        //}else{
-        //    $sortArr = array(
-		//		'defaultOrder' => array(
-		//		    'created_at' => SORT_ASC,
-		//		)
-		//	);
-        //}
+		$query = Customer::find();
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 			'pagination' => [
