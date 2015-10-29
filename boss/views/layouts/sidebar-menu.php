@@ -1,3 +1,9 @@
+<style type="text/css">
+    .skin-blue .sidebar > .sidebar-menu > li:hover { color: #f6a202 !important;}
+    ul.sidebar-menu ul.treeview-menu li.active a.active {color: #f6a202;font-weight: bold;}
+    .sidebar .sidebar-menu .treeview-menu > li > a:hover {color: #f6a202;font-weight: bold;}
+    .skin-blue .sidebar > .sidebar-menu > li > a:hover, .skin-blue .sidebar > .sidebar-menu > li.active > a {color: #f6a202;font-weight: bold;}
+</style>
 <?php
 use boss\widgets\Menu;
 use core\models\finance\FinanceSettleApplySearch;

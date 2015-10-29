@@ -554,6 +554,7 @@ class WorkerController extends \restapi\components\Controller
      *           "order_money_except_cash": "工时服务费",
      *           "settle_status": 账单状态【0未结算 1已结算】,
      *           "settle_time": "账单日期"
+     *           "worker_is_confirmed":"阿姨是否确认账单【0未确认 1已确认】",
      *       }
      *      ]
      * }
@@ -595,8 +596,10 @@ class WorkerController extends \restapi\components\Controller
             }else{
                 $billList[$key]['settle_time'] = date('m',strtotime($val['settle_starttime']));
             }
+            $billList[$key]['worker_is_confirmed'] = $val['isWorkerConfirmed'];
             unset($billList[$key]['settle_starttime']);
             unset($billList[$key]['settle_endtime']);
+            unset($billList[$key]['isWorkerConfirmed']);
         }
         $ret = [
             'per_page' => $per_page,
@@ -855,19 +858,17 @@ class WorkerController extends \restapi\components\Controller
      *       "code": "ok",
      *      "msg": "阿姨信息查询成功",
      *      "ret": {
-     *          "worker_name": "李刘珍",
-     *          "worker_phone": "13121999270",
-     *          "head_url": "",
-     *          "worker_identity": "全职",
-     *          "worker_identity_id":"1",
-     *          "worker_role": "保姆",
-     *          "worker_start": 4.5,
+     *          "worker_name": "阿姨姓名",
+     *          "worker_phone": "阿姨手机号",
+     *          "worker_photo": "头像地址",
+     *          "worker_identity_description": "阿姨身份说明",
+     *          "worker_identity_id":"阿姨身份标识【1全职 2兼职 3高峰 4时段】",
+     *          "worker_type_description": "角色",
+     *          "worker_star": "星级",
      *          "personal_skill": [
-     *              "煮饭",
-     *              "开荒",
-     *              "护老",
-     *              "擦玻璃",
-     *              "带孩子"
+     *              "阿姨技能1",
+     *              "阿姨技能2",
+     *              "阿姨技能3"
      *          ]
      *        }
      *     }
@@ -895,12 +896,11 @@ class WorkerController extends \restapi\components\Controller
         $ret = [
             "worker_name" => $workerInfo['worker_name'],
             "worker_phone" => $workerInfo['worker_phone'],
-            "head_url" => $workerInfo['worker_photo'],
-            "worker_identity" => $workerInfo['worker_identity_description'],//身份
+            "worker_photo" => $workerInfo['worker_photo'],
+            "worker_identity_description" => $workerInfo['worker_identity_description'],//身份
             "worker_identity_id" => $workerInfo['worker_identity_id'],//身份类型
-            "worker_role" => $workerInfo["worker_type_description"],
-            'worker_start' => $workerInfo["worker_star"],
-            'total_money' => $workerInfo['worker_stat_order_money'],
+            "worker_type_description" => $workerInfo["worker_type_description"],
+            'worker_star' => $workerInfo["worker_star"],
             "personal_skill" => WorkerSkill::getWorkerSkill($checkResult['worker_id']),
         ];
         return $this->send($ret, "阿姨信息查询成功");

@@ -224,6 +224,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-toggle'=>'modal',
                             'data-target'=>'#modal',
                             'data-id'=>$model->id,
+                            'class'=>'btn btn-primary',
+                        ]) : Html::a('解除黑名单', [
                             'class'=>'block-btn',
                         ]) : Html::a('解除封号', [
                             'customer/customer/remove-from-block',
