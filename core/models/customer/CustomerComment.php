@@ -92,8 +92,8 @@ class CustomerComment extends \common\models\customer\CustomerComment
             	$data['order_id']=$array['order_id'];
             	$data['worker_id']=$array['worker_id'];
             	$data['complaint_type']=1;
-            	$data['complaint_status']=0;
-            	$data['complaint_channel']=0;
+            	$data['complaint_status']=2;
+            	$data['complaint_channel']=1;
             	$data['complaint_phone']=$array['worker_tel'];
             	$data['complaint_section']=0;
             	$data['complaint_level']=3;
