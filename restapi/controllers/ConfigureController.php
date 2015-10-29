@@ -554,6 +554,93 @@ class ConfigureController extends \restapi\components\Controller
      *  }
      *
      */
+    public function actionWorkerInit()
+    {
+        $params = Yii::$app->request->get() or
+        $params = json_decode(Yii::$app->request->getRawBody(), true);
+        @$token = $params['access_token'];
+        $user = CustomerAccessToken::getCustomer($token);
+        $worker = WorkerAccessToken::getWorker($token);
+        if (empty($worker)) {
+            return $this->send(null, "用户无效,请先登录", 0);
+        }
+        //获取阿姨待服务订单
+        $serverDate="";
+        
+        //获取待服务订单
+        //"workerData": "指定阿姨订单"
+        //"orderData": "待抢单订单"
+        $workerData = OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
+        $orderData = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
+
+        $order_num=[
+            "server_date"=>$serverDate,
+            "worker_date"=>$workerData,
+            "order_date"=>$orderData,
+        ];
+
+        //获取首页轮播图
+        $pic_list = [
+            [
+                "img_path" => "http://webapi2.1jiajie.com/app/images/ios_banner_1.png",
+                "link" => "http://wap.1jiajie.com/trainAuntie1.html",
+                "url_title" => "标准服务"
+            ],
+            [
+                "img_path" => "http://webapi2.1jiajie.com/app/images/20150603ad_top_v4_1.png",
+                "link" => "http://wap.1jiajie.com/pledge.html",
+                "url_title" => "服务承诺"
+            ],
+            [
+                "img_path" => "http://webapi2.1jiajie.com/app/images/20150311ad_top_v4_3.png",
+                "link" => "",
+                "url_title" => ""
+            ]
+        ];
+        $footer_link = [
+            [
+                'link_id' => '1',
+                'title' => '首页',
+                'url' => '',
+                'link_icon' => '',
+                'colour' => '',
+                'sort' => '1',
+            ],
+            [
+                'link_id' => '2',
+                'title' => '订单',
+                'url' => '',
+                'link_icon' => '',
+                'colour' => '',
+                'sort' => '2',
+            ],
+            [
+                'link_id' => '3',
+                'title' => '优惠券',
+                'url' => '',
+                'link_icon' => '',
+                'colour' => '',
+                'sort' => '3',
+            ],
+            [
+                'link_id' => '4',
+                'title' => '我的',
+                'url' => '',
+                'link_icon' => '',
+                'colour' => '',
+                'sort' => '4',
+            ],
+        ];
+
+        $ret = [
+            'pic_list' => $pic_list,
+            'order_num' => $order_num,
+            'footer_link' => $footer_link,
+        ];
+
+        //获取阿姨待抢订单
+
+    }
 
     /**
      * 支付方式展示api 获得各个支付方式的配置 折叠显示列表，默认支付方式，非折叠显示列表
