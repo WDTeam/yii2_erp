@@ -30,7 +30,7 @@ class FinancePayChannel extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['finance_pay_channel_rank','pay_channel_id', 'finance_pay_channel_is_lock', 'create_time', 'is_del'], 'integer'],
+            [['finance_pay_channel_rank', 'finance_pay_channel_is_lock', 'create_time', 'is_del'], 'integer'],
             [['finance_pay_channel_name'], 'string', 'max' => 50]
         ];
     }
@@ -131,9 +131,11 @@ class FinancePayChannel extends \yii\db\ActiveRecord
     }
 
     
-    public static function get_pay_channel_list(){
+    public static function get_pay_channel_list($styp='one'){
     	 $ordewhere['is_del']=0;
-    	$ordewhere['finance_pay_channel_is_lock']=2;
+    	 if($styp=='one'){
+    	 	$ordewhere['finance_pay_channel_is_lock']=2;
+    	 }
     	 $payatainfo=FinancePayChannel::find()->where($ordewhere)->asArray()->all();	
     	foreach ($payatainfo as $errt){
     		$tyd[]=$errt['id'];
