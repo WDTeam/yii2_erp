@@ -17,7 +17,7 @@ use yii\web\Response;
 class OrderController extends \restapi\components\Controller
 {
 
-    public $workerText = array(1 => '指定阿姨订单数', '待抢单订单订单数', '指定阿姨订单列表', '待抢单订单列表');
+    public $workerText = array(1 => '指定阿姨订单数,待抢单订单订单数', '指定阿姨订单列表', '待抢单订单列表');
 
     /**
      * @api {POST} /order/create-order 创建订单 (90%xieyi  缺少周期订单和精品保洁，缺少后台模块支持)
@@ -95,7 +95,7 @@ class OrderController extends \restapi\components\Controller
     public function actionCreateOrder()
     {
         $args = Yii::$app->request->post() or
-        $args = json_decode(Yii::$app->request->getRawBody(), true);
+                $args = json_decode(Yii::$app->request->getRawBody(), true);
         $attributes = [];
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
@@ -254,7 +254,7 @@ class OrderController extends \restapi\components\Controller
     public function actionAppendOrder()
     {
         $args = Yii::$app->request->post() or
-        $args = json_decode(Yii::$app->request->getRawBody(), true);
+                $args = json_decode(Yii::$app->request->getRawBody(), true);
         $attributes = [];
         $user = CustomerAccessToken::getCustomer($args['access_token']);
         if (is_null($user)) {
@@ -530,7 +530,7 @@ class OrderController extends \restapi\components\Controller
         @$to = $args['to'];
         $args["oc.customer_id"] = $user->id;
         $orderSearch = new \core\models\order\OrderSearch();
-        $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus, $channels,$from,$to);
+        $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus, $channels, $from, $to);
         $ret['count'] = $count;
         return $this->send($ret, "操作成功", 1, 200);
     }
@@ -872,7 +872,6 @@ class OrderController extends \restapi\components\Controller
             $ret['count'] = $count;
         }
         $this->send($ret, "操作成功");
-
     }
 
     /**
@@ -932,9 +931,7 @@ class OrderController extends \restapi\components\Controller
         $ret['count'] = $count;
 
         $this->send($ret, "操作成功");
-
     }
-
 
     /**
      * @api {GET} v1/order/worker-done-orders-history 查询阿姨三个月的完成历史订单(xieyi 90%已经将后台接口完成,缺少周期订单)
@@ -1009,27 +1006,28 @@ class OrderController extends \restapi\components\Controller
      *     }
      *
      */
-    public function actionWorkerDoneOrdersHistory(){
+    public function actionWorkerDoneOrdersHistory()
+    {
         $args = Yii::$app->request->get();
         @$token = $args["access_token"];
 
         $worker = WorkerAccessToken::getWorker($token);
-        if(empty($worker)){
+        if (empty($worker)) {
             return $this->send(null, "用户无效,请先登录", 0);
         }
-        $beginTime =  strtotime('-3 month');
+        $beginTime = strtotime('-3 month');
         $endTime = time();
 
         @$limit = $args["access_token"];
-        if(is_null($limit)){
+        if (is_null($limit)) {
             $limit = 10;
         }
         @$page = $args["page"];
-        if(is_null($page)){
+        if (is_null($page)) {
             $page = 1;
         }
         $offset = ($page - 1) * $limit;
-        $ret = OrderSearch::getWorkerAndOrderAndDoneTime($worker->id,$beginTime,$endTime,$limit,$offset);
+        $ret = OrderSearch::getWorkerAndOrderAndDoneTime($worker->id, $beginTime, $endTime, $limit, $offset);
         return $this->send($ret, "操作成功");
     }
 
@@ -1106,27 +1104,28 @@ class OrderController extends \restapi\components\Controller
      *     }
      *
      */
-    public function actionWorkerCancelOrdersHistory(){
+    public function actionWorkerCancelOrdersHistory()
+    {
         $args = Yii::$app->request->get();
         @$token = $args["access_token"];
 
         $worker = WorkerAccessToken::getWorker($token);
-        if(empty($worker)){
+        if (empty($worker)) {
             return $this->send(null, "用户无效,请先登录", 0);
         }
-        $beginTime =  strtotime('-3 month');
+        $beginTime = strtotime('-3 month');
         $endTime = time();
 
         @$limit = $args["access_token"];
-        if(is_null($limit)){
+        if (is_null($limit)) {
             $limit = 10;
         }
         @$page = $args["page"];
-        if(is_null($page)){
+        if (is_null($page)) {
             $page = 1;
         }
         $offset = ($page - 1) * $limit;
-        $ret = OrderSearch::getWorkerAndOrderAndCancelTime($worker->id,$beginTime,$endTime,$limit,$offset);
+        $ret = OrderSearch::getWorkerAndOrderAndCancelTime($worker->id, $beginTime, $endTime, $limit, $offset);
         return $this->send($ret, "操作成功");
     }
 
@@ -1287,7 +1286,7 @@ class OrderController extends \restapi\components\Controller
     public function actionOrderStatusHistory()
     {
         $args = Yii::$app->request->get() or
-        $args = json_decode(Yii::$app->request->getRawBody(), true);
+                $args = json_decode(Yii::$app->request->getRawBody(), true);
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
@@ -1340,7 +1339,7 @@ class OrderController extends \restapi\components\Controller
     public function actionWorkerServiceOrderCount()
     {
         $args = Yii::$app->request->get() or
-        $args = json_decode(Yii::$app->request->getRawBody(), true);
+                $args = json_decode(Yii::$app->request->getRawBody(), true);
         @$token = $args['access_token'];
         $user = CustomerAccessToken::getCustomer($token);
         if (empty($user)) {
@@ -1434,15 +1433,15 @@ class OrderController extends \restapi\components\Controller
                 if (!in_array($reason, $order_cancel_reason)) {
                     $reason = '其他原因#' . $reason;
                 }
-                try{
+                try {
                     $result = \core\models\order\Order::cancel($orderId, 0, $reason);
                     if ($result) {
                         return $this->send([1], $orderId . "订单取消成功");
-                    }else{
+                    } else {
                         return $this->send([0], $orderId . "订单取消失败");
                     }
                 } catch (Exception $e) {
-                    return $this->send(null, $orderId . "订单取消异常:".$e);
+                    return $this->send(null, $orderId . "订单取消异常:" . $e);
                 }
             } else {
                 return $this->send(null, "核实用户订单唯一性失败，用户id：" . $customer->id . ",订单id：" . $orderId, 0, 403);
@@ -1494,7 +1493,7 @@ class OrderController extends \restapi\components\Controller
      */
     public function actionObtainOrder()
     {
-
+        
     }
 
     /**
@@ -1533,7 +1532,7 @@ class OrderController extends \restapi\components\Controller
      */
     public function actionAddComment()
     {
-
+        
     }
 
     /**
@@ -1643,7 +1642,7 @@ class OrderController extends \restapi\components\Controller
      */
     public function actionWorkerHistoryOrders()
     {
-
+        
     }
 
     /**
@@ -1655,7 +1654,7 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} platform_version  平台版本号
      * @apiParam {String} [page_size]         条数
      * @apiParam {String} [page]              页面
-     * @apiParam {String} leveltype         判断标示 leveltype=1 指定阿姨订单数; leveltype=2 待抢单订单订单数; leveltype=3 指定阿姨订单列表;  leveltype=4 待抢单订单列表;
+     * @apiParam {String} leveltype         判断标示 leveltype=1 指定阿姨订单数，待抢单订单订单数;  leveltype=3 指定阿姨订单列表;  leveltype=4 待抢单订单列表;
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -1665,7 +1664,8 @@ class OrderController extends \restapi\components\Controller
      *      "msg":"操作成功",
      *      "ret":
      *      {
-     *          "OrderCount": "123"
+     *          "workerData": "指定阿姨订单"
+     *          "orderData": "待抢单订单"
      *      }
      * }
      *
@@ -1680,7 +1680,7 @@ class OrderController extends \restapi\components\Controller
      *           {
      *            "order_id":"订单号"
      *            "order_code":"订单编号"
-     *            "batch_code":"周期订单好"
+     *            "batch_code":"周期订单号"
      *            "booked_begin_time":"服务开始时间"
      *            "booked_end_time":"服务结束时间"
      *            "channel_name":"服务类型名称"
@@ -1690,7 +1690,7 @@ class OrderController extends \restapi\components\Controller
      *            "money":"订单价格"
      *           } 
      *         ],
-     *         "time":900  倒计时秒
+     *         "time":172800  倒计时秒 #要求2天
      *      }
      * }
      *
@@ -1725,40 +1725,32 @@ class OrderController extends \restapi\components\Controller
                     $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 1);
                     $ret['workerData'] = $workerCount;
                     #倒计时
-                    $ret['time'] = 7200;
+                    $ret['time'] = 172800;
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
                     return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
-                    return false;
                 }
             } else if ($param['leveltype'] == 4) {
                 try {
                     $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 0);
                     $ret['workerData'] = $workerCount;
                     #倒计时
-                    $ret['time'] =7200;
+                    $ret['time'] = 172800;
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
                     return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
-                    return false;
                 }
             } else if ($param['leveltype'] == 1) {
                 try {
-                    $workerCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
-                    $ret['workerData'] = $workerCount;
-                    return $this->send($ret, $this->workerText[$param['leveltype']], 1);
-                } catch (Exception $e) {
-                    return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
-                    return false;
-                }
-            } else if ($param['leveltype'] == 2) {
-                try {
                     $workerCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
+                    $workerCountTwo = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
+
                     $ret['workerData'] = $workerCount;
+                    $ret['orderData'] = $workerCountTwo;
+
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (Exception $e) {
                     return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
-                    return false;
                 }
             }
         } else {
@@ -1816,7 +1808,6 @@ class OrderController extends \restapi\components\Controller
             }
         }
     }
-
 
     /**
      * 智能派单自动推送访问接口
