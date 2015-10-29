@@ -68,11 +68,9 @@ class Order extends OrderModel
      * 获取已开通城市列表
      * @return array
      */
-    public static function getOnlineCityList(){
-//         $city_list = OperationCity::find()->select(['city_id','city_name'])->where(['province_id'=>$province_id,'operation_city_is_online'=>1])->all();
-//         return ArrayHelper::map($city_list,'city_id','city_name');
-        
-        $onlineCityList = OperationCity::getCityOnlineInfoList();
+    public static function getOnlineCityList($province_id){
+
+        $onlineCityList = OperationCity::getCityOnlineInfoListByProvince($province_id);
         return $onlineCityList?ArrayHelper::map($onlineCityList,'city_id','city_name'):[];
     }
 

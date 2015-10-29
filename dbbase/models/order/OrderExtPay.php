@@ -3,7 +3,7 @@
 namespace dbbase\models\order;
 
 use Yii;
-
+use dbbase\models\ActiveRecord;
 /**
  * This is the model class for table "{{%order_ext_pay}}".
  *
@@ -25,7 +25,7 @@ use Yii;
  *
  * @property Order $order
  */
-class OrderExtPay extends \dbbase\models\order\ActiveRecord
+class OrderExtPay extends ActiveRecord
 {
     const ORDER_PAY_TYPE_OFF_LINE = 1;
     const ORDER_PAY_TYPE_ON_LINE = 2;

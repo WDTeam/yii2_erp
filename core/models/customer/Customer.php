@@ -3,6 +3,7 @@
 namespace core\models\customer;
 
 
+use core\models\finance\FinanceOrderChannel;
 use Yii;
 
 use yii\web\BadRequestHttpException;
@@ -283,8 +284,8 @@ class Customer extends \dbbase\models\customer\Customer
 		$customer = self::find()->where(['customer_phone'=>$customer_phone])->asArray()->one();
 		if(empty($customer)) return false;
 
-		$channal_name = funcname($channal_id);
-		//$channal_name = FinanceOrderChannal::getOrderChannelByName($channal_id);
+//		$channal_name = funcname($channal_id);
+		$channal_name = FinanceOrderChannel::getOrderChannelByName($channal_id);
 	
 		$customerExtSrc = new CustomerExtSrc;
 		$customerExtSrc->customer_id = $customer["id"];
@@ -313,8 +314,8 @@ class Customer extends \dbbase\models\customer\Customer
 		$customer = self::find()->where(['customer_phone'=>$customer_phone])->asArray()->one();
 		if(empty($customer)) return false;
 
-		$channal_id = funcname($channal_name);
-		//$channal_id = FinanceOrderChannal::getOrderChannelByid($channal_name)
+//		$channal_id = funcname($channal_name);
+        $channal_id = FinanceOrderChannel::getOrderChannelByid($channal_name);
 	
 		$customerExtSrc = new CustomerExtSrc;
 		$customerExtSrc->customer_id = $customer["id"];

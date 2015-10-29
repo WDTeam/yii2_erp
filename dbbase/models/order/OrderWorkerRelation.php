@@ -3,7 +3,7 @@
 namespace dbbase\models\order;
 
 use Yii;
-
+use dbbase\models\ActiveRecord;
 /**
  * This is the model class for table "{{%order_worker_relation}}".
  *
@@ -17,7 +17,7 @@ use Yii;
  * @property string $order_worker_relation_status
  * @property integer $isdel
  */
-class OrderWorkerRelation extends \dbbase\models\order\ActiveRecord
+class OrderWorkerRelation extends ActiveRecord
 {
     /**
      * @inheritdoc

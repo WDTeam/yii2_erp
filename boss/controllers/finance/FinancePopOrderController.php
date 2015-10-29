@@ -592,8 +592,10 @@ class FinancePopOrderController extends Controller
     	$model->save();
     	return $this->redirect(['index', 'id' =>$requestModel['oid']]);
     	}else{
+    		
     	$model = new FinancePopOrder;
     	return $this->renderAjax('forminfo',['workerVacationModel'=>$model]);
+    	
     	}
     }
     
