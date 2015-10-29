@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <label>智能派单服务器端口：</label>
             <input id="serverport" class="form-control" name="serverport" value="<?php echo !empty($srvInfo['port'])? $srvInfo['port'] : ''?>" placeholder="SOCKET服务器端口" />
         </div>
-        <div class="col-md-2"><button class="btn btn-default" id="connect" name="connect">连接派单服务器</button></div>
+        <div class="col-md-2"><button class="btn btn-default" id="connect" name="connect">连接派单服务器</button><button class="btn btn-default" id="runService" name="runService">启动派单服务</button></div>
         <div class="col-md-2"><button class="btn btn-default" id="start" name="start">开始自动派单</button><button class="btn btn-default" id="stop" name="stop">停止自动派单</button></div>
     </div>
     <hr/>
@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <input id="qstart" class="form-control margin-l-36" name="qstart" value="0" readonly="true" /> 至 <input id="qend" class="form-control" name="qend" value="<?php echo !empty($config['FULLTIME_WORKER_TIMEOUT'])? $config['FULLTIME_WORKER_TIMEOUT'] : ''?>" />分钟
         </div>
         <div class="col-md-2">
-            <button class="btn btn-default" id="update" name="update">更新配置（临时变更）</button>
+            <button class="btn btn-default" id="update" name="update">更新配置（即时生效）</button>
         </div>
     </div>
     <hr/>
