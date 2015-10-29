@@ -268,6 +268,7 @@ class GeneralPayCommon extends \yii\db\ActiveRecord
             //var_dump($attribute);exit;
             //$orderChannel = FinanceOrderChannel::get_order_channel_info($attribute['general_pay_source']);
             //$payChannel = FinancePayChannel::get_pay_channel_info($attribute['general_pay_source']);
+            //var_dump($attribute['order_id'],0,$attribute['general_pay_source'],$attribute['general_pay_source_name'],$attribute['general_pay_transaction_id']);exit;
             Order::isPaymentOnline($attribute['order_id'],0,$attribute['general_pay_source'],$attribute['general_pay_source_name'],$attribute['general_pay_transaction_id']);
         }
     }
