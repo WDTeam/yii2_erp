@@ -313,7 +313,7 @@ echo GridView::widget([
             'format' => 'raw',
             'label' => '历史状态',
             'value' => function ($customerBlockLogProvider) {
-                return $customerBlockLogProvider == NULL ? "未知" : $customerBlockLogProvider->customer_block_log_status ? '黑名单' : '正常';
+                return $customerBlockLogProvider == NULL ? "未知" : $customerBlockLogProvider->customer_block_log_status ? '封号' : '正常';
             },
             'width' => "80px",
         ],

@@ -37,7 +37,7 @@ class FinanceCompensateController extends Controller
         $searchModel = new FinanceCompensateSearch;
         $requestParams = Yii::$app->request->getQueryParams();
         $searchModel->load($requestParams);
-        $searchModel->isdel = FinanceCompensateSearch::FINANCE_COMPENSATE_NO_DELETE;
+        $searchModel->is_softdel = FinanceCompensateSearch::FINANCE_COMPENSATE_NO_DELETE;
         $dataProvider = $searchModel->search($requestParams);
 
         return $this->render('index', [
@@ -58,7 +58,7 @@ class FinanceCompensateController extends Controller
             $searchModel->worker_id = $requestParams['worker_tel'];
         }
         $searchModel->finance_compensate_status = FinanceCompensateSearch::FINANCE_COMPENSATE_REVIEW_INIT;
-        $searchModel->isdel = FinanceCompensateSearch::FINANCE_COMPENSATE_NO_DELETE;
+        $searchModel->is_softdel = FinanceCompensateSearch::FINANCE_COMPENSATE_NO_DELETE;
         $searchModel->load($requestParams);
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
         return $this->render('financeConfirmIndex', [
@@ -201,7 +201,7 @@ class FinanceCompensateController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $model->isdel = FinanceCompensateSearch::FINANCE_COMPENSATE_DELETE;
+        $model->is_softdel = FinanceCompensateSearch::FINANCE_COMPENSATE_DELETE;
         $model->save();
         return $this->redirect(['index']);
     }

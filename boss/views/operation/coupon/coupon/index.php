@@ -209,9 +209,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'id' => $model->id
                         ], [
                             'title' => Yii::t('app', '编辑'),
-                            'data-toggle'=>'modal',
-                            'data-target'=>'#modal',
-                            'data-id'=>$model->id,
                             'class'=>'block-btn',
                         ]);
                     },
@@ -246,16 +243,20 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]);
                     },
                     'bind' => function ($url, $model) {
-                        return Html::a('绑定', [
-                            'bind',
-                            'id' => $model->id
-                        ], [
-                            'title' => Yii::t('app', '绑定'),
-                            'data-toggle'=>'modal',
-                            'data-target'=>'#modal',
-                            'data-id'=>$model->id,
-                            'class'=>'bind-btn block-btn',
-                        ]);
+                        if($model->whetherCanBind()){
+                            return Html::a('绑定', [
+                                'bind',
+                                'id' => $model->id
+                            ], [
+                                'title' => Yii::t('app', '绑定'),
+                                'data-toggle'=>'modal',
+                                'data-target'=>'#modal',
+                                'data-id'=>$model->id,
+                                'class'=>'bind-btn block-btn',
+                            ]);
+                        }else{
+                            return false;
+                        }
                     },
                 ],
             ],

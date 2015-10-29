@@ -28,21 +28,20 @@ class WorkerController extends \restapi\components\Controller
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *       "code": "ok",
+     *       "code": "1",
      *      "msg": "阿姨信息查询成功",
      *      "ret": {
-     *          "worker_name": "李刘珍",
-     *          "worker_phone": "13121999270",
-     *          "head_url": "",
-     *          "worker_identity": "兼职",
-     *          "worker_role": "保姆",
-     *          "worker_start": 4.5,
+      *          "worker_name": "阿姨姓名",
+     *          "worker_phone": "阿姨手机号",
+     *          "worker_photo": "头像地址",
+     *          "worker_identity_description": "阿姨身份说明",
+     *          "worker_identity_id":"阿姨身份标识【1全职 2兼职 3高峰 4时段】",
+     *          "worker_type_description": "角色",
+     *          "worker_star": "星级",
      *          "personal_skill": [
-     *              "煮饭",
-     *              "开荒",
-     *              "护老",
-     *              "擦玻璃",
-     *              "带孩子"
+     *              "阿姨技能1",
+     *              "阿姨技能2",
+     *              "阿姨技能3"
      *          ]
      *        }
      *     } 
@@ -59,29 +58,37 @@ class WorkerController extends \restapi\components\Controller
     public function actionWorkerInfo()
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-        if (!isset($param['access_token']) || !$param['access_token'] || !isset($param['worker_id']) || !$param['worker_id'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+        if (!isset($param['access_token']) || !$param['access_token']|| !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
+        if(!isset($param['worker_id']) ||!$param['worker_id']){
+            return $this->send(null, "阿姨不存在.", 0, 403);
         }
         // 按阿姨id获取阿姨信息
         $workerId = intval($param['worker_id']);
-        if ($workerId ) {
+        if (!$workerId) {
+            return $this->send(null, "阿姨不存在.", 0, 403);
+        }
+        //数据调取
+        try{
             $workerInfo = Worker::getWorkerDetailInfo($workerId);
-            //数据整理
+            $ret = array();
             if(!empty($workerInfo)){
                 $ret = [
                     "worker_name" => $workerInfo['worker_name'],
                     "worker_phone" => $workerInfo['worker_phone'],
-                    "head_url" => $workerInfo['worker_photo'],
-                    "worker_identity" => $workerInfo['worker_identity_description'],//身份
-                    "worker_role" => $workerInfo["worker_type_description"],
-                    'worker_start' => $workerInfo["worker_star"],
-                    'total_money' => $workerInfo['worker_stat_order_money'],
-                    "personal_skill" => WorkerSkill::getWorkerSkill($workerId),
+                    "worker_photo" => $workerInfo['worker_photo'],
+                    "worker_identity_description" => $workerInfo['worker_identity_description'],//身份
+                    "worker_identity_id" => $workerInfo['worker_identity_id'],//身份类型
+                    "worker_type_description" => $workerInfo["worker_type_description"],
+                    'worker_star' => $workerInfo["worker_star"],
+                    "personal_skill" =>WorkerSkill::getWorkerSkill($workerId) ,
                 ];
-                return $this->send($ret, "阿姨信息查询成功");
             }
+            return $this->send($ret, "阿姨信息查询成功");
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
         }
-        return $this->send(null, "阿姨不存在.", 0, 403);
     }
 
     /**
@@ -486,7 +493,7 @@ class WorkerController extends \restapi\components\Controller
      *             "worker_name": "阿姨姓名",
      *             "order_count": "服务订单数",
      *             "service_family_count": "服务家庭总数",
-     *             "worker_income"=>"阿姨收入"
+     *             "worker_income":"阿姨收入"
      *      ]
      * }
      *
@@ -539,27 +546,30 @@ class WorkerController extends \restapi\components\Controller
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *      "code": "ok",
+     *      "code": "1",
      *      "msg": "操作成功.",
      *      "ret": [
      *      {
-     *         "settle_id"=>"32"
-     *         'settle_type' =>"1",
-     *         'settle_year' =>"2014"
-     *         'settle_time'=>'09年07月-09月13日',
-     *         'settle_type' =>1,
-     *         'order_count'=>'10',
-     *         'worker_income'=>'320.00',
-     *         'settle_status'=>"1"
+     *           "settle_year": "2015",
+     *           "order_count": "账单归属年限",
+     *           "worker_income": "该账单阿姨的总收入",
+     *           "settle_cycle": "账单类型【1周期账单 2月结账单】",
+     *           "settle_cycle_des": "账单文字说明",
+     *           "settle_task_money": "任务奖励金额",
+     *           "base_salary_subsidy": "底薪补贴",
+     *           "money_deduction": "处罚金额",
+     *           "order_money_except_cash": "工时服务费",
+     *           "settle_status": 账单状态【0未结算 1已结算】,
+     *           "settle_time": "账单日期"
+     *           "worker_is_confirmed":"阿姨是否确认账单【0未确认 1已确认】",
      *       }
      *      ]
-     *       
      * }
      *
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"error",
+     *      "code":"0",
      *      "msg": "用户认证已经过期,请重新登录"
      *  }
      */
@@ -581,39 +591,35 @@ class WorkerController extends \restapi\components\Controller
             $param['page_num'] = 10;
         }
         $page_num = intval($param['page_num']);
-        //调取model层
+        
         try{
             $billList = FinanceSettleApplySearch::getSettledWorkerIncomeListByWorkerId($checkResult['worker_id'],$per_page,$page_num);
          }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
-        
-        $settleArr = array();
         foreach($billList as $key=>$val){
-            $settleArr[$key]['settle_id'] = $val['settle_id'];
-            $settleArr[$key]['settle_year'] = $val['settle_year'];
-            if($val['settle_cycle_type']==1){//周结账单
-                $settleArr[$key]['settle_time'] = $val['settle_starttime'].'-'.$val['settle_endtime'];
+            if($val['settle_cycle']==1){//周结账单
+                $billList[$key]['settle_time'] = $val['settle_starttime'].'-'.$val['settle_endtime'];
             }else{
-                $settleArr[$key]['settle_time'] = date('m',strtotime($val['settle_starttime']));
+                $billList[$key]['settle_time'] = date('m',strtotime($val['settle_starttime']));
             }
-            $settleArr[$key]['settle_type'] = $val['settle_cycle'];
-            $settleArr[$key]['order_count'] = $val['order_count'];
-            $settleArr[$key]['worker_income'] = $val['worker_income'];
-            $settleArr[$key]['settle_status'] = $val['settle_status'];
+            $billList[$key]['worker_is_confirmed'] = $val['isWorkerConfirmed'];
+            unset($billList[$key]['settle_starttime']);
+            unset($billList[$key]['settle_endtime']);
+            unset($billList[$key]['isWorkerConfirmed']);
         }
         $ret = [
             'per_page' => $per_page,
             'page_num' => $page_num,
-            'data'  => $settleArr
+            'data'  => $billList
         ];
         return $this->send($ret, "操作成功.");
     }
 
     /**
-     * @api {GET} /worker/get-worker-bill-detail 获取阿姨对账单列表详情 (田玉星 100%)
+     * @api {GET} /worker/get-worker-tasktime-list 获取阿姨工时列表 (田玉星 100%)
      * 
-     * @apiName actionGetWorkerBillDetail
+     * @apiName actionGetWorkerTasktimeList
      * @apiGroup Worker
      * 
      * @apiParam {String} access_token    阿姨登录token
@@ -627,89 +633,13 @@ class WorkerController extends \restapi\components\Controller
      * {
      *   "code": 1,
      *   "msg": "操作成功.",
-     *   "ret": {
-     *       "worker_income": "150.00",
-     *       "worker_income_constitute": "0.00元(底薪)+150.00元(工时服务)+0.00元(奖励)-0.00元(处罚)",
-     *       "data": [
-     *           {
-     *               "service_date": "01-01",
-     *               "service_time": "08:01:00-08:01:00",
-     *               "order_code": "2123112",
-     *               "order_money": "150.00"
-     *           }
-     *       ]
-     *   }
-     * }   
-     *
-     * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
-     *  {
-     *      "code":"error",
-     *      "msg": "用户认证已经过期,请重新登录"
-     *  }
-     */
-    public function actionGetWorkerBillDetail(){
-        $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
-        //检测阿姨是否登录
-        $checkResult = ApiWorker::checkWorkerLogin($param);
-        if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 0, 403);
-        }  
-        //数据整理
-        $settle_id = intval($param['settle_id']);//账单ID
-        if(!$settle_id){
-            return $this->send(null, "账单唯一标识错误", 0, 403);
-        }
-        $billData = array();
-        try{
-            $workerIncomeInfoList = FinanceSettleApplySearch::getSettledWorkerIncomeListByWorkerId($checkResult['worker_id'],1,1);
-            $workerIncomeInfo = $workerIncomeInfoList[0];
-            $billList = FinanceSettleApplySearch::getOrderArrayBySettleId($settle_id);
-            if($billList){
-                foreach($billList as $key=>$val){
-                    $beginTime = strtotime($val['order_begin_time']);
-                    $billData[$key]['service_date'] = date('m-d',$beginTime);
-                    $billData[$key]['service_time'] = date('H:i:s',$beginTime).'-'.date('H:i:s',strtotime($val['order_end_time']));
-                    $billData[$key]['order_code'] =111;
-                    $billData[$key]['order_money'] = $val['order_money'];
-                }
-            }
-        }catch (\Exception $e) {
-            return $this->send(null, "boss系统错误", 1024, 403);
-        }
-        $ret = [
-                'worker_income'=>$workerIncomeInfo['worker_income'],
-                'worker_income_constitute'=>$workerIncomeInfo['base_salary_subsidy']."元(底薪)+".
-                                            $workerIncomeInfo['order_money_except_cash']."元(工时服务)+".
-                                            $workerIncomeInfo['settle_task_money']."元(奖励)-".
-                                            $workerIncomeInfo['money_deduction']."元(处罚)",
-                'data'=>$billData
-        ];
-        return $this->send($ret, "操作成功.");
-    }
-    /**
-     * @api {GET} /worker/get-worker-tasktime-list 获取阿姨工时列表 (田玉星 100%)
-     * 
-     * @apiName actionGetWorkerTasktimeList
-     * @apiGroup Worker
-     * 
-     * @apiParam {String} access_token    阿姨登录token
-     * @apiParam {String} bill_id  账单唯一标识.
-     * @apiParam {String} [platform_version] 平台版本号.
-     * 
-     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-tasktime-list
-     * 
-     * @apiSuccessExample {json} Success-Response:
-     * HTTP/1.1 200 OK
-     * {
-     *   "code": 1,
-     *   "msg": "操作成功",
      *   "ret": [
      *       {
-     *           "service_date": "01-01",
-     *           "service_time": "08:01:00-08:01:00",
-     *           "order_code": "1234354",
-     *           "order_money": "150.00"
+     *           "order_id": "订单ID",
+     *           "order_money": "订单金额",
+     *           "order_code": "订单号",
+     *           "service_date": "服务日期",
+     *           "service_time": "服务时间段"
      *       }
      *   ]
      * }
@@ -717,42 +647,39 @@ class WorkerController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"error",
+     *      "code":"0",
      *      "msg": "用户认证已经过期,请重新登录"
      *  }
      */
     public function actionGetWorkerTasktimeList(){
-         $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
         //检测阿姨是否登录
         $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
-        }  
+        }
         //数据整理
-       $settle_id = intval($param['settle_id']);//账单ID
-        if(!$settle_id){
+        if(!isset($param['settle_id'])||!intval($param['settle_id'])){
             return $this->send(null, "账单唯一标识错误", 0, 403);
         }
-        //调取数据
-        $billData = array();
         try{
-            $billList = FinanceSettleApplySearch::getOrderArrayBySettleId($settle_id);
+            $billList = FinanceSettleApplySearch::getOrderArrayBySettleId(intval($param['settle_id']));
             if($billList){
                 foreach($billList as $key=>$val){
                     $beginTime = strtotime($val['order_begin_time']);
-                    $billData[$key]['service_date'] = date('m-d',$beginTime);
-                    $billData[$key]['service_time'] = date('H:i:s',$beginTime).'-'.date('H:i:s',strtotime($val['order_end_time']));
-                    $billData[$key]['order_code'] =111;
-                    $billData[$key]['order_money'] = $val['order_money'];
+                    $billList[$key]['service_date'] = date('m-d',$beginTime);
+                    $billList[$key]['service_time'] = date('H:i',$beginTime).'-'.date('H:i',strtotime($val['order_end_time']));
+                    unset($billList[$key]['order_begin_time']);
+                    unset($billList[$key]['order_end_time']);
                 }
             }
         }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
-        //获取工时列表
-        return $this->send($billData, "操作成功");
+        return $this->send($billList, "操作成功.");
     }
     
+  
     /**
      * @api {GET} /worker/get-worker-taskreward-list 获取阿姨奖励列表 (田玉星 100%)
      * 
@@ -772,8 +699,8 @@ class WorkerController extends \restapi\components\Controller
      *   "msg": "操作成功.",
      *   "ret": [
      *       {
-     *           "task_money": "50.00",
-     *           "task_des": "每个月请假不超过4天"
+     *           "task_money": "任务奖励",
+     *           "task_des": "任务描述"
      *       }
      *   ]
      * }
@@ -781,7 +708,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"error",
+     *      "code":"0",
      *      "msg": "用户认证已经过期,请重新登录"
      *  }
      */
@@ -793,17 +720,16 @@ class WorkerController extends \restapi\components\Controller
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
         //数据整理
-        $settle_id = intval($param['settle_id']);//账单ID
-        if(!$settle_id){
+        if(!isset($param['settle_id'])||!intval($param['settle_id'])){
             return $this->send(null, "账单唯一标识错误", 0, 403);
         }
         try{
             //获取任务奖励列表
-            $ret = FinanceSettleApplySearch::getTaskArrayBySettleId($settle_id);
+            $taskRewardret = FinanceSettleApplySearch::getTaskArrayBySettleId(intval($param['settle_id']));
          }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
-        return $this->send($ret, "操作成功.");
+        return $this->send($taskRewardret, "操作成功");
     }
     
     /**
@@ -825,11 +751,11 @@ class WorkerController extends \restapi\components\Controller
      *     "msg": "操作成功.",
      *        "ret": [
      *            {
-     *                "deduction_money": "12.00",
-     *                "deduction_des": "第三大大声点",
-     *                "deduction_type": "2",
-     *                "deduction_time": "2015.10.26",
-     *                "deduction_type_des": "投诉"
+     *                "deduction_money": "处罚金额",
+     *                "deduction_des": "处罚描述",
+     *                "deduction_type": "处罚类型",
+     *                "deduction_time": "处罚时间",
+     *                "deduction_type_des": "处罚类型描述"
      *            }
      *       ]
      * }
@@ -837,7 +763,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"error",
+     *      "code":"0",
      *      "msg": "用户认证已经过期,请重新登录"
      *  }
      */
@@ -849,13 +775,12 @@ class WorkerController extends \restapi\components\Controller
             return $this->send(null, $checkResult['msg'], 0, 403);
         }
         //数据整理
-        $settle_id = intval($param['settle_id']);//账单ID
-        if(!$settle_id){
+        if(!isset($param['settle_id'])||!intval($param['settle_id'])){
             return $this->send(null, "账单唯一标识错误", 0, 403);
         }
         try{
             //获取任务奖励列表
-            $punishList = FinanceSettleApplySearch::getDeductionArrayBySettleId($settle_id);
+            $punishList = FinanceSettleApplySearch::getDeductionArrayBySettleId(intval($param['settle_id']));
             if($punishList){
                 foreach($punishList as $key=>$val){
                     switch($val['deduction_type']){
@@ -900,7 +825,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"error",
+     *      "code":"0",
      *      "msg": "用户认证已经过期,请重新登录"
      *  }
      */
@@ -912,17 +837,17 @@ class WorkerController extends \restapi\components\Controller
             return $this->send(null, $checkResult['msg'], 0, 403);
         }
         //数据整理
-        $settle_id = intval($param['settle_id']);//账单ID
+        if(!isset($param['settle_id'])||!intval($param['settle_id'])){
+            return $this->send(null, "账单唯一标识错误", 0, 403);
+        }
         try{
-            $isSucceed = FinanceSettleApplySearch::workerConfirmSettlement($settle_id);
+            if(FinanceSettleApplySearch::workerConfirmSettlement(intval($param['settle_id']))){
+                return $this->send(null, "账单确定成功");
+            }
          }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
-        if($isSucceed){
-            return $this->send(null, "账单确定成功");
-        }
         return $this->send(null, "账单确定失败",0,403);
-      
     }
     
     /**
@@ -940,19 +865,17 @@ class WorkerController extends \restapi\components\Controller
      *       "code": "ok",
      *      "msg": "阿姨信息查询成功",
      *      "ret": {
-     *          "worker_name": "李刘珍",
-     *          "worker_phone": "13121999270",
-     *          "head_url": "",
-     *          "worker_identity": "全职",
-     *          "worker_identity_id":"1",
-     *          "worker_role": "保姆",
-     *          "worker_start": 4.5,
+     *          "worker_name": "阿姨姓名",
+     *          "worker_phone": "阿姨手机号",
+     *          "worker_photo": "头像地址",
+     *          "worker_identity_description": "阿姨身份说明",
+     *          "worker_identity_id":"阿姨身份标识【1全职 2兼职 3高峰 4时段】",
+     *          "worker_type_description": "角色",
+     *          "worker_star": "星级",
      *          "personal_skill": [
-     *              "煮饭",
-     *              "开荒",
-     *              "护老",
-     *              "擦玻璃",
-     *              "带孩子"
+     *              "阿姨技能1",
+     *              "阿姨技能2",
+     *              "阿姨技能3"
      *          ]
      *        }
      *     }
@@ -980,12 +903,11 @@ class WorkerController extends \restapi\components\Controller
         $ret = [
             "worker_name" => $workerInfo['worker_name'],
             "worker_phone" => $workerInfo['worker_phone'],
-            "head_url" => $workerInfo['worker_photo'],
-            "worker_identity" => $workerInfo['worker_identity_description'],//身份
+            "worker_photo" => $workerInfo['worker_photo'],
+            "worker_identity_description" => $workerInfo['worker_identity_description'],//身份
             "worker_identity_id" => $workerInfo['worker_identity_id'],//身份类型
-            "worker_role" => $workerInfo["worker_type_description"],
-            'worker_start' => $workerInfo["worker_star"],
-            'total_money' => $workerInfo['worker_stat_order_money'],
+            "worker_type_description" => $workerInfo["worker_type_description"],
+            'worker_star' => $workerInfo["worker_star"],
             "personal_skill" => WorkerSkill::getWorkerSkill($checkResult['worker_id']),
         ];
         return $this->send($ret, "阿姨信息查询成功");
@@ -1112,32 +1034,28 @@ class WorkerController extends \restapi\components\Controller
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *      "code": "ok",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      [
-     *      {
-     *          "id": "任务id",
-     *          "worker_task_name": "任务名称",
-     *          "worker_task_start": "任务开始时间",
-     *          "worker_task_end": "任务结束时间",
-     *          "worker_task_reward_value": "任务奖励值",
-     *          "worker_task_conditions": "任务需要完成次数",
-     *          "worker_task_already": "任务已经完成次数"
-     *      },
-     *      {
-     *          "id": "任务id",
-     *          "worker_task_name": "任务名称",
-     *          "worker_task_start": "任务开始时间",
-     *          "worker_task_end": "任务结束时间",
-     *          "worker_task_reward_value": "任务奖励值",
-     *          "worker_task_conditions": "任务需要完成次数",
-     *          "worker_task_already": "任务已经完成次数"
-     *      }
-     *      ]
-     *      }
-     * }
+     *   {
+     *       "code": 1,
+     *       "msg": "操作成功",
+     *       "ret": [
+     *           {
+     *               "id": 2,
+     *               "worker_id": 1,
+     *               "worker_task_id": 2,
+     *               "worker_task_cycle_number": "1",
+     *               "worker_task_name": "任务名称2",
+     *               "worker_task_log_start": 1446096240,
+     *               "worker_task_log_end": 1446297240,
+     *               "worker_task_is_done": 0,
+     *               "worker_task_done_time": 0,
+     *               "worker_task_reward_type": 0,
+     *               "worker_task_reward_value": 0,
+     *               "created_at": 1446097240,
+     *               "updated_at": 0,
+     *               "is_del": 0
+     *           }
+     *       ]
+     *   }
      *
      * @apiError SessionIdNotFound 未找到会话ID.
      *
@@ -1181,33 +1099,29 @@ class WorkerController extends \restapi\components\Controller
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *      "code": "ok",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      [
-     *      {
-     *          "id": "任务id",
-     *          "worker_task_name": "任务名称",
-     *          "worker_task_start": "任务开始时间",
-     *          "worker_task_end": "任务结束时间",
-     *          "worker_task_reward_value": "任务奖励值",
-     *          "worker_task_conditions": "任务需要完成次数",
-     *          "worker_task_already": "任务已经完成次数"
-     *      },
-     *      {
-     *          "id": "任务id",
-     *          "worker_task_name": "任务名称",
-     *          "worker_task_start": "任务开始时间",
-     *          "worker_task_end": "任务结束时间",
-     *          "worker_task_reward_value": "任务奖励值",
-     *          "worker_task_conditions": "任务需要完成次数",
-     *          "worker_task_already": "任务已经完成次数"
-     *      }
-     *      ]
-     *      }
-     * }
-     *
+     *   {
+     *       "code": 1,
+     *       "msg": "操作成功",
+     *       "ret": [
+     *           {
+     *               "id": 2,
+     *               "worker_id": 1,
+     *               "worker_task_id": 2,
+     *               "worker_task_cycle_number": "1",
+     *               "worker_task_name": "任务名称2",
+     *               "worker_task_log_start": 1446096240,
+     *               "worker_task_log_end": 1446297240,
+     *               "worker_task_is_done": 0,
+     *               "worker_task_done_time": 0,
+     *               "worker_task_reward_type": 0,
+     *               "worker_task_reward_value": 0,
+     *               "created_at": 1446097240,
+     *               "updated_at": 0,
+     *               "is_del": 0
+     *           }
+     *       ]
+     *   }
+     * 
      * @apiError SessionIdNotFound 未找到会话ID.
      *
      * @apiErrorExample Error-Response:
@@ -1253,32 +1167,30 @@ class WorkerController extends \restapi\components\Controller
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *      "code": "ok",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      [
-     *      {
-     *          "id": "任务id",
-     *          "worker_task_name": "任务名称",
-     *          "worker_task_start": "任务开始时间",
-     *          "worker_task_end": "任务结束时间",
-     *          "worker_task_reward_value": "任务奖励值",
-     *          "worker_task_conditions": "任务需要完成次数",
-     *          "worker_task_already": "任务已经完成次数"
-     *      },
-     *      {
-     *          "id": "任务id",
-     *          "worker_task_name": "任务名称",
-     *          "worker_task_start": "任务开始时间",
-     *          "worker_task_end": "任务结束时间",
-     *          "worker_task_reward_value": "任务奖励值",
-     *          "worker_task_conditions": "任务需要完成次数",
-     *          "worker_task_already": "任务已经完成次数"
-     *      }
-     *      ]
-     *      }
-     * }
+     *   {
+     *       "code": 1,
+     *       "msg": "操作成功",
+     *       "ret": [
+     *           {
+     *               "id": 3,
+     *               "worker_id": 1,
+     *               "worker_task_id": 1,
+     *               "worker_task_cycle_number": "0",
+     *               "worker_task_name": "任务名称3",
+     *               "worker_task_log_start": 1446096240,
+     *               "worker_task_log_end": 1446097240,
+     *               "worker_task_is_done": -1,
+     *               "worker_task_done_time": 0,
+     *               "worker_task_reward_type": 0,
+     *               "worker_task_reward_value": 0,
+     *               "created_at": 1446097240,
+     *               "updated_at": 0,
+     *               "is_del": 0,
+     *               "values": [],
+     *               "worker_task_description": ""
+     *           }
+     *       ]
+     *   }
      *
      * @apiError SessionIdNotFound 未找到会话ID.
      *
@@ -1377,8 +1289,6 @@ class WorkerController extends \restapi\components\Controller
         }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
-                echo "ee";die;
-
         $worker_task_log_start=$task_log['worker_task_log_start'];
         $worker_task_log_end=$task_log['worker_task_log_end'];
         //获取任务的订单列表

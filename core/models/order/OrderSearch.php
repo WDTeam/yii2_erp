@@ -30,6 +30,25 @@ class OrderSearch extends Order
 
 
     /**
+     * 获取支付表的数据,支持单个/多个订单号
+     * @param $order_id
+     */
+    public static function getOrderExtPayData($order_id)
+    {
+        //如果是数组,使用 IN 查询
+        if( is_array($order_id) ) {
+            $condition = ['in','order_id',$order_id];
+        }else{
+            $condition = ['order_id'=>$order_id];
+        }
+
+        //查询
+        $query = new \yii\db\Query();
+        $data = $query->from('{{%order_ext_pay}}')->where($condition)->all();
+        return $data;
+    }
+
+    /**
      * 通过阿姨ID获取指定日期的创建时间所有订单
      * @param $worker_id 阿姨ID
      * @param $begin_time 开始时间(时间戳)
@@ -364,7 +383,8 @@ class OrderSearch extends Order
 
         $query->from('{{%order}} as order')
             ->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')
-            ->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id');
+            ->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')
+            ->innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

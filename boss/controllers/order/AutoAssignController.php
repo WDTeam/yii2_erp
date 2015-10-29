@@ -20,7 +20,6 @@ use autoassign\ClientCommand;
  */
 class AutoAssignController extends BaseAuthController
 {
-    public $config;
     public function behaviors()
     {
         return [
@@ -38,9 +37,9 @@ class AutoAssignController extends BaseAuthController
      */
     public function actionIndex()
     {
-        $this->config = require_once(__DIR__ . '/../../../autoassign/autoassign.config.php');
-        $data = (array)json_decode(Yii::$app->redis->get($this->config['_REDIS_SERVER_RUN_STATUS_']));
-        
-        return $this->render('index', ['data' => $data]);
+        $config = (array)json_decode(Yii::$app->redis->get('REDIS_AUTOASSIGN_CONFIG'));
+        $srvInfo = (array)json_decode(Yii::$app->redis->get('_REDIS_SERVER_RUN_STATUS_'));
+  
+        return $this->render('index', ['srvInfo' => $srvInfo,'config'=>$config]);
     }
 }

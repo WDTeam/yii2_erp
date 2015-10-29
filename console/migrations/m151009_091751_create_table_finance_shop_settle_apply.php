@@ -26,7 +26,7 @@ class m151009_091751_create_table_finance_shop_settle_apply extends Migration
             'finance_shop_settle_apply_reviewer' => Schema::TYPE_STRING . '(20)  COMMENT \'审核人姓名\'',
             'finance_shop_settle_apply_starttime' => Schema::TYPE_INTEGER . '(10)  COMMENT \'本次结算开始时间(统计)，例如：2015.9.1 00:00:00对应的int值\'',
             'finance_shop_settle_apply_endtime' => Schema::TYPE_INTEGER . '(10)  COMMENT \'本次结算结束时间(统计)，例如：2015.9.30 23:59:59对应的int值\'',
-            'isdel' => Schema::TYPE_SMALLINT. '(1) DEFAULT 0 COMMENT \'是否被删除，0为启用，1为删除\'',
+            'is_softdel' => Schema::TYPE_SMALLINT. '(1) DEFAULT 0 COMMENT \'是否被删除，0为启用，1为删除\'',
             'updated_at' => Schema::TYPE_INTEGER . '(11)  COMMENT \'审核时间\'',
             'created_at' => Schema::TYPE_INTEGER. '(11) COMMENT \'申请时间\'',
             'comment' => Schema::TYPE_TEXT. ' COMMENT \'备注，可能是审核不通过原因\'',
@@ -37,7 +37,7 @@ class m151009_091751_create_table_finance_shop_settle_apply extends Migration
                 'finance_shop_settle_apply_status','finance_shop_settle_apply_cycle','finance_shop_settle_apply_cycle_des','finance_shop_settle_apply_reviewer',
 
                 'finance_shop_settle_apply_starttime','finance_shop_settle_apply_endtime',
-                'isdel','updated_at','created_at'],
+                'is_softdel','updated_at','created_at'],
             [
                 [1,111,'爱佳家政北京沙河店',2,'爱佳家政',6,10,60,0,1,'周结','',
 

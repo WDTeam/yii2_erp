@@ -65,7 +65,7 @@ $menuItemsMain = [
                 'url' => ['/general/role'],
             ],
             [
-                'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', '设置用户权限'),
+                'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', '设置用户角色'),
                 'url' => ['/general/system-user'],
             ],
             [
