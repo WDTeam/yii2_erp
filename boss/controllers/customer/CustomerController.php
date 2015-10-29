@@ -2,7 +2,7 @@
 
 namespace boss\controllers\customer;
 use Yii;
-//use common\models\Customer;
+//use dbbase\models\Customer;
 use boss\models\customer\CustomerSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -734,7 +734,7 @@ class CustomerController extends Controller
         $customerAddress->customer_id = $customer->id;
 
         //根据区名查询省市区
-        $operationArea = \common\models\Operation\CommonOperationArea::find()->where([
+        $operationArea = \dbbase\models\Operation\CommonOperationArea::find()->where([
             'level'=>3,
             ])->asArray()->one();
         
@@ -746,7 +746,7 @@ class CustomerController extends Controller
         $operation_longitude = $operationArea['longitude'];
         $operation_latitude = $operationArea['latitude'];
 
-        $operationCity = \common\models\Operation\CommonOperationArea::find()->where([
+        $operationCity = \dbbase\models\Operation\CommonOperationArea::find()->where([
             'id'=>$operation_city_id,
             'level'=>2,
             ])->asArray()->one();
@@ -755,7 +755,7 @@ class CustomerController extends Controller
         $operation_city_short_name = $operationCity['short_name'];
         $operation_province_id = $operationCity['parent_id'];
 
-        $operationProvince = \common\models\Operation\CommonOperationArea::find()->where([
+        $operationProvince = \dbbase\models\Operation\CommonOperationArea::find()->where([
             'id'=>$operation_province_id,
             'level'=>1,
             ])->asArray()->one();
@@ -817,7 +817,7 @@ class CustomerController extends Controller
         // $info = $test->incBalance(202, 10);
         // var_dump($info);
 
-        // $res = \common\models\CustomerBlockLog::addToBlock(17782, '测试');
+        // $res = \dbbase\models\CustomerBlockLog::addToBlock(17782, '测试');
         // var_dump($res);
         // $res = \core\models\customer\CustomerCode::generateAndSend('18519654001');
         // var_dump($res);

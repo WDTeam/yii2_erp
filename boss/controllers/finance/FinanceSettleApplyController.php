@@ -3,7 +3,7 @@
 namespace boss\controllers\finance;
 error_reporting(E_ALL);
 use Yii;
-use common\models\finance\FinanceSettleApply;
+use dbbase\models\finance\FinanceSettleApply;
 use core\models\finance\FinanceSettleApplySearch;
 use core\models\finance\FinanceSettleApplyLogSearch;
 use boss\components\BaseAuthController;

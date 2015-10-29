@@ -2,9 +2,9 @@
 
 namespace core\models\customer;
 use Yii;
-use common\models\GeneralRegion;
+use dbbase\models\GeneralRegion;
 
-use common\models\operation\OperationArea;
+use dbbase\models\operation\OperationArea;
 
 
 use core\models\customer\Customer;
@@ -25,7 +25,7 @@ use core\models\customer\Customer;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class CustomerAddress extends \common\models\customer\CustomerAddress
+class CustomerAddress extends \dbbase\models\customer\CustomerAddress
 {
     
     /**

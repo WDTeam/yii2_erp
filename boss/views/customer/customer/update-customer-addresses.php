@@ -7,14 +7,14 @@ use kartik\datecontrol\DateControl;
 use kartik\widgets\Select2; // or kartik\select2\Select2
 use yii\web\JsExpression;
 use kartik\grid\GridView;
-use common\models\Customer;
-use common\models\CustomerPlatform;
-use common\models\CustomerChannal;
+use dbbase\models\Customer;
+use dbbase\models\CustomerPlatform;
+use dbbase\models\CustomerChannal;
 use kartik\date\DatePicker;
 
 /**
  * @var yii\web\View $this
- * @var common\models\Customer $model
+ * @var dbbase\models\Customer $model
  */
 
 // $this->title = Yii::t('boss', '更新{modelClass}', [

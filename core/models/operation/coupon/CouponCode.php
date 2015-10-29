@@ -21,7 +21,7 @@ use yii\base\InvalidParamException;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class CouponCode extends \common\models\operation\coupon\CouponCode
+class CouponCode extends \dbbase\models\operation\coupon\CouponCode
 {
   
     /**

@@ -6,7 +6,7 @@ use kartik\datecontrol\DateControl;
 
 /**
  * @var yii\web\View $this
- * @var common\models\OperationCity $model
+ * @var dbbase\models\OperationCity $model
  */
 
 $this->title = Yii::t('app', 'Look').$model->city_name;

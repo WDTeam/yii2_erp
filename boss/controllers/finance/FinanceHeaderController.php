@@ -13,14 +13,14 @@
 namespace boss\controllers\finance;
 
 use Yii;
-use common\models\finance\FinanceHeader;
+use dbbase\models\finance\FinanceHeader;
 use boss\models\finance\FinanceHeaderSearch;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
-use common\models\finance\FinanceOrderChannel;
-use common\models\finance\FinancePayChannel;
+use dbbase\models\finance\FinanceOrderChannel;
+use dbbase\models\finance\FinancePayChannel;
 use boss\models\finance\FinancePayChannelSearch;
 use boss\models\finance\FinanceOrderChannelSearch;
 use crazyfd\qiniu\Qiniu;

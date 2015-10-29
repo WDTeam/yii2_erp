@@ -7,7 +7,7 @@ use \core\models\operation\OperationCategory;
 use \core\models\operation\OperationCity;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\order\OrderSearch;
-use \common\models\order\OrderStatusDict;
+use \dbbase\models\order\OrderStatusDict;
 use \core\models\worker\WorkerAccessToken;
 
 class ConfigureController extends \restapi\components\Controller

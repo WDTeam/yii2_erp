@@ -7,7 +7,7 @@ use kartik\datecontrol\DateControl;
 use boss\components\AreaCascade;
 /**
  * @var yii\web\View $this
- * @var common\models\OperationCity $model
+ * @var dbbase\models\OperationCity $model
  */
 
 $this->title = Yii::t('app', 'release').Yii::t('app', 'City');

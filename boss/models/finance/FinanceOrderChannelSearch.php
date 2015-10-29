@@ -5,10 +5,10 @@ namespace boss\models\finance;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\finance\FinanceOrderChannel;
+use dbbase\models\finance\FinanceOrderChannel;
 
 /**
- * FinanceOrderChannelSearch represents the model behind the search form about `common\models\FinanceOrderChannel`.
+ * FinanceOrderChannelSearch represents the model behind the search form about `dbbase\models\FinanceOrderChannel`.
  */
 class FinanceOrderChannelSearch extends FinanceOrderChannel
 {

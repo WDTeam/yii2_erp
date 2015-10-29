@@ -15,7 +15,7 @@ use Yii;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class CustomerCommentTag extends \common\models\customer\CustomerCommentTag
+class CustomerCommentTag extends \dbbase\models\customer\CustomerCommentTag
 {
     /**
      * @inheritdoc

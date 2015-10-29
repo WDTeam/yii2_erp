@@ -4,7 +4,7 @@ namespace core\models\finance;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\finance\FinanceWorkerNonOrderIncome;
+use dbbase\models\finance\FinanceWorkerNonOrderIncome;
 use core\models\worker\WorkerTask;
 use yii\data\ArrayDataProvider;
 use core\models\worker\Worker;
@@ -12,7 +12,7 @@ use core\models\finance\FinanceSettleApplySearch;
 use core\models\finance\FinanceCompensate;
 
 /**
- * FinanceWorkerNonOrderIncomeSearch represents the model behind the search form about `common\models\finance\FinanceWorkerNonOrderIncome`.
+ * FinanceWorkerNonOrderIncomeSearch represents the model behind the search form about `dbbase\models\finance\FinanceWorkerNonOrderIncome`.
  */
 class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
 {

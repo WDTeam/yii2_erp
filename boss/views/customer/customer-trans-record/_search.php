@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use common\models\finance\FinanceOrderChannel;
+use dbbase\models\finance\FinanceOrderChannel;
 use boss\models\payment\GeneralPay;
 use kartik\widgets\Select2;
 use yii\helpers\Url;

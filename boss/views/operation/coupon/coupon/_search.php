@@ -7,7 +7,7 @@ use yii\helpers\ArrayHelper;
 
 use \core\models\operation\OperationCity;
 
-//use \common\models\Operation\OperationCity;
+//use \dbbase\models\Operation\OperationCity;
 
 /**
  * @var yii\web\View $this

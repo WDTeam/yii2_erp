@@ -15,7 +15,7 @@ use yii\helpers\ArrayHelper;
  * @property integer $admin_id
  * @property double $isdel
  */
-class WorkerSkillConfig extends \common\models\worker\WorkerSkillConfig
+class WorkerSkillConfig extends \dbbase\models\worker\WorkerSkillConfig
 {
     /**
      * 获取阿姨技能配置信息

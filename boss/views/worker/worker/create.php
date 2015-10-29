@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 /**
  * @var yii\web\View $this
- * @var common\models\Worker $model
+ * @var dbbase\models\Worker $model
  */
 
 /*tabs-x 切换

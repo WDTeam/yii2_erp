@@ -2,7 +2,7 @@
 namespace boss\controllers\finance;
 
 use Yii;
-use common\models\finance\FinanceOrderChannel;
+use dbbase\models\finance\FinanceOrderChannel;
 use boss\models\finance\FinanceOrderChannelSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;

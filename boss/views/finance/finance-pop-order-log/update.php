@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 /**
  * @var yii\web\View $this
- * @var common\models\FinancePopOrderLog $model
+ * @var dbbase\models\FinancePopOrderLog $model
  */
 
 $this->title = Yii::t('boss', 'Update {modelClass}: ', [

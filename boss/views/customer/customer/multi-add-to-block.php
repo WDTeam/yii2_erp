@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
-use common\models\Customer;
+use dbbase\models\Customer;
 use boss\components\AreaCascade;
 
 /**

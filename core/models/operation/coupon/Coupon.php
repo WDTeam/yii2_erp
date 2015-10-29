@@ -41,7 +41,7 @@ use yii\base\InvalidParamException;
  * @property integer $system_user_id
  * @property string $system_user_name
  */
-class Coupon extends \common\models\operation\coupon\Coupon
+class Coupon extends \dbbase\models\operation\coupon\Coupon
 {
 
 	/**

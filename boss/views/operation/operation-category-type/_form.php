@@ -6,7 +6,7 @@ use kartik\date\DatePicker;
 use dosamigos\datetimepicker\DateTimePicker;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\OperationCategoryType */
+/* @var $model dbbase\models\OperationCategoryType */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\OperationBootPage */
+/* @var $model dbbase\models\OperationBootPage */
 
 //$this->title = $model->id;
 $this->title = Yii::t('app','Look').Yii::t('operation','Boot Page');

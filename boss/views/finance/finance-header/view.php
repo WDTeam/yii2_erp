@@ -10,7 +10,7 @@ use kartik\widgets\Select2;
 
 /**
  * @var yii\web\View $this
- * @var common\models\FinanceHeader $model
+ * @var dbbase\models\FinanceHeader $model
  */
 
 $this->title = $model->finance_header_title;

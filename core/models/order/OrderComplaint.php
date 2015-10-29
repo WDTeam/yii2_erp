@@ -3,7 +3,7 @@ namespace core\models\order;
 
 use Yii;
 use yii\data\ActiveDataProvider;
-class OrderComplaint extends \common\models\order\OrderComplaint
+class OrderComplaint extends \dbbase\models\order\OrderComplaint
 {
 	
     /**

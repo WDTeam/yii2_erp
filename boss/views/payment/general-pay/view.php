@@ -6,7 +6,7 @@ use kartik\datecontrol\DateControl;
 
 /**
  * @var yii\web\View $this
- * @var common\models\GeneralPay $model
+ * @var dbbase\models\GeneralPay $model
  */
 
 $this->title = $model->id;

@@ -3,7 +3,7 @@
 namespace boss\controllers\payment;
 
 use Yii;
-use common\models\GeneralPayLog;
+use dbbase\models\GeneralPayLog;
 use boss\models\GeneralPayLogSearch;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;

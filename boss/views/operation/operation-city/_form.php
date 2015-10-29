@@ -8,7 +8,7 @@ use boss\components\AreaCascade;
 
 /**
  * @var yii\web\View $this
- * @var common\models\OperationCity $model
+ * @var dbbase\models\OperationCity $model
  * @var yii\widgets\ActiveForm $form
  */
 ?>

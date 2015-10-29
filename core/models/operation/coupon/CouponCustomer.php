@@ -24,7 +24,7 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $updated_at
 * @property integer $is_del
  */
-class CouponCustomer extends \common\models\operation\coupon\CouponCustomer
+class CouponCustomer extends \dbbase\models\operation\coupon\CouponCustomer
 {
     /**
      * 自动处理创建、修改时间
