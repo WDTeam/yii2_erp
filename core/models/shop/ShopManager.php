@@ -2,11 +2,13 @@
 namespace core\models\shop;
 use yii;
 use yii\behaviors\TimestampBehavior;
-use boss\models\Operation\OperationArea;
+use core\models\Operation\OperationArea;
 use yii\base\Object;
 use core\models\shop\ShopStatus;
 use crazyfd\qiniu\Qiniu;
 use core\behaviors\ShopStatusBehavior;
+use core\models\operation\OperationCity;
+use yii\helpers\ArrayHelper;
 class ShopManager extends \common\models\shop\ShopManager
 {
     /**
@@ -216,5 +218,13 @@ class ShopManager extends \common\models\shop\ShopManager
     
     public static function findById($id) {
         return self::findOne(['id'=>$id]);
+    }
+    /**
+     * 获取已开通城市列表
+     * @return array [city_id=>city_name,...]
+     */
+    public static function getOnlineCityList(){
+        $onlineCityList = OperationCity::getCityOnlineInfoList();
+        return $onlineCityList?ArrayHelper::map($onlineCityList,'city_id','city_name'):[];
     }
 }

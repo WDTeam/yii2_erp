@@ -68,24 +68,27 @@ class Worker extends \common\models\worker\Worker
      * @return array 阿姨信息
      */
     public static function getWorkerInfo($worker_id){
-
-        $workerInfo = self::find()->where((['id'=>$worker_id]))->select('id,shop_id,worker_name,worker_phone,worker_idcard,worker_type,worker_photo,worker_identity_id,worker_star,created_ad')->asArray()->one();
-        if($workerInfo){
-            //门店名称,家政公司名称
-            $shopInfo = Shop::findone($workerInfo['shop_id']);
-            if($shopInfo){
-                $shopManagerInfo = ShopManager::findOne($shopInfo['shop_manager_id']);
-            }
-            $workerInfo['shop_name'] = isset($shopInfo['name'])?$shopInfo['name']:'';
-            $workerInfo['shop_manager_id'] = isset($shopInfo['shop_manager_id'])?$shopInfo['shop_manager_id']:'';
-            $workerInfo['worker_skill'] = WorkerSkill::getWorkerSkill($worker_id);
-            $workerInfo['shop_manager_name'] = isset($shopManagerInfo['name'])?$shopManagerInfo['name']:'';
-            $workerInfo['worker_type_description'] = self::getWorkerTypeShow($workerInfo['worker_type']);
-            $workerInfo['worker_identity_description'] = WorkerIdentityConfig::getWorkerIdentityShow($workerInfo['worker_identity_id']);
+        if(empty($worker_id)){
+            return [];
         }else{
-            $workerInfo = [];
+            $workerInfo = self::find()->where((['id'=>$worker_id]))->select('id,shop_id,worker_name,worker_phone,worker_idcard,worker_type,worker_photo,worker_identity_id,worker_star,created_ad')->asArray()->one();
+            if($workerInfo){
+                //门店名称,家政公司名称
+                $shopInfo = Shop::findone($workerInfo['shop_id']);
+                if($shopInfo){
+                    $shopManagerInfo = ShopManager::findOne($shopInfo['shop_manager_id']);
+                }
+                $workerInfo['shop_name'] = isset($shopInfo['name'])?$shopInfo['name']:'';
+                $workerInfo['shop_manager_id'] = isset($shopInfo['shop_manager_id'])?$shopInfo['shop_manager_id']:'';
+                $workerInfo['worker_skill'] = WorkerSkill::getWorkerSkill($worker_id);
+                $workerInfo['shop_manager_name'] = isset($shopManagerInfo['name'])?$shopManagerInfo['name']:'';
+                $workerInfo['worker_type_description'] = self::getWorkerTypeShow($workerInfo['worker_type']);
+                $workerInfo['worker_identity_description'] = WorkerIdentityConfig::getWorkerIdentityShow($workerInfo['worker_identity_id']);
+            }else{
+                $workerInfo = [];
+            }
+            return $workerInfo;
         }
-        return $workerInfo;
     }
 
 
@@ -96,26 +99,30 @@ class Worker extends \common\models\worker\Worker
      * @return array 阿姨详细信息
      */
     public static function getWorkerDetailInfo($worker_id){
-        $workerDetailResult = self::find()
-            ->where(['id'=>$worker_id])
-            ->select('id,shop_id,worker_name,worker_phone,worker_photo,worker_age,worker_type,worker_identity_id,worker_star,worker_sex,worker_edu,worker_stat_order_num,worker_stat_order_refuse,worker_stat_order_complaint,worker_stat_order_money,worker_live_province,worker_live_city,worker_live_area,worker_live_street')
-            ->joinWith('workerExtRelation')
-            ->joinWith('workerStatRelation')
-            ->asArray()
-            ->one();
-
-        if(!empty($workerDetailResult)){
-            $workerDetailResult['worker_sex'] = Worker::getWorkerSexShow($workerDetailResult['worker_sex']);
-            $workerDetailResult['worker_type_description'] = self::getWorkerTypeShow($workerDetailResult['worker_type']);
-            $workerDetailResult['worker_identity_description'] = WorkerIdentityConfig::getWorkerIdentityShow($workerDetailResult['worker_identity_id']);
-            $workerDetailResult['worker_live_place'] = self::getWorkerPlaceShow($workerDetailResult['worker_live_province'],$workerDetailResult['worker_live_city'],$workerDetailResult['worker_live_area'],$workerDetailResult['worker_live_street']);
-            $workerDetailResult['worker_skill'] = WorkerSkill::getWorkerSkill($worker_id);
-            unset($workerDetailResult['workerStatRelation']);
-            unset($workerDetailResult['workerExtRelation']);
-        }else{
+        if(empty($worker_id)){
             return [];
+        }else{
+            $workerDetailResult = self::find()
+                ->where(['id'=>$worker_id])
+                ->select('id,shop_id,worker_name,worker_phone,worker_photo,worker_age,worker_type,worker_identity_id,worker_star,worker_sex,worker_edu,worker_stat_order_num,worker_stat_order_refuse,worker_stat_order_complaint,worker_stat_order_money,worker_live_province,worker_live_city,worker_live_area,worker_live_street')
+                ->joinWith('workerExtRelation')
+                ->joinWith('workerStatRelation')
+                ->asArray()
+                ->one();
+
+            if(!empty($workerDetailResult)){
+                $workerDetailResult['worker_sex'] = Worker::getWorkerSexShow($workerDetailResult['worker_sex']);
+                $workerDetailResult['worker_type_description'] = self::getWorkerTypeShow($workerDetailResult['worker_type']);
+                $workerDetailResult['worker_identity_description'] = WorkerIdentityConfig::getWorkerIdentityShow($workerDetailResult['worker_identity_id']);
+                $workerDetailResult['worker_live_place'] = self::getWorkerPlaceShow($workerDetailResult['worker_live_province'],$workerDetailResult['worker_live_city'],$workerDetailResult['worker_live_area'],$workerDetailResult['worker_live_street']);
+                $workerDetailResult['worker_skill'] = WorkerSkill::getWorkerSkill($worker_id);
+                unset($workerDetailResult['workerStatRelation']);
+                unset($workerDetailResult['workerExtRelation']);
+            }else{
+                return [];
+            }
+            return $workerDetailResult;
         }
-        return $workerDetailResult;
     }
 
     /**
@@ -124,18 +131,22 @@ class Worker extends \common\models\worker\Worker
      * @return array 阿姨统计信息
      */
     public static function getWorkerStatInfo($worker_id){
-        $workerStatResult = self::find()
-            ->where(['id'=>$worker_id])
-            ->select('id,shop_id,worker_name,worker_phone,worker_stat_order_num,worker_stat_order_refuse,worker_stat_order_complaint,worker_stat_order_money')
-            ->joinWith('workerStatRelation')
-            ->asArray()
-            ->one();
-        if($workerStatResult){
-            //获取阿姨服务过的用户数
-            $workerStatResult['worker_stat_server_customer'] = CustomerWorker::countWorkerServerAllCustomer($worker_id);
-            unset($workerStatResult['workerStatRelation']);
+        if(empty($worker_id)){
+            return [];
+        }else{
+            $workerStatResult = self::find()
+                ->where(['id'=>$worker_id])
+                ->select('id,shop_id,worker_name,worker_phone,worker_stat_order_num,worker_stat_order_refuse,worker_stat_order_complaint,worker_stat_order_money')
+                ->joinWith('workerStatRelation')
+                ->asArray()
+                ->one();
+            if($workerStatResult){
+                //获取阿姨服务过的用户数
+                $workerStatResult['worker_stat_server_customer'] = CustomerWorker::countWorkerServerAllCustomer($worker_id);
+                unset($workerStatResult['workerStatRelation']);
+            }
+            return $workerStatResult;
         }
-        return $workerStatResult;
     }
 
     /**
@@ -144,25 +155,28 @@ class Worker extends \common\models\worker\Worker
      * @return array 阿姨详细信息(阿姨id，阿姨姓名)
      */
     public static function getWorkerInfoByPhone($phone){
-
-        $condition = ['worker_phone'=>$phone,'isdel'=>0,'worker_is_block'=>0,'worker_is_vacation'=>0,'worker_is_blacklist'=>0];
-        $workerInfo = worker::find()->where($condition)->select('id,shop_id,worker_name,worker_phone,worker_idcard,worker_type,worker_identity_id,created_ad')->asArray()->one();
-        if($workerInfo){
-            //门店名称,家政公司名称
-            $shopInfo = Shop::findone($workerInfo['shop_id']);
-            if($shopInfo){
-                $shopManagerInfo = ShopManager::findOne($shopInfo['shop_manager_id']);
-            }
-            $workerInfo['shop_name'] = isset($shopInfo['name'])?$shopInfo['name']:'';
-            $workerInfo['shop_manager_name'] = isset($shopManagerInfo['name'])?$shopManagerInfo['name']:'';
-            //阿姨类型描述信息
-            $workerInfo['worker_type_description'] = self::getWorkerTypeShow($workerInfo['worker_type']);
-            //阿姨身份描述信息
-            $workerInfo['worker_identity_description'] = WorkerIdentityConfig::getWorkerIdentityShow($workerInfo['worker_identity_id']);
+        if(empty($phone)){
+            return [];
         }else{
-            $workerInfo = [];
+            $condition = ['worker_phone'=>$phone,'isdel'=>0,'worker_is_block'=>0,'worker_is_vacation'=>0,'worker_is_blacklist'=>0];
+            $workerInfo = worker::find()->where($condition)->select('id,shop_id,worker_name,worker_phone,worker_idcard,worker_type,worker_identity_id,created_ad')->asArray()->one();
+            if($workerInfo){
+                //门店名称,家政公司名称
+                $shopInfo = Shop::findone($workerInfo['shop_id']);
+                if($shopInfo){
+                    $shopManagerInfo = ShopManager::findOne($shopInfo['shop_manager_id']);
+                }
+                $workerInfo['shop_name'] = isset($shopInfo['name'])?$shopInfo['name']:'';
+                $workerInfo['shop_manager_name'] = isset($shopManagerInfo['name'])?$shopManagerInfo['name']:'';
+                //阿姨类型描述信息
+                $workerInfo['worker_type_description'] = self::getWorkerTypeShow($workerInfo['worker_type']);
+                //阿姨身份描述信息
+                $workerInfo['worker_identity_description'] = WorkerIdentityConfig::getWorkerIdentityShow($workerInfo['worker_identity_id']);
+            }else{
+                $workerInfo = [];
+            }
+            return $workerInfo;
         }
-        return $workerInfo;
     }
 
     /**
@@ -191,12 +205,19 @@ class Worker extends \common\models\worker\Worker
      * @param  int $identity_id 阿姨身份id
      * @return array 阿姨id列表
      */
-    public static function getWorkerIds($type,$identity_id){
-        $condition['worker_type'] = $type;
-        $condition['worker_identity_id'] = $identity_id;
+    public static function getWorkerIds($type=null,$identity_id=null){
+        $condition = [];
+        if($type){
+            $condition['worker_type'] = $type;
+        }
+        if($identity_id){
+            $condition['worker_identity_id'] = $identity_id;
+        }
         $workerList = self::find()->select('id')->where($condition)->asArray()->all();
         return $workerList?ArrayHelper::getColumn($workerList,'id'):[];
     }
+
+
 
 
     /**

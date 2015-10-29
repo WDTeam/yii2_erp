@@ -4,16 +4,18 @@ namespace core\models\customer;
 
 
 use Yii;
-// use common\models\Customer;
 
+use yii\web\BadRequestHttpException;
+use common\models\customer\GeneralRegion;
 use common\models\customer\CustomerExtSrc;
+
 use core\models\customer\CustomerAddress;
 use core\models\customer\CustomerWorker;
 use common\models\Worker;
 use core\models\customer\CustomerExtBalance;
 use core\models\customer\CustomerExtScore;
-use common\models\customer\GeneralRegion;
-use yii\web\BadRequestHttpException;
+use core\models\finance\FinanceOrderChannal;
+
 
 class Customer extends \common\models\customer\Customer
 {
@@ -282,6 +284,7 @@ class Customer extends \common\models\customer\Customer
 		if(empty($customer)) return false;
 
 		$channal_name = funcname($channal_id);
+		//$channal_name = FinanceOrderChannal::getOrderChannelByName($channal_id);
 	
 		$customerExtSrc = new CustomerExtSrc;
 		$customerExtSrc->customer_id = $customer["id"];
@@ -311,6 +314,7 @@ class Customer extends \common\models\customer\Customer
 		if(empty($customer)) return false;
 
 		$channal_id = funcname($channal_name);
+		//$channal_id = FinanceOrderChannal::getOrderChannelByid($channal_name)
 	
 		$customerExtSrc = new CustomerExtSrc;
 		$customerExtSrc->customer_id = $customer["id"];
