@@ -52,7 +52,7 @@ use yii\web\JsExpression;
             </div>
      
      
-      <div class='col-md-3'>
+      <div class='col-md-3' style="float:left;">
         <?= $form->field($model, 'finance_refund_shop_id')->widget(Select2::classname(), [
             'initValueText' => '门店名称', // set the initial display text
             'options' => ['placeholder' => '搜索门店名称...', 'class' => 'col-md-2'],

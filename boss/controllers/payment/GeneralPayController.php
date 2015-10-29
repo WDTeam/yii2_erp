@@ -158,10 +158,19 @@ class GeneralPayController extends Controller
         return json_encode(['results' => $channel]);
     }
 
+
     public function actionTest()
     {
 
+        $str = 'a:23:{s:12:"payment_type";s:1:"1";s:7:"subject";s:19:"e家洁在线支付";s:8:"trade_no";s:16:"2015102942279250";s:11:"buyer_email";s:11:"18311474301";s:10:"gmt_create";s:19:"2015-10-29 15:57:07";s:11:"notify_type";s:17:"trade_status_sync";s:8:"quantity";s:1:"1";s:12:"out_trade_no";s:13:"1510290160566";s:9:"seller_id";s:16:"2088801136967007";s:11:"notify_time";s:19:"2015-10-29 15:57:09";s:4:"body";s:26:"e家洁在线支付0.02元";s:12:"trade_status";s:14:"TRADE_FINISHED";s:19:"is_total_fee_adjust";s:1:"N";s:9:"total_fee";s:4:"0.02";s:11:"gmt_payment";s:19:"2015-10-29 15:57:08";s:12:"seller_email";s:15:"47632990@qq.com";s:9:"gmt_close";s:19:"2015-10-29 15:57:08";s:5:"price";s:4:"0.02";s:8:"buyer_id";s:16:"2088802381237501";s:9:"notify_id";s:34:"2983afc3b92e376e84923e4c75e0f3574s";s:10:"use_coupon";s:1:"N";s:9:"sign_type";s:3:"RSA";s:4:"sign";s:172:"ZlCICZ/ar7ePcQalT2s1sI7o8Bqrt4picnzIxaucQeNi8GE/mmch4armXS2BKmlzSpyLcP9Ge+CSC2JOxRMZbSl2aZT4xy6qvllToCBBos4tcybujHR61lrIeY8nSnWlGFTq11N7+9aKHZ2GuNtpoRAPxQswJC+M6ekopYmelrc=";}||a:23:{s:12:"payment_type";s:1:"1";s:7:"subject";s:19:"e家洁在线支付";s:8:"trade_no";s:16:"2015102942279250";s:11:"buyer_email";s:11:"18311474301";s:10:"gmt_create";s:19:"2015-10-29 15:57:07";s:11:"notify_type";s:17:"trade_status_sync";s:8:"quantity";s:1:"1";s:12:"out_trade_no";s:13:"1510290160566";s:9:"seller_id";s:16:"2088801136967007";s:11:"notify_time";s:19:"2015-10-29 16:01:23";s:4:"body";s:26:"e家洁在线支付0.02元";s:12:"trade_status";s:14:"TRADE_FINISHED";s:19:"is_total_fee_adjust";s:1:"N";s:9:"total_fee";s:4:"0.02";s:11:"gmt_payment";s:19:"2015-10-29 15:57:08";s:12:"seller_email";s:15:"47632990@qq.com";s:9:"gmt_close";s:19:"2015-10-29 15:57:08";s:5:"price";s:4:"0.02";s:8:"buyer_id";s:16:"2088802381237501";s:9:"notify_id";s:34:"2983afc3b92e376e84923e4c75e0f3574s";s:10:"use_coupon";s:1:"N";s:9:"sign_type";s:3:"RSA";s:4:"sign";s:172:"KOL2stTNfEGWMrzf3tkwKzkBU0Riz2sTZqjVkthSgZDz3zZ7BgQqCktoruovPQX/vvqKeGNVcHwIvaSmTaToZaSPRVdDK+yA88gTcBtEGa6uQtIF0MXCsv40Cefx2DRfThzuUE1kUX1YK+lzOXq5W5qeY8g8SBZxtbP7+636wTI=";}';
+        dump(unserialize($str));
 
+        exit;
+        \core\models\payment\GeneralPaySearch::getOrderMoney([48,49,50,51]);
+
+        exit;
+        var_dump(preg_replace("/(\d+)/",5,"'FULLTIME_WORKER_TIMEOUT' => 1"));
+        exit;
         $data = \core\models\order\OrderSearch::getWorkerAndOrderAndDoneTime(1,'1445948100','1445948900');
         dump($data);
         exit;

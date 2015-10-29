@@ -20,7 +20,8 @@ use yii\helpers\ArrayHelper;
 $this->title = $workerModel->worker_name;
 $content1 = $this->render('view_worker',['model'=>$workerModel]);
 $content2 = $this->render('view_schedule',['worker_id'=>$workerModel->id,'schedule'=>$schedule]);
-$content3 = $this->render('view_log',['workerBlockLogData'=>$workerBlockLogData]);
+$content3 = $this->render('view_vacation',['workerVacationData'=>$workerVacationData]);
+$content4 = $this->render('view_log',['workerBlockLogData'=>$workerBlockLogData]);
 if(Yii::$app->request->get('tab')==2){
     $content1View = false;
     $content2View = true;
@@ -36,15 +37,17 @@ $items = [
         'active'=>$content1View
     ],
     [
-        'label'=>'<i class="fa fa-fw fa-th-list"></i> 排班表',
+        'label'=>'<i class="fa fa-fw  fa-calendar"></i> 排班表',
         'content'=>$content2,
-        //'linkOptions'=>['data-url'=>\yii\helpers\Url::to(['/worker/view-schedule?id='.$workerModel->id])],
         'active'=>$content2View
     ],
     [
-        'label'=>'<i class="fa fa-fw fa-book"></i> 操作记录',
+        'label'=>'<i class="fa fa-fw fa-th-list"></i> 请假表',
         'content'=>$content3,
-        //'linkOptions'=>['data-url'=>\yii\helpers\Url::to(['/site/tabs-data'])],
+    ],
+    [
+        'label'=>'<i class="fa fa-fw fa-book"></i> 操作记录',
+        'content'=>$content4,
         'active'=>false
     ],
 ];

@@ -10,6 +10,7 @@ use core\models\order\Order;
 use core\models\worker\Worker;
 use common\models\finance\FinanceWorkerOrderIncome;
 use core\models\finance\FinanceSettleApplySearch;
+use common\models\order\OrderStatusDict;
 
 /**
  * FinanceWorkerOrderIncomeSearch represents the model behind the search form about `common\models\finance\FinanceWorkerOrderIncome`.
@@ -38,7 +39,7 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
     public function rules()
     {
         return [
-            [['id', 'worker_id', 'order_id', 'order_service_type_id', 'channel_id', 'order_pay_type_id', 'order_booked_begin_time', 'order_booked_count', 'isSettled', 'finance_worker_order_income_starttime', 'finance_worker_order_income_endtime', 'finance_settle_apply_id', 'isdel', 'updated_at', 'created_at'], 'integer'],
+            [['id', 'worker_id', 'order_id', 'order_service_type_id', 'channel_id', 'order_pay_type_id', 'order_booked_begin_time', 'order_booked_count', 'isSettled', 'finance_worker_order_income_starttime', 'finance_worker_order_income_endtime', 'finance_settle_apply_id', 'is_softdel', 'updated_at', 'created_at'], 'integer'],
             [['order_service_type_name', 'order_channel_name', 'order_pay_type_des'], 'safe'],
             [['order_unit_money', 'order_money', 'finance_worker_order_income_discount_amount', 'order_pay_money', 'finance_worker_order_income_money'], 'number'],
         ];
@@ -80,7 +81,7 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
             'finance_worker_order_income_starttime' => $this->finance_worker_order_income_starttime,
             'finance_worker_order_income_endtime' => $this->finance_worker_order_income_endtime,
             'finance_settle_apply_id' => $this->finance_settle_apply_id,
-            'isdel' => $this->isdel,
+            'is_softdel' => $this->is_softdel,
             'updated_at' => $this->updated_at,
             'created_at' => $this->created_at,
         ]);
@@ -122,6 +123,14 @@ class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
         $orders = Order::find()->joinWith('orderExtWorker')->where(['orderExtWorker.worker_id'=>$worker_id])->all();
         return $this->getWorkerOrderIncomeArrayFromOrders($orders);
     }
+    
+    public static function getOrderCountByWorkerId($worker_id,$start_time,$end_time){
+        return Order::find()->joinWith('orderExtWorker')->joinWith('orderExtStatus')
+                ->where(['orderExtWorker.worker_id'=>$worker_id,'orderExtStatus.order_status_dict_id'=>OrderStatusDict::ORDER_CUSTOMER_ACCEPT_DONE])
+                ->andFilterWhere(['between','order_booked_begin_time',$start_time,$end_time])
+                ->count();
+    }
+    
     /**
      * 根据订单列表信息获取订单收入数组
      * @param type $orders

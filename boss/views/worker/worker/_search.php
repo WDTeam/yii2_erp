@@ -30,7 +30,7 @@ use kartik\date\DatePicker;
             'name' => 'worker_rule_id',
             'hideSearch' => true,
             'data' => $model::getOnlineCityList(),
-            'options' => ['placeholder' => '选择城市', 'inline' => true],
+            'options' => ['placeholder' => '选择城市...', 'inline' => true],
             'pluginOptions' => [
                 'allowClear' => true
             ],
@@ -60,38 +60,6 @@ use kartik\date\DatePicker;
     <div class='col-md-2'>
         <?= $form->field($model, 'worker_phone') ?>
     </div>
-    <?php // echo $form->field($model, 'worker_level') ?>
-
-    <?php // echo $form->field($model, 'worker_auth_status') ?>
-
-    <?php // echo $form->field($model, 'worker_ontrial_status') ?>
-
-    <?php // echo $form->field($model, 'worker_onboard_status') ?>
-
-    <?php // echo $form->field($model, 'worker_work_city') ?>
-
-    <?php // echo $form->field($model, 'worker_work_area') ?>
-
-    <?php // echo $form->field($model, 'worker_work_street') ?>
-
-    <?php // echo $form->field($model, 'worker_work_lng') ?>
-
-    <?php // echo $form->field($model, 'worker_work_lat') ?>
-
-    <?php // echo $form->field($model, 'worker_type') ?>
-
-    <?php // echo $form->field($model, 'worker_rule_id') ?>
-
-    <?php // echo $form->field($model, 'worker_is_block') ?>
-
-    <?php // echo $form->field($model, 'worker_is_blacklist') ?>
-
-    <?php // echo $form->field($model, 'created_ad') ?>
-
-    <?php // echo $form->field($model, 'updated_ad') ?>
-
-    <?php // echo $form->field($model, 'isdel') ?>
-
 
     <div class='col-md-2' style="    margin-top: 22px;">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>

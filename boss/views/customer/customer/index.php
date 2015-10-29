@@ -17,6 +17,7 @@ use yii\widgets\ActiveForm;
 
 use common\models\order\OrderExtCustomer;
 
+use core\models\customer\Customer;
 use core\models\customer\CustomerAddress;
 use core\models\customer\CustomerExtBalance;
 use core\models\customer\CustomerExtSrc;
@@ -44,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
     <?php
     $b= Html::a('<i class="glyphicon" ></i>全部 '.$searchModel->countALLCustomer(), ['customer/customer/index'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']). 
-    Html::a('<i class="glyphicon" ></i>黑名单 '.$searchModel->countBlockCustomer(), ['customer/customer/index?CustomerSearch[is_del]=1'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']).
+    Html::a('<i class="glyphicon" ></i>封号'.$searchModel->countBlockCustomer(), ['customer/customer/index?CustomerSearch[is_del]=1'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']).
     Html::a('<i class="glyphicon" ></i>按时间从大到小 ', ['index', 'sort'=>'created_at'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']).
     Html::a('<i class="glyphicon" ></i>按订单量从大到小 ', ['index', 'sort'=>'order_count'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']);
    
@@ -74,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     // Html::a('<i class="glyphicon">批量移除黑名单</i>', ['customer/multi-remove-from-block'], [
                     //     'class' => 'btn btn-default multi-remove-from-block',
                     // ]),
-                    Html::a('<i class="glyphicon">导入测试数据</i>', ['customer/customer/data'], [
+                    Html::a('<i class="glyphicon">data</i>', ['customer/customer/data'], [
                         'class' => 'btn btn-default',
                     ]),
             ],
@@ -113,7 +114,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'format' => 'raw',
-                'label' => '黑名单原因',
+                'label' => '封号原因',
                 'value' => function ($dataProvider) {
                     $currentBlockReason = \core\models\customer\CustomerBlockLog::getCurrentBlockReason($dataProvider->id);
                     return $currentBlockReason == false ? '-' : $currentBlockReason;
@@ -161,8 +162,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'label' => '平台',
                 'value' => function ($dataProvider) {
-                    $customerExtSrc = CustomerExtSrc::getFirstSrc($dataProvider->id);
-                    return $customerExtSrc == false ? '-' : $customerExtSrc->platform_name == '' ? '-' : $customerExtSrc->platform_name;
+                    $customer_ext_src = Customer::getFirstSrc($dataProvider->customer_phone);
+                    $platform_name = empty($customer_ext_src) ? '-' : empty($customer_ext_src['platform_name']) ? '-' : $customer_ext_src['platform_name']; 
+					return $platform_name;
                 },
                 'width' => "80px",
             ],
@@ -170,8 +172,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'label' => '渠道',
                 'value' => function ($dataProvider) {
-                    $customerExtSrc = CustomerExtSrc::getFirstSrc($dataProvider->id);
-                    return $customerExtSrc == false ? '-' : $customerExtSrc->channal_name == '' ? '-' : $customerExtSrc->channal_name;
+                    $customer_ext_src = Customer::getFirstSrc($dataProvider->customer_phone);
+                    $channal_name = empty($customer_ext_src) ? '-' : empty($customer_ext_src['channal_name']) ? '-' : $customer_ext_src['channal_name']; 
+					return $channal_name;
                 },
                 'width' => "80px",
             ],
@@ -193,14 +196,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'width' => "80px",
             ],
-            [
-                'format' => 'raw',
-                'label' => '投诉',
-                'value' => function ($dataProvider) {
-                    return $dataProvider->customer_complaint_times;
-                },
-                'width' => "50px",
-            ],
+            //[
+            //    'format' => 'raw',
+            //    'label' => '投诉',
+            //    'value' => function ($dataProvider) {
+            //        return $dataProvider->customer_complaint_times;
+            //    },
+            //    'width' => "50px",
+            //],
+			'customer_complaint_times',
             [
                 'format' => 'datetime',
                 'label' => '创建时间',
@@ -215,21 +219,21 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template'=>'{block}',
                 'buttons' => [
                     'block' => function ($url, $model) {
-                        return empty($model->is_del) ? Html::a('加入黑名单', [
+                        return empty($model->is_del) ? Html::a('封号', [
                             'customer/customer/add-to-block',
                             'id' => $model->id
                         ], [
-                            'title' => Yii::t('app', '加入黑名单'),
+                            'title' => Yii::t('app', '封号'),
                             'data-toggle'=>'modal',
                             'data-target'=>'#modal',
                             'data-id'=>$model->id,
-                            'class'=>'block-btn',
-                        ]) : Html::a('解除黑名单', [
+                            'class'=>'btn btn-primary',
+                        ]) : Html::a('解除封号', [
                             'customer/customer/remove-from-block',
                             'id' => $model->id
                             
                         ], [
-                            'title' => Yii::t('app', '解除黑名单'),
+                            'title' => Yii::t('app', '解除封号'),
                         ]);
                     },
                 ],
@@ -255,7 +259,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
 </div>
 <?php echo Modal::widget([
-'header' => '<h4 class="modal-title">黑名单原因</h4>',
+'header' => '<h4 class="modal-title">封号原因</h4>',
 'id' =>'modal',
 ]);?>
 

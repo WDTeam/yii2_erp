@@ -57,7 +57,11 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     
     const PARTTIME = 2;//兼职
     
-    public $roleDes = [self::FULLTIME=>'全职',self::PARTTIME=>'兼职'];
+    const PARKTIME = 3;//高峰
+    
+    const INTERVALTIME = 4;//时段
+    
+    public $roleDes = [self::FULLTIME=>'全职',self::PARTTIME=>'兼职',self::PARKTIME=>'高峰',self::INTERVALTIME=>'时段'];
             
     public $latestSettleTime;//上次结算日期
     
@@ -110,7 +114,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             'finance_settle_apply_money' => $this->finance_settle_apply_money,
             'finance_settle_apply_status' => $this->finance_settle_apply_status,
             'finance_settle_apply_cycle' => $this->finance_settle_apply_cycle,
-            'isdel' => $this->isdel,
+            'is_softdel' => $this->is_softdel,
             'updated_at' => $this->updated_at,
             'created_at' => $this->created_at,
             'worker_tel' => $this->worker_tel,
@@ -197,7 +201,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         $apply_order_money = 0;//工时费小计
         $apply_task_count = 0;//完成任务数,从任务系统获取
         $apply_task_money = 0;//完成任务奖励,从任务系统获取
-        $apply_base_salary = Yii::$app->params['worker_base_salary'];//底薪
+        $apply_base_salary = 0;//底薪
         $apply_base_salary_subsidy = 0;//底薪补贴
         $apply_money_except_deduct_cash = 0;//应结合计,没有减除扣款和现金
         $apply_money_deduction = 0;//扣款小计;包括投诉扣款、赔偿扣款等
@@ -227,6 +231,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             $this->finance_settle_apply_starttime = self::getFirstDayOfLastWeek();//结算开始日期
             $this->finance_settle_apply_endtime = self::getLastDayOfLastWeek();//结算截止日期
         }
+        $apply_base_salary = $this->getBaseSalary($this->worker_type_id,$this->worker_identity_id);
         $apply_task_count = FinanceWorkerNonOrderIncomeSearch::getTaskAwardCount($workerId, $this->finance_settle_apply_starttime, $this->finance_settle_apply_endtime);
         $apply_task_money = FinanceWorkerNonOrderIncomeSearch::getTaskAwardMoney($workerId, $this->finance_settle_apply_starttime, $this->finance_settle_apply_endtime);
         $apply_money_deduction = FinanceWorkerNonOrderIncomeSearch::getCompensateMoney($workerId, $this->finance_settle_apply_starttime, $this->finance_settle_apply_endtime);
@@ -262,7 +267,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         $this->finance_settle_apply_money =$apply_money;//本次应付合计
         $this->finance_settle_apply_order_noncash_count = $order_noncash_count;//非现金订单
         $this->finance_settle_apply_order_money_except_cash = $order_money_except_cash;//工时费应结，扣除了现金
-        $this->finance_settle_apply_base_salary_subsidy = $this->getBaseSalarySubsidy($apply_order_money,$apply_base_salary,$this->worker_type_id,$this->worker_identity_id,$this->finance_settle_apply_starttime,$this->finance_settle_apply_endtime);
+        $this->finance_settle_apply_base_salary_subsidy = $this->getBaseSalarySubsidy($workerId,$apply_order_money,$apply_base_salary,$this->worker_type_id,$this->worker_identity_id,$this->finance_settle_apply_starttime,$this->finance_settle_apply_endtime);
         $this->finance_settle_apply_cycle = $this->getSettleCycleIdByWorkerType($this->worker_type_id, $this->worker_identity_id);//结算周期Id
         $this->finance_settle_apply_cycle_des = $this->getSettleCycleByWorkerType($this->worker_type_id, $this->worker_identity_id);//结算周期描述
         $this->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT;//提交结算申请
@@ -272,22 +277,57 @@ class FinanceSettleApplySearch extends FinanceSettleApply
 
     }
     
-    public function getBaseSalarySubsidy($apply_order_money,$apply_base_salary,$workerType,$workerIdentityId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
+    /**
+     * 获取阿姨底薪
+     * @param type $workerType
+     * @param type $workerIdentityId
+     * @return type
+     */
+    public function getBaseSalary($workerType,$workerIdentityId){
+        $base_salary = 0;
+        if($this->isSelfAndFulltimeWorker($workerType, $workerIdentityId)){
+            $base_salary = Yii::$app->params['worker_base_salary'];
+        }
+        return $base_salary;
+    }
+    
+    /**
+     * 获取阿姨的底薪补贴
+     * @param type $worker_id
+     * @param type $apply_order_money
+     * @param type $apply_base_salary
+     * @param type $workerType
+     * @param type $workerIdentityId
+     * @param type $finance_settle_apply_starttime
+     * @param type $finance_settle_apply_endtime
+     * @return type
+     */
+    public function getBaseSalarySubsidy($worker_id,$apply_order_money,$apply_base_salary,$workerType,$workerIdentityId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
         $baseSalarySubsidy = 0;
         if($this->isSelfAndFulltimeWorker($workerType, $workerIdentityId)){
              $needWorkDay = date('t',$finance_settle_apply_starttime) - self::WORKER_VACATION_DAYS;//本月应服务天数
-             $realWorkDay = $needWorkDay;//实际工作天数,从阿姨接口获取
+             $realWorkDay = date('t',$finance_settle_apply_starttime) - Worker::getWorkerNotWorkTime($worker_id, $finance_settle_apply_starttime, $finance_settle_apply_endtime);//实际工作天数,从阿姨接口获取
              if($realWorkDay >= $needWorkDay){
                  $realWorkDay = $needWorkDay;
              }
              $baseSalarySubsidy = max($apply_order_money,$apply_base_salary/$needWorkDay*$realWorkDay) - $apply_order_money;
+        }elseif($this->isNonSelfAndFulltimeWorker($workerType,$workerIdentityId)){
+             $orderCount = FinanceWorkerOrderIncomeSearch::getOrderCountByWorkerId($worker_id, $finance_settle_apply_starttime, $finance_settle_apply_endtime);
+             if($orderCount < Yii::$app->params['order_count_per_week']){
+                 $orderSubsidyCount = Yii::$app->params['order_count_per_week'] - $orderCount;
+                 $baseSalarySubsidy = $orderSubsidyCount * Yii::$app->params['unit_order_money_nonself_fulltime'];
+             }
         }
         return $baseSalarySubsidy;
     }
     
     
+    
     /**
-     * 
+     * 判断是否为自营全时段阿姨
+     * @param type $workerType
+     * @param type $workerIdentityId
+     * @return boolean
      */
     public function isSelfAndFulltimeWorker($workerType,$workerIdentityId){
         $isSelfAndFulltimeWorker = false;
@@ -295,6 +335,19 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             $isSelfAndFulltimeWorker = true;
         }
         return $isSelfAndFulltimeWorker;
+    }
+    
+    /**
+     * 判断阿姨是否为非自营（小家政）全时段阿姨
+     * @param type $workerType
+     * @param type $workerIdentityId
+     */
+    public function isNonSelfAndFulltimeWorker($workerType,$workerIdentityId){
+        $isNonSelfAndFulltimeWorker = false;
+        if(($workerType == self::NON_SELF_OPERATION) && ($workerIdentityId == self::FULLTIME)){
+            $isNonSelfAndFulltimeWorker = true;
+        }
+        return $isNonSelfAndFulltimeWorker;
     }
     
     public function getWorkerOrderInfo($workerId){
@@ -414,7 +467,8 @@ class FinanceSettleApplySearch extends FinanceSettleApply
                     'finance_settle_apply_task_money as settle_task_money',
                     'finance_settle_apply_base_salary_subsidy as base_salary_subsidy',
                     'finance_settle_apply_money_deduction as money_deduction',
-                    'finance_settle_apply_order_money_except_cash as order_money_except_cash'
+                    'finance_settle_apply_order_money_except_cash as order_money_except_cash',
+                    'isWorkerConfirmed',
                     ])
                 ->where(['worker_id'=>$worker_id])
                 ->offset($offset)->limit($per_page_num)
@@ -434,6 +488,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             $finalWorkerIncome['base_salary_subsidy'] = $workerIncome['base_salary_subsidy'];
             $finalWorkerIncome['money_deduction'] = $workerIncome['money_deduction'];
             $finalWorkerIncome['order_money_except_cash'] = $workerIncome['order_money_except_cash'];
+            $finalWorkerIncome['isWorkerConfirmed'] = $workerIncome['isWorkerConfirmed'];
             if($workerIncome['settle_status'] == self::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PAYED){
                  $finalWorkerIncome['settle_status'] = 1;//已结算
             }else{

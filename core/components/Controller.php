@@ -16,7 +16,7 @@ class Controller extends \yii\rest\Controller
         unset($behaviors['contentNegotiator']);
 //        $behaviors['authenticator'] = [
 //            'class' => HttpBasicAuth::className(),
-//            'auth' => '\api\models\User::findByUsernameAndPassword'
+//            'auth' => '\restapi\models\User::findByUsernameAndPassword'
 //        ];
         return $behaviors;
     }

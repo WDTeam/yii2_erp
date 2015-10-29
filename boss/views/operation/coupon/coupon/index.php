@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\bootstrap\Modal;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 
@@ -200,7 +201,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template'=>'{edit} | {disable} | {view}',
+                'template'=>'{edit} | {disable} | {view} | {bind}',
                 'buttons' => [
                     'edit' => function ($url, $model) {
                         return Html::a('编辑', [
@@ -208,9 +209,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'id' => $model->id
                         ], [
                             'title' => Yii::t('app', '编辑'),
-                            'data-toggle'=>'modal',
-                            'data-target'=>'#modal',
-                            'data-id'=>$model->id,
                             'class'=>'block-btn',
                         ]);
                     },
@@ -244,6 +242,22 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class'=>'block-btn',
                         ]);
                     },
+                    'bind' => function ($url, $model) {
+                        if($model->whetherCanBind()){
+                            return Html::a('绑定', [
+                                'bind',
+                                'id' => $model->id
+                            ], [
+                                'title' => Yii::t('app', '绑定'),
+                                'data-toggle'=>'modal',
+                                'data-target'=>'#modal',
+                                'data-id'=>$model->id,
+                                'class'=>'bind-btn block-btn',
+                            ]);
+                        }else{
+                            return false;
+                        }
+                    },
                 ],
             ],
         ],
@@ -265,3 +279,14 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); Pjax::end(); ?>
 
 </div>
+<?php echo Modal::widget([
+    'header' => '<h4 class="modal-title">绑定手机号</h4>',
+    'id' =>'modal',
+]);?>
+<?php $this->registerJs(<<<JSCONTENT
+    $('.bind-btn').click(function(){
+        $('#modal .modal-body').html('加载中……');
+        $('#modal .modal-body').eq(0).load(this.href);
+    });
+JSCONTENT
+);?>

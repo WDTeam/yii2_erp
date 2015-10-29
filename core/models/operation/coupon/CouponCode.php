@@ -7,6 +7,7 @@ use Yii;
 use core\models\operation\coupon\Coupon;
 use core\models\customer\Customer;
 use core\models\operation\coupon\CouponCustomer;
+use yii\base\InvalidParamException;
 
 /**
  * This is the model class for table "{{%coupon_code}}".
@@ -168,5 +169,36 @@ class CouponCode extends \common\models\operation\coupon\CouponCode
         $couponCustomer->save();
         return $couponCustomer;
                      
+    }
+    /**
+     * 当前码绑定手机号
+     * @author CoLee
+     */
+    public function bindMobile($mobile)
+    {
+        $customer = Customer::findOne(['customer_phone'=>$mobile]);
+        if(empty($customer)){
+            throw new InvalidParamException('手机号未注册');
+        }
+        $model = CouponCustomer::findOne(['coupon_code_id'=>$this->id]);
+        if(!empty($model)){
+            throw new InvalidParamException('优惠码已被绑定');
+        }
+        $model = new CouponCustomer();
+        $etime = Coupon::getExpirateAtByTimeType($this->coupon_id);
+        $model->setAttributes([
+            'customer_id'=>$customer->id,
+            'coupon_id'=>$this->coupon_id,
+            'coupon_code_id'=>$this->id,
+            'coupon_code'=>$this->coupon_code,
+            'coupon_name'=>$this->coupon_name,
+            'coupon_price'=>$this->coupon_price,
+            'expirate_at'=>$etime,
+        ]);
+        if($model->save()){
+            return $model;
+        }else{
+            throw new InvalidParamException('绑定失败');
+        }
     }
 }

@@ -39,6 +39,7 @@ $this->params['isFinacePayedConfirm'] = $isFinacePayedConfirm;
         height:50px;
         max-width:2000px;
     }
+    .btn {width: 120px;margin-bottom: 3px; float: right;}
 </style>
 <form id ="financeSettleApplyForm">
    
@@ -79,18 +80,18 @@ $this->params['isFinacePayedConfirm'] = $isFinacePayedConfirm;
                 'template' =>'{view} {agree} {disagree}',
                 'buttons' => [
                     'view' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Yii::$app->urlManager->createUrl(['/finance/finance-settle-apply/self-fulltime-worker-settle-view', 'FinanceSettleApplySearch[id]' => $model->id],[]), [
+                        return Html::a('<span class="btn btn-primary">查看</span>', Yii::$app->urlManager->createUrl(['/finance/finance-settle-apply/self-fulltime-worker-settle-view', 'FinanceSettleApplySearch[id]' => $model->id],[]), [
                             'title' => Yii::t('yii', '查看'),'data-pjax'=>'0','target' => '_blank',
                         ]);
                     },
                     'agree' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-ok"></span>', Yii::$app->urlManager->createUrl(['/finance/finance-settle-apply/self-fulltime-worker-settle-done', 'id' => $model->id, 'settle_type'=>$this->params['settle_type'],'is_ok'=>1,'isFinacePayedConfirm'=>$this->params['isFinacePayedConfirm'], 'review_section'=>$this->params['review_section']]), [
+                        return Html::a('<span class="btn btn-primary">审核通过</span>', Yii::$app->urlManager->createUrl(['/finance/finance-settle-apply/self-fulltime-worker-settle-done', 'id' => $model->id, 'settle_type'=>$this->params['settle_type'],'is_ok'=>1,'isFinacePayedConfirm'=>$this->params['isFinacePayedConfirm'], 'review_section'=>$this->params['review_section']]), [
                             'title' => Yii::t('yii', $this->params['isFinacePayedConfirm']?'确认打款':'审核通过'),
                             'class'=>'agree',
                         ]);
                     },
                     'disagree' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-remove" style = "display:'.($this->params['isFinacePayedConfirm']?'none':'block').'"></span>',
+                        return Html::a('<span class="btn btn-primary" style = "display:'.($this->params['isFinacePayedConfirm']?'none':'').'">审核不通过</span>',
                             [
                                 '/finance/finance-settle-apply/review-failed-reason',
                                 'id' => $model->id, 

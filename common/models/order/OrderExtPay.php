@@ -27,6 +27,10 @@ use Yii;
  */
 class OrderExtPay extends \common\models\order\ActiveRecord
 {
+    const ORDER_PAY_TYPE_OFF_LINE = 1;
+    const ORDER_PAY_TYPE_ON_LINE = 2;
+    const ORDER_PAY_TYPE_POP = 3;
+
     /**
      * @inheritdoc
      */
@@ -41,6 +45,7 @@ class OrderExtPay extends \common\models\order\ActiveRecord
     public function rules()
     {
         return [
+            [['order_pay_type'],'required'],
             [['order_pay_type', 'pay_channel_id', 'card_id', 'coupon_id', 'promotion_id', 'created_at', 'updated_at'], 'integer'],
             [['order_pay_money', 'order_use_acc_balance', 'order_use_card_money', 'order_use_coupon_money', 'order_use_promotion_money'], 'number'],
             [['order_pay_channel_name'], 'string', 'max' => 128],

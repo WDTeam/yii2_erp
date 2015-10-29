@@ -26,32 +26,38 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-md-4 form-inline">
             <label>智能派单服务器地址：</label>
-            <input id="serverip" class="form-control" name="serverip" value="<?php echo !empty($data['ip'])? $data['ip'] : ''?>" placeholder="SOCKET服务器地址" />
+            <input id="serverip" class="form-control" name="serverip" value="<?php echo !empty($srvInfo['ip'])? $srvInfo['ip'] : ''?>" placeholder="SOCKET服务器地址" />
         </div>
         <div class="col-md-4 form-inline">
             <label>智能派单服务器端口：</label>
-            <input id="serverport" class="form-control" name="serverport" value="<?php echo !empty($data['port'])? $data['port'] : ''?>" placeholder="SOCKET服务器端口" />
+            <input id="serverport" class="form-control" name="serverport" value="<?php echo !empty($srvInfo['port'])? $srvInfo['port'] : ''?>" placeholder="SOCKET服务器端口" />
         </div>
-        <div class="col-md-2"><button class="btn btn-default" id="connect" name="connect">连接派单服务器</button></div>
+        <div class="col-md-2"><button class="btn btn-default" id="connect" name="connect">连接派单服务器</button><button class="btn btn-default" id="runService" name="runService">启动派单服务</button></div>
+        <div class="col-md-2"><button class="btn btn-default" id="start" name="start">开始自动派单</button><button class="btn btn-default" id="stop" name="stop">停止自动派单</button></div>
     </div>
     <hr/>
     <div class="row">
         <div class="col-md-6  form-inline">
-            <label>全职阿姨派单：</label>
-            <input id="qstart" class="form-control margin-l-36" name="qstart" value="0" /> 至 <input id="qend" class="form-control" name="qend" value="5" />分钟
+            <label>全职阿姨派单时间：</label>
+            <input id="qstart" class="form-control margin-l-36" name="qstart" value="0" readonly="true" /> 至 <input id="qend" class="form-control" name="qend" value="<?php echo !empty($config['FULLTIME_WORKER_TIMEOUT'])? $config['FULLTIME_WORKER_TIMEOUT'] : ''?>" />分钟
         </div>
         <div class="col-md-2">
-            <button class="btn btn-default" id="start" name="start">开始自动派单</button>
+            <button class="btn btn-default" id="update" name="update">更新配置（即时生效）</button>
         </div>
     </div>
     <hr/>
     <div class="row">
         <div class="col-md-6  form-inline">
-            <label>兼职阿姨派单：</label>
-            <input id="jstart" class="form-control margin-l-36" name="qstart" value="5" /> 至 <input id="jend" class="form-control" name="qend" value="10" />分钟
+            <label>兼职阿姨派单时间：</label>
+            <input id="jstart" class="form-control margin-l-36" name="jstart" value="5" readonly="true" /> 至 <input id="jend" class="form-control" name="jend" value="<?php echo !empty($config['FREETIME_WORKER_TIMEOUT'])? $config['FREETIME_WORKER_TIMEOUT'] : ''?>" />分钟
         </div>
         <div class="col-md-2">
-            <button class="btn btn-default" id="stop" name="start">停止自动派单</button>
+            <button class="btn btn-default" id="reload" name="reload">重新启动</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6  form-inline">
+        <label>执行结果：</label><div id="connectStatus"></div>
         </div>
     </div>
     <hr/>
@@ -81,5 +87,5 @@ $this->params['breadcrumbs'][] = $this->title;
     </table>
 </div>
 
-<script type="text/javascript" src="/static/js/jquery.js"></script>
-<script type="text/javascript" src="/static/js/index.js"></script>
+<script type="text/javascript" src="/autoassign/js/jquery.js"></script>
+<script type="text/javascript" src="/autoassign/js/index.js"></script>

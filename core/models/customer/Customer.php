@@ -5,6 +5,8 @@ namespace core\models\customer;
 
 use Yii;
 // use common\models\Customer;
+
+use common\models\customer\CustomerExtSrc;
 use core\models\customer\CustomerAddress;
 use core\models\customer\CustomerWorker;
 use common\models\Worker;
@@ -19,7 +21,7 @@ class Customer extends \common\models\customer\Customer
 	/**
 	 * add customer while customer is not exist by phone
 	 */
-	public static function addCustomer($phone){
+	public static function addCustomer($phone, $channal_id){
 		$customer = self::find()->where(['customer_phone'=>$phone])->one();
 		if($customer != NULL){
 			return false;
@@ -53,6 +55,8 @@ class Customer extends \common\models\customer\Customer
 				$customerExtScore->updated_at = 0;
 				$customerExtScore->is_del = 0;
 				$customerExtScore->save();
+
+				self::addSrcByChannalId($phone, $channal_id);
 				
 				$transaction->commit();
 				return true;
@@ -62,6 +66,13 @@ class Customer extends \common\models\customer\Customer
 				return false;
 			}
 		}
+	}
+
+	/**
+     * get complaint count by customer_phone
+	 */
+	public static function getComplaintCount($customer_phone){
+		
 	}
 
     /**
@@ -237,4 +248,89 @@ class Customer extends \common\models\customer\Customer
         }
         return $workers;
     }
+
+	/*******************************************客户渠道**********************************************/
+	/**
+     * get all customer srcs
+	 */
+	public static function getAllSrcs(){
+		$all_srcs = CustomerExtSrc::find()->asArray()->all();
+		return $all_srcs;
+	}
+
+	/**
+	 * get customer srcs
+	 */
+	public static function getSrcs($customer_phone){
+		$srcs = CustomerExtSrc::find()->where(['customer_phone'=>$customer_phone])->asArray()->all();
+		return $srcs;
+	}
+
+	/**
+ 	 * get customer first src
+     */
+	public static function getFirstSrc($customer_phone){
+		$srcs = CustomerExtSrc::find()->where(['customer_phone'=>$customer_phone])->orderBy('created_at asc')->asArray()->one();
+		return $srcs;
+	}
+
+	/**
+     * add customer src by channal_id
+	 */
+	public static function addSrcByChannalId($customer_phone, $channal_id){
+		$customer = self::find()->where(['customer_phone'=>$customer_phone])->asArray()->one();
+		if(empty($customer)) return false;
+
+		$channal_name = funcname($channal_id);
+	
+		$customerExtSrc = new CustomerExtSrc;
+		$customerExtSrc->customer_id = $customer["id"];
+		$customerExtSrc->customer_phone = $customer["customer_phone"];
+		$customerExtSrc->finance_order_channal_id = $channal_id;
+		$customerExtSrc->platform_name = "";
+		$customerExtSrc->platform_ename = "";
+		$customerExtSrc->channal_name = $channal_name;
+		$customerExtSrc->channal_ename = "";
+		$customerExtSrc->device_name = "";
+		$customerExtSrc->device_no = "";
+		$customerExtSrc->created_at = time();
+		$customerExtSrc->updated_at = 0;
+		$customerExtSrc->is_del = 0;
+		if($customerExtSrc->validate()){
+			$customerExtSrc->save();
+			return true;
+		}
+		return false;
+	}
+
+	/**
+     * add csutomer src by channal_name
+	 */
+	public static function addSrcByChannalName($customer_phone, $channal_name){
+		$customer = self::find()->where(['customer_phone'=>$customer_phone])->asArray()->one();
+		if(empty($customer)) return false;
+
+		$channal_id = funcname($channal_name);
+	
+		$customerExtSrc = new CustomerExtSrc;
+		$customerExtSrc->customer_id = $customer["id"];
+		$customerExtSrc->customer_phone = $customer["customer_phone"];
+		$customerExtSrc->finance_order_channal_id = $channal_id;
+		$customerExtSrc->platform_name = "";
+		$customerExtSrc->platform_ename = "";
+		$customerExtSrc->channal_name = $channal_name;
+		$customerExtSrc->channal_ename = "";
+		$customerExtSrc->device_name = "";
+		$customerExtSrc->device_no = "";
+		$customerExtSrc->created_at = time();
+		$customerExtSrc->updated_at = 0;
+		$customerExtSrc->is_del = 0;
+		if($customerExtSrc->validate()){
+			$customerExtSrc->save();
+			return true;
+		}
+		return false;
+		
+		
+	}
 }

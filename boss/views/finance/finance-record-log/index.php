@@ -88,11 +88,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' =>'{view}  {vacation} {delete}',
                 'buttons' => [
                 'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance/finance-pop-order/billinfo','id' => $model->id,'edit'=>'t']), [
+                                    return Html::a('<span class="btn btn-primary">编辑</span>', Yii::$app->urlManager->createUrl(['finance/finance-pop-order/billinfo','id' => $model->id,'edit'=>'t']), [
                                                     'title' => Yii::t('yii', 'Edit'),
                                                   ]);},
                     'vacation' => function ($url, $model) {
-                        return Html::a('<span class="fa fa-fw fa-history"></span>',
+                        return Html::a('<span class="btn btn-primary">对账处理</span>',
                         		
                         		Yii::$app->urlManager->createUrl(['finance/finance-pop-order/index','id' => $model->id]), [
                         		'title' => Yii::t('yii', '对账处理'),

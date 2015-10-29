@@ -51,35 +51,39 @@ $menuItemsMain = [
         'visible' => Yii::$app->user->can('readPost'),
     ],
     [
-        'label' => '<i class="fa fa-cog"></i> ' . Yii::t('app', '配置'),
+        'label' => '<i class="fa fa-cog"></i> ' . Yii::t('app', '系统设置'),
         'url' => ['#'],
         'active' => false,
         //'visible' => Yii::$app->user->can('haha'),
         'items' => [
             [
-                'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', 'User'),
-                'url' => ['/general/system-user'],
+                'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', '设置授权项'),
+                'url' => ['/general/auth'],
             ],
             [
-                'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', 'Role'),
+                'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', '设置角色'),
                 'url' => ['/general/role'],
             ],
             [
-                'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', 'Auths'),
-                'url' => ['/general/auth'],
+                'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', '设置用户角色'),
+                'url' => ['/general/system-user'],
+            ],
+            [
+                'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', '退出系统'),
+                'url' => ['/general/site/logout'],
             ],
         ],
     ],
-    [
-        'label' => '<i class="fa fa-cog"></i> ' . Yii::t('app', '用户'),
-        'url' => ['#'],
-        'active' => false,
-        //'visible' => Yii::$app->user->can('haha'),
-        'items' => [
-            [
-                'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', '登出'),
-                'url' => ['/general/site/logout'],
-            ],
+//     [
+//         'label' => '<i class="fa fa-cog"></i> ' . Yii::t('app', '用户'),
+//         'url' => ['#'],
+//         'active' => false,
+//         //'visible' => Yii::$app->user->can('haha'),
+//         'items' => [
+//             [
+//                 'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', '登出'),
+//                 'url' => ['/general/site/logout'],
+//             ],
 //             [
 //                 'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', '授权列表'),
 //                 'url' => ['/rbac'],
@@ -96,24 +100,24 @@ $menuItemsMain = [
 //                 'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', '分配授权项'),
 //                 'url' => ['/rbac/assign'],
 //             ],
-        ],
-    ],
-    [
-        'label' => '<i class="fa fa-cog"></i> ' . Yii::t('app', '吐槽'),
-        'url' => ['#'],
-        'active' => false,
-        //'visible' => Yii::$app->user->can('haha'),
-        'items' => [
-            [
-                'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', 'User'),
-                'url' => ['/general/user'],
-            ],
-            [
-                'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', 'Role'),
-                'url' => ['/general/role'],
-            ],
-        ],
-    ],
+//         ],
+//     ],
+//     [
+//         'label' => '<i class="fa fa-cog"></i> ' . Yii::t('app', '吐槽'),
+//         'url' => ['#'],
+//         'active' => false,
+//         //'visible' => Yii::$app->user->can('haha'),
+//         'items' => [
+//             [
+//                 'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', 'User'),
+//                 'url' => ['/general/user'],
+//             ],
+//             [
+//                 'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', 'Role'),
+//                 'url' => ['/general/role'],
+//             ],
+//         ],
+//     ],
 ];
 echo Nav::widget([
     'options' => ['class' => 'navbar-nav navbar-right'],

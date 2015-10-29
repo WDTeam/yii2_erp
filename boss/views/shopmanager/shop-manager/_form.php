@@ -38,7 +38,14 @@ use boss\components\AreaCascade;
                         'maxlength'=>255,
                     ]
                     
-                ], 
+                ],
+                'account'=>[
+                    'type'=> Form::INPUT_TEXT,
+                ],
+                'password'=>[
+                    'label'=>'密码',
+                    'type'=> Form::INPUT_PASSWORD,
+                ],
                 
             ]
         ]);?>
