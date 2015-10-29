@@ -65,6 +65,8 @@ class Shop extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'name' => Yii::t('app', '店名'),
+            'account' => Yii::t('app', '账号'),
+            'password_hash' => Yii::t('app', '密码'),
             'shop_manager_id' => Yii::t('app', '归属家政ID'),
             'province_id' => Yii::t('app', '省份ID'),
             'city_id' => Yii::t('app', '城市ID'),
