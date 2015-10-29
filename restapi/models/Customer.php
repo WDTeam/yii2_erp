@@ -3,7 +3,7 @@
  * 顾客基本信息模型
  * @author:刘道强
  */
-namespace api\models;
+namespace restapi\models;
 
 use yii\db\ActiveModel;
 class Customer extends ActiveModel

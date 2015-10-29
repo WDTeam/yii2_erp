@@ -1,6 +1,6 @@
 <?php
 
-namespace api\modules\user;
+namespace restapi\modules\user;
 
 class Module extends \yii\base\Module
 {

@@ -1,5 +1,5 @@
 <?php
-namespace api\components;
+namespace restapi\components;
 
 use Yii;
 use yii\web\HttpException;

@@ -1,5 +1,5 @@
 <?php
-namespace api\controllers;
+namespace restapi\controllers;
 
 use Yii;
 use \core\models\customer\CustomerAccessToken;
@@ -14,7 +14,7 @@ use \core\models\customer\CustomerComment;
 use \core\models\worker\WorkerTaskLog;
 use \core\models\order\OrderSearch;
 
-class WorkerController extends \api\components\Controller
+class WorkerController extends \restapi\components\Controller
 {
     /**
      * @api {GET} /worker/worker-info 查看阿姨信息 (田玉星 100%)
