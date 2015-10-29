@@ -8,6 +8,7 @@ use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use boss\models\order\OrderComplaintSearch;
+use core\models\finance\FinanceCompensate;
 
 /**
  * OrderComplaintController implements the CRUD actions for OrderComplaint model.
@@ -32,6 +33,7 @@ class OrderComplaintController extends BaseAuthController
      */
     public function actionIndex()
     {   
+    	$session = Yii::$app->session;
     	$searchModel = new OrderComplaintSearch();
     	$orderComplaint = new OrderComplaint();
     	$comStatus = OrderComplaint::ComplaintStatus();
@@ -40,6 +42,7 @@ class OrderComplaintController extends BaseAuthController
     	$comLevel = OrderComplaint::ComplaintLevel();
     	$comType = OrderComplaint::ComplaintType();
     	$params = Yii::$app->request->getQueryParams();
+    	$url = $searchModel->urlParameterProcessing($params);
     	$dataProvider = $searchModel->search($params);
     	return $this->render('index', [
     			'dataProvider' => $dataProvider,
@@ -49,7 +52,8 @@ class OrderComplaintController extends BaseAuthController
     			'comType' => $comType,
     			'devpart' => $dev,
     			'channel' => $channel,
-    			'params' => $params
+    			'params' => $params,
+    			'url' => $url
     	]);
         
     }
@@ -89,14 +93,17 @@ class OrderComplaintController extends BaseAuthController
      */
     public function actionCreate()
     {
-        $model = new OrderComplaint();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+    	$model = new FinanceCompensate();
+        $params = Yii::$app->request->getQueryParams();
+        if(!empty($params['id'])){
+        	$id = intval($params['id']);
+        	$orderComplaintModel = $this->findModel($id);
+        	
+        	return $this->render('create', [
+        			'orderComplaintModel' => $orderComplaintModel,'model'=>$model,
+        	]);
+        }else{
+        	false;
         }
     }
 
@@ -152,6 +159,7 @@ class OrderComplaintController extends BaseAuthController
      * @return boolean
      */
     public function actionBack(){
+    	$model = new OrderComplaint();
     	$params = Yii::$app->request->post();
     	if(!empty($params) && is_array($params)){
     			$result = $model->backInsertComplaint($params);

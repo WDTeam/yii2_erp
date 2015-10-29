@@ -15,7 +15,7 @@ use boss\models\order\OrderComplaint;
 			                    </tr>
 			                    <tr>
 			                    	<td>订   单ID：<?= $model->order_id; ?><br/>
-										客户手机：<?= $model->orderExtCustomer->order_customer_phone; ?><br/>
+										客户手机：<?= $model->complaint_phone; ?><br/>
 										投诉渠道：<?= $odercmodel->channel($model->complaint_channel); ?><br/>
 										投诉部门：<?= $odercmodel->section($model->complaint_section); ?><br/>
 										投诉级别：<?= $odercmodel->level($model->complaint_level); ?><br/>
@@ -33,7 +33,8 @@ use boss\models\order\OrderComplaint;
 			                    	<td>
 			                    	</td>
 			                    	<td>
-			                    		<p>已处理</p>
+			                    		<p>待处理</p>
+			                    		<p><a href="/order/order-complaint/create?id=<?= $model->id; ?>">申请赔偿</a></p>
 			                    		<!--p><a href="###">查看关联投诉</a></p> -->
 			                    	</td>
 			                    </tr>
