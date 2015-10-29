@@ -180,11 +180,6 @@ class Worker extends \common\models\worker\Worker
              if($val['worker_vacation_start_time']>=$startTime && $val['worker_vacation_finish_time']<$endTime){
                 $workTime = $workTime+intval($val['worker_vacation_start_time']-$val['worker_vacation_start_time']);
              }
-//              elseif($val['worker_vacation_start_time']>=$startTime && $val['worker_vacation_finish_time']<$endTime){
-//                $workTime = $workTime+($val['worker_vacation_end_time']-$startTime);
-//             }elseif($val['worker_vacation_start_time']>=$startTime && $val['worker_vacation_finish_time']<$endTime){
-//                $workTime = $workTime+($endTime-  $val['worker_vacation_start_time']);
-//             }
 
         }
         return $workTime;
