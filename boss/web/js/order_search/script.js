@@ -84,7 +84,7 @@ $(document).ready(function($){
 		
 		complaint_items.push({department: dept_id, type: complaint_type_id, level: complaint_level_id});
 		
-		$(".m_queren").children("div").prepend('<p><span>' + dept_name + '</span><span>投诉类型：' + complaint_type_name + '</span> <span>投诉级别：' + complaint_level_name + '</span><a href="javascript:;">修改</a></p>');
+		$(".m_queren").children("div").prepend('<p><span>投诉部门：' + dept_name + '</span><span>投诉类型：' + complaint_type_name + '</span> <span>投诉级别：' + complaint_level_name + '</span><a href="javascript:;" class="m_edit">修改</a></p>');
 		
 		$(".m_queren").show();
 		$(".radioLi").hide();
@@ -100,6 +100,10 @@ $(document).ready(function($){
 		$(".m_disd").show();
 		$(".submitBtntt").hide();
 	});
+
+	$(".m_edit").click(function(){
+		
+	});
 	
 	$(".m_submit").click(function(){
         var complaints = {
@@ -111,7 +115,7 @@ $(document).ready(function($){
         
 		$.ajax({
             type: "POST",
-            url:  "order-complaint/create",
+            url:  "order-complaint/back",
             data: complaints,
             dataType:"json",
             success: function (msg) {
