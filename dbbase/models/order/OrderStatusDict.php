@@ -3,7 +3,7 @@
 namespace dbbase\models\order;
 
 use Yii;
-
+use dbbase\models\ActiveRecord;
 /**
  * This is the model class for table "{{%order_status_dict}}".
  *
@@ -15,7 +15,7 @@ use Yii;
  * @property string $updated_at
  * @property integer $isdel
  */
-class OrderStatusDict extends \dbbase\models\order\ActiveRecord
+class OrderStatusDict extends ActiveRecord
 {
     const ORDER_INIT = 1; //已创建
     const ORDER_WAIT_ASSIGN = 2; //待指派

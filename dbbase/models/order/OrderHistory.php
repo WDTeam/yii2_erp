@@ -3,7 +3,7 @@
 namespace dbbase\models\order;
 
 use Yii;
-
+use dbbase\models\ActiveRecord;
 /**
  * This is the model class for table "{{%order_history}}".
  *
@@ -87,7 +87,7 @@ use Yii;
  * @property string $order_sys_memo
  * @property string $admin_id
  */
-class OrderHistory extends \dbbase\models\order\ActiveRecord
+class OrderHistory extends ActiveRecord
 {
     /**
      * @inheritdoc
