@@ -290,8 +290,12 @@ class Worker extends \common\models\worker\Worker
     }
 
 
-
-
+    /**
+     * 获取商圈所有阿姨
+     * @param $district_id
+     * @param $worker_id
+     * @return array
+     */
     public static function getDistrictAllWorker($district_id,$worker_id){
         $dataSource = 2;//1redis 2mysql
         if($dataSource==1){
@@ -310,6 +314,12 @@ class Worker extends \common\models\worker\Worker
         }
     }
 
+    /**
+     * 获取商圈所有阿姨从redis
+     * @param $district_id
+     * @param $worker_id
+     * @return array
+     */
     public static function getDistrictAllWorkerFromRedis($district_id,$worker_id){
         $workerIdsArr =  Yii::$app->redis->executeCommand('smembers', [self::DISTRICT.'_'.$district_id]);
         if($workerIdsArr){
@@ -332,7 +342,7 @@ class Worker extends \common\models\worker\Worker
     }
 
     /**
-     * 获取商圈中所有阿姨
+     * 获取商圈中所有阿姨mysql
      * @param $district_id
      * @param array $filterCondition 阿姨筛选条件
      * @return array 阿姨列表
@@ -521,7 +531,7 @@ class Worker extends \common\models\worker\Worker
     }
 
     /**
-     * 转换时间格式 如果阿姨订单预约 开始时间不是 整点时间或半点时间
+     * 转换不规范时间格式 如果阿姨订单预约 开始时间不是 整点时间或半点时间
      * @param $time
      * @return mixed
      */
