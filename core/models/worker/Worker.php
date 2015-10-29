@@ -164,6 +164,10 @@ class Worker extends \common\models\worker\Worker
         return $workerInfo;
     }
 
+    public static function getWorkerWorkTime($worker_id,$date){
+        $workTime = date('t');
+    }
+
     /**
      * 批量获取阿姨id
      * @param  int $type 阿姨类型 1自营 2非自营
@@ -194,6 +198,8 @@ class Worker extends \common\models\worker\Worker
             return $workerResult;
         }
     }
+
+
 
     /**
      * 根据条件搜索阿姨
@@ -401,13 +407,12 @@ class Worker extends \common\models\worker\Worker
                     }
                 }
                 if ($isDisabled == 1) {
-                    $timeLineTmp[] = [$val . '-' . $dayTimes[$endKey] => false];
+                    $timeLineTmp[] = ['time'=>$val . '-' . $dayTimes[$endKey],'enable'=>false];
                 } else {
-                    $timeLineTmp[] = [$val . '-' . $dayTimes[$endKey] => true];
+                    $timeLineTmp[] = ['time'=>$val . '-' . $dayTimes[$endKey],'enable'=> true];
                 }
-
-                $timeLine[$date] = $timeLineTmp;
             }
+            $timeLine[] = ['date'=>$date,'timeline'=>$timeLineTmp];
             $timeLineTmp = [];
         }
         return $timeLine;
@@ -478,7 +483,7 @@ class Worker extends \common\models\worker\Worker
     }
 
     /**
-     * 转换时间格式 如果阿姨订单预约 开始时间不是 整点时间和半点时间结束
+     * 转换时间格式 如果阿姨订单预约 开始时间不是 整点时间或半点时间
      * @param $time
      * @return mixed
      */

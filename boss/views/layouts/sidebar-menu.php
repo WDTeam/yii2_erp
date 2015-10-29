@@ -18,7 +18,7 @@ echo Menu::widget(
                 'options' => [
                     'class' => 'treeview rootTree',
                 ],
-                'visible' => (Yii::$app->user->can('housekeep')),
+                'visible' => (Yii::$app->user->can('sidebar-housekeep')),
                 'items' => [
                     [
                         'label' => '查看所有家政公司',
@@ -36,7 +36,7 @@ echo Menu::widget(
                 'label' => '门店管理',
                 'url' => ['#'],
                 'icon' => 'fa fa-flag',
-                'visible' => (Yii::$app->user->can('shop')),
+                'visible' => (Yii::$app->user->can('sidebar-shop')),
                 'options' => [
                     'class' => 'treeview rootTree',
                 ],
@@ -57,7 +57,7 @@ echo Menu::widget(
                 'label' => '阿姨管理',
                 'url' => ['#'],
                 'icon' => 'fa fa-female',
-                'visible' => (Yii::$app->user->can('worker')),
+                'visible' => (Yii::$app->user->can('sidebar-worker')),
                 'options' => [
                     'class' => 'treeview rootTree',
                 ],
@@ -83,7 +83,7 @@ echo Menu::widget(
                 'label' => '客户管理',
                 'url' => ['#'],
                 'icon' => 'fa fa-user',
-                'visible' => (Yii::$app->user->can('customer')),
+                'visible' => (Yii::$app->user->can('sidebar-customer')),
                 'options' => [
                     'class' => 'treeview rootTree',
                 ],
@@ -109,7 +109,7 @@ echo Menu::widget(
                 'label' => '订单管理',
                 'url' => ['#'],
                 'icon' => 'fa fa-tag',
-                'visible' => (Yii::$app->user->can('order')),
+                'visible' => (Yii::$app->user->can('sidebar-order')),
                 'options' => [
                     'class' => 'treeview rootTree',
                 ],
@@ -146,7 +146,7 @@ echo Menu::widget(
                 'label' => '交易管理',
                 'url' => ['#'],
                 'icon' => 'fa fa-tag',
-                'visible' => (Yii::$app->user->can('payment')),
+                'visible' => (Yii::$app->user->can('sidebar-payment')),
                 'options' => [
                     'class' => 'treeview rootTree',
                 ],
@@ -167,7 +167,7 @@ echo Menu::widget(
                 'label' => '运营管理',
                 'url' => ['#'],
                 'icon' => 'fa fa-recycle',
-                'visible' => (Yii::$app->user->can('operation')),
+                'visible' => (Yii::$app->user->can('sidebar-operation')),
                 'options' => [
                     'class' => 'treeview rootTree',
                 ],
@@ -366,7 +366,7 @@ echo Menu::widget(
                 'label' => '财务管理',
                 'url' => ['#'],
                 'icon' => 'fa fa-credit-card',
-                'visible' => (Yii::$app->user->can('finance')),
+                'visible' => (Yii::$app->user->can('sidebar-finance')),
                 'options' => [
                     'class' => 'treeview rootTree',
                 ],
