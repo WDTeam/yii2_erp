@@ -25,7 +25,7 @@ return [
     /*
      * Redis 服务运行状态
      */
-    '_REDIS_SERVER_RUN_STATUS_' => '_SWOOLE_SOCKET_RUN_STATUS_',
+    '_REDIS_SERVER_RUN_STATUS_' => '_REDIS_SERVER_RUN_STATUS_',
     /*
      * Redis 待指派订单池
      */
