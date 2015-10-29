@@ -1,5 +1,5 @@
 <?php
-namespace api\models;
+namespace restapi\models;
 
 use \core\models\customer\CustomerAccessToken;
 use \core\models\operation\coupon\CouponCustomer;
