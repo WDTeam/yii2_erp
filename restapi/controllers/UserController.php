@@ -304,7 +304,7 @@ class UserController extends \restapi\components\Controller
 
                 return $this->send(null, "设置默认地址失败", 0, 403);
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 0, 1024);
         }
     }
@@ -377,7 +377,7 @@ class UserController extends \restapi\components\Controller
 
                 return $this->send(null, "修改常用地址失败", 0, 403);
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 0, 1024);
         }
     }
@@ -460,7 +460,7 @@ class UserController extends \restapi\components\Controller
                 }
                 $ret = ['address' => $Address];
                 return $this->send($ret, "获取默认地址成功", 1);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return $this->send(null, "boss系统错误", 0, 1024);
             }
         } else {
@@ -780,7 +780,7 @@ class UserController extends \restapi\components\Controller
                 $ret["userBalance"] = $userBalance;
                 $ret["userRecord"] = $userRecord;
                 return $this->send($ret, "查询成功", 1);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return $this->send(null, "boss系统错误", 0, 1024);
             }
 
@@ -855,7 +855,7 @@ class UserController extends \restapi\components\Controller
                 } else {
                     return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return $this->send(null, "boss系统错误", 0, 1024);
             }
         }
@@ -950,7 +950,7 @@ class UserController extends \restapi\components\Controller
                 } else {
                     return $this->send(null, "添加评论失败", 0, 403);
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return $this->send(null, "boss系统错误", 0, 1024);
             }
         } else {
@@ -1008,7 +1008,7 @@ class UserController extends \restapi\components\Controller
                 } else {
                     return $this->send(null, "获取评论级别失败", 0, 403);
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return $this->send(null, "boss系统错误", 0, 1024);
             }
         } else {
@@ -1068,7 +1068,7 @@ class UserController extends \restapi\components\Controller
                 } else {
                     return $this->send(null, "获取评论标签失败", 0, 403);
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return $this->send(null, "boss系统错误", 0, 1024);
             }
         } else {
@@ -1208,7 +1208,7 @@ class UserController extends \restapi\components\Controller
                 } else {
                     return $this->send(null, "获取标签和子标签失败", 0, 403);
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return $this->send(null, "boss系统错误", 0, 1024);
             }
         } else {
@@ -1262,7 +1262,7 @@ class UserController extends \restapi\components\Controller
                 $ret['CommentCount'] = $level;
 
                 return $this->send($ret, "获取用户评价数量", 1);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return $this->send(null, "boss系统错误", 0, 1024);
             }
         } else {
@@ -1318,7 +1318,7 @@ class UserController extends \restapi\components\Controller
                 } else {
                     return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return $this->send(null, "boss系统错误", 0, 1024);
             }
         } else {
