@@ -1,10 +1,10 @@
 <?php
 
-namespace common\models\worker;
+namespace dbbase\models\worker;
 use kartik\builder\TabularForm;
 use kartik\grid\GridView;
 use yii\helpers\ArrayHelper;
-use common\models\WorkerExt;
+use dbbase\models\WorkerExt;
 use Yii;
 
 /**

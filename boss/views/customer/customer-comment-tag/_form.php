@@ -9,7 +9,7 @@ $rty=OrderComplaint::ComplaintTypes();
 
 /**
  * @var yii\web\View $this
- * @var common\models\CustomerCommentTag $model
+ * @var dbbase\models\CustomerCommentTag $model
  * @var yii\widgets\ActiveForm $form
  */
 ?>

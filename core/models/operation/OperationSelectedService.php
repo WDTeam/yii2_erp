@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationSelectedService as CommonOperationSelectedService;
+use dbbase\models\operation\OperationSelectedService as CommonOperationSelectedService;
 use yii\web\UploadedFile;
 use crazyfd\qiniu\Qiniu;
 

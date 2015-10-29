@@ -9,7 +9,7 @@ use core\models\worker\Worker;
 use core\behaviors\ShopStatusBehavior;
 use yii\helpers\ArrayHelper;
 use core\models\operation\OperationShopDistrict;
-class Shop extends \common\models\shop\Shop
+class Shop extends \dbbase\models\shop\Shop
 {
     public static $audit_statuses = [
         0=>'待审核',

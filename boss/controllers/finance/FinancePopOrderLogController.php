@@ -3,7 +3,7 @@
 namespace boss\controllers\finance;
 
 use Yii;
-use common\models\finance\FinancePopOrderLog;
+use dbbase\models\finance\FinancePopOrderLog;
 use boss\models\finance\FinancePopOrderLogSearch;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;

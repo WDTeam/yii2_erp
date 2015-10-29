@@ -14,21 +14,21 @@
 namespace boss\controllers\finance;
 
 use Yii;
-use common\models\finance\FinancePopOrder;
+use dbbase\models\finance\FinancePopOrder;
 use boss\models\finance\FinancePopOrderSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
-use common\models\finance\FinanceOrderChannel;
-use common\models\finance\FinanceHeader;
+use dbbase\models\finance\FinanceOrderChannel;
+use dbbase\models\finance\FinanceHeader;
 use boss\models\finance\FinanceRecordLogSearch;
 use boss\models\finance\FinanceOrderChannelSearch;
 use core\models\order\OrderSearch;
 use core\models\payment\GeneralPaySearch;
-use common\models\finance\FinanceRecordLog;
+use dbbase\models\finance\FinanceRecordLog;
 use crazyfd\qiniu\Qiniu;
-use common\models\finance\FinancePayChannel;
+use dbbase\models\finance\FinancePayChannel;
 
 
 /**

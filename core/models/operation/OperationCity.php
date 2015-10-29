@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationCity as CommonOperationCity;
+use dbbase\models\operation\OperationCity as CommonOperationCity;
 
 /**
  * This is the model class for table "{{%operation_city}}".

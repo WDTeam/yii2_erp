@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\base\View;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Area */
+/* @var $model dbbase\models\Area */
 $this->registerAssetFiles("jquery");
 $this->title = '分配授权项';
 $this->params['breadcrumbs'][] =['label' => '管理授权项', 'url' => ['index']];

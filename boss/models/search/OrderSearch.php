@@ -5,10 +5,10 @@ namespace boss\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Order;
+use dbbase\models\Order;
 
 /**
- * OrderSearch represents the model behind the search form about `common\models\Order`.
+ * OrderSearch represents the model behind the search form about `dbbase\models\Order`.
  */
 class OrderSearch extends Order
 {

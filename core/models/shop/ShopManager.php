@@ -9,7 +9,7 @@ use crazyfd\qiniu\Qiniu;
 use core\behaviors\ShopStatusBehavior;
 use core\models\operation\OperationCity;
 use yii\helpers\ArrayHelper;
-class ShopManager extends \common\models\shop\ShopManager
+class ShopManager extends \dbbase\models\shop\ShopManager
 {
     /**
      * 营业执照注册类型

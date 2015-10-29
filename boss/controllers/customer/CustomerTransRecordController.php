@@ -3,8 +3,8 @@
 namespace boss\controllers\customer;
 
 use Yii;
-use common\models\customer\CustomerTransRecord;
-use common\models\customer\CustomerTransRecordLog;
+use dbbase\models\customer\CustomerTransRecord;
+use dbbase\models\customer\CustomerTransRecordLog;
 use boss\models\customer\CustomerTransRecordSearch;
 use yii\rest\Controller;
 use yii\web\NotFoundHttpException;

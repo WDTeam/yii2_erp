@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 /**
  * @var yii\web\View $this
- * @var common\models\FinancePayChannel $model
+ * @var dbbase\models\FinancePayChannel $model
  */
 
 $this->title = Yii::t('boss', ' {modelClass}', [

@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models\order;
+namespace dbbase\models\order;
 
 use Yii;
 
@@ -359,7 +359,7 @@ class Order extends ActiveRecord
 
             //各类执行保存操作
             foreach($save_models as $modelClassName){
-                $class = '\common\models\order\\'.$modelClassName;
+                $class = '\dbbase\models\order\\'.$modelClassName;
                 if($is_new_record || $modelClassName=='OrderStatusHistory'){//状态历史只新建不更新
                     $$modelClassName = new $class();
                     $$modelClassName->order_id = $attributes['order_id'];
@@ -378,7 +378,7 @@ class Order extends ActiveRecord
             $OrderHistory = new OrderHistory(); //订单历史记录每次都需要插入
             $modelClassNames = ['OrderExtCustomer','OrderExtFlag','OrderExtPay','OrderExtPop','OrderExtStatus','OrderExtWorker'];
             foreach($modelClassNames as $modelClassName) {
-                $class = '\common\models\order\\'.$modelClassName;
+                $class = '\dbbase\models\order\\'.$modelClassName;
                 $instance = $class::findOne($this->id);
                 $attributes = $instance->attributes;
                 unset($attributes['order_id']);
@@ -444,7 +444,7 @@ class Order extends ActiveRecord
         $order = self::findOne($id);
         $modelClassNames = ['OrderExtCustomer','OrderExtFlag','OrderExtPay','OrderExtPop','OrderExtStatus','OrderExtWorker'];
         foreach($modelClassNames as $modelClassName) {
-            $class = '\common\models\order\\'.$modelClassName;
+            $class = '\dbbase\models\order\\'.$modelClassName;
             $instance = $class::findOne($id);
             $attributes = $instance->attributes;
             unset($attributes['order_id']);

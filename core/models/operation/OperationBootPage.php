@@ -2,7 +2,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationBootPage as CommonOperationBootPage;
+use dbbase\models\operation\OperationBootPage as CommonOperationBootPage;
 /**
  * This is the model class for table "{{%operation_category}}".
  *

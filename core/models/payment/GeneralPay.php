@@ -2,13 +2,13 @@
 
 namespace core\models\payment;
 
-use common\models\payment\GeneralPayCommon;
-use common\models\payment\GeneralPayRefund;
+use dbbase\models\payment\GeneralPayCommon;
+use dbbase\models\payment\GeneralPayRefund;
 use core\models\customer\CustomerTransRecord;
 use core\models\customer\Customer;
 use Yii;
 
-class GeneralPay extends \common\models\payment\GeneralPay
+class GeneralPay extends \dbbase\models\payment\GeneralPay
 {
 
 

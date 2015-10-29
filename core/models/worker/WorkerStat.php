@@ -15,7 +15,7 @@ use Yii;
  * @property integer $worker_stat_sale_cards
  * @property integer $updated_ad
  */
-class WorkerStat extends \common\models\worker\WorkerStat
+class WorkerStat extends \dbbase\models\worker\WorkerStat
 {
     /**
      * @inheritdoc

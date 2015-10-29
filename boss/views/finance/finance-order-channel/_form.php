@@ -4,12 +4,12 @@ use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
-use common\models\finance\FinancePayChannel;
+use dbbase\models\finance\FinancePayChannel;
 $model->finance_order_channel_is_lock=1;
 $model->is_del=0;
 /**
  * @var yii\web\View $this
- * @var common\models\FinanceOrderChannel $model
+ * @var dbbase\models\FinanceOrderChannel $model
  * @var yii\widgets\ActiveForm $form
  */
 ?>

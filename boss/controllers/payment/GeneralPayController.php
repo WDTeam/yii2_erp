@@ -2,14 +2,14 @@
 
 namespace boss\controllers\payment;
 
-use common\models\finance\FinanceOrderChannel;
-use common\models\payment\GeneralPayRefund;
+use dbbase\models\finance\FinanceOrderChannel;
+use dbbase\models\payment\GeneralPayRefund;
 use boss\models\payment\GeneralPaySearch;
 use Yii;
 use core\models\customer\Customer;
 use core\models\customer\CustomerTransRecord;
 use boss\models\payment\GeneralPay;
-use common\models\payment\GeneralPayLog;
+use dbbase\models\payment\GeneralPayLog;
 use yii\data\ActiveDataProvider;
 use yii\rest\Controller;
 use yii\web\NotFoundHttpException;

@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models\finance;
+namespace dbbase\models\finance;
 
 use Yii;
 use boss\models\general\SystemUser;

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 /**
  * @var yii\web\View $this
- * @var common\models\GeneralPayLog $model
+ * @var dbbase\models\GeneralPayLog $model
  */
 
 $this->title = Yii::t('app', 'Create {modelClass}', [

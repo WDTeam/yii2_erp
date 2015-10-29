@@ -15,7 +15,7 @@ use Yii;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class CustomerChannal extends \common\models\customer\CustomerChannal
+class CustomerChannal extends \dbbase\models\customer\CustomerChannal
 {
     /**
      * @inheritdoc

@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models\order;
+namespace dbbase\models\order;
 
 use Yii;
 
@@ -15,7 +15,7 @@ use Yii;
  * @property string $updated_at
  * @property integer $isdel
  */
-class OrderStatusDict extends \common\models\order\ActiveRecord
+class OrderStatusDict extends \dbbase\models\order\ActiveRecord
 {
     const ORDER_INIT = 1; //已创建
     const ORDER_WAIT_ASSIGN = 2; //待指派

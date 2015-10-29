@@ -1,11 +1,11 @@
 <?php
 
-namespace common\models\customer;
+namespace dbbase\models\customer;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
-use common\models\finance\FinanceOrderChannel;
-use common\models\finance\FinancePayChannel;
+use dbbase\models\finance\FinanceOrderChannel;
+use dbbase\models\finance\FinancePayChannel;
 /**
  * This is the model class for table "{{%customer_trans_record}}".
  *

@@ -51,7 +51,7 @@
 
 ```
 	1、请在BOSS订单模块，智能指派接口部分，引入 common\autoassign.config.php 使用里面定义好的配置项
-	2、请在BOSS订单模块，智能指派页面，引入 common\models\autoassign\ClientCommand; 枚举控制台命令，传递数据结构应包含 cmd 项
+	2、请在BOSS订单模块，智能指派页面，引入 dbbase\models\autoassign\ClientCommand; 枚举控制台命令，传递数据结构应包含 cmd 项
 	3、自动热启动（不用重启服务以更新配置项）
 	4、BOSS控制台页面的控制部分（请找人写）
 ```

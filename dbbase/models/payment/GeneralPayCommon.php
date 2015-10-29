@@ -1,9 +1,9 @@
 <?php
 
-namespace common\models\payment;
+namespace dbbase\models\payment;
 
-use common\models\finance\FinanceOrderChannel;
-use common\models\finance\FinancePayChannel;
+use dbbase\models\finance\FinanceOrderChannel;
+use dbbase\models\finance\FinancePayChannel;
 use core\models\customer\Customer;
 use core\models\customer\CustomerTransRecord;
 use core\models\order\Order;

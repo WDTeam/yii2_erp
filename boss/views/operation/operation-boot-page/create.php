@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model common\models\OperationBootPage */
+/* @var $model dbbase\models\OperationBootPage */
 
 $this->title = Yii::t('app','Add').Yii::t('operation','Boot Page');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('operation','Operation Boot Page'), 'url' => ['index']];

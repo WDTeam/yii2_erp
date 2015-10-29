@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models\operation;
+namespace dbbase\models\operation;
 
 /**
  * This is the ActiveQuery class for [[OperationCategory]].

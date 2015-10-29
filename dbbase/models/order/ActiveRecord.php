@@ -6,7 +6,7 @@
  * Time: 17:33
  */
 
-namespace common\models\order;
+namespace dbbase\models\order;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;

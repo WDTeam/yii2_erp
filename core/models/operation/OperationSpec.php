@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationSpec as CommonOperationSpec;
+use dbbase\models\operation\OperationSpec as CommonOperationSpec;
 
 /**
  * This is the model class for table "{{%operation_spec}}".

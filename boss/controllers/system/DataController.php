@@ -3,7 +3,7 @@
 namespace boss\controllers;
 
 use Yii;
-//use common\models\Customer;
+//use dbbase\models\Customer;
 use boss\models\CustomerSearch;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
@@ -348,7 +348,7 @@ class DataController extends BaseAuthController
         // $info = $test->incBalance(202, 10);
         // var_dump($info);
 
-        // $res = \common\models\CustomerBlockLog::addToBlock(17782, '测试');
+        // $res = \dbbase\models\CustomerBlockLog::addToBlock(17782, '测试');
         // var_dump($res);
         $res = \core\models\customer\CustomerCode::generateAndSend('18519654001');
         var_dump($res);

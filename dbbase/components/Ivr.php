@@ -55,7 +55,7 @@ description	说明
 提交成功	
  
  */
-namespace common\components;
+namespace dbbase\components;
 
 use yii\base\Component;
 use yii\base\Event;

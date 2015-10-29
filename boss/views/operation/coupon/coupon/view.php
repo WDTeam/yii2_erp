@@ -8,7 +8,7 @@ use kartik\grid\GridView;
 
 /**
  * @var yii\web\View $this
- * @var common\models\coupon\Coupon $model
+ * @var dbbase\models\coupon\Coupon $model
  */
 
 $this->title = '优惠券详情';

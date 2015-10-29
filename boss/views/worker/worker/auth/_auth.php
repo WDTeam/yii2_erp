@@ -3,7 +3,7 @@ use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
 use kartik\builder\FormGrid;
-use common\models\WorkerBlock;
+use dbbase\models\WorkerBlock;
 use yii\bootstrap\Modal;
 use core\models\worker\Worker;
 /**

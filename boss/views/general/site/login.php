@@ -5,7 +5,7 @@ use boss\assets\AppAsset;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
-/* @var $model \common\models\LoginForm */
+/* @var $model \dbbase\models\LoginForm */
 
 $this->title = Yii::t('app', 'Login');
 $this->params['breadcrumbs'][] = $this->title;

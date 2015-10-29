@@ -7,7 +7,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 /**
- * CustomerTransRecordSearch represents the model behind the search form about `common\models\CustomerTransRecord`.
+ * CustomerTransRecordSearch represents the model behind the search form about `dbbase\models\CustomerTransRecord`.
  */
 class CustomerTransRecordSearch extends CustomerTransRecord
 {

@@ -16,7 +16,7 @@ use \core\models\worker\Worker;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class WorkerCode extends \common\models\worker\WorkerCode
+class WorkerCode extends \dbbase\models\worker\WorkerCode
 {
 
     /**

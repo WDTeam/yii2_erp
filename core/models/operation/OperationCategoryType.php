@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationCategoryType as CommonOperationCategoryType;
+use dbbase\models\operation\OperationCategoryType as CommonOperationCategoryType;
 /**
  * This is the model class for table "{{%operation_category_type}}".
  *

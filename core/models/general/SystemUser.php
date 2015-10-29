@@ -3,7 +3,7 @@
 namespace core\models\general;
 
 use yii\helpers\ArrayHelper;
-class SystemUser extends \common\models\general\SystemUser
+class SystemUser extends \dbbase\models\general\SystemUser
 {
     public $repassword;
     private $_statusLabel;
@@ -78,7 +78,7 @@ class SystemUser extends \common\models\general\SystemUser
     }
     /**
      * role 验证规则
-     * @see \common\models\SystemUser::validateRole()
+     * @see \dbbase\models\SystemUser::validateRole()
      */
     public function validateRole($attribute, $params)
     {

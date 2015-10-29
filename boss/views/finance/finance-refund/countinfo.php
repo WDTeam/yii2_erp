@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
-use common\models\finance\FinanceRefund;
+use dbbase\models\finance\FinanceRefund;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider

@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models\shop;
+namespace dbbase\models\shop;
 
 /**
  * This is the ActiveQuery class for [[ShopStatus]].

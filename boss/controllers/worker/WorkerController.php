@@ -15,7 +15,7 @@ use yii\helpers\ArrayHelper;
 use yii\data\ActiveDataProvider;
 use boss\components\BaseAuthController;
 
-use common\models\worker\WorkerBlockLog;
+use dbbase\models\worker\WorkerBlockLog;
 use boss\models\worker\WorkerBlock;
 use boss\models\worker\WorkerVacation;
 use boss\models\worker\Worker;

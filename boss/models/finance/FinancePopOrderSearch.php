@@ -5,14 +5,14 @@ namespace boss\models\finance;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\finance\FinancePopOrder;
-use common\models\finance\FinanceHeader;
+use dbbase\models\finance\FinancePopOrder;
+use dbbase\models\finance\FinanceHeader;
 use core\models\Customer;
 use core\models\order\Order;
 use core\models\worker\Worker;
-use common\models\finance\FinanceOrderChannel;
+use dbbase\models\finance\FinanceOrderChannel;
 /**
- * FinancePopOrderSearch represents the model behind the search form about `common\models\FinancePopOrder`.
+ * FinancePopOrderSearch represents the model behind the search form about `dbbase\models\FinancePopOrder`.
  */
 class FinancePopOrderSearch extends FinancePopOrder
 {

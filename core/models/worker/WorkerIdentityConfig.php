@@ -14,7 +14,7 @@ use Yii;
  * @property integer $admin_id
  * @property integer $isdel
  */
-class WorkerIdentityConfig extends \common\models\worker\WorkerIdentityConfig
+class WorkerIdentityConfig extends \dbbase\models\worker\WorkerIdentityConfig
 {
     /**
      * @inheritdoc
