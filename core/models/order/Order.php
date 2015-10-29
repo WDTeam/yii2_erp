@@ -499,10 +499,10 @@ class Order extends OrderModel
         $this->setAttributes([
             'order_unit_money' => $goods['operation_shop_district_goods_price'], //单价
             'order_service_type_name' => $goods['operation_shop_district_goods_name'], //商品名称
-            'order_booked_count' => intval(($this->order_booked_end_time - $this->order_booked_begin_time) / 60), //时长
+            'order_booked_count' => floatval(($this->order_booked_end_time - $this->order_booked_begin_time) / 3600), //TODO 精品保洁另算时长
         ]);
         $this->setAttributes([
-            'order_money' => $this->order_unit_money * $this->order_booked_count / 60, //订单总价
+            'order_money' => $this->order_unit_money * $this->order_booked_count, //订单总价
             'city_id' =>$address['operation_city_id'],
             'district_id' => $goods['district_id'],
             'order_address' => $address['operation_province_name'] . ',' . $address['operation_city_name'] . ',' . $address['operation_area_name'] . ',' . $address['customer_address_detail'] . ',' . $address['customer_address_nickname'] . ',' . $address['customer_address_phone'], //地址信息
