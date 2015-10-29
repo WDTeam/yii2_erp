@@ -1,6 +1,5 @@
 var operating_order_id = 0;
 var complaint_customer_phone = '';
-var complaint_items = [];
 
 $(document).ready(function($){
 	//open popup
@@ -80,15 +79,48 @@ $(document).ready(function($){
 		var complaint_type_id = $(":radio[name='radio_complaint_type']:checked").val();
 		var complaint_type_name = $(":radio[name='radio_complaint_type']:checked").parent().text();
 		var complaint_level_id = $(":radio[name='radio_complaint_level']:checked").val();
-		var complaint_level_name = $(":radio[name='radio_complaint_level']:checked").parent().text();		
+		var complaint_level_name = $(":radio[name='radio_complaint_level']:checked").parent().text();
 		
-		complaint_items.push({department: dept_id, type: complaint_type_id, level: complaint_level_id});
+		if (dept_id == undefined || complaint_type_id == undefined || complaint_level_id == undefined){
+			alert("投诉部门、投诉类型、投诉级别都必须选择！");
+			return;
+		}
 		
-		$(".m_queren").children("div").prepend('<p><span>投诉部门：' + dept_name + '</span><span>投诉类型：' + complaint_type_name + '</span> <span>投诉级别：' + complaint_level_name + '</span><a href="javascript:;" class="m_edit">修改</a></p>');
+		$(".m_queren").children("div").prepend('<p><input type="hidden" value="' + dept_id 
+				+ '"><input type="hidden" value="' + complaint_type_id + '"><input type="hidden" value="' + complaint_level_id 
+				+ '"><span>投诉部门：' + dept_name + '</span><span>投诉类型：' + complaint_type_name + '</span> <span>投诉级别：' 
+				+ complaint_level_name + '</span><a href="#" class="m_edit">修改</a></p>');
+		
+		$(".m_edit").unbind();
+		$(".m_edit").click(function(){
+			var current_row = $(this).parent();
+			$(":radio[name='radio_department']").each(function (){
+				if ($(this).val() == current_row.children('input:eq(0)').val())
+					$(this).parent().click();
+			});
+
+			$(":radio[name='radio_complaint_type']").each(function (){
+				if ($(this).val() == current_row.children('input:eq(1)').val())
+					$(this).prop('checked', true);
+			});
+			
+			$(":radio[name='radio_complaint_level']").each(function (){
+				if ($(this).val() == current_row.children('input:eq(2)').val())
+					$(this).prop('checked', true);
+			});
+			
+			$(this).parent().remove();
+			
+			$(".m_queren").show();
+			$(".radioLi").show();
+			$(".m_disd").show();
+			$(".submitBtntt").hide();
+			
+			return false;
+		});		
 		
 		$(".m_queren").show();
 		$(".radioLi").hide();
-		$(".m_disd").hide();
 		$(".m_disd").hide();
 		$(".submitBtntt").show();
 	});
@@ -97,15 +129,22 @@ $(document).ready(function($){
 		$(".m_queren").show();
 		$(".radioLi").show();
 		$(".m_disd").show();
-		$(".m_disd").show();
 		$(".submitBtntt").hide();
-	});
-
-	$(".m_edit").click(function(){
 		
+		$(":radio[name='radio_department']").removeAttr("checked");
+		$(":radio[name='radio_complaint_type']").removeAttr("checked");
+		$(":radio[name='radio_complaint_level']").removeAttr("checked");
+		
+		$(":radio[name='radio_department']:eq(0)").parent().click();
 	});
 	
 	$(".m_submit").click(function(){
+		var complaint_items = [];
+		
+		$(".m_queren div p").each(function(){
+			complaint_items.push({department: $(this).children('input:eq(0)').val(), type: $(this).children('input:eq(1)').val(), level: $(this).children('input:eq(2)').val()});
+		});
+		
         var complaints = {
             	order_id: operating_order_id,
             	complaint_detail: $('#complaint_detail').val(),
