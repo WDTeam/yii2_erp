@@ -26,6 +26,10 @@ use yii\behaviors\TimestampBehavior;
  */
 class CouponCustomer extends \common\models\operation\coupon\CouponCustomer
 {
+    /**
+     * 自动处理创建、修改时间
+     * @author CoLee
+     */
     public function behaviors()
     {
         return [

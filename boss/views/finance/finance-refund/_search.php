@@ -18,9 +18,6 @@ use kartik\date\DatePicker;
     <div class='col-md-1'>
     <?= $form->field($model, 'finance_refund_tel') ?>
 	</div> 
-    <div class='col-md-1'>
-    <?= $form->field($model, 'finance_refund_worker_tel') ?>
-	</div> 
 	<div class='col-md-2'>
     <?= $form->field($model, 'finance_order_channel_id')->widget(Select2::classname(), [
         'name' => '订单渠道',
