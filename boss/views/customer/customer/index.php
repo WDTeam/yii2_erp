@@ -17,6 +17,7 @@ use yii\widgets\ActiveForm;
 
 use common\models\order\OrderExtCustomer;
 
+use core\models\customer\Customer;
 use core\models\customer\CustomerAddress;
 use core\models\customer\CustomerExtBalance;
 use core\models\customer\CustomerExtSrc;
@@ -161,8 +162,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'label' => '平台',
                 'value' => function ($dataProvider) {
-                    $customerExtSrc = CustomerExtSrc::getFirstSrc($dataProvider->id);
-                    return $customerExtSrc == false ? '-' : $customerExtSrc->platform_name == '' ? '-' : $customerExtSrc->platform_name;
+                    $customer_ext_src = Customer::getFirstSrc($dataProvider->customer_phone);
+                    $platform_name = empty($customer_ext_src) ? '-' : empty($customer_ext_src['platform_name']) ? '-' : $customer_ext_src['platform_name']; 
+					return $platform_name;
                 },
                 'width' => "80px",
             ],
@@ -170,8 +172,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'label' => '渠道',
                 'value' => function ($dataProvider) {
-                    $customerExtSrc = CustomerExtSrc::getFirstSrc($dataProvider->id);
-                    return $customerExtSrc == false ? '-' : $customerExtSrc->channal_name == '' ? '-' : $customerExtSrc->channal_name;
+                    $customer_ext_src = Customer::getFirstSrc($dataProvider->customer_phone);
+                    $channal_name = empty($customer_ext_src) ? '-' : empty($customer_ext_src['channal_name']) ? '-' : $customer_ext_src['channal_name']; 
+					return $channal_name;
                 },
                 'width' => "80px",
             ],
