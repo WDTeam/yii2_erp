@@ -689,8 +689,8 @@ class WorkerController extends \restapi\components\Controller
      *   "msg": "操作成功.",
      *   "ret": [
      *       {
-     *           "task_money": "50.00",
-     *           "task_des": "每个月请假不超过4天"
+     *           "task_money": "任务奖励",
+     *           "task_des": "任务描述"
      *       }
      *   ]
      * }
@@ -698,7 +698,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"error",
+     *      "code":"0",
      *      "msg": "用户认证已经过期,请重新登录"
      *  }
      */
@@ -710,17 +710,16 @@ class WorkerController extends \restapi\components\Controller
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
         //数据整理
-        $settle_id = intval($param['settle_id']);//账单ID
-        if(!$settle_id){
+        if(!isset($param['settle_id'])||!intval($param['settle_id'])){
             return $this->send(null, "账单唯一标识错误", 0, 403);
         }
         try{
             //获取任务奖励列表
-            $ret = FinanceSettleApplySearch::getTaskArrayBySettleId($settle_id);
+            $taskRewardret = FinanceSettleApplySearch::getTaskArrayBySettleId(intval($param['settle_id']));
          }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
-        return $this->send($ret, "操作成功.");
+        return $this->send($taskRewardret, "操作成功");
     }
     
     /**
@@ -742,11 +741,11 @@ class WorkerController extends \restapi\components\Controller
      *     "msg": "操作成功.",
      *        "ret": [
      *            {
-     *                "deduction_money": "12.00",
-     *                "deduction_des": "第三大大声点",
-     *                "deduction_type": "2",
-     *                "deduction_time": "2015.10.26",
-     *                "deduction_type_des": "投诉"
+     *                "deduction_money": "处罚金额",
+     *                "deduction_des": "处罚描述",
+     *                "deduction_type": "处罚类型",
+     *                "deduction_time": "处罚时间",
+     *                "deduction_type_des": "处罚类型描述"
      *            }
      *       ]
      * }
@@ -754,7 +753,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"error",
+     *      "code":"0",
      *      "msg": "用户认证已经过期,请重新登录"
      *  }
      */
@@ -766,13 +765,12 @@ class WorkerController extends \restapi\components\Controller
             return $this->send(null, $checkResult['msg'], 0, 403);
         }
         //数据整理
-        $settle_id = intval($param['settle_id']);//账单ID
-        if(!$settle_id){
+        if(!isset($param['settle_id'])||!intval($param['settle_id'])){
             return $this->send(null, "账单唯一标识错误", 0, 403);
         }
         try{
             //获取任务奖励列表
-            $punishList = FinanceSettleApplySearch::getDeductionArrayBySettleId($settle_id);
+            $punishList = FinanceSettleApplySearch::getDeductionArrayBySettleId(intval($param['settle_id']));
             if($punishList){
                 foreach($punishList as $key=>$val){
                     switch($val['deduction_type']){
@@ -817,7 +815,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"error",
+     *      "code":"0",
      *      "msg": "用户认证已经过期,请重新登录"
      *  }
      */
@@ -829,17 +827,17 @@ class WorkerController extends \restapi\components\Controller
             return $this->send(null, $checkResult['msg'], 0, 403);
         }
         //数据整理
-        $settle_id = intval($param['settle_id']);//账单ID
+        if(!isset($param['settle_id'])||!intval($param['settle_id'])){
+            return $this->send(null, "账单唯一标识错误", 0, 403);
+        }
         try{
-            $isSucceed = FinanceSettleApplySearch::workerConfirmSettlement($settle_id);
+            if(FinanceSettleApplySearch::workerConfirmSettlement(intval($param['settle_id']))){
+                return $this->send(null, "账单确定成功");
+            }
          }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
-        if($isSucceed){
-            return $this->send(null, "账单确定成功");
-        }
         return $this->send(null, "账单确定失败",0,403);
-      
     }
     
     /**

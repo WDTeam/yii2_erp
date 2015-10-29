@@ -5,7 +5,7 @@ namespace boss\models\operation\coupon;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\operation\coupon\Coupon;
+use core\models\operation\coupon\Coupon;
 
 use \core\models\operation\coupon\CouponCode;
 
