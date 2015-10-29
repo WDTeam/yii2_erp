@@ -875,7 +875,7 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /order/worker-service-orders-count 查询阿姨订单订单数量(xieyi 90%已经将后台接口完成,缺少周期订单)
+     * @api {GET} /order/worker-service-orders-count 查询阿姨待服务订单订单数量(xieyi 90%已经将后台接口完成,缺少周期订单)
      *
      *
      * @apiName Orders
@@ -927,7 +927,7 @@ class OrderController extends \restapi\components\Controller
         $arr[] = OrderStatusDict::ORDER_SYS_ASSIGN_DONE;
         $arr[] = OrderStatusDict::ORDER_WORKER_BIND_ORDER;
 
-        $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $arr, $channels);
+        $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $arr);
         $ret['count'] = $count;
 
         $this->send($ret, "操作成功");
@@ -1216,7 +1216,7 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /order/order-status-history 查询某个订单状态历史状态记录(xieyi 70%缺少周期订单)
+     * @api {GET} /order/order-status-history 查询用户某个订单状态历史状态记录(xieyi 70%缺少周期订单)
      *
      *
      * @apiName OrderStatusHistory
@@ -1284,59 +1284,6 @@ class OrderController extends \restapi\components\Controller
      *
      */
     public function actionOrderStatusHistory()
-    {
-        $args = Yii::$app->request->get() or
-                $args = json_decode(Yii::$app->request->getRawBody(), true);
-        @$token = $args['access_token'];
-        $user = CustomerAccessToken::getCustomer($token);
-        if (empty($user)) {
-            return $this->send(null, "用户无效,请先登录", 0);
-        }
-        @$orderId = $args['order_id'];
-        if (!is_numeric($orderId)) {
-            return $this->send(null, "该订单不存在", 0);
-        }
-        //TODO check whether the orders belong the user
-        $ret = \core\models\order\OrderStatus::searchOrderStatusHistory($orderId);
-
-        $this->send($ret, "操作成功");
-    }
-
-    /**
-     * @api {GET} /order/worker-service-order-count 查询阿姨待服务订单个数(xieyi 10%)
-     *
-     *
-     * @apiName WorkerServiceOrderCount
-     * @apiGroup Order
-     *
-     * @apiParam {String} order_id 订单id
-     * @apiParam {String} access_token 阿姨认证令牌
-     *
-     * @apiSuccess {Object[]} status_list 该状态订单.
-     *
-     * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *         "code": "ok",
-     *         "msg": "操作成功",
-     *         "ret":
-     *         {
-     *            count:1
-     *         }
-     *     }
-     *
-     * @apiError UserNotFound 用户认证已经过期.
-     *
-     * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "error",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
-     *
-     */
-    public function actionWorkerServiceOrderCount()
     {
         $args = Yii::$app->request->get() or
                 $args = json_decode(Yii::$app->request->getRawBody(), true);
