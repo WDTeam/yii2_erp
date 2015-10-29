@@ -167,9 +167,11 @@ class Coupon extends \common\models\operation\coupon\Coupon
 	/**
      * get coupon code expirate_at by time type
 	 */
-	public static function getExpirateAtByTimeType($coupon_id, $get_at = time()){
+	public static function getExpirateAtByTimeType($coupon_id, $get_at){
 		$coupon = self::findOne($coupon_id);
 		if($coupon == NULL) return false;
+
+		if(!isset($get_at)) $get_at = time();
 		
 		$expirate_at = 0;
 		switch ($coupon->coupon_time_type)
@@ -190,8 +192,6 @@ class Coupon extends \common\models\operation\coupon\Coupon
 				}
 				
 			break;
-		
-			
 		
 			default:
 				# code...
