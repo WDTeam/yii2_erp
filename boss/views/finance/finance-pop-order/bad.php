@@ -33,31 +33,17 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
      		
             //'id',
+            'order_code',
             'finance_pop_order_number',
            // 'finance_order_channel_id',
             'finance_order_channel_title',
-          //  'finance_pay_channel_id',
-          //  'finance_pay_channel_title', 
-            'finance_pop_order_customer_tel', 
-      //      'finance_pop_order_worker_uid', 
             'finance_pop_order_booked_time:datetime', 
             'finance_pop_order_booked_counttime:datetime', 
+     		'order_money',
            'finance_pop_order_sum_money', 
             'finance_pop_order_coupon_count', 
-//           'finance_pop_order_coupon_id', 
-//            'finance_pop_order_order2', 
-           //'finance_pop_order_channel_order', 
-//            'finance_pop_order_order_type', 
-//            'finance_pop_order_status', 
-
-     		
-     		
-           //'finance_pop_order_finance_isok', 
-//            'finance_pop_order_discount_pay', 
-//            'finance_pop_order_reality_pay', 
-//            'finance_pop_order_order_time:datetime', 
-//            'finance_pop_order_pay_time:datetime', 
-
+     		'order_status_name',
+     		'finance_pop_order_finance_time:datetime',
      		[
      		'format' => 'raw',
      		'label' => '财务审核',
@@ -67,13 +53,8 @@ $this->params['breadcrumbs'][] = $this->title;
      		},
      		'width' => "100px",
      		],
-            'finance_pop_order_pay_title', 
+           // 'finance_pop_order_pay_title', 
             'finance_pop_order_msg',
-//            'finance_pop_order_check_id', 
-//            'finance_pop_order_finance_time:datetime', 
-//            'create_time:datetime', 
-//            'is_del', 
-
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' =>'{view} {tagssign}',

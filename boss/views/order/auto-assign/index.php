@@ -33,25 +33,31 @@ $this->params['breadcrumbs'][] = $this->title;
             <input id="serverport" class="form-control" name="serverport" value="<?php echo !empty($data['port'])? $data['port'] : ''?>" placeholder="SOCKET服务器端口" />
         </div>
         <div class="col-md-2"><button class="btn btn-default" id="connect" name="connect">连接派单服务器</button></div>
+        <div class="col-md-2"><button class="btn btn-default" id="start" name="start">开始自动派单</button><button class="btn btn-default" id="stop" name="stop">停止自动派单</button></div>
     </div>
     <hr/>
     <div class="row">
         <div class="col-md-6  form-inline">
-            <label>全职阿姨派单：</label>
-            <input id="qstart" class="form-control margin-l-36" name="qstart" value="0" /> 至 <input id="qend" class="form-control" name="qend" value="5" />分钟
+            <label>全职阿姨派单时间：</label>
+            <input id="qstart" class="form-control margin-l-36" name="qstart" value="0" readonly="true" /> 至 <input id="qend" class="form-control" name="qend" value="5" />分钟
         </div>
         <div class="col-md-2">
-            <button class="btn btn-default" id="start" name="start">开始自动派单</button>
+            <button class="btn btn-default" id="update" name="update">更新配置（临时变更）</button>
         </div>
     </div>
     <hr/>
     <div class="row">
         <div class="col-md-6  form-inline">
-            <label>兼职阿姨派单：</label>
-            <input id="jstart" class="form-control margin-l-36" name="qstart" value="5" /> 至 <input id="jend" class="form-control" name="qend" value="10" />分钟
+            <label>兼职阿姨派单时间：</label>
+            <input id="jstart" class="form-control margin-l-36" name="jstart" value="5" readonly="true" /> 至 <input id="jend" class="form-control" name="jend" value="15" />分钟
         </div>
         <div class="col-md-2">
-            <button class="btn btn-default" id="stop" name="start">停止自动派单</button>
+            <button class="btn btn-default" id="reload" name="reload">重新启动</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6  form-inline">
+        <label>执行结果：</label><div id="connectStatus"></div>
         </div>
     </div>
     <hr/>
@@ -81,5 +87,5 @@ $this->params['breadcrumbs'][] = $this->title;
     </table>
 </div>
 
-<script type="text/javascript" src="/static/js/jquery.js"></script>
-<script type="text/javascript" src="/static/js/index.js"></script>
+<script type="text/javascript" src="/autoassign/js/jquery.js"></script>
+<script type="text/javascript" src="/autoassign/js/index.js"></script>

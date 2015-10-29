@@ -64,6 +64,17 @@ $(document).ready(function(){
 	_good.eq(7).addClass("assess");
 	$(".good-job,.just-so-so").click(function(){$(".check").css("display","none")});
 	$(".assess").click(function(){$(".assess_list").css("display","none")});
+	$(".check").css("display","none");
+	$(".assess").click(function(){
+		$(".assess_list").css("display","none");
+		$(".check").css("display","block");
+
+	});
+	$(".just-so-so,.good-job").click(function(){
+		$(".assess_list").css("display","block");
+		$(".check").css("display","none");
+
+	});
 
 	//时间插件
 
@@ -106,8 +117,6 @@ $(document).ready(function(){
                 $(".timepicker").timepicker({
                     showInputs: false
                 });
-
-
 	
 });
 
