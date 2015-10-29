@@ -47,9 +47,6 @@ use Yii;
 class Order extends ActiveRecord
 {
 
-    const ORDER_PAY_TYPE_OFF_LINE = 1;
-    const ORDER_PAY_TYPE_ON_LINE = 2;
-    const ORDER_PAY_TYPE_POP = 3;
     const MANUAL_ASSIGN_lONG_TIME = 900;
 
     public $order_before_status_dict_id;
@@ -330,16 +327,16 @@ class Order extends ActiveRecord
     }
 
 
-
     /**
      * 保存订单
      * 保存时记录订单历史
      * @param array $save_models 需要保存操作的类名
+     * @param $transact 事务
      * @return bool
      */
-    public function doSave($save_models = ['OrderExtCustomer','OrderExtFlag','OrderExtPay','OrderExtPop','OrderExtStatus','OrderExtWorker','OrderStatusHistory'])
+    public function doSave($save_models = ['OrderExtCustomer','OrderExtFlag','OrderExtPay','OrderExtPop','OrderExtStatus','OrderExtWorker','OrderStatusHistory'],$transact = null)
     {
-        $transaction = static::getDb()->beginTransaction(); //开启一个事务
+        $transaction = empty($transact)?static::getDb()->beginTransaction():$transact; //开启一个事务
         $is_new_record = $this->isNewRecord;
         if(!$this->isNewRecord)$this->version++;
 
@@ -430,7 +427,9 @@ class Order extends ActiveRecord
             }
 
 
-            $transaction->commit();
+            if(empty($transact)){
+                $transaction->commit();
+            }
             return true;
         }
         return false;

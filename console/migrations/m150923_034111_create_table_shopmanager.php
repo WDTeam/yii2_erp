@@ -11,6 +11,8 @@ class m150923_034111_create_table_shopmanager extends Migration
             CREATE TABLE IF NOT EXISTS {{%shop_manager}} (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `name` varchar(255) NOT NULL COMMENT '家政名称',
+              `account` varchar(100) NOT NULL COMMENT '账号',
+              `password_hash` varchar(50) NOT NULL COMMENT '密码HASH',
               `province_id` int(11) DEFAULT NULL COMMENT '省份ID',
               `city_id` int(11) DEFAULT NULL COMMENT '城市ID',
               `county_id` int(11) DEFAULT NULL COMMENT '区县ID',

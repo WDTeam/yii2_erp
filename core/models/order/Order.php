@@ -12,6 +12,7 @@ namespace core\models\order;
 use boss\controllers\operation\OperationGoodsController;
 use boss\controllers\operation\OperationShopDistrictController;
 use common\models\order\OrderExtFlag;
+use common\models\order\OrderExtPay;
 use common\models\order\OrderExtWorker;
 use core\models\customer\Customer;
 use core\models\customer\CustomerAddress;
@@ -137,7 +138,7 @@ class Order extends OrderModel
             $order['order_id'] = $this->id;
             $order_model = OrderSearch::getOne($this->id);
             switch ($this->orderExtPay->order_pay_type) {
-                case self::ORDER_PAY_TYPE_OFF_LINE://现金支付
+                case OrderExtPay::ORDER_PAY_TYPE_OFF_LINE://现金支付
                     //交易记录
                     $order['customer_trans_record_cash'] = $this->order_money;
                     $order['general_pay_source'] = 20;
@@ -146,7 +147,7 @@ class Order extends OrderModel
                         OrderStatus::_payment($order_model, ['OrderExtPay']);
                     }
                     break;
-                case self::ORDER_PAY_TYPE_ON_LINE://线上支付
+                case OrderExtPay::ORDER_PAY_TYPE_ON_LINE://线上支付
                     if ($this->orderExtPay->order_pay_money == 0) { //如果需要支付的金额等于0 则全部走余额支付
                         //交易记录
                         $order['customer_trans_record_online_balance_pay'] = $this->orderExtPay->order_use_acc_balance;
@@ -157,7 +158,7 @@ class Order extends OrderModel
                         }
                     }
                     break;
-                case self::ORDER_PAY_TYPE_POP://第三方预付
+                case OrderExtPay::ORDER_PAY_TYPE_POP://第三方预付
                     //交易记录
                     $order['customer_trans_record_pre_pay'] = $this->orderExtPop->order_pop_order_money;
                     $order['general_pay_source'] = $this->channel_id;
@@ -174,18 +175,52 @@ class Order extends OrderModel
         return false;
     }
 
-    public function createNewBatch($orders_attributes)
+    /**
+     * 周期订单
+     *  @param $attributes [
+     *  string $order_ip 下单IP地址 必填
+     *  integer $order_service_type_id 服务类型 商品id 必填
+     *  integer $order_src_id 订单来源id 必填
+     *  string $channel_id 下单渠道 必填
+     *  int $address_id 客户地址id 必填
+     *  int $customer_id 客户id 必填
+     *  string $order_customer_phone 客户手机号 必填
+     *  int $admin_id 操作人id 0客户 1系统 必填
+     *  int $order_pay_type 支付方式 1现金 2线上 3第三方 必填
+     *  int $order_is_use_balance 是否使用余额 0否 1是 必填
+     *  string $order_booked_worker_id 指定阿姨id
+     *  string $order_customer_need 客户需求
+     *  string $order_customer_memo 客户备注
+     * ]
+     * @param $booked_list [
+     *      [
+     *          int $order_booked_begin_time 预约开始时间 必填
+     *          int $order_booked_end_time 预约结束时间 必填
+     *          int $coupon_id 优惠券id
+     *      ]
+     * ]
+     * @return bool
+     */
+    public function createNewBatch($attributes,$booked_list)
     {
-        foreach($orders_attributes as $attributes){
-            $attributes['order_parent_id'] = 0;
-            $attributes['order_is_parent'] = 0;
-            //如果指定阿姨则是周期订单分配周期订单号
-            if(isset($attributes['order_booked_worker_id']) && $attributes['order_booked_worker_id']>0)
-            {
-                $attributes['order_batch_code'] = OrderTool::createOrderBatchCode();
-            }
-            $this->_create($attributes);
+        $transact = static::getDb()->beginTransaction();
+        //如果指定阿姨则是周期订单分配周期订单号否则分配批量订单号
+        $attributes['order_parent_id'] = 0;
+        $attributes['order_is_parent'] = 0;
+        if(isset($attributes['order_booked_worker_id']) && $attributes['order_booked_worker_id']>0)
+        {
+            $attributes['order_batch_code'] = OrderTool::createOrderCode('z');
+        }else{
+            $attributes['order_batch_code'] = OrderTool::createOrderCode('p');
         }
+        foreach($booked_list as $booked){
+            if(!$this->_create($attributes+$booked,$transact)){
+                $transact->rollBack();
+                return false;
+            }
+        }
+        $transact->commit();
+        return true;
     }
 
 
@@ -429,9 +464,10 @@ class Order extends OrderModel
     /**
      * 创建订单
      * @param $attributes
+     * @param $transact
      * @return bool
      */
-    private function _create($attributes)
+    private function _create($attributes,$transact=null)
     {
         $this->setAttributes($attributes);
         $status_from = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //创建订单状态
@@ -473,9 +509,9 @@ class Order extends OrderModel
         ]);
 
 
-        if ($this->order_pay_type == 3) { //第三方预付
+        if ($this->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_POP) { //第三方预付
             $this->order_pop_operation_money = $this->order_money - $this->order_pop_order_money; //渠道运营费
-        } elseif ($this->order_pay_type == 2) {//线上支付
+        } elseif ($this->order_pay_type == OrderExtPay::ORDER_PAY_TYPE_ON_LINE) {//线上支付
             $this->order_pay_money = $this->order_money; //支付金额
             if (!empty($this->coupon_id)) {//是否使用了优惠券
                 $coupon = self::getCouponById($this->coupon_id);
@@ -531,7 +567,7 @@ class Order extends OrderModel
             'isdel' => 0,
         ]);
 
-        return $this->doSave();
+        return $this->doSave(['OrderExtCustomer','OrderExtFlag','OrderExtPay','OrderExtPop','OrderExtStatus','OrderExtWorker','OrderStatusHistory'],$transact);
     }
 
     /**

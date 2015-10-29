@@ -2,19 +2,22 @@
 
 use yii\helpers\Html;
 
-/* @var $this yii\web\View */
-/* @var $model boss\models\Operation\OperationAdvertRelease */
+/**
+ * @var yii\web\View $this
+ * @var boss\models\operation\OperationAdvertRelease $model
+ */
 
-$this->title = Yii::t('app', 'Update').Yii::t('app', 'Advert Release');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Advert Release'), 'url' => ['index']];
-//$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = '城市名称: ' . ' ' . $model->city_name;
+$this->params['breadcrumbs'][] = ['label' => '更新发布时间', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->city_name, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = '更新';
 ?>
 <div class="operation-advert-release-update">
 
+    <!--h1><?= Html::encode($this->title) ?></h1-->
+
     <?= $this->render('_form', [
         'model' => $model,
-        'citys' => $citys
     ]) ?>
 
 </div>

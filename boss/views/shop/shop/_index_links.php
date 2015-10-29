@@ -23,19 +23,19 @@ echo Html::a('全部('.Shop::getTotal().')',[
 ]);
 echo ' ';
 
-echo Html::a('待验证('.Shop::getAuditStatusCountByNumber(0).')',[
+echo Html::a('待审核('.Shop::getAuditStatusCountByNumber(0).')',[
     'index','ShopSearch'=>['audit_status'=>0]
 ], [
     'class'=>'btn btn-success'
 ]);
 echo ' ';
-echo Html::a('未验证通过('.Shop::getAuditStatusCountByNumber(2).')',[
+echo Html::a('未审核通过('.Shop::getAuditStatusCountByNumber(2).')',[
     'index','ShopSearch'=>['audit_status'=>2]
 ],[
     'class'=>'btn btn-success'
 ]);
 echo ' ';
-echo Html::a('验证通过('.Shop::getAuditStatusCountByNumber(1).')',[
+echo Html::a('审核通过('.Shop::getAuditStatusCountByNumber(1).')',[
     'index','ShopSearch'=>['audit_status'=>1]
 ],[
     'class'=>'btn btn-success'

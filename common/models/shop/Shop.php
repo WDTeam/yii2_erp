@@ -50,9 +50,9 @@ class Shop extends \yii\db\ActiveRecord
         return [
             [['name', 'street', 'principal', 'tel'], 'required'],
             [['shop_manager_id', 'province_id', 'city_id', 'county_id', 'operation_shop_district_id', 'created_at', 'updated_at', 'is_blacklist', 'audit_status', 'worker_count', 'complain_coutn'], 'integer'],
-            [['name', 'account_person'], 'string', 'max' => 100],
+            [['name', 'account_person', 'account'], 'string', 'max' => 100],
             [['street', 'opening_address'], 'string', 'max' => 255],
-            [['principal', 'tel', 'bankcard_number', 'level'], 'string', 'max' => 50],
+            [['principal', 'tel', 'bankcard_number', 'level', 'password_hash'], 'string', 'max' => 50],
             [['other_contact', 'opening_bank', 'sub_branch'], 'string', 'max' => 200]
         ];
     }
@@ -65,6 +65,8 @@ class Shop extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'name' => Yii::t('app', '店名'),
+            'account' => Yii::t('app', '账号'),
+            'password_hash' => Yii::t('app', '密码'),
             'shop_manager_id' => Yii::t('app', '归属家政ID'),
             'province_id' => Yii::t('app', '省份ID'),
             'city_id' => Yii::t('app', '城市ID'),

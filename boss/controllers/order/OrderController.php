@@ -28,7 +28,9 @@ class OrderController extends BaseAuthController
     public function actionTest()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-       return OrderSearch::getPushWorkerOrders(18513,$page_size=20,$page=1,false);
+        return Order::isPaymentOnline(14,0,24,'aaa','2015102942279250');
+
+//       return OrderSearch::getPushWorkerOrders(18513,$page_size=20,$page=1,false);
         return OrderTool::createOrderCode();
     }
     

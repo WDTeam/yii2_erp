@@ -61,7 +61,7 @@ class ShopManager extends \yii\db\ActiveRecord
         return [
             [['name', 'street', 'principal', 'tel'], 'required'],
             [['province_id', 'city_id', 'county_id', 'bl_type', 'bl_create_time', 'bl_audit', 'bl_expiry_start', 'bl_expiry_end', 'created_at', 'updated_at', 'is_blacklist', 'audit_status', 'shop_count', 'worker_count', 'complain_coutn'], 'integer'],
-            [['bl_business'], 'string'],
+            [['bl_business', 'password_hash', 'account'], 'string'],
             [['name', 'street', 'opening_address', 'bl_name', 'bl_address', 'bl_photo_url'], 'string', 'max' => 255],
             [['principal', 'tel', 'bankcard_number', 'bl_person', 'level'], 'string', 'max' => 50],
             [['other_contact', 'opening_bank', 'sub_branch', 'bl_number'], 'string', 'max' => 200],
@@ -77,6 +77,8 @@ class ShopManager extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'name' => Yii::t('app', '家政名称'),
+            'account' => Yii::t('app', '账号'),
+            'password_hash' => Yii::t('app', '密码'),
             'province_id' => Yii::t('app', '省份ID'),
             'city_id' => Yii::t('app', '城市ID'),
             'county_id' => Yii::t('app', '区县ID'),

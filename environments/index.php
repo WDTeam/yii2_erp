@@ -55,8 +55,8 @@ return [
             'core/web/assets',
             'boss/runtime',
             'boss/web/assets',
-            'api/runtime',
-            'api/web/assets',
+            'restapi/runtime',
+            'restapi/web/assets',
         ],
         'setExecutable' => [
             'yii',
@@ -72,8 +72,8 @@ return [
             'core/web/assets',
             'boss/runtime',
             'boss/web/assets',
-            'api/runtime',
-            'api/web/assets',
+            'restapi/runtime',
+            'restapi/web/assets',
         ],
         'setExecutable' => [
             'yii',
@@ -89,8 +89,8 @@ return [
             'core/web/assets',
             'boss/runtime',
             'boss/web/assets',
-            'api/runtime',
-            'api/web/assets',
+            'restapi/runtime',
+            'restapi/web/assets',
         ],
         'setExecutable' => [
             'yii',
