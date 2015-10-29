@@ -3,6 +3,7 @@
 namespace core\models\worker;
 
 
+use boss\models\worker\WorkerVacation;
 use common\models\Help;
 use common\models\worker\WorkerVacationApplication;
 use Symfony\Component\Console\Helper\Helper;
@@ -164,8 +165,29 @@ class Worker extends \common\models\worker\Worker
         return $workerInfo;
     }
 
-    public static function getWorkerWorkTime($worker_id,$date){
-        $workTime = date('t');
+    /**
+     * 获取指定时间段内阿姨的工作时间
+     * @param $worker_id
+     * @param $startTime
+     * @param $endTime
+     * @return int
+     */
+    public static function getWorkerWorkTime($worker_id,$startTime,$endTime){
+        $condition = "(worker_vacation_start_time>=$startTime and worker_vacation_finish_time<$endTime) or (worker_vacation_start_time<=$startTime and worker_vacation_finish_time>$startTime) or (worker_vacation_start_time<$endTime and worker_vacation_finish_time>$endTime)";
+        $vacationResult = WorkerVacation::find()->where($condition)->andWhere(['worker_id'=>$worker_id])->select('worker_vacation_start_time,worker_vacation_finish_time')->asArray()->all();
+        $workTime = 0;
+        foreach ((array)$vacationResult as $val) {
+             if($val['worker_vacation_start_time']>=$startTime && $val['worker_vacation_finish_time']<$endTime){
+                $workTime = $workTime+($val['worker_vacation_start_time']-$val['worker_vacation_start_time']);
+             }
+//              elseif($val['worker_vacation_start_time']>=$startTime && $val['worker_vacation_finish_time']<$endTime){
+//                $workTime = $workTime+($val['worker_vacation_end_time']-$startTime);
+//             }elseif($val['worker_vacation_start_time']>=$startTime && $val['worker_vacation_finish_time']<$endTime){
+//                $workTime = $workTime+($endTime-  $val['worker_vacation_start_time']);
+//             }
+
+        }
+        return $workTime;
     }
 
     /**
