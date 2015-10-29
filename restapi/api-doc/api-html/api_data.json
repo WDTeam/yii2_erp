@@ -220,7 +220,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"1\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"worker_name\": \"陈测试1\",\n         \"worker_rule_id\": 0,\n         \"worker_rule_description\": \"兼职\",\n         \"worker_photo\": \"http://static.1jiajie.com/worker/face/1111116.jpg\",\n         \"access_token\": \"hXjooooooooAPXzo5jjbMnz80dccYgwoooooooowoooooooo-1111116\",\n         \"worker_id\": \"1111116\",\n         \"shop_id\": \"68\"",
+          "content": "HTTP/1.1 200 OK\n{\n      \"code\": 1,\n      \"msg\": \"登陆成功\",\n      \"ret\": {\n          \"user\": {\n              \"id\": 1,\n              \"shop_id\": 221,\n              \"worker_name\": \"李刘珍\",\n              \"worker_phone\": \"1350122342342\",\n              \"worker_photo\": \"1.png\",\n              \"worker_level\": 1,\n              \"worker_auth_status\": 0,\n              \"worker_ontrial_status\": 0,\n              \"worker_onboard_status\": 0,\n              \"worker_work_city\": 1,\n              \"worker_work_area\": 1,\n              \"worker_work_street\": \"1\",\n              \"worker_work_lng\": null,\n              \"worker_work_lat\": null,\n              \"worker_type\": 1,\n              \"worker_rule_id\": 1,\n              \"worker_identity_id\": 1,\n              \"worker_is_block\": 0,\n              \"worker_is_vacation\": 0,\n              \"worker_is_blacklist\": 0,\n              \"worker_blacklist_reason\": null,\n              \"worker_blacklist_time\": 0,\n              \"worker_is_dimission\": 0,\n              \"worker_dimission_reason\": null,\n              \"worker_dimission_time\": 0,\n              \"created_ad\": 1444360582,\n              \"updated_ad\": null,\n              \"isdel\": 0\n          },\n          \"access_token\": \"eaa872ee3e20880be5e368f289d5aa67\"\n      }\n  }",
           "type": "json"
         }
       ]
@@ -4476,7 +4476,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"1\",\n     \"msg\": \"操作成功.\",\n     \"ret\": [\n            \"worker_name\": \"阿姨姓名\",\n            \"order_count\": \"服务订单数\",\n            \"service_family_count\": \"服务家庭总数\",\n            \"worker_income\"=>\"阿姨收入\"\n     ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"1\",\n     \"msg\": \"操作成功.\",\n     \"ret\": [\n            \"worker_name\": \"阿姨姓名\",\n            \"order_count\": \"服务订单数\",\n            \"service_family_count\": \"服务家庭总数\",\n            \"worker_income\":\"阿姨收入\"\n     ]\n}",
           "type": "json"
         }
       ]
@@ -4769,7 +4769,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     [\n     {\n         \"id\": \"任务id\",\n         \"worker_task_name\": \"任务名称\",\n         \"worker_task_start\": \"任务开始时间\",\n         \"worker_task_end\": \"任务结束时间\",\n         \"worker_task_reward_value\": \"任务奖励值\",\n         \"worker_task_conditions\": \"任务需要完成次数\",\n         \"worker_task_already\": \"任务已经完成次数\"\n     },\n     {\n         \"id\": \"任务id\",\n         \"worker_task_name\": \"任务名称\",\n         \"worker_task_start\": \"任务开始时间\",\n         \"worker_task_end\": \"任务结束时间\",\n         \"worker_task_reward_value\": \"任务奖励值\",\n         \"worker_task_conditions\": \"任务需要完成次数\",\n         \"worker_task_already\": \"任务已经完成次数\"\n     }\n     ]\n     }\n}",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          {\n              \"id\": 2,\n              \"worker_id\": 1,\n              \"worker_task_id\": 2,\n              \"worker_task_cycle_number\": \"1\",\n              \"worker_task_name\": \"任务名称2\",\n              \"worker_task_log_start\": 1446096240,\n              \"worker_task_log_end\": 1446297240,\n              \"worker_task_is_done\": 0,\n              \"worker_task_done_time\": 0,\n              \"worker_task_reward_type\": 0,\n              \"worker_task_reward_value\": 0,\n              \"created_at\": 1446097240,\n              \"updated_at\": 0,\n              \"is_del\": 0\n          }\n      ]\n  }",
           "type": "json"
         }
       ]
@@ -4913,7 +4913,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     [\n     {\n         \"id\": \"任务id\",\n         \"worker_task_name\": \"任务名称\",\n         \"worker_task_start\": \"任务开始时间\",\n         \"worker_task_end\": \"任务结束时间\",\n         \"worker_task_reward_value\": \"任务奖励值\",\n         \"worker_task_conditions\": \"任务需要完成次数\",\n         \"worker_task_already\": \"任务已经完成次数\"\n     },\n     {\n         \"id\": \"任务id\",\n         \"worker_task_name\": \"任务名称\",\n         \"worker_task_start\": \"任务开始时间\",\n         \"worker_task_end\": \"任务结束时间\",\n         \"worker_task_reward_value\": \"任务奖励值\",\n         \"worker_task_conditions\": \"任务需要完成次数\",\n         \"worker_task_already\": \"任务已经完成次数\"\n     }\n     ]\n     }\n}",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          {\n              \"id\": 3,\n              \"worker_id\": 1,\n              \"worker_task_id\": 1,\n              \"worker_task_cycle_number\": \"0\",\n              \"worker_task_name\": \"任务名称3\",\n              \"worker_task_log_start\": 1446096240,\n              \"worker_task_log_end\": 1446097240,\n              \"worker_task_is_done\": -1,\n              \"worker_task_done_time\": 0,\n              \"worker_task_reward_type\": 0,\n              \"worker_task_reward_value\": 0,\n              \"created_at\": 1446097240,\n              \"updated_at\": 0,\n              \"is_del\": 0,\n              \"values\": [],\n              \"worker_task_description\": \"\"\n          }\n      ]\n  }",
           "type": "json"
         }
       ]
@@ -5294,15 +5294,15 @@
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "session_id",
-            "description": "<p>会话id.</p> "
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": false,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
           }
         ]
       }
@@ -5353,14 +5353,14 @@
             "type": "<p>String</p> ",
             "optional": false,
             "field": "access_token",
-            "description": "<p>会话id.</p> "
+            "description": "<p>用户认证</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": false,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
           }
         ]
       }
