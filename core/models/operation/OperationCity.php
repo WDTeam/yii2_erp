@@ -56,7 +56,12 @@ class OperationCity extends CommonOperationCity
     public static function getCityOnlineInfoList(){
         return self::find()->asArray()->where(['operation_city_is_online' => 1])->all();
     }
-    
+
+    /**查询开通城市列表**/
+    public static function getCityOnlineInfoListByProvince($province_id){
+        return self::find()->asArray()->where(['province_id'=>$province_id,'operation_city_is_online' => 1])->all();
+    }
+
     /**根据省份查询开通城市**/
     public static function getProvinceCityList(){
         return self::find()->where(['operation_city_is_online' => 1])->orderBy('province_id')->asArray()->all();

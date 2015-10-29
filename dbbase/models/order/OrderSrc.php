@@ -3,7 +3,7 @@
 namespace dbbase\models\order;
 
 use Yii;
-
+use dbbase\models\ActiveRecord;
 /**
  * This is the model class for table "{{%order_src}}".
  *
@@ -13,7 +13,7 @@ use Yii;
  * @property string $order_src_name
  * @property integer $isdel
  */
-class OrderSrc extends \dbbase\models\order\ActiveRecord
+class OrderSrc extends ActiveRecord
 {
     /**
      * @inheritdoc

@@ -291,12 +291,12 @@ echo Menu::widget(
                                 'url' => ['operation/coupon/coupon/create'],
                                 'icon' => 'fa fa-angle-right',
                             ],
-                            [
-                                'label' => '绑定用户',
-                                'url' => ['operation/coupon/coupon/bundle'],
-                                'icon' => 'fa fa-angle-right',
+//                             [
+//                                 'label' => '绑定用户',
+//                                 'url' => ['operation/coupon/coupon/bundle'],
+//                                 'icon' => 'fa fa-angle-right',
 
-                            ],
+//                             ],
                         ]
                     ],
 
