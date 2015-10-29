@@ -1444,7 +1444,7 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /order/add-comment 评价订单（haojianse %0）
+     * @api {GET} /order/add-comment 评价订单（该功能写在UserController里面 v1/user/user-suggest）
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} app_version 访问源(android_4.2.2)
