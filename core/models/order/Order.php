@@ -354,7 +354,7 @@ class Order extends OrderModel
         $order = OrderSearch::getOne($order_id);
         if($order->orderExtFlag->order_flag_lock>0 && $order->orderExtFlag->order_flag_lock!=$admin_id && time()-$order->orderExtFlag->order_flag_lock_time<Order::MANUAL_ASSIGN_lONG_TIME){
             $order->addError('id','订单正在进行人工指派！');
-        }elseif(OrderSearch::WorkerOrderExistsConflict($worker['id'],$order->order_booked_begin_time,$order->order_booked_end_time)){
+        }elseif(OrderSearch::WorkerOrderExistsConflict($worker['id'],$order->order_booked_begin_time,$order->order_booked_end_time)>0){
             $order->addError('id','阿姨服务时间冲突！');
         }elseif($order->orderExtWorker->worker_id>0){
             $order->addError('id','订单已经指派阿姨！');
