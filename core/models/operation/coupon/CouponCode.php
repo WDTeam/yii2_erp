@@ -185,6 +185,7 @@ class CouponCode extends \common\models\operation\coupon\CouponCode
             throw new InvalidParamException('优惠码已被绑定');
         }
         $model = new CouponCustomer();
+        $etime = Coupon::getExpirateAtByTimeType($this->coupon_id);
         $model->setAttributes([
             'customer_id'=>$customer->id,
             'coupon_id'=>$this->coupon_id,
@@ -192,12 +193,12 @@ class CouponCode extends \common\models\operation\coupon\CouponCode
             'coupon_code'=>$this->coupon_code,
             'coupon_name'=>$this->coupon_name,
             'coupon_price'=>$this->coupon_price,
-            'expirate_at'=>'',
+            'expirate_at'=>$etime,
         ]);
         if($model->save()){
             return $model;
         }else{
-            return $model->getErrors();
+            throw new InvalidParamException('绑定失败');
         }
     }
 }
