@@ -5,7 +5,7 @@ use kartik\detail\DetailView;
 use dbbase\models\finance\FinanceOrderChannel;
 use dbbase\models\finance\FinancePayChannel;
 use core\models\Customer\Customer;
-use core\models\general\SystemUser;
+use core\models\system\SystemUser;
 
 
 use dbbase\models\finance\FinancePopOrder;

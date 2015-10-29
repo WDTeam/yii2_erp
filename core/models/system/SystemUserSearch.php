@@ -1,11 +1,11 @@
 <?php
 
-namespace core\models\general;
+namespace core\models\system;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use core\models\general\SystemUser;
+use core\models\system\SystemUser;
 
 /**
  * SystemUserSearch represents the model behind the search form about `boss\models\SystemUser`.

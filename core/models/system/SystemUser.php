@@ -1,9 +1,9 @@
 <?php
 
-namespace core\models\general;
+namespace core\models\system;
 
 use yii\helpers\ArrayHelper;
-class SystemUser extends \dbbase\models\general\SystemUser
+class SystemUser extends \dbbase\models\system\SystemUser
 {
     public $repassword;
     private $_statusLabel;

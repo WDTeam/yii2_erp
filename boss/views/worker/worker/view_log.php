@@ -2,7 +2,7 @@
 
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
-use dbbase\models\general\SystemUser;
+use dbbase\models\system\SystemUser;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider

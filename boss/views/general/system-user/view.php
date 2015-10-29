@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use kartik\detail\DetailView;
 use kartik\datecontrol\DateControl;
-use core\models\general\SystemUser;
+use core\models\system\SystemUser;
 
 /**
  * @var yii\web\View $this
