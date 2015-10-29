@@ -263,6 +263,16 @@ class WorkerController extends BaseAuthController
         $model->worker_vacation_application_approve_status = $status;
         $model->worker_vacation_application_approve_time = time();
         $model->save();
+        if($status==1){
+            $workerVacationModel = new WorkerVacation;
+            $workerVacationModel->worker_id = $model->worker_id;
+            $workerVacationModel->worker_vacation_start_time = $model->worker_vacation_application_start_time;
+            $workerVacationModel->worker_vacation_finish_time = $model->worker_vacation_application_end_time;
+            $workerVacationModel->worker_vacation_type = $model->worker_vacation_application_type;
+            $workerVacationModel->worker_vacation_source = 1;
+            $workerVacationModel->worker_vacation_status = 1;
+            $workerVacationModel->save();
+        }
         return $this->redirect(['index','WorkerSearch[worker_vacation_application_approve_status]'=>0]);
     }
 

@@ -13,6 +13,7 @@ use Yii;
  * @property integer $worker_vacation_finish_time
  * @property integer $worker_vacation_type
  * @property string $worker_vacation_extend
+ * @property string $worker_vacation_source
  * @property integer $created_ad
  * @property integer $updated_ad
  * @property integer $admin_id
