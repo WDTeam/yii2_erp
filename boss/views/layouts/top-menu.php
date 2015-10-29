@@ -16,7 +16,7 @@ $menuItems = [
     ],
     [
         'label' => Yii::t('app', 'Logout') . '(' . Yii::$app->user->identity->username . ')',
-        'url' => ['/general/site/logout'],
+        'url' => ['/system/site/logout'],
         'linkOptions' => ['data-method' => 'post']
     ]
 ];
@@ -58,19 +58,19 @@ $menuItemsMain = [
         'items' => [
             [
                 'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', '设置授权项'),
-                'url' => ['/general/auth'],
+                'url' => ['/system/auth'],
             ],
             [
                 'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', '设置角色'),
-                'url' => ['/general/role'],
+                'url' => ['/system/role'],
             ],
             [
                 'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', '设置用户角色'),
-                'url' => ['/general/system-user'],
+                'url' => ['/system/system-user'],
             ],
             [
                 'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', '退出系统'),
-                'url' => ['/general/site/logout'],
+                'url' => ['/system/site/logout'],
             ],
         ],
     ],
@@ -82,7 +82,7 @@ $menuItemsMain = [
 //         'items' => [
 //             [
 //                 'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', '登出'),
-//                 'url' => ['/general/site/logout'],
+//                 'url' => ['/system/site/logout'],
 //             ],
 //             [
 //                 'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', '授权列表'),
@@ -110,11 +110,11 @@ $menuItemsMain = [
 //         'items' => [
 //             [
 //                 'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', 'User'),
-//                 'url' => ['/general/user'],
+//                 'url' => ['/system/user'],
 //             ],
 //             [
 //                 'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', 'Role'),
-//                 'url' => ['/general/role'],
+//                 'url' => ['/system/role'],
 //             ],
 //         ],
 //     ],
