@@ -27,7 +27,7 @@ use Yii;
  * @property integer $finance_worker_order_income_starttime
  * @property integer $finance_worker_order_income_endtime
  * @property integer $finance_settle_apply_id
- * @property integer $isdel
+ * @property integer $is_softdel
  * @property integer $updated_at
  * @property integer $created_at
  */
@@ -48,7 +48,7 @@ class FinanceWorkerOrderIncome extends \yii\db\ActiveRecord
     {
         return [
             [['worker_id', 'order_id', 'order_service_type_id', 'channel_id', 'order_pay_type_id'], 'required'],
-            [['worker_id', 'order_id', 'order_service_type_id', 'channel_id', 'order_pay_type_id', 'order_booked_begin_time', 'order_booked_count', 'isSettled', 'finance_worker_order_income_starttime', 'finance_worker_order_income_endtime', 'finance_settle_apply_id', 'isdel', 'updated_at', 'created_at'], 'integer'],
+            [['worker_id', 'order_id', 'order_service_type_id', 'channel_id', 'order_pay_type_id', 'order_booked_begin_time', 'order_booked_count', 'isSettled', 'finance_worker_order_income_starttime', 'finance_worker_order_income_endtime', 'finance_settle_apply_id', 'is_softdel', 'updated_at', 'created_at'], 'integer'],
             [['order_unit_money', 'order_money', 'finance_worker_order_income_discount_amount', 'order_pay_money', 'finance_worker_order_income_money'], 'number'],
             [['order_service_type_name', 'order_channel_name', 'order_pay_type_des'], 'string', 'max' => 64]
         ];
@@ -80,7 +80,7 @@ class FinanceWorkerOrderIncome extends \yii\db\ActiveRecord
             'finance_worker_order_income_starttime' => Yii::t('app', '本次结算开始时间(统计)，例如：2015.9.1 00:00:00对应的int值'),
             'finance_worker_order_income_endtime' => Yii::t('app', '本次结算结束时间(统计)，例如：2015.9.30 23:59:59对应的int值'),
             'finance_settle_apply_id' => Yii::t('app', '结算申请Id'),
-            'isdel' => Yii::t('app', '是否被删除，0为启用，1为删除'),
+            'is_softdel' => Yii::t('app', '是否被删除，0为启用，1为删除'),
             'updated_at' => Yii::t('app', '结算时间'),
             'created_at' => Yii::t('app', '创建时间'),
         ];

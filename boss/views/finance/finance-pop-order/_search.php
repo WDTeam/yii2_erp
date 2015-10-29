@@ -81,16 +81,13 @@ use kartik\date\DatePicker;
      
      
      
-    <div class='col-md-3'>
+    <div class='col-md-4 form-inline'>
       <?= $form->field($model, 'finance_uplod_url')->fileInput(['maxlength' => true]) ?>
+      <?= Html::submitButton(Yii::t('app', '提交'), ['class' => 'btn btn-primary']) ?>
+      <?= Html::resetButton(Yii::t('app', '重置'), ['class' => 'btn btn-default']) ?>
     </div> 
     
-    <div class="form-group">
-    <div class='col-md-2' style="margin-top:22px;">
-        <?= Html::submitButton(Yii::t('app', '提交'), ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton(Yii::t('app', '重置'), ['class' => 'btn btn-default']) ?>
-    </div>
-</div>
+        
     <?php ActiveForm::end(); ?>
 
 </div>

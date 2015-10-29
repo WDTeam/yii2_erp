@@ -15,7 +15,7 @@ class FinanceSettleApplyLogSearch extends FinanceSettleApplyLog
     public function rules()
     {
         return [
-            [['id', 'finance_settle_apply_id', 'finance_settle_apply_reviewer_id',  'finance_settle_apply_node_id', 'finance_settle_apply_is_passed', 'isdel', 'updated_at', 'created_at'], 'integer'],
+            [['id', 'finance_settle_apply_id', 'finance_settle_apply_reviewer_id',  'finance_settle_apply_node_id', 'finance_settle_apply_is_passed', 'is_softdel', 'updated_at', 'created_at'], 'integer'],
             [['finance_settle_apply_reviewer_comment'], 'safe'],
         ];
     }
@@ -46,7 +46,7 @@ class FinanceSettleApplyLogSearch extends FinanceSettleApplyLog
             'finance_settle_apply_node_id' => $this->finance_settle_apply_node_id,
             'finance_settle_apply_node_des' => $this->finance_settle_apply_node_des,
             'finance_settle_apply_is_passed' => $this->finance_settle_apply_is_passed,
-            'isdel' => $this->isdel,
+            'is_softdel' => $this->is_softdel,
             'updated_at' => $this->updated_at,
             'created_at' => $this->created_at,
         ]);

@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\date\DatePicker;
 
 $this->title = Yii::t('app', '第四步：选择广告完成发布');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Advert Release'), 'url' => ['index']];
@@ -59,8 +60,40 @@ $this->params['breadcrumbs'][] = $this->title;
                         <td><?php echo Html::checkbox('advert[id][]', false, ['value' => $v['id']]);?></td>
                         <td><?php echo $v['position_name'];?></td>
                         <td><?php echo $v['operation_advert_content_name'];?></td>
-                        <td><?php echo Html::textInput('advert[starttime][]');?> 格式：2015-10-01 08:20:25</td>
-                        <td><?php echo Html::textInput('advert[endtime][]');?> 格式：2015-10-01 08:20:25</td>
+                        <td>
+                            <?php
+                                echo Html::textInput('advert[starttime][]');
+                            ?> 格式：2015-10-01 08:20:25
+                            <?php
+                                //echo '<label class="control-label">'.$model->attributeLabels()['operation_advert_start_time'].'</label>';
+                                //echo DatePicker::widget([
+                                //'name' => 'OperationAdvertContent[operation_advert_start_time]',
+                                //'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+                                //'value' => !empty($model->operation_advert_start_time) ? date('Y-m-d', $model->operation_advert_start_time) : '',
+                                //'pluginOptions' => [
+                                    //'autoclose'=>true,
+                                    //'format' => 'yyyy-mm-dd'
+                                //]
+                            //]);
+                            ?>
+                        </td>
+                        <td>
+                            <?php
+                                echo Html::textInput('advert[endtime][]');
+                            ?> 格式：2015-10-01 08:20:25
+                            <?php
+                                //echo '<label class="control-label">'.$model->attributeLabels()['operation_advert_end_time'].'</label>';
+                                //echo DatePicker::widget([
+                                //'name' => 'OperationAdvertContent[operation_advert_end_time]',
+                                //'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+                                //'value' => !empty($model->operation_advert_start_time) ? date('Y-m-d', $model->operation_advert_end_time) : '',
+                                //'pluginOptions' => [
+                                    //'autoclose'=>true,
+                                    //'format' => 'yyyy-mm-dd'
+                                //]
+                            //]);
+                            ?>
+                        </td>
                     </tr>
                 <?php }?>
                 </tbody>

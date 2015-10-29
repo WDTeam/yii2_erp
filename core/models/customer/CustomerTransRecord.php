@@ -80,14 +80,13 @@ class CustomerTransRecord extends \common\models\customer\CustomerTransRecord
             $data['customer_trans_record_order_total_money'] = $orderInfo->order_money;  //订单总额
             $data['order_pop_order_money'] = $orderInfo->orderExtPop->order_pop_order_money;  //预付费
 
-            $data['customer_trans_record_online_pay'] = !empty($data['customer_trans_record_online_pay']) ? $data['customer_trans_record_online_pay'] : 0;  //在线支付
+            $data['customer_trans_record_online_pay'] = !empty($data['general_pay_actual_money']) ? $data['general_pay_actual_money'] : 0;  //在线支付
             $data['customer_trans_record_pre_pay'] = !empty($data['customer_trans_record_pre_pay']) ? $data['customer_trans_record_pre_pay'] : 0;  //预付费
             $data['customer_trans_record_cash'] = !empty($data['customer_trans_record_cash']) ? $data['customer_trans_record_cash'] : 0;
             $data['customer_trans_record_mode'] = 1; //交易方式:1消费,2=充值,3=退款,4=补偿
 
-
             //服务卡 or 余额 + 在线 + 优惠券
-            if( (!empty($data['customer_trans_git record_online_service_card_on']) || $data['customer_trans_record_online_balance_pay'] > 0) && $data['customer_trans_record_online_pay'] > 0 )
+            if( (!empty($data['customer_trans_record_online_service_card_on']) || $data['customer_trans_record_online_balance_pay'] > 0) && $data['customer_trans_record_online_pay'] > 0 )
             {
                 $data['scenario'] = 1;  //支付场景
             }
@@ -121,7 +120,7 @@ class CustomerTransRecord extends \common\models\customer\CustomerTransRecord
                 exit('没有此条件');
             }
         }
-        //dump($data);exit;
+
         return self::createRecord($data);
     }
 

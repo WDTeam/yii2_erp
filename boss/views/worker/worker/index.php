@@ -116,25 +116,25 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
             ],
             'buttons' => [
                 'view' => function ($url, $model) {
-                    return Html::a('<span>查看</span>', Yii::$app->urlManager->createUrl(['worker/worker/view', 'id' => $model->worker->id]), [
+                    return Html::a('<span class="btn btn-primary">查看</span>', Yii::$app->urlManager->createUrl(['worker/worker/view', 'id' => $model->worker->id]), [
                         'title' =>'查看',
                         'style' => 'margin-right:5px'
                     ]);
                 },
                 'auth' => function ($url, $model) {
-                    return Html::a('<span>审核</span>', Yii::$app->urlManager->createUrl(['worker/worker/auth', 'id' => $model->worker->id]), [
+                    return Html::a('<span class="btn btn-primary">审核</span>', Yii::$app->urlManager->createUrl(['worker/worker/auth', 'id' => $model->worker->id]), [
                         'title' =>'审核管理',
                         'style' => 'margin-right:5px'
                     ]);
                 },
                 'operate_application_success' => function ($url, $model) {
-                    return Html::a('<span onclick="return confirm(\'确认通过申请?\')">通过</span>', Yii::$app->urlManager->createUrl(['worker/worker/operate-vacation-application', 'id' => $model->id,'status'=>1]), [
+                    return Html::a('<span class="btn btn-primary" onclick="return confirm(\'确认通过申请?\')">通过</span>', Yii::$app->urlManager->createUrl(['worker/worker/operate-vacation-application', 'id' => $model->id,'status'=>1]), [
                         'title' =>'通过',
                         'style' => 'margin-right:5px'
                     ]);
                 },
                 'operate_application_failed' => function ($url, $model) {
-                    return Html::a('<span onclick="return confirm(\'确认拒绝申请?\')" >拒绝</span>', Yii::$app->urlManager->createUrl(['worker/worker/operate-vacation-application', 'id' => $model->id,'status'=>2]), [
+                    return Html::a('<span class="btn btn-primary" onclick="return confirm(\'确认拒绝申请?\')" >拒绝</span>', Yii::$app->urlManager->createUrl(['worker/worker/operate-vacation-application', 'id' => $model->id,'status'=>2]), [
                         'title' =>'拒绝',
                         'style' => 'margin-right:6px'
                     ]);
@@ -283,13 +283,13 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
             ],
             'buttons' => [
                 'view' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Yii::$app->urlManager->createUrl(['worker/worker/view', 'id' => $model->id]), [
+                    return Html::a('<span class="btn btn-primary">查看</span>', Yii::$app->urlManager->createUrl(['worker/worker/view', 'id' => $model->id]), [
                         'title' =>'查看',
                         'style' => 'margin-right:5px'
                     ]);
                 },
                 'auth' => function ($url, $model) {
-                    return Html::a('<span class="fa fa-fw fa-th-list"></span>', Yii::$app->urlManager->createUrl(['worker/worker/auth', 'id' => $model->id]), [
+                    return Html::a('<span class="btn btn-primary">审核</span>', Yii::$app->urlManager->createUrl(['worker/worker/auth', 'id' => $model->id]), [
                         'title' =>'审核管理',
                         'style' => 'margin-right:3px'
                     ]);
@@ -506,21 +506,21 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
                 ],
                 'buttons' => [
                     'auth' => function ($url, $model) {
-                        return Html::a('<span>审核</span>', Yii::$app->urlManager->createUrl(['worker/worker/auth', 'id' => $model->id]), [
+                        return Html::a('<span class="btn btn-primary">审核</span>', Yii::$app->urlManager->createUrl(['worker/worker/auth', 'id' => $model->id]), [
                             'title' =>'审核管理',
-                            'style' => 'margin-right:3px'
+                            
                         ]);
                     },
                     'view' => function ($url, $model) {
-                        return Html::a('<span>查看</span>', Yii::$app->urlManager->createUrl(['worker/worker/view', 'id' => $model->id]), [
-                            'style' => 'margin-right:3px'
+                        return Html::a('<span class="btn btn-primary">查看</span>', Yii::$app->urlManager->createUrl(['worker/worker/view', 'id' => $model->id]), [
+                            
                         ]);
                     },
                     'delete' => function ($url, $model) {
-                        return Html::a('<span>删除</span>', Yii::$app->urlManager->createUrl(['worker/worker/delete', 'id' => $model->id]),
+                        return Html::a('<span class="btn btn-primary">删除</span>', Yii::$app->urlManager->createUrl(['worker/worker/delete', 'id' => $model->id]),
                         ['title' => Yii::t('yii', 'Delete'), 'class' => '', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')],
                         [
-                            'style' => 'margin-right:3px'
+                            
                         ]);
                     },
 //                    'vacation' => function ($url, $model) {

@@ -11,6 +11,8 @@ use Yii;
 class GeneralPay extends \common\models\payment\GeneralPay
 {
 
+
+
     /**
      * @param $condition
      * @param $fileds
@@ -74,6 +76,40 @@ class GeneralPay extends \common\models\payment\GeneralPay
     }
 
     /**
+     * 批量下单支付接口
+     * @param $customer_id
+     * @param $channel_id
+     * @param $order_id
+     */
+    public static function getBatchPayParams($customer_id, $channel_id, $order_id)
+    {
+        //判断订单编号是否正确
+        if(!is_array($order_id))
+        {
+            return ['status'=>0 , 'info'=>'订单编号必须是一个数组', 'data'=>''];
+        }
+
+        //判断订单支付状态
+
+        //查询订单金额
+        $orderPayMoney = GeneralPaySearch::getOrderSumMoney($order_id);
+        if( empty($orderPayMoney) )
+        {
+            return ['status'=>0 , 'info'=>'未找到订单支付金额或订单金额为0', 'data'=>''];
+        }
+
+        //支付数据组装
+        $payData = [
+            "general_pay_money" => $orderPayMoney,
+            "customer_id" => $customer_id,
+            "general_pay_source" => $channel_id,
+            "partner" => $partner,
+            "order_id" => $order_id
+        ];
+
+    }
+
+    /**
      * 调用(调起)在线支付,发送给支付接口的数据
      * @param integer $pay_money 支付金额
      * @param integer $customer_id 消费者ID
@@ -86,11 +122,11 @@ class GeneralPay extends \common\models\payment\GeneralPay
         //实例化模型
         $model = new GeneralPay();
 
-        //查询订单是否已经支付过
+        //查询订单是否已经支付过1
         if( !empty($order_id) )
         {
-            $order = $model->getPayStatus($order_id,1);
-
+            //查询订单支付状态
+            $order = GeneralPaySearch::searchPayStatus($order_id,1);
             if(!empty($order))
             {
                 return ['status'=>0 , 'info'=>'订单已经支付过', 'data'=>''];

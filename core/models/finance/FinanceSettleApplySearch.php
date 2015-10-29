@@ -110,7 +110,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             'finance_settle_apply_money' => $this->finance_settle_apply_money,
             'finance_settle_apply_status' => $this->finance_settle_apply_status,
             'finance_settle_apply_cycle' => $this->finance_settle_apply_cycle,
-            'isdel' => $this->isdel,
+            'is_softdel' => $this->is_softdel,
             'updated_at' => $this->updated_at,
             'created_at' => $this->created_at,
             'worker_tel' => $this->worker_tel,
@@ -273,6 +273,12 @@ class FinanceSettleApplySearch extends FinanceSettleApply
 
     }
     
+    /**
+     * 获取阿姨底薪
+     * @param type $workerType
+     * @param type $workerIdentityId
+     * @return type
+     */
     public function getBaseSalary($workerType,$workerIdentityId){
         $base_salary = 0;
         if($this->isSelfAndFulltimeWorker($workerType, $workerIdentityId)){
@@ -280,11 +286,23 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         }
         return $base_salary;
     }
+    
+    /**
+     * 获取阿姨的底薪补贴
+     * @param type $worker_id
+     * @param type $apply_order_money
+     * @param type $apply_base_salary
+     * @param type $workerType
+     * @param type $workerIdentityId
+     * @param type $finance_settle_apply_starttime
+     * @param type $finance_settle_apply_endtime
+     * @return type
+     */
     public function getBaseSalarySubsidy($worker_id,$apply_order_money,$apply_base_salary,$workerType,$workerIdentityId,$finance_settle_apply_starttime,$finance_settle_apply_endtime){
         $baseSalarySubsidy = 0;
         if($this->isSelfAndFulltimeWorker($workerType, $workerIdentityId)){
              $needWorkDay = date('t',$finance_settle_apply_starttime) - self::WORKER_VACATION_DAYS;//本月应服务天数
-             $realWorkDay = $needWorkDay;//实际工作天数,从阿姨接口获取
+             $realWorkDay = date('t',$finance_settle_apply_starttime) - Worker::getWorkerWorkTime($worker_id, $finance_settle_apply_starttime, $finance_settle_apply_endtime);//实际工作天数,从阿姨接口获取
              if($realWorkDay >= $needWorkDay){
                  $realWorkDay = $needWorkDay;
              }
