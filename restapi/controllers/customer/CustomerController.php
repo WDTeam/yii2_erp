@@ -1,6 +1,6 @@
 <?php
 
-namespace api\controllers\customer;
+namespace restapi\controllers\customer;
 
 use Yii;
 use core\models\customer\CustomerAccessToken;

@@ -1,5 +1,5 @@
 <?php
-namespace api\controllers;
+namespace restapi\controllers;
 
 use Yii;
 use \api\models\PayParam;

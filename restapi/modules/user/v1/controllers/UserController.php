@@ -6,7 +6,7 @@
  * Time: 13:30
  */
 
-namespace api\modules\user\v1\controllers;
+namespace restapi\modules\user\v1\controllers;
 
 use api\components\Controller;
 use api\utils\SysCurl;

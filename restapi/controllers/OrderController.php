@@ -1,6 +1,6 @@
 <?php
 
-namespace api\controllers;
+namespace restapi\controllers;
 
 use common\models\worker\Worker;
 use \core\models\order\OrderPush;

@@ -1,5 +1,5 @@
 <?php
-namespace api\utils;
+namespace restapi\utils;
 use Yii;
 /**
  * 系统方法

@@ -1,6 +1,6 @@
 <?php
 
-namespace api\controllers;
+namespace restapi\controllers;
 
 use \core\models\customer\Customer;
 use Yii;
