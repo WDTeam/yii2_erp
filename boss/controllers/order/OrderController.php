@@ -19,7 +19,8 @@ use core\models\customer\Customer;
 use core\models\order\OrderStatusHistory;
 use core\models\shop\Shop;
 use common\models\order\OrderStatusDict;
-use boss\models\general\SystemUser;
+use core\models\general\SystemUser;
+use boss\models\search\SystemUserSearch;
 
 /**
  * OrderController implements the CRUD actions for Order model.
