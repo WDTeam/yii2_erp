@@ -116,6 +116,7 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
      */
     public static function getOrderChannelByName($id)
     {
+    	
         //定义缓存名称
         $cacheName = 'orderChannel_'.$id;
 
