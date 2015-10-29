@@ -31,7 +31,7 @@ class CustomerAddress extends \common\models\customer\CustomerAddress
     /**
      * 新增服务地址
      */
-    public static function addAddress($customer_id, $operation_province_name, $operation_city_name, $operation_area_name, $customer_address_detail, $customer_address_nickname, $customer_address_phone){
+    public static function addAddress($customer_id, $operation_province_name, $operation_city_name, $operation_area_name, $customer_address_detail, $customer_address_nickname='', $customer_address_phone){
         $transaction = \Yii::$app->db->beginTransaction();
         try{
             //先将该客户所有的地址状态设为0
@@ -142,7 +142,7 @@ class CustomerAddress extends \common\models\customer\CustomerAddress
     /**
      * 修改服务地址
      */
-    public static function updateAddress($id, $operation_province_name, $operation_city_name, $operation_area_name, $customer_address_detail, $customer_address_nickname, $customer_address_phone){
+    public static function updateAddress($id, $operation_province_name, $operation_city_name, $operation_area_name, $customer_address_detail, $customer_address_nickname='', $customer_address_phone){
         $transaction = \Yii::$app->db->beginTransaction();
         try{
             //先将该客户所有的地址状态设为0
