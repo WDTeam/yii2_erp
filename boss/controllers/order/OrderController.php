@@ -19,6 +19,7 @@ use core\models\customer\Customer;
 use core\models\order\OrderStatusHistory;
 use core\models\shop\Shop;
 use common\models\order\OrderStatusDict;
+use boss\models\general\SystemUser;
 
 /**
  * OrderController implements the CRUD actions for Order model.
@@ -371,6 +372,20 @@ class OrderController extends BaseAuthController
         $post = Yii::$app->request->post();
         $model['admin_id'] = Yii::$app->user->id;
         
+        $history = [];
+        
+        $createRecord = OrderStatusHistory::find()->where([
+            'order_id'=>$id,
+            'order_status_dict_id'=>OrderStatusDict::ORDER_INIT,
+        ])->one();
+        $history['creator_name'] = SystemUser::findOne(['id' => $createRecord['admin_id']])['username'];
+        
+        $payRecord = OrderStatusHistory::find()->where([
+            'order_id'=>$id,
+            'order_status_dict_id'=>OrderStatusDict::ORDER_WAIT_ASSIGN,
+        ])->one();
+        $history['pay_time'] = $payRecord ? date('Y-m-d H:i:s', $payRecord['created_at']) : null;
+        
         if($model->load($post)) {
             $post['Order']['admin_id'] = Yii::$app->user->id;
             $post['Order']['order_ip'] = Yii::$app->request->userIP;
@@ -385,8 +400,7 @@ class OrderController extends BaseAuthController
                 return $this->redirect(['edit', 'id' => $model->id]);
             }
         }
-        return $this->render('edit', ['model' => $model]);
-    
+        return $this->render('edit', ['model' => $model, 'history' => $history]);
     }
 
     /**
