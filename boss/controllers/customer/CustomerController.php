@@ -391,8 +391,8 @@ class CustomerController extends Controller
                 $customer->customer_complaint_times = 0;
                 
                 $customer->customer_src = intval($val['user_src']);
-                $customer->channal_id = 0;
-                $customer->platform_id = 0;
+//                $customer->channal_id = 0;
+//                $customer->platform_id = 0;
                 $customer->customer_login_ip = '';
                 $customer->customer_login_time = 0;
                 $customer->customer_is_vip = $val['user_type'];
@@ -507,8 +507,8 @@ class CustomerController extends Controller
                 
                 $customerExtSrc = new CustomerExtSrc;
                 $customerExtSrc->customer_id = $customer->id;
-                $customerExtSrc->platform_id = 0;
-                $customerExtSrc->channal_id = 0;
+//                $customerExtSrc->platform_id = 0;
+//                $customerExtSrc->channal_id = 0;
                 $customerExtSrc->platform_name = 'Android';
                 $customerExtSrc->channal_name = '美团';
                 $customerExtSrc->platform_ename = 'android';
@@ -584,8 +584,8 @@ class CustomerController extends Controller
             $customerArr[]['customer_level'] = $val['level'];
             $customerArr[]['customer_complaint_times'] = 0;
             $customerArr[]['customer_src'] = intval($val['user_src']);
-            $customerArr[]['channal_id'] = 0;
-            $customerArr[]['platform_id'] = 0;
+//            $customerArr[]['channal_id'] = 0;
+//            $customerArr[]['platform_id'] = 0;
             $customerArr[]['customer_login_ip'] = '';
             $customerArr[]['customer_login_time'] = 0;
             $customerArr[]['customer_is_vip'] = $val['user_type'];
@@ -687,8 +687,8 @@ class CustomerController extends Controller
         $customerChannal->save();
 
         $customerExtSrc->customer_id = $customer->id;
-        $customerExtSrc->platform_id = 0;
-        $customerExtSrc->channal_id = $customerChannal->id;
+//        $customerExtSrc->platform_id = 0;
+//        $customerExtSrc->channal_id = $customerChannal->id;
         $customerExtSrc->platform_name = '';
         $customerExtSrc->channal_name = $customerChannal->channal_name;
         $customerExtSrc->platform_ename = '';

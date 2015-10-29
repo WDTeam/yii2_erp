@@ -101,7 +101,7 @@ $items = [
 'label'=>'<i class="glyphicon glyphicon-king"></i> 支付渠道管理',
 'content'=>'',
 'active'=>false,
-'url' => ['finance-pay-channel/index']
+'url' => ['finance/finance-pay-channel/index']
 ]
 ];
     echo TabsX::widget([
