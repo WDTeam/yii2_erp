@@ -607,9 +607,9 @@ class WorkerController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /worker/get-worker-bill-detail 获取阿姨对账单列表详情 (田玉星 100%)
+     * @api {GET} /worker/get-worker-tasktime-list 获取阿姨工时列表 (田玉星 100%)
      * 
-     * @apiName actionGetWorkerBillDetail
+     * @apiName actionGetWorkerTasktimeList
      * @apiGroup Worker
      * 
      * @apiParam {String} access_token    阿姨登录token
@@ -623,91 +623,13 @@ class WorkerController extends \restapi\components\Controller
      * {
      *   "code": 1,
      *   "msg": "操作成功.",
-     *   "ret": {
-     *       "worker_income": "150.00",
-     *       "worker_income_constitute": "0.00元(底薪)+150.00元(工时服务)+0.00元(奖励)-0.00元(处罚)",
-     *       "data": [
-     *           {
-     *               "service_date": "01-01",
-     *               "service_time": "08:01:00-08:01:00",
-     *               "order_code": "2123112",
-     *               "order_money": "150.00"
-     *           }
-     *       ]
-     *   }
-     * }   
-     *
-     * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
-     *  {
-     *      "code":"error",
-     *      "msg": "用户认证已经过期,请重新登录"
-     *  }
-     */
-    public function actionGetWorkerBillDetail(){
-        $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
-        //检测阿姨是否登录
-        $checkResult = ApiWorker::checkWorkerLogin($param);
-        if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 0, 403);
-        }  
-        //数据整理
-        if(!isset($param['settle_id'])||!intval($param['settle_id'])){
-            return $this->send(null, "账单唯一标识错误", 0, 403);
-        }
-        $settle_id = intval($param['settle_id']);//账单ID
-        $billData = array();
-        try{
-            $billList = FinanceSettleApplySearch::getOrderArrayBySettleId($settle_id);
-                            print_R($billList);
-                           //FinanceSettleApplySearch:: getSettledWorkerIncomeListByWorkerId();
-die;
-            if($billList){
-                foreach($billList as $key=>$val){
-                    $beginTime = strtotime($val['order_begin_time']);
-                    $billData[$key]['service_date'] = date('m-d',$beginTime);
-                    $billData[$key]['service_time'] = date('H:i:s',$beginTime).'-'.date('H:i:s',strtotime($val['order_end_time']));
-                    $billData[$key]['order_code'] =111;
-                    $billData[$key]['order_money'] = $val['order_money'];
-                }
-            
-            }
-        }catch (\Exception $e) {
-            return $this->send(null, "boss系统错误", 1024, 403);
-        }
-        $ret = [
-                'worker_income'=>$workerIncomeInfo['worker_income'],
-                'worker_income_constitute'=>$workerIncomeInfo['base_salary_subsidy']."元(底薪)+".
-                                            $workerIncomeInfo['order_money_except_cash']."元(工时服务)+".
-                                            $workerIncomeInfo['settle_task_money']."元(奖励)-".
-                                            $workerIncomeInfo['money_deduction']."元(处罚)",
-                'data'=>$billData
-        ];
-        return $this->send($ret, "操作成功.");
-    }
-    /**
-     * @api {GET} /worker/get-worker-tasktime-list 获取阿姨工时列表 (田玉星 100%)
-     * 
-     * @apiName actionGetWorkerTasktimeList
-     * @apiGroup Worker
-     * 
-     * @apiParam {String} access_token    阿姨登录token
-     * @apiParam {String} bill_id  账单唯一标识.
-     * @apiParam {String} [platform_version] 平台版本号.
-     * 
-     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-tasktime-list
-     * 
-     * @apiSuccessExample {json} Success-Response:
-     * HTTP/1.1 200 OK
-     * {
-     *   "code": 1,
-     *   "msg": "操作成功",
      *   "ret": [
      *       {
-     *           "service_date": "01-01",
-     *           "service_time": "08:01:00-08:01:00",
-     *           "order_code": "1234354",
-     *           "order_money": "150.00"
+     *           "order_id": "订单ID",
+     *           "order_money": "订单金额",
+     *           "order_code": "订单号",
+     *           "service_date": "服务日期",
+     *           "service_time": "服务时间段"
      *       }
      *   ]
      * }
@@ -715,42 +637,39 @@ die;
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"error",
+     *      "code":"0",
      *      "msg": "用户认证已经过期,请重新登录"
      *  }
      */
     public function actionGetWorkerTasktimeList(){
-         $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        $param = Yii::$app->request->get() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
         //检测阿姨是否登录
         $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
-        }  
+        }
         //数据整理
-       $settle_id = intval($param['settle_id']);//账单ID
-        if(!$settle_id){
+        if(!isset($param['settle_id'])||!intval($param['settle_id'])){
             return $this->send(null, "账单唯一标识错误", 0, 403);
         }
-        //调取数据
-        $billData = array();
         try{
-            $billList = FinanceSettleApplySearch::getOrderArrayBySettleId($settle_id);
+            $billList = FinanceSettleApplySearch::getOrderArrayBySettleId(intval($param['settle_id']));
             if($billList){
                 foreach($billList as $key=>$val){
                     $beginTime = strtotime($val['order_begin_time']);
-                    $billData[$key]['service_date'] = date('m-d',$beginTime);
-                    $billData[$key]['service_time'] = date('H:i:s',$beginTime).'-'.date('H:i:s',strtotime($val['order_end_time']));
-                    $billData[$key]['order_code'] =111;
-                    $billData[$key]['order_money'] = $val['order_money'];
+                    $billList[$key]['service_date'] = date('m-d',$beginTime);
+                    $billList[$key]['service_time'] = date('H:i',$beginTime).'-'.date('H:i',strtotime($val['order_end_time']));
+                    unset($billList[$key]['order_begin_time']);
+                    unset($billList[$key]['order_end_time']);
                 }
             }
         }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
-        //获取工时列表
-        return $this->send($billData, "操作成功");
+        return $this->send($billList, "操作成功.");
     }
     
+  
     /**
      * @api {GET} /worker/get-worker-taskreward-list 获取阿姨奖励列表 (田玉星 100%)
      * 
