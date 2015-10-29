@@ -28,41 +28,42 @@ $this->params['breadcrumbs'][] = $this->title;
         //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'finance_refund_tel',
-    		'create_time:datetime',
+    		
+    		
+    		'finance_refund_pay_flow_num',
     		'finance_refund_money',
     		[
     		'format' => 'raw',
-    		'label' => '申请方式',
+    		'label' => '订单金额',
     		'value' => function ($dataProvider) {
-    			return $dataProvider->finance_refund_stype==1 ?'用户取消':'未知';
+    	    $sum=($dataProvider->finance_refund_money)+($dataProvider->finance_refund_discount);
+    			return $sum;
     		},
     		'width' => "80px",
     		],
-    		'finance_refund_reason',
     		'finance_refund_discount',
-    		'finance_refund_pay_create_time:datetime',
+    		[
+    		'format' => 'raw',
+    		'label' => '实收金额',
+    		'value' => function ($dataProvider) {
+    			return $dataProvider->finance_refund_money;
+    		},
+    		'width' => "80px",
+    		],
+    		'finance_order_channel_title',
     		'finance_pay_channel_title',
+    		[
+    		'format' => 'raw',
+    		'label' => '收款状态',
+    		'value' => function ($dataProvider) {
+    			return $dataProvider->finance_refund_pay_status==1 ?'支付':'未支付';
+    		},
+    		'width' => "80px",
+    		],
     		'finance_refund_pop_nub',
+    		'finance_refund_reason',
+    		'finance_refund_tel',
     		[
-    		'format' => 'raw',
-    		'label' => '支付状态',
-    		'value' => function ($dataProvider) {
-    			return $dataProvider->finance_refund_stype==1 ?'已支付':'未支付';
-    		},
-    		'width' => "80px",
-    		],
-    		[
-    		'format' => 'raw',
-    		'label' => '服务阿姨',
-    		'value' => function ($dataProvider) {
-    			return FinanceRefund::get_adminname($dataProvider->finance_refund_worker_id);
-    		},
-    		'width' => "80px",
-    		],
-    		
-    		'finance_refund_worker_tel',
-			[
 			'format' => 'raw',
 			'label' => '状态',
 			'value' => function ($dataProvider) {
