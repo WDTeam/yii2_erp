@@ -191,12 +191,19 @@ class Worker extends \common\models\worker\Worker
      * @param  int $identity_id 阿姨身份id
      * @return array 阿姨id列表
      */
-    public static function getWorkerIds($type,$identity_id){
-        $condition['worker_type'] = $type;
-        $condition['worker_identity_id'] = $identity_id;
+    public static function getWorkerIds($type=null,$identity_id=null){
+        $condition = [];
+        if($type){
+            $condition['worker_type'] = $type;
+        }
+        if($identity_id){
+            $condition['worker_identity_id'] = $identity_id;
+        }
         $workerList = self::find()->select('id')->where($condition)->asArray()->all();
         return $workerList?ArrayHelper::getColumn($workerList,'id'):[];
     }
+
+
 
 
     /**
