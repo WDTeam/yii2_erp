@@ -9,21 +9,21 @@
 
 namespace core\models\order;
 
-use boss\controllers\operation\OperationGoodsController;
-use boss\controllers\operation\OperationShopDistrictController;
-use dbbase\models\order\OrderExtFlag;
-use dbbase\models\order\OrderExtPay;
-use dbbase\models\order\OrderExtWorker;
+use core\models\operation\OperationShopDistrictGoods;
+use core\models\operation\OperationShopDistrictCoordinate;
+use dbbace\models\order\OrderExtFlag;
+use dbbace\models\order\OrderExtPay;
+use dbbace\models\order\OrderExtWorker;
 use core\models\customer\Customer;
 use core\models\customer\CustomerAddress;
 use core\models\payment\GeneralPay;
 use core\models\worker\Worker;
 use Yii;
-use dbbase\models\order\Order as OrderModel;
-use dbbase\models\order\OrderStatusDict;
-use dbbase\models\order\OrderExtCustomer;
-use dbbase\models\order\OrderSrc;
-use dbbase\models\finance\FinanceOrderChannel;
+use dbbace\models\order\Order as OrderModel;
+use dbbace\models\order\OrderStatusDict;
+use dbbace\models\order\OrderExtCustomer;
+use dbbace\models\order\OrderSrc;
+use dbbace\models\finance\FinanceOrderChannel;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 use core\models\operation\OperationShopDistrict;
@@ -601,16 +601,16 @@ class Order extends OrderModel
      */
     public static function getGoods($longitude, $latitude, $goods_id = 0)
     {
-        $shop_district_info = OperationShopDistrictController::getCoordinateShopDistrict($longitude, $latitude);
-        if (isset($shop_district_info['status']) && $shop_district_info['status'] == 1) {
-            $goods = OperationGoodsController::getGoodsList($shop_district_info['data']['operation_city_id'], $shop_district_info['data']['operation_shop_district_id']);
-            if (isset($goods['status']) && $goods['status'] == 1) {
+        $shop_district_info = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
+        if (!empty($shop_district_info)) {
+            $goods = OperationShopDistrictGoods::getShopDistrictGoodsList($shop_district_info['operation_city_id'], $shop_district_info['operation_shop_district_id']);
+            if (!empty($goods)) {
                 if ($goods_id == 0) {
-                    return ['code' => 200, 'data' => $goods['data']];
+                    return ['code' => 200, 'data' => $goods];
                 } else {
-                    foreach ($goods['data'] as $v) {
+                    foreach ($goods as $v) {
                         if ($v['operation_goods_id'] == $goods_id) {
-                            $v['district_id'] = $shop_district_info['data']['operation_shop_district_id'];
+                            $v['district_id'] = $shop_district_info['operation_shop_district_id'];
                             return $v;
                         }
                     }

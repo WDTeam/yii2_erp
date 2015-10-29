@@ -1,5 +1,5 @@
 <?php
-namespace boss\controllers\general;
+namespace boss\controllers\system;
 
 use core\models\order\Order;
 use core\models\order\OrderPush;

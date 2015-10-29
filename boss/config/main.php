@@ -38,7 +38,7 @@ return [
             'showScriptName' => false,
             //'enableStrictParsing' => true,
             'rules' => [
-                ''=>'general/site/index',
+                ''=>'system/site/index',
                 '<controller:\w+>/<id:\d+>' => '<controller>/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
@@ -55,7 +55,7 @@ return [
             ],
         ],
         'errorHandler' => [
-            'errorAction' => 'general/site/error',
+            'errorAction' => 'system/site/error',
         ],
         'areacascade' => [
             'class' => 'boss\components\AreaCascade'
