@@ -654,6 +654,7 @@ class ConfigureController extends \restapi\components\Controller
      *                  "title": "", 文字
      *                  "remark": "",  备注
      *                  "sort": "1" 排序
+     *                  "time": "5"  停留时间，默认5秒
      *                  "next_url": "" 下一页url
      *              },
      * {
@@ -662,6 +663,7 @@ class ConfigureController extends \restapi\components\Controller
      *                  "title": "", 文字
      *                  "remark": "",  备注
      *                  "sort": "2" 排序
+     *                  "time": "5"  停留时间，默认5秒
      *                  "next_url": "" 下一页url
      *              },
      *              ]

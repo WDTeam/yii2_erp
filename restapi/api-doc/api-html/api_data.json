@@ -646,7 +646,7 @@
   {
     "type": "GET",
     "url": "/order/add-comment",
-    "title": "评价订单（haojianse %0）",
+    "title": "评价订单（该功能写在UserController里面 v1/user/user-suggest）",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -1331,7 +1331,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n {\n\"code\": \"1\",\n\"msg\": \"操作成功\",\n\"ret\": {\n\"limit\": \"1\",\n\"page_total\": 4,\n\"offset\": 0,\n\"orders\": [\n{\n\"id\": \"2\",\n\"order_code\": \"339710\",\n\"order_parent_id\": \"0\",\n\"order_is_parent\": \"0\",\n\"created_at\": \"1445347126\",\n\"updated_at\": \"1445347126\",\n\"isdel\": \"0\",\n\"ver\": \"3\",\n\"version\": \"3\",\n\"order_ip\": \"58.135.77.96\",\n\"order_service_type_id\": \"1\",\n\"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n\"order_src_id\": \"1\",\n\"order_src_name\": \"BOSS\",\n\"channel_id\": \"20\",\n\"order_channel_name\": \"后台下单\",\n\"order_unit_money\": \"20.00\",\n\"order_money\": \"40.00\",\n\"order_booked_count\": \"120\",\n\"order_booked_begin_time\": \"1446249600\",\n\"order_booked_end_time\": \"1446256800\",\n\"address_id\": \"397\",\n\"district_id\": \"3\",\n\"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n\"order_booked_worker_id\": \"0\",\n\"checking_id\": \"0\",\n\"order_cs_memo\": \"\",\n\"order_id\": \"2\",\n\"order_before_status_dict_id\": \"2\",\n\"order_before_status_name\": \"已支付\",\n\"order_status_dict_id\": \"3\",\n\"order_status_name\": \"已开始智能指派\"\n}\n]\n}",
+          "content": " HTTP/1.1 200 OK\n {\n\"code\": \"1\",\n\"msg\": \"操作成功\",\n\"ret\": {\n\"limit\": \"1\",\n\"page_total\": 4,\n\"offset\": 0,\n\"orders\": [\n{\n\"id\": \"2\",\n\"order_code\": \"339710\",\n\"order_parent_id\": \"0\",\n\"order_is_parent\": \"0\",\n\"created_at\": \"1445347126\",\n\"updated_at\": \"1445347126\",\n\"isdel\": \"0\",\n\"ver\": \"3\",\n\"version\": \"3\",\n\"order_ip\": \"58.135.77.96\",\n\"order_service_type_id\": \"1\",\n\"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n\"order_src_id\": \"1\",\n\"order_src_name\": \"BOSS\",\n\"channel_id\": \"20\",\n\"order_channel_name\": \"后台下单\",\n\"order_unit_money\": \"20.00\",\n\"order_money\": \"40.00\",\n\"order_pay_type\": \"支付方式\",\n\"order_booked_count\": \"120\",\n\"order_booked_begin_time\": \"1446249600\",\n\"order_booked_end_time\": \"1446256800\",\n\"address_id\": \"397\",\n\"district_id\": \"3\",\n\"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n\"order_booked_worker_id\": \"0\",\n\"checking_id\": \"0\",\n\"order_cs_memo\": \"\",\n\"order_id\": \"2\",\n\"order_before_status_dict_id\": \"2\",\n\"order_before_status_name\": \"已支付\",\n\"order_status_dict_id\": \"3\",\n\"order_status_name\": \"已开始智能指派\"\n}\n]\n}",
           "type": "json"
         }
       ]
@@ -2706,7 +2706,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"地址添加成功\"\n  \"ret\":{\n  \"address\":\n     {\n     \"id\": 2,\n     \"customer_id\": 1,\n     \"operation_province_id\": 110000,\n     \"operation_city_id\": 110100,\n     \"operation_area_id\": 110105,\n     \"operation_province_name\": \"北京\",\n     \"operation_city_name\": \"北京市\",\n     \"operation_area_name\": \"朝阳区\",\n     \"operation_province_short_name\": \"北京\",\n     \"operation_city_short_name\": \"北京\",\n     \"operation_area_short_name\": \"朝阳\",\n     \"customer_address_detail\": \"某某小区8栋3单元512\",\n     \"customer_address_status\": 1,客户地址类型,1为默认地址，0为非默认地址\n     \"customer_address_longitude\": 116.48641,\n     \"customer_address_latitude\": 39.92149,\n     \"customer_address_nickname\": \"王小明\",\n     \"customer_address_phone\": \"18210922324\",\n     \"created_at\": 1445063798,\n     \"updated_at\": 0,\n     \"is_del\": 0\n     }\n   }\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"地址添加成功\"\n  \"ret\":{\n  \"address\":\n     {\n     \"id\": 主键,\n     \"customer_id\":关联客户,\n     \"operation_province_id\": 110000,\n     \"operation_city_id\": 市,\n     \"operation_area_id\": 区,\n     \"operation_province_name\": \"北京\",\n     \"operation_city_name\": \"北京市\",\n     \"operation_area_name\": \"朝阳区\",\n     \"operation_province_short_name\": \"北京\",\n     \"operation_city_short_name\": \"北京\",\n     \"operation_area_short_name\": \"朝阳\",\n     \"customer_address_detail\": \"详细地址\",\n     \"customer_address_status\": 1,客户地址类型,1为默认地址，0为非默认地址\n     \"customer_address_longitude\": 经度,\n     \"customer_address_latitude\": 纬度,\n     \"customer_address_nickname\": \"用户昵称\",\n     \"customer_address_phone\": \"被服务者手机\",\n     \"created_at\": 1445063798,\n     \"updated_at\": 0,\n     \"is_del\": 0\n     }\n   }\n\n}",
           "type": "json"
         }
       ]
@@ -3442,7 +3442,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "    HTTP/1.1 200 OK\n{\n\"code\": \"1\",\n\"msg\": \"查询成功\",\n\"ret\": {\n\"userBalance\": \"100.00\",\n\"userRecord\": [\n{\n\"id\": \"1\",\n\"customer_id\": \"1\",\n \"order_id\": \"0\",\n\"order_channel_id\": \"0\",\n\"customer_trans_record_order_channel\": null,\n\"pay_channel_id\": \"0\",\n\"customer_trans_record_pay_channel\": null,\n \"customer_trans_record_mode\": \"0\",\n\"customer_trans_record_mode_name\": null,\n\"customer_trans_record_coupon_money\": \"0.00\",\n\"customer_trans_record_cash\": \"0.00\",\n\"customer_trans_record_pre_pay\": \"0.00\",\n\"customer_trans_record_online_pay\": \"0.00\",\n\"customer_trans_record_online_balance_pay\": \"0.00\",\n\"customer_trans_record_online_service_card_on\": \"0\",\n\"customer_trans_record_online_service_card_pay\": \"0.00\",\n\"customer_trans_record_online_service_card_current_balance\": \"0.00\",\n\"customer_trans_record_online_service_card_befor_balance\": \"0.00\",\n\"customer_trans_record_compensate_money\": \"0.00\",\n\"customer_trans_record_refund_money\": \"0.00\",\n\"customer_trans_record_order_total_money\": \"0.00\",\n\"customer_trans_record_total_money\": \"0.00\",\n\"customer_trans_record_current_balance\": \"0.00\",\n\"customer_trans_record_befor_balance\": \"0.00\",\n\"customer_trans_record_transaction_id\": \"0\",\n\"customer_trans_record_remark\": \"\",\n\"customer_trans_record_verify\": \"\",\n\"created_at\": \"0\",\n\"updated_at\": \"0\",\n\"is_del\": \"1\"\n}\n]\n}\n}",
+          "content": "    HTTP/1.1 200 OK\n{\n\"code\": \"1\",\n\"msg\": \"查询成功\",\n\"ret\": {\n\"userBalance\": \"用户余额\",\n\"userRecord\": [\n{\n\"id\": \"1\",\n\"customer_id\": \"用户ID\",\n \"order_id\": \"订单ID\",\n\"order_channel_id\": \"订单渠道\",\n\"customer_trans_record_order_channel\": 订单渠道名称,\n\"pay_channel_id\": \"支付渠道\",\n\"customer_trans_record_pay_channel\": 支付渠道名称,\n \"customer_trans_record_mode\": \"交易方式:1消费,2=充值,3=退款,4=赔偿\",\n\"customer_trans_record_mode_name\": 交易方式名称,\n\"customer_trans_record_coupon_money\": \"优惠券金额\",\n\"customer_trans_record_cash\": \"现金支付\",\n\"customer_trans_record_pre_pay\": \"预付费金额（第三方）\",\n\"customer_trans_record_online_pay\": \"在线支付\",\n\"customer_trans_record_online_balance_pay\": \"在线余额支付\",\n\"customer_trans_record_online_service_card_on\": \"服务卡号\",\n\"customer_trans_record_online_service_card_pay\": \"服务卡支付\",\n\"customer_trans_record_online_service_card_current_balance\": \"服务卡当前余额\",\n\"customer_trans_record_online_service_card_befor_balance\": \"服务卡之前余额\",\n\"customer_trans_record_compensate_money\": \"补偿金额\",\n\"customer_trans_record_refund_money\": \"退款金额\",\n\"customer_trans_record_order_total_money\": \"订单总额\",\n\"customer_trans_record_total_money:'交易总额',\n\"customer_trans_record_current_balance:'当前余额',\n\"customer_trans_record_befor_balance:'之前余额',\n\"customer_trans_record_transaction_id:'交易流水号',\n\"customer_trans_record_remark\": '备注',\n\"customer_trans_record_verify\": '验证',\n\"created_at\":'创建时间',\n\"updated_at\":'更新时间',\n\"is_del\"：'删除',\n}\n]\n}\n}",
           "type": "json"
         }
       ]
@@ -3501,7 +3501,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\": \"提交成功\"\n  \"ret\":{\n     \"scoreCategory\": [\n         {\n             \"desc\": \"在线支付后评价订单\",\n             \"score\": \"¥*5\"\n         },\n         {\n             \"desc\": \"在线支付\",\n             \"score\": \"¥*5\"\n         },\n         {\n             \"desc\": \"分享给朋友\",\n             \"score\": \"10\"\n         }\n     ],\n     \"scoreDetail\": [],\n     \"score\": \"0分\",\n     \"userPrize\": [\n         {\n             \"prizeId\": \"3\",\n             \"prizeName\": \"e家洁厨房高温保养\",\n             \"prizeCost\": \"1500\",\n             \"prizeRule\": [\n                 \"如需咨询请拨打客服电话：400-6767-636\"\n             ],\n             \"prizeThumb\": \"http://webapi2.1jiajie.com/app/images/gaowenbaojie_small3.png\",\n             \"prizePic\": \"http://static.1jiajie.com/prizePhoto/gaowenbaojie_big.png\"\n         }\n     ],\n   }\n\n}",
+          "content": "    HTTP/1.1 200 OK\n{\n\"code\": 1,\n\"msg\": \"用户积分明细列表\",\n\"ret\": {\n\"scoreCategory\": [\n     {\n      \"id\": \"1\",\n      \"customer_id\": \"客户\",\n      \"customer_score\": \"客户积分\",\n      \"created_at\": \"创建时间\",\n      \"updated_at\": \"更新时间\",\n      \"is_del\": 是否删除\n      }\n     ]\n    }\n   }",
           "type": "json"
         }
       ]
@@ -3959,7 +3959,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n \"msg\": \"阿姨信息查询成功\",\n \"ret\": {\n     \"worker_name\": \"李刘珍\",\n     \"worker_phone\": \"13121999270\",\n     \"head_url\": \"\",\n     \"worker_identity\": \"兼职\",\n     \"worker_role\": \"保姆\",\n     \"worker_start\": 4.5,\n     \"personal_skill\": [\n         \"煮饭\",\n         \"开荒\",\n         \"护老\",\n         \"擦玻璃\",\n         \"带孩子\"\n     ]\n   }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n \"msg\": \"阿姨信息查询成功\",\n \"ret\": {\n     \"worker_name\": \"阿姨姓名\",\n     \"worker_phone\": \"阿姨手机号\",\n     \"worker_photo\": \"头像地址\",\n     \"worker_identity_description\": \"阿姨身份说明\",\n     \"worker_identity_id\":\"阿姨身份标识【1全职 2兼职 3高峰 4时段】\",\n     \"worker_type_description\": \"角色\",\n     \"worker_star\": \"星级\",\n     \"personal_skill\": [\n         \"阿姨技能1\",\n         \"阿姨技能2\",\n         \"阿姨技能3\"\n     ]\n   }\n}",
           "type": "json"
         }
       ]
@@ -4054,66 +4054,6 @@
   },
   {
     "type": "GET",
-    "url": "/worker/get-worker-bill-detail",
-    "title": "获取阿姨对账单列表详情 (田玉星 100%)",
-    "name": "actionGetWorkerBillDetail",
-    "group": "Worker",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>阿姨登录token</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "settle_id",
-            "description": "<p>账单唯一标识.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "platform_version",
-            "description": "<p>平台版本号.</p> "
-          }
-        ]
-      }
-    },
-    "sampleRequest": [
-      {
-        "url": "http://dev.api.1jiajie.com/v1/worker/get-worker-bill-detail"
-      }
-    ],
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功.\",\n  \"ret\": {\n      \"worker_income\": \"150.00\",\n      \"worker_income_constitute\": \"0.00元(底薪)+150.00元(工时服务)+0.00元(奖励)-0.00元(处罚)\",\n      \"data\": [\n          {\n              \"service_date\": \"01-01\",\n              \"service_time\": \"08:01:00-08:01:00\",\n              \"order_code\": \"2123112\",\n              \"order_money\": \"150.00\"\n          }\n      ]\n  }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"error\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
-    "groupTitle": "Worker"
-  },
-  {
-    "type": "GET",
     "url": "/worker/get-worker-bill-list",
     "title": "获取阿姨对账单列表 (田玉星 100%)",
     "name": "actionGetWorkerBillList",
@@ -4161,7 +4101,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\": \"操作成功.\",\n     \"ret\": [\n     {\n        \"settle_id\"=>\"32\"\n        'settle_type' =>\"1\",\n        'settle_year' =>\"2014\"\n        'settle_time'=>'09年07月-09月13日',\n        'settle_type' =>1,\n        'order_count'=>'10',\n        'worker_income'=>'320.00',\n        'settle_status'=>\"1\"\n      }\n     ]\n      \n}",
+          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"1\",\n     \"msg\": \"操作成功.\",\n     \"ret\": [\n     {\n          \"settle_year\": \"2015\",\n          \"order_count\": \"账单归属年限\",\n          \"worker_income\": \"该账单阿姨的总收入\",\n          \"settle_cycle\": \"账单类型【1周期账单 2月结账单】\",\n          \"settle_cycle_des\": \"账单文字说明\",\n          \"settle_task_money\": \"任务奖励金额\",\n          \"base_salary_subsidy\": \"底薪补贴\",\n          \"money_deduction\": \"处罚金额\",\n          \"order_money_except_cash\": \"工时服务费\",\n          \"settle_status\": 账单状态【0未结算 1已结算】,\n          \"settle_time\": \"账单日期\"\n          \"worker_is_confirmed\":\"阿姨是否确认账单【0未确认 1已确认】\",\n      }\n     ]\n}",
           "type": "json"
         }
       ]
@@ -4170,7 +4110,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"error\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"0\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -4483,7 +4423,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n   \"code\": 1,\n    \"msg\": \"操作成功.\",\n       \"ret\": [\n           {\n               \"deduction_money\": \"12.00\",\n               \"deduction_des\": \"第三大大声点\",\n               \"deduction_type\": \"2\",\n               \"deduction_time\": \"2015.10.26\",\n               \"deduction_type_des\": \"投诉\"\n           }\n      ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n   \"code\": 1,\n    \"msg\": \"操作成功.\",\n       \"ret\": [\n           {\n               \"deduction_money\": \"处罚金额\",\n               \"deduction_des\": \"处罚描述\",\n               \"deduction_type\": \"处罚类型\",\n               \"deduction_time\": \"处罚时间\",\n               \"deduction_type_des\": \"处罚类型描述\"\n           }\n      ]\n}",
           "type": "json"
         }
       ]
@@ -4492,7 +4432,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"error\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"0\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -4596,7 +4536,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功.\",\n  \"ret\": [\n      {\n          \"task_money\": \"50.00\",\n          \"task_des\": \"每个月请假不超过4天\"\n      }\n  ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功.\",\n  \"ret\": [\n      {\n          \"task_money\": \"任务奖励\",\n          \"task_des\": \"任务描述\"\n      }\n  ]\n}",
           "type": "json"
         }
       ]
@@ -4605,7 +4545,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"error\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"0\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -4634,7 +4574,7 @@
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "bill_id",
+            "field": "settle_id",
             "description": "<p>账单唯一标识.</p> "
           },
           {
@@ -4649,14 +4589,14 @@
     },
     "sampleRequest": [
       {
-        "url": "http://dev.api.1jiajie.com/v1/worker/get-worker-tasktime-list"
+        "url": "http://dev.api.1jiajie.com/v1/worker/get-worker-bill-detail"
       }
     ],
     "success": {
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"ret\": [\n      {\n          \"service_date\": \"01-01\",\n          \"service_time\": \"08:01:00-08:01:00\",\n          \"order_code\": \"1234354\",\n          \"order_money\": \"150.00\"\n      }\n  ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功.\",\n  \"ret\": [\n      {\n          \"order_id\": \"订单ID\",\n          \"order_money\": \"订单金额\",\n          \"order_code\": \"订单号\",\n          \"service_date\": \"服务日期\",\n          \"service_time\": \"服务时间段\"\n      }\n  ]\n}",
           "type": "json"
         }
       ]
@@ -4665,7 +4605,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"error\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"0\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -4901,7 +4841,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     [\n     {\n         \"id\": \"任务id\",\n         \"worker_task_name\": \"任务名称\",\n         \"worker_task_start\": \"任务开始时间\",\n         \"worker_task_end\": \"任务结束时间\",\n         \"worker_task_reward_value\": \"任务奖励值\",\n         \"worker_task_conditions\": \"任务需要完成次数\",\n         \"worker_task_already\": \"任务已经完成次数\"\n     },\n     {\n         \"id\": \"任务id\",\n         \"worker_task_name\": \"任务名称\",\n         \"worker_task_start\": \"任务开始时间\",\n         \"worker_task_end\": \"任务结束时间\",\n         \"worker_task_reward_value\": \"任务奖励值\",\n         \"worker_task_conditions\": \"任务需要完成次数\",\n         \"worker_task_already\": \"任务已经完成次数\"\n     }\n     ]\n     }\n}",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          {\n              \"id\": 2,\n              \"worker_id\": 1,\n              \"worker_task_id\": 2,\n              \"worker_task_cycle_number\": \"1\",\n              \"worker_task_name\": \"任务名称2\",\n              \"worker_task_log_start\": 1446096240,\n              \"worker_task_log_end\": 1446297240,\n              \"worker_task_is_done\": 0,\n              \"worker_task_done_time\": 0,\n              \"worker_task_reward_type\": 0,\n              \"worker_task_reward_value\": 0,\n              \"created_at\": 1446097240,\n              \"updated_at\": 0,\n              \"is_del\": 0\n          }\n      ]\n  }",
           "type": "json"
         }
       ]
@@ -5052,7 +4992,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"error\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"0\",\n    \"msg\": \"用户认证已经过期,请重新登录\"\n}",
           "type": "json"
         }
       ]
@@ -5154,7 +5094,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n \"msg\": \"阿姨信息查询成功\",\n \"ret\": {\n     \"worker_name\": \"李刘珍\",\n     \"worker_phone\": \"13121999270\",\n     \"head_url\": \"\",\n     \"worker_identity\": \"全职\",\n     \"worker_identity_id\":\"1\",\n     \"worker_role\": \"保姆\",\n     \"worker_start\": 4.5,\n     \"personal_skill\": [\n         \"煮饭\",\n         \"开荒\",\n         \"护老\",\n         \"擦玻璃\",\n         \"带孩子\"\n     ]\n   }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n \"msg\": \"阿姨信息查询成功\",\n \"ret\": {\n     \"worker_name\": \"阿姨姓名\",\n     \"worker_phone\": \"阿姨手机号\",\n     \"worker_photo\": \"头像地址\",\n     \"worker_identity_description\": \"阿姨身份说明\",\n     \"worker_identity_id\":\"阿姨身份标识【1全职 2兼职 3高峰 4时段】\",\n     \"worker_type_description\": \"角色\",\n     \"worker_star\": \"星级\",\n     \"personal_skill\": [\n         \"阿姨技能1\",\n         \"阿姨技能2\",\n         \"阿姨技能3\"\n     ]\n   }\n}",
           "type": "json"
         }
       ]
@@ -5254,7 +5194,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "    HTTP/1.1 200 OK\n    {\n         \"code\": \"1\",\n         \"msg\": \"操作成功\",\n         \"ret\": {\n             \"pages\": [\n             {\n                 \"id\": \"1\", 编号\n                 \"img\": \"\", 图片地址\n                 \"title\": \"\", 文字\n                 \"remark\": \"\",  备注\n                 \"sort\": \"1\" 排序\n                 \"next_url\": \"\" 下一页url\n             },\n{\n                 \"id\": \"2\", 编号\n                 \"img\": \"\", 图片地址\n                 \"title\": \"\", 文字\n                 \"remark\": \"\",  备注\n                 \"sort\": \"2\" 排序\n                 \"next_url\": \"\" 下一页url\n             },\n             ]\n     }\n}",
+          "content": "    HTTP/1.1 200 OK\n    {\n         \"code\": \"1\",\n         \"msg\": \"操作成功\",\n         \"ret\": {\n             \"pages\": [\n             {\n                 \"id\": \"1\", 编号\n                 \"img\": \"\", 图片地址\n                 \"title\": \"\", 文字\n                 \"remark\": \"\",  备注\n                 \"sort\": \"1\" 排序\n                 \"time\": \"5\"  停留时间，默认5秒\n                 \"next_url\": \"\" 下一页url\n             },\n{\n                 \"id\": \"2\", 编号\n                 \"img\": \"\", 图片地址\n                 \"title\": \"\", 文字\n                 \"remark\": \"\",  备注\n                 \"sort\": \"2\" 排序\n                 \"time\": \"5\"  停留时间，默认5秒\n                 \"next_url\": \"\" 下一页url\n             },\n             ]\n     }\n}",
           "type": "json"
         }
       ]
@@ -5778,7 +5718,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n {\n      \"code\": 1,\n      \"msg\": \"获取单次服务排班表成功\",\n      \"ret\": {\n          \"2015-10-28\": [\n              {\n                  \"8:00-11:00\": false\n              },\n              {\n                  \"8:30-11:30\": false\n              },\n              {\n                  \"9:00-12:00\": false\n              },\n              {\n                  \"9:30-12:30\": false\n              },\n              {\n                  \"10:00-13:00\": false\n              },\n              {\n                  \"10:30-13:30\": false\n              },\n              {\n                  \"11:00-14:00\": false\n              },\n              {\n                  \"11:30-14:30\": false\n              },\n              {\n                  \"12:00-15:00\": false\n              },\n              {\n                  \"12:30-16:30\": false\n              },\n              {\n                  \"13:00-17:00\": false\n              },\n              {\n                  \"13:30-17:30\": false\n              },\n              {\n                  \"14:00-18:00\": false\n              },\n              {\n                  \"14:30-18:30\": false\n              },\n              {\n                  \"15:00-19:00\": false\n              },\n              {\n                  \"16:30-19:30\": false\n              },\n              {\n                  \"17:00-20:00\": false\n              },\n              {\n                  \"17:30-20:30\": false\n              },\n              {\n                  \"18:00-21:00\": false\n              },\n              {\n                  \"18:30-21:30\": false\n              },\n              {\n                  \"19:00-22:00\": false\n              }\n          ],\n  }",
+          "content": "HTTP/1.1 200 OK\n{\n\"code\": 1,\n\"msg\": \"获取单次服务排班表成功\",\n\"ret\": [\n      {\n          \"date\": \"2015-10-29\",\n          \"timeline\": [\n              {\n                  \"time\": \"8:00-10:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"8:30-10:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"9:00-11:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"9:30-11:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"10:00-12:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"10:30-12:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"11:00-13:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"11:30-13:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"12:00-14:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"12:30-14:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"13:00-15:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"13:30-16:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"14:00-17:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"14:30-17:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"15:00-18:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"16:30-18:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"17:00-19:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"17:30-19:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"18:00-20:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"18:30-20:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"19:00-21:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"19:30-21:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"20:00-22:00\",\n                  \"enable\": false\n              }\n          ]\n      }\n   ]\n}",
           "type": "json"
         }
       ]
@@ -6221,7 +6161,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"获取周期服务时间表成功\",\n  \"ret\": [\n       {\n          \"date_name\": \"11月04日\",\n          \"date_week\": \"3\",\n          \"date_week_every\": \"每周日\",\n          \"date_time\": [\n              {\n                  \"time\": \"08:00-10:00\",\n                  \"status\": \"0\"\n              },\n              {\n                  \"time\": \"18:00-20:00\",\n                  \"status\": \"1\"\n              }\n          ],\n          \"date_name_tag\": \"11月04日（今天）\"\n       },\n      {\n          \"date_name\": \"11月05日\",\n          \"date_week\": \"4\",\n          \"date_week_every\": \"每周日\",\n          \"date_time\": [\n              {\n                  \"time\": \"08:00-10:00\",\n                  \"status\": \"0\"\n              },\n              {\n                  \"time\": \"18:00-20:00\",\n                  \"status\": \"1\"\n              }\n          ],\n          \"date_name_tag\": \"11月05日（今天）\"\n      }\n   ]\n }",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"获取周期服务时间表成功\",\n  \"ret\": [\n      {\n          \"date\": \"2015-10-29\",\n          \"timeline\": [\n              {\n                  \"time\": \"8:00-10:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"8:30-10:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"9:00-11:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"9:30-11:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"10:00-12:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"10:30-12:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"11:00-13:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"11:30-13:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"12:00-14:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"12:30-14:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"13:00-15:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"13:30-16:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"14:00-17:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"14:30-17:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"15:00-18:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"16:30-18:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"17:00-19:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"17:30-19:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"18:00-20:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"18:30-20:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"19:00-21:00\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"19:30-21:30\",\n                  \"enable\": false\n              },\n              {\n                  \"time\": \"20:00-22:00\",\n                  \"enable\": false\n              }\n          ]\n      }\n   ]\n}",
           "type": "json"
         }
       ]

@@ -64,6 +64,13 @@ class Customer extends \common\models\customer\Customer
 		}
 	}
 
+	/**
+     * get complaint count by customer_phone
+	 */
+	public static function getComplaintCount($customer_phone){
+		
+	}
+
     /**
      * 根据customer_id获取顾客信息
      */

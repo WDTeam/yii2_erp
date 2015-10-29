@@ -102,7 +102,7 @@ use core\models\finance\FinanceShopSettleApplySearch;
         }
         ?>
 
-    <div class='col-md-3' style="margin-top: 22px;">
+    <div class='col-md-5 form-inline' style="margin-top: 22px;">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
         <?php 

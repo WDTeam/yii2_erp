@@ -373,4 +373,24 @@ class Coupon extends \common\models\operation\coupon\Coupon
 	    ->all();
 	    return (array)$models;
 	}
+	/**
+	 * 赔付类型的绑定记录
+	 * @author CoLee
+	 */
+	public function getBindLog()
+	{
+	    $bindM = CouponCustomer::find()
+	    ->where([
+	        'coupon_id'=>$this->id
+	    ])->one();
+	    return $bindM;
+	}
+	/**
+	 * 是否可以绑定
+	 * @author CoLee
+	 */
+	public function whetherCanBind()
+	{
+	    return $this->coupon_category==1 && empty($this->getBindLog());
+	}
 }

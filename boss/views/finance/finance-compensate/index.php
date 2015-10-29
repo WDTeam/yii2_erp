@@ -42,11 +42,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
                 'view' => function ($url, $model) {
-                                return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', Yii::$app->urlManager->createUrl(['/finance/finance-compensate/view','id' => $model->id]), [
+                                return Html::a('<span class="btn btn-primary">查看</span>', Yii::$app->urlManager->createUrl(['/finance/finance-compensate/view','id' => $model->id]), [
                                                 'title' => Yii::t('yii', 'View'),'data-pjax'=>'0','target' => '_blank',
                                               ]);},
                 'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['/finance/finance-compensate/create','id' => $model->id]), [
+                                    return Html::a('<span class="btn btn-primary">更新</span>', Yii::$app->urlManager->createUrl(['/finance/finance-compensate/create','id' => $model->id]), [
                                                     'title' => Yii::t('yii', 'Edit'),
                                                   ]);}
 
