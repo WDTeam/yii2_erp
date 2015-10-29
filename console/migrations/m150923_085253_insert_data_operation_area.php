@@ -7,7 +7,7 @@ class m150923_085253_insert_data_operation_area extends Migration
 {
     public function up()
     {
-        $sql = str_replace('`areas`','{{%operation_area}}', file_get_contents('./datasql/areas.sql'));
+        $sql = str_replace('`areas`','{{%operation_area}}', file_get_contents('areas.sql'));
         $this->execute($sql);
     }
 
