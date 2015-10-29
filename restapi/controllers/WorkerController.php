@@ -115,11 +115,10 @@ class WorkerController extends \restapi\components\Controller
     {
         $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //检测阿姨是否登录
-//        $checkResult = ApiWorker::checkWorkerLogin($param);
-//        if(!$checkResult['code']){
-//            return $this->send(null, $checkResult['msg'], 0, 403);
-//        }
-        $checkResult['worker_id'] = 18475;
+        $checkResult = ApiWorker::checkWorkerLogin($param);
+        if(!$checkResult['code']){
+            return $this->send(null, $checkResult['msg'], 0, 403);
+        }
         //判断数据完整
         if(!isset($param['leave_type']) || !$param['leave_type']){
             return $this->send(null, "数据不完整,请选择请假类型", 0, 403);
