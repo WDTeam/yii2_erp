@@ -392,11 +392,9 @@ class server
             echo date('Y-m-d H:i:s').$ex->getMessage()."\n";
             var_dump($data);
             echo $ex->getTrace()."\n";
-        } finally {
-            return $data;
-        }
+        } 
+        return $data;
     }
-
     /*
      * 任务完成时触发
      */
