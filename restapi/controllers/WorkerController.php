@@ -1237,7 +1237,7 @@ class WorkerController extends \api\components\Controller
             return $this->send(null, "boss系统错误", 1024, 403);
         }
         if(empty($ret)){
-              return $this->send(null, "您没有任务哦", 0);
+              return $this->send(null, "您没有已完成任务哦", 0);
         }
         return $this->send($ret, "操作成功", 1);
     }
