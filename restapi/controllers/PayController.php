@@ -1,12 +1,12 @@
 <?php
-namespace api\controllers;
+namespace restapi\controllers;
 
 use Yii;
-use \api\models\PayParam;
+use \restapi\models\PayParam;
 use \core\models\payment\GeneralPay;
 use \core\models\customer\CustomerAccessToken;
 
-class PayController extends \api\components\Controller
+class PayController extends \restapi\components\Controller
 {
     /**
      * @api {POST} v1/pay/balance-pay 会员余额支付 (赵顺利100%)

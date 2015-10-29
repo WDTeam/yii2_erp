@@ -1,6 +1,6 @@
 <?php
 
-namespace api\controllers;
+namespace restapi\controllers;
 
 use common\models\worker\Worker;
 use \core\models\order\OrderPush;
@@ -13,7 +13,7 @@ use \core\models\order\OrderSearch;
 use \core\models\worker\WorkerAccessToken;
 use yii\web\Response;
 
-class OrderController extends \api\components\Controller
+class OrderController extends \restapi\components\Controller
 {
 
     public $workerText = array(1 => '指定阿姨订单数', '待抢单订单订单数', '指定阿姨订单列表', '待抢单订单列表');
@@ -1241,9 +1241,15 @@ class OrderController extends \api\components\Controller
                 if (!in_array($reason, $order_cancel_reason)) {
                     $reason = '其他原因#' . $reason;
                 }
-
-                if (\core\models\order\Order::cancel($orderId, 0, $reason)) {
-                    return $this->send([1], $orderId . "订单取消成功");
+                try{
+                    $result = \core\models\order\Order::cancel($orderId, 0, $reason);
+                    if ($result) {
+                        return $this->send([1], $orderId . "订单取消成功");
+                    }else{
+                        return $this->send([0], $orderId . "订单取消失败");
+                    }
+                } catch (Exception $e) {
+                    return $this->send(null, $orderId . "订单取消异常:".$e);
                 }
             } else {
                 return $this->send(null, "核实用户订单唯一性失败，用户id：" . $customer->id . ",订单id：" . $orderId, 0, 403);

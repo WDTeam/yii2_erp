@@ -131,4 +131,7 @@ class WorkerVacationApplication extends \common\models\worker\WorkerVacationAppl
 
     }
 
+    public function getWorker(){
+        return $this->hasOne(Worker::className(),['id'=>'worker_id']);
+    }
 }

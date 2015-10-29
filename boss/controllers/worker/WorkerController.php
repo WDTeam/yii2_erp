@@ -258,6 +258,14 @@ class WorkerController extends BaseAuthController
         return $this->render('view_auth',['worker_id'=>$id,'workerAuthModel'=>$workerAuthModel]);
     }
 
+    public function actionOperateVacationApplication($id,$status){
+        $model = WorkerVacationApplication::findOne($id);
+        $model->worker_vacation_application_approve_status = $status;
+        $model->worker_vacation_application_approve_time = time();
+        $model->save();
+        return $this->redirect(['index','WorkerSearch[worker_vacation_application_approve_status]'=>0]);
+    }
+
     /**
      * 删除阿姨
      * 数据库中不删除阿姨信息，采用软删除
