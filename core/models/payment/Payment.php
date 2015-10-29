@@ -2,10 +2,12 @@
 
 namespace core\models\payment;
 
+use core\models\payment\PaymentCustomerTransRecord;
+use core\models\customer\Customer;
+
 use dbbase\models\payment\PaymentCommon;
 use dbbase\models\payment\PaymentRefund;
-use core\models\customer\CustomerTransRecord;
-use core\models\customer\Customer;
+
 use Yii;
 
 class Payment extends \dbbase\models\payment\Payment
@@ -32,7 +34,7 @@ class Payment extends \dbbase\models\payment\Payment
         //用户服务卡扣款
         //ServiceCard();
         //用户交易记录
-        return CustomerTransRecord::analysisRecord($data);
+        return PaymentCustomerTransRecord::analysisRecord($data);
     }
 
     /**
@@ -46,13 +48,12 @@ class Payment extends \dbbase\models\payment\Payment
         //获取订单数据
         $orderInfo = PaymentCommon::orderInfo($data['order_id']);
         $orderInfo = array_merge($orderInfo->getAttributes(),$orderInfo->orderExtPay->getAttributes());
-        dump($orderInfo);exit;
+
         //用户服务卡扣款
         Customer::decBalance($data['customer_id'],$orderInfo['order_use_acc_balance']);
-        dump(Customer::decBalance($data['customer_id'],$orderInfo['order_use_acc_balance']));
-        exit;
+
         //用户交易记录
-        return CustomerTransRecord::analysisRecord(array_merge($orderInfo,$data));
+        return PaymentCustomerTransRecord::analysisRecord(array_merge($orderInfo,$data));
     }
 
     /**
@@ -62,7 +63,7 @@ class Payment extends \dbbase\models\payment\Payment
     public static function cashPay($data)
     {
         //用户交易记录
-        return CustomerTransRecord::analysisRecord($data);
+        return PaymentCustomerTransRecord::analysisRecord($data);
     }
 
     /**
@@ -72,7 +73,7 @@ class Payment extends \dbbase\models\payment\Payment
     public static function prePay($data)
     {
         //用户交易记录
-        return CustomerTransRecord::analysisRecord($data);
+        return PaymentCustomerTransRecord::analysisRecord($data);
     }
 
     /**

@@ -5,7 +5,7 @@ namespace dbbase\models\payment;
 use dbbase\models\finance\FinanceOrderChannel;
 use dbbase\models\finance\FinancePayChannel;
 use core\models\customer\Customer;
-use core\models\customer\CustomerTransRecord;
+use core\models\payment\PaymentCustomerTransRecord;
 use core\models\order\Order;
 use core\models\order\OrderSearch;
 use Yii;
@@ -253,7 +253,7 @@ class PaymentCommon extends \yii\db\ActiveRecord
             Customer::decBalance($attribute['customer_id'],$orderInfo->orderExtPay->order_use_acc_balance);
         }
         //支付订单交易记录
-        CustomerTransRecord::analysisRecord($attribute);
+        PaymentCustomerTransRecord::analysisRecord($attribute);
         //修改订单状态
         /**
          * @param $order_id 订单ID
@@ -283,7 +283,7 @@ class PaymentCommon extends \yii\db\ActiveRecord
         Customer::incBalance($attribute['customer_id'],$attribute['payment_actual_money']);
 
         //充值交易记录
-        CustomerTransRecord::analysisRecord($attribute);
+        PaymentCustomerTransRecord::analysisRecord($attribute);
         return true;
     }
 

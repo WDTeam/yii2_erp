@@ -11,23 +11,25 @@ namespace core\models\order;
 
 use core\models\operation\OperationShopDistrictGoods;
 use core\models\operation\OperationShopDistrictCoordinate;
+use core\models\customer\Customer;
+use core\models\customer\CustomerAddress;
+use core\models\payment\Payment;
+use core\models\worker\Worker;
+use core\models\operation\OperationShopDistrict;
+use core\models\operation\OperationGoods;
+
 use dbbase\models\order\OrderExtFlag;
 use dbbase\models\order\OrderExtPay;
 use dbbase\models\order\OrderExtWorker;
-use core\models\customer\Customer;
-use core\models\customer\CustomerAddress;
-use core\models\payment\GeneralPay;
-use core\models\worker\Worker;
-use Yii;
 use dbbase\models\order\Order as OrderModel;
 use dbbase\models\order\OrderStatusDict;
 use dbbase\models\order\OrderExtCustomer;
 use dbbase\models\order\OrderSrc;
 use dbbase\models\finance\FinanceOrderChannel;
+use Yii;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
-use core\models\operation\OperationShopDistrict;
-use core\models\operation\OperationGoods;
+
 
 /**
  * This is the model class for table "{{%order}}".
@@ -140,9 +142,9 @@ class Order extends OrderModel
             switch ($this->orderExtPay->order_pay_type) {
                 case OrderExtPay::ORDER_PAY_TYPE_OFF_LINE://现金支付
                     //交易记录
-                    $order['customer_trans_record_cash'] = $this->order_money;
-                    $order['general_pay_source'] = 20;
-                    if (GeneralPay::cashPay($order)) {
+                    $order['payment_customer_trans_record_cash'] = $this->order_money;
+                    $order['payment_source'] = 20;
+                    if (Payment::cashPay($order)) {
                         $order_model->admin_id = $attributes['admin_id'];
                         OrderStatus::_payment($order_model, ['OrderExtPay']);
                     }
@@ -150,9 +152,9 @@ class Order extends OrderModel
                 case OrderExtPay::ORDER_PAY_TYPE_ON_LINE://线上支付
                     if ($this->orderExtPay->order_pay_money == 0) { //如果需要支付的金额等于0 则全部走余额支付
                         //交易记录
-                        $order['customer_trans_record_online_balance_pay'] = $this->orderExtPay->order_use_acc_balance;
-                        $order['general_pay_source'] = 20;
-                        if (GeneralPay::balancePay($order)) {
+                        $order['payment_customer_trans_record_online_balance_pay'] = $this->orderExtPay->order_use_acc_balance;
+                        $order['payment_source'] = 20;
+                        if (Payment::balancePay($order)) {
                             $order_model->admin_id = $attributes['admin_id'];
                             OrderStatus::_payment($order_model, ['OrderExtPay']);
                         }
@@ -160,9 +162,9 @@ class Order extends OrderModel
                     break;
                 case OrderExtPay::ORDER_PAY_TYPE_POP://第三方预付
                     //交易记录
-                    $order['customer_trans_record_pre_pay'] = $this->orderExtPop->order_pop_order_money;
-                    $order['general_pay_source'] = $this->channel_id;
-                    if (GeneralPay::prePay($order)) {
+                    $order['payment_customer_trans_record_pre_pay'] = $this->orderExtPop->order_pop_order_money;
+                    $order['payment_source'] = $this->channel_id;
+                    if (Payment::prePay($order)) {
                         $order_model->admin_id = $attributes['admin_id'];
                         OrderStatus::_payment($order_model, ['OrderExtPay']);
                     }
