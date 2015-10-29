@@ -12,7 +12,8 @@ use kartik\grid\ActionColumn;
 
 use core\models\shop\Shop;
 use boss\models\worker\Worker;
-use core\models\worker\WorkerVacation;
+use boss\models\worker\WorkerVacation;
+use boss\models\worker\WorkerVacationApplication;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -22,6 +23,7 @@ $this->title = Yii::t('app', '阿姨管理');
 $this->params['breadcrumbs'][1] = $this->title;
 $params = Yii::$app->request->getQueryParams();
 if(isset($params['WorkerSearch']['worker_vacation_application_approve_status'])){
+    $vacationBtn = '';
     $columns =[
         [
             'class'=>'kartik\grid\CheckboxColumn',
@@ -101,15 +103,15 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
             'format' => 'raw',
             'label' => '审核状态',
             'value' => function(){
-                return '<span style="font-weight:bold;color:#FFD1CD">未审核</span>';
+                return '未审核';
             },
             'width' => "8%",
         ],
         [
             'class' => 'kartik\grid\ActionColumn',
             'header' => '操作',
-            'width' => "5%",
-            'template' =>'{operate_vacation_application}',
+            'width' => "9%",
+            'template' =>'{operate_application_success}{operate_application_failed}',
             'contentOptions'=>[
                 'style'=>'font-size: 12px;padding-right:2px',
             ],
@@ -117,9 +119,16 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
                 'style'=>'margin-right:3px'
             ],
             'buttons' => [
-                'operate_vacation_application' => function ($url, $model) {
-                    return Html::a('<span onclick="return confirm(\'确认通过审核?\')" class="fa fa-fw fa-eye"></span>', Yii::$app->urlManager->createUrl(['worker/worker/auth', 'id' => $model->id]), [
-                        'title' =>'审核管理',
+
+                'operate_application_success' => function ($url, $model) {
+                    return Html::a('<span onclick="return confirm(\'确认通过申请?\')">通过</span>', Yii::$app->urlManager->createUrl(['worker/worker/operate-vacation-application', 'id' => $model->id,'status'=>1]), [
+                        'title' =>'通过',
+                        'style' => 'margin-right:7px'
+                    ]);
+                },
+                'operate_application_failed' => function ($url, $model) {
+                    return Html::a('<span onclick="return confirm(\'确认拒绝申请?\')" >拒绝</span>', Yii::$app->urlManager->createUrl(['worker/worker/operate-vacation-application', 'id' => $model->id,'status'=>2]), [
+                        'title' =>'拒绝',
                         'style' => 'margin-right:3px'
                     ]);
                 },
@@ -140,9 +149,12 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
 //                            ]);
 //                    },
             ],
-        ]
+        ],
     ];
 }else{
+    $vacationBtn =
+        Html::a('<i ></i>批量休假',['create-vacation?workerIds='],['class' => ' btn btn-success batchVacation','data-target' => '#vacationModal','data-toggle' => 'modal','type'=>1,'style'=>'margin-right:20px'])
+        .Html::a('<i></i>批量事假',['create-vacation?workerIds='],['class' => 'btn btn-success batchVacation','type'=>2,'data-target' => '#vacationModal','data-toggle' => 'modal']);
     $columns =[
         [
             'class'=>'kartik\grid\CheckboxColumn',
@@ -330,12 +342,10 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
         Html::a('<i class="glyphicon" ></i>封号 '.Worker::CountBlockWorker(), ['index?WorkerSearch[worker_is_block]=1'], ['class' => 'btn '.Worker::setBtnCss(9), 'style' => 'margin-right:10px']) .
         Html::a('<i class="glyphicon" ></i>黑名单 '.Worker::CountBlackListWorker(), ['index?WorkerSearch[worker_is_blacklist]=1'], ['class' => 'btn '.Worker::setBtnCss(10), 'style' => 'margin-right:10px']).
         Html::a('<i class="glyphicon" ></i>离职 '.Worker::CountDimissionWorker(), ['index?WorkerSearch[worker_is_dimission]=1'], ['class' => 'btn '.Worker::setBtnCss(11), 'style' => 'margin-right:10px']).
-        Html::a('<i class="glyphicon" ></i>请假待审核 '.Worker::CountDimissionWorker(), ['index?WorkerSearch[worker_vacation_application_approve_status]=0'], ['class' => 'btn '.Worker::setBtnCss(12), 'style' => 'margin-right:10px']);
+        Html::a('<i class="glyphicon" ></i>请假待审核 '.WorkerVacationApplication::CountApplication(), ['index?WorkerSearch[worker_vacation_application_approve_status]=0'], ['class' => 'btn '.Worker::setBtnCss(12), 'style' => 'margin-right:10px']);
     $requestParam = \Yii::$app->request->getQueryParams();
 
-    $vacationBtn =
-         Html::a('<i ></i>批量休假',['create-vacation?workerIds='],['class' => ' btn btn-success batchVacation','data-target' => '#vacationModal','data-toggle' => 'modal','type'=>1,'style'=>'margin-right:20px'])
-        .Html::a('<i></i>批量事假',['create-vacation?workerIds='],['class' => 'btn btn-success batchVacation','type'=>2,'data-target' => '#vacationModal','data-toggle' => 'modal']);
+
 //        $vacationBtn =
 //            Html::a('<i ></i>批量休假',['create-vacation?workerIds='],['disabled'=>'disabled','style'=>'margin-right:20px'])
 //            .Html::a('<i></i>批量事假',['create-vacation?workerIds='],['disabled'=>'disabled']);
