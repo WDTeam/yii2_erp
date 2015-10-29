@@ -60,13 +60,17 @@ class FinancePopOrderController extends Controller
     {
     	$model = new FinancePopOrderSearch;
     	$modelinfo= new FinancePopOrder;
+    	
     	if(Yii::$app->request->isPost) {
     		if(Yii::$app->params['uploadpath']){
     		//开启七牛上传，文件存储在七牛
     			$data = \Yii::$app->request->post();
     			$model->load($data);
     			$file = UploadedFile::getInstance($model, 'finance_uplod_url');
-    			
+    			if(isset($file->baseName)){
+    				\Yii::$app->getSession()->setFlash('default','请上传对账单！');
+    				return $this->redirect(['index']);
+    			}
     			$filenamesitename=$file->baseName;
     			if($file){
     				$qiniu = new Qiniu();

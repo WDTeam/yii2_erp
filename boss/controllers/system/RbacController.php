@@ -1,5 +1,5 @@
 <?php
-namespace boss\controllers\general;
+namespace boss\controllers\system;
 
 use Yii;
 use core\models\system\SystemUser;

@@ -6,7 +6,7 @@
  * Time: 下午4:54
  * To change this template use File | Settings | File Templates.
  */
-namespace boss\controllers\general;
+namespace boss\controllers\system;
 
 use Yii;
 use yii\filters\AccessControl;

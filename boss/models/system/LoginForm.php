@@ -3,6 +3,7 @@ namespace boss\models\system;
 
 use Yii;
 use yii\base\Model;
+use core\models\system\SystemUser;
 
 /**
  * Login form

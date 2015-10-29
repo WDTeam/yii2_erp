@@ -24,7 +24,7 @@ $model->is_del=0;
     'attributes' => [
      		'pay_channel_id'=>[
      		'type' => Form::INPUT_DROPDOWN_LIST,
-     		'items' => FinancePayChannel::get_pay_channel_list(),
+     		'items' => FinancePayChannel::get_pay_channel_list($stype='all'),
      		'options' => [
      		'prompt' => '请选择支付渠道',
      		],
