@@ -14,11 +14,12 @@ class m151026_074743_create_table_order_complaint extends Migration
     	
     	$this->createTable('{{%order_complaint}}',[
     			'id'=>  Schema::TYPE_PK.'(11) NOT NULL AUTO_INCREMENT COMMENT \'ID\'',
-    			'order_id'=>  Schema::TYPE_INTEGER.'(11) NOT NULL COMMENT \'订单id\'',
+    			'order_id'=>   Schema::TYPE_BIGPK.'(11) NOT NULL COMMENT \'订单id\'',
     			'complaint_type'=> Schema::TYPE_SMALLINT.'(2) DEFAULT 0 COMMENT \'投诉类型\'',
     			'complaint_status'=> Schema::TYPE_SMALLINT.'(2) DEFAULT 0 COMMENT \'投诉状态\'',
     			'complaint_channel'=> Schema::TYPE_SMALLINT.'(2) DEFAULT 0 COMMENT \'投诉渠道\'',
     			'complaint_section'=> Schema::TYPE_SMALLINT.'(2) DEFAULT 0 COMMENT \'投诉部门\'',
+    			'complaint_assortment'=> Schema::TYPE_SMALLINT.'(3) DEFAULT 0 COMMENT \'投诉分类\'',
     			'complaint_level'=>  Schema::TYPE_STRING.'(2) DEFAULT NULL COMMENT \'投诉级别\'',
     			'complaint_phone' => Schema::TYPE_STRING.'(16) NOT NULL DEFAULT 0 COMMENT \'投诉手机号\'',
     			'complaint_content'=>  Schema::TYPE_TEXT. ' COMMENT \'投诉详情\'',
