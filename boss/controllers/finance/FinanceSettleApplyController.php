@@ -456,9 +456,9 @@ class FinanceSettleApplyController extends BaseAuthController
     */
     public function actionSelfParttimeWorkerCycleSettlement(){
         $settleStartTime = FinanceSettleApplySearch::getFirstDayOfLastWeek();//统计开始时间,上周第一天
-        echo $settleStartTime.'------';
+        echo date('Y-m-d 00:00:00', strtotime('-1 week last monday')).'------';
         $settleEndTime = FinanceSettleApplySearch::getLastDayOfLastWeek();//统计结束时间,上周最后一天
-        echo $settleEndTime.'------';
+        echo date('Y-m-d 23:59:59', strtotime('last sunday')).'------';
         //自营兼职阿姨的结算
         $selfPartimeWorkerArr = Worker::getWorkerIds(FinanceSettleApplySearch::SELF_OPERATION, FinanceSettleApplySearch::PARTTIME);
         $this->saveAndGenerateSettleData($selfPartimeWorkerArr,$settleStartTime,$settleEndTime);
