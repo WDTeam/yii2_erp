@@ -3,8 +3,8 @@
 namespace boss\controllers\general;
 
 use Yii;
-use core\models\general\SystemUser;
-use core\models\general\SystemUserSearch;
+use core\models\system\SystemUser;
+use core\models\system\SystemUserSearch;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

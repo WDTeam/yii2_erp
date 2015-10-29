@@ -19,7 +19,7 @@ use core\models\customer\Customer;
 use core\models\order\OrderStatusHistory;
 use core\models\shop\Shop;
 use dbbase\models\order\OrderStatusDict;
-use core\models\general\SystemUser;
+use core\models\system\SystemUser;
 use boss\models\search\SystemUserSearch;
 
 /**
