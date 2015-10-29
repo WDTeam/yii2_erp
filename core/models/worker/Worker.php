@@ -3,9 +3,7 @@
 namespace core\models\worker;
 
 
-use boss\models\worker\WorkerVacation;
 use dbbase\models\Help;
-use dbbase\models\worker\WorkerVacationApplication;
 use Symfony\Component\Console\Helper\Helper;
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -15,6 +13,9 @@ use yii\web\UploadedFile;
 use dbbase\models\order\OrderExtWorker;
 use core\models\shop\ShopManager;
 use core\models\shop\Shop;
+
+use core\models\worker\WorkerVacation;
+use core\models\worker\WorkerVacationApplication;
 use core\models\worker\WorkerStat;
 use core\models\worker\WorkerExt;
 use core\models\worker\WorkerIdentityConfig;
@@ -581,13 +582,16 @@ class Worker extends \dbbase\models\worker\Worker
 
     /**
      * 操作阿姨的订单信息
-     * @param int $worker_id
-     * @param int $type 操作类型 1添加2修改3删除
-     * @param array $orderInfo 订单信息([order_id=>1,order_booked_begin_time=>145666666,order_booked_end_time=>14445555,order_booked_count=>3)
+     * @param $worker_id
+     * @param $type 操作类型 1添加2修改3删除
+     * @param $order_id
+     * @param $order_booked_count
+     * @param $order_booked_begin_time
+     * @param $order_booked_end_time
      * @return bool
      */
-    public static function operateWorkerOrderInfoToRedis($worker_id,$type,$orderInfo){
-        if(empty($worker_id) && empty($type) && empty($orderInfo)){
+    public static function operateWorkerOrderInfoToRedis($worker_id,$type,$order_id,$order_booked_count,$order_booked_begin_time,$order_booked_end_time){
+        if(empty($worker_id) && empty($type) && empty($order_id) && empty($order_booked_count)){
             return false;
         }
         $workerInfo =  Yii::$app->redis->executeCommand('get', [self::WORKER.'_'.$worker_id]);
@@ -597,14 +601,22 @@ class Worker extends \dbbase\models\worker\Worker
         //添加阿姨订单信息
         if($type==1){
             $workerInfo = json_decode($workerInfo,1);
+            $orderInfo['order_id'] = $order_id;
+            $orderInfo['order_booked_count'] = $order_booked_count;
+            $orderInfo['order_booked_begin_time'] = $order_booked_begin_time;
+            $orderInfo['order_booked_end_time'] = $order_booked_end_time;
             array_push($workerInfo['order'],$orderInfo);
             $workerInfo = json_encode($workerInfo);
             Yii::$app->redis->executeCommand('set', [self::WORKER.'_'.$worker_id,$workerInfo]);
         //修改阿姨订单信息
         }elseif($type==2){
             $workerInfo = json_decode($workerInfo,1);
+            $orderInfo['order_id'] = $order_id;
+            $orderInfo['order_booked_count'] = $order_booked_count;
+            $orderInfo['order_booked_begin_time'] = $order_booked_begin_time;
+            $orderInfo['order_booked_end_time'] = $order_booked_end_time;
             foreach ($workerInfo['order'] as $key=>$val) {
-                if($val['order_id']==$orderInfo['order_id']){
+                if($val['order_id']==$order_id){
                     $workerInfo['order'][$key] = $orderInfo;
                 }
             }
@@ -614,7 +626,7 @@ class Worker extends \dbbase\models\worker\Worker
         }elseif($type==3){
             $workerInfo = json_decode($workerInfo,1);
             foreach ($workerInfo['order'] as $key=>$val) {
-                if($val['order_id']==$orderInfo['order_id']){
+                if($val['order_id']==$order_id){
                     unset($workerInfo['order'][$key]);
                 }
             }
