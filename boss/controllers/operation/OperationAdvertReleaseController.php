@@ -70,10 +70,14 @@ class OperationAdvertReleaseController extends BaseAuthController
     {
         $post = Yii::$app->request->post();
         if ($post){
-            $citys = OperationCity::find()->asArray()->where(['city_id' => $post['city_ids']])->all();
-            $cache = Yii::$app->cache;
-            $cache->set('__CITY_INFO__', $citys, 6000);
-            return $this->redirect(['step-second']);
+            if (!empty($post['city_ids'])) {
+                $citys = OperationCity::find()->asArray()->where(['city_id' => $post['city_ids']])->all();
+                $cache = Yii::$app->cache;
+                $cache->set('__CITY_INFO__', $citys, 6000);
+                return $this->redirect(['step-second']);
+            } else {
+                return $this->redirect(['step-first']);
+            }
         } else {
 
             $citys = OperationCity::find()->all();
@@ -117,10 +121,21 @@ class OperationAdvertReleaseController extends BaseAuthController
     {
         $post = Yii::$app->request->post();
         if ($post){
-            $version_ids = $post['version_id'];
-            $cache = Yii::$app->cache;
-            $cache->set('__VERSIONS_INFO__', $version_ids, 6000);
-            return $this->redirect(['step-forth']);
+            if (!empty($post['version_id'])) {
+                $version_ids = $post['version_id'];
+                $cache = Yii::$app->cache;
+                $cache->set('__VERSIONS_INFO__', $version_ids, 6000);
+                return $this->redirect(['step-forth']);
+            } else {
+
+                $platform_ids = Yii::$app->request->get('platform_ids');
+                $platforms = OperationPlatform::find()->asArray()->where(['id' => $platform_ids])->all();
+                foreach($platforms as $k => $v){
+                    $versions = OperationPlatformVersion::find()->asArray()->where(['operation_platform_id' => $v['id']])->all();
+                    $platforms[$k]['versions'] = $versions;
+                }
+                return $this->render('step-third', ['platforms' => $platforms]);
+            }
         } else {
             $platform_ids = Yii::$app->request->get('platform_ids');
             $platforms = OperationPlatform::find()->asArray()->where(['id' => $platform_ids])->all();
@@ -139,27 +154,31 @@ class OperationAdvertReleaseController extends BaseAuthController
     {
         $post = Yii::$app->request->post();
         if ($post){
-            $cache = Yii::$app->cache;
-            $citys = $cache->get('__CITY_INFO__');
-            $model = new OperationAdvertRelease();
-            foreach($citys as $k => $city){
-                $data = [
-                    '_csrf' => $post['_csrf'],
-                    'OperationAdvertRelease' => [
-                        'advert_content_id' => $post['advert']['id'][0],
-                        'city_id' => $city['city_id'],
-                        'city_name' => $city['city_name'],
-                        'starttime' => $post['advert']['starttime'][0],
-                        'endtime' => $post['advert']['endtime'][0],
-                        'created_at' => time(),
-                        'updated_at' => time()
-                    ]
-                ];
-                $_model = clone $model;
-                $_model->load($data);
-                $_model->save();
+            if (!empty($post['advert'])) {
+                $cache = Yii::$app->cache;
+                $citys = $cache->get('__CITY_INFO__');
+                $model = new OperationAdvertRelease();
+                foreach($citys as $k => $city){
+                    $data = [
+                        '_csrf' => $post['_csrf'],
+                        'OperationAdvertRelease' => [
+                            'advert_content_id' => $post['advert']['id'][0],
+                            'city_id' => $city['city_id'],
+                            'city_name' => $city['city_name'],
+                            'starttime' => $post['advert']['starttime'][0],
+                            'endtime' => $post['advert']['endtime'][0],
+                            'created_at' => time(),
+                            'updated_at' => time()
+                        ]
+                    ];
+                    $_model = clone $model;
+                    $_model->load($data);
+                    $_model->save();
+                }
+                return $this->redirect(['index']);
+            } else {
+                return $this->redirect(['step-forth']);
             }
-            return $this->redirect(['index']);
         } else {
             $cache = Yii::$app->cache;
             $platforms = $cache->get('__PLATFORMS_INFO__');

@@ -95,7 +95,7 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有顾客',
+                        'label' => '查看所有客户',
                         'url' => ['/customer/customer/index?CustomerSearch[is_del]=0'],
                         'icon' => 'fa fa-angle-right',
                     ],
