@@ -61,7 +61,13 @@ use yii\web\JsExpression;
                             name: params.term
                         }; }')
                     ],
-                    //                     'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                    'initSelection'=> new JsExpression('function (element, callback) {
+                        callback({
+                            id:"'.$model->operation_shop_district_id.'",
+                            operation_shop_district_name:"'.$model->getOperation_shop_district_name().'"
+                        });
+                    }'),
+                    'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
                     'templateResult' => new JsExpression('function(model) { return model.operation_shop_district_name; }'),
                     'templateSelection' => new JsExpression('function (model) { return model.operation_shop_district_name; }'),
                 ],

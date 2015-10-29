@@ -1,6 +1,6 @@
 <?php
 
-namespace boss\controllers\worker;
+namespace boss\controllers\operation;
 
 use Yii;
 use core\models\worker\WorkerTask;
