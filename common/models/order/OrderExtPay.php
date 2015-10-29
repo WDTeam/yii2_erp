@@ -27,6 +27,10 @@ use Yii;
  */
 class OrderExtPay extends \common\models\order\ActiveRecord
 {
+    const ORDER_PAY_TYPE_OFF_LINE = 1;
+    const ORDER_PAY_TYPE_ON_LINE = 2;
+    const ORDER_PAY_TYPE_POP = 3;
+
     /**
      * @inheritdoc
      */
