@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\SerialColumn'
             ],
 
-//            'id',
+            //'id',
             'city_name',
              'created_at:datetime',
              'updated_at:datetime',
@@ -35,12 +35,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     'view' => function ($url, $model) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-eye-open"></span>', 
-                            Yii::$app->urlManager->createUrl(['/operation/operation-advert-release/view','city_id' => $model->city_id]),
+                            Yii::$app->urlManager->createUrl(['/operation/operation-advert-release/view','OperationAdvertReleaseSearch[city_id]' => $model->city_id]),
                             ['title' => Yii::t('yii', 'View'), 'class' => 'btn btn-success btn-sm']
                         );
                     },
                     'update' => function(){return false;},
                     'delete' => function ($url, $model) {
+                        return '';
                         return Html::a(
                             '<span class="glyphicon glyphicon-trash"></span>', 
                             Yii::$app->urlManager->createUrl(['/operation/operation-advert-release/delete','id' => $model->id]),

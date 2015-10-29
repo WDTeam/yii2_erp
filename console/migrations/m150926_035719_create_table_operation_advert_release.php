@@ -20,6 +20,7 @@ class m150926_035719_create_table_operation_advert_release extends Migration
             'city_name' => Schema::TYPE_STRING . '(60) DEFAULT NULL COMMENT \'城市名称\'',
             'starttime' => Schema::TYPE_DATETIME. ' DEFAULT NULL COMMENT \'开始时间\'',
             'endtime' => Schema::TYPE_DATETIME. ' DEFAULT NULL COMMENT \'结束时间\'',
+            'advert_release_order' => Schema::TYPE_SMALLINT. '(2) DEFAULT NULL COMMENT \'同城广告排序位置\'',
             'status' => Schema::TYPE_SMALLINT . '(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT \'是否上线\'',
             'is_softdel' => Schema::TYPE_SMALLINT . '(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT \'状态\'',
             'created_at' => Schema::TYPE_INTEGER. '(11) DEFAULT NULL COMMENT \'创建时间\'',

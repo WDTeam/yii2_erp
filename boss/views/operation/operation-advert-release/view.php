@@ -10,14 +10,16 @@ use yii\widgets\Pjax;
  * @var boss\models\operation\OperationAdvertReleaseSearch $searchModel
  */
 
-$this->title = 'Operation Advert Releases';
+$this->title = '已发布广告管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-advert-release-index">
     <div class="page-header">
-            <h1><?= Html::encode($this->title) ?></h1>
+            <!--h1><?= Html::encode($this->title) ?></h1-->
     </div>
-    <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
+    <div class="row">
+        <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
+    </div>
 
     <p>
         <?php /* echo Html::a('Create Operation Advert Release', ['create'], ['class' => 'btn btn-success'])*/  ?>
@@ -29,35 +31,98 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'advert_content_id',
-            'city_id',
             'city_name',
+            [
+                'attribute'=> 'advert_release_order',
+                'format'=>'raw',
+                'value' => function ($model){
+                    return Html::textInput('advert_release_order[]',$model->advert_release_order, ['class' => 'advert_release_orders_input', 'id' => $model->id]);
+                }
+            ],
             [
                 'format' => 'raw',
                 'label' => '广告名称',
                 'value' => function ($dataProvider) {
-                    //if($dataProvider->shop_id && Shop::findOne($dataProvider->shop_id)){
-                        //return Shop::findOne($dataProvider->shop_id)->name;
-                        return $dataProvider->operationAdvertContent->operation_advert_content_name;
-                    //}
+                               return $dataProvider->operationAdvertContent->operation_advert_content_name;
                 }
             ],
-            ['attribute'=>'starttime','format'=>['datetime',(isset(Yii::$app->modules['datecontrol']['displaySettings']['datetime'])) ? Yii::$app->modules['datecontrol']['displaySettings']['datetime'] : 'd-m-Y H:i:s A']],
-//            ['attribute'=>'endtime','format'=>['datetime',(isset(Yii::$app->modules['datecontrol']['displaySettings']['datetime'])) ? Yii::$app->modules['datecontrol']['displaySettings']['datetime'] : 'd-m-Y H:i:s A']], 
-//            'status', 
-//            'is_softdel', 
-//            'created_at', 
-//            'updated_at', 
-
             [
+                'format' => 'raw',
+                'label' => '所属平台',
+                'value' => function ($dataProvider) {
+                               return $dataProvider->operationAdvertContent->platform_name;
+                }
+            ],
+            [
+                'format' => 'raw',
+                'label' => '平台版本',
+                'value' => function ($dataProvider) {
+                               return $dataProvider->operationAdvertContent->platform_version_name;
+                }
+            ],
+            [
+                'format' => 'raw',
+                'label' => '广告位置',
+                'value' => function ($dataProvider) {
+                               return $dataProvider->operationAdvertContent->position_name;
+                }
+            ],
+            [
+                'attribute' => 'starttime',
+                'label' => '上线时间',
+                //'format' => 
+                //[
+                    //'datetime',
+                    //(isset(Yii::$app->modules['datecontrol']['displaySettings']['datetime'])) ? Yii::$app->modules['datecontrol']['displaySettings']['datetime'] : 'd-m-Y H:i:s A'
+                //]
+            ],
+            [
+                'attribute'=>'endtime',
+                'label' => '下线时间',
+                //'format'=>
+                //[
+                    //'datetime',
+                    //(isset(Yii::$app->modules['datecontrol']['displaySettings']['datetime'])) ? Yii::$app->modules['datecontrol']['displaySettings']['datetime'] : 'Y-m-d H:i:s'
+                //]
+            ], 
+            [
+                'attribute' => 'status',
+                'value' => function ($dataProvider) {
+                    if ($dataProvider->status == 0) {
+                        return '未上线';
+                    } elseif (($dataProvider->status == 1)) {
+                        return '已上线';
+                    } else {
+                        return '已下线';
+                    }
+                }
+            ],
+            [
+                'header' => Yii::t('app', 'Operation'),
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
-                'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['operation-advert-release/view','id' => $model->id,'edit'=>'t']), [
-                                                    'title' => Yii::t('yii', 'Edit'),
-                                                  ]);}
-
+                    'view' => function ($url, $model) {
+                        return '';
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-eye-open"></span>', 
+                            Yii::$app->urlManager->createUrl(['/operation/operation-advert-content/view','id' => $model->id]),
+                            ['title' => Yii::t('yii', 'View'), 'class' => 'btn btn-success btn-sm']
+                        );
+                    },
+                    'update' => function ($url, $model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-pencil"></span>', 
+                            Yii::$app->urlManager->createUrl(['/operation/operation-advert-release/update','id' => $model->id]),
+                            ['title' => Yii::t('yii', 'Update')]
+                        );
+                    },
+                    'delete' => function ($url, $model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-trash"></span>', 
+                            Yii::$app->urlManager->createUrl(['/operation/operation-advert-release/delete','id' => $model->id]),
+                            ['title' => 'Delete', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
+                        );
+                    },
                 ],
             ],
         ],
@@ -66,14 +131,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'condensed'=>true,
         'floatHeader'=>true,
 
-
-
-
         'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
-            'type'=>'info',
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> Add', ['create'], ['class' => 'btn btn-success']),                                                                                                                                                          'after'=>Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List', ['index'], ['class' => 'btn btn-info']),
-            'showFooter'=>false
+            //'type'=>'info',
+            //'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> Add', ['create'], ['class' => 'btn btn-success']),                                                                                                                                                          'after'=>Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List', ['index'], ['class' => 'btn btn-info']),
+            //'showFooter'=>false
         ],
     ]); Pjax::end(); ?>
 

@@ -16,31 +16,32 @@ use yii\helpers\Html; use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'advert_content_id') ?>
+    <div class="col-md-2">
+        <?= $form->field($model, 'city_name') ?>
+    </div>
 
-    <?= $form->field($model, 'city_id') ?>
+    <div class="col-md-2">
+        <?= $form->field($model, 'operation_advert_content_name') ?>
+    </div>
 
-    <?= $form->field($model, 'city_name') ?>
 
-    <?= $form->field($model, 'starttime') ?>
+    <div class="col-md-2">
+        <?= $form->field($model, 'platform_name') ?>
+    </div>
 
-    <?= $form->field($model, 'operation_advert_content_name') ?>
+    <div class="col-md-2">
+        <?= $form->field($model, 'platform_version_name') ?>
+    </div>
 
-    <?php // echo $form->field($model, 'endtime') ?>
-
-    <?php // echo $form->field($model, 'status') ?>
-
-    <?php // echo $form->field($model, 'is_softdel') ?>
-
-    <?php // echo $form->field($model, 'created_at') ?>
-
-    <?php // echo $form->field($model, 'updated_at') ?>
+    <div class="col-md-2">
+        <?= $form->field($model, 'position_name') ?>
+    </div>
 
     <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+
+        <?= Html::submitButton('搜索', ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('app', '保存排序'), 'javascript:void(0);', ['class' => 'btn btn-primary', 'id' => 'saveReleaseAdvOrders']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

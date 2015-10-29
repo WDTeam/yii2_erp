@@ -20,11 +20,6 @@ use Yii;
  */
 class OperationAdvertRelease extends \yii\db\ActiveRecord
 {
-    public $operation_advert_content_name;
-    public $platform_name;
-    public $platform_version_name;
-    public $platform_version_id;
-
     /**
      * @inheritdoc
      */
@@ -39,7 +34,7 @@ class OperationAdvertRelease extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['advert_content_id', 'city_id', 'status', 'is_softdel', 'created_at', 'updated_at'], 'integer'],
+            [['advert_content_id', 'advert_release_order', 'city_id', 'status', 'is_softdel', 'created_at', 'updated_at'], 'integer'],
             [['starttime', 'endtime'], 'safe'],
             [['city_name'], 'string', 'max' => 60]
         ];
@@ -59,9 +54,13 @@ class OperationAdvertRelease extends \yii\db\ActiveRecord
             'endtime' => '结束时间',
             'status' => '状态',
             'is_softdel' => '是否删除',
-            'created_at' => '首次发布时间',
-            'created_at' => '首次发布时间',
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
+            'advert_release_order' => '排序',
             'operation_advert_content_name' => '广告名称',
+            'platform_name' => '所属平台',
+            'platform_version_name' => '平台版本',
+            'position_name' => '广告位置',
         ];
     }
 

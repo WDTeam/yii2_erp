@@ -8,14 +8,11 @@ use yii\data\ActiveDataProvider;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-//use boss\models\Operation\OperationPlatform;
-//use boss\models\Operation\OperationPlatformVersion;
 use boss\models\operation\OperationAdvertPosition;
 use boss\models\operation\OperationAdvertContent;
 use boss\models\operation\OperationCity;
 use boss\models\operation\OperationPlatform;
 use boss\models\operation\OperationPlatformVersion;
-//use yii\caching\Cache;
 use boss\models\operation\OperationAdvertReleaseSearch;
 
 /**
@@ -49,11 +46,6 @@ class OperationAdvertReleaseController extends BaseAuthController
             'dataProvider' => $dataProvider,
         ]);
     }
-    
-    public function actionTest(){
-        $data = OperationAdvertRelease::getAdvertList(110100, 5, 6, 6);
-        var_dump($data);
-    }
 
     /**
      * Displays a single OperationAdvertRelease model.
@@ -69,26 +61,10 @@ class OperationAdvertReleaseController extends BaseAuthController
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
-
-        die;
-        $model = $this->findModel($id);
-        $adverts = unserialize($model->operation_release_contents);
-        $advertinfos = OperationAdvertContent::find()->asArray()->where(['id' => $adverts['id']])->all();
-        $i = 0;
-        foreach($advertinfos as $key => $value){
-            $advertinfos[$key]['starttime'] = $adverts['starttime'][$i];
-            $advertinfos[$key]['endtime'] = $adverts['endtime'][$i];
-            $i++;
-        }
-        //$model->operation_release_contents = serialize($adverts);
-        return $this->render('view', [
-            'model' => $model,
-            'adverts' => $advertinfos,
-        ]);
     }
     
     /**
-     * 
+     * 发布广告第一步:选择城市
      */
     public function actionStepFirst()
     {
@@ -99,7 +75,7 @@ class OperationAdvertReleaseController extends BaseAuthController
             $cache->set('__CITY_INFO__', $citys, 6000);
             return $this->redirect(['step-second']);
         } else {
-            
+
             $citys = OperationCity::find()->all();
             //$c = ['选择要发布的城市'];
             $c = [];
@@ -109,7 +85,7 @@ class OperationAdvertReleaseController extends BaseAuthController
     }
     
     /**
-     * 
+     * 发布广告第二步:选择平台
      */
     public function actionStepSecond()
     {
@@ -135,7 +111,7 @@ class OperationAdvertReleaseController extends BaseAuthController
     }
     
     /**
-     * 
+     * 发布广告第三步:选择平台版本
      */
     public function actionStepThird()
     {
@@ -157,7 +133,7 @@ class OperationAdvertReleaseController extends BaseAuthController
     }
     
     /**
-     * 
+     * 发布广告第四步:选择可用的广告发布
      */
     public function actionStepForth()
     {
@@ -208,33 +184,9 @@ class OperationAdvertReleaseController extends BaseAuthController
                     }
                 }
             }
-//            var_dump($data);exit;
             return $this->render('step-forth', ['data' => $data]);
         }
     }
-
-    /**
-     * Creates a new OperationAdvertRelease model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-//    public function actionCreate()
-//    {
-//        $model = new OperationAdvertRelease();
-//        $post = Yii::$app->request->post();
-//        if ($model->load($post)){
-//            $model->save();
-//            return $this->redirect(['index']);
-//        } else {
-//            $citys = OperationCity::find()->all();
-//            $c = ['选择要发布的城市'];
-//            foreach($citys as $v){$c[$v->city_id] = $v->city_name;}
-//            return $this->render('create', [
-//                'model' => $model,
-//                'citys' => $c
-//            ]);
-//        }
-//    }
 
     /**
      * Updates an existing OperationAdvertRelease model.
@@ -242,38 +194,18 @@ class OperationAdvertReleaseController extends BaseAuthController
      * @param integer $id
      * @return mixed
      */
-//    public function actionUpdate($id)
-//    {
-//        $model = $this->findModel($id);
-//        $post = Yii::$app->request->post();
-//        if ($model->load($post)) {
-//            $_model = clone $model;
-//            $position_id = $post['OperationAdvertRelease']['operation_advert_position_id'];
-//            $position = OperationAdvertPosition::find()->where(['id' => $position_id])->one();
-//            $post['OperationAdvertRelease']['operation_advert_position_name'] = $position->operation_advert_position_name;
-//            $post['OperationAdvertRelease']['operation_advert_contents'] = serialize($post['OperationAdvertRelease']['operation_advert_contents']);
-//            $_model->operation_platform_id = $position->operation_platform_id;
-//            $_model->operation_platform_name = $position->operation_platform_name;
-//            $_model->operation_platform_version_id = $position->operation_platform_version_id;
-//            $_model->operation_platform_version_name = $position->operation_platform_version_name;
-//            $_model->load($post);
-//            $_model->save();
-//            return $this->redirect(['index']);
-//        } else {
-//            $position = OperationAdvertPosition::find()->all();
-//            $positions = ['选择广告位置'];
-//            foreach($position as $v){$positions[$v->id] = $v->operation_advert_position_name;}
-//            $content = OperationAdvertContent::find()->all();
-//            foreach($content as $k => $v){
-//                $contents[$v->id] = $v->operation_advert_position_name.'('.$v->operation_city_name.':'.$v->operation_platform_name.$v->operation_platform_version_name.')';
-//            }
-//            return $this->render('update', [
-//                'model' => $model,
-//                'positions' => $positions,
-//                'contents' => $contents,
-//            ]);
-//        }
-//    }
+    public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            return $this->render('update', [
+                'model' => $model,
+            ]);
+        }
+    }
 
     /**
      * Deletes an existing OperationAdvertRelease model.
@@ -286,6 +218,22 @@ class OperationAdvertReleaseController extends BaseAuthController
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    /**
+     * 保存同一个城市里广告的顺序
+     */
+    public function actionSaveOrders(){
+        $data = Yii::$app->request->post();
+
+        $model = new OperationAdvertRelease();
+        $result = $model->saveReleaseAdvOrder($data);
+
+        if ($result > 0) {
+            return '有' . $result . '次保存成功!';
+        } else {
+            return '排序没有变化!';
+        }
     }
 
     /**
