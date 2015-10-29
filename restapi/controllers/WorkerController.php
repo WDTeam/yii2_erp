@@ -815,7 +815,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"error",
+     *      "code":"0",
      *      "msg": "用户认证已经过期,请重新登录"
      *  }
      */
@@ -827,17 +827,17 @@ class WorkerController extends \restapi\components\Controller
             return $this->send(null, $checkResult['msg'], 0, 403);
         }
         //数据整理
-        $settle_id = intval($param['settle_id']);//账单ID
+        if(!isset($param['settle_id'])||!intval($param['settle_id'])){
+            return $this->send(null, "账单唯一标识错误", 0, 403);
+        }
         try{
-            $isSucceed = FinanceSettleApplySearch::workerConfirmSettlement($settle_id);
+            if(FinanceSettleApplySearch::workerConfirmSettlement(intval($param['settle_id']))){
+                return $this->send(null, "账单确定成功");
+            }
          }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
-        if($isSucceed){
-            return $this->send(null, "账单确定成功");
-        }
         return $this->send(null, "账单确定失败",0,403);
-      
     }
     
     /**
