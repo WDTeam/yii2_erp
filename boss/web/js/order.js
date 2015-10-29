@@ -5,6 +5,7 @@ window.coupons = new Array();
 window.cards = new Array();
 var address_list = new Object();
 var goods_list = new Array();
+var district_id = 0;
 
 $("#order-order_customer_phone").keyup(function(e){
     if(e.keyCode == 13){
@@ -44,14 +45,31 @@ $(document).on("change","#order-address_id input[type='radio']",function(){
 
 $("#order-order_booked_count input").change(function(){
     setOrderMoney();
-    $("#order-orderbookedtimerange").html('');
-    for(var i=8;i<=18;i++){
-        var hour = i<10?'0'+i:i;
-        var hourtime = i+$("#order-order_booked_count input:checked").val()*1;
-        var hour2 = parseInt(hourtime)<10?'0'+parseInt(hourtime):parseInt(hourtime);
-        var minute = (hourtime%1==0)?'00':'30';
-        $("#order-orderbookedtimerange").append('<label class="radio-inline"><input type="radio"  value="'+hour+':00-'+hour2+':'+minute+'" name="Order[orderBookedTimeRange]"> '+hour+':00-'+hour2+':'+minute+'</label>');
-    }
+    $.ajax({
+        type: "GET",
+        url: "/order/order/get-time-range-list/?order_booked_count=" + $("#order-order_booked_count input:checked").val()+"&district_id="+district_id+"&date="+$("#order-orderbookeddate").val(),
+        dataType: "json",
+        success: function (data) {
+            $("#order-orderbookedtimerange").html('');
+            for(var key in data) {
+                var val = data[key];
+                for (var k in val.timeline) {
+                    var v = val.timeline[k];
+                    var disabled_class = v.enable?'':'disabled';
+                    var disabled = v.enable?'':'disabled="disabled"';
+                    $("#order-orderbookedtimerange").append('<label class="radio-inline '+disabled_class+'"><input '+disabled+' type="radio"  value="' + v.time + '" name="Order[orderBookedTimeRange]"> ' + v.time + '</label>');
+                }
+            }
+        }
+    });
+    //$("#order-orderbookedtimerange").html('');
+    //for(var i=8;i<=18;i++){
+    //    var hour = i<10?'0'+i:i;
+    //    var hourtime = i+$("#order-order_booked_count input:checked").val()*1;
+    //    var hour2 = parseInt(hourtime)<10?'0'+parseInt(hourtime):parseInt(hourtime);
+    //    var minute = (hourtime%1==0)?'00':'30';
+    //    $("#order-orderbookedtimerange").append('<label class="radio-inline"><input type="radio"  value="'+hour+':00-'+hour2+':'+minute+'" name="Order[orderBookedTimeRange]"> '+hour+':00-'+hour2+':'+minute+'</label>');
+    //}
 
 });
 
@@ -227,6 +245,7 @@ function getGoods(){
             if(data.code==200){
                 $("#order-order_service_type_id").html('');
                 goods_list = data.data;
+                district_id = data.district_id;
                 for(var k in goods_list){
                     var v = goods_list[k];
                     $("#order-order_service_type_id").append(

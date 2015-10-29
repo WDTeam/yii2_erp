@@ -606,7 +606,7 @@ class Order extends OrderModel
             $goods = OperationShopDistrictGoods::getShopDistrictGoodsList($shop_district_info['operation_city_id'], $shop_district_info['operation_shop_district_id']);
             if (!empty($goods)) {
                 if ($goods_id == 0) {
-                    return ['code' => 200, 'data' => $goods];
+                    return ['code' => 200, 'data' => $goods,'district_id'=>$shop_district_info['operation_shop_district_id']];
                 } else {
                     foreach ($goods as $v) {
                         if ($v['operation_goods_id'] == $goods_id) {
