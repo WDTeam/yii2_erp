@@ -166,23 +166,23 @@ class Worker extends \common\models\worker\Worker
     }
 
     /**
-     * 获取指定时间段内阿姨的工作时间
+     * 获取指定时间段内阿姨的未工作时间
      * @param $worker_id
      * @param $startTime
      * @param $endTime
      * @return int
      */
-    public static function getWorkerWorkTime($worker_id,$startTime,$endTime){
+    public static function getWorkerNotWorkTime($worker_id,$startTime,$endTime){
         $condition = "(worker_vacation_start_time>=$startTime and worker_vacation_finish_time<$endTime) or (worker_vacation_start_time<=$startTime and worker_vacation_finish_time>$startTime) or (worker_vacation_start_time<$endTime and worker_vacation_finish_time>$endTime)";
         $vacationResult = WorkerVacation::find()->where($condition)->andWhere(['worker_id'=>$worker_id])->select('worker_vacation_start_time,worker_vacation_finish_time')->asArray()->all();
-        $workTime = 0;
+        $vacationTime = 0;
         foreach ((array)$vacationResult as $val) {
              if($val['worker_vacation_start_time']>=$startTime && $val['worker_vacation_finish_time']<$endTime){
-                $workTime = $workTime+intval($val['worker_vacation_start_time']-$val['worker_vacation_start_time']);
+                 $vacationTime = $vacationTime+intval($val['worker_vacation_start_time']-$val['worker_vacation_start_time']);
              }
-
         }
-        return $workTime;
+        $notWorkTime = $vacationTime;
+        return $notWorkTime;
     }
 
     /**
@@ -548,6 +548,51 @@ class Worker extends \common\models\worker\Worker
         return $timeLine;
     }
 
+    /**
+     * 操作阿姨的订单信息
+     * @param int $worker_id
+     * @param int $type 操作类型 1添加2修改3删除
+     * @param array $orderInfo 订单信息([order_id=>1,order_booked_begin_time=>145666666,order_booked_end_time=>14445555,order_booked_count=>3)
+     * @return bool
+     */
+    public static function operateWorkerOrderInfoToRedis($worker_id,$type,$orderInfo){
+        if(empty($worker_id) && empty($type) && empty($orderInfo)){
+            return false;
+        }
+        $workerInfo =  Yii::$app->redis->executeCommand('get', [self::WORKER.'_'.$worker_id]);
+        if(empty($workerInfo)){
+            return false;
+        }
+        //添加阿姨订单信息
+        if($type==1){
+            $workerInfo = json_decode($workerInfo,1);
+            array_push($workerInfo['order'],$orderInfo);
+            $workerInfo = json_encode($workerInfo);
+            Yii::$app->redis->executeCommand('set', [self::WORKER.'_'.$worker_id,$workerInfo]);
+        //修改阿姨订单信息
+        }elseif($type==2){
+            $workerInfo = json_decode($workerInfo,1);
+            foreach ($workerInfo['order'] as $key=>$val) {
+                if($val['order_id']==$orderInfo['order_id']){
+                    $workerInfo['order'][$key] = $orderInfo;
+                }
+            }
+            $workerInfo = json_encode($workerInfo);
+            Yii::$app->redis->executeCommand('set', [self::WORKER.'_'.$worker_id,$workerInfo]);
+        //删除阿姨订单信息
+        }elseif($type==3){
+            $workerInfo = json_decode($workerInfo,1);
+            foreach ($workerInfo['order'] as $key=>$val) {
+                if($val['order_id']==$orderInfo['order_id']){
+                    unset($workerInfo['order'][$key]);
+                }
+            }
+            $workerInfo = json_encode($workerInfo);
+            Yii::$app->redis->executeCommand('set', [self::WORKER.'_'.$worker_id,$workerInfo]);
+        }else{
+            return false;
+        }
+    }
 
 
     /**
