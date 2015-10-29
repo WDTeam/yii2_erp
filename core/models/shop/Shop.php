@@ -2,8 +2,8 @@
 namespace core\models\shop;
 use yii;
 use yii\behaviors\TimestampBehavior;
-use core\models\Operation\OperationCity;
-use core\models\Operation\OperationArea;
+use core\models\operation\OperationCity;
+use core\models\operation\OperationArea;
 use yii\web\BadRequestHttpException;
 use core\models\worker\Worker;
 use core\behaviors\ShopStatusBehavior;
