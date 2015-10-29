@@ -1444,7 +1444,7 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /order/add-comment 评价订单（haojianse %0）
+     * @api {GET} /order/add-comment 评价订单（该功能写在UserController里面 v1/user/user-suggest）
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} app_version 访问源(android_4.2.2)
@@ -1674,7 +1674,7 @@ class OrderController extends \restapi\components\Controller
                     #倒计时
                     $ret['time'] = 172800;
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
                 }
             } else if ($param['leveltype'] == 4) {
@@ -1684,7 +1684,7 @@ class OrderController extends \restapi\components\Controller
                     #倒计时
                     $ret['time'] = 172800;
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
                 }
             } else if ($param['leveltype'] == 1) {
@@ -1696,7 +1696,7 @@ class OrderController extends \restapi\components\Controller
                     $ret['orderData'] = $workerCountTwo;
 
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
                 }
             }

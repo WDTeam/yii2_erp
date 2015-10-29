@@ -88,6 +88,8 @@ class WorkerAccessToken extends \common\models\worker\WorkerAccessToken
             return false;
         }
         $worker = Worker::find()->where(['worker_phone'=>$workerAccessToken->worker_phone])->one();
+        unset($worker['worker_password']);
+        unset($worker['worker_idcard']);
         return $worker == NULL ? false : $worker;
     }
 
