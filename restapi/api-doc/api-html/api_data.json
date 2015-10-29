@@ -5291,7 +5291,7 @@
   {
     "type": "Get",
     "url": "/coupon/all-coupons",
-    "title": "获取用户全部优惠码列表（包括可用的、不可用的、所有城市的、通用的） （李勇 100%）",
+    "title": "获取用户全部优惠券列表（包括可用的、不可用的、所有城市的、通用的） （李勇 100%）",
     "name": "AllCoupons",
     "group": "coupon",
     "parameter": {
@@ -5344,7 +5344,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "   HTTP/1.1 403 Not Found\n   {\n     \"code\": \"0\",\n     \"msg\": \"用户认证已经过期,请重新登录，\"\n\n   }\n*     {\n     \"code\": \"0\",\n     \"msg\": \"优惠码列表为空\"\n\n   }",
+          "content": "   HTTP/1.1 403 Not Found\n   {\n     \"code\": \"0\",\n     \"msg\": \"用户认证已经过期,请重新登录，\"\n\n   }\n*     {\n     \"code\": \"0\",\n     \"msg\": \"优惠券列表为空\"\n\n   }",
           "type": "json"
         }
       ]
@@ -5356,7 +5356,7 @@
   {
     "type": "Get",
     "url": "/coupon/coupons",
-    "title": "获取用户优惠码列表（包括该用户该城市下的优惠码和通用的优惠码） （李勇 100%）",
+    "title": "获取用户优惠券列表（包括该用户该城市下的优惠券和通用的优惠券） （李勇 100%）",
     "name": "Coupons",
     "group": "coupon",
     "parameter": {
@@ -5390,7 +5390,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\":\n  \"ret\": {\n      \"coupon\":[\n        {\n          \"id\": \"1\",\n          \"coupon_name\": \"优惠码名称\",\n           \"coupon_price\": \"优惠码价格\",\n           \"coupon_type_name\": \"优惠券类型名称\",\n           \"coupon_service_type_id\": \"服务类别id\",\n           \"coupon_service_type_name\": \"服务类别名称\",\n          }\n       ]\n      }\n\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n  \"msg\":\n  \"ret\": {\n      \"coupon\":[\n        {\n          \"id\": \"1\",\n          \"coupon_name\": \"优惠券名称\",\n           \"coupon_price\": \"优惠券价格\",\n           \"coupon_type_name\": \"优惠券类型名称\",\n           \"coupon_service_type_id\": \"服务类别id\",\n           \"coupon_service_type_name\": \"服务类别名称\",\n          }\n       ]\n      }\n\n}",
           "type": "json"
         }
       ]
@@ -5409,7 +5409,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "   HTTP/1.1 403 Not Found\n   {\n     \"code\": \"0\",\n     \"msg\": \"用户认证已经过期,请重新登录，\"\n\n   }\n*     {\n     \"code\": \"0\",\n     \"msg\": \"优惠码列表为空\"\n\n   }",
+          "content": "   HTTP/1.1 403 Not Found\n   {\n     \"code\": \"0\",\n     \"msg\": \"用户认证已经过期,请重新登录，\"\n\n   }\n*     {\n     \"code\": \"0\",\n     \"msg\": \"优惠券列表为空\"\n\n   }",
           "type": "json"
         }
       ]
@@ -5439,7 +5439,7 @@
             "type": "<p>String</p> ",
             "optional": true,
             "field": "coupon_code",
-            "description": "<p>活动码</p> "
+            "description": "<p>优惠码</p> "
           },
           {
             "group": "Parameter",
@@ -5485,7 +5485,7 @@
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"优惠码不存在，\"\n\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"优惠券不存在，\"\n\n}",
           "type": "json"
         }
       ]
@@ -5497,7 +5497,7 @@
   {
     "type": "GET",
     "url": "v1/coupon/get-coupon-count",
-    "title": "获取用户优惠码数量 （功能已经实现 100%）",
+    "title": "获取用户优惠券数量 （功能已经实现 100%）",
     "name": "GetCouponCount",
     "group": "coupon",
     "parameter": {
