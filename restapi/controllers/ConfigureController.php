@@ -6,6 +6,8 @@ use \core\models\operation\OperationShopDistrictGoods;
 use \core\models\operation\OperationCategory;
 use \core\models\operation\OperationCity;
 use \core\models\customer\CustomerAccessToken;
+use \core\models\order\OrderSearch;
+use \common\models\order\OrderStatusDict;
 
 class ConfigureController extends \restapi\components\Controller
 {
@@ -471,78 +473,63 @@ class ConfigureController extends \restapi\components\Controller
      */
 
     /**
-     * @api {POST} /configure/worker-init 阿姨app初始化 （赵顺利0%）
+     * @api {GET} v1/configure/worker-init 阿姨app初始化 （赵顺利0%）
      * @apiName actionWorkerInit
      * @apiGroup configure
      *
-     * @apiParam {String} session_id 会话id.
+     * @apiParam {String} access_token 会话id.
      * @apiParam {String} platform_version 平台版本号.
      *
      * @apiSuccessExample Success-Response:
-     *  HTTP/1.1 200 OK
-     *  {
-     *      "code": "OK",
-     *      "msg": "首页信息获取成功",
-     *      "ret":
-     *      {
-     *          "msgStyle": "",
-     *          "alertMsg": "",
-     *          "worker":
-     *          {
-     *              "id": "1111116",
-     *              "name": "陈测试1",
-     *              "head": "http://static.1jiajie.com/worker/face/1111116.jpg",
-     *              "notify": "傍晚好，祝您晚餐愉快！"
-     *          },
-     *          "forEntry":
-     *          {
-     *              "title": "",
-     *              "num": 0,
-     *              "info": []
-     *           },
-     *          "forService":
-     *          {
-     *              "title": "您的下一个订单",
-     *              "num": 7,
-     *              "info":
-     *              [
+     *     HTTP/1.1 200 OK
+     *     {
+     *          "code": "1",
+     *          "msg": "操作成功",
+     *          "ret": {
+     *              "pic_list": [
      *              {
-     *                  "auot_pay_status": 0,
-     *                  "order_id": "188",
-     *                  "is_member": 1,
-     *                  "member_value": "4600.00",
-     *                  "reserve_time": "2015-09-10 12:00",
-     *                  "date_name_tag": "09月10日",
-     *                  "lat": "39.929669",
-     *                  "lng": "116.523996",
-     *                  "city_name": "北京",
-     *                  "place": "朝阳区大悦城 测试测试",
-     *                  "telephone": "15652146926",
-     *                  "list": [],
-     *                  "order_status": "2",
-     *                  "server_type_name": "家庭保洁",
-     *                  "suggest_worked_time": 2,
-     *                  "worker_time": "2015-09-10 12:00-14:00",
-     *                  "extend_info": "",
-     *                  "pay_amount": "0",
-     *                  "coupon": "",
-     *                  "coupon_money": 0,
-     *                  "is_cancel": "0",
-     *                  "order_price": 25
+     *                  "img_path": "http://webapi2.1jiajie.com/app/images/ios_banner_1.png",
+     *                  "link": "http://wap.1jiajie.com/trainAuntie1.html",
+     *                  "url_title": "标准服务"
+     *              },
+     *              {
+     *                  "img_path": "http://webapi2.1jiajie.com/app/images/20150603ad_top_v4_1.png",
+     *                  "link": "http://wap.1jiajie.com/pledge.html",
+     *                  "url_title": "服务承诺"
+     *              },
+     *              {
+     *                  "img_path": "http://webapi2.1jiajie.com/app/images/20150311ad_top_v4_3.png",
+     *                  "link": "",
+     *                  "url_title": ""
      *              }
-     *              ]
-     *          },
-     *          "sysMsg":
-     *          {
-     *              "num": 0,
-     *              "info": ""
-     *          },
-     *          "picVersion": 1,
-     *          "bigPic": "http://webapi2.1jiajie.com/ayiduan/images/aunt_ad_big.png",
-     *          "smallPic": "http://webapi2.1jiajie.com/ayiduan/images/aunt_ad_small.png",
-     *          "isShow": 1
+     *              ],
+     *              "order_num":
+     *              {
+     *                  "server_count"=>"", 待服务订单
+     *                  "worker_count"=>"", 指定阿姨订单
+     *                  "order_count"=>"",  待抢单订单
+     *
+     *              },
+     *              "footer_link":[
+     *              {
+     *                  "link_id"=>"1",
+     *                  "title"=>"首页",
+     *                  "url"=>"",   跳转链接
+     *                  "link_icon"=>"",
+     *                  "colour"=>"",
+     *                  "sort"=>"1"  排序
+     *              },
+     *              {
+     *                  "link_id"=>"2",
+     *                  "title"=>"任务",
+     *                  "url"=>"",
+     *                  "link_icon"=>"",
+     *                  "colour"=>"",
+     *                  "sort"=>"2"
+     *              },
+     *          ]
      *      }
-     *  }
+     * }
      *
      * @apiError SessionIdNotFound 未找到会话ID.
      *
@@ -554,6 +541,98 @@ class ConfigureController extends \restapi\components\Controller
      *  }
      *
      */
+    public function actionWorkerInit()
+    {
+        $params = Yii::$app->request->get() or
+        $params = json_decode(Yii::$app->request->getRawBody(), true);
+        @$token = $params['access_token'];
+        $user = CustomerAccessToken::getCustomer($token);
+        $worker = WorkerAccessToken::getWorker($token);
+        if (empty($worker)) {
+            return $this->send(null, "用户无效,请先登录", 0);
+        }
+        //获取阿姨待服务订单
+        $args["owr.worker_id"] = $worker->id;
+        $arr = array();
+        $arr[] = OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE;
+        $arr[] = OrderStatusDict::ORDER_SYS_ASSIGN_DONE;
+        $arr[] = OrderStatusDict::ORDER_WORKER_BIND_ORDER;
+
+        $serverCount = OrderSearch::searchWorkerOrdersWithStatusCount($args, $arr);
+        //获取待服务订单
+        //"$workerCount": "指定阿姨订单"
+        //"$orderCount": "待抢单订单"
+        $workerCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
+        $orderCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
+
+        $order_num=[
+            "server_count"=>$serverCount,
+            "worker_count"=>$workerCount,
+            "order_count"=>$orderCount,
+        ];
+
+        //获取首页轮播图
+        $pic_list = [
+            [
+                "img_path" => "http://webapi2.1jiajie.com/app/images/ios_banner_1.png",
+                "link" => "http://wap.1jiajie.com/trainAuntie1.html",
+                "url_title" => "标准服务"
+            ],
+            [
+                "img_path" => "http://webapi2.1jiajie.com/app/images/20150603ad_top_v4_1.png",
+                "link" => "http://wap.1jiajie.com/pledge.html",
+                "url_title" => "服务承诺"
+            ],
+            [
+                "img_path" => "http://webapi2.1jiajie.com/app/images/20150311ad_top_v4_3.png",
+                "link" => "",
+                "url_title" => ""
+            ]
+        ];
+        $footer_link = [
+            [
+                'link_id' => '1',
+                'title' => '首页',
+                'url' => '',
+                'link_icon' => '',
+                'colour' => '',
+                'sort' => '1',
+            ],
+            [
+                'link_id' => '2',
+                'title' => '订单',
+                'url' => '',
+                'link_icon' => '',
+                'colour' => '',
+                'sort' => '2',
+            ],
+            [
+                'link_id' => '3',
+                'title' => '优惠券',
+                'url' => '',
+                'link_icon' => '',
+                'colour' => '',
+                'sort' => '3',
+            ],
+            [
+                'link_id' => '4',
+                'title' => '我的',
+                'url' => '',
+                'link_icon' => '',
+                'colour' => '',
+                'sort' => '4',
+            ],
+        ];
+
+        $ret = [
+            'pic_list' => $pic_list,
+            'order_num' => $order_num,
+            'footer_link' => $footer_link,
+        ];
+
+        return $this->send($ret, "查询成功");
+
+    }
 
     /**
      * 支付方式展示api 获得各个支付方式的配置 折叠显示列表，默认支付方式，非折叠显示列表
