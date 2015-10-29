@@ -123,6 +123,11 @@ class OrderController extends \api\components\Controller
         }
         $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
 
+        if (is_null($args['order_pay_type'])) {
+            return $this->send(null, "数据不完整,请输入支付方式", 0);
+        }
+        $attributes['order_pay_type'] = $args['order_pay_type'];
+
         if (isset($args['address_id'])) {
             $attributes['address_id'] = $args['address_id'];
         } elseif (isset($args['address']) && isset($args['city'])) {
@@ -273,6 +278,11 @@ class OrderController extends \api\components\Controller
             return $this->send(null, "数据不完整,请输入完成时间", 0);
         }
         $attributes['order_booked_end_time'] = $args['order_booked_end_time'];
+
+        if (is_null($args['order_pay_type'])) {
+            return $this->send(null, "数据不完整,请输入支付方式", 0);
+        }
+        $attributes['order_pay_type'] = $args['order_pay_type'];
 
 
         if (is_null($args['address_id'])) {
