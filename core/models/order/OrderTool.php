@@ -25,18 +25,21 @@ class OrderTool extends Model
         return 'b'.self::_code(self::ORDER_BATCH_ORDER_CODE);
     }
 
-    private static function _code($redis_key){
-        if(Yii::$app->file_cache->get($redis_key.'_'.date('ymd',strtotime('-1 days')))){
-            Yii::$app->file_cache->delete($redis_key.'_'.date('ymd',strtotime('-1 days')));
+    private static function _getNum($key){
+        if(Yii::$app->file_cache->get($key.'_'.date('ymd',strtotime('-1 days')))){
+            Yii::$app->file_cache->delete($key.'_'.date('ymd',strtotime('-1 days')));
         }
-        $num = Yii::$app->file_cache->get($redis_key.'_'.date('ymd'));
+        $num = Yii::$app->file_cache->get($key.'_'.date('ymd'));
         if(empty($num)){
             $num = 1;
         }else{
             $num++;
         }
-        Yii::$app->file_cache->set($redis_key.'_'.date('ymd'),$num);
+        return Yii::$app->file_cache->set($key.'_'.date('ymd'),$num);
+    }
 
+    private static function _code($key){
+        $num = self::_getNum($key);
         $code = str_pad($num,6,'0',STR_PAD_LEFT);
         $a = $code{0};
         $b = $code{1};
