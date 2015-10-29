@@ -11,7 +11,7 @@ use core\models\general\SystemUser;
 use dbbase\models\finance\FinancePopOrder;
 /**
  * @var yii\web\View $this
- * @var common\models\FinancePopOrder $model
+ * @var dbbase\models\FinancePopOrder $model
  */
 
 $this->title = '订单号为:'.$model->finance_pop_order_number;

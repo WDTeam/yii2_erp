@@ -17,7 +17,7 @@ use Yii;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class CustomerExtSrc extends \common\models\customer\CustomerExtSrc
+class CustomerExtSrc extends \dbbase\models\customer\CustomerExtSrc
 {
     /**
      * @inheritdoc

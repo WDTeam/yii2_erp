@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use dbbase\models\sq_ejiajie_v2\UserInfo;
 
 /**
- * UserInfo represents the model behind the search form about `common\models\UserInfo`.
+ * UserInfo represents the model behind the search form about `dbbase\models\UserInfo`.
  */
 class UserInfoSearch extends UserInfo
 {

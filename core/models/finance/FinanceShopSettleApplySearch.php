@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use dbbase\models\finance\FinanceShopSettleApply;
 use dbbase\models\finance\FinanceSettleApply;
 /**
- * FinanceShopSettleApplySearch represents the model behind the search form about `common\models\finance\FinanceShopSettleApply`.
+ * FinanceShopSettleApplySearch represents the model behind the search form about `dbbase\models\finance\FinanceShopSettleApply`.
  */
 class FinanceShopSettleApplySearch extends FinanceShopSettleApply
 {

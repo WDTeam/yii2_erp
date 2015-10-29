@@ -11,7 +11,7 @@ use dbbase\models\finance\FinanceOrderChannel;
 use boss\models\payment\GeneralPay;
 /**
  * @var yii\web\View $this
- * @var common\models\payment\GeneralPaySearch $model
+ * @var dbbase\models\payment\GeneralPaySearch $model
  * @var yii\widgets\ActiveForm $form
  */
 ?>

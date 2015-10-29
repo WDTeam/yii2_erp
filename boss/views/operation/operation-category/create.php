@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 /**
  * @var yii\web\View $this
- * @var common\models\OperationCategory $model
+ * @var dbbase\models\OperationCategory $model
  */
 
 $this->title = Yii::t('app', 'Create').Yii::t('app', 'Operation Categories');

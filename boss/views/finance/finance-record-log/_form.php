@@ -6,7 +6,7 @@ use kartik\datecontrol\DateControl;
 
 /**
  * @var yii\web\View $this
- * @var common\models\FinanceRecordLog $model
+ * @var dbbase\models\FinanceRecordLog $model
  * @var yii\widgets\ActiveForm $form
  */
 ?>

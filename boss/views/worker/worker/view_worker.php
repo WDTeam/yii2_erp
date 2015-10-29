@@ -22,7 +22,7 @@ use boss\models\worker\workerExt;
 
 /**
  * @var yii\web\View $this
- * @var common\models\Worker $model
+ * @var dbbase\models\Worker $model
  */
 $this->title = $model->worker_name;
 //$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Workers'), 'url' => ['index']];

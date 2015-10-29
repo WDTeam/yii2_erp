@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 use boss\components\GoodsTypeCascade;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\OperationPriceStrategy */
+/* @var $model dbbase\models\OperationPriceStrategy */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 

@@ -2,7 +2,7 @@
 namespace core\behaviors;
 
 use yii\base\Behavior;
-use common\components\Ivr;
+use dbbase\components\Ivr;
 use dbbase\models\worker\WorkerIvrlog;
 class IvrlogBehavior extends Behavior
 {

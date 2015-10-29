@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use dbbase\models\finance\FinanceSettleApplyLog;
 
 /**
- * FinanceSettleApplyLogSearch represents the model behind the search form about `common\models\finance\FinanceSettleApplyLog`.
+ * FinanceSettleApplyLogSearch represents the model behind the search form about `dbbase\models\finance\FinanceSettleApplyLog`.
  */
 class FinanceSettleApplyLogSearch extends FinanceSettleApplyLog
 {

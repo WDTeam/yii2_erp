@@ -79,7 +79,7 @@ class SignupCest
         ]);
 
         $I->expectTo('see that user is created');
-        $I->seeRecord('common\models\User', [
+        $I->seeRecord('dbbase\models\User', [
             'username' => 'tester',
             'email' => 'tester.email@example.com',
         ]);

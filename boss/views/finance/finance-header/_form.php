@@ -9,7 +9,7 @@ use dbbase\models\finance\FinancePayChannel;
 use dbbase\models\finance\FinanceOrderChannel;
 /**
  * @var yii\web\View $this
- * @var common\models\FinanceHeader $model
+ * @var dbbase\models\FinanceHeader $model
  * @var yii\widgets\ActiveForm $form
  */
 

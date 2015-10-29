@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use dbbase\models\finance\FinanceHeader;
 
 /**
- * FinanceHeaderSearch represents the model behind the search form about `common\models\FinanceHeader`.
+ * FinanceHeaderSearch represents the model behind the search form about `dbbase\models\FinanceHeader`.
  */
 class FinanceHeaderSearch extends FinanceHeader
 {

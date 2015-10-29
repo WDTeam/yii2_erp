@@ -9,7 +9,7 @@ $model->finance_order_channel_is_lock=1;
 $model->is_del=0;
 /**
  * @var yii\web\View $this
- * @var common\models\FinanceOrderChannel $model
+ * @var dbbase\models\FinanceOrderChannel $model
  * @var yii\widgets\ActiveForm $form
  */
 ?>

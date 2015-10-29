@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model common\models\OperationCategoryType */
+/* @var $model dbbase\models\OperationCategoryType */
 
 $this->title = Yii::t('app', 'Create').Yii::t('app', 'Category Types');//'Create Operation Category Type';
 $this->params['breadcrumbs'][] = Html::a(Yii::t('app', 'Category Types'), ['index']);//['label' => 'Operation Category Types', 'url' => ['index']];

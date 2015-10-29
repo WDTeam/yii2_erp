@@ -20,7 +20,7 @@ use core\models\finance\FinanceWorkerNonOrderIncomeSearch;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class WorkerTaskLog extends \common\models\worker\WorkerTaskLog
+class WorkerTaskLog extends \dbbase\models\worker\WorkerTaskLog
 {
     public function behaviors()
     {

@@ -5,7 +5,7 @@ use yii\base\InvalidParamException;
 use core\models\operation\OperationCity;
 use yii\helpers\ArrayHelper;
 use yii\behaviors\TimestampBehavior;
-class WorkerTask extends \common\models\worker\WorkerTask
+class WorkerTask extends \dbbase\models\worker\WorkerTask
 {
     /**
      * 条件名

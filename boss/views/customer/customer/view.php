@@ -28,7 +28,7 @@ use core\models\operation\coupon\CouponCode;
 
 /**
  * @var yii\web\View $this
- * @var common\models\Worker $model
+ * @var dbbase\models\Worker $model
  */
 $this->title = '客户详情';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Customers'), 'url' => ['View']];

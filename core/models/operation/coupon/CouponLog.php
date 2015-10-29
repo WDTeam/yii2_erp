@@ -22,7 +22,7 @@ use Yii;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class CouponLog extends \common\models\coupon\CouponLog
+class CouponLog extends \dbbase\models\coupon\CouponLog
 {
     /**
      * @inheritdoc

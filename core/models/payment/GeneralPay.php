@@ -8,7 +8,7 @@ use core\models\customer\CustomerTransRecord;
 use core\models\customer\Customer;
 use Yii;
 
-class GeneralPay extends \common\models\payment\GeneralPay
+class GeneralPay extends \dbbase\models\payment\GeneralPay
 {
 
 

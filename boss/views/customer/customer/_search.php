@@ -13,7 +13,7 @@ use yii\helpers\ArrayHelper;
 
 use \core\models\operation\OperationCity;
 
-//use \common\models\OperationCity;
+//use \dbbase\models\OperationCity;
 
 /**
  * @var yii\web\View $this

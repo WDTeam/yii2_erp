@@ -12,7 +12,7 @@ use core\models\order\Order;
 use core\models\worker\Worker;
 use dbbase\models\finance\FinanceOrderChannel;
 /**
- * FinancePopOrderSearch represents the model behind the search form about `common\models\FinancePopOrder`.
+ * FinancePopOrderSearch represents the model behind the search form about `dbbase\models\FinancePopOrder`.
  */
 class FinancePopOrderSearch extends FinancePopOrder
 {

@@ -13,7 +13,7 @@ use dbbase\models\CustomerChannal;
 use kartik\date\DatePicker;
 /**
  * @var yii\web\View $this
- * @var common\models\Customer $model
+ * @var dbbase\models\Customer $model
  * @var yii\widgets\ActiveForm $form
  */
 $url = \yii\helpers\Url::to(['customer']);

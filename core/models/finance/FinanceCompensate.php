@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use dbbase\models\finance\FinanceCompensate as FinanceCompensateModel;
 
 /**
- * FinanceCompensate represents the model behind the search form about `common\models\finance\FinanceCompensate`.
+ * FinanceCompensate represents the model behind the search form about `dbbase\models\finance\FinanceCompensate`.
  */
 class FinanceCompensate extends FinanceCompensateModel
 {

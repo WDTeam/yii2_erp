@@ -8,7 +8,7 @@ use dbbase\models\payment\GeneralPayCommon;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 
-class CustomerTransRecord extends \common\models\customer\CustomerTransRecord
+class CustomerTransRecord extends \dbbase\models\customer\CustomerTransRecord
 {
 
     /**

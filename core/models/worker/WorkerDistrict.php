@@ -14,7 +14,7 @@ use core\models\operation\OperationShopDistrict;
  * @property integer $operation_shop_district_id
  * @property integer $created_ad
  */
-class WorkerDistrict extends \common\models\worker\WorkerDistrict
+class WorkerDistrict extends \dbbase\models\worker\WorkerDistrict
 {
 
     //public static function updateWorkerDistrict();

@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use dbbase\models\customer\Customer;
 
 /**
- * CustomerSearch represents the model behind the search form about `common\models\Customer`.
+ * CustomerSearch represents the model behind the search form about `dbbase\models\Customer`.
  */
 class CustomerSearch extends Customer
 {

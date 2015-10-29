@@ -11,7 +11,7 @@ use Yii;
  * @property string $catename
  * @property string $description
  */
-class Category extends \common\models\Category
+class Category extends \dbbase\models\Category
 {
     /**
      * @inheritdoc

@@ -25,7 +25,7 @@ use Yii;
  *
  * @property Order $order
  */
-class OrderExtPay extends \common\models\order\ActiveRecord
+class OrderExtPay extends \dbbase\models\order\ActiveRecord
 {
     const ORDER_PAY_TYPE_OFF_LINE = 1;
     const ORDER_PAY_TYPE_ON_LINE = 2;

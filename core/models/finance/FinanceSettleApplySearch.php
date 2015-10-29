@@ -13,7 +13,7 @@ use core\models\finance\FinanceWorkerNonOrderIncomeSearch;
 use core\models\finance\FinanceWorkerOrderIncomeSearch;
 
 /**
- * FinanceSettleApplySearch represents the model behind the search form about `common\models\finance\FinanceSettleApply`.
+ * FinanceSettleApplySearch represents the model behind the search form about `dbbase\models\finance\FinanceSettleApply`.
  */
 class FinanceSettleApplySearch extends FinanceSettleApply
 {

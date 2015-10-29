@@ -14,7 +14,7 @@ use kartik\date\DatePicker;
 
 /**
  * @var yii\web\View $this
- * @var common\models\Customer $model
+ * @var dbbase\models\Customer $model
  */
 
 // $this->title = Yii::t('boss', '更新{modelClass}', [

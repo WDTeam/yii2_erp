@@ -12,7 +12,7 @@ use core\models\finance\FinanceSettleApplySearch;
 use core\models\finance\FinanceCompensate;
 
 /**
- * FinanceWorkerNonOrderIncomeSearch represents the model behind the search form about `common\models\finance\FinanceWorkerNonOrderIncome`.
+ * FinanceWorkerNonOrderIncomeSearch represents the model behind the search form about `dbbase\models\finance\FinanceWorkerNonOrderIncome`.
  */
 class FinanceWorkerNonOrderIncomeSearch extends FinanceWorkerNonOrderIncome
 {

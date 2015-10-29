@@ -19,7 +19,7 @@ use core\models\customer\CustomerChannal;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class CustomerAccessToken extends \common\models\customer\CustomerAccessToken
+class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
 {
     public static function generateAccessToken($phone, $code){
         $check_code = CustomerCode::checkCode($phone, $code);

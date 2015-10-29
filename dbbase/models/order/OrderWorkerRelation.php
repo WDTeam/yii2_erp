@@ -17,7 +17,7 @@ use Yii;
  * @property string $order_worker_relation_status
  * @property integer $isdel
  */
-class OrderWorkerRelation extends \common\models\order\ActiveRecord
+class OrderWorkerRelation extends \dbbase\models\order\ActiveRecord
 {
     /**
      * @inheritdoc

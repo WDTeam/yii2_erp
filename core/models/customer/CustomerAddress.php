@@ -25,7 +25,7 @@ use core\models\customer\Customer;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class CustomerAddress extends \common\models\customer\CustomerAddress
+class CustomerAddress extends \dbbase\models\customer\CustomerAddress
 {
     
     /**

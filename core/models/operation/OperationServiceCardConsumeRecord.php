@@ -22,7 +22,7 @@ namespace core\models\operation;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class OperationServiceCardConsumeRecord extends \common\models\operation\OperationServiceCardConsumeRecord
+class OperationServiceCardConsumeRecord extends \dbbase\models\operation\OperationServiceCardConsumeRecord
 {
     
 }

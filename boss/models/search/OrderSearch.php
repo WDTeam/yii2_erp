@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use dbbase\models\Order;
 
 /**
- * OrderSearch represents the model behind the search form about `common\models\Order`.
+ * OrderSearch represents the model behind the search form about `dbbase\models\Order`.
  */
 class OrderSearch extends Order
 {

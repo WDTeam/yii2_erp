@@ -25,7 +25,7 @@ use dbbase\models\order\OrderExtWorker;
 
 
 
-class OrderComplaint extends \common\models\order\ActiveRecord
+class OrderComplaint extends \dbbase\models\order\ActiveRecord
 {
 	
 

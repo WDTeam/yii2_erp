@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use dbbase\models\finance\FinanceRefund;
 
 /**
- * FinanceRefundSearch represents the model behind the search form about `common\models\FinanceRefund`.
+ * FinanceRefundSearch represents the model behind the search form about `dbbase\models\FinanceRefund`.
  */
 class FinanceRefundSearch extends FinanceRefund
 {

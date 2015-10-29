@@ -16,7 +16,7 @@ use Yii;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class CustomerWorker extends \common\models\customer\CustomerWorker
+class CustomerWorker extends \dbbase\models\customer\CustomerWorker
 {
 
     /**

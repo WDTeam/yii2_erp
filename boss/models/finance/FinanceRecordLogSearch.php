@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use dbbase\models\finance\FinanceRecordLog;
 
 /**
- * FinanceRecordLogSearch represents the model behind the search form about `common\models\FinanceRecordLog`.
+ * FinanceRecordLogSearch represents the model behind the search form about `dbbase\models\FinanceRecordLog`.
  */
 class FinanceRecordLogSearch extends FinanceRecordLog
 {

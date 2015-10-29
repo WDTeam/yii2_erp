@@ -13,7 +13,7 @@ use core\models\finance\FinanceSettleApplySearch;
 use dbbase\models\order\OrderStatusDict;
 
 /**
- * FinanceWorkerOrderIncomeSearch represents the model behind the search form about `common\models\finance\FinanceWorkerOrderIncome`.
+ * FinanceWorkerOrderIncomeSearch represents the model behind the search form about `dbbase\models\finance\FinanceWorkerOrderIncome`.
  */
 class FinanceWorkerOrderIncomeSearch extends FinanceWorkerOrderIncome
 {

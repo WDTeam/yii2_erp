@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use dbbase\models\finance\FinanceInvoice;
 
 /**
- * FinanceInvoiceSearch represents the model behind the search form about `common\models\FinanceInvoice`.
+ * FinanceInvoiceSearch represents the model behind the search form about `dbbase\models\FinanceInvoice`.
  */
 class FinanceInvoiceSearch extends FinanceInvoice
 {

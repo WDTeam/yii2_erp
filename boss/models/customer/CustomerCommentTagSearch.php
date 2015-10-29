@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use dbbase\models\customer\CustomerCommentTag;
 
 /**
- * CustomerCommentTagSearch represents the model behind the search form about `\common\models\CustomerCommentTag`.
+ * CustomerCommentTagSearch represents the model behind the search form about `\dbbase\models\CustomerCommentTag`.
  */
 class CustomerCommentTagSearch extends CustomerCommentTag
 {

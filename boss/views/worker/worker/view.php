@@ -15,7 +15,7 @@ use kartik\daterange\DateRangePicker;
 use yii\helpers\ArrayHelper;
 /**
  * @var yii\web\View $this
- * @var common\models\Worker $model
+ * @var dbbase\models\Worker $model
  */
 $this->title = $workerModel->worker_name;
 $content1 = $this->render('view_worker',['model'=>$workerModel]);

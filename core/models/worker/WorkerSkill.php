@@ -12,7 +12,7 @@ use boss\models\worker\WorkerSkillConfig;
  * @property integer $worker_skill_id
  * @property integer $created_ad
  */
-class WorkerSkill extends \common\models\worker\WorkerSkill
+class WorkerSkill extends \dbbase\models\worker\WorkerSkill
 {
     /**
      * 获取阿姨所有技能

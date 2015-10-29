@@ -87,7 +87,7 @@ use Yii;
  * @property string $order_sys_memo
  * @property string $admin_id
  */
-class OrderHistory extends \common\models\order\ActiveRecord
+class OrderHistory extends \dbbase\models\order\ActiveRecord
 {
     /**
      * @inheritdoc

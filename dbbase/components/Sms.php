@@ -34,7 +34,7 @@
 -10032	用户使用的费率代码错误
 -10033	非法关键词
 */
-namespace common\components;
+namespace dbbase\components;
 
 /**
  * 添加配置

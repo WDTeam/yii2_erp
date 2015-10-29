@@ -21,7 +21,7 @@ use Yii;
  *
  * @property Order $order
  */
-class OrderExtCustomer extends \common\models\order\ActiveRecord
+class OrderExtCustomer extends \dbbase\models\order\ActiveRecord
 {
     /**
      * @inheritdoc

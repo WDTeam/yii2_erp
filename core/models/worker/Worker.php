@@ -57,7 +57,7 @@ use crazyfd\qiniu\Qiniu;
  * @property integer $updated_ad
  * @property integer $isdel
  */
-class Worker extends \common\models\worker\Worker
+class Worker extends \dbbase\models\worker\Worker
 {
 
     const DISTRICT = 'DISTRICT';

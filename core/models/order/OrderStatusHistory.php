@@ -11,7 +11,7 @@ namespace core\models\order;
 use dbbase\models\order\OrderStatusDict;
 use Yii;
 
-class OrderStatusHistory extends \common\models\order\OrderStatusHistory
+class OrderStatusHistory extends \dbbase\models\order\OrderStatusHistory
 {
 
     /**

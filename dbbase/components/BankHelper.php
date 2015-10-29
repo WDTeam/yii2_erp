@@ -1,5 +1,5 @@
 <?php
-namespace common\components;
+namespace dbbase\components;
 
 use yii\helpers\ArrayHelper;
 class BankHelper

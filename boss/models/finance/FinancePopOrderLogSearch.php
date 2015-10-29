@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use dbbase\models\finance\FinancePopOrderLog;
 
 /**
- * FinancePopOrderLogSearch represents the model behind the search form about `common\models\FinancePopOrderLog`.
+ * FinancePopOrderLogSearch represents the model behind the search form about `dbbase\models\FinancePopOrderLog`.
  */
 class FinancePopOrderLogSearch extends FinancePopOrderLog
 {

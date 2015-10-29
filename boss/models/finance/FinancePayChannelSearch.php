@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use dbbase\models\finance\FinancePayChannel;
 
 /**
- * FinancePayChannelSearch represents the model behind the search form about `common\models\FinancePayChannel`.
+ * FinancePayChannelSearch represents the model behind the search form about `dbbase\models\FinancePayChannel`.
  */
 class FinancePayChannelSearch extends FinancePayChannel
 {

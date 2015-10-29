@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use dbbase\models\finance\FinanceOrderChannel;
 
 /**
- * FinanceOrderChannelSearch represents the model behind the search form about `common\models\FinanceOrderChannel`.
+ * FinanceOrderChannelSearch represents the model behind the search form about `dbbase\models\FinanceOrderChannel`.
  */
 class FinanceOrderChannelSearch extends FinanceOrderChannel
 {

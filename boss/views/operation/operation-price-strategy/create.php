@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model common\models\OperationPriceStrategy */
+/* @var $model dbbase\models\OperationPriceStrategy */
 
 $this->title = Yii::t('app', 'Create').'价格策略';
 $this->params['breadcrumbs'][] = ['label' => '价格策略', 'url' => ['index']];

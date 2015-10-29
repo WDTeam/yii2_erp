@@ -6,7 +6,7 @@ use yii\grid\GridView;
 use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\OperationBootPage */
+/* @var $model dbbase\models\OperationBootPage */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 

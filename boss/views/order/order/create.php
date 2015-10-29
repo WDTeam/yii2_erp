@@ -6,7 +6,7 @@ use dosamigos\datepicker\DatePicker;
 
 /**
  * @var yii\web\View $this
- * @var common\models\Order $model
+ * @var dbbase\models\Order $model
  */
 
 $this->title = '创建订单';

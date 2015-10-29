@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\OperationCategoryType */
+/* @var $model dbbase\models\OperationCategoryType */
 
 $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Operation Category Types', 'url' => ['index']];
