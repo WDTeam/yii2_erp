@@ -63,7 +63,6 @@ $(document).ready(function(){
 	_good.eq(6).addClass("just-so-so");
 	_good.eq(7).addClass("assess");
 	$(".check").css("display","none");
-	// $(".good-job,.just-so-so").click(function(){$(".check").css("display","none")});
 	$(".assess").click(function(){
 		$(".assess_list").css("display","none");
 		$(".check").css("display","block");
