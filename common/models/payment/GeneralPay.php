@@ -401,31 +401,31 @@ class GeneralPay extends GeneralPayCommon
     {
         //POST数据
         if(!empty($data['debug'])){
+            //15:57:08","price":"0.02","buyer_id":"2088802381237501","notify_id":"2983afc3b92e376e84923e4c75e0f3574s","use_coupon":"N","sign_type":"RSA","sign":"ZlCICZ\/ar7ePcQalT2s1sI7o8Bqrt4picnzIxaucQeNi8GE\/mmch4armXS2BKmlzSpyLcP9Ge+CSC2JOxRMZbSl2aZT4xy6qvllToCBBos4tcybujHR61lrIeY8nSnWlGFTq11N7+9aKHZ2GuNtpoRAPxQswJC+M6ekopYmelrc="}
             $_POST = array (
-                "discount"=> "0.00",
-                "payment_type"=> "1",
-                "subject"=> "e家洁会员充值",
-                "trade_no"=> "2015092510165",
-                "buyer_email"=> "lsqpy@163.com",
-                "gmt_create"=> "2015-09-25 21:13:20",
-                "notify_type"=> "trade_status_sync",
-                "quantity"=> "1",
-                "out_trade_no"=> "150925846765",
-                "seller_id"=> "2088801136967007",
-                "notify_time"=> "2015-09-25 21:13:21",
-                "body"=> "e家洁会员充值0.01元",
-                "trade_status"=> "TRADE_FINISHED",
-                "is_total_fee_adjust"=> "N",
-                "total_fee"=> "0.01",
-                "gmt_payment"=> "2015-09-25 21:13:21",
-                "seller_email"=> "47632990@qq.com",
-                "gmt_close"=> "2015-09-25 21:13:21",
-                "price"=> "0.01",
-                "buyer_id"=> "2088002074138164",
-                "notify_id"=> "6260ae5cc41e6aa3a42824ec032071df2w",
-                "use_coupon"=> "N",
-                "sign_type"=> "RSA",
-                "sign"=> "T4Bkh9KljoFOTIossu5QtYPRUwj/7by/YLXNQ7efaxe0AwYDjFDFWTFts4h8yq2ceCH8weqYVBklj2btkF2/hKPuUifuJNB6lk8EtHckmJg0MzhGIBAvpteUAo+5Gs+wlI5eS5zmryBskuHOXSM7svb9wNCcL9pHAv8CM06Au+A="
+                "payment_type" => "1",
+                "subject" => "e家洁在线支付",
+                "trade_no" => "2015102942279250",
+                "buyer_email" => "18311474301",
+                "gmt_create" => "2015-10-29 15:57:07",
+                "notify_type" => "trade_status_sync",
+                "quantity" => "1",
+                "out_trade_no" => "1510290160566",
+                "seller_id" => "2088801136967007",
+                "notify_time" => "2015-10-29 15:57:09",
+                "body" => "e家洁在线支付0.02元",
+                "trade_status" => "TRADE_FINISHED",
+                "is_total_fee_adjust" => "N",
+                "total_fee" => "0.02",
+                "gmt_payment" => "2015-10-29 15:57:08",
+                "seller_email" => "47632990@qq.com",
+                "gmt_close" => "2015-10-29 15:57:08",
+                "price" => "0.02",
+                "buyer_id" => "2088802381237501",
+                "notify_id" => "2983afc3b92e376e84923e4c75e0f3574s",
+                "use_coupon" => "N",
+                "sign_type" => "RSA",
+                "sign" => "ZlCICZ/ar7ePcQalT2s1sI7o8Bqrt4picnzIxaucQeNi8GE/mmch4armXS2BKmlzSpyLcP9Ge+CSC2JOxRMZbSl2aZT4xy6qvllToCBBos4tcybujHR61lrIeY8nSnWlGFTq11N7+9aKHZ2GuNtpoRAPxQswJC+M6ekopYmelrc=",
             );
             $post = $_POST;
         }else{
@@ -482,8 +482,8 @@ class GeneralPay extends GeneralPayCommon
                 //commit
                 $connection  = \Yii::$app->db;
                 $transaction = $connection->beginTransaction();
-                try
-                {
+                //try
+                //{
                     $model->save(false);
                     $attribute = $model->getAttributes();
                     if(!empty($model->order_id)){
@@ -495,7 +495,7 @@ class GeneralPay extends GeneralPayCommon
                     }
 
                     $transaction->commit();
-
+                    var_dump($model->order_id);
                     /*
                     if(empty($data['debug'])){
                         //发送短信事件
@@ -505,11 +505,11 @@ class GeneralPay extends GeneralPayCommon
                     */
 
                     echo $class->notify();
-                }
-                catch(Exception $e)
-                {
-                    $transaction->rollBack();
-                }
+                //}
+                //catch(Exception $e)
+                //{
+                //    $transaction->rollBack();
+                //}
             }
         }
     }

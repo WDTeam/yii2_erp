@@ -174,18 +174,52 @@ class Order extends OrderModel
         return false;
     }
 
-    public function createNewBatch($orders_attributes)
+    /**
+     * 周期订单
+     *  @param $attributes [
+     *  string $order_ip 下单IP地址 必填
+     *  integer $order_service_type_id 服务类型 商品id 必填
+     *  integer $order_src_id 订单来源id 必填
+     *  string $channel_id 下单渠道 必填
+     *  int $address_id 客户地址id 必填
+     *  int $customer_id 客户id 必填
+     *  string $order_customer_phone 客户手机号 必填
+     *  int $admin_id 操作人id 0客户 1系统 必填
+     *  int $order_pay_type 支付方式 1现金 2线上 3第三方 必填
+     *  int $order_is_use_balance 是否使用余额 0否 1是 必填
+     *  string $order_booked_worker_id 指定阿姨id
+     *  string $order_customer_need 客户需求
+     *  string $order_customer_memo 客户备注
+     * ]
+     * @param $booked_list [
+     *      [
+     *          int $order_booked_begin_time 预约开始时间 必填
+     *          int $order_booked_end_time 预约结束时间 必填
+     *          int $coupon_id 优惠券id
+     *      ]
+     * ]
+     * @return bool
+     */
+    public function createNewBatch($attributes,$booked_list)
     {
-        foreach($orders_attributes as $attributes){
-            $attributes['order_parent_id'] = 0;
-            $attributes['order_is_parent'] = 0;
-            //如果指定阿姨则是周期订单分配周期订单号
-            if(isset($attributes['order_booked_worker_id']) && $attributes['order_booked_worker_id']>0)
-            {
-                $attributes['order_batch_code'] = OrderTool::createOrderBatchCode();
-            }
-            $this->_create($attributes);
+        $transact = static::getDb()->beginTransaction();
+        //如果指定阿姨则是周期订单分配周期订单号否则分配批量订单号
+        $attributes['order_parent_id'] = 0;
+        $attributes['order_is_parent'] = 0;
+        if(isset($attributes['order_booked_worker_id']) && $attributes['order_booked_worker_id']>0)
+        {
+            $attributes['order_batch_code'] = OrderTool::createOrderCode('z');
+        }else{
+            $attributes['order_batch_code'] = OrderTool::createOrderCode('p');
         }
+        foreach($booked_list as $booked){
+            if(!$this->_create($attributes+$booked,$transact)){
+                $transact->rollBack();
+                return false;
+            }
+        }
+        $transact->commit();
+        return true;
     }
 
 
@@ -429,9 +463,10 @@ class Order extends OrderModel
     /**
      * 创建订单
      * @param $attributes
+     * @param $transact
      * @return bool
      */
-    private function _create($attributes)
+    private function _create($attributes,$transact=null)
     {
         $this->setAttributes($attributes);
         $status_from = OrderStatusDict::findOne(OrderStatusDict::ORDER_INIT); //创建订单状态
@@ -531,7 +566,7 @@ class Order extends OrderModel
             'isdel' => 0,
         ]);
 
-        return $this->doSave();
+        return $this->doSave(['OrderExtCustomer','OrderExtFlag','OrderExtPay','OrderExtPop','OrderExtStatus','OrderExtWorker','OrderStatusHistory'],$transact);
     }
 
     /**

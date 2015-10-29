@@ -2,6 +2,8 @@
 
 namespace common\models\payment;
 
+use common\models\finance\FinanceOrderChannel;
+use common\models\finance\FinancePayChannel;
 use core\models\customer\Customer;
 use core\models\customer\CustomerTransRecord;
 use core\models\order\Order;
@@ -263,8 +265,10 @@ class GeneralPayCommon extends \yii\db\ActiveRecord
         //验证支付金额是否一致
         if( $attribute['general_pay_money'] == $attribute['general_pay_actual_money'] )
         {
-            $orderChannel = FinanceOrderChannel::get_order_channel_info($attribute['general_pay_source']);
-            Order::isPaymentOnline($attribute['order_id'],0,$orderChannel['id'],$orderChannel['finance_pay_channel_name'],$attribute['general_pay_transaction_id']);
+            //var_dump($attribute);exit;
+            //$orderChannel = FinanceOrderChannel::get_order_channel_info($attribute['general_pay_source']);
+            //$payChannel = FinancePayChannel::get_pay_channel_info($attribute['general_pay_source']);
+            Order::isPaymentOnline($attribute['order_id'],0,$attribute['general_pay_source'],$attribute['general_pay_source_name'],$attribute['general_pay_transaction_id']);
         }
     }
 
