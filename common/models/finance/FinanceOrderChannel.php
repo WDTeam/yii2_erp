@@ -130,6 +130,7 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
 
         //返回渠道名称
         return $data['finance_order_channel_name']?$data['finance_order_channel_name']:'官方支付对账';
+
     }
 
     
