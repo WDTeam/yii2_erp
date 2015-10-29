@@ -26,11 +26,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-md-4 form-inline">
             <label>智能派单服务器地址：</label>
-            <input id="serverip" class="form-control" name="serverip" value="<?php echo !empty($data['ip'])? $data['ip'] : ''?>" placeholder="SOCKET服务器地址" />
+            <input id="serverip" class="form-control" name="serverip" value="<?php echo !empty($srvInfo['ip'])? $srvInfo['ip'] : ''?>" placeholder="SOCKET服务器地址" />
         </div>
         <div class="col-md-4 form-inline">
             <label>智能派单服务器端口：</label>
-            <input id="serverport" class="form-control" name="serverport" value="<?php echo !empty($data['port'])? $data['port'] : ''?>" placeholder="SOCKET服务器端口" />
+            <input id="serverport" class="form-control" name="serverport" value="<?php echo !empty($srvInfo['port'])? $srvInfo['port'] : ''?>" placeholder="SOCKET服务器端口" />
         </div>
         <div class="col-md-2"><button class="btn btn-default" id="connect" name="connect">连接派单服务器</button></div>
         <div class="col-md-2"><button class="btn btn-default" id="start" name="start">开始自动派单</button><button class="btn btn-default" id="stop" name="stop">停止自动派单</button></div>
@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-md-6  form-inline">
             <label>全职阿姨派单时间：</label>
-            <input id="qstart" class="form-control margin-l-36" name="qstart" value="0" readonly="true" /> 至 <input id="qend" class="form-control" name="qend" value="5" />分钟
+            <input id="qstart" class="form-control margin-l-36" name="qstart" value="0" readonly="true" /> 至 <input id="qend" class="form-control" name="qend" value="<?php echo !empty($config['FULLTIME_WORKER_TIMEOUT'])? $config['FULLTIME_WORKER_TIMEOUT'] : ''?>" />分钟
         </div>
         <div class="col-md-2">
             <button class="btn btn-default" id="update" name="update">更新配置（临时变更）</button>
@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-md-6  form-inline">
             <label>兼职阿姨派单时间：</label>
-            <input id="jstart" class="form-control margin-l-36" name="jstart" value="5" readonly="true" /> 至 <input id="jend" class="form-control" name="jend" value="15" />分钟
+            <input id="jstart" class="form-control margin-l-36" name="jstart" value="5" readonly="true" /> 至 <input id="jend" class="form-control" name="jend" value="<?php echo !empty($config['FREETIME_WORKER_TIMEOUT'])? $config['FREETIME_WORKER_TIMEOUT'] : ''?>" />分钟
         </div>
         <div class="col-md-2">
             <button class="btn btn-default" id="reload" name="reload">重新启动</button>

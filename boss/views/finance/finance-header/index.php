@@ -49,15 +49,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'buttons' => [
                 'update' => function ($url, $model) {
-                                    return Html::a('<span>编辑</span>', Yii::$app->urlManager->createUrl(['finance/finance-header/view','id' => $model->id,'edit'=>'t']), [
+                                    return Html::a('<span class="btn btn-primary">编辑</span>', Yii::$app->urlManager->createUrl(['finance/finance-header/view','id' => $model->id,'edit'=>'t']), [
                                                     'title' => Yii::t('yii', 'Edit'),
                                                   ]);},
                 'view' => function ($url, $model) {
-                                    return Html::a('<span>查看</span>', Yii::$app->urlManager->createUrl(['finance/finance-header/view','id' => $model->id,'edit'=>'t']), [
+                                    return Html::a('<span class="btn btn-primary">查看</span>', Yii::$app->urlManager->createUrl(['finance/finance-header/view','id' => $model->id,'edit'=>'t']), [
                                                     'title' => Yii::t('yii', 'Edit'),
                                                   ]);},
                 'delete' => function ($url, $model) {
-                                    return Html::a('<span>删除</span>', Yii::$app->urlManager->createUrl(['finance/finance-header/delete','id' => $model->id,'edit'=>'t']), [
+                                    return Html::a('<span class="btn btn-primary">删除</span>', Yii::$app->urlManager->createUrl(['finance/finance-header/delete','id' => $model->id,'edit'=>'t']), [
                                                     'title' => Yii::t('yii', 'Delete'), 'class' => '', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete'),
                                                   ]);}
 

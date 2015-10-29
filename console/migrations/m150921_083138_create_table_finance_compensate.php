@@ -35,14 +35,14 @@ class m150921_083138_create_table_finance_compensate extends Migration
             'comment' => Schema::TYPE_TEXT . ' DEFAULT NULL COMMENT \'备注，可能是未通过原因\'' ,
             'updated_at' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL  COMMENT \'审核时间\'',
             'created_at' => Schema::TYPE_INTEGER. '(11) DEFAULT NULL COMMENT \'申请时间\'',
-            'isdel' => Schema::TYPE_SMALLINT. '(1) DEFAULT \'0\' COMMENT \'0 正常 1删除\'' ,
+            'is_softdel' => Schema::TYPE_SMALLINT. '(1) DEFAULT \'0\' COMMENT \'0 正常 1删除\'' ,
         ], $tableOptions);
         $this->batchInsert('{{%finance_compensate}}',
             ['id','finance_compensate_oa_code','finance_complaint_id','worker_id','worker_tel','worker_name',
                 'customer_id','customer_name',
                 'finance_compensate_coupon','finance_compensate_coupon_money','finance_compensate_money','finance_compensate_total_money','finance_compensate_insurance_money',
                  'finance_compensate_company_money','finance_compensate_worker_money','finance_compensate_reason','finance_compensate_proposer',
-                'isdel','updated_at','created_at'],
+                'is_softdel','updated_at','created_at'],
             [
                 [1,'OA001',111,201,'13810008888','陈阿姨',301,'李先生','AAAA','50',50,200,100,50,50,'地板坏了','客服A',
                     0,time(),time()],
