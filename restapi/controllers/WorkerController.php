@@ -85,7 +85,7 @@ class WorkerController extends \api\components\Controller
     }
 
     /**
-     * @api {POST} /worker/handle-worker-leave  阿姨请假（田玉星 80%）
+     * @api {POST} /worker/handle-worker-leave  阿姨请假（田玉星 100%）
      *
      * @apiName actionHandleWorkerLeave
      * @apiGroup Worker
@@ -99,20 +99,17 @@ class WorkerController extends \api\components\Controller
      *
      * @apiSuccessExample {json} Success-Response:
      *  HTTP/1.1 200 OK
-     *  {
-     *      "code": "ok",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      {
-     *          "result": "1",
-     *          "msg": "您的请假已提交，请耐心等待审批。"
-     *      }
-     *  }
+     * {
+     *   "code": 0,
+     *   "msg": "请假时间不在请假时间范围内",
+     *   "ret": null
+     *   }
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"error",
-     *      "msg": "阿姨不存在"
+     *      "code":"0",
+     *      "msg": "阿姨不存在",
+     *      "ret": null
      *  }
      */
     public function actionHandleWorkerLeave()
