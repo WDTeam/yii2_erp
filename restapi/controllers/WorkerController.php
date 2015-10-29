@@ -49,11 +49,12 @@ class WorkerController extends \restapi\components\Controller
      *
      * @apiError UserNotFound 用户认证已经过期.
      * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "error",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *     }
+     * HTTP/1.1 403 Not Found
+     * {
+     *   "code": "0",
+     *   "msg": "用户认证已经过期,请重新登录，",
+     *   "ret": null
+     * }
      */
     public function actionWorkerInfo()
     {
@@ -91,18 +92,19 @@ class WorkerController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} [platform_version] 平台版本号.
-     * @apiParam {String} leave_time 请假时间.eg:2015-09-10_2015-09-20
-     * @apiParam {String} leave_type 请假类型
+     * @apiParam {String} leave_time 请假时间，如果请假时间是两天则格式为:【2015-09-10_2015-09-20】
+     * @apiParam {String} leave_type 请假类型  1.休假 2事假
      * .
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/handle-worker-leave
      *
      * @apiSuccessExample {json} Success-Response:
      *  HTTP/1.1 200 OK
      * {
-     *   "code": 0,
-     *   "msg": "请假时间不在请假时间范围内",
+     *   "code": 1,
+     *   "msg": "您的请假已提交，请耐心等待审批",
      *   "ret": null
      *   }
+     * 
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
@@ -192,9 +194,9 @@ class WorkerController extends \restapi\components\Controller
      *       "page_num": 1,
      *       "data": [
      *           {
-     *               "leave_type": "休假",
-     *               "leave_time": "2015-10-30",
-     *               "leave_status": "待审核"
+     *               "leave_type": "请假类型【1休假 2事假】",
+     *               "leave_time": "请假时间",
+     *               "leave_status": "请假状态"
      *           }
      *       ]
      *      }
@@ -270,18 +272,18 @@ class WorkerController extends \restapi\components\Controller
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *      "code": "ok",
+     *      "code": "1",
      *      "msg":"查询地址成功",
      *      "ret":
      *      {
-     *          "live_place": "北京市密云县密云"
+     *          "live_place": "阿姨常住地址"
      *      }
      * }
      *
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"error",
+     *      "code":"0",
      *      "msg": "阿姨不存在"
      *  }
      *
@@ -316,7 +318,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} [platform_version] 平台版本号.
      *
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-comment
-     *
+     *get-worker-comment
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      *   {
@@ -327,9 +329,9 @@ class WorkerController extends \restapi\components\Controller
      *           "page_num": 10,
      *           "data": [
      *               {
-     *                   "comment_id": "1",
-     *                   "comment_content": "这是第一条评论类型为评论",
-     *                   "comment_time": "2015-10-27"
+     *                   "comment_id": "评论ID",
+     *                   "comment_content": "评论内容",
+     *                   "comment_time": "评论日期"
      *               }
      *           ]
      *       }
@@ -338,7 +340,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"error",
+     *      "code":"0",
      *      "msg": "用户认证已经过期,请重新登录"
      *  }
      */
@@ -383,7 +385,7 @@ class WorkerController extends \restapi\components\Controller
             'page_num'=>$page_num,
             'data'=>$retData
         ];
-        return $this->send($ret, "操作成功.");
+        return $this->send($ret, "操作成功");
     }
 
     /**
@@ -407,11 +409,11 @@ class WorkerController extends \restapi\components\Controller
      *   "ret": {
      *       "per_page": 1,
      *       "page_num": 10,
-     *       "worker_is_block":1,
+     *       "worker_is_block":"阿姨账号状态【0正常 1封号】",
      *       "data": [
      *           {
-     *               "complaint_content": "打扫不干净",
-     *               "complaint_time": "1970-01-01 08:00:00"
+     *               "complaint_content": "投诉内容",
+     *               "complaint_time": "投诉时间"
      *           }
      *       ]
      *   }
@@ -420,7 +422,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"error",
+     *      "code":"0",
      *      "msg": "用户认证已经过期,请重新登录"
      *  }
      */
@@ -478,20 +480,20 @@ class WorkerController extends \restapi\components\Controller
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *      "code": "ok",
+     *      "code": "1",
      *      "msg": "操作成功.",
      *      "ret": [
-     *             "worker_name": "张",
-     *             "order_count": "60",
-     *             "service_family_count": "60",
-     *             "worker_income"=>"23888.00"
+     *             "worker_name": "阿姨姓名",
+     *             "order_count": "服务订单数",
+     *             "service_family_count": "服务家庭总数",
+     *             "worker_income"=>"阿姨收入"
      *      ]
      * }
      *
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
-     *      "code":"error",
+     *      "code":"0",
      *      "msg": "用户认证已经过期,请重新登录"
      *  }
      */
@@ -513,9 +515,9 @@ class WorkerController extends \restapi\components\Controller
         //数据整理返回
         $ret = [
             "worker_name" => $service['worker_name'],
-            "order_count" => $service['all_order_count'],
+            "order_count" => intval($service['all_order_count']),
             "worker_income" => $service['all_worker_money'],
-            "service_family_count" => $workerInfo['worker_stat_server_customer']
+            "service_family_count" => intval($workerInfo['worker_stat_server_customer'])
         ];
         return $this->send($ret, "操作成功.");
 
