@@ -8,7 +8,6 @@
 namespace core\models\order;
 
 
-use boss\models\order\OrderSearch;
 use Yii;
 use yii\base\Exception;
 use common\models\order\OrderStatusDict;
