@@ -1,5 +1,5 @@
 <?php
-namespace api\controllers;
+namespace restapi\controllers;
 
 use Yii;
 use \core\models\operation\CoreOperationShopDistrictGoods;
@@ -8,7 +8,7 @@ use \core\models\customer\CustomerAccessToken;
 use \core\models\operation\coupon\CouponCustomer;
 use \core\models\operation\coupon\Coupon;
 use \core\models\operation\coupon\CouponCode;
-use \api\models\LoginCustomer;
+use \restapi\models\LoginCustomer;
 class CouponController extends \api\components\Controller
 {
     
@@ -19,7 +19,7 @@ class CouponController extends \api\components\Controller
      * @apiGroup coupon
      *
      * @apiParam {String} [customer_phone] 用户手机号
-     * @apiParam {String} [coupon_code] 活动码
+     * @apiParam {String} [coupon_code] 优惠码
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      *
@@ -52,7 +52,7 @@ class CouponController extends \api\components\Controller
      *     HTTP/1.1 403 Not Found
      *     {
      *       "code": "0",
-     *       "msg": "优惠码不存在，"
+     *       "msg": "优惠券不存在，"
      *
      *     }
      */
@@ -71,7 +71,7 @@ class CouponController extends \api\components\Controller
             return $this->send(null, "boss系统错误", 1024, 403);
         }
         if (!$exist_coupon) {
-            return $this->send(null, "优惠码不存在", 0, 403);
+            return $this->send(null, "优惠券不存在", 0, 403);
         }
         //兑换优惠码
         try{
@@ -87,7 +87,7 @@ class CouponController extends \api\components\Controller
     }
 
     /**
-     * @api {Get} /coupon/coupons 获取用户优惠码列表（包括该用户该城市下的优惠码和通用的优惠码） （李勇 100%）
+     * @api {Get} /coupon/coupons 获取用户优惠券列表（包括该用户该城市下的优惠券和通用的优惠券） （李勇 100%）
      *
      * @apiName Coupons
      * @apiGroup coupon
@@ -105,8 +105,8 @@ class CouponController extends \api\components\Controller
      *           "coupon":[
      *             {
      *               "id": "1",
-     *               "coupon_name": "优惠码名称",
-     *                "coupon_price": "优惠码价格",
+     *               "coupon_name": "优惠券名称",
+     *                "coupon_price": "优惠券价格",
      *                "coupon_type_name": "优惠券类型名称",
      *                "coupon_service_type_id": "服务类别id",
      *                "coupon_service_type_name": "服务类别名称",
@@ -127,7 +127,7 @@ class CouponController extends \api\components\Controller
      *     }
      *  *     {
      *       "code": "0",
-     *       "msg": "优惠码列表为空"
+     *       "msg": "优惠券列表为空"
      *
      *     }
      *
@@ -152,14 +152,14 @@ class CouponController extends \api\components\Controller
             return $this->send(null, "boss系统错误", 1024, 403);
         }
         if (!empty($coupons)) {
-            return $this->send($coupons, "获取优惠码列表成功", 1);
+            return $this->send($coupons, "获取优惠券列表成功", 1);
         } else {
-            return $this->send(null, "优惠码列表为空", 0);
+            return $this->send(null, "优惠券列表为空", 0);
         }
         
     }
     /**
-     * @api {Get} /coupon/all-coupons 获取用户全部优惠码列表（包括可用的、不可用的、所有城市的、通用的） （李勇 100%）
+     * @api {Get} /coupon/all-coupons 获取用户全部优惠券列表（包括可用的、不可用的、所有城市的、通用的） （李勇 100%）
      *
      * @apiName AllCoupons
      * @apiGroup coupon
@@ -199,7 +199,7 @@ class CouponController extends \api\components\Controller
      *     }
      *  *     {
      *       "code": "0",
-     *       "msg": "优惠码列表为空"
+     *       "msg": "优惠券列表为空"
      *
      *     }
      *
@@ -224,14 +224,14 @@ class CouponController extends \api\components\Controller
             return $this->send(null, "boss系统错误", 1024, 403);
         }
         if (!empty($coupons)) {
-            return $this->send($coupons, "获取优惠码列表成功", 1);
+            return $this->send($coupons, "获取优惠券列表成功", 1);
         } else {
-            return $this->send(null, "优惠码列表为空", 0);
+            return $this->send(null, "优惠券列表为空", 0);
         }
         
     }
      /**
-     * @api {GET} v1/coupon/get-coupon-count 获取用户优惠码数量 （功能已经实现 100%）
+     * @api {GET} v1/coupon/get-coupon-count 获取用户优惠券数量 （功能已经实现 100%）
      *
      *
      * @apiName GetCouponCount
@@ -289,7 +289,7 @@ class CouponController extends \api\components\Controller
             return $this->send(null, "boss系统错误", 1024, 403);
         }
         $ret['couponCount'] = $CouponCount;
-        return $this->send($ret, "用户优惠码数量");
+        return $this->send($ret, "用户优惠券数量");
     }
 }
 ?>

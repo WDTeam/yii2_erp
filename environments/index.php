@@ -37,8 +37,8 @@ return [
             'boss/runtime',
             'boss/web/assets',
 			'boss/web/upload',
-            'api/runtime',
-            'api/web/assets',
+            'restapi/runtime',
+            'restapi/web/assets',
         ],
         'setExecutable' => [
             'yii',
