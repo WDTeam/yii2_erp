@@ -920,10 +920,6 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "用户无效,请先登录", 0, 403);
         }
 
-        $channels = null;
-        if (isset($args['channels'])) {
-            $channels = explode(".", $args['channels']);
-        }
         $args["owr.worker_id"] = $worker->id;
         $orderSearch = new \core\models\order\OrderSearch();
         $ret = [];
@@ -939,70 +935,7 @@ class OrderController extends \restapi\components\Controller
 
     }
 
-    /**
-     * @api {GET} /order/worker-service-orders-count 查询阿姨订单订单数量(xieyi 90%已经将后台接口完成,缺少周期订单)
-     *
-     *
-     * @apiName Orders
-     * @apiGroup Order
-     *
-     * @apiParam {String} access_token 阿姨登陆令牌
-     * @apiParam {String} [order_id] 订单id
-     *
-     *
-     * @apiSuccess {Object[]} orderList 该状态订单.
-     *
-     * @apiSuccessExample Success-Response:
-     *     HTTP/1.1 200 OK
-     *     {
-     *    "code": "1",
-     *    "msg": "操作成功",
-     *    "ret": {
-     *    }
-     *
-     *    }
-     *
-     *
-     * @apiError UserNotFound 用户认证已经过期.
-     *
-     * @apiErrorExample Error-Response:
-     *     HTTP/1.1 403 Not Found
-     *     {
-     *       "code": "0",
-     *       "msg": "用户认证已经过期,请重新登录，"
-     *
-     *     }
-     *
-     */
-    public function actionWorkerServiceOrders()
-    {
-        $args = Yii::$app->request->get();
-
-        @$token = $args["access_token"];
-        $worker = WorkerAccessToken::getWorker($token);
-        if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0, 403);
-        }
-
-        $channels = null;
-        if (isset($args['channels'])) {
-            $channels = explode(".", $args['channels']);
-        }
-        $args["owr.worker_id"] = $worker->id;
-        $orderSearch = new \core\models\order\OrderSearch();
-        $ret = [];
-        $arr = array();
-        $arr[] = OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE;
-        $arr[] = OrderStatusDict::ORDER_SYS_ASSIGN_DONE;
-        $arr[] = OrderStatusDict::ORDER_WORKER_BIND_ORDER;
-
-        $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $arr[], $channels);
-        $ret['count'] = $count;
-
-        $this->send($ret, "操作成功");
-
-    }
-
+   
     /**
      * @api {GET} v1/order/worker-done-orders-history 查询阿姨三个月的完成历史订单(xieyi 90%已经将后台接口完成,缺少周期订单)
      *
