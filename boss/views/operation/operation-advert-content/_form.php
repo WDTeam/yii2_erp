@@ -54,29 +54,29 @@ use boss\components\AreaCascade;
     <?= $form->field($model, 'operation_advert_url')->textInput(['maxlength' => true, 'value' => empty($model->operation_advert_url) ? 'http://' : $model->operation_advert_url]) ?>
     <div class="form-group">
     <?php
-        echo '<label class="control-label">'.$model->attributeLabels()['operation_advert_start_time'].'</label>';
-        echo DatePicker::widget([
-        'name' => 'OperationAdvertContent[operation_advert_start_time]',
-        'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-        'value' => !empty($model->operation_advert_start_time) ? date('Y-m-d', $model->operation_advert_start_time) : '',
-        'pluginOptions' => [
-            'autoclose'=>true,
-            'format' => 'yyyy-mm-dd'
-        ]
-    ]);
+        //echo '<label class="control-label">'.$model->attributeLabels()['operation_advert_start_time'].'</label>';
+        //echo DatePicker::widget([
+        //'name' => 'OperationAdvertContent[operation_advert_start_time]',
+        //'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+        //'value' => !empty($model->operation_advert_start_time) ? date('Y-m-d', $model->operation_advert_start_time) : '',
+        //'pluginOptions' => [
+            //'autoclose'=>true,
+            //'format' => 'yyyy-mm-dd'
+        //]
+    //]);
     ?></div>
         <div class="form-group">
     <?php
-        echo '<label class="control-label">'.$model->attributeLabels()['operation_advert_end_time'].'</label>';
-        echo DatePicker::widget([
-        'name' => 'OperationAdvertContent[operation_advert_end_time]',
-        'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-        'value' => !empty($model->operation_advert_start_time) ? date('Y-m-d', $model->operation_advert_end_time) : '',
-        'pluginOptions' => [
-            'autoclose'=>true,
-            'format' => 'yyyy-mm-dd'
-        ]
-    ]);
+        //echo '<label class="control-label">'.$model->attributeLabels()['operation_advert_end_time'].'</label>';
+        //echo DatePicker::widget([
+        //'name' => 'OperationAdvertContent[operation_advert_end_time]',
+        //'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+        //'value' => !empty($model->operation_advert_start_time) ? date('Y-m-d', $model->operation_advert_end_time) : '',
+        //'pluginOptions' => [
+            //'autoclose'=>true,
+            //'format' => 'yyyy-mm-dd'
+        //]
+    //]);
     ?></div>
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
