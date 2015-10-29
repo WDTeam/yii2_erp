@@ -1,11 +1,11 @@
-count=`ps -fe |grep "server.php" | grep -v "grep" | grep "master" | wc -l`
+count=`ps -fe |grep "autoassign-server" | grep -v "grep" | wc -l`
 
 echo $count
 if [ $count -lt 1 ]; then
-ps -eaf |grep "server.php" | grep -v "grep"| awk '{print $2}'|xargs kill -9
+ps -eaf |grep "autoassign-server" | grep -v "grep"| awk '{print $2}'|xargs kill -9
 sleep 2
 ulimit -c unlimited
-php ./server.php
+php ./autoassign-server.php
 echo "restart";
 echo $(date +%Y-%m-%d_%H:%M:%S) >./restart.log
 fi

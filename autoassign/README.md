@@ -6,17 +6,19 @@
 
 ```
 	1、本程序运行在 linux 或 windows 环境，需要 PHP 5.4+ / swoole扩展 / redis 扩展
-	2、手动输入命令 PHP server.php 启动；
+	2、手动输入命令 php autoassign-server.php 启动；
         3、自动启动: 在linux系统的crontab中加入： */1 * * * * ./startup.sh  （TODO：升级为可程序控制）
 	4、浏览器打开BOSS系统 -> 订单管理 -> 智能派单-> "连接派单服务器"
-        5、界面上提示 “自动派单开始”
+        5、界面上提示 “连接成功”
+        6、点击“停止派单”-> 暂停派单 点击“开始派单”-> 继续派单
+        7、修改全职、兼职的派单时间，点击“更新配置”-> 实时生效
 
 ```
 
 ## 配置说明：
 
 ```
-    1、配置文件： config.php
+    1、配置文件： autoassign.config.php
     2、配置内容：
     /*
      * Redis 服务IP
