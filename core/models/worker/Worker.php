@@ -4,6 +4,7 @@ namespace core\models\worker;
 
 
 use common\models\Help;
+use common\models\worker\WorkerVacationApplication;
 use Symfony\Component\Console\Helper\Helper;
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -245,6 +246,26 @@ class Worker extends \common\models\worker\Worker
     }
 
 
+
+
+    public static function getDistrictAllWorker($district_id,$worker_id){
+        $dataSource = 2;//1redis 2mysql
+        if($dataSource==1){
+            return self::getDistrictAllWorkerFromRedis($district_id,$worker_id);
+        }else{
+            $workerCondition = $worker_id ? ['{{%worker}}.id'=>$worker_id] : [];
+            $result = self::getDistrictAllWorkerFromMysql($district_id,$workerCondition);
+            foreach ($result as $key=>$val) {
+                $result[$key]['schedule'] = $val['workerScheduleRelation'];
+                $result[$key]['order'] = self::getWorkerOrderInfo($val['id']);
+                unset( $result[$key]['shopRelation']);
+                unset( $result[$key]['workerScheduleRelation']);
+                unset( $result[$key]['workerStatRelation']);
+            }
+            return $result;
+        }
+    }
+
     public static function getDistrictAllWorkerFromRedis($district_id,$worker_id){
         $workerIdsArr =  Yii::$app->redis->executeCommand('smembers', [self::DISTRICT.'_'.$district_id]);
         if($workerIdsArr){
@@ -263,24 +284,6 @@ class Worker extends \common\models\worker\Worker
             return $new_workerInfoArr;
         }else{
             return [];
-        }
-    }
-
-    public static function getDistrictAllWorker($district_id,$worker_id){
-        $dataSource = 2;//1redis 2mysql
-        if($dataSource==1){
-            return self::getDistrictAllWorkerFromRedis($district_id,$worker_id);
-        }else{
-            $workerCondition = $worker_id ? ['{{%worker}}.id'=>$worker_id] : [];
-            $result = self::getDistrictAllWorkerFromMysql($district_id,$workerCondition);
-            foreach ($result as $key=>$val) {
-                $result[$key]['schedule'] = $val['workerScheduleRelation'];
-                $result[$key]['order'] = self::getWorkerOrderInfo($val['id']);
-                unset( $result[$key]['shopRelation']);
-                unset( $result[$key]['workerScheduleRelation']);
-                unset( $result[$key]['workerStatRelation']);
-            }
-            return $result;
         }
     }
 
@@ -957,6 +960,8 @@ class Worker extends \common\models\worker\Worker
         return $workerDistrictArr?ArrayHelper::getColumn($workerDistrictArr,'operation_shop_district_id'):[];
     }
 
-
+    public function getWorkerVacationApplicationRelation(){
+        return $this->hasMany(WorkerVacationApplication::className(),['worker_id'=>'id']);
+    }
 
 }

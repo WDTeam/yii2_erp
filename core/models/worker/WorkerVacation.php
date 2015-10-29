@@ -19,5 +19,15 @@ use Yii;
  */
 class WorkerVacation extends \common\models\worker\WorkerVacation
 {
-
+    /**
+     * @param $vacationType
+     * @return string
+     */
+    public static function getWorkerVacationTypeShow($vacationType){
+        if($vacationType=1){
+            return '休假';
+        }else{
+            return '事假';
+        }
+    }
 }

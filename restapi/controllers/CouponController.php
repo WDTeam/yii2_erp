@@ -9,7 +9,7 @@ use \core\models\operation\coupon\CouponCustomer;
 use \core\models\operation\coupon\Coupon;
 use \core\models\operation\coupon\CouponCode;
 use \restapi\models\LoginCustomer;
-class CouponController extends \api\components\Controller
+class CouponController extends \restapi\components\Controller
 {
     
     /**
