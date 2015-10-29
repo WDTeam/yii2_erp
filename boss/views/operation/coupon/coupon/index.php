@@ -209,9 +209,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'id' => $model->id
                         ], [
                             'title' => Yii::t('app', '编辑'),
-                            'data-toggle'=>'modal',
-                            'data-target'=>'#modal',
-                            'data-id'=>$model->id,
                             'class'=>'block-btn',
                         ]);
                     },
