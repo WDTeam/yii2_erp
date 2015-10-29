@@ -1,5 +1,5 @@
 <?php
-namespace restapi\controllers;
+namespace api\controllers;
 
 use Yii;
 use \core\models\customer\CustomerAccessToken;
