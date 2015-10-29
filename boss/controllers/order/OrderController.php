@@ -35,7 +35,7 @@ class OrderController extends BaseAuthController
     public function actionCancelOrder()
     {
         //TODO: Xiaobo
-        $admin_id = 0;
+        $admin_id = Yii::$app->user->id;
     
         $params = yii::$app->request->post();
         $order_id = $params['order_id'];
@@ -283,15 +283,7 @@ class OrderController extends BaseAuthController
      * @return mixed
      */
     public function actionIndex()
-    {
-        //Yii::info('xiaobo: '.json_encode(Yii::$app->request->getQueryParams()));
-        
-//         if (!empty(Yii::$app->request->get()))
-//         {
-//         print_r(Yii::$app->request->get());
-//         return;
-//         }
-        
+    {        
         $searchModel = new OrderSearch; 
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
@@ -375,17 +367,25 @@ class OrderController extends BaseAuthController
      */
     public function actionEdit($id)
     {
-        $model = $this->findModel($id);
+        $model = Order::findById($id);
         $post = Yii::$app->request->post();
+        $model['admin_id'] = Yii::$app->user->id;
+        
         if($model->load($post)) {
             $post['Order']['admin_id'] = Yii::$app->user->id;
-            $post['Order']['order_ip'] = ip2long(Yii::$app->request->userIP);
-    
+            $post['Order']['order_ip'] = Yii::$app->request->userIP;
+            $post['Order']['order_customer_need'] = (isset($post['Order']['order_customer_need']) && is_array($post['Order']['order_customer_need']))?implode(',',$post['Order']['order_customer_need']):''; //客户需求
+            
+            //预约时间处理
+            $time = explode('-',$post['Order']['orderBookedTimeRange']);
+            $post['Order']['order_booked_begin_time'] = strtotime($post['Order']['orderBookedDate'].' '.$time[0].':00');
+            $post['Order']['order_booked_end_time'] = strtotime(($time[1]=='24:00')?date('Y-m-d H:i:s',strtotime($post['Order']['orderBookedDate'].'00:00:00 +1 days')):$post['Order']['orderBookedDate'].' '.$time[1].':00');
+            
             if ($model->update($post)) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['edit', 'id' => $model->id]);
             }
         }
-        return $this->render('view', ['model' => $model]);
+        return $this->render('edit', ['model' => $model]);
     
     }
 

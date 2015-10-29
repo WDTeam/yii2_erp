@@ -62,6 +62,8 @@ $(document).ready(function(){
 	_good.eq(5).addClass("good-job");
 	_good.eq(6).addClass("just-so-so");
 	_good.eq(7).addClass("assess");
+	$(".good-job,.just-so-so").click(function(){$(".check").css("display","none")});
+	$(".assess").click(function(){$(".assess_list").css("display","none")});
 	$(".check").css("display","none");
 	$(".assess").click(function(){
 		$(".assess_list").css("display","none");
@@ -115,8 +117,6 @@ $(document).ready(function(){
                 $(".timepicker").timepicker({
                     showInputs: false
                 });
-
-
 	
 });
 

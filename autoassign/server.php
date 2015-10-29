@@ -9,11 +9,11 @@
 define('DEBUG', 'on');
 define("WEBPATH", str_replace("\\","/", __DIR__));
 define("CONFIG_PATH", WEBPATH."/autoassign.config.php");
+define("REDIS_IS_SERVER_SUSPEND","REDIS_IS_SERVER_SUSPEND");
 
 $assign_config = require(CONFIG_PATH);
 
-use autoassign\ClientCommand;
-
+require_once(WEBPATH."/ClientCommand.php");
 class server
 {
     private $serv;
@@ -89,7 +89,7 @@ class server
      * Worker Stop
      */
     function onWorkerStop($server, $worker_id) {
-        echo 'Worker Stop && Reload...'."\n";
+        echo date('Y-m-d H:i:s').' Worker Stop && Reload...'."\n";
         //opcache_reset(); //zend_opcache的      
         //apc, xcache, eacc等其他方式，请调用相关函数  
     }
@@ -99,7 +99,7 @@ class server
      */
     public function serverIP(){
         $localIpArray = swoole_get_local_ip();
-        $localIp = $localIpArray[0];
+        $localIp = current($localIpArray);
 
         return $localIp;
     }
@@ -115,9 +115,11 @@ class server
      */
     function onMessage($server, $ws)
     {
-        echo 'On Message'."\n";
-
-        $this->handleCommandMessage($server, $ws);
+        echo date('Y-m-d H:i:s').' On Message:= '.$ws->data."\n";
+        $this->ws = $ws;
+        $this->fd = $ws->fd;
+        $this->data = $ws->data;
+        $this->handleCommandMessage($server, $ws->data);
 
         return;
     }
@@ -125,41 +127,46 @@ class server
      * 接受 client 消息
      */
     public function onReceive( swoole_server $server, $fd, $from_id, $data ) {
-        echo "Get Message From Client {$fd}:{$data}\n";
-        $this->handleCommandMessage($server, $ws);
+        echo date('Y-m-d H:i:s')." Get Message From Client {$fd}:{$data}\n";
+        $this->handleCommandMessage($server, $data);
         
         return;
     }
     /*
      * 处理消息
      */
-    public function handleCommandMessage($server,$ws)
+    public function handleCommandMessage($server,$data)
     {
-        $this->ws = $ws;
-        $this->fd = $ws->fd;
-        $this->data = $ws->data;
-        $data = $this->getCommand($ws);
+        $data = $this->getCommand($data);
         $cmd = $data['cmd'];
         
         switch ($cmd) {
-            case ClientCommand::START:
+            case autoassign\ClientCommand::START:
             {
+                echo date('Y-m-d H:i:s')." 服务继续\n";
                 $this->isServerSuspend = false;
+                $this->redis->set(REDIS_IS_SERVER_SUSPEND,false);
             }
             break;
-            case ClientCommand::STOP:
+            case autoassign\ClientCommand::STOP:
             {
+                echo date('Y-m-d H:i:s')." 服务暂停\n";
                 $this->isServerSuspend = true;
+                $this->redis->set(REDIS_IS_SERVER_SUSPEND,true);
             }
             break;
-            case ClientCommand::RELOAD:
+            case autoassign\ClientCommand::RELOAD:
             {
+                echo date('Y-m-d H:i:s')." 服务重启\n";
                 $server->reload();
             }
             break;
-            case ClientCommand::UPDAE:
+            case autoassign\ClientCommand::UPDATE:
             {
-                
+                $this->update_config(CONFIG_PATH, "FULLTIME_WORKER_TIMEOUT", $data['fulltimeout_end']);
+                $this->update_config(CONFIG_PATH, "FREETIME_WORKER_TIMEOUT", $data['freetimeout_end']);
+                $this->update_config(CONFIG_PATH, "SYSTEM_ASSIGN_TIMEOUT", $data['freetimeout_end']);
+                echo date('Y-m-d H:i:s')." 配置已更新\n";
             }
             break;
             default:
@@ -170,14 +177,14 @@ class server
     /*
      * 获取 Command
      */
-    public function getCommand($ws){
-        $data = explode(',', $ws->data);
+    public function getCommand($data){
+        $data = explode(',', $data);
         $d = array(
             'cmd' => $data[0],
-            'qstart' => $data[3],
-            'qend' => $data[4],
-            'jstart' => $data[5],
-            'jend' => $data[6],
+            'fulltimeout_start' => $data[1],
+            'fulltimeout_end' => $data[2],
+            'freetimeout_start' => $data[3],
+            'freetimeout_end' => $data[4],
         );
         return $d;
     }
@@ -213,7 +220,7 @@ class server
      * 处理订单
      */
     public function processOrders($server) {
-        if ($this->isServerSuspend)
+        if ($this->redis->get(REDIS_IS_SERVER_SUSPEND)==true)
         {
             return;
         }
@@ -233,12 +240,18 @@ class server
             echo "没有待指派订单\n";
         }
         foreach($orders as $key => $order){
+            
+            if ($order['order_id']==null || $order['order_id']=='')
+            {
+                continue;
+            }
+            
             $order = $this->getOrderStatus($order);
 
-            $d = $order;
-            $d['created_at'] = date('Y-m-d H:i:s', $d['created_at']);
-            $d['updated_at'] = isset($d['updated_at']) ? date('Y-m-d H:i:s', $d['updated_at']) : '';
-            $d = json_encode($d);
+//            $d = $order;
+//            $d['created_at'] = date('Y-m-d H:i:s', $d['created_at']);
+//            $d['updated_at'] = isset($d['updated_at']) ? date('Y-m-d H:i:s', $d['updated_at']) : '';
+//            $d = json_encode($d);
             
             /*
              * TODO: 张旭刚
@@ -319,14 +332,14 @@ class server
      * 客户端连接时触发
      */
     public function onConnect($server, $fd) {
-        echo $fd."Client Connect.\n";
+        echo date('Y-m-d H:i:s').' '.$fd."Client Connect.\n";
         return true;
     }
     /*
      * 客户端断开时触发
      */
     public function onClose($server, $fd) {
-        echo "Client Close.\n";
+        echo date('Y-m-d H:i:s')." Client Close.\n";
     }
     /*
      * 多线程任务
@@ -397,12 +410,14 @@ class server
      * 调用demo
       $name="admin";//kkkk
       $bb='234';
-      $bb=getconfig("./2.php", "bb", "string");
+      $bb=getconfig("./config.php", "bb", "string");
       updateconfig("./2.php", "name", "admin");
      */
-    function get_config($file = 'config.php', $ini, $type = "string") {
-        if (!file_exists($file))
+    function get_config($file, $ini, $type = "string") {
+        if (!file_exists($file)){
+            echo "file not exist\n";
             return false;
+        }
         $str = file_get_contents($file);
         if ($type == "int") {
             $config = preg_match("/" . preg_quote($ini) . "=(.*);/", $str, $res);
@@ -418,18 +433,23 @@ class server
     /*
      * 配置文件更新
      */
-    function update_config($file = 'config.php', $ini, $value, $type = "string") {
-        if (!file_exists($file))
+    function update_config($file, $ini, $value, $type = "string") {
+        if (!file_exists($file)) {
+            echo "file not exist\n";
             return false;
+        }
         $str = file_get_contents($file);
         $str2 = "";
         if ($type == "int") {
-            $str2 = preg_replace("/" . preg_quote($ini) . "=(.*);/", $ini . "=" . $value . ";", $str);
+            $str2 = preg_replace("/" . preg_quote($ini) . "=>(.*);/", $ini . "=>" . $value . ";", $str);
         } else {
-            $str2 = preg_replace("/" . preg_quote($ini) . "=(.*);/", $ini . "=\"" . $value . "\";", $str);
+            echo "replace ...\n";
+            $str2 = preg_replace("/\'FULLTIME_WORKER_TIMEOUT\'.*=>.*\d+/",10,"'FULLTIME_WORKER_TIMEOUT' => 5");
+            echo $str2;
         }
         file_put_contents($file, $str2);
     }
+
 }
 /*
  * 启动服务

@@ -1,10 +1,13 @@
 <?php
 use yii\helpers\Html;
+
 use kartik\detail\DetailView;
 use common\models\finance\FinanceOrderChannel;
 use common\models\finance\FinancePayChannel;
 use core\models\Customer\Customer;
-use common\models\SystemUser;
+use core\models\general\SystemUser;
+
+
 use common\models\finance\FinancePopOrder;
 /**
  * @var yii\web\View $this
@@ -18,7 +21,9 @@ $this->params['breadcrumbs'][] =$this->title;
 $userinfo=Customer::getCustomerById($model->finance_pop_order_worker_uid);
 
 if(isset($userinfo->customer_name)){$username=$userinfo->customer_name;}else{$username='未查到';}
-$admininfo=SystemUser::findIdentity($model->finance_pop_order_worker_uid);
+
+$admininfo=SystemUser::findIdentity($model->finance_pop_order_check_id);
+
 if($admininfo){$adminname=$admininfo->username;}else{$adminname='未查到';}
 $order_channel_info=FinanceOrderChannel::get_order_channel_info($model->finance_order_channel_id);
 
