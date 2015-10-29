@@ -330,16 +330,16 @@ class Order extends ActiveRecord
     }
 
 
-
     /**
      * 保存订单
      * 保存时记录订单历史
      * @param array $save_models 需要保存操作的类名
+     * @param $transact 事务
      * @return bool
      */
-    public function doSave($save_models = ['OrderExtCustomer','OrderExtFlag','OrderExtPay','OrderExtPop','OrderExtStatus','OrderExtWorker','OrderStatusHistory'])
+    public function doSave($save_models = ['OrderExtCustomer','OrderExtFlag','OrderExtPay','OrderExtPop','OrderExtStatus','OrderExtWorker','OrderStatusHistory'],$transact = null)
     {
-        $transaction = static::getDb()->beginTransaction(); //开启一个事务
+        $transaction = empty($transact)?static::getDb()->beginTransaction():$transact; //开启一个事务
         $is_new_record = $this->isNewRecord;
         if(!$this->isNewRecord)$this->version++;
 
@@ -430,7 +430,9 @@ class Order extends ActiveRecord
             }
 
 
-            $transaction->commit();
+            if(empty($transact)){
+                $transaction->commit();
+            }
             return true;
         }
         return false;
