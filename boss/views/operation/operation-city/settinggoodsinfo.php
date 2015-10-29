@@ -35,13 +35,27 @@ $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL, 'options' => ['e
         <?php // echo Html::checkboxList('shopdistrict', $shopdistrictinfoall, $shopdistrictinfo)  ?>
         <div class="form-group ">
             <label class="control-label col-md-2"><?= $goodsInfo['operation_goods_name']?>&nbsp;&nbsp;&nbsp;</label><label class="settingGoodsinfo">统一设置</label>
-            <!--        <label class="control-label col-md-2 settingGoodsinfo"></label>-->
+            <!-- <label class="control-label col-md-2 settingGoodsinfo"></label>-->
             <div class="col-md-10 not-bold">
-                <label>市场价格：</label><input type="text" maxlength="" style="width:50px;" class="operation_goods_market_price_demo" value="" name="operation_goods_market_price[]" >元<div class="div-inline"></div>
-                <label>销售价格：</label><input type="text" maxlength="" style="width:50px;" class="operation_goods_price_demo" value="" name="operation_goods_price[]" >元<div class="div-inline"></div>
-                <label>最低消费数量：</label><input type="text" maxlength="" style="width:70px;" class="operation_goods_lowest_consume_demo" value="" name="operation_goods_lowest_consume[]" > <?= $goodsInfo['operation_spec_strategy_unit']?><div class="div-inline"></div>
-                <label>开始服务时间：</label><input type="text" maxlength="" style="width:120px;" class="operation_goods_start_time_demo" value="" name="operation_goods_start_time[]" ><div class="div-inline"></div>
-                <label>结束服务时间：</label><input type="text" maxlength="" style="width:120px;" class="operation_goods_end_time_demo" value="" name="operation_goods_end_time[]" >
+                <label>市场价格：</label>
+                <input type="text" maxlength="" style="width:50px;" class="operation_goods_market_price_demo" value="" name="operation_goods_market_price[]" >元/<?= $goodsInfo['operation_spec_strategy_unit']?>
+                <div class="div-inline"></div>
+
+                <label>销售价格：</label>
+                <input type="text" maxlength="" style="width:50px;" class="operation_goods_price_demo" value="" name="operation_goods_price[]" >元/<?= $goodsInfo['operation_spec_strategy_unit']?>
+                <div class="div-inline"></div>
+
+                <label>最低消费数量：</label>
+                <input type="text" maxlength="" style="width:70px;" class="operation_goods_lowest_consume_demo" value="" name="operation_goods_lowest_consume[]" >
+                <?= $goodsInfo['operation_spec_strategy_unit']?>
+                <div class="div-inline"></div>
+
+                <label>开始服务时间：</label>
+                <input type="text" maxlength="" style="width:120px;" class="operation_goods_start_time_demo" value="" name="operation_goods_start_time[]">
+                <div class="div-inline"></div>
+
+                <label>结束服务时间：</label>
+                <input type="text" maxlength="" style="width:120px;" class="operation_goods_end_time_demo" value="" name="operation_goods_end_time[]" >
             </div>
             <div class="col-md-offset-2 col-md-10"></div>
             <div class="col-md-offset-2 col-md-10"><div class="help-block"></div></div>
@@ -52,11 +66,26 @@ $form = ActiveForm::begin(['type'=>ActiveForm::TYPE_HORIZONTAL, 'options' => ['e
             <div class="form-group shopdistrictgoods<?= $key?>" > <!--<?php if(empty($goodsshopdistrictinfo[$key])){ ?>style="display: none"<?php }?>-->
                 <label class="control-label col-md-2"><?= $value?></label>
                 <div class="col-md-10 not-bold">
-                    <label>市场价格：</label><input type="text" maxlength="" style="width:50px;" class="operation_goods_market_price" value="<?= empty($goodsshopdistrictinfo[$key]['operation_shop_district_goods_market_price']) ? '' : $goodsshopdistrictinfo[$key]['operation_shop_district_goods_market_price']?>" name="goodsinfo[operation_goods_market_price][<?= $key?>]" >元<div class="div-inline"></div>
-                    <label>销售价格：</label><input type="text" maxlength="" style="width:50px;" class="operation_goods_price" value="<?= empty($goodsshopdistrictinfo[$key]['operation_shop_district_goods_price']) ? '' : $goodsshopdistrictinfo[$key]['operation_shop_district_goods_price']?>" name="goodsinfo[operation_goods_price][<?= $key?>]" >元<div class="div-inline"></div>
-                    <label>最低消费数量：</label><input type="text" maxlength="" style="width:70px;" class="operation_goods_lowest_consume" value="<?= empty($goodsshopdistrictinfo[$key]['operation_shop_district_goods_lowest_consume_num']) ? '' : $goodsshopdistrictinfo[$key]['operation_shop_district_goods_lowest_consume_num']?>" name="goodsinfo[operation_goods_lowest_consume][<?= $key?>]" > <?= $goodsInfo['operation_spec_strategy_unit']?><div class="div-inline"></div>
-                    <label>开始服务时间：</label><input type="text" maxlength="" style="width:120px;" class="operation_goods_start_time" value="<?= empty($goodsshopdistrictinfo[$key]['operation_shop_district_goods_start_time']) ? '' : $goodsshopdistrictinfo[$key]['operation_shop_district_goods_start_time']?>" name="goodsinfo[operation_goods_start_time][<?= $key?>]" ><div class="div-inline"></div>
-                    <label>结束服务时间：</label><input type="text" maxlength="" style="width:120px;" class="operation_goods_end_time" value="<?= empty($goodsshopdistrictinfo[$key]['operation_shop_district_goods_end_time']) ? '' : $goodsshopdistrictinfo[$key]['operation_shop_district_goods_end_time']?>" name="goodsinfo[operation_goods_end_time][<?= $key?>]" >
+                    <label>市场价格：</label>
+                    <input type="text" maxlength="" style="width:50px;" class="operation_goods_market_price" value="<?= empty($goodsshopdistrictinfo[$key]['operation_shop_district_goods_market_price']) ? '' : $goodsshopdistrictinfo[$key]['operation_shop_district_goods_market_price']?>" name="goodsinfo[operation_goods_market_price][<?= $key?>]" >
+                    元/<?= $goodsInfo['operation_spec_strategy_unit']?>
+                    <div class="div-inline"></div>
+
+                    <label>销售价格：</label>
+                    <input type="text" maxlength="" style="width:50px;" class="operation_goods_price" value="<?= empty($goodsshopdistrictinfo[$key]['operation_shop_district_goods_price']) ? '' : $goodsshopdistrictinfo[$key]['operation_shop_district_goods_price']?>" name="goodsinfo[operation_goods_price][<?= $key?>]" >
+                    元/<?= $goodsInfo['operation_spec_strategy_unit']?>
+                    <div class="div-inline"></div>
+
+                    <label>最低消费数量：</label>
+                    <input type="text" maxlength="" style="width:70px;" class="operation_goods_lowest_consume" value="<?= empty($goodsshopdistrictinfo[$key]['operation_shop_district_goods_lowest_consume_num']) ? '' : $goodsshopdistrictinfo[$key]['operation_shop_district_goods_lowest_consume_num']?>" name="goodsinfo[operation_goods_lowest_consume][<?= $key?>]" > <?= $goodsInfo['operation_spec_strategy_unit']?>
+                    <div class="div-inline"></div>
+
+                    <label>开始服务时间：</label>
+                    <input type="text" maxlength="" style="width:120px;" class="operation_goods_start_time" value="<?= empty($goodsshopdistrictinfo[$key]['operation_shop_district_goods_start_time']) ? '' : $goodsshopdistrictinfo[$key]['operation_shop_district_goods_start_time']?>" name="goodsinfo[operation_goods_start_time][<?= $key?>]" >
+                    <div class="div-inline"></div>
+
+                    <label>结束服务时间：</label>
+                    <input type="text" maxlength="" style="width:120px;" class="operation_goods_end_time" value="<?= empty($goodsshopdistrictinfo[$key]['operation_shop_district_goods_end_time']) ? '' : $goodsshopdistrictinfo[$key]['operation_shop_district_goods_end_time']?>" name="goodsinfo[operation_goods_end_time][<?= $key?>]" >
                 </div>
                 <div class="col-md-offset-2 col-md-10"></div>
                 <div class="col-md-offset-2 col-md-10"><div class="help-block"></div></div>

@@ -20,19 +20,13 @@ class m151021_035240_create_table_customer_comment_level extends Migration
             'is_del'  => Schema::TYPE_BOOLEAN . '(1) DEFAULT 0 COMMENT \'删除\'',
 
         ], $tableOptions);
-
-        //$this->createIndex('customer_id','{{%customer_comment}}','customer_id');
-        //$this->createIndex('order_id','{{%customer_comment}}','order_id');
-	 $this->batchInsert('{{%customer_comment_level}}',
-            ['id','customer_comment_level','customer_comment_level_name','created_at','updated_at','is_del'],
-             [
-                [1,0,'满意',time(), 0,0],
-                [2,1,'一般', time(),0,0],
-                [3,2,'不满意', time(),0,0],
-            ]);
-
+		$this->createIndex('customer_comment_level','{{%customer_comment_level}}','customer_comment_level');
+		$this->execute(
+			"INSERT INTO {{%customer_comment_level}} VALUES ('1', '0', '满意', '1446089631', '0', '0');
+INSERT INTO {{%customer_comment_level}} VALUES ('2', '1', '一般', '1446089631', '0', '0');
+INSERT INTO {{%customer_comment_level}} VALUES ('3', '2', '不满意', '1446089631', '0', '0');"
+        );
     }
-
 
     public function down()
     {
