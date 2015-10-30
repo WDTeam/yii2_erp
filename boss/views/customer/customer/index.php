@@ -19,7 +19,9 @@ use dbbase\models\order\OrderExtCustomer;
 
 use core\models\customer\Customer;
 use core\models\customer\CustomerAddress;
+use core\models\customer\CustomerWorker;
 use core\models\customer\CustomerExtBalance;
+use core\models\customer\CustomerExtScore;
 use core\models\customer\CustomerExtSrc;
 
 /**
