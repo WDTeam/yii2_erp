@@ -1402,8 +1402,6 @@ class OrderController extends \restapi\components\Controller
         }
     }
 
-
-
     /**
      * @api {GET} /order/add-comment 评价订单（该功能写在UserController里面 v1/user/user-suggest）
      *
@@ -1665,20 +1663,25 @@ class OrderController extends \restapi\components\Controller
                 }
             } else if ($param['leveltype'] == 1) {
                 try {
+
                     #指定阿姨订单数
                     $workerCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
+
                     #待抢单订单数
                     $workerCountTwo = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
 
+
                     $args["owr.worker_id"] = $worker->id;
+                    $args["oc.customer_id"] = null;
                     $orderSearch = new \core\models\order\OrderSearch();
+
                     $ret = [];
                     $arr = array();
                     $arr[] = OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE;
                     $arr[] = OrderStatusDict::ORDER_SYS_ASSIGN_DONE;
                     $arr[] = OrderStatusDict::ORDER_WORKER_BIND_ORDER;
-
                     $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $arr);
+
                     #待服务订单数
                     $ret['workerServiceCount'] = $count;
 
@@ -1688,7 +1691,6 @@ class OrderController extends \restapi\components\Controller
                     $ret['worker_is_block'] = [
                         $worker->worker_is_block
                     ];
-
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (\Exception $e) {
                     return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
