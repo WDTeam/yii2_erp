@@ -640,24 +640,30 @@ class WorkerController extends \restapi\components\Controller
      * 
      * @apiParam {String} access_token    阿姨登录token
      * @apiParam {String} settle_id  账单唯一标识.
+     * @apiParam {String} per_page  每页显示多少条.
+     * @apiParam {String} page  第几页.
      * @apiParam {String} [platform_version] 平台版本号.
      * 
-     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-bill-detail
+     * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-tasktime-list
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
      *   "code": 1,
      *   "msg": "操作成功.",
-     *   "ret": [
-     *       {
-     *           "order_id": "订单ID",
-     *           "order_money": "订单金额",
-     *           "order_code": "订单号",
-     *           "service_date": "服务日期",
-     *           "service_time": "服务时间段"
-     *       }
-     *   ]
+     *   "ret": {
+     *       "per_page": 1,
+     *       "page_num": 10,
+     *       "data": [
+     *           {
+     *               "order_id": "订单ID",
+     *               "order_money": "订单金额",
+     *               "order_code": "订单号",
+     *               "service_date": "服务日期",
+     *               "service_time": "服务时间段"
+     *           }
+     *       ]
+     *   }
      * }
      *
      * @apiErrorExample Error-Response:
@@ -678,8 +684,19 @@ class WorkerController extends \restapi\components\Controller
         if(!isset($param['settle_id'])||!intval($param['settle_id'])){
             return $this->send(null, "账单唯一标识错误", 0, 403);
         }
+         //判断页码
+        if (!isset($param['per_page']) || !intval($param['per_page'])) {
+            $param['per_page'] = 1;
+        }
+        $per_page = intval($param['per_page']);
+        //每页显示数据量
+        if (!isset($param['page_num']) || !intval($param['page_num'])) {
+            $param['page_num'] = 10;
+        }
+        $page_num = intval($param['page_num']);
+        
         try{
-            $billList = FinanceSettleApplySearch::getOrderArrayBySettleId(intval($param['settle_id']));
+            $billList = FinanceSettleApplySearch::getOrderArrayBySettleId(intval($param['settle_id']),$per_page,$page_num);
         }catch (\Exception $e) {
             return $this->send(null, "boss系统错误", 1024, 403);
         }
@@ -687,13 +704,18 @@ class WorkerController extends \restapi\components\Controller
         if($billList){
             foreach($billList as $key=>$val){
                 $beginTime = strtotime($val['order_begin_time']);
-                $billList[$key]['service_date'] = date('m-d',$beginTime);
+                $billList[$key]['service_date'] = date('Y-m-d',$beginTime);
                 $billList[$key]['service_time'] = date('H:i',$beginTime).'-'.date('H:i',strtotime($val['order_end_time']));
                 unset($billList[$key]['order_begin_time']);
                 unset($billList[$key]['order_end_time']);
             }
         }
-        return $this->send($billList, "操作成功.");
+        $ret = [
+            'per_page' => $per_page,
+            'page_num' => $page_num,
+            'data'  => $billList
+        ];
+        return $this->send($ret, "操作成功.");
     }
     
   
