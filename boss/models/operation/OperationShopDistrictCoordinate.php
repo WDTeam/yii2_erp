@@ -24,7 +24,6 @@ class OperationShopDistrictCoordinate extends \core\models\operation\OperationSh
     {
         return [
             [['operation_city_id', 'created_at', 'updated_at'], 'integer'],
-//            [['operation_shop_district_latitude_longitude'], 'string'],
             [['operation_shop_district_coordinate_start_longitude'], 'number', 'min' => 0, 'max' => 180],
             [['operation_shop_district_coordinate_end_longitude'], 'number', 'min' => 0, 'max' => 180],
             [['operation_shop_district_coordinate_start_latitude'], 'number', 'min' => 0, 'max' => 90],
