@@ -83,15 +83,14 @@ class SendSmsController extends \restapi\components\Controller
         @$app_version = Yii::$app->request->get('app_version');
         if (preg_match("/^(0|86|17951)?(13[0-9]|15[012356789]|17[0-9]|18[0-9]|14[57])[0-9]{8}$/", $phone)) {
             //验证通过
-            //if (!CustomerCode::generateAndSend($phone)) {
-             //   return $this->send(null, "短信发送失败", 0, 403);
-
-            //}
+            if (!CustomerCode::generateAndSend($phone)) {
+                return $this->send(null, "短信发送失败", 0, 403,null,alertMsgEnum::sendUserCodeFailed);
+            }
         } else {
-            return $this->send(null, "电话号码不符合规则", 0, 403);
+            return $this->send(null, "电话号码不符合规则", 0, 403,null,alertMsgEnum::sendUserCodeFailed);
 
         }
-        return $this->send(null, "短信发送成功",alertMsgEnum::sendUserCodeSuccess, 1);
+        return $this->send(null, "短信发送成功", 1, 200,null, alertMsgEnum::sendUserCodeSuccess);
     }
 
     /**
