@@ -166,7 +166,6 @@ class CouponController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {String} [city_id]  城市
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -213,16 +212,12 @@ class CouponController extends \restapi\components\Controller
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
-        if (!isset($param['city_id']) || !$param['city_id']) {
-            return $this->send(null, "请填写服务或城市名称", 0, 403);
-        }
-        $city_id = $param['city_id'];
         //获取该用户该城市的优惠码列表
-        try{
-            $coupons=CouponCustomer::GetAllCustomerCouponList($checkResult['customer_id'],$city_id);
-        }catch (\Exception $e) {
-            return $this->send(null, "boss系统错误", 1024, 403);
-        }
+//        try{
+            $coupons=CouponCustomer::GetAllCustomerCouponList($checkResult['customer_id']);
+//        }catch (\Exception $e) {
+//            return $this->send(null, "boss系统错误", 1024, 403);
+//        }
         if (!empty($coupons)) {
             return $this->send($coupons, "获取优惠券列表成功", 1);
         } else {

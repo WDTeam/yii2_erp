@@ -41,9 +41,10 @@ class OperationCityController extends BaseAuthController
     public function actionIndex()
     {
         $searchModel = new OperationCitySearch();
+        $ShopDistrictModel = new OperationShopDistrict();
         $params = Yii::$app->request->post();//getQueryParams();
 
-        if (isset($params['fields']) && $params['fields'] == 0) {
+        if (isset($params['fields']) && $params['fields'] == '0') {
             $params['fields'] = 'province_name';
             $params['keyword'] = '';
         }
@@ -52,6 +53,7 @@ class OperationCityController extends BaseAuthController
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+            'ShopDistrictModel' => $ShopDistrictModel,
             'params' => $params,
         ]);
     }
