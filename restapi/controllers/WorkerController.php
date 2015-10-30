@@ -322,7 +322,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} [platform_version] 平台版本号.
      *
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-comment
-     *get-worker-comment
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      *   {
