@@ -100,7 +100,7 @@ class WorkerController extends BaseAuthController
             $workerModel->uploadImgToQiniu('worker_photo');
             $workerModel->save();
             //更新阿姨附属信息
-            $workerExtModel->$workerModel->id;
+            $workerExtModel->worker_id = $workerModel->id;
             $workerExtModel->save();
             //更新阿姨商圈信息 ???
             $workerDistrictModel = new WorkerDistrict;
