@@ -43,11 +43,10 @@ class OrderComplaintSearch extends OrderComplaint{
 		}
 		$query->andFilterWhere([
 				'id' => $this->id,
-				'order_id'=> $this->order_id,
+				'ejj_order_complaint.order_id'=> $this->order_id,
 				'complaint_type' => $this->complaint_type,
 				'complaint_status' => $this->complaint_status,
 				'complaint_channel' => $this->complaint_channel,
-				'complaint_phone' => $this->complaint_phone,
 				'complaint_section' => $this->complaint_section,
 				'complaint_level' => $this->complaint_level,
 				'complaint_time' => $this->complaint_time,
@@ -56,7 +55,7 @@ class OrderComplaintSearch extends OrderComplaint{
 				
 		]);
 		$query->andFilterWhere(['like','ejj_order_ext_worker.order_worker_name',$this->order_worker_name])->
-		andFilterWhere(['like','complaint_phone',$this->complaint_phone])->
+		andFilterWhere(['like',OrderComplaint::tableName().'.complaint_phone',$this->complaint_phone])->
 		andFilterWhere(['like','ejj_order_ext_worker.order_worker_phone',$this->order_worker_phone]);
 		if(!empty($params['starttime']) && !empty($params['endtime'])){
 			$query->andFilterWhere(['between', OrderComplaint::tableName().'.created_at', strtotime($params['starttime']), strtotime($params['endtime'])]);
