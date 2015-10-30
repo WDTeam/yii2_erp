@@ -27,7 +27,7 @@ use kartik\datecontrol\DateControl;
 
 'order_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 服务订单id...', 'maxlength'=>20]], 
 
-'service_card_with_customer _id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 服务卡id...', 'maxlength'=>20]], 
+'service_card_with_customer_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 服务卡id...', 'maxlength'=>20]], 
 
 'service_card_consume_record_consume_type'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 服务类型...']], 
 

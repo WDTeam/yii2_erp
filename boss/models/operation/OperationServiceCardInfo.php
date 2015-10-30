@@ -29,9 +29,9 @@ class OperationServiceCardInfo extends \core\models\operation\OperationServiceCa
     public function rules()
     {
         return [
-			[['service_card_info_name','service_card_info_card_type', 'service_card_info_card_level', 'service_card_info_use_scope', 'service_card_info_valid_days','service_card_info_par_value','service_card_info_reb_value'], 'required'],
+			[['service_card_info_name','service_card_info_card_type', 'service_card_info_card_level', 'service_card_info_use_scope', 'service_card_info_valid_days','service_card_info_value','service_card_info_rebate_value'], 'required'],
             [['service_card_info_card_type', 'service_card_info_card_level', 'service_card_info_use_scope', 'service_card_info_valid_days', 'created_at', 'updated_at', 'is_del'], 'integer'],
-            [['service_card_info_par_value', 'service_card_info_reb_value'], 'number'],
+            [['service_card_info_value', 'service_card_info_rebate_value'], 'number'],
             [['service_card_info_name'], 'string', 'max' => 64]
         ];
     }
@@ -46,8 +46,8 @@ class OperationServiceCardInfo extends \core\models\operation\OperationServiceCa
             'service_card_info_name' => Yii::t('app', '卡名'),
             'service_card_info_card_type' => Yii::t('app', '卡类型'),
             'service_card_info_card_level' => Yii::t('app', '卡级别'),
-            'service_card_info_par_value' => Yii::t('app', '卡面金额'),
-            'service_card_info_reb_value' => Yii::t('app', '优惠金额'),
+            'service_card_info_value' => Yii::t('app', '卡面金额'),
+            'service_card_info_rebate_value' => Yii::t('app', '优惠金额'),
             'service_card_info_use_scope' => Yii::t('app', '使用范围'),
             'service_card_info_valid_days' => Yii::t('app', '有效时间(天)'),
             'created_at' => Yii::t('app', '创建时间'),

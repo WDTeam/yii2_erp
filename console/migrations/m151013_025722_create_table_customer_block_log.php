@@ -14,6 +14,7 @@ class m151013_025722_create_table_customer_block_log extends Migration
         $this->createTable('{{%customer_block_log}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT  COMMENT \'编号\'' ,
             'customer_id' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'客户\'',
+			'customer_phone' => Schema::TYPE_STRING . '(11) DEFAULT NULL COMMENT \'手机号\'',
             'customer_block_log_status' => Schema::TYPE_INTEGER . '(4) DEFAULT 0 COMMENT \'状态，1为黑名单0为正常\'',
             'customer_block_log_reason' => Schema::TYPE_STRING . '(255) DEFAULT NULL COMMENT \'原因\'',
             'created_at'=>  Schema::TYPE_INTEGER.'(11) NOT NULL COMMENT \'创建时间\'' ,

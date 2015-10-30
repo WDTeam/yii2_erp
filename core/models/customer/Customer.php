@@ -307,6 +307,78 @@ class Customer extends \dbbase\models\customer\Customer
 		return $customer_ext_balance['customer_balance'];
 	}
 
+    /**
+     * 客户账户余额转入
+     */
+    static public function incBalance($customer_id, $cash)
+    {
+        // $customer_id = \Yii::$app->request->get('customer_id');
+        // $cash = \Yii::$app->request->get('cash');
+        // \Yii::$app->response->format = Response::FORMAT_JSON;
+        $customer = Customer::findOne($customer_id);
+        if ($customer == NULL) {
+            return false;
+        }
+        $customerBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
+        if ($customerBalance == NULL) {
+            $customerBalance = new CustomerExtBalance;
+            $customerBalance->customer_id = $customer_id;
+            $customerBalance->customer_balance = 0;
+            $customerBalance->created_at = time();
+            $customerBalance->updated_at = 0;
+            $customerBalance->is_del = 0;
+            $customerBalance->validate();
+            if ($customerBalance->hasErrors()) {
+                return false;
+            }
+            $customerBalance->save();
+        }
+        $balance = $customerBalance->customer_balance;
+        $customerBalance->customer_balance = bcadd($balance, $cash, 2);
+        $customerBalance->validate();
+        if ($customerBalance->hasErrors()) {
+            return false;
+        }
+        $customerBalance->save();
+        return true;
+    }
+
+    /**
+     * 客户账户余额转出
+     */
+    static public function decBalance($customer_id, $cash)
+    {
+        // $customer_id = \Yii::$app->request->get('customer_id');
+        // $cash = \Yii::$app->request->get('cash');
+        // \Yii::$app->response->format = Response::FORMAT_JSON;
+        $customer = Customer::findOne($customer_id);
+        if ($customer == NULL) {
+            return false;
+        }
+        $customerBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
+        if ($customerBalance == NULL) {
+            $customerBalance = new CustomerExtBalance;
+            $customerBalance->customer_id = $customer_id;
+            $customerBalance->customer_balance = 0;
+            $customerBalance->created_at = time();
+            $customerBalance->updated_at = 0;
+            $customerBalance->is_del = 0;
+            $customerBalance->validate();
+            if ($customerBalance->hasErrors()) {
+                return false;
+            }
+            $customerBalance->save();
+        }
+        $balance = $customerBalance->customer_balance;
+        $customerBalance->customer_balance = bcsub($balance, $cash, 2);
+        $customerBalance->validate();
+        if ($customerBalance->hasErrors()) {
+            return false;
+        }
+        $customerBalance->save();
+        return true;
+    }
+
 	/******************************************score**********************************************/
 	/**
      * get score by phone
@@ -428,6 +500,10 @@ class Customer extends \dbbase\models\customer\Customer
 		];
 	}
 
+	/**
+	 *	
+	 */
+
 	/*************************************worker*******************************************************/
 	/**
      * get current worker
@@ -449,7 +525,31 @@ class Customer extends \dbbase\models\customer\Customer
 		return $worker;
 	}
 
-	
+	/**********************************count*************************************************************
+	/**
+     * 统计所有客户的数量
+     */
+    public static function countAllCustomer(){
+        $count = self::find()->count();
+        return $count;
+    }
+
+    /**
+     * 统计不包括黑名单的客户数量
+     */
+    public static function countCustomer(){
+        $count = self::find()->where(['is_del'=>0])->count();
+        return $count;
+    }
+
+    /**
+     * 统计黑名单客户数量
+     */
+    public static function countBlockCustomer(){
+        $count = self::find()->where(['is_del'=>1])->count();
+        return $count;
+    }
+
 
 	/******************************other******************************************************************/
 	/**

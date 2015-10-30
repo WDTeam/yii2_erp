@@ -89,7 +89,7 @@ class OperationServiceCardInfoController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+		$config = $model->getServiceCardConfig();
         if ($model->load(Yii::$app->request->post()) && $model->serviceCardInfoUpdate()) {
 			
 			file_put_contents('d:/demo/1.txt',var_export($model->load(Yii::$app->request->post()),true));
@@ -97,6 +97,7 @@ class OperationServiceCardInfoController extends Controller
         } else {
             return $this->render('update', [
                 'model' => $model,
+				'config' => $config,
             ]);
         }
     }
