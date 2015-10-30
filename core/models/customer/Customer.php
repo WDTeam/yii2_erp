@@ -1,12 +1,11 @@
 <?php
-
 namespace core\models\customer;
 
-
-use core\models\finance\FinanceOrderChannel;
 use Yii;
 
 use yii\web\BadRequestHttpException;
+use yii\helpers\ArrayHelper;
+
 use dbbase\models\customer\GeneralRegion;
 use dbbase\models\customer\CustomerExtSrc;
 
@@ -16,6 +15,8 @@ use dbbase\models\Worker;
 use core\models\customer\CustomerExtBalance;
 use core\models\customer\CustomerExtScore;
 use core\models\finance\FinanceOrderChannal;
+
+use core\models\operation\OperationCity;
 
 
 class Customer extends \dbbase\models\customer\Customer
@@ -335,7 +336,14 @@ class Customer extends \dbbase\models\customer\Customer
 			return true;
 		}
 		return false;
-		
-		
 	}
+
+	/******************************other******************************************************************/
+	/**
+	 * get online city list
+ 	 */
+	public static function getOnlineCityList(){
+        $onlineCityList = OperationCity::getCityOnlineInfoList();
+        return $onlineCityList?ArrayHelper::map($onlineCityList,'city_id','city_name'):[];
+    }
 }
