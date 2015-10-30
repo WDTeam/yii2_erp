@@ -59,6 +59,7 @@ $(document).ready(function($){
                 	//alert('22');
                 	$("#HBox2").hide();
                 	$("#HOverlay").hide()
+                	alert('取消订单成功！');
                 }else{
                     alert('取消订单失败！');
                 }
@@ -166,6 +167,8 @@ $(document).ready(function($){
             success: function (msg) {
                 if(msg){
                 	alert('提交投诉成功！');
+                	$("#HBox2").hide();
+                	$("#HOverlay").hide()
                 }else{
                     alert('提交投诉失败！');
                 }
