@@ -241,7 +241,7 @@ class UserController extends \restapi\components\Controller
             return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
         }
         if (empty($addressId)) {
-            return $this->send(null, "地址信息获取失败", 0, 403);
+            return $this->send(null, "地址信息获取失败,请添加地址id", 0, 403);
         }
 
         if (CustomerAddress::deleteAddress($addressId)) {
@@ -260,6 +260,12 @@ class UserController extends \restapi\components\Controller
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} address_id 地址id
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} [operation_province_name] 省
+     * @apiParam {String} [operation_city_name] 市名
+     * @apiParam {String} [operation_area_name] 地区名（朝阳区）
+     * @apiParam {String} [customer_address_detail] 详细地址
+     * @apiParam {String} [customer_address_nickname] 被服务者昵称
+     * @apiParam {String} [customer_address_phone] 被服务者手机
      *
      *
      * @apiSuccessExample Success-Response:
