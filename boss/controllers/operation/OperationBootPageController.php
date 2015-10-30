@@ -2,15 +2,17 @@
 
 namespace boss\controllers\operation;
 
-use Yii;
+use boss\components\BaseAuthController;
 use boss\models\operation\OperationBootPage;
 use boss\models\operation\OperationCity;
 use boss\models\operation\OperationBootPageCity;
+
+use Yii;
 use yii\data\ActiveDataProvider;
-use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
+
 use crazyfd\qiniu\Qiniu;
 
 /**

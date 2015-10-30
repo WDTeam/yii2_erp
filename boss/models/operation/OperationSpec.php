@@ -23,6 +23,8 @@ class OperationSpec extends \core\models\operation\OperationSpec
     public function rules()
     {
         return [
+            [['operation_spec_name'], 'required'],
+            [['operation_spec_strategy_unit'], 'required', 'message' => '请输入计量单位'],
             [['operation_spec_description', 'operation_spec_values'], 'string'],
             [['created_at', 'updated_at'], 'integer'],
             [['operation_spec_name', 'operation_spec_strategy_unit'], 'string', 'max' => 60]

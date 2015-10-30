@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use dbbase\models\operation\OperationCategory as CommonOperationCategory;
+
 /**
  * This is the model class for table "{{%operation_category}}".
  *
@@ -12,7 +12,7 @@ use dbbase\models\operation\OperationCategory as CommonOperationCategory;
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationCategory extends CommonOperationCategory
+class OperationCategory extends \dbbase\models\operation\OperationCategory
 {
     public static function getCategoryList($operation_category_parent_id = 0, $orderby = '', $select = null){
         return self::getAllData(['operation_category_parent_id' => $operation_category_parent_id], '', $select);

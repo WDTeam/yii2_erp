@@ -2,13 +2,14 @@
 
 namespace boss\controllers\operation;
 
-use Yii;
+use boss\components\BaseAuthController;
 use boss\models\operation\OperationShopDistrict;
 use boss\models\operation\OperationShopDistrictCoordinate;
 use boss\models\operation\OperationCity;
 use boss\models\operation\OperationArea;
+
+use Yii;
 use yii\data\ActiveDataProvider;
-use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 /**
