@@ -54,7 +54,7 @@ $(document).ready(function($){
             url:  "/order/order/cancel-order",
             data: {order_id: operating_order_id, cancel_type: cancelType, cancel_note: cancelNote},
             dataType:"json",
-            success: function (msg) {alert('11:' + msg);
+            success: function (msg) {
                 if(msg != false){
                 	//alert('22');
                 	$("#HBox2").hide();
