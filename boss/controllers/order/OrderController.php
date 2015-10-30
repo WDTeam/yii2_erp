@@ -42,8 +42,11 @@ class OrderController extends BaseAuthController
         $order_id = $params['order_id'];
         $cancel_type = $params['cancel_type'];
         $cancel_note = $params['cancel_note'];
-    
-        return Order::cancel($order_id, $admin_id, $cancel_type, $cancel_note);
+        
+        $result = Order::cancel($order_id, $admin_id, $cancel_type, $cancel_note);
+        if ($result == false)
+            return false;
+        return true;
     }
 
     public function actionCustomer()

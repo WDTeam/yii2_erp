@@ -42,9 +42,10 @@ $(document).ready(function($){
 	});	
 	$(".submitq").click(function(){
 		var cancelType = $(":radio[name='radio_cancelType']:checked").val();
+		var cancelDetailType = $(":radio[name='radio_cancelDetailType']:checked").val();
 		var cancelNote = $("#text_CancelNote").val();
 		
-		if (cancelType == undefined){
+		if (cancelType == undefined || cancelDetailType == undefined){
 			alert("请选择取消原因！");
 			return;
 		}
@@ -55,11 +56,11 @@ $(document).ready(function($){
             data: {order_id: operating_order_id, cancel_type: cancelType, cancel_note: cancelNote},
             dataType:"json",
             success: function (msg) {
-                if(msg != false){
+                if(msg){
                 	//alert('22');
-                	$("#HBox2").hide();
-                	$("#HOverlay").hide()
                 	alert('取消订单成功！');
+                	$("#HBox").hide();
+                	$("#HOverlay").hide()
                 }else{
                     alert('取消订单失败！');
                 }
