@@ -31,7 +31,7 @@ class OperationPlatformVersionController extends BaseAuthController
      * Lists all OperationPlatformVersion models.
      * @return mixed
      */
-    public function actionIndex($platform_id)
+    public function actionIndex($platform_id = '')
     {
         $dataProvider = new ActiveDataProvider([
             'query' => OperationPlatformVersion::find()->where(['operation_platform_id' => $platform_id]),
