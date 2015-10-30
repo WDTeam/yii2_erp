@@ -360,7 +360,7 @@ class Worker extends \dbbase\models\worker\Worker
              ->select('{{%worker}}.id,shop_id,worker_name,worker_phone,worker_idcard,worker_identity_id,worker_type,name as shop_name,worker_stat_order_num,worker_stat_order_refuse')
              ->innerJoinWith('workerDistrictRelation') //关联worker workerDistrictRelation方法
              ->andOnCondition(['{{%worker_district}}.operation_shop_district_id'=>$district_id])
-             ->innerJoinWith('shopRelation') //关联worker shopRelation方法
+             ->joinWith('shopRelation') //关联worker shopRelation方法
              ->innerJoinWith('workerScheduleRelation') //关联WorkerScheduleRelation方法
              //->andOnCondition([])
              ->joinWith('workerStatRelation') //关联worker WorkerStatRelation方法
