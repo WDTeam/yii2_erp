@@ -36,6 +36,7 @@ class OperationServiceCardInfo extends \dbbase\models\operation\OperationService
 		return $this->save();
 	}
 	
+	
 	public function getServiceCardConfig(){
 		$config = [
 			'type'=>[

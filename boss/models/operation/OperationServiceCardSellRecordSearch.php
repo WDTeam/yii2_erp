@@ -40,7 +40,6 @@ class OperationServiceCardSellRecordSearch extends OperationServiceCardSellRecor
 			
             return $dataProvider;
         }
-		file_put_contents('d:/demo/2.txt',var_export($this->service_card_info_card_id,true));
         $query->andFilterWhere([
             'id' => $this->id,
             'customer_id' => $this->customer_id,

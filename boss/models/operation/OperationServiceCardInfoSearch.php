@@ -30,7 +30,7 @@ class OperationServiceCardInfoSearch extends OperationServiceCardInfo
     public function search($params)
     {
         $query = OperationServiceCardInfo::find();
-
+		file_put_contents('d:/demo/2.txt',var_export($params,true));
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
