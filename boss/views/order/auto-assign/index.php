@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
     .margin-l-36 {margin-left: 33px;}
 </style>
 <!-- end -->
-
+<input id="srvIsSuspend" name="srvIsSuspend" value="<?php echo $srvIsSuspend ? 'true':'false' ?>" hidden />
 <div class="container">
     <div class="row">
         <div class="col-md-4 form-inline">

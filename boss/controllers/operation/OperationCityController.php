@@ -2,19 +2,19 @@
 
 namespace boss\controllers\operation;
 
-use Yii;
+use boss\components\UploadFile;
+use boss\components\BaseAuthController;
+use boss\models\operation\OperationArea;
 use boss\models\operation\OperationCity;
 use boss\models\operation\OperationCitySearch;
 use boss\models\operation\OperationShopDistrict;
 use boss\models\operation\OperationShopDistrictGoods;
 use boss\models\operation\OperationCategory;
 use boss\models\operation\OperationGoods;
-use boss\components\BaseAuthController;
+
+use Yii;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-//use boss\components\AreaCascade;
-use boss\models\operation\OperationArea;
-use boss\components\UploadFile;
 
 /**
  * OperationCityController implements the CRUD actions for OperationCity model.

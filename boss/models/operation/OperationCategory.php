@@ -16,10 +16,10 @@ class OperationCategory extends \core\models\operation\OperationCategory
     /**
      * @inheritdoc
      */
-//    public static function tableName()
-//    {
-//        return '{{%operation_category}}';
-//    }
+    //public static function tableName()
+    //{
+        //return '{{%operation_category}}';
+    //}
 
     /**
      * @inheritdoc

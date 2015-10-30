@@ -36,11 +36,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
 //           'id',
             [
-                'header'=>"服务品类名",
+                'header'=>"服务类型",
                 'attribute'=>'operation_category_name'
             ],
             [
-                'header'=>"商品",
+                'header'=>"服务项目",
                 'attribute'=>'operation_goods_name'
             ],
 //            [
