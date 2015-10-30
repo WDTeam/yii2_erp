@@ -294,6 +294,104 @@ class Customer extends \dbbase\models\customer\Customer
 		return ['vip_type'=>$vip_type, 'vip_type_name'=>$vip_type_name];
 	}
 
+	/*******************************************balance******************************************/
+	/**
+	 * get balance by phone
+	 */
+	public static function getBalance($phone){
+		$customer = self::find()->where(['customer_phone'=>$phone])->asArray()->one();
+		if(empty($customer)) throw new NotFoundHttpException;
+
+		$customer_ext_balance = CustomerExtBalance::find()->where(['customer_phone'=>$phone])->asArray()->one();
+		if(empty($customer_ext_balance)) throw new NotFoundHttpException;
+		return $customer_ext_balance['customer_balance'];
+	}
+
+    /**
+     * 客户账户余额转入
+     */
+    static public function incBalance($customer_id, $cash)
+    {
+        // $customer_id = \Yii::$app->request->get('customer_id');
+        // $cash = \Yii::$app->request->get('cash');
+        // \Yii::$app->response->format = Response::FORMAT_JSON;
+        $customer = Customer::findOne($customer_id);
+        if ($customer == NULL) {
+            return false;
+        }
+        $customerBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
+        if ($customerBalance == NULL) {
+            $customerBalance = new CustomerExtBalance;
+            $customerBalance->customer_id = $customer_id;
+            $customerBalance->customer_balance = 0;
+            $customerBalance->created_at = time();
+            $customerBalance->updated_at = 0;
+            $customerBalance->is_del = 0;
+            $customerBalance->validate();
+            if ($customerBalance->hasErrors()) {
+                return false;
+            }
+            $customerBalance->save();
+        }
+        $balance = $customerBalance->customer_balance;
+        $customerBalance->customer_balance = bcadd($balance, $cash, 2);
+        $customerBalance->validate();
+        if ($customerBalance->hasErrors()) {
+            return false;
+        }
+        $customerBalance->save();
+        return true;
+    }
+
+    /**
+     * 客户账户余额转出
+     */
+    static public function decBalance($customer_id, $cash)
+    {
+        // $customer_id = \Yii::$app->request->get('customer_id');
+        // $cash = \Yii::$app->request->get('cash');
+        // \Yii::$app->response->format = Response::FORMAT_JSON;
+        $customer = Customer::findOne($customer_id);
+        if ($customer == NULL) {
+            return false;
+        }
+        $customerBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
+        if ($customerBalance == NULL) {
+            $customerBalance = new CustomerExtBalance;
+            $customerBalance->customer_id = $customer_id;
+            $customerBalance->customer_balance = 0;
+            $customerBalance->created_at = time();
+            $customerBalance->updated_at = 0;
+            $customerBalance->is_del = 0;
+            $customerBalance->validate();
+            if ($customerBalance->hasErrors()) {
+                return false;
+            }
+            $customerBalance->save();
+        }
+        $balance = $customerBalance->customer_balance;
+        $customerBalance->customer_balance = bcsub($balance, $cash, 2);
+        $customerBalance->validate();
+        if ($customerBalance->hasErrors()) {
+            return false;
+        }
+        $customerBalance->save();
+        return true;
+    }
+
+	/******************************************score**********************************************/
+	/**
+     * get score by phone
+	 */
+	public static function getScore($phone){
+		$customer = self::find()->where(['customer_phone'=>$phone])->asArray()->one();
+		if(empty($customer)) throw new NotFoundHttpException;
+
+		$customer_ext_score = CustomerExtScore::find()->where(['customer_phone'=>$phone])->asArray()->one();
+		if(empty($customer_ext_score)) throw new NotFoundHttpException;
+		return $customer_ext_score['customer_score'];
+	}
+
 	/*******************************************src**********************************************/
 	/**
      * get all customer srcs
@@ -378,6 +476,80 @@ class Customer extends \dbbase\models\customer\Customer
 		}
 		return false;
 	}
+
+	/*************************************address*******************************************************/
+	/**
+	 * get current address
+	 */
+	public static function getCurrentAddress($phone){
+		$customer = self::find()->where(['customer_phone'=>$phone])->asArray()->one();
+		if(empty($customer)) throw new NotFoundHttpException;
+		
+		$customer_address = CustomerAddress::find()->where(['customer_phone'=>$phone, 'customer_address_status'=>1])->asArray()->one();
+		if(empty($customer_address)) throw new NotFoundHttpException;
+		return [
+			'operation'=>$customer_address,
+			'operation_str'=>$customer_address['operation_province_name']
+				.$customer_address['operation_city_name']
+				.$customer_address['operation_area_name']
+				.$customer_address['operation_address_detail']
+				.' | '
+				.$customer_address['customer_address_nickname']
+				.' | '
+				.$customer['customer_address_phone'],
+		];
+	}
+
+	/**
+	 *	
+	 */
+
+	/*************************************worker*******************************************************/
+	/**
+     * get current worker
+	 */
+	public static function getCurrentWorker($phone){
+		$customer = self::find()->where(['customer_phone'=>$phone])->asArray()->one();
+		if(empty($customer)) throw new NotFoundHttpException;
+
+		$customer_worker = CustomerWorker::find()->where([
+			'customer_phone'=>$phone, 
+			'customer_worker_status'=>1, 
+			'customer_worker_status'=>1, 
+			'is_del'=>0
+			])->asArray()->one();
+		if(empty($customer_worker)) throw new NotFoundHttpException;
+
+		$worker = Worker::findOne($customer_worker['id'])->asArray();
+		if(empty($worker)) throw new NotFoundHttpException;
+		return $worker;
+	}
+
+	/**********************************count*************************************************************
+	/**
+     * 统计所有客户的数量
+     */
+    public static function countAllCustomer(){
+        $count = self::find()->count();
+        return $count;
+    }
+
+    /**
+     * 统计不包括黑名单的客户数量
+     */
+    public static function countCustomer(){
+        $count = self::find()->where(['is_del'=>0])->count();
+        return $count;
+    }
+
+    /**
+     * 统计黑名单客户数量
+     */
+    public static function countBlockCustomer(){
+        $count = self::find()->where(['is_del'=>1])->count();
+        return $count;
+    }
+
 
 	/******************************other******************************************************************/
 	/**

@@ -17,7 +17,7 @@ class m151028_101635_create_table_operation_service_card_sell_record extends Mig
 			'service_card_sell_record_code' 	=> Schema::TYPE_STRING.'(20) NOT NULL DEFAULT \'\' COMMENT \'购卡订单号\'',
 			'customer_id' 						=> Schema::TYPE_BIGINT.'(20) NOT NULL DEFAULT 0 COMMENT \'用户id\'',
 			'customer_phone'					=> Schema::TYPE_INTEGER.'(11) NOT NULL DEFAULT 0 COMMENT \'用户手机号\'',
-			'service_card_info_card_id' 		=> Schema::TYPE_BIGINT.'(20) NOT NULL DEFAULT 0 COMMENT \'服务卡id\'',
+			'service_card_info_id' 		=> Schema::TYPE_BIGINT.'(20) NOT NULL DEFAULT 0 COMMENT \'服务卡id\'',
 			'service_card_info_name' 			=> Schema::TYPE_STRING.'(64) NOT NULL DEFAULT \'\' COMMENT \'服务卡名\'',
 			'service_card_sell_record_money' 			=> Schema::TYPE_DECIMAL.'(8,2) NOT NULL DEFAULT 0 COMMENT \'购卡订单金额\'',
 			'service_card_sell_record_channel_id' 		=> Schema::TYPE_INTEGER.'(10) NOT NULL DEFAULT 0 COMMENT \'购卡订单渠道id\'',

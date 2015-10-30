@@ -25,7 +25,7 @@ use kartik\datecontrol\DateControl;
 
 'customer_phone'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 用户手机号...']], 
 
-'service_card_info_card_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 服务卡id...', 'maxlength'=>20]], 
+'service_card_info_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 服务卡id...', 'maxlength'=>20]], 
 
 'service_card_sell_record_channel_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 购卡订单渠道id...']], 
 
