@@ -677,7 +677,7 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} v1/user/get-user-money 用户余额和消费记录 （数据已经全部取出,需要给出所需字段,然后给予返回 已完成99% ;）
+     * @api {GET} v1/user/get-user-money 用户余额和消费记录 （郝建设 已完成99% ;）
      * 
      *
      * @apiName actionGetUserMoney
@@ -719,10 +719,10 @@ class UserController extends \restapi\components\Controller
      * "customer_trans_record_compensate_money": "补偿金额",
      * "customer_trans_record_refund_money": "退款金额",
      * "customer_trans_record_order_total_money": "订单总额",
-     * "customer_trans_record_total_money:'交易总额',
-     * "customer_trans_record_current_balance:'当前余额',
-     * "customer_trans_record_befor_balance:'之前余额',
-     * "customer_trans_record_transaction_id:'交易流水号',
+     * "customer_trans_record_total_money":'交易总额',
+     * "customer_trans_record_current_balance":'当前余额',
+     * "customer_trans_record_befor_balance":'之前余额',
+     * "customer_trans_record_transaction_id":'交易流水号',
      * "customer_trans_record_remark": '备注',
      * "customer_trans_record_verify": '验证',
      * "created_at":'创建时间',
