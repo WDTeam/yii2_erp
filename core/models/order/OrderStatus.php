@@ -38,18 +38,29 @@ class OrderStatus extends Order
         return false;
     }
 
+
     /**
-     * 变更为已支付待指派状态
+     * 批量支付接口
      * @param $batch_code
-     * @param $must_models
+     * @param $admin_id
+     * @param $pay_channel_id
+     * @param $order_pay_channel_name
+     * @param $order_pay_flow_num
      * @return bool
+     * @throws \yii\db\Exception
      */
-    protected static function _batchPayment($batch_code,$must_models=[]){
+    protected static function _batchPayment($batch_code,$admin_id,$pay_channel_id,$order_pay_channel_name,$order_pay_flow_num){
         $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_WAIT_ASSIGN); //变更为已支付待指派状态
         $transact = static::getDb()->beginTransaction();
         $orders = OrderSearch::getBatchOrder($batch_code);
         foreach($orders as $order){
-            if(!self::_statusChange($order,$status,$must_models,$transact)){
+            $order->setAttributes([
+                'admin_id' => $admin_id,
+                'pay_channel_id' => $pay_channel_id,
+                'order_pay_channel_name' => $order_pay_channel_name,
+                'order_pay_flow_num' => $order_pay_flow_num
+            ]);
+            if(!self::_statusChange($order,$status,['OrderExtPay'],$transact)){
                 $transact->rollBack();
                 return false;
             }

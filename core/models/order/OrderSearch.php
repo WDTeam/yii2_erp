@@ -143,6 +143,23 @@ class OrderSearch extends Order
         return $data;
     }
 
+    /**
+     * 通过订单ID获取订单链表信息
+     * @param $order_id 订单ID
+     */
+    public static function getOrderInfo($order_id)
+    {
+        $query = new \yii\db\Query();
+        $data = $query->from('{{%order}} as order')
+            ->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')
+            ->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')
+            ->innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id')
+            ->innerJoin('{{%order_ext_worker}} as ow','order.id = ow.order_id')
+            ->select('*')
+            ->where(['id'=>$order_id])
+            ->one();
+        return $data;
+    }
 
     /**
      * 通过订单ID获取带用户信息的订单
@@ -278,7 +295,7 @@ class OrderSearch extends Order
      * @param $worker_id
      * @param int $page_size
      * @param int $page
-     * @param bool $is_booked
+     * @param bool $is_booked 是否指定阿姨
      * @return mixed
      */
     public static function getPushWorkerOrders($worker_id,$page_size=20,$page=1,$is_booked)
@@ -421,9 +438,12 @@ class OrderSearch extends Order
         if(!isset($attributes["OrderSearch"]["oc.customer_id"])){
             $attributes["OrderSearch"]["oc.customer_id"] = null;
         }
+        if(!isset($attributes["OrderSearch"]["id"])){
+            $attributes["OrderSearch"]["id"] = null;
+        }
         if ($this->load($attributes) && $this->validate()) {
             $query->andFilterWhere([
-                'id' => $this->id,
+                'id' => $attributes["OrderSearch"]["id"],
                 'order_parent_id' => $this->order_parent_id,
                 'order_is_parent' => $this->order_is_parent,
                 'created_at' => $this->created_at,

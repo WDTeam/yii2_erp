@@ -2,14 +2,15 @@
 
 namespace boss\controllers\operation;
 
-use Yii;
-use boss\models\operation\OperationAdvertPosition;
-use yii\data\ActiveDataProvider;
 use boss\components\BaseAuthController;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
+use boss\models\operation\OperationAdvertPosition;
 use boss\models\operation\OperationPlatform;
 use boss\models\operation\OperationPlatformVersion;
+
+use Yii;
+use yii\data\ActiveDataProvider;
+use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
 
 /**
  * OperationAdvertPositionController implements the CRUD actions for OperationAdvertPosition model.

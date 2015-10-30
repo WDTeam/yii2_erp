@@ -2,10 +2,12 @@
 
 namespace boss\controllers\operation;
 
-use Yii;
+use boss\components\BaseAuthController;
+
 use core\models\worker\WorkerTask;
 use core\models\worker\WorkerTaskSearch;
-use boss\components\BaseAuthController;
+
+use Yii;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 

@@ -26,10 +26,16 @@ function websocketConnect() {
             $('#connectStatus').html('连接成功！');
             $('#connect').attr('disabled', true);
             $('#runService').hide();
-            $('#start').attr('disabled', false);
-            $('#stop').attr('disabled', false);
             $('#reload').attr('disabled', false);
             $('#update').attr('disabled', false);
+            if ($('#srvIsSuspend').val()==true)
+            {
+                $('#start').attr('disabled', false);
+                $('#stop').attr('disabled', true);
+            }else{
+                $('#start').attr('disabled', true);
+                $('#stop').attr('disabled', false);
+            }
         };
         websocket.onclose = function (evt) {
             console.log("Disconnected");
@@ -64,8 +70,7 @@ function websocketConnect() {
             }else if(msg == srv_update){
                 $('#connectStatus').html('配置已完成更新...');
             }else if(msg == "Assign Server is OK"){
-                $('#start').attr('disabled', true);
-                $('#stop').attr('disabled', false);
+
             }else{
                 showOrders(evt.data);
             }

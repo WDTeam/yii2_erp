@@ -24,14 +24,6 @@ class m150918_031530_create_table_operation_city extends Migration
             'created_at' => Schema::TYPE_INTEGER. '(11) DEFAULT NULL COMMENT \'创建时间\'',
             'updated_at' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'编辑时间\'',
         ], $tableOptions);
-        $this->execute(
-            "insert into {{%operation_city}} (`id`, `province_id`, `province_name`, `city_id`, `city_name`, `operation_city_is_online`, `created_at`, `updated_at`) values
-	        ('1','120000','天津','120100','天津市','1','1444283773','1444283773'),
-	        ('2','110000','北京','110100','北京市','1','1444368462','1444368462'),
-                ('3','140000','山西省','140300','阳泉市','1','1444413962','1444413962'),
-                ('4','140000','山西省','140100','太原市','1','1444635891','1444635891'),
-                ('5','230000','黑龙江省','231100','黑河市','2','1444816358','1444816358');"
-        );
         
     }
 

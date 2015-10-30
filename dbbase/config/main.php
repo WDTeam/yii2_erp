@@ -109,37 +109,6 @@ return [
         'devicedetect' => [
             'class' => 'alexandernst\devicedetect\DeviceDetect'
         ],
-        /**
-         * 配置 redis 
-         *  add by zhanghang 2015-09-21
-         * 
-         * 使用方式： Yii::$app->redis->set('keyname','keyvalue');
-         * 
-         * 有部分函数使用时要注意，比如mget:
-         * $tempkeyarray=explode(',',$tempkey);
-         * $resultarray = Yii::$app->redis->executeCommand('mget',$tempkeyarray);
-         * 
-         * 修改php.ini，设置： 
-         * default_socket_timeout = -1
-         * 可以在index.php入口处加：
-         *   <?php
-         *      ini_set('default_socket_timeout', -1);
-         */
-        'redis' => [
-            'class' => 'yii\redis\Connection',
-            'hostname' => '101.200.179.70', // 配置为 dev环境 redis 服务器地址 test环境 101.200.200.74 ，prod环境 待定
-//            'hostname' => '127.0.0.1', // 配置为 dev环境 redis 服务器地址 test环境 101.200.200.74 ，prod环境 待定
-            'port' => 6379,
-            'database' => 0,
-        ],
-        /**
-         * 配置 mongodb
-         * 使用参考：http://www.yiiframework.com/doc-2.0/ext-mongodb-index.html
-         */
-        //'mongodb' => [
-            //'class' => '\yii\mongodb\Connection',
-            //'dsn' => 'mongodb://developer:password@localhost:27017/mydatabase',
-        //],
         
         /**
          * 配置控制台命令

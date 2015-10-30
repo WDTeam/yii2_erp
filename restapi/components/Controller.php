@@ -9,6 +9,7 @@ use yii\base\ErrorException;
 use yii\web\BadRequestHttpException;
 use yii\web\MethodNotAllowedHttpException;
 
+
 class Controller extends \yii\rest\Controller
 {
     public $version;
@@ -23,20 +24,21 @@ class Controller extends \yii\rest\Controller
 
     /**
      * 输出结果处理
+     *
      * @param Array|String|Number $data 输出内容
      * @param integer $error_code 错误码
      * @param string $msg 信息
      */
-    public function send($ret, $msg = "操作成功", $code = 1, $value = 200, $text = null)
+    public function send($ret, $msg = "操作成功", $code = 1, $value = 200, $text = null, $alertMsg = "")
     {
-        $value=200;
-        if(is_null($ret)) $ret=new Object();
+        $value = 200;
+        if (is_null($ret)) $ret = new Object();
         $result = [
             'code' => $code,
             'msg' => $msg,
-            'ret' => $ret
+            'ret' => $ret,
+            'alertMsg' => $alertMsg
         ];
-
         $response = Yii::$app->response;
         $response->format = Yii\web\Response::FORMAT_JSON;
         $response->data = $result;

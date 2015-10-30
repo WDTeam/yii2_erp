@@ -23,20 +23,7 @@ class m151021_025236_create_table_customer_comment_tag extends Migration
 
         ], $tableOptions);
 		$this->createIndex('customer_comment_level','{{%customer_comment_tag}}','customer_comment_level');
-        $this->execute(
-			"INSERT INTO `ejj_customer_comment_tag` VALUES ('1', '1', '阿姨态度很好', '1', '1', '1445860384', '1445860384', '0');
-			INSERT INTO {{%customer_comment_tag}} VALUES ('2', '1', '阿姨比较热情', '1', '1', '1445860384', '1445860384', '0');
-			INSERT INTO {{%customer_comment_tag}} VALUES ('3', '1', '态度很差', '3', '1', '1445860384', '1445860384', '0');
-			INSERT INTO {{%customer_comment_tag}} VALUES ('4', '1', '蛮不讲理', '3', '1', '1445860384', '1445860384', '0');
-			INSERT INTO {{%customer_comment_tag}} VALUES ('5', '1', '态度积极', '1', '1', '1445860384', '1445860384', '0');
-			INSERT INTO {{%customer_comment_tag}} VALUES ('6', '1', '通情达理', '1', '1', '1445860384', '1445860384', '0');
-			INSERT INTO {{%customer_comment_tag}} VALUES ('7', '1', '积极主动', '1', '1', '1445860384', '1445860384', '0');
-			INSERT INTO {{%customer_comment_tag}} VALUES ('8', '2', '积极主动', '1', '1', '1445860384', '1445860384', '0');"
-  );
     }
-
-
-
 
 
     public function down()

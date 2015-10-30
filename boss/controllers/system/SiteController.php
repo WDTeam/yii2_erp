@@ -29,11 +29,41 @@ class SiteController extends Controller
         if(\Yii::$app->user->isGuest){
             $this->redirect(array('login'));
         }
-        return $this->render('index');
         
+        if(1==2){
+        	return $this->render('indexshop');
+        }else {
+        	return $this->render('index');
+        }
         
     }
 
+    public function actionIndexshop()
+    {
+    	if(\Yii::$app->user->isGuest){
+    		$this->redirect(array('login'));
+    	}
+    	
+    	$date['countorder']=345;//已经接单
+    	$date['countworker']=28;//阿姨
+    	$date['countgoodreputation']=443;//好评
+    	$date['counttask']=231;// 任务
+    	$date['userinfo']='datainfo';//基本资料
+    	$date['dbbasemsg']='datainfo';//系统通知
+    	
+    	
+    	return $this->render('indexshop', [
+    			'date' => $date,
+    			]);
+    	
+    	
+    		return $this->render('indexshop');
+    		
+    }
+    
+    
+    
+    
     public function actionLogin()
     {
     	
@@ -46,6 +76,8 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+        	
+        	//echo  '11111';exit;
             return $this->goBack();
         } else {
             $model->username = 'admin';
