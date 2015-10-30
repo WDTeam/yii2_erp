@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 'title' => Yii::t('yii', 'View'),'data-pjax'=>'0','target' => '_blank',
                                               ]);},
                 'update' => function ($url, $model) {
-                                    return Html::a('<span class="btn btn-primary">更新</span>', Yii::$app->urlManager->createUrl(['/finance/finance-compensate/create','id' => $model->id]), [
+                                    return Html::a('<span class="btn btn-primary">更新</span>', Yii::$app->urlManager->createUrl(['/finance/finance-compensate/update','id' => $model->id]), [
                                                     'title' => Yii::t('yii', 'Edit'),
                                                   ]);}
 
