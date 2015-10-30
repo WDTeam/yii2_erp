@@ -146,11 +146,11 @@ class CouponController extends \restapi\components\Controller
         }
         $city_id = $param['city_id'];
         //获取该用户该城市的优惠码列表
-//        try{
+        try{
             $coupons=CouponCustomer::GetCustomerCouponList($checkResult['customer_id'],$city_id);
-//        }catch (\Exception $e) {
-//            return $this->send(null, "boss系统错误", 1024, 403);
-//        }
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
         if (!empty($coupons)) {
             return $this->send($coupons, "获取优惠券列表成功", 1);
         } else {

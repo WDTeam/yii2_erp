@@ -77,10 +77,10 @@ class CouponCustomer extends \dbbase\models\operation\coupon\CouponCustomer
      */
     public static function GetCustomerCouponList($customer_id,$city_id){
         $now_time=time();
-        $couponCustomer=(new \yii\db\Query())->select('*')->from('ejj_coupon_customer')
-                ->leftJoin('ejj_coupon', 'ejj_coupon_customer.coupon_id = ejj_coupon.id')
+        $couponCustomer=(new \yii\db\Query())->select('*')->from('ejj_coupon')
+                ->leftJoin('ejj_coupon_customer', 'ejj_coupon_customer.coupon_id = ejj_coupon.id')
                 ->where(['and',"ejj_coupon_customer.expirate_at>$now_time",'ejj_coupon_customer.is_del=0','ejj_coupon_customer.is_used=0',"ejj_coupon_customer.customer_id=$customer_id", ['or', ['and','ejj_coupon.coupon_city_limit=1',"ejj_coupon.coupon_city_id=$city_id"], 'ejj_coupon.coupon_city_limit=0']] )
-                ->orderBy(['ejj_coupon_customer.expirate_at' => SORT_ASC,'ejj_coupon_customer.coupon_price' => SORT_DESC])->all();
+                ->orderBy(['ejj_coupon_customer.expirate_at'=>SORT_ASC,'ejj_coupon_customer.coupon_price'=>SORT_DESC])->all();
         return $couponCustomer;
    }
     /**
