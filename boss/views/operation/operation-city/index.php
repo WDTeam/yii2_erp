@@ -4,10 +4,6 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use boss\components\SearchBox;
-use boss\models\operation\OperationCity;
-use boss\models\operation\OperationShopDistrict;
-use boss\models\operation\OperationShopDistrictGoods;
-
 
 /**
  * @var yii\web\View $this
@@ -73,8 +69,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'header'=>"商圈数量",
                 'attribute'=> 'shopdistrict',
                 'format'=>'html',
-                'value' => function ($model){
-                    return OperationShopDistrict::getCityShopDistrictNum($model->city_id);
+                'value' => function ($model) use ($ShopDistrictModel){
+                    return $ShopDistrictModel::getCityShopDistrictNum($model->city_id);
                     //                   return date('Y-m-d H:i:s', $model->created_at);
                 }
             ],
