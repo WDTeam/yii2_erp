@@ -254,7 +254,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         $apply_money_except_cash = $apply_money_except_deduct_cash - $apply_money_deduction;//订单金额+底薪补贴+任务奖励-扣款
         $apply_money = $apply_money_except_cash - $order_cash_money;//订单金额+底薪补贴+任务奖励-扣款-现金订单金额
         $this->finance_settle_apply_order_count = $order_count;//总单量
-        $this->finance_settle_apply_man_hour = $apply_man_hour/60;//总工时
+        $this->finance_settle_apply_man_hour = $apply_man_hour;//总工时
         $this->finance_settle_apply_order_money = $apply_order_money;//工时费小计
         $this->finance_settle_apply_task_count = $apply_task_count;//完成任务数
         $this->finance_settle_apply_task_money = $apply_task_money;//完成任务奖励
