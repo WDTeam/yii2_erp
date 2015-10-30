@@ -223,6 +223,7 @@ class server
         $this->redis->set($key, $data);
         if ($server)
         {
+            //echo "save status broadcast...\n";
             $this->broadcast($server,'Assign Server is OK');
         }
     }
@@ -413,6 +414,7 @@ class server
         $msg = json_encode($msg);
         foreach ($server->connections as $clid => $info)
         {
+            //var_dump($clid);
             try{
                 $server->push($clid, $msg);
             } catch (Exception $ex) {
