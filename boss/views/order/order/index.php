@@ -189,23 +189,23 @@ $this->params['breadcrumbs'][] = $this->title;
 						<strong>具体原因 </strong>
 						
 						<div class="fl js_radio_tab">
-							<label class="mr11"><input type="radio" name="yin1" value="2" class="xuanzhong"/>空号错号</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>无人接听</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>用户未预定服务</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>重复订单</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>时间调整</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>用户不需要</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>其他</label>
+							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2" class="xuanzhong"/>空号错号</label>
+							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2"/>无人接听</label>
+							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2"/>用户未预定服务</label>
+							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2"/>重复订单</label>
+							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2"/>时间调整</label>
+							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2"/>用户不需要</label>
+							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2"/>其他</label>
 						</div>
 						
 						<div class="fl js_radio_tab" style="display: none;">
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>用户所在地超范围</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>无服务阿姨</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>无人联系客户</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>爽约（阿姨未接到通知）</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>爽约（阿姨主动爽约）</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>服务体验差</label>
-							<label class="mr11"><input type="radio" name="yin1" value="2"/>其他</label>
+							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2"/>用户所在地超范围</label>
+							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2"/>无服务阿姨</label>
+							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2"/>无人联系客户</label>
+							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2"/>爽约（阿姨未接到通知）</label>
+							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2"/>爽约（阿姨主动爽约）</label>
+							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2"/>服务体验差</label>
+							<label class="mr11"><input type="radio" name="radio_cancelDetailType" value="2"/>其他</label>
 						</div>
 						
 					</li>
