@@ -51,7 +51,6 @@ function websocketConnect() {
             var srv_update = 4;
             //alert(msg=="Server-Continue");
             if( msg == srv_continue){
-                alert("Server-Continue");
                 $('#connectStatus').html('服务已继续...');
                 $('#start').attr('disabled', true);
                 $('#stop').attr('disabled', false);
@@ -65,7 +64,7 @@ function websocketConnect() {
             }else if(msg == srv_update){
                 $('#connectStatus').html('配置已完成更新...');
             }else if(msg == "Assign Server is OK"){
-                
+                console.log("log:"+msg);
             }else{
                 showOrders(evt.data);
             }
