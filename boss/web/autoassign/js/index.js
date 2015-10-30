@@ -64,7 +64,8 @@ function websocketConnect() {
             }else if(msg == srv_update){
                 $('#connectStatus').html('配置已完成更新...');
             }else if(msg == "Assign Server is OK"){
-                console.log("log:"+msg);
+                $('#start').attr('disabled', true);
+                $('#stop').attr('disabled', false);
             }else{
                 showOrders(evt.data);
             }
