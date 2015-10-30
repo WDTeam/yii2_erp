@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 /**
  * @var yii\web\View $this
- * @var common\models\FinanceRefund $model
+ * @var dbbase\models\FinanceRefund $model
  */
 
 $this->title = Yii::t('app', 'Update {modelClass}: ', [

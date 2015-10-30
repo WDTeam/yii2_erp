@@ -19,6 +19,7 @@ class m150919_084929_create_table_worker_vacation extends Migration
             'worker_vacation_type' => Schema::TYPE_BOOLEAN. '(1) DEFAULT NULL COMMENT \'阿姨请假类型 1休假 2事假\'',
             'worker_vacation_extend' => Schema::TYPE_STRING . '(50) DEFAULT NULL COMMENT \'阿姨请假备注\'',
             'worker_vacation_status' => Schema::TYPE_BOOLEAN. '(1) DEFAULT 0 COMMENT \'阿姨请假状态 0关闭1开启\'',
+            'worker_vacation_source' => Schema::TYPE_BOOLEAN. '(1) DEFAULT 0 COMMENT \'阿来源 0管理员1阿姨申请\'',
             'created_ad' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL COMMENT \'创建时间\'',
             'updated_ad' => Schema::TYPE_INTEGER . '(10) DEFAULT NULL COMMENT \'最后更新时间\'',
             'admin_id' => Schema::TYPE_INTEGER . '(11) DEFAULT NULL COMMENT \'操作管理员id\'',

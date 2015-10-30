@@ -3,10 +3,10 @@
 use yii\helpers\Html;
 use kartik\detail\DetailView;
 use kartik\datecontrol\DateControl;
-use common\models\finance\FinanceRefund;
+use dbbase\models\finance\FinanceRefund;
 /**
  * @var yii\web\View $this
- * @var common\models\FinanceRefund $model
+ * @var dbbase\models\FinanceRefund $model
  */
 
 $this->title = $model->finance_refund_tel;

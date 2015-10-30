@@ -95,6 +95,7 @@ class AreaCascade extends \yii\widgets\InputWidget
         $this->name = $this->getClassName($this->model);
         $name = $this->name.'['.$type.'_id]';
         $options['id'] = $type;
+        $items = [];
         if(!is_numeric($selection)){
             $items = [$selection];
         }

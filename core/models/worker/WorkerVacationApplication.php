@@ -16,7 +16,7 @@ use core\models\worker\WorkerVacation;
  * @property integer $worker_vacation_application_approve_time
  * @property integer $created_ad
  */
-class WorkerVacationApplication extends \common\models\worker\WorkerVacationApplication
+class WorkerVacationApplication extends \dbbase\models\worker\WorkerVacationApplication
 {
     /**
      * 获取阿姨请假排班表

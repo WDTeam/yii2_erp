@@ -9,7 +9,7 @@ use yii\data\ActiveDataProvider;
 use core\models\worker\Worker;
 
 /**
- * WorkerSearch represents the model behind the search form about `common\models\Worker`.
+ * WorkerSearch represents the model behind the search form about `dbbase\models\Worker`.
  */
 class WorkerSearch extends Worker
 {

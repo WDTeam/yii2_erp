@@ -2,14 +2,14 @@
 namespace core\models\shop;
 use yii;
 use yii\behaviors\TimestampBehavior;
-use core\models\Operation\OperationCity;
-use core\models\Operation\OperationArea;
+use core\models\operation\OperationCity;
+use core\models\operation\OperationArea;
 use yii\web\BadRequestHttpException;
 use core\models\worker\Worker;
 use core\behaviors\ShopStatusBehavior;
 use yii\helpers\ArrayHelper;
 use core\models\operation\OperationShopDistrict;
-class Shop extends \common\models\shop\Shop
+class Shop extends \dbbase\models\shop\Shop
 {
     public static $audit_statuses = [
         0=>'待审核',

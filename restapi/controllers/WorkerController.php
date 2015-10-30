@@ -915,12 +915,12 @@ class WorkerController extends \restapi\components\Controller
     
     
     /** 
-     * @api {get} /mobileapidriver2/system_news  通知中心(田玉星0%)
+     * @api {GET} /worker/system-news  消息通知中心(田玉星0%)
      * @apiName actionSystemNews
      * @apiGroup Worker
      *
-     * @apiParam {String} session_id    会话id.
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} access_token    阿姨登录token.
+     * @apiParam {String} [platform_version] 平台版本号.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK

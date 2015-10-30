@@ -5,7 +5,7 @@ namespace core\models\finance;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\finance\FinanceSettleApply;
+use dbbase\models\finance\FinanceSettleApply;
 use core\models\worker\Worker;
 use core\models\order\Order;
 use core\models\order\OrderSearch;
@@ -13,7 +13,7 @@ use core\models\finance\FinanceWorkerNonOrderIncomeSearch;
 use core\models\finance\FinanceWorkerOrderIncomeSearch;
 
 /**
- * FinanceSettleApplySearch represents the model behind the search form about `common\models\finance\FinanceSettleApply`.
+ * FinanceSettleApplySearch represents the model behind the search form about `dbbase\models\finance\FinanceSettleApply`.
  */
 class FinanceSettleApplySearch extends FinanceSettleApply
 {

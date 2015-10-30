@@ -64,7 +64,7 @@ class CouponController extends \restapi\components\Controller
         }
         $coupon_code = $param['coupon_code'];
         $customer_phone = $param['customer_phone'];
-        //验证活动码是否存在
+        //验证优惠码是否存在
         try{
             $exist_coupon=CouponCode::checkCouponCodeIsAble($coupon_code);
         }catch (\Exception $e) {
@@ -146,11 +146,11 @@ class CouponController extends \restapi\components\Controller
         }
         $city_id = $param['city_id'];
         //获取该用户该城市的优惠码列表
-        try{
+//        try{
             $coupons=CouponCustomer::GetCustomerCouponList($checkResult['customer_id'],$city_id);
-        }catch (\Exception $e) {
-            return $this->send(null, "boss系统错误", 1024, 403);
-        }
+//        }catch (\Exception $e) {
+//            return $this->send(null, "boss系统错误", 1024, 403);
+//        }
         if (!empty($coupons)) {
             return $this->send($coupons, "获取优惠券列表成功", 1);
         } else {

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 /**
  * @var yii\web\View $this
- * @var common\models\OperationCity $model
+ * @var dbbase\models\OperationCity $model
  */
 
 $this->title = Yii::t('app', 'Update').Yii::t('app', 'City');

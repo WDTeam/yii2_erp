@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationPriceStrategy as CommonOperationPriceStrategy;
+use dbbase\models\operation\OperationPriceStrategy as CommonOperationPriceStrategy;
 
 /**
  * This is the model class for table "{{%operation_price_strategy}}".

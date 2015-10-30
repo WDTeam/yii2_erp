@@ -16,7 +16,7 @@ $menuItems = [
     ],
     [
         'label' => Yii::t('app', 'Logout') . '(' . Yii::$app->user->identity->username . ')',
-        'url' => ['/general/site/logout'],
+        'url' => ['/system/site/logout'],
         'linkOptions' => ['data-method' => 'post']
     ]
 ];
@@ -56,21 +56,21 @@ $menuItemsMain = [
         'active' => false,
         //'visible' => Yii::$app->user->can('haha'),
         'items' => [
-            [
-                'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', '设置授权项'),
-                'url' => ['/general/auth'],
-            ],
-            [
-                'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', '设置角色'),
-                'url' => ['/general/role'],
-            ],
-            [
-                'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', '设置用户角色'),
-                'url' => ['/general/system-user'],
-            ],
-            [
-                'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', '退出系统'),
-                'url' => ['/general/site/logout'],
+          [
+              'label' => '<i class="fa fa-file-text"></i> ' . Yii::t('app', '设置系统授权项'),
+              'url' => ['/system/auth'],
+          ],
+          [
+              'label' => '<i class="fa fa-users"></i> ' . Yii::t('app', '设置系统用户角色'),
+              'url' => ['/system/role'],
+          ],
+          [
+              'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', '设置系统用户权限'),
+              'url' => ['/system/system-user'],
+          ],
+          [
+              'label' => '<i class="fa fa-sign-out"></i> ' . Yii::t('app', '退出系统'),
+              'url' => ['/system/site/logout'],
             ],
         ],
     ],
@@ -82,7 +82,7 @@ $menuItemsMain = [
 //         'items' => [
 //             [
 //                 'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', '登出'),
-//                 'url' => ['/general/site/logout'],
+//                 'url' => ['/system/site/logout'],
 //             ],
 //             [
 //                 'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', '授权列表'),
@@ -110,11 +110,11 @@ $menuItemsMain = [
 //         'items' => [
 //             [
 //                 'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', 'User'),
-//                 'url' => ['/general/user'],
+//                 'url' => ['/system/user'],
 //             ],
 //             [
 //                 'label' => '<i class="fa fa-lock"></i> ' . Yii::t('app', 'Role'),
-//                 'url' => ['/general/role'],
+//                 'url' => ['/system/role'],
 //             ],
 //         ],
 //     ],
@@ -126,4 +126,3 @@ echo Nav::widget([
 ]);
 
 //NavBar::end();
-

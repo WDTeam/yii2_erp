@@ -18,7 +18,7 @@ use core\models\worker\Worker;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class WorkerAccessToken extends \common\models\worker\WorkerAccessToken
+class WorkerAccessToken extends \dbbase\models\worker\WorkerAccessToken
 {
     public static function generateAccessToken($phone, $code){
          $check_code = WorkerCode::checkCode($phone, $code);

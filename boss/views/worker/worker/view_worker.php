@@ -15,14 +15,14 @@ use kartik\detail\DetailView;
 use kartik\datecontrol\DateControl;
 use kartik\date\DatePicker;
 
-use common\models\Shop;
+use dbbase\models\Shop;
 use boss\models\worker\Worker;
 use boss\models\worker\WorkerIdentityConfig;
 use boss\models\worker\workerExt;
 
 /**
  * @var yii\web\View $this
- * @var common\models\Worker $model
+ * @var dbbase\models\Worker $model
  */
 $this->title = $model->worker_name;
 //$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Workers'), 'url' => ['index']];
@@ -291,12 +291,11 @@ $this->title = $model->worker_name;
                 'value'=>WorkerIdentityConfig::getWorkerIdentityShow($model->worker_identity_id),
             ],
             [
-                'attribute' => 'worker_auth_status',
-                'type' => DetailView::INPUT_RADIO_LIST,
-                'items'=>['0'=>'新录入','1'=>'已审核','2'=>'已试工','3'=>'已上岗','4'=>'已离职'],
-                //'value'=>Worker::getWorkerAuthStatusShow($model->worker_auth_status),
-                'label'=>'阿姨状态',
-                'value'=>$model::getWorkerAuthStatusShow($model->worker_auth_status),
+                'attribute' => 'worker_star',
+                'type' => DetailView::INPUT_TEXT,
+                'displayOnly' => true,
+                'value'=>$model->worker_star.'星',
+
             ],
             [
                 'attribute' => 'worker_is_vacation',

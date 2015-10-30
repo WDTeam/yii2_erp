@@ -14,21 +14,21 @@
 namespace boss\controllers\finance;
 
 use Yii;
-use common\models\finance\FinancePopOrder;
+use dbbase\models\finance\FinancePopOrder;
 use boss\models\finance\FinancePopOrderSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
-use common\models\finance\FinanceOrderChannel;
-use common\models\finance\FinanceHeader;
+use dbbase\models\finance\FinanceOrderChannel;
+use dbbase\models\finance\FinanceHeader;
 use boss\models\finance\FinanceRecordLogSearch;
 use boss\models\finance\FinanceOrderChannelSearch;
 use core\models\order\OrderSearch;
 use core\models\payment\GeneralPaySearch;
-use common\models\finance\FinanceRecordLog;
+use dbbase\models\finance\FinanceRecordLog;
 use crazyfd\qiniu\Qiniu;
-use common\models\finance\FinancePayChannel;
+use dbbase\models\finance\FinancePayChannel;
 
 
 /**
@@ -60,12 +60,18 @@ class FinancePopOrderController extends Controller
     {
     	$model = new FinancePopOrderSearch;
     	$modelinfo= new FinancePopOrder;
+    	
     	if(Yii::$app->request->isPost) {
     		if(Yii::$app->params['uploadpath']){
     		//开启七牛上传，文件存储在七牛
     			$data = \Yii::$app->request->post();
     			$model->load($data);
     			$file = UploadedFile::getInstance($model, 'finance_uplod_url');
+    			
+    			if(!isset($file->baseName)){
+    				\Yii::$app->getSession()->setFlash('default','请上传对账单！');
+    				return $this->redirect(['index']);
+    			}
     			
     			$filenamesitename=$file->baseName;
     			if($file){
@@ -586,8 +592,10 @@ class FinancePopOrderController extends Controller
     	$model->save();
     	return $this->redirect(['index', 'id' =>$requestModel['oid']]);
     	}else{
+    		
     	$model = new FinancePopOrder;
     	return $this->renderAjax('forminfo',['workerVacationModel'=>$model]);
+    	
     	}
     }
     

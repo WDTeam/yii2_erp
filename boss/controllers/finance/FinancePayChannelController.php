@@ -3,7 +3,7 @@
 namespace boss\controllers\finance;
 
 use Yii;
-use common\models\finance\FinancePayChannel;
+use dbbase\models\finance\FinancePayChannel;
 use boss\models\finance\FinancePayChannelSearch;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;

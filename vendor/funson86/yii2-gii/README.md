@@ -52,7 +52,7 @@ Yii2-gii for Chinese
 
 ```php
 <?= $form->field($model, 'status')->textInput() ?>
-<?= $form->field($model, 'status')->dropDownList(\common\models\User::getArrayStatus()) ?>
+<?= $form->field($model, 'status')->dropDownList(\dbbase\models\User::getArrayStatus()) ?>
 ```
 
 3.在生成的视图view.php替换'status'

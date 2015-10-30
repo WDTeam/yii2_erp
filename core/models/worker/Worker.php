@@ -3,18 +3,19 @@
 namespace core\models\worker;
 
 
-use boss\models\worker\WorkerVacation;
-use common\models\Help;
-use common\models\worker\WorkerVacationApplication;
+use dbbase\models\Help;
 use Symfony\Component\Console\Helper\Helper;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
 use yii\web\UploadedFile;
 
-use common\models\order\OrderExtWorker;
+use dbbase\models\order\OrderExtWorker;
 use core\models\shop\ShopManager;
 use core\models\shop\Shop;
+
+use core\models\worker\WorkerVacation;
+use core\models\worker\WorkerVacationApplication;
 use core\models\worker\WorkerStat;
 use core\models\worker\WorkerExt;
 use core\models\worker\WorkerIdentityConfig;
@@ -57,7 +58,7 @@ use crazyfd\qiniu\Qiniu;
  * @property integer $updated_ad
  * @property integer $isdel
  */
-class Worker extends \common\models\worker\Worker
+class Worker extends \dbbase\models\worker\Worker
 {
 
     const DISTRICT = 'DISTRICT';
@@ -290,8 +291,12 @@ class Worker extends \common\models\worker\Worker
     }
 
 
-
-
+    /**
+     * 获取商圈所有阿姨
+     * @param $district_id
+     * @param $worker_id
+     * @return array
+     */
     public static function getDistrictAllWorker($district_id,$worker_id){
         $dataSource = 2;//1redis 2mysql
         if($dataSource==1){
@@ -310,6 +315,12 @@ class Worker extends \common\models\worker\Worker
         }
     }
 
+    /**
+     * 获取商圈所有阿姨从redis
+     * @param $district_id
+     * @param $worker_id
+     * @return array
+     */
     public static function getDistrictAllWorkerFromRedis($district_id,$worker_id){
         $workerIdsArr =  Yii::$app->redis->executeCommand('smembers', [self::DISTRICT.'_'.$district_id]);
         if($workerIdsArr){
@@ -332,7 +343,7 @@ class Worker extends \common\models\worker\Worker
     }
 
     /**
-     * 获取商圈中所有阿姨
+     * 获取商圈中所有阿姨mysql
      * @param $district_id
      * @param array $filterCondition 阿姨筛选条件
      * @return array 阿姨列表
@@ -349,7 +360,7 @@ class Worker extends \common\models\worker\Worker
          $districtWorkerResult = Worker::find()
              ->select('{{%worker}}.id,shop_id,worker_name,worker_phone,worker_idcard,worker_identity_id,worker_type,name as shop_name,worker_stat_order_num,worker_stat_order_refuse')
              ->innerJoinWith('workerDistrictRelation') //关联worker workerDistrictRelation方法
-             ->andOnCondition(['operation_shop_district_id'=>$district_id])
+             ->andOnCondition(['{{%worker_district}}.operation_shop_district_id'=>$district_id])
              ->innerJoinWith('shopRelation') //关联worker shopRelation方法
              ->innerJoinWith('workerScheduleRelation') //关联WorkerScheduleRelation方法
              //->andOnCondition([])
@@ -381,7 +392,7 @@ class Worker extends \common\models\worker\Worker
     public static function getWorkerTimeLine($district_id,$serverDurationTime=2,$beginTime='',$timeLineLength=7,$worker_id=''){
         $disabledTimesArr = self::getCycleTimes($timeLineLength);
         $beginTime = $beginTime ? $beginTime : time();
-        $beginTime = strtotime(date('Y-m-d'),$beginTime);
+        $beginTime = strtotime(date('Y-m-d',$beginTime));
 
         //如果无商圈id,返回不可用排班表
         if(empty($district_id)){
@@ -521,7 +532,7 @@ class Worker extends \common\models\worker\Worker
     }
 
     /**
-     * 转换时间格式 如果阿姨订单预约 开始时间不是 整点时间或半点时间
+     * 转换不规范时间格式 如果阿姨订单预约 开始时间不是 整点时间或半点时间
      * @param $time
      * @return mixed
      */
@@ -571,13 +582,16 @@ class Worker extends \common\models\worker\Worker
 
     /**
      * 操作阿姨的订单信息
-     * @param int $worker_id
-     * @param int $type 操作类型 1添加2修改3删除
-     * @param array $orderInfo 订单信息([order_id=>1,order_booked_begin_time=>145666666,order_booked_end_time=>14445555,order_booked_count=>3)
+     * @param $worker_id
+     * @param $type 操作类型 1添加2修改3删除
+     * @param $order_id
+     * @param $order_booked_count
+     * @param $order_booked_begin_time
+     * @param $order_booked_end_time
      * @return bool
      */
-    public static function operateWorkerOrderInfoToRedis($worker_id,$type,$orderInfo){
-        if(empty($worker_id) && empty($type) && empty($orderInfo)){
+    public static function operateWorkerOrderInfoToRedis($worker_id,$type,$order_id,$order_booked_count,$order_booked_begin_time,$order_booked_end_time){
+        if(empty($worker_id) && empty($type) && empty($order_id) && empty($order_booked_count)){
             return false;
         }
         $workerInfo =  Yii::$app->redis->executeCommand('get', [self::WORKER.'_'.$worker_id]);
@@ -587,14 +601,22 @@ class Worker extends \common\models\worker\Worker
         //添加阿姨订单信息
         if($type==1){
             $workerInfo = json_decode($workerInfo,1);
+            $orderInfo['order_id'] = $order_id;
+            $orderInfo['order_booked_count'] = $order_booked_count;
+            $orderInfo['order_booked_begin_time'] = $order_booked_begin_time;
+            $orderInfo['order_booked_end_time'] = $order_booked_end_time;
             array_push($workerInfo['order'],$orderInfo);
             $workerInfo = json_encode($workerInfo);
             Yii::$app->redis->executeCommand('set', [self::WORKER.'_'.$worker_id,$workerInfo]);
         //修改阿姨订单信息
         }elseif($type==2){
             $workerInfo = json_decode($workerInfo,1);
+            $orderInfo['order_id'] = $order_id;
+            $orderInfo['order_booked_count'] = $order_booked_count;
+            $orderInfo['order_booked_begin_time'] = $order_booked_begin_time;
+            $orderInfo['order_booked_end_time'] = $order_booked_end_time;
             foreach ($workerInfo['order'] as $key=>$val) {
-                if($val['order_id']==$orderInfo['order_id']){
+                if($val['order_id']==$order_id){
                     $workerInfo['order'][$key] = $orderInfo;
                 }
             }
@@ -604,7 +626,7 @@ class Worker extends \common\models\worker\Worker
         }elseif($type==3){
             $workerInfo = json_decode($workerInfo,1);
             foreach ($workerInfo['order'] as $key=>$val) {
-                if($val['order_id']==$orderInfo['order_id']){
+                if($val['order_id']==$order_id){
                     unset($workerInfo['order'][$key]);
                 }
             }

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 /**
  * @var yii\web\View $this
- * @var common\models\CustomerComment $model
+ * @var dbbase\models\CustomerComment $model
  */
 
 $this->title = Yii::t('boss', 'Create {modelClass}', [

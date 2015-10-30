@@ -12,7 +12,8 @@ use kartik\grid\ActionColumn;
 
 use core\models\shop\Shop;
 use boss\models\worker\Worker;
-
+use boss\models\worker\WorkerVacation;
+use boss\models\worker\WorkerVacationApplication;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -32,15 +33,19 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
             'format' => 'raw',
             'label' => '阿姨姓名',
             'value' => function ($dataProvider) {
-                return $dataProvider->worker->worker_name;
+                if($dataProvider->id){
+                    return $dataProvider->worker->worker_name;
+                }
             },
         ],
         [
             'format' => 'raw',
             'label' => '门店名称',
             'value' => function ($dataProvider) {
-                if($dataProvider->worker->shop_id && Shop::findOne($dataProvider->worker->shop_id)){
-                    return Shop::findOne($dataProvider->worker->shop_id)->name;
+                if($dataProvider->id){
+                    if($dataProvider->worker->shop_id && Shop::findOne($dataProvider->worker->shop_id)){
+                        return Shop::findOne($dataProvider->worker->shop_id)->name;
+                    }
                 }
             }
         ],
@@ -48,29 +53,39 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
             'format' => 'raw',
             'label'=>'阿姨手机',
             'value' => function ($dataProvider) {
-                return $dataProvider->worker->worker_phone;
-            }
+                if($dataProvider->id) {
+                    return $dataProvider->worker->worker_phone;
+                }
+            },
+            'width' => "7%",
         ],
         [
             'format' => 'raw',
             'label'=>'阿姨身份证号',
             'value' => function ($dataProvider) {
-                return $dataProvider->worker->worker_idcard;
-            }
+                if($dataProvider->id){
+                    return $dataProvider->worker->worker_idcard;
+                }
+            },
+            'width' => "10%",
         ],
         [
             'format' => 'raw',
             'label' => '阿姨类型',
             'value' => function ($dataProvider) {
-                return Worker::getWorkerTypeShow($dataProvider->worker->worker_type);
+                if($dataProvider->id){
+                    return Worker::getWorkerTypeShow($dataProvider->worker->worker_type);
+                }
             },
-            'width' => "100px",
+            'width' => "70px",
         ],
         [
             'format' => 'raw',
             'label' => '所属商圈',
             'value' => function($dataProvider){
-                return Worker::getWorkerDistrictShow($dataProvider->worker->id);
+                if($dataProvider->id){
+                    return Worker::getWorkerDistrictShow($dataProvider->worker->id);
+                }
             },
             'width' => "8%",
         ],
@@ -109,7 +124,7 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
         [
             'class' => 'kartik\grid\ActionColumn',
             'header' => '操作',
-            'width' => "9%",
+            'width' => "16%",
             'template' =>'{operate_application_success}{operate_application_failed}{view}{auth}',
             'contentOptions'=>[
                 'style'=>'font-size: 12px;padding-right:2px',
@@ -139,22 +154,6 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
                         'style' => 'margin-right:6px'
                     ]);
                 },
-//                    'vacation' => function ($url, $model) {
-//                        return Html::a('<span class="fa fa-fw fa-history"></span>',
-//                            [
-//                                '/worker/create-vacation',
-//                                'workerIds' => $model->id
-//                            ]
-//                            ,
-//                            [
-//                                'title' => Yii::t('yii', '请假信息录入'),
-//                                'data-toggle' => 'modal',
-//                                'data-target' => '#vacationModal',
-//                                'class'=>'vacation',
-//                                'data-id'=>$model->id,
-//                                'style' => 'margin-right:3px'
-//                            ]);
-//                    },
             ],
         ],
     ];
@@ -276,16 +275,23 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
         [
             'class' => 'kartik\grid\ActionColumn',
             'header' => '操作',
-            'width' => "9%",
+            'width' => "13%",
             'template' =>'{view} {auth} {vacation} {block} {delete}',
             'contentOptions'=>[
                 'style'=>'font-size: 12px;padding-right:2px',
             ],
+
             'buttons' => [
                 'view' => function ($url, $model) {
                     return Html::a('<span class="btn btn-primary">查看</span>', Yii::$app->urlManager->createUrl(['worker/worker/view', 'id' => $model->id]), [
                         'title' =>'查看',
                         'style' => 'margin-right:5px'
+                    ]);
+                },
+                'delete' => function ($url, $model) {
+                    return Html::a('<span class="btn btn-primary">删除</span>', Yii::$app->urlManager->createUrl(['worker/worker/delete', 'id' => $model->id]), [
+                        'title' =>'审核管理',
+                        'style' => 'margin-right:3px'
                     ]);
                 },
                 'auth' => function ($url, $model) {
@@ -351,7 +357,7 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
         Html::a('<i class="glyphicon" ></i>封号 '.Worker::CountBlockWorker(), ['index?WorkerSearch[worker_is_block]=1'], ['class' => 'btn '.Worker::setBtnCss(9), 'style' => 'margin-right:10px']) .
         Html::a('<i class="glyphicon" ></i>黑名单 '.Worker::CountBlackListWorker(), ['index?WorkerSearch[worker_is_blacklist]=1'], ['class' => 'btn '.Worker::setBtnCss(10), 'style' => 'margin-right:10px']).
         Html::a('<i class="glyphicon" ></i>离职 '.Worker::CountDimissionWorker(), ['index?WorkerSearch[worker_is_dimission]=1'], ['class' => 'btn '.Worker::setBtnCss(11), 'style' => 'margin-right:10px']).
-        Html::a('<i class="glyphicon" ></i>请假待审核 '.Worker::CountDimissionWorker(), ['index?WorkerSearch[worker_vacation_application_approve_status]=0'], ['class' => 'btn '.Worker::setBtnCss(12), 'style' => 'margin-right:10px']);
+        Html::a('<i class="glyphicon" ></i>请假待审核 '.WorkerVacationApplication::CountApplication(), ['index?WorkerSearch[worker_vacation_application_approve_status]=0'], ['class' => 'btn '.Worker::setBtnCss(12), 'style' => 'margin-right:10px']);
     $requestParam = \Yii::$app->request->getQueryParams();
 
     $vacationBtn =
@@ -379,169 +385,7 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
                         'title' => Yii::t('kvgrid', 'Reset Grid')
                     ]),
             ],
-        'columns' => [
-            [
-                'class'=>'kartik\grid\CheckboxColumn',
-                'headerOptions'=>['class'=>'kartik-sheet-style'],
-            ],
-
-            'worker_name',
-            [
-                'format' => 'raw',
-                'label' => '门店名称',
-                'value' => function ($dataProvider) {
-                    if($dataProvider->shop_id && Shop::findOne($dataProvider->shop_id)){
-                        return Shop::findOne($dataProvider->shop_id)->name;
-                    }
-                }
-            ],
-            'worker_phone',
-            'worker_idcard',
-            [
-                'format' => 'raw',
-                'label' => '阿姨类型',
-                'value' => function ($dataProvider) {
-                    return Worker::getWorkerTypeShow($dataProvider->worker_type);
-                },
-                'width' => "100px",
-            ],
-
-            [
-                'format' => 'raw',
-                'label' => '所属商圈',
-                'value' => function($dataProvider){
-                    return Worker::getWorkerDistrictShow($dataProvider->id);
-                },
-                'width' => "8%",
-            ],
-            /******* 选中其他状态显示列 ********/
-            [
-                'format' => 'raw',
-                'label' => '状态',
-                'hidden' => Worker::columnsIsHidden('other'),
-                'value' => function($dataProvider){
-                    return Worker::getWorkerAuthStatusShow($dataProvider->worker_auth_status);
-                },
-                'width' => "100px",
-            ],
-            [
-                'format' => 'raw',
-                'label' => '阿姨入职时间',
-                'hidden' => Worker::columnsIsHidden('other'),
-                'value' => function ($dataProvider) {
-                    return date('Y-m-d H:i', $dataProvider->created_ad);
-                },
-                'width' => "120px",
-            ],
-            /******* 选中其他状态显示列 ********/
-            /****** 选中黑名单显示列 ******/
-            [
-                'format' => 'raw',
-                'hidden' => Worker::columnsIsHidden('blacklist'),
-                'label' => '状态',
-                'value' => function ($dataProvider) {
-                    return '黑名单';
-                },
-                'width' => "120px",
-            ],
-            [
-                'format' => 'raw',
-                'hidden' => Worker::columnsIsHidden('blacklist'),
-                'label' => '列入黑名单时间',
-                'value' => function ($dataProvider) {
-                    return date('Y-m-d H:i', $dataProvider->worker_blacklist_time);
-                },
-                'width' => "120px",
-            ],
-            [
-                'format' => 'raw',
-                'hidden' => Worker::columnsIsHidden('blacklist'),
-                'label' => '黑名单原因',
-                'value' => function ($dataProvider) {
-                    return $dataProvider->worker_blacklist_reason;
-                },
-                'width' => "120px",
-            ],
-            /****** 选中黑名单显示列 ******/
-            /****** 选中离职显示列 ******/
-            [
-                'format' => 'raw',
-                'hidden' => Worker::columnsIsHidden('dimission'),
-                'label' => '状态',
-                'value' => function ($dataProvider) {
-                    return '离职';
-                },
-                'width' => "120px",
-            ],
-            [
-                'format' => 'raw',
-                'hidden' => Worker::columnsIsHidden('dimission'),
-                'label' => '离职时间',
-                'value' => function ($dataProvider) {
-                    return date('Y-m-d H:i', $dataProvider->worker_dimission_time);
-                },
-                'width' => "120px",
-            ],
-            [
-                'format' => 'raw',
-                'hidden' => Worker::columnsIsHidden('dimission'),
-                'label' => '离职原因',
-                'value' => function ($dataProvider) {
-                    return $dataProvider->worker_dimission_reason;
-                },
-                'width' => "120px",
-            ],
-            /****** 选中离职显示列 ******/
-
-            [
-                'class' => 'kartik\grid\ActionColumn',
-                'header' => '操作',
-                'width' => "9%",
-                'template' =>'{view} {auth} {vacation} {block} {delete}',
-                'contentOptions'=>[
-                    'style'=>'font-size: 12px;padding-right:2px',
-                ],
-                'viewOptions'=>[
-                    'style'=>'margin-right:3px'
-                ],
-                'buttons' => [
-                    'auth' => function ($url, $model) {
-                        return Html::a('<span class="btn btn-primary">审核</span>', Yii::$app->urlManager->createUrl(['worker/worker/auth', 'id' => $model->id]), [
-                            'title' =>'审核管理',
-                            
-                        ]);
-                    },
-                    'view' => function ($url, $model) {
-                        return Html::a('<span class="btn btn-primary">查看</span>', Yii::$app->urlManager->createUrl(['worker/worker/view', 'id' => $model->id]), [
-                            
-                        ]);
-                    },
-                    'delete' => function ($url, $model) {
-                        return Html::a('<span class="btn btn-primary">删除</span>', Yii::$app->urlManager->createUrl(['worker/worker/delete', 'id' => $model->id]),
-                        ['title' => Yii::t('yii', 'Delete'), 'class' => '', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')],
-                        [
-                            
-                        ]);
-                    },
-//                    'vacation' => function ($url, $model) {
-//                        return Html::a('<span class="fa fa-fw fa-history"></span>',
-//                            [
-//                                '/worker/create-vacation',
-//                                'workerIds' => $model->id
-//                            ]
-//                            ,
-//                            [
-//                                'title' => Yii::t('yii', '请假信息录入'),
-//                                'data-toggle' => 'modal',
-//                                'data-target' => '#vacationModal',
-//                                'class'=>'vacation',
-//                                'data-id'=>$model->id,
-//                                'style' => 'margin-right:3px'
-//                            ]);
-//                    },
-                ],
-            ],
-        ],
+        'columns' => $columns,
         'responsive' => true,
         'hover' => true,
         'condensed' => true,

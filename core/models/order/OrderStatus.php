@@ -10,8 +10,8 @@ namespace core\models\order;
 
 use Yii;
 use yii\base\Exception;
-use common\models\order\OrderStatusDict;
-use common\models\order\OrderStatusHistory;
+use dbbase\models\order\OrderStatusDict;
+use dbbase\models\order\OrderStatusHistory;
 
 class OrderStatus extends Order
 {
@@ -36,6 +36,56 @@ class OrderStatus extends Order
             return true;
         }
         return false;
+    }
+
+    /**
+     * 变更为已支付待指派状态
+     * @param $batch_code
+     * @param $must_models
+     * @return bool
+     */
+    protected static function _batchPayment($batch_code,$must_models=[]){
+        $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_WAIT_ASSIGN); //变更为已支付待指派状态
+        $transact = static::getDb()->beginTransaction();
+        $orders = OrderSearch::getBatchOrder($batch_code);
+        foreach($orders as $order){
+            if(!self::_statusChange($order,$status,$must_models,$transact)){
+                $transact->rollBack();
+                return false;
+            }
+        }
+        $transact->commit();
+        if(substr($batch_code,0,1)=='p') {
+            foreach ($orders as $order) {
+                // 开始系统指派
+                if (self::_sysAssignStart($order->id)) {
+                    OrderPool::addOrder($order->id);
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * 批量开始智能指派
+     * @param $batch_code
+     * @return bool
+     */
+    protected static function _batchSysAssignStart($batch_code)
+    {
+        $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_SYS_ASSIGN_START);
+        $transact = static::getDb()->beginTransaction();
+        $orders = OrderSearch::getBatchOrder($batch_code);
+        foreach($orders as $order){
+            $order->admin_id = 1;
+            if(!self::_statusChange($order,$status,[],$transact)){
+                $transact->rollBack();
+                return false;
+            }
+        }
+        $transact->commit();
+        return true;
     }
 
     /**
@@ -245,9 +295,10 @@ class OrderStatus extends Order
      * @param $order Order
      * @param $status OrderStatusDict
      * @param $must_models array
+     * @param $transact
      * @return bool
      */
-    private static function _statusChange(&$order, $status, $must_models=[])
+    private static function _statusChange(&$order, $status, $must_models=[],$transact=null)
     {
         try {
             $from = OrderStatusDict::findOne($order->orderExtStatus->order_status_dict_id); //当前订单状态
@@ -259,7 +310,7 @@ class OrderStatus extends Order
             ]);
             $save_models = ['OrderExtStatus', 'OrderStatusHistory'];
             $save_models = array_merge($must_models, $save_models);
-            return $order->doSave($save_models);
+            return $order->doSave($save_models,$transact);
         }catch (Exception $e){
             return false;
         }

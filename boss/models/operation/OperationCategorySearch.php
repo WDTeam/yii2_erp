@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use core\models\operation\OperationCategory;
 
 /**
- * OperationCategorySearch represents the model behind the search form about `common\models\OperationCategory`.
+ * OperationCategorySearch represents the model behind the search form about `dbbase\models\OperationCategory`.
  */
 class OperationCategorySearch extends OperationCategory
 {

@@ -17,7 +17,7 @@ namespace core\models\customer;
 use Yii;
 use core\models\order\OrderComplaint;
 
-class CustomerComment extends \common\models\customer\CustomerComment
+class CustomerComment extends \dbbase\models\customer\CustomerComment
 {
 
     /**

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 /**
  * @var yii\web\View $this
- * @var common\models\FinanceInvoice $model
+ * @var dbbase\models\FinanceInvoice $model
  */
 
 $this->title = 'Update Finance Invoice: ' . ' ' . $model->id;

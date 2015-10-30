@@ -2,7 +2,7 @@
 namespace core\models\order;
 
 
-use common\models\order\OrderWorkerRelation as OrderWorkerRelationModel;
+use dbbase\models\order\OrderWorkerRelation as OrderWorkerRelationModel;
 use Yii;
 
 

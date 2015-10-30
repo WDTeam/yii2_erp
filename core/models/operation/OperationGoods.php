@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationGoods as CommonOperationGoods;
+use dbbase\models\operation\OperationGoods as CommonOperationGoods;
 use boss\models\operation\OperationShopDistrictGoods;
 
 /**

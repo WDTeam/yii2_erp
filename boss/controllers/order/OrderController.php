@@ -18,7 +18,9 @@ use yii\web\Response;
 use core\models\customer\Customer;
 use core\models\order\OrderStatusHistory;
 use core\models\shop\Shop;
-use common\models\order\OrderStatusDict;
+use dbbase\models\order\OrderStatusDict;
+use core\models\system\SystemUser;
+use boss\models\search\SystemUserSearch;
 
 /**
  * OrderController implements the CRUD actions for Order model.
@@ -28,9 +30,6 @@ class OrderController extends BaseAuthController
     public function actionTest()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        return Order::isPaymentOnline(14,0,24,'aaa','2015102942279250');
-
-//       return OrderSearch::getPushWorkerOrders(18513,$page_size=20,$page=1,false);
         return OrderTool::createOrderCode();
     }
     
@@ -53,7 +52,7 @@ class OrderController extends BaseAuthController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $customer = Customer::getCustomerInfo($phone);
         if(empty($customer)){
-            if(Customer::adminAddCustomer($phone)) {
+            if(Customer::addCustomer($phone,20)) {
                 $customer = Customer::getCustomerInfo($phone);
             }
         }
@@ -107,6 +106,15 @@ class OrderController extends BaseAuthController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $city_id = Yii::$app->request->get('city_id');
         return Order::getCountyList($city_id);
+    }
+
+    public function actionGetTimeRangeList()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $order_booked_count = Yii::$app->request->get('order_booked_count');
+        $district_id = Yii::$app->request->get('district_id');
+        $date = Yii::$app->request->get('date');
+        return Order::getOrderBookedTimeRangeList($district_id,$order_booked_count,$date);
     }
 
     public function actionCoupons()
@@ -373,6 +381,20 @@ class OrderController extends BaseAuthController
         $post = Yii::$app->request->post();
         $model['admin_id'] = Yii::$app->user->id;
         
+        $history = [];
+        
+        $createRecord = OrderStatusHistory::find()->where([
+            'order_id'=>$id,
+            'order_status_dict_id'=>OrderStatusDict::ORDER_INIT,
+        ])->one();
+        $history['creator_name'] = SystemUser::findOne(['id' => $createRecord['admin_id']])['username'];
+        
+        $payRecord = OrderStatusHistory::find()->where([
+            'order_id'=>$id,
+            'order_status_dict_id'=>OrderStatusDict::ORDER_WAIT_ASSIGN,
+        ])->one();
+        $history['pay_time'] = $payRecord ? date('Y-m-d H:i:s', $payRecord['created_at']) : null;
+        
         if($model->load($post)) {
             $post['Order']['admin_id'] = Yii::$app->user->id;
             $post['Order']['order_ip'] = Yii::$app->request->userIP;
@@ -387,8 +409,7 @@ class OrderController extends BaseAuthController
                 return $this->redirect(['edit', 'id' => $model->id]);
             }
         }
-        return $this->render('edit', ['model' => $model]);
-    
+        return $this->render('edit', ['model' => $model, 'history' => $history]);
     }
 
     /**

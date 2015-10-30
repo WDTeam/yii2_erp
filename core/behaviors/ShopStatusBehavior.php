@@ -5,7 +5,7 @@ use yii\base\Behavior;
 use yii\base\InvalidValueException;
 use yii\base\Object;
 use core\models\shop\ShopStatus;
-use common\models\ActiveRecord;
+use dbbase\models\ActiveRecord;
 class ShopStatusBehavior extends Behavior
 {
     const CHANGE_STATUS = 'change:status';

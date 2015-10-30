@@ -134,7 +134,7 @@ $columns[] = [
         'toolbar' =>[
             'content'=>Html::a('<i class="glyphicon glyphicon-plus"></i>', [
 
-                'shop-manager/create',
+                'create',
                 
             ], [
                 'class' => 'btn btn-default',

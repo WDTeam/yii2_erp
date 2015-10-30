@@ -9,7 +9,7 @@ $model->finance_pay_channel_is_lock=1;
 $model->is_del=0;
 /**
  * @var yii\web\View $this
- * @var common\models\FinancePayChannel $model
+ * @var dbbase\models\FinancePayChannel $model
  * @var yii\widgets\ActiveForm $form
  */
 ?>

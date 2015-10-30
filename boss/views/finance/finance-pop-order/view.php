@@ -2,16 +2,16 @@
 use yii\helpers\Html;
 
 use kartik\detail\DetailView;
-use common\models\finance\FinanceOrderChannel;
-use common\models\finance\FinancePayChannel;
+use dbbase\models\finance\FinanceOrderChannel;
+use dbbase\models\finance\FinancePayChannel;
 use core\models\Customer\Customer;
-use core\models\general\SystemUser;
+use core\models\system\SystemUser;
 
 
-use common\models\finance\FinancePopOrder;
+use dbbase\models\finance\FinancePopOrder;
 /**
  * @var yii\web\View $this
- * @var common\models\FinancePopOrder $model
+ * @var dbbase\models\FinancePopOrder $model
  */
 
 $this->title = '订单号为:'.$model->finance_pop_order_number;

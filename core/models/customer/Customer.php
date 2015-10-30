@@ -3,21 +3,22 @@
 namespace core\models\customer;
 
 
+use core\models\finance\FinanceOrderChannel;
 use Yii;
 
 use yii\web\BadRequestHttpException;
-use common\models\customer\GeneralRegion;
-use common\models\customer\CustomerExtSrc;
+use dbbase\models\customer\GeneralRegion;
+use dbbase\models\customer\CustomerExtSrc;
 
 use core\models\customer\CustomerAddress;
 use core\models\customer\CustomerWorker;
-use common\models\Worker;
+use dbbase\models\Worker;
 use core\models\customer\CustomerExtBalance;
 use core\models\customer\CustomerExtScore;
 use core\models\finance\FinanceOrderChannal;
 
 
-class Customer extends \common\models\customer\Customer
+class Customer extends \dbbase\models\customer\Customer
 {
 
 	/**
@@ -133,7 +134,7 @@ class Customer extends \common\models\customer\Customer
     public function getCustomerWorkers($customer_id)
     {
         $customer = self::findOne($customer_id);
-        $customerWorkers = $customer->hasMany('\common\models\customerWorker', ['customer_id'=>'id'])->all();
+        $customerWorkers = $customer->hasMany('\dbbase\models\customerWorker', ['customer_id'=>'id'])->all();
         return $customerWorkers != NULL ? $customerWorkers : false;
     }
 
@@ -152,7 +153,7 @@ class Customer extends \common\models\customer\Customer
      */
     public static function getCustomerAddresses($customer_id){
         $customer = self::findOne($customer_id);
-        $customerAddresses = $customer->hasMany('\common\models\CustomerAddress', ['customer_id'=>'id'])->all();
+        $customerAddresses = $customer->hasMany('\dbbase\models\CustomerAddress', ['customer_id'=>'id'])->all();
         return $customerAddresses != NULL ? $customerAddresses : false;
     }
 
@@ -283,8 +284,8 @@ class Customer extends \common\models\customer\Customer
 		$customer = self::find()->where(['customer_phone'=>$customer_phone])->asArray()->one();
 		if(empty($customer)) return false;
 
-		$channal_name = funcname($channal_id);
-		//$channal_name = FinanceOrderChannal::getOrderChannelByName($channal_id);
+//		$channal_name = funcname($channal_id);
+		$channal_name = FinanceOrderChannel::getOrderChannelByName($channal_id);
 	
 		$customerExtSrc = new CustomerExtSrc;
 		$customerExtSrc->customer_id = $customer["id"];
@@ -313,8 +314,8 @@ class Customer extends \common\models\customer\Customer
 		$customer = self::find()->where(['customer_phone'=>$customer_phone])->asArray()->one();
 		if(empty($customer)) return false;
 
-		$channal_id = funcname($channal_name);
-		//$channal_id = FinanceOrderChannal::getOrderChannelByid($channal_name)
+//		$channal_id = funcname($channal_name);
+        $channal_id = FinanceOrderChannel::getOrderChannelByid($channal_name);
 	
 		$customerExtSrc = new CustomerExtSrc;
 		$customerExtSrc->customer_id = $customer["id"];

@@ -2,7 +2,7 @@
 
 namespace restapi\controllers;
 
-use common\models\worker\Worker;
+use dbbase\models\worker\Worker;
 use \core\models\order\OrderPush;
 use Faker\Provider\DateTime;
 use Yii;
@@ -11,7 +11,7 @@ use \core\models\customer\CustomerAccessToken;
 use \core\models\customer\CustomerAddress;
 use \core\models\order\OrderSearch;
 use \core\models\worker\WorkerAccessToken;
-use \common\models\order\OrderStatusDict;
+use \dbbase\models\order\OrderStatusDict;
 use yii\web\Response;
 
 class OrderController extends \restapi\components\Controller

@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationPlatformVersion as CommonOperationPlatformVersion;
+use dbbase\models\operation\OperationPlatformVersion as CommonOperationPlatformVersion;
 /**
  * This is the model class for table "{{%operation_platform_version}}".
  *

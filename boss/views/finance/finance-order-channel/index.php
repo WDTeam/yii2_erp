@@ -3,7 +3,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\tabs\TabsX;
-use common\models\finance\FinanceOrderChannel;
+use dbbase\models\finance\FinanceOrderChannel;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -101,7 +101,7 @@ $items = [
 'label'=>'<i class="glyphicon glyphicon-king"></i> 支付渠道管理',
 'content'=>'',
 'active'=>false,
-'url' => ['finance-pay-channel/index']
+'url' => ['finance/finance-pay-channel/index']
 ]
 ];
     echo TabsX::widget([

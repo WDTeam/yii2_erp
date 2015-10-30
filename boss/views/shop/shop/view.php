@@ -8,7 +8,7 @@ use yii\web\JsExpression;
 use yii\helpers\Url;
 use core\models\shop\Shop;
 use boss\components\AreaCascade;
-use common\components\BankHelper;
+use dbbase\components\BankHelper;
 use yii\widgets\ActiveForm;
 
 /**

@@ -67,7 +67,7 @@ return [
     /*
      * 日志文件
      */
-    'LOG_FILE' => './autoassign-server.log',
+    'LOG_FILE' => './server.log',
 
     /*
      * 设置worker进程的最大任务数
