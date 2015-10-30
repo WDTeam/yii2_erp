@@ -2,10 +2,11 @@
 
 namespace boss\controllers\operation;
 
-use Yii;
-use boss\models\operation\OperationPlatform;
-use yii\data\ActiveDataProvider;
 use boss\components\BaseAuthController;
+use boss\models\operation\OperationPlatform;
+
+use Yii;
+use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 

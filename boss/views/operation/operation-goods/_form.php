@@ -30,7 +30,7 @@ use boss\components\GoodsTypeCascade;
         //            'name' => 'OperationGoods[operation_category_ids][]',
         //        ]);
             ?>
-            <?= $form->field($model, 'operation_category_id')->dropDownList($OperationCategory, ['prompt' => '请选择分类'])->label('选择分类') ?>
+            <?= $form->field($model, 'operation_category_id')->dropDownList($OperationCategory, ['prompt' => '请选择分类'])->label('选择服务类型') ?>
             <?php
             echo Form::widget([
 
@@ -40,12 +40,12 @@ use boss\components\GoodsTypeCascade;
             'attributes' => [
                 'operation_goods_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'商品名称...', 'maxlength'=>60]],
 
-        //        'operation_category_ids'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 对应服务品类名称']],
+                //'operation_category_ids'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 对应服务品类名称']],
 
 
                 'operation_goods_introduction'=>['type'=> Form::INPUT_TEXTAREA, 'options'=>['placeholder'=>'Enter 服务类型简介...','rows'=> 6]],
 
-        //        'operation_category_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 对应服务品类名称（所属分类名称冗余）...', 'maxlength'=>60]],
+                //'operation_category_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 对应服务品类名称（所属分类名称冗余）...', 'maxlength'=>60]],
 
 
                 'operation_goods_english_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 服务类型英文名称...', 'maxlength'=>60]],

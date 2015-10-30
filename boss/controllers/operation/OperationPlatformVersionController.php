@@ -2,11 +2,12 @@
 
 namespace boss\controllers\operation;
 
-use Yii;
+use boss\components\BaseAuthController;
 use boss\models\operation\OperationPlatformVersion;
 use boss\models\operation\OperationPlatform;
+
+use Yii;
 use yii\data\ActiveDataProvider;
-use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -31,7 +32,7 @@ class OperationPlatformVersionController extends BaseAuthController
      * Lists all OperationPlatformVersion models.
      * @return mixed
      */
-    public function actionIndex($platform_id)
+    public function actionIndex($platform_id = '')
     {
         $dataProvider = new ActiveDataProvider([
             'query' => OperationPlatformVersion::find()->where(['operation_platform_id' => $platform_id]),

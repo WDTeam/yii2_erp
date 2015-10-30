@@ -8,7 +8,7 @@ use yii\widgets\Pjax;
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
  */
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '城市列表'), 'url' => ['operation-city/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '城市列表'), 'url' => ['/operation/operation-city/index']];
 $this->params['breadcrumbs'][] = $city_name;
 $this->title = $city_name.Yii::t('operation', 'Shop District Goods');
 $this->params['breadcrumbs'][] = $this->title;

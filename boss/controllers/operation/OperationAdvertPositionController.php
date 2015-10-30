@@ -2,14 +2,15 @@
 
 namespace boss\controllers\operation;
 
-use Yii;
-use boss\models\operation\OperationAdvertPosition;
-use yii\data\ActiveDataProvider;
 use boss\components\BaseAuthController;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
+use boss\models\operation\OperationAdvertPosition;
 use boss\models\operation\OperationPlatform;
 use boss\models\operation\OperationPlatformVersion;
+
+use Yii;
+use yii\data\ActiveDataProvider;
+use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
 
 /**
  * OperationAdvertPositionController implements the CRUD actions for OperationAdvertPosition model.
@@ -35,8 +36,9 @@ class OperationAdvertPositionController extends BaseAuthController
     public function actionIndex()
     {
         $post = Yii::$app->request->post();
+
         $dataProvider = new ActiveDataProvider([
-            'query' =>!empty($post) ? OperationAdvertPosition::find()->where([$post['fields'] => $post['keyword']]): OperationAdvertPosition::find(),
+            'query' => (!empty($post) && $post['fields'] != '0') ? OperationAdvertPosition::find()->where([$post['fields'] => $post['keyword']]): OperationAdvertPosition::find(),
         ]);
         return $this->render('index', [
             'dataProvider' => $dataProvider,

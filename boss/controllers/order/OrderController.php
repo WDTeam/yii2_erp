@@ -37,6 +37,7 @@ class OrderController extends BaseAuthController
     
     public function actionCancelOrder()
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         //TODO: Xiaobo
         $admin_id = Yii::$app->user->id;
     
@@ -44,8 +45,13 @@ class OrderController extends BaseAuthController
         $order_id = $params['order_id'];
         $cancel_type = $params['cancel_type'];
         $cancel_note = $params['cancel_note'];
-    
-        return Order::cancel($order_id, $admin_id, $cancel_type, $cancel_note);
+        
+        $result = Order::cancel($order_id, $admin_id, $cancel_type, $cancel_note);
+        
+        if (is_null($result))
+            return true;
+        
+        return $result;
     }
 
     public function actionCustomer()
@@ -296,12 +302,15 @@ class OrderController extends BaseAuthController
      */
     public function actionIndex()
     {        
+        $searchParas = Yii::$app->request->getQueryParams();
+        
         $searchModel = new OrderSearch; 
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        $dataProvider = $searchModel->search($searchParas);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+            'searchParas' => $searchParas,
         ]);
     }
     

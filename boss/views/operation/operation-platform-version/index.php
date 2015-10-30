@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app' ,'Platform').Yii::t('app' ,'Version');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Platform'), 'url' => ['operation-platform/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Platform'), 'url' => ['/operation/operation-platform/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-platform-version-index">

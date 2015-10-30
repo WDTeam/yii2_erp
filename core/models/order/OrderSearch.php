@@ -143,6 +143,23 @@ class OrderSearch extends Order
         return $data;
     }
 
+    /**
+     * 通过订单ID获取订单链表信息
+     * @param $order_id 订单ID
+     */
+    public static function getOrderInfo($order_id)
+    {
+        $query = new \yii\db\Query();
+        $data = $query->from('{{%order}} as order')
+            ->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')
+            ->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')
+            ->innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id')
+            ->innerJoin('{{%order_ext_worker}} as ow','order.id = ow.order_id')
+            ->select('*')
+            ->where(['id'=>$order_id])
+            ->one();
+        return $data;
+    }
 
     /**
      * 通过订单ID获取带用户信息的订单
@@ -418,7 +435,9 @@ class OrderSearch extends Order
                 ]);
             }
         }
-
+        if(!isset($attributes["OrderSearch"]["oc.customer_id"])){
+            $attributes["OrderSearch"]["oc.customer_id"] = null;
+        }
         if ($this->load($attributes) && $this->validate()) {
             $query->andFilterWhere([
                 'id' => $this->id,
@@ -489,6 +508,9 @@ class OrderSearch extends Order
                     'channel_id' => $channels_str
                 ]);
             }
+        }
+        if(!isset($attributes["OrderSearch"]["oc.customer_id"])){
+            $attributes["OrderSearch"]["oc.customer_id"]=null;
         }
 
         if ($this->load($attributes) && $this->validate()) {

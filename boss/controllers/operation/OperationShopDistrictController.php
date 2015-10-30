@@ -2,13 +2,14 @@
 
 namespace boss\controllers\operation;
 
-use Yii;
+use boss\components\BaseAuthController;
 use boss\models\operation\OperationShopDistrict;
 use boss\models\operation\OperationShopDistrictCoordinate;
 use boss\models\operation\OperationCity;
 use boss\models\operation\OperationArea;
+
+use Yii;
 use yii\data\ActiveDataProvider;
-use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 /**
@@ -92,7 +93,7 @@ class OperationShopDistrictController extends BaseAuthController
         $OperationShopDistrictCoordinate = new OperationShopDistrictCoordinate();
         $cityname = OperationCity::getCityName($this->city_id);
         $citymodel = OperationCity::getCityInfo($this->city_id);
-        if(!empty($post)){
+        if (!empty($post)) {
             $post['OperationShopDistrict']['operation_city_id'] = $this->city_id;
             $post['OperationShopDistrict']['operation_city_name'] = $cityname;
             $post['OperationShopDistrict']['created_at'] = time();
@@ -144,7 +145,8 @@ class OperationShopDistrictController extends BaseAuthController
         $OperationShopDistrictCoordinate = new OperationShopDistrictCoordinate();
         $cityname = OperationCity::getCityName($this->city_id);
         $citymodel = OperationCity::getCityInfo($this->city_id);
-        if(!empty($post)){
+
+        if (!empty($post)) {
             $post['OperationShopDistrict']['updated_at'] = time();
             $post['OperationShopDistrict']['operation_shop_district_status'] = 1;
             $areaInfo = explode('_', $post['OperationShopDistrict']['operation_area_id']);
@@ -160,15 +162,27 @@ class OperationShopDistrictController extends BaseAuthController
             $coordinate['operation_city_name'] = $cityname;
             $coordinate['operation_shop_district_name'] = $post['OperationShopDistrict']['operation_shop_district_name'];
             $coordinate['operation_shop_district_id'] = $id;
-            $coordinate['operation_shop_district_coordinate_start_longitude'] = $post['operation_shop_district_coordinate_start_longitude']; 
-            $coordinate['operation_shop_district_coordinate_start_latitude'] = $post['operation_shop_district_coordinate_start_latitude'];
-            $coordinate['operation_shop_district_coordinate_end_longitude'] = $post['operation_shop_district_coordinate_end_longitude'];
-            $coordinate['operation_shop_district_coordinate_end_latitude'] = $post['operation_shop_district_coordinate_end_latitude'];
+
+            $coordinate['operation_shop_district_coordinate_start_longitude'] = 
+                isset($post['operation_shop_district_coordinate_start_longitude']) ? 
+                $post['operation_shop_district_coordinate_start_longitude'] : ['']; 
+
+            $coordinate['operation_shop_district_coordinate_start_latitude'] = 
+                isset($post['operation_shop_district_coordinate_start_latitude']) ? 
+                $post['operation_shop_district_coordinate_start_latitude'] : [''];
+
+            $coordinate['operation_shop_district_coordinate_end_longitude'] = 
+                isset($post['operation_shop_district_coordinate_end_longitude']) ? 
+                $post['operation_shop_district_coordinate_end_longitude'] : [''];
+            $coordinate['operation_shop_district_coordinate_end_latitude'] = 
+                isset($post['operation_shop_district_coordinate_end_latitude']) ?
+                $post['operation_shop_district_coordinate_end_latitude'] : [''];
             
             $coordinate['operation_area_id'] = $area_id;
             $coordinate['operation_area_name'] = $area_name;
             OperationShopDistrictCoordinate::settingShopDistrictCoordinate($coordinate);
-//            return $this->redirect(['view', 'id' => $model->id]);
+
+            //return $this->redirect(['view', 'id' => $model->id]);
             return $this->redirect(['index']);
         } else {
             $OperationShopDistrictCoordinateList = OperationShopDistrictCoordinate::getShopDistrictCoordinate($id);

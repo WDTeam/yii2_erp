@@ -9,6 +9,7 @@ use crazyfd\qiniu\Qiniu;
 use core\behaviors\ShopStatusBehavior;
 use core\models\operation\OperationCity;
 use yii\helpers\ArrayHelper;
+use core\models\worker\Worker;
 class ShopManager extends \dbbase\models\shop\ShopManager
 {
     /**
@@ -226,5 +227,16 @@ class ShopManager extends \dbbase\models\shop\ShopManager
     public static function getOnlineCityList(){
         $onlineCityList = OperationCity::getCityOnlineInfoList();
         return $onlineCityList?ArrayHelper::map($onlineCityList,'city_id','city_name'):[];
+    }
+    /**
+     * 处理门店数量
+     * @param int $shop_manager_id
+     */
+    public static function runCalculateWorkerCount($shop_manager_id)
+    {
+        $model = self::findOne($shop_manager_id);
+        $count = (int)Shop::find()->where(['shop_manager_id'=>$model->id])->count();
+        $model->shop_count = $count;
+        return $model->save();
     }
 }

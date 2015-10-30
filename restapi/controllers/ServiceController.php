@@ -9,6 +9,7 @@ use \core\models\worker\Worker;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\operation\OperationSelectedService;
 use \core\models\customer\CustomerAddress;
+use \restapi\models\alertMsgEnum;
 
 
 class ServiceController extends \restapi\components\Controller
@@ -61,13 +62,13 @@ class ServiceController extends \restapi\components\Controller
         $param = Yii::$app->request->get();
 
         if (empty(@$param['city_name'])) {
-            return $this->send(null, "未取得城市信息", 0, 403);
+            return $this->send(null, "未取得城市信息", 0, 403,null,alertMsgEnum::getGoodsesFailed);
         }
 
         $goodses = OperationShopDistrictGoods::getGoodsByCityCategory($param['city_name'], $param['category_id']);
 
         if (empty($goodses)) {
-            return $this->send(null, "该城市暂未开通该类型的服务", 0, 403);
+            return $this->send(null, "该城市暂未开通该类型的服务", 0, 403,null,alertMsgEnum::getGoodsesFailed);
         }
         $gDate = [];
         foreach ($goodses as $gItem) {
@@ -87,7 +88,7 @@ class ServiceController extends \restapi\components\Controller
             ];
             $gDate[] = $gobject;
         }
-        return $this->send($gDate, "数据获取成功");
+        return $this->send($gDate, "数据获取成功",null,alertMsgEnum::getGoodsesSuccess);
     }
 
     /**
@@ -162,7 +163,7 @@ class ServiceController extends \restapi\components\Controller
         $param = Yii::$app->request->get();
 
         if (empty(@$param['city_name'])) {
-            return $this->send(null, "未取得城市信息", 0, 403);
+            return $this->send(null, "未取得城市信息", 0, 403,null,alertMsgEnum::homeGoodsesFailed);
         }
 
         $ret = [
@@ -208,7 +209,7 @@ class ServiceController extends \restapi\components\Controller
 
         ];
 
-        return $this->send($ret, "信息获取成功");
+        return $this->send($ret, "信息获取成功", 0, 403,null,alertMsgEnum::homeGoodsesSuccess);
     }
 
     /**
@@ -590,7 +591,7 @@ class ServiceController extends \restapi\components\Controller
     }
 
     /**
-     * @api {get} /worker/recursive-service-time  周期服务时间表(李勇100%)
+     * @api {get} /service/recursive-service-time  周期服务时间表(李勇100%)
      * @apiName actionRecursiveServiceTime
      * @apiGroup service
      * @apiDescription 周期服务时间表
@@ -760,6 +761,8 @@ class ServiceController extends \restapi\components\Controller
      * @apiParam {String} access_token    用户认证.
      * @apiParam {String} longitude     当前经度.
      * @apiParam {String} latitude      当前纬度.
+     * @apiParam {String} per_page  每页显示多少条.
+     * @apiParam {String} page  第几页.
      *
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
@@ -770,8 +773,8 @@ class ServiceController extends \restapi\components\Controller
      *           "worker_id": 1,
      *           "worker_name": "阿姨姓名",
      *           "worker_phote": "阿姨头像",
-     *           "server_times": "服务次数",
-     *           "server_star": "服务星级",
+     *           "service_times": "服务次数",
+     *           "service_star": "服务星级",
      *           "last_time": "最后服务时间"
      *       }
      *   }
@@ -794,6 +797,11 @@ class ServiceController extends \restapi\components\Controller
         if (!isset($param['longitude']) || !$param['longitude'] || !isset($param['latitude']) || !$param['latitude']){
             return $this->send(null, "请填写服务地址", 0, 403);
         }
+        if(!isset($param['page']) || !$param['page']||!isset($param['per_page']) || !$param['per_page']){
+            return $this->send(null, "数据不完整,请输入每页条数和第几页", 0, 403);
+        }
+        $page = $param['page'];
+        $per_page = $param['per_page'];
         $longitude = $param['longitude'];
         $latitude = $param['latitude'];
         //根据经纬度获取商圈id
@@ -805,7 +813,7 @@ class ServiceController extends \restapi\components\Controller
          $district_id = $ShopDistrictInfo['id'];
          //获取周期订单可用阿姨的列表
 //        try{
-//            $worker_list=Worker::getWorkerList($district_id);
+//            $worker_list=Worker::getWorkerList($district_id,$page,$per_page);
 //        }catch (\Exception $e) {
 //            return $this->send(null, "boss系统错误", 1024, 403);
 //        }
@@ -813,12 +821,81 @@ class ServiceController extends \restapi\components\Controller
                 'worker_id' => 1,
                 'worker_name' => "阿姨姓名",
                 'worker_phote' =>"阿姨头像",
-                'server_times' => '服务次数',
-                'server_star' => '服务星级',
+                'service_times' => '服务次数',
+                'service_star' => '服务星级',
                 'last_time' =>'最后服务时间'
             ];
         if(empty($ret)){
             return $this->send(null, "没有可用阿姨",0);
+        }else{
+            return $this->send($ret, "获取周期服务可用阿姨列表成功",1);
+        }
+    }
+    
+     /**
+     * @api {POST} v1/service/first-service-time 选择周期服务的第一次服务日期列表（李勇 80%缺少model支持）
+     * @apiGroup service
+     * @apiName actionFirstServiceTime
+     * @apiDescription 选择周期服务的第一次服务日期列表
+     *
+     * @apiParam {String} access_token    用户认证.
+     * @apiParam {String} plan_time     服务时长.
+     * @apiParam {json} service_time  预约时间段json.
+     * @apiParam {String} worker_id   阿姨id.
+     *
+     * @apiSuccessExample Success-Response:
+     *  HTTP/1.1 200 OK
+     *   {
+     *       "code": 1,
+     *       "msg": "获取周期服务的第一次服务日期列表成功",
+     *       "ret": {
+     *           "worker_id": 1,
+     *           "worker_name": "阿姨姓名",
+     *           "worker_phote": "阿姨头像",
+     *           "server_times": "服务次数",
+     *           "server_star": "服务星级",
+     *           "last_time": "最后服务时间"
+     *       }
+     *   }
+     *
+     * @apiError queryNotSupportFound 没有可用阿姨
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 404 Not Found
+     *     {
+     *       "code":"0",
+     *       "msg": "查询第一次服务日期列表失败"
+     *     }
+     */
+    public function actionFirstServiceTime()
+    {
+       $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
+        if (!isset($param['plan_time']) || !$param['plan_time']||!isset($param['worker_id']) || !$param['worker_id']){
+            return $this->send(null, "请选择服务时长或阿姨", 0, 403);
+        }
+        
+        if(empty($param['service_time'])){
+            return $this->send(null, "请选择预约时间段", 0, 403);
+        }
+        $plan_time = $param['plan_time'];
+        $worker_id = $param['worker_id'];
+        $service_time=$param['service_time'];
+         //获取周期服务的第一次服务日期列表
+//        try{
+//            $first_service_time=Worker::getFirstServiceTimeList($plan_time,$worker_id,$service_time);
+//        }catch (\Exception $e) {
+//            return $this->send(null, "boss系统错误", 1024, 403);
+//        }
+         $ret = [
+                    ['service_time'=>'2015-10-02(周五)'],
+                    ['service_time'=>'2015-10-02(周五)'],
+                    ['service_time'=>'2015-10-02(周五)']
+            ];
+        if(empty($ret)){
+            return $this->send(null, "查询第一次服务日期列表失败",0);
         }else{
             return $this->send($ret, "获取周期服务可用阿姨列表成功",1);
         }

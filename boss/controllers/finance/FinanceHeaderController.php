@@ -104,12 +104,17 @@ class FinanceHeaderController extends BaseAuthController
     {
        $model = new FinanceHeader;
        if(Yii::$app->request->isPost) {
-       	if(Yii::$app->params['uploadpath']){
+       	//Yii::$app->params['uploadpath']
+       	if(true){
        		//开启七牛上传，文件存储在七牛
        		$data = \Yii::$app->request->post();
        		$model->load($data);
        		$file = UploadedFile::getInstance($model, 'finance_uplod_url');
        		 
+       		if(!isset($file->baseName)){
+       			\Yii::$app->getSession()->setFlash('default','请上传对表头！');
+       			return $this->redirect(['index']);
+       		}
        		$filenamesitename=$file->baseName;
        		if($file){
        			$qiniu = new Qiniu();
