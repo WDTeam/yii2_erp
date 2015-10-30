@@ -20,44 +20,6 @@ use Yii;
 class CustomerExtSrc extends \dbbase\models\customer\CustomerExtSrc
 {
     /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return '{{%customer_ext_src}}';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['customer_id', 'created_at', 'updated_at', 'is_del'], 'integer'],
-            [['created_at', 'updated_at'], 'required'],
-            [['platform_name', 'channal_name', 'device_name', 'device_no'], 'string', 'max' => 255]
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => Yii::t('boss', '编号'),
-            'customer_id' => Yii::t('boss', '客户'),
-            'platform_name' => Yii::t('boss', '平台名称'),
-            'channal_name' => Yii::t('boss', '聚道名称'),
-            'device_name' => Yii::t('boss', '设备名称'),
-            'device_no' => Yii::t('boss', '设备号码'),
-            'created_at' => Yii::t('boss', '创建时间'),
-            'updated_at' => Yii::t('boss', '更新时间'),
-            'is_del' => Yii::t('boss', '是否逻辑删除'),
-        ];
-    }
-
-    /**
      * 获取最初来源
      */
     public static function getFirstSrc($customer_id){

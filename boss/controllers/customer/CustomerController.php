@@ -13,8 +13,6 @@ use core\models\customer\Customer;
 use core\models\customer\CustomerAddress;
 use core\models\customer\CustomerWorker;
 use core\models\customer\CustomerExtSrc;
-use core\models\customer\CustomerChannal;
-use core\models\customer\CustomerPlatform;
 use core\models\customer\CustomerExtBalance;
 use core\models\customer\CustomerExtScore;
 use core\models\customer\CustomerBlockLog;
@@ -300,49 +298,6 @@ class CustomerController extends Controller
         }
     }
 
-	public function actionClearData(){
-		Customer::deleteAll();
-		CustomerAddress::deleteAll();
-		CustomerWorker::deleteAll();
-		CustomerPlatform::deleteAll();
-		CustomerChannal::deleteAll();
-		CustomerExtSrc::deleteAll();
-		CustomerExtBalance::deleteAll();
-		CustomerExtScore::deleteAll();
-		CustomerCode::deleteAll();
-		CustomerAccessToken::deleteAll();
-	}
-
-	public function actionInitChannal(){
-		$customerChannal = new CustomerChannal;
-		$customerChannal->channal_name = '美团';
-		$customerChannal->channal_ename = 'meituan';
-		$customerChannal->pid = 0;
-		$customerChannal->created_at = time();
-		$customerChannal->updated_at = 0;
-		$custoemrChannal->is_del = 0;
-		$custoemrChannal->save();
-		
-		$customerChannal->channal_name = '美团';
-		$customerChannal->channal_ename = 'meituan';
-		$custoemrChannal->save();
-		
-		$customerChannal->channal_name = '美团';
-		$customerChannal->channal_ename = 'meituan';
-		$custoemrChannal->save();
-
-		$customerChannal->channal_name = '美团';
-		$customerChannal->channal_ename = 'meituan';
-		$custoemrChannal->save();
-
-		$customerChannal->channal_name = '美团';
-		$customerChannal->channal_ename = 'meituan';
-		$custoemrChannal->save();
-
-		$customerChannal->channal_name = '美团';
-		$customerChannal->channal_ename = 'meituan';
-		
-	}
 
     public $global_cur_page_no = 1;
     public function actionData(){
@@ -380,26 +335,17 @@ class CustomerController extends Controller
                 $customer->customer_email = $val['email'];
 
                 $customer->operation_area_id = 0;
-
-                $city = (new \yii\db\Query())->select('id, city_id, city_name')->from('ejj_operation_city')->where(['like', 'city_name', '北京'])->one();
-                $customer->operation_city_id = empty($city) ? 0 : $city['id'];
-                $customer->general_region_id = 1;
-                $customer->customer_live_address_detail = $val['street'];
-                
-     
+				$customer->operation_area_name = '';
+				$customer->operation_city_id = 0;
+				$customer->operation_city_name = '';
                 $customer->customer_level = $val['level'];
                 $customer->customer_complaint_times = 0;
-                
-                $customer->customer_src = intval($val['user_src']);
-//                $customer->channal_id = 0;
-//                $customer->platform_id = 0;
                 $customer->customer_login_ip = '';
                 $customer->customer_login_time = 0;
                 $customer->customer_is_vip = $val['user_type'];
                 $customer->created_at = strtotime($val['create_time']);
                 $customer->updated_at = 0;
                 $customer->is_del = $val['is_block'];
-                $customer->customer_del_reason = '辱骂阿姨';
                 $customer->validate();
                 if ($customer->hasErrors()) {
                     // var_dump($customer->getErrors());
@@ -442,6 +388,7 @@ class CustomerController extends Controller
 
                 $customerBalance = new CustomerExtBalance;
                 $customerBalance->customer_id = $customer->id;
+				$customerBalance->customer_phone = $customer->customer_phone;
                 $customerBalance->customer_balance = $val['charge_money'];
                 $customerBalance->created_at = time();
                 $customerBalance->updated_at = 0;
@@ -457,14 +404,13 @@ class CustomerController extends Controller
 
                 $customerScore = new CustomerExtScore;
                 $customerScore->customer_id = $customer->id;
+				$customerScore->customer_phone = $customer->customer_phone;
                 $customerScore->customer_score = 0;
                 $customerScore->created_at = time();
                 $customerScore->updated_at = 0;
                 $customerScore->is_del = 0;
                 $customerScore->validate();
                 if ($customerScore->hasErrors()) {
-                    // var_dump($customerScore->getErrors());
-                    // die();
                     echo "<br/>数据有误略过";
                     continue;
                 }
@@ -507,8 +453,7 @@ class CustomerController extends Controller
                 
                 $customerExtSrc = new CustomerExtSrc;
                 $customerExtSrc->customer_id = $customer->id;
-//                $customerExtSrc->platform_id = 0;
-//                $customerExtSrc->channal_id = 0;
+				$customerExtSrc->finance_order_channal_id = 0;
                 $customerExtSrc->platform_name = 'Android';
                 $customerExtSrc->channal_name = '美团';
                 $customerExtSrc->platform_ename = 'android';

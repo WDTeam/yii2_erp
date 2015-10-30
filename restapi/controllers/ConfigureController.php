@@ -269,14 +269,14 @@ class ConfigureController extends \restapi\components\Controller
         //页首链接
         $header_link = [
             'comment_link' => [
-                'title' => '',
-                'url' => '',
-                'img' => '',
+                'title' => '意见反馈',
+                'url' => 'http://dev.m2.1jiajie.com/statics/images/MyView_FeedBack.png',
+                'img' => 'http://dev.m2.1jiajie.com/statics/images/MyView_FeedBack.png',
             ],
             'phone_link' => [
-                'title' => '',
+                'title' => '18210922324',
                 'url' => '',
-                'img' => '',
+                'img' => 'http://dev.m2.1jiajie.com/statics/images/MyView_Tel.png',
             ],
         ];
         //获取首页轮播图
