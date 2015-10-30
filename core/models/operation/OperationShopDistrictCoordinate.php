@@ -3,7 +3,6 @@
 namespace core\models\operation;
 
 use Yii;
-use dbbase\models\operation\OperationShopDistrictCoordinate as CommonOperationShopDistrictCoordinate;
 
 /**
  * This is the model class for table "{{%operation_price_strategy}}".
@@ -15,7 +14,7 @@ use dbbase\models\operation\OperationShopDistrictCoordinate as CommonOperationSh
  * @property integer $created_at
  * @property integer $updated_at
  */
-class OperationShopDistrictCoordinate extends CommonOperationShopDistrictCoordinate
+class OperationShopDistrictCoordinate extends \dbbase\models\operation\OperationShopDistrictCoordinate
 {
     public static function setShopDistrictCoordinate($coordinate){
         $fields = ['operation_shop_district_id', 'operation_shop_district_name', 'operation_city_id', 'operation_city_name', 'operation_shop_district_coordinate_start_longitude', 'operation_shop_district_coordinate_start_latitude', 'operation_shop_district_coordinate_end_longitude', 'operation_shop_district_coordinate_end_latitude', 'operation_area_id', 'operation_area_name', 'created_at', 'updated_at'];
@@ -28,12 +27,28 @@ class OperationShopDistrictCoordinate extends CommonOperationShopDistrictCoordin
     }
     
     public static function settingShopDistrictCoordinate($coordinateinfo){
-        if(!empty($coordinateinfo['operation_shop_district_id'])){
+
+        if (!empty($coordinateinfo['operation_shop_district_id'])) {
             self::deleteAll(['operation_shop_district_id' => $coordinateinfo['operation_shop_district_id']]);
-            $fields = ['operation_shop_district_id', 'operation_shop_district_name', 'operation_city_id', 'operation_city_name', 'operation_shop_district_coordinate_start_longitude', 'operation_shop_district_coordinate_start_latitude', 'operation_shop_district_coordinate_end_longitude', 'operation_shop_district_coordinate_end_latitude', 'operation_area_id', 'operation_area_name', 'created_at', 'updated_at'];
+            $fields = [
+                'operation_shop_district_id',
+                'operation_shop_district_name',
+                'operation_city_id',
+                'operation_city_name',
+                'operation_shop_district_coordinate_start_longitude',
+                'operation_shop_district_coordinate_start_latitude',
+                'operation_shop_district_coordinate_end_longitude',
+                'operation_shop_district_coordinate_end_latitude',
+                'operation_area_id',
+                'operation_area_name',
+                'created_at',
+                'updated_at'
+            ];
             $data = [];
             $i = 0;
-            foreach((array)$coordinateinfo['operation_shop_district_coordinate_start_longitude'] as $key => $value){
+            foreach ((array)
+                $coordinateinfo['operation_shop_district_coordinate_start_longitude'] 
+                as $key => $value) {
                 $data[$i][] = $coordinateinfo['operation_shop_district_id'];
                 $data[$i][] = $coordinateinfo['operation_shop_district_name'];
                 $data[$i][] = $coordinateinfo['operation_city_id'];
