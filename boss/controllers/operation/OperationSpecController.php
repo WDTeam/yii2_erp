@@ -32,11 +32,13 @@ class OperationSpecController extends Controller
      */
     public function actionIndex()
     {
+        $OperationSpecModel = new OperationSpec();
         $dataProvider = new ActiveDataProvider([
             'query' => OperationSpec::find(),
         ]);
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'OperationSpecModel' => $OperationSpecModel,
         ]);
     }
 
