@@ -12,7 +12,7 @@ $this->title = Yii::t('app', 'Add Service');
 if($cityAddGoods == 'success'){
     $this->params['breadcrumbs'][] = ['label' => $city_name];
 }else {
-    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '开通') . $city_name, 'url' => ['categoryshop']];
+    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '开通') . $city_name, 'url' => ['release']];
 }
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '添加服务')];
 ?>
