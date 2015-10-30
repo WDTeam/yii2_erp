@@ -269,20 +269,14 @@ class ConfigureController extends \restapi\components\Controller
         //页首链接
         $header_link = [
             'comment_link' => [
-                'id' => '',
                 'title' => '',
                 'url' => '',
                 'img' => '',
-                'coluor'=>'',
-                'sort' => ''
             ],
             'phone_link' => [
-                'id' => '',
                 'title' => '',
                 'url' => '',
                 'img' => '',
-                'coluor'=>'',
-                'sort' => ''
             ],
         ];
         //获取首页轮播图
@@ -461,7 +455,7 @@ class ConfigureController extends \restapi\components\Controller
 
         $ret = [
             'city_list' => $city_list,
-            'header_link'=>$header_link,
+            'header_link' => $header_link,
             'pic_list' => $pic_list,
             'home_order_server' => $home_order_server,
             'server_list' => $server_list,
@@ -577,8 +571,7 @@ class ConfigureController extends \restapi\components\Controller
      */
     public function actionWorkerInit()
     {
-        $params = Yii::$app->request->get() or
-        $params = json_decode(Yii::$app->request->getRawBody(), true);
+        $params = Yii::$app->request->get();
         @$token = $params['access_token'];
         $worker = WorkerAccessToken::getWorker($token);
         if (empty($worker)) {
@@ -690,7 +683,7 @@ class ConfigureController extends \restapi\components\Controller
      *                  "time": "5"  停留时间，默认5秒
      *                  "next_url": "" 下一页url
      *              },
-     * {
+     *              {
      *                  "id": "2", 编号
      *                  "img": "", 图片地址
      *                  "title": "", 文字
@@ -715,7 +708,36 @@ class ConfigureController extends \restapi\components\Controller
      */
     public function actionStartPage()
     {
+        $params = Yii::$app->request->get();
+        $app_version = $params['app_version'];
 
+        if (empty($app_version)) {
+            return $this->send(null, "访问源信息不存在，请确认信息完整", 0);
+        }
+        $pages = [
+            [
+                "id" => "1",
+                "img" => "",
+                "title" => "",
+                "remark" => "",
+                "sort" => "1",
+                "time" => "5",
+                "next_url" => "",
+            ],
+            [
+                "id" => "2",
+                "img" => "",
+                "title" => "",
+                "remark" => "",
+                "sort" => "2",
+                "time" => "5",
+                "next_url" => "",
+            ],
+        ];
+        $ret=[
+            'pages'=>$pages
+        ];
+        return $this->send($ret, "查询成功");
     }
 
     /**
