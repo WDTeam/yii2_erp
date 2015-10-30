@@ -33,6 +33,7 @@ class OperationServiceCardSellRecord extends \dbbase\models\operation\OperationS
     /**
      * @instruction 客户确定购买服务卡，产生购卡记录
      * @author zhangrenzhao
+     * @date 2015-10-31
      * @param $attributes
      * 【   customer_id,用户ID
      *      server_card_info_id,卡信息ID
@@ -84,6 +85,7 @@ class OperationServiceCardSellRecord extends \dbbase\models\operation\OperationS
 
     /**
      * @introduction 客户支付成功，回写支付信息
+     * @author zhangrenzhao
      * @param $attributes
      * 【 id,服务卡订单记录
      *    customer_id,用户ID
@@ -136,8 +138,10 @@ class OperationServiceCardSellRecord extends \dbbase\models\operation\OperationS
     public function getServiceCardSellRecordById($id){
         return self::findOne(['id'=>$id]);
     }
+
     /**
-     * 软删除
+     * @introduction 逻辑删除
+     * @return bool
      */
     public function softDelete()
     {

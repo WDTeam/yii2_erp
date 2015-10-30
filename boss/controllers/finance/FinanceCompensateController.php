@@ -154,8 +154,15 @@ class FinanceCompensateController extends Controller
                  }
             }
             $model->save();
-        } 
-        return $this->redirect(['/order/order-complaint/']);
+            return $this->redirect(['/order/order-complaint/']);
+        } else {
+            if(!empty($id)){
+                 $model = $this->findModel($id);
+            }
+            return $this->render('create', [
+                'model' => $model,
+            ]);
+        }
     }
 
     /**
@@ -169,9 +176,9 @@ class FinanceCompensateController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         } else {
-            return $this->render('update', [
+            return $this->render('create', [
                 'model' => $model,
             ]);
         }

@@ -21,7 +21,7 @@ use core\models\customer\Customer;
  * @property string $service_card_info_rebate_value
  * @property string $service_card_with_customer_balance
  * @property integer $customer_id
- * @property string $customer_phone
+ * @property string  $customer_phone
  * @property integer $server_card_info_scope
  * @property integer $service_card_with_customer_buy_at
  * @property integer $service_card_with_customer_valid_at
@@ -58,11 +58,13 @@ class OperationServiceCardWithCustomer extends \dbbase\models\operation\Operatio
     }
     /**
      * @introduction 支付成功，生成客户服务卡关系记录
-     * @param
-     * $service_card_sell_record_id,购物卡销售记录ID
-     * $customer_id,用户ID
-     * $customer_trans_record_pay_money,支付金额
-     * $service_card_with_customer_buy_at，支付时间
+     * @author zhangrenzhao
+     * @date 2015-10-30
+     * @param【
+     *      $service_card_sell_record_id,购物卡销售记录ID
+     *      $customer_id,用户ID
+     *      $customer_trans_record_pay_money,支付金额
+     *      $service_card_with_customer_buy_at，支付时间】
      * @return mixed|null
      */
     public function createServiceCardWithCustomer($service_card_sell_record_id,$customer_id,$customer_trans_record_pay_money,$service_card_with_customer_buy_at)
