@@ -28,9 +28,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'submit_options' => ['class' => 'btn btn-default', 'id' => 'ajax_submit_search'],
                 'fields' => ['搜索字段', 'operation_advert_position_name' => '位置名称', 'operation_platform_name' => '平台名称', 'operation_platform_version_name' => '版本名称'],
                 'default' => isset($params['fields']) ? $params['fields'] : '',
-//                'is_ajax_search' => true,
-//                'addons' => ['operation_city_id' => 'all'],
-//                'callback' => 'adPositionShowHtml'
+                //'is_ajax_search' => true,
+                //'addons' => ['operation_city_id' => 'all'],
+                //'callback' => 'adPositionShowHtml'
             ]);?>
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,

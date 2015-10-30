@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\HtmlPurifier;
+use dbbase\models\order\OrderStatusDict;
 ?>
 
  <div class="m_tab">
@@ -8,7 +9,7 @@ use yii\helpers\HtmlPurifier;
    <table cellspacing="0" cellpadding="0" border="1">
 			<tr class="first">
             	<th style="width: 28%;">订单编号：<?= Html::encode($model->order_code) ?><span><?= Html::encode($model->order_service_type_name) ?></span></th>
-                <th><?= $model->orderExtStatus->order_status_dict_id > 1 ? '已支付' : '未支付' ?></th>
+                <th><?= $model->orderExtStatus->order_status_dict_id > OrderStatusDict::ORDER_INIT ? '已支付' : '未支付' ?></th>
                 <th></th>  
                 <th></th>
                 <th class="m_colo"><?= Html::encode($model->orderExtStatus->order_status_name) ?></th>
@@ -35,9 +36,15 @@ use yii\helpers\HtmlPurifier;
             	</td>
             	<td>
             		<p><a href="/order/order/edit?id=<?= Html::encode($model->id) ?>">查看订单</a></p>
+            		
+            		<?php if($model->orderExtStatus->order_status_dict_id != OrderStatusDict::ORDER_INIT):?>
             		<p><a href="###" class="m_tousu">投诉</a></p>
+            		<?php endif;?>
             		<!-- <p><a href="###">发送短信</a></p> -->
+            		
+            		<?php if($model->orderExtStatus->order_status_dict_id != OrderStatusDict::ORDER_CANCEL):?>
             		<p><a href="###" class="m_quxiao">取消订单</a></p>
+            		<?php endif;?>
             	</td>
             </tr>
 		</table>

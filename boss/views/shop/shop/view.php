@@ -8,7 +8,6 @@ use yii\web\JsExpression;
 use yii\helpers\Url;
 use core\models\shop\Shop;
 use boss\components\AreaCascade;
-use dbbase\components\BankHelper;
 use yii\widgets\ActiveForm;
 
 /**
@@ -177,7 +176,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'type' => DetailView::INPUT_WIDGET,
             'widgetOptions' => [
                 'class'=>\kartik\widgets\Select2::className(),
-                'data' =>BankHelper::getBankNames(),
+                'data' =>$model::getBankNames(),
                 'hideSearch' => false,
                 'options'=>[
                     'placeholder' => '选择银行',

@@ -7,8 +7,8 @@ use yii\helpers\Html;
 /* @var $model boss\models\Operation\OperationPlatformVersion */
 
 $this->title = Yii::t('app', 'Create').Yii::t('app', 'Platform').Yii::t('app', 'Version');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Platform'), 'url' => ['operation-platform/index']];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Platform').Yii::t('app' ,'Version'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Platform'), 'url' => ['/operation/operation-platform/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Platform').Yii::t('app' ,'Version'), 'url' => ['/operation/operation-platform-version/index', 'platform_id' => $platform_id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-platform-version-create">

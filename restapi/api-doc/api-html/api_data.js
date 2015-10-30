@@ -1900,7 +1900,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "v1/order/get-worker-orders.php",
+    "url": "v1/order/get-worker-orders",
     "title": "指定阿姨订单数/待抢单订单订单数/指定阿姨订单列表/待抢单订单列表 (haojianshe 100%)",
     "name": "actionGetWorkerOrders",
     "group": "Order",
@@ -1950,7 +1950,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n 指定阿姨订单数/待抢单订单订单数 leveltype=1\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"workerData\": \"指定阿姨订单\",\n         \"orderData\": \"待抢单订单\",\n         \"worker_is_block\": \"阿姨状态 0正常1封号\",\n     }\n}\n\n  * 指定阿姨订单列表/待抢单订单列表 leveltype=3/4\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"workerData\":\n          [\n          {\n           \"order_id\":\"订单号\"\n           \"order_code\":\"订单编号\"\n           \"batch_code\":\"周期订单号\"\n           \"booked_begin_time\":\"服务开始时间\"\n           \"booked_end_time\":\"服务结束时间\"\n           \"channel_name\":\"服务类型名称\"\n           \"booked_count\":\"时常\"\n           \"address\":\"服务地址\"\n           \"need\":\"备注说明\"\n           \"money\":\"订单价格\"\n          } \n        ],\n        \"time\":172800  倒计时秒 #要求2天\n     }\n}",
+          "content": "HTTP/1.1 200 OK\n 指定阿姨订单数/待抢单订单订单数 leveltype=1\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"workerData\": \"指定阿姨订单数\",\n         \"orderData\": \"待抢单订单数\",\n         \"workerServiceCount\": \"待服务订单数\",\n         \"worker_is_block\": \n           {\n           ##暂时还没有统一\n           //\"阿姨状态 0正常1封号\",\n           }\n     }\n}\n\n  * 指定阿姨订单列表/待抢单订单列表 leveltype=3/4\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"workerData\":\n          [\n          {\n           \"order_id\":\"订单号\"\n           \"order_code\":\"订单编号\"\n           \"batch_code\":\"周期订单号\"\n           \"booked_begin_time\":\"服务开始时间\"\n           \"booked_end_time\":\"服务结束时间\"\n           \"channel_name\":\"服务类型名称\"\n           \"booked_count\":\"时常\"\n           \"address\":\"服务地址\"\n           \"need\":\"备注说明\"\n           \"money\":\"订单价格\"\n          } \n        ],\n        \"time\":172800  倒计时秒 #要求2天\n     }\n}",
           "type": "json"
         }
       ]

@@ -37,7 +37,7 @@ $odercmodel = new OrderComplaint();
 			                    	<td>
 			                    	</td>
 			                    	<td>
-			                    		<p>待处理</p>
+			                    		<p>待确认</p>
 			                    		<p><a href="/order/order-complaint/create?id=<?= $model->id; ?>">申请赔偿</a></p>
 			                    		<!--p><a href="###">查看关联投诉</a></p> -->
 			                    	</td>
