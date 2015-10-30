@@ -20,12 +20,38 @@ namespace core\models\operation;
  */
 class OperationServiceCardInfo extends \dbbase\models\operation\OperationServiceCardInfo
 {
+	 /**
+     * @intruction 获取服务卡信息
+     * @param $id
+     * @return null|static
+     */
+    public static function getServiceCardInfoById($id) {
+        return self::findOne(['id'=>$id]);
+    }
+    /**
+     * 软删除
+     */
+    public function softDelete()
+    {
+        $this->isdel = 1;
+        return $this->save();
+    }
+
+    /**
+     * 查询所有服务卡信息
+     * @return static[]
+     */
+    public static function getServiceCardInfo()
+    {
+        return self::findAll();
+    }
+	
 	public function serviceCardInfoCreate()
 	{
 		
 		$this->created_at = time();
 		$this->updated_at = time();
-		$this->is_del = 1;
+		$this->is_del = 0;
 		return $this->save();
 	}
 	
@@ -35,6 +61,7 @@ class OperationServiceCardInfo extends \dbbase\models\operation\OperationService
 		$this->updated_at = time();
 		return $this->save();
 	}
+	
 	
 	public function getServiceCardConfig(){
 		$config = [

@@ -2,9 +2,10 @@
 
 namespace boss\controllers\operation;
 
-use Yii;
 use boss\models\operation\OperationServiceCardSellRecord;
 use boss\models\operation\OperationServiceCardSellRecordSearch;
+
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -34,7 +35,6 @@ class OperationServiceCardSellRecordController extends Controller
     {
         $searchModel = new OperationServiceCardSellRecordSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-		file_put_contents('d:/demo/1.txt',var_export(Yii::$app->request->getQueryParams(),true));
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,

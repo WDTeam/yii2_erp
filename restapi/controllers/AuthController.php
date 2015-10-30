@@ -16,7 +16,7 @@ class AuthController extends \restapi\components\Controller
      *
      * @apiParam {String} phone 用户电话号码
      * @apiParam {String} verify_code 短信验证码
-     * @apiParam {String} app_version 访问源(android_4.2.2)
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      * @apiSuccess {Object} user 用户信息.
      * @apiSuccess {String} access_token 访问令牌字符串.
@@ -145,9 +145,9 @@ class AuthController extends \restapi\components\Controller
      * @apiName actionWorkerLogin
      * @apiGroup Auth
      *
-     * @apiParam {String} [phone] 阿姨电话号码
-     * @apiParam {String} [verify_code] 短信验证码
-     * @apiParam {String} app_version 访问源(android_4.2.2)
+     * @apiParam {String} phone 阿姨电话号码
+     * @apiParam {String} verify_code 短信验证码
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      * @apiSuccess {Object} user 阿姨信息.
      * @apiSuccess {String} access_token 访问令牌字符串.
@@ -218,7 +218,7 @@ class AuthController extends \restapi\components\Controller
             return $this->send(null, "boss系统错误", 1024, 403);
         }
         if(empty($if_exist)){
-             return $this->send(null, "获取不到验证码", 0, 403);
+             return $this->send(null, "没有此阿姨，请联系客服！", 0, 403);
         }
         try{
              $checkRet = WorkerCode::checkCode($phone,$verify_code);

@@ -38,7 +38,7 @@ use yii\web\JsExpression;
                 'allowClear' => true,
                 'minimumInputLength' => 0,
                 'ajax' => [
-                    'url' => \yii\helpers\Url::to(['shop/search-by-name']),
+                    'url' => \yii\helpers\Url::to(['shop/shop/search-by-name']),
                     'dataType' => 'json',
                     'data' => new JsExpression('function(params) {
                         return {name:params.term, shop_manager_id: window.'.$widget_id.'shop_manager_id};

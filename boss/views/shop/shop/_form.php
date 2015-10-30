@@ -12,7 +12,6 @@ use boss\components\AreaCascade;
 // The widget
 use kartik\widgets\Select2; // or kartik\select2\Select2
 use yii\web\JsExpression;
-use dbbase\components\BankHelper;
 use yii\helpers\Url;
 
 /**
@@ -142,7 +141,7 @@ use yii\helpers\Url;
                         'type'=> Form::INPUT_WIDGET,
                         'widgetClass'=>\kartik\widgets\Select2::className(),
                         'options' => [
-                            'data' =>BankHelper::getBankNames(),
+                            'data' =>$model::getBankNames(),
                             'hideSearch' => false,
                             'options'=>[
                                 'placeholder' => '选择银行',

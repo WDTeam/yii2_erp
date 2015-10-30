@@ -2,9 +2,10 @@
 
 namespace boss\controllers\operation;
 
-use Yii;
 use boss\models\operation\OperationServiceCardInfo;
 use boss\models\operation\OperationServiceCardInfoSearch;
+
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -91,8 +92,6 @@ class OperationServiceCardInfoController extends Controller
         $model = $this->findModel($id);
 		$config = $model->getServiceCardConfig();
         if ($model->load(Yii::$app->request->post()) && $model->serviceCardInfoUpdate()) {
-			
-			file_put_contents('d:/demo/1.txt',var_export($model->load(Yii::$app->request->post()),true));
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [

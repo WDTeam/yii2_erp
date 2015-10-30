@@ -36,6 +36,7 @@ class server
         echo date('Y-m-d H:i:s')." 自动指派服务启动中";
         $this->config = $config;
         $this->connectRedis();
+        $this->redis->set(REDIS_IS_SERVER_SUSPEND,json_encode(false));
         $this->redis->set(REDIS_AUTOASSIGN_CONFIG,json_encode($this->config));
         $this->saveStatus(null);
         $this->serv = new swoole_websocket_server($config['SERVER_LISTEN_IP'], $config['SERVER_LISTEN_PORT']);
@@ -149,19 +150,22 @@ class server
             {
                 echo date('Y-m-d H:i:s')." 服务继续\n";
                 $this->isServerSuspend = false;
-                $this->redis->set(REDIS_IS_SERVER_SUSPEND,false);
+                $this->redis->set(REDIS_IS_SERVER_SUSPEND,json_encode(false));
+                $this->broadcast($server, autoassign\ClientCommand::START);
             }
             break;
             case autoassign\ClientCommand::STOP:
             {
                 echo date('Y-m-d H:i:s')." 服务暂停\n";
                 $this->isServerSuspend = true;
-                $this->redis->set(REDIS_IS_SERVER_SUSPEND,true);
+                $this->redis->set(REDIS_IS_SERVER_SUSPEND,json_encode(true));
+                $this->broadcast($server, autoassign\ClientCommand::STOP);
             }
             break;
             case autoassign\ClientCommand::RELOAD:
             {
                 echo date('Y-m-d H:i:s')." 服务重启\n";
+                $this->broadcast($server, autoassign\ClientCommand::RELOAD);
                 $server->reload();
             }
             break;
@@ -177,6 +181,7 @@ class server
                 
                 $this->redis->set(REDIS_AUTOASSIGN_CONFIG,json_encode($this->config));
                 echo date('Y-m-d H:i:s')." 配置已更新\n";
+                $this->broadcast($server, autoassign\ClientCommand::UPDATE);
             }
             break;
             default:
@@ -223,6 +228,7 @@ class server
         $this->redis->set($key, $data);
         if ($server)
         {
+            //echo "save status broadcast...\n";
             $this->broadcast($server,'Assign Server is OK');
         }
     }
@@ -230,7 +236,8 @@ class server
      * 处理订单
      */
     public function processOrders($server) {
-        if ($this->redis->get(REDIS_IS_SERVER_SUSPEND)==true)
+        $isSuspend = (bool) json_decode($this->redis->get(REDIS_IS_SERVER_SUSPEND));
+        if ($isSuspend==true)
         {
             return;
         }
@@ -413,6 +420,7 @@ class server
         $msg = json_encode($msg);
         foreach ($server->connections as $clid => $info)
         {
+            //var_dump($clid);
             try{
                 $server->push($clid, $msg);
             } catch (Exception $ex) {

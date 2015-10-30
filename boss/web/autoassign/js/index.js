@@ -26,10 +26,16 @@ function websocketConnect() {
             $('#connectStatus').html('连接成功！');
             $('#connect').attr('disabled', true);
             $('#runService').hide();
-            $('#start').attr('disabled', false);
-            $('#stop').attr('disabled', false);
             $('#reload').attr('disabled', false);
             $('#update').attr('disabled', false);
+            if ($('#srvIsSuspend').val()==true)
+            {
+                $('#start').attr('disabled', false);
+                $('#stop').attr('disabled', true);
+            }else{
+                $('#start').attr('disabled', true);
+                $('#stop').attr('disabled', false);
+            }
         };
         websocket.onclose = function (evt) {
             console.log("Disconnected");
@@ -44,7 +50,30 @@ function websocketConnect() {
 
         websocket.onmessage = function (evt) {
             console.log('Retrieved data from server: ' + evt.data);
-            showOrders(evt.data);
+            var msg = $.parseJSON(evt.data);
+            var srv_continue = 1;
+            var srv_suspend = 2;
+            var srv_reload = 3;
+            var srv_update = 4;
+            //alert(msg=="Server-Continue");
+            if( msg == srv_continue){
+                $('#connectStatus').html('服务已继续...');
+                $('#start').attr('disabled', true);
+                $('#stop').attr('disabled', false);
+            }else if(msg == srv_suspend)
+            {
+                $('#connectStatus').html('服务已暂停...');
+                $('#start').attr('disabled', false);
+                $('#stop').attr('disabled', true);
+            }else if(msg == srv_reload){
+                $('#connectStatus').html('服务重启中...');
+            }else if(msg == srv_update){
+                $('#connectStatus').html('配置已完成更新...');
+            }else if(msg == "Assign Server is OK"){
+
+            }else{
+                showOrders(evt.data);
+            }
         };
 
         websocket.onerror = function (evt, e) {
@@ -115,6 +144,6 @@ function getStatus(status){
 function execCommand(cmd){
     var data = cmd +','+$('#qstart').val()+','+$('#qend').val()+','+$('#jstart').val()+','+$('#jend').val()+','+status;
     websocket.send(data);
-    $('#connectStatus').html('自动派单开始！');
-    $('#start').attr('disabled', false);
+    //$('#connectStatus').html('自动派单开始！');
+    //$('#start').attr('disabled', false);
 }
