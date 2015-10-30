@@ -1346,15 +1346,19 @@ class OrderController extends \restapi\components\Controller
     public function actionCancelOrder()
     {
         $param = json_decode(Yii::$app->request->getRawBody(), true);
+
         if (!isset($param['access_token']) || !$param['access_token'] || !isset($param['order_id']) || !$param['order_id']) {
             return $this->send(null, "验证码或订单号不能为空", 0, 403);
         }
+
         $token = $param['access_token'];
         $orderId = $param['order_id'];
         $reason = '';
+
         if (isset($param['order_cancel_reason'])) {
             $reason = $param['order_cancel_reason'];
         }
+
         if (!CustomerAccessToken::checkAccessToken($token)) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
@@ -1367,7 +1371,7 @@ class OrderController extends \restapi\components\Controller
              * $customer->id 用户
              * $order_id     订单号
              */
-            $orderValidation = \core\models\order\Order::validationOrderCustomer($customer->id, $orderId);
+            $orderValidation = Order::validationOrderCustomer($customer->id, $orderId);
 
             if ($orderValidation) {
                 /**
@@ -1385,11 +1389,11 @@ class OrderController extends \restapi\components\Controller
                     $reason = '其他原因#' . $reason;
                 }
                 try {
-                    $result = \core\models\order\Order::cancel($orderId, 0, $reason);
+                    $result = Order::cancel($orderId, 0, $reason);
                     if ($result) {
-                        return $this->send([1], $orderId . "订单取消成功");
+                        return $this->send([1], $orderId . "订单取消成功", 1);
                     } else {
-                        return $this->send([0], $orderId . "订单取消失败");
+                        return $this->send([0], $orderId . "订单取消失败", 0);
                     }
                 } catch (Exception $e) {
                     return $this->send(null, $orderId . "订单取消异常:" . $e);
@@ -1442,7 +1446,7 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {DELETE} /order/hiden-order 删除订单（郝建设 100% ）
+     * @api {DELETE} /order/hiden-order 删除订单（郝建设 100%）
      *
      *
      * @apiName HidenOrder
@@ -1495,12 +1499,16 @@ class OrderController extends \restapi\components\Controller
              * $customer->id 用户
              * $order_id     订单号
              */
-            $orderValidation = \core\models\order\Order::validationOrderCoustomer($customer->id, $param['order_id']);
+            try {
+                $orderValidation = \core\models\order\Order::validationOrderCoustomer($customer->id, $param['order_id']);
 
-            if (\core\models\order\Order::customerDel($param['order_id'], 0)) {
-                return $this->send([], "删除订单成功");
-            } else {
-                return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+                if (\core\models\order\Order::customerDel($param['order_id'], 0)) {
+                    return $this->send([1], "删除订单成功", 1);
+                } else {
+                    return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+                }
+            } catch (\Exception $e) {
+                return $this->send(null, "boss系统错误" . $e, 0, 1024);
             }
         }
     }
@@ -1644,7 +1652,7 @@ class OrderController extends \restapi\components\Controller
                     $ret['time'] = 172800;
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (\Exception $e) {
-                    return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
+                    return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 1024);
                 }
             } else if ($param['leveltype'] == 4) {
 
@@ -1659,7 +1667,7 @@ class OrderController extends \restapi\components\Controller
                     $ret['time'] = 172800;
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (\Exception $e) {
-                    return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
+                    return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 1024);
                 }
             } else if ($param['leveltype'] == 1) {
                 try {
@@ -1693,7 +1701,7 @@ class OrderController extends \restapi\components\Controller
                     ];
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (\Exception $e) {
-                    return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
+                    return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 1024);
                 }
             }
         } else {
@@ -1702,7 +1710,7 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {PUT} v1/order/set-worker-order.php 阿姨抢单提交 (haojianshe 100%)
+     * @api {PUT} v1/order/set-worker-order 阿姨抢单提交 (haojianshe 100%)
      *
      * @apiName actionSetWorkerOrder
      * @apiGroup Order
