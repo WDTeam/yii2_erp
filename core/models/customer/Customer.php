@@ -252,8 +252,49 @@ class Customer extends \dbbase\models\customer\Customer
         }
         return $workers;
     }
+	/******************************************basic**********************************************/
+	/**
+	 * get customer vip typoes
+	 */
+	public static function getVipTypes(){
+		return [0=>'非会员', 1=>'会员'];
+	}
 
-	/*******************************************客户渠道**********************************************/
+	/**
+     *	get customer vip
+	 */
+	public static function getVipTypeName($vip_type){
+		$vip_type_name = '';
+		switch ($vip_type)
+		{
+			case 0:
+				$vip_type_name = '非会员';
+			break;
+			case 1:
+				$vip_type_name = '会员';
+			break;
+			
+			default:
+				# code...
+			break;
+		}
+		return $vip_type_name;
+	}
+
+	/**
+     *	get vip info by phone
+	 */
+	public static function getVipInfoByPhone($phone){
+		$customer = self::find()->where(['customer_phone'=>$phone])->asArray()->one();
+		if(empty($customer)) throw new NotFoundHttpException;
+		
+		$vip_types = self::getVipTypes();
+		$vip_type = $customer['customer_is_vip'];
+		$vip_type_name = $vip_types[$vip_type];
+		return ['vip_type'=>$vip_type, 'vip_type_name'=>$vip_type_name];
+	}
+
+	/*******************************************src**********************************************/
 	/**
      * get all customer srcs
 	 */
