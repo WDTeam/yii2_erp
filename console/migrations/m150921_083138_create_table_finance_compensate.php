@@ -37,24 +37,6 @@ class m150921_083138_create_table_finance_compensate extends Migration
             'created_at' => Schema::TYPE_INTEGER. '(11) DEFAULT NULL COMMENT \'申请时间\'',
             'is_softdel' => Schema::TYPE_SMALLINT. '(1) DEFAULT \'0\' COMMENT \'0 正常 1删除\'' ,
         ], $tableOptions);
-        $this->batchInsert('{{%finance_compensate}}',
-            ['id','finance_compensate_oa_code','finance_complaint_id','worker_id','worker_tel','worker_name',
-                'customer_id','customer_name',
-                'finance_compensate_coupon','finance_compensate_coupon_money','finance_compensate_money','finance_compensate_total_money','finance_compensate_insurance_money',
-                 'finance_compensate_company_money','finance_compensate_worker_money','finance_compensate_reason','finance_compensate_proposer',
-                'is_softdel','updated_at','created_at'],
-            [
-                [1,'OA001',111,201,'13810008888','陈阿姨',301,'李先生','AAAA','50',50,200,100,50,50,'地板坏了','客服A',
-                    0,time(),time()],
-                [2,'OA002',112,202,'13810008889','肖阿姨',302,'郝先生','AAAA','50',50,200,100,50,50,'玻璃裂了','客服B',
-                    0,time(),time()],
-                [3,'OA003',113,203,'13810008886','刘阿姨',303,'魏先生','AAAA','50',50,200,100,50,50,'茶几坏了','客服A',
-                    0,time(),time()],
-                [4,'OA004',114,204,'13810008885','万阿姨',304,'潘先生','AAAA','50',50,200,100,50,50,'花瓶破碎','客服B',
-                    0,time(),time()],
-                [5,'OA005',115,205,'13810008881','谢阿姨',305,'林先生','AAAA','50',50,200,100,50,50,'花洒漏水','客服C',
-                    0,time(),time()],
-            ]);
     }
 
 
