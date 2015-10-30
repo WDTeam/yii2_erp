@@ -55,7 +55,8 @@ $(document).ready(function($){
             data: {order_id: operating_order_id, cancel_type: cancelType, cancel_note: cancelNote},
             dataType:"json",
             success: function (msg) {alert('11:' + msg);
-                if(msg != false){alert('22');
+                if(msg != false){
+                	//alert('22');
                 	$("#HBox2").hide();
                 	$("#HOverlay").hide()
                 }else{
@@ -163,8 +164,8 @@ $(document).ready(function($){
             data: complaints,
             dataType:"json",
             success: function (msg) {
-                if(msg.status){
-                    
+                if(msg){
+                	alert('提交投诉成功！');
                 }else{
                     alert('提交投诉失败！');
                 }
