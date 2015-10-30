@@ -295,7 +295,7 @@ class OrderSearch extends Order
      * @param $worker_id
      * @param int $page_size
      * @param int $page
-     * @param bool $is_booked 是否指定阿姨
+     * @param bool $is_booked
      * @return mixed
      */
     public static function getPushWorkerOrders($worker_id,$page_size=20,$page=1,$is_booked)
@@ -345,7 +345,7 @@ class OrderSearch extends Order
      * @param $attributes
      * @return int|string
      */
-    public function searchOrdersWithStatus($attributes, $is_asc = false, $offset = 1, $limit = 10, $order_status = null,$channels = null, $from = null, $to = null)
+    public function searchOrdersWithStatus($attributes, $is_asc = false, $offset = 0, $limit = 10, $order_status = null,$channels = null, $from = null, $to = null)
     {
         $sort = $is_asc ? SORT_ASC : SORT_DESC;
         $params['OrderSearch'] = $attributes;
@@ -402,6 +402,7 @@ class OrderSearch extends Order
      */
     public function searchOrdersWithStatusProvider($attributes, $order_status = null,$channels = null, $from = null, $to = null)
     {
+
         $query = new \yii\db\Query();
 
         $query->from('{{%order}} as order')
@@ -443,7 +444,7 @@ class OrderSearch extends Order
         }
         if ($this->load($attributes) && $this->validate()) {
             $query->andFilterWhere([
-                'id' => $attributes["OrderSearch"]["id"],
+                'id' =>$attributes["OrderSearch"]["id"],
                 'order_parent_id' => $this->order_parent_id,
                 'order_is_parent' => $this->order_is_parent,
                 'created_at' => $this->created_at,

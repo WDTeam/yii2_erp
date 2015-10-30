@@ -937,14 +937,14 @@ class ServiceController extends \restapi\components\Controller
 
         $path = "http://api.map.baidu.com/place/v2/search";
         if (empty($params) || empty($params['query']) || empty($params['location']) || empty($params['radius']) || empty($params['output']) || empty($params['ak'])) {
-            return $this->send(null, '参数不完成', '0', '403');
+            return $this->send(null, '参数不完成', '0', '403',null,alertMsgEnum::baiduMapFailed);
         }
         $url = "http://api.map.baidu.com/place/v2/search?query=" . $params['query'] . '&location=' . $params['location'] .
             '&radius=' . $params['radius'] . '&output=' . $params['output'] . '&ak=' . $params['ak'];
 
         $date = file_get_contents($url);
 
-        return $this->send(json_decode($date), '操作成功');
+        return $this->send(json_decode($date), '操作成功', '0', '403',null,alertMsgEnum::baiduMapSuccess);
 
     }
 }
