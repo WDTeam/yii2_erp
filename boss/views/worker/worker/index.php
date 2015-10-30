@@ -290,7 +290,7 @@ if(isset($params['WorkerSearch']['worker_vacation_application_approve_status']))
                 },
                 'delete' => function ($url, $model) {
                     return Html::a('<span class="btn btn-primary">删除</span>', Yii::$app->urlManager->createUrl(['worker/worker/delete', 'id' => $model->id]), [
-                        'title' =>'审核管理',
+                        'title' =>'删除',
                         'style' => 'margin-right:3px'
                     ]);
                 },

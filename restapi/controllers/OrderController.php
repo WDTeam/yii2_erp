@@ -2,7 +2,7 @@
 
 namespace restapi\controllers;
 
-use dbbase\models\worker\Worker;
+
 use \core\models\order\OrderPush;
 use Faker\Provider\DateTime;
 use Yii;
@@ -1519,7 +1519,7 @@ class OrderController extends \restapi\components\Controller
      * @apiName actionAllOrderCommon
      * @apiGroup Order
      * @apiDescription 对账日常订单查看全部，月份列表
-     * @apiParam {String} access-token    会话id.
+     * @apiParam {String} access_token    会话id.
      * @apiParam {String} platform_version 平台版本号.
      *
      * @apiSuccessExample {json} Success-Response:
@@ -1565,7 +1565,7 @@ class OrderController extends \restapi\components\Controller
      * @apiName actionGetWorkerOrders
      * @apiGroup Order
      * @apiDescription 阿姨抢单数
-     * @apiParam {String} access-token      会话id.
+     * @apiParam {String} access_token      会话id.
      * @apiParam {String} platform_version  平台版本号
      * @apiParam {String} [page_size]         条数
      * @apiParam {String} [page]              页面
@@ -1717,7 +1717,7 @@ class OrderController extends \restapi\components\Controller
      * @apiGroup Order
      * @apiDescription 阿姨抢单提交
      *
-     * @apiParam {String} access-token      会话id.
+     * @apiParam {String} access_token      会话id.
      * @apiParam {String} platform_version  平台版本号
      * @apiParam {String} order_id          订单号
      *

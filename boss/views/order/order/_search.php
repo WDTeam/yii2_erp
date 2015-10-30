@@ -36,13 +36,13 @@ float: right;
 	<div class="m_riqi">
 	  <div class="m_fr">	
 		<label class="m_ipone">下单时间:</label>
-		 <input name="created_from" type="text" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})" value=""/> 到
-		 <input name="created_to" type="text" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})" value=""/>
+		 <input name="created_from" type="text" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})" value="<?= isset($searchParas['created_from']) ? Html::encode($searchParas['created_from']) : '' ?>"/> 到
+		 <input name="created_to" type="text" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})" value="<?= isset($searchParas['created_to']) ? Html::encode($searchParas['created_to']) : '' ?>"/>
      </div>
 	  <div class="m_fr" style="margin-bottom: 20px;">	
         <label class="m_ipone">服务时间:</label>
-		  <input name="booked_from" type="text" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})" value=""/> 到
-		  <input name="booked_to" type="text" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})" value=""/>
+		  <input name="booked_from" type="text" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})" value="<?= isset($searchParas['booked_from']) ? Html::encode($searchParas['booked_from']) : '' ?>"/> 到
+		  <input name="booked_to" type="text" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})" value="<?= isset($searchParas['booked_to']) ? Html::encode($searchParas['booked_to']) : '' ?>"/>
 	   </div>
 
         <?= $form->field($searchModel, 'shop_id')->widget(Select2::classname(), [

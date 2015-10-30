@@ -150,6 +150,7 @@ class server
                 echo date('Y-m-d H:i:s')." 服务继续\n";
                 $this->isServerSuspend = false;
                 $this->redis->set(REDIS_IS_SERVER_SUSPEND,false);
+                $this->broadcast($server, autoassign\ClientCommand::START);
             }
             break;
             case autoassign\ClientCommand::STOP:
@@ -157,11 +158,13 @@ class server
                 echo date('Y-m-d H:i:s')." 服务暂停\n";
                 $this->isServerSuspend = true;
                 $this->redis->set(REDIS_IS_SERVER_SUSPEND,true);
+                $this->broadcast($server, autoassign\ClientCommand::STOP);
             }
             break;
             case autoassign\ClientCommand::RELOAD:
             {
                 echo date('Y-m-d H:i:s')." 服务重启\n";
+                $this->broadcast($server, autoassign\ClientCommand::RELOAD);
                 $server->reload();
             }
             break;
@@ -177,6 +180,7 @@ class server
                 
                 $this->redis->set(REDIS_AUTOASSIGN_CONFIG,json_encode($this->config));
                 echo date('Y-m-d H:i:s')." 配置已更新\n";
+                $this->broadcast($server, autoassign\ClientCommand::UPDATE);
             }
             break;
             default:
@@ -223,6 +227,7 @@ class server
         $this->redis->set($key, $data);
         if ($server)
         {
+            //echo "save status broadcast...\n";
             $this->broadcast($server,'Assign Server is OK');
         }
     }
@@ -413,6 +418,7 @@ class server
         $msg = json_encode($msg);
         foreach ($server->connections as $clid => $info)
         {
+            //var_dump($clid);
             try{
                 $server->push($clid, $msg);
             } catch (Exception $ex) {
