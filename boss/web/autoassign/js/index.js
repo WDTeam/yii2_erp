@@ -98,18 +98,18 @@ function showOrders(data){
     }
     var id = 'order_'+order.order_id;
     var obj = $('#'+id);
-    order.status = getStatus(order.status);
-    if(order.ivr == true){
-        order.ivr = '已发送';
-    }else{
-        order.ivr = '未发送';
-    }
+    order.status = getStatus(order.push_status);
+    //if(order.ivr == true){
+    //    order.ivr = '已发送';
+    //}else{
+    //    order.ivr = '未发送';
+    //}
     
-    if(order.jpush == true){
-        order.jpush = '已发送';
-    }else{
-        order.jpush = '未发送';
-    }
+    //if(order.jpush == true){
+    //    order.jpush = '已发送';
+    //}else{
+    //    order.jpush = '未发送';
+    //}
     
     if(order.updated_at == null){
         order.updated_at = '';
