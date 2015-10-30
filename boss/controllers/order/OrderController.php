@@ -30,6 +30,8 @@ class OrderController extends BaseAuthController
     public function actionTest()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
+        return OrderSearch::getPushWorkerOrders(19074,20,1,false);
+//        die();
         return OrderTool::createOrderCode();
     }
     

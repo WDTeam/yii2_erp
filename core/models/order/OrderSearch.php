@@ -295,7 +295,7 @@ class OrderSearch extends Order
      * @param $worker_id
      * @param int $page_size
      * @param int $page
-     * @param bool $is_booked
+     * @param bool $is_booked 是否指定阿姨
      * @return mixed
      */
     public static function getPushWorkerOrders($worker_id,$page_size=20,$page=1,$is_booked)
@@ -438,9 +438,12 @@ class OrderSearch extends Order
         if(!isset($attributes["OrderSearch"]["oc.customer_id"])){
             $attributes["OrderSearch"]["oc.customer_id"] = null;
         }
+        if(!isset($attributes["OrderSearch"]["id"])){
+            $attributes["OrderSearch"]["id"] = null;
+        }
         if ($this->load($attributes) && $this->validate()) {
             $query->andFilterWhere([
-                'id' => $this->id,
+                'id' => $attributes["OrderSearch"]["id"],
                 'order_parent_id' => $this->order_parent_id,
                 'order_is_parent' => $this->order_is_parent,
                 'created_at' => $this->created_at,
