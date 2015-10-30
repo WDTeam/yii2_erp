@@ -213,14 +213,16 @@ class FinanceShopSettleApplyController extends Controller
      */
     public function actionView($id)
     {
-         $orderIncomeSearchModel = new FinanceWorkerOrderIncomeSearch;
-         $orderIncomeSearchModel->finance_settle_apply_id = $id;
-        $orderIncomeDataProvider = $orderIncomeSearchModel->search(Yii::$app->request->getQueryParams());
+        $orderIncomeSearchModel = new FinanceWorkerOrderIncomeSearch;
+        $orderIncomeSearchModel->finance_settle_apply_id = $id;
         $searchModel = new FinanceShopSettleApplySearch;
         $searchModel = $searchModel->find()->where(['id'=>$id])->one();
         $shopModel = Shop::findById($searchModel->shop_id);
+        $financeSettleApplySearchModel = new FinanceSettleApplySearch;
+        $financeSettleApplySearchModel->shop_id = $searchModel->shop_id;
+        $financeSettleApplyDataProvider = $financeSettleApplySearchModel->search(null);
         return $this->render('view', [
-            'orderIncomeDataProvider' => $orderIncomeDataProvider,
+             'financeSettleApplyDataProvider' => $financeSettleApplyDataProvider,
             'model' => $searchModel,
             'shopModel' => $shopModel,
         ]);
