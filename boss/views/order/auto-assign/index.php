@@ -66,7 +66,6 @@ $this->params['breadcrumbs'][] = $this->title;
             <tr>
                 <th>订单编号</th>
                 <th>状态</th>
-                <th>短信状态</th>
                 <th>ivr状态</th>
                 <th>App推送</th>
                 <th>创建时间</th>
@@ -77,7 +76,6 @@ $this->params['breadcrumbs'][] = $this->title;
             <tr>
                 <td>222</td>
                 <td>进行中</td>
-                <td>没有</td>
                 <td>正在进行中</td>
                 <td>没推送</td>
                 <td>2015-10-11</td>

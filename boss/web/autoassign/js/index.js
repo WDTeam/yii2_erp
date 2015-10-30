@@ -91,6 +91,7 @@ function websocketConnect() {
 
 function showOrders(data){
     var order = $.parseJSON(data);
+    order = eval('(' + order + ')');
     if (order.order_id==null || order.order_id=='')
     {
         return;
@@ -98,11 +99,6 @@ function showOrders(data){
     var id = 'order_'+order.order_id;
     var obj = $('#'+id);
     order.status = getStatus(order.status);
-    if(order.sms == true){
-        order.sms = '已发送';
-    }else{
-        order.sms = '已发送';
-    }
     if(order.ivr == true){
         order.ivr = '已发送';
     }else{
