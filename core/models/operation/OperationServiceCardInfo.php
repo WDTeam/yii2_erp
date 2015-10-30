@@ -25,6 +25,7 @@ class OperationServiceCardInfo extends \dbbase\models\operation\OperationService
 		
 		$this->created_at = time();
 		$this->updated_at = time();
+		$this->is_del = 1;
 		return $this->save();
 	}
 	

@@ -29,6 +29,7 @@ class OperationServiceCardInfo extends \core\models\operation\OperationServiceCa
     public function rules()
     {
         return [
+			[['service_card_info_name','service_card_info_card_type', 'service_card_info_card_level', 'service_card_info_use_scope', 'service_card_info_valid_days','service_card_info_par_value','service_card_info_reb_value'], 'required'],
             [['service_card_info_card_type', 'service_card_info_card_level', 'service_card_info_use_scope', 'service_card_info_valid_days', 'created_at', 'updated_at', 'is_del'], 'integer'],
             [['service_card_info_par_value', 'service_card_info_reb_value'], 'number'],
             [['service_card_info_name'], 'string', 'max' => 64]
