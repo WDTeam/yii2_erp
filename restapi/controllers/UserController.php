@@ -8,7 +8,7 @@ use \core\models\customer\CustomerAddress;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\operation\coupon\CouponCustomer;
 use \core\models\operation\coupon\Coupon;
-use \core\models\customer\PaymentCustomerTransRecord;
+use \core\models\payment\PaymentCustomerTransRecord;
 use \core\models\customer\CustomerExtBalance;
 use \core\models\order\Order;
 use \core\models\customer\CustomerComment;
@@ -787,7 +787,7 @@ class UserController extends \restapi\components\Controller
                 $ret["userRecord"] = $userRecord;
                 return $this->send($ret, "查询成功", 1);
             } catch (\Exception $e) {
-                return $this->send(null, "boss系统错误", 0, 1024);
+                return $this->send($e, "boss系统错误", 0, 1024);
             }
 
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);

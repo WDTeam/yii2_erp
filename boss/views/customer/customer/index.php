@@ -193,7 +193,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'label' => '余额',
                 'value' => function ($dataProvider) {
-                    $customerBalance = CustomerExtBalance::getCustomerBalance($dataProvider->id);
+                    $customerBalance = Customer::getBalanceById($dataProvider->id);
                     return $customerBalance == false ? 0 : $customerBalance;
                 },
                 'width' => "80px",
