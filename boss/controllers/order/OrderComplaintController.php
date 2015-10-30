@@ -144,7 +144,8 @@ class OrderComplaintController extends BaseAuthController
      * @return boolean
      */
     public function actionBack(){
-    	$result = false;
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $result = false;
     	$model = new OrderComplaint();$oderarr = array();
     	$params = Yii::$app->request->post();
     	if(!empty($params) && is_array($params)){

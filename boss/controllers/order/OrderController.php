@@ -35,6 +35,7 @@ class OrderController extends BaseAuthController
     
     public function actionCancelOrder()
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         //TODO: Xiaobo
         $admin_id = Yii::$app->user->id;
     
@@ -44,9 +45,11 @@ class OrderController extends BaseAuthController
         $cancel_note = $params['cancel_note'];
         
         $result = Order::cancel($order_id, $admin_id, $cancel_type, $cancel_note);
-        if ($result == false)
-            return false;
-        return true;
+        
+        if (is_null($result))
+            return true;
+        
+        return $result;
     }
 
     public function actionCustomer()
