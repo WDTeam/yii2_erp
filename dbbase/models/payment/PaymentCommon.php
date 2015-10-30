@@ -238,22 +238,24 @@ class PaymentCommon extends \yii\db\ActiveRecord
     {
         //查询用户信息
         $orderInfo = self::orderInfo($attribute['order_id']);
-        $attribute['customer_trans_record_online_service_card_on'] = !empty($orderInfo->orderExtPay->card_id) ? $orderInfo->orderExtPay->card_id : 0;    //服务卡ID
-        $attribute['customer_trans_record_online_service_card_pay'] = !empty($orderInfo->orderExtPay->order_use_card_money) ? $orderInfo->orderExtPay->order_use_card_money : 0;//服务卡金额
+        $attribute['customer_trans_record_service_card_on'] = !empty($orderInfo->orderExtPay->card_id) ? $orderInfo->orderExtPay->card_id : 0;    //服务卡ID
+        $attribute['customer_trans_record_service_card_pay'] = !empty($orderInfo->orderExtPay->order_use_card_money) ? $orderInfo->orderExtPay->order_use_card_money : 0;//服务卡金额
         $attribute['customer_trans_record_coupon_money'] = !empty($orderInfo->orderExtPay->order_use_coupon_money) ? $orderInfo->orderExtPay->order_use_coupon_money : 0; //优惠券金额
         $attribute['customer_trans_record_online_balance_pay'] = !empty($orderInfo->orderExtPay->order_use_acc_balance) ? $orderInfo->orderExtPay->order_use_acc_balance : 0;  //余额支付
         $attribute['customer_trans_record_order_total_money'] = $orderInfo->order_money;  //订单总额
         $attribute['order_pop_order_money'] = !empty($orderInfo->orderExtPop->order_pop_order_money) ? $orderInfo->orderExtPop->order_pop_order_money : 0;  //预付费
 
         //服务卡扣费
-        if( !empty($attribute['customer_trans_record_online_service_card_on']) && !empty($attribute['customer_trans_record_online_service_card_pay']) ){
+        if( !empty($attribute['customer_trans_record_service_card_on']) && !empty($attribute['customer_trans_record_service_card_pay']) ){
             //Customer::decBalance($model->customer_id,$orderInfo->orderExtPay->order_use_acc_balance);
-        }elseif( !empty($attribute['customer_trans_record_online_balance_pay']) ){
+        }elseif( !empty($attribute['customer_trans_record_online_balance_pay']) && $attribute['customer_trans_record_online_balance_pay'] > 0 ){
             //余额扣费
             Customer::decBalance($attribute['customer_id'],$orderInfo->orderExtPay->order_use_acc_balance);
         }
+
         //支付订单交易记录
         PaymentCustomerTransRecord::analysisRecord($attribute);
+
         //修改订单状态
         /**
          * @param $order_id 订单ID

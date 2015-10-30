@@ -19,7 +19,9 @@ use dbbase\models\order\OrderExtCustomer;
 
 use core\models\customer\Customer;
 use core\models\customer\CustomerAddress;
+use core\models\customer\CustomerWorker;
 use core\models\customer\CustomerExtBalance;
+use core\models\customer\CustomerExtScore;
 use core\models\customer\CustomerExtSrc;
 
 /**
@@ -44,8 +46,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php //echo Html::a(Yii::t('app', 'Create {modelClass}', ['modelClass' => 'Worker',]), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?php
-    $b= Html::a('<i class="glyphicon" ></i>全部 '.$searchModel->countALLCustomer(), ['customer/customer/index'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']). 
-    Html::a('<i class="glyphicon" ></i>封号'.$searchModel->countBlockCustomer(), ['customer/customer/index?CustomerSearch[is_del]=1'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']).
+    $b= Html::a('<i class="glyphicon" ></i>全部 '.Customer::countALLCustomer(), ['customer/customer/index'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']). 
+    Html::a('<i class="glyphicon" ></i>封号'.Customer::countBlockCustomer(), ['customer/customer/index?CustomerSearch[is_del]=1'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']).
     Html::a('<i class="glyphicon" ></i>按时间从大到小 ', ['index', 'sort'=>'created_at'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']).
     Html::a('<i class="glyphicon" ></i>按订单量从大到小 ', ['index', 'sort'=>'order_count'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']);
    
@@ -191,7 +193,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'label' => '余额',
                 'value' => function ($dataProvider) {
-                    $customerBalance = CustomerExtBalance::getCustomerBalance($dataProvider->id);
+                    $customerBalance = Customer::getBalanceById($dataProvider->id);
                     return $customerBalance == false ? 0 : $customerBalance;
                 },
                 'width' => "80px",
