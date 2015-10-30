@@ -278,7 +278,7 @@ class OrderSearch extends Order
      * @param $worker_id
      * @param int $page_size
      * @param int $page
-     * @param bool $is_booked
+     * @param bool $is_booked 是否指定阿姨
      * @return mixed
      */
     public static function getPushWorkerOrders($worker_id,$page_size=20,$page=1,$is_booked)
