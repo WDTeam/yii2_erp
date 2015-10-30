@@ -7,7 +7,8 @@ use \core\models\operation\OperationCategory;
 use \core\models\operation\OperationCity;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\order\OrderSearch;
-use \common\models\order\OrderStatusDict;
+use \dbbase\models\order\OrderStatusDict;
+use \core\models\worker\WorkerAccessToken;
 
 class ConfigureController extends \restapi\components\Controller
 {
@@ -187,7 +188,8 @@ class ConfigureController extends \restapi\components\Controller
      *                  "icon"=>"",
      *                  "url"=>"",
      *                  "sort"=>"1",  排序
-     *                  "colour"=>"",  颜色
+     *                  "bg_colour"=>"",  背景颜色
+     *                  "font_colour"=>"",  字体颜色
      *                  "category_id" => "1",
      *                  "category_name" => "专业保洁",
      *                  "category_icon" => "",
@@ -228,8 +230,10 @@ class ConfigureController extends \restapi\components\Controller
      *                  "link_id"=>"1",
      *                  "title"=>"首页",
      *                  "url"=>"",   跳转链接
-     *                  "link_icon"=>"",
-     *                  "colour"=>"",
+     *                  "link_icon_check" => "http://dev.m2.1jiajie.com/statics/images/nav_01.png", 选中图片
+     *                  "link_icon_uncheck" => "http://dev.m2.1jiajie.com/statics/images/nav_d_01.png", 未选中图片
+     *                  "colour_check" => "#f7b136", 选中颜色
+     *                  "colour_uncheck" => "#555",  未选中颜色
      *                  "sort"=>"1"  排序
      *              },
      *              {
@@ -284,10 +288,11 @@ class ConfigureController extends \restapi\components\Controller
             [
                 'title' => '单次保洁',
                 'introduction' => '新用户第1小时免费',
-                'icon' => '',
-                'url' => '',
+                'icon' => 'http://dev.m2.1jiajie.com/statics/images/dancibaojie.png',
+                'url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/1',
                 'sort' => '1',
-                'colour' => '',
+                'bg_colour' => '#ffb518',
+                'font_colour' => '#fff',
                 'category_id' => '1',
                 'category_name' => '专业保洁',
                 'category_icon' => '',
@@ -299,10 +304,11 @@ class ConfigureController extends \restapi\components\Controller
             [
                 'title' => '周期保洁',
                 'introduction' => '一次下单 清洁无忧',
-                'icon' => '',
-                'url' => '',
+                'icon' => 'http://dev.m2.1jiajie.com/statics/images/zhouqibaojie.png',
+                'url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/2',
                 'sort' => '2',
-                'colour' => '',
+                'bg_colour' => '#ff8a44',
+                'font_colour' => '#fff',
                 'category_id' => '1',
                 'category_name' => '专业保洁',
                 'category_icon' => '',
@@ -318,21 +324,21 @@ class ConfigureController extends \restapi\components\Controller
             [
                 'category_id' => '6',
                 'category_name' => '保洁任务',
-                'category_icon' => '',
-                'category_url' => '',
+                'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/baojierenwu.png',
+                'category_url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/3',
                 'category_introduction' => '37项定制化精品保洁',
                 'category_price' => '30',
                 'category_price_unit' => '小时',
                 'category_price_description' => '￥30/小时',
-                'colour' => '',
+                'colour' => '#ff701a',
                 'sort' => '1',
 
             ],
             [
                 'category_id' => '1',
                 'category_name' => '专业保洁',
-                'category_icon' => '',
-                'category_url' => '',
+                'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/zhuanyebaojie.png',
+                'category_url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/4',
                 'category_introduction' => '44项定制清洁服务',
                 'category_price' => '25.00',
                 'category_price_unit' => '小时',
@@ -344,49 +350,49 @@ class ConfigureController extends \restapi\components\Controller
             [
                 'category_id' => '2',
                 'category_name' => '洗护服务',
-                'category_icon' => '',
-                'category_url' => '',
+                'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/xihufuwu.png',
+                'category_url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/4',
                 'category_introduction' => '衣服、皮鞋、美包',
                 'category_price' => '9.00',
                 'category_price_unit' => '件',
                 'category_price_description' => '￥9/件起',
-                'colour' => '',
+                'colour' => '#7fce0f',
                 'sort' => '3',
             ],
             [
                 'category_id' => '3',
                 'category_name' => '家电维修',
-                'category_icon' => '',
-                'category_url' => '',
+                'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/jiadianweixiu.png',
+                'category_url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/4',
                 'category_introduction' => '油烟机、空调等深度清洁',
                 'category_price' => '100.00',
                 'category_price_unit' => '台',
                 'category_price_description' => '￥100/台起',
-                'colour' => '',
+                'colour' => '#2cc2f9',
                 'sort' => '4',
             ],
             [
                 'category_id' => '4',
                 'category_name' => '家具养护',
-                'category_icon' => '',
-                'category_url' => '',
+                'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/jiajuyanghu.png',
+                'category_url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/4',
                 'category_introduction' => '地板家具深度养护、除螨',
                 'category_price' => '',
                 'category_price_unit' => '',
                 'category_price_description' => '￥250起',
-                'colour' => '',
+                'colour' => '#e6001f',
                 'sort' => '5',
             ],
             [
                 'category_id' => '5',
                 'category_name' => '生活急救箱',
-                'category_icon' => '',
-                'category_url' => '',
+                'category_icon' => 'http://dev.m2.1jiajie.com/statics/images/shenghuojijiu.png',
+                'category_url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/4',
                 'category_introduction' => '管道维修疏通、除虫',
                 'category_price' => '',
                 'category_price_unit' => '',
                 'category_price_description' => '￥160起',
-                'colour' => '',
+                'colour' => '#e544a3',
                 'sort' => '6',
             ],
         ];
@@ -395,33 +401,41 @@ class ConfigureController extends \restapi\components\Controller
             [
                 'link_id' => '1',
                 'title' => '首页',
-                'url' => '',
-                'link_icon' => '',
-                'colour' => '',
+                'url' => '#',
+                'link_icon_check' => 'http://dev.m2.1jiajie.com/statics/images/nav_01.png',
+                'link_icon_uncheck' => 'http://dev.m2.1jiajie.com/statics/images/nav_d_01.png',
+                'colour_check' => '#f7b136',
+                'colour_uncheck' => '#555',
                 'sort' => '1',
             ],
             [
                 'link_id' => '2',
                 'title' => '订单',
-                'url' => '',
-                'link_icon' => '',
-                'colour' => '',
+                'url' => 'http://dev.m2.1jiajie.com/index.html#/order/index',
+                'link_icon_check' => 'http://dev.m2.1jiajie.com/statics/images/nav_02.png',
+                'link_icon_uncheck' => 'http://dev.m2.1jiajie.com/statics/images/nav_d_02.png',
+                'colour_check' => '#f7b136',
+                'colour_uncheck' => '#555',
                 'sort' => '2',
             ],
             [
                 'link_id' => '3',
                 'title' => '优惠券',
-                'url' => '',
-                'link_icon' => '',
-                'colour' => '',
+                'url' => 'http://dev.m2.1jiajie.com/index.html#/promoCode/index',
+                'link_icon_check' => 'http://dev.m2.1jiajie.com/statics/images/nav_03.png',
+                'link_icon_uncheck' => 'http://dev.m2.1jiajie.com/statics/images/nav_d_03.png',
+                'colour_check' => '#f7b136',
+                'colour_uncheck' => '#555',
                 'sort' => '3',
             ],
             [
                 'link_id' => '4',
                 'title' => '我的',
-                'url' => '',
-                'link_icon' => '',
-                'colour' => '',
+                'url' => 'http://dev.m2.1jiajie.com/index.html#/personalCenter/index',
+                'link_icon_check' => 'http://dev.m2.1jiajie.com/statics/images/nav_04.png',
+                'link_icon_uncheck' => 'http://dev.m2.1jiajie.com/statics/images/nav_d_04.png',
+                'colour_check' => '#f7b136',
+                'colour_uncheck' => '#555',
                 'sort' => '4',
             ],
         ];
@@ -442,8 +456,8 @@ class ConfigureController extends \restapi\components\Controller
      * @apiName actionWorkerCheckUpdate
      * @apiGroup configure
      *
-     * @apiParam {String} session_id    会话id.
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -477,8 +491,8 @@ class ConfigureController extends \restapi\components\Controller
      * @apiName actionWorkerInit
      * @apiGroup configure
      *
-     * @apiParam {String} access_token 会话id.
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -546,7 +560,6 @@ class ConfigureController extends \restapi\components\Controller
         $params = Yii::$app->request->get() or
         $params = json_decode(Yii::$app->request->getRawBody(), true);
         @$token = $params['access_token'];
-        $user = CustomerAccessToken::getCustomer($token);
         $worker = WorkerAccessToken::getWorker($token);
         if (empty($worker)) {
             return $this->send(null, "用户无效,请先登录", 0);
@@ -565,10 +578,10 @@ class ConfigureController extends \restapi\components\Controller
         $workerCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
         $orderCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
 
-        $order_num=[
-            "server_count"=>$serverCount,
-            "worker_count"=>$workerCount,
-            "order_count"=>$orderCount,
+        $order_num = [
+            "server_count" => $serverCount,
+            "worker_count" => $workerCount,
+            "order_count" => $orderCount,
         ];
 
         //获取首页轮播图
@@ -654,6 +667,7 @@ class ConfigureController extends \restapi\components\Controller
      *                  "title": "", 文字
      *                  "remark": "",  备注
      *                  "sort": "1" 排序
+     *                  "time": "5"  停留时间，默认5秒
      *                  "next_url": "" 下一页url
      *              },
      * {
@@ -662,6 +676,7 @@ class ConfigureController extends \restapi\components\Controller
      *                  "title": "", 文字
      *                  "remark": "",  备注
      *                  "sort": "2" 排序
+     *                  "time": "5"  停留时间，默认5秒
      *                  "next_url": "" 下一页url
      *              },
      *              ]

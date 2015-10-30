@@ -16,7 +16,7 @@ use \core\models\customer\Customer;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class CustomerCode extends \common\models\customer\CustomerCode
+class CustomerCode extends \dbbase\models\customer\CustomerCode
 {
 
     /**

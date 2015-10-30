@@ -14,7 +14,7 @@ use Yii;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class CustomerExtScore extends \common\models\customer\CustomerExtScore
+class CustomerExtScore extends \dbbase\models\customer\CustomerExtScore
 {
 
     /**

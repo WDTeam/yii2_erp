@@ -24,7 +24,7 @@ class m150921_115002_create_table_finance_worker_non_order_income extends Migrat
             'finance_worker_non_order_income_endtime' => Schema::TYPE_INTEGER . '(10)  COMMENT \'本次结算结束时间(统计)，例如：2015.9.30 23:59:59对应的int值\'',
             'finance_worker_non_order_income_isSettled' => Schema::TYPE_SMALLINT. '(1) DEFAULT 0 COMMENT \'是否已结算，0为未结算，1为已结算\'',
             'finance_settle_apply_id' => Schema::TYPE_INTEGER. '(10)  COMMENT \'结算申请Id\'',
-            'isdel' => Schema::TYPE_SMALLINT. '(1) DEFAULT 1 COMMENT \'是否被删除，0为启用，1为删除\'',
+            'is_softdel' => Schema::TYPE_SMALLINT. '(1) DEFAULT 1 COMMENT \'是否被删除，0为启用，1为删除\'',
             'updated_at' => Schema::TYPE_INTEGER . '(11)  COMMENT \'结算时间\'',
             'created_at' => Schema::TYPE_INTEGER. '(11) COMMENT \'创建时间\'',
         ], $tableOptions);
@@ -32,7 +32,7 @@ class m150921_115002_create_table_finance_worker_non_order_income extends Migrat
 //            ['id','worker_id','finance_worker_non_order_income_type','finance_worker_non_order_income_name','finance_worker_non_order_income',
 //                'finance_worker_non_order_income_des',
 //                'finance_worker_non_order_income_starttime','finance_worker_non_order_income_endtime',
-//                'finance_worker_non_order_income_isSettled','finance_settle_apply_id','isdel','updated_at','created_at'],
+//                'finance_worker_non_order_income_isSettled','finance_settle_apply_id','is_softdel','updated_at','created_at'],
 //            [
 //                [1,111,3,'全勤奖',50,'每个月请假不超过4天',strtotime(date('Y-m-01 00:00:00', strtotime('2015-09'))),strtotime(date('Y-m-t 23:59:59', strtotime('2015-09'))),0,1,0,time(),time()],
 //                [2,111,3,'路补',10,'服务距离超过7KM',strtotime(date('Y-m-01 00:00:00', strtotime('2015-09'))),strtotime(date('Y-m-t 23:59:59', strtotime('2015-09'))),0,1,0,time(),time()],

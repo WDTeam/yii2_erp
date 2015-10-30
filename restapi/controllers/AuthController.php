@@ -154,19 +154,43 @@ class AuthController extends \restapi\components\Controller
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *      "code": "1",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      {
-     *          "worker_name": "陈测试1",
-     *          "worker_rule_id": 0,
-     *          "worker_rule_description": "兼职",
-     *          "worker_photo": "http://static.1jiajie.com/worker/face/1111116.jpg",
-     *          "access_token": "hXjooooooooAPXzo5jjbMnz80dccYgwoooooooowoooooooo-1111116",
-     *          "worker_id": "1111116",
-     *          "shop_id": "68"
-     *
+     *{
+     *       "code": 1,
+     *       "msg": "登陆成功",
+     *       "ret": {
+     *           "user": {
+     *               "id": 1,
+     *               "shop_id": 221,
+     *               "worker_name": "李刘珍",
+     *               "worker_phone": "1350122342342",
+     *               "worker_photo": "1.png",
+     *               "worker_level": 1,
+     *               "worker_auth_status": 0,
+     *               "worker_ontrial_status": 0,
+     *               "worker_onboard_status": 0,
+     *               "worker_work_city": 1,
+     *               "worker_work_area": 1,
+     *               "worker_work_street": "1",
+     *               "worker_work_lng": null,
+     *               "worker_work_lat": null,
+     *               "worker_type": 1,
+     *               "worker_rule_id": 1,
+     *               "worker_identity_id": 1,
+     *               "worker_is_block": 0,
+     *               "worker_is_vacation": 0,
+     *               "worker_is_blacklist": 0,
+     *               "worker_blacklist_reason": null,
+     *               "worker_blacklist_time": 0,
+     *               "worker_is_dimission": 0,
+     *               "worker_dimission_reason": null,
+     *               "worker_dimission_time": 0,
+     *               "created_ad": 1444360582,
+     *               "updated_ad": null,
+     *               "isdel": 0
+     *           },
+     *           "access_token": "eaa872ee3e20880be5e368f289d5aa67"
+     *       }
+     *   }
      *
      * @apiError SessionIdNotFound 未找到会话ID.
      *
@@ -186,7 +210,7 @@ class AuthController extends \restapi\components\Controller
         $verify_code = $param['verify_code'];
         //验证手机号
         if (!preg_match("/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/", $phone)){
-           return $this->send(null, "请输入正确的手机号", 0, 403);
+           return $this->send(null, "请输入正确手机号", 0, 403);
         }
         try{
             $if_exist = Worker::getWorkerInfoByPhone($phone);
@@ -194,7 +218,7 @@ class AuthController extends \restapi\components\Controller
             return $this->send(null, "boss系统错误", 1024, 403);
         }
         if(empty($if_exist)){
-             return $this->send(null, "该用户不存在", 0, 403);
+             return $this->send(null, "获取不到验证码", 0, 403);
         }
         try{
              $checkRet = WorkerCode::checkCode($phone,$verify_code);

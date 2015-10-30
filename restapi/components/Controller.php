@@ -2,6 +2,7 @@
 namespace restapi\components;
 
 use Yii;
+use yii\base\Object;
 use yii\web\HttpException;
 use yii\base\ExitException;
 use yii\base\ErrorException;
@@ -28,6 +29,8 @@ class Controller extends \yii\rest\Controller
      */
     public function send($ret, $msg = "操作成功", $code = 1, $value = 200, $text = null)
     {
+        $value=200;
+        if(is_null($ret)) $ret=new Object();
         $result = [
             'code' => $code,
             'msg' => $msg,

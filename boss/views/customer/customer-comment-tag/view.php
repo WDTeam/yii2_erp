@@ -6,7 +6,7 @@ use kartik\datecontrol\DateControl;
 
 /**
  * @var yii\web\View $this
- * @var common\models\CustomerCommentTag $model
+ * @var dbbase\models\CustomerCommentTag $model
  */
 
 $this->title = $model->customer_tag_name;

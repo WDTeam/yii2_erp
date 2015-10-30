@@ -5,7 +5,7 @@ use kartik\widgets\ActiveForm;
 
 /**
  * @var yii\web\View $this
- * @var common\models\finance\FinanceCompensate $model
+ * @var dbbase\models\finance\FinanceCompensate $model
  */
 
 $this->title = '赔偿详情';

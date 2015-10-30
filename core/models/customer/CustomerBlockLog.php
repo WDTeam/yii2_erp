@@ -15,7 +15,7 @@ use Yii;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class CustomerBlockLog extends \common\models\customer\CustomerBlockLog
+class CustomerBlockLog extends \dbbase\models\customer\CustomerBlockLog
 {
 
     /**

@@ -64,7 +64,7 @@ class CouponController extends \restapi\components\Controller
         }
         $coupon_code = $param['coupon_code'];
         $customer_phone = $param['customer_phone'];
-        //验证活动码是否存在
+        //验证优惠码是否存在
         try{
             $exist_coupon=CouponCode::checkCouponCodeIsAble($coupon_code);
         }catch (\Exception $e) {

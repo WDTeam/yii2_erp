@@ -5,10 +5,10 @@ namespace core\models\finance;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\finance\FinanceShopSettleApply;
-use common\models\finance\FinanceSettleApply;
+use dbbase\models\finance\FinanceShopSettleApply;
+use dbbase\models\finance\FinanceSettleApply;
 /**
- * FinanceShopSettleApplySearch represents the model behind the search form about `common\models\finance\FinanceShopSettleApply`.
+ * FinanceShopSettleApplySearch represents the model behind the search form about `dbbase\models\finance\FinanceShopSettleApply`.
  */
 class FinanceShopSettleApplySearch extends FinanceShopSettleApply
 {
@@ -32,7 +32,7 @@ class FinanceShopSettleApplySearch extends FinanceShopSettleApply
     {
         return [
             [[ 'finance_shop_settle_apply_starttime', 'finance_shop_settle_apply_endtime'], 'required'],
-            [['id', 'shop_id', 'shop_manager_id', 'finance_shop_settle_apply_order_count', 'finance_shop_settle_apply_status', 'finance_shop_settle_apply_cycle', 'finance_shop_settle_apply_starttime', 'finance_shop_settle_apply_endtime', 'isdel', 'updated_at', 'created_at'], 'integer'],
+            [['id', 'shop_id', 'shop_manager_id', 'finance_shop_settle_apply_order_count', 'finance_shop_settle_apply_status', 'finance_shop_settle_apply_cycle', 'finance_shop_settle_apply_starttime', 'finance_shop_settle_apply_endtime', 'is_softdel', 'updated_at', 'created_at'], 'integer'],
             [['shop_name', 'shop_manager_name', 'finance_shop_settle_apply_cycle_des', 'finance_shop_settle_apply_reviewer'], 'safe'],
             [['finance_shop_settle_apply_fee_per_order', 'finance_shop_settle_apply_fee'], 'number'],
         ];
@@ -60,7 +60,7 @@ class FinanceShopSettleApplySearch extends FinanceShopSettleApply
             'finance_shop_settle_apply_fee' => $this->finance_shop_settle_apply_fee,
             'finance_shop_settle_apply_status' => $this->finance_shop_settle_apply_status,
             'finance_shop_settle_apply_cycle' => $this->finance_shop_settle_apply_cycle,
-            'isdel' => $this->isdel,
+            'is_softdel' => $this->is_softdel,
             'updated_at' => $this->updated_at,
             'created_at' => $this->created_at,
         ]);

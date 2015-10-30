@@ -27,7 +27,7 @@ use Yii;
  * @property integer $create_time
  * @property integer $is_del
  */
-class FinanceRefund extends \common\models\finance\FinanceRefund
+class FinanceRefund extends \dbbase\models\finance\FinanceRefund
 {
     /**
      * @inheritdoc

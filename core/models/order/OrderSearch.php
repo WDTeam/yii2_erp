@@ -2,17 +2,17 @@
 
 namespace core\models\order;
 
-use common\models\order\OrderExtCustomer;
-use common\models\order\OrderExtFlag;
-use common\models\order\OrderExtStatus;
-use common\models\order\OrderStatusDict;
+use dbbase\models\order\OrderExtCustomer;
+use dbbase\models\order\OrderExtFlag;
+use dbbase\models\order\OrderExtStatus;
+use dbbase\models\order\OrderStatusDict;
 use core\models\customer\Customer;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 /**
- * OrderSearch represents the model behind the search form about `common\models\order\Order`.
+ * OrderSearch represents the model behind the search form about `dbbase\models\order\Order`.
  */
 class OrderSearch extends Order
 {
@@ -249,7 +249,7 @@ class OrderSearch extends Order
      */
     public static function WorkerOrderExistsConflict($worker_id, $booked_begin_time, $booked_end_time)
     {
-        return Order::find()->joinWith(['orderExtWorker'])->where(['worker_id' => $worker_id])
+       $count = Order::find()->joinWith(['orderExtWorker'])->where(['worker_id' => $worker_id])
             ->andWhere(
                 ['or',
                     [
@@ -270,6 +270,7 @@ class OrderSearch extends Order
                 ]
 
             )->count();
+        return $count;
     }
 
     /**
@@ -315,6 +316,11 @@ class OrderSearch extends Order
     public static function getOne($id)
     {
         return Order::findOne($id);
+    }
+
+    public static function getBatchOrder($batch_code)
+    {
+        return Order::findAll(['order_batch_code'=>$batch_code]);
     }
 
     /**

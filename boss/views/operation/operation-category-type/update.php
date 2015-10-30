@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\OperationCategoryType */
+/* @var $model dbbase\models\OperationCategoryType */
 
 //$this->title = 'Update Operation Category Type: ' . ' ' . $model->id;
 //$this->params['breadcrumbs'][] = ['label' => 'Operation Category Types', 'url' => ['index']];

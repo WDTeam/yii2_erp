@@ -13,7 +13,7 @@ use core\models\order\OrderSearch;
 	<ul class="lis" id="list">
 		<p>城市：</p>
 		<?php
-		  echo $this->render('_filteritem', ['filter_name' => 'city_id', 'items' => Order::getOnlineCityList()]);
+		  echo $this->render('_filteritem', ['filter_name' => 'city_id', 'items' => Order::getOnlineCityList(null)]);
         ?>
 	</ul>
 	<ul class="lis" id="list">

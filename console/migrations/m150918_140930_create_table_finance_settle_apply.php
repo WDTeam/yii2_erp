@@ -47,7 +47,7 @@ class m150918_140930_create_table_finance_settle_apply extends Migration
             'finance_settle_apply_endtime' => Schema::TYPE_INTEGER . '(10)  COMMENT \'本次结算结束时间(统计)，例如：2015.9.30 23:59:59对应的int值\'',
             'isManagementFeeDone' => Schema::TYPE_SMALLINT. '(1) DEFAULT 0 COMMENT \'门店服务管理费是否已结算，0为未结算，1为已结算\'',
             'isWorkerConfirmed' => Schema::TYPE_SMALLINT. '(1) DEFAULT 0 COMMENT \'阿姨是否已经确认结算单，0为未确认，1为已确认\'',
-            'isdel' => Schema::TYPE_SMALLINT. '(1) DEFAULT 0 COMMENT \'是否被删除，0为启用，1为删除\'',
+            'is_softdel' => Schema::TYPE_SMALLINT. '(1) DEFAULT 0 COMMENT \'是否被删除，0为启用，1为删除\'',
             'updated_at' => Schema::TYPE_INTEGER . '(11)  COMMENT \'审核时间\'',
             'created_at' => Schema::TYPE_INTEGER. '(11) COMMENT \'申请时间\'',
              'comment' => Schema::TYPE_TEXT. ' COMMENT \'备注，可能是审核不通过原因\'',
@@ -61,7 +61,7 @@ class m150918_140930_create_table_finance_settle_apply extends Migration
 		'finance_settle_apply_money','finance_settle_apply_order_noncash_count','finance_settle_apply_order_money_except_cash',
                 'finance_settle_apply_status','finance_settle_apply_cycle','finance_settle_apply_cycle_des','finance_settle_apply_reviewer',
                 'finance_settle_apply_starttime','finance_settle_apply_endtime',
-                'isdel','updated_at','created_at'],
+                'is_softdel','updated_at','created_at'],
             [
                 [1,111,'刘阿姨','13888888888',1,'自营',1,'全职',
                     1,'望京门店',0,'e家洁',

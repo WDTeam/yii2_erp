@@ -4,7 +4,7 @@ namespace core\models\comment;
 
 use Yii;
 
-class CustomerCommentTag extends \common\models\customer\CustomerCommentTag
+class CustomerCommentTag extends \dbbase\models\customer\CustomerCommentTag
 {
 
     /**

@@ -26,7 +26,6 @@ $workerVacationModel->worker_vacation_type = \Yii::$app->request->get('vacationT
         <div class="col-sm-offset-3 col-sm-9"><div class="help-block"></div></div>
     </div>
 
-    <?= $form->field($workerVacationModel, 'worker_vacation_extend');?>
     <?= $form->field($workerVacationModel, 'worker_vacation_type')->widget(Select2::classname(), [
         'name' => 'worker_vacation_type',
         'hideSearch' => true,
@@ -54,6 +53,7 @@ $workerVacationModel->worker_vacation_type = \Yii::$app->request->get('vacationT
             'format' => 'yyyy-mm-dd'
         ]
     ]);?>
+    <?= $form->field($workerVacationModel, 'worker_vacation_extend');?>
     <?=  Html::submitButton('确认',['class'=>'btn btn-primary btn-lg btn-block']);?>
     <?php ActiveForm::end();?>
 

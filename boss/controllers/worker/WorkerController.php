@@ -15,7 +15,7 @@ use yii\helpers\ArrayHelper;
 use yii\data\ActiveDataProvider;
 use boss\components\BaseAuthController;
 
-use common\models\worker\WorkerBlockLog;
+use dbbase\models\worker\WorkerBlockLog;
 use boss\models\worker\WorkerBlock;
 use boss\models\worker\WorkerVacation;
 use boss\models\worker\Worker;
@@ -718,6 +718,9 @@ class WorkerController extends BaseAuthController
     }
 
     public function actionTest(){
+
+        var_dump(Worker::getDistrictFreeWorker(1,1,149155211,149145211));
+        die;
 //        $a = json_decode('{"1":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"2":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"3":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"4":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","16:00","17:00","20:00","21:00","22:00"],"5":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"6":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"7":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"]}',1);
 //        $workerInfo = [
 //            'info'=>[
@@ -748,8 +751,18 @@ class WorkerController extends BaseAuthController
 //                ],
 //            ]
 //        ];
+//        Yii::$app->redis->set('WORKER_18475',json_encode($workerInfo));
+//        die;
+        $o =
+                [
+                    'order_id'=>2,
+                    'order_booked_count'=>4554,
+                    'order_booked_begin_time'=>'14087655',
+                    'order_booked_end_time'=>'14087655',
+                ]
+           ;
         echo '<pre>';
-        var_dump(Worker::getWorkerWorkTime(1,1446134400,1446254400));die;
+        var_dump(Worker::operateWorkerOrderInfoToRedis(18475,1,$o));die;
 //        die;
 //        var_dump(WorkerVacationApplication::getApplicationList(18517));
 //
@@ -758,7 +771,7 @@ class WorkerController extends BaseAuthController
 //        die;
        // Yii::$app->redis->set('worker_1',json_encode($workerInfo));
        // die;
-        Yii::$app->redis->set('1','2014-05-05');
+
         $workers = Yii::$app->redis->mget('worker_1','worker_2','worker_3');
 //          Yii::$app->redis->srem('district_1','16682');
 //        Yii::$app->redis->sadd('district_1','16684','16683','16685','16686','16687','16688','16689','16682');

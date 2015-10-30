@@ -8,6 +8,7 @@ use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use boss\models\order\OrderComplaintSearch;
+use core\models\finance\FinanceCompensate;
 
 /**
  * OrderComplaintController implements the CRUD actions for OrderComplaint model.
@@ -25,13 +26,13 @@ class OrderComplaintController extends BaseAuthController
             ],
         ];
     }
-
     /**
      * Lists all OrderComplaint models.
      * @return mixed
      */
     public function actionIndex()
     {   
+    	$session = Yii::$app->session;
     	$searchModel = new OrderComplaintSearch();
     	$orderComplaint = new OrderComplaint();
     	$comStatus = OrderComplaint::ComplaintStatus();
@@ -40,6 +41,7 @@ class OrderComplaintController extends BaseAuthController
     	$comLevel = OrderComplaint::ComplaintLevel();
     	$comType = OrderComplaint::ComplaintType();
     	$params = Yii::$app->request->getQueryParams();
+    	$url = $searchModel->urlParameterProcessing($params);
     	$dataProvider = $searchModel->search($params);
     	return $this->render('index', [
     			'dataProvider' => $dataProvider,
@@ -49,25 +51,10 @@ class OrderComplaintController extends BaseAuthController
     			'comType' => $comType,
     			'devpart' => $dev,
     			'channel' => $channel,
-    			'params' => $params
+    			'params' => $params,
+    			'url' => $url
     	]);
         
-    }
-	public function actionAdd(){
-	$model = new OrderComplaint();
-    	$arr = array('OrderComplaint'=>array(
-    			'order_id'=>'1234',
-    			'worker_id'=>'123123',
-    			'complaint_type'=>'1',
-    			'complaint_phone'=>13800138000,
-    			'complaint_section'=>'1',
-    			'complaint_level'=>'2',
-    			'complaint_content'=>'33241234231',
-    			'complaint_time'=>'12332131'));
-    	$model->load($arr);
-    	$model->save();
-    	//$result = $model->insertModel($arr);
-    	exit();
     }
 
     /**
@@ -89,14 +76,17 @@ class OrderComplaintController extends BaseAuthController
      */
     public function actionCreate()
     {
-        $model = new OrderComplaint();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+    	$model = new FinanceCompensate();
+        $params = Yii::$app->request->getQueryParams();
+        if(!empty($params['id'])){
+        	$id = intval($params['id']);
+        	$orderComplaintModel = $this->findModel($id);
+        	
+        	return $this->render('create', [
+        			'orderComplaintModel' => $orderComplaintModel,'model'=>$model,
+        	]);
+        }else{
+        	false;
         }
     }
 
@@ -152,10 +142,44 @@ class OrderComplaintController extends BaseAuthController
      * @return boolean
      */
     public function actionBack(){
+    	$model = new OrderComplaint();
     	$params = Yii::$app->request->post();
     	if(!empty($params) && is_array($params)){
     			$result = $model->backInsertComplaint($params);
     	}
     	return $result;
+    }
+    /**
+     * 返回渠道
+     * @param unknown $num
+     */
+    public function actionChannel($num){
+    	$model = new OrderComplaint();
+    	return $model->channel($num);
+    }
+    /**
+     * 返回投诉类型
+     * @param unknown $dnum
+     * @param unknown $num
+     */
+    public function actionCtype($dnum,$num){
+    	$model = new OrderComplaint();
+    	 return $model->ctype($dnum, $num);
+    }
+    /**
+     * 返回部门
+     * @param unknown $num
+     */
+    public function actionSection($num){
+    	$model = new OrderComplaint();
+    	 return $model->section($nums);
+    }
+    /**
+     * 返回级别
+     * @param unknown $num
+     */
+    public function actionLevel($num){
+    	$model = new OrderComplaint();
+    	 return $model->level($num);
     }
 }

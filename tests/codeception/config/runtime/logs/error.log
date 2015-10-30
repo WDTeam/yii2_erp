@@ -1,4 +1,4 @@
-2015-10-08 18:04:40 [][-][-][error][yii\base\ErrorException:1] exception 'yii\base\ErrorException' with message 'Class 'common\models\LoginForm' not found' in D:\htdocs\ejiajie-boss\tests\codeception\common\unit\models\LoginFormTest.php:41
+2015-10-08 18:04:40 [][-][-][error][yii\base\ErrorException:1] exception 'yii\base\ErrorException' with message 'Class 'dbbase\models\LoginForm' not found' in D:\htdocs\ejiajie-boss\tests\codeception\common\unit\models\LoginFormTest.php:41
 Stack trace:
 #0 C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php(905): ReflectionMethod->invokeArgs()
 #1 C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php(775): PHPUnit_Framework_TestCase->runTest()
@@ -76,7 +76,7 @@ Stack trace:
     'SERVER_NAME' => 'localhost'
     'SERVER_PORT' => '80'
 ]
-2015-10-08 18:10:11 [][-][-][error][yii\base\ErrorException:1] exception 'yii\base\ErrorException' with message 'Class 'common\models\LoginForm' not found' in D:\htdocs\ejiajie-boss\tests\codeception\common\unit\models\LoginFormTest.php:41
+2015-10-08 18:10:11 [][-][-][error][yii\base\ErrorException:1] exception 'yii\base\ErrorException' with message 'Class 'dbbase\models\LoginForm' not found' in D:\htdocs\ejiajie-boss\tests\codeception\common\unit\models\LoginFormTest.php:41
 Stack trace:
 #0 C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php(905): ReflectionMethod->invokeArgs()
 #1 C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php(775): PHPUnit_Framework_TestCase->runTest()
@@ -154,7 +154,7 @@ Stack trace:
     'SERVER_NAME' => 'localhost'
     'SERVER_PORT' => '80'
 ]
-2015-10-08 18:10:59 [][-][-][error][yii\base\ErrorException:1] exception 'yii\base\ErrorException' with message 'Class 'common\models\LoginForm' not found' in D:\htdocs\ejiajie-boss\tests\codeception\common\unit\models\LoginFormTest.php:41
+2015-10-08 18:10:59 [][-][-][error][yii\base\ErrorException:1] exception 'yii\base\ErrorException' with message 'Class 'dbbase\models\LoginForm' not found' in D:\htdocs\ejiajie-boss\tests\codeception\common\unit\models\LoginFormTest.php:41
 Stack trace:
 #0 C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php(905): ReflectionMethod->invokeArgs()
 #1 C:\Users\co\AppData\Roaming\Composer\vendor\phpunit\phpunit\src\Framework\TestCase.php(775): PHPUnit_Framework_TestCase->runTest()

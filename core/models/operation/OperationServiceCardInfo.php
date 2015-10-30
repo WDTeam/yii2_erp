@@ -18,7 +18,7 @@ namespace core\models\operation;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class OperationServiceCardInfo extends \common\models\operation\OperationServiceCardInfo
+class OperationServiceCardInfo extends \dbbase\models\operation\OperationServiceCardInfo
 {
 	public function serviceCardInfoCreate()
 	{

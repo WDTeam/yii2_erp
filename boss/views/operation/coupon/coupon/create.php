@@ -5,14 +5,14 @@ use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use dosamigos\datepicker\DatePicker;
 
-//use \common\models\OperationCity;
+//use \dbbase\models\OperationCity;
 
 use \core\models\operation\coupon\Coupon;
 use \core\models\operation\OperationCity;
 
 /**
  * @var yii\web\View $this
- * @var common\models\coupon\Coupon $model
+ * @var dbbase\models\coupon\Coupon $model
  */
 $this->title = '创建优惠券';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('boss', ''), 'url' => ['index']];

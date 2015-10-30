@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 /**
  * @var yii\web\View $this
- * @var common\models\CustomerCommentTag $model
+ * @var dbbase\models\CustomerCommentTag $model
  */
 
 $this->title = Yii::t('boss', 'Update {modelClass}: ', [

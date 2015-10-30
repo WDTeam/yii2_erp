@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
-use common\models\Shop;
+use dbbase\models\Shop;
 use yii\helpers\ArrayHelper;
 use kartik\nav\NavX;
 use yii\bootstrap\NavBar;
@@ -15,8 +15,9 @@ use yii\web\JsExpression;
 use yii\base\Widget;
 use yii\widgets\ActiveForm;
 
-use common\models\order\OrderExtCustomer;
+use dbbase\models\order\OrderExtCustomer;
 
+use core\models\customer\Customer;
 use core\models\customer\CustomerAddress;
 use core\models\customer\CustomerExtBalance;
 use core\models\customer\CustomerExtSrc;
@@ -161,8 +162,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'label' => '平台',
                 'value' => function ($dataProvider) {
-                    $customerExtSrc = CustomerExtSrc::getFirstSrc($dataProvider->id);
-                    return $customerExtSrc == false ? '-' : $customerExtSrc->platform_name == '' ? '-' : $customerExtSrc->platform_name;
+                    $customer_ext_src = Customer::getFirstSrc($dataProvider->customer_phone);
+                    $platform_name = empty($customer_ext_src) ? '-' : empty($customer_ext_src['platform_name']) ? '-' : $customer_ext_src['platform_name']; 
+					return $platform_name;
                 },
                 'width' => "80px",
             ],
@@ -170,8 +172,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'label' => '渠道',
                 'value' => function ($dataProvider) {
-                    $customerExtSrc = CustomerExtSrc::getFirstSrc($dataProvider->id);
-                    return $customerExtSrc == false ? '-' : $customerExtSrc->channal_name == '' ? '-' : $customerExtSrc->channal_name;
+                    $customer_ext_src = Customer::getFirstSrc($dataProvider->customer_phone);
+                    $channal_name = empty($customer_ext_src) ? '-' : empty($customer_ext_src['channal_name']) ? '-' : $customer_ext_src['channal_name']; 
+					return $channal_name;
                 },
                 'width' => "80px",
             ],
@@ -224,15 +227,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-toggle'=>'modal',
                             'data-target'=>'#modal',
                             'data-id'=>$model->id,
-                            'class'=>'btn btn-primary',
-                        ]) : Html::a('解除黑名单', [
-                            'class'=>'block-btn',
+                            'class'=>'btn btn-primary block-btn',
                         ]) : Html::a('解除封号', [
                             'customer/customer/remove-from-block',
                             'id' => $model->id
                             
                         ], [
                             'title' => Yii::t('app', '解除封号'),
+							'class'=>'btn btn-primary',
                         ]);
                     },
                 ],

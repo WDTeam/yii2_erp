@@ -5,9 +5,9 @@ use kartik\widgets\ActiveForm;
 use kartik\widgets\Select2;
 use yii\helpers\ArrayHelper;
 
-use \core\models\operation\OperationCity;
+use \core\models\customer\Customer;
 
-//use \common\models\Operation\OperationCity;
+//use \dbbase\models\Operation\OperationCity;
 
 /**
  * @var yii\web\View $this
@@ -26,17 +26,10 @@ use \core\models\operation\OperationCity;
 
 	<div class='col-md-2'>
         <?php
-		$cityOnlineList = OperationCity::getCityOnlineInfoList();
-		$cities = array();
-		if(!empty($cityOnlineList)){
-			foreach($cityOnlineList as $value){
-				$cities[$value['city_id']] = $value['city_name'];
-			}
-		}
         echo $form->field($model, 'coupon_city_id')->widget(Select2::classname(), [
             'name' => 'id',
             'hideSearch' => true,
-            'data' => array(),
+            'data' =>Customer::getOnlineCityList(),
             'options' => ['placeholder' => '选择城市', 'inline' => true],
             'pluginOptions' => [
                 'allowClear' => true

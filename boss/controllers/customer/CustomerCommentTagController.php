@@ -3,7 +3,7 @@
 namespace boss\controllers\customer;
 
 use Yii;
-use common\models\customer\CustomerCommentTag;
+use dbbase\models\customer\CustomerCommentTag;
 use boss\models\customer\CustomerCommentTagSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;

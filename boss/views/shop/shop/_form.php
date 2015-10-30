@@ -12,7 +12,7 @@ use boss\components\AreaCascade;
 // The widget
 use kartik\widgets\Select2; // or kartik\select2\Select2
 use yii\web\JsExpression;
-use common\components\BankHelper;
+use dbbase\components\BankHelper;
 use yii\helpers\Url;
 
 /**

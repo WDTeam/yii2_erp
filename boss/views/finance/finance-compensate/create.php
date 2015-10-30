@@ -3,7 +3,7 @@
 
 /**
  * @var yii\web\View $this
- * @var common\models\finance\FinanceCompensate $model
+ * @var dbbase\models\finance\FinanceCompensate $model
  */
 
 $this->title = Yii::t('finance', 'Finance Compensate Create', [

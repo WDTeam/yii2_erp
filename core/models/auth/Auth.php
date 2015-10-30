@@ -153,9 +153,9 @@ class Auth extends \yii\db\ActiveRecord
     public static function hasUsersByRole($name) {
         $tablePrefix = Yii::$app->getDb()->tablePrefix;
         return Auth::find()
-                ->where(['name' => $name])
-                ->leftJoin("{$tablePrefix}auth_assignment", ['item_name' => $name])
-                ->count();
+        ->where(['name' => $name])
+        ->leftJoin("{$tablePrefix}auth_assignment", ['item_name' => $name])
+        ->count();
     }
 
     public static function hasRolesByPermission($name) {

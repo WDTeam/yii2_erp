@@ -71,7 +71,7 @@ class OrderPool extends Model
             Yii::$app->redis->executeCommand('zRemRangeByScore', [self::PUSH_BOOKED_WORKER_ORDERS . '_' . $worker_id, $order_id, $order_id]);
         }
         if($remPushOrderWorkers){
-            Yii::$app->redis->executeCommand('zRemRangeRyRank', [self::PUSH_ORDER_WORKERS.'_'.$order_id, 0, -1]);
+            Yii::$app->redis->executeCommand('zRemRangeByRank', [self::PUSH_ORDER_WORKERS.'_'.$order_id, 0, -1]);
         }
     }
 
@@ -113,6 +113,7 @@ class OrderPool extends Model
             return Yii::$app->redis->executeCommand('zCard', [self::PUSH_WORKER_ORDERS . '_' . $worker_id]);
         }
     }
+
 
     /**
      * 把订单放入订单池

@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationAdvertRelease as CommonOperationAdvertRelease;
+use dbbase\models\operation\OperationAdvertRelease as CommonOperationAdvertRelease;
 /**
  * This is the model class for table "{{%operation_advert_release}}".
  *
@@ -31,7 +31,61 @@ class OperationAdvertRelease extends CommonOperationAdvertRelease
     }
     
     static private function getAdvertListFrom($ids, $platform_id, $version_id, $position_id){
-//        foreach($contents)
-//        $adverts = $this->getAdvertListFromPosition($position_id);
+        //foreach($contents)
+        //$adverts = $this->getAdvertListFromPosition($position_id);
+    }
+
+    /**
+     * 保存顺序之前，检查同一个位置上是否有时间冲突
+     */
+    public function saveReleaseAdvOrder($data)
+    {
+        $result = 0;
+
+        foreach ($data as $id => $orders) {
+            $model = OperationAdvertRelease::findOne($id);
+
+            $city_name = $model->city_name;
+            $starttime = $model->starttime;
+            $endtime = $model->endtime;
+
+            //如果没有设置时间，直接保存
+            if (($starttime == '' || $starttime == '0000:00:00 00:00:00' || $starttime == null) && ($endtime == '' || $endtime == '0000:00:00 00:00:00' || $endtime == null)) {
+                $model->id = $id;
+                $model->advert_release_order = $orders;
+                $model->save();
+                $result += 1;
+
+            //如果有设置时间，检测时间是否有重叠
+            } else {
+                $city_adv_data = OperationAdvertRelease::find()->asArray()->where(['city_id' => $model->city_id, 'advert_release_order' => $orders])->all();
+
+                //没有同一个位置的广告直接保存
+                if (empty($city_adv_data)) {
+                    $model->id = $id;
+                    $model->advert_release_order = $orders;
+                    $model->save();
+                    $result += 1;
+                } else {
+                    foreach ($city_adv_data as $key => $value) {
+                        if (($orders == $value['advert_release_order']) &&
+                            (($endtime < $value['starttime']) || ($starttime > $value['endtime']))) {
+                            $model->id = $id;
+                            $model->advert_release_order = $orders;
+                            $model->save();
+                            $result += 1;
+                        } elseif ($orders != $value['advert_release_order']) {
+                            $model->id = $id;
+                            $model->advert_release_order = $orders;
+                            $model->save();
+                            $result += 1;
+                        } else {
+                        }
+                    }
+                }
+            }
+        }
+
+        return $result;
     }
 }

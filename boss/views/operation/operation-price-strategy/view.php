@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\OperationPriceStrategy */
+/* @var $model dbbase\models\OperationPriceStrategy */
 
 $this->title = '价格策略详情';
 $this->params['breadcrumbs'][] = ['label' => '价格策略', 'url' => ['index']];

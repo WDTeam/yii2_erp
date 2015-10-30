@@ -3,8 +3,8 @@
 namespace boss\models\order;
 
 use Yii;
-use common\models\order\OrderExtCustomer;
-use common\models\order\OrderExtWorker;
+use dbbase\models\order\OrderExtCustomer;
+use dbbase\models\order\OrderExtWorker;
 use yii\caching\ArrayCache;
 /**
  * This is the model class for table "ejj_order_complaint".
@@ -33,14 +33,16 @@ class OrderComplaint extends \core\models\order\OrderComplaint
     public function backInsertComplaint($params){
     	$arr = array(); $flag = false;
     	$arr['OrderComplaint']['order_id'] = $params['order_id'];
-    	$arr['OrderComplaint']['complaint_detail'] = $params['complaint_detail'];
+    	$arr['OrderComplaint']['complaint_content'] = $params['complaint_detail'];
     	$arr['OrderComplaint']['complaint_phone'] = $params['cumstomer_phone'];
+    	$arr['OrderComplaint']['complaint_status'] = '1';
+    	$arr['OrderComplaint']['complaint_type'] = '1';
     	$arr['OrderComplaint']['created_at'] = time();
     	$arr['OrderComplaint']['updated_at'] = time();
     	$arr['OrderComplaint']['complaint_time'] = time();
     	$arr['OrderComplaint']['complaint_channel'] = '2';
     	foreach ($params['data'] as $key=>$val){
-    		$arr['OrderComplaint']['complaint_type'] = $val['type'];
+    		$arr['OrderComplaint']['complaint_assortment'] = $val['type'];
     		$arr['OrderComplaint']['complaint_section'] = $val['department'];
     		$arr['OrderComplaint']['complaint_level'] = $val['level'];
     		if($this->load($arr) && $this->save()){

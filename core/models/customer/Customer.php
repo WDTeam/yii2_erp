@@ -1,25 +1,31 @@
 <?php
-
 namespace core\models\customer;
 
-
 use Yii;
-// use common\models\Customer;
+
+use yii\web\BadRequestHttpException;
+use yii\helpers\ArrayHelper;
+
+use dbbase\models\customer\GeneralRegion;
+use dbbase\models\customer\CustomerExtSrc;
+
 use core\models\customer\CustomerAddress;
 use core\models\customer\CustomerWorker;
-use common\models\Worker;
+use dbbase\models\Worker;
 use core\models\customer\CustomerExtBalance;
 use core\models\customer\CustomerExtScore;
-use common\models\customer\GeneralRegion;
-use yii\web\BadRequestHttpException;
+use core\models\finance\FinanceOrderChannal;
 
-class Customer extends \common\models\customer\Customer
+use core\models\operation\OperationCity;
+
+
+class Customer extends \dbbase\models\customer\Customer
 {
 
 	/**
 	 * add customer while customer is not exist by phone
 	 */
-	public static function addCustomer($phone){
+	public static function addCustomer($phone, $channal_id){
 		$customer = self::find()->where(['customer_phone'=>$phone])->one();
 		if($customer != NULL){
 			return false;
@@ -53,6 +59,8 @@ class Customer extends \common\models\customer\Customer
 				$customerExtScore->updated_at = 0;
 				$customerExtScore->is_del = 0;
 				$customerExtScore->save();
+
+				self::addSrcByChannalId($phone, $channal_id);
 				
 				$transaction->commit();
 				return true;
@@ -127,7 +135,7 @@ class Customer extends \common\models\customer\Customer
     public function getCustomerWorkers($customer_id)
     {
         $customer = self::findOne($customer_id);
-        $customerWorkers = $customer->hasMany('\common\models\customerWorker', ['customer_id'=>'id'])->all();
+        $customerWorkers = $customer->hasMany('\dbbase\models\customerWorker', ['customer_id'=>'id'])->all();
         return $customerWorkers != NULL ? $customerWorkers : false;
     }
 
@@ -146,7 +154,7 @@ class Customer extends \common\models\customer\Customer
      */
     public static function getCustomerAddresses($customer_id){
         $customer = self::findOne($customer_id);
-        $customerAddresses = $customer->hasMany('\common\models\CustomerAddress', ['customer_id'=>'id'])->all();
+        $customerAddresses = $customer->hasMany('\dbbase\models\CustomerAddress', ['customer_id'=>'id'])->all();
         return $customerAddresses != NULL ? $customerAddresses : false;
     }
 
@@ -243,5 +251,140 @@ class Customer extends \common\models\customer\Customer
             }
         }
         return $workers;
+    }
+	/******************************************basic**********************************************/
+	/**
+	 * get customer vip typoes
+	 */
+	public static function getVipTypes(){
+		return [0=>'非会员', 1=>'会员'];
+	}
+
+	/**
+     *	get customer vip
+	 */
+	public static function getVipTypeName($vip_type){
+		$vip_type_name = '';
+		switch ($vip_type)
+		{
+			case 0:
+				$vip_type_name = '非会员';
+			break;
+			case 1:
+				$vip_type_name = '会员';
+			break;
+			
+			default:
+				# code...
+			break;
+		}
+		return $vip_type_name;
+	}
+
+	/**
+     *	get vip info by phone
+	 */
+	public static function getVipInfoByPhone($phone){
+		$customer = self::find()->where(['customer_phone'=>$phone])->asArray()->one();
+		if(empty($customer)) throw new NotFoundHttpException;
+		
+		$vip_types = self::getVipTypes();
+		$vip_type = $customer['customer_is_vip'];
+		$vip_type_name = $vip_types[$vip_type];
+		return ['vip_type'=>$vip_type, 'vip_type_name'=>$vip_type_name];
+	}
+
+	/*******************************************src**********************************************/
+	/**
+     * get all customer srcs
+	 */
+	public static function getAllSrcs(){
+		$all_srcs = CustomerExtSrc::find()->asArray()->all();
+		return $all_srcs;
+	}
+
+	/**
+	 * get customer srcs
+	 */
+	public static function getSrcs($customer_phone){
+		$srcs = CustomerExtSrc::find()->where(['customer_phone'=>$customer_phone])->asArray()->all();
+		return $srcs;
+	}
+
+	/**
+ 	 * get customer first src
+     */
+	public static function getFirstSrc($customer_phone){
+		$srcs = CustomerExtSrc::find()->where(['customer_phone'=>$customer_phone])->orderBy('created_at asc')->asArray()->one();
+		return $srcs;
+	}
+
+	/**
+     * add customer src by channal_id
+	 */
+	public static function addSrcByChannalId($customer_phone, $channal_id){
+		$customer = self::find()->where(['customer_phone'=>$customer_phone])->asArray()->one();
+		if(empty($customer)) return false;
+
+//		$channal_name = funcname($channal_id);
+		$channal_name = FinanceOrderChannel::getOrderChannelByName($channal_id);
+	
+		$customerExtSrc = new CustomerExtSrc;
+		$customerExtSrc->customer_id = $customer["id"];
+		$customerExtSrc->customer_phone = $customer["customer_phone"];
+		$customerExtSrc->finance_order_channal_id = $channal_id;
+		$customerExtSrc->platform_name = "";
+		$customerExtSrc->platform_ename = "";
+		$customerExtSrc->channal_name = $channal_name;
+		$customerExtSrc->channal_ename = "";
+		$customerExtSrc->device_name = "";
+		$customerExtSrc->device_no = "";
+		$customerExtSrc->created_at = time();
+		$customerExtSrc->updated_at = 0;
+		$customerExtSrc->is_del = 0;
+		if($customerExtSrc->validate()){
+			$customerExtSrc->save();
+			return true;
+		}
+		return false;
+	}
+
+	/**
+     * add csutomer src by channal_name
+	 */
+	public static function addSrcByChannalName($customer_phone, $channal_name){
+		$customer = self::find()->where(['customer_phone'=>$customer_phone])->asArray()->one();
+		if(empty($customer)) return false;
+
+//		$channal_id = funcname($channal_name);
+        $channal_id = FinanceOrderChannel::getOrderChannelByid($channal_name);
+	
+		$customerExtSrc = new CustomerExtSrc;
+		$customerExtSrc->customer_id = $customer["id"];
+		$customerExtSrc->customer_phone = $customer["customer_phone"];
+		$customerExtSrc->finance_order_channal_id = $channal_id;
+		$customerExtSrc->platform_name = "";
+		$customerExtSrc->platform_ename = "";
+		$customerExtSrc->channal_name = $channal_name;
+		$customerExtSrc->channal_ename = "";
+		$customerExtSrc->device_name = "";
+		$customerExtSrc->device_no = "";
+		$customerExtSrc->created_at = time();
+		$customerExtSrc->updated_at = 0;
+		$customerExtSrc->is_del = 0;
+		if($customerExtSrc->validate()){
+			$customerExtSrc->save();
+			return true;
+		}
+		return false;
+	}
+
+	/******************************other******************************************************************/
+	/**
+	 * get online city list
+ 	 */
+	public static function getOnlineCityList(){
+        $onlineCityList = OperationCity::getCityOnlineInfoList();
+        return $onlineCityList?ArrayHelper::map($onlineCityList,'city_id','city_name'):[];
     }
 }

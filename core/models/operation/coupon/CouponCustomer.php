@@ -24,7 +24,7 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $updated_at
 * @property integer $is_del
  */
-class CouponCustomer extends \common\models\operation\coupon\CouponCustomer
+class CouponCustomer extends \dbbase\models\operation\coupon\CouponCustomer
 {
     /**
      * 自动处理创建、修改时间
@@ -76,19 +76,11 @@ class CouponCustomer extends \common\models\operation\coupon\CouponCustomer
      * 获取用户优惠券列表（列表包括下单所在城市的和所有城市都通用的券）
      */
     public static function GetCustomerCouponList($customer_id,$city_id){
-         $couponCustomer = CouponCustomer::find()->joinWith('coupon')->where([
-                'and',
-                ['>', 'ejj_coupon_customer.expirate_at', time()],
-                ['ejj_coupon_customer.customer_id' => $customer_id],
-                ['ejj_coupon_customer.is_used' => 0],
-                ['ejj_coupon_customer.is_del' => 0],
-                ['ejj_coupon.coupon_city_limit' => 1],
-                ['ejj_coupon.coupon_city_id' => $city_id]
-            ])->orWhere([
-                'or',
-                ['ejj_coupon.coupon_city_limit' => 0],
-            ])->orderBy('expirate_at asc,coupon_price desc')
-              ->all();
+        $now_time=time();
+        $couponCustomer=(new \yii\db\Query())->select('*')->from('ejj_coupon')
+                ->leftJoin('ejj_coupon_customer', 'ejj_coupon_customer.coupon_id = ejj_coupon.id')
+                ->where(['and',"ejj_coupon_customer.expirate_at>$now_time",'ejj_coupon_customer.is_del=0','ejj_coupon_customer.is_used=0',"ejj_coupon_customer.customer_id=$customer_id", ['or', ['and','ejj_coupon.coupon_city_limit=1',"ejj_coupon.coupon_city_id=$city_id"], 'ejj_coupon.coupon_city_limit=0']] )
+                ->orderBy(['ejj_coupon_customer.expirate_at'=>SORT_ASC,'ejj_coupon_customer.coupon_price'=>SORT_DESC])->all();
         return $couponCustomer;
    }
     /**

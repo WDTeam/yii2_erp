@@ -24,7 +24,7 @@ return [
             ],
         ],
         'user' => [
-            'identityClass' => 'common\models\UserInfo',
+            'identityClass' => 'dbbase\models\UserInfo',
             'enableAutoLogin' => true,
             'enableSession' => false,
             'loginUrl' => null,

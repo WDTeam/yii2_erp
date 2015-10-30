@@ -5,10 +5,10 @@ namespace core\models\finance;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\finance\FinanceCompensate as FinanceCompensateModel;
+use dbbase\models\finance\FinanceCompensate as FinanceCompensateModel;
 
 /**
- * FinanceCompensate represents the model behind the search form about `common\models\finance\FinanceCompensate`.
+ * FinanceCompensate represents the model behind the search form about `dbbase\models\finance\FinanceCompensate`.
  */
 class FinanceCompensate extends FinanceCompensateModel
 {
@@ -34,7 +34,7 @@ class FinanceCompensate extends FinanceCompensateModel
     public function rules()
     {
         return [
-            [['id', 'finance_complaint_id', 'worker_id', 'customer_id', 'updated_at', 'created_at', 'isdel'], 'integer'],
+            [['id', 'finance_complaint_id', 'worker_id', 'customer_id', 'updated_at', 'created_at', 'is_softdel'], 'integer'],
             [['finance_compensate_oa_code', 'finance_compensate_coupon', 'finance_compensate_reason', 'finance_compensate_proposer', 'finance_compensate_auditor', 'comment'], 'safe'],
             [['finance_compensate_money'], 'number'],
         ];
@@ -63,7 +63,7 @@ class FinanceCompensate extends FinanceCompensateModel
             'finance_compensate_status' => $this->finance_compensate_status,
             'updated_at' => $this->updated_at,
             'created_at' => $this->created_at,
-            'isdel' => $this->isdel,
+            'is_softdel' => $this->is_softdel,
         ]);
 
         $query->andFilterWhere(['like', 'finance_compensate_oa_code', $this->finance_compensate_oa_code])

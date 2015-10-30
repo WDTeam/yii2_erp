@@ -4,7 +4,7 @@ use Yii;
 
 
 /**
- * OperationCitySearch represents the model behind the search form about `common\models\OperationCity`.
+ * OperationCitySearch represents the model behind the search form about `dbbase\models\OperationCity`.
  */
 class OperationBootPage extends \core\models\operation\OperationBootPage
 {

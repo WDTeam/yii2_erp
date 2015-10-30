@@ -6,7 +6,7 @@ use kartik\datecontrol\DateControl;
 
 /**
  * @var yii\web\View $this
- * @var common\models\OperationCategory $model
+ * @var dbbase\models\OperationCategory $model
  */
 
 $this->title = Yii::t('app', 'Look').Yii::t('app', 'Operation Categories');

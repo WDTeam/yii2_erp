@@ -3,7 +3,7 @@
 namespace core\models\operation;
 
 use Yii;
-use common\models\operation\OperationAdvertPosition as CommonOperationAdvertPosition;
+use dbbase\models\operation\OperationAdvertPosition as CommonOperationAdvertPosition;
 /**
  * This is the model class for table "{{%operation_advert_position}}".
  *

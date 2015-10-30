@@ -19,7 +19,7 @@ use Yii;
  * @property integer $created_ad
  * @property integer $updated_ad
  */
-class WorkerDevice extends \common\models\worker\WorkerDevice
+class WorkerDevice extends \dbbase\models\worker\WorkerDevice
 {
 
 }

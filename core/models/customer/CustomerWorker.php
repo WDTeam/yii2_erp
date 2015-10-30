@@ -16,7 +16,7 @@ use Yii;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class CustomerWorker extends \common\models\customer\CustomerWorker
+class CustomerWorker extends \dbbase\models\customer\CustomerWorker
 {
 
     /**
@@ -93,6 +93,22 @@ class CustomerWorker extends \common\models\customer\CustomerWorker
     public static function countWorkerServerAllCustomer($worker_id){
         $result = CustomerWorker::find()->where(['worker_id'=>$worker_id])->count();
         return $result;
+    }
+
+    /**
+     * 获取用户常用阿姨列表
+     * @param $customer_id
+     */
+    public static function getCustomerCommonWorkerList($customer_id){
+
+    }
+
+    /**
+     * 获取用户附近阿姨列表
+     * @param $customer_id
+     */
+    public static function getCustomerNearbyWorkerList($customer_id){
+
     }
 
 }

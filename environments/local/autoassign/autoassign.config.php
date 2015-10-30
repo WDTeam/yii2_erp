@@ -7,23 +7,17 @@
  */
 return [
     /*
-<<<<<<< HEAD
-     * Redis 服务IP
-     */
-    'REDIS_SERVER_IP' => '101.200.179.70',
-=======
      * 自定义主服务进程名ID
      */
     'SERVER_MASTER_PROCESS_ID' => 'autoassign-server-master',
     /*
      * 自定义 WORKER-TASK 服务进程名ID前缀
      */
-    'SERVER_WORKER_PROCESS_ID' => 'autoassign-server-worker-id-',    
+    'SERVER_WORKER_PROCESS_ID' => 'autoassign-server-worker-id-',
     /*
      * Redis 服务IP（推荐使用域名）
      */
     'REDIS_SERVER_IP' => 'dev.boss.1jiajie.com',
->>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
     /*
      * Redis 服务PORT
      */
@@ -31,21 +25,21 @@ return [
     /*
      * Redis 服务运行状态
      */
-    '_REDIS_SERVER_RUN_STATUS_' => '_SWOOLE_SOCKET_RUN_STATUS_',
+    '_REDIS_SERVER_RUN_STATUS_' => '_REDIS_SERVER_RUN_STATUS_',
     /*
      * Redis 待指派订单池
      */
-    '_REDIS_WAIT_ASSIGN_ORDER_POOL_ '=> 'WaitAssignOrdersPool',
+    '_REDIS_WAIT_ASSIGN_ORDER_POOL_ '=> 'WAIT_ASSIGN_ORDERS_POOL',
     /*
      * 服务监听地址（默认 0.0.0.0 勿改）
      */
     'SERVER_LISTEN_IP' => '0.0.0.0',
-    
+
     /*
      * 服务监听端口（默认 9501）
      */
     'SERVER_LISTEN_PORT' => 9501,
-    
+
     /*
      * 设置启动的worker进程数
      * 业务代码是全异步非阻塞的，这里设置为CPU的1-4倍最合理
@@ -55,12 +49,12 @@ return [
      * 所以这里适当即可。不要配置过大。
      */
     'WORKER_NUM' => 2,
-    
+
     /*
      * 配置task进程的数量
      */
     'TASK_WORKER_NUM' => 8,
-    
+
     /*
      * 守护进程化
      * 设置daemonize => 1时，程序将转入后台作为守护进程运行。长时间运行的服务器端程序必须启用此项。
@@ -69,46 +63,32 @@ return [
      * 如果未设置log_file，将重定向到 /dev/null，所有打印屏幕的信息都会被丢弃
      */
     'DAEMONIZE' => false,
-    
+
     /*
      * 日志文件
      */
-    'LOG_FILE' => './server.log',
-    
+    'LOG_FILE' => './autoassign-server.log',
+
     /*
      * 设置worker进程的最大任务数
      */
     'MAX_REQUEST' => 1000,
-    
+
     // 定时器 单位秒
     'TIMER_INTERVAL' => 6,
-    
+
     // 全职阿姨 0-5分钟
     'FULLTIME_WORKER_TIMEOUT' => 5,
-    
+
     // 兼职阿姨 5-15分钟
     'FREETIME_WORKER_TIMEOUT' => 15,
-    
+
     // 超时人工指派 >15分钟
     'SYSTEM_ASSIGN_TIMEOUT' => 15,
-    
-<<<<<<< HEAD
-    // 配置 Redis IP地址（推荐使用域名）
-    'REDIS_IP_ADDRESS' => '101.200.179.70',
-    
-    // 配置 Redis IP端口
-    'REDIS_IP_PORT' => 6379,
-    
-    // 配置 BOSS API 地址
-    'BOSS_API_URL' => 'http://dev.api.1jiajie.com/order/push/',
-    
-    // 配置 BOSS CONFIG 地址
-    'BOSS_CONFIG_URL' => 'http://dev.api.1jiajie.com/config/',
-=======
+
     // 配置 BOSS API 地址
     'BOSS_API_URL' => 'http://api.me/order/push/',
-    
+
     // 配置 BOSS CONFIG 地址
     'BOSS_CONFIG_URL' => 'http://api.me/config/',
->>>>>>> e6cadbd50b243ccfc63ba02eea30f7648e5a28c0
 ];

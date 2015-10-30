@@ -19,7 +19,7 @@ use core\models\worker\WorkerRuleConfig;
 use core\models\worker\WorkerIdentityConfig;
 /**
  * @var yii\web\View $this
- * @var common\models\Worker $worker
+ * @var dbbase\models\Worker $worker
  * @var yii\widgets\ActiveForm $form
  */
 

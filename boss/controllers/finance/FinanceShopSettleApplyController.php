@@ -3,7 +3,7 @@
 namespace boss\controllers\finance;
 
 use Yii;
-use common\models\finance\FinanceShopSettleApply;
+use dbbase\models\finance\FinanceShopSettleApply;
 use core\models\finance\FinanceShopSettleApplySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;

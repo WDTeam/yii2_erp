@@ -5,10 +5,10 @@ namespace boss\models\finance;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\finance\FinanceInvoice;
+use dbbase\models\finance\FinanceInvoice;
 
 /**
- * FinanceInvoiceSearch represents the model behind the search form about `common\models\FinanceInvoice`.
+ * FinanceInvoiceSearch represents the model behind the search form about `dbbase\models\FinanceInvoice`.
  */
 class FinanceInvoiceSearch extends FinanceInvoice
 {

@@ -2,7 +2,7 @@
 namespace core\behaviors;
 
 use yii\base\Behavior;
-use common\components\Sms;
+use dbbase\components\Sms;
 class SmslogBehavior extends Behavior
 {
 

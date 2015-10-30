@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use core\models\operation\OperationCity;
 
 /**
- * OperationCitySearch represents the model behind the search form about `common\models\OperationCity`.
+ * OperationCitySearch represents the model behind the search form about `dbbase\models\OperationCity`.
  */
 class OperationCitySearch extends OperationCity
 {

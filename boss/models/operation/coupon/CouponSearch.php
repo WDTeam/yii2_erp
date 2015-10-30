@@ -10,7 +10,7 @@ use core\models\operation\coupon\Coupon;
 use \core\models\operation\coupon\CouponCode;
 
 /**
- * CouponSearch represents the model behind the search form about `\common\models\coupon\Coupon`.
+ * CouponSearch represents the model behind the search form about `\dbbase\models\coupon\Coupon`.
  */
 class CouponSearch extends Coupon
 {
