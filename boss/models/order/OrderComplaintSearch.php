@@ -69,7 +69,7 @@ class OrderComplaintSearch extends OrderComplaint{
 	 */
 	public function urlParameterProcessing($params){
 		$session = Yii::$app->session;
-		unset($params['s']);
+		unset($params['r']);
 		if(!empty($params) && is_array($params)){
 			$session->set('param', $params);
 			$param = $session->get("param");$path = $session->get("path");

@@ -41,6 +41,7 @@ class OrderComplaint extends \core\models\order\OrderComplaint
     	$arr['OrderComplaint']['complaint_type'] = '1';
     	$arr['OrderComplaint']['created_at'] = time();
     	$arr['OrderComplaint']['updated_at'] = time();
+    	$arr['OrderComplaint']['is_softdel'] = '0';
     	$arr['OrderComplaint']['complaint_time'] = time();
     	$arr['OrderComplaint']['complaint_channel'] = '2';
     	foreach ($params['data'] as $key=>$val){
