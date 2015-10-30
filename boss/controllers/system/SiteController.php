@@ -30,7 +30,7 @@ class SiteController extends Controller
             $this->redirect(array('login'));
         }
         
-        if(1==1){
+        if(1==2){
         	return $this->render('indexshop');
         }else {
         	return $this->render('index');

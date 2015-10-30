@@ -329,7 +329,6 @@ $this->title = $model->worker_name;
         'deleteOptions' => [
             'url' => ['delete', 'id' => $model->id],
             'data' => [
-                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
                 'method' => 'post',
             ],
         ],

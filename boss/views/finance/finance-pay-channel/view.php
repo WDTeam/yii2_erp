@@ -19,6 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'model' => $model,
             'condensed'=>false,
             'hover'=>true,
+    		'buttons1'=>'{update}',
             'mode'=>Yii::$app->request->get('edit')=='t' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
             'panel'=>[
             'heading'=>$this->title,
@@ -38,13 +39,8 @@ $this->params['breadcrumbs'][] = $this->title;
            // 'create_time:datetime',
           //  'is_del',
         ],
-        'deleteOptions'=>[
-        'url'=>['delete', 'id' => $model->id],
-        'data'=>[
-        'confirm'=>Yii::t('app', '你确定删除吗?'),
-        'method'=>'post',
-        ],
-        ],
+        'deleteOptions'=>false,
+ 
         'enableEditMode'=>true,
     ]) ?>
 

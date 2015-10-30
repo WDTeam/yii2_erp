@@ -1302,8 +1302,8 @@ class OrderController extends \restapi\components\Controller
         $orderArr = array();
         $orderArr["id"] = $orderId;
         $orders = $orderSearch->searchOrdersWithStatus($orderArr);
-        $ret = \core\models\order\OrderStatus::searchOrderStatusHistory($orderId);
-
+        $ret['status_history'] = \core\models\order\OrderStatus::searchOrderStatusHistory($orderId);
+        $ret['orders'] = $orders;
         $this->send($ret, "操作成功");
     }
 

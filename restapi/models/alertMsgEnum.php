@@ -26,4 +26,11 @@ class alertMsgEnum
     //依据城市 获取所有服务商品列表
     const allGoodsesSuccess='获取服务商品成功';
     const allGoodsesFailed='获取服务商品失败';
+    //获取某城市某商品的价格及备注信息
+    const goodsInfoSuccess='获取服务商品成功';
+    const goodsInfoFailed='获取服务商品失败';
+    //获得所有保洁任务项目
+    const allCleaningTaskSuccess='获取所以保洁任务成功';
+    const allCleaningTaskFailed='获取所以保洁任务失败';
+    
 }
