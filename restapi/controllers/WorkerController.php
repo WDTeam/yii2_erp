@@ -953,7 +953,7 @@ class WorkerController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} type 请假类型
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} [platform_version] 平台版本号.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -1031,7 +1031,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiGroup Worker
      *
      * @apiParam {String} access_token    阿姨登录 token.
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} [platform_version] 平台版本号.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -1096,7 +1096,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} per_page  每页显示多少条.
      * @apiParam {String} page  第几页.
      * @apiParam {String} access_token    阿姨登录 token.
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} [platform_version] 平台版本号.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -1164,7 +1164,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} per_page  每页显示多少条.
      * @apiParam {String} page  第几页.
      * @apiParam {String} access_token    阿姨登录 token.
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} [platform_version] 平台版本号.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -1234,7 +1234,7 @@ class WorkerController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} id    任务id
-     * @apiParam {String} platform_version 平台版本号.
+     * @apiParam {String} [platform_version] 平台版本号.
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
