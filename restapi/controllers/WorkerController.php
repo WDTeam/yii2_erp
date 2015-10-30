@@ -310,8 +310,6 @@ class WorkerController extends \restapi\components\Controller
     /**
      * @api {GET} /worker/get-worker-comment 获取阿姨对应的评论 (田玉星 100%)
      *
-     * @apiDescription 【备注：等待model底层支持】
-     *
      * @apiName actionGetWorkerComment
      * @apiGroup Worker
      *
@@ -916,6 +914,9 @@ class WorkerController extends \restapi\components\Controller
     
     /** 
      * @api {GET} /worker/system-news  消息通知中心(田玉星0%)
+     * 
+     * @apiDescription 未定
+     * 
      * @apiName actionSystemNews
      * @apiGroup Worker
      *
