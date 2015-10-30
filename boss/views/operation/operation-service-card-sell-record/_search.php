@@ -62,7 +62,7 @@ use kartik\date\DatePicker;
 
     <?php // echo $form->field($model, 'customer_phone') ?>
 
-    <?php // echo $form->field($model, 'service_card_info_card_id') ?>
+    <?php // echo $form->field($model, 'service_card_info_id') ?>
 
     <?php // echo $form->field($model, 'service_card_info_name') ?>
 

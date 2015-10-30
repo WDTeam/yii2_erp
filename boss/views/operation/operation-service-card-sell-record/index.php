@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'service_card_sell_record_code',
 //            'customer_id',
             'customer_phone',
-//            'service_card_info_card_id',
+//            'service_card_info_id',
 //            'service_card_info_name', 
 //            'service_card_sell_record_money', 
 //            'service_card_sell_record_channel_id', 
@@ -47,7 +47,14 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'customer_trans_record_transaction_id', 
             'customer_trans_record_pay_money', 
 //            'customer_trans_record_pay_account', 
-            'customer_trans_record_paid_at', 
+//            'customer_trans_record_paid_at', 
+			[
+                'attribute'=>'customer_trans_record_paid_at',
+                'value'=>function($model){
+                    return date('Y-m-d', $model->customer_trans_record_paid_at);
+                },
+                'filter'=>false,
+            ],
 //            'created_at', 
 //            'updated_at', 
 //            'is_del', 
