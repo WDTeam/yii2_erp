@@ -79,7 +79,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/AuthController.php",
+    "filename": "../controllers/AuthController.php",
     "groupTitle": "Auth"
   },
   {
@@ -162,7 +162,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/AuthController.php",
+    "filename": "../controllers/AuthController.php",
     "groupTitle": "Auth"
   },
   {
@@ -245,7 +245,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/AuthController.php",
+    "filename": "../controllers/AuthController.php",
     "groupTitle": "Auth"
   },
   {
@@ -446,7 +446,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -640,7 +640,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -740,7 +740,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -819,7 +819,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -885,7 +885,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -954,7 +954,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -1023,7 +1023,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -1127,7 +1127,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -1245,7 +1245,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -1356,7 +1356,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -1481,7 +1481,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -1579,7 +1579,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -1677,7 +1677,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -1753,7 +1753,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -1829,7 +1829,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -1888,7 +1888,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -1982,7 +1982,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -2037,7 +2037,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n指定阿姨订单数/待抢单订单订单数\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"workerData\": \"指定阿姨订单\"\n         \"orderData\": \"待抢单订单\"\n     }\n}\n\n  * 指定阿姨订单列表/待抢单订单列表\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"workerData\":\n          [\n          {\n           \"order_id\":\"订单号\"\n           \"order_code\":\"订单编号\"\n           \"batch_code\":\"周期订单号\"\n           \"booked_begin_time\":\"服务开始时间\"\n           \"booked_end_time\":\"服务结束时间\"\n           \"channel_name\":\"服务类型名称\"\n           \"booked_count\":\"时常\"\n           \"address\":\"服务地址\"\n           \"need\":\"备注说明\"\n           \"money\":\"订单价格\"\n          } \n        ],\n        \"time\":172800  倒计时秒 #要求2天\n     }\n}",
+          "content": "HTTP/1.1 200 OK\n 指定阿姨订单数/待抢单订单订单数 leveltype=1\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"workerData\": \"指定阿姨订单\",\n         \"orderData\": \"待抢单订单\",\n         \"worker_is_block\": \"阿姨状态 0正常1封号\",\n     }\n}\n\n  * 指定阿姨订单列表/待抢单订单列表 leveltype=3/4\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"workerData\":\n          [\n          {\n           \"order_id\":\"订单号\"\n           \"order_code\":\"订单编号\"\n           \"batch_code\":\"周期订单号\"\n           \"booked_begin_time\":\"服务开始时间\"\n           \"booked_end_time\":\"服务结束时间\"\n           \"channel_name\":\"服务类型名称\"\n           \"booked_count\":\"时常\"\n           \"address\":\"服务地址\"\n           \"need\":\"备注说明\"\n           \"money\":\"订单价格\"\n          } \n        ],\n        \"time\":172800  倒计时秒 #要求2天\n     }\n}",
           "type": "json"
         }
       ]
@@ -2062,7 +2062,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -2128,7 +2128,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/OrderController.php",
+    "filename": "../controllers/OrderController.php",
     "groupTitle": "Order"
   },
   {
@@ -2199,7 +2199,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/PayController.php",
+    "filename": "../controllers/PayController.php",
     "groupTitle": "Pay"
   },
   {
@@ -2257,7 +2257,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/PayController.php",
+    "filename": "../controllers/PayController.php",
     "groupTitle": "Pay"
   },
   {
@@ -2433,7 +2433,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/PayController.php",
+    "filename": "../controllers/PayController.php",
     "groupTitle": "Pay"
   },
   {
@@ -2492,7 +2492,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/SendSmsController.php",
+    "filename": "../controllers/SendSmsController.php",
     "groupTitle": "SendSms"
   },
   {
@@ -2561,7 +2561,7 @@ define({ "api": [
       }
     ],
     "version": "0.0.0",
-    "filename": "controllers/SendSmsController.php",
+    "filename": "../controllers/SendSmsController.php",
     "groupTitle": "SendSms"
   },
   {
@@ -2620,7 +2620,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/SendSmsController.php",
+    "filename": "../controllers/SendSmsController.php",
     "groupTitle": "SendSms"
   },
   {
@@ -2742,7 +2742,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -2801,7 +2801,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -2870,7 +2870,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -2935,7 +2935,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -3011,7 +3011,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -3080,7 +3080,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -3138,7 +3138,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -3196,7 +3196,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -3261,7 +3261,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -3340,7 +3340,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -3398,13 +3398,13 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
     "type": "GET",
     "url": "v1/user/get-user-money",
-    "title": "用户余额和消费记录 （数据已经全部取出,需要给出所需字段,然后给予返回 已完成99% ;）",
+    "title": "用户余额和消费记录 （郝建设 已完成99% ;）",
     "name": "actionGetUserMoney",
     "group": "User",
     "parameter": {
@@ -3442,7 +3442,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "    HTTP/1.1 200 OK\n{\n\"code\": \"1\",\n\"msg\": \"查询成功\",\n\"ret\": {\n\"userBalance\": \"用户余额\",\n\"userRecord\": [\n{\n\"id\": \"1\",\n\"customer_id\": \"用户ID\",\n \"order_id\": \"订单ID\",\n\"order_channel_id\": \"订单渠道\",\n\"customer_trans_record_order_channel\": 订单渠道名称,\n\"pay_channel_id\": \"支付渠道\",\n\"customer_trans_record_pay_channel\": 支付渠道名称,\n \"customer_trans_record_mode\": \"交易方式:1消费,2=充值,3=退款,4=赔偿\",\n\"customer_trans_record_mode_name\": 交易方式名称,\n\"customer_trans_record_coupon_money\": \"优惠券金额\",\n\"customer_trans_record_cash\": \"现金支付\",\n\"customer_trans_record_pre_pay\": \"预付费金额（第三方）\",\n\"customer_trans_record_online_pay\": \"在线支付\",\n\"customer_trans_record_online_balance_pay\": \"在线余额支付\",\n\"customer_trans_record_online_service_card_on\": \"服务卡号\",\n\"customer_trans_record_online_service_card_pay\": \"服务卡支付\",\n\"customer_trans_record_online_service_card_current_balance\": \"服务卡当前余额\",\n\"customer_trans_record_online_service_card_befor_balance\": \"服务卡之前余额\",\n\"customer_trans_record_compensate_money\": \"补偿金额\",\n\"customer_trans_record_refund_money\": \"退款金额\",\n\"customer_trans_record_order_total_money\": \"订单总额\",\n\"customer_trans_record_total_money:'交易总额',\n\"customer_trans_record_current_balance:'当前余额',\n\"customer_trans_record_befor_balance:'之前余额',\n\"customer_trans_record_transaction_id:'交易流水号',\n\"customer_trans_record_remark\": '备注',\n\"customer_trans_record_verify\": '验证',\n\"created_at\":'创建时间',\n\"updated_at\":'更新时间',\n\"is_del\"：'删除',\n}\n]\n}\n}",
+          "content": "    HTTP/1.1 200 OK\n{\n\"code\": \"1\",\n\"msg\": \"查询成功\",\n\"ret\": {\n\"userBalance\": \"用户余额\",\n\"userRecord\": [\n{\n\"id\": \"1\",\n\"customer_id\": \"用户ID\",\n \"order_id\": \"订单ID\",\n\"order_channel_id\": \"订单渠道\",\n\"customer_trans_record_order_channel\": 订单渠道名称,\n\"pay_channel_id\": \"支付渠道\",\n\"customer_trans_record_pay_channel\": 支付渠道名称,\n \"customer_trans_record_mode\": \"交易方式:1消费,2=充值,3=退款,4=赔偿\",\n\"customer_trans_record_mode_name\": 交易方式名称,\n\"customer_trans_record_coupon_money\": \"优惠券金额\",\n\"customer_trans_record_cash\": \"现金支付\",\n\"customer_trans_record_pre_pay\": \"预付费金额（第三方）\",\n\"customer_trans_record_online_pay\": \"在线支付\",\n\"customer_trans_record_online_balance_pay\": \"在线余额支付\",\n\"customer_trans_record_online_service_card_on\": \"服务卡号\",\n\"customer_trans_record_online_service_card_pay\": \"服务卡支付\",\n\"customer_trans_record_online_service_card_current_balance\": \"服务卡当前余额\",\n\"customer_trans_record_online_service_card_befor_balance\": \"服务卡之前余额\",\n\"customer_trans_record_compensate_money\": \"补偿金额\",\n\"customer_trans_record_refund_money\": \"退款金额\",\n\"customer_trans_record_order_total_money\": \"订单总额\",\n\"customer_trans_record_total_money\":'交易总额',\n\"customer_trans_record_current_balance\":'当前余额',\n\"customer_trans_record_befor_balance\":'之前余额',\n\"customer_trans_record_transaction_id\":'交易流水号',\n\"customer_trans_record_remark\": '备注',\n\"customer_trans_record_verify\": '验证',\n\"created_at\":'创建时间',\n\"updated_at\":'更新时间',\n\"is_del\"：'删除',\n}\n]\n}\n}",
           "type": "json"
         }
       ]
@@ -3467,7 +3467,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -3526,7 +3526,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -3591,7 +3591,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -3624,6 +3624,48 @@ define({ "api": [
             "optional": true,
             "field": "app_version",
             "description": "<p>访问源(android_4.2.2)</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "operation_province_name",
+            "description": "<p>省</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "operation_city_name",
+            "description": "<p>市名</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "operation_area_name",
+            "description": "<p>地区名（朝阳区）</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "customer_address_detail",
+            "description": "<p>详细地址</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "customer_address_nickname",
+            "description": "<p>被服务者昵称</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "customer_address_phone",
+            "description": "<p>被服务者手机</p> "
           }
         ]
       }
@@ -3657,7 +3699,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -3772,7 +3814,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -3921,7 +3963,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/UserController.php",
+    "filename": "../controllers/UserController.php",
     "groupTitle": "User"
   },
   {
@@ -3984,7 +4026,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4049,7 +4091,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4101,7 +4143,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"1\",\n     \"msg\": \"操作成功.\",\n     \"ret\": [\n     {\n          \"settle_year\": \"2015\",\n          \"order_count\": \"账单归属年限\",\n          \"worker_income\": \"该账单阿姨的总收入\",\n          \"settle_cycle\": \"账单类型【1周期账单 2月结账单】\",\n          \"settle_cycle_des\": \"账单文字说明\",\n          \"settle_task_money\": \"任务奖励金额\",\n          \"base_salary_subsidy\": \"底薪补贴\",\n          \"money_deduction\": \"处罚金额\",\n          \"order_money_except_cash\": \"工时服务费\",\n          \"settle_status\": 账单状态【0未结算 1已结算】,\n          \"settle_time\": \"账单日期\"\n          \"worker_is_confirmed\":\"阿姨是否确认账单【0未确认 1已确认】\",\n      }\n     ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n\n \"code\": 1,\n  \"msg\": \"操作成功.\",\n  \"ret\": {\n      \"per_page\": 1,\n      \"page_num\": 10,\n      \"data\": [\n          {\n              \"settle_id\": \"账单唯一标识\",\n              \"settle_year\": \"账单归属年限\",\n              \"order_count\": \"账单内完成的订单总数\",\n              \"worker_income\": \"该账单阿姨的总收入\",\n              \"settle_cycle\": \"账单类型【1周期账单 2月结账单】\",\n              \"settle_cycle_des\": \"账单文字说明\",\n              \"settle_task_money\": \"任务奖励金额\",\n              \"base_salary_subsidy\": \"底薪补贴\",\n              \"money_deduction\": \"处罚金额\",\n              \"order_money_except_cash\": \"工时服务费\",\n              \"settle_status\":\"账单状态【0未结算 1已结算】\",\n              \"settle_time\": \"账单日期\",\n              \"worker_is_confirmed\": \"阿姨是否确认账单【0未确认 1已确认】\"\n          }\n      ]\n   }\n}",
           "type": "json"
         }
       ]
@@ -4116,7 +4158,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4191,7 +4233,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4258,7 +4300,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4325,7 +4367,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4378,7 +4420,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4438,7 +4480,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4491,7 +4533,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4551,7 +4593,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4611,7 +4653,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4678,13 +4720,13 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
-    "type": "get",
-    "url": "/mobileapidriver2/system_news",
-    "title": "通知中心(田玉星0%)",
+    "type": "GET",
+    "url": "/worker/system-news",
+    "title": "消息通知中心(田玉星0%)",
     "name": "actionSystemNews",
     "group": "Worker",
     "parameter": {
@@ -4694,13 +4736,13 @@ define({ "api": [
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "session_id",
-            "description": "<p>会话id.</p> "
+            "field": "access_token",
+            "description": "<p>阿姨登录token.</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": false,
+            "optional": true,
             "field": "platform_version",
             "description": "<p>平台版本号.</p> "
           }
@@ -4736,7 +4778,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4794,7 +4836,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4866,7 +4908,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4938,7 +4980,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -4998,7 +5040,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -5063,7 +5105,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -5109,7 +5151,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/WorkerController.php",
+    "filename": "../controllers/WorkerController.php",
     "groupTitle": "Worker"
   },
   {
@@ -5168,7 +5210,7 @@ define({ "api": [
     },
     "description": "<p>获取城市服务配置项价格介绍页面以及分类的全部服务项目</p> ",
     "version": "0.0.0",
-    "filename": "controllers/ConfigureController.php",
+    "filename": "../controllers/ConfigureController.php",
     "groupTitle": "configure"
   },
   {
@@ -5183,7 +5225,7 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
+            "optional": false,
             "field": "app_version",
             "description": "<p>访问源(android_4.2.2)</p> "
           }
@@ -5194,7 +5236,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "    HTTP/1.1 200 OK\n    {\n         \"code\": \"1\",\n         \"msg\": \"操作成功\",\n         \"ret\": {\n             \"pages\": [\n             {\n                 \"id\": \"1\", 编号\n                 \"img\": \"\", 图片地址\n                 \"title\": \"\", 文字\n                 \"remark\": \"\",  备注\n                 \"sort\": \"1\" 排序\n                 \"time\": \"5\"  停留时间，默认5秒\n                 \"next_url\": \"\" 下一页url\n             },\n{\n                 \"id\": \"2\", 编号\n                 \"img\": \"\", 图片地址\n                 \"title\": \"\", 文字\n                 \"remark\": \"\",  备注\n                 \"sort\": \"2\" 排序\n                 \"time\": \"5\"  停留时间，默认5秒\n                 \"next_url\": \"\" 下一页url\n             },\n             ]\n     }\n}",
+          "content": "    HTTP/1.1 200 OK\n    {\n         \"code\": \"1\",\n         \"msg\": \"操作成功\",\n         \"ret\": {\n             \"pages\": [\n             {\n                 \"id\": \"1\", 编号\n                 \"img\": \"\", 图片地址\n                 \"title\": \"\", 文字\n                 \"remark\": \"\",  备注\n                 \"sort\": \"1\" 排序\n                 \"time\": \"5\"  停留时间，默认5秒\n                 \"next_url\": \"\" 下一页url\n             },\n             {\n                 \"id\": \"2\", 编号\n                 \"img\": \"\", 图片地址\n                 \"title\": \"\", 文字\n                 \"remark\": \"\",  备注\n                 \"sort\": \"2\" 排序\n                 \"time\": \"5\"  停留时间，默认5秒\n                 \"next_url\": \"\" 下一页url\n             },\n             ]\n     }\n}",
           "type": "json"
         }
       ]
@@ -5219,7 +5261,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/ConfigureController.php",
+    "filename": "../controllers/ConfigureController.php",
     "groupTitle": "configure"
   },
   {
@@ -5278,7 +5320,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/ConfigureController.php",
+    "filename": "../controllers/ConfigureController.php",
     "groupTitle": "configure"
   },
   {
@@ -5336,7 +5378,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/ConfigureController.php",
+    "filename": "../controllers/ConfigureController.php",
     "groupTitle": "configure"
   },
   {
@@ -5394,7 +5436,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/ConfigureController.php",
+    "filename": "../controllers/ConfigureController.php",
     "groupTitle": "configure"
   },
   {
@@ -5419,13 +5461,6 @@ define({ "api": [
             "optional": true,
             "field": "app_version",
             "description": "<p>访问源(android_4.2.2)</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": true,
-            "field": "city_id",
-            "description": "<p>城市</p> "
           }
         ]
       }
@@ -5459,7 +5494,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/CouponController.php",
+    "filename": "../controllers/CouponController.php",
     "groupTitle": "coupon"
   },
   {
@@ -5524,7 +5559,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/CouponController.php",
+    "filename": "../controllers/CouponController.php",
     "groupTitle": "coupon"
   },
   {
@@ -5600,7 +5635,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/CouponController.php",
+    "filename": "../controllers/CouponController.php",
     "groupTitle": "coupon"
   },
   {
@@ -5663,7 +5698,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/CouponController.php",
+    "filename": "../controllers/CouponController.php",
     "groupTitle": "coupon"
   },
   {
@@ -5743,7 +5778,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/ServiceController.php",
+    "filename": "../controllers/ServiceController.php",
     "groupTitle": "service"
   },
   {
@@ -5802,7 +5837,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/ServiceController.php",
+    "filename": "../controllers/ServiceController.php",
     "groupTitle": "service"
   },
   {
@@ -5887,7 +5922,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/ServiceController.php",
+    "filename": "../controllers/ServiceController.php",
     "groupTitle": "service"
   },
   {
@@ -5960,7 +5995,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/ServiceController.php",
+    "filename": "../controllers/ServiceController.php",
     "groupTitle": "service"
   },
   {
@@ -6040,7 +6075,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/ServiceController.php",
+    "filename": "../controllers/ServiceController.php",
     "groupTitle": "service"
   },
   {
@@ -6099,7 +6134,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/ServiceController.php",
+    "filename": "../controllers/ServiceController.php",
     "groupTitle": "service"
   },
   {
@@ -6186,7 +6221,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/ServiceController.php",
+    "filename": "../controllers/ServiceController.php",
     "groupTitle": "service"
   },
   {
@@ -6252,7 +6287,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/ServiceController.php",
+    "filename": "../controllers/ServiceController.php",
     "groupTitle": "service"
   },
   {
@@ -6318,7 +6353,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "controllers/ServiceController.php",
+    "filename": "../controllers/ServiceController.php",
     "groupTitle": "service"
   }
 ] });

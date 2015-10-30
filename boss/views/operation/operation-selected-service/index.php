@@ -5,7 +5,6 @@ use kartik\grid\GridView;
 use yii\widgets\Pjax;
 
 use boss\components\SearchBox;
-use boss\models\operation\OperationSelectedService;
 
 /**
  * @var yii\web\View $this
@@ -90,8 +89,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'type'=>'info',
             'before'=>
             Html::a('<i class="glyphicon glyphicon-plus"></i> '.Yii::t('app', 'Add'), ['create'], ['class' => 'btn btn-success']).
-            Html::a('面积小于100平米', ['index?OperationSelectedService[selected_service_area_standard]=1'], ['class' => 'btn '.OperationSelectedService::setBtnCss(1), 'style' => 'margin-right:10px']).
-            Html::a('面积大于100平米', ['index?OperationSelectedService[selected_service_area_standard]=2'], ['class' => 'btn '.OperationSelectedService::setBtnCss(2), 'style' => 'margin-right:10px']),
+            Html::a('面积小于100平米', ['index?OperationSelectedService[selected_service_area_standard]=1'], ['class' => 'btn '.$searchModel::setBtnCss(1), 'style' => 'margin-right:10px']).
+            Html::a('面积大于100平米', ['index?OperationSelectedService[selected_service_area_standard]=2'], ['class' => 'btn '.$searchModel::setBtnCss(2), 'style' => 'margin-right:10px']),
             'showFooter'=>false
         ],
     ]); Pjax::end(); ?>

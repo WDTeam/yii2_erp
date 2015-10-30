@@ -252,8 +252,75 @@ class Customer extends \dbbase\models\customer\Customer
         }
         return $workers;
     }
+	/******************************************basic**********************************************/
+	/**
+	 * get customer vip typoes
+	 */
+	public static function getVipTypes(){
+		return [0=>'非会员', 1=>'会员'];
+	}
 
-	/*******************************************客户渠道**********************************************/
+	/**
+     *	get customer vip
+	 */
+	public static function getVipTypeName($vip_type){
+		$vip_type_name = '';
+		switch ($vip_type)
+		{
+			case 0:
+				$vip_type_name = '非会员';
+			break;
+			case 1:
+				$vip_type_name = '会员';
+			break;
+			
+			default:
+				# code...
+			break;
+		}
+		return $vip_type_name;
+	}
+
+	/**
+     *	get vip info by phone
+	 */
+	public static function getVipInfoByPhone($phone){
+		$customer = self::find()->where(['customer_phone'=>$phone])->asArray()->one();
+		if(empty($customer)) throw new NotFoundHttpException;
+		
+		$vip_types = self::getVipTypes();
+		$vip_type = $customer['customer_is_vip'];
+		$vip_type_name = $vip_types[$vip_type];
+		return ['vip_type'=>$vip_type, 'vip_type_name'=>$vip_type_name];
+	}
+
+	/*******************************************balance******************************************/
+	/**
+	 * get balance by phone
+	 */
+	public static function getBalance($phone){
+		$customer = self::find()->where(['customer_phone'=>$phone])->asArray()->one();
+		if(empty($customer)) throw new NotFoundHttpException;
+
+		$customer_ext_balance = CustomerExtBalance::find()->where(['customer_phone'=>$phone])->asArray()->one();
+		if(empty($customer_ext_balance)) throw new NotFoundHttpException;
+		return $customer_ext_balance['customer_balance'];
+	}
+
+	/******************************************score**********************************************/
+	/**
+     * get score by phone
+	 */
+	public static function getScore($phone){
+		$customer = self::find()->where(['customer_phone'=>$phone])->asArray()->one();
+		if(empty($customer)) throw new NotFoundHttpException;
+
+		$customer_ext_score = CustomerExtScore::find()->where(['customer_phone'=>$phone])->asArray()->one();
+		if(empty($customer_ext_score)) throw new NotFoundHttpException;
+		return $customer_ext_score['customer_score'];
+	}
+
+	/*******************************************src**********************************************/
 	/**
      * get all customer srcs
 	 */
@@ -337,6 +404,52 @@ class Customer extends \dbbase\models\customer\Customer
 		}
 		return false;
 	}
+
+	/*************************************address*******************************************************/
+	/**
+	 * get current address
+	 */
+	public static function getCurrentAddress($phone){
+		$customer = self::find()->where(['customer_phone'=>$phone])->asArray()->one();
+		if(empty($customer)) throw new NotFoundHttpException;
+		
+		$customer_address = CustomerAddress::find()->where(['customer_phone'=>$phone, 'customer_address_status'=>1])->asArray()->one();
+		if(empty($customer_address)) throw new NotFoundHttpException;
+		return [
+			'operation'=>$customer_address,
+			'operation_str'=>$customer_address['operation_province_name']
+				.$customer_address['operation_city_name']
+				.$customer_address['operation_area_name']
+				.$customer_address['operation_address_detail']
+				.' | '
+				.$customer_address['customer_address_nickname']
+				.' | '
+				.$customer['customer_address_phone'],
+		];
+	}
+
+	/*************************************worker*******************************************************/
+	/**
+     * get current worker
+	 */
+	public static function getCurrentWorker($phone){
+		$customer = self::find()->where(['customer_phone'=>$phone])->asArray()->one();
+		if(empty($customer)) throw new NotFoundHttpException;
+
+		$customer_worker = CustomerWorker::find()->where([
+			'customer_phone'=>$phone, 
+			'customer_worker_status'=>1, 
+			'customer_worker_status'=>1, 
+			'is_del'=>0
+			])->asArray()->one();
+		if(empty($customer_worker)) throw new NotFoundHttpException;
+
+		$worker = Worker::findOne($customer_worker['id'])->asArray();
+		if(empty($worker)) throw new NotFoundHttpException;
+		return $worker;
+	}
+
+	
 
 	/******************************other******************************************************************/
 	/**
