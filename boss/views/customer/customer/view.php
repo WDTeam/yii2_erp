@@ -92,7 +92,7 @@ $comment_count = CustomerComment::getCustomerCommentCount($model->id);
 //积分
 $score = CustomerExtScore::getCustomerScore($model->id);
 //余额
-$balance = CustomerExtBalance::getCustomerbalance($model->id);
+$balance = Customer::getBalanceById($model->id);
 //历史状态集
 $customerBlockLog = CustomerBlockLog::listBlockLog($model->id);
 //当前状态

@@ -418,7 +418,9 @@ class OrderSearch extends Order
                 ]);
             }
         }
-
+        if(!isset($attributes["OrderSearch"]["oc.customer_id"])){
+            $attributes["OrderSearch"]["oc.customer_id"] = null;
+        }
         if ($this->load($attributes) && $this->validate()) {
             $query->andFilterWhere([
                 'id' => $this->id,
@@ -489,6 +491,9 @@ class OrderSearch extends Order
                     'channel_id' => $channels_str
                 ]);
             }
+        }
+        if(!isset($attributes["OrderSearch"]["oc.customer_id"])){
+            $attributes["OrderSearch"]["oc.customer_id"]=null;
         }
 
         if ($this->load($attributes) && $this->validate()) {

@@ -32,14 +32,14 @@ use boss\components\SearchBox;
                         'class' => 'yii\grid\SerialColumn'
                     ],
 
-        //            'id',
-                    [
-                        'attribute'=> 'operation_advert_content_orders',
-                        'format'=>'raw',
-                        'value' => function ($model){
-                            return Html::textInput('operation_advert_content_orders[]',$model->operation_advert_content_orders, ['class' => 'operation_advert_content_orders_input', 'content_id' => $model->id]);
-                       }
-                    ],
+                    //'id',
+                    //[
+                        //'attribute'=> 'operation_advert_content_orders',
+                        //'format'=>'raw',
+                        //'value' => function ($model){
+                            //return Html::textInput('operation_advert_content_orders[]',$model->operation_advert_content_orders, ['class' => 'operation_advert_content_orders_input', 'content_id' => $model->id]);
+                       //}
+                    //],
                     'operation_advert_content_name',
                     'position_name',
                     'platform_name',
@@ -70,21 +70,21 @@ use boss\components\SearchBox;
                             'view' => function ($url, $model) {
                                 return Html::a(
                                     '<span class="glyphicon glyphicon-eye-open"></span>', 
-                                    Yii::$app->urlManager->createUrl(['operation-advert-content/view','id' => $model->id]),
+                                    Yii::$app->urlManager->createUrl(['/operation/operation-advert-content/view','id' => $model->id]),
                                     ['title' => Yii::t('yii', 'View'), 'class' => 'btn btn-success btn-sm']
                                 );
                             },
                             'update' => function ($url, $model) {
                                 return Html::a(
                                     '<span class="glyphicon glyphicon-pencil"></span>', 
-                                    Yii::$app->urlManager->createUrl(['operation-advert-content/update','id' => $model->id]),
+                                    Yii::$app->urlManager->createUrl(['/operation/operation-advert-content/update','id' => $model->id]),
                                     ['title' => Yii::t('yii', 'Update'), 'class' => 'btn btn-info btn-sm']
                                 );
                             },
                             'delete' => function ($url, $model) {
                                 return Html::a(
                                     '<span class="glyphicon glyphicon-trash"></span>', 
-                                    Yii::$app->urlManager->createUrl(['operation-advert-content/delete','id' => $model->id]),
+                                    Yii::$app->urlManager->createUrl(['/operation/operation-advert-content/delete','id' => $model->id]),
                                     ['title' => Yii::t('yii', 'Delete'), 'class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
                                 );
                             },
