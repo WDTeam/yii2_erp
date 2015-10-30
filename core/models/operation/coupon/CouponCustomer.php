@@ -86,11 +86,11 @@ class CouponCustomer extends \dbbase\models\operation\coupon\CouponCustomer
     /**
      * 获取用户全部优惠券列表（包括可用的、不可用的、所有城市的、通用的）
      */
-    public static function GetAllCustomerCouponList($customer_id,$city_id){
-        $couponCustomer = self::find()->where(['customer_id'=>$customer_id])
-            ->joinWith('coupon')
-            ->orderBy('expirate_at asc, coupon_price desc')
-            ->all();       
+    public static function GetAllCustomerCouponList($customer_id){
+       $couponCustomer=(new \yii\db\Query())->select('*')->from('ejj_coupon')
+               ->leftJoin('ejj_coupon_customer', 'ejj_coupon_customer.coupon_id = ejj_coupon.id')
+               ->where(['and','ejj_coupon_customer.is_del=0',"ejj_coupon_customer.customer_id=$customer_id"] )
+               ->orderBy(['ejj_coupon_customer.expirate_at'=>SORT_ASC,'ejj_coupon_customer.coupon_price'=>SORT_DESC])->all();   
         return $couponCustomer;
    }
        
