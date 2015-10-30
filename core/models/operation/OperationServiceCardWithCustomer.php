@@ -34,18 +34,18 @@ use core\models\customer\Customer;
 class OperationServiceCardWithCustomer extends \dbbase\models\operation\OperationServiceCardWithCustomer
 {
     /**
+     * @introduction 根据客户服务卡ID，查询服务卡信息
      * @param $id
      * @return null|static
-     * 根据客户服务卡ID，查询服务卡信息
      */
     public static function getServiceCardWithCustomerById($id) {
         return self::findOne(['id'=>$id]);
     }
     /**
+     * @introduction 根据服务卡ID，更新客户服务卡余额
      * @param $id
      * @param $service_card_with_customer_balance
      * @return bool
-     * 根据服务卡ID，更新客户服务卡余额
      */
     public function updateServiceCardWithCustomerBalanceById($id, $service_card_with_customer_balance)
     {
@@ -156,4 +156,18 @@ class OperationServiceCardWithCustomer extends \dbbase\models\operation\Operatio
         return $this->save();
     }
 
+    /**
+     * @introduction 基于服务卡号查询余额
+     * @author zhangrenzhao
+     * @param $service_card_with_customer_code
+     * @return bool|string
+     */
+    public function getServiceCardWithCustomerBalanceByCode($service_card_with_customer_code)
+    {
+        $service_card_with_customer_balance = self::find()
+            ->select(['service_card_with_customer_balance'])
+            ->where(['service_card_with_customer_code'=>$this->$service_card_with_customer_code,
+                     'is_del'=>0])->scalar();
+        return $service_card_with_customer_balance;
+    }
 }
