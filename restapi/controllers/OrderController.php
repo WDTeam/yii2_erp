@@ -1641,22 +1641,26 @@ class OrderController extends \restapi\components\Controller
         }
         if (!empty($worker) && !empty($worker->id)) {
 
-            if ($param['leveltype'] == 3) {
-
+            if ($param['leveltype'] == 2) {
+        
+              
                 if (empty($param['page_size']) || empty($param['page'])) {
                     return $this->send(null, "缺少规定的参数,page_size或page不能为空", 0, 403);
                 }
+                
+                
                 try {
                     $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 1);
                     $ret['workerData'] = $workerCount;
                     #倒计时
                     $ret['time'] = 172800;
+               
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (\Exception $e) {
                     return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 1024);
                 }
-            } else if ($param['leveltype'] == 4) {
-
+            } else if ($param['leveltype'] == 3) {
+                
                 if (empty($param['page_size']) || empty($param['page'])) {
                     return $this->send(null, "缺少规定的参数,page_size或page不能为空", 0, 403);
                 }
@@ -1668,7 +1672,7 @@ class OrderController extends \restapi\components\Controller
                     $ret['time'] = 172800;
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (\Exception $e) {
-                    return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 1024);
+                    return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 0,1024);
                 }
             } else if ($param['leveltype'] == 1) {
                 try {
