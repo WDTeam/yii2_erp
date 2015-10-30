@@ -307,6 +307,17 @@ class Customer extends \dbbase\models\customer\Customer
 		return $customer_ext_balance['customer_balance'];
 	}
 
+	/**
+     * 获取客户余额
+     */
+    public static function getBalanceById($customer_id){
+        $customer = Customer::findOne($customer_id);
+        if ($customer == NULL) throw new NotFoundHttpException;
+        $customerExtBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
+        if ($customerExtBalance == NULL) throw new NotFoundHttpException;
+        return $customerExtBalance->customer_balance;
+    }
+
     /**
      * 客户账户余额转入
      */
@@ -525,7 +536,9 @@ class Customer extends \dbbase\models\customer\Customer
 		return $worker;
 	}
 
-	/**********************************count*************************************************************
+	/**********************************block*************************************************************/
+	
+	/**********************************count*************************************************************/
 	/**
      * 统计所有客户的数量
      */
