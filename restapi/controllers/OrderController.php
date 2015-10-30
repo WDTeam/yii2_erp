@@ -2,7 +2,7 @@
 
 namespace restapi\controllers;
 
-use dbbase\models\worker\Worker;
+
 use \core\models\order\OrderPush;
 use Faker\Provider\DateTime;
 use Yii;
@@ -1519,7 +1519,7 @@ class OrderController extends \restapi\components\Controller
      * @apiName actionAllOrderCommon
      * @apiGroup Order
      * @apiDescription 对账日常订单查看全部，月份列表
-     * @apiParam {String} access-token    会话id.
+     * @apiParam {String} access_token    会话id.
      * @apiParam {String} platform_version 平台版本号.
      *
      * @apiSuccessExample {json} Success-Response:
@@ -1565,7 +1565,7 @@ class OrderController extends \restapi\components\Controller
      * @apiName actionGetWorkerOrders
      * @apiGroup Order
      * @apiDescription 阿姨抢单数
-     * @apiParam {String} access-token      会话id.
+     * @apiParam {String} access_token      会话id.
      * @apiParam {String} platform_version  平台版本号
      * @apiParam {String} [page_size]         条数
      * @apiParam {String} [page]              页面
@@ -1641,22 +1641,26 @@ class OrderController extends \restapi\components\Controller
         }
         if (!empty($worker) && !empty($worker->id)) {
 
-            if ($param['leveltype'] == 3) {
-
+            if ($param['leveltype'] == 2) {
+        
+              
                 if (empty($param['page_size']) || empty($param['page'])) {
                     return $this->send(null, "缺少规定的参数,page_size或page不能为空", 0, 403);
                 }
+                
+                
                 try {
                     $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 1);
                     $ret['workerData'] = $workerCount;
                     #倒计时
                     $ret['time'] = 172800;
+               
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (\Exception $e) {
                     return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 1024);
                 }
-            } else if ($param['leveltype'] == 4) {
-
+            } else if ($param['leveltype'] == 3) {
+                
                 if (empty($param['page_size']) || empty($param['page'])) {
                     return $this->send(null, "缺少规定的参数,page_size或page不能为空", 0, 403);
                 }
@@ -1668,7 +1672,7 @@ class OrderController extends \restapi\components\Controller
                     $ret['time'] = 172800;
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (\Exception $e) {
-                    return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 1024);
+                    return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 0,1024);
                 }
             } else if ($param['leveltype'] == 1) {
                 try {
@@ -1717,7 +1721,7 @@ class OrderController extends \restapi\components\Controller
      * @apiGroup Order
      * @apiDescription 阿姨抢单提交
      *
-     * @apiParam {String} access-token      会话id.
+     * @apiParam {String} access_token      会话id.
      * @apiParam {String} platform_version  平台版本号
      * @apiParam {String} order_id          订单号
      *

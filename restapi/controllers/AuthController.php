@@ -218,7 +218,7 @@ class AuthController extends \restapi\components\Controller
             return $this->send(null, "boss系统错误", 1024, 403);
         }
         if(empty($if_exist)){
-             return $this->send(null, "获取不到验证码", 0, 403);
+             return $this->send(null, "没有此阿姨，请联系客服！", 0, 403);
         }
         try{
              $checkRet = WorkerCode::checkCode($phone,$verify_code);
