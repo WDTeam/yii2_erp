@@ -4,9 +4,10 @@ namespace boss\models\order;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use boss\models\order\OrderComplaint;
 use yii\base\ExitException;
 use yii\web\Session;
+
+use boss\models\order\OrderComplaint;
 
 class OrderComplaintSearch extends OrderComplaint{
 	public $order_worker_name;

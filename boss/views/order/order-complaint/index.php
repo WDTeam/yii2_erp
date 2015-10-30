@@ -118,10 +118,10 @@ $this->params['breadcrumbs'][] = $this->title;
 						    	</ul>
 						    	<ul class="lis" id="list">
 						    		<p>投诉级别：</p>
-						    		<li <?php if(!isset($params['OrderComplaintSearch']['complaint_level'])){?> class="cur" <?php }?>><a href="<?php echo "/order/order-complaint/index?{$url}&OrderComplaintSearch[complaint_level]=";?>">全部</a></li>
+						    		<li <?php if(empty($params['OrderComplaintSearch']['complaint_level'])){?> class="cur" <?php }?>><a href="<?php echo "/order/order-complaint/index?{$url}&OrderComplaintSearch[complaint_level]=";?>">全部</a></li>
 						    		<?php if(!empty($comLevel)){
 						    			foreach ($comLevel as $keyl=>$vall){?>
-						    		<li <?php if(!empty($params['OrderComplaintSearch']['complaint_level']) && $vall == $params['OrderComplaintSearch']['complaint_level']){?>class="cur"<?php }?>><a href="<?php echo "/order/order-complaint/index?{$url}&OrderComplaintSearch[complaint_level]={$vall}";?>"><?php echo $vall;?></a></li>
+						    		<li <?php if(!empty($params['OrderComplaintSearch']['complaint_level']) && $keyl == $params['OrderComplaintSearch']['complaint_level']){?>class="cur"<?php }?>><a href="<?php echo "/order/order-complaint/index?{$url}&OrderComplaintSearch[complaint_level]={$keyl}";?>"><?php echo $vall;?></a></li>
 						    		<?php }}?>
 						    	</ul>
 						    	<ul class="lis" id="list">
