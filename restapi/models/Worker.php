@@ -17,7 +17,9 @@ class Worker
            return $msg;
         }
         try{
-            $isright_token = WorkerAccessToken::checkAccessToken($param['access_token']);
+            if(!WorkerAccessToken::checkAccessToken($param['access_token'])){
+                return $msg['msg'] = '用户认证已经过期,请ewewewe重新登录';
+            }
             $worker = WorkerAccessToken::getWorker($param['access_token']);
         }catch (\Exception $e) {
             $msg['code'] = '1024';
