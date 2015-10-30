@@ -227,13 +227,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-toggle'=>'modal',
                             'data-target'=>'#modal',
                             'data-id'=>$model->id,
-                            'class'=>'btn btn-primary',
+                            'class'=>'btn btn-primary block-btn',
                         ]) : Html::a('解除封号', [
                             'customer/customer/remove-from-block',
                             'id' => $model->id
                             
                         ], [
                             'title' => Yii::t('app', '解除封号'),
+							'class'=>'btn btn-primary',
                         ]);
                     },
                 ],

@@ -35,7 +35,7 @@
     /*
      * Redis 待指派订单池
      */
-    '_REDIS_WAIT_ASSIGN_ORDER_POOL_ '=> 'WaitAssignOrdersPool',
+    '_REDIS_WAIT_ASSIGN_ORDER_POOL_ '=> 'WAIT_ASSIGN_ORDERS_POOL',
     /*
      * 服务监听地址（默认 0.0.0.0 勿改）
      */

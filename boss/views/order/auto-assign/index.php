@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <label>智能派单服务器端口：</label>
             <input id="serverport" class="form-control" name="serverport" value="<?php echo !empty($srvInfo['port'])? $srvInfo['port'] : ''?>" placeholder="SOCKET服务器端口" />
         </div>
-        <div class="col-md-2"><button class="btn btn-default" id="connect" name="connect">连接派单服务器</button><button class="btn btn-default" id="runService" name="runService">启动派单服务</button></div>
+        <div class="col-md-2"><button class="btn btn-default" id="connect" name="connect">连接派单服务</button><button class="btn btn-default" id="runService" name="runService">启动派单服务</button></div>
         <div class="col-md-2"><button class="btn btn-default" id="start" name="start">开始自动派单</button><button class="btn btn-default" id="stop" name="stop">停止自动派单</button></div>
     </div>
     <hr/>
