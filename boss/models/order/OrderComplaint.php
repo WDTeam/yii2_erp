@@ -33,7 +33,7 @@ class OrderComplaint extends \core\models\order\OrderComplaint
     public function backInsertComplaint($params){
     	$arr = array(); $flag = false;
     	$arr['OrderComplaint']['order_id'] = $params['order_id'];
-    	$arr['OrderComplaint']['complaint_detail'] = $params['complaint_detail'];
+    	$arr['OrderComplaint']['complaint_content'] = $params['complaint_detail'];
     	$arr['OrderComplaint']['complaint_phone'] = $params['cumstomer_phone'];
     	$arr['OrderComplaint']['complaint_status'] = '1';
     	$arr['OrderComplaint']['complaint_type'] = '1';
