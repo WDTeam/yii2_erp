@@ -194,9 +194,6 @@ class FinancePopOrderController extends Controller
     			$_model = clone $model;
     			$_model->setAttributes($postdate);
     			$_model->save();
-    			
-    			//var_dump($postdate);exit;
-    			
     			unset($postdate);
     		}
     		$n++;
@@ -414,7 +411,8 @@ class FinancePopOrderController extends Controller
     	$searchModel = new FinancePopOrderSearch;
     	$requestModel = Yii::$app->request->post();
 		//$idArr = implode(',',);
-    	if(!empty($requestModel) && is_array($requestModel)){
+    	if(!empty($requestModel) && array_key_exists('ids',$requestModel)){
+
 		foreach ($requestModel['ids'] as $iddate){
 			$model=$searchModel::findOne($iddate);
 			$model->finance_pop_order_finance_time=time();
@@ -424,7 +422,6 @@ class FinancePopOrderController extends Controller
 		}else{
 			\Yii::$app->getSession()->setFlash('default','请选择需要处理的数据！');
 			return $this->redirect(['index']);
-			
 		}
 		
 		 return $this->redirect(['index']);
