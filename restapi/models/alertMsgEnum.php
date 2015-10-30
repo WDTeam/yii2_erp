@@ -32,5 +32,11 @@ class alertMsgEnum
     //获得所有保洁任务项目
     const allCleaningTaskSuccess='获取所以保洁任务成功';
     const allCleaningTaskFailed='获取所以保洁任务失败';
-    
+    //根据地址获取百度地图数据
+    const baiduMapSuccess='获取百度地图数据成功';
+    const baiduMapFailed='获取百度地图数据失败';
+
+    //会员余额支付
+    const balancePaySuccess='余额支付成功';
+
 }

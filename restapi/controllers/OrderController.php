@@ -428,7 +428,6 @@ class OrderController extends \restapi\components\Controller
         @$token = $args["access_token"];
 
         $user = CustomerAccessToken::getCustomer($token);
-
         if (empty($user)) {
             return $this->send(null, "用户无效,请先登录", 0);
         }
