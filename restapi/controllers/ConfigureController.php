@@ -291,8 +291,8 @@ class ConfigureController extends \restapi\components\Controller
                 'icon' => 'http://dev.m2.1jiajie.com/statics/images/dancibaojie.png',
                 'url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/1',
                 'sort' => '1',
-                'bg_colour' => '#ffb518',
-                'font_colour' => '#fff',
+                'bg_colour' => 'ffb518',
+                'font_colour' => 'ffffff',
                 'category_id' => '1',
                 'category_name' => '专业保洁',
                 'category_icon' => '',
@@ -307,8 +307,8 @@ class ConfigureController extends \restapi\components\Controller
                 'icon' => 'http://dev.m2.1jiajie.com/statics/images/zhouqibaojie.png',
                 'url' => 'http://dev.m2.1jiajie.com/#/order/createOnceOrder/2',
                 'sort' => '2',
-                'bg_colour' => '#ff8a44',
-                'font_colour' => '#fff',
+                'bg_colour' => 'ff8a44',
+                'font_colour' => 'ffffff',
                 'category_id' => '1',
                 'category_name' => '专业保洁',
                 'category_icon' => '',
@@ -330,7 +330,7 @@ class ConfigureController extends \restapi\components\Controller
                 'category_price' => '30',
                 'category_price_unit' => '小时',
                 'category_price_description' => '￥30/小时',
-                'colour' => '#ff701a',
+                'colour' => 'ff701a',
                 'sort' => '1',
 
             ],
@@ -343,7 +343,7 @@ class ConfigureController extends \restapi\components\Controller
                 'category_price' => '25.00',
                 'category_price_unit' => '小时',
                 'category_price_description' => '￥25/小时',
-                'colour' => '',
+                'colour' => 'ffb518',
                 'sort' => '2',
 
             ],
@@ -356,7 +356,7 @@ class ConfigureController extends \restapi\components\Controller
                 'category_price' => '9.00',
                 'category_price_unit' => '件',
                 'category_price_description' => '￥9/件起',
-                'colour' => '#7fce0f',
+                'colour' => '7fce0f',
                 'sort' => '3',
             ],
             [
@@ -368,7 +368,7 @@ class ConfigureController extends \restapi\components\Controller
                 'category_price' => '100.00',
                 'category_price_unit' => '台',
                 'category_price_description' => '￥100/台起',
-                'colour' => '#2cc2f9',
+                'colour' => '2cc2f9',
                 'sort' => '4',
             ],
             [
@@ -380,7 +380,7 @@ class ConfigureController extends \restapi\components\Controller
                 'category_price' => '',
                 'category_price_unit' => '',
                 'category_price_description' => '￥250起',
-                'colour' => '#e6001f',
+                'colour' => 'e6001f',
                 'sort' => '5',
             ],
             [
@@ -392,7 +392,7 @@ class ConfigureController extends \restapi\components\Controller
                 'category_price' => '',
                 'category_price_unit' => '',
                 'category_price_description' => '￥160起',
-                'colour' => '#e544a3',
+                'colour' => 'e544a3',
                 'sort' => '6',
             ],
         ];
@@ -404,8 +404,8 @@ class ConfigureController extends \restapi\components\Controller
                 'url' => '#',
                 'link_icon_check' => 'http://dev.m2.1jiajie.com/statics/images/nav_01.png',
                 'link_icon_uncheck' => 'http://dev.m2.1jiajie.com/statics/images/nav_d_01.png',
-                'colour_check' => '#f7b136',
-                'colour_uncheck' => '#555',
+                'colour_check' => 'f7b136',
+                'colour_uncheck' => '555555',
                 'sort' => '1',
             ],
             [
@@ -414,8 +414,8 @@ class ConfigureController extends \restapi\components\Controller
                 'url' => 'http://dev.m2.1jiajie.com/index.html#/order/index',
                 'link_icon_check' => 'http://dev.m2.1jiajie.com/statics/images/nav_02.png',
                 'link_icon_uncheck' => 'http://dev.m2.1jiajie.com/statics/images/nav_d_02.png',
-                'colour_check' => '#f7b136',
-                'colour_uncheck' => '#555',
+                'colour_check' => 'f7b136',
+                'colour_uncheck' => '555555',
                 'sort' => '2',
             ],
             [
@@ -424,8 +424,8 @@ class ConfigureController extends \restapi\components\Controller
                 'url' => 'http://dev.m2.1jiajie.com/index.html#/promoCode/index',
                 'link_icon_check' => 'http://dev.m2.1jiajie.com/statics/images/nav_03.png',
                 'link_icon_uncheck' => 'http://dev.m2.1jiajie.com/statics/images/nav_d_03.png',
-                'colour_check' => '#f7b136',
-                'colour_uncheck' => '#555',
+                'colour_check' => 'f7b136',
+                'colour_uncheck' => '555555',
                 'sort' => '3',
             ],
             [
@@ -434,8 +434,8 @@ class ConfigureController extends \restapi\components\Controller
                 'url' => 'http://dev.m2.1jiajie.com/index.html#/personalCenter/index',
                 'link_icon_check' => 'http://dev.m2.1jiajie.com/statics/images/nav_04.png',
                 'link_icon_uncheck' => 'http://dev.m2.1jiajie.com/statics/images/nav_d_04.png',
-                'colour_check' => '#f7b136',
-                'colour_uncheck' => '#555',
+                'colour_check' => 'f7b136',
+                'colour_uncheck' => '555555',
                 'sort' => '4',
             ],
         ];
@@ -652,7 +652,7 @@ class ConfigureController extends \restapi\components\Controller
      * @apiName actionStartPage
      * @apiGroup configure
      *
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} app_version 访问源(android_4.2.2)
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -693,6 +693,10 @@ class ConfigureController extends \restapi\components\Controller
      *  }
      *
      */
+    public function actionStartPage()
+    {
+        
+    }
 
     /**
      * 支付方式展示api 获得各个支付方式的配置 折叠显示列表，默认支付方式，非折叠显示列表
