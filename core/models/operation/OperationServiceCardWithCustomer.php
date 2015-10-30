@@ -31,7 +31,7 @@ use core\models\customer\Customer;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class OperationServiceCardWithCustomer extends \common\models\operation\OperationServiceCardWithCustomer
+class OperationServiceCardWithCustomer extends \dbbase\models\operation\OperationServiceCardWithCustomer
 {
     /**
      * @param $id

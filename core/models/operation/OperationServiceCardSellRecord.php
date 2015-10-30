@@ -28,7 +28,7 @@ use core\models\customer\Customer;
  * @property integer $updated_at
  * @property integer $is_del
  */
-class OperationServiceCardSellRecord extends \common\models\operation\OperationServiceCardSellRecord
+class OperationServiceCardSellRecord extends \dbbase\models\operation\OperationServiceCardSellRecord
 {
     /**
      * @instruction 客户确定购买服务卡，产生购卡记录
