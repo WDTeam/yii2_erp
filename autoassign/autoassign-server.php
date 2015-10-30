@@ -265,10 +265,10 @@ class server
             
             $order = $this->getOrderStatus($order);
 
-//            $d = $order;
+            $d = $order;
 //            $d['created_at'] = date('Y-m-d H:i:s', $d['created_at']);
 //            $d['updated_at'] = isset($d['updated_at']) ? date('Y-m-d H:i:s', $d['updated_at']) : '';
-//            $d = json_encode($d);
+            $d = json_encode($d);
             
             /*
              * TODO: 张旭刚
