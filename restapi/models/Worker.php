@@ -11,33 +11,19 @@ class Worker
      * @param type $param 
      */
     public static function checkWorkerLogin($param=array()){
-        $msg = array('code'=>0,'msg'=>'','worker_id'=>0);
         if(!isset($param['access_token'])||!$param['access_token']){
-           $msg['msg'] = '请您登录';
-           return $msg;
+           return array('code'=>0,'msg'=>'请您登录','worker_id'=>0,'worker_is_block'=>0);
         }
         try{
             if(!WorkerAccessToken::checkAccessToken($param['access_token'])){
-                return $msg['msg'] = '用户认证已经过期,请ewewewe重新登录';
+                return array('code'=>0,'msg'=>'用户认证已经过期,请重新登录','worker_id'=>0,'worker_is_block'=>0);
             }
-            $worker = WorkerAccessToken::getWorker($param['access_token']);
+            $workerObject = WorkerAccessToken::getWorker($param['access_token']);
+            return array('code'=>1,'msg'=>'验证通过','worker_id'=>$workerObject->id,'worker_is_block'=>$workerObject->worker_is_block);
         }catch (\Exception $e) {
             $msg['code'] = '1024';
             $msg['msg'] = 'boss系统错误';
             return $msg;
         }
-        if(!$isright_token){
-            $msg['msg'] = '用户认证已经过期,请重新登录';
-            return $msg;
-        }
-        if (!$worker|| !$worker->id) {
-            $msg['msg'] = '阿姨不存在';
-            return $msg;
-        }
-        //验证通过
-        $msg['code'] = 1;
-        $msg['msg'] = '验证通过';
-        $msg['worker_id'] = $worker->id;
-        return $msg;
     }
 }
