@@ -538,6 +538,7 @@ class OrderController extends \restapi\components\Controller
 
     /**
      * @api {GET} /order/worker-orders 查询阿姨订单(xieyi 90%已经将后台接口完成,缺少周期订单)
+     *
      * @apiName WorkerOrders
      * @apiGroup Order
      *
@@ -1552,7 +1553,7 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {get} v1/order/get-worker-orders.php 指定阿姨订单数/待抢单订单订单数/指定阿姨订单列表/待抢单订单列表 (haojianshe 100%)
+     * @api {get} v1/order/get-worker-orders 指定阿姨订单数/待抢单订单订单数/指定阿姨订单列表/待抢单订单列表 (haojianshe 100%)
      * @apiName actionGetWorkerOrders
      * @apiGroup Order
      * @apiDescription 阿姨抢单数
