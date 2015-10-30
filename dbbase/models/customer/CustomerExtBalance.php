@@ -9,6 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property integer $customer_id
+ * @property string $customer_phone
  * @property string $customer_balance
  * @property integer $created_at
  * @property integer $updated_at
@@ -31,7 +32,8 @@ class CustomerExtBalance extends \yii\db\ActiveRecord
     {
         return [
             [['customer_id', 'created_at', 'updated_at', 'is_del'], 'integer'],
-            [['customer_balance'], 'number']
+            [['customer_balance'], 'number'],
+            [['customer_phone'], 'string', 'max' => 11]
         ];
     }
 
@@ -41,12 +43,22 @@ class CustomerExtBalance extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('boss', 'ID'),
-            'customer_id' => Yii::t('boss', '客户'),
-            'customer_balance' => Yii::t('boss', '客户余额'),
-            'created_at' => Yii::t('boss', '创建时间'),
-            'updated_at' => Yii::t('boss', '更新时间'),
-            'is_del' => Yii::t('boss', '是否删除'),
+            'id' => Yii::t('dbbase', 'ID'),
+            'customer_id' => Yii::t('dbbase', '客户'),
+            'customer_phone' => Yii::t('dbbase', '手机号'),
+            'customer_balance' => Yii::t('dbbase', '客户余额'),
+            'created_at' => Yii::t('dbbase', '创建时间'),
+            'updated_at' => Yii::t('dbbase', '更新时间'),
+            'is_del' => Yii::t('dbbase', '是否删除'),
         ];
+    }
+
+    /**
+     * @inheritdoc
+     * @return CustomerExtBalanceQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new CustomerExtBalanceQuery(get_called_class());
     }
 }
