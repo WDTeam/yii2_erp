@@ -99,17 +99,17 @@ function showOrders(data){
     var id = 'order_'+order.order_id;
     var obj = $('#'+id);
     order.status = getStatus(order.push_status);
-    //if(order.ivr == true){
-    //    order.ivr = '已发送';
-    //}else{
-    //    order.ivr = '未发送';
-    //}
+    if(order.ivr > 0){
+        order.ivr = '已发送';
+    }else{
+        order.ivr = '未发送';
+    }
     
-    //if(order.jpush == true){
-    //    order.jpush = '已发送';
-    //}else{
-    //    order.jpush = '未发送';
-    //}
+    if(order.jpush > 0 ){
+        order.jpush = '已发送';
+    }else{
+        order.jpush = '未发送';
+    }
     
     if(order.updated_at == null){
         order.updated_at = '';
@@ -121,6 +121,8 @@ function showOrders(data){
         $($('#'+id).children('td')[1]).html(order.status);
         $($('#'+id).children('td')[2]).html(order.ivr);
         $($('#'+id).children('td')[3]).html(order.jpush);
+        $($('#'+id).children('td')[4]).html(order.created_at);
+        $($('#'+id).children('td')[5]).html(order.updated_at);
     }
 }
 
