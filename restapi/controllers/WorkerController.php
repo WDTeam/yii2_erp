@@ -230,16 +230,8 @@ class WorkerController extends \restapi\components\Controller
         }
         $workerID = $checkResult['workerInfo']['worker_id'];
         //判断页码
-        if (!isset($param['per_page']) || !intval($param['per_page'])) {
-            $param['per_page'] = 1;
-        }
-        $per_page = intval($param['per_page']);
-        //每页显示数据数
-        if (!isset($param['page_num']) || !intval($param['page_num'])) {
-            $param['page_num'] = 10;
-        }
-        $page_num = intval($param['page_num']);
-
+        (isset($param['per_page'])&&intval($param['per_page']))?$per_page = intval($param['per_page']):$per_page = 1;
+        (isset($param['page_num'])&&intval($param['page_num']))?$page_num = intval($param['page_num']):$page_num = 10;
         //调取阿姨请假历史情况
         $data = WorkerVacationApplication::getApplicationList($workerID,$per_page,$page_num);
         $pageData = array();
@@ -318,8 +310,6 @@ class WorkerController extends \restapi\components\Controller
     /**
      * @api {GET} /worker/get-worker-comment 获取阿姨对应的评论 (田玉星 100%)
      *
-     * @apiDescription 【备注：等待model底层支持】
-     *
      * @apiName actionGetWorkerComment
      * @apiGroup Worker
      *
@@ -330,7 +320,7 @@ class WorkerController extends \restapi\components\Controller
      * @apiParam {String} [platform_version] 平台版本号.
      *
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-comment
-     *get-worker-comment
+     *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      *   {
@@ -369,16 +359,9 @@ class WorkerController extends \restapi\components\Controller
         if (!isset($param['comment_level']) || !intval($param['comment_level']) || !in_array($param['comment_level'], array(1, 2, 3))) {
             return $this->send(null, "评论类型不正确", 0, 403);
         }
-        //判断页码
-        if (!isset($param['per_page']) || !intval($param['per_page'])) {
-            $param['per_page'] = 1;
-        }
-        $per_page = intval($param['per_page']);
-        //每页显示数
-        if (!isset($param['page_num']) || !intval($param['page_num'])) {
-            $param['page_num'] = 10;
-        }
-        $page_num = intval($param['page_num']);
+        //分页数据
+        (isset($param['per_page'])&&intval($param['per_page']))?$per_page = intval($param['per_page']):$per_page = 1;
+        (isset($param['page_num'])&&intval($param['page_num']))?$page_num = intval($param['page_num']):$page_num = 10;
         //获取数据
         $retData = array();
         try{
@@ -448,16 +431,9 @@ class WorkerController extends \restapi\components\Controller
             return $this->send(null, $checkResult['msg'], 0, 403);
         }
         $workerID = $checkResult['workerInfo']['worker_id'];
-        //判断页码
-        if (!isset($param['per_page']) || !intval($param['per_page'])) {
-            $param['per_page'] = 1;
-        }
-        $per_page = intval($param['per_page']);
-        //每页显示数据量
-        if (!isset($param['page_num']) || !intval($param['page_num'])) {
-            $param['page_num'] = 10;
-        }
-        $page_num = intval($param['page_num']);
+        //分页数据
+        (isset($param['per_page'])&&intval($param['per_page']))?$per_page = intval($param['per_page']):$per_page = 1;
+        (isset($param['page_num'])&&intval($param['page_num']))?$page_num = intval($param['page_num']):$page_num = 10;
         //调取数据
         try{
             $conplainList = OrderComplaint::getWorkerComplain($workerID);
@@ -596,18 +572,9 @@ class WorkerController extends \restapi\components\Controller
             return $this->send(null, $checkResult['msg'], 0, 403);
         }
         $workerID = $checkResult['workerInfo']['worker_id'];
-        
-        //判断页码
-        if (!isset($param['per_page']) || !intval($param['per_page'])) {
-            $param['per_page'] = 1;
-        }
-        $per_page = intval($param['per_page']);
-        //每页显示数据量
-        if (!isset($param['page_num']) || !intval($param['page_num'])) {
-            $param['page_num'] = 10;
-        }
-        $page_num = intval($param['page_num']);
-        
+        //分页数据
+        (isset($param['per_page'])&&intval($param['per_page']))?$per_page = intval($param['per_page']):$per_page = 1;
+        (isset($param['page_num'])&&intval($param['page_num']))?$page_num = intval($param['page_num']):$page_num = 10;
         try{
             $billList = FinanceSettleApplySearch::getSettledWorkerIncomeListByWorkerId($workerID,$per_page,$page_num);
          }catch (\Exception $e) {
@@ -684,17 +651,9 @@ class WorkerController extends \restapi\components\Controller
         if(!isset($param['settle_id'])||!intval($param['settle_id'])){
             return $this->send(null, "账单唯一标识错误", 0, 403);
         }
-         //判断页码
-        if (!isset($param['per_page']) || !intval($param['per_page'])) {
-            $param['per_page'] = 1;
-        }
-        $per_page = intval($param['per_page']);
-        //每页显示数据量
-        if (!isset($param['page_num']) || !intval($param['page_num'])) {
-            $param['page_num'] = 10;
-        }
-        $page_num = intval($param['page_num']);
-        
+         //分页数据
+        (isset($param['per_page'])&&intval($param['per_page']))?$per_page = intval($param['per_page']):$per_page = 1;
+        (isset($param['page_num'])&&intval($param['page_num']))?$page_num = intval($param['page_num']):$page_num = 10;
         try{
             $billList = FinanceSettleApplySearch::getOrderArrayBySettleId(intval($param['settle_id']),$per_page,$page_num);
         }catch (\Exception $e) {
@@ -955,6 +914,9 @@ class WorkerController extends \restapi\components\Controller
     
     /** 
      * @api {GET} /worker/system-news  消息通知中心(田玉星0%)
+     * 
+     * @apiDescription 未定
+     * 
      * @apiName actionSystemNews
      * @apiGroup Worker
      *
