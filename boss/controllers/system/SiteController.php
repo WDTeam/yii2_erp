@@ -29,6 +29,7 @@ class SiteController extends Controller
         if(\Yii::$app->user->isGuest){
             $this->redirect(array('login'));
         }
+        
         if(1==1){
         	return $this->render('indexshop');
         }else {
