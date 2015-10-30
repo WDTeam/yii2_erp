@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		  	 	 <div class="m_frist">
 		  	 	 	<!---------------------订单查询条件-------------------->
                     <?php            
-                    echo $this->render('_search', ['searchModel' => $searchModel]);
+                    echo $this->render('_search', ['searchModel' => $searchModel, 'searchParas' => $searchParas]);
                     ?>
 						
 		  	 	 	<!---------------------订单筛选条件-------------------->
