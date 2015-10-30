@@ -1509,7 +1509,7 @@ class OrderController extends \restapi\components\Controller
                     return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
                 }
             } catch (\Exception $e) {
-                return $this->send(null, "boss系统错误" . $e, 0, 1024);
+                return $this->send(null, "boss系统错误" . $e, 1024);
             }
         }
     }
