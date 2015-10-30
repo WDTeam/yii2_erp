@@ -2,19 +2,20 @@
 
 namespace boss\controllers\operation;
 
-use Yii;
 use boss\models\operation\OperationGoods;
-//use boss\models\Operation\OperationPriceStrategy;
 use boss\models\operation\OperationTag;
 use boss\models\operation\OperationCategory;
 use boss\models\operation\OperationSpec;
 use boss\models\operation\OperationSpecGoods;
 use boss\models\operation\OperationShopDistrictGoods;
+
+use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
+use yii\filters\VerbFilter;
+
 use crazyfd\qiniu\Qiniu;
 
 /**
@@ -189,6 +190,7 @@ class OperationGoodsController extends Controller
 
         $model = new OperationGoods;
         $post = Yii::$app->request->post();
+
         if ($model->load($post)) {
             $model->operation_category_ids = $model->operation_category_id;
             $model->operation_category_name = OperationCategory::getCategoryName($model->operation_category_id);
@@ -216,7 +218,6 @@ class OperationGoodsController extends Controller
             $model->updated_at = time();
             
             if($model->save()){
-//                return $this->redirect(['view', 'id' => $model->id]);
                 return $this->redirect(['/operation/operation-category']);
             }
         } else {
@@ -225,7 +226,7 @@ class OperationGoodsController extends Controller
             return $this->render('create', [
                 'model' => $model,
                 'OperationCategory' => $OperationCategory,
-//                'priceStrategies' => $priceStrategies,
+                //'priceStrategies' => $priceStrategies,
                 'OperationSpec' => $OperationSpec,
             ]);
         }
