@@ -154,8 +154,15 @@ class FinanceCompensateController extends Controller
                  }
             }
             $model->save();
-        } 
-        return $this->redirect(['/order/order-complaint/']);
+            return $this->redirect(['/order/order-complaint/']);
+        } else {
+            if(!empty($id)){
+                 $model = $this->findModel($id);
+            }
+            return $this->render('create', [
+                'model' => $model,
+            ]);
+        }
     }
 
     /**
