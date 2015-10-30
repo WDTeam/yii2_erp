@@ -44,7 +44,7 @@ class OperationServiceCardSellRecordSearch extends OperationServiceCardSellRecor
             'id' => $this->id,
             'customer_id' => $this->customer_id,
             'customer_phone' => $this->customer_phone,
-            'service_card_info_id' => $this->service_card_info_card_id,
+            'service_card_info_id' => $this->service_card_info_id,
             'service_card_sell_record_money' => $this->service_card_sell_record_money,
             'service_card_sell_record_channel_id' => $this->service_card_sell_record_channel_id,
             'service_card_sell_record_status' => $this->service_card_sell_record_status,
