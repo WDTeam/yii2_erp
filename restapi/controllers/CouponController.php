@@ -213,11 +213,11 @@ class CouponController extends \restapi\components\Controller
             return $this->send(null, $checkResult['msg'], 0, 403);
         } 
         //获取该用户该城市的优惠码列表
-//        try{
-            $coupons=CouponCustomer::GetAllCustomerCouponList($checkResult['customer_id']);
-//        }catch (\Exception $e) {
-//            return $this->send(null, "boss系统错误", 1024, 403);
-//        }
+        try{
+           $coupons=CouponCustomer::GetAllCustomerCouponList($checkResult['customer_id']);
+        }catch (\Exception $e) {
+            return $this->send(null, "boss系统错误", 1024, 403);
+        }
         if (!empty($coupons)) {
             return $this->send($coupons, "获取优惠券列表成功", 1);
         } else {

@@ -101,8 +101,8 @@ class CouponCustomer extends \dbbase\models\operation\coupon\CouponCustomer
      */
     public static function CouponCount($customer_id)
     {
-       
-        return CouponCustomer::find()->where(["customer_id" => $customer_id])->count();
+        $now_time=time();
+        return CouponCustomer::find()->where(['and','is_del=0',"customer_id=$customer_id",'is_used=0',"expirate_at>$now_time"] )->count();
     }
 
     
