@@ -9,6 +9,7 @@ use \core\models\worker\Worker;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\operation\OperationSelectedService;
 use \core\models\customer\CustomerAddress;
+use \restapi\models\alertMsgEnum;
 
 
 class ServiceController extends \restapi\components\Controller
@@ -61,13 +62,13 @@ class ServiceController extends \restapi\components\Controller
         $param = Yii::$app->request->get();
 
         if (empty(@$param['city_name'])) {
-            return $this->send(null, "未取得城市信息", 0, 403);
+            return $this->send(null, "未取得城市信息", 0, 403,null,alertMsgEnum::getGoodsesFailed);
         }
 
         $goodses = OperationShopDistrictGoods::getGoodsByCityCategory($param['city_name'], $param['category_id']);
 
         if (empty($goodses)) {
-            return $this->send(null, "该城市暂未开通该类型的服务", 0, 403);
+            return $this->send(null, "该城市暂未开通该类型的服务", 0, 403,null,alertMsgEnum::getGoodsesFailed);
         }
         $gDate = [];
         foreach ($goodses as $gItem) {
@@ -87,7 +88,7 @@ class ServiceController extends \restapi\components\Controller
             ];
             $gDate[] = $gobject;
         }
-        return $this->send($gDate, "数据获取成功");
+        return $this->send($gDate, "数据获取成功",null,alertMsgEnum::getGoodsesSuccess);
     }
 
     /**
@@ -162,7 +163,7 @@ class ServiceController extends \restapi\components\Controller
         $param = Yii::$app->request->get();
 
         if (empty(@$param['city_name'])) {
-            return $this->send(null, "未取得城市信息", 0, 403);
+            return $this->send(null, "未取得城市信息", 0, 403,null,alertMsgEnum::homeGoodsesFailed);
         }
 
         $ret = [
@@ -208,7 +209,7 @@ class ServiceController extends \restapi\components\Controller
 
         ];
 
-        return $this->send($ret, "信息获取成功");
+        return $this->send($ret, "信息获取成功", 0, 403,null,alertMsgEnum::homeGoodsesSuccess);
     }
 
     /**
