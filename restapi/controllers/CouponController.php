@@ -18,8 +18,8 @@ class CouponController extends \restapi\components\Controller
      * @apiName ExchangeCoupon
      * @apiGroup coupon
      *
-     * @apiParam {String} [customer_phone] 用户手机号
-     * @apiParam {String} [coupon_code] 优惠码
+     * @apiParam {String} customer_phone 用户手机号
+     * @apiParam {String} coupon_code 优惠码
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      *
      *
@@ -93,8 +93,8 @@ class CouponController extends \restapi\components\Controller
      * @apiGroup coupon
      *
      * @apiParam {String} access_token 用户认证
+     * @apiParam {String} city_id  城市
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {String} [city_id]  城市
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
