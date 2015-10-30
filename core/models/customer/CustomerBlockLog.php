@@ -32,7 +32,6 @@ class CustomerBlockLog extends \dbbase\models\customer\CustomerBlockLog
         $transaction = \Yii::$app->db->beginTransaction();
         try{
             $customer->is_del = 1;
-            $customer->customer_del_reason = $customer_block_log_reason;
             $customer->validate();
             if ($customer->hasErrors()) {
                 return false;
@@ -70,7 +69,6 @@ class CustomerBlockLog extends \dbbase\models\customer\CustomerBlockLog
         $transaction = \Yii::$app->db->beginTransaction();
         try{
             $customer->is_del = 0;
-            $customer->customer_del_reason = '';
             $customer->validate();
             if ($customer->hasErrors()) {
                 return false;
