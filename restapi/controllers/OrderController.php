@@ -17,7 +17,7 @@ use yii\web\Response;
 class OrderController extends \restapi\components\Controller
 {
 
-    public $workerText = array(1 => '指定阿姨订单数,待抢单订单订单数', '指定阿姨订单列表', '待抢单订单列表');
+    public $workerText = array(1 => '指定阿姨订单数,待抢单订单数', '指定阿姨订单列表', '待抢单订单列表');
 
     /**
      * @api {POST} /order/create-order 创建订单 (90%xieyi  缺少周期订单和精品保洁，缺少后台模块支持)
@@ -1606,18 +1606,19 @@ class OrderController extends \restapi\components\Controller
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * 指定阿姨订单数/待抢单订单订单数
+     *  指定阿姨订单数/待抢单订单订单数 leveltype=1
      * {
      *      "code": "ok",
      *      "msg":"操作成功",
      *      "ret":
      *      {
-     *          "workerData": "指定阿姨订单"
-     *          "orderData": "待抢单订单"
+     *          "workerData": "指定阿姨订单",
+     *          "orderData": "待抢单订单",
+     *          "worker_is_block": "阿姨状态 0正常1封号",
      *      }
      * }
      *
-     *   * 指定阿姨订单列表/待抢单订单列表
+     *   * 指定阿姨订单列表/待抢单订单列表 leveltype=3/4
      * {
      *      "code": "ok",
      *      "msg":"操作成功",
@@ -1663,12 +1664,16 @@ class OrderController extends \restapi\components\Controller
 
         $worker = WorkerAccessToken::getWorker($param['access_token']);
 
-        if (!isset($param['leveltype']) && !isset($param['access_token'])) {
+        if (empty($param['leveltype']) || empty($param['access_token'])) {
             return $this->send(null, "缺少规定的参数", 0, 403);
         }
         if (!empty($worker) && !empty($worker->id)) {
 
             if ($param['leveltype'] == 3) {
+
+                if (empty($param['page_size']) || empty($param['page'])) {
+                    return $this->send(null, "缺少规定的参数,page_size或page不能为空", 0, 403);
+                }
                 try {
                     $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 1);
                     $ret['workerData'] = $workerCount;
@@ -1679,6 +1684,11 @@ class OrderController extends \restapi\components\Controller
                     return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
                 }
             } else if ($param['leveltype'] == 4) {
+                
+                if (empty($param['page_size']) || empty($param['page'])) {
+                    return $this->send(null, "缺少规定的参数,page_size或page不能为空", 0, 403);
+                }
+                
                 try {
                     $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 0);
                     $ret['workerData'] = $workerCount;
@@ -1695,6 +1705,7 @@ class OrderController extends \restapi\components\Controller
 
                     $ret['workerData'] = $workerCount;
                     $ret['orderData'] = $workerCountTwo;
+                    $ret['worker_is_block'] = $worker->worker_is_block;
 
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (\Exception $e) {
