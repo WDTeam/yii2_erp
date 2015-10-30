@@ -538,6 +538,7 @@ class OrderController extends \restapi\components\Controller
 
     /**
      * @api {GET} /order/worker-orders 查询阿姨订单(xieyi 90%已经将后台接口完成,缺少周期订单)
+     *
      * @apiName WorkerOrders
      * @apiGroup Order
      *
@@ -1402,8 +1403,6 @@ class OrderController extends \restapi\components\Controller
         }
     }
 
-
-
     /**
      * @api {GET} /order/add-comment 评价订单（该功能写在UserController里面 v1/user/user-suggest）
      *
@@ -1554,7 +1553,7 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {get} v1/order/get-worker-orders.php 指定阿姨订单数/待抢单订单订单数/指定阿姨订单列表/待抢单订单列表 (haojianshe 100%)
+     * @api {get} v1/order/get-worker-orders 指定阿姨订单数/待抢单订单订单数/指定阿姨订单列表/待抢单订单列表 (haojianshe 100%)
      * @apiName actionGetWorkerOrders
      * @apiGroup Order
      * @apiDescription 阿姨抢单数
@@ -1572,9 +1571,14 @@ class OrderController extends \restapi\components\Controller
      *      "msg":"操作成功",
      *      "ret":
      *      {
-     *          "workerData": "指定阿姨订单",
-     *          "orderData": "待抢单订单",
-     *          "worker_is_block": "阿姨状态 0正常1封号",
+     *          "workerData": "指定阿姨订单数",
+     *          "orderData": "待抢单订单数",
+     *          "workerServiceCount": "待服务订单数",
+     *          "worker_is_block": 
+     *            {
+     *            ##暂时还没有统一
+     *            //"阿姨状态 0正常1封号",
+     *            }
      *      }
      * }
      *
@@ -1644,11 +1648,11 @@ class OrderController extends \restapi\components\Controller
                     return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
                 }
             } else if ($param['leveltype'] == 4) {
-                
+
                 if (empty($param['page_size']) || empty($param['page'])) {
                     return $this->send(null, "缺少规定的参数,page_size或page不能为空", 0, 403);
                 }
-                
+
                 try {
                     $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 0);
                     $ret['workerData'] = $workerCount;
@@ -1660,13 +1664,34 @@ class OrderController extends \restapi\components\Controller
                 }
             } else if ($param['leveltype'] == 1) {
                 try {
+
+                    #指定阿姨订单数
                     $workerCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
+
+                    #待抢单订单数
                     $workerCountTwo = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
+
+
+                    $args["owr.worker_id"] = $worker->id;
+                    $args["oc.customer_id"] = null;
+                    $orderSearch = new \core\models\order\OrderSearch();
+
+                    $ret = [];
+                    $arr = array();
+                    $arr[] = OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE;
+                    $arr[] = OrderStatusDict::ORDER_SYS_ASSIGN_DONE;
+                    $arr[] = OrderStatusDict::ORDER_WORKER_BIND_ORDER;
+                    $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $arr);
+
+                    #待服务订单数
+                    $ret['workerServiceCount'] = $count;
 
                     $ret['workerData'] = $workerCount;
                     $ret['orderData'] = $workerCountTwo;
-                    $ret['worker_is_block'] = $worker->worker_is_block;
-
+                    #阿姨状态
+                    $ret['worker_is_block'] = [
+                        $worker->worker_is_block
+                    ];
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (\Exception $e) {
                     return $this->send(null, "boss系统错误," . $this->workerText[$param['leveltype']], 1024);
