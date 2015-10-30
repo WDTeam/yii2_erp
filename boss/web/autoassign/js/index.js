@@ -1,10 +1,17 @@
 $(document).ready(function(){
+    $('#start').attr('disabled', true);
+    $('#stop').attr('disabled', true);
+    $('#reload').attr('disabled', true);
+    $('#update').attr('disabled', true);
+    $('#runService').hide();
+    
     $('#qend').blur(function(){ $('#jstart').val( $('#qend').val());});
     $('#start').click(function(){execCommand(1);});
     $('#stop').click(function(){execCommand(2);});
     $('#reload').click(function(){execCommand(3);});
     $('#update').click(function(){execCommand(4);});
     $('#connect').click(function(){websocketConnect();});
+    $('#connectStatus').html('正在连接派单服务器...');
     $('#connect').click();
 });
 
@@ -16,13 +23,23 @@ function websocketConnect() {
         websocket = new WebSocket(wsServer);
         websocket.onopen = function (evt) {
             console.log("Connected to WebSocket server." + evt.data);
-            $('#connect').attr('disabled', true);
             $('#connectStatus').html('连接成功！');
+            $('#connect').attr('disabled', true);
+            $('#runService').hide();
+            $('#start').attr('disabled', false);
+            $('#stop').attr('disabled', false);
+            $('#reload').attr('disabled', false);
+            $('#update').attr('disabled', false);
         };
         websocket.onclose = function (evt) {
             console.log("Disconnected");
             $('#connectStatus').html('链接断开！请检查服务器地址是否正确，或被网络防火墙禁止访问');
             $('#connect').attr('disabled', false);
+            $('#runService').show();
+            $('#start').attr('disabled', true);
+            $('#stop').attr('disabled', true);
+            $('#reload').attr('disabled', true);
+            $('#update').attr('disabled', true);
         };
 
         websocket.onmessage = function (evt) {
@@ -34,6 +51,11 @@ function websocketConnect() {
             console.log('Error occured: ' + evt.data);
             $('#connectStatus').html('连接错误，请检查网络环境是否正常！');
             $('#connect').attr('disabled', false);
+            $('#runService').show();
+            $('#start').attr('disabled', true);
+            $('#stop').attr('disabled', true);
+            $('#reload').attr('disabled', true);
+            $('#update').attr('disabled', true);
         };
     }
 }
