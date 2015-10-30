@@ -3,11 +3,13 @@
 namespace boss\controllers\order;
 
 use Yii;
-use boss\models\order\OrderComplaint;
-use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+
+use boss\models\order\OrderComplaint;
+use boss\components\BaseAuthController;
 use boss\models\order\OrderComplaintSearch;
+
 use core\models\finance\FinanceCompensate;
 
 /**
@@ -142,10 +144,15 @@ class OrderComplaintController extends BaseAuthController
      * @return boolean
      */
     public function actionBack(){
-    	$model = new OrderComplaint();
+    	$result = false;
+    	$model = new OrderComplaint();$oderarr = array();
     	$params = Yii::$app->request->post();
     	if(!empty($params) && is_array($params)){
-    			$result = $model->backInsertComplaint($params);
+    			$oderarr = $model->order_Complaint($params);
+    			foreach ($oderarr as $val){
+    				$_model = clone $model;
+    				$result = $_model->backInsertOrderComplaint($val);
+    			}
     	}
     	return $result;
     }

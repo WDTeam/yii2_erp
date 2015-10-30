@@ -3,9 +3,11 @@
 namespace boss\models\order;
 
 use Yii;
+use yii\caching\ArrayCache;
+
 use dbbase\models\order\OrderExtCustomer;
 use dbbase\models\order\OrderExtWorker;
-use yii\caching\ArrayCache;
+
 /**
  * This is the model class for table "ejj_order_complaint".
  *
@@ -26,12 +28,12 @@ use yii\caching\ArrayCache;
 class OrderComplaint extends \core\models\order\OrderComplaint
 {
 	/**
-	 * 后台添加投诉业务逻辑方法
+	 * 返回重组后的数组对象
 	 * @param array $params 要插入的参数数组
 	 * @return boolean
 	 */
-    public function backInsertComplaint($params){
-    	$arr = array(); $flag = false;
+    public function order_Complaint($params){
+    	$arr = array(); $flag = false;$narr = array();
     	$arr['OrderComplaint']['order_id'] = $params['order_id'];
     	$arr['OrderComplaint']['complaint_content'] = $params['complaint_detail'];
     	$arr['OrderComplaint']['complaint_phone'] = $params['cumstomer_phone'];
@@ -45,10 +47,20 @@ class OrderComplaint extends \core\models\order\OrderComplaint
     		$arr['OrderComplaint']['complaint_assortment'] = $val['type'];
     		$arr['OrderComplaint']['complaint_section'] = $val['department'];
     		$arr['OrderComplaint']['complaint_level'] = $val['level'];
+		 $narr[] = $arr;	
+    	}
+    	return $narr;
+    }
+    /**
+     * 添加订单投诉业务逻辑方法
+     * @param unknown $arr
+     * @return boolean
+     */
+    public function backInsertOrderComplaint($arr){
+  			$flag = false;
     		if($this->load($arr) && $this->save()){
     			$flag = true;
-    		}
-    	}
+    		};
     	return $flag;
     }
     /**
