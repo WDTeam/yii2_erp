@@ -20,5 +20,34 @@ namespace core\models\operation;
  */
 class OperationServiceCardInfo extends \common\models\operation\OperationServiceCardInfo
 {
+	public function serviceCardInfoCreate()
+	{
+		
+		$this->created_at = time();
+		$this->updated_at = time();
+		return $this->save();
+	}
+	
+	public function serviceCardInfoUpdate()
+	{
+		
+		$this->updated_at = time();
+		return $this->save();
+	}
+	
+	public function getServiceCardConfig(){
+		$config = [
+			'type'=>[
+				1=>'个人',
+				2=>'企业',
+			],
+			'level'=>[
+				1=>'青铜',
+				2=>'白银',
+				3=>'黄金',
+			],
+		];
+		return $config;
+	}
     
 }
