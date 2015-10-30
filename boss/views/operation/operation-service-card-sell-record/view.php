@@ -10,7 +10,7 @@ use kartik\datecontrol\DateControl;
  */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Service Card Sell Records'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '服务卡销售记录'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-service-card-sell-record-view">
@@ -29,11 +29,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'type'=>DetailView::TYPE_INFO,
         ],
         'attributes' => [
-            'id',
+//            'id',
             'service_card_sell_record_code',
             'customer_id',
             'customer_phone',
-            'service_card_info_card_id',
+            'service_card_info_id',
             'service_card_info_name',
             'service_card_sell_record_money',
             'service_card_sell_record_channel_id',
@@ -45,10 +45,19 @@ $this->params['breadcrumbs'][] = $this->title;
             'customer_trans_record_transaction_id',
             'customer_trans_record_pay_money',
             'customer_trans_record_pay_account',
-            'customer_trans_record_paid_at',
-            'created_at',
-            'updated_at',
-            'is_del',
+			[
+				'label'=>'支付时间','value'=>date('Y-m-d',$model->customer_trans_record_paid_at)
+			],
+			[
+				'label'=>'创建时间','value'=>date('Y-m-d',$model->created_at)
+			],
+			[
+				'label'=>'更新时间','value'=>date('Y-m-d',$model->updated_at)
+			],
+//            'customer_trans_record_paid_at',
+//            'created_at',
+//            'updated_at',
+//            'is_del',
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],

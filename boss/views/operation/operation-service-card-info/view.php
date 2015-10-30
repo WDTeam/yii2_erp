@@ -49,8 +49,8 @@ $this->params['breadcrumbs'][] = $this->title;
 				'items'=>$config['level'],
 				'valueColOptions'=>['style'=>'width:30%']
 			],
-            'service_card_info_par_value',
-            'service_card_info_reb_value',
+            'service_card_info_value',
+            'service_card_info_rebate_value',
             'service_card_info_use_scope',
             'service_card_info_valid_days',
 			[

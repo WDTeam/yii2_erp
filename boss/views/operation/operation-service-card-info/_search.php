@@ -46,10 +46,10 @@ use kartik\widgets\Select2;
     ?>
 	</div>
 	<div class="col-md-2">
-	 <?= $form->field($model, 'service_card_info_par_value') ?>
+	 <?= $form->field($model, 'service_card_info_value') ?>
 	</div>
 	<div class="col-md-2">
-	 <?= $form->field($model, 'service_card_info_reb_value') ?>
+	 <?= $form->field($model, 'service_card_info_rebate_value') ?>
 	</div>
 	<div class="col-md-2">
 	 <?= $form->field($model, 'service_card_info_valid_days') ?>
@@ -63,9 +63,9 @@ use kartik\widgets\Select2;
 
     <?php // echo $form->field($model, 'service_card_info_card_level') ?>
 
-    <?php // echo $form->field($model, 'service_card_info_par_value') ?>
+    <?php // echo $form->field($model, 'service_card_info_value') ?>
 
-    <?php // echo $form->field($model, 'service_card_info_reb_value') ?>
+    <?php // echo $form->field($model, 'service_card_info_rebate_value') ?>
 
     <?php // echo $form->field($model, 'service_card_info_use_scope') ?>
 
