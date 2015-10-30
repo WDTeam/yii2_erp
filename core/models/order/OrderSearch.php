@@ -147,7 +147,7 @@ class OrderSearch extends Order
      * 通过订单ID获取订单链表信息
      * @param $order_id 订单ID
      */
-    public static function getOrderInfo($order_id)
+    public static function getOrderInfo($order_id, $fields='*')
     {
         $query = new \yii\db\Query();
         $data = $query->from('{{%order}} as order')
@@ -155,7 +155,8 @@ class OrderSearch extends Order
             ->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')
             ->innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id')
             ->innerJoin('{{%order_ext_worker}} as ow','order.id = ow.order_id')
-            ->select('*')
+            ->innerJoin('{{%order_ext_pop}} as opp','order.id = opp.order_id')
+            ->select($fields)
             ->where(['id'=>$order_id])
             ->one();
         return $data;
