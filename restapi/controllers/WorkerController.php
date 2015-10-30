@@ -554,24 +554,30 @@ class WorkerController extends \restapi\components\Controller
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
-     *      "code": "1",
-     *      "msg": "操作成功.",
-     *      "ret": [
-     *      {
-     *           "settle_year": "2015",
-     *           "order_count": "账单归属年限",
-     *           "worker_income": "该账单阿姨的总收入",
-     *           "settle_cycle": "账单类型【1周期账单 2月结账单】",
-     *           "settle_cycle_des": "账单文字说明",
-     *           "settle_task_money": "任务奖励金额",
-     *           "base_salary_subsidy": "底薪补贴",
-     *           "money_deduction": "处罚金额",
-     *           "order_money_except_cash": "工时服务费",
-     *           "settle_status": 账单状态【0未结算 1已结算】,
-     *           "settle_time": "账单日期"
-     *           "worker_is_confirmed":"阿姨是否确认账单【0未确认 1已确认】",
-     *       }
-     *      ]
+     * 
+     *  "code": 1,
+     *   "msg": "操作成功.",
+     *   "ret": {
+     *       "per_page": 1,
+     *       "page_num": 10,
+     *       "data": [
+     *           {
+     *               "settle_id": "账单唯一标识",
+     *               "settle_year": "账单归属年限",
+     *               "order_count": "账单内完成的订单总数",
+     *               "worker_income": "该账单阿姨的总收入",
+     *               "settle_cycle": "账单类型【1周期账单 2月结账单】",
+     *               "settle_cycle_des": "账单文字说明",
+     *               "settle_task_money": "任务奖励金额",
+     *               "base_salary_subsidy": "底薪补贴",
+     *               "money_deduction": "处罚金额",
+     *               "order_money_except_cash": "工时服务费",
+     *               "settle_status":"账单状态【0未结算 1已结算】",
+     *               "settle_time": "账单日期",
+     *               "worker_is_confirmed": "阿姨是否确认账单【0未确认 1已确认】"
+     *           }
+     *       ]
+     *    }
      * }
      *
      * @apiErrorExample Error-Response:
