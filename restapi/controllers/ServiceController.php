@@ -265,14 +265,14 @@ class ServiceController extends \restapi\components\Controller
         $param = Yii::$app->request->get();
 
         if (empty(@$param['city_name'])) {
-            return $this->send(null, "未取得城市信息", 0, 403);
+            return $this->send(null, "未取得城市信息", 0, 403,null,alertMsgEnum::allGoodsesFailed);
         }
 
         $categoryes = OperationCategory::getAllCategory();
         $goodses = OperationShopDistrictGoods::getGoodsByCity($param['city_name']);
 
         if (empty($categoryes) || empty($goodses)) {
-            return $this->send(null, "该城市暂未开通", 0, 403);
+            return $this->send(null, "该城市暂未开通", 0, 403,null,alertMsgEnum::allGoodsesFailed);
         }
         $cDate = [];
         foreach ($categoryes as $cItem) {
@@ -304,7 +304,7 @@ class ServiceController extends \restapi\components\Controller
             $cDate[] = $cObject;
         }
 
-        return $this->send($cDate, "数据获取成功");
+        return $this->send($cDate, "数据获取成功",1,200,null,alertMsgEnum::allGoodsesSuccess);
     }
 
     /**
@@ -344,23 +344,23 @@ class ServiceController extends \restapi\components\Controller
         $params = Yii::$app->request->get();
 
         if (empty($params['longitude']) || empty($params['latitude'])) {
-            return $this->send(null, "经纬度信息不存在", 0, 403);
+            return $this->send(null, "经纬度信息不存在", 0, 403,null,alertMsgEnum::goodsInfoFailed);
         }
         $shopDistrict = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($params['longitude'], $params['latitude']);
         if (empty($shopDistrict)) {
-            return $this->send(null, "没有上线商圈", 0, 403);
+            return $this->send(null, "没有上线商圈", 0, 403,null,alertMsgEnum::goodsInfoFailed);
         }
         $goods = OperationShopDistrictGoods::getShopDistrictGoodsInfo($params['city_id'], $shopDistrict['operation_shop_district_id'], $params['goods_id']);
 
         if (empty($goods)) {
-            return $this->send(null, "该商圈没有上线当前服务品类", 0, 403);
+            return $this->send(null, "该商圈没有上线当前服务品类", 0, 403,null,alertMsgEnum::goodsInfoFailed);
         }
 
         $ret = [
             'goods_price' => $goods['operation_shop_district_goods_price'],
         ];
 
-        return $this->send($ret, "数据获取成功");
+        return $this->send($ret, "数据获取成功",1,200,null,alertMsgEnum::goodsInfoSuccess);
     }
 
     /**
@@ -411,21 +411,21 @@ class ServiceController extends \restapi\components\Controller
 
         //获取地址信息
         $address = CustomerAddress::getAddress($params['city_id']);
-        if (empty($address)) return $this->send(null, "获取地址信息失败", '0', 403);
+        if (empty($address)) return $this->send(null, "获取地址信息失败", '0', 403,null,alertMsgEnum::allCleaningTaskFailed);
 
         //获取商圈
         $shopDistrict = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($address['customer_address_longitude'], $address['customer_address_latitude']);
-        if (empty($shopDistrict)) return $this->send(null, "未找到相应商圈", '0', 403);
+        if (empty($shopDistrict)) return $this->send(null, "未找到相应商圈", '0', 403,null,alertMsgEnum::allCleaningTaskFailed);
 
         //获取商圈品类上线
         $goodses = OperationShopDistrictGoods::getGoodsCategoryInfo($params['city_id'], $shopDistrict['id'], '精品保洁');
-        if (empty($goodses)) return $this->send(null, "该商圈未上线精品保洁", '0', 403);
+        if (empty($goodses)) return $this->send(null, "该商圈未上线精品保洁", '0', 403,null,alertMsgEnum::allCleaningTaskFailed);
 
         $date = OperationSelectedService::getSelectedServiceList($params['build_area']);
 
-        if (empty($date)) return $this->send(null, "获取精品保洁商品信息失败", "0", "403");
+        if (empty($date)) return $this->send(null, "获取精品保洁商品信息失败", "0", "403",null,alertMsgEnum::allCleaningTaskFailed);
 
-        return $this->send($date, "获取精品保洁商品信息成功");
+        return $this->send($date, "获取精品保洁商品信息成功",1,200,null,alertMsgEnum::allCleaningTaskFailed);
 
     }
 
