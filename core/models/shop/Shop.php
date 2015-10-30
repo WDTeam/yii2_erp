@@ -209,6 +209,7 @@ class Shop extends \dbbase\models\shop\Shop
         $models = Worker::find()->where(['shop_id'=>$this->id])->all();
         return (array)$models;
     }
+
     public static function findById($id) {
         return self::findOne(['id'=>$id]);
     }
@@ -255,5 +256,23 @@ class Shop extends \dbbase\models\shop\Shop
     public static function getBankNames()
     {
         return BankHelper::getBankNames();
+    }
+    /**
+     * 处理阿姨数量
+     * @param int $shop_id
+     */
+    public static function runCalculateWorkerCount($shop_id)
+    {
+        $model = self::findById($shop_id);
+        $number = Worker::find()->where(['shop_id'=>$shop_id])->count();
+        $model->worker_count = $number;
+        if($model->save()){
+            $shop_manager = ShopManager::findOne($model->shop_manager_id);
+            $count = self::find()->select(['SUM(worker_count)'])
+            ->where(['shop_manager_id'=>$shop_manager->id])->scalar();
+            $shop_manager->worker_count = $count;
+            return $shop_manager->save();
+        }
+        return false;
     }
 }
