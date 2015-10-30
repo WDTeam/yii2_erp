@@ -3,7 +3,7 @@
 namespace dbbase\models\order;
 
 use Yii;
-
+use dbbase\models\ActiveRecord;
 /**
  * This is the model class for table "{{%order_ext_status}}".
  *
@@ -17,7 +17,7 @@ use Yii;
  *
  * @property Order $order
  */
-class OrderExtStatus extends \dbbase\models\order\ActiveRecord
+class OrderExtStatus extends ActiveRecord
 {
     /**
      * @inheritdoc

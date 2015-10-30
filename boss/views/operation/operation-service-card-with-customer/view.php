@@ -10,7 +10,7 @@ use kartik\datecontrol\DateControl;
  */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Service Card With Customers'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '服务卡客户关系'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-service-card-with-customer-view">
@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'type'=>DetailView::TYPE_INFO,
         ],
         'attributes' => [
-            'id',
+//            'id',
             'service_card_sell_record_id',
             'service_card_sell_record_code',
             'server_card_info_id',
@@ -42,13 +42,28 @@ $this->params['breadcrumbs'][] = $this->title;
             'customer_id',
             'customer_phone',
             'server_card_info_scope',
-            'service_card_with_customer_buy_at',
-            'service_card_with_customer_valid_at',
-            'service_card_with_customer_activated_at',
+//            'service_card_with_customer_buy_at',
+//            'service_card_with_customer_valid_at',
+//            'service_card_with_customer_activated_at',
+			[
+				'label'=>'购买日期','value'=>date('Y-m-d',$model->service_card_with_customer_buy_at)
+			],
+			[
+				'label'=>'有效截止日期','value'=>date('Y-m-d',$model->service_card_with_customer_valid_at)
+			],
+			[
+				'label'=>'激活日期','value'=>date('Y-m-d',$model->service_card_with_customer_activated_at)
+			],
             'service_card_with_customer_status',
-            'created_at',
-            'updated_at',
-            'is_del',
+			[
+				'label'=>'创建时间','value'=>date('Y-m-d',$model->created_at)
+			],
+			[
+				'label'=>'更新时间','value'=>date('Y-m-d',$model->updated_at)
+			],
+//            'created_at',
+//            'updated_at',
+//            'is_del',
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],

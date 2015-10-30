@@ -87,17 +87,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="form-group">
                     <label class=" col-sm-3"></label>
                     <h4 class="col-sm-2">
-                        单价：<span id="order_unit_money" style="font-size: 25px;color: #00ff00;" >25.00</span>
+                        单价：<span id="order_unit_money" style="font-size: 25px;color: #00ff00;" >0.00</span>
                     </h4>
                     <h4 class="col-sm-2">
-                        总价：<span class="order_money" style="font-size: 25px;color: #ff0000;">50.00</span>
+                        总价：<span class="order_money" style="font-size: 25px;color: #ff0000;">0.00</span>
                     </h4>
                     <h4 class="col-sm-2">
                         账户余额：<span id="customer_balance" style="font-size: 25px;">0.00</span>
                     </h4>
                 </div>
-                <div style="display: none;"><?= $form->field($model, 'order_unit_money')->textInput(['maxlength' => true,'value'=>25]) ?></div>
-                <div style="display: none;"><?= $form->field($model, 'order_money')->textInput(['maxlength' => true,'value'=>50]) ?></div>
+                <div style="display: none;"><?= $form->field($model, 'order_unit_money')->textInput(['maxlength' => true,'value'=>0]) ?></div>
+                <div style="display: none;"><?= $form->field($model, 'order_money')->textInput(['maxlength' => true,'value'=>0]) ?></div>
                 <?= $form->field($model, 'order_pay_type')->inline()->radioList(['1'=>'现金支付','2'=>'余额支付','3'=>'第三方预付'])->label('支付方式'); ?>
                 <div id="order_pay_type_1" >
                     <div class="form-group">

@@ -61,6 +61,6 @@ class PayParam extends Model
 
     public static function tableName()
     {
-        return '{{%general_pay}}';
+        return '{{%payment}}';
     }
 }

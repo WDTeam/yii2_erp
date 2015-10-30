@@ -30,22 +30,33 @@ class SystemUser extends ActiveRecord implements IdentityInterface
     const STATUS_ACTIVE = 1;
     const ROLE_USER = 10;
     
+    private $_roles = [];
     public function setRoles($roles)
     {
-        $auth = \Yii::$app->authManager;
-        $auth->revokeAll($this->id);
-        if(!empty($roles)){
-            foreach ($roles as $role){
-                $auth->assign($auth->getRole($role), $this->id);
-            }
-            return $auth->getRolesByUser($this->id);
+        $this->_roles = $roles;
+        if($this->getIsNewRecord()){
+            
         }else{
-            return [];
+            $auth = \Yii::$app->authManager;
+            $auth->revokeAll($this->id);
+            if(!empty($roles)){
+                foreach ($roles as $role){
+                    $auth->assign($auth->getRole($role), $this->id);
+                }
+                return $auth->getRolesByUser($this->id);
+            }else{
+                return [];
+            }
         }
     }
     public function getRoles()
     {
         return ArrayHelper::map(Yii::$app->authManager->getRolesByUser($this->id), 'name', 'name');
+    }
+    public function afterSave($insert, $changedAttributes)
+    {
+        $this->setRoles($this->_roles);
+        parent::afterSave($insert, $changedAttributes);
     }
 
     /**

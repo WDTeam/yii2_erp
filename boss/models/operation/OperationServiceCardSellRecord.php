@@ -39,7 +39,7 @@ class OperationServiceCardSellRecord extends \core\models\operation\OperationSer
     public function rules()
     {
         return [
-            [['customer_id', 'customer_phone', 'service_card_info_card_id', 'service_card_sell_record_channel_id', 'service_card_sell_record_status', 'customer_trans_record_pay_mode', 'pay_channel_id', 'customer_trans_record_pay_account', 'customer_trans_record_paid_at', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['customer_id', 'customer_phone', 'service_card_info_id', 'service_card_sell_record_channel_id', 'service_card_sell_record_status', 'customer_trans_record_pay_mode', 'pay_channel_id', 'customer_trans_record_pay_account', 'customer_trans_record_paid_at', 'created_at', 'updated_at', 'is_del'], 'integer'],
             [['service_card_sell_record_money', 'customer_trans_record_pay_money'], 'number'],
             [['service_card_sell_record_code'], 'string', 'max' => 20],
             [['service_card_info_name', 'service_card_sell_record_channel_name', 'customer_trans_record_pay_channel'], 'string', 'max' => 64],
@@ -57,7 +57,7 @@ class OperationServiceCardSellRecord extends \core\models\operation\OperationSer
             'service_card_sell_record_code' => Yii::t('app', '购卡订单号'),
             'customer_id' => Yii::t('app', '用户id'),
             'customer_phone' => Yii::t('app', '用户手机号'),
-            'service_card_info_card_id' => Yii::t('app', '服务卡id'),
+            'service_card_info_id' => Yii::t('app', '服务卡id'),
             'service_card_info_name' => Yii::t('app', '服务卡名'),
             'service_card_sell_record_money' => Yii::t('app', '购卡订单金额'),
             'service_card_sell_record_channel_id' => Yii::t('app', '购卡订单渠道id'),

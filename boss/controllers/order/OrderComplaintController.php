@@ -3,11 +3,13 @@
 namespace boss\controllers\order;
 
 use Yii;
-use boss\models\order\OrderComplaint;
-use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+
+use boss\models\order\OrderComplaint;
+use boss\components\BaseAuthController;
 use boss\models\order\OrderComplaintSearch;
+
 use core\models\finance\FinanceCompensate;
 
 /**
@@ -26,7 +28,6 @@ class OrderComplaintController extends BaseAuthController
             ],
         ];
     }
-
     /**
      * Lists all OrderComplaint models.
      * @return mixed
@@ -56,22 +57,6 @@ class OrderComplaintController extends BaseAuthController
     			'url' => $url
     	]);
         
-    }
-	public function actionAdd(){
-	$model = new OrderComplaint();
-    	$arr = array('OrderComplaint'=>array(
-    			'order_id'=>'1234',
-    			'worker_id'=>'123123',
-    			'complaint_type'=>'1',
-    			'complaint_phone'=>13800138000,
-    			'complaint_section'=>'1',
-    			'complaint_level'=>'2',
-    			'complaint_content'=>'33241234231',
-    			'complaint_time'=>'12332131'));
-    	$model->load($arr);
-    	$model->save();
-    	//$result = $model->insertModel($arr);
-    	exit();
     }
 
     /**
@@ -159,11 +144,50 @@ class OrderComplaintController extends BaseAuthController
      * @return boolean
      */
     public function actionBack(){
-    	$model = new OrderComplaint();
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $result = false;
+    	$model = new OrderComplaint();$oderarr = array();
     	$params = Yii::$app->request->post();
     	if(!empty($params) && is_array($params)){
-    			$result = $model->backInsertComplaint($params);
+    			$oderarr = $model->order_Complaint($params);
+    			foreach ($oderarr as $val){
+    				$_model = clone $model;
+    				$result = $_model->backInsertOrderComplaint($val);
+    			}
     	}
     	return $result;
+    }
+    /**
+     * 返回渠道
+     * @param unknown $num
+     */
+    public function actionChannel($num){
+    	$model = new OrderComplaint();
+    	return $model->channel($num);
+    }
+    /**
+     * 返回投诉类型
+     * @param unknown $dnum
+     * @param unknown $num
+     */
+    public function actionCtype($dnum,$num){
+    	$model = new OrderComplaint();
+    	 return $model->ctype($dnum, $num);
+    }
+    /**
+     * 返回部门
+     * @param unknown $num
+     */
+    public function actionSection($num){
+    	$model = new OrderComplaint();
+    	 return $model->section($nums);
+    }
+    /**
+     * 返回级别
+     * @param unknown $num
+     */
+    public function actionLevel($num){
+    	$model = new OrderComplaint();
+    	 return $model->level($num);
     }
 }

@@ -34,10 +34,12 @@ class OperationServiceCardInfoController extends Controller
     {
         $searchModel = new OperationServiceCardInfoSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+		$config = $searchModel->getServiceCardConfig();
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+			'config' => $config,
         ]);
     }
 
@@ -49,11 +51,12 @@ class OperationServiceCardInfoController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
+		$config = $model->getServiceCardConfig();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post()) && $model->serviceCardInfoUpdate()) {
+        return $this->redirect(['view', 'id' => $model->id,'config'=> $config]);
         } else {
-        return $this->render('view', ['model' => $model]);
+        return $this->render('view', ['model' => $model,'config'=> $config]);
 }
     }
 
@@ -65,12 +68,14 @@ class OperationServiceCardInfoController extends Controller
     public function actionCreate()
     {
         $model = new OperationServiceCardInfo;
+		$config = $model->getServiceCardConfig();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->serviceCardInfoCreate()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+				'config' => $config,
             ]);
         }
     }
@@ -84,12 +89,13 @@ class OperationServiceCardInfoController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+		$config = $model->getServiceCardConfig();
+        if ($model->load(Yii::$app->request->post()) && $model->serviceCardInfoUpdate()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+				'config' => $config,
             ]);
         }
     }

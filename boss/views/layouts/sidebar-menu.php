@@ -159,12 +159,12 @@ echo Menu::widget(
                 'items' => [
                     [
                         'label' => '支付记录查询',
-                        'url' => ['payment/general-pay/index'],
+                        'url' => ['payment/payment/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
                         'label' => '交易记录查询',
-                        'url' => ['customer/customer-trans-record/index'],
+                        'url' => ['payment/payment-customer-trans-record/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],
@@ -291,12 +291,12 @@ echo Menu::widget(
                                 'url' => ['operation/coupon/coupon/create'],
                                 'icon' => 'fa fa-angle-right',
                             ],
-                            [
-                                'label' => '绑定用户',
-                                'url' => ['operation/coupon/coupon/bundle'],
-                                'icon' => 'fa fa-angle-right',
+//                             [
+//                                 'label' => '绑定用户',
+//                                 'url' => ['operation/coupon/coupon/bundle'],
+//                                 'icon' => 'fa fa-angle-right',
 
-                            ],
+//                             ],
                         ]
                     ],
 
@@ -332,7 +332,7 @@ echo Menu::widget(
                     ],*/
                     [
                         'label' => '阿姨任务管理',
-                        'url' => ['/worker/worker-task/index'],
+                        'url' => ['/operation/worker-task/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [

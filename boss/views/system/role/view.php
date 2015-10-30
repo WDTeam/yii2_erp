@@ -8,7 +8,7 @@ $this->title = Yii::t('app', 'Role') . " $model->name";
 $this->params['breadcrumbs'] = [
     [
         'label' => Yii::t('app', 'Roles'),
-        'url' => ['/role']
+        'url' => ['index']
     ],
     $model->name
 ];

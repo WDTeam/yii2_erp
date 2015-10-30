@@ -8,7 +8,7 @@ use \core\models\customer\CustomerAddress;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\operation\coupon\CouponCustomer;
 use \core\models\operation\coupon\Coupon;
-use \core\models\customer\CustomerTransRecord;
+use \core\models\payment\PaymentCustomerTransRecord;
 use \core\models\customer\CustomerExtBalance;
 use \core\models\order\Order;
 use \core\models\customer\CustomerComment;
@@ -241,7 +241,7 @@ class UserController extends \restapi\components\Controller
             return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
         }
         if (empty($addressId)) {
-            return $this->send(null, "地址信息获取失败", 0, 403);
+            return $this->send(null, "地址信息获取失败,请添加地址id", 0, 403);
         }
 
         if (CustomerAddress::deleteAddress($addressId)) {
@@ -260,6 +260,12 @@ class UserController extends \restapi\components\Controller
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} address_id 地址id
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     * @apiParam {String} [operation_province_name] 省
+     * @apiParam {String} [operation_city_name] 市名
+     * @apiParam {String} [operation_area_name] 地区名（朝阳区）
+     * @apiParam {String} [customer_address_detail] 详细地址
+     * @apiParam {String} [customer_address_nickname] 被服务者昵称
+     * @apiParam {String} [customer_address_phone] 被服务者手机
      *
      *
      * @apiSuccessExample Success-Response:
@@ -305,7 +311,7 @@ class UserController extends \restapi\components\Controller
                 return $this->send(null, "设置默认地址失败", 0, 403);
             }
         } catch (\Exception $e) {
-            return $this->send(null, "boss系统错误", 0, 1024);
+            return $this->send(null, "boss系统错误" . $e, 0, 1024);
         }
     }
 
@@ -378,7 +384,7 @@ class UserController extends \restapi\components\Controller
                 return $this->send(null, "修改常用地址失败", 0, 403);
             }
         } catch (\Exception $e) {
-            return $this->send(null, "boss系统错误", 0, 1024);
+            return $this->send(null, "boss系统错误" . $e, 0, 1024);
         }
     }
 
@@ -461,7 +467,7 @@ class UserController extends \restapi\components\Controller
                 $ret = ['address' => $Address];
                 return $this->send($ret, "获取默认地址成功", 1);
             } catch (\Exception $e) {
-                return $this->send(null, "boss系统错误", 0, 1024);
+                return $this->send(null, "boss系统错误" . $e, 0, 1024);
             }
         } else {
             return $this->send(null, "获取用户信息失败", "error", 403);
@@ -677,7 +683,7 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} v1/user/get-user-money 用户余额和消费记录 （数据已经全部取出,需要给出所需字段,然后给予返回 已完成99% ;）
+     * @api {GET} v1/user/get-user-money 用户余额和消费记录 （郝建设 已完成99% ;）
      * 
      *
      * @apiName actionGetUserMoney
@@ -719,10 +725,10 @@ class UserController extends \restapi\components\Controller
      * "customer_trans_record_compensate_money": "补偿金额",
      * "customer_trans_record_refund_money": "退款金额",
      * "customer_trans_record_order_total_money": "订单总额",
-     * "customer_trans_record_total_money:'交易总额',
-     * "customer_trans_record_current_balance:'当前余额',
-     * "customer_trans_record_befor_balance:'之前余额',
-     * "customer_trans_record_transaction_id:'交易流水号',
+     * "customer_trans_record_total_money":'交易总额',
+     * "customer_trans_record_current_balance":'当前余额',
+     * "customer_trans_record_befor_balance":'之前余额',
+     * "customer_trans_record_transaction_id":'交易流水号',
      * "customer_trans_record_remark": '备注',
      * "customer_trans_record_verify": '验证',
      * "created_at":'创建时间',
@@ -775,13 +781,13 @@ class UserController extends \restapi\components\Controller
                  *
                  * @param int $customer 用户id
                  */
-                $userRecord = CustomerTransRecord::queryRecord($customer->id);
+                $userRecord = PaymentCustomerTransRecord::queryRecord($customer->id);
 
                 $ret["userBalance"] = $userBalance;
                 $ret["userRecord"] = $userRecord;
                 return $this->send($ret, "查询成功", 1);
             } catch (\Exception $e) {
-                return $this->send(null, "boss系统错误", 0, 1024);
+                return $this->send($e, "boss系统错误" . $e, 0, 1024);
             }
 
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
@@ -856,7 +862,7 @@ class UserController extends \restapi\components\Controller
                     return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
                 }
             } catch (\Exception $e) {
-                return $this->send(null, "boss系统错误", 0, 1024);
+                return $this->send(null, "boss系统错误" . $e, 0, 1024);
             }
         }
     }
@@ -951,7 +957,7 @@ class UserController extends \restapi\components\Controller
                     return $this->send(null, "添加评论失败", 0, 403);
                 }
             } catch (\Exception $e) {
-                return $this->send(null, "boss系统错误", 0, 1024);
+                return $this->send(null, "boss系统错误" . $e, 0, 1024);
             }
         } else {
             return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
@@ -1009,7 +1015,7 @@ class UserController extends \restapi\components\Controller
                     return $this->send(null, "获取评论级别失败", 0, 403);
                 }
             } catch (\Exception $e) {
-                return $this->send(null, "boss系统错误", 0, 1024);
+                return $this->send(null, "boss系统错误" . $e, 0, 1024);
             }
         } else {
             return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
@@ -1069,7 +1075,7 @@ class UserController extends \restapi\components\Controller
                     return $this->send(null, "获取评论标签失败", 0, 403);
                 }
             } catch (\Exception $e) {
-                return $this->send(null, "boss系统错误", 0, 1024);
+                return $this->send(null, "boss系统错误" . $e, 0, 1024);
             }
         } else {
             return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
@@ -1209,7 +1215,7 @@ class UserController extends \restapi\components\Controller
                     return $this->send(null, "获取标签和子标签失败", 0, 403);
                 }
             } catch (\Exception $e) {
-                return $this->send(null, "boss系统错误", 0, 1024);
+                return $this->send(null, "boss系统错误" . $e, 0, 1024);
             }
         } else {
             return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
@@ -1263,7 +1269,7 @@ class UserController extends \restapi\components\Controller
 
                 return $this->send($ret, "获取用户评价数量", 1);
             } catch (\Exception $e) {
-                return $this->send(null, "boss系统错误", 0, 1024);
+                return $this->send(null, "boss系统错误" . $e, 0, 1024);
             }
         } else {
             return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
@@ -1319,7 +1325,7 @@ class UserController extends \restapi\components\Controller
                     return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
                 }
             } catch (\Exception $e) {
-                return $this->send(null, "boss系统错误", 0, 1024);
+                return $this->send(null, "boss系统错误" . $e, 0, 1024);
             }
         } else {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);

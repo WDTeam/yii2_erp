@@ -45,7 +45,7 @@ $(document).on("click",'.worker_assign',function(){
         refuse_worker_id = $(this).parents('tr').find('input').val();
         $.ajax({
             type: "POST",
-            url:  "/order/do-assign",
+            url:  "/order/order/do-assign",
             data: "order_id="+window.order_data.order.id+"&worker_id="+refuse_worker_id,
             dataType:"json",
             success: function (msg) {
@@ -74,7 +74,7 @@ $(document).on("click",'.worker_contact_failure',function(){
     refuse_worker_id = $(this).parents('tr').find('input').val();
     $.ajax({
         type: "POST",
-        url:  "/order/create-order-worker-relation",
+        url:  "/order/order/create-order-worker-relation",
         data: "order_id="+window.order_data.order.id+"&worker_id="+refuse_worker_id+"&memo="+encodeURIComponent("人工指派未响应")+"&status="+encodeURIComponent("人工指派未响应"),
         dataType:"json",
         success: function (msg) {
@@ -94,7 +94,7 @@ $(document).on("click",'#worker_refuse_memo_submit',function(){
     }else{
         $.ajax({
             type: "POST",
-            url:  "/order/create-order-worker-relation",
+            url:  "/order/order/create-order-worker-relation",
             data: "order_id="+window.order_data.order.id+"&worker_id="+refuse_worker_id+"&memo="+encodeURIComponent(memo)+"&status="+encodeURIComponent("人工指派拒单"),
             dataType:"json",
             success: function (msg) {
@@ -114,9 +114,9 @@ $(document).on("click",'#worker_search_submit',function(){
         var reg = /^1[3-9][0-9]{9}$/;
         var url = '';
         if (reg.test($param)) {
-            url = "/order/search-assign-worker?order_id="+window.order_data.order.id+"&phone=" + $param;
+            url = "/order/order/search-assign-worker?order_id="+window.order_data.order.id+"&phone=" + $param;
         } else {
-            url = "/order/search-assign-worker?order_id="+window.order_data.order.id+"&worker_name=" + $param;
+            url = "/order/order/search-assign-worker?order_id="+window.order_data.order.id+"&worker_name=" + $param;
         }
         $.ajax({
             type: "GET",
@@ -130,7 +130,7 @@ $(document).on("click",'#worker_search_submit',function(){
                         '<td><input type="hidden" value="'+ v.id+'" /><a href="/worker/view/'+ v.id+'" target="_blank">'+ v.worker_name+'</a></td>'+
                         '<td>'+ v.worker_phone+'</td>'+
                         '<td>'+ v.shop_name+'</td>'+
-                        '<td>'+ v.worker_rule_description+'</td>'+
+                        '<td>'+ v.worker_identity_description+'</td>'+
                         '<td>'+ v.order_booked_time_range.join('<br/>')+'</td>'+
                         '<td>'+ v.worker_stat_order_refuse_percent+'</td>'+
                         '<td>'+ v.tag+'</td>'+
@@ -211,7 +211,7 @@ function getCanAssignWorkerList(){
                     '<td><input type="hidden" value="'+ v.id+'" /><a href="/worker/view/'+ v.id+'" target="_blank">'+ v.worker_name+'</a></td>'+
                     '<td>'+ v.worker_phone+'</td>'+
                     '<td>'+ v.shop_name+'</td>'+
-                    '<td>'+ v.worker_rule_description+'</td>'+
+                    '<td>'+ v.worker_identity_description+'</td>'+
                     '<td>'+ v.order_booked_time_range.join('<br/>')+'</td>'+
                     '<td>'+ v.worker_stat_order_refuse_percent+'</td>'+
                     '<td>'+ v.tag+'</td>'+

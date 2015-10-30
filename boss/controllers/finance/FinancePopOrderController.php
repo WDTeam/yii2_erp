@@ -67,10 +67,12 @@ class FinancePopOrderController extends Controller
     			$data = \Yii::$app->request->post();
     			$model->load($data);
     			$file = UploadedFile::getInstance($model, 'finance_uplod_url');
-    			if(isset($file->baseName)){
+    			
+    			if(!isset($file->baseName)){
     				\Yii::$app->getSession()->setFlash('default','请上传对账单！');
     				return $this->redirect(['index']);
     			}
+    			
     			$filenamesitename=$file->baseName;
     			if($file){
     				$qiniu = new Qiniu();
@@ -590,8 +592,10 @@ class FinancePopOrderController extends Controller
     	$model->save();
     	return $this->redirect(['index', 'id' =>$requestModel['oid']]);
     	}else{
+    		
     	$model = new FinancePopOrder;
     	return $this->renderAjax('forminfo',['workerVacationModel'=>$model]);
+    	
     	}
     }
     

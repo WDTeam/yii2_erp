@@ -35,6 +35,7 @@ class OrderController extends BaseAuthController
     
     public function actionCancelOrder()
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         //TODO: Xiaobo
         $admin_id = Yii::$app->user->id;
     
@@ -42,8 +43,13 @@ class OrderController extends BaseAuthController
         $order_id = $params['order_id'];
         $cancel_type = $params['cancel_type'];
         $cancel_note = $params['cancel_note'];
-    
-        return Order::cancel($order_id, $admin_id, $cancel_type, $cancel_note);
+        
+        $result = Order::cancel($order_id, $admin_id, $cancel_type, $cancel_note);
+        
+        if (is_null($result))
+            return true;
+        
+        return $result;
     }
 
     public function actionCustomer()
@@ -106,6 +112,15 @@ class OrderController extends BaseAuthController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $city_id = Yii::$app->request->get('city_id');
         return Order::getCountyList($city_id);
+    }
+
+    public function actionGetTimeRangeList()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $order_booked_count = Yii::$app->request->get('order_booked_count');
+        $district_id = Yii::$app->request->get('district_id');
+        $date = Yii::$app->request->get('date');
+        return Order::getOrderBookedTimeRangeList($district_id,$order_booked_count,$date);
     }
 
     public function actionCoupons()
@@ -285,12 +300,15 @@ class OrderController extends BaseAuthController
      */
     public function actionIndex()
     {        
+        $searchParas = Yii::$app->request->getQueryParams();
+        
         $searchModel = new OrderSearch; 
-        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+        $dataProvider = $searchModel->search($searchParas);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+            'searchParas' => $searchParas,
         ]);
     }
     

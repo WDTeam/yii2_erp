@@ -3,7 +3,7 @@ namespace restapi\controllers;
 
 use Yii;
 use \restapi\models\PayParam;
-use \core\models\payment\GeneralPay;
+use \core\models\payment\Payment;
 use \core\models\customer\CustomerAccessToken;
 
 class PayController extends \restapi\components\Controller
@@ -49,7 +49,7 @@ class PayController extends \restapi\components\Controller
             'order_id' => $params['order_id'],
         ];
 
-        if (empty(GeneralPay::balancePay($date))) {
+        if (empty(Payment::balancePay($date))) {
             return $this->send(null, "支付失败", "error", 403);
         }
 
@@ -219,7 +219,7 @@ class PayController extends \restapi\components\Controller
         $data[$name] = array_merge($data[$name], $ext_params);
         $model->attributes = $data[$name];
         if ($model->load($data) && $model->validate()) {
-            $retInfo = GeneralPay::getPayParams($model->pay_money, $model->customer_id, $model->channel_id, $model->partner, $model->order_id, $ext_params);
+            $retInfo = Payment::getPayParams($model->pay_money, $model->customer_id, $model->channel_id, $model->partner, $model->order_id, $ext_params);
             return $this->send($retInfo['data'], $retInfo['info'], $retInfo['status']);
         }
         return $this->send(null, $model->errors, 0);
@@ -286,7 +286,7 @@ class PayController extends \restapi\components\Controller
      */
     public function actionUpAppNotify()
     {
-        $obj = new GeneralPay();
+        $obj = new Payment();
         $obj->UpAppNotify(yii::$app->request->get());
         exit;
     }
@@ -296,7 +296,7 @@ class PayController extends \restapi\components\Controller
      */
     public function actionAlipayAppNotify()
     {
-        $obj = new GeneralPay();
+        $obj = new Payment();
         $obj->alipayAppNotify(yii::$app->request->get());
         exit;
     }
@@ -306,7 +306,7 @@ class PayController extends \restapi\components\Controller
      */
     public function actionAlipayWapNotify()
     {
-        $obj = new GeneralPay();
+        $obj = new Payment();
         $obj->alipayWapNotify(yii::$app->request->get());
         exit;
     }
@@ -316,7 +316,7 @@ class PayController extends \restapi\components\Controller
      */
     public function actionWxAppNotify()
     {
-        $obj = new GeneralPay();
+        $obj = new Payment();
         $obj->wxAppNotify(yii::$app->request->get());
         exit;
     }
@@ -326,7 +326,7 @@ class PayController extends \restapi\components\Controller
      */
     public function actionBfbAppNotify()
     {
-        $obj = new GeneralPay();
+        $obj = new Payment();
         $obj->bfbAppNotify(yii::$app->request->get());
         exit;
     }
@@ -336,7 +336,7 @@ class PayController extends \restapi\components\Controller
      */
     public function actionWxH5Notify()
     {
-        $obj = new GeneralPay();
+        $obj = new Payment();
         $obj->wxH5Notify(yii::$app->request->get());
         exit;
     }
@@ -346,7 +346,7 @@ class PayController extends \restapi\components\Controller
      */
     public function actionZhidahaoH5Notify()
     {
-        $obj = new GeneralPay();
+        $obj = new Payment();
         $obj->zhidahaoH5Notify(yii::$app->request->get());
         exit;
     }

@@ -35,8 +35,9 @@ class OperationAdvertPositionController extends BaseAuthController
     public function actionIndex()
     {
         $post = Yii::$app->request->post();
+
         $dataProvider = new ActiveDataProvider([
-            'query' =>!empty($post) ? OperationAdvertPosition::find()->where([$post['fields'] => $post['keyword']]): OperationAdvertPosition::find(),
+            'query' => (!empty($post) && $post['fields'] != '0') ? OperationAdvertPosition::find()->where([$post['fields'] => $post['keyword']]): OperationAdvertPosition::find(),
         ]);
         return $this->render('index', [
             'dataProvider' => $dataProvider,

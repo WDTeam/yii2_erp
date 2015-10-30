@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use kartik\widgets\Select2;
 /**
  * @var yii\web\View $this
  * @var boss\models\operation\OperationServiceCardInfoSearch $model
@@ -20,16 +20,36 @@ use yii\widgets\ActiveForm;
 	 <?= $form->field($model, 'service_card_info_name') ?>
 	</div>
 	<div class="col-md-2">
-	 <?= $form->field($model, 'service_card_info_card_type') ?>
+	 <?= $form->field($model, 'service_card_info_card_type')->widget(Select2::classname(), [
+        'name' => '服务卡类型',
+        'hideSearch' => true,
+        'data' => $config['type'],
+        'options' => ['placeholder' => '选择服务卡类型','class' => 'col-md-2'],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]);
+   
+    ?>
 	</div>
 	<div class="col-md-2">
-	 <?= $form->field($model, 'service_card_info_card_level') ?>
+	<?= $form->field($model, 'service_card_info_card_level')->widget(Select2::classname(), [
+        'name' => '服务卡级别',
+        'hideSearch' => true,
+        'data' => $config['level'],
+        'options' => ['placeholder' => '选择服务卡级别','class' => 'col-md-2'],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]);
+   
+    ?>
 	</div>
 	<div class="col-md-2">
-	 <?= $form->field($model, 'service_card_info_par_value') ?>
+	 <?= $form->field($model, 'service_card_info_value') ?>
 	</div>
 	<div class="col-md-2">
-	 <?= $form->field($model, 'service_card_info_reb_value') ?>
+	 <?= $form->field($model, 'service_card_info_rebate_value') ?>
 	</div>
 	<div class="col-md-2">
 	 <?= $form->field($model, 'service_card_info_valid_days') ?>
@@ -43,9 +63,9 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'service_card_info_card_level') ?>
 
-    <?php // echo $form->field($model, 'service_card_info_par_value') ?>
+    <?php // echo $form->field($model, 'service_card_info_value') ?>
 
-    <?php // echo $form->field($model, 'service_card_info_reb_value') ?>
+    <?php // echo $form->field($model, 'service_card_info_rebate_value') ?>
 
     <?php // echo $form->field($model, 'service_card_info_use_scope') ?>
 

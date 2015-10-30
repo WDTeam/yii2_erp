@@ -42,9 +42,10 @@ $(document).ready(function($){
 	});	
 	$(".submitq").click(function(){
 		var cancelType = $(":radio[name='radio_cancelType']:checked").val();
+		var cancelDetailType = $(":radio[name='radio_cancelDetailType']:checked").val();
 		var cancelNote = $("#text_CancelNote").val();
 		
-		if (cancelType == undefined){
+		if (cancelType == undefined || cancelDetailType == undefined){
 			alert("请选择取消原因！");
 			return;
 		}
@@ -54,9 +55,11 @@ $(document).ready(function($){
             url:  "/order/order/cancel-order",
             data: {order_id: operating_order_id, cancel_type: cancelType, cancel_note: cancelNote},
             dataType:"json",
-            success: function (msg) {alert('11:' + msg);
-                if(msg != false){alert('22');
-                	$("#HBox2").hide();
+            success: function (msg) {
+                if(msg){
+                	//alert('22');
+                	alert('取消订单成功！');
+                	$("#HBox").hide();
                 	$("#HOverlay").hide()
                 }else{
                     alert('取消订单失败！');
@@ -163,8 +166,10 @@ $(document).ready(function($){
             data: complaints,
             dataType:"json",
             success: function (msg) {
-                if(msg.status){
-                    
+                if(msg){
+                	alert('提交投诉成功！');
+                	$("#HBox2").hide();
+                	$("#HOverlay").hide()
                 }else{
                     alert('提交投诉失败！');
                 }

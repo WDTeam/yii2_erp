@@ -1,6 +1,10 @@
 <?php 
+use yii\helpers\Html;
+use yii\helpers\HtmlPurifier;
+
 use boss\models\order\OrderComplaint;
-	$odercmodel = new OrderComplaint();
+
+$odercmodel = new OrderComplaint();
 ?>					
 					 <div class="m_from">
 				     <div class="m_tab">
@@ -14,26 +18,26 @@ use boss\models\order\OrderComplaint;
 			                        <th class="m_colo">订单状态</th>
 			                    </tr>
 			                    <tr>
-			                    	<td>订   单ID：<?= $model->order_id; ?><br/>
-										客户手机：<?= $model->complaint_phone; ?><br/>
-										投诉渠道：<?= $odercmodel->channel($model->complaint_channel); ?><br/>
-										投诉部门：<?= $odercmodel->section($model->complaint_section); ?><br/>
-										投诉级别：<?= $odercmodel->level($model->complaint_level); ?><br/>
-										投诉类型：<?= $odercmodel->ctype($model->complaint_section,$model->complaint_type); ?><br/>
+			                    	<td>订   单ID：<?= Html::encode($model->order_id); ?><br/>
+										客户手机：<?= Html::encode($model->complaint_phone); ?><br/>
+										投诉渠道：<?= Html::encode($odercmodel->channel($model->complaint_channel)); ?><br/>
+										投诉部门：<?= Html::encode($odercmodel->section($model->complaint_section)); ?><br/>
+										投诉级别：<?= Html::encode($odercmodel->level($model->complaint_level)); ?><br/>
+										投诉类型：<?= Html::encode($odercmodel->ctype($model->complaint_section,$model->complaint_assortment)); ?><br/>
 			                    	</td>
-			                        <td>阿姨姓名：<?= $model->orderExtWorker->order_worker_name; ?><br/>
-										阿姨编号：<?= $model->orderExtWorker->worker_id; ?><br/>
-										阿姨身份：<?= $model->orderExtWorker->order_worker_type_name; ?><br/>
-										阿姨手机：<?= $model->orderExtWorker->order_worker_phone; ?><br/>
-										所属门店：<?= $model->orderExtWorker->order_worker_shop_name; ?><br/>
-			                    	</td>
-			                    	<td>
-			                    		<?= $model->complaint_content; ?>
+			                        <td>阿姨姓名：<?= Html::encode($model->orderExtWorker->order_worker_name); ?><br/>
+										阿姨编号：<?= Html::encode($model->orderExtWorker->worker_id); ?><br/>
+										阿姨身份：<?= Html::encode($model->orderExtWorker->order_worker_type_name); ?><br/>
+										阿姨手机：<?= Html::encode($model->orderExtWorker->order_worker_phone); ?><br/>
+										所属门店：<?= Html::encode($model->orderExtWorker->order_worker_shop_name); ?><br/>
 			                    	</td>
 			                    	<td>
+			                    		<?= Html::encode($model->complaint_content); ?>
 			                    	</td>
 			                    	<td>
-			                    		<p>待处理</p>
+			                    	</td>
+			                    	<td>
+			                    		<p>待确认</p>
 			                    		<p><a href="/order/order-complaint/create?id=<?= $model->id; ?>">申请赔偿</a></p>
 			                    		<!--p><a href="###">查看关联投诉</a></p> -->
 			                    	</td>

@@ -17,7 +17,7 @@ class OperationServiceCardInfoSearch extends OperationServiceCardInfo
         return [
             [['id', 'service_card_info_card_type', 'service_card_info_card_level', 'service_card_info_use_scope', 'service_card_info_valid_days', 'created_at', 'updated_at', 'is_del'], 'integer'],
             [['service_card_info_name'], 'safe'],
-            [['service_card_info_par_value', 'service_card_info_reb_value'], 'number'],
+            [['service_card_info_value', 'service_card_info_rebate_value'], 'number'],
         ];
     }
 
@@ -30,7 +30,6 @@ class OperationServiceCardInfoSearch extends OperationServiceCardInfo
     public function search($params)
     {
         $query = OperationServiceCardInfo::find();
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -43,8 +42,8 @@ class OperationServiceCardInfoSearch extends OperationServiceCardInfo
             'id' => $this->id,
             'service_card_info_card_type' => $this->service_card_info_card_type,
             'service_card_info_card_level' => $this->service_card_info_card_level,
-            'service_card_info_par_value' => $this->service_card_info_par_value,
-            'service_card_info_reb_value' => $this->service_card_info_reb_value,
+            'service_card_info_value' => $this->service_card_info_value,
+            'service_card_info_rebate_value' => $this->service_card_info_rebate_value,
             'service_card_info_use_scope' => $this->service_card_info_use_scope,
             'service_card_info_valid_days' => $this->service_card_info_valid_days,
             'created_at' => $this->created_at,

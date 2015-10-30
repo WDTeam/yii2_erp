@@ -41,7 +41,7 @@ class Order extends OrderModel
 
     public function getOrderBookedCountList()
     {
-        return ["120" => "两小时", "150" => "两个半小时", "180" => "三小时", "210" => "三个半小时", "240" => "四小时", "270" => "四个半小时", "300" => "五小时", "330" => "五个半小时", "360" => "六小时"];
+        return ["2" => "两小时", "2.5" => "两个半小时", "3" => "三小时", "3.5" => "三个半小时", "4" => "四小时", "4.5" => "四个半小时", "5" => "五小时", "5.5" => "五个半小时", "6" => "六小时"];
     }
 
     public function getCustomerNeeds()
@@ -68,11 +68,9 @@ class Order extends OrderModel
      * 获取已开通城市列表
      * @return array
      */
-    public static function getOnlineCityList(){
-//         $city_list = OperationCity::find()->select(['city_id','city_name'])->where(['province_id'=>$province_id,'operation_city_is_online'=>1])->all();
-//         return ArrayHelper::map($city_list,'city_id','city_name');
-        
-        $onlineCityList = OperationCity::getCityOnlineInfoList();
+    public static function getOnlineCityList($province_id){
+
+        $onlineCityList = OperationCity::getCityOnlineInfoListByProvince($province_id);
         return $onlineCityList?ArrayHelper::map($onlineCityList,'city_id','city_name'):[];
     }
 
@@ -89,8 +87,12 @@ class Order extends OrderModel
         return $countys;
     }
 
-    public function getOrderBookedTimeRangeList($range = 2)
+    public static function getOrderBookedTimeRangeList($district_id=0,$range = 2,$date=0,$days=1)
     {
+        if($district_id>0) {
+            $date = strtotime($date);
+            return Worker::getWorkerTimeLine($district_id, $range, $date, $days);
+        }
         $order_booked_time_range = [];
         for ($i = 8; $i <= 18; $i++) {
             $hour = str_pad($i, 2, '0', STR_PAD_LEFT);

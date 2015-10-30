@@ -2,6 +2,8 @@
 namespace dbbase\models\order;
 
 use Yii;
+
+use dbbase\models\ActiveRecord;
 use dbbase\models\order\OrderExtCustomer;
 use dbbase\models\order\OrderExtWorker;
 /**
@@ -25,7 +27,7 @@ use dbbase\models\order\OrderExtWorker;
 
 
 
-class OrderComplaint extends \dbbase\models\order\ActiveRecord
+class OrderComplaint extends ActiveRecord
 {
 	
 
