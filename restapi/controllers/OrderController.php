@@ -349,7 +349,7 @@ class OrderController extends \restapi\components\Controller
      * @apiGroup Order
      *
      * @apiParam {String} access_token 用户令牌
-     * @apiParam {String} [order_status] 订单状态
+     * @apiParam {String} [id] 订单id
      * @apiParam {String} [page] 第几页
      * @apiParam {String} [limit] 每页包含订单数
      * @apiParam {String} [channels] 渠道号按'.'分隔
@@ -478,7 +478,7 @@ class OrderController extends \restapi\components\Controller
      * @apiDescription 获得用户各种状态的订单数量
      *
      * @apiParam {String} access_token 用户令牌
-     * @apiParam {String} [order_id] 订单id
+     * @apiParam {String} [id] 订单id
      * @apiParam {String} [channels] 渠道号按'.'分隔
      * @apiParam {String} [order_status] 订单状态按'.'分隔
      * @apiParam {String} [from] 开始时间
@@ -538,14 +538,12 @@ class OrderController extends \restapi\components\Controller
 
     /**
      * @api {GET} /order/worker-orders 查询阿姨订单(xieyi 90%已经将后台接口完成,缺少周期订单)
-     *
-     *
-     * @apiName Orders
+     * @apiName WorkerOrders
      * @apiGroup Order
      *
      * @apiParam {String} access_token 阿姨登陆令牌
      * @apiParam {String} [order_status] 订单状态
-     * @apiParam {String} [order_id] 订单id
+     * @apiParam {String} [id] 订单id
      * @apiParam {String} [page] 第几页
      * @apiParam {String} [limit] 每页包含订单数
      * @apiParam {String} [channels] 渠道号按'.'分隔
@@ -679,7 +677,7 @@ class OrderController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 阿姨登陆令牌
      * @apiParam {String} [order_status] 订单状态
-     * @apiParam {String} [order_id] 订单id
+     * @apiParam {String} [id] 订单id
      * @apiParam {String} [page] 第几页
      * @apiParam {String} [limit] 每页包含订单数
      * @apiParam {String} [is_asc] 排序方式
@@ -809,7 +807,7 @@ class OrderController extends \restapi\components\Controller
      * @apiGroup Order
      *
      * @apiParam {String} access_token 阿姨登陆令牌
-     * @apiParam {String} [order_id] 订单id
+     * @apiParam {String} [id] 订单id
      * @apiParam {String} [channels] 渠道号按'.'分隔
      * @apiParam {String} [order_status] 订单状态按'.'分隔
      * @apiParam {String} [oc.customer_id]客户id
@@ -883,7 +881,7 @@ class OrderController extends \restapi\components\Controller
      * @apiGroup Order
      *
      * @apiParam {String} access_token 阿姨登陆令牌
-     * @apiParam {String} [order_id] 订单id
+     * @apiParam {String} [id] 订单id
      *
      *
      * @apiSuccess {Object[]} orderList 该状态订单.
@@ -1138,7 +1136,7 @@ class OrderController extends \restapi\components\Controller
      * @apiGroup Order
      * @apiDescription 获得各种状态的订单数量
      * @apiParam {String} access_token 订单状态
-     * @apiParam {String} [order_id] 订单id
+     * @apiParam {String} [id] 订单id
      * @apiParam {String} [channels] 渠道号按'.'分隔
      * @apiParam {String} [order_status] 订单状态按'.'分隔
      * @apiParam {String} [from] 开始时间
@@ -1286,6 +1284,7 @@ class OrderController extends \restapi\components\Controller
      */
     public function actionOrderStatusHistory()
     {
+
         $args = Yii::$app->request->get() or
                 $args = json_decode(Yii::$app->request->getRawBody(), true);
         @$token = $args['access_token'];
@@ -1293,11 +1292,15 @@ class OrderController extends \restapi\components\Controller
         if (empty($user)) {
             return $this->send(null, "用户无效,请先登录", 0);
         }
-        @$orderId = $args['order_id'];
+        $orderId = $args['order_id'];
         if (!is_numeric($orderId)) {
             return $this->send(null, "该订单不存在", 0);
         }
         //TODO check whether the orders belong the user
+        $orderSearch = new \core\models\order\OrderSearch();
+        $orderArr = array();
+        $orderArr["id"] = $orderId;
+        $orders = $orderSearch->searchOrdersWithStatus($orderArr);
         $ret = \core\models\order\OrderStatus::searchOrderStatusHistory($orderId);
 
         $this->send($ret, "操作成功");
@@ -1399,50 +1402,7 @@ class OrderController extends \restapi\components\Controller
         }
     }
 
-    /**
-     * @api {get} /mobileapidriver2/worker_request_order 抢单（haojianshe %0）
-     *
-     * @apiName actionDriverRequestOrder
-     * @apiGroup Order
-     *
-     * @apiDescription 阿姨抢单
-     * @apiParam {String} session_id    会话id.
-     * @apiParam {String} platform_version 平台版本号.
-     * @apiParam {String} order_id  订单id.
-     * @apiParam {String} list_type  订单类型.
-     * @apiParam {String} latitude
-     * @apiParam {String} longitude
-     * @apiParam {String} allow_worker_num   1  处理阿姨同时接单.
-     *
-     * @apiSuccessExample {json} Success-Response:
-     * HTTP/1.1 200 OK
-     * {
-     *      "code": "ok",
-     *      "msg":"操作成功",
-     *      "ret":
-     *      {
-     *          "result": "0",
-     *          "msg": "抢单失败，当天该时间段已有其他订单",
-     *          "goPage": 1,
-     *          "isSuc": false,
-     *          "telephone": "4006767636"
-     *      }
-     * }
-     *
-     * @apiError SessionIdNotFound 未找到会话ID.
-     *
-     * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
-     *  {
-     *      "code":"Failed",
-     *      "msg": "SessionIdNotFound"
-     *  }
-     *
-     */
-    public function actionObtainOrder()
-    {
-        
-    }
+
 
     /**
      * @api {GET} /order/add-comment 评价订单（该功能写在UserController里面 v1/user/user-suggest）

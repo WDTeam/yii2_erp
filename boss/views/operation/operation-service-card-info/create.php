@@ -7,10 +7,10 @@ use yii\helpers\Html;
  * @var boss\models\operation\OperationServiceCardInfo $model
  */
 
-$this->title = Yii::t('app', 'Create {modelClass}', [
+$this->title = Yii::t('app', '创建服务卡', [
     'modelClass' => 'Operation Service Card Info',
 ]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Service Card Infos'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '服务卡管理'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-service-card-info-create">
@@ -19,6 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <?= $this->render('_form', [
         'model' => $model,
+		'config' => $config,
     ]) ?>
 
 </div>

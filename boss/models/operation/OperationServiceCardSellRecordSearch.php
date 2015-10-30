@@ -16,8 +16,8 @@ class OperationServiceCardSellRecordSearch extends OperationServiceCardSellRecor
     public function rules()
     {
         return [
-            [['id', 'customer_id', 'customer_phone', 'service_card_info_card_id', 'service_card_sell_record_channel_id', 'service_card_sell_record_status', 'customer_trans_record_pay_mode', 'pay_channel_id', 'customer_trans_record_pay_account', 'customer_trans_record_paid_at','customer_trans_record_paid_at_min', 'customer_trans_record_paid_at_max', 'created_at', 'updated_at', 'is_del'], 'integer'],
-            [['service_card_sell_record_code', 'service_card_info_name', 'service_card_sell_record_channel_name', 'customer_trans_record_pay_channel', 'customer_trans_record_transaction_id'], 'safe'],
+            [['id', 'customer_id', 'customer_phone', 'service_card_info_id', 'service_card_sell_record_channel_id', 'service_card_sell_record_status', 'customer_trans_record_pay_mode', 'pay_channel_id', 'customer_trans_record_pay_account', 'customer_trans_record_paid_at','created_at', 'updated_at', 'is_del'], 'integer'],
+            [['service_card_sell_record_code', 'service_card_info_name', 'service_card_sell_record_channel_name', 'customer_trans_record_pay_channel', 'customer_trans_record_transaction_id','customer_trans_record_paid_at_min', 'customer_trans_record_paid_at_max',], 'safe'],
             [['service_card_sell_record_money', 'customer_trans_record_pay_money'], 'number'],
         ];
     }
@@ -45,7 +45,7 @@ class OperationServiceCardSellRecordSearch extends OperationServiceCardSellRecor
             'id' => $this->id,
             'customer_id' => $this->customer_id,
             'customer_phone' => $this->customer_phone,
-            'service_card_info_card_id' => $this->service_card_info_card_id,
+            'service_card_info_id' => $this->service_card_info_card_id,
             'service_card_sell_record_money' => $this->service_card_sell_record_money,
             'service_card_sell_record_channel_id' => $this->service_card_sell_record_channel_id,
             'service_card_sell_record_status' => $this->service_card_sell_record_status,
@@ -58,8 +58,8 @@ class OperationServiceCardSellRecordSearch extends OperationServiceCardSellRecor
             'updated_at' => $this->updated_at,
             'is_del' => $this->is_del,
         ]);
-		$query->andFilterWhere(['>','customer_trans_record_paid_at',$this->customer_trans_record_paid_at_min])
-			->andFilterWhere(['<','customer_trans_record_paid_at',$this->customer_trans_record_paid_at_max]);
+		$query->andFilterWhere(['>=','customer_trans_record_paid_at',strtotime($this->customer_trans_record_paid_at_min)])
+			->andFilterWhere(['<=','customer_trans_record_paid_at',strtotime($this->customer_trans_record_paid_at_max)]);
 
         $query->andFilterWhere(['like', 'service_card_sell_record_code', $this->service_card_sell_record_code])
             ->andFilterWhere(['like', 'service_card_info_name', $this->service_card_info_name])

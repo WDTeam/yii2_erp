@@ -7,10 +7,10 @@ use yii\helpers\Html;
  * @var boss\models\operation\OperationServiceCardConsumeRecord $model
  */
 
-$this->title = Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Operation Service Card Consume Record',
+$this->title = Yii::t('app', '创建服务卡消费记录', [
+    'modelClass' => '服务卡消费记录',
 ]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Operation Service Card Consume Records'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', '服务卡消费记录'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-service-card-consume-record-create">

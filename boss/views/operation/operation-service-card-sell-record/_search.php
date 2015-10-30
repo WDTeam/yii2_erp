@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\jui\DatePicker;
+use kartik\date\DatePicker;
 
 /**
  * @var yii\web\View $this
@@ -34,11 +34,25 @@ use yii\jui\DatePicker;
 	 <?= $form->field($model, 'customer_trans_record_pay_money') ?>
 	</div>
 	<div class="col-md-6">
-	 <?= $form->field($model, 'customer_trans_record_paid_at_min') ?>
+	  <?= $form->field($model, 'customer_trans_record_paid_at_min')->widget(DatePicker::classname(), [
+    		'name' => 'customer_trans_record_paid_at_min',
+    		'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+    		'pluginOptions' => [
+    		'autoclose' => true,
+    		'format' => 'yyyy-mm-dd'
+    		]
+            ]);  ?>
+	 
 	</div>
 	<div class="col-md-6">
-	 <?= $form->field($model, 'customer_trans_record_paid_at_max') ?>
-	 
+	<?= $form->field($model, 'customer_trans_record_paid_at_max')->widget(DatePicker::classname(), [
+    		'name' => 'customer_trans_record_paid_at_max',
+    		'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+    		'pluginOptions' => [
+    		'autoclose' => true,
+    		'format' => 'yyyy-mm-dd'
+    		]
+            ]);  ?>
 	</div>
     <?php // echo $form->field($model, 'id') ?>
 
@@ -48,7 +62,7 @@ use yii\jui\DatePicker;
 
     <?php // echo $form->field($model, 'customer_phone') ?>
 
-    <?php // echo $form->field($model, 'service_card_info_card_id') ?>
+    <?php // echo $form->field($model, 'service_card_info_id') ?>
 
     <?php // echo $form->field($model, 'service_card_info_name') ?>
 
