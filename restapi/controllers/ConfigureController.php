@@ -266,6 +266,25 @@ class ConfigureController extends \restapi\components\Controller
         }
         //获取城市列表
         $city_list = OperationCity::getOnlineCitys();
+        //页首链接
+        $header_link = [
+            'comment_link' => [
+                'id' => '',
+                'title' => '',
+                'url' => '',
+                'img' => '',
+                'coluor'=>'',
+                'sort' => ''
+            ],
+            'phone_link' => [
+                'id' => '',
+                'title' => '',
+                'url' => '',
+                'img' => '',
+                'coluor'=>'',
+                'sort' => ''
+            ],
+        ];
         //获取首页轮播图
         $pic_list = [
             [
@@ -442,6 +461,7 @@ class ConfigureController extends \restapi\components\Controller
 
         $ret = [
             'city_list' => $city_list,
+            'header_link'=>$header_link,
             'pic_list' => $pic_list,
             'home_order_server' => $home_order_server,
             'server_list' => $server_list,
@@ -695,7 +715,7 @@ class ConfigureController extends \restapi\components\Controller
      */
     public function actionStartPage()
     {
-        
+
     }
 
     /**
