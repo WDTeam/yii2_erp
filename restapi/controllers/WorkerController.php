@@ -679,7 +679,7 @@ class WorkerController extends \restapi\components\Controller
         $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
             return $this->send(null, $checkResult['msg'], 0, 403);
-        }
+        } 
         //数据整理
         if(!isset($param['settle_id'])||!intval($param['settle_id'])){
             return $this->send(null, "账单唯一标识错误", 0, 403);
