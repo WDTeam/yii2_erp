@@ -192,6 +192,8 @@ class alertMsgEnum
     const serverWorkerListFail = '没有可用阿姨';
     //获取周期服务可用阿姨列表成功
     const serverWorkerListSuccess = '获取周期服务可用阿姨列表成功';
+    //商圈不存在
+    const serverWorkerListDistrictNotExist = '商圈不存在';
     
     //选择周期服务的第一次服务日期列表
     //请选择服务时长或阿姨

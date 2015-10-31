@@ -813,7 +813,11 @@ class ServiceController extends \restapi\components\Controller
         }catch (\Exception $e) {
             return $this->send($e, "根据经纬度获取商圈id系统错误", 1024, 403,null,alertMsgEnum::bossError);
         }
-         $district_id = $ShopDistrictInfo['id'];
+        if (empty($ShopDistrictInfo)) {
+            return $this->send(null, "商圈不存在", 0, 403,null,alertMsgEnum::serverWorkerListDistrictNotExist);
+        } else {
+            $district_id = $ShopDistrictInfo['id'];
+        }
          //获取周期订单可用阿姨的列表
         try{
             $worker_list=CustomerWorker::getCustomerDistrictNearbyWorker($customer_id,$district_id,$page,$per_page);
