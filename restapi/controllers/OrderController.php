@@ -1647,16 +1647,23 @@ class OrderController extends \restapi\components\Controller
                 if (empty($param['page_size']) || empty($param['page'])) {
                     return $this->send(null, "缺少规定的参数,page_size或page不能为空", 0, 403);
                 }
-                try { 
+                try {
                     #指定阿姨订单列表
                     $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 1);
                     #未指定阿姨订单列表
                     $workerCountTwo = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 0);
 
                     #指定阿姨订单数
-                    $ret['workerOrderCount'] = OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
+                    $workerOrderCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
+                    if ($param['page'] == 1) {
+                        $ret['pageNumber'] = ceil($workerOrderCount / $param['page_size']);
+                    }
                     #待抢单订单数
-                    $ret['orderData'] = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
+                    $orderData = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
+
+                    if ($param['page'] == 1) {
+                        $ret['pageNumber'] = ceil($orderData / $param['page_size']);
+                    }
 
                     $ret['workerData'] = array_merge($workerCount, $workerCountTwo);
                     #倒计时
@@ -1665,23 +1672,7 @@ class OrderController extends \restapi\components\Controller
                 } catch (\Exception $e) {
                     return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 1024);
                 }
-            }
-//            else if ($param['leveltype'] == 3) {
-//                if (empty($param['page_size']) || empty($param['page'])) {
-//                    return $this->send(null, "缺少规定的参数,page_size或page不能为空", 0, 403);
-//                }
-//
-//                try {
-//                    $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 0);
-//                    $ret['workerData'] = $workerCount;
-//                    #倒计时
-//                    $ret['time'] = 172800;
-//                    return $this->send($ret, $this->workerText[$param['leveltype']], 1);
-//                } catch (\Exception $e) {
-//                    return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 0,1024);
-//                }
-//            } 
-            else if ($param['leveltype'] == 1) {
+            } else if ($param['leveltype'] == 1) {
                 try {
 
                     #指定阿姨订单数
