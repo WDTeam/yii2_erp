@@ -55,7 +55,7 @@ return [
             'class'=>'dbbase\components\Ivr',
             'app_id'=>'5000058',
             'token'=>'57b62a3462b52a1413a4e1934a60d983',
-            'redirect_uri'=>'ivr/callback'
+            'redirect_uri'=>'system/ivr/callback'
         ],
     ]
 ];

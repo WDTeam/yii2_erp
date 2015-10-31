@@ -472,7 +472,7 @@ class OrderController extends \restapi\components\Controller
     /**
      * @api {GET} /order/orders-count 查询用户订单数量(xieyi 70%缺少周期订单)
      *
-     * @apiName StatusOrdersCount
+     * @apiName OrdersCount
      * @apiGroup Order
      * @apiDescription 获得用户各种状态的订单数量
      *
@@ -674,7 +674,7 @@ class OrderController extends \restapi\components\Controller
      * @api {GET} /order/worker-service-orders 查询待服务阿姨订单(xieyi 90%已经将后台接口完成,缺少周期订单)
      *
      *
-     * @apiName Orders
+     * @apiName WorkerServiceOrders
      * @apiGroup Order
      *
      * @apiParam {String} access_token 阿姨登陆令牌
@@ -805,7 +805,7 @@ class OrderController extends \restapi\components\Controller
      * @api {GET} /order/worker-orders-count 查询阿姨订单订单数量(xieyi 90%已经将后台接口完成,缺少周期订单)
      *
      *
-     * @apiName Orders
+     * @apiName WorkerOrdersCount
      * @apiGroup Order
      *
      * @apiParam {String} access_token 阿姨登陆令牌
@@ -876,10 +876,10 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /order/worker-service-orders-count 查询阿姨待服务订单订单数量(xieyi 90%已经将后台接口完成,缺少周期订单)
+     * @api {GET} /order/worker-service-orders-count 查询阿姨待服务订单订单数量
      *
      *
-     * @apiName Orders
+     * @apiName WorkerServiceOrdersCount
      * @apiGroup Order
      *
      * @apiParam {String} access_token 阿姨登陆令牌
