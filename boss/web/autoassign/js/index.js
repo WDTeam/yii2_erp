@@ -92,13 +92,13 @@ function websocketConnect() {
 function showOrders(data){
     var order = $.parseJSON(data);
     order = eval('(' + order + ')');
-    if (order.order_id==null || order.order_id=='')
+    if (order.order_code==null || order.order_code=='')
     {
         return;
     }
-    var id = 'order_'+order.order_id;
+    var id = 'order_'+order.order_code;
     var obj = $('#'+id);
-    order.status = getStatus(order.push_status);
+    order.status = getStatus(order.status);
     if(order.ivr > 0){
         order.ivr = '已发送';
     }else{
@@ -115,7 +115,7 @@ function showOrders(data){
         order.updated_at = '';
     }
     if(obj[0] == null){
-        var str = '<tr id="'+id+'"><td>'+order.order_id+'</td><td>'+order.status+'</td><td>'+order.ivr+'</td><td>'+order.jpush+'</td><td>'+order.created_at+'</td><td>'+order.updated_at+'</td></tr>';
+        var str = '<tr id="'+id+'"><td>'+order.order_code+'</td><td>'+order.status+'</td><td>'+order.ivr+'</td><td>'+order.jpush+'</td><td>'+order.created_at+'</td><td>'+order.updated_at+'</td></tr>';
         $('#tbody').append(str);
     }else{
         $($('#'+id).children('td')[1]).html(order.status);
