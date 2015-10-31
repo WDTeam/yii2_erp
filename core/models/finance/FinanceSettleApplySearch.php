@@ -490,9 +490,9 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             $finalWorkerIncome['order_money_except_cash'] = $workerIncome['order_money_except_cash'];
             $finalWorkerIncome['isWorkerConfirmed'] = $workerIncome['isWorkerConfirmed'];
             if($workerIncome['settle_status'] == self::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PAYED){
-                 $finalWorkerIncome['settle_status'] = 1;//已结算
+                 $finalWorkerIncome['settle_status'] = '1';//已结算
             }else{
-                 $finalWorkerIncome['settle_status'] = 0;//未结算
+                 $finalWorkerIncome['settle_status'] = '0';//未结算
             }
             $finalWorkerIncomeArr[$i] = $finalWorkerIncome;
             $i++;

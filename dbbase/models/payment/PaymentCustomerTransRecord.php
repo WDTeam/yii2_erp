@@ -37,11 +37,9 @@ use yii\behaviors\TimestampBehavior;
  * @property string $payment_customer_trans_record_verify
  * @property string $created_at
  * @property string $updated_at
- * @property integer $is_del
  */
 class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
 {
-    public $record_type;
     /**
      * @inheritdoc
      */
@@ -66,8 +64,16 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
     }
 
     /**
-     * 验证数据之前组装数据
+     * 新增/修改数据
      */
+    protected function doSave()
+    {
+        return $this->save();
+    }
+
+    /**
+     * 验证数据之前组装数据
+
     public function beforeValidate()
     {
         //订单渠道
@@ -84,7 +90,7 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
 
         return true;
     }
-
+     */
 
     /**
      * 制造签名
@@ -97,6 +103,7 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
         $notArray = ['id','payment_customer_trans_record_verify','created_at','updated_at'];
         //获取字段
         $key = $this->attributeLabels();
+
         //加密签名
         foreach( $key as $name=>$val )
         {
@@ -115,20 +122,19 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
     {
         return [
             [['customer_id', 'payment_customer_trans_record_order_channel', 'pay_channel_id', 'payment_customer_trans_record_pay_channel', 'payment_customer_trans_record_mode_name', 'payment_customer_trans_record_refund_money', 'payment_customer_trans_record_verify'], 'required'],
-            [['customer_id', 'order_id', 'order_channel_id',  'pay_channel_id', 'payment_customer_trans_record_mode',  'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['customer_id', 'order_id', 'order_channel_id',  'pay_channel_id', 'payment_customer_trans_record_mode',  'created_at', 'updated_at'], 'integer'],
             [['payment_customer_trans_record_coupon_money', 'payment_customer_trans_record_cash', 'payment_customer_trans_record_pre_pay', 'payment_customer_trans_record_online_pay', 'payment_customer_trans_record_online_balance_pay', 'payment_customer_trans_record_service_card_pay','payment_customer_trans_record_service_card_current_balance','payment_customer_trans_record_service_card_befor_balance', 'payment_customer_trans_record_refund_money',  'payment_customer_trans_record_order_total_money', 'payment_customer_trans_record_total_money', 'payment_customer_trans_record_current_balance', 'payment_customer_trans_record_befor_balance','payment_customer_trans_record_compensate_money'], 'number'],
             //[['payment_customer_trans_record_service_card_on'], 'string', 'max' => 30],
             //[['payment_customer_trans_record_transaction_id'], 'string', 'max' => 40],
             [['payment_customer_trans_record_remark'], 'string', 'max' => 255],
-            [['payment_customer_trans_record_verify'], 'string', 'max' => 32],
-            [['record_type'],'required'],   //自定义，交易类型:1=消费,2=充值,3=退款,4=补偿
+            [['payment_customer_trans_record_verify'], 'string', 'max' => 320],
             [['customer_id','order_id','order_channel_id','pay_channel_id'],'match','pattern'=>'%^[1-9]\d*$%'],   //必须为数字，不能是0
         ];
     }
-
+    // 1jiajie.com246760760210001000285591000
+    // 1jiajie.com24676076021000285591000
     /**
      * 场景验证
-     * @param string $record_type_交易类型:
      * @remark 1：在线支付（在线+余额+服务卡）
      *         2：现金
      *         3：预付费
@@ -155,10 +161,16 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
                 'payment_customer_trans_record_coupon_money',   //优惠券金额
                 'payment_customer_trans_record_online_pay', //在线支付
                 'payment_customer_trans_record_online_balance_pay', //在线余额支付
+                'payment_customer_trans_record_befor_balance',  //之前余额
+                'payment_customer_trans_record_current_balance',    //当前余额
+                'payment_customer_trans_record_service_card_current_balance',    //服务卡当前
+                'payment_customer_trans_record_service_card_befor_balance', //服务卡之前余额
                 'payment_customer_trans_record_service_card_on', //服务卡号
                 'payment_customer_trans_record_service_card_pay',    //服务卡支付
                 'payment_customer_trans_record_order_total_money',  //订单总额
+                'payment_customer_trans_record_total_money',    //交易总额
                 'payment_customer_trans_record_transaction_id', //交易流水号
+                'payment_customer_trans_record_verify',
             ],
             //2=现金 cardPay
             '2'=>[
@@ -170,8 +182,16 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
                 'payment_customer_trans_record_pay_channel',    //支付渠道名称
                 'payment_customer_trans_record_mode',   //交易方式:1消费,2=充值,3=退款,4=补偿
                 'payment_customer_trans_record_mode_name',  //交易方式:1消费,2=充值,3=退款,4=补偿
+                'payment_customer_trans_record_cash',   //现金支付
                 'payment_customer_trans_record_order_total_money',  //订单总额
-                'payment_customer_trans_record_cash', //现金支付
+                'payment_customer_trans_record_befor_balance',  //之前余额
+                'payment_customer_trans_record_current_balance',    //当前余额
+                'payment_customer_trans_record_service_card_current_balance',    //服务卡当前
+                'payment_customer_trans_record_service_card_befor_balance', //服务卡之前余额
+                'payment_customer_trans_record_total_money',    //交易总额
+                'payment_customer_trans_record_service_card_on', //服务卡ID
+                'payment_customer_trans_record_service_card_pay', //服务卡金额
+                'payment_customer_trans_record_verify',
             ],
             //3=预付费 perPay
             '3'=>[
@@ -183,9 +203,16 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
                 'payment_customer_trans_record_pay_channel',    //支付渠道名称
                 'payment_customer_trans_record_mode',   //交易方式:1消费,2=充值,3=退款,4=补偿
                 'payment_customer_trans_record_mode_name',  //交易方式:1消费,2=充值,3=退款,4=补偿
+                'payment_customer_trans_record_pre_pay',    //预付费
                 'payment_customer_trans_record_order_total_money',  //订单总额
-                'payment_customer_trans_record_pre_pay', //预付费支付
-                'payment_customer_trans_record_transaction_id', //交易流水号
+                'payment_customer_trans_record_befor_balance',  //之前余额
+                'payment_customer_trans_record_current_balance',    //当前余额
+                'payment_customer_trans_record_service_card_current_balance',    //服务卡当前
+                'payment_customer_trans_record_service_card_befor_balance', //服务卡之前余额
+                'payment_customer_trans_record_total_money',    //交易总额
+                'payment_customer_trans_record_service_card_on', //服务卡ID
+                'payment_customer_trans_record_service_card_pay', //服务卡金额
+                'payment_customer_trans_record_verify',
             ],
             //4=充值（服务卡） rechargeServiceCardPay
             '4'=>[
@@ -197,9 +224,15 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
                 'payment_customer_trans_record_mode',   //交易方式:1消费,2=充值,3=退款,4=补偿
                 'payment_customer_trans_record_mode_name',  //交易方式:1消费,2=充值,3=退款,4=补偿
                 'payment_customer_trans_record_order_total_money',  //订单总额
+                'payment_customer_trans_record_total_money',    //交易总额
+                'payment_customer_trans_record_online_pay', //在线支付
+                'payment_customer_trans_record_befor_balance',  //之前余额
+                'payment_customer_trans_record_current_balance',    //当前余额
                 'payment_customer_trans_record_service_card_on', //服务卡号
-                'payment_customer_trans_record_service_card_pay',    //服务卡支付
+                'payment_customer_trans_record_service_card_current_balance',    //服务卡当前
+                'payment_customer_trans_record_service_card_befor_balance', //服务卡之前余额
                 'payment_customer_trans_record_transaction_id', //交易流水号
+                'payment_customer_trans_record_verify',
             ],
             //5=退款（服务卡）：把订单金额退到服务卡 refundServiceCardPay
             '5'=>[
@@ -212,9 +245,11 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
                 'payment_customer_trans_record_mode',   //交易方式:1消费,2=充值,3=退款,4=补偿
                 'payment_customer_trans_record_mode_name',  //交易方式:1消费,2=充值,3=退款,4=补偿
                 'payment_customer_trans_record_order_total_money',  //订单总额
+                'payment_customer_trans_record_total_money',    //交易总额
                 'payment_customer_trans_record_refund_money',   //退款金额
                 'payment_customer_trans_record_service_card_on', //服务卡号
                 'payment_customer_trans_record_service_card_pay',    //服务卡支付金额
+                'payment_customer_trans_record_verify',
             ],
             //6=补偿  compensation
             '6'=>[
@@ -227,9 +262,13 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
                 'payment_customer_trans_record_mode',   //交易方式:1消费,2=充值,3=退款,4=补偿
                 'payment_customer_trans_record_mode_name',  //交易方式:1消费,2=充值,3=退款,4=补偿
                 'payment_customer_trans_record_order_total_money',  //订单总额
+                'payment_customer_trans_record_befor_balance',  //之前余额
+                'payment_customer_trans_record_current_balance',    //当前余额
+                'payment_customer_trans_record_total_money',    //交易总额
                 'payment_customer_trans_record_compensate_money',   //补偿金额
                 'payment_customer_trans_record_service_card_on', //服务卡号
                 'payment_customer_trans_record_service_card_pay',    //服务卡支付金额
+                'payment_customer_trans_record_verify',
             ],
             //7=服务卡(在线支付) onlineServiceCardPay
             '7'=>[
@@ -242,8 +281,12 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
                 'payment_customer_trans_record_mode',   //交易方式:1消费,2=充值,3=退款,4=补偿
                 'payment_customer_trans_record_mode_name',  //交易方式:1消费,2=充值,3=退款,4=补偿
                 'payment_customer_trans_record_order_total_money',  //订单总额
-                'payment_customer_trans_record_service_card_on', //服务卡号
-                'payment_customer_trans_record_service_card_pay',    //服务卡支付金额
+                'payment_customer_trans_record_befor_balance',  //之前余额
+                'payment_customer_trans_record_current_balance',    //当前余额
+                'payment_customer_trans_record_total_money',    //交易总额
+                'payment_customer_trans_record_service_card_on', //服务卡ID
+                'payment_customer_trans_record_service_card_pay', //服务卡金额
+                'payment_customer_trans_record_verify',
             ],
             //8=余额（在线支付）onlineBalancePay
             '8'=>[
@@ -258,6 +301,14 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
                 'payment_customer_trans_record_online_balance_pay',//在线余额支付
                 'payment_customer_trans_record_coupon_money',   //优惠券金额
                 'payment_customer_trans_record_order_total_money',  //订单总额
+                'payment_customer_trans_record_befor_balance',  //之前余额
+                'payment_customer_trans_record_current_balance',    //当前余额
+                'payment_customer_trans_record_service_card_current_balance',    //服务卡当前
+                'payment_customer_trans_record_service_card_befor_balance', //服务卡之前余额
+                'payment_customer_trans_record_total_money',    //交易总额
+                'payment_customer_trans_record_service_card_on', //服务卡ID
+                'payment_customer_trans_record_service_card_pay', //服务卡金额
+                'payment_customer_trans_record_verify',
             ],
             //9=退款（订单）：把订单金额原路退回 refundSourc
             '9'=>[
@@ -270,13 +321,17 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
                 'payment_customer_trans_record_mode',   //交易方式:1消费,2=充值,3=退款,4=补偿
                 'payment_customer_trans_record_mode_name',  //交易方式:1消费,2=充值,3=退款,4=补偿
                 'payment_customer_trans_record_online_pay', //线上支付
-                'payment_customer_trans_record_service_card_on', //服务卡ID
-                'payment_customer_trans_record_service_card_pay', //服务卡内容
                 'payment_customer_trans_record_coupon_money',   //优惠券金额
                 'payment_customer_trans_record_online_balance_pay', //余额支付
                 'payment_customer_trans_record_order_total_money',  //订单总额
                 'payment_customer_trans_record_refund_money',   //退款金额
                 'payment_customer_trans_record_transaction_id', //交易流水号
+                'payment_customer_trans_record_befor_balance',  //之前余额
+                'payment_customer_trans_record_current_balance',    //当前余额
+                'payment_customer_trans_record_total_money',    //交易总额
+                'payment_customer_trans_record_service_card_on', //服务卡ID
+                'payment_customer_trans_record_service_card_pay', //服务卡内容
+                'payment_customer_trans_record_verify',
             ],
             //1=在线支付（在线）onlinePay
             '10'=>[
@@ -292,6 +347,15 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
                 'payment_customer_trans_record_online_pay', //在线支付
                 'payment_customer_trans_record_order_total_money',  //订单总额
                 'payment_customer_trans_record_transaction_id', //交易流水号
+                'payment_customer_trans_record_befor_balance',  //之前余额
+                'payment_customer_trans_record_current_balance',    //当前余额
+                'payment_customer_trans_record_service_card_current_balance',    //服务卡当前
+                'payment_customer_trans_record_service_card_befor_balance', //服务卡之前余额
+                'payment_customer_trans_record_total_money',    //交易总额
+                'payment_customer_trans_record_service_card_on', //服务卡ID
+                'payment_customer_trans_record_service_card_pay', //服务卡金额
+                'payment_customer_trans_record_verify',
+
             ],
         ];
     }
@@ -300,6 +364,7 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
     /**
      * 入口分配
      */
+    /*
     public function add()
     {
         $obj = null;
@@ -348,10 +413,10 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
 
         return $obj;
     }
-
+*/
     /**
      * 在线支付(1)
-     */
+
     private function onlineCradBalancePay()
     {
         //获取最后一次结果
@@ -373,10 +438,10 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
 
         return $this->insert();
     }
-
+     */
     /**
      * 现金支付(2)
-     */
+
     private function cardPay(){
         //获取最后一次结果
         $lastResult = $this->lastResult();
@@ -397,10 +462,10 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
 
         return $this->insert();
     }
-
+     */
     /**
      * 预付费(3)
-     */
+
     private function perPay()
     {
         //获取最后一次结果
@@ -422,10 +487,10 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
 
         return $this->insert();
     }
-
+     */
     /**
      *  充值（服务卡）(4)
-     */
+
     private function rechargeServiceCardPay()
     {
         //获取最后一次结果
@@ -448,28 +513,28 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
         return $this->insert();
 
     }
-
+     */
 
     /**
      * 退款(服务卡)(5)
-     */
+
     private function refundServiceCardPay()
     {
 
     }
-
+     */
     /**
      * 补偿(6)
-     */
+
     private function compensation()
     {
 
     }
 
-
+     */
     /**
      * 服务卡(在线支付)(7)
-     */
+
     private function onlineServiceCardPay()
     {
         //获取最后一次结果
@@ -491,10 +556,10 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
 
         return $this->insert();
     }
-
+     */
     /**
      * 余额在线支付(8)
-     */
+
     public function onlineBalancePay()
     {
         //获取最后一次结果
@@ -515,10 +580,10 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
         $this->payment_customer_trans_record_total_money = bcadd($lastResult['payment_customer_trans_record_total_money'],$this->payment_customer_trans_record_order_total_money);
         return $this->insert();
     }
-
+     */
     /**
      * 退款（订单）：把订单金额原路退回(9)
-     */
+
     private function refundSource()
     {
         //获取最后一次结果
@@ -542,10 +607,10 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
 
         return $this->insert();
     }
-
+     */
     /**
      * 在线支付（在线）(10)
-     */
+
     private function onlinePay()
     {
         //获取最后一次结果
@@ -567,10 +632,10 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
 
         return $this->insert();
     }
-
+     */
     /**
      * 获取用户交易记录最后一条数据
-     */
+
     private function lastResult(){
         return $result = PaymentCustomerTransRecord::find()->select(
             [
@@ -581,10 +646,10 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
             ]
         )->where(['customer_id'=>$this->customer_id])->orderBy(['id' => SORT_DESC])->asArray()->one();
     }
-
+     */
     /**
      * 获取用户交易记录最后一次服务卡的余额
-     */
+
     private function lastResultServerCard()
     {
         return $result = PaymentCustomerTransRecord::find()->select(
@@ -602,12 +667,12 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
             ]
         )->orderBy(['id' => SORT_DESC])->asArray()->one();
     }
-
+     */
     /**
      * 记录模式
      * @param $mode_id
      * @return string
-     */
+
     public static function getCustomerTransRecordModeByName($mode_id)
     {
         switch($mode_id){
@@ -626,7 +691,7 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
         }
         return $mode_name;
     }
-
+     */
     /**
      * @inheritdoc
      */
@@ -662,8 +727,6 @@ class PaymentCustomerTransRecord extends \yii\db\ActiveRecord
             'payment_customer_trans_record_verify' => Yii::t('app', '验证'),
             'created_at' => Yii::t('app', '创建时间'),
             'updated_at' => Yii::t('app', '更新时间'),
-            'is_del' => Yii::t('app', '删除'),
-            'record_type' => Yii::t('app', '规则'),
         ];
     }
 }

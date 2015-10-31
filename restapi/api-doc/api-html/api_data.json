@@ -4428,7 +4428,21 @@
             "type": "<p>String</p> ",
             "optional": false,
             "field": "settle_id",
-            "description": "<p>账单唯一标识.</p> "
+            "description": "<p>账单唯一标识</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "per_page",
+            "description": "<p>第几页</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "page_num",
+            "description": "<p>每页显示多少条</p> "
           },
           {
             "group": "Parameter",
@@ -4449,7 +4463,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n   \"code\": 1,\n    \"msg\": \"操作成功\",\n    \"alertMsg\": \"获取处罚列表成功\",\n       \"ret\": [\n           {\n               \"deduction_money\": \"处罚金额\",\n               \"deduction_des\": \"处罚描述\",\n               \"deduction_type\": \"处罚类型\",\n               \"deduction_time\": \"处罚时间\",\n               \"deduction_type_des\": \"处罚类型描述\"\n           }\n      ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n   \"code\": 1,\n    \"msg\": \"操作成功\",\n    \"alertMsg\": \"获取处罚列表成功\",\n    \"ret\":{\n             \"per_page\": 1,\n             \"page_num\": 10,\n             \"data\":[\n                {\n                 \"deduction_money\": \"处罚金额\",\n                 \"deduction_des\": \"处罚描述\",\n                 \"deduction_type\": \"处罚类型\",\n                 \"deduction_time\": \"处罚时间\",\n                 \"deduction_type_des\": \"处罚类型描述\"\n               }\n             ]  \n     }\n}",
           "type": "json"
         }
       ]
@@ -4546,6 +4560,20 @@
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
+            "optional": false,
+            "field": "per_page",
+            "description": "<p>第几页</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "page_num",
+            "description": "<p>每页显示多少条</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
             "optional": true,
             "field": "platform_version",
             "description": "<p>平台版本号.</p> "
@@ -4562,7 +4590,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"alertMsg\": \"获取任务奖励成功\",\n  \"ret\": [\n      {\n          \"task_money\": \"任务奖励\",\n          \"task_des\": \"任务描述\"\n      }\n  ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"alertMsg\": \"获取任务奖励成功\",\n  \"ret\":{\n      \"per_page\": 1,\n      \"page_num\": 10,\n      \"data\": [\n          {\n              \"task_money\": \"奖励金额\",\n              \"task_des\": \"任务说明\"\n          }\n      ]    \n }\n}",
           "type": "json"
         }
       ]

@@ -13,7 +13,7 @@ use core\models\operation\OperationShopDistrictGoods;
 use core\models\operation\OperationShopDistrictCoordinate;
 use core\models\customer\Customer;
 use core\models\customer\CustomerAddress;
-use core\models\payment\Payment;
+use core\models\payment\PaymentCustomerTransRecord;
 use core\models\worker\Worker;
 use core\models\operation\OperationShopDistrict;
 use core\models\operation\OperationGoods;
@@ -136,41 +136,12 @@ class Order extends OrderModel
         $attributes['order_parent_id'] = 0;
         $attributes['order_is_parent'] = 0;
         if($this->_create($attributes)) {
-            $order = $this->attributes;
-            $order['order_id'] = $this->id;
             $order_model = OrderSearch::getOne($this->id);
-            switch ($this->orderExtPay->order_pay_type) {
-                case OrderExtPay::ORDER_PAY_TYPE_OFF_LINE://现金支付
-                    //交易记录
-                    $order['payment_customer_trans_record_cash'] = $this->order_money;
-                    $order['payment_source'] = 20;
-                    if (Payment::cashPay($order)) {
-                        $order_model->admin_id = $attributes['admin_id'];
-                        OrderStatus::_payment($order_model, ['OrderExtPay']);
-                    }
-                    break;
-                case OrderExtPay::ORDER_PAY_TYPE_ON_LINE://线上支付
-                    if ($this->orderExtPay->order_pay_money == 0) { //如果需要支付的金额等于0 则全部走余额支付
-                        //交易记录
-                        $order['payment_customer_trans_record_online_balance_pay'] = $this->orderExtPay->order_use_acc_balance;
-                        $order['payment_source'] = 20;
-                        if (Payment::balancePay($order)) {
-                            $order_model->admin_id = $attributes['admin_id'];
-                            OrderStatus::_payment($order_model, ['OrderExtPay']);
-                        }
-                    }
-                    break;
-                case OrderExtPay::ORDER_PAY_TYPE_POP://第三方预付
-                    //交易记录
-                    $order['payment_customer_trans_record_pre_pay'] = $this->orderExtPop->order_pop_order_money;
-                    $order['payment_source'] = $this->channel_id;
-                    if (Payment::prePay($order)) {
-                        $order_model->admin_id = $attributes['admin_id'];
-                        OrderStatus::_payment($order_model, ['OrderExtPay']);
-                    }
-                    break;
-                default:
-                    break;
+            $channel_id = !empty($this->channel_id) ? $this->channel_id : 20;
+            //交易记录
+            if (PaymentCustomerTransRecord::analysisRecord($this->id, $channel_id, 'order_pay')) {
+                $order_model->admin_id = $attributes['admin_id'];
+                OrderStatus::_payment($order_model, ['OrderExtPay']);
             }
             return true;
         }
@@ -201,28 +172,36 @@ class Order extends OrderModel
      *          int $coupon_id 优惠券id
      *      ]
      * ]
-     * @return bool
+     * @return array
      */
-    public function createNewBatch($attributes,$booked_list)
+    public static function createNewBatch($attributes,$booked_list)
     {
         $transact = static::getDb()->beginTransaction();
         //如果指定阿姨则是周期订单分配周期订单号否则分配批量订单号
         $attributes['order_parent_id'] = 0;
-        $attributes['order_is_parent'] = 0;
+        $attributes['order_is_parent'] = 1;
         if(isset($attributes['order_booked_worker_id']) && $attributes['order_booked_worker_id']>0)
         {
-            $attributes['order_batch_code'] = OrderTool::createOrderCode('z');
+            $attributes['order_batch_code'] = OrderTool::createOrderCode('Z');
         }else{
-            $attributes['order_batch_code'] = OrderTool::createOrderCode('p');
+            $attributes['order_batch_code'] = OrderTool::createOrderCode('P');
         }
         foreach($booked_list as $booked){
-            if(!$this->_create($attributes+$booked,$transact)){
+            $order = new Order();
+            if(!$order->_create($attributes+$booked,$transact)){
+                print_r($order->errors);
                 $transact->rollBack();
-                return false;
+                return ['status'=>false,'errors'=>$order->errors];
+            }else{
+                if($attributes['order_parent_id'] ==0 && $attributes['order_is_parent']==1) {
+                    //第一个订单为父订单其余为子订单
+                    $attributes['order_parent_id'] = $order->id;
+                    $attributes['order_is_parent'] = 0;
+                }
             }
         }
         $transact->commit();
-        return true;
+        return ['status'=>true,'batch_code'=>$attributes['order_batch_code']];
     }
 
 
@@ -418,6 +397,44 @@ class Order extends OrderModel
         $order = OrderSearch::getOne($order_id);
         return OrderStatus::_serviceDone($order);
     }
+
+
+    /**
+     * 评价接口
+     * @param $order_id
+     * @return bool
+     */
+    public static function customerAcceptDone($order_id)
+    {
+        $order = OrderSearch::getOne($order_id);
+        return OrderStatus::_customerAcceptDone($order);
+    }
+
+
+    /**
+     * 订单已对账
+     * @param $order_id
+     * @return bool
+     */
+    public static function checked($order_id)
+    {
+        $order = OrderSearch::getOne($order_id);
+        return OrderStatus::_checked($order);
+    }
+
+    /**
+     * 订单完成结算
+     * @param $order_id
+     * @return bool
+     */
+    public static function payoffDone($order_id)
+    {
+        $order = OrderSearch::getOne($order_id);
+        return OrderStatus::_payoffDone($order);
+    }
+
+
+
 
     /**
      * 取消订单

@@ -236,25 +236,8 @@ class PaymentCommon extends \yii\db\ActiveRecord
      */
     public static function orderPay($attribute)
     {
-        //查询用户信息
-        $orderInfo = self::orderInfo($attribute['order_id']);
-        $attribute['customer_trans_record_service_card_on'] = !empty($orderInfo->orderExtPay->card_id) ? $orderInfo->orderExtPay->card_id : 0;    //服务卡ID
-        $attribute['customer_trans_record_service_card_pay'] = !empty($orderInfo->orderExtPay->order_use_card_money) ? $orderInfo->orderExtPay->order_use_card_money : 0;//服务卡金额
-        $attribute['customer_trans_record_coupon_money'] = !empty($orderInfo->orderExtPay->order_use_coupon_money) ? $orderInfo->orderExtPay->order_use_coupon_money : 0; //优惠券金额
-        $attribute['customer_trans_record_online_balance_pay'] = !empty($orderInfo->orderExtPay->order_use_acc_balance) ? $orderInfo->orderExtPay->order_use_acc_balance : 0;  //余额支付
-        $attribute['customer_trans_record_order_total_money'] = $orderInfo->order_money;  //订单总额
-        $attribute['order_pop_order_money'] = !empty($orderInfo->orderExtPop->order_pop_order_money) ? $orderInfo->orderExtPop->order_pop_order_money : 0;  //预付费
-
-        //服务卡扣费
-        if( !empty($attribute['customer_trans_record_service_card_on']) && !empty($attribute['customer_trans_record_service_card_pay']) ){
-            //Customer::decBalance($model->customer_id,$orderInfo->orderExtPay->order_use_acc_balance);
-        }elseif( !empty($attribute['customer_trans_record_online_balance_pay']) && $attribute['customer_trans_record_online_balance_pay'] > 0 ){
-            //余额扣费
-            Customer::decBalance($attribute['customer_id'],$orderInfo->orderExtPay->order_use_acc_balance);
-        }
-
         //支付订单交易记录
-        PaymentCustomerTransRecord::analysisRecord($attribute);
+        PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'order_pay');
 
         //修改订单状态
         /**
@@ -267,10 +250,6 @@ class PaymentCommon extends \yii\db\ActiveRecord
         //验证支付金额是否一致
         if( $attribute['payment_money'] == $attribute['payment_actual_money'] )
         {
-            //var_dump($attribute);exit;
-            //$orderChannel = FinanceOrderChannel::get_order_channel_info($attribute['payment_source']);
-            //$payChannel = FinancePayChannel::get_pay_channel_info($attribute['payment_source']);
-            //var_dump($attribute['order_id'],0,$attribute['payment_source'],$attribute['payment_source_name'],$attribute['payment_transaction_id']);exit;
             Order::isPaymentOnline($attribute['order_id'],0,$attribute['payment_source'],$attribute['payment_source_name'],$attribute['payment_transaction_id']);
         }
     }
@@ -282,10 +261,11 @@ class PaymentCommon extends \yii\db\ActiveRecord
     public static function pay($attribute)
     {
         //支付充值
-        Customer::incBalance($attribute['customer_id'],$attribute['payment_actual_money']);
+        //TODO::后期在交易记录接口调用创建服务卡
+        //Customer::incBalance($attribute['customer_id'],$attribute['payment_actual_money']);
 
         //充值交易记录
-        PaymentCustomerTransRecord::analysisRecord($attribute);
+        PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'payment');
         return true;
     }
 

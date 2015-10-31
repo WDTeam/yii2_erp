@@ -9,6 +9,7 @@ use boss\components\BaseAuthController;
 use core\models\customer\Customer;
 use core\models\payment\CustomerTransRecord;
 
+use core\models\payment\PaymentCustomerTransRecord;
 use dbbase\models\finance\FinanceOrderChannel;
 use dbbase\models\payment\PaymentRefund;
 use dbbase\models\payment\PaymentLog;
@@ -165,6 +166,47 @@ class PaymentController extends BaseAuthController
 
     public function actionTest()
     {
+        //充值
+        $order_id = 1;
+        $order_channel_id = 24;
+        $type='payment';
+        //在线支付
+        $order_id = 1;
+        $order_channel_id = 24;
+        $type='order_pay';
+        //余额支付
+        $order_id = 2;
+        $order_channel_id = 24;
+        $type='order_pay';
+
+        //服务卡支付
+        $order_id = 3;
+        $order_channel_id = 24;
+        $type='order_pay';
+        //预付费支付
+        $order_id = 7;
+        $order_channel_id = 24;
+        $type='order_pay';
+        //现金支付
+        $order_id = 4;
+        $order_channel_id = 24;
+        $type='order_pay';
+        //余额+在线支付
+        $order_id = 5;
+        $order_channel_id = 24;
+        $type='order_pay';
+        //余额+在线支付+优惠券
+        $order_id = 6;
+        $order_channel_id = 24;
+        $type='order_pay';
+        //余额+优惠券
+        $order_id = 7;
+        $order_channel_id = 24;
+        $type='order_pay';
+        $data = PaymentCustomerTransRecord::analysisRecord($order_id,$order_channel_id,$type);
+
+        var_dump($data);
+        exit;
         $data = [
             'customer_id'=>1,  //用户ID
             'order_id'=>1, //订单ID

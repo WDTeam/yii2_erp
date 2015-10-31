@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     echo GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            //['class' => 'yii\grid\SerialColumn'],
 
             'id',
             'customer_id',
@@ -72,11 +72,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'floatHeader' => true,
         'toolbar' => '',
         'rowOptions' =>function ($model, $key, $index, $grid){
-            if($model->payment_customer_trans_record_verify != $model->makeSign())
+            if($model->payment_customer_trans_record_verify != $model::sign($model->getAttributes()))
             {
-                return ['class'=>'text-red','t1'=>$model->payment_customer_trans_record_verify,'t2'=>$model->makeSign()];
+                return ['class'=>'text-red','t1'=>$model->payment_customer_trans_record_verify,'t2'=>$model::sign($model->getAttributes())];
             }
-
         },
         'panel' => [
             'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> ' . Html::encode($this->title) . ' </h3>',
