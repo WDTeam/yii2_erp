@@ -217,6 +217,12 @@ class alertMsgEnum
     const checkTaskSuccess = '操作成功';
     //请填写任务id
     const checkTaskNoId = '请填写任务id';
+    
+    //用户发送验证码
+    //短信发送失败
+    const sendWorkerCodeSuccess = '验证码已发送手机，守住验证码，打死都不能告诉别人哦！唯一客服热线4006767636';
+    //短信发送成功
+    const sendWorkerCodeFaile = '验证码已发失败';
     /*
      * 李勇end
      */
