@@ -41,7 +41,24 @@ class alertMsgEnum
 
     //会员余额支付
     const balancePaySuccess='余额支付成功';
-    
+    const balancePayFailed='余额支付失败';
+    //在线支付
+    const onlinePaySuccess='在线支付成功';
+    const onlinePayFailed='在线支付失败';
+
+    //获取城市全部上线服务
+    const allServicesSuccess='获取城市上线服务成功';
+    const allServicesFailed='获取城市上线服务失败';
+    //用户端首页初始化
+    const getUserInitSuccess='获取用户端初始化信息成功';
+    const getUserInitFailed='获取用户端初始化信息失败';
+    //阿姨端首页初始化
+    const getWorkerInitSuccess='获取阿姨端初始化信息成功';
+    const getWorkerInitFailed='获取阿姨端初始化信息失败';
+    //阿姨启动页
+    const getWorkerStartPageSuccess='获取阿姨端启动页成功';
+    const getWorkerStartPageFailed='获取阿姨端启动页失败';
+
     //阿姨登录
     const workerLoginFailed = '用户认证已经过期,请重新登录';
     const workerLoginBossFailed = '登录失败';

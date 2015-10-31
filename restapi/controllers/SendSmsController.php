@@ -9,7 +9,7 @@ use restapi\models\alertMsgEnum;
 class SendSmsController extends \restapi\components\Controller
 {
     /**
-     * @api {GET} /send-sms/send-v 发短消息 （赵顺利 0% 不使用）
+     * @api {GET} /send-sms/send-v 发短消息
      * @apiName actionSendV
      * @apiGroup SendSms
      *
