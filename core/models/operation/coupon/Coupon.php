@@ -44,6 +44,8 @@ use yii\base\InvalidParamException;
 class Coupon extends \dbbase\models\operation\coupon\Coupon
 {
 
+	/**********************************************coupon rules************************************/
+
 	/**
      * get coupon rule service types
      */
@@ -164,6 +166,57 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
             2 => '每减',
         );
     }
+
+	/**********************************************coupon info***************************************/
+	/**
+     * get coupon getting end time
+	 */
+	public static function getEndGettingAt($coupon_id){
+		$coupon = self::findOne($coupon_id);
+		if($coupon === NULL) return false;
+
+		$end_getting_at = 0;
+		switch ($coupon->coupon_time_type)
+		{
+			case 0:
+				$end_getting_at = $coupon->coupon_end_at;
+			break;
+		
+			case 1:
+				$end_getting_at = $coupon->coupon_get_end_at;
+			break;
+		
+			default:
+				# code...
+			break;
+		}
+		return $end_getting_at;
+	}
+
+	/**
+     * get coupon use end time
+	 */
+	public static function getEndUsingAt($coupon_id){
+		$coupon = self::findOne($coupon_id);
+		if($coupon === NULL) return false;
+
+		$end_getting_at = 0;
+		switch ($coupon->coupon_time_type)
+		{
+			case 0:
+				$end_getting_at = $coupon->coupon_end_at;
+			break;
+		
+			case 1:
+				$end_getting_at = $coupon->coupon_get_end_at + 24 * 3600 * $coupon->coupon_use_end_days;
+			break;
+		
+			default:
+				# code...
+			break;
+		}
+		return $end_getting_at;
+	}
 
 	/**
      * get coupon code expirate_at by time type

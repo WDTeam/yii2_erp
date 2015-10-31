@@ -86,27 +86,77 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 			[
                 'format' => 'raw',
-                'label' => '优惠券面值',
+                'label' => '面额',
                 'value' => function ($dataProvider) {
                     return $dataProvider->coupon_price == '' ? '-' : $dataProvider->coupon_price;
+                },
+                'width' => "80px",
+            ],
+			[
+                'format' => 'raw',
+                'label' => '开始日期',
+                'value' => function ($dataProvider) {
+                    return date('Y-m-d', $dataProvider->coupon_begin_at);
+                },
+                'width' => "80px",
+            ],
+			[
+                'format' => 'raw',
+                'label' => '领取结束日期',
+                'value' => function ($dataProvider) {
+					$end_getting_at = Coupon::getEndGettingAt($dataProvider->id);
+                    return date('Y-m-d', $end_getting_at);
+                },
+                'width' => "80px",
+            ],
+			[
+                'format' => 'raw',
+                'label' => '使用结束日期',
+                'value' => function ($dataProvider) {
+                    $end_using_at = Coupon::getEndUsingAt($dataProvider->id);
+                    return date('Y-m-d', $end_using_at);
                 },
                 'width' => "80px",
             ],
             //'coupon_type',
 			
             //'coupon_type_name',
-			[
-                'format' => 'raw',
-                'label' => '优惠券类型名称',
-                'value' => function ($dataProvider) {
-                    return $dataProvider->coupon_type_name == '' ? '-' : $dataProvider->coupon_type_name;
-                },
-                'width' => "80px",
-            ],
+			//[
+            //    'format' => 'raw',
+            //    'label' => '优惠券类型名称',
+            //    'value' => function ($dataProvider) {
+            //        return $dataProvider->coupon_type_name == '' ? '-' : $dataProvider->coupon_type_name;
+            //    },
+            //    'width' => "80px",
+            //],
 //            'coupon_service_type_id', 
 //            'coupon_service_type_name', 
 //            'coupon_service_id', 
 //            'coupon_service_name', 
+			[
+                'format' => 'raw',
+                'label' => '城市',
+                'value' => function ($dataProvider) {
+                    $coupon_city_info = Coupon::getCityInfo($dataProvider->id);
+					switch ($coupon_city_info['coupon_city_limit'])
+					{
+						case 0:
+							# code...
+							return '通用';
+						break;
+						case 1:
+							# code...
+							return $coupon_city_info['coupon_city_name'];
+						break;
+						
+					
+						default:
+							# code...
+						break;
+					}
+                },
+                'width' => "80px",
+            ],
 			[
                 'format' => 'raw',
                 'label' => '服务',
@@ -137,30 +187,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'coupon_city_limit', 
 //            'coupon_city_id', 
 //            'coupon_city_name', 
-			[
-                'format' => 'raw',
-                'label' => '城市',
-                'value' => function ($dataProvider) {
-                    $coupon_city_info = Coupon::getCityInfo($dataProvider->id);
-					switch ($coupon_city_info['coupon_city_limit'])
-					{
-						case 0:
-							# code...
-							return '通用';
-						break;
-						case 1:
-							# code...
-							return $coupon_city_info['coupon_city_name'];
-						break;
-						
-					
-						default:
-							# code...
-						break;
-					}
-                },
-                'width' => "80px",
-            ],
+			
 //            'coupon_customer_type', 
 //            'coupon_customer_type_name', 
 
@@ -182,7 +209,14 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'coupon_promote_type', 
 //            'coupon_promote_type_name', 
 //            'coupon_order_min_price', 
-            'coupon_code_num', 
+			[
+                'format' => 'raw',
+                'label' => '总数',
+                'value' => function ($dataProvider) {
+					return $dataProvider->coupon_code_num;
+                },
+                'width' => "80px",
+            ],
 //            'coupon_code_max_customer_num', 
 //            'is_disabled', 
 			[

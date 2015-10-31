@@ -92,7 +92,7 @@ echo GridView::widget([
     'columns'=>[
         [
             'format' => 'raw',
-            'label' => '优惠码',
+            'label' => '全部优惠码',
             'value' => function ($couponCodeProvider) {
                 return $couponCodeProvider->coupon_code;
             },
