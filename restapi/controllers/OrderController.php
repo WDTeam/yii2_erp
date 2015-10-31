@@ -1614,7 +1614,9 @@ class OrderController extends \restapi\components\Controller
      *            "money":"订单价格"
      *           } 
      *         ],
-     *         "time":172800  倒计时秒 #要求2天
+     *         "time":172800   倒计时秒 #要求2天
+     *         "pageNumber":""  指定阿姨订单数
+     *         "pageNumbNot":"" 待抢单订单数
      *      }
      * }
      *
@@ -1655,17 +1657,17 @@ class OrderController extends \restapi\components\Controller
 
                     #指定阿姨订单数
                     $workerOrderCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
+
                     if ($param['page'] == 1) {
-                        $ret['pageNumber'] = ceil($workerOrderCount / $param['page_size']);
+                        $ret['pageNumber'] = ($workerOrderCount / $param['page_size']) + 1;
                     }
-                    
+
                     #待抢单订单数
                     $orderData = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
 
                     if ($param['page'] == 1) {
-                        $ret['pageNumbTwo'] = ceil($orderData / $param['page_size']);
+                        $ret['pageNumbNot'] = ($orderData / $param['page_size']) + 1;
                     }
-                    
 
                     $ret['workerData'] = array_merge($workerCount, $workerCountTwo);
                     #倒计时
