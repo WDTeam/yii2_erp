@@ -58,5 +58,14 @@ class alertMsgEnum
     const workerCommentTypeFailed = '评论类型不正确';
     const workerCommentSuccess = '获取评论成功';  
     const workerCommentFailed = '获取评论失败';
+    //获取阿姨投诉
+    const workerComplainSuccess = '获取投诉成功';
+    const workerComplainFailed = '获取投诉失败';
+    //获取阿姨服务信息
+    const workerServiceInfoSuccess = '获取服务信息成功';
+    const workerServiceInfoFailed = '获取服务信息失败';
+    //获取阿姨账单列表
+    const workerBillListSuccess = '获取账单列表成功';
+    const workerBillListFailed = '获取账单列表失败';
 
 }
