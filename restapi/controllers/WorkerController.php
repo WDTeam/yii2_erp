@@ -31,6 +31,7 @@ class WorkerController extends \restapi\components\Controller
      *     {
      *       "code": "1",
      *      "msg": "阿姨信息查询成功",
+     *      "alertMsg": "获取阿姨信息成功"，
      *      "ret": {
       *          "worker_name": "阿姨姓名",
      *          "worker_phone": "阿姨手机号",
@@ -106,15 +107,15 @@ class WorkerController extends \restapi\components\Controller
      * {
      *   "code": 1,
      *   "msg": "您的请假已提交，请耐心等待审批",
-     *   "ret": null
-     *   }
+     *    "alertMsg": "您的请假已提交，请耐心等待审批"，
+     *   "ret": {}
+     *  }
      * 
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
      *      "code":"0",
      *      "msg": "阿姨不存在",
-     *      "ret": null
      *  }
      */
     public function actionHandleWorkerLeave()
