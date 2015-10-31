@@ -1658,12 +1658,14 @@ class OrderController extends \restapi\components\Controller
                     if ($param['page'] == 1) {
                         $ret['pageNumber'] = ceil($workerOrderCount / $param['page_size']);
                     }
+                    
                     #待抢单订单数
                     $orderData = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
 
                     if ($param['page'] == 1) {
-                        $ret['pageNumber'] = ceil($orderData / $param['page_size']);
+                        $ret['pageNumbTwo'] = ceil($orderData / $param['page_size']);
                     }
+                    
 
                     $ret['workerData'] = array_merge($workerCount, $workerCountTwo);
                     #倒计时
