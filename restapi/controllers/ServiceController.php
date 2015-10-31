@@ -840,8 +840,27 @@ class ServiceController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token    用户认证.
      * @apiParam {String} plan_time     服务时长.
-     * @apiParam {json} service_time  预约时间段json.
      * @apiParam {String} worker_id   阿姨id.
+     * @apiParam {Object} [service_times] 用于存储预约时间段数组(必填）
+     * @apiParam {Object} [service_times.times] 预约时间段
+     * @apiParamExample {json} Request-Example:
+     *  {
+     *      "service_times":
+     *      {
+     *          "times":
+     *          [
+     *          {
+     *              "date":"2015-10-02",
+     *              "time_slot":"8:00-10:00"
+     *          },
+     *          {
+     *              "date":"2015-10-03",
+     *              "time_slot":"10:00-12:00"
+     *          }
+     *          ]
+     *      }
+     * }
+     *
      *
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
@@ -849,12 +868,14 @@ class ServiceController extends \restapi\components\Controller
      *       "code": 1,
      *       "msg": "获取周期服务的第一次服务日期列表成功",
      *       "ret": {
-     *           "worker_id": 1,
-     *           "worker_name": "阿姨姓名",
-     *           "worker_phote": "阿姨头像",
-     *           "server_times": "服务次数",
-     *           "server_star": "服务星级",
-     *           "last_time": "最后服务时间"
+     *            [
+     *               {
+     *                       "service_time":"2015-10-02(周五)"
+     *               }，
+     *               {
+     *                       "service_time":"2015-10-03(周六)"
+     *               }
+     *           ]
      *       }
      *   }
      *
@@ -869,15 +890,14 @@ class ServiceController extends \restapi\components\Controller
      */
     public function actionFirstServiceTime()
     {
-       $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
         if (!isset($param['plan_time']) || !$param['plan_time']||!isset($param['worker_id']) || !$param['worker_id']){
             return $this->send(null, "请选择服务时长或阿姨", 0, 403);
         }
-        
-        if(empty($param['service_time'])){
+        if(empty($param['service_times'])){
             return $this->send(null, "请选择预约时间段", 0, 403);
         }
         $plan_time = $param['plan_time'];
