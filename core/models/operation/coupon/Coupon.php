@@ -44,6 +44,8 @@ use yii\base\InvalidParamException;
 class Coupon extends \dbbase\models\operation\coupon\Coupon
 {
 
+	/**********************************************coupon rules************************************/
+
 	/**
      * get coupon rule service types
      */
@@ -63,7 +65,7 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
         return array(
             0 => '全网优惠券',
             1 => '类别优惠券',
-            2 => '商品优惠券',
+            //2 => '商品优惠券',
         );
     }
 
@@ -93,7 +95,7 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
     {
         return array(
             0 => '全部城市',
-            1 => '单个城市',
+            //1 => '单个城市',
         );
     }
 
@@ -120,10 +122,10 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
     {
         return array(
             0 => '所有用户',
-            1 => '新用户',
-            2 => '老用户',
-            3 => '会员',
-            4 => '非会员',
+            //1 => '新用户',
+            //2 => '老用户',
+            //3 => '会员',
+            //4 => '非会员',
         );
     }
 
@@ -149,7 +151,7 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
     {
         return array(
             0 => '领取时间段和使用时间段一致',
-            1 => '使用时间段领取后开始计算',
+            //1 => '使用时间段领取后开始计算',
         );
     }
 
@@ -160,10 +162,61 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
     {
         return array(
             0 => '立减',
-            1 => '满减',
-            2 => '每减',
+            //1 => '满减',
+            //2 => '每减',
         );
     }
+
+	/**********************************************coupon info***************************************/
+	/**
+     * get coupon getting end time
+	 */
+	public static function getEndGettingAt($coupon_id){
+		$coupon = self::findOne($coupon_id);
+		if($coupon === NULL) return false;
+
+		$end_getting_at = 0;
+		switch ($coupon->coupon_time_type)
+		{
+			case 0:
+				$end_getting_at = $coupon->coupon_end_at;
+			break;
+		
+			case 1:
+				$end_getting_at = $coupon->coupon_get_end_at;
+			break;
+		
+			default:
+				# code...
+			break;
+		}
+		return $end_getting_at;
+	}
+
+	/**
+     * get coupon use end time
+	 */
+	public static function getEndUsingAt($coupon_id){
+		$coupon = self::findOne($coupon_id);
+		if($coupon === NULL) return false;
+
+		$end_getting_at = 0;
+		switch ($coupon->coupon_time_type)
+		{
+			case 0:
+				$end_getting_at = $coupon->coupon_end_at;
+			break;
+		
+			case 1:
+				$end_getting_at = $coupon->coupon_get_end_at + 24 * 3600 * $coupon->coupon_use_end_days;
+			break;
+		
+			default:
+				# code...
+			break;
+		}
+		return $end_getting_at;
+	}
 
 	/**
      * get coupon code expirate_at by time type
