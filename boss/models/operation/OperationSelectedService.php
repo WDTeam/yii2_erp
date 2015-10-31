@@ -27,7 +27,7 @@ class OperationSelectedService extends \core\models\operation\OperationSelectedS
     public function rules()
     {
         return [
-            [['selected_service_scene', 'selected_service_area', 'selected_service_sub_area', 'selected_service_standard', 'selected_service_unit'], 'required'],
+            [['selected_service_scene', 'selected_service_area', 'selected_service_sub_area', 'selected_service_standard', 'selected_service_unit', 'selected_service_area_standard'], 'required'],
             [['selected_service_goods_id', 'selected_service_unit'], 'integer'],
             [['selected_service_price'], 'number'],
             [['selected_service_area_standard'], 'string'],

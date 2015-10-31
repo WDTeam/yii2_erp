@@ -427,6 +427,24 @@ class Order extends OrderModel
         return OrderStatus::_serviceDone($order);
     }
 
+
+    /**
+     * 评价接口
+     * @param $order_id
+     * @param $comment_id
+     * @return bool
+     */
+    public static function customerAcceptDone($order_id,$comment_id)
+    {
+        $order = OrderSearch::getOne($order_id);
+        $order->comment_id = $comment_id;
+        return OrderStatus::_customerAcceptDone($order,['OrderExtCustomer']);
+    }
+
+
+    
+
+
     /**
      * 取消订单
      * @param $order_id
