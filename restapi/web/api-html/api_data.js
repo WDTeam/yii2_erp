@@ -452,7 +452,7 @@ define({ "api": [
   {
     "type": "POST",
     "url": "/order/create-order",
-    "title": "创建订单 (90%xieyi  缺少周期订单和精品保洁，缺少后台模块支持)",
+    "title": "创建订单 (100%xieyi)",
     "name": "ActionCreateOrder",
     "group": "Order",
     "description": "<p>创建订单v1</p> ",
@@ -1899,6 +1899,177 @@ define({ "api": [
     "groupTitle": "Order"
   },
   {
+    "type": "POST",
+    "url": "v1/order/create-worker-orderes",
+    "title": "创建周期订单 （haojianshe 100%）",
+    "name": "actionCreateWorkerOrderes",
+    "group": "Order",
+    "description": "<p>周期订单提交</p> ",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>会话id. 必填</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "platform_version",
+            "description": "<p>平台版本号</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "order_ip",
+            "description": "<p>下单IP地址 必填</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>integer</p> ",
+            "optional": false,
+            "field": "order_service_type_id",
+            "description": "<p>服务类型 商品id 必填</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>integer</p> ",
+            "optional": false,
+            "field": "order_src_id",
+            "description": "<p>订单来源id 必填</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>string</p> ",
+            "optional": false,
+            "field": "channel_id",
+            "description": "<p>下单渠道 必填</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>int</p> ",
+            "optional": false,
+            "field": "address_id",
+            "description": "<p>客户地址id 必填</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>int</p> ",
+            "optional": false,
+            "field": "customer_id",
+            "description": "<p>客户id 必填</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>string</p> ",
+            "optional": false,
+            "field": "order_customer_phone",
+            "description": "<p>客户手机号 必填</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>int</p> ",
+            "optional": false,
+            "field": "admin_id",
+            "description": "<p>操作人id 0客户 1系统 必填</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>int</p> ",
+            "optional": false,
+            "field": "order_pay_type",
+            "description": "<p>支付方式 1现金 2线上 3第三方 必填</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>int</p> ",
+            "optional": false,
+            "field": "order_is_use_balance",
+            "description": "<p>是否使用余额 0否 1是 必填</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>string</p> ",
+            "optional": true,
+            "field": "order_booked_worker_id",
+            "description": "<p>指定阿姨id</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>string</p> ",
+            "optional": true,
+            "field": "order_customer_need",
+            "description": "<p>客户需求</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>string</p> ",
+            "optional": true,
+            "field": "order_customer_memo",
+            "description": "<p>客户备注</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>int</p> ",
+            "optional": false,
+            "field": "order_booked_begin_time",
+            "description": "<p>预约开始时间 必填</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>int</p> ",
+            "optional": false,
+            "field": "order_booked_end_time",
+            "description": "<p>预约结束时间 必填</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>int</p> ",
+            "optional": true,
+            "field": "coupon_id",
+            "description": "<p>优惠券id</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"添加成功成功\",\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "SessionIdNotFound",
+            "description": "<p>未找到会话ID.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"0\",\n    \"msg\": \"操作失败\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/OrderController.php",
+    "groupTitle": "Order"
+  },
+  {
     "type": "get",
     "url": "v1/order/get-worker-orders",
     "title": "指定阿姨订单数/待抢单订单订单数/指定阿姨订单列表/待抢单订单列表 (haojianshe 100%)",
@@ -1927,21 +2098,21 @@ define({ "api": [
             "type": "<p>String</p> ",
             "optional": true,
             "field": "page_size",
-            "description": "<p>条数</p> "
+            "description": "<p>条数  #leveltype =2 时要传递</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": true,
             "field": "page",
-            "description": "<p>页面</p> "
+            "description": "<p>页面  #leveltype =2 时要传递</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
             "field": "leveltype",
-            "description": "<p>判断标示 leveltype=1 指定阿姨订单数，待抢单订单订单数;  leveltype=3 指定阿姨订单列表;  leveltype=4 待抢单订单列表;</p> "
+            "description": "<p>判断标示 leveltype=1 指定阿姨订单数，待抢单订单订单数;  leveltype=2 指定阿姨订单列表，待抢单订单列表,指定阿姨订单数，待抢单订单订单数</p> "
           }
         ]
       }
@@ -1950,7 +2121,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n 指定阿姨订单数/待抢单订单订单数 leveltype=1\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"workerData\": \"指定阿姨订单数\",\n         \"orderData\": \"待抢单订单数\",\n         \"workerServiceCount\": \"待服务订单数\",\n         \"worker_is_block\": \n           {\n           ##暂时还没有统一\n           //\"阿姨状态 0正常1封号\",\n           }\n     }\n}\n\n  * 指定阿姨订单列表/待抢单订单列表 leveltype=3/4\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"workerData\":\n          [\n          {\n           \"order_id\":\"订单号\"\n           \"order_code\":\"订单编号\"\n           \"batch_code\":\"周期订单号\"\n           \"booked_begin_time\":\"服务开始时间\"\n           \"booked_end_time\":\"服务结束时间\"\n           \"channel_name\":\"服务类型名称\"\n           \"booked_count\":\"时常\"\n           \"address\":\"服务地址\"\n           \"need\":\"备注说明\"\n           \"money\":\"订单价格\"\n          } \n        ],\n        \"time\":172800  倒计时秒 #要求2天\n     }\n}",
+          "content": "HTTP/1.1 200 OK\n 指定阿姨订单数/待抢单订单订单数 leveltype=1\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"workerData\": \"指定阿姨订单数\",\n         \"orderData\": \"待抢单订单数\",\n         \"workerServiceCount\": \"待服务订单数\",\n         \"worker_is_block\": \n           {\n           ##暂时还没有统一\n           //\"阿姨状态 0正常1封号\",\n           }\n     }\n}\n\n  * 指定阿姨订单列表/待抢单订单列表 leveltype=2\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"workerData\":\n          [\n          {\n           \"order_id\":\"订单号\"\n           \"order_code\":\"订单编号\"\n           \"batch_code\":\"周期订单号\"\n           \"booked_begin_time\":\"服务开始时间\"\n           \"booked_end_time\":\"服务结束时间\"\n           \"channel_name\":\"服务类型名称\"\n           \"booked_count\":\"时常\"\n           \"address\":\"服务地址\"\n           \"need\":\"备注说明\"\n           \"money\":\"订单价格\"\n          } \n        ],\n        \"time\":172800   倒计时秒 #要求2天\n        \"pageNumber\":\"\"  指定阿姨订单数\n        \"pageNumbNot\":\"\" 待抢单订单数\n     }\n}",
           "type": "json"
         }
       ]
@@ -2411,7 +2582,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "/send-sms/send-v",
-    "title": "发短消息 （赵顺利 0% 不使用）",
+    "title": "发短消息",
     "name": "actionSendV",
     "group": "SendSms",
     "parameter": {
@@ -3316,6 +3487,64 @@ define({ "api": [
   },
   {
     "type": "GET",
+    "url": "v1/user/get-user-info",
+    "title": "通过token获取用户信息 （赵顺利 100%）",
+    "name": "actionGetUserInfo",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 200 OK\n   {\n    \"code\": 1,\n    \"msg\": \"获取用户信息成功\",\n    \"ret\": {\n        \"user\": {\n            \"id\": 1,\n            \"customer_name\": null,\n            \"customer_sex\": null,\n            \"customer_birth\": null,\n            \"customer_photo\": null,\n            \"customer_phone\": \"18311474301\",\n            \"customer_email\": null,\n            \"operation_area_id\": null,\n            \"operation_area_name\": null,\n            \"operation_city_id\": null,\n            \"operation_city_name\": null,\n            \"customer_level\": null,\n            \"customer_complaint_times\": 0,\n            \"customer_platform_version\": null,\n            \"customer_app_version\": null,\n            \"customer_mac\": null,\n            \"customer_login_ip\": null,\n            \"customer_login_time\": null,\n            \"customer_is_vip\": null,\n            \"created_at\": 1446195943,\n            \"updated_at\": 0,\n            \"is_del\": 0\n        },\n        \"access_token\": \"bdf403df7b4afe39f6fe5110b98299bd\"\n    },\n    \"alertMsg\": \"获取用户信息成功\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"0\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/UserController.php",
+    "groupTitle": "User"
+  },
+  {
+    "type": "GET",
     "url": "v1/user/get-user-money",
     "title": "用户余额和消费记录 （郝建设 已完成99% ;）",
     "name": "actionGetUserMoney",
@@ -3986,7 +4215,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          {\n              \"id\": 3,\n              \"worker_id\": 1,\n              \"worker_task_id\": 1,\n              \"worker_task_cycle_number\": \"0\",\n              \"worker_task_name\": \"任务名称3\",\n              \"worker_task_log_start\": 1446096240,\n              \"worker_task_log_end\": 1446097240,\n              \"worker_task_is_done\": -1,\n              \"worker_task_done_time\": 0,\n              \"worker_task_reward_type\": 0,\n              \"worker_task_reward_value\": 0,\n              \"created_at\": 1446097240,\n              \"updated_at\": 0,\n              \"is_del\": 0,\n              \"values\": [],\n              \"worker_task_description\": \"\"\n          }\n      ]\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"ret\": [\n          {\n              \"id\": 3,\n              \"worker_id\": 1,\n              \"worker_task_id\": 1,\n              \"worker_task_cycle_number\": \"0\",\n              \"worker_task_name\": \"任务名称3\",\n              \"worker_task_log_start\": 1446096240,\n              \"worker_task_log_end\": 1446097240,\n              \"worker_task_is_done\": -1,\n              \"worker_task_done_time\": 0,\n              \"worker_task_reward_type\": 0,\n              \"worker_task_reward_value\": 0, \n              \"created_at\": 1446097240,\n              \"updated_at\": 0,\n              \"is_del\": 0,\n              \"values\": [],\n              \"worker_task_description\": \"\"\n          }\n      ]\n  }",
           "type": "json"
         }
       ]
@@ -5171,7 +5400,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "v1/configure/start-page",
-    "title": "阿姨端启动页 （赵顺利 0%）",
+    "title": "阿姨端启动页 （赵顺利 20%）",
     "name": "actionStartPage",
     "group": "configure",
     "parameter": {
@@ -5954,93 +6183,6 @@ define({ "api": [
     "groupTitle": "service"
   },
   {
-    "type": "POST",
-    "url": "v1/service/first-service-time",
-    "title": "选择周期服务的第一次服务日期列表（李勇 80%缺少model支持）",
-    "group": "service",
-    "name": "actionFirstServiceTime",
-    "description": "<p>选择周期服务的第一次服务日期列表</p> ",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "access_token",
-            "description": "<p>用户认证.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "plan_time",
-            "description": "<p>服务时长.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>String</p> ",
-            "optional": false,
-            "field": "worker_id",
-            "description": "<p>阿姨id.</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>Object</p> ",
-            "optional": true,
-            "field": "service_times",
-            "description": "<p>用于存储预约时间段数组(必填）</p> "
-          },
-          {
-            "group": "Parameter",
-            "type": "<p>Object</p> ",
-            "optional": true,
-            "field": "service_times.times",
-            "description": "<p>预约时间段</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Request-Example:",
-          "content": " {\n     \"service_times\":\n     {\n         \"times\":\n         [\n         {\n             \"date\":\"2015-10-02\",\n             \"time_slot\":\"8:00-10:00\"\n         },\n         {\n             \"date\":\"2015-10-03\",\n             \"time_slot\":\"10:00-12:00\"\n         }\n         ]\n     }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n {\n     \"code\": 1,\n     \"msg\": \"获取周期服务的第一次服务日期列表成功\",\n     \"ret\": {\n          [\n             {\n                     \"service_time\":\"2015-10-02(周五)\"\n             }，\n             {\n                     \"service_time\":\"2015-10-03(周六)\"\n             }\n         ]\n     }\n }",
-          "type": "json"
-        }
-      ]
-    },
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "queryNotSupportFound",
-            "description": "<p>没有可用阿姨</p> "
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n  \"code\":\"0\",\n  \"msg\": \"查询第一次服务日期列表失败\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "../controllers/ServiceController.php",
-    "groupTitle": "service"
-  },
-  {
     "type": "GET",
     "url": "v1/service/goods-price",
     "title": "获取某城市某商品的价格及备注信息（赵顺利 100%）",
@@ -6269,7 +6411,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "v1/service/server-worker-list",
-    "title": "周期服务可用阿姨列表（李勇 80%缺少model支持）",
+    "title": "周期服务可用阿姨列表（李勇 100%）",
     "group": "service",
     "name": "actionServerWorkerList",
     "description": "<p>获取周期服务可用阿姨列表</p> ",
