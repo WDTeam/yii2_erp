@@ -125,11 +125,11 @@ class CustomerWorker extends \dbbase\models\customer\CustomerWorker
      * 仅显示当前日七日后一个月内有可选时间段的阿姨
      * 阿姨列表默认展示按上述规则排序前20位阿姨，下拉刷新，上滑加载更多；
      * ********************×
-     * @param $customer_id
-     * @param $district_id
-     * @param int $page
-     * @param int $pageNum
-     * @return array
+     * @param $customer_id 用户id
+     * @param $district_id 商圈id
+     * @param int $page 页数
+     * @param int $pageNum 每页返回条数
+     * @return array 阿姨列表
      */
     public static function getCustomerDistrictNearbyWorker($customer_id,$district_id,$page=1,$pageNum=20){
         if(empty($customer_id) && empty($district_id)){
