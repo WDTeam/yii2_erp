@@ -59,6 +59,10 @@ class alertMsgEnum
     const getWorkerStartPageSuccess='获取阿姨端启动页成功';
     const getWorkerStartPageFailed='获取阿姨端启动页失败';
 
+    //获取用户信息
+    const getUserInfoSuccess='获取用户信息成功';
+    const getUserInfoFailed='获取用户信息失败';
+
     //阿姨登录
     const workerLoginFailed = '用户认证已经过期,请重新登录';
     const workerLoginBossFailed = '登录失败';
