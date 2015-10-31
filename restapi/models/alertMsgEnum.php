@@ -43,7 +43,6 @@ class alertMsgEnum
     const balancePaySuccess='余额支付成功';
     
     //阿姨登录
-    const workerLoginSuccess = '登录成功';
     const workerLoginFailed = '用户认证已经过期,请重新登录';
     const workerLoginBossFailed = '登录失败';
     //阿姨申请请假
@@ -88,6 +87,137 @@ class alertMsgEnum
     const workerCenterFailed = '获取阿姨数据失败';
     //阿姨信息
     const workerInfoSuccess = '获取阿姨信息成功';
-    const workerInfoFailed = '获取阿姨信息失败';
+    const workerInfoFailed = '获取阿姨信息失败';   
+    
+    
+    /*
+     * 李勇begin
+     */
+    //通用系统错误提示
+    const bossError = 'boss系统错误';
+    //通用用户登录已过期
+    const customerLoginFailed = '用户认证已经过期,请重新登录';
+    
+    //用户登录
+    //用户登录成功
+    const customerLoginSuccess = '登陆成功';
+    //用户登录失败
+    const customerLoginFail = '登陆失败';
+    //用户登录手机号或验证码不能为空
+    const customerLoginDataDefect = '用户名或验证码不能为空';
 
+    //阿姨登录
+    //阿姨登录成功
+    const workerLoginSuccess = '登陆成功';
+    //阿姨登录失败
+    const workerLoginFail = '登陆失败';
+    //阿姨登录手机号或验证码不能为空
+    const workerLoginDataDefect = '用户名或验证码不能为空';
+    //阿姨登录手机号格式不对
+    const workerLoginWrongPhoneNumber = '请输入正确手机号';
+    //没有此阿姨
+    const workerLoginNoWorker = '没有此阿姨，请联系客服';
+    
+    //优惠码
+    //优惠码或手机号不能为空
+    const exchangeCouponDataDefect = '优惠码或手机号不能为空';
+    //优惠券不能为空
+    const exchangeCouponNotExist = '优惠券不存在';
+    //兑换优惠券成功
+    const exchangeCouponSuccess = '兑换成功';
+    //兑换优惠券失败
+    const exchangeCouponFail = '兑换失败';
+    
+    //可用优惠券列表
+    //请选择城市
+    const couponsCityNoChoice = '请选择城市';
+    //获取优惠券列表成功
+    const couponsSuccess = '获取优惠券列表成功';
+    //优惠券列表为空
+    const couponsFail = '优惠券列表为空';
+    
+    //用户全部优惠券列表
+    //获取优惠券列表成功
+    const allCouponsSuccess = '获取优惠券列表成功';
+    //优惠券列表为空
+    const allCouponsFail = '优惠券列表为空';
+    
+    //用户优惠券数量
+    //获取用户优惠券数量成功
+    const getCouponCountSuccess = '获取用户优惠券数量成功';
+    
+    //单次服务排班表
+    //请填写服务地址或服务时长
+    const singleServiceTimeDataDefect = '请填写服务地址或服务时长';
+    //商圈不存在
+    const singleServiceTimeDistrictNotExist = '商圈不存在';
+    //获取单次服务排班表成功
+    const singleServiceTimeSuccess = '获取单次服务排班表成功';
+    
+    //周期服务排班表
+    //请填写服务地址或服务时长或选择阿姨
+    const recursiveServiceTimeDataDefect = '请填写服务地址或服务时长或选择阿姨';
+    //商圈不存在
+    const recursiveServiceTimeDistrictNotExist = '商圈不存在';
+    //获取单次服务排班表成功
+    const recursiveServiceTimeSuccess = '获取周期服务时间表成功';
+    
+    //周期服务可用阿姨列表
+    //请填写服务地址
+    const serverWorkerListNoAddress = '请填写服务地址';
+    //请输入分页每页条数和第几页
+    const serverWorkerListNoPage = '请输入分页每页条数和第几页';
+    //没有可用阿姨
+    const serverWorkerListFail = '没有可用阿姨';
+    //获取周期服务可用阿姨列表成功
+    const serverWorkerListSuccess = '获取周期服务可用阿姨列表成功';
+    
+    //选择周期服务的第一次服务日期列表
+    //请选择服务时长或阿姨
+    const firstServiceTimeNoWorker = '请选择服务时长或阿姨';
+    //请选择预约时间段
+    const firstServiceTimeNoTime = '请选择预约时间段';
+    //查询第一次服务日期列表失败
+    const firstServiceTimeFail = '查询第一次服务日期列表失败';
+    //获取周期服务可用阿姨列表成功
+    const firstServiceTimeSuccess = '获取周期服务可用阿姨列表成功';
+    
+    //查看请假情况
+    //请选择请假类型
+    const workerLeaveNoType = '请选择请假类型';
+    //获取阿姨请假排班表成功
+    const workerLeaveSuccess = '获取阿姨请假排班表成功';
+    
+    //获得进行中的任务列表
+    //您没有任务哦
+    const taskDoingFail = '您没有任务哦';
+    //操作成功
+    const taskDoingSuccess = '操作成功';
+    
+    //获得已完成的任务列表
+    //数据不完整,请输入每页条数和第几页
+    const taskDoneNoPage = '数据不完整,请输入每页条数和第几页';
+    //您没有已完成任务哦
+    const taskDoneFail = '您没有已完成任务哦';
+    //操作成功
+    const taskDoneSuccess = '操作成功';
+    
+    //获得已失败的任务列表
+    //数据不完整,请输入每页条数和第几页
+    const taskFailNoPage = '数据不完整,请输入每页条数和第几页';
+    //您没有已完成任务哦
+    const taskFailFail = '您没有任务哦';
+    //操作成功
+    const taskFailSuccess = '操作成功';
+    
+    //查看任务的详情
+    //您没有已完成任务哦
+    const checkTaskFail = '查看任务失败';
+    //操作成功
+    const checkTaskSuccess = '操作成功';
+    //请填写任务id
+    const checkTaskNoId = '请填写任务id';
+    /*
+     * 李勇end
+     */
 }
