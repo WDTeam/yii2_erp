@@ -1570,9 +1570,9 @@ class OrderController extends \restapi\components\Controller
      * @apiDescription 阿姨抢单数
      * @apiParam {String} access_token      会话id.
      * @apiParam {String} platform_version  平台版本号
-     * @apiParam {String} [page_size]         条数
-     * @apiParam {String} [page]              页面
-     * @apiParam {String} leveltype         判断标示 leveltype=1 指定阿姨订单数，待抢单订单订单数;  leveltype=3 指定阿姨订单列表;  leveltype=4 待抢单订单列表;
+     * @apiParam {String} [page_size]         条数  #leveltype =2 时要传递
+     * @apiParam {String} [page]              页面  #leveltype =2 时要传递
+     * @apiParam {String} leveltype         判断标示 leveltype=1 指定阿姨订单数，待抢单订单订单数;  leveltype=2 指定阿姨订单列表，待抢单订单列表,指定阿姨订单数，待抢单订单订单数
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -1593,7 +1593,7 @@ class OrderController extends \restapi\components\Controller
      *      }
      * }
      *
-     *   * 指定阿姨订单列表/待抢单订单列表 leveltype=3/4
+     *   * 指定阿姨订单列表/待抢单订单列表 leveltype=2
      * {
      *      "code": "ok",
      *      "msg":"操作成功",
