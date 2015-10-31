@@ -426,18 +426,91 @@ class Worker extends \dbbase\models\worker\Worker
 
     /**
      * 获取阿姨周期排班表
-     * @param $district_id
-     * @param int $serverDurationTime
-     * @param $worker_id
+     * @param int $district_id 商圈id
+     * @param int $serverDurationTime 服务时长
+     * @param int $worker_id 阿姨id
+     * @return array
      */
     public static function getWorkerCycleTimeLine($district_id,$serverDurationTime=2,$worker_id){
-        //周期订单已当前时间为开始时间
+        if(empty($worker_id)){
+            return false;
+        }
+        //周期订单默认已当前时间为开始时间
         $beginTime = strtotime(date('Y-m-d'));
-        //周期订单返回35天
+        //周期订单默认处理35天阿姨排班表
         $timeLineLength = 35;
-        $workerCycleTimeLineResult = self::getWorkerTimeLine($district_id,$serverDurationTime,$beginTime,$timeLineLength,$worker_id);
-        return $workerCycleTimeLineResult;
+        $workerTimeLineResult = self::getWorkerTimeLine($district_id,$serverDurationTime,$beginTime,$timeLineLength,$worker_id);
 
+        //获取本周时间表
+        $current = [];
+        for($i=0;$i<7;$i++) {
+            $current[] = [
+                'weekday' => date('N', strtotime("+$i day", $beginTime)),
+                'date' => date('Y-m-d', strtotime("+$i day", $beginTime)),
+                'timeline' => $workerTimeLineResult[$i]['timeline']
+            ];
+        }
+
+        //获取周期时间表
+        $cycle = [];
+        for($w=1;$w<=4;$w++){
+            for($d=0;$d<7;$d++){
+                $key = $w*7+$d;
+                $data = $workerTimeLineResult[$key];
+                if(isset($cycle[$d])){
+                    $timeline = self::compareTimeLine($cycle[$d]['timeline'],$data['timeline']);
+                    $cycle[$d] = [
+                        'timeline'=> $timeline
+                    ];
+                }else{
+                    $week = date('N',strtotime($data['date']));
+                    $cycle[$d] = [
+                        'week' => $week,
+                        'timeline'=> $data['timeline']
+                    ];
+                }
+
+            }
+        }
+
+//        foreach ($workerTimeLineResult as $key=>$val) {
+//            if($key<7){
+//                continue;
+//            }
+//            $week = date('N',strtotime($val['date']));
+//            if(isset($cycle[$week])){
+//                $timeline = self::operateTimeLine($cycle[$week]['timeline'],$val['timeline']);
+//                $cycle[$week] = [
+//                    'week' => date('N',strtotime($val['date'])),
+//                    'timeline'=> $timeline
+//                ];
+//            }else{
+//                $cycle[$week] = [
+//                    'week' => date('N',strtotime($val['date'])),
+//                    'timeline'=>$val['timeline']
+//                ];
+//            }
+//
+//        }
+        $workerCycleTimeLine = [
+            'current'=>$current,
+            'cycle'=>$cycle
+        ];
+        return $workerCycleTimeLine;
+
+    }
+
+    protected static function compareTimeLine($timeline1,$timeline2){
+        foreach($timeline1 as $key=>$val){
+            if($timeline1[$key]['enable']==false){
+                continue;
+            }else{
+                if($timeline2[$key]['enable']==false){
+                    $timeline1[$key]['enable'] = false;
+                }
+            }
+        }
+        return $timeline1;
     }
 
     /**
@@ -517,7 +590,7 @@ class Worker extends \dbbase\models\worker\Worker
         $week  = date('N',$time);
 
         foreach ((array)$workerSchedule as $val) {
-            if($time>=$val['worker_schedule_start_date'] && $time<$val['worker_schedule_end_date']){
+            if($time>=$val['worker_schedule_start_date'] && $time<=$val['worker_schedule_end_date']){
                 $enabledTimeLineArr = json_decode($val['worker_schedule_timeline'],1);
                 $enabledTimeLine = $enabledTimeLineArr[$week];
                 foreach ($enabledTimeLine as $e_val) {
