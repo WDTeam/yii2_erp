@@ -282,7 +282,7 @@ class server
             echo date('Y-m-d H:i:s').' 订单:＝ '. $order['order_id']." 派单中==>";
             $isOK = false;
             
-            $timerDiff = time() - (int)($order['created_at']);
+            $timerDiff = time() - (int)($order['assign_start_time']);
 
             echo '已过 '.$timerDiff.' 秒 ==>';
             

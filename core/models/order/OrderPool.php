@@ -125,7 +125,9 @@ class OrderPool extends Model
         $order = OrderSearch::getOne($order_id);
         $redis_order = [
             'order_id' => $order_id,
-            'created_at' => $order->orderExtStatus->updated_at,
+            'order_code' => $order->order_code,
+            'created_at' => $order->created_at,
+            'assign_start_time' => $order->orderExtStatus->updated_at,
             'jpush' => $order->orderExtFlag->order_flag_worker_jpush,
             'ivr' => $order->orderExtFlag->order_flag_worker_ivr,
             'worker_identity'=> $worker_identity,
