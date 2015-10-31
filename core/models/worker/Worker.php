@@ -400,7 +400,7 @@ class Worker extends \dbbase\models\worker\Worker
 
 
         $districtWorkerResult = self::getDistrictAllWorker($district_id,$worker_id);
-        //如果无阿姨信息,返回不可用排班表
+        //如果商圈中无阿姨信息,返回不可用排班表
         if(empty($districtWorkerResult)){
             return  self::generateTimeLine($disabledTimesArr,$serverDurationTime,$beginTime,$timeLineLength);
         }
@@ -424,6 +424,21 @@ class Worker extends \dbbase\models\worker\Worker
         return $workerTimeLine;
     }
 
+    /**
+     * 获取阿姨周期排班表
+     * @param $district_id
+     * @param int $serverDurationTime
+     * @param $worker_id
+     */
+    public static function getWorkerCycleTimeLine($district_id,$serverDurationTime=2,$worker_id){
+        //周期订单已当前时间为开始时间
+        $beginTime = strtotime(date('Y-m-d'));
+        //周期订单返回35天
+        $timeLineLength = 35;
+        $workerCycleTimeLineResult = self::getWorkerTimeLine($district_id,$serverDurationTime,$beginTime,$timeLineLength,$worker_id);
+        return $workerCycleTimeLineResult;
+
+    }
 
     /**
      * 生成排版表
@@ -499,7 +514,8 @@ class Worker extends \dbbase\models\worker\Worker
      */
     protected static function getWorkerEnabledTimeFromSchedule($time,$workerSchedule){
         $new_enabledTime = [];
-        $week  = date('w',$time);
+        $week  = date('N',$time);
+
         foreach ((array)$workerSchedule as $val) {
             if($time>=$val['worker_schedule_start_date'] && $time<$val['worker_schedule_end_date']){
                 $enabledTimeLineArr = json_decode($val['worker_schedule_timeline'],1);
@@ -580,7 +596,7 @@ class Worker extends \dbbase\models\worker\Worker
     }
 
     /**
-     * 操作阿姨的订单信息
+     * 操作Redis中阿姨的订单信息
      * @param $worker_id
      * @param $type 操作类型 1添加2修改
      * @param $order_id

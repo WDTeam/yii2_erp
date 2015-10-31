@@ -5,7 +5,8 @@ namespace core\models\customer;
 use Yii;
 use core\models\customer\CustomerCode;
 use core\models\customer\Customer;
-use core\models\customer\CustomerChannal;
+use core\models\finance\FinanceOrderChannel;
+
 
 /**
  * This is the model class for table "{{%customer_access_token}}".
@@ -115,14 +116,12 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
     /**
      * 验证POP调用BOSS系统的签名
      */
-    public static function checkSign($phone, $sign, $channal_ename){
+    public static function checkSign($phone, $sign, $channal_id){
 
         
         $key = 'pop_to_boss';
-        $customerChannal = CustomerChannal::find()->where(['channal_ename'=>$channal_ename])->one();
-        if ($customerChannal == NULL) {
-            return false;
-        }
+		$order_channal_info = \dbbase\models\finance\FinanceOrderChannel::get_order_channel_info($channal_id);
+		if($order_channal_info == "未知") return false;
         if (md5($phone.$key) != $sign) {
             return false;
         }
@@ -132,8 +131,8 @@ class CustomerAccessToken extends \dbbase\models\customer\CustomerAccessToken
     /**
      * 为POP客户下发access_token
      */
-    public static function generateAccessTokenForPop($phone, $sign, $channal_ename){
-        $check_sign = self::checkSign($phone, $sign, $channal_ename);
+    public static function generateAccessTokenForPop($phone, $sign, $channal_id){
+        $check_sign = self::checkSign($phone, $sign, $channal_id);
         if (!$check_sign) {
             return false;
         }
