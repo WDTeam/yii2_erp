@@ -81,11 +81,31 @@ use yii\helpers\Url;
                     'type'=>Form::INPUT_WIDGET,
                     'widgetClass'=>Select2::classname(),
                     'options' => [
-                        'data'=>Shop::getShopDistrictList(),
                         'hideSearch' => false,
                         'options'=>[
                             'placeholder' => '选择商圈',
-                        ]
+                        ],
+                        'pluginOptions' => [
+                            'allowClear' => true,
+                            'minimumInputLength' => 0,
+                            'ajax' => [
+                                'url' => Url::to(['operation/operation-shop-district/list-to-select2']),
+                                'dataType' => 'json',
+                                'data' => new JsExpression('function(params) { return {
+                                    city_id: $("#city").val(),
+                                    name: params.term
+                                }; }')
+                            ],
+                            'initSelection'=> new JsExpression('function (element, callback) {
+                                callback({
+                                    id:"'.$model->operation_shop_district_id.'",
+                                    operation_shop_district_name:"'.$model->getOperation_shop_district_name().'"
+                                });
+                            }'),
+                            'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                            'templateResult' => new JsExpression('function(model) { return model.operation_shop_district_name; }'),
+                            'templateSelection' => new JsExpression('function (model) { return model.operation_shop_district_name; }'),
+                        ],
                     ],
                     
                 ],

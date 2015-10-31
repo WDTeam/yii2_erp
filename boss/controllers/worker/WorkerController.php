@@ -735,7 +735,8 @@ class WorkerController extends BaseAuthController
     }
 
     public function actionTest(){
-        var_dump(CustomerWorker::getCustomerNearbyWorkerList(1,1,1));
+        echo '<pre>';
+        print_r(Worker::getWorkerCycleTimeLine(1,1,19114));
         die;
 //        $a = json_decode('{"1":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"2":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"3":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"4":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","16:00","17:00","20:00","21:00","22:00"],"5":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"6":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"7":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"]}',1);
 //        $workerInfo = [
@@ -769,16 +770,8 @@ class WorkerController extends BaseAuthController
 //        ];
 //        Yii::$app->redis->set('WORKER_18475',json_encode($workerInfo));
 //        die;
-        $o =
-                [
-                    'order_id'=>2,
-                    'order_booked_count'=>4554,
-                    'order_booked_begin_time'=>'14087655',
-                    'order_booked_end_time'=>'14087655',
-                ]
-           ;
         echo '<pre>';
-        var_dump(Worker::operateWorkerOrderInfoToRedis(18475,1,$o));die;
+        var_dump(CustomerWorker::getCustomerDistrictNearbyWorker(1,1));die;
 //        die;
 //        var_dump(WorkerVacationApplication::getApplicationList(18517));
 //
