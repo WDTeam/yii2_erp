@@ -613,8 +613,8 @@ class WorkerController extends \restapi\components\Controller
      * 
      * @apiParam {String} access_token    阿姨登录token
      * @apiParam {String} settle_id  账单唯一标识.
-     * @apiParam {String} per_page  每页显示多少条.
-     * @apiParam {String} page  第几页.
+     * @apiParam {String} per_page  第几页
+     * @apiParam {String} page_num  每页显示多少条.
      * @apiParam {String} [platform_version] 平台版本号.
      * 
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-tasktime-list
@@ -1104,8 +1104,8 @@ class WorkerController extends \restapi\components\Controller
      * @api {get} /worker/task-done  获得已完成的任务列表 (李勇100%)
      * @apiName actionTaskDone
      * @apiGroup Worker
-     * @apiParam {String} per_page  每页显示多少条.
-     * @apiParam {String} page  第几页.
+     * @apiParam {String} per_page  第几页
+     * @apiParam {String} page_num  每页显示多少条
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} [platform_version] 平台版本号.
      *
@@ -1171,9 +1171,9 @@ class WorkerController extends \restapi\components\Controller
      /**
      * @api {get} /worker/task-fail  获得已失败的任务列表 (李勇100%)
      * @apiName actionTaskFail
-     * @apiGroup Worker
-     * @apiParam {String} per_page  每页显示多少条.
-     * @apiParam {String} page  第几页.
+     * @apiGroup Worker.
+     * @apiParam {String} per_page  第几页
+     * @apiParam {String} page_num  每页显示多少条
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} [platform_version] 平台版本号.
      *
