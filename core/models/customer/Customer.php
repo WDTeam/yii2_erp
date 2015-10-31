@@ -564,6 +564,30 @@ class Customer extends \dbbase\models\customer\Customer
         return $count;
     }
 
+	/**
+     * get all customer relationally
+	 */
+	//public static function getAllRelationally(){
+		//$customers = self::find()->with([
+	//		'balance' => function($query) {
+	//			$query->where('customer_ext_balance.customer_id = customer.id');
+	//		},
+	//		'score' => function($query) {
+	//			$query->where('customer_ext_score.customer_id = customer.id');
+	//		},
+	//		'address' => function($query) {
+	//			$query->where('customer_address.customer_id = customer.id');
+	//		},
+	//		'worker' => function($query) {
+	//			$query->where('customer_worker.customer_id = customer.id');
+	//		},
+	//		'src' => function($query) {
+	//			$query->where('customer_ext_src.customer_id = customer.id');
+	//		},
+	//	])->all();
+	//	return $customers;
+	//}
+
 
 	/******************************other******************************************************************/
 	/**

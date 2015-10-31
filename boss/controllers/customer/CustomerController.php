@@ -44,12 +44,24 @@ class CustomerController extends Controller
 
         $params = Yii::$app->request->getQueryParams();
         $dataProvider = $searchModel->search($params);
+		//customer count on search
+		$count_on_search = $dataProvider->query->count();
+		//count of customer is blocked on search 
+		//$block_count_on_search = $dataProvider->query->addFilterWhere(['is_del'=>1])->count();
+		//count of all customer
+		$all_count = Customer::countAllCustomer();
+		//count of block-customer
+		$block_count = Customer::countBlockCustomer();
         $is_del = isset($_GET['CustomerSearch']['is_del']) ? $_GET['CustomerSearch']['is_del'] : 0;
         
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'is_del'=>$is_del,
+			'count_on_search'=>$count_on_search,
+			//'block_count_on_search'=>$block_count_on_search,
+			'all_count'=>$all_count,
+			'block_count'=>$block_count,
         ]);
     }
 
@@ -781,7 +793,11 @@ class CustomerController extends Controller
 
         // $res =  \core\models\customer\CustomerAddress::addAddress(1, '东城区', '详细地址', '刘道强', '18519654001');
         // var_dump($res);
-		$res = Customer::adminAddCustomer('18519654002');
+		//$res = Customer::adminAddCustomer('18519654002');
+		//var_dump($res);
+		//$res = \core\models\customer\CustomerAccessToken::checkSign('18519654001', md5('18519654001'.'pop_to_boss'), 25);
+		//var_dump($res);
+		$res = \core\models\customer\Customer::getAllRelationally();
 		var_dump($res);
     }
 

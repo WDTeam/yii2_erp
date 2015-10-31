@@ -17,9 +17,23 @@ class OrderComplaintSearch extends OrderComplaint{
 		return [
 				[['id','order_id','complaint_type','complaint_status','complaint_section','complaint_channel'], 'integer'],
 				[[ 'complaint_phone', 'order_worker_phone','order_worker_name','complaint_level'], 'safe'],
+				[['order_worker_phone','id','order_id','complaint_phone','order_worker_name'],'trim'],
+				['order_worker_phone','match','pattern'=>'/1[3458]{1}\d{9}$/'],
+				['complaint_phone','match','pattern'=>'/1[3458]{1}\d{9}$/'],
+				['id','match','pattern'=>'/\d{1,20}$/'],
+				['order_id','match','pattern'=>'/\d{1,20}$/'],
+				['order_worker_name','string','min'=>2,'max'=>20],
 		];
 	}
-	
+	public function attributeLabels(){
+		return [
+			'id'=>'投诉编号',
+			'order_id'=>'订单编号',
+			'complaint_phone'=>'客户手机',
+			'order_worker_phone'=>'阿姨手机',
+			'order_worker_name'=>'阿姨姓名'
+		];
+	}
 	public function scenarios()
 	{
 		// bypass scenarios() implementation in the parent class
@@ -72,7 +86,7 @@ class OrderComplaintSearch extends OrderComplaint{
 		unset($params['r']);
 		if(!empty($params) && is_array($params)){
 			$session->set('param', $params);
-			$param = $session->get("param");$path = $session->get("path");
+			$param = $session->get("param");
 			$url = http_build_query($param);
 			return $url;
 		}else{
