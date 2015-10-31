@@ -212,7 +212,7 @@ if(isset($model->review_section)){
                     ['attribute'=>'order_booked_count',
                        'header' => Yii::t('app', '服务工时（小时）'),
                         'content'=>function($model,$key,$index){
-                                   return $model['order_booked_count']/60;
+                                   return $model['order_booked_count'];
                        },
                     ], 
                     ['attribute'=>'order_unit_money',
@@ -277,7 +277,7 @@ if(isset($model->review_section)){
                     ['attribute'=>'order_booked_count',
                        'header' => Yii::t('app', '服务工时（小时）'),
                         'content'=>function($model,$key,$index){
-                                   return $model['order_booked_count']/60;
+                                   return $model['order_booked_count'];
                        },
                     ], 
                     ['attribute'=>'order_unit_money',
@@ -341,7 +341,7 @@ if(isset($model->review_section)){
                     ['attribute'=>'order_booked_count',
                        'header' => Yii::t('app', '服务工时（小时）'),
                         'content'=>function($model,$key,$index){
-                                   return $model['order_booked_count']/60;
+                                   return $model['order_booked_count'];
                        },
                     ], 
                     ['attribute'=>'order_unit_money',

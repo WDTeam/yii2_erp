@@ -12,7 +12,7 @@ use core\models\order\OrderSearch;
 use core\models\order\OrderComplaint;
 
 use restapi\models\Worker as ApiWorker;
-
+use restapi\models\alertMsgEnum;
 use Yii;
 class WorkerController extends \restapi\components\Controller
 {
@@ -31,6 +31,7 @@ class WorkerController extends \restapi\components\Controller
      *     {
      *       "code": "1",
      *      "msg": "阿姨信息查询成功",
+     *      "alertMsg": "获取阿姨信息成功"，
      *      "ret": {
       *          "worker_name": "阿姨姓名",
      *          "worker_phone": "阿姨手机号",
@@ -60,18 +61,14 @@ class WorkerController extends \restapi\components\Controller
     {
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         if (!isset($param['access_token']) || !$param['access_token']|| !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+            return $this->send(null, alertMsgEnum::userLoginFailed, 0, 403,null,alertMsgEnum::userLoginFailed);
         }
-        if(!isset($param['worker_id']) ||!$param['worker_id']){
-            return $this->send(null, "阿姨不存在.", 0, 403);
-        }
-        // 按阿姨id获取阿姨信息
-        $workerId = intval($param['worker_id']);
-        if (!$workerId) {
-            return $this->send(null, "阿姨不存在.", 0, 403);
+        if(!isset($param['worker_id']) ||!$param['worker_id']||!intval($param['worker_id'])){
+            return $this->send(null, '阿姨ID传输错误', 0, 403,null,alertMsgEnum::workerInfoFailed);
         }
         //数据调取
         try{
+            $workerId = intval($param['worker_id']);
             $workerInfo = Worker::getWorkerDetailInfo($workerId);
             $ret = array();
             if(!empty($workerInfo)){
@@ -86,9 +83,9 @@ class WorkerController extends \restapi\components\Controller
                     "personal_skill" =>WorkerSkill::getWorkerSkill($workerId) ,
                 ];
             }
-            return $this->send($ret, "阿姨信息查询成功");
+            return $this->send($ret, '阿姨信息查询成功', 1, 200,null,alertMsgEnum::workerInfoSuccess);
         }catch (\Exception $e) {
-            return $this->send(null, "boss系统错误", 1024, 403);
+            return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::workerInfoFailed);
         }
     }
 
@@ -110,15 +107,15 @@ class WorkerController extends \restapi\components\Controller
      * {
      *   "code": 1,
      *   "msg": "您的请假已提交，请耐心等待审批",
-     *   "ret": null
-     *   }
+     *    "alertMsg": "您的请假已提交，请耐心等待审批"，
+     *   "ret": {}
+     *  }
      * 
      * @apiErrorExample Error-Response:
      *  HTTP/1.1 404 Not Found
      *  {
      *      "code":"0",
      *      "msg": "阿姨不存在",
-     *      "ret": null
      *  }
      */
     public function actionHandleWorkerLeave()
@@ -127,28 +124,24 @@ class WorkerController extends \restapi\components\Controller
         //检测阿姨是否登录
         $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 0, 403);
+            return $this->send(null, $checkResult['msg'], $checkResult['code'], 403,null,$checkResult['msg']);
         }
         $workerID = $checkResult['workerInfo']['worker_id'];
-        
+        $worker_identity_id = $checkResult['workerInfo']['worker_identity_id'];
         //判断数据完整
-        if(!isset($param['leave_type']) || !$param['leave_type']){
-            return $this->send(null, "数据不完整,请选择请假类型", 0, 403);
-        }
-        if (!in_array($param['leave_type'], array(1, 2))) {
-            return $this->send(null, "请假类型不正确", 0, 403);
+        if(!isset($param['leave_type']) || !$param['leave_type']|| !in_array($param['leave_type'], array(1, 2))){
+            return $this->send(null, "请假类型不正确", 0, 403,null,alertMsgEnum::workerApplyLeaveTypeFailed);
         }
         $vacationType = intval($param['leave_type']);
         //请假时间
         if (!isset($param['leave_time']) || !$param['leave_time']) {
-            return $this->send(null, "数据不完整,请选择请假时间", 0, 403);
+            return $this->send(null, "数据不完整,请选择请假时间", 0, 403,null, alertMsgEnum::workerApplyLeaveTimeFailed);
         }
         try{
-            $workerInfo = Worker::getWorkerListByIds($workerID,'worker_identity_id');
-            if($workerInfo[0]['worker_identity_id']!=1) return $this->send(null, "只有全职阿姨才可以申请请假", 0, 403);
+            if($worker_identity_id!=1) return $this->send(null, "只有全职阿姨才可以申请请假", 0, 403,null,alertMsgEnum::workerApplyLeaveFailed);
             $vacationTimeLine = WorkerVacationApplication::getApplicationTimeLine($workerID,$vacationType);
          }catch (\Exception $e) {
-            return $this->send(null, "boss系统错误", 1024, 403);
+            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::workerApplyLeaveFailed);
         }
         $vacationTimeArr = explode("_",$param['leave_time']);
         $vacationTime = array_keys($vacationTimeLine);
@@ -156,28 +149,28 @@ class WorkerController extends \restapi\components\Controller
         $firstDay = $vacationTimeArr[0];
         $secondDay = isset($vacationTimeArr[1])?$vacationTimeArr[1]:"";
         if(!in_array($firstDay, $vacationTime)||!$vacationTimeLine[$firstDay]){
-            return $this->send(null, "请假时间不在请假时间范围内", 0, 403);
+            return $this->send(null, "请假时间不在请假时间范围内", 0, 403,null,alertMsgEnum::workerApplyLeaveTimeFailed);
         }
         if($vacationType==1&&count($vacationTimeArr)>2){
-            return $this->send(null, "休假最多只能选择两天", 0, 403);
+            return $this->send(null, "休假最多只能选择两天", 0, 403,null,alertMsgEnum::workerApplyLeaveTimeFailed);
         }
         if($vacationType==2&&count($vacationTimeArr)>1){
-            return $this->send(null, "事假最多只能选择一天", 0, 403);
+            return $this->send(null, "事假最多只能选择一天", 0, 403,null,alertMsgEnum::workerApplyLeaveTimeFailed);
         }
         //休假或者事假申请（一天）
         if(!WorkerVacationApplication::createVacationApplication($workerID,$firstDay,$vacationType)){
-            return $this->send(null, "请假申请失败", 0, 403);
+            return $this->send(null, "请假申请失败", 0, 403,null,alertMsgEnum::workerApplyLeaveFailed);
         }
         //如果选择休假且选择了两天
         if($vacationType==1&&$secondDay){//休假
             if(!in_array($secondDay, $vacationTime)||!$vacationTimeLine[$secondDay]){
-                return $this->send(null, "请假时间不在请假时间范围内", 0, 403);
+                return $this->send(null, "请假时间不在请假时间范围内", 0, 403,null,alertMsgEnum::workerApplyLeaveTimeFailed);
             }
             if(!WorkerVacationApplication::createVacationApplication($workerID,$secondDay,$vacationType)){
-                return $this->send(null, "请假申请失败", 0, 403);
+                return $this->send(null, "请假申请失败", 0, 403,null,alertMsgEnum::workerApplyLeaveFailed);
             }
         }
-        return $this->send(null, "您的请假已提交，请耐心等待审批");
+        return $this->send(null, "您的请假已提交，请耐心等待审批",1,200,null,alertMsgEnum::workerApplyLeaveSuccess);
         
     }
 
@@ -199,6 +192,7 @@ class WorkerController extends \restapi\components\Controller
      * {
      *   "code": 1,
      *   "msg": "操作成功",
+     *   "alertMsg": "获取阿姨请假历史记录成功",
      *   "ret": {
      *       "per_page": 1,
      *       "page_num": 1,
@@ -226,14 +220,18 @@ class WorkerController extends \restapi\components\Controller
         //检测阿姨是否登录
         $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 0, 403);
+             return $this->send(null, $checkResult['msg'], $checkResult['code'], 403,null,$checkResult['msg']);
         }
         $workerID = $checkResult['workerInfo']['worker_id'];
         //判断页码
         (isset($param['per_page'])&&intval($param['per_page']))?$per_page = intval($param['per_page']):$per_page = 1;
         (isset($param['page_num'])&&intval($param['page_num']))?$page_num = intval($param['page_num']):$page_num = 10;
         //调取阿姨请假历史情况
-        $data = WorkerVacationApplication::getApplicationList($workerID,$per_page,$page_num);
+        try{
+            $data = WorkerVacationApplication::getApplicationList($workerID,$per_page,$page_num);
+        }catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::workerLeaveHistoryFailed);
+        }
         $pageData = array();
         if($data['data']){
             foreach($data['data'] as $key => $val){
@@ -259,7 +257,7 @@ class WorkerController extends \restapi\components\Controller
             'page_num'=> $data['pageNum'],
             'data'    => $pageData
         ];
-        return $this->send($ret, "操作成功");
+        return $this->send($ret, "操作成功",1,200,null,alertMsgEnum::workerLeaveHistorySuccess);
     }
 
     /**
@@ -277,6 +275,7 @@ class WorkerController extends \restapi\components\Controller
      * {
      *      "code": "1",
      *      "msg":"查询地址成功",
+     *      "alertMsg": "获取阿姨住址成功",
      *      "ret":
      *      {
      *          "live_place": "阿姨常住地址"
@@ -297,14 +296,18 @@ class WorkerController extends \restapi\components\Controller
         //检测阿姨是否登录
         $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 0, 403);
+            return $this->send(null, $checkResult['msg'], $checkResult['code'], 403,null,$checkResult['msg']);
         }
         $workerID = $checkResult['workerInfo']['worker_id'];
-        $workerInfo = Worker::getWorkerDetailInfo($workerID);
+        try{
+            $workerInfo = Worker::getWorkerDetailInfo($workerID);
+        }catch(\Exception $e){
+            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::workerLivePlaceFailed);
+        }
         $ret = array(
             "live_place" => $workerInfo['worker_live_place']
         );
-        return $this->send($ret, "操作成功.");
+        return $this->send($ret, "操作成功",1,200,null,alertMsgEnum::workerLivePlaceSuccess);
     }
 
     /**
@@ -325,7 +328,8 @@ class WorkerController extends \restapi\components\Controller
      * HTTP/1.1 200 OK
      *   {
      *       "code": 1,
-     *       "msg": "操作成功.",
+     *       "msg": "操作成功",
+     *       "alertMsg": "获取评论成功"，
      *       "ret": {
      *           "per_page": 1,
      *           "page_num": 10,
@@ -352,12 +356,12 @@ class WorkerController extends \restapi\components\Controller
         //检测阿姨是否登录
         $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 0, 403);
+            return $this->send(null, $checkResult['msg'], $checkResult['code'], 403,null,$checkResult['msg']);
         }
         $workerID = $checkResult['workerInfo']['worker_id'];
         //判断评论类型
         if (!isset($param['comment_level']) || !intval($param['comment_level']) || !in_array($param['comment_level'], array(1, 2, 3))) {
-            return $this->send(null, "评论类型不正确", 0, 403);
+            return $this->send(null, "评论类型不正确", 0, 403,null,alertMsgEnum::workerCommentTypeFailed);
         }
         //分页数据
         (isset($param['per_page'])&&intval($param['per_page']))?$per_page = intval($param['per_page']):$per_page = 1;
@@ -374,14 +378,14 @@ class WorkerController extends \restapi\components\Controller
                 }
             }
         }catch (\Exception $e) {
-            return $this->send(null, "boss系统错误", 1024, 403);
+            return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::workerCommentFailed);
         }
         $ret = [
             'per_page'=>$per_page,
             'page_num'=>$page_num,
             'data'=>$retData
         ];
-        return $this->send($ret, "操作成功");
+        return $this->send($ret, "操作成功",1,200,null,alertMsgEnum::workerCommentSuccess);
     }
 
     /**
@@ -401,7 +405,8 @@ class WorkerController extends \restapi\components\Controller
      * HTTP/1.1 200 OK
      * {
      *   "code": 1,
-     *   "msg": "操作成功.",
+     *   "msg": "操作成功",
+     *   "alertMsg": "获取投诉成功"，
      *   "ret": {
      *       "per_page": 1,
      *       "page_num": 10,
@@ -428,7 +433,7 @@ class WorkerController extends \restapi\components\Controller
         //检测阿姨是否登录
         $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 0, 403);
+            return $this->send(null, $checkResult['msg'], $checkResult['code'], 403,null,$checkResult['msg']);
         }
         $workerID = $checkResult['workerInfo']['worker_id'];
         //分页数据
@@ -438,9 +443,8 @@ class WorkerController extends \restapi\components\Controller
         try{
             $conplainList = OrderComplaint::getWorkerComplain($workerID);
         }catch (\Exception $e) {
-            return $this->send(null, "boss系统错误", 1024, 403);
+            return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::workerComplainFailed);
         }
-        
         if($conplainList){
             foreach($conplainList as $key=>$val){
                 $conplainList[$key]['complaint_time'] = date('Y-m-d H:i:s',$val['complaint_time']);
@@ -453,7 +457,7 @@ class WorkerController extends \restapi\components\Controller
             'worker_is_block'=> $checkResult['workerInfo']['worker_is_block'],
             'data'  => $conplainList
         ];
-        return $this->send($ret, "操作成功.");
+        return $this->send($ret, "操作成功",1,200,null,alertMsgEnum::workerComplainSuccess);
     }
 
     /**
@@ -472,6 +476,7 @@ class WorkerController extends \restapi\components\Controller
      * {
      *      "code": "1",
      *      "msg": "操作成功.",
+     *       "alertMsg": "获取服务信息成功",
      *      "ret": [
      *             "worker_name": "阿姨姓名",
      *             "order_count": "服务订单数",
@@ -493,7 +498,7 @@ class WorkerController extends \restapi\components\Controller
          //检测阿姨是否登录
         $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 0, 403);
+            return $this->send(null, $checkResult['msg'], $checkResult['code'], 403,null,$checkResult['msg']);
         }
         $workerID = $checkResult['workerInfo']['worker_id'];
         //获取数据
@@ -501,7 +506,7 @@ class WorkerController extends \restapi\components\Controller
             $service = FinanceSettleApplySearch::getWorkerIncomeSummaryInfoByWorkerId($workerID);
             $workerInfo = Worker::getWorkerStatInfo($workerID);
         }catch (\Exception $e) {
-            return $this->send(null, "boss系统错误", 1024, 403);
+            return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::workerServiceInfoFailed);
         }
         //数据整理返回
         $ret = [
@@ -510,7 +515,7 @@ class WorkerController extends \restapi\components\Controller
             "worker_income" => $service['all_worker_money'],
             "service_family_count" => intval($workerInfo['worker_stat_server_customer'])
         ];
-        return $this->send($ret, "操作成功.");
+        return $this->send($ret, "操作成功",1,200,null,alertMsgEnum::workerServiceInfoSuccess);
 
     }
 
@@ -521,8 +526,8 @@ class WorkerController extends \restapi\components\Controller
      * @apiGroup Worker
      *
      * @apiParam {String} access_token    阿姨登录token
-     * @apiParam {String} per_page  每页显示多少条.
-     * @apiParam {String} page  第几页.
+     * @apiParam {String} per_page  第几页
+     * @apiParam {String} page_num  每页显示多少条
      * @apiParam {String} [platform_version] 平台版本号.
      *
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-bill-list
@@ -532,10 +537,12 @@ class WorkerController extends \restapi\components\Controller
      * {
      * 
      *  "code": 1,
-     *   "msg": "操作成功.",
+     *   "msg": "操作成功",
+     *   "alertMsg": "获取账单列表成功",
      *   "ret": {
      *       "per_page": 1,
      *       "page_num": 10,
+     *       "explain_url": "账单说明跳转URL",
      *       "data": [
      *           {
      *               "settle_id": "账单唯一标识",
@@ -549,7 +556,8 @@ class WorkerController extends \restapi\components\Controller
      *               "money_deduction": "处罚金额",
      *               "order_money_except_cash": "工时服务费",
      *               "settle_status":"账单状态【0未结算 1已结算】",
-     *               "settle_time": "账单日期",
+     *               "settle_starttime": "账单开始日期【如果是月结则settle_endtime无效】",
+     *                "settle_endtime": "账单结束日期",
      *               "worker_is_confirmed": "阿姨是否确认账单【0未确认 1已确认】"
      *           }
      *       ]
@@ -569,7 +577,7 @@ class WorkerController extends \restapi\components\Controller
         //检测阿姨是否登录
         $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 0, 403);
+            return $this->send(null, $checkResult['msg'], $checkResult['code'], 403,null,$checkResult['msg']);
         }
         $workerID = $checkResult['workerInfo']['worker_id'];
         //分页数据
@@ -578,25 +586,23 @@ class WorkerController extends \restapi\components\Controller
         try{
             $billList = FinanceSettleApplySearch::getSettledWorkerIncomeListByWorkerId($workerID,$per_page,$page_num);
          }catch (\Exception $e) {
-            return $this->send(null, "boss系统错误", 1024, 403);
+            return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::workerBillListFailed);
         }
         foreach($billList as $key=>$val){
-            if($val['settle_cycle']==1){//周结账单
-                $billList[$key]['settle_time'] = $val['settle_starttime'].'-'.$val['settle_endtime'];
-            }else{
-                $billList[$key]['settle_time'] = date('m',strtotime($val['settle_starttime']));
+            if($val['settle_cycle']==2){//周结账单
+                $billList[$key]['settle_starttime'] = date('Y-m',strtotime($val['settle_starttime']));
+                $billList[$key]['settle_endtime'] = date('Y-m',strtotime($val['settle_starttime']));
             }
             $billList[$key]['worker_is_confirmed'] = $val['isWorkerConfirmed'];
-            unset($billList[$key]['settle_starttime']);
-            unset($billList[$key]['settle_endtime']);
             unset($billList[$key]['isWorkerConfirmed']);
         }
         $ret = [
             'per_page' => $per_page,
             'page_num' => $page_num,
+            'explain_url'=>'http://www.baidu.com',
             'data'  => $billList
         ];
-        return $this->send($ret, "操作成功.");
+        return $this->send($ret, "操作成功",1,200,null,alertMsgEnum::workerBillListSuccess);
     }
 
     /**
@@ -607,8 +613,8 @@ class WorkerController extends \restapi\components\Controller
      * 
      * @apiParam {String} access_token    阿姨登录token
      * @apiParam {String} settle_id  账单唯一标识.
-     * @apiParam {String} per_page  每页显示多少条.
-     * @apiParam {String} page  第几页.
+     * @apiParam {String} per_page  第几页
+     * @apiParam {String} page_num  每页显示多少条.
      * @apiParam {String} [platform_version] 平台版本号.
      * 
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-tasktime-list
@@ -617,7 +623,8 @@ class WorkerController extends \restapi\components\Controller
      * HTTP/1.1 200 OK
      * {
      *   "code": 1,
-     *   "msg": "操作成功.",
+     *   "msg": "操作成功",
+     *   "alertMsg": "获取工时列表成功",
      *   "ret": {
      *       "per_page": 1,
      *       "page_num": 10,
@@ -645,11 +652,11 @@ class WorkerController extends \restapi\components\Controller
         //检测阿姨是否登录
         $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 0, 403);
+            return $this->send(null, $checkResult['msg'], $checkResult['code'], 403,null,$checkResult['msg']);
         } 
         //数据整理
         if(!isset($param['settle_id'])||!intval($param['settle_id'])){
-            return $this->send(null, "账单唯一标识错误", 0, 403);
+            return $this->send(null,'账单唯一标识错误', 0, 403,null,alertMsgEnum::workerSettleIdFailed);
         }
          //分页数据
         (isset($param['per_page'])&&intval($param['per_page']))?$per_page = intval($param['per_page']):$per_page = 1;
@@ -657,7 +664,7 @@ class WorkerController extends \restapi\components\Controller
         try{
             $billList = FinanceSettleApplySearch::getOrderArrayBySettleId(intval($param['settle_id']),$per_page,$page_num);
         }catch (\Exception $e) {
-            return $this->send(null, "boss系统错误", 1024, 403);
+            return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::workerTasktimeListFailed);
         }
         //数据整理
         if($billList){
@@ -674,7 +681,7 @@ class WorkerController extends \restapi\components\Controller
             'page_num' => $page_num,
             'data'  => $billList
         ];
-        return $this->send($ret, "操作成功.");
+        return $this->send($ret, "操作成功",1,200,null,alertMsgEnum::workerTasktimeListSuccess);
     }
     
   
@@ -694,7 +701,8 @@ class WorkerController extends \restapi\components\Controller
      * HTTP/1.1 200 OK
      * {
      *   "code": 1,
-     *   "msg": "操作成功.",
+     *   "msg": "操作成功",
+     *   "alertMsg": "获取任务奖励成功",
      *   "ret": [
      *       {
      *           "task_money": "任务奖励",
@@ -715,19 +723,19 @@ class WorkerController extends \restapi\components\Controller
         //检测阿姨是否登录
         $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 0, 403);
+            return $this->send(null, $checkResult['msg'], $checkResult['code'], 403,null,$checkResult['msg']);
         }
         //数据整理
         if(!isset($param['settle_id'])||!intval($param['settle_id'])){
-            return $this->send(null, "账单唯一标识错误", 0, 403);
+            return $this->send(null,'账单唯一标识错误', 0, 403,null,alertMsgEnum::workerTasktimeListFailed);
         }
         try{
             //获取任务奖励列表
             $taskRewardret = FinanceSettleApplySearch::getTaskArrayBySettleId(intval($param['settle_id']));
          }catch (\Exception $e) {
-            return $this->send(null, "boss系统错误", 1024, 403);
+            return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::workerTaskRewardListFailed);
         }
-        return $this->send($taskRewardret, "操作成功");
+        return $this->send($taskRewardret, "操作成功",1,200,null,alertMsgEnum::workerTaskRewardListSuccess);
     }
     
     /**
@@ -746,7 +754,8 @@ class WorkerController extends \restapi\components\Controller
      * HTTP/1.1 200 OK
      * {
      *    "code": 1,
-     *     "msg": "操作成功.",
+     *     "msg": "操作成功",
+     *     "alertMsg": "获取处罚列表成功",
      *        "ret": [
      *            {
      *                "deduction_money": "处罚金额",
@@ -770,16 +779,16 @@ class WorkerController extends \restapi\components\Controller
         //检测阿姨是否登录
         $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 0, 403);
+            return $this->send(null, $checkResult['msg'], $checkResult['code'], 403,null,$checkResult['msg']);
         }
         //数据整理
         if(!isset($param['settle_id'])||!intval($param['settle_id'])){
-            return $this->send(null, "账单唯一标识错误", 0, 403);
+            return $this->send(null,'账单唯一标识错误', 0, 403,null,alertMsgEnum::workerTasktimeListFailed);
         }
         try{
             $punishList = FinanceSettleApplySearch::getDeductionArrayBySettleId(intval($param['settle_id']));//获取任务奖励列表
         }catch (\Exception $e) {
-            return $this->send(null, "boss系统错误", 1024, 403);
+            return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::workerPunishListFailed);
         }
         if($punishList){
             foreach($punishList as $key=>$val){
@@ -796,7 +805,7 @@ class WorkerController extends \restapi\components\Controller
             }
         }
         //获取受处罚列表
-        return $this->send($punishList, "操作成功.");
+        return $this->send($punishList, "操作成功",1,200,null,alertMsgEnum::workerPunishListSuccess);
     }
     
     /**
@@ -816,7 +825,8 @@ class WorkerController extends \restapi\components\Controller
      * {
      *    "code": 1,
      *    "msg": "账单确定成功",
-     *    "ret": null
+     *    "alertMsg": "账单确认成功",
+     *    "ret": {}
      * }
      *
      * @apiErrorExample Error-Response:
@@ -831,20 +841,20 @@ class WorkerController extends \restapi\components\Controller
         //检测阿姨是否登录
         $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 0, 403);
+            return $this->send(null, $checkResult['msg'], $checkResult['code'], 403,null,$checkResult['msg']);
         }
         //数据整理
         if(!isset($param['settle_id'])||!intval($param['settle_id'])){
-            return $this->send(null, "账单唯一标识错误", 0, 403);
+            return $this->send(null,'账单唯一标识错误', 0, 403,null,alertMsgEnum::workerTasktimeListFailed);
         }
         try{
             if(FinanceSettleApplySearch::workerConfirmSettlement(intval($param['settle_id']))){
-                return $this->send(null, "账单确定成功");
+                return $this->send(null,'账单确定成功', 1, 200,null,alertMsgEnum::workerBillConfirmSuccess);
             }
          }catch (\Exception $e) {
-            return $this->send(null, "boss系统错误", 1024, 403);
+            return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::workerBillConfirmFailed);
         }
-        return $this->send(null, "账单确定失败",0,403);
+        return $this->send(null,'账单确定失败', 0, 403,null,alertMsgEnum::workerBillConfirmFailed);
     }
     
     /**
@@ -861,6 +871,7 @@ class WorkerController extends \restapi\components\Controller
      *     {
      *       "code": "ok",
      *      "msg": "阿姨信息查询成功",
+     *      "alertMsg": "获取阿姨数据成功",
      *      "ret": {
      *          "worker_name": "阿姨姓名",
      *          "worker_phone": "阿姨手机号",
@@ -889,14 +900,14 @@ class WorkerController extends \restapi\components\Controller
         //检测阿姨是否登录
         $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 0, 403);
+            return $this->send(null, $checkResult['msg'], $checkResult['code'], 403,null,$checkResult['msg']);
         }
-        $workerID = $checkResult['workerInfo']['worker_id'];
         //数据整理
         try{
+            $workerID = $checkResult['workerInfo']['worker_id'];
              $workerInfo = Worker::getWorkerDetailInfo($workerID);
         }catch (\Exception $e) {
-            return $this->send(null, "boss系统错误", 1024, 403);
+            return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::workerCenterFailed);
         }
         $ret = [
             "worker_name" => $workerInfo['worker_name'],
@@ -908,7 +919,7 @@ class WorkerController extends \restapi\components\Controller
             'worker_star' => $workerInfo["worker_star"],
             "personal_skill" => WorkerSkill::getWorkerSkill($workerID),
         ];
-        return $this->send($ret, "阿姨信息查询成功");
+        return $this->send($ret,'阿姨信息查询成功', 1, 200,null,alertMsgEnum::workerCenterSuccess);
     }
     
     
@@ -1093,8 +1104,8 @@ class WorkerController extends \restapi\components\Controller
      * @api {get} /worker/task-done  获得已完成的任务列表 (李勇100%)
      * @apiName actionTaskDone
      * @apiGroup Worker
-     * @apiParam {String} per_page  每页显示多少条.
-     * @apiParam {String} page  第几页.
+     * @apiParam {String} per_page  第几页
+     * @apiParam {String} page_num  每页显示多少条
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} [platform_version] 平台版本号.
      *
@@ -1160,9 +1171,9 @@ class WorkerController extends \restapi\components\Controller
      /**
      * @api {get} /worker/task-fail  获得已失败的任务列表 (李勇100%)
      * @apiName actionTaskFail
-     * @apiGroup Worker
-     * @apiParam {String} per_page  每页显示多少条.
-     * @apiParam {String} page  第几页.
+     * @apiGroup Worker.
+     * @apiParam {String} per_page  第几页
+     * @apiParam {String} page_num  每页显示多少条
      * @apiParam {String} access_token    阿姨登录 token.
      * @apiParam {String} [platform_version] 平台版本号.
      *

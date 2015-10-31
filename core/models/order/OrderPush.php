@@ -53,10 +53,12 @@ class OrderPush extends Order
                 self::pushToWorkers($order_id, $workers, $push_status);
             } else {//如果查询不到兼职阿姨则系统指派失败
                 Order::sysAssignUndone($order_id);
+                $push_status = 1001;
             }
         } else {
             //状态不是智能指派中直接从订单池中删除
             OrderPool::remOrder($order_id);
+            $push_status = 1001;
         }
 
         $order = OrderSearch::getOne($order_id);

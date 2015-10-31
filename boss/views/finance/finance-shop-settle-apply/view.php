@@ -2,13 +2,8 @@
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
-use kartik\widgets\ActiveForm;
 use yii\widgets\Pjax;
-use dbbase\models\Shop;
-use yii\helpers\ArrayHelper;
-use kartik\nav\NavX;
-use yii\bootstrap\NavBar;
-use yii\bootstrap\Modal;
+use core\models\finance\FinanceShopSettleApplySearch;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -88,17 +83,23 @@ $this->params['breadcrumbs'][] = $this->title;
         <div>
             
              <?php Pjax::begin(); echo GridView::widget([
-        'dataProvider' => $orderIncomeDataProvider,
+        'dataProvider' => $financeSettleApplyDataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            ['attribute'=>'worker_idcard',
+            ['attribute'=>'worker_id',
                  'content'=>function($model,$key,$index)
-                        {return  Html::a('<u>'.$model->order_id.'</u>',[Yii::$app->urlManager->createUrl(['order/view/','id' => $model->order_id])],['target'=>'_blank']);}],
-            'worker_name',
-            'worker_phone',
-            'worker_type', 
-            'order_count', 
-            'manage_fee', 
+                        {return  Html::a('<u>'.$model->worker_id.'</u>',[Yii::$app->urlManager->createUrl(['worker/worker/view/','id' => $model->worker_id])],['data-pjax'=>'0','target' => '_blank',]);}],
+            'worker_tel',
+            'worker_type_name',
+            'worker_identity_name', 
+            'finance_settle_apply_order_count', 
+             [
+                'header' => Yii::t('app', '服务费'),
+                'attribute' => 'finance_settle_apply_order_count',
+                'content'=>function($model,$key,$index){
+                            return $model->finance_settle_apply_order_count * FinanceShopSettleApplySearch::MANAGE_FEE_PER_ORDER;
+                },
+            ],                   
         ],
         'responsive'=>true,
         'hover'=>true,

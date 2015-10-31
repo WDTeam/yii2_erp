@@ -147,7 +147,7 @@ class OrderSearch extends Order
      * 通过订单ID获取订单链表信息
      * @param $order_id 订单ID
      */
-    public static function getOrderInfo($order_id)
+    public static function getOrderInfo($order_id, $fields='*')
     {
         $query = new \yii\db\Query();
         $data = $query->from('{{%order}} as order')
@@ -155,7 +155,8 @@ class OrderSearch extends Order
             ->innerJoin('{{%order_ext_customer}} as oc','order.id = oc.order_id')
             ->innerJoin('{{%order_ext_pay}} as op','order.id = op.order_id')
             ->innerJoin('{{%order_ext_worker}} as ow','order.id = ow.order_id')
-            ->select('*')
+            ->innerJoin('{{%order_ext_pop}} as opp','order.id = opp.order_id')
+            ->select($fields)
             ->where(['id'=>$order_id])
             ->one();
         return $data;
@@ -295,7 +296,7 @@ class OrderSearch extends Order
      * @param $worker_id
      * @param int $page_size
      * @param int $page
-     * @param bool $is_booked 是否指定阿姨
+     * @param bool $is_booked
      * @return mixed
      */
     public static function getPushWorkerOrders($worker_id,$page_size=20,$page=1,$is_booked)
@@ -345,7 +346,7 @@ class OrderSearch extends Order
      * @param $attributes
      * @return int|string
      */
-    public function searchOrdersWithStatus($attributes, $is_asc = false, $offset = 1, $limit = 10, $order_status = null,$channels = null, $from = null, $to = null)
+    public function searchOrdersWithStatus($attributes, $is_asc = false, $offset = 0, $limit = 10, $order_status = null,$channels = null, $from = null, $to = null)
     {
         $sort = $is_asc ? SORT_ASC : SORT_DESC;
         $params['OrderSearch'] = $attributes;
@@ -402,6 +403,7 @@ class OrderSearch extends Order
      */
     public function searchOrdersWithStatusProvider($attributes, $order_status = null,$channels = null, $from = null, $to = null)
     {
+
         $query = new \yii\db\Query();
 
         $query->from('{{%order}} as order')
@@ -443,7 +445,7 @@ class OrderSearch extends Order
         }
         if ($this->load($attributes) && $this->validate()) {
             $query->andFilterWhere([
-                'id' => $attributes["OrderSearch"]["id"],
+                'id' =>$attributes["OrderSearch"]["id"],
                 'order_parent_id' => $this->order_parent_id,
                 'order_is_parent' => $this->order_is_parent,
                 'created_at' => $this->created_at,
