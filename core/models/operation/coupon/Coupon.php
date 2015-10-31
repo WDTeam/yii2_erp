@@ -65,7 +65,7 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
         return array(
             0 => '全网优惠券',
             1 => '类别优惠券',
-            2 => '商品优惠券',
+            //2 => '商品优惠券',
         );
     }
 
@@ -95,7 +95,7 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
     {
         return array(
             0 => '全部城市',
-            1 => '单个城市',
+            //1 => '单个城市',
         );
     }
 
@@ -122,10 +122,10 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
     {
         return array(
             0 => '所有用户',
-            1 => '新用户',
-            2 => '老用户',
-            3 => '会员',
-            4 => '非会员',
+            //1 => '新用户',
+            //2 => '老用户',
+            //3 => '会员',
+            //4 => '非会员',
         );
     }
 
@@ -151,7 +151,7 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
     {
         return array(
             0 => '领取时间段和使用时间段一致',
-            1 => '使用时间段领取后开始计算',
+            //1 => '使用时间段领取后开始计算',
         );
     }
 
@@ -162,8 +162,8 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
     {
         return array(
             0 => '立减',
-            1 => '满减',
-            2 => '每减',
+            //1 => '满减',
+            //2 => '每减',
         );
     }
 
