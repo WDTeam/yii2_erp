@@ -431,18 +431,38 @@ class Order extends OrderModel
     /**
      * 评价接口
      * @param $order_id
-     * @param $comment_id
      * @return bool
      */
-    public static function customerAcceptDone($order_id,$comment_id)
+    public static function customerAcceptDone($order_id)
     {
         $order = OrderSearch::getOne($order_id);
-        $order->comment_id = $comment_id;
-        return OrderStatus::_customerAcceptDone($order,['OrderExtCustomer']);
+        return OrderStatus::_customerAcceptDone($order);
     }
 
 
-    
+    /**
+     * 订单已对账
+     * @param $order_id
+     * @return bool
+     */
+    public static function checked($order_id)
+    {
+        $order = OrderSearch::getOne($order_id);
+        return OrderStatus::_checked($order);
+    }
+
+    /**
+     * 订单完成结算
+     * @param $order_id
+     * @return bool
+     */
+    public static function payoffDone($order_id)
+    {
+        $order = OrderSearch::getOne($order_id);
+        return OrderStatus::_payoffDone($order);
+    }
+
+
 
 
     /**

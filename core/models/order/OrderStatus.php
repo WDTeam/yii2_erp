@@ -258,19 +258,7 @@ class OrderStatus extends Order
         $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_PAYOFF_DONE);
         return self::_statusChange($order,$status,$must_models);
     }
-
-    /**
-     * 已完成门店结算
-     * @param $order
-     * @param $must_models
-     * @return bool
-     */
-    protected static function _payoffShopDone(&$order,$must_models=[])
-    {
-        $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_PAYOFF_SHOP_DONE);
-        return self::_statusChange($order,$status,$must_models);
-    }
-
+    
 
     /**
      * 取消订单
