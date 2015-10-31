@@ -17,6 +17,9 @@ class alertMsgEnum
     //用户发送验证码
     const sendUserCodeSuccess = '验证码已发送手机，守住验证码，打死都不能告诉别人哦！唯一客服热线4006767636';
     const sendUserCodeFailed = '验证码已发失败';
+    //用户登录
+    const userLoginSuccess = '用户登录成功';
+    const userLoginFailed = '用户认证已经过期,请重新登录';
     //依据城市和服务品类 获取服务商品列表
     const getGoodsesSuccess='获取服务商品成功';
     const getGoodsesFailed='获取服务商品失败';
@@ -74,5 +77,17 @@ class alertMsgEnum
     //获取阿姨任务奖励列表
     const workerTaskRewardListSuccess = '获取任务奖励成功';
     const workerTaskRewardListFailed = '获取任务奖励失败';
+    //获取阿姨处罚列表
+    const workerPunishListSuccess = '获取处罚列表成功';
+    const workerPunishListFailed = '获取处罚列表失败';
+    //账单确定
+    const workerBillConfirmSuccess = '账单确认成功';
+    const workerBillConfirmFailed = '账单确认失败';
+    //阿姨用户中心
+    const workerCenterSuccess = '获取阿姨数据成功';
+    const workerCenterFailed = '获取阿姨数据失败';
+    //阿姨信息
+    const workerInfoSuccess = '获取阿姨信息成功';
+    const workerInfoFailed = '获取阿姨信息失败';
 
 }
