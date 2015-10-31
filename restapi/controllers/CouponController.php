@@ -15,7 +15,7 @@ class CouponController extends \restapi\components\Controller
     
     /**
      * @api {POST} /coupon/exchange-coupon 兑换优惠劵 （李勇 100%）
-     *
+     * 
      * @apiName ExchangeCoupon
      * @apiGroup coupon
      *

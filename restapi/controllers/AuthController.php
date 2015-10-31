@@ -145,7 +145,7 @@ class AuthController extends \restapi\components\Controller
     /**
      * @api {post} /auth/worker-login 阿姨登录（李勇100%)
      * @apiName actionWorkerLogin
-     * @apiGroup Auth
+     * @apiGroup Auth 
      *
      * @apiParam {String} phone 阿姨电话号码
      * @apiParam {String} verify_code 短信验证码

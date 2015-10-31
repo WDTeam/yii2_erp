@@ -1223,7 +1223,7 @@ class WorkerController extends \restapi\components\Controller
      *               "worker_task_is_done": -1,
      *               "worker_task_done_time": 0,
      *               "worker_task_reward_type": 0,
-     *               "worker_task_reward_value": 0,
+     *               "worker_task_reward_value": 0, 
      *               "created_at": 1446097240,
      *               "updated_at": 0,
      *               "is_del": 0,

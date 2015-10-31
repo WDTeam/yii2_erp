@@ -210,7 +210,6 @@ class alertMsgEnum
     //操作成功
     const taskFailSuccess = '操作成功';
     
-    
     //查看任务的详情
     //您没有已完成任务哦
     const checkTaskFail = '查看任务失败';

@@ -908,7 +908,7 @@ class ServiceController extends \restapi\components\Controller
         $plan_time = $param['plan_time'];
         $worker_id = $param['worker_id'];
         $service_times=$param['service_times'];
-         //获取周期服务的第一次服务日期列表
+         //获取周期服务的第一次服务日期列表 
 //        try{
 //            $first_service_time=Worker::getFirstServiceTimeList($plan_time,$worker_id,$service_times);
 //        }catch (\Exception $e) {
