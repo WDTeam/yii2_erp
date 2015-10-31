@@ -3,6 +3,7 @@ namespace restapi\controllers;
 
 use Yii;
 use \restapi\models\PayParam;
+use \restapi\models\alertMsgEnum;
 use \core\models\payment\Payment;
 use \core\models\customer\CustomerAccessToken;
 
@@ -41,7 +42,7 @@ class PayController extends \restapi\components\Controller
         $params = json_decode(Yii::$app->request->rawBody, true);
 
         if (empty($params['access_token']) || !CustomerAccessToken::checkAccessToken($params['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403,null,alertMsgEnum::balancePayFailed);
         }
         $customer = CustomerAccessToken::getCustomer($params['access_token']);
         $date = [
@@ -50,10 +51,10 @@ class PayController extends \restapi\components\Controller
         ];
 
         if (empty(Payment::balancePay($date))) {
-            return $this->send(null, "支付失败", "error", 403);
+            return $this->send(null, "支付失败", 0, 403,null,alertMsgEnum::balancePayFailed);
         }
 
-        return $this->send(null, "支付成功", "ok");
+        return $this->send(null, "支付成功",1,200,null,alertMsgEnum::balancePaySuccess);
     }
 
     /**
@@ -167,7 +168,7 @@ class PayController extends \restapi\components\Controller
         $data[$name] = Yii::$app->request->post() or
         $data[$name] = json_decode(Yii::$app->request->rawBody, true);
         if (empty($data[$name]['access_token']) || !CustomerAccessToken::checkAccessToken($data[$name]['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403,null,alertMsgEnum::onlinePayFailed);
         }
         $customer = CustomerAccessToken::getCustomer($data[$name]['access_token']);
 
@@ -220,9 +221,9 @@ class PayController extends \restapi\components\Controller
         $model->attributes = $data[$name];
         if ($model->load($data) && $model->validate()) {
             $retInfo = Payment::getPayParams($model->pay_money, $model->customer_id, $model->channel_id, $model->partner, $model->order_id, $ext_params);
-            return $this->send($retInfo['data'], $retInfo['info'], $retInfo['status']);
+            return $this->send($retInfo['data'], $retInfo['info'], $retInfo['status'],200,null,alertMsgEnum::onlinePayFailed);
         }
-        return $this->send(null, $model->errors, 0);
+        return $this->send(null, $model->errors, 0,403,null,alertMsgEnum::onlinePayFailed);
 
     }
 
