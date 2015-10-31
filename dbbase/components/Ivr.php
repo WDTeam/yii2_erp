@@ -96,7 +96,7 @@ class Ivr extends Component implements BootstrapInterface
         });
         if ($app instanceof \yii\web\Application) {
             $app->getUrlManager()->addRules([
-                'ivr/callback' => $this->redirect_uri,
+                'ivr/callback<path:.*>' => $this->redirect_uri,
             ], false);
         }
     }
