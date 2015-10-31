@@ -86,7 +86,7 @@ class AuthController extends \restapi\components\Controller
      *
      * @apiParam {String} phone 用户电话号码
      * @apiParam {String} sign 签名
-     * @apiParam {String} channel_name 渠道名称(拼音)
+     * @apiParam {String} channel_id 渠道id
      *
      * @apiSuccess {Object} user 用户信息.
      * @apiSuccess {String} access_token 访问令牌字符串.
@@ -108,23 +108,23 @@ class AuthController extends \restapi\components\Controller
      *     HTTP/1.1 403 Not Found
      *     { 
      *       "code":"0",
-     *       "msg": "用户名,签名或渠道名称错误",
+     *       "msg": "用户名,签名或渠道id错误",
      *       "ret": null
      *     }
      */
     public function actionLoginFromPop()
     {
         $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
-        if(!isset($param['phone'])||!$param['phone']||!isset($param['sign'])||!$param['sign']||!isset($param['channel_name'])||!$param['channel_name']){
-            return $this->send(null, "用户名,签名,渠道名称不能为空", 0, 403, "数据不完整");
+        if(!isset($param['phone'])||!$param['phone']||!isset($param['sign'])||!$param['sign']||!isset($param['channel_id'])||!$param['channel_id']){
+            return $this->send(null, "用户名,签名,渠道id不能为空", 0, 403, "数据不完整");
         }
         $phone = $param['phone'];
         $sign = $param['sign'];
-        $channel_name = $param['channel_name'];
-        $checkRet = CustomerAccessToken::checkSign($phone, $sign, $channel_name);
+        $channel_id = $param['channel_id'];
+        $checkRet = CustomerAccessToken::checkSign($phone, $sign, $channel_id);
 
         if ($checkRet) {
-            $token = CustomerAccessToken::generateAccessTokenForPop($phone, $sign, $channel_name);
+            $token = CustomerAccessToken::generateAccessTokenForPop($phone, $sign, $channel_id);
             if (empty($token)) {
                 return $this->send(null, "生成token错误", 0);
             } else {
@@ -136,7 +136,7 @@ class AuthController extends \restapi\components\Controller
                 return $this->send($ret, "登陆成功");
             }
         } else {
-            return $this->send(null, "用户名,签名或渠道名称错误", 0, 403);
+            return $this->send(null, "用户名,签名或渠道id错误", 0, 403);
         }
     }
 

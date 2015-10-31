@@ -4028,14 +4028,14 @@ define({ "api": [
             "type": "<p>String</p> ",
             "optional": false,
             "field": "per_page",
-            "description": "<p>每页显示多少条.</p> "
+            "description": "<p>第几页</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "page",
-            "description": "<p>第几页.</p> "
+            "field": "page_num",
+            "description": "<p>每页显示多少条</p> "
           },
           {
             "group": "Parameter",
@@ -4056,7 +4056,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n\n \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"alertMsg\": \"获取账单列表成功\",\n  \"ret\": {\n      \"per_page\": 1,\n      \"page_num\": 10,\n      \"data\": [\n          {\n              \"settle_id\": \"账单唯一标识\",\n              \"settle_year\": \"账单归属年限\",\n              \"order_count\": \"账单内完成的订单总数\",\n              \"worker_income\": \"该账单阿姨的总收入\",\n              \"settle_cycle\": \"账单类型【1周期账单 2月结账单】\",\n              \"settle_cycle_des\": \"账单文字说明\",\n              \"settle_task_money\": \"任务奖励金额\",\n              \"base_salary_subsidy\": \"底薪补贴\",\n              \"money_deduction\": \"处罚金额\",\n              \"order_money_except_cash\": \"工时服务费\",\n              \"settle_status\":\"账单状态【0未结算 1已结算】\",\n              \"settle_time\": \"账单日期\",\n              \"worker_is_confirmed\": \"阿姨是否确认账单【0未确认 1已确认】\"\n          }\n      ]\n   }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n\n \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"alertMsg\": \"获取账单列表成功\",\n  \"ret\": {\n      \"per_page\": 1,\n      \"page_num\": 10,\n      \"explain_url\": \"账单说明跳转URL\",\n      \"data\": [\n          {\n              \"settle_id\": \"账单唯一标识\",\n              \"settle_year\": \"账单归属年限\",\n              \"order_count\": \"账单内完成的订单总数\",\n              \"worker_income\": \"该账单阿姨的总收入\",\n              \"settle_cycle\": \"账单类型【1周期账单 2月结账单】\",\n              \"settle_cycle_des\": \"账单文字说明\",\n              \"settle_task_money\": \"任务奖励金额\",\n              \"base_salary_subsidy\": \"底薪补贴\",\n              \"money_deduction\": \"处罚金额\",\n              \"order_money_except_cash\": \"工时服务费\",\n              \"settle_status\":\"账单状态【0未结算 1已结算】\",\n              \"settle_starttime\": \"账单开始日期【如果是月结则settle_endtime无效】\",\n               \"settle_endtime\": \"账单结束日期\",\n              \"worker_is_confirmed\": \"阿姨是否确认账单【0未确认 1已确认】\"\n          }\n      ]\n   }\n}",
           "type": "json"
         }
       ]
