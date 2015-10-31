@@ -380,6 +380,40 @@ class OrderController extends BaseAuthController
             'model' => $model,
         ]);
     }
+
+    public function actionCreateBatch()
+    {
+        $attributes = [
+            'order_ip'=> Yii::$app->request->userIP,
+            'order_service_type_id'=>1,
+            'order_src_id'=>1,
+            'channel_id'=>20,
+            'address_id'=>1,
+            'customer_id'=>3,
+            'order_customer_phone'=>'13141484602',
+            'admin_id'=>Yii::$app->user->id,
+            'order_pay_type'=>1,
+            'order_is_use_balance'=>1,
+            'order_booked_worker_id'=>1,
+            'order_customer_need'=>'xxxxx',
+            'order_customer_memo'=>'fffff'
+        ];
+        $booked_list = [
+            [
+                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00')),
+                'order_booked_end_time' => strtotime(date('Y-m-d 12:30')),
+            ],
+            [
+                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00').' +1days'),
+                'order_booked_end_time' => strtotime(date('Y-m-d 12:30').' +1days'),
+            ],
+            [
+                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00').' +2days'),
+                'order_booked_end_time' => strtotime(date('Y-m-d 12:30').' +2days'),
+            ],
+        ];
+        return Order::createNewBatch($attributes,$booked_list);
+    }
     
     /**
      * 查看并编辑订单

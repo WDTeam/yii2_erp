@@ -9,7 +9,7 @@ use restapi\models\alertMsgEnum;
 class SendSmsController extends \restapi\components\Controller
 {
     /**
-     * @api {GET} /send-sms/send-v 发短消息 （赵顺利 0% 不使用）
+     * @api {GET} /send-sms/send-v 发短消息
      * @apiName actionSendV
      * @apiGroup SendSms
      *
@@ -124,14 +124,14 @@ class SendSmsController extends \restapi\components\Controller
         if (preg_match("/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/", $phone)) {
             //验证通过
             if (!WorkerCode::generateAndSend($phone)) {
-                return $this->send(null, "短信发送失败", 0, 403);
+                return $this->send(null, "短信发送失败", 0, 403,null,alertMsgEnum::sendWorkerCodeFaile);
 
             }
         } else {
-            return $this->send(null, "电话号码不符合规则", 0, 403);
+            return $this->send(null, "电话号码不符合规则", 0, 403,null,alertMsgEnum::sendWorkerCodeFaile);
 
         }
-        return $this->send(null, "短信发送成功");
+        return $this->send(null, "短信发送成功",1,200,null,alertMsgEnum::sendWorkerCodeSuccess);
     }
 
 }

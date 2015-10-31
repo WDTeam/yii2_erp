@@ -9,6 +9,7 @@ use \core\models\customer\CustomerAccessToken;
 use \core\models\order\OrderSearch;
 use \dbbase\models\order\OrderStatusDict;
 use \core\models\worker\WorkerAccessToken;
+use \restapi\models\alertMsgEnum;
 
 class ConfigureController extends \restapi\components\Controller
 {
@@ -65,14 +66,14 @@ class ConfigureController extends \restapi\components\Controller
         $param = Yii::$app->request->get();
 
         if (empty(@$param['city_name'])) {
-            return $this->send(null, "未取得城市信息", 0, 403);
+            return $this->send(null, "未取得城市信息", 0, 403,null,alertMsgEnum::allServicesFailed);
         }
 
         $categoryes = OperationCategory::getAllCategory();
         $goodses = OperationShopDistrictGoods::getGoodsByCity($param['city_name']);
 
         if (empty($categoryes) || empty($goodses)) {
-            return $this->send(null, "该城市暂未开通", 0, 403);
+            return $this->send(null, "该城市暂未开通", 0, 403,null,alertMsgEnum::allServicesFailed);
         }
         $cDate = [];
         foreach ($categoryes as $cItem) {
@@ -104,7 +105,7 @@ class ConfigureController extends \restapi\components\Controller
             $cDate[] = $cObject;
         }
 
-        return $this->send($cDate, "数据获取成功", 1);
+        return $this->send($cDate, "数据获取成功", 1,200,null,alertMsgEnum::allServicesSuccess);
     }
 
     /**
@@ -262,7 +263,7 @@ class ConfigureController extends \restapi\components\Controller
         $param = Yii::$app->request->get();
 
         if (empty(@$param['city_name'])) {
-            return $this->send(null, "未取得城市信息", 0, 403);
+            return $this->send(null, "未取得城市信息", 0, 403,null,alertMsgEnum::getUserInitFailed);
         }
         //获取城市列表
         $city_list = OperationCity::getOnlineCitys();
@@ -462,7 +463,7 @@ class ConfigureController extends \restapi\components\Controller
             'footer_link' => $footer_link,
         ];
 
-        return $this->send($ret, '操作成功');
+        return $this->send($ret, '操作成功',1,200,null,alertMsgEnum::getUserInitSuccess);
     }
 
     /**
@@ -575,7 +576,7 @@ class ConfigureController extends \restapi\components\Controller
         @$token = $params['access_token'];
         $worker = WorkerAccessToken::getWorker($token);
         if (empty($worker)) {
-            return $this->send(null, "用户无效,请先登录", 0);
+            return $this->send(null, "用户无效,请先登录", 0,403,null,alertMsgEnum::getWorkerInitFailed);
         }
         //获取阿姨待服务订单
         $args["owr.worker_id"] = $worker->id;
@@ -656,12 +657,12 @@ class ConfigureController extends \restapi\components\Controller
             'footer_link' => $footer_link,
         ];
 
-        return $this->send($ret, "查询成功");
+        return $this->send($ret, "查询成功",1,200,null,alertMsgEnum::getWorkerInitSuccess);
 
     }
 
     /**
-     * @api {GET} v1/configure/start-page 阿姨端启动页 （赵顺利 0%）
+     * @api {GET} v1/configure/start-page 阿姨端启动页 （赵顺利 20%）
      * @apiName actionStartPage
      * @apiGroup configure
      *
@@ -712,7 +713,7 @@ class ConfigureController extends \restapi\components\Controller
         $app_version = $params['app_version'];
 
         if (empty($app_version)) {
-            return $this->send(null, "访问源信息不存在，请确认信息完整", 0);
+            return $this->send(null, "访问源信息不存在，请确认信息完整",0,403,alertMsgEnum::getWorkerStartPageFailed);
         }
         $pages = [
             [
@@ -737,7 +738,7 @@ class ConfigureController extends \restapi\components\Controller
         $ret=[
             'pages'=>$pages
         ];
-        return $this->send($ret, "查询成功");
+        return $this->send($ret, "查询成功",1,200,alertMsgEnum::getWorkerStartPageSuccess);
     }
 
     /**

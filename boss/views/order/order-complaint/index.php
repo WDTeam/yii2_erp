@@ -4,7 +4,11 @@ use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use yii\widgets\ListView;
 use boss\assets\AppAsset;
+//use kartik\widgets\ActiveForm;
+
 use kartik\widgets\ActiveForm;
+use yii\web\JsExpression;
+use kartik\builder\Form;
 
 /**
  * @var yii\web\View $this
@@ -35,6 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <!-- 新增样式表 -->
 <style>
+.form-control{width:60%;}
 	.mar-t {margin-top: 15px;}
 	#m_warp .m_riqi .btn {margin: 0px 80px;width: 160px;height: 33px; background-color: #f6a202 !important;color: #fff !important;}
 </style>
@@ -54,25 +59,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         'method' => 'get',
                     ]); ?>
 						<div class="m_riqi">
-						 <div class="m_fr">
-						 	<label class="m_iphone">
-						 	客户手机<input type="text" name="OrderComplaintSearch[complaint_phone]" value="<?php if(!empty($params['OrderComplaintSearch']['complaint_phone'])){ echo $params['OrderComplaintSearch']['complaint_phone']; }?>"/>
-						 	</label>
-						 	<label class="m_iphone">
-						 	阿姨手机<input type="text" name="OrderComplaintSearch[order_worker_phone]" value="<?php if(!empty($params['OrderComplaintSearch']['order_worker_phone'])){ echo $params['OrderComplaintSearch']['order_worker_phone']; }?>"/>
-						 	</label>
-						 	<label class="m_iphone">
-						  		阿姨姓名<input type="text" name="OrderComplaintSearch[order_worker_name]" value="<?php if(!empty($params['OrderComplaintSearch']['order_worker_name'])){ echo $params['OrderComplaintSearch']['order_worker_name'];}?>"/>
-						  	</label>
+						 <div>	
+						 	<?php echo $form->field($searchModel, 'complaint_phone')->TextInput(['placeholder'=>'只能由11位数字组成','maxlength' => '11'])->label('客户手机 :', ['class' => 'm_ipone']); ?>
+						 	<?php echo $form->field($searchModel, 'order_worker_phone')->TextInput(['placeholder'=>'只能由11位数字组成','maxlength' => '11'])->label('阿姨手机 :', ['class' => 'm_ipone']); ?>
+							<?php echo $form->field($searchModel, 'order_worker_name')->TextInput(['placeholder'=>'只能由汉字/数字/下划线组成，不能包含空格'])->label('阿姨姓名 :', ['class' => 'm_ipone']); ?>
 							<?= Html::submitButton('查询', ['class' => 'btn btn-primary']) ?>
 						 </div>
 						<div class="m_fr mar-t">
-							<label class="m_iphone">
-						 	订单编号<input type="text" name="OrderComplaintSearch[order_id]" value="<?php if(!empty($params['OrderComplaintSearch']['order_id'])){echo $params['OrderComplaintSearch']['order_id'];}?>"/>
-						 	</label>
-						 	<label class="m_iphone">
-						 	投诉编号<input type="text" name="OrderComplaintSearch[id]" value="<?php if(!empty($params['OrderComplaintSearch']['id'])){ echo $params['OrderComplaintSearch']['id'];}?>"/>
-						 	</label>
+							<?php echo $form->field($searchModel, 'order_id')->TextInput(['placeholder'=>'由1到20位数字组成'])->label('订单编号 :', ['class' => 'm_ipone']); ?>
+							<?php echo $form->field($searchModel, 'id')->TextInput(['placeholder'=>'由1到20位数字组成'])->label('投诉编号 :', ['class' => 'm_ipone']); ?>
 						</div>
 						 <div class="m_fr mar-t">
                             <label class="m_ipone">创建时间:</label>
@@ -168,15 +163,15 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php 
 $this->registerJs('
 	    $(function () {
-			starttime = $("input[name="starttime"]").val();
-			endtime = $("input[name="endtime"]").val();
+			//starttime = $("input[name="starttime"]").val();
+			//endtime = $("input[name="endtime"]").val();
 		   // $("input[name="endtime"]").change(function(){
 				
 			//} 
 		
 		
 		
-	        $(".ui_timepicker").datetimepicker({
+	        /* $(".ui_timepicker").datetimepicker({
 	            //showOn: "button",
 	            //buttonImage: "./css/images/icon_calendar.gif",
 	            //buttonImageOnly: true,
@@ -191,7 +186,7 @@ $this->registerJs('
 					$(this).addClass("cur");
 					$(this).siblings("li").removeClass("cur");
 			   }
-		     );
+		     ); */
         })
     ');
 

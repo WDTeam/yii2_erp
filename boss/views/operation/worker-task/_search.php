@@ -25,7 +25,6 @@ use yii\widgets\ActiveForm;
 
         <div class="col-md-2" style="margin-top:22px;">
             <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
-            <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
         </div>
     
         <?php ActiveForm::end(); ?>

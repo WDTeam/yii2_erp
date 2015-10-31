@@ -66,7 +66,7 @@ class OrderStatus extends Order
             }
         }
         $transact->commit();
-        if(substr($batch_code,0,1)=='p') {
+        if(substr($batch_code,0,1)=='P') {
             foreach ($orders as $order) {
                 // 开始系统指派
                 if (self::_sysAssignStart($order->id)) {
