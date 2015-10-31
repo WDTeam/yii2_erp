@@ -57,13 +57,7 @@ if($searchModel->is_blacklist==1){
         }
     ];
 }
-$columns[] = [
-    'attribute'=>'shop_manager_id',
-    'value'=>function ($model){
-        return $model->getManagerName();
-    },
-    'options'=>['width'=>200,],
-];
+
 if($searchModel->is_blacklist==0){
     $columns[] = [
         'attribute'=>'created_at',
@@ -81,7 +75,16 @@ if($searchModel->is_blacklist==0){
         'filter'=>Shop::$audit_statuses,
     ];
 }
-
+$columns[] = [
+    'attribute'=>'shop_manager_id',
+    'format'=>'raw',
+    'value'=>function ($model){
+        return Html::a($model->getManagerName(), [
+            'shopmanager/shop-manager/view', 
+            'id'=>$model->shop_manager_id]);
+    },
+    'options'=>['width'=>200,],
+    ];
 $columns[] = 'worker_count';
 $columns[] = 'complain_coutn';
 $columns[] = 'level';

@@ -37,7 +37,7 @@ class OperationShopDistrictController extends BaseAuthController
     
     public function init(){
         $this->city_id = Yii::$app->request->get('city_id');
-        if(!empty($this->city_id)){
+        if(isset($this->city_id)){
             setcookie('city_id', $this->city_id, time()+86400);
         }else{
             $this->city_id = $_COOKIE['city_id'];
