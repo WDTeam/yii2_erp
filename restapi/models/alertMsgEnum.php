@@ -38,5 +38,14 @@ class alertMsgEnum
 
     //会员余额支付
     const balancePaySuccess='余额支付成功';
-
+    
+    //阿姨登录
+    const workerLoginSuccess = '登录成功';
+    const workerLoginFailed = '用户认证已经过期,请重新登录';
+    const workerLoginBossFailed = '登录失败';
+    //阿姨申请请假
+    const workerApplyLeaveTypeFailed = '请假类型不正确';
+    const workerApplyLeaveTimeFailed = '请假时间不正确';
+    const workerApplyLeaveFailed = '请假申请失败';
+    const workerApplyLeaveSuccess = '您的请假已提交，请耐心等待审批';
 }

@@ -12,7 +12,7 @@ use core\models\order\OrderSearch;
 use core\models\order\OrderComplaint;
 
 use restapi\models\Worker as ApiWorker;
-
+use restapi\models\alertMsgEnum;
 use Yii;
 class WorkerController extends \restapi\components\Controller
 {
@@ -127,28 +127,24 @@ class WorkerController extends \restapi\components\Controller
         //检测阿姨是否登录
         $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 0, 403);
+            return $this->send(null, $checkResult['msg'], $checkResult['code'], 403,null,$checkResult['msg']);
         }
         $workerID = $checkResult['workerInfo']['worker_id'];
-        
+        $worker_identity_id = $checkResult['workerInfo']['worker_identity_id'];
         //判断数据完整
-        if(!isset($param['leave_type']) || !$param['leave_type']){
-            return $this->send(null, "数据不完整,请选择请假类型", 0, 403);
-        }
-        if (!in_array($param['leave_type'], array(1, 2))) {
-            return $this->send(null, "请假类型不正确", 0, 403);
+        if(!isset($param['leave_type']) || !$param['leave_type']|| !in_array($param['leave_type'], array(1, 2))){
+            return $this->send(null, "请假类型不正确", 0, 403,null,alertMsgEnum::workerApplyLeaveTypeFailed);
         }
         $vacationType = intval($param['leave_type']);
         //请假时间
         if (!isset($param['leave_time']) || !$param['leave_time']) {
-            return $this->send(null, "数据不完整,请选择请假时间", 0, 403);
+            return $this->send(null, "数据不完整,请选择请假时间", 0, 403,null, alertMsgEnum::workerApplyLeaveTimeFailed);
         }
         try{
-            $workerInfo = Worker::getWorkerListByIds($workerID,'worker_identity_id');
-            if($workerInfo[0]['worker_identity_id']!=1) return $this->send(null, "只有全职阿姨才可以申请请假", 0, 403);
+            if($worker_identity_id!=1) return $this->send(null, "只有全职阿姨才可以申请请假", 0, 403,null,alertMsgEnum::workerApplyLeaveFailed);
             $vacationTimeLine = WorkerVacationApplication::getApplicationTimeLine($workerID,$vacationType);
          }catch (\Exception $e) {
-            return $this->send(null, "boss系统错误", 1024, 403);
+            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::workerApplyLeaveFailed);
         }
         $vacationTimeArr = explode("_",$param['leave_time']);
         $vacationTime = array_keys($vacationTimeLine);
@@ -156,28 +152,28 @@ class WorkerController extends \restapi\components\Controller
         $firstDay = $vacationTimeArr[0];
         $secondDay = isset($vacationTimeArr[1])?$vacationTimeArr[1]:"";
         if(!in_array($firstDay, $vacationTime)||!$vacationTimeLine[$firstDay]){
-            return $this->send(null, "请假时间不在请假时间范围内", 0, 403);
+            return $this->send(null, "请假时间不在请假时间范围内", 0, 403,null,alertMsgEnum::workerApplyLeaveTimeFailed);
         }
         if($vacationType==1&&count($vacationTimeArr)>2){
-            return $this->send(null, "休假最多只能选择两天", 0, 403);
+            return $this->send(null, "休假最多只能选择两天", 0, 403,null,alertMsgEnum::workerApplyLeaveTimeFailed);
         }
         if($vacationType==2&&count($vacationTimeArr)>1){
-            return $this->send(null, "事假最多只能选择一天", 0, 403);
+            return $this->send(null, "事假最多只能选择一天", 0, 403,null,alertMsgEnum::workerApplyLeaveTimeFailed);
         }
         //休假或者事假申请（一天）
         if(!WorkerVacationApplication::createVacationApplication($workerID,$firstDay,$vacationType)){
-            return $this->send(null, "请假申请失败", 0, 403);
+            return $this->send(null, "请假申请失败", 0, 403,null,alertMsgEnum::workerApplyLeaveFailed);
         }
         //如果选择休假且选择了两天
         if($vacationType==1&&$secondDay){//休假
             if(!in_array($secondDay, $vacationTime)||!$vacationTimeLine[$secondDay]){
-                return $this->send(null, "请假时间不在请假时间范围内", 0, 403);
+                return $this->send(null, "请假时间不在请假时间范围内", 0, 403,null,alertMsgEnum::workerApplyLeaveTimeFailed);
             }
             if(!WorkerVacationApplication::createVacationApplication($workerID,$secondDay,$vacationType)){
-                return $this->send(null, "请假申请失败", 0, 403);
+                return $this->send(null, "请假申请失败", 0, 403,null,alertMsgEnum::workerApplyLeaveFailed);
             }
         }
-        return $this->send(null, "您的请假已提交，请耐心等待审批");
+        return $this->send(null, "您的请假已提交，请耐心等待审批",1,200,null,alertMsgEnum::workerApplyLeaveSuccess);
         
     }
 
