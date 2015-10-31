@@ -67,5 +67,12 @@ class alertMsgEnum
     //获取阿姨账单列表
     const workerBillListSuccess = '获取账单列表成功';
     const workerBillListFailed = '获取账单列表失败';
+    //获取阿姨工时列表
+    const workerSettleIdFailed = '账单唯一标识错误';
+    const workerTasktimeListSuccess = '获取工时列表成功';
+    const workerTasktimeListFailed = '获取工时列表失败';
+    //获取阿姨任务奖励列表
+    const workerTaskRewardListSuccess = '获取任务奖励成功';
+    const workerTaskRewardListFailed = '获取任务奖励失败';
 
 }
