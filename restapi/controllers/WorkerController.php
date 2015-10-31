@@ -526,8 +526,8 @@ class WorkerController extends \restapi\components\Controller
      * @apiGroup Worker
      *
      * @apiParam {String} access_token    阿姨登录token
-     * @apiParam {String} per_page  每页显示多少条.
-     * @apiParam {String} page  第几页.
+     * @apiParam {String} per_page  第几页
+     * @apiParam {String} page_num  每页显示多少条
      * @apiParam {String} [platform_version] 平台版本号.
      *
      * @apiSampleRequest http://dev.api.1jiajie.com/v1/worker/get-worker-bill-list
@@ -542,6 +542,7 @@ class WorkerController extends \restapi\components\Controller
      *   "ret": {
      *       "per_page": 1,
      *       "page_num": 10,
+     *       "explain_url": "账单说明跳转URL",
      *       "data": [
      *           {
      *               "settle_id": "账单唯一标识",
@@ -555,7 +556,8 @@ class WorkerController extends \restapi\components\Controller
      *               "money_deduction": "处罚金额",
      *               "order_money_except_cash": "工时服务费",
      *               "settle_status":"账单状态【0未结算 1已结算】",
-     *               "settle_time": "账单日期",
+     *               "settle_starttime": "账单开始日期【如果是月结则settle_endtime无效】",
+     *                "settle_endtime": "账单结束日期",
      *               "worker_is_confirmed": "阿姨是否确认账单【0未确认 1已确认】"
      *           }
      *       ]
@@ -587,19 +589,17 @@ class WorkerController extends \restapi\components\Controller
             return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::workerBillListFailed);
         }
         foreach($billList as $key=>$val){
-            if($val['settle_cycle']==1){//周结账单
-                $billList[$key]['settle_time'] = $val['settle_starttime'].'-'.$val['settle_endtime'];
-            }else{
-                $billList[$key]['settle_time'] = date('m',strtotime($val['settle_starttime']));
+            if($val['settle_cycle']==2){//周结账单
+                $billList[$key]['settle_starttime'] = date('Y-m',strtotime($val['settle_starttime']));
+                $billList[$key]['settle_endtime'] = date('Y-m',strtotime($val['settle_starttime']));
             }
             $billList[$key]['worker_is_confirmed'] = $val['isWorkerConfirmed'];
-            unset($billList[$key]['settle_starttime']);
-            unset($billList[$key]['settle_endtime']);
             unset($billList[$key]['isWorkerConfirmed']);
         }
         $ret = [
             'per_page' => $per_page,
             'page_num' => $page_num,
+            'explain_url'=>'http://www.baidu.com',
             'data'  => $billList
         ];
         return $this->send($ret, "操作成功",1,200,null,alertMsgEnum::workerBillListSuccess);

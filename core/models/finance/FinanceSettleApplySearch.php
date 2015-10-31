@@ -505,11 +505,14 @@ class FinanceSettleApplySearch extends FinanceSettleApply
      * @param type $settle_id
      * @return type
      */
-    public static function getOrderArrayBySettleId($settle_id){
+    public static function getOrderArrayBySettleId($settle_id,$current_page,$per_page_num){
         $finalOrderArray = [];
+        $offset = ($current_page - 1) * $per_page_num;
         $orderIncomeArray = FinanceWorkerOrderIncomeSearch::find()
                 ->select(['order_id','order_money'])
-                ->where(['finance_settle_apply_id'=>$settle_id])->asArray()->all();
+                ->where(['finance_settle_apply_id'=>$settle_id])
+                ->offset($offset)->limit($per_page_num)
+                ->asArray()->all();
         $i = 0;
         foreach($orderIncomeArray as $orderIncome){
             $finalOrder = [];
