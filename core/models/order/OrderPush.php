@@ -9,6 +9,7 @@
 namespace core\models\order;
 
 
+use dbbase\models\order\OrderOtherDict;
 use dbbase\models\order\OrderStatusDict;
 use Yii;
 use core\models\worker\Worker;
@@ -86,8 +87,8 @@ class OrderPush extends Order
     {
         $ivr_flag = false;
         $jpush_flag = false;
-        $is_ivr_worker_ids = OrderWorkerRelation::getWorkerIdsByOrderIdAndStatus($order_id, 'IVR已推送');
-        $is_jpush_worker_ids = OrderWorkerRelation::getWorkerIdsByOrderIdAndStatus($order_id, 'JPUSH已推送');
+        $is_ivr_worker_ids = OrderWorkerRelation::getWorkerIdsByOrderIdAndStatusId($order_id, OrderOtherDict::NAME_IVR_PUSH_SUCCESS);
+        $is_jpush_worker_ids = OrderWorkerRelation::getWorkerIdsByOrderIdAndStatusId($order_id, OrderOtherDict::NAME_JPUSH_PUSH_SUCCESS);
         foreach ($workers as $v) {
             if (!in_array($v['id'], $is_ivr_worker_ids)) { //判断该阿姨有没有推送过该订单，防止重复推送。
                 //把该推送ivr的阿姨放入该订单的队列中
@@ -99,7 +100,7 @@ class OrderPush extends Order
                 $result = Yii::$app->jpush->push(["worker_{$v['id']}"], '订单来啦！'); //TODO 发送内容
                 if (isset($result->isOK)) {
                     $worker_id = intval(str_replace('worker_', '', $v));
-                    OrderWorkerRelation::addOrderWorkerRelation($order_id, $worker_id, '', 'JPUSH已推送', 1);
+                    OrderWorkerRelation::jpushPushSuccess($order_id, $worker_id, 1);
                     $jpush_flag = true;
                 }
             }
@@ -133,9 +134,9 @@ class OrderPush extends Order
                     ."，时长" . intval($order->order_booked_count / 60) . "个" . ($order->order_booked_count % 60 > 0 ? "半" : "") . "小时。服务地址是：{$order->order_address}！";
                 $result = Yii::$app->ivr->send($worker['worker_phone'], 'pushToWorker_' . $order_id, $ivr_msg);
                 if (isset($result['result']) && $result['result'] == 0) {
-                    OrderWorkerRelation::addOrderWorkerRelation($order_id, $worker['id'], '', 'IVR已推送', 1);
+                    OrderWorkerRelation::ivrPushSuccess($order_id, $worker['id'], 1);
                 } else {
-                    OrderWorkerRelation::addOrderWorkerRelation($order_id, $worker['id'], '', 'IVR推送失败', 1);
+                    OrderWorkerRelation::ivrPushFailure($order_id, $worker['id'], 1);
                 }
             }
         } else {

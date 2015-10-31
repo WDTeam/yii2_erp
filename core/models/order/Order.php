@@ -18,6 +18,7 @@ use core\models\worker\Worker;
 use core\models\operation\OperationShopDistrict;
 use core\models\operation\OperationGoods;
 
+use core\models\worker\WorkerStat;
 use dbbase\models\order\OrderExtFlag;
 use dbbase\models\order\OrderExtPay;
 use dbbase\models\order\OrderExtWorker;
@@ -400,7 +401,11 @@ class Order extends OrderModel
             }else {
                 $result = OrderStatus::_workerBindOrder($order, ['OrderExtFlag', 'OrderExtWorker']);
             }
-            OrderPool::remOrderForWorkerPushList($order->id,true); //永久从接单大厅中删除此订单
+            if($result) {
+                OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
+                //更新阿姨接单数量
+                WorkerStat::updateWorkerStatOrderNum($worker['id'],1);
+            }
         }
         return ['status'=>$result,'errors'=>$order->errors];
     }

@@ -489,18 +489,27 @@ class OrderController extends BaseAuthController
         return Order::manualAssignDone($order_id,$worker_id,Yii::$app->user->id,true);
     }
 
-
     /**
-     * 添加订单和阿姨的关系信息
-     *
+     * 阿姨拒单
+     * @return bool
      */
-    public function actionCreateOrderWorkerRelation()
+    public function actionWorkerRefuse()
     {
         $order_id = Yii::$app->request->post('order_id');
         $worker_id = Yii::$app->request->post('worker_id');
         $memo = Yii::$app->request->post('memo');
-        $status = Yii::$app->request->post('status');
-        return OrderWorkerRelation::addOrderWorkerRelation($order_id,$worker_id,$memo,$status,Yii::$app->user->id);
+        return OrderWorkerRelation::workerRefuse($order_id,$worker_id,Yii::$app->user->id,$memo);
+    }
+
+    /**
+     * 联系阿姨未响应
+     * @return bool
+     */
+    public function actionWorkerContactFailure()
+    {
+        $order_id = Yii::$app->request->post('order_id');
+        $worker_id = Yii::$app->request->post('worker_id');
+        return OrderWorkerRelation::workerContactFailure($order_id,$worker_id,Yii::$app->user->id);
     }
 
 
