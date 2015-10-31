@@ -182,7 +182,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'coupon_promote_type', 
 //            'coupon_promote_type_name', 
 //            'coupon_order_min_price', 
-//            'coupon_code_num', 
+            'coupon_code_num', 
 //            'coupon_code_max_customer_num', 
 //            'is_disabled', 
 			[
@@ -201,37 +201,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template'=>'{edit} | {disable} | {view} | {bind}',
+                'template'=>' {view}{bind}',
                 'buttons' => [
-                    'edit' => function ($url, $model) {
-                        return Html::a('编辑', [
-                            'coupon/update',
-                            'id' => $model->id
-                        ], [
-                            'title' => Yii::t('app', '编辑'),
-                            'class'=>'block-btn',
-                        ]);
-                    },
-
-					'disable' => function ($url, $model) {
-						$disable_word = '';
-						if ($model->is_disabled)
-						{
-							$disable_word = '启用';
-							
-						}else{
-							$disable_word = '禁用';
-						}
-                        return Html::a($disable_word, [
-                            'coupon/disable',
-                            'id' => $model->id
-                        ], [
-                            'title' => Yii::t('app', $disable_word),
-        
-                            'class'=>'block-btn',
-                        ]);
-                    },
-
 					'view' => function ($url, $model) {
                         return Html::a('详情', [
                             'operation/coupon/coupon/view',
@@ -239,7 +210,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ], [
                             'title' => Yii::t('app', '详情'),
                             
-                            'class'=>'block-btn',
+                            'class'=>'btn btn-primary block-btn',
                         ]);
                     },
                     'bind' => function ($url, $model) {
@@ -252,7 +223,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'data-toggle'=>'modal',
                                 'data-target'=>'#modal',
                                 'data-id'=>$model->id,
-                                'class'=>'bind-btn block-btn',
+                                'class'=>'btn btn-primary bind-btn',
                             ]);
                         }else{
                             return false;
@@ -266,10 +237,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'condensed' => true,
         'floatHeader' => true,
         'striped'=>false,
-
-
-
-
         'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type'=>'info',

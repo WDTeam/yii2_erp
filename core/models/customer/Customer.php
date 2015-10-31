@@ -1,6 +1,7 @@
 <?php
 namespace core\models\customer;
 
+use core\models\finance\FinanceOrderChannel;
 use Yii;
 
 use yii\web\BadRequestHttpException;

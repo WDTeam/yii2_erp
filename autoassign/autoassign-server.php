@@ -36,6 +36,7 @@ class server
         echo date('Y-m-d H:i:s')." 自动指派服务启动中";
         $this->config = $config;
         $this->connectRedis();
+        $this->redis->set(REDIS_IS_SERVER_SUSPEND,json_encode(false));
         $this->redis->set(REDIS_AUTOASSIGN_CONFIG,json_encode($this->config));
         $this->saveStatus(null);
         $this->serv = new swoole_websocket_server($config['SERVER_LISTEN_IP'], $config['SERVER_LISTEN_PORT']);
@@ -149,19 +150,22 @@ class server
             {
                 echo date('Y-m-d H:i:s')." 服务继续\n";
                 $this->isServerSuspend = false;
-                $this->redis->set(REDIS_IS_SERVER_SUSPEND,false);
+                $this->redis->set(REDIS_IS_SERVER_SUSPEND,json_encode(false));
+                $this->broadcast($server, autoassign\ClientCommand::START);
             }
             break;
             case autoassign\ClientCommand::STOP:
             {
                 echo date('Y-m-d H:i:s')." 服务暂停\n";
                 $this->isServerSuspend = true;
-                $this->redis->set(REDIS_IS_SERVER_SUSPEND,true);
+                $this->redis->set(REDIS_IS_SERVER_SUSPEND,json_encode(true));
+                $this->broadcast($server, autoassign\ClientCommand::STOP);
             }
             break;
             case autoassign\ClientCommand::RELOAD:
             {
                 echo date('Y-m-d H:i:s')." 服务重启\n";
+                $this->broadcast($server, autoassign\ClientCommand::RELOAD);
                 $server->reload();
             }
             break;
@@ -177,6 +181,7 @@ class server
                 
                 $this->redis->set(REDIS_AUTOASSIGN_CONFIG,json_encode($this->config));
                 echo date('Y-m-d H:i:s')." 配置已更新\n";
+                $this->broadcast($server, autoassign\ClientCommand::UPDATE);
             }
             break;
             default:
@@ -223,6 +228,7 @@ class server
         $this->redis->set($key, $data);
         if ($server)
         {
+            //echo "save status broadcast...\n";
             $this->broadcast($server,'Assign Server is OK');
         }
     }
@@ -230,7 +236,8 @@ class server
      * 处理订单
      */
     public function processOrders($server) {
-        if ($this->redis->get(REDIS_IS_SERVER_SUSPEND)==true)
+        $isSuspend = (bool) json_decode($this->redis->get(REDIS_IS_SERVER_SUSPEND));
+        if ($isSuspend==true)
         {
             return;
         }
@@ -275,7 +282,7 @@ class server
             echo date('Y-m-d H:i:s').' 订单:＝ '. $order['order_id']." 派单中==>";
             $isOK = false;
             
-            $timerDiff = time() - (int)($order['created_at']);
+            $timerDiff = time() - (int)($order['assign_start_time']);
 
             echo '已过 '.$timerDiff.' 秒 ==>';
             
@@ -297,7 +304,7 @@ class server
             if ($isOK)
             {
                 //推送到客户端
-                $this->broadcast($server,$d);
+//                $this->broadcast($server,$d);
                 $this->serv->task($order);
             }
 
@@ -365,7 +372,7 @@ class server
        
         //return $this->taskOrder($data, $server);
         
-        if ($data['lock']==false)
+        if (empty($data['lock']))
         {
             $this->lockOrder($data);//加入状态锁
             return $this->taskOrder($server, $data);
@@ -387,8 +394,12 @@ class server
         $url = $this->config['BOSS_API_URL'] . $data['order_id'];
         try {
             $result = @file_get_contents($url);
-            //$data = (array)json_decode($d);
-            //var_dump($data);
+            $d = json_decode($result,true);
+            $d['created_at'] = date('Y-m-d H:i:s', $d['created_at']);
+            $d['assign_start_time'] = date('Y-m-d H:i:s', $d['assign_start_time']);
+            $d['updated_at'] = isset($d['updated_at']) ? date('Y-m-d H:i:s', $d['updated_at']) : '';
+            $d = json_encode($d);
+            $this->broadcast($server,$d);
         } catch (Exception $ex) {
             echo date('Y-m-d H:i:s').$ex->getMessage()."\n";
             var_dump($data);
@@ -401,9 +412,15 @@ class server
      */
     public function onFinish($server,$task_id, $data) {
         echo date('Y-m-d H:i:s').'订单:＝ '.$data['order_id']." 本次任务完成\n";
-        $data['updated_at'] = isset($data['updated_at']) ? date('Y-m-d H:i:s', $data['updated_at']) : '';
-        $d = json_encode($data);
-        $this->broadcast($server,$d);
+//        $d = $data;
+//        if(isset($d['order_id'])) {
+//            unset($d['order_id']);
+//        }
+//        $d['created_at'] = date('Y-m-d H:i:s', $d['created_at']);
+//        $d['assign_start_time'] = date('Y-m-d H:i:s', $d['assign_start_time']);
+//        $d['updated_at'] = isset($d['updated_at']) ? date('Y-m-d H:i:s', $d['updated_at']) : '';
+//        $d = json_encode($d);
+//        $this->broadcast($server,$d);
     }
     /*
      * 广播给所有客户端
@@ -413,6 +430,7 @@ class server
         $msg = json_encode($msg);
         foreach ($server->connections as $clid => $info)
         {
+            //var_dump($clid);
             try{
                 $server->push($clid, $msg);
             } catch (Exception $ex) {

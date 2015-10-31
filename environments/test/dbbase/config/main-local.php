@@ -19,7 +19,7 @@ return [
         ],
         'redis' => [
             'class' => 'yii\redis\Connection',
-            'hostname' => '101.200.179.70', // 配置为 dev环境 redis 服务器地址 test环境 101.200.200.74 ，prod环境 待定
+            'hostname' => 'test.boss.1jiajie.com', // 配置为 dev环境 redis 服务器地址 test环境 101.200.200.74 ，prod环境 待定
             //            'hostname' => '127.0.0.1', // 配置为 dev环境 redis 服务器地址 test环境 101.200.200.74 ，prod环境 待定
             'port' => 6379,
             'database' => 0,
@@ -56,7 +56,7 @@ return [
             'class'=>'dbbase\components\Ivr',
             'app_id'=>'5000040',
             'token'=>'8578b07ba71ff7dfd6ddeca95d69828c',
-            'redirect_uri'=>'ivr/callback'
+            'redirect_uri'=>'system/ivr/callback'
         ],
     ],
 ];

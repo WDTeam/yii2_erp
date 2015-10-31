@@ -201,28 +201,36 @@ class Order extends OrderModel
      *          int $coupon_id 优惠券id
      *      ]
      * ]
-     * @return bool
+     * @return array
      */
-    public function createNewBatch($attributes,$booked_list)
+    public static function createNewBatch($attributes,$booked_list)
     {
         $transact = static::getDb()->beginTransaction();
         //如果指定阿姨则是周期订单分配周期订单号否则分配批量订单号
         $attributes['order_parent_id'] = 0;
-        $attributes['order_is_parent'] = 0;
+        $attributes['order_is_parent'] = 1;
         if(isset($attributes['order_booked_worker_id']) && $attributes['order_booked_worker_id']>0)
         {
-            $attributes['order_batch_code'] = OrderTool::createOrderCode('z');
+            $attributes['order_batch_code'] = OrderTool::createOrderCode('Z');
         }else{
-            $attributes['order_batch_code'] = OrderTool::createOrderCode('p');
+            $attributes['order_batch_code'] = OrderTool::createOrderCode('P');
         }
         foreach($booked_list as $booked){
-            if(!$this->_create($attributes+$booked,$transact)){
+            $order = new Order();
+            if(!$order->_create($attributes+$booked,$transact)){
+                print_r($order->errors);
                 $transact->rollBack();
-                return false;
+                return ['status'=>false,'errors'=>$order->errors];
+            }else{
+                if($attributes['order_parent_id'] ==0 && $attributes['order_is_parent']==1) {
+                    //第一个订单为父订单其余为子订单
+                    $attributes['order_parent_id'] = $order->id;
+                    $attributes['order_is_parent'] = 0;
+                }
             }
         }
         $transact->commit();
-        return true;
+        return ['status'=>true,'batch_code'=>$attributes['order_batch_code']];
     }
 
 
@@ -246,6 +254,20 @@ class Order extends OrderModel
             'order_pay_flow_num' => $order_pay_flow_num
         ]);
         return OrderStatus::_payment($order,['OrderExtPay']);
+    }
+
+    /**
+     * 批量支付回调接口
+     * @param $batch_code int 订单id
+     * @param $admin_id int  后台管理员id 系统0 客户1
+     * @param $pay_channel_id int  支付渠道id
+     * @param $order_pay_channel_name string 支付渠道名称
+     * @param $order_pay_flow_num string 支付流水号
+     * @return bool
+     */
+    public static function isBatchPaymentOnline($batch_code,$admin_id,$pay_channel_id,$order_pay_channel_name,$order_pay_flow_num)
+    {
+        return OrderStatus::_batchPayment($batch_code,$admin_id,$pay_channel_id,$order_pay_channel_name,$order_pay_flow_num);
     }
 
 

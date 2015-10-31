@@ -133,14 +133,6 @@ class FinanceCompensateController extends Controller
             $id = $getParams['id'];
         }
         if ($model->load($postParams)) {
-              //此处需要根据投诉Id获取阿姨信息
-//            $model->finance_complaint_id = 1111;
-//            $model->worker_tel = '13810998888';
-//            $model->worker_id = 33;
-//            $model->worker_name = '丁阿姨';
-//            $model->customer_id = 55;
-//            $model->customer_name = '肖先生';
-//            $model->finance_compensate_proposer = '客服A';
             $model->created_at = time();
             if(!empty($postParams) && isset($postParams['finance_compensate_coupon'])){
                 $finance_compensate_coupon_arr = $postParams['finance_compensate_coupon'];
@@ -162,7 +154,7 @@ class FinanceCompensateController extends Controller
                  }
             }
             $model->save();
-            return $this->redirect(['finance-confirm-index']);
+            return $this->redirect(['/order/order-complaint/']);
         } else {
             if(!empty($id)){
                  $model = $this->findModel($id);
@@ -184,9 +176,9 @@ class FinanceCompensateController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         } else {
-            return $this->render('update', [
+            return $this->render('create', [
                 'model' => $model,
             ]);
         }

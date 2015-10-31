@@ -53,20 +53,27 @@ class OrderPush extends Order
                 self::pushToWorkers($order_id, $workers, $push_status);
             } else {//如果查询不到兼职阿姨则系统指派失败
                 Order::sysAssignUndone($order_id);
+                $push_status = 1001;
             }
         } else {
             //状态不是智能指派中直接从订单池中删除
             OrderPool::remOrder($order_id);
+            $push_status = 1001;
         }
 
         $order = OrderSearch::getOne($order_id);
-        return [
-            'order_id' => $order->id,
-            'created_at' => $order->orderExtStatus->updated_at,
-            'jpush' => $order->orderExtFlag->order_flag_worker_jpush,
-            'ivr' => $order->orderExtFlag->order_flag_worker_ivr,
-            'push_status'=>$push_status
+        $order_flag = OrderExtFlag::findOne($order_id);
+        $redis_order = [
+            'order_code' => $order->order_code,
+            'created_at' => $order->created_at,
+            'updated_at' => $order->updated_at,
+            'assign_start_time' => $order->orderExtStatus->updated_at,
+            'jpush' => $order_flag->order_flag_worker_jpush,
+            'ivr' => $order_flag->order_flag_worker_ivr,
+            'status'=> $push_status,
         ];
+
+        return $redis_order;
     }
 
     /**

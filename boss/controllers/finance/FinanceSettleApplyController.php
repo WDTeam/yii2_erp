@@ -417,19 +417,22 @@ class FinanceSettleApplyController extends BaseAuthController
         $nonCashOrderDataProvider = new ArrayDataProvider();
         $taskDataProvider = new ArrayDataProvider();
         $compensateDataProvider = new ArrayDataProvider();
-        if(!empty($financeSettleApplySearch->worker_tel) && !$financeSettleApplySearch->isWorkerExist($financeSettleApplySearch->worker_tel, $worker_type)){
-            Yii::$app->getSession()->setFlash('default', "未找到该阿姨的信息，请确认阿姨类型");
-            $financeSettleApplySearch->worker_tel = "";
-            $financeSettleApplySearch->getWorkerInfo($financeSettleApplySearch->worker_tel);//获取阿姨的信息
-            $financeSettleApplySearch->settle_type = $settle_type;
-            $financeSettleApplySearch->review_section = $review_section;
-            $financeSettleApplySearch = $financeSettleApplySearch->getWorkerSettlementSummaryInfo($financeSettleApplySearch->worker_id);
-            $financeWorkerOrderIncomeSearch = new FinanceWorkerOrderIncomeSearch;
-            $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
-            $cashOrderDataProvider = $financeWorkerOrderIncomeSearch->getCashOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
-            $nonCashOrderDataProvider = $financeWorkerOrderIncomeSearch->getNonCashOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
-            $taskDataProvider = $financeWorkerNonOrderIncomeSearch->getTaskDataProviderByWorkerId($financeSettleApplySearch->worker_id, null, null);
-            $compensateDataProvider = $financeWorkerNonOrderIncomeSearch->getCompensateDataProviderByWorkerId($financeSettleApplySearch->worker_id, null, null);
+        if(!empty($financeSettleApplySearch->worker_tel)){
+            if(!$financeSettleApplySearch->isWorkerExist($financeSettleApplySearch->worker_tel, $worker_type)){
+                 Yii::$app->getSession()->setFlash('default', "未找到该阿姨的信息，请确认阿姨类型");
+                 $financeSettleApplySearch->worker_tel = "";
+            }else{
+                $financeSettleApplySearch->getWorkerInfo($financeSettleApplySearch->worker_tel);//获取阿姨的信息
+                $financeSettleApplySearch->settle_type = $settle_type;
+                $financeSettleApplySearch->review_section = $review_section;
+                $financeSettleApplySearch = $financeSettleApplySearch->getWorkerSettlementSummaryInfo($financeSettleApplySearch->worker_id);
+                $financeWorkerOrderIncomeSearch = new FinanceWorkerOrderIncomeSearch;
+                $orderDataProvider = $financeWorkerOrderIncomeSearch->getOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
+                $cashOrderDataProvider = $financeWorkerOrderIncomeSearch->getCashOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
+                $nonCashOrderDataProvider = $financeWorkerOrderIncomeSearch->getNonCashOrderDataProviderFromOrder($financeSettleApplySearch->worker_id);
+                $taskDataProvider = $financeWorkerNonOrderIncomeSearch->getTaskDataProviderByWorkerId($financeSettleApplySearch->worker_id, null, null);
+                $compensateDataProvider = $financeWorkerNonOrderIncomeSearch->getCompensateDataProviderByWorkerId($financeSettleApplySearch->worker_id, null, null);
+            }
         }
         
         return $this->render('workerManualSettlementIndex', ['model'=>$financeSettleApplySearch,'orderDataProvider'=>$orderDataProvider,'cashOrderDataProvider'=>$cashOrderDataProvider,'nonCashOrderDataProvider'=>$nonCashOrderDataProvider,'taskDataProvider'=>$taskDataProvider,'compensateDataProvider'=>$compensateDataProvider]);

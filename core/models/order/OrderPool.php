@@ -9,6 +9,7 @@
 namespace core\models\order;
 
 
+use dbbase\models\order\OrderExtFlag;
 use Yii;
 use yii\base\Model;
 
@@ -123,11 +124,14 @@ class OrderPool extends Model
     public static function addOrder($order_id,$worker_identity=0)
     {
         $order = OrderSearch::getOne($order_id);
+        $order_flag = OrderExtFlag::findOne($order_id);
         $redis_order = [
             'order_id' => $order_id,
-            'created_at' => $order->orderExtStatus->updated_at,
-            'jpush' => $order->orderExtFlag->order_flag_worker_jpush,
-            'ivr' => $order->orderExtFlag->order_flag_worker_ivr,
+            'order_code' => $order->order_code,
+            'created_at' => $order->created_at,
+            'assign_start_time' => $order->orderExtStatus->updated_at,
+            'jpush' => $order_flag->order_flag_worker_jpush,
+            'ivr' => $order_flag->order_flag_worker_ivr,
             'worker_identity'=> $worker_identity,
         ];
         Yii::$app->redis->executeCommand('zAdd', [self::WAIT_ASSIGN_ORDERS_POOL, $order_id, json_encode($redis_order)]);

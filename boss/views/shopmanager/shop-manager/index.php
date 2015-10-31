@@ -64,7 +64,7 @@ $columns[] = [
     'attribute'=>'shop_count',
     'options'=>['width'=>70],
     'value'=>function ($model){
-        return Html::a($model->shop_count, ['shop/index', 'ShopSearch'=>[
+        return Html::a($model->shop_count, ['shop/shop/index', 'ShopSearch'=>[
             'shop_manager_id'=>$model->id
         ]]);
     },

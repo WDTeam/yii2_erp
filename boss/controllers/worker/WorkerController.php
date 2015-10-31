@@ -3,6 +3,7 @@
 namespace boss\controllers\worker;
 
 
+use core\models\customer\CustomerWorker;
 use core\models\operation\OperationArea;
 use core\models\worker\WorkerSkill;
 use core\models\worker\WorkerStat;
@@ -26,6 +27,7 @@ use boss\models\worker\WorkerSchedule;
 use boss\models\worker\WorkerSearch;
 use boss\models\Operation;
 use core\models\shop\Shop;
+use yii\web\ServerErrorHttpException;
 
 
 /**
@@ -98,7 +100,8 @@ class WorkerController extends BaseAuthController
             $workerModel->uploadImgToQiniu('worker_photo');
             $workerModel->save();
             //更新阿姨附属信息
-            $workerModel->link('workerExtRelation',$workerExtModel);
+            $workerExtModel->worker_id = $workerModel->id;
+            $workerExtModel->save();
             //更新阿姨商圈信息 ???
             $workerDistrictModel = new WorkerDistrict;
             $workerParam = Yii::$app->request->post('Worker');
@@ -110,6 +113,11 @@ class WorkerController extends BaseAuthController
                     $workerDistrictModel->worker_id = $id;
                     $workerDistrictModel->operation_shop_district_id = $val;
                     $workerDistrictModel->save();
+                }
+                //更新商圈绑定阿姨到redis
+                $operateStatus = Worker::operateDistrictWorkerRelationToRedis($id,$workerParam['worker_district']);
+                if($operateStatus==false){
+                    throw new ServerErrorHttpException('更新商圈绑定阿姨到缓存失败');
                 }
             }
             return $this->redirect(['view', 'id' => $workerModel->id]);
@@ -150,6 +158,7 @@ class WorkerController extends BaseAuthController
                   $scheduleModel->save();
                   //var_dump($scheduleModel->getErrors());
               }
+            Worker::updateWorkerScheduleInfoToRedis($id);
           }
         return $this->redirect(['view', 'id' => $id,'tab'=>2]);
     }
@@ -172,11 +181,13 @@ class WorkerController extends BaseAuthController
         }
         return $this->redirect(['auth', 'id' => $id]);
     }
+
     /**
      * 录入新阿姨
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * @return string|\yii\web\Response
+     * @throws ServerErrorHttpException
      */
+
     public function actionCreate()
     {
         $workerModel = new Worker;
@@ -193,6 +204,8 @@ class WorkerController extends BaseAuthController
             $workerAuthModel->worker_id = $workerModel->id;
             $workerAuthModel->save();
             $workerParam = Yii::$app->request->post('Worker');
+
+            Worker::addWorkerBasicInfoToRedis($workerModel->id,$workerModel->worker_phone,$workerModel->worker_type);
             if($workerParam['worker_district']){
                 foreach($workerParam['worker_district'] as $val){
                     $workerDistrictModel = new WorkerDistrict;
@@ -200,6 +213,10 @@ class WorkerController extends BaseAuthController
                     $workerDistrictModel->worker_id = $workerModel->id;
                     $workerDistrictModel->operation_shop_district_id = $val;
                     $workerDistrictModel->save();
+                }
+                $operateStatus = Worker::operateDistrictWorkerRelationToRedis($workerModel->id,$workerParam['worker_district']);
+                if($operateStatus==false){
+                    throw new ServerErrorHttpException('更新商圈绑定阿姨到缓存失败');
                 }
             }
             return $this->redirect(['view', 'id' => $workerModel->id,'tab'=>2]);
@@ -695,7 +712,7 @@ class WorkerController extends BaseAuthController
                 $batchWorkerDevice[] = $workerDeviceArr;
                 $batchWorkerStat[] = $workerStatArr;
                 $batchWorkerAuth[] = $workerAuthArr;
-
+                Worker::addWorkerBasicInfoToRedis($workerArr['id'],$workerArr['worker_phone'],$workerArr['worker_type']);
             }
 
             $workerColumns = array_keys($workerArr);
@@ -718,8 +735,8 @@ class WorkerController extends BaseAuthController
     }
 
     public function actionTest(){
-
-        var_dump(Worker::getDistrictFreeWorker(1,1,149155211,149145211));
+        echo '<pre>';
+        print_r(Worker::getWorkerCycleTimeLine(1,1,19114));
         die;
 //        $a = json_decode('{"1":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"2":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"3":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"4":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","16:00","17:00","20:00","21:00","22:00"],"5":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"6":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"7":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"]}',1);
 //        $workerInfo = [
@@ -753,16 +770,8 @@ class WorkerController extends BaseAuthController
 //        ];
 //        Yii::$app->redis->set('WORKER_18475',json_encode($workerInfo));
 //        die;
-        $o =
-                [
-                    'order_id'=>2,
-                    'order_booked_count'=>4554,
-                    'order_booked_begin_time'=>'14087655',
-                    'order_booked_end_time'=>'14087655',
-                ]
-           ;
         echo '<pre>';
-        var_dump(Worker::operateWorkerOrderInfoToRedis(18475,1,$o));die;
+        var_dump(CustomerWorker::getCustomerDistrictNearbyWorker(1,1));die;
 //        die;
 //        var_dump(WorkerVacationApplication::getApplicationList(18517));
 //

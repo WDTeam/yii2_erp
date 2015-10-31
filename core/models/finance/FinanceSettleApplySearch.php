@@ -254,7 +254,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         $apply_money_except_cash = $apply_money_except_deduct_cash - $apply_money_deduction;//订单金额+底薪补贴+任务奖励-扣款
         $apply_money = $apply_money_except_cash - $order_cash_money;//订单金额+底薪补贴+任务奖励-扣款-现金订单金额
         $this->finance_settle_apply_order_count = $order_count;//总单量
-        $this->finance_settle_apply_man_hour = $apply_man_hour/60;//总工时
+        $this->finance_settle_apply_man_hour = $apply_man_hour;//总工时
         $this->finance_settle_apply_order_money = $apply_order_money;//工时费小计
         $this->finance_settle_apply_task_count = $apply_task_count;//完成任务数
         $this->finance_settle_apply_task_money = $apply_task_money;//完成任务奖励
@@ -490,9 +490,9 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             $finalWorkerIncome['order_money_except_cash'] = $workerIncome['order_money_except_cash'];
             $finalWorkerIncome['isWorkerConfirmed'] = $workerIncome['isWorkerConfirmed'];
             if($workerIncome['settle_status'] == self::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PAYED){
-                 $finalWorkerIncome['settle_status'] = 1;//已结算
+                 $finalWorkerIncome['settle_status'] = '1';//已结算
             }else{
-                 $finalWorkerIncome['settle_status'] = 0;//未结算
+                 $finalWorkerIncome['settle_status'] = '0';//未结算
             }
             $finalWorkerIncomeArr[$i] = $finalWorkerIncome;
             $i++;
@@ -505,11 +505,14 @@ class FinanceSettleApplySearch extends FinanceSettleApply
      * @param type $settle_id
      * @return type
      */
-    public static function getOrderArrayBySettleId($settle_id){
+    public static function getOrderArrayBySettleId($settle_id,$current_page,$per_page_num){
         $finalOrderArray = [];
+        $offset = ($current_page - 1) * $per_page_num;
         $orderIncomeArray = FinanceWorkerOrderIncomeSearch::find()
                 ->select(['order_id','order_money'])
-                ->where(['finance_settle_apply_id'=>$settle_id])->asArray()->all();
+                ->where(['finance_settle_apply_id'=>$settle_id])
+                ->offset($offset)->limit($per_page_num)
+                ->asArray()->all();
         $i = 0;
         foreach($orderIncomeArray as $orderIncome){
             $finalOrder = [];

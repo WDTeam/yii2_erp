@@ -30,6 +30,8 @@ class OrderController extends BaseAuthController
     public function actionTest()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
+        return OrderSearch::getPushWorkerOrders(19074,20,1,false);
+//        die();
         return OrderTool::createOrderCode();
     }
     
@@ -368,7 +370,7 @@ class OrderController extends BaseAuthController
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }else{//init
-            $model->order_booked_count = 120; //服务时长初始值120分钟
+            $model->order_booked_count = 2; //服务时长初始值2小时
             $model->order_booked_worker_id=0; //不指定阿姨
             $model->orderBookedTimeRange = '08:00-10:00';//预约时间段初始值
             $model->order_pay_type = 1;//支付方式 初始值
@@ -377,6 +379,40 @@ class OrderController extends BaseAuthController
         return $this->render('create', [
             'model' => $model,
         ]);
+    }
+
+    public function actionCreateBatch()
+    {
+        $attributes = [
+            'order_ip'=> Yii::$app->request->userIP,
+            'order_service_type_id'=>1,
+            'order_src_id'=>1,
+            'channel_id'=>20,
+            'address_id'=>1,
+            'customer_id'=>3,
+            'order_customer_phone'=>'13141484602',
+            'admin_id'=>Yii::$app->user->id,
+            'order_pay_type'=>1,
+            'order_is_use_balance'=>1,
+            'order_booked_worker_id'=>1,
+            'order_customer_need'=>'xxxxx',
+            'order_customer_memo'=>'fffff'
+        ];
+        $booked_list = [
+            [
+                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00')),
+                'order_booked_end_time' => strtotime(date('Y-m-d 12:30')),
+            ],
+            [
+                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00').' +1days'),
+                'order_booked_end_time' => strtotime(date('Y-m-d 12:30').' +1days'),
+            ],
+            [
+                'order_booked_begin_time' => strtotime(date('Y-m-d 11:00').' +2days'),
+                'order_booked_end_time' => strtotime(date('Y-m-d 12:30').' +2days'),
+            ],
+        ];
+        return Order::createNewBatch($attributes,$booked_list);
     }
     
     /**

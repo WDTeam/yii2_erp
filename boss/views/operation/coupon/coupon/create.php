@@ -55,8 +55,7 @@ $promote_types = Coupon::getPromoteTypes();
                 <h3 class="panel-title">优惠券基本信息</h3>
             </div>
             <div class="panel-body">
-                <?php //$form->field($model, 'coupon_name')->textInput()->label('优惠券名称') 
-				?>
+                <?= $form->field($model, 'coupon_name')->textInput()->label('优惠券名称') ?>
 				<?= $form->field($model, 'coupon_price')->textInput()->label('优惠券价值') ?>
             </div>
 

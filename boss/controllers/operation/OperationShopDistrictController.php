@@ -2,13 +2,14 @@
 
 namespace boss\controllers\operation;
 
-use Yii;
+use boss\components\BaseAuthController;
 use boss\models\operation\OperationShopDistrict;
 use boss\models\operation\OperationShopDistrictCoordinate;
 use boss\models\operation\OperationCity;
 use boss\models\operation\OperationArea;
+
+use Yii;
 use yii\data\ActiveDataProvider;
-use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 /**
@@ -36,7 +37,7 @@ class OperationShopDistrictController extends BaseAuthController
     
     public function init(){
         $this->city_id = Yii::$app->request->get('city_id');
-        if(!empty($this->city_id)){
+        if(isset($this->city_id)){
             setcookie('city_id', $this->city_id, time()+86400);
         }else{
             $this->city_id = $_COOKIE['city_id'];

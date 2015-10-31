@@ -26,10 +26,16 @@ function websocketConnect() {
             $('#connectStatus').html('连接成功！');
             $('#connect').attr('disabled', true);
             $('#runService').hide();
-            $('#start').attr('disabled', false);
-            $('#stop').attr('disabled', false);
             $('#reload').attr('disabled', false);
             $('#update').attr('disabled', false);
+            if ($('#srvIsSuspend').val()==true)
+            {
+                $('#start').attr('disabled', false);
+                $('#stop').attr('disabled', true);
+            }else{
+                $('#start').attr('disabled', true);
+                $('#stop').attr('disabled', false);
+            }
         };
         websocket.onclose = function (evt) {
             console.log("Disconnected");
@@ -44,7 +50,30 @@ function websocketConnect() {
 
         websocket.onmessage = function (evt) {
             console.log('Retrieved data from server: ' + evt.data);
-            showOrders(evt.data);
+            var msg = $.parseJSON(evt.data);
+            var srv_continue = 1;
+            var srv_suspend = 2;
+            var srv_reload = 3;
+            var srv_update = 4;
+            //alert(msg=="Server-Continue");
+            if( msg == srv_continue){
+                $('#connectStatus').html('服务已继续...');
+                $('#start').attr('disabled', true);
+                $('#stop').attr('disabled', false);
+            }else if(msg == srv_suspend)
+            {
+                $('#connectStatus').html('服务已暂停...');
+                $('#start').attr('disabled', false);
+                $('#stop').attr('disabled', true);
+            }else if(msg == srv_reload){
+                $('#connectStatus').html('服务重启中...');
+            }else if(msg == srv_update){
+                $('#connectStatus').html('配置已完成更新...');
+            }else if(msg == "Assign Server is OK"){
+
+            }else{
+                showOrders(evt.data);
+            }
         };
 
         websocket.onerror = function (evt, e) {
@@ -62,25 +91,21 @@ function websocketConnect() {
 
 function showOrders(data){
     var order = $.parseJSON(data);
-    if (order.order_id==null || order.order_id=='')
+    order = eval('(' + order + ')');
+    if (order.order_code==null || order.order_code=='')
     {
         return;
     }
-    var id = 'order_'+order.order_id;
+    var id = 'order_'+order.order_code;
     var obj = $('#'+id);
     order.status = getStatus(order.status);
-    if(order.sms == true){
-        order.sms = '已发送';
-    }else{
-        order.sms = '已发送';
-    }
-    if(order.ivr == true){
+    if(order.ivr > 0){
         order.ivr = '已发送';
     }else{
         order.ivr = '未发送';
     }
     
-    if(order.jpush == true){
+    if(order.jpush > 0 ){
         order.jpush = '已发送';
     }else{
         order.jpush = '未发送';
@@ -90,12 +115,14 @@ function showOrders(data){
         order.updated_at = '';
     }
     if(obj[0] == null){
-        var str = '<tr id="'+id+'"><td>'+order.order_id+'</td><td>'+order.status+'</td><td>'+order.ivr+'</td><td>'+order.jpush+'</td><td>'+order.created_at+'</td><td>'+order.updated_at+'</td></tr>';
+        var str = '<tr id="'+id+'"><td>'+order.order_code+'</td><td>'+order.status+'</td><td>'+order.ivr+'</td><td>'+order.jpush+'</td><td>'+order.created_at+'</td><td>'+order.updated_at+'</td></tr>';
         $('#tbody').append(str);
     }else{
         $($('#'+id).children('td')[1]).html(order.status);
         $($('#'+id).children('td')[2]).html(order.ivr);
         $($('#'+id).children('td')[3]).html(order.jpush);
+        $($('#'+id).children('td')[4]).html(order.created_at);
+        $($('#'+id).children('td')[5]).html(order.updated_at);
     }
 }
 
@@ -115,6 +142,6 @@ function getStatus(status){
 function execCommand(cmd){
     var data = cmd +','+$('#qstart').val()+','+$('#qend').val()+','+$('#jstart').val()+','+$('#jend').val()+','+status;
     websocket.send(data);
-    $('#connectStatus').html('自动派单开始！');
-    $('#start').attr('disabled', false);
+    //$('#connectStatus').html('自动派单开始！');
+    //$('#start').attr('disabled', false);
 }

@@ -1,9 +1,9 @@
 <?php
 
 namespace restapi\controllers;
+use Yii;
 
 use \core\models\customer\Customer;
-use Yii;
 use \core\models\customer\CustomerAddress;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\operation\coupon\CouponCustomer;

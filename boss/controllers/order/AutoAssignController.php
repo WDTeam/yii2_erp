@@ -39,7 +39,7 @@ class AutoAssignController extends BaseAuthController
     {
         $config = (array)json_decode(Yii::$app->redis->get('REDIS_AUTOASSIGN_CONFIG'));
         $srvInfo = (array)json_decode(Yii::$app->redis->get('_REDIS_SERVER_RUN_STATUS_'));
-  
-        return $this->render('index', ['srvInfo' => $srvInfo,'config'=>$config]);
+        $srvIsSuspend = json_decode(Yii::$app->redis->get('REDIS_IS_SERVER_SUSPEND'));
+        return $this->render('index', ['srvInfo' => $srvInfo,'config'=>$config,'srvIsSuspend'=>$srvIsSuspend]);
     }
 }
