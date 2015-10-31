@@ -13,7 +13,13 @@ use Yii;
 class Payment extends \dbbase\models\payment\Payment
 {
 
-
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return '{{%payment}}';
+    }
 
     /**
      * @param $condition
@@ -25,55 +31,18 @@ class Payment extends \dbbase\models\payment\Payment
         return Payment::find()->select($fileds)->where($condition)->asArray()->one();
     }
 
-    /**
-     * 服务卡支付
-     * @param $data  订单数据
-     */
-    public static function serviceCradPay($data)
-    {
-        //用户服务卡扣款
-        //ServiceCard();
-        //用户交易记录
-        return PaymentCustomerTransRecord::analysisRecord($data);
-    }
 
     /**
-     * 余额支付
-     * @param $data  订单数据
+     * 通过支付ID获取支付成功数据
+     * @param $id
+     * @return array
      */
-    public static function balancePay($data)
+    public static function getPaymentPayStatusData($id)
     {
-
-        $data['payment_source'] = 20;
-        //获取订单数据
-        $orderInfo = PaymentCommon::orderInfo($data['order_id']);
-        $orderInfo = array_merge($orderInfo->getAttributes(),$orderInfo->orderExtPay->getAttributes());
-
-        //用户服务卡扣款
-        Customer::decBalance($data['customer_id'],$orderInfo['order_use_acc_balance']);
-
-        //用户交易记录
-        return PaymentCustomerTransRecord::analysisRecord(array_merge($orderInfo,$data));
-    }
-
-    /**
-     * 现金支付
-     * @param $data 订单数据
-     */
-    public static function cashPay($data)
-    {
-        //用户交易记录
-        return PaymentCustomerTransRecord::analysisRecord($data);
-    }
-
-    /**
-     * 预付费
-     * @param $data 订单数据
-     */
-    public static function prePay($data)
-    {
-        //用户交易记录
-        return PaymentCustomerTransRecord::analysisRecord($data);
+        $condition = ['id'=>$id,'payment_status'=>1];
+        $query = new \yii\db\Query();
+        $data = $query->from(self::tableName())->where($condition)->one();
+        return $data;
     }
 
     /**

@@ -13,7 +13,7 @@ use core\models\operation\OperationShopDistrictGoods;
 use core\models\operation\OperationShopDistrictCoordinate;
 use core\models\customer\Customer;
 use core\models\customer\CustomerAddress;
-use core\models\payment\Payment;
+use core\models\payment\PaymentCustomerTransRecord;
 use core\models\worker\Worker;
 use core\models\operation\OperationShopDistrict;
 use core\models\operation\OperationGoods;
@@ -136,41 +136,12 @@ class Order extends OrderModel
         $attributes['order_parent_id'] = 0;
         $attributes['order_is_parent'] = 0;
         if($this->_create($attributes)) {
-            $order = $this->attributes;
-            $order['order_id'] = $this->id;
             $order_model = OrderSearch::getOne($this->id);
-            switch ($this->orderExtPay->order_pay_type) {
-                case OrderExtPay::ORDER_PAY_TYPE_OFF_LINE://现金支付
-                    //交易记录
-                    $order['payment_customer_trans_record_cash'] = $this->order_money;
-                    $order['payment_source'] = 20;
-                    if (Payment::cashPay($order)) {
-                        $order_model->admin_id = $attributes['admin_id'];
-                        OrderStatus::_payment($order_model, ['OrderExtPay']);
-                    }
-                    break;
-                case OrderExtPay::ORDER_PAY_TYPE_ON_LINE://线上支付
-                    if ($this->orderExtPay->order_pay_money == 0) { //如果需要支付的金额等于0 则全部走余额支付
-                        //交易记录
-                        $order['payment_customer_trans_record_online_balance_pay'] = $this->orderExtPay->order_use_acc_balance;
-                        $order['payment_source'] = 20;
-                        if (Payment::balancePay($order)) {
-                            $order_model->admin_id = $attributes['admin_id'];
-                            OrderStatus::_payment($order_model, ['OrderExtPay']);
-                        }
-                    }
-                    break;
-                case OrderExtPay::ORDER_PAY_TYPE_POP://第三方预付
-                    //交易记录
-                    $order['payment_customer_trans_record_pre_pay'] = $this->orderExtPop->order_pop_order_money;
-                    $order['payment_source'] = $this->channel_id;
-                    if (Payment::prePay($order)) {
-                        $order_model->admin_id = $attributes['admin_id'];
-                        OrderStatus::_payment($order_model, ['OrderExtPay']);
-                    }
-                    break;
-                default:
-                    break;
+            $channel_id = !empty($this->channel_id) ? $this->channel_id : 20;
+            //交易记录
+            if (PaymentCustomerTransRecord::analysisRecord($this->id, $channel_id, 'order_pay')) {
+                $order_model->admin_id = $attributes['admin_id'];
+                OrderStatus::_payment($order_model, ['OrderExtPay']);
             }
             return true;
         }
