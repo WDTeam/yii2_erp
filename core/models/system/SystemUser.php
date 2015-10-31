@@ -21,6 +21,27 @@ class SystemUser extends \dbbase\models\system\SystemUser
         return $this->_statusLabel;
     }
     
+    
+    /**
+    * 获取用户列表
+    * @date: 2015-10-31
+    * @author: peak pan
+    * @return:
+    **/
+    public static function getuserlist()
+    {
+    	
+    	$usernamelist=self::find()->select('id,username')->asArray()->all();
+    	if($usernamelist){
+    		return ArrayHelper::map($usernamelist, 'id', 'username');
+    	}else{
+    		return array();
+    	}
+    	
+    	
+    }
+    
+    
     /**
      * @inheritdoc
      */

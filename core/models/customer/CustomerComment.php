@@ -16,6 +16,8 @@ namespace core\models\customer;
 
 use Yii;
 use core\models\order\OrderComplaint;
+use core\models\order\Order;
+
 
 class CustomerComment extends \dbbase\models\customer\CustomerComment
 {
@@ -83,7 +85,9 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
                 $customerComment->save();
                 // var_dump($customerComment->errors);
                 $transaction->commit();
-
+				//通知订单 ，改变订单状态
+                Order::customerAcceptDone($array['order_id']); 
+                
                 if ($array['customer_comment_level'] == '3') {
                     //如果是差评 通知投诉接口
                     $data['order_id'] = $array['order_id'];
@@ -113,6 +117,7 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
         }
     }
 
+    
     
     /**
     *  根据评价的order_id获取评价详情
