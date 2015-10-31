@@ -594,7 +594,6 @@ class WorkerController extends \restapi\components\Controller
                 $billList[$key]['settle_endtime'] = date('Y-m',strtotime($val['settle_starttime']));
             }
             $billList[$key]['worker_is_confirmed'] = $val['isWorkerConfirmed'];
-            $billList[$key]['settle_status'] = strval($val['settle_status']);//TODO:后面去掉
             unset($billList[$key]['isWorkerConfirmed']);
         }
         $ret = [
