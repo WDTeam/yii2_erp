@@ -34,6 +34,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'worker_task_name',
+            [
+                'label'=>'任务条件',
+                'attribute'=>'conditions',
+                'format'=>'raw',
+                'value'=>function ($model){
+                    return $this->render('show_conditions',['models'=>$model->getConditions()]);
+                },
+            ],
             'worker_task_start:date',
             'worker_task_end:date',
             [
@@ -63,10 +71,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->getWorkerCityLabels();
                 },
             ],
-//             'worker_task_description', 
+            [
+                'attribute'=>'worker_task_reward_value',
+                'value'=>function($model){
+                    return $model->worker_task_reward_value.$model->getRewardUnit();
+                }
+            ],
+            'worker_task_description', 
 //             'worker_task_description_url:url', 
-//             'conditions:ntext', 
-//            'created_at', 
+            
+           'created_at:date', 
 //            'updated_at', 
 //            'is_del', 
 

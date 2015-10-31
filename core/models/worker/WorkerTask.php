@@ -34,9 +34,9 @@ class WorkerTask extends \dbbase\models\worker\WorkerTask
      * 任务奖励类型
      */
     const REWARD_TYPES = [
-        1=>'现金(元)',
-        2=>'当月流量(MB)',
-        3=>'次月流量(MB)',
+        1=>'(元)现金',
+        2=>'(MB)当月流量',
+        3=>'(MB)次月流量',
     ];
     
     const TASK_CYCLES = [
@@ -170,7 +170,7 @@ class WorkerTask extends \dbbase\models\worker\WorkerTask
      */
     public function getWorkerRuleLabels()
     {
-        $types = WorkerRuleConfig::getWorkerRuleList();
+        $types = WorkerIdentityConfig::getWorkerIdentityList();
         $cur_ruleids = $this->getWorker_rules();
         $res = [];
         foreach ($cur_ruleids as $id){
@@ -298,6 +298,11 @@ class WorkerTask extends \dbbase\models\worker\WorkerTask
             }
         }
         return $isfalse<=0;
+    }
+    public function getRewardUnit()
+    {
+        $types = self::REWARD_TYPES;
+        return $types[$this->worker_task_reward_type];
     }
     /**
      * 开通的城市列表
