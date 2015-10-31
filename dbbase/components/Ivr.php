@@ -89,7 +89,7 @@ class Ivr extends Component implements BootstrapInterface
     public function bootstrap($app)
     {
         \Yii::$app->on(Application::EVENT_BEFORE_ACTION, function($event){
-            $path = substr($event->sender->requestedRoute, 0, -1);
+            $path = $event->sender->requestedRoute;
             if($path==$this->redirect_uri){
                 $this->callback(\Yii::$app->request->post());
             }
