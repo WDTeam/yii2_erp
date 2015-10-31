@@ -159,12 +159,12 @@ echo Menu::widget(
                 'items' => [
                     [
                         'label' => '支付记录查询',
-                        'url' => ['payment/general-pay/index'],
+                        'url' => ['payment/payment/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
                     [
                         'label' => '交易记录查询',
-                        'url' => ['customer/customer-trans-record/index'],
+                        'url' => ['payment/payment-customer-trans-record/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
                 ],
