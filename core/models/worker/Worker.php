@@ -7,6 +7,7 @@ use core\models\worker\WorkerSchedule;
 use dbbase\models\Help;
 use Symfony\Component\Console\Helper\Helper;
 use Yii;
+use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
 use yii\web\UploadedFile;
@@ -188,6 +189,9 @@ class Worker extends \dbbase\models\worker\Worker
      * @return int
      */
     public static function getWorkerNotWorkTime($worker_id,$startTime,$endTime){
+        if(empty($worker_id) || empty($startTime) || empty($endTime)){
+            return false;
+        }
         $condition = "(worker_vacation_start_time>=$startTime and worker_vacation_finish_time<$endTime) or (worker_vacation_start_time<=$startTime and worker_vacation_finish_time>$startTime) or (worker_vacation_start_time<$endTime and worker_vacation_finish_time>$endTime)";
         $vacationResult = WorkerVacation::find()->where($condition)->andWhere(['worker_id'=>$worker_id])->select('worker_vacation_start_time,worker_vacation_finish_time')->asArray()->all();
         $vacationTime = 0;
@@ -297,14 +301,20 @@ class Worker extends \dbbase\models\worker\Worker
      * @return array
      */
     public static function getDistrictAllWorker($district_id,$worker_id){
-        $dataSource = 2;//1redis 2mysql
-        if($dataSource==1){
+        //$dataSource = 1;//1redis 2mysql
+        //如果redis可用
+        if(Yii::$app->redis->IsActive){
             return self::getDistrictAllWorkerFromRedis($district_id,$worker_id);
         }else{
             $workerCondition = $worker_id ? ['{{%worker}}.id'=>$worker_id] : [];
             $result = self::getDistrictAllWorkerFromMysql($district_id,$workerCondition);
             foreach ($result as $key=>$val) {
-                $result[$key]['schedule'] = $val['workerScheduleRelation'];
+                $workerSchedule = $val['workerScheduleRelation'];
+                foreach ((array)$workerSchedule as $s_key=>$s_val) {
+                    $workerSchedule[$s_key]['worker_schedule_timeline'] = json_decode($s_val['worker_schedule_timeline'],1);
+                }
+
+                $result[$key]['schedule'] = $workerSchedule;
                 $result[$key]['order'] = self::getWorkerOrderInfo($val['id']);
                 unset( $result[$key]['shopRelation']);
                 unset( $result[$key]['workerScheduleRelation']);
@@ -312,6 +322,8 @@ class Worker extends \dbbase\models\worker\Worker
             }
             return $result;
         }
+
+
     }
 
     /**
@@ -323,19 +335,36 @@ class Worker extends \dbbase\models\worker\Worker
     public static function getDistrictAllWorkerFromRedis($district_id,$worker_id){
         $workerIdsArr =  Yii::$app->redis->executeCommand('smembers', [self::DISTRICT.'_'.$district_id]);
         if($workerIdsArr){
-            foreach((array)$workerIdsArr as $key=>$val){
-                $workerIdsArr[$key] = self::WORKER.'_'.$val;
-            }
-            $workerInfoArr = Yii::$app->redis->executeCommand('mget',$workerIdsArr);
-
-            //过滤不存在阿姨
-            $new_workerInfoArr = [];
-            foreach ((array)$workerInfoArr as $val) {
-                if($val!==null){
-                    $new_workerInfoArr[] = $val;
+            //指定阿姨
+            if($worker_id){
+                //如果指定阿姨不在该商圈中，则返回空数组
+                if(in_array($worker_id,$workerIdsArr)){
+                    $workerInfoArr = Yii::$app->redis->executeCommand('get',[self::WORKER.'_'.$worker_id]);
+                    if($workerInfoArr){
+                        $workerInfoArr = json_decode($workerInfoArr,1);
+                        return [$workerInfoArr];
+                    }else{
+                        return [];
+                    }
+                }else{
+                    return [];
                 }
+            //所有阿姨
+            }else{
+                foreach((array)$workerIdsArr as $key=>$val){
+                    $workerIdsArr[$key] = self::WORKER.'_'.$val;
+                }
+                $workerInfoArr = Yii::$app->redis->executeCommand('mget',$workerIdsArr);
+
+                //过滤不存在阿姨
+                $new_workerInfoArr = [];
+                foreach ((array)$workerInfoArr as $val) {
+                    if($val!==null){
+                        $new_workerInfoArr[] = $val;
+                    }
+                }
+                return $new_workerInfoArr;
             }
-            return $new_workerInfoArr;
         }else{
             return [];
         }
@@ -372,6 +401,7 @@ class Worker extends \dbbase\models\worker\Worker
 
     protected static function getWorkerOrderInfo($worker_id){
         $orderWorkerResult = OrderExtWorker::find()
+            ->select('order_id,worker_id,order_booked_count,order_booked_begin_time,order_booked_end_time')
             ->where(['worker_id'=>$worker_id])
             ->innerJoinWith('order')
             ->asArray()
@@ -404,6 +434,9 @@ class Worker extends \dbbase\models\worker\Worker
         if(empty($districtWorkerResult)){
             return  self::generateTimeLine($disabledTimesArr,$serverDurationTime,$beginTime,$timeLineLength);
         }
+//        echo '<pre>';
+//        print_r($districtWorkerResult);die;
+        //处理数据 生成排班表
         $isEmptyDisabledTime = [];
         foreach($districtWorkerResult as $val){
 
@@ -432,7 +465,7 @@ class Worker extends \dbbase\models\worker\Worker
      * @return array
      */
     public static function getWorkerCycleTimeLine($district_id,$serverDurationTime=2,$worker_id){
-        if(empty($worker_id)){
+        if(empty($worker_id) || empty($district_id)){
             return false;
         }
         //周期订单默认已当前时间为开始时间
@@ -440,8 +473,7 @@ class Worker extends \dbbase\models\worker\Worker
         //周期订单默认处理35天阿姨排班表
         $timeLineLength = 35;
         $workerTimeLineResult = self::getWorkerTimeLine($district_id,$serverDurationTime,$beginTime,$timeLineLength,$worker_id);
-
-        //获取本周时间表
+        //获取当前周排版表
         $current = [];
         for($i=0;$i<7;$i++) {
             $current[] = [
@@ -451,19 +483,20 @@ class Worker extends \dbbase\models\worker\Worker
             ];
         }
 
-        //获取周期时间表
+        //获取后四周的周期时间表
         $cycle = [];
         for($w=1;$w<=4;$w++){
             for($d=0;$d<7;$d++){
                 $key = $w*7+$d;
                 $data = $workerTimeLineResult[$key];
+                $week = date('N',strtotime($data['date']));
                 if(isset($cycle[$d])){
                     $timeline = self::compareTimeLine($cycle[$d]['timeline'],$data['timeline']);
                     $cycle[$d] = [
+                        'week' => $week,
                         'timeline'=> $timeline
                     ];
                 }else{
-                    $week = date('N',strtotime($data['date']));
                     $cycle[$d] = [
                         'week' => $week,
                         'timeline'=> $data['timeline']
@@ -591,7 +624,7 @@ class Worker extends \dbbase\models\worker\Worker
 
         foreach ((array)$workerSchedule as $val) {
             if($time>=$val['worker_schedule_start_date'] && $time<=$val['worker_schedule_end_date']){
-                $enabledTimeLineArr = json_decode($val['worker_schedule_timeline'],1);
+                $enabledTimeLineArr = $val['worker_schedule_timeline'];
                 $enabledTimeLine = $enabledTimeLineArr[$week];
                 foreach ($enabledTimeLine as $e_val) {
                     $new_enabledTime[] = $e_val;
@@ -609,7 +642,7 @@ class Worker extends \dbbase\models\worker\Worker
     protected static function getWorkerHaveBookedTimeFromOrder($time,$workerOrderInfo){
         $workerHaveBookedTime = [];
         foreach ((array)$workerOrderInfo as $val) {
-            if(date('Y-m-d',$time) == date('Y-m-d',$val['order']['order_booked_begin_time'])){
+            if(date('Y-m-d',$time) == date('Y-m-d',$val['order_booked_begin_time'])){
                 $beginTime = self::convertDateFormat($val['order']['order_booked_begin_time']);
                 for($i=0;$i<$val['order']['order_booked_count']*2;$i++){
                     $workerHaveBookedTime[] = date('G:i',strtotime('+'.(30*$i).' minute',$beginTime));
@@ -673,9 +706,9 @@ class Worker extends \dbbase\models\worker\Worker
      * @param $worker_id
      * @param $type 操作类型 1添加2修改
      * @param $order_id
-     * @param $order_booked_count
-     * @param $order_booked_begin_time
-     * @param $order_booked_end_time
+     * @param $order_booked_count 订单服务时长
+     * @param $order_booked_begin_time 订单开始时间
+     * @param $order_booked_end_time 订单结束时间
      * @return bool
      */
     public static function operateWorkerOrderInfoToRedis($worker_id,$type,$order_id,$order_booked_count,$order_booked_begin_time,$order_booked_end_time){
@@ -722,8 +755,8 @@ class Worker extends \dbbase\models\worker\Worker
 
     /**
      * 删除阿姨的订单信息
-     * @param $worker_id
-     * @param $order_id
+     * @param $worker_id 阿姨id
+     * @param $order_id 订单id
      * @return bool
      */
     public static function deleteWorkerOrderInfoToRedis($worker_id,$order_id){
