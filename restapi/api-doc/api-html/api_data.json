@@ -25,7 +25,7 @@
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": false,
+            "optional": true,
             "field": "app_version",
             "description": "<p>访问源(android_4.2.2)</p> "
           }
@@ -177,21 +177,21 @@
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
+            "optional": false,
             "field": "phone",
             "description": "<p>阿姨电话号码</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
+            "optional": false,
             "field": "verify_code",
             "description": "<p>短信验证码</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": false,
+            "optional": true,
             "field": "app_version",
             "description": "<p>访问源(android_4.2.2)</p> "
           }
@@ -825,7 +825,7 @@
   {
     "type": "DELETE",
     "url": "/order/hiden-order",
-    "title": "删除订单（郝建设 100% ）",
+    "title": "删除订单（郝建设 100%）",
     "name": "HidenOrder",
     "group": "Order",
     "parameter": {
@@ -1853,7 +1853,7 @@
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "access-token",
+            "field": "access_token",
             "description": "<p>会话id.</p> "
           },
           {
@@ -1912,7 +1912,7 @@
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "access-token",
+            "field": "access_token",
             "description": "<p>会话id.</p> "
           },
           {
@@ -1980,7 +1980,7 @@
   },
   {
     "type": "PUT",
-    "url": "v1/order/set-worker-order.php",
+    "url": "v1/order/set-worker-order",
     "title": "阿姨抢单提交 (haojianshe 100%)",
     "name": "actionSetWorkerOrder",
     "group": "Order",
@@ -1992,7 +1992,7 @@
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
-            "field": "access-token",
+            "field": "access_token",
             "description": "<p>会话id.</p> "
           },
           {
@@ -3914,7 +3914,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n \"msg\": \"阿姨信息查询成功\",\n \"ret\": {\n     \"worker_name\": \"阿姨姓名\",\n     \"worker_phone\": \"阿姨手机号\",\n     \"worker_photo\": \"头像地址\",\n     \"worker_identity_description\": \"阿姨身份说明\",\n     \"worker_identity_id\":\"阿姨身份标识【1全职 2兼职 3高峰 4时段】\",\n     \"worker_type_description\": \"角色\",\n     \"worker_star\": \"星级\",\n     \"personal_skill\": [\n         \"阿姨技能1\",\n         \"阿姨技能2\",\n         \"阿姨技能3\"\n     ]\n   }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"1\",\n \"msg\": \"阿姨信息查询成功\",\n \"alertMsg\": \"获取阿姨信息成功\"，\n \"ret\": {\n     \"worker_name\": \"阿姨姓名\",\n     \"worker_phone\": \"阿姨手机号\",\n     \"worker_photo\": \"头像地址\",\n     \"worker_identity_description\": \"阿姨身份说明\",\n     \"worker_identity_id\":\"阿姨身份标识【1全职 2兼职 3高峰 4时段】\",\n     \"worker_type_description\": \"角色\",\n     \"worker_star\": \"星级\",\n     \"personal_skill\": [\n         \"阿姨技能1\",\n         \"阿姨技能2\",\n         \"阿姨技能3\"\n     ]\n   }\n}",
           "type": "json"
         }
       ]
@@ -3968,7 +3968,7 @@
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": false,
+            "optional": true,
             "field": "platform_version",
             "description": "<p>平台版本号.</p> "
           }
@@ -4056,7 +4056,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n\n \"code\": 1,\n  \"msg\": \"操作成功.\",\n  \"ret\": {\n      \"per_page\": 1,\n      \"page_num\": 10,\n      \"data\": [\n          {\n              \"settle_id\": \"账单唯一标识\",\n              \"settle_year\": \"账单归属年限\",\n              \"order_count\": \"账单内完成的订单总数\",\n              \"worker_income\": \"该账单阿姨的总收入\",\n              \"settle_cycle\": \"账单类型【1周期账单 2月结账单】\",\n              \"settle_cycle_des\": \"账单文字说明\",\n              \"settle_task_money\": \"任务奖励金额\",\n              \"base_salary_subsidy\": \"底薪补贴\",\n              \"money_deduction\": \"处罚金额\",\n              \"order_money_except_cash\": \"工时服务费\",\n              \"settle_status\":\"账单状态【0未结算 1已结算】\",\n              \"settle_time\": \"账单日期\",\n              \"worker_is_confirmed\": \"阿姨是否确认账单【0未确认 1已确认】\"\n          }\n      ]\n   }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n\n \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"alertMsg\": \"获取账单列表成功\",\n  \"ret\": {\n      \"per_page\": 1,\n      \"page_num\": 10,\n      \"data\": [\n          {\n              \"settle_id\": \"账单唯一标识\",\n              \"settle_year\": \"账单归属年限\",\n              \"order_count\": \"账单内完成的订单总数\",\n              \"worker_income\": \"该账单阿姨的总收入\",\n              \"settle_cycle\": \"账单类型【1周期账单 2月结账单】\",\n              \"settle_cycle_des\": \"账单文字说明\",\n              \"settle_task_money\": \"任务奖励金额\",\n              \"base_salary_subsidy\": \"底薪补贴\",\n              \"money_deduction\": \"处罚金额\",\n              \"order_money_except_cash\": \"工时服务费\",\n              \"settle_status\":\"账单状态【0未结算 1已结算】\",\n              \"settle_time\": \"账单日期\",\n              \"worker_is_confirmed\": \"阿姨是否确认账单【0未确认 1已确认】\"\n          }\n      ]\n   }\n}",
           "type": "json"
         }
       ]
@@ -4078,7 +4078,6 @@
     "type": "GET",
     "url": "/worker/get-worker-comment",
     "title": "获取阿姨对应的评论 (田玉星 100%)",
-    "description": "<p>【备注：等待model底层支持】</p> ",
     "name": "actionGetWorkerComment",
     "group": "Worker",
     "parameter": {
@@ -4124,14 +4123,14 @@
     },
     "sampleRequest": [
       {
-        "url": "http://dev.api.1jiajie.com/v1/worker/get-worker-comment\nget-worker-comment"
+        "url": "http://dev.api.1jiajie.com/v1/worker/get-worker-comment"
       }
     ],
     "success": {
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功.\",\n      \"ret\": {\n          \"per_page\": 1,\n          \"page_num\": 10,\n          \"data\": [\n              {\n                  \"comment_id\": \"评论ID\",\n                  \"comment_content\": \"评论内容\",\n                  \"comment_time\": \"评论日期\"\n              }\n          ]\n      }\n  }",
+          "content": "HTTP/1.1 200 OK\n  {\n      \"code\": 1,\n      \"msg\": \"操作成功\",\n      \"alertMsg\": \"获取评论成功\"，\n      \"ret\": {\n          \"per_page\": 1,\n          \"page_num\": 10,\n          \"data\": [\n              {\n                  \"comment_id\": \"评论ID\",\n                  \"comment_content\": \"评论内容\",\n                  \"comment_time\": \"评论日期\"\n              }\n          ]\n      }\n  }",
           "type": "json"
         }
       ]
@@ -4198,7 +4197,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功.\",\n  \"ret\": {\n      \"per_page\": 1,\n      \"page_num\": 10,\n      \"worker_is_block\":\"阿姨账号状态【0正常 1封号】\",\n      \"data\": [\n          {\n              \"complaint_content\": \"投诉内容\",\n              \"complaint_time\": \"投诉时间\"\n          }\n      ]\n  }\n  }",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"alertMsg\": \"获取投诉成功\"，\n  \"ret\": {\n      \"per_page\": 1,\n      \"page_num\": 10,\n      \"worker_is_block\":\"阿姨账号状态【0正常 1封号】\",\n      \"data\": [\n          {\n              \"complaint_content\": \"投诉内容\",\n              \"complaint_time\": \"投诉时间\"\n          }\n      ]\n  }\n  }",
           "type": "json"
         }
       ]
@@ -4265,7 +4264,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"ret\": {\n      \"per_page\": 1,\n      \"page_num\": 1,\n      \"data\": [\n          {\n              \"leave_type\": \"请假类型【1休假 2事假】\",\n              \"leave_time\": \"请假时间\",\n              \"leave_status\": \"请假状态\"\n          }\n      ]\n     }\n  }",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"alertMsg\": \"获取阿姨请假历史记录成功\",\n  \"ret\": {\n      \"per_page\": 1,\n      \"page_num\": 1,\n      \"data\": [\n          {\n              \"leave_type\": \"请假类型【1休假 2事假】\",\n              \"leave_time\": \"请假时间\",\n              \"leave_status\": \"请假状态\"\n          }\n      ]\n     }\n  }",
           "type": "json"
         }
       ]
@@ -4318,7 +4317,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"1\",\n     \"msg\":\"查询地址成功\",\n     \"ret\":\n     {\n         \"live_place\": \"阿姨常住地址\"\n     }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"1\",\n     \"msg\":\"查询地址成功\",\n     \"alertMsg\": \"获取阿姨住址成功\",\n     \"ret\":\n     {\n         \"live_place\": \"阿姨常住地址\"\n     }\n}",
           "type": "json"
         }
       ]
@@ -4378,7 +4377,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n   \"code\": 1,\n    \"msg\": \"操作成功.\",\n       \"ret\": [\n           {\n               \"deduction_money\": \"处罚金额\",\n               \"deduction_des\": \"处罚描述\",\n               \"deduction_type\": \"处罚类型\",\n               \"deduction_time\": \"处罚时间\",\n               \"deduction_type_des\": \"处罚类型描述\"\n           }\n      ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n   \"code\": 1,\n    \"msg\": \"操作成功\",\n    \"alertMsg\": \"获取处罚列表成功\",\n       \"ret\": [\n           {\n               \"deduction_money\": \"处罚金额\",\n               \"deduction_des\": \"处罚描述\",\n               \"deduction_type\": \"处罚类型\",\n               \"deduction_time\": \"处罚时间\",\n               \"deduction_type_des\": \"处罚类型描述\"\n           }\n      ]\n}",
           "type": "json"
         }
       ]
@@ -4431,7 +4430,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"1\",\n     \"msg\": \"操作成功.\",\n     \"ret\": [\n            \"worker_name\": \"阿姨姓名\",\n            \"order_count\": \"服务订单数\",\n            \"service_family_count\": \"服务家庭总数\",\n            \"worker_income\":\"阿姨收入\"\n     ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"1\",\n     \"msg\": \"操作成功.\",\n      \"alertMsg\": \"获取服务信息成功\",\n     \"ret\": [\n            \"worker_name\": \"阿姨姓名\",\n            \"order_count\": \"服务订单数\",\n            \"service_family_count\": \"服务家庭总数\",\n            \"worker_income\":\"阿姨收入\"\n     ]\n}",
           "type": "json"
         }
       ]
@@ -4491,7 +4490,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功.\",\n  \"ret\": [\n      {\n          \"task_money\": \"任务奖励\",\n          \"task_des\": \"任务描述\"\n      }\n  ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"alertMsg\": \"获取任务奖励成功\",\n  \"ret\": [\n      {\n          \"task_money\": \"任务奖励\",\n          \"task_des\": \"任务描述\"\n      }\n  ]\n}",
           "type": "json"
         }
       ]
@@ -4565,7 +4564,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功.\",\n  \"ret\": {\n      \"per_page\": 1,\n      \"page_num\": 10,\n      \"data\": [\n          {\n              \"order_id\": \"订单ID\",\n              \"order_money\": \"订单金额\",\n              \"order_code\": \"订单号\",\n              \"service_date\": \"服务日期\",\n              \"service_time\": \"服务时间段\"\n          }\n      ]\n  }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n  \"alertMsg\": \"获取工时列表成功\",\n  \"ret\": {\n      \"per_page\": 1,\n      \"page_num\": 10,\n      \"data\": [\n          {\n              \"order_id\": \"订单ID\",\n              \"order_money\": \"订单金额\",\n              \"order_code\": \"订单号\",\n              \"service_date\": \"服务日期\",\n              \"service_time\": \"服务时间段\"\n          }\n      ]\n  }\n}",
           "type": "json"
         }
       ]
@@ -4632,7 +4631,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"您的请假已提交，请耐心等待审批\",\n  \"ret\": null\n  }",
+          "content": " HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"您的请假已提交，请耐心等待审批\",\n   \"alertMsg\": \"您的请假已提交，请耐心等待审批\"，\n  \"ret\": {}\n }",
           "type": "json"
         }
       ]
@@ -4641,7 +4640,7 @@
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"0\",\n    \"msg\": \"阿姨不存在\",\n    \"ret\": null\n}",
+          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"0\",\n    \"msg\": \"阿姨不存在\",\n}",
           "type": "json"
         }
       ]
@@ -4654,6 +4653,7 @@
     "type": "GET",
     "url": "/worker/system-news",
     "title": "消息通知中心(田玉星0%)",
+    "description": "<p>未定</p> ",
     "name": "actionSystemNews",
     "group": "Worker",
     "parameter": {
@@ -4727,7 +4727,7 @@
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": false,
+            "optional": true,
             "field": "platform_version",
             "description": "<p>平台版本号.</p> "
           }
@@ -4799,7 +4799,7 @@
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": false,
+            "optional": true,
             "field": "platform_version",
             "description": "<p>平台版本号.</p> "
           }
@@ -4871,7 +4871,7 @@
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": false,
+            "optional": true,
             "field": "platform_version",
             "description": "<p>平台版本号.</p> "
           }
@@ -4952,7 +4952,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n   \"code\": 1,\n   \"msg\": \"账单确定成功\",\n   \"ret\": null\n}",
+          "content": "HTTP/1.1 200 OK\n{\n   \"code\": 1,\n   \"msg\": \"账单确定成功\",\n   \"alertMsg\": \"账单确认成功\",\n   \"ret\": {}\n}",
           "type": "json"
         }
       ]
@@ -4996,7 +4996,7 @@
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": false,
+            "optional": true,
             "field": "platform_version",
             "description": "<p>平台版本号.</p> "
           }
@@ -5063,7 +5063,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n \"msg\": \"阿姨信息查询成功\",\n \"ret\": {\n     \"worker_name\": \"阿姨姓名\",\n     \"worker_phone\": \"阿姨手机号\",\n     \"worker_photo\": \"头像地址\",\n     \"worker_identity_description\": \"阿姨身份说明\",\n     \"worker_identity_id\":\"阿姨身份标识【1全职 2兼职 3高峰 4时段】\",\n     \"worker_type_description\": \"角色\",\n     \"worker_star\": \"星级\",\n     \"personal_skill\": [\n         \"阿姨技能1\",\n         \"阿姨技能2\",\n         \"阿姨技能3\"\n     ]\n   }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n \"msg\": \"阿姨信息查询成功\",\n \"alertMsg\": \"获取阿姨数据成功\",\n \"ret\": {\n     \"worker_name\": \"阿姨姓名\",\n     \"worker_phone\": \"阿姨手机号\",\n     \"worker_photo\": \"头像地址\",\n     \"worker_identity_description\": \"阿姨身份说明\",\n     \"worker_identity_id\":\"阿姨身份标识【1全职 2兼职 3高峰 4时段】\",\n     \"worker_type_description\": \"角色\",\n     \"worker_star\": \"星级\",\n     \"personal_skill\": [\n         \"阿姨技能1\",\n         \"阿姨技能2\",\n         \"阿姨技能3\"\n     ]\n   }\n}",
           "type": "json"
         }
       ]
@@ -5443,16 +5443,16 @@
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
-            "field": "app_version",
-            "description": "<p>访问源(android_4.2.2)</p> "
+            "optional": false,
+            "field": "city_id",
+            "description": "<p>城市</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": true,
-            "field": "city_id",
-            "description": "<p>城市</p> "
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
           }
         ]
       }
@@ -5501,14 +5501,14 @@
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
+            "optional": false,
             "field": "customer_phone",
             "description": "<p>用户手机号</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
-            "optional": true,
+            "optional": false,
             "field": "coupon_code",
             "description": "<p>优惠码</p> "
           },
@@ -5926,6 +5926,93 @@
     "groupTitle": "service"
   },
   {
+    "type": "POST",
+    "url": "v1/service/first-service-time",
+    "title": "选择周期服务的第一次服务日期列表（李勇 80%缺少model支持）",
+    "group": "service",
+    "name": "actionFirstServiceTime",
+    "description": "<p>选择周期服务的第一次服务日期列表</p> ",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "plan_time",
+            "description": "<p>服务时长.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "worker_id",
+            "description": "<p>阿姨id.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>Object</p> ",
+            "optional": true,
+            "field": "service_times",
+            "description": "<p>用于存储预约时间段数组(必填）</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>Object</p> ",
+            "optional": true,
+            "field": "service_times.times",
+            "description": "<p>预约时间段</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": " {\n     \"service_times\":\n     {\n         \"times\":\n         [\n         {\n             \"date\":\"2015-10-02\",\n             \"time_slot\":\"8:00-10:00\"\n         },\n         {\n             \"date\":\"2015-10-03\",\n             \"time_slot\":\"10:00-12:00\"\n         }\n         ]\n     }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n {\n     \"code\": 1,\n     \"msg\": \"获取周期服务的第一次服务日期列表成功\",\n     \"ret\": {\n          [\n             {\n                     \"service_time\":\"2015-10-02(周五)\"\n             }，\n             {\n                     \"service_time\":\"2015-10-03(周六)\"\n             }\n         ]\n     }\n }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "queryNotSupportFound",
+            "description": "<p>没有可用阿姨</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n{\n  \"code\":\"0\",\n  \"msg\": \"查询第一次服务日期列表失败\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/ServiceController.php",
+    "groupTitle": "service"
+  },
+  {
     "type": "GET",
     "url": "v1/service/goods-price",
     "title": "获取某城市某商品的价格及备注信息（赵顺利 100%）",
@@ -6066,7 +6153,7 @@
   },
   {
     "type": "get",
-    "url": "/worker/recursive-service-time",
+    "url": "/service/recursive-service-time",
     "title": "周期服务时间表(李勇100%)",
     "name": "actionRecursiveServiceTime",
     "group": "service",
@@ -6181,6 +6268,20 @@
             "optional": false,
             "field": "latitude",
             "description": "<p>当前纬度.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "per_page",
+            "description": "<p>每页显示多少条.</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "page",
+            "description": "<p>第几页.</p> "
           }
         ]
       }
@@ -6189,7 +6290,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n {\n     \"code\": 1,\n     \"msg\": \"获取周期服务可用阿姨列表成功\",\n     \"ret\": {\n         \"worker_id\": 1,\n         \"worker_name\": \"阿姨姓名\",\n         \"worker_phote\": \"阿姨头像\",\n         \"server_times\": \"服务次数\",\n         \"server_star\": \"服务星级\",\n         \"last_time\": \"最后服务时间\"\n     }\n }",
+          "content": "HTTP/1.1 200 OK\n {\n     \"code\": 1,\n     \"msg\": \"获取周期服务可用阿姨列表成功\",\n     \"ret\": {\n         \"worker_id\": 1,\n         \"worker_name\": \"阿姨姓名\",\n         \"worker_phote\": \"阿姨头像\",\n         \"service_times\": \"服务次数\",\n         \"service_star\": \"服务星级\",\n         \"last_time\": \"最后服务时间\"\n     }\n }",
           "type": "json"
         }
       ]

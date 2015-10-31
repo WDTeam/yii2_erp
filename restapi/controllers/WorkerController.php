@@ -476,6 +476,7 @@ class WorkerController extends \restapi\components\Controller
      * {
      *      "code": "1",
      *      "msg": "操作成功.",
+     *       "alertMsg": "获取服务信息成功",
      *      "ret": [
      *             "worker_name": "阿姨姓名",
      *             "order_count": "服务订单数",
