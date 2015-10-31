@@ -1647,7 +1647,7 @@ class OrderController extends \restapi\components\Controller
                 if (empty($param['page_size']) || empty($param['page'])) {
                     return $this->send(null, "缺少规定的参数,page_size或page不能为空", 0, 403);
                 }
-                try {
+                try { 
                     #指定阿姨订单列表
                     $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 1);
                     #未指定阿姨订单列表
