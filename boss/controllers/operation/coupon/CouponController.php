@@ -182,8 +182,8 @@ class CouponController extends Controller
 			$model->is_del = 0;
 		
 			//coupon system user
-			$model->system_user_id = 0;
-			$model->system_user_name = '';
+			$model->system_user_id = \Yii::$app->user->id;
+			$model->system_user_name = \Yii::$app->user->identity->username;
 			$model->validate();
 			if($model->hasErrors()){
 				var_dump($model->getErrors());

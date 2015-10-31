@@ -31,7 +31,7 @@ echo DetailView::widget([
             'attribute'=>'', 
             'label'=>'创建用户',
             'format'=>'raw',
-            'value'=> \Yii::$app->user->identity->username,
+            'value'=> $model->system_user_name,
             'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],
