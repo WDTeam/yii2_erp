@@ -138,7 +138,7 @@ AppAsset::register($this);
 <footer class="main-footer">
     <div class="pull-right hidden-xs">
     Copyright © 2015 e家洁.
-    All rights reserved. v1.0.0
+    All rights reserved. v1.4.0
     </div>
 </footer>
 </body>

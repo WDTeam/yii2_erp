@@ -16,7 +16,12 @@ $("#order-order_customer_phone").keyup(function(e){
 $("#order-order_customer_phone").blur(getCustomerInfo);
 
 
-
+$("#order_create_form").submit(function(){
+    if($("#order-order_pay_type input:checked").val()==2 && parseFloat(customer.customer_balance)-parseFloat($(".order_pay_money").text()) < 0){
+        alert("用户余额不足以支付此次订单！");
+        return false;
+    }
+});
 
 
 $(document).on("change","#order-order_service_type_id input",function(){
@@ -211,9 +216,14 @@ function getCounty(city_id,address_id,county_id)
 
 //计算订单金额填写到表单
 function setOrderMoney(){
-    $money = $("#order-order_booked_count input:checked").val()*$("#order_unit_money").text();
-    $("#order-order_money").val($money.toFixed(2));
-    $(".order_money").text($money.toFixed(2));
+    var money = $("#order-order_booked_count input:checked").val()*$("#order_unit_money").text();
+    $("#order-order_money").val(money.toFixed(2));
+    $(".order_money").text(money.toFixed(2));
+    $(".order_pay_money").text(money.toFixed(2));
+    if($("#order-coupon_id").val()!=''){
+        var order_pay_money = $("#order-order_money").val()-window.coupons[$("#order-coupon_id").val()];
+        $(".order_pay_money").text(order_pay_money.toFixed(2));
+    }
 }
 
 function getGoods(){

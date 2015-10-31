@@ -304,7 +304,7 @@ class server
             if ($isOK)
             {
                 //推送到客户端
-                $this->broadcast($server,$d);
+//                $this->broadcast($server,$d);
                 $this->serv->task($order);
             }
 
@@ -372,7 +372,7 @@ class server
        
         //return $this->taskOrder($data, $server);
         
-        if ($data['lock']==false)
+        if (empty($data['lock']))
         {
             $this->lockOrder($data);//加入状态锁
             return $this->taskOrder($server, $data);
@@ -394,6 +394,18 @@ class server
         $url = $this->config['BOSS_API_URL'] . $data['order_id'];
         try {
             $result = @file_get_contents($url);
+//            '{
+//                "order_id": 15,
+//                "created_at": 1446222494,
+//                "jpush": 0,
+//                "ivr": 3,
+//                "push_status": 2
+//            }'
+            $d = json_decode($result,true);
+            $d['created_at'] = date('Y-m-d H:i:s', $d['created_at']);
+            $d['updated_at'] = isset($d['updated_at']) ? date('Y-m-d H:i:s', $d['updated_at']) : '';
+            $d = json_encode($d);
+            $this->broadcast($server,$d);
             //$data = (array)json_decode($d);
             //var_dump($data);
         } catch (Exception $ex) {

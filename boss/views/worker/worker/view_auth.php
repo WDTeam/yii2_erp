@@ -49,7 +49,8 @@ if($worker->worker_auth_status==0){
         $currentAuthState = '晋升培训不通过';
     }
 }elseif($worker->worker_auth_status==5){
-    $currentAuthState= '已通过晋升培训';
+    $btnState = [];
+    $currentAuthState= '晋升培训通过';
 }
 
 ?>

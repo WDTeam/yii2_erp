@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php if($model->hasErrors()):?>
         <div class="alert alert-danger" role="alert"><?=Html::errorSummary($model); ?></div>
         <?php endif;?>
-        <?php $form = ActiveForm::begin(['layout'=>'horizontal']); ?>
+        <?php $form = ActiveForm::begin(['layout'=>'horizontal','id'=>'order_create_form']); ?>
 
         <div class="panel panel-info">
             <div class="panel-heading">
@@ -103,7 +103,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="form-group">
                         <label class="control-label col-sm-3">需支付</label>
                         <div class="col-sm-2">
-                            <span class="order_money" style="font-size: 20px;color: #ff0000;">50.00</span>
+                            <span class="order_money" style="font-size: 20px;color: #ff0000;">00.00</span>
                         </div>
                     </div>
                 </div>
@@ -112,7 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="form-group">
                     <label class="control-label col-sm-3">需支付</label>
                     <div class="col-sm-2">
-                        <span class="order_pay_money" style="font-size: 20px;color: #ff0000;">50.00</span>
+                        <span class="order_pay_money" style="font-size: 20px;color: #ff0000;">00.00</span>
                     </div>
                 </div>
                 </div>

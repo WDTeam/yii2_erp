@@ -42,44 +42,41 @@ class OperationServiceCardConsumeRecord extends \dbbase\models\operation\Operati
      */
     public function createServiceCardConsumeRecord($attributes)
     {
-        /**
-         *读取attributes，并写入this对象属性
-         */
+        //1.读取attributes，并写入this对象属性
         $this->setAttributes($attributes);
-        /**
-         * 根据service_card_with_customer_id查询客服服务卡信息，计算服务卡使用后余额
-         */
+
+        //2.根据service_card_with_customer_id查询客服服务卡信息
         $operationServiceCardWithCustomer = OperationServiceCardWithCustomer::getServiceCardWithCustomerById($this->service_card_with_customer_id);
-        //写入使用前金额
+
+        //3.写入使用前金额
         $this->setAttributes([
             'service_card_consume_record_front_money' => $operationServiceCardWithCustomer->service_card_with_customer_balance,
         ]);
-        //计算使用后金额
+
+        //4.计算使用后金额
         $this->service_card_consume_record_behind_money = $this->service_card_with_customer_balance - $this->service_card_consume_record_use_money;
-        //写入使用后金额
+
+        //5.写入使用后金额
         $this->setAttributes([
             'service_card_consume_record_behind_money' => $this->service_card_consume_record_behind_money,
         ]);
-        /**
-         * 设置客户服务卡其他字段
-         */
+
+        //6.设置其他字段
         $this->setAttributes([
             'isdel' => 0,//逻辑删除
         ]);
-        /**
-         * 服务卡消费记录保存成功，更新客户服务卡余额
-         */
+
+        //7.服务卡消费记录保存成功，更新客户服务卡余额
         if($this->doSave()){
-            //更新服务卡余额
-            OperationServiceCardWithCustomer::updateServiceCardWithCustomerBalanceById($this->service_card_with_customer_id,$this->service_card_consume_record_behind_money);
-            return true;
+            return OperationServiceCardWithCustomer::updateServiceCardWithCustomerBalanceById($this->service_card_with_customer_id,$this->service_card_consume_record_behind_money);
         }else{
             return false;
         }
 
     }
     /**
-     * 软删除
+     * @introduction 逻辑删除
+     * @return bool
      */
     public function softDelete()
     {

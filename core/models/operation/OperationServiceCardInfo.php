@@ -28,14 +28,15 @@ class OperationServiceCardInfo extends \dbbase\models\operation\OperationService
     public static function getServiceCardInfoById($id) {
         return self::findOne(['id'=>$id]);
     }
-    /**
-     * 软删除
-     */
-    public function softDelete()
-    {
-        $this->isdel = 1;
-        return $this->save();
-    }
+	/**
+	 * @introduction 逻辑删除
+	 * @return bool
+	 */
+	public function softDelete()
+	{
+		$this->isdel = 1;
+		return $this->save();
+	}
 
     /**
      * 查询所有服务卡信息
@@ -45,7 +46,10 @@ class OperationServiceCardInfo extends \dbbase\models\operation\OperationService
     {
         return self::findAll();
     }
-	
+
+	/**
+	 * @return bool
+	 */
 	public function serviceCardInfoCreate()
 	{
 		
@@ -54,15 +58,20 @@ class OperationServiceCardInfo extends \dbbase\models\operation\OperationService
 		$this->is_del = 0;
 		return $this->save();
 	}
-	
+
+	/**
+	 * @return bool
+	 */
 	public function serviceCardInfoUpdate()
 	{
 		
 		$this->updated_at = time();
 		return $this->save();
 	}
-	
-	
+
+	/**
+	 * @return array
+	 */
 	public function getServiceCardConfig(){
 		$config = [
 			'type'=>[

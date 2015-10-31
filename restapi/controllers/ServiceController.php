@@ -9,6 +9,7 @@ use \core\models\worker\Worker;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\operation\OperationSelectedService;
 use \core\models\customer\CustomerAddress;
+use \restapi\models\alertMsgEnum;
 
 
 class ServiceController extends \restapi\components\Controller
@@ -61,13 +62,13 @@ class ServiceController extends \restapi\components\Controller
         $param = Yii::$app->request->get();
 
         if (empty(@$param['city_name'])) {
-            return $this->send(null, "未取得城市信息", 0, 403);
+            return $this->send(null, "未取得城市信息", 0, 403,null,alertMsgEnum::getGoodsesFailed);
         }
 
         $goodses = OperationShopDistrictGoods::getGoodsByCityCategory($param['city_name'], $param['category_id']);
 
         if (empty($goodses)) {
-            return $this->send(null, "该城市暂未开通该类型的服务", 0, 403);
+            return $this->send(null, "该城市暂未开通该类型的服务", 0, 403,null,alertMsgEnum::getGoodsesFailed);
         }
         $gDate = [];
         foreach ($goodses as $gItem) {
@@ -87,7 +88,7 @@ class ServiceController extends \restapi\components\Controller
             ];
             $gDate[] = $gobject;
         }
-        return $this->send($gDate, "数据获取成功");
+        return $this->send($gDate, "数据获取成功",null,alertMsgEnum::getGoodsesSuccess);
     }
 
     /**
@@ -162,7 +163,7 @@ class ServiceController extends \restapi\components\Controller
         $param = Yii::$app->request->get();
 
         if (empty(@$param['city_name'])) {
-            return $this->send(null, "未取得城市信息", 0, 403);
+            return $this->send(null, "未取得城市信息", 0, 403,null,alertMsgEnum::homeGoodsesFailed);
         }
 
         $ret = [
@@ -208,7 +209,7 @@ class ServiceController extends \restapi\components\Controller
 
         ];
 
-        return $this->send($ret, "信息获取成功");
+        return $this->send($ret, "信息获取成功", 0, 403,null,alertMsgEnum::homeGoodsesSuccess);
     }
 
     /**
@@ -264,14 +265,14 @@ class ServiceController extends \restapi\components\Controller
         $param = Yii::$app->request->get();
 
         if (empty(@$param['city_name'])) {
-            return $this->send(null, "未取得城市信息", 0, 403);
+            return $this->send(null, "未取得城市信息", 0, 403,null,alertMsgEnum::allGoodsesFailed);
         }
 
         $categoryes = OperationCategory::getAllCategory();
         $goodses = OperationShopDistrictGoods::getGoodsByCity($param['city_name']);
 
         if (empty($categoryes) || empty($goodses)) {
-            return $this->send(null, "该城市暂未开通", 0, 403);
+            return $this->send(null, "该城市暂未开通", 0, 403,null,alertMsgEnum::allGoodsesFailed);
         }
         $cDate = [];
         foreach ($categoryes as $cItem) {
@@ -303,7 +304,7 @@ class ServiceController extends \restapi\components\Controller
             $cDate[] = $cObject;
         }
 
-        return $this->send($cDate, "数据获取成功");
+        return $this->send($cDate, "数据获取成功",1,200,null,alertMsgEnum::allGoodsesSuccess);
     }
 
     /**
@@ -343,23 +344,23 @@ class ServiceController extends \restapi\components\Controller
         $params = Yii::$app->request->get();
 
         if (empty($params['longitude']) || empty($params['latitude'])) {
-            return $this->send(null, "经纬度信息不存在", 0, 403);
+            return $this->send(null, "经纬度信息不存在", 0, 403,null,alertMsgEnum::goodsInfoFailed);
         }
         $shopDistrict = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($params['longitude'], $params['latitude']);
         if (empty($shopDistrict)) {
-            return $this->send(null, "没有上线商圈", 0, 403);
+            return $this->send(null, "没有上线商圈", 0, 403,null,alertMsgEnum::goodsInfoFailed);
         }
         $goods = OperationShopDistrictGoods::getShopDistrictGoodsInfo($params['city_id'], $shopDistrict['operation_shop_district_id'], $params['goods_id']);
 
         if (empty($goods)) {
-            return $this->send(null, "该商圈没有上线当前服务品类", 0, 403);
+            return $this->send(null, "该商圈没有上线当前服务品类", 0, 403,null,alertMsgEnum::goodsInfoFailed);
         }
 
         $ret = [
             'goods_price' => $goods['operation_shop_district_goods_price'],
         ];
 
-        return $this->send($ret, "数据获取成功");
+        return $this->send($ret, "数据获取成功",1,200,null,alertMsgEnum::goodsInfoSuccess);
     }
 
     /**
@@ -410,21 +411,21 @@ class ServiceController extends \restapi\components\Controller
 
         //获取地址信息
         $address = CustomerAddress::getAddress($params['city_id']);
-        if (empty($address)) return $this->send(null, "获取地址信息失败", '0', 403);
+        if (empty($address)) return $this->send(null, "获取地址信息失败", '0', 403,null,alertMsgEnum::allCleaningTaskFailed);
 
         //获取商圈
         $shopDistrict = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($address['customer_address_longitude'], $address['customer_address_latitude']);
-        if (empty($shopDistrict)) return $this->send(null, "未找到相应商圈", '0', 403);
+        if (empty($shopDistrict)) return $this->send(null, "未找到相应商圈", '0', 403,null,alertMsgEnum::allCleaningTaskFailed);
 
         //获取商圈品类上线
         $goodses = OperationShopDistrictGoods::getGoodsCategoryInfo($params['city_id'], $shopDistrict['id'], '精品保洁');
-        if (empty($goodses)) return $this->send(null, "该商圈未上线精品保洁", '0', 403);
+        if (empty($goodses)) return $this->send(null, "该商圈未上线精品保洁", '0', 403,null,alertMsgEnum::allCleaningTaskFailed);
 
         $date = OperationSelectedService::getSelectedServiceList($params['build_area']);
 
-        if (empty($date)) return $this->send(null, "获取精品保洁商品信息失败", "0", "403");
+        if (empty($date)) return $this->send(null, "获取精品保洁商品信息失败", "0", "403",null,alertMsgEnum::allCleaningTaskFailed);
 
-        return $this->send($date, "获取精品保洁商品信息成功");
+        return $this->send($date, "获取精品保洁商品信息成功",1,200,null,alertMsgEnum::allCleaningTaskFailed);
 
     }
 
@@ -839,8 +840,27 @@ class ServiceController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token    用户认证.
      * @apiParam {String} plan_time     服务时长.
-     * @apiParam {json} service_time  预约时间段json.
      * @apiParam {String} worker_id   阿姨id.
+     * @apiParam {Object} [service_times] 用于存储预约时间段数组(必填）
+     * @apiParam {Object} [service_times.times] 预约时间段
+     * @apiParamExample {json} Request-Example:
+     *  {
+     *      "service_times":
+     *      {
+     *          "times":
+     *          [
+     *          {
+     *              "date":"2015-10-02",
+     *              "time_slot":"8:00-10:00"
+     *          },
+     *          {
+     *              "date":"2015-10-03",
+     *              "time_slot":"10:00-12:00"
+     *          }
+     *          ]
+     *      }
+     * }
+     *
      *
      * @apiSuccessExample Success-Response:
      *  HTTP/1.1 200 OK
@@ -848,12 +868,14 @@ class ServiceController extends \restapi\components\Controller
      *       "code": 1,
      *       "msg": "获取周期服务的第一次服务日期列表成功",
      *       "ret": {
-     *           "worker_id": 1,
-     *           "worker_name": "阿姨姓名",
-     *           "worker_phote": "阿姨头像",
-     *           "server_times": "服务次数",
-     *           "server_star": "服务星级",
-     *           "last_time": "最后服务时间"
+     *            [
+     *               {
+     *                       "service_time":"2015-10-02(周五)"
+     *               }，
+     *               {
+     *                       "service_time":"2015-10-03(周六)"
+     *               }
+     *           ]
      *       }
      *   }
      *
@@ -868,15 +890,14 @@ class ServiceController extends \restapi\components\Controller
      */
     public function actionFirstServiceTime()
     {
-       $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         if (!isset($param['access_token']) || !$param['access_token'] || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
         if (!isset($param['plan_time']) || !$param['plan_time']||!isset($param['worker_id']) || !$param['worker_id']){
             return $this->send(null, "请选择服务时长或阿姨", 0, 403);
         }
-        
-        if(empty($param['service_time'])){
+        if(empty($param['service_times'])){
             return $this->send(null, "请选择预约时间段", 0, 403);
         }
         $plan_time = $param['plan_time'];
@@ -936,14 +957,14 @@ class ServiceController extends \restapi\components\Controller
 
         $path = "http://api.map.baidu.com/place/v2/search";
         if (empty($params) || empty($params['query']) || empty($params['location']) || empty($params['radius']) || empty($params['output']) || empty($params['ak'])) {
-            return $this->send(null, '参数不完成', '0', '403');
+            return $this->send(null, '参数不完成', '0', '403',null,alertMsgEnum::baiduMapFailed);
         }
         $url = "http://api.map.baidu.com/place/v2/search?query=" . $params['query'] . '&location=' . $params['location'] .
             '&radius=' . $params['radius'] . '&output=' . $params['output'] . '&ak=' . $params['ak'];
 
         $date = file_get_contents($url);
 
-        return $this->send(json_decode($date), '操作成功');
+        return $this->send(json_decode($date), '操作成功', '0', '403',null,alertMsgEnum::baiduMapSuccess);
 
     }
 }

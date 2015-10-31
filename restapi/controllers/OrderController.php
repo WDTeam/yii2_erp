@@ -428,7 +428,6 @@ class OrderController extends \restapi\components\Controller
         @$token = $args["access_token"];
 
         $user = CustomerAccessToken::getCustomer($token);
-
         if (empty($user)) {
             return $this->send(null, "用户无效,请先登录", 0);
         }
@@ -473,7 +472,7 @@ class OrderController extends \restapi\components\Controller
     /**
      * @api {GET} /order/orders-count 查询用户订单数量(xieyi 70%缺少周期订单)
      *
-     * @apiName StatusOrdersCount
+     * @apiName OrdersCount
      * @apiGroup Order
      * @apiDescription 获得用户各种状态的订单数量
      *
@@ -673,7 +672,7 @@ class OrderController extends \restapi\components\Controller
      * @api {GET} /order/worker-service-orders 查询待服务阿姨订单(xieyi 90%已经将后台接口完成,缺少周期订单)
      *
      *
-     * @apiName Orders
+     * @apiName WorkerServiceOrders
      * @apiGroup Order
      *
      * @apiParam {String} access_token 阿姨登陆令牌
@@ -804,7 +803,7 @@ class OrderController extends \restapi\components\Controller
      * @api {GET} /order/worker-orders-count 查询阿姨订单订单数量(xieyi 90%已经将后台接口完成,缺少周期订单)
      *
      *
-     * @apiName Orders
+     * @apiName WorkerOrdersCount
      * @apiGroup Order
      *
      * @apiParam {String} access_token 阿姨登陆令牌
@@ -875,10 +874,10 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} /order/worker-service-orders-count 查询阿姨待服务订单订单数量(xieyi 90%已经将后台接口完成,缺少周期订单)
+     * @api {GET} /order/worker-service-orders-count 查询阿姨待服务订单订单数量
      *
      *
-     * @apiName Orders
+     * @apiName WorkerServiceOrdersCount
      * @apiGroup Order
      *
      * @apiParam {String} access_token 阿姨登陆令牌
@@ -1302,8 +1301,8 @@ class OrderController extends \restapi\components\Controller
         $orderArr = array();
         $orderArr["id"] = $orderId;
         $orders = $orderSearch->searchOrdersWithStatus($orderArr);
-        $ret = \core\models\order\OrderStatus::searchOrderStatusHistory($orderId);
-
+        $ret['status_history'] = \core\models\order\OrderStatus::searchOrderStatusHistory($orderId);
+        $ret['orders'] = $orders;
         $this->send($ret, "操作成功");
     }
 
@@ -1560,7 +1559,7 @@ class OrderController extends \restapi\components\Controller
         
     }
 
-    /**
+   /**
      * @api {get} v1/order/get-worker-orders 指定阿姨订单数/待抢单订单订单数/指定阿姨订单列表/待抢单订单列表 (haojianshe 100%)
      * @apiName actionGetWorkerOrders
      * @apiGroup Order
@@ -1640,64 +1639,84 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "缺少规定的参数", 0, 403);
         }
         if (!empty($worker) && !empty($worker->id)) {
-
             if ($param['leveltype'] == 2) {
-        
-              
                 if (empty($param['page_size']) || empty($param['page'])) {
                     return $this->send(null, "缺少规定的参数,page_size或page不能为空", 0, 403);
                 }
-                
-                
                 try {
+                    #指定阿姨订单列表
                     $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 1);
-                    $ret['workerData'] = $workerCount;
+                    #未指定阿姨订单列表
+                    $workerCountTwo = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 0);
+//                    $workerCountTwo = array(
+//                        array(
+//                            "order_id" => 6,
+//                            "order_code" => 521510306870356,
+//                            "batch_code" => 1,
+//                            "booked_begin_time" => 1446282000,
+//                            "booked_end_time" => 1446289200,
+//                            "channel_name" => '后台下单',
+//                            "booked_count" => 2,
+//                            "address" => '北京,北京市,东城区,光华路soho,李胜强,13111001100',
+//                            "need" => '重点打扫厨房',
+//                            "money" => 40.00
+//                        )
+//                    );
+//                    $workerCount = array(
+//                        array(
+//                            "order_id" => 6,
+//                            "order_code" => 521510306870356,
+//                            "batch_code" => 1,
+//                            "booked_begin_time" => 1446282000,
+//                            "booked_end_time" => 1446289200,
+//                            "channel_name" => '后台下单',
+//                            "booked_count" => 2,
+//                            "address" => '北京,北京市,东城区,光华路soho,李胜强,13111001100',
+//                            "need" => '重点打扫厨房',
+//                            "money" => 40.00
+//                        )
+//                    );
+                    $ret['workerData'] = array_merge($workerCount, $workerCountTwo);
                     #倒计时
                     $ret['time'] = 172800;
-               
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (\Exception $e) {
                     return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 1024);
                 }
-            } else if ($param['leveltype'] == 3) {
-                
-                if (empty($param['page_size']) || empty($param['page'])) {
-                    return $this->send(null, "缺少规定的参数,page_size或page不能为空", 0, 403);
-                }
-
-                try {
-                    $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 0);
-                    $ret['workerData'] = $workerCount;
-                    #倒计时
-                    $ret['time'] = 172800;
-                    return $this->send($ret, $this->workerText[$param['leveltype']], 1);
-                } catch (\Exception $e) {
-                    return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 0,1024);
-                }
-            } else if ($param['leveltype'] == 1) {
+            }
+//            else if ($param['leveltype'] == 3) {
+//                if (empty($param['page_size']) || empty($param['page'])) {
+//                    return $this->send(null, "缺少规定的参数,page_size或page不能为空", 0, 403);
+//                }
+//
+//                try {
+//                    $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 0);
+//                    $ret['workerData'] = $workerCount;
+//                    #倒计时
+//                    $ret['time'] = 172800;
+//                    return $this->send($ret, $this->workerText[$param['leveltype']], 1);
+//                } catch (\Exception $e) {
+//                    return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 0,1024);
+//                }
+//            } 
+            else if ($param['leveltype'] == 1) {
                 try {
 
                     #指定阿姨订单数
                     $workerCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
-
                     #待抢单订单数
                     $workerCountTwo = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
-
-
                     $args["owr.worker_id"] = $worker->id;
                     $args["oc.customer_id"] = null;
                     $orderSearch = new \core\models\order\OrderSearch();
-
                     $ret = [];
                     $arr = array();
                     $arr[] = OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE;
                     $arr[] = OrderStatusDict::ORDER_SYS_ASSIGN_DONE;
                     $arr[] = OrderStatusDict::ORDER_WORKER_BIND_ORDER;
                     $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $arr);
-
                     #待服务订单数
                     $ret['workerServiceCount'] = $count;
-
                     $ret['workerData'] = $workerCount;
                     $ret['orderData'] = $workerCountTwo;
                     #阿姨状态
@@ -1708,6 +1727,8 @@ class OrderController extends \restapi\components\Controller
                 } catch (\Exception $e) {
                     return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 1024);
                 }
+            } else {
+                return $this->send(null, "leveltype指定参数错误,不能大于2", 0, 403);
             }
         } else {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);

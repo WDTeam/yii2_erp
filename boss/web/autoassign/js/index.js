@@ -91,25 +91,21 @@ function websocketConnect() {
 
 function showOrders(data){
     var order = $.parseJSON(data);
+    order = eval('(' + order + ')');
     if (order.order_id==null || order.order_id=='')
     {
         return;
     }
     var id = 'order_'+order.order_id;
     var obj = $('#'+id);
-    order.status = getStatus(order.status);
-    if(order.sms == true){
-        order.sms = '已发送';
-    }else{
-        order.sms = '已发送';
-    }
-    if(order.ivr == true){
+    order.status = getStatus(order.push_status);
+    if(order.ivr > 0){
         order.ivr = '已发送';
     }else{
         order.ivr = '未发送';
     }
     
-    if(order.jpush == true){
+    if(order.jpush > 0 ){
         order.jpush = '已发送';
     }else{
         order.jpush = '未发送';
@@ -125,6 +121,8 @@ function showOrders(data){
         $($('#'+id).children('td')[1]).html(order.status);
         $($('#'+id).children('td')[2]).html(order.ivr);
         $($('#'+id).children('td')[3]).html(order.jpush);
+        $($('#'+id).children('td')[4]).html(order.created_at);
+        $($('#'+id).children('td')[5]).html(order.updated_at);
     }
 }
 

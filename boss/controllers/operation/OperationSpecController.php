@@ -52,8 +52,15 @@ class OperationSpecController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $post = Yii::$app->request->post();
+        if ($model->load($post)) {
+            $operation_spec_values = serialize(array_filter(explode(';', str_replace(' ', '', str_replace('；', ';', $post['OperationSpec']['operation_spec_values'])))));
+            $model->operation_spec_values = $operation_spec_values;
+            $model->created_at = time();
+            $model->updated_at = time();
+            if($model->save()){
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
             $model->operation_spec_values = OperationSpec::hanldeSpecValues($model->operation_spec_values);
             return $this->render('view', ['model' => $model]);
