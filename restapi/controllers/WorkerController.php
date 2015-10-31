@@ -195,6 +195,7 @@ class WorkerController extends \restapi\components\Controller
      * {
      *   "code": 1,
      *   "msg": "操作成功",
+     *   "alertMsg": "获取阿姨请假历史记录成功",
      *   "ret": {
      *       "per_page": 1,
      *       "page_num": 1,
@@ -222,14 +223,18 @@ class WorkerController extends \restapi\components\Controller
         //检测阿姨是否登录
         $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 0, 403);
+             return $this->send(null, $checkResult['msg'], $checkResult['code'], 403,null,$checkResult['msg']);
         }
         $workerID = $checkResult['workerInfo']['worker_id'];
         //判断页码
         (isset($param['per_page'])&&intval($param['per_page']))?$per_page = intval($param['per_page']):$per_page = 1;
         (isset($param['page_num'])&&intval($param['page_num']))?$page_num = intval($param['page_num']):$page_num = 10;
         //调取阿姨请假历史情况
-        $data = WorkerVacationApplication::getApplicationList($workerID,$per_page,$page_num);
+        try{
+            $data = WorkerVacationApplication::getApplicationList($workerID,$per_page,$page_num);
+        }catch (\Exception $e) {
+            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::workerLeaveHistoryFailed);
+        }
         $pageData = array();
         if($data['data']){
             foreach($data['data'] as $key => $val){
@@ -255,7 +260,7 @@ class WorkerController extends \restapi\components\Controller
             'page_num'=> $data['pageNum'],
             'data'    => $pageData
         ];
-        return $this->send($ret, "操作成功");
+        return $this->send($ret, "操作成功",1,200,null,alertMsgEnum::workerLeaveHistorySuccess);
     }
 
     /**
@@ -273,6 +278,7 @@ class WorkerController extends \restapi\components\Controller
      * {
      *      "code": "1",
      *      "msg":"查询地址成功",
+     *      "alertMsg": "获取阿姨住址成功",
      *      "ret":
      *      {
      *          "live_place": "阿姨常住地址"
@@ -293,14 +299,18 @@ class WorkerController extends \restapi\components\Controller
         //检测阿姨是否登录
         $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
-            return $this->send(null, $checkResult['msg'], 0, 403);
+            return $this->send(null, $checkResult['msg'], $checkResult['code'], 403,null,$checkResult['msg']);
         }
         $workerID = $checkResult['workerInfo']['worker_id'];
-        $workerInfo = Worker::getWorkerDetailInfo($workerID);
+        try{
+            $workerInfo = Worker::getWorkerDetailInfo($workerID);
+        }catch(\Exception $e){
+            return $this->send(null, $e->getMessage(), 1024, 403,null,alertMsgEnum::workerLivePlaceFailed);
+        }
         $ret = array(
             "live_place" => $workerInfo['worker_live_place']
         );
-        return $this->send($ret, "操作成功.");
+        return $this->send($ret, "操作成功",1,200,null,alertMsgEnum::workerLivePlaceSuccess);
     }
 
     /**
@@ -321,7 +331,8 @@ class WorkerController extends \restapi\components\Controller
      * HTTP/1.1 200 OK
      *   {
      *       "code": 1,
-     *       "msg": "操作成功.",
+     *       "msg": "操作成功",
+     *       "alertMsg": "获取评论成功"，
      *       "ret": {
      *           "per_page": 1,
      *           "page_num": 10,
@@ -353,7 +364,7 @@ class WorkerController extends \restapi\components\Controller
         $workerID = $checkResult['workerInfo']['worker_id'];
         //判断评论类型
         if (!isset($param['comment_level']) || !intval($param['comment_level']) || !in_array($param['comment_level'], array(1, 2, 3))) {
-            return $this->send(null, "评论类型不正确", 0, 403);
+            return $this->send(null, "评论类型不正确", 0, 403,null,alertMsgEnum::workerCommentTypeFailed);
         }
         //分页数据
         (isset($param['per_page'])&&intval($param['per_page']))?$per_page = intval($param['per_page']):$per_page = 1;
@@ -370,14 +381,14 @@ class WorkerController extends \restapi\components\Controller
                 }
             }
         }catch (\Exception $e) {
-            return $this->send(null, "boss系统错误", 1024, 403);
+            return $this->send(null,$e->getMessage(), 1024, 403,0,alertMsgEnum::workerCommentSuccess);
         }
         $ret = [
             'per_page'=>$per_page,
             'page_num'=>$page_num,
             'data'=>$retData
         ];
-        return $this->send($ret, "操作成功");
+        return $this->send($ret, "操作成功",1,200,null,alertMsgEnum::workerCommentSuccess);
     }
 
     /**

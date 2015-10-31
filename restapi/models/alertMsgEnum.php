@@ -48,4 +48,15 @@ class alertMsgEnum
     const workerApplyLeaveTimeFailed = '请假时间不正确';
     const workerApplyLeaveFailed = '请假申请失败';
     const workerApplyLeaveSuccess = '您的请假已提交，请耐心等待审批';
+    //获取阿姨请假历史记录
+    const workerLeaveHistorySuccess = '获取阿姨请假历史记录成功';
+    const workerLeaveHistoryFailed = '获取阿姨请假历史记录失败';
+    //获取阿姨住址
+    const workerLivePlaceSuccess = '获取阿姨住址成功';
+    const workerLivePlaceFailed = '获取阿姨住址失败';
+    //获取阿姨评论
+    const workerCommentTypeFailed = '评论类型不正确';
+    const workerCommentSuccess = '获取评论成功';  
+    const workerCommentFailed = '获取评论失败';
+
 }
