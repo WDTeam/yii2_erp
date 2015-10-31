@@ -78,6 +78,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'worker_task_description', 
+            [
+                'label'=>'任务状态',
+                'value'=>function($model){
+                    return $model->getStatusLabel();
+                }
+            ],
 //             'worker_task_description_url:url', 
             
            'created_at:date', 
