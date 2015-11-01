@@ -22,7 +22,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
      * @param $customer_id
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function queryRecord($customer_id)
+    public static function getCustomerPaymentTransRecord($customer_id)
     {
         return PaymentCustomerTransRecord::find()->where(["customer_id"=>$customer_id])->asArray()->all();
     }
@@ -55,7 +55,7 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
      * @param string $type  支付|充值类型
      * @return bool
      */
-    public static function analysisRecord($order_id,$order_channel_id,$type='order_pay')
+    public static function analysisRecord($order_id,$order_channel_id,$type='order_pay',$orderStatus = 1)
     {
         $obj = new self();
         if($type == 'order_pay')
@@ -76,18 +76,18 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
                 'order_use_promotion_money',
                 'order_pop_order_money'
             ];
-            $data = OrderSearch::getOrderInfo($order_id,$fields);
+            $dataArray = OrderSearch::getOrderInfo($order_id,$fields,$orderStatus);
 
             //组装数据
             $transRecord["payment_customer_trans_record_mode"] = 1;      //交易方式:1消费,2=充值,3=退款,4=赔偿
-            $transRecord["payment_customer_trans_record_service_card_on"] = $data['card_id'];                   //服务卡号
-            $transRecord["payment_customer_trans_record_service_card_pay"] = $data['order_use_card_money'];     //服务卡支付
-            $transRecord["payment_customer_trans_record_coupon_money"] = $data['order_use_coupon_money'];    //优惠券金额
-            $transRecord["payment_customer_trans_record_online_balance_pay"] = $data['order_use_acc_balance'];    //余额支付
-            $transRecord["payment_customer_trans_record_order_total_money"] = $data['order_money'];               //订单总额
-            $transRecord["payment_customer_trans_record_pre_pay"] = $data['order_pop_order_money'];    //预付费
-            $transRecord['payment_customer_trans_record_cash'] = ($data['order_pay_type'] == 1) ? $data['order_money'] : 0;   //现金支付
-            $transRecord['payment_customer_trans_record_online_pay'] = $data['order_pay_money'];    //在线支付
+            $transRecord["payment_customer_trans_record_service_card_on"] = $dataArray['card_id'];                   //服务卡号
+            $transRecord["payment_customer_trans_record_service_card_pay"] = $dataArray['order_use_card_money'];     //服务卡支付
+            $transRecord["payment_customer_trans_record_coupon_money"] = $dataArray['order_use_coupon_money'];    //优惠券金额
+            $transRecord["payment_customer_trans_record_online_balance_pay"] = $dataArray['order_use_acc_balance'];    //余额支付
+            $transRecord["payment_customer_trans_record_order_total_money"] = $dataArray['order_money'];               //订单总额
+            $transRecord["payment_customer_trans_record_pre_pay"] = $dataArray['order_pop_order_money'];    //预付费
+            $transRecord['payment_customer_trans_record_cash'] = ($dataArray['order_pay_type'] == 1) ? $dataArray['order_money'] : 0;   //现金支付
+            $transRecord['payment_customer_trans_record_online_pay'] = $dataArray['order_pay_money'];    //在线支付
 
         }
         elseif($type == 'payment')
@@ -105,14 +105,15 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         }
         else
         {
-            exit('未知类型');
+            return false;
+//            exit('未知类型');
         }
         //获取订单渠道
         $orderChannelInfo = FinanceOrderChannel::get_order_channel_info($order_channel_id);
 
         //公用部分
-        $transRecord['customer_id'] = $data['customer_id'];     //用户ID
-        $transRecord['order_id'] = $data['order_id'];           //订单ID
+        $transRecord['customer_id'] = $dataArray['customer_id'];     //用户ID
+        $transRecord['order_id'] = $dataArray['order_id'];           //订单ID
         $transRecord['order_channel_id'] = $order_channel_id;   //订单渠道
         $transRecord['payment_customer_trans_record_order_channel'] = $orderChannelInfo->finance_order_channel_name; //	订单渠道名称
         $transRecord['pay_channel_id'] = $orderChannelInfo->pay_channel_id;   //	支付渠道
@@ -164,94 +165,13 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         }
         else
         {
-            exit('没有此条件');
+            return false;
+            //exit('没有此条件');
         }
 
         return $status;
     }
 
-    /**
-     * 分析创建(支付/充值)交易记录
-     * @param $data 数据对象
-     * @return bool
-
-    public static function analysisRecord($data)
-    {
-    //公用部分
-    $data['order_channel_id'] = $data['payment_source']; //订单渠道
-    $data['payment_customer_trans_record_transaction_id'] = !empty($data['payment_transaction_id']) ? $data['payment_transaction_id'] : 0; //交易流水号
-
-    //用户充值
-    if( empty($data['order_id']) ){
-    //创建服务卡
-    //serviceCard::create();
-    $card = [
-    'card_on' => mt_rand(10000,99999),
-    ];
-
-    //服务卡充值
-    $data['payment_customer_trans_record_mode'] = 2; //交易方式:1消费,2=充值,3=退款,4=补偿
-    $data['payment_customer_trans_record_service_card_on'] =  $card['card_on'];//服务卡号
-    $data['payment_customer_trans_record_service_card_pay'] = $data['payment_money'];//服务卡支付
-    $data['scenario'] = 4;//支付场景(用户充值)
-
-    }else{
-
-    //支付订单
-
-    //查询订单信息
-    $orderInfo = PaymentCommon::orderInfo($data['order_id']);
-    $data['payment_customer_trans_record_service_card_on'] = $orderInfo->orderExtPay->card_id;    //服务卡ID
-    $data['payment_customer_trans_record_service_card_pay'] = $orderInfo->orderExtPay->order_use_card_money;   //服务卡内容
-    $data['payment_customer_trans_record_coupon_money'] = $orderInfo->orderExtPay->order_use_coupon_money; //优惠券金额
-    $data['payment_customer_trans_record_online_balance_pay'] = $orderInfo->orderExtPay->order_use_acc_balance;  //余额支付
-    $data['payment_customer_trans_record_order_total_money'] = $orderInfo->order_money;  //订单总额
-    $data['order_pop_order_money'] = $orderInfo->orderExtPop->order_pop_order_money;  //预付费
-
-    $data['payment_customer_trans_record_online_pay'] = !empty($data['payment_actual_money']) ? $data['payment_actual_money'] : 0;  //在线支付
-    $data['payment_customer_trans_record_pre_pay'] = !empty($data['payment_customer_trans_record_pre_pay']) ? $data['payment_customer_trans_record_pre_pay'] : 0;  //预付费
-    $data['payment_customer_trans_record_cash'] = !empty($data['payment_customer_trans_record_cash']) ? $data['payment_customer_trans_record_cash'] : 0;
-    $data['payment_customer_trans_record_mode'] = 1; //交易方式:1消费,2=充值,3=退款,4=补偿
-
-    //服务卡 or 余额 + 在线 + 优惠券
-    if( (!empty($data['payment_customer_trans_record_service_card_on']) || $data['payment_customer_trans_record_online_balance_pay'] > 0) && $data['payment_customer_trans_record_online_pay'] > 0 )
-    {
-    $data['scenario'] = 1;  //支付场景
-    }
-    elseif( $data['payment_customer_trans_record_online_pay'] > 0 )
-    {
-    //在线支付
-    $data['scenario'] = 10;  //支付场景
-    }
-    elseif( !empty($data['payment_customer_trans_record_service_card_on']) )
-    {
-    //服务卡支付 + 优惠券
-    $data['scenario'] = 7;  //支付场景
-    }
-    elseif( $data['payment_customer_trans_record_online_balance_pay'] > 0 )
-    {
-    //余额支付 + 优惠券
-    $data['scenario'] = 8;  //支付场景
-    }
-    elseif( $data['payment_customer_trans_record_pre_pay'] > 0 )
-    {
-    //预付费
-    $data['scenario'] = 3;  //支付场景
-    }
-    elseif( $data['payment_customer_trans_record_cash'] > 0 )
-    {
-    //现金
-    $data['scenario'] = 2;  //支付场景
-    }
-    else
-    {
-    exit('没有此条件');
-    }
-    }
-
-    return self::createRecord($data);
-    }
-     */
     /**
      * 退款交易记录
      * @param $data

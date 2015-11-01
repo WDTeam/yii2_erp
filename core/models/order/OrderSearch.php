@@ -145,10 +145,23 @@ class OrderSearch extends Order
 
     /**
      * 通过订单ID获取订单链表信息
-     * @param $order_id 订单ID
+     * @param $order_id
+     * @param string $fields
+     * @param int $orderStatus
+     * @return array
      */
-    public static function getOrderInfo($order_id, $fields='*')
+    public static function getOrderInfo($order_id, $fields='*',$orderStatus = 1)
     {
+        //判断订单状态
+        switch($orderStatus)
+        {
+            case 1://1:普通订单
+                $condition = ['id'=>$order_id];
+                break;
+            case 2://2:周期订单
+                $condition = ['order_batch_code'=>$order_id];
+                brea;
+        }
         $query = new \yii\db\Query();
         $data = $query->from('{{%order}} as order')
             ->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')
@@ -157,8 +170,8 @@ class OrderSearch extends Order
             ->innerJoin('{{%order_ext_worker}} as ow','order.id = ow.order_id')
             ->innerJoin('{{%order_ext_pop}} as opp','order.id = opp.order_id')
             ->select($fields)
-            ->where(['id'=>$order_id])
-            ->one();
+            ->where($condition)
+            ->all();
         return $data;
     }
 
