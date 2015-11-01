@@ -346,12 +346,12 @@ class OrderSearch extends Order
      * @param $attributes
      * @return int|string
      */
-    public function searchOrdersWithStatus($attributes, $is_asc = false, $offset = 0, $limit = 10, $order_status = null,$channels = null, $from = null, $to = null)
+    public function searchOrdersWithStatus($attributes, $is_asc = false, $offset = 0, $limit = 10, $order_status = null,$channels = null, $from = null, $to = null,$created_at='order.created_at')
     {
         $sort = $is_asc ? SORT_ASC : SORT_DESC;
         $params['OrderSearch'] = $attributes;
         $query = $this->searchOrdersWithStatusProvider($params,$order_status,$channels,$from,$to)->query;
-        $query->orderBy(['order.created_at' => $sort]);
+        $query->orderBy([$created_at => $sort]);
         $query->offset($offset)->limit($limit);
         return $query->all();
     }
@@ -361,12 +361,12 @@ class OrderSearch extends Order
      * @param $attributes
      * @return int|string
      */
-    public function searchWorkerOrdersWithStatus($attributes, $is_asc = false, $offset = 1, $limit = 10, $order_status = null,$channels = null, $from = null, $to = null)
+    public function searchWorkerOrdersWithStatus($attributes, $is_asc = false, $offset = 1, $limit = 10, $order_status = null,$channels = null, $from = null, $to = null,$created_at='order.created_at')
     {
         $sort = $is_asc ? SORT_ASC : SORT_DESC;
         $params['OrderSearch'] = $attributes;
         $query = $this->searchWorkerOrdersWithStatusProvider($params,$order_status,$channels,$from,$to)->query;
-        $query->orderBy(['order.created_at' => $sort]);
+        $query->orderBy([$created_at => $sort]);
         $query->offset($offset)->limit($limit);
         return $query->all();
     }
@@ -443,6 +443,11 @@ class OrderSearch extends Order
         if(!isset($attributes["OrderSearch"]["id"])){
             $attributes["OrderSearch"]["id"] = null;
         }
+        
+        if(!isset($attributes["OrderSearch"]["order_batch_code"])){
+            $attributes["OrderSearch"]["order_batch_code"] = null;
+        }
+        
         if ($this->load($attributes) && $this->validate()) {
             $query->andFilterWhere([
                 'id' =>$attributes["OrderSearch"]["id"],
@@ -464,6 +469,7 @@ class OrderSearch extends Order
                 'order_booked_worker_id' => $this->order_booked_worker_id,
                 'checking_id' => $this->checking_id,
                 'order_pop_order_code' => $this->order_pop_order_code,
+                'order_batch_code' => $attributes["OrderSearch"]["order_batch_code"],
                 'oc.customer_id' => $attributes["OrderSearch"]["oc.customer_id"],
             ]);
             $query->andFilterWhere(['like', 'order_service_type_name', $this->order_service_type_name]
