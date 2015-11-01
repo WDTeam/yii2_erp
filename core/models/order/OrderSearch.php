@@ -164,7 +164,7 @@ class OrderSearch extends Order
                 break;
             case 2://2:周期订单
                 $condition = ['order_batch_code'=>$order_id];
-                brea;
+                break;
         }
         $query = new \yii\db\Query();
         $data = $query->from('{{%order}} as order')
@@ -387,11 +387,11 @@ class OrderSearch extends Order
      */
     public static function getWaitServiceOrderList()
     {
-        return Order::find()->select('id','order_booked_begin_time')->joinWith(['orderExtStatus'])->where(['order_status_dict_id'=>[
+        return Order::find()->joinWith(['orderExtStatus'])->select(['id','order_booked_begin_time'])->where(['order_status_dict_id'=>[
             OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE,
             OrderStatusDict::ORDER_SYS_ASSIGN_DONE,
             OrderStatusDict::ORDER_WORKER_BIND_ORDER
-        ]])->all();
+        ]])->asArray()->all();
     }
 
     /**
@@ -400,9 +400,9 @@ class OrderSearch extends Order
      */
     public static function getStartServiceOrderList()
     {
-        return Order::find()->select('id','order_booked_end_time')->joinWith(['orderExtStatus'])->where(['order_status_dict_id'=>[
+        return Order::find()->joinWith(['orderExtStatus'])->select(['id','order_booked_end_time'])->where(['order_status_dict_id'=>[
             OrderStatusDict::ORDER_SERVICE_START
-        ]])->all();
+        ]])->asArray()->all();
     }
 
 
