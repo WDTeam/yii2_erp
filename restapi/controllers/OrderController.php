@@ -1728,9 +1728,9 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {POST} v1/order/create-worker-orderes 创建周期订单 （haojianshe 100%）
+     * @api {POST} v1/order/create-recursive-orderes 创建周期订单 （haojianshe 100%）
      *
-     * @apiName actionCreateWorkerOrderes
+     * @apiName CreateRecursiveOrderes
      * @apiGroup Order
      * @apiDescription 周期订单提交
      *
@@ -1745,18 +1745,18 @@ class OrderController extends \restapi\components\Controller
      * @apiParam  {int}     order_pay_type 支付方式 1现金 2线上 3第三方 必填
      * @apiParam  {int}     order_is_use_balance 是否使用余额 0否 1是 必填
      * @apiParam  {string}  [order_booked_worker_id] 指定阿姨id
+     * @apiParam  {int}  [accept_other_aunt] 0不接受 1接受
      * @apiParam  {string}  [order_customer_need] 客户需求
      * @apiParam  {string}  [order_customer_memo] 客户备注
      * @apiParam   {int} [coupon_id] 优惠券id
      * 
-     * @apiParam 
-     * order_booked_begin_time   预约开始时间 必填;      预约结束时间 必填 order_booked_end_time 
-     * {
-     * ["order_booked_begin_time":"2015-10-01 10:10","order_booked_end_time":"2015-10-02 10:10"],
-     * ["order_booked_begin_time":"2015-10-03 10:10","order_booked_end_time":"2015-10-04 10:10"],
-     * ["order_booked_begin_time":"2015-10-05 10:10","order_booked_end_time":"2015-10-06 10:10"],
-     * ["order_booked_begin_time":"2015-10-07 10:10","order_booked_end_time":"2015-10-08 10:10"]
-     * }
+     * @apiParam  {Object[]}order_booked_time
+     * [
+     * {"order_booked_begin_time":"2015-10-01 10:10","order_booked_end_time":"2015-10-02 10:10"},
+     * {"order_booked_begin_time":"2015-10-03 10:10","order_booked_end_time":"2015-10-04 10:10"},
+     * {"order_booked_begin_time":"2015-10-05 10:10","order_booked_end_time":"2015-10-06 10:10"},
+     * {"order_booked_begin_time":"2015-10-07 10:10","order_booked_end_time":"2015-10-08 10:10"}
+     * ]
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -1775,7 +1775,7 @@ class OrderController extends \restapi\components\Controller
      *  }
      *
      */
-    public function actionCreateWorkerOrderes()
+    public function actionCreateRecursiveOrderes()
     {
         $param = Yii::$app->request->post();
 
@@ -1819,16 +1819,11 @@ class OrderController extends \restapi\components\Controller
         if (empty($param['order_is_use_balance'])) {
             return $this->send(null, "使用余额不能为空", 0);
         }
-
-        #判断服务开始时间
-        if (empty($param['order_booked_begin_time'])) {
-            return $this->send(null, "服务开始时间不能为空", 0);
+        if(empty($param['$order_booked_time'])){
+            return $this->send(null, "服务时间不能为空", 0);
         }
 
-        #判断服务结束时间
-        if (empty($param['order_booked_end_time'])) {
-            return $this->send(null, "服务结束时间不能为空", 0);
-        }
+
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
             $attributes = array(
@@ -1847,20 +1842,15 @@ class OrderController extends \restapi\components\Controller
                 "order_customer_memo" => $param['order_customer_memo']
             );
 
-            $booked_list = array(
-                [
-                    'order_booked_begin_time' => strtotime(date('Y-m-d 11:00')),
-                    'order_booked_end_time' => strtotime(date('Y-m-d 12:30')),
-                ],
-                [
-                    'order_booked_begin_time' => strtotime(date('Y-m-d 11:00') . ' +1days'),
-                    'order_booked_end_time' => strtotime(date('Y-m-d 12:30') . ' +1days'),
-                ],
-                [
-                    'order_booked_begin_time' => strtotime(date('Y-m-d 11:00') . ' +2days'),
-                    'order_booked_end_time' => strtotime(date('Y-m-d 12:30') . ' +2days'),
-                ],
-            );
+            $booked_list = array();
+
+            foreach ($param['$order_booked_time'] as $key => $val) {
+                $booked_list[]=[
+                    'order_booked_begin_time' => strtotime($val['order_booked_begin_time']),
+                    'order_booked_end_time' => strtotime($val['order_booked_end_time'])
+                ];
+            }
+
             try {
                 $order = new \core\models\order\Order();
                 $createOrder = $order->createNewBatch($attributes, $booked_list);
