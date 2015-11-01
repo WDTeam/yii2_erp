@@ -25,7 +25,6 @@ class m150918_141212_create_table_payment_log extends Migration
             'payment_log_json_aggregation'  => Schema::TYPE_TEXT . ' COMMENT \'记录数据集合\'',
             'created_at'  => Schema::TYPE_INTEGER . '(10) COMMENT \'创建时间\'',
             'updated_at'  => Schema::TYPE_INTEGER . '(10) COMMENT \'更新时间\'',
-            'is_del'  => Schema::TYPE_BOOLEAN . '(1) DEFAULT 1 COMMENT \'删除\'',
 
         ], $tableOptions);
 

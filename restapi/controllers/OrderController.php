@@ -455,18 +455,33 @@ class OrderController extends \restapi\components\Controller
         $offset = ($page - 1) * $limit;
         @$from = $args['from'];
         @$to = $args['to'];
-
         $args["oc.customer_id"] = $user->id;
         $args['order_parent_id'] = 0;
-        $orderSearch = new \core\models\order\OrderSearch();
-        $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus);
-        $orders = $orderSearch->searchOrdersWithStatus($args, $isAsc, $offset, $limit, $orderStatus, $channels, $from, $to);
-        $ret = [];
-        $ret['limit'] = $limit;
-        $ret['page_total'] = ceil($count / $limit);
-        $ret['page'] = $page;
-        $ret['orders'] = $orders;
-        $this->send($ret, "操作成功", 1);
+
+        try {
+            $orderSearch = new \core\models\order\OrderSearch();
+            $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus);
+            $orders = $orderSearch->searchOrdersWithStatus($args, $isAsc, $offset, $limit, $orderStatus, $channels, $from, $to);
+
+            #获取周期订单子订单
+            foreach ($orders as $key => $val) {
+                if (!empty($val['order_batch_code'])) {
+                    $arry = array('order_batch_code' => $val['order_batch_code'], 'order_parent_id' => null);
+                    $subOrder = $orderSearch->searchOrdersWithStatus($arry, true, $offset, 100, $orderStatus, $channels, $from, $to, 'order.order_booked_begin_time');
+                    $orders[$key]['sub_order'] = $subOrder;
+                }
+            }
+
+            $ret = [];
+            $ret['limit'] = $limit;
+            $ret['page_total'] = ceil($count / $limit);
+            $ret['page'] = $page;
+            $ret['orders'] = $orders;
+
+            $this->send($ret, "操作成功", 1);
+        } catch (\Exception $e) {
+            return $this->send(null, "boss系统错误" . $e, 0, 1024);
+        }
     }
 
     /**
@@ -659,7 +674,7 @@ class OrderController extends \restapi\components\Controller
             $orderSearch = new \core\models\order\OrderSearch();
             $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $orderStatus, $channels, $from, $to);
             $orders = $orderSearch->searchWorkerOrdersWithStatus($args, $isAsc, $offset, $limit, $orderStatus, $channels, $from, $to);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $this->send($e, "服务异常", 2);
         }
         $ret = [];
@@ -1721,12 +1736,10 @@ class OrderController extends \restapi\components\Controller
      *
      * @apiParam  {String}  access_token      会话id. 必填
      * @apiParam  {String}  [platform_version]  平台版本号
-     * @apiParam  {String}  order_ip 下单IP地址 必填
      * @apiParam  {integer} order_service_type_id 服务类型 商品id 必填
      * @apiParam  {integer} order_src_id 订单来源id 必填
      * @apiParam  {string}  channel_id 下单渠道 必填
      * @apiParam  {int}     address_id 客户地址id 必填
-     * @apiParam  {int}     customer_id 客户id 必填
      * @apiParam  {string}  order_customer_phone 客户手机号 必填
      * @apiParam  {int}     admin_id 操作人id 0客户 1系统 必填
      * @apiParam  {int}     order_pay_type 支付方式 1现金 2线上 3第三方 必填
@@ -1818,7 +1831,7 @@ class OrderController extends \restapi\components\Controller
                 "channel_id" => $param['channel_id'],
                 "address_id" => $param['address_id'],
                 "customer_id" => $customer->id,
-                "address_order_customer_phoneid" => $param['order_customer_phone'],
+                "order_customer_phone" => $param['order_customer_phone'],
                 "admin_id" => 0,
                 "order_pay_type" => $param['order_pay_type'],
                 "order_is_use_balance" => $param['order_is_use_balance'],

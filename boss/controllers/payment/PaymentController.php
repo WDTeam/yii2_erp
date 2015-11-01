@@ -203,7 +203,7 @@ class PaymentController extends BaseAuthController
         $order_id = 7;
         $order_channel_id = 24;
         $type='order_pay';
-        $data = PaymentCustomerTransRecord::analysisRecord($order_id,$order_channel_id,$type);
+        $data = PaymentCustomerTransRecord::analysisRecord($order_id,$order_channel_id,$type,1);
 
         var_dump($data);
         exit;
