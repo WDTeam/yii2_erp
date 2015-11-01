@@ -819,16 +819,34 @@ class ServiceController extends \restapi\components\Controller
             $district_id = $ShopDistrictInfo['id'];
         }
          //获取周期订单可用阿姨的列表
-        try{
-            $worker_list=CustomerWorker::getCustomerDistrictNearbyWorker($customer_id,$district_id,$page,$per_page);
-        }catch (\Exception $e) {
-            return $this->send($e, "获取周期订单可用阿姨的列表系统错误", 1024, 403,null,alertMsgEnum::bossError);
-        }
-        if(empty($worker_list)){
-            return $this->send(null, "没有可用阿姨",0, 403,null,alertMsgEnum::serverWorkerListFail);
-        }else{
+//        try{
+//            $worker_list=CustomerWorker::getCustomerDistrictNearbyWorker($customer_id,$district_id,$page,$per_page);
+//        }catch (\Exception $e) {
+//            return $this->send($e, "获取周期订单可用阿姨的列表系统错误", 1024, 403,null,alertMsgEnum::bossError);
+//        }
+//        if(empty($worker_list['data'])){
+//            return $this->send(null, "没有可用阿姨",0, 403,null,alertMsgEnum::serverWorkerListFail);
+//        }else{
+            $worker_list=[
+                [
+                    "worker_id"=> 1,
+                    "worker_name"=> "李阿姨",
+                    "worker_phote"=> "1.png",
+                    "service_times"=> "2",
+                    "service_star"=> "5",
+                    "last_time"=> "1445822263"
+                ],
+                [
+                    "worker_id"=> 2,
+                    "worker_name"=> "王阿姨",
+                    "worker_phote"=> "22.png",
+                    "service_times"=> "3",
+                    "service_star"=> "4",
+                    "last_time"=> "1445812263"
+                ]
+            ];
             return $this->send($worker_list, "获取周期服务可用阿姨列表成功",1, 200,null,alertMsgEnum::serverWorkerListSuccess);
-        }
+//        }
     }
    
     

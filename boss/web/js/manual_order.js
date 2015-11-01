@@ -255,7 +255,7 @@ function timer(){
 function showOrder(){
     timer();
     var order = window.order_data;
-    $("#booked_time_range").text(order.booked_time_range);
+    $("#booked_time_range").html(order.booked_time_range);
     $("#order_address").text(order.order.order_address);
     if(order.ext_pay.order_pay_type==1){
         $("#must_pay_info").text('需收取'+order.order.order_money+'元');
