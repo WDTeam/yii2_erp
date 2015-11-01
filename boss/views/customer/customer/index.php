@@ -194,7 +194,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => '余额',
                 'value' => function ($dataProvider) {
                     $customerBalance = Customer::getBalanceById($dataProvider->id);
-                    return $customerBalance == false ? 0 : $customerBalance;
+                    if($customerBalance['errcode'] != 0){
+						return '-';					
+					}else{
+						return $customerBalance['balance'];
+					}
                 },
                 'width' => "80px",
             ],
