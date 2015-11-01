@@ -164,7 +164,7 @@ class OrderSearch extends Order
                 break;
             case 2://2:周期订单
                 $condition = ['order_batch_code'=>$order_id];
-                brea;
+                break;
         }
         $query = new \yii\db\Query();
         $data = $query->from('{{%order}} as order')

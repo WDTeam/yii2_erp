@@ -254,6 +254,28 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
 		return $expirate_at;
 	}
 
+
+	/**************************************coupon customer**************************************/
+	/**
+     * get customer coupon by cate_id
+	 */
+	public static function getAbleCouponByCateId($customer_id, $cate_id){
+		$able_coupons = (new \yii\db\Query())
+			->select(['c.id', 'cc.customer_id', 'c.coupon_name', 'c.coupon_price', 'cc.coupon_code'])
+			->from(['cc'=>'{{%coupon_customer}}'])
+			->leftJoin(['c'=>'{{%coupon}}'], 'c.id = cc.coupon_id')
+			->where(['cc.customer_id'=>$customer_id])
+			->andWhere(['cc.is_used'=>0])
+			->andWhere(['cc.is_del'=>0])
+			->andWhere(['c.is_disabled'=>0])
+			->andWhere(['c.is_del'=>0])
+			->andWhere(['<', 'c.coupon_begin_at', time()])
+			->andWhere(['>', 'c.coupon_end_at', time()])
+			->andWhere(['or', ['and', 'c.coupon_type=1', 'c.coupon_service_type_id='.$cate_id], ['c.coupon_type'=>0]])
+			->all();
+		return $able_coupons;
+	}
+
 	/**
      * add coupon and coupon code
 	 */ 
