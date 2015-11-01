@@ -53,21 +53,18 @@ class ShopSearch extends Shop
             'operation_shop_district_id'=>$this->operation_shop_district_id,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
+        $query
             ->andFilterWhere(['like', 'street', $this->street])
-            ->andFilterWhere(['like', 'principal', $this->principal])
-            ->andFilterWhere(['like', 'tel', $this->tel])
             ->andFilterWhere(['like', 'other_contact', $this->other_contact])
             ->andFilterWhere(['like', 'bankcard_number', $this->bankcard_number])
             ->andFilterWhere(['like', 'account_person', $this->account_person])
             ->andFilterWhere(['like', 'opening_bank', $this->opening_bank])
             ->andFilterWhere(['like', 'sub_branch', $this->sub_branch])
             ->andFilterWhere(['like', 'opening_address', $this->opening_address])
-            ->andFilterWhere(['like', 'level', $this->level]);
-        
-        $query->orFilterWhere(['like', 'principal', $this->name])
-        ->orFilterWhere(['like', 'name', $this->name])
-        ->orFilterWhere(['like', 'tel', $this->name]);
+            ->andFilterWhere(['like', 'level', $this->level])
+            ->orFilterWhere(['like', 'principal', $this->name])
+            ->orFilterWhere(['like', 'name', $this->name])
+            ->orFilterWhere(['like', 'tel', $this->name]);
 
         return $dataProvider;
     }
