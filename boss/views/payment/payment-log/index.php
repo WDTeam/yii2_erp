@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'payment_log_json_aggregation:ntext',
 //            'created_at', 
 //            'updated_at', 
-//            'is_del', 
+
 
             [
                 'class' => 'yii\grid\ActionColumn',

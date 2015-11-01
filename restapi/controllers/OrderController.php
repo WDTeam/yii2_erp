@@ -444,7 +444,7 @@ class OrderController extends \restapi\components\Controller
         if (is_null($isAsc)) {
             $isAsc = true;
         }
-        $limit = 10;
+        $limit = 2;
         if (isset($args['limit'])) {
             $limit = $args['limit'];
         }
@@ -457,16 +457,43 @@ class OrderController extends \restapi\components\Controller
         @$to = $args['to'];
 
         $args["oc.customer_id"] = $user->id;
+
         $args['order_parent_id'] = 0;
-        $orderSearch = new \core\models\order\OrderSearch();
-        $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus);
-        $orders = $orderSearch->searchOrdersWithStatus($args, $isAsc, $offset, $limit, $orderStatus, $channels, $from, $to);
-        $ret = [];
-        $ret['limit'] = $limit;
-        $ret['page_total'] = ceil($count / $limit);
-        $ret['page'] = $page;
-        $ret['orders'] = $orders;
-        $this->send($ret, "操作成功", 1);
+
+        try {
+            $orderSearch = new \core\models\order\OrderSearch();
+            $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus);
+            $orders = $orderSearch->searchOrdersWithStatus($args, $isAsc, $offset, $limit, $orderStatus, $channels, $from, $to);
+
+            #获取周期订单子订单
+            foreach ($orders as $key => $val) {
+
+                if (!empty($val['order_batch_code'])) {
+                    $arry = array('order_batch_code' => $val['order_batch_code'], 'order_parent_id' => null);
+                    $workerOrder[] = $orderSearch->searchOrdersWithStatus($arry, true, $offset, 100, $orderStatus, $channels, $from, $to, 'order.order_booked_begin_time');
+                }
+            }
+
+            #主订单和自订单合并
+            foreach ($orders as $k => $val) {
+                foreach ($workerOrder as $kk => $vv) {
+                    foreach ($vv as $kv => $vk) {
+                        if ($val['order_batch_code'] == $vk['order_batch_code']) {
+                            $orders[$k]['child_orders'][] = $vk;
+                        }
+                    }
+                }
+            }
+            $ret = [];
+            $ret['limit'] = $limit;
+            $ret['page_total'] = ceil($count / $limit);
+            $ret['page'] = $page;
+            $ret['orders'] = $orders;
+
+            $this->send($ret, "操作成功", 1);
+        } catch (\Exception $e) {
+            return $this->send(null, "boss系统错误" . $e, 0, 1024);
+        }
     }
 
     /**
@@ -659,7 +686,7 @@ class OrderController extends \restapi\components\Controller
             $orderSearch = new \core\models\order\OrderSearch();
             $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $orderStatus, $channels, $from, $to);
             $orders = $orderSearch->searchWorkerOrdersWithStatus($args, $isAsc, $offset, $limit, $orderStatus, $channels, $from, $to);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return $this->send($e, "服务异常", 2);
         }
         $ret = [];

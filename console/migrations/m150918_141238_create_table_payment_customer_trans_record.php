@@ -42,7 +42,6 @@ class m150918_141238_create_table_payment_customer_trans_record extends Migratio
             'payment_customer_trans_record_verify'  => Schema::TYPE_STRING . '(32) NOT NULL COMMENT \'验证\'',
             'created_at'  => Schema::TYPE_INTEGER . '(10) unsigned NOT NULL DEFAULT 0 COMMENT \'创建时间\'',
             'updated_at'  => Schema::TYPE_INTEGER . '(10) unsigned NOT NULL DEFAULT 0 COMMENT \'更新时间\'',
-            'is_del'  => Schema::TYPE_BOOLEAN . '(1) unsigned NOT NULL DEFAULT 1 COMMENT \'删除\'',
 
         ], $tableOptions);
 

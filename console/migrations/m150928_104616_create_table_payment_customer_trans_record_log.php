@@ -41,7 +41,6 @@ class m150928_104616_create_table_payment_customer_trans_record_log extends Migr
             'payment_customer_trans_record_verify' => Schema::TYPE_STRING . "(32)  COMMENT '验证'",
             'created_at' => Schema::TYPE_INTEGER . "(10)  COMMENT '创建时间'",
             'updated_at' => Schema::TYPE_INTEGER . "(10)  COMMENT '更新时间'",
-            'is_del' => Schema::TYPE_SMALLINT . "(1) COMMENT '删除'",
         ], $tableOptions);
 
     }

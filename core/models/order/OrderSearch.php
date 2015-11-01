@@ -149,12 +149,23 @@ class OrderSearch extends Order
 
     /**
      * 通过订单ID获取订单链表信息
-     * @param $order_id 订单ID
-     * @param $fields
+     * @param $order_id
+     * @param string $fields
+     * @param int $orderStatus
      * @return array
      */
-    public static function getOrderInfo($order_id, $fields='*')
+    public static function getOrderInfo($order_id, $fields='*',$orderStatus = 1)
     {
+        //判断订单状态
+        switch($orderStatus)
+        {
+            case 1://1:普通订单
+                $condition = ['id'=>$order_id];
+                break;
+            case 2://2:周期订单
+                $condition = ['order_batch_code'=>$order_id];
+                brea;
+        }
         $query = new \yii\db\Query();
         $data = $query->from('{{%order}} as order')
             ->innerJoin('{{%order_ext_status}} as os','order.id = os.order_id')
@@ -163,8 +174,8 @@ class OrderSearch extends Order
             ->innerJoin('{{%order_ext_worker}} as ow','order.id = ow.order_id')
             ->innerJoin('{{%order_ext_pop}} as opp','order.id = opp.order_id')
             ->select($fields)
-            ->where(['id'=>$order_id])
-            ->one();
+            ->where($condition)
+            ->all();
         return $data;
     }
 
@@ -400,12 +411,12 @@ class OrderSearch extends Order
      * @param $attributes
      * @return int|string
      */
-    public function searchOrdersWithStatus($attributes, $is_asc = false, $offset = 0, $limit = 10, $order_status = null,$channels = null, $from = null, $to = null)
+    public function searchOrdersWithStatus($attributes, $is_asc = false, $offset = 0, $limit = 10, $order_status = null,$channels = null, $from = null, $to = null,$created_at='order.created_at')
     {
         $sort = $is_asc ? SORT_ASC : SORT_DESC;
         $params['OrderSearch'] = $attributes;
         $query = $this->searchOrdersWithStatusProvider($params,$order_status,$channels,$from,$to)->query;
-        $query->orderBy(['order.created_at' => $sort]);
+        $query->orderBy([$created_at => $sort]);
         $query->offset($offset)->limit($limit);
         return $query->all();
     }
@@ -415,12 +426,12 @@ class OrderSearch extends Order
      * @param $attributes
      * @return int|string
      */
-    public function searchWorkerOrdersWithStatus($attributes, $is_asc = false, $offset = 1, $limit = 10, $order_status = null,$channels = null, $from = null, $to = null)
+    public function searchWorkerOrdersWithStatus($attributes, $is_asc = false, $offset = 1, $limit = 10, $order_status = null,$channels = null, $from = null, $to = null,$created_at='order.created_at')
     {
         $sort = $is_asc ? SORT_ASC : SORT_DESC;
         $params['OrderSearch'] = $attributes;
         $query = $this->searchWorkerOrdersWithStatusProvider($params,$order_status,$channels,$from,$to)->query;
-        $query->orderBy(['order.created_at' => $sort]);
+        $query->orderBy([$created_at => $sort]);
         $query->offset($offset)->limit($limit);
         return $query->all();
     }
@@ -497,6 +508,11 @@ class OrderSearch extends Order
         if(!isset($attributes["OrderSearch"]["id"])){
             $attributes["OrderSearch"]["id"] = null;
         }
+        
+        if(!isset($attributes["OrderSearch"]["order_batch_code"])){
+            $attributes["OrderSearch"]["order_batch_code"] = null;
+        }
+        
         if ($this->load($attributes) && $this->validate()) {
             $query->andFilterWhere([
                 'id' =>$attributes["OrderSearch"]["id"],
@@ -518,6 +534,7 @@ class OrderSearch extends Order
                 'order_booked_worker_id' => $this->order_booked_worker_id,
                 'checking_id' => $this->checking_id,
                 'order_pop_order_code' => $this->order_pop_order_code,
+                'order_batch_code' => $attributes["OrderSearch"]["order_batch_code"],
                 'oc.customer_id' => $attributes["OrderSearch"]["oc.customer_id"],
             ]);
             $query->andFilterWhere(['like', 'order_service_type_name', $this->order_service_type_name]

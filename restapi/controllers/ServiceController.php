@@ -824,18 +824,10 @@ class ServiceController extends \restapi\components\Controller
         }catch (\Exception $e) {
             return $this->send($e, "获取周期订单可用阿姨的列表系统错误", 1024, 403,null,alertMsgEnum::bossError);
         }
-         $ret = [
-                'worker_id' => 1,
-                'worker_name' => "阿姨姓名",
-                'worker_phote' =>"阿姨头像",
-                'service_times' => '服务次数',
-                'service_star' => '服务星级',
-                'last_time' =>'最后服务时间'
-            ];
-        if(empty($ret)){
+        if(empty($worker_list)){
             return $this->send(null, "没有可用阿姨",0, 403,null,alertMsgEnum::serverWorkerListFail);
         }else{
-            return $this->send($ret, "获取周期服务可用阿姨列表成功",1, 200,null,alertMsgEnum::serverWorkerListSuccess);
+            return $this->send($worker_list, "获取周期服务可用阿姨列表成功",1, 200,null,alertMsgEnum::serverWorkerListSuccess);
         }
     }
    
