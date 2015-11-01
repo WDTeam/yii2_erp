@@ -203,6 +203,7 @@ Array
      */
     public static function createNewBatch($attributes,$booked_list)
     {
+        
         $transact = static::getDb()->beginTransaction();
         //如果指定阿姨则是周期订单分配周期订单号否则分配批量订单号
         $attributes['order_parent_id'] = 0;
