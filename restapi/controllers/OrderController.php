@@ -1747,9 +1747,16 @@ class OrderController extends \restapi\components\Controller
      * @apiParam  {string}  [order_booked_worker_id] 指定阿姨id
      * @apiParam  {string}  [order_customer_need] 客户需求
      * @apiParam  {string}  [order_customer_memo] 客户备注
-     * @apiParam  {int} order_booked_begin_time 预约开始时间 必填
-     * @apiParam   {int} order_booked_end_time 预约结束时间 必填
      * @apiParam   {int} [coupon_id] 优惠券id
+     * 
+     * @apiParam 
+     * order_booked_begin_time   预约开始时间 必填;      预约结束时间 必填 order_booked_end_time 
+     * {
+     * ["order_booked_begin_time":"2015-10-01 10:10","order_booked_end_time":"2015-10-02 10:10"],
+     * ["order_booked_begin_time":"2015-10-03 10:10","order_booked_end_time":"2015-10-04 10:10"],
+     * ["order_booked_begin_time":"2015-10-05 10:10","order_booked_end_time":"2015-10-06 10:10"],
+     * ["order_booked_begin_time":"2015-10-07 10:10","order_booked_end_time":"2015-10-08 10:10"]
+     * }
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -1857,13 +1864,15 @@ class OrderController extends \restapi\components\Controller
             try {
                 $order = new \core\models\order\Order();
                 $createOrder = $order->createNewBatch($attributes, $booked_list);
-                print_r($createOrder);
-
-                #if ($createOrder["errors"]["order_service_type_name"][0])
-                if (!empty($createOrder)) {
-                    return $this->send([1], "添加成功", 1);
+                if ($createOrder['status'] == 1) {
+                    #if ($createOrder["errors"]["order_service_type_name"][0])
+                    if (!empty($createOrder)) {
+                        return $this->send([1], "添加成功", 1);
+                    } else {
+                        return $this->send(null, "添加失败", 0, 403);
+                    }
                 } else {
-                    return $this->send(null, "添加失败", 0, 403);
+                    return $this->send(null, "boss系统错误,添加周期订单失败", 1024);
                 }
             } catch (\Exception $e) {
                 return $this->send(null, "boss系统错误,添加周期订单失败" . $e, 1024);
