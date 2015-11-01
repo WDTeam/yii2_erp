@@ -18,7 +18,7 @@ echo Menu::widget(
         ],
         'items' => [
             [
-                'label' => '家政公司管理1',
+                'label' => '家政公司管理',
                 'url' => ['#'],
                 'icon' => 'fa fa-slideshare',
                 'options' => [
