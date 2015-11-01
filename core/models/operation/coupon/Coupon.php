@@ -274,7 +274,7 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
 	}
 
 
-	/**************************************coupon customer**************************************/
+	/**************************************coupon for order**************************************/
 	/**
      * get customer coupon by cate_id
 	 */
@@ -294,6 +294,48 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
 			->all();
 		return $able_coupons;
 	}
+
+	/**
+     * set custoemr's coupon used after pay by coupon
+	 */
+	public static function useCoupon($coupon_customer_id){
+		$couponCustomer = CouponCustomer::findOne($coupon_customer_id);
+		if($couponCustomer === NULL){
+			return ['response'=>'error', 'errcode'=>1, 'errmsg'=>'优惠券不存在'];
+		}
+		if($couponCustomer->is_used == 1){
+			return ['response'=>'error', 'errcode'=>2, 'errmsg'=>'数据错误'];
+		}
+		$couponCustomer->is_used = 1;
+		$couponCustomer->updated_at = time();
+		if(!$couponCustomer->validate()){
+			return ['response'=>'error', 'errcode'=>3, 'errmsg'=>'使用优惠券失败'];
+		}
+		$couponCustomer->save();
+		return ['response'=>'success', 'errcode'=>0, 'errmsg'=>''];
+	}
+
+	/************************************coupon reverse******************************************/
+	/**
+     * reverse coupon while customer cancel order
+	 */
+	public static function backcoupon($coupon_customer_id){
+		$couponCustomer = CouponCustomer::findOne($coupon_customer_id);
+		if($couponCustomer === NULL){
+			return ['response'=>'error', 'errcode'=>1, 'errmsg'=>'优惠券不存在'];
+		}
+		if($couponCustomer->is_used == 0){
+			return ['response'=>'error', 'errcode'=>2, 'errmsg'=>'数据错误'];
+		}
+		$couponCustomer->is_used = 0;
+		$couponCustomer->updated_at = time();
+		if(!$couponCustomer->validate()){
+			return ['response'=>'error', 'errcode'=>3, 'errmsg'=>'退还优惠券失败'];
+		}
+		$couponCustomer->save();
+		return ['response'=>'success', 'errcode'=>0, 'errmsg'=>''];
+	}
+
 
 	/**********************************coupon other msg*******************************************/
 
