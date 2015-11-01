@@ -383,6 +383,7 @@ class OrderController extends BaseAuthController
 
     public function actionCreateBatch()
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         $attributes = [
             'order_ip'=> Yii::$app->request->userIP,
             'order_service_type_id'=>1,

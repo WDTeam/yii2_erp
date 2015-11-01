@@ -190,7 +190,6 @@ class Order extends OrderModel
         foreach($booked_list as $booked){
             $order = new Order();
             if(!$order->_create($attributes+$booked,$transact)){
-                print_r($order->errors);
                 $transact->rollBack();
                 return ['status'=>false,'errors'=>$order->errors];
             }else{
@@ -640,25 +639,23 @@ class Order extends OrderModel
     public static function getGoods($longitude, $latitude, $goods_id = 0)
     {
         $shop_district_info = OperationShopDistrictCoordinate::getCoordinateShopDistrictInfo($longitude, $latitude);
-        if (!empty($shop_district_info)) {
-            $goods = OperationShopDistrictGoods::getShopDistrictGoodsList($shop_district_info['operation_city_id'], $shop_district_info['operation_shop_district_id']);
-            if (!empty($goods)) {
-                if ($goods_id == 0) {
-                    return ['code' => 200, 'data' => $goods,'district_id'=>$shop_district_info['operation_shop_district_id']];
-                } else {
-                    foreach ($goods as $v) {
-                        if ($v['operation_goods_id'] == $goods_id) {
-                            $v['district_id'] = $shop_district_info['operation_shop_district_id'];
-                            return $v;
-                        }
-                    }
-                    return ['code' => 500, 'msg' => '获取商品信息失败：没有匹配的商品'];
-                }
-            } else {
-                return ['code' => 501, 'msg' => '获取商品信息失败：没有匹配的商品'];
-            }
-        } else {
+        if (empty($shop_district_info)) {
             return ['code' => 502, 'msg' => '获取商品信息失败：没有匹配的商圈'];
+        }else{
+            $goods = OperationShopDistrictGoods::getShopDistrictGoodsList($shop_district_info['operation_city_id'], $shop_district_info['operation_shop_district_id']);
+            if (empty($goods)) {
+                return ['code' => 501, 'msg' => '获取商品信息失败：没有匹配的商品'];
+            }else if ($goods_id == 0) {
+                return ['code' => 200, 'data' => $goods,'district_id'=>$shop_district_info['operation_shop_district_id']];
+            } else {
+                foreach ($goods as $v) {
+                    if ($v['operation_goods_id'] == $goods_id) {
+                        $v['district_id'] = $shop_district_info['operation_shop_district_id'];
+                        return $v;
+                    }
+                }
+                return ['code' => 500, 'msg' => '获取商品信息失败：没有匹配的商品'];
+            }
         }
     }
 

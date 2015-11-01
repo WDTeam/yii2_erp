@@ -32,6 +32,7 @@ class OrderSearch extends Order
     /**
      * 获取支付表的数据,支持单个/多个订单号
      * @param $order_id
+     * @return array
      */
     public static function getOrderExtPayData($order_id)
     {
@@ -53,6 +54,7 @@ class OrderSearch extends Order
      * @param $worker_id 阿姨ID
      * @param $begin_time 开始时间(时间戳)
      * @param $end_time 结束时间(时间戳)
+     * @return array
      */
     public static function getWorkerAndOrderAndCreateTime($worker_id,$begin_time,$end_time)
     {
@@ -75,6 +77,7 @@ class OrderSearch extends Order
      * @param $worker_id 阿姨ID
      * @param $begin_time 开始时间(时间戳)
      * @param $end_time 结束时间(时间戳)
+     * @return array
      */
     public static function getWorkerAndOrderAndDoneTime($worker_id,$begin_time,$end_time,$limit=null,$offset=null)
     {
@@ -114,6 +117,7 @@ class OrderSearch extends Order
      * @param $worker_id 阿姨ID
      * @param $begin_time 开始时间(时间戳)
      * @param $end_time 结束时间(时间戳)
+     * @return array
      */
     public static function getWorkerAndOrderAndCancelTime($worker_id,$begin_time,$end_time,$limit=null,$offset=null)
     {
@@ -146,6 +150,8 @@ class OrderSearch extends Order
     /**
      * 通过订单ID获取订单链表信息
      * @param $order_id 订单ID
+     * @param $fields
+     * @return array
      */
     public static function getOrderInfo($order_id, $fields='*')
     {
@@ -165,6 +171,7 @@ class OrderSearch extends Order
     /**
      * 通过订单ID获取带用户信息的订单
      * @param $order_id 订单ID
+     * @return array
      */
     public static function getOrderAndCustomer($order_id)
     {
@@ -184,6 +191,7 @@ class OrderSearch extends Order
     /**
      * 获取待人工指派的订单
      * 订单状态为系统指派失败的订单
+     * @author lin
      * @param $admin_id 操作人id
      * @param $isCS bool 是否是客服获取
      * @return $this|static
@@ -236,6 +244,7 @@ class OrderSearch extends Order
 
     /**
      * 根据预约开始时间获取多个阿姨当天订单
+     * @author lin
      * @param $worker_ids
      * @param $booked_begin_time
      * @return array|\yii\db\ActiveRecord[]
@@ -249,6 +258,7 @@ class OrderSearch extends Order
 
     /**
      * 根据预约的开始时间获取单个阿姨当天订单
+     * @author lin
      * @param $worker_id
      * @param $booked_begin_time
      * @return array|\yii\db\ActiveRecord[]
@@ -260,6 +270,7 @@ class OrderSearch extends Order
 
     /**
      * 是否存在冲突订单
+     * @author lin
      * @param $worker_id
      * @param $booked_begin_time
      * @param $booked_end_time
@@ -293,6 +304,7 @@ class OrderSearch extends Order
 
     /**
      * 返回推送给阿姨的订单列表
+     * @author lin
      * @param $worker_id
      * @param int $page_size
      * @param int $page
@@ -306,6 +318,7 @@ class OrderSearch extends Order
 
     /**
      * 返回推送给阿姨的订单总数
+     * @author lin
      * @param $worker_id
      * @param bool $is_booked
      * @return mixed
@@ -317,6 +330,7 @@ class OrderSearch extends Order
 
     /**
      * 获取客户订单数量
+     * @author lin
      * @param $customer_id
      * @return int|string
      */
@@ -331,15 +345,55 @@ class OrderSearch extends Order
         return Model::scenarios();
     }
 
+    /**
+     * 获取单个订单
+     * @author lin
+     * @param $id
+     * @return null|static
+     */
     public static function getOne($id)
     {
         return Order::findOne($id);
     }
 
+    /**
+     * 获取批量订单
+     * @author lin
+     * @param $batch_code
+     * @return static[]
+     */
     public static function getBatchOrder($batch_code)
     {
         return Order::findAll(['order_batch_code'=>$batch_code]);
     }
+
+
+    /**
+     * 获取待服务订单列表
+     * @author lin
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function getWaitServiceOrderList()
+    {
+        return Order::find()->select('id','order_booked_begin_time')->joinWith(['orderExtStatus'])->where(['order_status_dict_id'=>[
+            OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE,
+            OrderStatusDict::ORDER_SYS_ASSIGN_DONE,
+            OrderStatusDict::ORDER_WORKER_BIND_ORDER
+        ]])->all();
+    }
+
+    /**
+     * 获取已开始服务订单列表
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function getStartServiceOrderList()
+    {
+        return Order::find()->select('id','order_booked_end_time')->joinWith(['orderExtStatus'])->where(['order_status_dict_id'=>[
+            OrderStatusDict::ORDER_SERVICE_START
+        ]])->all();
+    }
+
+
 
     /**
      * 分页查询带状态订单
