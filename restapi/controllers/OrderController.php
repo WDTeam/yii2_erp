@@ -1839,10 +1839,13 @@ class OrderController extends \restapi\components\Controller
                 "order_customer_need" => $param['order_customer_need'],
                 "order_customer_memo" => $param['order_customer_memo']
             );
+
             $booked_list = array(
-                'order_booked_begin_time' => strtotime($param['order_booked_begin_time']),
-                'order_booked_end_time' => strtotime($param['order_booked_end_time']),
-                'coupon_id' => $param['coupon_id']
+                array(
+                    'order_booked_begin_time' => strtotime($param['order_booked_begin_time']),
+                    'order_booked_end_time' => strtotime($param['order_booked_end_time']),
+                    'coupon_id' => $param['coupon_id']
+                )
             );
             try {
                 $order = new \core\models\order\Order();

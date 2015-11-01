@@ -302,14 +302,14 @@ class Customer extends \dbbase\models\customer\Customer
 	public static function getBalance($phone){
 		$customer = self::find()->where(['customer_phone'=>$phone])->asArray()->one();
 		if(empty($customer)){
-			return json_encode(['response'=>'error', 'errcode'=>'1', 'errmsg'=>'客户不存在']);
+			return ['response'=>'error', 'errcode'=>'1', 'errmsg'=>'客户不存在'];
 		}
 
 		$customer_ext_balance = CustomerExtBalance::find()->where(['customer_phone'=>$phone])->asArray()->one();
 		if(empty($customer_ext_balance)) {
-			return json_encode(['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误']);
+			return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误'];
 		}
-		return json_encode(['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'balance'=>$customer_ext_balance['customer_balance']]);
+		return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'balance'=>$customer_ext_balance['customer_balance']];
 	}
 
 	/**
@@ -318,13 +318,13 @@ class Customer extends \dbbase\models\customer\Customer
     public static function getBalanceById($customer_id){
         $customer = Customer::findOne($customer_id);
         if ($customer == NULL) {
-			return json_encode(['response'=>'error', 'errcode'=>'1', 'errmsg'=>'客户不存在']);
+			return ['response'=>'error', 'errcode'=>'1', 'errmsg'=>'客户不存在'];
 		}
         $customerExtBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
         if ($customerExtBalance == NULL) {
-			return json_encode(['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误']);
+			return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误'];
 		}
-        return json_encode(['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'balance'=>$customerExtBalance['customer_balance']]);
+        return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'balance'=>$customerExtBalance['customer_balance']];
     }
 
     /**
@@ -337,20 +337,20 @@ class Customer extends \dbbase\models\customer\Customer
         // \Yii::$app->response->format = Response::FORMAT_JSON;
         $customer = Customer::findOne($customer_id);
         if ($customer == NULL) {
-			return json_encode(['response'=>'error', 'errcode'=>'1', 'errmsg'=>'客户不存在']);
+			return ['response'=>'error', 'errcode'=>'1', 'errmsg'=>'客户不存在'];
 		}
         $customerExtBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
         if ($customerExtBalance == NULL) {
-			return json_encode(['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误']);
+			return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误'];
 		}
         $balance = $customerExtBalance->customer_balance;
         $customerExtBalance->customer_balance = bcadd($balance, $cash, 2);
         if(!$customerExtBalance->validate()){
-			return json_encode(['response'=>'error', 'errcode'=>'3', 'errmsg'=>'数据验证错误']);
+			return ['response'=>'error', 'errcode'=>'3', 'errmsg'=>'数据验证错误'];
 		}
         
         $customerExtBalance->save();
-        return json_encode(['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'balance'=>$customerExtBalance->customer_balance]);
+        return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'balance'=>$customerExtBalance->customer_balance];
     }
 
     /**
@@ -360,20 +360,20 @@ class Customer extends \dbbase\models\customer\Customer
     {
         $customer = Customer::findOne($customer_id);
         if ($customer == NULL) {
-			return json_encode(['response'=>'error', 'errcode'=>'1', 'errmsg'=>'客户不存在']);
+			return ['response'=>'error', 'errcode'=>'1', 'errmsg'=>'客户不存在'];
 		}
         $customerExtBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
         if ($customerExtBalance == NULL) {
-			return json_encode(['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误']);
+			return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误'];
 		}
         $balance = $customerExtBalance->customer_balance;
         $customerExtBalance->customer_balance = bcsub($balance, $cash, 2);
         if(!$customerExtBalance->validate()){
-			return json_encode(['response'=>'error', 'errcode'=>'3', 'errmsg'=>'数据验证错误']);
+			return ['response'=>'error', 'errcode'=>'3', 'errmsg'=>'数据验证错误'];
 		}
         
         $customerExtBalance->save();
-        return json_encode(['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'balance'=>$customerExtBalance->customer_balance]);
+        return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'balance'=>$customerExtBalance->customer_balance];
     }
 
 	/******************************************score**********************************************/
