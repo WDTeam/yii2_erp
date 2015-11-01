@@ -4,9 +4,7 @@ namespace boss\controllers\payment;
 
 use boss\components\BaseAuthController;
 use boss\models\payment\PaymentCustomerTransRecordSearch;
-
-use core\models\payment\PaymentCustomerTransRecord;
-use core\models\payment\PaymentCustomerTransRecordLog;
+use boss\models\payment\PaymentCustomerTransRecord;
 
 use Yii;
 use yii\web\NotFoundHttpException;
@@ -119,15 +117,15 @@ class PaymentCustomerTransRecordController extends BaseAuthController
      * @param integer $id
      * @return CustomerTransRecord the loaded model
      * @throws NotFoundHttpException if the model cannot be found
-
+     */
     protected function findModel($id)
     {
-        if (($model = CustomerTransRecord::findOne($id)) !== null) {
+        if (($model = PaymentCustomerTransRecord::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-     */
+
 
 }
