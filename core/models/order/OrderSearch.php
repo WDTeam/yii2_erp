@@ -221,7 +221,8 @@ class OrderSearch extends Order
             $order = Order::find()->joinWith(['orderExtStatus', 'orderExtFlag'])->where([
                 'and',
                 ['>', 'order_booked_begin_time', time()], //服务开始时间大于当前时间
-                ['orderExtFlag.order_flag_send' => [0, $flag_send]] //0可指派 1客服指派不了 2小家政指派不了
+                ['orderExtFlag.order_flag_send' => [0, $flag_send]], //0可指派 1客服指派不了 2小家政指派不了
+                ['order_parent_id' => 0]
             ])->andWhere([
                 'or',
                 ['orderExtFlag.order_flag_lock' => 0],
