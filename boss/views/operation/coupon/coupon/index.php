@@ -161,8 +161,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'label' => '服务',
                 'value' => function ($dataProvider) {
-                    $coupon_service_info = Coupon::getserviceInfo($dataProvider->id);
-					switch ($coupon_service_info['coupon_type'])
+                    //$coupon_service_info = Coupon::getserviceInfo($dataProvider->id);
+					//$service_cates = Coupon::getServiceCates();
+					switch ($dataProvider->coupon_type)
 					{
 						case 0:
 							# code...
@@ -170,11 +171,11 @@ $this->params['breadcrumbs'][] = $this->title;
 						break;
 						case 1:
 							# code...
-							return $coupon_service_info['coupon_service_type_name'];
+							return $dataProvider->coupon_service_type_name;
 						break;
 						case 2:
 							# code...
-							return $coupon_service_info['coupon_service_name'];
+							//return $coupon_service_info['coupon_service_name'];
 						break;
 					
 						default:

@@ -166,6 +166,17 @@ class PaymentController extends BaseAuthController
 
     public function actionTest()
     {
+        /**
+         * 调用(调起)在线支付,发送给支付接口的数据
+         * @param integer $payment_type 支付类型,1普通订单,2周期订单,3充值订单
+         * @param integer $customer_id 消费者ID
+         * @param integer $channel_id 渠道ID
+         * @param integer $order_id 订单ID
+         * @param integer $partner 第三方合作号
+         */
+        $data = \core\models\payment\Payment::getPayParams(1,1,24,49);
+        dump($data);
+        exit;
         //充值
         $order_id = 1;
         $order_channel_id = 24;
@@ -200,10 +211,10 @@ class PaymentController extends BaseAuthController
         $order_channel_id = 24;
         $type='order_pay';
         //余额+优惠券
-        $order_id = 7;
+        $order_id = 1212;
         $order_channel_id = 24;
         $type='order_pay';
-        $data = PaymentCustomerTransRecord::analysisRecord($order_id,$order_channel_id,$type,1);
+        $data = PaymentCustomerTransRecord::analysisRecord($order_id,$order_channel_id,$type,2);
 
         var_dump($data);
         exit;

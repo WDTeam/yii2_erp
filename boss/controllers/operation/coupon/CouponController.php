@@ -72,7 +72,8 @@ class CouponController extends Controller
         $model = new Coupon;
         if ($model->load(Yii::$app->request->post())) {
 			
-			
+			//var_dump($_POST);
+			//exit();
 			//coupon basic info
 			
 			//coupon categories
@@ -82,6 +83,8 @@ class CouponController extends Controller
 			//coupon type
 			$service_types = Coupon::getServiceTypes();
 			$model->coupon_type_name = $service_types[$model->coupon_type];
+			//service categories
+			$service_cates = Coupon::getServiceCates();
 			switch ($model->coupon_type)
 			{
 				case 0:
@@ -89,6 +92,13 @@ class CouponController extends Controller
 					$model->coupon_service_id = 0;
 				break;
 				case 1:
+					foreach ($service_cates as $value)
+					{
+						# code...
+						if($value['service_cate_id'] == $model->coupon_service_type_id){
+							$model->coupon_service_type_name = $value['service_cate_name'];
+						}
+					}
 					$model->coupon_service_id = 0;
 				break;
 				case 2:
@@ -271,8 +281,12 @@ class CouponController extends Controller
         }
     }
     public function actionTest(){
-        $customerCoupon = \core\models\operation\coupon\CouponCustomer::listCustomerCoupon('18500041311');
-        var_dump($customerCoupon);
+        //$customerCoupon = \core\models\operation\coupon\CouponCustomer::listCustomerCoupon('18500041311');
+        //var_dump($customerCoupon);
+		//$res = \core\models\operation\coupon\Coupon::getAbleCouponByCateId(1, 1);
+		//var_dump($res);
+		$serviceCates = \core\models\operation\coupon\Coupon::getServiceCates();
+		var_dump($serviceCates);
     }
     /**
      * 优惠码绑定手机号

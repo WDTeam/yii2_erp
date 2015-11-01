@@ -27,7 +27,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $payment_transaction_id
  * @property string $payment_eo_order_id
  * @property string $payment_memo
- * @property integer $payment_is_coupon
+ * @property integer $payment_type
  * @property string $admin_id
  * @property string $payment_admin_name
  * @property string $worker_id
@@ -40,7 +40,6 @@ use yii\behaviors\TimestampBehavior;
  */
 class PaymentCommon extends \yii\db\ActiveRecord
 {
-    public $partner;
     public $pay_type;
 
     public $openid;
@@ -70,7 +69,7 @@ class PaymentCommon extends \yii\db\ActiveRecord
     {
         return [
             [['customer_name','customer_mobile','customer_address','order_source_url','page_url','detail','openid','customer_id', 'payment_source_name','payment_money','payment_source_name'], 'required'],
-            [['customer_id', 'order_id', 'payment_source', 'payment_mode', 'payment_status', 'payment_is_coupon', 'admin_id', 'worker_id', 'handle_admin_id', 'created_at', 'updated_at', 'is_reconciliation'], 'integer'],
+            [['customer_id', 'order_id', 'payment_source', 'payment_mode', 'payment_status', 'payment_type', 'admin_id', 'worker_id', 'handle_admin_id', 'created_at', 'updated_at', 'is_reconciliation'], 'integer'],
             [['payment_money', 'payment_actual_money'], 'number'],
             [['payment_source_name'], 'string', 'max' => 20],
             [['payment_transaction_id'], 'string', 'max' => 40],
@@ -78,11 +77,7 @@ class PaymentCommon extends \yii\db\ActiveRecord
             [['customer_id','order_id'],'match','pattern'=>'%^[1-9]\d*$%'],   //必须为数字，不能是0
             [['payment_memo','show_url','return_url'], 'string', 'max' => 255],
             [['payment_verify'], 'string', 'max' => 32],
-            /**********以下自定义属性**********/
-            [['partner'], 'required'],
-            //支付宝,银联,百度钱包,微信
-            [['partner'], 'in','range'=>['2088801136967007','898111448161364','1500610004','1217983401']],
-
+            [['payment_type'],'in','range'=>[1,2,3]],   //支付类型:1普通订单支付,2周期订单支付,3充值
         ];
     }
 
@@ -99,23 +94,23 @@ class PaymentCommon extends \yii\db\ActiveRecord
     {
         return[
             //支付宝WEB
-            'alipay_web_pay'    =>['payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','return_url','show_url'],
+            //'alipay_web_pay'    =>['payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','return_url','show_url'],
             //支付宝WEB
-            'alipay_web_online_pay'    =>['payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','order_id','return_url','show_url'],
+            'alipay_web_online_pay'    =>['payment_type','payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','order_id','return_url','show_url'],
             //在线充值
-            'pay'       =>['payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode'],
+            //'pay'       =>['payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode'],
             //在线支付
-            'online_pay'=>['payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','order_id'],
+            'online_pay'=>['payment_type','payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','order_id'],
             //微信在线充值
-            'wx_h5_pay' =>['payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','openid'],
+            //'wx_h5_pay' =>['payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','openid'],
             //微信在线支付
-            'wx_h5_online_pay'=>['payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','order_id','openid'],
+            'wx_h5_online_pay'=>['payment_type','payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','order_id','openid'],
             //微信在线充值
-            'zhidahao_h5_pay' =>['payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail'],
+            //'zhidahao_h5_pay' =>['payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail'],
             //微信在线支付
-            'zhidahao_h5_online_pay'=>['payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','order_id','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail'],
+            'zhidahao_h5_online_pay'=>['payment_type','payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','order_id','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail'],
             //在线退款
-            'refund'       =>['customer_id','order_id','payment_money','payment_source','payment_source_name','payment_mode','payment_status','payment_eo_order_id','payment_is_coupon','admin_id','payment_admin_name','payment_verify'],
+            'refund'       =>['payment_type','customer_id','order_id','payment_money','payment_source','payment_source_name','payment_mode','payment_status','payment_eo_order_id','payment_type','admin_id','payment_admin_name','payment_verify'],
         ];
     }
 
@@ -363,7 +358,7 @@ class PaymentCommon extends \yii\db\ActiveRecord
             'payment_transaction_id' => Yii::t('app', '第三方交易流水号'),
             'payment_eo_order_id' => Yii::t('app', '商户ID(第三方交易)'),
             'payment_memo' => Yii::t('app', '备注'),
-            'payment_is_coupon' => Yii::t('app', '是否返券'),
+            'payment_type' => Yii::t('app', '支付类型'),
             'admin_id' => Yii::t('app', '管理员ID'),
             'payment_admin_name' => Yii::t('app', '管理员名称'),
             'worker_id' => Yii::t('app', '销售卡阿姨ID'),

@@ -74,7 +74,6 @@ class PaymentCustomerTransRecordLog extends \yii\db\ActiveRecord
      */
     public function insertLog($param)
     {
-
         //写入文本日志
         $writeLog = array(
             'path' => '/tmp/log/transaction_record/'.date('Y-m-d',time()),
@@ -84,22 +83,22 @@ class PaymentCustomerTransRecordLog extends \yii\db\ActiveRecord
 
         $this->on('writeTextLog',[$this,'writeTextLog'],$writeLog);
         $this->trigger('writeTextLog');
-        $orderChannelInfo = FinanceOrderChannel::get_order_channel_info($param->data['order_channel_id']);
+        //$orderChannelInfo = FinanceOrderChannel::get_order_channel_info($param->data['order_channel_id']);
 
         //支付渠道
-        $param->data['pay_channel_id'] = $orderChannelInfo->pay_channel_id;
+        //$param->data['pay_channel_id'] = $orderChannelInfo->pay_channel_id;
 
         //支付渠道名称
-        $param->data['payment_customer_trans_record_pay_channel'] = FinancePayChannel::getPayChannelByName($orderChannelInfo->pay_channel_id);
+        //$param->data['payment_customer_trans_record_pay_channel'] = FinancePayChannel::getPayChannelByName($orderChannelInfo->pay_channel_id);
 
         //订单渠道名称
-        $param->data['payment_customer_trans_record_order_channel'] = $orderChannelInfo->finance_order_channel_name;
+        //$param->data['payment_customer_trans_record_order_channel'] = $orderChannelInfo->finance_order_channel_name;
 
         //makeSign
-        $param->data['payment_customer_trans_record_verify'] = $this->makeSign();
+        $param->data['payment_customer_trans_record_verify'] = self::sign($param->data);
 
         //交易方式:1消费,2=充值,3=退款,4=补偿
-        $param->data['payment_customer_trans_record_mode_name'] = PaymentCustomerTransRecord::getCustomerTransRecordModeByName($param->data['payment_customer_trans_record_mode']);
+        //$param->data['payment_customer_trans_record_mode_name'] = PaymentCustomerTransRecord::getCustomerTransRecordModeByName($param->data['payment_customer_trans_record_mode']);
 
         //写入数据库日志
         $this->attributes = $param->data;
@@ -125,6 +124,29 @@ class PaymentCustomerTransRecordLog extends \yii\db\ActiveRecord
         file_put_contents($fullFileName,serialize($param->data['data']).'||',FILE_APPEND);
     }
 
+    /**
+     * 签名
+     */
+    public static function sign($data)
+    {
+        ksort($data);
+        //加密字符串
+        $str='1jiajie.com';
+        //排除的字段
+        $notArray = ['id','payment_customer_trans_record_verify','created_at','updated_at'];
+        //加密签名
+        foreach( $data as $name=>$val )
+        {
+            if( !empty($val) && intval($val) > 1 && !in_array($name,$notArray))
+            {
+                $str .= (int)$val;
+            }
+        }
+        //1jiajie.com2476575255601540401000100013402320
+        //1jiajie.com24765752556015401000100013402320
+        //return $str;
+        return md5(md5($str).'1jiajie.com');
+    }
 
     /**
      * 制造签名
