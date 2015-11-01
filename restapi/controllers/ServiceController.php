@@ -583,11 +583,11 @@ class ServiceController extends \restapi\components\Controller
             $district_id = $ShopDistrictInfo['operation_shop_district_id'];
         }
         //获取单次服务排班表
-//        try{
+        try{
             $single_worker_time=Worker::getWorkerTimeLine($district_id,$plan_time,time(),7);
-//        }catch (\Exception $e) {
-//            return $this->send($e, "获取单次服务排班表系统错误", 1024, 403,null,alertMsgEnum::bossError);
-//        }
+        }catch (\Exception $e) {
+            return $this->send($e, "获取单次服务排班表系统错误", 1024, 403,null,alertMsgEnum::bossError);
+        }
         return $this->send($single_worker_time, "获取单次服务排班表成功",null,alertMsgEnum::singleServiceTimeSuccess);
     }
 
@@ -745,11 +745,11 @@ class ServiceController extends \restapi\components\Controller
             $district_id = $ShopDistrictInfo['operation_shop_district_id'];
         }
         //获取周期服务时间表
-//        try{
+        try{
             $recursive_worker_time=Worker::getWorkerCycleTimeLine($district_id,$plan_time,$worker_id);
-//        }catch (\Exception $e) {
-//            return $this->send(null, "获取周期服务时间表系统错误", 1024, 403,null,alertMsgEnum::bossError);
-//        }
+        }catch (\Exception $e) {
+            return $this->send(null, "获取周期服务时间表系统错误", 1024, 403,null,alertMsgEnum::bossError);
+        }
         return $this->send($recursive_worker_time, "获取周期服务时间表成功", 1, 200,null,alertMsgEnum::recursiveServiceTimeSuccess);
     }
     

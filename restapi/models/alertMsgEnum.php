@@ -159,7 +159,7 @@ class alertMsgEnum
     
     //获取用户优惠券列表（包括该城市可用的、还有过期30天内的优惠券）
     //请选择城市
-    const couponsCityNoChoice = '请选择城市';
+    const couponsOverDueNoChoice = '请选择城市';
     //获取优惠券列表成功
     const couponsOverDueSuccess = '获取优惠券列表成功';
     //优惠券列表为空
