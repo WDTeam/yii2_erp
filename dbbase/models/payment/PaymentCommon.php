@@ -68,13 +68,13 @@ class PaymentCommon extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_name','customer_mobile','customer_address','order_source_url','page_url','detail','openid','customer_id', 'payment_source_name','payment_money','payment_source_name'], 'required'],
-            [['customer_id', 'order_id', 'payment_source', 'payment_mode', 'payment_status', 'payment_type', 'admin_id', 'worker_id', 'handle_admin_id', 'created_at', 'updated_at', 'is_reconciliation'], 'integer'],
+            [['order_id','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail','openid','customer_id', 'payment_source_name','payment_money','payment_source_name'], 'required'],
+            [['customer_id', 'payment_source', 'payment_mode', 'payment_status', 'payment_type', 'admin_id', 'worker_id', 'handle_admin_id', 'created_at', 'updated_at', 'is_reconciliation'], 'integer'],
             [['payment_money', 'payment_actual_money'], 'number'],
             [['payment_source_name'], 'string', 'max' => 20],
             [['payment_transaction_id'], 'string', 'max' => 40],
             [['payment_admin_name', 'payment_handle_admin_name'], 'string', 'max' => 30],
-            [['customer_id','order_id'],'match','pattern'=>'%^[1-9]\d*$%'],   //必须为数字，不能是0
+            [['customer_id'],'match','pattern'=>'%^[1-9]\d*$%'],   //必须为数字，不能是0
             [['payment_memo','show_url','return_url'], 'string', 'max' => 255],
             [['payment_verify'], 'string', 'max' => 32],
             [['payment_type'],'in','range'=>[1,2,3]],   //支付类型:1普通订单支付,2周期订单支付,3充值
@@ -226,41 +226,38 @@ class PaymentCommon extends \yii\db\ActiveRecord
     }
 
     /**
-     * 订单支付
-     * @param $attribute 支付或订单详细数据
-     */
-    public static function orderPay($attribute)
-    {
-        //支付订单交易记录
-        PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'order_pay');
-
-        //修改订单状态
-        /**
-         * @param $order_id 订单ID
-         * @param $admin_id 后台管理员ID 系统0 客户1
-         * @param $pay_channel_id  支付渠道ID
-         * @param $order_pay_channel_name   支付渠道名称
-         * @param $order_pay_flow_num   支付流水号
-         */
-        //验证支付金额是否一致
-        if( $attribute['payment_money'] == $attribute['payment_actual_money'] )
-        {
-            Order::isPaymentOnline($attribute['order_id'],0,$attribute['payment_source'],$attribute['payment_source_name'],$attribute['payment_transaction_id']);
-        }
-    }
-
-    /**
      * 充值支付
      * @param $attribute 支付或订单详细数据
      */
-    public static function pay($attribute)
+    public static function payment($attribute)
     {
+        switch($attribute['payment_type'])
+        {
+            case 1:
+                //支付普通订单交易记录
+                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'order_pay',1);
+                //验证支付金额是否一致
+                if( $attribute['payment_money'] == $attribute['payment_actual_money'] )
+                {
+                    Order::isPaymentOnline($attribute['order_id'],0,$attribute['payment_source'],$attribute['payment_source_name'],$attribute['payment_transaction_id']);
+                }
+                break;
+            case 2:
+                //支付周期订单交易记录
+                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'order_pay',2);
+                //验证支付金额是否一致
+                if( $attribute['payment_money'] == $attribute['payment_actual_money'] )
+                {
+                    Order::isBatchPaymentOnline($attribute['order_id'],0,$attribute['payment_source'],$attribute['payment_source_name'],$attribute['payment_transaction_id']);
+                }
+                break;
+            case 3:
+                //支付充值交易记录
+                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'payment');
+                break;
+        }
         //支付充值
         //TODO::后期在交易记录接口调用创建服务卡
-        //Customer::incBalance($attribute['customer_id'],$attribute['payment_actual_money']);
-
-        //充值交易记录
-        PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'payment');
         return true;
     }
 

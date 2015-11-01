@@ -90,6 +90,7 @@ class Payment extends \dbbase\models\payment\Payment
                     'order_pop_order_money'
                 ];
                 $dataArray = OrderSearch::getOrderInfo($order_id,$fields,$payment_type);
+
                 $pay_money = 0;
                 //判断是普通订单还是周期订单
                 if(count($dataArray) > 1)
