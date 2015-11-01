@@ -49,12 +49,14 @@ class Payment extends \dbbase\models\payment\Payment
 
     /**
      * 调用(调起)在线支付,发送给支付接口的数据
-     * @param integer $payment_type 支付类型,1普通订单,2周期订单,3充值订单
-     * @param integer $customer_id 消费者ID
-     * @param integer $channel_id 渠道ID
-     * @param integer $order_id 订单ID
+     * @param $payment_type 支付类型,1普通订单,2周期订单,3充值订单
+     * @param $customer_id  消费者ID
+     * @param $channel_id   渠道ID
+     * @param int $order_id 订单ID
+     * @param array $ext_params 部分渠道扩展参数
+     * @return array
      */
-    public static function getPayParams( $payment_type,$customer_id,$channel_id,$order_id=0,$ext_params=[] )
+    public static function getPayParams( $payment_type,$customer_id,$channel_id,$order_id,$ext_params=[] )
     {
         //实例化模型
         $model = new Payment();

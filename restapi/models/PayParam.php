@@ -8,7 +8,7 @@ class PayParam extends Model
     public $pay_money;
     public $customer_id;
     public $channel_id;
-    public $partner;
+    public $payment_type;
     public $order_id;
     public $openid;
     public $customer_name;
@@ -23,7 +23,7 @@ class PayParam extends Model
     public function rules()
     {
         return [
-            [['pay_money','customer_id','channel_id','partner','order_id','openid','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail'],'required'],
+            [['pay_money','customer_id','channel_id','payment_type','order_id','openid','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail'],'required'],
         ];
     }
 
@@ -40,21 +40,21 @@ class PayParam extends Model
     {
         return[
             //在线充值
-            'pay'       =>              ['pay_money','customer_id','channel_id','partner'],
+            //'pay'       =>              ['customer_id','channel_id','payment_type'],
             //在线支付
-            'online_pay'=>              ['pay_money','customer_id','channel_id','partner','order_id'],
+            'online_pay'=>              ['customer_id','channel_id','payment_type','order_id'],
             //微信在线充值
-            'wx_h5_pay' =>              ['pay_money','customer_id','channel_id','partner','openid'],
+            //'wx_h5_pay' =>              ['customer_id','channel_id','payment_type','openid'],
             //微信在线支付
-            'wx_h5_online_pay'=>        ['pay_money','customer_id','channel_id','partner','order_id','openid'],
+            'wx_h5_online_pay'=>        ['customer_id','channel_id','payment_type','order_id','openid'],
             //微信在线充值
-            'zhidahao_h5_pay' =>        ['pay_money','customer_id','channel_id','partner','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail'],
+            //'zhidahao_h5_pay' =>        ['customer_id','channel_id','payment_type','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail'],
             //微信在线支付
-            'zhidahao_h5_online_pay'=>  ['pay_money','customer_id','channel_id','partner','order_id','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail'],
+            'zhidahao_h5_online_pay'=>  ['customer_id','channel_id','payment_type','order_id','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail'],
             //支付宝WEB
-            'alipay_web_pay'    =>      ['pay_money','customer_id','channel_id','partner','return_url','show_url'],
+            //'alipay_web_pay'    =>      ['customer_id','channel_id','payment_type','return_url','show_url'],
             //支付宝WEB
-            'alipay_web_online_pay' =>  ['pay_money','customer_id','channel_id','partner','order_id','return_url','show_url'],
+            'alipay_web_online_pay' =>  ['customer_id','channel_id','payment_type','order_id','return_url','show_url'],
 
         ];
     }
