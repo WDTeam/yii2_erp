@@ -391,7 +391,7 @@ class OrderSearch extends Order
             OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE,
             OrderStatusDict::ORDER_SYS_ASSIGN_DONE,
             OrderStatusDict::ORDER_WORKER_BIND_ORDER
-        ]])->all()->asArray();
+        ]])->asArray()->all();
     }
 
     /**
@@ -402,7 +402,7 @@ class OrderSearch extends Order
     {
         return Order::find()->select('id','order_booked_end_time')->joinWith(['orderExtStatus'])->where(['order_status_dict_id'=>[
             OrderStatusDict::ORDER_SERVICE_START
-        ]])->all()->asArray();
+        ]])->asArray()->all();
     }
 
 
