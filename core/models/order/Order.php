@@ -532,6 +532,9 @@ class Order extends OrderModel
         if (empty($goods)) {
             $this->addError('order_service_type_name', '创建时获商品信息失败！');
             return false;
+        }elseif($goods['code']>=500){
+            $this->addError('order_service_type_name', $goods['msg']);
+            return false;
         }
         $this->setAttributes([
             'order_unit_money' => $goods['operation_shop_district_goods_price'], //单价
