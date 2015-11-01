@@ -275,13 +275,6 @@ class CouponController extends \restapi\components\Controller
      */
     public function actionCouponsOverDue()
     {
-
-        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-         //检测用户是否登录
-        $checkResult =LoginCustomer::checkCustomerLogin($param);
-        if(!$checkResult['code']){
-            return $this->send(null,$checkResult['msg'], 0, 403,null,alertMsgEnum::customerLoginFailed);
-        } 
         $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
          //检测用户是否登录
         $checkResult =LoginCustomer::checkCustomerLogin($param);
@@ -289,19 +282,19 @@ class CouponController extends \restapi\components\Controller
             return $this->send(null, $checkResult['msg'], 0, 403,null,alertMsgEnum::customerLoginFailed);
         } 
         if ( !isset($param['city_id']) || !$param['city_id']) {
-            return $this->send(null, "请选择城市", 0, 403,null,alertMsgEnum::couponsCityNoChoice);
+            return $this->send(null, "城市id不能为空", 0, 403,null,alertMsgEnum::couponsOverDueNoChoice);
         }
         $city_id = $param['city_id'];
         //获取该用户该城市的优惠券列表
-//        try{
+        try{
             $coupons=CouponCustomer::GetCustomerDueCouponList($checkResult['customer_id'],$city_id);
-//        }catch (\Exception $e) {
-//            return $this->send($e, "获取用户优惠券列表系统错误", 1024, 403,null,alertMsgEnum::bossError);
-//        }
+        }catch (\Exception $e) {
+            return $this->send($e, "获取用户优惠券列表系统错误", 1024, 403,null,alertMsgEnum::bossError);
+        }
         if (!empty($coupons)) {
-            return $this->send($coupons, "获取优惠券列表成功", 1, 200,null,alertMsgEnum::couponsSuccess);
+            return $this->send($coupons, "获取优惠券列表成功", 1, 200,null,alertMsgEnum::couponsOverDueSuccess);
         } else {
-            return $this->send(null, "优惠券列表为空", 0, 403,null,alertMsgEnum::couponsFail);
+            return $this->send(null, "优惠券列表为空", 0, 403,null,alertMsgEnum::couponsOverDueFail);
         }
         
     }

@@ -76,6 +76,7 @@ class CouponSearch extends Coupon
             ->andFilterWhere(['like', 'coupon_time_type_name', $this->coupon_time_type_name])
             ->andFilterWhere(['like', 'coupon_promote_type_name', $this->coupon_promote_type_name])
             ->andFilterWhere(['like', 'system_user_name', $this->system_user_name]);
+
 		
 		if(!empty($this->coupon_code)){
 			$coupon_code_arr = CouponCode::findAll(['like', 'coupon_code', $this->coupon_cdoe]);
