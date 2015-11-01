@@ -783,7 +783,7 @@ class UserController extends \restapi\components\Controller
                  *
                  * @param int $customer 用户id
                  */
-                $userRecord = PaymentCustomerTransRecord::queryRecord($customer->id);
+                $userRecord = PaymentCustomerTransRecord::getCustomerPaymentTransRecord($customer->id);
 
                 $ret["userBalance"] = $userBalance;
                 $ret["userRecord"] = $userRecord;
