@@ -1841,15 +1841,23 @@ class OrderController extends \restapi\components\Controller
             );
 
             $booked_list = array(
-                array(
-                    'order_booked_begin_time' => strtotime($param['order_booked_begin_time']),
-                    'order_booked_end_time' => strtotime($param['order_booked_end_time']),
-                    'coupon_id' => $param['coupon_id']
-                )
+                [
+                    'order_booked_begin_time' => strtotime(date('Y-m-d 11:00')),
+                    'order_booked_end_time' => strtotime(date('Y-m-d 12:30')),
+                ],
+                [
+                    'order_booked_begin_time' => strtotime(date('Y-m-d 11:00') . ' +1days'),
+                    'order_booked_end_time' => strtotime(date('Y-m-d 12:30') . ' +1days'),
+                ],
+                [
+                    'order_booked_begin_time' => strtotime(date('Y-m-d 11:00') . ' +2days'),
+                    'order_booked_end_time' => strtotime(date('Y-m-d 12:30') . ' +2days'),
+                ],
             );
             try {
                 $order = new \core\models\order\Order();
                 $createOrder = $order->createNewBatch($attributes, $booked_list);
+                print_r($createOrder);
 
                 #if ($createOrder["errors"]["order_service_type_name"][0])
                 if (!empty($createOrder)) {
