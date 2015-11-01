@@ -15,6 +15,7 @@ use dbbase\models\ActiveRecord;
  * @property integer $admin_id
  * @property string $order_worker_relation_memo
  * @property string $order_worker_relation_status
+ * @property string $order_worker_relation_status_id
  * @property integer $isdel
  */
 class OrderWorkerRelation extends ActiveRecord
@@ -33,7 +34,7 @@ class OrderWorkerRelation extends ActiveRecord
     public function rules()
     {
         return [
-            [['created_at', 'updated_at', 'order_id', 'worker_id', 'admin_id', 'isdel'], 'integer'],
+            [['created_at', 'updated_at', 'order_id', 'worker_id', 'admin_id','order_worker_relation_status_id', 'isdel'], 'integer'],
             [['order_worker_relation_memo', 'order_worker_relation_status'], 'string', 'max' => 255]
         ];
     }
@@ -51,6 +52,7 @@ class OrderWorkerRelation extends ActiveRecord
             'worker_id' => '阿姨id',
             'admin_id' => '派单员id',
             'order_worker_relation_memo' => '订单阿姨备注',
+            'order_worker_relation_status_id' => '订单阿姨状态id',
             'order_worker_relation_status' => '订单阿姨状态',
             'isdel' => '是否已删除',
         ];

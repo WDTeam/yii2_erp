@@ -20,8 +20,8 @@ class OrderOtherDict extends ActiveRecord
     const TYPE_CANCEL_ORDER_CUSTOMER_CAUSE = 2;
     const TYPE_ORDER_WORKER_RELATION_STATUS = 3;
 
-    const NAME_MANUAL_ASSIGN_NO_RESPONSE = 1;
-    const NAME_MANUAL_ASSIGN_REFUSE = 2;
+    const NAME_WORKER_CONTACT_FAILURE = 1;
+    const NAME_WORKER_REFUSE = 2;
     const NAME_CANCEL_ASSIGN = 3;
     const NAME_IVR_PUSH_SUCCESS = 4;
     const NAME_IVR_PUSH_FAILURE = 5;
@@ -60,5 +60,10 @@ class OrderOtherDict extends ActiveRecord
             'updated_at' => 'Updated At',
             'isdel' => 'Isdel',
         ];
+    }
+
+    public static function getName($id)
+    {
+        return self::findOne($id)->order_other_dict_name;
     }
 }

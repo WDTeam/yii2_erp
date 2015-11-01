@@ -11,7 +11,7 @@ use yii\data\ActiveDataProvider;
 /**
  * CustomerTransRecordSearch represents the model behind the search form about `dbbase\models\CustomerTransRecord`.
  */
-class PaymentCustomerTransRecordSearch extends \core\models\payment\PaymentCustomerTransRecord
+class PaymentCustomerTransRecordSearch extends PaymentCustomerTransRecord
 {
     public function rules()
     {
@@ -34,7 +34,7 @@ class PaymentCustomerTransRecordSearch extends \core\models\payment\PaymentCusto
 
     public function search($params)
     {
-        $query = \core\models\payment\PaymentCustomerTransRecord::find();
+        $query = PaymentCustomerTransRecord::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

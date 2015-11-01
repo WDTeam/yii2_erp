@@ -155,7 +155,7 @@ class PaymentCustomerTransRecordLog extends \yii\db\ActiveRecord
     {
         return [
             [['customer_id', 'order_id', 'order_channel_id', 'payment_customer_trans_record_order_channel', 'pay_channel_id', 'payment_customer_trans_record_pay_channel', 'payment_customer_trans_record_mode', 'payment_customer_trans_record_mode_name', 'created_at', 'updated_at', 'is_del'], 'integer'],
-            [['payment_customer_trans_record_promo_code_money', 'payment_customer_trans_record_coupon_money', 'payment_customer_trans_record_cash', 'payment_customer_trans_record_pre_pay', 'payment_customer_trans_record_online_pay', 'payment_customer_trans_record_online_balance_pay', 'payment_customer_trans_record_service_card_pay', 'payment_customer_trans_record_service_card_current_balance', 'payment_customer_trans_record_service_card_befor_balance', 'payment_customer_trans_record_compensate_money', 'payment_customer_trans_record_refund_money', 'payment_customer_trans_record_order_total_money', 'payment_customer_trans_record_total_money', 'payment_customer_trans_record_current_balance', 'payment_customer_trans_record_befor_balance'], 'number'],
+            [['payment_customer_trans_record_coupon_money', 'payment_customer_trans_record_cash', 'payment_customer_trans_record_pre_pay', 'payment_customer_trans_record_online_pay', 'payment_customer_trans_record_online_balance_pay', 'payment_customer_trans_record_service_card_pay', 'payment_customer_trans_record_service_card_current_balance', 'payment_customer_trans_record_service_card_befor_balance', 'payment_customer_trans_record_compensate_money', 'payment_customer_trans_record_refund_money', 'payment_customer_trans_record_order_total_money', 'payment_customer_trans_record_total_money', 'payment_customer_trans_record_current_balance', 'payment_customer_trans_record_befor_balance'], 'number'],
             [['payment_customer_trans_record_service_card_on'], 'string', 'max' => 30],
             [['payment_customer_trans_record_transaction_id'], 'string', 'max' => 40],
             [['payment_customer_trans_record_remark'], 'string', 'max' => 255],
@@ -178,7 +178,6 @@ class PaymentCustomerTransRecordLog extends \yii\db\ActiveRecord
             'payment_customer_trans_record_pay_channel' => Yii::t('app', '支付渠道名称'),
             'payment_customer_trans_record_mode' => Yii::t('app', '交易方式:1消费,2=充值,3=退款,4=赔偿'),
             'payment_customer_trans_record_mode_name' => Yii::t('app', '交易方式名称'),
-            'payment_customer_trans_record_promo_code_money' => Yii::t('app', '优惠码金额'),
             'payment_customer_trans_record_coupon_money' => Yii::t('app', '优惠券金额'),
             'payment_customer_trans_record_cash' => Yii::t('app', '现金支付'),
             'payment_customer_trans_record_pre_pay' => Yii::t('app', '预付费金额（第三方）'),

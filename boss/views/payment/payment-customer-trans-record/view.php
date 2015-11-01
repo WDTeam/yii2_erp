@@ -38,7 +38,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'payment_customer_trans_record_pay_channel',
             'payment_customer_trans_record_mode',
             'payment_customer_trans_record_mode_name',
-            'payment_customer_trans_record_promo_code_money',
             'payment_customer_trans_record_coupon_money',
             'payment_customer_trans_record_cash',
             'payment_customer_trans_record_pre_pay',
@@ -50,7 +49,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'payment_customer_trans_record_service_card_befor_balance',
             'payment_customer_trans_record_compensate_money',
             'payment_customer_trans_record_refund_money',
-            'payment_customer_trans_record_money',
             'payment_customer_trans_record_order_total_money',
             'payment_customer_trans_record_total_money',
             'payment_customer_trans_record_current_balance',
@@ -60,7 +58,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'payment_customer_trans_record_verify',
             'created_at',
             'updated_at',
-            'is_del',
         ],
         'deleteOptions'=>[
         'url'=>['delete', 'id' => $model->id],

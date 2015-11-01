@@ -18,37 +18,32 @@ use Yii;
 class WorkerStat extends \dbbase\models\worker\WorkerStat
 {
     /**
-     * @inheritdoc
+     * 更新阿姨接单数量
+     * @param int $worker_id
+     * @param int $addNum 添加数量
+     * @return bool
      */
-    public static function tableName()
-    {
-        return '{{%worker_stat}}';
+    public static function updateWorkerStatOrderNum($worker_id,$addNum=1){
+        if(empty($worker_id) || empty($addNum)){
+            return false;
+        }
+        $model = self::findOne($worker_id);
+        $model->worker_stat_order_num = intval($model->worker_stat_order_num)+intval($addNum);
+        return $model->save();
     }
 
     /**
-     * @inheritdoc
+     * 更新阿姨拒单数量
+     * @param int $worker_id
+     * @param int $addNum 添加数量
+     * @return bool
      */
-    public function rules()
-    {
-        return [
-            [['worker_stat_order_num', 'worker_stat_order_refuse', 'worker_stat_order_complaint', 'worker_stat_sale_cards', 'updated_ad'], 'integer'],
-            [['worker_stat_order_money'], 'number']
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'worker_id' => Yii::t('app', '主表阿姨id'),
-            'worker_stat_order_num' => Yii::t('app', '阿姨订单总数'),
-            'worker_stat_order_money' => Yii::t('app', '阿姨订单总金额'),
-            'worker_stat_order_refuse' => Yii::t('app', '阿姨拒绝订单数'),
-            'worker_stat_order_complaint' => Yii::t('app', '阿姨接到投诉数'),
-            'worker_stat_sale_cards' => Yii::t('app', '阿姨销售会员卡数量'),
-            'updated_ad' => Yii::t('app', '最后更新时间'),
-        ];
+    public static function updateWorkerStatRefuseNum($worker_id,$addNum=1){
+        if(empty($worker_id) || empty($addNum)){
+            return false;
+        }
+        $model = self::findOne($worker_id);
+        $model->worker_stat_order_refuse = intval($model->worker_stat_order_refuse)+intval($addNum);
+        return $model->save();
     }
 }
