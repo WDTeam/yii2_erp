@@ -148,6 +148,32 @@ class Order extends OrderModel
         }
         return false;
     }
+    
+    /*
+Array
+(
+    [order_ip] => 127.0.0.1
+    [order_service_type_id] => 11
+    [order_src_id] => 1
+    [channel_id] => 1
+    [address_id] => 1
+    [customer_id] => 3
+    [order_customer_phone] => 13683118946
+    [admin_id] => 0
+    [order_pay_type] => 1
+    [order_is_use_balance] => 1
+    [order_booked_worker_id] => 1
+    [order_customer_need] => 1
+    [order_customer_memo] => 1
+)
+Array
+(
+    [order_booked_begin_time] => 1420855800
+    [order_booked_end_time] => 1420942200
+    [coupon_id] => 1
+)
+
+     *      */
 
     /**
      * 周期订单
@@ -190,8 +216,8 @@ class Order extends OrderModel
         foreach($booked_list as $booked){
             $order = new Order();
             if(!$order->_create($attributes+$booked,$transact)){
-                print_r($order->errors);
                 $transact->rollBack();
+                
                 return ['status'=>false,'errors'=>$order->errors];
             }else{
                 if($attributes['order_parent_id'] ==0 && $attributes['order_is_parent']==1) {
