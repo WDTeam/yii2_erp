@@ -136,10 +136,9 @@ class Order extends OrderModel
         $attributes['order_parent_id'] = 0;
         $attributes['order_is_parent'] = 0;
         if ($this->_create($attributes)) {
-            $order_model = OrderSearch::getOne($this->id);
-            $channel_id = !empty($this->channel_id) ? $this->channel_id : 20;
             //交易记录
-            if (PaymentCustomerTransRecord::analysisRecord($this->id, $channel_id, 'order_pay')) {
+            if (PaymentCustomerTransRecord::analysisRecord($this->id, $this->channel_id, 'order_pay')) {
+                $order_model = OrderSearch::getOne($this->id);
                 $order_model->admin_id = $attributes['admin_id'];
                 OrderStatus::_payment($order_model, ['OrderExtPay']);
             }
@@ -227,6 +226,10 @@ class Order extends OrderModel
             }
         }
         $transact->commit();
+        //交易记录
+        if (PaymentCustomerTransRecord::analysisRecord($attributes['order_batch_code'], $attributes['channel_id'], 'order_pay',2)) {
+            OrderStatus::_batchPayment($attributes['order_batch_code'],$attributes['admin_id']);
+        }
         return ['status' => true, 'batch_code' => $attributes['order_batch_code']];
     }
 
