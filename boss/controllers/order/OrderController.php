@@ -30,9 +30,7 @@ class OrderController extends BaseAuthController
     public function actionTest()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        return OrderSearch::getPushWorkerOrders(19074,20,1,false);
-//        die();
-        return OrderTool::createOrderCode();
+        return Order::serviceStart(1);
     }
     
     public function actionCancelOrder()
@@ -179,6 +177,13 @@ class OrderController extends BaseAuthController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $order = OrderSearch::getWaitManualAssignOrder(Yii::$app->user->id,true);
         if($order){
+            $booked_time_range = date('Y-m-d    H:i-',$order->order_booked_begin_time).date('H:i',$order->order_booked_end_time);
+            if($order->order_is_parent>0){
+               $orders = OrderSearch::getChildOrder($order->id);
+                foreach($orders as $order){
+                    $booked_time_range .= '<br/>'.date('Y-m-d    H:i-',$order->order_booked_begin_time).date('H:i',$order->order_booked_end_time);
+                }
+            }
             return
                 [
                     'order'=>$order,
@@ -187,7 +192,7 @@ class OrderController extends BaseAuthController
                     'ext_customer'=>$order->orderExtCustomer,
                     'ext_flag'=>$order->orderExtFlag,
                     'operation_long_time'=>Order::MANUAL_ASSIGN_lONG_TIME,
-                    'booked_time_range'=>date('Y-m-d    H:i-',$order->order_booked_begin_time).date('H:i',$order->order_booked_end_time),
+                    'booked_time_range'=>$booked_time_range,
                 ];
         }else{
             return false;

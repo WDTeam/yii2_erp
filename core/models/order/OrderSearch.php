@@ -379,6 +379,16 @@ class OrderSearch extends Order
         return Order::findAll(['order_batch_code'=>$batch_code]);
     }
 
+    /**
+     * 获取子订单
+     * @param $order_id
+     * @return static[]
+     */
+    public static function getChildOrder($order_id)
+    {
+        return Order::findAll(['order_parent_id'=>$order_id]);
+    }
+
 
     /**
      * 获取待服务订单列表

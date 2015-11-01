@@ -446,7 +446,9 @@ class Worker extends \dbbase\models\worker\Worker
                     continue;
                 }
                 $time = strtotime("+$i day",$beginTime);
-                $disabledTimesArr[$i] = self::filterDisabledTimeLine($time,$val['schedule'],$val['order'],$disabledTimesArr[$i]);
+                $scheduleInfo = isset($val['schedule'])?$val['schedule']:[];
+                $orderInfo = isset($val['order'])?$val['order']:[];
+                $disabledTimesArr[$i] = self::filterDisabledTimeLine($time,$scheduleInfo,$orderInfo,$disabledTimesArr[$i]);
             }
             if(count($isEmptyDisabledTime)==$timeLineLength){
                 break;

@@ -412,6 +412,7 @@ class Order extends OrderModel
     public static function serviceStart($order_id)
     {
         $order = OrderSearch::getOne($order_id);
+        $order->admin_id = 1;
         return OrderStatus::_serviceStart($order);
     }
 
@@ -423,39 +424,46 @@ class Order extends OrderModel
     public static function serviceDone($order_id)
     {
         $order = OrderSearch::getOne($order_id);
+        $order->admin_id = 1;
         return OrderStatus::_serviceDone($order);
     }
 
     /**
      * 评价接口
      * @param $order_id
+     * @param $admin_id
      * @return bool
      */
-    public static function customerAcceptDone($order_id)
+    public static function customerAcceptDone($order_id,$admin_id=0)
     {
         $order = OrderSearch::getOne($order_id);
+        $order->admin_id = $admin_id;
         return OrderStatus::_customerAcceptDone($order);
     }
 
     /**
      * 订单已对账
      * @param $order_id
+     * @param $admin_id
      * @return bool
      */
-    public static function checked($order_id)
+    public static function checked($order_id,$admin_id)
     {
         $order = OrderSearch::getOne($order_id);
+        $order->admin_id = $admin_id;
         return OrderStatus::_checked($order);
     }
 
     /**
      * 订单完成结算
      * @param $order_id
+     * @param $admin_id
      * @return bool
      */
-    public static function payoffDone($order_id)
+    public static function payoffDone($order_id,$admin_id)
     {
         $order = OrderSearch::getOne($order_id);
+        $order->admin_id = $admin_id;
         return OrderStatus::_payoffDone($order);
     }
 
