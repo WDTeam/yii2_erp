@@ -92,17 +92,7 @@ class CouponCustomer extends \dbbase\models\operation\coupon\CouponCustomer
         $couponCustomer=(new \yii\db\Query())->select('*')->from('ejj_coupon')
                 ->leftJoin('ejj_coupon_customer', 'ejj_coupon_customer.coupon_id = ejj_coupon.id')
                 ->where(['and',"ejj_coupon.coupon_end_at>$last_month",'ejj_coupon_customer.is_del=0','ejj_coupon_customer.is_used=0',"ejj_coupon_customer.customer_id=$customer_id", ['or', ['and','ejj_coupon.coupon_city_limit=1',"ejj_coupon.coupon_city_id=$city_id"], 'ejj_coupon.coupon_city_limit=0']] )
-                ->orderBy(['ejj_coupon.coupon_end_at'=>SORT_ASC,'ejj_coupon_customer.coupon_price'=>SORT_DESC])->all();
-        
-//        foreach($couponCustomer as $key=>$coupon){
-//
-//            $now_time= date("Y-m-d",time());
-//            if($coupon['coupon_end_at']>$now_time){
-//                $couponCustomer[$key]['isOverdue']=false;
-//            }else{
-//                $couponCustomer[$key]['isOverdue']=true;
-//            }
-//        }
+                ->orderBy(['ejj_coupon.coupon_end_at'=>SORT_ASC,'ejj_coupon_customer.coupon_price'=>SORT_DESC])->all();      
         return $couponCustomer;
    }
     /**
@@ -112,7 +102,7 @@ class CouponCustomer extends \dbbase\models\operation\coupon\CouponCustomer
        $couponCustomer=(new \yii\db\Query())->select('*')->from('ejj_coupon')
                ->leftJoin('ejj_coupon_customer', 'ejj_coupon_customer.coupon_id = ejj_coupon.id')
                ->where(['and','ejj_coupon_customer.is_del=0',"ejj_coupon_customer.customer_id=$customer_id"] )
-               ->orderBy(['ejj_coupon_customer.expirate_at'=>SORT_ASC,'ejj_coupon_customer.coupon_price'=>SORT_DESC])->all();   
+               ->orderBy(['ejj_coupon.coupon_end_at'=>SORT_ASC,'ejj_coupon_customer.coupon_price'=>SORT_DESC])->all();   
         return $couponCustomer;
    }
        
