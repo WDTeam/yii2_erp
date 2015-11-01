@@ -64,7 +64,7 @@ class ShopSearch extends Shop
             ->andFilterWhere(['like', 'level', $this->level])
             ->orFilterWhere(['like', 'principal', $this->name])
             ->orFilterWhere(['like', 'name', $this->name])
-            ->orFilterWhere(['like', 'tel', $this->name]);
+            ->orFilterWhere(['like', 'tel', $this->name]); 
 
         return $dataProvider;
     }
