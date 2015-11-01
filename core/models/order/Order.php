@@ -554,6 +554,8 @@ class Order extends OrderModel
         } elseif ($goods['code'] >= 500) {
             $this->addError('order_service_type_name', $goods['msg']);
             return false;
+        }else{
+            $goods = $goods['data'];
         }
         $this->setAttributes([
             'order_unit_money' => $goods['operation_shop_district_goods_price'], //单价
@@ -673,7 +675,7 @@ class Order extends OrderModel
                 foreach ($goods as $v) {
                     if ($v['operation_goods_id'] == $goods_id) {
                         $v['district_id'] = $shop_district_info['operation_shop_district_id'];
-                        return $v;
+                        return [ 'code'=> 200,'data'=> $v ];
                     }
                 }
                 return ['code' => 500, 'msg' => '获取商品信息失败：没有匹配的商品'];

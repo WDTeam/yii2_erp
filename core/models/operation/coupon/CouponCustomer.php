@@ -84,6 +84,28 @@ class CouponCustomer extends \dbbase\models\operation\coupon\CouponCustomer
         return $couponCustomer;
    }
     /**
+     * 获取用户优惠券列表（列表包括下单所在城市的和所有城市都通用的券和过期三十天内的）
+     */
+    public static function GetCustomerDueCouponList($customer_id,$city_id){
+        $now_time= date("Y-m-d",time());
+        $last_month = strtotime("$now_time -30 days");
+        $couponCustomer=(new \yii\db\Query())->select('*')->from('ejj_coupon')
+                ->leftJoin('ejj_coupon_customer', 'ejj_coupon_customer.coupon_id = ejj_coupon.id')
+                ->where(['and',"ejj_coupon.coupon_end_at>$last_month",'ejj_coupon_customer.is_del=0','ejj_coupon_customer.is_used=0',"ejj_coupon_customer.customer_id=$customer_id", ['or', ['and','ejj_coupon.coupon_city_limit=1',"ejj_coupon.coupon_city_id=$city_id"], 'ejj_coupon.coupon_city_limit=0']] )
+                ->orderBy(['ejj_coupon.coupon_end_at'=>SORT_ASC,'ejj_coupon_customer.coupon_price'=>SORT_DESC])->all();
+        
+//        foreach($couponCustomer as $key=>$coupon){
+//
+//            $now_time= date("Y-m-d",time());
+//            if($coupon['coupon_end_at']>$now_time){
+//                $couponCustomer[$key]['isOverdue']=false;
+//            }else{
+//                $couponCustomer[$key]['isOverdue']=true;
+//            }
+//        }
+        return $couponCustomer;
+   }
+    /**
      * 获取用户全部优惠券列表（包括可用的、不可用的、所有城市的、通用的）
      */
     public static function GetAllCustomerCouponList($customer_id){
