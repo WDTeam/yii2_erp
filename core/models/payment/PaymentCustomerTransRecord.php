@@ -182,9 +182,14 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         }
         elseif( $transRecord['payment_customer_trans_record_online_balance_pay'] > 0 )
         {
-            //余额支付 + 优惠券
-            $transRecord['scenario'] = 8;
-            $status = $obj->onlineBalancePay($transRecord);
+            //如果order_pay_money == 0 直接返回false,去线上支付
+            if( $data['order_pay_money'] != 0 && $data['order_pay_money'] > 0){
+                $status = false;
+            }else{
+                //余额支付 + 优惠券
+                $transRecord['scenario'] = 8;
+                $status = $obj->onlineBalancePay($transRecord);
+            }
         }
         elseif( $transRecord['payment_customer_trans_record_pre_pay'] > 0 )
         {
