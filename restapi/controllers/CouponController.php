@@ -60,7 +60,7 @@ class CouponController extends \restapi\components\Controller
     public function actionExchangeCoupon()
     {
         $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
-        if (!isset($param['coupon_code']) || !intval($param['coupon_code'])||!isset($param['customer_phone']) || !intval($param['customer_phone'])) {
+        if (!isset($param['coupon_code']) || !$param['coupon_code']||!isset($param['customer_phone']) || !$param['customer_phone']) {
             return $this->send(null, "优惠码或手机号不能为空", 0, 403,null,alertMsgEnum::exchangeCouponDataDefect);
         }
         $coupon_code = $param['coupon_code'];
@@ -72,7 +72,16 @@ class CouponController extends \restapi\components\Controller
             return $this->send($e, "验证优惠码是否存在可用系统错误", 1024, 403,null,alertMsgEnum::bossError);
         }
         if (!$exist_coupon) {
-            return $this->send(null, "优惠券不存在", 0, 403,null,alertMsgEnum::exchangeCouponNotExist);
+            return $this->send(null, "优惠码不存在", 0, 403,null,alertMsgEnum::exchangeCouponFail);
+        }
+        //验证优惠码是否已经绑定用户
+        try{
+            $coupon_is_used=CouponCustomer::checkCouponIsUsed($coupon_code);
+        }catch (\Exception $e) {
+            return $this->send($e, "验证优惠码是否已经绑定用户系统错误", 1024, 403,null,alertMsgEnum::bossError);
+        }
+        if ($coupon_is_used) {
+            return $this->send(null, "优惠券已经绑定用户", 0, 403,null,alertMsgEnum::exchangeCouponFail);
         }
         //兑换优惠码
         try{

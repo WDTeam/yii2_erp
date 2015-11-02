@@ -114,8 +114,13 @@ class CouponCode extends \dbbase\models\operation\coupon\CouponCode
         //check customer exists
    
         $customer = Customer::find()->where(['customer_phone'=>$phone])->one();
-        //如果用户不存在就创建用户
+        //如果用户不存在就创建用户(逻辑未定先返回false)
         if($customer == NULL){
+            return false;
+        }
+        //检查优惠码是否已经被兑换
+        $couponCustomer=CouponCustomer::find()->where(['coupon_code'=>$code])->one();
+        if(!empty($couponCustomer)){
             return false;
         }
        // $code_able = self::checkCouponCode($code);
