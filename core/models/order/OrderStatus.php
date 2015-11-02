@@ -120,12 +120,13 @@ class OrderStatus extends Order
      * 完成智能指派
      * @param $order
      * @param $must_models
+     * @param $transact
      * @return bool
      */
-    protected static function _sysAssignDone(&$order,$must_models=[])
+    protected static function _sysAssignDone(&$order,$must_models=[],$transact=null)
     {
         $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_SYS_ASSIGN_DONE);
-        return self::_statusChange($order,$status,$must_models);
+        return self::_statusChange($order,$status,$must_models,$transact);
     }
 
     /**
@@ -156,12 +157,13 @@ class OrderStatus extends Order
      * 完成人工指派
      * @param $order
      * @param $must_models
+     * @param $transact
      * @return bool
      */
-    protected static function _manualAssignDone(&$order,$must_models=[])
+    protected static function _manualAssignDone(&$order,$must_models=[],$transact=null)
     {
         $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE);
-        return self::_statusChange($order,$status,$must_models);
+        return self::_statusChange($order,$status,$must_models,$transact);
     }
 
     /**
@@ -180,12 +182,13 @@ class OrderStatus extends Order
      * 阿姨自助接单
      * @param $order
      * @param $must_models
+     * @param $transact
      * @return bool
      */
-    protected static function _workerBindOrder(&$order,$must_models=[])
+    protected static function _workerBindOrder(&$order,$must_models=[],$transact=null)
     {
         $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_WORKER_BIND_ORDER);
-        return self::_statusChange($order,$status,$must_models);
+        return self::_statusChange($order,$status,$must_models,$transact);
     }
 
     /**
