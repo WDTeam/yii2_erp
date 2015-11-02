@@ -135,7 +135,7 @@ class OperationServiceCardSellRecord extends \dbbase\models\operation\OperationS
      * @instruction 根据ID获取购卡销售记录
      * @param $id
      */
-    public function getServiceCardSellRecordById($id){
+    public static function getServiceCardSellRecordById($id){
         return self::findOne(['id'=>$id]);
     }
 
