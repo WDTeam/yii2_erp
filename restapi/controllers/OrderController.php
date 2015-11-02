@@ -788,9 +788,7 @@ class OrderController extends \restapi\components\Controller
         $limit = 10;
         if (isset($args['limit'])) {
             $limit = $args['limit'];
-            if($limit<=0){
-                $limit == 1;
-            }
+
         }
         $page = 1;
         if (isset($args['page'])) {
@@ -804,6 +802,9 @@ class OrderController extends \restapi\components\Controller
         $arr[] = OrderStatusDict::ORDER_SYS_ASSIGN_DONE;
         $arr[] = OrderStatusDict::ORDER_WORKER_BIND_ORDER;
         $args["owr.worker_id"] = $worker->id;
+        if($limit<=0){
+            $limit == 1;
+        }
         try {
             $orderSearch = new \core\models\order\OrderSearch();
             $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $arr, null, $from, $to);
@@ -811,6 +812,7 @@ class OrderController extends \restapi\components\Controller
         } catch (Exception $e) {
             return $this->send($e, "服务异常", 2);
         }
+
         $ret = [];
         $ret['limit'] = $limit;
         $ret['page_total'] = $count / $limit + 1;
