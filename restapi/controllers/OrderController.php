@@ -1886,7 +1886,7 @@ class OrderController extends \restapi\components\Controller
      * @apiDescription 阿姨抢单提交
      *
      * @apiParam {String} access_token      会话id.
-     * @apiParam {String} platform_version  平台版本号
+     * @apiParam {String} [platform_version]  平台版本号
      * @apiParam {String} order_id          订单号
      *
      * @apiSuccessExample {json} Success-Response:
