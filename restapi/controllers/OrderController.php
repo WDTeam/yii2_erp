@@ -1759,10 +1759,10 @@ class OrderController extends \restapi\components\Controller
      * 
      * @apiParam  {Object[]}order_booked_time
      * [
-     * {"order_booked_begin_time":"2015-10-01 10:10","order_booked_end_time":"2015-10-02 10:10"},
-     * {"order_booked_begin_time":"2015-10-03 10:10","order_booked_end_time":"2015-10-04 10:10"},
-     * {"order_booked_begin_time":"2015-10-05 10:10","order_booked_end_time":"2015-10-06 10:10"},
-     * {"order_booked_begin_time":"2015-10-07 10:10","order_booked_end_time":"2015-10-08 10:10"}
+     * {"order_booked_begin_time":"2015-10-01 10:10","order_booked_end_time":"2015-10-02 10:10","coupon_id":"1"},
+     * {"order_booked_begin_time":"2015-10-03 10:10","order_booked_end_time":"2015-10-04 10:10","coupon_id":"2"},
+     * {"order_booked_begin_time":"2015-10-05 10:10","order_booked_end_time":"2015-10-06 10:10","coupon_id":"3"},
+     * {"order_booked_begin_time":"2015-10-07 10:10","order_booked_end_time":"2015-10-08 10:10","coupon_id":"4"}
      * ]
      *
      * @apiSuccessExample {json} Success-Response:
