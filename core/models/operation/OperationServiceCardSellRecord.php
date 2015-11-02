@@ -148,9 +148,8 @@ class OperationServiceCardSellRecord extends \dbbase\models\operation\OperationS
         $this->isdel = 1;
         return $this->save();
     }
-
     /**
-     * @introduction
+     * @introduction基于购卡订单号，查询销售记录
      * @author zhangrenzhao
      * @date 2015-11-2
      * @param $service_card_sell_record_code
@@ -163,4 +162,5 @@ class OperationServiceCardSellRecord extends \dbbase\models\operation\OperationS
                 'is_del'=>0])->scalar();
         return $service_card_sell_record;
     }
+
 }
