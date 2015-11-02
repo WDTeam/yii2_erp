@@ -78,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'language'=>'zh-CN'
                 ]);?>
                 <?= $form->field($model, 'order_booked_count')->inline()->radioList($model->orderBookedCountList)->label('服务时长'); ?>
-                <?= $form->field($model, 'orderBookedTimeRange')->inline()->radioList($model->orderBookedTimeRangeList)->label('服务时间');?>
+                <?= $form->field($model, 'orderBookedTimeRange')->inline()->radioList([])->label('服务时间');?>
             </div>
             <div class="panel-heading">
                 <h3 class="panel-title">支付信息</h3>
