@@ -31,18 +31,6 @@ $this->params['review_section'] = $searchModel->review_section;
 $isFinacePayedConfirm = ($searchModel->finance_settle_apply_status == FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_FINANCE_PASSED);
 $this->params['isFinacePayedConfirm'] = $isFinacePayedConfirm;
 ?>
-<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.js"></script>
-<script src="//cdn.bootcss.com/angular-strap/2.3.3/modules/popover.js"></script>
-<script src="//cdn.bootcss.com/angular-strap/2.3.3/modules/tooltip.js"></script>
-<style type="text/css">
-    .popover {
-        height:50px;
-        max-width:2000px;
-    }
-    .btn {width: 120px;margin-bottom: 3px; float: right;}
-</style>
-<form id ="financeSettleApplyForm">
-   
 <div class="finance-settle-apply-index">
     <div class="panel panel-info">
         <div class="panel-heading">
@@ -151,12 +139,6 @@ JS;
          ?>
      </div>
 </div>
-<script>
-$(function () {
-    $('[data-toggle="popover"]').popover();
-});
-</script>
-</form>
 <?php echo Modal::widget([
             'header' => '<h4 class="modal-title">请输入审核不通过原因</h4>',
             'id'=>'reasonModal',
