@@ -2,9 +2,12 @@
 namespace console\controllers;
 
 use core\models\order\Order;
+use core\models\order\OrderSearch;
+use core\models\customer\CustomerComment;
+
 use Yii;
 use yii\console\Controller;
-use core\models\order\OrderSearch;
+
 
 class OrderController extends Controller{
     public function actionUnlock(){
@@ -48,6 +51,21 @@ class OrderController extends Controller{
         }
     }
     /**
+     * 评价订单
+     * @param unknown $order
+     */
+    private function suggest($order)
+    {
+        var_dump($order);exit;
+        try{
+            CustomerComment::autoaddUserSuggest([
+//                 $order
+            ]);
+        }catch(\Exception $e){
+            echo 'Order ID:'.$order['id'].' suggest error!'.PHP_EOL;
+        }
+    }
+    /**
      * 定时处理服务状态
      * 5分钟一次 
      * use: *\/5 * * * * yii order/change-service-status
@@ -64,6 +82,12 @@ class OrderController extends Controller{
         echo 'Service Total:'.count($service_list).PHP_EOL;
         foreach ($service_list as $order){
             $this->serviceDone($order);
+        }
+        
+        //订单评论
+        $orders = OrderSearch::getWaitSysCommentOrderList();
+        foreach ($orders as $order){
+           $this->suggest($order);
         }
     }
 }

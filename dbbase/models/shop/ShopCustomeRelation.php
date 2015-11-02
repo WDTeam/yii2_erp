@@ -42,10 +42,10 @@ class ShopCustomeRelation extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('core', '主键'),
-            'system_user_id' => Yii::t('core', '用户id'),
-            'baseid' => Yii::t('core', '父级id'),
-            'shopid' => Yii::t('core', '门店id'),
-            'shop_manager_id' => Yii::t('core', '家政公司ID'),
+            'system_user_id' => Yii::t('core', '用户'),
+            'baseid' => Yii::t('core', '父级'),
+            'shopid' => Yii::t('core', '门店'),
+            'shop_manager_id' => Yii::t('core', '家政公司'),
             'stype' => Yii::t('core', '1 家政公司 2 门店'),
             'is_del' => Yii::t('core', '0 正常  1删除'),
         ];

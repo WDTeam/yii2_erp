@@ -20,7 +20,8 @@ use kartik\grid\GridView;
     ]); ?>
     
     <div class='col-md-3'>
-    <?php echo  $form->field($model, 'finance_settle_apply_starttime')->widget(DateControl::classname(),[
+    <?php 
+    echo  $form->field($model, 'settle_apply_create_start_time')->widget(DateControl::classname(),[
         'type' => DateControl::FORMAT_DATE,
         'ajaxConversion'=>false,
         'displayFormat' => 'php:Y-m-d',
@@ -35,7 +36,7 @@ use kartik\grid\GridView;
     ?>
   </div>  
     <div class='col-md-3'>
-    <?php echo  $form->field($model, 'finance_settle_apply_endtime')->widget(DateControl::classname(),[
+    <?php echo  $form->field($model, 'settle_apply_create_end_time')->widget(DateControl::classname(),[
         'type' => DateControl::FORMAT_DATE,
         'ajaxConversion'=>false,
         'displayFormat' => 'php:Y-m-d',
@@ -49,7 +50,13 @@ use kartik\grid\GridView;
     
     ?>
   </div> 
-    
+    <div class='col-md-2'>
+        <?= $form->field($model, 'worker_tel') ?>
+    </div>
+    <div class='col-md-2' style="margin-top: 22px;">
+        <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
+        <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
+    </div>
     <?php ActiveForm::end(); ?>
 
 </div>

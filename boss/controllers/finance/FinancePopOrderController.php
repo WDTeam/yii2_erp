@@ -29,7 +29,7 @@ use core\models\payment\GeneralPaySearch;
 use dbbase\models\finance\FinanceRecordLog;
 use crazyfd\qiniu\Qiniu;
 use dbbase\models\finance\FinancePayChannel;
-
+use core\models\order\Order;
 
 /**
  * FinancePopOrderController implements the CRUD actions for FinancePopOrder model.
@@ -412,9 +412,18 @@ class FinancePopOrderController extends Controller
     	$requestModel = Yii::$app->request->post();
 		//$idArr = implode(',',);
     	if(!empty($requestModel) && array_key_exists('ids',$requestModel)){
-
+		//checked($order_id)
+		
+    		
 		foreach ($requestModel['ids'] as $iddate){
 			$model=$searchModel::findOne($iddate);
+			if(isset($model->order_code)){
+			//如果有		
+			if(strlen($model->order_code)==15){
+			//判断是充值还是下单
+			Order::checked($model->order_code);	
+			}		
+			}
 			$model->finance_pop_order_finance_time=time();
 			$model->finance_pop_order_pay_status='1';
 			$model->save();
@@ -585,8 +594,17 @@ class FinancePopOrderController extends Controller
     		$model->finance_pop_order_finance_time=time();
     		$model->finance_pop_order_msg=$post['FinancePopOrder']['finance_pop_order_msg'];
     	}
-    	
     	$model->save();
+    	
+    	//告诉订单方财务标记
+    	if(isset($model->order_code)){
+    		//如果有
+    		if(strlen($model->order_code)==15){
+    			Order::checked($model->order_code);
+    		}
+    	}
+    	
+    	
     	return $this->redirect(['index', 'id' =>$requestModel['oid']]);
     	}else{
     		
