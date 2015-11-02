@@ -39,13 +39,13 @@ use boss\components\AreaCascade;
                     ]
                     
                 ],
-                'account'=>[
-                    'type'=> Form::INPUT_TEXT,
-                ],
-                'password'=>[
-                    'label'=>'密码',
-                    'type'=> Form::INPUT_PASSWORD,
-                ],
+//                 'account'=>[
+//                     'type'=> Form::INPUT_TEXT,
+//                 ],
+//                 'password'=>[
+//                     'label'=>'密码',
+//                     'type'=> Form::INPUT_PASSWORD,
+//                 ],
                 
             ]
         ]);?>

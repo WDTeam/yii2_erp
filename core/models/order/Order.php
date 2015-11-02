@@ -374,11 +374,12 @@ class Order extends OrderModel
     public static function assignDone($order_id, $worker, $admin_id, $assign_type)
     {
         $result = false;
+        $order_count = 1;
         $order = OrderSearch::getOne($order_id);
         $conflict = OrderSearch::WorkerOrderExistsConflict($worker['id'], $order->order_booked_begin_time, $order->order_booked_end_time);
         if($order->order_is_parent==1){
-            $orders = OrderSearch::getChildOrder($order_id);
-            foreach($orders as $child){
+            $child_list = OrderSearch::getChildOrder($order_id);
+            foreach($child_list as $child){
                 $conflict += OrderSearch::WorkerOrderExistsConflict($worker['id'], $child->order_booked_begin_time, $child->order_booked_end_time);
             }
         }
@@ -389,30 +390,53 @@ class Order extends OrderModel
         } elseif ($order->orderExtWorker->worker_id > 0) {
             $order->addError('id', '订单已经指派阿姨！');
         } else {
-            $order->order_flag_lock = 0;
-            $order->worker_id = $worker['id'];
-            $order->worker_type_id = $worker['worker_type'];
-            $order->order_worker_phone = $worker['worker_phone'];
-            $order->order_worker_name = $worker['worker_name'];
-            $order->order_worker_type_name = $worker['worker_type_description'];
-            $order->shop_id = $worker["shop_id"];
-            $order->order_worker_shop_name = $worker["shop_name"];
-            $order->order_worker_assign_type = $assign_type; //接单方式
-            $order->admin_id = $admin_id;
-            if ($admin_id > 1) { //大于1属于人工操作
-                $result = OrderStatus::_manualAssignDone($order, ['OrderExtFlag', 'OrderExtWorker']);
-            } elseif ($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //当前状态如果是开始智能派单 就到智能派单成功 否则 到阿姨自助接单
-                $result = OrderStatus::_sysAssignDone($order, ['OrderExtFlag', 'OrderExtWorker']);
-            } else {
-                $result = OrderStatus::_workerBindOrder($order, ['OrderExtFlag', 'OrderExtWorker']);
+            $transact = static::getDb()->beginTransaction();
+            $result = self::_assignDone($order, $worker, $admin_id, $assign_type,$transact);
+            if($result && $order->order_is_parent==1) {
+                foreach ($child_list as $child) {
+                    $order_count++;
+                    $result = self::_assignDone($child, $worker, $admin_id, $assign_type, $transact);
+                }
             }
-            if ($result) {
+            if($result) {
+                $transact->commit();
                 OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
                 //更新阿姨接单数量
-                WorkerStat::updateWorkerStatOrderNum($worker['id'], 1);
+                WorkerStat::updateWorkerStatOrderNum($worker['id'], $order_count);
             }
         }
         return ['status' => $result, 'errors' => $order->errors];
+    }
+
+    /**
+     * 内部方法供指派成功调用
+     * @param $order
+     * @param $worker
+     * @param $admin_id
+     * @param $assign_type
+     * @param $transact
+     * @return bool
+     */
+    private static function _assignDone(&$order, $worker, $admin_id, $assign_type,$transact)
+    {
+        $order->order_flag_lock = 0;
+        $order->worker_id = $worker['id'];
+        $order->worker_type_id = $worker['worker_type'];
+        $order->order_worker_phone = $worker['worker_phone'];
+        $order->order_worker_name = $worker['worker_name'];
+        $order->order_worker_type_name = $worker['worker_type_description'];
+        $order->shop_id = $worker["shop_id"];
+        $order->order_worker_shop_name = $worker["shop_name"];
+        $order->order_worker_assign_type = $assign_type; //接单方式
+        $order->admin_id = $admin_id;
+        if ($admin_id > 1) { //大于1属于人工操作
+            $result = OrderStatus::_manualAssignDone($order, ['OrderExtFlag', 'OrderExtWorker'],$transact);
+        } elseif ($order->orderExtStatus->order_status_dict_id == OrderStatusDict::ORDER_SYS_ASSIGN_START) { //当前状态如果是开始智能派单 就到智能派单成功 否则 到阿姨自助接单
+            $result = OrderStatus::_sysAssignDone($order, ['OrderExtFlag', 'OrderExtWorker'],$transact);
+        } else {
+            $result = OrderStatus::_workerBindOrder($order, ['OrderExtFlag', 'OrderExtWorker'],$transact);
+        }
+        return $result;
     }
 
     /**
