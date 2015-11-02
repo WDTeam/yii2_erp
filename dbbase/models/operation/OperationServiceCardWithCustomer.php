@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models\operation;
+namespace dbbase\models\operation;
 
 
 /**
@@ -29,27 +29,6 @@ namespace common\models\operation;
  */
 class OperationServiceCardWithCustomer extends \yii\db\ActiveRecord
 {
-    public  $id;
-    public  $service_card_sell_record_id;
-    public  $service_card_sell_record_code;
-    public  $server_card_info_id;
-    public  $service_card_with_customer_code;
-    public  $server_card_info_name;
-    public  $customer_trans_record_pay_money;
-    public  $server_card_info_value;
-    public  $service_card_info_rebate_value;
-    public  $service_card_with_customer_balance;
-    public  $customer_id;
-    public  $customer_phone;
-    public  $server_card_info_scope;
-    public  $service_card_with_customer_buy_at;
-    public  $service_card_with_customer_valid_at;
-    public  $service_card_with_customer_activated_at;
-    public  $service_card_with_customer_status;
-    public  $created_at;
-    public  $updated_at;
-    public  $is_del;
-
     /**
      * @inheritdoc
      */

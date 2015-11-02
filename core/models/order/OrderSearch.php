@@ -5,8 +5,10 @@ namespace core\models\order;
 use dbbase\models\order\OrderExtCustomer;
 use dbbase\models\order\OrderExtFlag;
 use dbbase\models\order\OrderExtStatus;
-use dbbase\models\order\OrderStatusDict;
+
+use core\models\order\OrderStatusDict;
 use core\models\customer\Customer;
+
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -320,19 +322,18 @@ class OrderSearch extends Order
      * @param $worker_id
      * @param int $page_size
      * @param int $page
-     * @param bool $is_booked
      * @return mixed
      */
-    public static function getPushWorkerOrders($worker_id,$page_size=20,$page=1,$is_booked)
+    public static function getPushWorkerOrders($worker_id,$page_size=20,$page=1)
     {
-        return OrderPool::getOrdersFromWorkerPushList($worker_id,$page_size,$page,$is_booked);
+        return OrderPool::getOrdersFromWorkerPushList($worker_id,$page_size,$page);
     }
 
     /**
      * 返回推送给阿姨的订单总数
      * @author lin
      * @param $worker_id
-     * @param bool $is_booked
+     * @param bool $is_booked true指定阿姨 false不指定阿姨
      * @return mixed
      */
     public static function getPushWorkerOrdersCount($worker_id,$is_booked)
@@ -430,7 +431,12 @@ class OrderSearch extends Order
      */
     public static function getWaitSysCommentOrderList()
     {
-        return Order::find()->joinWith(['orderExtStatus'])->where(['order_status_dict_id'=> OrderStatusDict::ORDER_SERVICE_DONE],['<=','order_booked_end_time',strtotime('-1 days')])->asArray()->all();
+        return Order::find()->joinWith(['orderExtStatus'])
+        ->where([
+            'order_status_dict_id'=> OrderStatusDict::ORDER_SERVICE_DONE
+        ])
+        ->andFilterWhere(['<=','order_booked_end_time',strtotime('-1 days')])
+        ->asArray()->all();
     }
 
 

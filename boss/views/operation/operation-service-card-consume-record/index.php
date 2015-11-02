@@ -14,9 +14,7 @@ $this->title = Yii::t('app', '服务卡消费记录');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-service-card-consume-record-index">
-    <div class="page-header">
-            <h1><?= Html::encode($this->title) ?></h1>
-    </div>
+
     <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
@@ -28,6 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
+		'toolbar' =>[],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -49,13 +48,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
+                'template'=>'{view}',
                 'buttons' => [
-                'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['operation/operation-service-card-consume-record/view','id' => $model->id,'edit'=>'t']), [
-                                                    'title' => Yii::t('yii', 'Edit'),
-                                                  ]);}
-
-                ],
+					'view' => function ($url, $model) {
+						return Html::a(Yii::t('yii', '查看'), ['view', 'id' => $model->id], [
+							'title' => Yii::t('yii', '查看'),
+							'class' => 'btn btn-success btn-sm'
+						]);
+					},		
+				],
             ],
         ],
         'responsive'=>true,

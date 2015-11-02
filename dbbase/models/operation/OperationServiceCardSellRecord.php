@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models\operation;
+namespace dbbase\models\operation;
 
 
 /**
@@ -29,26 +29,7 @@ namespace common\models\operation;
  */
 class OperationServiceCardSellRecord extends \yii\db\ActiveRecord
 {
-     public  $id;
-     public  $service_card_sell_record_code;
-     public  $customer_id;
-     public  $customer_phone;
-     public  $service_card_info_card_id;
-     public  $service_card_info_name;
-     public  $service_card_sell_record_money;
-     public  $service_card_sell_record_channel_id;
-     public  $service_card_sell_record_channel_name;
-     public  $service_card_sell_record_status;
-     public  $customer_trans_record_pay_mode;
-     public  $pay_channel_id;
-     public  $customer_trans_record_pay_channel;
-     public  $customer_trans_record_transaction_id;
-     public  $customer_trans_record_pay_money;
-     public  $customer_trans_record_pay_account;
-     public  $customer_trans_record_paid_at;
-     public  $created_at;
-     public  $updated_at;
-     public  $is_del;
+
     /**
      * @inheritdoc
      */
