@@ -7,7 +7,7 @@ use \core\models\operation\OperationCategory;
 use \core\models\operation\OperationCity;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\order\OrderSearch;
-use \dbbase\models\order\OrderStatusDict;
+use \core\models\order\OrderStatusDict;
 use \core\models\worker\WorkerAccessToken;
 use \restapi\models\alertMsgEnum;
 
