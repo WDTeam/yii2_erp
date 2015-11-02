@@ -788,6 +788,9 @@ class OrderController extends \restapi\components\Controller
         $limit = 10;
         if (isset($args['limit'])) {
             $limit = $args['limit'];
+            if($limit<=0){
+                $limit == 1;
+            }
         }
         $page = 1;
         if (isset($args['page'])) {
