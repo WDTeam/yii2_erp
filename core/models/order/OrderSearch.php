@@ -322,12 +322,11 @@ class OrderSearch extends Order
      * @param $worker_id
      * @param int $page_size
      * @param int $page
-     * @param bool $is_booked true指定阿姨 false不指定阿姨
      * @return mixed
      */
-    public static function getPushWorkerOrders($worker_id,$page_size=20,$page=1,$is_booked)
+    public static function getPushWorkerOrders($worker_id,$page_size=20,$page=1)
     {
-        return OrderPool::getOrdersFromWorkerPushList($worker_id,$page_size,$page,$is_booked);
+        return OrderPool::getOrdersFromWorkerPushList($worker_id,$page_size,$page);
     }
 
     /**
