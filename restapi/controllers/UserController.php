@@ -4,14 +4,12 @@ namespace restapi\controllers;
 
 use restapi\models\alertMsgEnum;
 use Yii;
-
 use \core\models\customer\Customer;
 use \core\models\customer\CustomerAddress;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\operation\coupon\CouponCustomer;
 use \core\models\operation\coupon\Coupon;
 use \core\models\payment\PaymentCustomerTransRecord;
-use \core\models\customer\CustomerExtBalance;
 use \core\models\order\Order;
 use \core\models\customer\CustomerComment;
 use \core\models\comment\CustomerCommentTag;
@@ -767,26 +765,28 @@ class UserController extends \restapi\components\Controller
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
 
         if (!empty($customer) && !empty($customer->id)) {
-
             try {
                 /**
                  * 获取客户余额
-                 *
                  * @param int $customer 用户id
                  */
-                $userBalance = CustomerExtBalance::getCustomerBalance($customer->id);
-                if (!$userBalance) {
-                    $userBalance = '0';
+                $userBalance = Customer::getBalanceById($customer->id);
+
+                if ($userBalance['response'] == 'success') {
+                    $userBalanceMoney = $userBalance['balance'];
+                } elseif ($userBalance['response'] == 'error') {
+                    return $this->send(null, $userBalance['errmsg'], 0, 403);
                 }
+
                 /**
                  * 获取用户消费记录
                  *
                  * @param int $customer 用户id
                  */
                 $userRecord = PaymentCustomerTransRecord::getCustomerPaymentTransRecord($customer->id);
-
-                $ret["userBalance"] = $userBalance;
+                $ret["userBalance"] = $userBalanceMoney;
                 $ret["userRecord"] = $userRecord;
+
                 return $this->send($ret, "查询成功", 1);
             } catch (\Exception $e) {
                 return $this->send($e, "boss系统错误" . $e, 0, 1024);
@@ -1390,7 +1390,7 @@ class UserController extends \restapi\components\Controller
     public function actionGetUserInfo()
     {
         $param = Yii::$app->request->get() or
-        $param = json_decode(Yii::$app->request->getRawBody(), true);
+                $param = json_decode(Yii::$app->request->getRawBody(), true);
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403, null, alertMsgEnum::getUserInfoFailed);
         }
