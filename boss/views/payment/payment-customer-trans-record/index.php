@@ -47,6 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'payment_customer_trans_record_online_balance_pay',
             'payment_customer_trans_record_service_card_on',
             'payment_customer_trans_record_service_card_pay',
+
             'payment_customer_trans_record_service_card_current_balance',
             'payment_customer_trans_record_service_card_befor_balance',
             'payment_customer_trans_record_compensate_money',
