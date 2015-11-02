@@ -21,17 +21,7 @@ namespace dbbase\models\operation;
 class OperationServiceCardInfo extends \yii\db\ActiveRecord
 {
 
-    public $id;
-    public $service_card_info_name;
-    public $service_card_info_type;
-    public $service_card_info_level;
-    public $service_card_info_value;
-    public $service_card_info_rebate_value;
-    public $service_card_info_scope;
-    public $service_card_info_valid_days;
-    public $created_at;
-    public $updated_at;
-    public $is_del;
+
     /**
      * @inheritdoc
      */

@@ -24,21 +24,7 @@ namespace dbbase\models\operation;
  */
 class OperationServiceCardConsumeRecord extends \yii\db\ActiveRecord
 {
-    public $id;
-    public $customer_id;
-    public $customer_trans_record_transaction_id;
-    public $order_id;
-    public $order_code;
-    public $service_card_with_customer_id;
-    public $service_card_with_customer_code;
-    public $service_card_consume_record_front_money;
-    public $service_card_consume_record_behind_money;
-    public $service_card_consume_record_consume_type;
-    public $service_card_consume_record_business_type;
-    public $service_card_consume_record_use_money;
-    public $created_at;
-    public $updated_at;
-    public $is_del;
+    
     /**
      * @inheritdoc
      */
