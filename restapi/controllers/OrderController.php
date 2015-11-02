@@ -770,7 +770,7 @@ class OrderController extends \restapi\components\Controller
 
         @$token = $args["access_token"];
 
-        $worker = WorkerAccessToken::getCustomer($token);
+        $worker = WorkerAccessToken::getWorker($token);
 
         if (empty($worker)) {
             return $this->send(null, "用户无效,请先登录", 0);
