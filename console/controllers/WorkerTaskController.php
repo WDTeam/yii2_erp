@@ -15,6 +15,7 @@ class WorkerTaskController extends Controller
     }
     /**
      * 定时处理已结束的任务周期
+     * 每天运行一次即可
      * 定时生成阿姨任务
      * 定时检查结算与否
      */
@@ -23,6 +24,7 @@ class WorkerTaskController extends Controller
 //         * 1、循环任务，查询获取昨日完成的任务
 //         * 2、计算时间段内各项条件的数值，保存数值，运算是否达到条件完成。
         $tasks = (array)WorkerTaskLog::find()
+        ->select(['worker_task_is_done','worker_task_log_start', 'worker_task_log_end', 'worker_id'])
         ->where('worker_task_is_done is NULL or worker_task_is_done=0')
         ->andFilterWhere(['<=','worker_task_log_end', strtotime("-1 day")])
         ->all();
