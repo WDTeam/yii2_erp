@@ -68,7 +68,7 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
      * @return:
      * */
     
-    public static function autoaddUserSuggest($array,$adminid=1)
+    public static function autoaddUserSuggest($array)
     {
     	$array['customer_comment_content']='满意';
     	$array['customer_comment_level']=1;
@@ -140,6 +140,7 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
                 // var_dump($customerComment->errors);
                 $transaction->commit();
 				//通知订单 ，改变订单状态
+				if(!isset($array['adminid'])){$array['adminid']=0;}
                 Order::customerAcceptDone($array['order_id'],$array['adminid']); 
                 
                 if ($array['customer_comment_level'] == '3') {
