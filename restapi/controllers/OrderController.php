@@ -803,7 +803,7 @@ class OrderController extends \restapi\components\Controller
         $arr[] = OrderStatusDict::ORDER_WORKER_BIND_ORDER;
         $args["owr.worker_id"] = $worker->id;
         if($limit<=0){
-            $limit == 1;
+            $limit = 1;
         }
         try {
             $orderSearch = new \core\models\order\OrderSearch();
