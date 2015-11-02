@@ -56,10 +56,18 @@ class OrderController extends Controller{
      */
     private function suggest($order)
     {
-        var_dump($order);exit;
+//         var_dump($order);exit;
         try{
             CustomerComment::autoaddUserSuggest([
-//                 $order
+                'order_id'=>$order['id'],
+                'worker_id'=>$order['worker_id'],
+                'customer_id'=>$order['customer_id'],
+                'worker_tel'=>$order['order_worker_phone'],
+                'operation_shop_district_id'=>$order['district_id'],
+                'province_id'=>0,
+                'city_id'=>$order['city_id'],
+                'county_id'=>0,
+                'customer_comment_phone'=>$order['order_customer_phone'],
             ]);
         }catch(\Exception $e){
             echo 'Order ID:'.$order['id'].' suggest error!'.PHP_EOL;

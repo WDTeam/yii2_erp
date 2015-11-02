@@ -645,6 +645,66 @@ class Order extends OrderModel
     }
 
     /**
+     * 更新订单
+     * @param $attributes
+     * @param $transact
+     * @return bool
+     */
+    public function modify($attributes, $transact = null)
+    {
+        $status = [
+            OrderStatusDict::ORDER_INIT, // = 1已创建
+            OrderStatusDict::ORDER_WAIT_ASSIGN, // = 2待指派
+            OrderStatusDict::ORDER_SYS_ASSIGN_START, // = 3智能指派开始
+            OrderStatusDict::ORDER_SYS_ASSIGN_DONE, // = 4智能指派完成
+            OrderStatusDict::ORDER_SYS_ASSIGN_UNDONE, // = 5未完成智能指派 待人工指派
+            OrderStatusDict::ORDER_MANUAL_ASSIGN_START, // = 6开始人工指派
+            OrderStatusDict::ORDER_MANUAL_ASSIGN_DONE, // = 7完成人工指派
+            OrderStatusDict::ORDER_MANUAL_ASSIGN_UNDONE, // = 8未完成人工指派，如果客服和小家政都未完成人工指派则去响应，否则重回待指派状态。
+            OrderStatusDict::ORDER_WORKER_BIND_ORDER, // = 9阿姨自助抢单
+        ];
+        //1:获取订单状态
+        $orderStatus = OrderStatus::findOne($attributes['id']);
+        if( in_array($orderStatus['order_status_dict_id'],$status))
+        {
+            $this->addError('order_status', '当前订单状态不可更新,当前订单状态'.$orderStatus->order_status_name);
+            return false;
+        }
+
+        //1.1:创建地址信息
+        try {
+            $address = CustomerAddress::getAddress($attributes['address_id']);
+        } catch (Exception $e) {
+            $this->addError('order_address', '创建时获取地址异常！');
+            return false;
+        }
+
+        //1.3:获取服务日期时间段是否可用
+        if( !empty($attributes['order_booked_worker_id']) && $attributes['order_booked_worker_id'] > 0 )
+        {
+            //如果有阿姨信息
+        }
+
+        //2:载入参数
+        $this->setAttributes([
+            //阿姨信息
+            'worker_id' => $attributes['worker_id'],   //工人id
+            'order_worker_name' => 0,   //工人姓名
+            //用户需求
+            'order_customer_need'=>$attributes['order_customer_need'],   //客户需求
+            'order_cs_memo'=>$attributes['order_cs_memo'],   //客服备注
+            'order_customer_memo'=>$attributes['order_customer_memo'],   //客户备注
+
+        ]);
+
+        //3:修改订单信息
+
+
+        return $this->doSave(['OrderExtCustomer', 'OrderExtFlag', 'OrderExtPay', 'OrderExtPop', 'OrderExtStatus', 'OrderExtWorker', 'OrderStatusHistory'], $transact);
+    }
+
+
+    /**
      * 获取订单来源名称
      * @param $id
      * @return string
