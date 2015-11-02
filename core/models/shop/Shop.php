@@ -296,6 +296,28 @@ class Shop extends \dbbase\models\shop\Shop
     	 
     	 
     }
+
+    
+    /**
+     * 使用修改通过搜索关键字获取门店信息
+     * @date: 2015-11-2
+     * @author: peak pan
+     * @return:
+     **/
+    public static function ShowShop()
+    {
+    
+    	$shopResult = Shop::find()->select('id, name')->asArray()->all();
+    	if($shopResult){
+    		$namelist=['0'=>'请选择门店'];
+    		$namelist=array_merge($namelist,ArrayHelper::map($shopResult, 'id', 'name'));
+    		return $namelist;
+    	}else{
+    		return array();
+    	}
+    	
+    }
+    
     
     
     

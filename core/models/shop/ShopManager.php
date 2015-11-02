@@ -261,6 +261,28 @@ class ShopManager extends \dbbase\models\shop\ShopManager
     
     }
     
+
+    
+    /**
+     * 使用修改通过搜索关键字获取门店信息
+     * @date: 2015-11-2
+     * @author: peak pan
+     * @return:
+     **/
+    public static function ShowShopManager()
+    {
+    
+    	$shopResult = ShopManager::find()->select('id, name')->asArray()->all();
+    	if($shopResult){
+    		return ArrayHelper::map($shopResult, 'id', 'name');
+    	}else{
+    		return array();
+    	}
+    	 
+    }
+    
+    
+    
     
     
 }

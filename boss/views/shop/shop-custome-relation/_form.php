@@ -57,7 +57,7 @@ use yii\web\JsExpression;
         'name' => '用户',
         'hideSearch' => true,
         'data' => SystemUser::getuserlist(),
-        'options' => ['placeholder' => '选择订单渠道','class' => 'col-md-2'],
+        'options' => ['placeholder' => '请选择用户','class' => 'col-md-2'],
         'pluginOptions' => [
             'allowClear' => true
         ],
