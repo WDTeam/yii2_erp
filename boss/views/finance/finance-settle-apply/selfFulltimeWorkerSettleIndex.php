@@ -49,7 +49,7 @@ $this->params['isFinacePayedConfirm'] = $isFinacePayedConfirm;
                 'worker_name',
                 [ 'header' => Yii::t('app', '阿姨类型'),'content'=>function($model,$key,$index){return $model->getWorkerTypeDes($model->worker_type_id,$model->worker_identity_id);}],
                 'finance_settle_apply_cycle_des',
-                ['attribute'=>'created_at','content'=>function($model,$key,$index){return Html::a(date('Y:m:d H:i:s',$model->created_at),'#');}],
+                ['attribute'=>'created_at','content'=>function($model,$key,$index){return Html::a(date('Y-m-d H:i:s',$model->created_at),'#');}],
                 [ 'header' => Yii::t('app', '结算周期'),'content'=>function($model,$key,$index){return date('Y-m-d',$model->finance_settle_apply_starttime).'至<br>'.date('Y-m-d',$model->finance_settle_apply_endtime);}],
                 'finance_settle_apply_man_hour', 
                 'finance_settle_apply_order_money', 
