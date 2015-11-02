@@ -82,7 +82,7 @@ class OrderExtPay extends ActiveRecord
         return [
           self::ORDER_PAY_TYPE_OFF_LINE => '现金支付',
           self::ORDER_PAY_TYPE_ON_LINE => '线上支付',
-          self::ORDER_PAY_TYPE => '第三方预付'
+          self::ORDER_PAY_TYPE_POP => '第三方预付'
         ];
     }
 

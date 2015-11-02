@@ -201,7 +201,7 @@ if(isset($model->review_section)){
                        'header' => Yii::t('app', '渠道'),],
                     [
                        'header' => Yii::t('app', '支付方式'),
-                        'attribute' => 'order_pay_type_id',
+                        'attribute' => 'order_pay_type_des',
                     ],
                     ['attribute'=>'order_booked_begin_time',
                        'header' => Yii::t('app', '服务开始时间'),

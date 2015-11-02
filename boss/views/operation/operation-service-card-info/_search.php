@@ -10,8 +10,11 @@ use kartik\widgets\Select2;
  */
 ?>
 
-<div class="operation-service-card-info-search">
-
+<div class="operation-service-card-info-search panel panel-info">
+	<div class="panel-heading">
+        <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 服务卡搜索</h3>
+    </div>
+	<div class="panel-body row">
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
@@ -51,9 +54,6 @@ use kartik\widgets\Select2;
 	<div class="col-md-2">
 	 <?= $form->field($model, 'service_card_info_rebate_value') ?>
 	</div>
-	<div class="col-md-2">
-	 <?= $form->field($model, 'service_card_info_valid_days') ?>
-	</div>
 
     <?php // echo $form->field($model, 'id') ?>
 
@@ -76,11 +76,13 @@ use kartik\widgets\Select2;
     <?php // echo $form->field($model, 'updated_at') ?>
 
     <?php // echo $form->field($model, 'is_del') ?>
-
-    <div class="form-group">
+	
+	<div class="col-md-2" style="margin-top:22px;">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
     </div>
+	</div>
+	
 
     <?php ActiveForm::end(); ?>
 
