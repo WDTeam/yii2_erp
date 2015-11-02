@@ -3,6 +3,9 @@ namespace core\models\order;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use core\models\order\Order;
+use dbbase\models\order\OrderExtWorker;
+
 class OrderComplaint extends \dbbase\models\order\OrderComplaint
 {
 	
@@ -176,5 +179,13 @@ class OrderComplaint extends \dbbase\models\order\OrderComplaint
             'query' => $query,
         ]);
         return $dataProvider->query->all();
+    }
+
+    public function getOrder(){
+    	return $this->hasOne(Order::className(), ['id'=>'order_id']);
+    }
+    
+    public function getOrderExtWorker(){
+    	return $this->hasOne(OrderExtWorker::className(), ['order_id'=>'order_id']);
     }
 }
