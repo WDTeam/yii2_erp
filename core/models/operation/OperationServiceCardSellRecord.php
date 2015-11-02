@@ -65,7 +65,7 @@ class OperationServiceCardSellRecord extends \dbbase\models\operation\OperationS
         ]);
 
         //6.生成购卡销售订单号
-        $service_card_sell_record_code=self::getService_card_sell_record_code();
+        $service_card_sell_record_code=self::getServiceCardSellRecordCode();
 
         //7.初始化其他字段
         $this->setAttributes([
@@ -77,7 +77,7 @@ class OperationServiceCardSellRecord extends \dbbase\models\operation\OperationS
 
         //8.保存购卡销售记录
         if($this->doSave()){
-            return $this->primaryKey;//返回购卡订单ID
+            return $this->service_card_sell_record_code;//返回购卡订单号
         }else{
             return null;//返回NULL，说明保存失败
         }
@@ -123,10 +123,22 @@ class OperationServiceCardSellRecord extends \dbbase\models\operation\OperationS
     }
 
     /**
+     * @introduction 基于购卡订单号，查询购卡销售记录
+     * @author zhangrenzhao
+     * @date 2015-11-12
+     * @param $service_card_sell_record_code
+     */
+    public function getServiceCardSellRecordByCode($service_card_sell_record_code){
+        $service_card_sell_record = self::find()
+            ->where(['service_card_sell_record_code'=>$service_card_sell_record_code,
+                'is_del'=>0]);
+        return $service_card_sell_record;
+    }
+    /**
      * @instruction 生成购卡订单号码
      * @return mixed
      */
-    private function getService_card_sell_record_code(){
+    private function getServiceCardSellRecordCode(){
         $code='99999999';
         return code;
     }
