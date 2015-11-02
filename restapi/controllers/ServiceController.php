@@ -327,6 +327,8 @@ class ServiceController extends \restapi\components\Controller
      *      "msg": "",
      *      "ret":
      *      [
+     *          "category_name": "", 服务品类名称
+     *          "goods_category_name": "", 服务商品名称
      *          "goods_price": "0.0000", 价格
      *      ],
      *  }
@@ -358,6 +360,8 @@ class ServiceController extends \restapi\components\Controller
         }
 
         $ret = [
+            'category_name' => $goods['operation_category_name'],
+            'goods_name' => $goods['operation_shop_district_goods_name'],
             'goods_price' => $goods['operation_shop_district_goods_price'],
         ];
 

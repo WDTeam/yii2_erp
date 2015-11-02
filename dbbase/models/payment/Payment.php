@@ -354,7 +354,6 @@ class Payment extends PaymentCommon
                 $model->payment_status = 1; //支付状态
                 $model->payment_actual_money = $post['total_fee'];
                 $model->payment_transaction_id = $post['trade_no'];
-                $model->payment_is_coupon = 1;
                 $model->payment_eo_order_id = $post['out_trade_no'];
                 $model->payment_verify = $model->makeSign();
 
@@ -365,12 +364,9 @@ class Payment extends PaymentCommon
                 {
                     $model->save(false);
                     $attribute = $model->getAttributes();
-                    if(!empty($model->order_id)){
-                        //支付订单
-                        Payment::orderPay($attribute);
-                    }else{
-                        //充值支付
-                        Payment::pay($attribute);
+                    if(!empty($model->payment_type)){
+                        //支付订单/充值
+                        Payment::payment($attribute);
                     }
 
                     $transaction->commit();
@@ -475,7 +471,6 @@ class Payment extends PaymentCommon
                 $model->payment_status = 1; //支付状态
                 $model->payment_actual_money = $post['total_fee'];
                 $model->payment_transaction_id = $post['trade_no'];
-                $model->payment_is_coupon = 1;
                 $model->payment_eo_order_id = $post['out_trade_no'];
                 $model->payment_verify = $model->makeSign();
 
@@ -486,14 +481,10 @@ class Payment extends PaymentCommon
                 {
                     $model->save(false);
                     $attribute = $model->getAttributes();
-                    if(!empty($model->order_id)){
-                        //支付订单
-                        Payment::orderPay($attribute);
-                    }else{
-                        //充值支付
-                        Payment::pay($attribute);
+                    if(!empty($model->payment_type)){
+                        //支付订单/充值
+                        Payment::payment($attribute);
                     }
-
                     $transaction->commit();
                     /*
                     if(empty($data['debug'])){
@@ -583,7 +574,6 @@ class Payment extends PaymentCommon
             $model->payment_status = 1; //支付状态
             $model->payment_actual_money = $model->toMoney($post['total_fee'],100,'/');
             $model->payment_transaction_id = $post['transaction_id'];
-            $model->payment_is_coupon = 1;
             $model->payment_eo_order_id = $post['out_trade_no'];
             $model->payment_verify = $model->makeSign();
 
@@ -594,12 +584,9 @@ class Payment extends PaymentCommon
                 $model->save(false);
                 //change customer balance
                 $attribute = $model->getAttributes();
-                if(!empty($model->order_id)){
-                    //支付订单
-                    Payment::orderPay($attribute);
-                }else{
-                    //充值支付
-                    Payment::pay($attribute);
+                if(!empty($model->payment_type)){
+                    //支付订单/充值
+                    Payment::payment($attribute);
                 }
                 $transaction->commit();
                 $class->notify();
@@ -692,7 +679,6 @@ class Payment extends PaymentCommon
             $model->payment_status = 1; //支付状态
             $model->payment_actual_money = $model->toMoney($post['total_amount'],100,'/');
             $model->payment_transaction_id = $post['bfb_order_no'];
-            $model->payment_is_coupon = 1;
             $model->payment_eo_order_id = $post['order_no'];
             $model->payment_verify = $model->makeSign();
 
@@ -703,12 +689,9 @@ class Payment extends PaymentCommon
                 $model->save(false);
                 //change customer balance
                 $attribute = $model->getAttributes();
-                if(!empty($model->order_id)){
-                    //支付订单
-                    Payment::orderPay($attribute);
-                }else{
-                    //充值支付
-                    Payment::pay($attribute);
+                if(!empty($model->payment_type)){
+                    //支付订单/充值
+                    Payment::payment($attribute);
                 }
 
                 $transaction->commit();
@@ -804,7 +787,6 @@ class Payment extends PaymentCommon
             $model->payment_status = 1; //支付状态
             $model->payment_actual_money = $model->toMoney($post['settleAmt'],100,'/');
             $model->payment_transaction_id = $post['queryId'];
-            $model->payment_is_coupon = 1;
             $model->payment_eo_order_id = $post['orderId'];
             $model->payment_verify = $model->makeSign();
 
@@ -814,12 +796,9 @@ class Payment extends PaymentCommon
             try {
                 $model->save(false);
                 $attribute = $model->getAttributes();
-                if(!empty($model->order_id)){
-                    //支付订单
-                    Payment::orderPay($attribute);
-                }else{
-                    //充值支付
-                    Payment::pay($attribute);
+                if(!empty($model->payment_type)){
+                    //支付订单/充值
+                    Payment::payment($attribute);
                 }
                 $transaction->commit();
 
@@ -932,7 +911,6 @@ class Payment extends PaymentCommon
                 $model->payment_status = 1; //支付状态
                 $model->payment_actual_money = $model->toMoney($post['total_fee'],100,'/');
                 $model->payment_transaction_id = $post['transaction_id'];
-                $model->payment_is_coupon = 1;
                 $model->payment_eo_order_id = $post['out_trade_no'];
                 $model->payment_verify = $model->makeSign();
 
@@ -943,12 +921,9 @@ class Payment extends PaymentCommon
                 {
                     $model->save(false);
                     $attribute = $model->getAttributes();
-                    if(!empty($model->order_id)){
-                        //支付订单
-                        Payment::orderPay($attribute);
-                    }else{
-                        //充值支付
-                        Payment::pay($attribute);
+                    if(!empty($model->payment_type)){
+                        //支付订单/充值
+                        Payment::payment($attribute);
                     }
 
                     $transaction->commit();
@@ -1034,7 +1009,6 @@ class Payment extends PaymentCommon
                 $model->payment_status = 1; //支付状态
                 $model->payment_actual_money = $model->toMoney($post['paid_amount'],100,'/');
                 $model->payment_transaction_id = $post['order_id'];
-                $model->payment_is_coupon = 1;
                 $model->payment_eo_order_id = $post['order_no'];
                 $model->payment_verify = $model->makeSign();
 
@@ -1046,12 +1020,9 @@ class Payment extends PaymentCommon
                     $model->save(false);
                     $attribute = $model->getAttributes();
 
-                    if(!empty($model->order_id)){
-                        //支付订单
-                        Payment::orderPay($attribute);
-                    }else{
-                        //充值支付
-                        Payment::pay($attribute);
+                    if(!empty($model->payment_type)){
+                        //支付订单/充值
+                        Payment::payment($attribute);
                     }
 
                     $transaction->commit();

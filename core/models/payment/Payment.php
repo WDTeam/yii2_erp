@@ -90,6 +90,7 @@ class Payment extends \dbbase\models\payment\Payment
                     'order_pop_order_money'
                 ];
                 $dataArray = OrderSearch::getOrderInfo($order_id,$fields,$payment_type);
+
                 $pay_money = 0;
                 //判断是普通订单还是周期订单
                 if(count($dataArray) > 1)
@@ -105,11 +106,11 @@ class Payment extends \dbbase\models\payment\Payment
                     $one = current($dataArray);
                     $pay_money = $one['order_pay_money'];
                 }
-                $data['payment_mode'] = 3;//在线支付
+                $payment_mode = 1;//在线支付
                 break;
             case 3: //3充值订单
                 //TODO::获取服务卡金额
-                $data['payment_mode'] = 1;//充值
+                $payment_mode = 2;//充值
                 break;
         }
 
@@ -125,6 +126,7 @@ class Payment extends \dbbase\models\payment\Payment
             "payment_source" => $channel_id,
             "order_id" => $order_id,
             'payment_type' => $payment_type,
+            'payment_mode' => $payment_mode,
         ];
 
         $data = array_merge($data,$ext_params);

@@ -269,17 +269,16 @@ class PaymentCustomerTransRecord extends \dbbase\models\payment\PaymentCustomerT
         //加密签名
         foreach( $data as $name=>$val )
         {
-            if( !empty($val) && intval($val) > 1 && !in_array($name,$notArray))
+            $value = is_numeric($val) ? (int)$val : $val;
+            if( !empty($value) && !in_array($name,$notArray))
             {
-                $str .= (int)$val;
+                if(is_numeric($value) && $value < 1) continue;
+                $str .= $value;
             }
         }
-        //1jiajie.com2476575255601540401000100013402320
-        //1jiajie.com24765752556015401000100013402320
         //return $str;
         return md5(md5($str).'1jiajie.com');
     }
-
 
     /**
      * 在线支付(1)

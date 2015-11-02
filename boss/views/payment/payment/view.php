@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'payment_transaction_id',
             'payment_eo_order_id',
             'payment_memo',
-            'payment_is_coupon',
+            'payment_type',
             'admin_id',
             'payment_admin_name',
             'worker_id',

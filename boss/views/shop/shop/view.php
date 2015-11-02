@@ -44,11 +44,22 @@ $this->params['breadcrumbs'][] = $this->title;
                         'allowClear' => true,
                         'minimumInputLength' => 0,
                         'ajax' => [
-                            'url' => Url::to(['shop-manager/search-by-name']),
+                            'url' => Url::to(['shopmanager/shop-manager/search-by-name']),
                             'dataType' => 'json',
-                            'data' => new JsExpression('function(params) { return {name:params.term}; }')
+                            'data' => new JsExpression('function(params) { 
+                                return {
+                                    name:params.term,
+                                    city_id: $("#city").val()
+                                }; 
+                            }')
                         ],
-                        //                     'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                        'initSelection'=> new JsExpression('function (element, callback) {
+                            callback({
+                                id:"'.$model->shop_manager_id.'",
+                                name:"'.$model->getManagerName().'"
+                            });
+                        }'),
+                        'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
                         'templateResult' => new JsExpression('function(model) { return model.name; }'),
                         'templateSelection' => new JsExpression('function (model) { return model.name; }'),
                     ],

@@ -457,7 +457,9 @@ class OrderController extends \restapi\components\Controller
         @$to = $args['to'];
         $args["oc.customer_id"] = $user->id;
         $args['order_parent_id'] = 0;
-
+        if($limit<=0){
+            $limit =1;
+        }
         try {
             $orderSearch = new \core\models\order\OrderSearch();
             $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus);
@@ -770,7 +772,7 @@ class OrderController extends \restapi\components\Controller
 
         @$token = $args["access_token"];
 
-        $worker = WorkerAccessToken::getCustomer($token);
+        $worker = WorkerAccessToken::getWorker($token);
 
         if (empty($worker)) {
             return $this->send(null, "用户无效,请先登录", 0);
@@ -788,6 +790,7 @@ class OrderController extends \restapi\components\Controller
         $limit = 10;
         if (isset($args['limit'])) {
             $limit = $args['limit'];
+
         }
         $page = 1;
         if (isset($args['page'])) {
@@ -801,6 +804,9 @@ class OrderController extends \restapi\components\Controller
         $arr[] = OrderStatusDict::ORDER_SYS_ASSIGN_DONE;
         $arr[] = OrderStatusDict::ORDER_WORKER_BIND_ORDER;
         $args["owr.worker_id"] = $worker->id;
+        if($limit<=0){
+            $limit = 1;
+        }
         try {
             $orderSearch = new \core\models\order\OrderSearch();
             $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $arr, null, $from, $to);
@@ -808,6 +814,7 @@ class OrderController extends \restapi\components\Controller
         } catch (Exception $e) {
             return $this->send($e, "服务异常", 2);
         }
+
         $ret = [];
         $ret['limit'] = $limit;
         $ret['page_total'] = ceil($count / $limit);
@@ -1728,41 +1735,40 @@ class OrderController extends \restapi\components\Controller
     }
 
     /**
-     * @api {POST} v1/order/create-worker-orderes 创建周期订单 （haojianshe 100%）
+     * @api {POST} v1/order/create-recursive-orderes 创建周期订单 （haojianshe 100%）
      *
-     * @apiName actionCreateWorkerOrderes
+     * @apiName CreateRecursiveOrderes
      * @apiGroup Order
      * @apiDescription 周期订单提交
      *
-     * @apiParam  {String}  access_token      会话id. 必填
+     * @apiParam  {String}  access_token      会话id. 必填 
      * @apiParam  {String}  [platform_version]  平台版本号
      * @apiParam  {integer} order_service_type_id 服务类型 商品id 必填
      * @apiParam  {integer} order_src_id 订单来源id 必填
      * @apiParam  {string}  channel_id 下单渠道 必填
      * @apiParam  {int}     address_id 客户地址id 必填
      * @apiParam  {string}  order_customer_phone 客户手机号 必填
-     * @apiParam  {int}     admin_id 操作人id 0客户 1系统 必填
      * @apiParam  {int}     order_pay_type 支付方式 1现金 2线上 3第三方 必填
      * @apiParam  {int}     order_is_use_balance 是否使用余额 0否 1是 必填
      * @apiParam  {string}  [order_booked_worker_id] 指定阿姨id
+     * @apiParam  {int}     [accept_other_aunt] 0不接受 1接受
      * @apiParam  {string}  [order_customer_need] 客户需求
      * @apiParam  {string}  [order_customer_memo] 客户备注
-     * @apiParam   {int} [coupon_id] 优惠券id
+     * @apiParam   {int}    [coupon_id] 优惠券id
      * 
-     * @apiParam 
-     * order_booked_begin_time   预约开始时间 必填;      预约结束时间 必填 order_booked_end_time 
-     * {
-     * ["order_booked_begin_time":"2015-10-01 10:10","order_booked_end_time":"2015-10-02 10:10"],
-     * ["order_booked_begin_time":"2015-10-03 10:10","order_booked_end_time":"2015-10-04 10:10"],
-     * ["order_booked_begin_time":"2015-10-05 10:10","order_booked_end_time":"2015-10-06 10:10"],
-     * ["order_booked_begin_time":"2015-10-07 10:10","order_booked_end_time":"2015-10-08 10:10"]
-     * }
+     * @apiParam  {Object[]}
+     * [
+     * {"order_booked_begin_time":"2015-10-01 10:10","order_booked_end_time":"2015-10-02 10:10","coupon_id":"1"},
+     * {"order_booked_begin_time":"2015-10-03 10:10","order_booked_end_time":"2015-10-04 10:10","coupon_id":"2"},
+     * {"order_booked_begin_time":"2015-10-05 10:10","order_booked_end_time":"2015-10-06 10:10","coupon_id":"3"},
+     * {"order_booked_begin_time":"2015-10-07 10:10","order_booked_end_time":"2015-10-08 10:10","coupon_id":"4"}
+     * ]
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
      *      "code": "ok",
-     *      "msg":"添加成功成功",
+     *      "msg":"添加成功",
      * }
      *
      * @apiError SessionIdNotFound 未找到会话ID.
@@ -1775,7 +1781,7 @@ class OrderController extends \restapi\components\Controller
      *  }
      *
      */
-    public function actionCreateWorkerOrderes()
+    public function actionCreateRecursiveOrderes()
     {
         $param = Yii::$app->request->post();
 
@@ -1819,16 +1825,11 @@ class OrderController extends \restapi\components\Controller
         if (empty($param['order_is_use_balance'])) {
             return $this->send(null, "使用余额不能为空", 0);
         }
-
-        #判断服务开始时间
-        if (empty($param['order_booked_begin_time'])) {
-            return $this->send(null, "服务开始时间不能为空", 0);
+        if(empty($param['$order_booked_time'])){
+            return $this->send(null, "服务时间不能为空", 0);
         }
 
-        #判断服务结束时间
-        if (empty($param['order_booked_end_time'])) {
-            return $this->send(null, "服务结束时间不能为空", 0);
-        }
+
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
         if (!empty($customer) && !empty($customer->id)) {
             $attributes = array(
@@ -1847,20 +1848,15 @@ class OrderController extends \restapi\components\Controller
                 "order_customer_memo" => $param['order_customer_memo']
             );
 
-            $booked_list = array(
-                [
-                    'order_booked_begin_time' => strtotime(date('Y-m-d 11:00')),
-                    'order_booked_end_time' => strtotime(date('Y-m-d 12:30')),
-                ],
-                [
-                    'order_booked_begin_time' => strtotime(date('Y-m-d 11:00') . ' +1days'),
-                    'order_booked_end_time' => strtotime(date('Y-m-d 12:30') . ' +1days'),
-                ],
-                [
-                    'order_booked_begin_time' => strtotime(date('Y-m-d 11:00') . ' +2days'),
-                    'order_booked_end_time' => strtotime(date('Y-m-d 12:30') . ' +2days'),
-                ],
-            );
+            $booked_list = array();
+
+            foreach ($param['$order_booked_time'] as $key => $val) {
+                $booked_list[]=[
+                    'order_booked_begin_time' => strtotime($val['order_booked_begin_time']),
+                    'order_booked_end_time' => strtotime($val['order_booked_end_time'])
+                ];
+            }
+
             try {
                 $order = new \core\models\order\Order();
                 $createOrder = $order->createNewBatch($attributes, $booked_list);
@@ -1890,7 +1886,7 @@ class OrderController extends \restapi\components\Controller
      * @apiDescription 阿姨抢单提交
      *
      * @apiParam {String} access_token      会话id.
-     * @apiParam {String} platform_version  平台版本号
+     * @apiParam {String} [platform_version]  平台版本号
      * @apiParam {String} order_id          订单号
      *
      * @apiSuccessExample {json} Success-Response:

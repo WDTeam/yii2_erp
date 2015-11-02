@@ -3,8 +3,10 @@
 namespace core\models\operation\coupon;
 
 use Yii;
-use core\models\operation\coupon\CouponCode;
 use yii\base\InvalidParamException;
+
+use core\models\operation\coupon\CouponCode;
+use core\models\operation\coupon\CouponCustomer;
 
 /**
  * This is the model class for table "{{%coupon}}".
@@ -273,6 +275,21 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
 		return $expirate_at;
 	}
 
+	/**************************************defined relations*************************************/
+	/**
+     * define relation of code for coupon
+	 */
+	public function getCouponCodeRelation(){
+		return $this->hasMany(CouponCode::className(), ['coupon_id' => 'id']);
+	}
+
+	/**
+     * define relation of customer for coupon
+	 */
+	public static function getCouponCustomerRelation(){
+		return $this->hasMany(CouponCustomer::className(), ['coupon_id' => 'id']);
+	}
+
 
 	/**************************************coupon for order**************************************/
 	/**
@@ -319,7 +336,7 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
 	/**
      * reverse coupon while customer cancel order
 	 */
-	public static function backcoupon($coupon_customer_id){
+	public static function backCoupon($coupon_customer_id){
 		$couponCustomer = CouponCustomer::findOne($coupon_customer_id);
 		if($couponCustomer === NULL){
 			return ['response'=>'error', 'errcode'=>1, 'errmsg'=>'优惠券不存在'];
@@ -365,13 +382,13 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
      * 获取当前优惠券的所有优惠码
      * @author CoLee
      */
-	public function getCodes()
-	{
-	    $models = CouponCode::find()
-	    ->where(['coupon_id'=>$this->id])
-	    ->all();
-	    return (array)$models;
-	}
+	//public function getCodes()
+	//{
+	//    $models = CouponCode::find()
+	//    ->where(['coupon_id'=>$this->id])
+	//    ->all();
+	//    return (array)$models;
+	//}
 	/**
 	 * 赔付类型的绑定记录
 	 * @author CoLee

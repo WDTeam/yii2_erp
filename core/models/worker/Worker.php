@@ -304,7 +304,7 @@ class Worker extends \dbbase\models\worker\Worker
         //$dataSource = 1;//1redis 2mysql
         //如果redis可用
         if(Yii::$app->redis->IsActive){
-            return self::getDistrictAllWorkerFromRedis($district_id,$worker_id);
+           return self::getDistrictAllWorkerFromRedis($district_id,$worker_id);
         }else{
             $workerCondition = $worker_id ? ['{{%worker}}.id'=>$worker_id] : [];
             $result = self::getDistrictAllWorkerFromMysql($district_id,$workerCondition);
@@ -332,12 +332,12 @@ class Worker extends \dbbase\models\worker\Worker
      * @param $worker_id
      * @return array
      */
-    public static function getDistrictAllWorkerFromRedis($district_id,$worker_id){
+    protected static function getDistrictAllWorkerFromRedis($district_id,$worker_id){
         $workerIdsArr =  Yii::$app->redis->executeCommand('smembers', [self::DISTRICT.'_'.$district_id]);
         if($workerIdsArr){
             //指定阿姨
             if($worker_id){
-                //如果指定阿姨不在该商圈中，则返回空数组
+                //如果指定阿姨必须在该商圈中
                 if(in_array($worker_id,$workerIdsArr)){
                     $workerInfoArr = Yii::$app->redis->executeCommand('get',[self::WORKER.'_'.$worker_id]);
                     if($workerInfoArr){
@@ -360,7 +360,7 @@ class Worker extends \dbbase\models\worker\Worker
                 $new_workerInfoArr = [];
                 foreach ((array)$workerInfoArr as $val) {
                     if($val!==null){
-                        $new_workerInfoArr[] = $val;
+                        $new_workerInfoArr[] = json_decode($val,1);
                     }
                 }
                 return $new_workerInfoArr;
@@ -535,6 +535,12 @@ class Worker extends \dbbase\models\worker\Worker
 
     }
 
+    /**
+     * 对比时间是否可用
+     * @param $timeline1
+     * @param $timeline2
+     * @return mixed
+     */
     protected static function compareTimeLine($timeline1,$timeline2){
         foreach($timeline1 as $key=>$val){
             if($timeline1[$key]['enable']==false){
@@ -723,10 +729,11 @@ class Worker extends \dbbase\models\worker\Worker
             return false;
         }else{
             //整理阿姨订单信息
+            /*根据需求 需要给阿姨留有路程上的时间 阿姨订单开始时间-1小时 和 订单结束时间+1小时*/
             $orderInfo['order_id'] = $order_id;
-            $orderInfo['order_booked_count'] = $order_booked_count;
-            $orderInfo['order_booked_begin_time'] = $order_booked_begin_time;
-            $orderInfo['order_booked_end_time'] = $order_booked_end_time;
+            $orderInfo['order_booked_count'] = intval($order_booked_count);
+            $orderInfo['order_booked_begin_time'] = intval($order_booked_begin_time)-3600;
+            $orderInfo['order_booked_end_time'] = intval($order_booked_end_time)+3600;
 
             //添加阿姨订单信息
             if($type==1){
