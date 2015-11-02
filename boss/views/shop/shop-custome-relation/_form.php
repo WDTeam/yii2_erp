@@ -25,15 +25,13 @@ use core\models\system\SystemUser;
     		'prompt' => '请选择用户',
     		],'class' => 'col-md-2'],
     		
-'baseid'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 父级id...']], 
-
-'shopid'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 门店id...']], 
-
-'shop_manager_id'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 家政公司ID...']], 
-
-'stype'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 1 家政公司 2 门店...']], 
-
-'is_del'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 0 正常  1删除...']], 
+    		'shopid'=>['type'=> Form::INPUT_DROPDOWN_LIST, 'items'=>SystemUser::getuserlist(),'options' => [
+    		'prompt' => '请选择门店',
+    		],'class' => 'col-md-2'],
+    		
+    		'shop_manager_id'=>['type'=> Form::INPUT_DROPDOWN_LIST, 'items'=>SystemUser::getuserlist(),'options' => [
+    		'prompt' => '请选择家政公司',
+    		],'class' => 'col-md-2'],
 
     ]
 
