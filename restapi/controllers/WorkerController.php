@@ -573,7 +573,7 @@ class WorkerController extends \restapi\components\Controller
      */
     public function actionGetWorkerBillList()
     {
-        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //检测阿姨是否登录
         $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
@@ -866,7 +866,7 @@ class WorkerController extends \restapi\components\Controller
      *  }
      */
     public function actionWorkerBillConfirm(){
-        $param =  json_decode(Yii::$app->request->getRawBody(),true);
+        $param = Yii::$app->request->post() or $param =  json_decode(Yii::$app->request->getRawBody(),true);
         //检测阿姨是否登录
         $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){
@@ -878,7 +878,7 @@ class WorkerController extends \restapi\components\Controller
         }
         try{
             if(FinanceSettleApplySearch::workerConfirmSettlement(intval($param['settle_id']))){
-                return $this->send(null,'账单确定成功', 1, 200,null,alertMsgEnum::workerBillConfirmSuccess);
+                return $this->send(null,'账单确定d成功', 1, 200,null,alertMsgEnum::workerBillConfirmSuccess);
             }
          }catch (\Exception $e) {
             return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::workerBillConfirmFailed);
