@@ -9,8 +9,6 @@ namespace core\models\order;
 
 
 use Yii;
-use yii\base\Exception;
-use dbbase\models\order\OrderStatusDict;
 use dbbase\models\order\OrderStatusHistory;
 
 class OrderStatus extends Order
