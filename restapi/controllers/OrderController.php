@@ -813,7 +813,7 @@ class OrderController extends \restapi\components\Controller
         }
         $ret = [];
         $ret['limit'] = $limit;
-        $ret['page_total'] = ceil($count / $limit);
+        $ret['page_total'] = $count / $limit + 1;
         $ret['page'] = $page;
         $ret['orders'] = $orders;
         $this->send($ret, "操作成功", 1);
