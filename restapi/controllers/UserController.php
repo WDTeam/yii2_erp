@@ -91,6 +91,7 @@ class UserController extends \restapi\components\Controller
     public function actionAddAddress()
     {
         $param = Yii::$app->request->post();
+
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
@@ -177,7 +178,6 @@ class UserController extends \restapi\components\Controller
     public function actionGetAddresses()
     {
         @$accessToken = Yii::$app->request->get('access_token');
-
         if (empty($accessToken)) {
             $accessToken = json_decode(Yii::$app->request->getRawBody(), true);
         }
