@@ -37,6 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="customer-view">
 <?php 
+
 //城市
 $city_name = core\models\operation\OperationCity::getCityName($model->operation_city_id);
 
@@ -64,7 +65,6 @@ if(empty($customer_ext_srcs)){
 	}
 }
 
-
 //全部服务地址
 $customerAddress = CustomerAddress::listAddress($model->id);
 
@@ -81,22 +81,30 @@ if(!empty($customerAddress)){
 		}
 	}
 }
-//var_dump($addressStr);
-//exit();
+
 
 //订单
 $order_count = OrderSearch::getCustomerOrderCount($model->id);
+
 //评价数量
 $comment_count = CustomerComment::getCustomerCommentCount($model->id);
 //$comment_count = 0;
 //积分
-$score = CustomerExtScore::getCustomerScore($model->id);
+$score_arr_info = Customer::getScoreById($model->id);
+if($score_arr_info['errcode'] == 0){
+	$score = $score_arr_info['score'];
+}
+
 //余额
-$balance = Customer::getBalanceById($model->id);
+$balance_arr_info = Customer::getBalanceById($model->id);
+if($balance_arr_info['errcode'] == 0){
+	$balance = $balance_arr_info['balance'];
+}
 //历史状态集
 $customerBlockLog = CustomerBlockLog::listBlockLog($model->id);
 //当前状态
 $currentBlockStatus = CustomerBlockLog::getCurrentBlockStatus($model->id);
+
 echo DetailView::widget([
     'model' => $model,
     'condensed'=>false,
