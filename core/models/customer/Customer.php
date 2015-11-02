@@ -46,6 +46,7 @@ class Customer extends \dbbase\models\customer\Customer
 				//customer balance
 				$customerExtBalance = new CustomerExtBalance;
 				$customerExtBalance->customer_id = $customer->id;
+				$customerExtBalance->customer_phone = $phone;
 				$customerExtBalance->customer_balance = 0;
 				$customerExtBalance->created_at = time();
 				$customerExtBalance->updated_at = 0;
@@ -55,6 +56,7 @@ class Customer extends \dbbase\models\customer\Customer
 				//customer score
 				$customerExtScore = new CustomerExtScore;
 				$customerExtScore->customer_id = $customer->id;
+				$customerExtScore->customer_phone = $phone;
 				$customerExtScore->customer_score = 0;
 				$customerExtScore->created_at = time();
 				$customerExtScore->updated_at = 0;
@@ -382,11 +384,31 @@ class Customer extends \dbbase\models\customer\Customer
 	 */
 	public static function getScore($phone){
 		$customer = self::find()->where(['customer_phone'=>$phone])->asArray()->one();
-		if(empty($customer)) throw new NotFoundHttpException;
+		if(empty($customer)) {
+			return ['response'=>'error', 'errcode'=>'1', 'errmsg'=>'客户不存在'];
+		}
 
 		$customer_ext_score = CustomerExtScore::find()->where(['customer_phone'=>$phone])->asArray()->one();
-		if(empty($customer_ext_score)) throw new NotFoundHttpException;
-		return $customer_ext_score['customer_score'];
+		if(empty($customer_ext_score)) {
+			return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误'];
+		}
+		return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'score'=>$customer_ext_score['customer_score']];
+	}
+
+	/**
+     * get score by id
+	 */
+	public static function getScoreById($customer_id){
+		$customer = self::findOne($customer_id);
+		if(empty($customer)) {
+			return ['response'=>'error', 'errcode'=>'1', 'errmsg'=>'客户不存在'];
+		}
+
+		$customer_ext_score = CustomerExtScore::find()->where(['customer_id'=>$customer_id])->asArray()->one();
+		if(empty($customer_ext_score)) {
+			return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误'];
+		}
+		return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'score'=>$customer_ext_score['customer_score']];
 	}
 
 	/*******************************************src**********************************************/

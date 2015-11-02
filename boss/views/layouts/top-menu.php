@@ -65,6 +65,10 @@ $menuItemsMain = [
               'url' => ['/system/role'],
           ],
           [
+          'label' => '<i class="fa fa-users"></i> ' . Yii::t('app', '设置用户关系'),
+          'url' => ['/shop/shop-custome-relation'],
+          ],
+          [
               'label' => '<i class="fa fa-user"></i> ' . Yii::t('app', '设置系统用户权限'),
               'url' => ['/system/system-user'],
           ],

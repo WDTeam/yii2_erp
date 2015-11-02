@@ -70,6 +70,10 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     const WORKER_CONFIRM_SETTLEMENT = 1;//阿姨确认结算单
     
     const WORKER_VACATION_DAYS = 4;//公司规定阿姨每个月可休假的天数
+    
+    public $settle_apply_create_start_time;//结算申请开始时间
+    
+    public $settle_apply_create_end_time;//结算申请结束时间
    
    public $financeSettleApplyStatusArr = [
        FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED=>'财务审核不通过',
@@ -82,9 +86,10 @@ class FinanceSettleApplySearch extends FinanceSettleApply
     public function rules()
     {
         return [
-            [[ 'finance_settle_apply_starttime', 'finance_settle_apply_endtime'], 'required'],
+            [[ 'settle_apply_create_start_time', 'settle_apply_create_end_time'], 'required'],
              [['worker_id','id', 'worker_type_id','shop_id', 'finance_settle_apply_man_hour', 'finance_settle_apply_status','worker_type_id','worker_identity_id', ], 'integer'],
             [['worker_tel',], 'string', 'max' => 11],
+            [['worker_tel',],'match','pattern'=>'/^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/','message'=>'请填写正确格式的手机号码'],
         ];
     }
 
@@ -116,11 +121,9 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             'finance_settle_apply_cycle' => $this->finance_settle_apply_cycle,
             'is_softdel' => $this->is_softdel,
             'updated_at' => $this->updated_at,
-            'created_at' => $this->created_at,
             'worker_tel' => $this->worker_tel,
         ]);
-        $query->andFilterWhere(['<=','finance_settle_apply_starttime',$this->finance_settle_apply_starttime])
-              ->andFilterWhere(['<=','finance_settle_apply_endtime',$this->finance_settle_apply_endtime]);
+        $query->andFilterWhere(['between','created_at',$this->settle_apply_create_start_time,$this->settle_apply_create_end_time]);
         $query->andFilterWhere(['like', 'worker_type_name', $this->worker_type_name])
                 ->andFilterWhere(['like', 'worker_identity_name', $this->worker_identity_name])
             ->andFilterWhere(['like', 'finance_settle_apply_cycle_des', $this->finance_settle_apply_cycle_des])
@@ -362,6 +365,15 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         return $this->roleDes[$workerIdentityId];
     }
     
+    public function getWorkerIdByWorkerTel($worker_tel){
+        $worker_id = -1;
+        $worker = Worker::getWorkerInfoByPhone($worker_tel);
+        if(count($worker) > 0){
+            $worker_id = $worker['id'];
+        }
+        return $worker_id;
+    }
+    
     /**
      * 根据用户角色和阿姨类型获取结算周期
      * @param type $workerType
@@ -559,6 +571,8 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         $parentAttributeLabels = parent::attributeLabels();
         $addAttributeLabels = [
             'settleMonth' => Yii::t('app', '结算月份'),
+            'settle_apply_create_start_time' => Yii::t('app', '申请开始时间'),
+            'settle_apply_create_end_time' => Yii::t('app', '申请结束时间'),
         ];
         return array_merge($addAttributeLabels,$parentAttributeLabels);
     }

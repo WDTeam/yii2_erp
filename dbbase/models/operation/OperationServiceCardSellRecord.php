@@ -29,11 +29,23 @@ namespace dbbase\models\operation;
  */
 class OperationServiceCardSellRecord extends \yii\db\ActiveRecord
 {
+
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
         return '{{%operation_service_card_sell_record}}';
+    }
+
+    /**
+     * 保存服务卡销售记录
+     * @return bool
+     */
+    public function doSave(){
+        if ($this->save()) {
+            return true;
+        }
+        return false;
     }
 }

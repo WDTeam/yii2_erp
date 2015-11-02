@@ -39,6 +39,7 @@ class OrderPool extends Model
             'address' => $order->order_address,
             'need' => $order->orderExtCustomer->order_customer_need,
             'money' => $order->orderExtPay->order_pay_type==1?$order->order_money:'0.00',
+            'is_booked_worker' => ($order->order_booked_worker_id==$worker_id)
         ];
         if($order->order_booked_worker_id==$worker_id){
             Yii::$app->redis->executeCommand('zAdd', [self::PUSH_BOOKED_WORKER_ORDERS.'_'.$worker_id, $order_id, json_encode($redis_order)]);
@@ -81,17 +82,17 @@ class OrderPool extends Model
      * @param $worker_id
      * @param int $page_size
      * @param int $page
-     * @param bool $is_booked
      * @return array
      */
-    public static function getOrdersFromWorkerPushList($worker_id,$page_size=20,$page=1,$is_booked=false)
+    public static function getOrdersFromWorkerPushList($worker_id,$page_size=20,$page=1)
     {
         $begin = ($page-1)*$page_size;
         $end = $begin+$page_size-1;
-        if($is_booked){
-            $orders = Yii::$app->redis->executeCommand('zRange', [self::PUSH_BOOKED_WORKER_ORDERS.'_'.$worker_id, $begin, $end]);
-        }else{
-            $orders = Yii::$app->redis->executeCommand('zRange', [self::PUSH_WORKER_ORDERS.'_'.$worker_id, $begin, $end]);
+        $orders = Yii::$app->redis->executeCommand('zRange', [self::PUSH_BOOKED_WORKER_ORDERS.'_'.$worker_id, $begin, $end]);
+        if(count($orders)<$page_size) {
+            $begin = $begin + count($orders) - self::getOrdersCountFromWorkerPushList($worker_id,true);
+            $end = $begin+$page_size-1-count($orders);
+            $orders += Yii::$app->redis->executeCommand('zRange', [self::PUSH_WORKER_ORDERS . '_' . $worker_id, $begin, $end]);
         }
         $order_list = [];
         foreach($orders as $order){

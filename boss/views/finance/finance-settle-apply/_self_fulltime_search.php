@@ -2,11 +2,9 @@
 
 use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
-use kartik\datecontrol\DateControl;
-use kartik\date\DatePicker;
 use core\models\finance\FinanceSettleApplySearch;
-use boss\widgets\ShopSelect;
 use core\models\finance\FinanceShopSettleApplySearch;
+use kartik\datecontrol\DateControl;
 ?>
 
 <div class="worker-search">
@@ -18,70 +16,6 @@ use core\models\finance\FinanceShopSettleApplySearch;
         'method' => 'get',
     ]); ?>
     
-        <?php
-//            if($model->settle_type == FinanceSettleApplySearch::SELF_FULLTIME_WORKER_SETTELE){
-//                echo "<div class='col-md-2'>";
-//                echo $form->field($model, 'settleMonth')->widget(DatePicker::classname(), [
-//                            'name' => 'settleMonth',
-//                            'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-//                            'pluginOptions' => [
-//                                'autoclose' => true,
-//                                'format' => 'yyyy-mm',
-//                                'startView'=>1,
-//                                'minViewMode'=>1,
-//                            ]
-//                        ]); 
-//                echo "</div> ";
-//            }
-        ?>
-    <?php 
-//    if($model->settle_type == FinanceSettleApplySearch::SELF_PARTTIME_WORKER_SETTELE){
-//        echo "<div class='col-md-2'>";
-//        echo  $form->field($model, 'finance_settle_apply_starttime')->widget(DateControl::classname(),[
-//            'type' => DateControl::FORMAT_DATE,
-//            'ajaxConversion'=>false,
-//            'displayFormat' => 'php:Y-m-d',
-//            'saveFormat'=>'php:U',
-//            'options' => [
-//                'pluginOptions' => [
-//                     'autoclose' => true
-//                ]
-//            ]
-//        ]);
-//        echo "</div> ";
-//    }
-    ?>
-    
-    <?php 
-//    if($model->settle_type == FinanceSettleApplySearch::SELF_PARTTIME_WORKER_SETTELE){
-//        echo "<div class='col-md-2'>";
-//        echo  $form->field($model, 'finance_settle_apply_endtime')->widget(DateControl::classname(),[
-//            'type' => DateControl::FORMAT_DATE,
-//            'ajaxConversion'=>false,
-//            'displayFormat' => 'php:Y-m-d',
-//            'saveFormat'=>'php:U',
-//            'options' => [
-//                'pluginOptions' => [
-//                     'autoclose' => true
-//                ]
-//            ]
-//        ]);
-//        echo "</div> ";
-//    }
-    ?>
-    
-     <?php 
-//    if(($model->settle_type == FinanceSettleApplySearch::SHOP_WORKER_SETTELE) || ($model->settle_type ==FinanceSettleApplySearch::ALL_WORKER_SETTELE)){
-//        echo "<div class='col-md-4' style='margin-top: 22px;'>";
-//        echo  ShopSelect::widget([
-//            'model'=>$model,
-//            'shop_manager_id'=>'shop_manager_id',
-//            'shop_id'=>'shop_id',
-//            ]);
-//        echo "</div> ";
-//    }
-    ?>
-  
     <div class='col-md-2'>
         <?= $form->field($model, 'worker_tel'); ?>
     </div>
@@ -113,6 +47,6 @@ use core\models\finance\FinanceShopSettleApplySearch;
     </div>
 
     
-    
+     <?php ActiveForm::end(); ?>
 
 </div>

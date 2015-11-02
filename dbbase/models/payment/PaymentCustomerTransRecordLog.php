@@ -137,36 +137,14 @@ class PaymentCustomerTransRecordLog extends \yii\db\ActiveRecord
         //加密签名
         foreach( $data as $name=>$val )
         {
-            if( !empty($val) && intval($val) > 1 && !in_array($name,$notArray))
+            $value = is_numeric($val) ? (int)$val : $val;
+            if( !empty($value) && !in_array($name,$notArray))
             {
-                $str .= (int)$val;
+                if(is_numeric($value) && $value < 1) continue;
+                $str .= $value;
             }
         }
-        //1jiajie.com2476575255601540401000100013402320
-        //1jiajie.com24765752556015401000100013402320
         //return $str;
-        return md5(md5($str).'1jiajie.com');
-    }
-
-    /**
-     * 制造签名
-     */
-    public function makeSign()
-    {
-        //加密字符串
-        $str='';
-        //排除的字段
-        $notArray = ['id','payment_customer_trans_record_verify','created_at','updated_at'];
-        //获取字段
-        $key = $this->attributeLabels();
-        //加密签名
-        foreach( $key as $name=>$val )
-        {
-            if( !empty($this->$name) && $this->$name != 1 && $this->$name > 0 && !in_array($name,$notArray))
-            {
-                $str .= (int)$this->$name;
-            }
-        }
         return md5(md5($str).'1jiajie.com');
     }
 
