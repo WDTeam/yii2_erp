@@ -4,7 +4,7 @@ namespace dbbase\models\order;
 use Yii;
 
 use dbbase\models\ActiveRecord;
-use dbbase\models\order\OrderExtCustomer;
+use core\models\order\Order;
 use dbbase\models\order\OrderExtWorker;
 /**
  * This is the model class for table "ejj_order_complaint".
@@ -73,8 +73,8 @@ class OrderComplaint extends ActiveRecord
         ];
     }
     
-    public function getOrderExtCustomer(){
-    	return $this->hasOne(OrderExtCustomer::className(), ['order_id'=>'order_id']);
+    public function getOrder(){
+    	return $this->hasOne(Order::className(), ['id'=>'order_id']);
     }
     
     public function getOrderExtWorker(){
