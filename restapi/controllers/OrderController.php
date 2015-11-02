@@ -1716,7 +1716,9 @@ class OrderController extends \restapi\components\Controller
                     $count = $orderSearch->searchWorkerOrdersWithStatusCount($args, $arr);
                     #待服务订单数
                     $ret['workerServiceCount'] = $count;
+                    #指定阿姨订单数
                     $ret['workerData'] = $workerCount;
+                    #待服务订单数
                     $ret['orderData'] = $workerCountTwo;
                     #阿姨状态
                     $ret['worker_is_block'] = [
@@ -1756,14 +1758,16 @@ class OrderController extends \restapi\components\Controller
      * @apiParam  {string}  [order_customer_memo] 客户备注
      * @apiParam   {int}    [coupon_id] 优惠券id
      * 
-     * @apiParam  {Object[]}
-     * [
-     * {"order_booked_begin_time":"2015-10-01 10:10","order_booked_end_time":"2015-10-02 10:10","coupon_id":"1"},
-     * {"order_booked_begin_time":"2015-10-03 10:10","order_booked_end_time":"2015-10-04 10:10","coupon_id":"2"},
-     * {"order_booked_begin_time":"2015-10-05 10:10","order_booked_end_time":"2015-10-06 10:10","coupon_id":"3"},
-     * {"order_booked_begin_time":"2015-10-07 10:10","order_booked_end_time":"2015-10-08 10:10","coupon_id":"4"}
-     * ]
-     *
+     * @apiParam  {Object[]} 
+     *  { 
+     *   "order_booked_time": [
+     *   // 开始时间 结束时间 优惠券
+     *   {"order_booked_begin_time":"2015-10-01 10:10","order_booked_end_time":"2015-10-02 10:10","coupon_id":"1"},
+     *   {"order_booked_begin_time":"2015-10-03 10:10","order_booked_end_time":"2015-10-04 10:10","coupon_id":"2"},
+     *   {"order_booked_begin_time":"2015-10-05 10:10","order_booked_end_time":"2015-10-06 10:10","coupon_id":"3"},
+     *   {"order_booked_begin_time":"2015-10-07 10:10","order_booked_end_time":"2015-10-08 10:10","coupon_id":"4"}
+     *    ]
+     *   }
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
@@ -1825,7 +1829,7 @@ class OrderController extends \restapi\components\Controller
         if (empty($param['order_is_use_balance'])) {
             return $this->send(null, "使用余额不能为空", 0);
         }
-        if(empty($param['$order_booked_time'])){
+        if(empty($param['order_booked_time'])){
             return $this->send(null, "服务时间不能为空", 0);
         }
 
@@ -1850,10 +1854,11 @@ class OrderController extends \restapi\components\Controller
 
             $booked_list = array();
 
-            foreach ($param['$order_booked_time'] as $key => $val) {
+            foreach ($param['order_booked_time'] as $key => $val) {
                 $booked_list[]=[
                     'order_booked_begin_time' => strtotime($val['order_booked_begin_time']),
-                    'order_booked_end_time' => strtotime($val['order_booked_end_time'])
+                    'order_booked_end_time' => strtotime($val['order_booked_end_time']),
+                    'coupon_id' => $val['coupon_id']
                 ];
             }
 
