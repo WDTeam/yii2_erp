@@ -457,7 +457,9 @@ class OrderController extends \restapi\components\Controller
         @$to = $args['to'];
         $args["oc.customer_id"] = $user->id;
         $args['order_parent_id'] = 0;
-
+        if($limit<=0){
+            $limit =1;
+        }
         try {
             $orderSearch = new \core\models\order\OrderSearch();
             $count = $orderSearch->searchOrdersWithStatusCount($args, $orderStatus);
@@ -815,7 +817,7 @@ class OrderController extends \restapi\components\Controller
 
         $ret = [];
         $ret['limit'] = $limit;
-        $ret['page_total'] = $count / $limit + 1;
+        $ret['page_total'] = ceil($count / $limit);
         $ret['page'] = $page;
         $ret['orders'] = $orders;
         $this->send($ret, "操作成功", 1);
