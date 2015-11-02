@@ -1741,35 +1741,34 @@ class OrderController extends \restapi\components\Controller
      * @apiGroup Order
      * @apiDescription 周期订单提交
      *
-     * @apiParam  {String}  access_token      会话id. 必填
+     * @apiParam  {String}  access_token      会话id. 必填 
      * @apiParam  {String}  [platform_version]  平台版本号
      * @apiParam  {integer} order_service_type_id 服务类型 商品id 必填
      * @apiParam  {integer} order_src_id 订单来源id 必填
      * @apiParam  {string}  channel_id 下单渠道 必填
      * @apiParam  {int}     address_id 客户地址id 必填
      * @apiParam  {string}  order_customer_phone 客户手机号 必填
-     * @apiParam  {int}     admin_id 操作人id 0客户 1系统 必填
      * @apiParam  {int}     order_pay_type 支付方式 1现金 2线上 3第三方 必填
      * @apiParam  {int}     order_is_use_balance 是否使用余额 0否 1是 必填
      * @apiParam  {string}  [order_booked_worker_id] 指定阿姨id
-     * @apiParam  {int}  [accept_other_aunt] 0不接受 1接受
+     * @apiParam  {int}     [accept_other_aunt] 0不接受 1接受
      * @apiParam  {string}  [order_customer_need] 客户需求
      * @apiParam  {string}  [order_customer_memo] 客户备注
-     * @apiParam   {int} [coupon_id] 优惠券id
+     * @apiParam   {int}    [coupon_id] 优惠券id
      * 
-     * @apiParam  {Object[]}order_booked_time
+     * @apiParam  {Object[]}
      * [
-     * {"order_booked_begin_time":"2015-10-01 10:10","order_booked_end_time":"2015-10-02 10:10"},
-     * {"order_booked_begin_time":"2015-10-03 10:10","order_booked_end_time":"2015-10-04 10:10"},
-     * {"order_booked_begin_time":"2015-10-05 10:10","order_booked_end_time":"2015-10-06 10:10"},
-     * {"order_booked_begin_time":"2015-10-07 10:10","order_booked_end_time":"2015-10-08 10:10"}
+     * {"order_booked_begin_time":"2015-10-01 10:10","order_booked_end_time":"2015-10-02 10:10","coupon_id":"1"},
+     * {"order_booked_begin_time":"2015-10-03 10:10","order_booked_end_time":"2015-10-04 10:10","coupon_id":"2"},
+     * {"order_booked_begin_time":"2015-10-05 10:10","order_booked_end_time":"2015-10-06 10:10","coupon_id":"3"},
+     * {"order_booked_begin_time":"2015-10-07 10:10","order_booked_end_time":"2015-10-08 10:10","coupon_id":"4"}
      * ]
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
      *      "code": "ok",
-     *      "msg":"添加成功成功",
+     *      "msg":"添加成功",
      * }
      *
      * @apiError SessionIdNotFound 未找到会话ID.
@@ -1887,7 +1886,7 @@ class OrderController extends \restapi\components\Controller
      * @apiDescription 阿姨抢单提交
      *
      * @apiParam {String} access_token      会话id.
-     * @apiParam {String} platform_version  平台版本号
+     * @apiParam {String} [platform_version]  平台版本号
      * @apiParam {String} order_id          订单号
      *
      * @apiSuccessExample {json} Success-Response:

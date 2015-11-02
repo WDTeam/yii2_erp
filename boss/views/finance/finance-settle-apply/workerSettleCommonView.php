@@ -84,10 +84,10 @@ if(isset($model->review_section)){
         </div>
         <div class="panel-body settle-detail-body">
             <div class='settleDetail'>
-                完成总工时
+                完成订单总数
             </div>
             <div class='settleDetail'>
-                工时费小计
+                订单费用小计
             </div>
             <div class='settleDetail'>
                 底薪补贴
