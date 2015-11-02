@@ -103,10 +103,8 @@ class server
      * 获取本机IP
      */
     public function serverIP(){
-        $localIpArray = swoole_get_local_ip();
-        $localIp = current($localIpArray);
-
-        return $localIp;
+        $serverIP = $this->config['SWOOLE_SERVER_IP'];
+        return $serverIP;
     }
     /*
      * 连接 Redis
