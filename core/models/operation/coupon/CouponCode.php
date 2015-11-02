@@ -47,13 +47,14 @@ class CouponCode extends \dbbase\models\operation\coupon\CouponCode
 		$coupon_code['length'] = 8;
 		$coupon_code['element_lib'] = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 
 			'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 
-			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', );
+			//'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 
+		);
 
 		$coupon_code_str = '';
 		$coupon_code_element = '';
 		for ($i = 0; $i < $coupon_code['length']; $i++)
 		{
-			$coupon_code_element = $coupon_code['element_lib'][rand(0, 61)];
+			$coupon_code_element = $coupon_code['element_lib'][rand(0, 36)];
 			$coupon_code_str .= $coupon_code_element;
 		}
 		return $coupon_code_str;
