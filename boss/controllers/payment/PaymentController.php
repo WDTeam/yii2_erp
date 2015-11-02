@@ -174,9 +174,9 @@ class PaymentController extends BaseAuthController
          * @param integer $order_id 订单ID
          * @param integer $partner 第三方合作号
          */
-        $data = \core\models\payment\Payment::getPayParams(2,1,24,'Z681511017247639');
-        dump($data);
-        exit;
+        //$data = \core\models\payment\Payment::getPayParams(2,1,24,'Z681511017247639');
+        //dump($data);
+        //exit;
         //充值
         $order_id = 1;
         $order_channel_id = 24;
