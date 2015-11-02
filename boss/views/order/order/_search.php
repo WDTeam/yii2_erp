@@ -13,16 +13,14 @@ use boss\models\order\Order;
  */
 ?>
 <style type="text/css">
-	.select2-container--krajee {
-display: block;
-float: right;
-}
-
+	.select2-container--krajee {display: block;float: right;}
+    #m_warp .form-group {width: 280px;float: left;}
+    .select2-container--krajee {display: block;float: left;}
+    #m_warp .m_riqi .btn {float: left !important; background: #f6a202;text-align: center !important;height: 32px !important;line-height: 32px !important;font-size: 14px;padding: 0 !important;border-radius: 3px !important;width: 150px !important;}
 </style>
 <div class="heading">
 	<h3 class="panel-title">查询</h3>
 </div>
-
 <div class="m_from">
 <?php $form = ActiveForm::begin([
     //'type' => ActiveForm::TYPE_VERTICAL,
@@ -30,26 +28,11 @@ float: right;
     'method' => 'get',
 ]); ?>						
 	<?php echo $form->field($searchModel, 'order_customer_phone')->TextInput(['class' => 'm_ipu'])->label('用户电话 :', ['class' => 'm_ipone']); ?>
-	<?php echo $form->field($searchModel, 'order_worker_phone')->TextInput(['class' => 'm_ipu'])->label('阿姨电话 :', ['class' => 'm_ipone']); ?>
-	<?php echo $form->field($searchModel, 'order_code')->TextInput(['class' => 'm_ipu'])->label('订单编号 :', ['class' => 'm_ipone']); ?>
-	
-	<div class="m_riqi">
-	  <div class="m_fr">	
-		<label class="m_ipone">下单时间:</label>
-		 <input name="created_from" type="text" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})" value="<?= isset($searchParas['created_from']) ? Html::encode($searchParas['created_from']) : '' ?>"/> 到
-		 <input name="created_to" type="text" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})" value="<?= isset($searchParas['created_to']) ? Html::encode($searchParas['created_to']) : '' ?>"/>
-     </div>
-	  <div class="m_fr" style="margin-bottom: 20px;">	
-        <label class="m_ipone">服务时间:</label>
-		  <input name="booked_from" type="text" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})" value="<?= isset($searchParas['booked_from']) ? Html::encode($searchParas['booked_from']) : '' ?>"/> 到
-		  <input name="booked_to" type="text" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})" value="<?= isset($searchParas['booked_to']) ? Html::encode($searchParas['booked_to']) : '' ?>"/>
-	   </div>
-
-        <?= $form->field($searchModel, 'shop_id')->widget(Select2::classname(), [
+    <?= $form->field($searchModel, 'shop_id')->widget(Select2::classname(), [
             'initValueText' => '门店:', // set the initial display text
             'options' => ['placeholder' => '选择门店', 'class' => 'm_ipu'],
             'pluginOptions' => [
-                'width' => '80%',
+                'width' => '65%',
                 'allowClear' => true,
                 'minimumInputLength' => 0,
                 'ajax' => [
@@ -62,24 +45,33 @@ float: right;
                 'templateSelection' => new JsExpression('function (city) { return city.text; }'),
             ],
         ])->label('门店:', ['class' => 'm_ipone','style'=>'line-height:35px']); ?>
-        
-        <?= $form->field($searchModel, 'district_id')->widget(Select2::classname(), [
+	    <label class="m_ipone">下单时间:</label>
+        <input name="created_from" type="text" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})" value="<?= isset($searchParas['created_from']) ? Html::encode($searchParas['created_from']) : '' ?>"/>到
+        <input name="created_to" type="text" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})" value="<?= isset($searchParas['created_to']) ? Html::encode($searchParas['created_to']) : '' ?>"/>
+	<div class="m_riqi">
+	<div class="m_fr">
+    <?php echo $form->field($searchModel, 'order_worker_phone')->TextInput(['class' => 'm_ipu'])->label('阿姨电话 :', ['class' => 'm_ipone']); ?>
+    <?= $form->field($searchModel, 'district_id')->widget(Select2::classname(), [
             'name' => 'worker_district',
             'hideSearch' => true,
             'data' => Order::getDistrictList(),
             'options' => ['placeholder' => '选择商圈', 'class' => 'm_ipu'],
             'pluginOptions' => [
-                'width' => '80%',
+                'width' => '65%',
                 'tags' => true,
                 'maximumInputLength' => 10
             ],
-        ])->label('商圈:', ['class' => 'm_ipone','style'=>'line-height:35px']); ?>        	   
-	   <?php echo $form->field($searchModel, 'order_address')->TextInput(['class' => 'm_ipu'])->label('客户地址 :', ['class' => 'm_ipone','style'=>'margin-left:20px;']); ?>
-	   <?= Html::submitButton('搜索', ['class' => 'btn btn-primary']) ?>
+        ])->label('商圈:', ['class' => 'm_ipone','style'=>'line-height:35px']); ?>
+          <label class="m_ipone">服务时间:</label>
+          <input name="booked_from" type="text" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})" value="<?= isset($searchParas['booked_from']) ? Html::encode($searchParas['booked_from']) : '' ?>"/>到
+          <input name="booked_to" type="text" class="Wdate" id="d412" onfocus="WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'1990-03-08 00:00:00',maxDate:'2030-12-32 23:59:59'})" value="<?= isset($searchParas['booked_to']) ? Html::encode($searchParas['booked_to']) : '' ?>"/>
+    </div>
+	<div class="m_fr" style="margin-right: 0;">
+    <?php echo $form->field($searchModel, 'order_code')->TextInput(['class' => 'm_ipu'])->label('订单编号 :', ['class' => 'm_ipone']); ?>	
+	</div>        	   
+	<?php echo $form->field($searchModel, 'order_address')->TextInput(['class' => 'm_ipu'])->label('客户地址 :', ['class' => 'm_ipone']); ?>
+    <?= Html::submitButton('搜索', ['class' => 'btn btn-primary']) ?>
 	</div>
-	
-	
-	
 <?php ActiveForm::end(); ?>
   <div class="clear"></div>
 </div>
