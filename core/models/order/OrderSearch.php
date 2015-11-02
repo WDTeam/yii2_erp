@@ -369,6 +369,17 @@ class OrderSearch extends Order
     }
 
     /**
+     * 获取单个订单
+     * @author lin
+     * @param $code
+     * @return null|static
+     */
+    public static function getOneByCode($code)
+    {
+        return Order::findOne(['order_code'=>$code]);
+    }
+
+    /**
      * 获取批量订单
      * @author lin
      * @param $batch_code
@@ -410,9 +421,16 @@ class OrderSearch extends Order
      */
     public static function getStartServiceOrderList()
     {
-        return Order::find()->joinWith(['orderExtStatus'])->select(['id','order_booked_end_time'])->where(['order_status_dict_id'=>[
-            OrderStatusDict::ORDER_SERVICE_START
-        ]])->asArray()->all();
+        return Order::find()->joinWith(['orderExtStatus'])->select(['id','order_booked_end_time'])->where(['order_status_dict_id'=>OrderStatusDict::ORDER_SERVICE_START])->asArray()->all();
+    }
+
+    /**
+     * 获取已完成服务订单列表
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function getWaitSysCommentOrderList()
+    {
+        return Order::find()->joinWith(['orderExtStatus'])->where(['order_status_dict_id'=> OrderStatusDict::ORDER_SERVICE_DONE],['<=','order_booked_end_time',strtotime('-1 days')])->asArray()->all();
     }
 
 
