@@ -1,5 +1,4 @@
 $(document).ready(function(){
-    $('#start').attr('disabled', true);
     $('#stop').attr('disabled', true);
     $('#reload').attr('disabled', true);
     $('#update').attr('disabled', true);
@@ -7,9 +6,6 @@ $(document).ready(function(){
     
     $('#qend').blur(function(){ $('#jstart').val( $('#qend').val());});
     $('#start').click(function(){execCommand(1);});
-    $('#stop').click(function(){execCommand(2);});
-    $('#reload').click(function(){execCommand(3);});
-    $('#update').click(function(){execCommand(4);});
     $('#connect').click(function(){websocketConnect();});
     $('#connectStatus').html('正在连接派单服务器...');
     $('#connect').click();
@@ -23,29 +19,21 @@ function websocketConnect() {
         websocket = new WebSocket(wsServer);
         websocket.onopen = function (evt) {
             console.log("Connected to WebSocket server." + evt.data);
-            $('#connectStatus').html('连接成功！');
-            $('#connect').attr('disabled', true);
-            $('#runService').hide();
-            $('#reload').attr('disabled', false);
-            $('#update').attr('disabled', false);
+            $('#connectStatus').html('<font color="#41A317">连接成功！</font>');
             if ($('#srvIsSuspend').val()==true)
             {
-                $('#start').attr('disabled', false);
-                $('#stop').attr('disabled', true);
-            }else{
+                $('#start').html('开始自动派单');
                 $('#start').attr('disabled', true);
-                $('#stop').attr('disabled', false);
+            }else{
+                $('#start').attr('disabled', false);
+                $('#start').html('停止自动派单');
             }
         };
         websocket.onclose = function (evt) {
             console.log("Disconnected");
-            $('#connectStatus').html('链接断开！请检查服务器地址是否正确，或被网络防火墙禁止访问');
-            $('#connect').attr('disabled', false);
-            $('#runService').show();
+            $('#connectStatus').html('<font color="#FF0000">链接断开！请检查服务器地址是否正确，或被网络防火墙禁止访问</font>');
+            $('#start').html('开始自动派单');
             $('#start').attr('disabled', true);
-            $('#stop').attr('disabled', true);
-            $('#reload').attr('disabled', true);
-            $('#update').attr('disabled', true);
         };
 
         websocket.onmessage = function (evt) {
@@ -78,13 +66,9 @@ function websocketConnect() {
 
         websocket.onerror = function (evt, e) {
             console.log('Error occured: ' + evt.data);
-            $('#connectStatus').html('连接错误，请检查网络环境是否正常！');
-            $('#connect').attr('disabled', false);
-            $('#runService').show();
+            $('#connectStatus').html('<font color="#FF0000">连接错误，请检查网络环境是否正常！</font>');
+            $('#start').html('开始自动派单');
             $('#start').attr('disabled', true);
-            $('#stop').attr('disabled', true);
-            $('#reload').attr('disabled', true);
-            $('#update').attr('disabled', true);
         };
     }
 }
@@ -142,6 +126,4 @@ function getStatus(status){
 function execCommand(cmd){
     var data = cmd +','+$('#qstart').val()+','+$('#qend').val()+','+$('#jstart').val()+','+$('#jend').val()+','+status;
     websocket.send(data);
-    //$('#connectStatus').html('自动派单开始！');
-    //$('#start').attr('disabled', false);
 }
