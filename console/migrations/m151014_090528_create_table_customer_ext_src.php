@@ -14,7 +14,7 @@ class m151014_090528_create_table_customer_ext_src extends Migration
         $this->createTable('{{%customer_ext_src}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT  COMMENT \'编号\'' ,
             'customer_id' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'客户\'',
-			'customer_phone' => Schema::TYPE_INTEGER . '(11) DEFAULT 0 COMMENT \'客户手机\'',
+			'customer_phone' => Schema::TYPE_STRING . '(11) DEFAULT NULL UNIQUE COMMENT \'客户手机\'',
             //'platform_id' => Schema::TYPE_INTEGER . '(8) DEFAULT 0 COMMENT \'平台\'',
             //'channal_id' => Schema::TYPE_INTEGER . '(8) DEFAULT 0 COMMENT \'渠道\'',
 			'finance_order_channal_id'=>Schema::TYPE_INTEGER . '(8) DEFAULT 0 COMMENT \'\'',

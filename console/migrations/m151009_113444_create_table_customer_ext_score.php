@@ -14,7 +14,7 @@ class m151009_113444_create_table_customer_ext_score extends Migration
         $this->createTable('{{%customer_ext_score}}', [
             'id'=>  Schema::TYPE_PK.'(8) NOT NULL AUTO_INCREMENT COMMENT \'ID\'',
             'customer_id'=>  Schema::TYPE_INTEGER.'(8) COMMENT \'客户\'',
-			'customer_phone' => Schema::TYPE_STRING . '(11) DEFAULT NULL COMMENT \'手机号\'',
+			'customer_phone' => Schema::TYPE_STRING . '(11) DEFAULT NULL UNIQUE COMMENT \'手机号\'',
             'customer_score' => Schema::TYPE_INTEGER.'(8) COMMENT \'客户积分\'',
             'created_at'=>  Schema::TYPE_INTEGER.'(11) COMMENT \'创建时间\'',
             'updated_at'=>  Schema::TYPE_INTEGER.'(11) COMMENT \'更新时间\'',
