@@ -37,15 +37,19 @@ $conditions = $model->getFullConditions();
         'worker_task_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 任务名称...', 'maxlength'=>255]],
     ]
     ]);?>
-    <div class="form-group">
+    <div class="form-group has-error">
         <label class="control-label col-md-2">任务条件</label>
         <?php foreach ($conditions as $con){?>
-        <div class="row col-md-10" style="padding-left:50px">
+        <div class="col-md-10" style="padding-left:50px">
             <span class="col-md-2">
                 <?php echo Html::dropDownList("WorkerTask[conditions][{$con['id']}][id]", $conditions[$con['id']]['id'], WorkerTask::CONDITION_NAME);?>
             </span>
-            <?php echo Html::dropDownList("WorkerTask[conditions][{$con['id']}][judge]", $conditions[$con['id']]['judge'], WorkerTask::CONDITION_JUDGE);?>
-            <?php echo Html::textInput("WorkerTask[conditions][{$con['id']}][value]", $conditions[$con['id']]['value']);?>
+            <?php echo Html::dropDownList("WorkerTask[conditions][{$con['id']}][judge]", $conditions[$con['id']]['judge'], WorkerTask::CONDITION_JUDGE,[
+                
+            ]);?>
+            <?php echo Html::textInput("WorkerTask[conditions][{$con['id']}][value]", $conditions[$con['id']]['value'],[
+                
+            ]);?>
             <button onclick="$(this).parent().remove()" class="btn" type="button">删除</button>
         </div>
         <?php }?>
