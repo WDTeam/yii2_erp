@@ -581,6 +581,22 @@ class OrderController extends BaseAuthController
         }
     }
 
+    public function actionModify()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $attr = Yii::$app->request->post();
+        $order = OrderSearch::getOne($attr['id']);
+        if($order->modify($attr))
+        {
+            return ['status'=>1,'info'=>'修改成功'];
+        }
+        else
+        {
+            return ['status'=>0,'info'=>'修改失败'];
+        }
+
+    }
+
     /**
      * Deletes an existing Order model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
