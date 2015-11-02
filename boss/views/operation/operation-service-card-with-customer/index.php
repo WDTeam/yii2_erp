@@ -14,9 +14,6 @@ $this->title = Yii::t('app', '服务卡客户关系');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-service-card-with-customer-index">
-    <div class="page-header">
-            <h1><?= Html::encode($this->title) ?></h1>
-    </div>
     <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
@@ -28,20 +25,22 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
+		'toolbar' =>[
+        ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+//            'id',
             'service_card_sell_record_id',
             'service_card_sell_record_code',
             'server_card_info_id',
             'service_card_with_customer_code',
-//            'server_card_info_name', 
-//            'customer_trans_record_pay_money', 
+            'server_card_info_name', 
+            'customer_trans_record_pay_money', 
 //            'server_card_info_value', 
 //            'service_card_info_rebate_value', 
 //            'service_card_with_customer_balance', 
-//            'customer_id', 
+            'customer_id', 
 //            'customer_phone', 
 //            'server_card_info_scope', 
 //            'service_card_with_customer_buy_at', 
@@ -54,13 +53,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
+               'template'=>'{view}',
                 'buttons' => [
-                'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['operation/operation-service-card-with-customer/view','id' => $model->id,'edit'=>'t']), [
-                                                    'title' => Yii::t('yii', 'Edit'),
-                                                  ]);}
-
-                ],
+					'view' => function ($url, $model) {
+						return Html::a(Yii::t('yii', '查看'), ['view', 'id' => $model->id], [
+							'title' => Yii::t('yii', '查看'),
+							'class' => 'btn btn-success btn-sm'
+						]);
+					},		
+				],
             ],
         ],
         'responsive'=>true,

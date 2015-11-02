@@ -68,7 +68,7 @@ class OperationServiceCardConsumeRecord extends \dbbase\models\operation\Operati
 
         //7.服务卡消费记录保存成功，更新客户服务卡余额
         if($this->doSave()){
-            return OperationServiceCardWithCustomer::updateServiceCardWithCustomerBalanceById($this->service_card_with_customer_id,$this->service_card_consume_record_behind_money);
+            return (new OperationServiceCardWithCustomer())->updateServiceCardWithCustomerBalanceById($this->service_card_with_customer_id,$this->service_card_consume_record_behind_money);
         }else{
             return false;
         }
