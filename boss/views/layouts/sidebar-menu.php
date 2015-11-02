@@ -48,7 +48,7 @@ echo Menu::widget(
                 ],
                 'items' => [
                     [
-                        'label' => '查看所有合作门店',
+                        'label' => '查看所有门店',
                         'url' => ['shop/shop/index'],
                         'icon' => 'fa fa-angle-right',
                     ],
