@@ -202,7 +202,17 @@ class FinanceSettleApplyController extends BaseAuthController
     public function actionQuery()
     {
         $financeSearchModel = new FinanceSettleApplySearch;
-        $dataProvider = $financeSearchModel->search(Yii::$app->request->getQueryParams());
+        $requestParams = Yii::$app->request->getQueryParams();
+        $financeSearchModel->settle_apply_create_start_time = FinanceSettleApplySearch::getFirstDayOfSpecifiedMonth();
+        $financeSearchModel->settle_apply_create_end_time = FinanceSettleApplySearch::getLastDayOfSpecifiedMonth();
+        $financeSearchModel->load($requestParams);
+        if(!empty($financeSearchModel->worker_tel)){
+            $financeSearchModel->worker_id = $financeSearchModel->getWorkerIdByWorkerTel($financeSearchModel->worker_tel);
+        }
+        $requestPhone = $financeSearchModel->worker_tel;
+        $financeSearchModel->worker_tel = null;
+        $dataProvider = $financeSearchModel->search(null);
+        $financeSearchModel->worker_tel = $requestPhone;
         return $this->render('query', [
             'dataProvider' => $dataProvider,
             'searchModel' => $financeSearchModel,
