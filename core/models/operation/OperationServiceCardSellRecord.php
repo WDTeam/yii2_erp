@@ -31,43 +31,43 @@ use core\models\customer\Customer;
 class OperationServiceCardSellRecord extends \dbbase\models\operation\OperationServiceCardSellRecord
 {
     /**
-     * @instruction ¿Í»§È·¶¨¹ºÂò·şÎñ¿¨£¬²úÉú¹º¿¨¼ÇÂ¼
+     * @instruction å®¢æˆ·ç¡®å®šè´­ä¹°æœåŠ¡å¡ï¼Œäº§ç”Ÿè´­å¡è®°å½•
      * @author zhangrenzhao
      * @date 2015-10-31
      * @param $attributes
-     * ¡¾   customer_id,ÓÃ»§ID
-     *      server_card_info_id,¿¨ĞÅÏ¢ID
-     *      service_card_sell_record_status£¬¹º¿¨¶©µ¥×´Ì¬
-     *      service_card_sell_record_channel_id,¹º¿¨ÇşµÀID
-     *      service_card_sell_record_channel_name,¹º¿¨ÇşµÀÃû³Æ
-     *      service_card_sell_record_money,¹º¿¨¶©µ¥½ğ¶î ¡¿
+     * ã€   customer_id,ç”¨æˆ·ID
+     *      server_card_info_id,å¡ä¿¡æ¯ID
+     *      service_card_sell_record_statusï¼Œè´­å¡è®¢å•çŠ¶æ€
+     *      service_card_sell_record_channel_id,è´­å¡æ¸ é“ID
+     *      service_card_sell_record_channel_name,è´­å¡æ¸ é“åç§°
+     *      service_card_sell_record_money,è´­å¡è®¢å•é‡‘é¢ ã€‘
      * @return string
      */
     public function createServiceCardSellRecord($attributes)
     {
-        //1.¶ÁÈ¡attributes£¬Ğ´Èëthis¶ÔÏóÊôĞÔ
+        //1.è¯»å–attributesï¼Œå†™å…¥thiså¯¹è±¡å±æ€§
         $this->setAttributes($attributes);
 
-        //2.¸ù¾İserver_card_info_id²éÑ¯·şÎñ¿¨ĞÅÏ¢
+        //2.æ ¹æ®server_card_info_idæŸ¥è¯¢æœåŠ¡å¡ä¿¡æ¯
         $operationServiceCardInfo = OperationServiceCardInfo::getServiceCardInfoById($this->server_card_info_id);
 
-        //3.Ğ´Èë·şÎñ¿¨ĞÅÏ¢
+        //3.å†™å…¥æœåŠ¡å¡ä¿¡æ¯
         $this->setAttributes([
-            'service_card_info_name' => $operationServiceCardInfo->service_card_info_name,//·şÎñ¿¨Ãû
+            'service_card_info_name' => $operationServiceCardInfo->service_card_info_name,//æœåŠ¡å¡å
         ]);
 
-        //4.¸ù¾İcustomer_id£¬»ñÈ¡ÓÃ»§¶ÔÏó
+        //4.æ ¹æ®customer_idï¼Œè·å–ç”¨æˆ·å¯¹è±¡
         $customer = Customer::getCustomerById($this->customer_id);
 
-        //5.Ğ´ÈëÓÃ»§ĞÅÏ¢
+        //5.å†™å…¥ç”¨æˆ·ä¿¡æ¯
         $this->setAttributes([
             'order_customer_phone' => $customer->customer_phone,
         ]);
 
-        //6.Éú³É¹º¿¨ÏúÊÛ¶©µ¥ºÅ
+        //6.ç”Ÿæˆè´­å¡é”€å”®è®¢å•å·
         $service_card_sell_record_code=self::getService_card_sell_record_code();
 
-        //7.³õÊ¼»¯ÆäËû×Ö¶Î
+        //7.åˆå§‹åŒ–å…¶ä»–å­—æ®µ
         $this->setAttributes([
             'service_card_sell_record_code'=>$service_card_sell_record_code,
             'is_del' => 0,
@@ -75,42 +75,42 @@ class OperationServiceCardSellRecord extends \dbbase\models\operation\OperationS
             'updated_at'=>time(),
         ]);
 
-        //8.±£´æ¹º¿¨ÏúÊÛ¼ÇÂ¼
+        //8.ä¿å­˜è´­å¡é”€å”®è®°å½•
         if($this->doSave()){
-            return $this->primaryKey;//·µ»Ø¹º¿¨¶©µ¥ID
+            return $this->primaryKey;//è¿”å›è´­å¡è®¢å•ID
         }else{
-            return null;//·µ»ØNULL£¬ËµÃ÷±£´æÊ§°Ü
+            return null;//è¿”å›NULLï¼Œè¯´æ˜ä¿å­˜å¤±è´¥
         }
     }
 
     /**
-     * @introduction ¿Í»§Ö§¸¶³É¹¦£¬»ØĞ´Ö§¸¶ĞÅÏ¢
+     * @introduction å®¢æˆ·æ”¯ä»˜æˆåŠŸï¼Œå›å†™æ”¯ä»˜ä¿¡æ¯
      * @author zhangrenzhao
      * @param $attributes
-     * ¡¾ id,·şÎñ¿¨¶©µ¥¼ÇÂ¼
-     *    customer_id,ÓÃ»§ID
-     *    server_card_info_id,¿¨ĞÅÏ¢ID
-     *    service_card_sell_record_status£¬¹º¿¨¶©µ¥×´Ì¬
-     *    customer_trans_record_pay_mode£¬Ö§¸¶·½Ê½
-     *    pay_channel_id£¬Ö§¸¶ÇşµÀID
-     *    customer_trans_record_pay_channel£¬Ö§¸¶ÇşµÀÃû³Æ
-     *    customer_trans_record_transaction_id£¬Ö§¸¶½»Ò×Á÷Ë®
-     *    customer_trans_record_pay_money£¬Ö§¸¶½ğ¶î
-     *    customer_trans_record_pay_account,Ö§¸¶ÕË»§
-     *    customer_trans_record _paid_at£¬Ö§¸¶Ê±¼ä
+     * ã€ id,æœåŠ¡å¡è®¢å•è®°å½•
+     *    customer_id,ç”¨æˆ·ID
+     *    server_card_info_id,å¡ä¿¡æ¯ID
+     *    service_card_sell_record_statusï¼Œè´­å¡è®¢å•çŠ¶æ€
+     *    customer_trans_record_pay_modeï¼Œæ”¯ä»˜æ–¹å¼
+     *    pay_channel_idï¼Œæ”¯ä»˜æ¸ é“ID
+     *    customer_trans_record_pay_channelï¼Œæ”¯ä»˜æ¸ é“åç§°
+     *    customer_trans_record_transaction_idï¼Œæ”¯ä»˜äº¤æ˜“æµæ°´
+     *    customer_trans_record_pay_moneyï¼Œæ”¯ä»˜é‡‘é¢
+     *    customer_trans_record_pay_account,æ”¯ä»˜è´¦æˆ·
+     *    customer_trans_record _paid_atï¼Œæ”¯ä»˜æ—¶é—´
      * @return tool
      */
     public function backServiceCardSellRecord($attributes)
     {
-        //1.¶ÁÈ¡attributes£¬Ğ´Èëthis¶ÔÏóÊôĞÔ
+        //1.è¯»å–attributesï¼Œå†™å…¥thiså¯¹è±¡å±æ€§
         $this->setAttributes($attributes);
-        //2.ÉèÖÃ¸üĞÂÊ±¼ä
+        //2.è®¾ç½®æ›´æ–°æ—¶é—´
         $this->setAttributes([
             'updated_at'=>time(),
         ]);
-        //3.±£´æ»ØĞ´ĞÅÏ¢
+        //3.ä¿å­˜å›å†™ä¿¡æ¯
         if($this->dosave()){
-            //»ØĞ´³É¹¦£¬Éú³É¿Í»§·şÎñ¹ØÏµ¼ÇÂ¼
+            //å›å†™æˆåŠŸï¼Œç”Ÿæˆå®¢æˆ·æœåŠ¡å…³ç³»è®°å½•
            return OperationServiceCardWithCustomer::createServiceCardWithCustomer(
                $this->id,
                $this->customer_id,
@@ -118,12 +118,12 @@ class OperationServiceCardSellRecord extends \dbbase\models\operation\OperationS
                $this->customer_trans_record_paid_at);
 
         }else{
-            return null;//NULL±íÊ¾Êı¾İÉú³ÉÊ§°Ü
+            return null;//NULLè¡¨ç¤ºæ•°æ®ç”Ÿæˆå¤±è´¥
         }
     }
 
     /**
-     * @instruction Éú³É¹º¿¨¶©µ¥ºÅÂë
+     * @instruction ç”Ÿæˆè´­å¡è®¢å•å·ç 
      * @return mixed
      */
     private function getService_card_sell_record_code(){
@@ -132,7 +132,7 @@ class OperationServiceCardSellRecord extends \dbbase\models\operation\OperationS
     }
 
     /**
-     * @instruction ¸ù¾İID»ñÈ¡¹º¿¨ÏúÊÛ¼ÇÂ¼
+     * @instruction æ ¹æ®IDè·å–è´­å¡é”€å”®è®°å½•
      * @param $id
      */
     public function getServiceCardSellRecordById($id){
@@ -140,7 +140,7 @@ class OperationServiceCardSellRecord extends \dbbase\models\operation\OperationS
     }
 
     /**
-     * @introduction Âß¼­É¾³ı
+     * @introduction é€»è¾‘åˆ é™¤
      * @return bool
      */
     public function softDelete()

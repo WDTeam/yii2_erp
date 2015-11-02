@@ -1200,7 +1200,7 @@ class WorkerController extends \restapi\components\Controller
      /**
      * @api {get} /worker/task-fail  获得已失败的任务列表 (李勇100%)
      * @apiName actionTaskFail
-     * @apiGroup Worker.
+     * @apiGroup Worker
      * @apiParam {String} per_page  第几页
      * @apiParam {String} page_num  每页显示多少条
      * @apiParam {String} access_token    阿姨登录 token.

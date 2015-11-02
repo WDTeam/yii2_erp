@@ -327,6 +327,8 @@ class ServiceController extends \restapi\components\Controller
      *      "msg": "",
      *      "ret":
      *      [
+     *          "category_name": "", 服务品类名称
+     *          "goods_category_name": "", 服务商品名称
      *          "goods_price": "0.0000", 价格
      *      ],
      *  }
@@ -358,6 +360,8 @@ class ServiceController extends \restapi\components\Controller
         }
 
         $ret = [
+            'category_name' => $goods['operation_category_name'],
+            'goods_name' => $goods['operation_shop_district_goods_name'],
             'goods_price' => $goods['operation_shop_district_goods_price'],
         ];
 
@@ -580,7 +584,7 @@ class ServiceController extends \restapi\components\Controller
         if (empty($ShopDistrictInfo)) {
             return $this->send(null, "商圈不存在", 0, 403,null,alertMsgEnum::singleServiceTimeDistrictNotExist);
         } else {
-            $district_id = $ShopDistrictInfo['id'];
+            $district_id = $ShopDistrictInfo['operation_shop_district_id'];
         }
         //获取单次服务排班表
         try{
@@ -742,7 +746,7 @@ class ServiceController extends \restapi\components\Controller
         if (empty($ShopDistrictInfo)) {
             return $this->send(null, "商圈不存在", 0, 403,null,alertMsgEnum::recursiveServiceTimeDistrictNotExist);
         } else {
-            $district_id = $ShopDistrictInfo['id'];
+            $district_id = $ShopDistrictInfo['operation_shop_district_id'];
         }
         //获取周期服务时间表
         try{
@@ -813,25 +817,21 @@ class ServiceController extends \restapi\components\Controller
         }catch (\Exception $e) {
             return $this->send($e, "根据经纬度获取商圈id系统错误", 1024, 403,null,alertMsgEnum::bossError);
         }
-         $district_id = $ShopDistrictInfo['id'];
+        if (empty($ShopDistrictInfo)) {
+            return $this->send(null, "商圈不存在", 0, 403,null,alertMsgEnum::serverWorkerListDistrictNotExist);
+        } else {
+            $district_id = $ShopDistrictInfo['operation_shop_district_id'];
+        }
          //获取周期订单可用阿姨的列表
         try{
             $worker_list=CustomerWorker::getCustomerDistrictNearbyWorker($customer_id,$district_id,$page,$per_page);
         }catch (\Exception $e) {
             return $this->send($e, "获取周期订单可用阿姨的列表系统错误", 1024, 403,null,alertMsgEnum::bossError);
         }
-         $ret = [
-                'worker_id' => 1,
-                'worker_name' => "阿姨姓名",
-                'worker_phote' =>"阿姨头像",
-                'service_times' => '服务次数',
-                'service_star' => '服务星级',
-                'last_time' =>'最后服务时间'
-            ];
-        if(empty($ret)){
+        if(empty($worker_list['data'])){
             return $this->send(null, "没有可用阿姨",0, 403,null,alertMsgEnum::serverWorkerListFail);
         }else{
-            return $this->send($ret, "获取周期服务可用阿姨列表成功",1, 200,null,alertMsgEnum::serverWorkerListSuccess);
+           return $this->send($worker_list, "获取周期服务可用阿姨列表成功",1, 200,null,alertMsgEnum::serverWorkerListSuccess);
         }
     }
    

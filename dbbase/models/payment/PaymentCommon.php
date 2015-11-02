@@ -27,7 +27,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $payment_transaction_id
  * @property string $payment_eo_order_id
  * @property string $payment_memo
- * @property integer $payment_is_coupon
+ * @property integer $payment_type
  * @property string $admin_id
  * @property string $payment_admin_name
  * @property string $worker_id
@@ -40,7 +40,6 @@ use yii\behaviors\TimestampBehavior;
  */
 class PaymentCommon extends \yii\db\ActiveRecord
 {
-    public $partner;
     public $pay_type;
 
     public $openid;
@@ -69,20 +68,16 @@ class PaymentCommon extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_name','customer_mobile','customer_address','order_source_url','page_url','detail','openid','customer_id', 'payment_source_name','payment_money','payment_source_name'], 'required'],
-            [['customer_id', 'order_id', 'payment_source', 'payment_mode', 'payment_status', 'payment_is_coupon', 'admin_id', 'worker_id', 'handle_admin_id', 'created_at', 'updated_at', 'is_reconciliation'], 'integer'],
+            [['order_id','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail','openid','customer_id', 'payment_source_name','payment_money','payment_source_name'], 'required'],
+            [['customer_id', 'payment_source', 'payment_mode', 'payment_status', 'payment_type', 'admin_id', 'worker_id', 'handle_admin_id', 'created_at', 'updated_at', 'is_reconciliation'], 'integer'],
             [['payment_money', 'payment_actual_money'], 'number'],
             [['payment_source_name'], 'string', 'max' => 20],
             [['payment_transaction_id'], 'string', 'max' => 40],
             [['payment_admin_name', 'payment_handle_admin_name'], 'string', 'max' => 30],
-            [['customer_id','order_id'],'match','pattern'=>'%^[1-9]\d*$%'],   //必须为数字，不能是0
+            [['customer_id'],'match','pattern'=>'%^[1-9]\d*$%'],   //必须为数字，不能是0
             [['payment_memo','show_url','return_url'], 'string', 'max' => 255],
             [['payment_verify'], 'string', 'max' => 32],
-            /**********以下自定义属性**********/
-            [['partner'], 'required'],
-            //支付宝,银联,百度钱包,微信
-            [['partner'], 'in','range'=>['2088801136967007','898111448161364','1500610004','1217983401']],
-
+            [['payment_type'],'in','range'=>[1,2,3]],   //支付类型:1普通订单支付,2周期订单支付,3充值
         ];
     }
 
@@ -99,23 +94,23 @@ class PaymentCommon extends \yii\db\ActiveRecord
     {
         return[
             //支付宝WEB
-            'alipay_web_pay'    =>['payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','return_url','show_url'],
+            //'alipay_web_pay'    =>['payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','return_url','show_url'],
             //支付宝WEB
-            'alipay_web_online_pay'    =>['payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','order_id','return_url','show_url'],
+            'alipay_web_online_pay'    =>['payment_type','payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','order_id','return_url','show_url'],
             //在线充值
-            'pay'       =>['payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode'],
+            //'pay'       =>['payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode'],
             //在线支付
-            'online_pay'=>['payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','order_id'],
+            'online_pay'=>['payment_type','payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','order_id'],
             //微信在线充值
-            'wx_h5_pay' =>['payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','openid'],
+            //'wx_h5_pay' =>['payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','openid'],
             //微信在线支付
-            'wx_h5_online_pay'=>['payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','order_id','openid'],
+            'wx_h5_online_pay'=>['payment_type','payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','order_id','openid'],
             //微信在线充值
-            'zhidahao_h5_pay' =>['payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail'],
+            //'zhidahao_h5_pay' =>['payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail'],
             //微信在线支付
-            'zhidahao_h5_online_pay'=>['payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','order_id','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail'],
+            'zhidahao_h5_online_pay'=>['payment_type','payment_money','customer_id','partner','payment_source','payment_source_name','payment_mode','order_id','customer_name','customer_mobile','customer_address','order_source_url','page_url','detail'],
             //在线退款
-            'refund'       =>['customer_id','order_id','payment_money','payment_source','payment_source_name','payment_mode','payment_status','payment_eo_order_id','payment_is_coupon','admin_id','payment_admin_name','payment_verify'],
+            'refund'       =>['payment_type','customer_id','order_id','payment_money','payment_source','payment_source_name','payment_mode','payment_status','payment_eo_order_id','payment_type','admin_id','payment_admin_name','payment_verify'],
         ];
     }
 
@@ -231,61 +226,38 @@ class PaymentCommon extends \yii\db\ActiveRecord
     }
 
     /**
-     * 订单支付
-     * @param $attribute 支付或订单详细数据
-     */
-    public static function orderPay($attribute)
-    {
-        //查询用户信息
-        $orderInfo = self::orderInfo($attribute['order_id']);
-        $attribute['customer_trans_record_service_card_on'] = !empty($orderInfo->orderExtPay->card_id) ? $orderInfo->orderExtPay->card_id : 0;    //服务卡ID
-        $attribute['customer_trans_record_service_card_pay'] = !empty($orderInfo->orderExtPay->order_use_card_money) ? $orderInfo->orderExtPay->order_use_card_money : 0;//服务卡金额
-        $attribute['customer_trans_record_coupon_money'] = !empty($orderInfo->orderExtPay->order_use_coupon_money) ? $orderInfo->orderExtPay->order_use_coupon_money : 0; //优惠券金额
-        $attribute['customer_trans_record_online_balance_pay'] = !empty($orderInfo->orderExtPay->order_use_acc_balance) ? $orderInfo->orderExtPay->order_use_acc_balance : 0;  //余额支付
-        $attribute['customer_trans_record_order_total_money'] = $orderInfo->order_money;  //订单总额
-        $attribute['order_pop_order_money'] = !empty($orderInfo->orderExtPop->order_pop_order_money) ? $orderInfo->orderExtPop->order_pop_order_money : 0;  //预付费
-
-        //服务卡扣费
-        if( !empty($attribute['customer_trans_record_service_card_on']) && !empty($attribute['customer_trans_record_service_card_pay']) ){
-            //Customer::decBalance($model->customer_id,$orderInfo->orderExtPay->order_use_acc_balance);
-        }elseif( !empty($attribute['customer_trans_record_online_balance_pay']) && $attribute['customer_trans_record_online_balance_pay'] > 0 ){
-            //余额扣费
-            Customer::decBalance($attribute['customer_id'],$orderInfo->orderExtPay->order_use_acc_balance);
-        }
-
-        //支付订单交易记录
-        PaymentCustomerTransRecord::analysisRecord($attribute);
-
-        //修改订单状态
-        /**
-         * @param $order_id 订单ID
-         * @param $admin_id 后台管理员ID 系统0 客户1
-         * @param $pay_channel_id  支付渠道ID
-         * @param $order_pay_channel_name   支付渠道名称
-         * @param $order_pay_flow_num   支付流水号
-         */
-        //验证支付金额是否一致
-        if( $attribute['payment_money'] == $attribute['payment_actual_money'] )
-        {
-            //var_dump($attribute);exit;
-            //$orderChannel = FinanceOrderChannel::get_order_channel_info($attribute['payment_source']);
-            //$payChannel = FinancePayChannel::get_pay_channel_info($attribute['payment_source']);
-            //var_dump($attribute['order_id'],0,$attribute['payment_source'],$attribute['payment_source_name'],$attribute['payment_transaction_id']);exit;
-            Order::isPaymentOnline($attribute['order_id'],0,$attribute['payment_source'],$attribute['payment_source_name'],$attribute['payment_transaction_id']);
-        }
-    }
-
-    /**
      * 充值支付
      * @param $attribute 支付或订单详细数据
      */
-    public static function pay($attribute)
+    public static function payment($attribute)
     {
+        switch($attribute['payment_type'])
+        {
+            case 1:
+                //支付普通订单交易记录
+                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'order_pay',1);
+                //验证支付金额是否一致
+                if( $attribute['payment_money'] == $attribute['payment_actual_money'] )
+                {
+                    Order::isPaymentOnline($attribute['order_id'],0,$attribute['payment_source'],$attribute['payment_source_name'],$attribute['payment_transaction_id']);
+                }
+                break;
+            case 2:
+                //支付周期订单交易记录
+                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'order_pay',2);
+                //验证支付金额是否一致
+                if( $attribute['payment_money'] == $attribute['payment_actual_money'] )
+                {
+                    Order::isBatchPaymentOnline($attribute['order_id'],0,$attribute['payment_source'],$attribute['payment_source_name'],$attribute['payment_transaction_id']);
+                }
+                break;
+            case 3:
+                //支付充值交易记录
+                PaymentCustomerTransRecord::analysisRecord($attribute['order_id'],$attribute['payment_source'],'payment');
+                break;
+        }
         //支付充值
-        Customer::incBalance($attribute['customer_id'],$attribute['payment_actual_money']);
-
-        //充值交易记录
-        PaymentCustomerTransRecord::analysisRecord($attribute);
+        //TODO::后期在交易记录接口调用创建服务卡
         return true;
     }
 
@@ -322,24 +294,27 @@ class PaymentCommon extends \yii\db\ActiveRecord
     }
 
     /**
-     * 制造签名
+     * 签名
      */
     public function makeSign()
     {
+        $data = $this->getAttributes();
+        ksort($data);
         //加密字符串
-        $str='';
+        $str='1jiajie.com';
         //排除的字段
-        $notArray = ['updated_at','is_reconciliation'];
-        //获取字段
-        $key = $this->attributeLabels();
+        $notArray = ['id','payment_verify','created_at','updated_at'];
         //加密签名
-        foreach( $key as $name=>$val )
+        foreach( $data as $name=>$val )
         {
-            if( !empty($this->$name) && $this->$name != 1 && !in_array($name,$notArray))
+            $value = is_numeric($val) ? (int)$val : $val;
+            if( !empty($value) && !in_array($name,$notArray))
             {
-                $str .= $this->$name;
+                if(is_numeric($value) && $value < 1) continue;
+                $str .= $value;
             }
         }
+        //return $str;
         return md5(md5($str).'1jiajie.com');
     }
 
@@ -383,7 +358,7 @@ class PaymentCommon extends \yii\db\ActiveRecord
             'payment_transaction_id' => Yii::t('app', '第三方交易流水号'),
             'payment_eo_order_id' => Yii::t('app', '商户ID(第三方交易)'),
             'payment_memo' => Yii::t('app', '备注'),
-            'payment_is_coupon' => Yii::t('app', '是否返券'),
+            'payment_type' => Yii::t('app', '支付类型'),
             'admin_id' => Yii::t('app', '管理员ID'),
             'payment_admin_name' => Yii::t('app', '管理员名称'),
             'worker_id' => Yii::t('app', '销售卡阿姨ID'),

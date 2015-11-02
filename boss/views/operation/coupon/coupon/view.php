@@ -31,7 +31,7 @@ echo DetailView::widget([
             'attribute'=>'', 
             'label'=>'创建用户',
             'format'=>'raw',
-            'value'=> \Yii::$app->user->identity->username,
+            'value'=> $model->system_user_name,
             'type'=>DetailView::INPUT_TEXT,
             'valueColOptions'=>['style'=>'width:90%']
         ],
@@ -92,7 +92,7 @@ echo GridView::widget([
     'columns'=>[
         [
             'format' => 'raw',
-            'label' => '优惠码',
+            'label' => '全部优惠码',
             'value' => function ($couponCodeProvider) {
                 return $couponCodeProvider->coupon_code;
             },

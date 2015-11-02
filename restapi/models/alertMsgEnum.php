@@ -59,6 +59,10 @@ class alertMsgEnum
     const getWorkerStartPageSuccess='获取阿姨端启动页成功';
     const getWorkerStartPageFailed='获取阿姨端启动页失败';
 
+    //获取用户信息
+    const getUserInfoSuccess='获取用户信息成功';
+    const getUserInfoFailed='获取用户信息失败';
+
     //阿姨登录
     const workerLoginFailed = '用户认证已经过期,请重新登录';
     const workerLoginBossFailed = '登录失败';
@@ -153,6 +157,14 @@ class alertMsgEnum
     //优惠券列表为空
     const couponsFail = '优惠券列表为空';
     
+    //获取用户优惠券列表（包括该城市可用的、还有过期30天内的优惠券）
+    //请选择城市
+    const couponsOverDueNoChoice = '请选择城市';
+    //获取优惠券列表成功
+    const couponsOverDueSuccess = '获取优惠券列表成功';
+    //优惠券列表为空
+    const couponsOverDueFail = '优惠券列表为空';
+    
     //用户全部优惠券列表
     //获取优惠券列表成功
     const allCouponsSuccess = '获取优惠券列表成功';
@@ -188,6 +200,8 @@ class alertMsgEnum
     const serverWorkerListFail = '没有可用阿姨';
     //获取周期服务可用阿姨列表成功
     const serverWorkerListSuccess = '获取周期服务可用阿姨列表成功';
+    //商圈不存在
+    const serverWorkerListDistrictNotExist = '商圈不存在';
     
     //选择周期服务的第一次服务日期列表
     //请选择服务时长或阿姨

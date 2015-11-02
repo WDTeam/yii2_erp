@@ -301,11 +301,15 @@ class Customer extends \dbbase\models\customer\Customer
 	 */
 	public static function getBalance($phone){
 		$customer = self::find()->where(['customer_phone'=>$phone])->asArray()->one();
-		if(empty($customer)) throw new NotFoundHttpException;
+		if(empty($customer)){
+			return ['response'=>'error', 'errcode'=>'1', 'errmsg'=>'客户不存在'];
+		}
 
 		$customer_ext_balance = CustomerExtBalance::find()->where(['customer_phone'=>$phone])->asArray()->one();
-		if(empty($customer_ext_balance)) throw new NotFoundHttpException;
-		return $customer_ext_balance['customer_balance'];
+		if(empty($customer_ext_balance)) {
+			return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误'];
+		}
+		return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'balance'=>$customer_ext_balance['customer_balance']];
 	}
 
 	/**
@@ -313,10 +317,14 @@ class Customer extends \dbbase\models\customer\Customer
      */
     public static function getBalanceById($customer_id){
         $customer = Customer::findOne($customer_id);
-        if ($customer == NULL) throw new NotFoundHttpException;
+        if ($customer == NULL) {
+			return ['response'=>'error', 'errcode'=>'1', 'errmsg'=>'客户不存在'];
+		}
         $customerExtBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
-        if ($customerExtBalance == NULL) throw new NotFoundHttpException;
-        return $customerExtBalance->customer_balance;
+        if ($customerExtBalance == NULL) {
+			return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误'];
+		}
+        return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'balance'=>$customerExtBalance['customer_balance']];
     }
 
     /**
@@ -329,30 +337,20 @@ class Customer extends \dbbase\models\customer\Customer
         // \Yii::$app->response->format = Response::FORMAT_JSON;
         $customer = Customer::findOne($customer_id);
         if ($customer == NULL) {
-            return false;
-        }
-        $customerBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
-        if ($customerBalance == NULL) {
-            $customerBalance = new CustomerExtBalance;
-            $customerBalance->customer_id = $customer_id;
-            $customerBalance->customer_balance = 0;
-            $customerBalance->created_at = time();
-            $customerBalance->updated_at = 0;
-            $customerBalance->is_del = 0;
-            $customerBalance->validate();
-            if ($customerBalance->hasErrors()) {
-                return false;
-            }
-            $customerBalance->save();
-        }
-        $balance = $customerBalance->customer_balance;
-        $customerBalance->customer_balance = bcadd($balance, $cash, 2);
-        $customerBalance->validate();
-        if ($customerBalance->hasErrors()) {
-            return false;
-        }
-        $customerBalance->save();
-        return true;
+			return ['response'=>'error', 'errcode'=>'1', 'errmsg'=>'客户不存在'];
+		}
+        $customerExtBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
+        if ($customerExtBalance == NULL) {
+			return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误'];
+		}
+        $balance = $customerExtBalance->customer_balance;
+        $customerExtBalance->customer_balance = bcadd($balance, $cash, 2);
+        if(!$customerExtBalance->validate()){
+			return ['response'=>'error', 'errcode'=>'3', 'errmsg'=>'数据验证错误'];
+		}
+        
+        $customerExtBalance->save();
+        return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'balance'=>$customerExtBalance->customer_balance];
     }
 
     /**
@@ -360,35 +358,22 @@ class Customer extends \dbbase\models\customer\Customer
      */
     static public function decBalance($customer_id, $cash)
     {
-        // $customer_id = \Yii::$app->request->get('customer_id');
-        // $cash = \Yii::$app->request->get('cash');
-        // \Yii::$app->response->format = Response::FORMAT_JSON;
         $customer = Customer::findOne($customer_id);
         if ($customer == NULL) {
-            return false;
-        }
-        $customerBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
-        if ($customerBalance == NULL) {
-            $customerBalance = new CustomerExtBalance;
-            $customerBalance->customer_id = $customer_id;
-            $customerBalance->customer_balance = 0;
-            $customerBalance->created_at = time();
-            $customerBalance->updated_at = 0;
-            $customerBalance->is_del = 0;
-            $customerBalance->validate();
-            if ($customerBalance->hasErrors()) {
-                return false;
-            }
-            $customerBalance->save();
-        }
-        $balance = $customerBalance->customer_balance;
-        $customerBalance->customer_balance = bcsub($balance, $cash, 2);
-        $customerBalance->validate();
-        if ($customerBalance->hasErrors()) {
-            return false;
-        }
-        $customerBalance->save();
-        return true;
+			return ['response'=>'error', 'errcode'=>'1', 'errmsg'=>'客户不存在'];
+		}
+        $customerExtBalance = CustomerExtBalance::find()->where(['customer_id'=>$customer_id])->one();
+        if ($customerExtBalance == NULL) {
+			return ['response'=>'error', 'errcode'=>'2', 'errmsg'=>'数据错误'];
+		}
+        $balance = $customerExtBalance->customer_balance;
+        $customerExtBalance->customer_balance = bcsub($balance, $cash, 2);
+        if(!$customerExtBalance->validate()){
+			return ['response'=>'error', 'errcode'=>'3', 'errmsg'=>'数据验证错误'];
+		}
+        
+        $customerExtBalance->save();
+        return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'balance'=>$customerExtBalance->customer_balance];
     }
 
 	/******************************************score**********************************************/
@@ -563,6 +548,30 @@ class Customer extends \dbbase\models\customer\Customer
         $count = self::find()->where(['is_del'=>1])->count();
         return $count;
     }
+
+	/**
+     * get all customer relationally
+	 */
+	//public static function getAllRelationally(){
+		//$customers = self::find()->with([
+	//		'balance' => function($query) {
+	//			$query->where('customer_ext_balance.customer_id = customer.id');
+	//		},
+	//		'score' => function($query) {
+	//			$query->where('customer_ext_score.customer_id = customer.id');
+	//		},
+	//		'address' => function($query) {
+	//			$query->where('customer_address.customer_id = customer.id');
+	//		},
+	//		'worker' => function($query) {
+	//			$query->where('customer_worker.customer_id = customer.id');
+	//		},
+	//		'src' => function($query) {
+	//			$query->where('customer_ext_src.customer_id = customer.id');
+	//		},
+	//	])->all();
+	//	return $customers;
+	//}
 
 
 	/******************************other******************************************************************/

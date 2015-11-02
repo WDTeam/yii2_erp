@@ -109,12 +109,12 @@ $conditions = $model->getFullConditions();
         
         'worker_cites'=>[
             'type'=> Form::INPUT_CHECKBOX_LIST, 
-            'items'=>WorkerTask::getOnlineCites(),
+            'items'=>$model::getOnlineCites(),
         ], 
         
         'worker_task_reward_type'=>[
             'type'=>Form::INPUT_RADIO_LIST,
-            'items'=>WorkerTask::REWARD_TYPES,
+            'items'=>$model::REWARD_TYPES,
         ],
         
         'worker_task_reward_value'=>[
@@ -140,3 +140,16 @@ $conditions = $model->getFullConditions();
     <?php ActiveForm::end(); ?>
 
 </div>
+<div class="checkbox worker_cites_all hide"><label><input type="checkbox" name="WorkerTask[worker_cites][]" value="0">全部</label></div>
+<?php $this->registerJs(<<<JSCONTENT
+    var select_all_box = $('.worker_cites_all');
+    $('#workertask-worker_cites input').click(function(){
+        select_all_box.find('input').prop('checked', false);
+    });
+    select_all_box.prependTo('#workertask-worker_cites')
+    .removeClass('hide')
+    .click(function(){
+        $('#workertask-worker_cites input').prop('checked', $(this).find('input').prop('checked'));
+    });
+JSCONTENT
+);?>

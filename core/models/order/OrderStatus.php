@@ -49,17 +49,21 @@ class OrderStatus extends Order
      * @return bool
      * @throws \yii\db\Exception
      */
-    protected static function _batchPayment($batch_code,$admin_id,$pay_channel_id,$order_pay_channel_name,$order_pay_flow_num){
+    protected static function _batchPayment($batch_code,$admin_id,$pay_channel_id=0,$order_pay_channel_name='',$order_pay_flow_num=''){
         $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_WAIT_ASSIGN); //变更为已支付待指派状态
         $transact = static::getDb()->beginTransaction();
         $orders = OrderSearch::getBatchOrder($batch_code);
         foreach($orders as $order){
             $order->setAttributes([
                 'admin_id' => $admin_id,
-                'pay_channel_id' => $pay_channel_id,
-                'order_pay_channel_name' => $order_pay_channel_name,
-                'order_pay_flow_num' => $order_pay_flow_num
             ]);
+            if($pay_channel_id>0) {
+                $order->setAttributes([
+                    'pay_channel_id' => $pay_channel_id,
+                    'order_pay_channel_name' => $order_pay_channel_name,
+                    'order_pay_flow_num' => $order_pay_flow_num
+                ]);
+            }
             if(!self::_statusChange($order,$status,['OrderExtPay'],$transact)){
                 $transact->rollBack();
                 return false;
@@ -259,18 +263,6 @@ class OrderStatus extends Order
         return self::_statusChange($order,$status,$must_models);
     }
 
-    /**
-     * 已完成门店结算
-     * @param $order
-     * @param $must_models
-     * @return bool
-     */
-    protected static function _payoffShopDone(&$order,$must_models=[])
-    {
-        $status = OrderStatusDict::findOne(OrderStatusDict::ORDER_PAYOFF_SHOP_DONE);
-        return self::_statusChange($order,$status,$must_models);
-    }
-
 
     /**
      * 取消订单
@@ -311,20 +303,16 @@ class OrderStatus extends Order
      */
     private static function _statusChange(&$order, $status, $must_models=[],$transact=null)
     {
-        try {
-            $from = OrderStatusDict::findOne($order->orderExtStatus->order_status_dict_id); //当前订单状态
-            $order->setAttributes([
-                'order_before_status_dict_id' => $from->id,
-                'order_before_status_name' => $from->order_status_name,
-                'order_status_dict_id' => $status->id,
-                'order_status_name' => $status->order_status_name
-            ]);
-            $save_models = ['OrderExtStatus', 'OrderStatusHistory'];
-            $save_models = array_merge($must_models, $save_models);
-            return $order->doSave($save_models,$transact);
-        }catch (Exception $e){
-            return false;
-        }
+        $from = OrderStatusDict::findOne($order->orderExtStatus->order_status_dict_id); //当前订单状态
+        $order->setAttributes([
+            'order_before_status_dict_id' => $from->id,
+            'order_before_status_name' => $from->order_status_name,
+            'order_status_dict_id' => $status->id,
+            'order_status_name' => $status->order_status_name
+        ]);
+        $save_models = ['OrderExtStatus', 'OrderStatusHistory'];
+        $save_models = array_merge($must_models, $save_models);
+        return $order->doSave($save_models,$transact);
     }
 
     /**

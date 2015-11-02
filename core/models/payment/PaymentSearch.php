@@ -19,7 +19,7 @@ class PaymentSearch extends Payment
     public function rules()
     {
         return [
-            [['id', 'customer_id', 'order_id', 'payment_source', 'payment_mode', 'payment_status', 'payment_is_coupon', 'admin_id', 'worker_id', 'handle_admin_id', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'customer_id', 'order_id', 'payment_source', 'payment_mode', 'payment_status', 'payment_type', 'admin_id', 'worker_id', 'handle_admin_id', 'created_at', 'updated_at'], 'integer'],
             [['payment_money', 'payment_actual_money'], 'number'],
             [['payment_source_name', 'payment_transaction_id', 'payment_eo_order_id', 'payment_memo', 'payment_admin_name', 'payment_handle_admin_name', 'payment_verify'], 'safe'],
         ];
@@ -94,7 +94,7 @@ class PaymentSearch extends Payment
             'payment_source' => $this->payment_source,
             'payment_mode' => $this->payment_mode,
             'payment_status' => $this->payment_status,
-            'payment_is_coupon' => $this->payment_is_coupon,
+            'payment_type' => $this->payment_type,
             'admin_id' => $this->admin_id,
             'worker_id' => $this->worker_id,
             'handle_admin_id' => $this->handle_admin_id,
@@ -134,7 +134,7 @@ class PaymentSearch extends Payment
     			'payment_source' => $this->payment_source,
     			'payment_mode' => $this->payment_mode,
     			'payment_status' => $this->payment_status,
-    			'payment_is_coupon' => $this->payment_is_coupon,
+    			'payment_type' => $this->payment_type,
     			'admin_id' => $this->admin_id,
     			'worker_id' => $this->worker_id,
     			'handle_admin_id' => $this->handle_admin_id,

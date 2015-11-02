@@ -145,8 +145,8 @@ class CustomerWorker extends \dbbase\models\customer\CustomerWorker
                 'customer_worker.updated_at',
                 ])
             ->from('{{%worker}} as worker')
-            ->where(['customer_worker.is_block'=>0])
-            ->leftJoin('{{%customer_worker}} as customer_worker','customer_worker.worker_id = worker.id and worker.worker_is_blacklist=0 and customer_worker.customer_id='.$customer_id)
+            ->where(['worker.worker_is_blacklist'=>0])
+            ->leftJoin('{{%customer_worker}} as customer_worker','customer_worker.worker_id = worker.id and customer_worker.customer_id='.$customer_id)
             ->innerJoin('{{%worker_district}} as worker_district' ,'worker_district.worker_id=worker.id and operation_shop_district_id='.$district_id)
             ->orderBy("updated_at DESC")
             ->offset($start)

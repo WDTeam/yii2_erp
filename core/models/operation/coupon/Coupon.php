@@ -44,6 +44,8 @@ use yii\base\InvalidParamException;
 class Coupon extends \dbbase\models\operation\coupon\Coupon
 {
 
+	/**********************************************coupon rules************************************/
+
 	/**
      * get coupon rule service types
      */
@@ -63,7 +65,7 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
         return array(
             0 => '全网优惠券',
             1 => '类别优惠券',
-            2 => '商品优惠券',
+            //2 => '商品优惠券',
         );
     }
 
@@ -93,7 +95,7 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
     {
         return array(
             0 => '全部城市',
-            1 => '单个城市',
+            //1 => '单个城市',
         );
     }
 
@@ -113,6 +115,25 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
         );
     }
 
+	/**
+     * get service categories
+	 */
+	public static function getServiceCates(){
+		$serviceCates = \core\models\operation\OperationCategory::getAllCategory();
+		$service_cates = [];
+		foreach ($serviceCates as $value)
+		{
+			# code...
+			$service_cate_id = $value['id'];
+			$service_cate_name = $value['operation_category_name'];
+			$service_cates[] = [
+				'service_cate_id'=>$service_cate_id,
+				'service_cate_name'=>$service_cate_name,
+			];
+		}
+		return $service_cates;
+	}
+
     /**
      * get coupon rule customer types
      */
@@ -120,10 +141,10 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
     {
         return array(
             0 => '所有用户',
-            1 => '新用户',
-            2 => '老用户',
-            3 => '会员',
-            4 => '非会员',
+            //1 => '新用户',
+            //2 => '老用户',
+            //3 => '会员',
+            //4 => '非会员',
         );
     }
 
@@ -149,7 +170,7 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
     {
         return array(
             0 => '领取时间段和使用时间段一致',
-            1 => '使用时间段领取后开始计算',
+            //1 => '使用时间段领取后开始计算',
         );
     }
 
@@ -160,10 +181,61 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
     {
         return array(
             0 => '立减',
-            1 => '满减',
-            2 => '每减',
+            //1 => '满减',
+            //2 => '每减',
         );
     }
+
+	/**********************************************coupon time***************************************/
+	/**
+     * get coupon getting end time
+	 */
+	public static function getEndGettingAt($coupon_id){
+		$coupon = self::findOne($coupon_id);
+		if($coupon === NULL) return false;
+
+		$end_getting_at = 0;
+		switch ($coupon->coupon_time_type)
+		{
+			case 0:
+				$end_getting_at = $coupon->coupon_end_at;
+			break;
+		
+			case 1:
+				$end_getting_at = $coupon->coupon_get_end_at;
+			break;
+		
+			default:
+				# code...
+			break;
+		}
+		return $end_getting_at;
+	}
+
+	/**
+     * get coupon use end time
+	 */
+	public static function getEndUsingAt($coupon_id){
+		$coupon = self::findOne($coupon_id);
+		if($coupon === NULL) return false;
+
+		$end_getting_at = 0;
+		switch ($coupon->coupon_time_type)
+		{
+			case 0:
+				$end_getting_at = $coupon->coupon_end_at;
+			break;
+		
+			case 1:
+				$end_getting_at = $coupon->coupon_get_end_at + 24 * 3600 * $coupon->coupon_use_end_days;
+			break;
+		
+			default:
+				# code...
+			break;
+		}
+		return $end_getting_at;
+	}
 
 	/**
      * get coupon code expirate_at by time type
@@ -201,144 +273,71 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
 		return $expirate_at;
 	}
 
+
+	/**************************************coupon for order**************************************/
 	/**
-     * add coupon and coupon code
-	 */ 
-	public static function addCoupon($model){
-		//var_dump($_POST);
-		//exit();
-		//$transaction = \Yii::$app->db->beginTransaction();
-		//try{
-			$couponCode = new CouponCode;
-			$service_types = Coupon::getServiceTypes();
-			
-			//coupon basic info
-
-			//coupon type
-			$coupon->coupon_type_name = $service_types[$model->coupon_type];
-			switch ($model->coupon_type)
-			{
-				case 0:
-					$model->coupon_service_type_id = 0;
-					$model->coupon_service_id = 0;
-				break;
-				case 1:
-					$model->coupon_service_id = 0;
-				break;
-				case 2:
-				
-				break;
-			
-		
-				default:
-					# code...
-				break;
-			}
-		
-		
-			//coupon city
-			$city_types = Coupon::getCityTypes();
-			switch ($model->coupon_city_limit)
-			{
-				case 0:
-					$model->coupon_city_id = 0;
-				break;
-		
-				case 1:
-				
-				break;
-		
-		
-				default:
-					# code...
-				break;
-			}
-			//customer type 
-			$customer_types = Coupon::getCustomerTypes();
-			$model->coupon_customer_type_name = $customer_types[$model->coupon_customer_type];
-
-			//coupon time type
-			$time_types = Coupon::getTimeTypes();
-			$model->coupon_time_type_name = $time_types[$model->coupon_time_type];
-			switch ($model->coupon_time_type)
-			{
-				case 0:
-					$model->coupon_begin_at = strtotime($_POST['Coupon']['coupon_begin_at']);
-					$model->coupon_end_at = strtotime($_POST['Coupon']['coupon_end_at']);
-					$model->coupon_get_end_at = 0;
-					$model->coupon_use_end_days = 0;
-				break;
-				case 1:
-		            
-					$model->coupon_begin_at = strtotime($_POST['Coupon']['coupon_begin_at']);
-					$model->coupon_end_at = 0;
-					$model->coupon_get_end_at = strtotime($_POST['Coupon']['coupon_get_end_at']);
-				
-				break;
-					
-		
-				default:
-					# code...
-				break;
-			}
-		
-			//coupon_promote_type
-			$promote_types = Coupon::getPromoteTypes();
-			$model->coupon_promote_type_name = $promote_types[$model->coupon_promote_type];
-			switch ($model->coupon_promote_type)
-			{
-				case 0:
-					$model->coupon_order_min_price = 0;
-				break;
-		
-				case 1:
-				break;
-		
-				default:
-					# code...
-				break;
-			}
-
-
-			//coupon other infos
-			$model->is_disabled = 0;
-			$model->created_at = time();		
-			$model->updated_at = 0;
-			$model->is_del = 0;
-		
-			//coupon system user
-			$model->system_user_id = 0;
-			$model->system_user_name = '';
-		    $model->save();
-
-			var_dump($model);
-			exit();
-		
-		    //insert into coupon code
-		    $couponCode->coupon_id = $model->id;
-		    $couponCode->coupon_name = $model->coupon_name;
-		    $couponCode->coupon_price = $model->coupon_price;
-		    $couponCode->created_at = time();
-		    $couponCode->updated_at = 0;
-		    $couponCode->is_del = 0;
-		    for($i=0; $i<$_POST['Coupon']['coupon_code_num']; $i++){
-		        $coupon_code_str = CouponCode::generateCouponCode();
-		        $couponCodeTemp =  CouponCode::find()->where(['coupon_code'=>$coupon_code_str])->one();
-		        while($couponCodeTemp){
-		            
-		             $coupon_code_str = CouponCode::generateCouponCode();
-		             $couponCodeTemp =  CouponCode::find()->where(['coupon_code'=>$coupon_code_str])->one();
-		        }
-		        $couponCode->coupon_code = $coupon_code_str;
-		        $couponCode->save(); 
-		    }
-			//$transaction->commit();
-			//return true;
-		//}catch(\Exception $e){
-			//$transaction->rollback();
-			//return false;
-		//}
+     * get customer coupon by cate_id
+	 */
+	public static function getAbleCouponByCateId($customer_id, $cate_id){
+		$able_coupons = (new \yii\db\Query())
+			->select(['c.id', 'cc.customer_id', 'c.coupon_name', 'c.coupon_price', 'cc.coupon_code'])
+			->from(['cc'=>'{{%coupon_customer}}'])
+			->leftJoin(['c'=>'{{%coupon}}'], 'c.id = cc.coupon_id')
+			->where(['cc.customer_id'=>$customer_id])
+			->andWhere(['cc.is_used'=>0])
+			->andWhere(['cc.is_del'=>0])
+			->andWhere(['c.is_disabled'=>0])
+			->andWhere(['c.is_del'=>0])
+			->andWhere(['<', 'c.coupon_begin_at', time()])
+			->andWhere(['>', 'c.coupon_end_at', time()])
+			->andWhere(['or', ['and', 'c.coupon_type=1', 'c.coupon_service_type_id='.$cate_id], ['c.coupon_type'=>0]])
+			->all();
+		return $able_coupons;
 	}
+
+	/**
+     * set custoemr's coupon used after pay by coupon
+	 */
+	public static function useCoupon($coupon_customer_id){
+		$couponCustomer = CouponCustomer::findOne($coupon_customer_id);
+		if($couponCustomer === NULL){
+			return ['response'=>'error', 'errcode'=>1, 'errmsg'=>'优惠券不存在'];
+		}
+		if($couponCustomer->is_used == 1){
+			return ['response'=>'error', 'errcode'=>2, 'errmsg'=>'数据错误'];
+		}
+		$couponCustomer->is_used = 1;
+		$couponCustomer->updated_at = time();
+		if(!$couponCustomer->validate()){
+			return ['response'=>'error', 'errcode'=>3, 'errmsg'=>'使用优惠券失败'];
+		}
+		$couponCustomer->save();
+		return ['response'=>'success', 'errcode'=>0, 'errmsg'=>''];
+	}
+
+	/************************************coupon reverse******************************************/
+	/**
+     * reverse coupon while customer cancel order
+	 */
+	public static function backcoupon($coupon_customer_id){
+		$couponCustomer = CouponCustomer::findOne($coupon_customer_id);
+		if($couponCustomer === NULL){
+			return ['response'=>'error', 'errcode'=>1, 'errmsg'=>'优惠券不存在'];
+		}
+		if($couponCustomer->is_used == 0){
+			return ['response'=>'error', 'errcode'=>2, 'errmsg'=>'数据错误'];
+		}
+		$couponCustomer->is_used = 0;
+		$couponCustomer->updated_at = time();
+		if(!$couponCustomer->validate()){
+			return ['response'=>'error', 'errcode'=>3, 'errmsg'=>'退还优惠券失败'];
+		}
+		$couponCustomer->save();
+		return ['response'=>'success', 'errcode'=>0, 'errmsg'=>''];
+	}
+
+
+	/**********************************coupon other msg*******************************************/
 
     /**
      * 优惠名称 

@@ -23,7 +23,8 @@ $coupon_categories = Coupon::getCategories();
 
 //coupon types
 $coupon_types = Coupon::getServiceTypes();
-//service_types
+//service_cates
+$service_cates = Coupon::getServiceCates();
 //services
 //city types
 $city_types = Coupon::getCityTypes();
@@ -71,7 +72,7 @@ $promote_types = Coupon::getPromoteTypes();
             </div>
             <div class="panel-body">
                 <?= $form->field($model, 'coupon_type')->inline()->radioList($coupon_types)->label('优惠券类型') ?>
-				<?= $form->field($model, 'coupon_service_type_id')->dropDownList([""=>"请选择服务类别"],['maxlength' => true])->label('服务类别') ?>
+				<?= $form->field($model, 'coupon_service_type_id')->dropDownList(ArrayHelper::map($service_cates, 'service_cate_id', 'service_cate_name'),['maxlength' => true])->label('服务类别') ?>
 				<?= $form->field($model, 'coupon_service_id')->dropDownList([""=>"请选择服务"],['maxlength' => true])->label('服务') ?>
             </div>
 

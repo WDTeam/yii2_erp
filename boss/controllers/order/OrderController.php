@@ -7,6 +7,7 @@ use core\models\customer\CustomerAddress;
 use core\models\order\OrderTool;
 use core\models\order\OrderWorkerRelation;
 use core\models\worker\Worker;
+use dbbase\models\order\OrderExtPay;
 use Yii;
 use boss\components\BaseAuthController;
 use boss\models\order\OrderSearch;
@@ -30,9 +31,7 @@ class OrderController extends BaseAuthController
     public function actionTest()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        return OrderSearch::getPushWorkerOrders(19074,20,1,false);
-//        die();
-        return OrderTool::createOrderCode();
+        return Order::serviceStart(2);
     }
     
     public function actionCancelOrder()
@@ -179,15 +178,31 @@ class OrderController extends BaseAuthController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $order = OrderSearch::getWaitManualAssignOrder(Yii::$app->user->id,true);
         if($order){
+            $booked_time_range = date('Y-m-d    H:i-',$order->order_booked_begin_time).date('H:i',$order->order_booked_end_time);
+            $ext_pay = $order->orderExtPay;
+            if($order->order_is_parent>0){
+               $orders = OrderSearch::getChildOrder($order->id);
+                foreach($orders as $child){
+                    $order->order_money += $child->order_money;
+                    if($ext_pay->order_pay_type==OrderExtPay::ORDER_PAY_TYPE_ON_LINE){
+                        $ext_pay->order_pay_money += $child->orderExtPay->order_pay_money;
+                        $ext_pay->order_use_acc_balance += $child->orderExtPay->order_use_acc_balance;
+                        $ext_pay->order_use_card_money += $child->orderExtPay->order_use_card_money;
+                        $ext_pay->order_use_coupon_money += $child->orderExtPay->order_use_coupon_money;
+                        $ext_pay->order_use_promotion_money += $child->orderExtPay->order_use_promotion_money;
+                    }
+                    $booked_time_range .= '<br/>'.date('Y-m-d    H:i-',$child->order_booked_begin_time).date('H:i',$child->order_booked_end_time);
+                }
+            }
             return
                 [
                     'order'=>$order,
-                    'ext_pay'=>$order->orderExtPay,
+                    'ext_pay'=>$ext_pay,
                     'ext_pop'=>$order->orderExtPop,
                     'ext_customer'=>$order->orderExtCustomer,
                     'ext_flag'=>$order->orderExtFlag,
                     'operation_long_time'=>Order::MANUAL_ASSIGN_lONG_TIME,
-                    'booked_time_range'=>date('Y-m-d    H:i-',$order->order_booked_begin_time).date('H:i',$order->order_booked_end_time),
+                    'booked_time_range'=>$booked_time_range,
                 ];
         }else{
             return false;
@@ -383,6 +398,7 @@ class OrderController extends BaseAuthController
 
     public function actionCreateBatch()
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         $attributes = [
             'order_ip'=> Yii::$app->request->userIP,
             'order_service_type_id'=>1,
@@ -489,18 +505,27 @@ class OrderController extends BaseAuthController
         return Order::manualAssignDone($order_id,$worker_id,Yii::$app->user->id,true);
     }
 
-
     /**
-     * 添加订单和阿姨的关系信息
-     *
+     * 阿姨拒单
+     * @return bool
      */
-    public function actionCreateOrderWorkerRelation()
+    public function actionWorkerRefuse()
     {
         $order_id = Yii::$app->request->post('order_id');
         $worker_id = Yii::$app->request->post('worker_id');
         $memo = Yii::$app->request->post('memo');
-        $status = Yii::$app->request->post('status');
-        return OrderWorkerRelation::addOrderWorkerRelation($order_id,$worker_id,$memo,$status,Yii::$app->user->id);
+        return OrderWorkerRelation::workerRefuse($order_id,$worker_id,Yii::$app->user->id,$memo);
+    }
+
+    /**
+     * 联系阿姨未响应
+     * @return bool
+     */
+    public function actionWorkerContactFailure()
+    {
+        $order_id = Yii::$app->request->post('order_id');
+        $worker_id = Yii::$app->request->post('worker_id');
+        return OrderWorkerRelation::workerContactFailure($order_id,$worker_id,Yii::$app->user->id);
     }
 
 

@@ -27,7 +27,7 @@ class OperationSelectedService extends \core\models\operation\OperationSelectedS
     public function rules()
     {
         return [
-            [['selected_service_scene', 'selected_service_area', 'selected_service_sub_area', 'selected_service_standard', 'selected_service_unit'], 'required'],
+            [['selected_service_scene', 'selected_service_area', 'selected_service_sub_area', 'selected_service_standard', 'selected_service_unit', 'selected_service_area_standard'], 'required'],
             [['selected_service_goods_id', 'selected_service_unit'], 'integer'],
             [['selected_service_price'], 'number'],
             [['selected_service_area_standard'], 'string'],
@@ -35,6 +35,7 @@ class OperationSelectedService extends \core\models\operation\OperationSelectedS
             [['selected_service_scene', 'selected_service_area'], 'string', 'max' => 32],
             [['selected_service_sub_area'], 'string', 'max' => 64],
             [['selected_service_standard'], 'string', 'max' => 128],
+            ['selected_service_photo', 'file', 'extensions' => ['png', 'jpg', 'gif'], 'maxSize' => 1024*1024*1024],
             [['remark'], 'string', 'max' => 512]
         ];
     }

@@ -15,7 +15,7 @@ class m150918_141238_create_table_payment_customer_trans_record extends Migratio
         $this->createTable('{{%payment_customer_trans_record}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT ' ,
             'customer_id' => Schema::TYPE_INTEGER . '(11) unsigned NOT NULL COMMENT \'用户ID\'' ,
-            'order_id' => Schema::TYPE_INTEGER . '(11) unsigned DEFAULT 0 NOT NULL COMMENT \'订单ID\'' ,
+            'order_id' => Schema::TYPE_STRING . '(30) DEFAULT 0 NOT NULL COMMENT \'订单ID\'' ,
             'order_channel_id' => Schema::TYPE_SMALLINT . '(6) unsigned DEFAULT 0 NOT NULL COMMENT \'订单渠道\'' ,
             'payment_customer_trans_record_order_channel'  => Schema::TYPE_STRING . '(30) COMMENT \'订单渠道名称\'',
             'pay_channel_id'  => Schema::TYPE_SMALLINT . '(6) unsigned NOT NULL COMMENT \'支付渠道\'',
@@ -42,7 +42,6 @@ class m150918_141238_create_table_payment_customer_trans_record extends Migratio
             'payment_customer_trans_record_verify'  => Schema::TYPE_STRING . '(32) NOT NULL COMMENT \'验证\'',
             'created_at'  => Schema::TYPE_INTEGER . '(10) unsigned NOT NULL DEFAULT 0 COMMENT \'创建时间\'',
             'updated_at'  => Schema::TYPE_INTEGER . '(10) unsigned NOT NULL DEFAULT 0 COMMENT \'更新时间\'',
-            'is_del'  => Schema::TYPE_BOOLEAN . '(1) unsigned NOT NULL DEFAULT 1 COMMENT \'删除\'',
 
         ], $tableOptions);
 
