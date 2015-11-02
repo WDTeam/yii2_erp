@@ -16,10 +16,10 @@ use boss\models\order\Order;
 	.select2-container--krajee {display: block;float: right;}
     #m_warp .form-group {width: 280px;float: left;}
     .select2-container--krajee {display: block;float: left;}
-    #m_warp .m_riqi .btn {float: left !important; background: #f6a202;text-align: center !important;height: 32px !important;line-height: 32px !important;font-size: 14px;padding: 0 !important;border-radius: 3px !important;width: 150px !important;}
+    #m_warp .m_riqi .btn {margin-left:65px;float: left !important; background: #f6a202;text-align: center !important;height: 32px !important;line-height: 32px !important;font-size: 14px;padding: 0 !important;border-radius: 3px !important;width: 150px !important;}
 </style>
 <div class="heading">
-	<h3 class="panel-title">查询</h3>
+	<h3 class="panel-title"><i style="margin-right:5px;" class="glyphicon glyphicon-search"></i>查询</h3>
 </div>
 <div class="m_from">
 <?php $form = ActiveForm::begin([
