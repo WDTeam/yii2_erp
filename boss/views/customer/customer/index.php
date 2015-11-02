@@ -46,8 +46,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php //echo Html::a(Yii::t('app', 'Create {modelClass}', ['modelClass' => 'Worker',]), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?php
-    $b= Html::a('<i class="glyphicon" ></i>全部 '.Customer::countALLCustomer(), ['customer/customer/index'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']). 
-    Html::a('<i class="glyphicon" ></i>封号'.Customer::countBlockCustomer(), ['customer/customer/index?CustomerSearch[is_del]=1'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']).
+    $b= Html::a('<i class="glyphicon" ></i>全部 '.$all_count, ['customer/customer/index'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']). 
+    Html::a('<i class="glyphicon" ></i>封号'.$block_count, ['customer/customer/index?CustomerSearch[is_del]=1'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']).
     Html::a('<i class="glyphicon" ></i>按时间从大到小 ', ['index', 'sort'=>'created_at'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']).
     Html::a('<i class="glyphicon" ></i>按订单量从大到小 ', ['index', 'sort'=>'order_count'], ['class' => 'btn btn-success-selected', 'style' => 'margin-right:10px']);
    
@@ -194,7 +194,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => '余额',
                 'value' => function ($dataProvider) {
                     $customerBalance = Customer::getBalanceById($dataProvider->id);
-                    return $customerBalance == false ? 0 : $customerBalance;
+                    if($customerBalance['errcode'] != 0){
+						return '-';					
+					}else{
+						return $customerBalance['balance'];
+					}
                 },
                 'width' => "80px",
             ],

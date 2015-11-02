@@ -14,7 +14,7 @@ class m150928_104616_create_table_payment_customer_trans_record_log extends Migr
         $this->createTable('{{%payment_customer_trans_record_log}}', [
             'id' => Schema::TYPE_PK,
             'customer_id' => Schema::TYPE_INTEGER . "(11) COMMENT '用户ID'",
-            'order_id' => Schema::TYPE_INTEGER . "(11) COMMENT '订单ID'",
+            'order_id' => Schema::TYPE_STRING . "(30) COMMENT '订单ID'",
             'order_channel_id' => Schema::TYPE_SMALLINT . "(6) COMMENT '订单渠道'",
             'payment_customer_trans_record_order_channel' => Schema::TYPE_STRING . "(30) COMMENT '订单渠道名称'",
             'pay_channel_id' => Schema::TYPE_SMALLINT . "(6) COMMENT '支付渠道'",
@@ -41,8 +41,14 @@ class m150928_104616_create_table_payment_customer_trans_record_log extends Migr
             'payment_customer_trans_record_verify' => Schema::TYPE_STRING . "(32)  COMMENT '验证'",
             'created_at' => Schema::TYPE_INTEGER . "(10)  COMMENT '创建时间'",
             'updated_at' => Schema::TYPE_INTEGER . "(10)  COMMENT '更新时间'",
-            'is_del' => Schema::TYPE_SMALLINT . "(1) COMMENT '删除'",
         ], $tableOptions);
+
+        $this->createIndex('customer_id','{{%payment_customer_trans_record_log}}','customer_id');
+        $this->createIndex('order_id','{{%payment_customer_trans_record_log}}','order_id');
+        $this->createIndex('order_channel_id','{{%payment_customer_trans_record_log}}','order_channel_id');
+        $this->createIndex('payment_customer_trans_record_mode','{{%payment_customer_trans_record_log}}','payment_customer_trans_record_mode');
+        $this->createIndex('pay_channel_id','{{%payment_customer_trans_record_log}}','pay_channel_id');
+        $this->createIndex('payment_customer_trans_record_transaction_id','{{%payment_customer_trans_record_log}}','payment_customer_trans_record_transaction_id');
 
     }
 

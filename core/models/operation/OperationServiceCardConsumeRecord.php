@@ -29,53 +29,53 @@ class OperationServiceCardConsumeRecord extends \dbbase\models\operation\Operati
      * save service card consume record
      * @author zhangrenzhao
      * @param $attributes
-     * ¡¾   order_id, ¶©µ¥ID
-     *      order_code,¶©µ¥ºÅ
-     *      customer_id,ÓÃ»§ID
-     *      customer_trans_record_transaction_id,½»Ò×Á÷Ë®
-     *      service_card_with_customer_id,¿Í»§·þÎñ¿¨ID
-     *      service_card_with_customer_code,¿Í»§·þÎñ¿¨ºÅ
-     *      service_card_consume_record_consume_type,Ïû·ÑÀàÐÍ
-     *      service_card_consume_record_business_type,ÒµÎñÀàÐÍ
-     *      service_card_consume_record_use_money£¬Ê¹ÓÃ½ð¶î ¡¿
+     * ã€   order_id, è®¢å•ID
+     *      order_code,è®¢å•å·
+     *      customer_id,ç”¨æˆ·ID
+     *      customer_trans_record_transaction_id,äº¤æ˜“æµæ°´
+     *      service_card_with_customer_id,å®¢æˆ·æœåŠ¡å¡ID
+     *      service_card_with_customer_code,å®¢æˆ·æœåŠ¡å¡å·
+     *      service_card_consume_record_consume_type,æ¶ˆè´¹ç±»åž‹
+     *      service_card_consume_record_business_type,ä¸šåŠ¡ç±»åž‹
+     *      service_card_consume_record_use_moneyï¼Œä½¿ç”¨é‡‘é¢ ã€‘
      * @return bool
      */
     public function createServiceCardConsumeRecord($attributes)
     {
-        //1.¶ÁÈ¡attributes£¬²¢Ð´Èëthis¶ÔÏóÊôÐÔ
+        //1.è¯»å–attributesï¼Œå¹¶å†™å…¥thiså¯¹è±¡å±žæ€§
         $this->setAttributes($attributes);
 
-        //2.¸ù¾Ýservice_card_with_customer_id²éÑ¯¿Í·þ·þÎñ¿¨ÐÅÏ¢
+        //2.æ ¹æ®service_card_with_customer_idæŸ¥è¯¢å®¢æœæœåŠ¡å¡ä¿¡æ¯
         $operationServiceCardWithCustomer = OperationServiceCardWithCustomer::getServiceCardWithCustomerById($this->service_card_with_customer_id);
 
-        //3.Ð´ÈëÊ¹ÓÃÇ°½ð¶î
+        //3.å†™å…¥ä½¿ç”¨å‰é‡‘é¢
         $this->setAttributes([
             'service_card_consume_record_front_money' => $operationServiceCardWithCustomer->service_card_with_customer_balance,
         ]);
 
-        //4.¼ÆËãÊ¹ÓÃºó½ð¶î
+        //4.è®¡ç®—ä½¿ç”¨åŽé‡‘é¢
         $this->service_card_consume_record_behind_money = $this->service_card_with_customer_balance - $this->service_card_consume_record_use_money;
 
-        //5.Ð´ÈëÊ¹ÓÃºó½ð¶î
+        //5.å†™å…¥ä½¿ç”¨åŽé‡‘é¢
         $this->setAttributes([
             'service_card_consume_record_behind_money' => $this->service_card_consume_record_behind_money,
         ]);
 
-        //6.ÉèÖÃÆäËû×Ö¶Î
+        //6.è®¾ç½®å…¶ä»–å­—æ®µ
         $this->setAttributes([
-            'isdel' => 0,//Âß¼­É¾³ý
+            'isdel' => 0,//é€»è¾‘åˆ é™¤
         ]);
 
-        //7.·þÎñ¿¨Ïû·Ñ¼ÇÂ¼±£´æ³É¹¦£¬¸üÐÂ¿Í»§·þÎñ¿¨Óà¶î
+        //7.æœåŠ¡å¡æ¶ˆè´¹è®°å½•ä¿å­˜æˆåŠŸï¼Œæ›´æ–°å®¢æˆ·æœåŠ¡å¡ä½™é¢
         if($this->doSave()){
-            return OperationServiceCardWithCustomer::updateServiceCardWithCustomerBalanceById($this->service_card_with_customer_id,$this->service_card_consume_record_behind_money);
+            return (new OperationServiceCardWithCustomer())->updateServiceCardWithCustomerBalanceById($this->service_card_with_customer_id,$this->service_card_consume_record_behind_money);
         }else{
             return false;
         }
 
     }
     /**
-     * @introduction Âß¼­É¾³ý
+     * @introduction é€»è¾‘åˆ é™¤
      * @return bool
      */
     public function softDelete()

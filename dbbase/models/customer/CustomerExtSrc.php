@@ -9,7 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property integer $customer_id
- * @property integer $customer_phone
+ * @property string $customer_phone
  * @property integer $finance_order_channal_id
  * @property string $platform_name
  * @property string $channal_name
@@ -37,9 +37,11 @@ class CustomerExtSrc extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'customer_phone', 'finance_order_channal_id', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['customer_id', 'finance_order_channal_id', 'created_at', 'updated_at', 'is_del'], 'integer'],
             [['created_at', 'updated_at'], 'required'],
-            [['platform_name', 'channal_name', 'platform_ename', 'channal_ename', 'device_name', 'device_no'], 'string', 'max' => 255]
+            [['customer_phone'], 'string', 'max' => 11],
+            [['platform_name', 'channal_name', 'platform_ename', 'channal_ename', 'device_name', 'device_no'], 'string', 'max' => 255],
+            [['customer_phone'], 'unique']
         ];
     }
 

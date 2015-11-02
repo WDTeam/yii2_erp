@@ -362,6 +362,15 @@ class FinanceSettleApplySearch extends FinanceSettleApply
         return $this->roleDes[$workerIdentityId];
     }
     
+    public function getWorkerIdByWorkerTel($worker_tel){
+        $worker_id = -1;
+        $worker = Worker::getWorkerInfoByPhone($worker_tel);
+        if(count($worker) > 0){
+            $worker_id = $worker['id'];
+        }
+        return $worker_id;
+    }
+    
     /**
      * 根据用户角色和阿姨类型获取结算周期
      * @param type $workerType

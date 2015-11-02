@@ -11,14 +11,14 @@ use yii\data\ActiveDataProvider;
 /**
  * CustomerTransRecordSearch represents the model behind the search form about `dbbase\models\CustomerTransRecord`.
  */
-class PaymentCustomerTransRecordSearch extends \core\models\payment\PaymentCustomerTransRecord
+class PaymentCustomerTransRecordSearch extends PaymentCustomerTransRecord
 {
     public function rules()
     {
         return [
-            [['id', 'customer_id', 'order_id', 'order_channel_id', 'payment_customer_trans_record_order_channel', 'pay_channel_id', 'payment_customer_trans_record_pay_channel', 'payment_customer_trans_record_mode', 'payment_customer_trans_record_mode_name', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['id', 'customer_id', 'order_channel_id', 'payment_customer_trans_record_order_channel', 'pay_channel_id', 'payment_customer_trans_record_pay_channel', 'payment_customer_trans_record_mode', 'payment_customer_trans_record_mode_name', 'created_at', 'updated_at'], 'integer'],
             [['payment_customer_trans_record_coupon_money', 'payment_customer_trans_record_cash', 'payment_customer_trans_record_pre_pay', 'payment_customer_trans_record_online_pay', 'payment_customer_trans_record_online_balance_pay', 'payment_customer_trans_record_service_card_pay', 'payment_customer_trans_record_compensate_money', 'payment_customer_trans_record_refund_money', 'payment_customer_trans_record_order_total_money', 'payment_customer_trans_record_total_money', 'payment_customer_trans_record_current_balance', 'payment_customer_trans_record_befor_balance'], 'number'],
-            [['payment_customer_trans_record_service_card_on', 'payment_customer_trans_record_transaction_id', 'payment_customer_trans_record_remark', 'payment_customer_trans_record_verify'], 'safe'],
+            [['order_id', 'payment_customer_trans_record_service_card_on', 'payment_customer_trans_record_transaction_id', 'payment_customer_trans_record_remark', 'payment_customer_trans_record_verify'], 'safe'],
         ];
     }
 
@@ -34,7 +34,7 @@ class PaymentCustomerTransRecordSearch extends \core\models\payment\PaymentCusto
 
     public function search($params)
     {
-        $query = \core\models\payment\PaymentCustomerTransRecord::find();
+        $query = PaymentCustomerTransRecord::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -68,7 +68,6 @@ class PaymentCustomerTransRecordSearch extends \core\models\payment\PaymentCusto
             'payment_customer_trans_record_befor_balance' => $this->payment_customer_trans_record_befor_balance,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'is_del' => $this->is_del,
         ]);
 
         $query->andFilterWhere(['like', 'payment_customer_trans_record_service_card_on', $this->payment_customer_trans_record_service_card_on])

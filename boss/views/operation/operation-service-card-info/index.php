@@ -14,9 +14,6 @@ $this->title = Yii::t('app', '服务卡信息');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-service-card-info-index">
-    <div class="page-header">
-            <h1><?= Html::encode($this->title) ?></h1>
-    </div>
     <?php  echo $this->render('_search', ['model' => $searchModel,'config'=>$config,]); ?>
 
     <p>
@@ -28,8 +25,17 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
+		'toolbar' =>[
+            'content'=>Html::a('<i class="glyphicon glyphicon-plus"></i>', [
+            'create'
+            ], [
+                'class' => 'btn btn-default',
+                'title' => Yii::t('app', '添加新服务卡')
+            ]),
+        ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
+			
 
 //            'id',
             'service_card_info_name',
@@ -71,16 +77,33 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter'=>false,
             ],
 //            'is_del', 
+			
 
             [
                 'class' => 'yii\grid\ActionColumn',
+				 'template'=>'{view} {update} {delete} ',
                 'buttons' => [
-                'update' => function ($url, $model) {
-                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['operation/operation-service-card-info/view','id' => $model->id,'edit'=>'t']), [
-                                                    'title' => Yii::t('yii', 'Edit'),
-                                                  ]);}
-
-                ],
+					'view' => function ($url, $model) {
+						return Html::a(Yii::t('yii', '查看'), ['view', 'id' => $model->id], [
+							'title' => Yii::t('yii', '查看'),
+							'class' => 'btn btn-success btn-sm'
+						]);
+					},
+					'update' => function ($url, $model) {
+						return Html::a(Yii::t('yii', '编辑'), ['view', 'id' => $model->id, 'edit' => 't'], [
+							'title' => Yii::t('yii', '编辑'),
+							'class' => 'btn btn-success btn-sm'
+						]);
+					},
+					'delete' => function ($url, $model) {
+						return Html::a(
+							Yii::t('yii', 'Delete'),
+							['delete','id' => $model->id, 'id'=> $model->id],
+							['title' => Yii::t('yii', 'Delete'), 'class' => 'btn btn-danger btn-sm', 'data-pjax'=>"0", 'data-method'=>"post", 'data-confirm'=>"您确定要删除此项吗？", 'aria-label'=>Yii::t('yii', 'Delete')]
+						);
+					},
+					
+				],
             ],
         ],
         'responsive'=>true,
@@ -94,7 +117,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type'=>'info',
-            'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> 增加', ['create'], ['class' => 'btn btn-success']),                                                                                                                                                          'after'=>Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List', ['index'], ['class' => 'btn btn-info']),
+            //'before'=>Html::a('<i class="glyphicon glyphicon-plus"></i> 增加', ['create'], ['class' => 'btn btn-success']),                                                                                                                                                          'after'=>Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List', ['index'], ['class' => 'btn btn-info']),
             'showFooter'=>false
         ],
     ]); Pjax::end(); ?>

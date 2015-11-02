@@ -74,23 +74,43 @@ class CouponCustomer extends \dbbase\models\operation\coupon\CouponCustomer
    }
      /**
      * 获取用户优惠券列表（列表包括下单所在城市的和所有城市都通用的券）
+     * @param $customer_id int 用户id
+     * @param $city_id int 城市id
+     * @return $couponCustomer 用户优惠券列表
      */
     public static function GetCustomerCouponList($customer_id,$city_id){
         $now_time=time();
         $couponCustomer=(new \yii\db\Query())->select('*')->from('ejj_coupon')
                 ->leftJoin('ejj_coupon_customer', 'ejj_coupon_customer.coupon_id = ejj_coupon.id')
-                ->where(['and',"ejj_coupon_customer.expirate_at>$now_time",'ejj_coupon_customer.is_del=0','ejj_coupon_customer.is_used=0',"ejj_coupon_customer.customer_id=$customer_id", ['or', ['and','ejj_coupon.coupon_city_limit=1',"ejj_coupon.coupon_city_id=$city_id"], 'ejj_coupon.coupon_city_limit=0']] )
-                ->orderBy(['ejj_coupon_customer.expirate_at'=>SORT_ASC,'ejj_coupon_customer.coupon_price'=>SORT_DESC])->all();
+                ->where(['and',"ejj_coupon.coupon_end_at>$now_time",'ejj_coupon_customer.is_del=0','ejj_coupon_customer.is_used=0',"ejj_coupon_customer.customer_id=$customer_id", ['or', ['and','ejj_coupon.coupon_city_limit=1',"ejj_coupon.coupon_city_id=$city_id"], 'ejj_coupon.coupon_city_limit=0']] )
+                ->orderBy(['ejj_coupon.coupon_end_at'=>SORT_ASC,'ejj_coupon_customer.coupon_price'=>SORT_DESC])->all();
+        return $couponCustomer;
+   }
+    /**
+     * 获取用户优惠券列表（列表包括下单所在城市的和所有城市都通用的券和过期三十天内的）
+     * @param $customer_id int 用户id
+     * @param $city_id int 城市id
+     * @return $couponCustomer 用户优惠券列表
+     */
+    public static function GetCustomerDueCouponList($customer_id,$city_id){
+        $now_time= date("Y-m-d",time());
+        $last_month = strtotime("$now_time -30 days");
+        $couponCustomer=(new \yii\db\Query())->select('*')->from('ejj_coupon')
+                ->leftJoin('ejj_coupon_customer', 'ejj_coupon_customer.coupon_id = ejj_coupon.id')
+                ->where(['and',"ejj_coupon.coupon_end_at>$last_month",'ejj_coupon_customer.is_del=0','ejj_coupon_customer.is_used=0',"ejj_coupon_customer.customer_id=$customer_id", ['or', ['and','ejj_coupon.coupon_city_limit=1',"ejj_coupon.coupon_city_id=$city_id"], 'ejj_coupon.coupon_city_limit=0']] )
+                ->orderBy(['ejj_coupon.coupon_end_at'=>SORT_ASC,'ejj_coupon_customer.coupon_price'=>SORT_DESC])->all();      
         return $couponCustomer;
    }
     /**
      * 获取用户全部优惠券列表（包括可用的、不可用的、所有城市的、通用的）
+     * @param $customer_id int 用户id
+     * @return $couponCustomer 用户优惠券列表
      */
     public static function GetAllCustomerCouponList($customer_id){
        $couponCustomer=(new \yii\db\Query())->select('*')->from('ejj_coupon')
                ->leftJoin('ejj_coupon_customer', 'ejj_coupon_customer.coupon_id = ejj_coupon.id')
                ->where(['and','ejj_coupon_customer.is_del=0',"ejj_coupon_customer.customer_id=$customer_id"] )
-               ->orderBy(['ejj_coupon_customer.expirate_at'=>SORT_ASC,'ejj_coupon_customer.coupon_price'=>SORT_DESC])->all();   
+               ->orderBy(['ejj_coupon.coupon_end_at'=>SORT_ASC,'ejj_coupon_customer.coupon_price'=>SORT_DESC])->all();   
         return $couponCustomer;
    }
        
@@ -104,6 +124,20 @@ class CouponCustomer extends \dbbase\models\operation\coupon\CouponCustomer
         $now_time=time();
         return CouponCustomer::find()->where(['and','is_del=0',"customer_id=$customer_id",'is_used=0',"expirate_at>$now_time"] )->count();
     }
-
+    
+    /**
+    * @验证优惠码是否绑定用户
+    * @param $code string 优惠码
+     * @return ture已绑定 false未绑定
+    */
+    public static function checkCouponIsUsed($code)
+    {
+        $couponCustomer=self::find()->where(['coupon_code'=>$code])->one();
+        if(empty($couponCustomer)){
+            return false;
+        }else{
+            return true;
+        }
+    }
     
 }

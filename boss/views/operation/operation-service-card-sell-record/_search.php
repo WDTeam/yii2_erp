@@ -11,29 +11,33 @@ use kartik\date\DatePicker;
  */
 ?>
 
-<div class="operation-service-card-sell-record-search">
-
+<div class="operation-service-card-sell-record-search panel panel-info">
+	<div class="panel-heading">
+        <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 服务卡销售记录搜索</h3>
+    </div>
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
-
-	<div class="col-md-2">
-	 <?= $form->field($model, 'service_card_sell_record_code') ?>
+	<div class="panel-body row">
+		<div class="col-md-2">
+		 <?= $form->field($model, 'service_card_sell_record_code') ?>
+		</div>
+		<div class="col-md-2">
+		 <?= $form->field($model, 'customer_phone') ?>
+		</div>
+		<div class="col-md-2">
+		 <?= $form->field($model, 'customer_trans_record_pay_mode') ?>
+		</div>
+		<div class="col-md-2">
+		 <?= $form->field($model, 'customer_trans_record_pay_channel') ?>
+		</div>
+		<div class="col-md-4">
+		 <?= $form->field($model, 'customer_trans_record_pay_money') ?>
+		</div>
 	</div>
-	<div class="col-md-2">
-	 <?= $form->field($model, 'customer_phone') ?>
-	</div>
-	<div class="col-md-2">
-	 <?= $form->field($model, 'customer_trans_record_pay_mode') ?>
-	</div>
-	<div class="col-md-2">
-	 <?= $form->field($model, 'customer_trans_record_pay_channel') ?>
-	</div>
+	<div class="panel-body row">
 	<div class="col-md-4">
-	 <?= $form->field($model, 'customer_trans_record_pay_money') ?>
-	</div>
-	<div class="col-md-6">
 	  <?= $form->field($model, 'customer_trans_record_paid_at_min')->widget(DatePicker::classname(), [
     		'name' => 'customer_trans_record_paid_at_min',
     		'type' => DatePicker::TYPE_COMPONENT_PREPEND,
@@ -44,7 +48,7 @@ use kartik\date\DatePicker;
             ]);  ?>
 	 
 	</div>
-	<div class="col-md-6">
+	<div class="col-md-4">
 	<?= $form->field($model, 'customer_trans_record_paid_at_max')->widget(DatePicker::classname(), [
     		'name' => 'customer_trans_record_paid_at_max',
     		'type' => DatePicker::TYPE_COMPONENT_PREPEND,
@@ -94,10 +98,11 @@ use kartik\date\DatePicker;
 
     <?php // echo $form->field($model, 'is_del') ?>
 
-    <div class="form-group">
+    <div class="col-md-4" style="margin-top:22px;">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
     </div>
+	</div>
 
     <?php ActiveForm::end(); ?>
 

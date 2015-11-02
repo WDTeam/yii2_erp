@@ -39,7 +39,21 @@ use yii\helpers\Url;
                     'type'=> Form::INPUT_TEXT, 
                     'options'=>[ 'maxlength'=>100],
                     'label'=>'店名 *'
-                ], 
+                ],
+
+                'city_id'=>[
+                    'type'=>Form::INPUT_WIDGET,
+                    'widgetClass'=>AreaCascade::className(),
+                    'options'=>[
+                        'model' => $model,
+                        'options' => ['class' => 'form-control inline'],
+                        'label' =>'选择城市',
+                        'grades' => 'county',
+                        'is_minui'=>true,
+                    ],
+                ],
+                
+                'street'=>['type'=> Form::INPUT_TEXT, 'options'=>[ 'maxlength'=>255]],
                 
                 'shop_manager_id'=>[
                     'label'=>'归属家政 *',
@@ -54,38 +68,55 @@ use yii\helpers\Url;
                             'ajax' => [
                                 'url' => Url::to(['shopmanager/shop-manager/search-by-name']),
                                 'dataType' => 'json',
-                                'data' => new JsExpression('function(params) { return {name:params.term}; }')
+                                'data' => new JsExpression('function(params) { 
+                                    return {
+                                        name:params.term,
+                                        city_id: $("#city").val()
+                                    }; 
+                                }')
                             ],
-        //                     'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                            'initSelection'=> new JsExpression('function (element, callback) {
+                                callback({
+                                    id:"'.$model->shop_manager_id.'",
+                                    name:"'.$model->getManagerName().'"
+                                });
+                            }'),
+                            'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
                             'templateResult' => new JsExpression('function(model) { return model.name; }'),
                             'templateSelection' => new JsExpression('function (model) { return model.name; }'),
                         ],
                     ]
                 ], 
-                
-                'street'=>['type'=> Form::INPUT_TEXT, 'options'=>[ 'maxlength'=>255]],
-                
-                'city_id'=>[
-                    'type'=>Form::INPUT_WIDGET,
-                    'widgetClass'=>AreaCascade::className(),
-                    'options'=>[
-                        'model' => $model,
-                        'options' => ['class' => 'form-control inline'],
-                        'label' =>'选择城市',
-                        'grades' => 'county',
-                        'is_minui'=>true,
-                    ],
-                ],
-                
+
                 'operation_shop_district_id'=>[
                     'type'=>Form::INPUT_WIDGET,
                     'widgetClass'=>Select2::classname(),
                     'options' => [
-                        'data'=>Shop::getShopDistrictList(),
                         'hideSearch' => false,
                         'options'=>[
                             'placeholder' => '选择商圈',
-                        ]
+                        ],
+                        'pluginOptions' => [
+                            'allowClear' => true,
+                            'minimumInputLength' => 0,
+                            'ajax' => [
+                                'url' => Url::to(['operation/operation-shop-district/list-to-select2']),
+                                'dataType' => 'json',
+                                'data' => new JsExpression('function(params) { return {
+                                    city_id: $("#city").val(),
+                                    name: params.term
+                                }; }')
+                            ],
+                            'initSelection'=> new JsExpression('function (element, callback) {
+                                callback({
+                                    id:"'.$model->operation_shop_district_id.'",
+                                    operation_shop_district_name:"'.$model->getOperation_shop_district_name().'"
+                                });
+                            }'),
+                            'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                            'templateResult' => new JsExpression('function(model) { return model.operation_shop_district_name; }'),
+                            'templateSelection' => new JsExpression('function (model) { return model.operation_shop_district_name; }'),
+                        ],
                     ],
                     
                 ],

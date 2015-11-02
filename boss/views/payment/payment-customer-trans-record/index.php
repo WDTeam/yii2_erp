@@ -20,17 +20,26 @@ $this->params['breadcrumbs'][] = $this->title;
     echo GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            //['class' => 'yii\grid\SerialColumn'],
 
             'id',
             'customer_id',
             'order_id',
             //'order_channel_id',
-            'payment_customer_trans_record_order_channel',
+            [
+                'attribute' => 'payment_customer_trans_record_order_channel',
+                'label'=>'订单渠道',
+            ],
             //'pay_channel_id',
-            'payment_customer_trans_record_pay_channel',
+            [
+                'attribute' => 'payment_customer_trans_record_pay_channel',
+                'label'=>'收款渠道',
+            ],
             //'payment_customer_trans_record_mode',
-            'payment_customer_trans_record_mode_name',
+            [
+                'attribute' => 'payment_customer_trans_record_mode_name',
+                'label'=>'交易方式',
+            ],
             'payment_customer_trans_record_coupon_money',
             'payment_customer_trans_record_cash',
             'payment_customer_trans_record_pre_pay',
@@ -72,11 +81,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'floatHeader' => true,
         'toolbar' => '',
         'rowOptions' =>function ($model, $key, $index, $grid){
-            if($model->payment_customer_trans_record_verify != $model->makeSign())
+            if($model->payment_customer_trans_record_verify != $model::sign($model->getAttributes()))
             {
-                return ['class'=>'text-red','t1'=>$model->payment_customer_trans_record_verify,'t2'=>$model->makeSign()];
+                return ['class'=>'text-red','t1'=>$model->payment_customer_trans_record_verify,'t2'=>$model::sign($model->getAttributes())];
             }
-
         },
         'panel' => [
             'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> ' . Html::encode($this->title) . ' </h3>',

@@ -1,15 +1,15 @@
 <?php
 
 namespace restapi\controllers;
-use Yii;
 
+use restapi\models\alertMsgEnum;
+use Yii;
 use \core\models\customer\Customer;
 use \core\models\customer\CustomerAddress;
 use \core\models\customer\CustomerAccessToken;
 use \core\models\operation\coupon\CouponCustomer;
 use \core\models\operation\coupon\Coupon;
 use \core\models\payment\PaymentCustomerTransRecord;
-use \core\models\customer\CustomerExtBalance;
 use \core\models\order\Order;
 use \core\models\customer\CustomerComment;
 use \core\models\comment\CustomerCommentTag;
@@ -20,7 +20,7 @@ class UserController extends \restapi\components\Controller
 {
 
     /**
-     * @api {POST} v1/user/add-address 添加常用地址 (已完成100%) 
+     * @api {POST} v1/user/add-address 添加常用地址 (已完成100%)
      *
      * @apiName actionAddAddress
      * @apiGroup User
@@ -91,6 +91,7 @@ class UserController extends \restapi\components\Controller
     public function actionAddAddress()
     {
         $param = Yii::$app->request->post();
+
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
@@ -177,7 +178,6 @@ class UserController extends \restapi\components\Controller
     public function actionGetAddresses()
     {
         @$accessToken = Yii::$app->request->get('access_token');
-
         if (empty($accessToken)) {
             $accessToken = json_decode(Yii::$app->request->getRawBody(), true);
         }
@@ -203,7 +203,7 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {DELETE} v1/user/delete-address 删除用户常用地址 (已完成100%) 
+     * @api {DELETE} v1/user/delete-address 删除用户常用地址 (已完成100%)
      *
      * @apiName actionDeleteAddress
      * @apiGroup User
@@ -252,7 +252,7 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {PUT} v1/user/set-default-address 设置默认地址 (已完成100%) 
+     * @api {PUT} v1/user/set-default-address 设置默认地址 (已完成100%)
      * @apiDescription 用户每次下完单都会将该次地址设置为默认地址，下次下单优先使用默认地址
      * @apiName actionSetDefaultAddress
      * @apiGroup User
@@ -316,7 +316,7 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {PUT} v1/user/update-address 修改常用地址 (已完成100%) 
+     * @api {PUT} v1/user/update-address 修改常用地址 (已完成100%)
      *
      * @apiName actionUpdateAddress
      * @apiGroup User
@@ -684,7 +684,7 @@ class UserController extends \restapi\components\Controller
 
     /**
      * @api {GET} v1/user/get-user-money 用户余额和消费记录 （郝建设 已完成99% ;）
-     * 
+     *
      *
      * @apiName actionGetUserMoney
      *
@@ -765,26 +765,28 @@ class UserController extends \restapi\components\Controller
         $customer = CustomerAccessToken::getCustomer($param['access_token']);
 
         if (!empty($customer) && !empty($customer->id)) {
-
             try {
                 /**
                  * 获取客户余额
-                 *
                  * @param int $customer 用户id
                  */
-                $userBalance = CustomerExtBalance::getCustomerBalance($customer->id);
-                if (!$userBalance) {
-                    $userBalance = '0';
+                $userBalance = Customer::getBalanceById($customer->id);
+
+                if ($userBalance['response'] == 'success') {
+                    $userBalanceMoney = $userBalance['balance'];
+                } elseif ($userBalance['response'] == 'error') {
+                    return $this->send(null, $userBalance['errmsg'], 0, 403);
                 }
+
                 /**
                  * 获取用户消费记录
                  *
                  * @param int $customer 用户id
                  */
-                $userRecord = PaymentCustomerTransRecord::queryRecord($customer->id);
-
-                $ret["userBalance"] = $userBalance;
+                $userRecord = PaymentCustomerTransRecord::getCustomerPaymentTransRecord($customer->id);
+                $ret["userBalance"] = $userBalanceMoney;
                 $ret["userRecord"] = $userRecord;
+
                 return $this->send($ret, "查询成功", 1);
             } catch (\Exception $e) {
                 return $this->send($e, "boss系统错误" . $e, 0, 1024);
@@ -822,7 +824,6 @@ class UserController extends \restapi\components\Controller
      *      ]
      *     }
      *    }
-
      *
      * @apiError UserNotFound 用户认证已经过期.
      *
@@ -872,7 +873,6 @@ class UserController extends \restapi\components\Controller
      *
      * @apiName actionUserSuggest
      * @apiGroup User
-
      * @apiParam {int} order_id       '订单ID'
      * @apiParam {String} access_token 用户认证
      * @apiParam {int}  worker_id      '阿姨id'
@@ -1330,6 +1330,79 @@ class UserController extends \restapi\components\Controller
         } else {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
+    }
+
+    /**
+     * @api {GET} v1/user/get-user-info 通过token获取用户信息 （赵顺利 100%）
+     *
+     * @apiName actionGetUserInfo
+     * @apiGroup User
+     *
+     * @apiParam {String} access_token 用户认证
+     * @apiParam {String} [app_version] 访问源(android_4.2.2)
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *      "code": 1,
+     *      "msg": "获取用户信息成功",
+     *      "ret": {
+     *          "user": {
+     *              "id": 1,
+     *              "customer_name": null,
+     *              "customer_sex": null,
+     *              "customer_birth": null,
+     *              "customer_photo": null,
+     *              "customer_phone": "18311474301",
+     *              "customer_email": null,
+     *              "operation_area_id": null,
+     *              "operation_area_name": null,
+     *              "operation_city_id": null,
+     *              "operation_city_name": null,
+     *              "customer_level": null,
+     *              "customer_complaint_times": 0,
+     *              "customer_platform_version": null,
+     *              "customer_app_version": null,
+     *              "customer_mac": null,
+     *              "customer_login_ip": null,
+     *              "customer_login_time": null,
+     *              "customer_is_vip": null,
+     *              "created_at": 1446195943,
+     *              "updated_at": 0,
+     *              "is_del": 0
+     *          },
+     *          "access_token": "bdf403df7b4afe39f6fe5110b98299bd"
+     *      },
+     *      "alertMsg": "获取用户信息成功"
+     *  }
+     *
+     * @apiError UserNotFound 用户认证已经过期.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 403 Not Found
+     *     {
+     *       "code": "0",
+     *       "msg": "用户认证已经过期,请重新登录，"
+     *
+     *     }
+     *
+     */
+    public function actionGetUserInfo()
+    {
+        $param = Yii::$app->request->get() or
+                $param = json_decode(Yii::$app->request->getRawBody(), true);
+        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403, null, alertMsgEnum::getUserInfoFailed);
+        }
+        $customer = CustomerAccessToken::getCustomer($param['access_token']);
+        if (empty($customer)) {
+            return $this->send(null, "boss系统错误", 0, 1024, null, alertMsgEnum::getUserInfoFailed);
+        }
+        $ret = [
+            "user" => $customer,
+            "access_token" => $param['access_token']
+        ];
+        return $this->send($ret, "获取用户信息成功", 1, 200, null, alertMsgEnum::getUserInfoSuccess);
     }
 
 }

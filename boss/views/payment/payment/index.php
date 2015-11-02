@@ -25,7 +25,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'order_id',
             'payment_money',
             'payment_actual_money',
-            //'payment_source',
             'payment_source_name',
             [
                 'attribute' => 'payment_mode',
@@ -44,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'payment_transaction_id',
             'payment_eo_order_id',
             //'payment_memo',
-            //'payment_is_coupon',
+            //'payment_type',
             //'admin_id',
             //'payment_admin_name',
             //'worker_id',
@@ -61,6 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
+                'template' => '{view}',
                 'buttons' => [
                     'update' => function ($url, $model)
                     {
@@ -75,6 +75,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'hover'=>true,
         'condensed'=>true,
         'floatHeader'=>true,
+        'toolbar' => '',
+        'rowOptions' =>function ($model, $key, $index, $grid){
+            if($model->payment_verify != $model->makeSign())
+            {
+                return ['class'=>'text-red','t1'=>$model->payment_verify,'t2'=>$model->makeSign()];
+            }
+        },
         'panel' => [
             'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type'=>'info',

@@ -74,8 +74,8 @@ $(document).on("click",'.worker_contact_failure',function(){
     refuse_worker_id = $(this).parents('tr').find('input').val();
     $.ajax({
         type: "POST",
-        url:  "/order/order/create-order-worker-relation",
-        data: "order_id="+window.order_data.order.id+"&worker_id="+refuse_worker_id+"&memo="+encodeURIComponent("人工指派未响应")+"&status="+encodeURIComponent("人工指派未响应"),
+        url:  "/order/order/worker-contact-failure",
+        data: "order_id="+window.order_data.order.id+"&worker_id="+refuse_worker_id,
         dataType:"json",
         success: function (msg) {
             if(msg){
@@ -94,8 +94,8 @@ $(document).on("click",'#worker_refuse_memo_submit',function(){
     }else{
         $.ajax({
             type: "POST",
-            url:  "/order/order/create-order-worker-relation",
-            data: "order_id="+window.order_data.order.id+"&worker_id="+refuse_worker_id+"&memo="+encodeURIComponent(memo)+"&status="+encodeURIComponent("人工指派拒单"),
+            url:  "/order/order/worker-refuse",
+            data: "order_id="+window.order_data.order.id+"&worker_id="+refuse_worker_id+"&memo="+encodeURIComponent(memo),
             dataType:"json",
             success: function (msg) {
                 if(msg){
@@ -255,7 +255,7 @@ function timer(){
 function showOrder(){
     timer();
     var order = window.order_data;
-    $("#booked_time_range").text(order.booked_time_range);
+    $("#booked_time_range").html(order.booked_time_range);
     $("#order_address").text(order.order.order_address);
     if(order.ext_pay.order_pay_type==1){
         $("#must_pay_info").text('需收取'+order.order.order_money+'元');

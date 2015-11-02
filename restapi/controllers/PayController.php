@@ -3,6 +3,7 @@ namespace restapi\controllers;
 
 use Yii;
 use \restapi\models\PayParam;
+use \restapi\models\alertMsgEnum;
 use \core\models\payment\Payment;
 use \core\models\customer\CustomerAccessToken;
 
@@ -41,7 +42,7 @@ class PayController extends \restapi\components\Controller
         $params = json_decode(Yii::$app->request->rawBody, true);
 
         if (empty($params['access_token']) || !CustomerAccessToken::checkAccessToken($params['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", "error", 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403,null,alertMsgEnum::balancePayFailed);
         }
         $customer = CustomerAccessToken::getCustomer($params['access_token']);
         $date = [
@@ -50,10 +51,10 @@ class PayController extends \restapi\components\Controller
         ];
 
         if (empty(Payment::balancePay($date))) {
-            return $this->send(null, "支付失败", "error", 403);
+            return $this->send(null, "支付失败", 0, 403,null,alertMsgEnum::balancePayFailed);
         }
 
-        return $this->send(null, "支付成功", "ok");
+        return $this->send(null, "支付成功",1,200,null,alertMsgEnum::balancePaySuccess);
     }
 
     /**
@@ -63,7 +64,7 @@ class PayController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {String} pay_money 支付金额
+     * @apiParam {String} payment_type 支付类型:1普通订单,2周期订单,3充值
      * @apiParam {String} channel_id 渠道ID
      *                              1=APP微信,
      *                              2=H5微信,
@@ -75,8 +76,7 @@ class PayController extends \restapi\components\Controller
      *                              20=后台支付（未实现）,
      *                              21=微博支付（未实现）,
      *                              23=微信native,
-     * @apiParam {String} [order_id] 订单ID,没有订单号表示充值
-     * @apiParam {String} partner 第三方合作号
+     * @apiParam {String} order_id 订单ID,根据支付类型判断发送订单号(普通订单:order.id,周期订单:order.order_batch_code,充值:待定)
      *
      * @apiParam {Object} [ext_params] 扩展参数,用于微信/百度直达号（即channel_id=2或7 必填）
      * @apiParam {String} [ext_params.openid] 微信openid （channel_id=2 必填）
@@ -167,7 +167,7 @@ class PayController extends \restapi\components\Controller
         $data[$name] = Yii::$app->request->post() or
         $data[$name] = json_decode(Yii::$app->request->rawBody, true);
         if (empty($data[$name]['access_token']) || !CustomerAccessToken::checkAccessToken($data[$name]['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403,null,alertMsgEnum::onlinePayFailed);
         }
         $customer = CustomerAccessToken::getCustomer($data[$name]['access_token']);
 
@@ -175,54 +175,32 @@ class PayController extends \restapi\components\Controller
 
         $ext_params = [];
         //在线支付（online_pay），在线充值（pay）
-        if (empty($data[$name]['order_id'])) {
-            if ($data[$name]['channel_id'] == '2') {
-                $model->scenario = 'wx_h5_pay';
-                $ext_params['openid'] = $data[$name]['ext_params']['openid'];    //微信openid
-            } elseif ($data[$name]['channel_id'] == '6' || $data[$name]['channel_id'] == '24') {
-                $model->scenario = 'alipay_web_pay';
-                $ext_params['return_url'] = !empty($data[$name]['ext_params']['return_url']) ? $data[$name]['ext_params']['return_url'] :'';    //同步回调地址
-                $ext_params['show_url'] = !empty($data[$name]['ext_params']['show_url']) ? $data[$name]['ext_params']['show_url']: '';    //显示商品URL
-            } elseif ($data[$name]['channel_id'] == '7') {
-                $model->scenario = 'zhidahao_h5_pay';
-                $ext_params['customer_name'] = $data[$name]['ext_params']['customer_name'];  //商品名称
-                $ext_params['customer_mobile'] = $data[$name]['ext_params']['customer_mobile'];  //用户电话
-                $ext_params['customer_address'] = $data[$name]['ext_params']['customer_address'];  //用户地址
-                $ext_params['order_source_url'] = $data[$name]['ext_params']['order_source_url'];  //订单详情地址
-                $ext_params['page_url'] = $data[$name]['ext_params']['page_url'];  //订单跳转地址
-                $ext_params['goods_name'] = $data[$name]['ext_params']['goods_name'];  //订单名称
-                $ext_params['detail'] = $data[$name]['ext_params']['detail'];  //订单详情
-            } else {
-                $model->scenario = 'pay';
-            }
+        if ($data[$name]['channel_id'] == '2') {
+            $model->scenario = 'wx_h5_online_pay';
+            $ext_params['openid'] = $data[$name]['ext_params']['openid'];    //微信openid
+        } elseif ($data[$name]['channel_id'] == '6' || $data[$name]['channel_id'] == '24') {
+            $model->scenario = 'alipay_web_online_pay';
+            $ext_params['return_url'] = !empty($data[$name]['ext_params']['return_url']) ? $data[$name]['ext_params']['return_url'] :'';    //同步回调地址
+            $ext_params['show_url'] = !empty($data[$name]['ext_params']['show_url']) ? $data[$name]['ext_params']['show_url']: '';    //显示商品URL
+        } elseif ($data[$name]['channel_id'] == '7') {
+            $model->scenario = 'zhidahao_h5_online_pay';
+            $ext_params['customer_name'] = $data[$name]['ext_params']['customer_name'];  //商品名称
+            $ext_params['customer_mobile'] = $data[$name]['ext_params']['customer_mobile'];  //用户电话
+            $ext_params['customer_address'] = $data[$name]['ext_params']['customer_address'];  //用户地址
+            $ext_params['order_source_url'] = $data[$name]['ext_params']['order_source_url'];  //订单详情地址
+            $ext_params['page_url'] = $data[$name]['ext_params']['page_url'];  //订单跳转地址
+            $ext_params['goods_name'] = $data[$name]['ext_params']['goods_name'];  //订单名称
+            $ext_params['detail'] = $data[$name]['ext_params']['detail'];  //订单详情
         } else {
-            if ($data[$name]['channel_id'] == '2') {
-                $model->scenario = 'wx_h5_online_pay';
-                $ext_params['openid'] = $data[$name]['ext_params']['openid'];    //微信openid
-            } elseif ($data[$name]['channel_id'] == '6' || $data[$name]['channel_id'] == '24') {
-                $model->scenario = 'alipay_web_online_pay';
-                $ext_params['return_url'] = !empty($data[$name]['ext_params']['return_url']) ? $data[$name]['ext_params']['return_url'] :'';    //同步回调地址
-                $ext_params['show_url'] = !empty($data[$name]['ext_params']['show_url']) ? $data[$name]['ext_params']['show_url']: '';    //显示商品URL
-            } elseif ($data[$name]['channel_id'] == '7') {
-                $model->scenario = 'zhidahao_h5_online_pay';
-                $ext_params['customer_name'] = $data[$name]['ext_params']['customer_name'];  //商品名称
-                $ext_params['customer_mobile'] = $data[$name]['ext_params']['customer_mobile'];  //用户电话
-                $ext_params['customer_address'] = $data[$name]['ext_params']['customer_address'];  //用户地址
-                $ext_params['order_source_url'] = $data[$name]['ext_params']['order_source_url'];  //订单详情地址
-                $ext_params['page_url'] = $data[$name]['ext_params']['page_url'];  //订单跳转地址
-                $ext_params['goods_name'] = $data[$name]['ext_params']['goods_name'];  //订单名称
-                $ext_params['detail'] = $data[$name]['ext_params']['detail'];  //订单详情
-            } else {
-                $model->scenario = 'online_pay';
-            }
+            $model->scenario = 'online_pay';
         }
         $data[$name] = array_merge($data[$name], $ext_params);
         $model->attributes = $data[$name];
         if ($model->load($data) && $model->validate()) {
-            $retInfo = Payment::getPayParams($model->pay_money, $model->customer_id, $model->channel_id, $model->partner, $model->order_id, $ext_params);
-            return $this->send($retInfo['data'], $retInfo['info'], $retInfo['status']);
+            $retInfo = Payment::getPayParams($model->payment_type, $model->customer_id, $model->channel_id, $model->order_id, $ext_params);
+            return $this->send($retInfo['data'], $retInfo['info'], $retInfo['status'],200,null,alertMsgEnum::onlinePayFailed);
         }
-        return $this->send(null, $model->errors, 0);
+        return $this->send(null, $model->errors, 0,403,null,alertMsgEnum::onlinePayFailed);
 
     }
 

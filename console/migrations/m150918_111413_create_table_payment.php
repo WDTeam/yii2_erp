@@ -14,7 +14,7 @@ class m150918_111413_create_table_payment extends Migration
         $this->createTable('{{%payment}}', [
             'id' => Schema::TYPE_PK . ' AUTO_INCREMENT ' ,
             'customer_id' => Schema::TYPE_INTEGER . '(11) unsigned NOT NULL COMMENT \'用户ID\'' ,
-            'order_id' => Schema::TYPE_INTEGER . '(11) unsigned DEFAULT 0 NOT NULL COMMENT \'订单ID\'' ,
+            'order_id' => Schema::TYPE_STRING . '(30) DEFAULT 0 NOT NULL COMMENT \'订单ID\'' ,
             'payment_money' => Schema::TYPE_DECIMAL . '(8,2) unsigned DEFAULT 0 NOT NULL COMMENT \'发起充值/交易金额\'' ,
             'payment_actual_money' => Schema::TYPE_DECIMAL . '(8,2) unsigned DEFAULT 0 NOT NULL COMMENT \'实际充值/交易金额\'' ,
             'payment_source' => Schema::TYPE_BOOLEAN . '(3) unsigned DEFAULT 0 NOT NULL COMMENT \'数据来源:关联订单渠道表\'',
@@ -24,7 +24,7 @@ class m150918_111413_create_table_payment extends Migration
             'payment_transaction_id' => Schema::TYPE_STRING . '(40) DEFAULT 0 NOT NULL COMMENT \'第三方交易流水号\'' ,
             'payment_eo_order_id' => Schema::TYPE_STRING . '(30) DEFAULT 0 NOT NULL COMMENT \'商户ID(第三方交易)\'' ,
             'payment_memo' => Schema::TYPE_STRING . '(255) DEFAULT \'\' NOT NULL COMMENT \'备注\'' ,
-            'payment_is_coupon' => Schema::TYPE_BOOLEAN . '(1) unsigned DEFAULT 0 NOT NULL COMMENT \'是否返券\'' ,
+            'payment_type' => Schema::TYPE_BOOLEAN . '(1) unsigned DEFAULT 0 NOT NULL COMMENT \'支付方式:1普通订单,2周期订单,3充值\'' ,
             'admin_id' => Schema::TYPE_INTEGER . '(10) unsigned DEFAULT 0 NOT NULL COMMENT \'管理员ID\'' ,
             'payment_admin_name' => Schema::TYPE_STRING . '(30) DEFAULT \'\' NOT NULL COMMENT \'管理员名称\'' ,
             'worker_id' => Schema::TYPE_INTEGER . '(10) unsigned NOT NULL DEFAULT 0 COMMENT \'销售卡阿姨ID\'' ,

@@ -32,7 +32,8 @@ class CustomerExtScore extends \yii\db\ActiveRecord
     {
         return [
             [['customer_id', 'customer_score', 'created_at', 'updated_at', 'is_del'], 'integer'],
-            [['customer_phone'], 'string', 'max' => 11]
+            [['customer_phone'], 'string', 'max' => 11],
+            [['customer_phone'], 'unique']
         ];
     }
 

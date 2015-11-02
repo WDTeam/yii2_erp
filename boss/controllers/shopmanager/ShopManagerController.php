@@ -153,14 +153,18 @@ class ShopManagerController extends BaseAuthController
     }
     /**
      * 通过名称获取列表
+     * @param string $name
+     * @param int $city_id 城市ID
      */
-    public function actionSearchByName($name='')
+    public function actionSearchByName($name='', $city_id=null)
     {
-        $models = ShopManager::find()
+        $query = ShopManager::find()
         ->select(['id', 'name'])
-        ->andFilterWhere(['like', 'name', $name])
-        ->limit(50)
-        ->all();
+        ->andFilterWhere(['like', 'name', $name]);
+        if(isset($city_id)){
+            $query->andFilterWhere(['=', 'city_id', $city_id]);
+        }
+         $models = $query->limit(50)->all();
         echo Json::encode(['results'=>$models]);
     }
     /**

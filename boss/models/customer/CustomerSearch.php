@@ -58,7 +58,7 @@ class CustomerSearch extends Customer
             'customer_is_vip' => $this->customer_is_vip,
             // 'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'is_del' => $this->is_del,
+            //'is_del' => $this->is_del,
         ]);
 
         $query->andFilterWhere(['like', 'customer_name', $this->customer_name])

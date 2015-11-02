@@ -282,7 +282,7 @@ class server
             echo date('Y-m-d H:i:s').' 订单:＝ '. $order['order_id']." 派单中==>";
             $isOK = false;
             
-            $timerDiff = time() - (int)($order['created_at']);
+            $timerDiff = time() - (int)($order['assign_start_time']);
 
             echo '已过 '.$timerDiff.' 秒 ==>';
             
@@ -394,20 +394,12 @@ class server
         $url = $this->config['BOSS_API_URL'] . $data['order_id'];
         try {
             $result = @file_get_contents($url);
-//            '{
-//                "order_id": 15,
-//                "created_at": 1446222494,
-//                "jpush": 0,
-//                "ivr": 3,
-//                "push_status": 2
-//            }'
             $d = json_decode($result,true);
             $d['created_at'] = date('Y-m-d H:i:s', $d['created_at']);
+            $d['assign_start_time'] = date('Y-m-d H:i:s', $d['assign_start_time']);
             $d['updated_at'] = isset($d['updated_at']) ? date('Y-m-d H:i:s', $d['updated_at']) : '';
             $d = json_encode($d);
             $this->broadcast($server,$d);
-            //$data = (array)json_decode($d);
-            //var_dump($data);
         } catch (Exception $ex) {
             echo date('Y-m-d H:i:s').$ex->getMessage()."\n";
             var_dump($data);
@@ -420,9 +412,15 @@ class server
      */
     public function onFinish($server,$task_id, $data) {
         echo date('Y-m-d H:i:s').'订单:＝ '.$data['order_id']." 本次任务完成\n";
-        $data['updated_at'] = isset($data['updated_at']) ? date('Y-m-d H:i:s', $data['updated_at']) : '';
-        $d = json_encode($data);
-        $this->broadcast($server,$d);
+//        $d = $data;
+//        if(isset($d['order_id'])) {
+//            unset($d['order_id']);
+//        }
+//        $d['created_at'] = date('Y-m-d H:i:s', $d['created_at']);
+//        $d['assign_start_time'] = date('Y-m-d H:i:s', $d['assign_start_time']);
+//        $d['updated_at'] = isset($d['updated_at']) ? date('Y-m-d H:i:s', $d['updated_at']) : '';
+//        $d = json_encode($d);
+//        $this->broadcast($server,$d);
     }
     /*
      * 广播给所有客户端

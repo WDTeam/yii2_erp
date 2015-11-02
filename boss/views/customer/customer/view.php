@@ -37,6 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="customer-view">
 <?php 
+
 //城市
 $city_name = core\models\operation\OperationCity::getCityName($model->operation_city_id);
 
@@ -64,7 +65,6 @@ if(empty($customer_ext_srcs)){
 	}
 }
 
-
 //全部服务地址
 $customerAddress = CustomerAddress::listAddress($model->id);
 
@@ -81,22 +81,30 @@ if(!empty($customerAddress)){
 		}
 	}
 }
-//var_dump($addressStr);
-//exit();
+
 
 //订单
 $order_count = OrderSearch::getCustomerOrderCount($model->id);
+
 //评价数量
 $comment_count = CustomerComment::getCustomerCommentCount($model->id);
 //$comment_count = 0;
 //积分
-$score = CustomerExtScore::getCustomerScore($model->id);
+$score_arr_info = Customer::getScoreById($model->id);
+if($score_arr_info['errcode'] == 0){
+	$score = $score_arr_info['score'];
+}
+
 //余额
-$balance = Customer::getBalanceById($model->id);
+$balance_arr_info = Customer::getBalanceById($model->id);
+if($balance_arr_info['errcode'] == 0){
+	$balance = $balance_arr_info['balance'];
+}
 //历史状态集
 $customerBlockLog = CustomerBlockLog::listBlockLog($model->id);
 //当前状态
 $currentBlockStatus = CustomerBlockLog::getCurrentBlockStatus($model->id);
+
 echo DetailView::widget([
     'model' => $model,
     'condensed'=>false,
@@ -272,50 +280,53 @@ echo DetailView::widget([
 $couponCustomerProvider = new ActiveDataProvider([
 	'query' => \core\models\operation\coupon\CouponCustomer::find()->where(['customer_id'=>$model->id])
 ]);
-echo GridView::widget([
-    'dataProvider' => $couponCustomerProvider,
-    // 'responsive' => false,
-    // 'hover' => false,
-    // 'condensed' => false,
-    // 'floatHeader' => false,
-    // 'panel' => [
-    //     'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i>历史状态信息</h3>',
-    //     'type' => 'info',
-    //     'before' =>'',
-    //     'after' =>'',
-    //     'showFooter' => false
-    // ],
-    'columns'=>[
-        [
-            'format' => 'raw',
-            'label' => '类别',
-            'value' => function($couponCustomerProvider){
-				$coupon = Coupon::find($couponCustomerProvider->coupon_id);
-				return $coupon->coupon_type_name;
-			},
-            'width' => "80px",
-        ],
-        [
-            'format' => 'raw',
-            'label' => '金额',
-            'value' => function($couponCustomerProvider){
-				return $couponCustomerProvider->coupon_price;
-			},
-            'width' => "80px",
-        ],
-        [
-            'format' => 'raw',
-            'label' => '到期日',
-            'value' => function($couponCustomerProvider){
-				return date('Y-m-d H:i:s', $couponCustomerProvider->expirate_at);
-			},
-            'width' => "80px",
-        ],
-    ],
-]);
+if((int)($couponCustomerProvider->query->count()) > 0){
+	echo GridView::widget([
+		'dataProvider' => $couponCustomerProvider,
+		// 'responsive' => false,
+		// 'hover' => false,
+		// 'condensed' => false,
+		// 'floatHeader' => false,
+		// 'panel' => [
+		//     'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i>历史状态信息</h3>',
+		//     'type' => 'info',
+		//     'before' =>'',
+		//     'after' =>'',
+		//     'showFooter' => false
+		// ],
+		'columns'=>[
+		    [
+		        'format' => 'raw',
+		        'label' => '类别',
+		        'value' => function($couponCustomerProvider){
+					$coupon = Coupon::find($couponCustomerProvider->coupon_id);
+					return $coupon->coupon_type_name;
+				},
+		        'width' => "80px",
+		    ],
+		    [
+		        'format' => 'raw',
+		        'label' => '金额',
+		        'value' => function($couponCustomerProvider){
+					return $couponCustomerProvider->coupon_price;
+				},
+		        'width' => "80px",
+		    ],
+		    [
+		        'format' => 'raw',
+		        'label' => '到期日',
+		        'value' => function($couponCustomerProvider){
+					return date('Y-m-d H:i:s', $couponCustomerProvider->expirate_at);
+				},
+		        'width' => "80px",
+		    ],
+		],
+	]);
+}
 
 $customerBlockLogProvider = new ActiveDataProvider(['query' => \core\models\customer\CustomerBlockLog::find()->where(['customer_id'=>$model->id])]);
-echo GridView::widget([
+if((int)($customerBlockLogProvider->query->count()) > 0){
+	echo GridView::widget([
     'dataProvider' => $customerBlockLogProvider,
     // 'responsive' => false,
     // 'hover' => false,
@@ -355,6 +366,8 @@ echo GridView::widget([
         ],
     ],
 ]);
+}
+
 ?>
 </div>
 

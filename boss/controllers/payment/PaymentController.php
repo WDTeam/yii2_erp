@@ -9,6 +9,7 @@ use boss\components\BaseAuthController;
 use core\models\customer\Customer;
 use core\models\payment\CustomerTransRecord;
 
+use core\models\payment\PaymentCustomerTransRecord;
 use dbbase\models\finance\FinanceOrderChannel;
 use dbbase\models\payment\PaymentRefund;
 use dbbase\models\payment\PaymentLog;
@@ -165,6 +166,58 @@ class PaymentController extends BaseAuthController
 
     public function actionTest()
     {
+        /**
+         * 调用(调起)在线支付,发送给支付接口的数据
+         * @param integer $payment_type 支付类型,1普通订单,2周期订单,3充值订单
+         * @param integer $customer_id 消费者ID
+         * @param integer $channel_id 渠道ID
+         * @param integer $order_id 订单ID
+         * @param integer $partner 第三方合作号
+         */
+        //$data = \core\models\payment\Payment::getPayParams(2,1,24,'Z681511017247639');
+        //dump($data);
+        //exit;
+        //充值
+        $order_id = 1;
+        $order_channel_id = 24;
+        $type='payment';
+        //在线支付
+        $order_id = 1;
+        $order_channel_id = 24;
+        $type='order_pay';
+        //余额支付
+        $order_id = 2;
+        $order_channel_id = 24;
+        $type='order_pay';
+
+        //服务卡支付
+        $order_id = 3;
+        $order_channel_id = 24;
+        $type='order_pay';
+        //预付费支付
+        $order_id = 7;
+        $order_channel_id = 24;
+        $type='order_pay';
+        //现金支付
+        $order_id = 4;
+        $order_channel_id = 24;
+        $type='order_pay';
+        //余额+在线支付
+        $order_id = 5;
+        $order_channel_id = 24;
+        $type='order_pay';
+        //余额+在线支付+优惠券
+        $order_id = 6;
+        $order_channel_id = 24;
+        $type='order_pay';
+        //余额+优惠券
+        $order_id = 1212;
+        $order_channel_id = 24;
+        $type='order_pay';
+        $data = PaymentCustomerTransRecord::analysisRecord('Z651511017242523',$order_channel_id,$type,2);
+
+        var_dump($data);
+        exit;
         $data = [
             'customer_id'=>1,  //用户ID
             'order_id'=>1, //订单ID
