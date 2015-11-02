@@ -104,8 +104,6 @@ use yii\helpers\ArrayHelper;
 class Order extends OrderModel
 {
 
-    const ORDER_ASSIGN_WORKER_LOCK = 'ORDER_ASSIGN_WORKER_LOCK';
-
     /**
      * 创建新订单
      * @param $attributes [
