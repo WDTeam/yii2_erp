@@ -65,5 +65,11 @@ class OrderController extends Controller{
         foreach ($service_list as $order){
             $this->serviceDone($order);
         }
+        
+        //订单评论
+        $orders = OrderSearch::getWaitSysCommentOrderList();
+        foreach ($orders as $order){
+            
+        }
     }
 }
