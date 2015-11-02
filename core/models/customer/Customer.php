@@ -519,11 +519,43 @@ class Customer extends \dbbase\models\customer\Customer
 		];
 	}
 
-	/**
-	 *	
-	 */
 
 	/*************************************worker*******************************************************/
+	/**
+     * get customer's worker list 
+	 */
+	public static function getWorkersById($customer_id){
+		$customer = self::findOne($customer_id);
+		if($customer === NULL) {
+			return ['response'=>'error', 'errcode'=>'1', 'errmsg'=>'客户不存在'];
+		}
+
+		$customer_workers = (new \yii\db\Query())
+			->select(['w.*', 'cw.customer_id', 'cw.customer_phone'])
+			->from(['cw'=>'{{%customer_worker}}'])
+			->leftJoin(['w'=>'{{%worker}}'], 'w.id = cw.worker_id')
+			->where(['cw.is_block'=>0])
+			->andWhere(['cw.is_del'=>0])
+			->all();
+
+		return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'customer_workers'=>$customer_workers];
+	}
+
+	/**
+     * get customer's worker list by phone
+	 */
+	public static function getWorkersByPhone($customer_phone){
+		$customer = self::find()->where(['customer_phone'=>$customer_phone])->one();
+		if($customer === NULL) {
+			return ['response'=>'error', 'errcode'=>'1', 'errmsg'=>'客户不存在'];
+		}
+		$customer_workers = CustomerWorker::find()->where([
+			'customer_phone'=>$customer_phone,
+			'is_block'=>0,
+			'is_del'=>0
+			])->asArray()->all();
+		return ['response'=>'success', 'errcode'=>'0', 'errmsg'=>'', 'customer_workers'=>$customer_workers];
+	}
 	/**
      * get current worker
 	 */

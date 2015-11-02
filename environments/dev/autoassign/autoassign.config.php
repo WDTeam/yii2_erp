@@ -39,6 +39,11 @@ return [
      * 服务监听端口（默认 9501）
      */
     'SERVER_LISTEN_PORT' => 9501,
+    
+    /*
+     * SWOOLE 服务IP（推荐使用域名）
+     */
+    'SWOOLE_SERVER_IP' => 'dev.boss.1jiajie.com',
 
     /*
      * 设置启动的worker进程数
