@@ -18,7 +18,7 @@ class WorkerTaskCondition extends Model
      3=>'服务老用户',
      4=>'主动接单',
      5=>'完成工时',
-     6=>'完成小保养 ',个数
+     6=>'好评 ',
      * @param unknown $start_time
      * @param unknown $end_time
      * @param unknown $worker_id
@@ -79,6 +79,8 @@ class WorkerTaskCondition extends Model
         AND b.created_at>={$start_time}
         AND b.created_at<{$end_time}";
         $data[5] = (int)\Yii::$app->db->createCommand($sql)->queryScalar();
+        //好评
+        $data[6] = 0;
     
         return $data;
     }
