@@ -1676,8 +1676,11 @@ class OrderController extends \restapi\components\Controller
                     foreach($workerCount as $key=>$val){
                         if(@$val['is_booker_worker']){
                             $workerCount[$key]['times'] = '2:00:00';
+                        }else{
+                             $workerCount[$key]['times'] = '';
                         }
                     }
+                    
 //                    #待抢单订单列表
 //                    $workerCountTwo = OrderSearch::getPushWorkerOrders($worker->id, $page_size, $param['page'], 0);
 //
