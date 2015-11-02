@@ -465,7 +465,7 @@ class OrderSearch extends Order
     * @param $customer_id
     * @return int|string
     */
-    public function searchWorkerOrdersWithStatusCount($attributes,  $order_status = null,$channels=null,$from=null,y$to=null)
+    public function searchWorkerOrdersWithStatusCount($attributes,  $order_status = null,$channels=null,$from=null,$to=null)
     {
         $params['OrderSearch'] = $attributes;
         $query = $this->searchWorkerOrdersWithStatusProvider($params,$order_status,$channels,$from,$to)->query;
