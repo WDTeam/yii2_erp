@@ -8,8 +8,8 @@ use boss\models\shop\ShopCustomeRelationSearch;
 use boss\components\BaseAuthController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
-
+use core\models\shop\Shop;
+use core\models\shop\ShopManager;
 /**
  * ShopCustomeRelationController implements the CRUD actions for ShopCustomeRelation model.
  */
@@ -69,6 +69,7 @@ class ShopCustomeRelationController extends BaseAuthController
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
+            
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -76,6 +77,58 @@ class ShopCustomeRelationController extends BaseAuthController
         }
     }
 
+    
+   /**
+   * 添加
+   * @date: 2015-11-2
+   * @author: peak pan
+   * @return:
+   **/ 
+    public function actionAddCreate()
+    {
+    	$model = new ShopCustomeRelation;
+    
+    	if ($model->load(Yii::$app->request->post())) {
+    		
+    		$dateinfo=Yii::$app->request->post();
+    	
+    		$model->system_user_id= $dateinfo['ShopCustomeRelation']['system_user_id'];
+    		
+    		if(!isset($dateinfo['ShopCustomeRelation']['shopid'])){
+    		//父级id	
+    			$model->baseid= 0;
+    			$stype=1;
+    		}else{
+    		//门店选择家政公司  会根据家政公司选择父id
+    		if(!isset($dateinfo['ShopCustomeRelation']['shop_manager_id'])){
+    			\Yii::$app->getSession()->setFlash('default','请选择家政公司！');
+    			return $this->redirect(['index']);
+    		}else{
+    		$stype=2;
+    		$resinfo=ShopCustomeRelation::find()->select('id')->where(['shop_manager_id'=>$dateinfo['ShopCustomeRelation']['shop_manager_id']])->asArray()->one();
+    		}
+    			$model->baseid= $resinfo['id'];
+    		}
+    		$model->shopid= $dateinfo['ShopCustomeRelation']['shopid'];
+    		$model->shop_manager_id= $dateinfo['ShopCustomeRelation']['shop_manager_id'];
+    		$model->stype= $stype;
+    		$model->is_del= 0;
+    		 $model->save();
+    		return $this->redirect(['index']);
+
+    	} else {
+    		return $this->render('create', [
+    				'model' => $model,
+    				]);
+    	}
+    }
+    
+    
+    
+    
+    
+    
+    
     /**
      * Updates an existing ShopCustomeRelation model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -123,4 +176,59 @@ class ShopCustomeRelationController extends BaseAuthController
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+    
+    /**
+     * 通过搜索关键字获取门店信息  联想搜索通过ajax返回
+     * @date: 2015-11-2
+     * @param q string 关键字
+     * @return result array 门店信息
+     * @author: peak pan
+     * @return:
+     **/
+    
+    public function actionShowShop($q = null)
+    {
+    	\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    	$out = ['results' => ['id' => '', 'text' => '']];
+    	$condition = '';
+    	if($q!=null){
+    		$condition = 'name LIKE "%' . $q .'%"';
+    	}
+    	$shopResult = Shop::find()->where($condition)->select('id, name AS text')->asArray()->all();
+    	$out['results'] = array_values($shopResult);
+    	//$out['results'] = [['id' => '1', 'text' => '门店'], ['id' => '2', 'text' => '门店2'], ['id' => '2', 'text' => '门店3']];
+    	return $out;
+    }
+    
+    
+    
+    /**
+     * 通过搜索关键字获取家政公司信息  联想搜索通过ajax返回
+     * @date: 2015-11-2
+     * @param q string 关键字
+     * @return result array 门店信息
+     * @author: peak pan
+     * @return:
+     **/
+    
+    public function actionShopManager($q = null)
+    {
+    	\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    	$out = ['results' => ['id' => '', 'text' => '']];
+    	$condition = '';
+    	if($q!=null){
+    		$condition = 'name LIKE "%' . $q .'%"';
+    	}
+    	$shopResult = ShopManager::find()->where($condition)->select('id, name AS text')->asArray()->all();
+    	 $out['results'] = array_values($shopResult);
+    	 
+    	/*var_dump($out['results']);
+    	exit; */
+    	
+    	return $out;
+    }
+    
+    
+    
+    
 }

@@ -275,4 +275,28 @@ class Shop extends \dbbase\models\shop\Shop
         }
         return false;
     }
+    
+    
+    
+    /**
+     * 通过用户id返回门店名称
+     * @date: 2015-11-2
+     * @author: peak pan
+     * @return:
+     **/
+    
+    public static function get_id_name($id)
+    {
+    	$usernamelist=self::find()->select('name')->where(['id'=>$id])->asArray()->one();
+    	if($usernamelist){
+    		return $usernamelist['name'];
+    	}else{
+    		return '未知';
+    	}
+    	 
+    	 
+    }
+    
+    
+    
 }

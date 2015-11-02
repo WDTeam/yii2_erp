@@ -239,4 +239,28 @@ class ShopManager extends \dbbase\models\shop\ShopManager
         $model->shop_count = $count;
         return $model->save();
     }
+    
+    
+
+    /**
+     * 通过用户id返回家政公司名称
+     * @date: 2015-11-2
+     * @author: peak pan
+     * @return:
+     **/
+    
+    public static function get_id_name($id)
+    {
+    	$usernamelist=self::find()->select('name')->where(['id'=>$id])->asArray()->one();
+    	if($usernamelist){
+    		return $usernamelist['name'];
+    	}else{
+    		return '未知';
+    	}
+    
+    
+    }
+    
+    
+    
 }
