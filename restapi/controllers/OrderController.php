@@ -10,7 +10,7 @@ use \core\models\customer\CustomerAccessToken;
 use \core\models\customer\CustomerAddress;
 use \core\models\order\OrderSearch;
 use \core\models\worker\WorkerAccessToken;
-use \dbbase\models\order\OrderStatusDict;
+use \core\models\order\OrderStatusDict;
 use yii\web\Response;
 
 class OrderController extends \restapi\components\Controller
