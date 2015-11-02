@@ -14,10 +14,6 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '服务卡客户关�
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-service-card-with-customer-view">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
-
 
     <?= DetailView::widget([
             'model' => $model,
@@ -72,7 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'method'=>'post',
         ],
         ],
-        'enableEditMode'=>true,
+        'enableEditMode'=>false,
     ]) ?>
 
 </div>
