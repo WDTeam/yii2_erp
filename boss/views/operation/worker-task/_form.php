@@ -37,7 +37,7 @@ $conditions = $model->getFullConditions();
         'worker_task_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 任务名称...', 'maxlength'=>255]],
     ]
     ]);?>
-    <div class="form-group has-error">
+    <div class="form-group">
         <label class="control-label col-md-2">任务条件</label>
         <?php foreach ($conditions as $con){?>
         <div class="col-md-10" style="padding-left:50px">

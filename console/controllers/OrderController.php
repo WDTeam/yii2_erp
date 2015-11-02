@@ -56,8 +56,11 @@ class OrderController extends Controller{
      */
     private function suggest($order)
     {
+        var_dump($order);exit;
         try{
-            CustomerComment::autoaddUserSuggest($order);
+            CustomerComment::autoaddUserSuggest([
+//                 $order
+            ]);
         }catch(\Exception $e){
             echo 'Order ID:'.$order['id'].' suggest error!'.PHP_EOL;
         }
@@ -84,7 +87,7 @@ class OrderController extends Controller{
         //订单评论
         $orders = OrderSearch::getWaitSysCommentOrderList();
         foreach ($orders as $order){
-           
+           $this->suggest($order);
         }
     }
 }
