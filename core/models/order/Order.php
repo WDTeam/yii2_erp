@@ -18,11 +18,12 @@ use core\models\worker\Worker;
 use core\models\operation\OperationShopDistrict;
 use core\models\operation\OperationGoods;
 use core\models\worker\WorkerStat;
+use core\models\order\OrderStatusDict;
+
 use dbbase\models\order\OrderExtFlag;
 use dbbase\models\order\OrderExtPay;
 use dbbase\models\order\OrderExtWorker;
 use dbbase\models\order\Order as OrderModel;
-use dbbase\models\order\OrderStatusDict;
 use dbbase\models\order\OrderExtCustomer;
 use dbbase\models\order\OrderSrc;
 use dbbase\models\finance\FinanceOrderChannel;
