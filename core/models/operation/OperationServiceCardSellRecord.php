@@ -148,7 +148,6 @@ class OperationServiceCardSellRecord extends \dbbase\models\operation\OperationS
         $this->isdel = 1;
         return $this->save();
     }
-
     /**
      * @introduction基于购卡订单号，查询销售记录
      * @author zhangrenzhao

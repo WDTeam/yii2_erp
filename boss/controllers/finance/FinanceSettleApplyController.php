@@ -66,6 +66,9 @@ class FinanceSettleApplyController extends BaseAuthController
         $requestParams = Yii::$app->request->getQueryParams();
         $searchModel = $this->initQueryParams($requestParams);
         $searchModel->load($requestParams);
+        if(!empty($searchModel->worker_tel)){
+            $searchModel->worker_id = $searchModel->getWorkerIdByWorkerTel($searchModel->worker_tel);
+        }
         $requestPhone = $searchModel->worker_tel;
         $searchModel->worker_tel = null;
         $dataProvider = $searchModel->search(null);
@@ -81,12 +84,6 @@ class FinanceSettleApplyController extends BaseAuthController
         $settle_type = $requestParams['settle_type'];
         $searchModel->settle_type = $settle_type;
         $searchModel->review_section = $requestParams['review_section'];
-        if(isset($requestParams['FinanceSettleApplySearch'])){
-            $requestModel = $requestParams['FinanceSettleApplySearch'];
-            if(isset($requestModel['worker_tel'])){
-                $searchModel->worker_id = $searchModel->getWorkerIdByWorkerTel($requestModel['worker_tel']);
-            }
-        }
         //自营全职阿姨
         if($settle_type == FinanceSettleApplySearch::SELF_FULLTIME_WORKER_SETTELE){
             $searchModel->settleMonth = date('Y-m', strtotime('-1 month'));

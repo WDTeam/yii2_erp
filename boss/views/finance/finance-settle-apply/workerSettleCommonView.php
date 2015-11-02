@@ -206,7 +206,7 @@ if(isset($model->review_section)){
                     ['attribute'=>'order_booked_begin_time',
                        'header' => Yii::t('app', '服务开始时间'),
                         'content'=>function($model,$key,$index){
-                                   return date('Y-m-d h:m:s',$model['order_booked_begin_time']);
+                                   return date('Y-m-d h:i:s',$model['order_booked_begin_time']);
                        },
                     ], 
                     ['attribute'=>'order_booked_count',

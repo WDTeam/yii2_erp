@@ -1619,10 +1619,9 @@ class OrderController extends \restapi\components\Controller
      * "code": "ok",
      * "msg":"操作成功",
      * "ret":
-     *      {
-     *  "data": {
-     *        "workerOrder": [   //指定阿姨订单列表
-     * 	           {
+     *     {
+     *   "orderData": [  //指定阿姨订单列表 待抢单订单列表
+     * 	    {
      *       "order_id": "订单号",
      *       "order_code": "订单编号",
      *       "batch_code": "周期订单号",
@@ -1632,29 +1631,13 @@ class OrderController extends \restapi\components\Controller
      *       "booked_count": "时常",
      *       "address": "服务地址",
      *       "need": "备注说明",
-     *       "money": "订单价格"
+     *       "money": "订单价格",
      *         },
-     * 	      ],
-     *   "waitWorkerOrder": [  //待抢单订单列表
-     *      {
-     *       "order_id": "订单号",
-     *       "order_code": "订单编号",
-     *       "batch_code": "周期订单号",
-     *       "booked_begin_time": "服务开始时间",
-     *       "booked_end_time": "服务结束时间",
-     *       "channel_name": "服务类型名称",
-     *       "booked_count": "时常",
-     *       "address": "服务地址",
-     *       "need": "备注说明",
-     *       "money": "订单价格"
-     *        }
-     *       ]
-     *      }
-     *         "time":172800   倒计时秒 #要求2天
-     *         "workerOrderNum":""  指定阿姨订单数
-     *         "orderNum":"" 待抢单订单数
-     *      }
-     * }
+     * 	      ]
+     *      },
+     *    "time":172800,   倒计时秒 #要求2天
+     *    "pageNum":"总页码数"
+     *    }
      * 
      *
      * @apiError SessionIdNotFound 未找到会话ID.
@@ -1687,28 +1670,41 @@ class OrderController extends \restapi\components\Controller
                     return $this->send(null, "缺少规定的参数,page_size或page不能为空", 0, 403);
                 }
                 try {
-                    #指定阿姨订单列表
-                    $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 1);
-                    #待抢单订单列表
-                    $workerCountTwo = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page'], 0);
-
-                    #指定阿姨订单数
+                    #指定阿姨订单列表 待抢单订单列表
+                    $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page']);
+                    
+                    foreach($workerCount as $key=>$val){
+                        if(@$val['is_booker_worker']){
+                            $workerCount[$key]['times'] = '2:00:00';
+                        }else{
+                             $workerCount[$key]['times'] = '';
+                        }
+                    }
+                    
+//                    #待抢单订单列表
+//                    $workerCountTwo = OrderSearch::getPushWorkerOrders($worker->id, $page_size, $param['page'], 0);
+//
+//                    #指定阿姨订单数
                     $workerOrderCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
-                    if ($param['page'] == 1) {
-                        $ret['workerOrderNum'] = ceil($workerOrderCount / $param['page_size']) + 1;
-                    }
-
-                    #待抢单订单数
+////                    if ($param['page'] == 1) {
+////                        $ret['workerOrderNum'] = ceil($workerOrderCount / $param['page_size']) + 1;
+////                    }
+////                    #待抢单订单数
                     $orderData = OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
-                    if ($param['page'] == 1) {
-                        $ret['orderNum'] = ceil($orderData / $param['page_size']) + 1;
-                    }
-
-                    $ret["orderData"] = array(
-                        "workerOrder" => $workerCount, "waitWorkerOrder" => $workerCountTwo
-                    );
+////                    if ($param['page'] == 1) {
+////                        $ret['orderNum'] = ceil($orderData / $param['page_size']) + 1;
+////                    }
+//
+//                    if ($workerOrderCount > $orderData) {
+//                        $orderNumber = $workerOrderCount;
+//                    } else {
+//                        $orderNumber = $orderData;
+//                    }
+                    $pageNumber = ceil(($workerOrderCount + $orderData) / $param['page_size']);
+                    $ret['pageNum'] = $pageNumber;
+                    $ret["orderData"] = $workerCount;
                     #倒计时
-                    $ret['time'] = 172800;
+                   # $ret['time'] = 172800;
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (\Exception $e) {
                     return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 1024);
@@ -1876,8 +1872,7 @@ class OrderController extends \restapi\components\Controller
             try {
                 $order = new \core\models\order\Order();
                 $createOrder = $order->createNewBatch($attributes, $booked_list);
-                print_r($createOrder);
-                exit;
+
                 if ($createOrder['status'] == 1) {
                     if (!empty($createOrder)) {
                         return $this->send([1], "添加成功", 1);

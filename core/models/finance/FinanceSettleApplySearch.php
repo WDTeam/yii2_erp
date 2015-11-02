@@ -89,6 +89,7 @@ class FinanceSettleApplySearch extends FinanceSettleApply
             [[ 'settle_apply_create_start_time', 'settle_apply_create_end_time'], 'required'],
              [['worker_id','id', 'worker_type_id','shop_id', 'finance_settle_apply_man_hour', 'finance_settle_apply_status','worker_type_id','worker_identity_id', ], 'integer'],
             [['worker_tel',], 'string', 'max' => 11],
+            [['worker_tel',],'match','pattern'=>'/^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/','message'=>'请填写正确格式的手机号码'],
         ];
     }
 

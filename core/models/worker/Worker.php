@@ -42,8 +42,6 @@ use crazyfd\qiniu\Qiniu;
  * @property string $worker_photo
  * @property integer $worker_level
  * @property integer $worker_auth_status
- * @property integer $worker_ontrial_status
- * @property integer $worker_onboard_status
  * @property integer $worker_work_city
  * @property integer $worker_work_area
  * @property string $worker_work_street
@@ -242,6 +240,58 @@ class Worker extends \dbbase\models\worker\Worker
         }
     }
 
+    /**
+     * 通过阿姨id批量获取阿姨详细信息
+     * @param array $workerIdsArr 阿姨id数组
+     * @param string $field 返回字段
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function getWorkerDetailListByIds($workerIdsArr){
+
+        if(empty($workerIdsArr)){
+            return [];
+        }else{
+            $condition['worker_is_block'] = 0;
+            $condition['worker_is_vacation'] = 0;
+            $condition['worker_is_blacklist'] = 0;
+            $condition['{{%worker}}.id'] = $workerIdsArr;
+            $workerResult = Worker::find()
+                ->select('{{%worker}}.id,shop_id,worker_name,worker_phone,worker_idcard,worker_identity_id,worker_type,name as shop_name,worker_stat_order_num,worker_stat_order_refuse')
+                ->joinWith('workerStatRelation') //关联worker WorkerStatRelation方法
+                ->joinWith('shopRelation') //关联worker shopRelation方法
+                ->where($condition)
+                ->asArray()
+                ->all();
+            $workerIdentityConfigArr = WorkerIdentityConfig::getWorkerIdentityList();
+
+            if(empty($workerResult)){
+                return [];
+            }else{
+                foreach ($workerResult as $val) {
+
+                    $val['worker_id'] = $val['id'];
+                    $val['worker_type_description'] = self::getWorkerTypeShow($val['worker_type']);
+                    $val['worker_identity_description'] = $workerIdentityConfigArr[$val['worker_identity_id']];
+
+                    $val['shop_name'] = isset($val['shop_name'])?$val['shop_name']:'';
+                    $val['worker_stat_order_num'] = intval($val['worker_stat_order_num']);
+                    $val['worker_stat_order_refuse'] = intval($val['worker_stat_order_refuse']);
+
+                    if($val['worker_stat_order_num']!==0){
+                        $val['worker_stat_order_refuse_percent'] = Yii::$app->formatter->asPercent($val['worker_stat_order_refuse']/$val['worker_stat_order_num']);
+                    }else{
+                        $val['worker_stat_order_refuse_percent'] = '0%';
+                    }
+
+                    unset($val['workerStatRelation']);
+                    unset($val['shopRelation']);
+                    $workerList[] = $val;
+                }
+                return $workerList;
+            }
+        }
+
+    }
 
 
     /**
@@ -300,7 +350,7 @@ class Worker extends \dbbase\models\worker\Worker
      * @param $worker_id
      * @return array
      */
-    public static function getDistrictAllWorker($district_id,$worker_id){
+    public static function getDistrictAllWorker($district_id,$worker_id=''){
         //$dataSource = 1;//1redis 2mysql
         //如果redis可用
         if(Yii::$app->redis->IsActive){
@@ -406,6 +456,11 @@ class Worker extends \dbbase\models\worker\Worker
             ->innerJoinWith('order')
             ->asArray()
             ->all();
+        /*根据需求 需要给阿姨留有路程上的时间 阿姨订单开始时间-1小时 和 订单结束时间+1小时*/
+        foreach ((array)$orderWorkerResult as $key=>$val) {
+            $orderWorkerResult[$key]['order_booked_end_time'] = $val['order_booked_end_time']-3600;
+            $orderWorkerResult[$key]['order_booked_end_time'] = $val['order_booked_end_time']+3600;
+        }
         return $orderWorkerResult;
     }
 
@@ -562,7 +617,6 @@ class Worker extends \dbbase\models\worker\Worker
      * @param int $timeLineLength 排班表长度 默认返回7天的排班表
      * @return mixed
      */
-
     protected static function generateTimeLine($disabledTimeLine,$serverDurationTime,$beginTime,$timeLineLength){
         $dayTimes = self::getDayTimes();
         for($i=0;$i<$timeLineLength;$i++) {
@@ -652,7 +706,9 @@ class Worker extends \dbbase\models\worker\Worker
         foreach ((array)$workerOrderInfo as $val) {
             if(date('Y-m-d',$time) == date('Y-m-d',$val['order_booked_begin_time'])){
                 $beginTime = self::convertDateFormat($val['order']['order_booked_begin_time']);
-                for($i=0;$i<$val['order']['order_booked_count']*2;$i++){
+                //每个订单持续时间+2小时 阿姨连续订单之间留有空余的时间,避免没有空余时间赶到另外一个服务地点
+                $orderDurationTime = $val['order']['order_booked_count']+2;
+                for($i=0;$i<$orderDurationTime*2;$i++){
                     $workerHaveBookedTime[] = date('G:i',strtotime('+'.(30*$i).' minute',$beginTime));
                 }
             }
@@ -661,7 +717,7 @@ class Worker extends \dbbase\models\worker\Worker
     }
 
     /**
-     * 转换不规范时间格式 如果阿姨订单预约 开始时间不是 整点时间或半点时间
+     * 转换不规范时间格式 转换时间成整点时间或半点时间
      * @param $time
      * @return mixed
      */
@@ -876,7 +932,81 @@ class Worker extends \dbbase\models\worker\Worker
      * @param int $orderBookEndTime 待指派订单预约结束时间
      * @return array freeWorkerArr 所有可用阿姨列表
      */
-    public static function getDistrictFreeWorker($district_id=1,$worker_type=1,$orderBookBeginTime,$orderBookEndTime){
+    public static function getDistrictFreeWorker($district_id,$worker_type=1,$orderBookBeginTime,$orderBookEndTime){
+
+        $districtWorkerResult = self::getDistrictAllWorker($district_id);
+
+        $serverDurationTime = ($orderBookEndTime-$orderBookBeginTime)/3600;
+
+        for($i=0;$i<$serverDurationTime*2;$i++){
+            $orderBookTime[] = date('G:i',strtotime('+'.(30*$i).' minute',$orderBookBeginTime));
+        }
+        $districtFreeWorkerIdsArr = [];
+        foreach ($districtWorkerResult as $val) {
+            $schedule = isset($val['schedule'])?$val['schedule']:[];
+            $orderInfo = isset($val['order'])?$val['order']:[];
+            if($val['info']['worker_type']==$worker_type){
+                $workerEnabledTime = self::getWorkerEnabledTimeFromSchedule($orderBookBeginTime,$schedule);
+                if(array_diff($orderBookTime,$workerEnabledTime)){
+                    continue;
+                }
+                $workerHaveBookedTime = self::getWorkerHaveBookedTimeFromOrder($orderBookBeginTime,$orderInfo);
+                if(array_intersect($orderBookTime,$workerHaveBookedTime)){
+                    continue;
+                }
+                $districtFreeWorkerIdsArr[] = $val['info']['worker_id'];
+            }
+        }
+
+        $districtFreeWorker = self::getWorkerDetailListByIds($districtFreeWorkerIdsArr);
+        return $districtFreeWorker;
+    }
+
+    /**
+     * 检查阿姨指定时间段 是否可用
+     * @param $district_id
+     * @param $worker_id
+     * @param $orderBookBeginTime 订单预约开始时间
+     * @param $orderBookEndTime 订单
+     * @return bool true可用|false不可用
+     */
+    public static function checkWorkerTimeIsDisabled($district_id,$worker_id,$orderBookBeginTime,$orderBookEndTime){
+        $districtWorkerResult = self::getDistrictAllWorker($district_id,$worker_id);
+
+        $serverDurationTime = ($orderBookEndTime-$orderBookBeginTime)/3600;
+
+        for($i=0;$i<$serverDurationTime*2;$i++){
+            $orderBookTime[] = date('G:i',strtotime('+'.(30*$i).' minute',$orderBookBeginTime));
+        }
+        if($districtWorkerResult){
+            $districtWorker = $districtWorkerResult[0];
+            $schedule = isset($districtWorker['schedule'])?$districtWorker['schedule']:[];
+            $orderInfo = isset($districtWorker['order'])?$districtWorker['order']:[];
+            $workerEnabledTime = self::getWorkerEnabledTimeFromSchedule($orderBookBeginTime,$schedule);
+            if(array_diff($orderBookTime,$workerEnabledTime)){
+                return false;
+            }
+            $workerHaveBookedTime = self::getWorkerHaveBookedTimeFromOrder($orderBookBeginTime,$orderInfo);
+            if(array_intersect($orderBookTime,$workerHaveBookedTime)){
+                return false;
+            }
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+
+    /**
+     * 获取商圈中 所有可用阿姨
+     * @param int $district_id 商圈id
+     * @param int $worker_type 阿姨类型 1自营2非自营
+     * @param int $orderBookBeginTime 待指派订单预约开始时间
+     * @param int $orderBookEndTime 待指派订单预约结束时间
+     * @return array freeWorkerArr 所有可用阿姨列表
+     */
+    public static function getDistrictFreeWorkerBak($district_id=1,$worker_type=1,$orderBookBeginTime,$orderBookEndTime){
 
         $workerIdentityConfigArr = WorkerIdentityConfig::getWorkerIdentityList();
 
