@@ -18,11 +18,12 @@ use core\models\worker\Worker;
 use core\models\operation\OperationShopDistrict;
 use core\models\operation\OperationGoods;
 use core\models\worker\WorkerStat;
+use core\models\order\OrderStatusDict;
+
 use dbbase\models\order\OrderExtFlag;
 use dbbase\models\order\OrderExtPay;
 use dbbase\models\order\OrderExtWorker;
 use dbbase\models\order\Order as OrderModel;
-use dbbase\models\order\OrderStatusDict;
 use dbbase\models\order\OrderExtCustomer;
 use dbbase\models\order\OrderSrc;
 use dbbase\models\finance\FinanceOrderChannel;
@@ -103,8 +104,6 @@ use yii\helpers\ArrayHelper;
  */
 class Order extends OrderModel
 {
-
-    const ORDER_ASSIGN_WORKER_LOCK = 'ORDER_ASSIGN_WORKER_LOCK';
 
     /**
      * 创建新订单
@@ -204,12 +203,15 @@ class Order extends OrderModel
 
         $transact = static::getDb()->beginTransaction();
         //如果指定阿姨则是周期订单分配周期订单号否则分配批量订单号
-        $attributes['order_parent_id'] = 0;
-        $attributes['order_is_parent'] = 1;
+
         if (isset($attributes['order_booked_worker_id']) && $attributes['order_booked_worker_id'] > 0) {
             $attributes['order_batch_code'] = OrderTool::createOrderCode('Z');
+            $attributes['order_parent_id'] = 0;
+            $attributes['order_is_parent'] = 1; //周期订单为父子订单
         } else {
             $attributes['order_batch_code'] = OrderTool::createOrderCode('P');
+            $attributes['order_parent_id'] = 0;
+            $attributes['order_is_parent'] = 0; //批量订单为普通订单
         }
         foreach ($booked_list as $booked) {
             $order = new Order();

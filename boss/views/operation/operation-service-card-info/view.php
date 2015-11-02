@@ -14,11 +14,6 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', '服务卡管理'), '
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="operation-service-card-info-view">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
-
-
     <?= DetailView::widget([
             'model' => $model,
             'condensed'=>false,

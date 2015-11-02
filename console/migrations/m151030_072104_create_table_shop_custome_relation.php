@@ -12,17 +12,17 @@ class m151030_072104_create_table_shop_custome_relation extends Migration
     {
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
-            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'用户和家政公司及门店关系表\'';
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT=\'鐢ㄦ埛鍜屽鏀垮叕鍙稿強闂ㄥ簵鍏崇郴琛╘'';
         }
 
         $this->createTable('{{%shop_custome_relation}}', [
-            'id' => Schema::TYPE_PK . '(5) AUTO_INCREMENT  COMMENT \'主键id\'',
-            'system_user_id' => Schema::TYPE_SMALLINT . '(10) DEFAULT 0 COMMENT \'用户id\'',
-			'baseid' => Schema::TYPE_SMALLINT . '(6) DEFAULT 0 COMMENT \'父级id\'',
-			'shopid' => Schema::TYPE_SMALLINT . '(10) DEFAULT 0 COMMENT \'门店id\'',
-			'shop_manager_id' => Schema::TYPE_SMALLINT . '(5) DEFAULT 0 COMMENT \'管理公司id\'',
-			'stype' => Schema::TYPE_SMALLINT . '(2) DEFAULT \'0\' COMMENT \'1 家政公司 2 门店\'',
-            'is_del' => Schema::TYPE_SMALLINT . '(1) DEFAULT \'0\' COMMENT \'0 正常 1 删除\'',
+            'id' => Schema::TYPE_PK . '(5) AUTO_INCREMENT  COMMENT \'涓婚敭id\'',
+            'system_user_id' => Schema::TYPE_SMALLINT . '(10) DEFAULT 0 COMMENT \'鐢ㄦ埛id\'',
+			'baseid' => Schema::TYPE_SMALLINT . '(6) DEFAULT 0 COMMENT \'鐖剁骇id\'',
+			'shopid' => Schema::TYPE_SMALLINT . '(10) DEFAULT 0 COMMENT \'闂ㄥ簵id\'',
+			'shop_manager_id' => Schema::TYPE_SMALLINT . '(5) DEFAULT 0 COMMENT \'绠＄悊鍏徃id\'',
+			'stype' => Schema::TYPE_SMALLINT . '(2) DEFAULT \'0\' COMMENT \'1 瀹舵斂鍏徃 2 闂ㄥ簵\'',
+            'is_del' => Schema::TYPE_SMALLINT . '(1) DEFAULT \'0\' COMMENT \'0 姝ｅ父 1 鍒犻櫎\'',
         ], $tableOptions);
     }
 
