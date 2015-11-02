@@ -46,6 +46,7 @@ class Customer extends \dbbase\models\customer\Customer
 				//customer balance
 				$customerExtBalance = new CustomerExtBalance;
 				$customerExtBalance->customer_id = $customer->id;
+				$customerExtBalance->customer_phone = $phone;
 				$customerExtBalance->customer_balance = 0;
 				$customerExtBalance->created_at = time();
 				$customerExtBalance->updated_at = 0;
@@ -55,6 +56,7 @@ class Customer extends \dbbase\models\customer\Customer
 				//customer score
 				$customerExtScore = new CustomerExtScore;
 				$customerExtScore->customer_id = $customer->id;
+				$customerExtScore->customer_phone = $phone;
 				$customerExtScore->customer_score = 0;
 				$customerExtScore->created_at = time();
 				$customerExtScore->updated_at = 0;
