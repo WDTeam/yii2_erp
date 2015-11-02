@@ -10,16 +10,16 @@ use core\models\customer\Customer;
 /**
  * This is the model class for table "ejj_operation_service_card_with_customer".
  *
- * @property string $id
- * @property string $service_card_sell_record_id
- * @property string $service_card_sell_record_code
- * @property string $server_card_info_id
- * @property string $service_card_with_customer_code
- * @property string $server_card_info_name
- * @property string $customer_trans_record_pay_money
- * @property string $server_card_info_value
- * @property string $service_card_info_rebate_value
- * @property string $service_card_with_customer_balance
+ * @property string  $id
+ * @property string  $service_card_sell_record_id
+ * @property string  $service_card_sell_record_code
+ * @property string  $server_card_info_id
+ * @property string  $service_card_with_customer_code
+ * @property string  $server_card_info_name
+ * @property string  $customer_trans_record_pay_money
+ * @property string  $server_card_info_value
+ * @property string  $service_card_info_rebate_value
+ * @property string  $service_card_with_customer_balance
  * @property integer $customer_id
  * @property string  $customer_phone
  * @property integer $server_card_info_scope
@@ -167,9 +167,9 @@ class OperationServiceCardWithCustomer extends \dbbase\models\operation\Operatio
     public function getServiceCardWithCustomerBalanceByCode($service_card_with_customer_code)
     {
         $service_card_with_customer_balance = self::find()
-            ->select(['service_card_with_customer_balance'])
-            ->where(['service_card_with_customer_code'=>$this->$service_card_with_customer_code,
-                     'is_del'=>0])->scalar();
+        ->select(['service_card_with_customer_balance'])
+        ->where(['service_card_with_customer_code'=>$service_card_with_customer_code,
+            'is_del'=>0])->scalar();
         return $service_card_with_customer_balance;
     }
 }
