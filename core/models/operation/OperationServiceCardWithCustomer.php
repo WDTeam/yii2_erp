@@ -34,7 +34,7 @@ use core\models\customer\Customer;
 class OperationServiceCardWithCustomer extends \dbbase\models\operation\OperationServiceCardWithCustomer
 {
     /**
-     * @introduction ¸ù¾İ¿Í»§·şÎñ¿¨ID£¬²éÑ¯·şÎñ¿¨ĞÅÏ¢
+     * @introduction æ ¹æ®å®¢æˆ·æœåŠ¡å¡IDï¼ŒæŸ¥è¯¢æœåŠ¡å¡ä¿¡æ¯
      * @param $id
      * @return null|static
      */
@@ -42,7 +42,7 @@ class OperationServiceCardWithCustomer extends \dbbase\models\operation\Operatio
         return self::findOne(['id'=>$id]);
     }
     /**
-     * @introduction ¸ù¾İ·şÎñ¿¨ID£¬¸üĞÂ¿Í»§·şÎñ¿¨Óà¶î
+     * @introduction æ ¹æ®æœåŠ¡å¡IDï¼Œæ›´æ–°å®¢æˆ·æœåŠ¡å¡ä½™é¢
      * @param $id
      * @param $service_card_with_customer_balance
      * @return bool
@@ -57,39 +57,39 @@ class OperationServiceCardWithCustomer extends \dbbase\models\operation\Operatio
         return false;
     }
     /**
-     * @introduction Ö§¸¶³É¹¦£¬Éú³É¿Í»§·şÎñ¿¨¹ØÏµ¼ÇÂ¼
+     * @introduction æ”¯ä»˜æˆåŠŸï¼Œç”Ÿæˆå®¢æˆ·æœåŠ¡å¡å…³ç³»è®°å½•
      * @author zhangrenzhao
      * @date 2015-10-30
-     * @param¡¾
-     *      $service_card_sell_record_id,¹ºÎï¿¨ÏúÊÛ¼ÇÂ¼ID
-     *      $customer_id,ÓÃ»§ID
-     *      $customer_trans_record_pay_money,Ö§¸¶½ğ¶î
-     *      $service_card_with_customer_buy_at£¬Ö§¸¶Ê±¼ä¡¿
+     * @paramã€
+     *      $service_card_sell_record_id,è´­ç‰©å¡é”€å”®è®°å½•ID
+     *      $customer_id,ç”¨æˆ·ID
+     *      $customer_trans_record_pay_money,æ”¯ä»˜é‡‘é¢
+     *      $service_card_with_customer_buy_atï¼Œæ”¯ä»˜æ—¶é—´ã€‘
      * @return mixed|null
      */
     public function createServiceCardWithCustomer($service_card_sell_record_id,$customer_id,$customer_trans_record_pay_money,$service_card_with_customer_buy_at)
     {
-        //1.¸ù¾İcustomer_id£¬»ñÈ¡ÓÃ»§¶ÔÏó
+        //1.æ ¹æ®customer_idï¼Œè·å–ç”¨æˆ·å¯¹è±¡
         $customer = Customer::getCustomerById($this->customer_id);
 
-        //2.Ğ´ÈëÓÃ»§ĞÅÏ¢
+        //2.å†™å…¥ç”¨æˆ·ä¿¡æ¯
         $this->setAttributes([
             'order_customer_phone' => $customer->customer_phone,
         ]);
 
-        //3.»ñÈ¡¹º¿¨ÏúÊÛ¶©µ¥ĞÅÏ¢
+        //3.è·å–è´­å¡é”€å”®è®¢å•ä¿¡æ¯
         $operationServiceCardSellRecord=OperationServiceCardSellRecord::getServiceCardSellRecordById($service_card_sell_record_id);
 
-        //4.Ğ´Èë¹º¿¨ÏúÊÛ¶©µ¥ĞÅÏ¢
+        //4.å†™å…¥è´­å¡é”€å”®è®¢å•ä¿¡æ¯
         $this->setAttributes([
             'service_card_sell_record_code' => $operationServiceCardSellRecord->service_card_sell_record_code,
             'server_card_info_id'=>$operationServiceCardSellRecord->server_card_info_id,
         ]);
 
-        //5.»ñÈ¡·şÎñ¿¨ĞÅÏ¢
+        //5.è·å–æœåŠ¡å¡ä¿¡æ¯
         $operationServiceCardInfo=OperationServiceCardInfo::getServiceCardInfo($operationServiceCardSellRecord->server_card_info_id);
 
-        //6.Ğ´Èë·şÎñ¿¨ĞÅÏ¢
+        //6.å†™å…¥æœåŠ¡å¡ä¿¡æ¯
         $this->setAttributes([
             'server_card_info_name' =>  $operationServiceCardInfo->server_card_info_name,
             'server_card_info_value'=> $operationServiceCardInfo->server_card_info_value,
@@ -97,14 +97,14 @@ class OperationServiceCardWithCustomer extends \dbbase\models\operation\Operatio
             'service_card_info_rebate_value'=> $operationServiceCardInfo->service_card_info_rebate_value,
         ]);
 
-        //7.Éú³É·şÎñ¿¨ºÅ
+        //7.ç”ŸæˆæœåŠ¡å¡å·
         $service_card_with_customer_code=self::getServiceCardWithCustomerCode();
 
-        //¼ÆËãÓĞĞ§½ØÖÁÈÕÆÚ
+        //è®¡ç®—æœ‰æ•ˆæˆªè‡³æ—¥æœŸ
 
         $service_card_with_customer_valid_at=strtotime()+$operationServiceCardInfo->service_card_info_valid_days;
 
-        //8.³õÊ¼»¯ÆäËû×Ö¶Î
+        //8.åˆå§‹åŒ–å…¶ä»–å­—æ®µ
         $this->setAttributes([
             'is_del' => 0,
             'created_at'=>time(),
@@ -117,23 +117,23 @@ class OperationServiceCardWithCustomer extends \dbbase\models\operation\Operatio
             'service_card_with_customer_status'=>0,
             'service_card_with_customer_code'=>$service_card_with_customer_code,
             'service_card_with_customer_valid_at'=>$service_card_with_customer_valid_at,
-            'service_card_with_customer_balance'=>$operationServiceCardInfo->server_card_info_value,//·şÎñ¿¨´´½¨Ê±£¬Óà¶îµÈÓÚÃæÖµ
+            'service_card_with_customer_balance'=>$operationServiceCardInfo->server_card_info_value,//æœåŠ¡å¡åˆ›å»ºæ—¶ï¼Œä½™é¢ç­‰äºé¢å€¼
         ]);
-        //9.±£´æ¿Í»§·şÎñ¿¨¹ØÏµ¼ÇÂ¼
+        //9.ä¿å­˜å®¢æˆ·æœåŠ¡å¡å…³ç³»è®°å½•
         if($this->doSave()){
             $attributes= ['service_card_with_customer_id' => $this->primaryKey,
                 'service_card_with_customer_code' =>$this->service_card_sell_record_code,
                 'server_card_info_value' =>$this->server_card_info_value,
                  ];
-            return $attributes;//·µ»Ø¿¨ĞÅÏ¢
+            return $attributes;//è¿”å›å¡ä¿¡æ¯
 
         }else{
-            return null;//·µ»ØNULL£¬ËµÃ÷±£´æÊ§°Ü
+            return null;//è¿”å›NULLï¼Œè¯´æ˜ä¿å­˜å¤±è´¥
         }
     }
 
     /**
-     * @intruction Éú³É·şÎñ¿¨ºÅ
+     * @intruction ç”ŸæˆæœåŠ¡å¡å·
      * @return string
      */
     private function getServiceCardWithCustomerCode(){
@@ -142,7 +142,7 @@ class OperationServiceCardWithCustomer extends \dbbase\models\operation\Operatio
     }
 
     /**
-     * @intruction ²éÑ¯ÓÃ»§ÏÂËùÓĞ·şÎñ¿¨ĞÅÏ¢
+     * @intruction æŸ¥è¯¢ç”¨æˆ·ä¸‹æ‰€æœ‰æœåŠ¡å¡ä¿¡æ¯
      * @param $customer_id
      * @return static[]
      */
@@ -150,7 +150,7 @@ class OperationServiceCardWithCustomer extends \dbbase\models\operation\Operatio
         return self::findAll(['customer_id'=>$customer_id]);
     }
     /**
-     * ÈíÉ¾³ı
+     * è½¯åˆ é™¤
      */
     public function softDelete()
     {
@@ -159,7 +159,7 @@ class OperationServiceCardWithCustomer extends \dbbase\models\operation\Operatio
     }
 
     /**
-     * @introduction »ùÓÚ·şÎñ¿¨ºÅ²éÑ¯Óà¶î
+     * @introduction åŸºäºæœåŠ¡å¡å·æŸ¥è¯¢ä½™é¢
      * @author zhangrenzhao
      * @param $service_card_with_customer_code
      * @return bool|string

@@ -294,24 +294,27 @@ class PaymentCommon extends \yii\db\ActiveRecord
     }
 
     /**
-     * 制造签名
+     * 签名
      */
     public function makeSign()
     {
+        $data = $this->getAttributes();
+        ksort($data);
         //加密字符串
-        $str='';
+        $str='1jiajie.com';
         //排除的字段
-        $notArray = ['updated_at','is_reconciliation'];
-        //获取字段
-        $key = $this->attributeLabels();
+        $notArray = ['id','payment_verify','created_at','updated_at'];
         //加密签名
-        foreach( $key as $name=>$val )
+        foreach( $data as $name=>$val )
         {
-            if( !empty($this->$name) && $this->$name != 1 && !in_array($name,$notArray))
+            $value = is_numeric($val) ? (int)$val : $val;
+            if( !empty($value) && !in_array($name,$notArray))
             {
-                $str .= $this->$name;
+                if(is_numeric($value) && $value < 1) continue;
+                $str .= $value;
             }
         }
+        //return $str;
         return md5(md5($str).'1jiajie.com');
     }
 

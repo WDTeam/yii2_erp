@@ -304,7 +304,7 @@ class Worker extends \dbbase\models\worker\Worker
         //$dataSource = 1;//1redis 2mysql
         //如果redis可用
         if(Yii::$app->redis->IsActive){
-            return self::getDistrictAllWorkerFromRedis($district_id,$worker_id);
+           return self::getDistrictAllWorkerFromRedis($district_id,$worker_id);
         }else{
             $workerCondition = $worker_id ? ['{{%worker}}.id'=>$worker_id] : [];
             $result = self::getDistrictAllWorkerFromMysql($district_id,$workerCondition);
@@ -337,7 +337,7 @@ class Worker extends \dbbase\models\worker\Worker
         if($workerIdsArr){
             //指定阿姨
             if($worker_id){
-                //如果指定阿姨不在该商圈中，则返回空数组
+                //如果指定阿姨必须在该商圈中
                 if(in_array($worker_id,$workerIdsArr)){
                     $workerInfoArr = Yii::$app->redis->executeCommand('get',[self::WORKER.'_'.$worker_id]);
                     if($workerInfoArr){
@@ -360,7 +360,7 @@ class Worker extends \dbbase\models\worker\Worker
                 $new_workerInfoArr = [];
                 foreach ((array)$workerInfoArr as $val) {
                     if($val!==null){
-                        $new_workerInfoArr[] = $val;
+                        $new_workerInfoArr[] = json_decode($val,1);
                     }
                 }
                 return $new_workerInfoArr;
