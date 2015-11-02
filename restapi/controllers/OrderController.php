@@ -1876,8 +1876,9 @@ class OrderController extends \restapi\components\Controller
             try {
                 $order = new \core\models\order\Order();
                 $createOrder = $order->createNewBatch($attributes, $booked_list);
+                print_r($createOrder);
+                exit;
                 if ($createOrder['status'] == 1) {
-                    #if ($createOrder["errors"]["order_service_type_name"][0])
                     if (!empty($createOrder)) {
                         return $this->send([1], "添加成功", 1);
                     } else {

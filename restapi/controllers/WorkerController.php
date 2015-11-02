@@ -573,7 +573,7 @@ class WorkerController extends \restapi\components\Controller
      */
     public function actionGetWorkerBillList()
     {
-        $param = Yii::$app->request->post() or $param = json_decode(Yii::$app->request->getRawBody(), true);
+        $param = Yii::$app->request->get() or $param = json_decode(Yii::$app->request->getRawBody(), true);
         //检测阿姨是否登录
         $checkResult = ApiWorker::checkWorkerLogin($param);
         if(!$checkResult['code']){

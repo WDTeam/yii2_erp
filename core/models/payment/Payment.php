@@ -2,6 +2,7 @@
 
 namespace core\models\payment;
 
+use core\models\operation\OperationServiceCardSellRecord;
 use core\models\payment\PaymentCustomerTransRecord;
 use core\models\customer\Customer;
 use core\models\order\OrderSearch;
@@ -56,7 +57,7 @@ class Payment extends \dbbase\models\payment\Payment
      * @param array $ext_params 部分渠道扩展参数
      * @return array
      */
-    public static function getPayParams( $payment_type,$customer_id,$channel_id,$order_id,$ext_params=[] )
+    public static function getPayParams( $payment_type, $customer_id, $channel_id, $order_id, $ext_params=[] )
     {
         //实例化模型
         $model = new Payment();
@@ -110,6 +111,15 @@ class Payment extends \dbbase\models\payment\Payment
                 break;
             case 3: //3充值订单
                 //TODO::获取服务卡金额
+//                /**
+//                 *      customer_id,用户ID
+//                 *      server_card_info_id,卡信息ID
+//                 *      service_card_sell_record_status，购卡订单状态
+//                 *      service_card_sell_record_channel_id,购卡渠道ID
+//                 *      service_card_sell_record_channel_name,购卡渠道名称
+//                 *      service_card_sell_record_money,购卡订单金额 】
+//                 */
+//                OperationServiceCardSellRecord->createServiceCardSellRecord($customer_id, $order_id, 0, 1, 'APP客户端', 1000);
                 $payment_mode = 2;//充值
                 break;
         }
@@ -164,7 +174,7 @@ class Payment extends \dbbase\models\payment\Payment
         if( $model->validate() && $model->save() )
         {
             //返回组装数据
-            return ['status'=>0 , 'info'=>'数据返回成功', 'data'=>$model->call_pay($data)];
+            return ['status'=>1 , 'info'=>'数据返回成功', 'data'=>$model->call_pay($data)];
         }
         else
         {
