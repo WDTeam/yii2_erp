@@ -1808,8 +1808,6 @@ class OrderController extends \restapi\components\Controller
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
 
-        print_r($param);
-        exit;
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
