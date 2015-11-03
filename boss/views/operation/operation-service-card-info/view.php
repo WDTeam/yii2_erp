@@ -28,25 +28,25 @@ $this->params['breadcrumbs'][] = $this->title;
             'service_card_info_name',
 //            'service_card_info_card_type',
 			[
-				'attribute'=>'service_card_info_card_type', 
+				'attribute'=>'service_card_info_type', 
 				'format'=>'raw',
-				'value'=>$config['type'][$model->service_card_info_card_type],
+				'value'=>$config['type'][$model->service_card_info_type],
 				'type'=>DetailView::INPUT_DROPDOWN_LIST,
 				'items'=>$config['type'],
 				'valueColOptions'=>['style'=>'width:30%']
 			],
 //            'service_card_info_card_level',
 			[
-				'attribute'=>'service_card_info_card_level', 
+				'attribute'=>'service_card_info_level', 
 				'format'=>'raw',
-				'value'=>$config['level'][$model->service_card_info_card_level],
+				'value'=>$config['level'][$model->service_card_info_level],
 				'type'=>DetailView::INPUT_DROPDOWN_LIST,
 				'items'=>$config['level'],
 				'valueColOptions'=>['style'=>'width:30%']
 			],
             'service_card_info_value',
             'service_card_info_rebate_value',
-            'service_card_info_use_scope',
+            'service_card_info_scope',
             'service_card_info_valid_days',
 			[
 				'label'=>'创建时间','value'=>date('Y-m-d',$model->created_at)

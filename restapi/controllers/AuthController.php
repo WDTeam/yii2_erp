@@ -161,34 +161,33 @@ class AuthController extends \restapi\components\Controller
      *       "msg": "登陆成功",
      *       "ret": {
      *           "user": {
-     *               "id": 1,
-     *               "shop_id": 221,
-     *               "worker_name": "李刘珍",
-     *               "worker_phone": "1350122342342",
-     *               "worker_photo": "1.png",
-     *               "worker_level": 1,
-     *               "worker_auth_status": 0,
-     *               "worker_ontrial_status": 0,
-     *               "worker_onboard_status": 0,
-     *               "worker_work_city": 1,
-     *               "worker_work_area": 1,
-     *               "worker_work_street": "1",
-     *               "worker_work_lng": null,
-     *               "worker_work_lat": null,
-     *               "worker_type": 1,
-     *               "worker_rule_id": 1,
-     *               "worker_identity_id": 1,
-     *               "worker_is_block": 0,
-     *               "worker_is_vacation": 0,
-     *               "worker_is_blacklist": 0,
-     *               "worker_blacklist_reason": null,
-     *               "worker_blacklist_time": 0,
-     *               "worker_is_dimission": 0,
-     *               "worker_dimission_reason": null,
-     *               "worker_dimission_time": 0,
-     *               "created_ad": 1444360582,
-     *               "updated_ad": null,
-     *               "isdel": 0
+     *               "id": "阿姨表自增id",
+     *               "shop_id": "门店id",
+     *               "worker_name": "阿姨姓名",
+     *               "worker_phone": "阿姨手机",
+     *               "worker_photo": "阿姨头像地址",
+     *               "worker_level": "阿姨等级",
+     *               "worker_auth_status": "阿姨审核状态 0新录入1已审核2已基础培训3已试工4已上岗5已晋升培训",
+     *               "worker_work_city": "阿姨工作城市",
+     *               "worker_work_area": "阿姨工作区县",
+     *               "worker_work_street": "阿姨常用工作地址",
+     *               "worker_work_lng": "阿姨常用工作经度",
+     *               "worker_work_lat": "阿姨常用工作纬度",
+     *               "worker_star": "阿姨星级",
+     *               "worker_type": "阿姨类型 1自有 2非自有",
+     *               "worker_rule_id": "阿姨角色id ",
+     *               "worker_identity_id": "阿姨身份id ",
+     *               "worker_is_block": "阿姨是否封号 0正常1封号",
+     *               "worker_is_vacation": "阿姨是否请假 0正常1请假中",
+     *               "worker_is_blacklist": "阿姨是否黑名单 0正常1黑名单",
+     *               "worker_blacklist_reason": "阿姨被加入黑名单的原因",
+     *               "worker_blacklist_time": "阿姨加入黑名单的原因",
+     *               "worker_is_dimission": "阿姨离职原因",
+     *               "worker_dimission_reason": "阿姨离职原因",
+     *               "worker_dimission_time": "阿姨离职时间",
+     *               "created_ad": "阿姨录入时间",
+     *               "updated_ad": "最后更新时间",
+     *               "isdel": "是否删号 0正常1删号"
      *           },
      *           "access_token": "eaa872ee3e20880be5e368f289d5aa67"
      *       }
@@ -215,12 +214,22 @@ class AuthController extends \restapi\components\Controller
            return $this->send(null, "请输入正确手机号", 0, 403,null,alertMsgEnum::workerLoginWrongPhoneNumber);
         }
         try{
-            $if_exist = Worker::getWorkerInfoByPhone($phone);
+            $login_info = Worker::checkWorkerLogin($phone);
         }catch (\Exception $e) {
-            return $this->send($e, "验证此阿姨是否为系统用户系统错误", 1024, 403,null,alertMsgEnum::bossError);
+            return $this->send($e, "验证阿姨是否为系统用户系统错误", 1024, 403,null,alertMsgEnum::bossError);
         }
-        if(empty($if_exist)){
-             return $this->send(null, "没有此阿姨，请联系客服", 0, 403,null,alertMsgEnum::workerLoginNoWorker);
+        if(!empty($login_info)){
+             if($login_info['can_login']==0 && $login_info['login_type']==1){
+                  return $this->send(null, "不存在该阿姨", 0, 403,null,alertMsgEnum::workerLoginNoWorker);
+             }elseif($login_info['can_login']==0 && $login_info['login_type']==2){
+                  return $this->send(null, "阿姨已在黑名单", 0, 403,null,alertMsgEnum::workerLoginIsBlackList);
+             }elseif($login_info['can_login']==0 && $login_info['login_type']==3){
+                  return $this->send(null, "阿姨已离职", 0, 403,null,alertMsgEnum::workerLoginIsDimission);
+             }elseif($login_info['can_login']==0 && $login_info['login_type']==4){
+                  return $this->send(null, "阿姨已删除", 0, 403,null,alertMsgEnum::workerLoginIsDel);
+             }
+        }else{
+             return $this->send(null, "验证阿姨是否为系统用户系统错误", 1024, 403,null,alertMsgEnum::workerLoginFail);
         }
         try{
              $checkRet = WorkerCode::checkCode($phone,$verify_code);

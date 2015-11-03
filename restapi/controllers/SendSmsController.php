@@ -3,6 +3,7 @@ namespace restapi\controllers;
 
 use Yii;
 use \core\models\customer\CustomerCode;
+use \core\models\worker\Worker;
 use \core\models\worker\WorkerCode;
 use restapi\models\alertMsgEnum;
 
@@ -122,10 +123,14 @@ class SendSmsController extends \restapi\components\Controller
         @$phone = Yii::$app->request->get('phone');
         @$app_version = Yii::$app->request->get('app_version');
         if (preg_match("/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/", $phone)) {
-            //验证通过
-            if (!WorkerCode::generateAndSend($phone)) {
-                return $this->send(null, "短信发送失败", 0, 403,null,alertMsgEnum::sendWorkerCodeFaile);
-
+            $login_info = Worker::checkWorkerLogin($phone);
+            if($login_info['can_login']==1){
+                //验证通过
+                if (!WorkerCode::generateAndSend($phone)) {
+                    return $this->send(null, "短信发送失败", 0, 403,null,alertMsgEnum::sendWorkerCodeFaile);
+                }
+            }else{
+                 return $this->send(null, "阿姨不存在或在黑名单或离职或删号", 0, 403,null,alertMsgEnum::sendWorkerCodeFaile);
             }
         } else {
             return $this->send(null, "电话号码不符合规则", 0, 403,null,alertMsgEnum::sendWorkerCodeFaile);
