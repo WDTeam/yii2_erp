@@ -692,16 +692,18 @@ class OrderSearch extends Order
             'order_booked_begin_time' => $this->order_booked_begin_time,
             'order_booked_end_time' => $this->order_booked_end_time,
             'address_id' => $this->address_id,
-            'order_booked_worker_id' => $this->order_booked_worker_id,
+            //'order_booked_worker_id' => $this->order_booked_worker_id,
             'checking_id' => $this->checking_id,
             'order_pop_order_code' => $this->order_pop_order_code,
             'order_customer_phone' => $this->order_customer_phone,
-            'order_worker_phone' => $this->order_worker_phone,
+            //'order_worker_phone' => $this->order_worker_phone,
             'shop_id' => $this->shop_id,
             'district_id' => $this->district_id,
             'city_id' => $this->city_id,
             'order_status_dict_id' => $this->order_status_dict_id,
         ]);
+        
+        $query->orFilterWhere(['or', ['order_booked_worker_id' => $this->order_worker_phone], ['order_worker_phone' => $this->order_worker_phone]]);
 
         $query->andFilterWhere(['like', 'order_code', $this->order_code])
             ->andFilterWhere(['like', 'order_service_type_name', $this->order_service_type_name])
