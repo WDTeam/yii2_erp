@@ -68,7 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterRowOptions'=>['class'=>'kartik-sheet-style'],
         'toolbar' =>
             [
-                'content'=>''
+                'content'=>
                     // Html::submitButton(Yii::t('app', '批量 '), ['class' => 'btn btn-default','style' => 'margin-right:10px','data-toggle'=>'modal',
                     //     'data-target'=>'#multi-add-to-block-modal',]),
                     // Html::a('<i class="glyphicon">批量加入黑名单</i>', ['customer/multi-add-to-block'], [
@@ -79,9 +79,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     // Html::a('<i class="glyphicon">批量移除黑名单</i>', ['customer/multi-remove-from-block'], [
                     //     'class' => 'btn btn-default multi-remove-from-block',
                     // ]),
-                    //Html::a('<i class="glyphicon">data</i>', ['customer/customer/data'], [
-                    //    'class' => 'btn btn-default',
-                    //]),
+                    Html::a('<i class="glyphicon">data</i>', ['customer/customer/data'], [
+                        'class' => 'btn btn-default',
+                    ]),
             ],
         'columns' => [
             // ['class' => 'yii\grid\SerialColumn'],
