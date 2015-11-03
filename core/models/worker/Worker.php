@@ -4,8 +4,10 @@ namespace core\models\worker;
 
 
 use dbbase\models\Help;
+use JPush\Exception\APIRequestException;
 use Symfony\Component\Console\Helper\Helper;
 use Yii;
+use yii\base\ErrorException;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
@@ -988,6 +990,10 @@ class Worker extends \dbbase\models\worker\Worker
         $districtWorkerResult = self::getDistrictAllWorker($district_id);
 
         $orderBookTime = self::generateTimeUnit($orderBookBeginTime,$orderBookEndTime);
+        //开始时间大于等于结束时间
+        if($orderBookBeginTime>=$orderBookEndTime){
+            return [];
+        }
         $districtFreeWorkerIdsArr = [];
         foreach ($districtWorkerResult as $val) {
 
@@ -1018,6 +1024,7 @@ class Worker extends \dbbase\models\worker\Worker
      */
     protected static function generateTimeUnit($beginTime,$endTime){
         $durationTime = ($endTime-$beginTime)/3600;
+        $TimeArr = [];
         for($i=0;$i<$durationTime*2;$i++){
             $TimeArr[] = date('G:i',strtotime('+'.(30*$i).' minute',$beginTime));
         }
@@ -1030,7 +1037,9 @@ class Worker extends \dbbase\models\worker\Worker
      * @param int $worker_type 阿姨类型 1自营2非自营
      * @param array $orderBookTimeArr 待指派订单预约时间['orderBookBeginTime'=>'1490000000','orderBookEndTime'=>'1493200000']
      * @return array freeWorkerArr 所有可用阿姨列表
+     * @throws ErrorException
      */
+
     public static function getDistrictCycleFreeWorker($district_id,$worker_type=1,$orderBookTimeArr){
 
         $districtWorkerResult = self::getDistrictAllWorker($district_id);
@@ -1043,6 +1052,9 @@ class Worker extends \dbbase\models\worker\Worker
             if($val['info']['worker_type']==$worker_type){
                 $workerIsDisabled = 0;
                 foreach ($orderBookTimeArr as $t_val) {
+                    if($t_val['orderBookBeginTime']>=$t_val['orderBookEndTime']){
+                        return [];
+                    }
                     $orderBookTime = self::generateTimeUnit($t_val['orderBookBeginTime'],$t_val['orderBookEndTime']);
 
                     //根据排班表获取所有可用的时间 ['8:00','8:30','9:00','9:30','10:00','10:30'，...]

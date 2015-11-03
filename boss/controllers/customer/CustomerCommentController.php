@@ -44,7 +44,7 @@ class CustomerCommentController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new CustomerCommentSearch;
+    	$searchModel = new CustomerCommentSearch;
         
         $searchModel->load(Yii::$app->request->getQueryParams());
         $searchModel->is_del=1;
