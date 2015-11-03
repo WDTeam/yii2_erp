@@ -162,6 +162,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'width' => "80px",
             ],
+			[
+                'format' => 'raw',
+                'label' => '来源',
+                'value' => function ($dataProvider) {
+                    $customer_ext_src = Customer::getFirstSrc($dataProvider->customer_phone);
+                    $channal_name = empty($customer_ext_src) ? '-' : empty($customer_ext_src['channal_name']) ? '-' : $customer_ext_src['channal_name']; 
+					return $channal_name;
+                },
+                'width' => "80px",
+            ],
             [
                 'format' => 'raw',
                 'label' => '平台',
@@ -174,26 +184,16 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'format' => 'raw',
-                'label' => '渠道',
+                'label' => '所有订单',
                 'value' => function ($dataProvider) {
-                    $customer_ext_src = Customer::getFirstSrc($dataProvider->customer_phone);
-                    $channal_name = empty($customer_ext_src) ? '-' : empty($customer_ext_src['channal_name']) ? '-' : $customer_ext_src['channal_name']; 
-					return $channal_name;
+                    $order_count = OrderExtCustomer::find()->where(['customer_id'=>$dataProvider->id])->count();
+					return Html::a($order_count, ['order/order/index', 'OrderSearch[customer_id]'=>$dataProvider->id]);
                 },
                 'width' => "80px",
             ],
             [
                 'format' => 'raw',
-                'label' => '订单',
-                'value' => function ($dataProvider) {
-                    $order_count = OrderExtCustomer::find()->where(['customer_id'=>$dataProvider->id])->count();
-					return Html::a($order_count, ['order/order/index', 'OrderSearch[customer_id]'=>$dataProvider->id]);
-                },
-                'width' => "50px",
-            ],
-            [
-                'format' => 'raw',
-                'label' => '余额',
+                'label' => '账户余额',
                 'value' => function ($dataProvider) {
                     $customerBalance = Customer::getBalanceById($dataProvider->id);
                     if($customerBalance['errcode'] != 0){
@@ -212,7 +212,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					$complaint_count = $complaint_count == false ? 0 : $complaint_count;
                     return Html::a('<i class="glyphicon">'.$complaint_count.'</i>', ['order/order-complaint', 'customer_id'=>$dataProvider->id]);
                 },
-                'width' => "50px",
+                'width' => "80px",
             ],
 			[
                 'format' => 'raw',
@@ -221,7 +221,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					$comment_count = CustomerComment::getCustomerCommentCount($dataProvider->id);
                     return Html::a('<i class="glyphicon">'.$comment_count.'</i>', ['customer/customer-comment', 'customer_id'=>$dataProvider->id]);
                 },
-                'width' => "50px",
+                'width' => "80px",
             ],
 			[
                 'format' => 'raw',
@@ -234,7 +234,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					}
 					return $score;
                 },
-                'width' => "50px",
+                'width' => "80px",
             ],
             [
                 'format' => 'datetime',
