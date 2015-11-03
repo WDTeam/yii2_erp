@@ -11,15 +11,30 @@ class OrderResponse extends \dbbase\models\order\OrderResponse
      * 响应次数
      * @return multitype:string
      */
-    public static function ResponseTimes()
+    public static function getResponseTimes($order_id = 0)
     {
-    	return array(
-    			'1'=>'1次',
-    			'2'=>'2次',
-    			'3'=>'3次',
-    	);
+        $times = OrderResponse::find()
+            ->select(['order_response_times'])
+            ->where(['order_id' => $order_id])
+            ->orderBy(['id' => SORT_DESC])
+            ->asArray()
+            ->one();
+
+        return $times;
     }
 
+    /**
+     * 响应次数
+     * @return multitype:string
+     */
+    public static function ResponseTimes($order_id = 0)
+    {
+    	return array(
+    			'1' => '1次',
+    			'2' => '2次',
+    			'3' => '3次',
+    	);
+    }
     /**
      * 接听结果
      * @return multitype:string
@@ -72,7 +87,7 @@ class OrderResponse extends \dbbase\models\order\OrderResponse
 
         $model->order_id = $data['order_id'];
         $model->order_operation_user = $data['order_operation_user'];
-        $model->order_response_times = $data['order_reply_result'];
+        $model->order_response_times = $data['order_response_times'];
         $model->order_reply_result = $data['order_reply_result'];
         $model->order_response_or_not = $data['order_response_or_not'];
         $model->order_response_result = $data['order_response_result'];

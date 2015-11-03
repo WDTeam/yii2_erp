@@ -265,7 +265,7 @@ class OperationShopDistrictGoods extends CommonOperationShopDistrictGoods
         if(empty($city_id) || empty($shop_district)){
             return '';
         }else{
-            return self::find()->select(['operation_goods_id', 'operation_shop_district_goods_name', 'operation_shop_district_goods_introduction', 'operation_shop_district_goods_price', 'operation_shop_district_goods_lowest_consume_num', 'operation_shop_district_goods_lowest_consume', 'operation_shop_district_goods_market_price', 'created_at'])->asArray()->where(['operation_city_id' => $city_id, 'operation_shop_district_id' => $shop_district, 'operation_shop_district_goods_status' => 1])->All();
+            return self::find()->select(['operation_goods_id', 'operation_shop_district_goods_name','operation_category_id', 'operation_category_name', 'operation_shop_district_goods_introduction', 'operation_shop_district_goods_price', 'operation_shop_district_goods_lowest_consume_num', 'operation_shop_district_goods_lowest_consume', 'operation_shop_district_goods_market_price', 'created_at'])->asArray()->where(['operation_city_id' => $city_id, 'operation_shop_district_id' => $shop_district, 'operation_shop_district_goods_status' => 1])->All();
         }
     }
 

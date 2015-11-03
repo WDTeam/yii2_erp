@@ -286,7 +286,12 @@ class UserController extends \restapi\components\Controller
      */
     public function actionSetDefaultAddress()
     {
-        $params = json_decode(Yii::$app->request->getRawBody(), true);
+        $params = Yii::$app->request->post();
+
+        if (empty($params)) {
+            $params = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+
         @$accessToken = $params['access_token'];
         @$addressId = $params['address_id'];
 
@@ -359,7 +364,11 @@ class UserController extends \restapi\components\Controller
      */
     public function actionUpdateAddress()
     {
-        $params = json_decode(Yii::$app->request->getRawBody(), true);
+        $params = Yii::$app->request->post();
+        if (empty($params)) {
+            $params = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+
         @$accessToken = $params['access_token'];
         @$addressId = $params['address_id'];
 

@@ -120,7 +120,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-3">服务时间</label>
-                    <div class="col-sm-6 right-text service_time_html"><?= date('Y-m-d H:i', $model->order_booked_begin_time) ?> ~ <?= date('Y-m-d H:i', $model->order_booked_end_time) ?></div>
+                    <div class="col-sm-6 right-text service_time_html"><?= $model->getOrderBookedDate().' '.$model->getOrderBookedTimeArrange() ?></div>
                 </div>
             </div>
             <div class="panel-heading service-info-edit">

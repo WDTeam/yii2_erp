@@ -136,8 +136,8 @@ class OrderController extends BaseAuthController
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $id = Yii::$app->request->get('id');
-        $service_id = Yii::$app->request->get('service_id');
-        return Coupon::getAbleCouponByCateId($id, $service_id);
+        $cate_id = Yii::$app->request->get('cate_id');
+        return Coupon::getAbleCouponByCateId($id, $cate_id);
     }
 
     public function actionCards($id)
@@ -190,7 +190,7 @@ class OrderController extends BaseAuthController
             }
             $workers = [];
             if($order->order_booked_worker_id>0){
-                $worker_list = Worker::getWorkerInfo($order->order_booked_worker_id);
+                $worker_list = Worker::getWorkerStatInfo($order->order_booked_worker_id);
                 if(!empty($worker_list)) {
                     $workers = Order::assignWorkerFormat($order, [$worker_list]);
                 }

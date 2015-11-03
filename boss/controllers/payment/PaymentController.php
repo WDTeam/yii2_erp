@@ -166,6 +166,11 @@ class PaymentController extends BaseAuthController
 
     public function actionTest()
     {
+
+        $data = \core\models\payment\Payment::getPayParams(1, 1, 24, 45, ['return_url' => 'http://www.baidu.com']);
+        dump($data);
+        exit;
+
         $attr = [
             'id'=>45,
 			'address_id'=>9,
@@ -262,9 +267,7 @@ class PaymentController extends BaseAuthController
         $data = \core\models\order\OrderSearch::getOrderAndCustomer(3);
         dump($data);
         exit;
-        $data = \core\models\payment\Payment::getPayParams('0.01', 1, 24, '1500610004', 0, ['return_url' => 'http://www.baidu.com']);
-        dump($data);
-        exit;
+
         $data = \core\models\payment\Payment::getPayParams('0.01', 1, 23, '1500610004');
         dump($data);
     }

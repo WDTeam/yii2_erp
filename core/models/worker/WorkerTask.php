@@ -226,12 +226,14 @@ class WorkerTask extends \dbbase\models\worker\WorkerTask
     public function getStatusLabel()
     {
         $cur_time = time();
-        if($this->worker_task_start>$cur_time){
+        if($this->worker_task_online!=1){
+            return '已下线';
+        }elseif($this->worker_task_start>$cur_time){
             return '未开始';
         }elseif ($this->worker_task_start<$cur_time && $this->worker_task_end>$cur_time){
             return '进行中';
         }elseif ($this->worker_task_end<$cur_time){
-            return '已结束';
+            return '已过期';
         }
     }
     

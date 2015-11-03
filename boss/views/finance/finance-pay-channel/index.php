@@ -40,7 +40,7 @@ use kartik\tabs\TabsX;
 	   		'format' => 'raw',
 	   		'label' => '状态',
 	   		'value' => function ($dataProvider) {
-	   			return $dataProvider->finance_pay_channel_is_lock ? '<font cloro:red>开启</font>' : '关闭';
+	   			return $dataProvider->finance_pay_channel_is_lock==1? '<font cloro:red>开启</font>' : '关闭';
 	   		},
 	   		'width' => "100px",
 	   		],

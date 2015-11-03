@@ -136,12 +136,17 @@ class Worker extends \dbbase\models\worker\Worker
         }else{
             $workerStatResult = self::find()
                 ->where(['id'=>$worker_id])
-                ->select('id,shop_id,worker_name,worker_phone,worker_stat_order_num,worker_stat_order_refuse,worker_stat_order_complaint,worker_stat_order_money')
+                ->select('id,shop_id,worker_type,worker_identity_id,worker_name,worker_phone,worker_stat_order_num,worker_stat_order_refuse,worker_stat_order_complaint,worker_stat_order_money')
                 ->joinWith('workerStatRelation')
                 ->asArray()
                 ->one();
             if($workerStatResult){
-                if($workerStatResult['worker_stat_order_num']!==0){
+                //门店名称,家政公司名称
+                $shopInfo = Shop::findone($workerStatResult['shop_id']);
+                $workerStatResult['shop_name'] = isset($shopInfo['name'])?$shopInfo['name']:'';
+                $workerStatResult['worker_type_description'] = self::getWorkerTypeShow($workerStatResult['worker_type']);
+                $workerStatResult['worker_identity_description'] = WorkerIdentityConfig::getWorkerIdentityShow($workerStatResult['worker_identity_id']);
+                if($workerStatResult['worker_stat_order_num']!=0){
                     $workerStatResult['worker_stat_order_refuse_percent'] = Yii::$app->formatter->asPercent($workerStatResult['worker_stat_order_refuse']/$workerStatResult['worker_stat_order_num']);
                 }else{
                     $workerStatResult['worker_stat_order_refuse_percent'] = '0%';
@@ -155,11 +160,11 @@ class Worker extends \dbbase\models\worker\Worker
     }
 
     /**
-     * 批量获取阿姨银行信息
-     * @param int|array $worker_id
+     * 获取阿姨银行信息
+     * @param int|array $worker_id 阿姨id
      * @return array
      */
-    public static function getWorkerBankListByIds($worker_id){
+    public static function getWorkerBankInfo($worker_id){
         if(empty($worker_id)){
             return [];
         }else{
@@ -305,7 +310,7 @@ class Worker extends \dbbase\models\worker\Worker
                     $val['worker_stat_order_num'] = intval($val['worker_stat_order_num']);
                     $val['worker_stat_order_refuse'] = intval($val['worker_stat_order_refuse']);
 
-                    if($val['worker_stat_order_num']!==0){
+                    if($val['worker_stat_order_num']!=0){
                         $val['worker_stat_order_refuse_percent'] = Yii::$app->formatter->asPercent($val['worker_stat_order_refuse']/$val['worker_stat_order_num']);
                     }else{
                         $val['worker_stat_order_refuse_percent'] = '0%';
@@ -359,7 +364,7 @@ class Worker extends \dbbase\models\worker\Worker
                 $val['shop_name'] = isset($val['shop_name'])?$val['shop_name']:'';
                 $val['worker_stat_order_num'] = intval($val['worker_stat_order_num']);
                 $val['worker_stat_order_refuse'] = intval($val['worker_stat_order_refuse']);
-                if($val['worker_stat_order_num']!==0){
+                if($val['worker_stat_order_num']!=0){
                     $val['worker_stat_order_refuse_percent'] = Yii::$app->formatter->asPercent($val['worker_stat_order_refuse']/$val['worker_stat_order_num']);
                 }else{
                     $val['worker_stat_order_refuse_percent'] = '0%';
@@ -1020,7 +1025,7 @@ class Worker extends \dbbase\models\worker\Worker
     }
 
     /**
-     * 获取商圈中 周期内可用阿姨
+     * 获取商圈中 周期订单 可用阿姨
      * @param int $district_id 商圈id
      * @param int $worker_type 阿姨类型 1自营2非自营
      * @param array $orderBookTimeArr 待指派订单预约时间['week'=>1,'orderBookBeginTime'=>'8:00','orderBookEndTime'=>'9:00]
