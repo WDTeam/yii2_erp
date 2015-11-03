@@ -1711,9 +1711,9 @@ class OrderController extends \restapi\components\Controller
                             "is_booker_worker" => 1,
                             "times" => '2:00:00',
                             "order_time" => array(
-                                '1446528600 - 1446546600',
-                                '1447133400 - 1447151400',
-                                '1447738200 - 1447756200'
+                                '1446528600-1446546600',
+                                '1447133400-1447151400',
+                                '1447738200-1447756200'
                             )
                         ),
                         array(
@@ -1727,7 +1727,7 @@ class OrderController extends \restapi\components\Controller
                             "money" => '60.00',
                             "is_booker_worker" => 0,
                             "order_time" => array(
-                                '1446249600 - 1446256801'
+                                '1446249600-1446256801'
                             )
                         ),
                         array(
@@ -1863,7 +1863,7 @@ class OrderController extends \restapi\components\Controller
      * HTTP/1.1 200 OK
      * {
      *      "code": "ok",
-     *      "msg":"添加成功",
+     *      "msg":"添加成功", 
      * }
      *
      * @apiError SessionIdNotFound 未找到会话ID.
