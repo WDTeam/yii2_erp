@@ -2,6 +2,8 @@
 
 namespace boss\models\payment;
 
+use core\models\finance\FinanceOrderChannel;
+
 use Yii;
 use yii\base\ErrorException;
 use yii\base\Exception;
@@ -23,6 +25,16 @@ class Payment extends \core\models\payment\Payment
     ];
 
     /**
+     * 获取渠道名称
+     * @param $id
+     * @return mixed
+     */
+    public function getOrderChannelName($id)
+    {
+        return FinanceOrderChannel::getOrderChannelByName($id);
+    }
+
+    /**
      * @inheritdoc
      */
     public function attributeLabels()
@@ -30,7 +42,7 @@ class Payment extends \core\models\payment\Payment
         return array_merge(parent::attributeLabels(),[
             'payment_money' => Yii::t('app', '支付金额'),
             'payment_actual_money' => Yii::t('app', '实付金额'),
-            'payment_source' => Yii::t('app', '数据来源'),
+            'payment_source' => Yii::t('app', '订单渠道'),
             'payment_mode' => Yii::t('app', '交易方式'),
             'payment_status' => Yii::t('app', '状态'),
             'payment_transaction_id' => Yii::t('app', '交易流水号'),

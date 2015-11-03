@@ -20,11 +20,11 @@ class m150918_135715_create_table_finance_pay_channel extends Migration
         ], $tableOptions);
 
         $this->execute(
-		"INSERT INTO {{%finance_pay_channel}} VALUES ('7', '支付宝1jjtb', '7', '2', '1443339882', '0');
-		INSERT INTO {{%finance_pay_channel}} VALUES ('8', '百度钱包', '8', '2', '1443339882', '0');
-		INSERT INTO {{%finance_pay_channel}} VALUES ('10', '微信后台', '10', '2', '1443339882', '0');
-		INSERT INTO {{%finance_pay_channel}} VALUES ('12', '银联后台', '12', '2', '1443339882', '0');
-		INSERT INTO {{%finance_pay_channel}} VALUES ('13', '财付通', '13', '2', '1443339882', '0');"
+		"INSERT INTO {{%finance_pay_channel}} VALUES ('7', '支付宝1jjtb', '7', '1', '1443339882', '0');
+		INSERT INTO {{%finance_pay_channel}} VALUES ('8', '百度钱包', '8', '1', '1443339882', '0');
+		INSERT INTO {{%finance_pay_channel}} VALUES ('10', '微信后台', '10', '1', '1443339882', '0');
+		INSERT INTO {{%finance_pay_channel}} VALUES ('12', '银联后台', '12', '1', '1443339882', '0');
+		INSERT INTO {{%finance_pay_channel}} VALUES ('13', '财付通', '13', '1', '1443339882', '0');"
         );
 
     }

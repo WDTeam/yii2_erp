@@ -60,7 +60,7 @@ class ShopManager extends \dbbase\models\shop\ShopManager
     public function rules()
     {
         return array_merge(parent::rules(),[
-            [['name', 'street', 'principal', 'tel', 
+            [['name', 'street', 'principal', 'tel', 'bl_photo_url',
             ], 'required'],
             [['password'], 'string'],
             [['audit_status', 'is_blacklist'], 'default', 'value'=>0],
