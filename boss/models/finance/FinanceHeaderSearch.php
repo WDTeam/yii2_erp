@@ -42,7 +42,7 @@ class FinanceHeaderSearch extends FinanceHeader
 
         $query->andFilterWhere([
             'id' => $this->id,
-        	'finance_header_title' => $this->finance_header_title,
+        	'finance_header_title' =>trim($this->finance_header_title),
             'finance_order_channel_id' => $this->finance_order_channel_id,
             'finance_pay_channel_id' => $this->finance_pay_channel_id,
             'create_time' => $this->create_time,

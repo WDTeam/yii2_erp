@@ -36,9 +36,9 @@ use boss\models\order\Order;
             	   {
                        echo '接单阿姨：'.$model->orderExtWorker->order_worker_name;
                        echo '<br />';
-                       echo $model->orderExtWorker->order_worker_phone.'<br />';
-                       echo $model->orderExtWorker->order_worker_type_name.'<br />';
-                       echo $model->orderExtWorker->order_worker_shop_name;
+                       echo '阿姨手机：'.$model->orderExtWorker->order_worker_phone.'<br />';
+                       echo '阿姨身份：'.$model->orderExtWorker->order_worker_type_name.'<br />';
+                       echo '所属门店：'.$model->orderExtWorker->order_worker_shop_name;
             	   }
             	   else 
             	   {
@@ -48,9 +48,9 @@ use boss\models\order\Order;
             	           
             	           echo '指定阿姨：'.$worker->worker_name;
             	           echo '<br />';
-            	           echo $worker->worker_phone.'<br />';
-            	           echo Worker::getWorkerTypeShow($worker->worker_type).'<br />';
-            	           echo Worker::getShopName($worker->shop_id);            	           
+            	           echo '阿姨手机：'.$worker->worker_phone.'<br />';
+            	           echo '阿姨身份：'.Worker::getWorkerTypeShow($worker->worker_type).'<br />';
+            	           echo '所属门店：'.Worker::getShopName($worker->shop_id);            	           
             	       }
             	   }
             	   ?>
