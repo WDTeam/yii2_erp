@@ -179,6 +179,7 @@ line-height: 30px;display: block;text-align: center;margin-top: 7px;margin-right
 }
 
 #HBox h1,#HBox2 h1,#HBox3 h1,#HBox4 h1{ text-align: center;height: 42px;line-height: 42px;border-bottom: 1px solid #ccc;font-size: 16px;  }
+#HBox4{font-size: 12px;}
 .list{padding:10px 0;}
 .list li{width: 98%;margin:0px auto auto;overflow: hidden; line-height: 36px;}
 .list li strong{width:15%;float:left;display:inline-block;margin-right:10px;text-align: right;color: #f6a202;}

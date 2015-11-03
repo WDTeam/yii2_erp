@@ -325,6 +325,10 @@ class OrderResponseController extends BaseAuthController
         $status = [
             //未完成人工指派
             OrderStatusDict::ORDER_MANUAL_ASSIGN_UNDONE,
+            //未超时未指派
+            -1,
+            //已超时未指派
+            -2,
         ];
 
         $searchParas = Yii::$app->request->getQueryParams();
@@ -333,7 +337,19 @@ class OrderResponseController extends BaseAuthController
         if (!isset($searchParas['OrderSearch']) || 
             !isset($searchParas['OrderSearch']['order_status_dict_id']) || 
             !in_array($searchParas['OrderSearch']['order_status_dict_id'], $status)) {
-            $searchParas['OrderSearch']['order_status_dict_id'] = $status;
+            $searchParas['OrderSearch']['order_status_dict_id'] = OrderStatusDict::ORDER_MANUAL_ASSIGN_UNDONE;
+        }
+
+        //如果特殊异常订单
+        if (in_array($searchParas['OrderSearch']['order_status_dict_id'], [-1, -2])) {
+            $special_status = [
+                //未完成人工指派
+                OrderStatusDict::ORDER_MANUAL_ASSIGN_UNDONE,
+
+                //特殊异常订单
+                $searchParas['OrderSearch']['order_status_dict_id'],
+            ];
+            $searchParas['OrderSearch']['order_status_dict_id'] = $special_status;
         }
 
         $searchModel = new OrderSearch; 
@@ -342,6 +358,10 @@ class OrderResponseController extends BaseAuthController
         $orderModel = new Order; 
 
         $statusList = $orderModel->getStatusList($status); 
+        
+        //不在数据库状态字典里，特殊状态
+        $statusList['-1'] = '未超时未指派'; 
+        $statusList['-2'] = '已超时未指派'; 
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -366,6 +386,25 @@ class OrderResponseController extends BaseAuthController
         } else {
             $info = ['code' => 304, 'msg' => '设置失败'];
         }
+        return json_encode($info, JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * 获取订单响应的数据
+     */
+    public function actionGetOrderResponse()
+    {
+        $post = Yii::$app->request->post();
+        $order_id = $post['order_id'];
+
+        $result = OrderResponse::getResponseRecord($order_id);
+
+        if (isset($result) && !empty($result)) {
+            $info = ['code' => 201, 'data' => $result];
+        } else {
+            $info = ['code' => 404, 'msg' => '暂无响应数据'];
+        }
+
         return json_encode($info, JSON_UNESCAPED_UNICODE);
     }
     

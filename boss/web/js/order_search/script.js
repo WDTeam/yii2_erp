@@ -73,6 +73,41 @@ $(document).ready(function($){
 	$(".m_response").click(function(){
 		$(".xuanzhong").attr("checked","checked");
 		operating_order_id = $(this).parents('tr').find('input.order_id').val();
+
+        //把上次添加的记录清除，重新添加
+        $(".response_record").children("div").empty();
+
+        //获取响应记录
+		$.ajax({
+            type: "POST",
+            url:  "/order/order-response/get-order-response",
+            data: {
+                order_id: operating_order_id,
+            },
+            dataType:"json",
+            success: function (msg) {
+                if(msg.code == 201){
+                    var len = msg.data.length;
+                    for (i = 0; i < len; i ++) {
+                        $(".response_record").children("div").prepend(
+                            '<span>时间:' + msg.data[i].created_at + '</span>' + ';' +
+                            '<span>操作人:' + msg.data[i].order_operation_user + '</span>' +  ';' +
+
+                            '<span>响应次数:' + msg.data[i].order_response_times + '</span>' +  ';' +
+
+                            '<span>接听结果:' + msg.data[i].order_reply_result + '</span>' +  ';' +
+
+                            '<span>是否响应:' + msg.data[i].order_response_or_not + '</span>' +  ';' +
+
+                            '<span>响应结果:' + msg.data[i].order_response_result + '</span>' +  ';' + '<br />'
+                        ); 
+                    }
+
+                }else{
+                    //alert(msg.msg);
+                }
+            }
+        });		
 	});	
 
     //每次点击响应，响应结果都先隐藏

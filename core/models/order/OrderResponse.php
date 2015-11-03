@@ -88,15 +88,15 @@ class OrderResponse extends \dbbase\models\order\OrderResponse
     /**
      * 根据订单ID获取对应的响应记录
      *
-     * @param inter  $response_id  响应记录id
-     * @return type
+     * @param inter  $order_id  订单记录id
+     * @return array
      */ 
     public static function getResponseRecord($order_id = 0)
     {
-        $records = OrderResponse::find()->asArray()->all();
-        //$records =OrderResponse::findAll([
-            //'order_id' => $order_id,
-        //]);
+        $records = OrderResponse::find()
+            ->where(['order_id' => $order_id])
+            ->asArray()
+            ->all();
         $times = OrderResponse::ResponseTimes();
         $reply = OrderResponse::ReplyResult();
         $ornot = OrderResponse::ResponseOrNot();
@@ -105,32 +105,18 @@ class OrderResponse extends \dbbase\models\order\OrderResponse
         foreach ($records as $key => $val) {
             $val['order_response_times'] = $times[$val['order_response_times']];
             $val['order_reply_result'] = $reply[$val['order_reply_result']];
-            $val['order_response_or_not'] = $ornot[$val['order_response_or_not']];
 
-            if ($val['order_response_or_not'] == 1) {
+            if ($val['order_response_or_not'] == 0) {
                 $val['order_response_result'] = $response[$val['order_response_result']];
+            } elseif ($val['order_response_or_not'] == 1) {
+                $val['order_response_result'] = '无结果';
             }
-            print_r($val);
+
+            $val['order_response_or_not'] = $ornot[$val['order_response_or_not']];
+            $val['created_at'] = date('Y-m-d H:i:s', $val['created_at']);
+            $records[$key] = $val;
         }
-        echo '<pre>';
-        print_r($records);
+
         return $records;
-
-
-        //$query = new \yii\db\Query();
-        //$query = $query->select([
-            //'response.*',
-            //'ocomplain.complaint_content',
-            //'ocomplain.complaint_time',
-        //])
-        //->from('{{%order_response}} as response')
-        //->leftJoin('{{%order_complaint}} as ocomplain','order.id = ocomplain.order_id')
-        //->andFilterWhere([
-            //'order_booked_worker_id' => $worker_id
-        //])->offset($offset)->limit($per_page_num);
-        //$dataProvider = new ActiveDataProvider([
-            //'query' => $query,
-        //]);
-        //return $dataProvider->query->all();
     }
 }

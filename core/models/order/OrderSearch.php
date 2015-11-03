@@ -679,6 +679,24 @@ class OrderSearch extends Order
             'order_status_dict_id' => $this->order_status_dict_id,
         ]);
 
+        //两种特殊状态的订单查询条件是订单服务时间
+        if (isset($this->order_status_dict_id) && is_array($this->order_status_dict_id) 
+        && (in_array(-1, $this->order_status_dict_id) || in_array(-2, $this->order_status_dict_id))) {
+            if (in_array(-1, $this->order_status_dict_id)) {
+
+                //人工指派失败且服务时间在两小时内
+                $two_hour_before = strtotime('+2 hour');
+                $query->andFilterWhere(['>=', 'order_booked_begin_time', time()]);
+                $query->andFilterWhere(['<=', 'order_booked_begin_time', $two_hour_before]);
+            }
+
+            if (in_array(-2, $this->order_status_dict_id)) {
+
+                //人工指派失败且超过服务时间
+                $query->andFilterWhere(['<=', 'order_booked_begin_time', time()]);
+            }
+        }
+
         $query->andFilterWhere(['like', 'order_code', $this->order_code])
             ->andFilterWhere(['like', 'order_service_type_name', $this->order_service_type_name])
             ->andFilterWhere(['like', 'order_src_name', $this->order_src_name])

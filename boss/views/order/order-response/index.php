@@ -43,13 +43,17 @@ $this->params['breadcrumbs'][] = $this->title;
                     ?>
 
 
+<!-- 排序，可开发票筛选，Excel导出稍后做
 				    <div class="m_from row">
 				    	<ul class="lis liss" id="list">
-				    		<li class="btn">按下单时间 ↑</li>
-				    		<li class="btn">按服务时间 ↑</li>
+                            <li class="">
+                                <?= Html::a('按下单时间 ↑', ['index?OrderSearch[order_status_dict]=-1'], ['class' => 'btn', 'style' => 'margin-right:10px;margin-left:10px;']) ?>
+                            </li>
+                            <li>
+                                <?= Html::a('按服务时间 ↑', ['index?OrderSearch[order_status_dict]=-2'], ['class' => 'btn', 'style' => 'margin-right:10px']) ?>
+                            </li>
 				    	</ul>
                     </div>
-<!-- 排序，可开发票筛选，Excel导出稍后做
                     <div>
 				    	<h6><input type="checkbox" /><a href="javascript">可开发票</a></h6>
 				    	<p class="m_daoc"><a href="javascript:;">Excel导出</a></p>
@@ -263,35 +267,9 @@ $this->params['breadcrumbs'][] = $this->title;
 						</div>
 					</li>
 
-					<li class="m_disd">
+					<li class="response_record">
 						<strong>* 响应记录</strong>
 						<div class="fl">
-                           <table cellspacing="0" cellpadding="0">
-                              <tr>
-                                 <th>时间</th>
-                                 <th>操作人</th>
-                                 <th>响应次数</th>  
-                                 <th>接听结果</th>
-                                 <th>是否响应</th>
-                                 <th>响应结果</th>
-                             </tr>
-                             <tr>
-                                <?php
-                                //print_r($dataProvider->order_code);
-                                //print_r($dataProvider);
-                                $a = OrderResponse::getResponseRecord();
-                                //echo '<pre>';
-                                //print_r($a);
-                                    //foreach (OrderResponse::ResponseResult() as $key => $value)
-                                    //{
-                                        //echo '<label class="mr10"><input type="radio" name="radio_responseresult" value="'.$key.'"/>'.$value.'</label>';
-                                    //}    						  
-                                    //for ($i = 0; $i < 6; $i ++) {
-                                        //echo '<td class="mr10">aaaaaaaaaaaaa'.$i.'</td>';
-                                    //}
-                                ?>
-                            </tr>
-                            </table>
 						</div>
 					</li>
 
