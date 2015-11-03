@@ -892,9 +892,14 @@ class Order extends OrderModel
      * 获取订单状态列表
      */
 
-    public static function getStatusList()
+    public static function getStatusList($status = '')
     {
-        $statusList = OrderStatusDict::find()->asArray()->all();
+        $statusAC = OrderStatusDict::find();
+        if (isset($status) && is_array($status)) {
+            $statusList = $statusAC->where(['in', 'id', $status])->asArray()->all();
+        } else {
+            $statusList = $statusAC->asArray()->all();
+        }
         return $statusList ? ArrayHelper::map($statusList, 'id', 'order_status_name') : [];
     }
 
