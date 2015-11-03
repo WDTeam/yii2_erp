@@ -657,7 +657,7 @@ class WorkerController extends \restapi\components\Controller
         } 
         //数据整理
         if(!isset($param['settle_id'])||!intval($param['settle_id'])){
-            return $this->send(null,'账单唯一标识错误', 0, 403,null,alertMsgEnum::workerSettleIdFailed);
+            return $this->send(null,'账单唯一标识错误.', 0, 403,null,alertMsgEnum::workerSettleIdFailed);
         }
          //分页数据
         (isset($param['per_page'])&&intval($param['per_page']))?$per_page = intval($param['per_page']):$per_page = 1;
