@@ -1553,5 +1553,40 @@ class Worker extends \dbbase\models\worker\Worker
     public function getWorkerVacationApplicationRelation(){
         return $this->hasMany(WorkerVacationApplication::className(),['worker_id'=>'id']);
     }
+    
+     /**
+     * 通过阿姨手机号验证阿姨是否可以登录（无任何例外状况、封号：可以登录；离职、加入黑名单、输入后台没有的手机号：不可以）
+     *@param  number $phone 用户手机号
+     *@return array  $login_info 登录信息
+     * 
+     */
+    public static function checkWorkerLogin($phone){
+        $login_info=array();
+        $workerInfo = self::find()->where(['worker_phone'=>$phone])->one();
+        if(empty($workerInfo)){
+            //不存在该阿姨
+            $login_info['can_login']=0;
+            $login_info['login_type']=1;
+        }else{
+            if($workerInfo['worker_is_blacklist']=='1'){
+                //阿姨已在黑名单
+                $login_info['can_login']=0;
+                $login_info['login_type']=2;
+            }elseif($workerInfo['worker_is_dimission']=='1'){
+                //阿姨已离职
+                $login_info['can_login']=0;
+                $login_info['login_type']=3;
+            }elseif($workerInfo['isdel']=='1'){
+                //阿姨已删除
+                $login_info['can_login']=0;
+                $login_info['login_type']=4;
+            }else{
+                //阿姨可以登录
+                $login_info['can_login']=1;
+                $login_info['login_type']=5;
+            }
+        }
+        return $login_info;
+    }
 
 }

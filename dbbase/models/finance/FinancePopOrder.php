@@ -170,7 +170,7 @@ class FinancePopOrder extends \yii\db\ActiveRecord
             'finance_pop_order_reality_pay' => Yii::t('app', '实际收款'),
             'finance_pop_order_order_time' => Yii::t('app', '下单时间'),
             'finance_pop_order_pay_time' => Yii::t('app', '支付时间'),
-            'finance_pop_order_pay_status' => Yii::t('app', '支付状态'),
+            'finance_pop_order_pay_status' => Yii::t('app', '处理状态'),
             'finance_pop_order_pay_title' => Yii::t('app', '状态 描述'),
             'finance_pop_order_check_id' => Yii::t('app', '操作人id'),
             'finance_pop_order_finance_time' => Yii::t('app', '对账时间'),

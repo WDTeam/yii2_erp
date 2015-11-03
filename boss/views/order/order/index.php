@@ -69,11 +69,11 @@ $this->params['breadcrumbs'][] = $this->title;
 				     </div>
 -->				    
 					 <div class="m_from">						     
-					    <?php 
+					    <?php
 					    echo ListView::widget([
 					        'dataProvider' => $dataProvider,
 					        'itemView' => '_item',
-					    ]);    
+					    ]);
 					    ?>  							    
 				    	<div class="clear"></div>
 				    </div>                    

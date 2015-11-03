@@ -167,12 +167,11 @@ class PaymentController extends BaseAuthController
     public function actionTest()
     {
         $attr = [
-            'id'=>60,
-			'order_customer_memo'=>'特殊需求特殊需求特殊需求特殊需求',
-			'order_cs_memo'=>'客服备注客服备注客服备注客服备注客服备注',
-			'order_customer_need'=>'重点打扫厨房,家有爱宠,家有爱宠,家有爱宠,家有爱宠,家有爱宠'
+            'id'=>45,
+			'address_id'=>9,
         ];
         $order = \core\models\order\OrderSearch::getOne($attr['id']);
+        //dump($order->orderExtWorker->worker_id);exit;
         $data = $order->modify($attr);
         var_dump($data);
         exit;

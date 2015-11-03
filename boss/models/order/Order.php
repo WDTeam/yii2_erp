@@ -8,6 +8,8 @@
 
 namespace boss\models\order;
 
+use core\models\customer\Customer;
+use core\models\order\OrderWorkerRelation;
 use dbbase\models\finance\FinanceOrderChannel;
 use core\models\operation\OperationArea;
 use core\models\order\OrderPay;
@@ -68,9 +70,11 @@ class Order extends OrderModel
      * 获取已开通城市列表
      * @return array
      */
-    public static function getOnlineCityList($province_id){
-
-        $onlineCityList = OperationCity::getCityOnlineInfoListByProvince($province_id);
+    public static function getOnlineCityList($province_id=null){
+        if ($province_id)
+            $onlineCityList = OperationCity::getCityOnlineInfoListByProvince($province_id);
+        else
+            $onlineCityList = OperationCity::getCityOnlineInfoList();
         return $onlineCityList?ArrayHelper::map($onlineCityList,'city_id','city_name'):[];
     }
 
@@ -85,6 +89,18 @@ class Order extends OrderModel
             }
         }
         return $countys;
+    }
+
+    public function getThisOrderBookedTimeRangeList()
+    {
+        $time_range = self::getOrderBookedTimeRangeList($this->district_id,$this->order_booked_count,$this->orderBookedDate,1);
+        $order_booked_time_range = [];
+        foreach($time_range[0]['timeline'] as $range){
+            if($range['enable']) {
+                $order_booked_time_range[$range['time']] = $range['time'];
+            }
+        }
+        return $order_booked_time_range;
     }
 
     public static function getOrderBookedTimeRangeList($district_id=0,$range = 2,$date=0,$days=1)
@@ -102,6 +118,7 @@ class Order extends OrderModel
         }
         return $order_booked_time_range;
     }
+
 
     /**
      * @inheritdoc
@@ -126,6 +143,47 @@ class Order extends OrderModel
         return $channel_id == 0 ? $channel : (isset($channel[$channel_id]) ? $channel[$channel_id] : false);
     }
 
+    /**
+     * 可指派的阿姨格式化
+     * @param $order
+     * @param $worker_list
+     * @return array
+     */
+    public static function assignWorkerFormat($order,$worker_list){
+        //获取常用阿姨
+        $used_worker_list = Customer::getCustomerUsedWorkers($order->orderExtCustomer->customer_id);
+        $used_worker_ids = [];
+        if (is_array($used_worker_list)) {
+            foreach ($used_worker_list as $v) {
+                $used_worker_ids[] = $v['worker_id'];
+            }
+        }
+        $worker_ids = [];
+        $workers = [];
+        if (is_array($worker_list)) {
+            foreach ($worker_list as $k => $v) {
+                $worker_ids[] = $v['id'];
+                $workers[$v['id']] = $worker_list[$k];
+                $workers[$v['id']]['tag'] = in_array($v['id'], $used_worker_ids) ? '服务过' : "";
+                $workers[$v['id']]['tag'] = ($v['id'] == $order->order_booked_worker_id) ? '指定阿姨' : $workers[$v['id']]['tag'];
+                $workers[$v['id']]['order_booked_time_range'] = [];
+                $workers[$v['id']]['memo'] = [];
+                $workers[$v['id']]['status'] = [];
+            }
+            //获取阿姨当天订单
+            $worker_orders = OrderSearch::getListByWorkerIds($worker_ids, $order->order_booked_begin_time);
+            foreach ($worker_orders as $v) {
+                $workers[$v->orderExtWorker->worker_id]['order_booked_time_range'][] = date('H:i', $v->order_booked_begin_time) . '-' . date('H:i', $v->order_booked_end_time);
+            }
+            //获取阿姨跟订单的关系
+            $order_worker_relations = OrderWorkerRelation::getListByOrderIdAndWorkerIds($order->id, $worker_ids);
+            foreach ($order_worker_relations as $v) {
+                $workers[$v->worker_id]['memo'][] = $v->order_worker_relation_memo;
+                $workers[$v->worker_id]['status'][] = $v->order_worker_relation_status;
+            }
+        }
+        return $workers;
+    }
 
     public function createNew($post)
     {

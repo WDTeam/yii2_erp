@@ -184,7 +184,8 @@ class OrderController extends BaseAuthController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $order = OrderSearch::getWaitManualAssignOrder(Yii::$app->user->id, true);
         if ($order) {
-            $booked_time_range = date('Y-m-d    H:i-', $order->order_booked_begin_time) . date('H:i', $order->order_booked_end_time);
+            $week = ['日','一','二','三','四','五','六'];
+            $booked_time_range = date("Y-m-d  （周", $order->order_booked_begin_time). $week[date('w', $order->order_booked_begin_time)] .date('）  H:i-', $order->order_booked_begin_time) . date('H:i', $order->order_booked_end_time);
             $ext_pay = $order->orderExtPay;
             if ($order->order_is_parent > 0) {
                 $orders = OrderSearch::getChildOrder($order->id);
@@ -197,7 +198,14 @@ class OrderController extends BaseAuthController
                         $ext_pay->order_use_coupon_money += $child->orderExtPay->order_use_coupon_money;
                         $ext_pay->order_use_promotion_money += $child->orderExtPay->order_use_promotion_money;
                     }
-                    $booked_time_range .= '<br/>' . date('Y-m-d    H:i-', $child->order_booked_begin_time) . date('H:i', $child->order_booked_end_time);
+                    $booked_time_range .= '<br/>' . date("Y-m-d  （周", $child->order_booked_begin_time). $week[date('w', $child->order_booked_begin_time)] .date('）  H:i-', $child->order_booked_begin_time) . date('H:i', $child->order_booked_end_time);
+                }
+            }
+            $workers = [];
+            if($order->order_booked_worker_id>0){
+                $worker_list = Worker::getWorkerInfo($order->order_booked_worker_id);
+                if(!empty($worker_list)) {
+                    $workers = Order::assignWorkerFormat($order, [$worker_list]);
                 }
             }
             return
@@ -209,6 +217,7 @@ class OrderController extends BaseAuthController
                     'ext_flag' => $order->orderExtFlag,
                     'operation_long_time' => Order::MANUAL_ASSIGN_lONG_TIME,
                     'booked_time_range' => $booked_time_range,
+                    'booked_workers' => $workers
                 ];
         } else {
             return false;
@@ -224,50 +233,14 @@ class OrderController extends BaseAuthController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $order_id = Yii::$app->request->get('order_id');
         $order = Order::findOne($order_id);
-
         $district_id = $order->district_id;
-        try {
-            //获取常用阿姨
-            $used_worker_list = Customer::getCustomerUsedWorkers($order->orderExtCustomer->customer_id);
-            $used_worker_ids = [];
-            if (is_array($used_worker_list)) {
-                foreach ($used_worker_list as $v) {
-                    $used_worker_ids[] = $v['worker_id'];
-                }
-            }
-        } catch (Exception $e) {
-
-        }
         //根据商圈获取阿姨列表 第二个参数 1自有 2非自有
         try {
             $worker_list = array_merge(Worker::getDistrictFreeWorker($district_id, 1, $order->order_booked_begin_time, $order->order_booked_end_time), Worker::getDistrictFreeWorker($district_id, 2, $order->order_booked_begin_time, $order->order_booked_end_time));
         } catch (Exception $e) {
             return ['code' => 500, 'msg' => '获取阿姨列表接口异常！'];
         }
-        $worker_ids = [];
-        $workers = [];
-        if (is_array($worker_list)) {
-            foreach ($worker_list as $k => $v) {
-                $worker_ids[] = $v['id'];
-                $workers[$v['id']] = $worker_list[$k];
-                $workers[$v['id']]['tag'] = in_array($v['id'], $used_worker_ids) ? '服务过' : "";
-                $workers[$v['id']]['tag'] = ($v['id'] == $order->order_booked_worker_id) ? '指定阿姨' : $workers[$v['id']]['tag'];
-                $workers[$v['id']]['order_booked_time_range'] = [];
-                $workers[$v['id']]['memo'] = [];
-                $workers[$v['id']]['status'] = [];
-            }
-            //获取阿姨当天订单
-            $worker_orders = OrderSearch::getListByWorkerIds($worker_ids, $order->order_booked_begin_time);
-            foreach ($worker_orders as $v) {
-                $workers[$v->orderExtWorker->worker_id]['order_booked_time_range'][] = date('H:i', $v->order_booked_begin_time) . '-' . date('H:i', $v->order_booked_end_time);
-            }
-            //获取阿姨跟订单的关系
-            $order_worker_relations = OrderWorkerRelation::getListByOrderIdAndWorkerIds($order_id, $worker_ids);
-            foreach ($order_worker_relations as $v) {
-                $workers[$v->worker_id]['memo'][] = $v->order_worker_relation_memo;
-                $workers[$v->worker_id]['status'][] = $v->order_worker_relation_status;
-            }
-        }
+        $workers = Order::assignWorkerFormat($order,$worker_list);
         return ['code' => 200, 'data' => $workers];
 
     }
@@ -283,49 +256,13 @@ class OrderController extends BaseAuthController
         $phone = Yii::$app->request->get('phone');
         $worker_name = Yii::$app->request->get('worker_name');
         $order = Order::findOne($order_id);
-
-        //获取常用阿姨
-        try {
-            $used_worker_list = Customer::getCustomerUsedWorkers($order->orderExtCustomer->customer_id);
-            $used_worker_ids = [];
-            if (is_array($used_worker_list)) {
-                foreach ($used_worker_list as $v) {
-                    $used_worker_ids[] = $v['worker_id'];
-                }
-            }
-        } catch (Exception $e) {
-
-        }
         //根据商圈获取阿姨列表 第二个参数 1自有 2非自有
         try {
             $worker_list = Worker::searchWorker($worker_name, $phone);
         } catch (Exception $e) {
             return ['code' => 500, 'msg' => '获取阿姨列表接口异常！'];
         }
-        $worker_ids = [];
-        $workers = [];
-        if (is_array($worker_list)) {
-            foreach ($worker_list as $k => $v) {
-                $worker_ids[] = $v['id'];
-                $workers[$v['id']] = $worker_list[$k];
-                $workers[$v['id']]['tag'] = in_array($v['id'], $used_worker_ids) ? '服务过' : "";
-                $workers[$v['id']]['tag'] = ($v['id'] == $order->order_booked_worker_id) ? '指定阿姨' : $workers[$v['id']]['tag'];
-                $workers[$v['id']]['order_booked_time_range'] = [];
-                $workers[$v['id']]['memo'] = [];
-                $workers[$v['id']]['status'] = [];
-            }
-            //获取阿姨当天订单
-            $worker_orders = OrderSearch::getListByWorkerIds($worker_ids, $order->order_booked_begin_time);
-            foreach ($worker_orders as $v) {
-                $workers[$v->orderExtWorker->worker_id]['order_booked_time_range'][] = date('H:i', $v->order_booked_begin_time) . '-' . date('H:i', $v->order_booked_end_time);
-            }
-            //获取阿姨跟订单的关系
-            $order_worker_relations = OrderWorkerRelation::getListByOrderIdAndWorkerIds($order_id, $worker_ids);
-            foreach ($order_worker_relations as $v) {
-                $workers[$v->worker_id]['memo'][] = $v->order_worker_relation_memo;
-                $workers[$v->worker_id]['status'][] = $v->order_worker_relation_status;
-            }
-        }
+        $workers = Order::assignWorkerFormat($order,$worker_list);
         return ['code' => 200, 'data' => $workers];
 
 
@@ -458,6 +395,7 @@ class OrderController extends BaseAuthController
      */
     public function actionEdit($id)
     {
+
         $model = Order::findById($id);
         $post = Yii::$app->request->post();
         $model['admin_id'] = Yii::$app->user->id;
@@ -490,8 +428,30 @@ class OrderController extends BaseAuthController
                 return $this->redirect(['edit', 'id' => $model->id]);
             }
         }
-        return $this->render('edit', ['model' => $model, 'history' => $history]);
+
+        return $this->render('edit', ['model' => $model,'history' => $history]);
     }
+
+    /**
+     * ajax编辑订单
+     * @return array
+     */
+    public function actionModify()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $attr = Yii::$app->request->post();
+        $order = OrderSearch::getOne($attr['id']);
+        if($order->modify($attr))
+        {
+            return ['status'=>1,'info'=>'修改成功'];
+        }
+        else
+        {
+            return ['status'=>0,'info'=>'修改失败'];
+        }
+
+    }
+
 
     /**
      * 订单指派页面
@@ -581,21 +541,7 @@ class OrderController extends BaseAuthController
         }
     }
 
-    public function actionModify()
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $attr = Yii::$app->request->post();
-        $order = OrderSearch::getOne($attr['id']);
-        if($order->modify($attr))
-        {
-            return ['status'=>1,'info'=>'修改成功'];
-        }
-        else
-        {
-            return ['status'=>0,'info'=>'修改失败'];
-        }
 
-    }
 
     /**
      * Deletes an existing Order model.

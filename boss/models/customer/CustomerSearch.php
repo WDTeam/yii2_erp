@@ -55,17 +55,24 @@ class CustomerSearch extends Customer
             'customer_app_version' => $this->customer_app_version,
             'customer_mac' => $this->customer_mac,
             'customer_login_time' => $this->customer_login_time,
-            'customer_is_vip' => $this->customer_is_vip,
+            //'customer_is_vip' => $this->customer_is_vip,
             // 'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             //'is_del' => $this->is_del,
         ]);
+
+		if(isset($this->customer_is_vip)){
+			if($this->customer_is_vip != -1){
+				$query->andFilterWhere(['customer_is_vip' => $this->customer_is_vip]);
+			}
+		}
 
         $query->andFilterWhere(['like', 'customer_name', $this->customer_name])
             ->andFilterWhere(['like', 'customer_photo', $this->customer_photo])
             ->andFilterWhere(['like', 'customer_phone', $this->customer_phone])
             ->andFilterWhere(['like', 'customer_email', $this->customer_email])
             ->andFilterWhere(['like', 'customer_login_ip', $this->customer_login_ip]);
+
         if ($this->time_begin && $this->time_end) {
             $query->andFilterWhere(['>', 'created_at', strtotime($this->time_begin)])
             ->andFilterWhere(['<', 'created_at', strtotime($this->time_end)]);

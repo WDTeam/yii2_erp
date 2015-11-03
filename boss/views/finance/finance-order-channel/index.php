@@ -4,6 +4,7 @@ use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\tabs\TabsX;
 use dbbase\models\finance\FinanceOrderChannel;
+use boss\models\finance\FinanceOrderChannelSearch;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -29,7 +30,6 @@ use dbbase\models\finance\FinanceOrderChannel;
      		//'id',
      		'finance_order_channel_name',
     		'finance_order_channel_rate',
-    		
     		[
     		'format' => 'raw',
     		'label' => '支付渠道',
@@ -55,6 +55,15 @@ use dbbase\models\finance\FinanceOrderChannel;
     		},
     		'width' => "100px",
     		],
+    		[
+    		'format' => 'raw',
+    		'label' => '来源',
+    		'value' => function ($dataProvider) {
+    			return FinanceOrderChannelSearch::get_sourcedate($dataProvider->finance_order_channel_source,1);
+    		},
+    		'width' => "100px",
+    		],
+    		
     		[
     		'format' => 'raw',
     		'label' => '状态',

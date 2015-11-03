@@ -389,7 +389,12 @@ class FinancePopOrderController extends Controller
     	$searchModel = new FinancePopOrderSearch;
     	$searchModel->load(Yii::$app->request->getQueryParams());
     	$searchModel->is_del=0;
-    	$searchModel->finance_pop_order_pay_status=3;
+    	$dateinfo=Yii::$app->request->getQueryParams();
+    	if(isset($dateinfo['FinancePopOrderSearch']['finance_pop_order_pay_status'])){
+    		$searchModel->finance_pop_order_pay_status=$dateinfo['FinancePopOrderSearch']['finance_pop_order_pay_status'];
+    	}else{
+    		$searchModel->finance_pop_order_pay_status=[3,5];	
+    	}
     	$dataProvider = $searchModel->search();
     	return $this->render('bad', [
     			'dataProvider' => $dataProvider,
@@ -451,15 +456,24 @@ class FinancePopOrderController extends Controller
     		if($requestModel['edit']=='bak'){
     	    //坏账还原
     		$model->finance_pop_order_pay_status='0';
-    		
+    		$url='index';
     		}elseif($requestModel['edit']=='bakinfo'){
     		//回滚财务审核	
     		$model->finance_pop_order_pay_status='0';
+    		$url='index';
+    		}elseif ($requestModel['edit']=='bakinfoyes'){
+    		//财务审核已经处理的数据 
+    		$model->finance_pop_order_pay_status='4';
+    		$url='billinfo';
+    		}elseif ($requestModel['edit']=='bakinfodabyes'){
+    		$model->finance_pop_order_pay_status='5';
+    		$url='bad';
     		}else{	
     		$model->finance_pop_order_pay_status='3';
+    		$url='index';
     		}
     		$model->save();
-    		return $this->redirect(['index', 'id' =>$requestModel['oid']]);
+    		return $this->redirect([$url, 'id' =>$requestModel['oid']]);
     }
       
 
@@ -674,12 +688,16 @@ class FinancePopOrderController extends Controller
     	$searchModel = new FinancePopOrderSearch;
     	$searchModel->load(Yii::$app->request->getQueryParams());
     	$searchModel->is_del=0;
+    	$searchModel->finance_pop_order_pay_status=[1,4];
     	$timeinfo=Yii::$app->request->getQueryParams();
     	if(isset($timeinfo['FinancePopOrderSearch']['finance_order_channel_statuspayment'])){
     		$searchModel->finance_order_channel_statuspayment=strtotime($timeinfo['FinancePopOrderSearch']['finance_order_channel_statuspayment']);
     	}
     	if(isset($timeinfo['FinancePopOrderSearch']['finance_order_channel_endpayment'])){
     		$searchModel->finance_order_channel_statuspayment=strtotime($timeinfo['FinancePopOrderSearch']['finance_order_channel_endpayment']);
+    	}
+    	if(isset($timeinfo['FinancePopOrderSearch']['finance_pop_order_pay_status'])){
+    		$searchModel->finance_pop_order_pay_status=$timeinfo['FinancePopOrderSearch']['finance_pop_order_pay_status'];
     	}
     	
     	$dataProvider = $searchModel->search();

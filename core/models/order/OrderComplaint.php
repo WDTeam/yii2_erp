@@ -3,8 +3,10 @@ namespace core\models\order;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+
 use core\models\order\Order;
 use dbbase\models\order\OrderExtWorker;
+use yii\base\Model;
 
 class OrderComplaint extends \dbbase\models\order\OrderComplaint
 {
@@ -187,5 +189,22 @@ class OrderComplaint extends \dbbase\models\order\OrderComplaint
     
     public function getOrderExtWorker(){
     	return $this->hasOne(OrderExtWorker::className(), ['order_id'=>'order_id']);
+    }
+    /**
+     * 根据客户手机号统计客户的投诉数量
+     * @param 用户手机号 $phone
+     * @return boolean
+     */
+    public function getComplainNumsByPhone($phone){
+    	$flag = false;
+    	if(!empty($phone)){
+    		$model = self::find()->andWhere(["complaint_phone"=>$phone])->count("id");
+    		if($model > 0){
+    			return $model;
+    		}else {
+    			return $flag;
+    		}	
+    	}
+    	return $flag;
     }
 }

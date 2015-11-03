@@ -58,11 +58,12 @@ class WorkerTask extends \dbbase\models\worker\WorkerTask
     public function rules()
     {
         return array_merge(parent::rules(),[
-            [['worker_task_name', 'worker_task_start', 
+            [['worker_task_name', 
                 'worker_task_end', 'worker_task_reward_type',
                 'worker_rules', 'worker_types', 'worker_cites',
                 'worker_task_cycle',
             ], 'required'],
+            [['worker_task_time'], 'required'],
             [['worker_types', 'worker_rules', 'worker_cites'], 'safe'],
             [['conditions'], 'validateConditions'],
         ]);
@@ -91,6 +92,23 @@ class WorkerTask extends \dbbase\models\worker\WorkerTask
     public function setConditions($data)
     {
         $this->worker_task_conditions = json_encode($data);
+    }
+    public function getWorker_task_time()
+    {
+        if($this->getIsNewRecord()){
+            return null;
+        }
+
+        $str = date('m/d/Y', $this->worker_task_start);
+        $str .= ' - ';
+        $str .= date('m/d/Y', $this->worker_task_end);
+        return $str;
+    }
+    public function setWorker_task_time($value)
+    {
+        $times = explode('-', $value);
+        $this->worker_task_start = strtotime($times[0]);
+        $this->worker_task_end = strtotime($times[1]);
     }
     /**
      * 阿姨类型字段
@@ -215,6 +233,16 @@ class WorkerTask extends \dbbase\models\worker\WorkerTask
         }elseif ($this->worker_task_end<$cur_time){
             return '已结束';
         }
+    }
+    
+    public function attributeLabels()
+    {
+        return array_merge(parent::attributeLabels(),[
+            'worker_task_time' => \Yii::t('app', '任务时间段'),
+            'worker_types' => \Yii::t('app', '阿姨角色'),
+            'worker_rules' => \Yii::t('app', '阿姨身份'),
+            'worker_cites' => \Yii::t('app', '开通城市'),
+        ]);
     }
     
     

@@ -25,40 +25,6 @@ use core\models\finance\FinanceSettleApplySearch;
     ?>
     </div>
     
-    <!--<div class='col-md-2' >-->
-    <?php 
-//    echo  $form->field($model, 'finance_shop_settle_apply_starttime')->widget(DateControl::classname(),[
-//        'type' => DateControl::FORMAT_DATE,
-//         'value'=>$model->finance_shop_settle_apply_starttime,
-//        'ajaxConversion'=>false,
-//        'displayFormat' => 'php:Y-m-d',
-//        'saveFormat'=>'php:U',
-//        'options' => [
-//            'pluginOptions' => [
-//                 'autoclose' => true
-//            ]
-//        ]
-//    ]);
-    
-//    ?>
-  </div>  
-    <!--<div class='col-md-2'>-->
-    <?php 
-//    echo  $form->field($model, 'finance_shop_settle_apply_endtime')->widget(DateControl::classname(),[
-//        'type' => DateControl::FORMAT_DATE,
-//        'value'=>$model->finance_shop_settle_apply_endtime,
-//        'ajaxConversion'=>false,
-//        'displayFormat' => 'php:Y-m-d',
-//        'saveFormat'=>'php:U',
-//        'options' => [
-//            'pluginOptions' => [
-//                 'autoclose' => true
-//            ]
-//        ]
-//    ]);
-    
-    ?>
-  <!--</div>--> 
      <?php 
     if($model->review_section == FinanceShopSettleApplySearch::BUSINESS_REVIEW){
         echo "<div class='col-md-2'>";

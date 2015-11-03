@@ -5,7 +5,9 @@ namespace core\models\finance;
 use Yii;
 
 
-class FinanceRefund extends \dbbase\models\finance\FinancePayChannel
+class FinancePayChannel extends \dbbase\models\finance\FinancePayChannel
 {
    
+	
+	
 }

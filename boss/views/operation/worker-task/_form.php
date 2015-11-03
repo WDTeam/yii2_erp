@@ -9,6 +9,7 @@ use core\models\worker\WorkerRuleConfig;
 use core\models\worker\Worker;
 use core\models\worker\WorkerTaskLog;
 use core\models\worker\WorkerIdentityConfig;
+use kartik\daterange\DateRangePicker;
 
 /**
  * @var yii\web\View $this
@@ -67,37 +68,30 @@ $conditions = $model->getFullConditions();
             ],
         ],
         
-        'worker_task_start'=>[
+        'worker_task_time'=>[
+            'label'=>'时间段',
             'type'=> Form::INPUT_WIDGET, 
-            'widgetClass'=>DateControl::classname(),
-            'options' => [
-                'type'=>DateControl::FORMAT_DATE,
-                'ajaxConversion'=>false,
-                'displayFormat' => 'php:Y-m-d',
-                'saveFormat'=>'php:U',
-                'options' => [
-                    'pluginOptions' => [
-                        'autoclose' => true
-                    ]
-                ]
-            ],
+            'widgetClass'=>DateRangePicker::classname(),
+//             'presetDropdown'=>true,
+//             'convertFormat'=>true,
+//             'useWithAddon'=>true,
         ], 
         
-        'worker_task_end'=>[
-            'type'=> Form::INPUT_WIDGET, 
-            'widgetClass'=>DateControl::classname(),
-            'options' => [
-                'type'=>DateControl::FORMAT_DATE,
-                'ajaxConversion'=>false,
-                'displayFormat' => 'php:Y-m-d',
-                'saveFormat'=>'php:U',
-                'options' => [
-                    'pluginOptions' => [
-                        'autoclose' => true
-                    ]
-                ]
-            ]
-        ], 
+//         'worker_task_end'=>[
+//             'type'=> Form::INPUT_WIDGET, 
+//             'widgetClass'=>DateControl::classname(),
+//             'options' => [
+//                 'type'=>DateControl::FORMAT_DATE,
+//                 'ajaxConversion'=>false,
+//                 'displayFormat' => 'php:Y-m-d',
+//                 'saveFormat'=>'php:U',
+//                 'options' => [
+//                     'pluginOptions' => [
+//                         'autoclose' => true
+//                     ]
+//                 ]
+//             ]
+//         ], 
         
         'worker_types'=>[
             'type'=> Form::INPUT_CHECKBOX_LIST, 

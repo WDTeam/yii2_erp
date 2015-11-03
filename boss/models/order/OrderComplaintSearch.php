@@ -96,4 +96,25 @@ class OrderComplaintSearch extends OrderComplaint{
 		}
 		
 	}
+	/**
+	 * 根据投诉ID信息获取投诉
+	 * @param unknown $Id
+	 * @throws NotFoundHttpException
+	 * @return Ambigous <\yii\db\static, NULL>|boolean
+	 */
+	public function getOrder_Complaint_DetailById($id){
+	
+		$query = OrderComplaint::find()->
+		joinWith("order")->
+		joinWith("orderExtWorker")->
+		where(['ejj_order_complaint.id'=>$id])->one();
+		$dataProvider = new ActiveDataProvider([
+				'query'=>$query
+		]);
+		if($query != null){
+			return $query;
+		}else{
+			throw new NotFoundHttpException('The requested page does not exist.');
+		}
+	}
 }

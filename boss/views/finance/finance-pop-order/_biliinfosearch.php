@@ -63,6 +63,24 @@ use kartik\date\DatePicker;
             ]); ?>
      </div>
 
+      <div class='col-md-2'>
+    <?= $form->field($model, 'finance_pop_order_pay_status')->widget(Select2::classname(), [
+        'name' => '处理状态',
+        'hideSearch' => true,		
+        'data' => ['1'=>'已处理','4'=>'已审核'],
+        'options' => ['placeholder' => '选择处理状态','class' => 'col-md-2'],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]);
+   
+    ?>
+     </div>
+     
+     
+     
+     
+     
     <div class="form-group">
     <div class='col-md-2' style="    margin-top: 22px;">
         <?= Html::submitButton(Yii::t('app', '提交'), ['class' => 'btn btn-primary']) ?>

@@ -41,8 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
      		'class' => 'yii\grid\CheckboxColumn',
      		'name'=>'ids'
-
-],
+			],
      		'order_code',
               		[
      		'format' => 'raw',
@@ -60,8 +59,6 @@ $this->params['breadcrumbs'][] = $this->title;
      		},
      		'width' => "100px",
      		],
-          //  'finance_pay_channel_title', 
-            //'finance_pop_order_customer_tel', 
             [
             'format' => 'raw',
             'label' => '阿姨姓名',
@@ -88,12 +85,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'order_money',//系统金额
             'finance_pop_order_sum_money', // 对账金额
-           /* 'finance_pop_order_coupon_count', 
-           'finance_pop_order_coupon_id', 
-           'finance_pop_order_order2', 
-           'finance_pop_order_channel_order', 
-           'finance_pop_order_order_type', 
-           'finance_pop_order_finance_isok',  */
             [
             'format' => 'raw',
             'label' =>FinancePopOrderSearch::get_stypname($channleid),
@@ -102,11 +93,7 @@ $this->params['breadcrumbs'][] = $this->title;
             },
             'width' => "70px",
             ],
-          	//'finance_pop_order_discount_pay', //优惠金额
            'finance_pop_order_reality_pay', //实际收款
-			//'finance_pop_order_order_time:datetime', 
-			//'finance_pop_order_pay_time:datetime', 
-            //'finance_pop_order_pay_status', 
             [
             'format' => 'raw',
             'label' => '结算状态',
@@ -207,15 +194,10 @@ Html::a('<i class="glyphicon" ></i>公司有渠道无 (总额:'.$searchModel->Or
 Html::a('<i class="glyphicon" ></i>渠道有公司无 (总额:'.$searchModel->OrderPayStatus('2',$lastidRecordLogid,$channleid).')', ['index?FinancePopOrderSearch[finance_pop_order_pay_status_type]=2&id='.$lastidRecordLogid], ['class' => 'btn btn-'.$searchModel->defaultcss(2,$statusdeflde).'', 'style' => 'margin-right:10px']) .
 Html::a('<i class="glyphicon" ></i>金额不对 (总额:'.$searchModel->OrderPayStatus(4,$lastidRecordLogid,$channleid).')', ['index?FinancePopOrderSearch[finance_pop_order_pay_status_type]=4&id='.$lastidRecordLogid], ['class' => 'btn btn-'.$searchModel->defaultcss(4,$statusdeflde).'', 'style' => 'margin-right:10px']) .
 Html::a('<i class="glyphicon" ></i>状态不对(总额:'.$searchModel->OrderPayStatus(5,$lastidRecordLogid,$channleid).')', ['index?FinancePopOrderSearch[finance_pop_order_pay_status_type]=5&id='.$lastidRecordLogid], ['class' => 'btn btn-'.$searchModel->defaultcss(5,$statusdeflde).'', 'style' => 'margin-right:10px']),
-			/* 'after' => Html::a('批量审核',
-			['index'],
-			['class' => 'btn btn-default']), */
             'showFooter'=>false,
         ],
     ]);
        ActiveForm::end();
-
-       
        echo Modal::widget([
        		'header' => '<h4 class="modal-title">坏账原因</h4>',
        		'id'=>'vacationModal',
@@ -247,17 +229,8 @@ $this->registerJs(<<<JSCONTENT
                  workerId = $(this).attr('data-key');
                  selectWorkerIds += workerId+','
             })
-            if(selectWorkerIds){
-                selectWorkerIds = selectWorkerIds.substring(0,selectWorkerIds.length-1);
-                url = url.substring(0,url.indexOf("=")+1)+selectWorkerIds+'&vacationType='+vacationType
-            }else{
-                alert('请选择阿姨');
-                return false;
-            }
             $('#vacationModal .modal-body').eq(0).load(url);
         });
 JSCONTENT
 );
-     ?>
-
-</div>
+?>
