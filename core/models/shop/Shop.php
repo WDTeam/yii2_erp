@@ -42,6 +42,7 @@ class Shop extends \dbbase\models\shop\Shop
         return array_merge(parent::rules(),[
             [['name','city_id', 'street', 'principal', 'tel', 'shop_manager_id'], 'required'],
             [['street'], 'string', 'max'=>30],
+            [['principal'], 'match', 'pattern' => '/^[\x{4e00}-\x{9fa5}A-Za-z0-9_]+$/i'],
             [['shop_manager_id', 'province_id', 'city_id', 'county_id', 'is_blacklist', 
                  'audit_status', 'worker_count', 
                 'complain_coutn', 'tel', 'bankcard_number'], 'integer'],
