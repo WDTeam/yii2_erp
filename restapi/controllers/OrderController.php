@@ -1632,9 +1632,17 @@ class OrderController extends \restapi\components\Controller
      *       "address": "服务地址",
      *       "need": "备注说明",
      *       "money": "订单价格",
-     *         },
-     * 	      ]
-     *      },
+     *       "is_booker_worker" => "判断标示 1有时间格式 0没有时间格式",
+     *       "times" => '2:00:00',
+     *                    "order_time":
+     *                 [
+     *                    '开始时间 - 结束时间',
+     *                    '1447133400 - 1447151400',
+     *                   '1447738200 - 1447756200'
+     *               ]
+     *          },
+     * 	       ]
+     *       },
      *    "pageNum":"总页码数"
      *    }
      * 
@@ -1699,6 +1707,7 @@ class OrderController extends \restapi\components\Controller
                             "need" => '重点打扫厨房,重点打扫卫生间',
                             "money" => '50.00',
                             "is_booker_worker" => 1,
+                            "times" => '2:00:00',
                             "order_time" => array(
                                 '1446528600 - 1446546600',
                                 '1447133400 - 1447151400',
@@ -1729,6 +1738,7 @@ class OrderController extends \restapi\components\Controller
                             "need" => '重点打扫厨房',
                             "money" => '70.00',
                             "is_booker_worker" => 1,
+                            "times" => '2:00:00',
                             "order_time" => array(
                                 '1443666600-1443695400',
                                 '1443753000-1443781800',
@@ -1746,6 +1756,7 @@ class OrderController extends \restapi\components\Controller
                             "need" => '重点打扫卫生间',
                             "money" => '80.00',
                             "is_booker_worker" => 1,
+                            "times" => '2:00:00',
                             "order_time" => array(
                                 '1448937000-1448965800',
                                 '1449541800-1449570600',
