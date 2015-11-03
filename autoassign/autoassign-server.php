@@ -142,8 +142,13 @@ class server
     {
         $data = $this->getCommand($data);
         $cmd = $data['cmd'];
-        
-        switch ($cmd) {
+        $nextStatus = autoassign\ClientCommand::START;//默认下一步是“开始自动派单”
+        $currentStatus = (bool) json_decode($this->redis->get(REDIS_IS_SERVER_SUSPEND));
+        echo 'currentStatus:'.$currentStatus;
+        if(!$currentStatus){//如果当前是“开始自动派单”，则下一个状态为“停止自动服务”
+            $nextStatus = autoassign\ClientCommand::STOP;
+        }
+        switch ($nextStatus) {
             case autoassign\ClientCommand::START:
             {
                 echo date('Y-m-d H:i:s')." 服务继续\n";
@@ -160,28 +165,6 @@ class server
                 $this->broadcast($server, autoassign\ClientCommand::STOP);
             }
             break;
-            case autoassign\ClientCommand::RELOAD:
-            {
-                echo date('Y-m-d H:i:s')." 服务重启\n";
-                $this->broadcast($server, autoassign\ClientCommand::RELOAD);
-                $server->reload();
-            }
-            break;
-            case autoassign\ClientCommand::UPDATE:
-            {
-                $this->update_config(CONFIG_PATH, "FULLTIME_WORKER_TIMEOUT", $data['fulltimeout_end']);
-                $this->update_config(CONFIG_PATH, "FREETIME_WORKER_TIMEOUT", $data['freetimeout_end']);
-                $this->update_config(CONFIG_PATH, "SYSTEM_ASSIGN_TIMEOUT", $data['freetimeout_end']);
-                
-                $this->config['FULLTIME_WORKER_TIMEOUT'] = $data['fulltimeout_end'];
-                $this->config['FREETIME_WORKER_TIMEOUT'] = $data['freetimeout_end'];
-                $this->config['SYSTEM_ASSIGN_TIMEOUT'] = $data['freetimeout_end'];
-                
-                $this->redis->set(REDIS_AUTOASSIGN_CONFIG,json_encode($this->config));
-                echo date('Y-m-d H:i:s')." 配置已更新\n";
-                $this->broadcast($server, autoassign\ClientCommand::UPDATE);
-            }
-            break;
             default:
                 break;
         }
@@ -194,10 +177,10 @@ class server
         $data = explode(',', $data);
         $d = array(
             'cmd' => $data[0],
-            'fulltimeout_start' => $data[1],
-            'fulltimeout_end' => $data[2],
-            'freetimeout_start' => $data[3],
-            'freetimeout_end' => $data[4],
+            'fulltimeout_start' => 0,
+            'fulltimeout_end' => $this->config['FULLTIME_WORKER_TIMEOUT'],
+            'freetimeout_start' => 0,
+            'freetimeout_end' => $this->config['FREETIME_WORKER_TIMEOUT'],
         );
         return $d;
     }

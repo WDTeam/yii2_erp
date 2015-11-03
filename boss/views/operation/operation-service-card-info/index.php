@@ -39,26 +39,26 @@ $this->params['breadcrumbs'][] = $this->title;
 
 //            'id',
             'service_card_info_name',
-//            'service_card_info_card_type',
-//            'service_card_info_card_level',
+//            'service_card_info_type',
+//            'service_card_info_level',
 			[
-                'attribute'=>'service_card_info_card_type',
+                'attribute'=>'service_card_info_type',
                 'value'=>function($model){
-                     return $model->getServiceCardConfig()['type'][$model->service_card_info_card_type];
+                     return $model->getServiceCardConfig()['type'][$model->service_card_info_type];
                 },
                 'filter'=>false,
             ],
             [
-                'attribute'=>'service_card_info_card_level',
+                'attribute'=>'service_card_info_level',
 				'format'=>'raw',
                 'value'=>function($model){
-                    return $model->getServiceCardConfig()['level'][$model->service_card_info_card_level];
+                    return $model->getServiceCardConfig()['level'][$model->service_card_info_level];
                 },
                 'filter'=>false,
             ],
             'service_card_info_value',
             'service_card_info_rebate_value', 
-            'service_card_info_use_scope', 
+            'service_card_info_scope', 
             'service_card_info_valid_days', 
 //            'created_at', 
 //            'updated_at', 

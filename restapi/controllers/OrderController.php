@@ -1889,6 +1889,40 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
         }
     }
+    
+    
+     /**
+     * @api {get} v1/order/get-cycle-order 获得周期订单 (haojianshe 100%)
+     *
+     * @apiName actionGetCycleOrder
+     * @apiGroup Order
+     * @apiDescription 阿姨抢单提交
+     *
+     * @apiParam {String} access_token      会话id.
+     * @apiParam {String} [platform_version]  平台版本号
+     * @apiParam {String} order_batch_code          周期订单号
+     *
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *      "code": "ok",
+     *      "msg":"操作成功",
+     * }
+     *
+     * @apiError SessionIdNotFound 未找到会话ID.
+     *
+     * @apiErrorExample Error-Response:
+     *  HTTP/1.1 404 Not Found
+     *  {
+     *      "code":"0",
+     *      "msg": "操作失败"
+     *  }
+     *
+     */
+    
+    public function actionGetCycleOrder(){
+        
+    }
 
     /**
      * @api {PUT} v1/order/set-worker-order 阿姨抢单提交 (haojianshe 100%)

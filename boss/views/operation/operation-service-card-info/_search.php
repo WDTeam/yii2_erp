@@ -23,7 +23,7 @@ use kartik\widgets\Select2;
 	 <?= $form->field($model, 'service_card_info_name') ?>
 	</div>
 	<div class="col-md-2">
-	 <?= $form->field($model, 'service_card_info_card_type')->widget(Select2::classname(), [
+	 <?= $form->field($model, 'service_card_info_type')->widget(Select2::classname(), [
         'name' => '服务卡类型',
         'hideSearch' => true,
         'data' => $config['type'],
@@ -36,7 +36,7 @@ use kartik\widgets\Select2;
     ?>
 	</div>
 	<div class="col-md-2">
-	<?= $form->field($model, 'service_card_info_card_level')->widget(Select2::classname(), [
+	<?= $form->field($model, 'service_card_info_level')->widget(Select2::classname(), [
         'name' => '服务卡级别',
         'hideSearch' => true,
         'data' => $config['level'],
@@ -59,15 +59,15 @@ use kartik\widgets\Select2;
 
     <?php // echo $form->field($model, 'service_card_info_name') ?>
 
-    <?php // echo $form->field($model, 'service_card_info_card_type') ?>
+    <?php // echo $form->field($model, 'service_card_info_type') ?>
 
-    <?php // echo $form->field($model, 'service_card_info_card_level') ?>
+    <?php // echo $form->field($model, 'service_card_info_level') ?>
 
     <?php // echo $form->field($model, 'service_card_info_value') ?>
 
     <?php // echo $form->field($model, 'service_card_info_rebate_value') ?>
 
-    <?php // echo $form->field($model, 'service_card_info_use_scope') ?>
+    <?php // echo $form->field($model, 'service_card_info_scope') ?>
 
     <?php // echo $form->field($model, 'service_card_info_valid_days') ?>
 
