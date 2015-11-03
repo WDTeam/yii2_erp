@@ -1979,7 +1979,7 @@ class OrderController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token      会话id.
      * @apiParam {String} [platform_version]  平台版本号
-     * @apiParam {String} order_id          订单号
+     * @apiParam {int}    order_id          订单号
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -2093,16 +2093,13 @@ class OrderController extends \restapi\components\Controller
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
-//        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-//            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
-//        }
-        # = array('' => $val['order_batch_code']
-       
+        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+        }
         try {
             $orderSearch = new \core\models\order\OrderSearch();
-       
-            $order = $orderSearch->searchOrdersWithStatus(["order_batch_code"=>$param['order_batch_code']]);
-        
+            $order = $orderSearch->searchOrdersWithStatus(["order_batch_code" => $param['order_batch_code']]);
+
             if (count($order) > 0) {
                 $arr = array();
                 $array = array();
