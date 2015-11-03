@@ -875,7 +875,7 @@ class WorkerController extends \restapi\components\Controller
         }
         //数据整理
         if(!isset($param['settle_id'])||!intval($param['settle_id'])){
-            return $this->send(null,'账单唯一标识错误', 0, 403,null,alertMsgEnum::workerTasktimeListFailed);
+            return $this->send(null,'账单唯一标识错误！', 0, 403,null,alertMsgEnum::workerTasktimeListFailed);
         }
         try{
             if(FinanceSettleApplySearch::workerConfirmSettlement(intval($param['settle_id']))){
