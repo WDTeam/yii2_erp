@@ -67,7 +67,6 @@ class WorkerTaskController extends BaseAuthController
     public function actionCreate()
     {
         $model = new WorkerTask;
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {

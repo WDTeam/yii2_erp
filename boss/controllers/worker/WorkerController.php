@@ -205,7 +205,7 @@ class WorkerController extends BaseAuthController
             $workerAuthModel->save();
             $workerParam = Yii::$app->request->post('Worker');
 
-            Worker::addWorkerBasicInfoToRedis($workerModel->id,$workerModel->worker_phone,$workerModel->worker_type);
+            Worker::addWorkerInfoToRedis($workerModel->id,$workerModel->worker_phone,$workerModel->worker_type);
             if($workerParam['worker_district']){
                 foreach($workerParam['worker_district'] as $val){
                     $workerDistrictModel = new WorkerDistrict;
@@ -712,7 +712,7 @@ class WorkerController extends BaseAuthController
                 $batchWorkerDevice[] = $workerDeviceArr;
                 $batchWorkerStat[] = $workerStatArr;
                 $batchWorkerAuth[] = $workerAuthArr;
-                Worker::addWorkerBasicInfoToRedis($workerArr['id'],$workerArr['worker_phone'],$workerArr['worker_type']);
+                Worker::addWorkerInfoToRedis($workerArr['id'],$workerArr['worker_phone'],$workerArr['worker_type']);
             }
 
             $workerColumns = array_keys($workerArr);
@@ -736,12 +736,14 @@ class WorkerController extends BaseAuthController
 
     public function actionTest(){
         echo '<pre>';
-        echo date('Y-m-d H:i',1446253200);
+        echo '星期1 8:00 10:00';
+        //echo date('Y-m-d H:i',1446253200);
         echo '<br>';
-        echo date('Y-m-d H:i',1446264000);
-        Worker::operateWorkerOrderInfoToRedis(19076,1,113,3,1446249600,1446253200);
-        $a = Worker::getDistrictFreeWorker(1,1,1446253200,1446264000);
-        print_r($a);
+        //echo date('Y-m-d H:i',1446264000);
+        $a = Worker::getDistrictCycleFreeWorker(1,1,[['week'=>1,'orderBookBeginTime'=>'8:00','orderBookEndTime'=>'10:00']]);
+        var_dump($a);die;
+//        $a = Worker::getDistrictFreeWorker(1,1,1446253200,1446264000);
+//        print_r($a);
         //$a = Worker::operateWorkerOrderInfoToRedis(1,1,1,2,1446434010,1446434010);
         die;
 //        $a = json_decode('{"1":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"2":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"3":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"4":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","16:00","17:00","20:00","21:00","22:00"],"5":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"6":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"7":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"]}',1);

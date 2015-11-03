@@ -29,7 +29,19 @@ namespace dbbase\models\operation;
  */
 class OperationServiceCardSellRecord extends \yii\db\ActiveRecord
 {
-
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['customer_id', 'customer_phone', 'service_card_info_id', 'service_card_sell_record_channel_id', 'service_card_sell_record_status', 'customer_trans_record_pay_mode', 'pay_channel_id', 'customer_trans_record_pay_account', 'customer_trans_record_paid_at', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['service_card_sell_record_money', 'customer_trans_record_pay_money'], 'number'],
+            [['service_card_sell_record_code'], 'string', 'max' => 20],
+            [['service_card_info_name', 'service_card_sell_record_channel_name', 'customer_trans_record_pay_channel'], 'string', 'max' => 64],
+            [['customer_trans_record_transaction_id'], 'string', 'max' => 255]
+        ];
+    }
     /**
      * @inheritdoc
      */
@@ -47,5 +59,16 @@ class OperationServiceCardSellRecord extends \yii\db\ActiveRecord
             return true;
         }
         return false;
+    }
+
+    /**
+     * @introduction 基于购卡订单号更记录
+     */
+    public function updateByCode($code){
+       // $this->update()->where(['service_card_sell_record_code'=>$code]);
+        $this->updateAll(['customer_trans_record_pay_money'],'service_card_sell_record_code=:service_card_sell_record_code',
+            [':service_card_sell_record_code'=>$code]);
+
+
     }
 }

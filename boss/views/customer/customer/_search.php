@@ -20,6 +20,7 @@ use core\models\customer\Customer;
  * @var boss\models\Customer $model
  * @var yii\widgets\ActiveForm $form
  */
+//defined customer vip types
 ?>
 
 <div class="customer-search">
@@ -74,7 +75,7 @@ use core\models\customer\Customer;
         <?php echo $form->field($model, 'customer_is_vip')->widget(Select2::classname(), [
             'name' => 'customer_is_vip',
             'hideSearch' => true,
-            'data' => [1 => '会员', 0 => '非会员'],
+            'data' => [-1=>'全部', 1 => '会员', 0 => '非会员'],
             'options' => ['placeholder' => '选择客户身份', 'inline' => true],
             'pluginOptions' => [
                 'allowClear' => true

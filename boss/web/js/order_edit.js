@@ -24,14 +24,26 @@ $(document).ready(function(){
 		$(".customer-info-view").hide();
 		$(".customer-info-edit").show();
 	});
-	
+
 	$(".btn-cancel-customer-info").click(function(){
 		$(".customer-info-view").show();
 		$(".customer-info-edit").hide();
 	});
 
+	//显示编辑
+	$(".address-edit-btn").on('click',function(){
+		$(".address-save-btn").show();
+		$(".address-edit-btn").hide();
+	});
+
+	//显示文本
+	$(".btn_cancel_address-info").on('click',function(){
+		$(".address-info-view").show();
+		$(".address-info-edit").hide();
+	});
+
 	//保存用户需求
-	$(".order_edit_save").on('click',function(){
+	$(".order_customer_need_save").on('click',function(){
 		//获取数据
 		var id = $("input[name='Order[id]']").val();
 		var order_customer_memo = $("input[name='Order[order_customer_memo]']").val();
@@ -60,5 +72,52 @@ $(document).ready(function(){
 			}
 		},'json');
 
+	});
+
+
+	//保存服务信息
+	$(".order_service_info_save").on('click',function()
+	{
+		var order_booked_begin_time = $("input[name='Order[orderBookedDate]']").val();
+		var order_booked_time_range = $("input[name='Order[orderBookedTimeRange]']:checked").val();
+		var id = $("input[name='Order[id]']").val();
+		//发送数据
+		var url = '/order/order/modify';
+		var data = {
+			'id':id,
+			'order_booked_begin_time':order_booked_begin_time,
+			'order_booked_time_range':order_booked_time_range,
+		};
+		$.post(url,data,function(json){
+			if(json.status == 1){
+				$(".service-info-view").show();
+				$(".service-info-edit").hide();
+				//order_booked_begin_time:2015-11-20
+				//order_booked_time_range:20:00-22:00
+				var html = order_booked_begin_time +' '+ order_booked_time_range.split('-')[0];
+				html += '~';
+				html += order_booked_begin_time +' '+ order_booked_time_range.split('-')[1];
+				console.log(html)
+				$(".service_time_html").html(html);
+			}
+		},'json');
+	});
+
+	//保存地址信息
+	$(".address-save-btn").on("click",function(){
+		var address_id = $("input[name='Order[address_id]']:checked").val();
+		var id = $("input[name='Order[id]']").val();
+		//发送数据
+		var url = '/order/order/modify';
+		var data = {
+			'id':id,
+			'address_id':address_id,
+		};
+		$.post(url,data,function(json){
+			if(json.status == 1){
+				$(".address-save-btn").hide();
+				$(".address-edit-btn").show();
+			}
+		},'json');
 	});
 });
