@@ -1370,7 +1370,11 @@ class OrderController extends \restapi\components\Controller
      */
     public function actionCancelOrder()
     {
-        $param = json_decode(Yii::$app->request->getRawBody(), true);
+        $param = Yii::$app->request->post();
+        
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
 
         if (!isset($param['access_token']) || !$param['access_token'] || !isset($param['order_id']) || !$param['order_id']) {
             return $this->send(null, "验证码或订单号不能为空", 0, 403);
@@ -1399,7 +1403,7 @@ class OrderController extends \restapi\components\Controller
             $orderValidation = Order::validationOrderCustomer($customer->id, $orderId);
 
             if ($orderValidation) {
-                /**
+                /** 
                  * $order_id订单号
                  * $amdin_id管理员id,没有请填写0
                  * $param['order_cancel_reason'] 取消原因
@@ -1993,7 +1997,11 @@ class OrderController extends \restapi\components\Controller
      */
     public function actionSetWorkerOrder()
     {
-        $param = json_decode(Yii::$app->request->getRawBody(), true);
+        $param = Yii::$app->request->post();
+        
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
 
         if (empty($param['order_id']) || !WorkerAccessToken::getWorker($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
