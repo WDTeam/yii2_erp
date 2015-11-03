@@ -18,9 +18,11 @@ function websocketConnect() {
             {
                 $('#start').html('开始自动派单');
                 $('#start').attr('disabled', true);
+                $('#connectStatus').html('<font color="#41A317">连接成功，</font><font color="#FF0000">自动派单已暂停！</font>');
             }else{
                 $('#start').attr('disabled', false);
                 $('#start').html('停止自动派单');
+                $('#connectStatus').html('<font color="#41A317">连接成功，自动派单已启动！</font>');
             }
         };
         websocket.onclose = function (evt) {
@@ -36,10 +38,10 @@ function websocketConnect() {
             var srv_continue = 1;
             var srv_suspend = 2;
             if( msg == srv_continue){
-                $('#connectStatus').html('服务已继续...');
+                $('#connectStatus').html('<font color="#41A317">连接成功，自动派单已启动！</font>');
             }else if(msg == srv_suspend)
             {
-                $('#connectStatus').html('服务已暂停...');
+                $('#connectStatus').html('<font color="#41A317">连接成功，</font><font color="#FF0000">自动派单已暂停！</font>');
             }else if(msg == "Assign Server is OK"){
 
             }else{
