@@ -67,10 +67,12 @@ class CustomerCommentTagController extends Controller
 
         if ($model->load(Yii::$app->request->post()) ) {
         	$date=Yii::$app->request->post();
-        	
-        	//CustomerCommentTag[customer_comment_level_es][]
-        
-        	
+        	if($date['CustomerCommentTag']['customer_comment_level']==1 || $date['CustomerCommentTag']['customer_comment_level']==2){
+        	if($date['CustomerCommentTag']['customer_tag_name']==''){
+        		\Yii::$app->getSession()->setFlash('default','请填写评价标签名称！');
+        		return $this->redirect(['index']);
+        	}		
+        	}
         	if($date['CustomerCommentTag']['customer_tag_name']){	
         	$dataname=explode('|',$date['CustomerCommentTag']['customer_tag_name']);
         	}else{
@@ -80,8 +82,6 @@ class CustomerCommentTagController extends Controller
         		$dataname[]=$rty['1'][$tyuyyu];
         	}	
         	}
-
-        	
         	
         	$model = new CustomerCommentTag;
         	foreach ($dataname as $datatagname){

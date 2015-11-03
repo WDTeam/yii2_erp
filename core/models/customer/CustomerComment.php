@@ -139,6 +139,17 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
                 $customerComment->save();
                 // var_dump($customerComment->errors);
                 $transaction->commit();
+                
+                
+                //增加使用次数
+                $array['customer_comment_tag_ids'];
+                foreach (){
+                	
+                	
+                	
+                }
+                
+                
 				//通知订单 ，改变订单状态
 				if(!isset($array['adminid'])){$array['adminid']=0;}
                 Order::customerAcceptDone($array['order_id'],$array['adminid']); 
