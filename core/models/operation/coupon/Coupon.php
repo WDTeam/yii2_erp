@@ -286,7 +286,7 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
 	/**
      * define relation of customer for coupon
 	 */
-	public static function getCouponCustomerRelation(){
+	public function getCouponCustomerRelation(){
 		return $this->hasMany(CouponCustomer::className(), ['coupon_id' => 'id']);
 	}
 
@@ -351,6 +351,61 @@ class Coupon extends \dbbase\models\operation\coupon\Coupon
 		}
 		$couponCustomer->save();
 		return ['response'=>'success', 'errcode'=>0, 'errmsg'=>''];
+	}
+
+	/***********************************coupon code properties*******************************************/
+	/**
+     * check whether the coupon code is able to be binded
+     */
+	public static function isBinded($coupon_code){
+		$couponCustomer = CouponCustomer::find()->where(['coupon_code'=>$coupon_code])->one();
+		if($couponCustomer === NULL) {
+			return false;
+		}else{
+			return true;
+		}
+	}
+
+	/**
+     * check whether the coupon code is expirated
+	 */
+	public static function isExpirated($coupon_code){
+		$coupon_code = (new \yii\db\Query())
+			->select(['cc.coupon_id as coupon_id', 'cc.id as coupon_code_id', 'c.coupon_name', 'c.coupon_price', 'cc.coupon_code', 'c.coupon_time_type', 'c.coupon_begin_at', 'c.coupon_end_at', 'c.coupon_get_end_at', 'c.coupon_use_end_days'])
+			->from(['cc'=>'{{%coupon_code}}'])
+			->leftJoin(['c'=>'{{%coupon}}'], 'c.id = cc.coupon_id')
+			->where(['cc.coupon_code'=>$coupon_code])
+			->one();
+		$is_expirated = true;
+		switch ($coupon_code['coupon_time_type'])
+		{
+			case 0:
+				if(coupon_code['coupon_end_at'] < time()){
+					$is_expirated = true;
+				}else{
+					$is_expirated = false;
+				}
+			break;
+			case 1:
+				if(coupon_code['coupon_end_at'] < time()){
+					$is_expirated = true;
+				}else{
+					$is_expirated = false;
+				}
+			break;
+			
+		
+			default:
+				# code...
+			break;
+		}
+	}
+
+	/**
+     * coupon generated only one bundle for customer by phone
+	 */
+	public static function bindByPhone($coupon_code, $phone){
+		
 	}
 
 
