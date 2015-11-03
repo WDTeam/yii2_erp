@@ -46,6 +46,8 @@ class m151007_153202_create_table_order extends Migration
             'district_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'商圈ID\'',
             'address_id' => Schema::TYPE_INTEGER.'(10) unsigned NOT NULL DEFAULT 0 COMMENT \'地址ID\'',
             'order_address'=>Schema::TYPE_STRING.'(255) NOT NULL DEFAULT \'\' COMMENT \'详细地址 包括 联系人 手机号\'',
+            'order_lat' => Schema::TYPE_DOUBLE.' DEFAULT NULL COMMENT \'纬度\'',
+            'order_lng' => Schema::TYPE_DOUBLE.' DEFAULT NULL COMMENT \'经度\'',
             'order_booked_worker_id' => Schema::TYPE_INTEGER.'(10) unsigned DEFAULT 0 COMMENT \'指定阿姨\'',
 
 //===========================对账信息

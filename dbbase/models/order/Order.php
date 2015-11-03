@@ -31,6 +31,8 @@ use dbbase\models\ActiveRecord;
  * @property string $order_booked_begin_time
  * @property string $order_booked_end_time
  * @property string $address_id
+ * @property string $order_lat
+ * @property string $order_lng
  * @property string $district_id
  * @property string $city_id
  * @property string $order_address
@@ -186,7 +188,7 @@ class Order extends ActiveRecord
         return [
             [['admin_id','order_service_type_id','order_service_item_id','order_src_id','order_booked_begin_time','address_id'],'required'],
             [['order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'isdel', 'order_service_type_id','order_service_item_id', 'order_src_id', 'channel_id', 'order_booked_begin_time', 'order_booked_end_time', 'city_id', 'address_id', 'district_id', 'order_booked_worker_id', 'checking_id','version'], 'integer'],
-            [['order_unit_money',  'order_booked_count','order_money'], 'number'],
+            [['order_unit_money',  'order_booked_count','order_money','order_lat','order_lng'], 'number'],
             [['order_code', 'order_channel_name', 'order_batch_code'], 'string', 'max' => 64],
             [['order_service_type_name','order_service_item_name', 'order_ip','order_src_name'], 'string', 'max' => 128],
             [['order_address', 'order_cs_memo','order_sys_memo'], 'string', 'max' => 255],
@@ -227,6 +229,8 @@ class Order extends ActiveRecord
             'address_id' => '地址ID',
             'district_id' => '商圈ID',
             'order_address' => '详细地址 包括 联系人 手机号',
+            'order_lat' => '纬度',
+            'order_lng' => '经度',
             'order_booked_worker_id' => '指定阿姨',
             'checking_id' => '对账id',
             'order_cs_memo' => '客服备注',
@@ -426,6 +430,8 @@ class Order extends ActiveRecord
                 'district_id' => $this->district_id,
                 'address_id' => $this->address_id,
                 'order_address' => $this->order_address,
+                'order_lat' => $this->order_lat,
+                'order_lng' => $this->order_lng,
                 'order_booked_worker_id' => $this->order_booked_worker_id,
                 'checking_id' => $this->checking_id,
                 'order_cs_memo' => $this->order_cs_memo,
