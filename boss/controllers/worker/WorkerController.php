@@ -739,7 +739,7 @@ class WorkerController extends BaseAuthController
         //echo date('Y-m-d H:i',1446253200);
         echo '<br>';
         //echo date('Y-m-d H:i',1446264000);
-        $a = Worker::getDistrictCycleFreeWorker(1,1,[['week'=>1,'orderBookBeginTime'=>'8:00','orderBookEndTime'=>'10:00']]);
+        $a = Worker::getWorkerStatInfo(19077);
         //$a = Worker::getWorkerBankInfo(19077);
         var_dump($a);die;
 //        $a = Worker::getDistrictFreeWorker(1,1,1446253200,1446264000);

@@ -390,6 +390,25 @@ class OrderResponseController extends BaseAuthController
     }
 
     /**
+     * 获取可以响应的次数
+     */
+    public function actionGetOrderResponseTimes()
+    {
+        $post = Yii::$app->request->post();
+        $order_id = $post['order_id'];
+
+        $result = OrderResponse::getResponseTimes($order_id);
+
+        if (isset($result['order_response_times']) && $result['order_response_times'] > 0) {
+            $info = ['code' => 201, 'data' => $result['order_response_times']];
+        } else {
+            $info = ['code' => 404, 'msg' => '暂无响应记录次数'];
+        }
+
+        return json_encode($info, JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
      * 获取订单响应的数据
      */
     public function actionGetOrderResponse()

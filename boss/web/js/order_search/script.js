@@ -93,12 +93,60 @@ $(document).ready(function($){
 
     //订单响应开始 -----------------------------------------------------------
 	$(".m_response").hDialog({ box:"#HBox4", width:800,height: 600});
+
 	$(".m_response").click(function(){
 		$(".xuanzhong").attr("checked","checked");
 		operating_order_id = $(this).parents('tr').find('input.order_id').val();
 
         //把上次添加的记录清除，重新添加
         $(".response_record").children("div").empty();
+        $(".response_times").children("div").empty();
+        //$(".response_times").children("div").prepend('<span>正在加载...</span>'); 
+
+        //获取响应记录
+		$.ajax({
+            type: "POST",
+            url:  "/order/order-response/get-order-response-times",
+            data: {
+                order_id: operating_order_id,
+            },
+            dataType:"json",
+            success: function (msg) {
+                if (msg.code == 201) {
+                    for (i = 3; i >= 1; i --) {
+                        $(".response_times").children("div").prepend(
+                                '<label class="mr10"> <input type="radio" name="radio_responsetimes" value="' + i + '" id=times_' + i + ' />' + i + '次' + '</label>'
+                        ); 
+                    }
+
+                    if (msg.data == 1) {
+                        $('#times_1').attr("disabled",true);
+                        $('#times_3').attr("disabled",true);
+                    }
+                    if (msg.data == 2) {
+                        $('#times_2').attr("disabled",true);
+                        $('#times_1').attr("disabled",true);
+                    }
+                    if (msg.data == 3) {
+                        $('#times_3').attr("disabled",true);
+                        $('#times_2').attr("disabled",true);
+                        $('#times_1').attr("disabled",true);
+                    }
+
+                } else {
+                    for (i = 3; i >= 1; i --) {
+                        $(".response_times").children("div").prepend(
+                                '<label class="mr10"> <input type="radio" name="radio_responsetimes" value="' + i + '" id=times_' + i + ' />' + i + '次' + '</label>'
+                        ); 
+                    }
+
+                    $('#times_3').attr("disabled",true);
+                    $('#times_2').attr("disabled",true);
+                }
+
+            }
+        });		
+
 
         //获取响应记录
 		$.ajax({
@@ -109,7 +157,7 @@ $(document).ready(function($){
             },
             dataType:"json",
             success: function (msg) {
-                if(msg.code == 201){
+                if (msg.code == 201) {
                     var len = msg.data.length;
                     for (i = 0; i < len; i ++) {
                         $(".response_record").children("div").prepend(
@@ -126,8 +174,8 @@ $(document).ready(function($){
                         ); 
                     }
 
-                }else{
-                    //alert(msg.msg);
+                } else {
+                    $(".response_record").children("div").prepend('<span>暂无记录</span>'); 
                 }
             }
         });		
