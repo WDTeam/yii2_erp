@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'finance_pop_order_msg',
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' =>'{view} {tagssign}',
+                'template' =>'{view} {tagssign} {tagbadyes}',
                 'buttons' => [
                 'update' => function ($url, $model) {
                                     return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance/finance-pop-order/view','id' => $model->id,'edit'=>'t']), [
@@ -72,6 +72,15 @@ $this->params['breadcrumbs'][] = $this->title;
 	'data-pjax' => '0'
 			];
 	return Html::a('<span class="glyphicon glyphicon-backward"></span>', Yii::$app->urlManager->createUrl(['finance/finance-pop-order/tagssign','id' => $model->id,'edit'=>'bak','oid'=>$model->finance_record_log_id]), $options);
+},'tagbadyes' => function ($url, $model, $key) {
+	$options = [
+	'title' => Yii::t('yii', '审核坏账'),
+	'aria-label' => Yii::t('yii', '审核坏账'),
+	'data-confirm' => Yii::t('kvgrid', '你确定要审核坏账吗?'),
+	'data-method' => 'post',
+	'data-pjax' => '0'
+			];
+	return Html::a('<span class="glyphicon glyphicon-info-sign"></span>', Yii::$app->urlManager->createUrl(['finance/finance-pop-order/tagssign','id' => $model->id,'edit'=>'bakinfodabyes','oid'=>$model->finance_record_log_id]), $options);
 }
                 ],
             ],

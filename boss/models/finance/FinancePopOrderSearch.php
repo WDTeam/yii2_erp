@@ -236,13 +236,23 @@ class FinancePopOrderSearch extends FinancePopOrder
     
     public static  function is_finance($date)
     {
+    	
+    	//['0'=>'未处理','1'=>'已处理','3'=>'坏 账','4'=>'已审核','5'=>'坏账已审核'],
     	if($date==0 || $date==""){
     		return '<font color="red">未处理</font>';
     	}elseif($date==1){
     		return '<font color="blue">已处理</font>';
     	}elseif ($date==3){
     		return '<font color="orange">坏 账</font>';
+    	}elseif ($date==4){
+    		return '<font color="orange">已审核</font>';
+    	}elseif ($date==5){
+    		return '<font color="orange">坏账已审核</font>';
     	}
+    	
+    	
+    	
+    	
     }
     
     public static  function is_orderstatus($id)
@@ -1488,13 +1498,7 @@ class FinancePopOrderSearch extends FinancePopOrder
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-        
-        
-		/* 
-        if (!($this->load($params) && $this->validate())) {
-            return $dataProvider;
-        } */
-
+       
         $query->orderBy(['id'=>SORT_DESC]);
         $query->andFilterWhere([
             'id' => $this->id,
@@ -1518,7 +1522,6 @@ class FinancePopOrderSearch extends FinancePopOrder
         	'finance_pop_order_pay_status_type' => $this->finance_pop_order_pay_status_type,
             'finance_pop_order_check_id' => $this->finance_pop_order_check_id,
             'finance_pop_order_finance_time' => $this->finance_pop_order_finance_time,
-            'create_time' => $this->create_time,
             'is_del' => $this->is_del,
         ]);
  
@@ -1529,10 +1532,7 @@ class FinancePopOrderSearch extends FinancePopOrder
             ->andFilterWhere(['like', 'finance_pop_order_order2', $this->finance_pop_order_order2])
             ->andFilterWhere(['like', 'finance_pop_order_channel_order', $this->finance_pop_order_channel_order])
             ->andFilterWhere(['>=', 'finance_order_channel_statuspayment', $this->finance_order_channel_statuspayment])
-            
             ->andFilterWhere(['<=', 'finance_order_channel_endpayment', $this->finance_order_channel_endpayment])
-            
-            
        		->andFilterWhere(['like', 'finance_pop_order_pay_title', $this->finance_pop_order_pay_title]);
 
         return $dataProvider;

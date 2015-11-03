@@ -5,6 +5,7 @@ use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
 use kartik\datecontrol\DateControl;
 use dbbase\models\finance\FinancePayChannel;
+use boss\models\finance\FinanceOrderChannelSearch;
 $model->finance_order_channel_is_lock=1;
 $model->is_del=0;
 /**
@@ -42,6 +43,13 @@ $model->is_del=0;
     		
 ]],
 
+     		'finance_order_channel_source'=>['type'=> Form::INPUT_RADIO_LIST, 'items'=>FinanceOrderChannelSearch::get_sourcedate(1,2),
+     		'options'=>[
+     		
+     		]],
+     		
+     		
+     		
      		'is_del'=>['type'=> Form::INPUT_RADIO_LIST, 'items'=>['1' => '开启', '2' => '关闭'],
      		'options'=>[
      		
