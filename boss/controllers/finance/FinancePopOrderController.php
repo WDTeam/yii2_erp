@@ -390,7 +390,7 @@ class FinancePopOrderController extends Controller
     	$searchModel->load(Yii::$app->request->getQueryParams());
     	$searchModel->is_del=0;
     	$dateinfo=Yii::$app->request->getQueryParams();
-    	if($dateinfo['FinancePopOrderSearch']['finance_pop_order_pay_status']){
+    	if(isset($dateinfo['FinancePopOrderSearch']['finance_pop_order_pay_status'])){
     		$searchModel->finance_pop_order_pay_status=$dateinfo['FinancePopOrderSearch']['finance_pop_order_pay_status'];
     	}else{
     		$searchModel->finance_pop_order_pay_status=[3,5];	
