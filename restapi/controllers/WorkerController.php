@@ -878,7 +878,7 @@ class WorkerController extends \restapi\components\Controller
         }
         try{
             if(FinanceSettleApplySearch::workerConfirmSettlement(intval($param['settle_id']))){
-                return $this->send(null,'账单确定d成功', 1, 200,null,alertMsgEnum::workerBillConfirmSuccess);
+                return $this->send(null,'账单确定成功', 1, 200,null,alertMsgEnum::workerBillConfirmSuccess);
             }
          }catch (\Exception $e) {
             return $this->send(null,$e->getMessage(), 1024, 403,null,alertMsgEnum::workerBillConfirmFailed);
@@ -944,7 +944,7 @@ class WorkerController extends \restapi\components\Controller
             "worker_photo" => $workerInfo['worker_photo'],
             "worker_identity_description" => $workerInfo['worker_identity_description'],//身份
             "worker_identity_id" => $workerInfo['worker_identity_id'],//身份类型
-            "worker_type_description" => $workerInfo["worker_type_description"],
+            "worker_type" => $workerInfo["worker_type"],
             'worker_star' => $workerInfo["worker_star"],
             "personal_skill" => WorkerSkill::getWorkerSkill($workerID),
         ];
