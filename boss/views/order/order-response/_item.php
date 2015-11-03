@@ -35,15 +35,15 @@ use dbbase\models\order\OrderStatusDict;
             	<td><?= date('Y-m-d H:i', $model->created_at) ?> 下单
             	</td>
             	<td>
-            		<p><a href="/order/order/edit?id=<?= Html::encode($model->id) ?>">查看订单</a></p>
-            		
-            		<?php if($model->orderExtStatus->order_status_dict_id != OrderStatusDict::ORDER_INIT):?>
-            		<p><a href="###" class="m_tousu">投诉</a></p>
-            		<?php endif;?>
+            		<p><a href="/order/order-response/edit?id=<?= Html::encode($model->id) ?>">查看订单</a></p>
             		<!-- <p><a href="###">发送短信</a></p> -->
             		
             		<?php if($model->orderExtStatus->order_status_dict_id != OrderStatusDict::ORDER_CANCEL):?>
             		<p><a href="###" class="m_quxiao">取消订单</a></p>
+            		<?php endif;?>
+            		
+            		<?php if($model->orderExtStatus->order_status_dict_id != OrderStatusDict::ORDER_INIT):?>
+            		<p><a href="###" class="m_response">响应</a></p>
             		<?php endif;?>
             	</td>
             </tr>

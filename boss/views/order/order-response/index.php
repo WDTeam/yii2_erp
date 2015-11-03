@@ -9,6 +9,7 @@ use kartik\widgets\ActiveForm;
 use boss\models\order\Order;
 use yii\base\Object;
 use core\models\order\OrderComplaint;
+use core\models\order\OrderResponse;
 use yii\helpers\Url;
 use boss\models\search\OrderSearch;
 
@@ -36,18 +37,20 @@ $this->params['breadcrumbs'][] = $this->title;
 		  <div class="box">
 		  	 <div class="conter"> 
 		  	 	 <div class="m_frist">
-		  	 	 	<!---------------------订单筛选条件-------------------->
+		  	 	 	<!-- ------------------订单筛选条件------------------ -->
                     <?php            
                     echo $this->render('_filter', ['searchModel' => $searchModel, 'statusList' => $statusList]);
                     ?>
 
-<!-- 排序，可开发票筛选，Excel导出稍后做
 
-				    <div class="m_from">
+				    <div class="m_from row">
 				    	<ul class="lis liss" id="list">
-				    		<li>按下单时间 ↑</li>
-				    		<li>按服务时间 ↑</li>
+				    		<li class="btn">按下单时间 ↑</li>
+				    		<li class="btn">按服务时间 ↑</li>
 				    	</ul>
+                    </div>
+<!-- 排序，可开发票筛选，Excel导出稍后做
+                    <div>
 				    	<h6><input type="checkbox" /><a href="javascript">可开发票</a></h6>
 				    	<p class="m_daoc"><a href="javascript:;">Excel导出</a></p>
 				    	<div class="clear"></div>
@@ -206,75 +209,93 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>
 		
 		
-		<!------------------投诉弹出层开始------------------>
-		<div id="HBox2" style="display: none;">
+		<!------------------响应弹出层开始------------------>
+		<div id="HBox4" style="display: none;">
 			<form action="" method="post" onsubmit="return false;">
-				<h1>投诉</h1>
+				<h1>响应</h1>
 				<ul class="list">
-					<li>
-						<strong>* 投诉详情</strong>
-						<div class="fl">
-                          <textarea id="complaint_detail" type="text" placeholder="" class="form-control"></textarea>	
-                         </div>
-					</li>
-					
-					<li class="m_queren" style="display:none;">
-					    <strong>投诉部门列表:</strong>
-						<div class="fl">
-							<input type="submit" value="新增" class="submitBtntt m_add" />
-							<input type="submit" value="提交" class="submitBtntt m_submit" />
-                         </div>
-					</li>
 					
 					<li class="radioLi">
-						<strong>* 投诉部门</strong>
+						<strong>* 响应次数</strong>
 						<div class="fl jsRadio">
     						<?php
-    						  $i = 0;
-    						  foreach (OrderComplaint::Department() as $key => $value)
-    						  {
-    						      if ($i == 0)
-    						          echo '<label class="mr10"><input type="radio" class="xuanzhong" name="radio_department" value="'.$key.'"/>'.$value.'</label>';
-    						      else
-    						          echo '<label class="mr10"><input type="radio" name="radio_department" value="'.$key.'"/>'.$value.'</label>';
-    						      $i++;
-    						  }    						  
+                                foreach (OrderResponse::ResponseTimes() as $key => $value)
+                                {
+                                    echo '<label class="mr10"><input type="radio" name="radio_responsetimes" value="'.$key.'"/>'.$value.'</label>';
+                                }    						  
     						?>
 						</div>
 					</li>
+
 					<li class="m_disd">
-						<strong>* 投诉类型</strong>
-						
-						<?php 
-						  $i = 0;
-						  foreach (OrderComplaint::ComplaintTypes() as $key => $value)
-						  {
-						      if ($i == 0)
-						          echo '<div class="fl js_radio_tab">';
-						      else
-						          echo '<div class="fl js_radio_tab" style="display: none;">';
-						      foreach ($value as $type_id => $type_name)
-						      {
-						          echo '<label class="mr11"><input type="radio" name="radio_complaint_type" value="'.$type_id.'"/>'.$type_name.'</label>';
-						      }
-						      echo '</div>';
-						      $i++;
-						  }
-						?>						
-					</li>
-					<li class="m_disd">
-						<strong>* 投诉级别</strong>
-						<div class="fl">
-    						<?php 
-    						  $i = 0;
-    						  foreach (OrderComplaint::ComplaintLevel() as $key => $value)
-    						  {
-   						          echo '<label class="mr11"><input type="radio" checked="checked" name="radio_complaint_level" value="'.$key.'" />'.$value.'</label>';
-    						  }
-    						?>						
+						<strong>* 接听结果</strong>
+						<div class="fl jsRadio">
+    						<?php
+                                foreach (OrderResponse::ReplyResult() as $key => $value)
+                                {
+                                    echo '<label class="mr10"><input type="radio" name="radio_replyresult" value="'.$key.'"/>'.$value.'</label>';
+                                }    						  
+    						?>
 						</div>
 					</li>
-					<li class="m_disd"><input type="submit" value="保存" class="submitBtn" />
+
+					<li class="m_disd">
+						<strong>* 是否响应</strong>
+						<div class="fl jsRadio">
+    						<?php
+                                foreach (OrderResponse::ResponseOrNot() as $key => $value)
+                                {
+                                    echo '<label class="mr10"><input type="radio" name="radio_responseornot" class="radio_responseornot" value="'.$key.'"/>'.$value.'</label>';
+                                }    						  
+    						?>
+						</div>
+					</li>
+
+					<li class="m_disd" id="responseresult_show" style="display:none;">
+						<strong>* 响应结果</strong>
+						<div class="fl jsRadio">
+    						<?php
+                                foreach (OrderResponse::ResponseResult() as $key => $value)
+                                {
+                                    echo '<label class="mr10"><input type="radio" name="radio_responseresult" value="'.$key.'"/>'.$value.'</label>';
+                                }    						  
+    						?>
+						</div>
+					</li>
+
+					<li class="m_disd">
+						<strong>* 响应记录</strong>
+						<div class="fl">
+                           <table cellspacing="0" cellpadding="0">
+                              <tr>
+                                 <th>时间</th>
+                                 <th>操作人</th>
+                                 <th>响应次数</th>  
+                                 <th>接听结果</th>
+                                 <th>是否响应</th>
+                                 <th>响应结果</th>
+                             </tr>
+                             <tr>
+                                <?php
+                                //print_r($dataProvider->order_code);
+                                //print_r($dataProvider);
+                                $a = OrderResponse::getResponseRecord();
+                                //echo '<pre>';
+                                //print_r($a);
+                                    //foreach (OrderResponse::ResponseResult() as $key => $value)
+                                    //{
+                                        //echo '<label class="mr10"><input type="radio" name="radio_responseresult" value="'.$key.'"/>'.$value.'</label>';
+                                    //}    						  
+                                    //for ($i = 0; $i < 6; $i ++) {
+                                        //echo '<td class="mr10">aaaaaaaaaaaaa'.$i.'</td>';
+                                    //}
+                                ?>
+                            </tr>
+                            </table>
+						</div>
+					</li>
+
+					<li class="m_disd"><input type="submit" value="确定" class="responseSubmitBtn" />
 					</li>
 				</ul>
 			</form>

@@ -16,6 +16,7 @@ use core\models\customer\Customer;
 use core\models\order\OrderStatusHistory;
 use core\models\shop\Shop;
 use core\models\system\SystemUser;
+use core\models\order\OrderResponse;
 
 use dbbase\models\order\OrderExtPay;
 use dbbase\models\order\OrderStatusDict;
@@ -320,21 +321,26 @@ class OrderResponseController extends BaseAuthController
      */
     public function actionIndex()
     {        
+        //作为条件的订单状态,如果要显示新增的,在下面数组里添加
+        $status = [
+            //未完成人工指派
+            OrderStatusDict::ORDER_MANUAL_ASSIGN_UNDONE,
+        ];
+
         $searchParas = Yii::$app->request->getQueryParams();
         
+        //如果没有传订单类型,则显示所有异常订单
+        if (!isset($searchParas['OrderSearch']) || 
+            !isset($searchParas['OrderSearch']['order_status_dict_id']) || 
+            !in_array($searchParas['OrderSearch']['order_status_dict_id'], $status)) {
+            $searchParas['OrderSearch']['order_status_dict_id'] = $status;
+        }
+
         $searchModel = new OrderSearch; 
         $dataProvider = $searchModel->search($searchParas);
 
         $orderModel = new Order; 
 
-        //作为条件的订单状态
-        $status = [
-            //未完成人工指派
-            OrderStatusDict::ORDER_MANUAL_ASSIGN_UNDONE,
-
-            //未完成智能指派 待人工指派
-            OrderStatusDict::ORDER_SYS_ASSIGN_UNDONE,
-        ];
         $statusList = $orderModel->getStatusList($status); 
 
         return $this->render('index', [
@@ -343,6 +349,24 @@ class OrderResponseController extends BaseAuthController
             'searchParas' => $searchParas,
             'statusList' => $statusList,
         ]);
+    }
+
+    /**
+     * 保存订单响应的数据
+     */
+    public function actionSaveOrderResponse()
+    {
+        $post = Yii::$app->request->post();
+        $post['order_operation_user'] = Yii::$app->user->identity->username;
+
+        $result = OrderResponse::saveOrderResponse($post);
+
+        if ($result) {
+            $info = ['code' => 201, 'msg' => '设置成功'];
+        } else {
+            $info = ['code' => 304, 'msg' => '设置失败'];
+        }
+        return json_encode($info, JSON_UNESCAPED_UNICODE);
     }
     
     /**

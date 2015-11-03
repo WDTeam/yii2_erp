@@ -68,7 +68,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-3">用户地址</label>
-                    <div class="col-sm-6 right-text"><?= Html::encode($model->order_address) ?></div>
+                    <div class="col-sm-6 right-text">
+                        <?= Html::encode($model->order_address) ?>
+                    </div>
+                    <div class="col-sm-4 right-text">
+                        <a class="btn">编辑</a>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-3">服务类型</label>
