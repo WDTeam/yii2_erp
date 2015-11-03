@@ -981,6 +981,7 @@ class Worker extends \dbbase\models\worker\Worker
     public static function getDistrictFreeWorker($district_id,$worker_type=1,$orderBookBeginTime,$orderBookEndTime){
 
         $districtWorkerResult = self::getDistrictAllWorker($district_id);
+
         $orderBookTime = self::generateTimeUnit($orderBookBeginTime,$orderBookEndTime);
 
         foreach ($districtWorkerResult as $val) {
@@ -1056,12 +1057,13 @@ class Worker extends \dbbase\models\worker\Worker
                     for($i=1;$i<=4;$i++){
                         //获取周期表中选中星期的时间戳
                         $time = $weekTimeArr[$t_val['week']]+$i*7*24*3600;
-                        //获取选中星期那天的所有可用的时间 ['8:00','8:30','9:00','9:30','10:00','10:30']
+                        //根据排班表获取所有可用的时间 ['8:00','8:30','9:00','9:30','10:00','10:30'，...]
                         $workerEnabledTime = self::getWorkerEnabledTimeFromSchedule($time,$schedule);
                         if(array_diff($orderBookTime,$workerEnabledTime)){
                             $workerIsDisble = 1;
                             break;
                         }
+                        //根据订单获取不可用时间 ['8:00','8:30','9:00','9:30']
                         $workerHaveBookedTime = self::getWorkerHaveBookedTimeFromOrder($time,$orderInfo);
                         if(array_intersect($orderBookTime,$workerHaveBookedTime)){
                             $workerIsDisble = 1;
