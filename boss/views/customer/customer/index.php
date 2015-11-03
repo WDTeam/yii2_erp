@@ -23,6 +23,8 @@ use core\models\customer\CustomerWorker;
 use core\models\customer\CustomerExtBalance;
 use core\models\customer\CustomerExtScore;
 use core\models\customer\CustomerExtSrc;
+use core\models\customer\CustomerComment;
+use core\models\order\OrderComplaint;
 
 /**
  * @var yii\web\View $this
@@ -107,25 +109,6 @@ $this->params['breadcrumbs'][] = $this->title;
             // ],
             [
                 'format' => 'raw',
-                'label' => '状态',
-                'value' => function ($dataProvider) {
-                    $currentBlockStatus = \core\models\customer\CustomerBlockLog::getCurrentBlockStatus($dataProvider->id);
-                    return $currentBlockStatus['block_status_name'];
-                },
-                'width' => "80px",
-            ],
-            [
-                'format' => 'raw',
-                'label' => '封号原因',
-                'value' => function ($dataProvider) {
-                    $currentBlockReason = \core\models\customer\CustomerBlockLog::getCurrentBlockReason($dataProvider->id);
-                    return $currentBlockReason == false ? '-' : $currentBlockReason;
-                },
-                'width' => "80px",
-                'visible' => $is_del == 1 ? true : false,
-            ],
-            [
-                'format' => 'raw',
                 'label' => '电话',
                 'value' => function ($dataProvider) {
                     // return '<a href="/customer/' . $dataProvider->id . '">'.$dataProvider->customer_phone.'</a>';
@@ -151,6 +134,25 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $addressStr;
                 },
                 'width' => "300px",
+            ],
+			[
+                'format' => 'raw',
+                'label' => '状态',
+                'value' => function ($dataProvider) {
+                    $currentBlockStatus = \core\models\customer\CustomerBlockLog::getCurrentBlockStatus($dataProvider->id);
+                    return $currentBlockStatus['block_status_name'];
+                },
+                'width' => "80px",
+            ],
+            [
+                'format' => 'raw',
+                'label' => '封号原因',
+                'value' => function ($dataProvider) {
+                    $currentBlockReason = \core\models\customer\CustomerBlockLog::getCurrentBlockReason($dataProvider->id);
+                    return $currentBlockReason == false ? '-' : $currentBlockReason;
+                },
+                'width' => "80px",
+                'visible' => $is_del == 1 ? true : false,
             ],
             [
                 'format' => 'raw',
@@ -202,15 +204,38 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'width' => "80px",
             ],
-            //[
-            //    'format' => 'raw',
-            //    'label' => '投诉',
-            //    'value' => function ($dataProvider) {
-            //        return $dataProvider->customer_complaint_times;
-            //    },
-            //    'width' => "50px",
-            //],
-			'customer_complaint_times',
+            [
+                'format' => 'raw',
+                'label' => '投诉',
+                'value' => function ($dataProvider) {
+					$complaint_count = (new OrderComplaint)->getComplainNumsByPhone($dataProvider->customer_phone);
+					$complaint_count = $complaint_count == false ? 0 : $complaint_count;
+                    return Html::a('<i class="glyphicon">'.$complaint_count.'</i>', ['order/order-complaint', 'customer_id'=>$dataProvider->id]);
+                },
+                'width' => "50px",
+            ],
+			[
+                'format' => 'raw',
+                'label' => '评论',
+                'value' => function ($dataProvider) {
+					$comment_count = CustomerComment::getCustomerCommentCount($dataProvider->id);
+                    return Html::a('<i class="glyphicon">'.$comment_count.'</i>', ['customer/customer-comment', 'customer_id'=>$dataProvider->id]);
+                },
+                'width' => "50px",
+            ],
+			[
+                'format' => 'raw',
+                'label' => '积分',
+                'value' => function ($dataProvider) {
+                    $score_arr_info = Customer::getScoreById($dataProvider->id);
+					$score = 0;
+					if($score_arr_info['response'] == 'success'){
+						$score = $score_arr_info['score'];
+					}
+					return $score;
+                },
+                'width' => "50px",
+            ],
             [
                 'format' => 'datetime',
                 'label' => '创建时间',
