@@ -127,6 +127,8 @@ class Order extends OrderModel
      *  int $order_pop_order_money 第三方预付金额
      *  string $order_customer_need 客户需求
      *  string $order_customer_memo 客户备注
+     *  string $order_flag_sys_assign 是否系统指派
+     *  string $order_cs_memo 客服备注
      * ]
      * @return bool
      */
@@ -137,7 +139,7 @@ class Order extends OrderModel
             'order_booked_begin_time','order_booked_end_time','address_id',
             'customer_id','admin_id','order_pay_type',
             'coupon_id','order_is_use_balance','order_booked_worker_id','order_pop_order_code',
-            'order_pop_group_buy_code','order_pop_order_money','order_customer_need','order_customer_memo'
+            'order_pop_group_buy_code','order_pop_order_money','order_customer_need','order_customer_memo','order_cs_memo','order_flag_sys_assign'
         ];
         $attributes_required = [
             'order_ip','order_service_item_id','order_src_id','channel_id',
@@ -154,6 +156,10 @@ class Order extends OrderModel
                 $this->addError($v,Order::getAttributeLabel($v).'为必填项！');
                 return false;
             }
+        }
+        if(!in_array($attributes['order_pay_type'],[OrderExtPay::ORDER_PAY_TYPE_ON_LINE,OrderExtPay::ORDER_PAY_TYPE_OFF_LINE,OrderExtPay::ORDER_PAY_TYPE_POP])){
+            $this->addError('order_pay_type','支付方式错误！');
+            return false;
         }
         $attributes['order_parent_id'] = 0;
         $attributes['order_is_parent'] = 0;
@@ -210,6 +216,8 @@ class Order extends OrderModel
      *  string $order_booked_worker_id 指定阿姨id
      *  string $order_customer_need 客户需求
      *  string $order_customer_memo 客户备注
+     *  string $order_flag_sys_assign 是否系统指派
+     *  string $order_cs_memo 客服备注
      * ]
      * @param $booked_list [
      *      [
@@ -227,7 +235,7 @@ class Order extends OrderModel
             'order_ip','order_service_item_id','order_src_id','channel_id', 'address_id',
             'customer_id','admin_id','order_pay_type',
             'coupon_id','order_is_use_balance','order_booked_worker_id','order_pop_order_code',
-            'order_pop_group_buy_code','order_pop_order_money','order_customer_need','order_customer_memo'
+            'order_pop_group_buy_code','order_pop_order_money','order_customer_need','order_customer_memo','order_flag_sys_assign','order_cs_memo'
         ];
         $attributes_required = [
             'order_ip','order_service_item_id','order_src_id','channel_id', 'address_id', 'customer_id','admin_id','order_pay_type'

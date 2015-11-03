@@ -365,7 +365,8 @@ class OrderController extends BaseAuthController
             'order_is_use_balance' => 1,
             'order_booked_worker_id' => 1,
             'order_customer_need' => 'xxxxx',
-            'order_customer_memo' => 'fffff'
+            'order_customer_memo' => 'fffff',
+            'order_flag_sys_assign' => 0,
         ];
         $booked_list = [
             [
