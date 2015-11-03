@@ -30,9 +30,32 @@ $(document).ready(function($){
 	   }
      );	
 	
+	// 辅助函数，验证传入函数的字符串是否全为数字
+	function CheckDigit(str)
+	{
+		var letters="0123456789";
+		for(var i=0;i<str.length;i++)
+		{
+			if(letters.indexOf (str[i])==-1)
+				return false;
+		}
+		return true ;
+	}
+	
 	// 默认初始化对话框
 	var $el = $(".dialog");
 	$el.hDialog(); 
+	
+	// 输入条件校验
+//	$('.button-search').click(function(){
+//		var customerPhone = $('.input_customer_phone').val();
+//		
+//		if (CheckDigit(customerPhone) == false){
+//			$(this).hDialog({box:'#HBox_error'});
+//			return false;
+//		}
+//		return true;
+//	});
 	
 	// 取消订单
 	$(".m_quxiao").hDialog({width:600,height: 400});

@@ -136,8 +136,8 @@ class OrderController extends BaseAuthController
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $id = Yii::$app->request->get('id');
-        $service_id = Yii::$app->request->get('service_id');
-        return Coupon::getAbleCouponByCateId($id, $service_id);
+        $cate_id = Yii::$app->request->get('cate_id');
+        return Coupon::getAbleCouponByCateId($id, $cate_id);
     }
 
     public function actionCards($id)
