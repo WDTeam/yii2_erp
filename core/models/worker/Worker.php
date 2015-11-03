@@ -3,7 +3,6 @@
 namespace core\models\worker;
 
 
-use core\models\worker\WorkerSchedule;
 use dbbase\models\Help;
 use Symfony\Component\Console\Helper\Helper;
 use Yii;
@@ -24,6 +23,7 @@ use core\models\worker\WorkerIdentityConfig;
 use core\models\worker\WorkerRuleConfig;
 use core\models\worker\WorkerSkill;
 use core\models\worker\WorkerSkillConfig;
+use core\models\worker\WorkerSchedule;
 use core\models\customer\CustomerWorker;
 use core\models\operation\OperationShopDistrict;
 use core\models\operation\OperationCity;
@@ -141,6 +141,11 @@ class Worker extends \dbbase\models\worker\Worker
                 ->asArray()
                 ->one();
             if($workerStatResult){
+                if($workerStatResult['worker_stat_order_num']!==0){
+                    $workerStatResult['worker_stat_order_refuse_percent'] = Yii::$app->formatter->asPercent($workerStatResult['worker_stat_order_refuse']/$workerStatResult['worker_stat_order_num']);
+                }else{
+                    $workerStatResult['worker_stat_order_refuse_percent'] = '0%';
+                }
                 //获取阿姨服务过的用户数
                 $workerStatResult['worker_stat_server_customer'] = CustomerWorker::countWorkerServerAllCustomer($worker_id);
                 unset($workerStatResult['workerStatRelation']);
@@ -148,6 +153,26 @@ class Worker extends \dbbase\models\worker\Worker
             return $workerStatResult;
         }
     }
+
+    /**
+     * 批量获取阿姨银行信息
+     * @param int|array $worker_id
+     * @return array
+     */
+    public static function getWorkerBankListByIds($worker_id){
+        if(empty($worker_id)){
+            return [];
+        }else{
+            $condition['worker_id'] = $worker_id;
+            $workerBankInfo = WorkerExt::find()->where($condition)->select('worker_id,worker_bank_name,worker_bank_from,worker_bank_area,worker_bank_card')->asArray()->all();
+            if($workerBankInfo) {
+                return $workerBankInfo;
+            }else{
+                return [];
+            }
+        }
+    }
+
 
     /**
      * 通过电话获取阿姨信息
@@ -179,6 +204,8 @@ class Worker extends \dbbase\models\worker\Worker
         }
     }
 
+
+
     /**
      * 获取指定时间段内阿姨的未工作时间
      * @param $worker_id
@@ -201,6 +228,8 @@ class Worker extends \dbbase\models\worker\Worker
         $notWorkTime = $vacationTime;
         return $notWorkTime;
     }
+
+
 
     /**
      * 批量获取阿姨id
@@ -243,7 +272,6 @@ class Worker extends \dbbase\models\worker\Worker
     /**
      * 通过阿姨id批量获取阿姨详细信息
      * @param array $workerIdsArr 阿姨id数组
-     * @param string $field 返回字段
      * @return array|\yii\db\ActiveRecord[]
      */
     public static function getWorkerDetailListByIds($workerIdsArr){
@@ -292,6 +320,8 @@ class Worker extends \dbbase\models\worker\Worker
         }
 
     }
+
+
 
 
     /**
@@ -389,7 +419,7 @@ class Worker extends \dbbase\models\worker\Worker
         if($workerIdsArr){
             //指定阿姨
             if($worker_id){
-                //如果指定阿姨必须在该商圈中
+                //指定阿姨必须在该商圈中
                 if(in_array($worker_id,$workerIdsArr)){
                     $workerInfoArr = Yii::$app->redis->executeCommand('get',[self::WORKER.'_'.$worker_id]);
                     if($workerInfoArr){
@@ -878,6 +908,11 @@ class Worker extends \dbbase\models\worker\Worker
         return true;
     }
 
+    /**
+     * 更新阿姨排班表信息
+     * @param $worker_id
+     * @return bool
+     */
     public static function updateWorkerScheduleInfoToRedis($worker_id){
 
         if(empty($worker_id)){
@@ -912,7 +947,14 @@ class Worker extends \dbbase\models\worker\Worker
         return true;
     }
 
-    public static function addWorkerBasicInfoToRedis($worker_id,$worker_phone,$worker_type){
+    /**
+     * 添加阿姨信息到redis
+     * @param $worker_id
+     * @param $worker_phone
+     * @param $worker_type
+     * @return bool
+     */
+    public static function addWorkerInfoToRedis($worker_id,$worker_phone,$worker_type){
         if(empty($worker_id) || empty($worker_phone) || empty($worker_type)){
             return false;
         }
@@ -966,6 +1008,79 @@ class Worker extends \dbbase\models\worker\Worker
         $districtFreeWorker = self::getWorkerDetailListByIds($districtFreeWorkerIdsArr);
         return $districtFreeWorker;
     }
+
+    protected static function generateTimeParagraph($beginTime,$endTime){
+        $durationTime = ($endTime-$beginTime)/3600;
+        for($i=0;$i<$durationTime*2;$i++){
+            $TimeArr[] = date('G:i',strtotime('+'.(30*$i).' minute',$beginTime));
+        }
+        return $TimeArr;
+    }
+
+    /**
+     * 获取商圈中 周期内可用阿姨
+     * @param int $district_id 商圈id
+     * @param int $worker_type 阿姨类型 1自营2非自营
+     * @param array $orderBookTimeArr 待指派订单预约时间['week'=>1,'orderBookBeginTime'=>'8:00','orderBookEndTime'=>'9:00]
+
+     * @return array freeWorkerArr 所有可用阿姨列表
+     */
+    public static function getDistrictCycleFreeWorker($district_id,$worker_type=1,$orderBookTimeArr){
+        $timesArr = self::getDayTimes();
+
+        $districtWorkerResult = self::getDistrictAllWorker($district_id);
+
+        $time = strtotime(date('Y-m-d'));
+        //生成最近7天的星期对应时间戳数组 ['1'=>1490901111,'2'=>1490909811,....]
+        for($i=0;$i<7;$i++){
+            $week  = date('N',$time+$i*24*3600);
+            $weekTimeArr[$week] = $time+$i*24*3600;
+        }
+        $districtFreeWorkerIdsArr = [];
+
+        foreach ($districtWorkerResult as $val) {
+            $schedule = isset($val['schedule'])?$val['schedule']:[];
+            $orderInfo = isset($val['order'])?$val['order']:[];
+            if($val['info']['worker_type']==$worker_type){
+                $workerIsDisble = 0;
+                foreach ($orderBookTimeArr as $t_val) {
+                    /*
+                     * 根据时间段转换成最小时间单位
+                     * 转换前['8:00-10:00']
+                     * 转换后['8:00','8:30','9:00','9:30']
+                     */
+                    $beginKey = array_search($t_val['orderBookBeginTime'],$timesArr);
+                    $endKey = array_search($t_val['orderBookEndTime'],$timesArr);
+                    $orderBookTime = array_slice($timesArr,$beginKey,$endKey-$beginKey);
+
+                    for($i=1;$i<=4;$i++){
+                        //获取周期表中选中星期的时间戳
+                        $time = $weekTimeArr[$t_val['week']]+$i*7*24*3600;
+                        //获取选中星期那天的所有可用的时间 ['8:00','8:30','9:00','9:30','10:00','10:30']
+                        $workerEnabledTime = self::getWorkerEnabledTimeFromSchedule($time,$schedule);
+                        if(array_diff($orderBookTime,$workerEnabledTime)){
+                            $workerIsDisble = 1;
+                            break;
+                        }
+                        $workerHaveBookedTime = self::getWorkerHaveBookedTimeFromOrder($time,$orderInfo);
+                        if(array_intersect($orderBookTime,$workerHaveBookedTime)){
+                            $workerIsDisble = 1;
+                            break;
+                        }
+                    }
+                    if($workerIsDisble==1){
+                        break;
+                    }
+                }
+                if($workerIsDisble==0){
+                    $districtFreeWorkerIdsArr[] = $val['info']['worker_id'];
+                }
+            }
+        }
+        $districtFreeWorker = self::getWorkerDetailListByIds($districtFreeWorkerIdsArr);
+        return $districtFreeWorker;
+    }
+
 
     /**
      * 检查阿姨指定时间段 是否可用
