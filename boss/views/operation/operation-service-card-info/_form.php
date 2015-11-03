@@ -22,11 +22,11 @@ use kartik\datecontrol\DateControl;
     'attributes' => [
 'service_card_info_name'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 卡名...', 'maxlength'=>64]],	
 
-'service_card_info_card_type'=>['type'=> Form::INPUT_DROPDOWN_LIST, 'items'=>$config['type'], 'options'=>['placeholder'=>'Enter 卡类型...']], 
+'service_card_info_type'=>['type'=> Form::INPUT_DROPDOWN_LIST, 'items'=>$config['type'], 'options'=>['placeholder'=>'Enter 卡类型...']], 
 
-'service_card_info_card_level'=>['type'=> Form::INPUT_DROPDOWN_LIST, 'items'=>$config['level'], 'options'=>['placeholder'=>'Enter 卡级别...']], 
+'service_card_info_level'=>['type'=> Form::INPUT_DROPDOWN_LIST, 'items'=>$config['level'], 'options'=>['placeholder'=>'Enter 卡级别...']], 
 
-'service_card_info_use_scope'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 使用范围...']], 
+'service_card_info_scope'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 使用范围...']], 
 
 'service_card_info_valid_days'=>['type'=> Form::INPUT_TEXT, 'options'=>['placeholder'=>'Enter 有效时间(天)...']], 
 

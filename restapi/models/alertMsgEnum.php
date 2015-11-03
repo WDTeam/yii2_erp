@@ -138,6 +138,12 @@ class alertMsgEnum
     const workerLoginWrongPhoneNumber = '请输入正确手机号';
     //没有此阿姨
     const workerLoginNoWorker = '没有此阿姨，请联系客服';
+    //阿姨已在黑名单
+    const workerLoginIsBlackList = '阿姨已在黑名单';
+    //阿姨已离职
+    const workerLoginIsDimission = '阿姨已离职';
+    //阿姨已删除
+    const workerLoginIsDel = '阿姨已删除';
     
     //优惠码
     //优惠码或手机号不能为空

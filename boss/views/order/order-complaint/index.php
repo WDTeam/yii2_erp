@@ -85,14 +85,14 @@ $this->params['breadcrumbs'][] = $this->title;
 							</div>
 						    
 						    <div class="m_from">
-						    	<ul class="lis" id="list">
+						    	<!-- ul class="lis" id="list">
 						    		<p>投诉类型：</p>
 						    		<li <?php if(empty($params['OrderComplaintSearch']['complaint_type'])){?> class="cur" <?php }?>><a href="<?php echo "/order/order-complaint/index?{$url}&OrderComplaintSearch[complaint_type]=";?>">全部</a></li>
 						    		<?php if(!empty($comType)){
 						    		foreach ($comType as $keyt=>$valt){?>					    		
 						    		<li <?php if(!empty($params['OrderComplaintSearch']['complaint_type']) && $keyt == $params['OrderComplaintSearch']['complaint_type']){?>class="cur"<?php }?>><a href="<?php echo "/order/order-complaint/index?{$url}&OrderComplaintSearch[complaint_type]={$keyt}";?>"><?php echo $valt;?></a></li>
 						    		<?php }} ?>
-						    	</ul>
+						    	</ul -->
 						    	
 						    	<ul class="lis" id="list">
 						    		<p>投诉状态：</p>
@@ -121,7 +121,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						    	</ul>
 						    	<ul class="lis" id="list">
 						    		<p>投诉部门：</p>
-						    		<li <?php if(empty($params['OrderComplaintSearch']['complaint_section'])){?> class="cur" <?php }?>><a href="<?php echo "/order/order-complaint/index?OrderComplaintSearch[complaint_section]=0"?>">全部</a></li>
+						    		<li <?php if(empty($params['OrderComplaintSearch']['complaint_section'])){?> class="cur" <?php }?>><a href="<?php echo "/order/order-complaint/index?OrderComplaintSearch[complaint_section]="?>">全部</a></li>
 						    		<?php if(!empty($devpart)){
 						    		foreach ($devpart as $keyrt=>$valrt){?>
 						    		<li <?php if(!empty($params['OrderComplaintSearch']['complaint_section']) && $keyrt == $params['OrderComplaintSearch']['complaint_section']){?> class="cur" <?php }?>><a href="<?php echo "/order/order-complaint/index?{$url}&OrderComplaintSearch[complaint_section]={$keyrt}"?>"><?php echo $valrt;?></a></li>

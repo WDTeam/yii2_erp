@@ -216,14 +216,24 @@ class CustomerController extends Controller
     public function actionAddToBlock($id){
 
         $model = $this->findModel($id);
+		$customerBlockLogModel = new CustomerBlockLog;
         if(\Yii::$app->request->post()){
             $block_reason =\Yii::$app->request->post('customer_del_reason','');
             $is_added = CustomerBlockLog::addToBlock($id, $block_reason);
             if ($is_added) {
+				\Yii::$app->session->setFlash('default', '封号成功');
                 return $this->redirect(['index']);
             }else{
                 return $this->renderAjax('add-to-block',['model'=>$model]);
             }
+
+			//if($customerBlockLogModel->save()){
+			//	$model->is_del = 1;
+			//	$model->save();
+			//	return $this->redirect(['index']);
+			//}else{
+			//	return $this->renderAjax('add-to-block',['model'=>$model, 'customerBlockLogModel'=>$customerBlockLogModel]);
+			//}
         }
         return $this->renderAjax('add-to-block',['model'=>$model]);
     }
@@ -235,6 +245,11 @@ class CustomerController extends Controller
      */
     public function actionRemoveFromBlock($id){
         $is_removed = CustomerBlockLog::removeFromBlock($id);
+		if($is_removed){
+			\Yii::$app->session->setFlash('default', '解除封号成功');
+		}else{
+			\Yii::$app->session->setFlash('default', '解除封号失败');
+		}
         return $this->redirect(['index']);
     }
 
@@ -795,7 +810,9 @@ class CustomerController extends Controller
 		//var_dump($res);
 		//$res = \core\models\customer\CustomerAccessToken::checkSign('18519654001', md5('18519654001'.'pop_to_boss'), 25);
 		//var_dump($res);
-		$res = \core\models\customer\Customer::getAllRelationally();
+		//$res = \core\models\customer\Customer::getAllRelationally();
+		//$res = \core\models\customer\Customer::addCustomer('15623564857', 20);
+		$res = \core\models\customer\Customer::getWorkersByPhone('13436939482');
 		var_dump($res);
     }
 

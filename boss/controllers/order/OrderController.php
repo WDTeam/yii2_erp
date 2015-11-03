@@ -395,6 +395,7 @@ class OrderController extends BaseAuthController
      */
     public function actionEdit($id)
     {
+
         $model = Order::findById($id);
         $post = Yii::$app->request->post();
         $model['admin_id'] = Yii::$app->user->id;
@@ -427,8 +428,30 @@ class OrderController extends BaseAuthController
                 return $this->redirect(['edit', 'id' => $model->id]);
             }
         }
-        return $this->render('edit', ['model' => $model, 'history' => $history]);
+
+        return $this->render('edit', ['model' => $model,'history' => $history]);
     }
+
+    /**
+     * ajax编辑订单
+     * @return array
+     */
+    public function actionModify()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $attr = Yii::$app->request->post();
+        $order = OrderSearch::getOne($attr['id']);
+        if($order->modify($attr))
+        {
+            return ['status'=>1,'info'=>'修改成功'];
+        }
+        else
+        {
+            return ['status'=>0,'info'=>'修改失败'];
+        }
+
+    }
+
 
     /**
      * 订单指派页面
@@ -518,21 +541,7 @@ class OrderController extends BaseAuthController
         }
     }
 
-    public function actionModify()
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $attr = Yii::$app->request->post();
-        $order = OrderSearch::getOne($attr['id']);
-        if($order->modify($attr))
-        {
-            return ['status'=>1,'info'=>'修改成功'];
-        }
-        else
-        {
-            return ['status'=>0,'info'=>'修改失败'];
-        }
 
-    }
 
     /**
      * Deletes an existing Order model.

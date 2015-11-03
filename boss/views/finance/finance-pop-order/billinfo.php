@@ -34,32 +34,14 @@ $this->params['breadcrumbs'][] = $this->title;
         //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-     		
-           // 'id',
             'finance_pop_order_number',
-           // 'finance_order_channel_id',
             'finance_order_channel_title',
-          //  'finance_pay_channel_id',
-            //'finance_pay_channel_title', 
             'finance_pop_order_customer_tel', 
-      //      'finance_pop_order_worker_uid', 
             'finance_pop_order_booked_time:datetime', 
-          //  'finance_pop_order_booked_counttime:datetime', 
      		'finance_order_channel_statuspayment:datetime', 
      		'finance_order_channel_endpayment:datetime', 
            'finance_pop_order_sum_money', 
-           // 'finance_pop_order_coupon_count', 
-//            'finance_pop_order_coupon_id', 
-//            'finance_pop_order_order2', 
-         //  'finance_pop_order_channel_order', 
-//            'finance_pop_order_order_type', 
-//            'finance_pop_order_status', 
-          // 'finance_pop_order_finance_isok', 
-//            'finance_pop_order_discount_pay', 
             'finance_pop_order_reality_pay', 
-//            'finance_pop_order_order_time:datetime', 
-//            'finance_pop_order_pay_time:datetime', 
-
      		[
      		'format' => 'raw',
      		'label' => '财务审核',
@@ -69,8 +51,6 @@ $this->params['breadcrumbs'][] = $this->title;
      		},
      		'width' => "100px",
      		],
-            //'finance_pop_order_pay_title', 
-            
      		[
      		'format' => 'raw',
      		'label' => '对账状态',
@@ -83,23 +63,34 @@ $this->params['breadcrumbs'][] = $this->title;
      		'finance_pop_order_msg',
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' =>'{view} {tagssign}',
+                'template' =>'{view} {tagssign} {tagyes}',
                 'buttons' => [
                 'update' => function ($url, $model) {
                                     return Html::a('<span class="glyphicon glyphicon-pencil"></span>', Yii::$app->urlManager->createUrl(['finance/finance-pop-order/view','id' => $model->id,'edit'=>'t']), [
                                                     'title' => Yii::t('yii', 'Edit'),
                                                   ]);},
-'tagssign' => function ($url, $model, $key) {
-	$options = [
-	'title' => Yii::t('yii', '取消处理'),
-	'aria-label' => Yii::t('yii', '取消处理'),
-	'data-confirm' => Yii::t('kvgrid', '你确定要回滚处理吗?'),
-	'data-method' => 'post',
-	'data-pjax' => '0'
-			];
-	return Html::a('<span class="glyphicon glyphicon-backward"></span>', Yii::$app->urlManager->createUrl(['finance/finance-pop-order/tagssign','id' => $model->id,'edit'=>'bakinfo','oid'=>$model->finance_record_log_id]), $options);
-}
-
+                                                  
+					'tagssign' => function ($url, $model, $key) {
+						$options = [
+						'title' => Yii::t('yii', '取消处理'),
+						'aria-label' => Yii::t('yii', '取消处理'),
+						'data-confirm' => Yii::t('kvgrid', '你确定要回滚处理吗?'),
+						'data-method' => 'post',
+						'data-pjax' => '0'
+								];
+						return Html::a('<span class="glyphicon glyphicon-backward"></span>', Yii::$app->urlManager->createUrl(['finance/finance-pop-order/tagssign','id' => $model->id,'edit'=>'bakinfo','oid'=>$model->finance_record_log_id]), $options);
+					},
+					
+					'tagyes' => function ($url, $model, $key) {
+						$options = [
+						'title' => Yii::t('yii', '财务审核'),
+						'aria-label' => Yii::t('yii', '确定审核'),
+						'data-confirm' => Yii::t('kvgrid', '你确定要审核吗?'),
+						'data-method' => 'post',
+						'data-pjax' => '0'
+								];
+						return Html::a('<span class="glyphicon glyphicon-info-sign"></span>', Yii::$app->urlManager->createUrl(['finance/finance-pop-order/tagssign','id' => $model->id,'edit'=>'bakinfoyes','oid'=>$model->finance_record_log_id]), $options);
+					}
                 ],
             ],
         ],

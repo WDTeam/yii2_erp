@@ -14,7 +14,7 @@ use core\models\order\OrderSearch;
 		<div><p>城&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;市：</p></div>
 		<div>
 		<?php
-		  echo $this->render('_filteritem', ['filter_name' => 'city_id', 'items' => Order::getOnlineCityList(null)]);
+		  echo $this->render('_filteritem', ['filter_name' => 'city_id', 'items' => Order::getOnlineCityList()]);
         ?>
 		</div>
 		

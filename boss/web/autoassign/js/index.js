@@ -1,10 +1,4 @@
 $(document).ready(function(){
-    $('#stop').attr('disabled', true);
-    $('#reload').attr('disabled', true);
-    $('#update').attr('disabled', true);
-    $('#runService').hide();
-    
-    $('#qend').blur(function(){ $('#jstart').val( $('#qend').val());});
     $('#start').click(function(){execCommand(1);});
     $('#connect').click(function(){websocketConnect();});
     $('#connectStatus').html('正在连接派单服务器...');
@@ -24,9 +18,11 @@ function websocketConnect() {
             {
                 $('#start').html('开始自动派单');
                 $('#start').attr('disabled', true);
+                $('#connectStatus').html('<font color="#41A317">连接成功，</font><font color="#FF0000">自动派单已暂停！</font>');
             }else{
                 $('#start').attr('disabled', false);
                 $('#start').html('停止自动派单');
+                $('#connectStatus').html('<font color="#41A317">连接成功，自动派单已启动！</font>');
             }
         };
         websocket.onclose = function (evt) {
@@ -41,22 +37,11 @@ function websocketConnect() {
             var msg = $.parseJSON(evt.data);
             var srv_continue = 1;
             var srv_suspend = 2;
-            var srv_reload = 3;
-            var srv_update = 4;
-            //alert(msg=="Server-Continue");
             if( msg == srv_continue){
-                $('#connectStatus').html('服务已继续...');
-                $('#start').attr('disabled', true);
-                $('#stop').attr('disabled', false);
+                $('#connectStatus').html('<font color="#41A317">连接成功，自动派单已启动！</font>');
             }else if(msg == srv_suspend)
             {
-                $('#connectStatus').html('服务已暂停...');
-                $('#start').attr('disabled', false);
-                $('#stop').attr('disabled', true);
-            }else if(msg == srv_reload){
-                $('#connectStatus').html('服务重启中...');
-            }else if(msg == srv_update){
-                $('#connectStatus').html('配置已完成更新...');
+                $('#connectStatus').html('<font color="#41A317">连接成功，</font><font color="#FF0000">自动派单已暂停！</font>');
             }else if(msg == "Assign Server is OK"){
 
             }else{
@@ -124,6 +109,11 @@ function getStatus(status){
 }
 
 function execCommand(cmd){
-    var data = cmd +','+$('#qstart').val()+','+$('#qend').val()+','+$('#jstart').val()+','+$('#jend').val()+','+status;
+    var data = cmd ;
+    if($('#start').html() == '开始自动派单'){
+        $('#start').html('停止自动派单');
+    }else if($('#start').html() == '停止自动派单'){
+        $('#start').html('开始自动派单');
+    }
     websocket.send(data);
 }

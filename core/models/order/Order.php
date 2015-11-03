@@ -233,7 +233,7 @@ class Order extends OrderModel
             OrderStatus::_batchPayment($attributes['order_batch_code'],$attributes['admin_id']);
         }
         return ['status' => true, 'batch_code' => $attributes['order_batch_code']];
-    }
+    } 
 
     /**
      * 在线支付完后调用
@@ -707,8 +707,10 @@ class Order extends OrderModel
         {
             try {
                 $address = CustomerAddress::getAddress($attributes['address_id']);
+                $addressInfo = $address['operation_province_name'] . ',' . $address['operation_city_name'] . ',' . $address['operation_area_name'] . ',' . $address['customer_address_detail'] . ',' . $address['customer_address_nickname'] . ',' . $address['customer_address_phone']; //地址信息
                 $this->setAttributes([
-                    'address_id' => $address->id
+                    'address_id'=>$address['id'],
+                    'order_address'=>$addressInfo,
                 ]);
             } catch (Exception $e) {
                 $this->addError('order_address', '创建时获取地址异常！');
@@ -717,11 +719,36 @@ class Order extends OrderModel
         }
 
         //获取服务日期时间段是否可用
-        if( !empty($attributes['order_booked_worker_id']) && $attributes['order_booked_worker_id'] > 0 )
+        if( !empty($attributes['order_booked_begin_time']) && !empty($attributes['order_booked_time_range']) )
         {
-            //如果有阿姨信息
-            worker::checkWorkerTimeIsDisabled();
-            worker::getWorkerTimeLine();
+            $time = explode('-',$attributes['order_booked_time_range']);
+            $attr['order_booked_begin_time'] = strtotime($attributes['order_booked_begin_time'].' '.$time[0].':00');
+            $attr['order_booked_end_time'] = strtotime(($time[1]=='24:00')?date('Y-m-d H:i:s',strtotime($attributes['order_booked_begin_time'].'00:00:00 +1 days')):$attributes['order_booked_begin_time'].' '.$time[1].':00');
+            //判断订单已经指定阿姨,检测阿姨时间段是否可用
+            if( !empty($this->orderExtWorker->worker_id) ){
+                $checkWorkerTime = worker::checkWorkerTimeIsDisabled($this->district_id,$this->OrderExtWorker->worker_id,$attributes['order_booked_begin_time'],$attributes['order_booked_end_time']);
+                if(empty($checkWorkerTime))
+                {
+                    return false;
+                }
+            }
+
+            //设置参数
+            $this->setAttributes([
+                'order_booked_begin_time'=>$attr['order_booked_begin_time'],
+                'order_booked_end_time'=>$attr['order_booked_end_time'],
+            ]);
+
+            /**
+             * 获取阿姨时间排班表
+             * @param int $district_id 商圈id
+             * @param int $serverDurationTime 服务时长
+             * @param string $beginTime 排班表开始时间 默认今天
+             * @param int $timeLineLength 排班表长度 默认返回7天的排班表
+             * @param string $worker_id 阿姨id 通过阿姨id获取指定阿姨的排班表 默认返回所有阿姨排班表
+             * @return array
+             */
+            //worker::getWorkerTimeLine();
         }
         $this->setAttributes([
             'admin_id'=>Yii::$app->user->id

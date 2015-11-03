@@ -1,21 +1,23 @@
 <?php
 
 namespace boss\controllers\finance;
-error_reporting(E_ALL);
-use Yii;
-use dbbase\models\finance\FinanceSettleApply;
+
+use boss\components\BaseAuthController;
+
 use core\models\finance\FinanceSettleApplySearch;
 use core\models\finance\FinanceSettleApplyLogSearch;
-use boss\components\BaseAuthController;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use core\models\finance\FinanceWorkerOrderIncomeSearch;
 use core\models\finance\FinanceWorkerNonOrderIncomeSearch;
 use core\models\finance\FinanceShopSettleApplySearch;
 use core\models\worker\Worker;
-use yii\data\ArrayDataProvider;
+
 use PHPExcel;
 use PHPExcel_IOFactory;
+
+use Yii;
+use yii\filters\VerbFilter;
+use yii\data\ArrayDataProvider;
+use yii\web\NotFoundHttpException;
 
 
 /**
@@ -87,21 +89,21 @@ class FinanceSettleApplyController extends BaseAuthController
         //自营全职阿姨
         if($settle_type == FinanceSettleApplySearch::SELF_FULLTIME_WORKER_SETTELE){
             $searchModel->settleMonth = date('Y-m', strtotime('-1 month'));
-            $searchModel->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT;
+            $searchModel->finance_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_INIT;
             $searchModel->worker_type_id = 1;
             $searchModel->worker_identity_id = 1;
         }
         if($settle_type == FinanceSettleApplySearch::SELF_PARTTIME_WORKER_SETTELE){
-            $searchModel->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT;
+            $searchModel->finance_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_INIT;
             $searchModel->worker_type_id = 1;
             $searchModel->worker_identity_id = 2;
         }
         if($settle_type == FinanceSettleApplySearch::SHOP_WORKER_SETTELE){
-            $searchModel->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_INIT;
+            $searchModel->finance_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_INIT;
             $searchModel->worker_type_id = 2;
         }
         if($settle_type == FinanceSettleApplySearch::ALL_WORKER_SETTELE){
-            $searchModel->finance_settle_apply_status = FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED;
+            $searchModel->finance_settle_apply_status = FinanceSettleApplySearch::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_PASSED;
         }
         return $searchModel;
     }
@@ -348,7 +350,7 @@ class FinanceSettleApplyController extends BaseAuthController
      */
     public function actionCreate()
     {
-        $model = new FinanceSettleApply;
+        $model = new FinanceSettleApplySearch;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -388,7 +390,7 @@ class FinanceSettleApplyController extends BaseAuthController
      */
     protected function findModel($id)
     {
-        if (($model = FinanceSettleApply::findOne($id)) !== null) {
+        if (($model = FinanceSettleApplySearch::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -513,7 +515,7 @@ class FinanceSettleApplyController extends BaseAuthController
             $financeWorkerNonOrderIncomeArr = $financeWorkerNonOrderIncomeSearch->getTaskArrByWorkerId($workerId, null, null);
             $transaction =  Yii::$app->db->beginTransaction();
             try{
-                $existCount = FinanceSettleApply::find()->where(['worker_id'=>$financeSettleApplySearch->worker_id,'finance_settle_apply_starttime'=>$settleStartTime,'finance_settle_apply_endtime'=>$settleEndTime])->count();
+                $existCount = FinanceSettleApplySearch::find()->where(['worker_id'=>$financeSettleApplySearch->worker_id,'finance_settle_apply_starttime'=>$settleStartTime,'finance_settle_apply_endtime'=>$settleEndTime])->count();
                 if($existCount == 0){
                     if($financeSettleApplySearch->save()){
                         foreach($financeWorkerOrderIncomeArr as $financeWorkerOrderIncome){
