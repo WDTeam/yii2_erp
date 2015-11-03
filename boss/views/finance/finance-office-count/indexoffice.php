@@ -46,57 +46,57 @@ $this->params['breadcrumbs'][] = $this->title;
      		'format' => 'raw',
      		'label' => '订单号',
      		'value' =>function ($dataProvider) { return $dataProvider->order_code; },
-     		'options'=>[ 'style'=>'background:blue'],
+     		'options'=>[ 'style'=>'background:orange'],
      		],
      		[
      		'format' => 'raw',
      		'label' => '计划时长',
      		'value' =>function ($dataProvider) { return $dataProvider->order_booked_count; },
-     		'options'=>[ 'style'=>'background:red'],
+     		'options'=>[ 'style'=>'background:orange'],
      		],
      		[
      		'format' => 'raw',
      		'label' => '实际时长',
      		'value' =>function ($dataProvider) { return $dataProvider->order_booked_end_time; },
-     		'options'=>[ 'style'=>'background:red'],
+     		'options'=>[ 'style'=>'background:orange'],
      		],
      		[
      		'format' => 'raw',
      		'label' => '订单单价',
      		'value' =>function ($dataProvider) { return $dataProvider->order_unit_money; },
-     		'options'=>[ 'style'=>'background:red'],
+     		'options'=>[ 'style'=>'background:orange'],
      		],
      		[
      		'format' => 'raw',
      		'label' => '订单金额',
      		'value' =>function ($dataProvider) { return $dataProvider->order_money; },
-     		'options'=>[ 'style'=>'background:red'],
+     		'options'=>[ 'style'=>'background:orange'],
      		],
      		
      		[
      		'format' => 'raw',
      		'label' => '订单渠道',
      		'value' =>function ($dataProvider) { return $dataProvider->order_channel_name; },
-     		'options'=>[ 'style'=>'background:red'],
+     		'options'=>[ 'style'=>'background:pink'],
      		],
      		[
      		'format' => 'raw',
      		'label' => '支付渠道',
      		'value' =>function ($dataProvider) { return $dataProvider->order_pay_channel_name; },
-     		'options'=>[ 'style'=>'background:red'],
+     		'options'=>[ 'style'=>'background:pink'],
      		],
      		
      		[
      		'format' => 'raw',
      		'label' => '渠道营销费',
      		'value' =>function ($dataProvider) { return $dataProvider->order_pop_operation_money; },
-     		'options'=>[ 'style'=>'background:red'],
+     		'options'=>[ 'style'=>'background:pink'],
      		],
      		[
      		'format' => 'raw',
      		'label' => '手续费',
      		'value' =>function ($dataProvider) { return $dataProvider->order_pop_operation_money; },
-     		'options'=>[ 'style'=>'background:red'],
+     		'options'=>[ 'style'=>'background:pink'],
      		],
      		
      		
@@ -105,65 +105,65 @@ $this->params['breadcrumbs'][] = $this->title;
      		'format' => 'raw',
      		'label' => '订单渠道',
      		'value' =>function ($dataProvider) { return $dataProvider->order_channel_name; },
-     		'options'=>[ 'style'=>'background:red'],
+     		'options'=>[ 'style'=>'background:brown'],
      		],
      		
      		[
      		'format' => 'raw',
      		'label' => '支付渠道',
      		'value' =>function ($dataProvider) { return $dataProvider->order_pay_channel_name; },
-     		'options'=>[ 'style'=>'background:red'],
+     		'options'=>[ 'style'=>'background:brown'],
      		],
      		
      		[
      		'format' => 'raw',
      		'label' => '渠道营销费',
      		'value' =>function ($dataProvider) { return $dataProvider->order_pop_operation_money; },
-     		'options'=>[ 'style'=>'background:red'],
+     		'options'=>[ 'style'=>'background:brown'],
      		],
      		[
      		'format' => 'raw',
      		'label' => '抽成',
      		'value' =>function ($dataProvider) { return $dataProvider->order_pop_operation_money; },
-     		'options'=>[ 'style'=>'background:red'],
+     		'options'=>[ 'style'=>'background:brown'],
      		],
 
      		[
      		'format' => 'raw',
      		'label' => '对账状态',
      		'value' =>function ($dataProvider) { return '--'; },
-     		'options'=>[ 'style'=>'background:red'],
+     		'options'=>[ 'style'=>'background:palegreen'],
 			],
      		[
      		'format' => 'raw',
      		'label' => '应收款数',
      		'value' =>function ($dataProvider) { return '--'; },
-     		'options'=>[ 'style'=>'background:red'],
+     		'options'=>[ 'style'=>'background:palegreen'],
      		],
      		
      		[
      		'format' => 'raw',
      		'label' => '收款状态',
      		'value' =>function ($dataProvider) { return '--'; },
-     		'options'=>[ 'style'=>'background:red'],
+     		'options'=>[ 'style'=>'background:palegreen'],
      		],
      		[
      		'format' => 'raw',
      		'label' => '提款渠道',
      		'value' =>function ($dataProvider) { return '--'; },
-     		'options'=>[ 'style'=>'background:red'],
+     		'options'=>[ 'style'=>'background:palegreen'],
      		],
      		[
      		'format' => 'raw',
      		'label' => '提款金额',
      		'value' =>function ($dataProvider) { return '--'; },
-     		'options'=>[ 'style'=>'background:red'],
+     		'options'=>[ 'style'=>'background:palegreen'],
      		],
      		[
      		'format' => 'raw',
      		'label' => '结余',
      		'value' =>function ($dataProvider) { return '--'; },
-     		'options'=>[ 'style'=>'background:red'],
+     		'options'=>[ 'style'=>'background:palegreen'],
      		],
      		[
      		'format' => 'raw',
@@ -175,45 +175,45 @@ $this->params['breadcrumbs'][] = $this->title;
      		'format' => 'raw',
      		'label' => '代收代付阿姨结算金额',
      		'value' =>function ($dataProvider) { return '--'; },
-     		'options'=>[ 'style'=>'background:red'],
+     		'options'=>[ 'style'=>'background:seagreen'],
      		],
      		[
      		'format' => 'raw',
      		'label' => '公司抽佣',
      		'value' =>function ($dataProvider) { return '--'; },
-     		'options'=>[ 'style'=>'background:red'],
+     		'options'=>[ 'style'=>'background:seagreen'],
      		],
      		[
      		'format' => 'raw',
      		'label' => '代收代付退款金额',
      		'value' =>function ($dataProvider) { return '--'; },
-     		'options'=>[ 'style'=>'background:red'],
+     		'options'=>[ 'style'=>'background:seagreen'],
      		],
      		
      		[
      		'format' => 'raw',
      		'label' => '代收代付余额',
      		'value' =>function ($dataProvider) { return '--'; },
-     		'options'=>[ 'style'=>'background:red'],
+     		'options'=>[ 'style'=>'background:seagreen'],
      		],
      		[
      		'format' => 'raw',
      		'label' => '公司收款结算',
      		'value' =>function ($dataProvider) { return '--'; },
+     		'options'=>[ 'style'=>'background:rosybrown'],
      		],
      		[
      		'format' => 'raw',
      		'label' => '公司结算退款',
      		'value' =>function ($dataProvider) { return '--'; },
+     		'options'=>[ 'style'=>'background:rosybrown'],
      		],
      		[
      		'format' => 'raw',
      		'label' => '公司结算余额',
      		'value' =>function ($dataProvider) { return '--'; },
+     		'options'=>[ 'style'=>'background:rosybrown'],
      		],
-     		
-
-     		
      		
      		[
      		'attribute'=>'--',
