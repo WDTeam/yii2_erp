@@ -105,6 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'payment_customer_trans_record_total_money',
                 'label'=>'J:用户累计交易额',
+                //'options'=>[ 'style'=>'background:orange'],
             ],
 
             //'payment_customer_trans_record_remark',
