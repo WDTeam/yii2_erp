@@ -42,6 +42,7 @@ class OperationGoods extends \core\models\operation\OperationGoods
         return [
             [['operation_category_id'], 'required', 'message' => '请选择服务类型'],
             [['operation_goods_name'], 'required'],
+            [['operation_goods_price_description'], 'required'],
             [['operation_category_id', 'operation_goods_service_interval_time', 'operation_goods_service_estimate_time', 'created_at', 'updated_at'], 'integer'],
             [['operation_goods_introduction', 'operation_goods_service_time_slot', 'operation_goods_price_description', 'operation_tags', 'operation_goods_app_ico', 'operation_goods_pc_ico'], 'string'],
             [['operation_goods_additional_cost', 'operation_goods_market_price'], 'number'],
