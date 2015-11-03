@@ -50,6 +50,25 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
         return $comment_list;
     }
 
+
+    
+    /**
+     * 根据阿姨的id,开始时间和结束时间获取评价列表
+     * @date: 2015-10-27
+     * @author: peak pan
+     * @return:
+     * */
+    public static function getCommentworkercount($worker_id,$statime,$endtime)
+    {
+    	
+    	$comment_list = self::find()
+    	->andWhere(['worker_id' => $worker_id])
+    	->andFilterWhere(['between', 'created_at',$statime,$endtime])
+    	->count();
+    	return $comment_list;
+    }
+    
+    
     
     /**
      *  增加评价
@@ -185,27 +204,6 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
         }
     }
 
-    
-    
-    /**
-    *  通过 “阿姨ID，开始时间，结束时间”，评价时间在开始和结束之间，返回查询结果。给我个统计阿姨好评数的接口。
-    * @date: 2015-11-3
-    * @author: peak pan
-    * @return:
-    **/
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
