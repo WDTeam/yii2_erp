@@ -232,7 +232,7 @@ class Order extends OrderModel
         if (PaymentCustomerTransRecord::analysisRecord($attributes['order_batch_code'], $attributes['channel_id'], 'order_pay',2)) {
             OrderStatus::_batchPayment($attributes['order_batch_code'],$attributes['admin_id']);
         }
-        return ['status' => true, 'batch_code' => $attributes['order_batch_code']];
+        return ['status' => true, 'batch_code' => $attributes['order_batch_code'],'order_code' => $attributes['order_code']];
     }
 
     /**
