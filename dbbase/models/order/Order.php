@@ -99,7 +99,8 @@ class Order extends ActiveRecord
     public $shop_id;
     public $order_worker_shop_name;
     public $admin_id;
-
+    public $created_at_end;
+    public $stypechannel;
     public $order_is_use_balance;
 
     public $attributesExt = [
@@ -277,7 +278,9 @@ class Order extends ActiveRecord
             'shop_id' => '工人所属门店id',
             'order_worker_shop_name' => '工人所属门店',
             'admin_id' => '操作人id  0客户操作 1系统操作',
-            'order_is_use_balance'=>'是否使用余额 1是 0否'
+            'order_is_use_balance'=>'是否使用余额 1是 0否',
+            'created_at_end'=>'结束时间',
+            'stypechannel'=>'渠道分类'   
         ];
     }
 

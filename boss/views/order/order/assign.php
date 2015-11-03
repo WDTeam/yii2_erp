@@ -53,6 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <h5 class="col-sm-12" id="order_customer_need"></h5>
                             <h5 class="col-sm-12" id="order_customer_memo"></h5>
                             <h5 class="col-sm-12" id="order_cs_memo"></h5>
+                            <h5 class="col-sm-12" id="order_check_worker"></h5>
                         </td>
                     </tr>
                 </table>
@@ -76,7 +77,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         <tr><th>阿姨姓名</th><th>阿姨电话</th><th>所在店铺</th><th>阿姨身份</th><th>当日订单</th><th>拒单率</th><th>阿姨标签</th><th>接单状态</th><th>操作</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
                     </tbody>
                 </table>
             </div>

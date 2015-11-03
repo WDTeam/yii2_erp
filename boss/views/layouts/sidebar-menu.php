@@ -544,6 +544,16 @@ echo Menu::widget(
                         'label' => '报表管理',
                         'url' => ['#'],
                         'icon' => 'fa fa-angle-right',
+						'options' => [
+						'class' => 'treeview',
+						],
+						'items' => [
+						[
+						'label' => '日报表管理',
+						'url' => ['/finance/finance-office-count/indexoffice'],
+						'icon' => 'fa fa-angle-right',
+						],
+						]
                     ],
                     [
                         'label' => '发票管理',
