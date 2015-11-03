@@ -2093,12 +2093,16 @@ class OrderController extends \restapi\components\Controller
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
-
-        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
-            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
-        }
+//        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
+//            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
+//        }
+        # = array('' => $val['order_batch_code']
+       
         try {
-            $order = OrderSearch::getBatchOrder($param['order_batch_code'])->asArray()->all();
+            $orderSearch = new \core\models\order\OrderSearch();
+       
+            $order = $orderSearch->searchOrdersWithStatus(["order_batch_code"=>$param['order_batch_code']]);
+        
             if (count($order) > 0) {
                 $arr = array();
                 $array = array();
