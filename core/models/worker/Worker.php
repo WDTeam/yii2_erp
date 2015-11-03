@@ -988,7 +988,7 @@ class Worker extends \dbbase\models\worker\Worker
         $districtWorkerResult = self::getDistrictAllWorker($district_id);
 
         $orderBookTime = self::generateTimeUnit($orderBookBeginTime,$orderBookEndTime);
-
+        $districtFreeWorkerIdsArr = [];
         foreach ($districtWorkerResult as $val) {
 
             $schedule = isset($val['schedule'])?$val['schedule']:[];
@@ -1028,58 +1028,37 @@ class Worker extends \dbbase\models\worker\Worker
      * 获取商圈中 周期订单 可用阿姨
      * @param int $district_id 商圈id
      * @param int $worker_type 阿姨类型 1自营2非自营
-     * @param array $orderBookTimeArr 待指派订单预约时间['week'=>1,'orderBookBeginTime'=>'8:00','orderBookEndTime'=>'9:00]
+     * @param array $orderBookTimeArr 待指派订单预约时间['orderBookBeginTime'=>'1490000000','orderBookEndTime'=>'1493200000']
      * @return array freeWorkerArr 所有可用阿姨列表
      */
     public static function getDistrictCycleFreeWorker($district_id,$worker_type=1,$orderBookTimeArr){
-        $timesArr = self::getDayTimes();
 
         $districtWorkerResult = self::getDistrictAllWorker($district_id);
 
-        $time = strtotime(date('Y-m-d'));
-        //生成最近7天的星期对应时间戳数组 ['1'=>1490901111,'2'=>1490909811,....]
-        for($i=0;$i<7;$i++){
-            $week  = date('N',$time+$i*24*3600);
-            $weekTimeArr[$week] = $time+$i*24*3600;
-        }
         $districtFreeWorkerIdsArr = [];
 
         foreach ($districtWorkerResult as $val) {
             $schedule = isset($val['schedule'])?$val['schedule']:[];
             $orderInfo = isset($val['order'])?$val['order']:[];
             if($val['info']['worker_type']==$worker_type){
-                $workerIsDisble = 0;
+                $workerIsDisabled = 0;
                 foreach ($orderBookTimeArr as $t_val) {
-                    /*
-                     * 根据时间段转换成最小时间单位
-                     * 转换前['8:00-10:00']
-                     * 转换后['8:00','8:30','9:00','9:30']
-                     */
-                    $beginKey = array_search($t_val['orderBookBeginTime'],$timesArr);
-                    $endKey = array_search($t_val['orderBookEndTime'],$timesArr);
-                    $orderBookTime = array_slice($timesArr,$beginKey,$endKey-$beginKey);
+                    $orderBookTime = self::generateTimeUnit($t_val['orderBookBeginTime'],$t_val['orderBookEndTime']);
 
-                    for($i=1;$i<=4;$i++){
-                        //获取周期表中选中星期的时间戳
-                        $time = $weekTimeArr[$t_val['week']]+$i*7*24*3600;
-                        //根据排班表获取所有可用的时间 ['8:00','8:30','9:00','9:30','10:00','10:30'，...]
-                        $workerEnabledTime = self::getWorkerEnabledTimeFromSchedule($time,$schedule);
-                        if(array_diff($orderBookTime,$workerEnabledTime)){
-                            $workerIsDisble = 1;
-                            break;
-                        }
-                        //根据订单获取不可用时间 ['8:00','8:30','9:00','9:30']
-                        $workerHaveBookedTime = self::getWorkerHaveBookedTimeFromOrder($time,$orderInfo);
-                        if(array_intersect($orderBookTime,$workerHaveBookedTime)){
-                            $workerIsDisble = 1;
-                            break;
-                        }
+                    //根据排班表获取所有可用的时间 ['8:00','8:30','9:00','9:30','10:00','10:30'，...]
+                    $workerEnabledTime = self::getWorkerEnabledTimeFromSchedule($t_val['orderBookBeginTime'],$schedule);
+                    if(array_diff($orderBookTime,$workerEnabledTime)){
+                        $workerIsDisabled = 1;
+                        break;
                     }
-                    if($workerIsDisble==1){
+                    //根据订单获取不可用时间 ['8:00','8:30','9:00','9:30']
+                    $workerHaveBookedTime = self::getWorkerHaveBookedTimeFromOrder($t_val['orderBookBeginTime'],$orderInfo);
+                    if(array_intersect($orderBookTime,$workerHaveBookedTime)){
+                        $workerIsDisabled = 1;
                         break;
                     }
                 }
-                if($workerIsDisble==0){
+                if($workerIsDisabled==0){
                     $districtFreeWorkerIdsArr[] = $val['info']['worker_id'];
                 }
             }

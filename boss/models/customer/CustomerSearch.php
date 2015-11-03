@@ -33,7 +33,7 @@ class CustomerSearch extends Customer
 
     public function search($params)
     {
-		$query = Customer::find();
+		$query = Customer::find()->orderBy('created_at desc');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 			'pagination' => [
