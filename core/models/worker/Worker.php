@@ -988,7 +988,7 @@ class Worker extends \dbbase\models\worker\Worker
         $districtWorkerResult = self::getDistrictAllWorker($district_id);
 
         $orderBookTime = self::generateTimeUnit($orderBookBeginTime,$orderBookEndTime);
-
+        $districtFreeWorkerIdsArr = [];
         foreach ($districtWorkerResult as $val) {
 
             $schedule = isset($val['schedule'])?$val['schedule']:[];
