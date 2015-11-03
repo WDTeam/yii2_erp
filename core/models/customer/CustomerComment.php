@@ -142,12 +142,12 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
                 
                 
                 //增加使用次数
-                $array['customer_comment_tag_ids'];
+               /*  $array['customer_comment_tag_ids'];
                 foreach (){
                 	
                 	
                 	
-                }
+                } */
                 
                 
 				//通知订单 ，改变订单状态
