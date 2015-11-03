@@ -7,16 +7,13 @@ use boss\models\payment\PaymentSearch;
 use boss\components\BaseAuthController;
 
 use core\models\customer\Customer;
+use core\models\finance\FinanceOrderChannel;
 use core\models\payment\CustomerTransRecord;
-
 use core\models\payment\PaymentCustomerTransRecord;
-use dbbase\models\finance\FinanceOrderChannel;
-use dbbase\models\payment\PaymentRefund;
-use dbbase\models\payment\PaymentLog;
 
 use Yii;
 use yii\data\ActiveDataProvider;
-use yii\rest\Controller;
+use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -45,7 +42,6 @@ class PaymentController extends BaseAuthController
     {
         $searchModel = new PaymentSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
-
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
@@ -87,38 +83,6 @@ class PaymentController extends BaseAuthController
     }
 
     /**
-     * Updates an existing Payment model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Deletes an existing Payment model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
      * Finds the Payment model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
@@ -156,13 +120,13 @@ class PaymentController extends BaseAuthController
      */
     public function actionOrderChannel()
     {
+
         $channel = FinanceOrderChannel::get_order_channel_list();
         foreach ($channel as $k => $v) {
             $channel[$k]['text'] = $v['finance_order_channel_name'];
         }
         return json_encode(['results' => $channel]);
     }
-
 
     public function actionTest()
     {
