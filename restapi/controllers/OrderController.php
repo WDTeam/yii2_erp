@@ -27,7 +27,7 @@ class OrderController extends \restapi\components\Controller
      * @apiDescription 创建订单v1
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} order_service_type_id 服务类型商品id
+     * @apiParam {String} order_service_item_id 服务类型商品id
      * @apiParam {String} order_src_id 订单来源id 访问源(android_4.2.2)
      * @apiParam {String} order_booked_begin_time 服务开始时间 时间戳  如 *'1443695400'
      * @apiParam {String} order_booked_end_time 服务结束时间   时间戳  如 *'1443695400'
@@ -106,7 +106,7 @@ class OrderController extends \restapi\components\Controller
         if (is_null($args['order_service_type_id'])) {
             return $this->send(null, "请输入服务类型商品id", 0);
         }
-        $attributes['order_service_type_id'] = $args['order_service_type_id'];
+        $attributes['order_service_item_id'] = $args['order_service_item_id'];
 
         if (is_null($args['order_src_id'])) {
             return $this->send(null, "数据不完整,缺少订单来源", 0);
@@ -260,7 +260,7 @@ class OrderController extends \restapi\components\Controller
             return $this->send(null, "用户无效,请先登录", 0);
         }
         $attributes['customer_id'] = $user->id;
-        if (is_null($args['order_service_type_id'])) {
+        if (is_null($args['order_service_item_id'])) {
             return $this->send(null, "请输入商品类型", 0);
         }
         $attributes['order_service_type_id'] = $args['order_service_type_id'];
@@ -1835,7 +1835,7 @@ class OrderController extends \restapi\components\Controller
      *
      * @apiParam  {String}  access_token      会话id. 必填 
      * @apiParam  {String}  [platform_version]  平台版本号
-     * @apiParam  {integer} order_service_type_id 服务类型 商品id 必填
+     * @apiParam  {integer} order_service_item_id 服务类型 商品id 必填
      * @apiParam  {integer} order_src_id 订单来源id 必填
      * @apiParam  {string}  channel_id 下单渠道 必填
      * @apiParam  {int}     address_id 客户地址id 必填
@@ -1889,7 +1889,7 @@ class OrderController extends \restapi\components\Controller
         $order_ip = Yii::$app->getRequest()->getUserIP();
 
         #判断服务类型
-        if (empty($param['order_service_type_id'])) {
+        if (empty($param['order_service_item_id'])) {
             return $this->send(null, "服务类型不能为空", 0);
         }
         #判断订单来源
@@ -1922,7 +1922,7 @@ class OrderController extends \restapi\components\Controller
         if (!empty($customer) && !empty($customer->id)) {
             $attributes = array(
                 "order_ip" => $order_ip,
-                "order_service_type_id" => $param['order_service_type_id'],
+                "order_service_item_id" => $param['order_service_item_id'],
                 "order_src_id" => $param['order_src_id'],
                 "channel_id" => $param['channel_id'],
                 "address_id" => $param['address_id'],
