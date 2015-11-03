@@ -188,6 +188,28 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
     
     
     /**
+    *  通过 “阿姨ID，开始时间，结束时间”，评价时间在开始和结束之间，返回查询结果。给我个统计阿姨好评数的接口。
+    * @date: 2015-11-3
+    * @author: peak pan
+    * @return:
+    **/
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /**
     *  根据评价的order_id获取评价详情
     * @date: 2015-10-30
     * @author: peak pan

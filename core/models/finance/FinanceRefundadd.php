@@ -30,9 +30,9 @@ class FinanceRefundadd extends FinanceRefund
 
 	
     
-     public function add($date){
+     public static  function add($date){
 	     	$this->finance_refund_pop_nub='0';
-	     	$this->customer_id=$date->order_id;
+	     	$this->customer_id=$date->customer_id;
 	     	$this->finance_refund_tel=$date->order_customer_phone;
 	     	$this->finance_refund_money=$date->order_pay_money;
 	     	$this->finance_refund_stype=1;
