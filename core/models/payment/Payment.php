@@ -502,29 +502,204 @@ class Payment extends \dbbase\models\payment\Payment
 
 
 
-
-
-
-
-
-
-
     /**
      * 银联支付回调
      * @param $data
-
-    public function upAppNotify($data){
-        parent::upAppNotify($data);
-    }
      */
+    public function upAppNotify($data){
+        //POST数据
+        if(!empty($data['debug'])){
+            $_POST = array (
+                "accessType" => "0",
+                "bizType" => "000201",
+                "certId" => "21267647932558653966460913033289351200",
+                "currencyCode" => "156",
+                "encoding" => "utf-8",
+                "merId" => "898111448161364",
+                "orderId" => "151010743932",
+                "queryId" => "201510101112461438298",
+                "reqReserved" => "透传信息",
+                "respCode" => "00",
+                "respMsg" => "Success!",
+                "settleAmt" => "1",
+                "settleCurrencyCode" => "156",
+                "settleDate" => "1010",
+                "signMethod" => "01",
+                "traceNo" => "143829",
+                "traceTime" => "1010111246",
+                "txnAmt" => "1",
+                "txnSubType" => "01",
+                "txnTime" => "20151010111246",
+                "txnType" => "01",
+                "version" => "5.0.0",
+                "signature" => "GnmVKKUPgdLc11K8zrwL5w5cTx1bieDdTniC2Psh7WEuk4y+53l8OzvE41KsJNyxBuBWAPBgypK+8jNJmGUU2x+tMU5Z0liIKVD5HWhboHxlwZvh0vMGfB8vlmIcbYipxUuWz3Jin11I6O8W6mvTAb76wJXrcbqZD1PKtVP7/5ldxpYsRh/MmEfeDFCcxqMk0uS/ON7XagGKkYSOxCcDMmQ4xRhNzLOthO8vkK6vPDWuowNjFdQXV8A2K9MxVqJNrR5QgR52Hm0dy9z5o09YhjDhMgwlyqRAgaBRbVDNt7qJXFyp3lcxwU9sJBkpOCYV6Cwi/03sWJA+W87U6+gN9Q=="
+            );
+            $post = $_POST;
+        }else{
+            $post = yii::$app->request->post();
+        }
+
+        //记录日志
+        $dataLog = array(
+            'payment_log_price' => $this->toMoney($post['settleAmt'],100,'/'),   //支付金额
+            'payment_log_shop_name' => $post['reqReserved'],   //商品名称
+            'payment_log_eo_order_id' => $post['orderId'],   //订单ID
+            'payment_log_transaction_id' => $post['queryId'],   //交易流水号
+            'payment_log_status_bool' => $post['respMsg'],   //支付状态
+            'payment_log_status' => $post['respMsg'],   //支付状态
+            'pay_channel_id' => 12,  //支付渠道ID
+            'payment_log_json_aggregation' => json_encode($post),
+            'data' => $post //文件数据
+        );
+
+        $this->on('insertLog',[new PaymentLog(),'insertLog'],$dataLog);
+        $this->trigger('insertLog');
+
+        //获取交易ID
+        $paymentId = $this->getPaymentId($post['orderId']);
+
+        //查询支付记录
+        $model = Payment::find()->where(['id'=>$paymentId,'payment_status'=>0])->one();
+
+        //验证签名
+        $class = new \uppay_class();
+        $sign = $class->callback();
+
+        //验证支付结果
+        if( !empty($model) && !empty($sign) ){
+
+            $model->id = $paymentId; //ID
+            $model->payment_status = 1; //支付状态
+            $model->payment_actual_money = $model->toMoney($post['settleAmt'],100,'/');
+            $model->payment_transaction_id = $post['queryId'];
+            $model->payment_eo_order_id = $post['orderId'];
+            $model->payment_verify = $model->sign();
+
+            //commit
+            $connection  = \Yii::$app->db;
+            $transaction = $connection->beginTransaction();
+            try {
+                //保存数据
+                $model->doSave();
+                //保存交易记录
+                $this->paymentTransRecord($model->getAttributes());
+                //提交数据
+                $transaction->commit();
+                //TODO::发送短信
+
+                //通知回调成功
+                $class->notify();
+            } catch(Exception $e) {
+                $transaction->rollBack();
+            }
+        }
+    }
+
     /**
      * 支付宝APP回调
      * @param $data
-
-    public function alipayAppNotify($data){
-        parent::alipayAppNotify($data);
-    }
      */
+    public function alipayAppNotify($data){
+        //POST数据
+        if(!empty($data['debug'])){
+            $_POST = array (
+                "discount"=> "0.00",
+                "payment_type"=> "1",
+                "subject"=> "e家洁会员充值",
+                "trade_no"=> "2015092510165",
+                "buyer_email"=> "lsqpy@163.com",
+                "gmt_create"=> "2015-09-25 21:13:20",
+                "notify_type"=> "trade_status_sync",
+                "quantity"=> "1",
+                "out_trade_no"=> "150925846765",
+                "seller_id"=> "2088801136967007",
+                "notify_time"=> "2015-09-25 21:13:21",
+                "body"=> "e家洁会员充值0.01元",
+                "trade_status"=> "TRADE_FINISHED",
+                "is_total_fee_adjust"=> "N",
+                "total_fee"=> "0.01",
+                "gmt_payment"=> "2015-09-25 21:13:21",
+                "seller_email"=> "47632990@qq.com",
+                "gmt_close"=> "2015-09-25 21:13:21",
+                "price"=> "0.01",
+                "buyer_id"=> "2088002074138164",
+                "notify_id"=> "6260ae5cc41e6aa3a42824ec032071df2w",
+                "use_coupon"=> "N",
+                "sign_type"=> "RSA",
+                "sign"=> "T4Bkh9KljoFOTIossu5QtYPRUwj/7by/YLXNQ7efaxe0AwYDjFDFWTFts4h8yq2ceCH8weqYVBklj2btkF2/hKPuUifuJNB6lk8EtHckmJg0MzhGIBAvpteUAo+5Gs+wlI5eS5zmryBskuHOXSM7svb9wNCcL9pHAv8CM06Au+A="
+            );
+            $post = $_POST;
+        }else{
+            $post = yii::$app->request->post();
+        }
+
+        //记录日志
+        $dataLog = array(
+            'payment_log_price' => $post['total_fee'],   //支付金额
+            'payment_log_shop_name' => $post['subject'],   //商品名称
+            'payment_log_eo_order_id' => $post['out_trade_no'],   //订单ID
+            'payment_log_transaction_id' => $post['buyer_id'],   //交易流水号
+            'payment_log_status_bool' => $post['trade_status'],   //支付状态
+            'payment_log_status' => $post['trade_status'],   //支付状态
+            'pay_channel_id' => 6,  //支付渠道ID
+            'payment_log_json_aggregation' => json_encode($post),
+            'data' => $post //文件数据
+        );
+        $this->on('insertLog',[new PaymentLog(),'insertLog'],$dataLog);
+        $this->trigger('insertLog');
+
+        //获取交易ID
+        $paymentId = $this->getPaymentId($post['out_trade_no']);
+
+        //查询支付记录
+        $model = Payment::find()->where(['id'=>$paymentId,'payment_status'=>0])->one();
+
+        //验证支付结果
+        if(!empty($model))
+        {
+            //验证签名
+            $class = new \alipay_class;
+            $verify_result = $class->callback();
+
+            if(!empty($_GET['debug']))
+            {
+                $verify_result = true;
+            }
+
+            //签名验证成功
+            if($verify_result)
+            {
+                $model->id = $paymentId; //ID
+                $model->payment_status = 1; //支付状态
+                $model->payment_actual_money = $post['total_fee'];
+                $model->payment_transaction_id = $post['trade_no'];
+                $model->payment_eo_order_id = $post['out_trade_no'];
+                $model->payment_verify = $model->sign();
+
+                //commit
+                $connection  = \Yii::$app->db;
+                $transaction = $connection->beginTransaction();
+                try
+                {
+                    //保存数据
+                    $model->doSave();
+                    //保存交易记录
+                    $this->paymentTransRecord($model->getAttributes());
+                    //提交数据
+                    $transaction->commit();
+                    //TODO::发送短信
+
+                    //通知回调成功
+                    $class->notify();
+                }
+                catch(Exception $e)
+                {
+                    $transaction->rollBack();
+                }
+            }
+        }
+    }
+
     /**
      * 支付宝APP回调
      * @param $data
@@ -612,21 +787,16 @@ class Payment extends \dbbase\models\payment\Payment
                 $transaction = $connection->beginTransaction();
                 try
                 {
+                    //保存数据
                     $model->doSave();
-                    if(!empty($model->payment_type)){
-                        //支付订单/充值
-                        $this->paymentTransRecord($model->getAttributes());
-                        echo $class->notify();
-                        /*
-                        if(empty($data['debug'])){
-                            //发送短信事件
-                            $this->on("paySms",[new Payment,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
-                            $this->trigger('paySms');
-                        }
-                        */
-                    }
+                    //保存交易记录
+                    $this->paymentTransRecord($model->getAttributes());
+                    //提交数据
                     $transaction->commit();
-                    return true;
+                    //TODO::发送短信
+
+                    //通知回调成功
+                    echo $class->notify();
                 }
                 catch(Exception $e)
                 {
@@ -640,135 +810,8 @@ class Payment extends \dbbase\models\payment\Payment
     /**
      * 微信APP回调
      * @param $data
-
+     */
     public function wxAppNotify($data){
-        parent::wxAppNotify($data);
-    }
-
-     */
-
-    /**
-     * 支付宝APP回调
-     */
-    public function alipayAppNotify($data)
-    {
-        //POST数据
-        if(!empty($data['debug'])){
-            $_POST = array (
-                "discount"=> "0.00",
-                "payment_type"=> "1",
-                "subject"=> "e家洁会员充值",
-                "trade_no"=> "2015092510165",
-                "buyer_email"=> "lsqpy@163.com",
-                "gmt_create"=> "2015-09-25 21:13:20",
-                "notify_type"=> "trade_status_sync",
-                "quantity"=> "1",
-                "out_trade_no"=> "150925846765",
-                "seller_id"=> "2088801136967007",
-                "notify_time"=> "2015-09-25 21:13:21",
-                "body"=> "e家洁会员充值0.01元",
-                "trade_status"=> "TRADE_FINISHED",
-                "is_total_fee_adjust"=> "N",
-                "total_fee"=> "0.01",
-                "gmt_payment"=> "2015-09-25 21:13:21",
-                "seller_email"=> "47632990@qq.com",
-                "gmt_close"=> "2015-09-25 21:13:21",
-                "price"=> "0.01",
-                "buyer_id"=> "2088002074138164",
-                "notify_id"=> "6260ae5cc41e6aa3a42824ec032071df2w",
-                "use_coupon"=> "N",
-                "sign_type"=> "RSA",
-                "sign"=> "T4Bkh9KljoFOTIossu5QtYPRUwj/7by/YLXNQ7efaxe0AwYDjFDFWTFts4h8yq2ceCH8weqYVBklj2btkF2/hKPuUifuJNB6lk8EtHckmJg0MzhGIBAvpteUAo+5Gs+wlI5eS5zmryBskuHOXSM7svb9wNCcL9pHAv8CM06Au+A="
-            );
-            $post = $_POST;
-        }else{
-            $post = yii::$app->request->post();
-        }
-
-        //实例化模型
-        $PaymentLogModel = new PaymentLog();
-
-        //记录日志
-        $dataLog = array(
-            'payment_log_price' => $post['total_fee'],   //支付金额
-            'payment_log_shop_name' => $post['subject'],   //商品名称
-            'payment_log_eo_order_id' => $post['out_trade_no'],   //订单ID
-            'payment_log_transaction_id' => $post['buyer_id'],   //交易流水号
-            'payment_log_status_bool' => $PaymentLogModel->statusBool($post['trade_status']),   //支付状态
-            'payment_log_status' => $post['trade_status'],   //支付状态
-            'pay_channel_id' => 6,  //支付渠道ID
-            'payment_log_json_aggregation' => json_encode($post),
-            'data' => $post //文件数据
-        );
-        $this->on('insertLog',[$PaymentLogModel,'insertLog'],$dataLog);
-        $this->trigger('insertLog');
-
-        //获取交易ID
-        $PaymentId = $this->getPaymentId($post['out_trade_no']);
-
-        //查询支付记录
-        $model = Payment::find()->where(['id'=>$PaymentId,'payment_status'=>0])->one();
-
-        //验证支付结果
-        if(!empty($model))
-        {
-            //验证签名
-            $class = new \alipay_class;
-            $verify_result = $class->callback();
-
-            if(!empty($_GET['debug']))
-            {
-                $verify_result = true;
-            }
-
-            //签名验证成功
-            if($verify_result)
-            {
-                $model->id = $PaymentId; //ID
-                $model->payment_status = 1; //支付状态
-                $model->payment_actual_money = $post['total_fee'];
-                $model->payment_transaction_id = $post['trade_no'];
-                $model->payment_eo_order_id = $post['out_trade_no'];
-                $model->payment_verify = $model->makeSign();
-
-                //commit
-                $connection  = \Yii::$app->db;
-                $transaction = $connection->beginTransaction();
-                try
-                {
-                    $model->save(false);
-                    $attribute = $model->getAttributes();
-                    if(!empty($model->payment_type)){
-                        //支付订单/充值
-                        Payment::payment($attribute);
-                    }
-
-                    $transaction->commit();
-
-                    /*
-                    if(empty($data['debug'])){
-                        //发送短信事件
-                        $this->on("paySms",[new Payment,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
-                        $this->trigger('paySms');
-                    }
-                    */
-
-                    echo $class->notify();
-                }
-                catch(Exception $e)
-                {
-                    $transaction->rollBack();
-                }
-            }
-        }
-    }
-
-    /**
-     * 微信APP回调
-     * 金额单位为【分】
-     */
-    public function wxAppNotify($data)
-    {
         $class = new \wxpay_class();
         if(!empty($data['debug'])){
             $post = $_POST = [
@@ -796,30 +839,27 @@ class Payment extends \dbbase\models\payment\Payment
             $post = $data;
         }
 
-        //实例化模型
-        $PaymentLogModel = new PaymentLog();
-
         //记录日志
         $dataLog = array(
             'payment_log_price' => $this->toMoney($post['total_fee'],100,'/'),   //支付金额
             'payment_log_shop_name' => '微信支付',   //商品名称
             'payment_log_eo_order_id' => $post['out_trade_no'],   //订单ID
             'payment_log_transaction_id' => $post['transaction_id'],   //交易流水号
-            'payment_log_status_bool' => $PaymentLogModel->statusBool($post['trade_state']),   //支付状态
+            'payment_log_status_bool' => $post['trade_state'],   //支付状态
             'payment_log_status' => $post['trade_state'],   //支付状态
             'pay_channel_id' => 11,  //支付渠道ID
             'payment_log_json_aggregation' => json_encode($post),
             'data' => $post //文件数据
         );
 
-        $this->on('insertLog',[$PaymentLogModel,'insertLog'],$dataLog);
+        $this->on('insertLog',[new PaymentLog(),'insertLog'],$dataLog);
         $this->trigger('insertLog');
 
         //获取交易ID
-        $PaymentId = $this->getPaymentId($post['out_trade_no']);
+        $paymentId = $this->getPaymentId($post['out_trade_no']);
 
         //查询支付记录
-        $model = Payment::find()->where(['id'=>$PaymentId,'payment_status'=>0])->one();
+        $model = Payment::find()->where(['id'=>$paymentId,'payment_status'=>0])->one();
 
         if(!empty($data['debug'])){
             $status = true;
@@ -829,48 +869,38 @@ class Payment extends \dbbase\models\payment\Payment
 
         //验证支付结果
         if(!empty($model) && !empty($status)){
-            $model->id = $PaymentId; //ID
+            $model->id = $paymentId; //ID
             $model->payment_status = 1; //支付状态
             $model->payment_actual_money = $model->toMoney($post['total_fee'],100,'/');
             $model->payment_transaction_id = $post['transaction_id'];
             $model->payment_eo_order_id = $post['out_trade_no'];
-            $model->payment_verify = $model->makeSign();
+            $model->payment_verify = $model->sign();
 
             //commit
             $connection  = \Yii::$app->db;
             $transaction = $connection->beginTransaction();
             try {
-                $model->save(false);
-                //change customer balance
-                $attribute = $model->getAttributes();
-                if(!empty($model->payment_type)){
-                    //支付订单/充值
-                    Payment::payment($attribute);
-                }
+                //保存数据
+                $model->doSave();
+                //保存交易记录
+                $this->paymentTransRecord($model->getAttributes());
+                //提交数据
                 $transaction->commit();
+                //TODO::发送短信
+
+                //通知回调成功
                 $class->notify();
-
-                /*
-                if(empty($data['debug'])){
-                    //发送短信事件
-                    $this->on("paySms",[new Payment,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
-                    $this->trigger('paySms');
-                }
-                */
-
             } catch(Exception $e) {
                 $transaction->rollBack();
             }
         }
-
     }
 
     /**
-     *  百付宝APP回调
-     *  金额单位为【分】
+     * 百付宝APP回调
+     * @param $data
      */
-    public function bfbAppNotify($data)
-    {
+    public function bfbAppNotify($data){
         //POST数据
         if(!empty($data['debug'])){
             $_GET = array (
@@ -900,29 +930,26 @@ class Payment extends \dbbase\models\payment\Payment
             $post = $data;
         }
 
-        //实例化模型
-        $PaymentLogModel = new PaymentLog();
-
         //记录日志
         $dataLog = array(
             'payment_log_price' => $this->toMoney($post['total_amount'],100,'/'),   //支付金额
             'payment_log_shop_name' => '百付宝',   //商品名称
             'payment_log_eo_order_id' => $post['order_no'],   //订单ID
             'payment_log_transaction_id' => $post['bfb_order_no'],   //交易流水号
-            'payment_log_status_bool' => $PaymentLogModel->statusBool($post['pay_result']),   //支付状态
+            'payment_log_status_bool' => $post['pay_result'],   //支付状态
             'payment_log_status' => $post['pay_result'],   //支付状态
             'pay_channel_id' => 8,  //支付渠道ID
             'payment_log_json_aggregation' => json_encode($post),
             'data' => $post //文件数据
         );
-        $this->on('insertLog',[$PaymentLogModel,'insertLog'],$dataLog);
+        $this->on('insertLog',[new PaymentLog(),'insertLog'],$dataLog);
         $this->trigger('insertLog');
 
         //获取交易ID
-        $PaymentId = $this->getPaymentId($post['order_no']);
+        $paymentId = $this->getPaymentId($post['order_no']);
 
         //查询支付记录
-        $model = Payment::find()->where(['id'=>$PaymentId,'payment_status'=>0])->one();
+        $model = Payment::find()->where(['id'=>$paymentId,'payment_status'=>0])->one();
 
         //验证签名
         $class = new \bfbpay_class();
@@ -934,154 +961,38 @@ class Payment extends \dbbase\models\payment\Payment
 
         //验证支付结果
         if( !empty($model) && !empty($sign) ){
-            $model->id = $PaymentId; //ID
+            $model->id = $paymentId; //ID
             $model->payment_status = 1; //支付状态
             $model->payment_actual_money = $model->toMoney($post['total_amount'],100,'/');
             $model->payment_transaction_id = $post['bfb_order_no'];
             $model->payment_eo_order_id = $post['order_no'];
-            $model->payment_verify = $model->makeSign();
+            $model->payment_verify = $model->sign();
 
             //commit
             $connection  = \Yii::$app->db;
             $transaction = $connection->beginTransaction();
             try {
-                $model->save(false);
-                //change customer balance
-                $attribute = $model->getAttributes();
-                if(!empty($model->payment_type)){
-                    //支付订单/充值
-                    Payment::payment($attribute);
-                }
-
+                //保存数据
+                $model->doSave();
+                //保存交易记录
+                $this->paymentTransRecord($model->getAttributes());
+                //提交数据
                 $transaction->commit();
+                //TODO::发送短信
 
-                /*
-                if(empty($data['debug'])){
-                    //发送短信事件
-                    $this->on("paySms",[new Payment,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
-                    $this->trigger('paySms');
-                }
-                */
-
+                //通知回调成功
                 $class->notify();
             } catch(Exception $e) {
                 $transaction->rollBack();
             }
-
         }
     }
 
     /**
-     * 银联APP回调
+     * 微信H5回调
      * @param $data
-     * @throws \yii\db\Exception
      */
-    public function upAppNotify($data)
-    {
-        //POST数据
-        if(!empty($data['debug'])){
-            $_POST = array (
-                "accessType" => "0",
-                "bizType" => "000201",
-                "certId" => "21267647932558653966460913033289351200",
-                "currencyCode" => "156",
-                "encoding" => "utf-8",
-                "merId" => "898111448161364",
-                "orderId" => "151010743932",
-                "queryId" => "201510101112461438298",
-                "reqReserved" => "透传信息",
-                "respCode" => "00",
-                "respMsg" => "Success!",
-                "settleAmt" => "1",
-                "settleCurrencyCode" => "156",
-                "settleDate" => "1010",
-                "signMethod" => "01",
-                "traceNo" => "143829",
-                "traceTime" => "1010111246",
-                "txnAmt" => "1",
-                "txnSubType" => "01",
-                "txnTime" => "20151010111246",
-                "txnType" => "01",
-                "version" => "5.0.0",
-                "signature" => "GnmVKKUPgdLc11K8zrwL5w5cTx1bieDdTniC2Psh7WEuk4y+53l8OzvE41KsJNyxBuBWAPBgypK+8jNJmGUU2x+tMU5Z0liIKVD5HWhboHxlwZvh0vMGfB8vlmIcbYipxUuWz3Jin11I6O8W6mvTAb76wJXrcbqZD1PKtVP7/5ldxpYsRh/MmEfeDFCcxqMk0uS/ON7XagGKkYSOxCcDMmQ4xRhNzLOthO8vkK6vPDWuowNjFdQXV8A2K9MxVqJNrR5QgR52Hm0dy9z5o09YhjDhMgwlyqRAgaBRbVDNt7qJXFyp3lcxwU9sJBkpOCYV6Cwi/03sWJA+W87U6+gN9Q=="
-            );
-            $post = $_POST;
-        }else{
-            $post = yii::$app->request->post();
-        }
-
-        //实例化模型
-        $PaymentLogModel = new PaymentLog();
-
-        //记录日志
-        $dataLog = array(
-            'payment_log_price' => $this->toMoney($post['settleAmt'],100,'/'),   //支付金额
-            'payment_log_shop_name' => $post['reqReserved'],   //商品名称
-            'payment_log_eo_order_id' => $post['orderId'],   //订单ID
-            'payment_log_transaction_id' => $post['queryId'],   //交易流水号
-            'payment_log_status_bool' => $PaymentLogModel->statusBool($post['respMsg']),   //支付状态
-            'payment_log_status' => $post['respMsg'],   //支付状态
-            'pay_channel_id' => 12,  //支付渠道ID
-            'payment_log_json_aggregation' => json_encode($post),
-            'data' => $post //文件数据
-        );
-
-        $this->on('insertLog',[$PaymentLogModel,'insertLog'],$dataLog);
-        $this->trigger('insertLog');
-
-        //获取交易ID
-        $PaymentId = $this->getPaymentId($post['orderId']);
-
-        //查询支付记录
-        $model = Payment::find()->where(['id'=>$PaymentId,'payment_status'=>0])->one();
-
-        //验证签名
-        $class = new \uppay_class();
-        $sign = $class->callback();
-
-        //验证支付结果
-        if( !empty($model) && !empty($sign) ){
-
-            $model->id = $PaymentId; //ID
-            $model->payment_status = 1; //支付状态
-            $model->payment_actual_money = $model->toMoney($post['settleAmt'],100,'/');
-            $model->payment_transaction_id = $post['queryId'];
-            $model->payment_eo_order_id = $post['orderId'];
-            $model->payment_verify = $model->makeSign();
-
-            //commit
-            $connection  = \Yii::$app->db;
-            $transaction = $connection->beginTransaction();
-            try {
-                $model->save(false);
-                $attribute = $model->getAttributes();
-                if(!empty($model->payment_type)){
-                    //支付订单/充值
-                    Payment::payment($attribute);
-                }
-                $transaction->commit();
-
-                /*
-                if(empty($data['debug'])){
-                    //发送短信事件
-                    $this->on("paySms",[new Payment,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
-                    $this->trigger('paySms');
-                }
-                */
-
-                $class->notify();
-            } catch(Exception $e) {
-                $transaction->rollBack();
-            }
-        }
-    }
-
-    /**
-     * 支付宝APP回调
-     * wx-js-notify
-     */
-    public function wxH5Notify($data)
-    {
+    public function wxH5Notify($data){
         if(!empty($data['debug'])){
             $GLOBALS['HTTP_RAW_POST_DATA'] = "<xml>
                 <appid><![CDATA[wx7558e67c2d61eb8f]]></appid>
@@ -1128,31 +1039,26 @@ class Payment extends \dbbase\models\payment\Payment
         //实例化模型
         $model = new Payment();
 
-        //实例化模型
-        $PaymentLogModel = new PaymentLog();
-
         //记录日志
         $dataLog = array(
             'payment_log_price' => $model->toMoney($post['total_fee'],100,'/'),   //支付金额
             'payment_log_shop_name' => $post['attach'],   //商品名称
             'payment_log_eo_order_id' => $post['out_trade_no'],   //订单ID
             'payment_log_transaction_id' => $post['transaction_id'],   //交易流水号
-            'payment_log_status_bool' => $PaymentLogModel->statusBool($post['return_code']),   //支付状态
+            'payment_log_status_bool' => $post['return_code'],   //支付状态
             'payment_log_status' => $post['return_code'],   //支付状态
             'pay_channel_id' => 10,  //支付渠道ID
             'payment_log_json_aggregation' => json_encode($post),
             'data' => $post //文件数据
         );
-        $this->on('insertLog',[$PaymentLogModel,'insertLog'],$dataLog);
+        $this->on('insertLog',[new PaymentLog(),'insertLog'],$dataLog);
         $this->trigger('insertLog');
 
-
-
         //获取交易ID
-        $PaymentId = $model->getPaymentId($post['out_trade_no']);
+        $paymentId = $model->getPaymentId($post['out_trade_no']);
 
         //查询支付记录
-        $model = Payment::find()->where(['id'=>$PaymentId,'payment_status'=>0])->one();
+        $model = Payment::find()->where(['id'=>$paymentId,'payment_status'=>0])->one();
 
         //验证支付结果
         if(!empty($model))
@@ -1166,34 +1072,28 @@ class Payment extends \dbbase\models\payment\Payment
             //签名验证成功
             if($status == 'SUCCESS')
             {
-                $model->id = $PaymentId; //ID
+                $model->id = $paymentId; //ID
                 $model->payment_status = 1; //支付状态
                 $model->payment_actual_money = $model->toMoney($post['total_fee'],100,'/');
                 $model->payment_transaction_id = $post['transaction_id'];
                 $model->payment_eo_order_id = $post['out_trade_no'];
-                $model->payment_verify = $model->makeSign();
+                $model->payment_verify = $model->sign();
 
                 //commit
                 $connection  = \Yii::$app->db;
                 $transaction = $connection->beginTransaction();
                 try
                 {
-                    $model->save(false);
-                    $attribute = $model->getAttributes();
-                    if(!empty($model->payment_type)){
-                        //支付订单/充值
-                        Payment::payment($attribute);
-                    }
-
+                    //保存数据
+                    $model->doSave();
+                    //保存交易记录
+                    $this->paymentTransRecord($model->getAttributes());
+                    //提交数据
                     $transaction->commit();
+                    //TODO::发送短信
 
-                    /*
-                    if(empty($data['debug'])){
-                        //发送短信事件
-                        $this->on("paySms",[new Payment,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
-                        $this->trigger('paySms');
-                    }
-                    */
+                    //通知回调成功
+                    $class->notify();
                 }
                 catch(Exception $e)
                 {
@@ -1202,23 +1102,6 @@ class Payment extends \dbbase\models\payment\Payment
             }
         }
     }
-
-
-    /**
-     * 百付宝APP回调
-     * @param $data
-
-    public function bfbAppNotify($data){
-        parent::bfbAppNotify($data);
-    }
-     */
-    /**
-     * 微信H5回调
-     * @param $data
-
-    public function wxH5Notify($data){
-        parent::wxH5Notify($data);
-    } */
 
     /**
      * 百度直达号回调
@@ -1262,10 +1145,10 @@ class Payment extends \dbbase\models\payment\Payment
         $model = new Payment();
 
         //获取交易ID
-        $PaymentId = $model->getPaymentId($post['order_no']);
+        $paymentId = $model->getPaymentId($post['order_no']);
 
         //查询支付记录
-        $model = Payment::find()->where(['id'=>$PaymentId,'payment_status'=>0])->one();
+        $model = Payment::find()->where(['id'=>$paymentId,'payment_status'=>0])->one();
 
         //验证支付结果
         if(!empty($model))
@@ -1274,40 +1157,30 @@ class Payment extends \dbbase\models\payment\Payment
             $class = new \zhidahao_class();
             $status = $class->callback();
 
-
             //签名验证成功
             if( !empty($status) )
             {
-                $model->id = $PaymentId; //ID
+                $model->id = $paymentId; //ID
                 $model->payment_status = 1; //支付状态
                 $model->payment_actual_money = $model->toMoney($post['paid_amount'],100,'/');
                 $model->payment_transaction_id = $post['order_id'];
                 $model->payment_eo_order_id = $post['order_no'];
-                $model->payment_verify = $model->makeSign();
+                $model->payment_verify = $model->sign();
 
                 //commit
                 $connection  = \Yii::$app->db;
                 $transaction = $connection->beginTransaction();
                 try
                 {
-                    $model->save(false);
-                    $attribute = $model->getAttributes();
-
-                    if(!empty($model->payment_type)){
-                        //支付订单/充值
-                        Payment::payment($attribute);
-                    }
-
+                    //保存数据
+                    $model->doSave();
+                    //保存交易记录
+                    $this->paymentTransRecord($model->getAttributes());
+                    //提交数据
                     $transaction->commit();
+                    //TODO::发送短信
 
-                    /*
-                    if(empty($data['debug'])){
-                        //发送短信事件
-                        $this->on("paySms",[new Payment,'smsSend'],['customer_id'=>$model->customer_id,'order_id'=>$model->order_id]);
-                        $this->trigger('paySms');
-                    }
-                    */
-
+                    //通知回调成功
                     echo $class->notify();
                 }
                 catch(Exception $e)
@@ -1317,8 +1190,6 @@ class Payment extends \dbbase\models\payment\Payment
             }
         }
     }
-
-
 
     /**
      * 获取记录ID
