@@ -47,6 +47,7 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
             'finance_order_channel_rate' => Yii::t('boss', '比例'),
             'finance_order_channel_sort' => Yii::t('boss', '支付显示'),
             'finance_order_channel_is_lock' => Yii::t('boss', '下单显示'),
+            'finance_order_channel_source' => Yii::t('boss', '来源'),
             'create_time' => Yii::t('boss', '增加时间'),
             'is_del' => Yii::t('boss', '状态'),
         ];

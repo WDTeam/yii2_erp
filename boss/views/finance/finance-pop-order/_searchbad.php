@@ -39,36 +39,27 @@ use kartik\date\DatePicker;
      </div>
      
      
+      <div class='col-md-2'>
+    <?= $form->field($model, 'finance_pop_order_pay_status')->widget(Select2::classname(), [
+        'name' => '处理状态',
+        'hideSearch' => true,		
+        'data' => ['3'=>'已处理','5'=>'已审核'],
+        'options' => ['placeholder' => '选择处理状态','class' => 'col-md-2'],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]);
+   
+    ?>
+     </div>
+     
+     
+     
+     
      <div class='col-md-2'>
     <?= $form->field($model, 'finance_pop_order_customer_tel') ?>
 </div>
 
-   <!--  <div class='col-md-2'> 
-      $form->field($model, 'finance_order_channel_statuspayment')->widget(DatePicker::classname(), [
-    		'name' => 'finance_order_channel_statuspayment',
-    		'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-    		'pluginOptions' => [
-    		'autoclose' => true,
-    		'format' => 'yyyy-mm-dd'
-    		]
-            ]);  
-           
-     </div>
-      <div class='col-md-2'> 
-      
-     $form->field($model, 'finance_order_channel_endpayment')->widget(DatePicker::classname(), [
-    		'name' => 'finance_order_channel_endpayment',
-    		'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-    		'pluginOptions' => [
-    		'autoclose' => true,
-    		'format' => 'yyyy-mm-dd'
-    		]
-            ]);
-  </div> -->
-
-     
-     
-     
     <div class="form-group">
     <div class='col-md-2' style="    margin-top: 22px;">
         <?= Html::submitButton(Yii::t('app', '提交'), ['class' => 'btn btn-primary']) ?>

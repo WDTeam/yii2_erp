@@ -12,6 +12,8 @@ use dbbase\models\finance\FinanceOrderChannel;
  */
 class FinanceOrderChannelSearch extends FinanceOrderChannel
 {
+	
+	
     public function rules()
     {
         return [
@@ -26,6 +28,18 @@ class FinanceOrderChannelSearch extends FinanceOrderChannel
         return Model::scenarios();
     }
 
+    
+    public static  function get_sourcedate($key,$stype)
+    {
+    	$date=['0'=>'未知','1'=>'APP','2'=>'H5','3'=>'PC','4'=>'POP','5'=>'API'];
+    	if($stype==1){
+    		return $date[$key];
+    	}else{
+    		return $date;
+    	}
+    	
+    }
+    
     
     public function searchfind($where,$flsde){
     
