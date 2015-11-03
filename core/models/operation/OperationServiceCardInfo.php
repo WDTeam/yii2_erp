@@ -43,9 +43,10 @@ class OperationServiceCardInfo extends \dbbase\models\operation\OperationService
      * @return static[]
      */
     public static function getServiceCardInfo()
-    {
-        return self::findAll();
-    }
+	{
+		return self::findAll(['is_del' => 0]);
+	}
+
 
 	/**
 	 * @return bool
