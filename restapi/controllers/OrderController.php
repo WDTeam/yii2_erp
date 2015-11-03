@@ -1848,6 +1848,9 @@ class OrderController extends \restapi\components\Controller
      * @apiParam  {string} [order_booked_time.order_booked_end_time]   结束时间 时间戳 如："14012312312321"
      * @apiParam  {int}    [order_booked_time.coupon_id]      优惠券
      * @apiParamExample {json} Request-Example:
+     * {
+
+     * }
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
