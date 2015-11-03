@@ -156,8 +156,6 @@ class FinanceShopSettleApplyController extends Controller
     public function actionQuery()
     {
         $searchModel = new FinanceShopSettleApplySearch;
-//        $searchModel->finance_shop_settle_apply_starttime = strtotime('-1 week last monday');//统计结束时间,上周第一天
-//        $searchModel->finance_shop_settle_apply_endtime = strtotime('last sunday');//统计结束时间,上周最后一天
         $requestParams = Yii::$app->request->getQueryParams();
         $searchModel->load($requestParams);
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());

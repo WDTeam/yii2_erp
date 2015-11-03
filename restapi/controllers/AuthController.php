@@ -8,6 +8,8 @@ use \core\models\worker\WorkerAccessToken;
 use \core\models\worker\Worker;
 use \core\models\worker\WorkerCode;
 use \restapi\models\alertMsgEnum;
+use core\models\worker\WorkerIdentityConfig;
+
 class AuthController extends \restapi\components\Controller
 {
     /**
@@ -245,7 +247,8 @@ class AuthController extends \restapi\components\Controller
             if (empty($token)) {
                  return $this->send(null, "生成token错误",0,403,null,alertMsgEnum::workerLoginFail);
             }else{
-                 $user = WorkerAccessToken::getWorker($token);
+                 $user = WorkerAccessToken::getWorker($token)->getAttributes();
+                 $user['worker_identity_description']=WorkerIdentityConfig::getWorkerIdentityShow($user['worker_identity_id']);
                  $ret = [
                      "user" => $user,
                      "access_token" => $token
