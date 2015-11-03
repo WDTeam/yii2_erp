@@ -29,8 +29,8 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} order_service_type_id 服务类型商品id
      * @apiParam {String} order_src_id 订单来源id 访问源(android_4.2.2)
-     * @apiParam {String} order_booked_begin_time 服务开始时间
-     * @apiParam {String} order_booked_end_time 服务结束时间
+     * @apiParam {String} order_booked_begin_time 服务开始时间 时间戳  如 *'1443695400'
+     * @apiParam {String} order_booked_end_time 服务结束时间   时间戳  如 *'1443695400'
      * @apiParam {String} order_customer_phone 用户手机号
      * @apiParam {String} order_pay_type 支付方式 1现金 2线上 3第三方 必填
      * @apiParam {String} address_id 订单地址id
@@ -55,7 +55,7 @@ class OrderController extends \restapi\components\Controller
      *  "code": "1",
      *  "msg": "创建订单成功",
      *  "ret": {
-     *          "order_service_type_id": "1",
+     *          "order_service_type_id": "1", 服务类型商品id
      *          "order_src_id": "2",
      *          "order_booked_begin_time": "1445251619",
      *          "order_booked_end_time": "1445255219",
@@ -68,14 +68,14 @@ class OrderController extends \restapi\components\Controller
      *          "order_service_type_name": "Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机",
      *          "order_booked_count": 60,
      *          "order_money": 20,
-     *          "order_address": "光华路soho,张三,18622344432",
-     *          "order_code": "1110",
+     *          "order_address": "地址,姓名,电话",
+     *          "order_code": "订单号",
      *          "order_src_name": "IOS",
      *          "order_channel_name": "后台下单",
      *          "checking_id": 0,
      *          "isdel": 0,
-     *          "created_at": 1445320069,
-     *          "updated_at": 1445320069,
+     *          "created_at": 1445320069,  订单创建时间
+     *          "updated_at": 1445320069,  订单修改时间
      *          "id": 8
      *      }
      *  }
@@ -205,9 +205,9 @@ class OrderController extends \restapi\components\Controller
      * @apiDescription 追加订单
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} order_service_type_id 服务类型商品id
-     * @apiParam {String} order_src_id 订单来源id 访问源(android_4.2.2)
-     * @apiParam {String} order_booked_begin_time 服务开始时间
-     * @apiParam {String} order_booked_end_time 服务结束时间
+     * @apiParam {String} order_src_id 订单来源id 
+     * @apiParam {String} order_booked_begin_time 服务开始时间 时间戳 如 *'1443695400'
+     * @apiParam {String} order_booked_end_time 服务结束时间 时间戳 如 *'1443695400'
      * @apiParam {String} order_customer_phone 用户手机号
      * @apiParam {String} order_parent_id 追加父订单id
      * @apiParam {String} order_pay_type 支付方式 1现金 2线上 3第三方 必填
@@ -354,8 +354,8 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} [channels] 渠道号按'.'分隔
      * @apiParam {String} [order_status] 订单状态按'.'分隔
      * @apiParam {String} [is_asc] 排序方式
-     * @apiParam {String} [from] 开始时间
-     * @apiParam {String} [to] 结束时间
+     * @apiParam {String} [from] 开始时间 如 *'1443695400'
+     * @apiParam {String} [to] 结束时间 如 *'1443695400'
      *
      *
      * @apiSuccess {Object[]} orderList 该状态订单.
@@ -494,11 +494,11 @@ class OrderController extends \restapi\components\Controller
      * @apiDescription 获得用户各种状态的订单数量
      *
      * @apiParam {String} access_token 用户令牌
-     * @apiParam {String} [id] 订单id
+     * @apiParam {int} [id] 订单id
      * @apiParam {String} [channels] 渠道号按'.'分隔
      * @apiParam {String} [order_status] 订单状态按'.'分隔
-     * @apiParam {String} [from] 开始时间
-     * @apiParam {String} [to] 结束时间     *
+     * @apiParam {String} [from] 开始时间 时间戳   如 *'1443695400'
+     * @apiParam {String} [to] 结束时间   时间戳   如 *'1443695400'
      *
      * @apiSuccess {Object[]} orderList 该状态订单.
      *
@@ -568,8 +568,8 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} [channels] 渠道号按'.'分隔
      * @apiParam {String} [order_status] 订单状态按'.'分隔
      * @apiParam {String} [is_asc] 排序方式
-     * @apiParam {String} [from] 开始时间
-     * @apiParam {String} [to] 结束时间
+     * @apiParam {String} [from] 开始时间   时间戳   如 *'1443695400'
+     * @apiParam {String} [to] 结束时间     时间戳   如 *'1443695400'
      * @apiParam {String} [oc.customer_id]客户id
      *
      *
@@ -700,8 +700,8 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} [page] 第几页
      * @apiParam {String} [limit] 每页包含订单数
      * @apiParam {String} [is_asc] 排序方式
-     * @apiParam {String} [from] 开始时间
-     * @apiParam {String} [to] 结束时间
+     * @apiParam {String} [from] 开始时间  时间戳   如 *'1443695400'
+     * @apiParam {String} [to] 结束时间  时间戳   如 *'1443695400'
      * @apiParam {String} [oc.customer_id]客户id
      *
      *
@@ -834,8 +834,8 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} [channels] 渠道号按'.'分隔
      * @apiParam {String} [order_status] 订单状态按'.'分隔
      * @apiParam {String} [oc.customer_id]客户id
-     * @apiParam {String} [from] 开始时间
-     * @apiParam {String} [to] 结束时间
+     * @apiParam {String} [from] 开始时间  时间戳   如 *'1443695400'
+     * @apiParam {String} [to] 结束时间    时间戳   如 *'1443695400'
      *
      *
      * @apiSuccess {Object[]} orderList 该状态订单.
@@ -1370,7 +1370,11 @@ class OrderController extends \restapi\components\Controller
      */
     public function actionCancelOrder()
     {
-        $param = json_decode(Yii::$app->request->getRawBody(), true);
+        $param = Yii::$app->request->post();
+
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
 
         if (!isset($param['access_token']) || !$param['access_token'] || !isset($param['order_id']) || !$param['order_id']) {
             return $this->send(null, "验证码或订单号不能为空", 0, 403);
@@ -1481,7 +1485,7 @@ class OrderController extends \restapi\components\Controller
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      * @apiParam {String} order_id 订单号
      * @apiDescription  客户端删除订单，后台软删除 隐藏订单
-     * @apiParam {String} order_id 订单id
+     * @apiParam {int} order_id 订单id
      *
      *
      * @apiSuccessExample Success-Response:
@@ -1525,9 +1529,7 @@ class OrderController extends \restapi\components\Controller
              * $order_id     订单号
              */
             try {
-                $orderValidation = \core\models\order\Order::validationOrderCoustomer($customer->id, $param['order_id']);
-
-                if (\core\models\order\Order::customerDel($param['order_id'], 0)) {
+                if (Order::customerDel($param['order_id'], 0)) {
                     return $this->send([1], "删除订单成功", 1);
                 } else {
                     return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
@@ -1591,9 +1593,9 @@ class OrderController extends \restapi\components\Controller
      * @apiDescription 阿姨抢单数
      * @apiParam {String} access_token      会话id.
      * @apiParam {String} platform_version  平台版本号
-     * @apiParam {String} [page_size]         条数  #leveltype =2 时要传递
-     * @apiParam {String} [page]              页面  #leveltype =2 时要传递
-     * @apiParam {String} leveltype         判断标示 leveltype=1 指定阿姨订单数，待抢单订单订单数;  leveltype=2 指定阿姨订单列表，待抢单订单列表,指定阿姨订单数，待抢单订单订单数
+     * @apiParam {int} [page_size]         条数  #leveltype =2 时要传递
+     * @apiParam {int} [page]              页面  #leveltype =2 时要传递
+     * @apiParam {int} leveltype         判断标示 leveltype=1 指定阿姨订单数，待抢单订单订单数;  leveltype=2 指定阿姨订单列表，待抢单订单列表,指定阿姨订单数，待抢单订单订单数
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -1690,11 +1692,8 @@ class OrderController extends \restapi\components\Controller
                             $workerCount[$key]['times'] = '';
                         }
                     }
-                    #待抢单订单列表
-//                  $workerCountTwo = OrderSearch::getPushWorkerOrders($worker->id, $page_size, $param['page'], 0);
                     #指定阿姨订单数
                     $workerOrderCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
-
                     #待抢单订单数
                     $orderData = OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
                     #假数据
@@ -1784,7 +1783,7 @@ class OrderController extends \restapi\components\Controller
 
                     $pageNumber = ceil(($workerOrderCount + $orderData) / $param['page_size']);
                     $ret['pageNum'] = $pageNumber;
-                    $ret["orderData"] = $array; // $workerCount;
+                    $ret["orderData"] = $array; // $workerCount; 实际返回数组名称
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (\Exception $e) {
                     return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 1024);
@@ -1849,16 +1848,14 @@ class OrderController extends \restapi\components\Controller
      * @apiParam  {string}  [order_customer_memo] 客户备注
      * @apiParam  {int}    [coupon_id] 优惠券id
      * @apiParam  {Object} [order_booked_time] 
+     * @apiParam  {string} [order_booked_time.order_booked_begin_time] 开始时间 时间戳 如："14012312312321"
+     * @apiParam  {string} [order_booked_time.order_booked_end_time]   结束时间 时间戳 如："14012312312321"
+     * @apiParam  {int}    [order_booked_time.coupon_id]      优惠券
      * @apiParamExample {json} Request-Example:
      * {
-     *  "order_booked_time": [
-     *   // 开始时间 结束时间 优惠券
-     *   {"order_booked_begin_time":"2015-10-01 10:10","order_booked_end_time":"2015-10-02 10:10","coupon_id":"1"},
-     *   {"order_booked_begin_time":"2015-10-03 10:10","order_booked_end_time":"2015-10-04 10:10","coupon_id":"2"},
-     *   {"order_booked_begin_time":"2015-10-05 10:10","order_booked_end_time":"2015-10-06 10:10","coupon_id":"3"},
-     *   {"order_booked_begin_time":"2015-10-07 10:10","order_booked_end_time":"2015-10-08 10:10","coupon_id":"4"}
-     *   ]
-     *  }
+
+     * }
+     * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
@@ -1979,7 +1976,7 @@ class OrderController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token      会话id.
      * @apiParam {String} [platform_version]  平台版本号
-     * @apiParam {String} order_id          订单号
+     * @apiParam {int}    order_id          订单号
      *
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
@@ -2000,21 +1997,26 @@ class OrderController extends \restapi\components\Controller
      */
     public function actionSetWorkerOrder()
     {
-        $param = json_decode(Yii::$app->request->getRawBody(), true);
+        $param = Yii::$app->request->post();
+
+        if (empty($param)) {
+            $param = json_decode(Yii::$app->request->getRawBody(), true);
+        }
 
         if (empty($param['order_id']) || !WorkerAccessToken::getWorker($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
 
         $worker = WorkerAccessToken::getWorker($param['access_token']);
+
         if (!empty($worker) && !empty($worker->id)) {
 
             try {
-                $setWorker = Order::sysAssignDone($param['order_id'], $worker->id);
+                $setWorker = Order::sysAssignDone($param['order_id'], '');
                 $ret['workerSend'] = $setWorker;
                 return $this->send($ret, "操作成功", 1);
             } catch (Exception $e) {
-                return $this->send(null, "boss系统错误,阿姨抢单提交", 1024);
+                return $this->send(null, "boss系统错误,阿姨抢单提交" . $e, 1024);
             }
         }
     }
@@ -2050,22 +2052,22 @@ class OrderController extends \restapi\components\Controller
      *     "ret": [
      *     {
      *     "id": "8",
-     *     "order_code": "1231231231231",
-     *     "order_batch_code": "aaaaa",
+     *     "order_code": "订单号",
+     *     "order_batch_code": "周期订单号",
      *     "order_parent_id": "0",
      *     "order_is_parent": "0",
      *     "sub_order": {
      *     "1": {
      *     "id": "9",
-     *     "order_code": "1231231231232",
-     *     "order_batch_code": "aaaaa",
+     *     "order_code": "订单号",
+     *     "order_batch_code": "周期订单号",
      *     "order_parent_id": "1",
      *     "order_sys_memo": ""
      *     },
      *     "2": {
      *     "id": "10",
-     *     "order_code": "123123",
-     *     "order_batch_code": "aaaaa",
+     *     "order_code": "订单号",
+     *     "order_batch_code": "周期订单号",
      *     "order_cs_memo": "",
      *     "order_sys_memo": ""
      *    }
@@ -2093,12 +2095,13 @@ class OrderController extends \restapi\components\Controller
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
-
         if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
         try {
-            $order = OrderSearch::getBatchOrder($param['order_batch_code'])->asArray()->all();
+            $orderSearch = new \core\models\order\OrderSearch();
+            $order = $orderSearch->searchOrdersWithStatus(["order_batch_code" => $param['order_batch_code']]);
+
             if (count($order) > 0) {
                 $arr = array();
                 $array = array();
@@ -2136,8 +2139,8 @@ class OrderController extends \restapi\components\Controller
      *   "msg": "操作成功",
      *    "ret": {
      *   "id": "2",
-     *    "order_code": "4802003105010",
-     *   "order_batch_code": "",
+     *    "order_code": "订单号",
+     *   "order_batch_code": "周期订单号",
      *   "order_parent_id": "0",
      *   "order_is_parent": 0,
      *   "created_at": "1446041297",

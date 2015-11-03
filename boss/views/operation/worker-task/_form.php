@@ -69,12 +69,17 @@ $conditions = $model->getFullConditions();
         ],
         
         'worker_task_time'=>[
-            'label'=>'时间段',
             'type'=> Form::INPUT_WIDGET, 
             'widgetClass'=>DateRangePicker::classname(),
-//             'presetDropdown'=>true,
-//             'convertFormat'=>true,
-//             'useWithAddon'=>true,
+            'options'=>[
+//                 'presetDropdown'=>true,
+//                 'convertFormat'=>true,
+//                 'useWithAddon'=>true,
+                'pluginOptions'=>[
+                    'minDate'=>date('m/d/Y', time())
+                ]
+            ],
+            
         ], 
         
 //         'worker_task_end'=>[

@@ -210,7 +210,7 @@ class UserController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {String} address_id 地址id
+     * @apiParam {int} address_id 地址id
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -258,7 +258,7 @@ class UserController extends \restapi\components\Controller
      * @apiGroup User
      *
      * @apiParam {String} access_token 用户认证
-     * @apiParam {String} address_id 地址id
+     * @apiParam {int}    address_id 地址id
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      * @apiParam {String} [operation_province_name] 省
      * @apiParam {String} [operation_city_name] 市名
@@ -286,7 +286,12 @@ class UserController extends \restapi\components\Controller
      */
     public function actionSetDefaultAddress()
     {
-        $params = json_decode(Yii::$app->request->getRawBody(), true);
+        $params = Yii::$app->request->post();
+
+        if (empty($params)) {
+            $params = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+
         @$accessToken = $params['access_token'];
         @$addressId = $params['address_id'];
 
@@ -323,7 +328,7 @@ class UserController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {String} address_id 地址id
+     * @apiParam {int}    address_id 地址id
      * @apiParam {String} [operation_area_name] 地区名（朝阳区）
      * @apiParam {String} [address_detail] 详细地址信息
      * @apiParam {String} [address_nickname] 联系人
@@ -359,7 +364,11 @@ class UserController extends \restapi\components\Controller
      */
     public function actionUpdateAddress()
     {
-        $params = json_decode(Yii::$app->request->getRawBody(), true);
+        $params = Yii::$app->request->post();
+        if (empty($params)) {
+            $params = json_decode(Yii::$app->request->getRawBody(), true);
+        }
+
         @$accessToken = $params['access_token'];
         @$addressId = $params['address_id'];
 
@@ -475,7 +484,7 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {DELETE} v1/user/delete-used-worker 删除常用阿姨 （功能已经实现,需再次核实 100%）
+     * @api {DELETE} v1/user/delete-used-worker 删除常用阿姨 （该功能已经砍掉,   100%）
      *
      *
      * @apiName actionDeleteUsedWorker
@@ -483,7 +492,7 @@ class UserController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {String} worker_id  阿姨id
+     * @apiParam {int}    worker_id  阿姨id
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -547,7 +556,7 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} v1/user/black-list-workers 黑名单阿姨列表 （功能已经完成,需要核实传递参数和返回数据格式 已完成100%）
+     * @api {GET} v1/user/black-list-workers 黑名单阿姨列表 （该功能已经砍掉 已完成100%）
      * @apiDescription 获得该用户添加进黑名单的阿姨
      *
      * @apiName actionBlackListWorkers
@@ -621,7 +630,7 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {DELETE} v1/user/remove-worker 移除黑名单中的阿姨 （功能已经实现,需要再次确认传递参数 已完成100%）
+     * @api {DELETE} v1/user/remove-worker 移除黑名单中的阿姨 （该功能已经砍掉 已完成100%）
      *
      *
      * @apiName actionRemoveWorker
@@ -629,7 +638,7 @@ class UserController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token  用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {String} worker_id      阿姨id
+     * @apiParam {int}    worker_id      阿姨id
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -683,7 +692,7 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} v1/user/get-user-money 用户余额和消费记录 （郝建设 已完成99% ;）
+     * @api {GET} v1/user/get-user-money 用户余额和消费记录 （郝建设 已完成100%）
      *
      *
      * @apiName actionGetUserMoney
@@ -797,7 +806,7 @@ class UserController extends \restapi\components\Controller
     }
 
     /**
-     * @api {GET} v1/user/get-user-score 用户积分明细 （功能已实现,不明确需求端所需字段格式 90%）
+     * @api {GET} v1/user/get-user-score 用户积分明细 （已经完成 100%）
      *
      * @apiDescription 获取用户当前积分，积分兑换奖品信息，怎样获取积分信息
      * @apiName actionGetUserScore
@@ -1030,7 +1039,7 @@ class UserController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {String} customer_comment_level 级别id
+     * @apiParam {int} customer_comment_level 级别id
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -1286,7 +1295,7 @@ class UserController extends \restapi\components\Controller
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
      * @apiParam {String} longitude 经度
      * @apiParam {String} latitude 纬度
-     * @apiParam {String} order_service_type_id 服务id
+     * @apiParam {int} order_service_type_id 服务id
      *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK

@@ -36,8 +36,8 @@ use core\models\customer\Customer;
         echo $form->field($model, 'operation_city_id')->widget(Select2::classname(), [
             'name' => 'id',
             'hideSearch' => true,
-            'data'=>Customer::getOnlineCityList(),
-            'options' => ['placeholder' => '选择城市', 'inline' => true],
+            'data'=>Customer::cityList(),
+            'options' => ['placeholder' => '全部', 'inline' => true],
             'pluginOptions' => [
                 'allowClear' => true
             ],
@@ -75,8 +75,8 @@ use core\models\customer\Customer;
         <?php echo $form->field($model, 'customer_is_vip')->widget(Select2::classname(), [
             'name' => 'customer_is_vip',
             'hideSearch' => true,
-            'data' => [-1=>'全部', 1 => '会员', 0 => '非会员'],
-            'options' => ['placeholder' => '选择客户身份', 'inline' => true],
+            'data' => [1 => '会员', 0 => '非会员'],
+            'options' => ['placeholder' => '全部', 'inline' => true],
             'pluginOptions' => [
                 'allowClear' => true
             ],
@@ -84,7 +84,7 @@ use core\models\customer\Customer;
     </div>
 
     <div class='col-md-2'>
-        <?php echo $form->field($model, 'customer_name')->label('客户姓名，电话等'); ?>
+        <?php echo $form->field($model, 'customer_global_search')->label('客户手机'); ?>
     </div>
 
     <?php //echo $form->field($model, 'id') ?>

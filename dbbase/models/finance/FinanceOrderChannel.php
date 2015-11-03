@@ -31,7 +31,7 @@ class FinanceOrderChannel extends \yii\db\ActiveRecord
     {
         return [
             [['finance_order_channel_sort', 'finance_order_channel_is_lock', 'create_time', 'is_del'], 'integer'],
-            [['finance_order_channel_rate','finance_order_channel_name','finance_order_channel_rate'], 'string', 'max' => 50]
+            [['finance_order_channel_rate','finance_order_channel_source','finance_order_channel_name','finance_order_channel_rate'], 'string', 'max' => 50]
         ];
     }
 

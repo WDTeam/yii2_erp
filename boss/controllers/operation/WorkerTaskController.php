@@ -10,6 +10,7 @@ use core\models\worker\WorkerTaskSearch;
 use Yii;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\Url;
 
 /**
  * WorkerTaskController implements the CRUD actions for WorkerTask model.
@@ -34,6 +35,7 @@ class WorkerTaskController extends BaseAuthController
      */
     public function actionIndex()
     {
+        Url::remember();
         $searchModel = new WorkerTaskSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
@@ -124,14 +126,14 @@ class WorkerTaskController extends BaseAuthController
         }
     }
     /**
-     * 任务下线
+     * 任务上下线
      */
     public function actionSetOnline($id, $online)
     {
         $model = $this->findModel($id);
         $model->worker_task_online = $online;
         if($model->save()){
-            return $this->redirect('index');
+            return $this->redirect(Url::previous());
         }
     }
 }

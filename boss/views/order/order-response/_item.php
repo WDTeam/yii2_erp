@@ -2,8 +2,6 @@
 use yii\helpers\Html;
 use yii\helpers\HtmlPurifier;
 use dbbase\models\order\OrderStatusDict;
-use boss\models\worker\Worker;
-use boss\models\order\Order;
 ?>
 
  <div class="m_tab">
@@ -29,43 +27,23 @@ use boss\models\order\Order;
             	           需支付：<?= Html::encode($model->orderExtPay->order_pay_money) ?>元<br />
             	          支付方式：<?= Html::encode($model->orderExtPay->order_pay_channel_name) ?>
             	</td>
-            	<td>
-            	   <?php 
-            	   if ($model->orderExtWorker->worker_id > 0)
-            	   {
-                       echo '接单阿姨：'.$model->orderExtWorker->order_worker_name;
-                       echo '<br />';
-                       echo $model->orderExtWorker->order_worker_phone.'<br />';
-                       echo $model->orderExtWorker->order_worker_type_name.'<br />';
-                       echo $model->orderExtWorker->order_worker_shop_name;
-            	   }
-            	   else 
-            	   {
-            	       if (!empty($model->order_booked_worker_id))
-            	       {
-            	           $worker = Worker::findOne($model->order_booked_worker_id);
-            	           
-            	           echo '指定阿姨：'.$worker->worker_name;
-            	           echo '<br />';
-            	           echo $worker->worker_phone.'<br />';
-            	           echo Worker::getWorkerTypeShow($worker->worker_type).'<br />';
-            	           echo Worker::getShopName($worker->shop_id);            	           
-            	       }
-            	   }
-            	   ?>
+            	<td>指定阿姨：<?= Html::encode($model->orderExtWorker->order_worker_name) ?><br />
+            	    <?= Html::encode($model->orderExtWorker->order_worker_phone) ?><br />
+            	    <?= Html::encode($model->orderExtWorker->order_worker_type_name) ?><br />
+            	    <?= Html::encode($model->orderExtWorker->order_worker_shop_name) ?>
             	</td>
             	<td><?= date('Y-m-d H:i', $model->created_at) ?> 下单
             	</td>
             	<td>
-            		<p><a href="/order/order/edit?id=<?= Html::encode($model->id) ?>">查看订单</a></p>
-            		
-            		<?php if($model->orderExtStatus->order_status_dict_id != OrderStatusDict::ORDER_INIT):?>
-            		<p><a href="###" class="m_tousu">投诉</a></p>
-            		<?php endif;?>
+            		<p><a href="/order/order-response/edit?id=<?= Html::encode($model->id) ?>">查看订单</a></p>
             		<!-- <p><a href="###">发送短信</a></p> -->
             		
             		<?php if($model->orderExtStatus->order_status_dict_id != OrderStatusDict::ORDER_CANCEL):?>
             		<p><a href="###" class="m_quxiao">取消订单</a></p>
+            		<?php endif;?>
+            		
+            		<?php if($model->orderExtStatus->order_status_dict_id != OrderStatusDict::ORDER_INIT):?>
+            		<p><a href="###" class="m_response">响应</a></p>
             		<?php endif;?>
             	</td>
             </tr>
