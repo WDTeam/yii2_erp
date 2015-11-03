@@ -14,12 +14,14 @@ class CustomerSearch extends Customer
 {
     public $time_begin;
     public $time_end;
+	public $customer_global_search;
     public function rules()
     {
         return [
             [['id', 'customer_sex', 'customer_birth', 'operation_area_id', 'operation_city_id', 'customer_level', 'customer_complaint_times', 'customer_login_time', 'customer_is_vip', 'is_del', 'created_at'], 'integer'],
             [['customer_name', 'customer_photo', 'customer_phone', 'customer_email', 'customer_login_ip',], 'safe'],
             [['time_begin', 'time_end'], 'date'],
+			[['customer_global_search'], 'string'],
         ];
     }
 
@@ -55,27 +57,30 @@ class CustomerSearch extends Customer
             'customer_app_version' => $this->customer_app_version,
             'customer_mac' => $this->customer_mac,
             'customer_login_time' => $this->customer_login_time,
-            'customer_is_vip' => $this->customer_is_vip,
+            //'customer_is_vip' => $this->customer_is_vip,
             // 'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             //'is_del' => $this->is_del,
         ]);
+
+		if(isset($this->customer_is_vip)){
+			if($this->customer_is_vip != -1){
+				$query->andFilterWhere(['customer_is_vip' => $this->customer_is_vip]);
+			}
+		}
 
         $query->andFilterWhere(['like', 'customer_name', $this->customer_name])
             ->andFilterWhere(['like', 'customer_photo', $this->customer_photo])
             ->andFilterWhere(['like', 'customer_phone', $this->customer_phone])
             ->andFilterWhere(['like', 'customer_email', $this->customer_email])
             ->andFilterWhere(['like', 'customer_login_ip', $this->customer_login_ip]);
+
         if ($this->time_begin && $this->time_end) {
             $query->andFilterWhere(['>', 'created_at', strtotime($this->time_begin)])
             ->andFilterWhere(['<', 'created_at', strtotime($this->time_end)]);
         }
 
-
-        $query->orFilterWhere(['like', 'customer_name', $this->customer_name])
-            ->orFilterWhere(['like', 'customer_phone', $this->customer_name]);
-
-
+        $query->andFilterWhere(['like', 'customer_phone', $this->customer_global_search]);
         return $dataProvider;
     }
 	

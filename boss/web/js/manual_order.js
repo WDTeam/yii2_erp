@@ -183,6 +183,20 @@ function getWaitManualAssignOrder(){
                 window.work_status = 3;
                 $('#work_status').text('忙碌');
                 window.order_data = data;
+                for(var k in data.booked_workers){
+                    var v = data.booked_workers[k];
+                    $("#worker_list thead").append('<tr>'+
+                        '<td><input type="hidden" value="'+ v.id+'" /><a href="/worker/view/'+ v.id+'" target="_blank">'+ v.worker_name+'</a></td>'+
+                        '<td>'+ v.worker_phone+'</td>'+
+                        '<td>'+ v.shop_name+'</td>'+
+                        '<td>'+ v.worker_identity_description+'</td>'+
+                        '<td>'+ v.order_booked_time_range.join('<br/>')+'</td>'+
+                        '<td>'+ v.worker_stat_order_refuse_percent+'</td>'+
+                        '<td>'+ v.tag+'</td>'+
+                        '<td id="worker_status_'+ v.id+'">'+ v.status.join(',')+'</td>'+
+                        '<td id="worker_memo_'+ v.id+'">'+ (v.memo.length>0?v.memo.join(','):'<a href="javascript:void(0);" class="worker_assign">派单</a> <a href="javascript:void(0);" data-toggle="modal" data-target="#worker_refuse_modal" class="worker_refuse">拒单</a> <a href="javascript:void(0);" class="worker_contact_failure">未接通</a>')+'</td>'+
+                        '</tr>');
+                }
                 getCanAssignWorkerList();
                 showOrder();
                 $("#work_console").hide();
@@ -273,6 +287,7 @@ function showOrder(){
     $("#order_customer_need").text('用户需求：'+order.ext_customer.order_customer_need);
     $("#order_customer_memo").text('用户备注：'+order.ext_customer.order_customer_memo);
     $("#order_cs_memo").text('客服备注：'+order.order.order_cs_memo);
+    $("#order_check_worker").text('是否可更换阿姨：'+(order.ext_flag.order_flag_check_booked_worker ? '是' : '否' ));
 }
 
 function sec2time(time){
