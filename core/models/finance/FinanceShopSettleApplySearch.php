@@ -20,6 +20,10 @@ class FinanceShopSettleApplySearch extends FinanceShopSettleApply
     
     const MANAGE_FEE_PER_ORDER = 10;//门店管理费，每单10元
     
+    public $settle_apply_create_start_time;//结算申请开始时间
+    
+    public $settle_apply_create_end_time;//结算申请结束时间
+    
     public $financeShopSettleApplyStatusArr = [
        FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_FINANCE_FAILED=>'财务审核不通过',
        FinanceSettleApply::FINANCE_SETTLE_APPLY_STATUS_BUSINESS_FAILED=>'业务部门审核不通过',
@@ -31,7 +35,7 @@ class FinanceShopSettleApplySearch extends FinanceShopSettleApply
     public function rules()
     {
         return [
-            [[ 'finance_shop_settle_apply_starttime', 'finance_shop_settle_apply_endtime'], 'required'],
+            [[ 'settle_apply_create_start_time', 'settle_apply_create_end_time'], 'required'],
             [['id', 'shop_id', 'shop_manager_id', 'finance_shop_settle_apply_order_count', 'finance_shop_settle_apply_status', 'finance_shop_settle_apply_cycle', 'finance_shop_settle_apply_starttime', 'finance_shop_settle_apply_endtime', 'is_softdel', 'updated_at', 'created_at'], 'integer'],
             [['shop_name', 'shop_manager_name', 'finance_shop_settle_apply_cycle_des', 'finance_shop_settle_apply_reviewer'], 'safe'],
             [['finance_shop_settle_apply_fee_per_order', 'finance_shop_settle_apply_fee'], 'number'],
@@ -62,11 +66,9 @@ class FinanceShopSettleApplySearch extends FinanceShopSettleApply
             'finance_shop_settle_apply_cycle' => $this->finance_shop_settle_apply_cycle,
             'is_softdel' => $this->is_softdel,
             'updated_at' => $this->updated_at,
-            'created_at' => $this->created_at,
         ]);
 
-        $query->andFilterWhere(['<=', 'finance_shop_settle_apply_starttime', $this->finance_shop_settle_apply_starttime])
-            ->andFilterWhere(['>=', 'finance_shop_settle_apply_endtime', $this->finance_shop_settle_apply_endtime])
+        $query->andFilterWhere(['between', 'created_at', $this->settle_apply_create_start_time,$this->settle_apply_create_end_time])
             ->andFilterWhere(['like', 'shop_name', $this->shop_name])
             ->andFilterWhere(['like', 'shop_manager_name', $this->shop_manager_name])
             ->andFilterWhere(['like', 'finance_shop_settle_apply_cycle_des', $this->finance_shop_settle_apply_cycle_des])
@@ -84,5 +86,15 @@ class FinanceShopSettleApplySearch extends FinanceShopSettleApply
         $this->finance_shop_settle_apply_order_count = $orderCount[0]['orderCount'];
         $this->finance_shop_settle_apply_fee_per_order = self::MANAGE_FEE_PER_ORDER;
         $this->finance_shop_settle_apply_fee = self::MANAGE_FEE_PER_ORDER * $this->finance_shop_settle_apply_order_count;
+    }
+    
+    public function attributeLabels()
+    {
+        $parentAttributeLabels = parent::attributeLabels();
+        $addAttributeLabels = [
+            'settle_apply_create_start_time' => Yii::t('app', '申请开始时间'),
+            'settle_apply_create_end_time' => Yii::t('app', '申请结束时间'),
+        ];
+        return array_merge($addAttributeLabels,$parentAttributeLabels);
     }
 }

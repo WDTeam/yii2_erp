@@ -22,7 +22,7 @@ $this->params['review_section']=$searchModel->review_section;
             <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> 门店结算搜索</h3>
         </div>
         <div class="panel-body">
-            <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
+            <?php  echo $this->render('_query_search', ['model' => $searchModel]); ?>
         </div>
     </div>
      <div class="panel panel-info">
@@ -41,7 +41,7 @@ $this->params['review_section']=$searchModel->review_section;
                 ['attribute'=>'finance_shop_settle_apply_status',
                     'content'=> function($model,$key,$index){return $model->getShopSettleApplyStatusDes($model->finance_shop_settle_apply_status);} ],   
                 ['attribute'=>'comment','content'=>function($model,$key,$index){return $model->comment == null?'':$model->comment;}],
-                ['attribute'=>'created_at','content'=>function($model,$key,$index){return Html::a(date('Y:m:d H:i:s',$model->created_at),'#');}],
+                ['attribute'=>'created_at','content'=>function($model,$key,$index){return Html::a(date('Y-m-d H:i:s',$model->created_at),'#');}],
             ],
             'responsive'=>true,
             'hover'=>true,
