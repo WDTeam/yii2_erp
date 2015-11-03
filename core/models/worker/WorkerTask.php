@@ -63,7 +63,7 @@ class WorkerTask extends \dbbase\models\worker\WorkerTask
                 'worker_rules', 'worker_types', 'worker_cites',
                 'worker_task_cycle',
             ], 'required'],
-            [['worker_task_time'], 'safe'],
+            [['worker_task_time'], 'required'],
             [['worker_types', 'worker_rules', 'worker_cites'], 'safe'],
             [['conditions'], 'validateConditions'],
         ]);
