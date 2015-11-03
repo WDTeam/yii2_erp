@@ -720,7 +720,7 @@ class OrderSearch extends Order
             $query->andFilterWhere(['>=', 'order_booked_begin_time', strtotime($params['booked_from'])]);
         
         if (!empty($params['booked_to']))
-            $query->andFilterWhere(['<=', 'order_booked_end_time', strtotime($params['booked_to'])]);
+            $query->andFilterWhere(['<=', 'order_booked_begin_time', strtotime($params['booked_to'])]);
         return $dataProvider;
     }
     
