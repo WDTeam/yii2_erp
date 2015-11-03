@@ -80,7 +80,7 @@ class WorkerController extends \restapi\components\Controller
                     "worker_identity_id" => $workerInfo['worker_identity_id'],//身份类型
                     "worker_type" => $workerInfo["worker_type"],
                     "worker_type_description" => $workerInfo["worker_type_description"],
-                    'worker_star' => $workerInfo["worker_star"],
+                    'worker_star' => number_format($workerInfo["worker_star"],1),
                     "personal_skill" =>WorkerSkill::getWorkerSkill($workerId) ,
                 ];
             }
@@ -946,7 +946,7 @@ class WorkerController extends \restapi\components\Controller
             "worker_identity_description" => $workerInfo['worker_identity_description'],//身份
             "worker_identity_id" => $workerInfo['worker_identity_id'],//身份类型
             "worker_type" => $workerInfo["worker_type"],
-            'worker_star' => $workerInfo["worker_star"],
+            'worker_star' => number_format($workerInfo["worker_star"],1),
             "personal_skill" => WorkerSkill::getWorkerSkill($workerID),
         ];
         return $this->send($ret,'阿姨信息查询成功', 1, 200,null,alertMsgEnum::workerCenterSuccess);
