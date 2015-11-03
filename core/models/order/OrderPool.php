@@ -32,15 +32,20 @@ class OrderPool extends Model
             'order_id' => $order_id,
             'order_code' => $order->order_code,
             'batch_code' => $order->order_batch_code,
-            'booked_begin_time' => $order->order_booked_begin_time,
-            'booked_end_time' => $order->order_booked_end_time,
             'channel_name' => $order->order_channel_name,
             'booked_count' => $order->order_booked_count,
             'address' => $order->order_address,
             'need' => $order->orderExtCustomer->order_customer_need,
             'money' => $order->orderExtPay->order_pay_type==1?$order->order_money:'0.00',
-            'is_booked_worker' => ($order->order_booked_worker_id==$worker_id)
+            'is_booked_worker' => ($order->order_booked_worker_id==$worker_id),
+            'order_time' => [[$order->order_booked_begin_time.'-'.$order->order_booked_end_time]]
         ];
+        if($order->order_is_parent==1){
+            $child_list = OrderSearch::getChildOrder($order_id);
+            foreach($child_list as $child){
+                $redis_order['order_time'][] = $child->order_booked_begin_time.'-'.$child->order_booked_end_time;
+            }
+        }
         if($order->order_booked_worker_id==$worker_id){
             Yii::$app->redis->executeCommand('zAdd', [self::PUSH_BOOKED_WORKER_ORDERS.'_'.$worker_id, $order_id, json_encode($redis_order)]);
         }else {
