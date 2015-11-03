@@ -17,6 +17,8 @@ namespace core\models\customer;
 use Yii;
 use core\models\order\OrderComplaint;
 use core\models\order\Order;
+use core\models\comment\CustomerCommentTag;
+
 
 
 class CustomerComment extends \dbbase\models\customer\CustomerComment
@@ -142,13 +144,13 @@ class CustomerComment extends \dbbase\models\customer\CustomerComment
                 
                 
                 //增加使用次数
-               /*  $array['customer_comment_tag_ids'];
-                foreach (){
-                	
-                	
-                	
-                } */
-                
+               $arraydate= explode(',',$array['customer_comment_tag_ids']);
+                foreach ($arraydate as $ted){
+                	$dateinfo=CustomerCommentTag::findOne($ted);
+                	$dateinfo->customer_tag_count=$dateinfo->customer_tag_count+1;
+                	$dateinfo->save();
+                	unset($dateinfo);
+                }
                 
 				//通知订单 ，改变订单状态
 				if(!isset($array['adminid'])){$array['adminid']=0;}
