@@ -196,12 +196,15 @@ class OrderComplaint extends \dbbase\models\order\OrderComplaint
      * @return boolean
      */
     public function getComplainNumsByPhone($phone){
-    	
-    	$model = self::find()->andWhere(["complaint_phone"=>$phone])->count("id");
-    	if($model > 0){
-    		return $model;
-    	}else {
-            return false;
-        }
+    	$flag = false;
+    	if(!empty($phone)){
+    		$model = self::find()->andWhere(["complaint_phone"=>$phone])->count("id");
+    		if($model > 0){
+    			return $model;
+    		}else {
+    			return $flag;
+    		}	
+    	}
+    	return $flag;
     }
 }
