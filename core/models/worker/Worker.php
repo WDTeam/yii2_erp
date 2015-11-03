@@ -136,11 +136,16 @@ class Worker extends \dbbase\models\worker\Worker
         }else{
             $workerStatResult = self::find()
                 ->where(['id'=>$worker_id])
-                ->select('id,shop_id,worker_name,worker_phone,worker_stat_order_num,worker_stat_order_refuse,worker_stat_order_complaint,worker_stat_order_money')
+                ->select('id,shop_id,worker_type,worker_identity_id,worker_name,worker_phone,worker_stat_order_num,worker_stat_order_refuse,worker_stat_order_complaint,worker_stat_order_money')
                 ->joinWith('workerStatRelation')
                 ->asArray()
                 ->one();
             if($workerStatResult){
+                //门店名称,家政公司名称
+                $shopInfo = Shop::findone($workerStatResult['shop_id']);
+                $workerStatResult['shop_name'] = isset($shopInfo['name'])?$shopInfo['name']:'';
+                $workerStatResult['worker_type_description'] = self::getWorkerTypeShow($workerStatResult['worker_type']);
+                $workerStatResult['worker_identity_description'] = WorkerIdentityConfig::getWorkerIdentityShow($workerStatResult['worker_identity_id']);
                 if($workerStatResult['worker_stat_order_num']!=0){
                     $workerStatResult['worker_stat_order_refuse_percent'] = Yii::$app->formatter->asPercent($workerStatResult['worker_stat_order_refuse']/$workerStatResult['worker_stat_order_num']);
                 }else{
