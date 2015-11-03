@@ -9,6 +9,7 @@
 
 namespace core\models\order;
 
+use core\models\operation\coupon\Coupon;
 use core\models\operation\OperationShopDistrictGoods;
 use core\models\operation\OperationShopDistrictCoordinate;
 use core\models\customer\Customer;
@@ -669,8 +670,13 @@ class Order extends OrderModel
             $this->order_pay_money = $this->order_money; //支付金额
             if (!empty($this->coupon_id)) {//是否使用了优惠券
                 $coupon = self::getCouponById($this->coupon_id);
-                $this->order_use_coupon_money = $coupon['coupon_money'];
-                $this->order_pay_money -= $this->order_use_coupon_money;
+                if(!empty($coupon)) {
+                    $this->order_use_coupon_money = $coupon['coupon_price'];
+                    $this->order_pay_money -= $this->order_use_coupon_money;
+                }else{
+                    $this->addError('coupon_id', '获取优惠券信息失败！');
+                    return false;
+                }
             }
             if ($this->order_is_use_balance == 1) {
                 try {
@@ -869,24 +875,7 @@ class Order extends OrderModel
      */
     public static function getCouponById($id)
     {
-        $coupon = [
-            1 => [
-                "id" => 1,
-                "coupon_name" => "优惠券30",
-                "coupon_money" => 30
-            ],
-            2 => [
-                "id" => 2,
-                "coupon_name" => "优惠券30",
-                "coupon_money" => 30
-            ],
-            3 => [
-                "id" => 3,
-                "coupon_name" => "优惠券30",
-                "coupon_money" => 30
-            ]
-        ];
-        return $coupon[$id];
+        return Coupon::getCouponBasicInfoById($id);
     }
 
     /**
