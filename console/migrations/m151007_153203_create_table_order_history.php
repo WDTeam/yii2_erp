@@ -46,8 +46,10 @@ class m151007_153203_create_table_order_history extends Migration
 
 //===============================下单信息
             'order_ip' => Schema::TYPE_STRING.'(128) NOT NULL DEFAULT \'\' COMMENT \'下单IP\'',
-            'order_service_type_id' => Schema::TYPE_SMALLINT . '(4) unsigned NOT NULL DEFAULT 0 COMMENT \'订单服务类别ID\'',
+            'order_service_type_id' => Schema::TYPE_INTEGER . '(11) unsigned NOT NULL DEFAULT 0 COMMENT \'订单服务类别ID\'',
             'order_service_type_name' => Schema::TYPE_STRING . '(128) NOT NULL DEFAULT \'\' COMMENT \'订单服务类别\'',
+            'order_service_item_id' => Schema::TYPE_INTEGER . '(11) unsigned NOT NULL DEFAULT 0 COMMENT \'订单服务项ID\'',
+            'order_service_item_name' => Schema::TYPE_STRING . '(128) NOT NULL DEFAULT \'\' COMMENT \'订单服务项\'',
             'order_src_id' => Schema::TYPE_SMALLINT . '(4) unsigned DEFAULT 0 COMMENT \'订单来源，订单入口id\'',
             'order_src_name' => Schema::TYPE_STRING . '(128)  DEFAULT \'\' COMMENT \'订单来源，订单入口名称\'',
             'channel_id' => Schema::TYPE_INTEGER.'(10) unsigned DEFAULT 0 COMMENT \'订单渠道ID\'',

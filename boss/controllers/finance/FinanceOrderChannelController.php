@@ -82,7 +82,17 @@ class FinanceOrderChannelController extends Controller
     {
         $model = new FinanceOrderChannel;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) ) {
+        	$date=Yii::$app->request->post();
+        	$dateinfo=FinanceOrderChannel::find()->where(['finance_order_channel_name'=>$date['FinanceOrderChannel']['finance_order_channel_name']])->count();
+
+        	 if($dateinfo>0){
+        		\Yii::$app->getSession()->setFlash('default','支付渠道名称不能重复！');
+        		return $this->redirect(['index']);
+        	} 
+        	$model->create_time=time();
+        	$model->save();
+        	
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
