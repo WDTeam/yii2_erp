@@ -142,8 +142,13 @@ class server
     {
         $data = $this->getCommand($data);
         $cmd = $data['cmd'];
-        
-        switch ($cmd) {
+        $nextStatus = autoassign\ClientCommand::START;//默认下一步是“开始自动派单”
+        $currentStatus = (bool) json_decode($this->redis->get(REDIS_IS_SERVER_SUSPEND));
+        echo 'currentStatus:'.$currentStatus;
+        if(!$currentStatus){//如果当前是“开始自动派单”，则下一个状态为“停止自动服务”
+            $nextStatus = autoassign\ClientCommand::STOP;
+        }
+        switch ($nextStatus) {
             case autoassign\ClientCommand::START:
             {
                 echo date('Y-m-d H:i:s')." 服务继续\n";

@@ -2,18 +2,19 @@
 
 namespace boss\controllers\finance;
 
-use Yii;
-use dbbase\models\finance\FinanceShopSettleApply;
-use core\models\finance\FinanceShopSettleApplySearch;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use core\models\finance\FinanceWorkerOrderIncomeSearch;
-use core\models\finance\FinanceSettleApplySearch;
-use PHPExcel;
-use PHPExcel_IOFactory;
 use core\models\shop\Shop;
 use core\models\shop\ShopManager;
+use core\models\finance\FinanceSettleApplySearch;
+use core\models\finance\FinanceShopSettleApplySearch;
+use core\models\finance\FinanceWorkerOrderIncomeSearch;
+
+use PHPExcel;
+use PHPExcel_IOFactory;
+
+use Yii;
+use yii\web\Controller;
+use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
 
 /**
  * FinanceShopSettleApplyController implements the CRUD actions for FinanceShopSettleApply model.
@@ -235,7 +236,7 @@ class FinanceShopSettleApplyController extends Controller
      */
     public function actionCreate()
     {
-        $model = new FinanceShopSettleApply;
+        $model = new FinanceShopSettleApplySearch;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -287,7 +288,7 @@ class FinanceShopSettleApplyController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = FinanceShopSettleApply::findOne($id)) !== null) {
+        if (($model = FinanceShopSettleApplySearch::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

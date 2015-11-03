@@ -15,7 +15,7 @@ class OperationServiceCardInfoSearch extends OperationServiceCardInfo
     public function rules()
     {
         return [
-            [['id', 'service_card_info_card_type', 'service_card_info_card_level', 'service_card_info_use_scope', 'service_card_info_valid_days', 'created_at', 'updated_at', 'is_del'], 'integer'],
+            [['id', 'service_card_info_type', 'service_card_info_level', 'service_card_info_scope', 'service_card_info_valid_days', 'created_at', 'updated_at', 'is_del'], 'integer'],
             [['service_card_info_name'], 'safe'],
             [['service_card_info_value', 'service_card_info_rebate_value'], 'number'],
         ];
@@ -40,11 +40,11 @@ class OperationServiceCardInfoSearch extends OperationServiceCardInfo
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'service_card_info_card_type' => $this->service_card_info_card_type,
-            'service_card_info_card_level' => $this->service_card_info_card_level,
+            'service_card_info_type' => $this->service_card_info_type,
+            'service_card_info_level' => $this->service_card_info_level,
             'service_card_info_value' => $this->service_card_info_value,
             'service_card_info_rebate_value' => $this->service_card_info_rebate_value,
-            'service_card_info_use_scope' => $this->service_card_info_use_scope,
+            'service_card_info_scope' => $this->service_card_info_scope,
             'service_card_info_valid_days' => $this->service_card_info_valid_days,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

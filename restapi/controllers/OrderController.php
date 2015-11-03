@@ -1632,10 +1632,17 @@ class OrderController extends \restapi\components\Controller
      *       "address": "服务地址",
      *       "need": "备注说明",
      *       "money": "订单价格",
-     *         },
-     * 	      ]
-     *      },
-     *    "time":172800,   倒计时秒 #要求2天
+     *       "is_booker_worker" => "判断标示 1有时间格式 0没有时间格式",
+     *       "times" => '2:00:00',
+     *                    "order_time":
+     *                 [
+     *                    '开始时间 - 结束时间',
+     *                    '1447133400 - 1447151400',
+     *                   '1447738200 - 1447756200'
+     *               ]
+     *          },
+     * 	       ]
+     *       },
      *    "pageNum":"总页码数"
      *    }
      * 
@@ -1672,39 +1679,110 @@ class OrderController extends \restapi\components\Controller
                 try {
                     #指定阿姨订单列表 待抢单订单列表
                     $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page']);
-                    
-                    foreach($workerCount as $key=>$val){
-                        if(@$val['is_booker_worker']){
+
+                    foreach ($workerCount as $key => $val) {
+                        if (@$val['is_booker_worker']) {
                             $workerCount[$key]['times'] = '2:00:00';
-                        }else{
-                             $workerCount[$key]['times'] = '';
+                        } else {
+                            $workerCount[$key]['times'] = '';
                         }
                     }
-                    
-//                    #待抢单订单列表
-//                    $workerCountTwo = OrderSearch::getPushWorkerOrders($worker->id, $page_size, $param['page'], 0);
-//
-//                    #指定阿姨订单数
+
+                    #待抢单订单列表
+//                  $workerCountTwo = OrderSearch::getPushWorkerOrders($worker->id, $page_size, $param['page'], 0);
+                    #指定阿姨订单数
                     $workerOrderCount = OrderSearch::getPushWorkerOrdersCount($worker->id, 1);
-////                    if ($param['page'] == 1) {
-////                        $ret['workerOrderNum'] = ceil($workerOrderCount / $param['page_size']) + 1;
-////                    }
-////                    #待抢单订单数
+
+                    #待抢单订单数
                     $orderData = OrderSearch::getPushWorkerOrdersCount($worker->id, 0);
-////                    if ($param['page'] == 1) {
-////                        $ret['orderNum'] = ceil($orderData / $param['page_size']) + 1;
-////                    }
-//
-//                    if ($workerOrderCount > $orderData) {
-//                        $orderNumber = $workerOrderCount;
-//                    } else {
-//                        $orderNumber = $orderData;
-//                    }
+                    #假数据
+                    $array = Array(
+                        array(
+                            "order_id" => 1,
+                            "order_code" => 701510308380284,
+                            "batch_code" => 'zhouqidingdan',
+                            "channel_name" => '后台下单',
+                            "booked_count" => 2,
+                            "address" => '北京,北京市,朝阳区',
+                            "need" => '重点打扫厨房,重点打扫卫生间',
+                            "money" => '50.00',
+                            "is_booker_worker" => 1,
+                            "times" => '2:00:00',
+                            "order_time" => array(
+                                '1446528600 - 1446546600',
+                                '1447133400 - 1447151400',
+                                '1447738200 - 1447756200'
+                            )
+                        ),
+                        array(
+                            "order_id" => 2,
+                            "order_code" => 701510308380285,
+                            "batch_code" => '',
+                            "channel_name" => '后台下单',
+                            "booked_count" => 2,
+                            "address" => '北京,北京市,朝阳区',
+                            "need" => '重点打扫厨房,重点打扫卫生间',
+                            "money" => '60.00',
+                            "is_booker_worker" => 0,
+                            "order_time" => array(
+                                '1446249600 - 1446256801'
+                            )
+                        ),
+                        array(
+                            "order_id" => 3,
+                            "order_code" => 701510308380286,
+                            "batch_code" => 'zhouqidingdantwo',
+                            "channel_name" => '后台下单',
+                            "booked_count" => 2,
+                            "address" => '北京,北京市,海淀区区',
+                            "need" => '重点打扫厨房',
+                            "money" => '70.00',
+                            "is_booker_worker" => 1,
+                            "times" => '2:00:00',
+                            "order_time" => array(
+                                '1443666600-1443695400',
+                                '1443753000-1443781800',
+                                '1443839400-1443868200',
+                                '1443925800-1443954600'
+                            )
+                        ),
+                        array(
+                            "order_id" => 4,
+                            "order_code" => 701510308380287,
+                            "batch_code" => 'zhouqidingdantwo',
+                            "channel_name" => '后台下单',
+                            "booked_count" => 2,
+                            "address" => '北京,北京市,丰台区',
+                            "need" => '重点打扫卫生间',
+                            "money" => '80.00',
+                            "is_booker_worker" => 1,
+                            "times" => '2:00:00',
+                            "order_time" => array(
+                                '1448937000-1448965800',
+                                '1449541800-1449570600',
+                                '1450146600-1450175400',
+                                '1450751400-1450780200'
+                            )
+                        ),
+                        array(
+                            "order_id" => 2,
+                            "order_code" => 701510308380285,
+                            "batch_code" => '',
+                            "channel_name" => '后台下单',
+                            "booked_count" => 2,
+                            "address" => '北京',
+                            "need" => '重点打扫卫生间11',
+                            "money" => '25.00',
+                            "is_booker_worker" => 0,
+                            "order_time" => array(
+                                '1449801000-1449808200'
+                            )
+                        )
+                    );
+
                     $pageNumber = ceil(($workerOrderCount + $orderData) / $param['page_size']);
                     $ret['pageNum'] = $pageNumber;
-                    $ret["orderData"] = $workerCount;
-                    #倒计时
-                   # $ret['time'] = 172800;
+                    $ret["orderData"] = $array; // $workerCount;
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (\Exception $e) {
                     return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 1024);
@@ -1888,40 +1966,6 @@ class OrderController extends \restapi\components\Controller
         } else {
             return $this->send(null, "用户认证已经过期,请重新登录.", 0, 403);
         }
-    }
-    
-    
-     /**
-     * @api {get} v1/order/get-cycle-order 获得周期订单 (haojianshe 100%)
-     *
-     * @apiName actionGetCycleOrder
-     * @apiGroup Order
-     * @apiDescription 阿姨抢单提交
-     *
-     * @apiParam {String} access_token      会话id.
-     * @apiParam {String} [platform_version]  平台版本号
-     * @apiParam {String} order_batch_code          周期订单号
-     *
-     * @apiSuccessExample {json} Success-Response:
-     * HTTP/1.1 200 OK
-     * {
-     *      "code": "ok",
-     *      "msg":"操作成功",
-     * }
-     *
-     * @apiError SessionIdNotFound 未找到会话ID.
-     *
-     * @apiErrorExample Error-Response:
-     *  HTTP/1.1 404 Not Found
-     *  {
-     *      "code":"0",
-     *      "msg": "操作失败"
-     *  }
-     *
-     */
-    
-    public function actionGetCycleOrder(){
-        
     }
 
     /**

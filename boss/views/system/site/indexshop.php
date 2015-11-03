@@ -3,8 +3,8 @@
 
 
 use boss\assets\AppAsset;
-AppAsset::addCss($this, 'shop/css/bootstrap.min.css');
-AppAsset::addCss($this, 'shop/css/index.css');
+AppAsset::addCss($this, 'css/shop/bootstrap.min.css');
+AppAsset::addCss($this, 'css/shop/index.css');
 $this->title = '欢迎进入MIIN BOSS业务运营支撑系统';
 ?>
  <div class="container">

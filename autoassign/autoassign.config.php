@@ -67,12 +67,12 @@ return [
      * 启用守护进程后，标准输入和输出会被重定向到 log_file
      * 如果未设置log_file，将重定向到 /dev/null，所有打印屏幕的信息都会被丢弃
      */
-    'DAEMONIZE' => false,
+    'DAEMONIZE' => true,
 
     /*
      * 日志文件
      */
-    'LOG_FILE' => './autoassign-server.log',
+    'LOG_FILE' => '/code/ejj-homeclean-boss-logs/autoassign-server.log',
 
     /*
      * 设置worker进程的最大任务数
