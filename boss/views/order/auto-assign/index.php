@@ -25,23 +25,45 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="container">
     <div class="row">
         <div class="col-md-4 form-inline">
-            <label>服务器地址：</label>
-            <input id="serverip" class="form-control" name="serverip" value="<?php echo !empty($srvInfo['ip'])? $srvInfo['ip'] : ''?>" placeholder="SOCKET服务器地址" />
+            <label>派单服务器地址：&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <input readonly="true" class="form-control" value="<?php echo !empty($srvInfo['ip'])? $srvInfo['ip'].':'.$srvInfo['port'] : ''?>"  />
+            <input id="serverip" class="form-control" name="serverip" type = "hidden" value="<?php echo !empty($srvInfo['ip'])? $srvInfo['ip'] : ''?>"  />
+             <input id="serverport" class="form-control" style="width:30%;" name="serverport" type = "hidden" value="<?php echo !empty($srvInfo['port'])? $srvInfo['port'] : ''?>" />
         </div>
         <div class="col-md-3 form-inline">
-            <label>服务器端口：</label>
-            <input id="serverport" class="form-control" style="width:30%;" name="serverport" value="<?php echo !empty($srvInfo['port'])? $srvInfo['port'] : ''?>" placeholder="SOCKET服务器端口" />
-        </div>
-        <div class="col-md-3">
-            <button class="btn btn-default" id="connect" name="connect">连接</button>
+            <button class="btn btn-default" id="connect" name="connect">连接派单服务器</button>
             <button class="btn btn-default" id="start" name="start">停止自动派单</button>
+        </div>
+        <div class="col-md-5 form-inline" style="margin-top:8px;">
+            <label>当前状态：</label><div style="display: inline;" id="connectStatus"></div>
         </div>
     </div>
     <div class="row">&nbsp;</div>
     <div class="row">
-        <div class="col-md-8  form-inline">
-        <label>&nbsp;&nbsp;&nbsp;&nbsp;当前状态：&nbsp;&nbsp;</label><div style="display:inline;" id="connectStatus"></div>
+        <div class="col-md-4 form-inline">
+            <label>Redis服务器地址：&nbsp;</label>
+            <input readonly="true" class="form-control" value="<?php echo !empty($config['REDIS_SERVER_IP'])? $config['REDIS_SERVER_IP'].':'.$config['REDIS_SERVER_PORT '] : ''?>"  />
         </div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <div class="row">
+        <div class="col-md-6  form-inline">
+            <label>全职阿姨派单时间：</label>
+	 
+            <input id="qstart" class="form-control" maxlength="18" name="qstart" value="0" readonly="true" /> 至 <input id="qend" class="form-control" readonly="true"  name="qend" value="<?php echo !empty($config['FULLTIME_WORKER_TIMEOUT'])? $config['FULLTIME_WORKER_TIMEOUT'] : ''?>" />分钟
+	 
+        </div>
+-    </div>
+    <div class="row">
+        <div class="col-md-6  form-inline">
+            <label>兼职阿姨派单时间：</label>
+            <input id="jstart" class="form-control" name="jstart" value="5" readonly="true" /> 至 <input id="jend" readonly="true" class="form-control" name="jend" value="<?php echo !empty($config['FREETIME_WORKER_TIMEOUT'])? $config['FREETIME_WORKER_TIMEOUT'] : ''?>" />分钟
+	 
+        </div>
+     </div>
+    <div class="row">&nbsp;</div>
+    <div class="row">
+       
     </div>
     <div class="row">&nbsp;</div>
     <table class="table table-hover table-bordered">
