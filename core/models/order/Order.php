@@ -374,7 +374,6 @@ class Order extends OrderModel
     public static function assignDone($order_id, $worker, $admin_id, $assign_type)
     {
         $result = false;
-        $order_count = 1;
         $order = OrderSearch::getOne($order_id);
         $conflict = OrderSearch::WorkerOrderExistsConflict($worker['id'], $order->order_booked_begin_time, $order->order_booked_end_time);
         if($order->order_is_parent==1){
@@ -394,7 +393,6 @@ class Order extends OrderModel
             $result = self::_assignDone($order, $worker, $admin_id, $assign_type,$transact);
             if($result && $order->order_is_parent==1) {
                 foreach ($child_list as $child) {
-                    $order_count++;
                     $result = self::_assignDone($child, $worker, $admin_id, $assign_type, $transact);
                 }
             }
@@ -402,7 +400,7 @@ class Order extends OrderModel
                 $transact->commit();
                 OrderPool::remOrderForWorkerPushList($order->id, true); //永久从接单大厅中删除此订单
                 //更新阿姨接单数量
-                WorkerStat::updateWorkerStatOrderNum($worker['id'], $order_count);
+                WorkerStat::updateWorkerStatOrderNum($worker['id'], 1); //第二个参数是阿姨的接单次数
             }
         }
         return ['status' => $result, 'errors' => $order->errors];

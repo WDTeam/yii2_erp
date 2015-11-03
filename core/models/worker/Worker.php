@@ -62,7 +62,6 @@ class Worker extends \dbbase\models\worker\Worker
 
     const DISTRICT = 'DISTRICT';
     const WORKER = 'WORKER';
-    public  $worker_identity_description;
     /**
      * 获取阿姨基本信息
      * @param integer $worker_id  阿姨id

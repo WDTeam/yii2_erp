@@ -1659,18 +1659,22 @@ class OrderController extends \restapi\components\Controller
      */
     public function actionGetWorkerOrders()
     {
-
         $param = Yii::$app->request->get();
 
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
 
-        $worker = WorkerAccessToken::getWorker($param['access_token']);
-
-        if (empty($param['leveltype']) || empty($param['access_token'])) {
-            return $this->send(null, "缺少规定的参数", 0, 403);
+        if (empty($param['access_token']) || !WorkerAccessToken::checkAccessToken($param['access_token'])) {
+            return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
+
+        #判断传递的参数
+        if (empty($param['leveltype'])) {
+            return $this->send(null, "缺少规定的参数leveltype", 0, 403);
+        }
+
+        $worker = WorkerAccessToken::getWorker($param['access_token']);
         if (!empty($worker) && !empty($worker->id)) {
             if ($param['leveltype'] == 2) {
                 if (empty($param['page_size']) || empty($param['page'])) {
@@ -1679,7 +1683,6 @@ class OrderController extends \restapi\components\Controller
                 try {
                     #指定阿姨订单列表 待抢单订单列表
                     $workerCount = OrderSearch::getPushWorkerOrders($worker->id, $param['page_size'], $param['page']);
-
                     foreach ($workerCount as $key => $val) {
                         if (@$val['is_booker_worker']) {
                             $workerCount[$key]['times'] = '2:00:00';
@@ -1687,7 +1690,6 @@ class OrderController extends \restapi\components\Controller
                             $workerCount[$key]['times'] = '';
                         }
                     }
-
                     #待抢单订单列表
 //                  $workerCountTwo = OrderSearch::getPushWorkerOrders($worker->id, $page_size, $param['page'], 0);
                     #指定阿姨订单数
@@ -2036,119 +2038,42 @@ class OrderController extends \restapi\components\Controller
      * @apiName actionGetOrderWorker
      * @apiGroup Order
      *
-     * @apiParam {String} access_token 用户认证
-     * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {String} order_batch_code 访问源(android_4.2.2)
+     * @apiParam {String} access_token    用户认证
+     * @apiParam {String} [app_version]    访问源(android_4.2.2)
+     * @apiParam {String} order_batch_code 周期订单号
      * 
-     *
-     *
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
-      {
-      "code": 1,
-      "msg": "操作成功",
-      "ret": [
-      {
-      "id": "8",
-      "order_code": "1231231231231",
-      "order_batch_code": "aaaaa",
-      "order_parent_id": "0",
-      "order_is_parent": "0",
-      "created_at": "3",
-      "updated_at": "0",
-      "isdel": "0",
-      "ver": "1",
-      "version": "1",
-      "order_ip": "",
-      "order_service_type_id": "0",
-      "order_service_type_name": "",
-      "order_src_id": "0",
-      "order_src_name": "",
-      "channel_id": "0",
-      "order_channel_name": "",
-      "order_unit_money": "0.00",
-      "order_money": "0.00",
-      "order_booked_count": "0",
-      "order_booked_begin_time": "3",
-      "order_booked_end_time": "0",
-      "city_id": "0",
-      "district_id": "0",
-      "address_id": "0",
-      "order_address": "",
-      "order_booked_worker_id": "0",
-      "checking_id": "0",
-      "order_cs_memo": "",
-      "order_sys_memo": "",
-      "sub_order": {
-      "1": {
-      "id": "9",
-      "order_code": "1231231231232",
-      "order_batch_code": "aaaaa",
-      "order_parent_id": "1",
-      "order_is_parent": "0",
-      "created_at": "2",
-      "updated_at": "0",
-      "isdel": "0",
-      "ver": "1",
-      "version": "1",
-      "order_ip": "",
-      "order_service_type_id": "0",
-      "order_service_type_name": "",
-      "order_src_id": "0",
-      "order_src_name": "",
-      "channel_id": "0",
-      "order_channel_name": "",
-      "order_unit_money": "0.00",
-      "order_money": "0.00",
-      "order_booked_count": "0",
-      "order_booked_begin_time": "2",
-      "order_booked_end_time": "0",
-      "city_id": "0",
-      "district_id": "0",
-      "address_id": "0",
-      "order_address": "",
-      "order_booked_worker_id": "0",
-      "checking_id": "0",
-      "order_cs_memo": "",
-      "order_sys_memo": ""
-      },
-      "2": {
-      "id": "10",
-      "order_code": "123123",
-      "order_batch_code": "aaaaa",
-      "order_parent_id": "1",
-      "order_is_parent": "0",
-      "created_at": "1",
-      "updated_at": "0",
-      "isdel": "0",
-      "ver": "1",
-      "version": "1",
-      "order_ip": "",
-      "order_service_type_id": "0",
-      "order_service_type_name": "",
-      "order_src_id": "0",
-      "order_src_name": "",
-      "channel_id": "0",
-      "order_channel_name": "",
-      "order_unit_money": "0.00",
-      "order_money": "0.00",
-      "order_booked_count": "0",
-      "order_booked_begin_time": "1",
-      "order_booked_end_time": "0",
-      "city_id": "0",
-      "district_id": "0",
-      "address_id": "0",
-      "order_address": "",
-      "order_booked_worker_id": "0",
-      "checking_id": "0",
-      "order_cs_memo": "",
-      "order_sys_memo": ""
-      }
-      }
-      }
-      ],
-      "alertMsg": ""
-      }
+     *    {
+     *     "code": 1,
+     *     "msg": "操作成功",
+     *     "ret": [
+     *     {
+     *     "id": "8",
+     *     "order_code": "1231231231231",
+     *     "order_batch_code": "aaaaa",
+     *     "order_parent_id": "0",
+     *     "order_is_parent": "0",
+     *     "sub_order": {
+     *     "1": {
+     *     "id": "9",
+     *     "order_code": "1231231231232",
+     *     "order_batch_code": "aaaaa",
+     *     "order_parent_id": "1",
+     *     "order_sys_memo": ""
+     *     },
+     *     "2": {
+     *     "id": "10",
+     *     "order_code": "123123",
+     *     "order_batch_code": "aaaaa",
+     *     "order_cs_memo": "",
+     *     "order_sys_memo": ""
+     *    }
+     *    }
+     *    }
+     *     ],
+     *     "alertMsg": ""
+     *     }
      *
      * @apiError UserNotFound 用户认证已经过期.
      *
@@ -2169,7 +2094,7 @@ class OrderController extends \restapi\components\Controller
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
 
-        if (empty($param['order_batch_code']) || !WorkerAccessToken::getWorker($param['access_token'])) {
+        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
         try {
@@ -2202,7 +2127,7 @@ class OrderController extends \restapi\components\Controller
      *
      * @apiParam {String} access_token 用户认证
      * @apiParam {String} [app_version] 访问源(android_4.2.2)
-     * @apiParam {String} id 访问源(android_4.2.2)
+     * @apiParam {String} id            订单号
      * 
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -2258,7 +2183,7 @@ class OrderController extends \restapi\components\Controller
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
 
-        if (empty($param['id']) || !WorkerAccessToken::getWorker($param['access_token'])) {
+        if (empty($param['access_token']) || !CustomerAccessToken::checkAccessToken($param['access_token'])) {
             return $this->send(null, "用户认证已经过期,请重新登录", 0, 403);
         }
         try {
