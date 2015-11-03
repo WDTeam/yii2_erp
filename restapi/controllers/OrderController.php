@@ -1863,7 +1863,7 @@ class OrderController extends \restapi\components\Controller
      * HTTP/1.1 200 OK
      * {
      *      "code": "ok",
-     *      "msg":"添加成功",
+     *      "msg":"添加成功", 
      * }
      *
      * @apiError SessionIdNotFound 未找到会话ID.
