@@ -19,6 +19,8 @@ use dbbase\models\ActiveRecord;
  * @property string $order_ip
  * @property integer $order_service_type_id
  * @property string $order_service_type_name
+ * @property integer $order_service_item_id
+ * @property string $order_service_item_name
  * @property integer $order_src_id
  * @property string $order_src_name
  * @property string $channel_id
@@ -182,11 +184,11 @@ class Order extends ActiveRecord
     public function rules()
     {
         return [
-            [['admin_id','order_service_type_id','order_src_id','order_booked_begin_time','address_id'],'required'],
-            [['order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'isdel', 'order_service_type_id', 'order_src_id', 'channel_id', 'order_booked_begin_time', 'order_booked_end_time', 'city_id', 'address_id', 'district_id', 'order_booked_worker_id', 'checking_id','version'], 'integer'],
+            [['admin_id','order_service_type_id','order_service_item_id','order_src_id','order_booked_begin_time','address_id'],'required'],
+            [['order_parent_id', 'order_is_parent', 'created_at', 'updated_at', 'isdel', 'order_service_type_id','order_service_item_id', 'order_src_id', 'channel_id', 'order_booked_begin_time', 'order_booked_end_time', 'city_id', 'address_id', 'district_id', 'order_booked_worker_id', 'checking_id','version'], 'integer'],
             [['order_unit_money',  'order_booked_count','order_money'], 'number'],
             [['order_code', 'order_channel_name', 'order_batch_code'], 'string', 'max' => 64],
-            [['order_service_type_name', 'order_ip','order_src_name'], 'string', 'max' => 128],
+            [['order_service_type_name','order_service_item_name', 'order_ip','order_src_name'], 'string', 'max' => 128],
             [['order_address', 'order_cs_memo','order_sys_memo'], 'string', 'max' => 255],
             [['order_code'], 'unique'],
             [$this->attributesExt,'safe']
@@ -210,6 +212,8 @@ class Order extends ActiveRecord
             'order_ip' => '下单IP',
             'order_service_type_id' => '订单服务类别ID',
             'order_service_type_name' => '订单服务类别',
+            'order_service_item_id' => '订单服务项ID',
+            'order_service_item_name' => '订单服务项',
             'order_src_id' => '订单来源，订单入口id',
             'order_src_name' => '订单来源，订单入口名称',
             'channel_id' => '订单渠道ID',
@@ -407,6 +411,8 @@ class Order extends ActiveRecord
                 'order_ip' => $this->order_ip,
                 'order_service_type_id' => $this->order_service_type_id,
                 'order_service_type_name' => $this->order_service_type_name,
+                'order_service_item_id' => $this->order_service_item_id,
+                'order_service_item_name' => $this->order_service_item_name,
                 'order_src_id' => $this->order_src_id,
                 'order_src_name' => $this->order_src_name,
                 'channel_id' => $this->channel_id,

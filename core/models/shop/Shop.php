@@ -41,6 +41,7 @@ class Shop extends \dbbase\models\shop\Shop
     {
         return array_merge(parent::rules(),[
             [['name','city_id', 'street', 'principal', 'tel', 'shop_manager_id'], 'required'],
+            [['street'], 'string', 'max'=>30],
             [['shop_manager_id', 'province_id', 'city_id', 'county_id', 'is_blacklist', 
                  'audit_status', 'worker_count', 
                 'complain_coutn', 'tel', 'bankcard_number'], 'integer'],

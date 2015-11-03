@@ -4,7 +4,7 @@
 window.coupons = new Array();
 window.cards = new Array();
 var address_list = new Object();
-var goods_list = new Array();
+var goods_list = new Object();
 var district_id = 0;
 
 $("#order-order_customer_phone").keyup(function(e){
@@ -24,15 +24,8 @@ $("#order_create_form").submit(function(){
 });
 
 
-$(document).on("change","#order-order_service_type_id input",function(){
-    var goods_id = $("#order-order_service_type_id input:checked").val();
-    var goods = new Array();
-    for(var k in goods_list){
-        if(goods_list[k].operation_goods_id == goods_id){
-            goods = goods_list[k];
-            break;
-        }
-    }
+$(document).on("change","#order-order_service_item_id input",function(){
+    var goods = goods_list[$("#order-order_service_item_id input:checked").val()];
     var unit_price = parseFloat(goods.operation_shop_district_goods_price);
     $("#order_unit_money").text(unit_price.toFixed(2));
     $("#order-order_unit_money").val(unit_price.toFixed(2));
@@ -250,14 +243,14 @@ function getGoods(){
         dataType: "json",
         success: function (data) {
             if(data.code==200){
-                $("#order-order_service_type_id").html('');
-                goods_list = data.data;
+                $("#order-order_service_item_id").html('');
                 district_id = data.district_id;
-                for(var k in goods_list){
-                    var v = goods_list[k];
-                    $("#order-order_service_type_id").append(
+                for(var k in data.data){
+                    var v = data.data[k];
+                    goods_list[v.operation_goods_id]=v;
+                    $("#order-order_service_item_id").append(
                         '<label class="radio-inline"><input type="radio" value="'+ v.operation_goods_id
-                        +'" name="Order[order_service_type_id]"> '+ v.operation_shop_district_goods_name+'</label>'
+                        +'" name="Order[order_service_item_id]"> '+ v.operation_shop_district_goods_name+'</label>'
                     );
                 }
             }else{
@@ -271,16 +264,17 @@ function getGoods(){
 
 function getCoupons(){
     if(window.customer != undefined) {
+        var goods = goods_list[$("#order-order_service_item_id input:checked").val()];
         $.ajax({
             type: "GET",
-            url: "/order/order/coupons/?id=" + window.customer.id+"&service_id="+$('#order-order_service_type_id input:checked').val(),
+            url: "/order/order/coupons/?id=" + window.customer.id+"&cate_id="+goods.operation_category_id,
             dataType: "json",
             success: function (coupons) {
                 if (coupons.length > 0) {
                     $("#order-coupon_id").html('<option value="">请选择优惠券</option>');
                     for (var k in coupons) {
                         var v = coupons[k];
-                        window.coupons[v.id] = v.coupon_money;
+                        window.coupons[v.id] = v.coupon_price;
                         $("#order-coupon_id").append(
                             '<option value="' + v.id + '" > ' + v.coupon_name + '</option>'
                         );

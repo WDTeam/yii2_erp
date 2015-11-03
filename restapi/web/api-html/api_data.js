@@ -277,21 +277,21 @@ define({ "api": [
             "type": "<p>String</p> ",
             "optional": false,
             "field": "order_src_id",
-            "description": "<p>订单来源id 访问源(android_4.2.2)</p> "
+            "description": "<p>订单来源id</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
             "field": "order_booked_begin_time",
-            "description": "<p>服务开始时间</p> "
+            "description": "<p>服务开始时间 时间戳 如 *'1443695400'</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
             "field": "order_booked_end_time",
-            "description": "<p>服务结束时间</p> "
+            "description": "<p>服务结束时间 时间戳 如 *'1443695400'</p> "
           },
           {
             "group": "Parameter",
@@ -485,14 +485,14 @@ define({ "api": [
             "type": "<p>String</p> ",
             "optional": false,
             "field": "order_booked_begin_time",
-            "description": "<p>服务开始时间</p> "
+            "description": "<p>服务开始时间 时间戳  如 *'1443695400'</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": false,
             "field": "order_booked_end_time",
-            "description": "<p>服务结束时间</p> "
+            "description": "<p>服务结束时间   时间戳  如 *'1443695400'</p> "
           },
           {
             "group": "Parameter",
@@ -610,7 +610,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n \"code\": \"1\",\n \"msg\": \"创建订单成功\",\n \"ret\": {\n         \"order_service_type_id\": \"1\",\n         \"order_src_id\": \"2\",\n         \"order_booked_begin_time\": \"1445251619\",\n         \"order_booked_end_time\": \"1445255219\",\n         \"address_id\": \"1\",\n         \"channel_id\": \"20\",\n         \"order_ip\": \"::1\",\n         \"order_parent_id\": 0,\n         \"order_is_parent\": 0,\n         \"order_unit_money\": \"20.0000\",\n         \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n         \"order_booked_count\": 60,\n         \"order_money\": 20,\n         \"order_address\": \"光华路soho,张三,18622344432\",\n         \"order_code\": \"1110\",\n         \"order_src_name\": \"IOS\",\n         \"order_channel_name\": \"后台下单\",\n         \"checking_id\": 0,\n         \"isdel\": 0,\n         \"created_at\": 1445320069,\n         \"updated_at\": 1445320069,\n         \"id\": 8\n     }\n }",
+          "content": "HTTP/1.1 200 OK\n{\n \"code\": \"1\",\n \"msg\": \"创建订单成功\",\n \"ret\": {\n         \"order_service_type_id\": \"1\", 服务类型商品id\n         \"order_src_id\": \"2\",\n         \"order_booked_begin_time\": \"1445251619\",\n         \"order_booked_end_time\": \"1445255219\",\n         \"address_id\": \"1\",\n         \"channel_id\": \"20\",\n         \"order_ip\": \"::1\",\n         \"order_parent_id\": 0,\n         \"order_is_parent\": 0,\n         \"order_unit_money\": \"20.0000\",\n         \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n         \"order_booked_count\": 60,\n         \"order_money\": 20,\n         \"order_address\": \"地址,姓名,电话\",\n         \"order_code\": \"订单号\",\n         \"order_src_name\": \"IOS\",\n         \"order_channel_name\": \"后台下单\",\n         \"checking_id\": 0,\n         \"isdel\": 0,\n         \"created_at\": 1445320069,  订单创建时间\n         \"updated_at\": 1445320069,  订单修改时间\n         \"id\": 8\n     }\n }",
           "type": "json"
         }
       ]
@@ -929,15 +929,50 @@ define({ "api": [
             "optional": true,
             "field": "coupon_id",
             "description": "<p>优惠券id</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>Object</p> ",
+            "optional": true,
+            "field": "order_booked_time",
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>string</p> ",
+            "optional": true,
+            "field": "order_booked_time.order_booked_begin_time",
+            "description": "<p>开始时间 时间戳 如：&quot;14012312312321&quot;</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>string</p> ",
+            "optional": true,
+            "field": "order_booked_time.order_booked_end_time",
+            "description": "<p>结束时间 时间戳 如：&quot;14012312312321&quot;</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>int</p> ",
+            "optional": true,
+            "field": "order_booked_time.coupon_id",
+            "description": "<p>优惠券</p> "
           }
         ]
-      }
+      },
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n}",
+          "type": "json"
+        }
+      ]
     },
     "success": {
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"添加成功\",\n}",
+          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"添加成功\", \n}",
           "type": "json"
         }
       ]
@@ -1163,14 +1198,14 @@ define({ "api": [
             "type": "<p>String</p> ",
             "optional": true,
             "field": "from",
-            "description": "<p>开始时间</p> "
+            "description": "<p>开始时间 如 *'1443695400'</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": true,
             "field": "to",
-            "description": "<p>结束时间</p> "
+            "description": "<p>结束时间 如 *'1443695400'</p> "
           }
         ]
       }
@@ -1190,7 +1225,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "    HTTP/1.1 200 OK\n    {\n   \"code\": \"1\",\n   \"msg\": \"操作成功\",\n   \"ret\": {\n   \"limit\": \"1\",\n   \"page_total\": 4,\n   \"offset\": 0,\n   \"orders\": [\n   {\n   \"id\": \"2\",\n   \"order_code\": \"339710\",\n   \"order_parent_id\": \"0\",\n   \"order_is_parent\": \"0\",\n   \"created_at\": \"1445347126\",\n   \"updated_at\": \"1445347126\",\n   \"isdel\": \"0\",\n   \"ver\": \"3\",\n   \"version\": \"3\",\n   \"order_ip\": \"58.135.77.96\",\n   \"order_service_type_id\": \"1\",\n   \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n   \"order_src_id\": \"1\",\n   \"order_src_name\": \"BOSS\",\n   \"channel_id\": \"20\",\n   \"order_channel_name\": \"后台下单\",\n   \"order_unit_money\": \"20.00\",\n   \"order_money\": \"40.00\",\n   \"order_pay_type\": \"支付方式\",\n   \"order_booked_count\": \"120\",\n   \"order_booked_begin_time\": \"1446249600\",\n   \"order_booked_end_time\": \"1446256800\",\n   \"address_id\": \"397\",\n   \"district_id\": \"3\",\n   \"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n   \"order_booked_worker_id\": \"0\",\n   \"checking_id\": \"0\",\n   \"order_cs_memo\": \"\",\n   \"order_id\": \"2\",\n   \"order_before_status_dict_id\": \"2\",\n   \"order_before_status_name\": \"已支付\",\n   \"order_status_dict_id\": \"3\",\n   \"order_status_name\": \"已开始智能指派\"\n   }\n   ]\n   }\n}",
+          "content": " HTTP/1.1 200 OK\n {\n\"code\": \"1\",\n\"msg\": \"操作成功\",\n\"ret\": {\n\"limit\": \"1\",\n\"page_total\": 4,\n\"offset\": 0,\n\"orders\": [\n{\n\"id\": \"2\",\n\"order_code\": \"339710\",\n\"order_parent_id\": \"0\",\n\"order_is_parent\": \"0\",\n\"created_at\": \"1445347126\",\n\"updated_at\": \"1445347126\",\n\"isdel\": \"0\",\n\"ver\": \"3\",\n\"version\": \"3\",\n\"order_ip\": \"58.135.77.96\",\n\"order_service_type_id\": \"1\",\n\"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n\"order_src_id\": \"1\",\n\"order_src_name\": \"BOSS\",\n\"channel_id\": \"20\",\n\"order_channel_name\": \"后台下单\",\n\"order_unit_money\": \"20.00\",\n\"order_money\": \"40.00\",\n\"order_pay_type\": \"支付方式\",\n\"order_booked_count\": \"120\",\n\"order_booked_begin_time\": \"1446249600\",\n\"order_booked_end_time\": \"1446256800\",\n\"address_id\": \"397\",\n\"district_id\": \"3\",\n\"order_address\": \"北京,北京市,朝阳区,SOHO一期2单元908,测试昵称,18519654001\",\n\"order_booked_worker_id\": \"0\",\n\"checking_id\": \"0\",\n\"order_cs_memo\": \"\",\n\"order_id\": \"2\",\n\"order_before_status_dict_id\": \"2\",\n\"order_before_status_name\": \"已支付\",\n\"order_status_dict_id\": \"3\",\n\"order_status_name\": \"已开始智能指派\"\n}\n]\n}",
           "type": "json"
         }
       ]
@@ -1237,7 +1272,7 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "<p>String</p> ",
+            "type": "<p>int</p> ",
             "optional": true,
             "field": "id",
             "description": "<p>订单id</p> "
@@ -1261,14 +1296,14 @@ define({ "api": [
             "type": "<p>String</p> ",
             "optional": true,
             "field": "from",
-            "description": "<p>开始时间</p> "
+            "description": "<p>开始时间 时间戳   如 *'1443695400'</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": true,
             "field": "to",
-            "description": "<p>结束时间     *</p> "
+            "description": "<p>结束时间   时间戳   如 *'1443695400'</p> "
           }
         ]
       }
@@ -1629,14 +1664,14 @@ define({ "api": [
             "type": "<p>String</p> ",
             "optional": true,
             "field": "from",
-            "description": "<p>开始时间</p> "
+            "description": "<p>开始时间   时间戳   如 *'1443695400'</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": true,
             "field": "to",
-            "description": "<p>结束时间</p> "
+            "description": "<p>结束时间     时间戳   如 *'1443695400'</p> "
           },
           {
             "group": "Parameter",
@@ -1740,14 +1775,14 @@ define({ "api": [
             "type": "<p>String</p> ",
             "optional": true,
             "field": "from",
-            "description": "<p>开始时间</p> "
+            "description": "<p>开始时间  时间戳   如 *'1443695400'</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": true,
             "field": "to",
-            "description": "<p>结束时间</p> "
+            "description": "<p>结束时间    时间戳   如 *'1443695400'</p> "
           }
         ]
       }
@@ -1851,14 +1886,14 @@ define({ "api": [
             "type": "<p>String</p> ",
             "optional": true,
             "field": "from",
-            "description": "<p>开始时间</p> "
+            "description": "<p>开始时间  时间戳   如 *'1443695400'</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": true,
             "field": "to",
-            "description": "<p>结束时间</p> "
+            "description": "<p>结束时间  时间戳   如 *'1443695400'</p> "
           },
           {
             "group": "Parameter",
@@ -2042,12 +2077,11 @@ define({ "api": [
     "groupTitle": "Order"
   },
   {
-    "type": "get",
-    "url": "v1/order/get-cycle-order",
-    "title": "获得周期订单 (haojianshe 100%)",
-    "name": "actionGetCycleOrder",
+    "type": "GET",
+    "url": "/order/get-order-one",
+    "title": "获取一个订单的对象（haojianshe 100%）",
+    "name": "actionGetOrderOne",
     "group": "Order",
-    "description": "<p>阿姨抢单提交</p> ",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -2056,14 +2090,79 @@ define({ "api": [
             "type": "<p>String</p> ",
             "optional": false,
             "field": "access_token",
-            "description": "<p>会话id.</p> "
+            "description": "<p>用户认证</p> "
           },
           {
             "group": "Parameter",
             "type": "<p>String</p> ",
             "optional": true,
-            "field": "platform_version",
-            "description": "<p>平台版本号</p> "
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "id",
+            "description": "<p>订单号</p> "
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "    HTTP/1.1 200 OK\n{\n  \"code\": 1,\n  \"msg\": \"操作成功\",\n   \"ret\": {\n  \"id\": \"2\",\n   \"order_code\": \"订单号\",\n  \"order_batch_code\": \"周期订单号\",\n  \"order_parent_id\": \"0\",\n  \"order_is_parent\": 0,\n  \"created_at\": \"1446041297\",\n  \"updated_at\": \"1446041297\",\n  \"isdel\": 0,\n  \"ver\": \"1\",\n  \"version\": \"1\",\n  \"order_ip\": \"114.242.250.248\",\n   \"order_service_type_id\": 1,\n  \"order_service_type_name\": \"Apple iPhone 6s (A1700) 16G 金色 移动联通电信4G手机\",\n  \"order_src_id\": 1,\n  \"order_src_name\": \"BOSS\",\n  \"channel_id\": \"2\",\n  \"order_channel_name\": \"H5手机微信\",\n  \"order_unit_money\": \"20.00\",\n  \"order_money\": \"40.00\",\n  \"order_booked_count\": \"120\",\n  \"order_booked_begin_time\": \"1445581800\",\n  \"order_booked_end_time\": \"1445589000\",\n  \"city_id\": \"110100\",\n  \"district_id\": \"5\",\n    \"address_id\": \"1\",\n    \"order_address\": \",北京市,西城区,西城区西什库大街16号123,空,17091005305\",\n},\n\"alertMsg\": \"\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../controllers/OrderController.php",
+    "groupTitle": "Order"
+  },
+  {
+    "type": "GET",
+    "url": "/order/get-order-worker",
+    "title": "获取周期订单（haojianshe 100%）",
+    "name": "actionGetOrderWorker",
+    "group": "Order",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": false,
+            "field": "access_token",
+            "description": "<p>用户认证</p> "
+          },
+          {
+            "group": "Parameter",
+            "type": "<p>String</p> ",
+            "optional": true,
+            "field": "app_version",
+            "description": "<p>访问源(android_4.2.2)</p> "
           },
           {
             "group": "Parameter",
@@ -2079,7 +2178,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n}",
+          "content": " HTTP/1.1 200 OK\n{\n \"code\": 1,\n \"msg\": \"操作成功\",\n \"ret\": [\n {\n \"id\": \"8\",\n \"order_code\": \"订单号\",\n \"order_batch_code\": \"周期订单号\",\n \"order_parent_id\": \"0\",\n \"order_is_parent\": \"0\",\n \"sub_order\": {\n \"1\": {\n \"id\": \"9\",\n \"order_code\": \"订单号\",\n \"order_batch_code\": \"周期订单号\",\n \"order_parent_id\": \"1\",\n \"order_sys_memo\": \"\"\n },\n \"2\": {\n \"id\": \"10\",\n \"order_code\": \"订单号\",\n \"order_batch_code\": \"周期订单号\",\n \"order_cs_memo\": \"\",\n \"order_sys_memo\": \"\"\n}\n}\n}\n ],\n \"alertMsg\": \"\"\n }",
           "type": "json"
         }
       ]
@@ -2090,15 +2189,15 @@ define({ "api": [
           {
             "group": "Error 4xx",
             "optional": false,
-            "field": "SessionIdNotFound",
-            "description": "<p>未找到会话ID.</p> "
+            "field": "UserNotFound",
+            "description": "<p>用户认证已经过期.</p> "
           }
         ]
       },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n    \"code\":\"0\",\n    \"msg\": \"操作失败\"\n}",
+          "content": "HTTP/1.1 403 Not Found\n{\n  \"code\": \"error\",\n  \"msg\": \"用户认证已经过期,请重新登录，\"\n\n}",
           "type": "json"
         }
       ]
@@ -2133,21 +2232,21 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "<p>String</p> ",
+            "type": "<p>int</p> ",
             "optional": true,
             "field": "page_size",
             "description": "<p>条数  #leveltype =2 时要传递</p> "
           },
           {
             "group": "Parameter",
-            "type": "<p>String</p> ",
+            "type": "<p>int</p> ",
             "optional": true,
             "field": "page",
             "description": "<p>页面  #leveltype =2 时要传递</p> "
           },
           {
             "group": "Parameter",
-            "type": "<p>String</p> ",
+            "type": "<p>int</p> ",
             "optional": false,
             "field": "leveltype",
             "description": "<p>判断标示 leveltype=1 指定阿姨订单数，待抢单订单订单数;  leveltype=2 指定阿姨订单列表，待抢单订单列表,指定阿姨订单数，待抢单订单订单数</p> "
@@ -2159,7 +2258,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n 指定阿姨订单数/待抢单订单订单数 leveltype=1\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"workerData\": \"指定阿姨订单数\",\n         \"orderData\": \"待抢单订单数\",\n         \"workerServiceCount\": \"待服务订单数\",\n         \"worker_is_block\": \n           {\n           ##暂时还没有统一\n           //\"阿姨状态 0正常1封号\",\n           }\n     }\n}\n\n  * 指定阿姨订单列表/待抢单订单列表 leveltype=2\n{\n\"code\": \"ok\",\n\"msg\":\"操作成功\",\n\"ret\":\n    {\n  \"orderData\": [  //指定阿姨订单列表 待抢单订单列表\n\t    {\n      \"order_id\": \"订单号\",\n      \"order_code\": \"订单编号\",\n      \"batch_code\": \"周期订单号\",\n      \"booked_begin_time\": \"服务开始时间\",\n      \"booked_end_time\": \"服务结束时间\",\n      \"channel_name\": \"服务类型名称\",\n      \"booked_count\": \"时常\",\n      \"address\": \"服务地址\",\n      \"need\": \"备注说明\",\n      \"money\": \"订单价格\",\n        },\n\t      ]\n     },\n   \"time\":172800,   倒计时秒 #要求2天\n   \"pageNum\":\"总页码数\"\n   }",
+          "content": "HTTP/1.1 200 OK\n 指定阿姨订单数/待抢单订单订单数 leveltype=1\n{\n     \"code\": \"ok\",\n     \"msg\":\"操作成功\",\n     \"ret\":\n     {\n         \"workerData\": \"指定阿姨订单数\",\n         \"orderData\": \"待抢单订单数\",\n         \"workerServiceCount\": \"待服务订单数\",\n         \"worker_is_block\": \n           {\n           ##暂时还没有统一\n           //\"阿姨状态 0正常1封号\",\n           }\n     }\n}\n\n  * 指定阿姨订单列表/待抢单订单列表 leveltype=2\n{\n\"code\": \"ok\",\n\"msg\":\"操作成功\",\n\"ret\":\n    {\n  \"orderData\": [  //指定阿姨订单列表 待抢单订单列表\n\t    {\n      \"order_id\": \"订单号\",\n      \"order_code\": \"订单编号\",\n      \"batch_code\": \"周期订单号\",\n      \"booked_begin_time\": \"服务开始时间\",\n      \"booked_end_time\": \"服务结束时间\",\n      \"channel_name\": \"服务类型名称\",\n      \"booked_count\": \"时常\",\n      \"address\": \"服务地址\",\n      \"need\": \"备注说明\",\n      \"money\": \"订单价格\",\n      \"is_booker_worker\" => \"判断标示 1有时间格式 0没有时间格式\",\n      \"times\" => '2:00:00',\n                   \"order_time\":\n                [\n                   '开始时间 - 结束时间',\n                   '1447133400 - 1447151400',\n                  '1447738200 - 1447756200'\n              ]\n         },\n\t       ]\n      },\n   \"pageNum\":\"总页码数\"\n   }",
           "type": "json"
         }
       ]
@@ -2213,7 +2312,7 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "<p>String</p> ",
+            "type": "<p>int</p> ",
             "optional": false,
             "field": "order_id",
             "description": "<p>订单号</p> "
@@ -2863,7 +2962,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "v1/user/black-list-workers",
-    "title": "黑名单阿姨列表 （功能已经完成,需要核实传递参数和返回数据格式 已完成100%）",
+    "title": "黑名单阿姨列表 （该功能已经砍掉 已完成100%）",
     "description": "<p>获得该用户添加进黑名单的阿姨</p> ",
     "name": "actionBlackListWorkers",
     "group": "User",
@@ -3013,7 +3112,7 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "<p>String</p> ",
+            "type": "<p>int</p> ",
             "optional": false,
             "field": "address_id",
             "description": "<p>地址id</p> "
@@ -3056,7 +3155,7 @@ define({ "api": [
   {
     "type": "DELETE",
     "url": "v1/user/delete-used-worker",
-    "title": "删除常用阿姨 （功能已经实现,需再次核实 100%）",
+    "title": "删除常用阿姨 （该功能已经砍掉,   100%）",
     "name": "actionDeleteUsedWorker",
     "group": "User",
     "parameter": {
@@ -3078,7 +3177,7 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "<p>String</p> ",
+            "type": "<p>int</p> ",
             "optional": false,
             "field": "worker_id",
             "description": "<p>阿姨id</p> "
@@ -3339,7 +3438,7 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "<p>String</p> ",
+            "type": "<p>int</p> ",
             "optional": false,
             "field": "customer_comment_level",
             "description": "<p>级别id</p> "
@@ -3418,7 +3517,7 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "<p>String</p> ",
+            "type": "<p>int</p> ",
             "optional": false,
             "field": "order_service_type_id",
             "description": "<p>服务id</p> "
@@ -3577,7 +3676,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "v1/user/get-user-money",
-    "title": "用户余额和消费记录 （郝建设 已完成99% ;）",
+    "title": "用户余额和消费记录 （郝建设 已完成100%）",
     "name": "actionGetUserMoney",
     "group": "User",
     "parameter": {
@@ -3646,7 +3745,7 @@ define({ "api": [
   {
     "type": "GET",
     "url": "v1/user/get-user-score",
-    "title": "用户积分明细 （功能已实现,不明确需求端所需字段格式 90%）",
+    "title": "用户积分明细 （已经完成 100%）",
     "description": "<p>获取用户当前积分，积分兑换奖品信息，怎样获取积分信息</p> ",
     "name": "actionGetUserScore",
     "group": "User",
@@ -3705,7 +3804,7 @@ define({ "api": [
   {
     "type": "DELETE",
     "url": "v1/user/remove-worker",
-    "title": "移除黑名单中的阿姨 （功能已经实现,需要再次确认传递参数 已完成100%）",
+    "title": "移除黑名单中的阿姨 （该功能已经砍掉 已完成100%）",
     "name": "actionRemoveWorker",
     "group": "User",
     "parameter": {
@@ -3727,7 +3826,7 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "<p>String</p> ",
+            "type": "<p>int</p> ",
             "optional": false,
             "field": "worker_id",
             "description": "<p>阿姨id</p> "
@@ -3786,7 +3885,7 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "<p>String</p> ",
+            "type": "<p>int</p> ",
             "optional": false,
             "field": "address_id",
             "description": "<p>地址id</p> "
@@ -3900,7 +3999,7 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "<p>String</p> ",
+            "type": "<p>int</p> ",
             "optional": false,
             "field": "address_id",
             "description": "<p>地址id</p> "
@@ -5351,7 +5450,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n \"msg\": \"阿姨信息查询成功\",\n \"alertMsg\": \"获取阿姨数据成功\",\n \"ret\": {\n     \"worker_name\": \"阿姨姓名\",\n     \"worker_phone\": \"阿姨手机号\",\n     \"worker_photo\": \"头像地址\",\n     \"worker_identity_description\": \"阿姨身份说明\",\n     \"worker_identity_id\":\"阿姨身份标识【1全职 2兼职 3高峰 4时段】\",\n     \"worker_type_description\": \"角色\",\n     \"worker_star\": \"星级\",\n     \"personal_skill\": [\n         \"阿姨技能1\",\n         \"阿姨技能2\",\n         \"阿姨技能3\"\n     ]\n   }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"code\": \"ok\",\n \"msg\": \"阿姨信息查询成功\",\n \"alertMsg\": \"获取阿姨数据成功\",\n \"ret\": {\n     \"worker_name\": \"阿姨姓名\",\n     \"worker_phone\": \"阿姨手机号\",\n     \"worker_photo\": \"头像地址\",\n     \"worker_identity_description\": \"阿姨身份说明\",\n     \"worker_identity_id\":\"阿姨身份标识【1全职 2兼职 3高峰 4时段】\",\n     \"worker_type\": \"阿姨类型【 1自有 2非自有】\",\n     \"worker_star\": \"星级\",\n     \"personal_skill\": [\n         \"阿姨技能1\",\n         \"阿姨技能2\",\n         \"阿姨技能3\"\n     ]\n   }\n}",
           "type": "json"
         }
       ]
