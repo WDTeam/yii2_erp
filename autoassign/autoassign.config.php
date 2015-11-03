@@ -72,7 +72,7 @@ return [
     /*
      * 日志文件
      */
-    'LOG_FILE' => './autoassign-server.log',
+    'LOG_FILE' => '/code/ejj-enterprise-boss/autoassign/autoassign-server.log',
 
     /*
      * 设置worker进程的最大任务数
