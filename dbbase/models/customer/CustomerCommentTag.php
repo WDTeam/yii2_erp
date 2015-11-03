@@ -51,6 +51,7 @@ class CustomerCommentTag extends \yii\db\ActiveRecord
             'customer_tag_name' => Yii::t('common', '评价标签名称'),
             'customer_tag_type' => Yii::t('common', '分类'),
             'customer_comment_level' => Yii::t('common', '评价等级'),
+            'customer_tag_count' => Yii::t('common', '使用次数'),
             'is_online' => Yii::t('common', '是否上线'),
             'created_at' => Yii::t('common', '创建时间'),
             'updated_at' => Yii::t('common', '更新时间'),
