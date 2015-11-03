@@ -88,9 +88,8 @@ class WorkerAccessToken extends \dbbase\models\worker\WorkerAccessToken
         if ($workerAccessToken == NULL) {
             return false;
         }
-        $worker = Worker::find()->where(['worker_phone'=>$workerAccessToken->worker_phone])->asArray()->one();
-        $worker_identity_id=$worker['worker_identity_id'];
-        $worker['worker_identity_description']=WorkerIdentityConfig::getWorkerIdentityShow($worker_identity_id);
+        $worker = Worker::find()->where(['worker_phone'=>$workerAccessToken->worker_phone])->one();
+        $worker['worker_identity_description']=WorkerIdentityConfig::getWorkerIdentityShow($worker->worker_identity_id);
         $worker['worker_star']=  number_format($worker['worker_star'],1);
         unset($worker['worker_password']);
         unset($worker['worker_idcard']);
