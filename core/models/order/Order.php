@@ -144,7 +144,7 @@ class Order extends OrderModel
             'customer_id','admin_id','order_pay_type'
         ];
         foreach($attributes as $k=>$v){
-            if(!in_array($v,$attributes_keys)){
+            if(!in_array($k,$attributes_keys)){
                 unset($attributes[$k]);
             }
         }
@@ -232,7 +232,7 @@ class Order extends OrderModel
             'order_ip','order_service_item_id','order_src_id','channel_id', 'address_id', 'customer_id','admin_id','order_pay_type'
         ];
         foreach($attributes as $k=>$v){
-            if(!in_array($v,$attributes_keys)){
+            if(!in_array($k,$attributes_keys)){
                 unset($attributes[$k]);
             }
         }

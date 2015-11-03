@@ -389,7 +389,7 @@ class OrderSearch extends Order
      */
     public static function getBatchOrder($batch_code)
     {
-        return Order::find()->where(['order_batch_code'=>$batch_code]);
+        return Order::find()->where(['order_batch_code'=>$batch_code])->all();
     }
 
     /**
