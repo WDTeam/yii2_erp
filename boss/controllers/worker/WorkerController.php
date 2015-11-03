@@ -739,11 +739,11 @@ class WorkerController extends BaseAuthController
         //echo date('Y-m-d H:i',1446253200);
         echo '<br>';
         //echo date('Y-m-d H:i',1446264000);
-        $a = Worker::getWorkerStatInfo(19077);
+        //$a = Worker::getWorkerStatInfo(19077);
         //$a = Worker::getWorkerBankInfo(19077);
-        var_dump($a);die;
-//        $a = Worker::getDistrictFreeWorker(1,1,1446253200,1446264000);
-//        print_r($a);
+        //var_dump($a);die;
+        $a = Worker::getDistrictCycleFreeWorker(1,1,[['orderBookBeginTime'=>'1446253200','orderBookEndTime'=>'1446264000']]);
+        print_r($a);
         //$a = Worker::operateWorkerOrderInfoToRedis(1,1,1,2,1446434010,1446434010);
         die;
 //        $a = json_decode('{"1":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"2":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"3":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"4":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","16:00","17:00","20:00","21:00","22:00"],"5":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"6":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"],"7":["8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"]}',1);
@@ -778,8 +778,8 @@ class WorkerController extends BaseAuthController
 //        ];
 //        Yii::$app->redis->set('WORKER_18475',json_encode($workerInfo));
 //        die;
-        echo '<pre>';
-        var_dump(CustomerWorker::getCustomerDistrictNearbyWorker(1,1));die;
+//        echo '<pre>';
+//        var_dump(CustomerWorker::getCustomerDistrictNearbyWorker(1,1));die;
 //        die;
 //        var_dump(WorkerVacationApplication::getApplicationList(18517));
 //
@@ -789,25 +789,25 @@ class WorkerController extends BaseAuthController
        // Yii::$app->redis->set('worker_1',json_encode($workerInfo));
        // die;
 
-        $workers = Yii::$app->redis->mget('worker_1','worker_2','worker_3');
+        //$workers = Yii::$app->redis->mget('worker_1','worker_2','worker_3');
 //          Yii::$app->redis->srem('district_1','16682');
 //        Yii::$app->redis->sadd('district_1','16684','16683','16685','16686','16687','16688','16689','16682');
 //        Yii::$app->redis->sadd('district_2','16694','16693','16695','16696','16697','16698','16699','16692');
 //        Yii::$app->redis->sadd('worker_16694','10','11','9','8','7');
 //        Yii::$app->redis->sadd('worker_16693','10','11');
         //$workers = Yii::$app->redis->smembers('district_1');
-        var_dump($workers);
-        die;
-        $time = date('H');
-        foreach($workers as $val){
-            $workerKey = 'worker_'.$val;
-            $workerIsBusy = Yii::$app->redis->sismember($workerKey,$time);
-            if(empty($workerIsBusy)){
-                $workerFreeArr[] = $val;
-            }
-        }
-        var_dump($workerFreeArr);
-        var_dump(Yii::$app->redis->sinter('worker_16983','worker_16694'));
+//        var_dump($workers);
+//        die;
+//        $time = date('H');
+//        foreach($workers as $val){
+//            $workerKey = 'worker_'.$val;
+//            $workerIsBusy = Yii::$app->redis->sismember($workerKey,$time);
+//            if(empty($workerIsBusy)){
+//                $workerFreeArr[] = $val;
+//            }
+//        }
+//        var_dump($workerFreeArr);
+//        var_dump(Yii::$app->redis->sinter('worker_16983','worker_16694'));
     }
 
 
