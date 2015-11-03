@@ -5,8 +5,6 @@ namespace boss\models\order;
 use Yii;
 use yii\caching\ArrayCache;
 
-use dbbase\models\order\OrderExtCustomer;
-use dbbase\models\order\OrderExtWorker;
 
 /**
  * This is the model class for table "ejj_order_complaint".
