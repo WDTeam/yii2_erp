@@ -128,29 +128,16 @@ class OrderController extends BaseAuthController
         return Order::getOrderBookedTimeRangeList($district_id, $order_booked_count, $date);
     }
 
+    /**
+     * 根据服务品类获取优惠券
+     * @return array
+     */
     public function actionCoupons()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $id = Yii::$app->request->get('id');
         $service_id = Yii::$app->request->get('service_id');
         return Coupon::getAbleCouponByCateId($id, $service_id);
-        return '[
-                {
-                    "id": 1,
-                    "coupon_name": "优惠券30",
-                    "coupon_money": 30
-                },
-                {
-                    "id": 2,
-                    "coupon_name": "40优惠券",
-                    "coupon_money": 40
-                },
-                {
-                    "id": 3,
-                    "coupon_name": "50优惠券",
-                    "coupon_money": 50
-                }
-            ]';
     }
 
     public function actionCards($id)
@@ -358,11 +345,11 @@ class OrderController extends BaseAuthController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $attributes = [
             'order_ip' => Yii::$app->request->userIP,
-            'order_service_type_id' => 1,
+            'order_service_item_id' => 1,
             'order_src_id' => 1,
             'channel_id' => 20,
             'address_id' => 1,
-            'customer_id' => 3,
+            'customer_id' => 2,
             'order_customer_phone' => '13141484602',
             'admin_id' => Yii::$app->user->id,
             'order_pay_type' => 1,

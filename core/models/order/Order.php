@@ -109,18 +109,17 @@ class Order extends OrderModel
      * 创建新订单
      * @param $attributes [
      *  string $order_ip 下单IP地址 必填
-     *  integer $order_service_type_id 服务类型 商品id 必填
+     *  integer $order_service_item_id 服务项id 必填
      *  integer $order_src_id 订单来源id 必填
      *  string $channel_id 下单渠道 必填
      *  int $order_booked_begin_time 预约开始时间 必填
      *  int $order_booked_end_time 预约结束时间 必填
      *  int $address_id 客户地址id 必填
      *  int $customer_id 客户id 必填
-     *  string $order_customer_phone 客户手机号 必填
      *  int $admin_id 操作人id 0客户 1系统 必填
      *  int $order_pay_type 支付方式 1现金 2线上 3第三方 必填
      *  int $coupon_id 优惠券id
-     *  int $order_is_use_balance 是否使用余额 0否 1是 必填
+     *  int $order_is_use_balance 是否使用余额 0否 1是
      *  string $order_booked_worker_id 指定阿姨id
      *  string $order_pop_order_code 第三方订单号
      *  string $order_pop_group_buy_code 第三方团购号
@@ -132,6 +131,29 @@ class Order extends OrderModel
      */
     public function createNew($attributes)
     {
+        $attributes_keys = [
+            'order_ip','order_service_item_id','order_src_id','channel_id',
+            'order_booked_begin_time','order_booked_end_time','address_id',
+            'customer_id','admin_id','order_pay_type',
+            'coupon_id','order_is_use_balance','order_booked_worker_id','order_pop_order_code',
+            'order_pop_group_buy_code','order_pop_order_money','order_customer_need','order_customer_memo'
+        ];
+        $attributes_required = [
+            'order_ip','order_service_item_id','order_src_id','channel_id',
+            'order_booked_begin_time','order_booked_end_time','address_id',
+            'customer_id','admin_id','order_pay_type'
+        ];
+        foreach($attributes as $k=>$v){
+            if(!in_array($v,$attributes_keys)){
+                unset($attributes[$k]);
+            }
+        }
+        foreach($attributes_required as $v){
+            if(!isset($attributes[$v])){
+                $this->addError($v,Order::getAttributeLabel($v).'为必填项！');
+                return false;
+            }
+        }
         $attributes['order_parent_id'] = 0;
         $attributes['order_is_parent'] = 0;
         if ($this->_create($attributes)) {
@@ -176,15 +198,14 @@ class Order extends OrderModel
      * 周期订单
      *  @param $attributes [
      *  string $order_ip 下单IP地址 必填
-     *  integer $order_service_type_id 服务类型 商品id 必填
+     *  integer $order_service_item_id 服务类型 商品id 必填
      *  integer $order_src_id 订单来源id 必填
      *  string $channel_id 下单渠道 必填
      *  int $address_id 客户地址id 必填
      *  int $customer_id 客户id 必填
-     *  string $order_customer_phone 客户手机号 必填
      *  int $admin_id 操作人id 0客户 1系统 必填
      *  int $order_pay_type 支付方式 1现金 2线上 3第三方 必填
-     *  int $order_is_use_balance 是否使用余额 0否 1是 必填
+     *  int $order_is_use_balance 是否使用余额 0否 1是
      *  string $order_booked_worker_id 指定阿姨id
      *  string $order_customer_need 客户需求
      *  string $order_customer_memo 客户备注
@@ -201,6 +222,25 @@ class Order extends OrderModel
     public static function createNewBatch($attributes, $booked_list)
     {
 
+        $attributes_keys = [
+            'order_ip','order_service_item_id','order_src_id','channel_id', 'address_id',
+            'customer_id','admin_id','order_pay_type',
+            'coupon_id','order_is_use_balance','order_booked_worker_id','order_pop_order_code',
+            'order_pop_group_buy_code','order_pop_order_money','order_customer_need','order_customer_memo'
+        ];
+        $attributes_required = [
+            'order_ip','order_service_item_id','order_src_id','channel_id', 'address_id', 'customer_id','admin_id','order_pay_type'
+        ];
+        foreach($attributes as $k=>$v){
+            if(!in_array($v,$attributes_keys)){
+                unset($attributes[$k]);
+            }
+        }
+        foreach($attributes_required as $v){
+            if(!isset($attributes[$v])){
+                ['status' => false, 'errors' => $v.'为必填项！'];
+            }
+        }
         $transact = static::getDb()->beginTransaction();
         //如果指定阿姨则是周期订单分配周期订单号否则分配批量订单号
 
@@ -213,8 +253,13 @@ class Order extends OrderModel
             $attributes['order_parent_id'] = 0;
             $attributes['order_is_parent'] = 0; //批量订单为普通订单
         }
-        foreach ($booked_list as $booked) {
+        foreach ($booked_list as $v) {
             $order = new Order();
+            $booked = [
+                'order_booked_begin_time'=>$v['order_booked_begin_time'],
+                'order_booked_end_time'=>$v['order_booked_end_time'],
+                'coupon_id'=>isset($v['coupon_id'])?$v['order_booked_end_time']:0
+            ];
             if (!$order->_create($attributes + $booked, $transact)) {
                 $transact->rollBack();
 
@@ -572,10 +617,15 @@ class Order extends OrderModel
         $order_code = OrderTool::createOrderCode(); //创建订单号
 
         $customer = Customer::getCustomerById($this->customer_id);
-        $this->setAttributes([
-            'order_customer_phone' => $customer->customer_phone,
-            'customer_is_vip' => $customer->customer_is_vip,
-        ]);
+        if(!empty($customer)) {
+            $this->setAttributes([
+                'order_customer_phone' => $customer->customer_phone,
+                'customer_is_vip' => $customer->customer_is_vip,
+            ]);
+        }else{
+            $this->addError('customer_id', '没有获取到用户信息！');
+            return false;
+        }
 
         try {
             $address = CustomerAddress::getAddress($this->address_id);
@@ -584,23 +634,25 @@ class Order extends OrderModel
             return false;
         }
         try {
-            $goods = self::getGoods($address['customer_address_longitude'], $address['customer_address_latitude'], $attributes['order_service_type_id']);
+            $goods = self::getGoods($address['customer_address_longitude'], $address['customer_address_latitude'], $attributes['order_service_item_id']);
         } catch (Exception $e) {
-            $this->addError('order_service_type_name', '创建时获商品信息异常！');
+            $this->addError('order_service_item_name', '创建时获商品信息异常！');
             return false;
         }
         if (empty($goods)) {
-            $this->addError('order_service_type_name', '创建时获商品信息失败！');
+            $this->addError('order_service_item_name', '创建时获商品信息失败！');
             return false;
         } elseif ($goods['code'] >= 500) {
-            $this->addError('order_service_type_name', $goods['msg']);
+            $this->addError('order_service_item_name', $goods['msg']);
             return false;
         }else{
             $goods = $goods['data'];
         }
         $this->setAttributes([
             'order_unit_money' => $goods['operation_shop_district_goods_price'], //单价
-            'order_service_type_name' => $goods['operation_shop_district_goods_name'], //商品名称
+            'order_service_item_name' => $goods['operation_shop_district_goods_name'], //商品名称
+            'order_service_type_id' => $goods['operation_category_id'], //品类ID
+            'order_service_type_name' => $goods['operation_category_name'], //品类名称
             'order_booked_count' => floatval(($this->order_booked_end_time - $this->order_booked_begin_time) / 3600), //TODO 精品保洁另算时长
         ]);
         $this->setAttributes([
@@ -794,19 +846,18 @@ class Order extends OrderModel
         if (empty($shop_district_info)) {
             return ['code' => 502, 'msg' => '获取商品信息失败：没有匹配的商圈'];
         } else {
-            $goods = OperationShopDistrictGoods::getShopDistrictGoodsList($shop_district_info['operation_city_id'], $shop_district_info['operation_shop_district_id']);
+            if ($goods_id == 0) {
+                $goods = OperationShopDistrictGoods::getShopDistrictGoodsList($shop_district_info['operation_city_id'], $shop_district_info['operation_shop_district_id']);
+            }else{
+                $goods = OperationShopDistrictGoods::getShopDistrictGoodsInfo($shop_district_info['operation_city_id'], $shop_district_info['operation_shop_district_id'],$goods_id);
+            }
             if (empty($goods)) {
                 return ['code' => 501, 'msg' => '获取商品信息失败：没有匹配的商品'];
-            } else if ($goods_id == 0) {
+            } else if($goods_id == 0){
                 return ['code' => 200, 'data' => $goods, 'district_id' => $shop_district_info['operation_shop_district_id']];
             } else {
-                foreach ($goods as $v) {
-                    if ($v['operation_goods_id'] == $goods_id) {
-                        $v['district_id'] = $shop_district_info['operation_shop_district_id'];
-                        return [ 'code'=> 200,'data'=> $v ];
-                    }
-                }
-                return ['code' => 500, 'msg' => '获取商品信息失败：没有匹配的商品'];
+                $goods['district_id'] = $shop_district_info['operation_shop_district_id'];
+                return [ 'code'=> 200,'data'=> $goods ];
             }
         }
     }

@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
 
                 </div>
-                <?= $form->field($model, 'order_service_type_id')->inline()->radioList([''=>'选择地址获取商品'])->label('选择商品') ?>
+                <?= $form->field($model, 'order_service_item_id')->inline()->radioList([])->label('选择服务项') ?>
             </div>
             <div class="panel-heading">
                 <h3 class="panel-title">服务信息</h3>
