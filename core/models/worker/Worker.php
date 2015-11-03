@@ -981,12 +981,7 @@ class Worker extends \dbbase\models\worker\Worker
     public static function getDistrictFreeWorker($district_id,$worker_type=1,$orderBookBeginTime,$orderBookEndTime){
 
         $districtWorkerResult = self::getDistrictAllWorker($district_id);
-
-        $serverDurationTime = ($orderBookEndTime-$orderBookBeginTime)/3600;
-        for($i=0;$i<$serverDurationTime*2;$i++){
-            $orderBookTime[] = date('G:i',strtotime('+'.(30*$i).' minute',$orderBookBeginTime));
-        }
-
+        $orderBookTime = self::generateTimeUnit($orderBookBeginTime,$orderBookEndTime);
 
         foreach ($districtWorkerResult as $val) {
 
@@ -1009,7 +1004,13 @@ class Worker extends \dbbase\models\worker\Worker
         return $districtFreeWorker;
     }
 
-    protected static function generateTimeParagraph($beginTime,$endTime){
+    /**
+     * 获取开始结束时间间隔内 包含的 最小时间单位
+     * @param $beginTime 开始时间戳
+     * @param $endTime 结束时间戳
+     * @return array [8:00,8:30,9:00]
+     */
+    protected static function generateTimeUnit($beginTime,$endTime){
         $durationTime = ($endTime-$beginTime)/3600;
         for($i=0;$i<$durationTime*2;$i++){
             $TimeArr[] = date('G:i',strtotime('+'.(30*$i).' minute',$beginTime));
@@ -1022,7 +1023,6 @@ class Worker extends \dbbase\models\worker\Worker
      * @param int $district_id 商圈id
      * @param int $worker_type 阿姨类型 1自营2非自营
      * @param array $orderBookTimeArr 待指派订单预约时间['week'=>1,'orderBookBeginTime'=>'8:00','orderBookEndTime'=>'9:00]
-
      * @return array freeWorkerArr 所有可用阿姨列表
      */
     public static function getDistrictCycleFreeWorker($district_id,$worker_type=1,$orderBookTimeArr){
