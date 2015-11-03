@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'type'=>DetailView::TYPE_INFO,
         ],
         'attributes' => [
-            'id',
+            //'id',
             'customer_tag_name',
     		[
     		'format' => 'raw',

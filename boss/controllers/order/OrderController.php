@@ -190,7 +190,7 @@ class OrderController extends BaseAuthController
             }
             $workers = [];
             if($order->order_booked_worker_id>0){
-                $worker_list = Worker::getWorkerInfo($order->order_booked_worker_id);
+                $worker_list = Worker::getWorkerStatInfo($order->order_booked_worker_id);
                 if(!empty($worker_list)) {
                     $workers = Order::assignWorkerFormat($order, [$worker_list]);
                 }
@@ -223,7 +223,16 @@ class OrderController extends BaseAuthController
         $district_id = $order->district_id;
         //根据商圈获取阿姨列表 第二个参数 1自有 2非自有
         try {
-            $worker_list = array_merge(Worker::getDistrictFreeWorker($district_id, 1, $order->order_booked_begin_time, $order->order_booked_end_time), Worker::getDistrictFreeWorker($district_id, 2, $order->order_booked_begin_time, $order->order_booked_end_time));
+            if($order->order_is_parent==1){
+                $childs = OrderSearch::getChildOrder($order_id);
+                $times = [['orderBookBeginTime'=>$order->order_booked_begin_time, 'orderBookEndTime'=>$order->order_booked_end_time]];
+                foreach($childs as $child){
+                    $times[] = ['orderBookBeginTime'=>$child->order_booked_begin_time, 'orderBookEndTime'=>$child->order_booked_end_time];
+                }
+                $worker_list = array_merge(Worker::getDistrictCycleFreeWorker($district_id, 1,$times), Worker::getDistrictCycleFreeWorker($district_id, 2,$times));
+            }else {
+                $worker_list = array_merge(Worker::getDistrictFreeWorker($district_id, 1, $order->order_booked_begin_time, $order->order_booked_end_time), Worker::getDistrictFreeWorker($district_id, 2, $order->order_booked_begin_time, $order->order_booked_end_time));
+            }
         } catch (Exception $e) {
             return ['code' => 500, 'msg' => '获取阿姨列表接口异常！'];
         }
@@ -263,7 +272,7 @@ class OrderController extends BaseAuthController
     {
         $searchParas = Yii::$app->request->getQueryParams();
 
-        $searchModel = new OrderSearch;
+        $searchModel = new \boss\models\order\OrderSearchIndex();
         $dataProvider = $searchModel->search($searchParas);
 
         return $this->render('index', [
@@ -356,7 +365,8 @@ class OrderController extends BaseAuthController
             'order_is_use_balance' => 1,
             'order_booked_worker_id' => 1,
             'order_customer_need' => 'xxxxx',
-            'order_customer_memo' => 'fffff'
+            'order_customer_memo' => 'fffff',
+            'order_flag_sys_assign' => 0,
         ];
         $booked_list = [
             [

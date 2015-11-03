@@ -3,6 +3,7 @@
 namespace dbbase\models\payment;
 
 use dbbase\models\finance\FinancePayChannel;
+
 use Yii;
 use yii\behaviors\TimestampBehavior;
 /**
@@ -47,64 +48,12 @@ class PaymentLog extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * 日志记录
-     * @param array $param
-     */
-    public function insertLog($param)
+    public function doSave($param)
     {
-        //写入文本日志
-        $writeLog = array(
-            'data' => $param->data['data']
-        );
-
-        $this->on('writeTextLog',[$this,'writeTextLog'],$writeLog);
-        $this->trigger('writeTextLog');
-
-        //渠道名称
-        $param->data['pay_channel_name'] = FinancePayChannel::getPayChannelByName($param->data['pay_channel_id']);
-        //写入数据库日志
         $this->attributes = $param->data;
-        $this->insert(false);
+        $this->save(false);
     }
 
-    /**
-     * 写入日志
-     * @param $path 目录
-     * @param $filename 文件名称
-     * @param $data 写入数据
-     */
-    public function writeTextLog($param)
-    {
-
-        //创建目录
-        $path = !empty($param->data['path']) ? $param->data['path'] : '/tmp/pay/';
-        is_dir($path) || mkdir($path,0777,true);
-
-        //文件名称
-        $filename = !empty($param->data['filename']) ? $param->data['filename'] : date('Y-m-d',time()).'_pay.log';
-        //写入数据
-        $fullFileName = $path.$filename;
-        file_put_contents($fullFileName,serialize($param->data['data']).'||',FILE_APPEND);
-    }
-
-    /**
-     * 判断支付状态
-     * @param $statusString 状态类型
-     * @return int  1/支付成功 ， 0/支付失败
-     */
-    public function statusBool($statusString){
-        $statusArr = [
-            'TRADE_FINISHED',   //支付宝
-            'TRADE_SUCCESS',    //支付宝
-            '1',    //百付宝
-            '0',    //微信APP
-            'Success!',   //银联
-            'SUCCESS',//微信
-        ];
-        $status = in_array($statusString,$statusArr) ? 1 : 0 ;
-        return $status;
-    }
 
     /**
      * 自动处理创建时间和修改时间

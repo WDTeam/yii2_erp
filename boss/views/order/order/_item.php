@@ -19,10 +19,11 @@ use boss\models\order\Order;
             <tr>
             	<input type="hidden" class="order_id" value="<?= Html::encode($model->id) ?>" />
             	<input type="hidden" class="customer_phone" value="<?= Html::encode($model->orderExtCustomer->order_customer_phone) ?>" />
-            	<td><?= Html::encode($model->orderExtCustomer->order_customer_phone) ?>　<?= $model->orderExtCustomer->order_customer_is_vip == 1 ? '会员' : '非会员' ?><br />
-            	    <?= Html::encode($model->order_channel_name) ?><br />
-            	    <?= date('Y-m-d H:i', $model->order_booked_begin_time) ?> ~ <?= date('Y-m-d H:i', $model->order_booked_end_time) ?><br />
-            	    <?= HtmlPurifier::process($model->order_address) ?>
+            	<td>用户电话：<?= Html::encode($model->orderExtCustomer->order_customer_phone) ?><br />
+            	         用户身份：<?= $model->orderExtCustomer->order_customer_is_vip == 1 ? '会员' : '非会员' ?><br />
+            	         下单渠道：<?= Html::encode($model->order_channel_name) ?><br />
+            	         服务时间：<?= $model->getOrderBookedDate().' '.$model->getOrderBookedTimeArrange() ?><br />
+            	         客户地址：<?= HtmlPurifier::process($model->order_address) ?>
             	</td>
                 <td>总金额：<?= Html::encode($model->order_money) ?>元<br />
             	           优惠券：<?= Html::encode($model->orderExtPay->order_use_coupon_money) ?>元<br />
@@ -35,9 +36,9 @@ use boss\models\order\Order;
             	   {
                        echo '接单阿姨：'.$model->orderExtWorker->order_worker_name;
                        echo '<br />';
-                       echo $model->orderExtWorker->order_worker_phone.'<br />';
-                       echo $model->orderExtWorker->order_worker_type_name.'<br />';
-                       echo $model->orderExtWorker->order_worker_shop_name;
+                       echo '阿姨手机：'.$model->orderExtWorker->order_worker_phone.'<br />';
+                       echo '阿姨身份：'.$model->orderExtWorker->order_worker_type_name.'<br />';
+                       echo '所属门店：'.$model->orderExtWorker->order_worker_shop_name;
             	   }
             	   else 
             	   {
@@ -47,9 +48,9 @@ use boss\models\order\Order;
             	           
             	           echo '指定阿姨：'.$worker->worker_name;
             	           echo '<br />';
-            	           echo $worker->worker_phone.'<br />';
-            	           echo Worker::getWorkerTypeShow($worker->worker_type).'<br />';
-            	           echo Worker::getShopName($worker->shop_id);            	           
+            	           echo '阿姨手机：'.$worker->worker_phone.'<br />';
+            	           echo '阿姨身份：'.Worker::getWorkerTypeShow($worker->worker_type).'<br />';
+            	           echo '所属门店：'.Worker::getShopName($worker->shop_id);            	           
             	       }
             	   }
             	   ?>

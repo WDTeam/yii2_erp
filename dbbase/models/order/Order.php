@@ -478,6 +478,7 @@ class Order extends ActiveRecord
             'core\models\order\OrderSearch',
             'boss\models\order\Order',
             'boss\models\order\OrderSearch',
+            'boss\models\order\OrderSearchIndex',
             'boss\models\AutoOrderSerach',
             'boss\models\ManualOrderSerach'
         ])){

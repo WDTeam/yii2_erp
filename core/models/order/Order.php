@@ -9,6 +9,7 @@
 
 namespace core\models\order;
 
+use core\models\operation\coupon\Coupon;
 use core\models\operation\OperationShopDistrictGoods;
 use core\models\operation\OperationShopDistrictCoordinate;
 use core\models\customer\Customer;
@@ -126,6 +127,8 @@ class Order extends OrderModel
      *  int $order_pop_order_money 第三方预付金额
      *  string $order_customer_need 客户需求
      *  string $order_customer_memo 客户备注
+     *  string $order_flag_sys_assign 是否系统指派
+     *  string $order_cs_memo 客服备注
      * ]
      * @return bool
      */
@@ -136,7 +139,7 @@ class Order extends OrderModel
             'order_booked_begin_time','order_booked_end_time','address_id',
             'customer_id','admin_id','order_pay_type',
             'coupon_id','order_is_use_balance','order_booked_worker_id','order_pop_order_code',
-            'order_pop_group_buy_code','order_pop_order_money','order_customer_need','order_customer_memo'
+            'order_pop_group_buy_code','order_pop_order_money','order_customer_need','order_customer_memo','order_cs_memo','order_flag_sys_assign'
         ];
         $attributes_required = [
             'order_ip','order_service_item_id','order_src_id','channel_id',
@@ -153,6 +156,10 @@ class Order extends OrderModel
                 $this->addError($v,Order::getAttributeLabel($v).'为必填项！');
                 return false;
             }
+        }
+        if(!in_array($attributes['order_pay_type'],[OrderExtPay::ORDER_PAY_TYPE_ON_LINE,OrderExtPay::ORDER_PAY_TYPE_OFF_LINE,OrderExtPay::ORDER_PAY_TYPE_POP])){
+            $this->addError('order_pay_type','支付方式错误！');
+            return false;
         }
         $attributes['order_parent_id'] = 0;
         $attributes['order_is_parent'] = 0;
@@ -209,6 +216,8 @@ class Order extends OrderModel
      *  string $order_booked_worker_id 指定阿姨id
      *  string $order_customer_need 客户需求
      *  string $order_customer_memo 客户备注
+     *  string $order_flag_sys_assign 是否系统指派
+     *  string $order_cs_memo 客服备注
      * ]
      * @param $booked_list [
      *      [
@@ -226,7 +235,7 @@ class Order extends OrderModel
             'order_ip','order_service_item_id','order_src_id','channel_id', 'address_id',
             'customer_id','admin_id','order_pay_type',
             'coupon_id','order_is_use_balance','order_booked_worker_id','order_pop_order_code',
-            'order_pop_group_buy_code','order_pop_order_money','order_customer_need','order_customer_memo'
+            'order_pop_group_buy_code','order_pop_order_money','order_customer_need','order_customer_memo','order_flag_sys_assign','order_cs_memo'
         ];
         $attributes_required = [
             'order_ip','order_service_item_id','order_src_id','channel_id', 'address_id', 'customer_id','admin_id','order_pay_type'
@@ -669,8 +678,13 @@ class Order extends OrderModel
             $this->order_pay_money = $this->order_money; //支付金额
             if (!empty($this->coupon_id)) {//是否使用了优惠券
                 $coupon = self::getCouponById($this->coupon_id);
-                $this->order_use_coupon_money = $coupon['coupon_money'];
-                $this->order_pay_money -= $this->order_use_coupon_money;
+                if(!empty($coupon)) {
+                    $this->order_use_coupon_money = $coupon['coupon_price'];
+                    $this->order_pay_money -= $this->order_use_coupon_money;
+                }else{
+                    $this->addError('coupon_id', '获取优惠券信息失败！');
+                    return false;
+                }
             }
             if ($this->order_is_use_balance == 1) {
                 try {
@@ -869,24 +883,7 @@ class Order extends OrderModel
      */
     public static function getCouponById($id)
     {
-        $coupon = [
-            1 => [
-                "id" => 1,
-                "coupon_name" => "优惠券30",
-                "coupon_money" => 30
-            ],
-            2 => [
-                "id" => 2,
-                "coupon_name" => "优惠券30",
-                "coupon_money" => 30
-            ],
-            3 => [
-                "id" => 3,
-                "coupon_name" => "优惠券30",
-                "coupon_money" => 30
-            ]
-        ];
-        return $coupon[$id];
+        return Coupon::getCouponBasicInfoById($id);
     }
 
     /**

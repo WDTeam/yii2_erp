@@ -1,14 +1,16 @@
 <?php
 
+use boss\models\payment\Payment;
+
+use kartik\widgets\Select2;
+use kartik\widgets\Affix;
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use kartik\widgets\Select2;
 use yii\web\JsExpression;
 use yii\helpers\Url;
 use yii\base\Widget;
-use kartik\widgets\Affix;
-use dbbase\models\finance\FinanceOrderChannel;
-use boss\models\payment\Payment;
+
 /**
  * @var yii\web\View $this
  * @var dbbase\models\payment\PaymentSearch $model
@@ -42,7 +44,7 @@ use boss\models\payment\Payment;
         <div class="col-md-2">
 
             <?php
-                $name = FinanceOrderChannel::getOrderChannelByName($model->payment_source);
+                $name = $model->getOrderChannelName($model->payment_source);
                 echo $form->field($model, 'payment_source')->widget(Select2::classname(),[
                 'initValueText' => $name, // set the initial display text
                 'attribute'=>'payment_source',

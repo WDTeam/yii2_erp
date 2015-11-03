@@ -3,7 +3,6 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
-use boss\models\payment\Payment;
 
 /**
  * @var yii\web\View $this
@@ -30,14 +29,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'payment_mode',
                 'options'=>['width'=>80,],
                 "value" => function($model){
-                    return Payment::$PAY_MODE[$model->payment_mode];
+                    return $model::$PAY_MODE[$model->payment_mode];
                 }
             ],
             [
                 'attribute' => 'payment_status',
                 'options'=>['width'=>50,],
                 "value" => function($model){
-                    return Payment::$PAY_STATUS[$model->payment_status];
+                    return $model::$PAY_STATUS[$model->payment_status];
                 }
             ],
             'payment_transaction_id',
@@ -77,9 +76,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'floatHeader'=>true,
         'toolbar' => '',
         'rowOptions' =>function ($model, $key, $index, $grid){
-            if($model->payment_verify != $model->makeSign())
+            if($model->payment_verify != $model->sign())
             {
-                return ['class'=>'text-red','t1'=>$model->payment_verify,'t2'=>$model->makeSign()];
+                return ['class'=>'text-red','verify'=>$model->payment_verify,'sign'=>$model->sign()];
             }
         },
         'panel' => [
