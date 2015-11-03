@@ -1371,7 +1371,7 @@ class OrderController extends \restapi\components\Controller
     public function actionCancelOrder()
     {
         $param = Yii::$app->request->post();
-        
+
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
@@ -1403,7 +1403,7 @@ class OrderController extends \restapi\components\Controller
             $orderValidation = Order::validationOrderCustomer($customer->id, $orderId);
 
             if ($orderValidation) {
-                /** 
+                /**
                  * $order_id订单号
                  * $amdin_id管理员id,没有请填写0
                  * $param['order_cancel_reason'] 取消原因
@@ -1783,7 +1783,7 @@ class OrderController extends \restapi\components\Controller
 
                     $pageNumber = ceil(($workerOrderCount + $orderData) / $param['page_size']);
                     $ret['pageNum'] = $pageNumber;
-                    $ret["orderData"] = $array; // $workerCount;
+                    $ret["orderData"] = $array; // $workerCount; 实际返回数组名称
                     return $this->send($ret, $this->workerText[$param['leveltype']], 1);
                 } catch (\Exception $e) {
                     return $this->send(null, "boss系统错误," . $e . $this->workerText[$param['leveltype']], 1024);
@@ -1998,7 +1998,7 @@ class OrderController extends \restapi\components\Controller
     public function actionSetWorkerOrder()
     {
         $param = Yii::$app->request->post();
-        
+
         if (empty($param)) {
             $param = json_decode(Yii::$app->request->getRawBody(), true);
         }
@@ -2008,14 +2008,15 @@ class OrderController extends \restapi\components\Controller
         }
 
         $worker = WorkerAccessToken::getWorker($param['access_token']);
+
         if (!empty($worker) && !empty($worker->id)) {
 
             try {
-                $setWorker = Order::sysAssignDone($param['order_id'], $worker->id);
+                $setWorker = Order::sysAssignDone($param['order_id'], '');
                 $ret['workerSend'] = $setWorker;
                 return $this->send($ret, "操作成功", 1);
             } catch (Exception $e) {
-                return $this->send(null, "boss系统错误,阿姨抢单提交", 1024);
+                return $this->send(null, "boss系统错误,阿姨抢单提交" . $e, 1024);
             }
         }
     }
