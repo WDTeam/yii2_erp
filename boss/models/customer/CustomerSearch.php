@@ -33,7 +33,7 @@ class CustomerSearch extends Customer
 
     public function search($params)
     {
-		$query = Customer::find();
+		$query = Customer::find()->orderBy('created_at desc');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 			'pagination' => [
@@ -60,7 +60,7 @@ class CustomerSearch extends Customer
             //'customer_is_vip' => $this->customer_is_vip,
             // 'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            //'is_del' => $this->is_del,
+            'is_del' => $this->is_del,
         ]);
 
 		if(isset($this->customer_is_vip)){
@@ -75,9 +75,12 @@ class CustomerSearch extends Customer
             ->andFilterWhere(['like', 'customer_email', $this->customer_email])
             ->andFilterWhere(['like', 'customer_login_ip', $this->customer_login_ip]);
 
-        if ($this->time_begin && $this->time_end) {
-            $query->andFilterWhere(['>', 'created_at', strtotime($this->time_begin)])
-            ->andFilterWhere(['<', 'created_at', strtotime($this->time_end)]);
+        if ($this->time_begin) {
+            $query->andFilterWhere(['>', 'created_at', strtotime($this->time_begin)]);
+        }
+
+		if ($this->time_end) {
+            $query->andFilterWhere(['<', 'created_at', strtotime($this->time_end)]);
         }
 
         $query->andFilterWhere(['like', 'customer_phone', $this->customer_global_search]);

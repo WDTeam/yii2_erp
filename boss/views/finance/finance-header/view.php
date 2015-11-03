@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'type'=>DetailView::TYPE_INFO,
         ],
         'attributes' => [
-            'id',
+           // 'id',
             'finance_header_name',
             //'finance_order_channel_id',
             'finance_order_channel_name',
